@@ -1,5 +1,5 @@
 <template>
-	<div class="drawing-content-element-display" @click="onOpenElement">
+	<div class="drawing-content-element-display" @click="openElement">
 		<div class="content-image-mask">
 			<v-img :src="imageSrc" height="185px" cover />
 		</div>
@@ -41,16 +41,19 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const imageSrc = image;
+
+		const openElement = () => {
+			const urlRoom = `/tldraw?roomName=${props.drawingName}`;
+			window.open(urlRoom, "_blank");
+			emit("open:element");
+		};
+
 		const formattedLastUpdatedAt = computed(() => {
 			return dayjs(props.lastUpdatedAt).format("DD.MM HH:mm");
 		});
-		const onOpenElement = () => {
-			const urlWithRoom = `/tldraw?roomName=${props.drawingName}`;
-			window.open(urlWithRoom, "_blank");
-			emit("open:element");
-		};
+
 		return {
-			onOpenElement,
+			openElement,
 			imageSrc,
 			formattedLastUpdatedAt,
 		};

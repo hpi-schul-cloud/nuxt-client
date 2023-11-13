@@ -1,6 +1,10 @@
 import { ContentElementType } from "@/serverApi/v3";
+import NotifierModule from "@/store/notifier";
 import { Envs } from "@/store/types/env-config";
-import { injectStrict } from "@/utils/inject";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import { mountComposable } from "@@/tests/test-utils";
+import { useBoardNotifier } from "@util-board";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 
@@ -20,6 +24,8 @@ mockedInjectStrict.mockImplementation(() => {
 	};
 });
 
+const notifierModule = createModuleMocks(NotifierModule);
+
 describe("ElementTypeSelection Composable", () => {
 	describe("onElementClick", () => {
 		describe("when element is created successfully", () => {
@@ -29,9 +35,21 @@ describe("ElementTypeSelection Composable", () => {
 				const addElementMock = jest.fn();
 				const elementType = ContentElementType.RichText;
 
-				return { addElementMock, elementType };
+				const mountedComponent = mountComposable(() => useBoardNotifier(), {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				});
+
+				return {
+					addElementMock,
+					elementType,
+					mountedComponent,
+					notifierModule,
+				};
 			};
 
+			beforeEach(() => {
+				jest.clearAllMocks();
+			});
 			it("should call add Element", async () => {
 				const { addElementMock, elementType } = setup();
 
@@ -268,6 +286,19 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(closeDialogMock).toBeCalledTimes(1);
+			});
+
+			it("should show a notification if trying to add a drawing when it already exists", async () => {
+				const { onElementClick } = useAddElementDialog(jest.fn(), {
+					value: {
+						elements: [],
+					},
+				});
+				await onElementClick(ContentElementType.Drawing);
+
+				notifierModule.setNotifier({ text: "some text", status: "info" });
+
+				expect(notifierModule.setNotifier).toHaveBeenCalled();
 			});
 		});
 	});

@@ -39,11 +39,12 @@
 </template>
 
 <script lang="ts">
+import dayjs from "dayjs";
 import { computed, defineComponent } from "vue";
 import image from "@/assets/img/tldraw.png";
-import dayjs from "dayjs";
+
 export default defineComponent({
-	name: "DrawingContentElementDisplay",
+	name: "DrawingContentElementEdit",
 
 	props: {
 		lastUpdatedAt: {
