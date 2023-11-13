@@ -3,7 +3,7 @@ import {
 	ExternalToolElementResponse,
 } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
-import { CardResponse } from "@/serverApi/v3/api";
+import { CardResponse, DrawingElementResponse } from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
@@ -201,6 +201,30 @@ describe("BoardApi.composable", () => {
 			const data = {
 				content: payload.content,
 				type: ContentElementType.ExternalTool,
+			};
+
+			await updateElementCall(payload);
+
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				payload.id,
+				{ data }
+			);
+		});
+
+		it("should call elementControllerUpdateElement api with DrawingToolElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const payload: DrawingElementResponse = {
+				id: "drawing-tool-element-id",
+				type: ContentElementType.Drawing,
+				content: {
+					drawingName: "WhiteBoard",
+					description: "Some description",
+				},
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: payload.content,
+				type: ContentElementType.Drawing,
 			};
 
 			await updateElementCall(payload);
