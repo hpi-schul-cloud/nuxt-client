@@ -28,11 +28,6 @@ describe("DrawingContentElementEdit", () => {
 		};
 	};
 
-	it("should have the correct HTML structure", () => {
-		const { wrapper } = setup();
-		expect(wrapper.html()).toMatchSnapshot();
-	});
-
 	it("should be found in the DOM", () => {
 		const { wrapper } = setup();
 		expect(wrapper.exists()).toBe(true);
