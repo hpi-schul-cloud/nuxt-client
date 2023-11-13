@@ -19,15 +19,19 @@ export const useTimePickerState = () => {
 		return times;
 	});
 
-	const getTimeIndex = (givenTime: string) => {
+	const getTimeIndex = (givenTime: string | unknown) => {
 		if (!givenTime) {
 			return timesOfDayList.value.findIndex((time) => time.value === "07:00");
 		}
 
-		const hours = parseInt(givenTime.split(":")[0]);
-		const minutes = parseInt(givenTime.split(":")[1]);
+		const timeString = givenTime as string;
+
+		const hours = parseInt(timeString.split(":")[0]);
+		const minutes = parseInt(timeString.split(":")[1]);
 		if (minutes === 30 || minutes === 0) {
-			return timesOfDayList.value.findIndex((time) => time.value === givenTime);
+			return timesOfDayList.value.findIndex(
+				(time) => time.value === timeString
+			);
 		}
 
 		let timeProxy = `${hours}:00`;
