@@ -107,6 +107,7 @@ import ContentElementList from "./ContentElementList.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
 import { mdiArrowExpand } from "@mdi/js";
 import { delay } from "@/utils/helpers";
+import { useTouchDetection } from "@util-device-detection";
 
 export default defineComponent({
 	name: "CardHost",
@@ -133,6 +134,7 @@ export default defineComponent({
 			cardId.value,
 			cardHost
 		);
+		const { isTouchDevice } = useTouchDetection();
 		const isHovered = useElementHover(cardHost);
 		const isDetailView = ref(false);
 		const {
