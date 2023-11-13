@@ -1,7 +1,13 @@
 <template>
 	<ContentElementBar class="audioplayer">
 		<template #element>
-			<audio ref="audio" class="audio" loading="lazy" v-on:error="onError" />
+			<audio
+				ref="audio"
+				class="audio"
+				loading="lazy"
+				v-on:error="onError"
+				controlsList="nodownload noplaybackrate"
+			/>
 			<v-btn icon @click="playing = !playing">
 				<v-icon
 					role="img"
@@ -14,6 +20,12 @@
 					{{ mdiPause }}</v-icon
 				>
 			</v-btn>
+			<span
+				style="color: white; font-size: 10px; padding: 10px"
+				class="duration text-body-2"
+			>
+				{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</span
+			>
 		</template>
 		<template #menu><slot /></template>
 	</ContentElementBar>
@@ -39,7 +51,7 @@ export default defineComponent({
 			return props.src;
 		});
 
-		const { playing } = useMediaControls(audio, {
+		const { playing, currentTime, duration } = useMediaControls(audio, {
 			src: source,
 		});
 
@@ -47,12 +59,19 @@ export default defineComponent({
 			emit("error", FileAlert.AUDIO_FORMAT_ERROR);
 		};
 
+		const formatDuration = (seconds: number) => {
+			return new Date(1000 * seconds).toISOString().slice(14, 19);
+		};
+
 		return {
 			audio,
 			playing,
+			currentTime,
+			duration,
 			mdiPlay,
 			mdiPause,
 			onError,
+			formatDuration,
 		};
 	},
 });
@@ -65,6 +84,9 @@ export default defineComponent({
 	border-top-left-radius: 4px;
 }
 .audio {
+	width: 100%;
+}
+.duration {
 	width: 100%;
 }
 </style>
