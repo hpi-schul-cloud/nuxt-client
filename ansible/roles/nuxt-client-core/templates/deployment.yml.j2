@@ -7,6 +7,9 @@ metadata:
     app: nuxtclient
     app.kubernetes.io/part-of: schulcloud-verbund
     app.kubernetes.io/version: {{ NUXT_CLIENT_IMAGE_TAG }}
+    app.kubernetes.io/name: nuxtclient
+    app.kubernetes.io/component: client
+    app.kubernetes.io/managed-by: ansible
     git.branch: {{ NUXT_CLIENT_BRANCH_NAME }}
     git.repo: {{ NUXT_CLIENT_REPO_NAME }}
 spec:
@@ -26,6 +29,9 @@ spec:
         app: nuxtclient
         app.kubernetes.io/part-of: schulcloud-verbund
         app.kubernetes.io/version: {{ NUXT_CLIENT_IMAGE_TAG }}
+        app.kubernetes.io/name: nuxtclient
+        app.kubernetes.io/component: client
+        app.kubernetes.io/managed-by: ansible
         git.branch: {{ NUXT_CLIENT_BRANCH_NAME }}
         git.repo: {{ NUXT_CLIENT_REPO_NAME }}
       annotations:
