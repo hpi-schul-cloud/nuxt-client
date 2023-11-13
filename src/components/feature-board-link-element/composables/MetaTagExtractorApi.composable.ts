@@ -37,8 +37,8 @@ export const useMetaTagExtractorApi = () => {
 	const prefixTitle = (title: string, type: string) => {
 		const typeToLanguageKeyMap: Record<string, string> = {
 			course: "common.labels.course",
-			lesson: "common.labels.topic",
-			task: "common.labels.task",
+			lesson: "common.words.topic",
+			task: "common.words.task",
 		};
 
 		const prefixKey = typeToLanguageKeyMap[type];
