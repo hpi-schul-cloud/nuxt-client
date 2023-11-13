@@ -28,6 +28,11 @@ describe("DrawingContentElementEdit", () => {
 		};
 	};
 
+	it("should have the correct HTML structure", () => {
+		const { wrapper } = setup();
+		expect(wrapper.html()).toMatchSnapshot();
+	});
+
 	it("should be found in the DOM", () => {
 		const { wrapper } = setup();
 		expect(wrapper.exists()).toBe(true);
@@ -37,6 +42,12 @@ describe("DrawingContentElementEdit", () => {
 		const { wrapper } = setup();
 		const drawingIcon = wrapper.find("v-icon-stub");
 		expect(drawingIcon.exists()).toBe(true);
+	});
+
+	it("should display the image", () => {
+		const { wrapper } = setup();
+		const imageElement = wrapper.find("v-img-stub");
+		expect(imageElement.exists()).toBe(true);
 	});
 
 	it("should find the drawing tag and display it", () => {
