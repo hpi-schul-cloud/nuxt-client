@@ -1,10 +1,9 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { MetaTagExtractorResponse } from "@/serverApi/v3/api";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mount } from "@vue/test-utils";
-import { defineComponent } from "vue";
 import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
-import { mockApiResponse } from "@@/tests/test-utils";
+import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("useMetaTagExtractorApi", () => {
 	let api: DeepMocked<serverApi.MetaTagExtractorApi>;
@@ -18,20 +17,6 @@ describe("useMetaTagExtractorApi", () => {
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
-
-	const getWrapper = () => {
-		let composable: ReturnType<typeof useMetaTagExtractorApi> | undefined;
-
-		const TestComponent = defineComponent({
-			template: "<div/>",
-			setup() {
-				composable = useMetaTagExtractorApi();
-			},
-		});
-
-		const wrapper = mount(TestComponent, {});
-		return { wrapper, composable };
-	};
 
 	describe("getMetaTags", () => {
 		describe("when meta tags could be extracted", () => {
@@ -50,10 +35,11 @@ describe("useMetaTagExtractorApi", () => {
 					mockApiResponse({ data: mockedResponse })
 				);
 
-				const { wrapper, composable } = getWrapper();
+				const composable = mountComposable(() => useMetaTagExtractorApi(), {
+					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				});
 
 				return {
-					wrapper,
 					mockedResponse,
 					composable,
 				};
@@ -89,10 +75,11 @@ describe("useMetaTagExtractorApi", () => {
 
 				api.metaTagExtractorControllerGetMetaTags.mockRejectedValue(false);
 
-				const { wrapper, composable } = getWrapper();
+				const composable = mountComposable(() => useMetaTagExtractorApi(), {
+					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				});
 
 				return {
-					wrapper,
 					mockedResponse,
 					composable,
 				};
