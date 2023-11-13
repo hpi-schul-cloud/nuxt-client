@@ -84,7 +84,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.v-overlay >>> .v-overlay__content {
+.v-overlay :deep(.v-overlay__content) {
 	height: 100%;
 	width: 100%;
 }

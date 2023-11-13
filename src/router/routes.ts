@@ -174,14 +174,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
-		beforeEnter: validateQueryParameters({
-			origin: (value: unknown) => !isDefined(value) || isMongoId(value),
-		}),
-		props: (to: RouteLocationNormalized) => ({
-			origin: to.query.origin,
-		}),
 		meta: {
-			isPublic: true,
 			layout: Layouts.LOGGED_OUT,
 		},
 	},
