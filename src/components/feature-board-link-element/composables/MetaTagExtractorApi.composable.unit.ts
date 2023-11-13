@@ -33,7 +33,7 @@ describe("useMetaTagExtractorApi", () => {
 		return { wrapper, composable };
 	};
 
-	describe("extractMetaTags", () => {
+	describe("getMetaTags", () => {
 		describe("when meta tags could be extracted", () => {
 			const setup = () => {
 				const mockedResponse: MetaTagExtractorResponse = {
@@ -42,9 +42,11 @@ describe("useMetaTagExtractorApi", () => {
 					description: "",
 					imageUrl: "",
 					type: "unknown",
+					parentTitle: "",
+					parentType: "unknown",
 				};
 
-				api.metaTagExtractorControllerGetData.mockResolvedValue(
+				api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
 					mockApiResponse({ data: mockedResponse })
 				);
 
@@ -60,14 +62,14 @@ describe("useMetaTagExtractorApi", () => {
 			it("should be defined", () => {
 				const { composable } = setup();
 
-				expect(composable?.extractMetaTags).toBeDefined();
+				expect(composable?.getMetaTags).toBeDefined();
 			});
 
 			it("should return the data", async () => {
 				const { composable, mockedResponse } = setup();
 
 				const url = "https://test.de/my-article";
-				const data = await composable?.extractMetaTags(url);
+				const data = await composable?.getMetaTags(url);
 
 				expect(data).toEqual(mockedResponse);
 			});
@@ -81,9 +83,11 @@ describe("useMetaTagExtractorApi", () => {
 					description: "",
 					imageUrl: "",
 					type: "unknown",
+					parentTitle: "",
+					parentType: "unknown",
 				};
 
-				api.metaTagExtractorControllerGetData.mockRejectedValue(false);
+				api.metaTagExtractorControllerGetMetaTags.mockRejectedValue(false);
 
 				const { wrapper, composable } = getWrapper();
 
@@ -98,7 +102,7 @@ describe("useMetaTagExtractorApi", () => {
 				const { composable } = setup();
 
 				const url = "https://test.de/my-article";
-				const data = await composable?.extractMetaTags(url);
+				const data = await composable?.getMetaTags(url);
 
 				expect(data).toEqual({ url, title: "", description: "" });
 			});

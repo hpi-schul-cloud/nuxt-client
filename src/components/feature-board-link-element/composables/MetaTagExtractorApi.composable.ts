@@ -46,9 +46,9 @@ export const useMetaTagExtractorApi = () => {
 		return `${prefix}${title}`;
 	};
 
-	const extractMetaTags = async (url: string): Promise<MetaTagResult> => {
+	const getMetaTags = async (url: string): Promise<MetaTagResult> => {
 		try {
-			const res = await metaTagApi.metaTagExtractorControllerGetData({
+			const res = await metaTagApi.metaTagExtractorControllerGetMetaTags({
 				url,
 			});
 			return mapMetaTagResponse(res.data);
@@ -62,6 +62,6 @@ export const useMetaTagExtractorApi = () => {
 	};
 
 	return {
-		extractMetaTags,
+		getMetaTags,
 	};
 };
