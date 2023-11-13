@@ -83,11 +83,7 @@
 				dense
 				class="ml-1"
 				data-testid="migration-mandatory-switch"
-				@change="
-					setMigrationMandatory(
-						!(userLoginMigration && userLoginMigration.mandatorySince)
-					)
-				"
+				@change="setMigrationMandatory(!isMigrationMandatory)"
 			/>
 		</div>
 
