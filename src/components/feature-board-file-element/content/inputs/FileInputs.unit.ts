@@ -1,13 +1,21 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
+import { isPdfMimeType } from "@/utils/fileHelper";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
-import FileInputs from "./FileInputs.vue";
 import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
+import FileInputs from "./FileInputs.vue";
+
+jest.mock("@/utils/fileHelper");
+const isPdfMimeTypeMock = jest.mocked(isPdfMimeType);
 
 describe("FileInputs", () => {
-	const setup = (props: { previewUrl?: string; isEditMode: boolean }) => {
+	const setup = (props: {
+		previewUrl?: string;
+		isEditMode: boolean;
+		isPdf?: boolean;
+	}) => {
 		document.body.setAttribute("data-app", "true");
 
 		const element = fileElementResponseFactory.build();
@@ -20,6 +28,9 @@ describe("FileInputs", () => {
 			isDownloadAllowed: true,
 			element,
 		};
+
+		isPdfMimeTypeMock.mockReset();
+		isPdfMimeTypeMock.mockReturnValueOnce(props.isPdf ?? false);
 
 		const wrapper = shallowMount(FileInputs, {
 			propsData: { fileProperties, isEditMode: props.isEditMode },
@@ -52,22 +63,40 @@ describe("FileInputs", () => {
 		});
 
 		describe("when previewUrl is defined", () => {
-			it("should render AlternativeText Component", () => {
-				const { wrapper } = setup({ isEditMode: true, previewUrl: "test" });
-
-				const alternativeText = wrapper.findComponent(AlternativeText);
-
-				expect(alternativeText.exists()).toBe(true);
-			});
-
-			describe("when AlternativeText emits update:alternativeText", () => {
-				it("should emit update:alternativeText", () => {
+			describe("when mimetyp is not pdf", () => {
+				it("should render AlternativeText Component", () => {
 					const { wrapper } = setup({ isEditMode: true, previewUrl: "test" });
 
 					const alternativeText = wrapper.findComponent(AlternativeText);
-					alternativeText.vm.$emit("update:alternativeText", "test");
 
-					expect(wrapper.emitted("update:alternativeText")).toEqual([["test"]]);
+					expect(alternativeText.exists()).toBe(true);
+				});
+
+				describe("when AlternativeText emits update:alternativeText", () => {
+					it("should emit update:alternativeText", () => {
+						const { wrapper } = setup({ isEditMode: true, previewUrl: "test" });
+
+						const alternativeText = wrapper.findComponent(AlternativeText);
+						alternativeText.vm.$emit("update:alternativeText", "test");
+
+						expect(wrapper.emitted("update:alternativeText")).toEqual([
+							["test"],
+						]);
+					});
+				});
+			});
+
+			describe("when mimetyp is pdf", () => {
+				it("should not render AlternativeText Component", () => {
+					const { wrapper } = setup({
+						isEditMode: true,
+						previewUrl: "test",
+						isPdf: true,
+					});
+
+					const alternativeText = wrapper.findComponent(AlternativeText);
+
+					expect(alternativeText.exists()).toBe(false);
 				});
 			});
 		});
