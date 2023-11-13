@@ -152,6 +152,8 @@ describe("LinkContentElement", () => {
 						description: "",
 						imageUrl: "https://abc.de/foto.png",
 						type: "unknown",
+						parentTitle: "",
+						parentType: "unknown",
 					};
 
 					useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(
