@@ -3,7 +3,6 @@
 		<v-menu
 			v-model="showTimeDialog"
 			:close-on-content-click="false"
-			transition="scale-transition"
 			nudge-bottom="150"
 			max-height="200"
 			min-width="180"
