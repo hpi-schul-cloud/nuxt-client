@@ -1,3 +1,4 @@
+import { shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -6,7 +7,6 @@ import {
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, Wrapper } from "@vue/test-utils";
 import { createMock } from "@golevelup/ts-jest";
 import { ContentElementType, DrawingElementResponse } from "@/serverApi/v3";
 import DrawingContentElement from "./DrawingContentElement.vue";
@@ -64,35 +64,28 @@ describe("DrawingContentElement", () => {
 	};
 
 	describe("when component is mounted", () => {
-		it("should render display if isEditMode is false", () => {
-			setup({
-				element: DRAWING_ELEMENT,
-				isEditMode: false,
-			});
+		it("renders display with correct props in view mode", () => {
+			setup({ element: DRAWING_ELEMENT, isEditMode: false });
 			expect(wrapper.findComponent(DrawingContentElementDisplay).exists()).toBe(
 				true
 			);
 		});
 
-		it("should render edit if isEditMode is true", () => {
-			setup({
-				element: DRAWING_ELEMENT,
-				isEditMode: true,
-			});
+		it("renders edit with correct props in edit mode", () => {
+			setup({ element: DRAWING_ELEMENT, isEditMode: true });
 			expect(wrapper.findComponent(DrawingContentElementEdit).exists()).toBe(
 				true
 			);
 		});
+
 		describe("when arrow key up is pressed", () => {
 			describe("when component is in edit-mode", () => {
-				it("should NOT emit 'move-keyboard:edit'", async () => {
-					setup({
-						element: DRAWING_ELEMENT,
-						isEditMode: true,
-					});
+				beforeEach(() => {
+					setup({ element: DRAWING_ELEMENT, isEditMode: true });
+				});
 
-					const card = wrapper.findComponent(DrawingContentElement);
-					card.vm.$emit(
+				it('should NOT emit "move-keyboard:edit"', async () => {
+					wrapper.findComponent(DrawingContentElement).vm.$emit(
 						"keydown",
 						new KeyboardEvent("keydown", {
 							key: "ArrowUp",
@@ -102,15 +95,11 @@ describe("DrawingContentElement", () => {
 
 					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
 				});
+
 				it("should hide the element", () => {
-					setup({
-						element: DRAWING_ELEMENT,
-						isEditMode: true,
-					});
-
-					const element = wrapper.findComponent(DrawingContentElement);
-
-					expect(element.isVisible()).toEqual(true);
+					expect(
+						wrapper.findComponent(DrawingContentElement).isVisible()
+					).toEqual(true);
 				});
 			});
 		});
