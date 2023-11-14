@@ -4,17 +4,20 @@
 		@on:action="openLightBox"
 		color="var(--v-black-base)"
 	>
-		<div v-if="isImageLoading" class="d-flex justify-center align-center w-100">
-			<VProgressCircular color="primary" indeterminate :size="36" />
-		</div>
-
-		<img
-			v-if="!isImageLoading"
-			class="image-display-image rounded-t-sm"
+		<v-img
+			class="rounded-t-sm"
 			loading="lazy"
 			:src="previewSrc"
-			:alt="alternativeText"
-		/>
+			:alt="$t('components.cardElement.fileElement.pdfAlt') + name"
+			:aspect-ratio="1"
+			contain
+		>
+			<template v-slot:placeholder>
+				<v-row class="fill-height ma-0" align="center" justify="center">
+					<VProgressCircular color="primary" indeterminate :size="36" />
+				</v-row>
+			</template>
+		</v-img>
 
 		<ContentElementBar class="menu">
 			<template #menu><slot /></template>
@@ -30,7 +33,6 @@ import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PropType, computed, defineComponent } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { ColorOverlay } from "@ui-color-overlay";
-import { usePreloadedImage } from "../../../composables/preloadedImage.composable";
 
 export default defineComponent({
 	name: "ImageDisplay",
@@ -44,11 +46,6 @@ export default defineComponent({
 	components: { ContentElementBar, ColorOverlay },
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
-
-		const previewSrc = computed(() => {
-			return props.previewSrc;
-		});
-		const { isImageLoading } = usePreloadedImage(previewSrc.value);
 
 		const alternativeText = computed(() => {
 			const altTranslation = i18n.t(
@@ -79,7 +76,6 @@ export default defineComponent({
 		return {
 			alternativeText,
 			openLightBox,
-			isImageLoading,
 		};
 	},
 });
