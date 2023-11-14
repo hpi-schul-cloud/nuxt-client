@@ -708,6 +708,8 @@ describe("ExternalToolElement", () => {
 			it("should display an error alert", async () => {
 				const { wrapper, error } = setup();
 
+				await Vue.nextTick();
+
 				const alert = wrapper.find(
 					'[data-testid="board-external-tool-element-alert"]'
 				);
