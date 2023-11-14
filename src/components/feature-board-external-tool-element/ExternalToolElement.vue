@@ -45,6 +45,7 @@
 		<ExternalToolElementAlert
 			:error="error"
 			:is-tool-outdated="isToolOutdated"
+			data-testid="board-external-tool-element-alert"
 		/>
 		<ExternalToolElementConfigurationDialog
 			:is-open="isConfigurationDialogOpen"
