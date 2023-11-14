@@ -56,7 +56,7 @@ export default defineComponent({
 		const { close, isLightBoxOpen, lightBoxOptions } = useInternalLightBox();
 		const isImageLoading = ref(true);
 
-		onKeyStroke("Escape", (e) => close(), { eventName: "keydown" });
+		onKeyStroke("Escape", () => close(), { eventName: "keydown" });
 
 		const download = async () => {
 			await downloadFile(

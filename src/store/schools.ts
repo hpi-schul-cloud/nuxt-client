@@ -1,19 +1,15 @@
 import {
-	MigrationBody,
-	MigrationResponse,
-	SchoolApiFactory,
-	SchoolApiInterface,
 	UserImportApiFactory,
 	UserImportApiInterface,
 	ValidationError,
 } from "@/serverApi/v3";
 import { authModule } from "@/store";
 import { $axios } from "@/utils/api";
-import { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { useApplicationError } from "../composables/application-error.composable";
 import { ApplicationError } from "./types/application-error";
-import { FederalState, OauthMigration, School, Year } from "./types/schools";
+import { FederalState, School, Year } from "./types/schools";
 
 /**
  * The Api expects and returns a List of Feature-names. In the Frontend it is mapped to an object indexed by the feature-names.
@@ -147,20 +143,9 @@ export default class SchoolsModule extends VuexModule {
 		logoUrl: "",
 		__v: 0,
 	};
-	oauthMigration: OauthMigration = {
-		enableMigrationStart: false,
-		oauthMigrationPossible: false,
-		oauthMigrationMandatory: false,
-		oauthMigrationFinished: "",
-		oauthMigrationFinalFinish: "",
-	};
 	systems: any[] = [];
 	loading = false;
 	error: null | ApplicationError = null;
-
-	private get schoolApi(): SchoolApiInterface {
-		return SchoolApiFactory(undefined, "v3", $axios);
-	}
 
 	@Mutation
 	setSchool(updatedSchool: School): void {
@@ -180,11 +165,6 @@ export default class SchoolsModule extends VuexModule {
 	@Mutation
 	setLoading(loading: boolean): void {
 		this.loading = loading;
-	}
-
-	@Mutation
-	setOauthMigration(state: OauthMigration): void {
-		this.oauthMigration = state;
 	}
 
 	@Mutation
@@ -229,10 +209,6 @@ export default class SchoolsModule extends VuexModule {
 						system.ldapConfig.provider === "univention" ||
 						system.ldapConfig.provider === "general"))
 		);
-	}
-
-	get getOauthMigration(): OauthMigration {
-		return this.oauthMigration;
 	}
 
 	@Action
@@ -417,73 +393,6 @@ export default class SchoolsModule extends VuexModule {
 				);
 			}
 			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async fetchSchoolOAuthMigration(): Promise<void> {
-		if (!this.getSchool.id) {
-			await this.fetchSchool();
-		}
-
-		try {
-			const oauthMigration: AxiosResponse<MigrationResponse> =
-				await this.schoolApi.legacySchoolControllerGetMigration(
-					this.getSchool.id
-				);
-			this.setOauthMigration({
-				enableMigrationStart: oauthMigration.data.enableMigrationStart,
-				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
-				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
-				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
-				oauthMigrationFinalFinish:
-					oauthMigration.data.oauthMigrationFinalFinish,
-			});
-		} catch (error: unknown) {
-			if (error instanceof AxiosError) {
-				this.setError(
-					useApplicationError().createApplicationError(
-						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
-					)
-				);
-			}
-		}
-	}
-
-	@Action
-	async setSchoolOauthMigration(migrationFlags: MigrationBody): Promise<void> {
-		if (!this.school._id) {
-			return;
-		}
-
-		try {
-			const oauthMigration: AxiosResponse<MigrationResponse> =
-				await this.schoolApi.legacySchoolControllerSetMigration(
-					this.school._id,
-					migrationFlags
-				);
-			this.setOauthMigration({
-				enableMigrationStart: oauthMigration.data.enableMigrationStart,
-				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
-				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
-				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
-				oauthMigrationFinalFinish:
-					oauthMigration.data.oauthMigrationFinalFinish,
-			});
-		} catch (error: unknown) {
-			if (error instanceof AxiosError) {
-				const translationKey: string | undefined = isGracePeriodError(error)
-					? "pages.administration.school.index.error.gracePeriodExceeded"
-					: undefined;
-
-				this.setError(
-					useApplicationError().createApplicationError(
-						error.response?.status ?? 500,
-						translationKey
-					)
-				);
-			}
 		}
 	}
 

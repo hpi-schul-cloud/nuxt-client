@@ -116,7 +116,6 @@ describe("FileDescription", () => {
 						showTitle: true,
 						src,
 					});
-					console.log(wrapper.html());
 					const link = wrapper.find("a");
 
 					expect(link.attributes("href")).toBe(src);
@@ -206,7 +205,6 @@ describe("FileDescription", () => {
 						showTitle: true,
 						src,
 					});
-					console.log(wrapper.html());
 					const link = wrapper.find("a");
 
 					expect(link.attributes("href")).toBe(src);
