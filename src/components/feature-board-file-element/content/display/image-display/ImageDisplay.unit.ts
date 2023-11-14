@@ -109,6 +109,16 @@ describe("ImageDisplay", () => {
 			expect(image.exists()).toBe(true);
 		});
 
+		it("should display loading spinner", () => {
+			const { wrapper } = setup({ isEditMode: false });
+
+			const loadingSpinner = wrapper.findComponent({
+				name: "VProgressCircular",
+			});
+
+			expect(loadingSpinner.exists()).toBe(true);
+		});
+
 		it("should have set loading to lazy", () => {
 			const { wrapper } = setup({ isEditMode: false });
 
@@ -169,6 +179,23 @@ describe("ImageDisplay", () => {
 				expect(alt).toBe(
 					"components.cardElement.fileElement.emptyAlt " + nameProp
 				);
+			});
+		});
+
+		describe("when image emits onLoad", () => {
+			it("should hide loading spinner", async () => {
+				const { wrapper } = setup({ isEditMode: false });
+
+				const image = wrapper.find(imageSelektor);
+				image.trigger("load");
+
+				await wrapper.vm.$nextTick();
+
+				const loadingSpinner = wrapper.findComponent({
+					name: "VProgressCircular",
+				});
+
+				expect(loadingSpinner.exists()).toBe(false);
 			});
 		});
 	});
