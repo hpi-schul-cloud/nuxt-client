@@ -280,13 +280,13 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
-		component: () => import("../pages/H5PPlayer.page.vue"),
+		component: () => import("../pages/h5p/H5PPlayer.page.vue"),
 		name: "h5pPlayer",
 		//beforeEnter: createPermissionGuard(["H5P"]),
 	},
 	{
 		path: `/h5p/editor/:id(${REGEX_H5P_ID})?`,
-		component: () => import("../pages/H5PEditor.page.vue"),
+		component: () => import("../pages/h5p/H5PEditor.page.vue"),
 		name: "h5pEditor",
 		beforeEnter: validateQueryParameters({
 			parentType: isEnum(H5PContentParentType),
