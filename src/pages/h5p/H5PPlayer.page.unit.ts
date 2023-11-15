@@ -10,9 +10,6 @@ jest.mock("vue-router/composables", () => ({
 }));
 
 describe("H5PPlayerPage", () => {
-	const parentType = "test-parent-type";
-	const parentId = "test-parent-id";
-
 	const i18nMock = new VueI18n({
 		locale: "en",
 	});
@@ -22,11 +19,6 @@ describe("H5PPlayerPage", () => {
 			...createComponentMocks({
 				i18n: true,
 			}),
-			propsData: {
-				parentType,
-				parentId,
-				...propsData,
-			},
 			provide: {
 				[I18N_KEY as any]: i18nMock,
 			},
@@ -35,7 +27,7 @@ describe("H5PPlayerPage", () => {
 
 	it("renders without errors with standard props", async () => {
 		const wrapper = createWrapper();
-		const h5pPlayer = wrapper.findComponent({ ref: "editorRef" });
+		const h5pPlayer = wrapper.findComponent({ ref: "playerRef" });
 		expect(wrapper.exists()).toBe(true);
 		expect(h5pPlayer).toBeDefined();
 	});
