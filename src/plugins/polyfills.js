@@ -11,5 +11,3 @@ polyfill({
 	// full-type website, see https://github.com/timruffles/mobile-drag-drop/issues/167 for more
 	forceApply: true,
 });
-
-// console.log("mobileDragAndDrop loaded", polyfill);
