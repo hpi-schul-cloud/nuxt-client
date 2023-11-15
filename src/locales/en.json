@@ -1025,6 +1025,7 @@
 	"pages.tool.apiError.tool_param_value_regex": "The value of a parameter does not follow the given rules. Please adjust the value accordingly.",
 	"pages.tool.apiError.tool_with_name_exists": "A tool with the same name is already assigned to this course. Tool names must be unique within a course.",
 	"pages.tool.apiError.tool_launch_outdated": "The tool configuration is out of date due to a version change. The tool cannot be started!",
+	"pages.tool.apiError.tool_param_unknown": "The configuration of this tool contains an unknown parameter. Please contact support.",
 	"pages.tool.context.title": "Adding External Tools",
 	"pages.tool.context.displayName": "Display name",
 	"pages.tool.context.displayNameDescription": "The tool display name can be overridden and must be unique",

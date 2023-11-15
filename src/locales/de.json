@@ -1024,6 +1024,7 @@
 	"pages.tool.apiError.tool_param_type_mismatch": "Der Typ eines Parameters stimmt nicht mit dem geforderten Typ überein. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex": "Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",
 	"pages.tool.apiError.tool_with_name_exists": "Ein Tool mit gleichem Namen wurde bereits dem Kurs zugeordnet. Die einem Kurs zugeordneten Tools müssen eindeutige Namen haben.",
+	"pages.tool.apiError.tool_param_unknown": "Die Konfiguration dieses Tools enthält einen unbekannten Parameter. Bitte an den Support wenden.",
 	"pages.tool.context.title": "Hinzufügen externer Tools",
 	"pages.tool.context.displayName": "Anzeigename",
 	"pages.tool.context.displayNameDescription": "Der Anzeigename des Tools kann überschrieben werden und muss eindeutig sein",
