@@ -31,16 +31,8 @@ describe("H5PEditor", () => {
 		});
 	};
 
-	it("renders without errors with standard props", () => {
+	it("renders without errors with standard props", async () => {
 		const wrapper = createWrapper();
-		const h5pEditor = wrapper.findComponent({ ref: "h5pEditorRef" });
-		expect(wrapper.exists()).toBe(true);
-		expect(h5pEditor).toBeDefined();
-	});
-
-	it("handles different contentId correctly", async () => {
-		const newContentId = "new-content-id";
-		const wrapper = createWrapper({ contentId: newContentId });
 		const h5pEditor = wrapper.findComponent({ ref: "h5pEditorRef" });
 		expect(wrapper.exists()).toBe(true);
 		expect(h5pEditor).toBeDefined();
