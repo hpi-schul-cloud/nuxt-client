@@ -8,6 +8,7 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	["tool_param_type_mismatch", "pages.tool.apiError.tool_param_type_mismatch"],
 	["tool_param_value_regex", "pages.tool.apiError.tool_param_value_regex"],
 	["tool_with_name_exists", "pages.tool.apiError.tool_with_name_exists"],
+	["tool_param_unknown", "pages.tool.apiError.tool_param_unknown"],
 ]);
 
 export const ToolConfigurationStatusTranslationMapping: Record<

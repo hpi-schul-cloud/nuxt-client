@@ -119,8 +119,6 @@ export default class GroupModule extends VuexModule {
 		} catch (error) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -162,8 +160,6 @@ export default class GroupModule extends VuexModule {
 			this.setClasses(mappedClasses);
 		} catch (error) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,
