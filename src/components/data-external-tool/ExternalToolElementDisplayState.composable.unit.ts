@@ -1,28 +1,28 @@
 import { ExternalToolDisplayData } from "@/store/external-tool";
-import { externalToolDisplayDataFactory } from "@@/tests/test-utils";
+import {
+	axiosErrorFactory,
+	externalToolDisplayDataFactory,
+} from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useErrorHandler } from "../error-handling/ErrorHandler.composable";
+import { BusinessError } from "../../store/types/commons";
+import { mapAxiosErrorToResponseError } from "../../utils/api";
 import { useContextExternalToolApi } from "./ContextExternalToolApi.composable";
 import { useExternalToolElementDisplayState } from "./ExternalToolElementDisplayState.composable";
 
 jest.mock("@data-external-tool/ContextExternalToolApi.composable");
-jest.mock("@/components/error-handling/ErrorHandler.composable");
 
 describe("ExternalToolElementDisplayState.composable", () => {
 	let useContextExternalToolApiMock: DeepMocked<
 		ReturnType<typeof useContextExternalToolApi>
 	>;
-	let useErrorHandlerMock: DeepMocked<ReturnType<typeof useErrorHandler>>;
 
 	beforeEach(() => {
 		useContextExternalToolApiMock =
 			createMock<ReturnType<typeof useContextExternalToolApi>>();
-		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>();
 
 		jest
 			.mocked(useContextExternalToolApi)
 			.mockReturnValue(useContextExternalToolApiMock);
-		jest.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
 	});
 
 	afterEach(() => {
@@ -46,11 +46,26 @@ describe("ExternalToolElementDisplayState.composable", () => {
 				displayDataMock
 			);
 
+			const composable = useExternalToolElementDisplayState();
+
+			composable.error.value = {
+				statusCode: 418,
+				message: "error",
+			};
+
 			return {
 				displayDataMock,
-				...useExternalToolElementDisplayState(),
+				...composable,
 			};
 		};
+
+		it("should reset the error", async () => {
+			const { fetchDisplayData, error } = setup();
+
+			await fetchDisplayData("contextId");
+
+			expect(error.value).toBeUndefined();
+		});
 
 		it("should call the api for display data of the card", async () => {
 			const { fetchDisplayData } = setup();
@@ -73,24 +88,30 @@ describe("ExternalToolElementDisplayState.composable", () => {
 
 	describe("when an error occurs during loading", () => {
 		const setup = () => {
-			const error = new Error("unable to load");
+			const errorResponse = axiosErrorFactory.build();
+			const apiError = mapAxiosErrorToResponseError(errorResponse);
 
-			useContextExternalToolApiMock.fetchDisplayDataCall.mockRejectedValue(
-				error
+			useContextExternalToolApiMock.fetchDisplayDataCall.mockRejectedValueOnce(
+				errorResponse
 			);
 
 			return {
-				error,
+				errorResponse,
+				apiError,
 				...useExternalToolElementDisplayState(),
 			};
 		};
 
-		it("should handle the error", async () => {
-			const { fetchDisplayData, error } = setup();
+		it("should set the error", async () => {
+			const { fetchDisplayData, error, apiError } = setup();
 
 			await fetchDisplayData("contextId");
 
-			expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error);
+			expect(error.value).toEqual<BusinessError>({
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
+			});
 		});
 	});
 });

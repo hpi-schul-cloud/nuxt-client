@@ -7,7 +7,6 @@
 			nudge-bottom="70"
 			max-height="200"
 			min-width="180"
-			@input="onMenuToggle"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -21,8 +20,8 @@
 					append-icon="$mdiClockOutline"
 					:rules="rules"
 					data-testid="time-input"
+					v-timeInputMask
 					:class="{ 'menu-open': showTimeDialog }"
-					@keypress="isNumberOrColon"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@keydown.up.down.stop
@@ -54,8 +53,9 @@
 import { useDebounceFn } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
-import { ValidationRule } from "@/types/date-time-picker/Validation";
 import { useI18n } from "@/composables/i18n.composable";
+import { timeInputMask } from "@util-input-masks";
+import { isRequired, isValidTimeFormat } from "@util-validators";
 
 export default defineComponent({
 	name: "TimePicker",
@@ -65,7 +65,10 @@ export default defineComponent({
 		ariaLabel: { type: String, default: "" },
 		required: { type: Boolean },
 	},
-	emits: ["update:time"],
+	directives: {
+		timeInputMask,
+	},
+	emits: ["update:time", "error"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 
@@ -77,36 +80,27 @@ export default defineComponent({
 				emitTimeDebounced(newValue);
 			},
 		});
+
+		// Necessary because we need to wait for update:error
+		const emitTimeDebounced = useDebounceFn((newValue) => {
+			if (valid.value) {
+				emit("update:time", newValue);
+			}
+		}, 50);
+
 		const showTimeDialog = ref(false);
 		const inputField = ref<HTMLInputElement | null>(null);
 		const valid = ref(true);
-
 		const { timesOfDayList } = useTimePickerState();
 
-		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
-
-		const requiredRule: ValidationRule = (value: string | null) => {
-			return value === "" || value === null
-				? t("components.timePicker.validation.required")
-				: true;
-		};
-
-		const formatRule: ValidationRule = (value: string | null) => {
-			if (value === "" || value === null) {
-				return true;
-			}
-			return !value.match(timeRegex)
-				? t("components.timePicker.validation.format")
-				: true;
-		};
-
-		const rules = computed<ValidationRule[]>(() => {
-			const rules: ValidationRule[] = [];
+		const rules = computed(() => {
+			const rules = [
+				isValidTimeFormat(t("components.timePicker.validation.format")),
+			];
 
 			if (props.required) {
-				rules.push(requiredRule);
+				rules.push(isRequired(t("components.timePicker.validation.required")));
 			}
-			rules.push(formatRule);
 
 			return rules;
 		});
@@ -120,32 +114,14 @@ export default defineComponent({
 
 		const onError = (hasError: boolean) => {
 			valid.value = !hasError;
-		};
-
-		/**
-		 * Necessary because we need to wait for update:error
-		 */
-		const emitTimeDebounced = useDebounceFn((newValue) => {
-			if (valid.value) {
-				emit("update:time", newValue);
-			}
-		}, 50);
-
-		const onMenuToggle = () => {
-			if (showTimeDialog.value) {
-				valid.value = true;
+			if (hasError) {
+				emit("error");
 			}
 		};
 
 		const closeMenu = useDebounceFn(() => {
 			showTimeDialog.value = false;
 		}, 50);
-
-		const isNumberOrColon = (event: KeyboardEvent) => {
-			const char = String.fromCharCode(event.keyCode); // Get the character
-			if (/^[0-9|:]+$/.test(char)) return true; // Match with regex
-			else event.preventDefault(); // If it doesn't match, don't add to input text
-		};
 
 		return {
 			showTimeDialog,
@@ -155,8 +131,6 @@ export default defineComponent({
 			inputField,
 			onSelect,
 			onError,
-			onMenuToggle,
-			isNumberOrColon,
 		};
 	},
 });

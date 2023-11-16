@@ -111,8 +111,6 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -145,8 +143,6 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -169,8 +165,6 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			this.removeSchoolExternalTool(schoolExternalToolId);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,
@@ -201,8 +195,6 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			this.setSchoolExternalToolConfigurationTemplates(mapped);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,
@@ -236,8 +228,6 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -266,8 +256,6 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,
@@ -299,8 +287,6 @@ export default class SchoolExternalToolsModule extends VuexModule {
 			);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,

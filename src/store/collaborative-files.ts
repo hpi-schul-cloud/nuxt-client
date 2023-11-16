@@ -106,7 +106,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 			await this.addFileMetaData(data);
 			this.setLoading(false);
 		} catch (error: any) {
-			console.log(error);
+			console.error(error);
 			this.setLoading(false);
 		}
 	}
@@ -141,7 +141,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 			await this.addFileMetaData(data);
 			this.setLoading(false);
 		} catch (error: any) {
-			console.log(error);
+			console.error(error);
 			this.setLoading(false);
 		}
 	}
