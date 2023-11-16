@@ -1,6 +1,3 @@
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { AxiosResponse, HttpStatusCode } from "axios";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	UserLoginMigrationApiFactory,
 	UserLoginMigrationApiInterface,
@@ -8,12 +5,15 @@ import {
 	UserLoginMigrationSearchListResponse,
 } from "@/serverApi/v3";
 import { authModule } from "@/store/store-accessor";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { AxiosResponse, HttpStatusCode } from "axios";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { BusinessError } from "./types/commons";
 import {
 	UserLoginMigration,
 	UserLoginMigrationMapper,
 } from "./user-login-migration";
-import { BusinessError } from "./types/commons";
 
 @Module({
 	name: "userLoginMigrationModule",
@@ -128,12 +128,10 @@ export default class UserLoginMigrationModule extends VuexModule {
 						authModule.getUser?.schoolId
 					);
 
-				if (response.data.startedAt) {
-					const userLoginMigration: UserLoginMigration =
-						UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
+				const userLoginMigration: UserLoginMigration =
+					UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
 
-					this.setUserLoginMigration(userLoginMigration);
-				}
+				this.setUserLoginMigration(userLoginMigration);
 			} catch (error: unknown) {
 				const apiError = mapAxiosErrorToResponseError(error);
 
