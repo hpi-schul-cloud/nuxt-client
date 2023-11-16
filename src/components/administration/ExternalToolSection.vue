@@ -45,7 +45,7 @@
 			{{ t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
 
-		<v-dialog v-model="isDeleteDialogOpen" max-width="360">
+		<v-dialog v-if="toolMetadata" v-model="isDeleteDialogOpen" max-width="360">
 			<v-card :ripple="false">
 				<v-card-title>
 					<h2 class="text-h4 my-2">
@@ -60,7 +60,11 @@
 						:html="
 							t(
 								'components.administration.externalToolsSection.dialog.content',
-								{ itemName: getItemName }
+								{
+									itemName: getItemName,
+									courseCount: toolMetadata.course,
+									boardElementCount: toolMetadata.boardElement,
+								}
 							)
 						"
 						component="p"
@@ -120,6 +124,7 @@ import { DataTableHeader } from "vuetify";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
 
 export default defineComponent({
 	name: "ExternalToolSection",
@@ -147,6 +152,8 @@ export default defineComponent({
 			i18n.tc(key, 0, values);
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
+		const { fetchSchoolExternalToolUsage, metadata } =
+			useSchoolExternalToolUsage();
 
 		const headers: DataTableHeader[] = getHeaders;
 
@@ -167,6 +174,9 @@ export default defineComponent({
 
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
+				await schoolExternalToolsModule.getSchoolExternalToolMetadata(
+					itemToDelete.value?.id
+				);
 				await schoolExternalToolsModule.deleteSchoolExternalTool(
 					itemToDelete.value.id
 				);
@@ -187,11 +197,38 @@ export default defineComponent({
 			return itemToDelete.value ? itemToDelete.value?.name : "";
 		});
 
+		const toolMetadata = computed(() => {
+			if (!metadata.value?.course || !metadata.value?.boardElement) {
+				return undefined;
+			}
+
+			return {
+				course: metadata.value?.course,
+				boardElement: metadata.value?.boardElement,
+			};
+		});
+
+		const courseMetaData = computed(() => {
+			console.log(metadata.value?.course);
+			return {
+				course: metadata.value?.course ?? "...",
+			};
+		});
+
+		const boardMetadata = computed(() => {
+			console.log(metadata.value?.boardElement);
+			return {
+				boardElement: metadata.value?.boardElement ?? "...",
+			};
+		});
+
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
-		const openDeleteDialog = (item: SchoolExternalToolItem) => {
+		const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 			itemToDelete.value = item;
 			isDeleteDialogOpen.value = true;
+			console.log(item.id);
+			await fetchSchoolExternalToolUsage(item.id);
 		};
 
 		const onCloseDeleteDialog = () => {
@@ -214,6 +251,9 @@ export default defineComponent({
 			getItemName,
 			mdiRefreshCircle,
 			mdiCheckCircle,
+			courseMetaData,
+			boardMetadata,
+			toolMetadata,
 		};
 	},
 });
