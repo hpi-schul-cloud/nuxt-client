@@ -19,14 +19,20 @@ export const useMetaTagExtractorApi = () => {
 	const mapMetaTagResponse = (
 		response: MetaTagExtractorResponse
 	): MetaTagResult => {
+		console.log("response", response);
 		let title;
+		console.log("response.type", response.type);
+		console.log('response.type === "board"', response.type === "board");
 		if (response.type === "board") {
 			const prefix = prefixTitle(response.parentTitle, response.parentType);
+			console.log("prefix", prefix);
 			const boardTitle =
 				response.title !== ""
 					? response.title
 					: t("pages.room.boardCard.label.courseBoard");
+			console.log("boardTitle", boardTitle);
 			title = `${prefix} - ${boardTitle}`;
+			console.log("title", title);
 		} else {
 			title = prefixTitle(response.title, response.type);
 		}
@@ -42,7 +48,9 @@ export const useMetaTagExtractorApi = () => {
 		};
 
 		const prefixKey = typeToLanguageKeyMap[type];
+		console.log("prefixKey", prefixKey);
 		const prefix = prefixKey ? `${t(prefixKey)}: ` : "";
+		console.log("prefix", prefix);
 		return `${prefix}${title}`;
 	};
 

@@ -2,7 +2,11 @@ import * as serverApi from "@/serverApi/v3/api";
 import { MetaTagExtractorResponse } from "@/serverApi/v3/api";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
-import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import {
+	i18nMock,
+	mockApiResponse,
+	mountComposable,
+} from "@@/tests/test-utils";
 import { I18N_KEY } from "@/utils/inject";
 
 describe("useMetaTagExtractorApi", () => {
@@ -20,44 +24,90 @@ describe("useMetaTagExtractorApi", () => {
 
 	describe("getMetaTags", () => {
 		describe("when meta tags could be extracted", () => {
-			const setup = () => {
-				const mockedResponse: MetaTagExtractorResponse = {
-					url: "",
-					title: "",
-					description: "",
-					imageUrl: "",
-					type: "unknown",
-					parentTitle: "",
-					parentType: "unknown",
+			describe("when meta tags are of type unknown", () => {
+				const setup = () => {
+					const mockedResponse: MetaTagExtractorResponse = {
+						url: "",
+						title: "",
+						description: "",
+						imageUrl: "",
+						type: "unknown",
+						parentTitle: "",
+						parentType: "unknown",
+					};
+
+					api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
+						mockApiResponse({ data: mockedResponse })
+					);
+
+					const composable = mountComposable(() => useMetaTagExtractorApi(), {
+						[I18N_KEY.valueOf()]: i18nMock,
+					});
+
+					return {
+						mockedResponse,
+						composable,
+					};
 				};
 
-				api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
-					mockApiResponse({ data: mockedResponse })
-				);
+				it("should be defined", () => {
+					const { composable } = setup();
 
-				const composable = mountComposable(() => useMetaTagExtractorApi(), {
-					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+					expect(composable?.getMetaTags).toBeDefined();
 				});
 
-				return {
-					mockedResponse,
-					composable,
-				};
-			};
+				it("should return the data", async () => {
+					const { composable, mockedResponse } = setup();
 
-			it("should be defined", () => {
-				const { composable } = setup();
+					const url = "https://test.de/my-article";
+					const data = await composable?.getMetaTags(url);
 
-				expect(composable?.getMetaTags).toBeDefined();
+					expect(data).toEqual(mockedResponse);
+				});
 			});
 
-			it("should return the data", async () => {
-				const { composable, mockedResponse } = setup();
+			describe("when metatags are of type board", () => {
+				const setup = () => {
+					const mockedResponse: MetaTagExtractorResponse = {
+						url: "https://test.de/my-article",
+						title: "Shakespear",
+						description: "",
+						imageUrl: "",
+						type: "board",
+						parentTitle: "English",
+						parentType: "course",
+					};
 
-				const url = "https://test.de/my-article";
-				const data = await composable?.getMetaTags(url);
+					api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
+						mockApiResponse({ data: mockedResponse })
+					);
 
-				expect(data).toEqual(mockedResponse);
+					const composable = mountComposable(() => useMetaTagExtractorApi(), {
+						[I18N_KEY.valueOf()]: i18nMock,
+					});
+
+					return {
+						mockedResponse,
+						composable,
+					};
+				};
+
+				it("should be defined", () => {
+					const { composable } = setup();
+
+					expect(composable?.getMetaTags).toBeDefined();
+				});
+
+				it("should return the correct composed title", async () => {
+					const { composable } = setup();
+
+					const url = "https://test.de/my-article";
+					const data = await composable?.getMetaTags(url);
+
+					expect(data.title).toEqual(
+						"common.labels.course: English - Shakespear"
+					);
+				});
 			});
 		});
 
