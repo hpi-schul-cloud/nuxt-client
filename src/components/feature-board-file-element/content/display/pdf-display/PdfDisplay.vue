@@ -4,7 +4,7 @@
 			class="rounded-t-sm"
 			loading="lazy"
 			:src="previewSrc"
-			:alt="$t('components.cardElement.fileElement.pdfAlt') + name"
+			:alt="t('components.cardElement.fileElement.pdfAlt') + name"
 			:aspect-ratio="1.77777"
 			position="top"
 		>
@@ -21,6 +21,7 @@
 import { FileElementResponse } from "@/serverApi/v3";
 import { PropType, defineComponent } from "vue";
 import { ColorOverlay } from "@ui-color-overlay";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "PdfDisplay",
@@ -32,12 +33,14 @@ export default defineComponent({
 	},
 	components: { ColorOverlay },
 	setup(props) {
+		const { t } = useI18n();
 		const openPdf = () => {
 			window.open(props.src, "_blank");
 		};
 
 		return {
 			openPdf,
+			t,
 		};
 	},
 });

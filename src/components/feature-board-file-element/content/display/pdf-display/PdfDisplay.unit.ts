@@ -3,16 +3,10 @@ import { fileElementResponseFactory, i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { ColorOverlay } from "@ui-color-overlay";
 import { shallowMount } from "@vue/test-utils";
-import { ref } from "vue";
-import { usePreloadedImage } from "../../../composables/preloadedImage.composable";
 import PdfDisplay from "./PdfDisplay.vue";
 
-jest.mock("../../../composables/preloadedImage.composable");
-
-const mockedUsePreloadedImage = jest.mocked(usePreloadedImage);
-
 describe("PdfDisplay", () => {
-	const setup = (props: { isImageLoading: boolean }) => {
+	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
 		const element = fileElementResponseFactory.build();
@@ -22,11 +16,6 @@ describe("PdfDisplay", () => {
 			name: "file-record #1.txt",
 			element,
 		};
-
-		mockedUsePreloadedImage.mockReset();
-		mockedUsePreloadedImage.mockReturnValue({
-			isImageLoading: ref(props.isImageLoading ?? false),
-		});
 
 		const wrapper = shallowMount(PdfDisplay, {
 			attachTo: document.body,
@@ -46,59 +35,40 @@ describe("PdfDisplay", () => {
 		};
 	};
 
-	describe("when isImageLoading is true", () => {
-		it("should show loading spinner", () => {
-			const { wrapper } = setup({ isImageLoading: true });
+	it("should display image with correct props", () => {
+		const { wrapper, previewSrc, nameProp } = setup();
 
-			const loadingSpinner = wrapper.findComponent({
-				name: "VProgressCircular",
-			});
+		const image = wrapper.find("v-img-stub");
 
-			expect(loadingSpinner.exists()).toBe(true);
-		});
-
-		it("should not show image", () => {
-			const { wrapper } = setup({ isImageLoading: true });
-
-			const image = wrapper.find("img");
-
-			expect(image.exists()).toBe(false);
-		});
+		expect(image.exists()).toBe(true);
+		expect(image.attributes("loading")).toBe("lazy");
+		expect(image.attributes("src")).toBe(previewSrc);
+		expect(image.attributes("alt")).toBe(
+			"components.cardElement.fileElement.pdfAlt" + nameProp
+		);
+		expect(image.attributes("aspectratio")).toBe("1.77777");
 	});
 
-	describe("when isImageLoading is false", () => {
-		it("should not show loading spinner", () => {
-			const { wrapper } = setup({ isImageLoading: false });
+	it("should render color overlay with correct props", () => {
+		const { wrapper } = setup();
 
-			const loadingSpinner = wrapper.findComponent({
-				name: "VProgressCircular",
-			});
+		const colorOverlay = wrapper.findComponent(ColorOverlay);
 
-			expect(loadingSpinner.exists()).toBe(false);
-		});
+		expect(colorOverlay.exists()).toBe(true);
+		expect(colorOverlay.props("color")).toBe("var(--v-black-base)");
+	});
 
-		it("should show image", () => {
-			const { wrapper } = setup({ isImageLoading: false });
+	describe("when color overlay emits on:action", () => {
+		it("should call open function", () => {
+			const { wrapper, src } = setup();
 
-			const image = wrapper.find("img");
+			const windowOpenSpy = jest.spyOn(window, "open");
+			const colorOverlay = wrapper.findComponent(ColorOverlay);
 
-			expect(image.exists()).toBe(true);
-		});
+			colorOverlay.vm.$emit("on:action");
 
-		describe("when color overlay emits on:action", () => {
-			it("should call open function", () => {
-				const { wrapper, src } = setup({
-					isImageLoading: false,
-				});
-
-				const windowOpenSpy = jest.spyOn(window, "open");
-				const colorOverlay = wrapper.findComponent(ColorOverlay);
-
-				colorOverlay.vm.$emit("on:action");
-
-				expect(windowOpenSpy).toHaveBeenCalledTimes(1);
-				expect(windowOpenSpy).toHaveBeenCalledWith(src, "_blank");
-			});
+			expect(windowOpenSpy).toHaveBeenCalledTimes(1);
+			expect(windowOpenSpy).toHaveBeenCalledWith(src, "_blank");
 		});
 	});
 });

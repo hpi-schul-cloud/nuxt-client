@@ -8,7 +8,7 @@
 			class="rounded-t-sm"
 			loading="lazy"
 			:src="previewSrc"
-			:alt="$t('components.cardElement.fileElement.pdfAlt') + name"
+			:alt="alternativeText"
 			:aspect-ratio="1"
 			contain
 		>
@@ -28,11 +28,11 @@
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PropType, computed, defineComponent } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { ColorOverlay } from "@ui-color-overlay";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "ImageDisplay",
@@ -45,12 +45,10 @@ export default defineComponent({
 	},
 	components: { ContentElementBar, ColorOverlay },
 	setup(props) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 
 		const alternativeText = computed(() => {
-			const altTranslation = i18n.t(
-				"components.cardElement.fileElement.emptyAlt"
-			);
+			const altTranslation = t("components.cardElement.fileElement.emptyAlt");
 			const altText = props.element.content.alternativeText
 				? props.element.content.alternativeText
 				: `${altTranslation} ${props.name}`;
