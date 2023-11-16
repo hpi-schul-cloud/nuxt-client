@@ -2,6 +2,7 @@ import {
 	CustomParameterEntryParam,
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolConfigurationTemplateResponse,
+	SchoolExternalToolMetadataResponse,
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
@@ -18,6 +19,7 @@ import {
 	ToolConfigurationStatusMapping,
 } from "./common-tool.mapper";
 import { ExternalToolMapper } from "./external-tool.mapper";
+import { SchoolExternalToolMetadata } from "../school-external-tool-metadata";
 
 export class SchoolExternalToolMapper {
 	static mapToSchoolExternalToolConfigurationTemplate(
@@ -111,6 +113,25 @@ export class SchoolExternalToolMapper {
 			(toolResponse: SchoolExternalToolResponse) =>
 				SchoolExternalToolMapper.mapToSchoolExternalTool(toolResponse)
 		);
+
+		return mapped;
+	}
+
+	static mapSchoolExternalToolMetadata(
+		response: SchoolExternalToolMetadataResponse
+	): SchoolExternalToolMetadata {
+		if (
+			response.contextExternalToolCountPerContext.boardElement === undefined ||
+			response.contextExternalToolCountPerContext.course === undefined
+		) {
+			throw new Error(
+				"SchoolExternalToolMetadataResponse is missing required fields"
+			);
+		}
+		const mapped: SchoolExternalToolMetadata = {
+			course: response.contextExternalToolCountPerContext.course,
+			boardElement: response.contextExternalToolCountPerContext.boardElement,
+		};
 
 		return mapped;
 	}
