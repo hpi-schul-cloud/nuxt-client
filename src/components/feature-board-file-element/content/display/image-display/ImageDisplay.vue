@@ -5,12 +5,14 @@
 		color="var(--v-black-base)"
 	>
 		<v-img
-			class="rounded-t-sm"
+			ref="imageRef"
+			class="image rounded-t-sm"
 			loading="lazy"
 			:src="previewSrc"
 			:alt="alternativeText"
-			:aspect-ratio="1"
 			contain
+			@load="setWidth"
+			:max-width="imageWidth"
 		>
 			<template v-slot:placeholder>
 				<v-row class="fill-height ma-0" align="center" justify="center">
@@ -33,6 +35,7 @@ import { PropType, computed, defineComponent } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { ColorOverlay } from "@ui-color-overlay";
 import { useI18n } from "@/composables/i18n.composable";
+import { useNaturalwidth } from "../../../composables/NaturalWidth.composable";
 
 export default defineComponent({
 	name: "ImageDisplay",
@@ -46,6 +49,7 @@ export default defineComponent({
 	components: { ContentElementBar, ColorOverlay },
 	setup(props) {
 		const { t } = useI18n();
+		const { imageRef, imageWidth, setWidth } = useNaturalwidth();
 
 		const alternativeText = computed(() => {
 			const altTranslation = t("components.cardElement.fileElement.emptyAlt");
@@ -74,17 +78,18 @@ export default defineComponent({
 		return {
 			alternativeText,
 			openLightBox,
+			imageRef,
+			setWidth,
+			imageWidth,
 		};
 	},
 });
 </script>
 
 <style scoped>
-.image-display-image {
-	pointer-events: none;
-	display: block;
-	margin-right: auto;
-	margin-left: auto;
+.image {
+	left: 50%;
+	transform: translateX(-50%);
 }
 
 .menu {

@@ -1,12 +1,15 @@
 <template>
 	<ColorOverlay @on:action="openPdf" color="var(--v-black-base)">
 		<v-img
-			class="rounded-t-sm"
+			ref="imageRef"
+			class="image rounded-t-sm"
 			loading="lazy"
 			:src="previewSrc"
 			:alt="t('components.cardElement.fileElement.pdfAlt') + name"
 			:aspect-ratio="1.77777"
 			position="top"
+			@load="setWidth"
+			:max-width="imageWidth"
 		>
 			<template v-slot:placeholder>
 				<v-row class="fill-height ma-0" align="center" justify="center">
@@ -22,6 +25,7 @@ import { FileElementResponse } from "@/serverApi/v3";
 import { PropType, defineComponent } from "vue";
 import { ColorOverlay } from "@ui-color-overlay";
 import { useI18n } from "@/composables/i18n.composable";
+import { useNaturalwidth } from "../../../composables/NaturalWidth.composable";
 
 export default defineComponent({
 	name: "PdfDisplay",
@@ -34,6 +38,8 @@ export default defineComponent({
 	components: { ColorOverlay },
 	setup(props) {
 		const { t } = useI18n();
+		const { imageRef, imageWidth, setWidth } = useNaturalwidth();
+
 		const openPdf = () => {
 			window.open(props.src, "_blank");
 		};
@@ -41,13 +47,17 @@ export default defineComponent({
 		return {
 			openPdf,
 			t,
+			imageRef,
+			imageWidth,
+			setWidth,
 		};
 	},
 });
 </script>
 
 <style scoped>
-img {
-	pointer-events: none;
+.image {
+	left: 50%;
+	transform: translateX(-50%);
 }
 </style>
