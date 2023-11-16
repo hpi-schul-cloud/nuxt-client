@@ -20,12 +20,18 @@
 					{{ mdiPause }}</v-icon
 				>
 			</button>
-			<span
-				style="color: white; font-size: 10px; padding: 10px"
-				class="duration text-body-2"
-			>
+			<span style="color: white" class="duration text-body-2">
 				{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</span
 			>
+			<v-slider
+				class="slider"
+				color="white"
+				thumb-color="white"
+				track-color="#9e9e9e"
+				v-model="currentTime"
+				:max="max"
+				:min="min"
+			/>
 			<SpeedMenu />
 			<button @click="muted = !muted">
 				<v-icon
@@ -90,13 +96,19 @@ export default defineComponent({
 			return new Date(1000 * seconds).toISOString().slice(14, 19);
 		};
 
+		const max = computed(() => {
+			return Math.floor(duration.value);
+		});
+
+		const min = computed(() => {
+			return 0;
+		});
+
 		const open = () => {
-			console.log("open", isOpen.value);
 			return (isOpen.value = true);
 		};
 
 		const close = () => {
-			console.log("close");
 			return (isOpen.value = false);
 		};
 
@@ -122,6 +134,8 @@ export default defineComponent({
 			formatDuration,
 			open,
 			close,
+			max,
+			min,
 		};
 	},
 });
@@ -142,5 +156,9 @@ button:focus {
 }
 .duration {
 	width: 100%;
+}
+.slider {
+	width: 100%;
+	padding-top: 20px;
 }
 </style>
