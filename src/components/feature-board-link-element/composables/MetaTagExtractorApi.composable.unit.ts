@@ -67,46 +67,86 @@ describe("useMetaTagExtractorApi", () => {
 			});
 
 			describe("when metatags are of type board", () => {
-				const setup = () => {
-					const mockedResponse: MetaTagExtractorResponse = {
-						url: "https://test.de/my-article",
-						title: "Shakespear",
-						description: "",
-						imageUrl: "",
-						type: "board",
-						parentTitle: "English",
-						parentType: "course",
+				describe("when board has explicit title", () => {
+					const setup = () => {
+						const mockedResponse: MetaTagExtractorResponse = {
+							url: "https://test.de/my-article",
+							title: "Shakespear",
+							description: "",
+							imageUrl: "",
+							type: "board",
+							parentTitle: "English",
+							parentType: "course",
+						};
+
+						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
+							mockApiResponse({ data: mockedResponse })
+						);
+
+						const composable = mountComposable(() => useMetaTagExtractorApi(), {
+							[I18N_KEY.valueOf()]: i18nMock,
+						});
+
+						return {
+							mockedResponse,
+							composable,
+						};
 					};
 
-					api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
-						mockApiResponse({ data: mockedResponse })
-					);
+					it("should be defined", () => {
+						const { composable } = setup();
 
-					const composable = mountComposable(() => useMetaTagExtractorApi(), {
-						[I18N_KEY.valueOf()]: i18nMock,
+						expect(composable?.getMetaTags).toBeDefined();
 					});
 
-					return {
-						mockedResponse,
-						composable,
-					};
-				};
+					it("should return the correct composed title", async () => {
+						const { composable } = setup();
 
-				it("should be defined", () => {
-					const { composable } = setup();
+						const url = "https://test.de/my-article";
+						const data = await composable?.getMetaTags(url);
 
-					expect(composable?.getMetaTags).toBeDefined();
+						expect(data.title).toEqual(
+							"common.labels.course: English - Shakespear"
+						);
+					});
 				});
 
-				it("should return the correct composed title", async () => {
-					const { composable } = setup();
+				describe("when board has no explicit title", () => {
+					const setup = () => {
+						const mockedResponse: MetaTagExtractorResponse = {
+							url: "https://test.de/my-article",
+							title: "",
+							description: "",
+							imageUrl: "",
+							type: "board",
+							parentTitle: "English",
+							parentType: "course",
+						};
 
-					const url = "https://test.de/my-article";
-					const data = await composable?.getMetaTags(url);
+						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
+							mockApiResponse({ data: mockedResponse })
+						);
 
-					expect(data.title).toEqual(
-						"common.labels.course: English - Shakespear"
-					);
+						const composable = mountComposable(() => useMetaTagExtractorApi(), {
+							[I18N_KEY.valueOf()]: i18nMock,
+						});
+
+						return {
+							mockedResponse,
+							composable,
+						};
+					};
+
+					it("should use default fallback title", async () => {
+						const { composable } = setup();
+
+						const url = "https://test.de/my-article";
+						const data = await composable?.getMetaTags(url);
+
+						expect(data.title).toEqual(
+							"common.labels.course: English - pages.room.boardCard.label.courseBoard"
+						);
+					});
 				});
 			});
 		});
