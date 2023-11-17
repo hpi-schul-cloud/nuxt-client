@@ -21,8 +21,11 @@ export const useTouchDetection = () => {
 			} else {
 				isTouchDetected.value = true;
 			}
-			console.log("evt.touches[0]", evt.touches[0]);
+			console.log("touch event: ", evt.touches[0]);
 			console.log("isTouchDetected:", isTouchDetected.value);
+			console.log("onTouchStart", hasTouchCapability);
+			console.log("touchstart", hasTouchCapability2);
+			console.log("maxTouchPoints", hasTouchCapability3);
 		},
 		{
 			capture: true,
@@ -34,6 +37,10 @@ export const useTouchDetection = () => {
 		() => {
 			isTouchDetected.value = false;
 			console.log("isTouchDetected: false");
+
+			console.log("onTouchStart", hasTouchCapability);
+			console.log("touchstart", hasTouchCapability2);
+			console.log("maxTouchPoints", hasTouchCapability3);
 		},
 		{
 			capture: true,
