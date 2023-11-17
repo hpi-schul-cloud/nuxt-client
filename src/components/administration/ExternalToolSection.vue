@@ -4,6 +4,7 @@
 			{{ t("components.administration.externalToolsSection.info") }}
 		</p>
 		<v-data-table
+			data-testid="external-tool-section-table"
 			v-if="items.length"
 			:disable-pagination="true"
 			:hide-default-footer="true"
@@ -52,7 +53,7 @@
 			max-width="360"
 		>
 			<v-card :ripple="false">
-				<v-card-title>
+				<v-card-title data-testid="delete-dialog-title">
 					<h2 class="text-h4 my-2">
 						{{
 							t("components.administration.externalToolsSection.dialog.title")
@@ -200,7 +201,7 @@ export default defineComponent({
 			return itemToDelete.value ? itemToDelete.value?.name : "";
 		});
 
-		const toolMetadata = computed(() => {
+		const getToolMetadata = computed(() => {
 			if (!metadata.value?.course || !metadata.value?.boardElement) {
 				return undefined;
 			}
@@ -217,7 +218,7 @@ export default defineComponent({
 			itemToDelete.value = item;
 			isDeleteDialogOpen.value = true;
 			await fetchSchoolExternalToolUsage(item.id);
-			if (!toolMetadata.value) {
+			if (!getToolMetadata.value) {
 				notifierModule.show({
 					text: t(
 						"components.administration.externalToolsSection.dialog.content.metadata.error"
@@ -247,7 +248,7 @@ export default defineComponent({
 			getItemName,
 			mdiRefreshCircle,
 			mdiCheckCircle,
-			toolMetadata,
+			toolMetadata: getToolMetadata,
 		};
 	},
 });
