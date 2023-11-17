@@ -41,6 +41,9 @@ export const useTimePickerState = () => {
 		if (minutes >= 45) {
 			timeProxy = `${hours + 1}:00`;
 		}
+		if (minutes >= 45 && hours === 23) {
+			timeProxy = `00:00`;
+		}
 		return timesOfDayList.value.findIndex((time) => time.value === timeProxy);
 	};
 
