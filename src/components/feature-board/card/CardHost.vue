@@ -81,33 +81,32 @@
 
 <script lang="ts">
 import {
-	DragAndDropKey,
-	ElementMove,
-	verticalCursorKeys,
+DragAndDropKey,
+ElementMove,
+verticalCursorKeys,
 } from "@/types/board/DragAndDrop";
+import { delay } from "@/utils/helpers";
 import {
-	useBoardFocusHandler,
-	useBoardPermissions,
-	useCardState,
-	useEditMode,
+useBoardFocusHandler,
+useBoardPermissions,
+useCardState,
+useEditMode,
 } from "@data-board";
+import { mdiArrowExpand } from "@mdi/js";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionEdit,
+BoardMenu,
+BoardMenuActionDelete,
+BoardMenuActionEdit,
 } from "@ui-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
+import CardHostDetailView from "./CardHostDetailView.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
-import CardHostDetailView from "./CardHostDetailView.vue";
-import { mdiArrowExpand } from "@mdi/js";
-import { delay } from "@/utils/helpers";
-import { useTouchDetection } from "@util-device-detection";
 
 export default defineComponent({
 	name: "CardHost",
@@ -134,7 +133,7 @@ export default defineComponent({
 			cardId.value,
 			cardHost
 		);
-		const { isTouchDevice } = useTouchDetection();
+
 		const isHovered = useElementHover(cardHost);
 		const isDetailView = ref(false);
 		const {

@@ -15,7 +15,7 @@
 					:drop-placeholder="placeholderOptions"
 					@drop="onDropColumn"
 					:non-drag-area-selector="'.drag-disabled'"
-					:drag-begin-delay="isDesktop ? 0 : 300"
+					:drag-begin-delay="isTouchDetected ? 300 : 0"
 				>
 					<Draggable v-for="(column, index) in board.columns" :key="column.id">
 						<BoardColumn
@@ -49,31 +49,32 @@
 
 <script lang="ts">
 import {
-	CardMove,
-	columnDropPlaceholderOptions,
-	ColumnMove,
-	DragAndDropKey,
-	horizontalCursorKeys,
+CardMove,
+columnDropPlaceholderOptions,
+ColumnMove,
+DragAndDropKey,
+horizontalCursorKeys,
 } from "@/types/board/DragAndDrop";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
-	useBoardPermissions,
-	useBoardState,
-	useSharedBoardPageInformation,
-	useSharedEditMode,
+useBoardPermissions,
+useBoardState,
+useSharedBoardPageInformation,
+useSharedEditMode,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { useBoardNotifier } from "@util-board";
+import { useTouchDetection } from "@util-device-detection";
 import { useMediaQuery } from "@vueuse/core";
 import {
-	computed,
-	defineComponent,
-	onMounted,
-	onUnmounted,
-	toRef,
-	watch,
+computed,
+defineComponent,
+onMounted,
+onUnmounted,
+toRef,
+watch,
 } from "vue";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
@@ -115,6 +116,8 @@ export default defineComponent({
 		} = useBoardState(toRef(props, "boardId").value);
 
 		const { createPageInformation } = useSharedBoardPageInformation();
+
+		const { isTouchDetected } = useTouchDetection();
 
 		watch(board, async () => {
 			await createPageInformation(props.boardId);
@@ -221,6 +224,7 @@ export default defineComponent({
 			placeholderOptions,
 			isEditMode,
 			isDesktop,
+			isTouchDetected,
 			getColumnId,
 			onTouchEnd,
 			onCreateCard,

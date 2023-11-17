@@ -12,13 +12,27 @@ export const useTouchDetection = () => {
 	console.log("touchstart", hasTouchCapability2);
 	console.log("maxTouchPoints", hasTouchCapability3);
 
-	useEventListener("touchstart", () => (isTouchDetected.value = true), {
-		capture: true,
-	});
+	useEventListener(
+		"touchstart",
+		(evt) => {
+			isTouchDetected.value = true;
+			console.log("isTouchDetected: true");
+		},
+		{
+			capture: true,
+		}
+	);
 
-	useEventListener("mousedown", () => (isTouchDetected.value = false), {
-		capture: true,
-	});
+	useEventListener(
+		"mousedown",
+		() => {
+			isTouchDetected.value = false;
+			console.log("isTouchDetected: false");
+		},
+		{
+			capture: true,
+		}
+	);
 
 	return {
 		isTouchDetected,
