@@ -143,7 +143,7 @@
 	"common.words.languages.es": "Іспанська",
 	"common.words.languages.uk": "Українська",
 	"components.datePicker.messages.dateInPast": "Дата і час у минулому.",
-	"components.datePicker.messages.dateRequired": "Час неможливий без дати.",
+	"components.datePicker.messages.dateRequired": "Без дати неможливо вказати час.",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
