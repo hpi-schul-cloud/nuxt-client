@@ -142,7 +142,7 @@
 	"common.words.languages.es": "Español",
 	"common.words.languages.uk": "Ucranio",
 	"components.datePicker.messages.dateInPast": "La fecha y la hora están en el pasado.",
-	"components.datePicker.messages.dateRequired": "Tiempo no posible sin fecha.",
+	"components.datePicker.messages.dateRequired": "Sin fecha no es posible especificar la hora.",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
 	"components.datePicker.validation.format": "Por favor utilice el formato DD.MM.YYYY",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
