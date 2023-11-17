@@ -1,13 +1,26 @@
+import { useEventListener } from "@vueuse/core";
 import { ref } from "vue";
 
 export const useTouchDetection = () => {
-	const isTouchDevice = ref(false);
+	const hasTouchCapability = "ontouchstart" in window; // what is the best condition?
+	const hasTouchCapability2 = "touchstart" in window;
+	const hasTouchCapability3 = navigator.maxTouchPoints >= 1;
 
-	const hasTouchCapability = "ontouchstart" in window;
+	const isTouchDetected = ref(hasTouchCapability);
+
 	console.log("onTouchStart", hasTouchCapability);
-	console.log("maxTouchPoints", navigator.maxTouchPoints >= 1);
+	console.log("touchstart", hasTouchCapability2);
+	console.log("maxTouchPoints", hasTouchCapability3);
+
+	useEventListener("touchstart", () => (isTouchDetected.value = true), {
+		capture: true,
+	});
+
+	useEventListener("mousedown", () => (isTouchDetected.value = false), {
+		capture: true,
+	});
 
 	return {
-		isTouchDevice,
+		isTouchDetected,
 	};
 };
