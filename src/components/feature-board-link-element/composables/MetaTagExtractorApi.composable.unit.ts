@@ -106,7 +106,7 @@ describe("useMetaTagExtractorApi", () => {
 						const data = await composable?.getMetaTags(url);
 
 						expect(data.title).toEqual(
-							"common.labels.course: English - Shakespear"
+							"components.board: Shakespear (English)"
 						);
 					});
 				});
@@ -144,7 +144,7 @@ describe("useMetaTagExtractorApi", () => {
 						const data = await composable?.getMetaTags(url);
 
 						expect(data.title).toEqual(
-							"common.labels.course: English - pages.room.boardCard.label.courseBoard"
+							"components.board: pages.room.boardCard.label.courseBoard (English)"
 						);
 					});
 				});
