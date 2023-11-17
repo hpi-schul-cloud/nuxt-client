@@ -3,15 +3,11 @@ import {
 	UserLoginMigrationApiInterface,
 	UserLoginMigrationResponse,
 	UserLoginMigrationSearchListResponse,
-	UserMigrationApiInterface,
 } from "@/serverApi/v3/api";
-import {
-	MigrationLinkRequest,
-	MigrationLinks,
-	MigrationPageOrigin,
-	UserLoginMigration,
-} from "./user-login-migration";
-import UserLoginMigrationModule from "./user-login-migrations";
+import AuthModule from "@/store/auth";
+import { authModule } from "@/store/store-accessor";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
@@ -22,34 +18,25 @@ import {
 	userLoginMigrationResponseFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import AuthModule from "@/store/auth";
-import { authModule } from "@/store/store-accessor";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { HttpStatusCode } from "./types/http-status-code.enum";
 import { BusinessError } from "./types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { HttpStatusCode } from "./types/http-status-code.enum";
+import { UserLoginMigration } from "./user-login-migration";
+import UserLoginMigrationModule from "./user-login-migrations";
 
 describe("UserLoginMigrationModule", () => {
 	let module: UserLoginMigrationModule;
 
 	let apiMock: DeepMocked<UserLoginMigrationApiInterface>;
 
-	let userMigrationApiMock: DeepMocked<UserMigrationApiInterface>;
-
 	beforeEach(() => {
 		module = new UserLoginMigrationModule({});
 
-		userMigrationApiMock = createMock<UserMigrationApiInterface>();
 		apiMock = createMock<UserLoginMigrationApiInterface>();
 
 		jest
 			.spyOn(serverApi, "UserLoginMigrationApiFactory")
 			.mockReturnValue(apiMock);
-
-		jest
-			.spyOn(serverApi, "UserMigrationApiFactory")
-			.mockReturnValue(userMigrationApiMock);
 
 		setupStores({
 			authModule: AuthModule,
@@ -72,28 +59,6 @@ describe("UserLoginMigrationModule", () => {
 				module.setLoading(true);
 
 				expect(module.getLoading).toEqual(true);
-			});
-		});
-
-		describe("MigrationLinks", () => {
-			it("should return the default state", () => {
-				const migrationLinks: MigrationLinks = module.getMigrationLinks;
-
-				expect(migrationLinks).toEqual<MigrationLinks>({
-					proceedLink: "",
-					cancelLink: "",
-				});
-			});
-
-			it("should return the changed state", () => {
-				const migrationLinks: MigrationLinks = {
-					proceedLink: "proceedLink",
-					cancelLink: "cancelLink",
-				};
-
-				module.setMigrationLinks(migrationLinks);
-
-				expect(module.getMigrationLinks).toEqual(migrationLinks);
 			});
 		});
 
@@ -158,91 +123,6 @@ describe("UserLoginMigrationModule", () => {
 	});
 
 	describe("actions", () => {
-		describe("fetchMigrationLinks", () => {
-			describe("when it successfully calls the api", () => {
-				const setup = () => {
-					const migrationLinkRequest: MigrationLinkRequest = {
-						pageType: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
-						targetSystem: "targetSystemId",
-						sourceSystem: "sourceSystemId",
-					};
-
-					const response = {
-						proceedButtonUrl: "proceedLink",
-						cancelButtonUrl: "cancelLink",
-					};
-
-					userMigrationApiMock.userMigrationControllerGetMigrationPageDetails.mockResolvedValue(
-						mockApiResponse({ data: response })
-					);
-
-					return {
-						migrationLinkRequest,
-						response,
-					};
-				};
-
-				it("should call the userMigrationApi.userMigrationControllerGetMigrationPageDetails", async () => {
-					const { migrationLinkRequest } = setup();
-
-					await module.fetchMigrationLinks(migrationLinkRequest);
-
-					expect(
-						userMigrationApiMock.userMigrationControllerGetMigrationPageDetails
-					).toHaveBeenCalledWith(
-						MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
-						"sourceSystemId",
-						"targetSystemId"
-					);
-				});
-
-				it("should set the MigrationLinks", async () => {
-					const { migrationLinkRequest, response } = setup();
-
-					await module.fetchMigrationLinks(migrationLinkRequest);
-
-					expect(module.getMigrationLinks).toEqual<MigrationLinks>({
-						proceedLink: response.proceedButtonUrl,
-						cancelLink: response.cancelButtonUrl,
-					});
-				});
-			});
-
-			describe("when an error occurs", () => {
-				const setup = () => {
-					const migrationLinkRequest: MigrationLinkRequest = {
-						pageType: MigrationPageOrigin.START_FROM_SOURCE_SYSTEM,
-						targetSystem: "targetSystemId",
-						sourceSystem: "sourceSystemId",
-					};
-
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
-
-					userMigrationApiMock.userMigrationControllerGetMigrationPageDetails.mockRejectedValue(
-						error
-					);
-
-					return {
-						apiError,
-						migrationLinkRequest,
-					};
-				};
-
-				it("should set the businessError", async () => {
-					const { apiError, migrationLinkRequest } = setup();
-
-					await module.fetchMigrationLinks(migrationLinkRequest);
-
-					expect(module.getBusinessError).toEqual<BusinessError>({
-						error: apiError,
-						statusCode: apiError.code,
-						message: apiError.message,
-					});
-				});
-			});
-		});
-
 		describe("getLatestUserLoginMigrationForCurrentUser", () => {
 			describe("when user id is not available", () => {
 				const setup = () => {
@@ -583,26 +463,6 @@ describe("UserLoginMigrationModule", () => {
 				});
 
 				it("should throw application error", async () => {
-					setup();
-
-					const func = () => module.fetchLatestUserLoginMigrationForSchool();
-
-					await expect(func()).rejects.toEqual(
-						createApplicationError(HttpStatusCode.BadRequest)
-					);
-				});
-			});
-
-			describe("when the api returns a bad request", () => {
-				const setup = () => {
-					authModule.setUser({ ...mockUser, schoolId: "schoolId" });
-
-					apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(
-						createApplicationError(HttpStatusCode.BadRequest)
-					);
-				};
-
-				it("should throw an error with status code BadRequest when an ApplicationError is thrown", async () => {
 					setup();
 
 					const func = () => module.fetchLatestUserLoginMigrationForSchool();

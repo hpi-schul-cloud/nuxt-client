@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import { initializeAxios } from "../utils/api";
+import { initializeAxios } from "@/utils/api";
 import EnvConfigModule from "./env-config";
 import { Envs } from "./types/env-config";
 
