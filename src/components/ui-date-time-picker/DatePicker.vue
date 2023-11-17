@@ -4,7 +4,7 @@
 			v-model="showDateDialog"
 			:close-on-content-click="false"
 			transition="scale-transition"
-			nudge-bottom="70"
+			nudge-bottom="52"
 			min-width="auto"
 		>
 			<template #activator="{ on, attrs }">
