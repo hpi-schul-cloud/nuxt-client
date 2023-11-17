@@ -15,8 +15,14 @@ export const useTouchDetection = () => {
 	useEventListener(
 		"touchstart",
 		(evt) => {
-			isTouchDetected.value = true;
-			console.log("isTouchDetected: true");
+			if (evt.touches[0].force >= 0.999) {
+				// stylus or mouse on touch-device
+				isTouchDetected.value = false;
+			} else {
+				isTouchDetected.value = true;
+			}
+			console.log("evt.touches[0]", evt.touches[0]);
+			console.log("isTouchDetected:", isTouchDetected.value);
 		},
 		{
 			capture: true,
