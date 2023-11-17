@@ -10,7 +10,7 @@
 			data-testid="drawing-element-edit"
 			:inactive="true"
 		>
-			<v-list-item-content class="py-0 grey lighten-4">
+			<v-list-item-content class="py-0">
 				<div class="content">
 					<v-icon
 						class="edit-icon grey--text text--darken-3"
@@ -65,6 +65,7 @@ export default defineComponent({
 			window.open(urlWithRoom, "_blank");
 			emit("open:element");
 		};
+
 		return {
 			imageSrc,
 			formattedLastUpdatedAt,
@@ -74,36 +75,57 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-.edit-image-mask {
-	width: 100%;
-	height: 100%;
-	position: absolute;
-}
+.drawing-content-element-edit {
+	position: relative;
 
-.hover-image:hover {
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	filter: brightness(50%);
-}
-.menu {
-	position: absolute;
-	padding: 5px;
-	right: 0;
-	top: 0;
-}
-.text-edit {
-	font-weight: 400;
-	padding: 5px 0px 5px 15px;
-}
+	&:hover {
+		.hover-image {
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+			filter: brightness(75%);
+		}
 
-.content {
-	display: flex;
-	align-items: center;
-	padding: 10px 0px 0px 15px;
-}
+		.menu {
+			opacity: 1;
+		}
+	}
 
-.board-subtitle {
-	font-weight: 700;
-	margin-left: 10px;
+	.edit-image-mask {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+
+	.hover-image {
+		height: 185px;
+		width: 100%;
+		object-fit: cover;
+		transition: filter 0.3s;
+	}
+
+	.menu {
+		position: absolute;
+		padding: 5px;
+		right: 0;
+		top: 0;
+		opacity: 0;
+		transition: opacity 0.3s;
+	}
+
+	.text-edit {
+		font-weight: 400;
+		padding: 5px 0px 5px 15px;
+	}
+
+	.content {
+		display: flex;
+		align-items: center;
+		padding: 10px 0px 0px 15px;
+	}
+
+	.board-subtitle {
+		font-weight: 700;
+		margin-left: 10px;
+	}
 }
 </style>

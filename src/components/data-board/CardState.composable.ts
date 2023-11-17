@@ -94,6 +94,7 @@ export const useCardState = (
 		type: ContentElementType,
 		atFirstPosition?: boolean
 	) => {
+		let responseData;
 		if (cardState.card === undefined) return;
 
 		try {
@@ -110,12 +111,15 @@ export const useCardState = (
 			}
 
 			setFocus(response.data.id);
-			return response.data;
+			responseData = response.data;
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
 			});
+			throw new Error("error");
 		}
+
+		return responseData;
 	};
 
 	const addTextAfterTitle = async () => {

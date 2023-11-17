@@ -2,10 +2,12 @@
 	<v-card
 		class="mb-4"
 		data-testid="drawing-element"
-		:outlined="isOutlined"
+		outlined
+		dense
 		ref="drawingElement"
 		:ripple="false"
 		tabindex="0"
+		elevation="0"
 		@keydown.up.down="onKeydownArrow"
 	>
 		<div>
@@ -70,8 +72,6 @@ export default defineComponent({
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, drawingElement);
 
-		const isOutlined = toRef(props, "isEditMode");
-
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
@@ -88,7 +88,6 @@ export default defineComponent({
 			emit("delete:element", props.element.id);
 		};
 		return {
-			isOutlined,
 			drawingElement,
 			onDeleteElement,
 			onKeydownArrow,

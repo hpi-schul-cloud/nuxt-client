@@ -11,8 +11,8 @@ import {
 } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { notifierModule } from "@/store/store-accessor";
 import { useI18n } from "@/composables/i18n.composable";
+import { notifierModule } from "@/store/store-accessor";
 
 type AddCardElement = (
 	type: ContentElementType
@@ -32,23 +32,20 @@ export const useAddElementDialog = (
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
-		const drawingExists = elements.value.elements.some(
-			(element: { type: ContentElementType }) =>
-				element.type === ContentElementType.Drawing
-		);
-		if (elementType === ContentElementType.Drawing) {
-			if (drawingExists) {
+
+		try {
+			const elementData = await addElementFunction(elementType);
+			lastCreatedElementId.value = elementData?.id;
+		} catch (error) {
+			if (elementType === ContentElementType.Drawing) {
 				notifierModule.show({
 					text: t(
 						"components.administration.externalToolsSection.notification.infoCreation"
 					),
 					status: "error",
 				});
-				return;
 			}
 		}
-		const elementData = await addElementFunction(elementType);
-		lastCreatedElementId.value = elementData?.id;
 	};
 
 	const options = [

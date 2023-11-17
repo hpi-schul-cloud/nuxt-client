@@ -69,26 +69,6 @@ describe("ElementTypeSelection Composable", () => {
 				expect(isDialogOpen.value).toBe(false);
 			});
 		});
-
-		describe("when addElement returns error", () => {
-			const setup = () => {
-				const error = new Error("Test error");
-				const addElementMock = jest.fn().mockRejectedValueOnce(error);
-				const elementType = ContentElementType.RichText;
-
-				return { addElementMock, error, elementType };
-			};
-
-			it("should return error", async () => {
-				const { addElementMock, elementType, error } = setup();
-
-				const { onElementClick } = useAddElementDialog(addElementMock, {
-					value: { elements: [] },
-				});
-
-				await expect(onElementClick(elementType)).rejects.toThrowError(error);
-			});
-		});
 	});
 
 	describe("askType", () => {
@@ -284,15 +264,20 @@ describe("ElementTypeSelection Composable", () => {
 				jest.spyOn(translate, "useI18n").mockImplementation(() => {
 					return { t: () => "test" } as any;
 				});
-				const { onElementClick } = useAddElementDialog(jest.fn(), {
-					value: {
-						elements: [
-							{
-								type: ContentElementType.Drawing,
-							},
-						],
+				const { onElementClick } = useAddElementDialog(
+					() => {
+						throw new Error("error");
 					},
-				});
+					{
+						value: {
+							elements: [
+								{
+									type: ContentElementType.Drawing,
+								},
+							],
+						},
+					}
+				);
 				await onElementClick(ContentElementType.Drawing);
 
 				expect(notifierModule.show).toHaveBeenCalled();

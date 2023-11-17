@@ -61,27 +61,33 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-.content-image-mask {
-	overflow: hidden;
+.drawing-content-element-display {
 	&:hover {
-		filter: brightness(50%);
-		border-top-left-radius: 4px;
-		border-top-right-radius: 4px;
+		.content-image-mask {
+			filter: brightness(75%);
+			border-top-left-radius: 4px;
+			border-top-right-radius: 4px;
+		}
 	}
-}
 
-.text-edit {
-	font-weight: 400;
-	padding: 5px 0px 5px 15px;
-}
-.content {
-	display: flex;
-	align-items: center;
-	padding: 10px 0px 0px 15px;
-}
+	.content-image-mask {
+		overflow: hidden;
+	}
 
-.board-subtitle {
-	font-weight: 700;
-	margin-left: 10px;
+	.text-edit {
+		font-weight: 400;
+		padding: 5px 0px 5px 15px;
+	}
+
+	.content {
+		display: flex;
+		align-items: center;
+		padding: 10px 0px 0px 15px;
+	}
+
+	.board-subtitle {
+		font-weight: 700;
+		margin-left: 10px;
+	}
 }
 </style>
