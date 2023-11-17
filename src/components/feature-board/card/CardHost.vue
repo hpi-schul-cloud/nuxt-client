@@ -81,22 +81,22 @@
 
 <script lang="ts">
 import {
-DragAndDropKey,
-ElementMove,
-verticalCursorKeys,
+	DragAndDropKey,
+	ElementMove,
+	verticalCursorKeys,
 } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import {
-useBoardFocusHandler,
-useBoardPermissions,
-useCardState,
-useEditMode,
+	useBoardFocusHandler,
+	useBoardPermissions,
+	useCardState,
+	useEditMode,
 } from "@data-board";
 import { mdiArrowExpand } from "@mdi/js";
 import {
-BoardMenu,
-BoardMenuActionDelete,
-BoardMenuActionEdit,
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionEdit,
 } from "@ui-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, ref, toRef } from "vue";
