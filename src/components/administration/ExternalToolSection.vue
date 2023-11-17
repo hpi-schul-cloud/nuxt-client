@@ -208,27 +208,20 @@ export default defineComponent({
 			};
 		});
 
-		const courseMetaData = computed(() => {
-			console.log(metadata.value?.course);
-			return {
-				course: metadata.value?.course ?? "...",
-			};
-		});
-
-		const boardMetadata = computed(() => {
-			console.log(metadata.value?.boardElement);
-			return {
-				boardElement: metadata.value?.boardElement ?? "...",
-			};
-		});
-
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
 		const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 			itemToDelete.value = item;
 			isDeleteDialogOpen.value = true;
-			console.log(item.id);
 			await fetchSchoolExternalToolUsage(item.id);
+			if (!toolMetadata.value) {
+				notifierModule.show({
+					text: t(
+						"components.administration.externalToolsSection.dialog.content.metadata.error"
+					),
+					status: "error",
+				});
+			}
 		};
 
 		const onCloseDeleteDialog = () => {
@@ -251,8 +244,6 @@ export default defineComponent({
 			getItemName,
 			mdiRefreshCircle,
 			mdiCheckCircle,
-			courseMetaData,
-			boardMetadata,
 			toolMetadata,
 		};
 	},
