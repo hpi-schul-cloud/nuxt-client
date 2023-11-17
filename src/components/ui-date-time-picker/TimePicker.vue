@@ -3,10 +3,10 @@
 		<v-menu
 			v-model="showTimeDialog"
 			:close-on-content-click="false"
-			nudge-bottom="132"
+			nudge-bottom="52"
 			max-height="200"
 			min-width="180"
-			auto
+			@input="scrollToSelectedItem"
 		>
 			<template #activator="{ on, attrs }">
 				<v-text-field
@@ -28,21 +28,23 @@
 					@update:error="onError"
 				/>
 			</template>
-			<v-list class="col-12 pt-1 px-0 overflow-y-auto">
+			<v-list class="col-12 pt-1 px-0">
 				<v-list-item-group color="primary" v-model="selectedTime">
-					<div
-						v-for="(timeOfDay, index) in timesOfDayList"
-						:key="`time-select-${index}`"
-					>
+					<template v-for="(timeOfDay, index) in timesOfDayList">
 						<v-list-item
+							:key="`time-select-${index}`"
+							:id="`time-item-${index}`"
 							:data-testid="`time-select-${index}`"
 							class="time-list-item text-left"
 							@click="onSelect(timeOfDay.value)"
 						>
 							<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
 						</v-list-item>
-						<v-divider v-if="index < timesOfDayList.length - 1" />
-					</div>
+						<v-divider
+							v-if="index < timesOfDayList.length - 1"
+							:key="`divider-${index}`"
+						/>
+					</template>
 				</v-list-item-group>
 			</v-list>
 		</v-menu>
@@ -126,6 +128,18 @@ export default defineComponent({
 			showTimeDialog.value = false;
 		}, 50);
 
+		const scrollToSelectedItem = useDebounceFn(() => {
+			if (!showTimeDialog.value) return;
+
+			const menu = document.getElementsByClassName(
+				"menuable__content__active"
+			)[0];
+			const index = getTimeIndex(modelValue.value);
+			const offset = document.getElementById(`time-item-${index}`)?.offsetTop;
+
+			menu.scrollTop = offset as number;
+		}, 50);
+
 		return {
 			showTimeDialog,
 			timesOfDayList,
@@ -135,6 +149,7 @@ export default defineComponent({
 			selectedTime,
 			onSelect,
 			onError,
+			scrollToSelectedItem,
 		};
 	},
 });
@@ -145,10 +160,6 @@ export default defineComponent({
 	min-height: 42px;
 	text-align: center;
 	letter-spacing: $btn-letter-spacing;
-}
-
-.overflow-y-auto {
-	overflow-y: auto;
 }
 
 ::v-deep {
