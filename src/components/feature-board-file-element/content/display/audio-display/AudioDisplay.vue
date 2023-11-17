@@ -32,7 +32,7 @@
 				:max="max"
 				:min="min"
 			/>
-			<SpeedMenu />
+			<SpeedMenu @rate="speedRate" />
 			<button @click="muted = !muted">
 				<v-icon
 					role="img"
@@ -88,6 +88,10 @@ export default defineComponent({
 
 		const { playing, currentTime, duration, volume, muted, rate } = controls;
 
+		const speedRate = (rate: number) => {
+			controls.rate.value = rate;
+		};
+
 		const onError = () => {
 			emit("error", FileAlert.AUDIO_FORMAT_ERROR);
 		};
@@ -125,6 +129,7 @@ export default defineComponent({
 			volume,
 			muted,
 			rate,
+			speedRate,
 			mdiPlay,
 			mdiPause,
 			mdiVolumeOff,
