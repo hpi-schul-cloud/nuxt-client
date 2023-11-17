@@ -3,7 +3,6 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolConfigurationTemplateResponse,
-	SchoolExternalToolMetadataResponse,
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
 	ToolApiFactory,
@@ -14,7 +13,6 @@ import {
 	SchoolExternalTool,
 	SchoolExternalToolConfigurationTemplate,
 	SchoolExternalToolSave,
-	SchoolExternalToolMetadata,
 } from "./external-tool";
 import { SchoolExternalToolMapper } from "./external-tool/mapper";
 import { BusinessError } from "./types/commons";
@@ -287,40 +285,6 @@ export default class SchoolExternalToolsModule extends VuexModule {
 				params.schoolExternalToolId,
 				schoolExternalToolPostParams
 			);
-		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
-
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-		}
-
-		this.setLoading(false);
-	}
-
-	@Action
-	async getSchoolExternalToolMetadata(
-		schoolExternalToolId: string
-	): Promise<SchoolExternalToolMetadata | undefined> {
-		this.setLoading(true);
-		this.resetBusinessError();
-
-		try {
-			const apiResponse: AxiosResponse<SchoolExternalToolMetadataResponse> =
-				await this.toolApi.toolSchoolControllerGetMetaDataForExternalTool(
-					schoolExternalToolId
-				);
-
-			const mapped: SchoolExternalToolMetadata =
-				SchoolExternalToolMapper.mapSchoolExternalToolMetadata(
-					apiResponse.data
-				);
-
-			this.setLoading(false);
-
-			return mapped;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
