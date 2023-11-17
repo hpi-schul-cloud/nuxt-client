@@ -18,7 +18,7 @@
 			<ul data-testid="routesListTest" class="list">
 				<div
 					v-for="route in routes"
-					:key="JSON.stringify(route.to) || route.href"
+					:key="JSON.stringify(getRouteLocation(route))"
 				>
 					<li
 						class="list-item"
@@ -30,39 +30,39 @@
 					>
 						<base-link
 							class="list-content"
-							:to="route.to"
-							:href="route.href"
+							:to="!isExternalLink(route) ? route.to : undefined"
+							:href="isExternalLink(route) ? route.href : undefined"
 							:no-styles="true"
 							:aria-label="$t(route.title)"
 						>
 							<v-icon
 								v-if="route.icon"
 								class="icon"
-								:color="
-									isActive(route.title) || isChildActive(route.title)
-										? 'var(--v-primary-base)'
-										: 'var(--v-secondary-base)'
-								"
-								>{{ route.icon }}
+								:color="getIconColor(route)"
+							>
+								{{ route.icon }}
 							</v-icon>
 							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
 					<ul
-						v-if="isActive(route.title) || isChildActive(route.title)"
+						v-if="
+							hasChildren(route) &&
+							(isActive(route.title) || isChildActive(route.title))
+						"
 						class="px-0"
 					>
 						<li
 							v-for="child in route.children"
-							:key="JSON.stringify(child.to) || child.href"
+							:key="JSON.stringify(getRouteLocation(child))"
 							:class="{ active: isActive(child.title) }"
 							class="list-item list-sub-item"
 							:data-testId="child.testId"
 						>
 							<base-link
 								class="list-content"
-								:to="child.to"
-								:href="child.href"
+								:to="!isExternalLink(child) ? child.to : undefined"
+								:href="isExternalLink(child) ? child.href : undefined"
 								:no-styles="true"
 								:aria-label="$t(child.title)"
 							>
@@ -87,9 +87,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
+import { PropType, defineComponent, ref, watch } from "vue";
 import baseLink from "@/components/base/BaseLink.vue";
-import { SidebarItem } from "@/utils/sidebar-base-items";
+import {
+	SidebarCategoryItem,
+	SidebarItem,
+	SidebarItemExternalLink,
+	SidebarItemList,
+	SidebarItemRouterLink,
+} from "@/utils/sidebar-base-items";
 import { useRoute } from "vue-router/composables";
 
 export default defineComponent({
@@ -97,13 +103,8 @@ export default defineComponent({
 	components: { baseLink },
 	props: {
 		routes: {
-			type: Array,
+			type: Array as PropType<SidebarItemList>,
 			default: () => [],
-			validator: (value: []) => {
-				return value.every(
-					(route: any) => route.title && route.icon && (route.to || route.href)
-				);
-			},
 		},
 		expandedMenu: {
 			type: Boolean,
@@ -121,18 +122,20 @@ export default defineComponent({
 			);
 
 		const updateActiveItems = () => {
-			props.routes.forEach((item: any) => {
+			props.routes.forEach((item: SidebarItem | SidebarCategoryItem) => {
 				if (isItemActiveForRoute(item)) {
 					activeItem.value = item.title;
 					activeParent.value = "";
 				}
-				if (item.children) {
-					item.children.forEach((childItem: SidebarItem) => {
-						if (isItemActiveForRoute(childItem)) {
-							activeItem.value = childItem.title;
-							activeParent.value = item.title;
+				if ((item as SidebarCategoryItem).children) {
+					(item as SidebarCategoryItem).children.forEach(
+						(childItem: SidebarItem) => {
+							if (isItemActiveForRoute(childItem)) {
+								activeItem.value = childItem.title;
+								activeParent.value = item.title;
+							}
 						}
-					});
+					);
 				}
 			});
 		};
@@ -147,9 +150,41 @@ export default defineComponent({
 			return title === activeParent.value;
 		};
 
+		const getIconColor = (route: SidebarItem | SidebarCategoryItem) => {
+			return isActive(route.title) || isChildActive(route.title)
+				? "var(--v-primary-base)"
+				: "var(--v-secondary-base)";
+		};
+
+		const hasChildren = (
+			route: SidebarItem | SidebarCategoryItem
+		): route is SidebarCategoryItem => {
+			return (route as SidebarItemExternalLink).href !== undefined;
+		};
+
+		const isExternalLink = (
+			route: SidebarItemExternalLink | SidebarItemRouterLink
+		): route is SidebarItemExternalLink => {
+			return (route as SidebarItemExternalLink).href !== undefined;
+		};
+
+		const getRouteLocation = (
+			route: SidebarItemExternalLink | SidebarItemRouterLink
+		) => {
+			if (isExternalLink(route)) {
+				return route.href;
+			}
+
+			return route.to;
+		};
+
 		return {
 			isActive,
 			isChildActive,
+			getIconColor,
+			isExternalLink,
+			getRouteLocation,
+			hasChildren,
 		};
 	},
 });
