@@ -10,7 +10,7 @@ import {
 	BOARD_CARD_IS_FIRST_ELEMENT,
 	BOARD_CARD_IS_LAST_ELEMENT,
 } from "@util-board";
-import { defineComponent, provide } from "vue";
+import { computed, defineComponent, provide } from "vue";
 
 export default defineComponent({
 	name: "BoardMenuActionEdit",
@@ -19,12 +19,16 @@ export default defineComponent({
 		index: { type: Number, required: false },
 	},
 	setup(props) {
-		const hasMultipleElements = props.elementCount > 0;
-		const isFirstElement = hasMultipleElements && props.index === 0;
-		const lastIndex = props.elementCount - 1;
-		const isLastElement = hasMultipleElements && props.index === lastIndex;
+		const hasManyElements = computed(() => props.elementCount > 0);
+		const isFirstElement = computed(
+			() => hasManyElements.value && props.index === 0
+		);
+		const lastIndex = computed(() => props.elementCount - 1);
+		const isLastElement = computed(
+			() => hasManyElements.value && props.index === lastIndex.value
+		);
 
-		provide(BOARD_CARD_HAS_MULTIPLE_ELEMENTS, hasMultipleElements);
+		provide(BOARD_CARD_HAS_MULTIPLE_ELEMENTS, hasManyElements);
 		provide(BOARD_CARD_IS_FIRST_ELEMENT, isFirstElement);
 		provide(BOARD_CARD_IS_LAST_ELEMENT, isLastElement);
 

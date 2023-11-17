@@ -62,11 +62,3 @@ export type School = {
 	};
 	language?: string;
 };
-
-export type OauthMigration = {
-	enableMigrationStart: boolean;
-	oauthMigrationPossible: boolean;
-	oauthMigrationMandatory: boolean;
-	oauthMigrationFinished?: string;
-	oauthMigrationFinalFinish?: string;
-};

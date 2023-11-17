@@ -1,24 +1,19 @@
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { AxiosResponse, HttpStatusCode } from "axios";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	PageContentResponse,
 	UserLoginMigrationApiFactory,
 	UserLoginMigrationApiInterface,
 	UserLoginMigrationResponse,
 	UserLoginMigrationSearchListResponse,
-	UserMigrationApiFactory,
-	UserMigrationApiInterface,
 } from "@/serverApi/v3";
 import { authModule } from "@/store/store-accessor";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { AxiosResponse, HttpStatusCode } from "axios";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { BusinessError } from "./types/commons";
 import {
-	MigrationLinkRequest,
-	MigrationLinks,
 	UserLoginMigration,
 	UserLoginMigrationMapper,
 } from "./user-login-migration";
-import { BusinessError } from "./types/commons";
 
 @Module({
 	name: "userLoginMigrationModule",
@@ -26,10 +21,6 @@ import { BusinessError } from "./types/commons";
 	stateFactory: true,
 })
 export default class UserLoginMigrationModule extends VuexModule {
-	private migrationLinks: MigrationLinks = {
-		proceedLink: "",
-		cancelLink: "",
-	};
 	private loading = false;
 
 	private businessError: BusinessError = {
@@ -40,10 +31,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 
 	private userLoginMigration: UserLoginMigration | undefined;
 
-	private get userMigrationApi(): UserMigrationApiInterface {
-		return UserMigrationApiFactory(undefined, "v3", $axios);
-	}
-
 	private get userLoginMigrationApi(): UserLoginMigrationApiInterface {
 		return UserLoginMigrationApiFactory(undefined, "v3", $axios);
 	}
@@ -51,11 +38,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 	@Mutation
 	setLoading(loading: boolean): void {
 		this.loading = loading;
-	}
-
-	@Mutation
-	setMigrationLinks(migrationLinks: MigrationLinks): void {
-		this.migrationLinks = migrationLinks;
 	}
 
 	@Mutation
@@ -81,50 +63,12 @@ export default class UserLoginMigrationModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getMigrationLinks(): MigrationLinks {
-		return this.migrationLinks;
-	}
-
 	get getUserLoginMigration(): UserLoginMigration | undefined {
 		return this.userLoginMigration;
 	}
 
 	get getBusinessError(): BusinessError {
 		return this.businessError;
-	}
-
-	@Action
-	async fetchMigrationLinks(request: MigrationLinkRequest): Promise<void> {
-		this.setLoading(true);
-
-		this.resetBusinessError();
-
-		try {
-			const links: AxiosResponse<PageContentResponse> =
-				await this.userMigrationApi.userMigrationControllerGetMigrationPageDetails(
-					request.pageType,
-					request.sourceSystem,
-					request.targetSystem
-				);
-
-			const mappedLinks: MigrationLinks = {
-				proceedLink: links.data.proceedButtonUrl,
-				cancelLink: links.data.cancelButtonUrl,
-			};
-
-			this.setMigrationLinks(mappedLinks);
-		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
-
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-		}
-		this.setLoading(false);
 	}
 
 	@Action
@@ -158,8 +102,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 			} catch (error: unknown) {
 				const apiError = mapAxiosErrorToResponseError(error);
 
-				console.log(apiError);
-
 				this.setBusinessError({
 					error: apiError,
 					statusCode: apiError.code,
@@ -186,12 +128,10 @@ export default class UserLoginMigrationModule extends VuexModule {
 						authModule.getUser?.schoolId
 					);
 
-				if (response.data.startedAt) {
-					const userLoginMigration: UserLoginMigration =
-						UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
+				const userLoginMigration: UserLoginMigration =
+					UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
 
-					this.setUserLoginMigration(userLoginMigration);
-				}
+				this.setUserLoginMigration(userLoginMigration);
 			} catch (error: unknown) {
 				const apiError = mapAxiosErrorToResponseError(error);
 
@@ -199,8 +139,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 					this.setUserLoginMigration(undefined);
 					return;
 				}
-
-				console.log(apiError);
 
 				this.setBusinessError({
 					error: apiError,
@@ -232,8 +170,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -264,8 +200,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -294,8 +228,6 @@ export default class UserLoginMigrationModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -316,20 +248,17 @@ export default class UserLoginMigrationModule extends VuexModule {
 		try {
 			const response: AxiosResponse<UserLoginMigrationResponse> =
 				await this.userLoginMigrationApi.userLoginMigrationControllerCloseMigration();
-			console.log(response.data);
+
 			if (response.data.closedAt) {
 				const userLoginMigration: UserLoginMigration =
 					UserLoginMigrationMapper.mapToUserLoginMigration(response.data);
-				console.log(userLoginMigration);
+
 				this.setUserLoginMigration(userLoginMigration);
 			} else {
-				console.log(this.userLoginMigration);
 				this.setUserLoginMigration(undefined);
 			}
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,

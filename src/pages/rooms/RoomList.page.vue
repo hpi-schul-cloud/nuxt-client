@@ -68,7 +68,6 @@ import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 
-// eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
 	components: {
 		RoomWrapper,
