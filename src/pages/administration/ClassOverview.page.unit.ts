@@ -3,16 +3,30 @@ import GroupModule from "@/store/group";
 import { ClassInfo, ClassRootType } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
-import { AUTH_MODULE_KEY, GROUP_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import {
+	AUTH_MODULE_KEY,
+	GROUP_MODULE_KEY,
+	I18N_KEY,
+	SCHOOLS_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { classInfoFactory, i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import ClassOverview from "./ClassOverview.page.vue";
+import SchoolsModule from "@/store/schools";
+import { School, Year } from "@/store/types/schools";
+import { createMock } from "@golevelup/ts-jest";
+import VueRouter from "vue-router";
+
+const $router = createMock<VueRouter>();
 
 describe("ClassOverview", () => {
-	const getWrapper = (getters: Partial<GroupModule> = {}) => {
+	const getWrapper = (
+		getters: Partial<GroupModule> = {},
+		propsData: { tab: string } = { tab: "current" }
+	) => {
 		document.body.setAttribute("data-app", "true");
 
 		const groupModule = createModuleMocks(GroupModule, {
@@ -36,6 +50,23 @@ describe("ClassOverview", () => {
 			getUserPermissions: ["CLASS_EDIT".toLowerCase()],
 		});
 
+		const schoolModule = createModuleMocks(SchoolsModule, {
+			getSchool: {
+				years: {
+					schoolYears: [],
+					nextYear: {
+						name: "2024/25",
+					} as Year,
+					activeYear: {
+						name: "2023/24",
+					} as Year,
+					lastYear: {} as Year,
+					defaultYear: {} as Year,
+				},
+			} as unknown as School,
+			...getters,
+		});
+
 		const wrapper: Wrapper<Vue> = mount(ClassOverview as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
@@ -43,13 +74,17 @@ describe("ClassOverview", () => {
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
+				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
+			mocks: { $router },
+			propsData,
 		});
 
 		return {
 			wrapper,
 			groupModule,
+			schoolModule,
 		};
 	};
 
@@ -517,6 +552,168 @@ describe("ClassOverview", () => {
 
 					expect(groupModule.deleteClass).toHaveBeenCalled();
 				});
+			});
+		});
+	});
+
+	describe("tabs", () => {
+		describe("when loading page", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show 3 tabs", () => {
+				const { wrapper } = setup();
+
+				const nextYearTab = wrapper.find(
+					'[data-testid="admin-class-next-year-tab"]'
+				);
+
+				const currentYearTab = wrapper.find(
+					'[data-testid="admin-class-current-year-tab"]'
+				);
+
+				const previousYearTab = wrapper.find(
+					'[data-testid="admin-class-previous-years-tab"]'
+				);
+
+				expect(nextYearTab.exists()).toBeTruthy();
+				expect(currentYearTab.exists()).toBeTruthy();
+				expect(previousYearTab.exists()).toBeTruthy();
+			});
+
+			it("should have current year tab active", () => {
+				const { wrapper } = setup();
+
+				const currentYearTab = wrapper.find(
+					'[data-testid="admin-class-current-year-tab"]'
+				);
+
+				expect(currentYearTab.classes()).toContain("v-tab--active");
+			});
+		});
+
+		describe("when clicking on a tab", () => {
+			const setup = () => {
+				const { wrapper, groupModule } = getWrapper();
+
+				return {
+					wrapper,
+					groupModule,
+				};
+			};
+
+			it("should replace the route to the given tab ", async () => {
+				const { wrapper } = setup();
+
+				await wrapper
+					.find('[data-testid="admin-class-next-year-tab"]')
+					.trigger("click");
+
+				expect($router.replace).toHaveBeenCalledWith({
+					query: { tab: "next" },
+				});
+			});
+		});
+
+		describe("when clicking on next year tab", () => {
+			const setup = () => {
+				const { wrapper, groupModule } = getWrapper({}, { tab: "next" });
+
+				return {
+					wrapper,
+					groupModule,
+				};
+			};
+
+			it("should call store to load classes of next year", async () => {
+				const { wrapper, groupModule } = setup();
+
+				await wrapper
+					.find('[data-testid="admin-class-next-year-tab"]')
+					.trigger("click");
+
+				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith(
+					"nextYear"
+				);
+			});
+		});
+
+		describe("when clicking on previous years tab", () => {
+			const setup = () => {
+				const { wrapper, groupModule } = getWrapper({}, { tab: "archive" });
+
+				return {
+					wrapper,
+					groupModule,
+				};
+			};
+
+			it("should call store to load classes of previous years", async () => {
+				const { wrapper, groupModule } = setup();
+
+				await wrapper
+					.find('[data-testid="admin-class-previous-years-tab"]')
+					.trigger("click");
+
+				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith(
+					"previousYears"
+				);
+			});
+		});
+
+		describe("when clicking on current year tab", () => {
+			const setup = () => {
+				const { wrapper, groupModule } = getWrapper();
+
+				return {
+					wrapper,
+					groupModule,
+				};
+			};
+
+			it("should call store to load groups and classes of current year", async () => {
+				const { wrapper, groupModule } = setup();
+
+				await wrapper
+					.find('[data-testid="admin-class-next-year-tab"]')
+					.trigger("click");
+
+				await wrapper
+					.find('[data-testid="admin-class-current-year-tab"]')
+					.trigger("click");
+
+				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith(
+					"currentYear"
+				);
+			});
+		});
+	});
+
+	describe("addClass", () => {
+		describe("when clicking on add class buttton", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should redirect to legacy create class page", () => {
+				const { wrapper } = setup();
+
+				const addClassBtn = wrapper.find(
+					'[data-testid="admin-class-add-button"]'
+				);
+
+				expect(addClassBtn.attributes().href).toStrictEqual(
+					"/administration/classes/create"
+				);
 			});
 		});
 	});

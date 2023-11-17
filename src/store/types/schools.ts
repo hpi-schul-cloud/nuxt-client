@@ -55,15 +55,13 @@ export type School = {
 	isExternal: boolean;
 	id: string;
 	officialSchoolNumber?: string;
-	years: unknown;
+	years: {
+		schoolYears: Year[];
+		activeYear: Year;
+		defaultYear: Year;
+		nextYear: Year;
+		lastYear: Year;
+	};
 	language?: string;
 	isTeamCreationByStudentsEnabled: boolean;
-};
-
-export type OauthMigration = {
-	enableMigrationStart: boolean;
-	oauthMigrationPossible: boolean;
-	oauthMigrationMandatory: boolean;
-	oauthMigrationFinished?: string;
-	oauthMigrationFinalFinish?: string;
 };

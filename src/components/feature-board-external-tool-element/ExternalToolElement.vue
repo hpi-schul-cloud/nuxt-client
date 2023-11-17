@@ -42,6 +42,11 @@
 				@edit:element="onEditElement"
 			/>
 		</div>
+		<ExternalToolElementAlert
+			:error="error"
+			:is-tool-outdated="isToolOutdated"
+			data-testid="board-external-tool-element-alert"
+		/>
 		<ExternalToolElementConfigurationDialog
 			:is-open="isConfigurationDialogOpen"
 			:context-id="element.id"
@@ -56,10 +61,15 @@
 <script lang="ts">
 import { useI18n } from "@/composables/i18n.composable";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
+import { ToolConfigurationStatus } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useExternalToolElementDisplayState } from "@data-external-tool";
+import {
+	useExternalToolElementDisplayState,
+	useExternalToolLaunchState,
+} from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
+import { useSharedLastCreatedElement } from "@util-board";
 import {
 	computed,
 	ComputedRef,
@@ -69,12 +79,15 @@ import {
 	Ref,
 	ref,
 	toRef,
+	watch,
 } from "vue";
+import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 
 export default defineComponent({
 	components: {
+		ExternalToolElementAlert,
 		ExternalToolElementConfigurationDialog,
 		ExternalToolElementMenu,
 	},
@@ -100,12 +113,24 @@ export default defineComponent({
 			fetchDisplayData,
 			displayData,
 			isLoading: isDisplayDataLoading,
+			error,
 		} = useExternalToolElementDisplayState();
+		const { launchTool, fetchLaunchRequest } = useExternalToolLaunchState();
 
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, ref(null), () => {
 			autofocus.value = true;
+		});
+
+		const { lastCreatedElementId, resetLastCreatedElementId } =
+			useSharedLastCreatedElement();
+
+		watch(lastCreatedElementId, (newValue) => {
+			if (newValue !== undefined && newValue === props.element.id) {
+				isConfigurationDialogOpen.value = true;
+				resetLastCreatedElementId();
+			}
 		});
 
 		const hasLinkedTool: ComputedRef<boolean> = computed(
@@ -114,6 +139,10 @@ export default defineComponent({
 
 		const toolDisplayName: ComputedRef<string> = computed(
 			() => displayData.value?.name ?? "..."
+		);
+
+		const isToolOutdated: ComputedRef<boolean> = computed(
+			() => displayData.value?.status === ToolConfigurationStatus.Outdated
 		);
 
 		const isLoading = computed(
@@ -145,12 +174,12 @@ export default defineComponent({
 		};
 
 		const onClickElement = () => {
-			if (props.isEditMode) {
-				if (!hasLinkedTool.value) {
-					isConfigurationDialogOpen.value = true;
-				}
-			} else {
-				// TODO N21-1285: launch tool
+			if (hasLinkedTool.value && !props.isEditMode) {
+				launchTool();
+			}
+
+			if (!hasLinkedTool.value && props.isEditMode) {
+				isConfigurationDialogOpen.value = true;
 			}
 		};
 
@@ -161,21 +190,29 @@ export default defineComponent({
 		const onConfigurationDialogSave = async (tool: ContextExternalTool) => {
 			modelValue.value.contextExternalToolId = tool.id;
 
-			await fetchDisplayData(modelValue.value.contextExternalToolId);
+			await loadCardData();
 		};
 
-		onMounted(async () => {
+		const loadCardData = async () => {
 			if (modelValue.value.contextExternalToolId) {
 				await fetchDisplayData(modelValue.value.contextExternalToolId);
+
+				if (!isToolOutdated.value) {
+					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
+				}
 			}
-		});
+		};
+
+		onMounted(loadCardData);
 
 		return {
 			t,
 			hasLinkedTool,
 			toolDisplayName,
 			displayData,
+			error,
 			isLoading,
+			isToolOutdated,
 			isConfigurationDialogOpen,
 			mdiPuzzleOutline,
 			onMoveElementDown,

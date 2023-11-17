@@ -9,7 +9,6 @@
 			:can-edit="canEdit"
 			@delete="onOpenDeleteDialog"
 			@edit="onEditTool"
-			@click="onClickTool"
 			@error="onError"
 			:data-testid="`external-tool-card-${index}`"
 		/>
@@ -90,11 +89,6 @@ import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import {
-	ToolConfigurationStatus,
-	ToolLaunchRequest,
-	ToolLaunchRequestMethodEnum,
-} from "@/store/external-tool";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import {
 	AUTH_MODULE_KEY,
@@ -193,25 +187,6 @@ export default defineComponent({
 			});
 		};
 
-		const onClickTool = async (
-			toolLaunchRequest: ToolLaunchRequest,
-			displayData: ExternalToolDisplayData
-		) => {
-			if (isToolLaunchable(displayData)) {
-				switch (toolLaunchRequest?.method) {
-					case ToolLaunchRequestMethodEnum.Get:
-						handleGetLaunchRequest(toolLaunchRequest);
-						break;
-					case ToolLaunchRequestMethodEnum.Post:
-						handlePostLaunchRequest(toolLaunchRequest);
-						break;
-					default:
-						isToolLaunchable(displayData);
-						break;
-				}
-			}
-		};
-
 		const onError = (displayData: ExternalToolDisplayData): void => {
 			showErrorDialog(displayData);
 		};
@@ -221,48 +196,6 @@ export default defineComponent({
 		) => {
 			selectedItem.value = displayData;
 			isErrorDialogOpen.value = true;
-		};
-
-		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
-			if (toolLaunch.openNewTab) {
-				window.open(toolLaunch.url, "_blank");
-				return;
-			}
-			window.location.href = toolLaunch.url;
-		};
-
-		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
-			const form: HTMLFormElement = document.createElement("form");
-			form.method = "POST";
-			form.action = toolLaunch.url;
-			form.target = toolLaunch.openNewTab ? "_blank" : "_self";
-
-			const payload = JSON.parse(toolLaunch.payload || "{}");
-
-			for (const key in payload) {
-				if (Object.prototype.hasOwnProperty.call(payload, key)) {
-					const hiddenField = document.createElement("input");
-					hiddenField.type = "hidden";
-					hiddenField.name = key;
-					hiddenField.value = payload[key];
-
-					form.appendChild(hiddenField);
-				}
-			}
-
-			document.body.appendChild(form);
-			form.submit();
-		};
-
-		const isToolLaunchable = (
-			displayData: ExternalToolDisplayData
-		): boolean => {
-			if (displayData.status === ToolConfigurationStatus.Latest) {
-				return true;
-			}
-			showErrorDialog(displayData);
-
-			return false;
 		};
 
 		const errorDialogText: ComputedRef<string> = computed(() => {
@@ -282,7 +215,6 @@ export default defineComponent({
 			onOpenDeleteDialog,
 			onCloseDeleteDialog,
 			onDeleteTool,
-			onClickTool,
 			onEditTool,
 			isErrorDialogOpen,
 			onCloseErrorDialog,

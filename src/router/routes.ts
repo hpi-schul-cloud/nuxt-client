@@ -1,6 +1,6 @@
 import { Layouts } from "@/layouts/types";
-import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
+import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { ToolContextType } from "@/serverApi/v3";
 import {
 	isEnum,
@@ -8,10 +8,12 @@ import {
 	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_ID,
+	REGEX_H5P_ID,
 	REGEX_UUID,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { Route, RouteConfig } from "vue-router";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
@@ -100,6 +102,9 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("@/pages/administration/ClassOverview.page.vue"),
 		name: "administration-groups-classes",
 		beforeEnter: createPermissionGuard(["class_list", "group_list"]),
+		props: (route: Route) => ({
+			tab: route.query.tab,
+		}),
 	},
 	{
 		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
@@ -167,14 +172,7 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
-		beforeEnter: validateQueryParameters({
-			origin: (value: unknown) => !isDefined(value) || isMongoId(value),
-		}),
-		props: (route: Route) => ({
-			origin: route.query.origin,
-		}),
 		meta: {
-			isPublic: true,
 			layout: Layouts.LOGGED_OUT,
 		},
 	},
@@ -278,6 +276,25 @@ export const routes: Array<RouteConfig> = [
 			contextId: route.query.contextId,
 			contextType: route.query.contextType,
 			configId: route.params.configId,
+		}),
+	},
+	{
+		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
+		component: () => import("../pages/h5p/H5PPlayer.page.vue"),
+		name: "h5pPlayer",
+		//beforeEnter: createPermissionGuard(["H5P"]),
+	},
+	{
+		path: `/h5p/editor/:id(${REGEX_H5P_ID})?`,
+		component: () => import("../pages/h5p/H5PEditor.page.vue"),
+		name: "h5pEditor",
+		beforeEnter: validateQueryParameters({
+			parentType: isEnum(H5PContentParentType),
+			parentId: isMongoId,
+		}),
+		props: (route: Route) => ({
+			parentId: route.query.parentId,
+			parentType: route.query.parentType,
 		}),
 	},
 ];

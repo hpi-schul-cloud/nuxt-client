@@ -40,19 +40,19 @@ module.exports = defineConfig({
 					"src/components/feature-board-external-tool-element"
 				),
 				"@feature-board": getDir("src/components/feature-board"),
-				"@feature-date-time-picker": getDir(
-					"src/components/feature-date-time-picker"
-				),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
 				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
+				"@ui-color-overlay": getDir("src/components/ui-color-overlay"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
+				"@ui-date-time-picker": getDir("src/components/ui-date-time-picker"),
 				"@ui-light-box": getDir("src/components/ui-light-box"),
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
+				"@util-input-masks": getDir("src/components/util-input-masks"),
 				"@page-board": getDir("src/components/page-board"),
 				"@page-class-members": getDir("src/components/page-class-members"),
 			},
