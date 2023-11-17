@@ -1035,6 +1035,7 @@
 	"pages.videoConference.action.refresh": "Status aktualisieren",
 	"ui-confirmation-dialog.ask-delete": "{type} {title} wirklich löschen?",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
+	"pages.h5p.api.success.save": "Inhalt wurde erfolgreich gespeichert.",
 	"feature-board-external-tool-element.placeholder.selectTool": "Tool auswählen...",
 	"feature-board-external-tool-element.dialog.title": "Auswahl & Einstellungen",
 	"feature-board-external-tool-element.alert.error.teacher": "Das Tool kann aktuell nicht gestartet werden. Bitte Board aktualisieren oder an die Schuladministrator:in wenden.",
