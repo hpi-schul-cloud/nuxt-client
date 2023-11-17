@@ -46,7 +46,7 @@
 					color="white"
 					thumb-color="white"
 					track-color="#9e9e9e"
-					v-model="media"
+					v-model="volumeValue"
 				/>
 				<v-icon
 					@click="showVolumeSlider"
@@ -95,8 +95,8 @@ export default defineComponent({
 
 		const { playing, currentTime, duration, volume, muted, rate } = controls;
 
-		const media = (volume: number) => {
-			controls.volume.value = volume;
+		const volumeValue = (volume: number) => {
+			controls.volume.value = volume + 5;
 		};
 
 		const isShow: Ref<boolean> = ref(false);
@@ -156,7 +156,7 @@ export default defineComponent({
 			close,
 			max,
 			min,
-			media,
+			volumeValue,
 			showVolumeSlider,
 			isShow,
 		};
