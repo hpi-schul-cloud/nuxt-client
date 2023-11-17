@@ -33,22 +33,29 @@
 				:min="min"
 			/>
 			<SpeedMenu @rate="speedRate" />
-			<button @click="muted = !muted">
+			<v-icon
+				v-if="!isShow"
+				@click="showVolumeSlider"
+				role="img"
+				aria-hidden="false"
+				style="color: white"
+				>{{ mdiVolumeHigh }}</v-icon
+			>
+			<div class="volume-wrapper" v-if="isShow">
+				<v-slider
+					color="white"
+					thumb-color="white"
+					track-color="#9e9e9e"
+					v-model="media"
+				/>
 				<v-icon
+					@click="showVolumeSlider"
 					role="img"
 					aria-hidden="false"
 					style="color: white"
-					v-if="muted"
-					>{{ mdiVolumeOff }}</v-icon
-				>
-				<v-icon
-					role="img"
-					aria-hidden="false"
-					style="color: white; padding: 10px"
-					v-else
 					>{{ mdiVolumeHigh }}</v-icon
 				>
-			</button>
+			</div>
 		</template>
 		<template #menu><slot /></template>
 	</ContentElementBar>
@@ -64,7 +71,7 @@ import {
 } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
-import { computed, defineComponent, onMounted, ref } from "vue";
+import { computed, defineComponent, onMounted, Ref, ref } from "vue";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
 import SpeedMenu from "./SpeedMenu.vue";
 
@@ -88,6 +95,14 @@ export default defineComponent({
 
 		const { playing, currentTime, duration, volume, muted, rate } = controls;
 
+		const media = (volume: number) => {
+			controls.volume.value = volume;
+		};
+
+		const isShow: Ref<boolean> = ref(false);
+		const showVolumeSlider = () => {
+			isShow.value = !isShow.value;
+		};
 		const speedRate = (rate: number) => {
 			controls.rate.value = rate;
 		};
@@ -141,6 +156,9 @@ export default defineComponent({
 			close,
 			max,
 			min,
+			media,
+			showVolumeSlider,
+			isShow,
 		};
 	},
 });
@@ -165,5 +183,12 @@ button:focus {
 .slider {
 	width: 100%;
 	padding-top: 20px;
+}
+.volume-wrapper {
+	display: flex;
+	width: 100%;
+	height: 36px;
+	border-radius: 2px;
+	background: var(--shades-color-overlay-dark, rgba(33, 33, 33, 0.54));
 }
 </style>
