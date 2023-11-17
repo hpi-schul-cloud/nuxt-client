@@ -45,7 +45,12 @@
 			{{ t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
 
-		<v-dialog v-if="toolMetadata" v-model="isDeleteDialogOpen" max-width="360">
+		<v-dialog
+			v-if="toolMetadata"
+			data-testid="delete-dialog"
+			v-model="isDeleteDialogOpen"
+			max-width="360"
+		>
 			<v-card :ripple="false">
 				<v-card-title>
 					<h2 class="text-h4 my-2">
@@ -56,6 +61,7 @@
 				</v-card-title>
 				<v-card-text class="text--primary">
 					<RenderHTML
+						data-testid="delete-dialog-content"
 						class="text-md mt-2"
 						:html="
 							t(
@@ -73,7 +79,7 @@
 				<v-card-actions>
 					<v-spacer />
 					<v-btn
-						data-testId="dialog-cancel"
+						data-testId="delete-dialog-cancel"
 						class="dialog-closed"
 						depressed
 						text
@@ -82,7 +88,7 @@
 						{{ t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
-						data-testId="dialog-confirm"
+						data-testId="delete-dialog-confirm"
 						class="dialog-confirmed px-6"
 						color="primary"
 						depressed
@@ -174,9 +180,6 @@ export default defineComponent({
 
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
-				await schoolExternalToolsModule.getSchoolExternalToolMetadata(
-					itemToDelete.value?.id
-				);
 				await schoolExternalToolsModule.deleteSchoolExternalTool(
 					itemToDelete.value.id
 				);
