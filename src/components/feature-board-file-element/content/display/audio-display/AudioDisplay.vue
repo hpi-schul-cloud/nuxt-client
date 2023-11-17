@@ -178,15 +178,15 @@ button:focus {
 	width: 100%;
 }
 .duration {
-	width: 100%;
+	width: 40%;
 }
 .slider {
-	width: 100%;
+	width: 30%;
 	padding-top: 20px;
 }
 .volume-wrapper {
 	display: flex;
-	width: 100%;
+	width: 30%;
 	height: 36px;
 	border-radius: 2px;
 	background: var(--shades-color-overlay-dark, rgba(33, 33, 33, 0.54));
