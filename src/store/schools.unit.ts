@@ -95,7 +95,6 @@ describe("schools module", () => {
 				authModule.setUser({
 					schoolId: "4711",
 					_id: "",
-					__v: 0,
 					firstName: "",
 					lastName: "",
 					email: "",
@@ -624,7 +623,6 @@ describe("schools module", () => {
 			it("should set federalState data", () => {
 				const schoolsModule = new SchoolsModule({});
 				const mockFederalState = {
-					__v: 0,
 					counties: [],
 					logoUrl: "",
 					_id: "mockId",
@@ -699,7 +697,6 @@ describe("schools module", () => {
 			it("shoud return federalState state", () => {
 				const schoolsModule = new SchoolsModule({});
 				const mockFederalState = {
-					__v: 0,
 					counties: [],
 					logoUrl: "",
 					_id: "mockId",
