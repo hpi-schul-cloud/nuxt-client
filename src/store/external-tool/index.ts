@@ -12,4 +12,3 @@ export * from "./context-external-tool-template-list-item";
 export * from "./tool-launch-request";
 export * from "./tool-launch-request-method.enum";
 export * from "./school-external-tool-metadata";
-export * from "./tool-context-type.enum";
