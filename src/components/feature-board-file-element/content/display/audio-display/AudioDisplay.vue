@@ -29,6 +29,8 @@
 				thumb-color="white"
 				track-color="#9e9e9e"
 				:value="currentTime"
+				:min="0"
+				:max="max"
 				@click="currentTimeSlider"
 				@change="currentTimeSliderNumber"
 				@mousedown="currentTimeSlider"
@@ -73,7 +75,7 @@ import {
 } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
-import { computed, defineComponent, onMounted, Ref, ref } from "vue";
+import { computed, defineComponent, Ref, ref } from "vue";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
 import SpeedMenu from "./SpeedMenu.vue";
 
@@ -96,11 +98,6 @@ export default defineComponent({
 
 		const { playing, currentTime, duration, volume, muted, rate } = controls;
 
-		const currentTimeValue = computed({
-			get: () => controls?.currentTime,
-			set: (value) => (controls.currentTime = value),
-		});
-
 		const volumeValue = (volume: number) => {
 			controls.volume.value = volume + 5;
 		};
@@ -122,11 +119,7 @@ export default defineComponent({
 		};
 
 		const max = computed(() => {
-			return Math.floor(duration.value);
-		});
-
-		const min = computed(() => {
-			return 0;
+			return duration.value;
 		});
 
 		const onPlay = () => {
@@ -159,11 +152,9 @@ export default defineComponent({
 			onError,
 			formatDuration,
 			max,
-			min,
 			volumeValue,
 			showVolumeSlider,
 			isShow,
-			currentTimeValue,
 			onPlay,
 			currentTimeSlider,
 			currentTimeSliderNumber,
