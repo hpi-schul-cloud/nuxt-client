@@ -60,7 +60,6 @@ export const mockSchool: School = {
 		name: "",
 		abbreviation: "",
 		logoUrl: "",
-		__v: 0,
 	},
 	county: {
 		antaresKey: "",

@@ -51,7 +51,6 @@ const schoolMock = {
 		name: "",
 		abbreviation: "",
 		logoUrl: "",
-		__v: 0,
 	},
 	logo_name: "Schule_logo",
 	county: {

@@ -72,7 +72,6 @@ export default class SchoolsModule extends VuexModule {
 			name: "",
 			abbreviation: "",
 			logoUrl: "",
-			__v: 0,
 		},
 		county: {
 			id: "",

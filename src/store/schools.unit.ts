@@ -145,7 +145,6 @@ describe("schools module", () => {
 						name: "",
 						abbreviation: "",
 						logoUrl: "",
-						__v: 0,
 					},
 				});
 
@@ -181,7 +180,6 @@ describe("schools module", () => {
 						name: "",
 						abbreviation: "",
 						logoUrl: "",
-						__v: 0,
 					},
 				});
 
