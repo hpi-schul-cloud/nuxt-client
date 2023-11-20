@@ -18,6 +18,7 @@
 		"@braintree/sanitize-url": "^6.0.4",
 		"@ckeditor/ckeditor5-vue2": "^3.0.1",
 		"@hpi-schul-cloud/ckeditor": "0.4.0",
+		"@lumieducation/h5p-webcomponents": "^9.2.2",
 		"@mdi/js": "^7.3.67",
 		"@types/vuelidate": "^0.7.21",
 		"@vueuse/components": "^10.5.0",

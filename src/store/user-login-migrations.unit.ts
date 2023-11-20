@@ -3,10 +3,11 @@ import {
 	UserLoginMigrationApiInterface,
 	UserLoginMigrationResponse,
 	UserLoginMigrationSearchListResponse,
-	UserMigrationApiInterface,
 } from "@/serverApi/v3/api";
-import { UserLoginMigration } from "./user-login-migration";
-import UserLoginMigrationModule from "./user-login-migrations";
+import AuthModule from "@/store/auth";
+import { authModule } from "@/store/store-accessor";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
@@ -17,34 +18,25 @@ import {
 	userLoginMigrationResponseFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import AuthModule from "@/store/auth";
-import { authModule } from "@/store/store-accessor";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { HttpStatusCode } from "./types/http-status-code.enum";
 import { BusinessError } from "./types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { HttpStatusCode } from "./types/http-status-code.enum";
+import { UserLoginMigration } from "./user-login-migration";
+import UserLoginMigrationModule from "./user-login-migrations";
 
 describe("UserLoginMigrationModule", () => {
 	let module: UserLoginMigrationModule;
 
 	let apiMock: DeepMocked<UserLoginMigrationApiInterface>;
 
-	let userMigrationApiMock: DeepMocked<UserMigrationApiInterface>;
-
 	beforeEach(() => {
 		module = new UserLoginMigrationModule({});
 
-		userMigrationApiMock = createMock<UserMigrationApiInterface>();
 		apiMock = createMock<UserLoginMigrationApiInterface>();
 
 		jest
 			.spyOn(serverApi, "UserLoginMigrationApiFactory")
 			.mockReturnValue(apiMock);
-
-		jest
-			.spyOn(serverApi, "UserMigrationApiFactory")
-			.mockReturnValue(userMigrationApiMock);
 
 		setupStores({
 			authModule: AuthModule,
@@ -471,26 +463,6 @@ describe("UserLoginMigrationModule", () => {
 				});
 
 				it("should throw application error", async () => {
-					setup();
-
-					const func = () => module.fetchLatestUserLoginMigrationForSchool();
-
-					await expect(func()).rejects.toEqual(
-						createApplicationError(HttpStatusCode.BadRequest)
-					);
-				});
-			});
-
-			describe("when the api returns a bad request", () => {
-				const setup = () => {
-					authModule.setUser({ ...mockUser, schoolId: "schoolId" });
-
-					apiMock.userLoginMigrationControllerFindUserLoginMigrationBySchool.mockRejectedValue(
-						createApplicationError(HttpStatusCode.BadRequest)
-					);
-				};
-
-				it("should throw an error with status code BadRequest when an ApplicationError is thrown", async () => {
 					setup();
 
 					const func = () => module.fetchLatestUserLoginMigrationForSchool();
