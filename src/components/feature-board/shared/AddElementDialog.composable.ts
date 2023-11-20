@@ -11,41 +11,23 @@ import {
 } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { useI18n } from "@/composables/i18n.composable";
-import { notifierModule } from "@/store/store-accessor";
 
 type AddCardElement = (
 	type: ContentElementType
 ) => Promise<AnyContentElement | undefined>;
 
-export const useAddElementDialog = (
-	addElementFunction: AddCardElement,
-	elements: any
-) => {
+export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
-	const { t } = useI18n();
-
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
 
-		try {
-			const elementData = await addElementFunction(elementType);
-			lastCreatedElementId.value = elementData?.id;
-		} catch (error) {
-			if (elementType === ContentElementType.Drawing) {
-				notifierModule.show({
-					text: t(
-						"components.administration.externalToolsSection.notification.infoCreation"
-					),
-					status: "error",
-				});
-			}
-		}
+		const elementData = await addElementFunction(elementType);
+		lastCreatedElementId.value = elementData?.id;
 	};
 
 	const options = [

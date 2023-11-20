@@ -1,6 +1,6 @@
 <template>
 	<div class="drawing-content-element-edit" @click="onOpenElement">
-		<div class="edit-image-mask" />
+		<div class="edit-image-mask rounded-mb" />
 		<v-img :src="imageSrc" class="hover-image" height="185px" cover />
 		<div class="menu">
 			<slot />
@@ -11,7 +11,7 @@
 			:inactive="true"
 		>
 			<v-list-item-content class="py-0">
-				<div class="content">
+				<div class="content py-2 px-3">
 					<v-icon
 						class="edit-icon grey--text text--darken-3"
 						data-testid="board-drawing-element-icon"
@@ -27,7 +27,7 @@
 				</div>
 				<div class="last-updated">
 					<span
-						class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2"
+						class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2 py-1 px-3"
 					>
 						{{ $t("components.cardElement.lastUpdatedAt") }}
 						{{ formattedLastUpdatedAt }}
@@ -80,9 +80,7 @@ export default defineComponent({
 
 	&:hover {
 		.hover-image {
-			border-top-left-radius: 4px;
-			border-top-right-radius: 4px;
-			filter: brightness(75%);
+			filter: brightness(80%);
 		}
 
 		.menu {
@@ -114,13 +112,11 @@ export default defineComponent({
 
 	.text-edit {
 		font-weight: 400;
-		padding: 5px 0px 5px 15px;
 	}
 
 	.content {
 		display: flex;
 		align-items: center;
-		padding: 10px 0px 0px 15px;
 	}
 
 	.board-subtitle {

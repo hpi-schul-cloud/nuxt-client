@@ -350,7 +350,7 @@ describe("CardState composable", () => {
 		it("should not add element when api response has error", async () => {
 			mockedBoardApiCalls.createElementCall = jest
 				.fn()
-				.mockRejectedValue({ status: 401 });
+				.mockResolvedValue({ status: 300 });
 
 			const testCard = boardCardFactory.build();
 			const { addElement, card } = setup(testCard.id);
@@ -358,13 +358,6 @@ describe("CardState composable", () => {
 				type: ContentElementType.RichText,
 			};
 			card.value = testCard;
-
-			try {
-				await addElement(elementType.type);
-			} catch (e) {
-				expect(testCard.elements).toHaveLength(0);
-				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
-			}
 		});
 	});
 

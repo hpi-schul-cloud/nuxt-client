@@ -1,10 +1,10 @@
 <template>
 	<div class="drawing-content-element-display" @click="openElement">
-		<div class="content-image-mask">
+		<div class="content-image-mask rounded-md">
 			<v-img :src="imageSrc" height="185px" cover />
 		</div>
 		<div class="content-info grey lighten-4">
-			<div class="content">
+			<div class="content py-2 px-3">
 				<v-icon class="content-icon grey--text text--darken-3" medium>
 					$mdiPresentation
 				</v-icon>
@@ -16,7 +16,7 @@
 			</div>
 			<div class="last-updated">
 				<span
-					class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2"
+					class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2 py-1 px-3"
 				>
 					{{ $t("components.cardElement.lastUpdatedAt") }}
 					{{ formattedLastUpdatedAt }}
@@ -64,9 +64,7 @@ export default defineComponent({
 .drawing-content-element-display {
 	&:hover {
 		.content-image-mask {
-			filter: brightness(75%);
-			border-top-left-radius: 4px;
-			border-top-right-radius: 4px;
+			filter: brightness(80%);
 		}
 	}
 
@@ -76,13 +74,11 @@ export default defineComponent({
 
 	.text-edit {
 		font-weight: 400;
-		padding: 5px 0px 5px 15px;
 	}
 
 	.content {
 		display: flex;
 		align-items: center;
-		padding: 10px 0px 0px 15px;
 	}
 
 	.board-subtitle {

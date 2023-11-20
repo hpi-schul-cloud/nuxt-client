@@ -153,7 +153,7 @@ export default defineComponent({
 		);
 		const { hasDeletePermission } = useBoardPermissions();
 
-		const { askType } = useAddElementDialog(addElement, card);
+		const { askType } = useAddElementDialog(addElement);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) =>
 			emit("move:card-keyboard", event.code);
