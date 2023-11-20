@@ -46,7 +46,6 @@ const defaultTasksModuleGetters: Partial<TasksModule> = {
 };
 
 const mockAuthStoreDataTeacher = {
-	__v: 1,
 	_id: "asdfg",
 	id: "asdfg",
 	firstName: "Peter",
