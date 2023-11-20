@@ -121,8 +121,8 @@ export class SchoolExternalToolMapper {
 		response: SchoolExternalToolMetadataResponse
 	): SchoolExternalToolMetadata {
 		const mapped: SchoolExternalToolMetadata = {
-			course: response.contextExternalToolCountPerContext.course!,
-			boardElement: response.contextExternalToolCountPerContext.boardElement!,
+			course: response.contextExternalToolCountPerContext.course,
+			boardElement: response.contextExternalToolCountPerContext.boardElement,
 		};
 
 		return mapped;

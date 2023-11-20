@@ -1,4 +1,4 @@
 export interface SchoolExternalToolMetadata {
-	course: number;
-	boardElement: number;
+	course?: number;
+	boardElement?: number;
 }

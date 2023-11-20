@@ -20,17 +20,26 @@ export const useSchoolExternalToolApi = () => {
 			);
 
 		if (
-			response.data.contextExternalToolCountPerContext.course ||
+			response.data.contextExternalToolCountPerContext.course === 0 &&
+			response.data.contextExternalToolCountPerContext.boardElement === 0
+		) {
+			return {
+				course: 0,
+				boardElement: 0,
+			};
+		} else if (
+			response.data.contextExternalToolCountPerContext.course &&
 			response.data.contextExternalToolCountPerContext.boardElement
 		) {
 			const mapped: SchoolExternalToolMetadata =
 				SchoolExternalToolMapper.mapSchoolExternalToolMetadata(response.data);
 
 			return mapped;
+		} else {
+			throw new Error(
+				"SchoolExternalToolMetadataResponse is missing required fields"
+			);
 		}
-		throw new Error(
-			"SchoolExternalToolMetadataResponse is missing required fields"
-		);
 	};
 
 	return {
