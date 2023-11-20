@@ -84,6 +84,10 @@ describe("ExternalToolSection", () => {
 			.mockReturnValue(useSchoolExternalToolUsageMock);
 	});
 
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	describe("when component is used", () => {
 		it("should be found in the dom", () => {
 			const { wrapper } = getWrapper();
@@ -341,7 +345,7 @@ describe("ExternalToolSection", () => {
 	describe("when deleting a schoolExternalTool", () => {
 		describe("when metadata is given", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper({
+				const { wrapper, notifierModule } = getWrapper({
 					getSchoolExternalTools: [
 						schoolExternalToolFactory.build({}),
 						schoolExternalToolFactory.build(),
@@ -351,39 +355,60 @@ describe("ExternalToolSection", () => {
 				const schoolExternalToolMetadata =
 					schoolExternalToolMetadataFactory.build();
 
-				useSchoolExternalToolUsageMock.metadata = ref(
-					schoolExternalToolMetadata
-				);
+				useSchoolExternalToolUsageMock.metadata.value =
+					schoolExternalToolMetadata;
 
 				return {
 					wrapper,
+					notifierModule,
 				};
 			};
+
+			it("should display delete dialog", async () => {
+				const { wrapper } = setup();
+
+				const tableRows = wrapper.find("tbody").findAll("tr");
+
+				const firstRowButtons = tableRows.at(0).findAll("button");
+
+				const deleteButton = firstRowButtons.at(1);
+				await deleteButton.trigger("click");
+
+				const toolUsageCount = wrapper.find('[data-testid="delete-dialog"]');
+
+				expect(toolUsageCount.isVisible()).toBeTruthy();
+			});
 
 			it("should display tool usage count", async () => {
 				const { wrapper } = setup();
 
-				const deletebtn = wrapper.find('[data-testId="deleteAction"]');
-				await deletebtn.trigger("click");
+				const tableRows = wrapper.find("tbody").findAll("tr");
+
+				const firstRowButtons = tableRows.at(0).findAll("button");
+
+				const deleteButton = firstRowButtons.at(1);
+				await deleteButton.trigger("click");
 
 				const toolUsageCount = wrapper.find(
 					'[data-testid="delete-dialog-content"]'
 				);
 
-				expect(toolUsageCount).not.toBe("visible");
+				expect(toolUsageCount.text()).toContain(
+					"components.administration.externalToolsSection.dialog.content"
+				);
 			});
 
-			it("should display notification", async () => {
-				const { wrapper } = setup();
+			it("should not display notification", async () => {
+				const { wrapper, notifierModule } = setup();
 
-				const deletebtn = wrapper.find('[data-testId="deleteAction"]');
-				await deletebtn.trigger("click");
+				const tableRows = wrapper.find("tbody").findAll("tr");
 
-				const toolUsageCount = wrapper.find(
-					'[data-testid="delete-dialog-content"]'
-				);
+				const firstRowButtons = tableRows.at(0).findAll("button");
 
-				expect(toolUsageCount).not.toBe("visible");
+				const deleteButton = firstRowButtons.at(1);
+				await deleteButton.trigger("click");
+
+				expect(notifierModule.show).not.toHaveBeenCalled();
 			});
 		});
 
@@ -422,8 +447,12 @@ describe("ExternalToolSection", () => {
 			it("should display notification", async () => {
 				const { wrapper, notifierModule } = setup();
 
-				const deletebtn = wrapper.find('[data-testId="deleteAction"]');
-				await deletebtn.trigger("click");
+				const tableRows = wrapper.find("tbody").findAll("tr");
+
+				const firstRowButtons = tableRows.at(0).findAll("button");
+
+				const deleteButton = firstRowButtons.at(1);
+				await deleteButton.trigger("click");
 
 				expect(notifierModule.show).toHaveBeenCalled();
 				expect(notifierModule.show).toHaveBeenCalledWith({
