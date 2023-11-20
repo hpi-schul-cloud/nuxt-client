@@ -1,6 +1,6 @@
 <template>
 	<div class="text-center">
-		<v-menu offset-y max-height="120px" left="250px" max-width="120px">
+		<v-menu offset-y max-height="120px" nudge-left="100px" max-width="120px">
 			<template v-slot:activator="{ on, attrs }">
 				<button v-bind="attrs" v-on="on">
 					<v-icon style="color: white">{{ mdiPlaySpeed }}</v-icon>
