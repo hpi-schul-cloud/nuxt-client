@@ -47,7 +47,7 @@
 		</v-btn>
 
 		<v-dialog
-			v-if="toolMetadata"
+			v-if="metadata"
 			data-testid="delete-dialog"
 			v-model="isDeleteDialogOpen"
 			max-width="360"
@@ -69,8 +69,8 @@
 								'components.administration.externalToolsSection.dialog.content',
 								{
 									itemName: getItemName,
-									courseCount: toolMetadata.course,
-									boardElementCount: toolMetadata.boardElement,
+									courseCount: metadata.course,
+									boardElementCount: metadata.boardElement,
 								}
 							)
 						"
@@ -201,24 +201,13 @@ export default defineComponent({
 			return itemToDelete.value ? itemToDelete.value?.name : "";
 		});
 
-		const getToolMetadata = computed(() => {
-			if (!metadata.value?.course || !metadata.value?.boardElement) {
-				return undefined;
-			}
-
-			return {
-				course: metadata.value?.course,
-				boardElement: metadata.value?.boardElement,
-			};
-		});
-
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
 		const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 			itemToDelete.value = item;
 			isDeleteDialogOpen.value = true;
 			await fetchSchoolExternalToolUsage(item.id);
-			if (!getToolMetadata.value) {
+			if (!metadata.value) {
 				notifierModule.show({
 					text: t(
 						"components.administration.externalToolsSection.dialog.content.metadata.error"
@@ -248,7 +237,7 @@ export default defineComponent({
 			getItemName,
 			mdiRefreshCircle,
 			mdiCheckCircle,
-			toolMetadata: getToolMetadata,
+			metadata,
 		};
 	},
 });
