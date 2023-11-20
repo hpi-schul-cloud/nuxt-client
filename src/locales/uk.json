@@ -185,7 +185,6 @@
 	"components.administration.externalToolsSection.notification.created": "Інструмент створено успішно.",
 	"components.administration.externalToolsSection.notification.updated": "Інструмент успішно оновлено.",
 	"components.administration.externalToolsSection.notification.deleted": "Інструмент успішно видалено.",
-	"components.administration.externalToolsSection.notification.infoCreation": "Ви не можете створити ще одну дошку в межах картки.",
 	"components.base.BaseIcon.error": "помилка завантаження значка {icon} з {source}. Можливо, він недоступний або ви використовуєте застарілий браузер Edge.",
 	"components.base.showPassword": "Показати пароль",
 	"components.elementTypeSelection.dialog.title": "Додати елемент",

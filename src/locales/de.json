@@ -185,7 +185,6 @@
 	"components.administration.externalToolsSection.notification.created": "Tool wurde erfolgreich erstellt.",
 	"components.administration.externalToolsSection.notification.updated": "Tool wurde erfolgreich aktualisiert.",
 	"components.administration.externalToolsSection.notification.deleted": "Tool wurde erfolgreich gelöscht.",
-	"components.administration.externalToolsSection.notification.infoCreation": "Es ist nicht möglich, innerhalb der Karte eine weitere Karte hinzuzufügen.",
 	"components.base.BaseIcon.error": "Das Icon aus dieser Quelle konnte leider nicht geladen werden. Falls Sie Microsoft Edge verwenden, stellen Sie bitte sicher, dass Sie die neuste Version verwenden.",
 	"components.base.showPassword": "Passwort anzeigen",
 	"components.elementTypeSelection.dialog.title": "Element hinzufügen",

@@ -184,7 +184,6 @@
 	"components.administration.externalToolsSection.notification.created": "La herramienta se creó correctamente.",
 	"components.administration.externalToolsSection.notification.updated": "La herramienta se ha actualizado correctamente.",
 	"components.administration.externalToolsSection.notification.deleted": "La herramienta se eliminó correctamente.",
-	"components.administration.externalToolsSection.notification.infoCreation": "No se puede añadir otro tablero dentro de la tarjeta",
 	"components.base.BaseIcon.error": "Error al cargar el icono {icon} de {source}. Es posible que no esté disponible o que estés utilizando el navegador Edge heredado.",
 	"components.base.showPassword": "Mostrar contraseña",
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
