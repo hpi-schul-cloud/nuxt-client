@@ -20,7 +20,7 @@ export const useMetaTagExtractorApi = () => {
 		response: MetaTagExtractorResponse
 	): MetaTagResult => {
 		const prefix = getPrefix(response.type);
-		const postfix = getPostfix(response.type, response.parentTitle);
+		const postfix = getSuffix(response.type, response.parentTitle);
 		let title = getTitle(response.type, response.title);
 		title = `${prefix}${title}${postfix}`;
 		return { ...response, title };
@@ -46,7 +46,7 @@ export const useMetaTagExtractorApi = () => {
 		return title;
 	};
 
-	const getPostfix = (type: string, parentTitle: string) => {
+	const getSuffix = (type: string, parentTitle: string) => {
 		if (type === "board" && parentTitle.length > 0) {
 			return ` (${parentTitle})`;
 		}
