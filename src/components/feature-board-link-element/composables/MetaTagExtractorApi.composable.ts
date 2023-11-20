@@ -19,14 +19,14 @@ export const useMetaTagExtractorApi = () => {
 	const mapMetaTagResponse = (
 		response: MetaTagExtractorResponse
 	): MetaTagResult => {
-		const prefix = getPrefix(response.type);
-		const postfix = getSuffix(response.type, response.parentTitle);
+		const prefix = getPrefix(response.type) ?? "";
+		const suffix = getSuffix(response.type, response.parentTitle) ?? "";
 		let title = getTitle(response.type, response.title);
-		title = `${prefix}${title}${postfix}`;
+		title = `${prefix}${title}${suffix}`;
 		return { ...response, title };
 	};
 
-	const getPrefix = (type: string) => {
+	const getPrefix = (type: string): string | undefined => {
 		const typeToLanguageKeyMap: Record<string, string> = {
 			course: "common.labels.course",
 			lesson: "common.words.topic",
@@ -35,8 +35,10 @@ export const useMetaTagExtractorApi = () => {
 		};
 
 		const prefixKey = typeToLanguageKeyMap[type];
-		const prefix = prefixKey ? `${t(prefixKey)}: ` : "";
-		return prefix;
+		if (prefixKey === undefined) {
+			return undefined;
+		}
+		return `${t(prefixKey)}: `;
 	};
 
 	const getTitle = (type: string, title: string) => {
@@ -46,11 +48,11 @@ export const useMetaTagExtractorApi = () => {
 		return title;
 	};
 
-	const getSuffix = (type: string, parentTitle: string) => {
+	const getSuffix = (type: string, parentTitle: string): string | undefined => {
 		if (type === "board" && parentTitle.length > 0) {
 			return ` (${parentTitle})`;
 		}
-		return "";
+		return undefined;
 	};
 
 	const getMetaTags = async (url: string): Promise<MetaTagResult> => {
