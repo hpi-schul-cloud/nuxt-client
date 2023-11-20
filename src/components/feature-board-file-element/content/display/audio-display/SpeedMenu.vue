@@ -6,14 +6,22 @@
 					<v-icon style="color: white">{{ mdiPlaySpeed }}</v-icon>
 				</button>
 			</template>
+
 			<v-list>
-				<v-list-item
-					v-for="(item, index) in items"
-					:key="index"
-					@click="onSelect(item.id)"
-				>
-					<v-list-item-title>{{ item.title }}</v-list-item-title>
-				</v-list-item>
+				<v-list-item-group v-model="selectedItem">
+					<v-list-item
+						v-for="(item, i) in items"
+						:key="i"
+						@click="onSelect(item.id)"
+					>
+						<v-list-item-content class="ml-3">
+							<v-list-item-title>{{ item.title }} </v-list-item-title>
+						</v-list-item-content>
+						<v-list-item-icon v-if="item.id === selectedItem + 1">
+							<v-icon>{{ mdiCheck }}</v-icon>
+						</v-list-item-icon>
+					</v-list-item>
+				</v-list-item-group>
 			</v-list>
 		</v-menu>
 	</div>
@@ -21,7 +29,7 @@
 
 <script lang="ts">
 import { mdiCheck, mdiPlaySpeed } from "@mdi/js";
-import { defineComponent } from "vue";
+import { defineComponent, Ref, ref } from "vue";
 
 export default defineComponent({
 	name: "SpeedMenu",
@@ -37,9 +45,12 @@ export default defineComponent({
 			{ title: "1.75", value: 1.75, id: 7 },
 			{ title: "2", value: 2, id: 8 },
 		];
+		const selectedItem = ref(3);
+		const speedSelected: Ref<boolean> = ref(false);
 
 		const onSelect = async (selected: number) => {
 			emit("rate", items[selected - 1].value);
+			speedSelected.value = !speedSelected.value;
 		};
 
 		return {
@@ -47,6 +58,8 @@ export default defineComponent({
 			mdiPlaySpeed,
 			mdiCheck,
 			onSelect,
+			speedSelected,
+			selectedItem,
 		};
 	},
 });
