@@ -1,8 +1,8 @@
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 import { ref, Ref } from "vue";
-import { BusinessError } from "../../store/types/commons";
+import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "../../utils/api";
-import { SchoolExternalToolMetadata } from "../../store/external-tool";
+import { SchoolExternalToolMetadata } from "@/store/external-tool";
 
 export const useSchoolExternalToolUsage = () => {
 	const { fetchSchoolExternalToolMetadata } = useSchoolExternalToolApi();

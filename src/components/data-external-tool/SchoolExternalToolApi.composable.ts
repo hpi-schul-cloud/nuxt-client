@@ -4,7 +4,7 @@ import {
 	ToolApiInterface,
 } from "../../serverApi/v3";
 import { $axios } from "../../utils/api";
-import { SchoolExternalToolMetadata } from "../../store/external-tool";
+import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
 import { AxiosResponse } from "axios";
 

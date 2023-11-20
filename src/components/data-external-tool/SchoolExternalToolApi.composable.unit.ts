@@ -1,12 +1,11 @@
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import * as serverApi from "../../serverApi/v3/api";
-import { SchoolExternalToolMetadataResponse } from "../../serverApi/v3/api";
-import { mockApiResponse } from "../../../tests/test-utils";
-import { useExternalToolApi } from "./ExternalToolApi.composable";
+import { SchoolExternalToolMetadataResponse } from "../../serverApi/v3";
 import {
-	SchoolExternalToolMetadata,
-} from "../../store/external-tool";
-import { schoolExternalToolMetadataResponseFactory } from "../../../tests/test-utils/factory/schoolExternalToolMetadataResponseFactory";
+	mockApiResponse,
+	schoolExternalToolMetadataResponseFactory,
+} from "@@/tests/test-utils";
+import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 
 describe("SchoolExternalToolApi.composable", () => {
@@ -39,15 +38,17 @@ describe("SchoolExternalToolApi.composable", () => {
 		it("should call the api for metadata of schoolExternalTool", async () => {
 			setup();
 
-			await useExternalToolApi().fetchLaunchDataCall("contextExternalToolId");
+			await useSchoolExternalToolApi().fetchSchoolExternalToolMetadata(
+				"schoolExternalToolId"
+			);
 
 			expect(
-				toolApi.toolLaunchControllerGetToolLaunchRequest
-			).toHaveBeenCalledWith("contextExternalToolId");
+				toolApi.toolSchoolControllerGetMetaDataForExternalTool
+			).toHaveBeenCalledWith("schoolExternalToolId");
 		});
 
 		it("should return metadata", async () => {
-			const { request } = setup();
+			setup();
 
 			const result: SchoolExternalToolMetadata =
 				await useSchoolExternalToolApi().fetchSchoolExternalToolMetadata(

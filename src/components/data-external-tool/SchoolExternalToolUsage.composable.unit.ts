@@ -1,11 +1,13 @@
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 import { useSchoolExternalToolUsage } from "./SchoolExternalToolUsage.composable";
-import { SchoolExternalToolMetadata } from "../../store/external-tool";
-import { schoolExternalToolMetadataFactory } from "../../../tests/test-utils/factory/schoolExternalToolMetadataFactory";
-import { axiosErrorFactory } from "../../../tests/test-utils";
+import { SchoolExternalToolMetadata } from "@/store/external-tool";
+import {
+	axiosErrorFactory,
+	schoolExternalToolMetadataFactory,
+} from "@@/tests/test-utils";
 import { mapAxiosErrorToResponseError } from "../../utils/api";
-import { BusinessError } from "../../store/types/commons";
+import { BusinessError } from "@/store/types/commons";
 
 jest.mock("@data-external-tool/SchoolExternalToolApi.composable");
 
