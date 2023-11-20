@@ -1,6 +1,6 @@
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import * as serverApi from "../../serverApi/v3/api";
-import { SchoolExternalToolMetadataResponse } from "../../serverApi/v3";
+import * as serverApi from "@/serverApi/v3/api";
+import { SchoolExternalToolMetadataResponse } from "@/serverApi/v3";
 import {
 	mockApiResponse,
 	schoolExternalToolMetadataResponseFactory,

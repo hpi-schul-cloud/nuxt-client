@@ -120,17 +120,9 @@ export class SchoolExternalToolMapper {
 	static mapSchoolExternalToolMetadata(
 		response: SchoolExternalToolMetadataResponse
 	): SchoolExternalToolMetadata {
-		if (
-			response.contextExternalToolCountPerContext.boardElement === undefined ||
-			response.contextExternalToolCountPerContext.course === undefined
-		) {
-			throw new Error(
-				"SchoolExternalToolMetadataResponse is missing required fields"
-			);
-		}
 		const mapped: SchoolExternalToolMetadata = {
-			course: response.contextExternalToolCountPerContext.course,
-			boardElement: response.contextExternalToolCountPerContext.boardElement,
+			course: response.contextExternalToolCountPerContext.course!,
+			boardElement: response.contextExternalToolCountPerContext.boardElement!,
 		};
 
 		return mapped;

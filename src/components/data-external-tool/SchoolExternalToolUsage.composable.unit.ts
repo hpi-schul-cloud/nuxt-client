@@ -6,7 +6,7 @@ import {
 	axiosErrorFactory,
 	schoolExternalToolMetadataFactory,
 } from "@@/tests/test-utils";
-import { mapAxiosErrorToResponseError } from "../../utils/api";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { BusinessError } from "@/store/types/commons";
 
 jest.mock("@data-external-tool/SchoolExternalToolApi.composable");

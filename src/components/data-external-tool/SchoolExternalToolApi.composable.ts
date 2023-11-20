@@ -2,8 +2,8 @@ import {
 	SchoolExternalToolMetadataResponse,
 	ToolApiFactory,
 	ToolApiInterface,
-} from "../../serverApi/v3";
-import { $axios } from "../../utils/api";
+} from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
 import { AxiosResponse } from "axios";
@@ -19,10 +19,18 @@ export const useSchoolExternalToolApi = () => {
 				schoolExternalToolId
 			);
 
-		const mapped: SchoolExternalToolMetadata =
-			SchoolExternalToolMapper.mapSchoolExternalToolMetadata(response.data);
+		if (
+			response.data.contextExternalToolCountPerContext.course ||
+			response.data.contextExternalToolCountPerContext.boardElement
+		) {
+			const mapped: SchoolExternalToolMetadata =
+				SchoolExternalToolMapper.mapSchoolExternalToolMetadata(response.data);
 
-		return mapped;
+			return mapped;
+		}
+		throw new Error(
+			"SchoolExternalToolMetadataResponse is missing required fields"
+		);
 	};
 
 	return {
