@@ -216,6 +216,7 @@ https://github.com/vuetifyjs/vuetify/issues/13508
 
 - hover breaks variant elevated
 - GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/17574
+-> seems like it was fixed with 3.4.0
 
 ### v-chip
 - there is a bug in vuetifuy where the `text-color` prop does not work

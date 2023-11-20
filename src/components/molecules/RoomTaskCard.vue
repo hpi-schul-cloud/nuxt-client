@@ -6,7 +6,7 @@
 		:aria-label="ariaLabel"
 		tabindex="0"
 		:variant="isDraft ? 'outlined' : 'elevated'"
-		:hover="vuetifyHover"
+		hover
 		data-testid="content-card-task"
 		role="button"
 		@click="handleClick"
@@ -16,7 +16,6 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<!-- check hover -->
 		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="tagline" data-testid="tagline">
@@ -144,13 +143,6 @@ export default {
 			},
 			roles: Roles,
 			canShowDescription: false,
-			/**
-			 * VUE3_UPGRADE
-			 * - There is a bug report on Vuetify that using the hover attribute on v-card components is problematic.
-			 * - https://github.com/vuetifyjs/vuetify/issues/17574
-			 * - Remove this 'vuetifyHover' control after the upcoming Vuetify release if the issue is solved.
-			 */
-			vuetifyHover: false,
 		};
 	},
 	computed: {
