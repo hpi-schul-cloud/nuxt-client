@@ -8,7 +8,7 @@
 				v-on:error="onError"
 				controlsList="nodownload noplaybackrate"
 			/>
-			<button @click="playing = !playing">
+			<button @click="onPlay">
 				<v-icon
 					role="img"
 					aria-hidden="false"
@@ -28,9 +28,11 @@
 				color="white"
 				thumb-color="white"
 				track-color="#9e9e9e"
-				v-model="currentTime"
-				:max="max"
-				:min="min"
+				:value="currentTime"
+				@click="currentTimeSlider"
+				@change="currentTimeSliderNumber"
+				@mousedown="currentTimeSlider"
+				@mouseup="currentTimeSlider"
 			/>
 			<SpeedMenu @rate="speedRate" />
 			<v-icon
@@ -84,7 +86,6 @@ export default defineComponent({
 	emits: ["error"],
 	setup(props, { emit }) {
 		const audio = ref();
-		const isOpen = ref(true);
 		const source = computed(() => {
 			return props.src;
 		});
@@ -94,6 +95,11 @@ export default defineComponent({
 		});
 
 		const { playing, currentTime, duration, volume, muted, rate } = controls;
+
+		const currentTimeValue = computed({
+			get: () => controls?.currentTime,
+			set: (value) => (controls.currentTime = value),
+		});
 
 		const volumeValue = (volume: number) => {
 			controls.volume.value = volume + 5;
@@ -123,18 +129,18 @@ export default defineComponent({
 			return 0;
 		});
 
-		const open = () => {
-			return (isOpen.value = true);
+		const onPlay = () => {
+			playing.value = !playing.value;
 		};
 
-		const close = () => {
-			return (isOpen.value = false);
+		const currentTimeSlider = (event: Event) => {
+			event.stopPropagation();
+			event.stopImmediatePropagation();
 		};
 
-		onMounted(() => {
-			volume.value = 0.5;
-			currentTime.value = 60;
-		});
+		const currentTimeSliderNumber = (num: number) => {
+			controls.currentTime.value = num;
+		};
 
 		return {
 			audio,
@@ -152,13 +158,15 @@ export default defineComponent({
 			mdiPlaySpeed,
 			onError,
 			formatDuration,
-			open,
-			close,
 			max,
 			min,
 			volumeValue,
 			showVolumeSlider,
 			isShow,
+			currentTimeValue,
+			onPlay,
+			currentTimeSlider,
+			currentTimeSliderNumber,
 		};
 	},
 });
