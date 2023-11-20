@@ -68,7 +68,6 @@ const mockLessons: { data: Lessons } = {
 				position: 0,
 				time: "",
 				updatedAt: "",
-				__v: 0,
 				_id: "",
 			},
 		],

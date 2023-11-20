@@ -67,7 +67,6 @@ export type Lesson = {
 	position: number;
 	time: string;
 	updatedAt: string;
-	__v: number;
 	_id: string;
 };
 

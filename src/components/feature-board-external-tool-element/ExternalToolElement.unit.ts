@@ -7,6 +7,7 @@ import {
 	ToolConfigurationStatus,
 } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { BusinessError } from "@/store/types/commons";
 import { I18N_KEY } from "@/utils/inject";
 import {
 	contextExternalToolFactory,
@@ -22,15 +23,13 @@ import {
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@mdi/js";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { useSharedLastCreatedElement } from "@util-board";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue, { ref } from "vue";
 import ExternalToolElement from "./ExternalToolElement.vue";
-import { useSharedLastCreatedElement } from "@util-board";
 
 jest.mock("@data-board");
 jest.mock("@data-external-tool");
-jest.mock("@ui-confirmation-dialog");
 jest.mock("@util-board");
 
 const EMPTY_TEST_ELEMENT: ExternalToolElementResponse = {
@@ -49,7 +48,7 @@ describe("ExternalToolElement", () => {
 	let useBoardFocusHandlerMock: DeepMocked<
 		ReturnType<typeof useBoardFocusHandler>
 	>;
-	let useSharedExternalToolElementDisplayStateMock: DeepMocked<
+	let useExternalToolElementDisplayStateMock: DeepMocked<
 		ReturnType<typeof useExternalToolElementDisplayState>
 	>;
 	let useExternalToolLaunchStateMock: DeepMocked<
@@ -64,7 +63,7 @@ describe("ExternalToolElement", () => {
 			createMock<ReturnType<typeof useContentElementState>>();
 		useBoardFocusHandlerMock =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
-		useSharedExternalToolElementDisplayStateMock =
+		useExternalToolElementDisplayStateMock =
 			createMock<ReturnType<typeof useExternalToolElementDisplayState>>();
 		useExternalToolLaunchStateMock =
 			createMock<ReturnType<typeof useExternalToolLaunchState>>();
@@ -77,7 +76,7 @@ describe("ExternalToolElement", () => {
 		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 		jest
 			.mocked(useExternalToolElementDisplayState)
-			.mockReturnValue(useSharedExternalToolElementDisplayStateMock);
+			.mockReturnValue(useExternalToolElementDisplayStateMock);
 		jest
 			.mocked(useExternalToolLaunchState)
 			.mockReturnValue(useExternalToolLaunchStateMock);
@@ -99,14 +98,9 @@ describe("ExternalToolElement", () => {
 	) => {
 		document.body.setAttribute("data-app", "true");
 
-		const useDeleteConfirmationDialogReturnValue =
-			createMock<ReturnType<typeof useDeleteConfirmationDialog>>();
-		jest
-			.mocked(useDeleteConfirmationDialog)
-			.mockReturnValue(useDeleteConfirmationDialogReturnValue);
-
 		useContentElementStateMock.modelValue = ref(props.element.content);
-		useSharedExternalToolElementDisplayStateMock.displayData = ref(displayData);
+		useExternalToolElementDisplayStateMock.displayData = ref(displayData);
+		useExternalToolElementDisplayStateMock.error = ref(undefined);
 		useSharedLastCreatedElementMock.lastCreatedElementId = ref(undefined);
 
 		const wrapper: Wrapper<Vue> = shallowMount(
@@ -130,7 +124,6 @@ describe("ExternalToolElement", () => {
 
 		return {
 			wrapper,
-			useDeleteConfirmationDialogReturnValue,
 		};
 	};
 
@@ -157,7 +150,7 @@ describe("ExternalToolElement", () => {
 				await Vue.nextTick();
 
 				expect(
-					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
+					useExternalToolElementDisplayStateMock.fetchDisplayData
 				).toHaveBeenCalledWith("contextExternalToolId");
 			});
 
@@ -234,7 +227,7 @@ describe("ExternalToolElement", () => {
 				await Vue.nextTick();
 
 				expect(
-					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
+					useExternalToolElementDisplayStateMock.fetchDisplayData
 				).not.toHaveBeenCalled();
 			});
 
@@ -463,7 +456,7 @@ describe("ExternalToolElement", () => {
 			const setup = () => {
 				const contextExternalToolId = "context-external-tool-id";
 
-				useSharedExternalToolElementDisplayStateMock.isLoading = ref(true);
+				useExternalToolElementDisplayStateMock.isLoading = ref(true);
 
 				const { wrapper } = getWrapper({
 					element: {
@@ -491,7 +484,7 @@ describe("ExternalToolElement", () => {
 			const setup = () => {
 				const contextExternalToolId = "context-external-tool-id";
 
-				useSharedExternalToolElementDisplayStateMock.isLoading = ref(false);
+				useExternalToolElementDisplayStateMock.isLoading = ref(false);
 
 				const { wrapper } = getWrapper(
 					{
@@ -639,7 +632,7 @@ describe("ExternalToolElement", () => {
 				await Vue.nextTick();
 
 				expect(
-					useSharedExternalToolElementDisplayStateMock.fetchDisplayData
+					useExternalToolElementDisplayStateMock.fetchDisplayData
 				).toHaveBeenCalledWith(savedTool.id);
 			});
 		});
@@ -672,6 +665,56 @@ describe("ExternalToolElement", () => {
 				await Vue.nextTick();
 
 				expect(useExternalToolLaunchStateMock.launchTool).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("Alert", () => {
+		describe("when there is an error or the tool is outdated", () => {
+			const setup = () => {
+				const error: BusinessError = {
+					statusCode: 418,
+					message: "Loading error",
+				};
+
+				const { wrapper } = getWrapper(
+					{
+						element: EMPTY_TEST_ELEMENT,
+						isEditMode: true,
+					},
+					externalToolDisplayDataFactory.build({
+						status: ToolConfigurationStatus.Outdated,
+					})
+				);
+
+				useExternalToolElementDisplayStateMock.error.value = error;
+
+				return {
+					wrapper,
+					error,
+				};
+			};
+
+			it("should display an outdated alert", async () => {
+				const { wrapper } = setup();
+
+				const alert = wrapper.find(
+					'[data-testid="board-external-tool-element-alert"]'
+				);
+
+				expect(alert.props("isToolOutdated")).toEqual(true);
+			});
+
+			it("should display an error alert", async () => {
+				const { wrapper, error } = setup();
+
+				await Vue.nextTick();
+
+				const alert = wrapper.find(
+					'[data-testid="board-external-tool-element-alert"]'
+				);
+
+				expect(alert.props("error")).toEqual(error);
 			});
 		});
 	});

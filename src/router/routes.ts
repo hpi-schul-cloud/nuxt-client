@@ -1,6 +1,6 @@
 import { Layouts } from "@/layouts/types";
-import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
+import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { ToolContextType } from "@/serverApi/v3";
 import {
 	isEnum,
@@ -8,10 +8,12 @@ import {
 	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_ID,
+	REGEX_H5P_ID,
 	REGEX_UUID,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { Route, RouteConfig } from "vue-router";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
@@ -274,6 +276,25 @@ export const routes: Array<RouteConfig> = [
 			contextId: route.query.contextId,
 			contextType: route.query.contextType,
 			configId: route.params.configId,
+		}),
+	},
+	{
+		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
+		component: () => import("../pages/h5p/H5PPlayer.page.vue"),
+		name: "h5pPlayer",
+		//beforeEnter: createPermissionGuard(["H5P"]),
+	},
+	{
+		path: `/h5p/editor/:id(${REGEX_H5P_ID})?`,
+		component: () => import("../pages/h5p/H5PEditor.page.vue"),
+		name: "h5pEditor",
+		beforeEnter: validateQueryParameters({
+			parentType: isEnum(H5PContentParentType),
+			parentId: isMongoId,
+		}),
+		props: (route: Route) => ({
+			parentId: route.query.parentId,
+			parentType: route.query.parentType,
 		}),
 	},
 ];

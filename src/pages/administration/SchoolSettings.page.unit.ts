@@ -45,7 +45,6 @@ describe("SchoolSettingsPage", () => {
 		abbreviation: "BB",
 		logoUrl:
 			"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Brandenburg_Wappen.svg/354px-Brandenburg_Wappen.svg.png",
-		__v: 0,
 	};
 
 	const mockSystems: any[] = [{ _id: "123", type: "itslearning" }];
@@ -65,7 +64,6 @@ describe("SchoolSettingsPage", () => {
 			getCurrentYear: {
 				_id: "123",
 				name: "School Year 3000",
-				__v: 1,
 				startDate: "",
 				endDate: "",
 			},
