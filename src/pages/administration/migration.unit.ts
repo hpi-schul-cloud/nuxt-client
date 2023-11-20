@@ -67,13 +67,11 @@ const schoolMock = {
 	],
 	updatedAt: "2022-02-10T11:56:22.817Z",
 	createdAt: "2017-01-01T00:06:37.148Z",
-	__v: 1,
 	currentYear: {
 		id: "5ebd6dc14a431f75ec9a3e77",
 		name: "2021/22",
 		startDate: "2021-08-01T00:00:00.000Z",
 		endDate: "2022-07-31T00:00:00.000Z",
-		__v: 0,
 	},
 	purpose: "demo",
 	features: {
@@ -102,14 +100,12 @@ const schoolMock = {
 				name: "2021/22",
 				startDate: "2021-08-01T00:00:00.000Z",
 				endDate: "2022-07-31T00:00:00.000Z",
-				__v: 0,
 			},
 			{
 				id: "5ebd6dc14a431f75ec9a3e78",
 				name: "2022/23",
 				startDate: "2022-08-01T00:00:00.000Z",
 				endDate: "2023-07-31T00:00:00.000Z",
-				__v: 0,
 			},
 		],
 		activeYear: {
@@ -117,28 +113,24 @@ const schoolMock = {
 			name: "2021/22",
 			startDate: "2021-08-01T00:00:00.000Z",
 			endDate: "2022-07-31T00:00:00.000Z",
-			__v: 0,
 		},
 		defaultYear: {
 			id: "5ebd6dc14a431f75ec9a3e77",
 			name: "2021/22",
 			startDate: "2021-08-01T00:00:00.000Z",
 			endDate: "2022-07-31T00:00:00.000Z",
-			__v: 0,
 		},
 		nextYear: {
 			id: "5ebd6dc14a431f75ec9a3e78",
 			name: "2022/23",
 			startDate: "2022-08-01T00:00:00.000Z",
 			endDate: "2023-07-31T00:00:00.000Z",
-			__v: 0,
 		},
 		lastYear: {
 			id: "5d44297075e1502c27e405e2",
 			name: "2020/21",
 			startDate: "2020-08-01T00:00:00.000Z",
 			endDate: "2021-07-31T00:00:00.000Z",
-			__v: 0,
 		},
 	},
 

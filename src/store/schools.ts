@@ -83,13 +83,11 @@ export default class SchoolsModule extends VuexModule {
 		systems: [],
 		updatedAt: "",
 		createdAt: "",
-		__v: 0,
 		currentYear: {
 			id: "",
 			name: "",
 			startDate: "",
 			endDate: "",
-			__v: 0,
 		},
 		purpose: "",
 		features: {
@@ -114,28 +112,24 @@ export default class SchoolsModule extends VuexModule {
 				name: "",
 				startDate: "",
 				endDate: "",
-				__v: 0,
 			},
 			lastYear: {
 				id: "",
 				name: "",
 				startDate: "",
 				endDate: "",
-				__v: 0,
 			},
 			activeYear: {
 				id: "",
 				name: "",
 				startDate: "",
 				endDate: "",
-				__v: 0,
 			},
 			defaultYear: {
 				id: "",
 				name: "",
 				startDate: "",
 				endDate: "",
-				__v: 0,
 			},
 			schoolYears: [],
 		},
@@ -146,7 +140,6 @@ export default class SchoolsModule extends VuexModule {
 		name: "",
 		abbreviation: "",
 		logoUrl: "",
-		__v: 0,
 	};
 	systems: any[] = [];
 	loading = false;

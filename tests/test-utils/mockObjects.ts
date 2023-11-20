@@ -3,7 +3,6 @@ import { School } from "@/store/types/schools";
 
 export const mockUser: User = {
 	_id: "",
-	__v: 0,
 	firstName: "",
 	lastName: "",
 	email: "",
@@ -20,7 +19,6 @@ export const mockUser: User = {
 			createdAt: "",
 			roles: [],
 			permissions: [],
-			__v: 2,
 			displayName: "test-display-name",
 			id: "",
 		},
@@ -73,13 +71,11 @@ export const mockSchool: School = {
 	systems: [],
 	updatedAt: "",
 	createdAt: "",
-	__v: 0,
 	currentYear: {
 		id: "",
 		name: "",
 		startDate: "",
 		endDate: "",
-		__v: 0,
 	},
 	purpose: "",
 	features: {
@@ -104,28 +100,24 @@ export const mockSchool: School = {
 			name: "",
 			startDate: "",
 			endDate: "",
-			__v: 0,
 		},
 		lastYear: {
 			id: "",
 			name: "",
 			startDate: "",
 			endDate: "",
-			__v: 0,
 		},
 		activeYear: {
 			id: "",
 			name: "",
 			startDate: "",
 			endDate: "",
-			__v: 0,
 		},
 		defaultYear: {
 			id: "",
 			name: "",
 			startDate: "",
 			endDate: "",
-			__v: 0,
 		},
 		schoolYears: [
 			{
@@ -133,7 +125,6 @@ export const mockSchool: School = {
 				name: "",
 				startDate: "",
 				endDate: "",
-				__v: 0,
 			},
 		],
 	},

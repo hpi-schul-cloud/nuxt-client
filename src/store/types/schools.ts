@@ -3,7 +3,6 @@ export type Year = {
 	name: string;
 	endDate: string;
 	startDate: string;
-	__v: number;
 };
 
 export type County = {
@@ -19,7 +18,6 @@ export type FederalState = {
 	abbreviation: string;
 	counties: County[];
 	logoUrl: string;
-	__v: number;
 };
 
 export type School = {
@@ -33,7 +31,6 @@ export type School = {
 	systems: string[];
 	updatedAt: string;
 	createdAt: string;
-	__v: number;
 	currentYear: Year;
 	purpose: string;
 	features: {
