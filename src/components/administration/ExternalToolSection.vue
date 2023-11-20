@@ -207,6 +207,7 @@ export default defineComponent({
 			itemToDelete.value = item;
 			isDeleteDialogOpen.value = true;
 			await fetchSchoolExternalToolUsage(item.id);
+
 			if (!metadata.value) {
 				notifierModule.show({
 					text: t(

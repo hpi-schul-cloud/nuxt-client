@@ -18,8 +18,9 @@ export const useSchoolExternalToolUsage = () => {
 		error.value = undefined;
 
 		try {
-			const schoolExternalToolMetadata =
+			const schoolExternalToolMetadata: SchoolExternalToolMetadata =
 				await fetchSchoolExternalToolMetadata(schoolExternalToolId);
+
 			metadata.value = schoolExternalToolMetadata;
 		} catch (axiosError: unknown) {
 			const apiError = mapAxiosErrorToResponseError(axiosError);

@@ -27,8 +27,6 @@ describe("SchoolExternalToolUsage.composable", () => {
 
 	afterEach(() => {
 		jest.clearAllMocks();
-
-		window.location.href = "";
 	});
 
 	describe("fetchSchoolExternalToolMetadata", () => {
@@ -47,7 +45,7 @@ describe("SchoolExternalToolUsage.composable", () => {
 				};
 			};
 
-			it("should load the metadata from the store", async () => {
+			it("should load the metadata from the api", async () => {
 				const { fetchSchoolExternalToolUsage } = setup();
 
 				await fetchSchoolExternalToolUsage("schoolExternalToolId");
@@ -81,7 +79,7 @@ describe("SchoolExternalToolUsage.composable", () => {
 				};
 			};
 
-			it("should load the launch data from the store", async () => {
+			it("should get error from api", async () => {
 				const { fetchSchoolExternalToolUsage, error, apiError } = setup();
 
 				await fetchSchoolExternalToolUsage("contextExternalToolId");

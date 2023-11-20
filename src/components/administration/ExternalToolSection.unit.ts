@@ -345,22 +345,24 @@ describe("ExternalToolSection", () => {
 	describe("when deleting a schoolExternalTool", () => {
 		describe("when metadata is given", () => {
 			const setup = () => {
+				const schoolExternalToolMetadata =
+					schoolExternalToolMetadataFactory.build();
+
+				useSchoolExternalToolUsageMock.metadata = ref(
+					schoolExternalToolMetadata
+				);
+
 				const { wrapper, notifierModule } = getWrapper({
 					getSchoolExternalTools: [
-						schoolExternalToolFactory.build({}),
+						schoolExternalToolFactory.build(),
 						schoolExternalToolFactory.build(),
 					],
 				});
 
-				const schoolExternalToolMetadata =
-					schoolExternalToolMetadataFactory.build();
-
-				useSchoolExternalToolUsageMock.metadata.value =
-					schoolExternalToolMetadata;
-
 				return {
 					wrapper,
 					notifierModule,
+					schoolExternalToolMetadata,
 				};
 			};
 
@@ -374,13 +376,13 @@ describe("ExternalToolSection", () => {
 				const deleteButton = firstRowButtons.at(1);
 				await deleteButton.trigger("click");
 
-				const toolUsageCount = wrapper.find('[data-testid="delete-dialog"]');
+				const dialog = wrapper.find('[data-testid="delete-dialog"]');
 
-				expect(toolUsageCount.isVisible()).toBeTruthy();
+				expect(dialog.isVisible()).toBeTruthy();
 			});
 
 			it("should display tool usage count", async () => {
-				const { wrapper } = setup();
+				const { wrapper, schoolExternalToolMetadata } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
 
@@ -389,12 +391,12 @@ describe("ExternalToolSection", () => {
 				const deleteButton = firstRowButtons.at(1);
 				await deleteButton.trigger("click");
 
-				const toolUsageCount = wrapper.find(
+				const dialogContent = wrapper.find(
 					'[data-testid="delete-dialog-content"]'
 				);
 
-				expect(toolUsageCount.text()).toContain(
-					"components.administration.externalToolsSection.dialog.content"
+				expect(dialogContent.text()).toEqual(
+					`components.administration.externalToolsSection.dialog.content {"itemName":"name","courseCount":${schoolExternalToolMetadata.course},"boardElementCount":${schoolExternalToolMetadata.boardElement}}`
 				);
 			});
 
@@ -414,14 +416,14 @@ describe("ExternalToolSection", () => {
 
 		describe("when metadata is undefined", () => {
 			const setup = () => {
+				useSchoolExternalToolUsageMock.metadata = ref(undefined);
+
 				const { wrapper, notifierModule } = getWrapper({
 					getSchoolExternalTools: [
 						schoolExternalToolFactory.build({}),
 						schoolExternalToolFactory.build(),
 					],
 				});
-
-				useSchoolExternalToolUsageMock.metadata = ref(undefined);
 
 				return {
 					wrapper,
@@ -439,9 +441,9 @@ describe("ExternalToolSection", () => {
 				const deleteButton = firstRowButtons.at(1);
 				await deleteButton.trigger("click");
 
-				const toolUsageCount = wrapper.find('[data-testid="delete-dialog"]');
+				const dialog = wrapper.find('[data-testid="delete-dialog"]');
 
-				expect(toolUsageCount).not.toBe("visible");
+				expect(dialog).not.toBe("visible");
 			});
 
 			it("should display notification", async () => {
@@ -454,7 +456,6 @@ describe("ExternalToolSection", () => {
 				const deleteButton = firstRowButtons.at(1);
 				await deleteButton.trigger("click");
 
-				expect(notifierModule.show).toHaveBeenCalled();
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					status: "error",
 					text: "components.administration.externalToolsSection.dialog.content.metadata.error",
