@@ -5,7 +5,7 @@
 			class="image rounded-t-sm"
 			loading="lazy"
 			:src="previewSrc"
-			:alt="t('components.cardElement.fileElement.pdfAlt') + name"
+			:alt="altText"
 			:aspect-ratio="1.77777"
 			position="top"
 			@load="setWidth"
@@ -44,9 +44,13 @@ export default defineComponent({
 			window.open(props.src, "_blank");
 		};
 
+		const altText = `${t("components.cardElement.fileElement.emptyAlt")} ${
+			props.name
+		}`;
+
 		return {
 			openPdf,
-			t,
+			altText,
 			imageRef,
 			imageWidth,
 			setWidth,
