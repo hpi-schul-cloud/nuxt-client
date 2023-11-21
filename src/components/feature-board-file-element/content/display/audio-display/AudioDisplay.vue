@@ -1,5 +1,5 @@
 <template>
-	<ContentElementBar class="audioplayer">
+	<ContentElementBar class="audioplayer mt-0">
 		<template #element>
 			<audio
 				ref="audio"
@@ -10,13 +10,20 @@
 			/>
 			<button @click="onPlay">
 				<v-icon
+					class="mr-2"
 					role="img"
 					aria-hidden="false"
 					style="color: white"
 					v-if="!playing"
 					>{{ mdiPlay }}</v-icon
 				>
-				<v-icon role="img" aria-hidden="false" style="color: white" v-else>
+				<v-icon
+					class="mr-2"
+					role="img"
+					aria-hidden="false"
+					style="color: white"
+					v-else
+				>
 					{{ mdiPause }}</v-icon
 				>
 			</button>
@@ -32,7 +39,7 @@
 				:min="0"
 				:max="max"
 				@click="currentTimeSlider"
-				@change="currentTimeSliderNumber"
+				@change="currentTimeSeconds"
 				@mousedown="currentTimeSlider"
 				@mouseup="currentTimeSlider"
 			/>
@@ -42,17 +49,19 @@
 				@click="showVolumeSlider"
 				role="img"
 				aria-hidden="false"
-				style="color: white"
+				style="color: white; position: absolute; right: 16px"
 				>{{ mdiVolumeHigh }}</v-icon
 			>
-			<div class="volume-wrapper" v-if="isShow">
+			<div class="volume-wrapper mr-n2" v-if="isShow">
 				<v-slider
+					class="volume-slider"
 					color="white"
 					thumb-color="white"
 					track-color="#9e9e9e"
 					v-model="volumeValue"
 				/>
 				<v-icon
+					class="px-2"
 					@click="showVolumeSlider"
 					role="img"
 					aria-hidden="false"
@@ -131,8 +140,9 @@ export default defineComponent({
 			event.stopImmediatePropagation();
 		};
 
-		const currentTimeSliderNumber = (num: number) => {
-			controls.currentTime.value = num;
+		const currentTimeSeconds = (seconds: number) => {
+			console.log(seconds);
+			controls.currentTime.value = seconds;
 		};
 
 		return {
@@ -157,7 +167,7 @@ export default defineComponent({
 			isShow,
 			onPlay,
 			currentTimeSlider,
-			currentTimeSliderNumber,
+			currentTimeSeconds,
 		};
 	},
 });
@@ -169,7 +179,6 @@ button:focus {
 
 .audioplayer {
 	background-color: #424242;
-	margin-top: 0px;
 	border-top-right-radius: 4px;
 	border-top-left-radius: 4px;
 }
@@ -177,17 +186,25 @@ button:focus {
 	width: 100%;
 }
 .duration {
-	width: 40%;
+	white-space: nowrap;
+	padding-right: 2px;
 }
 .slider {
 	width: 30%;
-	padding-top: 20px;
+	padding-top: 23px;
 }
 .volume-wrapper {
 	display: flex;
-	width: 30%;
+	float: right;
+	width: 50%;
 	height: 36px;
 	border-radius: 2px;
 	background: var(--shades-color-overlay-dark, rgba(33, 33, 33, 0.54));
+}
+
+.volume-slider {
+	width: 50%;
+	padding-left: 10px;
+	padding-top: 3px;
 }
 </style>

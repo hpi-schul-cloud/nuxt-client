@@ -3,7 +3,10 @@
 		<v-menu offset-y max-height="120px" nudge-left="100px" max-width="120px">
 			<template v-slot:activator="{ on, attrs }">
 				<button v-bind="attrs" v-on="on">
-					<v-icon style="color: white">{{ mdiPlaySpeed }}</v-icon>
+					<v-icon
+						style="color: white; padding-right: 10px; padding-left: 2px"
+						>{{ mdiPlaySpeed }}</v-icon
+					>
 				</button>
 			</template>
 
