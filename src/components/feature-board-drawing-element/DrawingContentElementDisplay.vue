@@ -37,13 +37,13 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		drawingName: { type: String, required: true },
+		docName: { type: String, required: true },
 	},
 	setup(props, { emit }) {
 		const imageSrc = image;
 
 		const openElement = () => {
-			const urlRoom = `/tldraw?roomName=${props.drawingName}`;
+			const urlRoom = `/tldraw?roomName=${props.docName}`;
 			window.open(urlRoom, "_blank");
 			emit("open:element");
 		};
