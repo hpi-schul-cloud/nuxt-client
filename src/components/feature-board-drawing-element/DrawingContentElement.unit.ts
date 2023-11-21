@@ -28,7 +28,6 @@ const DRAWING_ELEMENT: DrawingElementResponse = {
 	id: "test-id",
 	type: ContentElementType.Drawing,
 	content: {
-		drawingName: "DrawingName",
 		description: "DrawingDescription",
 	},
 	timestamps: {

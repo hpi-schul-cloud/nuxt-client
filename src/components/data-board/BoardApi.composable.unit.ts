@@ -217,7 +217,6 @@ describe("BoardApi.composable", () => {
 				id: "drawing-tool-element-id",
 				type: ContentElementType.Drawing,
 				content: {
-					drawingName: "WhiteBoard",
 					description: "Some description",
 				},
 				timestamps: timestampsResponseFactory.build(),

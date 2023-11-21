@@ -51,7 +51,7 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		drawingName: { type: String, required: true },
+		docName: { type: String, required: true },
 	},
 
 	setup(props, { emit }) {
@@ -61,7 +61,7 @@ export default defineComponent({
 		});
 
 		const onOpenElement = () => {
-			const urlWithRoom = `/tldraw?roomName=${props.drawingName}`;
+			const urlWithRoom = `/tldraw?roomName=${props.docName}`;
 			window.open(urlWithRoom, "_blank");
 			emit("open:element");
 		};

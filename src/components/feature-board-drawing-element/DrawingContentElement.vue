@@ -14,12 +14,12 @@
 			<DrawingContentElementDisplay
 				v-if="!isEditMode"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				:drawing-name="element.content.drawingName"
+				:doc-name="element.id"
 			/>
 
 			<DrawingContentElementEdit
 				v-if="isEditMode"
-				:drawingName="element.content.drawingName"
+				:docName="element.id"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
 				><BoardMenu scope="element">
 					<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
