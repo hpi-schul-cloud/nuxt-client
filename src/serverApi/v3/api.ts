@@ -4282,12 +4282,6 @@ export interface DrawingContentBody {
 	 * @type {string}
 	 * @memberof DrawingContentBody
 	 */
-	drawingName: string;
-	/**
-	 *
-	 * @type {string}
-	 * @memberof DrawingContentBody
-	 */
 	description: string;
 }
 /**
@@ -4316,12 +4310,6 @@ export interface DrawingElementContentBody {
  */
 
 export interface DrawingElementContent {
-	/**
-	 *
-	 * @type {string}
-	 * @memberof DrawingElementContent
-	 */
-	drawingName: string;
 	/**
 	 *
 	 * @type {string}
@@ -7161,7 +7149,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | LinkElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse | DrawingElementResponse | DrawingElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | LinkElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse | DrawingElementResponse>;
 
     /**
      * 
