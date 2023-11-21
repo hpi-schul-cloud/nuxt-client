@@ -13,37 +13,41 @@
 		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
 			<div>
-				<v-text-field
-					v-model="searchQuery"
-					autofocus
-					variant="underlined"
-					color="primary"
-					:class="
-						activateTransition
-							? 'content__searchbar'
-							: 'first-search__searchbar'
-					"
-					:placeholder="$t('pages.content.index.search.placeholder')"
-				>
-					<template v-slot:append-inner>
-						<!-- TODO: add aria label translation for button  -->
-						<v-btn
-							v-if="searchQuery"
-							:icon="mdiClose"
-							aria-label="clear"
-							color="rgba(var(--v-theme-black))"
-							density="compact"
-							size="small"
-							variant="text"
-							@click="searchQuery = ''"
-						/>
-						<v-icon
-							v-else
-							:icon="mdiMagnify"
-							color="rgba(var(--v-theme-black))"
-						/>
-					</template>
-				</v-text-field>
+				<div class="search">
+					<div class="search__input-container">
+						<v-text-field
+							v-model="searchQuery"
+							autofocus
+							variant="underlined"
+							color="primary"
+							:class="
+								activateTransition
+									? 'content__searchbar'
+									: 'first-search__searchbar'
+							"
+							:placeholder="$t('pages.content.index.search.placeholder')"
+						>
+							<template v-slot:append-inner>
+								<v-btn
+									v-if="searchQuery"
+									:icon="mdiClose"
+									:aria-label="$t('common.actions.delete')"
+									color="rgba(var(--v-theme-black))"
+									density="compact"
+									size="x-large"
+									variant="text"
+									@click="searchQuery = ''"
+								/>
+								<v-icon
+									v-else
+									:icon="mdiMagnify"
+									color="rgba(var(--v-theme-black))"
+									size="x-large"
+								/>
+							</template>
+						</v-text-field>
+					</div>
+				</div>
 				<transition name="fade">
 					<div class="content__container" v-if="true">
 						<p
@@ -250,6 +254,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 .content {
 	display: flex;
 	flex-direction: column;
@@ -299,6 +304,31 @@ export default {
 		padding-bottom: var(--space-sm);
 	}
 }
+.search {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 100%;
+
+	&__input-container {
+		width: calc(
+			2 * var(--size-content-width-min)
+		); // keep in sync with wrapper in content (EmptyState.vue)
+
+		:deep(.v-field__input) {
+			font-size: var(--text-lg);
+			text-align: center;
+
+			@media #{map-get($display-breakpoints, 'sm-and-up')} {
+				font-size: var(--heading-6);
+			}
+
+			@media #{map-get($display-breakpoints, 'md-and-up')} {
+				font-size: var(--heading-4);
+			}
+		}
+	}
+}
 
 .inline {
 	min-height: calc(100vh - calc(24 * var(--border-width-bold)));
@@ -320,14 +350,5 @@ export default {
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
-}
-
-:deep(
-		.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(
-				:hover
-			)
-			.v-btn__content
-	) {
-	opacity: 1;
 }
 </style>
