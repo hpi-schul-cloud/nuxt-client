@@ -6,7 +6,7 @@ import { shallowMount } from "@vue/test-utils";
 import PdfDisplay from "./PdfDisplay.vue";
 
 describe("PdfDisplay", () => {
-	const setup = () => {
+	const setup = (props: { isEditMode: boolean }) => {
 		document.body.setAttribute("data-app", "true");
 
 		const element = fileElementResponseFactory.build();
@@ -15,6 +15,7 @@ describe("PdfDisplay", () => {
 			previewSrc: "preview/1/file-record #1.txt",
 			name: "file-record #1.txt",
 			element,
+			isEditMode: props.isEditMode,
 		};
 
 		const wrapper = shallowMount(PdfDisplay, {
@@ -36,7 +37,7 @@ describe("PdfDisplay", () => {
 	};
 
 	it("should display image with correct props", () => {
-		const { wrapper, previewSrc, nameProp } = setup();
+		const { wrapper, previewSrc, nameProp } = setup({ isEditMode: false });
 
 		const image = wrapper.find("v-img-stub");
 
@@ -44,13 +45,13 @@ describe("PdfDisplay", () => {
 		expect(image.attributes("loading")).toBe("lazy");
 		expect(image.attributes("src")).toBe(previewSrc);
 		expect(image.attributes("alt")).toBe(
-			"components.cardElement.fileElement.pdfAlt" + nameProp
+			"components.cardElement.fileElement.pdfAlt " + nameProp
 		);
 		expect(image.attributes("aspectratio")).toBe("1.77777");
 	});
 
 	it("should render color overlay with correct props", () => {
-		const { wrapper } = setup();
+		const { wrapper } = setup({ isEditMode: false });
 
 		const colorOverlay = wrapper.findComponent(ColorOverlay);
 
@@ -60,7 +61,7 @@ describe("PdfDisplay", () => {
 
 	describe("when color overlay emits on:action", () => {
 		it("should call open function", () => {
-			const { wrapper, src } = setup();
+			const { wrapper, src } = setup({ isEditMode: false });
 
 			const windowOpenSpy = jest.spyOn(window, "open");
 			const colorOverlay = wrapper.findComponent(ColorOverlay);
