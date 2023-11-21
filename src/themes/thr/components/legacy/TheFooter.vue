@@ -10,16 +10,16 @@
 				</template>
 				<template v-else>
 					<span :key="link.text">{{ link.text }}: </span>
-					<template v-for="(innerlink, innerindex) in link.innerlinks">
+					<template
+						v-for="(innerlink, innerindex) in link.innerlinks"
+						:key="innerlink.text"
+					>
 						<span v-if="innerindex !== 0" :key="`${index}-${innerindex}`">
 							/
 						</span>
-						<base-link
-							:key="innerlink.text"
-							v-bind="innerlink"
-							class="footer-link"
-							>{{ innerlink.text }}</base-link
-						>
+						<base-link v-bind="innerlink" class="footer-link">{{
+							innerlink.text
+						}}</base-link>
 					</template>
 				</template>
 			</template>
