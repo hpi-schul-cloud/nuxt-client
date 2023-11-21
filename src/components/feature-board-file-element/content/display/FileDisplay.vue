@@ -5,8 +5,11 @@
 			:src="fileProperties.url"
 			:preview-src="fileProperties.previewUrl"
 			:name="fileProperties.name"
+			:is-edit-mode="isEditMode"
 			:element="fileProperties.element"
-		/>
+		>
+			<slot />
+		</PdfDisplay>
 		<ImageDisplay
 			v-else-if="fileProperties.previewUrl"
 			:src="fileProperties.url"
@@ -36,6 +39,7 @@
 			:name="fileProperties.name"
 			:caption="fileProperties.element.content.caption"
 			:show-title="showTitle"
+			:show-menu="showMenu"
 			:is-edit-mode="isEditMode"
 			:src="fileDescriptionSrc"
 		>
@@ -102,6 +106,15 @@ export default defineComponent({
 			);
 		});
 
+		const showMenu = computed(() => {
+			return (
+				!hasPdfMimeType.value &&
+				!props.fileProperties.previewUrl &&
+				!hasVideoMimeType.value &&
+				!hasAudioMimeType.value
+			);
+		});
+
 		const onAddAlert = (alert: FileAlert) => {
 			emit("add:alert", alert);
 		};
@@ -112,6 +125,7 @@ export default defineComponent({
 			hasAudioMimeType,
 			hasPdfMimeType,
 			showTitle,
+			showMenu,
 			onAddAlert,
 		};
 	},

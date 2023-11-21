@@ -1,5 +1,9 @@
 <template>
-	<ColorOverlay @on:action="openPdf" color="var(--v-black-base)">
+	<ColorOverlay
+		:isOverlayDisabled="isEditMode"
+		@on:action="openPdf"
+		color="var(--v-black-base)"
+	>
 		<v-img
 			ref="imageRef"
 			class="image rounded-t-sm"
@@ -17,6 +21,10 @@
 				</v-row>
 			</template>
 		</v-img>
+
+		<ContentElementBar class="menu">
+			<template #menu><slot /></template>
+		</ContentElementBar>
 	</ColorOverlay>
 </template>
 
@@ -26,6 +34,7 @@ import { PropType, defineComponent } from "vue";
 import { ColorOverlay } from "@ui-color-overlay";
 import { useI18n } from "@/composables/i18n.composable";
 import { useNaturalwidth } from "../../../composables/NaturalWidth.composable";
+import { ContentElementBar } from "@ui-board";
 
 export default defineComponent({
 	name: "PdfDisplay",
@@ -33,9 +42,10 @@ export default defineComponent({
 		src: { type: String, required: true },
 		previewSrc: { type: String, required: true },
 		name: { type: String, required: true },
+		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
-	components: { ColorOverlay },
+	components: { ContentElementBar, ColorOverlay },
 	setup(props) {
 		const { t } = useI18n();
 		const { imageRef, imageWidth, setWidth } = useNaturalwidth();
@@ -44,7 +54,7 @@ export default defineComponent({
 			window.open(props.src, "_blank");
 		};
 
-		const altText = `${t("components.cardElement.fileElement.emptyAlt")} ${
+		const altText = `${t("components.cardElement.fileElement.pdfAlt")} ${
 			props.name
 		}`;
 
@@ -63,5 +73,11 @@ export default defineComponent({
 .image {
 	left: 50%;
 	transform: translateX(-50%);
+}
+
+.menu {
+	position: absolute;
+	top: 0px;
+	right: 0px;
 }
 </style>

@@ -11,7 +11,7 @@
 					<span v-else>{{ name }}</span>
 				</ContentElementTitle>
 			</template>
-			<template #menu>
+			<template v-if="showMenu" #menu>
 				<slot />
 			</template>
 			<template #subtitle v-if="caption && !isEditMode">
@@ -36,6 +36,7 @@ export default defineComponent({
 		name: { type: String, required: true },
 		caption: { type: String, required: false },
 		showTitle: { type: Boolean, required: true },
+		showMenu: { type: Boolean, required: true },
 		isEditMode: { type: Boolean, required: true },
 		src: { type: String, required: false },
 	},
