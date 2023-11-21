@@ -1,10 +1,13 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { MetaTagExtractorResponse } from "@/serverApi/v3/api";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mount } from "@vue/test-utils";
-import { defineComponent } from "vue";
 import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
-import { mockApiResponse } from "@@/tests/test-utils";
+import {
+	i18nMock,
+	mockApiResponse,
+	mountComposable,
+} from "@@/tests/test-utils";
+import { I18N_KEY } from "@/utils/inject";
 
 describe("useMetaTagExtractorApi", () => {
 	let api: DeepMocked<serverApi.MetaTagExtractorApi>;
@@ -19,56 +22,132 @@ describe("useMetaTagExtractorApi", () => {
 		jest.clearAllMocks();
 	});
 
-	const getWrapper = () => {
-		let composable: ReturnType<typeof useMetaTagExtractorApi> | undefined;
-
-		const TestComponent = defineComponent({
-			template: "<div/>",
-			setup() {
-				composable = useMetaTagExtractorApi();
-			},
-		});
-
-		const wrapper = mount(TestComponent, {});
-		return { wrapper, composable };
-	};
-
-	describe("extractMetaTags", () => {
+	describe("getMetaTags", () => {
 		describe("when meta tags could be extracted", () => {
-			const setup = () => {
-				const mockedResponse: MetaTagExtractorResponse = {
-					url: "",
-					title: "",
-					description: "",
-					imageUrl: "",
+			describe("when meta tags are of type unknown", () => {
+				const setup = () => {
+					const mockedResponse: MetaTagExtractorResponse = {
+						url: "",
+						title: "",
+						description: "",
+						imageUrl: "",
+						type: "unknown",
+						parentTitle: "",
+						parentType: "unknown",
+					};
+
+					api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
+						mockApiResponse({ data: mockedResponse })
+					);
+
+					const composable = mountComposable(() => useMetaTagExtractorApi(), {
+						[I18N_KEY.valueOf()]: i18nMock,
+					});
+
+					return {
+						mockedResponse,
+						composable,
+					};
 				};
 
-				api.metaTagExtractorControllerGetData.mockResolvedValue(
-					mockApiResponse({ data: mockedResponse })
-				);
+				it("should be defined", () => {
+					const { composable } = setup();
 
-				const { wrapper, composable } = getWrapper();
+					expect(composable?.getMetaTags).toBeDefined();
+				});
 
-				return {
-					wrapper,
-					mockedResponse,
-					composable,
-				};
-			};
+				it("should return the data", async () => {
+					const { composable, mockedResponse } = setup();
 
-			it("should be defined", () => {
-				const { composable } = setup();
+					const url = "https://test.de/my-article";
+					const data = await composable?.getMetaTags(url);
 
-				expect(composable?.extractMetaTags).toBeDefined();
+					expect(data).toEqual(mockedResponse);
+				});
 			});
 
-			it("should return the data", async () => {
-				const { composable, mockedResponse } = setup();
+			describe("when metatags are of type board", () => {
+				describe("when board has explicit title", () => {
+					const setup = () => {
+						const mockedResponse: MetaTagExtractorResponse = {
+							url: "https://test.de/my-article",
+							title: "Shakespear",
+							description: "",
+							imageUrl: "",
+							type: "board",
+							parentTitle: "English",
+							parentType: "course",
+						};
 
-				const url = "https://test.de/my-article";
-				const data = await composable?.extractMetaTags(url);
+						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
+							mockApiResponse({ data: mockedResponse })
+						);
 
-				expect(data).toEqual(mockedResponse);
+						const composable = mountComposable(() => useMetaTagExtractorApi(), {
+							[I18N_KEY.valueOf()]: i18nMock,
+						});
+
+						return {
+							mockedResponse,
+							composable,
+						};
+					};
+
+					it("should be defined", () => {
+						const { composable } = setup();
+
+						expect(composable?.getMetaTags).toBeDefined();
+					});
+
+					it("should return the correct composed title", async () => {
+						const { composable } = setup();
+
+						const url = "https://test.de/my-article";
+						const data = await composable?.getMetaTags(url);
+
+						expect(data.title).toEqual(
+							"components.board: Shakespear (English)"
+						);
+					});
+				});
+
+				describe("when board has no explicit title", () => {
+					const setup = () => {
+						const mockedResponse: MetaTagExtractorResponse = {
+							url: "https://test.de/my-article",
+							title: "",
+							description: "",
+							imageUrl: "",
+							type: "board",
+							parentTitle: "English",
+							parentType: "course",
+						};
+
+						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
+							mockApiResponse({ data: mockedResponse })
+						);
+
+						const composable = mountComposable(() => useMetaTagExtractorApi(), {
+							[I18N_KEY.valueOf()]: i18nMock,
+						});
+
+						return {
+							mockedResponse,
+							composable,
+						};
+					};
+
+					it("should use default fallback title", async () => {
+						const { composable } = setup();
+
+						const url = "https://test.de/my-article";
+						const data = await composable?.getMetaTags(url);
+
+						expect(data.title).toEqual(
+							"components.board: pages.room.boardCard.label.courseBoard (English)"
+						);
+					});
+				});
 			});
 		});
 
@@ -79,14 +158,18 @@ describe("useMetaTagExtractorApi", () => {
 					title: "",
 					description: "",
 					imageUrl: "",
+					type: "unknown",
+					parentTitle: "",
+					parentType: "unknown",
 				};
 
-				api.metaTagExtractorControllerGetData.mockRejectedValue(false);
+				api.metaTagExtractorControllerGetMetaTags.mockRejectedValue(false);
 
-				const { wrapper, composable } = getWrapper();
+				const composable = mountComposable(() => useMetaTagExtractorApi(), {
+					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				});
 
 				return {
-					wrapper,
 					mockedResponse,
 					composable,
 				};
@@ -96,7 +179,7 @@ describe("useMetaTagExtractorApi", () => {
 				const { composable } = setup();
 
 				const url = "https://test.de/my-article";
-				const data = await composable?.extractMetaTags(url);
+				const data = await composable?.getMetaTags(url);
 
 				expect(data).toEqual({ url, title: "", description: "" });
 			});
