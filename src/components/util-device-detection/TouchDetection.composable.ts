@@ -18,7 +18,7 @@ export const useTouchDetection = () => {
 		console.log("age", now.getTime() - lastTouchDetection);
 		console.log("event: ", evt.type);
 		if ("touches" in evt) {
-			console.log("evt.touches", JSON.stringify(evt.touches));
+			console.log("evt.touches", JSON.stringify(evt.touches[0], null, 2));
 			if ("touches" in evt && evt.touches[0].force >= 0.999) {
 				if (now.getTime() - lastTouchDetection > 200) {
 					console.log("touch with stylus or anything else");
