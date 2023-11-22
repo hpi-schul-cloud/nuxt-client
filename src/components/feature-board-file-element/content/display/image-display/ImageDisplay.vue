@@ -4,7 +4,7 @@
 		@on:action="openLightBox"
 		color="var(--v-black-base)"
 	>
-		<PreviewImage :src="previewSrc" :alt="alternativeText" contain="true" />
+		<PreviewImage :src="previewSrc" :alt="alternativeText" :contain="true" />
 
 		<ContentElementBar class="menu">
 			<template #menu><slot /></template>

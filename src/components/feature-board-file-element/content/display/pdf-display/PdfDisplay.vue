@@ -28,11 +28,11 @@ import { ContentElementBar } from "@ui-board";
 export default defineComponent({
 	name: "PdfDisplay",
 	props: {
-		src: { type: String, required: true },
-		previewSrc: { type: String, required: true },
-		name: { type: String, required: true },
-		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
+		isEditMode: { type: Boolean, required: true },
+		name: { type: String, required: true },
+		previewSrc: { type: String, required: true },
+		src: { type: String, required: true },
 	},
 	components: { ContentElementBar, ColorOverlay, PreviewImage },
 	setup(props) {
