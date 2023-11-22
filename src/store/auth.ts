@@ -27,7 +27,6 @@ export default class AuthModule extends VuexModule {
 	payload = null;
 	user: User | null = {
 		_id: "",
-		__v: 0,
 		firstName: "",
 		lastName: "",
 		email: "",
@@ -44,7 +43,6 @@ export default class AuthModule extends VuexModule {
 				createdAt: "",
 				roles: [],
 				permissions: [],
-				__v: 2,
 				displayName: "",
 				id: "",
 			},

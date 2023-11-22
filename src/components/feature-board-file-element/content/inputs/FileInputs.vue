@@ -5,7 +5,7 @@
 			@update:caption="onUpdateCaption"
 		/>
 		<AlternativeText
-			v-if="fileProperties.previewUrl"
+			v-if="fileProperties.previewUrl && !hasPdfMimeType"
 			:alternativeText="fileProperties.element.content.alternativeText"
 			@update:alternativeText="onUpdateText"
 		/>
@@ -13,7 +13,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
+import { isPdfMimeType } from "@/utils/fileHelper";
+import { computed, defineComponent, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
@@ -34,10 +35,15 @@ export default defineComponent({
 	emits: ["update:alternativeText", "update:caption"],
 	setup(props, { emit }) {
 		const onUpdateCaption = (value: string) => emit("update:caption", value);
+
 		const onUpdateText = (value: string) =>
 			emit("update:alternativeText", value);
 
-		return { onUpdateText, onUpdateCaption };
+		const hasPdfMimeType = computed(() =>
+			isPdfMimeType(props.fileProperties.mimeType)
+		);
+
+		return { onUpdateText, onUpdateCaption, hasPdfMimeType };
 	},
 });
 </script>

@@ -24,7 +24,6 @@ const getWrapper = (
 };
 
 const mockAuthStoreData = {
-	__v: 0,
 	_id: "asdf",
 	id: "asdf",
 	firstName: "Arthur",
