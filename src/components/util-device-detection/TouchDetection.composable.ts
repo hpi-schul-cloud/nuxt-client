@@ -16,8 +16,9 @@ export const useTouchDetection = () => {
 	const handler = <T extends MouseEvent | TouchEvent>(evt: T) => {
 		const now = new Date();
 		console.log("age", now.getTime() - lastTouchDetection);
+		console.log("event: ", evt.type);
 		if ("touches" in evt) {
-			console.log("event: ", JSON.stringify(evt));
+			console.log("evt.touches", JSON.stringify(evt.touches));
 			if ("touches" in evt && evt.touches[0].force >= 0.999) {
 				if (now.getTime() - lastTouchDetection > 200) {
 					console.log("touch with stylus or anything else");
