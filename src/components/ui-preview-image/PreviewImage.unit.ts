@@ -37,4 +37,12 @@ describe("PreviewImage", () => {
 		expect(image.attributes("position")).toBe("top");
 		expect(image.attributes("contain")).toBe("true");
 	});
+
+	it("should has loading spinner", () => {
+		const { wrapper } = setup({ isEditMode: false });
+
+		const loadingSpinner = wrapper.find("vprogresscircular-stub");
+
+		expect(loadingSpinner.exists()).toBe(true);
+	});
 });
