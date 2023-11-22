@@ -358,6 +358,11 @@ describe("CardState composable", () => {
 				type: ContentElementType.RichText,
 			};
 			card.value = testCard;
+
+			await addElement(elementType.type);
+
+			expect(testCard.elements).toHaveLength(0);
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
 	});
 

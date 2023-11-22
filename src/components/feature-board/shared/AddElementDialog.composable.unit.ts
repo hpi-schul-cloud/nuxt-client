@@ -4,9 +4,7 @@ import { Envs } from "@/store/types/env-config";
 import { injectStrict } from "@/utils/inject";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
-import { notifierModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
-import * as translate from "@/composables/i18n.composable";
 
 setupStores({ notifierModule: NotifierModule });
 
