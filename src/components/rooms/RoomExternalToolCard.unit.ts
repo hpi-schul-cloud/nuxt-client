@@ -1,38 +1,44 @@
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import EnvConfigModule from "@/store/env-config";
+import { ToolConfigurationStatus } from "@/store/external-tool";
+import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
-	I18N_KEY,
-} from "@/utils/inject";
-import {
-	ToolConfigurationStatus,
-	ToolLaunchRequest,
-} from "@/store/external-tool";
-import ExternalToolsModule from "@/store/external-tools";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
-import { toolLaunchRequestResponseFactory } from "@@/tests/test-utils";
+import { useExternalToolLaunchState } from "@data-external-tool";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import flushPromises from "flush-promises";
+import Vue from "vue";
+import RoomExternalToolCard from "./RoomExternalToolCard.vue";
+
+jest.mock("@data-external-tool");
 
 describe("RoomExternalToolCard", () => {
+	let useExternalToolLaunchStateMock: DeepMocked<
+		ReturnType<typeof useExternalToolLaunchState>
+	>;
+
+	beforeEach(() => {
+		useExternalToolLaunchStateMock =
+			createMock<ReturnType<typeof useExternalToolLaunchState>>();
+
+		jest
+			.mocked(useExternalToolLaunchState)
+			.mockReturnValue(useExternalToolLaunchStateMock);
+	});
+
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
 		document.body.setAttribute("data-app", "true");
 
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getCtlContextConfigurationEnabled: true,
 		});
-
-		const externalToolsModule = createModuleMocks(ExternalToolsModule);
-
-		externalToolsModule.loadToolLaunchData.mockResolvedValue(
-			toolLaunchRequestResponseFactory.build()
-		);
 
 		const wrapper: Wrapper<Vue> = mount(
 			RoomExternalToolCard as MountOptions<Vue>,
@@ -50,19 +56,30 @@ describe("RoomExternalToolCard", () => {
 						tc: (key: string): string => key,
 					},
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 				},
 			}
 		);
 
 		return {
 			wrapper,
-			externalToolsModule,
 		};
 	};
 
-	afterEach(() => {
-		jest.resetAllMocks();
+	describe("when the component is mounted and the tool is not outdated", () => {
+		it("should load the launch request", async () => {
+			getWrapper(
+				externalToolDisplayDataFactory.build({
+					status: ToolConfigurationStatus.Latest,
+				}),
+				false
+			);
+
+			await Vue.nextTick();
+
+			expect(
+				useExternalToolLaunchStateMock.fetchLaunchRequest
+			).toHaveBeenCalled();
+		});
 	});
 
 	describe("tool status", () => {
@@ -118,32 +135,85 @@ describe("RoomExternalToolCard", () => {
 	});
 
 	describe("when the user clicks the card", () => {
-		const setup = () => {
-			const toolDisplayData: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+		describe("when the tool is outdated", () => {
+			const setup = async () => {
+				const toolDisplayData: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: ToolConfigurationStatus.Outdated,
+					});
 
-			const launchRequest: ToolLaunchRequest = toolLaunchRequestFactory.build();
+				const { wrapper } = getWrapper(toolDisplayData, true);
 
-			const { wrapper } = getWrapper(toolDisplayData, true);
+				await flushPromises();
 
-			return {
-				wrapper,
-				toolDisplayData,
-				launchRequest,
+				return {
+					wrapper,
+					toolDisplayData,
+				};
 			};
-		};
 
-		it("should emit the click event", async () => {
-			const { wrapper, toolDisplayData, launchRequest } = setup();
+			it("should emit the error event", async () => {
+				const { wrapper, toolDisplayData } = await setup();
 
-			await flushPromises();
+				await wrapper.trigger("click");
 
-			await wrapper.trigger("click");
+				expect(wrapper.emitted("error")).toEqual([[toolDisplayData]]);
+			});
+		});
 
-			expect(wrapper.emitted("click")).toContainEqual([
-				launchRequest,
-				toolDisplayData,
-			]);
+		describe("when there was no error while loading launch request", () => {
+			const setup = async () => {
+				const toolDisplayData: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build();
+
+				useExternalToolLaunchStateMock.toolLaunchRequest.value =
+					toolLaunchRequestFactory.build();
+
+				const { wrapper } = getWrapper(toolDisplayData, true);
+
+				await flushPromises();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should launch the tool", async () => {
+				const { wrapper } = await setup();
+
+				await wrapper.trigger("click");
+
+				expect(useExternalToolLaunchStateMock.launchTool).toHaveBeenCalled();
+			});
+		});
+
+		describe("when the launch failed and an error is set", () => {
+			const setup = async () => {
+				const toolDisplayData: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build();
+
+				useExternalToolLaunchStateMock.error.value = {
+					message: "mock error",
+					statusCode: 400,
+				};
+
+				const { wrapper } = getWrapper(toolDisplayData, true);
+
+				await flushPromises();
+
+				return {
+					wrapper,
+					toolDisplayData,
+				};
+			};
+
+			it("should emit the error event", async () => {
+				const { wrapper, toolDisplayData } = await setup();
+
+				await wrapper.trigger("click");
+
+				expect(wrapper.emitted("error")).toEqual([[toolDisplayData]]);
+			});
 		});
 	});
 

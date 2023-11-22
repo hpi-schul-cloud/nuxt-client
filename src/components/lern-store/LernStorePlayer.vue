@@ -6,7 +6,7 @@
 		allowfullscreen="allowfullscreen"
 		frameborder="0"
 		scrolling="yes"
-	></iframe>
+	/>
 	<div v-else class="d-flex justify-center align-center min-height-screen">
 		<v-progress-circular indeterminate color="secondary" size="115" />
 	</div>

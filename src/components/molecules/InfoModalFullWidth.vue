@@ -5,7 +5,7 @@
 		class="modal-container"
 		v-on="$listeners"
 	>
-		<template #header></template>
+		<template #header />
 		<template #body>
 			<modal-body-info :title="title" :description="description">
 				<template #icon>

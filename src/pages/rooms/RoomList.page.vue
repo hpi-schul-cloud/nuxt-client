@@ -28,8 +28,7 @@
 						:label="$t('pages.rooms.index.search.label')"
 						:append-icon="mdiMagnify"
 						:aria-label="$t('pages.rooms.index.search.label')"
-					>
-					</v-text-field>
+					/>
 				</div>
 			</v-row>
 			<v-row>
@@ -51,7 +50,7 @@
 								:item="room"
 								size="5em"
 								:show-badge="true"
-							></vRoomAvatar>
+							/>
 						</v-col>
 					</v-row>
 				</v-container>
@@ -69,7 +68,6 @@ import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 
-// eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
 	components: {
 		RoomWrapper,

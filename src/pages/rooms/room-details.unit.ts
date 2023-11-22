@@ -72,7 +72,6 @@ const mockData = {
 };
 
 const mockAuthStoreDataStudentInvalid = {
-	__v: 0,
 	_id: "asdf",
 	id: "asdf",
 	firstName: "Arthur",
@@ -83,7 +82,6 @@ const mockAuthStoreDataStudentInvalid = {
 };
 
 const mockAuthStoreDataTeacher = {
-	__v: 1,
 	_id: "asdfg",
 	id: "asdfg",
 	firstName: "Peter",

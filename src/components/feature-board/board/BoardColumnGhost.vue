@@ -4,7 +4,7 @@
 			ref="ghostColumnTitleRef"
 			:isColumnActive="isColumnActive"
 			@add-column="onAddColumn"
-		></BoardColumnGhostHeader>
+		/>
 		<div
 			:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
 			class="column-drag-handle grow-transition mr-4"
@@ -21,8 +21,7 @@
 				:drop-placeholder="cardDropPlaceholderOptions"
 				class="dndrop-container vertical"
 				:class="{ 'expanded-column': isDragging }"
-			>
-			</Container>
+			/>
 		</div>
 	</div>
 </template>

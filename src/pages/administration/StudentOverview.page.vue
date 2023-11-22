@@ -65,8 +65,8 @@
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
 				</template>
-				<template #headcolumn-consent></template>
-				<template #columnlabel-consent></template>
+				<template #headcolumn-consent />
+				<template #columnlabel-consent />
 				<template #datacolumn-createdAt="{ data }">
 					<span class="text-content">{{ printDate(data) }}</span>
 				</template>
@@ -551,7 +551,6 @@ export default {
 					});
 				}
 			} catch (error) {
-				console.error(error);
 				notifierModule.show({
 					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
 					status: "error",

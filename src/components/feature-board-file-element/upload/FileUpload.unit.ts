@@ -14,61 +14,152 @@ const useSharedLastCreatedElementMock = jest.mocked(
 useSharedLastCreatedElementMock.mockReturnValue(mockedUse);
 
 describe(FileUpload.name, () => {
-	const setupProps = (fileName: string) => ({
-		fileName,
-		elementId: "element 123",
-		url: "1/file-record #1.txt",
-	});
+	describe("when isEditMode is true", () => {
+		const setup = (fileName = "") => {
+			document.body.setAttribute("data-app", "true");
 
-	const setup = (fileName = "") => {
-		document.body.setAttribute("data-app", "true");
+			const propsData = {
+				fileName,
+				elementId: "element 123",
+				url: "1/file-record #1.txt",
+				isEditMode: true,
+			};
+			const testSlot = "testSlot";
+			const wrapper = shallowMount(FileUpload, {
+				...createComponentMocks({ i18n: true }),
+				propsData,
+				slots: {
+					default: testSlot,
+				},
+			});
 
-		const propsData = setupProps(fileName);
-
-		const wrapper = shallowMount(FileUpload, {
-			...createComponentMocks({ i18n: true }),
-			propsData,
-		});
-
-		return {
-			wrapper,
-			fileNameProp: propsData.fileName,
-			urlProp: propsData.url,
-			elementId: propsData.elementId,
+			return {
+				wrapper,
+				fileNameProp: propsData.fileName,
+				urlProp: propsData.url,
+				elementId: propsData.elementId,
+				testSlot,
+			};
 		};
-	};
 
-	it("should be found in dom", () => {
-		const { wrapper } = setup();
+		describe("when file is not picked", () => {
+			it("should render FilePicker component", () => {
+				const { wrapper } = setup();
 
-		const component = wrapper.findComponent(FileUpload);
-		expect(component.exists()).toBe(true);
-	});
+				const filePicker = wrapper.findComponent(FilePicker);
+				expect(filePicker.exists()).toBe(true);
+			});
 
-	describe("when file gets picked", () => {
-		it("should be emitted as an upload:file event", async () => {
-			const { wrapper } = setup();
+			it("should render default slot", () => {
+				const { wrapper, testSlot } = setup();
 
-			const filePicker = wrapper.findComponent(FilePicker);
-			expect(filePicker.exists()).toBe(true);
+				expect(wrapper.text()).toContain(testSlot);
+			});
 
-			filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
+			it("should not show notification on page unload", async () => {
+				setup();
 
-			expect(wrapper.emitted("upload:file")).toHaveLength(1);
+				const beforeUnloadEvent = new Event("beforeunload");
+				const preventDefaultSpy = jest.fn();
+
+				beforeUnloadEvent.preventDefault = preventDefaultSpy;
+				window.dispatchEvent(beforeUnloadEvent);
+
+				expect(preventDefaultSpy).not.toHaveBeenCalled();
+			});
 		});
 
-		it("should render v-progress-linear component", async () => {
+		describe("when file gets picked", () => {
+			it("should be emitted as an upload:file event", async () => {
+				const { wrapper } = setup();
+
+				const filePicker = wrapper.findComponent(FilePicker);
+				expect(filePicker.exists()).toBe(true);
+
+				filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
+
+				expect(wrapper.emitted("upload:file")).toHaveLength(1);
+			});
+
+			it("should render v-progress-linear component", async () => {
+				const { wrapper } = setup();
+
+				const filePicker = wrapper.findComponent(FilePicker);
+				expect(filePicker.exists()).toBe(true);
+
+				filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
+
+				await nextTick();
+
+				const progressLinear = wrapper.find("v-progress-linear-stub");
+				expect(progressLinear.exists()).toBe(true);
+			});
+
+			it("should show notification on page unload", async () => {
+				const { wrapper } = setup();
+
+				const filePicker = wrapper.findComponent(FilePicker);
+				expect(filePicker.exists()).toBe(true);
+
+				filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
+
+				const beforeUnloadEvent = new Event("beforeunload");
+				const preventDefaultSpy = jest.fn();
+
+				beforeUnloadEvent.preventDefault = preventDefaultSpy;
+				window.dispatchEvent(beforeUnloadEvent);
+
+				expect(preventDefaultSpy).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("when isEditMode is false", () => {
+		const setup = (fileName = "") => {
+			document.body.setAttribute("data-app", "true");
+
+			const propsData = {
+				fileName,
+				elementId: "element 123",
+				url: "1/file-record #1.txt",
+				isEditMode: false,
+			};
+			const testSlot = "testSlot";
+			const wrapper = shallowMount(FileUpload, {
+				...createComponentMocks({ i18n: true }),
+				propsData,
+				slots: {
+					default: testSlot,
+				},
+			});
+
+			return {
+				wrapper,
+				fileNameProp: propsData.fileName,
+				urlProp: propsData.url,
+				elementId: propsData.elementId,
+				testSlot,
+			};
+		};
+
+		it("should not render FilePicker component", () => {
 			const { wrapper } = setup();
 
 			const filePicker = wrapper.findComponent(FilePicker);
-			expect(filePicker.exists()).toBe(true);
+			expect(filePicker.exists()).toBe(false);
+		});
 
-			filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
+		it("should not render default slot", () => {
+			const { wrapper, testSlot } = setup();
 
-			await nextTick();
+			expect(wrapper.text()).not.toContain(testSlot);
+		});
+
+		it("should not render progress bar", () => {
+			const { wrapper } = setup();
 
 			const progressLinear = wrapper.find("v-progress-linear-stub");
-			expect(progressLinear.exists()).toBe(true);
+			expect(progressLinear.exists()).toBe(false);
 		});
 	});
 });

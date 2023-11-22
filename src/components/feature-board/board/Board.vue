@@ -38,10 +38,10 @@
 					v-if="hasCreateColumnPermission"
 					@create:column="onCreateColumn"
 					@create:column-with-card="onCreateColumnWithCard"
-				></BoardColumnGhost>
-				<ConfirmationDialog></ConfirmationDialog>
-				<AddElementDialog></AddElementDialog>
-				<LightBox></LightBox>
+				/>
+				<ConfirmationDialog />
+				<AddElementDialog />
+				<LightBox />
 			</template>
 		</div>
 	</div>
@@ -50,9 +50,9 @@
 <script lang="ts">
 import {
 	CardMove,
+	columnDropPlaceholderOptions,
 	ColumnMove,
 	DragAndDropKey,
-	columnDropPlaceholderOptions,
 	horizontalCursorKeys,
 } from "@/types/board/DragAndDrop";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
@@ -100,7 +100,6 @@ export default defineComponent({
 		const { showInfo, resetNotifier } = useBoardNotifier();
 		const { editModeId } = useSharedEditMode();
 		const isEditMode = computed(() => editModeId.value !== undefined);
-
 		const {
 			board,
 			createCard,

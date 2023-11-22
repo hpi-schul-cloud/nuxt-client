@@ -1,5 +1,13 @@
-import { ClassInfoResponse } from "@/serverApi/v3";
-import { ClassInfo } from "../types/class-info";
+import { ClassInfoResponse, ClassInfoResponseTypeEnum } from "@/serverApi/v3";
+import { ClassInfo, ClassRootType } from "../types/class-info";
+
+export const ClassRootTypeMapping: Record<
+	ClassInfoResponseTypeEnum,
+	ClassRootType
+> = {
+	[ClassInfoResponseTypeEnum.Class]: ClassRootType.Class,
+	[ClassInfoResponseTypeEnum.Group]: ClassRootType.Group,
+};
 
 export class GroupMapper {
 	static mapToClassInfo(response: ClassInfoResponse[]): ClassInfo[] {
@@ -8,6 +16,10 @@ export class GroupMapper {
 				name: classInfoResponse.name,
 				externalSourceName: classInfoResponse.externalSourceName,
 				teachers: classInfoResponse.teachers,
+				type: ClassRootTypeMapping[classInfoResponse.type],
+				id: classInfoResponse.id,
+				isUpgradable: classInfoResponse.isUpgradable,
+				studentCount: classInfoResponse.studentCount,
 			})
 		);
 

@@ -1,11 +1,12 @@
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, Ref, watch } from "vue";
 import { SubmissionsResponse } from "@/serverApi/v3";
+import { TeacherSubmission, StudentSubmission } from "../types/submission";
 
 export const useSubmissionContentElementState = (
 	id: string,
-	dueDate?: string
+	modelValue: Ref<{ dueDate?: string }>
 ) => {
 	const { notifyWithTemplate } = useErrorHandler();
 	const {
@@ -13,15 +14,21 @@ export const useSubmissionContentElementState = (
 		createSubmissionItemCall,
 		updateSubmissionItemCall,
 	} = useSubmissionItemApi();
-	const submissions = ref<SubmissionsResponse>({
+	let submissionsResponse: SubmissionsResponse = {
 		submissionItemsResponse: [],
 		users: [],
-	});
-	const loading = ref(true);
+	};
+	const submissions = ref<Array<TeacherSubmission>>([]);
+	const studentSubmission = ref<StudentSubmission>({ completed: false });
+	const loading = ref(false);
 
 	const fetchSubmissionItems = async (id: string): Promise<void> => {
 		try {
-			submissions.value = await fetchSubmissionItemsCall(id);
+			loading.value = true;
+			submissionsResponse = await fetchSubmissionItemsCall(id);
+
+			submissions.value = mapTeacherSubmission(submissionsResponse);
+			studentSubmission.value = mapStudentSubmission(submissionsResponse);
 		} catch (error) {
 			notifyWithTemplate("notLoaded", "boardElement")();
 		} finally {
@@ -32,41 +39,111 @@ export const useSubmissionContentElementState = (
 	const createSubmissionItem = async (completed: boolean) => {
 		try {
 			const response = await createSubmissionItemCall(id, completed);
-			submissions.value.submissionItemsResponse.push(response);
+			submissionsResponse.submissionItemsResponse.push(response);
 		} catch (error) {
 			notifyWithTemplate("notCreated", "boardElement")();
 		}
 	};
 
 	const updateSubmissionItem = async (completed: boolean) => {
-		if (submissions.value.submissionItemsResponse.length === 0) {
+		if (submissionsResponse.submissionItemsResponse.length === 0) {
 			await createSubmissionItem(completed);
 			return;
 		}
 		try {
 			await updateSubmissionItemCall(
-				submissions.value.submissionItemsResponse[0].id,
+				submissionsResponse.submissionItemsResponse[0].id,
 				completed
 			);
-			submissions.value.submissionItemsResponse[0].completed = completed;
+			submissionsResponse.submissionItemsResponse[0].completed = completed;
 		} catch (error) {
 			notifyWithTemplate("notUpdated", "boardElement")();
 		}
 	};
 
-	const editable = computed(() => {
-		return !dueDate || new Date() < new Date(dueDate);
-	});
-
 	onMounted(() => {
 		fetchSubmissionItems(id);
 	});
 
+	watch(
+		() => modelValue.value.dueDate,
+		() => {
+			submissions.value = mapTeacherSubmission(submissionsResponse);
+			studentSubmission.value = mapStudentSubmission(submissionsResponse);
+		}
+	);
+
+	const isOverdue = computed(() => {
+		if (!modelValue.value.dueDate) {
+			return false;
+		}
+		return new Date() > new Date(modelValue.value.dueDate);
+	});
+
+	const sortByName = (
+		submissionA: TeacherSubmission,
+		submissionB: TeacherSubmission
+	) => {
+		const lastNameA = submissionA.lastName.toUpperCase();
+		const lastNameB = submissionB.lastName.toUpperCase();
+		if (lastNameA < lastNameB) {
+			return -1;
+		}
+		if (lastNameA > lastNameB) {
+			return 1;
+		}
+
+		return 0;
+	};
+
+	const mapStudentSubmission = (submissionsResponse: SubmissionsResponse) => {
+		if (submissionsResponse.submissionItemsResponse.length === 0) {
+			return { completed: false };
+		}
+
+		const completionState =
+			submissionsResponse.submissionItemsResponse[0].completed;
+		return { completed: completionState };
+	};
+
+	const mapTeacherSubmission = (submissionsResponse: SubmissionsResponse) => {
+		return submissionsResponse.users
+			.map((student) => {
+				const submissionInfo: Partial<TeacherSubmission> = {
+					firstName: student.firstName,
+					lastName: student.lastName,
+				};
+
+				const submission = submissionsResponse.submissionItemsResponse.find(
+					(submission) => submission.userId === student.userId
+				);
+
+				if (!submission) {
+					submissionInfo.status = !isOverdue.value ? "open" : "expired";
+					return submissionInfo as TeacherSubmission;
+				}
+
+				if (submission.completed) {
+					submissionInfo.status = "completed";
+				}
+				if (!submission.completed && !isOverdue.value) {
+					submissionInfo.status = "open";
+				}
+				if (!submission.completed && isOverdue.value) {
+					submissionInfo.status = "expired";
+				}
+
+				return submissionInfo as TeacherSubmission;
+			})
+			.sort(sortByName);
+	};
+
 	return {
 		submissions,
+		studentSubmission,
 		fetchSubmissionItems,
 		updateSubmissionItem,
 		loading,
-		editable,
+		isOverdue,
 	};
 };

@@ -80,6 +80,16 @@ describe("LightBox", () => {
 			expect(alt).toEqual(lightBoxOptions.value.alt);
 		});
 
+		it("should display loading spinner", () => {
+			const { wrapper } = setup({});
+
+			const loadingSpinner = wrapper.findComponent({
+				name: "VProgressCircular",
+			});
+
+			expect(loadingSpinner.exists()).toBe(true);
+		});
+
 		it("should show close button", () => {
 			const { wrapper } = setup({});
 
@@ -111,29 +121,26 @@ describe("LightBox", () => {
 			it("should show file icon", () => {
 				const { wrapper } = setup({});
 
-				const toolbarTitle = wrapper.findComponent({ name: "v-toolbar-title" });
-				const fileIcon = toolbarTitle.findComponent({ name: "v-icon" });
+				const fileIcon = wrapper.find("contentelementtitleicon-stub");
 
 				expect(fileIcon.exists()).toBe(true);
-				expect(fileIcon.text()).toEqual(mdiFileDocumentOutline);
+				expect(fileIcon.attributes("icon")).toEqual(mdiFileDocumentOutline);
 			});
 
 			it("should show file name", () => {
 				const { wrapper } = setup({});
 
-				const toolbarTitle = wrapper.findComponent({ name: "v-toolbar-title" });
-				const fileName = toolbarTitle.find("span");
+				const title = wrapper.find("contentelementtitle-stub");
 
-				expect(fileName.exists()).toBe(true);
+				expect(title.exists()).toBe(true);
 			});
 
 			it("should set file name correctly", () => {
 				const { lightBoxOptions, wrapper } = setup({});
 
-				const toolbarTitle = wrapper.findComponent({ name: "v-toolbar-title" });
-				const fileName = toolbarTitle.find("span");
+				const title = wrapper.find("contentelementtitle-stub");
 
-				expect(fileName.text()).toEqual(lightBoxOptions.value.name);
+				expect(title.text()).toEqual(lightBoxOptions.value.name);
 			});
 		});
 
@@ -182,6 +189,23 @@ describe("LightBox", () => {
 				const buttons = wrapper.findAllComponents({ name: "v-btn" });
 
 				expect(buttons).toHaveLength(1);
+			});
+		});
+
+		describe("when image emits onLoad", () => {
+			it("should hide loading spinner", async () => {
+				const { wrapper } = setup({});
+
+				const image = wrapper.find("img");
+				image.trigger("load");
+
+				await wrapper.vm.$nextTick();
+
+				const loadingSpinner = wrapper.findComponent({
+					name: "VProgressCircular",
+				});
+
+				expect(loadingSpinner.exists()).toBe(false);
 			});
 		});
 	});

@@ -10,9 +10,7 @@
 
 ## Documentation
 
-If you want to get started on how to use this project, you can start with our **[Getting Started-Document](./docs/0_GettingStarted.md)**.
-
-The complete **[documentation](./docs/README.md)** for this repository can be found here: *./docs/README.md*.
+If you want to get started on how to use this project, you can start with our complete **[documentation](https://documentation.dbildungscloud.dev/docs/category/nuxt-client)**.
 
 ## Related repositories
 

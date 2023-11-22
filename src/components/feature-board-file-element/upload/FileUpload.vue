@@ -1,5 +1,5 @@
 <template>
-	<v-app-bar flat color="transparent">
+	<v-app-bar v-if="isEditMode" flat color="transparent">
 		<FilePicker
 			v-if="!fileWasPicked"
 			@update:file="onFileSelect"
@@ -11,27 +11,23 @@
 			data-testid="board-file-element-progress-bar"
 			indeterminate
 		/>
-		<slot></slot>
+		<slot />
 	</v-app-bar>
 </template>
 
 <script lang="ts">
 import { useSharedLastCreatedElement } from "@util-board";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import FilePicker from "./file-picker/FilePicker.vue";
 
 export default defineComponent({
 	name: "FileUpload",
 	props: {
 		elementId: { type: String, required: true },
+		isEditMode: { type: Boolean },
 	},
 	components: { FilePicker },
-	emits: [
-		"delete:element",
-		"move-down:element",
-		"move-up:element",
-		"upload:file",
-	],
+	emits: ["upload:file"],
 	setup(props, { emit }) {
 		const isFilePickerOpen = ref(false);
 		const fileWasPicked = ref(false);
@@ -44,6 +40,23 @@ export default defineComponent({
 				isFilePickerOpen.value = true;
 				resetLastCreatedElementId();
 			}
+		});
+
+		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+			if (fileWasPicked.value) {
+				// Opens confirmation dialog in firefox
+				event.preventDefault();
+				// Opens confirmation dialog in chrome
+				event.returnValue = "";
+			}
+		};
+
+		onMounted(() => {
+			window.addEventListener("beforeunload", handleBeforeUnload);
+		});
+
+		onBeforeUnmount(() => {
+			window.removeEventListener("beforeunload", handleBeforeUnload);
 		});
 
 		const onFileSelect = async (file: File) => {

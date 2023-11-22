@@ -14,7 +14,7 @@
 		:full-width="false"
 	>
 		<div>
-			<form-news @save="create" @cancel="cancelHandler"> </form-news>
+			<form-news @save="create" @cancel="cancelHandler" />
 		</div>
 	</default-wireframe>
 </template>
@@ -70,7 +70,6 @@ export default {
 					});
 				}
 			} catch (e) {
-				console.error(e);
 				notifierModule.show({
 					text: this.$t("components.organisms.FormNews.errors.create"),
 					status: "error",

@@ -4,32 +4,37 @@
 			<v-btn icon @click="close">
 				<v-icon>{{ mdiClose }}</v-icon>
 			</v-btn>
-			<v-toolbar-title
-				v-if="lightBoxOptions.name !== ''"
-				class="d-flex align-items-center"
-			>
-				<v-icon color="black" class="mr-2" size="18">{{
-					mdiFileDocumentOutline
-				}}</v-icon>
-				<span class="subtitle-1 font-weight-bold text-truncate mr-8">{{
-					lightBoxOptions.name
-				}}</span>
+
+			<ContentElementTitleIcon :icon="mdiFileDocumentOutline" class="mr-2" />
+
+			<v-toolbar-title v-if="lightBoxOptions.name !== ''">
+				<ContentElementTitle>{{ lightBoxOptions.name }}</ContentElementTitle>
 			</v-toolbar-title>
 			<v-spacer />
 			<v-btn v-if="lightBoxOptions.downloadUrl !== ''" icon @click="download">
 				<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 			</v-btn>
 		</v-toolbar>
+
 		<v-overlay absolute class="mt-16 pa-4" @click="close">
 			<div
 				class="d-flex align-items-center justify-content-center"
 				style="height: 100%"
 			>
+				<VProgressCircular
+					v-if="isImageLoading"
+					color="primary"
+					indeterminate
+					:size="36"
+				/>
+
 				<img
+					v-show="!isImageLoading"
 					:src="lightBoxOptions.previewUrl"
 					:alt="lightBoxOptions.alt"
 					style="max-height: 100%; max-width: 100%"
 					@click.stop
+					@load="isImageLoading = false"
 				/>
 			</div>
 		</v-overlay>
@@ -40,15 +45,18 @@
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiClose, mdiFileDocumentOutline, mdiTrayArrowDown } from "@mdi/js";
 import { onKeyStroke } from "@vueuse/core";
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
+import { ContentElementTitleIcon, ContentElementTitle } from "@ui-board";
 
 export default defineComponent({
 	name: "LightBox",
+	components: { ContentElementTitle, ContentElementTitleIcon },
 	setup() {
 		const { close, isLightBoxOpen, lightBoxOptions } = useInternalLightBox();
+		const isImageLoading = ref(true);
 
-		onKeyStroke("Escape", (e) => close(), { eventName: "keydown" });
+		onKeyStroke("Escape", () => close(), { eventName: "keydown" });
 
 		const download = async () => {
 			await downloadFile(
@@ -56,6 +64,10 @@ export default defineComponent({
 				lightBoxOptions.value.name
 			);
 		};
+
+		watch(isLightBoxOpen, () => {
+			isImageLoading.value = true;
+		});
 
 		return {
 			close,
@@ -65,6 +77,7 @@ export default defineComponent({
 			mdiClose,
 			mdiFileDocumentOutline,
 			mdiTrayArrowDown,
+			isImageLoading,
 		};
 	},
 });

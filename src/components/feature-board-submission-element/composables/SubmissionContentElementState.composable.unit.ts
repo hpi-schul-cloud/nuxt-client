@@ -2,11 +2,12 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { ref } from "vue";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { SubmissionsResponse } from "@/serverApi/v3";
-import { submissionsResponseFactory } from "@@/tests/test-utils";
+import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -32,12 +33,12 @@ describe("SubmissionContentElementState.composable", () => {
 
 	const setup = (
 		contentElementId = "123123",
-		dueDate = "2100-12-31T00:00:00.000Z"
+		dueDate = ref({ dueDate: "2100-12-31T00:00:00.000Z" })
 	) => {
 		return mountComposable(
 			() => useSubmissionContentElementState(contentElementId, dueDate),
 			{
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: i18nMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			}
 		);
@@ -53,6 +54,26 @@ describe("SubmissionContentElementState.composable", () => {
 		).toHaveBeenCalledWith(contentElementId);
 	});
 
+	describe("isOverdue state", () => {
+		it("should be true if dueDate is in past", async () => {
+			const contentElementId = "123124";
+			const dueDateInPast = ref({ dueDate: "2000-12-31T00:00:00.000Z" });
+
+			const { isOverdue } = setup(contentElementId, dueDateInPast);
+
+			expect(isOverdue.value).toBe(true);
+		});
+
+		it("should be false if dueDate is in future", async () => {
+			const contentElementId = "123124";
+			const dueDateInFuture = ref({ dueDate: "2100-12-31T00:00:00.000Z" });
+
+			const { isOverdue } = setup(contentElementId, dueDateInFuture);
+
+			expect(isOverdue.value).toBe(false);
+		});
+	});
+
 	it("should return fetch function that updates submission items and loading state", async () => {
 		const contentElementId = "123124";
 		mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall.mockReturnValue(
@@ -63,7 +84,7 @@ describe("SubmissionContentElementState.composable", () => {
 			setup(contentElementId);
 
 		expect(loading.value).toBe(true);
-		expect(submissions.value.submissionItemsResponse.length).toBe(0);
+		expect(submissions.value.length).toBe(0);
 
 		await fetchSubmissionItems(contentElementId);
 
@@ -71,7 +92,7 @@ describe("SubmissionContentElementState.composable", () => {
 			mockedUseSubmissionItemApiCalls.fetchSubmissionItemsCall
 		).toHaveBeenCalledWith(contentElementId);
 		expect(loading.value).toBe(false);
-		expect(submissions.value.submissionItemsResponse.length).toEqual(
+		expect(submissions.value.length).toEqual(
 			mockedSubmissionsResponse.submissionItemsResponse.length
 		);
 	});

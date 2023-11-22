@@ -6,7 +6,7 @@
 			@dblclick.prevent.stop="onDoubleClick"
 			@keydown.escape="onKeydownEscape"
 		>
-			<slot></slot>
+			<slot />
 		</div>
 	</OnClickOutside>
 </template>
@@ -33,7 +33,7 @@ export default defineComponent({
 		const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
 		provide(InlineEditInteractionEvent, interactionEvent);
 
-		const isDatePicker = (target: HTMLElement): any => {
+		const isDatePicker = (target: HTMLElement): boolean | void => {
 			if (target.className?.includes("v-picker--date")) {
 				return true;
 			}

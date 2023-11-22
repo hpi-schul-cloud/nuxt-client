@@ -1,9 +1,11 @@
 <template>
 	<div>
-		<h2 class="text-h4 mb-10">
-			{{ t("components.administration.externalToolsSection.header") }}
-		</h2>
+		<p class="mb-6">
+			{{ t("components.administration.externalToolsSection.info") }}
+		</p>
 		<v-data-table
+			data-testid="external-tool-section-table"
+			v-if="items.length"
 			:disable-pagination="true"
 			:hide-default-footer="true"
 			:items="items"
@@ -36,7 +38,7 @@
 			</template>
 		</v-data-table>
 		<v-btn
-			class="my-5 button-save"
+			class="mt-8 mb-4 button-save float-right"
 			color="primary"
 			depressed
 			:to="{ name: 'administration-tool-config-overview' }"
@@ -44,9 +46,14 @@
 			{{ t("components.administration.externalToolsSection.action.add") }}
 		</v-btn>
 
-		<v-dialog v-model="isDeleteDialogOpen" max-width="360">
+		<v-dialog
+			v-if="metadata"
+			data-testid="delete-dialog"
+			v-model="isDeleteDialogOpen"
+			max-width="360"
+		>
 			<v-card :ripple="false">
-				<v-card-title>
+				<v-card-title data-testid="delete-dialog-title">
 					<h2 class="text-h4 my-2">
 						{{
 							t("components.administration.externalToolsSection.dialog.title")
@@ -55,20 +62,25 @@
 				</v-card-title>
 				<v-card-text class="text--primary">
 					<RenderHTML
+						data-testid="delete-dialog-content"
 						class="text-md mt-2"
 						:html="
 							t(
 								'components.administration.externalToolsSection.dialog.content',
-								{ itemName: getItemName }
+								{
+									itemName: getItemName,
+									courseCount: metadata.course,
+									boardElementCount: metadata.boardElement,
+								}
 							)
 						"
 						component="p"
 					/>
 				</v-card-text>
 				<v-card-actions>
-					<v-spacer></v-spacer>
+					<v-spacer />
 					<v-btn
-						data-testId="dialog-cancel"
+						data-testId="delete-dialog-cancel"
 						class="dialog-closed"
 						depressed
 						text
@@ -77,7 +89,7 @@
 						{{ t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
-						data-testId="dialog-confirm"
+						data-testId="delete-dialog-confirm"
 						class="dialog-confirmed px-6"
 						color="primary"
 						depressed
@@ -119,6 +131,7 @@ import { DataTableHeader } from "vuetify";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
 
 export default defineComponent({
 	name: "ExternalToolSection",
@@ -146,6 +159,8 @@ export default defineComponent({
 			i18n.tc(key, 0, values);
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
+		const { fetchSchoolExternalToolUsage, metadata } =
+			useSchoolExternalToolUsage();
 
 		const headers: DataTableHeader[] = getHeaders;
 
@@ -188,9 +203,19 @@ export default defineComponent({
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
-		const openDeleteDialog = (item: SchoolExternalToolItem) => {
+		const openDeleteDialog = async (item: SchoolExternalToolItem) => {
 			itemToDelete.value = item;
 			isDeleteDialogOpen.value = true;
+			await fetchSchoolExternalToolUsage(item.id);
+
+			if (!metadata.value) {
+				notifierModule.show({
+					text: t(
+						"components.administration.externalToolsSection.dialog.content.metadata.error"
+					),
+					status: "error",
+				});
+			}
 		};
 
 		const onCloseDeleteDialog = () => {
@@ -213,6 +238,7 @@ export default defineComponent({
 			getItemName,
 			mdiRefreshCircle,
 			mdiCheckCircle,
+			metadata,
 		};
 	},
 });

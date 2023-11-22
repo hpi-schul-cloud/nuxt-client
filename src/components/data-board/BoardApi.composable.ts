@@ -9,11 +9,12 @@ import {
 	ContentElementType,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
-	ExternalToolElementContent,
-	FileElementContent,
-	RichTextElementContent,
+	ExternalToolElementContentBody,
+	FileElementContentBody,
+	LinkElementContentBody,
+	RichTextElementContentBody,
 	RoomsApiFactory,
-	SubmissionContainerElementContent,
+	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
@@ -72,30 +73,37 @@ export const useBoardApi = () => {
 	const generateDataProp = (element: AnyContentElement) => {
 		if (element.type === ContentElementType.RichText) {
 			return {
-				content: element.content as RichTextElementContent,
-				type: ContentElementType.RichText,
-			};
+				content: element.content,
+				type: element.type,
+			} as RichTextElementContentBody;
 		}
 
 		if (element.type === ContentElementType.File) {
 			return {
-				content: element.content as FileElementContent,
+				content: element.content,
 				type: ContentElementType.File,
-			};
+			} as FileElementContentBody;
 		}
 
 		if (element.type === ContentElementType.SubmissionContainer) {
 			return {
-				content: element.content as SubmissionContainerElementContent,
+				content: element.content,
 				type: ContentElementType.SubmissionContainer,
-			};
+			} as SubmissionContainerElementContentBody;
+		}
+
+		if (element.type === ContentElementType.Link) {
+			return {
+				content: element.content,
+				type: ContentElementType.Link,
+			} as LinkElementContentBody;
 		}
 
 		if (element.type === ContentElementType.ExternalTool) {
 			return {
-				content: element.content as ExternalToolElementContent,
+				content: element.content,
 				type: ContentElementType.ExternalTool,
-			};
+			} as ExternalToolElementContentBody;
 		}
 
 		throw new Error("element.type mapping is undefined for updateElementCall");

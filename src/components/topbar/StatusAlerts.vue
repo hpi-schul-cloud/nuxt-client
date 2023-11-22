@@ -34,10 +34,11 @@
 					class="text-left text-caption d-flex flex-row alert-date text--secondary mt-0 mt-2"
 					:data-testid="`alert-date-${index}`"
 				>
-					{{ $t("common.labels.updateAt") }}
-					{{ getDate(item.timestamp) }} |
-					{{ $t("common.labels.createAt") }}
-					{{ getCreatedDate(item.createdAt) }}
+					<template v-if="item.timestamp !== item.createdAt">
+						{{ $t("common.labels.updateAt") }}
+						{{ formatDate(item.timestamp) }} |
+					</template>
+					{{ $t("common.labels.createAt") }} {{ formatDate(item.createdAt) }}
 				</v-list-item-subtitle>
 			</v-list-item-content>
 		</v-list-item>
@@ -46,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { printDateTime, fromNow } from "../../plugins/datetime";
+import { formatDateForAlerts } from "../../plugins/datetime";
 import { mdiAlertCircle, mdiInformation } from "@mdi/js";
 import { StatusAlert } from "@/store/types/status-alert";
 
@@ -65,14 +66,11 @@ export default defineComponent({
 				: { icon: mdiInformation, color: "info" };
 		};
 
-		const getDate = (date: string) => {
-			return fromNow(date, true);
-		};
-		const getCreatedDate = (dateTime: string) => {
-			return printDateTime(dateTime);
+		const formatDate = (dateTime: string) => {
+			return formatDateForAlerts(dateTime, true);
 		};
 
-		return { getIconTag, getDate, getCreatedDate };
+		return { getIconTag, formatDate };
 	},
 });
 </script>

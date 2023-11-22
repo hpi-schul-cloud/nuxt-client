@@ -2,14 +2,15 @@ import {
 	ClassInfoSearchListResponse,
 	GroupApiFactory,
 	GroupApiInterface,
+	SchoolYearQueryType,
 } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { GroupMapper } from "./group/group.mapper";
 import { ClassInfo } from "./types/class-info";
 import { BusinessError, Pagination } from "./types/commons";
 import { SortOrder } from "./types/sort-order.enum";
-import { GroupMapper } from "./group/group.mapper";
 
 @Module({
 	name: "groupModule",
@@ -105,7 +106,33 @@ export default class GroupModule extends VuexModule {
 	}
 
 	@Action
-	async loadClassesForSchool(): Promise<void> {
+	async deleteClass(deleteQuery: {
+		classId: string;
+		query?: SchoolYearQueryType;
+	}): Promise<void> {
+		this.setLoading(true);
+
+		try {
+			await $axios.delete(`/v1/classes/${deleteQuery.classId}`);
+
+			await this.loadClassesForSchool(deleteQuery.query);
+		} catch (error) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: `${apiError.type}: ${apiError.message}`,
+			});
+		}
+
+		this.setLoading(false);
+	}
+
+	@Action
+	async loadClassesForSchool(
+		schoolYearQuery?: SchoolYearQueryType
+	): Promise<void> {
 		this.setLoading(true);
 		try {
 			const sortBy =
@@ -114,11 +141,12 @@ export default class GroupModule extends VuexModule {
 					: undefined;
 
 			const response: AxiosResponse<ClassInfoSearchListResponse> =
-				await this.groupApi.groupControllerFindClassesForSchool(
+				await this.groupApi.groupControllerFindClasses(
 					this.pagination.skip,
 					this.pagination.limit,
 					this.getSortOrder,
-					sortBy
+					sortBy,
+					schoolYearQuery
 				);
 			const mappedClasses: ClassInfo[] = GroupMapper.mapToClassInfo(
 				response.data.data
@@ -132,8 +160,6 @@ export default class GroupModule extends VuexModule {
 			this.setClasses(mappedClasses);
 		} catch (error) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,

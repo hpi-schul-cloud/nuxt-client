@@ -3,6 +3,7 @@
 // using the ./proxy.js serverMiddleware
 
 const mongoId = "[a-z0-9]{24}";
+const h5pId = "[a-z0-9]+";
 const activationCode = "[a-z0-9]+";
 const uuid =
 	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
@@ -24,6 +25,7 @@ const vueRoutes = [
 	`^/administration/school-settings/tool-configuration/${mongoId}/?$`,
 	`^/administration/migration/?$`,
 	`^/administration/groups/classes/?$`,
+	`^/administration/groups/classes/${mongoId}/?$`,
 	`^/cfiles/?$`,
 	`^/cfiles/teams/?$`,
 	`^/cfiles/teams/.+`,
@@ -36,6 +38,9 @@ const vueRoutes = [
 	`^/poc-files/?$`,
 	`^/rooms-overview/?$`,
 	`^/rooms-list/?$`,
+	`^/h5p/player/${h5pId}/?$`,
+	`^/h5p/editor/?$`,
+	`^/h5p/editor/${h5pId}/?$`,
 	`^/rooms/${mongoId}/?$`,
 	`^/rooms/${mongoId}/board?$`,
 	`^/tasks/?$`,

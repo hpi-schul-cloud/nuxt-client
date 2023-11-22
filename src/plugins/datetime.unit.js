@@ -3,6 +3,7 @@ import {
 	currentDate,
 	fromInputDateTime,
 	fromNow,
+	formatDateForAlerts,
 	fromNowToFuture,
 	createInputDateTime,
 	inputRangeDate,
@@ -15,6 +16,7 @@ import {
 	calculateUTC,
 	setDefaultFormats,
 	DATETIME_FORMAT,
+	isDateTimeInPast,
 } from "@/plugins/datetime";
 import datetime from "@/plugins/datetime";
 import dayjs from "dayjs";
@@ -154,6 +156,13 @@ describe("@/plugins/datetime", () => {
 		expect(result).toBe("in 7 days");
 	});
 
+	it("formatDateForAlerts", () => {
+		const sevenDaysAgo = dayjs().subtract(7, "days");
+		const expectedDate = sevenDaysAgo.format("DD.MM.YYYY");
+		const result = formatDateForAlerts(sevenDaysAgo);
+		expect(result).toBe(expectedDate);
+	});
+
 	it("fromNowToFuture", () => {
 		const past = dateUTC.toISOString();
 		const future = dateNow.add(230, "minute").toISOString();
@@ -184,6 +193,11 @@ describe("@/plugins/datetime", () => {
 
 		const resultDateTimeString = resultDateTime.toISOString();
 		expect(resultDateTimeString).toStrictEqual(dateString);
+	});
+
+	it("isDateTimeInPast", () => {
+		const date = new Date("1991-12-31");
+		expect(isDateTimeInPast(date)).toStrictEqual(true);
 	});
 
 	const mockApp = {

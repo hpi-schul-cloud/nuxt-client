@@ -1,8 +1,5 @@
 <template>
 	<div>
-		<h2 class="text-h4 mb-10">
-			{{ t("components.administration.adminMigrationSection.headers") }}
-		</h2>
 		<div v-if="!isGracePeriodExpired" data-testId="migration-control-section">
 			<RenderHTML
 				data-testid="text-description"
@@ -14,32 +11,36 @@
 				component="p"
 			/>
 			<div v-if="isStartButtonVisible">
-				<v-alert light prominent text type="info">
-					<RenderHTML
-						data-testid="migration-info-text"
-						:html="
-							t('components.administration.adminMigrationSection.infoText')
-						"
-						component="span"
-					/>
+				<v-alert light text type="info">
+					<div class="alert-text">
+						<RenderHTML
+							data-testid="migration-info-text"
+							:html="
+								t('components.administration.adminMigrationSection.infoText')
+							"
+							component="span"
+						/>
+					</div>
 				</v-alert>
 			</div>
 			<div v-else-if="isMigrationActive">
-				<v-alert light prominent text type="info">
-					<RenderHTML
-						data-testid="migration-active-status"
-						:html="
-							t(
-								'components.administration.adminMigrationSection.migrationActive'
-							)
-						"
-						component="span"
-					/>
+				<v-alert light text type="info">
+					<div class="alert-text">
+						<RenderHTML
+							data-testid="migration-active-status"
+							:html="
+								t(
+									'components.administration.adminMigrationSection.migrationActive'
+								)
+							"
+							component="span"
+						/>
+					</div>
 				</v-alert>
 			</div>
 			<v-btn
 				v-if="isStartButtonVisible"
-				class="my-5 button-start"
+				class="my-4 button-start"
 				color="primary"
 				depressed
 				:disabled="!officialSchoolNumber"
@@ -54,10 +55,10 @@
 			</v-btn>
 			<v-btn
 				v-if="isEndButtonVisible"
-				class="my-5 button-end"
+				class="my-4 button-end"
 				color="primary"
 				depressed
-				:disabled="!oauthMigration.startedAt"
+				:disabled="!isMigrationActive"
 				data-testid="migration-end-button"
 				@click="onToggleShowEndWarning"
 			>
@@ -74,15 +75,15 @@
 						'components.administration.adminMigrationSection.mandatorySwitch.label'
 					)
 				"
-				:disabled="!oauthMigration.startedAt"
+				:disabled="!isMigrationActive"
 				:true-value="true"
 				:false-value="false"
-				:value="oauthMigration.mandatorySince"
+				:value="isMigrationMandatory"
 				inset
 				dense
 				class="ml-1"
 				data-testid="migration-mandatory-switch"
-				@change="setMigrationMandatory(!oauthMigration.mandatorySince)"
+				@change="setMigrationMandatory(!isMigrationMandatory)"
 			/>
 		</div>
 
@@ -103,15 +104,19 @@
 		/>
 
 		<RenderHTML
-			v-if="oauthMigration && oauthMigration.finishedAt"
+			v-if="
+				userLoginMigration &&
+				userLoginMigration.closedAt &&
+				userLoginMigration.finishedAt
+			"
 			class="migration-completion-date"
 			data-testid="migration-finished-timestamp"
 			:html="
 				t(latestMigration, {
-					date: dayjs(oauthMigration.closedAt).format('DD.MM.YYYY'),
-					time: dayjs(oauthMigration.closedAt).format('HH:mm'),
-					finishDate: dayjs(oauthMigration.finishedAt).format('DD.MM.YYYY'),
-					finishTime: dayjs(oauthMigration.finishedAt).format('HH:mm'),
+					date: dayjs(userLoginMigration.closedAt).format('DD.MM.YYYY'),
+					time: dayjs(userLoginMigration.closedAt).format('HH:mm'),
+					finishDate: dayjs(userLoginMigration.finishedAt).format('DD.MM.YYYY'),
+					finishTime: dayjs(userLoginMigration.finishedAt).format('HH:mm'),
 				})
 			"
 			component="p"
@@ -160,14 +165,16 @@
 </template>
 
 <script lang="ts">
-import { MigrationBody } from "@/serverApi/v3";
-import { OauthMigration, School } from "@/store/types/schools";
+import { useI18n } from "@/composables/i18n.composable";
+import { School } from "@/store/types/schools";
+import { UserLoginMigration } from "@/store/user-login-migration";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
+import { RenderHTML } from "@feature-render-html";
 import dayjs from "dayjs";
 import {
 	computed,
@@ -176,13 +183,8 @@ import {
 	onMounted,
 	ref,
 	Ref,
-	watch,
 } from "vue";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
-import { RenderHTML } from "@feature-render-html";
-import { useI18n } from "@/composables/i18n.composable";
-import { UserLoginMigration } from "@/store/user-login-migration";
-import { UserLoginMigrationFlags } from "@/store/user-login-migration/user-login-migration-flags";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -199,31 +201,24 @@ export default defineComponent({
 		);
 
 		onMounted(async () => {
-			// TODO remove in https://ticketsystem.dbildungscloud.de/browse/N21-820
-			await schoolsModule.fetchSchoolOAuthMigration();
-			await userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser();
+			await userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool();
 		});
 
 		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
 			computed(() => userLoginMigrationModule.getUserLoginMigration);
 
-		const oauthMigration: ComputedRef<UserLoginMigrationFlags> = computed(
-			() => {
-				return {
-					startedAt: !!userLoginMigration.value?.startedAt,
-					mandatorySince: !!userLoginMigration.value?.mandatorySince,
-					closedAt: userLoginMigration.value?.closedAt,
-					finishedAt: userLoginMigration.value?.finishedAt,
-				};
-			}
+		const isMigrationActive: ComputedRef<boolean> = computed(
+			() =>
+				!!userLoginMigration.value?.startedAt &&
+				!userLoginMigration.value.closedAt
 		);
 
-		const isMigrationActive: ComputedRef<boolean> = computed(
-			() => oauthMigration.value.startedAt && !oauthMigration.value.closedAt
+		const isMigrationMandatory: ComputedRef<boolean> = computed(
+			() => !!userLoginMigration.value?.mandatorySince
 		);
 
 		const onStartMigration = () => {
-			if (oauthMigration.value.startedAt) {
+			if (userLoginMigration.value) {
 				userLoginMigrationModule.restartUserLoginMigration();
 			} else {
 				userLoginMigrationModule.startUserLoginMigration();
@@ -238,21 +233,7 @@ export default defineComponent({
 			userLoginMigrationModule.closeUserLoginMigration();
 		};
 
-		// TODO remove in https://ticketsystem.dbildungscloud.de/browse/N21-820
-		const setMigration = async (available: boolean, mandatory: boolean) => {
-			const migrationFlags: MigrationBody = {
-				oauthMigrationPossible: available,
-				oauthMigrationMandatory: mandatory,
-				oauthMigrationFinished: !available,
-			};
-			await schoolsModule.setSchoolOauthMigration(migrationFlags);
-			await schoolsModule.fetchSchool();
-		};
-
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
-		watch(school, async () => {
-			await schoolsModule.fetchSchoolOAuthMigration();
-		});
 
 		const isEndWarningVisible: Ref<boolean> = ref(false);
 
@@ -289,9 +270,9 @@ export default defineComponent({
 				return (
 					Date.now() >= new Date(userLoginMigration.value.finishedAt).getTime()
 				);
-			} else {
-				return false;
 			}
+
+			return false;
 		});
 
 		const latestMigration: ComputedRef<string> = computed(() => {
@@ -338,7 +319,7 @@ export default defineComponent({
 		};
 
 		return {
-			oauthMigration,
+			userLoginMigration,
 			onStartMigration,
 			setMigrationMandatory,
 			onCloseMigration,
@@ -360,7 +341,15 @@ export default defineComponent({
 			globalFeatureEnableLdapSyncDuringMigration,
 			officialSchoolNumber,
 			isMigrationActive,
+			isMigrationMandatory,
 		};
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.alert-text {
+	color: var(--v-black-base) !important;
+	line-height: var(--line-height-lg) !important;
+}
+</style>

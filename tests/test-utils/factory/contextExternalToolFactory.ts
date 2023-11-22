@@ -1,13 +1,13 @@
-import { ToolContextType } from "@/store/external-tool";
-import { Factory } from "fishery";
+import { ToolContextType } from "@/serverApi/v3";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { Factory } from "fishery";
 
 export const contextExternalToolFactory = Factory.define<ContextExternalTool>(
 	() => ({
 		id: "id",
 		schoolToolId: "schoolToolId",
 		contextId: "contextId",
-		contextType: ToolContextType.COURSE,
+		contextType: ToolContextType.Course,
 		parameters: [],
 		toolVersion: 1,
 	})

@@ -2,8 +2,10 @@ import { PreviewStatus } from "@/fileStorageApi/v3";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { shallowMount } from "@vue/test-utils";
+import { FileAlert } from "../shared/types/FileAlert.enum";
+import FileAlerts from "./alert/FileAlerts.vue";
+import FileDisplay from "./display/FileDisplay.vue";
 import FileContent from "./FileContent.vue";
-import FileAlert from "./alert/FileAlert.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
 
@@ -24,10 +26,13 @@ describe("FileContent", () => {
 					isDownloadAllowed: true,
 					element,
 				};
+
+				const alerts = [FileAlert.AWAITING_SCAN_STATUS];
 				const wrapper = shallowMount(FileContent, {
 					propsData: {
 						fileProperties,
 						isEditMode: true,
+						alerts,
 					},
 					...createComponentMocks({}),
 				});
@@ -35,13 +40,14 @@ describe("FileContent", () => {
 				return {
 					wrapper,
 					fileProperties,
+					alerts,
 				};
 			};
 
-			it("should pass props to FileContent", () => {
+			it("should pass props to FileDisplay", () => {
 				const { wrapper, fileProperties } = setup();
 
-				const fileContent = wrapper.findComponent(FileContent);
+				const fileContent = wrapper.findComponent(FileDisplay);
 
 				expect(fileContent.props()).toEqual({
 					fileProperties,
@@ -61,52 +67,71 @@ describe("FileContent", () => {
 			});
 
 			it("should pass props to FileAlert", () => {
-				const { wrapper, fileProperties } = setup();
+				const { wrapper, alerts } = setup();
 
-				const fileAlert = wrapper.findComponent(FileAlert);
+				const fileAlert = wrapper.findComponent(FileAlerts);
 
 				expect(fileAlert.props()).toEqual({
-					previewStatus: fileProperties.previewStatus,
+					alerts,
 				});
 			});
 
-			it("should FileInputs component be in dom", () => {
-				const { wrapper } = setup();
+			it("should pass props to FileInputs", () => {
+				const { wrapper, fileProperties } = setup();
 
 				const fileInputs = wrapper.findComponent(FileInputs);
 
-				expect(fileInputs.exists()).toBe(true);
+				expect(fileInputs.props()).toEqual({
+					fileProperties,
+					isEditMode: true,
+				});
 			});
 
-			it("should emit update:alternativeText event, when it receives update:text event from file inputs component", async () => {
-				const { wrapper } = setup();
+			describe("when file inputs emit update:alternativeText", () => {
+				it("should emit update:alternativeText", async () => {
+					const { wrapper } = setup();
 
-				const fileInputs = wrapper.findComponent(FileInputs);
+					const fileInputs = wrapper.findComponent(FileInputs);
 
-				fileInputs.vm.$emit("update:alternativeText");
+					fileInputs.vm.$emit("update:alternativeText");
 
-				expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
+					expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
+				});
 			});
 
-			it("should emit update:caption event, when it receives update:caption event from file inputs component", async () => {
-				const { wrapper } = setup();
+			describe("when file inputs emit update:caption", () => {
+				it("should emit update:caption event, when it receives update:caption event from file inputs component", async () => {
+					const { wrapper } = setup();
 
-				const fileInputs = wrapper.findComponent(FileInputs);
+					const fileInputs = wrapper.findComponent(FileInputs);
 
-				fileInputs.vm.$emit("update:caption");
+					fileInputs.vm.$emit("update:caption");
 
-				expect(wrapper.emitted("update:caption")).toHaveLength(1);
+					expect(wrapper.emitted("update:caption")).toHaveLength(1);
+				});
 			});
 
-			describe("when alert emits on-status-reload", () => {
+			describe("when file alerts emits on-status-reload", () => {
 				it("should emit fetch:file event", async () => {
 					const { wrapper } = setup();
 
-					const fileAlert = wrapper.findComponent(FileAlert);
+					const fileAlert = wrapper.findComponent(FileAlerts);
 
 					await fileAlert.vm.$emit("on-status-reload");
 
 					expect(wrapper.emitted("fetch:file")).toBeTruthy();
+				});
+			});
+
+			describe("when file display emits add:alert", () => {
+				it("should emit add:alert event", async () => {
+					const { wrapper } = setup();
+
+					const fileDisplay = wrapper.findComponent(FileDisplay);
+
+					fileDisplay.vm.$emit("add:alert");
+
+					expect(wrapper.emitted("add:alert")).toHaveLength(1);
 				});
 			});
 		});

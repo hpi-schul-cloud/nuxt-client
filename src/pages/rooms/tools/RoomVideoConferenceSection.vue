@@ -7,7 +7,7 @@
 			data-testid="video-conference-card"
 			@click="onClick"
 			@refresh="onRefresh"
-		></room-video-conference-card>
+		/>
 
 		<v-custom-dialog
 			:is-open="isErrorDialogOpen"
@@ -52,7 +52,7 @@
 							class="my-0"
 							inset
 							dense
-						></v-switch>
+						/>
 					</div>
 					<div class="d-flex justify-space-between">
 						<p class="text-md mt-1 mr-4">
@@ -68,7 +68,7 @@
 							class="my-0"
 							inset
 							dense
-						></v-switch>
+						/>
 					</div>
 					<div class="d-flex justify-space-between">
 						<p class="text-md mt-1 mr-4">
@@ -84,11 +84,11 @@
 							class="my-0"
 							inset
 							dense
-						></v-switch>
+						/>
 					</div>
 				</v-card-text>
 				<v-card-actions>
-					<v-spacer></v-spacer>
+					<v-spacer />
 					<v-btn
 						data-testId="dialog-cancel"
 						depressed
