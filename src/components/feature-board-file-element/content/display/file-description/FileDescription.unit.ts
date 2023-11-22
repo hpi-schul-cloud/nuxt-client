@@ -7,6 +7,7 @@ describe("FileDescription", () => {
 	const shallowMountSetup = (props: {
 		isEditMode: boolean;
 		showTitle: boolean;
+		showMenu: boolean;
 		name?: string;
 		caption?: string;
 		src?: string;
@@ -18,6 +19,7 @@ describe("FileDescription", () => {
 			caption: props.caption,
 			isEditMode: props.isEditMode,
 			showTitle: props.showTitle,
+			showMenu: props.showMenu,
 			src: props.src,
 		};
 		const wrapper = shallowMount(FileDescription, {
@@ -36,6 +38,7 @@ describe("FileDescription", () => {
 	const mountSetup = (props: {
 		isEditMode: boolean;
 		showTitle: boolean;
+		showMenu: boolean;
 		name?: string;
 		caption?: string;
 		src?: string;
@@ -47,6 +50,7 @@ describe("FileDescription", () => {
 			caption: props.caption ?? "testCaption",
 			isEditMode: props.isEditMode,
 			showTitle: props.showTitle,
+			showMenu: props.showMenu,
 			src: props.src,
 		};
 		const wrapper = mount(FileDescription, {
@@ -68,6 +72,7 @@ describe("FileDescription", () => {
 				const { wrapper } = shallowMountSetup({
 					isEditMode: true,
 					showTitle: true,
+					showMenu: true,
 				});
 
 				const contentElementBar = wrapper.find("contentelementbar-stub");
@@ -79,6 +84,7 @@ describe("FileDescription", () => {
 				const { wrapper, caption } = mountSetup({
 					isEditMode: true,
 					showTitle: true,
+					showMenu: true,
 				});
 
 				const text = wrapper.text();
@@ -90,6 +96,7 @@ describe("FileDescription", () => {
 				const { wrapper } = shallowMountSetup({
 					isEditMode: true,
 					showTitle: true,
+					showMenu: true,
 				});
 
 				const contentElementBar = wrapper.find("contentelementbar-stub");
@@ -101,6 +108,7 @@ describe("FileDescription", () => {
 				const { wrapper } = shallowMountSetup({
 					isEditMode: true,
 					showTitle: true,
+					showMenu: true,
 				});
 
 				const contentElementBar = wrapper.find("contentelementbar-stub");
@@ -114,6 +122,7 @@ describe("FileDescription", () => {
 					const { wrapper, name } = mountSetup({
 						isEditMode: false,
 						showTitle: true,
+						showMenu: true,
 						src,
 					});
 					const link = wrapper.find("a");
@@ -128,6 +137,7 @@ describe("FileDescription", () => {
 					const { wrapper, name } = mountSetup({
 						isEditMode: false,
 						showTitle: true,
+						showMenu: true,
 					});
 					const link = wrapper.find("a");
 
@@ -142,6 +152,7 @@ describe("FileDescription", () => {
 				const { wrapper } = shallowMountSetup({
 					isEditMode: true,
 					showTitle: false,
+					showMenu: false,
 				});
 
 				const contentElementBar = wrapper.find("contentelementbar-stub");
@@ -153,6 +164,7 @@ describe("FileDescription", () => {
 				const { wrapper, caption } = mountSetup({
 					isEditMode: true,
 					showTitle: false,
+					showMenu: false,
 				});
 
 				const text = wrapper.text();
@@ -168,6 +180,7 @@ describe("FileDescription", () => {
 				const { wrapper } = shallowMountSetup({
 					isEditMode: false,
 					showTitle: true,
+					showMenu: true,
 				});
 
 				const contentElementBar = wrapper.find("contentelementbar-stub");
@@ -179,6 +192,7 @@ describe("FileDescription", () => {
 				const { wrapper, caption } = mountSetup({
 					isEditMode: false,
 					showTitle: true,
+					showMenu: true,
 				});
 
 				const text = wrapper.text();
@@ -190,6 +204,7 @@ describe("FileDescription", () => {
 				const { wrapper } = shallowMountSetup({
 					isEditMode: false,
 					showTitle: true,
+					showMenu: true,
 				});
 
 				const contentElementBar = wrapper.find("contentelementbar-stub");
@@ -203,6 +218,7 @@ describe("FileDescription", () => {
 					const { wrapper, name } = mountSetup({
 						isEditMode: false,
 						showTitle: true,
+						showMenu: true,
 						src,
 					});
 					const link = wrapper.find("a");
@@ -217,6 +233,7 @@ describe("FileDescription", () => {
 					const { wrapper, name } = mountSetup({
 						isEditMode: false,
 						showTitle: true,
+						showMenu: true,
 					});
 					const link = wrapper.find("a");
 
@@ -231,6 +248,7 @@ describe("FileDescription", () => {
 				const { wrapper, name } = shallowMountSetup({
 					isEditMode: false,
 					showTitle: false,
+					showMenu: false,
 				});
 
 				const text = wrapper.text();
@@ -244,6 +262,7 @@ describe("FileDescription", () => {
 					const { wrapper } = shallowMountSetup({
 						isEditMode: false,
 						showTitle: false,
+						showMenu: false,
 						caption,
 					});
 
@@ -258,6 +277,7 @@ describe("FileDescription", () => {
 					const { wrapper } = shallowMountSetup({
 						isEditMode: false,
 						showTitle: false,
+						showMenu: false,
 					});
 
 					const captionDiv = wrapper.find(".pa-4.grey.lighten-4");

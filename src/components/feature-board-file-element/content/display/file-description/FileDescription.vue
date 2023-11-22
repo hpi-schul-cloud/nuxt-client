@@ -6,12 +6,12 @@
 			:icon="mdiFileDocumentOutline"
 		>
 			<template #title>
-				<ContentElementTitle>
+				<ContentElementTitle class="title-link">
 					<a v-if="src" :href="src" target="_blank">{{ name }}</a>
 					<span v-else>{{ name }}</span>
 				</ContentElementTitle>
 			</template>
-			<template #menu>
+			<template v-if="showMenu" #menu>
 				<slot />
 			</template>
 			<template #subtitle v-if="caption && !isEditMode">
@@ -36,6 +36,7 @@ export default defineComponent({
 		name: { type: String, required: true },
 		caption: { type: String, required: false },
 		showTitle: { type: Boolean, required: true },
+		showMenu: { type: Boolean, required: true },
 		isEditMode: { type: Boolean, required: true },
 		src: { type: String, required: false },
 	},
@@ -48,13 +49,14 @@ export default defineComponent({
 });
 </script>
 <style scope>
-a {
+.title-link a {
 	text-decoration: none;
+	color: var(--v-black-base);
 }
-a:visited {
-	color: inherit;
+.title-link a:visited {
+	color: var(--v-black-base);
 }
-a:hover {
+.title-link a:hover {
 	text-decoration: underline;
 }
 </style>
