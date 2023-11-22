@@ -20,6 +20,7 @@ export const useTouchDetection = () => {
 			console.log("touch event: ", JSON.stringify(evt.touches[0]));
 			if ("touches" in evt && evt.touches[0].force >= 0.999) {
 				if (now.getTime() - lastTouchDetection > 200) {
+					console.log("touch with stylus or anything else");
 					isTouchDetected.value = false;
 				}
 				// stylus or mouse on touch-device
@@ -30,6 +31,7 @@ export const useTouchDetection = () => {
 			}
 		} else {
 			isTouchDetected.value = false;
+			console.log("mouse click");
 		}
 	};
 
