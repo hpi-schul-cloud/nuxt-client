@@ -6,16 +6,19 @@ export const useTouchDetection = () => {
 	const hasTouchCapability2 = "touchstart" in window;
 	const hasTouchCapability3 = navigator.maxTouchPoints >= 1;
 
+	console.log("hasTouchCapability", hasTouchCapability);
+	console.log("hasTouchCapability2", hasTouchCapability2);
+	console.log("hasTouchCapability3", hasTouchCapability3);
+
 	const isTouchDetected = ref(hasTouchCapability);
 	let lastTouchDetection = new Date().getTime();
-	console.log(".", lastTouchDetection);
 
-	useEventListener(
-		"touchstart",
-		(evt) => {
-			const now = new Date();
-			console.log("age", now.getTime() - lastTouchDetection);
-			if (evt.touches[0].force >= 0.999) {
+	const handler = <T extends MouseEvent | TouchEvent>(evt: T) => {
+		const now = new Date();
+		console.log("age", now.getTime() - lastTouchDetection);
+		if ("touches" in evt) {
+			console.log("touch event: ", JSON.stringify(evt.touches[0]));
+			if ("touches" in evt && evt.touches[0].force >= 0.999) {
 				if (now.getTime() - lastTouchDetection > 200) {
 					isTouchDetected.value = false;
 				}
@@ -25,35 +28,18 @@ export const useTouchDetection = () => {
 				lastTouchDetection = now.getTime();
 				console.log("lastTouchDetection", lastTouchDetection);
 			}
-			console.log("lastTouchDetection", lastTouchDetection);
-			console.log("touch event: ", evt.touches[0]);
-			console.log("isTouchDetected:", isTouchDetected.value);
-			console.log("onTouchStart", hasTouchCapability);
-			console.log("touchstart", hasTouchCapability2);
-			console.log("maxTouchPoints", hasTouchCapability3);
-		},
-		{
-			capture: true,
+		} else {
+			isTouchDetected.value = false;
 		}
-	);
+	};
 
-	useEventListener(
-		"mousedown",
-		() => {
-			const now = new Date();
-			console.log("age", now.getTime() - lastTouchDetection);
-			if (now.getTime() - lastTouchDetection > 200) {
-				isTouchDetected.value = false;
-			}
-			console.log("isTouchDetected:", isTouchDetected.value);
-			console.log("onTouchStart", hasTouchCapability);
-			console.log("touchstart", hasTouchCapability2);
-			console.log("maxTouchPoints", hasTouchCapability3);
-		},
-		{
-			capture: true,
-		}
-	);
+	useEventListener("touchstart", (evt) => handler<TouchEvent>(evt), {
+		capture: true,
+	});
+
+	useEventListener("mousedown", (evt) => handler<MouseEvent>(evt), {
+		capture: true,
+	});
 
 	return {
 		isTouchDetected,
