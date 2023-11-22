@@ -1,4 +1,4 @@
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -51,7 +51,7 @@ describe("DrawingContentElement", () => {
 		isEditMode: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(DrawingContentElement, {
+		wrapper = shallowMount(DrawingContentElement as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: props,
 			provide: {

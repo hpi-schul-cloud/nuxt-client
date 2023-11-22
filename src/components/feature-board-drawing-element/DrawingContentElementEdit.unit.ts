@@ -1,6 +1,6 @@
 import { I18N_KEY } from "@/utils/inject";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount } from "@vue/test-utils";
+import { MountOptions, shallowMount } from "@vue/test-utils";
 import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
 
 describe("DrawingContentElementEdit", () => {
@@ -14,13 +14,16 @@ describe("DrawingContentElementEdit", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const wrapper = shallowMount(DrawingContentElementEdit, {
-			...createComponentMocks({ i18n: true }),
-			propsData,
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
-			},
-		});
+		const wrapper = shallowMount(
+			DrawingContentElementEdit as MountOptions<Vue>,
+			{
+				...createComponentMocks({ i18n: true }),
+				propsData,
+				provide: {
+					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				},
+			}
+		);
 
 		return {
 			wrapper,
