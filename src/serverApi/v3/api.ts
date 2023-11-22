@@ -1622,6 +1622,25 @@ export interface ExternalToolElementResponse {
 /**
  * 
  * @export
+ * @interface ExternalToolMetadataResponse
+ */
+export interface ExternalToolMetadataResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof ExternalToolMetadataResponse
+     */
+    schoolExternalToolCount: number;
+    /**
+     * 
+     * @type {SchoolExternalToolMetadataResponseContextExternalToolCountPerContext}
+     * @memberof ExternalToolMetadataResponse
+     */
+    contextExternalToolCountPerContext: SchoolExternalToolMetadataResponseContextExternalToolCountPerContext;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolResponse
  */
 export interface ExternalToolResponse {
@@ -2542,6 +2561,24 @@ export interface MetaTagExtractorResponse {
      * @memberof MetaTagExtractorResponse
      */
     imageUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MetaTagExtractorResponse
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MetaTagExtractorResponse
+     */
+    parentTitle: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MetaTagExtractorResponse
+     */
+    parentType: string;
 }
 /**
  * 
@@ -3877,6 +3914,38 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
      * @memberof SchoolExternalToolConfigurationTemplateResponse
      */
     version: number;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolExternalToolMetadataResponse
+ */
+export interface SchoolExternalToolMetadataResponse {
+    /**
+     * 
+     * @type {SchoolExternalToolMetadataResponseContextExternalToolCountPerContext}
+     * @memberof SchoolExternalToolMetadataResponse
+     */
+    contextExternalToolCountPerContext: SchoolExternalToolMetadataResponseContextExternalToolCountPerContext;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolExternalToolMetadataResponseContextExternalToolCountPerContext
+ */
+export interface SchoolExternalToolMetadataResponseContextExternalToolCountPerContext {
+    /**
+     * 
+     * @type {number}
+     * @memberof SchoolExternalToolMetadataResponseContextExternalToolCountPerContext
+     */
+    course?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof SchoolExternalToolMetadataResponseContextExternalToolCountPerContext
+     */
+    boardElement?: number;
 }
 /**
  * 
@@ -9426,9 +9495,9 @@ export const MetaTagExtractorApiAxiosParamCreator = function (configuration?: Co
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        metaTagExtractorControllerGetData: async (getMetaTagDataBody: GetMetaTagDataBody, options: any = {}): Promise<RequestArgs> => {
+        metaTagExtractorControllerGetMetaTags: async (getMetaTagDataBody: GetMetaTagDataBody, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'getMetaTagDataBody' is not null or undefined
-            assertParamExists('metaTagExtractorControllerGetData', 'getMetaTagDataBody', getMetaTagDataBody)
+            assertParamExists('metaTagExtractorControllerGetMetaTags', 'getMetaTagDataBody', getMetaTagDataBody)
             const localVarPath = `/meta-tag-extractor`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -9476,8 +9545,8 @@ export const MetaTagExtractorApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async metaTagExtractorControllerGetData(getMetaTagDataBody: GetMetaTagDataBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MetaTagExtractorResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.metaTagExtractorControllerGetData(getMetaTagDataBody, options);
+        async metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MetaTagExtractorResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.metaTagExtractorControllerGetMetaTags(getMetaTagDataBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -9497,8 +9566,8 @@ export const MetaTagExtractorApiFactory = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        metaTagExtractorControllerGetData(getMetaTagDataBody: GetMetaTagDataBody, options?: any): AxiosPromise<MetaTagExtractorResponse> {
-            return localVarFp.metaTagExtractorControllerGetData(getMetaTagDataBody, options).then((request) => request(axios, basePath));
+        metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: any): AxiosPromise<MetaTagExtractorResponse> {
+            return localVarFp.metaTagExtractorControllerGetMetaTags(getMetaTagDataBody, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -9517,7 +9586,7 @@ export interface MetaTagExtractorApiInterface {
      * @throws {RequiredError}
      * @memberof MetaTagExtractorApiInterface
      */
-    metaTagExtractorControllerGetData(getMetaTagDataBody: GetMetaTagDataBody, options?: any): AxiosPromise<MetaTagExtractorResponse>;
+    metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: any): AxiosPromise<MetaTagExtractorResponse>;
 
 }
 
@@ -9536,8 +9605,8 @@ export class MetaTagExtractorApi extends BaseAPI implements MetaTagExtractorApiI
      * @throws {RequiredError}
      * @memberof MetaTagExtractorApi
      */
-    public metaTagExtractorControllerGetData(getMetaTagDataBody: GetMetaTagDataBody, options?: any) {
-        return MetaTagExtractorApiFp(this.configuration).metaTagExtractorControllerGetData(getMetaTagDataBody, options).then((request) => request(this.axios, this.basePath));
+    public metaTagExtractorControllerGetMetaTags(getMetaTagDataBody: GetMetaTagDataBody, options?: any) {
+        return MetaTagExtractorApiFp(this.configuration).metaTagExtractorControllerGetMetaTags(getMetaTagDataBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -13912,6 +13981,44 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Gets the metadata of an external tool.
+         * @param {string} externalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetMetaDataForExternalTool: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'externalToolId' is not null or undefined
+            assertParamExists('toolControllerGetMetaDataForExternalTool', 'externalToolId', externalToolId)
+            const localVarPath = `/tools/external-tools/{externalToolId}/metadata`
+                .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Updates an ExternalTool
          * @param {string} externalToolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -14132,6 +14239,44 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             }
 
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Gets the metadata of an school external tool.
+         * @param {string} schoolExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolSchoolControllerGetMetaDataForExternalTool: async (schoolExternalToolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolExternalToolId' is not null or undefined
+            assertParamExists('toolSchoolControllerGetMetaDataForExternalTool', 'schoolExternalToolId', schoolExternalToolId)
+            const localVarPath = `/tools/school-external-tools/{schoolExternalToolId}/metadata`
+                .replace(`{${"schoolExternalToolId"}}`, encodeURIComponent(String(schoolExternalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -14447,6 +14592,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Gets the metadata of an external tool.
+         * @param {string} externalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolMetadataResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetMetaDataForExternalTool(externalToolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Updates an ExternalTool
          * @param {string} externalToolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -14511,6 +14667,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
          */
         async toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Gets the metadata of an school external tool.
+         * @param {string} schoolExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExternalToolMetadataResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14707,6 +14874,16 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Gets the metadata of an external tool.
+         * @param {string} externalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolMetadataResponse> {
+            return localVarFp.toolControllerGetMetaDataForExternalTool(externalToolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Updates an ExternalTool
          * @param {string} externalToolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -14766,6 +14943,16 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          */
         toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<void> {
             return localVarFp.toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Gets the metadata of an school external tool.
+         * @param {string} schoolExternalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolMetadataResponse> {
+            return localVarFp.toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14957,6 +15144,16 @@ export interface ToolApiInterface {
 
     /**
      * 
+     * @summary Gets the metadata of an external tool.
+     * @param {string} externalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolMetadataResponse>;
+
+    /**
+     * 
      * @summary Updates an ExternalTool
      * @param {string} externalToolId 
      * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -15016,6 +15213,16 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Gets the metadata of an school external tool.
+     * @param {string} schoolExternalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolMetadataResponse>;
 
     /**
      * 
@@ -15235,6 +15442,18 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
+     * @summary Gets the metadata of an external tool.
+     * @param {string} externalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerGetMetaDataForExternalTool(externalToolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Updates an ExternalTool
      * @param {string} externalToolId 
      * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -15305,6 +15524,18 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId: string, options?: any) {
         return ToolApiFp(this.configuration).toolSchoolControllerDeleteSchoolExternalTool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Gets the metadata of an school external tool.
+     * @param {string} schoolExternalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolSchoolControllerGetMetaDataForExternalTool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
