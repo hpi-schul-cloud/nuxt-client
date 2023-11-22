@@ -1,9 +1,10 @@
 import {
 	ExternalToolElementResponse,
 	FileElementResponse,
+	LearnstoreElementResponse,
+	LinkElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
-	LinkElementResponse,
 } from "@/serverApi/v3";
 
 export type AnyContentElement =
@@ -11,4 +12,5 @@ export type AnyContentElement =
 	| RichTextElementResponse
 	| FileElementResponse
 	| SubmissionContainerElementResponse
-	| ExternalToolElementResponse;
+	| ExternalToolElementResponse
+	| LearnstoreElementResponse;

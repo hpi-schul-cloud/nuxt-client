@@ -6,6 +6,7 @@ import {
 	mdiLightbulbOnOutline,
 	mdiLink,
 	mdiPuzzleOutline,
+	mdiStorefrontOutline,
 	mdiTrayArrowUp,
 } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
@@ -69,6 +70,15 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			label: "components.elementTypeSelection.elements.linkElement.subtitle",
 			action: () => onElementClick(ContentElementType.Link),
 			testId: "create-element-link",
+		});
+	}
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LEARNSTORE_ENABLED) {
+		options.push({
+			icon: mdiStorefrontOutline,
+			label: "components.elementTypeSelection.elements.learnstore.subtitle",
+			action: () => onElementClick(ContentElementType.Learnstore),
+			testId: "create-element-learnstore-container",
 		});
 	}
 

@@ -52,6 +52,15 @@
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
+				<LearnstoreElement
+					v-else-if="showLearnstoreElement(element)"
+					:is-edit-mode="isEditMode"
+					:element="element"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
 			</ContentElement>
 		</template>
 	</VCardText>
@@ -62,6 +71,7 @@ import {
 	ContentElementType,
 	ExternalToolElementResponse,
 	FileElementResponse,
+	LearnstoreElementResponse,
 	LinkElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
@@ -76,10 +86,12 @@ import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { computed, defineComponent, PropType } from "vue";
 import ContentElement from "./ContentElement.vue";
+import { LearnstoreElement } from "@feature-board-learnstore-element";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
+		LearnstoreElement,
 		ContentElement,
 		ExternalToolElement,
 		FileContentElement,
@@ -171,6 +183,21 @@ export default defineComponent({
 			);
 		};
 
+		const isLearnstoreElementResponse = (
+			element: AnyContentElement
+		): element is LearnstoreElementResponse => {
+			return element.type === ContentElementType.Learnstore;
+		};
+
+		const showLearnstoreElement = (
+			element: AnyContentElement
+		): element is LearnstoreElementResponse => {
+			return (
+				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LEARNSTORE_ENABLED &&
+				isLearnstoreElementResponse(element)
+			);
+		};
+
 		const onMoveElementDown = (
 			elementIndex: number,
 			element: AnyContentElement
@@ -228,6 +255,8 @@ export default defineComponent({
 			showSubmissionContainerElement,
 			isExternalToolElementResponse,
 			showExternalToolElement,
+			isLearnstoreElementResponse,
+			showLearnstoreElement,
 			showLinkElement,
 			lastElementId,
 			onDeleteElement,

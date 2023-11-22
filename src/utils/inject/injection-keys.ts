@@ -15,6 +15,7 @@ import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
 import { InjectionKey } from "vue";
 import VueI18n from "vue-i18n";
+import ContentModule from "@/store/content";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
@@ -45,3 +46,6 @@ export const TERMS_OF_USE_MODULE_KEY: InjectionKey<TermsOfUseModule> =
 	Symbol("termsOfUseModule");
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
 	Symbol("schoolsModule");
+
+export const LEARNSTORE_MODULE_KEY: InjectionKey<ContentModule> =
+	Symbol("contentModule");
