@@ -28,16 +28,18 @@
 			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
 			<span class="align-self-center title flex-1 break-word">
 				{{
-					isLinked
+					hasMaterial
 						? title
 						: t("feature-board-learnstore-element.placeholder.select")
 				}}
 			</span>
 		</div>
-		<!-- <lernstore-detail-view
-      :v-if="isLearnstoreOpen && resource"
-      :resource="resource"
-    /> -->
+		<template v-if="isLearnstoreOpen">
+			<learnstore-selection-dialog
+				:is-open="isLearnstoreOpen"
+				@close="onLearnstoreClose"
+			/>
+		</template>
 	</v-card>
 </template>
 
@@ -62,10 +64,10 @@ import { injectStrict, LEARNSTORE_MODULE_KEY } from "@/utils/inject";
 import { useLearnstoreElementDisplayState } from "@feature-board-learnstore-element";
 import ContentModule from "@/store/content";
 import { Resource } from "@/store/types/content";
-import LernstoreDetailView from "@/components/lern-store/LernstoreDetailView.vue";
+import LearnstoreSelectionDialog from "./LearnstoreSelectionDialog.vue";
 
 export default defineComponent({
-	components: { LernstoreDetailView },
+	components: { LearnstoreSelectionDialog },
 	props: {
 		element: {
 			type: Object as PropType<LearnstoreElementResponse>,
@@ -87,7 +89,7 @@ export default defineComponent({
 		const learnstoreModule: ContentModule = injectStrict(LEARNSTORE_MODULE_KEY);
 		const {
 			resource,
-			isLoading: isDisplayDataLoading,
+			isLoading: isMaterialLoading,
 			error,
 			fetchContent,
 		} = useLearnstoreElementDisplayState(learnstoreModule);
@@ -108,7 +110,7 @@ export default defineComponent({
 			}
 		});
 
-		const isLinked: ComputedRef<boolean> = computed(
+		const hasMaterial: ComputedRef<boolean> = computed(
 			() => !!modelValue.value.someId
 		);
 
@@ -117,7 +119,7 @@ export default defineComponent({
 		);
 
 		const isLoading = computed(
-			() => isLinked.value && !resource.value && isDisplayDataLoading.value
+			() => hasMaterial.value && !resource.value && isMaterialLoading.value
 		);
 
 		const isLearnstoreOpen: Ref<boolean> = ref(false);
@@ -144,13 +146,15 @@ export default defineComponent({
 		};
 
 		const onClickElement = () => {
-			// TODO: do something
-			if (!isLinked.value && props.isEditMode) {
+			if (!hasMaterial.value && props.isEditMode) {
 				isLearnstoreOpen.value = true;
+			} else {
+				// TODO: open learnstore material
 			}
 		};
 
 		const onLearnstoreClose = () => {
+			console.log("CLOSED");
 			isLearnstoreOpen.value = false;
 		};
 
@@ -170,7 +174,7 @@ export default defineComponent({
 
 		return {
 			t,
-			isLinked,
+			hasMaterial,
 			title,
 			resource,
 			error,
