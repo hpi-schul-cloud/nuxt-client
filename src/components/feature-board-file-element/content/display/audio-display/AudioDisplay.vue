@@ -36,12 +36,16 @@
 				thumb-color="white"
 				track-color="#9e9e9e"
 				:value="currentTime"
+				step="0.01"
+				tick-size="0.01"
+				start="0"
+				end="duration"
 				:min="0"
 				:max="max"
-				@click="currentTimeSlider"
-				@change="currentTimeSeconds"
-				@mousedown="currentTimeSlider"
-				@mouseup="currentTimeSlider"
+				@click="onClickPlaySlider"
+				@mousedown="onClickPlaySlider"
+				@mouseup="onClickPlaySlider"
+				@input="onInputSlider"
 			/>
 			<SpeedMenu @rate="speedRate" />
 			<v-icon
@@ -58,10 +62,15 @@
 					color="white"
 					thumb-color="white"
 					track-color="#9e9e9e"
-					v-model="volumeValue"
+					v-model="volume"
+					step="0.01"
+					tick-size="0.01"
+					:min="0"
+					:max="1"
+					@click="currentVolumeSlider"
 				/>
 				<v-icon
-					class="px-2"
+					class="pr-2"
 					@click="showVolumeSlider"
 					role="img"
 					aria-hidden="false"
@@ -105,22 +114,19 @@ export default defineComponent({
 			src: source,
 		});
 
-		const { playing, currentTime, duration, volume, muted, rate } = controls;
+		const { playing, currentTime, duration, volume, rate } = controls;
 
-		const volumeValue = (volume: number) => {
-			controls.volume.value = volume + 5;
+		const onPlay = () => {
+			playing.value = !playing.value;
 		};
 
-		const isShow: Ref<boolean> = ref(false);
-		const showVolumeSlider = () => {
-			isShow.value = !isShow.value;
-		};
-		const speedRate = (rate: number) => {
-			controls.rate.value = rate;
+		const onClickPlaySlider = (event: Event) => {
+			event.stopPropagation();
+			event.stopImmediatePropagation();
 		};
 
-		const onError = () => {
-			emit("error", FileAlert.AUDIO_FORMAT_ERROR);
+		const onInputSlider = (seconds: number) => {
+			controls.currentTime.value = seconds;
 		};
 
 		const formatDuration = (seconds: number) => {
@@ -131,18 +137,22 @@ export default defineComponent({
 			return duration.value;
 		});
 
-		const onPlay = () => {
-			playing.value = !playing.value;
+		const speedRate = (rate: number) => {
+			controls.rate.value = rate;
 		};
 
-		const currentTimeSlider = (event: Event) => {
+		const isShow: Ref<boolean> = ref(false);
+		const showVolumeSlider = () => {
+			isShow.value = !isShow.value;
+		};
+
+		const currentVolumeSlider = (event: Event) => {
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 		};
 
-		const currentTimeSeconds = (seconds: number) => {
-			console.log(seconds);
-			controls.currentTime.value = seconds;
+		const onError = () => {
+			emit("error", FileAlert.AUDIO_FORMAT_ERROR);
 		};
 
 		return {
@@ -151,7 +161,6 @@ export default defineComponent({
 			currentTime,
 			duration,
 			volume,
-			muted,
 			rate,
 			speedRate,
 			mdiPlay,
@@ -159,15 +168,15 @@ export default defineComponent({
 			mdiVolumeOff,
 			mdiVolumeHigh,
 			mdiPlaySpeed,
-			onError,
+			onPlay,
 			formatDuration,
 			max,
-			volumeValue,
-			showVolumeSlider,
+			onClickPlaySlider,
 			isShow,
-			onPlay,
-			currentTimeSlider,
-			currentTimeSeconds,
+			showVolumeSlider,
+			currentVolumeSlider,
+			onError,
+			onInputSlider,
 		};
 	},
 });
@@ -204,7 +213,7 @@ button:focus {
 
 .volume-slider {
 	width: 50%;
-	padding-left: 10px;
+	padding-left: 6px;
 	padding-top: 3px;
 }
 </style>
