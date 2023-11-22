@@ -57,7 +57,7 @@ describe("ImageDisplay", () => {
 			open,
 		};
 	};
-	const imageSelektor = "v-img-stub";
+	const imageSelektor = "previewimage-stub";
 
 	describe("when isEditMode is false", () => {
 		it("should be found in dom", () => {
@@ -85,7 +85,7 @@ describe("ImageDisplay", () => {
 			const image = wrapper.find(imageSelektor);
 
 			expect(image.exists()).toBe(true);
-			expect(image.attributes("loading")).toBe("lazy");
+			expect(image.attributes("contain")).toBe("true");
 			expect(image.attributes("src")).toBe(previewSrc);
 			expect(image.attributes("alt")).toBe(
 				"components.cardElement.fileElement.emptyAlt " + nameProp

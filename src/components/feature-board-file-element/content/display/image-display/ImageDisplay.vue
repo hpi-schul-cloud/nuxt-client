@@ -4,22 +4,7 @@
 		@on:action="openLightBox"
 		color="var(--v-black-base)"
 	>
-		<v-img
-			ref="imageRef"
-			class="image rounded-t-sm"
-			loading="lazy"
-			:src="previewSrc"
-			:alt="alternativeText"
-			contain
-			@load="setWidth"
-			:max-width="imageWidth"
-		>
-			<template v-slot:placeholder>
-				<v-row class="fill-height ma-0" align="center" justify="center">
-					<VProgressCircular color="primary" indeterminate :size="36" />
-				</v-row>
-			</template>
-		</v-img>
+		<PreviewImage :src="previewSrc" :alt="alternativeText" contain="true" />
 
 		<ContentElementBar class="menu">
 			<template #menu><slot /></template>
@@ -34,8 +19,8 @@ import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PropType, computed, defineComponent } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { ColorOverlay } from "@ui-color-overlay";
+import { PreviewImage } from "@ui-preview-image";
 import { useI18n } from "@/composables/i18n.composable";
-import { useNaturalwidth } from "../../../composables/NaturalWidth.composable";
 
 export default defineComponent({
 	name: "ImageDisplay",
@@ -46,10 +31,9 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
-	components: { ContentElementBar, ColorOverlay },
+	components: { ContentElementBar, ColorOverlay, PreviewImage },
 	setup(props) {
 		const { t } = useI18n();
-		const { imageRef, imageWidth, setWidth } = useNaturalwidth();
 
 		const alternativeText = computed(() => {
 			const altTranslation = t("components.cardElement.fileElement.emptyAlt");
@@ -78,20 +62,12 @@ export default defineComponent({
 		return {
 			alternativeText,
 			openLightBox,
-			imageRef,
-			setWidth,
-			imageWidth,
 		};
 	},
 });
 </script>
 
 <style scoped>
-.image {
-	left: 50%;
-	transform: translateX(-50%);
-}
-
 .menu {
 	position: absolute;
 	top: 0px;

@@ -4,23 +4,12 @@
 		@on:action="openPdf"
 		color="var(--v-black-base)"
 	>
-		<v-img
-			ref="imageRef"
-			class="image rounded-t-sm"
-			loading="lazy"
+		<PreviewImage
 			:src="previewSrc"
 			:alt="altText"
 			:aspect-ratio="1.77777"
 			position="top"
-			@load="setWidth"
-			:max-width="imageWidth"
-		>
-			<template v-slot:placeholder>
-				<v-row class="fill-height ma-0" align="center" justify="center">
-					<VProgressCircular color="primary" indeterminate :size="36" />
-				</v-row>
-			</template>
-		</v-img>
+		/>
 
 		<ContentElementBar class="menu">
 			<template #menu><slot /></template>
@@ -32,8 +21,8 @@
 import { FileElementResponse } from "@/serverApi/v3";
 import { PropType, defineComponent } from "vue";
 import { ColorOverlay } from "@ui-color-overlay";
+import { PreviewImage } from "@ui-preview-image";
 import { useI18n } from "@/composables/i18n.composable";
-import { useNaturalwidth } from "../../../composables/NaturalWidth.composable";
 import { ContentElementBar } from "@ui-board";
 
 export default defineComponent({
@@ -45,10 +34,9 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
-	components: { ContentElementBar, ColorOverlay },
+	components: { ContentElementBar, ColorOverlay, PreviewImage },
 	setup(props) {
 		const { t } = useI18n();
-		const { imageRef, imageWidth, setWidth } = useNaturalwidth();
 
 		const openPdf = () => {
 			window.open(props.src, "_blank");
@@ -61,20 +49,12 @@ export default defineComponent({
 		return {
 			openPdf,
 			altText,
-			imageRef,
-			imageWidth,
-			setWidth,
 		};
 	},
 });
 </script>
 
 <style scoped>
-.image {
-	left: 50%;
-	transform: translateX(-50%);
-}
-
 .menu {
 	position: absolute;
 	top: 0px;

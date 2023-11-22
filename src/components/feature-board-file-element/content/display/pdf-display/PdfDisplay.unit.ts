@@ -39,10 +39,9 @@ describe("PdfDisplay", () => {
 	it("should display image with correct props", () => {
 		const { wrapper, previewSrc, nameProp } = setup({ isEditMode: false });
 
-		const image = wrapper.find("v-img-stub");
+		const image = wrapper.find("previewimage-stub");
 
 		expect(image.exists()).toBe(true);
-		expect(image.attributes("loading")).toBe("lazy");
 		expect(image.attributes("src")).toBe(previewSrc);
 		expect(image.attributes("alt")).toBe(
 			"components.cardElement.fileElement.pdfAlt " + nameProp
