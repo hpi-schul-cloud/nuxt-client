@@ -35,11 +35,11 @@ export const useTouchDetection = () => {
 		}
 	};
 
-	useEventListener("touchstart", (evt) => handler<TouchEvent>(evt), {
+	useEventListener("touchend", (evt) => handler<TouchEvent>(evt), {
 		capture: true,
 	});
 
-	useEventListener("mousedown", (evt) => handler<MouseEvent>(evt), {
+	useEventListener("mouseup", (evt) => handler<MouseEvent>(evt), {
 		capture: true,
 	});
 

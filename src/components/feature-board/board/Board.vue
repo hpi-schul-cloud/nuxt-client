@@ -2,7 +2,7 @@
 	<div>
 		<div class="ml-1">
 			<h3 aria-level="1" class="mt-3">
-				{{ $t("pages.room.boardCard.label.courseBoard") }} {{ debounceTime }} D
+				{{ $t("pages.room.boardCard.label.courseBoard") }} {{ debounceTime }} E
 			</h3>
 		</div>
 		<div class="d-flex flex-row flex-shrink-1 ml-n4" @touchend="onTouchEnd">
