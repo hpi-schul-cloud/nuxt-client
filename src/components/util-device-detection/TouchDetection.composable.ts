@@ -16,31 +16,24 @@ export const useTouchDetection = () => {
 	const handler = <T extends MouseEvent | TouchEvent>(evt: T) => {
 		const now = new Date();
 		console.log("age", now.getTime() - lastTouchDetection);
-		console.log("event: ", evt.type);
 		if ("touches" in evt) {
-			console.log("evt.touches", JSON.stringify(evt.touches[0], null, 2));
-			if ("touches" in evt && evt.touches[0].force >= 0.999) {
+			console.log("evt.touches", evt.touches[0]);
+			if (evt.touches[0].force >= 0.999) {
 				if (now.getTime() - lastTouchDetection > 200) {
-					console.log("touch with stylus or anything else");
 					isTouchDetected.value = false;
 				}
 				// stylus or mouse on touch-device
 			} else {
 				isTouchDetected.value = true;
 				lastTouchDetection = now.getTime();
-				console.log("lastTouchDetection", lastTouchDetection);
 			}
 		} else {
 			isTouchDetected.value = false;
-			console.log("mouse click");
 		}
+		console.log("event: ", evt.type, isTouchDetected.value);
 	};
 
 	useEventListener("touchstart", (evt) => handler<TouchEvent>(evt), {
-		capture: true,
-	});
-
-	useEventListener("touchend", (evt) => handler<TouchEvent>(evt), {
 		capture: true,
 	});
 
