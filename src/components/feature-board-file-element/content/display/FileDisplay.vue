@@ -1,7 +1,17 @@
 <template>
 	<div>
+		<PdfDisplay
+			v-if="hasPdfMimeType && fileProperties.previewUrl"
+			:src="fileProperties.url"
+			:preview-src="fileProperties.previewUrl"
+			:name="fileProperties.name"
+			:is-edit-mode="isEditMode"
+			:element="fileProperties.element"
+		>
+			<slot />
+		</PdfDisplay>
 		<ImageDisplay
-			v-if="fileProperties.previewUrl"
+			v-else-if="fileProperties.previewUrl"
 			:src="fileProperties.url"
 			:preview-src="fileProperties.previewUrl"
 			:name="fileProperties.name"
@@ -29,6 +39,7 @@
 			:name="fileProperties.name"
 			:caption="fileProperties.element.content.caption"
 			:show-title="showTitle"
+			:show-menu="showMenu"
 			:is-edit-mode="isEditMode"
 			:src="fileDescriptionSrc"
 		>
@@ -50,10 +61,17 @@ import AudioDisplay from "./audio-display/AudioDisplay.vue";
 import FileDescription from "./file-description/FileDescription.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
+import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 
 export default defineComponent({
 	name: "FileDisplay",
-	components: { ImageDisplay, FileDescription, VideoDisplay, AudioDisplay },
+	components: {
+		ImageDisplay,
+		PdfDisplay,
+		FileDescription,
+		VideoDisplay,
+		AudioDisplay,
+	},
 	props: {
 		fileProperties: {
 			type: Object as PropType<FileProperties>,
@@ -67,10 +85,12 @@ export default defineComponent({
 			return isVideoMimeType(props.fileProperties.mimeType);
 		});
 
+		const hasPdfMimeType = computed(() =>
+			isPdfMimeType(props.fileProperties.mimeType)
+		);
+
 		const fileDescriptionSrc = computed(() => {
-			return isPdfMimeType(props.fileProperties.mimeType)
-				? props.fileProperties.url
-				: undefined;
+			return hasPdfMimeType.value ? props.fileProperties.url : undefined;
 		});
 
 		const hasAudioMimeType = computed(() => {
@@ -79,6 +99,16 @@ export default defineComponent({
 
 		const showTitle = computed(() => {
 			return (
+				hasPdfMimeType.value ||
+				(!props.fileProperties.previewUrl &&
+					!hasVideoMimeType.value &&
+					!hasAudioMimeType.value)
+			);
+		});
+
+		const showMenu = computed(() => {
+			return (
+				!hasPdfMimeType.value &&
 				!props.fileProperties.previewUrl &&
 				!hasVideoMimeType.value &&
 				!hasAudioMimeType.value
@@ -93,7 +123,9 @@ export default defineComponent({
 			hasVideoMimeType,
 			fileDescriptionSrc,
 			hasAudioMimeType,
+			hasPdfMimeType,
 			showTitle,
+			showMenu,
 			onAddAlert,
 		};
 	},

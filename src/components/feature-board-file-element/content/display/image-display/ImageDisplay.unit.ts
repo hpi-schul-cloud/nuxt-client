@@ -57,7 +57,7 @@ describe("ImageDisplay", () => {
 			open,
 		};
 	};
-	const imageSelektor = "img";
+	const imageSelektor = "previewimage-stub";
 
 	describe("when isEditMode is false", () => {
 		it("should be found in dom", () => {
@@ -79,6 +79,45 @@ describe("ImageDisplay", () => {
 			expect(colorOverlay.props("opacity")).toBeUndefined;
 		});
 
+		it("should display image with correct props", () => {
+			const { wrapper, previewSrc, nameProp } = setup({ isEditMode: false });
+
+			const image = wrapper.find(imageSelektor);
+
+			expect(image.exists()).toBe(true);
+			expect(image.attributes("contain")).toBe("true");
+			expect(image.attributes("src")).toBe(previewSrc);
+			expect(image.attributes("alt")).toBe(
+				"components.cardElement.fileElement.emptyAlt " + nameProp
+			);
+		});
+
+		describe("when alternative text is defined", () => {
+			it("should have set alt correctly", () => {
+				const alternativeText = "alternative text";
+				const { wrapper } = setup({
+					isEditMode: false,
+					alternativeText,
+				});
+
+				const alt = wrapper.find(imageSelektor).attributes("alt");
+
+				expect(alt).toBe(alternativeText);
+			});
+		});
+
+		describe("when alternative text is undefined", () => {
+			it("should have set alt correctly", () => {
+				const { wrapper, nameProp } = setup({ isEditMode: false });
+
+				const alt = wrapper.find(imageSelektor).attributes("alt");
+
+				expect(alt).toBe(
+					"components.cardElement.fileElement.emptyAlt " + nameProp
+				);
+			});
+		});
+
 		describe("when color overlay emits on:action", () => {
 			it("should call open function", () => {
 				const alternativeText = "alternative text";
@@ -98,104 +137,6 @@ describe("ImageDisplay", () => {
 
 				expect(open).toHaveBeenCalledTimes(1);
 				expect(open).toHaveBeenCalledWith(options);
-			});
-		});
-
-		it("should display image", () => {
-			const { wrapper } = setup({ isEditMode: false });
-
-			const image = wrapper.find(imageSelektor);
-
-			expect(image.exists()).toBe(true);
-		});
-
-		it("should display loading spinner", () => {
-			const { wrapper } = setup({ isEditMode: false });
-
-			const loadingSpinner = wrapper.findComponent({
-				name: "VProgressCircular",
-			});
-
-			expect(loadingSpinner.exists()).toBe(true);
-		});
-
-		it("should have set loading to lazy", () => {
-			const { wrapper } = setup({ isEditMode: false });
-
-			const loading = wrapper.find(imageSelektor).attributes("loading");
-
-			expect(loading).toBe("lazy");
-		});
-
-		it("should have set loading before src", () => {
-			// This test ensures that "loading" attribute is rendered before "src",
-			// because the order of attributes is crucial for lazy loading to work.
-			const { wrapper, nameProp } = setup({ isEditMode: false });
-
-			const renderedImageTag = wrapper.find(imageSelektor).html();
-			const expectedHtml = `<img loading="lazy" src="preview/1/${nameProp}" alt="components.cardElement.fileElement.emptyAlt ${nameProp}" class="image-display-image rounded-t-sm">`;
-
-			expect(renderedImageTag).toBe(expectedHtml);
-		});
-
-		it("should have set src correctly", () => {
-			const { wrapper, previewSrc } = setup({ isEditMode: false });
-
-			const src = wrapper.find(imageSelektor).attributes("src");
-
-			expect(src).toBe(previewSrc);
-		});
-
-		it("should have set alt correctly", () => {
-			const { wrapper, nameProp } = setup({ isEditMode: false });
-
-			const alt = wrapper.find(imageSelektor).attributes("alt");
-
-			expect(alt).toBe(
-				"components.cardElement.fileElement.emptyAlt " + nameProp
-			);
-		});
-
-		describe("When alternative text is defined", () => {
-			it("should have set alt correctly", () => {
-				const alternativeText = "alternative text";
-				const { wrapper } = setup({
-					isEditMode: false,
-					alternativeText,
-				});
-
-				const alt = wrapper.find(imageSelektor).attributes("alt");
-
-				expect(alt).toBe(alternativeText);
-			});
-		});
-
-		describe("When alternative text is undefined", () => {
-			it("should have set alt correctly", () => {
-				const { wrapper, nameProp } = setup({ isEditMode: false });
-
-				const alt = wrapper.find(imageSelektor).attributes("alt");
-
-				expect(alt).toBe(
-					"components.cardElement.fileElement.emptyAlt " + nameProp
-				);
-			});
-		});
-
-		describe("when image emits onLoad", () => {
-			it("should hide loading spinner", async () => {
-				const { wrapper } = setup({ isEditMode: false });
-
-				const image = wrapper.find(imageSelektor);
-				image.trigger("load");
-
-				await wrapper.vm.$nextTick();
-
-				const loadingSpinner = wrapper.findComponent({
-					name: "VProgressCircular",
-				});
-
-				expect(loadingSpinner.exists()).toBe(false);
 			});
 		});
 	});
@@ -220,22 +161,13 @@ describe("ImageDisplay", () => {
 			expect(colorOverlay.props("opacity")).toBeUndefined;
 		});
 
-		it("should display image", () => {
-			const { wrapper } = setup({ isEditMode: true });
+		it("should display image with correct props", () => {
+			const { wrapper, previewSrc } = setup({ isEditMode: true });
 
 			const image = wrapper.find(imageSelektor);
 
 			expect(image.exists()).toBe(true);
-		});
-
-		it("should have set src correctly", () => {
-			const { wrapper, previewSrc } = setup({
-				isEditMode: true,
-			});
-
-			const src = wrapper.find(imageSelektor).attributes("src");
-
-			expect(src).toBe(previewSrc);
+			expect(image.attributes("src")).toBe(previewSrc);
 		});
 
 		describe("When alternative text is defined", () => {
