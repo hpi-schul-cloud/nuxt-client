@@ -1,7 +1,7 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { authModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
-import { mockApiResponse } from "@@/tests/test-utils";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
