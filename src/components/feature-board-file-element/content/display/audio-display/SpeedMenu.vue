@@ -5,6 +5,7 @@
 				<button v-bind="attrs" v-on="on">
 					<v-icon
 						aria-label="Speed menu"
+						role="img"
 						style="color: white; padding-right: 10px; padding-left: 2px"
 						>{{ mdiPlaySpeed }}</v-icon
 					>

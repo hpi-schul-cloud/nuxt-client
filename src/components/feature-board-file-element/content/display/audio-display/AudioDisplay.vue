@@ -53,7 +53,7 @@
 			<v-icon
 				v-if="!isShow"
 				@click="showVolumeSlider"
-				role="icon"
+				role="img"
 				aria-label="Volume"
 				aria-hidden="false"
 				style="color: white; position: absolute; right: 16px"
@@ -77,7 +77,7 @@
 				<v-icon
 					class="pr-2"
 					@click="showVolumeSlider"
-					role="icon"
+					role="img"
 					aria-label="Volume"
 					aria-hidden="false"
 					style="color: white"
