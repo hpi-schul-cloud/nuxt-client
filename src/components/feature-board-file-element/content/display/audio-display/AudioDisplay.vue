@@ -36,15 +36,14 @@
 				thumb-color="white"
 				track-color="#9e9e9e"
 				:value="currentTime"
-				step="0.01"
-				tick-size="0.01"
 				start="0"
 				end="duration"
+				step="0.0000001"
 				:min="0"
 				:max="max"
-				@click="onClickPlaySlider"
-				@mousedown="onClickPlaySlider"
-				@mouseup="onClickPlaySlider"
+				@click="stopPropagation"
+				@mousedown="stopPropagation"
+				@mouseup="stopPropagation"
 				@input="onInputSlider"
 			/>
 			<SpeedMenu @rate="speedRate" />
@@ -64,10 +63,11 @@
 					track-color="#9e9e9e"
 					v-model="volume"
 					step="0.01"
-					tick-size="0.01"
 					:min="0"
 					:max="1"
-					@click="currentVolumeSlider"
+					@click="stopPropagation"
+					@mousedown="stopPropagation"
+					@mouseup="stopPropagation"
 				/>
 				<v-icon
 					class="pr-2"
@@ -120,11 +120,6 @@ export default defineComponent({
 			playing.value = !playing.value;
 		};
 
-		const onClickPlaySlider = (event: Event) => {
-			event.stopPropagation();
-			event.stopImmediatePropagation();
-		};
-
 		const onInputSlider = (seconds: number) => {
 			controls.currentTime.value = seconds;
 		};
@@ -146,7 +141,7 @@ export default defineComponent({
 			isShow.value = !isShow.value;
 		};
 
-		const currentVolumeSlider = (event: Event) => {
+		const stopPropagation = (event: Event) => {
 			event.stopPropagation();
 			event.stopImmediatePropagation();
 		};
@@ -171,10 +166,9 @@ export default defineComponent({
 			onPlay,
 			formatDuration,
 			max,
-			onClickPlaySlider,
 			isShow,
 			showVolumeSlider,
-			currentVolumeSlider,
+			stopPropagation,
 			onError,
 			onInputSlider,
 		};
