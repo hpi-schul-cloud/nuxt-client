@@ -1,7 +1,8 @@
 import {
+	SystemsApiFactory,
+	SystemsApiInterface,
 	UserImportApiFactory,
 	UserImportApiInterface,
-	ValidationError,
 } from "@/serverApi/v3";
 import { authModule } from "@/store";
 import { $axios } from "@/utils/api";
@@ -48,10 +49,6 @@ function transformSchoolClientToServer(school: School): SchoolPayload {
 		}
 	});
 	return { ...school, features: featureArray };
-}
-
-function isGracePeriodError(error: AxiosError<ValidationError>): boolean {
-	return !!error.response?.data.message.startsWith("grace_period_expired");
 }
 
 @Module({
@@ -197,6 +194,7 @@ export default class SchoolsModule extends VuexModule {
 		return this.systems.some(
 			(system) =>
 				system.type === "tsp-school" ||
+				system.type === "oauth" ||
 				(system.type === "ldap" &&
 					(system.ldapConfig.provider === "iserv-idm" ||
 						system.ldapConfig.provider === "univention" ||
@@ -312,7 +310,7 @@ export default class SchoolsModule extends VuexModule {
 	async deleteSystem(systemId: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			await $axios.delete(`v1/systems/${systemId}`);
+			await this.systemsApi.systemControllerDeleteSystem(systemId);
 
 			const updatedSystemsList = this.systems.filter(
 				(system) => system._id !== systemId
@@ -391,5 +389,9 @@ export default class SchoolsModule extends VuexModule {
 
 	private get importUserApi(): UserImportApiInterface {
 		return UserImportApiFactory(undefined, "/v3", $axios);
+	}
+
+	private get systemsApi(): SystemsApiInterface {
+		return SystemsApiFactory(undefined, "/v3", $axios);
 	}
 }

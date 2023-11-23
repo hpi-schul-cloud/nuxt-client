@@ -1,8 +1,10 @@
 import * as serverApi from "@/serverApi/v3/api";
+import { SystemsApiInterface } from "@/serverApi/v3/api";
 import { authModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import SchoolsModule from "./schools";
@@ -25,6 +27,14 @@ const axiosInitializer = () => {
 axiosInitializer();
 
 describe("schools module", () => {
+	let systemsApi: DeepMocked<SystemsApiInterface>;
+
+	beforeEach(() => {
+		systemsApi = createMock<SystemsApiInterface>();
+
+		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);
+	});
+
 	describe("actions", () => {
 		beforeEach(() => {
 			initializeAxios({
@@ -344,12 +354,6 @@ describe("schools module", () => {
 
 			it("should call backend and sets state correctly", async () => {
 				const systemId = "id_1";
-				initializeAxios({
-					delete: async (path: string) => {
-						receivedRequests.push({ path });
-						return { data: "some data" };
-					},
-				} as AxiosInstance);
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
 					{ _id: "id_1", type: "itslearning" },
@@ -379,8 +383,9 @@ describe("schools module", () => {
 				const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
 				await schoolsModule.deleteSystem(systemId);
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual("v1/systems/id_1");
+				expect(systemsApi.systemControllerDeleteSystem).toHaveBeenCalledWith(
+					systemId
+				);
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(fetchSchoolSpy).toHaveBeenCalled();
@@ -390,12 +395,9 @@ describe("schools module", () => {
 
 			it("should trigger error and goes into the catch block", async () => {
 				const systemId = "id_1";
-				initializeAxios({
-					delete: async (path: string) => {
-						throw new AxiosError(path);
-						return "";
-					},
-				} as AxiosInstance);
+				systemsApi.systemControllerDeleteSystem.mockRejectedValueOnce(
+					new AxiosError()
+				);
 				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
@@ -403,7 +405,6 @@ describe("schools module", () => {
 
 				await schoolsModule.deleteSystem(systemId);
 
-				expect(receivedRequests).toHaveLength(0);
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
