@@ -3,7 +3,7 @@
 		ref="ck"
 		v-model="modelValue"
 		:config="config"
-		:editor="CustomCKEditor"
+		:editor="CustomCKEditor.BalloonEditor"
 		data-testid="ckeditor"
 		:disabled="disabled"
 		@blur="handleBlur"
