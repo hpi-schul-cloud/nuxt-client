@@ -518,7 +518,6 @@ export default defineComponent({
 	},
 	watch: {
 		tabIndex(newIndex) {
-			console.log({ newIndex });
 			if (newIndex >= 0 && newIndex < this.tabItems.length) {
 				this.$router.push({
 					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },

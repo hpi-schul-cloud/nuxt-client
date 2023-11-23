@@ -13,7 +13,7 @@
 					:exact="true"
 					class="breadcrumbs-item"
 				>
-					{{ item.text }}
+					{{ item.title }}
 				</v-breadcrumbs-item>
 			</template>
 		</v-breadcrumbs>
