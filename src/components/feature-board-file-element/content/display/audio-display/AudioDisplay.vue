@@ -12,6 +12,7 @@
 				<v-icon
 					class="mr-2"
 					role="img"
+					aria-label="Play"
 					aria-hidden="false"
 					style="color: white"
 					v-if="!playing"
@@ -20,6 +21,7 @@
 				<v-icon
 					class="mr-2"
 					role="img"
+					aria-label="Pause"
 					aria-hidden="false"
 					style="color: white"
 					v-else
@@ -31,6 +33,7 @@
 				{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</span
 			>
 			<v-slider
+				aria-label="Audio slider"
 				class="slider"
 				color="white"
 				thumb-color="white"
@@ -38,7 +41,7 @@
 				:value="currentTime"
 				start="0"
 				end="duration"
-				step="0.0000001"
+				step="step"
 				:min="0"
 				:max="max"
 				@click="stopPropagation"
@@ -50,13 +53,15 @@
 			<v-icon
 				v-if="!isShow"
 				@click="showVolumeSlider"
-				role="img"
+				role="icon"
+				aria-label="Volume"
 				aria-hidden="false"
 				style="color: white; position: absolute; right: 16px"
 				>{{ mdiVolumeHigh }}</v-icon
 			>
 			<div class="volume-wrapper mr-n2" v-if="isShow">
 				<v-slider
+					aria-label="Volume slider"
 					class="volume-slider"
 					color="white"
 					thumb-color="white"
@@ -72,7 +77,8 @@
 				<v-icon
 					class="pr-2"
 					@click="showVolumeSlider"
-					role="img"
+					role="icon"
+					aria-label="Volume"
 					aria-hidden="false"
 					style="color: white"
 					>{{ mdiVolumeHigh }}</v-icon
@@ -109,6 +115,8 @@ export default defineComponent({
 		const source = computed(() => {
 			return props.src;
 		});
+
+		const step = 0.0000001;
 
 		const controls = useMediaControls(audio, {
 			src: source,
@@ -157,6 +165,7 @@ export default defineComponent({
 			duration,
 			volume,
 			rate,
+			step,
 			speedRate,
 			mdiPlay,
 			mdiPause,
