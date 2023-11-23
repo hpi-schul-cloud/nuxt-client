@@ -63,8 +63,7 @@ export const mockSchool: School = {
 	},
 	county: {
 		antaresKey: "",
-		id: "",
-		countyId: "",
+		countyId: 0,
 		name: "",
 	},
 	systems: [],
@@ -91,7 +90,6 @@ export const mockSchool: School = {
 	permissions: {},
 	inMaintenance: false,
 	inUserMigration: false,
-	documentBaseDir: "",
 	isExternal: false,
 	years: {
 		nextYear: {

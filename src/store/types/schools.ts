@@ -6,9 +6,8 @@ export type Year = {
 };
 
 export type County = {
-	id: string;
 	antaresKey: string;
-	countyId: string;
+	countyId: number;
 	name: string;
 };
 
@@ -16,8 +15,21 @@ export type FederalState = {
 	id: string;
 	name: string;
 	abbreviation: string;
-	counties: County[];
+	counties?: County[];
 	logoUrl: string;
+};
+
+export type System = {
+	id: string;
+	type: string;
+	url?: string;
+	alias?: string;
+	displayName?: string;
+	oauthConfig?: any;
+	oidcConfig?: any;
+	ldapConfig?: any;
+	provisioningStrategy?: string;
+	provisioningUrl?: string;
 };
 
 export type School = {
@@ -25,14 +37,14 @@ export type School = {
 	name: string;
 	logo_name?: string;
 	logo_dataUrl?: string;
-	fileStorageType: string;
+	fileStorageType?: string;
 	federalState: FederalState;
-	county: County;
-	systems: string[];
+	county?: County;
+	systems?: System[];
 	updatedAt: string;
 	createdAt: string;
-	currentYear: Year;
-	purpose: string;
+	currentYear?: Year;
+	purpose?: string;
 	features: {
 		rocketChat: boolean;
 		videoconference: boolean;
@@ -44,10 +56,9 @@ export type School = {
 		enableLdapSyncDuringMigration: boolean;
 		isTeamCreationByStudentsEnabled: boolean;
 	};
-	permissions: unknown;
+	permissions?: unknown;
 	inMaintenance: boolean;
 	inUserMigration?: boolean;
-	documentBaseDir: string;
 	isExternal: boolean;
 	officialSchoolNumber?: string;
 	years: {

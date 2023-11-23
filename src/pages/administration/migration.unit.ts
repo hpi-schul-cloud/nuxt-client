@@ -54,16 +54,10 @@ const schoolMock = {
 	},
 	logo_name: "Schule_logo",
 	county: {
-		id: "5fa55eb53f472a2d986c8812",
 		antaresKey: "BRB",
-		countyId: "12051",
+		countyId: 12051,
 		name: "Brandenburg an der Havel",
 	},
-	systems: [
-		"0000d186816abba584714c91",
-		"0000d186816abba584714c90",
-		"6204fb6dcd5e9eb7240bc93f",
-	],
 	updatedAt: "2022-02-10T11:56:22.817Z",
 	createdAt: "2017-01-01T00:06:37.148Z",
 	currentYear: {
@@ -86,11 +80,8 @@ const schoolMock = {
 	},
 	permissions: { teacher: { STUDENT_LIST: true } },
 	officialSchoolNumber: "100000",
-	documentBaseDirType: "",
 	inUserMigration: true,
-	ldapSchoolIdentifier: "100000",
 	inMaintenance: true,
-	documentBaseDir: "https://s3.hidrive.strato.com/cloud-instances/default/",
 	isExternal: true,
 	years: {
 		schoolYears: [
@@ -132,8 +123,6 @@ const schoolMock = {
 			endDate: "2021-07-31T00:00:00.000Z",
 		},
 	},
-
-	enableMigrationStart: false,
 };
 
 window.scrollTo = jest.fn();

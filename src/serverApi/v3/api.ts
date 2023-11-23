@@ -939,6 +939,31 @@ export enum CopyApiResponseStatusEnum {
 /**
  * 
  * @export
+ * @interface CountyResponse
+ */
+export interface CountyResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CountyResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CountyResponse
+     */
+    countyId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CountyResponse
+     */
+    antaresKey: string;
+}
+/**
+ * 
+ * @export
  * @interface CourseMetadataListResponse
  */
 export interface CourseMetadataListResponse {
@@ -1788,6 +1813,43 @@ export interface ExternalToolUpdateParams {
 /**
  * 
  * @export
+ * @interface FederalStateResponse
+ */
+export interface FederalStateResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    abbreviation: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    logoUrl: string;
+    /**
+     * 
+     * @type {Array<CountyResponse>}
+     * @memberof FederalStateResponse
+     */
+    counties?: Array<CountyResponse>;
+}
+/**
+ * 
+ * @export
  * @interface FileContentBody
  */
 export interface FileContentBody {
@@ -1873,6 +1935,15 @@ export interface FileElementResponse {
      */
     timestamps: TimestampsResponse;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum FileStorageType {
+    AwsS3 = 'awsS3'
+}
+
 /**
  * 
  * @export
@@ -4060,6 +4131,48 @@ export interface SchoolExternalToolSearchListResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum SchoolFeature {
+    RocketChat = 'rocketChat',
+    Videoconference = 'videoconference',
+    Nextcloud = 'nextcloud',
+    StudentVisibility = 'studentVisibility',
+    LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
+    OauthProvisioningEnabled = 'oauthProvisioningEnabled',
+    ShowOutdatedUsers = 'showOutdatedUsers',
+    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
+    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+}
+
+/**
+ * 
+ * @export
+ * @interface SchoolForExternalInviteResponse
+ */
+export interface SchoolForExternalInviteResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolForExternalInviteResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolForExternalInviteResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {SchoolPurpose}
+     * @memberof SchoolForExternalInviteResponse
+     */
+    purpose?: SchoolPurpose;
+}
+/**
+ * 
+ * @export
  * @interface SchoolInfoResponse
  */
 export interface SchoolInfoResponse {
@@ -4081,12 +4194,183 @@ export interface SchoolInfoResponse {
  * @export
  * @enum {string}
  */
+export enum SchoolPurpose {
+    Expert = 'expert',
+    Tombstone = 'tombstone',
+    Demo = 'demo',
+    Test = 'test',
+    MintEc = 'MINT-EC'
+}
+
+/**
+ * 
+ * @export
+ * @interface SchoolResponse
+ */
+export interface SchoolResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    updatedAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    officialSchoolNumber?: string;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof SchoolResponse
+     */
+    currentYear?: SchoolYearResponse;
+    /**
+     * 
+     * @type {FederalStateResponse}
+     * @memberof SchoolResponse
+     */
+    federalState: FederalStateResponse;
+    /**
+     * 
+     * @type {CountyResponse}
+     * @memberof SchoolResponse
+     */
+    county?: CountyResponse;
+    /**
+     * 
+     * @type {SchoolPurpose}
+     * @memberof SchoolResponse
+     */
+    purpose?: SchoolPurpose;
+    /**
+     * 
+     * @type {Array<SchoolFeature>}
+     * @memberof SchoolResponse
+     */
+    features?: Array<SchoolFeature>;
+    /**
+     * 
+     * @type {Array<SystemResponse>}
+     * @memberof SchoolResponse
+     */
+    systems?: Array<SystemResponse>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolResponse
+     */
+    inMaintenance: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolResponse
+     */
+    isExternal: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    logo_dataUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    logo_name?: string;
+    /**
+     * 
+     * @type {FileStorageType}
+     * @memberof SchoolResponse
+     */
+    fileStorageType?: FileStorageType;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    language?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    timezone?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof SchoolResponse
+     */
+    permissions?: object;
+    /**
+     * 
+     * @type {YearsResponse}
+     * @memberof SchoolResponse
+     */
+    years: YearsResponse;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 export enum SchoolYearQueryType {
     NextYear = 'nextYear',
     CurrentYear = 'currentYear',
     PreviousYears = 'previousYears'
 }
 
+/**
+ * 
+ * @export
+ * @interface SchoolYearResponse
+ */
+export interface SchoolYearResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolYearResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolYearResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolYearResponse
+     */
+    startDate: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolYearResponse
+     */
+    endDate: string;
+}
 /**
  * 
  * @export
@@ -4489,6 +4773,85 @@ export interface SuccessfulResponse {
      * @memberof SuccessfulResponse
      */
     successful: boolean;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum SystemProvisioningStrategy {
+    Sanis = 'sanis',
+    Iserv = 'iserv',
+    Oidc = 'oidc',
+    Undefined = 'undefined'
+}
+
+/**
+ * 
+ * @export
+ * @interface SystemResponse
+ */
+export interface SystemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    url?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    alias?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    displayName?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof SystemResponse
+     */
+    oauthConfig?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof SystemResponse
+     */
+    oidcConfig?: object;
+    /**
+     * 
+     * @type {object}
+     * @memberof SystemResponse
+     */
+    ldapConfig?: object;
+    /**
+     * 
+     * @type {SystemProvisioningStrategy}
+     * @memberof SystemResponse
+     */
+    provisioningStrategy?: SystemProvisioningStrategy;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemResponse
+     */
+    provisioningUrl?: string;
 }
 /**
  * 
@@ -5332,6 +5695,43 @@ export interface VisibilitySettingsResponse {
      * @memberof VisibilitySettingsResponse
      */
     publishedAt?: string;
+}
+/**
+ * 
+ * @export
+ * @interface YearsResponse
+ */
+export interface YearsResponse {
+    /**
+     * 
+     * @type {Array<SchoolYearResponse>}
+     * @memberof YearsResponse
+     */
+    schoolYears: Array<SchoolYearResponse>;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof YearsResponse
+     */
+    activeYear: SchoolYearResponse;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof YearsResponse
+     */
+    defaultYear: SchoolYearResponse;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof YearsResponse
+     */
+    lastYear: SchoolYearResponse;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof YearsResponse
+     */
+    nextYear: SchoolYearResponse;
 }
 
 /**
@@ -12076,6 +12476,205 @@ export class SSOApi extends BaseAPI implements SSOApiInterface {
      */
     public oauthSSOControllerRequestAuthToken(oauthClientId: string, options?: any) {
         return SSOApiFp(this.configuration).oauthSSOControllerRequestAuthToken(oauthClientId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * SchoolApi - axios parameter creator
+ * @export
+ */
+export const SchoolApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchool: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerGetSchool', 'schoolId', schoolId)
+            const localVarPath = `/school/id/{schoolId}`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [federalStateId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolListForExternalInvite: async (federalStateId?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/school/list-for-external-invite`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (federalStateId !== undefined) {
+                localVarQueryParameter['federalStateId'] = federalStateId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SchoolApi - functional programming interface
+ * @export
+ */
+export const SchoolApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SchoolApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetSchool(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchool(schoolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} [federalStateId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolForExternalInviteResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolListForExternalInvite(federalStateId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SchoolApi - factory interface
+ * @export
+ */
+export const SchoolApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SchoolApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchool(schoolId: string, options?: any): AxiosPromise<SchoolResponse> {
+            return localVarFp.schoolControllerGetSchool(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [federalStateId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>> {
+            return localVarFp.schoolControllerGetSchoolListForExternalInvite(federalStateId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SchoolApi - interface
+ * @export
+ * @interface SchoolApi
+ */
+export interface SchoolApiInterface {
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetSchool(schoolId: string, options?: any): AxiosPromise<SchoolResponse>;
+
+    /**
+     * 
+     * @param {string} [federalStateId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>>;
+
+}
+
+/**
+ * SchoolApi - object-oriented interface
+ * @export
+ * @class SchoolApi
+ * @extends {BaseAPI}
+ */
+export class SchoolApi extends BaseAPI implements SchoolApiInterface {
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetSchool(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetSchool(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [federalStateId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForExternalInvite(federalStateId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
