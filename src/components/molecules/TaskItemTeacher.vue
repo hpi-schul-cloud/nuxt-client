@@ -75,7 +75,7 @@
 				<section
 					v-if="hasUnpublishedLesson"
 					data-testid="task-lesson-chip-large"
-					class="hidden-xs-only mr-8 pl-4 align-self-center"
+					class="hidden-xs mr-8 pl-4 align-self-center"
 				>
 					<v-chip size="small">
 						{{
@@ -88,7 +88,7 @@
 					data-testid="task-status"
 					class="mr-4 d-flex align-self-center"
 				>
-					<div class="hidden-xs-only px-4 mr-4 text-center">
+					<div class="hidden-xs px-4 mr-4 text-center">
 						<v-list-item-subtitle>
 							{{ $t("components.molecules.TaskItemTeacher.submitted") }}
 						</v-list-item-subtitle>
@@ -96,7 +96,7 @@
 							{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
 						</v-list-item-title>
 					</div>
-					<div class="hidden-xs-only px-4 text-center">
+					<div class="hidden-xs px-4 text-center">
 						<v-list-item-subtitle>
 							{{ $t("components.molecules.TaskItemTeacher.graded") }}
 						</v-list-item-subtitle>
