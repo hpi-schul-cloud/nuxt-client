@@ -1,35 +1,20 @@
 <template>
-	<ContentElementBar class="audioplayer mt-0">
+	<ContentElementBar class="audioplayer">
 		<template #element>
-			<audio
-				ref="audio"
-				class="audio"
-				loading="lazy"
-				v-on:error="onError"
-				controlsList="nodownload noplaybackrate"
-			/>
-			<button @click="onPlay">
+			<audio ref="audio" class="audio" loading="lazy" v-on:error="onError" />
+			<v-btn icon @click="onPlay" color="white" small>
 				<v-icon
-					class="mr-2"
+					v-if="!playing"
 					role="img"
 					aria-label="Play"
 					aria-hidden="false"
-					style="color: white"
-					v-if="!playing"
 					>{{ mdiPlay }}</v-icon
 				>
-				<v-icon
-					class="mr-2"
-					role="img"
-					aria-label="Pause"
-					aria-hidden="false"
-					style="color: white"
-					v-else
-				>
+				<v-icon v-else role="img" aria-label="Pause" aria-hidden="false">
 					{{ mdiPause }}</v-icon
 				>
-			</button>
-			<span style="color: white" class="duration text-body-2">
+			</v-btn>
+			<span class="duration text-body-2 px-2">
 				{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</span
 			>
 			<v-slider
@@ -185,21 +170,14 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-button:focus {
-	outline: none;
-}
-
 .audioplayer {
 	background-color: #424242;
 	border-top-right-radius: 4px;
 	border-top-left-radius: 4px;
 }
-.audio {
-	width: 100%;
-}
 .duration {
 	white-space: nowrap;
-	padding-right: 2px;
+	color: white;
 }
 .slider {
 	width: 30%;
