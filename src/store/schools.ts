@@ -4,7 +4,7 @@ import {
 	UserImportApiFactory,
 	UserImportApiInterface,
 } from "@/serverApi/v3";
-import { authModule } from "@/store";
+import { authModule, envConfigModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
@@ -310,7 +310,11 @@ export default class SchoolsModule extends VuexModule {
 	async deleteSystem(systemId: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			await this.systemsApi.systemControllerDeleteSystem(systemId);
+			if (envConfigModule.getEnv.FEATURE_NEST_SYSTEMS_API_ENABLED) {
+				await this.systemsApi.systemControllerDeleteSystem(systemId);
+			} else {
+				await $axios.delete(`v1/systems/${systemId}`);
+			}
 
 			const updatedSystemsList = this.systems.filter(
 				(system) => system._id !== systemId
