@@ -1,15 +1,21 @@
 <template>
 	<div class="text-center">
-		<v-menu offset-y max-height="120px" nudge-left="100px" max-width="120px">
+		<v-menu offset-y max-height="120px" nudge-left="50px">
 			<template v-slot:activator="{ on, attrs }">
-				<button v-bind="attrs" v-on="on">
-					<v-icon
-						aria-label="Speed menu"
-						role="img"
-						style="color: white; padding-right: 10px; padding-left: 2px"
-						>{{ mdiPlaySpeed }}</v-icon
-					>
-				</button>
+				<v-btn
+					v-bind="attrs"
+					v-on="on"
+					icon
+					small
+					color="white"
+					class="pr-1 pl-1"
+					aria-label="Speed menu"
+					role="img"
+				>
+					<v-icon>
+						{{ mdiPlaySpeed }}
+					</v-icon>
+				</v-btn>
 			</template>
 
 			<v-list>
@@ -70,9 +76,6 @@ export default defineComponent({
 });
 </script>
 <style scoped>
-button:focus {
-	outline: none;
-}
 .v-list-item {
 	min-height: 30px;
 	padding: 0px;

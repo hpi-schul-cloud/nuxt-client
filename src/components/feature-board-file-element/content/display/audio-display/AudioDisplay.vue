@@ -37,6 +37,7 @@
 			<SpeedMenu @rate="speedRate" />
 			<v-icon
 				color="white"
+				class="pr-0"
 				right
 				v-if="!isShow"
 				@click="showVolumeSlider"
@@ -48,7 +49,7 @@
 			<div class="volume-wrapper mr-n2" v-if="isShow">
 				<v-slider
 					aria-label="Volume slider"
-					class="volume-slider pl-2"
+					class="volume-slider pl-1"
 					color="white"
 					thumb-color="white"
 					track-color="#9e9e9e"
@@ -62,7 +63,7 @@
 				/>
 				<v-icon
 					color="white"
-					class="pr-2"
+					class="pr-1"
 					@click="showVolumeSlider"
 					role="img"
 					aria-label="Volume"
@@ -181,7 +182,7 @@ export default defineComponent({
 	color: white;
 }
 .slider {
-	width: 30%;
+	width: 40%;
 }
 .volume-wrapper {
 	display: flex;
