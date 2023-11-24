@@ -224,7 +224,7 @@ export default {
 			}
 		},
 		async addResource() {
-			const { getElement, getElementsRoute, materialId } =
+			const { getElement, getElementsRoute, setMaterialId } =
 				useSharedLearnstoreState();
 			const learnStoreBoardElement = getElement();
 
@@ -235,7 +235,7 @@ export default {
 					this.resource.properties,
 					"ccm:replicationsourceuuid"
 				);
-				materialId.value = metadataAttribute;
+				setMaterialId(metadataAttribute);
 				this.$router.push(getElementsRoute().value);
 			}
 

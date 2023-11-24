@@ -119,15 +119,7 @@ export type Resource = {
 	mimetype: string;
 	mediatype: string;
 	size: null;
-	preview: {
-		isIcon: boolean;
-		isGenerated: boolean;
-		type: string;
-		mimetype: string;
-		data: string;
-		width: null;
-		height: null;
-	};
+	preview: Preview;
 	iconURL: string;
 	collection: null;
 	owner: {
@@ -136,6 +128,17 @@ export type Resource = {
 		lastName: string;
 		mailbox: null;
 	};
+};
+
+export type Preview = {
+	isIcon: boolean;
+	isGenerated: boolean;
+	type: string;
+	mimetype: string;
+	data: string;
+	width: null;
+	height: null;
+	url: string;
 };
 
 export type Resources = {

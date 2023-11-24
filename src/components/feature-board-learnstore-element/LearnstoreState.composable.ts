@@ -14,6 +14,7 @@ export const useSharedLearnstoreState = createSharedComposable(() => {
 		boardElement: Ref<LearnstoreElementResponse>,
 		from?: Route
 	) => {
+		resetState();
 		element.value = boardElement.value;
 		if (from) {
 			route.value = from;
@@ -28,11 +29,26 @@ export const useSharedLearnstoreState = createSharedComposable(() => {
 		return route;
 	};
 
+	const resetState = () => {
+		element.value = null;
+		route.value = null;
+		materialId.value = null;
+	};
+
+	const setMaterialId = (id: string) => {
+		materialId.value = id;
+	};
+
+	const getMaterialId = (): Ref<string | null> => {
+		return ref(materialId.value);
+	};
+
 	return {
-		element,
 		setElement,
-		materialId,
+		getMaterialId,
+		setMaterialId,
 		getElement,
 		getElementsRoute,
+		resetState,
 	};
 });

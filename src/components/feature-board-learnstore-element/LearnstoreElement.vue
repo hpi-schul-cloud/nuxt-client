@@ -1,6 +1,6 @@
 <template>
 	<v-card
-		v-show="isEditMode"
+		v-show="hasMaterial || isEditMode"
 		class="mb-4"
 		data-testid="board-learnstore-element"
 		dense
@@ -14,32 +14,26 @@
 		@click="onClickElement"
 	>
 		<div class="card-container d-flex gap-8 grey lighten-4">
-			<div
-				v-if="resource && resource.preview.data"
-				class="logo-container my-auto mr-1"
-			>
-				<v-img
-					height="100%"
-					class="mx-auto"
-					:src="resource.preview.data"
-					contain
-				/>
-			</div>
-			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
+			<v-icon>{{ mdiStorefrontOutline }}</v-icon>
 			<span class="align-self-center title flex-1 break-word">
-				{{
-					hasMaterial
-						? title
-						: t("feature-board-learnstore-element.placeholder.select")
-				}}
+				{{ resource ?? resource?.title ? resource?.title : "..." }}
 			</span>
+			<BoardMenu scope="element">
+				<BoardMenuActionMoveUp @click="onMoveUp" />
+				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionDelete @click="onDelete" />
+			</BoardMenu>
 		</div>
-		<template v-if="isLearnstoreOpen">
-			<learnstore-selection-dialog
-				:is-open="isLearnstoreOpen"
-				@close="onLearnstoreClose"
-			/>
-		</template>
+		<learnstore-content
+			v-if="resource"
+			:resource="resource"
+			:is-edit-mode="isEditMode"
+		/>
+		<learnstore-selection-dialog
+			v-if="isLearnstoreOpen"
+			:is-open="isLearnstoreOpen"
+			@close="onLearnstoreClose"
+		/>
 	</v-card>
 </template>
 
@@ -47,7 +41,7 @@
 import { useI18n } from "@/composables/i18n.composable";
 import { LearnstoreElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { mdiPuzzleOutline } from "@mdi/js";
+import { mdiStorefrontOutline } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import {
 	computed,
@@ -66,12 +60,25 @@ import {
 	useSharedLearnstoreState,
 } from "@feature-board-learnstore-element";
 import ContentModule from "@/store/content";
-import { Resource } from "@/store/types/content";
 import LearnstoreSelectionDialog from "./LearnstoreSelectionDialog.vue";
 import { useRouter } from "vue-router/composables";
+import LearnstoreContent from "./LearnstoreContent.vue";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 
 export default defineComponent({
-	components: { LearnstoreSelectionDialog },
+	components: {
+		BoardMenuActionMoveDown,
+		BoardMenuActionMoveUp,
+		BoardMenu,
+		BoardMenuActionDelete,
+		LearnstoreContent,
+		LearnstoreSelectionDialog,
+	},
 	props: {
 		element: {
 			type: Object as PropType<LearnstoreElementResponse>,
@@ -100,8 +107,6 @@ export default defineComponent({
 			fetchContent,
 		} = useLearnstoreElementDisplayState(learnstoreModule);
 
-		const { setElement, materialId } = useSharedLearnstoreState();
-
 		const autofocus: Ref<boolean> = ref(false);
 
 		useBoardFocusHandler(element.value.id, ref(null), () => {
@@ -113,17 +118,13 @@ export default defineComponent({
 
 		watch(lastCreatedElementId, (newValue) => {
 			if (newValue !== undefined && newValue === props.element.id) {
-				isLearnstoreOpen.value = true;
+				// isLearnstoreOpen.value = true;
 				resetLastCreatedElementId();
 			}
 		});
 
 		const hasMaterial: ComputedRef<boolean> = computed(
 			() => !!modelValue.value.someId
-		);
-
-		const title: ComputedRef<string> = computed(
-			() => resource.value?.name ?? "..."
 		);
 
 		const isLoading = computed(
@@ -153,6 +154,9 @@ export default defineComponent({
 			isLearnstoreOpen.value = true;
 		};
 
+		const { setElement, getMaterialId, resetState } =
+			useSharedLearnstoreState();
+
 		const router = useRouter();
 		const onClickElement = () => {
 			if (!hasMaterial.value && props.isEditMode) {
@@ -160,7 +164,7 @@ export default defineComponent({
 				// isLearnstoreOpen.value = true;
 				/**  Page solution **/
 				setElement(element, router.currentRoute);
-				router.push({ name: "content" });
+				router.push({ name: "content", query: { inline: "1" } });
 			}
 		};
 
@@ -168,32 +172,29 @@ export default defineComponent({
 			isLearnstoreOpen.value = false;
 		};
 
-		const onLearnstoreAdd = async (resource: Resource) => {
-			modelValue.value.someId = resource.ref.id;
-
-			await loadCardData();
-		};
-
 		const loadCardData = async () => {
-			if (materialId.value) {
-				modelValue.value.someId = materialId.value;
-			}
 			if (modelValue.value.someId) {
 				await fetchContent(modelValue.value.someId);
+			} else if (getMaterialId().value) {
+				modelValue.value.someId = getMaterialId().value;
+				resetState();
 			}
 		};
 
 		onMounted(loadCardData);
 
+		const onDelete = () => emit("delete:element", element.value.id);
+		const onMoveUp = () => emit("move-up:edit");
+		const onMoveDown = () => emit("move-down:edit");
+
 		return {
 			t,
 			hasMaterial,
-			title,
 			resource,
 			error,
 			isLoading,
 			isLearnstoreOpen,
-			mdiPuzzleOutline,
+			mdiStorefrontOutline,
 			onMoveElementDown,
 			onMoveElementUp,
 			onKeydownArrow,
@@ -201,7 +202,9 @@ export default defineComponent({
 			onEditElement,
 			onClickElement,
 			onLearnstoreClose,
-			onLearnstoreAdd,
+			onDelete,
+			onMoveUp,
+			onMoveDown,
 		};
 	},
 });

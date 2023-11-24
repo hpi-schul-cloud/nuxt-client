@@ -158,6 +158,7 @@ const initialState = () => ({
 			data: "",
 			width: null,
 			height: null,
+			url: "",
 		},
 		iconURL: "",
 		collection: null,

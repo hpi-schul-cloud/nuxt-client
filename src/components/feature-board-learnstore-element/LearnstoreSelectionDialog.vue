@@ -1,10 +1,11 @@
 <template>
 	<v-custom-dialog :is-open="isOpen" @dialog-canceled="onCancel">
 		<h2 slot="title" class="text-h4 my-2">LernStore</h2>
-		<template #content />
+		<template #content>
+			<router-view />
+		</template>
 	</v-custom-dialog>
 </template>
-<script setup lang="ts"></script>
 
 <script lang="ts">
 import { useI18n } from "@/composables/i18n.composable";
