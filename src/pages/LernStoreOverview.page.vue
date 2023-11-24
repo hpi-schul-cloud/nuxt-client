@@ -10,7 +10,9 @@
 			@click="goBack"
 		>
 			<v-icon> {{ mdiChevronLeft }}</v-icon>
-			{{ $t("pages.content.index.backToCourse") }}
+			{{
+				fromBoard ? "Zurück zum Board" : $t("pages.content.index.backToCourse")
+			}}
 		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
 			<div>
@@ -86,6 +88,7 @@ import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFoo
 import ContentInitialState from "@/components/molecules/ContentInitialState";
 import { mdiChevronLeft } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useSharedLearnstoreState } from "@feature-board-learnstore-element";
 
 export default {
 	components: {
@@ -129,6 +132,9 @@ export default {
 		},
 		isInline() {
 			return !!this.$route.query.inline;
+		},
+		fromBoard() {
+			return useSharedLearnstoreState().getElementsRoute();
 		},
 	},
 	watch: {
@@ -223,6 +229,10 @@ export default {
 			}, 500);
 		},
 		goBack() {
+			const boardElementRoute = useSharedLearnstoreState().getElementsRoute();
+			if (boardElementRoute) {
+				this.$router.push(boardElementRoute.value);
+			}
 			window.close();
 		},
 	},
