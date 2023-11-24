@@ -178,6 +178,7 @@ export default defineComponent({
 			} else if (getMaterialId().value) {
 				modelValue.value.someId = getMaterialId().value;
 				resetState();
+				loadCardData();
 			}
 		};
 

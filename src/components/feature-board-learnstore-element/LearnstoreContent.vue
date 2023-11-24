@@ -112,16 +112,6 @@ export default defineComponent({
 	margin: 5px 0;
 }
 
-.title-container {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-}
-
-.title {
-	margin-bottom: 8px;
-}
-
 .logo-container {
 	margin-top: 8px;
 }
