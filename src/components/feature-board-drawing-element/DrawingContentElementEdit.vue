@@ -106,7 +106,7 @@ export default defineComponent({
 		padding: 5px;
 		right: 0;
 		top: 0;
-		opacity: 0;
+		opacity: 1;
 		transition: opacity 0.3s;
 	}
 
