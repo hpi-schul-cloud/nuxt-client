@@ -12,7 +12,7 @@ import { BusinessError } from "@/store/types/commons";
 import { useBoardNotifier } from "@util-board";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import VCustomDialog from "../organisms/vCustomDialog.vue";
-import { useLearnstoreState } from "@feature-board-learnstore-element";
+import { useLearnstoreElementDisplayState } from "@feature-board-learnstore-element";
 import ContentModule from "@/store/content";
 import { injectStrict, LEARNSTORE_MODULE_KEY } from "@/utils/inject";
 
@@ -37,7 +37,7 @@ export default defineComponent({
 		const hasData: Ref<boolean> = ref(false);
 
 		const { isLoading, error, fetchContent } =
-			useLearnstoreState(learnstoreModule);
+			useLearnstoreElementDisplayState(learnstoreModule);
 
 		const apiError: ComputedRef<BusinessError | undefined> = computed(
 			() => error.value

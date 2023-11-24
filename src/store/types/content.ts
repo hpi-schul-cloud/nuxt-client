@@ -179,10 +179,12 @@ export type Lessons = {
 export type AddToLessonQuery = {
 	lessonId: string;
 	event: {};
-	material: {
-		client: string;
-		merlinReference: string;
-		title: string;
-		url: string;
-	};
+	material: Material[];
+};
+
+export type Material = {
+	client: string;
+	merlinReference: string;
+	title: string;
+	url: string;
 };

@@ -57,13 +57,14 @@ import NotificationModal from "@/components/molecules/NotificationModal";
 import LoadingModal from "@/components/molecules/LoadingModal";
 import { mdiPlusCircleOutline } from "@mdi/js";
 import {
+	getID,
+	getMediatype,
 	getMerlinReference,
 	getMetadataAttribute,
 	getTitle,
 	getUrl,
-	getMediatype,
-	getID,
 } from "@/utils/helpers";
+import { useSharedLearnstoreState } from "@feature-board-learnstore-element";
 
 let slowAPICall;
 
@@ -218,14 +219,30 @@ export default {
 					} else {
 						window.opener.addResource(await getElementInfo(this));
 					}
-					window.close();
 					return true;
 				}
 			}
 		},
 		async addResource() {
+			const { getElement, getElementsRoute, materialId } =
+				useSharedLearnstoreState();
+			const learnStoreBoardElement = getElement();
+
 			contentModule.setNotificationModal(null);
-			if (!(await this.addResourceAndClose())) {
+
+			if (learnStoreBoardElement.value) {
+				const metadataAttribute = getMetadataAttribute(
+					this.resource.properties,
+					"ccm:replicationsourceuuid"
+				);
+				materialId.value = metadataAttribute;
+				this.$router.push(getElementsRoute().value);
+			}
+
+			if (
+				!learnStoreBoardElement.value &&
+				!(await this.addResourceAndClose())
+			) {
 				this.copyModalActive = true;
 				this.$store.dispatch("courses/find");
 			}

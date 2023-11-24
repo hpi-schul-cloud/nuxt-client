@@ -1,38 +1,38 @@
-import { BusinessError } from "@/store/types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { createSharedComposable } from "@vueuse/core";
 import { ref, Ref } from "vue";
-import ContentModule from "@/store/content";
-import { Resource } from "@/store/types/content";
+import { LearnstoreElementResponse } from "@/serverApi/v3";
+import { Route } from "vue-router";
 
-export const useLearnstoreState = (learnstoreModule: ContentModule) => {
-	const resource: Ref<Resource | undefined> = ref();
-	const isLoading: Ref<boolean> = ref(false);
-	const error: Ref<BusinessError | undefined> = ref(undefined);
+const element: Ref<LearnstoreElementResponse | null> = ref(null);
 
-	const fetchContent = async (id: string): Promise<void> => {
-		isLoading.value = true;
-		error.value = undefined;
+const route: Ref<Route | null> = ref(null);
 
-		try {
-			await learnstoreModule.getResourceMetadata(id);
-			resource.value = learnstoreModule.getCurrentResource;
-		} catch (errorResponse) {
-			const apiError = mapAxiosErrorToResponseError(errorResponse);
+const materialId: Ref<string | null> = ref(null);
 
-			error.value = {
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			};
+export const useSharedLearnstoreState = createSharedComposable(() => {
+	const setElement = (
+		boardElement: Ref<LearnstoreElementResponse>,
+		from?: Route
+	) => {
+		element.value = boardElement.value;
+		if (from) {
+			route.value = from;
 		}
+	};
 
-		isLoading.value = false;
+	const getElement = (): Ref<LearnstoreElementResponse | null> => {
+		return element;
+	};
+
+	const getElementsRoute = (): Ref<Route | null> => {
+		return route;
 	};
 
 	return {
-		resource,
-		isLoading,
-		error,
-		fetchContent,
+		element,
+		setElement,
+		materialId,
+		getElement,
+		getElementsRoute,
 	};
-};
+});

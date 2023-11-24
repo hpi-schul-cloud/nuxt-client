@@ -11,6 +11,7 @@ import {
 	CreateContentElementBodyParams,
 	ExternalToolElementContentBody,
 	FileElementContentBody,
+	LearnstoreElementContentBody,
 	LinkElementContentBody,
 	RichTextElementContentBody,
 	RoomsApiFactory,
@@ -104,6 +105,13 @@ export const useBoardApi = () => {
 				content: element.content,
 				type: ContentElementType.ExternalTool,
 			} as ExternalToolElementContentBody;
+		}
+
+		if (element.type === ContentElementType.Learnstore) {
+			return {
+				content: element.content,
+				type: ContentElementType.Learnstore,
+			} as LearnstoreElementContentBody;
 		}
 
 		throw new Error("element.type mapping is undefined for updateElementCall");

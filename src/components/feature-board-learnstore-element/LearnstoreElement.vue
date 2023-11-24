@@ -61,10 +61,14 @@ import {
 	watch,
 } from "vue";
 import { injectStrict, LEARNSTORE_MODULE_KEY } from "@/utils/inject";
-import { useLearnstoreElementDisplayState } from "@feature-board-learnstore-element";
+import {
+	useLearnstoreElementDisplayState,
+	useSharedLearnstoreState,
+} from "@feature-board-learnstore-element";
 import ContentModule from "@/store/content";
 import { Resource } from "@/store/types/content";
 import LearnstoreSelectionDialog from "./LearnstoreSelectionDialog.vue";
+import { useRouter } from "vue-router/composables";
 
 export default defineComponent({
 	components: { LearnstoreSelectionDialog },
@@ -87,6 +91,8 @@ export default defineComponent({
 			autoSaveDebounce: 0,
 		});
 		const learnstoreModule: ContentModule = injectStrict(LEARNSTORE_MODULE_KEY);
+		const element: Ref<LearnstoreElementResponse> = toRef(props, "element");
+
 		const {
 			resource,
 			isLoading: isMaterialLoading,
@@ -94,8 +100,10 @@ export default defineComponent({
 			fetchContent,
 		} = useLearnstoreElementDisplayState(learnstoreModule);
 
+		const { setElement, materialId } = useSharedLearnstoreState();
+
 		const autofocus: Ref<boolean> = ref(false);
-		const element: Ref<LearnstoreElementResponse> = toRef(props, "element");
+
 		useBoardFocusHandler(element.value.id, ref(null), () => {
 			autofocus.value = true;
 		});
@@ -145,16 +153,18 @@ export default defineComponent({
 			isLearnstoreOpen.value = true;
 		};
 
+		const router = useRouter();
 		const onClickElement = () => {
 			if (!hasMaterial.value && props.isEditMode) {
-				isLearnstoreOpen.value = true;
-			} else {
-				// TODO: open learnstore material
+				/**  Dialog solution **/
+				// isLearnstoreOpen.value = true;
+				/**  Page solution **/
+				setElement(element, router.currentRoute);
+				router.push({ name: "content" });
 			}
 		};
 
 		const onLearnstoreClose = () => {
-			console.log("CLOSED");
 			isLearnstoreOpen.value = false;
 		};
 
@@ -165,6 +175,9 @@ export default defineComponent({
 		};
 
 		const loadCardData = async () => {
+			if (materialId.value) {
+				modelValue.value.someId = materialId.value;
+			}
 			if (modelValue.value.someId) {
 				await fetchContent(modelValue.value.someId);
 			}

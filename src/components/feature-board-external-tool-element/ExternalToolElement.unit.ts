@@ -113,7 +113,6 @@ describe("ExternalToolElement", () => {
 					isFirstElement: false,
 					isLastElement: false,
 					hasMultipleElements: false,
-					cardId: "cardId",
 					...props,
 				},
 				provide: {
