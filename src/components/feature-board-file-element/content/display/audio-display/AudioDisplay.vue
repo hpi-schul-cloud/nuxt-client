@@ -1,8 +1,8 @@
 <template>
 	<ContentElementBar class="audioplayer">
 		<template #element>
-			<audio ref="audio" class="audio" loading="lazy" v-on:error="onError" />
-			<v-btn icon @click="onPlay" color="white" small>
+			<audio ref="audio" loading="lazy" v-on:error="onError" />
+			<v-btn icon @click="onPlay" color="white" small class="pa-0 ma-0">
 				<v-icon
 					v-if="!playing"
 					role="img"
@@ -14,12 +14,12 @@
 					{{ mdiPause }}</v-icon
 				>
 			</v-btn>
-			<span class="duration text-body-2 px-2">
+			<span class="duration pr-2 pl-1">
 				{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</span
 			>
 			<v-slider
 				aria-label="Audio slider"
-				class="slider"
+				class="slider pt-6"
 				color="white"
 				thumb-color="white"
 				track-color="#9e9e9e"
@@ -36,18 +36,19 @@
 			/>
 			<SpeedMenu @rate="speedRate" />
 			<v-icon
+				color="white"
+				right
 				v-if="!isShow"
 				@click="showVolumeSlider"
 				role="img"
 				aria-label="Volume"
 				aria-hidden="false"
-				style="color: white; position: absolute; right: 16px"
 				>{{ mdiVolumeHigh }}</v-icon
 			>
 			<div class="volume-wrapper mr-n2" v-if="isShow">
 				<v-slider
 					aria-label="Volume slider"
-					class="volume-slider"
+					class="volume-slider pl-2"
 					color="white"
 					thumb-color="white"
 					track-color="#9e9e9e"
@@ -60,12 +61,12 @@
 					@mouseup="stopPropagation"
 				/>
 				<v-icon
+					color="white"
 					class="pr-2"
 					@click="showVolumeSlider"
 					role="img"
 					aria-label="Volume"
 					aria-hidden="false"
-					style="color: white"
 					>{{ mdiVolumeHigh }}</v-icon
 				>
 			</div>
@@ -172,8 +173,8 @@ export default defineComponent({
 <style scoped>
 .audioplayer {
 	background-color: #424242;
-	border-top-right-radius: 4px;
-	border-top-left-radius: 4px;
+	border-top-right-radius: 0.25rem;
+	border-top-left-radius: 0.25rem;
 }
 .duration {
 	white-space: nowrap;
@@ -181,20 +182,18 @@ export default defineComponent({
 }
 .slider {
 	width: 30%;
-	padding-top: 23px;
 }
 .volume-wrapper {
 	display: flex;
 	float: right;
 	width: 50%;
 	height: 36px;
-	border-radius: 2px;
+	border-radius: 0.125rem;
 	background: var(--shades-color-overlay-dark, rgba(33, 33, 33, 0.54));
 }
 
 .volume-slider {
 	width: 50%;
-	padding-left: 6px;
 	padding-top: 3px;
 }
 </style>
