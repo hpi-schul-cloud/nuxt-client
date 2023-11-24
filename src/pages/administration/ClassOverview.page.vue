@@ -5,14 +5,19 @@
 		:full-width="true"
 		data-testid="admin-class-title"
 	>
-		<v-tabs class="tabs-max-width mb-5" grow v-model="activeTab">
-			<v-tab tab-value="next" data-testid="admin-class-next-year-tab">
+		<v-tabs
+			class="tabs-max-width mb-5"
+			grow
+			v-model="activeTab"
+			color="primary"
+		>
+			<v-tab value="next" data-testid="admin-class-next-year-tab">
 				<span>{{ nextYear }}</span>
 			</v-tab>
-			<v-tab tab-value="current" data-testid="admin-class-current-year-tab">
+			<v-tab value="current" data-testid="admin-class-current-year-tab">
 				<span>{{ currentYear }}</span>
 			</v-tab>
-			<v-tab tab-value="archive" data-testid="admin-class-previous-years-tab">
+			<v-tab value="archive" data-testid="admin-class-previous-years-tab">
 				<span>{{ t("pages.administration.classes.label.archive") }}</span>
 			</v-tab>
 		</v-tabs>
@@ -110,7 +115,6 @@
 				</template>
 			</template>
 		</v-data-table>
-
 		<v-custom-dialog
 			:is-open="isDeleteDialogOpen"
 			max-width="360"
@@ -195,6 +199,7 @@ import { useRouter } from "vue-router";
 import { SchoolYearQueryType } from "@/serverApi/v3";
 
 type Tab = "current" | "next" | "archive";
+// type SortItem = { key: string; order?: boolean | "asc" | "desc" };
 
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML, VCustomDialog },
@@ -314,27 +319,27 @@ export default defineComponent({
 		const headers = [
 			{
 				value: "name",
-				text: t("common.labels.classes"),
+				title: t("common.labels.classes"),
 				sortable: true,
 			},
 			{
 				value: "externalSourceName",
-				text: t("common.labels.externalsource"),
+				title: t("common.labels.externalsource"),
 				sortable: true,
 			},
 			{
 				value: "teachers",
-				text: t("common.labels.teacher"),
+				title: t("common.labels.teacher"),
 				sortable: true,
 			},
 			{
 				value: "studentCount",
-				text: "Schüler:innen",
+				title: "Schüler:innen",
 				sortable: true,
 			},
 			{
 				value: "actions",
-				text: "",
+				title: "",
 				sortable: false,
 			},
 		];
