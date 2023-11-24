@@ -840,6 +840,7 @@
   "components.cardElement.fileElement.alternativeText": "Texto alternativo",
   "components.cardElement.fileElement.altDescription": "Una breve descripción ayuda a las personas que no pueden ver la imagen.",
   "components.cardElement.fileElement.emptyAlt": "Aquí tenéis una imagen con el siguiente nombre",
+  "components.cardElement.fileElement.pdfAlt": "Imagen de vista previa para ",
   "components.cardElement.fileElement.virusDetected": "Se ha bloqueado el archivo debido a un virus sospechoso.",
   "components.cardElement.fileElement.awaitingScan": "La vista previa se muestra después de una comprobación de virus correcta. El fichero se está analizando actualmente.",
   "components.cardElement.fileElement.scanError": "Error durante la comprobación de virus. No se puede crear la vista previa. Vuelva a cargar el archivo.",
