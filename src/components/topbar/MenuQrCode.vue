@@ -33,8 +33,8 @@ export default defineComponent({
 		const openPrintMenu = () => {
 			const win = window.open();
 
-			if (qrCode.value !== null) {
-				win?.document.write(qrCode.value!.$el.innerHTML);
+			if (qrCode.value) {
+				win?.document.write(qrCode.value.$el.innerHTML);
 				win?.print();
 				win?.close();
 			}

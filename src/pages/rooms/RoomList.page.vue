@@ -69,7 +69,6 @@ import { mdiMagnify } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { defineComponent } from "vue";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: {
 		RoomWrapper,

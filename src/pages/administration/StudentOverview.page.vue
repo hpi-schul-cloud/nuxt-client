@@ -555,7 +555,6 @@ export default {
 					});
 				}
 			} catch (error) {
-				console.error(error);
 				notifierModule.show({
 					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
 					status: "error",

@@ -129,7 +129,7 @@ app.use(VueDOMPurifyHTML, {
 		try {
 			await authModule.login(jwt);
 		} catch (e) {
-			console.log("### JWT invalid: ", e);
+			console.error("### JWT invalid: ", e);
 		}
 	}
 

@@ -125,6 +125,7 @@ export default defineComponent({
 
 		const onInput = async (date: Date) => {
 			modelValue.value = date;
+			valid.value = true;
 			inputField.value?.focus();
 			await closeMenu();
 		};

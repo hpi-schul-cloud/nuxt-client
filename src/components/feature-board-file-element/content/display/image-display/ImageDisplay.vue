@@ -4,17 +4,7 @@
 		@on:action="openLightBox"
 		color="var(--v-black-base)"
 	>
-		<div v-if="isImageLoading" class="d-flex justify-center align-center w-100">
-			<VProgressCircular color="primary" indeterminate :size="36" />
-		</div>
-
-		<img
-			class="image-display-image rounded-t-sm"
-			loading="lazy"
-			:src="previewSrc"
-			:alt="alternativeText"
-			@load="isImageLoading = false"
-		/>
+		<PreviewImage :src="previewSrc" :alt="alternativeText" :contain="true" />
 
 		<ContentElementBar class="menu">
 			<template #menu><slot /></template>
@@ -26,9 +16,10 @@
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { PropType, computed, defineComponent, ref } from "vue";
+import { PropType, computed, defineComponent } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { ColorOverlay } from "@ui-color-overlay";
+import { PreviewImage } from "@ui-preview-image";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -40,10 +31,8 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
-	components: { ContentElementBar, ColorOverlay },
+	components: { ContentElementBar, ColorOverlay, PreviewImage },
 	setup(props) {
-		const isImageLoading = ref(true);
-
 		const { t } = useI18n();
 
 		const alternativeText = computed(() => {
@@ -73,20 +62,12 @@ export default defineComponent({
 		return {
 			alternativeText,
 			openLightBox,
-			isImageLoading,
 		};
 	},
 });
 </script>
 
 <style scoped>
-.image-display-image {
-	pointer-events: none;
-	display: block;
-	margin-right: auto;
-	margin-left: auto;
-}
-
 .menu {
 	position: absolute;
 	top: 0px;

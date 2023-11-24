@@ -42,6 +42,7 @@
 			"@ui-alert": ["src/components/ui-alert"],
 			"@ui-board": ["src/components/ui-board"],
 			"@ui-color-overlay": ["src/components/ui-color-overlay"],
+			"@ui-preview-image": ["src/components/ui-preview-image"],
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
 			"@ui-date-time-picker": ["src/components/ui-date-time-picker"],
 			"@ui-light-box": ["src/components/ui-light-box"],
