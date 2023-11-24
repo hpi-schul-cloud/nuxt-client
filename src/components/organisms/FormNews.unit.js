@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
+import { I18N_KEY } from "@/utils/inject";
 
 const testDate = dayjs("2022-07-05T09:00:00.000Z");
 
@@ -76,6 +77,9 @@ describe("@/components/organisms/FormNews", () => {
 			propsData: {
 				news: { ...validNews },
 			},
+			provide: {
+				[I18N_KEY.valueOf()]: { t: (key) => key },
+			},
 		});
 		expect(wrapper.vm.data.date.date).toStrictEqual(validNewsDate.date);
 		expect(wrapper.vm.data.date.time).toStrictEqual(validNewsDate.time);
@@ -91,6 +95,9 @@ describe("@/components/organisms/FormNews", () => {
 				...mock,
 				propsData: {
 					news: { ...validNews },
+				},
+				provide: {
+					[I18N_KEY.valueOf()]: { t: (key) => key },
 				},
 			});
 			wrapper.find("form").trigger("submit");
