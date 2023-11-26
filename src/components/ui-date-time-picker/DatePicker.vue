@@ -3,23 +3,23 @@
 		<v-menu
 			v-model="showDateDialog"
 			transition="scale-transition"
-			min-width="auto"
+			:close-on-content-click="false"
 		>
 			<template #activator="{ props }">
 				<v-text-field
 					v-bind="props"
 					ref="inputField"
+					data-testid="date-input"
+					variant="underlined"
+					color="primary"
+					append-inner-icon="$mdiCalendar"
 					:model-value="date"
 					:label="label"
 					:aria-label="ariaLabel"
 					:placeholder="t('common.placeholder.dateformat')"
 					:class="{ 'menu-open': showDateDialog }"
-					v-date-input-mask
-					append-icon="$mdiCalendar"
 					:rules="rules"
-					data-testid="date-input"
-					variant="underlined"
-					color="primary"
+					v-date-input-mask
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.up.down.stop
@@ -31,10 +31,12 @@
 				<v-date-picker
 					:model-value="modelValue"
 					:aria-expanded="showDateDialog"
-					color="primary"
-					hide-header
 					:min="minDate"
 					:max="maxDate"
+					color="primary"
+					hide-header
+					show-adjacent-months
+					elevation="6"
 					@update:model-value="onInput"
 				/>
 			</v-locale-provider>
@@ -110,6 +112,7 @@ const onInput = async (date: Date) => {
 	modelValue.value = date;
 	valid.value = true;
 	inputField.value?.focus();
+	await closeMenu();
 };
 
 const onError = (hasError: boolean) => {
@@ -118,17 +121,17 @@ const onError = (hasError: boolean) => {
 		emit("error");
 	}
 };
+
+const closeMenu = useDebounceFn(() => {
+	showDateDialog.value = false;
+}, 50);
 </script>
 
 <style lang="scss" scoped>
 :deep {
-	.v-input__icon--append .v-icon {
+	.v-field__append-inner .v-icon {
 		width: 20px;
 		height: 20px;
-	}
-
-	.v-messages__message {
-		line-height: 14px;
 	}
 }
 </style>
