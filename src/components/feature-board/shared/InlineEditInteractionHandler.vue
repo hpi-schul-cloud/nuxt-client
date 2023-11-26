@@ -34,6 +34,8 @@ export default defineComponent({
 		provide(InlineEditInteractionEvent, interactionEvent);
 
 		const isDatePicker = (target: HTMLElement | SVGElement): boolean | void => {
+			if (isIconButton(target as SVGElement)) return true;
+
 			if (target.className?.includes("v-date-picker")) {
 				return true;
 			}
@@ -46,6 +48,16 @@ export default defineComponent({
 			} else {
 				return isDatePicker(target.parentElement);
 			}
+		};
+
+		const isIconButton = (target: SVGElement): boolean => {
+			const buttonElement = target.parentElement?.parentElement?.parentElement;
+			if (!buttonElement) return false;
+
+			return (
+				target.classList.contains("v-icon__svg") &&
+				buttonElement.className.includes("v-btn")
+			);
 		};
 
 		const isListItem = (target: HTMLElement | SVGElement): boolean => {
@@ -61,7 +73,7 @@ export default defineComponent({
 			)
 				return true;
 
-			return !isListItem && !isDatePicker(event.target);
+			return !isListItem(event.target) && !isDatePicker(event.target);
 		};
 
 		const onClickOutside = (event: MouseEvent) => {
