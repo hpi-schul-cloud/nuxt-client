@@ -2,7 +2,6 @@
 	<div>
 		<v-menu
 			v-model="showDateDialog"
-			:close-on-content-click="false"
 			transition="scale-transition"
 			min-width="auto"
 		>
@@ -23,7 +22,7 @@
 					color="primary"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
-					@keydown.prevent.down="focusDatePicker"
+					@keydown.up.down.stop
 					@keydown.tab="showDateDialog = false"
 					@update:error="onError"
 				/>
@@ -33,7 +32,7 @@
 					:model-value="modelValue"
 					:aria-expanded="showDateDialog"
 					color="primary"
-					no-title
+					hide-header
 					:min="minDate"
 					:max="maxDate"
 					@update:model-value="onInput"
@@ -95,16 +94,6 @@ const getISODate = (date: string) => {
 	return `${year}-${month}-${day}`;
 };
 
-const focusDatePicker = () => {
-	setTimeout(() => {
-		const prevMonthBtn = document.querySelector<HTMLElement>(
-			".v-date-picker-header button"
-		);
-
-		prevMonthBtn?.focus();
-	}, 100);
-};
-
 const rules = computed(() => {
 	const rules = [
 		isValidDateFormat(t("components.datePicker.validation.format")),
@@ -121,7 +110,6 @@ const onInput = async (date: Date) => {
 	modelValue.value = date;
 	valid.value = true;
 	inputField.value?.focus();
-	await closeMenu();
 };
 
 const onError = (hasError: boolean) => {
@@ -130,10 +118,6 @@ const onError = (hasError: boolean) => {
 		emit("error");
 	}
 };
-
-const closeMenu = useDebounceFn(() => {
-	showDateDialog.value = false;
-}, 50);
 </script>
 
 <style lang="scss" scoped>
