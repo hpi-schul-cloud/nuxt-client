@@ -8,13 +8,14 @@
 		>
 			<template #activator="{ props }">
 				<v-text-field
+					v-bind="props"
 					ref="inputField"
 					:model-value="date"
-					v-bind="props"
 					:label="label"
 					:aria-label="ariaLabel"
-					:placeholder="$t('common.placeholder.dateformat')"
+					:placeholder="t('common.placeholder.dateformat')"
 					:class="{ 'menu-open': showDateDialog }"
+					v-date-input-mask
 					append-icon="$mdiCalendar"
 					:rules="rules"
 					data-testid="date-input"
@@ -42,117 +43,97 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, ref } from "vue";
+import { defineProps, defineEmits, computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { dateInputMask } from "@util-input-masks";
-import { isRequired } from "@util-validators";
+import { dateInputMask as vDateInputMask } from "@util-input-masks";
+import { isRequired, isValidDateFormat } from "@util-validators";
 import dayjs from "dayjs";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 
-export default defineComponent({
-	name: "DatePicker",
+const props = defineProps({
+	date: { type: String, required: true },
+	label: { type: String, default: "" },
+	ariaLabel: { type: String, default: "" },
+	required: { type: Boolean },
+	minDate: { type: String },
+	maxDate: { type: String },
+});
 
-	props: {
-		date: { type: String, required: true },
-		label: { type: String, default: "" },
-		ariaLabel: { type: String, default: "" },
-		required: { type: Boolean },
-		minDate: { type: String },
-		maxDate: { type: String },
+const emit = defineEmits(["update:date", "error"]);
+
+const { t, locale } = useI18n();
+
+const modelValue = computed({
+	get(): Date {
+		return dayjs(props.date).toDate();
 	},
-	directives: {
-		dateInputMask,
-	},
-	emits: ["update:date", "error"],
-	setup(props, { emit }) {
-		const { t, locale } = useI18n();
-
-		const modelValue = computed({
-			get(): Date {
-				return dayjs(props.date).toDate();
-			},
-			set: (newValue: Date) => {
-				emitDateDebounced(dayjs(newValue).format(DATETIME_FORMAT.inputDate));
-			},
-		});
-
-		/**
-		 * Necessary because we need to wait for update:error
-		 */
-		const emitDateDebounced = useDebounceFn((newValue) => {
-			if (valid.value) {
-				const dateISO = getISODate(newValue);
-				emit("update:date", dateISO);
-			}
-		}, 50);
-
-		const showDateDialog = ref(false);
-		const inputField = ref<HTMLInputElement | null>(null);
-		const valid = ref(true);
-
-		const getISODate = (date: string) => {
-			if (!date.includes(".")) return date;
-
-			const [day, month, year] = date.split(".");
-			return `${year}-${month}-${day}`;
-		};
-
-		const focusDatePicker = () => {
-			setTimeout(() => {
-				const prevMonthBtn = document.querySelector<HTMLElement>(
-					".v-date-picker-header button"
-				);
-
-				prevMonthBtn?.focus();
-			}, 100);
-		};
-
-		const rules = computed(() => {
-			// const rules = [
-			// 	isValidDateFormat(t("components.datePicker.validation.format")),
-			// ];
-
-			const rules = [];
-
-			if (props.required) {
-				rules.push(isRequired(t("components.datePicker.validation.required")));
-			}
-
-			return rules;
-		});
-
-		const onInput = async (date: Date) => {
-			modelValue.value = date;
-			valid.value = true;
-			inputField.value?.focus();
-			await closeMenu();
-		};
-
-		const onError = (hasError: boolean) => {
-			valid.value = !hasError;
-			if (hasError) {
-				emit("error");
-			}
-		};
-
-		const closeMenu = useDebounceFn(() => {
-			showDateDialog.value = false;
-		}, 50);
-
-		return {
-			locale,
-			modelValue,
-			rules,
-			showDateDialog,
-			inputField,
-			focusDatePicker,
-			onInput,
-			onError,
-		};
+	set: (newValue: Date) => {
+		emitDateDebounced(dayjs(newValue).format(DATETIME_FORMAT.inputDate));
 	},
 });
+
+/**
+ * Necessary because we need to wait for update:error
+ */
+const emitDateDebounced = useDebounceFn((newValue) => {
+	if (valid.value) {
+		const dateISO = getISODate(newValue);
+		emit("update:date", dateISO);
+	}
+}, 50);
+
+const showDateDialog = ref(false);
+const inputField = ref<HTMLInputElement | null>(null);
+const valid = ref(true);
+
+const getISODate = (date: string) => {
+	if (!date.includes(".")) return date;
+
+	const [day, month, year] = date.split(".");
+	return `${year}-${month}-${day}`;
+};
+
+const focusDatePicker = () => {
+	setTimeout(() => {
+		const prevMonthBtn = document.querySelector<HTMLElement>(
+			".v-date-picker-header button"
+		);
+
+		prevMonthBtn?.focus();
+	}, 100);
+};
+
+const rules = computed(() => {
+	const rules = [
+		isValidDateFormat(t("components.datePicker.validation.format")),
+	];
+
+	if (props.required) {
+		rules.push(isRequired(t("components.datePicker.validation.required")));
+	}
+
+	return rules;
+});
+
+const onInput = async (date: Date) => {
+	modelValue.value = date;
+	valid.value = true;
+	inputField.value?.focus();
+	await closeMenu();
+};
+
+const onError = (hasError: boolean) => {
+	valid.value = !hasError;
+	if (hasError) {
+		emit("error");
+	}
+};
+
+const closeMenu = useDebounceFn(() => {
+	showDateDialog.value = false;
+}, 50);
 </script>
 
 <style lang="scss" scoped>
