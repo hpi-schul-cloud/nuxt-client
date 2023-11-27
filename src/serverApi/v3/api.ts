@@ -723,6 +723,25 @@ export interface ContextExternalToolConfigurationTemplateResponse {
 /**
  * 
  * @export
+ * @interface ContextExternalToolCountPerContextResponse
+ */
+export interface ContextExternalToolCountPerContextResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof ContextExternalToolCountPerContextResponse
+     */
+    course: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ContextExternalToolCountPerContextResponse
+     */
+    boardElement: number;
+}
+/**
+ * 
+ * @export
  * @interface ContextExternalToolPostParams
  */
 export interface ContextExternalToolPostParams {
@@ -1634,10 +1653,10 @@ export interface ExternalToolMetadataResponse {
     schoolExternalToolCount: number;
     /**
      * 
-     * @type {SchoolExternalToolMetadataResponseContextExternalToolCountPerContext}
+     * @type {ContextExternalToolCountPerContextResponse}
      * @memberof ExternalToolMetadataResponse
      */
-    contextExternalToolCountPerContext: SchoolExternalToolMetadataResponseContextExternalToolCountPerContext;
+    contextExternalToolCountPerContext: ContextExternalToolCountPerContextResponse;
 }
 /**
  * 
@@ -3924,29 +3943,10 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
 export interface SchoolExternalToolMetadataResponse {
     /**
      * 
-     * @type {SchoolExternalToolMetadataResponseContextExternalToolCountPerContext}
+     * @type {ContextExternalToolCountPerContextResponse}
      * @memberof SchoolExternalToolMetadataResponse
      */
-    contextExternalToolCountPerContext: SchoolExternalToolMetadataResponseContextExternalToolCountPerContext;
-}
-/**
- * 
- * @export
- * @interface SchoolExternalToolMetadataResponseContextExternalToolCountPerContext
- */
-export interface SchoolExternalToolMetadataResponseContextExternalToolCountPerContext {
-    /**
-     * 
-     * @type {number}
-     * @memberof SchoolExternalToolMetadataResponseContextExternalToolCountPerContext
-     */
-    course?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof SchoolExternalToolMetadataResponseContextExternalToolCountPerContext
-     */
-    boardElement?: number;
+    contextExternalToolCountPerContext: ContextExternalToolCountPerContextResponse;
 }
 /**
  * 
