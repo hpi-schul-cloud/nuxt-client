@@ -361,4 +361,8 @@ export default defineComponent({
 	border: none !important;
 	box-shadow: none !important;
 }
+
+.ck.ck-toolbar {
+	border: none;
+}
 </style>
