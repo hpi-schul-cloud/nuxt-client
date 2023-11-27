@@ -127,7 +127,6 @@ describe("GeneralSettings", () => {
 		});
 
 		schoolsModule.setSchool(school);
-		schoolsModule.setSystems(syncedSystem);
 
 		envConfigModule.setEnvs({
 			I18N__AVAILABLE_LANGUAGES: "de,en,es",
@@ -173,6 +172,7 @@ describe("GeneralSettings", () => {
 		});
 
 		it("should not be possible to edit the school name if the school is synced", async () => {
+			schoolsModule.setSystems(syncedSystem);
 			const wrapper = mount(GeneralSettings, {
 				...createComponentMocks({
 					i18n: true,
@@ -180,13 +180,13 @@ describe("GeneralSettings", () => {
 					vuetify: true,
 				}),
 			});
-			await wrapper.setData(mockData);
 
 			const ele = wrapper.find(searchStrings.schoolName);
 			expect(ele.vm.disabled).toBeTruthy();
 		});
 
 		it("should be possible to edit the school name if the school is not synced", async () => {
+			schoolsModule.setSystems(unsyncedSystem);
 			const wrapper = mount(GeneralSettings, {
 				...createComponentMocks({
 					i18n: true,
@@ -194,20 +194,13 @@ describe("GeneralSettings", () => {
 					vuetify: true,
 				}),
 			});
-			const localMockData = {
-				localSchool: {
-					...mockData.localSchool,
-					systems: [{ $oid: unsyncedSystem[0]._id }],
-				},
-			};
-			schoolsModule.setSystems(unsyncedSystem);
-			await wrapper.setData(localMockData);
 
 			const ele = wrapper.find(searchStrings.schoolName);
 			expect(ele.vm.disabled).toBeFalsy();
 		});
 
 		it("should be possible to edit the school name if the school is not attached to a system", async () => {
+			schoolsModule.setSystems([]);
 			const wrapper = mount(GeneralSettings, {
 				...createComponentMocks({
 					i18n: true,
@@ -215,8 +208,6 @@ describe("GeneralSettings", () => {
 					vuetify: true,
 				}),
 			});
-			schoolsModule.setSystems([]);
-			await wrapper.setData(mockData);
 
 			const ele = wrapper.find(searchStrings.schoolName);
 			expect(ele.vm.disabled).toBeFalsy();
