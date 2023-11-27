@@ -122,7 +122,6 @@ export default class SchoolsModule extends VuexModule {
 			schoolYears: [],
 		},
 	};
-	systems: System[] = [];
 	loading = false;
 	error: null | ApplicationError = null;
 
@@ -137,7 +136,7 @@ export default class SchoolsModule extends VuexModule {
 
 	@Mutation
 	setSystems(systems: System[]): void {
-		this.systems = systems;
+		this.school.systems = systems;
 	}
 
 	@Mutation
@@ -162,8 +161,8 @@ export default class SchoolsModule extends VuexModule {
 		return this.school.federalState;
 	}
 
-	get getSystems(): System[] {
-		return this.systems;
+	get getSystems(): System[] | undefined {
+		return this.school.systems;
 	}
 
 	get getLoading(): boolean {
@@ -179,15 +178,21 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get schoolIsSynced(): boolean {
-		return this.systems.some(
-			(system) =>
-				system.type === "tsp-school" ||
-				system.type === "oauth" ||
-				(system.type === "ldap" &&
-					(system.ldapConfig.provider === "iserv-idm" ||
-						system.ldapConfig.provider === "univention" ||
-						system.ldapConfig.provider === "general"))
-		);
+		let isSynced = false;
+
+		if (this.school.systems) {
+			isSynced = this.school.systems.some(
+				(system) =>
+					system.type === "tsp-school" ||
+					system.type === "oauth" ||
+					(system.type === "ldap" &&
+						(system.ldapConfig.provider === "iserv-idm" ||
+							system.ldapConfig.provider === "univention" ||
+							system.ldapConfig.provider === "general"))
+			);
+		}
+
+		return isSynced;
 	}
 
 	@Action
@@ -254,11 +259,6 @@ export default class SchoolsModule extends VuexModule {
 				await $axios.delete(`v1/systems/${systemId}`);
 			}
 
-			const updatedSystemsList = this.systems.filter(
-				(system) => system.id !== systemId
-			);
-
-			this.setSystems(updatedSystemsList);
 			await this.fetchSchool();
 			this.setLoading(false);
 		} catch (error: unknown) {

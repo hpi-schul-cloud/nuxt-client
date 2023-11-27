@@ -258,21 +258,10 @@ describe("schools module", () => {
 							type: "ldap",
 						},
 					];
-					const expectedSystems = [
-						{
-							id: "id_2",
-							type: "moodle",
-						},
-						{
-							id: "id_3",
-							type: "ldap",
-						},
-					];
 					schoolsModule.setSystems(systems);
 
 					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
-					const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
 					await schoolsModule.deleteSystem(systemId);
 					expect(systemsApi.systemControllerDeleteSystem).toHaveBeenCalledWith(
@@ -281,10 +270,6 @@ describe("schools module", () => {
 					expect(setLoadingSpy).toHaveBeenCalled();
 					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 					expect(fetchSchoolSpy).toHaveBeenCalled();
-					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
-						expect.any(Array)
-					);
-					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
 				});
 
 				it("should trigger error and goes into the catch block", async () => {
@@ -335,21 +320,10 @@ describe("schools module", () => {
 							type: "ldap",
 						},
 					];
-					const expectedSystems = [
-						{
-							id: "id_2",
-							type: "moodle",
-						},
-						{
-							id: "id_3",
-							type: "ldap",
-						},
-					];
 					schoolsModule.setSystems(systems);
 
 					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
-					const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
 					await schoolsModule.deleteSystem(systemId);
 					expect(receivedRequests.length).toBeGreaterThan(0);
@@ -357,10 +331,6 @@ describe("schools module", () => {
 					expect(setLoadingSpy).toHaveBeenCalled();
 					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 					expect(fetchSchoolSpy).toHaveBeenCalled();
-					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
-						expect.any(Array)
-					);
-					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
 				});
 
 				it("should trigger error and goes into the catch block", async () => {
