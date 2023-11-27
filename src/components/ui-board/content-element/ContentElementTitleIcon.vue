@@ -1,8 +1,12 @@
 <template>
 	<div>
-		<v-icon color="black" size="18" data-testid="content-element-title-icon">{{
-			icon
-		}}</v-icon>
+		<v-icon
+			class="content-element-title-icon"
+			color="black"
+			size="18"
+			data-testid="content-element-title-icon"
+			>{{ icon }}</v-icon
+		>
 	</div>
 </template>
 
@@ -17,3 +21,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style type="text/scss">
+.content-element-title-icon {
+	line-height: 24px;
+}
+</style>

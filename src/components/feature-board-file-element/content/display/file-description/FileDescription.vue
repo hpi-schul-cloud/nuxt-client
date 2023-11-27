@@ -6,10 +6,10 @@
 			:icon="mdiFileDocumentOutline"
 		>
 			<template #title>
-				<ContentElementTitle class="title-link">
+				<div class="title-link">
 					<a v-if="src" :href="src" target="_blank">{{ name }}</a>
 					<span v-else>{{ name }}</span>
-				</ContentElementTitle>
+				</div>
 			</template>
 			<template v-if="showMenu" #menu>
 				<slot />
@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import { mdiFileDocumentOutline } from "@mdi/js";
-import { ContentElementBar, ContentElementTitle } from "@ui-board";
+import { ContentElementBar } from "@ui-board";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -45,7 +45,7 @@ export default defineComponent({
 			mdiFileDocumentOutline,
 		};
 	},
-	components: { ContentElementBar, ContentElementTitle },
+	components: { ContentElementBar },
 });
 </script>
 <style scope>

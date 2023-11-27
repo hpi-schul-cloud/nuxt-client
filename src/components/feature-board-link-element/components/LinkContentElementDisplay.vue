@@ -9,21 +9,21 @@
 		tabindex="0"
 		:loading="isLoading ? 'primary' : false"
 	>
-		<div class="menu" v-if="isEditMode">
-			<slot />
-		</div>
-
 		<a :href="sanitizedUrl" target="_blank">
 			<v-img v-if="imageUrl" :src="imageUrl" alt="" />
+			<div v-if="isEditMode && imageUrl" class="menu">
+				<slot />
+			</div>
 
 			<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
 				<template #title>
-					<ContentElementTitle>
-						{{ title }}
-					</ContentElementTitle>
+					{{ title }}
 				</template>
 				<template #subtitle>
 					{{ hostname }}
+				</template>
+				<template #menu v-if="isEditMode && !imageUrl">
+					<slot />
 				</template>
 			</ContentElementBar>
 		</a>
@@ -34,11 +34,11 @@
 import { ComputedRef, computed, defineComponent, ref } from "vue";
 import { mdiLink } from "@mdi/js";
 import { sanitizeUrl } from "@braintree/sanitize-url";
-import { ContentElementBar, ContentElementTitle } from "@ui-board";
+import { ContentElementBar } from "@ui-board";
 
 export default defineComponent({
 	name: "LinkContentElementDisplay",
-	components: { ContentElementBar, ContentElementTitle },
+	components: { ContentElementBar },
 	props: {
 		url: {
 			type: String,
@@ -87,8 +87,8 @@ a {
 }
 .menu {
 	position: absolute;
-	right: 4px;
-	top: 4px;
+	right: 10px;
+	top: 10px;
 	z-index: 100;
 }
 </style>

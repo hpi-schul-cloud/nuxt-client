@@ -10,6 +10,7 @@
 				ref="cardHost"
 				:height="isLoading ? height : 'auto'"
 				:class="{ 'drag-disabled': isEditMode }"
+				class="pl-4 pt-4 pr-4 pb-2"
 				outlined
 				tabindex="0"
 				min-height="120px"

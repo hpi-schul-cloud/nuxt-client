@@ -1,12 +1,9 @@
 <template>
-	<v-card
+	<div
 		class="mb-4"
 		data-testid="board-link-element"
-		dense
-		elevation="0"
-		:outlined="outlined"
 		ref="linkContentElement"
-		:ripple="false"
+		:outlined="outlined"
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 	>
@@ -30,7 +27,7 @@
 				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementCreate>
-	</v-card>
+	</div>
 </template>
 
 <script lang="ts">
