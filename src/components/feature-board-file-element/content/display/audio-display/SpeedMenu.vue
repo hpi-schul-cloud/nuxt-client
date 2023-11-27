@@ -3,6 +3,7 @@
 		<v-menu offset-y max-height="120px" nudge-left="50px">
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn
+					data-testid="speed-menu-play-speed"
 					v-bind="attrs"
 					v-on="on"
 					icon
