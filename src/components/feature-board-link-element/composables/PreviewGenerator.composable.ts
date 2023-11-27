@@ -19,7 +19,9 @@ export const usePreviewGenerator = (elementId: string) => {
 			fileRecord.value?.previewStatus &&
 			isPreviewPossible(fileRecord.value?.previewStatus)
 		) {
+			console.log("fileRecord.value", fileRecord.value); // WIP: remove
 			const imageUrl = convertDownloadToPreviewUrl(fileRecord.value.url);
+			console.log("imageUrl2", imageUrl); // WIP: remove
 			return imageUrl;
 		}
 	};

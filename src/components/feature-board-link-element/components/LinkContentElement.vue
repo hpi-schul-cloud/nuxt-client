@@ -101,6 +101,7 @@ export default defineComponent({
 				const { title, description, imageUrl } = await getMetaTags(validUrl);
 				modelValue.value.title = title;
 				modelValue.value.description = description;
+				console.log("imageUrl", imageUrl); // WIP: remove
 
 				if (imageUrl) {
 					modelValue.value.imageUrl = await createPreviewImage(imageUrl);
