@@ -1,5 +1,6 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { authModule } from "@/store";
+import { SystemsApiInterface } from "@/serverApi/v3/api";
+import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
@@ -8,7 +9,9 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
+import EnvConfigModule from "./env-config";
 import SchoolsModule from "./schools";
+import { Envs } from "./types/env-config";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
@@ -29,11 +32,14 @@ axiosInitializer();
 
 describe("schools module", () => {
 	let schoolApi: DeepMocked<serverApi.SchoolApiInterface>;
+	let systemsApi: DeepMocked<SystemsApiInterface>;
 
 	beforeEach(() => {
 		schoolApi = createMock<serverApi.SchoolApiInterface>();
+		systemsApi = createMock<SystemsApiInterface>();
 
 		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
+		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);
 	});
 
 	afterEach(() => {
@@ -52,7 +58,7 @@ describe("schools module", () => {
 					return getRequestReturn;
 				},
 			} as AxiosInstance);
-			setupStores({ authModule: AuthModule });
+			setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 		});
 
 		describe("fetchSchool", () => {
@@ -234,72 +240,155 @@ describe("schools module", () => {
 				receivedRequests = [];
 			});
 
-			it("should call backend and sets state correctly", async () => {
-				const systemId = "id_1";
-				initializeAxios({
-					delete: async (path: string) => {
-						receivedRequests.push({ path });
-						return { data: "some data" };
-					},
-				} as AxiosInstance);
-				const schoolsModule = new SchoolsModule({});
-				const systems = [
-					{ id: "id_1", type: "itslearning" },
-					{
-						id: "id_2",
-						type: "moodle",
-					},
-					{
-						id: "id_3",
-						type: "ldap",
-					},
-				];
-				const expectedSystems = [
-					{
-						id: "id_2",
-						type: "moodle",
-					},
-					{
-						id: "id_3",
-						type: "ldap",
-					},
-				];
-				schoolsModule.setSystems(systems);
+			describe("when using the nest api", () => {
+				it("should call backend and sets state correctly", async () => {
+					envConfigModule.setEnvs({
+						FEATURE_NEST_SYSTEMS_API_ENABLED: true,
+					} as Envs);
+					const systemId = "id_1";
+					const schoolsModule = new SchoolsModule({});
+					const systems = [
+						{ id: "id_1", type: "itslearning" },
+						{
+							id: "id_2",
+							type: "moodle",
+						},
+						{
+							id: "id_3",
+							type: "ldap",
+						},
+					];
+					const expectedSystems = [
+						{
+							id: "id_2",
+							type: "moodle",
+						},
+						{
+							id: "id_3",
+							type: "ldap",
+						},
+					];
+					schoolsModule.setSystems(systems);
 
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
-				const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
+					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
+					const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
-				await schoolsModule.deleteSystem(systemId);
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual("v1/systems/id_1");
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(fetchSchoolSpy).toHaveBeenCalled();
-				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expect.any(Array));
-				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
+					await schoolsModule.deleteSystem(systemId);
+					expect(systemsApi.systemControllerDeleteSystem).toHaveBeenCalledWith(
+						systemId
+					);
+					expect(setLoadingSpy).toHaveBeenCalled();
+					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+					expect(fetchSchoolSpy).toHaveBeenCalled();
+					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
+						expect.any(Array)
+					);
+					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
+				});
+
+				it("should trigger error and goes into the catch block", async () => {
+					envConfigModule.setEnvs({
+						FEATURE_NEST_SYSTEMS_API_ENABLED: true,
+					} as Envs);
+					const systemId = "id_1";
+					systemsApi.systemControllerDeleteSystem.mockRejectedValueOnce(
+						new AxiosError()
+					);
+					const schoolsModule = new SchoolsModule({});
+
+					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+					const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+
+					await schoolsModule.deleteSystem(systemId);
+
+					expect(setErrorSpy).toHaveBeenCalled();
+					expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(
+						expect.any(Object)
+					);
+					expect(setLoadingSpy).toHaveBeenCalled();
+					expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+				});
 			});
 
-			it("should trigger error and goes into the catch block", async () => {
-				const systemId = "id_1";
-				initializeAxios({
-					delete: async (path: string) => {
-						throw new AxiosError(path);
-						return "";
-					},
-				} as AxiosInstance);
-				const schoolsModule = new SchoolsModule({});
+			describe("when using the feathers api", () => {
+				it("should call backend and sets state correctly", async () => {
+					envConfigModule.setEnvs({
+						FEATURE_NEST_SYSTEMS_API_ENABLED: false,
+					} as Envs);
+					const systemId = "id_1";
+					initializeAxios({
+						delete: async (path: string) => {
+							receivedRequests.push({ path });
+							return { data: "some data" };
+						},
+					} as AxiosInstance);
+					const schoolsModule = new SchoolsModule({});
+					const systems = [
+						{ id: "id_1", type: "itslearning" },
+						{
+							id: "id_2",
+							type: "moodle",
+						},
+						{
+							id: "id_3",
+							type: "ldap",
+						},
+					];
+					const expectedSystems = [
+						{
+							id: "id_2",
+							type: "moodle",
+						},
+						{
+							id: "id_3",
+							type: "ldap",
+						},
+					];
+					schoolsModule.setSystems(systems);
 
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
+					const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
-				await schoolsModule.deleteSystem(systemId);
+					await schoolsModule.deleteSystem(systemId);
+					expect(receivedRequests.length).toBeGreaterThan(0);
+					expect(receivedRequests[0].path).toStrictEqual("v1/systems/id_1");
+					expect(setLoadingSpy).toHaveBeenCalled();
+					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+					expect(fetchSchoolSpy).toHaveBeenCalled();
+					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
+						expect.any(Array)
+					);
+					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
+				});
 
-				expect(receivedRequests).toHaveLength(0);
-				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+				it("should trigger error and goes into the catch block", async () => {
+					envConfigModule.setEnvs({
+						FEATURE_NEST_SYSTEMS_API_ENABLED: false,
+					} as Envs);
+					const systemId = "id_1";
+					initializeAxios({
+						delete: async (path: string) => {
+							throw new AxiosError(path);
+							return "";
+						},
+					} as AxiosInstance);
+					const schoolsModule = new SchoolsModule({});
+
+					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+					const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+
+					await schoolsModule.deleteSystem(systemId);
+
+					expect(receivedRequests).toHaveLength(0);
+					expect(setErrorSpy).toHaveBeenCalled();
+					expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(
+						expect.any(Object)
+					);
+					expect(setLoadingSpy).toHaveBeenCalled();
+					expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+				});
 			});
 		});
 
