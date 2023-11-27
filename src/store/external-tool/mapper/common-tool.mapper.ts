@@ -49,15 +49,6 @@ export const ToolParamScopeMapping: Record<
 	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
 };
 
-export const ToolConfigurationStatusMapping: Record<
-	ToolConfigurationStatusResponse,
-	ToolConfigurationStatus
-> = {
-	[ToolConfigurationStatusResponse.Latest]: ToolConfigurationStatus.Latest,
-	[ToolConfigurationStatusResponse.Outdated]: ToolConfigurationStatus.Outdated,
-	[ToolConfigurationStatusResponse.Unknown]: ToolConfigurationStatus.Unknown,
-};
-
 export const ToolLaunchRequestMethodMapping: Record<
 	ToolLaunchRequestResponseMethodEnum,
 	ToolLaunchRequestMethodEnum
@@ -84,6 +75,18 @@ export class CommonToolMapper {
 		const mapped: ToolParameterEntry = {
 			name: response.name,
 			value: response.value,
+		};
+
+		return mapped;
+	}
+
+	static mapToolConfigurationStatus(
+		status: ToolConfigurationStatusResponse
+	): ToolConfigurationStatus {
+		const mapped: ToolConfigurationStatus = {
+			isDisabled: status.isDisabled,
+			isOutdatedOnScopeSchool: status.isOutdatedOnScopeSchool,
+			isOutdatedOnScopeContext: status.isOutdatedOnScopeContext,
 		};
 
 		return mapped;
