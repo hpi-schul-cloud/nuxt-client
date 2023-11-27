@@ -2,7 +2,7 @@
 	<ContentElementBar class="audioplayer">
 		<template #element>
 			<audio ref="audio" loading="lazy" v-on:error="onError" />
-			<v-btn icon @click="onPlay" color="white" small class="pa-0 ma-0">
+			<v-btn icon @click="onPlay" color="white" small>
 				<v-icon
 					v-if="!playing"
 					role="img"
@@ -174,8 +174,6 @@ export default defineComponent({
 <style scoped>
 .audioplayer {
 	background-color: #424242;
-	border-top-right-radius: 0.25rem;
-	border-top-left-radius: 0.25rem;
 }
 .duration {
 	white-space: nowrap;
