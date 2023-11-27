@@ -187,7 +187,7 @@ import AdminMigrationSection from "@/components/administration/AdminMigrationSec
 import ExternalToolsSection from "@/components/administration/ExternalToolSection.vue";
 import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
 import { useI18n } from "@/composables/i18n.composable";
-import { School } from "@/store/types/schools";
+import { School, System } from "@/store/types/schools";
 import { useTitle } from "@vueuse/core";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { ApplicationError } from "@/store/types/application-error";
@@ -197,7 +197,7 @@ import {
 	ENV_CONFIG_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
+import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
 import { useRoute } from "vue-router/composables";
 
 export default defineComponent({
@@ -257,7 +257,7 @@ export default defineComponent({
 
 			return openedPanelsArr;
 		});
-		const systems: ComputedRef<any[]> = computed(
+		const systems: ComputedRef<System[]> = computed(
 			() => schoolsModule.getSystems
 		);
 		const isLoading: ComputedRef<boolean> = computed(
