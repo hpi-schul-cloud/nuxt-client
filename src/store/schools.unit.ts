@@ -600,36 +600,6 @@ describe("schools module", () => {
 			});
 		});
 
-		describe("setFederalState", () => {
-			it("should set federalState data", () => {
-				const schoolsModule = new SchoolsModule({});
-				const mockFederalState = {
-					counties: [],
-					logoUrl: "",
-					id: "mockId",
-					name: "mockname",
-					abbreviation: "MO",
-				};
-				const expectedFileStorageState = {
-					_id: "0000b186816abba584714c56",
-					name: "Hessen",
-					abbreviation: "HE",
-				};
-				expect(schoolsModule.getFederalState).not.toStrictEqual({
-					...mockFederalState,
-					...expectedFileStorageState,
-				});
-				schoolsModule.setFederalState({
-					...mockFederalState,
-					...expectedFileStorageState,
-				});
-				expect(schoolsModule.getFederalState).toStrictEqual({
-					...mockFederalState,
-					...expectedFileStorageState,
-				});
-			});
-		});
-
 		describe("setSystems", () => {
 			it("should set systems data", () => {
 				const schoolsModule = new SchoolsModule({});
@@ -677,17 +647,8 @@ describe("schools module", () => {
 		describe("getFederalState", () => {
 			it("shoud return federalState state", () => {
 				const schoolsModule = new SchoolsModule({});
-				const mockFederalState = {
-					counties: [],
-					logoUrl: "",
-					id: "mockId",
-					name: "mockname",
-					abbreviation: "MO",
-				};
-				expect(schoolsModule.getFederalState).not.toStrictEqual(
-					mockFederalState
-				);
-				schoolsModule.setFederalState(mockFederalState);
+				const mockFederalState = mockSchool.federalState;
+
 				expect(schoolsModule.getFederalState).toStrictEqual(mockFederalState);
 			});
 		});

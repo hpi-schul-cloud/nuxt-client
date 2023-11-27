@@ -6,46 +6,43 @@ import EnvConfigModule from "@/store/env-config";
 import AuthModule from "@/store/auth";
 
 const school = {
-	_id: { $oid: "5f2987e020834114b8efd6f8" },
+	id: "5f2987e020834114b8efd6f8",
 	name: "Paul-Gerhardt-Gymnasium",
-	federalState: { $oid: "0000b186816abba584714c53" },
+	federalState: {
+		id: "0000b186816abba584714c53",
+		counties: [
+			{
+				id: "5fa55eb53f472a2d986c8812",
+				antaresKey: "BRB",
+				countyId: 12051,
+				name: "Brandenburg an der Havel",
+			},
+			{
+				id: "5fa55eb53f472a2d986c8813",
+				antaresKey: "CB",
+				countyId: 12052,
+				name: "Cottbus",
+			},
+		],
+		name: "Brandenburg",
+		abbreviation: "BB",
+	},
 	county: {
+		id: "5fa55eb53f472a2d986c8812",
 		antaresKey: "BRB",
-		_id: { $oid: "5fa55eb53f472a2d986c8812" },
 		countyId: 12051,
 		name: "Brandenburg an der Havel",
 	},
-	systems: [{ $oid: "0000d186816abba584714c90" }],
 	updatedAt: { $date: "2020-07-27T08:21:14.719Z" },
 	createdAt: { $date: "2017-01-01T00:06:37.148Z" },
 	currentYear: {
-		_id: { $oid: "5ebd6dc14a431f75ec9a3e77" },
+		id: "5ebd6dc14a431f75ec9a3e77",
 		name: "2021/22",
 		startDate: "2021-08-01T00:00:00.000Z",
 		endDate: "2022-07-31T00:00:00.000Z",
 	},
 	purpose: "demo",
 	officialSchoolNumber: "123",
-};
-
-const federalState = {
-	_id: "0000b186816abba584714c53",
-	counties: [
-		{
-			antaresKey: "BRB",
-			_id: "5fa55eb53f472a2d986c8812",
-			countyId: 12051,
-			name: "Brandenburg an der Havel",
-		},
-		{
-			antaresKey: "CB",
-			_id: "5fa55eb53f472a2d986c8813",
-			countyId: 12052,
-			name: "Cottbus",
-		},
-	],
-	name: "Brandenburg",
-	abbreviation: "BB",
 };
 
 const syncedSystem = [
@@ -111,8 +108,8 @@ const mockData = {
 			},
 		},
 		county: {
+			id: "5fa55eb53f472a2d986c8813",
 			antaresKey: "CB",
-			_id: "5fa55eb53f472a2d986c8813",
 			countyId: 12052,
 			name: "Cottbus",
 		},
@@ -130,7 +127,6 @@ describe("GeneralSettings", () => {
 		});
 
 		schoolsModule.setSchool(school);
-		schoolsModule.setFederalState(federalState);
 		schoolsModule.setSystems(syncedSystem);
 
 		envConfigModule.setEnvs({

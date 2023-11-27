@@ -122,13 +122,6 @@ export default class SchoolsModule extends VuexModule {
 			schoolYears: [],
 		},
 	};
-	federalState: FederalState = {
-		id: "",
-		counties: [],
-		name: "",
-		abbreviation: "",
-		logoUrl: "",
-	};
 	systems: System[] = [];
 	loading = false;
 	error: null | ApplicationError = null;
@@ -140,11 +133,6 @@ export default class SchoolsModule extends VuexModule {
 	@Mutation
 	setSchool(updatedSchool: School): void {
 		this.school = updatedSchool;
-	}
-
-	@Mutation
-	setFederalState(federalState: FederalState): void {
-		this.federalState = federalState;
 	}
 
 	@Mutation
@@ -171,7 +159,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get getFederalState(): FederalState {
-		return this.federalState;
+		return this.school.federalState;
 	}
 
 	get getSystems(): System[] {
