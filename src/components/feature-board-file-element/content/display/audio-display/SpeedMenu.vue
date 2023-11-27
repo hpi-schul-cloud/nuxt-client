@@ -9,7 +9,6 @@
 					icon
 					small
 					color="white"
-					class="pr-1 pl-1"
 					aria-label="Speed menu"
 					role="img"
 				>
@@ -19,7 +18,7 @@
 				</v-btn>
 			</template>
 
-			<v-list>
+			<v-list dense flat>
 				<v-list-item-group v-model="selectedItem">
 					<v-list-item
 						v-for="(item, i) in items"
@@ -76,9 +75,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
-.v-list-item {
-	min-height: 30px;
-	padding: 0px;
-}
-</style>
