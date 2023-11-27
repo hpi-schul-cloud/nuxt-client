@@ -1,5 +1,7 @@
-export enum ToolConfigurationStatus {
-	Latest = "Latest",
-	Outdated = "Outdated",
-	Unknown = "Unknown",
+export interface ToolConfigurationStatus {
+	isDisabled: boolean;
+
+	isOutdatedOnScopeSchool: boolean;
+
+	isOutdatedOnScopeContext: boolean;
 }
