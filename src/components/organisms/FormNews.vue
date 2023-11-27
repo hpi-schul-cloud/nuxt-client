@@ -22,7 +22,7 @@
 							$t('components.organisms.FormNews.editor.placeholder').toString()
 						"
 						type="classic"
-						mode="simple"
+						mode="news"
 						@update:value="onUpdateValue"
 					/>
 					<transition name="fade">

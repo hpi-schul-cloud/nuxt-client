@@ -46,7 +46,7 @@ export default defineComponent({
 		},
 		mode: {
 			type: String,
-			validator: (value) => ["simple", "regular"].includes(value),
+			validator: (value) => ["simple", "regular", "news"].includes(value),
 			default: "regular",
 		},
 		disabled: {
@@ -70,49 +70,69 @@ export default defineComponent({
 		const language = i18n.locale;
 		const charCount = ref(0);
 
+		const boardToolbarSimple = [
+			"heading",
+			"|",
+			"bold",
+			"italic",
+			"highlight",
+			"|",
+			"link",
+			"bulletedList",
+			"numberedList",
+			"removeFormat",
+		];
+
+		const boardToolbarRegular = [
+			"undo",
+			"redo",
+			"|",
+			"heading",
+			"|",
+			"bold",
+			"italic",
+			"underline",
+			"strikethrough",
+			"highlight",
+			"fontBackgroundColor",
+			"code",
+			"superscript",
+			"subscript",
+			"|",
+			"link",
+			"bulletedList",
+			"numberedList",
+			"math",
+			"horizontalLine",
+			"|",
+			"blockQuote",
+			"insertTable",
+			"specialCharacters",
+			"removeFormat",
+		];
+
+		const boardToolbarNews = [
+			"undo",
+			"redo",
+			"|",
+			"heading",
+			"|",
+			"bold",
+			"italic",
+			"insertImage",
+			"bulletedList",
+			"numberedList",
+			"|",
+			"removeFormat",
+		];
+
 		const toolbarItems = {
-			simple: [
-				"heading",
-				"|",
-				"bold",
-				"italic",
-				"highlight",
-				"|",
-				"link",
-				"bulletedList",
-				"numberedList",
-				"removeFormat",
-			],
-			regular: [
-				"undo",
-				"redo",
-				"|",
-				"heading",
-				"|",
-				"bold",
-				"italic",
-				"underline",
-				"strikethrough",
-				"highlight",
-				"fontBackgroundColor",
-				"code",
-				"superscript",
-				"subscript",
-				"|",
-				"link",
-				"bulletedList",
-				"numberedList",
-				"math",
-				"horizontalLine",
-				"|",
-				"blockQuote",
-				"insertTable",
-				"specialCharacters",
-				"removeFormat",
-			],
+			simple: boardToolbarSimple,
+			regular: boardToolbarRegular,
+			news: boardToolbarNews,
 		};
 
-		const plugins = [
+		const boardPlugins = [
 			"Autoformat",
 			"Essentials",
 			"BlockQuote",
@@ -136,13 +156,33 @@ export default defineComponent({
 			"WordCount",
 		];
 
+		const newsPlugins = [
+			"Autoformat",
+			"Essentials",
+			"Bold",
+			"Heading",
+			"Italic",
+			"List",
+			"Paragraph",
+			"RemoveFormat",
+			"Strikethrough",
+			"Image",
+			"ImageInsertViaUrl",
+		];
+
+		const plugins = {
+			simple: boardPlugins,
+			regular: boardPlugins,
+			news: newsPlugins,
+		};
+
 		const config = computed(() => {
 			return {
 				toolbar: {
 					items: toolbarItems[props.mode],
 					shouldNotGroupWhenFull: showFullToolbar.value,
 				},
-				plugins: plugins,
+				plugins: plugins[props.mode],
 				heading: {
 					options: [
 						{
