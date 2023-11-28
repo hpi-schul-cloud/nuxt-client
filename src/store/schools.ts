@@ -20,12 +20,16 @@ import { FederalState, School, System, Year } from "./types/schools";
  * The Api expects and returns a List of Feature-names. In the Frontend it is mapped to an object indexed by the feature-names.
  * This Type represents this change to the School entity.
  */
-declare type SchoolPayload = { features: string[] } & Omit<School, "features">;
+declare type SchoolPayload = {
+	features: string[];
+	enableStudentTeamCreation: boolean;
+} & Omit<School, "features">;
 
 const SCHOOL_FEATURES = Object.values(SchoolFeature);
 
 function transformSchoolServerToClient(school: SchoolResponse): School {
 	const featureObject: Partial<School["features"]> = {};
+
 	SCHOOL_FEATURES.forEach((schoolFeature) => {
 		if (school.features?.includes(schoolFeature)) {
 			featureObject[schoolFeature] = true;
@@ -33,17 +37,25 @@ function transformSchoolServerToClient(school: SchoolResponse): School {
 			featureObject[schoolFeature] = false;
 		}
 	});
+
 	return { ...school, features: featureObject as Required<School["features"]> };
 }
 
 function transformSchoolClientToServer(school: School): SchoolPayload {
-	const featureArray: string[] = [];
+	const features: string[] = [];
+	let enableStudentTeamCreation = false;
+
 	SCHOOL_FEATURES.forEach((schoolFeature) => {
-		if (school.features[schoolFeature]) {
-			featureArray.push(schoolFeature);
+		// This extra check for isTeamCreationByStudentsEnabled is needed for compatibility with api/v1.
+		// It can be removed when PATCH school is migrated to api/v3.
+		if (schoolFeature === "isTeamCreationByStudentsEnabled") {
+			enableStudentTeamCreation = true;
+		} else if (school.features[schoolFeature]) {
+			features.push(schoolFeature);
 		}
 	});
-	return { ...school, features: featureArray };
+
+	return { ...school, enableStudentTeamCreation, features };
 }
 
 @Module({
