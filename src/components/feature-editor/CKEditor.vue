@@ -13,6 +13,13 @@
 </template>
 
 <script>
+import {
+	boardToolbarSimple,
+	boardToolbarRegular,
+	newsToolbar,
+	boardPlugins,
+	newsPlugins,
+} from "./config";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaQuery, useVModel } from "@vueuse/core";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
@@ -70,105 +77,11 @@ export default defineComponent({
 		const language = i18n.locale;
 		const charCount = ref(0);
 
-		const boardToolbarSimple = [
-			"heading",
-			"|",
-			"bold",
-			"italic",
-			"highlight",
-			"|",
-			"link",
-			"bulletedList",
-			"numberedList",
-			"removeFormat",
-		];
-
-		const boardToolbarRegular = [
-			"undo",
-			"redo",
-			"|",
-			"heading",
-			"|",
-			"bold",
-			"italic",
-			"underline",
-			"strikethrough",
-			"highlight",
-			"fontBackgroundColor",
-			"code",
-			"superscript",
-			"subscript",
-			"|",
-			"link",
-			"bulletedList",
-			"numberedList",
-			"math",
-			"horizontalLine",
-			"|",
-			"blockQuote",
-			"insertTable",
-			"specialCharacters",
-			"removeFormat",
-		];
-
-		const boardToolbarNews = [
-			"undo",
-			"redo",
-			"|",
-			"heading",
-			"|",
-			"bold",
-			"italic",
-			"insertImage",
-			"bulletedList",
-			"numberedList",
-			"|",
-			"removeFormat",
-		];
-
 		const toolbarItems = {
 			simple: boardToolbarSimple,
 			regular: boardToolbarRegular,
-			news: boardToolbarNews,
+			news: newsToolbar,
 		};
-
-		const boardPlugins = [
-			"Autoformat",
-			"Essentials",
-			"BlockQuote",
-			"Bold",
-			"Code",
-			"Heading",
-			"Highlight",
-			"HorizontalLine",
-			"Italic",
-			"Link",
-			"List",
-			"Math",
-			"Paragraph",
-			"RemoveFormat",
-			"SpecialCharacters",
-			"Strikethrough",
-			"Subscript",
-			"Superscript",
-			"Table",
-			"TableToolbar",
-			"WordCount",
-		];
-
-		const newsPlugins = [
-			"Autoformat",
-			"Essentials",
-			"Bold",
-			"Heading",
-			"Italic",
-			"List",
-			"Paragraph",
-			"RemoveFormat",
-			"Strikethrough",
-			"Image",
-			"ImageInsertViaUrl",
-		];
 
 		const plugins = {
 			simple: boardPlugins,
