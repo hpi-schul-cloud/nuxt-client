@@ -5714,12 +5714,6 @@ export interface YearsResponse {
      * @memberof YearsResponse
      */
     activeYear: SchoolYearResponse;
-/**
-     * 
-     * @type {SchoolYearResponse}
-     * @memberof YearsResponse
-     */
-    defaultYear: SchoolYearResponse;
     /**
      * 
      * @type {SchoolYearResponse}

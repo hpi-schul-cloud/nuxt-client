@@ -8,7 +8,6 @@ export const yearsResponseFactory = Factory.define<YearsResponse>(() => {
 	const years = {
 		schoolYears,
 		activeYear: schoolYears[1],
-		defaultYear: schoolYears[1],
 		lastYear: schoolYears[0],
 		nextYear: schoolYears[2],
 	};

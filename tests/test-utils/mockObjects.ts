@@ -110,12 +110,6 @@ export const mockSchool: School = {
 			startDate: "",
 			endDate: "",
 		},
-		defaultYear: {
-			id: "",
-			name: "",
-			startDate: "",
-			endDate: "",
-		},
 		schoolYears: [
 			{
 				id: "",

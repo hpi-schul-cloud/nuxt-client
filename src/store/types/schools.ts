@@ -64,7 +64,6 @@ export type School = {
 	years: {
 		schoolYears: Year[];
 		activeYear: Year;
-		defaultYear: Year;
 		nextYear: Year;
 		lastYear: Year;
 	};

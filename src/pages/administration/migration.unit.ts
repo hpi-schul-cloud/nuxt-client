@@ -104,12 +104,6 @@ const schoolMock = {
 			startDate: "2021-08-01T00:00:00.000Z",
 			endDate: "2022-07-31T00:00:00.000Z",
 		},
-		defaultYear: {
-			id: "5ebd6dc14a431f75ec9a3e77",
-			name: "2021/22",
-			startDate: "2021-08-01T00:00:00.000Z",
-			endDate: "2022-07-31T00:00:00.000Z",
-		},
 		nextYear: {
 			id: "5ebd6dc14a431f75ec9a3e78",
 			name: "2022/23",

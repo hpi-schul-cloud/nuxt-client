@@ -113,12 +113,6 @@ export default class SchoolsModule extends VuexModule {
 				startDate: "",
 				endDate: "",
 			},
-			defaultYear: {
-				id: "",
-				name: "",
-				startDate: "",
-				endDate: "",
-			},
 			schoolYears: [],
 		},
 	};

@@ -61,7 +61,6 @@ describe("ClassOverview", () => {
 						name: "2023/24",
 					} as Year,
 					lastYear: {} as Year,
-					defaultYear: {} as Year,
 				},
 			} as unknown as School,
 			...getters,
