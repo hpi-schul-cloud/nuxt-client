@@ -16,6 +16,7 @@ import { BusinessError } from "@/store/types/commons";
 import { useBoardPermissions } from "@data-board";
 import { WarningAlert } from "@ui-alert";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
+import { ToolConfigurationStatus } from "../../store/external-tool";
 
 export default defineComponent({
 	components: {
@@ -28,8 +29,11 @@ export default defineComponent({
 		isToolOutdated: {
 			type: Boolean,
 		},
+		toolConfigurationStatus: {
+			type: Object as PropType<ToolConfigurationStatus>,
+		},
 	},
-	setup() {
+	setup(props) {
 		const { t } = useI18n();
 
 		const { isTeacher } = useBoardPermissions();
@@ -40,11 +44,22 @@ export default defineComponent({
 				: "feature-board-external-tool-element.alert.error.student"
 		);
 
-		const outdatedMessage: ComputedRef<string> = computed(() =>
-			isTeacher
-				? "feature-board-external-tool-element.alert.outdated.teacher"
-				: "feature-board-external-tool-element.alert.outdated.student"
-		);
+		const outdatedMessage: ComputedRef<string> = computed(() => {
+			if (isTeacher) {
+				if (
+					props.toolConfigurationStatus?.isOutdatedOnScopeContext ||
+					props.toolConfigurationStatus?.isOutdatedOnScopeSchool
+				) {
+					return "feature-board-external-tool-element.alert.outdatedOnSchoolAndContext.teacher";
+				} else if (!props.toolConfigurationStatus?.isOutdatedOnScopeSchool) {
+					return "feature-board-external-tool-element.alert.outdatedOnContext.teacher";
+				} else {
+					return "feature-board-external-tool-element.alert.outdatedOnSchool.teacher";
+				}
+			} else {
+				return "feature-board-external-tool-element.alert.outdated.student";
+			}
+		});
 
 		return {
 			t,
