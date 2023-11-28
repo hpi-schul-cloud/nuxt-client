@@ -120,6 +120,7 @@ export default defineComponent({
 		watch(lastCreatedElementId, (newValue) => {
 			if (newValue !== undefined && newValue === props.element.id) {
 				// isLearnstoreOpen.value = true;
+				openLearnstorePage();
 				resetLastCreatedElementId();
 			}
 		});
@@ -132,7 +133,7 @@ export default defineComponent({
 			() => hasMaterial.value && !resource.value && isMaterialLoading.value
 		);
 
-		const isLearnstoreOpen: Ref<boolean> = ref(false);
+		const isLearnstoreDialogOpen: Ref<boolean> = ref(false);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -152,7 +153,7 @@ export default defineComponent({
 		const onDeleteElement = () => emit("delete:element", element.value.id);
 
 		const onEditElement = () => {
-			isLearnstoreOpen.value = true;
+			isLearnstoreDialogOpen.value = true;
 		};
 
 		const { setElement, getMaterialId, resetState } =
@@ -164,9 +165,8 @@ export default defineComponent({
 				/**  Dialog solution **/
 				// isLearnstoreOpen.value = true;
 				/**  Page solution **/
-				setElement(element, router.currentRoute);
-				router.push({ name: "content", query: { inline: "1" } });
-			} else {
+				openLearnstorePage();
+			} else if (hasMaterial.value) {
 				const url = getMetadataAttribute(
 					resource.value?.properties,
 					"ccm:wwwurl"
@@ -175,8 +175,13 @@ export default defineComponent({
 			}
 		};
 
+		const openLearnstorePage = () => {
+			setElement(element, router.currentRoute);
+			router.push({ name: "content", query: { inline: "1" } });
+		};
+
 		const onLearnstoreClose = () => {
-			isLearnstoreOpen.value = false;
+			isLearnstoreDialogOpen.value = false;
 		};
 
 		const loadCardData = async () => {
@@ -201,7 +206,7 @@ export default defineComponent({
 			resource,
 			error,
 			isLoading,
-			isLearnstoreOpen,
+			isLearnstoreOpen: isLearnstoreDialogOpen,
 			mdiStorefrontOutline,
 			onMoveElementDown,
 			onMoveElementUp,

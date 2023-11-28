@@ -27,7 +27,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, Ref, toRef } from "vue";
 import { Preview, Resource } from "@/store/types/content";
-import { mdiFile, mdiHeadphones, mdiStorefrontOutline } from "@mdi/js";
+import { mdiFile, mdiHeadphones, mdiStorefrontOutline, mdiText } from "@mdi/js";
 import { useI18n } from "@/composables/i18n.composable";
 import { PreviewImage } from "@ui-preview-image";
 import { getMetadataAttribute } from "@/utils/helpers";
@@ -90,6 +90,9 @@ export default defineComponent({
 			switch (resource.value?.mimetype) {
 				case "audio/mpeg": {
 					return mdiHeadphones;
+				}
+				case "text/html": {
+					return mdiText;
 				}
 				default: {
 					return mdiFile;
