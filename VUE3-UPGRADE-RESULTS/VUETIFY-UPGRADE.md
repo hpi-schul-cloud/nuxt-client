@@ -156,7 +156,7 @@ The `$button-colored-disabled` sass variable can be set to false to use grey ins
 | v-card | To disable this behavior, use <v-card style="overflow: initial; z-index: initial">                   |                                     |
 
 > **⚠️ Upgrade Notes:**
->- `hover` breaks variant elevated, GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/17574
+>- `hover` breaks variant elevated, GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/17574 (fixed in 3.4.0)
 >- `outlined` card appearance changed in vuetify 3
 
 ## v-dialog
@@ -187,6 +187,22 @@ The `$button-colored-disabled` sass variable can be set to false to use grey ins
 
 ## v-data-table
 
+- Headers objects:
+  - `text` property renamed to `title`
+  - `data-table-select` and `data-table-expand` must be defined as `key` instead of `value`.
+  - `class`replaced with `headerProps`
+  - `cellClass`replaced with `cellProps` and now accepts either a function or an object.
+- Server side tables using `server-items-length` must be replaced with `<v-data-table-server items-length />`
+- Argument order for `@click:*` events is now consistently `(event, data)`.
+  - `onRowClick (item, data, event)` changed to `onRowClick (event, { item })`.
+  - `item-class` and `item-style` have been combined into `row-props`, and `cell-props` has been added.
+- `sort-desc` and `group-desc` have been combined into `sort-by` and `group-by`.
+  - properties now take an array of `{ key: string, order: 'asc' | 'desc' } objects` instead of `strings`.
+- `sortBy` type changed from `string|array` to `SortItem[]`
+  ```ts
+  type SortItem = { key: string; order?: boolean | "asc" | "desc" };
+  ```
+
 ## v-custom-fab
 
 _Currently broken:_ is using `v-speed-dial` which is not available in vuetify 3 anymore
@@ -216,12 +232,17 @@ https://github.com/vuetifyjs/vuetify/issues/13508
 
 - hover breaks variant elevated
 - GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/17574
--> seems like it was fixed with 3.4.0
+
+  > **⚠️ Upgrade Notes:**
+  >- seems like it was fixed with 3.4.0
 
 ### v-chip
 - there is a bug in vuetifuy where the `text-color` prop does not work
   - eslint vuetify migration plugin says it was removed but this is propably not intended because they use the prop in the vuetify docs, see: https://vuetifyjs.com/en/components/chips/#colored (view source code)
 - GitHub Issue: https://github.com/vuetifyjs/vuetify/issues/18235
+
+  > **⚠️ Upgrade Notes:**
+  >- documentation was updated, if we want to have the text color black we can use `flat`
 
 
 ## To Keep In Mind
