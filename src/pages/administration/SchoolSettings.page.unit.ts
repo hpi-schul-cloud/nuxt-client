@@ -27,11 +27,13 @@ describe("SchoolSettingsPage", () => {
 		id: "00001234597947823",
 		counties: [
 			{
+				id: "00001234597998793",
 				antaresKey: "BRB",
 				countyId: 12051,
 				name: "Brandenburg an der Havel",
 			},
 			{
+				id: "00001234597913216",
 				antaresKey: "CB",
 				countyId: 12052,
 				name: "Cottbus",

@@ -6,6 +6,7 @@ export type Year = {
 };
 
 export type County = {
+	id: string;
 	antaresKey: string;
 	countyId: number;
 	name: string;

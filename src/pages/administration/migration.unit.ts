@@ -54,6 +54,7 @@ const schoolMock = {
 	},
 	logo_name: "Schule_logo",
 	county: {
+		id: "5fa55eb53f472a2d986c8812",
 		antaresKey: "BRB",
 		countyId: 12051,
 		name: "Brandenburg an der Havel",
