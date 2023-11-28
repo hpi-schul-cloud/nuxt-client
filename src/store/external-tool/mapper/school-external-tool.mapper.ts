@@ -11,12 +11,12 @@ import {
 	SchoolExternalTool,
 	SchoolExternalToolSave,
 } from "../school-external-tool";
+import { SchoolExternalToolMetadata } from "../school-external-tool-metadata";
 import { SchoolExternalToolConfigurationTemplate } from "../tool-configuration-template";
 import { ToolParameter } from "../tool-parameter";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { CommonToolMapper } from "./common-tool.mapper";
 import { ExternalToolMapper } from "./external-tool.mapper";
-import { SchoolExternalToolMetadata } from "../school-external-tool-metadata";
 
 export class SchoolExternalToolMapper {
 	static mapToSchoolExternalToolConfigurationTemplate(
@@ -118,8 +118,8 @@ export class SchoolExternalToolMapper {
 		response: SchoolExternalToolMetadataResponse
 	): SchoolExternalToolMetadata {
 		const mapped: SchoolExternalToolMetadata = {
-			course: response.contextExternalToolCountPerContext.course!,
-			boardElement: response.contextExternalToolCountPerContext.boardElement!,
+			course: response.contextExternalToolCountPerContext.course,
+			boardElement: response.contextExternalToolCountPerContext.boardElement,
 		};
 
 		return mapped;
