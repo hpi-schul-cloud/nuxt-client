@@ -1,11 +1,10 @@
 import {
 	SchoolExternalToolResponse,
-	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
-import { ToolConfigurationStatus } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
+import { toolConfigurationStatusFactory } from "../../tests/test-utils/factory/toolConfigurationSatusFactory";
 
 describe("useExternalToolUtils", () => {
 	const setup = () => {
@@ -23,7 +22,7 @@ describe("useExternalToolUtils", () => {
 					value: "value",
 				},
 			],
-			status: SchoolExternalToolResponseStatusEnum.Latest,
+			status: toolConfigurationStatusFactory.build(),
 		};
 
 		const listResponse: SchoolExternalToolSearchListResponse = {
@@ -78,7 +77,7 @@ describe("useExternalToolUtils", () => {
 			const setup = () => {
 				const { getStatusTranslationKey } = useExternalToolMappings();
 
-				const status = ToolConfigurationStatus.Latest;
+				const status = toolConfigurationStatusFactory.build();
 
 				return {
 					getStatusTranslationKey,
@@ -101,7 +100,9 @@ describe("useExternalToolUtils", () => {
 			const setup = () => {
 				const { getStatusTranslationKey } = useExternalToolMappings();
 
-				const status = ToolConfigurationStatus.Outdated;
+				const status = toolConfigurationStatusFactory.build({
+					isOutdatedOnScopeSchool: true,
+				});
 
 				return {
 					getStatusTranslationKey,
@@ -124,7 +125,10 @@ describe("useExternalToolUtils", () => {
 			const setup = () => {
 				const { getStatusTranslationKey } = useExternalToolMappings();
 
-				const status = ToolConfigurationStatus.Unknown;
+				const status = toolConfigurationStatusFactory.build({
+					isOutdatedOnScopeSchool: false,
+					isOutdatedOnScopeContext: true,
+				});
 
 				return {
 					getStatusTranslationKey,

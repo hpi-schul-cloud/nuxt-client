@@ -1,11 +1,11 @@
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { Factory } from "fishery";
-import { ToolConfigurationStatus } from "@/store/external-tool";
+import { toolConfigurationStatusFactory } from "./toolConfigurationSatusFactory";
 
 export const externalToolDisplayDataFactory =
 	Factory.define<ExternalToolDisplayData>(({ sequence }) => ({
 		contextExternalToolId: `schoolExternalTool${sequence}`,
 		name: `name${sequence}`,
 		openInNewTab: false,
-		status: ToolConfigurationStatus.Latest,
+		status: toolConfigurationStatusFactory.build(),
 	}));

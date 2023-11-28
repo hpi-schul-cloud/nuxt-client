@@ -1,5 +1,4 @@
 import EnvConfigModule from "@/store/env-config";
-import { ToolConfigurationStatus } from "@/store/external-tool";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -12,6 +11,7 @@ import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import flushPromises from "flush-promises";
 import Vue from "vue";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
+import { toolConfigurationStatusFactory } from "../../../tests/test-utils/factory/toolConfigurationSatusFactory";
 
 jest.mock("@data-external-tool");
 
@@ -69,7 +69,7 @@ describe("RoomExternalToolCard", () => {
 		it("should load the launch request", async () => {
 			getWrapper(
 				externalToolDisplayDataFactory.build({
-					status: ToolConfigurationStatus.Latest,
+					status: toolConfigurationStatusFactory.build(),
 				}),
 				false
 			);
@@ -87,7 +87,9 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ToolConfigurationStatus.Outdated,
+						status: toolConfigurationStatusFactory.build({
+							isOutdatedOnScopeContext: true,
+						}),
 					});
 
 				const { wrapper } = getWrapper(tool, false);
@@ -111,7 +113,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ToolConfigurationStatus.Latest,
+						status: toolConfigurationStatusFactory.build(),
 					});
 
 				const { wrapper } = getWrapper(tool, false);
@@ -139,7 +141,9 @@ describe("RoomExternalToolCard", () => {
 			const setup = async () => {
 				const toolDisplayData: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ToolConfigurationStatus.Outdated,
+						status: toolConfigurationStatusFactory.build({
+							isOutdatedOnScopeContext: true,
+						}),
 					});
 
 				const { wrapper } = getWrapper(toolDisplayData, true);

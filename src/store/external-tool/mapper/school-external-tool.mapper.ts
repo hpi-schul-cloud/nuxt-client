@@ -14,10 +14,7 @@ import {
 import { SchoolExternalToolConfigurationTemplate } from "../tool-configuration-template";
 import { ToolParameter } from "../tool-parameter";
 import { ToolParameterEntry } from "../tool-parameter-entry";
-import {
-	CommonToolMapper,
-	ToolConfigurationStatusMapping,
-} from "./common-tool.mapper";
+import { CommonToolMapper } from "./common-tool.mapper";
 import { ExternalToolMapper } from "./external-tool.mapper";
 import { SchoolExternalToolMetadata } from "../school-external-tool-metadata";
 
@@ -76,7 +73,7 @@ export class SchoolExternalToolMapper {
 			schoolId: response.schoolId,
 			toolId: response.toolId,
 			version: response.toolVersion,
-			status: ToolConfigurationStatusMapping[response.status],
+			status: CommonToolMapper.mapToolConfigurationStatus(response.status),
 			parameters: response.parameters.map(
 				(parameter): ToolParameterEntry =>
 					CommonToolMapper.mapToToolParameterEntry(parameter)
