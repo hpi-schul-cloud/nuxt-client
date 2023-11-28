@@ -5,6 +5,7 @@
 				<PreviewImage :src="getImage" :contain="true" alt="Some alt" />
 			</div>
 			<div class="additional-info mt-4">
+				<p>{{ getDescription }}</p>
 				<h4>Zusätzliche Informationen</h4>
 				<p><strong>Name: </strong> {{ content.name }}</p>
 				<p><strong>Titel: </strong> {{ content.title }}</p>
@@ -29,6 +30,7 @@ import { Preview, Resource } from "@/store/types/content";
 import { mdiFile, mdiHeadphones, mdiStorefrontOutline } from "@mdi/js";
 import { useI18n } from "@/composables/i18n.composable";
 import { PreviewImage } from "@ui-preview-image";
+import { getMetadataAttribute } from "@/utils/helpers";
 
 export default defineComponent({
 	name: "LearnstoreContent",
@@ -95,6 +97,14 @@ export default defineComponent({
 			}
 		});
 
+		const getDescription = computed(() => {
+			const description = getMetadataAttribute(
+				resource.value?.properties,
+				"cclom:general_description"
+			);
+			return description;
+		});
+
 		return {
 			t,
 			getTitle,
@@ -103,6 +113,7 @@ export default defineComponent({
 			getIcon,
 			content,
 			getContentTypeIcon,
+			getDescription,
 		};
 	},
 });
