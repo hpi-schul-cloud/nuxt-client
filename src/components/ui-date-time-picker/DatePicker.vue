@@ -1,11 +1,11 @@
 <template>
 	<v-text-field
+		v-model="dateValue"
 		ref="inputField"
 		data-testid="date-input"
 		variant="underlined"
 		color="primary"
 		append-inner-icon="$mdiCalendar"
-		v-model="dateValue"
 		:label="label"
 		:aria-label="ariaLabel"
 		:placeholder="t('common.placeholder.dateformat')"
@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, ref } from "vue";
+import { defineProps, defineEmits, computed, ref, watchEffect } from "vue";
 import { useDebounceFn, computedAsync } from "@vueuse/core";
 import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
@@ -71,10 +71,9 @@ import { helpers, requiredIf } from "@vuelidate/validators";
 import { dateInputMask as vDateInputMask } from "@util-input-masks";
 import { isValidDateFormat } from "@util-validators";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
-import { watchEffect } from "vue";
 
 const props = defineProps({
-	date: { type: String, required: true },
+	date: { type: String, required: true }, // ISO 8601 string
 	label: { type: String, default: "" },
 	ariaLabel: { type: String, default: "" },
 	required: { type: Boolean },
@@ -90,7 +89,7 @@ const inputField = ref<HTMLInputElement | null>(null);
 const dateValue = ref();
 
 watchEffect(() => {
-	dateValue.value = props.date;
+	dateValue.value = dayjs(props.date).format(DATETIME_FORMAT.date);
 });
 
 const rules = computed(() => ({
@@ -125,15 +124,15 @@ const validate = () => {
 
 	if (!v$.value.dateValue.$invalid) {
 		emitDate();
+	} else {
+		emit("error");
 	}
 };
 
 const emitDate = () => {
 	emit(
 		"update:date",
-		dayjs(dateValue.value, DATETIME_FORMAT.date).format(
-			DATETIME_FORMAT.inputDate
-		)
+		dayjs(dateValue.value, DATETIME_FORMAT.date).toISOString()
 	);
 };
 

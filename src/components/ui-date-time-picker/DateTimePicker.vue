@@ -8,6 +8,7 @@
 				:aria-label="dateInputAriaLabel"
 				:minDate="minDate"
 				:maxDate="maxDate"
+				required
 				@update:date="onDateUpdate"
 				@error="onError('date')"
 			/>
@@ -63,7 +64,8 @@ export default defineComponent({
 			if (!dateIsoString) {
 				return "";
 			}
-			return dayjs(dateTime.value).format(DATETIME_FORMAT.inputDate);
+
+			return dateIsoString;
 		};
 
 		const getTime = (dateIsoString: string) => {
