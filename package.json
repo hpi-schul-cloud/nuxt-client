@@ -44,6 +44,7 @@
 	},
 	"devDependencies": {
 		"@golevelup/ts-jest": "^0.4.0",
+		"@intlify/bundle-utils": "^7.4.0",
 		"@mdi/js": "^7.2.96",
 		"@openapitools/openapi-generator-cli": "^2.7.0",
 		"@types/jest": "^27.5.2",

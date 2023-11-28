@@ -66,6 +66,16 @@ module.exports = defineConfig({
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
 		},
+		module: {
+			rules: [
+				{
+					test: /\.json$/,
+					type: "javascript/auto",
+					loader: path.resolve(__dirname, "webpack-config/vue-i18n-loader.js"),
+					include: [path.resolve(__dirname, "src/locales")],
+				},
+			],
+		},
 	},
 
 	// use custom tsconfig for webpack builds
