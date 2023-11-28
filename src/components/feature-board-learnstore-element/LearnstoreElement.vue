@@ -69,6 +69,7 @@ import {
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
+import { getMetadataAttribute } from "@/utils/helpers";
 
 export default defineComponent({
 	components: {
@@ -165,6 +166,12 @@ export default defineComponent({
 				/**  Page solution **/
 				setElement(element, router.currentRoute);
 				router.push({ name: "content", query: { inline: "1" } });
+			} else {
+				const url = getMetadataAttribute(
+					resource.value?.properties,
+					"ccm:wwwurl"
+				);
+				window.open(`${url}`, "_blank", "noopener noreferrer");
 			}
 		};
 

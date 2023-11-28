@@ -13,11 +13,10 @@
 				<p>
 					<strong>Lizenz: </strong>
 					<img :src="content.license.icon" alt="License Icon" />
-					<a :href="content.license.url" target="_blank">CC BY-SA 4.0</a>
 				</p>
-				<p>
-					<strong>Download: </strong>
-					<a :href="content.downloadUrl" target="_blank">Download</a>
+				<p v-if="content.contentTypeIcon">
+					<strong>Content-Type: </strong>
+					<v-icon>{{ getContentTypeIcon }}</v-icon>
 				</p>
 			</div>
 		</div>
@@ -27,7 +26,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType, Ref, toRef } from "vue";
 import { Preview, Resource } from "@/store/types/content";
-import { mdiStorefrontOutline } from "@mdi/js";
+import { mdiFile, mdiHeadphones, mdiStorefrontOutline } from "@mdi/js";
 import { useI18n } from "@/composables/i18n.composable";
 import { PreviewImage } from "@ui-preview-image";
 
@@ -53,8 +52,7 @@ export default defineComponent({
 
 		const shouldDisplayImage = computed(() =>
 			Boolean(
-				resource.value &&
-					resource.value?.preview &&
+				resource.value?.preview &&
 					(resource.value?.preview.data || resource.value?.preview.url)
 			)
 		);
@@ -82,7 +80,19 @@ export default defineComponent({
 					url: resource.value.license.url,
 				},
 				downloadUrl: resource.value.downloadUrl,
+				contentTypeIcon: resource.value.iconURL,
 			};
+		});
+
+		const getContentTypeIcon = computed(() => {
+			switch (resource.value?.mimetype) {
+				case "audio/mpeg": {
+					return mdiHeadphones;
+				}
+				default: {
+					return mdiFile;
+				}
+			}
 		});
 
 		return {
@@ -92,6 +102,7 @@ export default defineComponent({
 			getImage,
 			getIcon,
 			content,
+			getContentTypeIcon,
 		};
 	},
 });
