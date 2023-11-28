@@ -200,10 +200,25 @@ export default defineComponent({
 
 		const errorDialogText: ComputedRef<string> = computed(() => {
 			if (authModule.getUserRoles.includes("teacher")) {
-				return t("pages.rooms.tools.outdatedDialog.content.teacher");
+				if (
+					selectedItem.value?.status.isOutdatedOnScopeContext &&
+					selectedItem.value?.status.isOutdatedOnScopeSchool
+				) {
+					return t(
+						"pages.rooms.tools.outdatedDialog.content.teacher.outdatedOnSchoolAndContext"
+					);
+				} else if (selectedItem.value?.status.isOutdatedOnScopeSchool) {
+					return t(
+						"pages.rooms.tools.outdatedDialog.content.teacher.outdatedOnSchool"
+					);
+				} else {
+					return t(
+						"pages.rooms.tools.outdatedDialog.content.teacher.outdatedOnContext"
+					);
+				}
+			} else {
+				return t("pages.rooms.tools.outdatedDialog.content.student");
 			}
-
-			return t("pages.rooms.tools.outdatedDialog.content.student");
 		});
 
 		return {
