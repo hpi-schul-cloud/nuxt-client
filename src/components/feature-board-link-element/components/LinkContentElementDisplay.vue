@@ -11,11 +11,16 @@
 	>
 		<a :href="sanitizedUrl" target="_blank">
 			<v-img v-if="imageUrl" :src="imageUrl" alt="" />
-			<div v-if="isEditMode && imageUrl" class="menu">
+			<img :src="imageUrl" />
+			<div v-if="imageUrl">mit Bild</div>
+			<!-- <div v-if="isEditMode && imageUrl" class="menu">
 				<slot />
-			</div>
+			</div> -->
 
 			<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
+				<template #image>
+					<v-img v-if="imageUrl" :src="imageUrl" alt="" />
+				</template>
 				<template #title>
 					{{ title }}
 				</template>

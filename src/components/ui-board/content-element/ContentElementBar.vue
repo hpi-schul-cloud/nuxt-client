@@ -1,23 +1,38 @@
 <template>
-	<div :class="backgroundClass" class="content-element-bar pa-4">
-		<div class="d-flex align-start">
-			<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
+	<div>
+		<div v-if="$slots.image">
+			<ContentElementImage>
+				<template #image>
+					<slot name="image" />
+				</template>
 
-			<ContentElementTitle>
-				<slot name="title" />
-			</ContentElementTitle>
+				<template #menu>
+					<slot name="menu" />
+				</template>
+			</ContentElementImage>
 
-			<div v-if="$slots.element" class="content-element-bar-element">
-				<slot name="element" />
-			</div>
-
-			<div v-if="$slots.menu" class="three-dot-menu">
-				<slot name="menu" />
-			</div>
+			<slot name="menu" />
 		</div>
+		<div :class="backgroundClass" class="content-element-bar pa-4">
+			<div class="d-flex align-start">
+				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
-		<div v-if="$slots.subtitle" class="pt-1 pb-1">
-			<slot name="subtitle" />
+				<ContentElementTitle>
+					<slot name="title" />
+				</ContentElementTitle>
+
+				<div v-if="$slots.element" class="content-element-bar-element">
+					<slot name="element" />
+				</div>
+
+				<div v-if="$slots.menu && !$slots.image" class="three-dot-menu">
+					<slot name="menu" />
+				</div>
+			</div>
+
+			<div v-if="$slots.subtitle" class="pt-1 pb-1">
+				<slot name="subtitle" />
+			</div>
 		</div>
 	</div>
 </template>
@@ -25,8 +40,9 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
 import { VuetifyIcon } from "vuetify/types/services/icons";
-import ContentElementTitleIcon from "./ContentElementTitleIcon.vue";
+import ContentElementImage from "./ContentElementImage.vue";
 import ContentElementTitle from "./ContentElementTitle.vue";
+import ContentElementTitleIcon from "./ContentElementTitleIcon.vue";
 
 export default defineComponent({
 	name: "ContentElementBar",
@@ -34,7 +50,11 @@ export default defineComponent({
 		hasGreyBackground: { type: Boolean, required: false },
 		icon: { type: String as PropType<VuetifyIcon>, required: false },
 	},
-	components: { ContentElementTitleIcon, ContentElementTitle },
+	components: {
+		ContentElementImage,
+		ContentElementTitleIcon,
+		ContentElementTitle,
+	},
 	setup(props) {
 		const backgroundClass = computed(() => {
 			return props.hasGreyBackground ? "grey lighten-4" : "";
