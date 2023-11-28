@@ -92,7 +92,7 @@
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
 							<v-btn
-								v-if="isRemovable(system) && hasSystemCreatePermission"
+								v-if="isEditable(system) && hasSystemCreatePermission"
 								class="delete-system-btn"
 								icon
 								:aria-label="ariaLabels(system).delete"
@@ -142,10 +142,10 @@
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import {
+	mdiCheckCircle,
+	mdiContentCopy,
 	mdiPencilOutline,
 	mdiTrashCanOutline,
-	mdiContentCopy,
-	mdiCheckCircle,
 } from "@mdi/js";
 import vCustomDialog from "@/components/organisms/vCustomDialog";
 
@@ -201,10 +201,7 @@ export default {
 			};
 		},
 		isEditable(system) {
-			return system.type === "ldap" && system.ldapConfig.provider === "general";
-		},
-		isRemovable(system) {
-			return system.type !== "ldap" || system.ldapConfig.provider === "general";
+			return system.ldapConfig?.provider === "general";
 		},
 		openConfirmDeleteDialog(systemId) {
 			this.confirmDeleteDialog = {
