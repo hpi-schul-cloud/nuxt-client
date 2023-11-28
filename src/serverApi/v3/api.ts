@@ -966,6 +966,12 @@ export interface CountyResponse {
      * @type {string}
      * @memberof CountyResponse
      */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CountyResponse
+     */
     name: string;
     /**
      * 
@@ -4163,12 +4169,6 @@ export interface SchoolForExternalInviteResponse {
      * @memberof SchoolForExternalInviteResponse
      */
     name: string;
-    /**
-     * 
-     * @type {SchoolPurpose}
-     * @memberof SchoolForExternalInviteResponse
-     */
-    purpose?: SchoolPurpose;
 }
 /**
  * 
@@ -5714,7 +5714,7 @@ export interface YearsResponse {
      * @memberof YearsResponse
      */
     activeYear: SchoolYearResponse;
-    /**
+/**
      * 
      * @type {SchoolYearResponse}
      * @memberof YearsResponse
