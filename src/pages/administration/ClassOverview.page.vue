@@ -22,20 +22,18 @@
 			</v-tab>
 		</v-tabs>
 
-		<v-data-table
+		<v-data-table-server
 			:headers="headers"
 			:items="classes"
 			v-model:items-per-page="pagination.limit"
-			:server-items-length="pagination.total"
+			:items-length="pagination.total"
 			:sort-by="sortBy"
-			:sort-Order="sortOrder"
 			:page="page"
 			:footer-props="footerProps"
 			data-testid="admin-class-table"
 			class="elevation-1"
 			:no-data-text="t('common.nodata')"
 			@update:sort-by="onUpdateSortBy"
-			@update:sort-desc="updateSortOrder"
 			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
@@ -114,7 +112,7 @@
 					</v-btn>
 				</template>
 			</template>
-		</v-data-table>
+		</v-data-table-server>
 		<v-custom-dialog
 			:is-open="isDeleteDialogOpen"
 			max-width="360"
@@ -199,7 +197,8 @@ import { useRouter } from "vue-router";
 import { SchoolYearQueryType } from "@/serverApi/v3";
 
 type Tab = "current" | "next" | "archive";
-// type SortItem = { key: string; order?: boolean | "asc" | "desc" };
+// vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
+type SortItem = { key: string; order?: boolean | "asc" | "desc" };
 
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML, VCustomDialog },
@@ -310,7 +309,12 @@ export default defineComponent({
 			() => groupModule.getPagination
 		);
 
-		const sortBy: ComputedRef<string> = computed(() => groupModule.getSortBy);
+		const sortBy: ComputedRef<SortItem[]> = computed(() => [
+			{
+				key: groupModule.getSortBy,
+				order: groupModule.getSortOrder,
+			},
+		]);
 		const sortOrder: ComputedRef<SortOrder> = computed(
 			() => groupModule.getSortOrder
 		);
@@ -328,7 +332,8 @@ export default defineComponent({
 				sortable: true,
 			},
 			{
-				value: "teachers",
+				key: "teachers",
+				value: (item: ClassInfo) => item.teachers.join(", "),
 				title: t("common.labels.teacher"),
 				sortable: true,
 			},
@@ -353,17 +358,17 @@ export default defineComponent({
 			}
 		};
 
-		const onUpdateSortBy = async (sortBy: string) => {
-			groupModule.setSortBy(sortBy);
+		const onUpdateSortBy = async (sortBy: SortItem[]) => {
+			const fieldToSortBy = sortBy[0];
+			groupModule.setSortBy(fieldToSortBy ? fieldToSortBy.key : "");
 
-			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
-		};
-		const updateSortOrder = async (sortDesc: boolean) => {
-			const sortOrder = sortDesc ? SortOrder.DESC : SortOrder.ASC;
+			const sortOrder =
+				fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
 			groupModule.setSortOrder(sortOrder);
 
 			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
 		};
+
 		const onUpdateCurrentPage = async (currentPage: number) => {
 			groupModule.setPage(currentPage);
 			const skip = (currentPage - 1) * groupModule.getPagination.limit;
@@ -417,7 +422,6 @@ export default defineComponent({
 			onCancelClassDeletion,
 			onConfirmClassDeletion,
 			onUpdateSortBy,
-			updateSortOrder,
 			onUpdateCurrentPage,
 			onUpdateItemsPerPage,
 			mdiAccountGroupOutline,
