@@ -14,6 +14,7 @@ import {
 	LearnstoreElementContentBody,
 	LinkElementContentBody,
 	RichTextElementContentBody,
+	DrawingElementContent,
 	RoomsApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
@@ -114,6 +115,12 @@ export const useBoardApi = () => {
 			} as LearnstoreElementContentBody;
 		}
 
+		if (element.type === ContentElementType.Drawing) {
+			return {
+				content: element.content as DrawingElementContent,
+				type: ContentElementType.Drawing,
+			};
+		}
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 

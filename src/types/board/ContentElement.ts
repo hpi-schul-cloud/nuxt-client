@@ -5,6 +5,7 @@ import {
 	LinkElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
+	DrawingElementResponse,
 } from "@/serverApi/v3";
 
 export type AnyContentElement =
@@ -13,4 +14,5 @@ export type AnyContentElement =
 	| FileElementResponse
 	| SubmissionContainerElementResponse
 	| ExternalToolElementResponse
+	| DrawingElementResponse
 	| LearnstoreElementResponse;

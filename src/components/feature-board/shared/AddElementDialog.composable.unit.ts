@@ -1,8 +1,12 @@
 import { ContentElementType } from "@/serverApi/v3";
+import NotifierModule from "@/store/notifier";
 import { Envs } from "@/store/types/env-config";
 import { injectStrict } from "@/utils/inject";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
+import setupStores from "@@/tests/test-utils/setupStores";
+
+setupStores({ notifierModule: NotifierModule });
 
 jest.mock("./SharedElementTypeSelection.composable");
 
@@ -15,6 +19,7 @@ mockedInjectStrict.mockImplementation(() => {
 		getEnv: {
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: false,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: false,
+			FEATURE_TLDRAW_ENABLED: false,
 		},
 	};
 });
@@ -28,7 +33,10 @@ describe("ElementTypeSelection Composable", () => {
 				const addElementMock = jest.fn();
 				const elementType = ContentElementType.RichText;
 
-				return { addElementMock, elementType };
+				return {
+					addElementMock,
+					elementType,
+				};
 			};
 
 			it("should call add Element", async () => {
@@ -55,7 +63,6 @@ describe("ElementTypeSelection Composable", () => {
 				expect(isDialogOpen.value).toBe(false);
 			});
 		});
-
 		describe("when addElement returns error", () => {
 			const setup = () => {
 				const error = new Error("Test error");
@@ -91,6 +98,7 @@ describe("ElementTypeSelection Composable", () => {
 			env: Partial<Envs> = {
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+				FEATURE_TLDRAW_ENABLED: true,
 			}
 		) => {
 			const addElementMock = jest.fn();
@@ -125,7 +133,6 @@ describe("ElementTypeSelection Composable", () => {
 			it("should set isDialogOpen to false", async () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
 				const { askType } = useAddElementDialog(addElementMock);
-
 				askType();
 
 				const action = elementTypeOptions.value[0].action;
@@ -166,7 +173,6 @@ describe("ElementTypeSelection Composable", () => {
 			it("should call add element function with right argument", async () => {
 				const { elementTypeOptions, addElementMock } = setup();
 				const { askType } = useAddElementDialog(addElementMock);
-
 				askType();
 
 				const action = elementTypeOptions.value[2].action;
@@ -181,7 +187,6 @@ describe("ElementTypeSelection Composable", () => {
 			it("should set isDialogOpen to false", async () => {
 				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
 				const { askType } = useAddElementDialog(addElementMock);
-
 				askType();
 
 				const action = elementTypeOptions.value[2].action;
@@ -212,6 +217,32 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const action = elementTypeOptions.value[3].action;
+				action();
+
+				expect(closeDialogMock).toBeCalledTimes(1);
+			});
+		});
+		describe("when the DrawingElement action is called", () => {
+			it("should call drawing element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock);
+
+				askType();
+
+				const action = elementTypeOptions.value[4].action;
+				action();
+
+				expect(addElementMock).toBeCalledTimes(1);
+				expect(addElementMock).toBeCalledWith(ContentElementType.Drawing);
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock);
+
+				askType();
+
+				const action = elementTypeOptions.value[4].action;
 				action();
 
 				expect(closeDialogMock).toBeCalledTimes(1);

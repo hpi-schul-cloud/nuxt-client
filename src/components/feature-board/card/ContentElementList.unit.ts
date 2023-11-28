@@ -6,6 +6,7 @@ import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { DrawingContentElement } from "@feature-board-drawing-element";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
 import { LinkContentElement } from "@feature-board-link-element";
@@ -31,6 +32,7 @@ describe("ContentElementList", () => {
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+				FEATURE_TEAMS_ENABLED: true,
 			}),
 		});
 
@@ -74,6 +76,10 @@ describe("ContentElementList", () => {
 			{
 				elementType: ContentElementType.ExternalTool,
 				component: ExternalToolElement,
+			},
+			{
+				elementType: ContentElementType.Drawing,
+				component: DrawingContentElement,
 			},
 		];
 

@@ -36,6 +36,9 @@
 			"@feature-board-external-tool-element": [
 				"src/components/feature-board-external-tool-element"
 			],
+			"@feature-board-drawing-element": [
+				"src/components/feature-board-drawing-element"
+			],
 			"@feature-board-learnstore-element": [
 				"src/components/feature-board-learnstore-element"
 			],

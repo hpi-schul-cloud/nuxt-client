@@ -114,6 +114,7 @@ export const useCardState = (
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
+				400: notifyWithTemplate("notCreated", "boardElement"),
 			});
 		}
 	};
