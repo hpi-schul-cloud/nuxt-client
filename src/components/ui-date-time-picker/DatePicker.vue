@@ -1,5 +1,24 @@
 <template>
-	<div>
+	<v-text-field
+		ref="inputField"
+		data-testid="date-input"
+		variant="underlined"
+		color="primary"
+		append-inner-icon="$mdiCalendar"
+		v-model="dateValue"
+		:label="label"
+		:aria-label="ariaLabel"
+		:placeholder="t('common.placeholder.dateformat')"
+		:class="{ 'menu-open': showDateDialog }"
+		:error-messages="errorMessages"
+		v-date-input-mask
+		@update:model-value="validate"
+		@keydown.space="showDateDialog = true"
+		@keydown.prevent.enter="showDateDialog = true"
+		@keydown.up.down.stop
+		@keydown.tab="showDateDialog = false"
+	/>
+	<!-- <div>
 		<v-menu
 			v-model="showDateDialog"
 			transition="scale-transition"
@@ -13,23 +32,22 @@
 					variant="underlined"
 					color="primary"
 					append-inner-icon="$mdiCalendar"
-					:model-value="date"
+					:model-value="dateValue"
 					:label="label"
 					:aria-label="ariaLabel"
 					:placeholder="t('common.placeholder.dateformat')"
 					:class="{ 'menu-open': showDateDialog }"
-					:rules="rules"
+					:error-messages="getErrorMessages(v$.dateValue)"
 					v-date-input-mask
+					@update:model-value="test"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.up.down.stop
 					@keydown.tab="showDateDialog = false"
-					@update:error="onError"
 				/>
 			</template>
 			<v-locale-provider :locale="locale">
 				<v-date-picker
-					:model-value="modelValue"
 					:aria-expanded="showDateDialog"
 					:min="minDate"
 					:max="maxDate"
@@ -37,21 +55,24 @@
 					hide-header
 					show-adjacent-months
 					elevation="6"
-					@update:model-value="onInput"
 				/>
 			</v-locale-provider>
 		</v-menu>
-	</div>
+	</div> -->
 </template>
 
 <script setup lang="ts">
-import { useDebounceFn } from "@vueuse/core";
 import { defineProps, defineEmits, computed, ref } from "vue";
+import { useDebounceFn, computedAsync } from "@vueuse/core";
+// import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
+import { useVuelidate } from "@vuelidate/core";
+import { helpers, requiredIf } from "@vuelidate/validators";
 import { dateInputMask as vDateInputMask } from "@util-input-masks";
-import { isRequired, isValidDateFormat } from "@util-validators";
-import dayjs from "dayjs";
-import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { isValidDateFormat } from "@util-validators";
+// import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { watchEffect } from "vue";
+import { watch } from "vue";
 
 const props = defineProps({
 	date: { type: String, required: true },
@@ -61,33 +82,52 @@ const props = defineProps({
 	minDate: { type: String },
 	maxDate: { type: String },
 });
-
 const emit = defineEmits(["update:date", "error"]);
 
 const { t, locale } = useI18n();
 
-const modelValue = computed({
-	get(): Date {
-		return dayjs(props.date).toDate();
-	},
-	set: (newValue: Date) => {
-		emitDateDebounced(dayjs(newValue).format(DATETIME_FORMAT.inputDate));
-	},
-});
-
-/**
- * Necessary because we need to wait for update:error
- */
-const emitDateDebounced = useDebounceFn((newValue) => {
-	if (valid.value) {
-		const dateISO = getISODate(newValue);
-		emit("update:date", dateISO);
-	}
-}, 50);
-
 const showDateDialog = ref(false);
 const inputField = ref<HTMLInputElement | null>(null);
-const valid = ref(true);
+const dateValue = ref();
+
+watchEffect(() => {
+	dateValue.value = props.date;
+});
+
+const rules = computed(() => ({
+	dateValue: {
+		requiredIfProp: helpers.withMessage(
+			t("components.datePicker.validation.required"),
+			requiredIf(props.required)
+		),
+		validDateFormat: helpers.withMessage(
+			t("components.datePicker.validation.format"),
+			isValidDateFormat
+		),
+	},
+}));
+
+const v$ = useVuelidate(rules, { dateValue }, { $lazy: true });
+
+const errorMessages = computedAsync(async () => {
+	return await getErrorMessages(v$.value.dateValue);
+}, null);
+
+const getErrorMessages = useDebounceFn((validationModel: any) => {
+	const messages = validationModel.$errors.map((e: any) => {
+		return e.$message;
+	});
+	return messages;
+}, 1000);
+
+const validate = () => {
+	v$.value.dateValue.$touch();
+	v$.value.$validate();
+
+	if (!v$.value.dateValue.$invalid) {
+		emit("update:date", getISODate(dateValue.value));
+	}
+};
 
 const getISODate = (date: string) => {
 	if (!date.includes(".")) return date;
@@ -96,35 +136,16 @@ const getISODate = (date: string) => {
 	return `${year}-${month}-${day}`;
 };
 
-const rules = computed(() => {
-	const rules = [
-		isValidDateFormat(t("components.datePicker.validation.format")),
-	];
+// const onInput = async (date: Date) => {
+// 	dateValue.value = date;
+// 	valid.value = true;
+// 	inputField.value?.focus();
+// 	await closeMenu();
+// };
 
-	if (props.required) {
-		rules.push(isRequired(t("components.datePicker.validation.required")));
-	}
-
-	return rules;
-});
-
-const onInput = async (date: Date) => {
-	modelValue.value = date;
-	valid.value = true;
-	inputField.value?.focus();
-	await closeMenu();
-};
-
-const onError = (hasError: boolean) => {
-	valid.value = !hasError;
-	if (hasError) {
-		emit("error");
-	}
-};
-
-const closeMenu = useDebounceFn(() => {
-	showDateDialog.value = false;
-}, 50);
+// const closeMenu = useDebounceFn(() => {
+// 	showDateDialog.value = false;
+// }, 50);
 </script>
 
 <style lang="scss" scoped>
