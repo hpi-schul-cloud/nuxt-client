@@ -45,6 +45,7 @@
 		<ExternalToolElementAlert
 			:error="error"
 			:is-tool-outdated="isToolOutdated"
+			:tool-configuration-status="toolConfigurationStatus"
 			data-testid="board-external-tool-element-alert"
 		/>
 		<ExternalToolElementConfigurationDialog
@@ -61,7 +62,6 @@
 <script lang="ts">
 import { useI18n } from "@/composables/i18n.composable";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
-import { ToolConfigurationStatus } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
@@ -84,6 +84,7 @@ import {
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import { ToolConfigurationStatus } from "../../store/external-tool";
 
 export default defineComponent({
 	components: {
@@ -142,8 +143,17 @@ export default defineComponent({
 		);
 
 		const isToolOutdated: ComputedRef<boolean> = computed(
-			() => displayData.value?.status === ToolConfigurationStatus.Outdated
+			() =>
+				(displayData.value?.status.isOutdatedOnScopeSchool ||
+					displayData.value?.status.isOutdatedOnScopeContext) ??
+				false
 		);
+
+		const toolConfigurationStatus: ComputedRef<
+			ToolConfigurationStatus | undefined
+		> = computed(() => {
+			return displayData.value?.status;
+		});
 
 		const isLoading = computed(
 			() =>
@@ -214,6 +224,7 @@ export default defineComponent({
 			isLoading,
 			isToolOutdated,
 			isConfigurationDialogOpen,
+			toolConfigurationStatus,
 			mdiPuzzleOutline,
 			onMoveElementDown,
 			onMoveElementUp,
