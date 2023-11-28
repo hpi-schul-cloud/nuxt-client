@@ -64,15 +64,14 @@
 <script setup lang="ts">
 import { defineProps, defineEmits, computed, ref } from "vue";
 import { useDebounceFn, computedAsync } from "@vueuse/core";
-// import dayjs from "dayjs";
+import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
 import { useVuelidate } from "@vuelidate/core";
 import { helpers, requiredIf } from "@vuelidate/validators";
 import { dateInputMask as vDateInputMask } from "@util-input-masks";
 import { isValidDateFormat } from "@util-validators";
-// import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { watchEffect } from "vue";
-import { watch } from "vue";
 
 const props = defineProps({
 	date: { type: String, required: true },
@@ -125,15 +124,17 @@ const validate = () => {
 	v$.value.$validate();
 
 	if (!v$.value.dateValue.$invalid) {
-		emit("update:date", getISODate(dateValue.value));
+		emitDate();
 	}
 };
 
-const getISODate = (date: string) => {
-	if (!date.includes(".")) return date;
-
-	const [day, month, year] = date.split(".");
-	return `${year}-${month}-${day}`;
+const emitDate = () => {
+	emit(
+		"update:date",
+		dayjs(dateValue.value, DATETIME_FORMAT.date).format(
+			DATETIME_FORMAT.inputDate
+		)
+	);
 };
 
 // const onInput = async (date: Date) => {
