@@ -73,7 +73,7 @@ const dateString = ref<undefined | string>();
 
 const dateObject = computed({
 	get() {
-		if (v$.value.dateString.$invalid) return;
+		if (v$.value.dateString.$invalid) return new Date(props.date);
 		return dateString.value
 			? dayjs(dateString.value, DATETIME_FORMAT.date).toDate()
 			: undefined;
