@@ -18,7 +18,7 @@
 			<span class="align-self-center title flex-1 break-word">
 				{{ resource ?? resource?.title ? resource?.title : "..." }}
 			</span>
-			<BoardMenu scope="element">
+			<BoardMenu v-if="isEditMode" scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete @click="onDelete" />
