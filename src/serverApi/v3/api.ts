@@ -1,3 +1,4 @@
+/* tslint:disable */
 /* eslint-disable */
 /**
  * HPI Schul-Cloud Server API
@@ -657,11 +658,11 @@ export interface ConsentSessionResponse {
  */
 export enum ContentElementType {
     File = 'file',
+    Drawing = 'drawing',
     Link = 'link',
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
-    ExternalTool = 'externalTool',
-    Drawing = 'drawing',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -919,6 +920,7 @@ export enum CopyApiResponseTypeEnum {
     ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
     File = 'FILE',
     FileElement = 'FILE_ELEMENT',
+    DrawingElement = 'DRAWING_ELEMENT',
     FileGroup = 'FILE_GROUP',
     Leaf = 'LEAF',
     Lesson = 'LESSON',
@@ -1055,11 +1057,11 @@ export interface CreateCardBodyParams {
     */
 export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     File = 'file',
+    Drawing = 'drawing',
     Link = 'link',
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
-    ExternalTool = 'externalTool',
-    Drawing = 'drawing',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -1577,10 +1579,10 @@ export interface ExternalToolCreateParams {
     openNewTab: boolean;
     /**
      * 
-     * @type {ToolContextType}
+     * @type {Array<ToolContextType>}
      * @memberof ExternalToolCreateParams
      */
-    restrictToContexts?: ToolContextType;
+    restrictToContexts?: Array<ToolContextType>;
 }
 /**
  * 
@@ -1818,10 +1820,10 @@ export interface ExternalToolUpdateParams {
     openNewTab: boolean;
     /**
      * 
-     * @type {ToolContextType}
+     * @type {Array<ToolContextType>}
      * @memberof ExternalToolUpdateParams
      */
-    restrictToContexts?: ToolContextType;
+    restrictToContexts?: Array<ToolContextType>;
 }
 /**
  * 
@@ -4307,83 +4309,6 @@ export interface SingleColumnBoardResponse {
      * @memberof SingleColumnBoardResponse
      */
     isArchived: boolean;
-}/**
- *
- * @export
- * @interface DrawingContentBody
- */
-export interface DrawingContentBody {
-	/**
-	 *
-	 * @type {string}
-	 * @memberof DrawingContentBody
-	 */
-	description: string;
-}
-/**
- *
- * @export
- * @interface DrawingElementContentBody
- */
-export interface DrawingElementContentBody {
-	/**
-	 *
-	 * @type {ContentElementType}
-	 * @memberof DrawingContentBody
-	 */
-	type: ContentElementType;
-	/**
-	 *
-	 * @type {String}
-	 * @memberof DrawingContentBody
-	 */
-	content: DrawingContentBody;
-}
-/**
- *
- * @export
- * @interface DrawingElementContent
- */
-
-export interface DrawingElementContent {
-	/**
-	 *
-	 * @type {string}
-	 * @memberof DrawingElementContent
-	 */
-	description: string;
-}
-/**
- *
- * @export
- * @interface DrawingElementResponse
- */
-
-export interface DrawingElementResponse {
-	/**
-	 *
-	 * @type {string}
-	 * @memberof DrawingElementResponse
-	 */
-	id: string;
-	/**
-	 *
-	 * @type {ContentElementType}
-	 * @memberof DrawingElementResponse
-	 */
-	type: ContentElementType;
-	/**
-	 *
-	 * @type {String}
-	 * @memberof DrawingElementResponse
-	 */
-	content: DrawingElementContent;
-	/**
-	 *
-	 * @type {TimestampsResponse}
-	 * @memberof DrawingElementResponse
-	 */
-	timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -4869,13 +4794,13 @@ export enum ToolContextType {
 /**
  * 
  * @export
- * @interface ToolContextTypesList
+ * @interface ToolContextTypesListResponse
  */
-export interface ToolContextTypesList {
+export interface ToolContextTypesListResponse {
     /**
      * 
      * @type {Array<ToolContextType>}
-     * @memberof ToolContextTypesList
+     * @memberof ToolContextTypesListResponse
      */
     data: Array<ToolContextType>;
 }
@@ -4978,10 +4903,10 @@ export interface ToolReferenceResponse {
 export interface UpdateElementContentBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody}
+     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody}
      * @memberof UpdateElementContentBodyParams
      */
-    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody;
+    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody;
 }
 /**
  * 
@@ -7044,7 +6969,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse| DrawingElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7124,7 +7049,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7198,7 +7123,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | LinkElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse | DrawingElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>;
 
     /**
      * 
@@ -14703,7 +14628,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetToolContextTypes(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolContextTypesList>> {
+        async toolConfigurationControllerGetToolContextTypes(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolContextTypesListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetToolContextTypes(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -15005,7 +14930,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetToolContextTypes(options?: any): AxiosPromise<ToolContextTypesList> {
+        toolConfigurationControllerGetToolContextTypes(options?: any): AxiosPromise<ToolContextTypesListResponse> {
             return localVarFp.toolConfigurationControllerGetToolContextTypes(options).then((request) => request(axios, basePath));
         },
         /**
@@ -15285,7 +15210,7 @@ export interface ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetToolContextTypes(options?: any): AxiosPromise<ToolContextTypesList>;
+    toolConfigurationControllerGetToolContextTypes(options?: any): AxiosPromise<ToolContextTypesListResponse>;
 
     /**
      * 
