@@ -13,89 +13,22 @@
 			{{ $t("pages.content.index.backToCourse") }}
 		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
-			<div>
-				<content-searchbar
-					v-model.lazy="searchQuery"
-					:class="
-						!activateTransition
-							? 'first-search__searchbar'
-							: 'content__searchbar'
-					"
-					:placeholder="$t('pages.content.index.search.placeholder')"
-					@keyup:enter="enterKeyHandler"
-				/>
-				<transition name="fade">
-					<div class="content__container">
-						<p
-							v-show="resources.data.length !== 0 && searchQuery.length > 1"
-							class="content__total"
-						>
-							{{ resources.total }}
-							{{ $t("pages.content.index.search_results") }} "{{
-								searchQueryResult
-							}}"
-						</p>
-						<span v-if="!loading" class="content__container_child">
-							<!-- initial state, empty search -->
-							<content-initial-state v-if="searchQuery.length === 0" />
-							<!-- search query not empty and there are no results -->
-							<div
-								v-else-if="resources.data.length === 0"
-								class="content__no_results"
-							>
-								<content-empty-state />
-							</div>
-						</span>
-						<!-- search query not empty and there are results -->
-						<lern-store-grid
-							v-if="searchQuery.length > 1"
-							column-width="14rem"
-							data-testid="lernStoreCardsContainer"
-						>
-							<content-card
-								v-for="resource of resources.data"
-								:key="resource.properties['ccm:replicationsourceuuid'][0]"
-								class="card"
-								:inline="isInline"
-								:resource="resource"
-							/>
-						</lern-store-grid>
-					</div>
-				</transition>
-			</div>
-			<v-progress-circular
-				v-if="loading"
-				indeterminate
-				color="secondary"
-				size="115"
-				class="align-self-center mt-4"
+			<iframe
+				src="https://repo.test.mediathek.dev.dbildungsplattform.de/edu-sharing/components/search"
+				style="height: calc(100vh - var(--sidebar-item-height) - 105.58px)"
+				title="edu-sharing-search-environment"
 			/>
-			<content-edu-sharing-footer class="content__footer" />
 		</div>
 	</section>
 </template>
 
 <script>
-import { contentModule, notifierModule } from "@/store";
-import ContentSearchbar from "@/components/molecules/ContentSearchbar";
-import ContentCard from "@/components/organisms/ContentCard";
-import ContentEmptyState from "@/components/molecules/ContentEmptyState";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
-import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
-import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
-import ContentInitialState from "@/components/molecules/ContentInitialState";
-import { mdiChevronLeft } from "@mdi/js";
+import { contentModule, notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { mdiChevronLeft } from "@mdi/js";
 
 export default {
-	components: {
-		ContentSearchbar,
-		ContentCard,
-		ContentEmptyState,
-		LernStoreGrid,
-		ContentInitialState,
-		ContentEduSharingFooter,
-	},
 	mixins: [infiniteScrolling],
 	data() {
 		return {
@@ -235,7 +168,8 @@ export default {
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	min-height: calc(100vh - var(--sidebar-item-height));
+	min-height: calc(100vh - var(--sidebar-item-height) - 105.58px);
+	// footer height  6558px + margin 40px (24px top + 16px bottom)
 	padding: 0 var(--space-lg);
 	overflow-y: hidden;
 
