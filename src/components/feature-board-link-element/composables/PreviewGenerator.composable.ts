@@ -1,4 +1,4 @@
-import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import {
 	convertDownloadToPreviewUrl,
 	isPreviewPossible,
@@ -15,13 +15,11 @@ export const usePreviewGenerator = (elementId: string) => {
 		externalImageUrl: string
 	): Promise<string | undefined> => {
 		await uploadFromUrl(externalImageUrl);
-		console.log("fileRecord.value", fileRecord.value); // WIP: remove
-		if (fileRecord.value?.previewStatus) {
-			const imageUrl = convertDownloadToPreviewUrl(
-				fileRecord.value.url,
-				PreviewWidth._500
-			);
-			console.log("imageUrl2", imageUrl); // WIP: remove
+		if (
+			fileRecord.value?.previewStatus &&
+			isPreviewPossible(fileRecord.value?.previewStatus)
+		) {
+			const imageUrl = convertDownloadToPreviewUrl(fileRecord.value.url);
 			return imageUrl;
 		}
 	};

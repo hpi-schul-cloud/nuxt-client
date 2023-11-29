@@ -1,17 +1,15 @@
 <template>
 	<div>
-		<div v-if="$slots.image">
-			<ContentElementImage>
-				<template #image>
-					<slot name="image" />
+		<div v-if="$slots.display">
+			<ContentElementDisplay>
+				<template #display>
+					<slot name="display" />
 				</template>
 
 				<template #menu>
 					<slot name="menu" />
 				</template>
-			</ContentElementImage>
-
-			<slot name="menu" />
+			</ContentElementDisplay>
 		</div>
 		<div :class="backgroundClass" class="content-element-bar pa-4">
 			<div class="d-flex align-start">
@@ -25,8 +23,8 @@
 					<slot name="element" />
 				</div>
 
-				<div v-if="$slots.menu && !$slots.image" class="three-dot-menu">
-					<slot name="menu" />
+				<div v-if="$slots.menu && !$slots.display" class="three-dot-menu">
+					<slot v-if="$slots.menu && !$slots.display" name="menu" />
 				</div>
 			</div>
 
@@ -40,7 +38,7 @@
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
 import { VuetifyIcon } from "vuetify/types/services/icons";
-import ContentElementImage from "./ContentElementImage.vue";
+import ContentElementDisplay from "./ContentElementDisplay.vue";
 import ContentElementTitle from "./ContentElementTitle.vue";
 import ContentElementTitleIcon from "./ContentElementTitleIcon.vue";
 
@@ -51,7 +49,7 @@ export default defineComponent({
 		icon: { type: String as PropType<VuetifyIcon>, required: false },
 	},
 	components: {
-		ContentElementImage,
+		ContentElementDisplay,
 		ContentElementTitleIcon,
 		ContentElementTitle,
 	},
@@ -65,7 +63,6 @@ export default defineComponent({
 		};
 	},
 });
-// enable to place images / previews / whiteboards directly in the contentbar
 </script>
 
 <style type="text/scss">

@@ -10,15 +10,8 @@
 		:loading="isLoading ? 'primary' : false"
 	>
 		<a :href="sanitizedUrl" target="_blank">
-			<v-img v-if="imageUrl" :src="imageUrl" alt="" />
-			<img :src="imageUrl" />
-			<div v-if="imageUrl">mit Bild</div>
-			<!-- <div v-if="isEditMode && imageUrl" class="menu">
-				<slot />
-			</div> -->
-
 			<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
-				<template #image>
+				<template #display>
 					<v-img v-if="imageUrl" :src="imageUrl" alt="" />
 				</template>
 				<template #title>
@@ -27,7 +20,7 @@
 				<template #subtitle>
 					{{ hostname }}
 				</template>
-				<template #menu v-if="isEditMode && !imageUrl">
+				<template #menu v-if="isEditMode">
 					<slot />
 				</template>
 			</ContentElementBar>

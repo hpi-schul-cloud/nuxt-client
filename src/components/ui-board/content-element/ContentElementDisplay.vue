@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<slot name="image" />
+		<slot name="display" />
 
 		<div class="menu">
 			<slot name="menu" />
@@ -28,22 +28,13 @@ export default defineComponent({
 		};
 	},
 });
-// enable to place images / previews / whiteboards directly in the contentbar
 </script>
 
 <style type="text/scss">
-.content-element-bar {
-	line-height: 24px;
-	color: var(--v-black-base);
-}
-.content-element-bar .three-dot-menu {
-	margin-top: -6px;
-	margin-right: -6px;
-}
-.content-element-bar .three-dot-menu .v-icon {
-	color: var(--v-black-base);
-}
-.content-element-bar .v-card__text {
-	margin-top: 0px;
+.menu {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	z-index: 100;
 }
 </style>

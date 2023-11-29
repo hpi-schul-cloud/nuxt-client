@@ -1,6 +1,6 @@
 <template>
 	<span
-		class="content-element-title subtitle-1 font-weight-bold"
+		class="content-element-title subtitle-1 font-weight-bold flex-grow-1"
 		data-testid="content-element-title"
 	>
 		<slot />

@@ -3,7 +3,7 @@
 		@click="onDownload"
 		:disabled="!isDownloadAllowed"
 		data-testid="board-file-element-edit-menu-download"
-		class="float-right"
+		class="float-right download-button"
 		icon
 	>
 		<v-icon>{{ mdiTrayArrowDown }}</v-icon>
@@ -34,3 +34,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style type="text/scss">
+.download-button {
+	margin-right: -6px;
+}
+</style>

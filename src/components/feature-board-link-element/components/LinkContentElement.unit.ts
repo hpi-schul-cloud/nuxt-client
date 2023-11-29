@@ -10,7 +10,7 @@ import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElem
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { LinkContentElement } from "@feature-board-link-element";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { MountOptions, shallowMount } from "@vue/test-utils";
+import { MountOptions, mount } from "@vue/test-utils";
 import { LinkElementContent, MetaTagExtractorResponse } from "@/serverApi/v3";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import Vue, { computed, ref } from "vue";
@@ -73,7 +73,7 @@ describe("LinkContentElement", () => {
 		isEditMode: boolean;
 	}) => {
 		const notifierModule = createModuleMocks(NotifierModule);
-		const wrapper = shallowMount(LinkContentElement as MountOptions<Vue>, {
+		const wrapper = mount(LinkContentElement as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
@@ -180,8 +180,8 @@ describe("LinkContentElement", () => {
 					isEditMode: true,
 				});
 
-				const card = wrapper.findComponent({ ref: "linkContentElement" });
-				card.vm.$emit(
+				// const card = wrapper.findComponent({ ref: "linkContentElement" });
+				wrapper.vm.$emit(
 					"keydown",
 					new KeyboardEvent("keydown", {
 						key: "ArrowUp",
@@ -199,8 +199,8 @@ describe("LinkContentElement", () => {
 					isEditMode: false,
 				});
 
-				const card = wrapper.findComponent({ ref: "linkContentElement" });
-				card.vm.$emit(
+				// const card = wrapper.findComponent({ ref: "linkContentElement" });
+				wrapper.vm.$emit(
 					"keydown",
 					new KeyboardEvent("keydown", {
 						key: "ArrowUp",
