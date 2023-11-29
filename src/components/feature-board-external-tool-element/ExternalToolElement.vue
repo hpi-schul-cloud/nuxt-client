@@ -45,7 +45,7 @@
 		<ExternalToolElementAlert
 			:error="error"
 			:is-tool-outdated="isToolOutdated"
-			:tool-outdated-translationkey="toolOutdatedTranslationkey"
+			:tool-outdated-status="toolOutdatedStatus"
 			data-testid="board-external-tool-element-alert"
 		/>
 		<ExternalToolElementConfigurationDialog
@@ -84,7 +84,7 @@ import {
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
-import { authModule } from "../../store";
+import { ToolConfigurationStatus } from "@/store/external-tool";
 
 export default defineComponent({
 	components: {
@@ -117,8 +117,7 @@ export default defineComponent({
 			error,
 		} = useExternalToolElementDisplayState();
 
-		const { launchTool, fetchLaunchRequest, determineOutdatedTranslationKey } =
-			useExternalToolLaunchState();
+		const { launchTool, fetchLaunchRequest } = useExternalToolLaunchState();
 
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
@@ -151,14 +150,10 @@ export default defineComponent({
 				false
 		);
 
-		const toolOutdatedTranslationkey: ComputedRef<string> = computed(() => {
-			const translationKey = determineOutdatedTranslationKey(
-				authModule.getUserRoles,
-				displayData.value?.status
-			);
-
-			return t(translationKey);
-		});
+		const toolOutdatedStatus: ComputedRef<ToolConfigurationStatus | undefined> =
+			computed(() => {
+				return displayData.value?.status;
+			});
 
 		const isLoading = computed(
 			() =>
@@ -229,7 +224,7 @@ export default defineComponent({
 			isLoading,
 			isToolOutdated,
 			isConfigurationDialogOpen,
-			toolOutdatedTranslationkey,
+			toolOutdatedStatus,
 			mdiPuzzleOutline,
 			onMoveElementDown,
 			onMoveElementUp,

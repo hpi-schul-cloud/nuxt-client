@@ -107,7 +107,7 @@ import {
 } from "vue";
 import VueI18n from "vue-i18n";
 import { useRouter } from "vue-router/composables";
-import { useExternalToolLaunchState } from "@data-external-tool";
+import { useToolConfigurationStatus } from "@data-external-tool";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
@@ -134,7 +134,7 @@ export default defineComponent({
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const router = useRouter();
-		const { determineOutdatedTranslationKey } = useExternalToolLaunchState();
+		const { determineOutdatedTranslationKey } = useToolConfigurationStatus();
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values): string =>
@@ -202,7 +202,6 @@ export default defineComponent({
 
 		const errorDialogText: ComputedRef<string> = computed(() => {
 			const toolOutdatedTranslationkey = determineOutdatedTranslationKey(
-				authModule.getUserRoles,
 				selectedItem.value?.status
 			);
 			return t(toolOutdatedTranslationkey);
