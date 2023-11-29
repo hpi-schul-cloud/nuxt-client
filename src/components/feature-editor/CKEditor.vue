@@ -19,6 +19,8 @@ import {
 	newsToolbar,
 	boardPlugins,
 	newsPlugins,
+	boardHeadings,
+	newsHeadings,
 } from "./config";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaQuery, useVModel } from "@vueuse/core";
@@ -89,6 +91,12 @@ export default defineComponent({
 			news: newsPlugins,
 		};
 
+		const headings = {
+			simple: boardHeadings,
+			regular: boardHeadings,
+			news: newsHeadings,
+		};
+
 		const config = computed(() => {
 			return {
 				toolbar: {
@@ -96,27 +104,7 @@ export default defineComponent({
 					shouldNotGroupWhenFull: showFullToolbar.value,
 				},
 				plugins: plugins[props.mode],
-				heading: {
-					options: [
-						{
-							model: "paragraph",
-							title: "Paragraph",
-							class: "ck-heading_paragraph",
-						},
-						{
-							model: "heading1",
-							view: "h4",
-							title: "Heading 1",
-							class: "ck-heading_heading1",
-						},
-						{
-							model: "heading2",
-							view: "h5",
-							title: "Heading 2",
-							class: "ck-heading_heading2",
-						},
-					],
-				},
+				heading: headings[props.mode],
 				link: {
 					defaultProtocol: "//",
 				},
