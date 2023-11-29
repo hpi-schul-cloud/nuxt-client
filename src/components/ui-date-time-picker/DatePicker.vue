@@ -1,24 +1,5 @@
 <template>
-	<v-text-field
-		v-model="dateValue"
-		ref="inputField"
-		data-testid="date-input"
-		variant="underlined"
-		color="primary"
-		append-inner-icon="$mdiCalendar"
-		:label="label"
-		:aria-label="ariaLabel"
-		:placeholder="t('common.placeholder.dateformat')"
-		:class="{ 'menu-open': showDateDialog }"
-		:error-messages="errorMessages"
-		v-date-input-mask
-		@update:model-value="validate"
-		@keydown.space="showDateDialog = true"
-		@keydown.prevent.enter="showDateDialog = true"
-		@keydown.up.down.stop
-		@keydown.tab="showDateDialog = false"
-	/>
-	<!-- <div>
+	<div>
 		<v-menu
 			v-model="showDateDialog"
 			transition="scale-transition"
@@ -27,19 +8,19 @@
 			<template #activator="{ props }">
 				<v-text-field
 					v-bind="props"
+					v-model="dateString"
 					ref="inputField"
 					data-testid="date-input"
 					variant="underlined"
 					color="primary"
 					append-inner-icon="$mdiCalendar"
-					:model-value="dateValue"
 					:label="label"
 					:aria-label="ariaLabel"
 					:placeholder="t('common.placeholder.dateformat')"
 					:class="{ 'menu-open': showDateDialog }"
-					:error-messages="getErrorMessages(v$.dateValue)"
+					:error-messages="errorMessages"
 					v-date-input-mask
-					@update:model-value="test"
+					@update:model-value="validate"
 					@keydown.space="showDateDialog = true"
 					@keydown.prevent.enter="showDateDialog = true"
 					@keydown.up.down.stop
@@ -48,6 +29,7 @@
 			</template>
 			<v-locale-provider :locale="locale">
 				<v-date-picker
+					v-model="dateObject"
 					:aria-expanded="showDateDialog"
 					:min="minDate"
 					:max="maxDate"
@@ -55,10 +37,11 @@
 					hide-header
 					show-adjacent-months
 					elevation="6"
+					@update:model-value="closeMenu"
 				/>
 			</v-locale-provider>
 		</v-menu>
-	</div> -->
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -86,14 +69,27 @@ const { t, locale } = useI18n();
 
 const showDateDialog = ref(false);
 const inputField = ref<HTMLInputElement | null>(null);
-const dateValue = ref();
+const dateString = ref<undefined | string>();
+
+const dateObject = computed({
+	get() {
+		if (v$.value.dateString.$invalid) return;
+		return dateString.value
+			? dayjs(dateString.value, DATETIME_FORMAT.date).toDate()
+			: undefined;
+	},
+
+	set(newValue) {
+		dateString.value = dayjs(newValue).format(DATETIME_FORMAT.date);
+	},
+});
 
 watchEffect(() => {
-	dateValue.value = dayjs(props.date).format(DATETIME_FORMAT.date);
+	dateString.value = dayjs(props.date).format(DATETIME_FORMAT.date);
 });
 
 const rules = computed(() => ({
-	dateValue: {
+	dateString: {
 		requiredIfProp: helpers.withMessage(
 			t("components.datePicker.validation.required"),
 			requiredIf(props.required)
@@ -105,10 +101,10 @@ const rules = computed(() => ({
 	},
 }));
 
-const v$ = useVuelidate(rules, { dateValue }, { $lazy: true });
+const v$ = useVuelidate(rules, { dateString }, { $lazy: true });
 
 const errorMessages = computedAsync(async () => {
-	return await getErrorMessages(v$.value.dateValue);
+	return await getErrorMessages(v$.value.dateString);
 }, null);
 
 const getErrorMessages = useDebounceFn((validationModel: any) => {
@@ -119,10 +115,10 @@ const getErrorMessages = useDebounceFn((validationModel: any) => {
 }, 1000);
 
 const validate = () => {
-	v$.value.dateValue.$touch();
+	v$.value.dateString.$touch();
 	v$.value.$validate();
 
-	if (!v$.value.dateValue.$invalid) {
+	if (!v$.value.dateString.$invalid) {
 		emitDate();
 	} else {
 		emit("error");
@@ -132,20 +128,14 @@ const validate = () => {
 const emitDate = () => {
 	emit(
 		"update:date",
-		dayjs(dateValue.value, DATETIME_FORMAT.date).toISOString()
+		dayjs(dateString.value, DATETIME_FORMAT.date).toISOString()
 	);
 };
 
-// const onInput = async (date: Date) => {
-// 	dateValue.value = date;
-// 	valid.value = true;
-// 	inputField.value?.focus();
-// 	await closeMenu();
-// };
-
-// const closeMenu = useDebounceFn(() => {
-// 	showDateDialog.value = false;
-// }, 50);
+const closeMenu = () => {
+	showDateDialog.value = false;
+	inputField.value?.focus();
+};
 </script>
 
 <style lang="scss" scoped>
