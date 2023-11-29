@@ -107,6 +107,7 @@ import {
 } from "vue";
 import VueI18n from "vue-i18n";
 import { useRouter } from "vue-router/composables";
+import { useExternalToolLaunchState } from "@data-external-tool";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
@@ -133,6 +134,7 @@ export default defineComponent({
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const router = useRouter();
+		const { determineOutdatedTranslationKey } = useExternalToolLaunchState();
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values): string =>
@@ -199,26 +201,11 @@ export default defineComponent({
 		};
 
 		const errorDialogText: ComputedRef<string> = computed(() => {
-			if (authModule.getUserRoles.includes("teacher")) {
-				if (
-					selectedItem.value?.status.isOutdatedOnScopeContext &&
-					selectedItem.value?.status.isOutdatedOnScopeSchool
-				) {
-					return t(
-						"pages.rooms.tools.outdatedDialog.content.teacher.outdatedOnSchoolAndContext"
-					);
-				} else if (selectedItem.value?.status.isOutdatedOnScopeSchool) {
-					return t(
-						"pages.rooms.tools.outdatedDialog.content.teacher.outdatedOnSchool"
-					);
-				} else {
-					return t(
-						"pages.rooms.tools.outdatedDialog.content.teacher.outdatedOnContext"
-					);
-				}
-			} else {
-				return t("pages.rooms.tools.outdatedDialog.content.student");
-			}
+			const toolOutdatedTranslationkey = determineOutdatedTranslationKey(
+				authModule.getUserRoles,
+				selectedItem.value?.status
+			);
+			return t(toolOutdatedTranslationkey);
 		});
 
 		return {

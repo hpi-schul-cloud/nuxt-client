@@ -1,4 +1,5 @@
 import {
+	ToolConfigurationStatus,
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
 } from "@/store/external-tool";
@@ -90,6 +91,25 @@ export const useExternalToolLaunchState = () => {
 		document.body.appendChild(form);
 		form.submit();
 	};
+	const determineOutdatedTranslationKey = (
+		userRoles: string[],
+		toolConfigStatus: ToolConfigurationStatus | undefined
+	): string => {
+		if (userRoles.includes("teacher")) {
+			if (
+				toolConfigStatus?.isOutdatedOnScopeContext &&
+				toolConfigStatus.isOutdatedOnScopeSchool
+			) {
+				return "common.information.outdatedOnSchoolAndContext.teacher";
+			} else if (toolConfigStatus?.isOutdatedOnScopeSchool) {
+				return "common.information.outdatedOnSchool.teacher";
+			} else {
+				return "common.information.outdatedOnContext.teacher";
+			}
+		} else {
+			return "common.information.outdated.student";
+		}
+	};
 
 	return {
 		toolLaunchRequest,
@@ -97,5 +117,6 @@ export const useExternalToolLaunchState = () => {
 		isLoading,
 		fetchLaunchRequest,
 		launchTool,
+		determineOutdatedTranslationKey,
 	};
 };

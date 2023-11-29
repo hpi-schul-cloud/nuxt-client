@@ -16,7 +16,6 @@ import { BusinessError } from "@/store/types/commons";
 import { useBoardPermissions } from "@data-board";
 import { WarningAlert } from "@ui-alert";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
-import { ToolConfigurationStatus } from "../../store/external-tool";
 
 export default defineComponent({
 	components: {
@@ -29,8 +28,9 @@ export default defineComponent({
 		isToolOutdated: {
 			type: Boolean,
 		},
-		toolConfigurationStatus: {
-			type: Object as PropType<ToolConfigurationStatus>,
+		toolOutdatedTranslationkey: {
+			type: String,
+			required: true,
 		},
 	},
 	setup(props) {
@@ -45,20 +45,7 @@ export default defineComponent({
 		);
 
 		const outdatedMessage: ComputedRef<string> = computed(() => {
-			if (isTeacher) {
-				if (
-					props.toolConfigurationStatus?.isOutdatedOnScopeContext ||
-					props.toolConfigurationStatus?.isOutdatedOnScopeSchool
-				) {
-					return "feature-board-external-tool-element.alert.outdatedOnSchoolAndContext.teacher";
-				} else if (!props.toolConfigurationStatus?.isOutdatedOnScopeSchool) {
-					return "feature-board-external-tool-element.alert.outdatedOnContext.teacher";
-				} else {
-					return "feature-board-external-tool-element.alert.outdatedOnSchool.teacher";
-				}
-			} else {
-				return "feature-board-external-tool-element.alert.outdated.student";
-			}
+			return props.toolOutdatedTranslationkey;
 		});
 
 		return {
