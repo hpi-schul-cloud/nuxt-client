@@ -61,9 +61,7 @@ export default defineComponent({
 
 		const getImage = computed(() => {
 			const preview: Preview | undefined = resource.value?.preview;
-			if (preview?.data) {
-				return preview.data;
-			} else if (preview?.url) {
+			if (preview?.url) {
 				return preview.url;
 			}
 			return "";
