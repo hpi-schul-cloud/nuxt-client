@@ -1,4 +1,6 @@
-type FormValidatorFn<T> = (errMsg: string) => (value: T) => string | true;
+export type FormValidatorFn<T> = (
+	errMsg: string
+) => (value: T) => string | true;
 
 /**
  * Checks if given value is not a nullish value
@@ -17,7 +19,9 @@ export const isValidUrl: FormValidatorFn<string> = (errMsg) => (value) => {
 		if (!["http:", "https:"].includes(urlObject.protocol)) {
 			throw new Error("Wrong protocol");
 		}
-		if (!urlObject.hostname.includes(".")) {
+		if (
+			!(urlObject.hostname.includes(".") || urlObject.hostname === "localhost")
+		) {
 			throw new Error("TopLevelDomain missing");
 		}
 		if (/(^-)|(--)|(-$)/.test(urlObject.hostname)) {
@@ -28,3 +32,31 @@ export const isValidUrl: FormValidatorFn<string> = (errMsg) => (value) => {
 	}
 	return true;
 };
+
+/**
+ * Checks if given value has valid time format
+ */
+export const isValidTimeFormat: FormValidatorFn<string> =
+	(errMsg) => (value) => {
+		if (value === "" || value === null) {
+			return true;
+		}
+
+		const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/g;
+
+		return !value.match(timeRegex) ? errMsg : true;
+	};
+
+/**
+ * Checks if given value has valid time format
+ */
+export const isValidDateFormat: FormValidatorFn<string> =
+	(errMsg) => (value) => {
+		if (value === "" || value === null) {
+			return true;
+		}
+
+		const dateRegex = /^(0[1-9]|[12]\d|3[01])\.(0[1-9]|1[0-2])\.\d{4}$/g;
+
+		return !value.match(dateRegex) ? errMsg : true;
+	};

@@ -24,6 +24,7 @@ declare type CardState = {
 
 export const useCardState = (
 	id: BoardCard["id"],
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	emit: (...args: any[]) => void
 ) => {
 	const { handleError, notifyWithTemplate } = useErrorHandler();
@@ -113,6 +114,7 @@ export const useCardState = (
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
+				400: notifyWithTemplate("notCreated", "boardElement"),
 			});
 		}
 	};

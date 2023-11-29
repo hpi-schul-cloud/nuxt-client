@@ -42,6 +42,11 @@
 				@edit:element="onEditElement"
 			/>
 		</div>
+		<ExternalToolElementAlert
+			:error="error"
+			:is-tool-outdated="isToolOutdated"
+			data-testid="board-external-tool-element-alert"
+		/>
 		<ExternalToolElementConfigurationDialog
 			:is-open="isConfigurationDialogOpen"
 			:context-id="element.id"
@@ -64,6 +69,7 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
+import { useSharedLastCreatedElement } from "@util-board";
 import {
 	computed,
 	ComputedRef,
@@ -73,12 +79,15 @@ import {
 	Ref,
 	ref,
 	toRef,
+	watch,
 } from "vue";
+import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 
 export default defineComponent({
 	components: {
+		ExternalToolElementAlert,
 		ExternalToolElementConfigurationDialog,
 		ExternalToolElementMenu,
 	},
@@ -104,6 +113,7 @@ export default defineComponent({
 			fetchDisplayData,
 			displayData,
 			isLoading: isDisplayDataLoading,
+			error,
 		} = useExternalToolElementDisplayState();
 		const { launchTool, fetchLaunchRequest } = useExternalToolLaunchState();
 
@@ -111,6 +121,16 @@ export default defineComponent({
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, ref(null), () => {
 			autofocus.value = true;
+		});
+
+		const { lastCreatedElementId, resetLastCreatedElementId } =
+			useSharedLastCreatedElement();
+
+		watch(lastCreatedElementId, (newValue) => {
+			if (newValue !== undefined && newValue === props.element.id) {
+				isConfigurationDialogOpen.value = true;
+				resetLastCreatedElementId();
+			}
 		});
 
 		const hasLinkedTool: ComputedRef<boolean> = computed(
@@ -190,7 +210,9 @@ export default defineComponent({
 			hasLinkedTool,
 			toolDisplayName,
 			displayData,
+			error,
 			isLoading,
+			isToolOutdated,
 			isConfigurationDialogOpen,
 			mdiPuzzleOutline,
 			onMoveElementDown,

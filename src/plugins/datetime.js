@@ -297,6 +297,10 @@ export const currentDate = () => {
 	return dayjs.tz();
 };
 
+export const isDateTimeInPast = (dateTime) => {
+	return new Date(dateTime) < new Date();
+};
+
 export const isToday = (date) => {
 	const dateObject = typeof date === Date ? date : new Date(date);
 	const today = new Date();

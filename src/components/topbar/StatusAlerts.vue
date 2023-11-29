@@ -66,7 +66,7 @@ export default defineComponent({
 				: { icon: mdiInformation, color: "info" };
 		};
 
-		const formatDate = (dateTime: any) => {
+		const formatDate = (dateTime: string) => {
 			return formatDateForAlerts(dateTime, true);
 		};
 

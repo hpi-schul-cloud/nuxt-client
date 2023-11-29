@@ -19,6 +19,7 @@
 					v-else-if="showLinkElement(element)"
 					:element="element"
 					:isEditMode="isEditMode"
+					:isDetailView="isDetailView"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
@@ -51,6 +52,19 @@
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
+				<DrawingContentElement
+					v-else-if="isDrawingElementResponse(element)"
+					:key="element.id"
+					:element="element"
+					:isEditMode="isEditMode"
+					:isFirstElement="firstElementId === element.id"
+					:isLastElement="lastElementId === element.id"
+					:hasMultipleElements="hasMultipleElements"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
 			</ContentElement>
 		</template>
 	</VCardText>
@@ -61,9 +75,10 @@ import {
 	ContentElementType,
 	ExternalToolElementResponse,
 	FileElementResponse,
-	LinkElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
+	DrawingElementResponse,
+	LinkElementResponse,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
@@ -73,6 +88,7 @@ import { FileContentElement } from "@feature-board-file-element";
 import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
+import { DrawingContentElement } from "@feature-board-drawing-element";
 import { computed, defineComponent, PropType } from "vue";
 import ContentElement from "./ContentElement.vue";
 
@@ -85,6 +101,7 @@ export default defineComponent({
 		RichTextContentElement,
 		SubmissionContentElement,
 		LinkContentElement,
+		DrawingContentElement,
 	},
 	props: {
 		elements: {
@@ -92,6 +109,10 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: {
+			type: Boolean,
+			required: true,
+		},
+		isDetailView: {
 			type: Boolean,
 			required: true,
 		},
@@ -166,6 +187,21 @@ export default defineComponent({
 			);
 		};
 
+		const isDrawingElementResponse = (
+			element: AnyContentElement
+		): element is DrawingElementResponse => {
+			return element.type === ContentElementType.Drawing;
+		};
+
+		const showDrawingElement = (
+			element: AnyContentElement
+		): element is DrawingElementResponse => {
+			return (
+				!!envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED &&
+				isDrawingElementResponse(element)
+			);
+		};
+
 		const onMoveElementDown = (
 			elementIndex: number,
 			element: AnyContentElement
@@ -223,6 +259,8 @@ export default defineComponent({
 			showSubmissionContainerElement,
 			isExternalToolElementResponse,
 			showExternalToolElement,
+			showDrawingElement,
+			isDrawingElementResponse,
 			showLinkElement,
 			lastElementId,
 			onDeleteElement,

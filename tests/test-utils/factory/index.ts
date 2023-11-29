@@ -44,3 +44,5 @@ export * from "./videoConferenceJoinResponseFactory";
 export * from "./toolReferenceResponseFactory";
 export * from "./groupResponseFactory";
 export * from "./groupFactory";
+export * from "./schoolExternalToolMetadataFactory";
+export * from "./schoolExternalToolMetadataResponseFactory";

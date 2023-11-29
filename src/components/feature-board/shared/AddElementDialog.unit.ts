@@ -35,6 +35,7 @@ const mockEnvs: Envs = {
 	FEATURE_SHOW_OUTDATED_USERS: true,
 	FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
 	FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
+	FEATURE_TLDRAW_ENABLED: true,
 };
 
 describe("ElementTypeSelection", () => {
