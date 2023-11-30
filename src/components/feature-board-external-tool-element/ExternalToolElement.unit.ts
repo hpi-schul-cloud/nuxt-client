@@ -2,10 +2,7 @@ import {
 	ContentElementType,
 	ExternalToolElementResponse,
 } from "@/serverApi/v3";
-import {
-	ExternalToolDisplayData,
-	ToolConfigurationStatus,
-} from "@/store/external-tool";
+import { ExternalToolDisplayData } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { I18N_KEY } from "@/utils/inject";
@@ -14,12 +11,14 @@ import {
 	externalToolDisplayDataFactory,
 	i18nMock,
 	timestampsResponseFactory,
+	toolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	useExternalToolElementDisplayState,
 	useExternalToolLaunchState,
+	useToolConfigurationStatus,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@mdi/js";
@@ -58,6 +57,10 @@ describe("ExternalToolElement", () => {
 		ReturnType<typeof useSharedLastCreatedElement>
 	>;
 
+	let useToolConfigurationStatusMock: DeepMocked<
+		ReturnType<typeof useToolConfigurationStatus>
+	>;
+
 	beforeEach(() => {
 		useContentElementStateMock =
 			createMock<ReturnType<typeof useContentElementState>>();
@@ -69,6 +72,8 @@ describe("ExternalToolElement", () => {
 			createMock<ReturnType<typeof useExternalToolLaunchState>>();
 		useSharedLastCreatedElementMock =
 			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		useToolConfigurationStatusMock =
+			createMock<ReturnType<typeof useToolConfigurationStatus>>();
 
 		jest
 			.mocked(useContentElementState)
@@ -83,6 +88,9 @@ describe("ExternalToolElement", () => {
 		jest
 			.mocked(useSharedLastCreatedElement)
 			.mockReturnValue(useSharedLastCreatedElementMock);
+		jest
+			.mocked(useToolConfigurationStatus)
+			.mockReturnValue(useToolConfigurationStatusMock);
 	});
 
 	afterEach(() => {
@@ -143,7 +151,7 @@ describe("ExternalToolElement", () => {
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
-						status: ToolConfigurationStatus.Latest,
+						status: toolConfigurationStatusFactory.build(),
 					})
 				);
 
@@ -164,7 +172,7 @@ describe("ExternalToolElement", () => {
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
-						status: ToolConfigurationStatus.Latest,
+						status: toolConfigurationStatusFactory.build(),
 					})
 				);
 
@@ -187,7 +195,10 @@ describe("ExternalToolElement", () => {
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
-						status: ToolConfigurationStatus.Outdated,
+						status: toolConfigurationStatusFactory.build({
+							isOutdatedOnScopeContext: true,
+							isOutdatedOnScopeSchool: true,
+						}),
 					})
 				);
 
@@ -677,13 +688,18 @@ describe("ExternalToolElement", () => {
 					message: "Loading error",
 				};
 
+				const toolOautdatedStatus = toolConfigurationStatusFactory.build({
+					isOutdatedOnScopeContext: true,
+					isOutdatedOnScopeSchool: true,
+				});
+
 				const { wrapper } = getWrapper(
 					{
 						element: EMPTY_TEST_ELEMENT,
 						isEditMode: true,
 					},
 					externalToolDisplayDataFactory.build({
-						status: ToolConfigurationStatus.Outdated,
+						status: toolOautdatedStatus,
 					})
 				);
 
@@ -692,17 +708,18 @@ describe("ExternalToolElement", () => {
 				return {
 					wrapper,
 					error,
+					toolOautdatedStatus,
 				};
 			};
 
 			it("should display an outdated alert", async () => {
-				const { wrapper } = setup();
+				const { wrapper, toolOautdatedStatus } = setup();
 
 				const alert = wrapper.find(
 					'[data-testid="board-external-tool-element-alert"]'
 				);
 
-				expect(alert.props("isToolOutdated")).toEqual(true);
+				expect(alert.props("toolOutdatedStatus")).toEqual(toolOautdatedStatus);
 			});
 
 			it("should display an error alert", async () => {

@@ -2,10 +2,7 @@ import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import EnvConfigModule from "@/store/env-config";
-import {
-	ExternalToolDisplayData,
-	ToolConfigurationStatus,
-} from "@/store/external-tool";
+import { ExternalToolDisplayData } from "@/store/external-tool";
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
@@ -14,16 +11,29 @@ import {
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory";
+import {
+	externalToolDisplayDataFactory,
+	toolConfigurationStatusFactory,
+} from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import VueRouter from "vue-router";
 import * as routerComposables from "vue-router/composables";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
+import { useToolConfigurationStatus } from "@data-external-tool";
 
 describe("RoomExternalToolsSection", () => {
 	let router: DeepMocked<VueRouter>;
+
+	let useToolConfigurationStatusMock: DeepMocked<
+		ReturnType<typeof useToolConfigurationStatus>
+	>;
+
+	beforeEach(() => {
+		useToolConfigurationStatusMock =
+			createMock<ReturnType<typeof useToolConfigurationStatus>>();
+	});
 
 	const getWrapper = (props: {
 		tools: ExternalToolDisplayData[];
@@ -242,7 +252,7 @@ describe("RoomExternalToolsSection", () => {
 		const setup = async () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build({
-					status: ToolConfigurationStatus.Latest,
+					status: toolConfigurationStatusFactory.build(),
 				});
 
 			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });
