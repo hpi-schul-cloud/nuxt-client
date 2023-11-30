@@ -26,7 +26,7 @@
 				:value="currentTime"
 				start="0"
 				end="duration"
-				step="step"
+				step="0.0000001"
 				:min="0"
 				:max="max"
 				@click="stopPropagation"
@@ -103,8 +103,6 @@ export default defineComponent({
 			return props.src;
 		});
 
-		const step = 0.0000001;
-
 		const controls = useMediaControls(audio, {
 			src: source,
 		});
@@ -160,7 +158,6 @@ export default defineComponent({
 			duration,
 			volume,
 			rate,
-			step,
 			speedRate,
 			mdiPlay,
 			mdiPause,
