@@ -17,7 +17,6 @@
 					:label="label"
 					:aria-label="ariaLabel"
 					:placeholder="t('common.placeholder.dateformat')"
-					:class="{ 'menu-open': showDateDialog }"
 					:error-messages="errorMessages"
 					v-date-input-mask
 					@update:model-value="validate"
@@ -64,7 +63,6 @@ const props = defineProps({
 	maxDate: { type: String },
 });
 const emit = defineEmits(["update:date", "error"]);
-
 const { t, locale } = useI18n();
 
 const showDateDialog = ref(false);
@@ -136,10 +134,7 @@ const closeAndEmit = () => {
 	showDateDialog.value = false;
 	inputField.value?.focus();
 
-	emit(
-		"update:date",
-		dayjs(dateString.value, DATETIME_FORMAT.date).toISOString()
-	);
+	emitDate();
 };
 </script>
 

@@ -1,5 +1,24 @@
 <template>
-	<div>
+	<v-text-field
+		v-bind="props"
+		v-model="timeValue"
+		ref="inputField"
+		data-testid="time-input"
+		variant="underlined"
+		color="primary"
+		append-inner-icon="$mdiClockOutline"
+		:label="label"
+		:aria-label="ariaLabel"
+		placeholder="HH:MM"
+		:error-messages="errorMessages"
+		v-time-input-mask
+		@update:model-value="validate"
+		@keydown.prevent.space="showTimeDialog = true"
+		@keydown.prevent.enter="showTimeDialog = true"
+		@keydown.up.down.stop
+		@keydown.tab="showTimeDialog = false"
+	/>
+	<!-- <div>
 		<v-menu
 			v-model="showTimeDialog"
 			:close-on-content-click="false"
@@ -19,13 +38,13 @@
 					:label="label"
 					:aria-label="ariaLabel"
 					placeholder="HH:MM"
-					:class="{ 'menu-open': showTimeDialog }"
-					:rules="rules"
+					:error-messages="errorMessages"
 					v-time-input-mask
+					@update:model-value="validate"
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@keydown.up.down.stop
-					@update:error="onError"
+					@keydown.tab="showTimeDialog = false"
 				/>
 			</template>
 			<v-list class="col-12 pt-1 px-0 overflow-y-auto">
@@ -44,16 +63,18 @@
 				</div>
 			</v-list>
 		</v-menu>
-	</div>
+	</div> -->
 </template>
 
 <script setup lang="ts">
-import { useDebounceFn } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { computedAsync, useDebounceFn } from "@vueuse/core";
+import { computed, ref, watchEffect } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { useI18n } from "vue-i18n";
+import { useVuelidate } from "@vuelidate/core";
+import { helpers, requiredIf } from "@vuelidate/validators";
 import { timeInputMask as vTimeInputMask } from "@util-input-masks";
-import { isRequired, isValidTimeFormat } from "@util-validators";
+import { isValidTimeFormat } from "@util-validators";
 
 const props = defineProps({
 	time: { type: String, required: true },
@@ -61,61 +82,75 @@ const props = defineProps({
 	ariaLabel: { type: String, default: "" },
 	required: { type: Boolean },
 });
-
 const emit = defineEmits(["update:time", "error"]);
-
 const { t } = useI18n();
-
-const modelValue = computed({
-	get() {
-		return props.time;
-	},
-	set: (newValue) => {
-		emitTimeDebounced(newValue);
-	},
-});
-
-// Necessary because we need to wait for update:error
-const emitTimeDebounced = useDebounceFn((newValue) => {
-	if (valid.value) {
-		emit("update:time", newValue);
-	}
-}, 50);
 
 const showTimeDialog = ref(false);
 const inputField = ref<HTMLInputElement | null>(null);
-const valid = ref(true);
+const timeValue = ref<undefined | string>();
 const { timesOfDayList } = useTimePickerState();
 
-const rules = computed(() => {
-	const rules = [
-		isValidTimeFormat(t("components.timePicker.validation.format")),
-	];
-
-	if (props.required) {
-		rules.push(isRequired(t("components.timePicker.validation.required")));
-	}
-
-	return rules;
+watchEffect(() => {
+	timeValue.value = props.time;
 });
 
-const onSelect = async (selected: string) => {
-	inputField.value?.focus();
-	modelValue.value = selected;
-	valid.value = true;
-	await closeMenu();
-};
+const rules = computed(() => ({
+	timeValue: {
+		requiredIfProp: helpers.withMessage(
+			t("components.timePicker.validation.required"),
+			requiredIf(props.required)
+		),
+		validDateFormat: helpers.withMessage(
+			t("components.timePicker.validation.format"),
+			isValidTimeFormat
+		),
+	},
+}));
 
-const onError = (hasError: boolean) => {
-	valid.value = !hasError;
-	if (hasError) {
+const v$ = useVuelidate(rules, { timeValue }, { $lazy: true });
+
+const errorMessages = computedAsync(async () => {
+	return await getErrorMessages(v$.value.timeValue);
+}, null);
+
+const getErrorMessages = useDebounceFn((validationModel: any) => {
+	const messages = validationModel.$errors.map((e: any) => {
+		return e.$message;
+	});
+	return messages;
+}, 1000);
+
+const validate = () => {
+	v$.value.timeValue.$touch();
+	v$.value.$validate();
+
+	if (!v$.value.timeValue.$invalid) {
+		emitTime();
+	} else {
 		emit("error");
 	}
 };
 
-const closeMenu = useDebounceFn(() => {
-	showTimeDialog.value = false;
-}, 50);
+const emitTime = () => {
+	emit("update:time", timeValue.value);
+};
+
+// const closeAndEmit = () => {
+// 	showDateDialog.value = false;
+// 	inputField.value?.focus();
+
+// 	emit(
+// 		"update:date",
+// 		dayjs(timeValue.value, DATETIME_FORMAT.date).toISOString()
+// 	);
+// };
+
+// const onSelect = async (selected: string) => {
+// 	inputField.value?.focus();
+// 	modelValue.value = selected;
+// 	valid.value = true;
+// 	await closeMenu();
+// };
 </script>
 
 <style lang="scss" scoped>

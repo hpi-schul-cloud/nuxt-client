@@ -8,7 +8,6 @@
 				:aria-label="dateInputAriaLabel"
 				:minDate="minDate"
 				:maxDate="maxDate"
-				required
 				@update:date="onDateUpdate"
 				@error="onError('date')"
 			/>
