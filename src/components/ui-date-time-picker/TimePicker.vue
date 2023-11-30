@@ -167,7 +167,7 @@ const emitTime = () => {
 }
 
 :deep {
-	.v-input__icon--append .v-icon {
+	.v-field__append-inner .v-icon {
 		width: 20px;
 		height: 20px;
 	}
