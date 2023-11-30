@@ -28,8 +28,12 @@
 				</div>
 			</div>
 
-			<div v-if="$slots.subtitle" class="pt-1 pb-1">
+			<div v-if="$slots.subtitle" class="gt-1 gb-1">
 				<slot name="subtitle" />
+			</div>
+
+			<div v-if="$slots.description" class="gt-1 gb-1">
+				<slot name="description" />
 			</div>
 		</div>
 	</div>
