@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, ref, watchEffect } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useDebounceFn, computedAsync } from "@vueuse/core";
 import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";

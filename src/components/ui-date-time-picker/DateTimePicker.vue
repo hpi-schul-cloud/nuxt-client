@@ -30,11 +30,10 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed, ref } from "vue";
+import { computed, ref } from "vue";
 import { useVModel } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
-import dayjs from "dayjs";
-import { isDateTimeInPast, DATETIME_FORMAT } from "@/plugins/datetime";
+import { isDateTimeInPast } from "@/plugins/datetime";
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 

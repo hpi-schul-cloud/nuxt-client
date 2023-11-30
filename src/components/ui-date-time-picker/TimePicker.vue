@@ -9,19 +9,19 @@
 		>
 			<template #activator="{ props }">
 				<v-text-field
-					ref="inputField"
-					v-model="modelValue"
 					v-bind="props"
+					v-model="modelValue"
+					ref="inputField"
+					data-testid="time-input"
+					variant="underlined"
+					color="primary"
+					append-inner-icon="$mdiClockOutline"
 					:label="label"
 					:aria-label="ariaLabel"
 					placeholder="HH:MM"
-					append-icon="$mdiClockOutline"
-					:rules="rules"
-					data-testid="time-input"
-					v-timeInputMask
 					:class="{ 'menu-open': showTimeDialog }"
-					variant="underlined"
-					color="primary"
+					:rules="rules"
+					v-time-input-mask
 					@keydown.prevent.space="showTimeDialog = true"
 					@keydown.prevent.enter="showTimeDialog = true"
 					@keydown.up.down.stop
@@ -47,91 +47,75 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { useDebounceFn } from "@vueuse/core";
-import { computed, defineComponent, ref } from "vue";
+import { computed, ref } from "vue";
 import { useTimePickerState } from "./TimePickerState.composable";
 import { useI18n } from "vue-i18n";
-import { timeInputMask } from "@util-input-masks";
+import { timeInputMask as vTimeInputMask } from "@util-input-masks";
 import { isRequired, isValidTimeFormat } from "@util-validators";
 
-export default defineComponent({
-	name: "TimePicker",
-	props: {
-		time: { type: String, required: true },
-		label: { type: String, default: "" },
-		ariaLabel: { type: String, default: "" },
-		required: { type: Boolean },
+const props = defineProps({
+	time: { type: String, required: true },
+	label: { type: String, default: "" },
+	ariaLabel: { type: String, default: "" },
+	required: { type: Boolean },
+});
+
+const emit = defineEmits(["update:time", "error"]);
+
+const { t } = useI18n();
+
+const modelValue = computed({
+	get() {
+		return props.time;
 	},
-	directives: {
-		timeInputMask,
-	},
-	emits: ["update:time", "error"],
-	setup(props, { emit }) {
-		const { t } = useI18n();
-
-		const modelValue = computed({
-			get() {
-				return props.time;
-			},
-			set: (newValue) => {
-				emitTimeDebounced(newValue);
-			},
-		});
-
-		// Necessary because we need to wait for update:error
-		const emitTimeDebounced = useDebounceFn((newValue) => {
-			if (valid.value) {
-				emit("update:time", newValue);
-			}
-		}, 50);
-
-		const showTimeDialog = ref(false);
-		const inputField = ref<HTMLInputElement | null>(null);
-		const valid = ref(true);
-		const { timesOfDayList } = useTimePickerState();
-
-		const rules = computed(() => {
-			const rules = [
-				isValidTimeFormat(t("components.timePicker.validation.format")),
-			];
-
-			if (props.required) {
-				rules.push(isRequired(t("components.timePicker.validation.required")));
-			}
-
-			return rules;
-		});
-
-		const onSelect = async (selected: string) => {
-			inputField.value?.focus();
-			modelValue.value = selected;
-			valid.value = true;
-			await closeMenu();
-		};
-
-		const onError = (hasError: boolean) => {
-			valid.value = !hasError;
-			if (hasError) {
-				emit("error");
-			}
-		};
-
-		const closeMenu = useDebounceFn(() => {
-			showTimeDialog.value = false;
-		}, 50);
-
-		return {
-			showTimeDialog,
-			timesOfDayList,
-			modelValue,
-			rules,
-			inputField,
-			onSelect,
-			onError,
-		};
+	set: (newValue) => {
+		emitTimeDebounced(newValue);
 	},
 });
+
+// Necessary because we need to wait for update:error
+const emitTimeDebounced = useDebounceFn((newValue) => {
+	if (valid.value) {
+		emit("update:time", newValue);
+	}
+}, 50);
+
+const showTimeDialog = ref(false);
+const inputField = ref<HTMLInputElement | null>(null);
+const valid = ref(true);
+const { timesOfDayList } = useTimePickerState();
+
+const rules = computed(() => {
+	const rules = [
+		isValidTimeFormat(t("components.timePicker.validation.format")),
+	];
+
+	if (props.required) {
+		rules.push(isRequired(t("components.timePicker.validation.required")));
+	}
+
+	return rules;
+});
+
+const onSelect = async (selected: string) => {
+	inputField.value?.focus();
+	modelValue.value = selected;
+	valid.value = true;
+	await closeMenu();
+};
+
+const onError = (hasError: boolean) => {
+	valid.value = !hasError;
+	if (hasError) {
+		emit("error");
+	}
+};
+
+const closeMenu = useDebounceFn(() => {
+	showTimeDialog.value = false;
+}, 50);
 </script>
 
 <style lang="scss" scoped>
