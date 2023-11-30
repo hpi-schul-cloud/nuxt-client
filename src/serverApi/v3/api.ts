@@ -1,3 +1,4 @@
+/* tslint:disable */
 /* eslint-disable */
 /**
  * HPI Schul-Cloud Server API
@@ -297,10 +298,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -657,11 +658,11 @@ export interface ConsentSessionResponse {
  */
 export enum ContentElementType {
     File = 'file',
+    Drawing = 'drawing',
     Link = 'link',
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
-    ExternalTool = 'externalTool',
-    Drawing = 'drawing',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -919,6 +920,7 @@ export enum CopyApiResponseTypeEnum {
     ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
     File = 'FILE',
     FileElement = 'FILE_ELEMENT',
+    DrawingElement = 'DRAWING_ELEMENT',
     FileGroup = 'FILE_GROUP',
     Leaf = 'LEAF',
     Lesson = 'LESSON',
@@ -1055,11 +1057,11 @@ export interface CreateCardBodyParams {
     */
 export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     File = 'file',
+    Drawing = 'drawing',
     Link = 'link',
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
-    ExternalTool = 'externalTool',
-    Drawing = 'drawing',
+    ExternalTool = 'externalTool'
 }
 
 /**
@@ -1457,6 +1459,82 @@ export interface DashboardResponse {
      * @memberof DashboardResponse
      */
     gridElements: Array<DashboardGridElementResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface DrawingContentBody
+ */
+export interface DrawingContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof DrawingContentBody
+     */
+    description: string;
+}
+/**
+ * 
+ * @export
+ * @interface DrawingElementContent
+ */
+export interface DrawingElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof DrawingElementContent
+     */
+    description: string;
+}
+/**
+ * 
+ * @export
+ * @interface DrawingElementContentBody
+ */
+export interface DrawingElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof DrawingElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {DrawingContentBody}
+     * @memberof DrawingElementContentBody
+     */
+    content: DrawingContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface DrawingElementResponse
+ */
+export interface DrawingElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof DrawingElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof DrawingElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof DrawingElementResponse
+     */
+    timestamps: TimestampsResponse;
+    /**
+     * 
+     * @type {DrawingElementContent}
+     * @memberof DrawingElementResponse
+     */
+    content: DrawingElementContent;
 }
 /**
  * 
@@ -4289,83 +4367,6 @@ export interface SingleColumnBoardResponse {
      * @memberof SingleColumnBoardResponse
      */
     isArchived: boolean;
-}/**
- *
- * @export
- * @interface DrawingContentBody
- */
-export interface DrawingContentBody {
-	/**
-	 *
-	 * @type {string}
-	 * @memberof DrawingContentBody
-	 */
-	description: string;
-}
-/**
- *
- * @export
- * @interface DrawingElementContentBody
- */
-export interface DrawingElementContentBody {
-	/**
-	 *
-	 * @type {ContentElementType}
-	 * @memberof DrawingContentBody
-	 */
-	type: ContentElementType;
-	/**
-	 *
-	 * @type {String}
-	 * @memberof DrawingContentBody
-	 */
-	content: DrawingContentBody;
-}
-/**
- *
- * @export
- * @interface DrawingElementContent
- */
-
-export interface DrawingElementContent {
-	/**
-	 *
-	 * @type {string}
-	 * @memberof DrawingElementContent
-	 */
-	description: string;
-}
-/**
- *
- * @export
- * @interface DrawingElementResponse
- */
-
-export interface DrawingElementResponse {
-	/**
-	 *
-	 * @type {string}
-	 * @memberof DrawingElementResponse
-	 */
-	id: string;
-	/**
-	 *
-	 * @type {ContentElementType}
-	 * @memberof DrawingElementResponse
-	 */
-	type: ContentElementType;
-	/**
-	 *
-	 * @type {String}
-	 * @memberof DrawingElementResponse
-	 */
-	content: DrawingElementContent;
-	/**
-	 *
-	 * @type {TimestampsResponse}
-	 * @memberof DrawingElementResponse
-	 */
-	timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -7013,7 +7014,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse| DrawingElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7167,7 +7168,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | LinkElementResponse | FileElementResponse | SubmissionContainerElementResponse | ExternalToolElementResponse | DrawingElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
 
     /**
      * 
@@ -7936,7 +7937,7 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>> {
+        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7990,7 +7991,7 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse> {
+        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse> {
             return localVarFp.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -8043,7 +8044,7 @@ export interface BoardElementApiInterface {
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse>;
+    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
 
 }
 
