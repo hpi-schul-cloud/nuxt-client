@@ -1,6 +1,6 @@
 <template>
 	<div class="text-center">
-		<v-menu offset-y max-height="120px" nudge-left="50px">
+		<v-menu offset-y max-height="120px" min-width="150px" nudge-left="75px">
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn
 					data-testid="speed-menu-play-speed"
