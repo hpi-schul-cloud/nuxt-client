@@ -187,6 +187,7 @@ export default defineComponent({
 <style scoped>
 .audioplayer {
 	background-color: #424242;
+	padding: 2px 0;
 }
 .duration {
 	white-space: nowrap;
