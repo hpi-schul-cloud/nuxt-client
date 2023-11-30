@@ -8,7 +8,10 @@ import {
 } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { mockApiResponse } from "@@/tests/test-utils";
+import {
+	mockApiResponse,
+	toolConfigurationStatusFactory,
+} from "@@/tests/test-utils";
 import {
 	axiosErrorFactory,
 	businessErrorFactory,
@@ -25,7 +28,6 @@ import ContextExternalToolsModule from "./context-external-tools";
 import {
 	ContextExternalToolConfigurationTemplate,
 	ExternalToolDisplayData,
-	ToolConfigurationStatus,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
@@ -282,7 +284,7 @@ describe("ContextExternalToolsModule", () => {
 							contextExternalToolId: displayData.contextToolId,
 							name: displayData.displayName,
 							logoUrl: displayData.logoUrl,
-							status: ToolConfigurationStatus.Latest,
+							status: toolConfigurationStatusFactory.build(),
 							openInNewTab: displayData.openInNewTab,
 						},
 					]);

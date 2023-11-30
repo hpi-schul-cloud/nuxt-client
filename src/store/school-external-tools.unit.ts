@@ -7,6 +7,7 @@ import {
 	schoolExternalToolFactory,
 	schoolExternalToolResponseFactory,
 	schoolExternalToolSaveFactory,
+	toolConfigurationStatusFactory,
 	toolParameterEntryFactory,
 } from "@@/tests/test-utils";
 import {
@@ -20,7 +21,6 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolConfigurationTemplate,
-	ToolConfigurationStatus,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
@@ -112,7 +112,7 @@ describe("SchoolExternalToolsModule", () => {
 									value: schoolExternalToolResponse.parameters[0].value,
 								},
 							],
-							status: ToolConfigurationStatus.Latest,
+							status: toolConfigurationStatusFactory.build(),
 							version: schoolExternalToolResponse.toolVersion,
 						},
 					]);
@@ -184,7 +184,7 @@ describe("SchoolExternalToolsModule", () => {
 						schoolId: schoolExternalTool.schoolId,
 						version: schoolExternalTool.toolVersion,
 						parameters: [],
-						status: ToolConfigurationStatus.Latest,
+						status: toolConfigurationStatusFactory.build(),
 						name: schoolExternalTool.name,
 					});
 				});

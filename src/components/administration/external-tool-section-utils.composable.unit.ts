@@ -3,11 +3,10 @@ import { DataTableHeader } from "vuetify";
 import { schoolExternalToolsModule } from "@/store";
 import {
 	SchoolExternalToolResponse,
-	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { ToolConfigurationStatus } from "@/store/external-tool";
+import { toolConfigurationStatusFactory } from "@@/tests/test-utils";
 
 const schoolExternalToolsModuleMock = () => {
 	return {
@@ -16,7 +15,10 @@ const schoolExternalToolsModuleMock = () => {
 				id: "id",
 				name: "toolName",
 				version: 1,
-				status: "Latest",
+				status: {
+					isOutdatedOnScopeSchool: false,
+					isOutdatedOnScopeContext: false,
+				},
 			},
 		],
 	};
@@ -45,7 +47,10 @@ describe("useSchoolExternalToolUtils", () => {
 					value: "value",
 				},
 			],
-			status: SchoolExternalToolResponseStatusEnum.Latest,
+			status: toolConfigurationStatusFactory.build({
+				isOutdatedOnScopeSchool: false,
+				isOutdatedOnScopeContext: false,
+			}),
 		};
 		const listResponse: SchoolExternalToolSearchListResponse = {
 			data: [toolResponse],
@@ -54,7 +59,7 @@ describe("useSchoolExternalToolUtils", () => {
 		const schoolExternaToolItem: SchoolExternalToolItem = {
 			name: toolResponse.name,
 			id: toolResponse.id,
-			status: ToolConfigurationStatus.Latest,
+			status: "translationKey",
 			outdated: false,
 		};
 
