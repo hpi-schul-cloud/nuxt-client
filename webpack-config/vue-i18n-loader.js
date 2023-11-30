@@ -15,19 +15,13 @@ const loader = function (source, sourceMap) {
 		type: "plain",
 		isGlobal: false,
 		onWarn: (msg) => {
-			// console.log(
-			// 	"--- warning:",
-			// 	`[vue-i18n-loader]: ${loaderContext.resourcePath} ${msg}`
-			// );
+			console.warn(`[vue-i18n-loader]: ${loaderContext.resourcePath} ${msg}`);
 			// loaderContext.emitWarning(
 			// 	`[vue-i18n-loader]: ${loaderContext.resourcePath} ${msg}`
 			// );
 		},
 		onError: (msg) => {
-			// console.log(
-			// 	"--- error:",
-			// 	`[vue-i18n-loader]: ${loaderContext.resourcePath} ${msg}`
-			// );
+			console.error(`[vue-i18n-loader]: ${loaderContext.resourcePath} ${msg}`);
 			// loaderContext.emitError(
 			// 	`[vue-i18n-loader]: ${loaderContext.resourcePath} ${msg}`
 			// );
@@ -39,7 +33,7 @@ const loader = function (source, sourceMap) {
 		const { code, map } = generateJSON(source, options);
 		this.callback(null, code, map);
 	} catch (err) {
-		// console.log("--- error 2:", `[vue-i18n-loader]: ${err.message}`);
+		console.error("error:", `[vue-i18n-loader]: ${err.message}`);
 		// this.emitError(`[vue-i18n-loader]: ${err.message}`);
 	}
 };
