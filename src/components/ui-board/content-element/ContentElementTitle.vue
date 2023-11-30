@@ -28,4 +28,19 @@ export default defineComponent({
 	letter-spacing: 0.02px;
 	color: var(--v-black-base);
 }
+.content-element-title.subtitle-1:hover {
+	animation-name: expand;
+	animation-duration: 2s;
+}
+
+@keyframes expand {
+	0% {
+		text-overflow: ellipsis;
+		text-wrap: nowrap;
+	}
+	100% {
+		text-overflow: inherit;
+		text-wrap: pretty;
+	}
+}
 </style>
