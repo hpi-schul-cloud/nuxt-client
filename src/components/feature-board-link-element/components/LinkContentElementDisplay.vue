@@ -1,15 +1,12 @@
 <template>
-	<v-card
+	<div
 		data-testid="board-link-element"
 		ref="linkContentElementDisplay"
-		dense
-		elevation="0"
-		:outlined="true"
 		:ripple="false"
-		tabindex="0"
+		tabindex="-1"
 		:loading="isLoading ? 'primary' : false"
 	>
-		<a :href="sanitizedUrl" target="_blank">
+		<a :href="sanitizedUrl" target="_blank" tabindex="-1">
 			<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
 				<template #display>
 					<v-img v-if="imageUrl" :src="imageUrl" alt="" />
@@ -25,7 +22,7 @@
 				</template>
 			</ContentElementBar>
 		</a>
-	</v-card>
+	</div>
 </template>
 
 <script lang="ts">

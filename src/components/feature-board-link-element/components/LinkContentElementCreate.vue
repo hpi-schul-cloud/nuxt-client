@@ -1,5 +1,5 @@
 <template>
-	<v-card-text>
+	<v-card class="pa-4 elevation-0" tabindex="-1">
 		<v-form @submit.prevent.stop="onSubmit" ref="form" :lazy-validation="true">
 			<div class="d-flex flex-row">
 				<v-textarea
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 		</v-form>
-	</v-card-text>
+	</v-card>
 </template>
 
 <script lang="ts">
@@ -92,6 +92,6 @@ export default defineComponent({
 	line-height: 1.375rem;
 }
 .menu {
-	margin-right: -12px;
+	margin-right: -6px;
 }
 </style>

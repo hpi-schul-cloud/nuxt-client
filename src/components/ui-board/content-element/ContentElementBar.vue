@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div tabindex="-1">
 		<div v-if="$slots.display">
 			<ContentElementDisplay>
 				<template #display>

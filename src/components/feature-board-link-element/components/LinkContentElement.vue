@@ -1,9 +1,12 @@
 <template>
-	<div
+	<v-card
 		class="mb-4"
 		data-testid="board-link-element"
 		ref="linkContentElement"
+		dense
+		elevation="0"
 		:outlined="outlined"
+		:ripple="false"
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 	>
@@ -27,7 +30,7 @@
 				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementCreate>
-	</div>
+	</v-card>
 </template>
 
 <script lang="ts">
@@ -75,7 +78,10 @@ export default defineComponent({
 		const linkContentElement = ref(null);
 		const isLoading = ref(false);
 		const element = toRef(props, "element");
-		const outlined = computed(() => props.isEditMode);
+		const outlined = computed(
+			() =>
+				props.isEditMode === true || computedElement.value.content.url !== ""
+		);
 
 		useBoardFocusHandler(element.value.id, linkContentElement);
 
@@ -101,8 +107,6 @@ export default defineComponent({
 				const { title, description, imageUrl } = await getMetaTags(validUrl);
 				modelValue.value.title = title;
 				modelValue.value.description = description;
-				console.log("imageUrl", imageUrl); // WIP: remove
-
 				if (imageUrl) {
 					modelValue.value.imageUrl = await createPreviewImage(imageUrl);
 				}

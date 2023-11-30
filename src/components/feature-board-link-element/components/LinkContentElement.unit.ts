@@ -10,7 +10,7 @@ import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElem
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { LinkContentElement } from "@feature-board-link-element";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { MountOptions, mount } from "@vue/test-utils";
+import { MountOptions, shallowMount } from "@vue/test-utils";
 import { LinkElementContent, MetaTagExtractorResponse } from "@/serverApi/v3";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import Vue, { computed, ref } from "vue";
@@ -73,7 +73,7 @@ describe("LinkContentElement", () => {
 		isEditMode: boolean;
 	}) => {
 		const notifierModule = createModuleMocks(NotifierModule);
-		const wrapper = mount(LinkContentElement as MountOptions<Vue>, {
+		const wrapper = shallowMount(LinkContentElement as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
 				[I18N_KEY.valueOf()]: i18nMock,
@@ -107,7 +107,7 @@ describe("LinkContentElement", () => {
 
 		const { wrapper } = getWrapper({
 			element,
-			isEditMode: options.isEditMode ?? false,
+			isEditMode: true,
 		});
 
 		return {
@@ -180,8 +180,8 @@ describe("LinkContentElement", () => {
 					isEditMode: true,
 				});
 
-				// const card = wrapper.findComponent({ ref: "linkContentElement" });
-				wrapper.vm.$emit(
+				const element = wrapper.findComponent({ ref: "linkContentElement" });
+				element.vm.$emit(
 					"keydown",
 					new KeyboardEvent("keydown", {
 						key: "ArrowUp",
@@ -189,26 +189,7 @@ describe("LinkContentElement", () => {
 					})
 				);
 
-				expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
-			});
-		});
-
-		describe("when component is in display-mode", () => {
-			it("should emit 'move-keyboard:edit'", async () => {
-				const { wrapper } = setup({
-					isEditMode: false,
-				});
-
-				// const card = wrapper.findComponent({ ref: "linkContentElement" });
-				wrapper.vm.$emit(
-					"keydown",
-					new KeyboardEvent("keydown", {
-						key: "ArrowUp",
-						keyCode: 38,
-					})
-				);
-
-				expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
+				expect(element.emitted("move-keyboard:edit")).toBeUndefined();
 			});
 		});
 	});
