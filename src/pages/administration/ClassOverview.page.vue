@@ -29,12 +29,13 @@
 			:items-length="pagination.total"
 			:sort-by="sortBy"
 			:page="page"
-			:footer-props="footerProps"
+			:items-per-page-text="footerProps.itemsPerPageText"
+			:items-per-page-options="footerProps.itemsPerPageOptions"
 			data-testid="admin-class-table"
 			class="elevation-1"
 			:no-data-text="t('common.nodata')"
-			@update:sort-by="onUpdateSortBy"
-			@update:items-per-page="onUpdateItemsPerPage"
+			@update:sortBy="onUpdateSortBy"
+			@update:itemsPerPage="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
 			<template v-slot:[`item.actions`]="{ item }">
@@ -339,7 +340,7 @@ export default defineComponent({
 			},
 			{
 				value: "studentCount",
-				title: "Schüler:innen",
+				title: t("common.labels.students"),
 				sortable: true,
 			},
 			{
