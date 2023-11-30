@@ -128,11 +128,6 @@ export default defineComponent({
 				duration = isoString.slice(12, 19);
 			}
 
-			const secondsInTenHours = 36000;
-			if (seconds >= secondsInTenHours) {
-				duration = isoString.slice(11, 19);
-			}
-
 			return duration;
 		};
 
