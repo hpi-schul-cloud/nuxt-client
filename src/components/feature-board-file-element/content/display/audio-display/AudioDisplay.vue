@@ -120,7 +120,20 @@ export default defineComponent({
 		};
 
 		const formatDuration = (seconds: number) => {
-			return new Date(1000 * seconds).toISOString().slice(14, 19);
+			const isoString = new Date(1000 * seconds).toISOString();
+			let duration = isoString.slice(14, 19);
+
+			const secondsInOneHour = 3600;
+			if (seconds >= secondsInOneHour) {
+				duration = isoString.slice(12, 19);
+			}
+
+			const secondsInTenHours = 36000;
+			if (seconds >= secondsInTenHours) {
+				duration = isoString.slice(11, 19);
+			}
+
+			return duration;
 		};
 
 		const max = computed(() => {
