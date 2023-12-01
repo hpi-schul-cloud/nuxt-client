@@ -112,11 +112,11 @@ export default defineComponent({
 			if (errors.value.length > 0) return "";
 
 			if (dateRequired.value && !date.value) {
-				return t("components.datePicker.messages.dateRequired");
+				return t("components.dateTimePicker.messages.dateRequired");
 			}
 
 			if (dateTimeInPast.value) {
-				return t("components.datePicker.messages.dateInPast");
+				return t("components.dateTimePicker.messages.dateInPast");
 			}
 
 			return "";
