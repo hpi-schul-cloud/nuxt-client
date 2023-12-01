@@ -2,6 +2,7 @@ import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
+	mdiPresentation,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
 	mdiLink,
@@ -24,6 +25,7 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
+
 		const elementData = await addElementFunction(elementType);
 		lastCreatedElementId.value = elementData?.id;
 	};
@@ -69,6 +71,15 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			label: "components.elementTypeSelection.elements.linkElement.subtitle",
 			action: () => onElementClick(ContentElementType.Link),
 			testId: "create-element-link",
+		});
+	}
+
+	if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
+		options.push({
+			icon: mdiPresentation,
+			label: "components.elementTypeSelection.elements.boardElement.subtitle",
+			action: () => onElementClick(ContentElementType.Drawing),
+			testId: "create-element-drawing-element",
 		});
 	}
 

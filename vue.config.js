@@ -45,6 +45,9 @@ module.exports = defineConfig({
 				"@feature-board-external-tool-element": getDir(
 					"src/components/feature-board-external-tool-element"
 				),
+				"@feature-board-drawing-element": getDir(
+					"src/components/feature-board-drawing-element"
+				),
 				"@feature-board": getDir("src/components/feature-board"),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
@@ -65,6 +68,16 @@ module.exports = defineConfig({
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
+		},
+		module: {
+			rules: [
+				{
+					test: /\.json$/,
+					type: "javascript/auto",
+					loader: path.resolve(__dirname, "webpack-config/vue-i18n-loader.js"),
+					include: [path.resolve(__dirname, "src/locales")],
+				},
+			],
 		},
 	},
 

@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { authModule, envConfigModule } from "@/store";
 import { createI18n } from "vue-i18n";
 
 const loadLocaleMessages = () => {
 	const messages = {
-		en: require("../locales/en.json"),
-		de: require("../locales/de.json"),
-		es: require("../locales/es.json"),
-		uk: require("../locales/uk.json"),
+		en: require("../locales/en.json").default,
+		de: require("../locales/de.json").default,
+		es: require("../locales/es.json").default,
+		uk: require("../locales/uk.json").default,
 	};
 	return messages;
 };
