@@ -21,6 +21,7 @@ import { defineComponent, computed } from "vue";
 import { mdiPresentation } from "@mdi/js";
 import image from "@/assets/img/tldraw.png";
 import { ContentElementBar } from "@ui-board";
+import { useI18n } from "@/composables/i18n.composable";
 import dayjs from "dayjs";
 
 export default defineComponent({
@@ -33,10 +34,11 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const { t } = useI18n();
 		const imageSrc = image;
 
 		const formattedLastUpdatedAt = computed(() => {
-			return dayjs(props.lastUpdatedAt).format("DD.MM. HH:mm");
+			return dayjs(props.lastUpdatedAt).format(t("format.dateTime"));
 		});
 
 		return {

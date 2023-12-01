@@ -15,13 +15,13 @@
 			<InnerContent
 				v-if="!isEditMode"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				:doc-name="element.id"
+				:docName="element.id"
 			/>
 
 			<InnerContent
 				v-if="isEditMode"
-				:docName="element.id"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
+				:docName="element.id"
 				><BoardMenu scope="element">
 					<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
 					<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
