@@ -55,7 +55,7 @@ import { isValidDateFormat } from "@util-validators";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 
 const props = defineProps({
-	date: { type: String, required: true }, // ISO 8601 string
+	date: { type: String }, // ISO 8601 string
 	label: { type: String, default: "" },
 	ariaLabel: { type: String, default: "" },
 	required: { type: Boolean },
@@ -67,23 +67,26 @@ const { t, locale } = useI18n();
 
 const showDateDialog = ref(false);
 const inputField = ref<HTMLInputElement | null>(null);
-const dateString = ref<undefined | string>();
+const dateString = ref<string>();
+
+watchEffect(() => {
+	dateString.value = props.date
+		? dayjs(props.date).format(DATETIME_FORMAT.date)
+		: undefined;
+});
 
 const dateObject = computed({
 	get() {
-		if (v$.value.dateString.$invalid) return new Date(props.date);
+		if (v$.value.dateString.$invalid)
+			return props.date ? new Date(props.date) : undefined;
+
 		return dateString.value
 			? dayjs(dateString.value, DATETIME_FORMAT.date).toDate()
 			: undefined;
 	},
-
 	set(newValue) {
 		dateString.value = dayjs(newValue).format(DATETIME_FORMAT.date);
 	},
-});
-
-watchEffect(() => {
-	dateString.value = dayjs(props.date).format(DATETIME_FORMAT.date);
 });
 
 const rules = computed(() => ({
@@ -124,10 +127,11 @@ const validate = () => {
 };
 
 const emitDate = () => {
-	emit(
-		"update:date",
-		dayjs(dateString.value, DATETIME_FORMAT.date).toISOString()
-	);
+	const date = dateString.value
+		? dayjs(dateString.value, DATETIME_FORMAT.date).toISOString()
+		: undefined;
+
+	emit("update:date", date);
 };
 
 const closeAndEmit = () => {

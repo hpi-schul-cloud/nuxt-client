@@ -77,13 +77,13 @@ const dateRequired = computed(() => time.value !== "");
 const dateTimeInPast = ref(dateTime.value && isDateTimeInPast(dateTime.value));
 
 const emitDateTime = () => {
-	if (date.value === "" && time.value === "") {
+	if (!date.value && time.value === "") {
 		dateTimeInPast.value = false;
 		emit("input", null);
 		return;
 	}
 
-	if (date.value === "" && dateRequired.value) {
+	if (!date.value && dateRequired.value) {
 		return;
 	}
 

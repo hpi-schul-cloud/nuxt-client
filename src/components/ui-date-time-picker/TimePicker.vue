@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import { computedAsync, useDebounceFn } from "@vueuse/core";
 import { computed, ref, watchEffect } from "vue";
-import { useTimePickerState } from "./TimePickerState.composable";
+// import { useTimePickerState } from "./TimePickerState.composable";
 import { useI18n } from "vue-i18n";
 import { useVuelidate } from "@vuelidate/core";
 import { helpers, requiredIf } from "@vuelidate/validators";
@@ -88,7 +88,7 @@ const { t } = useI18n();
 const showTimeDialog = ref(false);
 const inputField = ref<HTMLInputElement | null>(null);
 const timeValue = ref<undefined | string>();
-const { timesOfDayList } = useTimePickerState();
+// const { timesOfDayList } = useTimePickerState();
 
 watchEffect(() => {
 	timeValue.value = props.time;
