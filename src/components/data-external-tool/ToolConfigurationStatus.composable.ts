@@ -6,7 +6,7 @@ export const useToolConfigurationStatus = () => {
 	const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 	const determineOutdatedTranslationKey = (
-		toolConfigStatus: ToolConfigurationStatus | undefined
+		toolConfigStatus: ToolConfigurationStatus
 	): string => {
 		const userRoles = authModule.getUserRoles;
 
@@ -15,14 +15,14 @@ export const useToolConfigurationStatus = () => {
 				toolConfigStatus?.isOutdatedOnScopeContext &&
 				toolConfigStatus.isOutdatedOnScopeSchool
 			) {
-				return "common.information.outdatedOnSchoolAndContext.teacher";
+				return "common.tool.information.outdatedOnSchoolAndContext.teacher";
 			} else if (toolConfigStatus?.isOutdatedOnScopeSchool) {
-				return "common.information.outdatedOnSchool.teacher";
+				return "common.tool.information.outdatedOnSchool.teacher";
 			} else {
-				return "common.information.outdatedOnContext.teacher";
+				return "common.tool.information.outdatedOnContext.teacher";
 			}
 		} else {
-			return "common.information.outdated.student";
+			return "common.tool.information.outdated.student";
 		}
 	};
 

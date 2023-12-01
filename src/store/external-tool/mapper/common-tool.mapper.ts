@@ -8,7 +8,7 @@ import {
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
 import { ToolLaunchRequestMethodEnum } from "@/store/external-tool";
-import { ToolConfigurationStatus } from "../tool-configuration-status.enum";
+import { ToolConfigurationStatus } from "../tool-configuration-status";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { ToolParameterLocation } from "../tool-parameter-location.enum";
 import { ToolParameterScope } from "../tool-parameter-scope.enum";
@@ -84,7 +84,6 @@ export class CommonToolMapper {
 		status: ToolConfigurationStatusResponse
 	): ToolConfigurationStatus {
 		const mapped: ToolConfigurationStatus = {
-			isDisabled: status.isDisabled,
 			isOutdatedOnScopeSchool: status.isOutdatedOnScopeSchool,
 			isOutdatedOnScopeContext: status.isOutdatedOnScopeContext,
 		};

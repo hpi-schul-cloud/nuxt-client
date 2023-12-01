@@ -44,7 +44,6 @@
 		</div>
 		<ExternalToolElementAlert
 			:error="error"
-			:is-tool-outdated="isToolOutdated"
 			:tool-outdated-status="toolOutdatedStatus"
 			data-testid="board-external-tool-element-alert"
 		/>
@@ -145,15 +144,20 @@ export default defineComponent({
 
 		const isToolOutdated: ComputedRef<boolean> = computed(
 			() =>
-				(displayData.value?.status.isOutdatedOnScopeSchool ||
-					displayData.value?.status.isOutdatedOnScopeContext) ??
-				false
+				!!displayData.value?.status.isOutdatedOnScopeSchool ||
+				!!displayData.value?.status.isOutdatedOnScopeContext
 		);
 
-		const toolOutdatedStatus: ComputedRef<ToolConfigurationStatus | undefined> =
-			computed(() => {
-				return displayData.value?.status;
-			});
+		const toolOutdatedStatus: ComputedRef<ToolConfigurationStatus> = computed(
+			() => {
+				return (
+					displayData.value?.status ?? {
+						isOutdatedOnScopeSchool: false,
+						isOutdatedOnScopeContext: false,
+					}
+				);
+			}
+		);
 
 		const isLoading = computed(
 			() =>

@@ -7,7 +7,6 @@ import {
 	schoolExternalToolFactory,
 	schoolExternalToolResponseFactory,
 	schoolExternalToolSaveFactory,
-	toolConfigurationStatusFactory,
 	toolParameterEntryFactory,
 } from "@@/tests/test-utils";
 import {
@@ -27,6 +26,7 @@ import {
 } from "./external-tool";
 import SchoolExternalToolsModule from "./school-external-tools";
 import { BusinessError } from "./types/commons";
+import { schoolToolConfigurationStatusResponseFactory } from "../../tests/test-utils/factory/schoolExternalToolConfigurationStatusFactory";
 
 describe("SchoolExternalToolsModule", () => {
 	let module: SchoolExternalToolsModule;
@@ -112,7 +112,7 @@ describe("SchoolExternalToolsModule", () => {
 									value: schoolExternalToolResponse.parameters[0].value,
 								},
 							],
-							status: toolConfigurationStatusFactory.build(),
+							status: schoolToolConfigurationStatusResponseFactory.build(),
 							version: schoolExternalToolResponse.toolVersion,
 						},
 					]);
@@ -184,7 +184,7 @@ describe("SchoolExternalToolsModule", () => {
 						schoolId: schoolExternalTool.schoolId,
 						version: schoolExternalTool.toolVersion,
 						parameters: [],
-						status: toolConfigurationStatusFactory.build(),
+						status: schoolToolConfigurationStatusResponseFactory.build(),
 						name: schoolExternalTool.name,
 					});
 				});

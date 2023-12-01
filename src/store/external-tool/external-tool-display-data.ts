@@ -1,4 +1,4 @@
-import { ToolConfigurationStatus } from "@/store/external-tool/tool-configuration-status.enum";
+import { ToolConfigurationStatus } from "./tool-configuration-status";
 
 export type ExternalToolDisplayData = {
 	contextExternalToolId: string;

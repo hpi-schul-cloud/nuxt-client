@@ -1,7 +1,6 @@
 import { DataTableHeader } from "vuetify";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import { SchoolExternalTool } from "@/store/external-tool";
-import { ToolConfigurationStatusTranslationMapping } from "@/composables/external-tool-mappings.composable";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 
 export function useExternalToolsSectionUtils(
@@ -33,8 +32,9 @@ export function useExternalToolsSectionUtils(
 			schoolExternalToolsModule.getSchoolExternalTools;
 		return schoolExternalTools.map((tool: SchoolExternalTool) => {
 			const outdated: boolean = tool.status.isOutdatedOnScopeSchool;
-			const statusTranslationKey: string =
-				ToolConfigurationStatusTranslationMapping(tool.status);
+			const statusTranslationKey: string = tool.status.isOutdatedOnScopeSchool
+				? "components.externalTools.status.outdated"
+				: "components.externalTools.status.latest";
 
 			return {
 				id: tool.id,

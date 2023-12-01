@@ -3,11 +3,11 @@ import { ToolReferenceResponse } from "@/serverApi/v3/api";
 import { ExternalToolDisplayData } from "@/store/external-tool";
 import {
 	mockApiResponse,
+	toolConfigurationStatusFactory,
 	toolReferenceResponseFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useContextExternalToolApi } from "./ContextExternalToolApi.composable";
-import { toolConfigurationStatusFactory } from "../../../tests/test-utils/factory/toolConfigurationSatusFactory";
 
 describe("ContextExternalToolApi.composable", () => {
 	let toolApi: DeepMocked<serverApi.ToolApiInterface>;

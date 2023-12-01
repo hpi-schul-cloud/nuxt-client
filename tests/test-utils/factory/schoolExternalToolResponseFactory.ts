@@ -1,6 +1,6 @@
 import { SchoolExternalToolResponse } from "@/serverApi/v3";
 import { Factory } from "fishery";
-import { toolConfigurationStatusResponseFactory } from "./toolConfigurationStatusResponseFactory";
+import { schoolToolConfigurationStatusResponseFactory } from "./schoolExternalToolConfigurationStatusFactory";
 
 export const schoolExternalToolResponseFactory =
 	Factory.define<SchoolExternalToolResponse>(({ sequence }) => ({
@@ -8,7 +8,7 @@ export const schoolExternalToolResponseFactory =
 		schoolId: `school-${sequence}`,
 		toolId: `tool-${sequence}`,
 		name: `SchoolExternalTool${sequence}`,
-		status: toolConfigurationStatusResponseFactory.build(),
+		status: schoolToolConfigurationStatusResponseFactory.build(),
 		parameters: [],
 		toolVersion: 1,
 	}));

@@ -10,6 +10,7 @@ import {
 	contextExternalToolFactory,
 	externalToolDisplayDataFactory,
 	i18nMock,
+	schoolToolConfigurationStatusFactory,
 	timestampsResponseFactory,
 	toolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
@@ -151,7 +152,7 @@ describe("ExternalToolElement", () => {
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
-						status: toolConfigurationStatusFactory.build(),
+						status: schoolToolConfigurationStatusFactory.build(),
 					})
 				);
 
@@ -172,7 +173,7 @@ describe("ExternalToolElement", () => {
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
-						status: toolConfigurationStatusFactory.build(),
+						status: schoolToolConfigurationStatusFactory.build(),
 					})
 				);
 
@@ -688,8 +689,7 @@ describe("ExternalToolElement", () => {
 					message: "Loading error",
 				};
 
-				const toolOautdatedStatus = toolConfigurationStatusFactory.build({
-					isOutdatedOnScopeContext: true,
+				const toolOautdatedStatus = schoolToolConfigurationStatusFactory.build({
 					isOutdatedOnScopeSchool: true,
 				});
 

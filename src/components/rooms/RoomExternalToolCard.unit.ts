@@ -11,7 +11,7 @@ import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import flushPromises from "flush-promises";
 import Vue from "vue";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { toolConfigurationStatusFactory } from "@@/tests/test-utils/factory/toolConfigurationSatusFactory";
+import { toolConfigurationStatusFactory } from "@@/tests/test-utils";
 
 jest.mock("@data-external-tool");
 

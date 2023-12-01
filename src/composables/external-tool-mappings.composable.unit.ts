@@ -4,7 +4,7 @@ import {
 } from "@/serverApi/v3";
 import { useExternalToolMappings } from "./external-tool-mappings.composable";
 import { BusinessError } from "@/store/types/commons";
-import { toolConfigurationStatusFactory } from "../../tests/test-utils/factory/toolConfigurationSatusFactory";
+import { schoolToolConfigurationStatusFactory } from "@@/tests/test-utils/factory";
 
 describe("useExternalToolUtils", () => {
 	const setup = () => {
@@ -22,7 +22,7 @@ describe("useExternalToolUtils", () => {
 					value: "value",
 				},
 			],
-			status: toolConfigurationStatusFactory.build(),
+			status: schoolToolConfigurationStatusFactory.build(),
 		};
 
 		const listResponse: SchoolExternalToolSearchListResponse = {
@@ -69,82 +69,6 @@ describe("useExternalToolUtils", () => {
 			const translationKey: string | undefined =
 				getBusinessErrorTranslationKey(error);
 			expect(translationKey).toEqual(error.message);
-		});
-	});
-
-	describe("getStatusTranslationKey", () => {
-		describe("when status is Latest", () => {
-			const setup = () => {
-				const { getStatusTranslationKey } = useExternalToolMappings();
-
-				const status = toolConfigurationStatusFactory.build();
-
-				return {
-					getStatusTranslationKey,
-					status,
-				};
-			};
-
-			it("should return latest translation key", () => {
-				const { getStatusTranslationKey, status } = setup();
-
-				const translationKey: string = getStatusTranslationKey(status);
-
-				expect(translationKey).toEqual(
-					"components.externalTools.status.latest"
-				);
-			});
-		});
-
-		describe("when status is Outdated", () => {
-			const setup = () => {
-				const { getStatusTranslationKey } = useExternalToolMappings();
-
-				const status = toolConfigurationStatusFactory.build({
-					isOutdatedOnScopeSchool: true,
-				});
-
-				return {
-					getStatusTranslationKey,
-					status,
-				};
-			};
-
-			it("should return outdated translation key", () => {
-				const { getStatusTranslationKey, status } = setup();
-
-				const translationKey: string = getStatusTranslationKey(status);
-
-				expect(translationKey).toEqual(
-					"components.externalTools.status.outdated"
-				);
-			});
-		});
-
-		describe("when status is Unknown", () => {
-			const setup = () => {
-				const { getStatusTranslationKey } = useExternalToolMappings();
-
-				const status = toolConfigurationStatusFactory.build({
-					isOutdatedOnScopeSchool: false,
-					isOutdatedOnScopeContext: true,
-				});
-
-				return {
-					getStatusTranslationKey,
-					status,
-				};
-			};
-
-			it("should return latest translation key", () => {
-				const { getStatusTranslationKey, status } = setup();
-
-				const translationKey: string = getStatusTranslationKey(status);
-
-				expect(translationKey).toEqual(
-					"components.externalTools.status.unknown"
-				);
-			});
 		});
 	});
 });

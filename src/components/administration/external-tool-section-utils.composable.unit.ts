@@ -17,7 +17,6 @@ const schoolExternalToolsModuleMock = () => {
 				version: 1,
 				status: {
 					isOutdatedOnScopeSchool: false,
-					isOutdatedOnScopeContext: false,
 				},
 			},
 		],
@@ -49,7 +48,6 @@ describe("useSchoolExternalToolUtils", () => {
 			],
 			status: toolConfigurationStatusFactory.build({
 				isOutdatedOnScopeSchool: false,
-				isOutdatedOnScopeContext: false,
 			}),
 		};
 		const listResponse: SchoolExternalToolSearchListResponse = {

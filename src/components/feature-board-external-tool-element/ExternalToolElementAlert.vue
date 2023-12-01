@@ -28,7 +28,7 @@ export default defineComponent({
 			type: Object as PropType<BusinessError>,
 		},
 		toolOutdatedStatus: {
-			type: Object as PropType<ToolConfigurationStatus | undefined>,
+			type: Object as PropType<ToolConfigurationStatus>,
 			required: true,
 		},
 	},
@@ -41,9 +41,8 @@ export default defineComponent({
 
 		const isToolOutdated: ComputedRef<boolean> = computed(
 			() =>
-				(props.toolOutdatedStatus?.isOutdatedOnScopeSchool ||
-					props.toolOutdatedStatus?.isOutdatedOnScopeContext) ??
-				false
+				!!props.toolOutdatedStatus?.isOutdatedOnScopeSchool ||
+				!!props.toolOutdatedStatus?.isOutdatedOnScopeContext
 		);
 
 		const errorMessage: ComputedRef<string> = computed(() =>

@@ -46,5 +46,7 @@ export * from "./groupResponseFactory";
 export * from "./groupFactory";
 export * from "./schoolExternalToolMetadataFactory";
 export * from "./schoolExternalToolMetadataResponseFactory";
-export * from "./toolConfigurationSatusFactory";
+export * from "./toolConfigurationStatusFactory";
 export * from "./toolConfigurationStatusResponseFactory";
+export * from "./schoolExternalToolConfigurationFactory";
+export * from "./schoolExternalToolConfigurationFactory";

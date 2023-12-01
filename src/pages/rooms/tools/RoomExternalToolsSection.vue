@@ -201,9 +201,13 @@ export default defineComponent({
 		};
 
 		const errorDialogText: ComputedRef<string> = computed(() => {
+			if (!selectedItem.value?.status) {
+				return "";
+			}
 			const toolOutdatedTranslationkey = determineOutdatedTranslationKey(
 				selectedItem.value?.status
 			);
+
 			return t(toolOutdatedTranslationkey);
 		});
 

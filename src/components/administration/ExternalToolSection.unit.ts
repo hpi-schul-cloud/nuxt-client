@@ -20,7 +20,7 @@ import { useSchoolExternalToolUsage } from "@data-external-tool";
 import {
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
-	toolConfigurationStatusFactory,
+	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils/factory";
 
 jest.mock("@data-external-tool");
@@ -119,7 +119,7 @@ describe("ExternalToolSection", () => {
 						schoolId: "schoolId",
 						parameters: [],
 						name: firstToolName,
-						status: toolConfigurationStatusFactory.build(),
+						status: schoolToolConfigurationStatusFactory.build(),
 						version: 1,
 					},
 					{
@@ -128,7 +128,7 @@ describe("ExternalToolSection", () => {
 						schoolId: "schoolId",
 						parameters: [],
 						name: secondToolName,
-						status: toolConfigurationStatusFactory.build({
+						status: schoolToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 						}),
 						version: 1,
@@ -248,7 +248,7 @@ describe("ExternalToolSection", () => {
 									schoolId: "schoolId",
 									parameters: [],
 									name: "firstToolName",
-									status: toolConfigurationStatusFactory.build(),
+									status: schoolToolConfigurationStatusFactory.build(),
 									version: 1,
 								},
 							],
@@ -280,7 +280,7 @@ describe("ExternalToolSection", () => {
 									schoolId: "schoolId",
 									parameters: [],
 									name: "firstToolName",
-									status: toolConfigurationStatusFactory.build(),
+									status: schoolToolConfigurationStatusFactory.build(),
 									version: 1,
 								},
 							],
@@ -315,7 +315,7 @@ describe("ExternalToolSection", () => {
 				//@ts-ignore
 				wrapper.vm.itemToDelete = {
 					name: expectedName,
-					status: toolConfigurationStatusFactory.build(),
+					status: schoolToolConfigurationStatusFactory.build(),
 					outdated: false,
 				};
 

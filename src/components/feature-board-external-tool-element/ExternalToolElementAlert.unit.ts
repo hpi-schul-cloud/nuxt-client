@@ -8,10 +8,10 @@ import { WarningAlert } from "@ui-alert";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
-import AuthModule from "@/store/auth";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import { ToolConfigurationStatus } from "@/store/external-tool";
 import { useToolConfigurationStatus } from "@data-external-tool";
+import AuthModule from "../../store/auth";
+import { createModuleMocks } from "../../utils/mock-store-module";
 
 jest.mock("@data-board");
 
@@ -38,16 +38,21 @@ describe("ExternalToolElementAlert", () => {
 		jest.clearAllMocks();
 	});
 
-	const getWrapper = (propsData: {
-		error?: BusinessError;
-		isToolOutdated?: boolean;
-		toolOutdatedStatus?: ToolConfigurationStatus;
-		userRoles?: string[];
-	}) => {
+	const getWrapper = (
+		propsData: {
+			error?: BusinessError;
+			toolOutdatedStatus?: ToolConfigurationStatus;
+		},
+		userRoles?: string[]
+	) => {
 		document.body.setAttribute("data-app", "true");
 
+		useToolConfigurationStatusMock.determineOutdatedTranslationKey.mockReturnValue(
+			"translated"
+		);
+
 		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: propsData.userRoles,
+			getUserRoles: userRoles,
 		});
 
 		const wrapper: Wrapper<Vue> = mount(
@@ -137,14 +142,15 @@ describe("ExternalToolElementAlert", () => {
 			const setup = () => {
 				useBoardPermissionsMock.isTeacher = true;
 
-				const { wrapper } = getWrapper({
-					isToolOutdated: true,
-					toolOutdatedStatus: toolConfigurationStatusFactory.build({
-						isOutdatedOnScopeSchool: true,
-						isOutdatedOnScopeContext: false,
-					}),
-					userRoles: ["teacher"],
-				});
+				const { wrapper } = getWrapper(
+					{
+						toolOutdatedStatus: toolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: false,
+						}),
+					},
+					["teacher"]
+				);
 
 				return {
 					wrapper,
@@ -158,7 +164,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts.at(0).text()).toEqual(
-					"common.information.outdatedOnSchool.teacher"
+					"common.tool.information.outdatedOnSchool.teacher"
 				);
 			});
 		});
@@ -167,14 +173,15 @@ describe("ExternalToolElementAlert", () => {
 			const setup = () => {
 				useBoardPermissionsMock.isTeacher = false;
 
-				const { wrapper } = getWrapper({
-					isToolOutdated: true,
-					toolOutdatedStatus: toolConfigurationStatusFactory.build({
-						isOutdatedOnScopeSchool: true,
-						isOutdatedOnScopeContext: false,
-					}),
-					userRoles: ["student"],
-				});
+				const { wrapper } = getWrapper(
+					{
+						toolOutdatedStatus: toolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: false,
+						}),
+					},
+					["student"]
+				);
 
 				return {
 					wrapper,
@@ -188,7 +195,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts.at(0).text()).toEqual(
-					"common.information.outdated.student"
+					"common.tool.information.outdated.student"
 				);
 			});
 		});
@@ -199,14 +206,15 @@ describe("ExternalToolElementAlert", () => {
 			const setup = () => {
 				useBoardPermissionsMock.isTeacher = true;
 
-				const { wrapper } = getWrapper({
-					isToolOutdated: true,
-					toolOutdatedStatus: toolConfigurationStatusFactory.build({
-						isOutdatedOnScopeSchool: false,
-						isOutdatedOnScopeContext: true,
-					}),
-					userRoles: ["teacher"],
-				});
+				const { wrapper } = getWrapper(
+					{
+						toolOutdatedStatus: toolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: false,
+							isOutdatedOnScopeContext: true,
+						}),
+					},
+					["teacher"]
+				);
 
 				return {
 					wrapper,
@@ -220,7 +228,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts.at(0).text()).toEqual(
-					"common.information.outdatedOnContext.teacher"
+					"common.tool.information.outdatedOnContext.teacher"
 				);
 			});
 		});
@@ -229,14 +237,15 @@ describe("ExternalToolElementAlert", () => {
 			const setup = () => {
 				useBoardPermissionsMock.isTeacher = false;
 
-				const { wrapper } = getWrapper({
-					isToolOutdated: true,
-					toolOutdatedStatus: toolConfigurationStatusFactory.build({
-						isOutdatedOnScopeSchool: false,
-						isOutdatedOnScopeContext: true,
-					}),
-					userRoles: ["student"],
-				});
+				const { wrapper } = getWrapper(
+					{
+						toolOutdatedStatus: toolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: false,
+							isOutdatedOnScopeContext: true,
+						}),
+					},
+					["student"]
+				);
 
 				return {
 					wrapper,
@@ -250,7 +259,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts.at(0).text()).toEqual(
-					"common.information.outdated.student"
+					"common.tool.information.outdated.student"
 				);
 			});
 		});
@@ -261,14 +270,15 @@ describe("ExternalToolElementAlert", () => {
 			const setup = () => {
 				useBoardPermissionsMock.isTeacher = true;
 
-				const { wrapper } = getWrapper({
-					isToolOutdated: true,
-					toolOutdatedStatus: toolConfigurationStatusFactory.build({
-						isOutdatedOnScopeSchool: true,
-						isOutdatedOnScopeContext: true,
-					}),
-					userRoles: ["teacher"],
-				});
+				const { wrapper } = getWrapper(
+					{
+						toolOutdatedStatus: toolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: true,
+						}),
+					},
+					["teacher"]
+				);
 
 				return {
 					wrapper,
@@ -282,7 +292,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts.at(0).text()).toEqual(
-					"common.information.outdatedOnSchoolAndContext.teacher"
+					"common.tool.information.outdatedOnSchoolAndContext.teacher"
 				);
 			});
 		});
@@ -291,14 +301,15 @@ describe("ExternalToolElementAlert", () => {
 			const setup = () => {
 				useBoardPermissionsMock.isTeacher = false;
 
-				const { wrapper } = getWrapper({
-					isToolOutdated: true,
-					toolOutdatedStatus: toolConfigurationStatusFactory.build({
-						isOutdatedOnScopeSchool: true,
-						isOutdatedOnScopeContext: true,
-					}),
-					userRoles: ["student"],
-				});
+				const { wrapper } = getWrapper(
+					{
+						toolOutdatedStatus: toolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: true,
+						}),
+					},
+					["student"]
+				);
 
 				return {
 					wrapper,
@@ -312,7 +323,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts.at(0).text()).toEqual(
-					"common.information.outdated.student"
+					"common.tool.information.outdated.student"
 				);
 			});
 		});
