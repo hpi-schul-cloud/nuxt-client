@@ -1,6 +1,8 @@
 <template>
 	<div>
-		<slot name="display" />
+		<div class="content-element-bar-display">
+			<slot name="display" />
+		</div>
 
 		<div class="menu">
 			<slot name="menu" />
@@ -36,5 +38,8 @@ export default defineComponent({
 	right: 10px;
 	top: 10px;
 	z-index: 100;
+}
+.content-element-bar-display:hover {
+	filter: brightness(80%);
 }
 </style>
