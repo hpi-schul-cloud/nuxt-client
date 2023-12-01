@@ -34,30 +34,7 @@ export default defineComponent({
 		provide(InlineEditInteractionEvent, interactionEvent);
 
 		const isDatePicker = (target: HTMLElement | SVGElement): boolean | void => {
-			if (isIconButton(target as SVGElement)) return true;
-
-			if (target.className?.includes("v-date-picker")) {
-				return true;
-			}
-
-			if (
-				target.className?.includes("v-locale-provider") ||
-				!target.parentElement
-			) {
-				return false;
-			} else {
-				return isDatePicker(target.parentElement);
-			}
-		};
-
-		const isIconButton = (target: SVGElement): boolean => {
-			const buttonElement = target.parentElement?.parentElement?.parentElement;
-			if (!buttonElement) return false;
-
-			return (
-				target.classList.contains("v-icon__svg") &&
-				buttonElement.className.includes("v-btn")
-			);
+			return !!target.closest(".v-date-picker");
 		};
 
 		const isListItem = (target: HTMLElement | SVGElement): boolean => {
