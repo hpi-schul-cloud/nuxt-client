@@ -21,19 +21,9 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import * as routerComposables from "vue-router/composables";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
-import { useToolConfigurationStatus } from "@data-external-tool";
 
 describe("RoomExternalToolsSection", () => {
 	let router: DeepMocked<VueRouter>;
-
-	let useToolConfigurationStatusMock: DeepMocked<
-		ReturnType<typeof useToolConfigurationStatus>
-	>;
-
-	beforeEach(() => {
-		useToolConfigurationStatusMock =
-			createMock<ReturnType<typeof useToolConfigurationStatus>>();
-	});
 
 	const getWrapper = (props: {
 		tools: ExternalToolDisplayData[];
