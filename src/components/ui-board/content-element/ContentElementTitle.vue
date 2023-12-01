@@ -2,16 +2,35 @@
 	<span
 		class="content-element-title subtitle-1 font-weight-bold flex-grow-1"
 		data-testid="content-element-title"
+		ref="oneliner"
 	>
-		<slot />
+		<span><slot /></span>
+		<span class="tooltiptext elevation-8" v-if="isEllipsisActive"
+			><slot
+		/></span>
 	</span>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, Ref, onMounted } from "vue";
 
 export default defineComponent({
 	name: "ContentElementTitle",
+	setup: () => {
+		const oneliner: Ref<HTMLElement | undefined> = ref(undefined);
+		const isEllipsisActive = ref(false);
+
+		onMounted(() => {
+			if (oneliner.value) {
+				isEllipsisActive.value =
+					oneliner.value.offsetWidth < oneliner.value.scrollWidth;
+			}
+		});
+		return {
+			isEllipsisActive,
+			oneliner,
+		};
+	},
 });
 </script>
 
@@ -26,21 +45,28 @@ export default defineComponent({
 	font-weight: 400;
 	line-height: 24px;
 	letter-spacing: 0.02px;
+	white-space: nowrap;
 	color: var(--v-black-base);
 }
-.content-element-title.subtitle-1:hover {
-	animation-name: expand;
-	animation-duration: 2s;
-}
 
-@keyframes expand {
-	0% {
-		text-overflow: ellipsis;
-		text-wrap: nowrap;
-	}
-	100% {
-		text-overflow: inherit;
-		text-wrap: pretty;
-	}
+/* Tooltip text */
+.content-element-title.subtitle-1 .tooltiptext {
+	visibility: hidden;
+	background-color: #ddd;
+	color: var(--v-black-base);
+	padding: 8px;
+	border-radius: 6px;
+	word-wrap: break-word;
+	width: 280px;
+	position: absolute;
+	left: 34px;
+	top: 8px;
+	z-index: 1;
+}
+.content-element-title.subtitle-1:hover .tooltiptext {
+	visibility: visible;
+	overflow: auto;
+	text-wrap: wrap;
+	height: auto;
 }
 </style>
