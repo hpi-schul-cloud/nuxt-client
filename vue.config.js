@@ -45,6 +45,9 @@ module.exports = defineConfig({
 				"@feature-board-external-tool-element": getDir(
 					"src/components/feature-board-external-tool-element"
 				),
+				"@feature-board-drawing-element": getDir(
+					"src/components/feature-board-drawing-element"
+				),
 				"@feature-board": getDir("src/components/feature-board"),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),

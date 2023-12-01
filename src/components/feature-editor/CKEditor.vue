@@ -2,8 +2,8 @@
 	<ckeditor
 		ref="ck"
 		v-model="modelValue"
+		:editor="editor"
 		:config="config"
-		:editor="CustomCKEditor"
 		data-testid="ckeditor"
 		:disabled="disabled"
 		@blur="handleBlur"
@@ -40,6 +40,11 @@ export default defineComponent({
 			type: String,
 			default: "",
 		},
+		type: {
+			type: String,
+			validator: (value) => ["classic", "balloon"].includes(value),
+			default: "classic",
+		},
 		mode: {
 			type: String,
 			validator: (value) => ["simple", "regular"].includes(value),
@@ -57,6 +62,11 @@ export default defineComponent({
 
 		const ck = ref(null);
 		const modelValue = useVModel(props, "value", emit);
+		const editor = computed(() => {
+			return props.type === "classic"
+				? CustomCKEditor.ClassicEditor
+				: CustomCKEditor.BalloonEditor;
+		});
 
 		const charCount = ref(0);
 
@@ -261,6 +271,7 @@ export default defineComponent({
 
 		return {
 			ck,
+			editor,
 			modelValue,
 			CustomCKEditor,
 			config,
