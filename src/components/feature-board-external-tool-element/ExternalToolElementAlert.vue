@@ -5,7 +5,7 @@
 		</WarningAlert>
 
 		<WarningAlert v-if="isToolOutdated">
-			{{ t(outdatedMessage) }}
+			{{ outdatedMessage }}
 		</WarningAlert>
 	</div>
 </template>
