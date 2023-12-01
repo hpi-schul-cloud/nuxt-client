@@ -10,6 +10,7 @@ import AudioDisplay from "./audio-display/AudioDisplay.vue";
 import FileDescription from "./file-description/FileDescription.vue";
 import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
+import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
 
 jest.mock("@/utils/fileHelper");
@@ -152,6 +153,68 @@ describe("FileDisplay", () => {
 				const props = wrapper.findComponent(FileDescription).attributes();
 
 				expect(props.showtitle).toBeFalsy();
+			});
+		});
+
+		describe("when mimeType is pdf type", () => {
+			const setup = () => {
+				document.body.setAttribute("data-app", "true");
+
+				const element = fileElementResponseFactory.build();
+				const propsData = {
+					fileProperties: {
+						name: "test",
+						size: 100,
+						url: "test",
+						previewUrl: "previewUrl",
+						previewStatus: "test",
+						isDownloadAllowed: true,
+						element,
+					},
+					isEditMode: true,
+				};
+
+				isAudioMimeTypeMock.mockReset();
+				isAudioMimeTypeMock.mockReturnValueOnce(false);
+
+				isVideoMimeTypeMock.mockReset();
+				isVideoMimeTypeMock.mockReturnValueOnce(false);
+
+				isPdfMimeTypeMock.mockReset();
+				isPdfMimeTypeMock.mockReturnValueOnce(true);
+
+				const wrapper = shallowMount(FileDisplay, {
+					propsData,
+					...createComponentMocks({}),
+				});
+
+				return {
+					wrapper,
+					fileNameProp: propsData.fileProperties.name,
+					previewUrlProp: propsData.fileProperties.previewUrl,
+					url: propsData.fileProperties.url,
+					srcProp: propsData.fileProperties.url,
+				};
+			};
+
+			it("should pass correct props to file description", () => {
+				const { wrapper, url } = setup();
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.src).toBe(url);
+				expect(props.showtitle).toBeTruthy();
+			});
+
+			it("should pass correct props to pdf display component", () => {
+				const { wrapper, fileNameProp, previewUrlProp, srcProp } = setup();
+
+				const props = wrapper.findComponent(PdfDisplay).attributes();
+
+				expect(props.name).toBe(fileNameProp);
+				expect(props.previewsrc).toBe(previewUrlProp);
+				expect(props.src).toBe(srcProp);
+				expect(props.element).toBeDefined();
 			});
 		});
 	});
@@ -298,6 +361,12 @@ describe("FileDisplay", () => {
 					isEditMode: true,
 				};
 
+				isAudioMimeTypeMock.mockReset();
+				isAudioMimeTypeMock.mockReturnValueOnce(false);
+
+				isVideoMimeTypeMock.mockReset();
+				isVideoMimeTypeMock.mockReturnValueOnce(false);
+
 				isPdfMimeTypeMock.mockReset();
 				isPdfMimeTypeMock.mockReturnValueOnce(true);
 
@@ -311,6 +380,7 @@ describe("FileDisplay", () => {
 					fileNameProp: propsData.fileProperties.name,
 					previewUrlProp: propsData.fileProperties.previewUrl,
 					url: propsData.fileProperties.url,
+					srcProp: propsData.fileProperties.url,
 				};
 			};
 
@@ -321,9 +391,17 @@ describe("FileDisplay", () => {
 
 				expect(props.src).toBe(url);
 			});
+
+			it("should not render pdf display", () => {
+				const { wrapper } = setup();
+
+				const pdfDisplay = wrapper.findComponent(PdfDisplay);
+
+				expect(pdfDisplay.exists()).toBe(false);
+			});
 		});
 
-		describe("when mimeType is not a video or audio or pdf type", () => {
+		describe("when mimeType is not a video or audio type", () => {
 			const setup = () => {
 				document.body.setAttribute("data-app", "true");
 

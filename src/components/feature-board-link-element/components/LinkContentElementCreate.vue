@@ -12,14 +12,14 @@
 					rows="1"
 					@keydown.enter.prevent.stop="onKeydownEnter"
 					class="text"
-				>
-					<template v-slot:append>
-						<button type="submit" ref="submit">
-							<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
-							<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
-						</button>
-					</template>
-				</v-textarea>
+				/>
+
+				<div class="align-self-center pl-2">
+					<button type="submit" ref="submit">
+						<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
+						<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
+					</button>
+				</div>
 
 				<div class="align-self-center menu">
 					<slot />

@@ -19,7 +19,9 @@ export const isValidUrl: FormValidatorFn<string> = (errMsg) => (value) => {
 		if (!["http:", "https:"].includes(urlObject.protocol)) {
 			throw new Error("Wrong protocol");
 		}
-		if (!urlObject.hostname.includes(".")) {
+		if (
+			!(urlObject.hostname.includes(".") || urlObject.hostname === "localhost")
+		) {
 			throw new Error("TopLevelDomain missing");
 		}
 		if (/(^-)|(--)|(-$)/.test(urlObject.hostname)) {
