@@ -185,7 +185,7 @@ const theme = computed(() => envConfigModule.getTheme);
 
 const studentVisibility = computed(() => {
 	if (isTeacherStudentVisibilityConfigurable.value) {
-		return props.permissions?.value.teacher
+		return props.permissions?.teacher
 			? props.permissions.teacher.STUDENT_LIST
 			: false;
 	} else {
