@@ -142,7 +142,7 @@
 	"common.words.languages.en": "Englisch",
 	"common.words.languages.es": "Spanisch",
 	"common.words.languages.uk": "Ukrainisch",
-	"components.datePicker.validation.required": "Bitte Datum angeben.test",
+	"components.datePicker.validation.required": "Bitte Datum angeben",
 	"components.datePicker.validation.format": "Bitte Format DD.MM.YYYY verwenden.",
 	"components.dateTimePicker.messages.dateInPast": "Datum und Uhrzeit liegen in der Vergangenheit.",
 	"components.dateTimePicker.messages.dateRequired": "Uhrzeitangabe ohne Datum nicht möglich.",
