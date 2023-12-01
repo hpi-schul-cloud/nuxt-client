@@ -9,15 +9,16 @@
 		tabindex="0"
 		elevation="0"
 		@keydown.up.down="onKeydownArrow"
+		@click="onClick"
 	>
 		<div>
-			<DrawingContentElementDisplay
+			<InnerContent
 				v-if="!isEditMode"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
 				:doc-name="element.id"
 			/>
 
-			<DrawingContentElementEdit
+			<InnerContent
 				v-if="isEditMode"
 				:docName="element.id"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
@@ -26,7 +27,7 @@
 					<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
 					<BoardMenuActionDelete @click="onDeleteElement" />
 				</BoardMenu>
-			</DrawingContentElementEdit>
+			</InnerContent>
 		</div>
 	</v-card>
 </template>
@@ -34,9 +35,8 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, toRef } from "vue";
 import { DrawingElementResponse } from "@/serverApi/v3";
-import DrawingContentElementDisplay from "./DrawingContentElementDisplay.vue";
-import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
 import { useBoardFocusHandler } from "@data-board";
+import InnerContent from "./InnerContent.vue";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
@@ -51,8 +51,7 @@ export default defineComponent({
 		BoardMenuActionMoveUp,
 		BoardMenuActionMoveDown,
 		BoardMenuActionDelete,
-		DrawingContentElementDisplay,
-		DrawingContentElementEdit,
+		InnerContent,
 	},
 	props: {
 		element: {
@@ -66,29 +65,31 @@ export default defineComponent({
 		"move-down:edit",
 		"move-up:edit",
 		"move-keyboard:edit",
+		"open:element",
 	],
 	setup(props, { emit }) {
 		const drawingElement = ref<HTMLElement | null>(null);
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, drawingElement);
 
+		const onClick = () => {
+			const urlWithRoom = `/tldraw?roomName=${element.value.id}`;
+			window.open(urlWithRoom, "_blank");
+			emit("open:element");
+		};
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
 				emit("move-keyboard:edit", event);
 			}
 		};
-		const onMoveDrawingElementEditDown = () => {
-			emit("move-down:edit");
-		};
-		const onMoveDrawingElementEditUp = () => {
-			emit("move-up:edit");
-		};
-		const onDeleteElement = async (): Promise<void> => {
-			emit("delete:element", props.element.id);
-		};
+		const onMoveDrawingElementEditDown = () => emit("move-down:edit");
+		const onMoveDrawingElementEditUp = () => emit("move-up:edit");
+		const onDeleteElement = () => emit("delete:element", element.value.id);
+
 		return {
 			drawingElement,
+			onClick,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveDrawingElementEditDown,
