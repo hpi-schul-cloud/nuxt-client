@@ -1,7 +1,7 @@
 <template>
 	<ContentElementBar class="audioplayer">
 		<template #element>
-			<audio ref="audio" loading="lazy" v-on:error="onError" />
+			<audio ref="audio" loading="lazy" />
 			<v-btn icon @click="onPlay" color="white" small>
 				<v-icon
 					v-if="!playing"
@@ -107,7 +107,12 @@ export default defineComponent({
 			src: source,
 		});
 
-		const { playing, currentTime, duration, volume, rate } = controls;
+		const { playing, currentTime, duration, volume, rate, onSourceError } =
+			controls;
+
+		onSourceError(() => {
+			emit("error", FileAlert.AUDIO_FORMAT_ERROR);
+		});
 
 		const onPlay = () => {
 			playing.value = !playing.value;
@@ -147,10 +152,6 @@ export default defineComponent({
 			event.stopImmediatePropagation();
 		};
 
-		const onError = () => {
-			emit("error", FileAlert.AUDIO_FORMAT_ERROR);
-		};
-
 		return {
 			audio,
 			playing,
@@ -170,7 +171,6 @@ export default defineComponent({
 			isShow,
 			showVolumeSlider,
 			stopPropagation,
-			onError,
 			onInputSlider,
 		};
 	},
