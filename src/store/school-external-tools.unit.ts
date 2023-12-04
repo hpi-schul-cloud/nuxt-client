@@ -3,6 +3,7 @@ import {
 	axiosErrorFactory,
 	customParameterResponseFactory,
 	mockApiResponse,
+	schoolExternalToolConfigurationStatusResponseFactory,
 	schoolExternalToolConfigurationTemplateResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolResponseFactory,
@@ -20,7 +21,6 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolConfigurationTemplate,
-	ToolConfigurationStatus,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
@@ -112,7 +112,8 @@ describe("SchoolExternalToolsModule", () => {
 									value: schoolExternalToolResponse.parameters[0].value,
 								},
 							],
-							status: ToolConfigurationStatus.Latest,
+							status:
+								schoolExternalToolConfigurationStatusResponseFactory.build(),
 							version: schoolExternalToolResponse.toolVersion,
 						},
 					]);
@@ -184,7 +185,8 @@ describe("SchoolExternalToolsModule", () => {
 						schoolId: schoolExternalTool.schoolId,
 						version: schoolExternalTool.toolVersion,
 						parameters: [],
-						status: ToolConfigurationStatus.Latest,
+						status:
+							schoolExternalToolConfigurationStatusResponseFactory.build(),
 						name: schoolExternalTool.name,
 					});
 				});

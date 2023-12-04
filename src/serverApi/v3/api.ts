@@ -668,6 +668,25 @@ export enum ContentElementType {
 /**
  * 
  * @export
+ * @interface ContextExternalToolConfigurationStatusResponse
+ */
+export interface ContextExternalToolConfigurationStatusResponse {
+    /**
+     * Is the tool outdated on school scope, because of non matching versions or required parameter changes on ExternalTool?
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isOutdatedOnScopeSchool: boolean;
+    /**
+     * Is the tool outdated on context scope, because of non matching versions or required parameter changes on SchoolExternalTool?
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isOutdatedOnScopeContext: boolean;
+}
+/**
+ * 
+ * @export
  * @interface ContextExternalToolConfigurationTemplateListResponse
  */
 export interface ContextExternalToolConfigurationTemplateListResponse {
@@ -1653,6 +1672,12 @@ export interface ExternalToolCreateParams {
      * @memberof ExternalToolCreateParams
      */
     openNewTab: boolean;
+    /**
+     * 
+     * @type {Array<ToolContextType>}
+     * @memberof ExternalToolCreateParams
+     */
+    restrictToContexts?: Array<ToolContextType>;
 }
 /**
  * 
@@ -1796,6 +1821,12 @@ export interface ExternalToolResponse {
      * @memberof ExternalToolResponse
      */
     version: number;
+    /**
+     * 
+     * @type {Array<ToolContextType>}
+     * @memberof ExternalToolResponse
+     */
+    restrictToContexts?: Array<ToolContextType>;
 }
 /**
  * 
@@ -1882,6 +1913,12 @@ export interface ExternalToolUpdateParams {
      * @memberof ExternalToolUpdateParams
      */
     openNewTab: boolean;
+    /**
+     * 
+     * @type {Array<ToolContextType>}
+     * @memberof ExternalToolUpdateParams
+     */
+    restrictToContexts?: Array<ToolContextType>;
 }
 /**
  * 
@@ -3966,6 +4003,19 @@ export interface RichTextElementResponse {
 /**
  * 
  * @export
+ * @interface SchoolExternalToolConfigurationStatusResponse
+ */
+export interface SchoolExternalToolConfigurationStatusResponse {
+    /**
+     * Is the tool outdated on school scope, because of non matching versions or required parameter changes on ExternalTool?
+     * @type {boolean}
+     * @memberof SchoolExternalToolConfigurationStatusResponse
+     */
+    isOutdatedOnScopeSchool: boolean;
+}
+/**
+ * 
+ * @export
  * @interface SchoolExternalToolConfigurationTemplateListResponse
  */
 export interface SchoolExternalToolConfigurationTemplateListResponse {
@@ -4101,10 +4151,10 @@ export interface SchoolExternalToolResponse {
     toolVersion: number;
     /**
      * 
-     * @type {string}
+     * @type {SchoolExternalToolConfigurationStatusResponse}
      * @memberof SchoolExternalToolResponse
      */
-    status: SchoolExternalToolResponseStatusEnum;
+    status: SchoolExternalToolConfigurationStatusResponse;
     /**
      * 
      * @type {string}
@@ -4112,17 +4162,6 @@ export interface SchoolExternalToolResponse {
      */
     logoUrl?: string;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SchoolExternalToolResponseStatusEnum {
-    Latest = 'Latest',
-    Outdated = 'Outdated',
-    Unknown = 'Unknown'
-}
-
 /**
  * 
  * @export
@@ -4833,22 +4872,24 @@ export interface TimestampsResponse {
  * @export
  * @enum {string}
  */
-export enum ToolConfigurationStatusResponse {
-    Latest = 'Latest',
-    Outdated = 'Outdated',
-    Unknown = 'Unknown'
-}
-
-/**
- * 
- * @export
- * @enum {string}
- */
 export enum ToolContextType {
     Course = 'course',
     BoardElement = 'board-element'
 }
 
+/**
+ * 
+ * @export
+ * @interface ToolContextTypesListResponse
+ */
+export interface ToolContextTypesListResponse {
+    /**
+     * 
+     * @type {Array<ToolContextType>}
+     * @memberof ToolContextTypesListResponse
+     */
+    data: Array<ToolContextType>;
+}
 /**
  * 
  * @export
@@ -4934,11 +4975,11 @@ export interface ToolReferenceResponse {
      */
     openInNewTab: boolean;
     /**
-     * 
-     * @type {ToolConfigurationStatusResponse}
+     * The status of the tool
+     * @type {ContextExternalToolConfigurationStatusResponse}
      * @memberof ToolReferenceResponse
      */
-    status: ToolConfigurationStatusResponse;
+    status: ContextExternalToolConfigurationStatusResponse;
 }
 /**
  * 
@@ -7014,7 +7055,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | SubmissionContainerElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7094,7 +7135,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | SubmissionContainerElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7168,7 +7209,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | SubmissionContainerElementResponse>;
 
     /**
      * 
@@ -13721,6 +13762,40 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Lists all context types available in the SVS
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerGetToolContextTypes: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/tools/context-types`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Creates a ContextExternalTool
          * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
          * @param {*} [options] Override http request option.
@@ -14635,6 +14710,16 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Lists all context types available in the SVS
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolConfigurationControllerGetToolContextTypes(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ToolContextTypesListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetToolContextTypes(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Creates a ContextExternalTool
          * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
          * @param {*} [options] Override http request option.
@@ -14927,6 +15012,15 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Lists all context types available in the SVS
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerGetToolContextTypes(options?: any): AxiosPromise<ToolContextTypesListResponse> {
+            return localVarFp.toolConfigurationControllerGetToolContextTypes(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Creates a ContextExternalTool
          * @param {ContextExternalToolPostParams} contextExternalToolPostParams 
          * @param {*} [options] Override http request option.
@@ -15194,6 +15288,15 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolConfigurationTemplateResponse>;
+
+    /**
+     * 
+     * @summary Lists all context types available in the SVS
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolConfigurationControllerGetToolContextTypes(options?: any): AxiosPromise<ToolContextTypesListResponse>;
 
     /**
      * 
@@ -15471,6 +15574,17 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: any) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Lists all context types available in the SVS
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolConfigurationControllerGetToolContextTypes(options?: any) {
+        return ToolApiFp(this.configuration).toolConfigurationControllerGetToolContextTypes(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
