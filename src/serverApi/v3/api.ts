@@ -4267,7 +4267,7 @@ export interface SchoolResponse {
      * @type {Array<SchoolFeature>}
      * @memberof SchoolResponse
      */
-    features?: Array<SchoolFeature>;
+    features: Array<SchoolFeature>;
     /**
      * 
      * @type {Array<SystemResponse>}
