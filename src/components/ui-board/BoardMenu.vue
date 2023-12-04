@@ -8,7 +8,8 @@
 				:ripple="false"
 				:class="{ white: hasBackground }"
 				icon
-				@dblclick.stop="() => {}"
+				@click.stop.prevent="() => {}"
+				@dblclick.stop.prevent="() => {}"
 				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
 				style="height: 36px; width: 36px"

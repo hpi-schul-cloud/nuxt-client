@@ -3,7 +3,7 @@
 		<v-icon
 			class="content-element-title-icon"
 			color="black"
-			size="18"
+			size="20"
 			data-testid="content-element-title-icon"
 			>{{ icon }}</v-icon
 		>

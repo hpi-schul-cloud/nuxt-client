@@ -9,6 +9,8 @@
 		:ripple="false"
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
+		:href="sanitizedUrl"
+		target="_blank"
 	>
 		<LinkContentElementDisplay
 			v-if="computedElement.content.url"
@@ -49,6 +51,7 @@ import {
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import { ensureProtocolIncluded } from "../util/url.util";
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 export default defineComponent({
 	name: "LinkElementContent",
@@ -78,6 +81,7 @@ export default defineComponent({
 		const linkContentElement = ref(null);
 		const isLoading = ref(false);
 		const element = toRef(props, "element");
+
 		const outlined = computed(
 			() =>
 				props.isEditMode === true || computedElement.value.content.url !== ""
@@ -88,6 +92,10 @@ export default defineComponent({
 		const { modelValue, computedElement } = useContentElementState(props, {
 			autoSaveDebounce: 100,
 		});
+
+		const sanitizedUrl = computed(() =>
+			sanitizeUrl(computedElement.value.content.url)
+		);
 
 		const isCreating = computed(
 			() => props.isEditMode && !computedElement.value.content.url
@@ -137,6 +145,7 @@ export default defineComponent({
 			linkContentElement,
 			modelValue,
 			outlined,
+			sanitizedUrl,
 			onCreateUrl,
 			onKeydownArrow,
 			onMoveDown,

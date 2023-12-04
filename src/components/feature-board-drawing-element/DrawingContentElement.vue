@@ -9,7 +9,9 @@
 		tabindex="0"
 		elevation="0"
 		@keydown.up.down="onKeydownArrow"
-		@click="onClick"
+		role="button"
+		:href="sanitizedUrl"
+		target="_blank"
 	>
 		<div>
 			<InnerContent
@@ -33,7 +35,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, toRef } from "vue";
+import { computed, defineComponent, PropType, ref, toRef } from "vue";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 import { DrawingElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler } from "@data-board";
 import InnerContent from "./InnerContent.vue";
@@ -65,18 +68,15 @@ export default defineComponent({
 		"move-down:edit",
 		"move-up:edit",
 		"move-keyboard:edit",
-		"open:element",
 	],
 	setup(props, { emit }) {
 		const drawingElement = ref<HTMLElement | null>(null);
 		const element = toRef(props, "element");
+		const sanitizedUrl = computed(() =>
+			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
+		);
 		useBoardFocusHandler(element.value.id, drawingElement);
 
-		const onClick = () => {
-			const urlWithRoom = `/tldraw?roomName=${element.value.id}`;
-			window.open(urlWithRoom, "_blank");
-			emit("open:element");
-		};
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
@@ -89,7 +89,7 @@ export default defineComponent({
 
 		return {
 			drawingElement,
-			onClick,
+			sanitizedUrl,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveDrawingElementEditDown,

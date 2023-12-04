@@ -1,5 +1,5 @@
 <template>
-	<RenderHTML class="ck-content" :html="value" config="ck5" />
+	<RenderHTML class="ck-content pb-2" :html="value" config="ck5" />
 </template>
 
 <script>

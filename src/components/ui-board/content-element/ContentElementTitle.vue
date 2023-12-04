@@ -40,7 +40,7 @@ export default defineComponent({
 	text-rendering: optimizelegibility;
 	text-wrap: nowrap;
 	overflow: hidden;
-	font-family: var(--font-primary);
+	font-family: var(--font-accent) !important;
 	font-size: 14px;
 	font-weight: 400;
 	line-height: 24px;

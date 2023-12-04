@@ -6,29 +6,26 @@
 		tabindex="-1"
 		:loading="isLoading ? 'primary' : false"
 	>
-		<a :href="sanitizedUrl" target="_blank" tabindex="-1">
-			<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
-				<template #display>
-					<v-img v-if="imageUrl" :src="imageUrl" alt="" />
-				</template>
-				<template #title>
-					{{ title }}
-				</template>
-				<template #subtitle>
-					{{ hostname }}
-				</template>
-				<template #menu v-if="isEditMode">
-					<slot />
-				</template>
-			</ContentElementBar>
-		</a>
+		<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
+			<template #display>
+				<v-img v-if="imageUrl" :src="imageUrl" alt="" />
+			</template>
+			<template #title>
+				{{ title }}
+			</template>
+			<template #subtitle>
+				{{ hostname }}
+			</template>
+			<template #menu v-if="isEditMode">
+				<slot />
+			</template>
+		</ContentElementBar>
 	</div>
 </template>
 
 <script lang="ts">
 import { ComputedRef, computed, defineComponent, ref } from "vue";
 import { mdiLink } from "@mdi/js";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import { ContentElementBar } from "@ui-board";
 
 export default defineComponent({
@@ -54,7 +51,6 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
-		const sanitizedUrl = computed(() => sanitizeUrl(props.url));
 		const hostname: ComputedRef<string> = computed(() => {
 			try {
 				const urlObject = new URL(props.url);
@@ -68,7 +64,6 @@ export default defineComponent({
 
 		return {
 			mdiLink,
-			sanitizedUrl,
 			hostname,
 			linkContentElementDisplay,
 		};
