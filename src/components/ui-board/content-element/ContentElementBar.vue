@@ -1,5 +1,5 @@
 <template>
-	<div tabindex="-1">
+	<div tabindex="-1" class="content-element-bar">
 		<div v-if="$slots.display">
 			<ContentElementDisplay>
 				<template #display>
@@ -11,7 +11,7 @@
 				</template>
 			</ContentElementDisplay>
 		</div>
-		<div :class="backgroundClass" class="content-element-bar pa-4">
+		<div :class="backgroundClass" class="pa-4">
 			<div class="d-flex align-start">
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
@@ -28,11 +28,11 @@
 				</div>
 			</div>
 
-			<div v-if="$slots.subtitle" class="gt-1 gb-1">
+			<div v-if="$slots.subtitle" class="pt-1 gb-1 subtitle">
 				<slot name="subtitle" />
 			</div>
 
-			<div v-if="$slots.description" class="gt-1 gb-1">
+			<div v-if="$slots.description" class="pt-1 gb-1 description">
 				<slot name="description" />
 			</div>
 		</div>
@@ -73,6 +73,16 @@ export default defineComponent({
 .content-element-bar {
 	line-height: 24px;
 	color: var(--v-black-base);
+}
+.content-element-bar:hover .content-element-title {
+	text-decoration: underline;
+}
+.content-element-bar:hover .content-element-bar-display {
+	filter: brightness(80%);
+}
+.content-element-bar .subtitle,
+.content-element-bar .description {
+	line-height: 20px;
 }
 .content-element-bar .three-dot-menu {
 	margin-top: -6px;

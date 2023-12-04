@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<div class="content-element-bar-display">
+	<div class="content-element-bar-display">
+		<div>
 			<slot name="display" />
 		</div>
 
@@ -15,7 +15,7 @@ import { computed, defineComponent, PropType } from "vue";
 import { VuetifyIcon } from "vuetify/types/services/icons";
 
 export default defineComponent({
-	name: "ContentElementImage",
+	name: "ContentElementDisplay",
 	props: {
 		hasGreyBackground: { type: Boolean, required: false },
 		icon: { type: String as PropType<VuetifyIcon>, required: false },
@@ -32,14 +32,11 @@ export default defineComponent({
 });
 </script>
 
-<style type="text/scss" scoped>
-.menu {
+<style type="text/scss">
+.content-element-bar-display .menu {
 	position: absolute;
 	right: 10px;
 	top: 10px;
 	z-index: 100;
-}
-.content-element-bar-display:hover {
-	filter: brightness(80%);
 }
 </style>

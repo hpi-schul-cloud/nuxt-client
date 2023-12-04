@@ -89,7 +89,6 @@ export default defineComponent({
 <style scoped>
 .v-textarea textarea {
 	padding-top: 8px;
-	line-height: 1.375rem;
 }
 .menu {
 	margin-right: -6px;
