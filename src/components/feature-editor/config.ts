@@ -58,10 +58,10 @@ const newsToolbar = [
 
 const boardPlugins = [
 	"Autoformat",
-	"Essentials",
 	"BlockQuote",
 	"Bold",
 	"Code",
+	"Essentials",
 	"Heading",
 	"Highlight",
 	"HorizontalLine",
@@ -82,16 +82,16 @@ const boardPlugins = [
 
 const newsPlugins = [
 	"Autoformat",
-	"Essentials",
 	"Bold",
+	"Essentials",
 	"Heading",
+	"Image",
+	"ImageInsertViaUrl",
 	"Italic",
 	"List",
 	"Paragraph",
 	"RemoveFormat",
 	"Strikethrough",
-	"Image",
-	"ImageInsertViaUrl",
 ];
 
 const boardHeadings = {
