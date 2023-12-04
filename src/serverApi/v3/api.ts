@@ -7055,7 +7055,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | SubmissionContainerElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7135,7 +7135,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | SubmissionContainerElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7209,7 +7209,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | SubmissionContainerElementResponse>;
 
     /**
      * 
