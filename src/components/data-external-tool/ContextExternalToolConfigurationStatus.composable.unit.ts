@@ -60,7 +60,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				const toolConfigurationStatus =
 					ContextExternalToolConfigurationStatusFactory.build({
 						isOutdatedOnScopeSchool: true,
-						isOutdatedOnScopeContext: true,
+						isOutdatedOnScopeContext: false,
 					});
 
 				const composable = mountComposable(
@@ -80,8 +80,6 @@ describe("ToolConfigurationStatus.composable", () => {
 			it("should return translationkey for outdated on scope school ", () => {
 				const { determineOutdatedTranslationKey, toolConfigurationStatus } =
 					setup();
-				toolConfigurationStatus.isOutdatedOnScopeSchool = true;
-				toolConfigurationStatus.isOutdatedOnScopeContext = false;
 
 				const result = determineOutdatedTranslationKey(toolConfigurationStatus);
 
@@ -99,7 +97,7 @@ describe("ToolConfigurationStatus.composable", () => {
 
 				const toolConfigurationStatus =
 					ContextExternalToolConfigurationStatusFactory.build({
-						isOutdatedOnScopeSchool: true,
+						isOutdatedOnScopeSchool: false,
 						isOutdatedOnScopeContext: true,
 					});
 
@@ -120,8 +118,6 @@ describe("ToolConfigurationStatus.composable", () => {
 			it("should return translationkey for outdated tool on scope context ", () => {
 				const { determineOutdatedTranslationKey, toolConfigurationStatus } =
 					setup();
-				toolConfigurationStatus.isOutdatedOnScopeSchool = false;
-				toolConfigurationStatus.isOutdatedOnScopeContext = true;
 
 				const result = determineOutdatedTranslationKey(toolConfigurationStatus);
 
@@ -175,7 +171,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				const toolConfigurationStatus =
 					ContextExternalToolConfigurationStatusFactory.build({
 						isOutdatedOnScopeSchool: true,
-						isOutdatedOnScopeContext: true,
+						isOutdatedOnScopeContext: false,
 					});
 
 				const composable = mountComposable(
@@ -194,8 +190,6 @@ describe("ToolConfigurationStatus.composable", () => {
 			it("should return translationkey for outdated on scope school ", () => {
 				const { determineOutdatedTranslationKey, toolConfigurationStatus } =
 					setup();
-				toolConfigurationStatus.isOutdatedOnScopeSchool = true;
-				toolConfigurationStatus.isOutdatedOnScopeContext = false;
 
 				const result = determineOutdatedTranslationKey(toolConfigurationStatus);
 
@@ -211,7 +205,7 @@ describe("ToolConfigurationStatus.composable", () => {
 
 				const toolConfigurationStatus =
 					ContextExternalToolConfigurationStatusFactory.build({
-						isOutdatedOnScopeSchool: true,
+						isOutdatedOnScopeSchool: false,
 						isOutdatedOnScopeContext: true,
 					});
 
@@ -231,8 +225,6 @@ describe("ToolConfigurationStatus.composable", () => {
 			it("should return translationkey for outdated on scope context ", () => {
 				const { determineOutdatedTranslationKey, toolConfigurationStatus } =
 					setup();
-				toolConfigurationStatus.isOutdatedOnScopeSchool = false;
-				toolConfigurationStatus.isOutdatedOnScopeContext = true;
 
 				const result = determineOutdatedTranslationKey(toolConfigurationStatus);
 
