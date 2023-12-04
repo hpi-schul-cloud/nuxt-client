@@ -55,7 +55,7 @@ describe("PdfDisplay", () => {
 		const colorOverlay = wrapper.findComponent(ColorOverlay);
 
 		expect(colorOverlay.exists()).toBe(true);
-		expect(colorOverlay.props("color")).toBe("var(--v-black-base)");
+		expect(colorOverlay.props("color")).toBe("rgba(var(--v-theme-black))");
 	});
 
 	describe("when color overlay emits on:action", () => {

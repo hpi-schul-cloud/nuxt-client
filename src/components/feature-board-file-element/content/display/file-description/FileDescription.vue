@@ -51,10 +51,10 @@ export default defineComponent({
 <style scope>
 .title-link a {
 	text-decoration: none;
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 }
 .title-link a:visited {
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 }
 .title-link a:hover {
 	text-decoration: underline;
