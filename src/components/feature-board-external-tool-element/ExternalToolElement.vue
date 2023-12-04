@@ -44,7 +44,7 @@
 		</div>
 		<ExternalToolElementAlert
 			:error="error"
-			:is-tool-outdated="isToolOutdated"
+			:tool-outdated-status="toolOutdatedStatus"
 			data-testid="board-external-tool-element-alert"
 		/>
 		<ExternalToolElementConfigurationDialog
@@ -61,7 +61,6 @@
 <script lang="ts">
 import { useI18n } from "@/composables/i18n.composable";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
-import { ToolConfigurationStatus } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
@@ -84,6 +83,7 @@ import {
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 
 export default defineComponent({
 	components: {
@@ -115,6 +115,7 @@ export default defineComponent({
 			isLoading: isDisplayDataLoading,
 			error,
 		} = useExternalToolElementDisplayState();
+
 		const { launchTool, fetchLaunchRequest } = useExternalToolLaunchState();
 
 		const autofocus: Ref<boolean> = ref(false);
@@ -142,8 +143,20 @@ export default defineComponent({
 		);
 
 		const isToolOutdated: ComputedRef<boolean> = computed(
-			() => displayData.value?.status === ToolConfigurationStatus.Outdated
+			() =>
+				!!displayData.value?.status.isOutdatedOnScopeSchool ||
+				!!displayData.value?.status.isOutdatedOnScopeContext
 		);
+
+		const toolOutdatedStatus: ComputedRef<ContextExternalToolConfigurationStatus> =
+			computed(() => {
+				return (
+					displayData.value?.status ?? {
+						isOutdatedOnScopeSchool: false,
+						isOutdatedOnScopeContext: false,
+					}
+				);
+			});
 
 		const isLoading = computed(
 			() =>
@@ -214,6 +227,7 @@ export default defineComponent({
 			isLoading,
 			isToolOutdated,
 			isConfigurationDialogOpen,
+			toolOutdatedStatus,
 			mdiPuzzleOutline,
 			onMoveElementDown,
 			onMoveElementUp,
