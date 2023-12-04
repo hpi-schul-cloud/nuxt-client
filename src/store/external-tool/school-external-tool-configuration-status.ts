@@ -1,3 +1,3 @@
-export interface SchoolToolConfigurationStatus {
+export interface SchoolExternalToolConfigurationStatus {
 	isOutdatedOnScopeSchool: boolean;
 }

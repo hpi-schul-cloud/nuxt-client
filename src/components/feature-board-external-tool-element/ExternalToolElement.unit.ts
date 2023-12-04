@@ -7,19 +7,19 @@ import { ContextExternalTool } from "@/store/external-tool/context-external-tool
 import { BusinessError } from "@/store/types/commons";
 import { I18N_KEY } from "@/utils/inject";
 import {
+	ContextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,
 	externalToolDisplayDataFactory,
 	i18nMock,
 	schoolToolConfigurationStatusFactory,
 	timestampsResponseFactory,
-	toolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
+	useContextExternalToolConfigurationStatus,
 	useExternalToolElementDisplayState,
 	useExternalToolLaunchState,
-	useToolConfigurationStatus,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@mdi/js";
@@ -59,7 +59,7 @@ describe("ExternalToolElement", () => {
 	>;
 
 	let useToolConfigurationStatusMock: DeepMocked<
-		ReturnType<typeof useToolConfigurationStatus>
+		ReturnType<typeof useContextExternalToolConfigurationStatus>
 	>;
 
 	beforeEach(() => {
@@ -74,7 +74,9 @@ describe("ExternalToolElement", () => {
 		useSharedLastCreatedElementMock =
 			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
 		useToolConfigurationStatusMock =
-			createMock<ReturnType<typeof useToolConfigurationStatus>>();
+			createMock<
+				ReturnType<typeof useContextExternalToolConfigurationStatus>
+			>();
 
 		jest
 			.mocked(useContentElementState)
@@ -90,7 +92,7 @@ describe("ExternalToolElement", () => {
 			.mocked(useSharedLastCreatedElement)
 			.mockReturnValue(useSharedLastCreatedElementMock);
 		jest
-			.mocked(useToolConfigurationStatus)
+			.mocked(useContextExternalToolConfigurationStatus)
 			.mockReturnValue(useToolConfigurationStatusMock);
 	});
 
@@ -196,7 +198,7 @@ describe("ExternalToolElement", () => {
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
-						status: toolConfigurationStatusFactory.build({
+						status: ContextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeContext: true,
 							isOutdatedOnScopeSchool: true,
 						}),

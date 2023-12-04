@@ -2,8 +2,8 @@ import * as serverApi from "@/serverApi/v3/api";
 import { ToolReferenceResponse } from "@/serverApi/v3/api";
 import { ExternalToolDisplayData } from "@/store/external-tool";
 import {
+	ContextExternalToolConfigurationStatusFactory,
 	mockApiResponse,
-	toolConfigurationStatusFactory,
 	toolReferenceResponseFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -60,7 +60,7 @@ describe("ContextExternalToolApi.composable", () => {
 				contextExternalToolId: displayData.contextToolId,
 				name: displayData.displayName,
 				logoUrl: displayData.logoUrl,
-				status: toolConfigurationStatusFactory.build(),
+				status: ContextExternalToolConfigurationStatusFactory.build(),
 				openInNewTab: displayData.openInNewTab,
 			});
 		});

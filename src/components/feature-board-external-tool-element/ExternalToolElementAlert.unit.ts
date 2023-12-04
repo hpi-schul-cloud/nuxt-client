@@ -1,6 +1,9 @@
 import { BusinessError } from "@/store/types/commons";
 import { AUTH_MODULE_KEY, I18N_KEY } from "@/utils/inject";
-import { i18nMock, toolConfigurationStatusFactory } from "@@/tests/test-utils";
+import {
+	ContextExternalToolConfigurationStatusFactory,
+	i18nMock,
+} from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { useBoardPermissions } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -8,10 +11,10 @@ import { WarningAlert } from "@ui-alert";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
-import { ToolConfigurationStatus } from "@/store/external-tool";
-import { useToolConfigurationStatus } from "@data-external-tool";
-import AuthModule from "../../store/auth";
-import { createModuleMocks } from "../../utils/mock-store-module";
+import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
+import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
+import AuthModule from "@/store/auth";
+import { createModuleMocks } from "@/utils/mock-store-module";
 
 jest.mock("@data-board");
 
@@ -21,7 +24,7 @@ describe("ExternalToolElementAlert", () => {
 	>;
 
 	let useToolConfigurationStatusMock: DeepMocked<
-		ReturnType<typeof useToolConfigurationStatus>
+		ReturnType<typeof useContextExternalToolConfigurationStatus>
 	>;
 
 	beforeEach(() => {
@@ -29,7 +32,9 @@ describe("ExternalToolElementAlert", () => {
 			createMock<ReturnType<typeof useBoardPermissions>>();
 
 		useToolConfigurationStatusMock =
-			createMock<ReturnType<typeof useToolConfigurationStatus>>();
+			createMock<
+				ReturnType<typeof useContextExternalToolConfigurationStatus>
+			>();
 
 		jest.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
 	});
@@ -41,7 +46,7 @@ describe("ExternalToolElementAlert", () => {
 	const getWrapper = (
 		propsData: {
 			error?: BusinessError;
-			toolOutdatedStatus?: ToolConfigurationStatus;
+			toolOutdatedStatus?: ContextExternalToolConfigurationStatus;
 		},
 		userRoles?: string[]
 	) => {
@@ -144,10 +149,11 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus: toolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: true,
-							isOutdatedOnScopeContext: false,
-						}),
+						toolOutdatedStatus:
+							ContextExternalToolConfigurationStatusFactory.build({
+								isOutdatedOnScopeSchool: true,
+								isOutdatedOnScopeContext: false,
+							}),
 					},
 					["teacher"]
 				);
@@ -175,10 +181,11 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus: toolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: true,
-							isOutdatedOnScopeContext: false,
-						}),
+						toolOutdatedStatus:
+							ContextExternalToolConfigurationStatusFactory.build({
+								isOutdatedOnScopeSchool: true,
+								isOutdatedOnScopeContext: false,
+							}),
 					},
 					["student"]
 				);
@@ -208,10 +215,11 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus: toolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: false,
-							isOutdatedOnScopeContext: true,
-						}),
+						toolOutdatedStatus:
+							ContextExternalToolConfigurationStatusFactory.build({
+								isOutdatedOnScopeSchool: false,
+								isOutdatedOnScopeContext: true,
+							}),
 					},
 					["teacher"]
 				);
@@ -239,10 +247,11 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus: toolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: false,
-							isOutdatedOnScopeContext: true,
-						}),
+						toolOutdatedStatus:
+							ContextExternalToolConfigurationStatusFactory.build({
+								isOutdatedOnScopeSchool: false,
+								isOutdatedOnScopeContext: true,
+							}),
 					},
 					["student"]
 				);
@@ -272,10 +281,11 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus: toolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: true,
-							isOutdatedOnScopeContext: true,
-						}),
+						toolOutdatedStatus:
+							ContextExternalToolConfigurationStatusFactory.build({
+								isOutdatedOnScopeSchool: true,
+								isOutdatedOnScopeContext: true,
+							}),
 					},
 					["teacher"]
 				);
@@ -303,10 +313,11 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus: toolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: true,
-							isOutdatedOnScopeContext: true,
-						}),
+						toolOutdatedStatus:
+							ContextExternalToolConfigurationStatusFactory.build({
+								isOutdatedOnScopeSchool: true,
+								isOutdatedOnScopeContext: true,
+							}),
 					},
 					["student"]
 				);

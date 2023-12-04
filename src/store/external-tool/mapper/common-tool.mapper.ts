@@ -1,14 +1,14 @@
 import {
+	ContextExternalToolConfigurationStatusResponse,
 	CustomParameterEntryParam,
 	CustomParameterEntryResponse,
 	CustomParameterResponseLocationEnum,
 	CustomParameterResponseScopeEnum,
 	CustomParameterResponseTypeEnum,
-	ToolConfigurationStatusResponse,
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
 import { ToolLaunchRequestMethodEnum } from "@/store/external-tool";
-import { ToolConfigurationStatus } from "../tool-configuration-status";
+import { ContextExternalToolConfigurationStatus } from "../context-external-tool-configuration-status";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { ToolParameterLocation } from "../tool-parameter-location.enum";
 import { ToolParameterScope } from "../tool-parameter-scope.enum";
@@ -80,10 +80,10 @@ export class CommonToolMapper {
 		return mapped;
 	}
 
-	static mapToolConfigurationStatus(
-		status: ToolConfigurationStatusResponse
-	): ToolConfigurationStatus {
-		const mapped: ToolConfigurationStatus = {
+	static mapContextExternalToolConfigurationStatus(
+		status: ContextExternalToolConfigurationStatusResponse
+	): ContextExternalToolConfigurationStatus {
+		const mapped: ContextExternalToolConfigurationStatus = {
 			isOutdatedOnScopeSchool: status.isOutdatedOnScopeSchool,
 			isOutdatedOnScopeContext: status.isOutdatedOnScopeContext,
 		};

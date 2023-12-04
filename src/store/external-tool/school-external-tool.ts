@@ -1,5 +1,5 @@
 import { ToolParameterEntry } from "./tool-parameter-entry";
-import { SchoolToolConfigurationStatus } from "./school-external-tool-configuration-status";
+import { SchoolExternalToolConfigurationStatus } from "./school-external-tool-configuration-status";
 
 export interface SchoolExternalToolSave {
 	toolId: string;
@@ -16,5 +16,5 @@ export interface SchoolExternalTool extends SchoolExternalToolSave {
 
 	name: string;
 
-	status: SchoolToolConfigurationStatus;
+	status: SchoolExternalToolConfigurationStatus;
 }

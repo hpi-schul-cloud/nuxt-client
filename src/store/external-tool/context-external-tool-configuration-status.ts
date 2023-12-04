@@ -1,4 +1,4 @@
-export interface ToolConfigurationStatus {
+export interface ContextExternalToolConfigurationStatus {
 	isOutdatedOnScopeSchool: boolean;
 
 	isOutdatedOnScopeContext: boolean;

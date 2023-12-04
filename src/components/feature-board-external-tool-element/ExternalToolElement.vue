@@ -83,7 +83,7 @@ import {
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
-import { ToolConfigurationStatus } from "@/store/external-tool";
+import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 
 export default defineComponent({
 	components: {
@@ -148,16 +148,15 @@ export default defineComponent({
 				!!displayData.value?.status.isOutdatedOnScopeContext
 		);
 
-		const toolOutdatedStatus: ComputedRef<ToolConfigurationStatus> = computed(
-			() => {
+		const toolOutdatedStatus: ComputedRef<ContextExternalToolConfigurationStatus> =
+			computed(() => {
 				return (
 					displayData.value?.status ?? {
 						isOutdatedOnScopeSchool: false,
 						isOutdatedOnScopeContext: false,
 					}
 				);
-			}
-		);
+			});
 
 		const isLoading = computed(
 			() =>

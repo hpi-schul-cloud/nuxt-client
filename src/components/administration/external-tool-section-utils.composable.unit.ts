@@ -6,7 +6,7 @@ import {
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { toolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 
 const schoolExternalToolsModuleMock = () => {
 	return {
@@ -46,7 +46,7 @@ describe("useSchoolExternalToolUtils", () => {
 					value: "value",
 				},
 			],
-			status: toolConfigurationStatusFactory.build({
+			status: ContextExternalToolConfigurationStatusFactory.build({
 				isOutdatedOnScopeSchool: false,
 			}),
 		};

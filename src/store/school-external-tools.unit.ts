@@ -3,6 +3,7 @@ import {
 	axiosErrorFactory,
 	customParameterResponseFactory,
 	mockApiResponse,
+	schoolExternalToolConfigurationStatusResponseFactory,
 	schoolExternalToolConfigurationTemplateResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolResponseFactory,
@@ -26,7 +27,6 @@ import {
 } from "./external-tool";
 import SchoolExternalToolsModule from "./school-external-tools";
 import { BusinessError } from "./types/commons";
-import { schoolToolConfigurationStatusResponseFactory } from "../../tests/test-utils/factory/schoolExternalToolConfigurationStatusFactory";
 
 describe("SchoolExternalToolsModule", () => {
 	let module: SchoolExternalToolsModule;
@@ -112,7 +112,8 @@ describe("SchoolExternalToolsModule", () => {
 									value: schoolExternalToolResponse.parameters[0].value,
 								},
 							],
-							status: schoolToolConfigurationStatusResponseFactory.build(),
+							status:
+								schoolExternalToolConfigurationStatusResponseFactory.build(),
 							version: schoolExternalToolResponse.toolVersion,
 						},
 					]);
@@ -184,7 +185,8 @@ describe("SchoolExternalToolsModule", () => {
 						schoolId: schoolExternalTool.schoolId,
 						version: schoolExternalTool.toolVersion,
 						parameters: [],
-						status: schoolToolConfigurationStatusResponseFactory.build(),
+						status:
+							schoolExternalToolConfigurationStatusResponseFactory.build(),
 						name: schoolExternalTool.name,
 					});
 				});

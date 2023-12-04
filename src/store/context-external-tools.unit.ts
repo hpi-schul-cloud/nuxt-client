@@ -9,8 +9,8 @@ import {
 import * as serverApi from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
+	ContextExternalToolConfigurationStatusFactory,
 	mockApiResponse,
-	toolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
 import {
 	axiosErrorFactory,
@@ -284,7 +284,7 @@ describe("ContextExternalToolsModule", () => {
 							contextExternalToolId: displayData.contextToolId,
 							name: displayData.displayName,
 							logoUrl: displayData.logoUrl,
-							status: toolConfigurationStatusFactory.build(),
+							status: ContextExternalToolConfigurationStatusFactory.build(),
 							openInNewTab: displayData.openInNewTab,
 						},
 					]);

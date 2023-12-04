@@ -12,8 +12,8 @@ import {
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import {
+	ContextExternalToolConfigurationStatusFactory,
 	externalToolDisplayDataFactory,
-	toolConfigurationStatusFactory,
 } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
@@ -242,7 +242,7 @@ describe("RoomExternalToolsSection", () => {
 		const setup = async () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build({
-					status: toolConfigurationStatusFactory.build(),
+					status: ContextExternalToolConfigurationStatusFactory.build(),
 				});
 
 			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });

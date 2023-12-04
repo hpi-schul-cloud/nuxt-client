@@ -16,8 +16,8 @@ import { BusinessError } from "@/store/types/commons";
 import { useBoardPermissions } from "@data-board";
 import { WarningAlert } from "@ui-alert";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
-import { useToolConfigurationStatus } from "@data-external-tool";
-import { ToolConfigurationStatus } from "@/store/external-tool";
+import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
+import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 
 export default defineComponent({
 	components: {
@@ -28,14 +28,15 @@ export default defineComponent({
 			type: Object as PropType<BusinessError>,
 		},
 		toolOutdatedStatus: {
-			type: Object as PropType<ToolConfigurationStatus>,
+			type: Object as PropType<ContextExternalToolConfigurationStatus>,
 			required: true,
 		},
 	},
 	setup(props) {
 		const { t } = useI18n();
 
-		const { determineOutdatedTranslationKey } = useToolConfigurationStatus();
+		const { determineOutdatedTranslationKey } =
+			useContextExternalToolConfigurationStatus();
 
 		const { isTeacher } = useBoardPermissions();
 

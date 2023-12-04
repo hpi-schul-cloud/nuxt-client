@@ -1,10 +1,11 @@
-import { ToolConfigurationStatus } from "@/store/external-tool";
+import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 
-export const useToolConfigurationStatus = () => {
+export const useContextExternalToolConfigurationStatus = () => {
 	const authModule = injectStrict(AUTH_MODULE_KEY);
+
 	const determineOutdatedTranslationKey = (
-		toolConfigStatus: ToolConfigurationStatus
+		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string => {
 		const userRoles = authModule.getUserRoles;
 
