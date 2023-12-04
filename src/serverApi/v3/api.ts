@@ -668,6 +668,25 @@ export enum ContentElementType {
 /**
  * 
  * @export
+ * @interface ContextExternalToolConfigurationStatusResponse
+ */
+export interface ContextExternalToolConfigurationStatusResponse {
+    /**
+     * Is the tool outdated on school scope, because of non matching versions or required parameter changes on ExternalTool?
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isOutdatedOnScopeSchool: boolean;
+    /**
+     * Is the tool outdated on context scope, because of non matching versions or required parameter changes on SchoolExternalTool?
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isOutdatedOnScopeContext: boolean;
+}
+/**
+ * 
+ * @export
  * @interface ContextExternalToolConfigurationTemplateListResponse
  */
 export interface ContextExternalToolConfigurationTemplateListResponse {
@@ -3982,6 +4001,19 @@ export interface RichTextElementResponse {
 /**
  * 
  * @export
+ * @interface SchoolExternalToolConfigurationStatusResponse
+ */
+export interface SchoolExternalToolConfigurationStatusResponse {
+    /**
+     * Is the tool outdated on school scope, because of non matching versions or required parameter changes on ExternalTool?
+     * @type {boolean}
+     * @memberof SchoolExternalToolConfigurationStatusResponse
+     */
+    isOutdatedOnScopeSchool: boolean;
+}
+/**
+ * 
+ * @export
  * @interface SchoolExternalToolConfigurationTemplateListResponse
  */
 export interface SchoolExternalToolConfigurationTemplateListResponse {
@@ -4117,10 +4149,10 @@ export interface SchoolExternalToolResponse {
     toolVersion: number;
     /**
      * 
-     * @type {string}
+     * @type {SchoolExternalToolConfigurationStatusResponse}
      * @memberof SchoolExternalToolResponse
      */
-    status: SchoolExternalToolResponseStatusEnum;
+    status: SchoolExternalToolConfigurationStatusResponse;
     /**
      * 
      * @type {string}
@@ -4128,17 +4160,6 @@ export interface SchoolExternalToolResponse {
      */
     logoUrl?: string;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SchoolExternalToolResponseStatusEnum {
-    Latest = 'Latest',
-    Outdated = 'Outdated',
-    Unknown = 'Unknown'
-}
-
 /**
  * 
  * @export
@@ -4849,17 +4870,6 @@ export interface TimestampsResponse {
  * @export
  * @enum {string}
  */
-export enum ToolConfigurationStatusResponse {
-    Latest = 'Latest',
-    Outdated = 'Outdated',
-    Unknown = 'Unknown'
-}
-
-/**
- * 
- * @export
- * @enum {string}
- */
 export enum ToolContextType {
     Course = 'course',
     BoardElement = 'board-element'
@@ -4963,11 +4973,11 @@ export interface ToolReferenceResponse {
      */
     openInNewTab: boolean;
     /**
-     * 
-     * @type {ToolConfigurationStatusResponse}
+     * The status of the tool
+     * @type {ContextExternalToolConfigurationStatusResponse}
      * @memberof ToolReferenceResponse
      */
-    status: ToolConfigurationStatusResponse;
+    status: ContextExternalToolConfigurationStatusResponse;
 }
 /**
  * 
