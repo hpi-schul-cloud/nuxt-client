@@ -89,7 +89,7 @@ export default {
 				this.keyword = this.data[0].keyword;
 				this.activated = this.data[0].success;
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 			this.showModal = true;
 		},

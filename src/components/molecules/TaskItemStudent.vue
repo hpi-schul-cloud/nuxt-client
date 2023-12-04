@@ -11,39 +11,52 @@
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"
 		>
-			<v-list-item-avatar>
-				<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
-			</v-list-item-avatar>
-			<v-list-item-content>
-				<v-list-item-subtitle data-testid="taskSubtitle">
-					{{ taskLabel }}
-				</v-list-item-subtitle>
-				<v-list-item-title data-testid="taskTitle">
-					{{ task.name }}
-				</v-list-item-title>
-				<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
-			</v-list-item-content>
-			<v-list-item-action>
-				<v-list-item-action-text class="subtitle-2" data-test-id="dueDateLabel">
-					{{ dueDateLabel }}
-				</v-list-item-action-text>
-				<v-spacer />
-				<v-custom-chip-time-remaining
-					v-if="taskState === 'warning'"
-					:type="taskState"
-					:due-date="task.dueDate"
-					:shorten-unit="$vuetify.display.xsOnly"
-				/>
-			</v-list-item-action>
-			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
-				<task-item-menu
-					:task-id="task.id"
-					:task-is-finished="task.status.isFinished"
-					user-role="student"
-					@toggled-menu="toggleMenu"
-					@focus-changed="handleFocus"
-				/>
-			</v-list-item-action>
+			<!-- item avatar -->
+			<template v-slot:prepend>
+				<v-avatar>
+					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
+				</v-avatar>
+			</template>
+
+			<!-- item main info -->
+			<div class="d-flex align-center justify-space-between">
+				<!-- item title -->
+				<div class="task-item__main-info">
+					<v-list-item-subtitle data-testid="taskSubtitle">
+						{{ taskLabel }}
+					</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskTitle">
+						{{ task.name }}
+					</v-list-item-title>
+					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
+				</div>
+				<div class="mr-4 text-right">
+					<div
+						class="text-subtitle-2 due-date-label"
+						data-test-id="dueDateLabel"
+					>
+						{{ dueDateLabel }}
+					</div>
+					<v-custom-chip-time-remaining
+						v-if="taskState === 'warning'"
+						:type="taskState"
+						:due-date="task.dueDate"
+						:shorten-unit="$vuetify.display.xsOnly"
+					/>
+				</div>
+			</div>
+
+			<template v-slot:append>
+				<div :id="`task-menu-${task.id}`" class="context-menu-btn">
+					<task-item-menu
+						:task-id="task.id"
+						:task-is-finished="task.status.isFinished"
+						user-role="student"
+						@toggled-menu="toggleMenu"
+						@focus-changed="handleFocus"
+					/>
+				</div>
+			</template>
 		</v-list-item>
 	</v-hover>
 </template>
@@ -164,8 +177,12 @@ export default {
 	fill: currentColor;
 }
 
-// stylelint-disable sh-waqar/declaration-use-variable
-.context-menu-btn {
-	min-width: 45px;
+:deep(.v-list-item__prepend .v-icon) {
+	width: inherit;
+	height: inherit;
+}
+
+:deep(.due-date-label) {
+	opacity: var(--v-medium-emphasis-opacity);
 }
 </style>

@@ -213,7 +213,6 @@ export default class RoomsModule extends VuexModule {
 			this.setRoomData(data.gridElements || []);
 			if (indicateLoading) this.setLoading(false);
 		} catch (error: any) {
-			console.log(error);
 			this.setError(error);
 			if (indicateLoading) this.setLoading(false);
 		}

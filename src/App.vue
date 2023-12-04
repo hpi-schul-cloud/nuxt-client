@@ -24,8 +24,8 @@ export default {
 				layout = authModule.isLoggedIn ? Layouts.LOGGED_IN : Layouts.LOGGED_OUT;
 			}
 
-			return defineAsyncComponent(() =>
-				import(`@/layouts/${layout}.layout.vue`)
+			return defineAsyncComponent(
+				() => import(`@/layouts/${layout}.layout.vue`)
 			);
 		},
 		isLoggedIn() {

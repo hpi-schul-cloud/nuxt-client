@@ -29,157 +29,165 @@
 					{{ t("pages.administration.school.index.info", { instituteTitle }) }}
 				</div>
 			</v-alert>
-			<template>
-				<v-divider />
-				<v-expansion-panels
-					hover
-					accordion
-					flat
-					multiple
-					class="mb-9"
-					v-model="openedPanels"
+
+			<v-divider />
+			<v-expansion-panels
+				variant="accordion"
+				multiple
+				class="mb-9"
+				:model-value="openedPanels"
+			>
+				<v-expansion-panel
+					data-testid="general-settings-panel"
+					value="general"
+					elevation="0"
 				>
-					<v-expansion-panel data-testid="general-settings-panel">
-						<v-expansion-panel-header hide-actions>
-							<template v-slot:default="{ open }">
-								<div class="text-h4">
-									{{ t("pages.administration.school.index.generalSettings") }}
-								</div>
-								<div class="v-expansion-panel-header__icon">
-									<v-icon>
-										<template v-if="!open">$mdiPlus</template>
-										<template v-else>$mdiMinus</template>
-									</v-icon>
-								</div>
-							</template>
-						</v-expansion-panel-header>
-						<v-expansion-panel-content eager>
-							<general-settings class="mt-9" />
-						</v-expansion-panel-content>
-						<v-divider />
-					</v-expansion-panel>
+					<v-expansion-panel-title hide-actions>
+						<template v-slot:default="{ expanded }">
+							<div class="text-h4">
+								{{ t("pages.administration.school.index.generalSettings") }}
+							</div>
+							<div class="v-expansion-panel-header__icon">
+								<v-icon>
+									<template v-if="!expanded">$mdiPlus</template>
+									<template v-else>$mdiMinus</template>
+								</v-icon>
+							</div>
+						</template>
+					</v-expansion-panel-title>
+					<v-expansion-panel-text eager>
+						<general-settings class="mt-9" />
+					</v-expansion-panel-text>
+				</v-expansion-panel>
 
-					<v-expansion-panel
-						v-if="isFeatureSchoolPolicyEnabled"
-						data-testid="policy-panel"
-					>
-						<v-expansion-panel-header hide-actions>
-							<template v-slot:default="{ open }">
-								<div class="text-h4">
-									{{ t("common.words.privacyPolicy") }}
-								</div>
-								<div class="v-expansion-panel-header__icon">
-									<v-icon>
-										<template v-if="!open">$mdiPlus</template>
-										<template v-else>$mdiMinus</template>
-									</v-icon>
-								</div>
-							</template>
-						</v-expansion-panel-header>
-						<v-expansion-panel-content eager>
-							<school-policy class="mt-9" />
-						</v-expansion-panel-content>
-						<v-divider />
-					</v-expansion-panel>
+				<v-expansion-panel
+					v-if="isFeatureSchoolPolicyEnabled"
+					data-testid="policy-panel"
+					value="privacy"
+					elevation="0"
+				>
+					<v-expansion-panel-title hide-actions>
+						<template v-slot:default="{ expanded }">
+							<div class="text-h4">
+								{{ t("common.words.privacyPolicy") }}
+							</div>
+							<div class="v-expansion-panel-header__icon">
+								<v-icon>
+									<template v-if="!expanded">$mdiPlus</template>
+									<template v-else>$mdiMinus</template>
+								</v-icon>
+							</div>
+						</template>
+					</v-expansion-panel-title>
+					<v-expansion-panel-text eager>
+						<school-policy class="mt-9" />
+					</v-expansion-panel-text>
+				</v-expansion-panel>
 
-					<v-expansion-panel
-						v-if="isFeatureSchoolTermsOfUseEnabled"
-						data-testid="terms-panel"
-					>
-						<v-expansion-panel-header hide-actions>
-							<template v-slot:default="{ open }">
-								<div class="text-h4">
-									{{ t("common.words.termsOfUse") }}
-								</div>
-								<div class="v-expansion-panel-header__icon">
-									<v-icon>
-										<template v-if="!open">$mdiPlus</template>
-										<template v-else>$mdiMinus</template>
-									</v-icon>
-								</div>
-							</template>
-						</v-expansion-panel-header>
-						<v-expansion-panel-content eager>
-							<school-terms-of-use class="mt-9" />
-						</v-expansion-panel-content>
-						<v-divider />
-					</v-expansion-panel>
+				<v-expansion-panel
+					v-if="isFeatureSchoolTermsOfUseEnabled"
+					data-testid="terms-panel"
+					value="terms"
+					elevation="0"
+				>
+					<v-expansion-panel-title hide-actions>
+						<template v-slot:default="{ expanded }">
+							<div class="text-h4">
+								{{ t("common.words.termsOfUse") }}
+							</div>
+							<div class="v-expansion-panel-header__icon">
+								<v-icon>
+									<template v-if="!expanded">$mdiPlus</template>
+									<template v-else>$mdiMinus</template>
+								</v-icon>
+							</div>
+						</template>
+					</v-expansion-panel-title>
+					<v-expansion-panel-text eager>
+						<school-terms-of-use class="mt-9" />
+					</v-expansion-panel-text>
+				</v-expansion-panel>
 
-					<v-expansion-panel
-						v-if="isFeatureOauthMigrationEnabled"
-						data-testid="migration-panel"
-					>
-						<v-expansion-panel-header hide-actions>
-							<template v-slot:default="{ open }">
-								<div class="text-h4">
-									{{
-										t("components.administration.adminMigrationSection.headers")
-									}}
-								</div>
-								<div class="v-expansion-panel-header__icon">
-									<v-icon>
-										<template v-if="!open">$mdiPlus</template>
-										<template v-else>$mdiMinus</template>
-									</v-icon>
-								</div>
-							</template>
-						</v-expansion-panel-header>
-						<v-expansion-panel-content eager>
-							<admin-migration-section class="mt-9" />
-						</v-expansion-panel-content>
-						<v-divider />
-					</v-expansion-panel>
+				<v-expansion-panel
+					v-if="isFeatureOauthMigrationEnabled"
+					data-testid="migration-panel"
+					value="migration"
+					elevation="0"
+				>
+					<v-expansion-panel-title hide-actions>
+						<template v-slot:default="{ expanded }">
+							<div class="text-h4">
+								{{
+									t("components.administration.adminMigrationSection.headers")
+								}}
+							</div>
+							<div class="v-expansion-panel-header__icon">
+								<v-icon>
+									<template v-if="!expanded">$mdiPlus</template>
+									<template v-else>$mdiMinus</template>
+								</v-icon>
+							</div>
+						</template>
+					</v-expansion-panel-title>
+					<v-expansion-panel-text eager>
+						<admin-migration-section class="mt-9" />
+					</v-expansion-panel-text>
+				</v-expansion-panel>
 
-					<v-expansion-panel data-testid="systems-panel">
-						<v-expansion-panel-header hide-actions>
-							<template v-slot:default="{ open }">
-								<div class="text-h4">
-									{{ t("pages.administration.school.index.authSystems.title") }}
-								</div>
-								<div class="v-expansion-panel-header__icon">
-									<v-icon>
-										<template v-if="!open">$mdiPlus</template>
-										<template v-else>$mdiMinus</template>
-									</v-icon>
-								</div>
-							</template>
-						</v-expansion-panel-header>
-						<v-expansion-panel-content eager>
-							<template v-if="isLoading">
-								<v-skeleton-loader
-									class="mt-9"
-									type="table-thead, table-row, table-row"
-									data-testid="systems-panel-skeleton"
-								/>
-							</template>
-							<auth-systems class="mt-9" v-else :systems="systems" />
-						</v-expansion-panel-content>
-						<v-divider />
-					</v-expansion-panel>
+				<v-expansion-panel
+					data-testid="systems-panel"
+					value="authentication"
+					elevation="0"
+				>
+					<v-expansion-panel-title hide-actions>
+						<template v-slot:default="{ expanded }">
+							<div class="text-h4">
+								{{ t("pages.administration.school.index.authSystems.title") }}
+							</div>
+							<div class="v-expansion-panel-header__icon">
+								<v-icon>
+									<template v-if="!expanded">$mdiPlus</template>
+									<template v-else>$mdiMinus</template>
+								</v-icon>
+							</div>
+						</template>
+					</v-expansion-panel-title>
+					<v-expansion-panel-text eager>
+						<template v-if="isLoading">
+							<v-skeleton-loader
+								class="mt-9"
+								type="table-thead, table-row, table-row"
+								data-testid="systems-panel-skeleton"
+							/>
+						</template>
+						<auth-systems class="mt-9" v-else :systems="systems" />
+					</v-expansion-panel-text>
+				</v-expansion-panel>
 
-					<v-expansion-panel data-testid="tools-panel">
-						<v-expansion-panel-header hide-actions>
-							<template v-slot:default="{ open }">
-								<div class="text-h4">
-									{{
-										t("components.administration.externalToolsSection.header")
-									}}
-								</div>
-								<div class="v-expansion-panel-header__icon">
-									<v-icon>
-										<template v-if="!open">$mdiPlus</template>
-										<template v-else>$mdiMinus</template>
-									</v-icon>
-								</div>
-							</template>
-						</v-expansion-panel-header>
-						<v-expansion-panel-content eager>
-							<external-tools-section class="mt-9" />
-						</v-expansion-panel-content>
-						<v-divider />
-					</v-expansion-panel>
-				</v-expansion-panels>
-			</template>
+				<v-expansion-panel
+					data-testid="tools-panel"
+					value="tools"
+					elevation="0"
+				>
+					<v-expansion-panel-title hide-actions>
+						<template v-slot:default="{ expanded }">
+							<div class="text-h4">
+								{{ t("components.administration.externalToolsSection.header") }}
+							</div>
+							<div class="v-expansion-panel-header__icon">
+								<v-icon>
+									<template v-if="!expanded">$mdiPlus</template>
+									<template v-else>$mdiMinus</template>
+								</v-icon>
+							</div>
+						</template>
+					</v-expansion-panel-title>
+					<v-expansion-panel-text eager>
+						<external-tools-section class="mt-9" />
+					</v-expansion-panel-text>
+				</v-expansion-panel>
+				<v-divider />
+			</v-expansion-panels>
 		</div>
 	</default-wireframe>
 </template>
@@ -260,27 +268,9 @@ export default defineComponent({
 			{ immediate: true }
 		);
 
-		const openedPanels: ComputedRef<number[]> = computed(() => {
-			// those need to be in order of code appearance since index is needed for panels v-model
-			const panels: string[] = [
-				"general",
-				"privacy",
-				"terms",
-				"migration",
-				"authentication",
-				"tools",
-			];
-
-			let openedPanelsArr: number[] = [];
-			if (route.query.openPanels) {
-				openedPanelsArr = route.query.openPanels
-					.toString()
-					.split(",")
-					.map((panelName) => panels.findIndex((p) => p === panelName));
-			}
-
-			return openedPanelsArr;
-		});
+		const openedPanels: ComputedRef<string[]> = computed(() =>
+			route.query.openPanels ? route.query.openPanels.toString().split(",") : []
+		);
 		const systems: ComputedRef<any[]> = computed(
 			() => schoolsModule.getSystems
 		);
@@ -329,7 +319,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .alert-text {
-	color: var(--v-black-base) !important;
+	color: rgba(var(--v-theme-black)) !important;
 	line-height: var(--line-height-lg) !important;
 }
 </style>

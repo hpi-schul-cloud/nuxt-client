@@ -1,7 +1,7 @@
 <template>
 	<section class="task-dashboard-teacher">
-		<v-window :model-value="tab">
-			<v-window-item :model-value="tabRoutes[0]" class="padding-bottom">
+		<v-window v-model="tab">
+			<v-window-item :value="tabRoutes[0]" class="padding-bottom">
 				<v-custom-double-panels
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"

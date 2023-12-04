@@ -3,14 +3,15 @@
 		<v-text-field
 			v-if="customLoginLinkEnabled && !hasSystems"
 			id="school-login-link-0"
-			:value="generateLoginLink()"
+			:model-value="generateLoginLink()"
 			class="school-login-link"
 			:color="getCopyStatus(0) ? 'success' : 'primary'"
 			:label="
 				$t('pages.administration.school.index.authSystems.loginLinkLabel')
 			"
 			readonly
-			dense
+			density="compact"
+			variant="underlined"
 			@blur="linkCopyFinished(0)"
 		>
 			<template #append>
@@ -28,7 +29,7 @@
 				</v-btn>
 			</template>
 		</v-text-field>
-		<v-simple-table v-if="hasSystems" class="table-system">
+		<v-table v-if="hasSystems" class="table-system">
 			<template #default>
 				<thead>
 					<tr>
@@ -56,11 +57,12 @@
 							<v-text-field
 								v-if="isLoginSystem(system)"
 								:id="`school-login-link-${system._id}`"
-								:value="generateLoginLink(system)"
+								:model-value="generateLoginLink(system)"
 								class="school-login-link"
 								:color="getCopyStatus(system._id) ? 'success' : 'primary'"
 								readonly
-								dense
+								density="compact"
+								variant="underlined"
 								@blur="linkCopyFinished"
 							>
 								<template #append>
@@ -95,7 +97,7 @@
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
 							<v-btn
-								v-if="isRemovable(system) && hasSystemCreatePermission"
+								v-if="isEditable(system) && hasSystemCreatePermission"
 								class="delete-system-btn"
 								icon
 								variant="text"
@@ -108,7 +110,7 @@
 					</tr>
 				</tbody>
 			</template>
-		</v-simple-table>
+		</v-table>
 		<v-btn
 			v-if="hasSystemCreatePermission"
 			color="primary"
@@ -148,10 +150,10 @@
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import {
+	mdiCheckCircle,
+	mdiContentCopy,
 	mdiPencilOutline,
 	mdiTrashCanOutline,
-	mdiContentCopy,
-	mdiCheckCircle,
 } from "@mdi/js";
 import vCustomDialog from "@/components/organisms/vCustomDialog";
 
@@ -207,10 +209,7 @@ export default {
 			};
 		},
 		isEditable(system) {
-			return system.type === "ldap" && system.ldapConfig.provider === "general";
-		},
-		isRemovable(system) {
-			return system.type !== "ldap" || system.ldapConfig.provider === "general";
+			return system.ldapConfig?.provider === "general";
 		},
 		openConfirmDeleteDialog(systemId) {
 			this.confirmDeleteDialog = {

@@ -16,6 +16,7 @@ import {
 	calculateUTC,
 	setDefaultFormats,
 	DATETIME_FORMAT,
+	isDateTimeInPast,
 } from "@/plugins/datetime";
 import datetime from "@/plugins/datetime";
 import dayjs from "dayjs";
@@ -192,6 +193,11 @@ describe("@/plugins/datetime", () => {
 
 		const resultDateTimeString = resultDateTime.toISOString();
 		expect(resultDateTimeString).toStrictEqual(dateString);
+	});
+
+	it("isDateTimeInPast", () => {
+		const date = new Date("1991-12-31");
+		expect(isDateTimeInPast(date)).toStrictEqual(true);
 	});
 
 	const mockApp = {

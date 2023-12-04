@@ -6,24 +6,14 @@
 				v-model="inputValues[index]"
 			/>
 		</div>
-		<v-progress-linear :active="loading" indeterminate />
 	</div>
 </template>
 
 <script lang="ts">
 import { SchoolExternalToolConfigurationTemplate } from "@/store/external-tool";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	PropType,
-	WritableComputedRef,
-} from "vue";
-import ExternalToolsModule from "@/store/external-tools";
+import { computed, defineComponent, PropType, WritableComputedRef } from "vue";
 import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
-import { EXTERNAL_TOOLS_MODULE_KEY, injectStrict } from "@/utils/inject";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ExternalToolConfigSettings",
 	components: { ExternalToolConfigParameter },
@@ -38,10 +28,6 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE_KEY
-		);
-
 		const inputValues: WritableComputedRef<(string | undefined)[]> = computed({
 			get() {
 				return props.modelValue;
@@ -51,12 +37,7 @@ export default defineComponent({
 			},
 		});
 
-		const loading: ComputedRef<boolean> = computed(
-			() => externalToolsModule.getLoading
-		);
-
 		return {
-			loading,
 			inputValues,
 		};
 	},

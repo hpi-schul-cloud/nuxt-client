@@ -7,23 +7,18 @@
 			width="120"
 			height="22"
 		/>
-		<VExpansionPanels
-			v-else
-			v-model="panel"
-			flat
-			class="rounded-0 rounded-b-sm"
-		>
-			<VExpansionPanel>
-				<VExpansionPanelHeader
+		<VExpansionPanels v-else v-model="panel" class="rounded-0 rounded-b-sm">
+			<VExpansionPanel elevation="0">
+				<VExpansionPanelTitle
 					@dblclick.stop="() => {}"
-					class="pl-4 pr-4 rounded-tr-0 rounded-tl-0"
+					class="pl-4 pr-4 rounded-te-0 rounded-ts-0"
 				>
 					<v-chip
 						v-if="!isOverdue"
 						ref="v-chip-open"
 						class="mr-2"
 						:class="getFilterClass('open', openCount)"
-						small
+						size="small"
 						label
 						:ripple="false"
 						:disabled="isDisabled(openCount)"
@@ -39,7 +34,7 @@
 						ref="v-chip-completed"
 						class="mr-2"
 						:class="getFilterClass('completed', completedCount)"
-						small
+						size="small"
 						label
 						:ripple="false"
 						:disabled="isDisabled(completedCount)"
@@ -56,7 +51,7 @@
 						ref="v-chip-expired"
 						class="mr-2"
 						:class="getFilterClass('expired', overdueCount)"
-						small
+						size="small"
 						label
 						:ripple="false"
 						:disabled="isDisabled(overdueCount)"
@@ -68,7 +63,7 @@
 						{{ overdueCount }}
 						{{ t("components.cardElement.submissionElement.expired") }}
 					</v-chip>
-				</VExpansionPanelHeader>
+				</VExpansionPanelTitle>
 				<v-expansion-panel-text>
 					<v-data-table
 						:headers="headers"
@@ -78,7 +73,7 @@
 					>
 						<template #[`item.status`]="{ item }">
 							<span data-testid="submission-item">
-								<v-icon color="black" small>
+								<v-icon color="black" size="small">
 									{{ getStatusIcon(item) }}
 								</v-icon>
 							</span>
@@ -91,10 +86,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, computed, ref, watch, unref } from "vue";
+import {
+	defineComponent,
+	PropType,
+	computed,
+	ref,
+	watch,
+	toRef,
+	Ref,
+	unref,
+} from "vue";
 import { TeacherSubmission, Status } from "../types/submission";
 import { DataTableHeader } from "@/types/vuetify";
 import { useI18n } from "vue-i18n";
+import { MaybeRef } from "@vueuse/core";
+import { VExpansionPanelTitle } from "vuetify/lib/components/index.mjs";
 
 type StatusFilter = "all" | Status;
 
@@ -116,7 +122,6 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { t } = useI18n();
-
 		const headers: DataTableHeader[] = [
 			{
 				title: t("common.labels.status"),
@@ -131,29 +136,43 @@ export default defineComponent({
 				key: "firstName",
 			},
 		];
-
-		const allSubmissions = computed<Array<TeacherSubmission>>(() => {
-			return props.submissions;
-		});
-
-		const openCount = computed<number>(() => {
-			return allSubmissions.value.filter((item) => {
-				return item.status === "open";
-			}).length;
-		});
-
-		const completedCount = computed<number>(() => {
-			return allSubmissions.value.filter((item) => {
-				return item.status === "completed";
-			}).length;
-		});
-
-		const overdueCount = computed<number>(() => {
-			return allSubmissions.value.filter((item) => {
-				return item.status === "expired";
-			}).length;
-		});
-
+		const panel = ref<number | undefined>(undefined);
+		const allSubmissions = toRef(props, "submissions");
+		const activeFilter = ref<StatusFilter>("all");
+		const filteredSubmissions = computed(() =>
+			filterByStatus(allSubmissions, activeFilter)
+		);
+		const filterByStatus = (
+			submissions: Ref<TeacherSubmission[]>,
+			statusFilter: MaybeRef<StatusFilter>
+		) => {
+			const status = unref(statusFilter);
+			return submissions.value.filter(
+				(item) => status === "all" || item.status === status
+			);
+		};
+		const setFilter = (filter: StatusFilter) => {
+			if (filter === activeFilter.value) {
+				activeFilter.value = "all";
+			} else {
+				activeFilter.value = filter;
+			}
+		};
+		const openCount = computed<number>(
+			() => filterByStatus(allSubmissions, "open").length
+		);
+		const completedCount = computed<number>(
+			() => filterByStatus(allSubmissions, "completed").length
+		);
+		const overdueCount = computed<number>(
+			() => filterByStatus(allSubmissions, "expired").length
+		);
+		const isDisabled = (count: number) => {
+			return count === 0;
+		};
+		const getTabIndex = (isDisabled: boolean) => {
+			return isDisabled ? -1 : 0;
+		};
 		const getStatusIcon = (item: TeacherSubmission) => {
 			if (item.status === "open") {
 				return "$mdiMinus";
@@ -165,7 +184,6 @@ export default defineComponent({
 				return "$mdiClose";
 			}
 		};
-
 		const getFilterClass = (filter: StatusFilter, count: number) => {
 			if (isDisabled(count)) {
 				return "filter-chip--disabled";
@@ -174,58 +192,14 @@ export default defineComponent({
 				? "filter-chip--active"
 				: "filter-chip";
 		};
-
-		const isDisabled = (count: number) => {
-			return count === 0;
-		};
-
-		const getTabIndex = (isDisabled: boolean) => {
-			return isDisabled ? -1 : 0;
-		};
-
-		//	Filter Functionality
-		const filteredSubmissions = ref<Array<TeacherSubmission>>(
-			unref(allSubmissions)
-		);
-		const activeFilter = ref<StatusFilter>("all");
-		const panel = ref<number | undefined>(undefined);
-
-		watch(allSubmissions, (newValue) => {
-			filteredSubmissions.value = newValue;
-		});
-
-		const filterByStatus = (statusFilter: StatusFilter) => {
-			if (statusFilter === "all") {
-				filteredSubmissions.value = allSubmissions.value;
-				return;
-			}
-
-			filteredSubmissions.value = allSubmissions.value.filter(
-				(item: TeacherSubmission) => {
-					return item.status === statusFilter;
-				}
-			);
-		};
-
-		const setFilter = (filter: StatusFilter) => {
-			if (filter === activeFilter.value) {
-				activeFilter.value = "all";
-			} else {
-				activeFilter.value = filter;
-			}
-		};
-
-		watch(activeFilter, (newFilter) => {
-			filterByStatus(newFilter);
+		watch(activeFilter, () => {
 			openPanel();
 		});
-
 		const openPanel = () => {
 			if (panel.value === undefined && activeFilter.value !== "all") {
 				panel.value = 0;
 			}
 		};
-
 		return {
 			t,
 			panel,
@@ -242,6 +216,7 @@ export default defineComponent({
 			getTabIndex,
 		};
 	},
+	components: { VExpansionPanelTitle },
 });
 </script>
 <style lang="scss" scoped>

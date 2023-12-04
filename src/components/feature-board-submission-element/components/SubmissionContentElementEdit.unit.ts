@@ -5,7 +5,7 @@ import { shallowMount, MountOptions } from "@vue/test-utils";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
-import { DateTimePicker } from "@feature-date-time-picker";
+import { DateTimePicker } from "@ui-date-time-picker";
 
 const mockedSubmissions = submissionsResponseFactory.build();
 

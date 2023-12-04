@@ -1,3 +1,5 @@
+<!-- eslint-disable vuetify/no-deprecated-components -->
+<!-- VUE3_UPGRADE re-enable linter rule when v-stepper was released -->
 <template>
 	<default-wireframe
 		v-if="isAllowed"
@@ -9,8 +11,7 @@
 			v-if="businessError && businessError.statusCode !== '200'"
 			v-model="businessError"
 			:timeout="errorTimeout"
-			top
-			centered
+			location="top centered"
 			color="error-darken-3"
 		>
 			{{ $t("pages.administration.migration.error") }}
@@ -36,6 +37,7 @@
 						:complete="isMigrationFinished && isMaintenanceFinished"
 						:editable="isStepEditable(1)"
 						:value="1"
+						color="primary"
 						data-testid="migration_tutorial_head"
 					>
 						{{ $t("pages.administration.migration.step1") }}
@@ -45,6 +47,7 @@
 						:complete="isMigrationFinished"
 						:editable="isStepEditable(2)"
 						:value="2"
+						color="primary"
 						data-testid="migration_importUsers_head"
 					>
 						{{ $t("pages.administration.migration.step2") }}
@@ -54,6 +57,7 @@
 						:editable="isStepEditable(3)"
 						:complete="isMigrationFinished"
 						:value="3"
+						color="primary"
 						data-testid="migration_summary_head"
 					>
 						{{ $t("pages.administration.migration.step3") }}
@@ -63,6 +67,7 @@
 						:complete="isMigrationFinished && isMaintenanceFinished"
 						:editable="isStepEditable(4)"
 						:value="4"
+						color="primary"
 						data-testid="migration_finish_head"
 					>
 						{{ $t("pages.administration.migration.step4") }}
@@ -72,6 +77,7 @@
 						:value="5"
 						:editable="isStepEditable(5)"
 						:complete="migrationStep === 5"
+						color="primary"
 						data-testid="migration_waitForSync_head"
 					>
 						{{ $t("pages.administration.migration.step5") }}
@@ -242,7 +248,7 @@
 									:ripple="false"
 									elevation="2"
 									class="pa-5 mb-10"
-									color="grey lighten-5"
+									color="grey-lighten-5"
 								>
 									<v-card-text>
 										<v-row>
@@ -309,7 +315,7 @@
 
 									<div class="text-right">
 										<v-btn
-											class="primary"
+											class="bg-primary"
 											data-testid="migration_endMaintenance"
 											@click="endMaintenance"
 										>
@@ -377,7 +383,7 @@
 								</ul>
 								<div class="text-right">
 									<v-btn
-										class="primary"
+										class="bg-primary"
 										data-testid="migration_backToAdministration"
 										to="/administration"
 									>
@@ -513,11 +519,11 @@ export default {
 
 		this.breadcrumbs = [
 			{
-				text: this.$t("pages.administration.index.title"),
+				title: this.$t("pages.administration.index.title"),
 				to: "/administration/",
 			},
 			{
-				text: this.$t("pages.administration.migration.title", {
+				title: this.$t("pages.administration.migration.title", {
 					source: this.ldapSourceTranslation,
 					instance: this.$theme.name,
 				}),

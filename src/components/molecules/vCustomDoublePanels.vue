@@ -1,7 +1,7 @@
 <template>
 	<section>
-		<v-expansion-panels v-model="expanded" flat accordion mandatory>
-			<v-expansion-panel :disabled="isPanelOneDisabled">
+		<v-expansion-panels :model-value="expanded" variant="accordion" mandatory>
+			<v-expansion-panel elevation="0" :disabled="isPanelOneDisabled">
 				<v-expansion-panel-title v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />
 					<template #actions>
@@ -26,7 +26,7 @@
 					<slot name="panelOne" />
 				</v-expansion-panel-text>
 			</v-expansion-panel>
-			<v-expansion-panel :disabled="isPanelTwoDisabled">
+			<v-expansion-panel elevation="0" :disabled="isPanelTwoDisabled">
 				<v-expansion-panel-title v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />
 					<template #actions>
@@ -161,7 +161,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-:deep(.v-expansion-panel-text__wrap) {
-	padding: 0;
+:deep(.v-expansion-panel-text__wrapper) {
+	padding: 0 0 8px 0;
 }
 </style>

@@ -9,6 +9,8 @@
 			item-value="value"
 			return-object
 			active
+			variant="underlined"
+			color="primary"
 			@update:model-value="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
@@ -20,8 +22,8 @@
 							perPage > total
 								? total
 								: currentPage * perPage > total
-								? total
-								: currentPage * perPage,
+								  ? total
+								  : currentPage * perPage,
 						total,
 					})
 				}}

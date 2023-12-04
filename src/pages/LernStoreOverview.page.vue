@@ -13,18 +13,43 @@
 		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
 			<div>
-				<content-searchbar
-					v-model.lazy="searchQuery"
-					:class="
-						!activateTransition
-							? 'first-search__searchbar'
-							: 'content__searchbar'
-					"
-					:placeholder="$t('pages.content.index.search.placeholder')"
-					@keyup:enter="enterKeyHandler"
-				/>
+				<div class="search">
+					<div class="search__input-container">
+						<v-text-field
+							v-model="searchQuery"
+							autofocus
+							variant="underlined"
+							color="primary"
+							:class="
+								activateTransition
+									? 'content__searchbar'
+									: 'first-search__searchbar'
+							"
+							:placeholder="$t('pages.content.index.search.placeholder')"
+						>
+							<template v-slot:append-inner>
+								<v-btn
+									v-if="searchQuery"
+									:icon="mdiClose"
+									:aria-label="$t('common.actions.delete')"
+									color="rgba(var(--v-theme-black))"
+									density="compact"
+									size="x-large"
+									variant="text"
+									@click="searchQuery = ''"
+								/>
+								<v-icon
+									v-else
+									:icon="mdiMagnify"
+									color="rgba(var(--v-theme-black))"
+									size="x-large"
+								/>
+							</template>
+						</v-text-field>
+					</div>
+				</div>
 				<transition name="fade">
-					<div class="content__container">
+					<div class="content__container" v-if="true">
 						<p
 							v-show="resources.data.length !== 0 && searchQuery.length > 1"
 							class="content__total"
@@ -76,19 +101,17 @@
 
 <script>
 import { contentModule, notifierModule } from "@/store";
-import ContentSearchbar from "@/components/molecules/ContentSearchbar";
 import ContentCard from "@/components/organisms/ContentCard";
 import ContentEmptyState from "@/components/molecules/ContentEmptyState";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
 import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
 import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
 import ContentInitialState from "@/components/molecules/ContentInitialState";
-import { mdiChevronLeft } from "@mdi/js";
+import { mdiChevronLeft, mdiMagnify, mdiClose } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
-		ContentSearchbar,
 		ContentCard,
 		ContentEmptyState,
 		LernStoreGrid,
@@ -104,6 +127,8 @@ export default {
 			activateTransition: false,
 			prevRoute: null,
 			mdiChevronLeft,
+			mdiMagnify,
+			mdiClose,
 		};
 	},
 	computed: {
@@ -229,6 +254,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 .content {
 	display: flex;
 	flex-direction: column;
@@ -278,6 +304,31 @@ export default {
 		padding-bottom: var(--space-sm);
 	}
 }
+.search {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 100%;
+
+	&__input-container {
+		width: calc(
+			2 * var(--size-content-width-min)
+		); // keep in sync with wrapper in content (EmptyState.vue)
+
+		:deep(.v-field__input) {
+			font-size: var(--text-lg);
+			text-align: center;
+
+			@media #{map-get($display-breakpoints, 'sm-and-up')} {
+				font-size: var(--heading-6);
+			}
+
+			@media #{map-get($display-breakpoints, 'md-and-up')} {
+				font-size: var(--heading-4);
+			}
+		}
+	}
+}
 
 .inline {
 	min-height: calc(100vh - calc(24 * var(--border-width-bold)));
@@ -299,14 +350,5 @@ export default {
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
-}
-
-:deep(
-		.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(
-				:hover
-			)
-			.v-btn__content
-	) {
-	opacity: 1;
 }
 </style>

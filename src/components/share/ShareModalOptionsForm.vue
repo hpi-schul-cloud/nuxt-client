@@ -1,5 +1,5 @@
 <template>
-	<div class="black--text">
+	<div class="text-black">
 		<div class="d-flex justify-space-between">
 			<div class="mt-1">
 				{{ $t("components.molecules.share.options.schoolInternally") }}
@@ -8,7 +8,7 @@
 				v-model="shareOptions.isSchoolInternal"
 				data-testid="isSchoolInternal"
 				color="primary"
-				input-value="true"
+				:value="true"
 				class="my-0 mr-n3"
 				inset
 				density="compact"
@@ -23,7 +23,7 @@
 				v-model="shareOptions.hasExpiryDate"
 				data-testid="hasExpiryDate"
 				color="primary"
-				input-value="true"
+				:value="true"
 				class="my-0 mr-n3"
 				inset
 				density="compact"

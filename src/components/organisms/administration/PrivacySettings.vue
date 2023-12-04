@@ -7,7 +7,7 @@
 			<v-col>
 				<v-switch
 					:disabled="!isTeacherStudentVisibilityConfigurable"
-					:input-value="studentVisibility"
+					:model-value="studentVisibility"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
@@ -44,7 +44,7 @@
 		<v-row v-if="toggleStudentLernstoreViewEnabled" class="learnstore-switch">
 			<v-col>
 				<v-switch
-					:input-value="lernStoreVisibility"
+					:model-value="lernStoreVisibility"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.lernStore'
@@ -78,7 +78,7 @@
 		<v-row v-if="rocketChatEnabled" class="rocketchat-switch">
 			<v-col>
 				<v-switch
-					:input-value="features.rocketChat"
+					:model-value="features.rocketChat"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.chatFunction'
@@ -112,7 +112,7 @@
 		<v-row v-if="videoConferenceEnabled" class="videoconference-switch">
 			<v-col>
 				<v-switch
-					:input-value="features.videoconference"
+					:model-value="features.videoconference"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.videoConference'
@@ -185,7 +185,7 @@ const theme = computed(() => envConfigModule.getTheme);
 
 const studentVisibility = computed(() => {
 	if (isTeacherStudentVisibilityConfigurable.value) {
-		return props.permissions?.value.teacher
+		return props.permissions?.teacher
 			? props.permissions.teacher.STUDENT_LIST
 			: false;
 	} else {

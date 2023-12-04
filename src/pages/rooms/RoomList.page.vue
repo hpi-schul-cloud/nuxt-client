@@ -24,6 +24,7 @@
 					class="px-1"
 					v-model="searchText"
 					variant="solo"
+					color="primary"
 					rounded
 					single-line
 					:label="$t('pages.rooms.index.search.label')"
@@ -68,7 +69,6 @@ import { mdiMagnify } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { defineComponent } from "vue";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: {
 		RoomWrapper,

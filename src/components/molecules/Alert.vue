@@ -18,7 +18,7 @@
 			:close-icon="mdiClose"
 			:close-label="$t('common.labels.close')"
 			border="start"
-			@input="closeNotification"
+			@update:modelValue="closeNotification"
 		>
 			<div v-if="messages" class="alert_text mr-2">
 				<div v-for="(message, index) in messages" :key="index" class="mb-1">

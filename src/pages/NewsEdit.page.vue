@@ -79,7 +79,6 @@ export default {
 					path: `/news/${this.news.id}`,
 				});
 			} catch (e) {
-				console.error(e);
 				notifierModule.show({
 					text: this.$t("components.organisms.FormNews.errors.patch"),
 					status: "error",
@@ -97,7 +96,6 @@ export default {
 				});
 				this.$router.push({ name: "news" });
 			} catch (e) {
-				console.error(e);
 				notifierModule.show({
 					text: this.$t("components.organisms.FormNews.errors.remove"),
 					status: "error",

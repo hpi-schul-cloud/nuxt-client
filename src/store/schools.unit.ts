@@ -1,18 +1,15 @@
 import * as serverApi from "@/serverApi/v3/api";
-import {
-	MigrationBody,
-	MigrationResponse,
-	SchoolApiInterface,
-} from "@/serverApi/v3/api";
-import { authModule } from "@/store";
+import { SystemsApiInterface } from "@/serverApi/v3/api";
+import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { AxiosError, AxiosInstance, AxiosPromise } from "axios";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
+import EnvConfigModule from "./env-config";
 import SchoolsModule from "./schools";
-import { ApplicationError } from "./types/application-error";
-import { OauthMigration } from "./types/schools";
+import { Envs } from "./types/env-config";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -32,29 +29,13 @@ const axiosInitializer = () => {
 axiosInitializer();
 
 describe("schools module", () => {
-	const setupApi = () => {
-		const legacySchoolControllerGetMigration = jest.fn<
-			AxiosPromise<MigrationResponse>,
-			[schoolId: string, options?: any]
-		>();
-		const legacySchoolControllerSetMigration = jest.fn<
-			AxiosPromise<MigrationResponse>,
-			[schoolId: string, migrationBody: MigrationBody, options?: any]
-		>();
+	let systemsApi: DeepMocked<SystemsApiInterface>;
 
-		const apiMock: Partial<SchoolApiInterface> = {
-			legacySchoolControllerGetMigration,
-			legacySchoolControllerSetMigration,
-		};
-		jest
-			.spyOn(serverApi, "SchoolApiFactory")
-			.mockReturnValue(apiMock as SchoolApiInterface);
+	beforeEach(() => {
+		systemsApi = createMock<SystemsApiInterface>();
 
-		return {
-			legacySchoolControllerGetMigration,
-			legacySchoolControllerSetMigration,
-		};
-	};
+		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);
+	});
 
 	describe("actions", () => {
 		beforeEach(() => {
@@ -68,7 +49,7 @@ describe("schools module", () => {
 					return getRequestReturn;
 				},
 			} as AxiosInstance);
-			setupStores({ authModule: AuthModule });
+			setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 		});
 		describe("fetchSchool", () => {
 			beforeEach(() => {
@@ -126,7 +107,6 @@ describe("schools module", () => {
 				authModule.setUser({
 					schoolId: "4711",
 					_id: "",
-					__v: 0,
 					firstName: "",
 					lastName: "",
 					email: "",
@@ -374,72 +354,155 @@ describe("schools module", () => {
 				receivedRequests = [];
 			});
 
-			it("should call backend and sets state correctly", async () => {
-				const systemId = "id_1";
-				initializeAxios({
-					delete: async (path: string) => {
-						receivedRequests.push({ path });
-						return { data: "some data" };
-					},
-				} as AxiosInstance);
-				const schoolsModule = new SchoolsModule({});
-				const systems = [
-					{ _id: "id_1", type: "itslearning" },
-					{
-						_id: "id_2",
-						type: "moodle",
-					},
-					{
-						_id: "id_3",
-						type: "ldap",
-					},
-				];
-				const expectedSystems = [
-					{
-						_id: "id_2",
-						type: "moodle",
-					},
-					{
-						_id: "id_3",
-						type: "ldap",
-					},
-				];
-				schoolsModule.setSystems(systems);
+			describe("when using the nest api", () => {
+				it("should call backend and sets state correctly", async () => {
+					envConfigModule.setEnvs({
+						FEATURE_NEST_SYSTEMS_API_ENABLED: true,
+					} as Envs);
+					const systemId = "id_1";
+					const schoolsModule = new SchoolsModule({});
+					const systems = [
+						{ _id: "id_1", type: "itslearning" },
+						{
+							_id: "id_2",
+							type: "moodle",
+						},
+						{
+							_id: "id_3",
+							type: "ldap",
+						},
+					];
+					const expectedSystems = [
+						{
+							_id: "id_2",
+							type: "moodle",
+						},
+						{
+							_id: "id_3",
+							type: "ldap",
+						},
+					];
+					schoolsModule.setSystems(systems);
 
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
-				const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
+					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
+					const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
-				await schoolsModule.deleteSystem(systemId);
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual("v1/systems/id_1");
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(fetchSchoolSpy).toHaveBeenCalled();
-				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expect.any(Array));
-				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
+					await schoolsModule.deleteSystem(systemId);
+					expect(systemsApi.systemControllerDeleteSystem).toHaveBeenCalledWith(
+						systemId
+					);
+					expect(setLoadingSpy).toHaveBeenCalled();
+					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+					expect(fetchSchoolSpy).toHaveBeenCalled();
+					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
+						expect.any(Array)
+					);
+					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
+				});
+
+				it("should trigger error and goes into the catch block", async () => {
+					envConfigModule.setEnvs({
+						FEATURE_NEST_SYSTEMS_API_ENABLED: true,
+					} as Envs);
+					const systemId = "id_1";
+					systemsApi.systemControllerDeleteSystem.mockRejectedValueOnce(
+						new AxiosError()
+					);
+					const schoolsModule = new SchoolsModule({});
+
+					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+					const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+
+					await schoolsModule.deleteSystem(systemId);
+
+					expect(setErrorSpy).toHaveBeenCalled();
+					expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(
+						expect.any(Object)
+					);
+					expect(setLoadingSpy).toHaveBeenCalled();
+					expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+				});
 			});
 
-			it("should trigger error and goes into the catch block", async () => {
-				const systemId = "id_1";
-				initializeAxios({
-					delete: async (path: string) => {
-						throw new AxiosError(path);
-						return "";
-					},
-				} as AxiosInstance);
-				const schoolsModule = new SchoolsModule({});
+			describe("when using the feathers api", () => {
+				it("should call backend and sets state correctly", async () => {
+					envConfigModule.setEnvs({
+						FEATURE_NEST_SYSTEMS_API_ENABLED: false,
+					} as Envs);
+					const systemId = "id_1";
+					initializeAxios({
+						delete: async (path: string) => {
+							receivedRequests.push({ path });
+							return { data: "some data" };
+						},
+					} as AxiosInstance);
+					const schoolsModule = new SchoolsModule({});
+					const systems = [
+						{ _id: "id_1", type: "itslearning" },
+						{
+							_id: "id_2",
+							type: "moodle",
+						},
+						{
+							_id: "id_3",
+							type: "ldap",
+						},
+					];
+					const expectedSystems = [
+						{
+							_id: "id_2",
+							type: "moodle",
+						},
+						{
+							_id: "id_3",
+							type: "ldap",
+						},
+					];
+					schoolsModule.setSystems(systems);
 
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
+					const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
-				await schoolsModule.deleteSystem(systemId);
+					await schoolsModule.deleteSystem(systemId);
+					expect(receivedRequests.length).toBeGreaterThan(0);
+					expect(receivedRequests[0].path).toStrictEqual("v1/systems/id_1");
+					expect(setLoadingSpy).toHaveBeenCalled();
+					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+					expect(fetchSchoolSpy).toHaveBeenCalled();
+					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
+						expect.any(Array)
+					);
+					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
+				});
 
-				expect(receivedRequests).toHaveLength(0);
-				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+				it("should trigger error and goes into the catch block", async () => {
+					envConfigModule.setEnvs({
+						FEATURE_NEST_SYSTEMS_API_ENABLED: false,
+					} as Envs);
+					const systemId = "id_1";
+					initializeAxios({
+						delete: async (path: string) => {
+							throw new AxiosError(path);
+							return "";
+						},
+					} as AxiosInstance);
+					const schoolsModule = new SchoolsModule({});
+
+					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+					const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+
+					await schoolsModule.deleteSystem(systemId);
+
+					expect(receivedRequests).toHaveLength(0);
+					expect(setErrorSpy).toHaveBeenCalled();
+					expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(
+						expect.any(Object)
+					);
+					expect(setLoadingSpy).toHaveBeenCalled();
+					expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+				});
 			});
 		});
 
@@ -629,259 +692,6 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
-
-		describe("fetchSchoolOAuthMigration is called", () => {
-			describe("when school id is given", () => {
-				it("should return state of OauthMigration", async () => {
-					const date: string = new Date().toDateString();
-					const schoolsModule = new SchoolsModule({});
-					schoolsModule.setSchool({
-						...mockSchool,
-					});
-
-					const mockApi = {
-						legacySchoolControllerGetMigration: jest.fn().mockResolvedValue({
-							data: {
-								oauthMigrationPossible: date,
-								enableMigrationStart: true,
-								oauthMigrationMandatory: date,
-								oauthMigrationFinished: date,
-							},
-						}),
-					};
-
-					jest
-						.spyOn(serverApi, "SchoolApiFactory")
-						.mockReturnValue(
-							mockApi as unknown as serverApi.SchoolApiInterface
-						);
-
-					await schoolsModule.fetchSchoolOAuthMigration();
-
-					expect(
-						mockApi.legacySchoolControllerGetMigration
-					).toHaveBeenCalledWith(mockSchool.id);
-					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
-						enableMigrationStart: true,
-						oauthMigrationPossible: true,
-						oauthMigrationMandatory: true,
-						oauthMigrationFinished: date,
-					});
-				});
-			});
-
-			describe("when school id is missing", () => {
-				it("should not set any migration flags ", async () => {
-					const { legacySchoolControllerGetMigration } = setupApi();
-					const schoolsModule = new SchoolsModule({});
-					schoolsModule.setSchool({
-						...mockSchool,
-						_id: "",
-					});
-
-					await schoolsModule.fetchSchoolOAuthMigration();
-
-					expect(legacySchoolControllerGetMigration).toHaveBeenCalledTimes(1);
-					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
-						enableMigrationStart: false,
-						oauthMigrationFinalFinish: "",
-						oauthMigrationPossible: false,
-						oauthMigrationMandatory: false,
-						oauthMigrationFinished: "",
-					});
-				});
-			});
-
-			describe("when api call fails", () => {
-				it("should set an error", async () => {
-					const { legacySchoolControllerGetMigration } = setupApi();
-					const schoolsModule = new SchoolsModule({});
-					schoolsModule.setSchool({
-						...mockSchool,
-					});
-
-					legacySchoolControllerGetMigration.mockRejectedValue(
-						new AxiosError("")
-					);
-
-					await schoolsModule.fetchSchoolOAuthMigration();
-
-					expect(schoolsModule.getError).toStrictEqual(
-						new ApplicationError(500, "pages.administration.school.index.error")
-					);
-				});
-			});
-		});
-
-		describe("setSchoolOauthMigration is called", () => {
-			describe("when school id is given", () => {
-				it("should call legacySchoolControllerSetMigration and return state of OauthMigration", async () => {
-					const date: string = new Date().toDateString();
-					const schoolsModule = new SchoolsModule({});
-					schoolsModule.setSchool({
-						...mockSchool,
-					});
-
-					const mockApi = {
-						legacySchoolControllerSetMigration: jest.fn().mockResolvedValue({
-							data: {
-								oauthMigrationPossible: date,
-								enableMigrationStart: true,
-								oauthMigrationMandatory: undefined,
-								oauthMigrationFinished: undefined,
-							},
-						}),
-					};
-
-					jest
-						.spyOn(serverApi, "SchoolApiFactory")
-						.mockReturnValue(
-							mockApi as unknown as serverApi.SchoolApiInterface
-						);
-
-					await schoolsModule.setSchoolOauthMigration({
-						oauthMigrationPossible: true,
-						oauthMigrationMandatory: false,
-						oauthMigrationFinished: false,
-					});
-					expect(
-						mockApi.legacySchoolControllerSetMigration
-					).toHaveBeenCalledTimes(1);
-					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
-						enableMigrationStart: true,
-						oauthMigrationPossible: true,
-						oauthMigrationMandatory: false,
-						oauthMigrationFinished: undefined,
-					});
-				});
-			});
-
-			describe("when school id is give and oauthMigrationFinished exists", () => {
-				it("should call legacySchoolControllerSetMigration and return state of OauthMigration", async () => {
-					const date: string = new Date().toDateString();
-					const schoolsModule = new SchoolsModule({});
-					schoolsModule.setSchool({
-						...mockSchool,
-					});
-
-					const mockApi = {
-						legacySchoolControllerSetMigration: jest.fn().mockResolvedValue({
-							data: {
-								oauthMigrationPossible: undefined,
-								enableMigrationStart: true,
-								oauthMigrationMandatory: date,
-								oauthMigrationFinished: date,
-							},
-						}),
-					};
-
-					jest
-						.spyOn(serverApi, "SchoolApiFactory")
-						.mockReturnValue(
-							mockApi as unknown as serverApi.SchoolApiInterface
-						);
-
-					await schoolsModule.setSchoolOauthMigration({
-						oauthMigrationPossible: false,
-						oauthMigrationMandatory: true,
-						oauthMigrationFinished: true,
-					});
-					expect(
-						mockApi.legacySchoolControllerSetMigration
-					).toHaveBeenCalledTimes(1);
-					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
-						enableMigrationStart: true,
-						oauthMigrationPossible: false,
-						oauthMigrationMandatory: true,
-						oauthMigrationFinished: date,
-					});
-				});
-			});
-
-			describe("when school id is missing", () => {
-				it("should not set migration flags ", async () => {
-					const { legacySchoolControllerSetMigration } = setupApi();
-					const schoolsModule = new SchoolsModule({});
-					schoolsModule.setSchool({
-						...mockSchool,
-						_id: "",
-					});
-
-					await schoolsModule.setSchoolOauthMigration({
-						oauthMigrationPossible: true,
-						oauthMigrationMandatory: true,
-						oauthMigrationFinished: false,
-					});
-
-					expect(legacySchoolControllerSetMigration).toHaveBeenCalledTimes(0);
-					expect(schoolsModule.getOauthMigration).toEqual<OauthMigration>({
-						enableMigrationStart: false,
-						oauthMigrationFinalFinish: "",
-						oauthMigrationPossible: false,
-						oauthMigrationMandatory: false,
-						oauthMigrationFinished: "",
-					});
-				});
-			});
-
-			describe("when api call fails", () => {
-				it("should set an error from axios reponse", async () => {
-					const { legacySchoolControllerSetMigration } = setupApi();
-					const schoolsModule = new SchoolsModule({});
-					schoolsModule.setSchool({
-						...mockSchool,
-					});
-
-					legacySchoolControllerSetMigration.mockRejectedValue(
-						new AxiosError("", "400")
-					);
-
-					await schoolsModule.setSchoolOauthMigration({
-						oauthMigrationPossible: true,
-						oauthMigrationMandatory: false,
-						oauthMigrationFinished: false,
-					});
-
-					expect(schoolsModule.getError).toStrictEqual(
-						new ApplicationError(
-							400,
-							"pages.administration.school.index.error.gracePeriodExceeded"
-						)
-					);
-				});
-
-				it("should set an default error when axios reponse is missing", async () => {
-					const { legacySchoolControllerSetMigration } = setupApi();
-					const schoolsModule = new SchoolsModule({});
-					schoolsModule.setSchool({
-						...mockSchool,
-					});
-
-					legacySchoolControllerSetMigration.mockRejectedValue(
-						new AxiosError(
-							undefined,
-							undefined,
-							undefined,
-							undefined,
-							undefined
-						)
-					);
-
-					await schoolsModule.setSchoolOauthMigration({
-						oauthMigrationPossible: true,
-						oauthMigrationMandatory: false,
-						oauthMigrationFinished: false,
-					});
-
-					expect(schoolsModule.getError).toStrictEqual(
-						new ApplicationError(
-							500,
-							"pages.administration.school.index.error.gracePeriodExceeded"
-						)
-					);
-				});
-			});
-		});
 	});
 
 	describe("mutations", () => {
@@ -903,11 +713,11 @@ describe("schools module", () => {
 				});
 			});
 		});
+
 		describe("setFederalState", () => {
 			it("should set federalState data", () => {
 				const schoolsModule = new SchoolsModule({});
 				const mockFederalState = {
-					__v: 0,
 					counties: [],
 					logoUrl: "",
 					_id: "mockId",
@@ -933,6 +743,7 @@ describe("schools module", () => {
 				});
 			});
 		});
+
 		describe("setSystems", () => {
 			it("should set systems data", () => {
 				const schoolsModule = new SchoolsModule({});
@@ -942,6 +753,7 @@ describe("schools module", () => {
 				expect(schoolsModule.getSystems).toStrictEqual(expectedSystemState);
 			});
 		});
+
 		describe("setLoading", () => {
 			it("should set loading data", () => {
 				const schoolsModule = new SchoolsModule({});
@@ -949,24 +761,6 @@ describe("schools module", () => {
 				expect(schoolsModule.getLoading).not.toBe(loadingValue);
 				schoolsModule.setLoading(loadingValue);
 				expect(schoolsModule.getLoading).toBe(loadingValue);
-			});
-		});
-		describe("setOauthMigration", () => {
-			it("should set oauth migration data", () => {
-				const schoolsModule = new SchoolsModule({});
-				const oauthMigrationValue = {
-					enableMigrationStart: true,
-					oauthMigrationPossible: true,
-					oauthMigrationMandatory: true,
-					oauthMigrationFinished: new Date().toDateString(),
-				};
-				expect(schoolsModule.getOauthMigration).not.toStrictEqual(
-					oauthMigrationValue
-				);
-				schoolsModule.setOauthMigration(oauthMigrationValue);
-				expect(schoolsModule.getOauthMigration).toStrictEqual(
-					oauthMigrationValue
-				);
 			});
 		});
 	});
@@ -998,7 +792,6 @@ describe("schools module", () => {
 			it("shoud return federalState state", () => {
 				const schoolsModule = new SchoolsModule({});
 				const mockFederalState = {
-					__v: 0,
 					counties: [],
 					logoUrl: "",
 					_id: "mockId",
@@ -1107,25 +900,6 @@ describe("schools module", () => {
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
-			});
-		});
-
-		describe("getOauthMigration", () => {
-			it("should return oauth migration data", () => {
-				const schoolsModule = new SchoolsModule({});
-				const oauthMigrationValue = {
-					enableMigrationStart: true,
-					oauthMigrationPossible: true,
-					oauthMigrationMandatory: true,
-					oauthMigrationFinished: new Date().toDateString(),
-				};
-				expect(schoolsModule.getOauthMigration).not.toStrictEqual(
-					oauthMigrationValue
-				);
-				schoolsModule.setOauthMigration(oauthMigrationValue);
-				expect(schoolsModule.getOauthMigration).toStrictEqual(
-					oauthMigrationValue
-				);
 			});
 		});
 	});

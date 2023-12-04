@@ -11,7 +11,6 @@
 			<template #footerRight>
 				<v-btn
 					variant="flat"
-					:dark="invertedDesign"
 					:color="!invertedDesign ? 'secondary' : 'success'"
 					data-testid="btn-dialog-cancel"
 					@click="cancel"
@@ -21,7 +20,6 @@
 				<v-btn
 					variant="flat"
 					:color="invertedDesign ? 'secondary' : 'success'"
-					:dark="!invertedDesign"
 					data-testid="btn-dialog-confirm"
 					@click="confirm"
 				>

@@ -137,6 +137,7 @@ export default defineComponent({
 			copy,
 		};
 	},
+	emits: ["toggledMenu", "focusChanged", "copyTask", "shareTask"],
 	components: { vCustomDialog },
 	props: {
 		taskId: {
@@ -149,7 +150,6 @@ export default defineComponent({
 		},
 		taskIsPublished: {
 			type: Boolean,
-			required: true,
 		},
 		taskTitle: {
 			type: String,
@@ -194,6 +194,10 @@ export default defineComponent({
 		},
 		shareTaskEnabled() {
 			return envConfigModule?.getEnv.FEATURE_TASK_SHARE;
+		},
+		ariaLabel() {
+			// VUE3_UPGRADE we need a proper label here. was missing before.
+			return `${this.$t("common.words.task")}`;
 		},
 	},
 	methods: {

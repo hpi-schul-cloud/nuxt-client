@@ -60,9 +60,7 @@
 		v-else
 		v-bind="$props"
 		postion="fixed"
-		right
-		:bottom="!positionAtTop"
-		:top="positionAtTop"
+		:location="positionAtTop ? 'top right' : 'bottom right'"
 		color="primary"
 		rounded="xl"
 		:size="extended ? 'small' : 'default'"

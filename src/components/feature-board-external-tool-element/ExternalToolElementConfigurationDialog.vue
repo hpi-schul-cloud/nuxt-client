@@ -28,8 +28,10 @@
 						:label="t('pages.tool.context.displayName')"
 						:hint="t('pages.tool.context.displayNameDescription')"
 						persistent-hint
-						validate-on-blur
+						validate-on="blur"
 						data-testId="parameter-display-name"
+						variant="underlined"
+						color="primary"
 					/>
 				</template>
 			</external-tool-configurator>

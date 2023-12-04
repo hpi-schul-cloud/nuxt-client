@@ -7,21 +7,24 @@ interface Props {
 	fetchFileMock?: jest.Mock;
 	renameMock?: jest.Mock;
 	uploadMock?: jest.Mock;
+	uploadFromUrlMock?: jest.Mock;
 }
 
 export const setupFileStorageApiMock = (props: Props = {}) => {
-	const { fetchFileMock, renameMock, uploadMock } = props;
+	const { fetchFileMock, renameMock, uploadMock, uploadFromUrlMock } = props;
 	const mockedFileStorageApi = jest.mocked(useFileStorageApi);
 	const fileRecord = ref<FileRecordResponse>();
 
 	const fetchFile = fetchFileMock ?? jest.fn();
 	const rename = renameMock ?? jest.fn();
 	const upload = uploadMock ?? jest.fn();
+	const uploadFromUrl = uploadFromUrlMock ?? jest.fn();
 
 	const mocks = {
 		fetchFile,
 		rename,
 		upload,
+		uploadFromUrl,
 		fileRecord,
 	};
 

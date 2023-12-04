@@ -52,6 +52,8 @@
 								:label="$t('components.organisms.importUsers.searchFirstName')"
 								clearable
 								class="searchFirstName"
+								variant="underlined"
+								color="primary"
 							/>
 						</td>
 						<td class="col-2">
@@ -61,6 +63,8 @@
 								:label="$t('components.organisms.importUsers.searchLastName')"
 								clearable
 								class="searchLastName"
+								variant="underlined"
+								color="primary"
 							/>
 						</td>
 						<td>
@@ -70,6 +74,8 @@
 								:label="$t('components.organisms.importUsers.searchUserName')"
 								clearable
 								class="searchLoginName"
+								variant="underlined"
+								color="primary"
 							/>
 						</td>
 						<td>
@@ -81,6 +87,8 @@
 								:label="$t('components.organisms.importUsers.searchRole')"
 								clearable
 								class="searchRole"
+								variant="underlined"
+								color="primary"
 							/>
 						</td>
 						<td>
@@ -90,6 +98,8 @@
 								:label="$t('components.organisms.importUsers.searchClass')"
 								clearable
 								class="searchClasses"
+								variant="underlined"
+								color="primary"
 							/>
 						</td>
 						<td class="col-2">
@@ -176,7 +186,7 @@
 
 				<template #[`item.match`]="{ item }">
 					<div class="text-no-wrap md">
-						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
+						<v-icon size="small">{{ getMatchedByIcon(item.match) }}</v-icon>
 						{{
 							item.match
 								? `${item.match.firstName} ${item.match.lastName}`

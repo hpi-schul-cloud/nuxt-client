@@ -7,4 +7,5 @@ export const classInfoFactory = Factory.define<ClassInfo>(({ sequence }) => ({
 	teachers: ["TestTeacher"],
 	type: ClassRootType.Group,
 	id: `id-${sequence}`,
+	studentCount: 2,
 }));

@@ -9,12 +9,13 @@ import {
 	ContentElementType,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
-	ExternalToolElementResponse,
-	FileElementContent,
-	LinkElementContent,
-	RichTextElementContent,
+	ExternalToolElementContentBody,
+	FileElementContentBody,
+	LinkElementContentBody,
+	RichTextElementContentBody,
+	DrawingElementContent,
 	RoomsApiFactory,
-	SubmissionContainerElementContent,
+	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
@@ -73,49 +74,46 @@ export const useBoardApi = () => {
 	const generateDataProp = (element: AnyContentElement) => {
 		if (element.type === ContentElementType.RichText) {
 			return {
-				content: element.content as RichTextElementContent,
+				content: element.content,
 				type: element.type,
-			};
+			} as RichTextElementContentBody;
 		}
 
 		if (element.type === ContentElementType.File) {
 			return {
-				content: element.content as FileElementContent,
+				content: element.content,
 				type: ContentElementType.File,
-			};
+			} as FileElementContentBody;
 		}
 
 		if (element.type === ContentElementType.SubmissionContainer) {
 			return {
-				content: element.content as SubmissionContainerElementContent,
+				content: element.content,
 				type: ContentElementType.SubmissionContainer,
-			};
-		}
-
-		if (isExternalToolElement(element)) {
-			return {
-				content: {
-					contextExternalToolId:
-						element.content.contextExternalToolId ?? undefined,
-				},
-				type: ContentElementType.ExternalTool,
-			};
+			} as SubmissionContainerElementContentBody;
 		}
 
 		if (element.type === ContentElementType.Link) {
 			return {
-				content: element.content as LinkElementContent,
+				content: element.content,
 				type: ContentElementType.Link,
-			};
+			} as LinkElementContentBody;
 		}
 
-		throw new Error("element.type mapping is undefined for updateElementCall");
-	};
+		if (element.type === ContentElementType.ExternalTool) {
+			return {
+				content: element.content,
+				type: ContentElementType.ExternalTool,
+			} as ExternalToolElementContentBody;
+		}
 
-	const isExternalToolElement = (
-		element: AnyContentElement
-	): element is ExternalToolElementResponse => {
-		return element.type === ContentElementType.ExternalTool;
+		if (element.type === ContentElementType.Drawing) {
+			return {
+				content: element.content as DrawingElementContent,
+				type: ContentElementType.Drawing,
+			};
+		}
+		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 
 	const createElementCall = async (

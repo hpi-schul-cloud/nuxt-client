@@ -12,8 +12,10 @@
 				:hint="parameter.description"
 				persistent-hint
 				:rules="validateParameter(parameter, inputValue)"
-				validate-on-blur
+				validate-on="blur"
 				:data-testId="parameter.name"
+				variant="underlined"
+				color="primary"
 			/>
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Boolean">
@@ -27,6 +29,8 @@
 				:items="booleanSelectItems"
 				item-value="value"
 				item-title="text"
+				variant="underlined"
+				color="primary"
 			/>
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Number">
@@ -37,8 +41,10 @@
 				persistent-hint
 				type="number"
 				:rules="validateParameter(parameter, inputValue)"
-				validate-on-blur
+				validate-on="blur"
 				:data-testId="parameter.name"
+				variant="underlined"
+				color="primary"
 			/>
 		</template>
 	</div>

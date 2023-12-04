@@ -3,7 +3,6 @@ import { School } from "@/store/types/schools";
 
 export const mockUser: User = {
 	_id: "",
-	__v: 0,
 	firstName: "",
 	lastName: "",
 	email: "",
@@ -20,7 +19,6 @@ export const mockUser: User = {
 			createdAt: "",
 			roles: [],
 			permissions: [],
-			__v: 2,
 			displayName: "test-display-name",
 			id: "",
 		},
@@ -67,13 +65,11 @@ export const mockSchool: School = {
 	systems: [],
 	updatedAt: "",
 	createdAt: "",
-	__v: 0,
 	currentYear: {
 		_id: "",
 		name: "",
 		startDate: "",
 		endDate: "",
-		__v: 0,
 	},
 	purpose: "",
 	features: {
@@ -93,6 +89,39 @@ export const mockSchool: School = {
 	documentBaseDir: "",
 	isExternal: false,
 	id: "mockSchoolId",
-	years: {},
+	years: {
+		nextYear: {
+			_id: "",
+			name: "",
+			startDate: "",
+			endDate: "",
+		},
+		lastYear: {
+			_id: "",
+			name: "",
+			startDate: "",
+			endDate: "",
+		},
+		activeYear: {
+			_id: "",
+			name: "",
+			startDate: "",
+			endDate: "",
+		},
+		defaultYear: {
+			_id: "",
+			name: "",
+			startDate: "",
+			endDate: "",
+		},
+		schoolYears: [
+			{
+				_id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+			},
+		],
+	},
 	isTeamCreationByStudentsEnabled: false,
 };

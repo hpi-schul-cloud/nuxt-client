@@ -30,7 +30,8 @@
 					class="input-file mb-2"
 					data-testid="input-file"
 					v-model="file"
-					dense
+					density="compact"
+					variant="underlined"
 					accept="application/pdf"
 					truncate-length="30"
 					:label="

@@ -22,36 +22,34 @@
 			/>
 			<v-list-item
 				v-else
-				two-line
-				dense
+				lines="two"
+				density="compact"
 				class="mb-6"
 				data-testid="terms-item"
 				@click="downloadTerms"
 				:class="{ 'item-no-action': !termsOfUse }"
 				:ripple="termsOfUse !== null"
 			>
-				<v-list-item-icon class="me-4">
+				<template v-slot:prepend>
 					<v-icon>$file_pdf_outline</v-icon>
-				</v-list-item-icon>
-				<v-list-item-content>
-					<v-list-item-title class="text-body-1 black--text mb-2">
-						{{ t("pages.administration.school.index.termsOfUse.fileName") }}
-					</v-list-item-title>
-					<v-list-item-subtitle class="text-body-2">
-						<template v-if="termsOfUse">
-							{{
-								t("pages.administration.school.index.termsOfUse.uploadedOn", {
-									date: formatDate(termsOfUse.publishedAt),
-								})
-							}}
-						</template>
-						<template v-else>
-							{{
-								t("pages.administration.school.index.termsOfUse.notUploadedYet")
-							}}
-						</template>
-					</v-list-item-subtitle>
-				</v-list-item-content>
+				</template>
+				<v-list-item-title class="text-body-1 text-black mb-2">
+					{{ t("pages.administration.school.index.termsOfUse.fileName") }}
+				</v-list-item-title>
+				<v-list-item-subtitle class="text-body-2">
+					<template v-if="termsOfUse">
+						{{
+							t("pages.administration.school.index.termsOfUse.uploadedOn", {
+								date: formatDate(termsOfUse.publishedAt),
+							})
+						}}
+					</template>
+					<template v-else>
+						{{
+							t("pages.administration.school.index.termsOfUse.notUploadedYet")
+						}}
+					</template>
+				</v-list-item-subtitle>
 				<v-list-item-action
 					v-if="hasSchoolEditPermission"
 					data-testid="edit-button"

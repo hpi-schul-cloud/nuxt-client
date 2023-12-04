@@ -1,7 +1,9 @@
 <template>
-	<v-icon color="black" size="18" data-testid="content-element-title-icon">{{
-		icon
-	}}</v-icon>
+	<div>
+		<v-icon color="black" size="18" data-testid="content-element-title-icon">{{
+			icon
+		}}</v-icon>
+	</div>
 </template>
 
 <script lang="ts">
