@@ -1056,5 +1056,6 @@
 	"media.player.action.pause": "Pause",
 	"media.player.action.slider": "Audio Schieberegler",
 	"media.player.action.volume.slider": "Lautstärke Schieberegler",
-	"media.player.action.volume": "Lautstärke"
+	"media.player.action.volume": "Lautstärke",
+	"media.player.action.speed": "Geschwindigkeitsmenü"
 }

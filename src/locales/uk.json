@@ -1082,5 +1082,6 @@
 	"media.player.action.pause": "пауза",
 	"media.player.action.slider": "повзунок",
 	"media.player.action.volume.slider": "повзунок гучності",
-	"media.player.action.volume": "гучності"
+	"media.player.action.volume": "гучності",
+	"media.player.action.speed": "швидке меню"
 }

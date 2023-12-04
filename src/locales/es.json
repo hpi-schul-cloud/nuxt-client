@@ -1052,5 +1052,6 @@
 	"media.player.action.pause": "Pausa",
 	"media.player.action.slider": "Control deslizante",
 	"media.player.action.volume.slider": "Control deslizante de volumen",
-	"media.player.action.volume": "Volumen"
+	"media.player.action.volume": "Volumen",
+	"media.player.action.speed": "Menú de velocidad"
 }

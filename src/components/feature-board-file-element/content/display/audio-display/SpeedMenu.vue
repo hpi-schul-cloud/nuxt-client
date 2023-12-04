@@ -9,7 +9,7 @@
 					icon
 					small
 					color="white"
-					aria-label="Speed menu"
+					:aria-label="$t('media.player.action.speed')"
 					role="img"
 				>
 					<v-icon>
