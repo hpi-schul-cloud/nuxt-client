@@ -6,11 +6,16 @@
 				<v-icon
 					v-if="!playing"
 					role="img"
-					aria-label="Play"
+					:aria-label="$t('media.player.action.play')"
 					aria-hidden="false"
 					>{{ mdiPlay }}</v-icon
 				>
-				<v-icon v-else role="img" aria-label="Pause" aria-hidden="false">
+				<v-icon
+					v-else
+					role="img"
+					:aria-label="$t('media.player.action.pause')"
+					aria-hidden="false"
+				>
 					{{ mdiPause }}</v-icon
 				>
 			</v-btn>
@@ -18,7 +23,7 @@
 				{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</span
 			>
 			<v-slider
-				aria-label="Audio slider"
+				:aria-label="$t('media.player.action.slider')"
 				class="slider pt-6"
 				color="white"
 				thumb-color="white"
@@ -42,13 +47,13 @@
 				v-if="!isShow"
 				@click="showVolumeSlider"
 				role="img"
-				aria-label="Volume"
+				:aria-label="$t('media.player.action.volume')"
 				aria-hidden="false"
 				>{{ mdiVolumeHigh }}</v-icon
 			>
 			<div class="volume-wrapper mr-n2" v-if="isShow">
 				<v-slider
-					aria-label="Volume slider"
+					:aria-label="$t('media.player.action.volume.slider')"
 					class="volume-slider pl-1"
 					color="white"
 					thumb-color="white"
@@ -66,7 +71,7 @@
 					class="pr-1"
 					@click="showVolumeSlider"
 					role="img"
-					aria-label="Volume"
+					:aria-label="$t('media.player.action.volume')"
 					aria-hidden="false"
 					>{{ mdiVolumeHigh }}</v-icon
 				>
