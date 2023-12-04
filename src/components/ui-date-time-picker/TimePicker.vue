@@ -1,5 +1,21 @@
 <template>
-	<div>
+	<v-text-field
+		ref="inputField"
+		v-model="modelValue"
+		:label="label"
+		:aria-label="ariaLabel"
+		placeholder="HH:MM"
+		append-icon="$mdiClockOutline"
+		:rules="rules"
+		data-testid="time-input"
+		v-timeInputMask
+		:class="{ 'menu-open': showTimeDialog }"
+		@keydown.prevent.space="showTimeDialog = true"
+		@keydown.prevent.enter="showTimeDialog = true"
+		@keydown.up.down.stop
+		@update:error="onError"
+	/>
+	<!-- <div>
 		<v-menu
 			v-model="showTimeDialog"
 			:close-on-content-click="false"
@@ -48,7 +64,7 @@
 				</v-list-item-group>
 			</v-list>
 		</v-menu>
-	</div>
+	</div> -->
 </template>
 
 <script lang="ts">
