@@ -14,7 +14,6 @@
 			bordered
 			color="rgba(var(--v-theme-primary)"
 			icon="$mdiLock"
-			overlap
 			:model-value="hasNotifications"
 		>
 			<v-card

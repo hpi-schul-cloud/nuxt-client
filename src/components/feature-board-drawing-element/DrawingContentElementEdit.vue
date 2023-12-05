@@ -13,21 +13,21 @@
 			<v-list-item-content class="py-0">
 				<div class="content py-2 px-3">
 					<v-icon
-						class="edit-icon grey--text text--darken-3"
+						class="edit-icon text-grey-darken-3"
 						data-testid="board-drawing-element-icon"
-						medium
+						size="medium"
 					>
 						$mdiPresentation
 					</v-icon>
 					<span
-						class="subtitle-1 board-subtitle d-inline-block text-truncate black--text text--darken-2"
+						class="text-subtitle-1 board-subtitle d-inline-block text-truncate text-black-darken-2"
 					>
 						{{ $t("components.cardElement.drawingElement") }}
 					</span>
 				</div>
 				<div class="last-updated">
 					<span
-						class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2 py-1 px-3"
+						class="text-subtitle-1 text-edit d-inline-block text-truncate text-black-darken-2 py-1 px-3"
 					>
 						{{ $t("components.cardElement.lastUpdatedAt") }}
 						{{ formattedLastUpdatedAt }}

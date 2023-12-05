@@ -2,7 +2,7 @@
 	<v-card
 		class="mb-4"
 		data-testid="drawing-element"
-		outlined
+		variant="outlined"
 		dense
 		ref="drawingElement"
 		:ripple="false"
