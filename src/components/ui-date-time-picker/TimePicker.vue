@@ -1,24 +1,5 @@
 <template>
-	<v-text-field
-		v-bind="props"
-		v-model="timeValue"
-		ref="inputField"
-		data-testid="time-input"
-		variant="underlined"
-		color="primary"
-		append-inner-icon="$mdiClockOutline"
-		:label="label"
-		:aria-label="ariaLabel"
-		placeholder="HH:MM"
-		:error-messages="errorMessages"
-		v-time-input-mask
-		@update:model-value="validate"
-		@keydown.prevent.space="showTimeDialog = true"
-		@keydown.prevent.enter="showTimeDialog = true"
-		@keydown.up.down.stop
-		@keydown.tab="showTimeDialog = false"
-	/>
-	<!-- <div>
+	<div>
 		<v-menu
 			v-model="showTimeDialog"
 			:close-on-content-click="false"
@@ -29,7 +10,7 @@
 			<template #activator="{ props }">
 				<v-text-field
 					v-bind="props"
-					v-model="modelValue"
+					v-model="timeValue"
 					ref="inputField"
 					data-testid="time-input"
 					variant="underlined"
@@ -47,7 +28,11 @@
 					@keydown.tab="showTimeDialog = false"
 				/>
 			</template>
-			<v-list class="col-12 pt-1 px-0 overflow-y-auto">
+
+			<v-list
+				v-model:selected="selected"
+				class="col-12 pt-1 px-0 overflow-y-auto"
+			>
 				<div
 					v-for="(timeOfDay, index) in timesOfDayList"
 					:key="`time-select-${index}`"
@@ -55,6 +40,8 @@
 					<v-list-item
 						:data-testid="`time-select-${index}`"
 						class="time-list-item text-left"
+						:value="timeOfDay.value"
+						color="primary"
 						@click="onSelect(timeOfDay.value)"
 					>
 						<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
@@ -63,13 +50,13 @@
 				</div>
 			</v-list>
 		</v-menu>
-	</div> -->
+	</div>
 </template>
 
 <script setup lang="ts">
 import { computedAsync, useDebounceFn } from "@vueuse/core";
 import { computed, ref, watchEffect } from "vue";
-// import { useTimePickerState } from "./TimePickerState.composable";
+import { useTimePickerState } from "./TimePickerState.composable";
 import { useI18n } from "vue-i18n";
 import { useVuelidate } from "@vuelidate/core";
 import { helpers, requiredIf } from "@vuelidate/validators";
@@ -83,15 +70,18 @@ const props = defineProps({
 	required: { type: Boolean },
 });
 const emit = defineEmits(["update:time", "error"]);
+
 const { t } = useI18n();
+const { timesOfDayList } = useTimePickerState();
 
 const showTimeDialog = ref(false);
 const inputField = ref<HTMLInputElement | null>(null);
 const timeValue = ref<undefined | string>();
-// const { timesOfDayList } = useTimePickerState();
+const selected = ref<Array<string>>([]);
 
 watchEffect(() => {
 	timeValue.value = props.time;
+	selected.value = [props.time];
 });
 
 const rules = computed(() => ({
@@ -135,22 +125,18 @@ const emitTime = () => {
 	emit("update:time", timeValue.value);
 };
 
-// const closeAndEmit = () => {
-// 	showDateDialog.value = false;
-// 	inputField.value?.focus();
+const onSelect = async (selected: string) => {
+	timeValue.value = selected;
 
-// 	emit(
-// 		"update:date",
-// 		dayjs(timeValue.value, DATETIME_FORMAT.date).toISOString()
-// 	);
-// };
+	closeAndEmit();
+};
 
-// const onSelect = async (selected: string) => {
-// 	inputField.value?.focus();
-// 	modelValue.value = selected;
-// 	valid.value = true;
-// 	await closeMenu();
-// };
+const closeAndEmit = () => {
+	showTimeDialog.value = false;
+	inputField.value?.focus();
+
+	emitTime();
+};
 </script>
 
 <style lang="scss" scoped>
@@ -160,10 +146,6 @@ const emitTime = () => {
 	min-height: 42px;
 	text-align: center;
 	letter-spacing: $btn-letter-spacing;
-}
-
-.overflow-y-auto {
-	overflow-y: auto;
 }
 
 :deep {
