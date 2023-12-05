@@ -152,7 +152,7 @@ import ProgressModal from "@/components/molecules/ProgressModal";
 import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
-import NewDataFilter from "@/components/organisms/DataFilter/NewDataFilter/NewDataFilter";
+import NewDataFilter from "@/components/organisms/NewDataFilter/NewDataFilter.vue";
 
 export default {
 	components: {
@@ -559,6 +559,7 @@ export default {
 					});
 				}
 			} catch (error) {
+				console.error(error);
 				notifierModule.show({
 					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
 					status: "error",

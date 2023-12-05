@@ -1,0 +1,44 @@
+<template>
+	<div>
+		<template v-for="(item, index) of registrationOptions" :key="index">
+			<v-checkbox v-model="selected" :value="item.value" :label="item.title" />
+		</template>
+		{{ selected }}
+	</div>
+	<FilterActionButtons
+		class="ma-4"
+		@remove:filter="onRemoveFilter"
+		@dialog-closed="onClose"
+		@update:filter="onUpdateFilter"
+	/>
+</template>
+<script setup lang="ts">
+import { ref } from "vue";
+import FilterActionButtons from "./FilterActionButtons.vue";
+import { RegistrationTypes } from "../types/filterTypes";
+
+const registrationOptions = [
+	{ title: "Registration Complete", value: RegistrationTypes.COMPLETE },
+	{
+		title: "Student Agreement Missing",
+		value: RegistrationTypes.PARENT_AGREED,
+	},
+	{ title: "User Created", value: RegistrationTypes.MISSING },
+];
+
+const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
+
+const selected = ref([]);
+
+const onUpdateFilter = () => {
+	emit("update:filter", selected.value);
+};
+
+const onClose = () => {
+	emit("dialog-closed", false);
+};
+
+const onRemoveFilter = () => {
+	emit("remove:filter");
+};
+</script>
