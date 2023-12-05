@@ -7,9 +7,9 @@
 		@click:outside="onClose"
 	>
 		<v-card class="menu-text">
-			<v-card-title data-testid="dialog-title">
+			<div class="d-flex justify-center mt-4 text-h4">
 				<slot name="title">Dialog Title</slot>
-			</v-card-title>
+			</div>
 			<v-card-text class="text--primary">
 				<slot name="content">_</slot>
 			</v-card-text>

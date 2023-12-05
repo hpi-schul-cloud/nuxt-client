@@ -23,7 +23,7 @@
 
 	<FilterDialog
 		:isOpen="dialogOpen"
-		@dialog-closed="onDialogClose"
+		@dialog-closed="onCloseDialog"
 		@remove:filter="onRemoveFilter"
 	>
 		<template #title> {{ modalTitle }} </template>
@@ -32,17 +32,20 @@
 				v-if="filterSelectionType == FilterOptions.REGISTRATION"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
+				@dialog-closed="onCloseDialog"
 			/>
 			<Classes
 				v-if="filterSelectionType == FilterOptions.CLASSES"
 				:classes="classes"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
+				@dialog-closed="onCloseDialog"
 			/>
 			<TimeBetween
 				v-if="isDateFiltering"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
+				@dialog-closed="onCloseDialog"
 			/>
 		</template>
 	</FilterDialog>
@@ -58,7 +61,7 @@ import {
 } from "./types/filterTypes";
 import { ref, computed } from "vue";
 
-const classes = ["1A", "1B", "2C"];
+const classes = ["1A", "1B", "1A"];
 
 const dialogOpen = ref(false);
 const filterSelectionType = ref<FilterOptions | undefined>(undefined);
@@ -91,7 +94,7 @@ const onMenuClick = (filter: FilterOptions) => {
 	dialogOpen.value = true;
 };
 
-const onDialogClose = () => (dialogOpen.value = false);
+const onCloseDialog = () => (dialogOpen.value = false);
 
 const filterQuery: FilterQuery = {};
 

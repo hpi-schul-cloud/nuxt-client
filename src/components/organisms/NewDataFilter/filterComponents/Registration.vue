@@ -1,12 +1,16 @@
 <template>
 	<div>
 		<template v-for="(item, index) of registrationOptions" :key="index">
-			<v-checkbox v-model="selected" :value="item.value" :label="item.title" />
+			<v-checkbox
+				v-model="selected"
+				:value="item.value"
+				:label="item.title"
+				hide-details
+			/>
 		</template>
-		{{ selected }}
 	</div>
 	<FilterActionButtons
-		class="ma-4"
+		class="ma-2"
 		@remove:filter="onRemoveFilter"
 		@dialog-closed="onClose"
 		@update:filter="onUpdateFilter"
@@ -31,6 +35,11 @@ const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 const selected = ref([]);
 
 const onUpdateFilter = () => {
+	if (!selected.value.length) {
+		emit("dialog-closed", false);
+		return;
+	}
+
 	emit("update:filter", selected.value);
 };
 
