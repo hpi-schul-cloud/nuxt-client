@@ -73,7 +73,6 @@ import { currentDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { useI18n } from "vue-i18n";
-import { reactive } from "vue";
 
 export default defineComponent({
 	name: "SchoolTermsFormDialog",
@@ -93,22 +92,23 @@ export default defineComponent({
 		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
-		const termsForm: Ref = ref(null);
+		const termsForm: Ref<File[]> = ref([]);
 		const isFormValid: Ref<boolean> = ref(false);
 		const isFormTouched: Ref<boolean> = ref(false);
-		const termsFiles = reactive<File[]>([]);
+		const files: Ref<File[]> = ref([]);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
 		const validationRules = {
-			required: (value: string) => !!value || t("common.validation.required"),
-			mustBePdf: (value: File) =>
-				!value ||
-				value.type === "application/pdf" ||
+			required: (value: File[]) =>
+				!(value.length === 0) || t("common.validation.required"),
+			mustBePdf: (value: File[]) =>
+				!(value.length === 0) ||
+				value[0].type === "application/pdf" ||
 				t("pages.administration.school.index.termsOfUse.validation.notPdf"),
-			maxSize: (bytes: number) => (value: File) =>
-				!value ||
-				value.size <= bytes ||
+			maxSize: (bytes: number) => (value: File[]) =>
+				!(value.length === 0) ||
+				value[0].size <= bytes ||
 				t("pages.administration.school.index.termsOfUse.validation.fileTooBig"),
 		};
 
@@ -117,7 +117,7 @@ export default defineComponent({
 		};
 
 		const resetForm = () => {
-			termsForm.value.reset();
+			termsForm.value = [];
 			isFormValid.value = false;
 			isFormTouched.value = false;
 		};
@@ -135,7 +135,7 @@ export default defineComponent({
 					consentText: "",
 					consentTypes: ["termsOfUse"],
 					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(termsFiles[0])) as string,
+					consentData: (await toBase64(files.value[0])) as string,
 				};
 
 				emit("close");
@@ -153,7 +153,7 @@ export default defineComponent({
 
 		return {
 			t,
-			files: termsFiles,
+			files,
 			rules: validationRules,
 			cancel,
 			submit,
