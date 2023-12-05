@@ -172,7 +172,7 @@ describe("ColorOverlay", () => {
 
 		describe("when color property is undefined", () => {
 			it("should use default color value", async () => {
-				// default color should be "var(--v-black-base)", BUT as these is
+				// default color should be "rgba(var(--v-theme-black))", BUT as these is
 				// unknown here, we need to use "real" color values
 				const color = "rgb(27, 27, 27)"; // equivalent to #1b1b1b
 				const { wrapper } = setup({ isOverlayDisabled: false });

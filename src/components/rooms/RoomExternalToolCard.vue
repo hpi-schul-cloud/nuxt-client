@@ -12,7 +12,7 @@
 					size="small"
 					class="py-1"
 					color="warning-lighten-1"
-					text-color="black"
+					variant="flat"
 					data-testId="tool-card-status"
 				>
 					<v-icon size="small" class="mr-1" color="warning">{{

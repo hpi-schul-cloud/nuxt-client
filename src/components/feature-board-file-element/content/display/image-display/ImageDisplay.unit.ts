@@ -75,7 +75,7 @@ describe("ImageDisplay", () => {
 
 			expect(colorOverlay.exists()).toBe(true);
 			expect(colorOverlay.props("isOverlayDisabled")).toBe(false);
-			expect(colorOverlay.props("color")).toBe("var(--v-black-base)");
+			expect(colorOverlay.props("color")).toBe("rgba(var(--v-theme-black))");
 			expect(colorOverlay.props("opacity")).toBeUndefined;
 		});
 
@@ -157,7 +157,7 @@ describe("ImageDisplay", () => {
 
 			expect(colorOverlay.exists()).toBe(true);
 			expect(colorOverlay.props("isOverlayDisabled")).toBe(true);
-			expect(colorOverlay.props("color")).toBe("var(--v-black-base)");
+			expect(colorOverlay.props("color")).toBe("rgba(var(--v-theme-black))");
 			expect(colorOverlay.props("opacity")).toBeUndefined;
 		});
 

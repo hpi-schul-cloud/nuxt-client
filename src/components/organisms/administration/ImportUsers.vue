@@ -22,19 +22,17 @@
 		</v-alert>
 
 		<div v-else>
-			<v-data-table
+			<v-data-table-server
 				v-if="canStartMigration"
 				:headers="tableHead"
 				:items="importUsers"
 				v-model:options="options"
-				:server-items-length="totalImportUsers"
+				items-length="totalImportUsers"
 				:loading="loading"
 				class="table"
-				:footer-props="{
-					itemsPerPageOptions: [5, 10, 25, 50, 100],
-					itemsPerPageText: '',
-					pageText: '{0}-{1} von {2}',
-				}"
+				:items-per-page-options="[5, 10, 25, 50, 100]"
+				items-per-page-text=""
+				page-text="{0}-{1} von {2}"
 			>
 				<template #loading>
 					<v-skeleton-loader
@@ -217,7 +215,7 @@
 						}}</v-icon>
 					</v-btn>
 				</template>
-			</v-data-table>
+			</v-data-table-server>
 
 			<p class="text-sm">
 				<b>{{ $t("components.organisms.importUsers.legend") }}</b>
@@ -332,41 +330,41 @@ export default {
 		tableHead() {
 			return [
 				{
-					text: this.$t("components.organisms.importUsers.tableFirstName"),
+					title: this.$t("components.organisms.importUsers.tableFirstName"),
 					value: "firstName",
 					sortable: true,
 					class: "head_firstName",
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableLastName"),
+					title: this.$t("components.organisms.importUsers.tableLastName"),
 					value: "lastName",
 					sortable: true,
 					class: "head_lastName",
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableUserName"),
+					title: this.$t("components.organisms.importUsers.tableUserName"),
 					value: "loginName",
 					sortable: false,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableRoles"),
+					title: this.$t("components.organisms.importUsers.tableRoles"),
 					value: "roleNames",
 					sortable: false,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableClasses"),
+					title: this.$t("components.organisms.importUsers.tableClasses"),
 					value: "classNames",
 					sortable: false,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableMatch", {
+					title: this.$t("components.organisms.importUsers.tableMatch", {
 						instance: this.$theme.name,
 					}),
 					value: "match",
 					sortable: false,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableFlag"),
+					title: this.$t("components.organisms.importUsers.tableFlag"),
 					value: "flagged",
 					sortable: false,
 				},

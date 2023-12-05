@@ -5,7 +5,7 @@
 		loading="lazy"
 		:src="src"
 		:alt="alt"
-		:contain="contain"
+		:cover="contain"
 		:aspect-ratio="aspectRatio"
 		:position="position"
 		@load="setWidth"

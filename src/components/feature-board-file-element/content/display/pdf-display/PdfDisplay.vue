@@ -2,7 +2,7 @@
 	<ColorOverlay
 		:isOverlayDisabled="isEditMode"
 		@on:action="openPdf"
-		color="var(--v-black-base)"
+		color="rgba(var(--v-theme-black))"
 	>
 		<PreviewImage
 			:src="previewSrc"

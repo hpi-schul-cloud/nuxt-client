@@ -342,6 +342,7 @@
 					</svg>
 				</template>
 			</div>
+			<!--eslint-disable-next-line vuetify/no-deprecated-classes -->
 			<h2 v-if="title" class="h4 title">{{ title }}</h2>
 			<div class="description">
 				<slot name="description" />

@@ -273,7 +273,7 @@ export default defineComponent({
 }
 
 .filter-chip {
-	background-color: var(--v-white-base) !important;
+	background-color: rgba(var(--v-theme-white)) !important;
 	border: 1px solid map-get($grey, base);
 	border-color: map-get($grey, base);
 }
@@ -285,7 +285,7 @@ export default defineComponent({
 
 .filter-chip--disabled {
 	opacity: 1;
-	background-color: var(--v-white-base) !important;
+	background-color: rgba(var(--v-theme-white)) !important;
 	color: rgba(map-get($grey, base), 0.9);
 	border: 1px solid rgba(map-get($grey, base), 0.4);
 }

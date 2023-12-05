@@ -13,7 +13,7 @@
 		@keydown.up.down="onKeydownArrow"
 		@click="onClickElement"
 	>
-		<div class="card-container d-flex gap-8 grey lighten-4">
+		<div class="card-container d-flex gap-8 bg-grey-lighten-4">
 			<div
 				v-if="displayData && displayData.logoUrl"
 				class="logo-container my-auto mr-1"
@@ -21,7 +21,7 @@
 				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" cover />
 			</div>
 			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
-			<span class="align-self-center title flex-1 break-word">
+			<span class="align-self-center text-h6 flex-1 break-word">
 				{{
 					hasLinkedTool
 						? toolDisplayName
