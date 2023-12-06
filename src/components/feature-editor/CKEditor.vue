@@ -13,6 +13,15 @@
 </template>
 
 <script>
+import {
+	boardToolbarSimple,
+	boardToolbarRegular,
+	newsToolbar,
+	boardPlugins,
+	newsPlugins,
+	boardHeadings,
+	newsHeadings,
+} from "./config";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaQuery, useVModel } from "@vueuse/core";
 import CKEditor from "@ckeditor/ckeditor5-vue";
@@ -47,7 +56,7 @@ export default defineComponent({
 		},
 		mode: {
 			type: String,
-			validator: (value) => ["simple", "regular"].includes(value),
+			validator: (value) => ["simple", "regular", "news"].includes(value),
 			default: "regular",
 		},
 		disabled: {
@@ -71,70 +80,22 @@ export default defineComponent({
 		const charCount = ref(0);
 
 		const toolbarItems = {
-			simple: [
-				"heading",
-				"|",
-				"bold",
-				"italic",
-				"highlight",
-				"|",
-				"link",
-				"bulletedList",
-				"numberedList",
-				"removeFormat",
-			],
-			regular: [
-				"undo",
-				"redo",
-				"|",
-				"heading",
-				"|",
-				"bold",
-				"italic",
-				"underline",
-				"strikethrough",
-				"highlight",
-				"fontBackgroundColor",
-				"code",
-				"superscript",
-				"subscript",
-				"|",
-				"link",
-				"bulletedList",
-				"numberedList",
-				"math",
-				"horizontalLine",
-				"|",
-				"blockQuote",
-				"insertTable",
-				"specialCharacters",
-				"removeFormat",
-			],
+			simple: boardToolbarSimple,
+			regular: boardToolbarRegular,
+			news: newsToolbar,
 		};
 
-		const plugins = [
-			"Autoformat",
-			"Essentials",
-			"BlockQuote",
-			"Bold",
-			"Code",
-			"Heading",
-			"Highlight",
-			"HorizontalLine",
-			"Italic",
-			"Link",
-			"List",
-			"Math",
-			"Paragraph",
-			"RemoveFormat",
-			"SpecialCharacters",
-			"Strikethrough",
-			"Subscript",
-			"Superscript",
-			"Table",
-			"TableToolbar",
-			"WordCount",
-		];
+		const plugins = {
+			simple: boardPlugins,
+			regular: boardPlugins,
+			news: newsPlugins,
+		};
+
+		const headings = {
+			simple: boardHeadings,
+			regular: boardHeadings,
+			news: newsHeadings,
+		};
 
 		const config = computed(() => {
 			return {
@@ -142,28 +103,8 @@ export default defineComponent({
 					items: toolbarItems[props.mode],
 					shouldNotGroupWhenFull: showFullToolbar.value,
 				},
-				plugins: plugins,
-				heading: {
-					options: [
-						{
-							model: "paragraph",
-							title: "Paragraph",
-							class: "ck-heading_paragraph",
-						},
-						{
-							model: "heading1",
-							view: "h4",
-							title: "Heading 1",
-							class: "ck-heading_heading1",
-						},
-						{
-							model: "heading2",
-							view: "h5",
-							title: "Heading 2",
-							class: "ck-heading_heading2",
-						},
-					],
-				},
+				plugins: plugins[props.mode],
+				heading: headings[props.mode],
 				link: {
 					defaultProtocol: "//",
 				},
@@ -200,7 +141,7 @@ export default defineComponent({
 						{
 							model: "dullBlueMarker",
 							class: "marker-dull-blue",
-							title: t("components.editor.highlight.dullBlue").toString(),
+							title: t("components.editor.highlight.dullBlue"),
 							color: "var(--ck-highlight-marker-dull-blue)",
 							type: "marker",
 						},
@@ -214,7 +155,7 @@ export default defineComponent({
 						{
 							model: "dullGreenMarker",
 							class: "marker-dull-green",
-							title: t("components.editor.highlight.dullGreen").toString(),
+							title: t("components.editor.highlight.dullGreen"),
 							color: "var(--ck-highlight-marker-dull-green)",
 							type: "marker",
 						},
@@ -232,7 +173,7 @@ export default defineComponent({
 						charCount.value = stats.characters;
 					},
 				},
-				language: locale,
+				language: locale.value,
 				placeholder: props.placeholder,
 			};
 		});
@@ -318,5 +259,9 @@ export default defineComponent({
 .ck-focused {
 	border: none !important;
 	box-shadow: none !important;
+}
+
+.ck.ck-toolbar {
+	border: none;
 }
 </style>
