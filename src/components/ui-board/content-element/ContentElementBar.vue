@@ -19,13 +19,13 @@
 					<slot name="title" />
 				</ContentElementTitle>
 
-				<div v-if="$slots.element" class="content-element-bar-element">
-					<slot name="element" />
-				</div>
-
 				<div v-if="$slots.menu && !$slots.display" class="three-dot-menu">
 					<slot v-if="$slots.menu && !$slots.display" name="menu" />
 				</div>
+			</div>
+
+			<div v-if="$slots.element" class="content-element-bar-element">
+				<slot name="element" />
 			</div>
 
 			<div v-if="$slots.subtitle" class="pt-1 gb-1 subtitle">
@@ -93,5 +93,9 @@ export default defineComponent({
 }
 .content-element-bar .v-card__text {
 	margin-top: 0px;
+}
+.content-element-bar-element {
+	margin-top: -16px;
+	margin-bottom: -16px;
 }
 </style>
