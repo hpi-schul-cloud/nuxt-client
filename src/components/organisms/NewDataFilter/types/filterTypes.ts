@@ -1,11 +1,3 @@
-// enum FilterOptions {
-// 	REGISTRATION = "registration",
-// 	CLASSES = "classes",
-// 	CREATION_DATE = "creationDate",
-// 	LAST_MIGRATION_ON = "lastMigrationOn",
-// 	OBSOLOTE_SINCE = "obsolote_since",
-// }
-
 enum FilterOptions {
 	REGISTRATION = "consentStatus",
 	CLASSES = "classes",

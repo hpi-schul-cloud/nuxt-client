@@ -19,16 +19,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
-import { RegistrationTypes } from "../types/filterTypes";
+import { useDataTableFilter } from "../filter.composable";
 
-const registrationOptions = [
-	{ title: "Registration Complete", value: RegistrationTypes.COMPLETE },
-	{
-		title: "Student Agreement Missing",
-		value: RegistrationTypes.PARENT_AGREED,
-	},
-	{ title: "User Created", value: RegistrationTypes.MISSING },
-];
+const { registrationOptions } = useDataTableFilter();
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 

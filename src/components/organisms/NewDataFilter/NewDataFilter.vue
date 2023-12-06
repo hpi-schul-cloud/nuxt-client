@@ -1,7 +1,7 @@
 <template>
 	<v-menu>
 		<template v-slot:activator="{ props }">
-			<v-btn v-bind="props">
+			<v-btn v-bind="props" variant="flat">
 				<v-icon class="filter-icon mr-2">$mdiTune</v-icon>
 				Add Filter
 				<v-icon class="filter-icon">$mdiMenuDown</v-icon>
@@ -20,6 +20,9 @@
 			</v-list-item>
 		</v-list>
 	</v-menu>
+	<FilterChips :filter="filterTitles" @remove:filter="onRemoveChipFilter" />
+
+	<!-- {{ filterMenuItems }} -->
 
 	<FilterDialog
 		:isOpen="dialogOpen"
@@ -53,35 +56,40 @@
 
 <script setup lang="ts">
 import FilterDialog from "./FilterDialog.vue";
-import { Registration, Classes, TimeBetween } from "./filterComponents";
+import {
+	Registration,
+	Classes,
+	TimeBetween,
+	FilterChips,
+} from "./filterComponents";
 import {
 	FilterOptions,
 	FilterQuery,
 	SelectOptionsType,
 } from "./types/filterTypes";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useDataTableFilter } from "./filter.composable";
 
 const classes = ["1A", "1B", "1A"];
 
 const dialogOpen = ref(false);
 const filterSelectionType = ref<FilterOptions | undefined>(undefined);
 
-const filterMenuItems: SelectOptionsType[] = [
-	{ title: "Registration", value: FilterOptions.REGISTRATION },
-	{ title: "Classes", value: FilterOptions.CLASSES },
-	{ title: "Creation date", value: FilterOptions.CREATION_DATE },
-	{ title: "Last migrated on", value: FilterOptions.LAST_MIGRATION_ON },
-	{ title: "Obsolete since", value: FilterOptions.OBSOLOTE_SINCE },
-];
+const { defaultFilterMenuItems } = useDataTableFilter();
 
 const isDateFiltering = ref<boolean>(false);
 
 const modalTitle = computed(
 	() =>
-		filterMenuItems.find(
+		defaultFilterMenuItems.find(
 			(item: SelectOptionsType) => item.value == filterSelectionType.value
 		)?.title
 );
+
+const filterQuery: FilterQuery = {};
+const filterTitles = ref<string[]>([]);
+
+const filterMenuItems = ref<SelectOptionsType[]>([]);
 
 const onMenuClick = (filter: FilterOptions) => {
 	filterSelectionType.value = filter;
@@ -96,18 +104,35 @@ const onMenuClick = (filter: FilterOptions) => {
 
 const onCloseDialog = () => (dialogOpen.value = false);
 
-const filterQuery: FilterQuery = {};
-
 const onUpdateFilter = (value: string) => {
 	if (filterSelectionType.value) filterQuery[filterSelectionType.value] = value;
 
+	filterMenuItems.value = defaultFilterMenuItems.filter(
+		(item: SelectOptionsType) => item.value in filterQuery == false
+	);
+
+	filterTitles.value = Object.keys(filterQuery);
 	dialogOpen.value = false;
 };
 
 const onRemoveFilter = () => {
 	if (filterSelectionType.value) delete filterQuery[filterSelectionType.value];
+
+	filterTitles.value = Object.keys(filterQuery);
 	dialogOpen.value = false;
 };
+
+const onRemoveChipFilter = (val: FilterOptions) => {
+	delete filterQuery[val];
+
+	filterMenuItems.value = defaultFilterMenuItems.filter(
+		(item: SelectOptionsType) => item.value in filterQuery == false
+	);
+};
+
+onMounted(() => {
+	filterMenuItems.value = defaultFilterMenuItems;
+});
 </script>
 
 <style lang="scss" scoped>
