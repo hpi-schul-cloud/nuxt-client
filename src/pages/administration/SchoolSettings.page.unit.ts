@@ -176,4 +176,13 @@ describe("SchoolSettingsPage", () => {
 		expect(noError.exists()).toBe(false);
 		expect(errorAlert.exists()).toBe(true);
 	});
+
+	it("should load needed data from server", async () => {
+		const fetchSystemsSpy = jest.spyOn(schoolsModule, "fetchSystems");
+
+		const wrapper = setup();
+		await wrapper.vm.$nextTick();
+
+		expect(fetchSystemsSpy).toHaveBeenCalled();
+	});
 });

@@ -14,5 +14,6 @@ export const schoolResponseFactory = Factory.define<SchoolResponse>(
 		federalState: federalStateResponseFactory.build(),
 		years: yearsResponseFactory.build(),
 		features: [],
+		systemIds: [],
 	})
 );

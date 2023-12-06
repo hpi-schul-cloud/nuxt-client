@@ -20,19 +20,6 @@ export type FederalState = {
 	logoUrl: string;
 };
 
-export type System = {
-	id: string;
-	type: string;
-	url?: string;
-	alias?: string;
-	displayName?: string;
-	oauthConfig?: any;
-	oidcConfig?: any;
-	ldapConfig?: any;
-	provisioningStrategy?: string;
-	provisioningUrl?: string;
-};
-
 export type School = {
 	id: string;
 	name: string;
@@ -41,7 +28,7 @@ export type School = {
 	fileStorageType?: string;
 	federalState: FederalState;
 	county?: County;
-	systems?: System[];
+	systemIds: string[];
 	updatedAt: string;
 	createdAt: string;
 	currentYear?: Year;

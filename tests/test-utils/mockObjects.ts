@@ -67,7 +67,7 @@ export const mockSchool: School = {
 		countyId: 0,
 		name: "",
 	},
-	systems: [],
+	systemIds: [],
 	updatedAt: "",
 	createdAt: "",
 	currentYear: {

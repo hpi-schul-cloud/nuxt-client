@@ -14,7 +14,7 @@ import SchoolsModule from "./schools";
 import { Envs } from "./types/env-config";
 
 let receivedRequests: any[] = [];
-const getRequestReturn: any = {};
+let getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
@@ -135,6 +135,65 @@ describe("schools module", () => {
 
 				await schoolsModule.fetchSchool();
 
+				expect(setErrorSpy).toHaveBeenCalled();
+				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
+				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+			});
+		});
+
+		describe("fetchSystems", () => {
+			beforeEach(() => {
+				receivedRequests = [];
+			});
+
+			it("should call backend and sets state correctly", async () => {
+				axiosInitializer();
+				getRequestReturn = { data: "dummy response" };
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool,
+					systemIds: ["mockSystemId"],
+				});
+
+				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
+
+				await schoolsModule.fetchSystems();
+
+				expect(receivedRequests.length).toBeGreaterThan(0);
+				expect(receivedRequests[0].path).toStrictEqual(
+					"v1/systems/mockSystemId"
+				);
+				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(setSystemsSpy).toHaveBeenCalled();
+				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual([
+					"dummy response",
+				]);
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+			});
+
+			it("should trigger error and goes into the catch block", async () => {
+				initializeAxios({
+					get: async (path: string) => {
+						throw new AxiosError(path);
+						return;
+					},
+				} as AxiosInstance);
+
+				const schoolsModule = new SchoolsModule({});
+				schoolsModule.setSchool({
+					...mockSchool,
+					systemIds: ["mockSystemId"],
+				});
+
+				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
+				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
+
+				await schoolsModule.fetchSystems();
+
+				expect(receivedRequests).toHaveLength(0);
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();

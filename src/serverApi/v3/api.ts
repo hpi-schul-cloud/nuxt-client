@@ -4270,10 +4270,10 @@ export interface SchoolResponse {
     features: Array<SchoolFeature>;
     /**
      * 
-     * @type {Array<SystemResponse>}
+     * @type {Array<string>}
      * @memberof SchoolResponse
      */
-    systems?: Array<SystemResponse>;
+    systemIds: Array<string>;
     /**
      * 
      * @type {boolean}
@@ -4773,85 +4773,6 @@ export interface SuccessfulResponse {
      * @memberof SuccessfulResponse
      */
     successful: boolean;
-}
-/**
- * 
- * @export
- * @enum {string}
- */
-export enum SystemProvisioningStrategy {
-    Sanis = 'sanis',
-    Iserv = 'iserv',
-    Oidc = 'oidc',
-    Undefined = 'undefined'
-}
-
-/**
- * 
- * @export
- * @interface SystemResponse
- */
-export interface SystemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SystemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SystemResponse
-     */
-    type: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SystemResponse
-     */
-    url?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SystemResponse
-     */
-    alias?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SystemResponse
-     */
-    displayName?: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof SystemResponse
-     */
-    oauthConfig?: object;
-    /**
-     * 
-     * @type {object}
-     * @memberof SystemResponse
-     */
-    oidcConfig?: object;
-    /**
-     * 
-     * @type {object}
-     * @memberof SystemResponse
-     */
-    ldapConfig?: object;
-    /**
-     * 
-     * @type {SystemProvisioningStrategy}
-     * @memberof SystemResponse
-     */
-    provisioningStrategy?: SystemProvisioningStrategy;
-    /**
-     * 
-     * @type {string}
-     * @memberof SystemResponse
-     */
-    provisioningUrl?: string;
 }
 /**
  * 

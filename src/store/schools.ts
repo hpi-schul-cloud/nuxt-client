@@ -14,7 +14,7 @@ import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { useApplicationError } from "../composables/application-error.composable";
 import { ApplicationError } from "./types/application-error";
-import { FederalState, School, System, Year } from "./types/schools";
+import { FederalState, School, Year } from "./types/schools";
 
 /**
  * The Api expects and returns a List of Feature-names. In the Frontend it is mapped to an object indexed by the feature-names.
@@ -82,7 +82,7 @@ export default class SchoolsModule extends VuexModule {
 			countyId: 0,
 			name: "",
 		},
-		systems: [],
+		systemIds: [],
 		updatedAt: "",
 		createdAt: "",
 		currentYear: {
@@ -129,6 +129,7 @@ export default class SchoolsModule extends VuexModule {
 			schoolYears: [],
 		},
 	};
+	systems: any[] = [];
 	loading = false;
 	error: null | ApplicationError = null;
 
@@ -142,8 +143,8 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setSystems(systems: System[]): void {
-		this.school.systems = systems;
+	setSystems(systems: any[]): void {
+		this.systems = systems;
 	}
 
 	@Mutation
@@ -168,8 +169,8 @@ export default class SchoolsModule extends VuexModule {
 		return this.school.federalState;
 	}
 
-	get getSystems(): System[] {
-		return this.school.systems ?? [];
+	get getSystems(): any[] {
+		return this.systems;
 	}
 
 	get getLoading(): boolean {
@@ -185,21 +186,15 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get schoolIsSynced(): boolean {
-		let isSynced = false;
-
-		if (this.school.systems) {
-			isSynced = this.school.systems.some(
-				(system) =>
-					system.type === "tsp-school" ||
-					system.type === "oauth" ||
-					(system.type === "ldap" &&
-						(system.ldapConfig.provider === "iserv-idm" ||
-							system.ldapConfig.provider === "univention" ||
-							system.ldapConfig.provider === "general"))
-			);
-		}
-
-		return isSynced;
+		return this.systems.some(
+			(system) =>
+				system.type === "tsp-school" ||
+				system.type === "oauth" ||
+				(system.type === "ldap" &&
+					(system.ldapConfig.provider === "iserv-idm" ||
+						system.ldapConfig.provider === "univention" ||
+						system.ldapConfig.provider === "general"))
+		);
 	}
 
 	@Action
@@ -227,6 +222,33 @@ export default class SchoolsModule extends VuexModule {
 				}
 				this.setLoading(false);
 			}
+		}
+	}
+
+	@Action
+	async fetchSystems(): Promise<void> {
+		this.setLoading(true);
+		try {
+			// TODO - monitor if not checking for ldap key causes any errors in the future
+			const systemIds = this.school.systemIds;
+
+			const requests = systemIds.map((systemId) =>
+				$axios.get(`v1/systems/${systemId}`)
+			);
+			const responses = await Promise.all(requests);
+
+			this.setSystems(responses.map((response) => response.data));
+			this.setLoading(false);
+		} catch (error: unknown) {
+			if (error instanceof AxiosError) {
+				this.setError(
+					useApplicationError().createApplicationError(
+						error.response?.status ?? 500,
+						"pages.administration.school.index.error"
+					)
+				);
+			}
+			this.setLoading(false);
 		}
 	}
 
@@ -265,6 +287,11 @@ export default class SchoolsModule extends VuexModule {
 			} else {
 				await $axios.delete(`v1/systems/${systemId}`);
 			}
+
+			const updatedSystemsList = this.systems.filter(
+				(system) => system._id !== systemId
+			);
+			this.setSystems(updatedSystemsList);
 
 			await this.fetchSchool();
 			this.setLoading(false);
