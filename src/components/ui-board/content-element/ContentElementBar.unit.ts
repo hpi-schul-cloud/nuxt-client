@@ -1,11 +1,14 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount } from "@vue/test-utils";
+import { MountOptions, shallowMount } from "@vue/test-utils";
+import Vue from "vue";
 import ContentElementBar from "./ContentElementBar.vue";
 
 describe("ContentElementBar", () => {
 	const setup = (props: {
 		icon?: string;
 		hasGreyBackground?: boolean;
+		description?: string;
+		display?: string;
 		title?: string;
 		element?: string;
 		menu?: string;
@@ -13,7 +16,16 @@ describe("ContentElementBar", () => {
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
-		const { icon, hasGreyBackground, title, menu, subtitle, element } = props;
+		const {
+			icon,
+			hasGreyBackground,
+			description,
+			display,
+			title,
+			menu,
+			subtitle,
+			element,
+		} = props;
 		const propsData = {
 			icon,
 			hasGreyBackground,
@@ -23,8 +35,10 @@ describe("ContentElementBar", () => {
 			element: element ?? "",
 			menu: menu ?? "",
 			subtitle: subtitle ?? "",
+			description: description ?? "",
+			display: display ?? "",
 		};
-		const wrapper = shallowMount(ContentElementBar, {
+		const wrapper = shallowMount(ContentElementBar as MountOptions<Vue>, {
 			propsData,
 			slots,
 			...createComponentMocks({}),

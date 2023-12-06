@@ -38,7 +38,7 @@ const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
 	}),
 });
 
-describe("LinkContentElement", () => {
+describe(LinkContentElement.name, () => {
 	let useBoardFocusHandlerMock: DeepMocked<
 		ReturnType<typeof useBoardFocusHandler>
 	>;
@@ -169,6 +169,47 @@ describe("LinkContentElement", () => {
 						usePreviewGeneratorMock.createPreviewImage
 					).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
 				});
+			});
+
+			it("should sanitize the url", async () => {
+				const VALID_UNSANITIZED_URL =
+					"&#104;&#116;&#116;&#112;&#115;&#0000058//&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;";
+				const { wrapper } = setup({
+					content: linkElementContentFactory.build({
+						url: VALID_UNSANITIZED_URL,
+					}),
+					isEditMode: false,
+				});
+
+				const expectedUrl = "https://example.com";
+				expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
+			});
+
+			it("should sanitize a javascript-url", async () => {
+				const INVALID_UNSANITIZED_URL =
+					"javascript" + ":" + "alert(document.domain)";
+				const { wrapper } = setup({
+					content: linkElementContentFactory.build({
+						url: INVALID_UNSANITIZED_URL,
+					}),
+					isEditMode: false,
+				});
+
+				const expectedUrl = "about:blank";
+				expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
+			});
+
+			it("should display the hostname ", async () => {
+				const INVALID_UNSANITIZED_URL = "https://de.wikipedia.org/dachs";
+				const { wrapper } = setup({
+					content: linkElementContentFactory.build({
+						url: INVALID_UNSANITIZED_URL,
+					}),
+					isEditMode: false,
+				});
+
+				const expectedUrl = "de.wikipedia.org";
+				expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
 			});
 		});
 	});

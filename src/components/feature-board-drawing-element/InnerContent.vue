@@ -21,8 +21,8 @@ import { defineComponent, computed } from "vue";
 import { mdiPresentation } from "@mdi/js";
 import image from "@/assets/img/tldraw.png";
 import { ContentElementBar } from "@ui-board";
-import { useI18n } from "@/composables/i18n.composable";
 import dayjs from "dayjs";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "InnerContent",
@@ -34,11 +34,11 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const { t } = useI18n();
+		const { t } = injectStrict(I18N_KEY);
 		const imageSrc = image;
 
 		const formattedLastUpdatedAt = computed(() => {
-			return dayjs(props.lastUpdatedAt).format(t("format.dateTime"));
+			return dayjs(props.lastUpdatedAt).format(t("format.dateTime").toString());
 		});
 
 		return {

@@ -1,11 +1,13 @@
 import { I18N_KEY } from "@/utils/inject";
+import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount } from "@vue/test-utils";
+import Vue from "vue";
 import InnerContent from "./InnerContent.vue";
 
 describe("InnerContent", () => {
 	const propsData = {
-		lastUpdatedAt: "03.12 15:56",
+		lastUpdatedAt: "2023-12-15 17:30:00",
 		isFirstElement: false,
 		isLastElement: false,
 		hasMultipleElements: false,
@@ -18,7 +20,7 @@ describe("InnerContent", () => {
 			...createComponentMocks({ i18n: true }),
 			propsData,
 			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: i18nMock,
 			},
 		});
 
@@ -33,24 +35,15 @@ describe("InnerContent", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should display an icon", () => {
-		const { wrapper } = setup();
-		const drawingIcon = wrapper.find("v-icon-stub");
-		expect(drawingIcon.exists()).toBe(true);
-	});
-
 	it("should display the image", () => {
 		const { wrapper } = setup();
 		const imageElement = wrapper.find("v-img-stub");
 		expect(imageElement.exists()).toBe(true);
 	});
 
-	it("should find the drawing tag and display it", () => {
+	it("should find the drawing-element language context", () => {
 		const { wrapper } = setup();
-		const drawingTag = wrapper
-			.find("span.subtitle-1.text-truncate.black--text.text--darken-2")
-			.text();
-		const expectedText = wrapper.vm.$t("components.cardElement.drawingElement");
-		expect(drawingTag).toContain(expectedText);
+
+		expect(wrapper.text()).toContain("Whiteboard");
 	});
 });
