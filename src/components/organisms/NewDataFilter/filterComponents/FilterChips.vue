@@ -8,6 +8,7 @@
 				class="mx-1 filter-chip"
 				:close-icon="mdiCloseCircle"
 				@click:close="onChipClose(item)"
+				@click="onClick(item)"
 			>
 				{{ item }}
 			</v-chip>
@@ -24,9 +25,13 @@ defineProps({
 	},
 });
 
-const emit = defineEmits(["remove:filter"]);
+const emit = defineEmits(["remove:filter", "click:filter"]);
 
-const onChipClose = (val: string) => {
-	emit("remove:filter", val);
+const onChipClose = (item: string) => {
+	emit("remove:filter", item);
+};
+
+const onClick = (item: string) => {
+	emit("click:filter", item);
 };
 </script>

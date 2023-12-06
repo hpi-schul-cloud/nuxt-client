@@ -20,7 +20,11 @@
 			</v-list-item>
 		</v-list>
 	</v-menu>
-	<FilterChips :filter="filterChipTitles" @remove:filter="onRemoveChipFilter" />
+	<FilterChips
+		:filter="filterChipTitles"
+		@remove:filter="onRemoveChipFilter"
+		@click:filter="onClickFilter"
+	/>
 
 	<FilterDialog
 		:isOpen="dialogOpen"
@@ -85,8 +89,8 @@ const modalTitle = computed(
 		)?.title
 );
 
-const onMenuClick = (filter: FilterOptions) => {
-	filterSelection.value = filter;
+const onMenuClick = (val: FilterOptions) => {
+	filterSelection.value = val;
 
 	dialogOpen.value = true;
 };
@@ -105,6 +109,12 @@ const onRemoveFilter = () => {
 
 const onRemoveChipFilter = (val: FilterOptions) => {
 	removeChipFilter(val);
+};
+
+const onClickFilter = (val: FilterOptions) => {
+	filterSelection.value = val;
+
+	dialogOpen.value = true;
 };
 
 onMounted(() => {
