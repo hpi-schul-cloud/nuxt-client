@@ -39,7 +39,9 @@
 				data-testid="data_filter"
 			/>
 
-			<NewDataFilter />
+			<Suspense>
+				<NewDataFilter />
+			</Suspense>
 
 			<backend-data-table
 				:actions="filteredActions"

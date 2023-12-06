@@ -11,7 +11,7 @@
 		<v-list>
 			<v-list-item v-for="(item, index) in filterMenuItems" :key="index">
 				<v-list-item-title
-					@click="onMenuClick(item.value)"
+					@click="onFilterClick(item.value)"
 					class="menu-text"
 					hover
 				>
@@ -23,7 +23,7 @@
 	<FilterChips
 		:filter="filterChipTitles"
 		@remove:filter="onRemoveChipFilter"
-		@click:filter="onClickFilter"
+		@click:filter="onFilterClick"
 	/>
 
 	<FilterDialog
@@ -41,7 +41,7 @@
 			/>
 			<Classes
 				v-if="filterSelection == FilterOptions.CLASSES"
-				:classes="classes"
+				:classes="classNames"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
 				@dialog-closed="onCloseDialog"
@@ -67,13 +67,14 @@ import {
 import { FilterOptions, SelectOptionsType } from "./types/filterTypes";
 import { ref, computed, onMounted } from "vue";
 import { useDataTableFilter } from "./filter.composable";
+import { useDataTableFilterApi } from "./filterApi.composable";
 
 const dialogOpen = ref(false);
 
 const {
 	defaultFilterMenuItems,
 	filterSelection,
-	classes,
+	// classes,
 	isDateFiltering,
 	filterMenuItems,
 	filterChipTitles,
@@ -82,6 +83,8 @@ const {
 	removeChipFilter,
 } = useDataTableFilter();
 
+const { classNames } = await useDataTableFilterApi();
+
 const modalTitle = computed(
 	() =>
 		defaultFilterMenuItems.find(
@@ -89,7 +92,7 @@ const modalTitle = computed(
 		)?.title
 );
 
-const onMenuClick = (val: FilterOptions) => {
+const onFilterClick = (val: FilterOptions) => {
 	filterSelection.value = val;
 
 	dialogOpen.value = true;
@@ -109,12 +112,6 @@ const onRemoveFilter = () => {
 
 const onRemoveChipFilter = (val: FilterOptions) => {
 	removeChipFilter(val);
-};
-
-const onClickFilter = (val: FilterOptions) => {
-	filterSelection.value = val;
-
-	dialogOpen.value = true;
 };
 
 onMounted(() => {
