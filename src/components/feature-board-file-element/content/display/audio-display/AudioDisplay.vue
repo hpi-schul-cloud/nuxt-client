@@ -31,7 +31,7 @@
 				:value="currentTime"
 				start="0"
 				end="duration"
-				step="0.0000001"
+				step="durationStep"
 				:min="0"
 				:max="max"
 				@click="stopPropagation"
@@ -59,7 +59,7 @@
 					thumb-color="white"
 					track-color="#9e9e9e"
 					v-model="volume"
-					step="0.01"
+					step="volumeStep"
 					:min="0"
 					:max="1"
 					@click="stopPropagation"
@@ -157,7 +157,12 @@ export default defineComponent({
 			event.stopImmediatePropagation();
 		};
 
+		const durationStep = 0.0000001;
+		const volumeStep = 0.01;
+
 		return {
+			durationStep,
+			volumeStep,
 			audio,
 			playing,
 			currentTime,
