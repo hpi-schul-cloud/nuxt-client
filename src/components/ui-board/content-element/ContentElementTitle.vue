@@ -6,7 +6,7 @@
 	>
 		<span><slot /></span>
 		<span
-			class="tooltiptext elevation-4 grey lighten-3"
+			class="tooltip grey darken-3 text-grey-lighten-5"
 			v-if="isOverflowingLongText"
 			><slot
 		/></span>
@@ -49,25 +49,37 @@ export default defineComponent({
 	letter-spacing: 0.02px;
 	white-space: nowrap;
 	color: var(--v-black-base);
+
+	.tooltip {
+		z-index: 1;
+		height: auto;
+		border-radius: 4px;
+		position: absolute;
+		left: 0px;
+		font-weight: 100;
+		color: white !important;
+		padding: 8px;
+		margin: -60px 8px 8px 8px;
+		word-wrap: break-word;
+		text-wrap: wrap;
+		overflow: auto;
+		opacity: 0;
+		transition: all 500ms 300ms ease;
+	}
 }
 
-/* Tooltip text */
-.content-element-title.subtitle-1 .tooltiptext {
-	visibility: hidden;
-	border-radius: 4px;
+.v-application .content-element-title.subtitle-1 a {
 	color: var(--v-black-base);
-	padding: 8px;
-	margin-top: -6px;
-	word-wrap: break-word;
-	width: 280px;
-	position: absolute;
-	left: 34px;
-	z-index: 1;
 }
-.content-element-title.subtitle-1:hover .tooltiptext {
-	visibility: visible;
-	overflow: auto;
-	text-wrap: wrap;
-	height: auto;
+
+.v-application .content-element-title.subtitle-1 .tooltip a {
+	color: white;
+	text-decoration: none;
+}
+
+.content-element-title:hover .tooltip,
+.v-card:not(.card-host):focus .content-element-title .tooltip {
+	opacity: 1;
+	transition: all 500ms 300ms ease;
 }
 </style>
