@@ -29,25 +29,32 @@
 				/>
 			</template>
 
-			<v-list
-				v-model:selected="selected"
-				class="col-12 pt-1 px-0 overflow-y-auto"
-			>
-				<div
-					v-for="(timeOfDay, index) in timesOfDayList"
-					:key="`time-select-${index}`"
+			<v-list :selected="selected" class="col-12 pt-1 px-0 overflow-y-auto">
+				<v-virtual-scroll
+					ref="virtualScroll"
+					renderless
+					:items="timesOfDayList"
 				>
-					<v-list-item
-						:data-testid="`time-select-${index}`"
-						class="time-list-item text-left"
-						:value="timeOfDay.value"
-						color="primary"
-						@click="onSelect(timeOfDay.value)"
-					>
-						<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
-					</v-list-item>
-					<v-divider v-if="index < timesOfDayList.length - 1" />
-				</div>
+					<template #default="{ item, index, itemRef }">
+						<!-- <div
+						v-for="(timeOfDay, index) in timesOfDayList"
+						:key="`time-select-${index}`"
+					> -->
+						<v-list-item
+							:ref="itemRef"
+							:key="index"
+							:data-testid="`time-select-${index}`"
+							class="time-list-item text-left"
+							:value="item.value"
+							color="primary"
+							@click="onSelect(item.value)"
+						>
+							<v-list-item-title>{{ item.value }}</v-list-item-title>
+						</v-list-item>
+						<!-- <v-divider v-if="index < timesOfDayList.length - 1" />
+					</div> -->
+					</template>
+				</v-virtual-scroll>
 			</v-list>
 		</v-menu>
 	</div>
@@ -62,6 +69,8 @@ import { useVuelidate } from "@vuelidate/core";
 import { helpers, requiredIf } from "@vuelidate/validators";
 import { timeInputMask as vTimeInputMask } from "@util-input-masks";
 import { isValidTimeFormat } from "@util-validators";
+import { VVirtualScroll } from "vuetify/lib/components/index.mjs";
+import { watch } from "vue";
 
 const props = defineProps({
 	time: { type: String, required: true },
@@ -72,16 +81,18 @@ const props = defineProps({
 const emit = defineEmits(["update:time", "error"]);
 
 const { t } = useI18n();
-const { timesOfDayList } = useTimePickerState();
+const { timesOfDayList, getTimeIndex } = useTimePickerState();
+const DEFAULT_TIME = "07:00";
 
-const showTimeDialog = ref(false);
 const inputField = ref<HTMLInputElement | null>(null);
+const virtualScroll = ref<VVirtualScroll>();
+const showTimeDialog = ref(false);
 const timeValue = ref<undefined | string>();
 const selected = ref<Array<string>>([]);
 
 watchEffect(() => {
 	timeValue.value = props.time;
-	selected.value = [props.time];
+	selected.value = props.time ? [props.time] : [DEFAULT_TIME];
 });
 
 const rules = computed(() => ({
@@ -137,6 +148,16 @@ const closeAndEmit = () => {
 
 	emitTime();
 };
+
+watch(showTimeDialog, () => {
+	if (showTimeDialog.value) {
+		const index = getTimeIndex(timeValue.value);
+
+		window.requestAnimationFrame(() => {
+			virtualScroll.value?.scrollToIndex(index);
+		});
+	}
+});
 </script>
 
 <style lang="scss" scoped>

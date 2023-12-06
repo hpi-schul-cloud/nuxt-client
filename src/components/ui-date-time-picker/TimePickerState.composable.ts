@@ -19,7 +19,36 @@ export const useTimePickerState = () => {
 		return times;
 	});
 
+	const getTimeIndex = (givenTime: string | unknown) => {
+		if (!givenTime) {
+			return timesOfDayList.value.findIndex((time) => time.value === "07:00");
+		}
+
+		// const timeString = givenTime as string;
+
+		// const hours = parseInt(timeString.split(":")[0]);
+		// const minutes = parseInt(timeString.split(":")[1]);
+		// if (minutes === 30 || minutes === 0) {
+		// 	return timesOfDayList.value.findIndex(
+		// 		(time) => time.value === timeString
+		// 	);
+		// }
+
+		// let timeProxy = `${hours}:00`;
+		// if (minutes > 14 && minutes < 45) {
+		// 	timeProxy = `${hours}:30`;
+		// }
+		// if (minutes >= 45) {
+		// 	timeProxy = `${hours + 1}:00`;
+		// }
+		// if (minutes >= 45 && hours === 23) {
+		// 	timeProxy = `00:00`;
+		// }
+		return timesOfDayList.value.findIndex((time) => time.value === givenTime);
+	};
+
 	return {
 		timesOfDayList,
+		getTimeIndex,
 	};
 };
