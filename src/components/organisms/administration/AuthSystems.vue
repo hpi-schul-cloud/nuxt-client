@@ -86,7 +86,7 @@
 								v-if="isEditable(system) && hasSystemEditPermission"
 								class="edit-system-btn"
 								icon
-								:to="`/administration/ldap/config?id=${system._id}`"
+								:to="redirectTo(system)"
 								:aria-label="ariaLabels(system).edit"
 							>
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
@@ -201,7 +201,15 @@ export default {
 			};
 		},
 		isEditable(system) {
-			return system.ldapConfig?.provider === "general";
+			//TODO N21-1479 change logic - return system.ldapConfig?.provider === "general";
+			return true;
+		},
+		redirectTo(system) {
+			if (system.oauthConfig) {
+				// TODO N21-1479 think of logic here
+				return "/administration/school-settings/provisioning-options";
+			}
+			return "`/administration/ldap/config?id=${system._id}`";
 		},
 		openConfirmDeleteDialog(systemId) {
 			this.confirmDeleteDialog = {
