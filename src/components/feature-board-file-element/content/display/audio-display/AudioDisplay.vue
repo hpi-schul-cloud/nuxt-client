@@ -1,22 +1,20 @@
 <template>
-	<ContentElementBar class="audioplayer">
+	<ContentElementBar class="audioPlayer grey darken-3">
 		<template #element>
 			<audio ref="audio" loading="lazy" />
 			<v-btn icon @click="onPlay" color="white" small>
 				<v-icon
-					v-if="!playing"
-					role="img"
-					:aria-label="$t('media.player.action.play')"
-					aria-hidden="false"
-					>{{ mdiPlay }}</v-icon
-				>
-				<v-icon
-					v-else
-					role="img"
+					v-if="playing"
 					:aria-label="$t('media.player.action.pause')"
 					aria-hidden="false"
 				>
 					{{ mdiPause }}</v-icon
+				>
+				<v-icon
+					v-else
+					:aria-label="$t('media.player.action.play')"
+					aria-hidden="false"
+					>{{ mdiPlay }}</v-icon
 				>
 			</v-btn>
 			<span class="duration pr-2 pl-1">
@@ -24,7 +22,7 @@
 			>
 			<v-slider
 				:aria-label="$t('media.player.action.slider')"
-				class="slider pt-6"
+				class="duration-slider pt-6"
 				color="white"
 				thumb-color="white"
 				track-color="#9e9e9e"
@@ -33,31 +31,30 @@
 				end="duration"
 				step="0.0000001"
 				:min="0"
-				:max="max"
+				:max="duration"
 				@click="stopPropagation"
 				@mousedown="stopPropagation"
 				@mouseup="stopPropagation"
 				@input="onInputSlider"
 			/>
-			<SpeedMenu @rate="speedRate" />
+			<SpeedMenu @rate="onSpeedRateChange" />
 			<v-icon
 				color="white"
 				class="pr-0"
 				right
-				v-if="!isShow"
+				v-if="!isVolumeSliderShown"
 				@click="showVolumeSlider"
-				role="img"
 				:aria-label="$t('media.player.action.volume')"
 				aria-hidden="false"
 				>{{ mdiVolumeHigh }}</v-icon
 			>
-			<div class="volume-wrapper mr-n2" v-if="isShow">
+			<div class="volume-wrapper mr-n2" v-if="isVolumeSliderShown">
 				<v-slider
 					:aria-label="$t('media.player.action.volume.slider')"
 					class="volume-slider pl-1"
 					color="white"
 					thumb-color="white"
-					track-color="#9e9e9e"
+					track-color="v-grey-base"
 					v-model="volume"
 					step="0.01"
 					:min="0"
@@ -70,7 +67,6 @@
 					color="white"
 					class="pr-1"
 					@click="showVolumeSlider"
-					role="img"
 					:aria-label="$t('media.player.action.volume')"
 					aria-hidden="false"
 					>{{ mdiVolumeHigh }}</v-icon
@@ -127,6 +123,10 @@ export default defineComponent({
 			controls.currentTime.value = seconds;
 		};
 
+		const onSpeedRateChange = (rate: number) => {
+			controls.rate.value = rate;
+		};
+
 		const formatDuration = (seconds: number) => {
 			const isoString = new Date(1000 * seconds).toISOString();
 			let duration = isoString.slice(14, 19);
@@ -139,17 +139,9 @@ export default defineComponent({
 			return duration;
 		};
 
-		const max = computed(() => {
-			return duration.value;
-		});
-
-		const speedRate = (rate: number) => {
-			controls.rate.value = rate;
-		};
-
-		const isShow: Ref<boolean> = ref(false);
+		const isVolumeSliderShown: Ref<boolean> = ref(false);
 		const showVolumeSlider = () => {
-			isShow.value = !isShow.value;
+			isVolumeSliderShown.value = !isVolumeSliderShown.value;
 		};
 
 		const stopPropagation = (event: Event) => {
@@ -164,7 +156,7 @@ export default defineComponent({
 			duration,
 			volume,
 			rate,
-			speedRate,
+			onSpeedRateChange,
 			mdiPlay,
 			mdiPause,
 			mdiVolumeOff,
@@ -172,8 +164,7 @@ export default defineComponent({
 			mdiPlaySpeed,
 			onPlay,
 			formatDuration,
-			max,
-			isShow,
+			isVolumeSliderShown,
 			showVolumeSlider,
 			stopPropagation,
 			onInputSlider,
@@ -181,16 +172,16 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
-.audioplayer {
-	background-color: #424242;
-	padding: 2px 0;
+<style scoped lang="scss">
+.audioPlayer {
+	border-top-right-radius: 0.25rem;
+	border-top-left-radius: 0.25rem;
 }
 .duration {
 	white-space: nowrap;
 	color: white;
 }
-.slider {
+.duration-slider {
 	width: 40%;
 }
 .volume-wrapper {
@@ -199,11 +190,11 @@ export default defineComponent({
 	width: 50%;
 	height: 36px;
 	border-radius: 0.125rem;
-	background: var(--shades-color-overlay-dark, rgba(33, 33, 33, 0.54));
+	background-color: rgba(map-get($grey, "darken-4"), 0.54);
 }
 
 .volume-slider {
 	width: 50%;
-	padding-top: 3px;
+	padding-top: 2px;
 }
 </style>

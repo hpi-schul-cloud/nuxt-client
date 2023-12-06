@@ -1,5 +1,5 @@
 <template>
-	<div :class="backgroundClass" class="top-border-rounded">
+	<div :class="backgroundClass">
 		<v-app-bar dense flat color="transparent">
 			<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
@@ -47,9 +47,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
-.top-border-rounded {
-	border-top-right-radius: 0.25rem;
-	border-top-left-radius: 0.25rem;
-}
-</style>
