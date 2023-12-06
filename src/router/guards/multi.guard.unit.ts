@@ -138,8 +138,7 @@ describe("Multiguard", () => {
 
 			const multiguard = Multiguard([
 				(to, from, next) => next(expected),
-				(to, from, next) =>
-					fail("Second guard called when it shouldn't have been"),
+				() => fail("Second guard called when it shouldn't have been"),
 			]);
 
 			return { expected, to, from, next, multiguard };

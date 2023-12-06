@@ -14,7 +14,7 @@ describe("H5PPlayerPage", () => {
 		locale: "en",
 	});
 
-	const createWrapper = (propsData = {}) => {
+	const createWrapper = () => {
 		return mount(H5pPlayerPage, {
 			...createComponentMocks({
 				i18n: true,
