@@ -1,7 +1,8 @@
 import { createSharedComposable } from "@vueuse/core";
-// import { ref } from "vue";
+import { computed, ref } from "vue";
 import {
 	FilterOptions,
+	FilterQuery,
 	RegistrationTypes,
 	SelectOptionsType,
 } from "./types/filterTypes";
@@ -44,7 +45,62 @@ const dataTableFilter = () => {
 			value: RegistrationTypes.MISSING,
 		},
 	];
-	return { defaultFilterMenuItems, registrationOptions };
+
+	const filterQuery: FilterQuery = {};
+
+	const filterSelection = ref<FilterOptions | undefined>(undefined);
+
+	const classes = ["1A", "1B", "1A"];
+
+	const isDateFiltering = computed(() => {
+		return (
+			filterSelection.value == FilterOptions.CREATION_DATE ||
+			filterSelection.value == FilterOptions.LAST_MIGRATION_ON ||
+			filterSelection.value == FilterOptions.OBSOLOTE_SINCE
+		);
+	});
+
+	const filterMenuItems = ref<SelectOptionsType[]>([]);
+
+	const filterChipTitles = ref<Array<string>>([]);
+
+	const updateFilter = (value: FilterOptions) => {
+		if (filterSelection.value) filterQuery[filterSelection.value] = value;
+
+		filterMenuItems.value = defaultFilterMenuItems.filter(
+			(item: SelectOptionsType) => item.value in filterQuery == false
+		);
+
+		filterChipTitles.value = Object.keys(filterQuery);
+	};
+
+	const removeFilter = () => {
+		if (filterSelection.value) delete filterQuery[filterSelection.value];
+
+		filterChipTitles.value = Object.keys(filterQuery);
+	};
+
+	const removeChipFilter = (val: FilterOptions) => {
+		delete filterQuery[val];
+
+		filterMenuItems.value = defaultFilterMenuItems.filter(
+			(item: SelectOptionsType) => item.value in filterQuery == false
+		);
+	};
+
+	return {
+		defaultFilterMenuItems,
+		registrationOptions,
+		filterQuery,
+		filterSelection,
+		classes,
+		isDateFiltering,
+		filterMenuItems,
+		filterChipTitles,
+		updateFilter,
+		removeFilter,
+		removeChipFilter,
+	};
 };
 
 export const useDataTableFilter = createSharedComposable(dataTableFilter);

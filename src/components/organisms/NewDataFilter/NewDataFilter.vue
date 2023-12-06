@@ -20,9 +20,7 @@
 			</v-list-item>
 		</v-list>
 	</v-menu>
-	<FilterChips :filter="filterTitles" @remove:filter="onRemoveChipFilter" />
-
-	<!-- {{ filterMenuItems }} -->
+	<FilterChips :filter="filterChipTitles" @remove:filter="onRemoveChipFilter" />
 
 	<FilterDialog
 		:isOpen="dialogOpen"
@@ -32,13 +30,13 @@
 		<template #title> {{ modalTitle }} </template>
 		<template #content>
 			<Registration
-				v-if="filterSelectionType == FilterOptions.REGISTRATION"
+				v-if="filterSelection == FilterOptions.REGISTRATION"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
 				@dialog-closed="onCloseDialog"
 			/>
 			<Classes
-				v-if="filterSelectionType == FilterOptions.CLASSES"
+				v-if="filterSelection == FilterOptions.CLASSES"
 				:classes="classes"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
@@ -62,72 +60,51 @@ import {
 	TimeBetween,
 	FilterChips,
 } from "./filterComponents";
-import {
-	FilterOptions,
-	FilterQuery,
-	SelectOptionsType,
-} from "./types/filterTypes";
+import { FilterOptions, SelectOptionsType } from "./types/filterTypes";
 import { ref, computed, onMounted } from "vue";
 import { useDataTableFilter } from "./filter.composable";
 
-const classes = ["1A", "1B", "1A"];
-
 const dialogOpen = ref(false);
-const filterSelectionType = ref<FilterOptions | undefined>(undefined);
 
-const { defaultFilterMenuItems } = useDataTableFilter();
-
-const isDateFiltering = ref<boolean>(false);
+const {
+	defaultFilterMenuItems,
+	filterSelection,
+	classes,
+	isDateFiltering,
+	filterMenuItems,
+	filterChipTitles,
+	updateFilter,
+	removeFilter,
+	removeChipFilter,
+} = useDataTableFilter();
 
 const modalTitle = computed(
 	() =>
 		defaultFilterMenuItems.find(
-			(item: SelectOptionsType) => item.value == filterSelectionType.value
+			(item: SelectOptionsType) => item.value == filterSelection.value
 		)?.title
 );
 
-const filterQuery: FilterQuery = {};
-const filterTitles = ref<string[]>([]);
-
-const filterMenuItems = ref<SelectOptionsType[]>([]);
-
 const onMenuClick = (filter: FilterOptions) => {
-	filterSelectionType.value = filter;
-
-	isDateFiltering.value =
-		filterSelectionType.value == FilterOptions.CREATION_DATE ||
-		filterSelectionType.value == FilterOptions.LAST_MIGRATION_ON ||
-		filterSelectionType.value == FilterOptions.OBSOLOTE_SINCE;
+	filterSelection.value = filter;
 
 	dialogOpen.value = true;
 };
 
 const onCloseDialog = () => (dialogOpen.value = false);
 
-const onUpdateFilter = (value: string) => {
-	if (filterSelectionType.value) filterQuery[filterSelectionType.value] = value;
-
-	filterMenuItems.value = defaultFilterMenuItems.filter(
-		(item: SelectOptionsType) => item.value in filterQuery == false
-	);
-
-	filterTitles.value = Object.keys(filterQuery);
+const onUpdateFilter = (value: FilterOptions) => {
+	updateFilter(value);
 	dialogOpen.value = false;
 };
 
 const onRemoveFilter = () => {
-	if (filterSelectionType.value) delete filterQuery[filterSelectionType.value];
-
-	filterTitles.value = Object.keys(filterQuery);
+	removeFilter();
 	dialogOpen.value = false;
 };
 
 const onRemoveChipFilter = (val: FilterOptions) => {
-	delete filterQuery[val];
-
-	filterMenuItems.value = defaultFilterMenuItems.filter(
-		(item: SelectOptionsType) => item.value in filterQuery == false
-	);
+	removeChipFilter(val);
 };
 
 onMounted(() => {
