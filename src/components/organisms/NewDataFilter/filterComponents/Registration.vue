@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
-import { useDataTableFilter } from "../filter.composable";
+import { useDataTableFilter } from "../composables/filter.composable";
 
 const { registrationOptions } = useDataTableFilter();
 
