@@ -56,6 +56,7 @@ export default defineComponent({
 		border-radius: 4px;
 		position: absolute;
 		left: 0px;
+		line-height: 20px;
 		font-weight: 100;
 		color: white !important;
 		padding: 8px;
