@@ -18,7 +18,8 @@
 				>
 			</v-btn>
 			<span class="duration pr-2 pl-1">
-				{{ formatDuration(currentTime) }} / {{ formatDuration(duration) }}</span
+				{{ formatDurationHourMinSec(currentTime) }} /
+				{{ formatDurationHourMinSec(duration) }}</span
 			>
 			<v-slider
 				:aria-label="$t('media.player.action.slider')"
@@ -127,7 +128,7 @@ export default defineComponent({
 			controls.rate.value = rate;
 		};
 
-		const formatDuration = (seconds: number) => {
+		const formatDurationHourMinSec = (seconds: number) => {
 			const isoString = new Date(1000 * seconds).toISOString();
 			let duration = isoString.slice(14, 19);
 
@@ -169,7 +170,7 @@ export default defineComponent({
 			mdiVolumeHigh,
 			mdiPlaySpeed,
 			onPlay,
-			formatDuration,
+			formatDurationHourMinSec,
 			isVolumeSliderShown,
 			showVolumeSlider,
 			stopPropagation,
