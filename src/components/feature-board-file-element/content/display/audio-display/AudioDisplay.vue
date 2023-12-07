@@ -44,40 +44,6 @@
 				@input="onInputSlider"
 			/>
 			<SpeedMenu @rate="onSpeedRateChange" />
-			<v-icon
-				color="white"
-				class="pr-0"
-				right
-				v-if="!isVolumeSliderShown"
-				@click="showVolumeSlider"
-				:aria-label="$t('media.player.action.volume')"
-				aria-hidden="false"
-				>{{ mdiVolumeHigh }}</v-icon
-			>
-			<div class="volume-wrapper mr-n2" v-if="isVolumeSliderShown">
-				<v-slider
-					:aria-label="$t('media.player.action.volume.slider')"
-					class="volume-slider pl-1"
-					color="white"
-					thumb-color="white"
-					track-color="v-grey-base"
-					v-model="volume"
-					step="volumeStep"
-					:min="0"
-					:max="1"
-					@click="stopPropagation"
-					@mousedown="stopPropagation"
-					@mouseup="stopPropagation"
-				/>
-				<v-icon
-					color="white"
-					class="pr-1"
-					@click="showVolumeSlider"
-					:aria-label="$t('media.player.action.volume')"
-					aria-hidden="false"
-					>{{ mdiVolumeHigh }}</v-icon
-				>
-			</div>
 		</template>
 		<template #menu><slot /></template>
 	</ContentElementBar>
