@@ -33,6 +33,8 @@ export const useProvisioningOptionsApi = () => {
 	};
 
 	const saveProvisioningOptions = (
+		systemId: string,
+		schoolId: string,
 		provisioningOptions: ProvisioningOptions
 	): ProvisioningOptions => {
 		//TODO N21-1479 call api with POST and make method async
@@ -41,7 +43,12 @@ export const useProvisioningOptionsApi = () => {
 			course: provisioningOptions.course,
 			others: provisioningOptions.others,
 		};
-		console.log("save has been called with", provisioningOptions);
+		console.log(
+			"save has been called with",
+			systemId,
+			schoolId,
+			provisioningOptions
+		);
 		return savedOptions;
 	};
 

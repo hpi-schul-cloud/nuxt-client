@@ -207,7 +207,7 @@ export default {
 		redirectTo(system) {
 			if (system.oauthConfig) {
 				// TODO N21-1479 think of logic here
-				return "/administration/school-settings/provisioning-options";
+				return `/administration/school-settings/provisioning-options?schoolId=${schoolsModule.getSchool.id}&systemId=${system._id}`;
 			}
 			return "`/administration/ldap/config?id=${system._id}`";
 		},
