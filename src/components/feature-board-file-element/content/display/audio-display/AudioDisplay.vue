@@ -22,10 +22,7 @@
 			>
 				<v-icon>{{ mdiPlay }}</v-icon>
 			</v-btn>
-			<span class="duration pr-2 pl-1">
-				{{ formatDurationHourMinSec(currentTime) }} /
-				{{ formatDurationHourMinSec(duration) }}</span
-			>
+			<span class="duration pr-2 pl-1"> {{ durationDisplay }}</span>
 			<v-slider
 				:aria-label="$t('media.player.action.slider')"
 				class="duration-slider pt-6"
@@ -93,6 +90,12 @@ export default defineComponent({
 			controls.rate.value = rate;
 		};
 
+		const durationDisplay = computed(() => {
+			const durationValue = formatDurationHourMinSec(duration.value);
+			const currentTimeValue = formatDurationHourMinSec(currentTime.value);
+			return currentTimeValue + " / " + durationValue;
+		});
+
 		const formatDurationHourMinSec = (seconds: number) => {
 			const isoString = new Date(1000 * seconds).toISOString();
 			let duration = isoString.slice(14, 19);
@@ -131,6 +134,7 @@ export default defineComponent({
 			formatDurationHourMinSec,
 			stopPropagation,
 			onInputSlider,
+			durationDisplay,
 		};
 	},
 });
