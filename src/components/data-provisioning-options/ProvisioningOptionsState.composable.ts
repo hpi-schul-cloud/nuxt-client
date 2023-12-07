@@ -2,10 +2,10 @@ import { BusinessError } from "../../store/types/commons";
 import { mapAxiosErrorToResponseError } from "../../utils/api";
 import { ref, Ref } from "vue";
 import { ProvisioningOptions, useProvisioningOptionsApi } from "./index";
-//TODO N21-1479 Test
+
 export const useProvisioningOptionsState = () => {
 	const { getProvisioningOptions, saveProvisioningOptions } =
-		useProvisioningOptionsApi(); //TODO N21-1479 ProvisioningOptionsApiFactory
+		useProvisioningOptionsApi();
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
@@ -16,17 +16,13 @@ export const useProvisioningOptionsState = () => {
 	});
 
 	const fetchProvisioningOptionsData = async (
-		systemId: string,
-		schoolId: string
+		systemId: string
 	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 
 		try {
-			provisioningOptionsData.value = await getProvisioningOptions(
-				systemId,
-				schoolId
-			);
+			provisioningOptionsData.value = await getProvisioningOptions(systemId);
 		} catch (errorResponse) {
 			const apiError = mapAxiosErrorToResponseError(errorResponse);
 
@@ -42,7 +38,6 @@ export const useProvisioningOptionsState = () => {
 
 	const updateProvisioningOptionsData = async (
 		systemId: string,
-		schoolId: string,
 		provisioningOptions: ProvisioningOptions
 	): Promise<void> => {
 		isLoading.value = true;
@@ -51,7 +46,6 @@ export const useProvisioningOptionsState = () => {
 		try {
 			provisioningOptionsData.value = await saveProvisioningOptions(
 				systemId,
-				schoolId,
 				provisioningOptions
 			);
 		} catch (errorResponse) {

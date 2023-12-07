@@ -1,25 +1,31 @@
-import { SystemsApiFactory } from "@/serverApi/v3";
+import { SchoolApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { ProvisioningOptions } from "./type";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { schoolsModule } from "../../store";
 
 export const useProvisioningOptionsApi = () => {
 	const { handleError } = useErrorHandler();
-	const provisioningApi = SystemsApiFactory(undefined, "/v3", $axios); //TODO N21-1479 ProvisioningOptionsApiFactory
+	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
 
 	const getProvisioningOptions = async (
-		systemId: string,
-		schoolId: string
+		systemId: string
 	): Promise<ProvisioningOptions> => {
-		// try {
-		const provisioningOptions: ProvisioningOptions = {
+		try {
+			const provisioningOptions: ProvisioningOptions =
+				await schoolApi.schoolControllerGetProvisioningOptions(
+					schoolsModule.getSchool.id,
+					systemId
+				);
+
+			/* const provisioningOptions: ProvisioningOptions = {
 			class: true,
 			course: false,
 			others: false,
-		};
+		}; */
 
-		return provisioningOptions;
-		/* } catch (error) {
+			return provisioningOptions;
+		} catch (error) {
 			handleError(error, {
 				404: undefined,
 				500: undefined,
@@ -29,12 +35,11 @@ export const useProvisioningOptionsApi = () => {
 				course: false,
 				others: false,
 			};
-		} */
+		}
 	};
 
 	const saveProvisioningOptions = async (
 		systemId: string,
-		schoolId: string,
 		provisioningOptions: ProvisioningOptions
 	): Promise<ProvisioningOptions> => {
 		//TODO N21-1479 call api with POST with errorhandling
@@ -43,12 +48,7 @@ export const useProvisioningOptionsApi = () => {
 			course: provisioningOptions.course,
 			others: provisioningOptions.others,
 		};
-		console.log(
-			"save has been called with",
-			systemId,
-			schoolId,
-			provisioningOptions
-		);
+		console.log("save has been called with", systemId, provisioningOptions);
 		return savedOptions;
 	};
 

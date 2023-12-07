@@ -68,13 +68,15 @@ export const routes: Array<RouteConfig> = [
 		}),
 	},
 	{
-		path: "/administration/school-settings/provisioning-options", // TODO N21-1479 systems? system-name?
+		path: "/administration/school-settings/provisioning-options",
 		component: () =>
 			import("@/components/administration/ProvisioningOptionsPage.vue"),
 		name: "provivisioning-options-page",
-		// TODO N21-1479 beforeEnter: createPermissionGuard(["school_system_edit"])
+		beforeEnter: createPermissionGuard([
+			"school_system_view",
+			"school_system_edit",
+		]),
 		props: (route: Route) => ({
-			schoolId: route.query.schoolId,
 			systemId: route.query.systemId,
 		}),
 	},

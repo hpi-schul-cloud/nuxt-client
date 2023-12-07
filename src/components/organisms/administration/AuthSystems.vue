@@ -201,13 +201,20 @@ export default {
 			};
 		},
 		isEditable(system) {
-			//TODO N21-1479 change logic - return system.ldapConfig?.provider === "general";
-			return true;
+			if (envConfigModule.getViewProvisioningOptionsEnabled) {
+				return (
+					system.ldapConfig?.provider === "general" ||
+					system.displayName === "moin.schule"
+				);
+			}
+			return system.ldapConfig?.provider === "general";
 		},
 		redirectTo(system) {
-			if (system.oauthConfig) {
-				// TODO N21-1479 think of logic here
-				return `/administration/school-settings/provisioning-options?schoolId=${schoolsModule.getSchool.id}&systemId=${system._id}`;
+			if (
+				envConfigModule.getViewProvisioningOptionsEnabled &&
+				system.displayName === "moin.schule"
+			) {
+				return `/administration/school-settings/provisioning-options?systemId=${system._id}`;
 			}
 			return "`/administration/ldap/config?id=${system._id}`";
 		},
