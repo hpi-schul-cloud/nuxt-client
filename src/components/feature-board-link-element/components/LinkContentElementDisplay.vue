@@ -8,7 +8,7 @@
 	>
 		<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
 			<template #display>
-				<v-img v-if="imageUrl" :src="imageUrl" alt="" />
+				<v-img v-if="imageUrl" :src="imageUrl" alt="" class="rounded-t" />
 			</template>
 			<template #title>
 				{{ title }}

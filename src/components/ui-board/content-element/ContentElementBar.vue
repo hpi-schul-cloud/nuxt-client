@@ -11,7 +11,7 @@
 				</template>
 			</ContentElementDisplay>
 		</div>
-		<div :class="backgroundClass" class="pa-4">
+		<div :class="backgroundClass" class="pa-4 rounded-b">
 			<div class="d-flex align-start">
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
