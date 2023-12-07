@@ -94,7 +94,9 @@ export default defineComponent({
 		});
 
 		const sanitizedUrl = computed(() =>
-			sanitizeUrl(computedElement.value.content.url)
+			computedElement.value.content.url
+				? sanitizeUrl(computedElement.value.content.url)
+				: ""
 		);
 
 		const isCreating = computed(
