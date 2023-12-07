@@ -149,6 +149,7 @@ export default defineComponent({
 			event.stopImmediatePropagation();
 		};
 
+		// Moving these variables to template causes the audio not to play on iOS
 		const durationStep = 0.0000001;
 		const volumeStep = 0.01;
 
