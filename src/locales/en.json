@@ -1055,7 +1055,6 @@
 	"media.player.action.play": "Play",
 	"media.player.action.pause": "Pause",
 	"media.player.action.slider": "Audio slider",
-	"media.player.action.volume.slider": "Volume slider",
-	"media.player.action.volume": "Volume",
-	"media.player.action.speed": "Speed Menu"
+	"media.player.action.speed": "Speed Menu",
+	"media.player.action.speed.normal": "Normal"
 }
