@@ -25,4 +25,31 @@ type FilterQuery = {
 	outdatedSince?: string;
 };
 
-export { FilterOptions, RegistrationTypes, SelectOptionsType, FilterQuery };
+// TODO: set type here
+// type UserBasedFilterState =
+// 	| "pages.administration.students.index"
+// 	| "pages.administration.teachers.index";
+
+type Query = {
+	query: FilterQuery;
+};
+
+type FilterState = {
+	"pages.administration.students.index"?: Query;
+	"pages.administration.teachers.index"?: Query;
+};
+
+type UiState = {
+	pagination: object;
+	filter: FilterState;
+	sorting: object;
+	version: number;
+};
+
+export {
+	FilterOptions,
+	RegistrationTypes,
+	SelectOptionsType,
+	FilterQuery,
+	UiState,
+};

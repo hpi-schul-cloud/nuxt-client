@@ -1,35 +1,18 @@
-import { createSharedComposable, useStorage } from "@vueuse/core";
+import { createSharedComposable } from "@vueuse/core";
+import { useStorage } from "@/composables/locale-storage.composable";
+import { UiState } from "../types/filterTypes";
 
 const filterLocalStorage = () => {
-	// const defaults = {
-	// 	filter: {
-	// 		"pages.administration.students.index": {
-	// 			query: {
-	// 				consentStatus: {
-	// 					$in: ["ok", "parentsAgreed"],
-	// 				},
-	// 				classes: ["1A"],
-	// 				createdAt: {
-	// 					$gte: "2023-12-06T21:00:00Z",
-	// 					$lte: "2099-12-31T22:59:59Z",
-	// 				},
-	// 				lastLoginSystemChange: {
-	// 					$gte: "2023-12-06T23:00:00Z",
-	// 					$lte: "2099-12-31T22:59:59Z",
-	// 				},
-	// 				outdatedSince: {
-	// 					$gte: "2023-12-06T23:00:00Z",
-	// 					$lte: "2099-12-31T22:59:59Z",
-	// 				},
-	// 			},
-	// 		},
-	// 	},
-	// };
+	const { get, set } = useStorage();
 
-	const defaults = {
+	const stateName = "uiState";
+	const defaultState: UiState = {
 		pagination: {},
 		filter: {
 			"pages.administration.students.index": {
+				query: {},
+			},
+			"pages.administration.teachers.index": {
 				query: {},
 			},
 		},
@@ -37,11 +20,41 @@ const filterLocalStorage = () => {
 		version: 1,
 	};
 
-	const uiFilterState = useStorage("uiState", defaults);
-
-	return {
-		uiFilterState,
+	const defaultFilterState = {
+		filter: {
+			"pages.administration.students.index": {
+				query: {},
+			},
+		},
 	};
+	const getFilterState = () => {
+		return JSON.parse(get(stateName) ?? "{}");
+	};
+	const getDefaultState = (): UiState => {
+		const uiState = getFilterState();
+
+		if (!uiState?.filter) {
+			defaultState.filter = defaultFilterState.filter;
+			set(stateName, JSON.stringify(defaultState));
+			return defaultState;
+		}
+		return uiState;
+	};
+
+	const state = getDefaultState();
+
+	const setFilterState = (val: object) => {
+		state.filter["pages.administration.students.index"] = { query: {} };
+
+		state.filter["pages.administration.students.index"].query = {
+			...state.filter["pages.administration.students.index"]?.query,
+			...val,
+		};
+
+		set(stateName, JSON.stringify(state));
+	};
+
+	return { setFilterState, getFilterState };
 };
 
 export const useFilterLocalStorage = createSharedComposable(filterLocalStorage);

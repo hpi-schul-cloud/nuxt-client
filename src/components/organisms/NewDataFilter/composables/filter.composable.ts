@@ -7,9 +7,11 @@ import {
 	SelectOptionsType,
 } from "../types/filterTypes";
 import { useI18n } from "vue-i18n";
+import { useFilterLocalStorage } from "./localStorage.composable";
 
 const dataTableFilter = () => {
 	const { t } = useI18n();
+	const { setFilterState } = useFilterLocalStorage();
 
 	const defaultFilterMenuItems: SelectOptionsType[] = [
 		{
@@ -72,6 +74,8 @@ const dataTableFilter = () => {
 		);
 
 		filterChipTitles.value = Object.keys(filterQuery.value);
+
+		setFilterState(filterQuery.value);
 	};
 
 	const removeFilter = () => {
