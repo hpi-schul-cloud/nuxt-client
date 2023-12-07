@@ -10,7 +10,6 @@
 					small
 					color="white"
 					:aria-label="$t('media.player.action.speed')"
-					role="img"
 				>
 					<v-icon>
 						{{ mdiPlaySpeed }}
