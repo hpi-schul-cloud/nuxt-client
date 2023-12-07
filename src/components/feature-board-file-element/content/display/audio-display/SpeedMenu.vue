@@ -18,16 +18,70 @@
 			</template>
 
 			<v-list dense flat>
-				<v-list-item-group v-model="selectedItem">
-					<v-list-item
-						v-for="(item, i) in items"
-						:key="i"
-						@click="onSelect(item.id)"
-					>
+				<v-list-item-group>
+					<v-list-item @click="onSelect(0.25)">
 						<v-list-item-content class="ml-3">
-							<v-list-item-title>{{ item.title }} </v-list-item-title>
+							<v-list-item-title>0.25 </v-list-item-title>
 						</v-list-item-content>
-						<v-list-item-icon v-if="item.id === selectedItem + 1">
+						<v-list-item-icon v-if="0.25 === selectedItem">
+							<v-icon>{{ mdiCheck }}</v-icon>
+						</v-list-item-icon>
+					</v-list-item>
+					<v-list-item @click="onSelect(0.5)">
+						<v-list-item-content class="ml-3">
+							<v-list-item-title>0.5 </v-list-item-title>
+						</v-list-item-content>
+						<v-list-item-icon v-if="0.5 === selectedItem">
+							<v-icon>{{ mdiCheck }}</v-icon>
+						</v-list-item-icon>
+					</v-list-item>
+					<v-list-item @click="onSelect(0.75)">
+						<v-list-item-content class="ml-3">
+							<v-list-item-title>0.75 </v-list-item-title>
+						</v-list-item-content>
+						<v-list-item-icon v-if="0.75 === selectedItem">
+							<v-icon>{{ mdiCheck }}</v-icon>
+						</v-list-item-icon>
+					</v-list-item>
+					<v-list-item @click="onSelect(1)">
+						<v-list-item-content class="ml-3">
+							<v-list-item-title>{{
+								$t("media.player.action.speed.normal")
+							}}</v-list-item-title>
+						</v-list-item-content>
+						<v-list-item-icon v-if="1 === selectedItem">
+							<v-icon>{{ mdiCheck }}</v-icon>
+						</v-list-item-icon>
+					</v-list-item>
+					<v-list-item @click="onSelect(1.25)">
+						<v-list-item-content class="ml-3">
+							<v-list-item-title>1.25</v-list-item-title>
+						</v-list-item-content>
+						<v-list-item-icon v-if="1.25 === selectedItem">
+							<v-icon>{{ mdiCheck }}</v-icon>
+						</v-list-item-icon>
+					</v-list-item>
+					<v-list-item @click="onSelect(1.5)">
+						<v-list-item-content class="ml-3">
+							<v-list-item-title>1.5</v-list-item-title>
+						</v-list-item-content>
+						<v-list-item-icon v-if="1.5 === selectedItem">
+							<v-icon>{{ mdiCheck }}</v-icon>
+						</v-list-item-icon>
+					</v-list-item>
+					<v-list-item @click="onSelect(1.75)">
+						<v-list-item-content class="ml-3">
+							<v-list-item-title>1.75</v-list-item-title>
+						</v-list-item-content>
+						<v-list-item-icon v-if="1.75 === selectedItem">
+							<v-icon>{{ mdiCheck }}</v-icon>
+						</v-list-item-icon>
+					</v-list-item>
+					<v-list-item @click="onSelect(2)">
+						<v-list-item-content class="ml-3">
+							<v-list-item-title>2</v-list-item-title>
+						</v-list-item-content>
+						<v-list-item-icon v-if="7 === selectedItem">
 							<v-icon>{{ mdiCheck }}</v-icon>
 						</v-list-item-icon>
 					</v-list-item>
@@ -38,40 +92,24 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "@/composables/i18n.composable";
 import { mdiCheck, mdiPlaySpeed } from "@mdi/js";
-import { defineComponent, Ref, ref } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
 	name: "SpeedMenu",
 	emits: ["rate"],
 	setup(props, { emit }) {
-		const { t } = useI18n();
-		const title = t("media.player.action.speed.normal");
-		const items = [
-			{ title: "0.25", value: 0.25, id: 1 },
-			{ title: "0.5", value: 0.5, id: 2 },
-			{ title: "0.75", value: 0.75, id: 3 },
-			{ title: title, value: 1, id: 4 },
-			{ title: "1.25", value: 1.25, id: 5 },
-			{ title: "1.5", value: 1.5, id: 6 },
-			{ title: "1.75", value: 1.75, id: 7 },
-			{ title: "2", value: 2, id: 8 },
-		];
-		const selectedItem = ref(3);
-		const speedSelected: Ref<boolean> = ref(false);
+		const selectedItem = ref(1);
 
-		const onSelect = async (selected: number) => {
-			emit("rate", items[selected - 1].value);
-			speedSelected.value = !speedSelected.value;
+		const onSelect = (rate: number) => {
+			emit("rate", rate);
+			selectedItem.value = rate;
 		};
 
 		return {
-			items,
 			mdiPlaySpeed,
 			mdiCheck,
 			onSelect,
-			speedSelected,
 			selectedItem,
 		};
 	},
