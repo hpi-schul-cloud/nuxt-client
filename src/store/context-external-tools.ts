@@ -136,8 +136,6 @@ export default class ContextExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -179,8 +177,6 @@ export default class ContextExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -215,8 +211,6 @@ export default class ContextExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -237,8 +231,6 @@ export default class ContextExternalToolsModule extends VuexModule {
 			this.removeContextExternalTool(toolId);
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,
@@ -274,8 +266,6 @@ export default class ContextExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -310,8 +300,6 @@ export default class ContextExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
@@ -343,8 +331,6 @@ export default class ContextExternalToolsModule extends VuexModule {
 			return mapped;
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
-
-			console.log(apiError);
 
 			this.setBusinessError({
 				error: apiError,

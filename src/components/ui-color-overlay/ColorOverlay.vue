@@ -11,13 +11,12 @@
 		@mouseenter.stop.prevent="onMouseEnter"
 		@mouseleave.stop.prevent="onMouseLeave"
 	>
+		<slot />
 		<div
 			v-if="showOverlay"
 			class="display-overlay rounded-t-sm"
 			v-bind:style="{ background: color, opacity }"
 		/>
-
-		<slot />
 	</div>
 </template>
 

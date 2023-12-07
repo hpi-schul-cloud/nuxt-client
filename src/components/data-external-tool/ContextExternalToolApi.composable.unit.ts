@@ -1,10 +1,8 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { ToolReferenceResponse } from "@/serverApi/v3/api";
+import { ExternalToolDisplayData } from "@/store/external-tool";
 import {
-	ExternalToolDisplayData,
-	ToolConfigurationStatus,
-} from "@/store/external-tool";
-import {
+	ContextExternalToolConfigurationStatusFactory,
 	mockApiResponse,
 	toolReferenceResponseFactory,
 } from "@@/tests/test-utils";
@@ -62,7 +60,7 @@ describe("ContextExternalToolApi.composable", () => {
 				contextExternalToolId: displayData.contextToolId,
 				name: displayData.displayName,
 				logoUrl: displayData.logoUrl,
-				status: ToolConfigurationStatus.Latest,
+				status: ContextExternalToolConfigurationStatusFactory.build(),
 				openInNewTab: displayData.openInNewTab,
 			});
 		});

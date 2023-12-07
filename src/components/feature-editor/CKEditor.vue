@@ -2,8 +2,8 @@
 	<ckeditor
 		ref="ck"
 		v-model="modelValue"
+		:editor="editor"
 		:config="config"
-		:editor="CustomCKEditor"
 		data-testid="ckeditor"
 		:disabled="disabled"
 		@blur="handleBlur"
@@ -13,6 +13,15 @@
 </template>
 
 <script>
+import {
+	boardToolbarSimple,
+	boardToolbarRegular,
+	newsToolbar,
+	boardPlugins,
+	newsPlugins,
+	boardHeadings,
+	newsHeadings,
+} from "./config";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useMediaQuery, useVModel } from "@vueuse/core";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
@@ -39,9 +48,14 @@ export default defineComponent({
 			type: String,
 			default: "",
 		},
+		type: {
+			type: String,
+			validator: (value) => ["classic", "balloon"].includes(value),
+			default: "classic",
+		},
 		mode: {
 			type: String,
-			validator: (value) => ["simple", "regular"].includes(value),
+			validator: (value) => ["simple", "regular", "news"].includes(value),
 			default: "regular",
 		},
 		disabled: {
@@ -56,75 +70,32 @@ export default defineComponent({
 
 		const ck = ref(null);
 		const modelValue = useVModel(props, "value", emit);
+		const editor = computed(() => {
+			return props.type === "classic"
+				? CustomCKEditor.ClassicEditor
+				: CustomCKEditor.BalloonEditor;
+		});
 
 		const language = i18n.locale;
 		const charCount = ref(0);
 
 		const toolbarItems = {
-			simple: [
-				"heading",
-				"|",
-				"bold",
-				"italic",
-				"highlight",
-				"|",
-				"link",
-				"bulletedList",
-				"numberedList",
-				"removeFormat",
-			],
-			regular: [
-				"undo",
-				"redo",
-				"|",
-				"heading",
-				"|",
-				"bold",
-				"italic",
-				"underline",
-				"strikethrough",
-				"highlight",
-				"fontBackgroundColor",
-				"code",
-				"superscript",
-				"subscript",
-				"|",
-				"link",
-				"bulletedList",
-				"numberedList",
-				"math",
-				"horizontalLine",
-				"|",
-				"blockQuote",
-				"insertTable",
-				"specialCharacters",
-				"removeFormat",
-			],
+			simple: boardToolbarSimple,
+			regular: boardToolbarRegular,
+			news: newsToolbar,
 		};
 
-		const plugins = [
-			"Autoformat",
-			"Essentials",
-			"BlockQuote",
-			"Bold",
-			"Code",
-			"Heading",
-			"Highlight",
-			"HorizontalLine",
-			"Italic",
-			"Link",
-			"List",
-			"Math",
-			"Paragraph",
-			"RemoveFormat",
-			"SpecialCharacters",
-			"Strikethrough",
-			"Subscript",
-			"Superscript",
-			"Table",
-			"TableToolbar",
-			"WordCount",
-		];
+		const plugins = {
+			simple: boardPlugins,
+			regular: boardPlugins,
+			news: newsPlugins,
+		};
+
+		const headings = {
+			simple: boardHeadings,
+			regular: boardHeadings,
+			news: newsHeadings,
+		};
 
 		const config = computed(() => {
 			return {
@@ -132,28 +103,8 @@ export default defineComponent({
 					items: toolbarItems[props.mode],
 					shouldNotGroupWhenFull: showFullToolbar.value,
 				},
-				plugins: plugins,
-				heading: {
-					options: [
-						{
-							model: "paragraph",
-							title: "Paragraph",
-							class: "ck-heading_paragraph",
-						},
-						{
-							model: "heading1",
-							view: "h4",
-							title: "Heading 1",
-							class: "ck-heading_heading1",
-						},
-						{
-							model: "heading2",
-							view: "h5",
-							title: "Heading 2",
-							class: "ck-heading_heading2",
-						},
-					],
-				},
+				plugins: plugins[props.mode],
+				heading: headings[props.mode],
 				link: {
 					defaultProtocol: "//",
 				},
@@ -263,6 +214,7 @@ export default defineComponent({
 
 		return {
 			ck,
+			editor,
 			modelValue,
 			CustomCKEditor,
 			config,
@@ -309,5 +261,9 @@ export default defineComponent({
 .ck-focused {
 	border: none !important;
 	box-shadow: none !important;
+}
+
+.ck.ck-toolbar {
+	border: none;
 }
 </style>
