@@ -60,10 +60,13 @@ export default defineComponent({
 		font-weight: 100;
 		color: white !important;
 		padding: 8px;
-		margin: -60px 8px 8px 8px;
-		word-wrap: break-word;
-		text-wrap: wrap;
-		overflow: auto;
+		margin: 8px;
+		margin-top: -4vh;
+		max-width: 95%;
+		word-break: normal;
+		text-wrap: pretty;
+		text-align: center;
+		overflow: visible;
 		opacity: 0;
 		transition: all 500ms 300ms ease;
 	}
