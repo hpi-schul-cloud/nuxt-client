@@ -59,7 +59,7 @@ import {
 } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
-import { computed, defineComponent, Ref, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
 import SpeedMenu from "./SpeedMenu.vue";
 
@@ -111,11 +111,6 @@ export default defineComponent({
 			return duration;
 		};
 
-		const isVolumeSliderShown: Ref<boolean> = ref(false);
-		const showVolumeSlider = () => {
-			isVolumeSliderShown.value = !isVolumeSliderShown.value;
-		};
-
 		const stopPropagation = (event: Event) => {
 			event.stopPropagation();
 			event.stopImmediatePropagation();
@@ -142,8 +137,6 @@ export default defineComponent({
 			mdiPlaySpeed,
 			onPlay,
 			formatDurationHourMinSec,
-			isVolumeSliderShown,
-			showVolumeSlider,
 			stopPropagation,
 			onInputSlider,
 		};
@@ -161,18 +154,5 @@ export default defineComponent({
 }
 .duration-slider {
 	width: 40%;
-}
-.volume-wrapper {
-	display: flex;
-	float: right;
-	width: 50%;
-	height: 36px;
-	border-radius: 0.125rem;
-	background-color: rgba(map-get($grey, "darken-4"), 0.54);
-}
-
-.volume-slider {
-	width: 50%;
-	padding-top: 2px;
 }
 </style>
