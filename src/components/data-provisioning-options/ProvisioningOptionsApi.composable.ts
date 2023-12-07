@@ -32,12 +32,12 @@ export const useProvisioningOptionsApi = () => {
 		} */
 	};
 
-	const saveProvisioningOptions = (
+	const saveProvisioningOptions = async (
 		systemId: string,
 		schoolId: string,
 		provisioningOptions: ProvisioningOptions
-	): ProvisioningOptions => {
-		//TODO N21-1479 call api with POST and make method async
+	): Promise<ProvisioningOptions> => {
+		//TODO N21-1479 call api with POST with errorhandling
 		const savedOptions = {
 			class: provisioningOptions.class,
 			course: provisioningOptions.course,
