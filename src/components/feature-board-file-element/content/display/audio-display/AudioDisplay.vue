@@ -2,20 +2,25 @@
 	<ContentElementBar class="audioPlayer grey darken-3">
 		<template #element>
 			<audio ref="audio" loading="lazy" />
-			<v-btn icon @click="onPlay" color="white" small>
-				<v-icon
-					v-if="playing"
-					:aria-label="$t('media.player.action.pause')"
-					aria-hidden="false"
-				>
-					{{ mdiPause }}</v-icon
-				>
-				<v-icon
-					v-else
-					:aria-label="$t('media.player.action.play')"
-					aria-hidden="false"
-					>{{ mdiPlay }}</v-icon
-				>
+			<v-btn
+				v-if="playing"
+				:aria-label="$t('media.player.action.pause')"
+				icon
+				@click="onPlay"
+				color="white"
+				small
+			>
+				<v-icon> {{ mdiPause }}</v-icon>
+			</v-btn>
+			<v-btn
+				v-else
+				:aria-label="$t('media.player.action.play')"
+				icon
+				@click="onPlay"
+				color="white"
+				small
+			>
+				<v-icon>{{ mdiPlay }}</v-icon>
 			</v-btn>
 			<span class="duration pr-2 pl-1">
 				{{ formatDurationHourMinSec(currentTime) }} /
