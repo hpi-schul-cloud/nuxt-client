@@ -34,11 +34,12 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const { t } = injectStrict(I18N_KEY);
+		const i18n = injectStrict(I18N_KEY);
 		const imageSrc = image;
 
 		const formattedLastUpdatedAt = computed(() => {
-			return dayjs(props.lastUpdatedAt).format(t("format.dateTime").toString());
+			const format = i18n.tc("format.dateTime");
+			return dayjs(props.lastUpdatedAt).format(format);
 		});
 
 		return {
