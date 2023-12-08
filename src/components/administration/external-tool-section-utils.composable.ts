@@ -41,7 +41,8 @@ export function useExternalToolsSectionUtils(
 			const outdated: boolean =
 				tool.status === ToolConfigurationStatus.Outdated;
 			const statusTranslationKey: string =
-				ToolConfigurationStatusTranslationMapping[tool.status];
+				ToolConfigurationStatusTranslationMapping[tool.status] ??
+				"none.existent.key"; // VUE3_UPGRADE: need to fix reactive translations, see BC-6007
 
 			return {
 				id: tool.id,
