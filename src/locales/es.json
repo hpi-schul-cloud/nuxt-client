@@ -511,6 +511,7 @@
   "components.molecules.copyResult.etherpadCopy.info": "El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
   "components.molecules.copyResult.geogebraCopy.info": "Los ID de material no se copian por razones técnicas y deben agregarse nuevamente.",
   "components.molecules.copyResult.nexboardCopy.info": "El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
+  "components.molecules.copyResult.nexboardCopy.infoTldraw": "El contenido no se copia ya que NeXboard está siendo reemplazado por Tldraw. Puede añadir Tldraw en el Tablero de columna añadiendo un nuevo elemento Whiteboard.",
   "components.molecules.share.options.title": "Compartir la configuración",
   "components.molecules.share.options.schoolInternally": "El enlace sólo es válido dentro de la escuela",
   "components.molecules.share.options.expiresInDays": "El enlace caduca a los 21 días",

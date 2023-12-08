@@ -524,6 +524,7 @@
 	"components.molecules.copyResult.etherpadCopy.info": "Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.geogebraCopy.info": "Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.nexboardCopy.info": "Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
+	"components.molecules.copyResult.nexboardCopy.infoTldraw": "Der Inhalt wird nicht kopiert, da NeXboard durch Tldraw ersetzt wird. Sie können Tldraw im Spalten-Board hinzufügen, indem Sie ein neues Whiteboard-Element hinzufügen.",
 	"components.molecules.share.options.title": "Teilen-Einstellungen",
 	"components.molecules.share.options.schoolInternally": "Link nur schulintern gültig",
 	"components.molecules.share.options.expiresInDays": "Link läuft nach 21 Tagen ab",
