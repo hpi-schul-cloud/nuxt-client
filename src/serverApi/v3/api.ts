@@ -2107,7 +2107,9 @@ export interface GroupResponse {
     * @enum {string}
     */
 export enum GroupResponseTypeEnum {
-    Class = 'class'
+    Class = 'class',
+    Course = 'course',
+    Other = 'other'
 }
 
 /**
