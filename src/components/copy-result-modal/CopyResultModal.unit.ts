@@ -4,6 +4,8 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mount, MountOptions } from "@vue/test-utils";
 import CopyResultModal from "./CopyResultModal.vue";
 import Vue from "vue";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 const geoGebraItem = {
 	title: "GeoGebra Element Title",
@@ -63,6 +65,9 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
 	});
 
 	describe("basic functions", () => {
