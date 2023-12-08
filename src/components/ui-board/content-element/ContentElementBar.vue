@@ -20,7 +20,7 @@
 				</ContentElementTitle>
 
 				<div v-if="$slots.menu && !$slots.display" class="three-dot-menu">
-					<slot v-if="$slots.menu && !$slots.display" name="menu" />
+					<slot name="menu" />
 				</div>
 			</div>
 

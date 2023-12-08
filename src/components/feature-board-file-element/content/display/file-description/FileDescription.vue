@@ -7,9 +7,11 @@
 		>
 			<template #title>
 				<div class="title-link">
-					<a v-if="src" :href="src" target="_blank">{{ name }}</a>
-					<span v-else>{{ name }}</span>
+					{{ name }}
 				</div>
+			</template>
+			<template #tooltip>
+				{{ name }}
 			</template>
 			<template v-if="showMenu" #menu>
 				<slot />
