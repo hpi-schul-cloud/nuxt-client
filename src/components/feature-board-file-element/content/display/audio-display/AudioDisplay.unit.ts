@@ -53,7 +53,9 @@ describe("AudioDisplay", () => {
 		const playIcon = wrapper.find("v-icon");
 
 		wrapper.vm.$nextTick(() => {
-			expect(playButton.attributes("aria-label")).toBe("Play");
+			expect(playButton.attributes("aria-label")).toBe(
+				wrapper.vm.$i18n.t("media.player.action.play")
+			);
 			expect(playIcon.text()).toBe("mdiPlay");
 		});
 	});
@@ -65,7 +67,9 @@ describe("AudioDisplay", () => {
 		const playIcon = wrapper.find("v-icon");
 
 		wrapper.vm.$nextTick(() => {
-			expect(playButton.attributes("aria-label")).toBe("Pause");
+			expect(playButton.attributes("aria-label")).toBe(
+				wrapper.vm.$i18n.t("media.player.action.pause")
+			);
 			expect(playIcon.text()).toBe("mdiPause");
 		});
 	});
