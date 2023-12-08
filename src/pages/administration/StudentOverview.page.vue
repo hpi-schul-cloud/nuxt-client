@@ -35,12 +35,12 @@
 			<data-filter
 				:filters="filters"
 				:backend-filtering="true"
-				v-model:active-filters="currentFilterQuery"
+				v-model:update:active-filters="currentFilterQuery"
 				data-testid="data_filter"
 			/>
 
 			<Suspense>
-				<NewDataFilter />
+				<NewDataFilter @update:filter="onUpdateFilter" />
 			</Suspense>
 
 			<backend-data-table
@@ -683,6 +683,10 @@ export default {
 		dialogConfirm(confirmDialogProps) {
 			this.confirmDialogProps = confirmDialogProps;
 			this.isConfirmDialogActive = true;
+		},
+		onUpdateFilter(query) {
+			this.currentFilterQuery = query;
+			this.find();
 		},
 	},
 };

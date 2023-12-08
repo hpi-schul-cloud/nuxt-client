@@ -26,8 +26,6 @@
 		@click:filter="onFilterClick"
 	/>
 
-	{{ filterQuery }}
-
 	<FilterDialog
 		:isOpen="dialogOpen"
 		@dialog-closed="onCloseDialog"
@@ -71,6 +69,8 @@ import { ref, computed, onMounted } from "vue";
 import { useDataTableFilter } from "./composables/filter.composable";
 import { useDataTableFilterApi } from "./composables/filterApi.composable";
 
+const emit = defineEmits(["update:filter"]);
+
 const dialogOpen = ref(false);
 
 const {
@@ -106,15 +106,18 @@ const onCloseDialog = () => (dialogOpen.value = false);
 const onUpdateFilter = (value: FilterOptions) => {
 	updateFilter(value);
 	dialogOpen.value = false;
+	emit("update:filter", filterQuery.value);
 };
 
 const onRemoveFilter = () => {
 	removeFilter();
 	dialogOpen.value = false;
+	emit("update:filter", filterQuery.value);
 };
 
 const onRemoveChipFilter = (val: FilterOptions) => {
 	removeChipFilter(val);
+	emit("update:filter", filterQuery.value);
 };
 
 onMounted(() => {
@@ -127,4 +130,3 @@ onMounted(() => {
 	cursor: pointer;
 }
 </style>
-./composables/filter.composable./composables/filterApi.composable

@@ -82,6 +82,7 @@ const dataTableFilter = () => {
 		if (filterSelection.value) delete filterQuery.value[filterSelection.value];
 
 		filterChipTitles.value = Object.keys(filterQuery.value);
+		setFilterState(filterQuery.value);
 	};
 
 	const removeChipFilter = (val: FilterOptions) => {
@@ -90,6 +91,7 @@ const dataTableFilter = () => {
 		filterMenuItems.value = defaultFilterMenuItems.filter(
 			(item: SelectOptionsType) => item.value in filterQuery.value == false
 		);
+		setFilterState(filterQuery.value);
 	};
 
 	return {
