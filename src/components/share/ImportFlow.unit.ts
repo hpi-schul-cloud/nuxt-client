@@ -21,6 +21,7 @@ import { mount, MountOptions } from "@vue/test-utils";
 import Vue from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import EnvConfigModule from "@/store/env-config";
 
 describe("@components/share/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
@@ -65,7 +66,10 @@ describe("@components/share/ImportFlow", () => {
 			getCopyResult: copyResultResponse,
 		});
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-		setupStores({ rooms: RoomsModule });
+		setupStores({
+			rooms: RoomsModule,
+			envConfigModule: EnvConfigModule,
+		});
 		jest.spyOn(roomsModule, "fetchAllElements").mockImplementation();
 	});
 

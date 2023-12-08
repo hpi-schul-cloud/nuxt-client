@@ -18,6 +18,7 @@ import Vue from "vue";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
+import EnvConfigModule from "@/store/env-config";
 
 const $route = {
 	query: {
@@ -224,6 +225,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			setupStores({
 				copyModule: CopyModule,
 				authModule: AuthModule,
+				envConfigModule: EnvConfigModule,
 			});
 
 			authModule.setUser(mockAuthStoreDataTeacher as User);
