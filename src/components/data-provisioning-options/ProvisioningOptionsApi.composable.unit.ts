@@ -1,21 +1,25 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { PublicSystemResponse, SystemsApiInterface } from "@/serverApi/v3/api";
+import {
+	SchoolApiInterface,
+	SchulConneXProvisioningOptionsResponse,
+} from "@/serverApi/v3/api";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils";
-import { useSystemApi } from "@data-system";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
+import { ProvisioningOptions } from "./type";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
-// TODO N21-1479 test api composable
+
 describe("SystemApi.composable", () => {
-	let systemApi: DeepMocked<SystemsApiInterface>;
+	let schoolApi: DeepMocked<SchoolApiInterface>;
 	let useErrorHandlerMock: DeepMocked<ReturnType<typeof useErrorHandler>>;
 
 	beforeEach(() => {
-		systemApi = createMock<SystemsApiInterface>();
+		schoolApi = createMock<SchoolApiInterface>();
 		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>();
 
-		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemApi);
+		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 		jest.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
 	});
 
@@ -23,41 +27,40 @@ describe("SystemApi.composable", () => {
 		jest.clearAllMocks();
 	});
 
-	describe("getSystem", () => {
+	describe("getProvisioningOptions", () => {
 		const setup = () => {
-			const system: PublicSystemResponse = {
-				id: "systemId",
-				displayName: "displayName",
+			const provisioningOptions: SchulConneXProvisioningOptionsResponse = {
+				groupProvisioningClassesEnabled: true,
+				groupProvisioningCoursesEnabled: true,
+				groupProvisioningOtherEnabled: true,
 			};
 
-			systemApi.systemControllerGetSystem.mockResolvedValue(
-				mockApiResponse({ data: system })
+			schoolApi.schoolControllerGetProvisioningOptions.mockResolvedValue(
+				mockApiResponse({ data: provisioningOptions })
 			);
-
-			return {
-				system,
-			};
 		};
 
 		describe("when the api call succeeds", () => {
-			it("should call the api for systems", async () => {
+			it("should call the api for provisioning options", async () => {
 				setup();
 
-				await useSystemApi().getSystem("systemId");
+				await useProvisioningOptionsApi().getProvisioningOptions("systemId");
 
-				expect(systemApi.systemControllerGetSystem).toHaveBeenCalledWith(
-					"systemId"
-				);
+				expect(
+					schoolApi.schoolControllerGetProvisioningOptions
+				).toHaveBeenCalledWith("systemId");
 			});
 
-			it("should return a system", async () => {
-				const { system } = setup();
+			it("should return provisioning options of this system - school combination", async () => {
+				setup();
 
-				const result = await useSystemApi().getSystem("systemId");
+				const result =
+					await useProvisioningOptionsApi().getProvisioningOptions("systemId");
 
 				expect(result).toEqual({
-					id: system.id,
-					displayName: system.displayName,
+					class: true,
+					course: true,
+					others: true,
 				});
 			});
 		});
@@ -65,22 +68,147 @@ describe("SystemApi.composable", () => {
 		describe("when the api call fails", () => {
 			const setup = () => {
 				const error = new Error();
-				systemApi.systemControllerGetSystem.mockRejectedValue(error);
+				schoolApi.schoolControllerGetProvisioningOptions.mockRejectedValue(
+					error
+				);
+
+				const provisioningOptionsDefaultValues: ProvisioningOptions = {
+					class: true,
+					course: false,
+					others: false,
+				};
 
 				return {
 					error,
+					provisioningOptionsDefaultValues,
 				};
 			};
 
 			it("should call the error handler", async () => {
 				const { error } = setup();
 
-				await useSystemApi().getSystem("systemId");
+				await useProvisioningOptionsApi().getProvisioningOptions("systemId");
 
 				expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error, {
 					404: undefined,
 					500: undefined,
 				});
+			});
+
+			it("should return provisioning options default values", async () => {
+				const { provisioningOptionsDefaultValues } = setup();
+
+				const result =
+					await useProvisioningOptionsApi().getProvisioningOptions("systemid");
+
+				expect(result).toEqual(provisioningOptionsDefaultValues);
+			});
+		});
+	});
+
+	describe("saveProvisioningOptions", () => {
+		const setup = () => {
+			const provisioningOptions: SchulConneXProvisioningOptionsResponse = {
+				groupProvisioningClassesEnabled: true,
+				groupProvisioningCoursesEnabled: true,
+				groupProvisioningOtherEnabled: true,
+			};
+			const provisioningOptionsEntry: ProvisioningOptions = {
+				class: true,
+				course: true,
+				others: true,
+			};
+
+			schoolApi.schoolControllerGetProvisioningOptions.mockResolvedValue(
+				mockApiResponse({ data: provisioningOptions })
+			);
+
+			return {
+				provisioningOptionsEntry,
+			};
+		};
+
+		describe("when the api call succeeds", () => {
+			it("should call the api to save provisioning options", async () => {
+				const { provisioningOptionsEntry } = setup();
+
+				await useProvisioningOptionsApi().saveProvisioningOptions(
+					"systemId",
+					provisioningOptionsEntry
+				);
+
+				expect(
+					schoolApi.schoolControllerSetProvisioningOptions
+				).toHaveBeenCalledWith("systemId", provisioningOptionsEntry);
+			});
+
+			it("should return provisioning options of this system - school combination", async () => {
+				const { provisioningOptionsEntry } = setup();
+
+				const result =
+					await useProvisioningOptionsApi().saveProvisioningOptions(
+						"systemId",
+						provisioningOptionsEntry
+					);
+
+				expect(result).toEqual({
+					class: true,
+					course: true,
+					others: true,
+				});
+			});
+		});
+
+		describe("when the api call fails", () => {
+			const setup = () => {
+				const error = new Error();
+				schoolApi.schoolControllerSetProvisioningOptions.mockRejectedValue(
+					error
+				);
+
+				const provisioningOptionsDefaultValues: ProvisioningOptions = {
+					class: true,
+					course: false,
+					others: false,
+				};
+				const provisioningOptionsEntry: ProvisioningOptions = {
+					class: true,
+					course: true,
+					others: true,
+				};
+
+				return {
+					error,
+					provisioningOptionsDefaultValues,
+					provisioningOptionsEntry,
+				};
+			};
+
+			it("should call the error handler", async () => {
+				const { error, provisioningOptionsEntry } = setup();
+
+				await useProvisioningOptionsApi().saveProvisioningOptions(
+					"systemId",
+					provisioningOptionsEntry
+				);
+
+				expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error, {
+					404: undefined,
+					500: undefined,
+				});
+			});
+
+			it("should return provisioning options default values", async () => {
+				const { provisioningOptionsDefaultValues, provisioningOptionsEntry } =
+					setup();
+
+				const result =
+					await useProvisioningOptionsApi().saveProvisioningOptions(
+						"systemid",
+						provisioningOptionsEntry
+					);
+
+				expect(result).toEqual(provisioningOptionsDefaultValues);
 			});
 		});
 	});
