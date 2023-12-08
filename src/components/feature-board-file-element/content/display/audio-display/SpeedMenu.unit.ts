@@ -1,3 +1,4 @@
+import { mdiCheck } from "@mdi/js";
 import { mount } from "@vue/test-utils";
 import SpeedMenu from "./SpeedMenu.vue";
 
@@ -50,9 +51,7 @@ describe("SpeedMenu", () => {
 		const { wrapper } = setup();
 		const list = wrapper.find("v-list");
 
-		wrapper.vm.$nextTick(() => {
-			expect(list.exists()).toBe(true);
-		});
+		expect(list.exists()).toBe(true);
 	});
 
 	it("should display correctly the default speed", () => {
@@ -64,13 +63,37 @@ describe("SpeedMenu", () => {
 		});
 	});
 
+	it("should display check icon on normal value", () => {
+		const { wrapper } = setup();
+
+		const icon = wrapper.findAll("v-list-item").at(3).find("v-list-item-icon");
+
+		expect(icon.text()).toBe(mdiCheck);
+	});
+
+	describe("when selection 0.25 value", () => {
+		it("should display check icon on normal value", async () => {
+			const { wrapper } = setup();
+
+			const listItem = wrapper.findAll("v-list-item").at(0);
+
+			listItem.trigger("click");
+			await wrapper.vm.$nextTick();
+
+			const listItemIcon = wrapper
+				.findAll("v-list-item")
+				.at(0)
+				.find("v-list-item-icon");
+
+			expect(listItemIcon.text()).toBe(mdiCheck);
+		});
+	});
+
 	it("should display correctly the check icon when selected", () => {
 		const { wrapper } = setup();
 		const icon = wrapper.find("v-list-item-icon");
 
-		wrapper.vm.$nextTick(() => {
-			expect(icon.text()).toBe("mdiCheck");
-		});
+		expect(icon.text()).toBe(mdiCheck);
 	});
 
 	it("should display correctly the speed value", () => {
@@ -93,11 +116,11 @@ describe("when picking a speed through select", () => {
 		const listItem = wrapper.find("v-list-item");
 		await listItem.trigger("click");
 
-		wrapper.vm.$nextTick(() => {
-			expect(wrapper.emitted("rate")).toBeTruthy();
-			expect(wrapper.emitted("speedSelected")).toBeTruthy();
-			expect(wrapper.emitted("speedSelected")).toHaveLength(1);
-			expect(wrapper.vm.$data.speed).toBe(0.25);
-		});
+		await wrapper.vm.$nextTick;
+
+		expect(wrapper.emitted("rate")).toBeTruthy();
+		expect(wrapper.emitted("speedSelected")).toBeTruthy();
+		expect(wrapper.emitted("speedSelected")).toHaveLength(1);
+		expect(wrapper.vm.$data.speed).toBe(0.25);
 	});
 });
