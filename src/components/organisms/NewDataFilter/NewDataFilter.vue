@@ -71,7 +71,6 @@ const dialogOpen = ref(false);
 const {
 	defaultFilterMenuItems,
 	filterSelection,
-	// classes,
 	isDateFiltering,
 	filterMenuItems,
 	filterChipTitles,
