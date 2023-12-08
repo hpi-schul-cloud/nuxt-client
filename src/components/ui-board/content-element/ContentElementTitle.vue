@@ -66,7 +66,7 @@ export default defineComponent({
 		word-break: normal;
 		text-wrap: pretty;
 		overflow: visible;
-		opacity: 1;
+		opacity: 0;
 		transition: all 500ms 300ms ease;
 		white-space: normal;
 		text-align: left;
