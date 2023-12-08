@@ -17,7 +17,7 @@
 				</v-btn>
 			</template>
 
-			<v-list dense flat>
+			<v-list dense>
 				<v-list-item-group>
 					<v-list-item @click="onSelect(0.25)">
 						<v-list-item-content class="ml-3">
