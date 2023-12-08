@@ -1,6 +1,6 @@
 import { createSharedComposable } from "@vueuse/core";
 import { useStorage } from "@/composables/locale-storage.composable";
-import { UiState } from "../types/filterTypes";
+import { UiState, FilterQuery } from "../types/filterTypes";
 
 const filterLocalStorage = () => {
 	const { get, set } = useStorage();
@@ -43,7 +43,7 @@ const filterLocalStorage = () => {
 
 	const state = getDefaultState();
 
-	const setFilterState = (val: object) => {
+	const setFilterState = (val: FilterQuery) => {
 		state.filter["pages.administration.students.index"] = { query: {} };
 
 		state.filter["pages.administration.students.index"].query = {

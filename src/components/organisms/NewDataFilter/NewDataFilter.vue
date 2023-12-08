@@ -33,15 +33,11 @@
 	>
 		<template #title> {{ modalTitle }} </template>
 		<template #content>
-			<Registration
-				v-if="filterSelection == FilterOptions.REGISTRATION"
-				@update:filter="onUpdateFilter"
-				@remove:filter="onRemoveFilter"
-				@dialog-closed="onCloseDialog"
-			/>
-			<Classes
-				v-if="filterSelection == FilterOptions.CLASSES"
-				:classes="classNames"
+			<ListSelection
+				v-if="
+					filterSelection == FilterOptions.CLASSES || FilterOptions.REGISTRATION
+				"
+				:classes="selectionProps"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
 				@dialog-closed="onCloseDialog"
@@ -58,13 +54,12 @@
 
 <script setup lang="ts">
 import FilterDialog from "./FilterDialog.vue";
+import { TimeBetween, FilterChips, ListSelection } from "./filterComponents";
 import {
-	Registration,
-	Classes,
-	TimeBetween,
-	FilterChips,
-} from "./filterComponents";
-import { FilterOptions, SelectOptionsType } from "./types/filterTypes";
+	FilterOptions,
+	SelectOptionsType,
+	FilterOptionsType,
+} from "./types/filterTypes";
 import { ref, computed, onMounted } from "vue";
 import { useDataTableFilter } from "./composables/filter.composable";
 import { useDataTableFilterApi } from "./composables/filterApi.composable";
@@ -84,6 +79,7 @@ const {
 	removeFilter,
 	removeChipFilter,
 	filterQuery,
+	registrationOptions,
 } = useDataTableFilter();
 
 const { classNames } = await useDataTableFilterApi();
@@ -95,7 +91,13 @@ const modalTitle = computed(
 		)?.title
 );
 
-const onFilterClick = (val: FilterOptions) => {
+const selectionProps = computed(() => {
+	return filterSelection.value == FilterOptions.CLASSES
+		? classNames
+		: registrationOptions;
+});
+
+const onFilterClick = (val: FilterOptionsType) => {
 	filterSelection.value = val;
 
 	dialogOpen.value = true;

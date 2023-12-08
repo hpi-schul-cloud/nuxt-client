@@ -1,6 +1,7 @@
 import { createSharedComposable } from "@vueuse/core";
 import { useStore } from "vuex";
 import { authModule } from "@/store";
+import { SelectOptionsType } from "../types/filterTypes";
 
 const dataTableFilterApi = async () => {
 	const store = useStore();
@@ -21,8 +22,8 @@ const dataTableFilterApi = async () => {
 	const classState = store.state["classes"].list;
 
 	const classNames = classState.reduce(
-		(acc: string[], item: { displayName: string }) =>
-			acc.concat(item.displayName),
+		(acc: SelectOptionsType[], item: { displayName: string }) =>
+			acc.concat({ title: item.displayName, value: item.displayName }),
 		[]
 	);
 

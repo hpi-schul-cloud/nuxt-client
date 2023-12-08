@@ -2,6 +2,7 @@ import { createSharedComposable } from "@vueuse/core";
 import { computed, ref } from "vue";
 import {
 	FilterOptions,
+	FilterOptionsType,
 	FilterQuery,
 	RegistrationTypes,
 	SelectOptionsType,
@@ -50,9 +51,7 @@ const dataTableFilter = () => {
 
 	const filterQuery = ref<FilterQuery>({});
 
-	const filterSelection = ref<FilterOptions | undefined>(undefined);
-
-	const classes = ["1A", "1B", "1A"];
+	const filterSelection = ref<FilterOptionsType | undefined>(undefined);
 
 	const isDateFiltering = computed(() => {
 		return (
@@ -99,7 +98,6 @@ const dataTableFilter = () => {
 		registrationOptions,
 		filterQuery,
 		filterSelection,
-		classes,
 		isDateFiltering,
 		filterMenuItems,
 		filterChipTitles,

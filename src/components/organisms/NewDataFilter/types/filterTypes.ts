@@ -6,6 +6,13 @@ enum FilterOptions {
 	OBSOLOTE_SINCE = "outdatedSince",
 }
 
+type FilterOptionsType =
+	| "consentStatus"
+	| "classes"
+	| "createdAt"
+	| "lastLoginSystemChange"
+	| "outdatedSince";
+
 enum RegistrationTypes {
 	COMPLETE = "ok",
 	PARENT_AGREED = "parentsAgreed",
@@ -14,7 +21,7 @@ enum RegistrationTypes {
 
 type SelectOptionsType = {
 	title: string;
-	value: FilterOptions;
+	value: FilterOptions | string;
 };
 
 type FilterQuery = {
@@ -48,6 +55,7 @@ type UiState = {
 
 export {
 	FilterOptions,
+	FilterOptionsType,
 	RegistrationTypes,
 	SelectOptionsType,
 	FilterQuery,
