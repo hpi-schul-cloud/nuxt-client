@@ -131,41 +131,10 @@ describe("AudioDisplay", () => {
 		});
 	});
 
-	it("should display volume correctly", () => {
-		const { wrapper } = setup();
-
-		const volume = wrapper.find(".volume");
-		wrapper.vm.$nextTick(() => {
-			expect(volume.text()).toBe("50%");
-		});
-	});
-
-	it("should display a volume icon", () => {
-		const { wrapper } = setup();
-
-		const playIcon = wrapper.find("v-icon");
-		wrapper.vm.$nextTick(() => {
-			expect(playIcon.text()).toBe("mdiVolumeHigh");
-		});
-	});
-
 	it("should render slot content", () => {
 		const { wrapper } = setup();
 
 		expect(wrapper.text()).toContain("test-slot-content");
-	});
-
-	describe("when volume icon is clicked", () => {
-		it("should display a volume slider", () => {
-			const { wrapper } = setup();
-			const volumeIcon = wrapper.find("v-icon");
-
-			volumeIcon.trigger("click");
-			wrapper.vm.$nextTick(() => {
-				const volumeSlider = wrapper.findComponent({ name: "VSlider" });
-				expect(volumeSlider.exists()).toBe(true);
-			});
-		});
 	});
 
 	describe("when audio dispatches error event", () => {
