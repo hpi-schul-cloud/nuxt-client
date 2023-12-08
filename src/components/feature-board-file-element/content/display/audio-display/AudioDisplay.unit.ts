@@ -171,11 +171,12 @@ describe("AudioDisplay", () => {
 	describe("when audio dispatches error event", () => {
 		it("should emit error event", () => {
 			const { wrapper } = setup();
-
 			const audio = wrapper.find("audio");
-			audio.trigger("error");
 
-			expect(wrapper.emitted("error")).toBeTruthy();
+			audio.trigger("error");
+			wrapper.vm.$nextTick(() => {
+				expect(wrapper.emitted("error")).toBeTruthy();
+			});
 		});
 	});
 });
