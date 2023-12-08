@@ -59,16 +59,17 @@ export default defineComponent({
 		line-height: 20px;
 		font-weight: 100;
 		color: white !important;
-		padding: 8px;
+		padding: 8px 12px;
 		margin: 8px;
-		margin-top: -4vh;
+		margin-top: 0vh;
 		max-width: 95%;
 		word-break: normal;
 		text-wrap: pretty;
-		text-align: center;
 		overflow: visible;
-		opacity: 0;
+		opacity: 1;
 		transition: all 500ms 300ms ease;
+		white-space: normal;
+		text-align: left;
 	}
 }
 

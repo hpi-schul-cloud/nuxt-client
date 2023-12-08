@@ -21,9 +21,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style type="text/scss">
-.content-element-title-icon {
-	line-height: 24px;
-}
-</style>
