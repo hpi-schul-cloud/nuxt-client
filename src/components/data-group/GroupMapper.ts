@@ -8,6 +8,8 @@ import { Group, GroupType, GroupUser, GroupUserRole } from "./types";
 
 export const GroupTypeMapping: Record<GroupResponseTypeEnum, GroupType> = {
 	[GroupResponseTypeEnum.Class]: GroupType.Class,
+	[GroupResponseTypeEnum.Course]: GroupType.Course,
+	[GroupResponseTypeEnum.Other]: GroupType.Other,
 };
 
 export const GroupUserRoleMapping: Partial<
