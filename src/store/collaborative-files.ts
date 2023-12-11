@@ -112,7 +112,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 	}
 
 	@Action
-	async fetchTeamFiles(path: string): Promise<void> {
+	async fetchTeamFiles(): Promise<void> {
 		this.setLoading(true);
 		try {
 			// only mock data, comes from api in the future
