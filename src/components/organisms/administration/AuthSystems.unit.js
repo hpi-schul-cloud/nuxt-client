@@ -16,7 +16,7 @@ const generateProps = () => ({
 			oauthConfig: { provider: "iserv-idm" },
 		}, // deletable: false, editable: false
 		{ _id: "3", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
-		{ _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }, // deletable: true, editable: false
+		{ _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" }, system }, // deletable: true, editable: false // TODO N21-1479 continue here
 	],
 	confirmDeleteDialog: {
 		isOpen: false,
