@@ -15,21 +15,14 @@
 			/>
 			<transition name="fade">
 				<div v-if="data.title">
-					<!-- <text-editor
-						v-model="data.content"
-						class="mb--md mt--xl-3"
-						:error="errors.content"
-						:required="true"
-						:placeholder="
-							$t('components.organisms.FormNews.editor.placeholder')
-						"
-					/> -->
-
 					<ck-editor
 						v-model="data.content"
 						:placeholder="
 							$t($t('components.organisms.FormNews.editor.placeholder'))
 						"
+						type="classic"
+						mode="news"
+						@update:value="onUpdateValue"
 					/>
 
 					<transition name="fade">
@@ -227,6 +220,9 @@ export default defineComponent({
 				[this.data.date.date, this.data.date.time] =
 					createInputDateTime(displayAt);
 			}
+		},
+		onUpdateValue(newValue: string) {
+			this.data.content = newValue;
 		},
 		async remove() {
 			this.dialogConfirm({
