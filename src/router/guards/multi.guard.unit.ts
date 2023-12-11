@@ -138,7 +138,9 @@ describe("Multiguard", () => {
 
 			const multiguard = Multiguard([
 				(to, from, next) => next(expected),
-				() => fail("Second guard called when it shouldn't have been"),
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
+				(to, from, next) =>
+					fail("Second guard called when it shouldn't have been"),
 			]);
 
 			return { expected, to, from, next, multiguard };

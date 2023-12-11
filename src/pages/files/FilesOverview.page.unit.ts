@@ -34,7 +34,8 @@ describe("FileOverview", () => {
 	beforeAll(() => {
 		jest.spyOn(fileTableComposable, "useFileTableUtils").mockReturnValue({
 			...fileTableComposable.useFileTableUtils(collaborativeFilesModule, tMock),
-			getFilesPageForRoute(): FilesPageConfig {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			getFilesPageForRoute(route: Route): FilesPageConfig {
 				return {
 					title: pageTitle,
 					breadcrumbs: [
