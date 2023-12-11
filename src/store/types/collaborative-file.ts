@@ -1,7 +1,7 @@
 export enum CollaborativeFileType {
 	FAVORITES = "favorites",
 	FILE = "draft",
-	PDF = "draft",
+	PDF = "pdf",
 	DIRECTORY = "dir",
 	SHARED_DIRECTORY = "shared_dir",
 	UNKNOWN = "question_mark",
