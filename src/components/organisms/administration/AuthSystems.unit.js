@@ -219,7 +219,7 @@ describe("AuthSystems", () => {
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
-			// { _id: "1234", type: "sample system" }, // deletable: true, editable: false
+			// { _id: "1", type: "sample system" }, // deletable: false, editable: false
 			expect(
 				tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(false);
@@ -227,7 +227,7 @@ describe("AuthSystems", () => {
 				tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(false);
 
-			// { _id: "12345", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
+			// { _id: "2", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
 			expect(
 				tableCell.wrappers[5].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(false);
@@ -235,15 +235,81 @@ describe("AuthSystems", () => {
 				tableCell.wrappers[5].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(false);
 
-			// { _id: "123456", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
+			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
 			expect(
 				tableCell.wrappers[8].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(true);
 			expect(
 				tableCell.wrappers[8].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(true);
+
+			// { _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }, // deletable: false, editable: false
+			expect(
+				tableCell.wrappers[11].find(searchStrings.deleteSystemButton).exists()
+			).toStrictEqual(false);
+			expect(
+				tableCell.wrappers[11].find(searchStrings.editSystemButton).exists()
+			).toStrictEqual(false);
 		});
-		// TODO N21-1479 test for feature flag and moin schule system? test redirectTo method
+
+		it("should redirect to ldap config page from edit button of general ldap system", () => {
+			authModule.setUser({
+				...mockUser,
+				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
+			});
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+
+			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
+
+			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
+			expect(
+				tableCell.wrappers[8].find(searchStrings.editSystemButton).attributes()
+					.href
+			).toEqual("/administration/ldap/config");
+		});
+
+		it("should display the edit system button for oauth system, when provisioning options feature flag is true and redirect to provisioning options page", () => {
+			envConfigModule.setEnvs({
+				FEATURE_VIEW_PROVISIONING_OPTIONS_ENABLED: true,
+			});
+
+			authModule.setUser({
+				...mockUser,
+				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
+			});
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+
+			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
+
+			// { _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }
+			expect(
+				tableCell.wrappers[11].find(searchStrings.editSystemButton).exists()
+			).toStrictEqual(true);
+			expect(
+				tableCell.wrappers[11].find(searchStrings.editSystemButton).attributes()
+					.href
+			).toEqual(
+				"/administration/school-settings/provisioning-options?systemId=4"
+			);
+
+			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
+			expect(
+				tableCell.wrappers[8].find(searchStrings.editSystemButton).attributes()
+					.href
+			).toEqual("/administration/ldap/config");
+		});
 
 		it("should NOT display the dialog", async () => {
 			const wrapper = mount(AuthSystems, {
