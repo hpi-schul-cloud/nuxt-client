@@ -522,7 +522,7 @@
   "components.molecules.copyResult.etherpadCopy.info": "Content is not copied for data protection reasons and must be added again.",
   "components.molecules.copyResult.geogebraCopy.info": "Material IDs are not copied for technical reasons and must be added again.",
   "components.molecules.copyResult.nexboardCopy.info": "Content is not copied for data protection reasons and must be added again.",
-  "components.molecules.copyResult.nexboardCopy.infoTldraw": "Content is not copied as NeXboard is being replaced by Tldraw. You can add Tldraw in the Column Board by adding new Whiteboard element.",
+  "components.molecules.copyResult.nexboardCopy.infoTldraw": "Content is not copied as NeXboard is being replaced by Tldraw. You can add Tldraw in the Column Board by adding a new Whiteboard element.",
   "components.molecules.share.options.title": "Share settings",
   "components.molecules.share.options.schoolInternally": "Link only valid within the school",
   "components.molecules.share.options.expiresInDays": "Link expires after 21 days",
