@@ -134,7 +134,7 @@ describe("CollaborativeFilesModule", () => {
 		it("should set loading to true and after success to false", async () => {
 			const { setLoadingSpy } = setup();
 
-			await collaborativeFilesModule.fetchTeamFiles("/path");
+			await collaborativeFilesModule.fetchTeamFiles();
 
 			expect(setLoadingSpy).toHaveBeenCalledWith(true);
 			expect(setLoadingSpy).toHaveBeenCalledWith(false);
@@ -146,7 +146,7 @@ describe("CollaborativeFilesModule", () => {
 				throw new Error();
 			});
 
-			await collaborativeFilesModule.fetchTeamFiles("/path");
+			await collaborativeFilesModule.fetchTeamFiles();
 
 			expect(collaborativeFilesModule.loading).toBeFalsy();
 		});
@@ -154,7 +154,7 @@ describe("CollaborativeFilesModule", () => {
 		it("should add files to store after fetching them from api", async () => {
 			const { addFileMetaDataSpy } = setup();
 
-			await collaborativeFilesModule.fetchTeamFiles("/path");
+			await collaborativeFilesModule.fetchTeamFiles();
 
 			expect(addFileMetaDataSpy).toHaveBeenCalledWith(
 				expect.objectContaining<FileMetaListResponse>({
@@ -210,9 +210,7 @@ describe("CollaborativeFilesModule", () => {
 					collaborativeFilesModule,
 					tMock
 				),
-				mapFileMetaListResponse(
-					response: FileMetaListResponse
-				): CollaborativeFile[] {
+				mapFileMetaListResponse(): CollaborativeFile[] {
 					return [
 						{
 							path: mockFileMetaListResponse.data[0].path,
