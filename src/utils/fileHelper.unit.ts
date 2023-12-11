@@ -7,7 +7,7 @@ import {
 	convertDownloadToPreviewUrl,
 	convertFileSize,
 	downloadFile,
-	formatDurationHourMinSec,
+	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
 	isDownloadAllowed,
@@ -468,19 +468,26 @@ describe("@/utils/fileHelper", () => {
 		});
 	});
 
-	describe("formatDurationHourMinSec", () => {
-		describe("when file has duration in minutes", () => {
-			it("should display it in Minutes, Seconds format", () => {
-				const result = formatDurationHourMinSec(125);
+	describe("formatSecondsToHourMinSec", () => {
+		describe("when file has duration 0", () => {
+			it("should display 0 minutes & 0 seconds", () => {
+				const result = formatSecondsToHourMinSec(0);
 
-				expect(result).toBe("02:05");
+				expect(result).toBe("00:00");
+			});
+		});
+		describe("when file lasts some seconds", () => {
+			it("should display it in Minutes, Seconds format", () => {
+				const result = formatSecondsToHourMinSec(45);
+
+				expect(result).toBe("00:45");
 			});
 		});
 		describe("when file has duration in hours", () => {
 			it("should display it in Hours, Minutes, Seconds format", () => {
-				const result = formatDurationHourMinSec(10125);
+				const result = formatSecondsToHourMinSec(1555125);
 
-				expect(result).toBe("02:48:45");
+				expect(result).toBe("23:58:45");
 			});
 		});
 	});
