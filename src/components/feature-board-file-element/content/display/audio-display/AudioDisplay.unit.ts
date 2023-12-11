@@ -1,154 +1,242 @@
-import { mount } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { createMock } from "@golevelup/ts-jest";
+import { mdiPause, mdiPlay } from "@mdi/js";
+import { shallowMount } from "@vue/test-utils";
+import { useMediaControls } from "@vueuse/core";
+import { ref } from "vue";
 import AudioDisplay from "./AudioDisplay.vue";
 
-describe("AudioDisplay", () => {
-	const setup = () => {
-		document.body.setAttribute("data-app", "true");
+jest.mock("@vueuse/core", () => {
+	const original = jest.requireActual("@vueuse/core");
 
-		const src = "test-source";
-		const slotContent = "test-slot-content";
-		const propsData = {
-			src,
+	return {
+		...original,
+		useMediaControls: jest.fn(),
+	};
+});
+
+describe("AudioDisplay", () => {
+	describe("when audio is not playing", () => {
+		const setup = () => {
+			document.body.setAttribute("data-app", "true");
+
+			const src = "test-source";
+			const slotContent = "test-slot-content";
+			const propsData = {
+				src,
+			};
+
+			const currentTimeRef = ref(0);
+			const durationRef = ref(50);
+			const rateRef = ref(1);
+			const playingRef = ref(false);
+			const onSourceErrorMock = jest.fn();
+
+			const useMediaControlsMock = createMock<
+				ReturnType<typeof useMediaControls>
+			>({
+				playing: playingRef,
+				currentTime: currentTimeRef,
+				duration: durationRef,
+				rate: rateRef,
+				onSourceError: onSourceErrorMock,
+			});
+			jest.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
+
+			const wrapper = shallowMount(AudioDisplay, {
+				attachTo: document.body,
+				propsData,
+				slots: {
+					default: slotContent,
+				},
+				...createComponentMocks({}),
+			});
+
+			return {
+				wrapper,
+				src,
+				currentTimeRef,
+				durationRef,
+				playingRef,
+				rateRef,
+				onSourceErrorMock,
+			};
 		};
 
-		const wrapper = mount(AudioDisplay, {
-			attachTo: document.body,
-			propsData,
-			slots: {
-				default: slotContent,
-			},
+		it("should render slot content", () => {
+			const { wrapper } = setup();
+
+			expect(wrapper.text()).toContain("test-slot-content");
 		});
 
-		return {
-			wrapper,
-			src,
-		};
-	};
+		it("should call onSourceError", () => {
+			const { onSourceErrorMock } = setup();
 
-	it("should be found in dom", () => {
-		const { wrapper } = setup();
+			expect(onSourceErrorMock).toHaveBeenCalled();
+		});
 
-		const audioDisplayElement = wrapper.findComponent(AudioDisplay);
-		expect(audioDisplayElement.exists()).toBe(true);
-	});
+		it("should render audio element with lazy prop", () => {
+			const { wrapper } = setup();
 
-	it("should have an audio element", () => {
-		const { wrapper } = setup();
+			const audio = wrapper.find("audio");
 
-		const audio = wrapper.find("audio");
-		expect(audio.exists()).toBe(true);
-	});
+			expect(audio.attributes("loading")).toBe("lazy");
+		});
 
-	it("should have a play button ", () => {
-		const { wrapper } = setup();
+		it("should pass duration to v-slider", () => {
+			const { wrapper, durationRef } = setup();
 
-		const playButton = wrapper.find("v-btn");
-		expect(playButton.exists()).toBe(true);
-	});
+			const slider = wrapper.findComponent({ name: "v-slider" });
+			expect(slider.attributes("max")).toBe(`${durationRef.value}`);
+		});
 
-	it("should have a play icon when audio is not playing", () => {
-		const { wrapper } = setup();
+		it("should pass currentTime to v-slider", () => {
+			const { wrapper, currentTimeRef } = setup();
 
-		const playButton = wrapper.find("v-btn");
-		const playIcon = wrapper.find("v-icon");
+			const slider = wrapper.findComponent({ name: "v-slider" });
+			expect(slider.attributes("value")).toBe(`${currentTimeRef.value}`);
+		});
 
-		wrapper.vm.$nextTick(() => {
+		it("should have an accessible play button", () => {
+			const { wrapper } = setup();
+
+			const playButton = wrapper.findComponent({ name: "v-btn" });
+			const playIcon = wrapper.findComponent({ name: "v-icon" });
+
 			expect(playButton.attributes("aria-label")).toBe(
 				wrapper.vm.$i18n.t("media.player.action.play")
 			);
-			expect(playIcon.text()).toBe("mdiPlay");
+			expect(playIcon.text()).toBe(mdiPlay);
+		});
+
+		it("should display duration", () => {
+			const { wrapper } = setup();
+
+			const duration = wrapper.find(".duration");
+			expect(duration.text()).toBe("00:00 / 00:50");
+		});
+
+		describe("when play button is clicked", () => {
+			it("playing should be set to true", async () => {
+				const { wrapper, playingRef } = setup();
+
+				const playButton = wrapper.findComponent({ name: "v-btn" });
+				playButton.vm.$emit("click");
+
+				await wrapper.vm.$nextTick();
+
+				expect(playingRef.value).toBe(true);
+			});
+		});
+
+		describe("when duration slider emits input", () => {
+			it("should set current time", async () => {
+				const { wrapper, currentTimeRef } = setup();
+
+				const audioSlider = wrapper.findComponent({ name: "v-slider" });
+				audioSlider.vm.$emit("input", 10);
+
+				await wrapper.vm.$nextTick();
+
+				expect(currentTimeRef.value).toBe(10);
+			});
+		});
+
+		it("should render speed menu component with correct props", async () => {
+			const { wrapper, rateRef } = setup();
+
+			const speedMenu = wrapper.findComponent({ name: "SpeedMenu" });
+			expect(speedMenu.props("rate")).toBe(rateRef.value);
+		});
+
+		describe("when speed menu emits speedChange", () => {
+			it("should set rate to new value", async () => {
+				const { wrapper, rateRef } = setup();
+
+				const newRateValue = 2;
+				const speedMenu = wrapper.findComponent({ name: "SpeedMenu" });
+				speedMenu.vm.$emit("updateRate", newRateValue);
+
+				await wrapper.vm.$nextTick();
+
+				expect(rateRef.value).toBe(newRateValue);
+			});
 		});
 	});
 
-	it("should have a pause icon when audio is playing", () => {
-		const { wrapper } = setup();
+	describe("when audio is playing", () => {
+		const setup = () => {
+			document.body.setAttribute("data-app", "true");
 
-		const playButton = wrapper.find("v-btn");
-		const playIcon = wrapper.find("v-icon");
+			const src = "test-source";
+			const slotContent = "test-slot-content";
+			const propsData = {
+				src,
+			};
 
-		wrapper.vm.$nextTick(() => {
+			const currentTimeRef = ref(5);
+			const durationRef = ref(50);
+			const rateRef = ref(1);
+			const playingRef = ref(true);
+
+			const useMediaControlsMock = createMock<
+				ReturnType<typeof useMediaControls>
+			>({
+				playing: playingRef,
+				currentTime: currentTimeRef,
+				duration: durationRef,
+				rate: rateRef,
+			});
+			jest.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
+
+			const wrapper = shallowMount(AudioDisplay, {
+				attachTo: document.body,
+				propsData,
+				slots: {
+					default: slotContent,
+				},
+				...createComponentMocks({}),
+			});
+
+			return {
+				wrapper,
+				src,
+				currentTimeRef,
+				durationRef,
+				playingRef,
+				rateRef,
+			};
+		};
+
+		it("should display duration", () => {
+			const { wrapper } = setup();
+
+			const duration = wrapper.find(".duration");
+			expect(duration.text()).toBe("00:05 / 00:50");
+		});
+
+		it("should have an accessible pause button", () => {
+			const { wrapper } = setup();
+
+			const playButton = wrapper.findComponent({ name: "v-btn" });
+			const playIcon = wrapper.findComponent({ name: "v-icon" });
+
 			expect(playButton.attributes("aria-label")).toBe(
 				wrapper.vm.$i18n.t("media.player.action.pause")
 			);
-			expect(playIcon.text()).toBe("mdiPause");
+			expect(playIcon.text()).toBe(mdiPause);
 		});
-	});
 
-	it("should render speed menu component", async () => {
-		const { wrapper } = setup();
+		describe("when play button is clicked", () => {
+			it("playing should be set to false", async () => {
+				const { wrapper, playingRef } = setup();
 
-		const speedMenu = wrapper.findComponent({ name: "SpeedMenu" });
-		expect(speedMenu.exists()).toBe(true);
-	});
+				const playButton = wrapper.findComponent({ name: "v-btn" });
+				playButton.vm.$emit("click");
 
-	it("should render speed menu component with correct props", async () => {
-		const { wrapper } = setup();
+				await wrapper.vm.$nextTick();
 
-		const speedMenu = wrapper.findComponent({ name: "SpeedMenu" });
-		wrapper.vm.$nextTick(() => {
-			expect(speedMenu.props("speed")).toBe(1);
-		});
-	});
-
-	it("should render content element bar component correctly", () => {
-		const { wrapper } = setup();
-
-		const contentElementBar = wrapper.findComponent({
-			name: "ContentElementBar",
-		});
-		expect(contentElementBar.exists()).toBe(true);
-	});
-
-	it("should render audio element with src", () => {
-		const { wrapper, src } = setup();
-
-		const audio = wrapper.find("audio");
-		wrapper.vm.$nextTick(() => {
-			expect(audio.attributes("src")).toBe(src);
-		});
-	});
-
-	it("should display duration correctly", () => {
-		const { wrapper } = setup();
-
-		const duration = wrapper.find(".duration");
-		wrapper.vm.$nextTick(() => {
-			expect(duration.text()).toBe("00:00");
-		});
-	});
-
-	it("should display audio slider correctly", () => {
-		const { wrapper } = setup();
-
-		const audioSlider = wrapper.findComponent({ name: "VSlider" });
-		wrapper.vm.$nextTick(() => {
-			expect(audioSlider.exists()).toBe(true);
-		});
-	});
-
-	it("should display rate correctly", () => {
-		const { wrapper } = setup();
-
-		const rate = wrapper.find(".rate");
-		wrapper.vm.$nextTick(() => {
-			expect(rate.text()).toBe("1.0x");
-		});
-	});
-
-	it("should render slot content", () => {
-		const { wrapper } = setup();
-
-		expect(wrapper.text()).toContain("test-slot-content");
-	});
-
-	describe("when audio dispatches error event", () => {
-		it("should emit error event", () => {
-			const { wrapper } = setup();
-			const audio = wrapper.find("audio");
-
-			audio.trigger("error");
-			wrapper.vm.$nextTick(() => {
-				expect(wrapper.emitted("error")).toBeTruthy();
+				expect(playingRef.value).toBe(false);
 			});
 		});
 	});
