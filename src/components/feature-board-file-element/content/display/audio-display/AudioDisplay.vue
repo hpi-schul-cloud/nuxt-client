@@ -28,7 +28,7 @@
 				class="duration-slider pt-6"
 				color="white"
 				thumb-color="white"
-				track-color="#9e9e9e"
+				track-color="black"
 				:value="currentTime"
 				start="0"
 				end="duration"
