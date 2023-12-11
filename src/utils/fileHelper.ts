@@ -88,3 +88,15 @@ export function isPdfMimeType(mimeType: string): boolean {
 export function isAudioMimeType(mimeType: string): boolean {
 	return mimeType.startsWith("audio/");
 }
+
+export function formatDurationHourMinSec(seconds: number) {
+	const isoString = new Date(1000 * seconds).toISOString();
+	let duration = isoString.slice(14, 19);
+
+	const secondsInOneHour = 3600;
+	if (seconds >= secondsInOneHour) {
+		duration = isoString.slice(11, 19);
+	}
+
+	return duration;
+}
