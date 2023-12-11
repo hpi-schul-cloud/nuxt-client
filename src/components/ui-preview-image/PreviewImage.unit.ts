@@ -7,6 +7,7 @@ describe("PreviewImage", () => {
 		document.body.setAttribute("data-app", "true");
 
 		const propsData = {
+			...props,
 			src: "https://www.example.com/image-preview.jpg",
 			alt: "image.jpg",
 			"aspect-ratio": "1.77777",
