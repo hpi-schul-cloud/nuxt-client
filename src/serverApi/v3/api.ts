@@ -3907,11 +3907,9 @@ export interface RichText {
     */
 export enum RichTextTypeEnum {
     PlainText = 'plainText',
-    RichText = 'richText',
-    Inline = 'inline',
+    RichTextCk5Simple = 'richTextCk5Simple',
     RichTextCk4 = 'richTextCk4',
-    RichTextCk5 = 'richTextCk5',
-    RichTextCk5Inline = 'richTextCk5Inline'
+    RichTextCk5 = 'richTextCk5'
 }
 
 /**
@@ -4207,6 +4205,31 @@ export enum SchoolYearQueryType {
     PreviousYears = 'previousYears'
 }
 
+/**
+ * 
+ * @export
+ * @interface SchulConneXProvisioningOptionsParams
+ */
+export interface SchulConneXProvisioningOptionsParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsParams
+     */
+    groupProvisioningClassesEnabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsParams
+     */
+    groupProvisioningCoursesEnabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsParams
+     */
+    groupProvisioningOtherEnabled: boolean;
+}
 /**
  * 
  * @export
@@ -12234,7 +12257,7 @@ export class SSOApi extends BaseAPI implements SSOApiInterface {
 export const SchoolApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * Gets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
          * @param {*} [options] Override http request option.
@@ -12245,7 +12268,7 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             assertParamExists('schoolControllerGetProvisioningOptions', 'schoolId', schoolId)
             // verify required parameter 'systemId' is not null or undefined
             assertParamExists('schoolControllerGetProvisioningOptions', 'systemId', systemId)
-            const localVarPath = `/schools/{schoolId}/systems/{systemId}`
+            const localVarPath = `/schools/{schoolId}/systems/{systemId}/provisioning-options`
                 .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
                 .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -12275,21 +12298,21 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Sets all provisioning options for a system
+         * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
-         * @param {UNKNOWN_BASE_TYPE} uNKNOWNBASETYPE 
+         * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetProvisioningOptions: async (schoolId: string, systemId: string, uNKNOWNBASETYPE: UNKNOWN_BASE_TYPE, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerSetProvisioningOptions: async (schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerSetProvisioningOptions', 'schoolId', schoolId)
             // verify required parameter 'systemId' is not null or undefined
             assertParamExists('schoolControllerSetProvisioningOptions', 'systemId', systemId)
-            // verify required parameter 'uNKNOWNBASETYPE' is not null or undefined
-            assertParamExists('schoolControllerSetProvisioningOptions', 'uNKNOWNBASETYPE', uNKNOWNBASETYPE)
-            const localVarPath = `/schools`
+            // verify required parameter 'schulConneXProvisioningOptionsParams' is not null or undefined
+            assertParamExists('schoolControllerSetProvisioningOptions', 'schulConneXProvisioningOptionsParams', schulConneXProvisioningOptionsParams)
+            const localVarPath = `/schools/{schoolId}/systems/{systemId}/provisioning-options`
                 .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
                 .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -12314,7 +12337,7 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(uNKNOWNBASETYPE, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(schulConneXProvisioningOptionsParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -12332,7 +12355,7 @@ export const SchoolApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SchoolApiAxiosParamCreator(configuration)
     return {
         /**
-         * 
+         * Gets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
          * @param {*} [options] Override http request option.
@@ -12343,15 +12366,15 @@ export const SchoolApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * Sets all provisioning options for a system
+         * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
-         * @param {UNKNOWN_BASE_TYPE} uNKNOWNBASETYPE 
+         * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, uNKNOWNBASETYPE: UNKNOWN_BASE_TYPE, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchulConneXProvisioningOptionsResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetProvisioningOptions(schoolId, systemId, uNKNOWNBASETYPE, options);
+        async schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchulConneXProvisioningOptionsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -12365,7 +12388,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
     const localVarFp = SchoolApiFp(configuration)
     return {
         /**
-         * 
+         * Gets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
          * @param {*} [options] Override http request option.
@@ -12375,15 +12398,15 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.schoolControllerGetProvisioningOptions(schoolId, systemId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Sets all provisioning options for a system
+         * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
-         * @param {UNKNOWN_BASE_TYPE} uNKNOWNBASETYPE 
+         * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, uNKNOWNBASETYPE: UNKNOWN_BASE_TYPE, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse> {
-            return localVarFp.schoolControllerSetProvisioningOptions(schoolId, systemId, uNKNOWNBASETYPE, options).then((request) => request(axios, basePath));
+        schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse> {
+            return localVarFp.schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -12395,7 +12418,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
  */
 export interface SchoolApiInterface {
     /**
-     * 
+     * Gets all provisioning options for a system at a school
      * @param {string} schoolId 
      * @param {string} systemId 
      * @param {*} [options] Override http request option.
@@ -12405,15 +12428,15 @@ export interface SchoolApiInterface {
     schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse>;
 
     /**
-     * Sets all provisioning options for a system
+     * Sets all provisioning options for a system at a school
      * @param {string} schoolId 
      * @param {string} systemId 
-     * @param {UNKNOWN_BASE_TYPE} uNKNOWNBASETYPE 
+     * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, uNKNOWNBASETYPE: UNKNOWN_BASE_TYPE, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse>;
+    schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse>;
 
 }
 
@@ -12425,7 +12448,7 @@ export interface SchoolApiInterface {
  */
 export class SchoolApi extends BaseAPI implements SchoolApiInterface {
     /**
-     * 
+     * Gets all provisioning options for a system at a school
      * @param {string} schoolId 
      * @param {string} systemId 
      * @param {*} [options] Override http request option.
@@ -12437,16 +12460,16 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
     }
 
     /**
-     * Sets all provisioning options for a system
+     * Sets all provisioning options for a system at a school
      * @param {string} schoolId 
      * @param {string} systemId 
-     * @param {UNKNOWN_BASE_TYPE} uNKNOWNBASETYPE 
+     * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
-    public schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, uNKNOWNBASETYPE: UNKNOWN_BASE_TYPE, options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerSetProvisioningOptions(schoolId, systemId, uNKNOWNBASETYPE, options).then((request) => request(this.axios, this.basePath));
+    public schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

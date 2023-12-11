@@ -51,11 +51,10 @@ export const useProvisioningOptionsApi = () => {
 				await schoolApi.schoolControllerSetProvisioningOptions(
 					schoolsModule.getSchool.id,
 					systemId,
-					{},
 					{
-						class: provisioningOptions.class,
-						course: provisioningOptions.course,
-						others: provisioningOptions.others,
+						groupProvisioningClassesEnabled: provisioningOptions.class,
+						groupProvisioningCoursesEnabled: provisioningOptions.course,
+						groupProvisioningOtherEnabled: provisioningOptions.others,
 					}
 				);
 
