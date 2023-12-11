@@ -15,7 +15,7 @@
 					class="menu-text"
 					hover
 				>
-					{{ item.title }}
+					{{ item.label }}
 				</v-list-item-title>
 			</v-list-item>
 		</v-list>
@@ -33,17 +33,19 @@
 	>
 		<template #title> {{ modalTitle }} </template>
 		<template #content>
+			<!-- TODO: investigate error -->
 			<ListSelection
 				v-if="isSelectFiltering"
 				:selection-list="selectionProps"
-				:selected-list="filterValues"
+				:selected-list="filteredValues"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
 				@dialog-closed="onCloseDialog"
 			/>
+			<!-- TODO: investigate error -->
 			<TimeBetween
 				v-if="isDateFiltering"
-				:selected-date="filterValues"
+				:selected-date="filteredValues"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
 				@dialog-closed="onCloseDialog"
@@ -70,53 +72,51 @@ const dialogOpen = ref(false);
 
 const {
 	defaultFilterMenuItems,
-	filterSelection,
+	filterChipTitles,
+	filterMenuItems,
+	filterQuery,
 	isDateFiltering,
 	isSelectFiltering,
-	filterMenuItems,
-	filterChipTitles,
-	updateFilter,
-	removeFilter,
-	removeChipFilter,
-	filterQuery,
 	registrationOptions,
+	selectedFilterType,
+	removeChipFilter,
+	removeFilter,
+	updateFilter,
 } = useDataTableFilter();
 
-const { classNames } = await useDataTableFilterApi();
+const { classNamesList } = await useDataTableFilterApi();
 
 const modalTitle = computed(
 	() =>
 		defaultFilterMenuItems.find(
-			(item: SelectOptionsType) => item.value == filterSelection.value
-		)?.title
+			(item: SelectOptionsType) => item.value == selectedFilterType.value
+		)?.label
 );
 
 const selectionProps = computed(() => {
-	return filterSelection.value == FilterOptions.CLASSES
-		? classNames
+	return selectedFilterType.value == FilterOptions.CLASSES
+		? classNamesList
 		: registrationOptions;
 });
 
-const filterValues = computed(() => {
-	if (!filterSelection.value) return undefined;
+const filteredValues = computed(() => {
+	if (!selectedFilterType.value) return undefined;
 
-	return filterQuery.value[filterSelection.value];
+	return filterQuery.value[selectedFilterType.value];
 });
 
-const onFilterClick = (val: FilterOptionsType) => {
-	filterSelection.value = val;
+const onCloseDialog = () => {
+	selectedFilterType.value = undefined;
+	dialogOpen.value = false;
+};
 
+const onFilterClick = (val: FilterOptionsType) => {
+	selectedFilterType.value = val;
 	dialogOpen.value = true;
 };
 
-const onCloseDialog = () => {
-	filterSelection.value = undefined;
-	dialogOpen.value = false;
-};
-
-const onUpdateFilter = (value: FilterOptions) => {
-	updateFilter(value);
-	dialogOpen.value = false;
+const onRemoveChipFilter = (val: FilterOptions) => {
+	removeChipFilter(val);
 	emit("update:filter", filterQuery.value);
 };
 
@@ -126,8 +126,9 @@ const onRemoveFilter = () => {
 	emit("update:filter", filterQuery.value);
 };
 
-const onRemoveChipFilter = (val: FilterOptions) => {
-	removeChipFilter(val);
+const onUpdateFilter = (value: FilterOptions) => {
+	updateFilter(value);
+	dialogOpen.value = false;
 	emit("update:filter", filterQuery.value);
 };
 

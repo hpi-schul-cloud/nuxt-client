@@ -20,16 +20,16 @@ enum RegistrationTypes {
 }
 
 type SelectOptionsType = {
-	title: string;
+	label: string;
 	value: FilterOptions | string;
 };
 
 type FilterQuery = {
-	consentStatus?: string | string[];
-	classes?: string;
-	createdAt?: string;
-	lastLoginSystemChange?: string;
-	outdatedSince?: string;
+	lastLoginSystemChange?: DateSelection | string;
+	classes?: string[] | string;
+	consentStatus?: RegistrationTypes | string;
+	createdAt?: DateSelection | string;
+	outdatedSince?: DateSelection | string;
 };
 
 // TODO: set type here
@@ -41,14 +41,14 @@ type Query = {
 	query: FilterQuery;
 };
 
-type FilterState = {
+type StorageFilterState = {
 	"pages.administration.students.index"?: Query;
 	"pages.administration.teachers.index"?: Query;
 };
 
 type UiState = {
 	pagination: object;
-	filter: FilterState;
+	filter: StorageFilterState;
 	sorting: object;
 	version: number;
 };
@@ -59,11 +59,11 @@ type DateSelection = {
 };
 
 export {
+	DateSelection,
 	FilterOptions,
 	FilterOptionsType,
+	FilterQuery,
 	RegistrationTypes,
 	SelectOptionsType,
-	FilterQuery,
 	UiState,
-	DateSelection,
 };

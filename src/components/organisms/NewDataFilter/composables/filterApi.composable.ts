@@ -21,17 +21,17 @@ const dataTableFilterApi = async () => {
 
 	const classState = store.state["classes"].list;
 
-	const classNames = classState.reduce(
+	const classNamesList = classState.reduce(
 		(acc: SelectOptionsType[], item: { displayName: string }) =>
 			acc.concat({
-				title: item.displayName,
+				label: item.displayName,
 				value: item.displayName,
 			}),
 		[]
 	);
 
 	return {
-		classNames,
+		classNamesList,
 	};
 };
 

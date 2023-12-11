@@ -4,7 +4,7 @@
 			<v-checkbox
 				v-model="selected"
 				:value="item.value"
-				:label="item.title"
+				:label="item.label"
 				hide-details
 			/>
 		</template>

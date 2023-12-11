@@ -8,7 +8,7 @@
 	>
 		<v-card class="menu-text">
 			<div class="d-flex justify-center mt-4 text-h4">
-				<slot name="title">Dialog Title</slot>
+				<slot name="title">{{ "" }}</slot>
 			</div>
 			<v-card-text class="text--primary">
 				<slot name="content">_</slot>

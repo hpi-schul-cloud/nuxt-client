@@ -18,56 +18,56 @@ const dataTableFilter = () => {
 
 	const defaultFilterMenuItems: SelectOptionsType[] = [
 		{
-			title: t("common.labels.registration"),
+			label: t("common.labels.registration"),
 			value: FilterOptions.REGISTRATION,
 		},
 		{
-			title: t("utils.adminFilter.class.title"),
+			label: t("utils.adminFilter.class.title"),
 			value: FilterOptions.CLASSES,
 		},
 		{
-			title: t("utils.adminFilter.date.title"),
+			label: t("utils.adminFilter.date.title"),
 			value: FilterOptions.CREATION_DATE,
 		},
 		{
-			title: t("utils.adminFilter.lastMigration.title"),
+			label: t("utils.adminFilter.lastMigration.title"),
 			value: FilterOptions.LAST_MIGRATION_ON,
 		},
 		{
-			title: t("utils.adminFilter.outdatedSince.title"),
+			label: t("utils.adminFilter.outdatedSince.title"),
 			value: FilterOptions.OBSOLOTE_SINCE,
 		},
 	];
 
-	const registrationOptions = [
+	const registrationOptions: SelectOptionsType[] = [
 		{
-			title: t("pages.administration.students.legend.icon.success"),
+			label: t("pages.administration.students.legend.icon.success"),
 			value: RegistrationTypes.COMPLETE,
 		},
 		{
-			title: t("utils.adminFilter.consent.label.parentsAgreementMissing"),
+			label: t("utils.adminFilter.consent.label.parentsAgreementMissing"),
 			value: RegistrationTypes.PARENT_AGREED,
 		},
 		{
-			title: t("utils.adminFilter.consent.label.missing"),
+			label: t("utils.adminFilter.consent.label.missing"),
 			value: RegistrationTypes.MISSING,
 		},
 	];
 
-	const filterSelection = ref<FilterOptionsType | undefined>(undefined);
+	const selectedFilterType = ref<FilterOptionsType | undefined>(undefined);
 
 	const isDateFiltering = computed(() => {
 		return (
-			filterSelection.value == FilterOptions.CREATION_DATE ||
-			filterSelection.value == FilterOptions.LAST_MIGRATION_ON ||
-			filterSelection.value == FilterOptions.OBSOLOTE_SINCE
+			selectedFilterType.value == FilterOptions.CREATION_DATE ||
+			selectedFilterType.value == FilterOptions.LAST_MIGRATION_ON ||
+			selectedFilterType.value == FilterOptions.OBSOLOTE_SINCE
 		);
 	});
 
 	const isSelectFiltering = computed(() => {
 		return (
-			filterSelection.value == FilterOptions.CLASSES ||
-			filterSelection.value == FilterOptions.REGISTRATION
+			selectedFilterType.value == FilterOptions.CLASSES ||
+			selectedFilterType.value == FilterOptions.REGISTRATION
 		);
 	});
 
@@ -76,10 +76,11 @@ const dataTableFilter = () => {
 	const filterChipTitles = ref<Array<string>>([]);
 
 	const updateFilter = (value: FilterOptions) => {
-		if (filterSelection.value) filterQuery.value[filterSelection.value] = value;
+		if (selectedFilterType.value)
+			filterQuery.value[selectedFilterType.value] = value;
 
 		filterMenuItems.value = defaultFilterMenuItems.filter(
-			(item: SelectOptionsType) => item.value in filterQuery.value == false
+			(item: SelectOptionsType) => !(item.value in filterQuery.value)
 		);
 
 		filterChipTitles.value = Object.keys(filterQuery.value);
@@ -88,7 +89,8 @@ const dataTableFilter = () => {
 	};
 
 	const removeFilter = () => {
-		if (filterSelection.value) delete filterQuery.value[filterSelection.value];
+		if (selectedFilterType.value)
+			delete filterQuery.value[selectedFilterType.value];
 
 		filterChipTitles.value = Object.keys(filterQuery.value);
 		setFilterState(filterQuery.value);
@@ -98,13 +100,13 @@ const dataTableFilter = () => {
 		delete filterQuery.value[val];
 
 		filterMenuItems.value = defaultFilterMenuItems.filter(
-			(item: SelectOptionsType) => item.value in filterQuery.value == false
+			(item: SelectOptionsType) => !(item.value in filterQuery.value)
 		);
 		setFilterState(filterQuery.value);
 	};
 
 	onMounted(() => {
-		// @ts-expect-error asdas
+		// @ts-expect-error TODO: investigate error
 		filterQuery.value = getFilterStorage();
 		filterChipTitles.value = Object.keys(filterQuery.value);
 	});
@@ -114,10 +116,10 @@ const dataTableFilter = () => {
 		filterChipTitles,
 		filterMenuItems,
 		filterQuery,
-		filterSelection,
 		isDateFiltering,
 		isSelectFiltering,
 		registrationOptions,
+		selectedFilterType,
 		removeChipFilter,
 		removeFilter,
 		updateFilter,
