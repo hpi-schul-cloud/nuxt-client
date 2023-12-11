@@ -11,6 +11,7 @@ const cardsApiFactoryMock = {
 	cardControllerGetCards: jest.fn().mockImplementation(() => mockReturnData),
 };
 initializeAxios({
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	request: async (path: string) => mockReturnData,
 } as axios.AxiosInstance);
 

@@ -15,14 +15,15 @@
 			/>
 			<transition name="fade">
 				<div v-if="data.title">
-					<text-editor
+					<ck-editor
 						v-model="data.content"
 						class="mb--md mt--xl-3"
-						:error="errors.content"
-						:required="true"
 						:placeholder="
 							$t('components.organisms.FormNews.editor.placeholder').toString()
 						"
+						type="classic"
+						mode="news"
+						@update:value="onUpdateValue"
 					/>
 					<transition name="fade">
 						<div v-if="data.content">
@@ -85,17 +86,17 @@
 import Vue from "vue";
 import { fromInputDateTime, createInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
-import TextEditor from "@/components/molecules/TextEditor.vue";
 import TitleInput from "@/components/molecules/TitleInput.vue";
 import FormActions from "@/components/molecules/FormActions.vue";
 import { mdiClose, mdiCheck, mdiDelete } from "@mdi/js";
+import { CkEditor } from "@feature-editor";
 
 // eslint-disable-next-line vue/require-direct-export
 export default Vue.extend({
 	components: {
-		TextEditor,
 		TitleInput,
 		FormActions,
+		CkEditor,
 	},
 	model: {
 		prop: "news",
@@ -217,6 +218,9 @@ export default Vue.extend({
 				[this.data.date.date, this.data.date.time] =
 					createInputDateTime(displayAt);
 			}
+		},
+		onUpdateValue(newValue: string) {
+			this.data.content = newValue;
 		},
 		async remove() {
 			this.dialogConfirm({
