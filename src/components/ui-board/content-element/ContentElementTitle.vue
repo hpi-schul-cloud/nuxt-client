@@ -6,7 +6,8 @@
 	>
 		<v-tooltip
 			top
-			max-width="330"
+			start
+			origin="auto"
 			open-delay="300"
 			close-delay="300"
 			transition="fade"
@@ -18,9 +19,9 @@
 					<slot />
 				</span>
 			</template>
-			<span class="tooltip-content">
+			<div class="tooltip-content">
 				<slot />
-			</span>
+			</div>
 		</v-tooltip>
 		<template v-else>
 			<slot />
@@ -51,13 +52,12 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .content-element-title.subtitle-1 {
 	-webkit-text-overflow: ellipsis;
 	-o-text-overflow: ellipsis;
 	text-overflow: ellipsis;
 	text-rendering: optimizelegibility;
-	max-width: 280px;
 	overflow: hidden;
 	font-family: var(--font-accent) !important;
 	font-size: 14px;
@@ -72,21 +72,22 @@ export default defineComponent({
 </style>
 <style lang="scss" scoped>
 .tooltip {
+	display: inline-block;
 	border-radius: 4px;
 	padding: 8px;
 	font-family: var(--font-primary) !important;
 	font-size: 14px;
 	font-weight: 100;
 	line-height: 18px;
+	width: 320px;
 	color: white !important;
 	background: map-get($grey, darken-3);
-	left: 0px;
-	position: absolute;
 	opacity: 1;
-	word-break: normal;
+	// word-break: normal;
 	text-wrap: wrap;
 	overflow: visible;
 	overflow-wrap: break-word;
 	white-space: normal;
+	box-sizing: border-box;
 }
 </style>
