@@ -73,6 +73,7 @@ export default defineComponent({
 		const handleClick = () => {
 			if (isToolOutdated.value) {
 				emit("error", props.tool);
+				return;
 			}
 
 			launchTool();
