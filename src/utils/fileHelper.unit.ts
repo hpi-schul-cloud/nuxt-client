@@ -476,6 +476,7 @@ describe("@/utils/fileHelper", () => {
 				expect(result).toBe("00:00");
 			});
 		});
+
 		describe("when file lasts some seconds", () => {
 			it("should display it in Minutes, Seconds format", () => {
 				const result = formatSecondsToHourMinSec(45);
@@ -483,6 +484,7 @@ describe("@/utils/fileHelper", () => {
 				expect(result).toBe("00:45");
 			});
 		});
+
 		describe("when file has duration in hours", () => {
 			it("should display it in Hours, Minutes, Seconds format", () => {
 				const result = formatSecondsToHourMinSec(1555125);

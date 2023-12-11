@@ -23,7 +23,7 @@
 						<v-list-item-content class="ml-3">
 							<v-list-item-title>0.25 </v-list-item-title>
 						</v-list-item-content>
-						<v-list-item-icon v-if="0.25 === selectedItem">
+						<v-list-item-icon v-if="0.25 === rate">
 							<v-icon>{{ mdiCheck }}</v-icon>
 						</v-list-item-icon>
 					</v-list-item>
@@ -31,7 +31,7 @@
 						<v-list-item-content class="ml-3">
 							<v-list-item-title>0.5 </v-list-item-title>
 						</v-list-item-content>
-						<v-list-item-icon v-if="0.5 === selectedItem">
+						<v-list-item-icon v-if="0.5 === rate">
 							<v-icon>{{ mdiCheck }}</v-icon>
 						</v-list-item-icon>
 					</v-list-item>
@@ -39,7 +39,7 @@
 						<v-list-item-content class="ml-3">
 							<v-list-item-title>0.75 </v-list-item-title>
 						</v-list-item-content>
-						<v-list-item-icon v-if="0.75 === selectedItem">
+						<v-list-item-icon v-if="0.75 === rate">
 							<v-icon>{{ mdiCheck }}</v-icon>
 						</v-list-item-icon>
 					</v-list-item>
@@ -49,7 +49,7 @@
 								$t("media.player.action.speed.normal")
 							}}</v-list-item-title>
 						</v-list-item-content>
-						<v-list-item-icon v-if="1 === selectedItem">
+						<v-list-item-icon v-if="1 === rate">
 							<v-icon>{{ mdiCheck }}</v-icon>
 						</v-list-item-icon>
 					</v-list-item>
@@ -57,7 +57,7 @@
 						<v-list-item-content class="ml-3">
 							<v-list-item-title>1.25</v-list-item-title>
 						</v-list-item-content>
-						<v-list-item-icon v-if="1.25 === selectedItem">
+						<v-list-item-icon v-if="1.25 === rate">
 							<v-icon>{{ mdiCheck }}</v-icon>
 						</v-list-item-icon>
 					</v-list-item>
@@ -65,7 +65,7 @@
 						<v-list-item-content class="ml-3">
 							<v-list-item-title>1.5</v-list-item-title>
 						</v-list-item-content>
-						<v-list-item-icon v-if="1.5 === selectedItem">
+						<v-list-item-icon v-if="1.5 === rate">
 							<v-icon>{{ mdiCheck }}</v-icon>
 						</v-list-item-icon>
 					</v-list-item>
@@ -73,7 +73,7 @@
 						<v-list-item-content class="ml-3">
 							<v-list-item-title>1.75</v-list-item-title>
 						</v-list-item-content>
-						<v-list-item-icon v-if="1.75 === selectedItem">
+						<v-list-item-icon v-if="1.75 === rate">
 							<v-icon>{{ mdiCheck }}</v-icon>
 						</v-list-item-icon>
 					</v-list-item>
@@ -81,7 +81,7 @@
 						<v-list-item-content class="ml-3">
 							<v-list-item-title>2</v-list-item-title>
 						</v-list-item-content>
-						<v-list-item-icon v-if="7 === selectedItem">
+						<v-list-item-icon v-if="2 === rate">
 							<v-icon>{{ mdiCheck }}</v-icon>
 						</v-list-item-icon>
 					</v-list-item>
@@ -93,24 +93,23 @@
 
 <script lang="ts">
 import { mdiCheck, mdiPlaySpeed } from "@mdi/js";
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "SpeedMenu",
-	emits: ["rate"],
+	emits: ["updateRate"],
+	props: {
+		rate: { type: Number, required: true },
+	},
 	setup(props, { emit }) {
-		const selectedItem = ref(1);
-
 		const onSelect = (rate: number) => {
-			emit("rate", rate);
-			selectedItem.value = rate;
+			emit("updateRate", rate);
 		};
 
 		return {
 			mdiPlaySpeed,
 			mdiCheck,
 			onSelect,
-			selectedItem,
 		};
 	},
 });

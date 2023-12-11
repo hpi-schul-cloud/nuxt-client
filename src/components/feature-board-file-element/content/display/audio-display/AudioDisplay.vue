@@ -40,7 +40,7 @@
 				@mouseup="stopPropagation"
 				@input="onInputSlider"
 			/>
-			<SpeedMenu @rate="onSpeedRateChange" />
+			<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
 		</template>
 		<template #menu><slot /></template>
 	</ContentElementBar>
