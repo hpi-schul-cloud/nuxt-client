@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { formatDurationHourMinSec } from "@/utils/fileHelper";
+import { formatSecondsToHourMinSec } from "@/utils/fileHelper";
 import { mdiPause, mdiPlay, mdiPlaySpeed } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
@@ -92,8 +92,8 @@ export default defineComponent({
 		};
 
 		const durationDisplay = computed(() => {
-			const durationValue = formatDurationHourMinSec(duration.value);
-			const currentTimeValue = formatDurationHourMinSec(currentTime.value);
+			const durationValue = formatSecondsToHourMinSec(duration.value);
+			const currentTimeValue = formatSecondsToHourMinSec(currentTime.value);
 			return currentTimeValue + " / " + durationValue;
 		});
 
@@ -120,7 +120,6 @@ export default defineComponent({
 			mdiPause,
 			mdiPlaySpeed,
 			onPlay,
-			formatDurationHourMinSec,
 			stopPropagation,
 			onInputSlider,
 			durationDisplay,

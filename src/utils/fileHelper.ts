@@ -89,7 +89,7 @@ export function isAudioMimeType(mimeType: string): boolean {
 	return mimeType.startsWith("audio/");
 }
 
-export function formatDurationHourMinSec(seconds: number) {
+export function formatSecondsToHourMinSec(seconds: number) {
 	const isoString = new Date(1000 * seconds).toISOString();
 	let duration = isoString.slice(14, 19);
 
