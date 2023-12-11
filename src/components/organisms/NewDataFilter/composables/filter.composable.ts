@@ -1,5 +1,5 @@
 import { createSharedComposable } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import {
 	FilterOptions,
 	FilterOptionsType,
@@ -14,10 +14,7 @@ const dataTableFilter = () => {
 	const { t } = useI18n();
 	const { setFilterState, getFilterStorage } = useFilterLocalStorage();
 
-	const filterStorage = getFilterStorage();
 	const filterQuery = ref<FilterQuery>({});
-
-	filterQuery.value = filterStorage;
 
 	const defaultFilterMenuItems: SelectOptionsType[] = [
 		{
@@ -102,6 +99,12 @@ const dataTableFilter = () => {
 		);
 		setFilterState(filterQuery.value);
 	};
+
+	onMounted(() => {
+		// @ts-expect-error asdas
+		filterQuery.value = getFilterStorage();
+		filterChipTitles.value = Object.keys(filterQuery.value);
+	});
 
 	return {
 		defaultFilterMenuItems,

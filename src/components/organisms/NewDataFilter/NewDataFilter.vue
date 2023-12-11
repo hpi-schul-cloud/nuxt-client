@@ -35,7 +35,7 @@
 		<template #content>
 			<ListSelection
 				v-if="isSelectFiltering"
-				:classes="selectionProps"
+				:selectionList="selectionProps"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
 				@dialog-closed="onCloseDialog"

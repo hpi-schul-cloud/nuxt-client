@@ -43,9 +43,9 @@ const filterLocalStorage = () => {
 		return uiState;
 	};
 
-	const getFilterStorage = (): FilterQuery => {
-		return defaultFilterState.filter["pages.administration.students.index"]
-			.query;
+	const getFilterStorage = () => {
+		return getDefaultState().filter["pages.administration.students.index"]
+			?.query;
 	};
 
 	const state = getDefaultState();
@@ -54,7 +54,7 @@ const filterLocalStorage = () => {
 		state.filter["pages.administration.students.index"] = { query: {} };
 
 		state.filter["pages.administration.students.index"].query = {
-			...state.filter["pages.administration.students.index"]?.query,
+			...state.filter["pages.administration.students.index"].query,
 			...val,
 		};
 

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<template v-for="(item, index) of classes" :key="index">
+		<template v-for="(item, index) of selectionList" :key="index">
 			<v-checkbox
 				v-model="selected"
 				:value="item.value"
@@ -23,7 +23,7 @@ import FilterActionButtons from "./FilterActionButtons.vue";
 import { SelectOptionsType } from "../types/filterTypes";
 
 defineProps({
-	classes: {
+	selectionList: {
 		type: Array<SelectOptionsType>,
 		required: true,
 	},

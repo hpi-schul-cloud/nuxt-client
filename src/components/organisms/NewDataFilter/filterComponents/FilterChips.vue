@@ -23,6 +23,10 @@ defineProps({
 		type: Array<string>,
 		required: true,
 	},
+	title: {
+		type: String,
+		default: "",
+	},
 });
 
 const emit = defineEmits(["remove:filter", "click:filter"]);
