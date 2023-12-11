@@ -21,7 +21,10 @@ const dataTableFilter = () => {
 			title: t("common.labels.registration"),
 			value: FilterOptions.REGISTRATION,
 		},
-		{ title: t("utils.adminFilter.class.title"), value: FilterOptions.CLASSES },
+		{
+			title: t("utils.adminFilter.class.title"),
+			value: FilterOptions.CLASSES,
+		},
 		{
 			title: t("utils.adminFilter.date.title"),
 			value: FilterOptions.CREATION_DATE,

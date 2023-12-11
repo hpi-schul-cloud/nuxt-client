@@ -18,20 +18,24 @@
 	/>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
 import { SelectOptionsType } from "../types/filterTypes";
 
-defineProps({
+const props = defineProps({
 	selectionList: {
 		type: Array<SelectOptionsType>,
 		required: true,
+	},
+	selectedList: {
+		type: Array<string> || undefined,
+		default: undefined,
 	},
 });
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
-const selected = ref([]);
+const selected = ref<string[]>([]);
 
 const onUpdateFilter = () => {
 	if (!selected.value.length) {
@@ -49,4 +53,8 @@ const onClose = () => {
 const onRemoveFilter = () => {
 	emit("remove:filter");
 };
+
+onMounted(() => {
+	if (props.selectedList) selected.value = props.selectedList;
+});
 </script>

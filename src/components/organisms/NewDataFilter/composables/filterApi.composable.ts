@@ -23,7 +23,10 @@ const dataTableFilterApi = async () => {
 
 	const classNames = classState.reduce(
 		(acc: SelectOptionsType[], item: { displayName: string }) =>
-			acc.concat({ title: item.displayName, value: item.displayName }),
+			acc.concat({
+				title: item.displayName,
+				value: item.displayName,
+			}),
 		[]
 	);
 

@@ -21,14 +21,10 @@
 	/>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, PropType } from "vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
 import DatePicker from "@/components/ui-date-time-picker/DatePicker.vue";
-
-type DateSelection = {
-	$gte: string;
-	$lte: string;
-};
+import { DateSelection } from "../types/filterTypes";
 
 const defaultDates: DateSelection = {
 	$gte: "1900-01-01T23:00:00.000Z",
@@ -38,6 +34,13 @@ const defaultDates: DateSelection = {
 const dateSelection = ref<DateSelection>({
 	$gte: new Date().toString(),
 	$lte: "",
+});
+
+const props = defineProps({
+	selectedDate: {
+		type: (Object as PropType<DateSelection>) || undefined,
+		required: true,
+	},
 });
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
@@ -62,4 +65,8 @@ const onClose = () => {
 const onRemoveFilter = () => {
 	emit("remove:filter");
 };
+
+onMounted(() => {
+	if (props.selectedDate) dateSelection.value = props.selectedDate;
+});
 </script>

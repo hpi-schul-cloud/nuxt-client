@@ -35,13 +35,15 @@
 		<template #content>
 			<ListSelection
 				v-if="isSelectFiltering"
-				:selectionList="selectionProps"
+				:selection-list="selectionProps"
+				:selected-list="filterValues"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
 				@dialog-closed="onCloseDialog"
 			/>
 			<TimeBetween
 				v-if="isDateFiltering"
+				:selected-date="filterValues"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
 				@dialog-closed="onCloseDialog"
@@ -93,6 +95,12 @@ const selectionProps = computed(() => {
 	return filterSelection.value == FilterOptions.CLASSES
 		? classNames
 		: registrationOptions;
+});
+
+const filterValues = computed(() => {
+	if (!filterSelection.value) return undefined;
+
+	return filterQuery.value[filterSelection.value];
 });
 
 const onFilterClick = (val: FilterOptionsType) => {

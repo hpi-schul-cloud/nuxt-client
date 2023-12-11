@@ -53,6 +53,11 @@ type UiState = {
 	version: number;
 };
 
+type DateSelection = {
+	$gte: string;
+	$lte: string;
+};
+
 export {
 	FilterOptions,
 	FilterOptionsType,
@@ -60,4 +65,5 @@ export {
 	SelectOptionsType,
 	FilterQuery,
 	UiState,
+	DateSelection,
 };
