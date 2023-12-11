@@ -17,16 +17,7 @@
 					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
 				>
 					<div class="mx-2">
-						<div
-							v-for="showedWarning in copyResultWarnings"
-							:key="showedWarning"
-						>
-							<p>
-								<v-icon v-if="showedWarning.isShow" color="warning">{{
-									mdiAlert
-								}}</v-icon>
-							</p>
-						</div>
+						<v-icon color="warning">{{ mdiAlert }}</v-icon>
 					</div>
 					<div>
 						<template v-for="(warning, index) in copyResultWarnings">
@@ -63,7 +54,7 @@ import {
 	mdiCloseCircle,
 	mdiInformation,
 } from "@mdi/js";
-import { envConfigModule } from "../../store";
+import { envConfigModule } from "@/store";
 
 export default {
 	name: "CopyResultModal",

@@ -21,7 +21,17 @@
 					<div class="mx-2">
 						<v-icon color="info">{{ mdiInformation }}</v-icon>
 					</div>
-					<div>
+					<div
+						v-if="ctlToolsEnabled"
+						data-testid="import-modal-external-tools-info"
+					>
+						{{
+							$t(
+								`components.molecules.import.courses.options.ctlTools.infoText`
+							)
+						}}
+					</div>
+					<div v-else>
 						{{
 							$t(`components.molecules.import.${parentType}.options.infoText`)
 						}}
@@ -43,6 +53,7 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, reactive, ref } from "vue";
+import { envConfigModule } from "@/store";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -76,12 +87,17 @@ export default defineComponent({
 		};
 		const onCancel = () => emit("cancel");
 
+		const ctlToolsEnabled = () => {
+			return envConfigModule.getCtlToolsTabEnabled;
+		};
+
 		return {
 			onConfirm,
 			onCancel,
 			mdiInformation,
 			rules,
 			newName,
+			ctlToolsEnabled,
 		};
 	},
 });

@@ -1,7 +1,7 @@
 import ShareModule from "@/store/share";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
@@ -10,13 +10,17 @@ import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import NotifierModule from "@/store/notifier";
 import Vue from "vue";
+import { envConfigModule } from "@/store";
+import { Envs } from "@/store/types/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
 
 describe("@/components/share/ShareModal", () => {
 	let shareModuleMock: ShareModule;
 	let notifierModuleMock: NotifierModule;
 
 	const getWrapper = (attrs = { propsData: { type: "courses" } }) => {
-		const wrapper = mount(ShareModal as MountOptions<Vue>, {
+		return mount(ShareModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -27,13 +31,13 @@ describe("@/components/share/ShareModal", () => {
 			},
 			...attrs,
 		});
-
-		return wrapper;
 	};
 
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+
+		setupStores({ envConfigModule: EnvConfigModule });
 
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
@@ -117,5 +121,21 @@ describe("@/components/share/ShareModal", () => {
 
 		form.vm.$emit("copied");
 		expect(notifierModuleMock.show).toHaveBeenCalled();
+	});
+
+	describe("when ctl tools are enabled", () => {
+		it("should have the correct title", () => {
+			envConfigModule.setEnvs({ FEATURE_CTL_TOOLS_TAB_ENABLED: true } as Envs);
+			const wrapper = getWrapper();
+			const infotext = wrapper.find(
+				`[data-testid="share-modal-external-tools-info"]`
+			);
+
+			expect(infotext.text()).toEqual(
+				wrapper.vm.$i18n.t(
+					"components.molecules.share.courses.options.ctlTools.infotext"
+				)
+			);
+		});
 	});
 });

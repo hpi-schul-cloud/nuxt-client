@@ -3,6 +3,8 @@ import { mount, MountOptions } from "@vue/test-utils";
 import ImportModal from "@/components/share/ImportModal.vue";
 import Vue from "vue";
 import { I18N_KEY } from "@/utils/inject";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 describe("@components/share/ImportModal", () => {
 	const getWrapper = (attrs = {}) => {
@@ -22,6 +24,8 @@ describe("@components/share/ImportModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+
+		setupStores({ envConfigModule: EnvConfigModule });
 	});
 
 	it("should not render without required props", () => {
@@ -121,5 +125,27 @@ describe("@components/share/ImportModal", () => {
 
 		const emitted = wrapper.emitted("import");
 		expect(emitted).toBeUndefined();
+	});
+
+	describe("when ctl tools are enabled", () => {
+		it("should show ctl tool info", () => {
+			const wrapper = getWrapper({
+				propsData: {
+					isOpen: true,
+					parentName: "TestParentName",
+					parentType: "course",
+				},
+			});
+
+			const infoText = wrapper.find(
+				`[data-testid="import-modal-external-tools-info"]`
+			);
+
+			expect(infoText.text()).toEqual(
+				wrapper.vm.$i18n.t(
+					`components.molecules.import.courses.options.ctlTools.infoText`
+				)
+			);
+		});
 	});
 });

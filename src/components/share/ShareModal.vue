@@ -26,9 +26,15 @@
 							{{ $t(`components.molecules.share.${type}.options.infoText`) }}
 							<br />
 							{{ $t("components.molecules.copyResult.courseFiles.info") }}
-							<div v-if="ctlToolInfo">
-								<br />
-								{{ ctlToolInfo }}
+							<div
+								v-if="ctlToolsEnabled"
+								data-testid="share-modal-external-tools-info"
+							>
+								{{
+									$t(
+										`components.molecules.share.courses.options.ctlTools.infotext`
+									)
+								}}
 							</div>
 						</div>
 					</div>
@@ -59,7 +65,7 @@ import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { I18N_KEY, injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
-import { envConfigModule } from "../../store";
+import { envConfigModule } from "@/store";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -143,14 +149,8 @@ export default defineComponent({
 			});
 		};
 
-		const ctlToolInfo = () => {
-			const ctlToolsEnabled = envConfigModule.getCtlToolsTabEnabled;
-
-			if (ctlToolsEnabled) {
-				return t("components.molecules.share.courses.options.ctlTool.infotext");
-			}
-
-			return "";
+		const ctlToolsEnabled = () => {
+			return envConfigModule.getCtlToolsTabEnabled;
 		};
 
 		return {
@@ -166,7 +166,7 @@ export default defineComponent({
 			shareOptions,
 			mdiInformation,
 			onCopy,
-			ctlToolInfo,
+			ctlToolsEnabled,
 		};
 	},
 });
