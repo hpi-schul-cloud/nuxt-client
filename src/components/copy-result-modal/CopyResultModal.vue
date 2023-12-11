@@ -17,7 +17,16 @@
 					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
 				>
 					<div class="mx-2">
-						<v-icon color="warning">{{ mdiAlert }}</v-icon>
+						<div
+							v-for="showedWarning in copyResultWarnings"
+							:key="showedWarning"
+						>
+							<p>
+								<v-icon v-if="showedWarning.isShow" color="warning">{{
+									mdiAlert
+								}}</v-icon>
+							</p>
+						</div>
 					</div>
 					<div>
 						<template v-for="(warning, index) in copyResultWarnings">
@@ -54,6 +63,7 @@ import {
 	mdiCloseCircle,
 	mdiInformation,
 } from "@mdi/js";
+import { envConfigModule } from "../../store";
 
 export default {
 	name: "CopyResultModal",
@@ -106,6 +116,11 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.files"),
 				},
 				{
+					isShow: this.hasFeatureCtlsToolsenabled,
+					text: this.externalToolsInfoText,
+					title: this.$t("components.molecules.copyResult.label.externalTools"),
+				},
+				{
 					isShow: this.hasCourseGroup,
 					text: this.$t("components.molecules.copyResult.courseGroupCopy.info"),
 					title: this.$t("common.words.courseGroups"),
@@ -139,6 +154,9 @@ export default {
 				CopyApiResponseTypeEnum.CoursegroupGroup
 			);
 		},
+		hasFeatureCtlsToolsenabled() {
+			return envConfigModule.getCtlToolsTabEnabled;
+		},
 		hasErrors() {
 			return this.items.length > 0;
 		},
@@ -153,6 +171,11 @@ export default {
 				? this.$t("components.molecules.copyResult.fileCopy.error")
 				: "";
 			return `${courseFilesText} ${fileErrorText}`.trim();
+		},
+		externalToolsInfoText() {
+			return this.hasFeatureCtlsToolsenabled
+				? this.$t("components.molecules.copyResult.ctlTools.info")
+				: "";
 		},
 	},
 	methods: {
