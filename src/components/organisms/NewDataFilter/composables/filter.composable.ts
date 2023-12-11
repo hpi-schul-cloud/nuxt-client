@@ -12,7 +12,12 @@ import { useFilterLocalStorage } from "./localStorage.composable";
 
 const dataTableFilter = () => {
 	const { t } = useI18n();
-	const { setFilterState } = useFilterLocalStorage();
+	const { setFilterState, getFilterStorage } = useFilterLocalStorage();
+
+	const filterStorage = getFilterStorage();
+	const filterQuery = ref<FilterQuery>({});
+
+	filterQuery.value = filterStorage;
 
 	const defaultFilterMenuItems: SelectOptionsType[] = [
 		{
@@ -49,8 +54,6 @@ const dataTableFilter = () => {
 		},
 	];
 
-	const filterQuery = ref<FilterQuery>({});
-
 	const filterSelection = ref<FilterOptionsType | undefined>(undefined);
 
 	const isDateFiltering = computed(() => {
@@ -58,6 +61,13 @@ const dataTableFilter = () => {
 			filterSelection.value == FilterOptions.CREATION_DATE ||
 			filterSelection.value == FilterOptions.LAST_MIGRATION_ON ||
 			filterSelection.value == FilterOptions.OBSOLOTE_SINCE
+		);
+	});
+
+	const isSelectFiltering = computed(() => {
+		return (
+			filterSelection.value == FilterOptions.CLASSES ||
+			filterSelection.value == FilterOptions.REGISTRATION
 		);
 	});
 
@@ -95,15 +105,16 @@ const dataTableFilter = () => {
 
 	return {
 		defaultFilterMenuItems,
-		registrationOptions,
+		filterChipTitles,
+		filterMenuItems,
 		filterQuery,
 		filterSelection,
 		isDateFiltering,
-		filterMenuItems,
-		filterChipTitles,
-		updateFilter,
-		removeFilter,
+		isSelectFiltering,
+		registrationOptions,
 		removeChipFilter,
+		removeFilter,
+		updateFilter,
 	};
 };
 

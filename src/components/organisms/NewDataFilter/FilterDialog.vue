@@ -1,6 +1,6 @@
 <template>
 	<v-dialog
-		ref="vDialog"
+		ref="dialog"
 		:model-value="isOpen"
 		:max-width="size"
 		@keydown.esc="onClose"
@@ -19,7 +19,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { onClickOutside } from "@vueuse/core";
 
 defineProps({
 	isOpen: Boolean,
@@ -32,8 +31,6 @@ defineProps({
 const emit = defineEmits(["dialog-closed", "remove:filter"]);
 
 const dialog = ref(null);
-
-onClickOutside(dialog, () => emit("dialog-closed", false));
 
 const onClose = () => {
 	emit("dialog-closed", false);

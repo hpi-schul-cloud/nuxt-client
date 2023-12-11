@@ -25,19 +25,33 @@ import { ref } from "vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
 import DatePicker from "@/components/ui-date-time-picker/DatePicker.vue";
 
-const dateSelection = ref({
-	$gte: new Date().toDateString(),
+type DateSelection = {
+	$gte: string;
+	$lte: string;
+};
+
+const defaultDates: DateSelection = {
+	$gte: "1900-01-01T23:00:00.000Z",
+	$lte: "2099-12-31T23:00:00.000Z",
+};
+
+const dateSelection = ref<DateSelection>({
+	$gte: new Date().toString(),
 	$lte: "",
 });
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
-const onUpdateDate = (date: string, fromUntil: string) => {
-	if (fromUntil == "from") dateSelection.value.$gte = date;
-	if (fromUntil == "until") dateSelection.value.$lte = date;
+const onUpdateDate = (date: Date, fromUntil: string) => {
+	if (fromUntil == "from") dateSelection.value.$gte = date.toString();
+	if (fromUntil == "until") dateSelection.value.$lte = date.toString();
 };
 
 const onUpdateFilter = () => {
+	if (dateSelection.value.$gte == "")
+		dateSelection.value.$gte = defaultDates.$gte;
+	if (dateSelection.value.$lte == "")
+		dateSelection.value.$lte = defaultDates.$lte;
 	emit("update:filter", dateSelection.value);
 };
 

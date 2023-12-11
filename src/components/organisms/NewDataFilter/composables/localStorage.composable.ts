@@ -27,9 +27,11 @@ const filterLocalStorage = () => {
 			},
 		},
 	};
-	const getFilterState = () => {
-		return JSON.parse(get(stateName) ?? "{}");
+
+	const getFilterState = (): UiState => {
+		return JSON.parse(get(stateName) ?? "") || defaultState;
 	};
+
 	const getDefaultState = (): UiState => {
 		const uiState = getFilterState();
 
@@ -39,6 +41,11 @@ const filterLocalStorage = () => {
 			return defaultState;
 		}
 		return uiState;
+	};
+
+	const getFilterStorage = (): FilterQuery => {
+		return defaultFilterState.filter["pages.administration.students.index"]
+			.query;
 	};
 
 	const state = getDefaultState();
@@ -54,7 +61,7 @@ const filterLocalStorage = () => {
 		set(stateName, JSON.stringify(state));
 	};
 
-	return { setFilterState, getFilterState };
+	return { setFilterState, getFilterStorage };
 };
 
 export const useFilterLocalStorage = createSharedComposable(filterLocalStorage);

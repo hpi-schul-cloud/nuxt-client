@@ -11,7 +11,7 @@
 		<v-list>
 			<v-list-item v-for="(item, index) in filterMenuItems" :key="index">
 				<v-list-item-title
-					@click="onFilterClick(item.value)"
+					@click="onFilterClick(item.value as FilterOptions)"
 					class="menu-text"
 					hover
 				>
@@ -34,9 +34,7 @@
 		<template #title> {{ modalTitle }} </template>
 		<template #content>
 			<ListSelection
-				v-if="
-					filterSelection == FilterOptions.CLASSES || FilterOptions.REGISTRATION
-				"
+				v-if="isSelectFiltering"
 				:classes="selectionProps"
 				@update:filter="onUpdateFilter"
 				@remove:filter="onRemoveFilter"
@@ -72,6 +70,7 @@ const {
 	defaultFilterMenuItems,
 	filterSelection,
 	isDateFiltering,
+	isSelectFiltering,
 	filterMenuItems,
 	filterChipTitles,
 	updateFilter,
@@ -102,7 +101,10 @@ const onFilterClick = (val: FilterOptionsType) => {
 	dialogOpen.value = true;
 };
 
-const onCloseDialog = () => (dialogOpen.value = false);
+const onCloseDialog = () => {
+	filterSelection.value = undefined;
+	dialogOpen.value = false;
+};
 
 const onUpdateFilter = (value: FilterOptions) => {
 	updateFilter(value);
