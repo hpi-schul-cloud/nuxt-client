@@ -6,7 +6,11 @@ import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomsModule from "@/store/rooms";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -138,6 +142,9 @@ const getWrapper = (
 	});
 	loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 	notifierModuleMock = createModuleMocks(NotifierModule);
+	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+		getCtlToolsTabEnabled: false,
+	});
 	return mount(RoomOverview, {
 		...createComponentMocks({
 			vuetify: true,
@@ -153,6 +160,7 @@ const getWrapper = (
 			loadingStateModule: loadingStateModuleMock,
 			[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 			[I18N_KEY]: { t: (key) => key },
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 		},
 		propsData: {
 			role: "student",
