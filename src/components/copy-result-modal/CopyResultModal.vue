@@ -107,6 +107,11 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.files"),
 				},
 				{
+					isShow: this.hasFeatureCtlsToolsenabled,
+					text: this.externalToolsInfoText,
+					title: this.$t("components.molecules.copyResult.label.externalTools"),
+				},
+				{
 					isShow: this.hasCourseGroup,
 					text: this.$t("components.molecules.copyResult.courseGroupCopy.info"),
 					title: this.$t("common.words.courseGroups"),
@@ -140,6 +145,9 @@ export default {
 				CopyApiResponseTypeEnum.CoursegroupGroup
 			);
 		},
+		hasFeatureCtlsToolsenabled() {
+			return envConfigModule.getCtlToolsTabEnabled;
+		},
 		hasErrors() {
 			return this.items.length > 0;
 		},
@@ -159,6 +167,9 @@ export default {
 			return envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED
 				? this.$t("components.molecules.copyResult.nexboardCopy.info")
 				: this.$t("components.molecules.copyResult.nexboardCopy.infoTldraw");
+		},
+		externalToolsInfoText() {
+			return this.$t("components.molecules.copyResult.ctlTools.info");
 		},
 	},
 	methods: {

@@ -20,7 +20,11 @@ import SelectCourseModal from "@/components/share/SelectCourseModal.vue";
 import { mount, MountOptions } from "@vue/test-utils";
 import Vue from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 
 describe("@components/share/ImportFlow", () => {
@@ -37,6 +41,10 @@ describe("@components/share/ImportFlow", () => {
 		displayColor: "#54616e",
 	};
 	const mountComponent = (attrs = {}) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getCtlToolsTabEnabled: false,
+		});
+
 		const wrapper = mount(ImportFlow as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
@@ -46,6 +54,7 @@ describe("@components/share/ImportFlow", () => {
 				loadingStateModule: loadingStateModuleMock,
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 			},
 			propsData: {
 				token,
