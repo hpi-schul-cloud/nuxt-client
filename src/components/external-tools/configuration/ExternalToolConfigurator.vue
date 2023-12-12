@@ -26,7 +26,10 @@
 				/>
 			</template>
 			<template #item="{ item }">
-				<external-tool-selection-row :item="item" />
+				<external-tool-selection-row
+					data-testId="configuration-select-item"
+					:item="item"
+				/>
 			</template>
 		</v-autocomplete>
 		<h2

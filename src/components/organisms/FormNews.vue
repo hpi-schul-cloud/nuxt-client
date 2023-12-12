@@ -17,6 +17,7 @@
 				<div v-if="data.title">
 					<ck-editor
 						v-model="data.content"
+						class="mb--md mt--xl-3"
 						:placeholder="
 							$t($t('components.organisms.FormNews.editor.placeholder'))
 						"
@@ -91,18 +92,18 @@
 import { defineComponent } from "vue";
 import { fromInputDateTime, createInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
-import { CkEditor } from "@feature-editor";
 import TitleInput from "@/components/molecules/TitleInput.vue";
 import FormActions from "@/components/molecules/FormActions.vue";
 import { mdiClose, mdiCheck, mdiDelete } from "@mdi/js";
+import { CkEditor } from "@feature-editor";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	inheritAttrs: false,
 	components: {
-		CkEditor,
 		TitleInput,
 		FormActions,
+		CkEditor,
 	},
 	props: {
 		news: {
@@ -164,12 +165,12 @@ export default defineComponent({
 				? undefined
 				: this.$t(
 						"components.organisms.FormNews.errors.missing_title"
-				  ).toString();
+					).toString();
 			const content = this.data.content
 				? undefined
 				: this.$t(
 						"components.organisms.FormNews.errors.missing_content"
-				  ).toString();
+					).toString();
 			return {
 				title,
 				content,

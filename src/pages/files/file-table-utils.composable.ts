@@ -4,7 +4,7 @@ import {
 	FileTypeIconMapping,
 } from "@/store/types/collaborative-file";
 import { FileTableItem } from "@/pages/files/file-table-item";
-import { RouteLocationNormalized } from "vue-router";
+import { RouteLocation, RouteLocationNormalized } from "vue-router";
 import { DataTableHeader } from "@/store/types/data-table-header";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { FileMetaListResponse } from "@/store/collaborative-files/file-meta-list.response";
@@ -102,13 +102,12 @@ export function useFileTableUtils(
 		};
 	};
 
-	const getTeamsPage = (route: RouteLocationNormalized): FilesPageConfig => {
+	const getTeamsPage = (route: RouteLocation): FilesPageConfig => {
 		const paramsArray: string[] = Array.isArray(route.params.catchAll)
 			? route.params.catchAll
 			: route.params.catchAll
 					.split("/")
 					.filter((element: string) => element !== "");
-		// const teamsPath: string = route.path.replace("/cfiles/teams", "");
 		const deepBreadcrumbs: Breadcrumb[] = getDeepBreadcumbs(paramsArray);
 
 		return {
@@ -124,7 +123,6 @@ export function useFileTableUtils(
 				},
 				...deepBreadcrumbs,
 			],
-			// VUE_UPGRADE path is not used inside fetchTeamFiles()
 			loadFilesFunction: async () => collaborativeFilesModule.fetchTeamFiles(),
 		};
 	};

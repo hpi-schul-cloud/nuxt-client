@@ -1,10 +1,6 @@
 import { DataTableHeader } from "@/store/types/data-table-header";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import {
-	SchoolExternalTool,
-	ToolConfigurationStatus,
-} from "@/store/external-tool";
-import { ToolConfigurationStatusTranslationMapping } from "@/composables/external-tool-mappings.composable";
+import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 
 export function useExternalToolsSectionUtils(
@@ -38,11 +34,10 @@ export function useExternalToolsSectionUtils(
 		const schoolExternalTools: SchoolExternalTool[] =
 			schoolExternalToolsModule.getSchoolExternalTools;
 		return schoolExternalTools.map((tool: SchoolExternalTool) => {
-			const outdated: boolean =
-				tool.status === ToolConfigurationStatus.Outdated;
-			const statusTranslationKey: string =
-				ToolConfigurationStatusTranslationMapping[tool.status] ??
-				"none.existent.key"; // VUE3_UPGRADE: need to fix reactive translations, see BC-6007
+			const outdated: boolean = tool.status.isOutdatedOnScopeSchool;
+			const statusTranslationKey: string = tool.status.isOutdatedOnScopeSchool
+				? "components.externalTools.status.outdated"
+				: "components.externalTools.status.latest"; // VUE3_UPGRADE: need to test if that works now, see BC-6007
 
 			return {
 				id: tool.id,

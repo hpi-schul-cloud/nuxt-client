@@ -107,6 +107,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
@@ -133,6 +134,8 @@ export default defineComponent({
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const router = useRouter();
+		const { determineOutdatedTranslationKey } =
+			useContextExternalToolConfigurationStatus();
 
 		const { t } = useI18n();
 
@@ -197,11 +200,14 @@ export default defineComponent({
 		};
 
 		const errorDialogText: ComputedRef<string> = computed(() => {
-			if (authModule.getUserRoles.includes("teacher")) {
-				return t("pages.rooms.tools.outdatedDialog.content.teacher");
+			if (!selectedItem.value?.status) {
+				return "";
 			}
+			const toolOutdatedTranslationkey = determineOutdatedTranslationKey(
+				selectedItem.value?.status
+			);
 
-			return t("pages.rooms.tools.outdatedDialog.content.student");
+			return t(toolOutdatedTranslationkey);
 		});
 
 		return {

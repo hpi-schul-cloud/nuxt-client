@@ -342,7 +342,7 @@ export default {
 					title: this.$t("pages.content.page.window.title", {
 						instance: this.$theme.name,
 					}),
-			  }
+				}
 			: { title: this.$t("common.words.lernstore") };
 
 		document.title = buildPageTitle(pageTitle);

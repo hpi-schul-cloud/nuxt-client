@@ -35,7 +35,7 @@ const useBoardPageInformation = () => {
 						to: `/rooms/${contextInfo.id}`,
 						disabled: false,
 					},
-			  ]
+				]
 			: [];
 	}
 

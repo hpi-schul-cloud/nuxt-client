@@ -169,6 +169,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		initializeAxios({
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			get: async (path) => {
 				return { data: [] };
 			},
