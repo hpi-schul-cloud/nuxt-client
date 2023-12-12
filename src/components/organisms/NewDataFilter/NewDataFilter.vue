@@ -61,14 +61,26 @@ import {
 	FilterOptions,
 	SelectOptionsType,
 	FilterOptionsType,
+	UserType,
 } from "./types/filterTypes";
 import { ref, computed, onMounted } from "vue";
 import { useDataTableFilter } from "./composables/filter.composable";
 import { useDataTableFilterApi } from "./composables/filterApi.composable";
 
+const props = defineProps({
+	filterFor: {
+		type: String,
+		default: () => UserType.STUDENT,
+	},
+});
+
 const emit = defineEmits(["update:filter"]);
 
 const dialogOpen = ref(false);
+
+// const filterForUser = computed(() => props.filterFor);
+
+console.log(props);
 
 const {
 	defaultFilterMenuItems,
@@ -82,7 +94,7 @@ const {
 	removeChipFilter,
 	removeFilter,
 	updateFilter,
-} = useDataTableFilter();
+} = useDataTableFilter(UserType.TEACHER);
 
 const { classNamesList } = await useDataTableFilterApi();
 

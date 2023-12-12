@@ -6,6 +6,11 @@ enum FilterOptions {
 	OBSOLOTE_SINCE = "outdatedSince",
 }
 
+enum UserType {
+	STUDENT = "student",
+	TEACHER = "teacher",
+}
+
 type FilterOptionsType =
 	| "consentStatus"
 	| "classes"
@@ -32,19 +37,14 @@ type FilterQuery = {
 	outdatedSince?: DateSelection | string;
 };
 
-// TODO: set type here
-// type UserBasedFilterState =
-// 	| "pages.administration.students.index"
-// 	| "pages.administration.teachers.index";
-
 type Query = {
 	query: FilterQuery;
 };
 
-type StorageFilterState = {
+interface StorageFilterState {
 	"pages.administration.students.index"?: Query;
 	"pages.administration.teachers.index"?: Query;
-};
+}
 
 type UiState = {
 	pagination: object;
@@ -66,4 +66,5 @@ export {
 	RegistrationTypes,
 	SelectOptionsType,
 	UiState,
+	UserType,
 };

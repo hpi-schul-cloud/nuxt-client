@@ -39,6 +39,10 @@
 				data-testid="data_filter"
 			/>
 
+			<Suspense>
+				<NewDataFilter @update:filter="onUpdateFilter" filter-for="teachers" />
+			</Suspense>
+
 			<backend-data-table
 				:actions="filteredActions"
 				:columns="filteredColumns"
@@ -146,6 +150,7 @@ import {
 } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
+import NewDataFilter from "@/components/organisms/NewDataFilter/NewDataFilter.vue";
 
 export default {
 	components: {
@@ -154,6 +159,7 @@ export default {
 		BackendDataTable,
 		AdminTableLegend,
 		ProgressModal,
+		NewDataFilter,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -630,6 +636,10 @@ export default {
 		dialogConfirm(confirmDialogProps) {
 			this.confirmDialogProps = confirmDialogProps;
 			this.isConfirmDialogActive = true;
+		},
+		onUpdateFilter(query) {
+			this.currentFilterQuery = query;
+			this.find();
 		},
 	},
 	mounted() {

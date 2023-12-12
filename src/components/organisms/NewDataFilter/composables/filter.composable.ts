@@ -6,13 +6,15 @@ import {
 	FilterQuery,
 	RegistrationTypes,
 	SelectOptionsType,
+	UserType,
 } from "../types/filterTypes";
 import { useI18n } from "vue-i18n";
 import { useFilterLocalStorage } from "./localStorage.composable";
 
-const dataTableFilter = () => {
+const dataTableFilter = (userType: UserType) => {
+	console.log(userType);
 	const { t } = useI18n();
-	const { setFilterState, getFilterStorage } = useFilterLocalStorage();
+	const { setFilterState, getFilterStorage } = useFilterLocalStorage(userType);
 
 	const filterQuery = ref<FilterQuery>({});
 
@@ -86,6 +88,7 @@ const dataTableFilter = () => {
 		filterChipTitles.value = Object.keys(filterQuery.value);
 
 		setFilterState(filterQuery.value);
+		setFilterMenuItems();
 	};
 
 	const removeFilter = () => {
@@ -94,19 +97,23 @@ const dataTableFilter = () => {
 
 		filterChipTitles.value = Object.keys(filterQuery.value);
 		setFilterState(filterQuery.value);
+		setFilterMenuItems();
 	};
 
 	const removeChipFilter = (val: FilterOptions) => {
 		delete filterQuery.value[val];
 
+		setFilterState(filterQuery.value);
+		setFilterMenuItems();
+	};
+
+	const setFilterMenuItems = () => {
 		filterMenuItems.value = defaultFilterMenuItems.filter(
 			(item: SelectOptionsType) => !(item.value in filterQuery.value)
 		);
-		setFilterState(filterQuery.value);
 	};
 
 	onMounted(() => {
-		// @ts-expect-error TODO: investigate type error
 		filterQuery.value = getFilterStorage();
 		if (filterQuery.value)
 			filterChipTitles.value = Object.keys(filterQuery.value);

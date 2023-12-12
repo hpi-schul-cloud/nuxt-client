@@ -1,18 +1,30 @@
 import { createSharedComposable } from "@vueuse/core";
 import { useStorage } from "@/composables/locale-storage.composable";
-import { UiState, FilterQuery } from "../types/filterTypes";
+import { UiState, FilterQuery, UserType } from "../types/filterTypes";
 
-const filterLocalStorage = () => {
+const filterLocalStorage = (userType: UserType) => {
 	const { get, set } = useStorage();
+
+	type UserBasedFilter = {
+		[UserType.STUDENT]: string;
+		[UserType.TEACHER]: string;
+	};
+
+	const filterStorageKey: UserBasedFilter = {
+		[UserType.STUDENT]: "pages.administration.students.index",
+		[UserType.TEACHER]: "pages.administration.teachers.index",
+	};
+
+	console.log(filterStorageKey[userType]);
 
 	const stateName = "uiState";
 	const defaultState: UiState = {
 		pagination: {},
 		filter: {
-			"pages.administration.students.index": {
+			[filterStorageKey[UserType.STUDENT]]: {
 				query: {},
 			},
-			"pages.administration.teachers.index": {
+			[filterStorageKey[UserType.STUDENT]]: {
 				query: {},
 			},
 		},
@@ -22,7 +34,7 @@ const filterLocalStorage = () => {
 
 	const defaultFilterState = {
 		filter: {
-			"pages.administration.students.index": {
+			[filterStorageKey[userType]]: {
 				query: {},
 			},
 		},
@@ -47,17 +59,18 @@ const filterLocalStorage = () => {
 	};
 
 	const getFilterStorage = () => {
-		return getDefaultState().filter["pages.administration.students.index"]
-			?.query;
+		// @ts-expect-error TODO: check type here
+		return getDefaultState().filter[filterStorageKey[userType]]?.query;
 	};
 
 	const state = getDefaultState();
 
 	const setFilterState = (val: FilterQuery) => {
-		state.filter["pages.administration.students.index"] = { query: {} };
+		const newState = JSON.parse(JSON.stringify(state));
+		newState.filter[filterStorageKey[userType]] = { query: {} };
 
-		state.filter["pages.administration.students.index"].query = {
-			...state.filter["pages.administration.students.index"].query,
+		newState.filter[filterStorageKey[userType]].query = {
+			...newState.filter[filterStorageKey[userType]].query,
 			...val,
 		};
 		set(stateName, JSON.stringify(state));
