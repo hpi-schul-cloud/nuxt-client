@@ -7,12 +7,12 @@ import {
 	RegistrationTypes,
 	SelectOptionsType,
 	UserType,
+	UserBasedRegistrationOptions,
 } from "../types/filterTypes";
 import { useI18n } from "vue-i18n";
 import { useFilterLocalStorage } from "./localStorage.composable";
 
 const dataTableFilter = (userType: UserType) => {
-	console.log(userType);
 	const { t } = useI18n();
 	const { setFilterState, getFilterStorage } = useFilterLocalStorage(userType);
 
@@ -41,20 +41,33 @@ const dataTableFilter = (userType: UserType) => {
 		},
 	];
 
-	const registrationOptions: SelectOptionsType[] = [
-		{
-			label: t("pages.administration.students.legend.icon.success"),
-			value: RegistrationTypes.COMPLETE,
-		},
-		{
-			label: t("utils.adminFilter.consent.label.parentsAgreementMissing"),
-			value: RegistrationTypes.PARENT_AGREED,
-		},
-		{
-			label: t("utils.adminFilter.consent.label.missing"),
-			value: RegistrationTypes.MISSING,
-		},
-	];
+	const registrationOptions: UserBasedRegistrationOptions = {
+		[UserType.STUDENT]: [
+			{
+				label: t("pages.administration.students.legend.icon.success"),
+				value: RegistrationTypes.COMPLETE,
+			},
+			{
+				label: t("utils.adminFilter.consent.label.parentsAgreementMissing"),
+				value: RegistrationTypes.PARENT_AGREED,
+			},
+			{
+				label: t("utils.adminFilter.consent.label.missing"),
+				value: RegistrationTypes.MISSING,
+			},
+		],
+		[UserType.TEACHER]: [
+			{
+				label: t("pages.administration.students.legend.icon.success"),
+				value: RegistrationTypes.COMPLETE,
+			},
+
+			{
+				label: t("utils.adminFilter.consent.label.missing"),
+				value: RegistrationTypes.MISSING,
+			},
+		],
+	};
 
 	const selectedFilterType = ref<FilterOptionsType | undefined>(undefined);
 

@@ -78,9 +78,7 @@ const emit = defineEmits(["update:filter"]);
 
 const dialogOpen = ref(false);
 
-// const filterForUser = computed(() => props.filterFor);
-
-console.log(props);
+const filterForUser = computed(() => props.filterFor);
 
 const {
 	defaultFilterMenuItems,
@@ -94,7 +92,7 @@ const {
 	removeChipFilter,
 	removeFilter,
 	updateFilter,
-} = useDataTableFilter(UserType.TEACHER);
+} = useDataTableFilter(filterForUser.value as UserType);
 
 const { classNamesList } = await useDataTableFilterApi();
 
@@ -108,7 +106,7 @@ const modalTitle = computed(
 const selectionProps = computed(() => {
 	return selectedFilterType.value == FilterOptions.CLASSES
 		? classNamesList
-		: registrationOptions;
+		: registrationOptions[filterForUser.value as UserType];
 });
 
 const filteredValues = computed(() => {

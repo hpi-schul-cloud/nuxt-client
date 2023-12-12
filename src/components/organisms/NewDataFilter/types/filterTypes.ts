@@ -29,6 +29,11 @@ type SelectOptionsType = {
 	value: FilterOptions | string;
 };
 
+type UserBasedRegistrationOptions = {
+	[UserType.STUDENT]: SelectOptionsType[];
+	[UserType.TEACHER]: SelectOptionsType[];
+};
+
 type FilterQuery = {
 	lastLoginSystemChange?: DateSelection | string;
 	classes?: string[] | string;
@@ -66,5 +71,6 @@ export {
 	RegistrationTypes,
 	SelectOptionsType,
 	UiState,
+	UserBasedRegistrationOptions,
 	UserType,
 };

@@ -40,7 +40,7 @@
 			/>
 
 			<Suspense>
-				<NewDataFilter @update:filter="onUpdateFilter" />
+				<NewDataFilter @update:filter="onUpdateFilter" user-for="student" />
 			</Suspense>
 
 			<backend-data-table
