@@ -15,6 +15,10 @@ import * as routerComposables from "vue-router/composables";
 
 jest.mock("@data-provisioning-options");
 
+const $theme = {
+	name: "instance name",
+};
+
 describe("ProvisioningOptionsPage", () => {
 	let useProvisioningOptionsStateMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsState>
@@ -42,6 +46,7 @@ describe("ProvisioningOptionsPage", () => {
 				}),
 				provide: { [I18N_KEY.valueOf()]: i18nMock },
 				propsData: { ...propsData },
+				mocks: { $theme },
 			}
 		);
 
@@ -124,12 +129,12 @@ describe("ProvisioningOptionsPage", () => {
 			expect(
 				checkboxes[0].find("input").attributes("aria-checked")
 			).toBeTruthy();
-			expect(
-				checkboxes[1].find("input").attributes("aria-checked")
-			).toBeFalsy();
-			expect(
-				checkboxes[2].find("input").attributes("aria-checked")
-			).toBeFalsy();
+			expect(checkboxes[1].find("input").attributes("aria-checked")).toEqual(
+				"false"
+			);
+			expect(checkboxes[2].find("input").attributes("aria-checked")).toEqual(
+				"false"
+			);
 		});
 	});
 
@@ -195,6 +200,8 @@ describe("ProvisioningOptionsPage", () => {
 					query: { openPanels: "authentication" },
 				};
 
+				useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
+
 				return {
 					saveButton,
 					redirect,
@@ -208,13 +215,18 @@ describe("ProvisioningOptionsPage", () => {
 
 				expect(
 					useProvisioningOptionsStateMock.updateProvisioningOptionsData
-				).toHaveBeenCalledWith({ class: true, course: false, others: false });
+				).toHaveBeenCalledWith("systemId", {
+					class: true,
+					course: false,
+					others: false,
+				});
 			});
 
-			it("should return to school settings page", () => {
+			it("should return to school settings page", async () => {
 				const { saveButton, redirect } = setup();
 
-				saveButton.trigger("click");
+				await saveButton.trigger("click");
+				await Vue.nextTick();
 
 				expect(router.push).toHaveBeenCalledWith(redirect);
 			});

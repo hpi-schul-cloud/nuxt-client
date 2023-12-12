@@ -8,6 +8,8 @@ import { mockApiResponse } from "@@/tests/test-utils";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ProvisioningOptions } from "./type";
+import setupStores from "../../../tests/test-utils/setupStores";
+import SchoolsModule from "../../store/schools";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 
@@ -15,12 +17,14 @@ describe("SystemApi.composable", () => {
 	let schoolApi: DeepMocked<SchoolApiInterface>;
 	let useErrorHandlerMock: DeepMocked<ReturnType<typeof useErrorHandler>>;
 
-	beforeEach(() => {
+	beforeAll(() => {
 		schoolApi = createMock<SchoolApiInterface>();
 		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>();
 
 		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 		jest.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
+
+		setupStores({ schoolsModule: SchoolsModule });
 	});
 
 	afterEach(() => {
@@ -52,7 +56,7 @@ describe("SystemApi.composable", () => {
 
 				expect(
 					schoolApi.schoolControllerGetProvisioningOptions
-				).toHaveBeenCalledWith("systemId");
+				).toHaveBeenCalledWith("", "systemId");
 			});
 
 			it("should return provisioning options of this system - school combination", async () => {
@@ -123,18 +127,19 @@ describe("SystemApi.composable", () => {
 				others: true,
 			};
 
-			schoolApi.schoolControllerGetProvisioningOptions.mockResolvedValue(
+			schoolApi.schoolControllerSetProvisioningOptions.mockResolvedValue(
 				mockApiResponse({ data: provisioningOptions })
 			);
 
 			return {
 				provisioningOptionsEntry,
+				provisioningOptions,
 			};
 		};
 
 		describe("when the api call succeeds", () => {
 			it("should call the api to save provisioning options", async () => {
-				const { provisioningOptionsEntry } = setup();
+				const { provisioningOptionsEntry, provisioningOptions } = setup();
 
 				await useProvisioningOptionsApi().saveProvisioningOptions(
 					"systemId",
@@ -143,7 +148,7 @@ describe("SystemApi.composable", () => {
 
 				expect(
 					schoolApi.schoolControllerSetProvisioningOptions
-				).toHaveBeenCalledWith("systemId", provisioningOptionsEntry);
+				).toHaveBeenCalledWith("", "systemId", provisioningOptions);
 			});
 
 			it("should return provisioning options of this system - school combination", async () => {
