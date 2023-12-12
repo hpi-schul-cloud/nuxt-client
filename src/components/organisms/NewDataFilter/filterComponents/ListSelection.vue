@@ -28,14 +28,14 @@ const props = defineProps({
 		required: true,
 	},
 	selectedList: {
-		type: Array<string> || undefined,
+		type: Array<SelectOptionsType> || undefined,
 		default: undefined,
 	},
 });
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
-const selected = ref<string[]>([]);
+const selected = ref<SelectOptionsType[]>([]);
 
 const onUpdateFilter = () => {
 	if (!selected.value.length) {
