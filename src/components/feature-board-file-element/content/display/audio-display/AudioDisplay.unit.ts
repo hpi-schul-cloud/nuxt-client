@@ -104,7 +104,7 @@ describe("AudioDisplay", () => {
 			const playIcon = wrapper.findComponent({ name: "v-icon" });
 
 			expect(playButton.attributes("aria-label")).toBe(
-				wrapper.vm.$i18n.t("media.player.action.play")
+				wrapper.vm.$i18n.t("component.cardElement.fileElement.audioPlayer.play")
 			);
 			expect(playIcon.text()).toBe(mdiPlay);
 		});
@@ -222,7 +222,9 @@ describe("AudioDisplay", () => {
 			const playIcon = wrapper.findComponent({ name: "v-icon" });
 
 			expect(playButton.attributes("aria-label")).toBe(
-				wrapper.vm.$i18n.t("media.player.action.pause")
+				wrapper.vm.$i18n.t(
+					"component.cardElement.fileElement.audioPlayer.pause"
+				)
 			);
 			expect(playIcon.text()).toBe(mdiPause);
 		});
