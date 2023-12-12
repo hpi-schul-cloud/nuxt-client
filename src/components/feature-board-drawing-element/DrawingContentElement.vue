@@ -21,10 +21,13 @@
 				v-if="isEditMode"
 				:docName="element.id"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				><BoardMenu scope="element">
+				><BoardMenu
+					scope="element"
+					v-on="{ [MenuEvent.DELETE]: onDeleteElement }"
+				>
 					<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
 					<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
-					<BoardMenuActionDelete @click="onDeleteElement" />
+					<BoardMenuActionDelete />
 				</BoardMenu>
 			</DrawingContentElementEdit>
 		</div>
@@ -42,6 +45,7 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	MenuEvent,
 } from "@ui-board";
 
 export default defineComponent({
@@ -93,6 +97,7 @@ export default defineComponent({
 			onKeydownArrow,
 			onMoveDrawingElementEditDown,
 			onMoveDrawingElementEditUp,
+			MenuEvent,
 		};
 	},
 });
