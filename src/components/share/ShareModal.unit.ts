@@ -7,20 +7,28 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import NotifierModule from "@/store/notifier";
 import Vue from "vue";
-import { envConfigModule } from "@/store";
-import { Envs } from "@/store/types/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 
 describe("@/components/share/ShareModal", () => {
 	let shareModuleMock: ShareModule;
 	let notifierModuleMock: NotifierModule;
 
-	const getWrapper = (attrs = { propsData: { type: "courses" } }) => {
-		return mount(ShareModal as MountOptions<Vue>, {
+	const getWrapper = (
+		attrs = { propsData: { type: "courses" } },
+		envConfigModuleGetter?: Partial<EnvConfigModule>
+	) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			...envConfigModuleGetter,
+		});
+
+		const wrapper = mount(ShareModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
@@ -28,16 +36,17 @@ describe("@/components/share/ShareModal", () => {
 				shareModule: shareModuleMock,
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 			},
 			...attrs,
 		});
+
+		return wrapper;
 	};
 
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-
-		setupStores({ envConfigModule: EnvConfigModule });
 
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
@@ -123,19 +132,53 @@ describe("@/components/share/ShareModal", () => {
 		expect(notifierModuleMock.show).toHaveBeenCalled();
 	});
 
-	describe("when ctl tools are enabled", () => {
-		it("should have the correct title", () => {
-			envConfigModule.setEnvs({ FEATURE_CTL_TOOLS_TAB_ENABLED: true } as Envs);
-			const wrapper = getWrapper();
-			const infotext = wrapper.find(
-				`[data-testid="share-modal-external-tools-info"]`
-			);
+	describe("ctl tool info", () => {
+		describe("ctl tools are enabled", () => {
+			it("should have the correct title", () => {
+				const wrapper = getWrapper(
+					{
+						propsData: {
+							type: "courses",
+						},
+					},
+					{
+						getCtlToolsTabEnabled: true,
+					}
+				);
 
-			expect(infotext.text()).toEqual(
-				wrapper.vm.$i18n.t(
-					"components.molecules.share.courses.options.ctlTools.infotext"
-				)
-			);
+				const infotext = wrapper.find(
+					`[data-testid="share-modal-external-tools-info"]`
+				);
+
+				expect(infotext.text()).toEqual(
+					wrapper.vm.$i18n.t(
+						"components.molecules.share.courses.options.ctlTools.infotext"
+					)
+				);
+
+				expect(infotext.isVisible()).toBe(true);
+			});
+		});
+
+		describe("when ctl tools are disabled", () => {
+			it("should have the correct title", () => {
+				const wrapper = getWrapper(
+					{
+						propsData: {
+							type: "courses",
+						},
+					},
+					{
+						getCtlToolsTabEnabled: false,
+					}
+				);
+
+				const infotext = wrapper.find(
+					`[data-testid="share-modal-external-tools-info"]`
+				);
+
+				expect(infotext.exists()).toBe(false);
+			});
 		});
 	});
 });

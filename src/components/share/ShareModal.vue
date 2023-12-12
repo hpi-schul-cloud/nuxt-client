@@ -27,8 +27,8 @@
 							<br />
 							{{ $t("components.molecules.copyResult.courseFiles.info") }}
 							<div
-								v-if="ctlToolsEnabled"
 								data-testid="share-modal-external-tools-info"
+								v-if="ctlToolsEnabled"
 							>
 								{{
 									$t(
@@ -62,10 +62,14 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
-import { I18N_KEY, injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
-import { envConfigModule } from "@/store";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -85,6 +89,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 
 		const t = (key) => {
