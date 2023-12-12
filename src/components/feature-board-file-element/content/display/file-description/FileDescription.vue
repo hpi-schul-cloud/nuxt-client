@@ -10,9 +10,6 @@
 					{{ name }}
 				</div>
 			</template>
-			<template #tooltip>
-				{{ name }}
-			</template>
 			<template v-if="showMenu" #menu>
 				<slot />
 			</template>

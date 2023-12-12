@@ -15,11 +15,11 @@
 			v-if="isOverflowingLongText"
 		>
 			<template v-slot:activator="{ on, attrs }">
-				<span v-bind="attrs" v-on="on">
+				<div v-bind="attrs" v-on="on">
 					<slot />
-				</span>
+				</div>
 			</template>
-			<div class="tooltip-content">
+			<div>
 				<slot />
 			</div>
 		</v-tooltip>
@@ -69,10 +69,8 @@ export default defineComponent({
 	color: var(--v-black-base);
 	box-sizing: border-box;
 }
-</style>
-<style lang="scss" scoped>
 .tooltip {
-	display: inline-block;
+	display: block;
 	border-radius: 4px;
 	padding: 8px;
 	font-family: var(--font-primary) !important;
@@ -83,7 +81,6 @@ export default defineComponent({
 	color: white !important;
 	background: map-get($grey, darken-3);
 	opacity: 1;
-	// word-break: normal;
 	text-wrap: wrap;
 	overflow: visible;
 	overflow-wrap: break-word;
