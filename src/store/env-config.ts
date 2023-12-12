@@ -46,6 +46,7 @@ export default class EnvConfigModule extends VuexModule {
 		FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: false,
 		FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: false,
 		FEATURE_VIEW_PROVISIONING_OPTIONS_ENABLED: false,
+		FEATURE_CTL_TOOLS_TAB_ENABLED: false,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
