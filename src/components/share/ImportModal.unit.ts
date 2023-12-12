@@ -2,18 +2,26 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions } from "@vue/test-utils";
 import ImportModal from "@/components/share/ImportModal.vue";
 import Vue from "vue";
-import { I18N_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { createModuleMocks } from "@/utils/mock-store-module";
 
 describe("@components/share/ImportModal", () => {
-	const getWrapper = (attrs = {}) => {
+	const getWrapper = (
+		attrs = {},
+		envConfigModuleGetter?: Partial<EnvConfigModule>
+	) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			...envConfigModuleGetter,
+		});
+
 		const wrapper = mount(ImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
 			provide: {
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 			},
 			...attrs,
 		});
@@ -22,10 +30,9 @@ describe("@components/share/ImportModal", () => {
 	};
 
 	beforeEach(() => {
+		jest.clearAllMocks();
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-
-		setupStores({ envConfigModule: EnvConfigModule });
 	});
 
 	it("should not render without required props", () => {
@@ -127,25 +134,114 @@ describe("@components/share/ImportModal", () => {
 		expect(emitted).toBeUndefined();
 	});
 
-	describe("when ctl tools are enabled", () => {
-		it("should show ctl tool info", () => {
-			const wrapper = getWrapper({
-				propsData: {
-					isOpen: true,
-					parentName: "TestParentName",
-					parentType: "course",
-				},
+	describe("ctl tools info", () => {
+		describe("when ctl tools are enabled", () => {
+			const setup = () => {
+				const wrapper = getWrapper(
+					{
+						propsData: {
+							isOpen: true,
+							parentName: "TestParentName",
+							parentType: "courses",
+						},
+					},
+					{
+						getCtlToolsTabEnabled: true,
+					}
+				);
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show ctl tool info", () => {
+				const { wrapper } = setup();
+
+				const infoText = wrapper.get(
+					`[data-testid="import-modal-external-tools-info"]`
+				);
+
+				expect(infoText.isVisible()).toBe(true);
 			});
 
-			const infoText = wrapper.find(
-				`[data-testid="import-modal-external-tools-info"]`
-			);
+			it("should set the right key for ctl tools", () => {
+				const { wrapper } = setup();
 
-			expect(infoText.text()).toEqual(
-				wrapper.vm.$i18n.t(
-					`components.molecules.import.courses.options.ctlTools.infoText`
-				)
-			);
+				const infoText = wrapper.get(
+					`[data-testid="import-modal-external-tools-info"]`
+				);
+
+				expect(infoText.element.innerHTML).toContain(
+					wrapper.vm.$i18n.t(
+						`components.molecules.import.courses.options.ctlTools.infoText`
+					)
+				);
+			});
+
+			it("should not show course file info", () => {
+				const { wrapper } = setup();
+
+				const infoText = wrapper.find(
+					`[data-testid="import-modal-coursefiles-info"]`
+				);
+
+				expect(infoText.isVisible()).toBe(false);
+			});
+		});
+
+		describe("show ctl tool info is disabled", () => {
+			const setup = () => {
+				const wrapper = getWrapper(
+					{
+						propsData: {
+							isOpen: true,
+							parentName: "TestParentName",
+							parentType: "course",
+						},
+					},
+					{
+						getCtlToolsTabEnabled: false,
+					}
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			describe("when ctl is disabled", () => {
+				it("should not show ctl tool info", () => {
+					const { wrapper } = setup();
+
+					const infoText = wrapper.find(
+						`[data-testid="import-modal-external-tools-info"]`
+					);
+
+					expect(infoText.isVisible()).toBe(false);
+				});
+
+				it("should show course file info", () => {
+					const { wrapper } = setup();
+
+					const infoText = wrapper.find(
+						`[data-testid="import-modal-coursefiles-info"]`
+					);
+
+					expect(infoText.isVisible()).toBe(true);
+				});
+
+				it("should set the right key for course files", () => {
+					const { wrapper } = setup();
+
+					const infoText = wrapper.find(
+						`[data-testid="import-modal-coursefiles-info"]`
+					);
+
+					expect(infoText.element.innerHTML).toContain(
+						"components.molecules.import.course.options.infoText"
+					);
+				});
+			});
 		});
 	});
 });

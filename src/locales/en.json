@@ -551,6 +551,7 @@
   "components.molecules.import.options.failure.permissionError": "Unfortunately, the necessary authorization is missing.",
   "components.molecules.import.courses.options.title": "Import course",
   "components.molecules.import.courses.options.infoText": "Participant-related data will not be copied. The course can be renamed below.",
+  "components.molecules.import.courses.options.ctlTools.infoText": "A copy will be created.<br>Personal data will not be imported.<br>External tools will not be copied.<br>The course can be renamed below.",
   "components.molecules.import.courses.label": "Course",
   "components.molecules.import.lessons.options.title": "Import topic",
   "components.molecules.import.lessons.options.infoText": "Participant-related data will not be copied. The topic can be renamed below.",

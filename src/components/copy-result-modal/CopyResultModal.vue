@@ -164,9 +164,7 @@ export default {
 			return `${courseFilesText} ${fileErrorText}`.trim();
 		},
 		externalToolsInfoText() {
-			return this.hasFeatureCtlsToolsenabled
-				? this.$t("components.molecules.copyResult.ctlTools.info")
-				: "";
+			return this.$t("components.molecules.copyResult.ctlTools.info");
 		},
 	},
 	methods: {

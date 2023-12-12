@@ -21,17 +21,19 @@
 					<div class="mx-2">
 						<v-icon color="info">{{ mdiInformation }}</v-icon>
 					</div>
-					<div
-						v-if="ctlToolsEnabled"
+					<RenderHTML
 						data-testid="import-modal-external-tools-info"
-					>
-						{{
+						v-show="ctlToolsEnabled"
+						:html="
 							$t(
-								`components.molecules.import.courses.options.ctlTools.infoText`
+								`components.molecules.import.${parentType}.options.ctlTools.infoText`
 							)
-						}}
-					</div>
-					<div v-else>
+						"
+					/>
+					<div
+						v-show="!ctlToolsEnabled"
+						data-testid="import-modal-coursefiles-info"
+					>
 						{{
 							$t(`components.molecules.import.${parentType}.options.infoText`)
 						}}
@@ -50,15 +52,16 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, reactive, ref } from "vue";
-import { envConfigModule } from "@/store";
+import { RenderHTML } from "@feature-render-html";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ImportModal",
 	components: {
+		RenderHTML,
 		vCustomDialog,
 	},
 	emits: ["import", "cancel"],
@@ -69,6 +72,7 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const nameInput = ref(undefined);
 
 		const rules = reactive({
@@ -87,9 +91,7 @@ export default defineComponent({
 		};
 		const onCancel = () => emit("cancel");
 
-		const ctlToolsEnabled = () => {
-			return envConfigModule.getCtlToolsTabEnabled;
-		};
+		const ctlToolsEnabled = envConfigModule.getCtlToolsTabEnabled;
 
 		return {
 			onConfirm,

@@ -553,7 +553,7 @@
 	"components.molecules.import.options.failure.permissionError": "Leider fehlt die notwendige Berechtigung.",
 	"components.molecules.import.courses.options.title": "Kurs importieren",
 	"components.molecules.import.courses.options.infoText": "Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Der Kurs kann im Folgenden umbenannt werden.",
-	"components.molecules.import.courses.options.ctlTools.infoText": "Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Externe Tools werden nicht kopiert. \nDer Kurs kann im Folgenden umbenannt werden.",
+	"components.molecules.import.courses.options.ctlTools.infoText": "Es wird eine Kopie erstellt.<br>Personenbezogene Daten werden nicht importiert.<br>Externe Tools werden nicht kopiert. <br>Der Kurs kann im Folgenden umbenannt werden.",
 	"components.molecules.import.courses.label": "Kurs",
 	"components.molecules.import.lessons.options.title": "Thema importieren",
 	"components.molecules.import.lessons.options.infoText": "Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Das Thema kann im Folgenden umbenannt werden.",
