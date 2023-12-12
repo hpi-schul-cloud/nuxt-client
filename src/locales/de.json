@@ -843,7 +843,7 @@
 	"components.cardElement.fileElement.videoFormatError": "Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"components.cardElement.fileElement.audioFormatError": "Das Audioformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"component.cardElement.fileElement.audioPlayer.play": "Abspielen",
-	"component.cardElement.fileElement.audioPlayer.pause": "Pause",
+	"component.cardElement.fileElement.audioPlayer.pause": "Anhalten",
 	"component.cardElement.fileElement.audioPlayer.slider": "Audio Schieberegler für Fortschritt",
 	"component.cardElement.fileElement.audioPlayer.speed": "Geschwindigkeitsmenü",
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
