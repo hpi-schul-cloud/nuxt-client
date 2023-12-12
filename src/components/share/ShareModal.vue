@@ -154,7 +154,9 @@ export default defineComponent({
 			});
 		};
 
-		const ctlToolsEnabled = envConfigModule.getCtlToolsTabEnabled;
+		const ctlToolsEnabled = computed(() => {
+			return envConfigModule.getCtlToolsTabEnabled;
+		});
 
 		return {
 			onShareOptionsChange,

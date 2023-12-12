@@ -91,7 +91,9 @@ export default defineComponent({
 		};
 		const onCancel = () => emit("cancel");
 
-		const ctlToolsEnabled = envConfigModule.getCtlToolsTabEnabled;
+		const ctlToolsEnabled = computed(() => {
+			return envConfigModule.getCtlToolsTabEnabled;
+		});
 
 		return {
 			onConfirm,
