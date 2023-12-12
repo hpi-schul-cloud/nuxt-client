@@ -4,7 +4,7 @@
 			<audio ref="audio" loading="lazy" />
 			<v-btn
 				v-if="playing"
-				:aria-label="$t('media.player.action.pause')"
+				:aria-label="$t('component.cardElement.fileElement.audioPlayer.pause')"
 				icon
 				@click="onPlay"
 				color="white"
@@ -14,7 +14,7 @@
 			</v-btn>
 			<v-btn
 				v-else
-				:aria-label="$t('media.player.action.play')"
+				:aria-label="$t('component.cardElement.fileElement.audioPlayer.play')"
 				icon
 				@click="onPlay"
 				color="white"
@@ -24,7 +24,7 @@
 			</v-btn>
 			<span class="duration pr-2 pl-1"> {{ durationDisplay }}</span>
 			<v-slider
-				:aria-label="$t('media.player.action.slider')"
+				:aria-label="$t('component.cardElement.fileElement.audioPlayer.slider')"
 				class="duration-slider pt-6"
 				color="white"
 				thumb-color="white"

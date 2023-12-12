@@ -9,7 +9,9 @@
 					icon
 					small
 					color="white"
-					:aria-label="$t('media.player.action.speed')"
+					:aria-label="
+						$t('component.cardElement.fileElement.audioPlayer.speed')
+					"
 				>
 					<v-icon>
 						{{ mdiPlaySpeed }}
@@ -46,7 +48,7 @@
 					<v-list-item @click="onSelect(1)">
 						<v-list-item-content class="ml-3">
 							<v-list-item-title>{{
-								$t("media.player.action.speed.normal")
+								$t("component.cardElement.fileElement.audioPlayer.speed.normal")
 							}}</v-list-item-title>
 						</v-list-item-content>
 						<v-list-item-icon v-if="1 === rate">
