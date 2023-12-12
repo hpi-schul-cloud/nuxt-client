@@ -3,23 +3,23 @@ import VueRouter from "vue-router";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import Vue, { ref } from "vue";
-import createComponentMocks from "../../../tests/test-utils/componentMocks";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { I18N_KEY } from "../../utils/inject";
-import { i18nMock } from "../../../tests/test-utils";
+import { i18nMock } from "@@/tests/test-utils";
 import {
 	ProvisioningOptions,
 	useProvisioningOptionsState,
 } from "../data-provisioning-options";
-import { provisioningOptionsDataFactory } from "../../../tests/test-utils/factory/provisioningOptionsDataFactory";
-import router from "../../router";
+import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory/provisioningOptionsDataFactory";
+import * as routerComposables from "vue-router/composables";
 
 jest.mock("@data-provisioning-options");
-const $router = createMock<VueRouter>();
 
 describe("ProvisioningOptionsPage", () => {
 	let useProvisioningOptionsStateMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsState>
 	>;
+	let router: DeepMocked<VueRouter>;
 
 	const getWrapper = (
 		propsData: { systemId: string } = { systemId: "systemId" },
@@ -31,6 +31,9 @@ describe("ProvisioningOptionsPage", () => {
 		useProvisioningOptionsStateMock.provisioningOptionsData =
 			ref(provisioningOptions);
 
+		router = createMock<VueRouter>();
+		jest.spyOn(routerComposables, "useRouter").mockReturnValue(router);
+
 		const wrapper: Wrapper<Vue> = mount(
 			ProvisioningOptionsPage as MountOptions<Vue>,
 			{
@@ -38,7 +41,6 @@ describe("ProvisioningOptionsPage", () => {
 					i18n: true,
 				}),
 				provide: { [I18N_KEY.valueOf()]: i18nMock },
-				mocks: { $router },
 				propsData: { ...propsData },
 			}
 		);

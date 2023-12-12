@@ -16,7 +16,12 @@ const generateProps = () => ({
 			oauthConfig: { provider: "iserv-idm" },
 		}, // deletable: false, editable: false
 		{ _id: "3", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
-		{ _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" }, system }, // deletable: true, editable: false // TODO N21-1479 continue here
+		{
+			_id: "4",
+			type: "oauth",
+			oauthConfig: { provider: "sanis-idm" },
+			displayName: "moin.schule",
+		}, // deletable: true, editable: false
 	],
 	confirmDeleteDialog: {
 		isOpen: false,
@@ -269,9 +274,8 @@ describe("AuthSystems", () => {
 
 			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
 			expect(
-				tableCell.wrappers[8].find(searchStrings.editSystemButton).attributes()
-					.href
-			).toEqual("/administration/ldap/config");
+				tableCell.wrappers[8].findComponent("routerlink-stub").props("to")
+			).toEqual("`/administration/ldap/config?id=${system._id}`");
 		});
 
 		it("should display the edit system button for oauth system, when provisioning options feature flag is true and redirect to provisioning options page", () => {
@@ -298,17 +302,14 @@ describe("AuthSystems", () => {
 				tableCell.wrappers[11].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(true);
 			expect(
-				tableCell.wrappers[11].find(searchStrings.editSystemButton).attributes()
-					.href
+				tableCell.wrappers[11].findComponent("routerlink-stub").props("to")
 			).toEqual(
 				"/administration/school-settings/provisioning-options?systemId=4"
 			);
-
 			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
 			expect(
-				tableCell.wrappers[8].find(searchStrings.editSystemButton).attributes()
-					.href
-			).toEqual("/administration/ldap/config");
+				tableCell.wrappers[8].findComponent("routerlink-stub").props("to")
+			).toEqual("`/administration/ldap/config?id=${system._id}`");
 		});
 
 		it("should NOT display the dialog", async () => {

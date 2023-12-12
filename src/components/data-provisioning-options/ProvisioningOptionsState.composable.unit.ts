@@ -5,9 +5,9 @@ import { mapAxiosErrorToResponseError } from "../../utils/api";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
 import { ProvisioningOptions } from "./type";
-import { provisioningOptionsDataFactory } from "../../../tests/test-utils/factory/provisioningOptionsDataFactory";
+import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory/provisioningOptionsDataFactory";
 
-jest.mock("@data-external-tool/ContextExternalToolApi.composable");
+jest.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
 
 describe("ProvisioningOptionsState.composable", () => {
 	let useProvisioningOptionsApiMock: DeepMocked<
@@ -32,7 +32,11 @@ describe("ProvisioningOptionsState.composable", () => {
 			it("should not have data", async () => {
 				const { provisioningOptionsData } = useProvisioningOptionsState();
 
-				expect(provisioningOptionsData.value).toBeUndefined();
+				expect(provisioningOptionsData.value).toEqual({
+					class: true,
+					course: false,
+					others: false,
+				});
 			});
 		});
 

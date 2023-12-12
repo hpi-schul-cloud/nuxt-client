@@ -5,8 +5,8 @@ import {
 } from "@/serverApi/v3/api";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ProvisioningOptions } from "./type";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
@@ -38,6 +38,10 @@ describe("SystemApi.composable", () => {
 			schoolApi.schoolControllerGetProvisioningOptions.mockResolvedValue(
 				mockApiResponse({ data: provisioningOptions })
 			);
+
+			return {
+				provisioningOptions,
+			};
 		};
 
 		describe("when the api call succeeds", () => {
@@ -52,15 +56,15 @@ describe("SystemApi.composable", () => {
 			});
 
 			it("should return provisioning options of this system - school combination", async () => {
-				setup();
+				const { provisioningOptions } = setup();
 
 				const result =
 					await useProvisioningOptionsApi().getProvisioningOptions("systemId");
 
-				expect(result).toEqual({
-					class: true,
-					course: true,
-					others: true,
+				expect(result).toEqual<ProvisioningOptions>({
+					class: provisioningOptions.groupProvisioningClassesEnabled,
+					course: provisioningOptions.groupProvisioningCoursesEnabled,
+					others: provisioningOptions.groupProvisioningOtherEnabled,
 				});
 			});
 		});
