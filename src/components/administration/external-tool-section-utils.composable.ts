@@ -37,7 +37,7 @@ export function useExternalToolsSectionUtils(
 			const outdated: boolean = tool.status.isOutdatedOnScopeSchool;
 			const statusTranslationKey: string = tool.status.isOutdatedOnScopeSchool
 				? "components.externalTools.status.outdated"
-				: "components.externalTools.status.latest"; // VUE3_UPGRADE: need to test if that works now, see BC-6007
+				: "components.externalTools.status.latest";
 
 			return {
 				id: tool.id,
