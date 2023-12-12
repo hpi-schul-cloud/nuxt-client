@@ -102,7 +102,11 @@ const selectionProps = computed(() => {
 const filteredValues = computed(() => {
 	if (!selectedFilterType.value) return undefined;
 
-	return filterQuery.value[selectedFilterType.value];
+	const filterObject = filterQuery.value[selectedFilterType.value];
+
+	if (!filterObject) return undefined;
+
+	return filterObject;
 });
 
 const onCloseDialog = () => {

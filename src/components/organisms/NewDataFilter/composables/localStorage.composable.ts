@@ -29,7 +29,10 @@ const filterLocalStorage = () => {
 	};
 
 	const getFilterState = (): UiState => {
-		return JSON.parse(get(stateName) ?? "") || defaultState;
+		const state = get(stateName);
+		if (!state) return defaultState;
+
+		return JSON.parse(state);
 	};
 
 	const getDefaultState = (): UiState => {
@@ -57,7 +60,6 @@ const filterLocalStorage = () => {
 			...state.filter["pages.administration.students.index"].query,
 			...val,
 		};
-
 		set(stateName, JSON.stringify(state));
 	};
 

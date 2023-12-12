@@ -106,9 +106,10 @@ const dataTableFilter = () => {
 	};
 
 	onMounted(() => {
-		// @ts-expect-error TODO: investigate error
+		// @ts-expect-error TODO: investigate type error
 		filterQuery.value = getFilterStorage();
-		filterChipTitles.value = Object.keys(filterQuery.value);
+		if (filterQuery.value)
+			filterChipTitles.value = Object.keys(filterQuery.value);
 	});
 
 	return {
