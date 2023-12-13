@@ -32,6 +32,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
+import { createPinia } from "pinia";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 // NUXT_REMOVAL set this based on the tenant theme
@@ -102,6 +103,8 @@ app.mixin({
 		},
 	},
 });
+
+app.use(createPinia());
 
 app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
