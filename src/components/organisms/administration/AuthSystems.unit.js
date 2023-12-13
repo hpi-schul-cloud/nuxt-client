@@ -280,7 +280,7 @@ describe("AuthSystems", () => {
 
 		it("should display the edit system button for oauth system, when provisioning options feature flag is true and redirect to provisioning options page", () => {
 			envConfigModule.setEnvs({
-				FEATURE_VIEW_PROVISIONING_OPTIONS_ENABLED: true,
+				FEATURE_PROVISIONING_OPTIONS_ENABLED: true,
 			});
 
 			authModule.setUser({
