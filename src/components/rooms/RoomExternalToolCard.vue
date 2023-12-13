@@ -12,7 +12,7 @@
 					size="small"
 					class="py-1"
 					color="warning-lighten-1"
-					text-color="black"
+					variant="flat"
 					data-testId="tool-card-status"
 				>
 					<v-icon size="small" class="mr-1" color="warning">{{
@@ -37,7 +37,6 @@
 <script lang="ts">
 import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
 import EnvConfigModule from "@/store/env-config";
-import { ToolConfigurationStatus } from "@/store/external-tool";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useExternalToolLaunchState } from "@data-external-tool";
@@ -75,6 +74,7 @@ export default defineComponent({
 		const handleClick = () => {
 			if (isToolOutdated.value) {
 				emit("error", props.tool);
+				return;
 			}
 
 			launchTool();
@@ -111,7 +111,9 @@ export default defineComponent({
 		}
 
 		const isToolOutdated: ComputedRef = computed(
-			() => props.tool.status === ToolConfigurationStatus.Outdated
+			() =>
+				props.tool.status.isOutdatedOnScopeSchool ||
+				props.tool.status.isOutdatedOnScopeContext
 		);
 
 		const loadLaunchRequest = async () => {

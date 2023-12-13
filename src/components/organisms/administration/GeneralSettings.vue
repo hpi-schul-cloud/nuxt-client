@@ -178,7 +178,7 @@ export default {
 				permissions: {},
 				features: {},
 			},
-			logoFile: null,
+			logoFile: [],
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
 		};
 	},
@@ -213,11 +213,13 @@ export default {
 			handler: async function (newSchool) {
 				if (newSchool && newSchool.id) {
 					this.logoFile = newSchool.logo_dataUrl
-						? this.convertDataUrlToFile(
-								newSchool.logo_dataUrl,
-								newSchool.logo_name
-						  )
-						: null;
+						? [
+								this.convertDataUrlToFile(
+									newSchool.logo_dataUrl,
+									newSchool.logo_name
+								),
+							]
+						: [];
 
 					await this.copyToLocalSchool();
 				}
@@ -296,10 +298,10 @@ export default {
 				updatedSchool.county = this.localSchool.county._id;
 			}
 
-			updatedSchool.logo_dataUrl = this.logoFile
-				? await toBase64(this.logoFile)
-				: "";
-			updatedSchool.logo_name = this.logoFile ? this.logoFile.name : "";
+			updatedSchool.logo_dataUrl =
+				this.logoFile.length > 0 ? await toBase64(this.logoFile[0]) : "";
+			updatedSchool.logo_name =
+				this.logoFile.length > 0 ? this.logoFile[0].name : "";
 
 			schoolsModule.update(updatedSchool);
 		},

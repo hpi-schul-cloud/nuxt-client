@@ -2,7 +2,6 @@
 	<div>
 		<v-alert
 			v-if="status === 'error'"
-			prominent
 			variant="tonal"
 			type="error"
 			class="mb-6"
@@ -104,7 +103,7 @@
 					</h4>
 				</template>
 				<template #content>
-					<v-alert prominent variant="tonal" type="info" class="mb-0">
+					<v-alert variant="tonal" type="info" class="mb-0">
 						<div class="alert-text">
 							{{
 								t("pages.administration.school.index.schoolPolicy.delete.text")
@@ -220,7 +219,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .alert-text {
-	color: var(--v-black-base) !important;
+	color: rgba(var(--v-theme-black)) !important;
 	line-height: var(--line-height-lg) !important;
 }
 

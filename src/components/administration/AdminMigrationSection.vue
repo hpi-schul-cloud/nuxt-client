@@ -11,7 +11,7 @@
 				component="p"
 			/>
 			<div v-if="isStartButtonVisible">
-				<v-alert prominent variant="tonal" type="info">
+				<v-alert variant="tonal" type="info">
 					<div class="alert-text">
 						<RenderHTML
 							data-testid="migration-info-text"
@@ -24,7 +24,7 @@
 				</v-alert>
 			</div>
 			<div v-else-if="isMigrationActive">
-				<v-alert prominent variant="tonal" type="info">
+				<v-alert variant="tonal" type="info">
 					<div class="alert-text">
 						<RenderHTML
 							data-testid="migration-active-status"
@@ -356,7 +356,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .alert-text {
-	color: var(--v-black-base) !important;
+	color: rgba(var(--v-theme-black)) !important;
 	line-height: var(--line-height-lg) !important;
 }
 </style>

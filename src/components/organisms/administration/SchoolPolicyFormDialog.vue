@@ -29,7 +29,7 @@
 					ref="input-file"
 					class="input-file mb-2"
 					data-testid="input-file"
-					v-model="file"
+					v-model="files"
 					density="compact"
 					variant="underlined"
 					accept="application/pdf"
@@ -94,22 +94,23 @@ export default defineComponent({
 		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
-		const policyForm: Ref = ref(null);
+		const policyForm: Ref<File[]> = ref([]);
 		const isValid: Ref<boolean> = ref(false);
 		const isTouched: Ref<boolean> = ref(false);
-		const file: Ref<File | null> = ref(null);
+		const files: Ref<File[]> = ref([]);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
 		const rules = {
-			required: (value: string) => !!value || t("common.validation.required"),
-			mustBePdf: (value: File) =>
-				!value ||
-				value.type === "application/pdf" ||
+			required: (value: File[]) =>
+				!(value.length === 0) || t("common.validation.required"),
+			mustBePdf: (value: File[]) =>
+				!(value.length === 0) ||
+				value[0].type === "application/pdf" ||
 				t("pages.administration.school.index.schoolPolicy.validation.notPdf"),
-			maxSize: (bytes: number) => (value: File) =>
-				!value ||
-				value.size <= bytes ||
+			maxSize: (bytes: number) => (value: File[]) =>
+				!(value.length === 0) ||
+				value[0].size <= bytes ||
 				t(
 					"pages.administration.school.index.schoolPolicy.validation.fileTooBig"
 				),
@@ -120,7 +121,7 @@ export default defineComponent({
 		};
 
 		const resetForm = () => {
-			policyForm.value.reset();
+			policyForm.value = [];
 			isValid.value = false;
 			isTouched.value = false;
 		};
@@ -138,7 +139,7 @@ export default defineComponent({
 					consentText: "",
 					consentTypes: ["privacy"],
 					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(file.value as File)) as string,
+					consentData: (await toBase64(files.value[0])) as string,
 				};
 
 				emit("close");
@@ -156,7 +157,7 @@ export default defineComponent({
 
 		return {
 			t,
-			file,
+			files,
 			rules,
 			cancel,
 			submit,

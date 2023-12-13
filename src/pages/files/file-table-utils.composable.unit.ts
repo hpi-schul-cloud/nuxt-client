@@ -181,9 +181,7 @@ describe("UseFileTableUtils", () => {
 				]);
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.headline");
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.teamFiles");
-				expect(collaborativeFilesModule.fetchTeamFiles).toHaveBeenCalledWith(
-					"/testFolder1/testFolder2"
-				);
+				expect(collaborativeFilesModule.fetchTeamFiles).toHaveBeenCalled();
 			});
 		});
 

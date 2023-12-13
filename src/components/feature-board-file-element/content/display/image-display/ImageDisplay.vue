@@ -2,7 +2,7 @@
 	<ColorOverlay
 		:isOverlayDisabled="isEditMode"
 		@on:action="openLightBox"
-		color="var(--v-black-base)"
+		color="rgba(var(--v-theme-black))"
 	>
 		<PreviewImage :src="previewSrc" :alt="alternativeText" :contain="true" />
 

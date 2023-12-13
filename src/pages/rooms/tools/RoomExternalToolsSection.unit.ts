@@ -2,10 +2,7 @@ import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import EnvConfigModule from "@/store/env-config";
-import {
-	ExternalToolDisplayData,
-	ToolConfigurationStatus,
-} from "@/store/external-tool";
+import { ExternalToolDisplayData } from "@/store/external-tool";
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
@@ -13,7 +10,10 @@ import {
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory";
+import {
+	ContextExternalToolConfigurationStatusFactory,
+	externalToolDisplayDataFactory,
+} from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { MountingOptions, VueWrapper, mount } from "@vue/test-utils";
 import Vue from "vue";
@@ -243,7 +243,7 @@ describe("RoomExternalToolsSection", () => {
 		const setup = async () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build({
-					status: ToolConfigurationStatus.Latest,
+					status: ContextExternalToolConfigurationStatusFactory.build(),
 				});
 
 			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });

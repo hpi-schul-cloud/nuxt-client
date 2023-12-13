@@ -38,7 +38,7 @@
 			data-testid="content-card-lesson-info"
 		>
 			<div class="chip-items-group">
-				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
+				<div class="bg-grey-lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
 					<div class="chip-value">
 						{{ taskChipValue }}
 					</div>

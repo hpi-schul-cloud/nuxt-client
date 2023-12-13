@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<v-dialog
-			:value="isOpen"
+			:model-value="isOpen"
 			:fullscreen="isFullscreen"
-			:hide-overlay="isFullscreen"
+			:scrim="isFullscreen"
 			:width="700"
 			scrollable
 			transition="dialog-bottom-transition"
@@ -23,8 +23,8 @@
 							{{
 								isEditMode
 									? $t("common.actions.edit") +
-									  " " +
-									  $t("common.actions.finish")
+										" " +
+										$t("common.actions.finish")
 									: $t("common.actions.edit")
 							}}
 						</v-btn>

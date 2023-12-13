@@ -20,10 +20,14 @@
 			@update:caption="onUpdateCaption"
 			@add:alert="onAddAlert"
 		>
-			<BoardMenu scope="element" v-if="isEditMode">
+			<BoardMenu
+				scope="element"
+				v-if="isEditMode"
+				v-on="{ [MenuEvent.DELETE]: onDelete }"
+			>
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
+				<BoardMenuActionDelete :name="fileProperties.name" />
 			</BoardMenu>
 		</FileContent>
 		<FileUpload
@@ -32,10 +36,10 @@
 			:isEditMode="isEditMode"
 			@upload:file="onUploadFile"
 		>
-			<BoardMenu scope="element">
+			<BoardMenu scope="element" v-on="{ [MenuEvent.DELETE]: onDelete }">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete @click="onDelete" />
+				<BoardMenuActionDelete />
 			</BoardMenu>
 		</FileUpload>
 	</v-card>
@@ -55,6 +59,7 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	MenuEvent,
 } from "@ui-board";
 import {
 	computed,
@@ -193,6 +198,7 @@ export default defineComponent({
 			onDelete,
 			onMoveUp,
 			onMoveDown,
+			MenuEvent,
 		};
 	},
 });

@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<div class="grey lighten-4 pa-4 rounded-t">
+		<div class="bg-grey-lighten-4 pa-4 rounded-t">
 			<SubmissionContentElementTitle />
 			<v-card-subtitle
-				class="pa-0 mt-1 subtitle-1"
+				class="pa-0 mt-1 text-subtitle-1"
 				data-testid="board-submission-element-due-date"
 			>
 				{{ formattedDueDate }}

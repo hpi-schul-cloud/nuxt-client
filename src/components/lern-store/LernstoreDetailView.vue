@@ -41,6 +41,7 @@
 		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
 				<div class="actions" />
+				<!--eslint-disable-next-line vuetify/no-deprecated-classes -->
 				<div class="title">
 					<span>
 						{{ resource.title || resource.name }}
@@ -341,7 +342,7 @@ export default {
 					title: this.$t("pages.content.page.window.title", {
 						instance: this.$theme.name,
 					}),
-			  }
+				}
 			: { title: this.$t("common.words.lernstore") };
 
 		document.title = buildPageTitle(pageTitle);

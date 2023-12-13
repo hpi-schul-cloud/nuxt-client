@@ -1,11 +1,11 @@
 <template>
-	<BoardMenu scope="element">
+	<BoardMenu scope="element" v-on="{ [MenuEvent.DELETE]: onDelete }">
 		<BoardMenuActionMoveUp @click="onMoveUp" />
 		<BoardMenuActionMoveDown @click="onMoveDown" />
 		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
 			{{ $t("common.labels.settings") }}
 		</BoardMenuAction>
-		<BoardMenuActionDelete @click="onDelete" />
+		<BoardMenuActionDelete />
 	</BoardMenu>
 </template>
 
@@ -22,6 +22,7 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	MenuEvent,
 } from "@ui-board";
 import { defineComponent } from "vue";
 
@@ -57,6 +58,7 @@ export default defineComponent({
 			onDelete,
 			onMoveDown,
 			onMoveUp,
+			MenuEvent,
 		};
 	},
 });

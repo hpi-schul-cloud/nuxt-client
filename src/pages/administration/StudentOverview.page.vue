@@ -298,10 +298,10 @@ export default {
 					label: this.isConsentNecessary
 						? this.$t(
 								"pages.administration.students.index.tableActions.consent"
-						  )
+							)
 						: this.$t(
 								"pages.administration.students.index.tableActions.registration"
-						  ),
+							),
 					icon: "$mdiCheck",
 					action: this.handleBulkConsent,
 					dataTestId: "consent_action",

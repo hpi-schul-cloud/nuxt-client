@@ -19,7 +19,7 @@
 			</template>
 		</ContentElementBar>
 
-		<div v-else-if="caption && !isEditMode" class="pa-4 grey lighten-4">
+		<div v-else-if="caption && !isEditMode" class="pa-4 bg-grey-lighten-4">
 			{{ caption }}
 		</div>
 	</div>
@@ -51,10 +51,10 @@ export default defineComponent({
 <style scope>
 .title-link a {
 	text-decoration: none;
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 }
 .title-link a:visited {
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 }
 .title-link a:hover {
 	text-decoration: underline;
