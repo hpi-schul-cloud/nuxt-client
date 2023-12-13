@@ -13,7 +13,12 @@ import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import Vue from "vue";
 import ShareModule from "@/store/share";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
+import EnvConfigModule from "../../store/env-config";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -31,6 +36,10 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getCtlToolsTabEnabled: false,
+		});
+
 		const wrapper = mount(TasksDashboardTeacher as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
@@ -43,6 +52,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				shareModule: shareModuleMock,
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 			},
 			...attrs,
 		});

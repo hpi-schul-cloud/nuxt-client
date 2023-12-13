@@ -6,6 +6,7 @@
 			:placeholder="
 				$t('components.cardElement.richTextElement.placeholder').toString()
 			"
+			type="balloon"
 			mode="simple"
 			@update:value="onUpdateValue"
 			@focus="onFocus"

@@ -1,14 +1,14 @@
 import {
+	ContextExternalToolConfigurationStatusResponse,
 	CustomParameterEntryParam,
 	CustomParameterEntryResponse,
 	CustomParameterResponseLocationEnum,
 	CustomParameterResponseScopeEnum,
 	CustomParameterResponseTypeEnum,
-	ToolConfigurationStatusResponse,
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
 import { ToolLaunchRequestMethodEnum } from "@/store/external-tool";
-import { ToolConfigurationStatus } from "../tool-configuration-status.enum";
+import { ContextExternalToolConfigurationStatus } from "../context-external-tool-configuration-status";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { ToolParameterLocation } from "../tool-parameter-location.enum";
 import { ToolParameterScope } from "../tool-parameter-scope.enum";
@@ -49,15 +49,6 @@ export const ToolParamScopeMapping: Record<
 	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
 };
 
-export const ToolConfigurationStatusMapping: Record<
-	ToolConfigurationStatusResponse,
-	ToolConfigurationStatus
-> = {
-	[ToolConfigurationStatusResponse.Latest]: ToolConfigurationStatus.Latest,
-	[ToolConfigurationStatusResponse.Outdated]: ToolConfigurationStatus.Outdated,
-	[ToolConfigurationStatusResponse.Unknown]: ToolConfigurationStatus.Unknown,
-};
-
 export const ToolLaunchRequestMethodMapping: Record<
 	ToolLaunchRequestResponseMethodEnum,
 	ToolLaunchRequestMethodEnum
@@ -84,6 +75,17 @@ export class CommonToolMapper {
 		const mapped: ToolParameterEntry = {
 			name: response.name,
 			value: response.value,
+		};
+
+		return mapped;
+	}
+
+	static mapContextExternalToolConfigurationStatus(
+		status: ContextExternalToolConfigurationStatusResponse
+	): ContextExternalToolConfigurationStatus {
+		const mapped: ContextExternalToolConfigurationStatus = {
+			isOutdatedOnScopeSchool: status.isOutdatedOnScopeSchool,
+			isOutdatedOnScopeContext: status.isOutdatedOnScopeContext,
 		};
 
 		return mapped;

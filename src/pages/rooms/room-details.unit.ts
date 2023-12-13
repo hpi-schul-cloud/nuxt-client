@@ -10,7 +10,11 @@ import ShareModule from "@/store/share";
 import { User } from "@/store/types/auth";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject/injection-keys";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -120,6 +124,10 @@ let shareModuleMock: ShareModule;
 const $router = { push: jest.fn(), resolve: jest.fn(), replace: jest.fn() };
 
 const getWrapper: any = () => {
+	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+		getCtlToolsTabEnabled: false,
+	});
+
 	return mount(RoomDetailsPage, {
 		...createComponentMocks({
 			i18n: true,
@@ -135,6 +143,7 @@ const getWrapper: any = () => {
 			shareModule: shareModuleMock,
 			[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 		},
 		stubs: {
 			RoomDashboard: true,
@@ -169,6 +178,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		initializeAxios({
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			get: async (path) => {
 				return { data: [] };
 			},

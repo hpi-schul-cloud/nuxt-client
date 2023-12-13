@@ -42,6 +42,7 @@ jest.mock("./BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
 jest.mock("@/utils/helpers");
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const mockedDelay = jest.mocked(delay);
 
 jest.mock("@util-board");

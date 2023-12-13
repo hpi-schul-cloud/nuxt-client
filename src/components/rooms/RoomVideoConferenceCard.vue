@@ -9,7 +9,11 @@
 			<div v-if="isRunning && hasPermission" class="pulsating-dot my-auto" />
 		</template>
 		<template #footer>
-			<div v-show="!isRunning" class="mt-2">
+			<div
+				v-show="!isRunning && !canStart"
+				class="mt-2"
+				data-testId="vc-info-box-show"
+			>
 				<v-alert dense text class="ma-0" type="info" data-testId="vc-info-box">
 					<div class="d-flex flex-wrap gap-4">
 						<span class="flex-1 my-auto">
@@ -53,6 +57,10 @@ export default defineComponent({
 			required: true,
 		},
 		hasPermission: {
+			type: Boolean,
+			required: true,
+		},
+		canStart: {
 			type: Boolean,
 			required: true,
 		},

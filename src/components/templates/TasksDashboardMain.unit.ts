@@ -9,15 +9,20 @@ import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { User } from "@/store/types/auth";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { MountOptions, Wrapper, mount } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
+import EnvConfigModule from "../../store/env-config";
 
 const $route = {
 	query: {
@@ -71,6 +76,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let wrapper: Wrapper<Vue>;
 
 	const mountComponent = (attrs = {}) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getCtlToolsTabEnabled: false,
+		});
+
 		return mount(TasksDashboardMain as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
@@ -86,6 +95,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				shareModule: shareModuleMock,
 				authModule: authModuleMock,
 				[I18N_KEY as symbol]: { t: (key: string) => key },
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 			},
 			...attrs,
 		});

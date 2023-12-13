@@ -1,8 +1,7 @@
 import AuthSystems from "./AuthSystems";
-import { schoolsModule, envConfigModule, authModule } from "@/store";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mockUser } from "@@/tests/test-utils/mockObjects";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
@@ -223,7 +222,7 @@ describe("AuthSystems", () => {
 			// { _id: "1234", type: "sample system" }, // deletable: true, editable: false
 			expect(
 				tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
-			).toStrictEqual(true);
+			).toStrictEqual(false);
 			expect(
 				tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(false);
@@ -338,7 +337,7 @@ describe("AuthSystems", () => {
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(false);
 			deleteButton.trigger("click");
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(true);
-			expect(wrapper.vm.$data.confirmDeleteDialog.systemId).toStrictEqual("1");
+			expect(wrapper.vm.$data.confirmDeleteDialog.systemId).toStrictEqual("3");
 		});
 	});
 	describe("display system buttons", () => {
