@@ -97,10 +97,7 @@ describe("SystemApi.composable", () => {
 
 				await useProvisioningOptionsApi().getProvisioningOptions("systemId");
 
-				expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error, {
-					404: undefined,
-					500: undefined,
-				});
+				expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error);
 			});
 
 			it("should return provisioning options default values", async () => {
@@ -201,10 +198,7 @@ describe("SystemApi.composable", () => {
 					provisioningOptionsEntry
 				);
 
-				expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error, {
-					404: undefined,
-					500: undefined,
-				});
+				expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error);
 			});
 
 			it("should return provisioning options default values", async () => {

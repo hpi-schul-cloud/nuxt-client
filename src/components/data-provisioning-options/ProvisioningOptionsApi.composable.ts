@@ -35,10 +35,7 @@ export const useProvisioningOptionsApi = () => {
 
 			return provisioningOptions;
 		} catch (error) {
-			handleError(error, {
-				404: undefined,
-				500: undefined,
-			});
+			handleError(error);
 			return provisioningOptionsDefaultValues;
 		}
 	};
@@ -67,10 +64,7 @@ export const useProvisioningOptionsApi = () => {
 
 			return savedOptions;
 		} catch (error) {
-			handleError(error, {
-				404: undefined,
-				500: undefined,
-			});
+			handleError(error);
 			return provisioningOptionsDefaultValues;
 		}
 	};
