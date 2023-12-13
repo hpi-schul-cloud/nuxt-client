@@ -3,11 +3,11 @@ import dayjs from "dayjs";
 
 export const useTimePickerState = () => {
 	const timesOfDayList = computed(() => {
-		type timeItem = {
+		type TimeItem = {
 			value: string;
 		};
 
-		const times: timeItem[] = [];
+		const times: TimeItem[] = [];
 		for (let hour = 0; hour < 24; hour++) {
 			times.push({
 				value: dayjs().hour(hour).minute(0).format("HH:mm"),

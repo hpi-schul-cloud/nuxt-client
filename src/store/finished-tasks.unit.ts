@@ -22,6 +22,7 @@ initializeAxios({
 describe("finished task store", () => {
 	describe("actions", () => {
 		const setup = (taskApiMock: any) => {
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const spy = jest
 				.spyOn(serverApi, "TaskApiFactory")
 				.mockReturnValue(taskApiMock as unknown as serverApi.TaskApiInterface);

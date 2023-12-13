@@ -1,5 +1,4 @@
 import AuthModule from "@/store/auth";
-import { ToolConfigurationStatus } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { User } from "@/store/types/auth";
@@ -21,6 +20,7 @@ import { useSchoolExternalToolUsage } from "@data-external-tool";
 import {
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
+	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils/factory";
 
 jest.mock("@data-external-tool");
@@ -119,7 +119,7 @@ describe("ExternalToolSection", () => {
 						schoolId: "schoolId",
 						parameters: [],
 						name: firstToolName,
-						status: ToolConfigurationStatus.Latest,
+						status: schoolToolConfigurationStatusFactory.build(),
 						version: 1,
 					},
 					{
@@ -128,7 +128,9 @@ describe("ExternalToolSection", () => {
 						schoolId: "schoolId",
 						parameters: [],
 						name: secondToolName,
-						status: ToolConfigurationStatus.Outdated,
+						status: schoolToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+						}),
 						version: 1,
 					},
 				],
@@ -246,7 +248,7 @@ describe("ExternalToolSection", () => {
 									schoolId: "schoolId",
 									parameters: [],
 									name: "firstToolName",
-									status: ToolConfigurationStatus.Latest,
+									status: schoolToolConfigurationStatusFactory.build(),
 									version: 1,
 								},
 							],
@@ -278,7 +280,7 @@ describe("ExternalToolSection", () => {
 									schoolId: "schoolId",
 									parameters: [],
 									name: "firstToolName",
-									status: ToolConfigurationStatus.Latest,
+									status: schoolToolConfigurationStatusFactory.build(),
 									version: 1,
 								},
 							],
@@ -313,7 +315,7 @@ describe("ExternalToolSection", () => {
 				//@ts-ignore
 				wrapper.vm.itemToDelete = {
 					name: expectedName,
-					status: ToolConfigurationStatus.Latest,
+					status: schoolToolConfigurationStatusFactory.build(),
 					outdated: false,
 				};
 
