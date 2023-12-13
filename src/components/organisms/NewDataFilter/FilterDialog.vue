@@ -18,8 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-
 defineProps({
 	isOpen: Boolean,
 	size: {
@@ -29,8 +27,6 @@ defineProps({
 });
 
 const emit = defineEmits(["dialog-closed", "remove:filter"]);
-
-const dialog = ref(null);
 
 const onClose = () => {
 	emit("dialog-closed", false);

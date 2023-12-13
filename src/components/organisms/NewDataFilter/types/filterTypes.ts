@@ -46,10 +46,10 @@ type Query = {
 	query: FilterQuery;
 };
 
-interface StorageFilterState {
+type StorageFilterState = {
 	"pages.administration.students.index"?: Query;
 	"pages.administration.teachers.index"?: Query;
-}
+};
 
 type UiState = {
 	pagination: object;
