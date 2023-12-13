@@ -48,7 +48,7 @@ function transformSchoolClientToServer(school: School): SchoolPayload {
 	SCHOOL_FEATURES.forEach((schoolFeature) => {
 		// This extra check for isTeamCreationByStudentsEnabled is needed for compatibility with api/v1.
 		// It can be removed when PATCH school is migrated to api/v3.
-		if (schoolFeature === "isTeamCreationByStudentsEnabled") {
+		if (schoolFeature === SchoolFeature.IsTeamCreationByStudentsEnabled) {
 			enableStudentTeamCreation = true;
 		} else if (school.features[schoolFeature]) {
 			features.push(schoolFeature);
