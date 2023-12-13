@@ -12527,9 +12527,9 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchool: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetSchoolById: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('schoolControllerGetSchool', 'schoolId', schoolId)
+            assertParamExists('schoolControllerGetSchoolById', 'schoolId', schoolId)
             const localVarPath = `/school/id/{schoolId}`
                 .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -12612,8 +12612,8 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchool(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchool(schoolId, options);
+        async schoolControllerGetSchoolById(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolById(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -12642,8 +12642,8 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchool(schoolId: string, options?: any): AxiosPromise<SchoolResponse> {
-            return localVarFp.schoolControllerGetSchool(schoolId, options).then((request) => request(axios, basePath));
+        schoolControllerGetSchoolById(schoolId: string, options?: any): AxiosPromise<SchoolResponse> {
+            return localVarFp.schoolControllerGetSchoolById(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12670,7 +12670,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchool(schoolId: string, options?: any): AxiosPromise<SchoolResponse>;
+    schoolControllerGetSchoolById(schoolId: string, options?: any): AxiosPromise<SchoolResponse>;
 
     /**
      * 
@@ -12697,8 +12697,8 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
-    public schoolControllerGetSchool(schoolId: string, options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerGetSchool(schoolId, options).then((request) => request(this.axios, this.basePath));
+    public schoolControllerGetSchoolById(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetSchoolById(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
