@@ -65,7 +65,7 @@ describe("schools module", () => {
 			it("should call backend and set state correctly", async () => {
 				authModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
 				const mockSchoolResponse = schoolResponseFactory.build();
-				schoolApi.schoolControllerGetSchool.mockResolvedValueOnce(
+				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolResponse })
 				);
 				const schoolsModule = new SchoolsModule({});
@@ -97,7 +97,7 @@ describe("schools module", () => {
 			});
 
 			it("should set error if api client throws error", async () => {
-				schoolApi.schoolControllerGetSchool.mockRejectedValueOnce(
+				schoolApi.schoolControllerGetSchoolById.mockRejectedValueOnce(
 					new AxiosError()
 				);
 
@@ -236,7 +236,7 @@ describe("schools module", () => {
 				} as unknown as AxiosInstance);
 
 				const mockSchoolResponse = schoolResponseFactory.build();
-				schoolApi.schoolControllerGetSchool.mockResolvedValueOnce(
+				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolResponse })
 				);
 
@@ -251,7 +251,7 @@ describe("schools module", () => {
 				expect(receivedRequests[0].path).toStrictEqual("/v1/schools/id_123");
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(schoolApi.schoolControllerGetSchool).toHaveBeenCalled();
+				expect(schoolApi.schoolControllerGetSchoolById).toHaveBeenCalled();
 				expect(setSchoolSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});

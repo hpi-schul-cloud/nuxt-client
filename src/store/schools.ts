@@ -203,7 +203,7 @@ export default class SchoolsModule extends VuexModule {
 		if (authModule.getUser?.schoolId) {
 			try {
 				const school = (
-					await this.schoolApi.schoolControllerGetSchool(
+					await this.schoolApi.schoolControllerGetSchoolById(
 						authModule.getUser?.schoolId
 					)
 				).data;
@@ -260,8 +260,9 @@ export default class SchoolsModule extends VuexModule {
 			await $axios.patch(`/v1/schools/${school.id}`, school);
 			// TODO: Patch returns old data in response since it doesn't have enough time to sync between db instances
 			// Get request can be removed after https://ticketsystem.dbildungscloud.de/browse/BC-3449 (need to be retested)
-			const data = (await this.schoolApi.schoolControllerGetSchool(school.id))
-				.data;
+			const data = (
+				await this.schoolApi.schoolControllerGetSchoolById(school.id)
+			).data;
 
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
