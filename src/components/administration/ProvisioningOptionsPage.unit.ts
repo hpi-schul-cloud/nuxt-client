@@ -149,7 +149,7 @@ describe("ProvisioningOptionsPage", () => {
 				);
 
 				const cancelButton = wrapper.find(
-					'[data-testid="cancel-provisioning-options"]'
+					'[data-testid="provisioning-options-cancel-button"]'
 				);
 
 				const redirect = {
@@ -192,7 +192,7 @@ describe("ProvisioningOptionsPage", () => {
 				);
 
 				const saveButton = wrapper.find(
-					'[data-testid="save-provisioning-options"]'
+					'[data-testid="provisioning-options-save-button"]'
 				);
 
 				const redirect = {

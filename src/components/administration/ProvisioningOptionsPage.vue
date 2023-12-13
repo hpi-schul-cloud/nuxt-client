@@ -10,6 +10,7 @@
 			v-model="provisioningOptions.class"
 			inset
 			dense
+			data-testid="checkbox-option-class"
 			class="ml-1"
 		/>
 		<p>
@@ -26,6 +27,7 @@
 			v-model="provisioningOptions.course"
 			inset
 			dense
+			data-testid="checkbox-option-course"
 			class="ml-1"
 		/>
 		<p>
@@ -44,6 +46,7 @@
 			v-model="provisioningOptions.others"
 			inset
 			dense
+			data-testid="checkbox-option-others"
 			class="ml-1"
 		/>
 		<p>
@@ -60,7 +63,7 @@
 		<v-row class="justify-end mt-10">
 			<v-btn
 				class="mr-2"
-				data-testid="cancel-provisioning-options"
+				data-testid="provisioning-options-cancel-button"
 				color="secondary"
 				outlined
 				@click="onCancel"
@@ -69,7 +72,7 @@
 
 			<v-btn
 				class="mr-2"
-				data-testid="save-provisioning-options"
+				data-testid="provisioning-options-save-button"
 				color="primary"
 				depressed
 				@click="onSave({ systemId }, provisioningOptions)"

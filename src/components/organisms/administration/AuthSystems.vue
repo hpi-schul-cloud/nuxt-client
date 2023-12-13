@@ -27,7 +27,11 @@
 				</v-btn>
 			</template>
 		</v-text-field>
-		<v-simple-table v-if="hasSystems" class="table-system">
+		<v-simple-table
+			v-if="hasSystems"
+			data-testid="system-table"
+			class="table-system"
+		>
 			<template #default>
 				<thead>
 					<tr>
