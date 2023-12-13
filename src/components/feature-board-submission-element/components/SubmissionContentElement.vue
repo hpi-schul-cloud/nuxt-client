@@ -28,10 +28,13 @@
 				:isOverdue="isOverdue"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
 			>
-				<BoardMenu scope="element">
+				<BoardMenu
+					scope="element"
+					v-on="{ [MenuEvent.DELETE]: onDeleteElement }"
+				>
 					<BoardMenuActionMoveUp @click="onMoveElementUp" />
 					<BoardMenuActionMoveDown @click="onMoveElementDown" />
-					<BoardMenuActionDelete @click="onDeleteElement" />
+					<BoardMenuActionDelete />
 				</BoardMenu>
 			</SubmissionContentElementEdit>
 		</div>
@@ -51,6 +54,7 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	MenuEvent,
 } from "@ui-board";
 
 export default defineComponent({
@@ -122,6 +126,7 @@ export default defineComponent({
 			onDeleteElement,
 			onUpdateCompleted,
 			t,
+			MenuEvent,
 		};
 	},
 });

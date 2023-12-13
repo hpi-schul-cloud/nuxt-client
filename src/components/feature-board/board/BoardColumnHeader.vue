@@ -20,9 +20,13 @@
 					@update:value="onUpdateTitle"
 					class="w-100"
 				/>
-				<BoardMenu v-if="hasDeletePermission" scope="column">
+				<BoardMenu
+					v-if="hasDeletePermission"
+					scope="column"
+					v-on="{ [MenuEvent.DELETE]: onDelete }"
+				>
 					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
-					<BoardMenuActionDelete @click="onDelete" :name="title" />
+					<BoardMenuActionDelete :name="title" />
 				</BoardMenu>
 			</div>
 			<VDivider aria-hidden="true" color="black" />
@@ -41,6 +45,7 @@ import {
 	BoardMenu,
 	BoardMenuActionEdit,
 	BoardMenuActionDelete,
+	MenuEvent,
 } from "@ui-board";
 import { defineComponent, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
@@ -118,6 +123,7 @@ export default defineComponent({
 			onDelete,
 			onMoveColumnKeyboard,
 			onUpdateTitle,
+			MenuEvent,
 		};
 	},
 });
