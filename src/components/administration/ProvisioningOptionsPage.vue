@@ -75,7 +75,7 @@
 				data-testid="provisioning-options-save-button"
 				color="primary"
 				depressed
-				@click="onSave({ systemId }, provisioningOptions)"
+				@click="onSave(provisioningOptions)"
 				:disabled="isLoading"
 				>{{ t("common.actions.save") }}</v-btn
 			>
@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, onMounted } from "vue";
-import { useI18n } from "../../composables/i18n.composable";
+import { useI18n } from "@/composables/i18n.composable";
 import {
 	ProvisioningOptions,
 	useProvisioningOptionsState,
@@ -132,13 +132,9 @@ export default defineComponent({
 
 		onMounted(async () => {
 			await fetchProvisioningOptionsData(props.systemId);
-			isLoading.value = false;
 		});
 
-		const onSave = async (
-			props: { systemId: string },
-			provisioningOptions: ProvisioningOptions
-		) => {
+		const onSave = async (provisioningOptions: ProvisioningOptions) => {
 			await updateProvisioningOptionsData(props.systemId, provisioningOptions);
 			await router.push({
 				path: schoolSettingsPage.to,

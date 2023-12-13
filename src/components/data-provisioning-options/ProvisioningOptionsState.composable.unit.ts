@@ -1,7 +1,7 @@
 import { axiosErrorFactory } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { BusinessError } from "../../store/types/commons";
-import { mapAxiosErrorToResponseError } from "../../utils/api";
+import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
 import { ProvisioningOptions } from "./type";
@@ -70,7 +70,7 @@ describe("ProvisioningOptionsState.composable", () => {
 				expect(error.value).toBeUndefined();
 			});
 
-			it("should call the api for provisioning options data of the system and school combination", async () => {
+			it("should call the api for provisioning options data", async () => {
 				const { fetchProvisioningOptionsData } = setup();
 
 				await fetchProvisioningOptionsData("systemId");
@@ -114,6 +114,14 @@ describe("ProvisioningOptionsState.composable", () => {
 					...useProvisioningOptionsState(),
 				};
 			};
+
+			it("should set loading to false", async () => {
+				const { fetchProvisioningOptionsData } = setup();
+
+				await fetchProvisioningOptionsData("systemid");
+
+				expect(useProvisioningOptionsState().isLoading.value).toEqual(false);
+			});
 
 			it("should set the error", async () => {
 				const { fetchProvisioningOptionsData, error, apiError } = setup();
@@ -185,7 +193,7 @@ describe("ProvisioningOptionsState.composable", () => {
 				expect(error.value).toBeUndefined();
 			});
 
-			it("should call the api to save provisioning options data of the system and school combination", async () => {
+			it("should call the api to save provisioning options data", async () => {
 				const { updateProvisioningOptionsData, provisioningOptionsDataMock } =
 					setup();
 
@@ -243,6 +251,18 @@ describe("ProvisioningOptionsState.composable", () => {
 					...useProvisioningOptionsState(),
 				};
 			};
+
+			it("should set loading to false", async () => {
+				const { updateProvisioningOptionsData, provisioningOptionsDataMock } =
+					setup();
+
+				await updateProvisioningOptionsData(
+					"systemid",
+					provisioningOptionsDataMock
+				);
+
+				expect(useProvisioningOptionsState().isLoading.value).toEqual(false);
+			});
 
 			it("should set the error", async () => {
 				const {

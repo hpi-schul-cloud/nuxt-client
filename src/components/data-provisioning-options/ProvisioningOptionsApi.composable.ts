@@ -5,12 +5,17 @@ import {
 import { $axios } from "@/utils/api";
 import { ProvisioningOptions } from "./type";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { schoolsModule } from "../../store";
+import { schoolsModule } from "@/store";
 import { AxiosResponse } from "axios";
 
 export const useProvisioningOptionsApi = () => {
 	const { handleError } = useErrorHandler();
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
+	const provisioningOptionsDefaultValues: ProvisioningOptions = {
+		class: true,
+		course: false,
+		others: false,
+	};
 
 	const getProvisioningOptions = async (
 		systemId: string
@@ -34,11 +39,7 @@ export const useProvisioningOptionsApi = () => {
 				404: undefined,
 				500: undefined,
 			});
-			return {
-				class: true,
-				course: false,
-				others: false,
-			};
+			return provisioningOptionsDefaultValues;
 		}
 	};
 
@@ -70,11 +71,7 @@ export const useProvisioningOptionsApi = () => {
 				404: undefined,
 				500: undefined,
 			});
-			return {
-				class: true,
-				course: false,
-				others: false,
-			};
+			return provisioningOptionsDefaultValues;
 		}
 	};
 

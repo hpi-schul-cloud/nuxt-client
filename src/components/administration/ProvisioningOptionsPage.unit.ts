@@ -1,10 +1,10 @@
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import VueRouter from "vue-router";
+import VueRouter, { Route } from "vue-router";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import Vue, { ref } from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { I18N_KEY } from "../../utils/inject";
+import { I18N_KEY } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
 import {
 	ProvisioningOptions,
@@ -114,11 +114,12 @@ describe("ProvisioningOptionsPage", () => {
 
 	describe("checkboxes", () => {
 		it("should render 3 checkboxes", () => {
+			const provisioningOptions = provisioningOptionsDataFactory.build();
 			const { wrapper } = getWrapper(
 				{
 					systemId: "systemId",
 				},
-				provisioningOptionsDataFactory.build()
+				provisioningOptions
 			);
 
 			const checkboxes = wrapper.findAllComponents({
@@ -126,14 +127,14 @@ describe("ProvisioningOptionsPage", () => {
 			}).wrappers;
 
 			expect(checkboxes.length).toEqual(3);
-			expect(
-				checkboxes[0].find("input").attributes("aria-checked")
-			).toBeTruthy();
+			expect(checkboxes[0].find("input").attributes("aria-checked")).toEqual(
+				provisioningOptions.class.toString()
+			);
 			expect(checkboxes[1].find("input").attributes("aria-checked")).toEqual(
-				"false"
+				provisioningOptions.course.toString()
 			);
 			expect(checkboxes[2].find("input").attributes("aria-checked")).toEqual(
-				"false"
+				provisioningOptions.others.toString()
 			);
 		});
 	});
@@ -182,7 +183,7 @@ describe("ProvisioningOptionsPage", () => {
 			});
 		});
 
-		describe("when clicking the cancel button", () => {
+		describe("when clicking the save button", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper(
 					{
@@ -195,7 +196,7 @@ describe("ProvisioningOptionsPage", () => {
 					'[data-testid="provisioning-options-save-button"]'
 				);
 
-				const redirect = {
+				const redirect: Partial<Route> = {
 					path: "/administration/school-settings",
 					query: { openPanels: "authentication" },
 				};

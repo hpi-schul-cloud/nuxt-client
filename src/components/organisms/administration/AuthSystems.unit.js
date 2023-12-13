@@ -278,7 +278,7 @@ describe("AuthSystems", () => {
 			).toEqual("`/administration/ldap/config?id=${system._id}`");
 		});
 
-		it("should display the edit system button for oauth system, when provisioning options feature flag is true and redirect to provisioning options page", () => {
+		it("should display system edit button and redirect to correct config page ", () => {
 			envConfigModule.setEnvs({
 				FEATURE_PROVISIONING_OPTIONS_ENABLED: true,
 			});

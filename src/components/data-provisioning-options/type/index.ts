@@ -1,1 +1,1 @@
-export * from "./ProvisioningOptions";
+export { ProvisioningOptions } from "./ProvisioningOptions";

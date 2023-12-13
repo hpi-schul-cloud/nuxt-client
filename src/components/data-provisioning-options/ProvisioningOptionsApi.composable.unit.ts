@@ -8,8 +8,8 @@ import { mockApiResponse } from "@@/tests/test-utils";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ProvisioningOptions } from "./type";
-import setupStores from "../../../tests/test-utils/setupStores";
-import SchoolsModule from "../../store/schools";
+import setupStores from "@@/tests/test-utils/setupStores";
+import SchoolsModule from "@/store/schools";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 
@@ -59,7 +59,7 @@ describe("SystemApi.composable", () => {
 				).toHaveBeenCalledWith("", "systemId");
 			});
 
-			it("should return provisioning options of this system - school combination", async () => {
+			it("should return provisioning options", async () => {
 				const { provisioningOptions } = setup();
 
 				const result =
@@ -151,7 +151,7 @@ describe("SystemApi.composable", () => {
 				).toHaveBeenCalledWith("", "systemId", provisioningOptions);
 			});
 
-			it("should return provisioning options of this system - school combination", async () => {
+			it("should return provisioning options", async () => {
 				const { provisioningOptionsEntry } = setup();
 
 				const result =

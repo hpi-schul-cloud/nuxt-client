@@ -1,3 +1,3 @@
-export * from "./type";
-export * from "./ProvisioningOptionsApi.composable";
-export * from "./ProvisioningOptionsState.composable";
+export { ProvisioningOptions } from "./type";
+export { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
+export { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";

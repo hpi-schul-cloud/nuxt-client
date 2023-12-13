@@ -1,5 +1,5 @@
-import { BusinessError } from "../../store/types/commons";
-import { mapAxiosErrorToResponseError } from "../../utils/api";
+import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { ref, Ref } from "vue";
 import { ProvisioningOptions, useProvisioningOptionsApi } from "./index";
 
