@@ -84,6 +84,7 @@ const schoolMock = {
 	inUserMigration: true,
 	inMaintenance: true,
 	isExternal: true,
+	systemIds: [],
 	years: {
 		schoolYears: [
 			{
