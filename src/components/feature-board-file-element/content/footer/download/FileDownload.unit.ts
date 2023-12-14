@@ -43,6 +43,16 @@ describe("FileDownload", () => {
 		expect(button.exists()).toBe(true);
 	});
 
+	it("should have an accessible download button", () => {
+		const { wrapper } = setup();
+
+		const button = wrapper.find("v-btn");
+
+		expect(button.attributes("aria-label")).toBe(
+			wrapper.vm.$i18n.t("components.board.action.download")
+		);
+	});
+
 	describe("when download is allowed", () => {
 		describe("when download icon is clicked", () => {
 			const setup = () => {
