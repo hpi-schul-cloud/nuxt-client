@@ -20,7 +20,7 @@ const generateProps = () => ({
 			_id: "4",
 			type: "oauth",
 			oauthConfig: { provider: "sanis-idm" },
-			displayName: "moin.schule",
+			alias: "SANIS",
 		}, // deletable: true, editable: false
 	],
 	confirmDeleteDialog: {

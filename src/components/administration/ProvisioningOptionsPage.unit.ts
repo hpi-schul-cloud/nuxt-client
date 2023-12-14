@@ -183,7 +183,7 @@ describe("ProvisioningOptionsPage", () => {
 			});
 		});
 
-		describe("when clicking the save button", () => {
+		describe("when clicking the save button without error", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper(
 					{
@@ -202,6 +202,7 @@ describe("ProvisioningOptionsPage", () => {
 				};
 
 				useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
+				useProvisioningOptionsStateMock.error.value = undefined;
 
 				return {
 					saveButton,
@@ -230,6 +231,61 @@ describe("ProvisioningOptionsPage", () => {
 				await Vue.nextTick();
 
 				expect(router.push).toHaveBeenCalledWith(redirect);
+			});
+		});
+
+		describe("when clicking the save button with errors", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper(
+					{
+						systemId: "systemId",
+					},
+					provisioningOptionsDataFactory.build()
+				);
+
+				const saveButton = wrapper.find(
+					'[data-testid="provisioning-options-save-button"]'
+				);
+
+				const redirect: Partial<Route> = {
+					path: "/administration/school-settings",
+					query: { openPanels: "authentication" },
+				};
+
+				useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
+				useProvisioningOptionsStateMock.error.value = {
+					error: new Error(),
+					message: "mockMessage",
+					statusCode: 500,
+				};
+
+				return {
+					saveButton,
+					redirect,
+				};
+			};
+
+			it("should call the update function", () => {
+				const { saveButton } = setup();
+
+				saveButton.trigger("click");
+
+				expect(
+					useProvisioningOptionsStateMock.updateProvisioningOptionsData
+				).toHaveBeenCalledWith("systemId", {
+					class: true,
+					course: false,
+					others: false,
+				});
+			});
+
+			it("should return to school settings page", async () => {
+				const { saveButton, redirect } = setup();
+
+				await saveButton.trigger("click");
+				await Vue.nextTick();
+
+				expect(router.push).not.toHaveBeenCalled();
 			});
 		});
 	});

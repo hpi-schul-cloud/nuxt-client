@@ -207,8 +207,7 @@ export default {
 		isEditable(system) {
 			if (envConfigModule.getProvisioningOptionsEnabled) {
 				return (
-					system.ldapConfig?.provider === "general" ||
-					system.displayName === "moin.schule"
+					system.ldapConfig?.provider === "general" || system.alias === "SANIS"
 				);
 			}
 			return system.ldapConfig?.provider === "general";
@@ -216,7 +215,7 @@ export default {
 		redirectTo(system) {
 			if (
 				envConfigModule.getProvisioningOptionsEnabled &&
-				system.displayName === "moin.schule"
+				system.alias === "SANIS"
 			) {
 				return `/administration/school-settings/provisioning-options?systemId=${system._id}`;
 			}

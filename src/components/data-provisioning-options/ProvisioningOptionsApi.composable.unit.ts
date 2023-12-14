@@ -4,27 +4,32 @@ import {
 	SchulConneXProvisioningOptionsResponse,
 } from "@/serverApi/v3/api";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mockApiResponse } from "@@/tests/test-utils";
+import {
+	apiResponseErrorFactory,
+	axiosErrorFactory,
+	mockApiResponse,
+	mountComposable,
+} from "@@/tests/test-utils";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { ProvisioningOptions } from "./type";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
+import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "../../utils/inject";
+import { createModuleMocks } from "../../utils/mock-store-module";
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-
-describe("SystemApi.composable", () => {
+describe("ProvisioningOptionsApi.composable", () => {
 	let schoolApi: DeepMocked<SchoolApiInterface>;
-	let useErrorHandlerMock: DeepMocked<ReturnType<typeof useErrorHandler>>;
+	const notifierModule = createModuleMocks(NotifierModule);
 
 	beforeAll(() => {
 		schoolApi = createMock<SchoolApiInterface>();
-		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>();
 
 		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
-		jest.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
 
-		setupStores({ schoolsModule: SchoolsModule });
+		setupStores({
+			schoolsModule: SchoolsModule,
+		});
 	});
 
 	afterEach(() => {
@@ -39,20 +44,25 @@ describe("SystemApi.composable", () => {
 				groupProvisioningOtherEnabled: true,
 			};
 
+			const composable = mountComposable(() => useProvisioningOptionsApi(), {
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			});
+
 			schoolApi.schoolControllerGetProvisioningOptions.mockResolvedValue(
 				mockApiResponse({ data: provisioningOptions })
 			);
 
 			return {
 				provisioningOptions,
+				composable,
 			};
 		};
 
 		describe("when the api call succeeds", () => {
 			it("should call the api for provisioning options", async () => {
-				setup();
+				const { composable } = setup();
 
-				await useProvisioningOptionsApi().getProvisioningOptions("systemId");
+				await composable.getProvisioningOptions("systemId");
 
 				expect(
 					schoolApi.schoolControllerGetProvisioningOptions
@@ -60,10 +70,9 @@ describe("SystemApi.composable", () => {
 			});
 
 			it("should return provisioning options", async () => {
-				const { provisioningOptions } = setup();
+				const { composable, provisioningOptions } = setup();
 
-				const result =
-					await useProvisioningOptionsApi().getProvisioningOptions("systemId");
+				const result = await composable.getProvisioningOptions("systemId");
 
 				expect(result).toEqual<ProvisioningOptions>({
 					class: provisioningOptions.groupProvisioningClassesEnabled,
@@ -80,6 +89,45 @@ describe("SystemApi.composable", () => {
 					error
 				);
 
+				const composable = mountComposable(() => useProvisioningOptionsApi(), {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				});
+
+				return {
+					error,
+					composable,
+				};
+			};
+
+			it("should show notification and throw error", async () => {
+				const { composable, error } = setup();
+
+				await expect(
+					composable.getProvisioningOptions("systemid")
+				).rejects.toThrow(error);
+				expect(notifierModule.show).toHaveBeenCalled();
+			});
+		});
+
+		describe("when the api call fails with 404", () => {
+			const setup = () => {
+				const error = axiosErrorFactory.build({
+					response: {
+						data: apiResponseErrorFactory.build({
+							message: "mockMessage",
+							code: 404,
+						}),
+					},
+				});
+
+				const composable = mountComposable(() => useProvisioningOptionsApi(), {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				});
+
+				schoolApi.schoolControllerGetProvisioningOptions.mockRejectedValue(
+					error
+				);
+
 				const provisioningOptionsDefaultValues: ProvisioningOptions = {
 					class: true,
 					course: false,
@@ -89,22 +137,14 @@ describe("SystemApi.composable", () => {
 				return {
 					error,
 					provisioningOptionsDefaultValues,
+					composable,
 				};
 			};
 
-			it("should call the error handler", async () => {
-				const { error } = setup();
-
-				await useProvisioningOptionsApi().getProvisioningOptions("systemId");
-
-				expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error);
-			});
-
 			it("should return provisioning options default values", async () => {
-				const { provisioningOptionsDefaultValues } = setup();
+				const { composable, provisioningOptionsDefaultValues } = setup();
 
-				const result =
-					await useProvisioningOptionsApi().getProvisioningOptions("systemid");
+				const result = await composable.getProvisioningOptions("systemid");
 
 				expect(result).toEqual(provisioningOptionsDefaultValues);
 			});
@@ -124,6 +164,10 @@ describe("SystemApi.composable", () => {
 				others: true,
 			};
 
+			const composable = mountComposable(() => useProvisioningOptionsApi(), {
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			});
+
 			schoolApi.schoolControllerSetProvisioningOptions.mockResolvedValue(
 				mockApiResponse({ data: provisioningOptions })
 			);
@@ -131,14 +175,16 @@ describe("SystemApi.composable", () => {
 			return {
 				provisioningOptionsEntry,
 				provisioningOptions,
+				composable,
 			};
 		};
 
 		describe("when the api call succeeds", () => {
 			it("should call the api to save provisioning options", async () => {
-				const { provisioningOptionsEntry, provisioningOptions } = setup();
+				const { composable, provisioningOptionsEntry, provisioningOptions } =
+					setup();
 
-				await useProvisioningOptionsApi().saveProvisioningOptions(
+				await composable.saveProvisioningOptions(
 					"systemId",
 					provisioningOptionsEntry
 				);
@@ -149,13 +195,12 @@ describe("SystemApi.composable", () => {
 			});
 
 			it("should return provisioning options", async () => {
-				const { provisioningOptionsEntry } = setup();
+				const { composable, provisioningOptionsEntry } = setup();
 
-				const result =
-					await useProvisioningOptionsApi().saveProvisioningOptions(
-						"systemId",
-						provisioningOptionsEntry
-					);
+				const result = await composable.saveProvisioningOptions(
+					"systemId",
+					provisioningOptionsEntry
+				);
 
 				expect(result).toEqual({
 					class: true,
@@ -172,6 +217,10 @@ describe("SystemApi.composable", () => {
 					error
 				);
 
+				const composable = mountComposable(() => useProvisioningOptionsApi(), {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				});
+
 				const provisioningOptionsDefaultValues: ProvisioningOptions = {
 					class: true,
 					course: false,
@@ -187,31 +236,20 @@ describe("SystemApi.composable", () => {
 					error,
 					provisioningOptionsDefaultValues,
 					provisioningOptionsEntry,
+					composable,
 				};
 			};
 
-			it("should call the error handler", async () => {
-				const { error, provisioningOptionsEntry } = setup();
+			it("should show notification and throw error", async () => {
+				const { composable, error, provisioningOptionsEntry } = setup();
 
-				await useProvisioningOptionsApi().saveProvisioningOptions(
-					"systemId",
-					provisioningOptionsEntry
-				);
-
-				expect(useErrorHandlerMock.handleError).toHaveBeenCalledWith(error);
-			});
-
-			it("should return provisioning options default values", async () => {
-				const { provisioningOptionsDefaultValues, provisioningOptionsEntry } =
-					setup();
-
-				const result =
-					await useProvisioningOptionsApi().saveProvisioningOptions(
+				await expect(
+					composable.saveProvisioningOptions(
 						"systemid",
 						provisioningOptionsEntry
-					);
-
-				expect(result).toEqual(provisioningOptionsDefaultValues);
+					)
+				).rejects.toThrow(error);
+				expect(notifierModule.show).toHaveBeenCalled();
 			});
 		});
 	});

@@ -107,6 +107,7 @@ export default defineComponent({
 			updateProvisioningOptionsData,
 			provisioningOptionsData,
 			isLoading,
+			error,
 		} = useProvisioningOptionsState();
 		const router = useRouter();
 
@@ -136,10 +137,12 @@ export default defineComponent({
 
 		const onSave = async (provisioningOptions: ProvisioningOptions) => {
 			await updateProvisioningOptionsData(props.systemId, provisioningOptions);
-			await router.push({
-				path: schoolSettingsPage.to,
-				query: { openPanels: "authentication" },
-			});
+			if (!error.value) {
+				await router.push({
+					path: schoolSettingsPage.to,
+					query: { openPanels: "authentication" },
+				});
+			}
 		};
 
 		const onCancel = async () => {
