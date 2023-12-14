@@ -12,9 +12,15 @@ import {
 import { useI18n } from "vue-i18n";
 import { useFilterLocalStorage } from "./localStorage.composable";
 
-const dataTableFilter = (userType: UserType) => {
+const dataTableFilter = () => {
+	const userType = ref<UserType>();
+
+	const setUserType = (user: UserType) => (userType.value = user);
+
 	const { t } = useI18n();
-	const { setFilterState, getFilterStorage } = useFilterLocalStorage(userType);
+	const { setFilterState, getFilterStorage } = useFilterLocalStorage(
+		userType.value ?? UserType.STUDENT
+	);
 
 	const filterQuery = ref<FilterQuery>({});
 
@@ -143,6 +149,7 @@ const dataTableFilter = (userType: UserType) => {
 		selectedFilterType,
 		removeChipFilter,
 		removeFilter,
+		setUserType,
 		updateFilter,
 	};
 };

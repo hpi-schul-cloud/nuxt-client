@@ -65,7 +65,12 @@ import {
 } from "./types/filterTypes";
 import { ref, computed, onMounted } from "vue";
 import { useDataTableFilter } from "./composables/filter.composable";
-import { useDataTableFilterApi } from "./composables/filterApi.composable";
+import { useStore } from "vuex";
+import { authModule } from "@/store";
+
+const { currentYear } = authModule.getSchool;
+
+const store = useStore();
 
 const props = defineProps({
 	filterFor: {
@@ -78,8 +83,6 @@ const emit = defineEmits(["update:filter"]);
 
 const dialogOpen = ref(false);
 
-const filterForUser = computed(() => props.filterFor);
-
 const {
 	defaultFilterMenuItems,
 	filterChipTitles,
@@ -91,10 +94,11 @@ const {
 	selectedFilterType,
 	removeChipFilter,
 	removeFilter,
+	setUserType,
 	updateFilter,
-} = useDataTableFilter(filterForUser.value as UserType);
+} = useDataTableFilter();
 
-const { classNamesList } = await useDataTableFilterApi();
+const classNamesList = ref([]);
 
 const modalTitle = computed(
 	() =>
@@ -105,8 +109,8 @@ const modalTitle = computed(
 
 const selectionProps = computed(() => {
 	return selectedFilterType.value == FilterOptions.CLASSES
-		? classNamesList
-		: registrationOptions[filterForUser.value as UserType];
+		? classNamesList.value
+		: registrationOptions[props.filterFor as UserType];
 });
 
 const filteredValues = computed(() => {
@@ -146,7 +150,29 @@ const onUpdateFilter = (value: FilterOptions) => {
 	emit("update:filter", filterQuery.value);
 };
 
-onMounted(() => {
+const getClassNameList = () => {
+	return store?.state["classes"].list.reduce(
+		(acc: SelectOptionsType[], item: { displayName: string }) =>
+			acc.concat({
+				label: item.displayName,
+				value: item.displayName,
+			}),
+		[]
+	);
+};
+
+onMounted(async () => {
+	setUserType(props.filterFor as UserType);
+
+	await store.dispatch("classes/find", {
+		query: {
+			$limit: 1000,
+			year: currentYear._id,
+		},
+	});
+
+	classNamesList.value = getClassNameList();
+
 	filterMenuItems.value = defaultFilterMenuItems;
 });
 </script>
