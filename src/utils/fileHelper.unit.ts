@@ -7,6 +7,7 @@ import {
 	convertDownloadToPreviewUrl,
 	convertFileSize,
 	downloadFile,
+	formatSecondsToHourMinSec,
 	getFileExtension,
 	isAudioMimeType,
 	isDownloadAllowed,
@@ -463,6 +464,32 @@ describe("@/utils/fileHelper", () => {
 				const result = isPdfMimeType("");
 
 				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("formatSecondsToHourMinSec", () => {
+		describe("when file has duration 0", () => {
+			it("should display 0 minutes & 0 seconds", () => {
+				const result = formatSecondsToHourMinSec(0);
+
+				expect(result).toBe("00:00");
+			});
+		});
+
+		describe("when file lasts some seconds", () => {
+			it("should display it in Minutes, Seconds format", () => {
+				const result = formatSecondsToHourMinSec(45);
+
+				expect(result).toBe("00:45");
+			});
+		});
+
+		describe("when file has duration in hours", () => {
+			it("should display it in Hours, Minutes, Seconds format", () => {
+				const result = formatSecondsToHourMinSec(1555125);
+
+				expect(result).toBe("23:58:45");
 			});
 		});
 	});
