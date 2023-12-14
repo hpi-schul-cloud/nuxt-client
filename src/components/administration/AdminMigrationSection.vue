@@ -78,11 +78,9 @@
 				:disabled="!isMigrationActive"
 				:true-value="true"
 				:false-value="false"
+				:true-icon="mdiCheck"
 				:model-value="isMigrationMandatory"
-				inset
-				density="compact"
 				class="ml-1"
-				color="primary"
 				data-testid="migration-mandatory-switch"
 				@update:model-value="setMigrationMandatory(!isMigrationMandatory)"
 			/>
@@ -132,10 +130,7 @@
 			"
 			:disabled="!isMigrationActive"
 			v-model="school.features.enableLdapSyncDuringMigration"
-			inset
-			density="compact"
 			class="ml-1"
-			color="primary"
 			:true-icon="mdiCheck"
 			data-testid="enable-sync-during-migration-switch"
 			@update:model-value="setSchoolFeatures"
@@ -148,10 +143,7 @@
 				)
 			"
 			v-model="school.features.showOutdatedUsers"
-			inset
-			density="compact"
 			class="ml-1"
-			color="primary"
 			:true-icon="mdiCheck"
 			data-testid="show-outdated-users-switch"
 			@update:model-value="setSchoolFeatures"

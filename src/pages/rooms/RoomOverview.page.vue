@@ -28,10 +28,6 @@
 							:label="$t('pages.rooms.index.courses.arrangeCourses')"
 							:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
 							:true-icon="mdiCheck"
-							inset
-							flat
-							density="compact"
-							color="primary"
 						/>
 					</div>
 				</div>

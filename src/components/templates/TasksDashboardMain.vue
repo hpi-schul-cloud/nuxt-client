@@ -15,10 +15,6 @@
 					:aria-label="
 						$t('components.organisms.TasksDashboardMain.filter.substitute')
 					"
-					inset
-					flat
-					density="compact"
-					color="primary"
 					:true-icon="mdiCheck"
 				/>
 			</div>

@@ -7,11 +7,8 @@
 			<v-switch
 				v-model="shareOptions.isSchoolInternal"
 				data-testid="isSchoolInternal"
-				color="primary"
 				:value="true"
 				class="my-0 mr-n3"
-				inset
-				density="compact"
 				:true-icon="mdiCheck"
 			/>
 		</div>
@@ -22,11 +19,8 @@
 			<v-switch
 				v-model="shareOptions.hasExpiryDate"
 				data-testid="hasExpiryDate"
-				color="primary"
 				:value="true"
 				class="my-0 mr-n3"
-				inset
-				density="compact"
 				:true-icon="mdiCheck"
 			/>
 		</div>
