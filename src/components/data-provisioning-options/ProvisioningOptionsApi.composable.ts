@@ -7,10 +7,12 @@ import { ProvisioningOptions } from "./type";
 import { schoolsModule } from "@/store";
 import { AxiosResponse } from "axios";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "../../utils/inject";
+import { useI18n } from "../../composables/i18n.composable";
 
 // TODO N21-1479 move error handling to state composable
 export const useProvisioningOptionsApi = () => {
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+	const { t } = useI18n();
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
 	const provisioningOptionsDefaultValues: ProvisioningOptions = {
 		class: true,
@@ -42,7 +44,7 @@ export const useProvisioningOptionsApi = () => {
 			}
 
 			notifierModule.show({
-				text: "Something went wrong. Please try again or contact support.",
+				text: t("error.load"),
 				status: "error",
 			});
 
@@ -75,7 +77,7 @@ export const useProvisioningOptionsApi = () => {
 			return savedOptions;
 		} catch (error) {
 			notifierModule.show({
-				text: "Something went wrong. Please try again or contact support.",
+				text: t("error.generic"),
 				status: "error",
 			});
 
