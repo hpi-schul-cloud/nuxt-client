@@ -1,14 +1,9 @@
 <template>
-	<component
-		:is="component"
-		v-if="html !== ''"
-		v-dompurify-html:[config]="html"
-	/>
+	<component :is="component" v-dompurify-html:[config]="html" />
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
-
+import { defineComponent, PropType } from "vue";
 export default defineComponent({
 	name: "RenderHTML",
 	props: {
@@ -18,12 +13,6 @@ export default defineComponent({
 			type: String as PropType<"ck5" | "translations">,
 			default: "translations",
 		},
-	},
-	setup: (props) => {
-		const isEmpty = computed(() => props.html === "");
-		return {
-			isEmpty,
-		};
 	},
 });
 </script>
