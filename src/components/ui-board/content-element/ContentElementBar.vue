@@ -69,29 +69,31 @@ export default defineComponent({
 });
 </script>
 
-<style type="text/scss">
+<style scoped type="text/scss">
 .content-element-bar {
 	line-height: 24px;
 	color: var(--v-black-base);
 }
-.content-element-bar:hover .content-element-title {
-	text-decoration: underline;
+.content-element-bar:hover {
+	.content-element-title {
+		text-decoration: underline;
+	}
+	.content-element-bar-display {
+		filter: brightness(80%);
+	}
 }
-.content-element-bar:hover .content-element-bar-display {
-	filter: brightness(80%);
-}
-.content-element-bar .subtitle,
-.content-element-bar .description {
+.subtitle,
+.description {
 	line-height: 20px;
 }
-.content-element-bar .three-dot-menu {
+.three-dot-menu {
 	margin-top: -6px;
 	margin-right: -6px;
+	.v-icon {
+		color: var(--v-black-base);
+	}
 }
-.content-element-bar .three-dot-menu .v-icon {
-	color: var(--v-black-base);
-}
-.content-element-bar .v-card__text {
+.v-card__text {
 	margin-top: 0px;
 }
 .content-element-bar-element {
