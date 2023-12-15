@@ -5,6 +5,7 @@
 		data-testid="board-file-element-edit-menu-download"
 		class="float-right download-button"
 		icon
+		:aria-label="$t('components.board.action.download')"
 	>
 		<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 	</v-btn>
