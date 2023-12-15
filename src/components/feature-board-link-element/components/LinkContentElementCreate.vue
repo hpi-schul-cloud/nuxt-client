@@ -1,5 +1,5 @@
 <template>
-	<v-card class="pa-4 elevation-0" tabindex="-1">
+	<v-card-text>
 		<v-form @submit.prevent.stop="onSubmit" ref="form" :lazy-validation="true">
 			<div class="d-flex flex-row">
 				<v-textarea
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 		</v-form>
-	</v-card>
+	</v-card-text>
 </template>
 
 <script lang="ts">
