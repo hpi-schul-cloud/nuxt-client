@@ -75,7 +75,10 @@ describe("@components/share/ImportFlow", () => {
 			getCopyResult: copyResultResponse,
 		});
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
-		setupStores({ rooms: RoomsModule });
+		setupStores({
+			rooms: RoomsModule,
+			envConfigModule: EnvConfigModule,
+		});
 		jest.spyOn(roomsModule, "fetchAllElements").mockImplementation();
 	});
 

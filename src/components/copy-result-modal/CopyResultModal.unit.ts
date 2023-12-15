@@ -69,8 +69,9 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
-
-		setupStores({ envConfigModule: EnvConfigModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
 	});
 
 	describe("basic functions", () => {

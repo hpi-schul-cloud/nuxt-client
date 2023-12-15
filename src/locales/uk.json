@@ -276,6 +276,7 @@
 	"components.molecules.copyResult.etherpadCopy.info": "Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.geogebraCopy.info": "Ідентифікатори матеріалів не копіюються з технічних причин і повинні бути додані знову.",
 	"components.molecules.copyResult.nexboardCopy.info": "Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
+	"components.molecules.copyResult.nexboardCopy.infoTldraw": "Вміст не копіюється, оскільки NeXboard замінюється на Tldraw. Ви можете додати Tldraw до Колонна дошка для стовпчиків, додавши новий елемент Whiteboard.",
 	"components.molecules.share.options.title": "Налаштування спільного доступу",
 	"components.molecules.share.options.schoolInternally": "Посилання дійсне тільки в межах школи",
 	"components.molecules.share.options.expiresInDays": "Термін дії посилання закінчується через 21 днів",
