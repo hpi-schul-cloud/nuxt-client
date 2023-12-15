@@ -215,7 +215,7 @@ describe("ProvisioningOptionsState.composable", () => {
 				};
 			};
 
-			it("should show notification", async () => {
+			it("should not show notification", async () => {
 				const { composable } = setup();
 
 				await composable.fetchProvisioningOptionsData("systemId");

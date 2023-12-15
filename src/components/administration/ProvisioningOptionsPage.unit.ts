@@ -23,7 +23,7 @@ const $theme = {
 	name: "instance name",
 };
 
-describe("ProvisioningOptionsPage", () => {
+describe(ProvisioningOptionsPage.name, () => {
 	let useProvisioningOptionsStateMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsState>
 	>;
