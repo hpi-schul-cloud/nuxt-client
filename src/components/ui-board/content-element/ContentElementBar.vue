@@ -11,7 +11,18 @@
 				</template>
 			</ContentElementDisplay>
 		</div>
-		<div :class="backgroundClass" class="pa-4 rounded-b">
+		<div
+			:class="backgroundClass"
+			class="pa-4 rounded-b"
+			v-if="
+				icon ||
+				$slots.title ||
+				$slots.menu ||
+				$slots.element ||
+				$slots.subtitle ||
+				$slots.description
+			"
+		>
 			<div class="d-flex align-start">
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
