@@ -247,11 +247,6 @@ describe("ProvisioningOptionsPage", () => {
 					'[data-testid="provisioning-options-save-button"]'
 				);
 
-				const redirect: Partial<Route> = {
-					path: "/administration/school-settings",
-					query: { openPanels: "authentication" },
-				};
-
 				useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
 				useProvisioningOptionsStateMock.error.value = {
 					error: new Error(),
@@ -261,7 +256,6 @@ describe("ProvisioningOptionsPage", () => {
 
 				return {
 					saveButton,
-					redirect,
 				};
 			};
 
@@ -279,8 +273,8 @@ describe("ProvisioningOptionsPage", () => {
 				});
 			});
 
-			it("should return to school settings page", async () => {
-				const { saveButton, redirect } = setup();
+			it("should stay on provisioning options page", async () => {
+				const { saveButton } = setup();
 
 				await saveButton.trigger("click");
 				await Vue.nextTick();
