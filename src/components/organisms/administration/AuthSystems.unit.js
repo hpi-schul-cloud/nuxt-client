@@ -16,7 +16,12 @@ const generateProps = () => ({
 			oauthConfig: { provider: "iserv-idm" },
 		}, // deletable: false, editable: false
 		{ _id: "3", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
-		{ _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }, // deletable: true, editable: false
+		{
+			_id: "4",
+			type: "oauth",
+			oauthConfig: { provider: "sanis-idm" },
+			alias: "SANIS",
+		}, // deletable: true, editable: false
 	],
 	confirmDeleteDialog: {
 		isOpen: false,
@@ -219,7 +224,7 @@ describe("AuthSystems", () => {
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
-			// { _id: "1234", type: "sample system" }, // deletable: true, editable: false
+			// { _id: "1", type: "sample system" }, // deletable: false, editable: false
 			expect(
 				tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(false);
@@ -227,7 +232,7 @@ describe("AuthSystems", () => {
 				tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(false);
 
-			// { _id: "12345", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
+			// { _id: "2", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
 			expect(
 				tableCell.wrappers[5].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(false);
@@ -235,13 +240,76 @@ describe("AuthSystems", () => {
 				tableCell.wrappers[5].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(false);
 
-			// { _id: "123456", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
+			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
 			expect(
 				tableCell.wrappers[8].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(true);
 			expect(
 				tableCell.wrappers[8].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(true);
+
+			// { _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }, // deletable: false, editable: false
+			expect(
+				tableCell.wrappers[11].find(searchStrings.deleteSystemButton).exists()
+			).toStrictEqual(false);
+			expect(
+				tableCell.wrappers[11].find(searchStrings.editSystemButton).exists()
+			).toStrictEqual(false);
+		});
+
+		it("should redirect to ldap config page from edit button of general ldap system", () => {
+			authModule.setUser({
+				...mockUser,
+				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
+			});
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+
+			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
+
+			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
+			expect(
+				tableCell.wrappers[8].findComponent("routerlink-stub").props("to")
+			).toEqual("`/administration/ldap/config?id=${system._id}`");
+		});
+
+		it("should display system edit button and redirect to correct config page ", () => {
+			envConfigModule.setEnvs({
+				FEATURE_PROVISIONING_OPTIONS_ENABLED: true,
+			});
+
+			authModule.setUser({
+				...mockUser,
+				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
+			});
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+
+			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
+
+			// { _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }
+			expect(
+				tableCell.wrappers[11].find(searchStrings.editSystemButton).exists()
+			).toStrictEqual(true);
+			expect(
+				tableCell.wrappers[11].findComponent("routerlink-stub").props("to")
+			).toEqual(
+				"/administration/school-settings/provisioning-options?systemId=4"
+			);
+			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
+			expect(
+				tableCell.wrappers[8].findComponent("routerlink-stub").props("to")
+			).toEqual("`/administration/ldap/config?id=${system._id}`");
 		});
 
 		it("should NOT display the dialog", async () => {

@@ -7,8 +7,8 @@ import {
 	isMongoId,
 	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
-	REGEX_ID,
 	REGEX_H5P_ID,
+	REGEX_ID,
 	REGEX_UUID,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
@@ -65,6 +65,19 @@ export const routes: Array<RouteConfig> = [
 		],
 		props: (route: Route) => ({
 			configId: route.params.configId,
+		}),
+	},
+	{
+		path: "/administration/school-settings/provisioning-options",
+		component: () =>
+			import("@/components/administration/ProvisioningOptionsPage.vue"),
+		name: "provivisioning-options-page",
+		beforeEnter: createPermissionGuard([
+			"school_system_view",
+			"school_system_edit",
+		]),
+		props: (route: Route) => ({
+			systemId: route.query.systemId,
 		}),
 	},
 	{
