@@ -130,7 +130,7 @@ const dataTableFilter = (userType: string) => {
 	};
 
 	onMounted(() => {
-		filterQuery.value = getFilterStorage() || {};
+		filterQuery.value = getFilterStorage || {};
 		if (filterQuery.value)
 			filterChipTitles.value = Object.keys(filterQuery.value);
 	});

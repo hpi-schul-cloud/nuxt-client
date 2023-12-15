@@ -39,9 +39,7 @@
 				data-testid="data_filter"
 			/>
 
-			<Suspense>
-				<NewDataFilter @update:filter="onUpdateFilter" filter-for="student" />
-			</Suspense>
+			<NewDataFilter @update:filter="onUpdateFilter" filter-for="student" />
 
 			<backend-data-table
 				:actions="filteredActions"
