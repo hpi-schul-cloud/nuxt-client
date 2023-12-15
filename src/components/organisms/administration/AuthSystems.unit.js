@@ -275,7 +275,7 @@ describe("AuthSystems", () => {
 			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
 			expect(
 				tableCell.wrappers[8].findComponent("routerlink-stub").props("to")
-			).toEqual("`/administration/ldap/config?id=${system._id}`");
+			).toEqual("/administration/ldap/config?id=3");
 		});
 
 		it("should display system edit button and redirect to correct config page ", () => {
@@ -309,7 +309,7 @@ describe("AuthSystems", () => {
 			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
 			expect(
 				tableCell.wrappers[8].findComponent("routerlink-stub").props("to")
-			).toEqual("`/administration/ldap/config?id=${system._id}`");
+			).toEqual("/administration/ldap/config?id=3");
 		});
 
 		it("should NOT display the dialog", async () => {
