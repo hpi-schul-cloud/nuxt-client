@@ -1986,7 +1986,7 @@ export interface FederalStateResponse {
      * @type {Array<CountyResponse>}
      * @memberof FederalStateResponse
      */
-    counties?: Array<CountyResponse>;
+    counties: Array<CountyResponse>;
 }
 /**
  * 

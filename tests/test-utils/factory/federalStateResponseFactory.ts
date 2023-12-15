@@ -7,5 +7,6 @@ export const federalStateResponseFactory = Factory.define<FederalStateResponse>(
 		name: "Niedersachen",
 		abbreviation: "NI",
 		logoUrl: "https://example.com/logo.png",
+		counties: [],
 	})
 );
