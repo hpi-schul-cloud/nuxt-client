@@ -22,7 +22,7 @@ import { mdiPresentation } from "@mdi/js";
 import image from "@/assets/img/tldraw.png";
 import { ContentElementBar } from "@ui-board";
 import dayjs from "dayjs";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "InnerContent",
@@ -34,11 +34,11 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const imageSrc = image;
 
 		const formattedLastUpdatedAt = computed(() => {
-			const format = i18n.tc("format.dateTime");
+			const format = t("format.dateTime");
 			return dayjs(props.lastUpdatedAt).format(format);
 		});
 
