@@ -35,11 +35,11 @@ type UserBasedRegistrationOptions = {
 };
 
 type FilterQuery = {
-	lastLoginSystemChange?: DateSelection | string;
-	classes?: string[] | string;
-	consentStatus?: RegistrationTypes | string;
-	createdAt?: DateSelection | string;
-	outdatedSince?: DateSelection | string;
+	lastLoginSystemChange?: DateSelection | object;
+	classes?: string[];
+	consentStatus?: RegistrationTypes | string[];
+	createdAt?: DateSelection | object;
+	outdatedSince?: DateSelection | object;
 };
 
 type Query = {

@@ -1,16 +1,26 @@
 import { createSharedComposable } from "@vueuse/core";
-import { useStorage } from "@/composables/locale-storage.composable";
-import { UiState, FilterQuery, UserType } from "../types/filterTypes";
+import { useStorage } from "@vueuse/core";
 
-const filterLocalStorage = (userType: UserType) => {
-	const { get, set } = useStorage();
+import { UiState, UserType } from "../types/filterTypes";
+import { ref } from "vue";
 
-	const filterStorageKey = {
+const filterLocalStorage = () => {
+	const userType = ref<string>();
+
+	const initializeUserType = (user: string) => {
+		userType.value = user;
+	};
+
+	type FilterStorage = {
+		[UserType.STUDENT]: string;
+		[UserType.TEACHER]: string;
+	};
+
+	const filterStorageKey: FilterStorage = {
 		[UserType.STUDENT]: "pages.administration.students.index",
 		[UserType.TEACHER]: "pages.administration.teachers.index",
 	};
 
-	const stateName = "uiState";
 	const defaultState: UiState = {
 		pagination: {},
 		filter: {
@@ -25,52 +35,26 @@ const filterLocalStorage = (userType: UserType) => {
 		version: 1,
 	};
 
-	const defaultFilterState = {
-		filter: {
-			[filterStorageKey[UserType.STUDENT]]: {
-				query: {},
-			},
-			[filterStorageKey[UserType.TEACHER]]: {
-				query: {},
-			},
-		},
-	};
-
-	const getFilterState = (): UiState => {
-		const state = get(stateName);
-		if (!state) return defaultState;
-
-		return JSON.parse(state);
-	};
-
-	const getDefaultState = (): UiState => {
-		const uiState = getFilterState();
-
-		if (!uiState?.filter) {
-			defaultState.filter = defaultFilterState.filter;
-			set(stateName, JSON.stringify(defaultState));
-			return defaultState;
-		}
-		return uiState;
-	};
+	const state = useStorage("uiState", defaultState);
 
 	const getFilterStorage = () => {
-		// @ts-expect-error TODO: check type here
-		return getDefaultState().filter[filterStorageKey[userType]]?.query;
+		return userType.value == UserType.STUDENT
+			? state.value.filter["pages.administration.students.index"]?.query
+			: state.value.filter["pages.administration.teachers.index"]?.query;
 	};
 
-	const state = getDefaultState();
-
-	const setFilterState = (val: FilterQuery) => {
-		const newState = JSON.parse(JSON.stringify(state));
-		newState.filter[filterStorageKey[userType]].query = {
-			...val,
-		};
-
-		set(stateName, JSON.stringify(newState));
+	const setFilterState = (val: object) => {
+		if (userType.value == UserType.STUDENT)
+			state.value.filter["pages.administration.students.index"] = {
+				query: val,
+			};
+		if (userType.value == UserType.TEACHER)
+			state.value.filter["pages.administration.teachers.index"] = {
+				query: val,
+			};
 	};
 
-	return { setFilterState, getFilterStorage };
+	return { getFilterStorage, setFilterState, initializeUserType };
 };
 
 export const useFilterLocalStorage = createSharedComposable(filterLocalStorage);

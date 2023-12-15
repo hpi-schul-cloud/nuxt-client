@@ -94,9 +94,9 @@ const {
 	selectedFilterType,
 	removeChipFilter,
 	removeFilter,
-	setUserType,
 	updateFilter,
-} = useDataTableFilter();
+	// eslint-disable-next-line vue/no-setup-props-reactivity-loss
+} = useDataTableFilter(props.filterFor);
 
 const classNamesList = ref([]);
 
@@ -162,8 +162,6 @@ const getClassNameList = () => {
 };
 
 onMounted(async () => {
-	setUserType(props.filterFor as UserType);
-
 	await store.dispatch("classes/find", {
 		query: {
 			$limit: 1000,

@@ -12,15 +12,11 @@ import {
 import { useI18n } from "vue-i18n";
 import { useFilterLocalStorage } from "./localStorage.composable";
 
-const dataTableFilter = () => {
-	const userType = ref<UserType>();
-
-	const setUserType = (user: UserType) => (userType.value = user);
-
+const dataTableFilter = (userType: string) => {
 	const { t } = useI18n();
-	const { setFilterState, getFilterStorage } = useFilterLocalStorage(
-		userType.value ?? UserType.STUDENT
-	);
+	const { setFilterState, getFilterStorage, initializeUserType } =
+		useFilterLocalStorage();
+	initializeUserType(userType);
 
 	const filterQuery = ref<FilterQuery>({});
 
@@ -98,6 +94,7 @@ const dataTableFilter = () => {
 
 	const updateFilter = (value: FilterOptions) => {
 		if (selectedFilterType.value)
+			// @ts-expect-error TODO: check error here
 			filterQuery.value[selectedFilterType.value] = value;
 
 		filterMenuItems.value = defaultFilterMenuItems.filter(
@@ -133,7 +130,7 @@ const dataTableFilter = () => {
 	};
 
 	onMounted(() => {
-		filterQuery.value = getFilterStorage();
+		filterQuery.value = getFilterStorage() || {};
 		if (filterQuery.value)
 			filterChipTitles.value = Object.keys(filterQuery.value);
 	});
@@ -147,9 +144,9 @@ const dataTableFilter = () => {
 		isSelectFiltering,
 		registrationOptions,
 		selectedFilterType,
+		userType,
 		removeChipFilter,
 		removeFilter,
-		setUserType,
 		updateFilter,
 	};
 };
