@@ -15,6 +15,10 @@ import * as routerComposables from "vue-router/composables";
 
 jest.mock("@data-provisioning-options");
 
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 const $theme = {
 	name: "instance name",
 };

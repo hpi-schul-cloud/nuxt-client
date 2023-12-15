@@ -93,7 +93,8 @@ import {
 import { useRouter } from "vue-router/composables";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
 import { Breadcrumb } from "../templates/default-wireframe.types";
-import { buildPageTitle } from "../../utils/pageTitle";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
 
 export default defineComponent({
 	name: "ProvisioningOptionsPage",
@@ -111,6 +112,11 @@ export default defineComponent({
 			error,
 		} = useProvisioningOptionsState();
 		const router = useRouter();
+
+		const pageTitle = buildPageTitle(
+			t("components.administration.provisioningOptions.page.title")
+		);
+		useTitle(pageTitle);
 
 		const schoolSettingsPage: Breadcrumb = {
 			text: t("pages.administration.school.index.title"),
@@ -133,9 +139,6 @@ export default defineComponent({
 		);
 
 		onMounted(async () => {
-			document.title = buildPageTitle(
-				t("components.administration.provisioningOptions.page.title")
-			);
 			await fetchProvisioningOptionsData(props.systemId);
 		});
 
