@@ -11,7 +11,7 @@
 			open-delay="300"
 			close-delay="300"
 			transition="fade"
-			content-class="tooltip"
+			content-class="content-element-tooltip"
 			v-if="isOverflowingLongText"
 		>
 			<template v-slot:activator="{ on, attrs }">
@@ -69,7 +69,7 @@ export default defineComponent({
 	color: var(--v-black-base);
 	box-sizing: border-box;
 }
-.tooltip {
+.content-element-tooltip {
 	display: block;
 	border-radius: 4px;
 	padding: 8px;
@@ -86,5 +86,16 @@ export default defineComponent({
 	overflow-wrap: break-word;
 	white-space: normal;
 	box-sizing: border-box;
+}
+</style>
+
+<style lang="scss">
+.v-application .content-element-tooltip a {
+	color: white !important;
+	text-decoration: none;
+}
+.v-application .content-element-title a {
+	color: var(--v-black-base) !important;
+	text-decoration: none;
 }
 </style>
