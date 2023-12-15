@@ -1,5 +1,5 @@
 <template>
-	<v-card-text
+	<div
 		data-testid="board-link-element"
 		ref="linkContentElementDisplay"
 		:ripple="false"
@@ -20,7 +20,7 @@
 				<slot />
 			</template>
 		</ContentElementBar>
-	</v-card-text>
+	</div>
 </template>
 
 <script lang="ts">
