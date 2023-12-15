@@ -21,3 +21,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.content-element-title-icon {
+	vertical-align: sub;
+}
+</style>
