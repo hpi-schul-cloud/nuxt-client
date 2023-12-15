@@ -1,4 +1,4 @@
-import { axiosErrorFactory } from "@@/tests/test-utils";
+import { axiosErrorFactory, mountComposable } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
@@ -6,6 +6,8 @@ import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
 import { ProvisioningOptions } from "./type";
 import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory/provisioningOptionsDataFactory";
+import { NOTIFIER_MODULE_KEY } from "../../utils/inject";
+import { notifierModule } from "../../store";
 
 jest.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
 
@@ -29,7 +31,7 @@ describe("ProvisioningOptionsState.composable", () => {
 
 	describe("fetchProvisioningOptionsData", () => {
 		describe("when no data is loaded", () => {
-			it("should not have data", async () => {
+			it("should have default values", async () => {
 				const { provisioningOptionsData } = useProvisioningOptionsState();
 
 				expect(provisioningOptionsData.value).toEqual({
@@ -49,7 +51,12 @@ describe("ProvisioningOptionsState.composable", () => {
 					provisioningOptionsDataMock
 				);
 
-				const composable = useProvisioningOptionsState();
+				const composable = mountComposable(
+					() => useProvisioningOptionsState(),
+					{
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					}
+				);
 
 				composable.error.value = {
 					statusCode: 418,
@@ -58,22 +65,22 @@ describe("ProvisioningOptionsState.composable", () => {
 
 				return {
 					provisioningOptionsDataMock,
-					...composable,
+					composable,
 				};
 			};
 
 			it("should reset the error", async () => {
-				const { fetchProvisioningOptionsData, error } = setup();
+				const { composable } = setup();
 
-				await fetchProvisioningOptionsData("systemId");
+				await composable.fetchProvisioningOptionsData("systemId");
 
-				expect(error.value).toBeUndefined();
+				expect(composable.error.value).toBeUndefined();
 			});
 
 			it("should call the api for provisioning options data", async () => {
-				const { fetchProvisioningOptionsData } = setup();
+				const { composable } = setup();
 
-				await fetchProvisioningOptionsData("systemId");
+				await composable.fetchProvisioningOptionsData("systemId");
 
 				expect(
 					useProvisioningOptionsApiMock.getProvisioningOptions
@@ -81,15 +88,11 @@ describe("ProvisioningOptionsState.composable", () => {
 			});
 
 			it("should set the provisioning data in the state", async () => {
-				const {
-					fetchProvisioningOptionsData,
-					provisioningOptionsData,
-					provisioningOptionsDataMock,
-				} = setup();
+				const { composable, provisioningOptionsDataMock } = setup();
 
-				await fetchProvisioningOptionsData("systemId");
+				await composable.fetchProvisioningOptionsData("systemId");
 
-				expect(provisioningOptionsData.value).toEqual(
+				expect(composable.provisioningOptionsData.value).toEqual(
 					provisioningOptionsDataMock
 				);
 			});
@@ -107,28 +110,35 @@ describe("ProvisioningOptionsState.composable", () => {
 				const provisioningOptionsDefaultData: ProvisioningOptions =
 					provisioningOptionsDataFactory.build();
 
+				const composable = mountComposable(
+					() => useProvisioningOptionsState(),
+					{
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					}
+				);
+
 				return {
 					errorResponse,
 					apiError,
 					provisioningOptionsDefaultData,
-					...useProvisioningOptionsState(),
+					composable,
 				};
 			};
 
 			it("should set loading to false", async () => {
-				const { fetchProvisioningOptionsData } = setup();
+				const { composable } = setup();
 
-				await fetchProvisioningOptionsData("systemid");
+				await composable.fetchProvisioningOptionsData("systemid");
 
 				expect(useProvisioningOptionsState().isLoading.value).toEqual(false);
 			});
 
 			it("should set the error", async () => {
-				const { fetchProvisioningOptionsData, error, apiError } = setup();
+				const { composable, apiError } = setup();
 
-				await fetchProvisioningOptionsData("systemid");
+				await composable.fetchProvisioningOptionsData("systemid");
 
-				expect(error.value).toEqual<BusinessError>({
+				expect(composable.error.value).toEqual<BusinessError>({
 					error: apiError,
 					statusCode: apiError.code,
 					message: apiError.message,
@@ -136,19 +146,19 @@ describe("ProvisioningOptionsState.composable", () => {
 			});
 
 			it("should return default provisioning options data", async () => {
-				const {
-					provisioningOptionsData,
-					fetchProvisioningOptionsData,
-					provisioningOptionsDefaultData,
-				} = setup();
+				const { composable, provisioningOptionsDefaultData } = setup();
 
-				await fetchProvisioningOptionsData("systemid");
+				await composable.fetchProvisioningOptionsData("systemid");
 
-				expect(provisioningOptionsData.value).toEqual(
+				expect(composable.provisioningOptionsData.value).toEqual(
 					provisioningOptionsDefaultData
 				);
 			});
+			// TODO N21-1479 adjust test cases for new error handling moved from api composable
+			it;
 		});
+
+		describe("when ");
 	});
 
 	describe("updateProvisioningOptionsData", () => {

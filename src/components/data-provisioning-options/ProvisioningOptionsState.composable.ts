@@ -2,11 +2,14 @@ import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { ref, Ref } from "vue";
 import { ProvisioningOptions, useProvisioningOptionsApi } from "./index";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { useI18n } from "@/composables/i18n.composable";
 
 export const useProvisioningOptionsState = () => {
 	const { getProvisioningOptions, saveProvisioningOptions } =
 		useProvisioningOptionsApi();
-
+	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+	const { t } = useI18n();
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 	const provisioningOptionsData: Ref<ProvisioningOptions> = ref({
@@ -14,6 +17,11 @@ export const useProvisioningOptionsState = () => {
 		course: false,
 		others: false,
 	});
+	const provisioningOptionsDefaultValues: ProvisioningOptions = {
+		class: true,
+		course: false,
+		others: false,
+	};
 
 	const fetchProvisioningOptionsData = async (
 		systemId: string
@@ -31,6 +39,14 @@ export const useProvisioningOptionsState = () => {
 				statusCode: apiError.code,
 				message: apiError.message,
 			};
+
+			provisioningOptionsData.value = provisioningOptionsDefaultValues;
+			if (apiError.code !== 404) {
+				notifierModule.show({
+					text: t("error.load"),
+					status: "error",
+				});
+			}
 		}
 
 		isLoading.value = false;
@@ -49,6 +65,11 @@ export const useProvisioningOptionsState = () => {
 				provisioningOptions
 			);
 		} catch (errorResponse) {
+			notifierModule.show({
+				text: t("error.generic"),
+				status: "error",
+			});
+
 			const apiError = mapAxiosErrorToResponseError(errorResponse);
 
 			error.value = {
