@@ -4,6 +4,7 @@ import { ref, Ref } from "vue";
 import { ProvisioningOptions, useProvisioningOptionsApi } from "./index";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useI18n } from "@/composables/i18n.composable";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 export const useProvisioningOptionsState = () => {
 	const { getProvisioningOptions, saveProvisioningOptions } =
@@ -41,7 +42,8 @@ export const useProvisioningOptionsState = () => {
 			};
 
 			provisioningOptionsData.value = provisioningOptionsDefaultValues;
-			if (apiError.code !== 404) {
+
+			if (apiError.code !== HttpStatusCode.NotFound) {
 				notifierModule.show({
 					text: t("error.load"),
 					status: "error",

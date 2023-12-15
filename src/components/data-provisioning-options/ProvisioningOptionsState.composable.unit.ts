@@ -1,4 +1,9 @@
-import { axiosErrorFactory, mountComposable } from "@@/tests/test-utils";
+import {
+	apiResponseErrorFactory,
+	axiosErrorFactory,
+	i18nMock,
+	mountComposable,
+} from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
@@ -6,8 +11,9 @@ import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
 import { ProvisioningOptions } from "./type";
 import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory/provisioningOptionsDataFactory";
-import { NOTIFIER_MODULE_KEY } from "../../utils/inject";
-import { notifierModule } from "../../store";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
 
 jest.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
 
@@ -15,6 +21,7 @@ describe("ProvisioningOptionsState.composable", () => {
 	let useProvisioningOptionsApiMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsApi>
 	>;
+	const notifierModule = createModuleMocks(NotifierModule);
 
 	beforeEach(() => {
 		useProvisioningOptionsApiMock =
@@ -31,10 +38,24 @@ describe("ProvisioningOptionsState.composable", () => {
 
 	describe("fetchProvisioningOptionsData", () => {
 		describe("when no data is loaded", () => {
-			it("should have default values", async () => {
-				const { provisioningOptionsData } = useProvisioningOptionsState();
+			const setup = () => {
+				const composable = mountComposable(
+					() => useProvisioningOptionsState(),
+					{
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+						[I18N_KEY.valueOf()]: i18nMock,
+					}
+				);
 
-				expect(provisioningOptionsData.value).toEqual({
+				return {
+					composable,
+				};
+			};
+
+			it("should have default values", async () => {
+				const { composable } = setup();
+
+				expect(composable.provisioningOptionsData.value).toEqual({
 					class: true,
 					course: false,
 					others: false,
@@ -55,6 +76,7 @@ describe("ProvisioningOptionsState.composable", () => {
 					() => useProvisioningOptionsState(),
 					{
 						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+						[I18N_KEY.valueOf()]: i18nMock,
 					}
 				);
 
@@ -114,6 +136,7 @@ describe("ProvisioningOptionsState.composable", () => {
 					() => useProvisioningOptionsState(),
 					{
 						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+						[I18N_KEY.valueOf()]: i18nMock,
 					}
 				);
 
@@ -130,7 +153,7 @@ describe("ProvisioningOptionsState.composable", () => {
 
 				await composable.fetchProvisioningOptionsData("systemid");
 
-				expect(useProvisioningOptionsState().isLoading.value).toEqual(false);
+				expect(composable.isLoading.value).toEqual(false);
 			});
 
 			it("should set the error", async () => {
@@ -154,11 +177,52 @@ describe("ProvisioningOptionsState.composable", () => {
 					provisioningOptionsDefaultData
 				);
 			});
-			// TODO N21-1479 adjust test cases for new error handling moved from api composable
-			it;
+
+			it("should show notification", async () => {
+				const { composable } = setup();
+
+				await composable.fetchProvisioningOptionsData("systemId");
+
+				expect(notifierModule.show).toHaveBeenCalled();
+			});
 		});
 
-		describe("when ");
+		describe("when occured error during loading is a NOT_FOUND", () => {
+			const setup = () => {
+				const errorResponse = axiosErrorFactory.build({
+					response: {
+						data: apiResponseErrorFactory.build({
+							message: "mockMessage",
+							code: 404,
+						}),
+					},
+				});
+
+				useProvisioningOptionsApiMock.getProvisioningOptions.mockRejectedValueOnce(
+					errorResponse
+				);
+
+				const composable = mountComposable(
+					() => useProvisioningOptionsState(),
+					{
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+						[I18N_KEY.valueOf()]: i18nMock,
+					}
+				);
+
+				return {
+					composable,
+				};
+			};
+
+			it("should show notification", async () => {
+				const { composable } = setup();
+
+				await composable.fetchProvisioningOptionsData("systemId");
+
+				expect(notifierModule.show).not.toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("updateProvisioningOptionsData", () => {
@@ -175,7 +239,13 @@ describe("ProvisioningOptionsState.composable", () => {
 					provisioningOptionsDataMock
 				);
 
-				const composable = useProvisioningOptionsState();
+				const composable = mountComposable(
+					() => useProvisioningOptionsState(),
+					{
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+						[I18N_KEY.valueOf()]: i18nMock,
+					}
+				);
 
 				composable.error.value = {
 					statusCode: 418,
@@ -184,30 +254,25 @@ describe("ProvisioningOptionsState.composable", () => {
 
 				return {
 					provisioningOptionsDataMock,
-					...composable,
+					composable,
 				};
 			};
 
 			it("should reset the error", async () => {
-				const {
-					updateProvisioningOptionsData,
-					error,
-					provisioningOptionsDataMock,
-				} = setup();
+				const { composable, provisioningOptionsDataMock } = setup();
 
-				await updateProvisioningOptionsData(
+				await composable.updateProvisioningOptionsData(
 					"systemId",
 					provisioningOptionsDataMock
 				);
 
-				expect(error.value).toBeUndefined();
+				expect(composable.error.value).toBeUndefined();
 			});
 
 			it("should call the api to save provisioning options data", async () => {
-				const { updateProvisioningOptionsData, provisioningOptionsDataMock } =
-					setup();
+				const { composable, provisioningOptionsDataMock } = setup();
 
-				await updateProvisioningOptionsData(
+				await composable.updateProvisioningOptionsData(
 					"systemId",
 					provisioningOptionsDataMock
 				);
@@ -218,18 +283,14 @@ describe("ProvisioningOptionsState.composable", () => {
 			});
 
 			it("should set the provisioning data in the state", async () => {
-				const {
-					updateProvisioningOptionsData,
-					provisioningOptionsData,
-					provisioningOptionsDataMock,
-				} = setup();
+				const { composable, provisioningOptionsDataMock } = setup();
 
-				await updateProvisioningOptionsData(
+				await composable.updateProvisioningOptionsData(
 					"systemId",
 					provisioningOptionsDataMock
 				);
 
-				expect(provisioningOptionsData.value).toEqual(
+				expect(composable.provisioningOptionsData.value).toEqual(
 					provisioningOptionsDataMock
 				);
 			});
@@ -249,6 +310,14 @@ describe("ProvisioningOptionsState.composable", () => {
 				const provisioningOptionsDefaultData: ProvisioningOptions =
 					provisioningOptionsDataFactory.build();
 
+				const composable = mountComposable(
+					() => useProvisioningOptionsState(),
+					{
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+						[I18N_KEY.valueOf()]: i18nMock,
+					}
+				);
+
 				useProvisioningOptionsApiMock.saveProvisioningOptions.mockRejectedValueOnce(
 					errorResponse
 				);
@@ -258,58 +327,45 @@ describe("ProvisioningOptionsState.composable", () => {
 					apiError,
 					provisioningOptionsDataMock,
 					provisioningOptionsDefaultData,
-					...useProvisioningOptionsState(),
+					composable,
 				};
 			};
 
 			it("should set loading to false", async () => {
-				const { updateProvisioningOptionsData, provisioningOptionsDataMock } =
-					setup();
+				const { composable, provisioningOptionsDataMock } = setup();
 
-				await updateProvisioningOptionsData(
+				await composable.updateProvisioningOptionsData(
 					"systemid",
 					provisioningOptionsDataMock
 				);
 
-				expect(useProvisioningOptionsState().isLoading.value).toEqual(false);
+				expect(composable.isLoading.value).toEqual(false);
 			});
 
 			it("should set the error", async () => {
-				const {
-					updateProvisioningOptionsData,
-					error,
-					apiError,
-					provisioningOptionsDataMock,
-				} = setup();
+				const { composable, apiError, provisioningOptionsDataMock } = setup();
 
-				await updateProvisioningOptionsData(
+				await composable.updateProvisioningOptionsData(
 					"systemid",
 					provisioningOptionsDataMock
 				);
 
-				expect(error.value).toEqual<BusinessError>({
+				expect(composable.error.value).toEqual<BusinessError>({
 					error: apiError,
 					statusCode: apiError.code,
 					message: apiError.message,
 				});
 			});
 
-			it("should return default provisioning options data", async () => {
-				const {
-					provisioningOptionsData,
-					updateProvisioningOptionsData,
-					provisioningOptionsDataMock,
-					provisioningOptionsDefaultData,
-				} = setup();
+			it("should show notification", async () => {
+				const { composable, provisioningOptionsDataMock } = setup();
 
-				await updateProvisioningOptionsData(
+				await composable.updateProvisioningOptionsData(
 					"systemid",
 					provisioningOptionsDataMock
 				);
 
-				expect(provisioningOptionsData.value).toEqual(
-					provisioningOptionsDefaultData
-				);
+				expect(notifierModule.show).toHaveBeenCalled();
 			});
 		});
 	});

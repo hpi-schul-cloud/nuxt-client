@@ -93,6 +93,7 @@ import {
 import { useRouter } from "vue-router/composables";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
 import { Breadcrumb } from "../templates/default-wireframe.types";
+import { buildPageTitle } from "../../utils/pageTitle";
 
 export default defineComponent({
 	name: "ProvisioningOptionsPage",
@@ -132,6 +133,9 @@ export default defineComponent({
 		);
 
 		onMounted(async () => {
+			document.title = buildPageTitle(
+				t("components.administration.provisioningOptions.page.title")
+			);
 			await fetchProvisioningOptionsData(props.systemId);
 		});
 
