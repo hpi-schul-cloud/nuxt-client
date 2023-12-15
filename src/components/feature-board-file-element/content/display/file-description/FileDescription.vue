@@ -6,9 +6,7 @@
 			:icon="mdiFileDocumentOutline"
 		>
 			<template #title>
-				<div class="title-link">
-					{{ name }}
-				</div>
+				{{ name }}
 			</template>
 			<template v-if="showMenu" #menu>
 				<slot />
@@ -47,15 +45,3 @@ export default defineComponent({
 	components: { ContentElementBar },
 });
 </script>
-<style scope>
-.title-link a {
-	text-decoration: none;
-	color: var(--v-black-base);
-}
-.title-link a:visited {
-	color: var(--v-black-base);
-}
-.title-link a:hover {
-	text-decoration: underline;
-}
-</style>
