@@ -10,7 +10,7 @@
 			{{ $t("components.cardElement.lastUpdatedAt") }}
 			{{ formattedLastUpdatedAt }}
 		</template>
-		<template #menu v-if="$slots.default">
+		<template #menu>
 			<slot />
 		</template>
 	</ContentElementBar>
