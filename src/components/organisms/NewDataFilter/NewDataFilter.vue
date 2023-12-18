@@ -21,7 +21,7 @@
 		</v-list>
 	</v-menu>
 	<FilterChips
-		:filter="filterChipTitles"
+		:filters="filterChipTitles"
 		@remove:filter="onRemoveChipFilter"
 		@click:filter="onFilterClick"
 	/>

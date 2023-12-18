@@ -1,32 +1,29 @@
 <template>
 	<div class="mt-2">
-		<template v-for="item in filter" :key="item">
+		<template v-for="filterItem in filters" :key="filterItem.item">
 			<v-chip
 				:border="true"
 				closable
 				variant="text"
 				class="ma-1"
 				:close-icon="mdiCloseCircle"
-				@click:close="onChipClose(item.item)"
-				@click="onClick(item.item)"
+				@click:close="onChipClose(filterItem.item)"
+				@click="onClick(filterItem.item)"
 			>
-				{{ item.title }}
+				{{ filterItem.title }}
 			</v-chip>
 		</template>
 	</div>
 </template>
 <script setup lang="ts">
 import { mdiCloseCircle } from "@mdi/js";
+import { PropType } from "vue";
 import { ChipTitle } from "@/components/organisms/NewDataFilter/types/filterTypes";
 
 defineProps({
-	filter: {
-		type: Array<ChipTitle>,
+	filters: {
+		type: Object as PropType<ChipTitle[]>,
 		required: true,
-	},
-	title: {
-		type: String,
-		default: "",
 	},
 });
 

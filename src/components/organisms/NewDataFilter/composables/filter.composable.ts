@@ -10,6 +10,7 @@ import {
 	UserBasedRegistrationOptions,
 	ChipTitle,
 	FilterItem,
+	DateSelection,
 } from "../types/filterTypes";
 import { useI18n } from "vue-i18n";
 import { useFilterLocalStorage } from "./localStorage.composable";
@@ -74,7 +75,7 @@ const dataTableFilter = (userType: string) => {
 		],
 	};
 
-	const selectedFilterType = ref<FilterOptionsType | undefined>(undefined);
+	const selectedFilterType = ref<FilterOptionsType>();
 
 	const isDateFiltering = computed(() => {
 		return (
@@ -93,12 +94,12 @@ const dataTableFilter = (userType: string) => {
 
 	const filterMenuItems = ref<SelectOptionsType[]>([]);
 
-	const filterChipTitles = ref<Array<ChipTitle>>();
+	const filterChipTitles = ref<Array<ChipTitle>>([]);
 
-	const updateFilter = (value: FilterOptions) => {
-		if (selectedFilterType.value)
-			// @ts-expect-error TODO: check error here
-			filterQuery.value[selectedFilterType.value] = value;
+	const updateFilter = (value: string[] | DateSelection) => {
+		if (!selectedFilterType.value) return;
+		// @ts-expect-error TODO: check type error
+		filterQuery.value[selectedFilterType.value] = value;
 
 		filterMenuItems.value = defaultFilterMenuItems.filter(
 			(item: SelectOptionsType) => !(item.value in filterQuery.value)
@@ -171,6 +172,7 @@ const dataTableFilter = (userType: string) => {
 			return `${t("utils.adminFilter.outdatedSince.title")} ${printDate(
 				chipItem[1].$gte
 			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
+		return [];
 	};
 
 	const setFilterChipTitles = () => {
@@ -187,6 +189,7 @@ const dataTableFilter = (userType: string) => {
 	};
 
 	onMounted(() => {
+		console.log(selectedFilterType.value);
 		filterQuery.value = getFilterStorage() ?? {};
 		if (filterQuery.value) setFilterChipTitles();
 	});
