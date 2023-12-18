@@ -54,7 +54,7 @@ const dateMissing = computed(() => time.value && !date.value);
 const dateTimeInPast = computed(() => isDateTimeInPast(dateTime.value));
 const errors = ref<Array<string>>([]);
 const hintMessage = ref<string>(
-	dateTimeInPast.value ? t("components.datePicker.messages.future") : ""
+	dateTimeInPast.value ? t("components.dateTimePicker.messages.dateInPast") : ""
 );
 
 const emitDateTime = () => {
