@@ -1,18 +1,20 @@
 <template>
-	<v-text-field
-		v-model="timeValue"
-		data-testid="time-input"
-		variant="underlined"
-		color="primary"
-		append-inner-icon="$mdiClockOutline"
-		:label="label"
-		:aria-label="ariaLabel"
-		placeholder="HH:MM"
-		:error-messages="errorMessages"
-		v-time-input-mask
-		@update:model-value="validate"
-		@keydown.up.down.stop
-	/>
+	<div>
+		<v-text-field
+			v-model="timeValue"
+			data-testid="time-input"
+			variant="underlined"
+			color="primary"
+			append-inner-icon="$mdiClockOutline"
+			:label="label"
+			:aria-label="ariaLabel"
+			placeholder="HH:MM"
+			:error-messages="errorMessages"
+			v-time-input-mask
+			@update:model-value="validate"
+			@keydown.up.down.stop
+		/>
+	</div>
 </template>
 
 <script setup lang="ts">

@@ -2,7 +2,7 @@
 	<div class="wrapper">
 		<div class="d-flex flex-row">
 			<date-picker
-				class="mr-2 picker-width"
+				class="mr-4 picker-width"
 				:date="date"
 				:label="dateInputLabel"
 				:aria-label="dateInputAriaLabel"
@@ -124,7 +124,7 @@ const onTimeUpdate = (newTime: string) => {
 
 <style lang="scss" scoped>
 .picker-width {
-	width: 225px;
+	width: 131px;
 }
 
 .wrapper {
