@@ -113,7 +113,7 @@ const getErrorMessages = useDebounceFn((validationModel: any) => {
 		return e.$message;
 	});
 	return messages;
-}, 600);
+}, 800);
 
 const validate = () => {
 	v$.value.dateString.$touch();
