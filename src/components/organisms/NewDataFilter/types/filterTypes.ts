@@ -24,6 +24,13 @@ enum RegistrationTypes {
 	MISSING = "missing",
 }
 
+type ChipTitle = {
+	item: string;
+	title: string;
+};
+
+type FilterItem = [string, string[] & DateSelection];
+
 type SelectOptionsType = {
 	label: string;
 	value: FilterOptions | string;
@@ -35,11 +42,11 @@ type UserBasedRegistrationOptions = {
 };
 
 type FilterQuery = {
-	lastLoginSystemChange?: DateSelection | object;
+	lastLoginSystemChange?: DateSelection;
 	classes?: string[];
-	consentStatus?: RegistrationTypes | string[];
-	createdAt?: DateSelection | object;
-	outdatedSince?: DateSelection | object;
+	consentStatus?: string[];
+	createdAt?: DateSelection;
+	outdatedSince?: DateSelection;
 };
 
 type Query = {
@@ -64,7 +71,9 @@ type DateSelection = {
 };
 
 export {
+	ChipTitle,
 	DateSelection,
+	FilterItem,
 	FilterOptions,
 	FilterOptionsType,
 	FilterQuery,

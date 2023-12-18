@@ -5,22 +5,23 @@
 				:border="true"
 				closable
 				variant="text"
-				class="mx-1 filter-chip"
+				class="ma-1"
 				:close-icon="mdiCloseCircle"
-				@click:close="onChipClose(item)"
-				@click="onClick(item)"
+				@click:close="onChipClose(item.item)"
+				@click="onClick(item.item)"
 			>
-				{{ item }}
+				{{ item.title }}
 			</v-chip>
 		</template>
 	</div>
 </template>
 <script setup lang="ts">
 import { mdiCloseCircle } from "@mdi/js";
+import { ChipTitle } from "@/components/organisms/NewDataFilter/types/filterTypes";
 
 defineProps({
 	filter: {
-		type: Array<string>,
+		type: Array<ChipTitle>,
 		required: true,
 	},
 	title: {
@@ -31,11 +32,11 @@ defineProps({
 
 const emit = defineEmits(["remove:filter", "click:filter"]);
 
-const onChipClose = (item: string) => {
-	emit("remove:filter", item);
+const onChipClose = (val: string) => {
+	emit("remove:filter", val);
 };
 
-const onClick = (item: string) => {
-	emit("click:filter", item);
+const onClick = (val: string) => {
+	emit("click:filter", val);
 };
 </script>

@@ -38,7 +38,7 @@ const dateSelection = ref<DateSelection>({
 
 const props = defineProps({
 	selectedDate: {
-		type: (Object as PropType<DateSelection>) || undefined,
+		type: Object as PropType<DateSelection>,
 		required: true,
 	},
 });

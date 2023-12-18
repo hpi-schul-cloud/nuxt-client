@@ -8,9 +8,12 @@ import {
 	SelectOptionsType,
 	UserType,
 	UserBasedRegistrationOptions,
+	ChipTitle,
+	FilterItem,
 } from "../types/filterTypes";
 import { useI18n } from "vue-i18n";
 import { useFilterLocalStorage } from "./localStorage.composable";
+import { printDate } from "@/plugins/datetime";
 
 const dataTableFilter = (userType: string) => {
 	const { t } = useI18n();
@@ -90,7 +93,7 @@ const dataTableFilter = (userType: string) => {
 
 	const filterMenuItems = ref<SelectOptionsType[]>([]);
 
-	const filterChipTitles = ref<Array<string>>([]);
+	const filterChipTitles = ref<Array<ChipTitle>>();
 
 	const updateFilter = (value: FilterOptions) => {
 		if (selectedFilterType.value)
@@ -129,8 +132,58 @@ const dataTableFilter = (userType: string) => {
 		);
 	};
 
+	const prepareTitles = (chipItem: FilterItem) => {
+		if (chipItem[0] == FilterOptions.REGISTRATION) {
+			const statusKeyMap = {
+				[RegistrationTypes.COMPLETE]: t(
+					"pages.administration.students.legend.icon.success"
+				),
+				[RegistrationTypes.MISSING]: t(
+					"utils.adminFilter.consent.label.missing"
+				),
+				[RegistrationTypes.PARENT_AGREED]: t(
+					"utils.adminFilter.consent.label.parentsAgreementMissing"
+				),
+			};
+			const status = chipItem[1].map((val) => {
+				return statusKeyMap[val as RegistrationTypes];
+			});
+
+			return status.join(` ${t("common.words.and")} `);
+		}
+
+		if (chipItem[0] == FilterOptions.CLASSES)
+			return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(
+				", "
+			)}`;
+
+		if (chipItem[0] == FilterOptions.CREATION_DATE)
+			return `${t("utils.adminFilter.date.created")} ${printDate(
+				chipItem[1].$gte
+			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
+
+		if (chipItem[0] == FilterOptions.LAST_MIGRATION_ON)
+			return `${t("utils.adminFilter.lastMigration.title")} ${printDate(
+				chipItem[1].$gte
+			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
+
+		if (chipItem[0] == FilterOptions.OBSOLOTE_SINCE)
+			return `${t("utils.adminFilter.outdatedSince.title")} ${printDate(
+				chipItem[1].$gte
+			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
+	};
+
 	const setFilterChipTitles = () => {
-		filterChipTitles.value = Object.keys(filterQuery.value);
+		const items = Object.entries(filterQuery.value).reduce(
+			(acc: Array<object>, item) => {
+				return acc.concat({
+					item: item[0],
+					title: prepareTitles(item as FilterItem),
+				});
+			},
+			[]
+		);
+		filterChipTitles.value = (items as ChipTitle[]) || [];
 	};
 
 	onMounted(() => {
