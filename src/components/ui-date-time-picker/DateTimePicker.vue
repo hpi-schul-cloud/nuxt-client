@@ -64,17 +64,17 @@ const getTime = (dateIsoString: string) => {
 const dateTime = useVModel(props, "dateTime");
 const date = ref(dateTime.value ? dateTime.value : "");
 const time = ref(getTime(dateTime.value));
-const dateRequired = computed(() => time.value !== "");
+const dateMissing = computed(() => time.value && !date.value);
 const dateTimeInPast = ref(dateTime.value && isDateTimeInPast(dateTime.value));
 
 const emitDateTime = () => {
-	if (!date.value && time.value === "") {
+	if (!date.value && !time.value) {
 		dateTimeInPast.value = false;
 		emit("input", null);
 		return;
 	}
 
-	if (!date.value && dateRequired.value) {
+	if (dateMissing.value) {
 		return;
 	}
 
@@ -91,7 +91,7 @@ const errors = ref<Array<string>>([]);
 const message = computed(() => {
 	if (errors.value.length > 0) return "";
 
-	if (dateRequired.value && !date.value) {
+	if (dateMissing.value) {
 		return t("components.datePicker.validation.required");
 	}
 
