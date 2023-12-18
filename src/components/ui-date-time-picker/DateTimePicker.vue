@@ -49,16 +49,7 @@ const props = defineProps({
 	maxDate: { type: String },
 });
 const emit = defineEmits(["input"]);
-
 const { locale, t } = useI18n();
-
-const getDate = (dateIsoString: string) => {
-	if (!dateIsoString) {
-		return "";
-	}
-
-	return dateIsoString;
-};
 
 const getTime = (dateIsoString: string) => {
 	if (!dateIsoString) {
@@ -71,7 +62,7 @@ const getTime = (dateIsoString: string) => {
 };
 
 const dateTime = useVModel(props, "dateTime");
-const date = ref(getDate(dateTime.value));
+const date = ref(dateTime.value ? dateTime.value : "");
 const time = ref(getTime(dateTime.value));
 const dateRequired = computed(() => time.value !== "");
 const dateTimeInPast = ref(dateTime.value && isDateTimeInPast(dateTime.value));
