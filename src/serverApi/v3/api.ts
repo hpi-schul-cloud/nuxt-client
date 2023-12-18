@@ -4233,6 +4233,31 @@ export interface SchulConneXProvisioningOptionsParams {
 /**
  * 
  * @export
+ * @interface SchulConneXProvisioningOptionsResponse
+ */
+export interface SchulConneXProvisioningOptionsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsResponse
+     */
+    groupProvisioningClassesEnabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsResponse
+     */
+    groupProvisioningCoursesEnabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsResponse
+     */
+    groupProvisioningOtherEnabled: boolean;
+}
+/**
+ * 
+ * @export
  * @interface SetHeightBodyParams
  */
 export interface SetHeightBodyParams {
