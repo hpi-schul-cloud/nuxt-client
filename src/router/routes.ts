@@ -80,8 +80,8 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 			"school_system_view",
 			"school_system_edit",
 		]),
-		props: (route: Route) => ({
-			systemId: route.query.systemId,
+		props: (to: RouteLocationNormalized) => ({
+			systemId: to.query.systemId,
 		}),
 	},
 	{

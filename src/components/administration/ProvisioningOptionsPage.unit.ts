@@ -11,7 +11,7 @@ import {
 	useProvisioningOptionsState,
 } from "../data-provisioning-options";
 import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory/provisioningOptionsDataFactory";
-import * as routerComposables from "vue-router/composables";
+import * as routerComposables from "vue-router";
 
 jest.mock("@data-provisioning-options");
 

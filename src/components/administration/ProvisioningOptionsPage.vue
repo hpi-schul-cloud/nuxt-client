@@ -16,7 +16,7 @@
 		<p>
 			{{
 				t("components.administration.provisioningOptions.class.description", {
-					instance: $theme.name,
+					instance: themeName,
 				})
 			}}
 		</p>
@@ -33,7 +33,7 @@
 		<p>
 			{{
 				t("components.administration.provisioningOptions.course.description", {
-					instance: $theme.name,
+					instance: themeName,
 				})
 			}}
 		</p>
@@ -54,7 +54,7 @@
 				t(
 					"components.administration.provisioningOptions.otherGroups.description",
 					{
-						instance: $theme.name,
+						instance: themeName,
 					}
 				)
 			}}
@@ -85,16 +85,17 @@
 
 <script lang="ts">
 import { computed, ComputedRef, defineComponent, onMounted } from "vue";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import {
 	ProvisioningOptions,
 	useProvisioningOptionsState,
 } from "../data-provisioning-options";
-import { useRouter } from "vue-router/composables";
+import { useRouter } from "vue-router";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
 import { Breadcrumb } from "../templates/default-wireframe.types";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
+import themeConfig from "@/theme.config";
 
 export default defineComponent({
 	name: "ProvisioningOptionsPage",
@@ -119,17 +120,17 @@ export default defineComponent({
 		useTitle(pageTitle);
 
 		const schoolSettingsPage: Breadcrumb = {
-			text: t("pages.administration.school.index.title"),
+			title: t("pages.administration.school.index.title"),
 			to: "/administration/school-settings",
 		};
 		const breadcrumbs: Breadcrumb[] = [
 			{
-				text: t("pages.administration.index.title"),
+				title: t("pages.administration.index.title"),
 				href: "/administration/",
 			},
 			schoolSettingsPage,
 			{
-				text: t("components.administration.provisioningOptions.page.title"),
+				title: t("components.administration.provisioningOptions.page.title"),
 				disabled: true,
 			},
 		];
@@ -166,6 +167,7 @@ export default defineComponent({
 			provisioningOptions,
 			onSave,
 			onCancel,
+			themeName: themeConfig.name,
 		};
 	},
 });
