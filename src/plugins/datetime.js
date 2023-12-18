@@ -298,6 +298,8 @@ export const currentDate = () => {
 };
 
 export const isDateTimeInPast = (dateTime) => {
+	if (!dateTime) return false;
+
 	return new Date(dateTime) < new Date();
 };
 

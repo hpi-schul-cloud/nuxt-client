@@ -21,15 +21,15 @@
 			/>
 		</div>
 		<v-slide-y-transition>
-			<span v-if="message" class="v-messages theme--light message">
-				{{ message }}
+			<span v-if="hintMessage" class="v-messages theme--light message">
+				{{ hintMessage }}
 			</span>
 		</v-slide-y-transition>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useVModel } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import { isDateTimeInPast, getTimeFromISOString } from "@/plugins/datetime";
@@ -37,10 +37,7 @@ import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 
 const props = defineProps({
-	dateTime: {
-		type: String,
-		default: "",
-	},
+	dateTime: { type: String },
 	dateInputLabel: { type: String, default: "" },
 	dateInputAriaLabel: { type: String, default: "" },
 	timeInputLabel: { type: String, default: "" },
@@ -48,19 +45,21 @@ const props = defineProps({
 	minDate: { type: String },
 	maxDate: { type: String },
 });
-const emit = defineEmits(["input"]);
 const { t } = useI18n();
 
 const dateTime = useVModel(props, "dateTime");
 const date = ref(dateTime.value ? dateTime.value : "");
 const time = ref(getTimeFromISOString(dateTime.value));
 const dateMissing = computed(() => time.value && !date.value);
-const dateTimeInPast = ref(dateTime.value && isDateTimeInPast(dateTime.value));
+const dateTimeInPast = computed(() => isDateTimeInPast(dateTime.value));
+const errors = ref<Array<string>>([]);
+const hintMessage = ref<string>(
+	dateTimeInPast.value ? t("components.datePicker.messages.future") : ""
+);
 
 const emitDateTime = () => {
 	if (!date.value && !time.value) {
-		dateTimeInPast.value = false;
-		emit("input", null);
+		dateTime.value = undefined;
 		return;
 	}
 
@@ -69,28 +68,38 @@ const emitDateTime = () => {
 	}
 
 	const timeValue = time.value || "23:59";
-	const dateTime = new Date(date.value);
+	const dateTimeObject = new Date(date.value);
 	const hoursAndMinutes = timeValue.split(":");
 
-	dateTime.setHours(parseInt(hoursAndMinutes[0]), parseInt(hoursAndMinutes[1]));
-	dateTimeInPast.value = isDateTimeInPast(dateTime);
-	emit("input", dateTime.toISOString());
+	dateTimeObject.setHours(
+		parseInt(hoursAndMinutes[0]),
+		parseInt(hoursAndMinutes[1])
+	);
+	dateTime.value = dateTimeObject.toISOString();
 };
 
-const errors = ref<Array<string>>([]);
-const message = computed(() => {
-	if (errors.value.length > 0) return "";
+watch(
+	[errors, () => dateMissing.value, () => dateTimeInPast],
+	([newErrors, newDateMissing, newDateTimeInPast]) => {
+		if (newErrors.length > 0) {
+			hintMessage.value = "";
+			return;
+		}
 
-	if (dateMissing.value) {
-		return t("components.datePicker.validation.required");
-	}
+		if (newDateTimeInPast.value) {
+			hintMessage.value = t("components.datePicker.messages.future");
+			return;
+		}
 
-	if (dateTimeInPast.value) {
-		return t("components.datePicker.messages.future");
-	}
+		if (newDateMissing) {
+			hintMessage.value = t("components.datePicker.validation.required");
+			return;
+		}
 
-	return "";
-});
+		hintMessage.value = "";
+	},
+	{ deep: true }
+);
 
 const onError = (errorOrigin: string) => {
 	if (errors.value.indexOf(errorOrigin) === -1) {
