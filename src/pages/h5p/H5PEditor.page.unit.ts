@@ -1,6 +1,5 @@
 import { mount } from "@vue/test-utils";
 import H5pEditorPage from "./H5PEditor.page.vue";
-import H5PEditor from "@components/h5p/H5PEditor.vue";
 import { I18N_KEY } from "@/utils/inject";
 import VueI18n from "vue-i18n";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";

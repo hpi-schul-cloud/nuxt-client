@@ -5,10 +5,10 @@
 </template>
 
 <script lang="ts">
-import { MENU_SCOPE } from "./injection-tokens";
+import { MENU_SCOPE, MENU_HANDLER } from "./injection-tokens";
 import { injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
-import { BoardMenuAction } from "@ui-board";
+import { BoardMenuAction, MenuEvent } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { defineComponent } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
@@ -23,7 +23,7 @@ export default defineComponent({
 		BoardMenuAction,
 	},
 	emits: ["click"],
-	setup(props, { emit }) {
+	setup(props) {
 		const scope = injectStrict<BoardMenuScope>(MENU_SCOPE);
 		const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
@@ -40,6 +40,9 @@ export default defineComponent({
 			}
 		};
 
+		// VUE3_UPGRADE: Solves BC-5938, BC-5948, BC-5949. See BoardMenu.vue
+		const emitMenuEvent = injectStrict(MENU_HANDLER);
+
 		const onClick = async (): Promise<void> => {
 			let shouldDelete = true;
 			if (!props.skipDeleteConfirmation) {
@@ -50,7 +53,7 @@ export default defineComponent({
 			}
 
 			if (shouldDelete) {
-				emit("click");
+				emitMenuEvent(MenuEvent.DELETE);
 			}
 		};
 

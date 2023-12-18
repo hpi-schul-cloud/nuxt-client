@@ -1,11 +1,10 @@
 import { mount } from "@vue/test-utils";
 import H5pPlayerPage from "./H5PPlayer.page.vue";
-import H5PPlayer from "@components/h5p/H5PPlayer.vue";
 import { I18N_KEY } from "@/utils/inject";
 import VueI18n from "vue-i18n";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
-jest.mock("vue-router/composables", () => ({
+jest.mock("vue-router", () => ({
 	useRoute: () => ({ params: { id: "test-id" }, query: {} }),
 }));
 
@@ -14,7 +13,7 @@ describe("H5PPlayerPage", () => {
 		locale: "en",
 	});
 
-	const createWrapper = (propsData = {}) => {
+	const createWrapper = () => {
 		return mount(H5pPlayerPage, {
 			...createComponentMocks({
 				i18n: true,

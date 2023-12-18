@@ -254,7 +254,7 @@ export default defineComponent({
 		const pageTitle = this.isInline
 			? this.$t("pages.content.page.window.title", {
 					instance: this.$theme.name,
-			  })
+				})
 			: this.$t("common.words.lernstore");
 		document.title = buildPageTitle(pageTitle);
 	},

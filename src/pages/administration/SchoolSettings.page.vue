@@ -6,7 +6,6 @@
 	>
 		<v-alert
 			v-if="error"
-			prominent
 			variant="tonal"
 			type="error"
 			data-testid="error-alert"
@@ -16,7 +15,7 @@
 			</div>
 		</v-alert>
 		<div v-else data-testid="no-error">
-			<v-alert prominent variant="tonal" type="info" class="mb-4">
+			<v-alert variant="tonal" type="info" class="mb-4">
 				<div class="alert-text">
 					{{ t("pages.administration.school.index.back") }}
 					<a href="/administration/school/">
@@ -24,7 +23,7 @@
 					>.
 				</div>
 			</v-alert>
-			<v-alert prominent variant="tonal" type="info" class="mb-12">
+			<v-alert variant="tonal" type="info" class="mb-12">
 				<div class="alert-text">
 					{{ t("pages.administration.school.index.info", { instituteTitle }) }}
 				</div>

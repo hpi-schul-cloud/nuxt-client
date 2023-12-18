@@ -17,17 +17,17 @@
 			:imageUrl="computedElement.content.imageUrl"
 			:isLoading="isLoading"
 			:isEditMode="isEditMode"
-			><BoardMenu scope="element">
+			><BoardMenu scope="element" v-on="{ [MenuEvent.DELETE]: onDelete }">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete @click="onDelete" />
+				<BoardMenuActionDelete />
 			</BoardMenu>
 		</LinkContentElementDisplay>
 		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
-			><BoardMenu scope="element">
+			><BoardMenu scope="element" v-on="{ [MenuEvent.DELETE]: onDelete }">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete @click="onDelete" />
+				<BoardMenuActionDelete />
 			</BoardMenu>
 		</LinkContentElementCreate>
 	</v-card>
@@ -45,6 +45,7 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	MenuEvent,
 } from "@ui-board";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import { ensureProtocolIncluded } from "../util/url.util";
@@ -140,6 +141,7 @@ export default defineComponent({
 			onMoveDown,
 			onMoveUp,
 			onDelete,
+			MenuEvent,
 		};
 	},
 });

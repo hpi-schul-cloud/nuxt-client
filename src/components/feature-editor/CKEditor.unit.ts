@@ -3,10 +3,19 @@ import { MountOptions, mount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import CkEditor from "./CKEditor.vue";
 import { I18N_KEY } from "@/utils/inject";
+import { i18nMock } from "@@/tests/test-utils";
+import {
+	boardToolbarSimple,
+	boardToolbarRegular,
+	newsToolbar,
+	boardPlugins,
+	newsPlugins,
+} from "./config";
 
 type CkEditorProps = {
 	value?: string;
 	placeholder?: string;
+	type?: string;
 	mode?: string;
 	disabled?: boolean;
 };
@@ -35,7 +44,7 @@ describe("CKEditor", () => {
 			}),
 			propsData: props,
 			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: i18nMock,
 			},
 		});
 	};
@@ -59,24 +68,38 @@ describe("CKEditor", () => {
 		}
 	});
 
-	it("should have reduced toolbar items in simple mode", () => {
+	it("should have reduced board toolbar items in simple mode", () => {
 		setup({ mode: "simple" });
-		expect(wrapper.vm.config.toolbar.items).toHaveLength(10);
+		expect(wrapper.vm.config.toolbar.items).toHaveLength(
+			boardToolbarSimple.length
+		);
 	});
 
-	it("should have all plugins available in simple mode", () => {
+	it("should have all board plugins available in simple mode", () => {
 		setup({ mode: "simple" });
-		expect(wrapper.vm.config.plugins).toHaveLength(21);
+		expect(wrapper.vm.config.plugins).toHaveLength(boardPlugins.length);
 	});
 
-	it("should have all toolbar items in regular mode", () => {
+	it("should have all boards toolbar items in regular mode", () => {
 		setup({ mode: "regular" });
-		expect(wrapper.vm.config.toolbar.items).toHaveLength(25);
+		expect(wrapper.vm.config.toolbar.items).toHaveLength(
+			boardToolbarRegular.length
+		);
 	});
 
-	it("should have all plugins available in regular mode", () => {
+	it("should have all board plugins available in regular mode", () => {
 		setup({ mode: "regular" });
-		expect(wrapper.vm.config.plugins).toHaveLength(21);
+		expect(wrapper.vm.config.plugins).toHaveLength(boardPlugins.length);
+	});
+
+	it("should have all news toolbar items in news mode", () => {
+		setup({ mode: "news" });
+		expect(wrapper.vm.config.toolbar.items).toHaveLength(newsToolbar.length);
+	});
+
+	it("should have all news plugins available in news mode", () => {
+		setup({ mode: "news" });
+		expect(wrapper.vm.config.plugins).toHaveLength(newsPlugins.length);
 	});
 
 	describe("events", () => {

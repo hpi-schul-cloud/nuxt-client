@@ -87,12 +87,12 @@ watchDebounced(
 		}
 
 		if (newDateTimeInPast.value) {
-			hintMessage.value = t("components.datePicker.messages.future");
+			hintMessage.value = t("components.dateTimePicker.messages.dateInPast");
 			return;
 		}
 
 		if (newDateMissing) {
-			hintMessage.value = t("components.datePicker.validation.required");
+			hintMessage.value = t("components.dateTimePicker.messages.dateRequired");
 			return;
 		}
 

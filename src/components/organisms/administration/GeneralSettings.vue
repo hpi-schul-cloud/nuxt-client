@@ -218,7 +218,7 @@ export default {
 									newSchool.logo_dataUrl,
 									newSchool.logo_name
 								),
-						  ]
+							]
 						: [];
 
 					await this.copyToLocalSchool();

@@ -2,6 +2,7 @@
 	<div>
 		<room-video-conference-card
 			:has-permission="hasPermission"
+			:can-start="canStart"
 			:is-running="isRunning"
 			:is-refreshing="isRefreshing"
 			data-testid="video-conference-card"
@@ -52,8 +53,6 @@
 							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
 							data-testId="every-attendee-joins-muted"
 							class="my-0"
-							inset
-							density="compact"
 							:true-icon="mdiCheck"
 						/>
 					</div>
@@ -69,8 +68,6 @@
 							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
 							data-testId="moderator-must-approve-join-requests"
 							class="my-0"
-							inset
-							density="compact"
 							:true-icon="mdiCheck"
 						/>
 					</div>
@@ -86,8 +83,6 @@
 							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
 							data-testId="everybody-joins-as-moderator"
 							class="my-0"
-							inset
-							density="compact"
 							:true-icon="mdiCheck"
 						/>
 					</div>
@@ -132,8 +127,8 @@ import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE_KEY,
 	injectStrict,
-	VIDEO_CONFERENCE_MODULE_KEY,
 	ROOM_MODULE_KEY,
+	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import {
 	computed,
@@ -293,6 +288,7 @@ export default defineComponent({
 			videoConferenceInfo,
 			videoConferenceOptions,
 			hasPermission,
+			canStart,
 			isRunning,
 			isRefreshing,
 			onClick,
