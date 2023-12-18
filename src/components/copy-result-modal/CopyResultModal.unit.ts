@@ -4,6 +4,10 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mount, MountOptions } from "@vue/test-utils";
 import CopyResultModal from "./CopyResultModal.vue";
 import Vue from "vue";
+import { envConfigModule } from "@/store";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
+import { Envs } from "@/store/types/env-config";
 
 const geoGebraItem = {
 	title: "GeoGebra Element Title",
@@ -47,7 +51,7 @@ const mockResultItems = (
 };
 
 const getWrapper = (props?: any) => {
-	return mount<any>(CopyResultModal as MountOptions<Vue>, {
+	const wrapper = mount<any>(CopyResultModal as MountOptions<Vue>, {
 		...createComponentMocks({
 			i18n: true,
 		}),
@@ -57,12 +61,17 @@ const getWrapper = (props?: any) => {
 			...props,
 		},
 	});
+
+	return wrapper;
 };
 
 describe("@/components/copy-result-modal/CopyResultModal", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
 	});
 
 	describe("basic functions", () => {
@@ -124,6 +133,22 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				wrapper.find('[data-testid="copy-result-notifications"]').text()
 			).toContain(
 				wrapper.vm.$i18n.t("components.molecules.copyResult.courseFiles.info")
+			);
+		});
+
+		it("should render ctl tools info if root item is a Course and has no failed file ", () => {
+			const copyResultItems = mockResultItems([]);
+			envConfigModule.setEnvs({ FEATURE_CTL_TOOLS_TAB_ENABLED: true } as Envs);
+			const wrapper = getWrapper({
+				isOpen: true,
+				copyResultItems,
+				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+			});
+
+			expect(
+				wrapper.find('[data-testid="copy-result-notifications"]').text()
+			).toContain(
+				wrapper.vm.$i18n.t("components.molecules.copyResult.ctlTools.info")
 			);
 		});
 

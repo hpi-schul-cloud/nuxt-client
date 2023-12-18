@@ -1,69 +1,19 @@
 <template>
 	<v-text-field
-		v-bind="props"
-		v-model="timeValue"
 		ref="inputField"
-		data-testid="time-input"
+		v-model="timeValue"
 		variant="underlined"
 		color="primary"
-		append-inner-icon="$mdiClockOutline"
 		:label="label"
 		:aria-label="ariaLabel"
 		placeholder="HH:MM"
+		append-icon="$mdiClockOutline"
+		data-testid="time-input"
 		:error-messages="errorMessages"
 		v-time-input-mask
-		@update:model-value="validate"
-		@keydown.prevent.space="showTimeDialog = true"
-		@keydown.prevent.enter="showTimeDialog = true"
 		@keydown.up.down.stop
-		@keydown.tab="showTimeDialog = false"
+		@update:model-value="validate"
 	/>
-	<!-- <div>
-		<v-menu
-			v-model="showTimeDialog"
-			:close-on-content-click="false"
-			transition="scale-transition"
-			max-height="200"
-			min-width="180"
-		>
-			<template #activator="{ props }">
-				<v-text-field
-					v-bind="props"
-					v-model="modelValue"
-					ref="inputField"
-					data-testid="time-input"
-					variant="underlined"
-					color="primary"
-					append-inner-icon="$mdiClockOutline"
-					:label="label"
-					:aria-label="ariaLabel"
-					placeholder="HH:MM"
-					:error-messages="errorMessages"
-					v-time-input-mask
-					@update:model-value="validate"
-					@keydown.prevent.space="showTimeDialog = true"
-					@keydown.prevent.enter="showTimeDialog = true"
-					@keydown.up.down.stop
-					@keydown.tab="showTimeDialog = false"
-				/>
-			</template>
-			<v-list class="col-12 pt-1 px-0 overflow-y-auto">
-				<div
-					v-for="(timeOfDay, index) in timesOfDayList"
-					:key="`time-select-${index}`"
-				>
-					<v-list-item
-						:data-testid="`time-select-${index}`"
-						class="time-list-item text-left"
-						@click="onSelect(timeOfDay.value)"
-					>
-						<v-list-item-title>{{ timeOfDay.value }}</v-list-item-title>
-					</v-list-item>
-					<v-divider v-if="index < timesOfDayList.length - 1" />
-				</div>
-			</v-list>
-		</v-menu>
-	</div> -->
 </template>
 
 <script setup lang="ts">
@@ -160,10 +110,6 @@ const emitTime = () => {
 	min-height: 42px;
 	text-align: center;
 	letter-spacing: $btn-letter-spacing;
-}
-
-.overflow-y-auto {
-	overflow-y: auto;
 }
 
 :deep {

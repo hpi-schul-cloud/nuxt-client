@@ -21,7 +21,19 @@
 					<div class="mx-2">
 						<v-icon color="info" :icon="mdiInformation" />
 					</div>
-					<div>
+					<RenderHTML
+						data-testid="import-modal-external-tools-info"
+						v-show="ctlToolsEnabled"
+						:html="
+							$t(
+								`components.molecules.import.${parentType}.options.ctlTools.infoText`
+							)
+						"
+					/>
+					<div
+						v-show="!ctlToolsEnabled"
+						data-testid="import-modal-coursefiles-info"
+					>
 						{{
 							$t(`components.molecules.import.${parentType}.options.infoText`)
 						}}
@@ -42,14 +54,16 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { RenderHTML } from "@feature-render-html";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ImportModal",
 	components: {
+		RenderHTML,
 		vCustomDialog,
 	},
 	emits: ["import", "cancel"],
@@ -60,6 +74,7 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const { t } = useI18n();
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const nameInput = ref(undefined);
 
 		const rules = reactive({
@@ -78,12 +93,17 @@ export default defineComponent({
 		};
 		const onCancel = () => emit("cancel");
 
+		const ctlToolsEnabled = computed(() => {
+			return envConfigModule.getCtlToolsTabEnabled;
+		});
+
 		return {
 			onConfirm,
 			onCancel,
 			mdiInformation,
 			rules,
 			newName,
+			ctlToolsEnabled,
 		};
 	},
 });

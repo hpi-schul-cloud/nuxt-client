@@ -2,7 +2,7 @@
 	<div class="wrapper">
 		<div class="d-flex flex-row">
 			<date-picker
-				class="mr-2 picker-width"
+				class="mr-4 picker-width"
 				:date="date"
 				:label="dateInputLabel"
 				:aria-label="dateInputAriaLabel"
@@ -101,11 +101,11 @@ const message = computed(() => {
 	if (errors.value.length > 0) return "";
 
 	if (dateRequired.value && !date.value) {
-		return t("components.datePicker.validation.required");
+		return t("components.dateTimePicker.messages.dateRequired");
 	}
 
 	if (dateTimeInPast.value) {
-		return t("components.datePicker.messages.future");
+		return t("components.dateTimePicker.messages.dateInPast");
 	}
 
 	return "";

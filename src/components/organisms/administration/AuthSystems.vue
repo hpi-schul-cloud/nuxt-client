@@ -29,7 +29,7 @@
 				</v-btn>
 			</template>
 		</v-text-field>
-		<v-table v-if="hasSystems" class="table-system">
+		<v-table v-if="hasSystems" class="table-system" data-testid="system-table">
 			<template #default>
 				<thead>
 					<tr>
@@ -91,7 +91,7 @@
 								class="edit-system-btn"
 								icon
 								variant="text"
-								:to="`/administration/ldap/config?id=${system._id}`"
+								:to="redirectTo(system)"
 								:aria-label="ariaLabels(system).edit"
 							>
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
@@ -209,7 +209,21 @@ export default {
 			};
 		},
 		isEditable(system) {
+			if (envConfigModule.getProvisioningOptionsEnabled) {
+				return (
+					system.ldapConfig?.provider === "general" || system.alias === "SANIS"
+				);
+			}
 			return system.ldapConfig?.provider === "general";
+		},
+		redirectTo(system) {
+			if (
+				envConfigModule.getProvisioningOptionsEnabled &&
+				system.alias === "SANIS"
+			) {
+				return `/administration/school-settings/provisioning-options?systemId=${system._id}`;
+			}
+			return `/administration/ldap/config?id=${system._id}`;
 		},
 		openConfirmDeleteDialog(systemId) {
 			this.confirmDeleteDialog = {

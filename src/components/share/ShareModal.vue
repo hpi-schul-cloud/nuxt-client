@@ -26,6 +26,16 @@
 							{{ $t(`components.molecules.share.${type}.options.infoText`) }}
 							<br />
 							{{ $t("components.molecules.copyResult.courseFiles.info") }}
+							<div
+								data-testid="share-modal-external-tools-info"
+								v-if="ctlToolsEnabled"
+							>
+								{{
+									$t(
+										`components.molecules.share.courses.options.ctlTools.infotext`
+									)
+								}}
+							</div>
 						</div>
 					</div>
 					<share-modal-options-form
@@ -52,7 +62,11 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
-import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -75,6 +89,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { t } = useI18n();
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 
 		const shareModule = inject("shareModule");
@@ -131,6 +146,10 @@ export default defineComponent({
 			});
 		};
 
+		const ctlToolsEnabled = computed(() => {
+			return envConfigModule.getCtlToolsTabEnabled;
+		});
+
 		return {
 			onShareOptionsChange,
 			onCloseDialog,
@@ -144,6 +163,7 @@ export default defineComponent({
 			shareOptions,
 			mdiInformation,
 			onCopy,
+			ctlToolsEnabled,
 		};
 	},
 });
