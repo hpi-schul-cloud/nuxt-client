@@ -32,7 +32,7 @@
 import { computed, ref } from "vue";
 import { useVModel } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
-import { isDateTimeInPast } from "@/plugins/datetime";
+import { isDateTimeInPast, getTimeFromISOString } from "@/plugins/datetime";
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 
@@ -49,21 +49,11 @@ const props = defineProps({
 	maxDate: { type: String },
 });
 const emit = defineEmits(["input"]);
-const { locale, t } = useI18n();
-
-const getTime = (dateIsoString: string) => {
-	if (!dateIsoString) {
-		return "";
-	}
-	return new Date(dateIsoString).toLocaleTimeString(locale.value, {
-		timeStyle: "short",
-		hourCycle: "h23",
-	});
-};
+const { t } = useI18n();
 
 const dateTime = useVModel(props, "dateTime");
 const date = ref(dateTime.value ? dateTime.value : "");
-const time = ref(getTime(dateTime.value));
+const time = ref(getTimeFromISOString(dateTime.value));
 const dateMissing = computed(() => time.value && !date.value);
 const dateTimeInPast = ref(dateTime.value && isDateTimeInPast(dateTime.value));
 
