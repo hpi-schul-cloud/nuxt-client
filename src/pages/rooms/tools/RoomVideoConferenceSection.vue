@@ -53,8 +53,6 @@
 							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
 							data-testId="every-attendee-joins-muted"
 							class="my-0"
-							inset
-							density="compact"
 							:true-icon="mdiCheck"
 						/>
 					</div>
@@ -70,8 +68,6 @@
 							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
 							data-testId="moderator-must-approve-join-requests"
 							class="my-0"
-							inset
-							density="compact"
 							:true-icon="mdiCheck"
 						/>
 					</div>
@@ -87,8 +83,6 @@
 							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
 							data-testId="everybody-joins-as-moderator"
 							class="my-0"
-							inset
-							density="compact"
 							:true-icon="mdiCheck"
 						/>
 					</div>

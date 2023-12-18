@@ -5,11 +5,8 @@
 		</h3>
 		<v-switch
 			v-model="checked"
-			inset
 			:label="$t('pages.administration.ldap.classes.activate.import')"
 			:true-icon="mdiCheck"
-			density="compact"
-			color="primary"
 		/>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.path.subtitle") }}

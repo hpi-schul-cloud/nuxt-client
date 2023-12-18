@@ -5,4 +5,7 @@ import theme from "@/vuetify.options";
 
 export default createVuetify({
 	...theme,
+	defaults: {
+		VSwitch: { inset: true, flat: true, color: "primary" },
+	},
 });
