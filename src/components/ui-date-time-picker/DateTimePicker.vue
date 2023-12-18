@@ -29,8 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import { useVModel } from "@vueuse/core";
+import { computed, ref } from "vue";
+import { useVModel, watchDebounced } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import { isDateTimeInPast, getTimeFromISOString } from "@/plugins/datetime";
 import DatePicker from "./DatePicker.vue";
@@ -78,7 +78,7 @@ const emitDateTime = () => {
 	dateTime.value = dateTimeObject.toISOString();
 };
 
-watch(
+watchDebounced(
 	[errors, () => dateMissing.value, () => dateTimeInPast],
 	([newErrors, newDateMissing, newDateTimeInPast]) => {
 		if (newErrors.length > 0) {
@@ -98,7 +98,7 @@ watch(
 
 		hintMessage.value = "";
 	},
-	{ deep: true }
+	{ deep: true, debounce: 600 }
 );
 
 const onError = (errorOrigin: string) => {
@@ -110,7 +110,6 @@ const onError = (errorOrigin: string) => {
 const onDateUpdate = (newDate: string) => {
 	date.value = newDate;
 	errors.value = errors.value.filter((item) => item !== "date");
-
 	emitDateTime();
 };
 
