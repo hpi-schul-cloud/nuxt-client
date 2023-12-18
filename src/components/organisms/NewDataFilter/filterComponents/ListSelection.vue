@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
-import { SelectOptionsType } from "../types/filterTypes";
+import { SelectOptionsType } from "../types";
 
 const props = defineProps({
 	selectionList: {

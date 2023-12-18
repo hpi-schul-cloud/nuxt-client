@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { mdiCloseCircle } from "@mdi/js";
 import { PropType } from "vue";
-import { ChipTitle } from "@/components/organisms/NewDataFilter/types/filterTypes";
+import { ChipTitle } from "@/components/organisms/NewDataFilter/types";
 
 defineProps({
 	filters: {

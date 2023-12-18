@@ -1,17 +1,17 @@
 import { createSharedComposable } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import {
-	FilterOptions,
+	FilterOption,
 	FilterOptionsType,
 	FilterQuery,
-	RegistrationTypes,
+	Registration,
 	SelectOptionsType,
-	UserType,
+	User,
 	UserBasedRegistrationOptions,
 	ChipTitle,
 	FilterItem,
 	DateSelection,
-} from "../types/filterTypes";
+} from "../types";
 import { useI18n } from "vue-i18n";
 import { useFilterLocalStorage } from "./localStorage.composable";
 import { printDate } from "@/plugins/datetime";
@@ -27,50 +27,50 @@ const dataTableFilter = (userType: string) => {
 	const defaultFilterMenuItems: SelectOptionsType[] = [
 		{
 			label: t("common.labels.registration"),
-			value: FilterOptions.REGISTRATION,
+			value: FilterOption.REGISTRATION,
 		},
 		{
 			label: t("utils.adminFilter.class.title"),
-			value: FilterOptions.CLASSES,
+			value: FilterOption.CLASSES,
 		},
 		{
 			label: t("utils.adminFilter.date.title"),
-			value: FilterOptions.CREATION_DATE,
+			value: FilterOption.CREATION_DATE,
 		},
 		{
 			label: t("utils.adminFilter.lastMigration.title"),
-			value: FilterOptions.LAST_MIGRATION_ON,
+			value: FilterOption.LAST_MIGRATION_ON,
 		},
 		{
 			label: t("utils.adminFilter.outdatedSince.title"),
-			value: FilterOptions.OBSOLOTE_SINCE,
+			value: FilterOption.OBSOLOTE_SINCE,
 		},
 	];
 
 	const registrationOptions: UserBasedRegistrationOptions = {
-		[UserType.STUDENT]: [
+		[User.STUDENT]: [
 			{
 				label: t("pages.administration.students.legend.icon.success"),
-				value: RegistrationTypes.COMPLETE,
+				value: Registration.COMPLETE,
 			},
 			{
 				label: t("utils.adminFilter.consent.label.parentsAgreementMissing"),
-				value: RegistrationTypes.PARENT_AGREED,
+				value: Registration.PARENT_AGREED,
 			},
 			{
 				label: t("utils.adminFilter.consent.label.missing"),
-				value: RegistrationTypes.MISSING,
+				value: Registration.MISSING,
 			},
 		],
-		[UserType.TEACHER]: [
+		[User.TEACHER]: [
 			{
 				label: t("pages.administration.students.legend.icon.success"),
-				value: RegistrationTypes.COMPLETE,
+				value: Registration.COMPLETE,
 			},
 
 			{
 				label: t("utils.adminFilter.consent.label.missing"),
-				value: RegistrationTypes.MISSING,
+				value: Registration.MISSING,
 			},
 		],
 	};
@@ -79,16 +79,16 @@ const dataTableFilter = (userType: string) => {
 
 	const isDateFiltering = computed(() => {
 		return (
-			selectedFilterType.value == FilterOptions.CREATION_DATE ||
-			selectedFilterType.value == FilterOptions.LAST_MIGRATION_ON ||
-			selectedFilterType.value == FilterOptions.OBSOLOTE_SINCE
+			selectedFilterType.value == FilterOption.CREATION_DATE ||
+			selectedFilterType.value == FilterOption.LAST_MIGRATION_ON ||
+			selectedFilterType.value == FilterOption.OBSOLOTE_SINCE
 		);
 	});
 
 	const isSelectFiltering = computed(() => {
 		return (
-			selectedFilterType.value == FilterOptions.CLASSES ||
-			selectedFilterType.value == FilterOptions.REGISTRATION
+			selectedFilterType.value == FilterOption.CLASSES ||
+			selectedFilterType.value == FilterOption.REGISTRATION
 		);
 	});
 
@@ -96,9 +96,8 @@ const dataTableFilter = (userType: string) => {
 
 	const filterChipTitles = ref<Array<ChipTitle>>([]);
 
-	const updateFilter = (value: string[] | DateSelection) => {
+	const updateFilter = (value: string[] & DateSelection) => {
 		if (!selectedFilterType.value) return;
-		// @ts-expect-error TODO: check type error
 		filterQuery.value[selectedFilterType.value] = value;
 
 		filterMenuItems.value = defaultFilterMenuItems.filter(
@@ -120,7 +119,7 @@ const dataTableFilter = (userType: string) => {
 		setFilterMenuItems();
 	};
 
-	const removeChipFilter = (val: FilterOptions) => {
+	const removeChipFilter = (val: FilterOption) => {
 		delete filterQuery.value[val];
 
 		setFilterState(filterQuery.value);
@@ -134,41 +133,39 @@ const dataTableFilter = (userType: string) => {
 	};
 
 	const prepareTitles = (chipItem: FilterItem) => {
-		if (chipItem[0] == FilterOptions.REGISTRATION) {
+		if (chipItem[0] == FilterOption.REGISTRATION) {
 			const statusKeyMap = {
-				[RegistrationTypes.COMPLETE]: t(
+				[Registration.COMPLETE]: t(
 					"pages.administration.students.legend.icon.success"
 				),
-				[RegistrationTypes.MISSING]: t(
-					"utils.adminFilter.consent.label.missing"
-				),
-				[RegistrationTypes.PARENT_AGREED]: t(
+				[Registration.MISSING]: t("utils.adminFilter.consent.label.missing"),
+				[Registration.PARENT_AGREED]: t(
 					"utils.adminFilter.consent.label.parentsAgreementMissing"
 				),
 			};
 			const status = chipItem[1].map((val) => {
-				return statusKeyMap[val as RegistrationTypes];
+				return statusKeyMap[val as Registration];
 			});
 
 			return status.join(` ${t("common.words.and")} `);
 		}
 
-		if (chipItem[0] == FilterOptions.CLASSES)
+		if (chipItem[0] == FilterOption.CLASSES)
 			return `${t("utils.adminFilter.class.title")} = ${chipItem[1].join(
 				", "
 			)}`;
 
-		if (chipItem[0] == FilterOptions.CREATION_DATE)
+		if (chipItem[0] == FilterOption.CREATION_DATE)
 			return `${t("utils.adminFilter.date.created")} ${printDate(
 				chipItem[1].$gte
 			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
 
-		if (chipItem[0] == FilterOptions.LAST_MIGRATION_ON)
+		if (chipItem[0] == FilterOption.LAST_MIGRATION_ON)
 			return `${t("utils.adminFilter.lastMigration.title")} ${printDate(
 				chipItem[1].$gte
 			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
 
-		if (chipItem[0] == FilterOptions.OBSOLOTE_SINCE)
+		if (chipItem[0] == FilterOption.OBSOLOTE_SINCE)
 			return `${t("utils.adminFilter.outdatedSince.title")} ${printDate(
 				chipItem[1].$gte
 			)} ${t("common.words.and")} ${printDate(chipItem[1].$lte)}`;
@@ -189,7 +186,6 @@ const dataTableFilter = (userType: string) => {
 	};
 
 	onMounted(() => {
-		console.log(selectedFilterType.value);
 		filterQuery.value = getFilterStorage() ?? {};
 		if (filterQuery.value) setFilterChipTitles();
 	});

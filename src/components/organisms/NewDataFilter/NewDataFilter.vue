@@ -11,7 +11,7 @@
 		<v-list>
 			<v-list-item v-for="(item, index) in filterMenuItems" :key="index">
 				<v-list-item-title
-					@click="onFilterClick(item.value as FilterOptions)"
+					@click="onFilterClick(item.value as FilterOptionsType)"
 					class="menu-text"
 					hover
 				>
@@ -58,11 +58,12 @@
 import FilterDialog from "./FilterDialog.vue";
 import { TimeBetween, FilterChips, ListSelection } from "./filterComponents";
 import {
-	FilterOptions,
+	DateSelection,
+	FilterOption,
 	SelectOptionsType,
 	FilterOptionsType,
-	UserType,
-} from "./types/filterTypes";
+	User,
+} from "./types";
 import { ref, computed, onMounted } from "vue";
 import { useDataTableFilter } from "./composables/filter.composable";
 import { useStore } from "vuex";
@@ -75,7 +76,7 @@ const store = useStore();
 const props = defineProps({
 	filterFor: {
 		type: String,
-		default: () => UserType.STUDENT,
+		default: () => User.STUDENT,
 	},
 });
 
@@ -108,9 +109,9 @@ const modalTitle = computed(
 );
 
 const selectionProps = computed(() => {
-	return selectedFilterType.value == FilterOptions.CLASSES
+	return selectedFilterType.value == FilterOption.CLASSES
 		? classNamesList.value
-		: registrationOptions[props.filterFor as UserType];
+		: registrationOptions[props.filterFor as User];
 });
 
 const filteredValues = computed(() => {
@@ -133,7 +134,7 @@ const onFilterClick = (val: FilterOptionsType) => {
 	dialogOpen.value = true;
 };
 
-const onRemoveChipFilter = (val: FilterOptions) => {
+const onRemoveChipFilter = (val: FilterOption) => {
 	removeChipFilter(val);
 	emit("update:filter", filterQuery.value);
 };
@@ -144,7 +145,7 @@ const onRemoveFilter = () => {
 	emit("update:filter", filterQuery.value);
 };
 
-const onUpdateFilter = (value: FilterOptions) => {
+const onUpdateFilter = (value: string[] & DateSelection) => {
 	updateFilter(value);
 	dialogOpen.value = false;
 	emit("update:filter", filterQuery.value);

@@ -1,15 +1,4 @@
-enum FilterOptions {
-	REGISTRATION = "consentStatus",
-	CLASSES = "classes",
-	CREATION_DATE = "createdAt",
-	LAST_MIGRATION_ON = "lastLoginSystemChange",
-	OBSOLOTE_SINCE = "outdatedSince",
-}
-
-enum UserType {
-	STUDENT = "student",
-	TEACHER = "teacher",
-}
+import { FilterOption, User } from "./enums";
 
 type FilterOptionsType =
 	| "consentStatus"
@@ -17,12 +6,6 @@ type FilterOptionsType =
 	| "createdAt"
 	| "lastLoginSystemChange"
 	| "outdatedSince";
-
-enum RegistrationTypes {
-	COMPLETE = "ok",
-	PARENT_AGREED = "parentsAgreed",
-	MISSING = "missing",
-}
 
 type ChipTitle = {
 	item: string;
@@ -33,20 +16,20 @@ type FilterItem = [string, string[] & DateSelection];
 
 type SelectOptionsType = {
 	label: string;
-	value: FilterOptions | string;
+	value: FilterOption | string;
 };
 
 type UserBasedRegistrationOptions = {
-	[UserType.STUDENT]: SelectOptionsType[];
-	[UserType.TEACHER]: SelectOptionsType[];
+	[User.STUDENT]: SelectOptionsType[];
+	[User.TEACHER]: SelectOptionsType[];
 };
 
 type FilterQuery = {
-	lastLoginSystemChange?: DateSelection;
-	classes?: string[];
-	consentStatus?: string[];
-	createdAt?: DateSelection;
-	outdatedSince?: DateSelection;
+	[FilterOption.LAST_MIGRATION_ON]?: DateSelection;
+	[FilterOption.REGISTRATION]?: string[];
+	[FilterOption.CLASSES]?: string[];
+	[FilterOption.CREATION_DATE]?: DateSelection;
+	[FilterOption.OBSOLOTE_SINCE]?: DateSelection;
 };
 
 type Query = {
@@ -74,12 +57,9 @@ export {
 	ChipTitle,
 	DateSelection,
 	FilterItem,
-	FilterOptions,
 	FilterOptionsType,
 	FilterQuery,
-	RegistrationTypes,
 	SelectOptionsType,
 	UiState,
 	UserBasedRegistrationOptions,
-	UserType,
 };

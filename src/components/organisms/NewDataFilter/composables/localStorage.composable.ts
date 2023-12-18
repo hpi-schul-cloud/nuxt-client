@@ -1,5 +1,5 @@
 import { createSharedComposable, useStorage } from "@vueuse/core";
-import { UiState, UserType } from "../types/filterTypes";
+import { UiState, User } from "../types";
 import { ref } from "vue";
 
 const filterLocalStorage = () => {
@@ -10,22 +10,22 @@ const filterLocalStorage = () => {
 	};
 
 	type FilterStorage = {
-		[UserType.STUDENT]: string;
-		[UserType.TEACHER]: string;
+		[User.STUDENT]: string;
+		[User.TEACHER]: string;
 	};
 
 	const filterStorageKey: FilterStorage = {
-		[UserType.STUDENT]: "pages.administration.students.index",
-		[UserType.TEACHER]: "pages.administration.teachers.index",
+		[User.STUDENT]: "pages.administration.students.index",
+		[User.TEACHER]: "pages.administration.teachers.index",
 	};
 
 	const defaultState: UiState = {
 		pagination: {},
 		filter: {
-			[filterStorageKey[UserType.STUDENT]]: {
+			[filterStorageKey[User.STUDENT]]: {
 				query: {},
 			},
-			[filterStorageKey[UserType.TEACHER]]: {
+			[filterStorageKey[User.TEACHER]]: {
 				query: {},
 			},
 		},
@@ -36,17 +36,17 @@ const filterLocalStorage = () => {
 	const state = useStorage("uiState", defaultState);
 
 	const getFilterStorage = () => {
-		return userType.value == UserType.STUDENT
+		return userType.value == User.STUDENT
 			? state.value.filter["pages.administration.students.index"]?.query
 			: state.value.filter["pages.administration.teachers.index"]?.query;
 	};
 
 	const setFilterState = (val: object) => {
-		if (userType.value == UserType.STUDENT)
+		if (userType.value == User.STUDENT)
 			state.value.filter["pages.administration.students.index"] = {
 				query: val,
 			};
-		if (userType.value == UserType.TEACHER)
+		if (userType.value == User.TEACHER)
 			state.value.filter["pages.administration.teachers.index"] = {
 				query: val,
 			};

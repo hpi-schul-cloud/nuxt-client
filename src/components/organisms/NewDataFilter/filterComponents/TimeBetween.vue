@@ -24,7 +24,7 @@
 import { ref, onMounted, PropType } from "vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
 import DatePicker from "@/components/ui-date-time-picker/DatePicker.vue";
-import { DateSelection } from "../types/filterTypes";
+import { DateSelection } from "../types";
 
 const defaultDates: DateSelection = {
 	$gte: "1900-01-01T23:00:00.000Z",
