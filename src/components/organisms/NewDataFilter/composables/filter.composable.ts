@@ -101,7 +101,7 @@ const dataTableFilter = (userType: string) => {
 			(item: SelectOptionsType) => !(item.value in filterQuery.value)
 		);
 
-		filterChipTitles.value = Object.keys(filterQuery.value);
+		setFilterChipTitles();
 
 		setFilterState(filterQuery.value);
 		setFilterMenuItems();
@@ -111,7 +111,7 @@ const dataTableFilter = (userType: string) => {
 		if (selectedFilterType.value)
 			delete filterQuery.value[selectedFilterType.value];
 
-		filterChipTitles.value = Object.keys(filterQuery.value);
+		setFilterChipTitles();
 		setFilterState(filterQuery.value);
 		setFilterMenuItems();
 	};
@@ -129,10 +129,13 @@ const dataTableFilter = (userType: string) => {
 		);
 	};
 
+	const setFilterChipTitles = () => {
+		filterChipTitles.value = Object.keys(filterQuery.value);
+	};
+
 	onMounted(() => {
-		filterQuery.value = getFilterStorage || {};
-		if (filterQuery.value)
-			filterChipTitles.value = Object.keys(filterQuery.value);
+		filterQuery.value = getFilterStorage() ?? {};
+		if (filterQuery.value) setFilterChipTitles();
 	});
 
 	return {

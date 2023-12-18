@@ -1,9 +1,8 @@
-import { defineStore } from "pinia";
-import { useStorage } from "@vueuse/core";
+import { createSharedComposable, useStorage } from "@vueuse/core";
 import { UiState, UserType } from "../types/filterTypes";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 
-export const useFilterLocalStorage = defineStore("filterStorageStore", () => {
+const filterLocalStorage = () => {
 	const userType = ref<string>();
 
 	const initializeUserType = (user: string) => {
@@ -36,11 +35,11 @@ export const useFilterLocalStorage = defineStore("filterStorageStore", () => {
 
 	const state = useStorage("uiState", defaultState);
 
-	const getFilterStorage = computed(() => {
+	const getFilterStorage = () => {
 		return userType.value == UserType.STUDENT
 			? state.value.filter["pages.administration.students.index"]?.query
 			: state.value.filter["pages.administration.teachers.index"]?.query;
-	});
+	};
 
 	const setFilterState = (val: object) => {
 		if (userType.value == UserType.STUDENT)
@@ -53,5 +52,7 @@ export const useFilterLocalStorage = defineStore("filterStorageStore", () => {
 			};
 	};
 
-	return { getFilterStorage, setFilterState, initializeUserType, userType };
-});
+	return { getFilterStorage, setFilterState, initializeUserType };
+};
+
+export const useFilterLocalStorage = createSharedComposable(filterLocalStorage);
