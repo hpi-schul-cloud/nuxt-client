@@ -35,7 +35,6 @@ const props = defineProps({
 const emit = defineEmits(["update:time", "error"]);
 const { t } = useI18n();
 
-const showTimeDialog = ref(false);
 const inputField = ref<HTMLInputElement | null>(null);
 const timeValue = ref<undefined | string>();
 // const { timesOfDayList } = useTimePickerState();
