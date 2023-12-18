@@ -98,7 +98,7 @@ watchDebounced(
 
 		hintMessage.value = "";
 	},
-	{ deep: true, debounce: 600 }
+	{ deep: true, debounce: 700 }
 );
 
 const onError = (errorOrigin: string) => {
