@@ -1,5 +1,5 @@
 <template>
-	<ContentElementBar class="audioPlayer grey darken-3">
+	<ContentElementBar class="audioPlayer bg-grey-darken-3">
 		<template #element>
 			<audio ref="audio" loading="lazy" />
 			<v-btn
@@ -8,7 +8,7 @@
 				icon
 				@click="onPlay"
 				color="white"
-				small
+				size="small"
 			>
 				<v-icon> {{ mdiPause }}</v-icon>
 			</v-btn>
@@ -18,7 +18,7 @@
 				icon
 				@click="onPlay"
 				color="white"
-				small
+				size="small"
 			>
 				<v-icon>{{ mdiPlay }}</v-icon>
 			</v-btn>
@@ -29,7 +29,7 @@
 				color="white"
 				thumb-color="white"
 				track-color="black"
-				:value="currentTime"
+				:model-value="currentTime"
 				start="0"
 				end="duration"
 				step="durationStep"
@@ -38,7 +38,7 @@
 				@click="stopPropagation"
 				@mousedown="stopPropagation"
 				@mouseup="stopPropagation"
-				@input="onInputSlider"
+				@update:model-value="onInputSlider"
 			/>
 			<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
 		</template>

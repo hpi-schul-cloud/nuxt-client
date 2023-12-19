@@ -19,7 +19,7 @@
 			<v-card
 				:height="size"
 				:width="size"
-				outlined
+				variant="outlined"
 				class="ma-0 card-component"
 				:aria-label="
 					$t('pages.rooms.a11y.group.text', {

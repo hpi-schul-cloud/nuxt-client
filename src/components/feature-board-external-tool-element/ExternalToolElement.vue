@@ -5,7 +5,7 @@
 		data-testid="board-external-tool-element"
 		dense
 		elevation="0"
-		outlined
+		variant="outlined"
 		ref="externalToolElement"
 		:ripple="false"
 		tabindex="0"
