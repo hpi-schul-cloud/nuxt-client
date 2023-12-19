@@ -4,7 +4,7 @@
 		ref="linkContentElementDisplay"
 		dense
 		elevation="0"
-		:outlined="true"
+		variant="outlined"
 		:ripple="false"
 		tabindex="0"
 		:loading="isLoading ? 'primary' : false"
