@@ -12,7 +12,7 @@
 					title: news.title,
 				},
 				{
-					text: $t('pages.news.edit.title.default'),
+					title: $t('pages.news.edit.title.default'),
 					disabled: true,
 				},
 			]"
