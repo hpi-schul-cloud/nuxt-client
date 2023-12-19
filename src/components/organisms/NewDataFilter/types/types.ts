@@ -16,7 +16,7 @@ type FilterItem = [string, string[] & DateSelection];
 
 type SelectOptionsType = {
 	label: string;
-	value: FilterOption | string;
+	value: string;
 };
 
 type UserBasedRegistrationOptions = {
@@ -53,6 +53,8 @@ type DateSelection = {
 	$lte: string;
 };
 
+type UpdateFilterParamType = string[] & DateSelection;
+
 export {
 	ChipTitle,
 	DateSelection,
@@ -61,5 +63,6 @@ export {
 	FilterQuery,
 	SelectOptionsType,
 	UiState,
+	UpdateFilterParamType,
 	UserBasedRegistrationOptions,
 };

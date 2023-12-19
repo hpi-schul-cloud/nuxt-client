@@ -28,8 +28,8 @@ const props = defineProps({
 		required: true,
 	},
 	selectedList: {
-		type: Array<SelectOptionsType> || undefined,
-		default: undefined,
+		type: Array<SelectOptionsType> || [],
+		required: true,
 	},
 });
 

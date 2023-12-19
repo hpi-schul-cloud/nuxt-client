@@ -33,7 +33,6 @@
 	>
 		<template #title> {{ modalTitle }} </template>
 		<template #content>
-			<!-- TODO: investigate error -->
 			<ListSelection
 				v-if="isSelectFiltering"
 				:selection-list="selectionProps"
@@ -42,8 +41,7 @@
 				@remove:filter="onRemoveFilter"
 				@dialog-closed="onCloseDialog"
 			/>
-			<!-- TODO: investigate error -->
-			<TimeBetween
+			<DateBetween
 				v-if="isDateFiltering"
 				:selected-date="filteredValues"
 				@update:filter="onUpdateFilter"
@@ -56,7 +54,7 @@
 
 <script setup lang="ts">
 import FilterDialog from "./FilterDialog.vue";
-import { TimeBetween, FilterChips, ListSelection } from "./filterComponents";
+import { DateBetween, FilterChips, ListSelection } from "./filterComponents";
 import {
 	DateSelection,
 	FilterOption,
@@ -84,6 +82,8 @@ const emit = defineEmits(["update:filter"]);
 
 const dialogOpen = ref(false);
 
+const userType = computed(() => props.filterFor);
+
 const {
 	defaultFilterMenuItems,
 	filterChipTitles,
@@ -96,8 +96,7 @@ const {
 	removeChipFilter,
 	removeFilter,
 	updateFilter,
-	// eslint-disable-next-line vue/no-setup-props-reactivity-loss
-} = useDataTableFilter(props.filterFor);
+} = useDataTableFilter(userType.value);
 
 const classNamesList = ref([]);
 
@@ -111,17 +110,13 @@ const modalTitle = computed(
 const selectionProps = computed(() => {
 	return selectedFilterType.value == FilterOption.CLASSES
 		? classNamesList.value
-		: registrationOptions[props.filterFor as User];
+		: registrationOptions[userType.value as User];
 });
 
 const filteredValues = computed(() => {
-	if (!selectedFilterType.value) return undefined;
+	if (!selectedFilterType.value) return;
 
-	const filterObject = filterQuery.value[selectedFilterType.value];
-
-	if (!filterObject) return undefined;
-
-	return filterObject;
+	return filterQuery.value[selectedFilterType.value];
 });
 
 const onCloseDialog = () => {

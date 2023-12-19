@@ -10,7 +10,7 @@ import {
 	UserBasedRegistrationOptions,
 	ChipTitle,
 	FilterItem,
-	DateSelection,
+	UpdateFilterParamType,
 } from "../types";
 import { useI18n } from "vue-i18n";
 import { useFilterLocalStorage } from "./localStorage.composable";
@@ -96,7 +96,7 @@ const dataTableFilter = (userType: string) => {
 
 	const filterChipTitles = ref<Array<ChipTitle>>([]);
 
-	const updateFilter = (value: string[] & DateSelection) => {
+	const updateFilter = (value: UpdateFilterParamType) => {
 		if (!selectedFilterType.value) return;
 		filterQuery.value[selectedFilterType.value] = value;
 
@@ -132,7 +132,7 @@ const dataTableFilter = (userType: string) => {
 		);
 	};
 
-	const prepareTitles = (chipItem: FilterItem) => {
+	const prepareChipTitles = (chipItem: FilterItem) => {
 		if (chipItem[0] == FilterOption.REGISTRATION) {
 			const statusKeyMap = {
 				[Registration.COMPLETE]: t(
@@ -177,7 +177,7 @@ const dataTableFilter = (userType: string) => {
 			(acc: Array<object>, item) => {
 				return acc.concat({
 					item: item[0],
-					title: prepareTitles(item as FilterItem),
+					title: prepareChipTitles(item as FilterItem),
 				});
 			},
 			[]

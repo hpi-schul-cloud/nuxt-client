@@ -6,8 +6,9 @@ import {
 	FilterOptionsType,
 	FilterQuery,
 	SelectOptionsType,
-	UserBasedRegistrationOptions,
 	UiState,
+	UpdateFilterParamType,
+	UserBasedRegistrationOptions,
 } from "./types";
 
 export {
@@ -20,6 +21,7 @@ export {
 	FilterOptionsType,
 	FilterQuery,
 	SelectOptionsType,
-	UserBasedRegistrationOptions,
 	UiState,
+	UpdateFilterParamType,
+	UserBasedRegistrationOptions,
 };

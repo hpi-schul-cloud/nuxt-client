@@ -21,20 +21,10 @@
 	/>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, PropType } from "vue";
+import { onMounted, ref, PropType } from "vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
 import DatePicker from "@/components/ui-date-time-picker/DatePicker.vue";
 import { DateSelection } from "../types";
-
-const defaultDates: DateSelection = {
-	$gte: "1900-01-01T23:00:00.000Z",
-	$lte: "2099-12-31T23:00:00.000Z",
-};
-
-const dateSelection = ref<DateSelection>({
-	$gte: new Date().toString(),
-	$lte: "",
-});
 
 const props = defineProps({
 	selectedDate: {
@@ -43,11 +33,21 @@ const props = defineProps({
 	},
 });
 
+const defaultDates: DateSelection = {
+	$gte: "1900-01-01T23:00:00.000Z",
+	$lte: "2099-12-31T23:00:00.000Z",
+};
+
+const dateSelection = ref<DateSelection>({
+	$gte: new Date().toISOString(),
+	$lte: "",
+});
+
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
-const onUpdateDate = (date: Date, fromUntil: string) => {
-	if (fromUntil == "from") dateSelection.value.$gte = date.toString();
-	if (fromUntil == "until") dateSelection.value.$lte = date.toString();
+const onUpdateDate = (date: string, fromUntil: string) => {
+	if (fromUntil == "from") dateSelection.value.$gte = date;
+	if (fromUntil == "until") dateSelection.value.$lte = date;
 };
 
 const onUpdateFilter = () => {
