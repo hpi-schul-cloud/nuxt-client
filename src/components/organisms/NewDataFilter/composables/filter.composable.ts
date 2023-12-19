@@ -188,6 +188,7 @@ const dataTableFilter = (userType: string) => {
 	onMounted(() => {
 		filterQuery.value = getFilterStorage() ?? {};
 		if (filterQuery.value) setFilterChipTitles();
+		setFilterMenuItems();
 	});
 
 	return {

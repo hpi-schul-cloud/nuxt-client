@@ -166,8 +166,6 @@ onMounted(async () => {
 	});
 
 	classNamesList.value = getClassNameList();
-
-	filterMenuItems.value = defaultFilterMenuItems;
 });
 </script>
 
