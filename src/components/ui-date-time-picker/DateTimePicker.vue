@@ -67,8 +67,8 @@ const emitDateTime = () => {
 		return;
 	}
 
-	const timeValue = time.value || "23:59";
 	const dateTimeObject = new Date(date.value);
+	const timeValue = time.value || "23:59";
 	const hoursAndMinutes = timeValue.split(":");
 
 	dateTimeObject.setHours(
