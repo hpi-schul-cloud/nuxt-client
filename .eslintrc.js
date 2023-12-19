@@ -36,7 +36,6 @@ module.exports = {
 		"@typescript-eslint/ban-ts-comment": "error",
 		"@typescript-eslint/no-inferrable-types": "error",
 		"@typescript-eslint/ban-types": "error",
-		"@typescript-eslint/no-explicit-any": "warn",
 		"vue/no-v-text-v-html-on-component": "error",
 		"vue/no-v-html": "error",
 		"vue/html-self-closing": [

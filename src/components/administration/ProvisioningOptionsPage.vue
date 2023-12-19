@@ -8,8 +8,6 @@
 			:label="t('components.administration.provisioningOptions.class.label')"
 			:loading="isLoading"
 			v-model="provisioningOptions.class"
-			inset
-			dense
 			data-testid="checkbox-option-class"
 			class="ml-1"
 		/>
@@ -25,8 +23,6 @@
 			:label="t('components.administration.provisioningOptions.course.label')"
 			:loading="isLoading"
 			v-model="provisioningOptions.course"
-			inset
-			dense
 			data-testid="checkbox-option-course"
 			class="ml-1"
 		/>
@@ -44,8 +40,6 @@
 			"
 			:loading="isLoading"
 			v-model="provisioningOptions.others"
-			inset
-			dense
 			data-testid="checkbox-option-others"
 			class="ml-1"
 		/>
@@ -65,7 +59,7 @@
 				class="mr-2"
 				data-testid="provisioning-options-cancel-button"
 				color="secondary"
-				outlined
+				variant="outlined"
 				@click="onCancel"
 				>{{ t("common.actions.cancel") }}</v-btn
 			>
@@ -74,7 +68,7 @@
 				class="mr-2"
 				data-testid="provisioning-options-save-button"
 				color="primary"
-				depressed
+				variant="flat"
 				@click="onSave(provisioningOptions)"
 				:disabled="isLoading"
 				>{{ t("common.actions.save") }}</v-btn
