@@ -219,7 +219,7 @@ export default {
 			) {
 				return `/administration/school-settings/provisioning-options?systemId=${system._id}`;
 			}
-			return "`/administration/ldap/config?id=${system._id}`";
+			return `/administration/ldap/config?id=${system._id}`;
 		},
 		openConfirmDeleteDialog(systemId) {
 			this.confirmDeleteDialog = {
