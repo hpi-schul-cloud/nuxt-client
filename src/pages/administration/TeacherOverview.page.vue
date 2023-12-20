@@ -32,13 +32,6 @@
 				</template>
 			</base-input>
 
-			<data-filter
-				:filters="filters"
-				:backend-filtering="true"
-				v-model:active-filters="currentFilterQuery"
-				data-testid="data_filter"
-			/>
-
 			<NewDataFilter @update:filter="onUpdateFilter" filter-for="teacher" />
 
 			<backend-data-table
@@ -134,8 +127,7 @@ import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@/components/molecules/AdminTableLegend";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter";
-import { teacherFilter } from "@/utils/adminFilter";
+
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
@@ -152,7 +144,6 @@ import NewDataFilter from "@/components/organisms/NewDataFilter/NewDataFilter.vu
 
 export default {
 	components: {
-		DataFilter,
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
@@ -295,7 +286,6 @@ export default {
 					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
 			],
-			filters: teacherFilter(this),
 			searchQuery:
 				(this.getUiState("filter", "pages.administration.teachers.index") &&
 					this.getUiState("filter", "pages.administration.teachers.index")

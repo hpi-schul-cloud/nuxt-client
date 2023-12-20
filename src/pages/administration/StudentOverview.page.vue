@@ -32,13 +32,6 @@
 				</template>
 			</base-input>
 
-			<data-filter
-				:filters="filters"
-				:backend-filtering="true"
-				v-model:update:active-filters="currentFilterQuery"
-				data-testid="data_filter"
-			/>
-
 			<NewDataFilter @update:filter="onUpdateFilter" filter-for="student" />
 
 			<backend-data-table
@@ -142,9 +135,7 @@ import { mapGetters } from "vuex";
 import { envConfigModule, notifierModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@/components/molecules/AdminTableLegend";
-import { studentFilter } from "@/utils/adminFilter";
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
@@ -156,7 +147,6 @@ import NewDataFilter from "@/components/organisms/NewDataFilter/NewDataFilter.vu
 
 export default {
 	components: {
-		DataFilter,
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
@@ -264,7 +254,6 @@ export default {
 					disabled: true,
 				},
 			],
-			filters: studentFilter(this),
 			active: false,
 			searchQuery:
 				(this.getUiState("filter", "pages.administration.students.index") &&
