@@ -1,11 +1,11 @@
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
-import FilterActionButtons from "./FilterActionButtons.vue"; // Adjust the path accordingly
+import FilterActionButtons from "./FilterActionButtons.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-describe("FilterActionButtons", () => {
+describe("@components/NewDataFilter/filterComponents/FilterActionButtons.vue", () => {
 	const mountComponent = (
 		options: ComponentMountingOptions<typeof FilterActionButtons> = {}
 	) => {

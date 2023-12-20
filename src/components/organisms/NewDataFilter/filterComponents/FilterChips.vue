@@ -5,10 +5,11 @@
 				:border="true"
 				closable
 				variant="text"
-				class="ma-1"
+				class="ma-1 filter-chip"
 				:close-icon="mdiCloseCircle"
 				@click:close="onChipClose(filterItem.item)"
 				@click="onClick(filterItem.item)"
+				data-testid="filter-chip"
 			>
 				{{ filterItem.title }}
 			</v-chip>
@@ -17,12 +18,11 @@
 </template>
 <script setup lang="ts">
 import { mdiCloseCircle } from "@mdi/js";
-import { PropType } from "vue";
 import { ChipTitle } from "@/components/organisms/NewDataFilter/types";
 
 defineProps({
 	filters: {
-		type: Object as PropType<ChipTitle[]>,
+		type: Array<ChipTitle>,
 		required: true,
 	},
 });
