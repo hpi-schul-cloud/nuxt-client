@@ -137,7 +137,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 	it("computed DueDateLabel() method should be able to render a shortened date", () => {
 		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
-		wrapper.vm.$vuetify.display.xsOnly = true;
+		wrapper.vm.$vuetify.display.xs = true;
 
 		const convertedDueDate = dateFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
