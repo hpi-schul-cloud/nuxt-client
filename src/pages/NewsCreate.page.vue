@@ -55,7 +55,6 @@ export default {
 					title: news.title,
 					content: news.content,
 					displayAt: news.displayAt,
-					schoolId: this.$user.schoolId,
 					targetId: newsTarget.targetId,
 					targetModel: newsTarget.targetModel,
 				});
