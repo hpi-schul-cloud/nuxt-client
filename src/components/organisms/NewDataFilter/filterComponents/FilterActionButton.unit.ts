@@ -1,36 +1,46 @@
-import { shallowMount } from "@vue/test-utils";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import FilterActionButtons from "./FilterActionButtons.vue"; // Adjust the path accordingly
-
-// TODO: correct i18n providing will be here
-jest.mock("vue-i18n", () => ({
-	useI18n: jest.fn().mockReturnValue({
-		t: (key: string) => key,
-	}),
-}));
-
-const setup = () => {
-	const wrapper = shallowMount(FilterActionButtons);
-	return { wrapper };
-};
-
-// TODO: write actual tests
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("FilterActionButtons", () => {
+	const mountComponent = (
+		options: ComponentMountingOptions<typeof FilterActionButtons> = {}
+	) => {
+		return mount(FilterActionButtons, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			...options,
+		});
+	};
 	it('should emit "remove:filter" event when onRemoveFilter is called', async () => {
-		const { wrapper } = setup();
+		const wrapper = mountComponent();
+		const removeButton = wrapper.getComponent(
+			'[data-testid="remove-filter-button"]'
+		);
 
-		expect(wrapper).toBeDefined();
+		await removeButton.trigger("click");
+		expect(wrapper.emitted()).toHaveProperty("remove:filter");
 	});
 
 	it('should emit "dialog-closed" event when onCancel is called', async () => {
-		const { wrapper } = setup();
+		const wrapper = mountComponent();
+		const cancelButton = wrapper.getComponent(
+			'[data-testid="cancel-filter-button"]'
+		);
 
-		expect(wrapper).toBeDefined();
+		await cancelButton.trigger("click");
+		expect(wrapper.emitted()).toHaveProperty("dialog-closed");
 	});
 
 	it('should emit "update:filter" event when onAddFilter is called', async () => {
-		const { wrapper } = setup();
+		const wrapper = mountComponent();
+		const addButton = wrapper.getComponent('[data-testid="add-filter-button"]');
 
-		expect(wrapper).toBeDefined();
+		await addButton.trigger("click");
+		expect(wrapper.emitted()).toHaveProperty("update:filter");
 	});
 });

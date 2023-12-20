@@ -3,7 +3,7 @@
 		<template v-slot:activator="{ props }">
 			<v-btn v-bind="props" variant="flat">
 				<v-icon class="filter-icon mr-2">$mdiTune</v-icon>
-				Add Filter
+				{{ t("components.organisms.DataFilter.add") }}
 				<v-icon class="filter-icon">$mdiMenuDown</v-icon>
 			</v-btn>
 		</template>
@@ -66,10 +66,7 @@ import { ref, computed, onMounted } from "vue";
 import { useDataTableFilter } from "./composables/filter.composable";
 import { useStore } from "vuex";
 import { authModule } from "@/store";
-
-const { currentYear } = authModule.getSchool;
-
-const store = useStore();
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	filterFor: {
@@ -80,9 +77,12 @@ const props = defineProps({
 
 const emit = defineEmits(["update:filter"]);
 
+const { currentYear } = authModule.getSchool;
+const store = useStore();
+const { t } = useI18n();
 const dialogOpen = ref(false);
-
 const userType = computed(() => props.filterFor);
+const classNamesList = ref([]);
 
 const {
 	defaultFilterMenuItems,
@@ -97,8 +97,6 @@ const {
 	removeFilter,
 	updateFilter,
 } = useDataTableFilter(userType.value);
-
-const classNamesList = ref([]);
 
 const modalTitle = computed(
 	() =>
