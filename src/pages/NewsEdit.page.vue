@@ -127,8 +127,4 @@ const onDelete = async () => {
 const onCancel = async () => {
 	router.push({ path: `/news/${route.params.id}` });
 };
-
-// validate({ params }) {
-// 	return /^[a-z0-9]{24}$/.test(params.id);
-// },
 </script>
