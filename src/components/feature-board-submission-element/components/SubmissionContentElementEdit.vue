@@ -11,7 +11,7 @@
 			:dateTime="dueDate"
 			:date-input-label="t('common.labels.date')"
 			:time-input-label="t('common.labels.time')"
-			@input="onDateTimeInput"
+			@update:date-time="onDateTimeInput"
 		/>
 		<SubmissionItemsTeacherDisplay
 			:submissions="submissions"

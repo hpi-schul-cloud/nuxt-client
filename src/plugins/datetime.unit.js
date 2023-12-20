@@ -17,6 +17,7 @@ import {
 	setDefaultFormats,
 	DATETIME_FORMAT,
 	isDateTimeInPast,
+	getTimeFromISOString,
 } from "@/plugins/datetime";
 import datetime from "@/plugins/datetime";
 import dayjs from "dayjs";
@@ -198,6 +199,11 @@ describe("@/plugins/datetime", () => {
 	it("isDateTimeInPast", () => {
 		const date = new Date("1991-12-31");
 		expect(isDateTimeInPast(date)).toStrictEqual(true);
+	});
+
+	it("getTimeFromISOString", () => {
+		const ISOString = "2023-12-18T12:29:19.197Z";
+		expect(getTimeFromISOString(ISOString)).toStrictEqual("13:29");
 	});
 
 	const mockApp = {
