@@ -13,7 +13,11 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { Envs } from "@/store/types/env-config";
 import ShareModule from "@/store/share";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 
 const mockData = {
 	roomId: "123",
@@ -112,6 +116,10 @@ const shareModuleMock = createModuleMocks(ShareModule, {
 const notifierModuleMock = createModuleMocks(NotifierModule);
 
 const getWrapper = (props: object, options?: object) => {
+	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+		getCtlToolsTabEnabled: false,
+	});
+
 	return mount<any>(RoomDashboard, {
 		...createComponentMocks({
 			i18n: true,
@@ -121,6 +129,7 @@ const getWrapper = (props: object, options?: object) => {
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			shareModule: shareModuleMock,
 			[I18N_KEY.valueOf()]: { t: (key: string) => key },
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 		},
 		propsData: props,
 		...options,

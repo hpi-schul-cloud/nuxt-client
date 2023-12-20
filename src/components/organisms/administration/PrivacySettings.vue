@@ -19,10 +19,6 @@
 						)
 					"
 					:true-icon="mdiCheck"
-					inset
-					flat
-					density="compact"
-					color="primary"
 					class="ml-1 mt-0"
 					@update:modelValue="
 						($event) =>
@@ -60,10 +56,6 @@
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
-					inset
-					flat
-					density="compact"
-					color="primary"
 					:true-icon="mdiCheck"
 				/>
 				<p class="switch-hint">
@@ -95,10 +87,6 @@
 					@update:model-value="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
-					inset
-					flat
-					density="compact"
-					color="primary"
 				/>
 				<p class="switch-hint">
 					{{
@@ -130,10 +118,6 @@
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')
 					"
-					inset
-					flat
-					density="compact"
-					color="primary"
 				/>
 				<p class="switch-hint">
 					{{

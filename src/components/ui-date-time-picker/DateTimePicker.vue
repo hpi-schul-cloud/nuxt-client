@@ -2,7 +2,7 @@
 	<div class="wrapper">
 		<div class="d-flex flex-row">
 			<date-picker
-				class="mr-2 picker-width"
+				class="mr-4 picker-width"
 				:date="date"
 				:label="dateInputLabel"
 				:aria-label="dateInputAriaLabel"
@@ -21,8 +21,8 @@
 			/>
 		</div>
 		<v-slide-y-transition>
-			<span v-if="message" class="v-messages theme--light message">
-				{{ message }}
+			<span v-if="hintMessage" class="v-messages theme--light message">
+				{{ hintMessage }}
 			</span>
 		</v-slide-y-transition>
 	</div>
@@ -30,17 +30,14 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { useVModel } from "@vueuse/core";
+import { useVModel, watchDebounced } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
-import { isDateTimeInPast } from "@/plugins/datetime";
+import { isDateTimeInPast, getTimeFromISOString } from "@/plugins/datetime";
 import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 
 const props = defineProps({
-	dateTime: {
-		type: String,
-		default: "",
-	},
+	dateTime: { type: String },
 	dateInputLabel: { type: String, default: "" },
 	dateInputAriaLabel: { type: String, default: "" },
 	timeInputLabel: { type: String, default: "" },
@@ -48,68 +45,61 @@ const props = defineProps({
 	minDate: { type: String },
 	maxDate: { type: String },
 });
-const emit = defineEmits(["input"]);
-
-const { locale, t } = useI18n();
-
-const getDate = (dateIsoString: string) => {
-	if (!dateIsoString) {
-		return "";
-	}
-
-	return dateIsoString;
-};
-
-const getTime = (dateIsoString: string) => {
-	if (!dateIsoString) {
-		return "";
-	}
-	return new Date(dateIsoString).toLocaleTimeString(locale.value, {
-		timeStyle: "short",
-		hourCycle: "h23",
-	});
-};
+const { t } = useI18n();
 
 const dateTime = useVModel(props, "dateTime");
-const date = ref(getDate(dateTime.value));
-const time = ref(getTime(dateTime.value));
-const dateRequired = computed(() => time.value !== "");
-const dateTimeInPast = ref(dateTime.value && isDateTimeInPast(dateTime.value));
+const date = ref(dateTime.value ? dateTime.value : "");
+const time = ref(getTimeFromISOString(dateTime.value));
+const dateMissing = computed(() => time.value && !date.value);
+const dateTimeInPast = computed(() => isDateTimeInPast(dateTime.value));
+const errors = ref<Array<string>>([]);
+const hintMessage = ref<string>(
+	dateTimeInPast.value ? t("components.dateTimePicker.messages.dateInPast") : ""
+);
 
 const emitDateTime = () => {
-	if (!date.value && time.value === "") {
-		dateTimeInPast.value = false;
-		emit("input", null);
+	if (!date.value && !time.value) {
+		dateTime.value = undefined;
 		return;
 	}
 
-	if (!date.value && dateRequired.value) {
+	if (dateMissing.value) {
 		return;
 	}
 
+	const dateTimeObject = new Date(date.value);
 	const timeValue = time.value || "23:59";
-	const dateTime = new Date(date.value);
 	const hoursAndMinutes = timeValue.split(":");
 
-	dateTime.setHours(parseInt(hoursAndMinutes[0]), parseInt(hoursAndMinutes[1]));
-	dateTimeInPast.value = isDateTimeInPast(dateTime);
-	emit("input", dateTime.toISOString());
+	dateTimeObject.setHours(
+		parseInt(hoursAndMinutes[0]),
+		parseInt(hoursAndMinutes[1])
+	);
+	dateTime.value = dateTimeObject.toISOString();
 };
 
-const errors = ref<Array<string>>([]);
-const message = computed(() => {
-	if (errors.value.length > 0) return "";
+watchDebounced(
+	[errors, () => dateMissing.value, () => dateTimeInPast],
+	([newErrors, newDateMissing, newDateTimeInPast]) => {
+		if (newErrors.length > 0) {
+			hintMessage.value = "";
+			return;
+		}
 
-	if (dateRequired.value && !date.value) {
-		return t("components.datePicker.validation.required");
-	}
+		if (newDateTimeInPast.value) {
+			hintMessage.value = t("components.dateTimePicker.messages.dateInPast");
+			return;
+		}
 
-	if (dateTimeInPast.value) {
-		return t("components.datePicker.messages.future");
-	}
+		if (newDateMissing) {
+			hintMessage.value = t("components.dateTimePicker.messages.dateRequired");
+			return;
+		}
 
-	return "";
-});
+		hintMessage.value = "";
+	},
+	{ deep: true, debounce: 700 }
+);
 
 const onError = (errorOrigin: string) => {
 	if (errors.value.indexOf(errorOrigin) === -1) {
@@ -120,7 +110,6 @@ const onError = (errorOrigin: string) => {
 const onDateUpdate = (newDate: string) => {
 	date.value = newDate;
 	errors.value = errors.value.filter((item) => item !== "date");
-
 	emitDateTime();
 };
 
@@ -133,7 +122,7 @@ const onTimeUpdate = (newTime: string) => {
 
 <style lang="scss" scoped>
 .picker-width {
-	width: 225px;
+	width: 131px;
 }
 
 .wrapper {

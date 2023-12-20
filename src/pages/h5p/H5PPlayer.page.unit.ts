@@ -4,7 +4,7 @@ import { I18N_KEY } from "@/utils/inject";
 import VueI18n from "vue-i18n";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
-jest.mock("vue-router/composables", () => ({
+jest.mock("vue-router", () => ({
 	useRoute: () => ({ params: { id: "test-id" }, query: {} }),
 }));
 

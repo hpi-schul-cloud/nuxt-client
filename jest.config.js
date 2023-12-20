@@ -28,7 +28,7 @@ const config = deepmerge(defaultPreset, {
 		"^@@/(.*)$": "<rootDir>/$1",
 	},
 
-	// setupFiles: ["./tests/unit/setup.js"],
+	setupFiles: ["./tests/unit/setupNew.js"],
 
 	collectCoverageFrom: [
 		// Include
