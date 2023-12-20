@@ -36,16 +36,22 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
 import { useTitle } from "@vueuse/core";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+	NEWS_MODULE_KEY,
+} from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { PatchNewsPayload } from "@/store/types/news";
+import { AlertStatus } from "@/store/types/alert-payload";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import FormNews from "@/components/organisms/FormNews.vue";
-import { newsModule } from "@/store";
 
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+const newsModule = injectStrict(NEWS_MODULE_KEY);
 
 const fetchNews = async () => {
 	await newsModule.fetchNews(route.params.id as string);
@@ -62,13 +68,9 @@ if (news.value?.title) {
 }
 useTitle(buildPageTitle(pageTitle));
 
-const onSave = async (newsToPatch: any) => {
+const onSave = async (newsToPatch: Partial<PatchNewsPayload>) => {
 	if (!news.value?.id) {
-		notifierModule.show({
-			text: t("components.organisms.FormNews.errors.patch"),
-			status: "error",
-			timeout: 10000,
-		});
+		showNotifier("error", "patch");
 		return;
 	}
 
@@ -80,51 +82,39 @@ const onSave = async (newsToPatch: any) => {
 			displayAt: newsToPatch.displayAt,
 		});
 
-		notifierModule.show({
-			text: t("components.organisms.FormNews.success.patch"),
-			status: "success",
-			timeout: 10000,
-		});
+		showNotifier("success", "patch");
 
 		await router.push({ path: `/news/${news.value?.id}` });
 	} catch (e) {
-		notifierModule.show({
-			text: t("components.organisms.FormNews.errors.patch"),
-			status: "error",
-			timeout: 10000,
-		});
+		showNotifier("error", "patch");
 	}
 };
 
 const onDelete = async () => {
 	if (!news.value?.id) {
-		notifierModule.show({
-			text: t("components.organisms.FormNews.errors.remove"),
-			status: "error",
-			timeout: 10000,
-		});
+		showNotifier("error", "remove");
 		return;
 	}
 
 	try {
 		await newsModule.removeNews(news.value.id);
+		showNotifier("success", "remove");
 
-		notifierModule.show({
-			text: t("components.organisms.FormNews.success.remove"),
-			status: "success",
-			timeout: 10000,
-		});
 		router.push({ path: "/news" });
 	} catch (e) {
-		notifierModule.show({
-			text: t("components.organisms.FormNews.errors.remove"),
-			status: "error",
-			timeout: 10000,
-		});
+		showNotifier("error", "remove");
 	}
 };
 
 const onCancel = async () => {
 	router.push({ path: `/news/${route.params.id}` });
+};
+
+const showNotifier = (type: AlertStatus, method: "remove" | "patch") => {
+	notifierModule.show({
+		text: t(`components.organisms.FormNews.${type}.${method}`),
+		status: type,
+		timeout: 10000,
+	});
 };
 </script>
