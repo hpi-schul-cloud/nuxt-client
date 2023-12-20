@@ -112,7 +112,7 @@ const onDelete = async () => {
 			status: "success",
 			timeout: 10000,
 		});
-		router.push({ name: "news" });
+		router.push({ path: "/news" });
 	} catch (e) {
 		notifierModule.show({
 			text: t("components.organisms.FormNews.errors.remove"),
@@ -123,10 +123,7 @@ const onDelete = async () => {
 };
 
 const onCancel = async () => {
-	router.push({
-		name: "news-id",
-		params: { id: route.params.id },
-	});
+	router.push({ path: `/news/${route.params.id}` });
 };
 
 // validate({ params }) {
