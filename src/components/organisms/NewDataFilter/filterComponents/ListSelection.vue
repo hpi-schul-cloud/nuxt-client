@@ -6,6 +6,7 @@
 				:value="item.value"
 				:label="item.label"
 				hide-details
+				data-testid="list-selection"
 			/>
 		</template>
 	</div>
@@ -28,22 +29,18 @@ const props = defineProps({
 		required: true,
 	},
 	selectedList: {
-		type: Array<SelectOptionsType> || [],
+		type: Array<string>,
 		required: true,
 	},
 });
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
-const selected = ref<SelectOptionsType[]>([]);
+const selected = ref<string[]>([]);
 
 const onUpdateFilter = () => {
-	if (!selected.value.length) {
-		emit("dialog-closed", false);
-		return;
-	}
-
 	emit("update:filter", selected.value);
+	emit("dialog-closed", false);
 };
 
 const onClose = () => {
