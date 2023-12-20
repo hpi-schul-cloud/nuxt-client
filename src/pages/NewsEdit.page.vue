@@ -36,14 +36,16 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
 import { useTitle } from "@vueuse/core";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import FormNews from "@/components/organisms/FormNews.vue";
-import { newsModule, notifierModule } from "@/store";
-import { buildPageTitle } from "@/utils/pageTitle";
+import { newsModule } from "@/store";
 
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const fetchNews = async () => {
 	await newsModule.fetchNews(route.params.id as string);
