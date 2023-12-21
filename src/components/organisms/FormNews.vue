@@ -19,7 +19,7 @@
 						v-model="data.content"
 						class="mb--md mt--xl-3"
 						:placeholder="
-							$t($t('components.organisms.FormNews.editor.placeholder'))
+							$t('components.organisms.FormNews.editor.placeholder')
 						"
 						type="classic"
 						mode="news"
