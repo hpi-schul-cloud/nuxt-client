@@ -45,7 +45,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { PatchNewsPayload } from "@/store/types/news";
 import { AlertStatus } from "@/store/types/alert-payload";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import FormNews from "@/components/organisms/FormNews.vue";
+import { FormNews } from "@feature-news-form";
 
 const { t } = useI18n();
 const router = useRouter();

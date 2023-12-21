@@ -92,12 +92,11 @@
 import { defineComponent } from "vue";
 import { fromInputDateTime, createInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
-import TitleInput from "@/components/molecules/TitleInput.vue";
-import FormActions from "@/components/molecules/FormActions.vue";
+import TitleInput from "./TitleInput.vue";
+import FormActions from "./FormActions.vue";
 import { mdiClose, mdiCheck, mdiDelete } from "@mdi/js";
 import { CkEditor } from "@feature-editor";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	inheritAttrs: false,
 	components: {

@@ -51,6 +51,7 @@ module.exports = defineConfig({
 				"@feature-board": getDir("src/components/feature-board"),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
+				"@feature-news-form": getDir("src/components/feature-news-form"),
 				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
 				"@ui-color-overlay": getDir("src/components/ui-color-overlay"),
