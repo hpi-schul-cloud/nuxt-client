@@ -1308,6 +1308,12 @@ export interface CustomParameterPostParams {
      * @memberof CustomParameterPostParams
      */
     isOptional: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CustomParameterPostParams
+     */
+    isProtected: boolean;
 }
 /**
  * 
@@ -1375,6 +1381,12 @@ export interface CustomParameterResponse {
      * @memberof CustomParameterResponse
      */
     isOptional: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CustomParameterResponse
+     */
+    isProtected: boolean;
 }
 
 /**
