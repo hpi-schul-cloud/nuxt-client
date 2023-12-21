@@ -2,15 +2,17 @@
 	<date-picker
 		class="mr-2"
 		:date="dateSelection.$gte"
-		label="first date"
+		:label="t('utils.adminFilter.date.label.from')"
 		@update:date="onUpdateDate($event, 'from')"
+		data-testid="date-picker-from"
 	/>
 
 	<date-picker
 		class="mr-2"
 		:date="dateSelection.$lte"
-		label="until date"
+		:label="t('utils.adminFilter.date.label.until')"
 		@update:date="onUpdateDate($event, 'until')"
+		data-testid="date-picker-until"
 	/>
 
 	<FilterActionButtons
@@ -25,6 +27,7 @@ import { onMounted, ref, PropType } from "vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
 import DatePicker from "@/components/ui-date-time-picker/DatePicker.vue";
 import { DateSelection } from "../types";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	selectedDate: {
@@ -32,6 +35,8 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+const { t } = useI18n();
 
 const defaultDates: DateSelection = {
 	$gte: "1900-01-01T23:00:00.000Z",
