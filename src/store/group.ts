@@ -131,7 +131,7 @@ export default class GroupModule extends VuexModule {
 	}
 
 	@Action
-	async loadClassesForSchool(data: {
+	async loadClassesForSchool(data?: {
 		schoolYearQuery?: SchoolYearQueryType;
 		calledFrom?: ClassRequestContext;
 	}): Promise<void> {
@@ -148,8 +148,8 @@ export default class GroupModule extends VuexModule {
 					this.pagination.limit,
 					this.getSortOrder,
 					sortBy,
-					data.schoolYearQuery,
-					data.calledFrom
+					data?.schoolYearQuery,
+					data?.calledFrom
 				);
 			const mappedClasses: ClassInfo[] = GroupMapper.mapToClassInfo(
 				response.data.data

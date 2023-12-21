@@ -19,6 +19,7 @@ import SchoolsModule from "@/store/schools";
 import { School, Year } from "@/store/types/schools";
 import { createMock } from "@golevelup/ts-jest";
 import VueRouter from "vue-router";
+import { ClassRequestContext } from "@/serverApi/v3";
 
 const $router = createMock<VueRouter>();
 
@@ -80,10 +81,13 @@ describe("ClassOverview", () => {
 			propsData,
 		});
 
+		const calledFrom = ClassRequestContext.ClassOverview;
+
 		return {
 			wrapper,
 			groupModule,
 			schoolModule,
+			calledFrom,
 		};
 	};
 
@@ -621,62 +625,70 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on next year tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = getWrapper({}, { tab: "next" });
+				const { wrapper, groupModule, calledFrom } = getWrapper({}, { tab: "next" });
 
 				return {
 					wrapper,
 					groupModule,
+					calledFrom,
 				};
 			};
 
 			it("should call store to load classes of next year", async () => {
-				const { wrapper, groupModule } = setup();
+				const { wrapper, groupModule, calledFrom } = setup();
 
 				await wrapper
 					.find('[data-testid="admin-class-next-year-tab"]')
 					.trigger("click");
 
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith(
-					"nextYear"
-				);
+				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith({
+					schoolYearQuery: "nextYear",
+					calledFrom: calledFrom,
+				});
 			});
 		});
 
 		describe("when clicking on previous years tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = getWrapper({}, { tab: "archive" });
+				const { wrapper, groupModule, calledFrom } = getWrapper(
+					{},
+					{ tab: "archive" }
+				);
 
 				return {
 					wrapper,
 					groupModule,
+					calledFrom,
 				};
 			};
 
 			it("should call store to load classes of previous years", async () => {
-				const { wrapper, groupModule } = setup();
+				const { wrapper, groupModule, calledFrom } = setup();
 
 				await wrapper
 					.find('[data-testid="admin-class-previous-years-tab"]')
 					.trigger("click");
 
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith(
-					"previousYears"
-				);
+				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith({
+					schoolYearQuery: "previousYears",
+					calledFrom: calledFrom,
+				});
 			});
 		});
 
 		describe("when clicking on current year tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = getWrapper();
+				const { wrapper, groupModule, calledFrom } = getWrapper();
 
 				return {
 					wrapper,
 					groupModule,
+					calledFrom,
 				};
 			};
 
 			it("should call store to load groups and classes of current year", async () => {
-				const { wrapper, groupModule } = setup();
+				const { wrapper, groupModule, calledFrom } = setup();
 
 				await wrapper
 					.find('[data-testid="admin-class-next-year-tab"]')
@@ -686,9 +698,10 @@ describe("ClassOverview", () => {
 					.find('[data-testid="admin-class-current-year-tab"]')
 					.trigger("click");
 
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith(
-					"currentYear"
-				);
+				expect(groupModule.loadClassesForSchool).toHaveBeenCalledWith({
+					schoolYearQuery: "currentYear",
+					calledFrom: calledFrom,
+				});
 			});
 		});
 	});
