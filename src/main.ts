@@ -67,6 +67,7 @@ import {
 	TERMS_OF_USE_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
+	NEWS_MODULE_KEY,
 } from "./utils/inject";
 
 export const app = createApp(App);
@@ -156,7 +157,7 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);
 	app.provide("loadingStateModule", loadingStateModule);
-	app.provide("newsModule", newsModule);
+	app.provide(NEWS_MODULE_KEY.valueOf(), newsModule);
 	app.provide(NOTIFIER_MODULE_KEY.valueOf(), notifierModule);
 	app.provide(PRIVACY_POLICY_MODULE_KEY.valueOf(), privacyPolicyModule);
 	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
