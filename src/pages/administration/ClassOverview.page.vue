@@ -197,7 +197,7 @@ import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import { useRouter } from "vue-router/composables";
 import { ClassRequestContext, SchoolYearQueryType } from "@/serverApi/v3";
-import { buildPageTitle } from "../../utils/pageTitle";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 
 type Tab = "current" | "next" | "archive";
