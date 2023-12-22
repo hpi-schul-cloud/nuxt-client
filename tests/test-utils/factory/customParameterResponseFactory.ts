@@ -13,5 +13,6 @@ export const customParameterResponseFactory =
 		location: CustomParameterResponseLocationEnum.Body,
 		name: `CustomParameter${sequence}`,
 		isOptional: false,
+		isProtected: false,
 		displayName: `Custom Parameter ${sequence}`,
 	}));
