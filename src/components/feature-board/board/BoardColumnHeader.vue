@@ -19,6 +19,7 @@
 					:placeholder="titlePlaceholder"
 					@update:value="onUpdateTitle"
 					class="w-100"
+					:is-focused="isFocusedById"
 				/>
 				<BoardMenu
 					v-if="hasDeletePermission"
@@ -84,7 +85,7 @@ export default defineComponent({
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const columnHeader = ref<HTMLDivElement | null>(null);
-		const { isFocusContained } = useBoardFocusHandler(
+		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
 			columnId.value,
 			columnHeader
 		);
@@ -124,6 +125,7 @@ export default defineComponent({
 			onMoveColumnKeyboard,
 			onUpdateTitle,
 			MenuEvent,
+			isFocusedById,
 		};
 	},
 });
