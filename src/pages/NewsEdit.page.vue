@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter, useRoute } from "vue-router";
 import { useTitle } from "@vueuse/core";
@@ -42,7 +42,7 @@ import {
 	NEWS_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { PatchNewsPayload } from "@/store/types/news";
+import { News, PatchNewsPayload } from "@/store/types/news";
 import { AlertStatus } from "@/store/types/alert-payload";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { FormNews } from "@feature-news-form";
@@ -52,21 +52,25 @@ const router = useRouter();
 const route = useRoute();
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const newsModule = injectStrict(NEWS_MODULE_KEY);
+const news = ref<News | null>();
 
 const fetchNews = async () => {
-	await newsModule.fetchNews(route.params.id as string);
+	await newsModule.fetchNews(route.params.id as string).then(() => {
+		news.value = newsModule.getCurrentNews;
+		setPageTitle();
+	});
 };
 fetchNews();
 
-const news = computed(() => newsModule.getCurrentNews);
-
-let pageTitle = t("pages.news.edit.title.default");
-if (news.value?.title) {
-	pageTitle = t("pages.news.edit.title", {
-		title: news.value?.title,
-	});
-}
-useTitle(buildPageTitle(pageTitle));
+const setPageTitle = () => {
+	let pageTitle = t("pages.news.edit.title.default");
+	if (news.value?.title) {
+		pageTitle = t("pages.news.edit.title", {
+			title: news.value?.title,
+		});
+	}
+	useTitle(buildPageTitle(pageTitle));
+};
 
 const onSave = async (newsToPatch: Partial<PatchNewsPayload>) => {
 	if (!news.value?.id) {
