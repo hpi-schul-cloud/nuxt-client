@@ -16,6 +16,7 @@ describe("useExternalToolValidation", () => {
 			name: "ToolParameter",
 			displayName: "Tool Parameter",
 			isOptional: true,
+			isProtected: false,
 			type: ToolParameterType.String,
 			regexComment: "comment",
 			location: ToolParameterLocation.PATH,
