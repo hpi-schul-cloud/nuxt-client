@@ -329,12 +329,12 @@ export default defineComponent({
 			},
 			{
 				value: "teachers",
-				text: t("common.labels.students"),
+				text: t("common.labels.teacher"),
 				sortable: true,
 			},
 			{
 				value: "studentCount",
-				text: "Schüler:innen",
+				text: t("common.labels.students"),
 				sortable: true,
 			},
 			{
