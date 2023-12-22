@@ -625,7 +625,10 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on next year tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule, calledFrom } = getWrapper({}, { tab: "next" });
+				const { wrapper, groupModule, calledFrom } = getWrapper(
+					{},
+					{ tab: "next" }
+				);
 
 				return {
 					wrapper,

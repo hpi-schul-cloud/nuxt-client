@@ -78,7 +78,7 @@ export default defineComponent({
 				? await h5pEditorApi.h5PEditorControllerSaveH5pContent(
 						contentId,
 						createParams
-				  )
+					)
 				: await h5pEditorApi.h5PEditorControllerCreateH5pContent(createParams);
 
 			return data;
