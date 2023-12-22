@@ -197,6 +197,8 @@ import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import { useRouter } from "vue-router/composables";
 import { ClassRequestContext, SchoolYearQueryType } from "@/serverApi/v3";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
 
 type Tab = "current" | "next" | "archive";
 
@@ -237,6 +239,8 @@ export default defineComponent({
 				disabled: true,
 			},
 		];
+
+		useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 
 		const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(
 			() => {
@@ -330,7 +334,7 @@ export default defineComponent({
 			},
 			{
 				value: "studentCount",
-				text: "Schüler:innen",
+				text: t("common.labels.students"),
 				sortable: true,
 			},
 			{

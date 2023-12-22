@@ -23,6 +23,10 @@ import { ClassRequestContext } from "@/serverApi/v3";
 
 const $router = createMock<VueRouter>();
 
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 describe("ClassOverview", () => {
 	const getWrapper = (
 		getters: Partial<GroupModule> = {},
@@ -625,7 +629,10 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on next year tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule, calledFrom } = getWrapper({}, { tab: "next" });
+				const { wrapper, groupModule, calledFrom } = getWrapper(
+					{},
+					{ tab: "next" }
+				);
 
 				return {
 					wrapper,
