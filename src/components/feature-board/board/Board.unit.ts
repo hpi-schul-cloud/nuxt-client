@@ -1,16 +1,13 @@
 import NotifierModule from "@/store/notifier";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { nextTick, ref } from "vue";
-import { Route } from "vue-router";
+import { shallowMount } from "@vue/test-utils";
+import { nextTick, ref } from "vue";
 import {
 	useBoardState,
 	useBoardPermissions,
@@ -26,6 +23,7 @@ import {
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 jest.mock("@data-board");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -42,24 +40,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-const $route: Route = {
-	params: {
-		id: "a1b2c3",
-	},
-	path: "/rooms/a1b2c3/board",
-	fullPath: "/rooms/a1b2c3/board",
-	hash: "",
-	query: {
-		id: "a1b2c3",
-	},
-	matched: [],
-} as Route;
-
-const $router = { replace: jest.fn(), push: jest.fn(), afterEach: jest.fn() };
-
 describe("Board", () => {
-	let wrapper: Wrapper<Vue>;
-
 	const cards = cardSkeletonResponseFactory.buildList(3);
 	const oneColumn = columnResponseFactory.build({ cards });
 	const boardWithOneColumn = boardResponseFactory.build({
@@ -103,23 +84,21 @@ describe("Board", () => {
 		});
 
 		const boardId = board?.id ?? boardWithOneColumn.id;
-		wrapper = shallowMount(BoardVue as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			mocks: {
-				$router,
-				$route,
+		const wrapper = shallowMount(BoardVue, {
+			global: {
+				plugins: [createTestingI18n()],
 			},
 			propsData: { boardId },
 			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 		});
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should call 'useBoardState' composable", () => {
-			setup();
+			const { wrapper } = setup();
 
 			expect(mockedUseBoardState).toHaveBeenCalled();
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -128,17 +107,17 @@ describe("Board", () => {
 		});
 
 		it("should be found in the dom", () => {
-			setup();
+			const { wrapper } = setup();
 			expect(wrapper.findComponent(BoardVue).exists()).toBeTruthy();
 		});
 
 		it("should fetch board from store and render it", () => {
-			setup();
+			const { wrapper } = setup();
 			expect(wrapper.findComponent(BoardColumnVue).exists()).toBeTruthy();
 		});
 
 		it("should fetch board from store and render one column", () => {
-			setup();
+			const { wrapper } = setup();
 			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(1);
 		});
 
@@ -147,7 +126,7 @@ describe("Board", () => {
 			const boardWithTwoColumns = boardResponseFactory.build({
 				columns: twoColumns,
 			});
-			setup({ board: boardWithTwoColumns });
+			const { wrapper } = setup({ board: boardWithTwoColumns });
 
 			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
 		});
@@ -172,7 +151,7 @@ describe("Board", () => {
 		describe("BoardColumnGhost component", () => {
 			describe("when user has create column permission", () => {
 				it("should not be rendered on DOM", () => {
-					setup();
+					const { wrapper } = setup();
 					const ghostColumnComponent = wrapper.findComponent({
 						name: "BoardColumnGhost",
 					});
@@ -183,7 +162,9 @@ describe("Board", () => {
 
 			describe("when user doesn't have create column permission", () => {
 				it("should not be rendered on DOM", () => {
-					setup({ permissions: { hasCreateColumnPermission: false } });
+					const { wrapper } = setup({
+						permissions: { hasCreateColumnPermission: false },
+					});
 					const ghostColumnComponent = wrapper.findComponent({
 						name: "BoardColumnGhost",
 					});
@@ -196,8 +177,8 @@ describe("Board", () => {
 
 	describe("when component is unMounted", () => {
 		it("should reset the notifier message", () => {
-			setup();
-			wrapper.destroy();
+			const { wrapper } = setup();
+			wrapper.unmount();
 
 			expect(mockedBoardNotifierCalls.resetNotifier).toHaveBeenCalled();
 		});
@@ -210,7 +191,9 @@ describe("Board", () => {
 
 		describe("when user is not permitted to move", () => {
 			it("should set drag-disabled", () => {
-				setup({ permissions: { hasMovePermission: false } });
+				const { wrapper } = setup({
+					permissions: { hasMovePermission: false },
+				});
 
 				const dndContainer = wrapper.findComponent({ name: "Container" });
 				expect(dndContainer.element.outerHTML).toContain(".drag-disabled");
@@ -220,7 +203,7 @@ describe("Board", () => {
 		describe("@onCreateCard", () => {
 			describe("when user is permitted to create card", () => {
 				it("should call the createCard method", () => {
-					setup();
+					const { wrapper } = setup();
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -232,7 +215,9 @@ describe("Board", () => {
 
 			describe("when user is not permitted to create card", () => {
 				it("should not call the createCard method", () => {
-					setup({ permissions: { hasCreateCardPermission: false } });
+					const { wrapper } = setup({
+						permissions: { hasCreateCardPermission: false },
+					});
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -246,7 +231,7 @@ describe("Board", () => {
 		describe("@onCreateColumn", () => {
 			describe("when user is permitted to create a column", () => {
 				it("should call createColumn method", () => {
-					setup();
+					const { wrapper } = setup();
 					const ghostColumnComponent = wrapper.findComponent({
 						name: "BoardColumnGhost",
 					});
@@ -260,7 +245,7 @@ describe("Board", () => {
 		describe("@onCreateColumnWithCard", () => {
 			describe("when user is permitted to create a column with card", () => {
 				it("should call createColumn method", () => {
-					setup();
+					const { wrapper } = setup();
 					const ghostColumnComponent = wrapper.findComponent({
 						name: "BoardColumnGhost",
 					});
@@ -274,7 +259,7 @@ describe("Board", () => {
 		describe("@onDeleteCard", () => {
 			describe("when user is permitted to delete a card", () => {
 				it("should call deleteCard method", () => {
-					setup();
+					const { wrapper } = setup();
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -286,7 +271,9 @@ describe("Board", () => {
 
 			describe("when user is not permitted to delete a card", () => {
 				it("should not call deleteCard method", () => {
-					setup({ permissions: { hasCreateCardPermission: false } });
+					const { wrapper } = setup({
+						permissions: { hasCreateCardPermission: false },
+					});
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -300,7 +287,7 @@ describe("Board", () => {
 		describe("@onDeleteColumn", () => {
 			describe("when user is permitted to delete a column", () => {
 				it("should call deleteColumn method", () => {
-					setup();
+					const { wrapper } = setup();
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -312,7 +299,9 @@ describe("Board", () => {
 
 			describe("when user is not permitted to delete a column", () => {
 				it("should not call deleteColumn method", () => {
-					setup({ permissions: { hasDeletePermission: false } });
+					const { wrapper } = setup({
+						permissions: { hasDeletePermission: false },
+					});
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -326,7 +315,7 @@ describe("Board", () => {
 		describe("@onDropColumn", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
-					setup();
+					const { wrapper } = setup();
 					const containerComponent = wrapper.findComponent({
 						name: "Container",
 					});
@@ -338,7 +327,9 @@ describe("Board", () => {
 
 			describe("when user is not permitted to move a column", () => {
 				it("should not call moveColumn method", () => {
-					setup({ permissions: { hasMovePermission: false } });
+					const { wrapper } = setup({
+						permissions: { hasMovePermission: false },
+					});
 					const containerComponent = wrapper.findComponent({
 						name: "Container",
 					});
@@ -352,7 +343,7 @@ describe("Board", () => {
 		describe("@onUpdateCardPosition", () => {
 			describe("when user is permitted to move a card", () => {
 				it("should call moveCardMock method", () => {
-					setup();
+					const { wrapper } = setup();
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -364,7 +355,9 @@ describe("Board", () => {
 
 			describe("when user is not permitted to move a card", () => {
 				it("should not call moveCardMock method", () => {
-					setup({ permissions: { hasMovePermission: false } });
+					const { wrapper } = setup({
+						permissions: { hasMovePermission: false },
+					});
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -378,7 +371,7 @@ describe("Board", () => {
 		describe("@onUpdateColumnTitle", () => {
 			describe("when user is permitted to edit", () => {
 				it("should call updateColumnTitle method", () => {
-					setup();
+					const { wrapper } = setup();
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -390,7 +383,9 @@ describe("Board", () => {
 
 			describe("when user is not permitted to edit", () => {
 				it("should not call updateColumnTitle method", () => {
-					setup({ permissions: { hasEditPermission: false } });
+					const { wrapper } = setup({
+						permissions: { hasEditPermission: false },
+					});
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -405,12 +400,12 @@ describe("Board", () => {
 
 		describe("@onReloadBoard", () => {
 			it("should reload the board", async () => {
-				setup();
+				const { wrapper } = setup();
 
 				const boardColumnComponents = wrapper.findAllComponents({
 					name: "BoardColumn",
 				});
-				boardColumnComponents.at(0).vm.$emit("reload:board");
+				boardColumnComponents.at(0)?.vm.$emit("reload:board");
 				await nextTick();
 
 				expect(mockedBoardStateCalls.reloadBoard).toHaveBeenCalled();
