@@ -32,7 +32,7 @@
 		"mobile-drag-drop": "^3.0.0-rc.0",
 		"object-hash": "^3.0.0",
 		"universal-cookie": "^6.1.1",
-		"vue": "^2.7.14",
+		"vue": "^2.7.16",
 		"vue-dndrop": "github:hpi-schul-cloud/vue-dndrop#d78a541aa4840063c70ced401310c822d6f06361",
 		"vue-dompurify-html": "^4.1.4",
 		"vue-filter-ui": "^0.8.0",
