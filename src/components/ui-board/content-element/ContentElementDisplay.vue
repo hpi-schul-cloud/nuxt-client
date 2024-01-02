@@ -32,7 +32,7 @@ export default defineComponent({
 });
 </script>
 
-<style type="text/scss">
+<style type="text/scss" scoped>
 .content-element-bar-display .menu {
 	position: absolute;
 	right: 10px;

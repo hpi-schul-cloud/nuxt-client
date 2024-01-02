@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="content-element-title subtitle-1 font-weight-bold flex-grow-1"
+		class="content-element-title subtitle-1 font-weight-bold flex-grow-1 text-truncate"
 		data-testid="content-element-title"
 		ref="oneLineTitle"
 	>
@@ -15,7 +15,7 @@
 			v-if="isOverflowingLongText"
 		>
 			<template v-slot:activator="{ on, attrs }">
-				<div v-bind="attrs" v-on="on">
+				<div v-bind="attrs" v-on="on" class="text-truncate">
 					<slot />
 				</div>
 			</template>
@@ -54,11 +54,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .content-element-title.subtitle-1 {
-	-webkit-text-overflow: ellipsis;
-	-o-text-overflow: ellipsis;
-	text-overflow: ellipsis;
-	text-rendering: optimizelegibility;
-	overflow: hidden;
 	font-family: var(--font-accent) !important;
 	font-size: 14px;
 	font-weight: 400;
@@ -74,11 +69,7 @@ export default defineComponent({
 	border-radius: 4px;
 	padding: 8px;
 	font-family: var(--font-primary) !important;
-	font-size: 14px;
-	font-weight: 100;
-	line-height: 18px;
 	width: 320px;
-	color: white !important;
 	background: map-get($grey, darken-3);
 	opacity: 1;
 	text-wrap: wrap;
@@ -94,7 +85,7 @@ export default defineComponent({
 	color: white !important;
 	text-decoration: none;
 }
-.v-application .content-element-title a {
+.v-application .content-element-title.subtitle-1 a {
 	color: var(--v-black-base) !important;
 	text-decoration: none;
 }
