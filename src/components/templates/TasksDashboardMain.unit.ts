@@ -234,6 +234,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			setupStores({
 				copyModule: CopyModule,
 				authModule: AuthModule,
+				envConfigModule: EnvConfigModule,
 			});
 
 			authModule.setUser(mockAuthStoreDataTeacher as User);
