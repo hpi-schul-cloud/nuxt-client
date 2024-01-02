@@ -18,7 +18,7 @@ export const isTouchEvent = <T extends MouseEvent | TouchEvent>(
 	// a non-touch-event on touch-capable device
 
 	if (now.getTime() - lastTouchDetection < 200) {
-		// interprete as touch-event if last touch-event happen less than 200 seconds ago
+		// interprete as touch-event if last touch-event happend less than 200 milliseconds ago
 		return true;
 	}
 
