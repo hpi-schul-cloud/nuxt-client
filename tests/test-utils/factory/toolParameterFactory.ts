@@ -14,5 +14,6 @@ export const toolParameterFactory = Factory.define<ToolParameter>(
 		displayName: `Parameter ${sequence}`,
 		description: "test description",
 		isOptional: true,
+		isProtected: false,
 	})
 );
