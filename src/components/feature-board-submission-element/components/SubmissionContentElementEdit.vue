@@ -1,13 +1,11 @@
 <template>
 	<div>
-		<ContentElementBar :hasGreyBackground="true" :icon="mdiLightbulbOnOutline">
-			<template #title>
-				{{ t("components.cardElement.submissionElement") }}
-			</template>
-			<template #menu>
+		<div class="grey lighten-4 pa-4 rounded">
+			<SubmissionContentElementTitle />
+			<div class="menu">
 				<slot />
-			</template>
-		</ContentElementBar>
+			</div>
+		</div>
 
 		<date-time-picker
 			class="mt-1 mx-4"
@@ -30,14 +28,14 @@ import { mdiLightbulbOnOutline } from "@mdi/js";
 import { useI18n } from "@/composables/i18n.composable";
 import { TeacherSubmission } from "../types/submission";
 import { DateTimePicker } from "@ui-date-time-picker";
-import { ContentElementBar } from "@ui-board";
+import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 
 export default defineComponent({
 	name: "SubmissionContentElementEdit",
 	components: {
-		ContentElementBar,
 		DateTimePicker,
+		SubmissionContentElementTitle,
 		SubmissionItemsTeacherDisplay,
 	},
 	props: {
