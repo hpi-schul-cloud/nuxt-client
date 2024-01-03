@@ -45,3 +45,9 @@ export default defineComponent({
 	components: { ContentElementBar },
 });
 </script>
+
+<style scoped type="text/scss">
+a {
+	color: var(--v-black-base) !important;
+}
+</style>

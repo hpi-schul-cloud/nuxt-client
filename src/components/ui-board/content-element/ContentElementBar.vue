@@ -13,7 +13,7 @@
 		</div>
 		<div
 			:class="backgroundClass"
-			class="pa-4 rounded-b"
+			class="rounded-b"
 			v-if="
 				icon ||
 				$slots.title ||
@@ -23,29 +23,34 @@
 				$slots.description
 			"
 		>
-			<div class="d-flex align-start">
+			<v-card-title
+				class="subtitle-1 d-inline-block font-weight-bold d-flex flex-nowrap"
+			>
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
-				<ContentElementTitle>
+				<LineClamp class="black--text">
 					<slot name="title" />
-				</ContentElementTitle>
-
-				<div v-if="$slots.menu && !$slots.display" class="three-dot-menu">
+				</LineClamp>
+				<div
+					v-if="$slots.menu && !$slots.display"
+					class="three-dot-menu ml-auto"
+				>
 					<slot name="menu" />
 				</div>
-			</div>
+			</v-card-title>
+			<v-card-subtitle>
+				<div v-if="$slots.element">
+					<slot name="element" />
+				</div>
 
-			<div v-if="$slots.element" class="content-element-bar-element">
-				<slot name="element" />
-			</div>
+				<div v-if="$slots.subtitle" class="pt-1 gb-1 subtitle">
+					<slot name="subtitle" />
+				</div>
 
-			<div v-if="$slots.subtitle" class="pt-1 gb-1 subtitle">
-				<slot name="subtitle" />
-			</div>
-
-			<div v-if="$slots.description" class="pt-1 gb-1 description">
-				<slot name="description" />
-			</div>
+				<div v-if="$slots.description" class="pt-1 gb-1 description">
+					<slot name="description" />
+				</div>
+			</v-card-subtitle>
 		</div>
 	</div>
 </template>
@@ -54,7 +59,7 @@
 import { computed, defineComponent, PropType } from "vue";
 import { VuetifyIcon } from "vuetify/types/services/icons";
 import ContentElementDisplay from "./ContentElementDisplay.vue";
-import ContentElementTitle from "./ContentElementTitle.vue";
+import LineClamp from "./LineClamp.vue";
 import ContentElementTitleIcon from "./ContentElementTitleIcon.vue";
 
 export default defineComponent({
@@ -66,7 +71,7 @@ export default defineComponent({
 	components: {
 		ContentElementDisplay,
 		ContentElementTitleIcon,
-		ContentElementTitle,
+		LineClamp,
 	},
 	setup(props) {
 		const backgroundClass = computed(() => {
@@ -106,9 +111,5 @@ export default defineComponent({
 }
 .v-card__text {
 	margin-top: 0px;
-}
-.content-element-bar-element {
-	margin-top: -16px;
-	margin-bottom: -16px;
 }
 </style>

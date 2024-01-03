@@ -1,13 +1,7 @@
 <template>
-	<div>
-		<v-icon
-			class="content-element-title-icon"
-			color="black"
-			size="20"
-			data-testid="content-element-title-icon"
-			>{{ icon }}</v-icon
-		>
-	</div>
+	<v-icon color="black" size="20" data-testid="content-element-title-icon">{{
+		icon
+	}}</v-icon>
 </template>
 
 <script lang="ts">
@@ -21,9 +15,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.content-element-title-icon {
-	vertical-align: sub;
-}
-</style>
