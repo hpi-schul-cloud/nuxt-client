@@ -3,11 +3,14 @@ import {
 	FileApiInterface,
 	FileRecordParentType,
 	FileRecordResponse,
+	FileRecordScanStatus,
 	FileUrlParams,
+	PreviewStatus,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { createGlobalState } from "@vueuse/core";
 import { ref } from "vue";
 import { useSharedFileRecordsStatus } from "./FileRecordsStatus.composable";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
@@ -23,12 +26,9 @@ export enum ErrorType {
 	Forbidden = "Forbidden",
 }
 
-export const useFileStorageApi = (
-	parentId: string,
-	parentType: FileRecordParentType
-) => {
+const useFileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
-	const fileRecord = ref<FileRecordResponse>();
+	const fileRecords = ref<FileRecordResponse[]>([]);
 	const {
 		showFileTooBigError,
 		showForbiddenError,
@@ -40,20 +40,63 @@ export const useFileStorageApi = (
 	const { addFileRecordStatus, removeFileRecordStatus } =
 		useSharedFileRecordsStatus();
 
-	const fetchFile = async (): Promise<void> => {
+	const createDefaultFileRecord = (id: string) => {
+		return {
+			id: "asd",
+			name: "w3c_home_256.bmp",
+			url: "",
+			size: 4534,
+			securityCheckStatus: FileRecordScanStatus.PENDING,
+			parentId: id,
+			creatorId: "0000d231816abba584714c9e",
+			mimeType: "image/bmp",
+			parentType: FileRecordParentType.BOARDNODES,
+			previewStatus: PreviewStatus.AWAITING_SCAN_STATUS,
+			isUploading: true,
+		};
+	};
+	const getFileRecord = (id: string) => {
+		const realValue = fileRecords.value.find(
+			(fileRecord) => fileRecord.parentId === id
+		);
+
+		if (!realValue) {
+			fileRecords.value.push(createDefaultFileRecord(id));
+		}
+
+		return fileRecords.value.find((fileRecord) => fileRecord.parentId === id);
+	};
+
+	const fetchFile = async (
+		parentId: string,
+		parentType: FileRecordParentType
+	): Promise<void> => {
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.list(schoolId, parentId, parentType);
 
 			// idea: use request-pooling to reduce number of api-requests
-			fileRecord.value = response.data.data[0];
+			const index = fileRecords.value.findIndex(
+				(fileRecord) => fileRecord.parentId === parentId
+			);
+			if (index !== -1) {
+				console.log("index");
+				fileRecords.value[index] = response.data.data[0];
+			} else {
+				fileRecords.value.push(response.data.data[0]);
+			}
+			console.log(fileRecords.value);
 		} catch (error) {
 			showError(error);
 			throw error;
 		}
 	};
 
-	const upload = async (file: File): Promise<void> => {
+	const upload = async (
+		file: File,
+		parentId: string,
+		parentType: FileRecordParentType
+	): Promise<void> => {
 		try {
 			addFileRecordStatus({ id: parentId, isUploading: true });
 
@@ -67,14 +110,18 @@ export const useFileStorageApi = (
 
 			removeFileRecordStatus(parentId);
 
-			fileRecord.value = response.data;
+			fileRecords.value.push(response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
 		}
 	};
 
-	const uploadFromUrl = async (imageUrl: string): Promise<void> => {
+	const uploadFromUrl = async (
+		imageUrl: string,
+		parentId: string,
+		parentType: FileRecordParentType
+	): Promise<void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
 			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
@@ -91,7 +138,7 @@ export const useFileStorageApi = (
 				fileUrlParams
 			);
 
-			fileRecord.value = response.data;
+			fileRecords.value.push(response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -105,7 +152,7 @@ export const useFileStorageApi = (
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
-			fileRecord.value = response.data;
+			fileRecords.value.push(response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -144,6 +191,8 @@ export const useFileStorageApi = (
 		rename,
 		upload,
 		uploadFromUrl,
-		fileRecord,
+		getFileRecord,
 	};
 };
+
+export const useSharedFileRecords = createGlobalState(useFileStorageApi);

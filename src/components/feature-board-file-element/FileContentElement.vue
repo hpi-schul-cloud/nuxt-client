@@ -43,7 +43,11 @@
 </template>
 
 <script lang="ts">
-import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
+import {
+	FileRecordParentType,
+	FileRecordResponse,
+	PreviewWidth,
+} from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
@@ -69,7 +73,7 @@ import {
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import { useSharedFileRecordsStatus } from "./shared/composables/FileRecordsStatus.composable";
-import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
+import { useSharedFileRecords } from "./shared/composables/FileStorageApi.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
@@ -100,11 +104,12 @@ export default defineComponent({
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
-		const { fetchFile, upload, fileRecord } = useFileStorageApi(
-			element.value.id,
-			FileRecordParentType.BOARDNODES
-		);
+		const { fetchFile, upload, getFileRecord } = useSharedFileRecords();
 		const { getFileRecordStatus } = useSharedFileRecordsStatus();
+
+		const fileRecord = computed(() => {
+			return getFileRecord(element.value.id) as unknown as FileRecordResponse;
+		});
 
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
 
@@ -116,13 +121,13 @@ export default defineComponent({
 			() => isUploading.value,
 			(newValue) => {
 				if (newValue === undefined) {
-					fetchFile();
+					fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
 				}
 			}
 		);
 
 		const fileProperties = computed(() => {
-			if (fileRecord.value === undefined) {
+			if (fileRecord.value === null) {
 				return;
 			}
 
@@ -154,7 +159,8 @@ export default defineComponent({
 
 		onMounted(() => {
 			(async () => {
-				await fetchFile();
+				await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+
 				isLoadingFileRecord.value = false;
 			})();
 		});
@@ -168,14 +174,14 @@ export default defineComponent({
 
 		const onUploadFile = async (file: File): Promise<void> => {
 			try {
-				await upload(file);
+				await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
 			} catch (error) {
 				emit("delete:element", element.value.id);
 			}
 		};
 
 		const onFetchFile = async (): Promise<void> => {
-			await fetchFile();
+			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
 		};
 
 		const onUpdateAlternativeText = (value: string) => {
