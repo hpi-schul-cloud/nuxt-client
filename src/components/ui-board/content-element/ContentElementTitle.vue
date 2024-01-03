@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, Ref, onMounted } from "vue";
-import LineClamp from "./LineClamp.vue";
+import LineClamp from "../LineClamp.vue";
 
 export default defineComponent({
 	name: "ContentElementTitle",

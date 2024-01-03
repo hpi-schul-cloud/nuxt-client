@@ -13,8 +13,8 @@
 					<slot />
 				</div>
 			</template>
-			<div>
-				<slot />
+			<div class="overflow-hidden">
+				{{ tooltipText }}
 			</div>
 		</v-tooltip>
 		<template v-else>
@@ -24,15 +24,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, Ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted, computed } from "vue";
 
 export default defineComponent({
 	name: "LineClamp",
 	setup: () => {
-		const textElement: Ref<HTMLElement | undefined> = ref(undefined);
-		const isOverflowingLongText = ref(false);
+		const textElement = ref<HTMLDivElement | undefined>(undefined);
+		const isOverflowingLongText = ref<boolean>(false);
 		let tooltipWidth = "320px";
-
+		const tooltipText = computed<string>(
+			() => textElement.value?.innerText ?? ""
+		);
 		onMounted(() => {
 			if (textElement.value) {
 				isOverflowingLongText.value =
@@ -45,6 +47,7 @@ export default defineComponent({
 			isOverflowingLongText,
 			textElement,
 			tooltipWidth,
+			tooltipText,
 		};
 	},
 });
@@ -54,5 +57,9 @@ export default defineComponent({
 .line-clamp {
 	overflow: hidden;
 	white-space: nowrap;
+}
+
+.overflow-hidden {
+	overflow: hidden;
 }
 </style>

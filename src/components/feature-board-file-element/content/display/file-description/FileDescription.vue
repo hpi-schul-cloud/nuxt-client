@@ -6,7 +6,7 @@
 			:icon="mdiFileDocumentOutline"
 		>
 			<template #title>
-				<a v-if="src" :href="src" target="_blank">{{ name }}</a>
+				<a :href="src" target="_blank">{{ name }}</a>
 			</template>
 			<template v-if="showMenu" #menu>
 				<slot />
@@ -45,9 +45,3 @@ export default defineComponent({
 	components: { ContentElementBar },
 });
 </script>
-
-<style scoped type="text/scss">
-a {
-	color: var(--v-black-base) !important;
-}
-</style>

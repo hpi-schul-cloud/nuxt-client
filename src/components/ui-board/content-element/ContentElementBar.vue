@@ -28,7 +28,7 @@
 			>
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
-				<LineClamp class="black--text">
+				<LineClamp class="black--text font-narrow">
 					<slot name="title" />
 				</LineClamp>
 				<div
@@ -43,11 +43,11 @@
 					<slot name="element" />
 				</div>
 
-				<div v-if="$slots.subtitle" class="pt-1 gb-1 subtitle">
+				<div v-if="$slots.subtitle" class="gb-2 subtitle">
 					<slot name="subtitle" />
 				</div>
 
-				<div v-if="$slots.description" class="pt-1 gb-1 description">
+				<div v-if="$slots.description" class="gb-2 description">
 					<slot name="description" />
 				</div>
 			</v-card-subtitle>
@@ -59,7 +59,7 @@
 import { computed, defineComponent, PropType } from "vue";
 import { VuetifyIcon } from "vuetify/types/services/icons";
 import ContentElementDisplay from "./ContentElementDisplay.vue";
-import LineClamp from "./LineClamp.vue";
+import LineClamp from "../LineClamp.vue";
 import ContentElementTitleIcon from "./ContentElementTitleIcon.vue";
 
 export default defineComponent({
@@ -86,6 +86,10 @@ export default defineComponent({
 </script>
 
 <style scoped type="text/scss">
+.font-narrow {
+	font-family: var(--font-accent) !important;
+}
+
 .content-element-bar {
 	line-height: 24px;
 	color: var(--v-black-base);
@@ -111,5 +115,13 @@ export default defineComponent({
 }
 .v-card__text {
 	margin-top: 0px;
+}
+
+.line-clamp :deep(a) {
+	color: var(--v-black-base) !important;
+	text-decoration: none;
+}
+.line-clamp :deep(a:hover) {
+	text-decoration: underline;
 }
 </style>
