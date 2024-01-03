@@ -9,6 +9,7 @@ import {
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { ref } from "vue";
+import { useSharedFileRecordsStatus } from "./FileRecordsStatus.composable";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
 export enum ErrorType {
@@ -36,6 +37,9 @@ export const useFileStorageApi = (
 		showFileExistsError,
 	} = useFileStorageNotifier();
 
+	const { addFileRecordStatus, removeFileRecordStatus } =
+		useSharedFileRecordsStatus();
+
 	const fetchFile = async (): Promise<void> => {
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
@@ -51,6 +55,8 @@ export const useFileStorageApi = (
 
 	const upload = async (file: File): Promise<void> => {
 		try {
+			addFileRecordStatus({ id: parentId, isUploading: true });
+
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.upload(
 				schoolId,
@@ -58,6 +64,8 @@ export const useFileStorageApi = (
 				parentType,
 				file
 			);
+
+			removeFileRecordStatus(parentId);
 
 			fileRecord.value = response.data;
 		} catch (error) {

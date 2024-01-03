@@ -11,7 +11,7 @@
 		@keydown.up.down="onKeydownArrow"
 	>
 		<FileContent
-			v-if="fileProperties"
+			v-if="fileProperties && isUploading !== true"
 			:file-properties="fileProperties"
 			:alerts="alerts"
 			:is-edit-mode="isEditMode"
@@ -31,6 +31,7 @@
 			:elementId="element.id"
 			:isEditMode="isEditMode"
 			@upload:file="onUploadFile"
+			:isUploading="isUploading"
 		>
 			<BoardMenu scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
@@ -63,9 +64,11 @@ import {
 	PropType,
 	ref,
 	toRef,
+	watch,
 } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
+import { useSharedFileRecordsStatus } from "./shared/composables/FileRecordsStatus.composable";
 import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
@@ -101,8 +104,22 @@ export default defineComponent({
 			element.value.id,
 			FileRecordParentType.BOARDNODES
 		);
+		const { getFileRecordStatus } = useSharedFileRecordsStatus();
 
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
+
+		const isUploading = computed(() => {
+			return getFileRecordStatus(element.value.id)?.isUploading;
+		});
+
+		watch(
+			() => isUploading.value,
+			(newValue) => {
+				if (newValue === undefined) {
+					fetchFile();
+				}
+			}
+		);
 
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
@@ -184,6 +201,7 @@ export default defineComponent({
 			isOutlined,
 			modelValue,
 			alerts,
+			isUploading,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,
