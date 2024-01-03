@@ -69,3 +69,10 @@ $card-text-letter-spacing: normal;
 // treeview
 $treeview-node-margin: 0;
 $treeview-node-padding: 0;
+
+// tooltip
+$tooltip-background-color: rgba(0, 0, 0, 0.8);
+$tooltip-text-color: white;
+$tooltip-padding: 8px;
+$tooltip-transition-enter-duration: 300;
+$tooltip-transition-leave-duration: 300;
