@@ -4,6 +4,14 @@
 			{{ t(errorMessage) }}
 		</WarningAlert>
 
+		<WarningAlert v-if="toolStatus.isDeactivated">
+			{{
+				t("common.tool.information.deactivated", {
+					toolDisplayName,
+				})
+			}}
+		</WarningAlert>
+
 		<WarningAlert v-if="isToolOutdated">
 			{{ outdatedMessage }}
 		</WarningAlert>
@@ -24,10 +32,14 @@ export default defineComponent({
 		WarningAlert,
 	},
 	props: {
+		toolDisplayName: {
+			type: String,
+			required: true,
+		},
 		error: {
 			type: Object as PropType<BusinessError>,
 		},
-		toolOutdatedStatus: {
+		toolStatus: {
 			type: Object as PropType<ContextExternalToolConfigurationStatus>,
 			required: true,
 		},
@@ -42,8 +54,8 @@ export default defineComponent({
 
 		const isToolOutdated: ComputedRef<boolean> = computed(
 			() =>
-				!!props.toolOutdatedStatus?.isOutdatedOnScopeSchool ||
-				!!props.toolOutdatedStatus?.isOutdatedOnScopeContext
+				!!props.toolStatus?.isOutdatedOnScopeSchool ||
+				!!props.toolStatus?.isOutdatedOnScopeContext
 		);
 
 		const errorMessage: ComputedRef<string> = computed(() =>
@@ -53,9 +65,7 @@ export default defineComponent({
 		);
 
 		const outdatedMessage: ComputedRef<string> = computed(() => {
-			const translationKey = determineOutdatedTranslationKey(
-				props.toolOutdatedStatus
-			);
+			const translationKey = determineOutdatedTranslationKey(props.toolStatus);
 
 			return t(translationKey);
 		});

@@ -20,14 +20,14 @@
 				</span>
 			</template>
 			<template #[`item.status`]="{ item }">
-				<v-icon v-if="item.outdated" color="error">
+				<v-icon v-if="item.isOutdated || item.isDeactivated" color="error">
 					{{ mdiRefreshCircle }}
 				</v-icon>
 				<v-icon v-else color="success">
 					{{ mdiCheckCircle }}
 				</v-icon>
 				<span>
-					{{ item.status }}
+					{{ item.statusText }}
 				</span>
 			</template>
 			<template #[`item.actions`]="{ item }">

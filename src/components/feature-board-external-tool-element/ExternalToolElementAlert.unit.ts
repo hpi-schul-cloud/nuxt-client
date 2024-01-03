@@ -149,11 +149,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: true,
-								isOutdatedOnScopeContext: false,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: false,
+						}),
 					},
 					["teacher"]
 				);
@@ -181,11 +180,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: true,
-								isOutdatedOnScopeContext: false,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: false,
+						}),
 					},
 					["student"]
 				);
@@ -215,11 +213,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: false,
-								isOutdatedOnScopeContext: true,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: false,
+							isOutdatedOnScopeContext: true,
+						}),
 					},
 					["teacher"]
 				);
@@ -247,11 +244,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: false,
-								isOutdatedOnScopeContext: true,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: false,
+							isOutdatedOnScopeContext: true,
+						}),
 					},
 					["student"]
 				);
@@ -281,11 +277,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: true,
-								isOutdatedOnScopeContext: true,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: true,
+						}),
 					},
 					["teacher"]
 				);
@@ -313,11 +308,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: true,
-								isOutdatedOnScopeContext: true,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: true,
+						}),
 					},
 					["student"]
 				);
