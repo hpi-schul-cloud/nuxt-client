@@ -47,6 +47,7 @@ export default class EnvConfigModule extends VuexModule {
 		FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: false,
 		FEATURE_PROVISIONING_OPTIONS_ENABLED: false,
 		FEATURE_CTL_TOOLS_TAB_ENABLED: false,
+		FEATURE_CTL_TOOLS_COPY_ENABLED: false,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -191,6 +192,10 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getProvisioningOptionsEnabled(): boolean {
 		return this.env.FEATURE_PROVISIONING_OPTIONS_ENABLED ?? false;
+	}
+
+	get getCtlToolsCopyEnabled(): boolean {
+		return this.env.FEATURE_CTL_TOOLS_COPY_ENABLED ?? false;
 	}
 
 	get getEnv(): Envs {
