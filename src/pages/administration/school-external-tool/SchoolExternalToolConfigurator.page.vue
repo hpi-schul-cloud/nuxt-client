@@ -21,14 +21,20 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { useI18n } from "@/composables/i18n.composable";
+import AuthModule from "@/store/auth";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolConfigurationTemplate,
 	SchoolExternalToolSave,
+	ToolParameterEntry,
 } from "@/store/external-tool";
+import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
+import NotifierModule from "@/store/notifier";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { BusinessError } from "@/store/types/commons";
 import {
 	AUTH_MODULE_KEY,
@@ -36,6 +42,9 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { RenderHTML } from "@feature-render-html";
+import { useTitle } from "@vueuse/core";
 import {
 	computed,
 	ComputedRef,
@@ -46,14 +55,6 @@ import {
 } from "vue";
 import VueRouter from "vue-router";
 import { useRouter } from "vue-router/composables";
-import NotifierModule from "@/store/notifier";
-import AuthModule from "@/store/auth";
-import { SchoolExternalToolMapper } from "@/store/external-tool/mapper";
-import { useI18n } from "@/composables/i18n.composable";
-import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { buildPageTitle } from "@/utils/pageTitle";
-import { useTitle } from "@vueuse/core";
 
 export default defineComponent({
 	components: {
@@ -121,7 +122,7 @@ export default defineComponent({
 
 		const onSave = async (
 			template: SchoolExternalToolConfigurationTemplate,
-			configuredParameterValues: (string | undefined)[]
+			configuredParameterValues: ToolParameterEntry[]
 		) => {
 			if (authModule.getUser) {
 				const schoolExternalTool: SchoolExternalToolSave =
