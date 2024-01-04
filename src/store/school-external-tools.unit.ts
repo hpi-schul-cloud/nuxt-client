@@ -351,6 +351,7 @@ describe("SchoolExternalToolsModule", () => {
 							],
 							version: toolConfigurationTemplate.version,
 							logoUrl: toolConfigurationTemplate.logoUrl,
+							isDeactivated: false,
 						},
 					]);
 				});
@@ -455,6 +456,7 @@ describe("SchoolExternalToolsModule", () => {
 							],
 							version: toolConfigurationTemplate.version,
 							logoUrl: toolConfigurationTemplate.logoUrl,
+							isDeactivated: false,
 						},
 					]);
 				});
@@ -519,6 +521,7 @@ describe("SchoolExternalToolsModule", () => {
 								value: schoolExternalTool.parameters[0].value,
 							},
 						],
+						isDeactivated: false,
 					});
 				});
 			});
@@ -580,6 +583,7 @@ describe("SchoolExternalToolsModule", () => {
 							schoolId: schoolExternalTool.schoolId,
 							version: schoolExternalTool.version,
 							parameters: [],
+							isDeactivated: false,
 						}
 					);
 				});
