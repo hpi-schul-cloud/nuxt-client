@@ -28,9 +28,14 @@
 			>
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
-				<LineClamp class="black--text font-narrow">
+				<LineClamp v-if="$slots.title" class="black--text font-narrow">
 					<slot name="title" />
 				</LineClamp>
+
+				<div v-if="$slots.element" class="flex-grow-1">
+					<slot name="element" />
+				</div>
+
 				<div
 					v-if="$slots.menu && !$slots.display"
 					class="three-dot-menu ml-auto"
@@ -39,10 +44,6 @@
 				</div>
 			</v-card-title>
 			<v-card-subtitle>
-				<div v-if="$slots.element">
-					<slot name="element" />
-				</div>
-
 				<div v-if="$slots.subtitle" class="gb-2 subtitle">
 					<slot name="subtitle" />
 				</div>
