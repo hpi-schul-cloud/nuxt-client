@@ -11,7 +11,7 @@
 		@keydown.up.down="onKeydownArrow"
 	>
 		<FileContent
-			v-if="fileProperties"
+			v-if="fileProperties && isUploading !== true"
 			:file-properties="fileProperties"
 			:alerts="alerts"
 			:is-edit-mode="isEditMode"
@@ -31,6 +31,7 @@
 			:elementId="element.id"
 			:isEditMode="isEditMode"
 			@upload:file="onUploadFile"
+			:isUploading="isUploading"
 		>
 			<BoardMenu scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
@@ -63,10 +64,11 @@ import {
 	PropType,
 	ref,
 	toRef,
+	watch,
 } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
+import { useSharedFileRecords } from "./shared/composables/FileStorageApi.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
@@ -97,47 +99,64 @@ export default defineComponent({
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
-		const { fetchFile, upload, fileRecord } = useFileStorageApi(
-			element.value.id,
-			FileRecordParentType.BOARDNODES
-		);
+		const { fetchFile, upload, getFileRecord } = useSharedFileRecords();
 
+		const fileRecord = getFileRecord(element.value.id);
+
+		/* watch(fileRecord, (newValue) => {
+			console.log(newValue);
+		});
+ */
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
+
+		const isUploading = computed(() => {
+			return fileRecord.value?.isUploading;
+		});
+
+		watch(
+			() => isUploading.value,
+			(newValue) => {
+				if (newValue === undefined) {
+					fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+				}
+			}
+		);
 
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
 				return;
 			}
 
-			const previewUrl = isPreviewPossible(fileRecord.value?.previewStatus)
+			const previewUrl = isPreviewPossible(fileRecord.value.previewStatus)
 				? convertDownloadToPreviewUrl(fileRecord.value.url, PreviewWidth._500)
 				: undefined;
 
 			return {
-				size: fileRecord.value.size,
-				name: fileRecord.value.name,
-				url: fileRecord.value.url,
+				size: fileRecord.value.size || 1,
+				name: fileRecord.value.name || "",
+				url: fileRecord.value.url || "",
 				previewUrl,
 				previewStatus: fileRecord.value.previewStatus,
 				isDownloadAllowed: isDownloadAllowed(
 					fileRecord.value.securityCheckStatus
 				),
-				mimeType: fileRecord.value.mimeType,
+				mimeType: fileRecord.value.mimeType || "",
 				element: props.element,
 			};
 		});
 
 		const hasFileRecord = computed(() => {
-			return fileRecord.value !== undefined;
+			return fileRecord !== undefined;
 		});
 
 		const isOutlined = computed(() => {
-			return fileRecord.value !== undefined || props.isEditMode === true;
+			return fileRecord !== undefined || props.isEditMode === true;
 		});
 
 		onMounted(() => {
 			(async () => {
-				await fetchFile();
+				await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+
 				isLoadingFileRecord.value = false;
 			})();
 		});
@@ -151,14 +170,14 @@ export default defineComponent({
 
 		const onUploadFile = async (file: File): Promise<void> => {
 			try {
-				await upload(file);
+				await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
 			} catch (error) {
 				emit("delete:element", element.value.id);
 			}
 		};
 
 		const onFetchFile = async (): Promise<void> => {
-			await fetchFile();
+			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
 		};
 
 		const onUpdateAlternativeText = (value: string) => {
@@ -170,7 +189,7 @@ export default defineComponent({
 		};
 
 		const onAddAlert = (alert: FileAlert) => {
-			addAlert(alert);
+			//addAlert(alert);
 		};
 		const onDelete = () => emit("delete:element", element.value.id);
 		const onMoveUp = () => emit("move-up:edit");
@@ -184,6 +203,7 @@ export default defineComponent({
 			isOutlined,
 			modelValue,
 			alerts,
+			isUploading,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,

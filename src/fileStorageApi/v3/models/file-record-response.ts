@@ -79,6 +79,12 @@ export interface FileRecordResponse {
     parentType: FileRecordParentType;
     /**
      * 
+     * @type {boolean}
+     * @memberof FileRecordResponse
+     */
+    isUploading: boolean;
+    /**
+     * 
      * @type {PreviewStatus}
      * @memberof FileRecordResponse
      */
