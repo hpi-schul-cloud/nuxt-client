@@ -7,16 +7,18 @@
 		@click="handleClick"
 	>
 		<template #under-title>
-			<room-card-chip
-				v-if="isToolOutdated"
-				data-testId="tool-card-status-outdated"
-				>{{ t("pages.rooms.tools.outdated") }}
-			</room-card-chip>
-			<room-card-chip
-				v-if="isToolDeactivated"
-				data-testId="tool-card-status-deactivated"
-				>{{ t("pages.rooms.tools.deactivated") }}
-			</room-card-chip>
+			<div class="d-flex g-2">
+				<room-card-chip
+					v-if="isToolDeactivated"
+					data-testId="tool-card-status-deactivated"
+					>{{ t("pages.rooms.tools.deactivated") }}
+				</room-card-chip>
+				<room-card-chip
+					v-if="isToolOutdated"
+					data-testId="tool-card-status-outdated"
+					>{{ t("pages.rooms.tools.outdated") }}
+				</room-card-chip>
+			</div>
 		</template>
 		<template #right>
 			<div v-if="canEdit" class="ml-1 my-auto">
@@ -144,3 +146,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.g-2 {
+	gap: 4px;
+}
+</style>
