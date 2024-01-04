@@ -56,13 +56,14 @@ describe("useSchoolExternalToolUtils", () => {
 			data: [toolResponse],
 		};
 
-		const schoolExternaToolItem: SchoolExternalToolItem = {
-			name: toolResponse.name,
-			id: toolResponse.id,
-			statusText: "translationKey",
-			isOutdated: false,
-			isDeactivated: false,
-		};
+		const schoolExternaToolItem: SchoolExternalToolItem =
+			new SchoolExternalToolItem({
+				name: toolResponse.name,
+				id: toolResponse.id,
+				statusText: "translationKey",
+				isOutdated: false,
+				isDeactivated: false,
+			});
 
 		return {
 			getHeaders,
