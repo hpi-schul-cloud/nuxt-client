@@ -131,7 +131,7 @@ const fileStorageApi = () => {
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
-			fileRecords.set(fileRecordId, ref(response.data));
+			updateOrAddFileRecord(response.data.parentId, response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
