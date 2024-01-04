@@ -61,11 +61,9 @@ describe("ContentElementBar", () => {
 				icon: "mdi-test-icon",
 			});
 
-			const iconProp = wrapper
-				.find("contentelementtitleicon-stub")
-				.attributes("icon");
+			const iconComponent = wrapper.find({ name: "v-icon" });
 
-			expect(iconProp).toBe(icon);
+			expect(iconComponent.classes()).toContain(icon);
 		});
 	});
 
