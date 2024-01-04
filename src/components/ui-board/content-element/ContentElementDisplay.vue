@@ -11,24 +11,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
-import { VuetifyIcon } from "vuetify/types/services/icons";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "ContentElementDisplay",
-	props: {
-		hasGreyBackground: { type: Boolean, required: false },
-		icon: { type: String as PropType<VuetifyIcon>, required: false },
-	},
-	setup(props) {
-		const backgroundClass = computed(() => {
-			return props.hasGreyBackground ? "grey lighten-4" : "";
-		});
-
-		return {
-			backgroundClass,
-		};
-	},
 });
 </script>
 
