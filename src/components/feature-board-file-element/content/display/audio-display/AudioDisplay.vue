@@ -25,7 +25,9 @@
 				>
 					<v-icon>{{ mdiPlay }}</v-icon>
 				</v-btn>
-				<div class="duration pr-2 pl-1 pt-1">{{ durationDisplay }}</div>
+				<div class="duration pr-2 pl-1 pt-1 body-2">
+					{{ durationDisplay }}
+				</div>
 				<v-slider
 					:aria-label="
 						$t('component.cardElement.fileElement.audioPlayer.slider')
