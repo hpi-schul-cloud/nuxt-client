@@ -21,13 +21,10 @@
 				v-if="isEditMode"
 				:docName="element.id"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				><BoardMenu
-					scope="element"
-					v-on="{ [MenuEvent.DELETE]: onDeleteElement }"
-				>
+				><BoardMenu scope="element">
 					<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
 					<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
-					<BoardMenuActionDelete />
+					<BoardMenuActionDelete @click="onDeleteElement" />
 				</BoardMenu>
 			</DrawingContentElementEdit>
 		</div>
@@ -45,7 +42,6 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
-	MenuEvent,
 } from "@ui-board";
 
 export default defineComponent({
@@ -88,8 +84,11 @@ export default defineComponent({
 		const onMoveDrawingElementEditUp = () => {
 			emit("move-up:edit");
 		};
-		const onDeleteElement = async (): Promise<void> => {
-			emit("delete:element", props.element.id);
+		const onDeleteElement = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:element", props.element.id);
+			}
 		};
 		return {
 			drawingElement,
@@ -97,7 +96,6 @@ export default defineComponent({
 			onKeydownArrow,
 			onMoveDrawingElementEditDown,
 			onMoveDrawingElementEditUp,
-			MenuEvent,
 		};
 	},
 });

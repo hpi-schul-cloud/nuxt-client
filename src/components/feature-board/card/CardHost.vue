@@ -32,11 +32,7 @@
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
-						<BoardMenu
-							v-if="hasDeletePermission"
-							scope="card"
-							v-on="{ [MenuEvent.DELETE]: onDeleteCard }"
-						>
+						<BoardMenu v-if="hasDeletePermission" scope="card">
 							<!-- <BoardMenuAction :icon="mdiArrowExpand" @click="onOpenDetailView">
 								{{ $t("components.board.action.detail-view") }}
 							</BoardMenuAction> -->
@@ -47,6 +43,7 @@
 							<BoardMenuActionDelete
 								data-test-id="board-menu-action-delete"
 								:name="card.title"
+								@click="onDeleteCard"
 							/>
 						</BoardMenu>
 					</div>
@@ -110,7 +107,6 @@ import ContentElementList from "./ContentElementList.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
 import { mdiArrowExpand } from "@mdi/js";
 import { delay } from "@/utils/helpers";
-import { MenuEvent } from "@ui-board";
 
 export default defineComponent({
 	name: "CardHost",
@@ -164,7 +160,12 @@ export default defineComponent({
 
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
 
-		const onDeleteCard = () => emit("delete:card", card.value?.id);
+		const onDeleteCard = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:card", card.value?.id);
+			}
+		};
 
 		const onAddElement = () => askType();
 
@@ -233,7 +234,6 @@ export default defineComponent({
 			onCloseDetailView,
 			isDetailView,
 			mdiArrowExpand,
-			MenuEvent,
 		};
 	},
 });

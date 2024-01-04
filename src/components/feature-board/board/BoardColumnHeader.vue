@@ -21,13 +21,9 @@
 					class="w-100"
 					:is-focused="isFocusedById"
 				/>
-				<BoardMenu
-					v-if="hasDeletePermission"
-					scope="column"
-					v-on="{ [MenuEvent.DELETE]: onDelete }"
-				>
+				<BoardMenu v-if="hasDeletePermission" scope="column">
 					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
-					<BoardMenuActionDelete :name="title" />
+					<BoardMenuActionDelete :name="title" @click="onDelete" />
 				</BoardMenu>
 			</div>
 			<VDivider aria-hidden="true" color="black" />
@@ -44,9 +40,8 @@ import {
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import {
 	BoardMenu,
-	BoardMenuActionEdit,
 	BoardMenuActionDelete,
-	MenuEvent,
+	BoardMenuActionEdit,
 } from "@ui-board";
 import { defineComponent, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
@@ -101,7 +96,12 @@ export default defineComponent({
 			stopEditMode();
 		};
 
-		const onDelete = () => emit("delete:column", props.columnId);
+		const onDelete = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:column", props.columnId);
+			}
+		};
 
 		const onMoveColumnKeyboard = (event: KeyboardEvent) => {
 			emit("move:column-keyboard", event.code);
@@ -124,7 +124,6 @@ export default defineComponent({
 			onDelete,
 			onMoveColumnKeyboard,
 			onUpdateTitle,
-			MenuEvent,
 			isFocusedById,
 		};
 	},

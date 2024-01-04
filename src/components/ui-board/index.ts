@@ -7,7 +7,6 @@ import BoardMenuActionMoveDown from "./BoardMenuActionMoveDown.vue";
 import ContentElementBar from "./content-element/ContentElementBar.vue";
 import ContentElementTitle from "./content-element/ContentElementTitle.vue";
 import ContentElementTitleIcon from "./content-element/ContentElementTitleIcon.vue";
-import { MenuEvent } from "./BoardMenuEvent.enum";
 
 export {
 	BoardMenu,
@@ -19,5 +18,4 @@ export {
 	ContentElementBar,
 	ContentElementTitle,
 	ContentElementTitleIcon,
-	MenuEvent,
 };
