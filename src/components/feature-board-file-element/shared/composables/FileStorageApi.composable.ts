@@ -36,13 +36,13 @@ const fileStorageApi = () => {
 
 	const getFileRecord = (id: string) => {
 		const existingFileRecord = fileRecords.get(id);
-		const scaletonFileRecord = ref(undefined);
+		const skeletonFileRecord = ref(undefined);
 
 		if (!existingFileRecord) {
-			fileRecords.set(id, scaletonFileRecord);
+			fileRecords.set(id, skeletonFileRecord);
 		}
 
-		const returnValue = existingFileRecord ?? scaletonFileRecord;
+		const returnValue = existingFileRecord ?? skeletonFileRecord;
 
 		return returnValue;
 	};
