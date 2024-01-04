@@ -116,7 +116,13 @@ const fileStorageApi = () => {
 				fileUrlParams
 			);
 
-			fileRecords.set(parentId, ref(response.data));
+			const existingFileRecord = fileRecords.get(parentId);
+
+			if (existingFileRecord) {
+				existingFileRecord.value = response.data;
+			} else {
+				fileRecords.set(parentId, ref(response.data));
+			}
 		} catch (error) {
 			showError(error);
 			throw error;
