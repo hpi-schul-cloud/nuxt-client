@@ -23,6 +23,10 @@ import { ClassRequestContext } from "@/serverApi/v3";
 
 const $router = createMock<VueRouter>();
 
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 describe("ClassOverview", () => {
 	const getWrapper = (
 		getters: Partial<GroupModule> = {},
