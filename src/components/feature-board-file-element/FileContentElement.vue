@@ -132,11 +132,11 @@ export default defineComponent({
 		});
 
 		const hasFileRecord = computed(() => {
-			return fileRecord !== undefined;
+			return fileRecord.value !== undefined;
 		});
 
 		const isOutlined = computed(() => {
-			return fileRecord !== undefined || props.isEditMode === true;
+			return fileRecord.value !== undefined || props.isEditMode === true;
 		});
 
 		onMounted(() => {
