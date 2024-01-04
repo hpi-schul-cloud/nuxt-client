@@ -17,6 +17,7 @@ const schoolExternalToolsModuleMock = () => {
 				version: 1,
 				status: {
 					isOutdatedOnScopeSchool: false,
+					isDeactivated: false,
 				},
 			},
 		],
@@ -48,6 +49,7 @@ describe("useSchoolExternalToolUtils", () => {
 			],
 			status: ContextExternalToolConfigurationStatusFactory.build({
 				isOutdatedOnScopeSchool: false,
+				isDeactivated: false,
 			}),
 		};
 		const listResponse: SchoolExternalToolSearchListResponse = {
@@ -57,8 +59,9 @@ describe("useSchoolExternalToolUtils", () => {
 		const schoolExternaToolItem: SchoolExternalToolItem = {
 			name: toolResponse.name,
 			id: toolResponse.id,
-			status: "translationKey",
-			outdated: false,
+			statusText: "translationKey",
+			isOutdated: false,
+			isDeactivated: false,
 		};
 
 		return {
@@ -135,8 +138,9 @@ describe("useSchoolExternalToolUtils", () => {
 				{
 					id: "id",
 					name: "toolName",
-					status: "translated",
-					outdated: false,
+					statusText: "translated",
+					isOutdated: false,
+					isDeactivated: false,
 					version: undefined,
 				},
 			]);
