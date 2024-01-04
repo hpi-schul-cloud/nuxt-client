@@ -6,7 +6,8 @@
 			:icon="mdiFileDocumentOutline"
 		>
 			<template #title>
-				<a :href="src" target="_blank">{{ name }}</a>
+				<a v-if="src" :href="src" target="_blank">{{ name }}</a>
+				<span v-else>{{ name }}</span>
 			</template>
 			<template v-if="showMenu" #menu>
 				<slot />
