@@ -23,7 +23,7 @@ export enum ErrorType {
 	Forbidden = "Forbidden",
 }
 
-const useFileStorageApi = () => {
+const fileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const fileRecords = new Map<string, Ref<FileRecordResponse | undefined>>();
 	const {
@@ -173,4 +173,4 @@ const useFileStorageApi = () => {
 	};
 };
 
-export const useSharedFileRecords = createGlobalState(useFileStorageApi);
+export const useFileStorageApi = createGlobalState(fileStorageApi);

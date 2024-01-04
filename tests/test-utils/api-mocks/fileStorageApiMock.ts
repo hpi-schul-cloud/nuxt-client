@@ -1,4 +1,4 @@
-import { useSharedFileRecords } from "@feature-board-file-element";
+import { useFileStorageApi } from "@feature-board-file-element";
 import { jest } from "@jest/globals";
 
 interface Props {
@@ -17,7 +17,7 @@ export const setupFileStorageApiMock = (props: Props = {}) => {
 		uploadFromUrlMock,
 		getFileRecordMock,
 	} = props;
-	const mockedFileStorageApi = jest.mocked(useSharedFileRecords);
+	const mockedFileStorageApi = jest.mocked(useFileStorageApi);
 	const getFileRecord = getFileRecordMock ?? jest.fn();
 
 	const fetchFile = fetchFileMock ?? jest.fn();

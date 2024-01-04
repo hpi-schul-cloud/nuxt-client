@@ -3,11 +3,11 @@ import {
 	convertDownloadToPreviewUrl,
 	isPreviewPossible,
 } from "@/utils/fileHelper";
-import { useSharedFileRecords } from "@feature-board-file-element";
+import { useFileStorageApi } from "@feature-board-file-element";
 import { computed } from "vue";
 
 export const usePreviewGenerator = (elementId: string) => {
-	const { getFileRecord, uploadFromUrl } = useSharedFileRecords();
+	const { getFileRecord, uploadFromUrl } = useFileStorageApi();
 
 	const fileRecord = computed(() => {
 		return getFileRecord(elementId);

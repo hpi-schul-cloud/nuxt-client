@@ -64,11 +64,10 @@ import {
 	PropType,
 	ref,
 	toRef,
-	watch,
 } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { useSharedFileRecords } from "./shared/composables/FileStorageApi.composable";
+import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
@@ -99,7 +98,7 @@ export default defineComponent({
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
-		const { fetchFile, upload, getFileRecord } = useSharedFileRecords();
+		const { fetchFile, upload, getFileRecord } = useFileStorageApi();
 
 		const fileRecord = getFileRecord(element.value.id);
 
