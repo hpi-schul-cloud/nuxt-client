@@ -1,26 +1,26 @@
-import { createModuleMocks } from "@/utils/mock-store-module";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
-import {
-	businessErrorFactory,
-	schoolExternalToolConfigurationTemplateFactory,
-	toolParameterFactory,
-} from "@@/tests/test-utils/factory";
+import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
+import AuthModule from "@/store/auth";
 import { SchoolExternalToolSave } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
-import AuthModule from "@/store/auth";
-import { i18nMock } from "@@/tests/test-utils";
-import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { User } from "@/store/types/auth";
 import {
 	AUTH_MODULE_KEY,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { User } from "@/store/types/auth";
-import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import { i18nMock } from "@@/tests/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	businessErrorFactory,
+	schoolExternalToolConfigurationTemplateFactory,
+	toolParameterFactory,
+} from "@@/tests/test-utils/factory";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
+import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -162,7 +162,8 @@ describe("SchoolExternalToolConfigurator", () => {
 		it("should change page when cancel button was clicked", async () => {
 			const { wrapper } = getWrapper({});
 
-			await wrapper.findComponent(ExternalToolConfigurator).vm.$emit("cancel");
+			wrapper.findComponent(ExternalToolConfigurator).vm.$emit("cancel");
+			await Vue.nextTick();
 
 			expect(routerPush).toHaveBeenCalledWith({
 				path: "/administration/school-settings",
@@ -199,9 +200,15 @@ describe("SchoolExternalToolConfigurator", () => {
 					setup();
 				const testValue = "test";
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
-					.vm.$emit("save", template, [testValue]);
+					.vm.$emit("save", template, [
+						{
+							name: template.parameters[0].name,
+							value: testValue,
+						},
+					]);
+				await Vue.nextTick();
 
 				expect(
 					schoolExternalToolsModule.createSchoolExternalTool
@@ -221,9 +228,10 @@ describe("SchoolExternalToolConfigurator", () => {
 			it("should redirect back to school settings page when there is no error", async () => {
 				const { wrapper, template } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
+				await Vue.nextTick();
 
 				expect(routerPush).toHaveBeenCalledWith({
 					path: "/administration/school-settings",
@@ -234,9 +242,10 @@ describe("SchoolExternalToolConfigurator", () => {
 			it("should display a notification when created", async () => {
 				const { wrapper, notifierModule, template } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
+				await Vue.nextTick();
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "components.administration.externalToolsSection.notification.created",
@@ -278,9 +287,10 @@ describe("SchoolExternalToolConfigurator", () => {
 					schoolId,
 				} = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
+				await Vue.nextTick();
 
 				expect(
 					schoolExternalToolsModule.updateSchoolExternalTool
@@ -305,9 +315,10 @@ describe("SchoolExternalToolConfigurator", () => {
 			it("should redirect back to school settings page when there is no error", async () => {
 				const { wrapper, template } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
+				await Vue.nextTick();
 
 				expect(routerPush).toHaveBeenCalledWith({
 					path: "/administration/school-settings",
@@ -318,9 +329,10 @@ describe("SchoolExternalToolConfigurator", () => {
 			it("should display a notification when updated", async () => {
 				const { wrapper, notifierModule, template } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
+				await Vue.nextTick();
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "components.administration.externalToolsSection.notification.updated",
@@ -346,13 +358,14 @@ describe("SchoolExternalToolConfigurator", () => {
 			it("should display an alert", async () => {
 				const { wrapper } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit(
 						"save",
 						schoolExternalToolConfigurationTemplateFactory.build(),
 						[]
 					);
+				await Vue.nextTick();
 
 				expect(wrapper.find(".v-alert__content").exists()).toBeTruthy();
 			});
@@ -360,13 +373,14 @@ describe("SchoolExternalToolConfigurator", () => {
 			it("should not redirect", async () => {
 				const { wrapper } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit(
 						"save",
 						schoolExternalToolConfigurationTemplateFactory.build(),
 						[]
 					);
+				await Vue.nextTick();
 
 				expect(routerPush).not.toHaveBeenCalled();
 			});

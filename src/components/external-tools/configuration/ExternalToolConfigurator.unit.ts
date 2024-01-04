@@ -1,20 +1,20 @@
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
-import {
-	schoolExternalToolConfigurationTemplateFactory,
-	schoolExternalToolFactory,
-} from "@@/tests/test-utils/factory";
+import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import {
 	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
 } from "@/store/external-tool";
-import { i18nMock } from "@@/tests/test-utils";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
-import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
-import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { I18N_KEY } from "@/utils/inject";
+import { i18nMock } from "@@/tests/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	schoolExternalToolConfigurationTemplateFactory,
+	schoolExternalToolFactory,
+} from "@@/tests/test-utils/factory";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import Vue from "vue";
+import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 
 describe("ExternalToolConfigurator", () => {
 	jest
@@ -168,9 +168,11 @@ describe("ExternalToolConfigurator", () => {
 				const { wrapper } = getWrapper({
 					templates:
 						schoolExternalToolConfigurationTemplateFactory.buildList(1),
+					configuration: schoolExternalToolFactory.build(),
 				});
 
-				await wrapper.find('[data-testId="save-button"]').vm.$emit("click");
+				wrapper.find('[data-testId="save-button"]').vm.$emit("click");
+				await Vue.nextTick();
 
 				expect(wrapper.emitted("save")).toBeDefined();
 			});
