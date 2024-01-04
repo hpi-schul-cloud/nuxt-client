@@ -109,15 +109,6 @@ export default defineComponent({
 			return fileRecord.value?.isUploading;
 		});
 
-		watch(
-			() => isUploading.value,
-			(newValue) => {
-				if (newValue === undefined) {
-					fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
-				}
-			}
-		);
-
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
 				return;
