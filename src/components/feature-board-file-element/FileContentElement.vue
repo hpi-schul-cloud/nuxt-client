@@ -43,11 +43,7 @@
 </template>
 
 <script lang="ts">
-import {
-	FileRecordParentType,
-	FileRecordResponse,
-	PreviewWidth,
-} from "@/fileStorageApi/v3";
+import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
@@ -66,14 +62,12 @@ import {
 	defineComponent,
 	onMounted,
 	PropType,
-	Ref,
 	ref,
 	toRef,
 	watch,
 } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { useSharedFileRecordsStatus } from "./shared/composables/FileRecordsStatus.composable";
 import { useSharedFileRecords } from "./shared/composables/FileStorageApi.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
@@ -106,7 +100,6 @@ export default defineComponent({
 
 		const { modelValue } = useContentElementState(props);
 		const { fetchFile, upload, getFileRecord } = useSharedFileRecords();
-		const { getFileRecordStatus } = useSharedFileRecordsStatus();
 
 		const fileRecord = getFileRecord(element.value.id);
 
@@ -117,7 +110,7 @@ export default defineComponent({
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
 
 		const isUploading = computed(() => {
-			return getFileRecordStatus(element.value.id)?.isUploading;
+			return fileRecord.value?.isUploading;
 		});
 
 		watch(

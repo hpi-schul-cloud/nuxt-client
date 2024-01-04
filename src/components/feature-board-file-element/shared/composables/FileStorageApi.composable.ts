@@ -10,7 +10,6 @@ import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createGlobalState } from "@vueuse/core";
 import { Ref, ref } from "vue";
-import { useSharedFileRecordsStatus } from "./FileRecordsStatus.composable";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
 export enum ErrorType {
@@ -34,9 +33,6 @@ const useFileStorageApi = () => {
 		showInternalServerError,
 		showFileExistsError,
 	} = useFileStorageNotifier();
-
-	const { addFileRecordStatus, removeFileRecordStatus } =
-		useSharedFileRecordsStatus();
 
 	const getFileRecord = (id: string) => {
 		const existingFileRecord = fileRecords.get(id);
@@ -78,8 +74,6 @@ const useFileStorageApi = () => {
 		parentType: FileRecordParentType
 	): Promise<void> => {
 		try {
-			addFileRecordStatus({ id: parentId, isUploading: true });
-
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.upload(
 				schoolId,
@@ -87,8 +81,6 @@ const useFileStorageApi = () => {
 				parentType,
 				file
 			);
-
-			removeFileRecordStatus(parentId);
 
 			const existingFileRecord = fileRecords.get(parentId);
 
