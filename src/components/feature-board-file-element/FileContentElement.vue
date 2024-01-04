@@ -103,10 +103,6 @@ export default defineComponent({
 
 		const fileRecord = getFileRecord(element.value.id);
 
-		/* watch(fileRecord, (newValue) => {
-			console.log(newValue);
-		});
- */
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
 
 		const isUploading = computed(() => {
@@ -132,15 +128,15 @@ export default defineComponent({
 				: undefined;
 
 			return {
-				size: fileRecord.value.size || 1,
-				name: fileRecord.value.name || "",
-				url: fileRecord.value.url || "",
+				size: fileRecord.value.size,
+				name: fileRecord.value.name,
+				url: fileRecord.value.url,
 				previewUrl,
 				previewStatus: fileRecord.value.previewStatus,
 				isDownloadAllowed: isDownloadAllowed(
 					fileRecord.value.securityCheckStatus
 				),
-				mimeType: fileRecord.value.mimeType || "",
+				mimeType: fileRecord.value.mimeType,
 				element: props.element,
 			};
 		});
@@ -189,7 +185,7 @@ export default defineComponent({
 		};
 
 		const onAddAlert = (alert: FileAlert) => {
-			//addAlert(alert);
+			addAlert(alert);
 		};
 		const onDelete = () => emit("delete:element", element.value.id);
 		const onMoveUp = () => emit("move-up:edit");
