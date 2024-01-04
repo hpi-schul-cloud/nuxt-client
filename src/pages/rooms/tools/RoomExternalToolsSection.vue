@@ -205,9 +205,11 @@ export default defineComponent({
 			if (!selectedItem.value?.status) {
 				return "";
 			}
+
 			if (selectedItem.value?.status.isDeactivated) {
-				return "common.tool.information.deactivated";
+				return t("common.tool.information.deactivated");
 			}
+
 			const toolOutdatedTranslationkey = determineOutdatedTranslationKey(
 				selectedItem.value?.status
 			);
