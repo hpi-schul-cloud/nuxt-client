@@ -160,8 +160,6 @@ export default defineComponent({
 			() => slots.aboveParameters?.({ selectedTemplate }) === undefined
 		);
 
-		const isDeactivated: Ref<boolean | undefined> = ref(undefined);
-
 		const canBeDeactivated: ComputedRef<boolean> = computed(() => {
 			return selectedTemplate.value?.isDeactivated !== undefined;
 		});
@@ -192,9 +190,19 @@ export default defineComponent({
 			if (props.templates.length >= 1) {
 				selectedTemplate.value = props.templates[0];
 
+				fillStatus(configuration);
+
 				fillParametersWithDefaultValues();
 
 				fillParametersWithValues(configuration);
+			}
+		};
+
+		const fillStatus = (configuration: ConfigurationTypes) => {
+			if ("status" in configuration && selectedTemplate.value) {
+				console.log(configuration.status.isDeactivated);
+				selectedTemplate.value.isDeactivated =
+					configuration.status.isDeactivated;
 			}
 		};
 
@@ -246,7 +254,6 @@ export default defineComponent({
 			parameterConfiguration,
 			isAboveParametersSlotEmpty,
 			canBeDeactivated,
-			isDeactivated,
 		};
 	},
 });

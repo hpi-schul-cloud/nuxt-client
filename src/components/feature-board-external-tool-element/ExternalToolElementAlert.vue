@@ -4,7 +4,7 @@
 			{{ t(errorMessage) }}
 		</WarningAlert>
 
-		<WarningAlert v-if="toolStatus.isDeactivated">
+		<WarningAlert v-if="toolStatus && toolStatus.isDeactivated">
 			{{
 				t("common.tool.information.deactivated", {
 					toolDisplayName,

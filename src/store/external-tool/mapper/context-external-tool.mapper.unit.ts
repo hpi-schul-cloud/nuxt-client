@@ -1,7 +1,11 @@
 import { ToolContextType } from "@/serverApi/v3";
-import { contextExternalToolConfigurationTemplateFactory } from "@@/tests/test-utils";
+import {
+	contextExternalToolConfigurationTemplateFactory,
+	contextExternalToolConfigurationTemplateResponseFactory,
+} from "@@/tests/test-utils";
 import { ContextExternalToolSave } from "../context-external-tool";
 import { ContextExternalToolMapper } from "./context-external-tool.mapper";
+import { ContextExternalToolConfigurationTemplate } from "@/store/external-tool";
 
 describe("ContextExternalToolMapper", () => {
 	describe("mapTemplateToContextExternalToolSave", () => {
@@ -73,6 +77,34 @@ describe("ContextExternalToolMapper", () => {
 					})
 				);
 			});
+		});
+	});
+
+	describe("mapToContextExternalToolConfigurationTemplate", () => {
+		const setup = () => {
+			const template =
+				contextExternalToolConfigurationTemplateResponseFactory.build();
+
+			return {
+				template,
+			};
+		};
+
+		it("should set isDeactivated to undefined", () => {
+			const { template } = setup();
+
+			const result: ContextExternalToolConfigurationTemplate =
+				ContextExternalToolMapper.mapToContextExternalToolConfigurationTemplate(
+					template
+				);
+
+			expect(result).toEqual(
+				expect.objectContaining<
+					Partial<ContextExternalToolConfigurationTemplate>
+				>({
+					isDeactivated: undefined,
+				})
+			);
 		});
 	});
 });
