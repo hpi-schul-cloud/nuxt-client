@@ -66,6 +66,7 @@ import {
 	defineComponent,
 	onMounted,
 	PropType,
+	Ref,
 	ref,
 	toRef,
 	watch,
@@ -107,10 +108,12 @@ export default defineComponent({
 		const { fetchFile, upload, getFileRecord } = useSharedFileRecords();
 		const { getFileRecordStatus } = useSharedFileRecordsStatus();
 
-		const fileRecord = computed(() => {
-			return getFileRecord(element.value.id) as unknown as FileRecordResponse;
-		});
+		const fileRecord: Ref<FileRecordResponse> = getFileRecord(element.value.id);
 
+		/* watch(fileRecord, (newValue) => {
+			console.log(newValue);
+		});
+ */
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
 
 		const isUploading = computed(() => {
@@ -127,34 +130,34 @@ export default defineComponent({
 		);
 
 		const fileProperties = computed(() => {
-			if (fileRecord.value === null) {
+			if (fileRecord.value === undefined) {
 				return;
 			}
 
-			const previewUrl = isPreviewPossible(fileRecord.value?.previewStatus)
+			const previewUrl = isPreviewPossible(fileRecord.value.previewStatus)
 				? convertDownloadToPreviewUrl(fileRecord.value.url, PreviewWidth._500)
 				: undefined;
 
 			return {
-				size: fileRecord.value.size,
-				name: fileRecord.value.name,
-				url: fileRecord.value.url,
+				size: fileRecord.value.size || 1,
+				name: fileRecord.value.name || "",
+				url: fileRecord.value.url || "",
 				previewUrl,
 				previewStatus: fileRecord.value.previewStatus,
 				isDownloadAllowed: isDownloadAllowed(
 					fileRecord.value.securityCheckStatus
 				),
-				mimeType: fileRecord.value.mimeType,
+				mimeType: fileRecord.value.mimeType || "",
 				element: props.element,
 			};
 		});
 
 		const hasFileRecord = computed(() => {
-			return fileRecord.value !== undefined;
+			return fileRecord !== undefined;
 		});
 
 		const isOutlined = computed(() => {
-			return fileRecord.value !== undefined || props.isEditMode === true;
+			return fileRecord !== undefined || props.isEditMode === true;
 		});
 
 		onMounted(() => {
@@ -193,7 +196,7 @@ export default defineComponent({
 		};
 
 		const onAddAlert = (alert: FileAlert) => {
-			addAlert(alert);
+			//addAlert(alert);
 		};
 		const onDelete = () => emit("delete:element", element.value.id);
 		const onMoveUp = () => emit("move-up:edit");

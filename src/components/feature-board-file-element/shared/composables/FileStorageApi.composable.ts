@@ -11,7 +11,7 @@ import {
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createGlobalState } from "@vueuse/core";
-import { ref } from "vue";
+import { ref, Ref } from "vue";
 import { useSharedFileRecordsStatus } from "./FileRecordsStatus.composable";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
@@ -28,7 +28,7 @@ export enum ErrorType {
 
 const useFileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
-	const fileRecords = ref<FileRecordResponse[]>([]);
+	const fileRecords: Ref<FileRecordResponse>[] = [];
 	const {
 		showFileTooBigError,
 		showForbiddenError,
@@ -41,7 +41,7 @@ const useFileStorageApi = () => {
 		useSharedFileRecordsStatus();
 
 	const createDefaultFileRecord = (id: string) => {
-		return {
+		return ref({
 			id: "asd",
 			name: "w3c_home_256.bmp",
 			url: "",
@@ -53,18 +53,26 @@ const useFileStorageApi = () => {
 			parentType: FileRecordParentType.BOARDNODES,
 			previewStatus: PreviewStatus.AWAITING_SCAN_STATUS,
 			isUploading: true,
-		};
+		});
 	};
 	const getFileRecord = (id: string) => {
-		const realValue = fileRecords.value.find(
-			(fileRecord) => fileRecord.parentId === id
+		const realValue = fileRecords.find(
+			(fileRecord) => fileRecord.value.parentId === id
 		);
+		console.log("id", id);
+
+		console.log("realValue", realValue);
+
+		const defaultFileRecord = createDefaultFileRecord(id);
 
 		if (!realValue) {
-			fileRecords.value.push(createDefaultFileRecord(id));
+			fileRecords.push(defaultFileRecord);
 		}
 
-		return fileRecords.value.find((fileRecord) => fileRecord.parentId === id);
+		const returnValue = realValue ?? defaultFileRecord;
+		console.log(returnValue);
+
+		return returnValue;
 	};
 
 	const fetchFile = async (
@@ -76,16 +84,14 @@ const useFileStorageApi = () => {
 			const response = await fileApi.list(schoolId, parentId, parentType);
 
 			// idea: use request-pooling to reduce number of api-requests
-			const index = fileRecords.value.findIndex(
-				(fileRecord) => fileRecord.parentId === parentId
+			const index = fileRecords.findIndex(
+				(fileRecord) => fileRecord.value.parentId === parentId
 			);
 			if (index !== -1) {
-				console.log("index");
-				fileRecords.value[index] = response.data.data[0];
+				fileRecords[index].value = response.data.data[0];
 			} else {
-				fileRecords.value.push(response.data.data[0]);
+				fileRecords.push(ref(response.data.data[0]));
 			}
-			console.log(fileRecords.value);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -110,7 +116,14 @@ const useFileStorageApi = () => {
 
 			removeFileRecordStatus(parentId);
 
-			fileRecords.value.push(response.data);
+			const index = fileRecords.findIndex(
+				(fileRecord) => fileRecord.value.parentId === parentId
+			);
+			if (index !== -1) {
+				fileRecords[index].value = response.data;
+			} else {
+				fileRecords.push(ref(response.data));
+			}
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -138,7 +151,7 @@ const useFileStorageApi = () => {
 				fileUrlParams
 			);
 
-			fileRecords.value.push(response.data);
+			fileRecords.push(ref(response.data));
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -152,7 +165,7 @@ const useFileStorageApi = () => {
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
-			fileRecords.value.push(response.data);
+			fileRecords.push(ref(response.data));
 		} catch (error) {
 			showError(error);
 			throw error;

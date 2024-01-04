@@ -22,10 +22,10 @@ export const usePreviewGenerator = (elementId: string) => {
 			FileRecordParentType.BOARDNODES
 		);
 		if (
-			fileRecord.value?.previewStatus &&
-			isPreviewPossible(fileRecord.value?.previewStatus)
+			fileRecord.value?.value.previewStatus &&
+			isPreviewPossible(fileRecord.value?.value.previewStatus)
 		) {
-			const imageUrl = convertDownloadToPreviewUrl(fileRecord.value.url);
+			const imageUrl = convertDownloadToPreviewUrl(fileRecord.value.value.url);
 			return imageUrl;
 		}
 	};
