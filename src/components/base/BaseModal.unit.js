@@ -1,87 +1,50 @@
 import { mount } from "@vue/test-utils";
 import BaseModal from "./BaseModal";
-
-const modal = {
-	...createComponentMocks({
-		i18n: true,
-		vuetify: true,
-	}),
-	data: () => ({ active: false }),
-	template: `
-		<base-modal id="modal" ref="modal" :active.sync="active" @close="active = false">
-			<div>
-				<div class="modal-header">
-					<h3>custom header</h3>
-				</div>
-
-				<div class="modal-body">
-					Hello I'm a modal, do you like to close me? Then just click outside of my box or the button below.
-				</div>
-
-				<div class="modal-footer">
-					<v-btn id="btn-close" @click="$refs.modal.close()">
-						OK
-					</v-btn>
-				</div>
-			</div>
-		</base-modal>
-	`,
-	components: { BaseModal },
-};
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
 
 describe("@/components/base/BaseModal", () => {
-	it(
-		...rendersSlotContent(BaseModal, ["default"], {
-			propsData: {
-				active: true,
+	const setup = (options = {}) => {
+		const wrapper = mount(BaseModal, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-		})
-	);
-
-	it("changing the active property should open and close the modal", async () => {
-		const wrapper = mount(modal);
-
-		expect(wrapper.find("#btn-close").exists()).toBe(false);
-		wrapper.vm.active = true;
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find("#btn-close").exists()).toBe(true);
-	});
-
-	it("pressing the ok button should close the modal", async () => {
-		const wrapper = mount(modal, {
-			...createComponentMocks({ stubs: { transition: true } }),
+			slots: {
+				default: `<div class="modal-content"/>`,
+			},
+			...options,
 		});
 
-		expect(wrapper.find("#btn-close").exists()).toBe(false);
-		wrapper.vm.active = true;
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find("#btn-close").exists()).toBe(true);
-		wrapper.find("#btn-close").trigger("click");
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find("#btn-close").exists()).toBe(false);
+		return { wrapper };
+	};
+
+	it("changing the active property should open and close the modal", async () => {
+		const { wrapper } = setup();
+
+		expect(wrapper.find(".modal-content").exists()).toBe(false);
+
+		await wrapper.setProps({ active: true });
+
+		expect(wrapper.find(".modal-content").exists()).toBe(true);
 	});
 
-	it("pressing outside the model content should emit onBackdropClick event", async () => {
-		const wrapper = mount(modal);
+	describe("when clicking outside the modal", () => {
+		it("should emit the update:active event", async () => {
+			const { wrapper } = setup({ props: { active: true } });
 
-		wrapper.vm.active = true;
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find("#btn-close").exists()).toBe(true);
-		wrapper.find(".base-modal-wrapper").trigger("click");
-		await wrapper.vm.$nextTick();
-		expect(
-			wrapper.findComponent(BaseModal).emitted("onBackdropClick")
-		).toHaveLength(1);
-	});
+			await wrapper.find(".base-modal-wrapper").trigger("click");
 
-	it("pressing outside the model content should close the modal", async () => {
-		const wrapper = mount(modal);
+			expect(wrapper.emitted("update:active")[0][0]).toBe(false);
+		});
 
-		wrapper.vm.active = true;
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find("#btn-close").exists()).toBe(true);
-		wrapper.find(".base-modal-wrapper").trigger("click");
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find("#btn-close").exists()).toBe(false);
+		it("should emit the onBackdropClick event", async () => {
+			const { wrapper } = setup({ props: { active: true } });
+
+			await wrapper.find(".base-modal-wrapper").trigger("click");
+
+			expect(wrapper.emitted("onBackdropClick").length).toBe(1);
+		});
 	});
 });
