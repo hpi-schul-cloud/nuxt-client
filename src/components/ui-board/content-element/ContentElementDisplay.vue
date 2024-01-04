@@ -1,5 +1,5 @@
 <template>
-	<div class="content-element-bar-display">
+	<div class="content-element-display">
 		<div>
 			<slot name="display" />
 		</div>
@@ -19,7 +19,7 @@ export default defineComponent({
 </script>
 
 <style type="text/scss" scoped>
-.content-element-bar-display .menu {
+.content-element-display .menu {
 	position: absolute;
 	right: 10px;
 	top: 10px;

@@ -1,5 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount } from "@vue/test-utils";
+import { MountOptions, mount } from "@vue/test-utils";
 import Vue from "vue";
 import ContentElementBar from "./ContentElementBar.vue";
 
@@ -38,7 +38,7 @@ describe("ContentElementBar", () => {
 			description: description ?? "",
 			display: display ?? "",
 		};
-		const wrapper = shallowMount(ContentElementBar as MountOptions<Vue>, {
+		const wrapper = mount(ContentElementBar as MountOptions<Vue>, {
 			propsData,
 			slots,
 			...createComponentMocks({}),
@@ -151,6 +151,7 @@ describe("ContentElementBar", () => {
 		it("should render grey background", () => {
 			const { wrapper } = setup({
 				hasGreyBackground: true,
+				title: "i have a dream",
 			});
 
 			const divWithBackgroundClass = wrapper.find("div.grey.lighten-4");
@@ -166,6 +167,38 @@ describe("ContentElementBar", () => {
 			const divWithBackgroundClass = wrapper.find("div.grey.lighten-4");
 
 			expect(divWithBackgroundClass.exists()).toBe(false);
+		});
+	});
+
+	describe("when menu slot and display slot are defined", () => {
+		it("should render menu slot in display", () => {
+			const menu = "test menu slot content";
+			const { wrapper } = setup({
+				display: "display content",
+				menu,
+			});
+
+			const contentElementDisplay = wrapper.find(".content-element-display");
+
+			expect(contentElementDisplay.exists()).toBe(true);
+			expect(contentElementDisplay.text()).toEqual(
+				expect.stringContaining(menu)
+			);
+		});
+	});
+
+	describe("when menu slot is defined but not display slot", () => {
+		it("should render menu slot in title", () => {
+			const menu = "test menu slot content";
+			const { wrapper } = setup({
+				title: "title content",
+				menu,
+			});
+
+			const title = wrapper.find({ name: "v-card-title" });
+
+			expect(title.exists()).toBe(true);
+			expect(title.text()).toEqual(expect.stringContaining(menu));
 		});
 	});
 });

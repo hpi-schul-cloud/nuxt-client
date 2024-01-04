@@ -5,8 +5,6 @@ import BoardMenuActionDelete from "./BoardMenuActionDelete.vue";
 import BoardMenuActionMoveUp from "./BoardMenuActionMoveUp.vue";
 import BoardMenuActionMoveDown from "./BoardMenuActionMoveDown.vue";
 import ContentElementBar from "./content-element/ContentElementBar.vue";
-import ContentElementTitle from "./content-element/ContentElementTitle.vue";
-import ContentElementTitleIcon from "./content-element/ContentElementTitleIcon.vue";
 
 export {
 	BoardMenu,
@@ -16,6 +14,4 @@ export {
 	BoardMenuActionMoveUp,
 	BoardMenuActionMoveDown,
 	ContentElementBar,
-	ContentElementTitle,
-	ContentElementTitleIcon,
 };
