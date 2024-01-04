@@ -55,7 +55,7 @@
 					"
 					:items="federalState.counties"
 					item-text="name"
-					item-value="_id"
+					item-value="id"
 					return-object
 					dense
 					:disabled="!!localSchool.county"
@@ -283,9 +283,9 @@ export default {
 			if (
 				!this.school.county &&
 				this.localSchool.county &&
-				this.localSchool.county._id
+				this.localSchool.county.id
 			) {
-				updatedSchool.county = this.localSchool.county._id;
+				updatedSchool.county = this.localSchool.county.id;
 			}
 
 			updatedSchool.logo_dataUrl = this.logoFile

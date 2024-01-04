@@ -2,6 +2,7 @@
 	<div>
 		<room-video-conference-card
 			:has-permission="hasPermission"
+			:can-start="canStart"
 			:is-running="isRunning"
 			:is-refreshing="isRefreshing"
 			data-testid="video-conference-card"
@@ -127,10 +128,10 @@ import {
 import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE_KEY,
-	injectStrict,
-	VIDEO_CONFERENCE_MODULE_KEY,
-	ROOM_MODULE_KEY,
 	I18N_KEY,
+	injectStrict,
+	ROOM_MODULE_KEY,
+	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import {
 	computed,
@@ -291,6 +292,7 @@ export default defineComponent({
 			videoConferenceInfo,
 			videoConferenceOptions,
 			hasPermission,
+			canStart,
 			isRunning,
 			isRefreshing,
 			onClick,

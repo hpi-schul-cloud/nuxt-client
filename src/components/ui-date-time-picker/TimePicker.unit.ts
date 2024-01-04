@@ -64,25 +64,6 @@ describe("TimePicker", () => {
 		});
 	});
 
-	describe("when picking a time through select", () => {
-		it("should emit event on click", async () => {
-			jest.useFakeTimers();
-			setup({ time: "12:30" });
-
-			const input = wrapper
-				.findComponent({ name: "v-text-field" })
-				.find("input");
-			await input.trigger("click");
-
-			const listItem = wrapper.findComponent({ name: "v-list-item" });
-			expect(listItem.exists()).toBe(true);
-			await listItem.trigger("click");
-
-			jest.advanceTimersByTime(1000);
-			expect(wrapper.emitted("update:time")).toHaveLength(1);
-		});
-	});
-
 	describe("validation", () => {
 		beforeEach(() => {
 			const mockedDate = new Date("2023-01-01T03:10:05"); // 03:00

@@ -1,5 +1,6 @@
 import {
 	CustomParameterEntryParam,
+	SchoolExternalToolConfigurationStatusResponse,
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolConfigurationTemplateResponse,
 	SchoolExternalToolMetadataResponse,
@@ -15,11 +16,9 @@ import { SchoolExternalToolMetadata } from "../school-external-tool-metadata";
 import { SchoolExternalToolConfigurationTemplate } from "../tool-configuration-template";
 import { ToolParameter } from "../tool-parameter";
 import { ToolParameterEntry } from "../tool-parameter-entry";
-import {
-	CommonToolMapper,
-	ToolConfigurationStatusMapping,
-} from "./common-tool.mapper";
+import { CommonToolMapper } from "./common-tool.mapper";
 import { ExternalToolMapper } from "./external-tool.mapper";
+import { SchoolExternalToolConfigurationStatus } from "../school-external-tool-configuration-status";
 
 export class SchoolExternalToolMapper {
 	static mapToSchoolExternalToolConfigurationTemplate(
@@ -76,7 +75,7 @@ export class SchoolExternalToolMapper {
 			schoolId: response.schoolId,
 			toolId: response.toolId,
 			version: response.toolVersion,
-			status: ToolConfigurationStatusMapping[response.status],
+			status: this.mapSchoolToolConfigurationStatus(response.status),
 			parameters: response.parameters.map(
 				(parameter): ToolParameterEntry =>
 					CommonToolMapper.mapToToolParameterEntry(parameter)
@@ -123,6 +122,16 @@ export class SchoolExternalToolMapper {
 		const mapped: SchoolExternalToolMetadata = {
 			course: response.contextExternalToolCountPerContext.course,
 			boardElement: response.contextExternalToolCountPerContext.boardElement,
+		};
+
+		return mapped;
+	}
+
+	static mapSchoolToolConfigurationStatus(
+		schoolToolStatus: SchoolExternalToolConfigurationStatusResponse
+	): SchoolExternalToolConfigurationStatus {
+		const mapped: SchoolExternalToolConfigurationStatus = {
+			isOutdatedOnScopeSchool: schoolToolStatus.isOutdatedOnScopeSchool,
 		};
 
 		return mapped;

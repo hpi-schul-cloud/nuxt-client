@@ -1,4 +1,4 @@
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import Vue from "vue";
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
@@ -8,6 +8,7 @@ describe("RoomVideoConferenceCard", () => {
 	const getWrapper = (props: {
 		isRunning: boolean;
 		hasPermission: boolean;
+		canStart: boolean;
 		isRefreshing: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
@@ -41,6 +42,7 @@ describe("RoomVideoConferenceCard", () => {
 			const wrapper = getWrapper({
 				isRunning: false,
 				hasPermission: true,
+				canStart: true,
 				isRefreshing: false,
 			});
 
@@ -58,11 +60,12 @@ describe("RoomVideoConferenceCard", () => {
 		});
 	});
 
-	describe("when the video conference is not running", () => {
+	describe("when the video conference is not running and user is not a teacher", () => {
 		const setup = () => {
 			const wrapper = getWrapper({
 				isRunning: false,
 				hasPermission: true,
+				canStart: false,
 				isRefreshing: false,
 			});
 
@@ -98,11 +101,60 @@ describe("RoomVideoConferenceCard", () => {
 		});
 	});
 
+	describe("when the video conference is not running and user is a teacher", () => {
+		const setup = () => {
+			const wrapper = getWrapper({
+				isRunning: false,
+				hasPermission: true,
+				canStart: true,
+				isRefreshing: false,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should display a logo", () => {
+			const { wrapper } = setup();
+
+			const logo = wrapper.find('[data-testId="vc-card-logo"]');
+
+			expect(logo.exists()).toEqual(true);
+		});
+
+		it("should not display a description text", () => {
+			const { wrapper } = setup();
+
+			const alert = wrapper.find('[data-testId="vc-info-box-show"]');
+			const text = alert.find("span");
+
+			expect(text.isVisible()).toBeFalsy();
+		});
+
+		it("should not display a refresh button", () => {
+			const { wrapper } = setup();
+
+			const button = wrapper.find('[data-testId="refresh-btn"]');
+
+			expect(button.isVisible()).toBeFalsy();
+		});
+
+		it("should not display alert", () => {
+			const { wrapper } = setup();
+
+			const alert = wrapper.find('[data-testId="vc-info-box-show"]');
+
+			expect(alert.isVisible()).toBeFalsy();
+		});
+	});
+
 	describe("when the video conference is running", () => {
 		const setup = () => {
 			const wrapper = getWrapper({
 				isRunning: true,
 				hasPermission: true,
+				canStart: true,
 				isRefreshing: false,
 			});
 
@@ -133,6 +185,7 @@ describe("RoomVideoConferenceCard", () => {
 			const wrapper = getWrapper({
 				isRunning: true,
 				hasPermission: false,
+				canStart: false,
 				isRefreshing: false,
 			});
 
@@ -173,6 +226,7 @@ describe("RoomVideoConferenceCard", () => {
 			const wrapper = getWrapper({
 				isRunning: false,
 				hasPermission: true,
+				canStart: false,
 				isRefreshing: false,
 			});
 
@@ -197,6 +251,7 @@ describe("RoomVideoConferenceCard", () => {
 			const wrapper = getWrapper({
 				isRunning: true,
 				hasPermission: true,
+				canStart: false,
 				isRefreshing: false,
 			});
 
@@ -221,6 +276,7 @@ describe("RoomVideoConferenceCard", () => {
 			const wrapper = getWrapper({
 				isRunning: false,
 				hasPermission: true,
+				canStart: false,
 				isRefreshing: true,
 			});
 

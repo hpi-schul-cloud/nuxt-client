@@ -57,6 +57,9 @@ module.exports = defineConfig({
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
 				"@util-input-masks": getDir("src/components/util-input-masks"),
+				"@util-device-detection": getDir(
+					"src/components/util-device-detection"
+				),
 				"@page-board": getDir("src/components/page-board"),
 				"@page-class-members": getDir("src/components/page-class-members"),
 			},

@@ -2,6 +2,8 @@ import * as serverApi from "@/serverApi/v3/api";
 import { SystemsApiInterface } from "@/serverApi/v3/api";
 import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -29,12 +31,19 @@ const axiosInitializer = () => {
 axiosInitializer();
 
 describe("schools module", () => {
+	let schoolApi: DeepMocked<serverApi.SchoolApiInterface>;
 	let systemsApi: DeepMocked<SystemsApiInterface>;
 
 	beforeEach(() => {
+		schoolApi = createMock<serverApi.SchoolApiInterface>();
 		systemsApi = createMock<SystemsApiInterface>();
 
+		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);
+	});
+
+	afterEach(() => {
+		jest.resetAllMocks();
 	});
 
 	describe("actions", () => {
@@ -51,55 +60,46 @@ describe("schools module", () => {
 			} as AxiosInstance);
 			setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 		});
+
 		describe("fetchSchool", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-			it("should call backend and sets state correctly", async () => {
+			it("should call backend and set state correctly", async () => {
 				authModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
-				getRequestReturn = {
-					data: {
-						id: "id_123",
-						features: ["rocketChat"],
-					},
-				};
+				const mockSchoolResponse = schoolResponseFactory.build();
+				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
+					mockApiResponse({ data: mockSchoolResponse })
+				);
 				const schoolsModule = new SchoolsModule({});
 
 				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 
-				await schoolsModule.fetchSchool();
+				const expectedFeatureObject = {
+					rocketChat: false,
+					videoconference: false,
+					studentVisibility: false,
+					ldapUniventionMigrationSchool: false,
+					showOutdatedUsers: false,
+					enableLdapSyncDuringMigration: false,
+					isTeamCreationByStudentsEnabled: false,
+					oauthProvisioningEnabled: false,
+					nextcloud: false,
+				};
 
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual(
-					"/v1/schools/sampleSchoolId "
-				);
+				await schoolsModule.fetchSchool();
 
 				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setSchoolSpy).toHaveBeenCalled();
 				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual({
-					id: "id_123",
-					features: {
-						rocketChat: true,
-						studentVisibility: false,
-						videoconference: false,
-						ldapUniventionMigrationSchool: false,
-						showOutdatedUsers: false,
-						enableLdapSyncDuringMigration: false,
-						nextcloud: false,
-						oauthProvisioningEnabled: false,
-					},
+					...mockSchoolResponse,
+					features: expectedFeatureObject,
 				});
 			});
 
-			it("should trigger error and goes into the catch block", async () => {
-				initializeAxios({
-					get: async (path: string) => {
-						throw new AxiosError(path);
-						return;
-					},
-				} as AxiosInstance);
+			it("should set error if api client throws error", async () => {
+				schoolApi.schoolControllerGetSchoolById.mockRejectedValueOnce(
+					new AxiosError()
+				);
 
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
@@ -141,58 +141,6 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 		});
-		describe("fetchFederalState", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-			it("should call backend and sets state correctly", async () => {
-				getRequestReturn = { data: "dummy response" };
-				const schoolsModule = new SchoolsModule({});
-				schoolsModule.setSchool({
-					...mockSchool,
-					federalState: "federalStateId",
-				});
-
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setFederalSpy = jest.spyOn(schoolsModule, "setFederalState");
-
-				await schoolsModule.fetchFederalState();
-
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual(
-					"/v1/federalStates/federalStateId"
-				);
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setFederalSpy).toHaveBeenCalled();
-				expect(setFederalSpy.mock.calls[0][0]).toStrictEqual("dummy response");
-				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
-			});
-			it("should trigger error and goes into the catch block", async () => {
-				initializeAxios({
-					get: async (path: string) => {
-						throw new AxiosError(path);
-						return;
-					},
-				} as AxiosInstance);
-
-				const schoolsModule = new SchoolsModule({});
-				schoolsModule.setSchool({
-					...mockSchool,
-					federalState: "federalStateId",
-				});
-
-				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
-
-				await schoolsModule.fetchFederalState();
-
-				expect(setErrorSpy).toHaveBeenCalled();
-				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
-				expect(setLoadingSpy).toHaveBeenCalled();
-				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
-			});
-		});
 
 		describe("fetchSystems", () => {
 			beforeEach(() => {
@@ -205,7 +153,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
-					systems: ["mockSystemId"],
+					systemIds: ["mockSystemId"],
 				});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
@@ -237,7 +185,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
-					systems: ["mockSystemId"],
+					systemIds: ["mockSystemId"],
 				});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
@@ -261,7 +209,7 @@ describe("schools module", () => {
 			it("should call backend and set state correctly", async () => {
 				const uploadData = {
 					id: "id_123",
-					data: "some data to be updated",
+					name: "Paul Newname Gymnasium",
 					features: {
 						rocketChat: true,
 						studentVisibility: false,
@@ -269,6 +217,7 @@ describe("schools module", () => {
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
 						enableLdapSyncDuringMigration: false,
+						isTeamCreationByStudentsEnabled: false,
 						nextcloud: false,
 						oauthProvisioningEnabled: false,
 					},
@@ -279,22 +228,18 @@ describe("schools module", () => {
 						return {
 							data: {
 								id: "id_123",
-								data: "some data to be updated",
-								features: ["rocketChat"],
-							},
-						};
-					},
-					get: async () => {
-						receivedRequests.push();
-						return {
-							data: {
-								id: "id_123",
-								data: "some data to be updated",
+								name: "Paul Newname Gymnasium",
 								features: ["rocketChat"],
 							},
 						};
 					},
 				} as unknown as AxiosInstance);
+
+				const mockSchoolResponse = schoolResponseFactory.build();
+				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
+					mockApiResponse({ data: mockSchoolResponse })
+				);
+
 				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
@@ -306,9 +251,8 @@ describe("schools module", () => {
 				expect(receivedRequests[0].path).toStrictEqual("/v1/schools/id_123");
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(schoolApi.schoolControllerGetSchoolById).toHaveBeenCalled();
 				expect(setSchoolSpy).toHaveBeenCalled();
-				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
-				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual(uploadData);
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 
@@ -330,6 +274,7 @@ describe("schools module", () => {
 						ldapUniventionMigrationSchool: false,
 						showOutdatedUsers: false,
 						enableLdapSyncDuringMigration: false,
+						isTeamCreationByStudentsEnabled: false,
 						nextcloud: false,
 						oauthProvisioningEnabled: false,
 					},
@@ -362,23 +307,13 @@ describe("schools module", () => {
 					const systemId = "id_1";
 					const schoolsModule = new SchoolsModule({});
 					const systems = [
-						{ _id: "id_1", type: "itslearning" },
+						{ id: "id_1", type: "itslearning" },
 						{
-							_id: "id_2",
+							id: "id_2",
 							type: "moodle",
 						},
 						{
-							_id: "id_3",
-							type: "ldap",
-						},
-					];
-					const expectedSystems = [
-						{
-							_id: "id_2",
-							type: "moodle",
-						},
-						{
-							_id: "id_3",
+							id: "id_3",
 							type: "ldap",
 						},
 					];
@@ -386,7 +321,6 @@ describe("schools module", () => {
 
 					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
-					const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
 					await schoolsModule.deleteSystem(systemId);
 					expect(systemsApi.systemControllerDeleteSystem).toHaveBeenCalledWith(
@@ -395,10 +329,6 @@ describe("schools module", () => {
 					expect(setLoadingSpy).toHaveBeenCalled();
 					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 					expect(fetchSchoolSpy).toHaveBeenCalled();
-					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
-						expect.any(Array)
-					);
-					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
 				});
 
 				it("should trigger error and goes into the catch block", async () => {
@@ -439,23 +369,13 @@ describe("schools module", () => {
 					} as AxiosInstance);
 					const schoolsModule = new SchoolsModule({});
 					const systems = [
-						{ _id: "id_1", type: "itslearning" },
+						{ id: "id_1", type: "itslearning" },
 						{
-							_id: "id_2",
+							id: "id_2",
 							type: "moodle",
 						},
 						{
-							_id: "id_3",
-							type: "ldap",
-						},
-					];
-					const expectedSystems = [
-						{
-							_id: "id_2",
-							type: "moodle",
-						},
-						{
-							_id: "id_3",
+							id: "id_3",
 							type: "ldap",
 						},
 					];
@@ -463,7 +383,6 @@ describe("schools module", () => {
 
 					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
-					const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
 					await schoolsModule.deleteSystem(systemId);
 					expect(receivedRequests.length).toBeGreaterThan(0);
@@ -471,10 +390,6 @@ describe("schools module", () => {
 					expect(setLoadingSpy).toHaveBeenCalled();
 					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 					expect(fetchSchoolSpy).toHaveBeenCalled();
-					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
-						expect.any(Array)
-					);
-					expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(expectedSystems);
 				});
 
 				it("should trigger error and goes into the catch block", async () => {
@@ -714,40 +629,10 @@ describe("schools module", () => {
 			});
 		});
 
-		describe("setFederalState", () => {
-			it("should set federalState data", () => {
-				const schoolsModule = new SchoolsModule({});
-				const mockFederalState = {
-					counties: [],
-					logoUrl: "",
-					_id: "mockId",
-					name: "mockname",
-					abbreviation: "MO",
-				};
-				const expectedFileStorageState = {
-					_id: "0000b186816abba584714c56",
-					name: "Hessen",
-					abbreviation: "HE",
-				};
-				expect(schoolsModule.getFederalState).not.toStrictEqual({
-					...mockFederalState,
-					...expectedFileStorageState,
-				});
-				schoolsModule.setFederalState({
-					...mockFederalState,
-					...expectedFileStorageState,
-				});
-				expect(schoolsModule.getFederalState).toStrictEqual({
-					...mockFederalState,
-					...expectedFileStorageState,
-				});
-			});
-		});
-
 		describe("setSystems", () => {
 			it("should set systems data", () => {
 				const schoolsModule = new SchoolsModule({});
-				const expectedSystemState = ["systems_id_2"];
+				const expectedSystemState = [{ id: "id_1", type: "ldap" }];
 				expect(schoolsModule.getSystems).not.toStrictEqual(expectedSystemState);
 				schoolsModule.setSystems(expectedSystemState);
 				expect(schoolsModule.getSystems).toStrictEqual(expectedSystemState);
@@ -791,17 +676,8 @@ describe("schools module", () => {
 		describe("getFederalState", () => {
 			it("shoud return federalState state", () => {
 				const schoolsModule = new SchoolsModule({});
-				const mockFederalState = {
-					counties: [],
-					logoUrl: "",
-					_id: "mockId",
-					name: "mockname",
-					abbreviation: "MO",
-				};
-				expect(schoolsModule.getFederalState).not.toStrictEqual(
-					mockFederalState
-				);
-				schoolsModule.setFederalState(mockFederalState);
+				const mockFederalState = mockSchool.federalState;
+
 				expect(schoolsModule.getFederalState).toStrictEqual(mockFederalState);
 			});
 		});
@@ -809,7 +685,7 @@ describe("schools module", () => {
 		describe("getSystems", () => {
 			it("should return systems state", () => {
 				const schoolsModule = new SchoolsModule({});
-				const systems = ["system"];
+				const systems = [{ id: "id_1", type: "ldap" }];
 				expect(schoolsModule.getSystems).not.toStrictEqual(systems);
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.getSystems).toStrictEqual(systems);
@@ -830,7 +706,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
 					{
-						_id: "id_1",
+						id: "id_1",
 						type: "ldap",
 						ldapConfig: {
 							provider: "iserv-idm",
@@ -844,7 +720,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
 					{
-						_id: "id_1",
+						id: "id_1",
 						type: "ldap",
 						ldapConfig: {
 							provider: "univention",
@@ -858,7 +734,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
 					{
-						_id: "id_1",
+						id: "id_1",
 						type: "tsp-school",
 					},
 				];
@@ -869,7 +745,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
 					{
-						_id: "id_1",
+						id: "id_1",
 						type: "ldap",
 						ldapConfig: {
 							provider: "general",
@@ -883,7 +759,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
 					{
-						_id: "id_1",
+						id: "id_1",
 						type: "moodle",
 					},
 				];
@@ -894,7 +770,7 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
 					{
-						_id: "id_1",
+						id: "id_1",
 						type: "itslearning",
 					},
 				];

@@ -31,8 +31,6 @@
 		"maska": "^2.1.10",
 		"mobile-drag-drop": "^3.0.0-rc.0",
 		"object-hash": "^3.0.0",
-		"tiptap": "^1.32.2",
-		"tiptap-extensions": "^1.35.2",
 		"universal-cookie": "^6.1.1",
 		"vue": "^2.7.14",
 		"vue-dndrop": "github:hpi-schul-cloud/vue-dndrop#d78a541aa4840063c70ced401310c822d6f06361",
@@ -52,8 +50,8 @@
 		"@openapitools/openapi-generator-cli": "^2.7.0",
 		"@types/jest": "^27.5.2",
 		"@types/object-hash": "^2.2.1",
-		"@typescript-eslint/eslint-plugin": "^5.4.0",
-		"@typescript-eslint/parser": "^5.62.0",
+		"@typescript-eslint/eslint-plugin": "^6.13.2",
+		"@typescript-eslint/parser": "^6.13.2",
 		"@vue/cli-plugin-babel": "~5.0.0",
 		"@vue/cli-plugin-eslint": "~5.0.0",
 		"@vue/cli-plugin-router": "~5.0.0",
@@ -87,6 +85,6 @@
 	},
 	"engines": {
 		"node": "18",
-		"npm": "9"
+		"npm": ">=9"
 	}
 }

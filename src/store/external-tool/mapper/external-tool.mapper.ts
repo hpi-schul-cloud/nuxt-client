@@ -8,7 +8,7 @@ import { ExternalToolDisplayData } from "../external-tool-display-data";
 import { ToolLaunchRequest } from "../tool-launch-request";
 import { ToolParameter } from "../tool-parameter";
 import {
-	ToolConfigurationStatusMapping,
+	CommonToolMapper,
 	ToolLaunchRequestMethodMapping,
 	ToolParamLocationMapping,
 	ToolParamScopeMapping,
@@ -26,6 +26,7 @@ export class ExternalToolMapper {
 			description: response.description,
 			displayName: response.displayName,
 			isOptional: response.isOptional,
+			isProtected: response.isProtected,
 			regex: response.regex,
 			regexComment: response.regexComment,
 		};
@@ -50,7 +51,9 @@ export class ExternalToolMapper {
 		const mapped: ExternalToolDisplayData = {
 			contextExternalToolId: response.contextToolId,
 			name: response.displayName,
-			status: ToolConfigurationStatusMapping[response.status],
+			status: CommonToolMapper.mapContextExternalToolConfigurationStatus(
+				response.status
+			),
 			logoUrl: response.logoUrl,
 			openInNewTab: response.openInNewTab,
 		};
