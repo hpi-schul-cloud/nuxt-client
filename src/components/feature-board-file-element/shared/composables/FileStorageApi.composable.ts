@@ -55,13 +55,7 @@ const fileStorageApi = () => {
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.list(schoolId, parentId, parentType);
 
-			const existingFileRecord = fileRecords.get(parentId);
-
-			if (existingFileRecord) {
-				existingFileRecord.value = response.data.data[0];
-			} else {
-				fileRecords.set(parentId, ref(response.data.data[0]));
-			}
+			updateOrAddFileRecord(parentId, response.data.data[0]);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -82,13 +76,7 @@ const fileStorageApi = () => {
 				file
 			);
 
-			const existingFileRecord = fileRecords.get(parentId);
-
-			if (existingFileRecord) {
-				existingFileRecord.value = response.data;
-			} else {
-				fileRecords.set(parentId, ref(response.data));
-			}
+			updateOrAddFileRecord(parentId, response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -116,16 +104,23 @@ const fileStorageApi = () => {
 				fileUrlParams
 			);
 
-			const existingFileRecord = fileRecords.get(parentId);
-
-			if (existingFileRecord) {
-				existingFileRecord.value = response.data;
-			} else {
-				fileRecords.set(parentId, ref(response.data));
-			}
+			updateOrAddFileRecord(parentId, response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
+		}
+	};
+
+	const updateOrAddFileRecord = (
+		parentId: string,
+		filerecord: FileRecordResponse
+	) => {
+		const existingFileRecord = fileRecords.get(parentId);
+
+		if (existingFileRecord) {
+			existingFileRecord.value = filerecord;
+		} else {
+			fileRecords.set(parentId, ref(filerecord));
 		}
 	};
 
