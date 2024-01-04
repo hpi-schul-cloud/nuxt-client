@@ -691,7 +691,7 @@ describe("ExternalToolElement", () => {
 					message: "Loading error",
 				};
 
-				const toolOautdatedStatus = schoolToolConfigurationStatusFactory.build({
+				const toolOutdatedStatus = schoolToolConfigurationStatusFactory.build({
 					isOutdatedOnScopeSchool: true,
 				});
 
@@ -701,7 +701,7 @@ describe("ExternalToolElement", () => {
 						isEditMode: true,
 					},
 					externalToolDisplayDataFactory.build({
-						status: toolOautdatedStatus,
+						status: toolOutdatedStatus,
 					})
 				);
 
@@ -710,18 +710,18 @@ describe("ExternalToolElement", () => {
 				return {
 					wrapper,
 					error,
-					toolOautdatedStatus,
+					toolOutdatedStatus,
 				};
 			};
 
 			it("should display an outdated alert", async () => {
-				const { wrapper, toolOautdatedStatus } = setup();
+				const { wrapper, toolOutdatedStatus } = setup();
 
 				const alert = wrapper.find(
 					'[data-testid="board-external-tool-element-alert"]'
 				);
 
-				expect(alert.props("toolOutdatedStatus")).toEqual(toolOautdatedStatus);
+				expect(alert.props("toolStatus")).toEqual(toolOutdatedStatus);
 			});
 
 			it("should display an error alert", async () => {
