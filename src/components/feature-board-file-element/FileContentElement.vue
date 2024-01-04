@@ -108,7 +108,7 @@ export default defineComponent({
 		const { fetchFile, upload, getFileRecord } = useSharedFileRecords();
 		const { getFileRecordStatus } = useSharedFileRecordsStatus();
 
-		const fileRecord: Ref<FileRecordResponse> = getFileRecord(element.value.id);
+		const fileRecord = getFileRecord(element.value.id);
 
 		/* watch(fileRecord, (newValue) => {
 			console.log(newValue);

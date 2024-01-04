@@ -3,15 +3,13 @@ import {
 	FileApiInterface,
 	FileRecordParentType,
 	FileRecordResponse,
-	FileRecordScanStatus,
 	FileUrlParams,
-	PreviewStatus,
 	RenameFileParams,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createGlobalState } from "@vueuse/core";
-import { ref, Ref } from "vue";
+import { Ref, ref } from "vue";
 import { useSharedFileRecordsStatus } from "./FileRecordsStatus.composable";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
@@ -28,7 +26,7 @@ export enum ErrorType {
 
 const useFileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
-	const fileRecords: Ref<FileRecordResponse>[] = [];
+	const fileRecords = new Map<string, Ref<FileRecordResponse | undefined>>();
 	const {
 		showFileTooBigError,
 		showForbiddenError,
@@ -40,37 +38,15 @@ const useFileStorageApi = () => {
 	const { addFileRecordStatus, removeFileRecordStatus } =
 		useSharedFileRecordsStatus();
 
-	const createDefaultFileRecord = (id: string) => {
-		return ref({
-			id: "asd",
-			name: "w3c_home_256.bmp",
-			url: "",
-			size: 4534,
-			securityCheckStatus: FileRecordScanStatus.PENDING,
-			parentId: id,
-			creatorId: "0000d231816abba584714c9e",
-			mimeType: "image/bmp",
-			parentType: FileRecordParentType.BOARDNODES,
-			previewStatus: PreviewStatus.AWAITING_SCAN_STATUS,
-			isUploading: true,
-		});
-	};
 	const getFileRecord = (id: string) => {
-		const realValue = fileRecords.find(
-			(fileRecord) => fileRecord.value.parentId === id
-		);
-		console.log("id", id);
+		const existingFileRecord = fileRecords.get(id);
+		const scaletonFileRecord = ref(undefined);
 
-		console.log("realValue", realValue);
-
-		const defaultFileRecord = createDefaultFileRecord(id);
-
-		if (!realValue) {
-			fileRecords.push(defaultFileRecord);
+		if (!existingFileRecord) {
+			fileRecords.set(id, scaletonFileRecord);
 		}
 
-		const returnValue = realValue ?? defaultFileRecord;
-		console.log(returnValue);
+		const returnValue = existingFileRecord ?? scaletonFileRecord;
 
 		return returnValue;
 	};
@@ -83,14 +59,12 @@ const useFileStorageApi = () => {
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.list(schoolId, parentId, parentType);
 
-			// idea: use request-pooling to reduce number of api-requests
-			const index = fileRecords.findIndex(
-				(fileRecord) => fileRecord.value.parentId === parentId
-			);
-			if (index !== -1) {
-				fileRecords[index].value = response.data.data[0];
+			const existingFileRecord = fileRecords.get(parentId);
+
+			if (existingFileRecord) {
+				existingFileRecord.value = response.data.data[0];
 			} else {
-				fileRecords.push(ref(response.data.data[0]));
+				fileRecords.set(parentId, ref(response.data.data[0]));
 			}
 		} catch (error) {
 			showError(error);
@@ -116,13 +90,12 @@ const useFileStorageApi = () => {
 
 			removeFileRecordStatus(parentId);
 
-			const index = fileRecords.findIndex(
-				(fileRecord) => fileRecord.value.parentId === parentId
-			);
-			if (index !== -1) {
-				fileRecords[index].value = response.data;
+			const existingFileRecord = fileRecords.get(parentId);
+
+			if (existingFileRecord) {
+				existingFileRecord.value = response.data;
 			} else {
-				fileRecords.push(ref(response.data));
+				fileRecords.set(parentId, ref(response.data));
 			}
 		} catch (error) {
 			showError(error);
@@ -151,7 +124,7 @@ const useFileStorageApi = () => {
 				fileUrlParams
 			);
 
-			fileRecords.push(ref(response.data));
+			fileRecords.set(parentId, ref(response.data));
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -165,7 +138,7 @@ const useFileStorageApi = () => {
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
-			fileRecords.push(ref(response.data));
+			fileRecords.set(fileRecordId, ref(response.data));
 		} catch (error) {
 			showError(error);
 			throw error;
