@@ -82,7 +82,7 @@ export interface FileRecordResponse {
      * @type {boolean}
      * @memberof FileRecordResponse
      */
-    isUploading: boolean;
+    isUploading?: boolean;
     /**
      * 
      * @type {PreviewStatus}
