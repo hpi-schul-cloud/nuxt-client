@@ -276,9 +276,6 @@ export default defineComponent({
 			onSaveButtonClick,
 			newlyTurnedOffOptions,
 			translateProvisioningOption,
-			// TODO REMOVE
-			initialProvisioningOptions,
-			provisioningOptionsData,
 		};
 	},
 });
