@@ -2,7 +2,7 @@ import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import RoomExternalToolsErrorDialog from "@/pages/rooms/tools/RoomExternalToolsErrorDialog.vue";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
+import { ExternalToolDisplayData } from "@/store/external-tool";
 import {
 	ContextExternalToolConfigurationStatusFactory,
 	i18nMock,
@@ -13,7 +13,7 @@ import AuthModule from "@/store/auth";
 
 describe("RoomExternalToolsErrorDialog", () => {
 	const getWrapper = (propsData: {
-		status: ContextExternalToolConfigurationStatus;
+		selectedItem: ExternalToolDisplayData;
 		isOpen?: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
@@ -29,7 +29,6 @@ describe("RoomExternalToolsErrorDialog", () => {
 				...createComponentMocks({}),
 				propsData: {
 					isOpen: true,
-					toolName: "Test Tool",
 					...propsData,
 				},
 				provide: {
@@ -44,13 +43,26 @@ describe("RoomExternalToolsErrorDialog", () => {
 		};
 	};
 
+	const createSelectedItem = (
+		deactivated: boolean,
+		outdated = false
+	): ExternalToolDisplayData => {
+		return {
+			status: ContextExternalToolConfigurationStatusFactory.build({
+				isDeactivated: deactivated,
+				isOutdatedOnScopeSchool: outdated,
+			}),
+			name: "Test Tool",
+			openInNewTab: false,
+			contextExternalToolId: "contextExternalToolId",
+		};
+	};
+
 	describe("when dialog is rendered", () => {
 		describe("when status is outdated", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					status: ContextExternalToolConfigurationStatusFactory.build({
-						isOutdatedOnScopeSchool: true,
-					}),
+					selectedItem: createSelectedItem(false, true),
 				});
 
 				return {
@@ -82,9 +94,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 		describe("when status is deactivated", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					status: ContextExternalToolConfigurationStatusFactory.build({
-						isDeactivated: true,
-					}),
+					selectedItem: createSelectedItem(true),
 				});
 
 				return {

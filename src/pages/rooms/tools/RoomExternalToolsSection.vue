@@ -15,9 +15,8 @@
 
 		<template v-if="selectedItem">
 			<RoomExternalToolsErrorDialog
-				:tool-name="selectedItemName"
+				:selected-item="selectedItem"
 				:is-open="isErrorDialogOpen"
-				:status="selectedItem.status"
 				@closed="onCloseErrorDialog"
 			/>
 		</template>

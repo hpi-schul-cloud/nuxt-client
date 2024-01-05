@@ -40,12 +40,6 @@
 		>
 			{{ $t("pages.tool.settings") }}
 		</h2>
-		<v-checkbox
-			v-if="selectedTemplate && canBeDeactivated"
-			:label="$t('pages.tool.deactivate.label')"
-			data-testId="configuration-deactivate-checkbox"
-			v-model="selectedTemplate.isDeactivated"
-		/>
 		<slot name="aboveParameters" :selectedTemplate="selectedTemplate" />
 		<external-tool-config-settings
 			v-if="selectedTemplate && selectedTemplate.parameters.length > 0"
@@ -87,10 +81,8 @@ import ExternalToolConfigSettings from "@/components/external-tools/configuratio
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { useI18n } from "@/composables/i18n.composable";
 import {
-	ContextExternalToolConfigurationTemplate,
 	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
-	SchoolExternalToolConfigurationTemplate,
 } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
@@ -109,10 +101,6 @@ import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 
-type ConfigurationTemplates =
-	| SchoolExternalToolConfigurationTemplate
-	| ContextExternalToolConfigurationTemplate;
-
 export default defineComponent({
 	emits: ["cancel", "save", "change"],
 	components: {
@@ -121,7 +109,7 @@ export default defineComponent({
 	},
 	props: {
 		templates: {
-			type: Array as PropType<Array<ConfigurationTemplates>>,
+			type: Array as PropType<Array<ExternalToolConfigurationTemplate>>,
 			required: true,
 		},
 		configuration: {
@@ -160,11 +148,8 @@ export default defineComponent({
 			() => slots.aboveParameters?.({ selectedTemplate }) === undefined
 		);
 
-		const canBeDeactivated: ComputedRef<boolean> = computed(() => {
-			return selectedTemplate.value?.isDeactivated !== undefined;
-		});
-
-		const selectedTemplate: Ref<ConfigurationTemplates | undefined> = ref();
+		const selectedTemplate: Ref<ExternalToolConfigurationTemplate | undefined> =
+			ref();
 
 		const parametersValid: ComputedRef<boolean> = computed(
 			() => !!selectedTemplate.value
@@ -190,19 +175,9 @@ export default defineComponent({
 			if (props.templates.length >= 1) {
 				selectedTemplate.value = props.templates[0];
 
-				fillStatus(configuration);
-
 				fillParametersWithDefaultValues();
 
 				fillParametersWithValues(configuration);
-			}
-		};
-
-		const fillStatus = (configuration: ConfigurationTypes) => {
-			if ("status" in configuration && selectedTemplate.value) {
-				console.log(configuration.status.isDeactivated);
-				selectedTemplate.value.isDeactivated =
-					configuration.status.isDeactivated;
 			}
 		};
 
@@ -253,7 +228,6 @@ export default defineComponent({
 			fillParametersWithDefaultValues,
 			parameterConfiguration,
 			isAboveParametersSlotEmpty,
-			canBeDeactivated,
 		};
 	},
 });

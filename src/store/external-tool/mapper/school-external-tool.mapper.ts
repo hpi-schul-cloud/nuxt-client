@@ -82,6 +82,7 @@ export class SchoolExternalToolMapper {
 				(parameter): ToolParameterEntry =>
 					CommonToolMapper.mapToToolParameterEntry(parameter)
 			),
+			isDeactivated: response.status.isDeactivated,
 		};
 
 		return mapped;
@@ -90,7 +91,8 @@ export class SchoolExternalToolMapper {
 	static mapTemplateToSchoolExternalToolSave(
 		template: SchoolExternalToolConfigurationTemplate,
 		parameterConfiguration: (string | undefined)[],
-		schoolId: string
+		schoolId: string,
+		isDeactivated: boolean
 	): SchoolExternalToolSave {
 		const mapped: SchoolExternalToolSave = {
 			schoolId: schoolId,
@@ -102,7 +104,7 @@ export class SchoolExternalToolMapper {
 					value: parameterConfiguration[index],
 				})
 			),
-			isDeactivated: template.isDeactivated,
+			isDeactivated,
 		};
 
 		return mapped;

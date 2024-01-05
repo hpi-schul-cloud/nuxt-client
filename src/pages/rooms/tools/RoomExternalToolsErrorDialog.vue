@@ -1,6 +1,6 @@
 <template>
 	<v-custom-dialog
-		v-if="$props.status"
+		v-if="status"
 		:is-open="$props.isOpen"
 		:has-buttons="true"
 		:buttons="['close']"
@@ -24,7 +24,7 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RenderHTML from "@/components/feature-render-html/RenderHTML.vue";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
 import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
+import { ExternalToolDisplayData } from "@/store/external-tool";
 import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
@@ -32,12 +32,8 @@ export default defineComponent({
 	components: { RenderHTML, VCustomDialog },
 	emits: ["closed"],
 	props: {
-		toolName: {
-			type: String,
-			required: true,
-		},
-		status: {
-			type: Object as PropType<ContextExternalToolConfigurationStatus>,
+		selectedItem: {
+			type: Object as PropType<ExternalToolDisplayData>,
 			required: true,
 		},
 		isOpen: {
@@ -57,13 +53,13 @@ export default defineComponent({
 
 		const isToolOutdated: ComputedRef<boolean> = computed(() => {
 			return (
-				props.status.isOutdatedOnScopeContext ||
-				props.status.isOutdatedOnScopeSchool
+				props.selectedItem.status.isOutdatedOnScopeContext ||
+				props.selectedItem.status.isOutdatedOnScopeSchool
 			);
 		});
 
 		const getTitle: ComputedRef<string> = computed(() => {
-			if (props.status.isDeactivated) {
+			if (props.selectedItem.status.isDeactivated) {
 				return "pages.rooms.tools.deactivatedDialog.title";
 			}
 
@@ -75,15 +71,15 @@ export default defineComponent({
 		});
 
 		const getText: ComputedRef<string> = computed(() => {
-			if (!props.status) {
+			if (!props.selectedItem) {
 				return "";
 			}
 
-			if (props.status.isDeactivated) {
+			if (props.selectedItem.status.isDeactivated) {
 				return "common.tool.information.deactivated";
 			}
 
-			return determineOutdatedTranslationKey(props.status);
+			return determineOutdatedTranslationKey(props.selectedItem.status);
 		});
 
 		return {
@@ -91,6 +87,8 @@ export default defineComponent({
 			onCloseCustomDialog,
 			getTitle,
 			getText,
+			status: props.selectedItem.status,
+			toolName: props.selectedItem.name,
 		};
 	},
 });

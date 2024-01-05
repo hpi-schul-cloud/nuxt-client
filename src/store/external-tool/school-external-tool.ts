@@ -10,7 +10,7 @@ export interface SchoolExternalToolSave {
 
 	version: number;
 
-	isDeactivated?: boolean;
+	isDeactivated: boolean;
 }
 
 export interface SchoolExternalTool extends SchoolExternalToolSave {
