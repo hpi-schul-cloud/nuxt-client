@@ -23,7 +23,6 @@ export const fileRecordResponseFactory = Factory.define<FileRecordResponse>(
 			creatorId: `creatorId${sequence}`,
 			schoolId: `schoolId${sequence}`,
 			previewStatus: PreviewStatus.AWAITING_SCAN_STATUS,
-			isUploading: true,
 		};
 	}
 );

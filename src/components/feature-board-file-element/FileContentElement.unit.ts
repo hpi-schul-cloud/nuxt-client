@@ -13,7 +13,7 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { computed } from "vue";
+import Vue, { computed, ref } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
 import FileContentElement from "./FileContentElement.vue";
@@ -60,7 +60,7 @@ describe("FileContentElement", () => {
 		return { wrapper, menu, addAlertMock };
 	};
 
-	describe("when component is not in edit mode", () => {
+	describe("when component is in view mode", () => {
 		describe("when file record is not available", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
@@ -125,6 +125,7 @@ describe("FileContentElement", () => {
 			const setup = (props?: {
 				scanStatus?: FileRecordScanStatus;
 				previewStatus?: PreviewStatus;
+				isUploading?: boolean;
 			}) => {
 				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
@@ -133,12 +134,14 @@ describe("FileContentElement", () => {
 					securityCheckStatus:
 						props?.scanStatus ?? FileRecordScanStatus.PENDING,
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
+					isUploading: props?.isUploading,
 				});
-				const fetchFileMock = jest.fn().mockImplementationOnce(() => {
-					fileRecord.value = fileRecordResponse;
+
+				const getFileRecordMock = jest.fn().mockImplementationOnce(() => {
+					return ref(fileRecordResponse);
 				});
-				const { fetchFile, fileRecord } = setupFileStorageApiMock({
-					fetchFileMock,
+				const { fetchFile } = setupFileStorageApiMock({
+					getFileRecordMock,
 				});
 
 				const expectedFileProperties: FileProperties = {
@@ -171,12 +174,28 @@ describe("FileContentElement", () => {
 				};
 			};
 
-			it("should pass isOutlined prop to v-card", () => {
-				const { wrapper } = setup();
+			describe("when file is uploaded", () => {
+				it("should pass isOutlined prop to v-card", async () => {
+					const { wrapper } = setup();
 
-				const card = wrapper.findComponent({ ref: "fileContentElement" });
+					await wrapper.vm.$nextTick();
 
-				expect(card.props("outlined")).toBe(false);
+					const card = wrapper.findComponent({ ref: "fileContentElement" });
+
+					expect(card.props("outlined")).toBe(true);
+				});
+			});
+
+			describe("when file is uploading", () => {
+				it("should pass isOutlined prop to v-card", async () => {
+					const { wrapper } = setup({ isUploading: true });
+
+					await wrapper.vm.$nextTick();
+
+					const card = wrapper.findComponent({ ref: "fileContentElement" });
+
+					expect(card.props("outlined")).toBe(false);
+				});
 			});
 
 			describe("when file content emits add:alert event", () => {
@@ -455,6 +474,7 @@ describe("FileContentElement", () => {
 			const setup = (props?: {
 				scanStatus?: FileRecordScanStatus;
 				previewStatus?: PreviewStatus;
+				isUploading?: boolean;
 			}) => {
 				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
@@ -463,12 +483,13 @@ describe("FileContentElement", () => {
 					securityCheckStatus:
 						props?.scanStatus ?? FileRecordScanStatus.PENDING,
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
+					isUploading: props?.isUploading,
 				});
-				const fetchFileMock = jest.fn().mockImplementationOnce(() => {
-					fileRecord.value = fileRecordResponse;
+				const getFileRecordMock = jest.fn().mockImplementation(() => {
+					return ref(fileRecordResponse);
 				});
-				const { fetchFile, fileRecord } = setupFileStorageApiMock({
-					fetchFileMock,
+				const { fetchFile } = setupFileStorageApiMock({
+					getFileRecordMock,
 				});
 
 				const expectedFileProperties: FileProperties = {
@@ -553,6 +574,7 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup();
 
 					const fileContentElement = wrapper.findComponent(FileContentElement);
+
 					expect(fileContentElement.exists()).toBe(true);
 				});
 
@@ -560,18 +582,8 @@ describe("FileContentElement", () => {
 					const { wrapper, fetchFile } = setup();
 
 					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
 
 					expect(fetchFile).toHaveBeenCalledTimes(1);
-				});
-
-				it("should render FileContent component", async () => {
-					const { wrapper } = setup();
-					await wrapper.vm.$nextTick();
-
-					const fileContent = wrapper.findComponent(FileContent);
-
-					expect(fileContent.exists()).toBe(true);
 				});
 
 				it("should pass correct fileProperties to FileContent", async () => {
@@ -600,12 +612,44 @@ describe("FileContentElement", () => {
 					expect(fetchFile).toHaveBeenCalledTimes(2);
 				});
 
-				it("should not render File Upload component", async () => {
-					const { wrapper } = setup();
-					await wrapper.vm.$nextTick();
+				describe("when file is uploaded", () => {
+					it("should render FileContent component", async () => {
+						const { wrapper } = setup();
 
-					const fileUpload = wrapper.findComponent(FileUpload);
-					expect(fileUpload.exists()).toBe(false);
+						await wrapper.vm.$nextTick();
+
+						const fileContent = wrapper.findComponent(FileContent);
+
+						expect(fileContent.exists()).toBe(true);
+					});
+
+					it("should not render File Upload component", async () => {
+						const { wrapper } = setup();
+						await wrapper.vm.$nextTick();
+
+						const fileUpload = wrapper.findComponent(FileUpload);
+						expect(fileUpload.exists()).toBe(false);
+					});
+				});
+
+				describe("when file is uploading", () => {
+					it("should render File Upload component", async () => {
+						const { wrapper } = setup({ isUploading: true });
+						await wrapper.vm.$nextTick();
+
+						const fileUpload = wrapper.findComponent(FileUpload);
+						expect(fileUpload.exists()).toBe(true);
+					});
+
+					it("should not render FileContent component", async () => {
+						const { wrapper } = setup({ isUploading: true });
+
+						await wrapper.vm.$nextTick();
+
+						const fileContent = wrapper.findComponent(FileContent);
+
+						expect(fileContent.exists()).toBe(false);
+					});
 				});
 			});
 
