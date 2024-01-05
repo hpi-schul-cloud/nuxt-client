@@ -118,7 +118,7 @@ export class TaskFilter {
 			? this.tasks
 			: this.tasks.filter(
 					(task) => task.status.isSubstitutionTeacher === false
-			  );
+				);
 
 		return new TaskFilter(filteredTasks);
 	}

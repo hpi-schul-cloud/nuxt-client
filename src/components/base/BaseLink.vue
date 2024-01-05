@@ -80,8 +80,8 @@ export default {
 			return this.target
 				? this.target
 				: this.href.startsWith("/")
-				? "_self" // fallback should stay on same page
-				: "_blank"; // external links should be in new window opened
+					? "_self" // fallback should stay on same page
+					: "_blank"; // external links should be in new window opened
 		},
 		external() {
 			return this.href && !this.href.startsWith("/");

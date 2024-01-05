@@ -17,8 +17,8 @@
 							perPage > total
 								? total
 								: currentPage * perPage > total
-								? total
-								: currentPage * perPage,
+									? total
+									: currentPage * perPage,
 						total,
 					})
 				}}

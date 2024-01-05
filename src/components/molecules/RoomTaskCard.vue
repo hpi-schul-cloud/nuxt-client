@@ -371,10 +371,10 @@ export default {
 				titleSuffix = this.isPlanned
 					? `${this.$t("pages.tasks.labels.planned")} ${printDateFromStringUTC(
 							this.task.availableDate
-					  )}`
+						)}`
 					: `${this.$t(
 							"pages.room.taskCard.label.due"
-					  )} ${printDateFromStringUTC(dueDate)}`;
+						)} ${printDateFromStringUTC(dueDate)}`;
 			} else {
 				titleSuffix = this.$t("pages.room.taskCard.label.noDueDate");
 			}
