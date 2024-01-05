@@ -71,8 +71,9 @@ $treeview-node-margin: 0;
 $treeview-node-padding: 0;
 
 // tooltip
-$tooltip-background-color: rgba(0, 0, 0, 0.8);
+$tooltip-background-color: rgb(66, 66, 66);
 $tooltip-text-color: white;
 $tooltip-padding: 8px;
 $tooltip-transition-enter-duration: 300;
 $tooltip-transition-leave-duration: 300;
+$tooltip-opacity: 1;
