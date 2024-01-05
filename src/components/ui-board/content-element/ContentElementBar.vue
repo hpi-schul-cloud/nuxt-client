@@ -39,11 +39,10 @@
 					<slot name="element" />
 				</div>
 
-				<div
-					v-if="$slots.menu && !$slots.display"
-					class="three-dot-menu ml-auto"
-				>
-					<slot name="menu" />
+				<div v-if="$slots.menu && !$slots.display" class="pl-10">
+					<div class="three-dot-menu">
+						<slot name="menu" />
+					</div>
 				</div>
 			</v-card-title>
 			<v-card-subtitle
