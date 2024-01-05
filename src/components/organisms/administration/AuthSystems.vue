@@ -96,7 +96,7 @@
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
 							<v-btn
-								v-if="isEditable(system) && hasSystemCreatePermission"
+								v-if="isRemovable(system) && hasSystemCreatePermission"
 								class="delete-system-btn"
 								icon
 								:aria-label="ariaLabels(system).delete"
@@ -205,18 +205,15 @@ export default {
 			};
 		},
 		isEditable(system) {
-			if (envConfigModule.getProvisioningOptionsEnabled) {
-				return (
-					system.ldapConfig?.provider === "general" || system.alias === "SANIS"
-				);
-			}
-			return system.ldapConfig?.provider === "general";
+			return (
+				system.ldapConfig?.provider === "general" || system.alias === "SANIS"
+			);
+		},
+		isRemovable(system) {
+			return system.ldapConfig?.provider === "general" ?? false;
 		},
 		redirectTo(system) {
-			if (
-				envConfigModule.getProvisioningOptionsEnabled &&
-				system.alias === "SANIS"
-			) {
+			if (system.alias === "SANIS") {
 				return `/administration/school-settings/provisioning-options?systemId=${system._id}`;
 			}
 			return `/administration/ldap/config?id=${system._id}`;
