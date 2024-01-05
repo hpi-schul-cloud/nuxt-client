@@ -28,7 +28,10 @@
 			>
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
-				<LineClamp v-if="$slots.title" class="black--text font-narrow">
+				<LineClamp
+					v-if="$slots.title"
+					class="black--text font-narrow content-element-title"
+				>
 					<slot name="title" />
 				</LineClamp>
 
@@ -99,11 +102,11 @@ export default defineComponent({
 	line-height: 24px;
 	color: var(--v-black-base);
 }
-.content-element-bar:hover {
+a.v-card .content-element-bar:hover {
 	.content-element-title {
 		text-decoration: underline;
 	}
-	.content-element-bar-display {
+	.content-element-display {
 		filter: brightness(80%);
 	}
 }
@@ -122,11 +125,11 @@ export default defineComponent({
 	margin-top: 0px;
 }
 
-.line-clamp :deep(a) {
+.content-element-title :deep(a) {
 	color: var(--v-black-base) !important;
 	text-decoration: none;
 }
-.line-clamp :deep(a:hover) {
+.content-element-title :deep(a:hover) {
 	text-decoration: underline;
 }
 </style>
