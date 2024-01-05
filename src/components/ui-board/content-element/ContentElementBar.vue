@@ -115,8 +115,10 @@ a.v-card .content-element-bar:hover {
 	line-height: 20px;
 }
 .three-dot-menu {
-	margin-top: -6px;
-	margin-right: -6px;
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	z-index: 100;
 	.v-icon {
 		color: var(--v-black-base);
 	}
