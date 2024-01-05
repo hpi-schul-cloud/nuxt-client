@@ -935,6 +935,7 @@
 	"pages.rooms.tools.emptyState": "No hay herramientas en este curso todavía.",
 	"pages.rooms.tools.deactivatedDialog.title": "Herramienta {toolName}“ desactivada",
 	"pages.rooms.tools.outdatedDialog.title": "Herramienta „{toolName}“ obsoleta",
+	"pages.rooms.tools.incompleteDialog.title": "Configuración incomplet",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",
 	"pages.rooms.tools.deleteDialog.content": "¿Está seguro de que desea eliminar la herramienta '<i>{itemName}</i>' del curso?",
 	"pages.rooms.tools.configureVideoconferenceDialog.title": "Crear videoconferencia {roomName}",

@@ -83,7 +83,6 @@ import { useI18n } from "@/composables/i18n.composable";
 import {
 	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
-	SchoolExternalToolConfigurationTemplate,
 	ToolParameter,
 	ToolParameterEntry,
 } from "@/store/external-tool";

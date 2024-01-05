@@ -942,6 +942,7 @@
 	"pages.rooms.tools.deactivated": "Tool deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ veraltet",
+	"pages.rooms.tools.incompleteDialog.title": "Konfiguration unvollständig",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
 	"pages.rooms.tools.deleteDialog.content": "Möchten Sie wirklich das Tool '<i>{itemName}</i>' aus dem Kurs entfernen?",
 	"pages.rooms.tools.configureVideoconferenceDialog.title": "Videokonferenz {roomName} erstellen",
