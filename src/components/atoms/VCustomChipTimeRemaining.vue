@@ -48,7 +48,7 @@ export default {
 					: this.$tc(
 							"components.atoms.VCustomChipTimeRemaining.hintMinutes",
 							diffMins
-					  );
+						);
 
 				return `${this.$t(
 					"components.atoms.VCustomChipTimeRemaining.hintDueTime"
@@ -59,7 +59,7 @@ export default {
 					: this.$tc(
 							"components.atoms.VCustomChipTimeRemaining.hintHours",
 							diffHrs
-					  );
+						);
 				return `${this.$t(
 					"components.atoms.VCustomChipTimeRemaining.hintDueTime"
 				)}${diffHrs} ${label}`;
