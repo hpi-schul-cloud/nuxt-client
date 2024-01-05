@@ -13,7 +13,7 @@
 					<slot />
 				</div>
 			</template>
-			<div class="overflow-hidden">
+			<div class="overflow-hidden base-2">
 				{{ tooltipText }}
 			</div>
 		</v-tooltip>
