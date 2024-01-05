@@ -62,7 +62,7 @@ export class SchoolExternalToolMapper {
 					CommonToolMapper.mapToCustomParameterEntryParam(parameter)
 			),
 			version: schoolExternalTool.version,
-			isDeactivated: schoolExternalTool.isDeactivated ?? false,
+			isDeactivated: schoolExternalTool.isDeactivated,
 		};
 
 		return mapped;

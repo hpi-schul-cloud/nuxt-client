@@ -4,7 +4,6 @@
 		class="room-card-chip py-1"
 		color="warning lighten-1"
 		text-color="black"
-		data-testId="tool-card-status"
 	>
 		<v-icon small class="mr-1" color="warning">{{ mdiAlert }}</v-icon>
 		<slot />
