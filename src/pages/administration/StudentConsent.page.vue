@@ -437,17 +437,17 @@ export default {
 			return this.isConsentNecessary
 				? this.$t(
 						"pages.administration.students.consent.steps.download.explanation"
-				  )
+					)
 				: this.$t(
 						"pages.administration.students.manualRegistration.steps.download.explanation"
-				  );
+					);
 		},
 		successMessage() {
 			return this.isConsentNecessary
 				? this.$t("pages.administration.students.consent.steps.success")
 				: this.$t(
 						"pages.administration.students.manualRegistration.steps.success"
-				  );
+					);
 		},
 	},
 	async created() {

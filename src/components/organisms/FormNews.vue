@@ -162,12 +162,12 @@ export default Vue.extend({
 				? undefined
 				: this.$t(
 						"components.organisms.FormNews.errors.missing_title"
-				  ).toString();
+					).toString();
 			const content = this.data.content
 				? undefined
 				: this.$t(
 						"components.organisms.FormNews.errors.missing_content"
-				  ).toString();
+					).toString();
 			return {
 				title,
 				content,
