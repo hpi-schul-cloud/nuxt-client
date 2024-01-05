@@ -1,6 +1,7 @@
 import BaseInput from "./BaseInput";
 
-describe("@/components/base/BaseInputRadio", () => {
+// VUE3_UPGRADE: no need to test because we removed type "radio" from BaseInput
+describe.skip("@/components/base/BaseInputRadio", () => {
 	it(`Check if input type="radio" is rendered`, () => {
 		const wrapper = mount(BaseInput, {
 			propsData: {

@@ -100,7 +100,7 @@ describe("@/components/organisms/FormCreateUser", () => {
 			expect(eventUserData["create-user"]).toBeUndefined();
 		});
 
-		it("renders slot content", async () => {
+		it("renders slot content", () => {
 			const { wrapper } = setup(getMockActionsErrorCreate(), {
 				slots: {
 					inputs: '<input label="test"/>',
