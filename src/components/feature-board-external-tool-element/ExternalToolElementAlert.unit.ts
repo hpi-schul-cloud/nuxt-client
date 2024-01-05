@@ -46,7 +46,7 @@ describe("ExternalToolElementAlert", () => {
 	const getWrapper = (
 		propsData: {
 			error?: BusinessError;
-			toolOutdatedStatus?: ContextExternalToolConfigurationStatus;
+			toolStatus?: ContextExternalToolConfigurationStatus;
 		},
 		userRoles?: string[]
 	) => {
@@ -66,7 +66,11 @@ describe("ExternalToolElementAlert", () => {
 				...createComponentMocks({
 					i18n: true,
 				}),
-				propsData,
+				propsData: {
+					toolDisplayName: "Tool name",
+					toolStatus: ContextExternalToolConfigurationStatusFactory.build(),
+					...propsData,
+				},
 				provide: {
 					[I18N_KEY.valueOf()]: i18nMock,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
@@ -149,11 +153,11 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: true,
-								isOutdatedOnScopeContext: false,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: false,
+							isDeactivated: false,
+						}),
 					},
 					["teacher"]
 				);
@@ -181,11 +185,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: true,
-								isOutdatedOnScopeContext: false,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: false,
+						}),
 					},
 					["student"]
 				);
@@ -215,11 +218,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: false,
-								isOutdatedOnScopeContext: true,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: false,
+							isOutdatedOnScopeContext: true,
+						}),
 					},
 					["teacher"]
 				);
@@ -247,11 +249,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: false,
-								isOutdatedOnScopeContext: true,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: false,
+							isOutdatedOnScopeContext: true,
+						}),
 					},
 					["student"]
 				);
@@ -281,11 +282,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: true,
-								isOutdatedOnScopeContext: true,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: true,
+						}),
 					},
 					["teacher"]
 				);
@@ -313,11 +313,10 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolOutdatedStatus:
-							ContextExternalToolConfigurationStatusFactory.build({
-								isOutdatedOnScopeSchool: true,
-								isOutdatedOnScopeContext: true,
-							}),
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+							isOutdatedOnScopeContext: true,
+						}),
 					},
 					["student"]
 				);
@@ -337,6 +336,28 @@ describe("ExternalToolElementAlert", () => {
 					"common.tool.information.outdated.student"
 				);
 			});
+		});
+	});
+
+	describe("when the tool is deactivated", () => {
+		it("should display a user friendly message", () => {
+			useBoardPermissionsMock.isTeacher = true;
+
+			const { wrapper } = getWrapper(
+				{
+					toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						isDeactivated: true,
+					}),
+				},
+				["teacher"]
+			);
+
+			const alerts = wrapper.findAllComponents(WarningAlert);
+
+			expect(alerts).toHaveLength(1);
+			expect(alerts.at(0).text()).toEqual(
+				'common.tool.information.deactivated {"toolDisplayName":"Tool name"}'
+			);
 		});
 	});
 });

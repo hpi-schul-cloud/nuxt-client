@@ -12,10 +12,13 @@ export interface ExternalToolConfigurationTemplate {
 	version: number;
 }
 
-export type SchoolExternalToolConfigurationTemplate =
-	ExternalToolConfigurationTemplate;
+export interface SchoolExternalToolConfigurationTemplate
+	extends ExternalToolConfigurationTemplate {
+	isDeactivated: boolean;
+}
 
 export interface ContextExternalToolConfigurationTemplate
-	extends SchoolExternalToolConfigurationTemplate {
+	extends ExternalToolConfigurationTemplate {
 	schoolExternalToolId: string;
+	isDeactivated?: boolean;
 }

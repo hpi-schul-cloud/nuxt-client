@@ -1,4 +1,14 @@
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
+import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import Vue from "vue";
+import {
+	contextExternalToolConfigurationTemplateFactory,
+	contextExternalToolFactory,
+	schoolExternalToolConfigurationTemplateFactory,
+	schoolExternalToolFactory,
+	schoolToolConfigurationStatusFactory,
+} from "@@/tests/test-utils/factory";
 import {
 	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
@@ -7,13 +17,6 @@ import { ContextExternalTool } from "@/store/external-tool/context-external-tool
 import { BusinessError } from "@/store/types/commons";
 import { I18N_KEY } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import {
-	schoolExternalToolConfigurationTemplateFactory,
-	schoolExternalToolFactory,
-} from "@@/tests/test-utils/factory";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 
 describe("ExternalToolConfigurator", () => {
@@ -143,6 +146,46 @@ describe("ExternalToolConfigurator", () => {
 				expect(selectionRow.find("span").text()).toEqual(
 					expect.stringContaining(template.name)
 				);
+			});
+		});
+	});
+
+	describe("deactivated checkbox", () => {
+		describe("when the template is a school external tool", () => {
+			it("should be checked when the tool configuration status is deactivated", async () => {
+				const { wrapper } = getWrapper({
+					templates: schoolExternalToolConfigurationTemplateFactory.buildList(
+						1,
+						{ isDeactivated: false }
+					),
+					configuration: schoolExternalToolFactory.build({
+						status: schoolToolConfigurationStatusFactory.build({
+							isDeactivated: true,
+						}),
+					}),
+				});
+
+				const checkbox = wrapper.find(
+					'[data-testId="configuration-deactivate-checkbox"]'
+				);
+
+				expect(checkbox.attributes("aria-checked")).toBe("true");
+			});
+		});
+
+		describe("when the template is a context external tool", () => {
+			it("should not be rendered", async () => {
+				const { wrapper } = getWrapper({
+					templates:
+						contextExternalToolConfigurationTemplateFactory.buildList(1),
+					configuration: contextExternalToolFactory.build(),
+				});
+
+				const checkbox = wrapper.find(
+					'[data-testId="configuration-deactivate-checkbox"]'
+				);
+
+				expect(checkbox.exists()).toBeFalsy();
 			});
 		});
 	});
