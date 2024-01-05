@@ -40,7 +40,6 @@ export class ContextExternalToolMapper {
 					ExternalToolMapper.mapToToolParameter(parameter)
 			),
 			version: response.version,
-			isDeactivated: undefined,
 		};
 
 		return mapped;

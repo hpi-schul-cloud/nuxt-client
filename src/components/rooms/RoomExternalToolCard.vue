@@ -7,21 +7,25 @@
 		@click="handleClick"
 	>
 		<template #under-title>
-			<room-card-chip
-				v-if="isToolOutdated"
-				data-testId="tool-card-status-outdated"
-				>{{ t("pages.rooms.tools.outdated") }}
-			</room-card-chip>
-			<room-card-chip
-				v-if="isToolIncomplete"
+			<div class="d-flex g-1">
+				<room-card-chip
+					v-if="isToolDeactivated"
+					data-testId="tool-card-status-deactivated"
+				>
+					{{ t("pages.rooms.tools.deactivated") }}
+				</room-card-chip>
+				<room-card-chip
+					v-if="isToolIncomplete"
 				data-testId="tool-card-status-incomplete"
 				>{{ t("pages.rooms.tools.incomplete") }}
 			</room-card-chip>
 			<room-card-chip
-				v-if="isToolDeactivated"
-				data-testId="tool-card-status-deactivated"
-				>{{ t("pages.rooms.tools.deactivated") }}
-			</room-card-chip>
+				v-if="isToolOutdated"
+					data-testId="tool-card-status-outdated"
+				>
+					{{ t("pages.rooms.tools.outdated") }}
+				</room-card-chip>
+			</div>
 		</template>
 		<template #right>
 			<div v-if="canEdit" class="ml-1 my-auto">
@@ -75,8 +79,7 @@ export default defineComponent({
 		const t = (key: string): string => i18n.tc(key, 0);
 
 		const handleClick = () => {
-			if (isToolOutdated.value || isToolIncomplete.value) {
-				// TODO N21-1507 why not !isToolLaunchable.value?
+			if (!isToolLaunchable.value) {
 				emit("error", props.tool);
 				return;
 			}
@@ -159,3 +162,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style scoped>
+.g-1 {
+	gap: 4px;
+}
+</style>

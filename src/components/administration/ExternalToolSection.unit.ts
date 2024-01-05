@@ -121,6 +121,7 @@ describe("ExternalToolSection", () => {
 						name: firstToolName,
 						status: schoolToolConfigurationStatusFactory.build(),
 						version: 1,
+						isDeactivated: false,
 					},
 					{
 						id: "testId2",
@@ -132,6 +133,7 @@ describe("ExternalToolSection", () => {
 							isOutdatedOnScopeSchool: true,
 						}),
 						version: 1,
+						isDeactivated: false,
 					},
 					{
 						id: "testId3",
@@ -143,6 +145,7 @@ describe("ExternalToolSection", () => {
 							isDeactivated: true,
 						}),
 						version: 1,
+						isDeactivated: true,
 					},
 				],
 			});
@@ -271,6 +274,7 @@ describe("ExternalToolSection", () => {
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
 									version: 1,
+									isDeactivated: false,
 								},
 							],
 						});
@@ -303,6 +307,7 @@ describe("ExternalToolSection", () => {
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
 									version: 1,
+									isDeactivated: false,
 								},
 							],
 						});

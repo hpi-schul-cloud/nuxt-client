@@ -20,5 +20,4 @@ export interface SchoolExternalToolConfigurationTemplate
 export interface ContextExternalToolConfigurationTemplate
 	extends ExternalToolConfigurationTemplate {
 	schoolExternalToolId: string;
-	isDeactivated?: boolean;
 }

@@ -13,28 +13,13 @@
 			:data-testid="`external-tool-card-${index}`"
 		/>
 
-		<v-custom-dialog
-			:is-open="isErrorDialogOpen"
-			:has-buttons="true"
-			:buttons="['close']"
-			data-testId="error-dialog"
-			@dialog-closed="onCloseErrorDialog"
-		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{
-					t("pages.rooms.tools.outdatedDialog.title", {
-						toolName: selectedItemName,
-					})
-				}}
-			</h2>
-			<template #content>
-				<RenderHTML
-					:html="errorDialogText"
-					component="p"
-					class="text-md mt-2"
-				/>
-			</template>
-		</v-custom-dialog>
+		<template v-if="selectedItem">
+			<RoomExternalToolsErrorDialog
+				:selected-item="selectedItem"
+				:is-open="isErrorDialogOpen"
+				@closed="onCloseErrorDialog"
+			/>
+		</template>
 
 		<v-dialog
 			v-model="isDeleteDialogOpen"
@@ -84,7 +69,6 @@
 </template>
 
 <script lang="ts">
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
@@ -107,12 +91,12 @@ import {
 } from "vue";
 import VueI18n from "vue-i18n";
 import { useRouter } from "vue-router/composables";
-import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
+import RoomExternalToolsErrorDialog from "@/pages/rooms/tools/RoomExternalToolsErrorDialog.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
 	components: {
-		VCustomDialog,
+		RoomExternalToolsErrorDialog,
 		RoomExternalToolCard,
 		RenderHTML,
 	},
@@ -134,10 +118,6 @@ export default defineComponent({
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const router = useRouter();
-		const {
-			determineOutdatedTranslationKey,
-			determineIncompleteTranslationKey,
-		} = useContextExternalToolConfigurationStatus();
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values): string =>
@@ -203,29 +183,6 @@ export default defineComponent({
 			isErrorDialogOpen.value = true;
 		};
 
-		const errorDialogText: ComputedRef<string> = computed(() => {
-			if (!selectedItem.value?.status) {
-				return "";
-			}
-
-			if (selectedItem.value?.status.isDeactivated) {
-				return t("common.tool.information.deactivated");
-			}
-
-			if (selectedItem.value?.status.isIncompleteOnScopeContext) {
-				const toolIncompleteTranslationkey =
-					determineIncompleteTranslationKey();
-
-				return t(toolIncompleteTranslationkey);
-			}
-
-			const toolOutdatedTranslationkey = determineOutdatedTranslationKey(
-				selectedItem.value?.status
-			);
-
-			return t(toolOutdatedTranslationkey);
-		});
-
 		return {
 			t,
 			canEdit,
@@ -238,7 +195,6 @@ export default defineComponent({
 			onEditTool,
 			isErrorDialogOpen,
 			onCloseErrorDialog,
-			errorDialogText,
 			onError,
 		};
 	},
