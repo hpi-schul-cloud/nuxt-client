@@ -1,5 +1,4 @@
 import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue from "vue";
@@ -20,7 +19,7 @@ describe("InnerContent", () => {
 			...createComponentMocks({ i18n: true }),
 			propsData,
 			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+				[I18N_KEY.valueOf()]: { tc: (key: string) => key },
 			},
 		});
 

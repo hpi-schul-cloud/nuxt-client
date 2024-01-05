@@ -181,14 +181,14 @@ const getSidebarItems = (
 						href: "/administration/groups/classes",
 						testId: "Klassen",
 						activeForUrls: ["^/administration/groups/classes($|/.*)"],
-				  }
+					}
 				: {
 						title: "global.sidebar.classes",
 						icon: "$class",
 						href: "/administration/classes",
 						testId: "Klassen",
 						activeForUrls: ["^/administration/classes($|/.*)"],
-				  },
+					},
 		],
 	},
 	{
@@ -227,14 +227,14 @@ const getSidebarItems = (
 						href: "/administration/groups/classes",
 						testId: "Klassen",
 						activeForUrls: ["^/administration/groups/classes($|/.*)"],
-				  }
+					}
 				: {
 						title: "global.sidebar.classes",
 						icon: "$class",
 						href: "/administration/classes",
 						testId: "Klassen",
 						activeForUrls: ["^/administration/classes($|/.*)"],
-				  },
+					},
 			{
 				title: "global.sidebar.teams",
 				icon: "$mdiAccountGroupOutline",
@@ -252,7 +252,7 @@ const getSidebarItems = (
 							"^/administration/school($|/.*)",
 							"^/administration/school-settings($|/.*)",
 						],
-				  }
+					}
 				: {
 						title: "global.sidebar.school",
 						icon: "$school_outline",
@@ -262,7 +262,7 @@ const getSidebarItems = (
 							"^/administration/school($|/.*)",
 							"^/administration/school-settings($|/.*)",
 						],
-				  },
+					},
 		],
 	},
 	{
