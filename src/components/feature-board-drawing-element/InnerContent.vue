@@ -1,7 +1,7 @@
 <template>
 	<ContentElementBar :hasGreyBackground="true" :icon="mdiPresentation">
 		<template #display>
-			<v-img :src="imageSrc" height="185px" alt="" cover />
+			<v-img :src="imageSrc" height="185px" alt="" cover class="rounded-t" />
 		</template>
 		<template #title>
 			{{ $t("components.cardElement.drawingElement") }}
