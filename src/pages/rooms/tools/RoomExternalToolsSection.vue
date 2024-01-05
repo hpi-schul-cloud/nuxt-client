@@ -134,8 +134,10 @@ export default defineComponent({
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const router = useRouter();
-		const { determineOutdatedTranslationKey } =
-			useContextExternalToolConfigurationStatus();
+		const {
+			determineOutdatedTranslationKey,
+			determineIncompleteTranslationKey,
+		} = useContextExternalToolConfigurationStatus();
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values): string =>
@@ -208,6 +210,13 @@ export default defineComponent({
 
 			if (selectedItem.value?.status.isDeactivated) {
 				return t("common.tool.information.deactivated");
+			}
+
+			if (selectedItem.value?.status.isIncompleteOnScopeContext) {
+				const toolIncompleteTranslationkey =
+					determineIncompleteTranslationKey();
+
+				return t(toolIncompleteTranslationkey);
 			}
 
 			const toolOutdatedTranslationkey = determineOutdatedTranslationKey(

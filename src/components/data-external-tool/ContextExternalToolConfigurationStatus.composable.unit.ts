@@ -152,7 +152,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				};
 			};
 
-			it("should return translationkey for outdated on scope school and context", () => {
+			it("should return translationkey for outdated and student", () => {
 				const { determineOutdatedTranslationKey, toolConfigurationStatus } =
 					setup();
 
@@ -187,7 +187,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				};
 			};
 
-			it("should return translationkey for outdated on scope school ", () => {
+			it("should return translationkey for outdated and student ", () => {
 				const { determineOutdatedTranslationKey, toolConfigurationStatus } =
 					setup();
 
@@ -222,13 +222,72 @@ describe("ToolConfigurationStatus.composable", () => {
 				};
 			};
 
-			it("should return translationkey for outdated on scope context ", () => {
+			it("should return translationkey for outdated and student", () => {
 				const { determineOutdatedTranslationKey, toolConfigurationStatus } =
 					setup();
 
 				const result = determineOutdatedTranslationKey(toolConfigurationStatus);
 
 				expect(result).toEqual("common.tool.information.outdated.student");
+			});
+		});
+	});
+
+	describe("determineIncompleteTranslationKey for teacher", () => {
+		describe("when user is teacher and tool is incomplete on scope context", () => {
+			const setup = () => {
+				const authModule = createModuleMocks(AuthModule, {
+					getUserRoles: ["teacher"],
+				});
+
+				const composable = mountComposable(
+					() => useContextExternalToolConfigurationStatus(),
+					{
+						[AUTH_MODULE_KEY.valueOf()]: authModule,
+					}
+				);
+
+				return {
+					...composable,
+					authModule,
+				};
+			};
+
+			it("should return translationkey for incomplete tool on scope context ", () => {
+				const { determineIncompleteTranslationKey } = setup();
+
+				const result = determineIncompleteTranslationKey();
+
+				expect(result).toEqual(
+					"common.tool.information.incompleteOnContext.teacher"
+				);
+			});
+		});
+
+		describe("when user is student and tool is incomplete on scope context", () => {
+			const setup = () => {
+				const authModule = createModuleMocks(AuthModule, {
+					getUserRoles: ["student"],
+				});
+
+				const composable = mountComposable(
+					() => useContextExternalToolConfigurationStatus(),
+					{
+						[AUTH_MODULE_KEY.valueOf()]: authModule,
+					}
+				);
+
+				return {
+					...composable,
+				};
+			};
+
+			it("should return translationkey for incomplete on scope context ", () => {
+				const { determineIncompleteTranslationKey } = setup();
+
+				const result = determineIncompleteTranslationKey();
+
+				expect(result).toEqual("common.tool.information.incomplete.student");
 			});
 		});
 	});
