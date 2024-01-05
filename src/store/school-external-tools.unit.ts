@@ -115,6 +115,7 @@ describe("SchoolExternalToolsModule", () => {
 							status:
 								schoolExternalToolConfigurationStatusResponseFactory.build(),
 							version: schoolExternalToolResponse.toolVersion,
+							isDeactivated: false,
 						},
 					]);
 				});
@@ -188,6 +189,7 @@ describe("SchoolExternalToolsModule", () => {
 						status:
 							schoolExternalToolConfigurationStatusResponseFactory.build(),
 						name: schoolExternalTool.name,
+						isDeactivated: false,
 					});
 				});
 			});
