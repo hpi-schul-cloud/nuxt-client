@@ -35,6 +35,7 @@ export default defineComponent({
 		const tooltipText = computed<string>(
 			() => textElement.value?.innerText ?? ""
 		);
+
 		onMounted(() => {
 			if (textElement.value) {
 				isOverflowingLongText.value =
