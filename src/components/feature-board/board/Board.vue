@@ -21,6 +21,7 @@
 						<BoardColumn
 							:column="column"
 							:index="index"
+							:columnCount="board.columns.length"
 							:class="{ 'drag-disabled': isEditMode || !hasMovePermission }"
 							@reload:board="onReloadBoard"
 							@create:card="onCreateCard"
@@ -29,6 +30,8 @@
 							@move:column-keyboard="
 								onMoveColumnKeyboard(index, column.id, $event)
 							"
+							@move:column-left="onMoveColumnLeft(index, column.id)"
+							@move:column-right="onMoveColumnRight(index, column.id)"
 							@update:card-position="onUpdateCardPosition(index, $event)"
 							@update:column-title="onUpdateColumnTitle(column.id, $event)"
 						/>
@@ -191,6 +194,30 @@ export default defineComponent({
 			}
 		};
 
+		const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
+			const columnMove: ColumnMove = {
+				addedIndex: -1,
+				removedIndex: columnIndex,
+				payload: columnId,
+			};
+			if (hasMovePermission) {
+				columnMove.addedIndex = columnIndex - 1;
+				await moveColumn(columnMove);
+			}
+		};
+
+		const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
+			const columnMove: ColumnMove = {
+				addedIndex: -1,
+				removedIndex: columnIndex,
+				payload: columnId,
+			};
+			if (hasMovePermission) {
+				columnMove.addedIndex = columnIndex + 1;
+				await moveColumn(columnMove);
+			}
+		};
+
 		const onReloadBoard = async () => {
 			await reloadBoard();
 		};
@@ -239,6 +266,8 @@ export default defineComponent({
 			onDropColumn,
 			onDeleteColumn,
 			onMoveColumnKeyboard,
+			onMoveColumnLeft,
+			onMoveColumnRight,
 			onReloadBoard,
 			onUpdateCardPosition,
 			onUpdateColumnTitle,
