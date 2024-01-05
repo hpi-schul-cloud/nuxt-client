@@ -24,7 +24,7 @@
 			"
 		>
 			<v-card-title
-				class="subtitle-1 d-inline-block font-weight-bold d-flex flex-nowrap"
+				class="subtitle-1 d-inline-block font-weight-bold d-flex flex-nowrap gb-1"
 			>
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
@@ -43,7 +43,10 @@
 					<slot name="menu" />
 				</div>
 			</v-card-title>
-			<v-card-subtitle>
+			<v-card-subtitle
+				v-if="$slots.subtitle || $slots.description"
+				class="pt-2"
+			>
 				<div v-if="$slots.subtitle" class="gb-2 subtitle">
 					<slot name="subtitle" />
 				</div>
@@ -89,6 +92,7 @@ export default defineComponent({
 <style scoped type="text/scss">
 .font-narrow {
 	font-family: var(--font-accent) !important;
+	line-height: 1rem;
 }
 
 .content-element-bar {
