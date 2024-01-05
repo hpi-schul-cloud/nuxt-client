@@ -693,6 +693,12 @@ export interface ContextExternalToolConfigurationStatusResponse {
      * @memberof ContextExternalToolConfigurationStatusResponse
      */
     isOutdatedOnScopeContext: boolean;
+    /**
+     * True, if a configured parameter on the context external tool is missing a value
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isIncompleteOnScopeContext: boolean;
 }
 /**
  * 
@@ -946,6 +952,7 @@ export enum CopyApiResponseTypeEnum {
     Content = 'CONTENT',
     Course = 'COURSE',
     CoursegroupGroup = 'COURSEGROUP_GROUP',
+    ExternalTool = 'EXTERNAL_TOOL',
     ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
     File = 'FILE',
     FileElement = 'FILE_ELEMENT',
