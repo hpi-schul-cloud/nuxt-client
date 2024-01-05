@@ -163,10 +163,10 @@ export default defineComponent({
 				const message = props.configId
 					? t(
 							"components.administration.externalToolsSection.notification.updated"
-					  )
+						)
 					: t(
 							"components.administration.externalToolsSection.notification.created"
-					  );
+						);
 
 				showSuccess(message);
 

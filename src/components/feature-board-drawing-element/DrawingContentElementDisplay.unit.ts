@@ -14,13 +14,16 @@ describe("DrawingContentElementEdit", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const wrapper = shallowMount(DrawingContentElementEdit as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			propsData,
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
-			},
-		});
+		const wrapper = shallowMount(
+			DrawingContentElementEdit as MountOptions<Vue>,
+			{
+				...createComponentMocks({ i18n: true }),
+				propsData,
+				provide: {
+					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				},
+			}
+		);
 
 		return {
 			wrapper,
