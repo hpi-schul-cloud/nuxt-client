@@ -30,7 +30,6 @@ const props = defineProps({
 	},
 	selectedList: {
 		type: Array<string>,
-		required: true,
 	},
 });
 
