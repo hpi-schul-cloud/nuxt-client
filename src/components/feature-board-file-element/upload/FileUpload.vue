@@ -17,7 +17,14 @@
 
 <script lang="ts">
 import { useSharedLastCreatedElement } from "@util-board";
-import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
+import {
+	computed,
+	defineComponent,
+	onBeforeUnmount,
+	onMounted,
+	ref,
+	watch,
+} from "vue";
 import FilePicker from "./file-picker/FilePicker.vue";
 
 export default defineComponent({
@@ -43,8 +50,10 @@ export default defineComponent({
 			}
 		});
 
+		const isUploading = computed(() => props.isUploading);
+
 		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-			if (fileWasPicked.value) {
+			if (fileWasPicked.value || isUploading.value) {
 				// Opens confirmation dialog in firefox
 				event.preventDefault();
 				// Opens confirmation dialog in chrome
