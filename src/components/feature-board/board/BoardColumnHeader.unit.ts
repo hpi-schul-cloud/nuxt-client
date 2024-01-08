@@ -1,4 +1,4 @@
-import Vue, { computed, nextTick } from "vue";
+import Vue, { computed } from "vue";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
