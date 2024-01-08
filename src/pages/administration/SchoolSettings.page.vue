@@ -248,20 +248,18 @@ export default defineComponent({
 		]);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
+
 		watch(
 			school,
 			(newSchool, oldSchool) => {
-				// fetch school year and systems when the school is loaded
+				// fetch systems when the school is loaded
 				// if the school object gets a new reference (e.g. after updating it) do not reload the year or systems
 				if (
-					!schoolsModule.getFederalState ||
-					!schoolsModule.getFederalState._id ||
 					!schoolsModule.systems ||
 					!schoolsModule.systems.length ||
 					(newSchool && newSchool.id && (!oldSchool || !oldSchool.id))
 				) {
 					schoolsModule.fetchSystems();
-					schoolsModule.fetchFederalState();
 				}
 			},
 			{ immediate: true }

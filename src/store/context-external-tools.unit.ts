@@ -462,6 +462,8 @@ describe("ContextExternalToolsModule", () => {
 										toolConfigurationTemplate.parameters[0].description,
 									isOptional:
 										toolConfigurationTemplate.parameters[0].isOptional,
+									isProtected:
+										toolConfigurationTemplate.parameters[0].isProtected,
 									regex: toolConfigurationTemplate.parameters[0].regex,
 									regexComment:
 										toolConfigurationTemplate.parameters[0].regexComment,
@@ -569,6 +571,8 @@ describe("ContextExternalToolsModule", () => {
 										toolConfigurationTemplate.parameters[0].description,
 									isOptional:
 										toolConfigurationTemplate.parameters[0].isOptional,
+									isProtected:
+										toolConfigurationTemplate.parameters[0].isProtected,
 									regex: toolConfigurationTemplate.parameters[0].regex,
 									regexComment:
 										toolConfigurationTemplate.parameters[0].regexComment,

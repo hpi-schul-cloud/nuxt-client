@@ -40,8 +40,7 @@
 import { mdiDotsVertical } from "@mdi/js";
 import { computed, defineComponent, PropType, provide, toRef } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
-import { MENU_SCOPE, MENU_HANDLER } from "./injection-tokens";
-import { MenuEvent } from "./BoardMenuEvent.enum";
+import { MENU_SCOPE } from "./injection-tokens";
 
 export default defineComponent({
 	name: "BoardMenu",
@@ -51,20 +50,9 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: Object.values(MenuEvent),
-	setup(props, { emit }) {
+	setup(props) {
 		const scope = toRef(props, "scope");
 		provide(MENU_SCOPE, scope.value);
-
-		// VUE3_UPGRADE When using a confirmation dialog we have to delegate the emitting of the menu event to the menu.
-		// The reason is that Vuetify disposes the menu overlay content after the VMenu was closed. That will also
-		// dispose all menu items (actions) so that they will not be able to pass any events anymore.
-		// Solves BC-5938, BC-5948, BC-5949. Hopefully we will find a better solution
-		const emitMenuEvent = (event: MenuEvent) => {
-			emit(event);
-		};
-
-		provide(MENU_HANDLER, emitMenuEvent);
 
 		const hasBackground = computed<boolean>(
 			() => scope.value === "card" || scope.value === "element"

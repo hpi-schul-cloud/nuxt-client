@@ -3,7 +3,6 @@ import { CardResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { Board, BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
-import { I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { axiosErrorFactory } from "@@/tests/test-utils";
 import {
@@ -19,6 +18,10 @@ import { nextTick, ref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { useBoardState } from "./BoardState.composable";
 import { useSharedEditMode } from "./EditMode.composable";
+
+import { useI18n } from "vue-i18n";
+jest.mock("vue-i18n");
+(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -69,7 +72,6 @@ describe("BoardState.composable", () => {
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
 
 		return mountComposable(() => useBoardState(boardId), {
-			[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			notifierModule,
 		});
 	};
@@ -377,8 +379,7 @@ describe("BoardState.composable", () => {
 
 			expect(isLoading.value).toStrictEqual(true);
 
-			await nextTick();
-			await nextTick();
+			await new Promise((resolve) => setTimeout(resolve, 10));
 
 			expect(isLoading.value).toStrictEqual(false);
 		});

@@ -51,6 +51,7 @@ module.exports = defineConfig({
 				"@feature-board": getDir("src/components/feature-board"),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
+				"@feature-news-form": getDir("src/components/feature-news-form"),
 				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
 				"@ui-color-overlay": getDir("src/components/ui-color-overlay"),
@@ -63,6 +64,9 @@ module.exports = defineConfig({
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
 				"@util-input-masks": getDir("src/components/util-input-masks"),
+				"@util-device-detection": getDir(
+					"src/components/util-device-detection"
+				),
 				"@page-board": getDir("src/components/page-board"),
 				"@page-class-members": getDir("src/components/page-class-members"),
 			},

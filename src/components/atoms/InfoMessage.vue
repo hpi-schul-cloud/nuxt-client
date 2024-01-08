@@ -5,6 +5,7 @@
 	</div>
 </template>
 <script>
+import { mdiAlert } from "@/components/icons/material";
 export default {
 	props: {
 		message: {
@@ -22,7 +23,7 @@ export default {
 	computed: {
 		icon() {
 			if (this.type === "bc-error") {
-				return "$mdiAlert";
+				return mdiAlert;
 			}
 			return this.type.substring(3);
 		},

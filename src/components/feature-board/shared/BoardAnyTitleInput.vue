@@ -1,24 +1,23 @@
 <template>
-	<div>
-		<VTextarea
-			hide-details="auto"
-			v-model="modelValue"
-			variant="solo"
-			density="compact"
-			:rows="1"
-			auto-grow
-			flat
-			class="mx-n3 mb-n2"
-			:placeholder="placeholder"
-			bg-color="transparent"
-			ref="titleInput"
-			:readonly="!isEditMode"
-			role="heading"
-			:aria-level="ariaLevel"
-			@keydown.enter="onEnter"
-			:tabindex="isEditMode ? 0 : -1"
-		/>
-	</div>
+	<VTextarea
+		hide-details="auto"
+		v-model="modelValue"
+		variant="solo"
+		density="compact"
+		:rows="1"
+		auto-grow
+		flat
+		class="mx-n3 mb-n2"
+		:placeholder="placeholder"
+		bg-color="transparent"
+		ref="titleInput"
+		:readonly="!isEditMode"
+		role="heading"
+		:aria-level="ariaLevel"
+		@keydown.enter="onEnter"
+		:tabindex="isEditMode ? 0 : -1"
+		:autofocus="internalIsFocused"
+	/>
 </template>
 
 <script lang="ts">
@@ -32,7 +31,6 @@ import {
 	ref,
 	watch,
 } from "vue";
-import { useBoardPermissions } from "@data-board";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 export default defineComponent({
@@ -62,25 +60,17 @@ export default defineComponent({
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
-		const { hasEditPermission } = useBoardPermissions();
-		const titleInput = ref<InstanceType<
-			(typeof import("vuetify/components"))["VTextarea"]
-		> | null>(null);
+
+		const internalIsFocused = ref(false);
 
 		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();
 			await nextTick();
 		});
-		const setFocusOnEdit = () => {
-			if (!hasEditPermission) return;
-			if (!textarea.value) return;
-			textarea.value.focus();
+		const setFocusOnEdit = async () => {
+			await nextTick();
+			internalIsFocused.value = true;
 		};
-
-		const textarea = computed(() => {
-			if (titleInput.value === null) return null;
-			return titleInput.value.$refs.input as HTMLTextAreaElement;
-		});
 
 		onMounted(() => {
 			if (props.isFocused && props.isEditMode) setFocusOnEdit();
@@ -92,7 +82,7 @@ export default defineComponent({
 				if (props.scope !== "column" && !props.isFocused) return;
 				if (newVal && !oldVal) {
 					await nextTick();
-					setFocusOnEdit();
+					await setFocusOnEdit();
 				}
 			}
 		);
@@ -127,29 +117,19 @@ export default defineComponent({
 			}
 		});
 
-		const titleLength = () => {
-			if (!textarea.value) return;
-			return textarea.value.value.length;
-		};
-
 		const onEnter = ($event: KeyboardEvent) => {
 			if (props.scope !== "card") return;
-			if (!textarea.value) return;
-
-			if (titleLength() === textarea.value.selectionStart) {
-				$event.preventDefault();
-				emit("enter");
-			}
+			$event.preventDefault();
+			emit("enter");
 		};
 
 		return {
 			ariaLevel,
 			fontSize,
 			modelValue,
-			titleInput,
 			hasValue,
 			onEnter,
-			titleLength,
+			internalIsFocused,
 		};
 	},
 });
@@ -183,4 +163,3 @@ export default defineComponent({
 	opacity: 1;
 }
 </style>
-@data-board";

@@ -1,11 +1,11 @@
 <template>
-	<BoardMenu scope="element" v-on="{ [MenuEvent.DELETE]: onDelete }">
+	<BoardMenu scope="element">
 		<BoardMenuActionMoveUp @click="onMoveUp" />
 		<BoardMenuActionMoveDown @click="onMoveDown" />
 		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
 			{{ $t("common.labels.settings") }}
 		</BoardMenuAction>
-		<BoardMenuActionDelete />
+		<BoardMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>
 
@@ -22,7 +22,6 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
-	MenuEvent,
 } from "@ui-board";
 import { defineComponent } from "vue";
 
@@ -43,7 +42,12 @@ export default defineComponent({
 	setup(_, { emit }) {
 		const onEdit = () => emit("edit:element");
 
-		const onDelete = () => emit("delete:element");
+		const onDelete = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:element");
+			}
+		};
 
 		const onMoveDown = () => emit("move-down:element");
 
@@ -58,7 +62,6 @@ export default defineComponent({
 			onDelete,
 			onMoveDown,
 			onMoveUp,
-			MenuEvent,
 		};
 	},
 });

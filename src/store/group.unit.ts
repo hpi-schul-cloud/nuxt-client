@@ -224,6 +224,7 @@ describe("GroupModule", () => {
 					pagination.limit,
 					sortOrder,
 					sortBy,
+					undefined,
 					undefined
 				);
 			});

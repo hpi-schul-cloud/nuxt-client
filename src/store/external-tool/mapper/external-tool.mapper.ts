@@ -26,6 +26,7 @@ export class ExternalToolMapper {
 			description: response.description,
 			displayName: response.displayName,
 			isOptional: response.isOptional,
+			isProtected: response.isProtected,
 			regex: response.regex,
 			regexComment: response.regexComment,
 		};
