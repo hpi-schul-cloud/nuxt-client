@@ -1,48 +1,49 @@
-import { mount, MountOptions } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import vRoomEmptyAvatar from "./vRoomEmptyAvatar.vue";
-import Vue from "vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-
-const propsData = {
-	size: "4em",
-};
-
-const getWrapper = (props: object, options?: object) => {
-	return mount(vRoomEmptyAvatar as MountOptions<Vue>, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		propsData: props,
-		...options,
-	});
-};
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { nextTick } from "vue";
 
 describe("vRoomEmptyAvatar", () => {
+	const setup = () => {
+		const wrapper = mount(vRoomEmptyAvatar, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			propsData: {
+				size: "4em",
+			},
+		});
+		return { wrapper };
+	};
+
 	it("should have the correct size prop", () => {
-		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".avatar-component-empty");
+		const { wrapper } = setup();
+		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
+
 		expect(avatarComponent).toBeTruthy();
-		expect(avatarComponent.vm.$props.size).toStrictEqual("4em");
+		expect(avatarComponent.props().size).toStrictEqual("4em");
 	});
 
 	it("should emit 'drop' event when an element drops onto it", async () => {
-		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".avatar-component-empty");
+		const { wrapper } = setup();
+		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 		avatarComponent.trigger("drop");
-		await wrapper.vm.$nextTick();
-		const emitted = wrapper.emitted();
+		await nextTick();
 
-		expect(emitted["drop"]).toHaveLength(1);
+		expect(wrapper.emitted()).toHaveProperty("drop");
 	});
 
 	it("should change its class name while 'drag' events triggered", async () => {
-		const wrapper = getWrapper(propsData);
-		const avatarComponent = wrapper.find(".avatar-component-empty");
+		const { wrapper } = setup();
+		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 		expect(avatarComponent.element.className).not.toContain("hovered-avatar");
 
 		avatarComponent.trigger("dragenter");
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(avatarComponent.element.className).toContain("hovered-avatar");
 
 		avatarComponent.trigger("dragleave");

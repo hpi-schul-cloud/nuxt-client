@@ -4,7 +4,7 @@
 			class="ma-0 badge-component"
 			bordered
 			color="rgba(var(--v-theme-primary))"
-			icon="$mdiLock"
+			:icon="mdiLock"
 			:model-value="false"
 		>
 			<v-avatar
@@ -23,6 +23,7 @@
 	</div>
 </template>
 <script>
+import { mdiLock } from "@/components/icons/material";
 export default {
 	props: {
 		size: {
@@ -37,6 +38,7 @@ export default {
 	data() {
 		return {
 			hovered: false,
+			mdiLock,
 		};
 	},
 	methods: {

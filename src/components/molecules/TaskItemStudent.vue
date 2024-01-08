@@ -41,7 +41,7 @@
 						v-if="taskState === 'warning'"
 						:type="taskState"
 						:due-date="task.dueDate"
-						:shorten-unit="$vuetify.display.xsOnly"
+						:shorten-unit="$vuetify.display.xs"
 					/>
 				</div>
 			</div>
@@ -139,7 +139,7 @@ export default {
 		},
 		dueDateLabel() {
 			const dueDate = this.task.dueDate;
-			const convertedDueDate = this.$vuetify.display.xsOnly
+			const convertedDueDate = this.$vuetify.display.xs
 				? dateFromUTC(dueDate)
 				: dateTimeFromUTC(dueDate);
 
