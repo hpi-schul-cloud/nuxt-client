@@ -152,6 +152,20 @@ describe("Board", () => {
 			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
 		});
 
+		it("should propagate columnCount to BoardColumn components", () => {
+			const twoColumns = columnResponseFactory.buildList(2, { cards });
+			const boardWithTwoColumns = boardResponseFactory.build({
+				columns: twoColumns,
+			});
+			setup({ board: boardWithTwoColumns });
+
+			const boardColumnComponents = wrapper.findAllComponents({
+				name: "BoardColumn",
+			});
+			expect(boardColumnComponents.at(0).props("columnCount")).toBe(2);
+			expect(boardColumnComponents.at(1).props("columnCount")).toBe(2);
+		});
+
 		describe("Info message for teacher", () => {
 			afterEach(() => {
 				jest.clearAllMocks();
@@ -343,6 +357,58 @@ describe("Board", () => {
 						name: "Container",
 					});
 					containerComponent.vm.$emit("drop");
+
+					expect(mockedBoardStateCalls.moveColumn).not.toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("@onMoveColumnLeft", () => {
+			describe("when user is permitted to move a column", () => {
+				it("should call moveColumn method", () => {
+					setup();
+					const boardColumnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					boardColumnComponent.vm.$emit("move:column-left");
+
+					expect(mockedBoardStateCalls.moveColumn).toHaveBeenCalled();
+				});
+			});
+
+			describe("when user is not permitted to move a column", () => {
+				it("should not call moveColumn method", () => {
+					setup({ permissions: { hasMovePermission: false } });
+					const boardColumnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					boardColumnComponent.vm.$emit("move:column-left");
+
+					expect(mockedBoardStateCalls.moveColumn).not.toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("@onMoveColumnRight", () => {
+			describe("when user is permitted to move a column", () => {
+				it("should call moveColumn method", () => {
+					setup();
+					const boardColumnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					boardColumnComponent.vm.$emit("move:column-right");
+
+					expect(mockedBoardStateCalls.moveColumn).toHaveBeenCalled();
+				});
+			});
+
+			describe("when user is not permitted to move a column", () => {
+				it("should not call moveColumn method", () => {
+					setup({ permissions: { hasMovePermission: false } });
+					const boardColumnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					boardColumnComponent.vm.$emit("move:column-right");
 
 					expect(mockedBoardStateCalls.moveColumn).not.toHaveBeenCalled();
 				});
