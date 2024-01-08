@@ -1,7 +1,6 @@
 <template>
-	<empty-state
+	<v-custom-empty-state
 		image="content-empty"
-		:image-alt="$t('pages.content.empty_state.error.img_alt')"
 		:title="$t('pages.content.empty_state.error.title').toString()"
 	>
 		<template #description>
@@ -10,17 +9,17 @@
 				component="span"
 			/>
 		</template>
-	</empty-state>
+	</v-custom-empty-state>
 </template>
 
 <script lang="ts">
-import EmptyState from "@/components/lern-store/EmptyState.vue";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { RenderHTML } from "@feature-render-html";
 
 export default {
 	components: {
-		EmptyState,
 		RenderHTML,
+		vCustomEmptyState,
 	},
 };
 </script>

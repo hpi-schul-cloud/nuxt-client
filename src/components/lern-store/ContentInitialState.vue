@@ -1,28 +1,28 @@
 <template>
-	<empty-state
+	<v-custom-empty-state
 		image="content-initial"
-		:alt="$t('pages.content.init_state.img_alt').toString()"
 		:title="$t('pages.content.init_state.title').toString()"
 	>
 		<template #description>
-			<div class="initial-state-description">
+			<div class="d-flex justify-center">
 				<RenderHTML
 					:html="$t('pages.content.init_state.message').toString()"
 					component="span"
+					class="initial-state-description"
 				/>
 			</div>
 		</template>
-	</empty-state>
+	</v-custom-empty-state>
 </template>
 
 <script lang="ts">
-import EmptyState from "@/components/lern-store/EmptyState.vue";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { RenderHTML } from "@feature-render-html";
 
 export default {
 	components: {
-		EmptyState,
 		RenderHTML,
+		vCustomEmptyState,
 	},
 };
 </script>
@@ -30,5 +30,6 @@ export default {
 <style scoped>
 .initial-state-description {
 	text-align: left;
+	width: calc(2 * var(--size-content-width-min));
 }
 </style>
