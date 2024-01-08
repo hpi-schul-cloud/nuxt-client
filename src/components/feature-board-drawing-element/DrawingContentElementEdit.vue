@@ -1,45 +1,55 @@
 <template>
-	<div class="drawing-content-element-edit" @click="onOpenElement">
-		<div class="edit-image-mask rounded-mb" />
-		<v-img :src="imageSrc" class="hover-image" height="185px" cover />
-		<div class="menu">
-			<slot />
-		</div>
-		<v-list-item
-			class="edit-content-info px-0"
-			data-testid="drawing-element-edit"
-			:inactive="true"
-		>
-			<v-list-item-content class="py-0">
-				<div class="content py-2 px-3">
-					<v-icon
-						class="edit-icon grey--text text--darken-3"
-						data-testid="board-drawing-element-icon"
-						medium
-					>
-						$mdiPresentation
-					</v-icon>
-					<span
-						class="subtitle-1 board-subtitle d-inline-block text-truncate black--text text--darken-2"
-					>
-						{{ $t("components.cardElement.drawingElement") }}
-					</span>
-				</div>
-				<div class="last-updated">
-					<span
-						class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2 py-1 px-3"
-					>
-						{{ $t("components.cardElement.lastUpdatedAt") }}
-						{{ formattedLastUpdatedAt }}
-					</span>
-				</div>
-				<v-alert v-if="isTeacher" light text type="info" class="mb-0">
-					<div class="alert-text">
-						{{ $t("components.cardElement.notification.visibleAndEditable") }}
+	<div class="drawing-content-element-edit">
+		<div class="content-elements" @click="onOpenElement">
+			<div class="edit-image-mask rounded-mb" />
+			<v-img :src="imageSrc" class="hover-image" height="185px" cover />
+			<div class="menu">
+				<slot />
+			</div>
+			<v-list-item
+				class="edit-content-info px-0"
+				data-testid="drawing-element-edit"
+				:inactive="true"
+			>
+				<v-list-item-content class="py-0">
+					<div class="content py-2 px-3">
+						<v-icon
+							class="edit-icon grey--text text--darken-3"
+							data-testid="board-drawing-element-icon"
+							medium
+						>
+							$mdiPresentation
+						</v-icon>
+						<span
+							class="subtitle-1 board-subtitle d-inline-block text-truncate black--text text--darken-2"
+						>
+							{{ $t("components.cardElement.drawingElement") }}
+						</span>
 					</div>
-				</v-alert>
-			</v-list-item-content>
-		</v-list-item>
+					<div class="last-updated">
+						<span
+							class="subtitle-1 text-edit d-inline-block text-truncate black--text text--darken-2 py-1 px-3"
+						>
+							{{ $t("components.cardElement.lastUpdatedAt") }}
+							{{ formattedLastUpdatedAt }}
+						</span>
+					</div>
+				</v-list-item-content>
+			</v-list-item>
+		</div>
+		<v-alert
+			v-if="isTeacher"
+			light
+			text
+			type="info"
+			dismissible
+			:close-icon="mdiClose"
+			class="mb-0"
+		>
+			<div class="alert-text">
+				{{ $t("components.cardElement.notification.visibleAndEditable") }}
+			</div>
+		</v-alert>
 	</div>
 </template>
 
@@ -49,6 +59,7 @@ import { computed, defineComponent, ref } from "vue";
 import image from "@/assets/img/tldraw.png";
 import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
 import AuthModule from "@/store/auth";
+import { mdiClose } from "@mdi/js";
 
 export default defineComponent({
 	name: "DrawingContentElementEdit",
@@ -85,6 +96,7 @@ export default defineComponent({
 			formattedLastUpdatedAt,
 			onOpenElement,
 			isTeacher,
+			mdiClose,
 		};
 	},
 });
@@ -137,6 +149,10 @@ export default defineComponent({
 	.board-subtitle {
 		font-weight: 700;
 		margin-left: 10px;
+	}
+
+	.alert-text {
+		color: var(--v-black-base);
 	}
 }
 </style>
