@@ -8,7 +8,7 @@ import {
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createGlobalState } from "@vueuse/core";
+import { createTestableGlobaleState } from "@/utils/create-global-state";
 import { Ref, ref } from "vue";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
@@ -174,4 +174,4 @@ const fileStorageApi = () => {
 	};
 };
 
-export const useFileStorageApi = createGlobalState(fileStorageApi);
+export const useFileStorageApi = createTestableGlobaleState(fileStorageApi);
