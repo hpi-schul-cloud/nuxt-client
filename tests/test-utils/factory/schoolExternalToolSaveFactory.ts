@@ -7,4 +7,5 @@ export const schoolExternalToolSaveFactory =
 		schoolId: `school-${sequence}`,
 		version: 1,
 		parameters: [],
+		isDeactivated: false,
 	}));
