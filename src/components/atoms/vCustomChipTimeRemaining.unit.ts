@@ -18,7 +18,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 			},
 		});
 
-		return wrapper;
+		return { wrapper };
 	};
 
 	describe("time remaining hint hours", () => {
@@ -31,7 +31,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 		});
 
 		it("renders in long form", () => {
-			const wrapper = setup(dueDate);
+			const { wrapper } = setup(dueDate);
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
@@ -43,7 +43,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 		});
 
 		it("should render in shortened form", () => {
-			const wrapper = setup(dueDate, true);
+			const { wrapper } = setup(dueDate, true);
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
@@ -64,7 +64,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 		});
 
 		it("should render in long form", () => {
-			const wrapper = setup(dueDate);
+			const { wrapper } = setup(dueDate);
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
@@ -77,7 +77,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 		});
 
 		it("should render in shortened form", () => {
-			const wrapper = setup(dueDate, true);
+			const { wrapper } = setup(dueDate, true);
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"

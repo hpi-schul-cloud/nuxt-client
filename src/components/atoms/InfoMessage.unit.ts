@@ -12,12 +12,12 @@ describe("@/components/atoms/InfoMessage", () => {
 			props: { message: expectedMessage, type },
 		});
 
-		return wrapper;
+		return { wrapper };
 	};
 
 	it("shows the message", async () => {
 		const defaultType = "bc-info";
-		const wrapper = setup();
+		const { wrapper } = setup();
 
 		expect(wrapper.element.className).toContain(defaultType);
 		expect(wrapper.find("div.message").element.textContent?.trim()).toBe(
@@ -27,7 +27,7 @@ describe("@/components/atoms/InfoMessage", () => {
 
 	it("has correct styling class", async () => {
 		const expectedClass = "bc-error";
-		const wrapper = setup(expectedClass);
+		const { wrapper } = setup(expectedClass);
 
 		expect(wrapper.element.className).toContain(expectedClass);
 	});

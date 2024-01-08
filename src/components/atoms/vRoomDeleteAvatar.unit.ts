@@ -12,10 +12,10 @@ describe("vRoomDeleteAvatar", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
-		return wrapper;
+		return { wrapper };
 	};
 	it("should emit 'deleteAvatar' event when an element drops onto it", async () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const avatarComponent = wrapper.find(".delete-avatar");
 
 		avatarComponent.trigger("drop");
@@ -27,7 +27,7 @@ describe("vRoomDeleteAvatar", () => {
 	});
 
 	it("should change its class name while 'drag' events triggered", async () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const avatarComponent = wrapper.find(".delete-avatar");
 
 		expect(avatarComponent.element.className).not.toContain(

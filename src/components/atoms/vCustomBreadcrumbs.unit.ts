@@ -16,11 +16,11 @@ describe("@/components/atoms/vCustomBreadcrumbs", () => {
 			},
 		});
 
-		return wrapper;
+		return { wrapper };
 	};
 
 	it("should display title and has link", () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 
 		const breadcrumbsItem = wrapper.findComponent({
 			name: "v-breadcrumbs-item",

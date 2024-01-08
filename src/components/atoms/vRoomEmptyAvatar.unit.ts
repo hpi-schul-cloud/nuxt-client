@@ -16,11 +16,11 @@ describe("vRoomEmptyAvatar", () => {
 				size: "4em",
 			},
 		});
-		return wrapper;
+		return { wrapper };
 	};
 
 	it("should have the correct size prop", () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 		expect(avatarComponent).toBeTruthy();
@@ -28,22 +28,22 @@ describe("vRoomEmptyAvatar", () => {
 	});
 
 	it("should emit 'drop' event when an element drops onto it", async () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 		avatarComponent.trigger("drop");
-		await nextTick;
+		await nextTick();
 
 		expect(wrapper.emitted()).toHaveProperty("drop");
 	});
 
 	it("should change its class name while 'drag' events triggered", async () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 		expect(avatarComponent.element.className).not.toContain("hovered-avatar");
 
 		avatarComponent.trigger("dragenter");
-		await nextTick;
+		await nextTick();
 		expect(avatarComponent.element.className).toContain("hovered-avatar");
 
 		avatarComponent.trigger("dragleave");

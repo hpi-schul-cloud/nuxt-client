@@ -33,14 +33,14 @@ describe("vRoomAvatar", () => {
 				...optionalProps,
 			},
 		});
-		return wrapper;
+		return { wrapper };
 	};
 	beforeEach(() => {
 		window.location.pathname = "";
 	});
 
 	it("should display the title but NOT the date title", () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const labelElement = wrapper.find(".subtitle").element as HTMLElement;
 
 		expect(labelElement).toBeTruthy();
@@ -49,13 +49,13 @@ describe("vRoomAvatar", () => {
 	});
 
 	it("should NOT display the title", async () => {
-		const wrapper = setup({ condenseLayout: true });
+		const { wrapper } = setup({ condenseLayout: true });
 
 		expect(wrapper.find(".subtitle").exists()).toBeFalsy();
 	});
 
 	it("should display the short title", () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const shortLabelElement = wrapper.find(".single-avatar")
 			.element as HTMLElement;
 
@@ -64,21 +64,21 @@ describe("vRoomAvatar", () => {
 	});
 
 	it("should display the badge", async () => {
-		const wrapper = setup({ item: { ...mockData, notification: true } });
+		const { wrapper } = setup({ item: { ...mockData, notification: true } });
 		const badgeElement = wrapper.findComponent({ name: "VBadge" });
 
 		expect(badgeElement.props().modelValue).toBe(true);
 	});
 
 	it("should NOT display the badge", () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const badgeElement = wrapper.findComponent({ name: "VBadge" });
 
 		expect(badgeElement.props().modelValue).toBe(false);
 	});
 
 	it("should display the correct color and size", async () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 		expect(avatarComponent.props().color).toStrictEqual("#ffffff");
@@ -92,7 +92,7 @@ describe("vRoomAvatar", () => {
 		});
 		const locationSpy = jest.spyOn(window, "location", "set");
 
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 		await avatarComponent.trigger("click");
@@ -107,7 +107,7 @@ describe("vRoomAvatar", () => {
 		});
 		const locationSpy = jest.spyOn(window, "location", "set");
 
-		const wrapper = setup();
+		const { wrapper } = setup();
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 		await avatarComponent.trigger("keypress.enter");
@@ -121,7 +121,7 @@ describe("vRoomAvatar", () => {
 			get: () => createMock<Location>(),
 		});
 		const locationSpy = jest.spyOn(window, "location", "set");
-		const wrapper = setup({ condenseLayout: true });
+		const { wrapper } = setup({ condenseLayout: true });
 
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
@@ -145,7 +145,7 @@ describe("vRoomAvatar", () => {
 			},
 		};
 
-		const wrapper = setup(propData);
+		const { wrapper } = setup(propData);
 		const element = wrapper.find(".subtitle").element as HTMLElement;
 
 		expect(element).toBeTruthy();
@@ -155,7 +155,7 @@ describe("vRoomAvatar", () => {
 
 	describe("drag and drop", () => {
 		it("should emit 'dragStart' event when it started dragging", async () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 			const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 			await avatarComponent.trigger("dragstart");
@@ -167,7 +167,7 @@ describe("vRoomAvatar", () => {
 		});
 
 		it("should emit 'drop' event when an element dropped onto it", async () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 			const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 			await avatarComponent.trigger("drop");
@@ -176,7 +176,7 @@ describe("vRoomAvatar", () => {
 		});
 
 		it("should NOT emit 'dragStart' event if 'draggable' prop is set false", async () => {
-			const wrapper = setup({ draggable: false });
+			const { wrapper } = setup({ draggable: false });
 			const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 			await avatarComponent.trigger("dragstart");
@@ -186,7 +186,7 @@ describe("vRoomAvatar", () => {
 		});
 
 		it("should emit 'dragenter' event when draging over component", async () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 			const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 			await avatarComponent.trigger("dragenter");
@@ -195,7 +195,7 @@ describe("vRoomAvatar", () => {
 		});
 
 		it("should emit 'dragend' event when draging ended", async () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 			const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 			await avatarComponent.trigger("dragend");
@@ -221,7 +221,7 @@ describe("vRoomAvatar", () => {
 		};
 
 		it("should display info and not title", () => {
-			const wrapper = setup(longRunningCourseProps);
+			const { wrapper } = setup(longRunningCourseProps);
 
 			const element = wrapper.find(".subtitle").element as HTMLElement;
 
@@ -233,7 +233,7 @@ describe("vRoomAvatar", () => {
 		});
 
 		it("should display avatar in grey", () => {
-			const wrapper = setup(longRunningCourseProps);
+			const { wrapper } = setup(longRunningCourseProps);
 
 			const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
