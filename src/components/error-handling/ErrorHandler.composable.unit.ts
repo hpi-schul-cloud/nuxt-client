@@ -8,7 +8,7 @@ import { isAxiosError } from "axios";
 
 import { useErrorHandler } from "./ErrorHandler.composable";
 import { mountComposable } from "@@/tests/test-utils";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { notifierModule } from "@/store";
 
 jest.mock("axios");
@@ -20,12 +20,16 @@ let translationMap: Record<string, string> = {};
 
 const mountErrorComposable = () => {
 	return mountComposable(() => useErrorHandler(), {
-		[I18N_KEY.valueOf()]: {
-			t: (key: string) => key,
-			tc: (key: string) => key,
-			te: (key: string) => translationMap[key] !== undefined,
+		global: {
+			provide: {
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			},
+			mocks: {
+				t: (key: string) => key,
+				tc: (key: string) => key,
+				te: (key: string) => translationMap[key] !== undefined,
+			},
 		},
-		[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 	});
 };
 

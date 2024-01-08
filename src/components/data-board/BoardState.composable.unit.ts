@@ -72,7 +72,7 @@ describe("BoardState.composable", () => {
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
 
 		return mountComposable(() => useBoardState(boardId), {
-			notifierModule,
+			global: { provide: { notifierModule } },
 		});
 	};
 
