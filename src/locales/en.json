@@ -868,7 +868,7 @@
 	"components.cardElement.LinkElement.label": "Insert link address",
 	"components.cardElement.titleElement": "Title element",
 	"components.cardElement.lastUpdatedAt": "Edited by:",
-	"components.cardElement.notification.visibleAndEditable": "This whiteboard is visible and editable for each room member.",
+	"components.cardElement.notification.visibleAndEditable": "This whiteboard is visible and editable for all course participants.",
 	"components.cardElement.titleElement.placeholder": "Add title",
 	"components.cardElement.titleElement.validation.required": "Please enter a title.",
 	"components.cardElement.titleElement.validation.maxLength": "The title can only be {maxLength} characters long.",
