@@ -13,7 +13,6 @@ import { createMock } from "@golevelup/ts-jest";
 import { AxiosResponse } from "axios";
 import { setupFileStorageNotifier } from "../test-utils/fileStorageNotifier";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
-
 jest.mock("./FileStorageNotifications.composable");
 
 jest.mock("@/utils/helpers");
@@ -54,6 +53,60 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 describe("FileStorageApi Composable", () => {
 	afterEach(() => {
 		jest.resetAllMocks();
+	});
+
+	describe("getFileRecord", () => {
+		describe("when filerecords state is empty", () => {
+			const setup = () => {
+				const parentId = ObjectIdMock();
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				jest.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
+
+				setupFileStorageNotifier();
+
+				return {
+					parentId,
+				};
+			};
+
+			it("should create skeleton", async () => {
+				const { parentId } = setup();
+				const { getFileRecord } = useFileStorageApi();
+
+				const result = await getFileRecord(parentId);
+
+				expect(result.value).toEqual(undefined);
+			});
+		});
+
+		describe("when filerecord already exists", () => {
+			const setup = () => {
+				const parentId = ObjectIdMock();
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				jest.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
+
+				setupFileStorageNotifier();
+
+				const { getFileRecord } = useFileStorageApi();
+				const existingFileRecord = getFileRecord(parentId);
+
+				return {
+					parentId,
+					existingFileRecord,
+					getFileRecord,
+				};
+			};
+
+			it("should return skeleton", async () => {
+				const { parentId, existingFileRecord, getFileRecord } = setup();
+
+				const result = await getFileRecord(parentId);
+
+				expect(result).toBe(existingFileRecord);
+			});
+		});
 	});
 
 	describe("fetchFile", () => {
