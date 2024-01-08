@@ -3,14 +3,17 @@ export class SchoolExternalToolItem {
 
 	name: string;
 
-	status: string;
+	statusText: string;
 
-	outdated: boolean;
+	isOutdated: boolean;
+
+	isDeactivated: boolean;
 
 	constructor(props: SchoolExternalToolItem) {
 		this.id = props.id;
 		this.name = props.name;
-		this.status = props.status;
-		this.outdated = props.outdated;
+		this.statusText = props.statusText;
+		this.isOutdated = props.isOutdated;
+		this.isDeactivated = props.isDeactivated;
 	}
 }
