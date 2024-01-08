@@ -113,8 +113,8 @@ const selectionProps = computed(() => {
 
 const filteredValues = computed(() => {
 	if (!selectedFilterType.value) return;
-
-	return filterQuery.value[selectedFilterType.value];
+	return filterQuery.value[selectedFilterType.value] as string[] &
+		DateSelection;
 });
 
 const onCloseDialog = () => {
