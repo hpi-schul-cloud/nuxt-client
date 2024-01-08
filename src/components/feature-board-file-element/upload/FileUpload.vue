@@ -50,10 +50,8 @@ export default defineComponent({
 			}
 		});
 
-		const isUploading = computed(() => props.isUploading);
-
 		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-			if (fileWasPicked.value || isUploading.value) {
+			if (fileWasPicked.value || props.isUploading) {
 				// Opens confirmation dialog in firefox
 				event.preventDefault();
 				// Opens confirmation dialog in chrome
