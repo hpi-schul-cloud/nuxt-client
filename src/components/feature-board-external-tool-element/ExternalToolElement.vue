@@ -43,8 +43,9 @@
 			/>
 		</div>
 		<ExternalToolElementAlert
+			:toolDisplayName="toolDisplayName"
 			:error="error"
-			:tool-outdated-status="toolOutdatedStatus"
+			:tool-status="toolConfigurationStatus"
 			data-testid="board-external-tool-element-alert"
 		/>
 		<ExternalToolElementConfigurationDialog
@@ -148,12 +149,13 @@ export default defineComponent({
 				!!displayData.value?.status.isOutdatedOnScopeContext
 		);
 
-		const toolOutdatedStatus: ComputedRef<ContextExternalToolConfigurationStatus> =
+		const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatus> =
 			computed(() => {
 				return (
 					displayData.value?.status ?? {
 						isOutdatedOnScopeSchool: false,
 						isOutdatedOnScopeContext: false,
+						isDeactivated: false,
 					}
 				);
 			});
@@ -227,7 +229,7 @@ export default defineComponent({
 			isLoading,
 			isToolOutdated,
 			isConfigurationDialogOpen,
-			toolOutdatedStatus,
+			toolConfigurationStatus,
 			mdiPuzzleOutline,
 			onMoveElementDown,
 			onMoveElementUp,
