@@ -3,7 +3,7 @@
 		class="mr-2"
 		:date="dateSelection.$gte"
 		:label="t('utils.adminFilter.date.label.from')"
-		@update:date="onUpdateDate($event, 'from')"
+		@update:date="onUpdateDate($event, '$gte')"
 		data-testid="date-picker-from"
 	/>
 
@@ -11,7 +11,7 @@
 		class="mr-2"
 		:date="dateSelection.$lte"
 		:label="t('utils.adminFilter.date.label.until')"
-		@update:date="onUpdateDate($event, 'until')"
+		@update:date="onUpdateDate($event, '$lte')"
 		data-testid="date-picker-until"
 	/>
 
@@ -49,9 +49,8 @@ const dateSelection = ref<DateSelection>({
 
 const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 
-const onUpdateDate = (date: string, fromUntil: string) => {
-	if (fromUntil == "from") dateSelection.value.$gte = date;
-	if (fromUntil == "until") dateSelection.value.$lte = date;
+const onUpdateDate = (date: string, fromUntil: "$gte" | "$lte") => {
+	dateSelection.value[fromUntil] = date;
 };
 
 const onUpdateFilter = () => {
