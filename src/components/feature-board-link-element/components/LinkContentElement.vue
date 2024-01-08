@@ -17,17 +17,17 @@
 			:imageUrl="computedElement.content.imageUrl"
 			:isLoading="isLoading"
 			:isEditMode="isEditMode"
-			><BoardMenu scope="element" v-on="{ [MenuEvent.DELETE]: onDelete }">
+			><BoardMenu scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete />
+				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
 		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
-			><BoardMenu scope="element" v-on="{ [MenuEvent.DELETE]: onDelete }">
+			><BoardMenu scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete />
+				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementCreate>
 	</v-card>
@@ -45,7 +45,6 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
-	MenuEvent,
 } from "@ui-board";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import { ensureProtocolIncluded } from "../util/url.util";
@@ -127,7 +126,12 @@ export default defineComponent({
 
 		const onMoveUp = () => emit("move-up:edit");
 
-		const onDelete = () => emit("delete:element", element.value.id);
+		const onDelete = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:element", element.value.id);
+			}
+		};
 
 		return {
 			computedElement,
@@ -141,7 +145,6 @@ export default defineComponent({
 			onMoveDown,
 			onMoveUp,
 			onDelete,
-			MenuEvent,
 		};
 	},
 });

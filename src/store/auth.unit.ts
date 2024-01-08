@@ -185,9 +185,9 @@ describe("auth store module", () => {
 			it("should return the school state", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "";
-				schoolsModule.school._id = "test-school-id";
+				schoolsModule.school.id = "test-school-id";
 				schoolsModule.school.name = "test school";
-				expect(authModule.getSchool._id).toStrictEqual("test-school-id");
+				expect(authModule.getSchool.id).toStrictEqual("test-school-id");
 				expect(authModule.getSchool.name).toStrictEqual("test school");
 			});
 		});
@@ -353,21 +353,31 @@ describe("auth store module", () => {
 		});
 
 		describe("logout", () => {
-			const mockReplace = jest.fn();
-			window.location.replace = mockReplace;
+			const setup = () => {
+				const authModule = new AuthModule({});
+
+				axiosInitializer({
+					data: defaultUserData,
+				});
+
+				const mockReplace = jest.fn();
+				Object.defineProperty(window, "location", {
+					configurable: true,
+					value: { replace: mockReplace },
+				});
+
+				return { authModule, mockReplace };
+			};
 
 			describe("when logout action is called", () => {
 				it("should replace the window.location", () => {
-					axiosInitializer({
-						data: defaultUserData,
-					});
-					const authModule = new AuthModule({});
-					authModule.logout();
-					expect(mockReplace).toHaveBeenCalledWith("/logout");
+					const { authModule, mockReplace } = setup();
 
-					jest.clearAllMocks();
+					authModule.logout();
+					expect(mockReplace).toHaveBeenLastCalledWith("/logout");
+
 					authModule.logout("/to_another_path");
-					expect(mockReplace).toHaveBeenCalledWith("/to_another_path");
+					expect(mockReplace).toHaveBeenLastCalledWith("/to_another_path");
 				});
 			});
 		});

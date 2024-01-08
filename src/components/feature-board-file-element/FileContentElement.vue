@@ -20,14 +20,10 @@
 			@update:caption="onUpdateCaption"
 			@add:alert="onAddAlert"
 		>
-			<BoardMenu
-				scope="element"
-				v-if="isEditMode"
-				v-on="{ [MenuEvent.DELETE]: onDelete }"
-			>
+			<BoardMenu scope="element" v-if="isEditMode">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete :name="fileProperties.name" />
+				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
 			</BoardMenu>
 		</FileContent>
 		<FileUpload
@@ -36,10 +32,10 @@
 			:isEditMode="isEditMode"
 			@upload:file="onUploadFile"
 		>
-			<BoardMenu scope="element" v-on="{ [MenuEvent.DELETE]: onDelete }">
+			<BoardMenu scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete />
+				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>
 	</v-card>
@@ -59,7 +55,6 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
-	MenuEvent,
 } from "@ui-board";
 import {
 	computed,
@@ -177,7 +172,14 @@ export default defineComponent({
 		const onAddAlert = (alert: FileAlert) => {
 			addAlert(alert);
 		};
-		const onDelete = () => emit("delete:element", element.value.id);
+
+		const onDelete = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:element", element.value.id);
+			}
+		};
+
 		const onMoveUp = () => emit("move-up:edit");
 		const onMoveDown = () => emit("move-down:edit");
 
@@ -198,7 +200,6 @@ export default defineComponent({
 			onDelete,
 			onMoveUp,
 			onMoveDown,
-			MenuEvent,
 		};
 	},
 });

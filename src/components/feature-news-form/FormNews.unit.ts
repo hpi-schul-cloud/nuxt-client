@@ -1,6 +1,4 @@
-import Vue from "vue";
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount } from "@vue/test-utils";
 import FormNews from "./FormNews.vue";
 import { notifierModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
@@ -8,7 +6,11 @@ import NotifierModule from "@/store/notifier";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import dayjs from "dayjs";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { I18N_KEY } from "@/utils/inject";
+import { createStore } from "vuex";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 const testDate = dayjs("2022-07-05T09:00:00.000Z");
 
@@ -24,42 +26,44 @@ const testNews: News = {
 	displayAt: `${testDate.toISOString()}`,
 };
 
-describe("FormNews", () => {
-	let wrapper: Wrapper<Vue>;
-
-	const setup = (news: News) => {
-		wrapper = mount(FormNews as MountOptions<Vue>, {
-			...createComponentMocks({
-				$route: {
-					name: "news-id",
-					params: {
-						id: "randomId",
-					},
-					query: {},
-				},
-				i18n: true,
-				user: true,
-				stubs: {
-					BaseInput: true,
-				},
-				store: {
-					news: {
-						state: "",
-						mutations: {},
-						actions: {},
-						getters: {
-							getStatus: () => "completed",
-						},
-					},
-				},
-			}),
-			propsData: {
-				news: news,
+const $store = createStore({
+	modules: {
+		news: {
+			state: "",
+			mutations: {},
+			actions: {},
+			getters: {
+				getStatus: () => "completed",
 			},
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+		},
+	},
+});
+
+const $route = {
+	name: "news-id",
+	params: {
+		id: "randomId",
+	},
+	query: {},
+};
+
+describe("FormNews", () => {
+	const setup = (news: News) => {
+		const wrapper = mount(FormNews, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$route,
+					$store,
+				},
+				stubs: ["base-input", "base-dialog"],
+			},
+			props: {
+				news,
 			},
 		});
+
+		return { wrapper };
 	};
 
 	beforeEach(() => {
@@ -70,46 +74,42 @@ describe("FormNews", () => {
 	});
 
 	it("should render component", () => {
-		setup(testNews);
+		const { wrapper } = setup(testNews);
 		expect(wrapper.findComponent(FormNews).exists()).toBe(true);
 	});
 
 	it("passes date and time to input fields", async () => {
-		setup(testNews);
+		const { wrapper } = setup(testNews);
 
 		const dateInput = wrapper.find('[data-testid="news_date"]');
-		expect(dateInput.attributes("vmodel")).toStrictEqual(
+
+		expect(dateInput.attributes("modelvalue")).toStrictEqual(
 			testDate.format(DATETIME_FORMAT.inputDate)
 		);
 
 		const timeInput = wrapper.find('[data-testid="news_time"]');
-		expect(timeInput.attributes("vmodel")).toStrictEqual(
+		expect(timeInput.attributes("modelvalue")).toStrictEqual(
 			testDate.format(DATETIME_FORMAT.inputTime)
 		);
 	});
 
 	describe("save", () => {
 		it("emits save event on submit with correct payload", async () => {
-			setup({ ...testNews });
+			const { wrapper } = setup({ ...testNews });
 
 			wrapper.find("form").trigger("submit");
 			await wrapper.vm.$nextTick();
 
-			const emitted = wrapper.emitted();
-			expect(emitted["save"]).toHaveLength(1);
+			expect(wrapper.emitted()).toHaveProperty("save");
 
-			if (emitted["save"] === undefined) {
-				throw new Error("Emitted should be defined");
-			}
-
-			const saveEventPayload = emitted["save"][0][0];
+			const saveEventPayload = wrapper.emitted("save")?.at(0)?.[0];
 			expect(saveEventPayload).toMatchObject(testNews);
 		});
 
 		it("shows validation error on empty title", async () => {
 			const notifierMock = jest.spyOn(notifierModule, "show");
 
-			setup({ ...testNews, title: "" });
+			const { wrapper } = setup({ ...testNews, title: "" });
 
 			wrapper.find("form").trigger("submit");
 			expect(notifierMock).toHaveBeenCalled();
@@ -119,7 +119,7 @@ describe("FormNews", () => {
 		it("shows validation error on empty content", async () => {
 			const notifierMock = jest.spyOn(notifierModule, "show");
 
-			setup({ ...testNews, content: "" });
+			const { wrapper } = setup({ ...testNews, content: "" });
 
 			wrapper.find("form").trigger("submit");
 			expect(notifierMock).toHaveBeenCalled();
@@ -127,7 +127,7 @@ describe("FormNews", () => {
 		});
 
 		it("does not emit save event on empty title", async () => {
-			setup({ ...testNews, title: "" });
+			const { wrapper } = setup({ ...testNews, title: "" });
 
 			wrapper.find("form").trigger("submit");
 
@@ -136,7 +136,7 @@ describe("FormNews", () => {
 		});
 
 		it("does not emit save event on empty content", async () => {
-			setup({ ...testNews, content: "" });
+			const { wrapper } = setup({ ...testNews, content: "" });
 
 			wrapper.find("form").trigger("submit");
 

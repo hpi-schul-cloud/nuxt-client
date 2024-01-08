@@ -13,6 +13,7 @@ import SystemsModule from "@/store/systems";
 import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
+import NewsModule from "@/store/news";
 import { InjectionKey } from "vue";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
@@ -43,3 +44,4 @@ export const TERMS_OF_USE_MODULE_KEY: InjectionKey<TermsOfUseModule> =
 	Symbol("termsOfUseModule");
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
 	Symbol("schoolsModule");
+export const NEWS_MODULE_KEY: InjectionKey<NewsModule> = Symbol("newsModule");

@@ -1,29 +1,21 @@
-import { shallowMount } from "@vue/test-utils";
-import { defineComponent, provide } from "vue";
+import { mount } from "@vue/test-utils";
 
 export const mountComposable = <T>(
 	composable: () => T,
 	providers: Record<string | symbol, unknown> = {}
 ): T => {
-	const ParentComponent = defineComponent({
-		setup() {
-			for (const [key, mockFn] of Object.entries(providers)) {
-				provide(key, mockFn);
-			}
-		},
-		provide: providers,
-	});
-
 	const TestComponent = {
-		template: "<div></div>",
-	};
-
-	const wrapper = shallowMount(TestComponent, {
 		setup() {
 			const result = composable();
 			return { result };
 		},
-		parentComponent: ParentComponent,
+		template: "<div></div>",
+	};
+
+	const wrapper = mount(TestComponent, {
+		global: {
+			provide: providers,
+		},
 	});
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore

@@ -59,7 +59,7 @@
 					"
 					:items="federalState.counties"
 					item-title="name"
-					item-value="_id"
+					item-value="id"
 					return-object
 					:disabled="!!localSchool.county"
 					:hint="
@@ -293,9 +293,9 @@ export default {
 			if (
 				!this.school.county &&
 				this.localSchool.county &&
-				this.localSchool.county._id
+				this.localSchool.county.id
 			) {
-				updatedSchool.county = this.localSchool.county._id;
+				updatedSchool.county = this.localSchool.county.id;
 			}
 
 			updatedSchool.logo_dataUrl =

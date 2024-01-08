@@ -68,7 +68,7 @@
 					v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
 					type="warning"
 					:due-date="task.dueDate"
-					:shorten-unit="$vuetify.display.xsOnly"
+					:shorten-unit="$vuetify.display.xs"
 				/>
 			</div>
 		</v-card-text>

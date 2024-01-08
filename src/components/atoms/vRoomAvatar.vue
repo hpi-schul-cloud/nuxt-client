@@ -25,7 +25,6 @@
 				:size="size"
 				:tabindex="condenseLayout ? '-1' : '0'"
 				@click="onClick"
-				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 				@keypress.enter="onClick"
 				role="button"
@@ -72,7 +71,6 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			hovered: false,
 			isDragging: false,
 			mdiLock,
 		};
@@ -157,11 +155,7 @@ export default defineComponent({
 				this.$emit("startDrag", this.item);
 			}
 		},
-		dragLeave() {
-			this.hovered = false;
-		},
 		dragEnter() {
-			this.hovered = true;
 			this.isDragging = false;
 		},
 		dragend() {
