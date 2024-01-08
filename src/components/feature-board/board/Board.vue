@@ -181,41 +181,45 @@ export default defineComponent({
 			columnId: string,
 			keyString: DragAndDropKey
 		) => {
+			if (!hasMovePermission && !horizontalCursorKeys.includes(keyString)) {
+				return;
+			}
+
 			const columnMove: ColumnMove = {
 				addedIndex: -1,
 				removedIndex: columnIndex,
 				payload: columnId,
 			};
 
-			if (horizontalCursorKeys.includes(keyString)) {
-				const change = keyString === "ArrowLeft" ? -1 : +1;
-				columnMove.addedIndex = columnIndex + change;
-				if (hasMovePermission) await moveColumn(columnMove);
-			}
+			const change = keyString === "ArrowLeft" ? -1 : +1;
+			columnMove.addedIndex = columnIndex + change;
+			await moveColumn(columnMove);
 		};
 
 		const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
+			if (!hasMovePermission) return;
+
 			const columnMove: ColumnMove = {
 				addedIndex: -1,
 				removedIndex: columnIndex,
 				payload: columnId,
 			};
-			if (hasMovePermission) {
-				columnMove.addedIndex = columnIndex - 1;
-				await moveColumn(columnMove);
-			}
+
+			columnMove.addedIndex = columnIndex - 1;
+			await moveColumn(columnMove);
 		};
 
 		const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
+			if (!hasMovePermission) return;
+
 			const columnMove: ColumnMove = {
 				addedIndex: -1,
 				removedIndex: columnIndex,
 				payload: columnId,
 			};
-			if (hasMovePermission) {
-				columnMove.addedIndex = columnIndex + 1;
-				await moveColumn(columnMove);
-			}
+
+			columnMove.addedIndex = columnIndex + 1;
+			await moveColumn(columnMove);
 		};
 
 		const onReloadBoard = async () => {
