@@ -22,14 +22,21 @@
 					{{ formattedLastUpdatedAt }}
 				</span>
 			</div>
+			<v-alert v-if="isTeacher" light text type="info" class="mb-0">
+				<div class="alert-text">
+					{{ $t("components.cardElement.notification.visibleAndEditable") }}
+				</div>
+			</v-alert>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import image from "@/assets/img/tldraw.png";
 import dayjs from "dayjs";
+import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
+import AuthModule from "@/store/auth";
 export default defineComponent({
 	name: "DrawingContentElementDisplay",
 	props: {
@@ -40,6 +47,8 @@ export default defineComponent({
 		docName: { type: String, required: true },
 	},
 	setup(props, { emit }) {
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+		const userRoles = ref(authModule.getUserRoles);
 		const imageSrc = image;
 
 		const openElement = () => {
@@ -52,10 +61,15 @@ export default defineComponent({
 			return dayjs(props.lastUpdatedAt).format("DD.MM HH:mm");
 		});
 
+		const isTeacher = computed(() => {
+			return userRoles.value.includes("teacher");
+		});
+
 		return {
 			openElement,
 			imageSrc,
 			formattedLastUpdatedAt,
+			isTeacher,
 		};
 	},
 });

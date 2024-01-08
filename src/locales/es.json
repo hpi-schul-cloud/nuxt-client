@@ -878,6 +878,7 @@
 	"components.cardElement.LinkElement.label": "Inserte la dirección del enlace",
 	"components.cardElement.titleElement": "Elemento título",
 	"components.cardElement.lastUpdatedAt": "Editado:",
+	"components.cardElement.notification.visibleAndEditable": "Esta pizarra es visible y editable para cada miembro de la sala.",
 	"components.cardElement.titleElement.placeholder": "Añadir título",
 	"components.cardElement.titleElement.validation.required": "Por favor ingrese un título.",
 	"components.cardElement.titleElement.validation.maxLength": "El título solo puede tener {maxLength} caracteres.",
