@@ -8,8 +8,6 @@ import { useFileStorageApi } from "@feature-board-file-element";
 export const usePreviewGenerator = (elementId: string) => {
 	const { getFileRecord, uploadFromUrl } = useFileStorageApi();
 
-	const fileRecord = getFileRecord(elementId);
-
 	const createPreviewImage = async (
 		externalImageUrl: string
 	): Promise<string | undefined> => {
@@ -18,6 +16,8 @@ export const usePreviewGenerator = (elementId: string) => {
 			elementId,
 			FileRecordParentType.BOARDNODES
 		);
+
+		const fileRecord = getFileRecord(elementId);
 
 		if (
 			fileRecord.value?.previewStatus &&
