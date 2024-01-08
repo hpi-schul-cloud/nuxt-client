@@ -1,22 +1,19 @@
-import { mount } from "@vue/test-utils";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { DefineComponent, defineComponent } from "vue";
 
 export const mountComposable = <T>(
 	composable: () => T,
-	providers: Record<string | symbol, unknown> = {}
+	options?: ComponentMountingOptions<DefineComponent>
 ): T => {
-	const TestComponent = {
+	const TestComponent = defineComponent({
 		setup() {
 			const result = composable();
 			return { result };
 		},
 		template: "<div></div>",
-	};
-
-	const wrapper = mount(TestComponent, {
-		global: {
-			provide: providers,
-		},
 	});
+
+	const wrapper = mount(TestComponent, options);
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	return wrapper.vm.result;

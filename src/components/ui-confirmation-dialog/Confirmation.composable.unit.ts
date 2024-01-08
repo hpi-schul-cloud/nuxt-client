@@ -8,7 +8,9 @@ describe("Confirmation composable", () => {
 			const { askConfirmation, isDialogOpen } = mountComposable(
 				() => useConfirmationDialog(),
 				{
-					[I18N_KEY.valueOf()]: { t: (k: string) => k },
+					global: {
+						mocks: { t: (k: string) => k },
+					},
 				}
 			);
 

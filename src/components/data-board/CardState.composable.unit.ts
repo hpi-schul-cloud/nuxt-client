@@ -8,7 +8,7 @@ import { BoardCard } from "@/types/board/Card";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { axiosErrorFactory } from "@@/tests/test-utils";
 import {
@@ -33,8 +33,12 @@ const emitMock = jest.fn();
 
 const setup = (cardId = "123123", emitFn = emitMock) => {
 	return mountComposable(() => useCardState(cardId, emitFn), {
-		[I18N_KEY.valueOf()]: { t: (key: string) => key },
-		[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+		global: {
+			provide: {
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			},
+			mocks: { t: (key: string) => key },
+		},
 	});
 };
 

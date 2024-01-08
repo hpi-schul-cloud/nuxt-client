@@ -1,4 +1,3 @@
-import { I18N_KEY } from "@/utils/inject";
 import { i18nMock } from "@@/tests/test-utils";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -40,9 +39,7 @@ describe("BoardPageInformation.composable", () => {
 
 			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(
 				() => useSharedBoardPageInformation(),
-				{
-					[I18N_KEY.valueOf()]: i18nMock,
-				}
+				{ global: { mocks: i18nMock } }
 			);
 
 			return { createPageInformation, breadcrumbs, pageTitle };
@@ -75,9 +72,7 @@ describe("BoardPageInformation.composable", () => {
 
 			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(
 				() => useSharedBoardPageInformation(),
-				{
-					[I18N_KEY.valueOf()]: i18nMock,
-				}
+				{ global: { mocks: i18nMock } }
 			);
 
 			return { createPageInformation, breadcrumbs, pageTitle };

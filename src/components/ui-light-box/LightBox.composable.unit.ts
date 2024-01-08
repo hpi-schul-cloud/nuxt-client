@@ -17,7 +17,7 @@ describe("LightBox composable", () => {
 	describe("useLightBox", () => {
 		const setup = () => {
 			const { open, isLightBoxOpen } = mountComposable(() => useLightBox(), {
-				[I18N_KEY.valueOf()]: { t: (k: string) => k },
+				global: { mocks: { t: (k: string) => k } },
 			});
 
 			return {
@@ -55,7 +55,7 @@ describe("LightBox composable", () => {
 		const setup = () => {
 			const { close, isLightBoxOpen, lightBoxOptions, openInternal } =
 				mountComposable(() => useInternalLightBox(), {
-					[I18N_KEY.valueOf()]: { t: (k: string) => k },
+					global: { mocks: { t: (k: string) => k } },
 				});
 
 			return {

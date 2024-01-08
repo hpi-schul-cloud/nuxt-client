@@ -26,9 +26,7 @@ describe("DeleteConfirmation composable", () => {
 
 			const { askDeleteConfirmation } = mountComposable(
 				() => useDeleteConfirmationDialog(),
-				{
-					[I18N_KEY.valueOf()]: { t: translateMock },
-				}
+				{ global: { mocks: { t: translateMock } } }
 			);
 
 			return {
