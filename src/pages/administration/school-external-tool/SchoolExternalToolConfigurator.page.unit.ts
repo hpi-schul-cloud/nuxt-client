@@ -208,6 +208,7 @@ describe("SchoolExternalToolConfigurator", () => {
 				).toHaveBeenCalledWith<[SchoolExternalToolSave]>({
 					toolId: template.externalToolId,
 					version: template.version,
+					isDeactivated: template.isDeactivated,
 					parameters: [
 						{
 							name: template.parameters[0].name,
@@ -298,6 +299,7 @@ describe("SchoolExternalToolConfigurator", () => {
 						version: template.version,
 						parameters: [],
 						schoolId,
+						isDeactivated: template.isDeactivated,
 					},
 				});
 			});

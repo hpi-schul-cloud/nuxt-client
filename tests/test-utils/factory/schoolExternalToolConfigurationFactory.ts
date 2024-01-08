@@ -6,5 +6,6 @@ export const schoolToolConfigurationStatusFactory =
 		return {
 			isOutdatedOnScopeContext: false,
 			isOutdatedOnScopeSchool: false,
+			isDeactivated: false,
 		};
 	});
