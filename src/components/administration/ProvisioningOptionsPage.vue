@@ -208,19 +208,13 @@ export default defineComponent({
 
 		const newlyTurnedOffOptions: ComputedRef<ProvisioningOptionsEnum[]> =
 			computed(() => {
-				const list: ProvisioningOptionsEnum[] = [];
+				const options: ProvisioningOptionsEnum[] = Object.values(
+					ProvisioningOptionsEnum
+				);
 
-				for (const option of [
-					ProvisioningOptionsEnum.CLASS,
-					ProvisioningOptionsEnum.COURSE,
-					ProvisioningOptionsEnum.OTHERS,
-				]) {
-					if (wasOptionTurnedOff(option)) {
-						list.push(option);
-					}
-				}
-
-				return list;
+				return options.filter((option: ProvisioningOptionsEnum): boolean =>
+					wasOptionTurnedOff(option)
+				);
 			});
 
 		const translateProvisioningOption = (option: ProvisioningOptionsEnum) => {

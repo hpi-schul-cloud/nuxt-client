@@ -210,7 +210,7 @@ export default {
 			);
 		},
 		isRemovable(system) {
-			return system.ldapConfig?.provider === "general" ?? false;
+			return system.ldapConfig?.provider === "general";
 		},
 		redirectTo(system) {
 			if (system.alias === "SANIS") {
