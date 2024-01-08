@@ -16,11 +16,11 @@
 				</room-card-chip>
 				<room-card-chip
 					v-if="isToolIncomplete"
-				data-testId="tool-card-status-incomplete"
-				>{{ t("pages.rooms.tools.incomplete") }}
-			</room-card-chip>
-			<room-card-chip
-				v-if="isToolOutdated"
+					data-testId="tool-card-status-incomplete"
+					>{{ t("pages.rooms.tools.incomplete") }}
+				</room-card-chip>
+				<room-card-chip
+					v-if="isToolOutdated"
 					data-testId="tool-card-status-outdated"
 				>
 					{{ t("pages.rooms.tools.outdated") }}
@@ -133,8 +133,8 @@ export default defineComponent({
 
 		const isToolLaunchable = computed(() => {
 			return (
-				!isToolOutdated.value ||
-				!isToolDeactivated.value ||
+				!isToolOutdated.value &&
+				!isToolDeactivated.value &&
 				!isToolIncomplete.value
 			);
 		});
