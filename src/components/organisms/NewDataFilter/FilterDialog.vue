@@ -2,16 +2,16 @@
 	<v-dialog
 		ref="dialog"
 		:model-value="isOpen"
-		:max-width="size"
+		:max-width="defaultSize"
 		@keydown.esc="onClose"
 		@click:outside="onClose"
 	>
 		<v-card class="menu-text">
 			<div class="d-flex justify-center mt-4 text-h4">
-				<slot name="title">{{ "" }}</slot>
+				<slot name="title" />
 			</div>
 			<v-card-text class="text--primary">
-				<slot name="content">_</slot>
+				<slot name="content" />
 			</v-card-text>
 		</v-card>
 	</v-dialog>
@@ -20,13 +20,11 @@
 <script setup lang="ts">
 defineProps({
 	isOpen: Boolean,
-	size: {
-		type: Number,
-		default: 480,
-	},
 });
 
-const emit = defineEmits(["dialog-closed", "remove:filter"]);
+const defaultSize = 480;
+
+const emit = defineEmits(["dialog-closed"]);
 
 const onClose = () => {
 	emit("dialog-closed", false);
