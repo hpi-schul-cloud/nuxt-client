@@ -195,7 +195,9 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import { useRouter } from "vue-router";
-import { SchoolYearQueryType } from "@/serverApi/v3";
+import { ClassRequestContext, SchoolYearQueryType } from "@/serverApi/v3";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
 
 type Tab = "current" | "next" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -243,6 +245,8 @@ export default defineComponent({
 			},
 		]);
 
+		useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
+
 		const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(
 			() => {
 				switch (props.tab) {
@@ -267,7 +271,10 @@ export default defineComponent({
 		);
 
 		const onTabsChange = async (tab: string) => {
-			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
+			await groupModule.loadClassesForSchool({
+				schoolYearQuery: schoolYearQueryType.value,
+				calledFrom: ClassRequestContext.ClassOverview,
+			});
 
 			await router.replace({
 				query: { ...router.currentRoute.value.query, tab },
@@ -367,7 +374,10 @@ export default defineComponent({
 				fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
 			groupModule.setSortOrder(sortOrder);
 
-			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
+			await groupModule.loadClassesForSchool({
+				schoolYearQuery: schoolYearQueryType.value,
+				calledFrom: ClassRequestContext.ClassOverview,
+			});
 		};
 
 		const onUpdateCurrentPage = async (currentPage: number) => {
@@ -375,12 +385,18 @@ export default defineComponent({
 			const skip = (currentPage - 1) * groupModule.getPagination.limit;
 			groupModule.setPagination({ ...pagination.value, skip });
 
-			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
+			await groupModule.loadClassesForSchool({
+				schoolYearQuery: schoolYearQueryType.value,
+				calledFrom: ClassRequestContext.ClassOverview,
+			});
 		};
 		const onUpdateItemsPerPage = async (itemsPerPage: number) => {
 			groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
 
-			await groupModule.loadClassesForSchool(schoolYearQueryType.value);
+			await groupModule.loadClassesForSchool({
+				schoolYearQuery: schoolYearQueryType.value,
+				calledFrom: ClassRequestContext.ClassOverview,
+			});
 		};
 
 		onMounted(() => {
