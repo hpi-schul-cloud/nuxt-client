@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts">
-import EmptyState from "@/components/molecules/EmptyState.vue";
+import EmptyState from "@/components/lern-store/EmptyState.vue";
 import { RenderHTML } from "@feature-render-html";
 
 export default {

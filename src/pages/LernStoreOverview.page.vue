@@ -100,15 +100,15 @@
 </template>
 
 <script>
-import { contentModule, notifierModule } from "@/store";
-import ContentCard from "@/components/organisms/ContentCard";
-import ContentEmptyState from "@/components/molecules/ContentEmptyState";
-import infiniteScrolling from "@/mixins/infiniteScrolling";
-import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
-import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
-import ContentInitialState from "@/components/molecules/ContentInitialState";
 import { mdiChevronLeft, mdiMagnify, mdiClose } from "@mdi/js";
+import { contentModule, notifierModule } from "@/store";
+import infiniteScrolling from "@/mixins/infiniteScrolling";
 import { buildPageTitle } from "@/utils/pageTitle";
+import ContentCard from "@/components/lern-store/ContentCard";
+import ContentEmptyState from "@/components/lern-store/ContentEmptyState";
+import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
+import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter";
+import ContentInitialState from "@/components/lern-store/ContentInitialState";
 
 export default {
 	components: {
@@ -166,6 +166,7 @@ export default {
 			return this.loading;
 		},
 		searchQuery(to, from) {
+			console.log(from, to);
 			if (this.$options.debounce) {
 				clearInterval(this.$options.debounce);
 			}
@@ -221,8 +222,10 @@ export default {
 		},
 		async searchContent() {
 			try {
+				console.log("searching");
 				await contentModule.getResources(this.query);
 			} catch (error) {
+				console.log(error);
 				notifierModule.show({
 					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
 					status: "error",

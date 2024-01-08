@@ -50,9 +50,9 @@
 
 <script>
 import { contentModule } from "@/store";
-import AddContentModal from "@/components/molecules/AddContentModal";
-import NotificationModal from "@/components/molecules/NotificationModal";
-import LoadingModal from "@/components/molecules/LoadingModal";
+import AddContentModal from "@/components/lern-store/AddContentModal";
+import NotificationModal from "@/components/lern-store/NotificationModal";
+import LoadingModal from "@/components/lern-store/LoadingModal";
 import { mdiPlusCircleOutline } from "@mdi/js";
 import {
 	getMerlinReference,
