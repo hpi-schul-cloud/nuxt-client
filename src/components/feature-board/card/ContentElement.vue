@@ -13,7 +13,7 @@ import {
 import { computed, defineComponent, provide } from "vue";
 
 export default defineComponent({
-	name: "BoardMenuActionEdit",
+	name: "ContentElement",
 	props: {
 		elementCount: { type: Number, required: true },
 		index: { type: Number, required: false },
