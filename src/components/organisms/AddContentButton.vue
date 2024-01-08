@@ -114,7 +114,7 @@ export default {
 				? getMetadataAttribute(
 						this.resource.properties,
 						"ccm:replicationsourceuuid"
-				  )
+					)
 				: null;
 		},
 		title() {

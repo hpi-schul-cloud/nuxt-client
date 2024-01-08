@@ -24,20 +24,18 @@ describe("SchoolSettingsPage", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
 
 	const mockFederalState: FederalState = {
-		_id: "00001234597947823",
+		id: "00001234597947823",
 		counties: [
 			{
-				antaresKey: "BRB",
-				_id: "00001234597998793",
 				id: "00001234597998793",
-				countyId: "12051",
+				antaresKey: "BRB",
+				countyId: 12051,
 				name: "Brandenburg an der Havel",
 			},
 			{
-				antaresKey: "CB",
-				_id: "00001234597913216",
 				id: "00001234597913216",
-				countyId: "12052",
+				antaresKey: "CB",
+				countyId: 12052,
 				name: "Cottbus",
 			},
 		],
@@ -62,7 +60,7 @@ describe("SchoolSettingsPage", () => {
 			getFederalState: mockFederalState,
 			getSystems: mockSystems,
 			getCurrentYear: {
-				_id: "123",
+				id: "123",
 				name: "School Year 3000",
 				startDate: "",
 				endDate: "",
@@ -181,12 +179,10 @@ describe("SchoolSettingsPage", () => {
 
 	it("should load needed data from server", async () => {
 		const fetchSystemsSpy = jest.spyOn(schoolsModule, "fetchSystems");
-		const fetchFederalStateSpy = jest.spyOn(schoolsModule, "fetchFederalState");
 
 		const wrapper = setup();
 		await wrapper.vm.$nextTick();
 
 		expect(fetchSystemsSpy).toHaveBeenCalled();
-		expect(fetchFederalStateSpy).toHaveBeenCalled();
 	});
 });

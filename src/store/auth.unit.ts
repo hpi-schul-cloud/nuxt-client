@@ -185,9 +185,9 @@ describe("auth store module", () => {
 			it("should return the school state", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "";
-				schoolsModule.school._id = "test-school-id";
+				schoolsModule.school.id = "test-school-id";
 				schoolsModule.school.name = "test school";
-				expect(authModule.getSchool._id).toStrictEqual("test-school-id");
+				expect(authModule.getSchool.id).toStrictEqual("test-school-id");
 				expect(authModule.getSchool.name).toStrictEqual("test school");
 			});
 		});

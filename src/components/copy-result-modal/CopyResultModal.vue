@@ -54,6 +54,7 @@ import {
 	mdiCloseCircle,
 	mdiInformation,
 } from "@mdi/js";
+import { envConfigModule } from "@/store";
 
 export default {
 	name: "CopyResultModal",
@@ -97,13 +98,18 @@ export default {
 				},
 				{
 					isShow: this.hasNexboardElement,
-					text: this.$t("components.molecules.copyResult.nexboardCopy.info"),
+					text: this.nexboardInfoText,
 					title: this.$t("components.molecules.copyResult.label.nexboard"),
 				},
 				{
 					isShow: this.hasFileElement || this.isCourse,
 					text: this.filesInfoText,
 					title: this.$t("components.molecules.copyResult.label.files"),
+				},
+				{
+					isShow: this.hasFeatureCtlsToolsenabled,
+					text: this.externalToolsInfoText,
+					title: this.$t("components.molecules.copyResult.label.externalTools"),
 				},
 				{
 					isShow: this.hasCourseGroup,
@@ -139,6 +145,9 @@ export default {
 				CopyApiResponseTypeEnum.CoursegroupGroup
 			);
 		},
+		hasFeatureCtlsToolsenabled() {
+			return envConfigModule.getCtlToolsTabEnabled;
+		},
 		hasErrors() {
 			return this.items.length > 0;
 		},
@@ -153,6 +162,14 @@ export default {
 				? this.$t("components.molecules.copyResult.fileCopy.error")
 				: "";
 			return `${courseFilesText} ${fileErrorText}`.trim();
+		},
+		nexboardInfoText() {
+			return envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED
+				? this.$t("components.molecules.copyResult.nexboardCopy.info")
+				: this.$t("components.molecules.copyResult.nexboardCopy.infoTldraw");
+		},
+		externalToolsInfoText() {
+			return this.$t("components.molecules.copyResult.ctlTools.info");
 		},
 	},
 	methods: {

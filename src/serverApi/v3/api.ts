@@ -458,6 +458,16 @@ export interface ClassInfoSearchListResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum ClassRequestContext {
+    Course = 'course',
+    ClassOverview = 'class-overview'
+}
+
+/**
+ * 
+ * @export
  * @interface ColumnResponse
  */
 export interface ColumnResponse {
@@ -979,6 +989,37 @@ export enum CopyApiResponseStatusEnum {
 /**
  * 
  * @export
+ * @interface CountyResponse
+ */
+export interface CountyResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CountyResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CountyResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof CountyResponse
+     */
+    countyId: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof CountyResponse
+     */
+    antaresKey: string;
+}
+/**
+ * 
+ * @export
  * @interface CourseMetadataListResponse
  */
 export interface CourseMetadataListResponse {
@@ -1267,6 +1308,12 @@ export interface CustomParameterPostParams {
      * @memberof CustomParameterPostParams
      */
     isOptional: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CustomParameterPostParams
+     */
+    isProtected: boolean;
 }
 /**
  * 
@@ -1334,6 +1381,12 @@ export interface CustomParameterResponse {
      * @memberof CustomParameterResponse
      */
     isOptional: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CustomParameterResponse
+     */
+    isProtected: boolean;
 }
 
 /**
@@ -1923,6 +1976,43 @@ export interface ExternalToolUpdateParams {
 /**
  * 
  * @export
+ * @interface FederalStateResponse
+ */
+export interface FederalStateResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    abbreviation: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FederalStateResponse
+     */
+    logoUrl: string;
+    /**
+     * 
+     * @type {Array<CountyResponse>}
+     * @memberof FederalStateResponse
+     */
+    counties: Array<CountyResponse>;
+}
+/**
+ * 
+ * @export
  * @interface FileContentBody
  */
 export interface FileContentBody {
@@ -2008,6 +2098,15 @@ export interface FileElementResponse {
      */
     timestamps: TimestampsResponse;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum FileStorageType {
+    AwsS3 = 'awsS3'
+}
+
 /**
  * 
  * @export
@@ -2107,7 +2206,9 @@ export interface GroupResponse {
     * @enum {string}
     */
 export enum GroupResponseTypeEnum {
-    Class = 'class'
+    Class = 'class',
+    Course = 'course',
+    Other = 'other'
 }
 
 /**
@@ -3905,11 +4006,9 @@ export interface RichText {
     */
 export enum RichTextTypeEnum {
     PlainText = 'plainText',
-    RichText = 'richText',
-    Inline = 'inline',
+    RichTextCk5Simple = 'richTextCk5Simple',
     RichTextCk4 = 'richTextCk4',
-    RichTextCk5 = 'richTextCk5',
-    RichTextCk5Inline = 'richTextCk5Inline'
+    RichTextCk5 = 'richTextCk5'
 }
 
 /**
@@ -4178,6 +4277,42 @@ export interface SchoolExternalToolSearchListResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum SchoolFeature {
+    RocketChat = 'rocketChat',
+    Videoconference = 'videoconference',
+    Nextcloud = 'nextcloud',
+    StudentVisibility = 'studentVisibility',
+    LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
+    OauthProvisioningEnabled = 'oauthProvisioningEnabled',
+    ShowOutdatedUsers = 'showOutdatedUsers',
+    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
+    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+}
+
+/**
+ * 
+ * @export
+ * @interface SchoolForExternalInviteResponse
+ */
+export interface SchoolForExternalInviteResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolForExternalInviteResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolForExternalInviteResponse
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
  * @interface SchoolInfoResponse
  */
 export interface SchoolInfoResponse {
@@ -4199,12 +4334,233 @@ export interface SchoolInfoResponse {
  * @export
  * @enum {string}
  */
+export enum SchoolPurpose {
+    Expert = 'expert',
+    Tombstone = 'tombstone',
+    Demo = 'demo',
+    Test = 'test',
+    MintEc = 'MINT-EC'
+}
+
+/**
+ * 
+ * @export
+ * @interface SchoolResponse
+ */
+export interface SchoolResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    updatedAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    officialSchoolNumber?: string;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof SchoolResponse
+     */
+    currentYear?: SchoolYearResponse;
+    /**
+     * 
+     * @type {FederalStateResponse}
+     * @memberof SchoolResponse
+     */
+    federalState: FederalStateResponse;
+    /**
+     * 
+     * @type {CountyResponse}
+     * @memberof SchoolResponse
+     */
+    county?: CountyResponse;
+    /**
+     * 
+     * @type {SchoolPurpose}
+     * @memberof SchoolResponse
+     */
+    purpose?: SchoolPurpose;
+    /**
+     * 
+     * @type {Array<SchoolFeature>}
+     * @memberof SchoolResponse
+     */
+    features: Array<SchoolFeature>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SchoolResponse
+     */
+    systemIds: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolResponse
+     */
+    inMaintenance: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolResponse
+     */
+    isExternal: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    logo_dataUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    logo_name?: string;
+    /**
+     * 
+     * @type {FileStorageType}
+     * @memberof SchoolResponse
+     */
+    fileStorageType?: FileStorageType;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    language?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolResponse
+     */
+    timezone?: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof SchoolResponse
+     */
+    permissions?: object;
+    /**
+     * 
+     * @type {YearsResponse}
+     * @memberof SchoolResponse
+     */
+    years: YearsResponse;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 export enum SchoolYearQueryType {
     NextYear = 'nextYear',
     CurrentYear = 'currentYear',
     PreviousYears = 'previousYears'
 }
 
+/**
+ * 
+ * @export
+ * @interface SchoolYearResponse
+ */
+export interface SchoolYearResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolYearResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolYearResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolYearResponse
+     */
+    startDate: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolYearResponse
+     */
+    endDate: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchulConneXProvisioningOptionsParams
+ */
+export interface SchulConneXProvisioningOptionsParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsParams
+     */
+    groupProvisioningClassesEnabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsParams
+     */
+    groupProvisioningCoursesEnabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsParams
+     */
+    groupProvisioningOtherEnabled: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface SchulConneXProvisioningOptionsResponse
+ */
+export interface SchulConneXProvisioningOptionsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsResponse
+     */
+    groupProvisioningClassesEnabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsResponse
+     */
+    groupProvisioningCoursesEnabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsResponse
+     */
+    groupProvisioningOtherEnabled: boolean;
+}
 /**
  * 
  * @export
@@ -5452,6 +5808,37 @@ export interface VisibilitySettingsResponse {
      * @memberof VisibilitySettingsResponse
      */
     publishedAt?: string;
+}
+/**
+ * 
+ * @export
+ * @interface YearsResponse
+ */
+export interface YearsResponse {
+    /**
+     * 
+     * @type {Array<SchoolYearResponse>}
+     * @memberof YearsResponse
+     */
+    schoolYears: Array<SchoolYearResponse>;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof YearsResponse
+     */
+    activeYear: SchoolYearResponse;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof YearsResponse
+     */
+    lastYear: SchoolYearResponse;
+    /**
+     * 
+     * @type {SchoolYearResponse}
+     * @memberof YearsResponse
+     */
+    nextYear: SchoolYearResponse;
 }
 
 /**
@@ -7055,7 +7442,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | SubmissionContainerElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -7135,7 +7522,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | SubmissionContainerElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -7209,7 +7596,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | DrawingElementResponse | SubmissionContainerElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
 
     /**
      * 
@@ -9249,10 +9636,11 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {'name' | 'externalSourceName'} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
+         * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, options: any = {}): Promise<RequestArgs> => {
+        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/groups/class`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -9287,6 +9675,10 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
 
             if (type !== undefined) {
                 localVarQueryParameter['type'] = type;
+            }
+
+            if (calledFrom !== undefined) {
+                localVarQueryParameter['calledFrom'] = calledFrom;
             }
 
 
@@ -9356,11 +9748,12 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {'name' | 'externalSourceName'} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
+         * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options);
+        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -9392,11 +9785,12 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {'name' | 'externalSourceName'} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
+         * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
-            return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(axios, basePath));
+        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
+            return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -9425,11 +9819,12 @@ export interface GroupApiInterface {
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {'name' | 'externalSourceName'} [sortBy] 
      * @param {SchoolYearQueryType} [type] 
+     * @param {ClassRequestContext} [calledFrom] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApiInterface
      */
-    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
+    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
 
     /**
      * 
@@ -9458,12 +9853,13 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {'name' | 'externalSourceName'} [sortBy] 
      * @param {SchoolYearQueryType} [type] 
+     * @param {ClassRequestContext} [calledFrom] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
      */
-    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, options?: any) {
-        return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(this.axios, this.basePath));
+    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any) {
+        return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -12196,6 +12592,383 @@ export class SSOApi extends BaseAPI implements SSOApiInterface {
      */
     public oauthSSOControllerRequestAuthToken(oauthClientId: string, options?: any) {
         return SSOApiFp(this.configuration).oauthSSOControllerRequestAuthToken(oauthClientId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * SchoolApi - axios parameter creator
+ * @export
+ */
+export const SchoolApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Gets all provisioning options for a system at a school
+         * @param {string} schoolId 
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetProvisioningOptions: async (schoolId: string, systemId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerGetProvisioningOptions', 'schoolId', schoolId)
+            // verify required parameter 'systemId' is not null or undefined
+            assertParamExists('schoolControllerGetProvisioningOptions', 'systemId', systemId)
+            const localVarPath = `/schools/{schoolId}/systems/{systemId}/provisioning-options`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
+                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolById: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerGetSchoolById', 'schoolId', schoolId)
+            const localVarPath = `/school/id/{schoolId}`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} [federalStateId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolListForExternalInvite: async (federalStateId?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/school/list-for-external-invite`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (federalStateId !== undefined) {
+                localVarQueryParameter['federalStateId'] = federalStateId;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Sets all provisioning options for a system at a school
+         * @param {string} schoolId 
+         * @param {string} systemId 
+         * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerSetProvisioningOptions: async (schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerSetProvisioningOptions', 'schoolId', schoolId)
+            // verify required parameter 'systemId' is not null or undefined
+            assertParamExists('schoolControllerSetProvisioningOptions', 'systemId', systemId)
+            // verify required parameter 'schulConneXProvisioningOptionsParams' is not null or undefined
+            assertParamExists('schoolControllerSetProvisioningOptions', 'schulConneXProvisioningOptionsParams', schulConneXProvisioningOptionsParams)
+            const localVarPath = `/schools/{schoolId}/systems/{systemId}/provisioning-options`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
+                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(schulConneXProvisioningOptionsParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SchoolApi - functional programming interface
+ * @export
+ */
+export const SchoolApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SchoolApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Gets all provisioning options for a system at a school
+         * @param {string} schoolId 
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchulConneXProvisioningOptionsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetProvisioningOptions(schoolId, systemId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetSchoolById(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolById(schoolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} [federalStateId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolForExternalInviteResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolListForExternalInvite(federalStateId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Sets all provisioning options for a system at a school
+         * @param {string} schoolId 
+         * @param {string} systemId 
+         * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchulConneXProvisioningOptionsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SchoolApi - factory interface
+ * @export
+ */
+export const SchoolApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SchoolApiFp(configuration)
+    return {
+        /**
+         * Gets all provisioning options for a system at a school
+         * @param {string} schoolId 
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse> {
+            return localVarFp.schoolControllerGetProvisioningOptions(schoolId, systemId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolById(schoolId: string, options?: any): AxiosPromise<SchoolResponse> {
+            return localVarFp.schoolControllerGetSchoolById(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} [federalStateId] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>> {
+            return localVarFp.schoolControllerGetSchoolListForExternalInvite(federalStateId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Sets all provisioning options for a system at a school
+         * @param {string} schoolId 
+         * @param {string} systemId 
+         * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse> {
+            return localVarFp.schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SchoolApi - interface
+ * @export
+ * @interface SchoolApi
+ */
+export interface SchoolApiInterface {
+    /**
+     * Gets all provisioning options for a system at a school
+     * @param {string} schoolId 
+     * @param {string} systemId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse>;
+
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetSchoolById(schoolId: string, options?: any): AxiosPromise<SchoolResponse>;
+
+    /**
+     * 
+     * @param {string} [federalStateId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>>;
+
+    /**
+     * Sets all provisioning options for a system at a school
+     * @param {string} schoolId 
+     * @param {string} systemId 
+     * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse>;
+
+}
+
+/**
+ * SchoolApi - object-oriented interface
+ * @export
+ * @class SchoolApi
+ * @extends {BaseAPI}
+ */
+export class SchoolApi extends BaseAPI implements SchoolApiInterface {
+    /**
+     * Gets all provisioning options for a system at a school
+     * @param {string} schoolId 
+     * @param {string} systemId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetProvisioningOptions(schoolId: string, systemId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetProvisioningOptions(schoolId, systemId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetSchoolById(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetSchoolById(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} [federalStateId] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForExternalInvite(federalStateId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Sets all provisioning options for a system at a school
+     * @param {string} schoolId 
+     * @param {string} systemId 
+     * @param {SchulConneXProvisioningOptionsParams} schulConneXProvisioningOptionsParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
