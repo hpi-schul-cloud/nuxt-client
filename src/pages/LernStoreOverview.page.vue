@@ -98,152 +98,164 @@
 	</section>
 </template>
 
-<script>
+<script setup lang="ts">
+import { onMounted, computed, ref } from "vue";
+import { useDebounceFn } from "@vueuse/core";
 import { mdiChevronLeft, mdiMagnify, mdiClose } from "@mdi/js";
-import { contentModule, notifierModule } from "@/store";
-import infiniteScrolling from "@/mixins/infiniteScrolling";
+import { CONTENT_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { notifierModule } from "@/store";
+// import infiniteScrolling from "@/mixins/infiniteScrolling";
 import { buildPageTitle } from "@/utils/pageTitle";
-import ContentCard from "@/components/lern-store/ContentCard";
-import ContentEmptyState from "@/components/lern-store/ContentEmptyState";
+import ContentCard from "@/components/lern-store/ContentCard.vue";
+import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
 import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
-import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter";
-import ContentInitialState from "@/components/lern-store/ContentInitialState";
+import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter.vue";
+import ContentInitialState from "@/components/lern-store/ContentInitialState.vue";
+import { useI18n } from "vue-i18n";
+import themeConfig from "@/theme.config";
+import { useRoute, useRouter } from "vue-router";
+import { watch } from "vue";
+// import ContentSearchbar from "@/components/lern-store/ContentSearchbar.vue";
 
-export default {
-	components: {
-		ContentCard,
-		ContentEmptyState,
-		LernStoreGrid,
-		ContentInitialState,
-		ContentEduSharingFooter,
-	},
-	mixins: [infiniteScrolling],
-	data() {
-		return {
-			searchQuery: "",
-			searchQueryResult: "",
-			backToTopScrollYLimit: 115,
-			activateTransition: false,
-			prevRoute: null,
-			mdiChevronLeft,
-			mdiMagnify,
-			mdiClose,
-		};
-	},
-	computed: {
-		resources() {
-			return contentModule.getResourcesGetter;
-		},
-		player() {
-			return contentModule.getCurrentPlayer;
-		},
-		loading() {
-			return contentModule.getLoading;
-		},
-		query() {
-			const query = {
-				$limit: 12,
-				$skip: 0,
-			};
-			if (this.searchQuery) {
-				query["searchQuery"] = this.searchQuery;
-			}
-			return query;
-		},
-		isInline() {
-			return !!this.$route.query.inline;
-		},
-	},
-	watch: {
-		bottom(bottom) {
-			const { data, total } = this.resources;
-			if (bottom && !this.loading && data.length < total) {
-				this.addContent();
-			}
-		},
-		searchQuery(to, from) {
-			if (this.$options.debounce) {
-				clearInterval(this.$options.debounce);
-			}
+const { t } = useI18n();
+const router = useRouter();
+const route = useRoute();
+const contentModule = injectStrict(CONTENT_MODULE_KEY);
 
-			if (to === from || !to) {
-				this.$router.push({
-					query: {
-						...this.$route.query,
-						q: "",
-					},
-				});
-				return;
-			}
-			this.$options.debounce = setInterval(() => {
-				this.searchQueryResult = this.searchQuery;
+const searchQuery = ref("");
+const activateTransition = ref(false);
+const searchQueryResult = ref("");
+// const queryOptions = ref({ $limit: 12, $skip: 0 });
 
-				clearInterval(this.$options.debounce);
-				this.$router.push({
-					query: {
-						...this.$route.query,
-						q: this.searchQuery,
-					},
-				});
-			}, 200);
-		},
-	},
-	mounted() {
-		const pageTitle = this.isInline
-			? this.$t("pages.content.page.window.title", {
-					instance: this.$theme.name,
-				})
-			: this.$t("common.words.lernstore");
-		document.title = buildPageTitle(pageTitle);
+onMounted(() => {
+	const pageTitle = isInline.value
+		? t("pages.content.page.window.title", {
+				instance: themeConfig.name,
+			})
+		: t("common.words.lernstore");
+	document.title = buildPageTitle(pageTitle);
 
-		const initialSearchQuery = this.$route.query.q;
-		if (initialSearchQuery) {
-			this.searchQuery = initialSearchQuery;
-			this.activateTransition = true;
-			if (this.resources.data.length === 0) {
-				this.enterKeyHandler();
-			}
+	const initialSearchQuery = route.query.q;
+	if (initialSearchQuery) {
+		searchQuery.value = initialSearchQuery as string;
+		activateTransition.value = true;
+		if (resources.value.data.length === 0) {
+			enterKeyHandler();
 		}
-	},
-	methods: {
-		async addContent() {
-			if (this.resources.data.length < this.resources.total) {
-				this.query.$skip += this.query.$limit;
-				await contentModule.addResources(this.query);
-			}
-		},
-		async searchContent() {
-			try {
-				await contentModule.getResources(this.query);
-			} catch (error) {
-				notifierModule.show({
-					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
-					status: "error",
-					timeout: 10000,
-				});
-			}
-		},
-		async searchH5P() {
-			await contentModule.getResources({
-				$limit: 4,
-				$skip: 0,
-				searchQuery: "h5p",
-			});
-		},
-		enterKeyHandler() {
-			if (this.$options.debounceTyping) {
-				clearTimeout(this.$options.debounceTyping);
-			}
-			this.$options.debounceTyping = setTimeout(() => {
-				this.searchContent();
-				this.activateTransition = true;
-			}, 500);
-		},
-		goBack() {
-			window.close();
-		},
-	},
+	}
+});
+
+const isInline = computed(() => !!route.query.inline);
+const resources = computed(() => contentModule.getResourcesGetter);
+const loading = computed(() => contentModule.getLoading);
+
+const enterKeyHandler = useDebounceFn(() => {
+	searchContent();
+	activateTransition.value = true;
+}, 500);
+
+const searchContent = async () => {
+	try {
+		await contentModule.getResources(searchQuery.value);
+	} catch (error) {
+		notifierModule.show({
+			text: t("pages.content.notification.lernstoreNotAvailable"),
+			status: "error",
+			timeout: 10000,
+		});
+	}
 };
+
+// const addContent = async () => {
+// 	if (resources.value.data.length < resources.value.total) {
+// 		queryOptions.value.$skip += queryOptions.value.$limit;
+
+// 		const query = {
+// 			$limit: queryOptions.value.$limit,
+// 			$skip: queryOptions.value.$skip,
+// 			searchQuery: searchQuery.value,
+// 		};
+// 		await contentModule.addResources(query);
+// 	}
+// };
+
+const goBack = () => {
+	window.close();
+};
+
+watch(searchQuery, (to, from) => {
+	console.log(to, from);
+	console.log(resources.value);
+
+	// if (this.$options.debounce) {
+	// 	clearInterval(this.$options.debounce);
+	// }
+
+	if (to === from || !to) {
+		router.push({
+			query: {
+				...route.query,
+				q: "",
+			},
+		});
+		return;
+	}
+	// this.$options.debounce = setInterval(() => {
+	searchQueryResult.value = searchQuery.value;
+
+	// clearInterval(this.$options.debounce);
+	router.push({
+		query: {
+			...route.query,
+			q: searchQuery.value,
+		},
+	});
+	// }, 200);
+});
+
+// export default {
+// 	mixins: [infiniteScrolling],
+// 	data() {
+// 		return {
+// 			backToTopScrollYLimit: 115,
+// 			prevRoute: null,
+// 		};
+// 	},
+// 	watch: {
+// 		bottom(bottom) {
+// 			const { data, total } = this.resources;
+// 			if (bottom && !this.loading && data.length < total) {
+// 				this.addContent();
+// 			}
+// 		},
+// 		searchQuery(to, from) {
+// 			if (this.$options.debounce) {
+// 				clearInterval(this.$options.debounce);
+// 			}
+
+// 			if (to === from || !to) {
+// 				this.$router.push({
+// 					query: {
+// 						...this.$route.query,
+// 						q: "",
+// 					},
+// 				});
+// 				return;
+// 			}
+// 			this.$options.debounce = setInterval(() => {
+// 				this.searchQueryResult = this.searchQuery;
+
+// 				clearInterval(this.$options.debounce);
+// 				this.$router.push({
+// 					query: {
+// 						...this.$route.query,
+// 						q: this.searchQuery,
+// 					},
+// 				});
+// 			}, 200);
+// 		},
+// 	},
+// };
 </script>
 
 <style lang="scss" scoped>

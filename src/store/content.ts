@@ -255,12 +255,12 @@ export default class ContentModule extends VuexModule {
 	}
 
 	@Action
-	async getResources(payload: Query): Promise<void> {
+	async getResources(searchQuery: string): Promise<void> {
 		this.incLoading();
 		const query = {
 			$limit: 12,
 			$skip: 0,
-			searchQuery: payload.searchQuery,
+			searchQuery,
 		};
 		const queryHash = hash(query);
 		this.setLastQuery(queryHash);
