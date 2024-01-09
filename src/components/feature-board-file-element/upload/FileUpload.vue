@@ -17,14 +17,7 @@
 
 <script lang="ts">
 import { useSharedLastCreatedElement } from "@util-board";
-import {
-	computed,
-	defineComponent,
-	onBeforeUnmount,
-	onMounted,
-	ref,
-	watch,
-} from "vue";
+import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import FilePicker from "./file-picker/FilePicker.vue";
 
 export default defineComponent({
