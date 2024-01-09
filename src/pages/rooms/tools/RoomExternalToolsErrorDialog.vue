@@ -69,11 +69,9 @@ export default defineComponent({
 				return "pages.rooms.tools.deactivatedDialog.title";
 			}
 
-			if (isToolOutdated.value) {
+			if (isToolOutdated.value && !isToolIncomplete.value) {
 				return "pages.rooms.tools.outdatedDialog.title";
-			}
-
-			if (isToolIncomplete.value) {
+			} else if (isToolIncomplete.value) {
 				return "pages.rooms.tools.incompleteDialog.title";
 			}
 
@@ -89,11 +87,11 @@ export default defineComponent({
 				return "common.tool.information.deactivated";
 			}
 
-			if (isToolOutdated.value) {
+			if (isToolOutdated.value && !isToolIncomplete.value) {
 				return determineOutdatedTranslationKey(props.selectedItem.status);
+			} else {
+				return determineIncompleteTranslationKey();
 			}
-
-			return determineIncompleteTranslationKey();
 		});
 
 		return {
