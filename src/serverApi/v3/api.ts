@@ -693,6 +693,12 @@ export interface ContextExternalToolConfigurationStatusResponse {
      * @memberof ContextExternalToolConfigurationStatusResponse
      */
     isOutdatedOnScopeContext: boolean;
+    /**
+     * Is the tool deactivated, because of superhero or school administrator
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isDeactivated: boolean;
 }
 /**
  * 
@@ -1724,6 +1730,12 @@ export interface ExternalToolCreateParams {
      * @type {boolean}
      * @memberof ExternalToolCreateParams
      */
+    isDeactivated: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExternalToolCreateParams
+     */
     openNewTab: boolean;
     /**
      * 
@@ -1867,6 +1879,12 @@ export interface ExternalToolResponse {
      * @type {boolean}
      * @memberof ExternalToolResponse
      */
+    isDeactivated: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExternalToolResponse
+     */
     openNewTab: boolean;
     /**
      * 
@@ -1960,6 +1978,12 @@ export interface ExternalToolUpdateParams {
      * @memberof ExternalToolUpdateParams
      */
     isHidden: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ExternalToolUpdateParams
+     */
+    isDeactivated: boolean;
     /**
      * 
      * @type {boolean}
@@ -4111,6 +4135,12 @@ export interface SchoolExternalToolConfigurationStatusResponse {
      * @memberof SchoolExternalToolConfigurationStatusResponse
      */
     isOutdatedOnScopeSchool: boolean;
+    /**
+     * Is the tool deactivated, because of school administrator?
+     * @type {boolean}
+     * @memberof SchoolExternalToolConfigurationStatusResponse
+     */
+    isDeactivated: boolean;
 }
 /**
  * 
@@ -4199,6 +4229,12 @@ export interface SchoolExternalToolPostParams {
      * @memberof SchoolExternalToolPostParams
      */
     parameters?: Array<CustomParameterEntryParam>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolExternalToolPostParams
+     */
+    isDeactivated: boolean;
     /**
      * 
      * @type {number}

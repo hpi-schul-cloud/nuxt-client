@@ -5,10 +5,12 @@
 				<v-icon>{{ mdiClose }}</v-icon>
 			</v-btn>
 
-			<ContentElementTitleIcon :icon="mdiFileDocumentOutline" class="mr-2" />
+			<v-icon color="black" size="20" class="mr-1">{{
+				mdiFileDocumentOutline
+			}}</v-icon>
 
 			<v-toolbar-title v-if="lightBoxOptions.name !== ''">
-				<ContentElementTitle>{{ lightBoxOptions.name }}</ContentElementTitle>
+				{{ lightBoxOptions.name }}
 			</v-toolbar-title>
 			<v-spacer />
 			<v-btn v-if="lightBoxOptions.downloadUrl !== ''" icon @click="download">
@@ -47,11 +49,9 @@ import { mdiClose, mdiFileDocumentOutline, mdiTrayArrowDown } from "@mdi/js";
 import { onKeyStroke } from "@vueuse/core";
 import { defineComponent, ref, watch } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
-import { ContentElementTitleIcon, ContentElementTitle } from "@ui-board";
 
 export default defineComponent({
 	name: "LightBox",
-	components: { ContentElementTitle, ContentElementTitleIcon },
 	setup() {
 		const { close, isLightBoxOpen, lightBoxOptions } = useInternalLightBox();
 		const isImageLoading = ref(true);
