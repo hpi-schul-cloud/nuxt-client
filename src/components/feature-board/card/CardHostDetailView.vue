@@ -23,8 +23,8 @@
 							{{
 								isEditMode
 									? $t("common.actions.edit") +
-									  " " +
-									  $t("common.actions.finish")
+										" " +
+										$t("common.actions.finish")
 									: $t("common.actions.edit")
 							}}
 						</v-btn>

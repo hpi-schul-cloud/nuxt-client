@@ -38,7 +38,7 @@ const useBoardPageInformation = () => {
 						text: contextInfo.name ?? t("common.labels.course"),
 						to: `/rooms/${contextInfo.id}`,
 					},
-			  ]
+				]
 			: [];
 	}
 

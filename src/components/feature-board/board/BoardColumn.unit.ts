@@ -59,7 +59,7 @@ describe("BoardColumn", () => {
 			provide: {
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			},
-			propsData: { column, index: 1 },
+			propsData: { column, index: 1, columnCount: 1 },
 		});
 	};
 
@@ -200,6 +200,51 @@ describe("BoardColumn", () => {
 
 			const emitted = wrapper.emitted("reload:board");
 			expect(emitted).toHaveLength(1);
+		});
+	});
+
+	describe("when move was triggered by column header", () => {
+		describe("when move:column-keyboard was triggered by column header", () => {
+			it("should emit move:column-keyboard", async () => {
+				setup();
+
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
+				});
+				columnHeader.vm.$emit("move:column-keyboard", "ArrowLeft");
+				await nextTick();
+
+				const emitted = wrapper.emitted("move:column-keyboard");
+				expect(emitted).toHaveLength(1);
+			});
+		});
+		describe("when move:column-left was triggered by column header", () => {
+			it("should emit move:column-left", async () => {
+				setup();
+
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
+				});
+				columnHeader.vm.$emit("move:column-left");
+				await nextTick();
+
+				const emitted = wrapper.emitted("move:column-left");
+				expect(emitted).toHaveLength(1);
+			});
+		});
+		describe("when move:column-right was triggered by column header", () => {
+			it("should emit move:column-right", async () => {
+				setup();
+
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
+				});
+				columnHeader.vm.$emit("move:column-right");
+				await nextTick();
+
+				const emitted = wrapper.emitted("move:column-right");
+				expect(emitted).toHaveLength(1);
+			});
 		});
 	});
 });
