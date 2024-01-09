@@ -9,6 +9,8 @@
 			:titlePlaceholder="titlePlaceholder"
 			@delete:column="onColumnDelete"
 			@move:column-keyboard="onMoveColumnKeyboard"
+			@move:column-left="onMoveColumnLeft"
+			@move:column-right="onMoveColumnRight"
 			@update:title="onUpdateTitle"
 			class="pl-2"
 		/>
@@ -50,7 +52,7 @@
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { useDebounceFn, useMediaQuery } from "@vueuse/core";
-import { PropType, computed, defineComponent, ref } from "vue";
+import { PropType, computed, defineComponent, provide, ref } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 import { useBoardPermissions } from "@data-board";
@@ -65,6 +67,11 @@ import {
 } from "@/types/board/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import {
+	BOARD_HAS_MULTIPLE_COLUMNS,
+	BOARD_IS_FIRST_COLUMN,
+	BOARD_IS_LAST_COLUMN,
+} from "@util-board";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container, Draggable } = require("vue-dndrop");
 
@@ -82,6 +89,10 @@ export default defineComponent({
 			type: Object as PropType<BoardColumn>,
 			required: true,
 		},
+		columnCount: {
+			type: Number,
+			required: true,
+		},
 		index: { type: Number, required: true },
 	},
 	emits: [
@@ -89,6 +100,8 @@ export default defineComponent({
 		"delete:card",
 		"delete:column",
 		"move:column-keyboard",
+		"move:column-left",
+		"move:column-right",
 		"reload:board",
 		"update:card-position",
 		"update:column-title",
@@ -100,6 +113,19 @@ export default defineComponent({
 			useBoardPermissions();
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
+
+		const hasManyColumns = computed(() => props.columnCount > 1);
+		const isFirstColumn = computed(
+			() => hasManyColumns.value && props.index === 0
+		);
+		const lastIndex = computed(() => props.columnCount - 1);
+		const isLastColumn = computed(
+			() => hasManyColumns.value && props.index === lastIndex.value
+		);
+
+		provide(BOARD_HAS_MULTIPLE_COLUMNS, hasManyColumns);
+		provide(BOARD_IS_FIRST_COLUMN, isFirstColumn);
+		provide(BOARD_IS_LAST_COLUMN, isLastColumn);
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
@@ -157,6 +183,14 @@ export default defineComponent({
 			emit("move:column-keyboard", event);
 		};
 
+		const onMoveColumnLeft = () => {
+			emit("move:column-left");
+		};
+
+		const onMoveColumnRight = () => {
+			emit("move:column-right");
+		};
+
 		const onReloadBoard = () => {
 			emit("reload:board");
 		};
@@ -187,6 +221,8 @@ export default defineComponent({
 			onDragEnd,
 			onMoveCardKeyboard,
 			onMoveColumnKeyboard,
+			onMoveColumnLeft,
+			onMoveColumnRight,
 			onReloadBoard,
 			onUpdateTitle,
 			getChildPayload,
