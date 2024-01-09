@@ -10,10 +10,9 @@
 		elevation="0"
 		@keydown.up.down="onKeydownArrow"
 		role="button"
-		:href="sanitizedUrl"
 		target="_blank"
 	>
-		<div>
+		<div :href="sanitizedUrl">
 			<InnerContent
 				v-if="!isEditMode"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
@@ -31,6 +30,19 @@
 				</BoardMenu>
 			</InnerContent>
 		</div>
+		<v-alert
+			v-if="isTeacher"
+			light
+			text
+			type="info"
+			dismissible
+			:close-icon="mdiClose"
+			class="mb-0"
+		>
+			<div class="alert-text">
+				{{ $t("components.cardElement.notification.visibleAndEditable") }}
+			</div>
+		</v-alert>
 	</v-card>
 </template>
 
@@ -46,6 +58,9 @@ import {
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
+import AuthModule from "@/store/auth";
+import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
+import { mdiClose } from "@mdi/js";
 
 export default defineComponent({
 	name: "DrawingContentElement",
@@ -72,6 +87,9 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const drawingElement = ref<HTMLElement | null>(null);
 		const element = toRef(props, "element");
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+		const userRoles = ref(authModule.getUserRoles);
+
 		const sanitizedUrl = computed(() =>
 			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
 		);
@@ -87,6 +105,10 @@ export default defineComponent({
 		const onMoveDrawingElementEditUp = () => emit("move-up:edit");
 		const onDeleteElement = () => emit("delete:element", element.value.id);
 
+		const isTeacher = computed(() => {
+			return userRoles.value.includes("teacher");
+		});
+
 		return {
 			drawingElement,
 			sanitizedUrl,
@@ -94,7 +116,15 @@ export default defineComponent({
 			onKeydownArrow,
 			onMoveDrawingElementEditDown,
 			onMoveDrawingElementEditUp,
+			isTeacher,
+			mdiClose,
 		};
 	},
 });
 </script>
+<style lang="scss" scoped>
+::v-deep .v-btn__content .v-icon,
+.alert-text {
+	color: var(--v-black-base) !important;
+}
+</style>

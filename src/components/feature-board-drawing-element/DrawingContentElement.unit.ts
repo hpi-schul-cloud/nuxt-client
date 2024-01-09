@@ -1,6 +1,7 @@
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import {
+	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -14,6 +15,7 @@ import NotifierModule from "@/store/notifier";
 import EnvConfigModule from "@/store/env-config";
 import { Envs } from "@/store/types/env-config";
 import InnerContent from "./InnerContent.vue";
+import AuthModule from "@/store/auth";
 
 // Mocks
 jest.mock("@data-board", () => ({
@@ -50,6 +52,11 @@ describe("DrawingContentElement", () => {
 		isEditMode: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
+
+		const authModule = createModuleMocks(AuthModule, {
+			getUserRoles: ["teacher"],
+		});
+
 		wrapper = shallowMount(DrawingContentElement as MountOptions<Vue>, {
 			...createComponentMocks({}),
 			propsData: props,
@@ -57,6 +64,7 @@ describe("DrawingContentElement", () => {
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
+				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 		});
 	};
