@@ -1,5 +1,10 @@
 <template>
-	<RenderHTML class="ck-content" :html="value" config="ck5" />
+	<RenderHTML
+		class="ck-content"
+		:html="value"
+		config="ck5"
+		v-if="value !== undefined && value !== ''"
+	/>
 </template>
 
 <script>

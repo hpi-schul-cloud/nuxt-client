@@ -1,6 +1,6 @@
 import { downloadFile } from "@/utils/fileHelper";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mdiClose, mdiFileDocumentOutline, mdiTrayArrowDown } from "@mdi/js";
+import { mdiClose, mdiTrayArrowDown } from "@mdi/js";
 import { MountOptions, shallowMount } from "@vue/test-utils";
 import Vue, { nextTick, ref } from "vue";
 import { LightBoxOptions, useInternalLightBox } from "./LightBox.composable";
@@ -111,26 +111,17 @@ describe("LightBox", () => {
 
 		describe("when file name is set", () => {
 			it("should show toolbar title", () => {
-				const { wrapper } = setup({});
+				const { wrapper } = setup({ name: "Esmeralda" });
 
 				const toolbarTitle = wrapper.findComponent({ name: "v-toolbar-title" });
 
 				expect(toolbarTitle.exists()).toBe(true);
 			});
 
-			it("should show file icon", () => {
-				const { wrapper } = setup({});
-
-				const fileIcon = wrapper.find("contentelementtitleicon-stub");
-
-				expect(fileIcon.exists()).toBe(true);
-				expect(fileIcon.attributes("icon")).toEqual(mdiFileDocumentOutline);
-			});
-
 			it("should show file name", () => {
-				const { wrapper } = setup({});
+				const { wrapper } = setup({ name: "Esmeralda" });
 
-				const title = wrapper.find("contentelementtitle-stub");
+				const title = wrapper.find("v-toolbar-title-stub");
 
 				expect(title.exists()).toBe(true);
 			});
@@ -138,7 +129,7 @@ describe("LightBox", () => {
 			it("should set file name correctly", () => {
 				const { lightBoxOptions, wrapper } = setup({});
 
-				const title = wrapper.find("contentelementtitle-stub");
+				const title = wrapper.find("v-toolbar-title-stub");
 
 				expect(title.text()).toEqual(lightBoxOptions.value.name);
 			});
