@@ -208,7 +208,7 @@ export default {
 						? this.convertDataUrlToFile(
 								newSchool.logo_dataUrl,
 								newSchool.logo_name
-						  )
+							)
 						: null;
 
 					await this.copyToLocalSchool();

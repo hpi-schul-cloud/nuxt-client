@@ -298,15 +298,15 @@ export default {
 				this.sortOrder === "asc"
 					? `, ${this.$t(
 							"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc"
-					  )}`
+						)}`
 					: `, ${this.$t(
 							"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc"
-					  )}`;
+						)}`;
 
 			const sortableText = column.sortable
 				? `, ${this.$t(
 						"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting"
-				  )}`
+					)}`
 				: "";
 			return column.label + sortOrderText + sortableText;
 		},
