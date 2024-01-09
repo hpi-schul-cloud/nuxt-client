@@ -1,5 +1,6 @@
-import { createSharedComposable } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
+
 import {
 	FilterOption,
 	FilterOptionsType,
@@ -207,4 +208,5 @@ const dataTableFilter = (userType: string) => {
 	};
 };
 
-export const useDataTableFilter = createSharedComposable(dataTableFilter);
+export const useDataTableFilter =
+	createTestableSharedComposable(dataTableFilter);

@@ -159,7 +159,7 @@ onMounted(async () => {
 	await store.dispatch("classes/find", {
 		query: {
 			$limit: 1000,
-			year: currentYear._id,
+			year: currentYear?.id,
 		},
 	});
 
