@@ -26,6 +26,7 @@
 									: 'first-search__searchbar'
 							"
 							:placeholder="$t('pages.content.index.search.placeholder')"
+							@update:model-value="enterKeyHandler"
 						>
 							<template v-slot:append-inner>
 								<v-btn
@@ -36,6 +37,7 @@
 									density="compact"
 									size="x-large"
 									variant="text"
+									:ripple="false"
 									@click="searchQuery = ''"
 								/>
 								<v-icon
@@ -60,9 +62,7 @@
 							}}"
 						</p>
 						<span v-if="!loading" class="content__container_child">
-							<!-- initial state, empty search -->
 							<content-initial-state v-if="searchQuery.length === 0" />
-							<!-- search query not empty and there are no results -->
 							<div
 								v-else-if="resources.data.length === 0"
 								class="content__no_results"
@@ -70,7 +70,6 @@
 								<content-empty-state />
 							</div>
 						</span>
-						<!-- search query not empty and there are results -->
 						<lern-store-grid
 							v-if="searchQuery.length > 1"
 							column-width="14rem"
@@ -157,6 +156,7 @@ export default {
 	},
 	watch: {
 		bottom(bottom) {
+			console.log(bottom);
 			const { data, total } = this.resources;
 			if (bottom && !this.loading && data.length < total) {
 				this.addContent();
@@ -166,7 +166,6 @@ export default {
 			return this.loading;
 		},
 		searchQuery(to, from) {
-			console.log(from, to);
 			if (this.$options.debounce) {
 				clearInterval(this.$options.debounce);
 			}
@@ -222,10 +221,8 @@ export default {
 		},
 		async searchContent() {
 			try {
-				console.log("searching");
 				await contentModule.getResources(this.query);
 			} catch (error) {
-				console.log(error);
 				notifierModule.show({
 					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
 					status: "error",
