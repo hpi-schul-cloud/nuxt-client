@@ -137,10 +137,10 @@ export default defineComponent({
 
 		const isOutlined = computed(() => {
 			const { isEditMode } = props;
-			const isUploadedInViewMode =
+			const isUploadingInViewMode =
 				fileRecord.value?.id !== undefined && !isEditMode && !isUploading.value;
 
-			return isUploadedInViewMode || isEditMode;
+			return isUploadingInViewMode || isEditMode;
 		});
 
 		onMounted(() => {
