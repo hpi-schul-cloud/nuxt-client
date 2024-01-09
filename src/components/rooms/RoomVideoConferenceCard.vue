@@ -16,7 +16,6 @@
 			>
 				<v-alert
 					density="compact"
-					variant="tonal"
 					class="ma-0"
 					type="info"
 					data-testId="vc-info-box"

@@ -17,7 +17,12 @@
 			/>
 		</v-dialog>
 
-		<v-alert v-if="!canStartMigration" type="error" elevation="2">
+		<v-alert
+			v-if="!canStartMigration"
+			type="error"
+			:icon="mdiAlertCircle"
+			elevation="2"
+		>
 			{{ $t("pages.administration.migration.cannotStart") }}
 		</v-alert>
 
@@ -268,10 +273,11 @@ import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
 	mdiAccountSwitchOutline,
+	mdiAlertCircle,
 	mdiFlag,
 	mdiFlagOutline,
 	mdiPencilOutline,
-} from "@mdi/js";
+} from "@/components/icons/material";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 
 export default {
@@ -283,6 +289,7 @@ export default {
 			mdiAccountPlus,
 			mdiAccountSwitch,
 			mdiAccountSwitchOutline,
+			mdiAlertCircle,
 			mdiFlag,
 			mdiFlagOutline,
 			mdiPencilOutline,
