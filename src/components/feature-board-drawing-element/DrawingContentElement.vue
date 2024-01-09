@@ -12,7 +12,7 @@
 		role="button"
 		target="_blank"
 	>
-		<div :href="sanitizedUrl">
+		<div class="drawing-element-content" @click="redirectToSanitizedUrl">
 			<InnerContent
 				v-if="!isEditMode"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
@@ -93,6 +93,10 @@ export default defineComponent({
 		const sanitizedUrl = computed(() =>
 			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
 		);
+
+		const redirectToSanitizedUrl = () => {
+			window.location.href = sanitizedUrl.value;
+		};
 		useBoardFocusHandler(element.value.id, drawingElement);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
@@ -111,7 +115,7 @@ export default defineComponent({
 
 		return {
 			drawingElement,
-			sanitizedUrl,
+			redirectToSanitizedUrl,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveDrawingElementEditDown,
