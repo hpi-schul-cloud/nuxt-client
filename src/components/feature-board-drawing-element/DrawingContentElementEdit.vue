@@ -150,9 +150,12 @@ export default defineComponent({
 		font-weight: 700;
 		margin-left: 10px;
 	}
+}
 
+::v-deep {
+	.v-btn .v-icon,
 	.alert-text {
-		color: var(--v-black-base);
+		color: var(--v-black-base) !important;
 	}
 }
 </style>
