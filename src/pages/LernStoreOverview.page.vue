@@ -156,14 +156,10 @@ export default {
 	},
 	watch: {
 		bottom(bottom) {
-			console.log(bottom);
 			const { data, total } = this.resources;
 			if (bottom && !this.loading && data.length < total) {
 				this.addContent();
 			}
-		},
-		loading() {
-			return this.loading;
 		},
 		searchQuery(to, from) {
 			if (this.$options.debounce) {
@@ -190,9 +186,6 @@ export default {
 					},
 				});
 			}, 200);
-		},
-		resources() {
-			return this.resources;
 		},
 	},
 	mounted() {
