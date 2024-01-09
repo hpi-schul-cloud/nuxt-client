@@ -9,34 +9,37 @@
 		tabindex="0"
 		elevation="0"
 		@keydown.up.down="onKeydownArrow"
+		role="button"
+		:href="sanitizedUrl"
+		target="_blank"
 	>
 		<div>
-			<DrawingContentElementDisplay
+			<InnerContent
 				v-if="!isEditMode"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				:doc-name="element.id"
+				:docName="element.id"
 			/>
 
-			<DrawingContentElementEdit
+			<InnerContent
 				v-if="isEditMode"
-				:docName="element.id"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
+				:docName="element.id"
 				><BoardMenu scope="element">
 					<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
 					<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
 					<BoardMenuActionDelete @click="onDeleteElement" />
 				</BoardMenu>
-			</DrawingContentElementEdit>
+			</InnerContent>
 		</div>
 	</v-card>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, toRef } from "vue";
+import { computed, defineComponent, PropType, ref, toRef } from "vue";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 import { DrawingElementResponse } from "@/serverApi/v3";
-import DrawingContentElementDisplay from "./DrawingContentElementDisplay.vue";
-import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
 import { useBoardFocusHandler } from "@data-board";
+import InnerContent from "./InnerContent.vue";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
@@ -51,8 +54,7 @@ export default defineComponent({
 		BoardMenuActionMoveUp,
 		BoardMenuActionMoveDown,
 		BoardMenuActionDelete,
-		DrawingContentElementDisplay,
-		DrawingContentElementEdit,
+		InnerContent,
 	},
 	props: {
 		element: {
@@ -70,6 +72,9 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const drawingElement = ref<HTMLElement | null>(null);
 		const element = toRef(props, "element");
+		const sanitizedUrl = computed(() =>
+			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
+		);
 		useBoardFocusHandler(element.value.id, drawingElement);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
@@ -78,12 +83,8 @@ export default defineComponent({
 				emit("move-keyboard:edit", event);
 			}
 		};
-		const onMoveDrawingElementEditDown = () => {
-			emit("move-down:edit");
-		};
-		const onMoveDrawingElementEditUp = () => {
-			emit("move-up:edit");
-		};
+		const onMoveDrawingElementEditDown = () => emit("move-down:edit");
+		const onMoveDrawingElementEditUp = () => emit("move-up:edit");
 		const onDeleteElement = async (confirmation: Promise<boolean>) => {
 			const shouldDelete = await confirmation;
 			if (shouldDelete) {
@@ -92,6 +93,7 @@ export default defineComponent({
 		};
 		return {
 			drawingElement,
+			sanitizedUrl,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveDrawingElementEditDown,

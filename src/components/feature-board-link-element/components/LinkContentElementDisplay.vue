@@ -1,44 +1,36 @@
 <template>
-	<v-card
+	<div
 		data-testid="board-link-element"
 		ref="linkContentElementDisplay"
-		dense
-		elevation="0"
-		variant="outlined"
 		:ripple="false"
-		tabindex="0"
+		tabindex="-1"
 		:loading="isLoading ? 'primary' : false"
 	>
-		<div class="menu" v-if="isEditMode">
-			<slot />
-		</div>
-
-		<a :href="sanitizedUrl" target="_blank">
-			<v-img v-if="imageUrl" :src="imageUrl" alt="" />
-
-			<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
-				<template #title>
-					<ContentElementTitle>
-						{{ title }}
-					</ContentElementTitle>
-				</template>
-				<template #subtitle>
-					{{ hostname }}
-				</template>
-			</ContentElementBar>
-		</a>
-	</v-card>
+		<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
+			<template #display>
+				<v-img v-if="imageUrl" :src="imageUrl" alt="" class="rounded-t" />
+			</template>
+			<template #title>
+				{{ title }}
+			</template>
+			<template #subtitle>
+				{{ hostname }}
+			</template>
+			<template #menu v-if="isEditMode">
+				<slot />
+			</template>
+		</ContentElementBar>
+	</div>
 </template>
 
 <script lang="ts">
 import { ComputedRef, computed, defineComponent, ref } from "vue";
 import { mdiLink } from "@mdi/js";
-import { sanitizeUrl } from "@braintree/sanitize-url";
-import { ContentElementBar, ContentElementTitle } from "@ui-board";
+import { ContentElementBar } from "@ui-board";
 
 export default defineComponent({
 	name: "LinkContentElementDisplay",
-	components: { ContentElementBar, ContentElementTitle },
+	components: { ContentElementBar },
 	props: {
 		url: {
 			type: String,
@@ -59,7 +51,6 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 	},
 	setup(props) {
-		const sanitizedUrl = computed(() => sanitizeUrl(props.url));
 		const hostname: ComputedRef<string> = computed(() => {
 			try {
 				const urlObject = new URL(props.url);
@@ -73,7 +64,6 @@ export default defineComponent({
 
 		return {
 			mdiLink,
-			sanitizedUrl,
 			hostname,
 			linkContentElementDisplay,
 		};
@@ -87,8 +77,8 @@ a {
 }
 .menu {
 	position: absolute;
-	right: 4px;
-	top: 4px;
+	right: 10px;
+	top: 10px;
 	z-index: 100;
 }
 </style>

@@ -2,13 +2,15 @@
 	<v-card
 		class="mb-4"
 		data-testid="board-link-element"
+		ref="linkContentElement"
 		dense
 		elevation="0"
 		:outlined="outlined"
-		ref="linkContentElement"
 		:ripple="false"
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
+		:href="sanitizedUrl"
+		target="_blank"
 	>
 		<LinkContentElementDisplay
 			v-if="computedElement.content.url"
@@ -49,6 +51,7 @@ import {
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import { ensureProtocolIncluded } from "../util/url.util";
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 export default defineComponent({
 	name: "LinkElementContent",
@@ -78,13 +81,23 @@ export default defineComponent({
 		const linkContentElement = ref(null);
 		const isLoading = ref(false);
 		const element = toRef(props, "element");
-		const outlined = computed(() => props.isEditMode);
+
+		const outlined = computed(
+			() =>
+				props.isEditMode === true || computedElement.value.content.url !== ""
+		);
 
 		useBoardFocusHandler(element.value.id, linkContentElement);
 
 		const { modelValue, computedElement } = useContentElementState(props, {
 			autoSaveDebounce: 100,
 		});
+
+		const sanitizedUrl = computed(() =>
+			computedElement.value.content.url
+				? sanitizeUrl(computedElement.value.content.url)
+				: ""
+		);
 
 		const isCreating = computed(
 			() => props.isEditMode && !computedElement.value.content.url
@@ -104,7 +117,6 @@ export default defineComponent({
 				const { title, description, imageUrl } = await getMetaTags(validUrl);
 				modelValue.value.title = title;
 				modelValue.value.description = description;
-
 				if (imageUrl) {
 					modelValue.value.imageUrl = await createPreviewImage(imageUrl);
 				}
@@ -140,6 +152,7 @@ export default defineComponent({
 			linkContentElement,
 			modelValue,
 			outlined,
+			sanitizedUrl,
 			onCreateUrl,
 			onKeydownArrow,
 			onMoveDown,
