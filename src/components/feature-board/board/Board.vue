@@ -21,6 +21,7 @@
 						<BoardColumn
 							:column="column"
 							:index="index"
+							:columnCount="board.columns.length"
 							:class="{ 'drag-disabled': isEditMode || !hasMovePermission }"
 							@reload:board="onReloadBoard"
 							@create:card="onCreateCard"
@@ -29,6 +30,8 @@
 							@move:column-keyboard="
 								onMoveColumnKeyboard(index, column.id, $event)
 							"
+							@move:column-left="onMoveColumnLeft(index, column.id)"
+							@move:column-right="onMoveColumnRight(index, column.id)"
 							@update:card-position="onUpdateCardPosition(index, $event)"
 							@update:column-title="onUpdateColumnTitle(column.id, $event)"
 						/>
@@ -178,17 +181,45 @@ export default defineComponent({
 			columnId: string,
 			keyString: DragAndDropKey
 		) => {
+			if (!hasMovePermission && !horizontalCursorKeys.includes(keyString)) {
+				return;
+			}
+
 			const columnMove: ColumnMove = {
 				addedIndex: -1,
 				removedIndex: columnIndex,
 				payload: columnId,
 			};
 
-			if (horizontalCursorKeys.includes(keyString)) {
-				const change = keyString === "ArrowLeft" ? -1 : +1;
-				columnMove.addedIndex = columnIndex + change;
-				if (hasMovePermission) await moveColumn(columnMove);
-			}
+			const change = keyString === "ArrowLeft" ? -1 : +1;
+			columnMove.addedIndex = columnIndex + change;
+			await moveColumn(columnMove);
+		};
+
+		const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
+			if (!hasMovePermission) return;
+
+			const columnMove: ColumnMove = {
+				addedIndex: -1,
+				removedIndex: columnIndex,
+				payload: columnId,
+			};
+
+			columnMove.addedIndex = columnIndex - 1;
+			await moveColumn(columnMove);
+		};
+
+		const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
+			if (!hasMovePermission) return;
+
+			const columnMove: ColumnMove = {
+				addedIndex: -1,
+				removedIndex: columnIndex,
+				payload: columnId,
+			};
+
+			columnMove.addedIndex = columnIndex + 1;
+			await moveColumn(columnMove);
 		};
 
 		const onReloadBoard = async () => {
@@ -239,6 +270,8 @@ export default defineComponent({
 			onDropColumn,
 			onDeleteColumn,
 			onMoveColumnKeyboard,
+			onMoveColumnLeft,
+			onMoveColumnRight,
 			onReloadBoard,
 			onUpdateCardPosition,
 			onUpdateColumnTitle,
