@@ -1,12 +1,12 @@
 <template>
-	<BoardMenuAction :icon="mdiArrowCollapseUp" @click="onClick" v-if="isVisible">
+	<BoardMenuAction :icon="mdiArrowUp" @click="onClick" v-if="isVisible">
 		{{ $t("components.board.action.moveUp") }}
 	</BoardMenuAction>
 </template>
 
 <script lang="ts">
 import { injectStrict } from "@/utils/inject";
-import { mdiArrowCollapseUp } from "@mdi/js";
+import { mdiArrowUp } from "@mdi/js";
 import { BoardMenuAction } from "@ui-board";
 import {
 	BOARD_CARD_HAS_MULTIPLE_ELEMENTS,
@@ -33,7 +33,7 @@ export default defineComponent({
 
 		return {
 			onClick,
-			mdiArrowCollapseUp,
+			mdiArrowUp,
 			isVisible,
 		};
 	},

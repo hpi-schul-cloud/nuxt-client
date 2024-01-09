@@ -1996,6 +1996,12 @@ export interface ExternalToolUpdateParams {
      * @type {boolean}
      * @memberof ExternalToolUpdateParams
      */
+    isDeactivated: boolean;
+    /**
+     *
+     * @type {boolean}
+     * @memberof ExternalToolUpdateParams
+     */
     openNewTab: boolean;
     /**
      *

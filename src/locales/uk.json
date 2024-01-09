@@ -377,6 +377,8 @@
 	"components.board.action.download": "Завантажити",
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.action.moveDown": "Рухатися вниз",
+	"components.board.action.moveLeft": "Перемістіться вліво",
+	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
