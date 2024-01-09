@@ -152,7 +152,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				};
 			};
 
-			it("should return translationkey for outdated and student", () => {
+			it("should return translationkey for outdated", () => {
 				const { determineOutdatedTranslationKey, toolConfigurationStatus } =
 					setup();
 
@@ -187,7 +187,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				};
 			};
 
-			it("should return translationkey for outdated and student ", () => {
+			it("should return translationkey for outdated ", () => {
 				const { determineOutdatedTranslationKey, toolConfigurationStatus } =
 					setup();
 
@@ -222,7 +222,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				};
 			};
 
-			it("should return translationkey for outdated and student", () => {
+			it("should return translationkey for outdated", () => {
 				const { determineOutdatedTranslationKey, toolConfigurationStatus } =
 					setup();
 
@@ -233,7 +233,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		});
 	});
 
-	describe("determineIncompleteTranslationKey for teacher", () => {
+	describe("determineIncompleteTranslationKey", () => {
 		describe("when user is teacher and tool is incomplete on scope context", () => {
 			const setup = () => {
 				const authModule = createModuleMocks(AuthModule, {

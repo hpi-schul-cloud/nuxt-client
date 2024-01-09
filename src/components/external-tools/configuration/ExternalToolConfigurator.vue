@@ -165,25 +165,30 @@ export default defineComponent({
 
 		const onSave = async () => {
 			if (selectedTemplate.value) {
-				const parameterEntries: ToolParameterEntry[] =
-					selectedTemplate.value.parameters
-						.map(
-							(
-								parameter: ToolParameter,
-								index: number
-							): ToolParameterEntry => ({
-								name: parameter.name,
-								value: parameterConfiguration.value[index],
-							})
-						)
-						.filter(
-							(parameterEntry: ToolParameterEntry) =>
-								parameterEntry.value !== undefined &&
-								parameterEntry.value !== ""
-						);
+				const parameterEntries: ToolParameterEntry[] = mapValidParameterEntries(
+					selectedTemplate.value
+				);
 
 				emit("save", selectedTemplate.value, parameterEntries);
 			}
+		};
+
+		const mapValidParameterEntries = (
+			template: ExternalToolConfigurationTemplate
+		) => {
+			const parameterEntries: ToolParameterEntry[] = template.parameters
+				.map(
+					(parameter: ToolParameter, index: number): ToolParameterEntry => ({
+						name: parameter.name,
+						value: parameterConfiguration.value[index],
+					})
+				)
+				.filter(
+					(parameterEntry: ToolParameterEntry) =>
+						parameterEntry.value !== undefined && parameterEntry.value !== ""
+				);
+
+			return parameterEntries;
 		};
 
 		const onChangeSelection = async () => {
