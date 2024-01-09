@@ -1,46 +1,54 @@
 <template>
-	<ContentElementBar class="audioPlayer grey darken-3">
+	<ContentElementBar class="audio-player grey darken-3">
 		<template #element>
-			<audio ref="audio" loading="lazy" />
-			<v-btn
-				v-if="playing"
-				:aria-label="$t('component.cardElement.fileElement.audioPlayer.pause')"
-				icon
-				@click="onPlay"
-				color="white"
-				small
-			>
-				<v-icon> {{ mdiPause }}</v-icon>
-			</v-btn>
-			<v-btn
-				v-else
-				:aria-label="$t('component.cardElement.fileElement.audioPlayer.play')"
-				icon
-				@click="onPlay"
-				color="white"
-				small
-			>
-				<v-icon>{{ mdiPlay }}</v-icon>
-			</v-btn>
-			<span class="duration pr-2 pl-1"> {{ durationDisplay }}</span>
-			<v-slider
-				:aria-label="$t('component.cardElement.fileElement.audioPlayer.slider')"
-				class="duration-slider pt-6"
-				color="white"
-				thumb-color="white"
-				track-color="black"
-				:value="currentTime"
-				start="0"
-				end="duration"
-				step="durationStep"
-				:min="0"
-				:max="duration"
-				@click="stopPropagation"
-				@mousedown="stopPropagation"
-				@mouseup="stopPropagation"
-				@input="onInputSlider"
-			/>
-			<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
+			<div class="d-flex flex-nowrap pb-0">
+				<audio ref="audio" loading="lazy" />
+				<v-btn
+					v-if="playing"
+					:aria-label="
+						$t('component.cardElement.fileElement.audioPlayer.pause')
+					"
+					icon
+					@click="onPlay"
+					color="white"
+					small
+				>
+					<v-icon> {{ mdiPause }}</v-icon>
+				</v-btn>
+				<v-btn
+					v-else
+					:aria-label="$t('component.cardElement.fileElement.audioPlayer.play')"
+					icon
+					@click="onPlay"
+					color="white"
+					small
+				>
+					<v-icon>{{ mdiPlay }}</v-icon>
+				</v-btn>
+				<div class="duration pr-2 pl-1 pt-1 body-2">
+					{{ durationDisplay }}
+				</div>
+				<v-slider
+					:aria-label="
+						$t('component.cardElement.fileElement.audioPlayer.slider')
+					"
+					class="duration-slider"
+					color="white"
+					thumb-color="white"
+					track-color="black"
+					:value="currentTime"
+					start="0"
+					end="duration"
+					step="durationStep"
+					:min="0"
+					:max="duration"
+					@click="stopPropagation"
+					@mousedown="stopPropagation"
+					@mouseup="stopPropagation"
+					@input="onInputSlider"
+				/>
+				<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
+			</div>
 		</template>
 		<template #menu><slot /></template>
 	</ContentElementBar>
@@ -128,7 +136,7 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-.audioPlayer {
+.audio-player {
 	border-top-right-radius: 0.25rem;
 	border-top-left-radius: 0.25rem;
 }
@@ -138,5 +146,6 @@ export default defineComponent({
 }
 .duration-slider {
 	width: 40%;
+	max-height: 2rem;
 }
 </style>

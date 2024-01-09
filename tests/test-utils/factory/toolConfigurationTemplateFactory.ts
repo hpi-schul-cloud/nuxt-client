@@ -9,4 +9,5 @@ export const schoolExternalToolConfigurationTemplate =
 		name: "toolName",
 		logoUrl: "logoUrl",
 		parameters: [],
+		isDeactivated: false,
 	}));
