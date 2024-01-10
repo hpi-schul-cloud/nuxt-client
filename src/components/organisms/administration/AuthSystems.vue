@@ -213,6 +213,7 @@ export default {
 			return system.ldapConfig?.provider === "general";
 		},
 		redirectTo(system) {
+			window.scrollTo({ top: 0, behavior: "smooth" });
 			if (system.alias === "SANIS") {
 				return `/administration/school-settings/provisioning-options?systemId=${system._id}`;
 			}
