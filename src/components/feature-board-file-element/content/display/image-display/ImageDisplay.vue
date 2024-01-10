@@ -1,30 +1,33 @@
 <template>
-	<ColorOverlay
-		:isOverlayDisabled="isEditMode"
-		@on:action="openLightBox"
-		color="var(--v-black-base)"
-	>
-		<PreviewImage
-			:src="previewSrc"
-			:alt="alternativeText"
-			:contain="true"
-			class="rounded-t"
-		/>
+	<div class="rounded-t">
+		<PreviewImageError :show="hasImageError" />
+		<ColorOverlay
+			:isOverlayDisabled="isEditMode || hasImageError"
+			@on:action="openLightBox"
+			color="var(--v-black-base)"
+		>
+			<PreviewImage
+				:src="previewSrc"
+				:alt="alternativeText"
+				:contain="true"
+				@error="onImageError"
+			/>
 
-		<ContentElementBar class="menu">
-			<template #menu><slot /></template>
-		</ContentElementBar>
-	</ColorOverlay>
+			<ContentElementBar class="menu">
+				<template #menu><slot /></template>
+			</ContentElementBar>
+		</ColorOverlay>
+	</div>
 </template>
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { PropType, computed, defineComponent } from "vue";
+import { PropType, computed, defineComponent, ref } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { ColorOverlay } from "@ui-color-overlay";
-import { PreviewImage } from "@ui-preview-image";
+import { PreviewImage, PreviewImageError } from "@ui-preview-image";
 import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
@@ -36,9 +39,15 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 	},
-	components: { ContentElementBar, ColorOverlay, PreviewImage },
+	components: {
+		ContentElementBar,
+		ColorOverlay,
+		PreviewImage,
+		PreviewImageError,
+	},
 	setup(props) {
 		const { t } = useI18n();
+		const hasImageError = ref(false);
 
 		const alternativeText = computed(() => {
 			const altTranslation = t("components.cardElement.fileElement.emptyAlt");
@@ -64,9 +73,15 @@ export default defineComponent({
 			open(options);
 		};
 
+		const onImageError = () => {
+			hasImageError.value = true;
+		};
+
 		return {
 			alternativeText,
 			openLightBox,
+			onImageError,
+			hasImageError,
 		};
 	},
 });

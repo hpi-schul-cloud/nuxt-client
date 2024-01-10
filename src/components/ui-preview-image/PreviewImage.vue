@@ -3,12 +3,13 @@
 		ref="imageRef"
 		class="image rounded-t-sm"
 		loading="lazy"
-		:src="src"
+		:src="imageSrc"
 		:alt="alt"
 		:contain="contain"
 		:aspect-ratio="aspectRatio"
 		:position="position"
 		@load="setWidth"
+		@error="setError"
 		:max-width="imageWidth"
 	>
 		<template v-slot:placeholder>
@@ -20,8 +21,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref, computed } from "vue";
 import { useNaturalwidth } from "./NaturalWidth.composable";
+import errorImage from "@/assets/img/preview-not-possible.svg";
 
 export default defineComponent({
 	name: "PreviewImage",
@@ -32,13 +34,29 @@ export default defineComponent({
 		aspectRatio: { type: Number, required: false },
 		position: { type: String, required: false },
 	},
-	setup() {
+	setup(props, { emit }) {
 		const { imageRef, imageWidth, setWidth } = useNaturalwidth();
+		const isError = ref(false);
+
+		const imageSrc = computed(() => {
+			if (isError.value) {
+				return errorImage;
+			}
+			return props.src;
+		});
+
+		const setError = () => {
+			isError.value = true;
+			emit("error", isError);
+		};
 
 		return {
 			imageRef,
 			setWidth,
 			imageWidth,
+			imageSrc,
+			setError,
+			isError,
 		};
 	},
 });
