@@ -143,9 +143,6 @@ onMounted(() => {
 	if (initialSearchQuery) {
 		searchQuery.value = initialSearchQuery as string;
 		activateTransition.value = true;
-		if (resources.value.data.length === 0) {
-			enterKeyHandler();
-		}
 	}
 });
 
@@ -171,15 +168,6 @@ const searchContent = async () => {
 };
 
 const addContent = async ({ done }) => {
-	// console.log(resources.value);
-	// if (
-	// 	searchQuery.value &&
-	// 	!resources.value.data.length &&
-	// 	resources.value.skip === 0
-	// ) {
-	// 	// console.log("sdfsdfsdf", searchQuery.value, resources.value);
-	// }
-
 	if (
 		resources.value.total !== 0 &&
 		resources.value.data.length >= resources.value.total
@@ -187,15 +175,20 @@ const addContent = async ({ done }) => {
 		return;
 	}
 
-	queryOptions.value.$skip += queryOptions.value.$limit;
+	if (!resources.value.data.length && searchQuery.value) {
+		await searchContent();
+	} else {
+		queryOptions.value.$skip += queryOptions.value.$limit;
 
-	const query = {
-		$limit: queryOptions.value.$limit,
-		$skip: queryOptions.value.$skip,
-		searchQuery: searchQuery.value,
-	};
+		const query = {
+			$limit: queryOptions.value.$limit,
+			$skip: queryOptions.value.$skip,
+			searchQuery: searchQuery.value,
+		};
 
-	await contentModule.addResources(query);
+		await contentModule.addResources(query);
+	}
+
 	done("ok");
 };
 
