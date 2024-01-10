@@ -1,1 +1,4 @@
-export { ProvisioningOptions } from "./ProvisioningOptions";
+export {
+	ProvisioningOptions,
+	ProvisioningOptionsEnum,
+} from "./ProvisioningOptions";
