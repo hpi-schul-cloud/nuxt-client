@@ -50,51 +50,53 @@
 						</v-text-field>
 					</div>
 				</div>
-				<div class="content__container" v-if="true">
-					<template v-if="searchQuery.length > 1">
-						<p v-show="resources.data.length !== 0" class="content__total">
-							{{ resources.total }}
-							{{ $t("pages.content.index.search_results") }} "{{
-								searchQueryResult
-							}}"
-						</p>
-						<v-infinite-scroll
-							width="100%"
-							:items="resources"
-							@load="addContent"
-						>
-							<lern-store-grid
-								column-width="14rem"
-								data-testid="lernStoreCardsContainer"
+				<transition name="fade">
+					<div class="content__container" v-if="true">
+						<template v-if="searchQuery.length > 1">
+							<p v-show="resources.data.length !== 0" class="content__total">
+								{{ resources.total }}
+								{{ $t("pages.content.index.search_results") }} "{{
+									searchQueryResult
+								}}"
+							</p>
+							<v-infinite-scroll
+								width="100%"
+								:items="resources"
+								@load="addContent"
 							>
-								<content-card
-									v-for="resource of resources.data"
-									:key="resource.properties['ccm:replicationsourceuuid'][0]"
-									class="card"
-									:inline="isInline"
-									:resource="resource"
-								/>
-							</lern-store-grid>
-							<template #loading>
-								<v-progress-circular
-									indeterminate
-									color="secondary"
-									size="115"
-									class="align-self-center mt-4"
-								/>
-							</template>
-						</v-infinite-scroll>
-					</template>
-					<span v-if="!loading" class="content__container_child">
-						<content-initial-state v-if="searchQuery.length === 0" />
-						<div
-							v-else-if="resources.data.length === 0"
-							class="content__no_results"
-						>
-							<content-empty-state />
-						</div>
-					</span>
-				</div>
+								<lern-store-grid
+									column-width="14rem"
+									data-testid="lernStoreCardsContainer"
+								>
+									<content-card
+										v-for="resource of resources.data"
+										:key="resource.properties['ccm:replicationsourceuuid'][0]"
+										class="card"
+										:inline="isInline"
+										:resource="resource"
+									/>
+								</lern-store-grid>
+								<template #loading>
+									<v-progress-circular
+										indeterminate
+										color="secondary"
+										size="115"
+										class="align-self-center mt-4"
+									/>
+								</template>
+							</v-infinite-scroll>
+						</template>
+						<span v-if="!loading" class="content__container_child">
+							<content-initial-state v-if="searchQuery.length === 0" />
+							<div
+								v-else-if="resources.data.length === 0"
+								class="content__no_results"
+							>
+								<content-empty-state />
+							</div>
+						</span>
+					</div>
+				</transition>
 			</div>
 			<content-edu-sharing-footer class="content__footer" />
 		</div>
@@ -107,7 +109,6 @@ import { useDebounceFn } from "@vueuse/core";
 import { mdiChevronLeft, mdiMagnify, mdiClose } from "@mdi/js";
 import { CONTENT_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifierModule } from "@/store";
-// import infiniteScrolling from "@/mixins/infiniteScrolling";
 import { buildPageTitle } from "@/utils/pageTitle";
 import ContentCard from "@/components/lern-store/ContentCard.vue";
 import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
@@ -129,7 +130,6 @@ const searchQuery = ref("");
 const activateTransition = ref(false);
 const searchQueryResult = ref("");
 const queryOptions = ref({ $limit: 12, $skip: 0 });
-// const searchResults = ref([]);
 
 onMounted(() => {
 	const pageTitle = isInline.value
@@ -171,10 +171,12 @@ const searchContent = async () => {
 };
 
 const addContent = async ({ done }) => {
-	console.log("hi");
-	// if (resources.value.data.length >= resources.value.total) {
-	// 	return;
-	// }
+	if (
+		resources.value.total !== 0 &&
+		resources.value.data.length >= resources.value.total
+	) {
+		return;
+	}
 
 	queryOptions.value.$skip += queryOptions.value.$limit;
 
@@ -222,6 +224,12 @@ watch(searchQuery, (to, from) => {
 
 <style lang="scss" scoped>
 @import "~vuetify/settings";
+
+:deep {
+	.v-infinite-scroll--vertical {
+		overflow-y: visible;
+	}
+}
 .content {
 	display: flex;
 	flex-direction: column;
