@@ -171,6 +171,15 @@ const searchContent = async () => {
 };
 
 const addContent = async ({ done }) => {
+	// console.log(resources.value);
+	// if (
+	// 	searchQuery.value &&
+	// 	!resources.value.data.length &&
+	// 	resources.value.skip === 0
+	// ) {
+	// 	// console.log("sdfsdfsdf", searchQuery.value, resources.value);
+	// }
+
 	if (
 		resources.value.total !== 0 &&
 		resources.value.data.length >= resources.value.total
@@ -190,15 +199,21 @@ const addContent = async ({ done }) => {
 	done("ok");
 };
 
+const updateURLQuery = useDebounceFn(() => {
+	searchQueryResult.value = searchQuery.value;
+	router.push({
+		query: {
+			...route.query,
+			q: searchQuery.value,
+		},
+	});
+}, 200);
+
 const goBack = () => {
 	window.close();
 };
 
-watch(searchQuery, (to, from) => {
-	// if (this.$options.debounce) {
-	// 	clearInterval(this.$options.debounce);
-	// }
-
+watch(searchQuery, async (to, from) => {
 	if (to === from || !to) {
 		router.push({
 			query: {
@@ -208,17 +223,8 @@ watch(searchQuery, (to, from) => {
 		});
 		return;
 	}
-	// this.$options.debounce = setInterval(() => {
-	searchQueryResult.value = searchQuery.value;
 
-	// clearInterval(this.$options.debounce);
-	router.push({
-		query: {
-			...route.query,
-			q: searchQuery.value,
-		},
-	});
-	// }, 200);
+	await updateURLQuery();
 });
 </script>
 
