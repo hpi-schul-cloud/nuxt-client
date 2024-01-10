@@ -95,7 +95,7 @@ export default defineComponent({
 		);
 
 		const redirectToSanitizedUrl = () => {
-			window.location.href = sanitizedUrl.value;
+			window.open(sanitizedUrl.value, "_blank");
 		};
 		useBoardFocusHandler(element.value.id, drawingElement);
 
