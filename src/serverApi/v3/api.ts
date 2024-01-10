@@ -1726,7 +1726,7 @@ export interface ExternalToolCreateParams {
      */
     isHidden: boolean;
     /**
-     * 
+     * Tool can be deactivated, related tools can not be added to e.g. school, course or board anymore
      * @type {boolean}
      * @memberof ExternalToolCreateParams
      */
@@ -4230,7 +4230,7 @@ export interface SchoolExternalToolPostParams {
      */
     parameters?: Array<CustomParameterEntryParam>;
     /**
-     * 
+     * Tool can be deactivated, related tools can not be added to e.g. course or board anymore
      * @type {boolean}
      * @memberof SchoolExternalToolPostParams
      */
