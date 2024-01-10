@@ -5,43 +5,49 @@
 			'alert-wrapper': !isMobile,
 		}"
 	>
-		<v-alert
-			v-model="showNotifier"
-			:icon="icon"
-			:transition="transition"
-			:type="status"
-			class="alert"
-			closable
-			max-width="400"
-			min-width="200"
-			variant="tonal"
-			:close-icon="mdiClose"
-			:close-label="$t('common.labels.close')"
-			border="start"
-			@update:modelValue="closeNotification"
-		>
-			<div v-if="messages" class="alert_text mr-2">
-				<div v-for="(message, index) in messages" :key="index" class="mb-1">
-					<b>{{ message.title }}</b>
-					<p class="mb-0">{{ message.text }}</p>
+		<Transition :name="transition">
+			<v-alert
+				v-model="showNotifier"
+				:icon="icon"
+				:type="status"
+				class="alert"
+				closable
+				max-width="400"
+				min-width="200"
+				:close-label="$t('common.labels.close')"
+				border="start"
+				@update:modelValue="closeNotification"
+			>
+				<div v-if="messages" class="alert_text mr-2">
+					<div v-for="(message, index) in messages" :key="index" class="mb-1">
+						<b>{{ message.title }}</b>
+						<p class="mb-0">{{ message.text }}</p>
+					</div>
 				</div>
-			</div>
-			<div v-else class="alert_text mr-2">
-				{{ text }}
-			</div>
-		</v-alert>
+				<div v-else class="alert_text mr-2">
+					{{ text }}
+				</div>
+			</v-alert>
+		</Transition>
 	</div>
 </template>
 
 <script>
 import { notifierModule } from "@/store";
-import { mdiAlert, mdiCheckCircle, mdiClose, mdiInformation } from "@mdi/js";
+import {
+	mdiAlert,
+	mdiAlertCircle,
+	mdiCheckCircle,
+	mdiClose,
+	mdiInformation,
+} from "@mdi/js";
 
 export default {
 	data() {
 		return {
 			mdiClose,
 			mdiAlert,
+			mdiAlertCircle,
 			mdiCheckCircle,
 			mdiInformation,
 		};
@@ -69,7 +75,7 @@ export default {
 		icon() {
 			if (this.status === "success") return mdiCheckCircle;
 			if (this.status === "warning") return mdiAlert;
-			if (this.status === "error") return mdiAlert;
+			if (this.status === "error") return mdiAlertCircle;
 			if (this.status === "info") return mdiInformation;
 			return undefined;
 		},
@@ -116,9 +122,5 @@ export default {
 :deep(.v-btn__content .v-icon),
 .alert_text {
 	color: rgba(var(--v-theme-black)) !important;
-}
-
-:deep(.v-alert_border) {
-	opacity: 1;
 }
 </style>
