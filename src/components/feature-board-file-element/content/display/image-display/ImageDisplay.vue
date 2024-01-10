@@ -1,22 +1,20 @@
 <template>
-	<div class="rounded-t">
-		<ColorOverlay
-			:isOverlayDisabled="isEditMode || hasImageError"
-			@on:action="openLightBox"
-			color="var(--v-black-base)"
-		>
-			<PreviewImage
-				:src="previewSrc"
-				:alt="alternativeText"
-				:contain="true"
-				@error="onImageError"
-			/>
+	<ColorOverlay
+		:isOverlayDisabled="isEditMode || hasImageError"
+		@on:action="openLightBox"
+		color="var(--v-black-base)"
+	>
+		<PreviewImage
+			:src="previewSrc"
+			:alt="alternativeText"
+			:contain="true"
+			@error="onImageError"
+		/>
 
-			<ContentElementBar class="menu">
-				<template #menu><slot /></template>
-			</ContentElementBar>
-		</ColorOverlay>
-	</div>
+		<ContentElementBar class="menu">
+			<template #menu><slot /></template>
+		</ContentElementBar>
+	</ColorOverlay>
 </template>
 
 <script lang="ts">
