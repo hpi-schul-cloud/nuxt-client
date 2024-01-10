@@ -143,6 +143,7 @@ const onUpdateFilter = (value: string[] & DateSelection) => {
 	dialogOpen.value = false;
 	emit("update:filter", filterQuery.value);
 };
+defineExpose({ dialogOpen, filterTitle, userType });
 </script>
 
 <style lang="scss" scoped>
