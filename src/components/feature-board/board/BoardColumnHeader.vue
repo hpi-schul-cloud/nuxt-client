@@ -22,6 +22,8 @@
 				/>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
 					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
+					<BoardMenuActionMoveLeft @click="onMoveColumnLeft" />
+					<BoardMenuActionMoveRight @click="onMoveColumnRight" />
 					<BoardMenuActionDelete @click="onDelete" :name="title" />
 				</BoardMenu>
 			</div>
@@ -41,6 +43,8 @@ import {
 	BoardMenu,
 	BoardMenuActionEdit,
 	BoardMenuActionDelete,
+	BoardMenuActionMoveLeft,
+	BoardMenuActionMoveRight,
 } from "@ui-board";
 import { defineComponent, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
@@ -54,6 +58,8 @@ export default defineComponent({
 		BoardMenuActionEdit,
 		BoardColumnInteractionHandler,
 		BoardMenuActionDelete,
+		BoardMenuActionMoveLeft,
+		BoardMenuActionMoveRight,
 	},
 	props: {
 		columnId: {
@@ -69,7 +75,13 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["delete:column", "move:column-keyboard", "update:title"],
+	emits: [
+		"delete:column",
+		"move:column-keyboard",
+		"move:column-left",
+		"move:column-right",
+		"update:title",
+	],
 	setup(props, { emit }) {
 		const columnId = toRef(props, "columnId");
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
@@ -101,6 +113,14 @@ export default defineComponent({
 			emit("move:column-keyboard", event.code);
 		};
 
+		const onMoveColumnLeft = () => {
+			emit("move:column-left");
+		};
+
+		const onMoveColumnRight = () => {
+			emit("move:column-right");
+		};
+
 		const onUpdateTitle = (newTitle: string) => {
 			emit("update:title", newTitle);
 		};
@@ -117,6 +137,8 @@ export default defineComponent({
 			onEndEditMode,
 			onDelete,
 			onMoveColumnKeyboard,
+			onMoveColumnLeft,
+			onMoveColumnRight,
 			onUpdateTitle,
 		};
 	},
