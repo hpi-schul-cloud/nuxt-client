@@ -3,7 +3,7 @@
 		<template v-slot:activator="{ props }">
 			<v-btn v-bind="props" variant="flat">
 				<v-icon class="filter-icon mr-2">$mdiTune</v-icon>
-				{{ t("components.organisms.DataFilter.add") }}
+				{{ filterTitle }}
 				<v-icon class="filter-icon">$mdiMenuDown</v-icon>
 			</v-btn>
 		</template>
@@ -62,10 +62,9 @@ import {
 	FilterOptionsType,
 	User,
 } from "./types";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, PropType } from "vue";
 import { useDataTableFilter } from "./composables/filter.composable";
-import { useStore } from "vuex";
-import { authModule } from "@/store";
+
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -73,16 +72,17 @@ const props = defineProps({
 		type: String,
 		default: () => User.STUDENT,
 	},
+	classNames: {
+		type: Array as PropType<SelectOptionsType[]>,
+		default: () => [],
+	},
 });
 
 const emit = defineEmits(["update:filter"]);
-
-const { currentYear } = authModule.getSchool;
-const store = useStore();
 const { t } = useI18n();
+const filterTitle = computed(() => t("components.organisms.DataFilter.add"));
 const dialogOpen = ref(false);
 const userType = computed(() => props.filterFor);
-const classNamesList = ref([]);
 
 const {
 	defaultFilterMenuItems,
@@ -107,7 +107,7 @@ const modalTitle = computed(
 
 const selectionProps = computed(() => {
 	return selectedFilterType.value == FilterOption.CLASSES
-		? classNamesList.value
+		? props.classNames
 		: registrationOptions[userType.value as User];
 });
 
@@ -143,28 +143,6 @@ const onUpdateFilter = (value: string[] & DateSelection) => {
 	dialogOpen.value = false;
 	emit("update:filter", filterQuery.value);
 };
-
-const getClassNameList = () => {
-	return store?.state["classes"].list.reduce(
-		(acc: SelectOptionsType[], item: { displayName: string }) =>
-			acc.concat({
-				label: item.displayName,
-				value: item.displayName,
-			}),
-		[]
-	);
-};
-
-onMounted(async () => {
-	await store.dispatch("classes/find", {
-		query: {
-			$limit: 1000,
-			year: currentYear?.id,
-		},
-	});
-
-	classNamesList.value = getClassNameList();
-});
 </script>
 
 <style lang="scss" scoped>

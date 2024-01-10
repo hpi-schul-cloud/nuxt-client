@@ -32,7 +32,11 @@
 				</template>
 			</base-input>
 
-			<NewDataFilter @update:filter="onUpdateFilter" filter-for="teacher" />
+			<NewDataFilter
+				@update:filter="onUpdateFilter"
+				filter-for="teacher"
+				:class-names="classNameList"
+			/>
 
 			<backend-data-table
 				:actions="filteredActions"
@@ -293,6 +297,7 @@ export default {
 				"",
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
+			classNameList: [],
 		};
 	},
 	computed: {
@@ -437,6 +442,7 @@ export default {
 	},
 	created() {
 		this.find();
+		this.getClassNameList();
 	},
 	methods: {
 		find() {
@@ -628,6 +634,23 @@ export default {
 		onUpdateFilter(query) {
 			this.currentFilterQuery = query;
 			this.find();
+		},
+		async getClassNameList() {
+			const { currentYear } = this.$store.getters["authModule/getSchool"];
+			await this.$store.dispatch("classes/find", {
+				query: {
+					$limit: 1000,
+					year: currentYear?.id,
+				},
+			});
+			this.classNameList = this.$store.state["classes"].list.reduce(
+				(acc, item) =>
+					acc.concat({
+						label: item.displayName,
+						value: item.displayName,
+					}),
+				[]
+			);
 		},
 	},
 	mounted() {
