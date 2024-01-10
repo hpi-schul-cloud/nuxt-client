@@ -8,6 +8,7 @@
 			:src="previewSrc"
 			:alt="alternativeText"
 			:contain="true"
+			class="rounded-t"
 			@error="onImageError"
 		/>
 
