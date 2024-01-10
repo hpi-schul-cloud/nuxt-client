@@ -1,6 +1,5 @@
 <template>
 	<div class="rounded-t">
-		<PreviewImageError :show="hasImageError" />
 		<ColorOverlay
 			:isOverlayDisabled="isEditMode || hasImageError"
 			@on:action="openLightBox"
@@ -27,7 +26,7 @@ import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PropType, computed, defineComponent, ref } from "vue";
 import { ContentElementBar } from "@ui-board";
 import { ColorOverlay } from "@ui-color-overlay";
-import { PreviewImage, PreviewImageError } from "@ui-preview-image";
+import { PreviewImage } from "@ui-preview-image";
 import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
@@ -43,7 +42,6 @@ export default defineComponent({
 		ContentElementBar,
 		ColorOverlay,
 		PreviewImage,
-		PreviewImageError,
 	},
 	setup(props) {
 		const { t } = useI18n();
