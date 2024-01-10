@@ -10,6 +10,7 @@ import {
 	Lessons,
 	Query,
 	Resource,
+	ResourceProperties,
 	Resources,
 } from "./types/content";
 
@@ -60,7 +61,7 @@ const initialState = () => ({
 		owner: {},
 		parent: {},
 		preview: {},
-		properties: {},
+		properties: {} as ResourceProperties,
 		rating: null,
 		ref: {},
 		remote: null,

@@ -50,49 +50,52 @@
 						</v-text-field>
 					</div>
 				</div>
-				<transition name="fade">
-					<div class="content__container" v-if="true">
-						<p
-							v-show="resources.data.length !== 0 && searchQuery.length > 1"
-							class="content__total"
-						>
+				<div class="content__container" v-if="true">
+					<template v-if="searchQuery.length > 1">
+						<p v-show="resources.data.length !== 0" class="content__total">
 							{{ resources.total }}
 							{{ $t("pages.content.index.search_results") }} "{{
 								searchQueryResult
 							}}"
 						</p>
-						<span v-if="!loading" class="content__container_child">
-							<content-initial-state v-if="searchQuery.length === 0" />
-							<div
-								v-else-if="resources.data.length === 0"
-								class="content__no_results"
-							>
-								<content-empty-state />
-							</div>
-						</span>
-						<lern-store-grid
-							v-if="searchQuery.length > 1"
-							column-width="14rem"
-							data-testid="lernStoreCardsContainer"
+						<v-infinite-scroll
+							width="100%"
+							:items="resources"
+							@load="addContent"
 						>
-							<content-card
-								v-for="resource of resources.data"
-								:key="resource.properties['ccm:replicationsourceuuid'][0]"
-								class="card"
-								:inline="isInline"
-								:resource="resource"
-							/>
-						</lern-store-grid>
-					</div>
-				</transition>
+							<lern-store-grid
+								column-width="14rem"
+								data-testid="lernStoreCardsContainer"
+							>
+								<content-card
+									v-for="resource of resources.data"
+									:key="resource.properties['ccm:replicationsourceuuid'][0]"
+									class="card"
+									:inline="isInline"
+									:resource="resource"
+								/>
+							</lern-store-grid>
+							<template #loading>
+								<v-progress-circular
+									indeterminate
+									color="secondary"
+									size="115"
+									class="align-self-center mt-4"
+								/>
+							</template>
+						</v-infinite-scroll>
+					</template>
+					<span v-if="!loading" class="content__container_child">
+						<content-initial-state v-if="searchQuery.length === 0" />
+						<div
+							v-else-if="resources.data.length === 0"
+							class="content__no_results"
+						>
+							<content-empty-state />
+						</div>
+					</span>
+				</div>
 			</div>
-			<v-progress-circular
-				v-if="loading"
-				indeterminate
-				color="secondary"
-				size="115"
-				class="align-self-center mt-4"
-			/>
 			<content-edu-sharing-footer class="content__footer" />
 		</div>
 	</section>
@@ -125,7 +128,8 @@ const contentModule = injectStrict(CONTENT_MODULE_KEY);
 const searchQuery = ref("");
 const activateTransition = ref(false);
 const searchQueryResult = ref("");
-// const queryOptions = ref({ $limit: 12, $skip: 0 });
+const queryOptions = ref({ $limit: 12, $skip: 0 });
+// const searchResults = ref([]);
 
 onMounted(() => {
 	const pageTitle = isInline.value
@@ -149,8 +153,8 @@ const isInline = computed(() => !!route.query.inline);
 const resources = computed(() => contentModule.getResourcesGetter);
 const loading = computed(() => contentModule.getLoading);
 
-const enterKeyHandler = useDebounceFn(() => {
-	searchContent();
+const enterKeyHandler = useDebounceFn(async () => {
+	await searchContent();
 	activateTransition.value = true;
 }, 500);
 
@@ -166,27 +170,29 @@ const searchContent = async () => {
 	}
 };
 
-// const addContent = async () => {
-// 	if (resources.value.data.length < resources.value.total) {
-// 		queryOptions.value.$skip += queryOptions.value.$limit;
+const addContent = async ({ done }) => {
+	console.log("hi");
+	// if (resources.value.data.length >= resources.value.total) {
+	// 	return;
+	// }
 
-// 		const query = {
-// 			$limit: queryOptions.value.$limit,
-// 			$skip: queryOptions.value.$skip,
-// 			searchQuery: searchQuery.value,
-// 		};
-// 		await contentModule.addResources(query);
-// 	}
-// };
+	queryOptions.value.$skip += queryOptions.value.$limit;
+
+	const query = {
+		$limit: queryOptions.value.$limit,
+		$skip: queryOptions.value.$skip,
+		searchQuery: searchQuery.value,
+	};
+
+	await contentModule.addResources(query);
+	done("ok");
+};
 
 const goBack = () => {
 	window.close();
 };
 
 watch(searchQuery, (to, from) => {
-	console.log(to, from);
-	console.log(resources.value);
-
 	// if (this.$options.debounce) {
 	// 	clearInterval(this.$options.debounce);
 	// }
@@ -212,50 +218,6 @@ watch(searchQuery, (to, from) => {
 	});
 	// }, 200);
 });
-
-// export default {
-// 	mixins: [infiniteScrolling],
-// 	data() {
-// 		return {
-// 			backToTopScrollYLimit: 115,
-// 			prevRoute: null,
-// 		};
-// 	},
-// 	watch: {
-// 		bottom(bottom) {
-// 			const { data, total } = this.resources;
-// 			if (bottom && !this.loading && data.length < total) {
-// 				this.addContent();
-// 			}
-// 		},
-// 		searchQuery(to, from) {
-// 			if (this.$options.debounce) {
-// 				clearInterval(this.$options.debounce);
-// 			}
-
-// 			if (to === from || !to) {
-// 				this.$router.push({
-// 					query: {
-// 						...this.$route.query,
-// 						q: "",
-// 					},
-// 				});
-// 				return;
-// 			}
-// 			this.$options.debounce = setInterval(() => {
-// 				this.searchQueryResult = this.searchQuery;
-
-// 				clearInterval(this.$options.debounce);
-// 				this.$router.push({
-// 					query: {
-// 						...this.$route.query,
-// 						q: this.searchQuery,
-// 					},
-// 				});
-// 			}, 200);
-// 		},
-// 	},
-// };
 </script>
 
 <style lang="scss" scoped>

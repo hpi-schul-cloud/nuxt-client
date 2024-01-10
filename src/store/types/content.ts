@@ -38,7 +38,7 @@ export type Resource = {
 	type: string;
 };
 
-type ResourceProperties = {
+export type ResourceProperties = {
 	"cclom:aggregationlevel": string[];
 	"cclom:format": string[];
 	"cclom:general_description": string[];
