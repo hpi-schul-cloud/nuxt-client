@@ -34,16 +34,19 @@ export function useExternalToolsSectionUtils(
 		const schoolExternalTools: SchoolExternalTool[] =
 			schoolExternalToolsModule.getSchoolExternalTools;
 		return schoolExternalTools.map((tool: SchoolExternalTool) => {
-			const outdated: boolean = tool.status.isOutdatedOnScopeSchool;
-			const statusTranslationKey: string = tool.status.isOutdatedOnScopeSchool
-				? "components.externalTools.status.outdated"
-				: "components.externalTools.status.latest";
+			let statusTranslationKey = "components.externalTools.status.latest";
+			if (tool.status.isDeactivated) {
+				statusTranslationKey = "components.externalTools.status.deactivated";
+			} else if (tool.status.isOutdatedOnScopeSchool) {
+				statusTranslationKey = "components.externalTools.status.outdated";
+			}
 
 			return {
 				id: tool.id,
 				name: tool.name,
-				status: t(statusTranslationKey),
-				outdated,
+				statusText: t(statusTranslationKey),
+				isOutdated: tool.status.isOutdatedOnScopeSchool,
+				isDeactivated: tool.status.isDeactivated,
 			};
 		});
 	};

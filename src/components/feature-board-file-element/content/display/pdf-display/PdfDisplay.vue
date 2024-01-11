@@ -9,6 +9,7 @@
 			:alt="altText"
 			:aspect-ratio="1.77777"
 			position="top"
+			class="rounded-t"
 		/>
 
 		<ContentElementBar class="menu">

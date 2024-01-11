@@ -38,8 +38,12 @@ describe("SubmissionContentElementState.composable", () => {
 		return mountComposable(
 			() => useSubmissionContentElementState(contentElementId, dueDate),
 			{
-				[I18N_KEY.valueOf()]: i18nMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				global: {
+					provide: {
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					},
+					mocks: i18nMock,
+				},
 			}
 		);
 	};

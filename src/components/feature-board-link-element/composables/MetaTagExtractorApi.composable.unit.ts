@@ -41,7 +41,7 @@ describe("useMetaTagExtractorApi", () => {
 					);
 
 					const composable = mountComposable(() => useMetaTagExtractorApi(), {
-						[I18N_KEY.valueOf()]: i18nMock,
+						global: { mocks: i18nMock },
 					});
 
 					return {
@@ -84,7 +84,7 @@ describe("useMetaTagExtractorApi", () => {
 						);
 
 						const composable = mountComposable(() => useMetaTagExtractorApi(), {
-							[I18N_KEY.valueOf()]: i18nMock,
+							global: { mocks: i18nMock },
 						});
 
 						return {
@@ -128,7 +128,7 @@ describe("useMetaTagExtractorApi", () => {
 						);
 
 						const composable = mountComposable(() => useMetaTagExtractorApi(), {
-							[I18N_KEY.valueOf()]: i18nMock,
+							mocks: i18nMock,
 						});
 
 						return {
@@ -166,7 +166,9 @@ describe("useMetaTagExtractorApi", () => {
 				api.metaTagExtractorControllerGetMetaTags.mockRejectedValue(false);
 
 				const composable = mountComposable(() => useMetaTagExtractorApi(), {
-					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+					global: {
+						mocks: { t: (key: string) => key },
+					},
 				});
 
 				return {

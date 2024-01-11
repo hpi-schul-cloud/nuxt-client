@@ -6,16 +6,16 @@
 	>
 		<v-alert
 			v-if="error"
-			variant="tonal"
 			type="error"
+			:icon="mdiAlertCircle"
 			data-testid="error-alert"
 		>
 			<div class="alert-text">
 				{{ t(error.translationKey) }}
 			</div>
 		</v-alert>
-		<div v-else data-testid="no-error">
-			<v-alert variant="tonal" type="info" class="mb-4">
+		<div data-testid="no-error">
+			<v-alert type="info" class="mb-4">
 				<div class="alert-text">
 					{{ t("pages.administration.school.index.back") }}
 					<a href="/administration/school/">
@@ -23,7 +23,7 @@
 					>.
 				</div>
 			</v-alert>
-			<v-alert variant="tonal" type="info" class="mb-12">
+			<v-alert type="info" class="mb-12">
 				<div class="alert-text">
 					{{ t("pages.administration.school.index.info", { instituteTitle }) }}
 				</div>
@@ -212,6 +212,7 @@ import {
 } from "@/utils/inject";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { mdiAlertCircle } from "@/components/icons/material";
 
 export default defineComponent({
 	name: "SchoolSettings",
@@ -309,6 +310,7 @@ export default defineComponent({
 			isFeatureSchoolPolicyEnabled,
 			isFeatureSchoolTermsOfUseEnabled,
 			instituteTitle,
+			mdiAlertCircle,
 		};
 	},
 });

@@ -13,6 +13,7 @@ import {
 	defaultPermissions,
 } from "@/types/board/Permissions";
 import { I18N_KEY } from "@/utils/inject";
+import { BoardMenuActionMoveLeft, BoardMenuActionMoveRight } from "@ui-board";
 
 jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -70,6 +71,30 @@ describe("BoardColumnHeader", () => {
 
 			const emitted = wrapper.emitted();
 			expect(emitted["update:title"]).toBeDefined();
+		});
+	});
+
+	describe("when the column should be moved to the left", () => {
+		it("should emit move:column-left", async () => {
+			setup();
+
+			const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
+			moveLeftButton.vm.$emit("click");
+
+			const emitted = wrapper.emitted();
+			expect(emitted["move:column-left"]).toBeDefined();
+		});
+	});
+
+	describe("when the column should be moved to the right", () => {
+		it("should emit move:column-right", async () => {
+			setup();
+
+			const moveRightButton = wrapper.findComponent(BoardMenuActionMoveRight);
+			moveRightButton.vm.$emit("click");
+
+			const emitted = wrapper.emitted();
+			expect(emitted["move:column-right"]).toBeDefined();
 		});
 	});
 

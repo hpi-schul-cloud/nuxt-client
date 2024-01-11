@@ -1,5 +1,5 @@
 <template>
-	<v-alert :color="color" :icon="icon" variant="tonal" class="mb-0">
+	<v-alert :color="color" :icon="icon" class="mb-0">
 		<div class="text-black" v-if="$slots.default">
 			<slot />
 		</div>

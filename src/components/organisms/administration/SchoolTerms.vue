@@ -2,11 +2,11 @@
 	<div>
 		<v-alert
 			v-if="status === 'error'"
-			variant="tonal"
 			type="error"
 			class="mb-6"
 			data-testid="error-alert"
 			:text="t('pages.administration.school.index.termsOfUse.error')"
+			:icon="mdiAlertCircle"
 		>
 			<div class="alert-text">
 				{{ t("pages.administration.school.index.termsOfUse.error") }}
@@ -99,7 +99,7 @@
 					</h4>
 				</template>
 				<template #content>
-					<v-alert variant="tonal" type="info" class="mb-0">
+					<v-alert type="info" class="mb-0">
 						<div class="alert-text">
 							{{
 								t("pages.administration.school.index.termsOfUse.delete.text")
@@ -129,6 +129,7 @@ import {
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { downloadFile } from "@/utils/fileHelper";
 import { formatDateForAlerts } from "@/plugins/datetime";
+import { mdiAlertCircle } from "@/components/icons/material";
 
 export default defineComponent({
 	name: "SchoolTerms",
@@ -206,6 +207,7 @@ export default defineComponent({
 			deleteFile,
 			formatDate,
 			closeDialog,
+			mdiAlertCircle,
 		};
 	},
 });

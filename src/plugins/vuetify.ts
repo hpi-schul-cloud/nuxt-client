@@ -7,5 +7,6 @@ export default createVuetify({
 	...theme,
 	defaults: {
 		VSwitch: { inset: true, flat: true, color: "primary" },
+		VAlert: { variant: "tonal" },
 	},
 });

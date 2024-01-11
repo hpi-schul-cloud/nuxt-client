@@ -4,7 +4,12 @@
 		@on:action="openLightBox"
 		color="rgba(var(--v-theme-black))"
 	>
-		<PreviewImage :src="previewSrc" :alt="alternativeText" :contain="true" />
+		<PreviewImage
+			:src="previewSrc"
+			:alt="alternativeText"
+			:contain="true"
+			class="rounded-t"
+		/>
 
 		<ContentElementBar class="menu">
 			<template #menu><slot /></template>

@@ -85,6 +85,7 @@
 							density="compact"
 							variant="outlined"
 							type="error"
+							:icon="mdiAlertCircle"
 							:text="$t('pages.rooms.importCourse.importError')"
 						/>
 					</div>
@@ -96,7 +97,7 @@
 <script>
 import { roomsModule } from "@/store";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { mdiCheck } from "@mdi/js";
+import { mdiAlertCircle, mdiCheck } from "@/components/icons/material";
 
 export default {
 	components: {
@@ -122,6 +123,7 @@ export default {
 				message: "",
 			},
 			mdiCheck,
+			mdiAlertCircle,
 			isImportError: false,
 		};
 	},

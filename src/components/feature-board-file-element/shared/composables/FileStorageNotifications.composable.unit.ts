@@ -1,10 +1,6 @@
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
@@ -21,9 +17,13 @@ const configModule = createModuleMocks(EnvConfigModule, {
 
 const setupMountComposable = () => {
 	return mountComposable(() => useFileStorageNotifier(), {
-		[I18N_KEY as symbol]: i18nModule,
-		[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
-		[ENV_CONFIG_MODULE_KEY.valueOf()]: configModule,
+		global: {
+			provide: {
+				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: configModule,
+			},
+			mocks: i18nModule,
+		},
 	});
 };
 

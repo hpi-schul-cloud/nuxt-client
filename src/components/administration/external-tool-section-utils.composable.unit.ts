@@ -17,6 +17,7 @@ const schoolExternalToolsModuleMock = () => {
 				version: 1,
 				status: {
 					isOutdatedOnScopeSchool: false,
+					isDeactivated: false,
 				},
 			},
 		],
@@ -48,18 +49,21 @@ describe("useSchoolExternalToolUtils", () => {
 			],
 			status: ContextExternalToolConfigurationStatusFactory.build({
 				isOutdatedOnScopeSchool: false,
+				isDeactivated: false,
 			}),
 		};
 		const listResponse: SchoolExternalToolSearchListResponse = {
 			data: [toolResponse],
 		};
 
-		const schoolExternaToolItem: SchoolExternalToolItem = {
-			name: toolResponse.name,
-			id: toolResponse.id,
-			status: "translationKey",
-			outdated: false,
-		};
+		const schoolExternaToolItem: SchoolExternalToolItem =
+			new SchoolExternalToolItem({
+				name: toolResponse.name,
+				id: toolResponse.id,
+				statusText: "translationKey",
+				isOutdated: false,
+				isDeactivated: false,
+			});
 
 		return {
 			getHeaders,
@@ -135,8 +139,9 @@ describe("useSchoolExternalToolUtils", () => {
 				{
 					id: "id",
 					name: "toolName",
-					status: "translated",
-					outdated: false,
+					statusText: "translated",
+					isOutdated: false,
+					isDeactivated: false,
 					version: undefined,
 				},
 			]);

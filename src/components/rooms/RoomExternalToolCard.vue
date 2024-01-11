@@ -7,19 +7,19 @@
 		@click="handleClick"
 	>
 		<template #under-title>
-			<div v-if="isToolOutdated" class="mt-1">
-				<v-chip
-					size="small"
-					class="py-1"
-					color="warning-lighten-1"
-					variant="flat"
-					data-testId="tool-card-status"
+			<div class="d-flex g-1">
+				<room-card-chip
+					v-if="isToolDeactivated"
+					data-testId="tool-card-status-deactivated"
 				>
-					<v-icon size="small" class="mr-1" color="warning">{{
-						mdiAlert
-					}}</v-icon>
+					{{ t("pages.rooms.tools.deactivated") }}
+				</room-card-chip>
+				<room-card-chip
+					v-if="isToolOutdated"
+					data-testId="tool-card-status-outdated"
+				>
 					{{ t("pages.rooms.tools.outdated") }}
-				</v-chip>
+				</room-card-chip>
 			</div>
 		</template>
 		<template #right>
@@ -44,10 +44,11 @@ import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, PropType, watch } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
 import { useI18n } from "vue-i18n";
+import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
-	components: { RoomBaseCard, RoomDotMenu },
+	components: { RoomCardChip, RoomBaseCard, RoomDotMenu },
 	emits: ["edit", "delete", "error"],
 	props: {
 		tool: {
@@ -116,8 +117,16 @@ export default defineComponent({
 				props.tool.status.isOutdatedOnScopeContext
 		);
 
+		const isToolDeactivated: ComputedRef = computed(
+			() => props.tool.status.isDeactivated
+		);
+
+		const isToolLaunchable = computed(() => {
+			return !isToolOutdated.value || !isToolDeactivated.value;
+		});
+
 		const loadLaunchRequest = async () => {
-			if (isToolOutdated.value) {
+			if (!isToolLaunchable.value) {
 				return;
 			}
 
@@ -130,9 +139,17 @@ export default defineComponent({
 			t,
 			handleClick,
 			menuItems,
-			isToolOutdated,
+			isToolLaunchable,
 			mdiAlert,
+			isToolOutdated,
+			isToolDeactivated,
 		};
 	},
 });
 </script>
+
+<style scoped>
+.g-1 {
+	gap: 4px;
+}
+</style>

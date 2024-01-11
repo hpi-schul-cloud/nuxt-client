@@ -15,10 +15,9 @@
 		</div>
 		<v-alert
 			v-if="apiError && apiError.message"
-			prominent
-			variant="tonal"
 			type="error"
 			data-testId="context-tool-error"
+			:icon="mdiAlertCircle"
 			:text="apiError.message"
 		/>
 
@@ -62,6 +61,7 @@ import {
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
+import { mdiAlertCircle } from "@/components/icons/material";
 
 export default defineComponent({
 	components: {
@@ -118,6 +118,7 @@ export default defineComponent({
 			tools,
 			apiError,
 			isVideoConferenceAvailable,
+			mdiAlertCircle,
 		};
 	},
 });
