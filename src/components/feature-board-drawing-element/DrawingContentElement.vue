@@ -92,9 +92,7 @@ export default defineComponent({
 		const user = ref(authModule.getUser);
 
 		const sanitizedUrl = computed(() =>
-			sanitizeUrl(
-				`http://localhost:3046/tldraw?roomName=659be6f14f2aeaad11580494`
-			)
+			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
 		);
 
 		const redirectToSanitizedUrl = () => {
