@@ -1,5 +1,5 @@
 <template>
-	<VCardText>
+	<VCardText class="mb-n4">
 		<template v-for="(element, index) in elements">
 			<ContentElement
 				:key="element.id"

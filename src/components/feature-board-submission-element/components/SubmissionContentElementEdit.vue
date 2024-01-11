@@ -6,6 +6,7 @@
 				<slot />
 			</div>
 		</div>
+
 		<date-time-picker
 			class="mt-1 mx-4"
 			:dateTime="dueDate"
@@ -23,17 +24,18 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
+import { mdiLightbulbOnOutline } from "@mdi/js";
 import { useI18n } from "@/composables/i18n.composable";
 import { TeacherSubmission } from "../types/submission";
-import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import { DateTimePicker } from "@ui-date-time-picker";
+import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
 
 export default defineComponent({
 	name: "SubmissionContentElementEdit",
 	components: {
-		SubmissionContentElementTitle,
 		DateTimePicker,
+		SubmissionContentElementTitle,
 		SubmissionItemsTeacherDisplay,
 	},
 	props: {
@@ -64,6 +66,7 @@ export default defineComponent({
 		return {
 			t,
 			onDateTimeInput,
+			mdiLightbulbOnOutline,
 		};
 	},
 });

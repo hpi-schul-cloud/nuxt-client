@@ -1,11 +1,14 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount } from "@vue/test-utils";
+import { MountOptions, mount } from "@vue/test-utils";
+import Vue from "vue";
 import ContentElementBar from "./ContentElementBar.vue";
 
 describe("ContentElementBar", () => {
 	const setup = (props: {
 		icon?: string;
 		hasGreyBackground?: boolean;
+		description?: string;
+		display?: string;
 		title?: string;
 		element?: string;
 		menu?: string;
@@ -13,7 +16,16 @@ describe("ContentElementBar", () => {
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
-		const { icon, hasGreyBackground, title, menu, subtitle, element } = props;
+		const {
+			icon,
+			hasGreyBackground,
+			description,
+			display,
+			title,
+			menu,
+			subtitle,
+			element,
+		} = props;
 		const propsData = {
 			icon,
 			hasGreyBackground,
@@ -23,8 +35,10 @@ describe("ContentElementBar", () => {
 			element: element ?? "",
 			menu: menu ?? "",
 			subtitle: subtitle ?? "",
+			description: description ?? "",
+			display: display ?? "",
 		};
-		const wrapper = shallowMount(ContentElementBar, {
+		const wrapper = mount(ContentElementBar as MountOptions<Vue>, {
 			propsData,
 			slots,
 			...createComponentMocks({}),
@@ -47,11 +61,9 @@ describe("ContentElementBar", () => {
 				icon: "mdi-test-icon",
 			});
 
-			const iconProp = wrapper
-				.find("contentelementtitleicon-stub")
-				.attributes("icon");
+			const iconComponent = wrapper.find({ name: "v-icon" });
 
-			expect(iconProp).toBe(icon);
+			expect(iconComponent.classes()).toContain(icon);
 		});
 	});
 
@@ -137,6 +149,7 @@ describe("ContentElementBar", () => {
 		it("should render grey background", () => {
 			const { wrapper } = setup({
 				hasGreyBackground: true,
+				title: "i have a dream",
 			});
 
 			const divWithBackgroundClass = wrapper.find("div.grey.lighten-4");
@@ -152,6 +165,38 @@ describe("ContentElementBar", () => {
 			const divWithBackgroundClass = wrapper.find("div.grey.lighten-4");
 
 			expect(divWithBackgroundClass.exists()).toBe(false);
+		});
+	});
+
+	describe("when menu slot and display slot are defined", () => {
+		it("should render menu slot in display", () => {
+			const menu = "test menu slot content";
+			const { wrapper } = setup({
+				display: "display content",
+				menu,
+			});
+
+			const contentElementDisplay = wrapper.find(".content-element-display");
+
+			expect(contentElementDisplay.exists()).toBe(true);
+			expect(contentElementDisplay.text()).toEqual(
+				expect.stringContaining(menu)
+			);
+		});
+	});
+
+	describe("when menu slot is defined but not display slot", () => {
+		it("should render menu slot in title", () => {
+			const menu = "test menu slot content";
+			const { wrapper } = setup({
+				title: "title content",
+				menu,
+			});
+
+			const title = wrapper.find({ name: "v-card-title" });
+
+			expect(title.exists()).toBe(true);
+			expect(title.text()).toEqual(expect.stringContaining(menu));
 		});
 	});
 });
