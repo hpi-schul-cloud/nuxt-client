@@ -18,7 +18,7 @@
 </template>
 <script setup lang="ts">
 import { mdiCloseCircle } from "@mdi/js";
-import { ChipTitle } from "@/components/organisms/NewDataFilter/types";
+import { ChipTitle } from "@/components/organisms/DataFilter/types";
 
 defineProps({
 	filters: {

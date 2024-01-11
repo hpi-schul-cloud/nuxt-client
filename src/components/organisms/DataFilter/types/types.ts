@@ -55,7 +55,7 @@ type DateSelection = {
 
 type UpdateFilterParamType = string[] & DateSelection;
 
-export {
+export type {
 	ChipTitle,
 	DateSelection,
 	FilterItem,

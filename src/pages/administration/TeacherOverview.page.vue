@@ -32,7 +32,7 @@
 				</template>
 			</base-input>
 
-			<NewDataFilter
+			<DataFilter
 				@update:filter="onUpdateFilter"
 				filter-for="teacher"
 				:class-names="classNameList"
@@ -144,7 +144,7 @@ import {
 } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
-import NewDataFilter from "@/components/organisms/NewDataFilter/NewDataFilter.vue";
+import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 
 export default {
 	components: {
@@ -152,7 +152,7 @@ export default {
 		BackendDataTable,
 		AdminTableLegend,
 		ProgressModal,
-		NewDataFilter,
+		DataFilter,
 	},
 	mixins: [print, UserHasPermission],
 	props: {

@@ -3,7 +3,7 @@ import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import FilterDialog from "./FilterDialog.vue";
 import { nextTick } from "vue";
 
-describe("@components/NewDataFilter/FilterDialog.vue", () => {
+describe("@components/DataFilter/FilterDialog.vue", () => {
 	const mountComponent = (
 		options: ComponentMountingOptions<typeof FilterDialog> = {}
 	) => {

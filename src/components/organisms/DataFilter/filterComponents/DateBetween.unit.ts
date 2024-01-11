@@ -24,7 +24,7 @@ const mountComponent = (
 	});
 };
 
-describe("@components/NewDataFilter/filterComponents/DateBetween.vue", () => {
+describe("@components/DataFilter/filterComponents/DateBetween.vue", () => {
 	describe("should render the component", () => {
 		it("should render the date picker components", async () => {
 			jest.useFakeTimers();

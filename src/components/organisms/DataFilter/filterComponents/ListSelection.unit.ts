@@ -25,7 +25,7 @@ const mountComponent = (
 	});
 };
 
-describe("@components/NewDataFilter/filterComponents/ListSelection.vue", () => {
+describe("@components/DataFilter/filterComponents/ListSelection.vue", () => {
 	describe("should render the component", () => {
 		it("should render the checkboxes", async () => {
 			const wrapper = mountComponent();

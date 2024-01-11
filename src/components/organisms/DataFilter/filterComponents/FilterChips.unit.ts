@@ -2,7 +2,7 @@ import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import FilterChips from "./FilterChips.vue";
 
-describe("@components/NewDataFilter/filterComponents/FilterChips.vue", () => {
+describe("@components/DataFilter/filterComponents/FilterChips.vue", () => {
 	const mockProps = [
 		{ item: "classes", title: "Klasse(n) = 1C, 1D" },
 		{ item: "consentStatus", title: "Schülereinverständnis fehlt" },

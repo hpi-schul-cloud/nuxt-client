@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-describe("@components/NewDataFilter/filterComponents/FilterActionButtons.vue", () => {
+describe("@components/DataFilter/filterComponents/FilterActionButtons.vue", () => {
 	const mountComponent = (
 		options: ComponentMountingOptions<typeof FilterActionButtons> = {}
 	) => {
