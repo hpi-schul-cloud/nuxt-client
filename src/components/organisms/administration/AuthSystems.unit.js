@@ -254,7 +254,7 @@ describe("AuthSystems", () => {
 			).toStrictEqual(false);
 			expect(
 				tableCell.wrappers[11].find(searchStrings.editSystemButton).exists()
-			).toStrictEqual(false);
+			).toStrictEqual(true);
 		});
 
 		it("should redirect to ldap config page from edit button of general ldap system", () => {
@@ -279,10 +279,6 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display system edit button and redirect to correct config page ", () => {
-			envConfigModule.setEnvs({
-				FEATURE_PROVISIONING_OPTIONS_ENABLED: true,
-			});
-
 			authModule.setUser({
 				...mockUser,
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
