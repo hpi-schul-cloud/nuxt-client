@@ -845,7 +845,7 @@
 	"components.cardElement.fileElement.altDescription": "A short description helps people who cannot see the picture.",
 	"components.cardElement.fileElement.emptyAlt": "Here is an image with the following name",
 	"components.cardElement.fileElement.pdfAlt": "Preview image for ",
-	"components.cardElement.fileElement.previewError": "Failed to load the preview. Try again",
+	"components.cardElement.fileElement.previewError": "Failed to load the preview.",
 	"components.cardElement.fileElement.virusDetected": "File has been locked due to a suspected virus.",
 	"components.cardElement.fileElement.awaitingScan": "Preview is displayed after a successful virus scan. The file is currently being scanned.",
 	"components.cardElement.fileElement.scanError": "Error during virus check. Preview cannot be created. Please upload the file again.",
