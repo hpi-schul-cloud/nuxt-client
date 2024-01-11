@@ -22,7 +22,6 @@
 			<v-list-item
 				v-else
 				lines="two"
-				density="compact"
 				class="mb-6"
 				data-testid="policy-item"
 				@click="downloadPolicy"
@@ -49,36 +48,38 @@
 						}}
 					</template>
 				</v-list-item-subtitle>
-				<v-list-item-action
-					v-if="hasSchoolEditPermission"
-					data-testid="edit-button"
-					@click.stop="isSchoolPolicyFormDialogOpen = true"
-				>
-					<v-btn
-						icon
-						variant="text"
-						:aria-label="
-							t('pages.administration.school.index.schoolPolicy.edit')
-						"
+				<template v-slot:append>
+					<v-list-item-action
+						v-if="hasSchoolEditPermission"
+						data-testid="edit-button"
+						@click.stop="isSchoolPolicyFormDialogOpen = true"
 					>
-						<v-icon>$mdiTrayArrowUp</v-icon>
-					</v-btn>
-				</v-list-item-action>
-				<v-list-item-action
-					v-if="privacyPolicy"
-					data-testid="delete-button"
-					@click.stop="isDeletePolicyDialogOpen = true"
-				>
-					<v-btn
-						icon
-						variant="text"
-						:aria-label="
-							t('pages.administration.school.index.schoolPolicy.delete.title')
-						"
+						<v-btn
+							icon
+							variant="text"
+							:aria-label="
+								t('pages.administration.school.index.schoolPolicy.edit')
+							"
+						>
+							<v-icon>$mdiTrayArrowUp</v-icon>
+						</v-btn>
+					</v-list-item-action>
+					<v-list-item-action
+						v-if="privacyPolicy"
+						data-testid="delete-button"
+						@click.stop="isDeletePolicyDialogOpen = true"
 					>
-						<v-icon>$mdiTrashCanOutline</v-icon>
-					</v-btn>
-				</v-list-item-action>
+						<v-btn
+							icon
+							variant="text"
+							:aria-label="
+								t('pages.administration.school.index.schoolPolicy.delete.title')
+							"
+						>
+							<v-icon>$mdiTrashCanOutline</v-icon>
+						</v-btn>
+					</v-list-item-action>
+				</template>
 			</v-list-item>
 			<school-policy-form-dialog
 				v-if="hasSchoolEditPermission"
