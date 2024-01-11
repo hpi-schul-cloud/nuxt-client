@@ -278,7 +278,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			);
 
 			const draggableElement = wrapper.find(".elements");
-			await draggableElement.vm.$emit("input", items);
+			await draggableElement.vm.$emit("update:modelValue", items);
 			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual(
 				"Mathe_2"
 			);
