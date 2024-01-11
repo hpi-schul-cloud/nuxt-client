@@ -50,3 +50,4 @@ export * from "./contextExternalToolConfigurationStatusFactory";
 export * from "./contextExternalToolConfigurationStatusResponseFactory";
 export * from "./schoolExternalToolConfigurationFactory";
 export * from "./schoolExternalToolConfigurationStatusResponseFactory";
+export * from "./provisioningOptionsDataFactory";
