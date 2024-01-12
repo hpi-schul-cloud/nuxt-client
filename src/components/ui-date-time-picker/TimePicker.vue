@@ -3,8 +3,6 @@
 		<v-text-field
 			v-model="timeValue"
 			data-testid="time-input"
-			variant="underlined"
-			color="primary"
 			append-inner-icon="$mdiClockOutline"
 			:label="label"
 			:aria-label="ariaLabel"
