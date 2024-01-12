@@ -13,6 +13,7 @@
 				v-on="on"
 				v-bind="attrs"
 				class="three-dot-button"
+				data-testid="room-tool-three-dot-button"
 				icon
 				:aria-label="ariaLabel"
 				@keydown.space.stop
