@@ -89,15 +89,35 @@ describe("@components/DataFilter/filterComponents/DateBetween.vue", () => {
 	});
 
 	describe("should emit the events", () => {
-		it("should emit 'update:filter' when add button is clicked", async () => {
-			const wrapper = mountComponent();
+		describe("when add button is clicked", () => {
+			it("should emit 'update:filter'", async () => {
+				const wrapper = mountComponent();
 
-			const actionButtonComponent = wrapper.getComponent({
-				name: "FilterActionButtons",
+				const actionButtonComponent = wrapper.getComponent({
+					name: "FilterActionButtons",
+				});
+
+				await actionButtonComponent.vm.$emit("update:filter");
+				expect(wrapper.emitted()).toHaveProperty("update:filter");
 			});
 
-			await actionButtonComponent.vm.$emit("update:filter");
-			expect(wrapper.emitted()).toHaveProperty("update:filter");
+			it("should emit 'remove:filter' if dateSelection value is undefined", async () => {
+				const wrapper = mountComponent();
+				const datePickerComponent = wrapper.findAllComponents({
+					name: "date-picker",
+				});
+
+				await datePickerComponent[0].vm.$emit("update:date", undefined);
+
+				const actionButtonComponent = wrapper.getComponent({
+					name: "FilterActionButtons",
+				});
+
+				await actionButtonComponent.vm.$emit("update:filter");
+
+				expect(wrapper.emitted()).not.toHaveProperty("update:filter");
+				expect(wrapper.emitted()).toHaveProperty("remove:filter");
+			});
 		});
 
 		it("should emit 'remove:filter 'when remove button is clicked", async () => {
