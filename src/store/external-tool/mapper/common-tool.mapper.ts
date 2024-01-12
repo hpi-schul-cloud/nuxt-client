@@ -86,6 +86,7 @@ export class CommonToolMapper {
 		const mapped: ContextExternalToolConfigurationStatus = {
 			isOutdatedOnScopeSchool: status.isOutdatedOnScopeSchool,
 			isOutdatedOnScopeContext: status.isOutdatedOnScopeContext,
+			isIncompleteOnScopeContext: status.isIncompleteOnScopeContext,
 			isDeactivated: status.isDeactivated,
 		};
 
