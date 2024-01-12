@@ -106,8 +106,11 @@
 import { onMounted, computed, ref } from "vue";
 import { useDebounceFn, watchDebounced } from "@vueuse/core";
 import { mdiChevronLeft, mdiMagnify, mdiClose } from "@mdi/js";
-import { CONTENT_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { notifierModule } from "@/store";
+import {
+	CONTENT_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import ContentCard from "@/components/lern-store/ContentCard.vue";
 import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
@@ -123,6 +126,7 @@ const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 const contentModule = injectStrict(CONTENT_MODULE_KEY);
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const searchQuery = ref("");
 const activateTransition = ref(false);
@@ -154,13 +158,11 @@ const reachedTotal = computed(
 );
 
 const enterKeyHandler = async () => {
-	console.log("hola", searchQuery.value);
 	await searchContent();
 	activateTransition.value = true;
 };
 
 const searchContent = useDebounceFn(async () => {
-	console.log("aloha");
 	try {
 		await contentModule.getResources(searchQuery.value);
 	} catch (error) {
@@ -173,26 +175,18 @@ const searchContent = useDebounceFn(async () => {
 }, 500);
 
 const addContent = async ({ done }) => {
-	console.log("hi");
 	if (reachedTotal.value) {
-		console.log("blub");
 		done("empty");
 		return;
 	}
-	console.log("before", resources.value);
 
 	if (!resources.value.data.length && searchQuery.value) {
-		console.log("search");
 		await searchContent();
-		console.log("after", resources.value);
-		console.log("length", resources.value.data.length);
 		if (!resources.value.data.length) {
-			console.log("empty");
 			done("empty");
 			return;
 		}
 	} else {
-		console.log("add");
 		queryOptions.value.$skip += queryOptions.value.$limit;
 
 		const query = {
@@ -224,7 +218,6 @@ const goBack = () => {
 watchDebounced(
 	searchQuery,
 	async (to, from) => {
-		console.log(from, to);
 		if (to === from || !to) {
 			router.push({
 				query: {
