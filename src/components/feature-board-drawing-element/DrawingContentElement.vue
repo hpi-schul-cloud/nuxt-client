@@ -20,7 +20,7 @@
 			/>
 
 			<InnerContent
-				v-if="isEditMode && currentUser"
+				v-if="isEditMode"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
 				:docName="element.id"
 				><BoardMenu scope="element">
@@ -31,7 +31,7 @@
 			</InnerContent>
 		</div>
 		<v-alert
-			v-if="isTeacher && currentUser"
+			v-if="isTeacher"
 			light
 			text
 			type="info"
@@ -89,7 +89,6 @@ export default defineComponent({
 		const element = toRef(props, "element");
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const userRoles = ref(authModule.getUserRoles);
-		const user = ref(authModule.getUser);
 
 		const sanitizedUrl = computed(() =>
 			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
@@ -114,12 +113,6 @@ export default defineComponent({
 			return userRoles.value.includes("teacher");
 		});
 
-		const currentUser = computed(() => {
-			return user.value?._id;
-		});
-
-		console.log(currentUser, "CurrentUser");
-
 		return {
 			drawingElement,
 			redirectToSanitizedUrl,
@@ -129,7 +122,6 @@ export default defineComponent({
 			onMoveDrawingElementEditUp,
 			isTeacher,
 			mdiClose,
-			currentUser,
 		};
 	},
 });
