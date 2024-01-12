@@ -84,16 +84,15 @@
 										class="align-self-center mt-4"
 									/>
 								</template>
+								<template #empty>
+									<div v-if="!reachedTotal" class="content__no_results">
+										<content-empty-state />
+									</div>
+								</template>
 							</v-infinite-scroll>
 						</template>
 						<span v-if="!loading" class="content__container_child">
 							<content-initial-state v-if="searchQuery.length === 0" />
-							<div
-								v-else-if="resources.data.length === 0"
-								class="content__no_results"
-							>
-								<content-empty-state />
-							</div>
 						</span>
 					</div>
 				</transition>
@@ -105,7 +104,7 @@
 
 <script setup lang="ts">
 import { onMounted, computed, ref } from "vue";
-import { useDebounceFn } from "@vueuse/core";
+import { useDebounceFn, watchDebounced } from "@vueuse/core";
 import { mdiChevronLeft, mdiMagnify, mdiClose } from "@mdi/js";
 import { CONTENT_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { notifierModule } from "@/store";
@@ -118,7 +117,6 @@ import ContentInitialState from "@/components/lern-store/ContentInitialState.vue
 import { useI18n } from "vue-i18n";
 import themeConfig from "@/theme.config";
 import { useRoute, useRouter } from "vue-router";
-import { watch } from "vue";
 // import ContentSearchbar from "@/components/lern-store/ContentSearchbar.vue";
 
 const { t } = useI18n();
@@ -149,13 +147,20 @@ onMounted(() => {
 const isInline = computed(() => !!route.query.inline);
 const resources = computed(() => contentModule.getResourcesGetter);
 const loading = computed(() => contentModule.getLoading);
+const reachedTotal = computed(
+	() =>
+		resources.value.total !== 0 &&
+		resources.value.data.length >= resources.value.total
+);
 
-const enterKeyHandler = useDebounceFn(async () => {
+const enterKeyHandler = async () => {
+	console.log("hola", searchQuery.value);
 	await searchContent();
 	activateTransition.value = true;
-}, 500);
+};
 
-const searchContent = async () => {
+const searchContent = useDebounceFn(async () => {
+	console.log("aloha");
 	try {
 		await contentModule.getResources(searchQuery.value);
 	} catch (error) {
@@ -165,19 +170,29 @@ const searchContent = async () => {
 			timeout: 10000,
 		});
 	}
-};
+}, 500);
 
 const addContent = async ({ done }) => {
-	if (
-		resources.value.total !== 0 &&
-		resources.value.data.length >= resources.value.total
-	) {
+	console.log("hi");
+	if (reachedTotal.value) {
+		console.log("blub");
+		done("empty");
 		return;
 	}
+	console.log("before", resources.value);
 
 	if (!resources.value.data.length && searchQuery.value) {
+		console.log("search");
 		await searchContent();
+		console.log("after", resources.value);
+		console.log("length", resources.value.data.length);
+		if (!resources.value.data.length) {
+			console.log("empty");
+			done("empty");
+			return;
+		}
 	} else {
+		console.log("add");
 		queryOptions.value.$skip += queryOptions.value.$limit;
 
 		const query = {
@@ -206,19 +221,24 @@ const goBack = () => {
 	window.close();
 };
 
-watch(searchQuery, async (to, from) => {
-	if (to === from || !to) {
-		router.push({
-			query: {
-				...route.query,
-				q: "",
-			},
-		});
-		return;
-	}
+watchDebounced(
+	searchQuery,
+	async (to, from) => {
+		console.log(from, to);
+		if (to === from || !to) {
+			router.push({
+				query: {
+					...route.query,
+					q: "",
+				},
+			});
+			return;
+		}
 
-	await updateURLQuery();
-});
+		await updateURLQuery();
+	},
+	{ debounce: 200 }
+);
 </script>
 
 <style lang="scss" scoped>
