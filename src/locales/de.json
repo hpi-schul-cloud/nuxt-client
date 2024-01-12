@@ -852,6 +852,7 @@
 	"components.cardElement.fileElement.altDescription": "Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.emptyAlt": "Hier ist ein Bild mit folgendem Namen",
 	"components.cardElement.fileElement.pdfAlt": "Vorschaubild für ",
+	"components.cardElement.fileElement.previewError": "Laden der Vorschau fehlgeschlagen.",
 	"components.cardElement.fileElement.virusDetected": "Datei wurde aufgrund eines Virenverdachts gesperrt.",
 	"components.cardElement.fileElement.awaitingScan": "Vorschau wird nach erfolgreicher Virenprüfung angezeigt. Aktuell wird die Datei gescannt.",
 	"components.cardElement.fileElement.scanError": "Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
