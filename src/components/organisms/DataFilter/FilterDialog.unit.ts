@@ -1,7 +1,6 @@
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import FilterDialog from "./FilterDialog.vue";
-import { nextTick } from "vue";
 
 describe("@components/DataFilter/FilterDialog.vue", () => {
 	const mountComponent = (
@@ -24,7 +23,6 @@ describe("@components/DataFilter/FilterDialog.vue", () => {
 		it("should pass the props to dialog component", async () => {
 			const wrapper = mountComponent();
 			await wrapper.setProps({ isOpen: true });
-			await nextTick();
 			const dialog = wrapper.getComponent({ name: "v-dialog" });
 
 			expect(dialog.props("modelValue")).toBe(true);
