@@ -47,11 +47,15 @@ export default defineComponent({
 		)[0] as PerformanceNavigationTiming;
 
 		const getError = () => {
-			if (performanceNavigation.type === "reload") {
+			if (
+				performanceNavigation.type === "reload" ||
+				performanceNavigation.type === "navigate"
+			) {
 				const [statusCode, translationKey] = storage.getMultiple([
 					"applicationErrorStatusCode",
 					"applicationErrorTranslationKey",
 				]);
+
 				return {
 					statusCode: Number(statusCode),
 					translationKey,
