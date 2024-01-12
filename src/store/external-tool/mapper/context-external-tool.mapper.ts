@@ -75,7 +75,7 @@ export class ContextExternalToolMapper {
 
 	static mapTemplateToContextExternalToolSave(
 		template: ContextExternalToolConfigurationTemplate,
-		parameterConfiguration: (string | undefined)[],
+		parameterConfiguration: ToolParameterEntry[],
 		contextId: string,
 		contextType: ToolContextType,
 		displayName?: string
@@ -86,12 +86,7 @@ export class ContextExternalToolMapper {
 			displayName: displayName ? displayName : template.name,
 			schoolToolId: template.schoolExternalToolId,
 			toolVersion: template.version,
-			parameters: template.parameters.map(
-				(parameter, index): ToolParameterEntry => ({
-					name: parameter.name,
-					value: parameterConfiguration[index],
-				})
-			),
+			parameters: parameterConfiguration,
 		};
 
 		return mapped;
