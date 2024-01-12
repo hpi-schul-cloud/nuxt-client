@@ -29,7 +29,6 @@
 				</div>
 			</v-alert>
 
-			<v-divider />
 			<v-expansion-panels multiple class="mb-9" :model-value="openedPanels">
 				<v-expansion-panel data-testid="general-settings-panel" value="general">
 					<v-expansion-panel-title hide-actions>
@@ -165,7 +164,6 @@
 						<external-tools-section class="mt-9" />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
-				<v-divider />
 			</v-expansion-panels>
 		</div>
 	</default-wireframe>
