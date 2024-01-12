@@ -7,11 +7,11 @@
 	>
 		<div
 			class="column-header mb-4 rounded"
-			:class="{ 'grey lighten-2': isFocusContained }"
+			:class="{ 'bg-grey-lighten-2': isFocusContained }"
 			tabindex="0"
 			ref="columnHeader"
 		>
-			<div class="d-flex align-start py-2 px-2">
+			<div class="d-flex align-center py-2 px-2">
 				<BoardAnyTitleInput
 					:value="title"
 					scope="column"
