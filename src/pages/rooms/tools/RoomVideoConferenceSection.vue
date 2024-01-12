@@ -19,7 +19,7 @@
 		>
 			<template #title>
 				<h2 class="text-h4 my-2 text-break-word">
-					{{ t("error.generic") }}
+					{{ $t("error.generic") }}
 				</h2>
 			</template>
 		</v-custom-dialog>
@@ -36,7 +36,7 @@
 						data-testId="videoconference-config-dialog-title"
 					>
 						{{
-							t("pages.rooms.tools.configureVideoconferenceDialog.title", {
+							$t("pages.rooms.tools.configureVideoconferenceDialog.title", {
 								roomName: roomName,
 							})
 						}}
@@ -46,7 +46,7 @@
 					<div class="d-flex justify-space-between">
 						<p class="text-md mt-1 mr-4">
 							{{
-								t("pages.rooms.tools.configureVideoconferenceDialog.text.mute")
+								$t("pages.rooms.tools.configureVideoconferenceDialog.text.mute")
 							}}
 						</p>
 						<v-switch
@@ -59,7 +59,7 @@
 					<div class="d-flex justify-space-between">
 						<p class="text-md mt-1 mr-4">
 							{{
-								t(
+								$t(
 									"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom"
 								)
 							}}
@@ -74,7 +74,7 @@
 					<div class="d-flex justify-space-between">
 						<p class="text-md mt-1 mr-4">
 							{{
-								t(
+								$t(
 									"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission"
 								)
 							}}
@@ -284,7 +284,6 @@ export default defineComponent({
 		};
 
 		return {
-			t,
 			videoConferenceInfo,
 			videoConferenceOptions,
 			hasPermission,
