@@ -1,6 +1,6 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import CopyResultModal from "./CopyResultModal.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
@@ -49,33 +49,16 @@ const mockResultItems = (
 	];
 };
 
-/* const getWrapper = (props?: any) => {
-	const wrapper = mount<any>(CopyResultModal as MountOptions<Vue>, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		propsData: {
-			isLoading: false,
-			copyResultItems: mockResultItems(),
-			...props,
-		},
-	});
-
-	return wrapper;
-}; */
-
 describe("@/components/copy-result-modal/CopyResultModal", () => {
-	const createWrapper = (options: ComponentMountingOptions<typeof CopyResultModal> = {}) => {
-		const wrapper = mount(CopyResultModal, {
+	const createWrapper = (options = {}) => {
+		const wrapper = mount(CopyResultModal,{
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
 				isOpen: false,
-				...options,
-			},
-			mocks: {
 				copyResultItems: mockResultItems(),
+				...options
 			}
 		});
 
@@ -100,13 +83,21 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should be closed by default", () => {
 			const wrapper = createWrapper();
 
-			expect(wrapper.findComponent(".v-dialog__content").exists()).toBe(false);
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const title = dialog.findComponent('[data-testid="dialog-title"');
+
+			expect(dialog.vm.isOpen).toBe(false)
+			expect(title.exists()).toBe(false);
 		});
 
 		it("should be open when is-open property is true", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			expect(wrapper.findComponent(".v-dialog__content").exists()).toBe(true);
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const title = dialog.findComponent('[data-testid="dialog-title"');
+
+			expect(dialog.vm.isOpen).toBe(true)
+			expect(title.exists()).toBe(true);
 		});
 	});
 
@@ -114,14 +105,16 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it("should show partial-title when copy was partially successful", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
-			const headline = wrapper.findComponent('[data-testid="dialog-title"]').text();
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const headline = dialog.findComponent('[data-testid="dialog-title"]').text();
 
 			expect(headline).toBe("components.molecules.copyResult.title.partial");
 		});
 	});
 
+
 	describe("dialog-closed", () => {
-		it("should forward the dialog-closed event of the wrapped dialog", async () => {
+		it("should forward the dialog-closed event of the wrapped dialog", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
 			const dialog = wrapper.findComponent(vCustomDialog);
@@ -141,10 +134,11 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
 			});
 
-			expect(
-				wrapper.findComponent('[data-testid="copy-result-notifications"]').text()
-			).toContain(
-				createTestingI18n("components.molecules.copyResult.courseFiles.info")
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).toContain(
+				"components.molecules.copyResult.courseFiles.info"
 			);
 		});
 
@@ -157,10 +151,11 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
 			});
 
-			expect(
-				wrapper.find('[data-testid="copy-result-notifications"]').text()
-			).toContain(
-				createTestingI18n("components.molecules.copyResult.ctlTools.info")
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).toContain(
+				"components.molecules.copyResult.ctlTools.info"
 			);
 		});
 
@@ -173,12 +168,13 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
 			});
 
-			expect(
-				wrapper.find('[data-testid="copy-result-notifications"]').text()
-			).toContain(
-				createTestingI18n("components.molecules.copyResult.courseFiles.info") +
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).toContain(
+				"components.molecules.copyResult.courseFiles.info" +
 					" " +
-					createTestingI18n("components.molecules.copyResult.fileCopy.error")
+					"components.molecules.copyResult.fileCopy.error"
 			);
 		});
 
@@ -193,10 +189,11 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					copyResultRootItemType,
 				});
 
-				expect(
-					wrapper.find('[data-testid="copy-result-notifications"]').text()
-				).toContain(
-					createTestingI18n("components.molecules.copyResult.fileCopy.error")
+				const dialog = wrapper.findComponent(vCustomDialog);
+				const content = dialog.findComponent(".v-card-text").text();
+
+				expect(content).toContain(
+					"components.molecules.copyResult.fileCopy.error"
 				);
 			}
 		);
@@ -218,9 +215,10 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 
 			const wrapper = createWrapper({ isOpen: true, copyResultItems });
 
-			expect(
-				wrapper.find('[data-testid="copy-result-notifications"]').text()
-			).toContain(title);
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).toContain(title);
 		});
 	});
 });
