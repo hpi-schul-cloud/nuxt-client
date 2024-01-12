@@ -3,12 +3,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import NewDataFilter from "./NewDataFilter.vue";
+import DataFilter from "./DataFilter.vue";
 
 const mountComponent = (
-	options: ComponentMountingOptions<typeof NewDataFilter> = {}
+	options: ComponentMountingOptions<typeof DataFilter> = {}
 ) => {
-	return mount(NewDataFilter, {
+	return mount(DataFilter, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
@@ -16,7 +16,7 @@ const mountComponent = (
 	});
 };
 
-describe("@components/NewDataFilter/NewDataFilter.vue", () => {
+describe("@components/DataFilter/DataFilter.vue", () => {
 	describe("should render the component", () => {
 		it("should render the component", () => {
 			const wrapper = mountComponent();
