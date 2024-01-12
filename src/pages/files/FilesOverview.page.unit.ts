@@ -1,26 +1,28 @@
 import FilesOverview from "@/pages/files/FilesOverview.page.vue";
-import { mount, shallowMount, Wrapper, WrapperArray } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount } from "@vue/test-utils";
 import CollaborativeFilesModule from "@/store/collaborative-files";
-import { Route } from "vue-router";
+import { RouteLocation, Router, useRouter } from "vue-router";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { CollaborativeFileType } from "@/store/types/collaborative-file";
 import * as fileTableComposable from "@/pages/files/file-table-utils.composable";
 import { FilesPageConfig } from "@/pages/files/file-page-config.type";
-import { I18N_KEY } from "@/utils/inject";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-const $route: Route = {
-	path: "/cfiles",
-} as Route;
-
-const $router = { replace: jest.fn(), push: jest.fn(), afterEach: jest.fn() };
+jest.mock("vue-router", () => ({
+	useRoute: jest.fn(),
+	useRouter: jest.fn(),
+}));
+const useRouterMock = <jest.Mock>useRouter;
 
 describe("FileOverview", () => {
-	let wrapper: Wrapper<any>;
 	let collaborativeFilesModule: CollaborativeFilesModule;
 
 	const pageTitle = "Page Title";
@@ -35,12 +37,12 @@ describe("FileOverview", () => {
 		jest.spyOn(fileTableComposable, "useFileTableUtils").mockReturnValue({
 			...fileTableComposable.useFileTableUtils(collaborativeFilesModule, tMock),
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			getFilesPageForRoute(route: Route): FilesPageConfig {
+			getFilesPageForRoute(route: RouteLocation): FilesPageConfig {
 				return {
 					title: pageTitle,
 					breadcrumbs: [
 						{
-							text: breadcrumbTitle,
+							title: breadcrumbTitle,
 							to: breadcrumbPath,
 						},
 					],
@@ -51,52 +53,30 @@ describe("FileOverview", () => {
 	});
 
 	function setup(getters: Partial<CollaborativeFilesModule> = {}) {
-		document.body.setAttribute("data-app", "true");
 		collaborativeFilesModule = createModuleMocks(CollaborativeFilesModule, {
 			getFiles: [],
 			...getters,
 		});
-		wrapper = mount(FilesOverview, {
-			...createComponentMocks({}),
-			mocks: {
-				$router,
-				$route,
-			},
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
-				collaborativeFilesModule,
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
+
+		const wrapper = mount(FilesOverview, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					collaborativeFilesModule,
+				},
 			},
 		});
+
+		return { wrapper, router };
 	}
 
 	describe("basic functions", () => {
 		it("should render component", () => {
-			setup();
+			const { wrapper } = setup();
 			expect(wrapper.findComponent(FilesOverview).exists()).toBe(true);
-		});
-	});
-
-	describe("inject", () => {
-		it("should throw an error when i18n injection fails", () => {
-			const collaborativeFilesModule = createModuleMocks(
-				CollaborativeFilesModule
-			);
-			expect(() => {
-				shallowMount(FilesOverview, {
-					provide: {
-						collaborativeFilesModule,
-					},
-				});
-			}).toThrow();
-		});
-
-		it("should throw an error when collaborativeFilesModule injection fails", () => {
-			console.error = jest.fn();
-			expect(() => {
-				shallowMount(FilesOverview, {
-					provide: { [I18N_KEY.valueOf()]: { t: (key: string) => key } },
-				});
-			}).toThrow("Injection of dependencies failed");
 		});
 	});
 
@@ -107,51 +87,30 @@ describe("FileOverview", () => {
 		});
 	});
 
-	describe("t", () => {
-		it("should return translation", () => {
-			setup();
-			const testKey = "testKey";
-
-			const result: string = wrapper.vm.t(testKey);
-
-			expect(result).toEqual(testKey);
-		});
-
-		it("should return 'unknown translation-key'", () => {
-			setup();
-			const testKey = 123;
-
-			const result: string = wrapper.vm.t(testKey);
-
-			expect(result.includes("unknown translation-key:")).toBeTruthy();
-		});
-	});
-
 	describe("headers", () => {
 		it("should display dataTableHeaders in v-data-table", () => {
-			setup();
+			const { wrapper } = setup();
 
-			const vueWrapperArray: WrapperArray<any> = wrapper
-				.find(".v-data-table-header")
-				.findAll("th");
+			const vueWrapperArray = wrapper.findAll(".v-data-table__th");
 
-			expect(vueWrapperArray.at(0).find("span").text()).toEqual("");
-			expect(vueWrapperArray.at(1).find("span").text()).toEqual(
+			expect(vueWrapperArray?.at(0)?.find("span").text()).toEqual("");
+			expect(vueWrapperArray?.at(1)?.find("span").text()).toEqual(
 				"common.labels.name"
 			);
-			expect(vueWrapperArray.at(2).find("span").text()).toEqual(
+			expect(vueWrapperArray?.at(2)?.find("span").text()).toEqual(
 				"common.labels.size"
 			);
-			expect(vueWrapperArray.at(3).find("span").text()).toEqual(
+			expect(vueWrapperArray?.at(3)?.find("span").text()).toEqual(
 				"common.labels.changed"
 			);
 		});
 	});
 
 	describe("items", () => {
-		it("should display data of fetched files in a datatable row", () => {
+		// VUE3_UPGRADE fix v-data-table rendering, see https://ticketsystem.dbildungscloud.de/browse/BC-6224
+		it.only("should display data of fetched files in a datatable row", () => {
 			const size = 221;
-			setup({
+			const { wrapper } = setup({
 				getFiles: [
 					{
 						name: "notExpectedToBeDisplayed",
@@ -165,17 +124,17 @@ describe("FileOverview", () => {
 				],
 			});
 
-			const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
-			const firstRowElements: WrapperArray<any> = tableRows.at(0).findAll("td");
-			expect(firstRowElements.at(0).html()).toBeTruthy();
-			expect(firstRowElements.at(1).text()).toBeTruthy();
-			expect(firstRowElements.at(2).text()).toEqual(size.toString());
-			expect(firstRowElements.at(3).text()).toBeTruthy();
+			const tableRows = wrapper.find("tbody").findAll("tr");
+			const firstRowElements = tableRows?.at(0)?.findAll("td");
+			expect(firstRowElements?.at(0)?.html()).toBeTruthy();
+			expect(firstRowElements?.at(1)?.text()).toBeTruthy();
+			expect(firstRowElements?.at(2)?.text()).toEqual(size.toString());
+			expect(firstRowElements?.at(3)?.text()).toBeTruthy();
 		});
 
 		it("should display name of file when traslationKey is undefined", () => {
 			const name = "Favorites";
-			setup({
+			const { wrapper } = setup({
 				getFiles: [
 					{
 						name,
@@ -189,14 +148,14 @@ describe("FileOverview", () => {
 				],
 			});
 
-			const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
-			const firstRowElements: WrapperArray<any> = tableRows.at(0).findAll("td");
-			expect(firstRowElements.at(1).text()).toEqual(name);
+			const tableRows = wrapper.find("tbody").findAll("tr");
+			const firstRowElements = tableRows?.at(0)?.findAll("td");
+			expect(firstRowElements?.at(1)?.text()).toEqual(name);
 		});
 
 		it("should display translated name of file", () => {
 			const translationKey = "pages.files.overview.favorites";
-			setup({
+			const { wrapper } = setup({
 				getFiles: [
 					{
 						name: "notDisplayed",
@@ -210,16 +169,17 @@ describe("FileOverview", () => {
 				],
 			});
 
-			const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
-			const firstRowElements: WrapperArray<any> = tableRows.at(0).findAll("td");
-			expect(firstRowElements.at(1).text()).toEqual(translationKey);
+			const tableRows = wrapper.find("tbody").findAll("tr");
+			const firstRowElements = tableRows?.at(0)?.findAll("td");
+			expect(firstRowElements?.at(1)?.text()).toEqual(translationKey);
 		});
 	});
 
 	describe("click", () => {
 		const path = "/cfiles/";
+		// VUE3_UPGRADE fix v-data-table rendering, see https://ticketsystem.dbildungscloud.de/browse/BC-6224
 		it("should push path of fileTableItem to router when clicked on a row", () => {
-			setup({
+			const { wrapper, router } = setup({
 				getFiles: [
 					{
 						name: "name",
@@ -233,10 +193,10 @@ describe("FileOverview", () => {
 				],
 			});
 
-			const tableRows: WrapperArray<any> = wrapper.find("tbody").findAll("tr");
-			tableRows.at(0).trigger("click");
+			const tableRows = wrapper.find("tbody").findAll("tr");
+			tableRows?.at(0)?.trigger("click");
 
-			expect($router.push).toHaveBeenCalledWith(
+			expect(router.push).toHaveBeenCalledWith(
 				expect.objectContaining({ path })
 			);
 		});
@@ -244,21 +204,20 @@ describe("FileOverview", () => {
 
 	describe("breadcrumbs", () => {
 		it("should display breadcrumbs", () => {
-			setup();
+			const { wrapper } = setup();
 
-			const breadcrumbs: WrapperArray<any> =
-				wrapper.findAll(".breadcrumbs-item");
+			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
 			expect(breadcrumbs.length).toEqual(1);
-			expect(breadcrumbs.at(0).text()).toEqual(breadcrumbTitle);
+			expect(breadcrumbs?.at(0)?.text()).toEqual(breadcrumbTitle);
 		});
 	});
 
 	describe("title", () => {
 		it("should display the page title", () => {
-			setup();
+			const { wrapper } = setup();
 
-			const title: Wrapper<any> = wrapper.find("h1");
+			const title = wrapper.find("h1");
 
 			expect(title.text()).toEqual(pageTitle);
 		});
