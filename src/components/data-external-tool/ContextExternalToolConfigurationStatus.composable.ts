@@ -25,7 +25,18 @@ export const useContextExternalToolConfigurationStatus = () => {
 		}
 	};
 
+	const determineIncompleteTranslationKey = (): string => {
+		const userRoles = authModule.getUserRoles;
+
+		if (userRoles.includes("teacher")) {
+			return "common.tool.information.incompleteOnContext.teacher";
+		} else {
+			return "common.tool.information.incomplete.student";
+		}
+	};
+
 	return {
 		determineOutdatedTranslationKey,
+		determineIncompleteTranslationKey,
 	};
 };

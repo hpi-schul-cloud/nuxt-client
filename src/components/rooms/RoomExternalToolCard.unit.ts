@@ -65,7 +65,7 @@ describe("RoomExternalToolCard", () => {
 		};
 	};
 
-	describe("when the component is mounted and the tool is not outdated", () => {
+	describe("when the component is mounted and the tool is not outdated, incomplete or deactivated", () => {
 		it("should load the launch request", async () => {
 			getWrapper(
 				externalToolDisplayDataFactory.build({
@@ -248,6 +248,60 @@ describe("RoomExternalToolCard", () => {
 			});
 		});
 
+		describe("when tool status is incomplete on scope context", () => {
+			const setup = () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: ContextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOnScopeContext: true,
+						}),
+					});
+
+				const { wrapper } = getWrapper(tool, false);
+
+				return {
+					wrapper,
+					tool,
+				};
+			};
+
+			it("should display incomplete chip", () => {
+				const { wrapper } = setup();
+
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-incomplete"]'
+				);
+
+				expect(statusChip.text()).toEqual("pages.rooms.tools.incomplete");
+			});
+		});
+
+		describe("when tool status is not incomplete", () => {
+			const setup = () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: ContextExternalToolConfigurationStatusFactory.build(),
+					});
+
+				const { wrapper } = getWrapper(tool, false);
+
+				return {
+					wrapper,
+					tool,
+				};
+			};
+
+			it("should display no chip", () => {
+				const { wrapper } = setup();
+
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-text"]'
+				);
+
+				expect(statusChip.exists()).toEqual(false);
+			});
+		});
+
 		describe("when the user clicks the card", () => {
 			describe("when the tool is outdated on scope school", () => {
 				const setup = async () => {
@@ -310,7 +364,36 @@ describe("RoomExternalToolCard", () => {
 					const toolDisplayData: ExternalToolDisplayData =
 						externalToolDisplayDataFactory.build({
 							status: ContextExternalToolConfigurationStatusFactory.build({
+								isOutdatedOnScopeSchool: true,
 								isOutdatedOnScopeContext: true,
+							}),
+						});
+
+					const { wrapper } = getWrapper(toolDisplayData, true);
+
+					await flushPromises();
+
+					return {
+						wrapper,
+						toolDisplayData,
+					};
+				};
+
+				it("should emit the error event", async () => {
+					const { wrapper, toolDisplayData } = await setup();
+
+					await wrapper.trigger("click");
+
+					expect(wrapper.emitted("error")).toEqual([[toolDisplayData]]);
+				});
+			});
+
+			describe("when the tool is incomplete on scope context", () => {
+				const setup = async () => {
+					const toolDisplayData: ExternalToolDisplayData =
+						externalToolDisplayDataFactory.build({
+							status: ContextExternalToolConfigurationStatusFactory.build({
+								isIncompleteOnScopeContext: true,
 							}),
 						});
 
