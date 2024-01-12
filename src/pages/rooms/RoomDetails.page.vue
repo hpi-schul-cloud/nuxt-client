@@ -97,7 +97,6 @@
 					<v-text-field
 						:model-value="dialog.inputText"
 						variant="outlined"
-						color="primary"
 						density="compact"
 						data-testid="modal-input"
 					/>

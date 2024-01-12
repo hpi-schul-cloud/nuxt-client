@@ -18,8 +18,6 @@
 						:items="coursesOptions"
 						:label="$t('pages.content.label.chooseACourse')"
 						data-testid="topicSelector"
-						variant="underlined"
-						color="primary"
 					/>
 					<transition name="fade">
 						<v-select
@@ -32,8 +30,6 @@
 							:label="$t('pages.content.label.chooseALessonTopic')"
 							:no-data-text="$t('pages.content.placeholder.noLessonTopic')"
 							data-testid="courseSelector"
-							variant="underlined"
-							color="primary"
 						/>
 					</transition>
 				</div>

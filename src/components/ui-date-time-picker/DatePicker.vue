@@ -11,8 +11,6 @@
 					v-model="dateString"
 					ref="inputField"
 					data-testid="date-input"
-					variant="underlined"
-					color="primary"
 					append-inner-icon="$mdiCalendar"
 					:label="label"
 					:aria-label="ariaLabel"
