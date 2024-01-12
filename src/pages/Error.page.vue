@@ -47,15 +47,16 @@ export default defineComponent({
 		)[0] as PerformanceNavigationTiming;
 
 		const getError = () => {
+			const [statusCode, translationKey, isTldrawError] = storage.getMultiple([
+				"applicationErrorStatusCode",
+				"applicationErrorTranslationKey",
+				"applicationErrorTldraw",
+			]);
+
 			if (
 				performanceNavigation.type === "reload" ||
-				performanceNavigation.type === "navigate"
+				(performanceNavigation.type === "navigate" && isTldrawError)
 			) {
-				const [statusCode, translationKey] = storage.getMultiple([
-					"applicationErrorStatusCode",
-					"applicationErrorTranslationKey",
-				]);
-
 				return {
 					statusCode: Number(statusCode),
 					translationKey,
@@ -64,6 +65,8 @@ export default defineComponent({
 
 			storage.remove("applicationErrorStatusCode");
 			storage.remove("applicationErrorTranslationKey");
+			storage.remove("applicationErrorTldraw");
+
 			return {
 				statusCode: Number(applicationErrorModule.getStatusCode),
 				translationKey: applicationErrorModule.getTranslationKey,
@@ -71,6 +74,7 @@ export default defineComponent({
 		};
 
 		addEventListener("pagehide", (event) => {
+			storage.remove("applicationErrorTldraw");
 			if (event.persisted) return;
 
 			if (applicationErrorModule.getStatusCode) {
