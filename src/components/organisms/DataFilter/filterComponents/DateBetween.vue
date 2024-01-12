@@ -54,6 +54,14 @@ const onUpdateDate = (date: string, fromUntil: "$gte" | "$lte") => {
 };
 
 const onUpdateFilter = () => {
+	if (
+		dateSelection.value.$gte == undefined ||
+		dateSelection.value.$lte == undefined
+	) {
+		emit("remove:filter");
+		emit("dialog-closed", false);
+		return;
+	}
 	if (dateSelection.value.$gte == "")
 		dateSelection.value.$gte = defaultDates.$gte;
 	if (dateSelection.value.$lte == "")

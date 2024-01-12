@@ -38,6 +38,11 @@ const emit = defineEmits(["update:filter", "dialog-closed", "remove:filter"]);
 const selected = ref<string[]>([]);
 
 const onUpdateFilter = () => {
+	if (selected.value.length === 0) {
+		emit("remove:filter");
+		emit("dialog-closed", false);
+		return;
+	}
 	emit("update:filter", selected.value);
 	emit("dialog-closed", false);
 };
