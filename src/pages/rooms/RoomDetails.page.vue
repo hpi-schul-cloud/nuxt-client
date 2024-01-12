@@ -564,7 +564,6 @@ export default defineComponent({
 .v-tab {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
 :deep(.v-slide-group__prev),
