@@ -3,7 +3,7 @@
 		<template v-slot:activator="{ props }">
 			<v-btn v-bind="props" variant="flat">
 				<v-icon class="filter-icon mr-2">$mdiTune</v-icon>
-				{{ filterTitle }}
+				<span data-testid="filter-title">{{ filterTitle }}</span>
 				<v-icon class="filter-icon">$mdiMenuDown</v-icon>
 			</v-btn>
 		</template>
@@ -15,7 +15,7 @@
 					class="menu-text"
 					hover
 				>
-					{{ item.label }}
+					<span class="filter-menu-item">{{ item.label }}</span>
 				</v-list-item-title>
 			</v-list-item>
 		</v-list>
@@ -143,7 +143,8 @@ const onUpdateFilter = (value: string[] & DateSelection) => {
 	dialogOpen.value = false;
 	emit("update:filter", filterQuery.value);
 };
-defineExpose({ dialogOpen, filterTitle, userType });
+
+defineExpose({ dialogOpen });
 </script>
 
 <style lang="scss" scoped>

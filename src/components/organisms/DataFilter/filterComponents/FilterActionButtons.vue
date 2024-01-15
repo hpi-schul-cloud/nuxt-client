@@ -16,6 +16,7 @@
 				{{ t("common.actions.cancel") }}
 			</v-btn>
 			<v-btn
+				id="add-filter-button"
 				class="ml-2"
 				variant="flat"
 				color="primary"
