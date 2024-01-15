@@ -33,7 +33,7 @@
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
 			}"
-			class="main-content pl-6 pt-0 pr-0 pb-0"
+			class="main-content pl-6 pt-0 pb-0"
 		>
 			<slot />
 		</v-main>
@@ -84,6 +84,9 @@ export default defineComponent({
 
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
+}
+:deep(.v-application__wrap) {
+	min-height: unset;
 }
 
 .main-content {
