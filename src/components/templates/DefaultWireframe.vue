@@ -1,6 +1,6 @@
 <template>
 	<v-app class="wireframe-container">
-		<v-container class="wireframe-header sticky">
+		<v-container fluid class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -80,19 +80,20 @@ export default defineComponent({
 	margin-bottom: var(--space-md);
 }
 
-.container.wireframe-container {
-	padding: 0 var(--space-lg); // Desktop
+.wireframe-container {
+	padding: 0; // Desktop
 }
 
-.container.main-content {
+.wireframe-container.main-content {
 	padding: 0;
 }
 
-.container.container-max-width {
-	max-width: var(--size-content-width-max);
+.wireframe-container.container-max-width {
+	// max-width: var(--size-content-width-max);
+	max-width: none;
 }
 
-.container.container-full-width {
+.wireframe-container.container-full-width {
 	max-width: none;
 	margin: 0;
 }
