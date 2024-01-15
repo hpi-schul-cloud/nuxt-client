@@ -42,50 +42,35 @@
 						}}
 					</h2>
 				</v-card-title>
-				<v-card-text class="text--primary">
-					<div class="d-flex justify-space-between">
-						<p class="text-md mt-1 mr-4">
-							{{
-								t("pages.rooms.tools.configureVideoconferenceDialog.text.mute")
-							}}
-						</p>
-						<v-switch
-							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
-							data-testId="every-attendee-joins-muted"
-							class="my-0"
-							:true-icon="mdiCheck"
-						/>
-					</div>
-					<div class="d-flex justify-space-between">
-						<p class="text-md mt-1 mr-4">
-							{{
-								t(
-									"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom"
-								)
-							}}
-						</p>
-						<v-switch
-							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
-							data-testId="moderator-must-approve-join-requests"
-							class="my-0"
-							:true-icon="mdiCheck"
-						/>
-					</div>
-					<div class="d-flex justify-space-between">
-						<p class="text-md mt-1 mr-4">
-							{{
-								t(
-									"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission"
-								)
-							}}
-						</p>
-						<v-switch
-							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
-							data-testId="everybody-joins-as-moderator"
-							class="my-0"
-							:true-icon="mdiCheck"
-						/>
-					</div>
+				<v-card-text>
+					<v-checkbox
+						v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
+						data-testId="every-attendee-joins-muted"
+						:label="
+							t('pages.rooms.tools.configureVideoconferenceDialog.text.mute')
+						"
+						:hide-details="true"
+					/>
+					<v-checkbox
+						v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
+						data-testId="moderator-must-approve-join-requests"
+						:label="
+							t(
+								'pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom'
+							)
+						"
+						:hide-details="true"
+					/>
+					<v-checkbox
+						v-model="videoConferenceOptions.everybodyJoinsAsModerator"
+						data-testId="everybody-joins-as-moderator"
+						:label="
+							t(
+								'pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission'
+							)
+						"
+						:hide-details="true"
+					/>
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer />
