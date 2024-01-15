@@ -1048,7 +1048,7 @@
 	"pages.tool.context.description": "Después de guardar la selección, la herramienta está disponible dentro del curso.<br><br>\nEncontrará más información en nuestra <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Sección de ayuda sobre herramientas externas</a>.",
 	"pages.tool.settings": "Configuración",
 	"pages.tool.select.label": "Selección de Herramientas",
-	"pages.tool.deactivate.label": "Desactivar herramienta",
+	"pages.tool.deactivate.label": "Desactivar herramienta en la escuela",
 	"pages.tool.apiError.tool_param_duplicate": "Esta Herramienta tiene al menos un parámetro duplicado. Póngase en contacto con el soporte.",
 	"pages.tool.apiError.tool_version_mismatch": "La versión de esta Herramienta utilizada está desactualizada. Actualice la versión.",
 	"pages.tool.apiError.tool_param_required": "Aún faltan entradas para parámetros obligatorios para la configuración de esta herramienta. Introduzca los valores que faltan.",

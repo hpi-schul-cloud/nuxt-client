@@ -1078,7 +1078,7 @@
 	"pages.tool.context.description": "Після збереження вибору інструмент доступний у межах курсу.<br><br>\nДля отримання додаткової інформації відвідайте наш <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Довідковий центр зовнішніх інструментів</a>.",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.select.label": "вибір інструменту",
-	"pages.tool.deactivate.label": "Вимкнути інструмент",
+	"pages.tool.deactivate.label": "Деактивуйте інструмент у школі",
 	"pages.tool.apiError.tool_param_duplicate": "Цей інструмент має принаймні один повторюваний параметр. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_version_mismatch": "Використана версія цього інструменту застаріла. Будь ласка, оновіть версію.",
 	"pages.tool.apiError.tool_param_required": "Вхідні дані для обов’язкових параметрів для конфігурації цього інструменту все ще відсутні. Будь ласка, введіть відсутні значення.",
