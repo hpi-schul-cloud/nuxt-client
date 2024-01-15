@@ -1,9 +1,8 @@
 import { useStorage } from "@vueuse/core";
 import { UiState, User } from "../types";
 import { ref } from "vue";
-import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
-const filterLocalStorage = () => {
+export const useFilterLocalStorage = () => {
 	const userType = ref<string>();
 
 	const initializeUserType = (user: string) => {
@@ -55,6 +54,3 @@ const filterLocalStorage = () => {
 
 	return { getFilterStorage, setFilterState, initializeUserType, state };
 };
-
-export const useFilterLocalStorage =
-	createTestableSharedComposable(filterLocalStorage);

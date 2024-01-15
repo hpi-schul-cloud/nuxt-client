@@ -1,5 +1,4 @@
 import { computed, onMounted, ref } from "vue";
-import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
 import {
 	FilterOption,
@@ -17,7 +16,7 @@ import { useI18n } from "vue-i18n";
 import { useFilterLocalStorage } from "./localStorage.composable";
 import { printDate } from "@/plugins/datetime";
 
-const dataTableFilter = (userType: string) => {
+export const useDataTableFilter = (userType: string) => {
 	const { t } = useI18n();
 	const { setFilterState, getFilterStorage, initializeUserType } =
 		useFilterLocalStorage();
@@ -207,6 +206,3 @@ const dataTableFilter = (userType: string) => {
 		updateFilter,
 	};
 };
-
-export const useDataTableFilter =
-	createTestableSharedComposable(dataTableFilter);
