@@ -12,6 +12,10 @@
 			}}
 		</WarningAlert>
 
+		<WarningAlert v-if="isToolIncomplete">
+			{{ incompleteMessage }}
+		</WarningAlert>
+
 		<WarningAlert v-if="isToolOutdated">
 			{{ outdatedMessage }}
 		</WarningAlert>
@@ -47,8 +51,10 @@ export default defineComponent({
 	setup(props) {
 		const { t } = useI18n();
 
-		const { determineOutdatedTranslationKey } =
-			useContextExternalToolConfigurationStatus();
+		const {
+			determineOutdatedTranslationKey,
+			determineIncompleteTranslationKey,
+		} = useContextExternalToolConfigurationStatus();
 
 		const { isTeacher } = useBoardPermissions();
 
@@ -56,6 +62,10 @@ export default defineComponent({
 			() =>
 				!!props.toolStatus?.isOutdatedOnScopeSchool ||
 				!!props.toolStatus?.isOutdatedOnScopeContext
+		);
+
+		const isToolIncomplete: ComputedRef<boolean> = computed(
+			() => !!props.toolStatus?.isIncompleteOnScopeContext
 		);
 
 		const errorMessage: ComputedRef<string> = computed(() =>
@@ -70,11 +80,19 @@ export default defineComponent({
 			return t(translationKey);
 		});
 
+		const incompleteMessage: ComputedRef<string | undefined> = computed(() => {
+			const translationKey = determineIncompleteTranslationKey();
+
+			return t(translationKey);
+		});
+
 		return {
 			t,
 			errorMessage,
 			outdatedMessage,
+			incompleteMessage,
 			isToolOutdated,
+			isToolIncomplete,
 		};
 	},
 });

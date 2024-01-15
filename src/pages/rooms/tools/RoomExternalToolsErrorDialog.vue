@@ -42,8 +42,10 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const { determineOutdatedTranslationKey } =
-			useContextExternalToolConfigurationStatus();
+		const {
+			determineOutdatedTranslationKey,
+			determineIncompleteTranslationKey,
+		} = useContextExternalToolConfigurationStatus();
 
 		const { t } = useI18n();
 
@@ -58,13 +60,19 @@ export default defineComponent({
 			);
 		});
 
+		const isToolIncomplete: ComputedRef<boolean> = computed(() => {
+			return props.selectedItem.status.isIncompleteOnScopeContext;
+		});
+
 		const getTitle: ComputedRef<string> = computed(() => {
 			if (props.selectedItem.status.isDeactivated) {
 				return "pages.rooms.tools.deactivatedDialog.title";
 			}
 
-			if (isToolOutdated.value) {
+			if (isToolOutdated.value && !isToolIncomplete.value) {
 				return "pages.rooms.tools.outdatedDialog.title";
+			} else if (isToolIncomplete.value) {
+				return "pages.rooms.tools.incompleteDialog.title";
 			}
 
 			return "";
@@ -79,7 +87,11 @@ export default defineComponent({
 				return "common.tool.information.deactivated";
 			}
 
-			return determineOutdatedTranslationKey(props.selectedItem.status);
+			if (isToolOutdated.value && !isToolIncomplete.value) {
+				return determineOutdatedTranslationKey(props.selectedItem.status);
+			} else {
+				return determineIncompleteTranslationKey();
+			}
 		});
 
 		return {
