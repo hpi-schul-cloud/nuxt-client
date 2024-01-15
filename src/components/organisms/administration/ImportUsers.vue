@@ -17,7 +17,12 @@
 			/>
 		</v-dialog>
 
-		<v-alert v-if="!canStartMigration" type="error" elevation="2">
+		<v-alert
+			v-if="!canStartMigration"
+			type="error"
+			:icon="mdiAlertCircle"
+			elevation="2"
+		>
 			{{ $t("pages.administration.migration.cannotStart") }}
 		</v-alert>
 
@@ -50,8 +55,6 @@
 								:label="$t('components.organisms.importUsers.searchFirstName')"
 								clearable
 								class="searchFirstName"
-								variant="underlined"
-								color="primary"
 							/>
 						</td>
 						<td class="col-2">
@@ -61,8 +64,6 @@
 								:label="$t('components.organisms.importUsers.searchLastName')"
 								clearable
 								class="searchLastName"
-								variant="underlined"
-								color="primary"
 							/>
 						</td>
 						<td>
@@ -72,8 +73,6 @@
 								:label="$t('components.organisms.importUsers.searchUserName')"
 								clearable
 								class="searchLoginName"
-								variant="underlined"
-								color="primary"
 							/>
 						</td>
 						<td>
@@ -85,8 +84,6 @@
 								:label="$t('components.organisms.importUsers.searchRole')"
 								clearable
 								class="searchRole"
-								variant="underlined"
-								color="primary"
 							/>
 						</td>
 						<td>
@@ -96,8 +93,6 @@
 								:label="$t('components.organisms.importUsers.searchClass')"
 								clearable
 								class="searchClasses"
-								variant="underlined"
-								color="primary"
 							/>
 						</td>
 						<td class="col-2">
@@ -268,10 +263,11 @@ import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
 	mdiAccountSwitchOutline,
+	mdiAlertCircle,
 	mdiFlag,
 	mdiFlagOutline,
 	mdiPencilOutline,
-} from "@mdi/js";
+} from "@/components/icons/material";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
 
 export default {
@@ -283,6 +279,7 @@ export default {
 			mdiAccountPlus,
 			mdiAccountSwitch,
 			mdiAccountSwitchOutline,
+			mdiAlertCircle,
 			mdiFlag,
 			mdiFlagOutline,
 			mdiPencilOutline,

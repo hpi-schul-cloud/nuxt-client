@@ -10,7 +10,7 @@
 				:force-fallback="true"
 				ghost-class="ghost"
 				class="elements"
-				@input="onSort"
+				@update:modelValue="onSort"
 				@start="dragInProgress = true"
 				@end="endDragging"
 			>

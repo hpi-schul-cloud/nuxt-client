@@ -6,16 +6,16 @@
 	>
 		<v-alert
 			v-if="error"
-			variant="tonal"
 			type="error"
+			:icon="mdiAlertCircle"
 			data-testid="error-alert"
 		>
 			<div class="alert-text">
 				{{ t(error.translationKey) }}
 			</div>
 		</v-alert>
-		<div v-else data-testid="no-error">
-			<v-alert variant="tonal" type="info" class="mb-4">
+		<div data-testid="no-error">
+			<v-alert type="info" class="mb-4">
 				<div class="alert-text">
 					{{ t("pages.administration.school.index.back") }}
 					<a href="/administration/school/">
@@ -23,24 +23,14 @@
 					>.
 				</div>
 			</v-alert>
-			<v-alert variant="tonal" type="info" class="mb-12">
+			<v-alert type="info" class="mb-12">
 				<div class="alert-text">
 					{{ t("pages.administration.school.index.info", { instituteTitle }) }}
 				</div>
 			</v-alert>
 
-			<v-divider />
-			<v-expansion-panels
-				variant="accordion"
-				multiple
-				class="mb-9"
-				:model-value="openedPanels"
-			>
-				<v-expansion-panel
-					data-testid="general-settings-panel"
-					value="general"
-					elevation="0"
-				>
+			<v-expansion-panels multiple class="mb-9" :model-value="openedPanels">
+				<v-expansion-panel data-testid="general-settings-panel" value="general">
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
 							<div class="text-h4">
@@ -63,7 +53,6 @@
 					v-if="isFeatureSchoolPolicyEnabled"
 					data-testid="policy-panel"
 					value="privacy"
-					elevation="0"
 				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
@@ -87,7 +76,6 @@
 					v-if="isFeatureSchoolTermsOfUseEnabled"
 					data-testid="terms-panel"
 					value="terms"
-					elevation="0"
 				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
@@ -111,7 +99,6 @@
 					v-if="isFeatureOauthMigrationEnabled"
 					data-testid="migration-panel"
 					value="migration"
-					elevation="0"
 				>
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
@@ -133,11 +120,7 @@
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
-				<v-expansion-panel
-					data-testid="systems-panel"
-					value="authentication"
-					elevation="0"
-				>
+				<v-expansion-panel data-testid="systems-panel" value="authentication">
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
 							<div class="text-h4">
@@ -163,11 +146,7 @@
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
-				<v-expansion-panel
-					data-testid="tools-panel"
-					value="tools"
-					elevation="0"
-				>
+				<v-expansion-panel data-testid="tools-panel" value="tools">
 					<v-expansion-panel-title hide-actions>
 						<template v-slot:default="{ expanded }">
 							<div class="text-h4">
@@ -185,7 +164,6 @@
 						<external-tools-section class="mt-9" />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
-				<v-divider />
 			</v-expansion-panels>
 		</div>
 	</default-wireframe>
@@ -212,6 +190,7 @@ import {
 } from "@/utils/inject";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { mdiAlertCircle } from "@/components/icons/material";
 
 export default defineComponent({
 	name: "SchoolSettings",
@@ -309,6 +288,7 @@ export default defineComponent({
 			isFeatureSchoolPolicyEnabled,
 			isFeatureSchoolTermsOfUseEnabled,
 			instituteTitle,
+			mdiAlertCircle,
 		};
 	},
 });

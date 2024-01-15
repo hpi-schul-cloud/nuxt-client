@@ -11,8 +11,6 @@
 					v-model="data.title"
 					density="compact"
 					flat
-					variant="underlined"
-					color="primary"
 					:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
 					:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
 					:label="$t('pages.rooms.roomModal.courseGroupTitle')"

@@ -14,8 +14,6 @@
 				:rules="validateParameter(parameter, inputValue)"
 				validate-on="blur"
 				:data-testId="parameter.name"
-				variant="underlined"
-				color="primary"
 			/>
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Boolean">
@@ -29,8 +27,6 @@
 				:items="booleanSelectItems"
 				item-value="value"
 				item-title="text"
-				variant="underlined"
-				color="primary"
 			/>
 		</template>
 		<template v-if="parameter.type === ToolParameterType.Number">
@@ -43,8 +39,6 @@
 				:rules="validateParameter(parameter, inputValue)"
 				validate-on="blur"
 				:data-testId="parameter.name"
-				variant="underlined"
-				color="primary"
 			/>
 		</template>
 	</div>
