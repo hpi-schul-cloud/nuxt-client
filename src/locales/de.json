@@ -1054,7 +1054,7 @@
 	"pages.tool.context.description": "Nach dem Speichern der Auswahl ist das Tool innerhalb des Kurses verfügbar.<br><br>\nWeitere Informationen sind in unserem <a href=\"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610\" target=\"_blank\">Hilfebereich zu externen Tools</a> zu finden.",
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.select.label": "Tool-Auswahl",
-	"pages.tool.deactivate.label": "Tool deaktivieren",
+	"pages.tool.deactivate.label": "Tool in der Schule deaktivieren",
 	"pages.tool.apiError.tool_param_duplicate": "Dieses Tool hat mindestens einen doppelten Parameter. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_version_mismatch": "Die benutzte Version dieses Tools ist nicht mehr aktuell. Bitte die Version aktualisieren.",
 	"pages.tool.apiError.tool_param_required": "Für die Konfiguration dieses Tools fehlen noch Eingaben für Pflichtparameter. Bitte die fehlenden Werte eingeben.",
