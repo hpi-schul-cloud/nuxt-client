@@ -57,11 +57,7 @@
 									searchQueryResult
 								}}"
 							</p>
-							<v-infinite-scroll
-								width="100%"
-								:items="resources"
-								@load="addContent"
-							>
+							<v-infinite-scroll width="100%" :items="resources" @load="onLoad">
 								<lern-store-grid
 									column-width="14rem"
 									data-testid="lernStoreCardsContainer"
@@ -171,7 +167,7 @@ const searchContent = useDebounceFn(async () => {
 	}
 }, 500);
 
-const addContent = async ({
+const onLoad = async ({
 	done,
 }: {
 	side: "start" | "end" | "both";
@@ -184,26 +180,39 @@ const addContent = async ({
 
 	if (!resources.value.data.length && searchQuery.value) {
 		await searchContent();
+
 		if (!resources.value.data.length) {
 			done("empty");
 			return;
 		}
 	} else {
-		queryOptions.value.$skip += queryOptions.value.$limit;
-
-		const query = {
-			$limit: queryOptions.value.$limit,
-			$skip: queryOptions.value.$skip,
-			searchQuery: searchQuery.value,
-		};
-
-		await contentModule.addResources(query);
+		await addContent();
 	}
 
 	done("ok");
 };
 
-const updateURLQuery = useDebounceFn(() => {
+const addContent = async () => {
+	queryOptions.value.$skip += queryOptions.value.$limit;
+
+	const query = {
+		$limit: queryOptions.value.$limit,
+		$skip: queryOptions.value.$skip,
+		searchQuery: searchQuery.value,
+	};
+
+	try {
+		await contentModule.addResources(query);
+	} catch (error) {
+		notifierModule.show({
+			text: t("pages.content.notification.lernstoreNotAvailable"),
+			status: "error",
+			timeout: 10000,
+		});
+	}
+};
+
+const updateURLQueryDebounced = useDebounceFn(() => {
 	searchQueryResult.value = searchQuery.value;
 	router.push({
 		query: {
@@ -230,7 +239,7 @@ watchDebounced(
 			return;
 		}
 
-		await updateURLQuery();
+		await updateURLQueryDebounced();
 	},
 	{ debounce: 200 }
 );
@@ -244,6 +253,7 @@ watchDebounced(
 		overflow-y: visible;
 	}
 }
+
 .content {
 	display: flex;
 	flex-direction: column;
