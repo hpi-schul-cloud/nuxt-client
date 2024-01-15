@@ -24,7 +24,6 @@
 					class="px-1"
 					v-model="searchText"
 					variant="solo"
-					color="primary"
 					rounded
 					single-line
 					:label="$t('pages.rooms.index.search.label')"

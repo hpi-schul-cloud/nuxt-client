@@ -32,7 +32,6 @@
 					v-model="files"
 					:multiple="false"
 					density="compact"
-					variant="underlined"
 					accept="application/pdf"
 					truncate-length="30"
 					:label="

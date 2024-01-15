@@ -42,7 +42,7 @@ export function useFileTableUtils(
 				value: "lastChanged",
 				class: "text-primary",
 				width: "140",
-				key: "size",
+				key: "lastChanged",
 			},
 		];
 	};

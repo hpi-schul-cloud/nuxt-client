@@ -15,7 +15,6 @@
 			data-testId="configuration-select"
 			@update:modelValue="onChangeSelection"
 			variant="underlined"
-			color="primary"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row

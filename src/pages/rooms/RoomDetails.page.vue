@@ -97,7 +97,6 @@
 					<v-text-field
 						:model-value="dialog.inputText"
 						variant="outlined"
-						color="primary"
 						density="compact"
 						data-testid="modal-input"
 					/>
@@ -564,7 +563,6 @@ export default defineComponent({
 .v-tab {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
 :deep(.v-slide-group__prev),

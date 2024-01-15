@@ -119,7 +119,6 @@
 							"
 							no-filter
 							variant="solo"
-							color="primary"
 							rounded
 							chips
 						>

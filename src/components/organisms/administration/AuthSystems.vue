@@ -11,7 +11,6 @@
 			"
 			readonly
 			density="compact"
-			variant="underlined"
 			@blur="linkCopyFinished(0)"
 		>
 			<template #append>
@@ -62,7 +61,6 @@
 								:color="getCopyStatus(system._id) ? 'success' : 'primary'"
 								readonly
 								density="compact"
-								variant="underlined"
 								@blur="linkCopyFinished"
 							>
 								<template #append>
