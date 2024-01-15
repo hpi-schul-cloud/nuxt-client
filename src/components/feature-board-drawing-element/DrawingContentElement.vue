@@ -10,39 +10,24 @@
 		elevation="0"
 		@keydown.up.down="onKeydownArrow"
 		role="button"
-		target="_blank"
 	>
 		<div class="drawing-element-content" @click="redirectToSanitizedUrl">
 			<InnerContent
-				v-if="!isEditMode"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
 				:docName="element.id"
-			/>
-
-			<InnerContent
-				v-if="isEditMode"
-				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				:docName="element.id"
-				><BoardMenu scope="element">
-					<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
-					<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
-					<BoardMenuActionDelete @click="onDeleteElement" />
-				</BoardMenu>
+			>
+				<template v-if="isEditMode">
+					<BoardMenu scope="element">
+						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
+						<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
+						<BoardMenuActionDelete @click="onDeleteElement" />
+					</BoardMenu>
+				</template>
 			</InnerContent>
 		</div>
-		<v-alert
-			v-if="isTeacher"
-			light
-			text
-			type="info"
-			dismissible
-			:close-icon="mdiClose"
-			class="mb-0"
-		>
-			<div class="alert-text">
-				{{ $t("components.cardElement.notification.visibleAndEditable") }}
-			</div>
-		</v-alert>
+		<InfoAlert v-if="isTeacher" :showCloseIcon="true">
+			{{ $t("components.cardElement.notification.visibleAndEditable") }}
+		</InfoAlert>
 	</v-card>
 </template>
 
@@ -58,6 +43,7 @@ import {
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
+import { InfoAlert } from "@ui-alert";
 import AuthModule from "@/store/auth";
 import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
 import { mdiClose } from "@mdi/js";
@@ -70,6 +56,7 @@ export default defineComponent({
 		BoardMenuActionMoveDown,
 		BoardMenuActionDelete,
 		InnerContent,
+		InfoAlert,
 	},
 	props: {
 		element: {
