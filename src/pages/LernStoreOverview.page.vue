@@ -26,7 +26,7 @@
 									: 'first-search__searchbar'
 							"
 							:placeholder="$t('pages.content.index.search.placeholder')"
-							@update:model-value="enterKeyHandler"
+							@update:model-value="onInput"
 						>
 							<template v-slot:append-inner>
 								<v-btn
@@ -120,7 +120,6 @@ import ContentInitialState from "@/components/lern-store/ContentInitialState.vue
 import { useI18n } from "vue-i18n";
 import themeConfig from "@/theme.config";
 import { useRoute, useRouter } from "vue-router";
-// import ContentSearchbar from "@/components/lern-store/ContentSearchbar.vue";
 
 const { t } = useI18n();
 const router = useRouter();
@@ -157,7 +156,7 @@ const reachedTotal = computed(
 		resources.value.data.length >= resources.value.total
 );
 
-const enterKeyHandler = async () => {
+const onInput = async () => {
 	await searchContent();
 	activateTransition.value = true;
 };
@@ -174,7 +173,12 @@ const searchContent = useDebounceFn(async () => {
 	}
 }, 500);
 
-const addContent = async ({ done }) => {
+const addContent = async ({
+	done,
+}: {
+	side: "start" | "end" | "both";
+	done: (status: "ok" | "empty" | "loading" | "error") => void;
+}) => {
 	if (reachedTotal.value) {
 		done("empty");
 		return;
