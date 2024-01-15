@@ -29,12 +29,11 @@
 			<div v-if="showBorder" class="border" />
 		</v-container>
 		<v-main
-			class="pl-6 pt-0 pr-0 pb-0"
 			:class="{
-				container: true,
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
 			}"
+			class="main-content pl-6 pt-0 pr-0 pb-0"
 		>
 			<slot />
 		</v-main>
@@ -87,19 +86,15 @@ export default defineComponent({
 	margin-bottom: var(--space-md);
 }
 
-.container.wireframe-container {
-	padding: 0 var(--space-lg); // Desktop
+.main-content {
+	padding: 0 var(--space-lg);
 }
 
-.container.main-content {
-	padding: 0;
-}
-
-.container.container-max-width {
+.container-max-width {
 	max-width: var(--size-content-width-max);
 }
 
-.container.container-full-width {
+.container-full-width {
 	max-width: none;
 	margin: 0;
 }
