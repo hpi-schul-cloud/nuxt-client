@@ -81,20 +81,6 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 		});
 
 		describe("filter dialog", () => {
-			beforeEach(() => {
-				// create teleport target
-				const el = document.createElement("div");
-				el.id = "modal";
-				document.body.appendChild(el);
-			});
-			afterEach(() => {
-				// remove teleport target
-				const el = document.getElementById("modal");
-				if (el) {
-					el.remove();
-				}
-			});
-
 			it("should set the 'dialogOpen' false when 'close' event be emitted", async () => {
 				const wrapper = setup({ props: { filterFor: "student" } });
 
