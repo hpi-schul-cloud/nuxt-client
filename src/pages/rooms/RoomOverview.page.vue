@@ -65,6 +65,7 @@
 									:size="dimensions.cellWidth"
 									@drop="setDropElement({ x: colIndex, y: rowIndex })"
 									data-avatar-type="vRoomEmptyAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
 								<vRoomGroupAvatar
 									v-else-if="hasGroup(rowIndex, colIndex)"
@@ -81,6 +82,7 @@
 									@dragend="onDragend"
 									@drop="addGroupElements({ x: colIndex, y: rowIndex })"
 									data-avatar-type="vRoomGroupAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
 								<vRoomAvatar
 									v-else
@@ -94,6 +96,7 @@
 									@dragend="onDragend"
 									@drop="setGroupElements({ x: colIndex, y: rowIndex })"
 									data-avatar-type="vRoomAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
 							</template>
 							<template v-else>
@@ -103,6 +106,7 @@
 									:show-outline="dragging"
 									@drop="setDropElement({ x: colIndex, y: rowIndex })"
 									data-avatar-type="vRoomEmptyAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
 							</template>
 						</div>
