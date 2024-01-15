@@ -1,36 +1,25 @@
 <template>
-	<div class="text-black">
-		<div class="d-flex justify-space-between">
-			<div class="mt-1">
-				{{ $t("components.molecules.share.options.schoolInternally") }}
-			</div>
-			<v-switch
-				v-model="shareOptions.isSchoolInternal"
-				data-testid="isSchoolInternal"
-				:value="true"
-				class="my-0 mr-n3"
-				:true-icon="mdiCheck"
-			/>
-		</div>
-		<div class="d-flex justify-space-between">
-			<div class="mt-1">
-				{{ $t("components.molecules.share.options.expiresInDays") }}
-			</div>
-			<v-switch
-				v-model="shareOptions.hasExpiryDate"
-				data-testid="hasExpiryDate"
-				:value="true"
-				class="my-0 mr-n3"
-				:true-icon="mdiCheck"
-			/>
-		</div>
-	</div>
+	<v-checkbox
+		v-model="shareOptions.isSchoolInternal"
+		data-testid="isSchoolInternal"
+		:label="t('components.molecules.share.options.schoolInternally')"
+		:hide-details="true"
+		density="comfortable"
+	/>
+	<v-checkbox
+		v-model="shareOptions.hasExpiryDate"
+		data-testid="hasExpiryDate"
+		:label="t('components.molecules.share.options.expiresInDays')"
+		:hide-details="true"
+		density="comfortable"
+	/>
 </template>
 
 <script>
 import { defineComponent, reactive, watch } from "vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { mdiCheck } from "@mdi/js";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -50,14 +39,18 @@ export default defineComponent({
 			hasExpiryDate: true,
 		});
 
+		const { t } = useI18n();
+
 		watch(shareOptions, (newValue) => {
 			emit("share-options-change", newValue);
 		});
 
 		emit("share-options-change", shareOptions);
+
 		return {
 			shareOptions,
 			mdiCheck,
+			t,
 		};
 	},
 });
