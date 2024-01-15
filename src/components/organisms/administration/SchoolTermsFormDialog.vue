@@ -16,7 +16,7 @@
 		</template>
 		<template #content>
 			<v-form ref="termsForm" v-model="isValid">
-				<v-alert variant="tonal" type="warning" class="mb-10" icon="$mdiAlert">
+				<v-alert type="warning" class="mb-10" icon="$mdiAlert">
 					<div class="alert-text">
 						{{
 							t(
@@ -32,7 +32,6 @@
 					v-model="files"
 					:multiple="false"
 					density="compact"
-					variant="underlined"
 					accept="application/pdf"
 					truncate-length="30"
 					:label="

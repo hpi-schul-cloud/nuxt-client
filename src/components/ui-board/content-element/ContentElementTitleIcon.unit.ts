@@ -1,14 +1,15 @@
-import { ContentElementTitleIcon } from "@ui-board";
-import { shallowMount } from "@vue/test-utils";
+import ContentElementTitleIcon from "./ContentElementTitleIcon.vue";
+import { MountOptions, shallowMount } from "@vue/test-utils";
+import Vue from "vue";
 
 describe("ContentElementTitleIcon", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
 		const icon = "mdi-test";
-		const wrapper = shallowMount(ContentElementTitleIcon, {
+		const wrapper = shallowMount(ContentElementTitleIcon as MountOptions<Vue>, {
 			propsData: {
-				icon,
+				icon: icon,
 			},
 		});
 

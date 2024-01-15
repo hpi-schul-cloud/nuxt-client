@@ -82,6 +82,60 @@ describe("RoomExternalToolCard", () => {
 	});
 
 	describe("tool status", () => {
+		describe("when tool status is deactivated", () => {
+			const setup = () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: ContextExternalToolConfigurationStatusFactory.build({
+							isDeactivated: true,
+						}),
+					});
+
+				const { wrapper } = getWrapper(tool, false);
+
+				return {
+					wrapper,
+					tool,
+				};
+			};
+
+			it("should display deactivated chip", () => {
+				const { wrapper } = setup();
+
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-deactivated"]'
+				);
+
+				expect(statusChip.text()).toEqual("pages.rooms.tools.deactivated");
+			});
+		});
+
+		describe("when tool status is not deactivated", () => {
+			const setup = () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: ContextExternalToolConfigurationStatusFactory.build(),
+					});
+
+				const { wrapper } = getWrapper(tool, false);
+
+				return {
+					wrapper,
+					tool,
+				};
+			};
+
+			it("should display no chip", () => {
+				const { wrapper } = setup();
+
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-text"]'
+				);
+
+				expect(statusChip.exists()).toEqual(false);
+			});
+		});
+
 		describe("when tool status is outdated on scope context", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
@@ -102,7 +156,9 @@ describe("RoomExternalToolCard", () => {
 			it("should display outdated chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-outdated"]'
+				);
 
 				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});
@@ -128,7 +184,9 @@ describe("RoomExternalToolCard", () => {
 			it("should display outdated chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-outdated"]'
+				);
 
 				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});
@@ -155,7 +213,9 @@ describe("RoomExternalToolCard", () => {
 			it("should display outdated chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-outdated"]'
+				);
 
 				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});

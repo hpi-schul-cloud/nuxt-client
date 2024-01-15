@@ -2,10 +2,10 @@
 	<div>
 		<v-alert
 			v-if="status === 'error'"
-			variant="tonal"
 			type="error"
 			class="mb-6"
 			data-testid="error-alert"
+			:icon="mdiAlertCircle"
 			:text="t('pages.administration.school.index.schoolPolicy.error')"
 		>
 			<div class="alert-text">
@@ -22,7 +22,6 @@
 			<v-list-item
 				v-else
 				lines="two"
-				density="compact"
 				class="mb-6"
 				data-testid="policy-item"
 				@click="downloadPolicy"
@@ -49,36 +48,38 @@
 						}}
 					</template>
 				</v-list-item-subtitle>
-				<v-list-item-action
-					v-if="hasSchoolEditPermission"
-					data-testid="edit-button"
-					@click.stop="isSchoolPolicyFormDialogOpen = true"
-				>
-					<v-btn
-						icon
-						variant="text"
-						:aria-label="
-							t('pages.administration.school.index.schoolPolicy.edit')
-						"
+				<template v-slot:append>
+					<v-list-item-action
+						v-if="hasSchoolEditPermission"
+						data-testid="edit-button"
+						@click.stop="isSchoolPolicyFormDialogOpen = true"
 					>
-						<v-icon>$mdiTrayArrowUp</v-icon>
-					</v-btn>
-				</v-list-item-action>
-				<v-list-item-action
-					v-if="privacyPolicy"
-					data-testid="delete-button"
-					@click.stop="isDeletePolicyDialogOpen = true"
-				>
-					<v-btn
-						icon
-						variant="text"
-						:aria-label="
-							t('pages.administration.school.index.schoolPolicy.delete.title')
-						"
+						<v-btn
+							icon
+							variant="text"
+							:aria-label="
+								t('pages.administration.school.index.schoolPolicy.edit')
+							"
+						>
+							<v-icon>$mdiTrayArrowUp</v-icon>
+						</v-btn>
+					</v-list-item-action>
+					<v-list-item-action
+						v-if="privacyPolicy"
+						data-testid="delete-button"
+						@click.stop="isDeletePolicyDialogOpen = true"
 					>
-						<v-icon>$mdiTrashCanOutline</v-icon>
-					</v-btn>
-				</v-list-item-action>
+						<v-btn
+							icon
+							variant="text"
+							:aria-label="
+								t('pages.administration.school.index.schoolPolicy.delete.title')
+							"
+						>
+							<v-icon>$mdiTrashCanOutline</v-icon>
+						</v-btn>
+					</v-list-item-action>
+				</template>
 			</v-list-item>
 			<school-policy-form-dialog
 				v-if="hasSchoolEditPermission"
@@ -103,7 +104,7 @@
 					</h4>
 				</template>
 				<template #content>
-					<v-alert variant="tonal" type="info" class="mb-0">
+					<v-alert type="info" class="mb-0">
 						<div class="alert-text">
 							{{
 								t("pages.administration.school.index.schoolPolicy.delete.text")
@@ -133,6 +134,7 @@ import {
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { downloadFile } from "@/utils/fileHelper";
 import { formatDateForAlerts } from "@/plugins/datetime";
+import { mdiAlertCircle } from "@/components/icons/material";
 
 export default defineComponent({
 	name: "SchoolPolicy",
@@ -212,6 +214,7 @@ export default defineComponent({
 			deleteFile,
 			formatDate,
 			closeDialog,
+			mdiAlertCircle,
 		};
 	},
 });

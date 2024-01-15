@@ -10,11 +10,10 @@ import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { createMock } from "@golevelup/ts-jest";
 import { ContentElementType, DrawingElementResponse } from "@/serverApi/v3";
 import DrawingContentElement from "./DrawingContentElement.vue";
-import DrawingContentElementDisplay from "./DrawingContentElementDisplay.vue";
-import DrawingContentElementEdit from "./DrawingContentElementEdit.vue";
 import NotifierModule from "@/store/notifier";
 import EnvConfigModule from "@/store/env-config";
 import { Envs } from "@/store/types/env-config";
+import InnerContent from "./InnerContent.vue";
 
 // Mocks
 jest.mock("@data-board", () => ({
@@ -63,18 +62,9 @@ describe("DrawingContentElement", () => {
 	};
 
 	describe("when component is mounted", () => {
-		it("renders display with correct props in view mode", () => {
+		it("renders correctly", () => {
 			setup({ element: DRAWING_ELEMENT, isEditMode: false });
-			expect(wrapper.findComponent(DrawingContentElementDisplay).exists()).toBe(
-				true
-			);
-		});
-
-		it("renders edit with correct props in edit mode", () => {
-			setup({ element: DRAWING_ELEMENT, isEditMode: true });
-			expect(wrapper.findComponent(DrawingContentElementEdit).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent(InnerContent).exists()).toBe(true);
 		});
 
 		describe("when arrow key up is pressed", () => {

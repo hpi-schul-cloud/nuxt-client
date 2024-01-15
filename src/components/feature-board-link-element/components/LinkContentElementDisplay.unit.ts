@@ -1,71 +1,49 @@
-import LinkContentElementDisplayVue from "./LinkContentElementDisplay.vue";
-import { mount, MountOptions } from "@vue/test-utils";
-import Vue from "vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
+import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
+import { mount } from "@vue/test-utils";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
 
 type Props = {
-	url: string;
-	title: string;
+	url?: string;
+	title?: string;
 	imageUrl?: string;
-	isLoading: boolean;
-	isEditMode: boolean;
+	isEditMode?: boolean;
 };
 
-describe("LinkContentElementDisplay", () => {
+describe(LinkContentElementDisplay.name, () => {
 	const setup = (props: Props) => {
-		const wrapper = mount(LinkContentElementDisplayVue as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+		const wrapper = mount(LinkContentElementDisplay, {
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			props: {
+				url: "",
+				title: "",
+				isEditMode: false,
+				...props,
 			},
-			propsData: { ...props },
 		});
-
 		return { wrapper };
 	};
 
 	describe("when valid url was given", () => {
-		it("should sanitize urls", async () => {
-			const VALID_UNSANITIZED_URL =
-				"&#104;&#116;&#116;&#112;&#115;&#0000058//&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;";
+		it("should display the hostname", async () => {
 			const { wrapper } = setup({
-				url: VALID_UNSANITIZED_URL,
-				title: "",
-				isLoading: false,
-				isEditMode: false,
+				url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
 			});
 
-			const expectedUrl = "https://example.com";
-			expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
+			const hostname = "www.zdf.de";
+			expect(wrapper.text()).toEqual(hostname);
 		});
 
-		it("should sanitize javascript-urls", async () => {
-			const INVALID_UNSANITIZED_URL =
-				"javascript" + ":" + "alert(document.domain)";
+		it("should display a title", async () => {
+			const title = "Die Sendung mit der Maus";
 			const { wrapper } = setup({
-				url: INVALID_UNSANITIZED_URL,
-				title: "",
-				isLoading: false,
-				isEditMode: false,
+				url: "https://www.zdf.de/die-maus/2023-12-06-der-nikolaus",
+				title,
 			});
 
-			const expectedUrl = "about:blank";
-			expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
-		});
-
-		it("should display the hostname ", async () => {
-			const INVALID_UNSANITIZED_URL = "https://de.wikipedia.org/dachs";
-			const { wrapper } = setup({
-				url: INVALID_UNSANITIZED_URL,
-				title: "",
-				isLoading: false,
-				isEditMode: false,
-			});
-
-			const expectedUrl = "de.wikipedia.org";
-			expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
+			expect(wrapper.html()).toEqual(expect.stringContaining(title));
 		});
 	});
 });

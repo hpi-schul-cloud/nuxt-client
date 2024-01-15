@@ -18,8 +18,6 @@
 						<v-text-field
 							v-model="searchQuery"
 							autofocus
-							variant="underlined"
-							color="primary"
 							:class="
 								activateTransition
 									? 'content__searchbar'

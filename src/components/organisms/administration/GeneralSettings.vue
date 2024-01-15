@@ -13,9 +13,7 @@
 							'pages.administration.school.index.generalSettings.labels.nameOfSchool'
 						)
 					"
-					color="primary"
 					density="compact"
-					variant="underlined"
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSyncedSchool"
 					data-testid="school-name"
@@ -33,9 +31,7 @@
 							'pages.administration.school.index.generalSettings.labels.schoolNumber'
 						)
 					"
-					color="primary"
 					density="compact"
-					variant="underlined"
 					:disabled="!!school.officialSchoolNumber"
 					:hint="
 						$t(
@@ -68,8 +64,6 @@
 						)
 					"
 					persistent-hint
-					variant="underlined"
-					color="primary"
 				/>
 			</v-col>
 		</v-row>
@@ -84,7 +78,6 @@
 					"
 					v-model="logoFile"
 					density="compact"
-					variant="underlined"
 					prepend-icon=""
 					prepend-inner-icon="$file"
 				/>
@@ -101,8 +94,6 @@
 						)
 					"
 					density="compact"
-					variant="underlined"
-					color="primary"
 					disabled
 					:hint="
 						$t('pages.administration.school.index.generalSettings.timezoneHint')
@@ -124,8 +115,6 @@
 					:items="languages"
 					item-title="name"
 					item-value="abbreviation"
-					variant="underlined"
-					color="primary"
 				>
 					<template #item="{ props, item }">
 						<v-list-item v-bind="props" :prepend-icon="item.raw.flagIcon" />

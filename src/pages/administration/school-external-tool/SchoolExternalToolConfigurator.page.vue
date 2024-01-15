@@ -16,7 +16,16 @@
 			:loading="loading"
 			@cancel="onCancel"
 			@save="onSave"
-		/>
+		>
+			<template #aboveParameters="{ selectedTemplate }">
+				<v-checkbox
+					v-if="selectedTemplate"
+					:label="$t('pages.tool.deactivate.label')"
+					data-testId="configuration-deactivate-checkbox"
+					v-model="isDeactivated"
+				/>
+			</template>
+		</external-tool-configurator>
 	</default-wireframe>
 </template>
 
@@ -118,6 +127,8 @@ export default defineComponent({
 			router.push({ path: schoolSetting.to! });
 		};
 
+		const isDeactivated: Ref<boolean> = ref(false);
+
 		const onSave = async (
 			template: SchoolExternalToolConfigurationTemplate,
 			configuredParameterValues: (string | undefined)[]
@@ -127,7 +138,8 @@ export default defineComponent({
 					SchoolExternalToolMapper.mapTemplateToSchoolExternalToolSave(
 						template,
 						configuredParameterValues,
-						authModule.getUser.schoolId
+						authModule.getUser.schoolId,
+						isDeactivated.value
 					);
 
 				if (props.configId) {
@@ -174,6 +186,9 @@ export default defineComponent({
 					await schoolExternalToolsModule.loadSchoolExternalTool(
 						props.configId
 					);
+
+				isDeactivated.value =
+					configuration.value?.status.isDeactivated ?? false;
 			} else if (authModule.getUser) {
 				await schoolExternalToolsModule.loadAvailableToolsForSchool(
 					authModule.getUser?.schoolId
@@ -192,6 +207,7 @@ export default defineComponent({
 			onCancel,
 			onSave,
 			configuration,
+			isDeactivated,
 		};
 	},
 });

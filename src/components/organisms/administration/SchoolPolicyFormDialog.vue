@@ -16,7 +16,7 @@
 		</template>
 		<template #content>
 			<v-form ref="policyForm" v-model="isValid">
-				<v-alert variant="tonal" type="warning" class="mb-10" :icon="mdiAlert">
+				<v-alert type="warning" class="mb-10" :icon="mdiAlert">
 					<div class="alert-text">
 						{{
 							t(
@@ -31,7 +31,6 @@
 					data-testid="input-file"
 					v-model="files"
 					density="compact"
-					variant="underlined"
 					accept="application/pdf"
 					truncate-length="30"
 					:label="

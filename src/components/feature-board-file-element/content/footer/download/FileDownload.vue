@@ -4,7 +4,7 @@
 		:aria-label="$t('components.board.action.download')"
 		:disabled="!isDownloadAllowed"
 		data-testid="board-file-element-edit-menu-download"
-		class="float-right"
+		class="float-right download-button"
 		icon
 		variant="text"
 	>
@@ -36,3 +36,9 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style type="text/scss">
+.download-button {
+	margin-right: -6px;
+}
+</style>

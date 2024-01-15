@@ -15,7 +15,6 @@
 			data-testId="configuration-select"
 			@update:modelValue="onChangeSelection"
 			variant="underlined"
-			color="primary"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
@@ -49,12 +48,7 @@
 			v-model="parameterConfiguration"
 		/>
 		<v-spacer class="mt-10" />
-		<v-alert
-			v-if="error && error.message"
-			prominent
-			variant="tonal"
-			type="error"
-		>
+		<v-alert v-if="error && error.message" type="error" :icon="mdiAlertCircle">
 			{{ t(getBusinessErrorTranslationKey(error)) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
@@ -105,6 +99,7 @@ import {
 	watch,
 } from "vue";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
+import { mdiAlertCircle } from "@/components/icons/material";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 
@@ -235,6 +230,7 @@ export default defineComponent({
 			fillParametersWithDefaultValues,
 			parameterConfiguration,
 			isAboveParametersSlotEmpty,
+			mdiAlertCircle,
 		};
 	},
 });
