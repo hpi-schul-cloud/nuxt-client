@@ -8,6 +8,7 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	["tool_param_value_regex", "pages.tool.apiError.tool_param_value_regex"],
 	["tool_with_name_exists", "pages.tool.apiError.tool_with_name_exists"],
 	["tool_param_unknown", "pages.tool.apiError.tool_param_unknown"],
+	["tool_param_value_missing", "pages.tool.apiError.tool_param_value_missing"],
 ]);
 
 export function useExternalToolMappings() {
