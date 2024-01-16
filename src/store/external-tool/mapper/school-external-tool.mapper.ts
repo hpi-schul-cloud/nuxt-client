@@ -12,13 +12,13 @@ import {
 	SchoolExternalTool,
 	SchoolExternalToolSave,
 } from "../school-external-tool";
+import { SchoolExternalToolConfigurationStatus } from "../school-external-tool-configuration-status";
 import { SchoolExternalToolMetadata } from "../school-external-tool-metadata";
 import { SchoolExternalToolConfigurationTemplate } from "../tool-configuration-template";
 import { ToolParameter } from "../tool-parameter";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { CommonToolMapper } from "./common-tool.mapper";
 import { ExternalToolMapper } from "./external-tool.mapper";
-import { SchoolExternalToolConfigurationStatus } from "../school-external-tool-configuration-status";
 
 export class SchoolExternalToolMapper {
 	static mapToSchoolExternalToolConfigurationTemplate(
@@ -90,7 +90,7 @@ export class SchoolExternalToolMapper {
 
 	static mapTemplateToSchoolExternalToolSave(
 		template: SchoolExternalToolConfigurationTemplate,
-		parameterConfiguration: (string | undefined)[],
+		parameterConfiguration: ToolParameterEntry[],
 		schoolId: string,
 		isDeactivated: boolean
 	): SchoolExternalToolSave {
@@ -98,12 +98,7 @@ export class SchoolExternalToolMapper {
 			schoolId: schoolId,
 			toolId: template.externalToolId,
 			version: template.version,
-			parameters: template.parameters.map(
-				(parameter, index): ToolParameterEntry => ({
-					name: parameter.name,
-					value: parameterConfiguration[index],
-				})
-			),
+			parameters: parameterConfiguration,
 			isDeactivated,
 		};
 

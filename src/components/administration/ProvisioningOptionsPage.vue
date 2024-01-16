@@ -224,6 +224,7 @@ export default defineComponent({
 		const isWarningDialogOpen: Ref<boolean> = ref(false);
 
 		onMounted(async () => {
+			window.scrollTo({ top: 0, behavior: "smooth" });
 			await fetchProvisioningOptionsData(props.systemId);
 
 			initialProvisioningOptions.value = { ...provisioningOptionsData.value };

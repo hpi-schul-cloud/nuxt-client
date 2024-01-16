@@ -3,5 +3,7 @@ export interface ContextExternalToolConfigurationStatus {
 
 	isOutdatedOnScopeContext: boolean;
 
+	isIncompleteOnScopeContext: boolean;
+
 	isDeactivated: boolean;
 }

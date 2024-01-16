@@ -360,4 +360,66 @@ describe("ExternalToolElementAlert", () => {
 			);
 		});
 	});
+
+	describe("when the tool is incomplete on scope context", () => {
+		describe("when the user is a teacher", () => {
+			const setup = () => {
+				useBoardPermissionsMock.isTeacher = true;
+
+				const { wrapper } = getWrapper(
+					{
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOnScopeContext: true,
+						}),
+					},
+					["teacher"]
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should display a teacher friendly message", () => {
+				const { wrapper } = setup();
+
+				const alerts = wrapper.findAllComponents(WarningAlert);
+
+				expect(alerts).toHaveLength(1);
+				expect(alerts.at(0).text()).toEqual(
+					"common.tool.information.incompleteOnContext.teacher"
+				);
+			});
+		});
+
+		describe("when the user is a student", () => {
+			const setup = () => {
+				useBoardPermissionsMock.isTeacher = false;
+
+				const { wrapper } = getWrapper(
+					{
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOnScopeContext: true,
+						}),
+					},
+					["student"]
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should display a student friendly message", () => {
+				const { wrapper } = setup();
+
+				const alerts = wrapper.findAllComponents(WarningAlert);
+
+				expect(alerts).toHaveLength(1);
+				expect(alerts.at(0).text()).toEqual(
+					"common.tool.information.incomplete.student"
+				);
+			});
+		});
+	});
 });

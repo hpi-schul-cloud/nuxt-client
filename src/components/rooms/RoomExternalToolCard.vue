@@ -15,6 +15,11 @@
 					{{ t("pages.rooms.tools.deactivated") }}
 				</room-card-chip>
 				<room-card-chip
+					v-if="isToolIncomplete"
+					data-testId="tool-card-status-incomplete"
+					>{{ t("pages.rooms.tools.incomplete") }}
+				</room-card-chip>
+				<room-card-chip
 					v-if="isToolOutdated"
 					data-testId="tool-card-status-outdated"
 				>
@@ -74,7 +79,7 @@ export default defineComponent({
 		const t = (key: string): string => i18n.tc(key, 0);
 
 		const handleClick = () => {
-			if (isToolOutdated.value) {
+			if (!isToolLaunchable.value) {
 				emit("error", props.tool);
 				return;
 			}
@@ -118,12 +123,20 @@ export default defineComponent({
 				props.tool.status.isOutdatedOnScopeContext
 		);
 
+		const isToolIncomplete: ComputedRef = computed(
+			() => props.tool.status.isIncompleteOnScopeContext
+		);
+
 		const isToolDeactivated: ComputedRef = computed(
 			() => props.tool.status.isDeactivated
 		);
 
 		const isToolLaunchable = computed(() => {
-			return !isToolOutdated.value || !isToolDeactivated.value;
+			return (
+				!isToolOutdated.value &&
+				!isToolDeactivated.value &&
+				!isToolIncomplete.value
+			);
 		});
 
 		const loadLaunchRequest = async () => {
@@ -144,6 +157,7 @@ export default defineComponent({
 			mdiAlert,
 			isToolOutdated,
 			isToolDeactivated,
+			isToolIncomplete,
 		};
 	},
 });
