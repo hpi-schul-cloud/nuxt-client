@@ -879,6 +879,7 @@
 	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
 	"components.cardElement.titleElement": "Titelelement",
 	"components.cardElement.lastUpdatedAt": "Bearbeitet:",
+	"components.cardElement.notification.visibleAndEditable": "Dieses Whiteboard ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.titleElement.placeholder": "Titel hinzufügen",
 	"components.cardElement.titleElement.validation.required": "Bitte Titel angeben.",
 	"components.cardElement.titleElement.validation.maxLength": "Der Titel darf nur {maxLength} Zeichen lang sein.",
