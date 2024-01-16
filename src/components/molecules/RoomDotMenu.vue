@@ -6,6 +6,8 @@
 				:icon="mdiDotsVertical"
 				variant="text"
 				density="comfortable"
+				class="three-dot-button"
+				data-testid="room-tool-three-dot-button"
 				:aria-label="ariaLabel"
 				@keydown.space.stop
 			/>

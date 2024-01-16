@@ -6,7 +6,10 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { envConfigModule } from "@/store";
 import { Envs } from "@/store/types/env-config";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 const mockGeoGebraItem = {
 	title: "GeoGebra Element Title",
@@ -51,24 +54,28 @@ const mockResultItems = (
 
 describe("@/components/copy-result-modal/CopyResultModal", () => {
 	const createWrapper = (options = {}) => {
-		const wrapper = mount(CopyResultModal,{
+		const wrapper = mount(CopyResultModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
 				isOpen: false,
 				copyResultItems: mockResultItems(),
-				...options
-			}
+				...options,
+			},
 		});
 
 		return wrapper;
 	};
 
-	beforeEach(() => {
+	beforeAll(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});
+	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
 	});
 
 	describe("basic functions", () => {
@@ -86,7 +93,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			const title = dialog.findComponent('[data-testid="dialog-title"');
 
-			expect(dialog.vm.isOpen).toBe(false)
+			expect(dialog.vm.isOpen).toBe(false);
 			expect(title.exists()).toBe(false);
 		});
 
@@ -96,7 +103,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			const title = dialog.findComponent('[data-testid="dialog-title"');
 
-			expect(dialog.vm.isOpen).toBe(true)
+			expect(dialog.vm.isOpen).toBe(true);
 			expect(title.exists()).toBe(true);
 		});
 	});
@@ -106,12 +113,13 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const wrapper = createWrapper({ isOpen: true });
 
 			const dialog = wrapper.findComponent(vCustomDialog);
-			const headline = dialog.findComponent('[data-testid="dialog-title"]').text();
+			const headline = dialog
+				.findComponent('[data-testid="dialog-title"]')
+				.text();
 
 			expect(headline).toBe("components.molecules.copyResult.title.partial");
 		});
 	});
-
 
 	describe("dialog-closed", () => {
 		it("should forward the dialog-closed event of the wrapped dialog", () => {
@@ -157,6 +165,33 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			expect(content).toContain(
 				"components.molecules.copyResult.ctlTools.info"
 			);
+		});
+
+		describe("when root item is a Course, has no failed file and CTL_TOOLS_COPY feature flag is enabled", () => {
+			const setup = () => {
+				const copyResultItems = mockResultItems([]);
+				const wrapper = createWrapper({
+					isOpen: true,
+					copyResultItems,
+					copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+				});
+
+				return { wrapper };
+			};
+
+			it("should render ctl tools copy info ", () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+					FEATURE_CTL_TOOLS_COPY_ENABLED: true,
+				} as Envs);
+				const { wrapper } = setup();
+
+				expect(
+					wrapper.find('[data-testid="copy-result-notifications"]').text()
+				).toContain(
+					"components.molecules.copyResult.ctlTools.withFeature.info"
+				);
+			});
 		});
 
 		it("should merge file error and coursefiles info if root item is a Course and has a failed file ", () => {

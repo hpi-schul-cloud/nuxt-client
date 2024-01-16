@@ -33,7 +33,11 @@
 			:room-id="roomId"
 		/>
 
-		<room-external-tools-section :tools="tools" :room-id="roomId" />
+		<room-external-tools-section
+			:tools="tools"
+			:room-id="roomId"
+			data-testid="room-external-tool-section"
+		/>
 	</div>
 </template>
 

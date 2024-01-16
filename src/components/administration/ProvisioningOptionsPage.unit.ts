@@ -1,17 +1,18 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import VueRouter, { Route } from "vue-router";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
-import Vue, { ref } from "vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
+import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory";
 import {
 	ProvisioningOptions,
 	useProvisioningOptionsState,
-} from "../data-provisioning-options";
-import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory/provisioningOptionsDataFactory";
+} from "@data-provisioning-options";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { flushPromises, mount } from "@vue/test-utils";
+import Vue, { ref } from "vue";
+import { Router } from "vue-router";
 import * as routerComposables from "vue-router";
+import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock("@data-provisioning-options");
 
@@ -27,32 +28,30 @@ describe(ProvisioningOptionsPage.name, () => {
 	let useProvisioningOptionsStateMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsState>
 	>;
-	let router: DeepMocked<VueRouter>;
+	let router: DeepMocked<Router>;
 
 	const getWrapper = (
-		propsData: { systemId: string } = { systemId: "systemId" },
+		props: { systemId: string } = { systemId: "systemId" },
 		provisioningOptions: ProvisioningOptions = provisioningOptionsDataFactory.build()
 	) => {
-		document.body.setAttribute("data-app", "true");
-
 		useProvisioningOptionsStateMock.isLoading = ref(false);
 		useProvisioningOptionsStateMock.provisioningOptionsData =
 			ref(provisioningOptions);
 
-		router = createMock<VueRouter>();
+		router = createMock<Router>();
 		jest.spyOn(routerComposables, "useRouter").mockReturnValue(router);
 
-		const wrapper: Wrapper<Vue> = mount(
-			ProvisioningOptionsPage as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				provide: { [I18N_KEY.valueOf()]: i18nMock },
-				propsData: { ...propsData },
-				mocks: { $theme },
-			}
-		);
+		const wrapper = mount(ProvisioningOptionsPage, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$theme,
+				},
+			},
+			props: {
+				...props,
+			},
+		});
 
 		return {
 			wrapper,
@@ -168,122 +167,178 @@ describe(ProvisioningOptionsPage.name, () => {
 				};
 			};
 
-			it("should not call the update function", () => {
+			it("should not call the update function", async () => {
 				const { cancelButton } = setup();
 
-				cancelButton.trigger("click");
+				await cancelButton.trigger("click");
 
 				expect(
 					useProvisioningOptionsStateMock.updateProvisioningOptionsData
 				).not.toHaveBeenCalled();
 			});
 
-			it("should return to school settings page", () => {
+			it("should return to school settings page", async () => {
 				const { cancelButton, redirect } = setup();
 
-				cancelButton.trigger("click");
+				await cancelButton.trigger("click");
 
 				expect(router.push).toHaveBeenCalledWith(redirect);
 			});
 		});
 
-		describe("when clicking the save button without error", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						systemId: "systemId",
-					},
-					provisioningOptionsDataFactory.build()
-				);
+		describe("when clicking the save", () => {
+			describe("when enabling options", () => {
+				const setup = () => {
+					const { wrapper } = getWrapper(
+						{
+							systemId: "systemId",
+						},
+						provisioningOptionsDataFactory.build()
+					);
 
-				const saveButton = wrapper.find(
-					'[data-testid="provisioning-options-save-button"]'
-				);
+					const saveButton = wrapper.find(
+						'[data-testid="provisioning-options-save-button"]'
+					);
 
-				const redirect: Partial<Route> = {
-					path: "/administration/school-settings",
-					query: { openPanels: "authentication" },
+					const redirect: Partial<Route> = {
+						path: "/administration/school-settings",
+						query: { openPanels: "authentication" },
+					};
+
+					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
+					useProvisioningOptionsStateMock.error.value = undefined;
+
+					return {
+						saveButton,
+						redirect,
+					};
 				};
 
-				useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
-				useProvisioningOptionsStateMock.error.value = undefined;
+				it("should call the update function", async () => {
+					const { saveButton } = setup();
 
-				return {
-					saveButton,
-					redirect,
-				};
-			};
+					await saveButton.trigger("click");
 
-			it("should call the update function", () => {
-				const { saveButton } = setup();
+					expect(
+						useProvisioningOptionsStateMock.updateProvisioningOptionsData
+					).toHaveBeenCalledWith("systemId", {
+						class: true,
+						course: false,
+						others: false,
+					});
+				});
 
-				saveButton.trigger("click");
+				it("should return to school settings page", async () => {
+					const { saveButton, redirect } = setup();
 
-				expect(
-					useProvisioningOptionsStateMock.updateProvisioningOptionsData
-				).toHaveBeenCalledWith("systemId", {
-					class: true,
-					course: false,
-					others: false,
+					await saveButton.trigger("click");
+					await flushPromises();
+
+					expect(router.push).toHaveBeenCalledWith(redirect);
 				});
 			});
 
-			it("should return to school settings page", async () => {
-				const { saveButton, redirect } = setup();
+			describe("when disabling options", () => {
+				const setup = async () => {
+					const { wrapper } = getWrapper(
+						{
+							systemId: "systemId",
+						},
+						provisioningOptionsDataFactory.build({
+							class: true,
+						})
+					);
 
-				await saveButton.trigger("click");
-				await Vue.nextTick();
+					const saveButton = wrapper.find(
+						'[data-testid="provisioning-options-save-button"]'
+					);
 
-				expect(router.push).toHaveBeenCalledWith(redirect);
-			});
-		});
+					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
+					useProvisioningOptionsStateMock.error.value = undefined;
 
-		describe("when clicking the save button with errors", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						systemId: "systemId",
-					},
-					provisioningOptionsDataFactory.build()
-				);
+					// await OnMounted
+					await flushPromises();
 
-				const saveButton = wrapper.find(
-					'[data-testid="provisioning-options-save-button"]'
-				);
+					const checkbox = wrapper.find(
+						'[data-testid="checkbox-option-class"]'
+					);
+					await checkbox.setChecked(false);
 
-				useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
-				useProvisioningOptionsStateMock.error.value = {
-					error: new Error(),
-					message: "mockMessage",
-					statusCode: 500,
+					return {
+						wrapper,
+						saveButton,
+					};
 				};
 
-				return {
-					saveButton,
-				};
-			};
+				it("should not call the update function", async () => {
+					const { saveButton } = await setup();
 
-			it("should call the update function", () => {
-				const { saveButton } = setup();
+					await saveButton.trigger("click");
 
-				saveButton.trigger("click");
+					expect(
+						useProvisioningOptionsStateMock.updateProvisioningOptionsData
+					).not.toHaveBeenCalled();
+				});
 
-				expect(
-					useProvisioningOptionsStateMock.updateProvisioningOptionsData
-				).toHaveBeenCalledWith("systemId", {
-					class: true,
-					course: false,
-					others: false,
+				it("should open the warning dialog", async () => {
+					const { saveButton, wrapper } = await setup();
+
+					await saveButton.trigger("click");
+					await flushPromises();
+
+					const dialog = wrapper.find('[data-testId="warning-dialog"]');
+
+					expect(dialog.props("isOpen")).toEqual(true);
 				});
 			});
 
-			it("should stay on provisioning options page", async () => {
-				const { saveButton } = setup();
+			describe("when an error occurs", () => {
+				const setup = () => {
+					const { wrapper } = getWrapper(
+						{
+							systemId: "systemId",
+						},
+						provisioningOptionsDataFactory.build()
+					);
 
-				await saveButton.trigger("click");
-				await Vue.nextTick();
+					const saveButton = wrapper.find(
+						'[data-testid="provisioning-options-save-button"]'
+					);
 
-				expect(router.push).not.toHaveBeenCalled();
+					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
+					useProvisioningOptionsStateMock.error.value = {
+						error: new Error(),
+						message: "mockMessage",
+						statusCode: 500,
+					};
+
+					return {
+						saveButton,
+					};
+				};
+
+				it("should call the update function", () => {
+					const { saveButton } = setup();
+
+					saveButton.trigger("click");
+
+					expect(
+						useProvisioningOptionsStateMock.updateProvisioningOptionsData
+					).toHaveBeenCalledWith("systemId", {
+						class: true,
+						course: false,
+						others: false,
+					});
+				});
+
+				it("should stay on provisioning options page", async () => {
+					const { saveButton } = setup();
+
+					await saveButton.trigger("click");
+					await flushPromises();
+
+					expect(router.push).not.toHaveBeenCalled();
+				});
 			});
 		});
 	});

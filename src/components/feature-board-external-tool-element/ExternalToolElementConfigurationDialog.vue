@@ -41,7 +41,10 @@
 import { useI18n } from "vue-i18n";
 import { ToolContextType } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import { ContextExternalToolConfigurationTemplate } from "@/store/external-tool";
+import {
+	ContextExternalToolConfigurationTemplate,
+	ToolParameterEntry,
+} from "@/store/external-tool";
 import {
 	ContextExternalTool,
 	ContextExternalToolSave,
@@ -130,7 +133,7 @@ export default defineComponent({
 
 		const onSave = async (
 			template: ContextExternalToolConfigurationTemplate,
-			configuredParameterValues: (string | undefined)[]
+			configuredParameterValues: ToolParameterEntry[]
 		) => {
 			const contextExternalTool: ContextExternalToolSave =
 				ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
