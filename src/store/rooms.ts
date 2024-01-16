@@ -349,4 +349,19 @@ export default class RoomsModule extends VuexModule {
 			});
 		}
 	}
+
+	@Action
+	async uploadCourse(file: File): Promise<void> {
+		this.resetBusinessError();
+
+		try {
+			await this.coursesApi.courseControllerImportCourse(file);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
 }
