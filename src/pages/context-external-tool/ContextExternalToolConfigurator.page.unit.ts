@@ -260,7 +260,7 @@ describe("ContextExternalToolConfigurator", () => {
 							value: testValue,
 						},
 					]);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					contextExternalToolsModule.createContextExternalTool
@@ -285,7 +285,7 @@ describe("ContextExternalToolConfigurator", () => {
 				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(router.push).toHaveBeenCalledWith({
 					path: `/rooms/${contextId}`,
@@ -299,7 +299,7 @@ describe("ContextExternalToolConfigurator", () => {
 				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "components.administration.externalToolsSection.notification.created",
@@ -353,7 +353,7 @@ describe("ContextExternalToolConfigurator", () => {
 				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					contextExternalToolsModule.updateContextExternalTool
@@ -383,7 +383,7 @@ describe("ContextExternalToolConfigurator", () => {
 				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(router.push).toHaveBeenCalledWith({
 					path: `/rooms/${contextId}`,
@@ -397,7 +397,7 @@ describe("ContextExternalToolConfigurator", () => {
 				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "components.administration.externalToolsSection.notification.updated",
@@ -433,7 +433,7 @@ describe("ContextExternalToolConfigurator", () => {
 						contextExternalToolConfigurationTemplateFactory.build(),
 						[]
 					);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(wrapper.find(".v-alert__content").exists()).toBeTruthy();
 			});
@@ -448,7 +448,7 @@ describe("ContextExternalToolConfigurator", () => {
 						contextExternalToolConfigurationTemplateFactory.build(),
 						[]
 					);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(router.push).not.toHaveBeenCalled();
 			});
