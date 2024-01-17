@@ -17,10 +17,6 @@ const etherpadItem = {
 	title: "Etherpad Element Title",
 	type: CopyApiResponseTypeEnum.LessonContentEtherpad,
 };
-const nexboardItem = {
-	title: "Nexboard Element Title",
-	type: CopyApiResponseTypeEnum.LessonContentNexboard,
-};
 const courseGroupItem = {
 	title: "CourseGroup Group Example",
 	type: CopyApiResponseTypeEnum.CoursegroupGroup,
@@ -34,7 +30,6 @@ const mockResultItems = (
 	elements = [
 		geoGebraItem,
 		etherpadItem,
-		nexboardItem,
 		courseGroupItem,
 		fileItem,
 	]
@@ -225,7 +220,6 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		it.each([
 			["GeoGebra", CopyApiResponseTypeEnum.LessonContentGeogebra],
 			["Etherpad", CopyApiResponseTypeEnum.LessonContentEtherpad],
-			["NeXboard", CopyApiResponseTypeEnum.LessonContentNexboard],
 			["Kursgruppen", CopyApiResponseTypeEnum.CoursegroupGroup],
 			["Dateien", CopyApiResponseTypeEnum.File],
 		])("should render if there is a %s item", (title, type) => {

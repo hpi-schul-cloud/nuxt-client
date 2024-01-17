@@ -97,11 +97,6 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.etherpad"),
 				},
 				{
-					isShow: this.hasNexboardElement,
-					text: this.nexboardInfoText,
-					title: this.$t("components.molecules.copyResult.label.nexboard"),
-				},
-				{
 					isShow: this.hasFileElement || this.isCourse,
 					text: this.filesInfoText,
 					title: this.$t("components.molecules.copyResult.label.files"),
@@ -130,12 +125,6 @@ export default {
 				CopyApiResponseTypeEnum.LessonContentEtherpad
 			);
 		},
-		hasNexboardElement() {
-			return this.hasElementOfType(
-				this.items,
-				CopyApiResponseTypeEnum.LessonContentNexboard
-			);
-		},
 		hasFileElement() {
 			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);
 		},
@@ -162,11 +151,6 @@ export default {
 				? this.$t("components.molecules.copyResult.fileCopy.error")
 				: "";
 			return `${courseFilesText} ${fileErrorText}`.trim();
-		},
-		nexboardInfoText() {
-			return envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED
-				? this.$t("components.molecules.copyResult.nexboardCopy.info")
-				: this.$t("components.molecules.copyResult.nexboardCopy.infoTldraw");
 		},
 		externalToolsInfoText() {
 			return envConfigModule.getCtlToolsCopyEnabled
