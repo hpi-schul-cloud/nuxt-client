@@ -1,15 +1,15 @@
 <template>
 	<v-app-bar v-if="isEditMode" flat color="transparent">
-		<FilePicker
-			v-if="!fileWasPicked"
-			@update:file="onFileSelect"
-			v-model:isFilePickerOpen="isFilePickerOpen"
-		/>
-
 		<v-progress-linear
-			v-else
+			v-if="isUploading || fileWasPicked"
 			data-testid="board-file-element-progress-bar"
 			indeterminate
+		/>
+
+		<FilePicker
+			v-else
+			@update:file="onFileSelect"
+			v-model:isFilePickerOpen="isFilePickerOpen"
 		/>
 		<slot />
 	</v-app-bar>
@@ -25,6 +25,7 @@ export default defineComponent({
 	props: {
 		elementId: { type: String, required: true },
 		isEditMode: { type: Boolean },
+		isUploading: { type: Boolean },
 	},
 	components: { FilePicker },
 	emits: ["upload:file"],
@@ -43,7 +44,7 @@ export default defineComponent({
 		});
 
 		const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-			if (fileWasPicked.value) {
+			if (fileWasPicked.value || props.isUploading) {
 				// Opens confirmation dialog in firefox
 				event.preventDefault();
 				// Opens confirmation dialog in chrome
