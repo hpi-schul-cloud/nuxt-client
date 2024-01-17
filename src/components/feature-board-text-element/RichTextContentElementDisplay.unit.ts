@@ -1,30 +1,29 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
+import { RenderHTML } from "@feature-render-html";
 
 describe("RichTextContentElementDisplay", () => {
-	let wrapper: Wrapper<Vue>;
-
-	const setup = (props: { value?: string }) => {
-		document.body.setAttribute("data-app", "true");
-		wrapper = mount(RichTextContentElementDisplay as MountOptions<Vue>, {
-			...createComponentMocks({}),
-			propsData: props,
+	const setup = (options: {}) => {
+		const wrapper = shallowMount(RichTextContentElementDisplay, {
+			props: {
+				...options
+			},
 		});
+
+		return wrapper;
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ value: "test value" });
-			expect(
-				wrapper.findComponent(RichTextContentElementDisplay).exists()
-			).toBe(true);
+			const wrapper = setup({ value: "test value" });
+			const content = wrapper.findComponent(RichTextContentElementDisplay);
+			expect(content.exists()).toBe(true);
 		});
 
 		it("should pass props to ck-editor component", () => {
-			setup({ value: "test value" });
-			expect(wrapper.text()).toStrictEqual("test value");
+			const wrapper = setup({ value: "test value" });
+			const editorComponent = wrapper.findComponent(RenderHTML);
+			expect(editorComponent.vm.html).toStrictEqual("test value");
 		});
 	});
 });
