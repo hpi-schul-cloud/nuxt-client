@@ -1,7 +1,8 @@
 import errorImage from "@/assets/img/image-not-available.svg";
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { PreviewImage } from "@ui-preview-image";
 import { mount, shallowMount } from "@vue/test-utils";
 
@@ -15,17 +16,12 @@ describe("PreviewImage", () => {
 			alt: "image.jpg",
 			"aspect-ratio": 1.77777,
 			position: "top",
-			contain: true,
+			cover: true,
 		};
 		const wrapper = shallowMount(PreviewImage, {
 			attachTo: document.body,
 			propsData,
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-			},
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 		return {
 			wrapper,
@@ -43,17 +39,12 @@ describe("PreviewImage", () => {
 			alt: "image.jpg",
 			"aspect-ratio": 1.77777,
 			position: "top",
-			contain: true,
+			cover: true,
 		};
 		const wrapper = mount(PreviewImage, {
 			attachTo: document.body,
 			propsData,
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-			},
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 		return {
 			wrapper,
@@ -72,7 +63,7 @@ describe("PreviewImage", () => {
 		expect(image.attributes("alt")).toBe(alt);
 		expect(image.attributes("aspectratio")).toBe("1.77777");
 		expect(image.attributes("position")).toBe("top");
-		expect(image.attributes("contain")).toBe("true");
+		expect(image.attributes("cover")).toBe("true");
 	});
 
 	it("should has loading spinner", () => {
@@ -85,16 +76,16 @@ describe("PreviewImage", () => {
 		it("should display warning alert", async () => {
 			const { wrapper } = setupWithShallowMount({});
 			const image = wrapper.find("v-img-stub");
-			await image.vm.$emit("error");
+			await image.trigger("error");
 
-			const alert = wrapper.find("warningalert-stub");
+			const alert = wrapper.find("warning-alert-stub");
 			expect(alert.exists()).toBe(true);
 		});
 
 		it("should emit error event", async () => {
 			const { wrapper } = setupWithShallowMount({});
 			const image = wrapper.find("v-img-stub");
-			await image.vm.$emit("error");
+			await image.trigger("error");
 
 			expect(wrapper.emitted("error")).toBeTruthy();
 		});
@@ -102,7 +93,7 @@ describe("PreviewImage", () => {
 		it("should pass error image to v-img", async () => {
 			const { wrapper } = setupWithShallowMount({});
 			const image = wrapper.find("v-img-stub");
-			await image.vm.$emit("error");
+			await image.trigger("error");
 
 			expect(image.attributes("src")).toBe(errorImage);
 		});
