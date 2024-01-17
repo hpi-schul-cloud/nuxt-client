@@ -1,5 +1,5 @@
 <template>
-	<ContentElementBar>
+	<ContentElementBar v-if="isEditMode">
 		<template #element>
 			<v-progress-linear
 				v-if="isUploading || fileWasPicked"
