@@ -67,8 +67,6 @@ export default defineComponent({
 		}
 
 		async function confirmUpload(): Promise<void> {
-			console.log(file.value);
-
 			if (file.value) {
 				await roomsModule.uploadCourse(file.value);
 			}
