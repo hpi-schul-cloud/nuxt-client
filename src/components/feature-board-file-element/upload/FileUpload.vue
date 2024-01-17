@@ -1,21 +1,28 @@
 <template>
-	<v-app-bar v-if="isEditMode" flat color="transparent">
-		<v-progress-linear
-			v-if="isUploading || fileWasPicked"
-			data-testid="board-file-element-progress-bar"
-			indeterminate
-		/>
+	<ContentElementBar v-if="isEditMode">
+		<template #element>
+			<v-progress-linear
+				v-if="isUploading || fileWasPicked"
+				data-testid="board-file-element-progress-bar"
+				indeterminate
+				color="primary"
+			/>
 
-		<FilePicker
-			v-else
-			@update:file="onFileSelect"
-			v-model:isFilePickerOpen="isFilePickerOpen"
-		/>
-		<slot />
-	</v-app-bar>
+			<FilePicker
+				v-else
+				@update:file="onFileSelect"
+				v-model:isFilePickerOpen="isFilePickerOpen"
+			/>
+		</template>
+
+		<template #menu>
+			<slot />
+		</template>
+	</ContentElementBar>
 </template>
 
 <script lang="ts">
+import { ContentElementBar } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
 import { defineComponent, onBeforeUnmount, onMounted, ref, watch } from "vue";
 import FilePicker from "./file-picker/FilePicker.vue";
@@ -27,7 +34,7 @@ export default defineComponent({
 		isEditMode: { type: Boolean },
 		isUploading: { type: Boolean },
 	},
-	components: { FilePicker },
+	components: { FilePicker, ContentElementBar },
 	emits: ["upload:file"],
 	setup(props, { emit }) {
 		const isFilePickerOpen = ref(false);
