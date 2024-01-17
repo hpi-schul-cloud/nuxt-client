@@ -10,7 +10,6 @@ const setup = () => {
 	return mountComposable(() => useBoardNotifier(), {
 		global: {
 			provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
-			mocks: { t: (key: string) => key },
 		},
 	});
 };
