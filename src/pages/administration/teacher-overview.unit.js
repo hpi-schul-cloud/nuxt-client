@@ -187,7 +187,7 @@ describe("teachers/index", () => {
 	};
 
 	it("should call 'deleteUsers' action", async () => {
-		const { wrapper, usersActionsStubs } = await setup();
+		const { wrapper, usersActionsStubs } = setup();
 
 		await nextTick();
 
