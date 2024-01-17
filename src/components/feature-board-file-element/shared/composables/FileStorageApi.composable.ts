@@ -8,7 +8,8 @@ import {
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { ref } from "vue";
+import { createTestableGlobaleState } from "@/utils/create-global-state";
+import { Ref, ref } from "vue";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
 export enum ErrorType {
@@ -22,12 +23,9 @@ export enum ErrorType {
 	Forbidden = "Forbidden",
 }
 
-export const useFileStorageApi = (
-	parentId: string,
-	parentType: FileRecordParentType
-) => {
+const fileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
-	const fileRecord = ref<FileRecordResponse>();
+	const fileRecords = new Map<string, Ref<FileRecordResponse | undefined>>();
 	const {
 		showFileTooBigError,
 		showForbiddenError,
@@ -36,20 +34,39 @@ export const useFileStorageApi = (
 		showFileExistsError,
 	} = useFileStorageNotifier();
 
-	const fetchFile = async (): Promise<void> => {
+	const getFileRecord = (id: string) => {
+		const existingFileRecord = fileRecords.get(id);
+		const skeletonFileRecord = ref(undefined);
+
+		if (!existingFileRecord) {
+			fileRecords.set(id, skeletonFileRecord);
+		}
+
+		const returnValue = existingFileRecord ?? skeletonFileRecord;
+
+		return returnValue;
+	};
+
+	const fetchFile = async (
+		parentId: string,
+		parentType: FileRecordParentType
+	): Promise<void> => {
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.list(schoolId, parentId, parentType);
 
-			// idea: use request-pooling to reduce number of api-requests
-			fileRecord.value = response.data.data[0];
+			updateOrAddFileRecord(parentId, response.data.data[0]);
 		} catch (error) {
 			showError(error);
 			throw error;
 		}
 	};
 
-	const upload = async (file: File): Promise<void> => {
+	const upload = async (
+		file: File,
+		parentId: string,
+		parentType: FileRecordParentType
+	): Promise<void> => {
 		try {
 			const schoolId = authModule.getUser?.schoolId as string;
 			const response = await fileApi.upload(
@@ -59,14 +76,18 @@ export const useFileStorageApi = (
 				file
 			);
 
-			fileRecord.value = response.data;
+			updateOrAddFileRecord(parentId, response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
 		}
 	};
 
-	const uploadFromUrl = async (imageUrl: string): Promise<void> => {
+	const uploadFromUrl = async (
+		imageUrl: string,
+		parentId: string,
+		parentType: FileRecordParentType
+	): Promise<void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
 			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
@@ -83,10 +104,23 @@ export const useFileStorageApi = (
 				fileUrlParams
 			);
 
-			fileRecord.value = response.data;
+			updateOrAddFileRecord(parentId, response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
+		}
+	};
+
+	const updateOrAddFileRecord = (
+		parentId: string,
+		filerecord: FileRecordResponse
+	) => {
+		const existingFileRecord = fileRecords.get(parentId);
+
+		if (existingFileRecord) {
+			existingFileRecord.value = filerecord;
+		} else {
+			fileRecords.set(parentId, ref(filerecord));
 		}
 	};
 
@@ -97,7 +131,7 @@ export const useFileStorageApi = (
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
-			fileRecord.value = response.data;
+			updateOrAddFileRecord(response.data.parentId, response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -136,6 +170,8 @@ export const useFileStorageApi = (
 		rename,
 		upload,
 		uploadFromUrl,
-		fileRecord,
+		getFileRecord,
 	};
 };
+
+export const useFileStorageApi = createTestableGlobaleState(fileStorageApi);
