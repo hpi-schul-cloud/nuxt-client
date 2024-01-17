@@ -39,7 +39,10 @@ import { useI18n } from "@/composables/i18n.composable";
 import { ToolContextType } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import EnvConfigModule from "@/store/env-config";
-import { ContextExternalToolConfigurationTemplate } from "@/store/external-tool";
+import {
+	ContextExternalToolConfigurationTemplate,
+	ToolParameterEntry,
+} from "@/store/external-tool";
 import {
 	ContextExternalTool,
 	ContextExternalToolSave,
@@ -159,7 +162,7 @@ export default defineComponent({
 
 		const onSave = async (
 			template: ContextExternalToolConfigurationTemplate,
-			configuredParameterValues: (string | undefined)[]
+			configuredParameterValues: ToolParameterEntry[]
 		) => {
 			const contextExternalTool: ContextExternalToolSave =
 				ContextExternalToolMapper.mapTemplateToContextExternalToolSave(

@@ -10,27 +10,24 @@
 		elevation="0"
 		@keydown.up.down="onKeydownArrow"
 		role="button"
-		:href="sanitizedUrl"
-		target="_blank"
 	>
-		<div>
+		<div class="drawing-element-content" @click="redirectToSanitizedUrl">
 			<InnerContent
-				v-if="!isEditMode"
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
 				:docName="element.id"
-			/>
-
-			<InnerContent
-				v-if="isEditMode"
-				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				:docName="element.id"
-				><BoardMenu scope="element">
-					<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
-					<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
-					<BoardMenuActionDelete @click="onDeleteElement" />
-				</BoardMenu>
+			>
+				<template v-if="isEditMode">
+					<BoardMenu scope="element">
+						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
+						<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
+						<BoardMenuActionDelete @click="onDeleteElement" />
+					</BoardMenu>
+				</template>
 			</InnerContent>
 		</div>
+		<InfoAlert v-if="isTeacher" :showCloseIcon="true">
+			{{ $t("components.cardElement.notification.visibleAndEditable") }}
+		</InfoAlert>
 	</v-card>
 </template>
 
@@ -46,6 +43,10 @@ import {
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
+import { InfoAlert } from "@ui-alert";
+import AuthModule from "@/store/auth";
+import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
+import { mdiClose } from "@mdi/js";
 
 export default defineComponent({
 	name: "DrawingContentElement",
@@ -55,6 +56,7 @@ export default defineComponent({
 		BoardMenuActionMoveDown,
 		BoardMenuActionDelete,
 		InnerContent,
+		InfoAlert,
 	},
 	props: {
 		element: {
@@ -72,9 +74,16 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const drawingElement = ref<HTMLElement | null>(null);
 		const element = toRef(props, "element");
+		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+		const userRoles = ref(authModule.getUserRoles);
+
 		const sanitizedUrl = computed(() =>
 			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
 		);
+
+		const redirectToSanitizedUrl = () => {
+			window.open(sanitizedUrl.value, "_blank");
+		};
 		useBoardFocusHandler(element.value.id, drawingElement);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
@@ -87,14 +96,26 @@ export default defineComponent({
 		const onMoveDrawingElementEditUp = () => emit("move-up:edit");
 		const onDeleteElement = () => emit("delete:element", element.value.id);
 
+		const isTeacher = computed(() => {
+			return userRoles.value.includes("teacher");
+		});
+
 		return {
 			drawingElement,
-			sanitizedUrl,
+			redirectToSanitizedUrl,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveDrawingElementEditDown,
 			onMoveDrawingElementEditUp,
+			isTeacher,
+			mdiClose,
 		};
 	},
 });
 </script>
+<style lang="scss" scoped>
+::v-deep .v-btn__content .v-icon,
+.alert-text {
+	color: var(--v-black-base) !important;
+}
+</style>

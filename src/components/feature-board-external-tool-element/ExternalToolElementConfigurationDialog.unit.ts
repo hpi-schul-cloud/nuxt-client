@@ -202,7 +202,12 @@ describe("ExternalToolElementConfigurationDialog", () => {
 				const testValue = "test";
 
 				const configurator = wrapper.findComponent(ExternalToolConfigurator);
-				configurator.vm.$emit("save", template, [testValue]);
+				configurator.vm.$emit("save", template, [
+					{
+						name: template.parameters[0].name,
+						value: testValue,
+					},
+				]);
 				await Vue.nextTick();
 
 				expect(

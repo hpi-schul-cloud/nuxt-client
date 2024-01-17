@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { SchoolExternalToolConfigurationTemplate } from "@/store/external-tool";
+import { ExternalToolConfigurationTemplate } from "@/store/external-tool";
 import { computed, defineComponent, PropType, WritableComputedRef } from "vue";
 import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
 
@@ -19,7 +19,7 @@ export default defineComponent({
 	components: { ExternalToolConfigParameter },
 	props: {
 		template: {
-			type: Object as PropType<SchoolExternalToolConfigurationTemplate>,
+			type: Object as PropType<ExternalToolConfigurationTemplate>,
 			required: true,
 		},
 		value: {
