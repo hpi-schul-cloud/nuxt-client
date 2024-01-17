@@ -92,6 +92,17 @@ describe("ImageDisplay", () => {
 			);
 		});
 
+		describe("when preview image emits error", () => {
+			it("should disable color overlay", async () => {
+				const { wrapper } = setup({ isEditMode: false });
+				const previewImage = wrapper.find("previewimage-stub");
+				await previewImage.vm.$emit("error");
+
+				const colorOverlay = wrapper.findComponent(ColorOverlay);
+				expect(colorOverlay.props("isOverlayDisabled")).toBe(true);
+			});
+		});
+
 		describe("when alternative text is defined", () => {
 			it("should have set alt correctly", () => {
 				const alternativeText = "alternative text";

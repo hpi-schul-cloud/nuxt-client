@@ -30,6 +30,9 @@ module.exports = defineConfig({
 				"@data-external-tool": getDir("src/components/data-external-tool"),
 				"@data-group": getDir("src/components/data-group"),
 				"@data-system": getDir("src/components/data-system"),
+				"@data-provisioning-options": getDir(
+					"src/components/data-provisioning-options"
+				),
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),

@@ -242,6 +242,7 @@ export default {
 		},
 	},
 	mounted() {
+		window.scrollTo({ top: 0, behavior: "smooth" });
 		document.title = buildPageTitle(this.$t("pages.administration.ldap.title"));
 	},
 };

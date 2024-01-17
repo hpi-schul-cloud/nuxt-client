@@ -169,7 +169,9 @@ export default {
 				: this.$t("components.molecules.copyResult.nexboardCopy.infoTldraw");
 		},
 		externalToolsInfoText() {
-			return this.$t("components.molecules.copyResult.ctlTools.info");
+			return envConfigModule.getCtlToolsCopyEnabled
+				? this.$t("components.molecules.copyResult.ctlTools.withFeature.info")
+				: this.$t("components.molecules.copyResult.ctlTools.info");
 		},
 	},
 	methods: {

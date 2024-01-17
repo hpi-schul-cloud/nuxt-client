@@ -70,7 +70,7 @@
 <script>
 import { contentModule } from "@/store";
 import BaseLink from "@/components/base/BaseLink";
-import AddContentButton from "@/components/organisms/AddContentButton";
+import AddContentButton from "@/components/lern-store/AddContentButton";
 import UserHasRole from "@/components/helpers/UserHasRole";
 import contentMeta from "@/mixins/contentMeta";
 import { getProvider, isCollectionHelper } from "@/utils/helpers";

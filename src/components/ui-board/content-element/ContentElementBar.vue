@@ -13,7 +13,7 @@
 		</div>
 		<div
 			:class="backgroundClass"
-			class="rounded-b"
+			class="rounded-b pb-4"
 			v-if="
 				icon ||
 				$slots.title ||
@@ -24,13 +24,13 @@
 			"
 		>
 			<v-card-title
-				class="subtitle-1 d-inline-block font-weight-bold d-flex flex-nowrap gb-1"
+				class="text-subtitle-1 d-inline-block font-weight-bold d-flex flex-nowrap gb-1 pt-5 pb-0"
 			>
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
 				<LineClamp
 					v-if="$slots.title"
-					class="black--text font-narrow content-element-title"
+					class="font-narrow content-element-title flex-grow-1"
 				>
 					<slot name="title" />
 				</LineClamp>
@@ -47,9 +47,9 @@
 			</v-card-title>
 			<v-card-subtitle
 				v-if="$slots.subtitle || $slots.description"
-				class="pt-2"
+				class="pt-1"
 			>
-				<div v-if="$slots.subtitle" class="gb-2 subtitle">
+				<div v-if="$slots.subtitle" class="gb-2">
 					<slot name="subtitle" />
 				</div>
 
@@ -81,7 +81,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const backgroundClass = computed(() => {
-			return props.hasGreyBackground ? "grey lighten-4" : "";
+			return props.hasGreyBackground ? "bg-grey-lighten-4" : "";
 		});
 
 		return {
@@ -94,7 +94,6 @@ export default defineComponent({
 <style scoped type="text/scss">
 .font-narrow {
 	font-family: var(--font-accent) !important;
-	line-height: 1rem;
 }
 
 .content-element-bar {
@@ -108,10 +107,6 @@ a.v-card .content-element-bar:hover {
 	.content-element-display {
 		filter: brightness(80%);
 	}
-}
-.subtitle,
-.description {
-	line-height: 20px;
 }
 .three-dot-menu {
 	position: absolute;

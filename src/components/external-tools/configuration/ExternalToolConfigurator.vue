@@ -15,7 +15,6 @@
 			data-testId="configuration-select"
 			@update:modelValue="onChangeSelection"
 			variant="underlined"
-			color="primary"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
@@ -85,6 +84,8 @@ import { useI18n } from "vue-i18n";
 import {
 	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
+	ToolParameter,
+	ToolParameterEntry,
 } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
@@ -165,7 +166,31 @@ export default defineComponent({
 		};
 
 		const onSave = async () => {
-			emit("save", selectedTemplate.value, parameterConfiguration.value);
+			if (selectedTemplate.value) {
+				const parameterEntries: ToolParameterEntry[] = mapValidParameterEntries(
+					selectedTemplate.value
+				);
+
+				emit("save", selectedTemplate.value, parameterEntries);
+			}
+		};
+
+		const mapValidParameterEntries = (
+			template: ExternalToolConfigurationTemplate
+		) => {
+			const parameterEntries: ToolParameterEntry[] = template.parameters
+				.map(
+					(parameter: ToolParameter, index: number): ToolParameterEntry => ({
+						name: parameter.name,
+						value: parameterConfiguration.value[index],
+					})
+				)
+				.filter(
+					(parameterEntry: ToolParameterEntry) =>
+						parameterEntry.value !== undefined && parameterEntry.value !== ""
+				);
+
+			return parameterEntries;
 		};
 
 		const onChangeSelection = async () => {

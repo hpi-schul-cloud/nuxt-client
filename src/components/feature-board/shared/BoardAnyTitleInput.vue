@@ -136,7 +136,7 @@ export default defineComponent({
 </script>
 
 <style scoped>
-:deep(div.v-input__slot) {
+:deep(div.v-field__field) {
 	padding: 0;
 	font-family: var(--font-accent);
 }
@@ -153,7 +153,7 @@ export default defineComponent({
 }
 
 /** Edge */
-:deep(textarea)::-ms-input-placeholder {
+:deep(textarea) {
 	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }

@@ -6,7 +6,12 @@ import theme from "@/vuetify.options";
 export default createVuetify({
 	...theme,
 	defaults: {
-		VSwitch: { inset: true, flat: true, color: "primary" },
 		VAlert: { variant: "tonal" },
+		VAutocomplete: { color: "primary" },
+		VCheckbox: { color: "primary" },
+		VFileInput: { variant: "underlined", color: "primary" },
+		VSelect: { variant: "underlined", color: "primary" },
+		VSwitch: { inset: true, flat: true, color: "primary" },
+		VTextField: { variant: "underlined", color: "primary" },
 	},
 });

@@ -20,10 +20,14 @@
 				</span>
 			</template>
 			<template #[`item.status`]="{ item }">
-				<v-icon v-if="item.isOutdated || item.isDeactivated" color="warning">
+				<v-icon
+					v-if="item.isOutdated || item.isDeactivated"
+					color="warning"
+					start
+				>
 					{{ mdiAlert }}
 				</v-icon>
-				<v-icon v-else color="success">
+				<v-icon v-else color="success" start>
 					{{ mdiCheckCircle }}
 				</v-icon>
 				<span>
@@ -41,6 +45,7 @@
 			class="mt-8 mb-4 button-save float-right"
 			color="primary"
 			variant="flat"
+			data-testid="add-external-tool-button"
 			:to="{ name: 'administration-tool-config-overview' }"
 		>
 			{{ t("components.administration.externalToolsSection.action.add") }}

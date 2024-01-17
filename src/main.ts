@@ -68,6 +68,7 @@ import {
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 	NEWS_MODULE_KEY,
+	CONTENT_MODULE_KEY,
 } from "./utils/inject";
 
 export const app = createApp(App);
@@ -145,7 +146,7 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
 	app.provide("autoLogoutModule", autoLogoutModule);
 	app.provide("collaborativeFilesModule", collaborativeFilesModule);
-	app.provide("contentModule", contentModule);
+	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(
 		CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),
 		contextExternalToolsModule

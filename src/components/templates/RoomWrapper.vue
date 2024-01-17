@@ -2,7 +2,7 @@
 	<default-wireframe
 		ref="main"
 		headline=""
-		:full-width="isLoading"
+		:full-width="true"
 		:fab-items="fabItems"
 		@fabButtonEvent="fabClick"
 	>
@@ -10,11 +10,11 @@
 			<slot name="header" />
 		</template>
 		<template v-if="isLoading">
-			<v-container fluid class="px-0"
+			<v-container class="loader"
 				><v-skeleton-loader
 					ref="skeleton-loader"
 					type="date-picker-days"
-					class="mt-16"
+					class="mt-6"
 				/>
 			</v-container>
 		</template>
@@ -140,9 +140,12 @@ export default defineComponent({
 :deep(.v-skeleton-loader__avatar) {
 	width: 80px;
 	max-width: 80px;
-	height: 80px;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin: 12px;
+}
+
+.loader {
+	// padding: 0 var(--space-lg); // Desktop
+	max-width: var(--size-content-width-max);
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-up')} {
@@ -155,7 +158,7 @@ export default defineComponent({
 @media #{map-get($display-breakpoints, 'md-and-up')} {
 	:deep(.v-skeleton-loader__avatar) {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-		margin: 24px 48px;
+		margin: 24px 36px;
 	}
 }
 </style>

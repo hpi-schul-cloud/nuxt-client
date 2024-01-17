@@ -213,6 +213,31 @@ describe("ExternalToolElement", () => {
 			});
 		});
 
+		describe("when the element has a tool attached, but it is incomplete", () => {
+			it("should not load the launch request", async () => {
+				getWrapper(
+					{
+						element: {
+							...EMPTY_TEST_ELEMENT,
+							content: { contextExternalToolId: "contextExternalToolId" },
+						},
+						isEditMode: false,
+					},
+					externalToolDisplayDataFactory.build({
+						status: ContextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOnScopeContext: true,
+						}),
+					})
+				);
+
+				await Vue.nextTick();
+
+				expect(
+					useExternalToolLaunchStateMock.fetchLaunchRequest
+				).not.toHaveBeenCalled();
+			});
+		});
+
 		describe("when the element does not have a tool attached", () => {
 			it("should open the configuration dialog immediately", async () => {
 				const { wrapper } = getWrapper({
@@ -734,6 +759,40 @@ describe("ExternalToolElement", () => {
 				);
 
 				expect(alert.props("error")).toEqual(error);
+			});
+		});
+
+		describe("when the tool is incomplete", () => {
+			const setup = () => {
+				const toolIncompleteStatus =
+					ContextExternalToolConfigurationStatusFactory.build({
+						isIncompleteOnScopeContext: true,
+					});
+
+				const { wrapper } = getWrapper(
+					{
+						element: EMPTY_TEST_ELEMENT,
+						isEditMode: true,
+					},
+					externalToolDisplayDataFactory.build({
+						status: toolIncompleteStatus,
+					})
+				);
+
+				return {
+					wrapper,
+					toolIncompleteStatus,
+				};
+			};
+
+			it("should display an incomplete alert", async () => {
+				const { wrapper, toolIncompleteStatus } = setup();
+
+				const alert = wrapper.find(
+					'[data-testid="board-external-tool-element-alert"]'
+				);
+
+				expect(alert.props("toolStatus")).toEqual(toolIncompleteStatus);
 			});
 		});
 	});

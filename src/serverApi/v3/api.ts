@@ -694,6 +694,12 @@ export interface ContextExternalToolConfigurationStatusResponse {
      */
     isOutdatedOnScopeContext: boolean;
     /**
+     * True, if a configured parameter on the context external tool is missing a value
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isIncompleteOnScopeContext: boolean;
+    /**
      * Is the tool deactivated, because of superhero or school administrator
      * @type {boolean}
      * @memberof ContextExternalToolConfigurationStatusResponse
@@ -952,6 +958,7 @@ export enum CopyApiResponseTypeEnum {
     Content = 'CONTENT',
     Course = 'COURSE',
     CoursegroupGroup = 'COURSEGROUP_GROUP',
+    ExternalTool = 'EXTERNAL_TOOL',
     ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
     File = 'FILE',
     FileElement = 'FILE_ELEMENT',
@@ -1726,7 +1733,7 @@ export interface ExternalToolCreateParams {
      */
     isHidden: boolean;
     /**
-     * 
+     * Tool can be deactivated, related tools can not be added to e.g. school, course or board anymore
      * @type {boolean}
      * @memberof ExternalToolCreateParams
      */
@@ -4230,7 +4237,7 @@ export interface SchoolExternalToolPostParams {
      */
     parameters?: Array<CustomParameterEntryParam>;
     /**
-     * 
+     * Tool can be deactivated, related tools can not be added to e.g. course or board anymore
      * @type {boolean}
      * @memberof SchoolExternalToolPostParams
      */
@@ -8306,6 +8313,44 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
+         * @summary Check if user has read permission for any board element.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        elementControllerReadPermission: async (contentElementId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contentElementId' is not null or undefined
+            assertParamExists('elementControllerReadPermission', 'contentElementId', contentElementId)
+            const localVarPath = `/elements/{contentElementId}/permission`
+                .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Update a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {UpdateElementContentBodyParams} updateElementContentBodyParams 
@@ -8395,6 +8440,17 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Check if user has read permission for any board element.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async elementControllerReadPermission(contentElementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerReadPermission(contentElementId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Update a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {UpdateElementContentBodyParams} updateElementContentBodyParams 
@@ -8449,6 +8505,16 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
         },
         /**
          * 
+         * @summary Check if user has read permission for any board element.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        elementControllerReadPermission(contentElementId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.elementControllerReadPermission(contentElementId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {UpdateElementContentBodyParams} updateElementContentBodyParams 
@@ -8498,6 +8564,16 @@ export interface BoardElementApiInterface {
      * @memberof BoardElementApiInterface
      */
     elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Check if user has read permission for any board element.
+     * @param {string} contentElementId The id of the element.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardElementApiInterface
+     */
+    elementControllerReadPermission(contentElementId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -8555,6 +8631,18 @@ export class BoardElementApi extends BaseAPI implements BoardElementApiInterface
      */
     public elementControllerMoveElement(contentElementId: string, moveContentElementBody: MoveContentElementBody, options?: any) {
         return BoardElementApiFp(this.configuration).elementControllerMoveElement(contentElementId, moveContentElementBody, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Check if user has read permission for any board element.
+     * @param {string} contentElementId The id of the element.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardElementApi
+     */
+    public elementControllerReadPermission(contentElementId: string, options?: any) {
+        return BoardElementApiFp(this.configuration).elementControllerReadPermission(contentElementId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

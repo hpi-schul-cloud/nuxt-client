@@ -10,7 +10,6 @@
 			elevation="6"
 			class="bg-white"
 			icon
-			size="large"
 			v-if="!isEditMode"
 		>
 			<VIcon>{{ mdiPlus }}</VIcon>

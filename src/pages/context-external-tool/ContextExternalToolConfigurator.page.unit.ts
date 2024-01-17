@@ -252,9 +252,15 @@ describe("ContextExternalToolConfigurator", () => {
 				} = setup();
 				const testValue = "test";
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
-					.vm.$emit("save", template, [testValue]);
+					.vm.$emit("save", template, [
+						{
+							name: template.parameters[0].name,
+							value: testValue,
+						},
+					]);
+				await Vue.nextTick();
 
 				expect(
 					contextExternalToolsModule.createContextExternalTool
@@ -276,9 +282,10 @@ describe("ContextExternalToolConfigurator", () => {
 			it("should redirect back to the room page", async () => {
 				const { wrapper, template, contextId } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
+				await Vue.nextTick();
 
 				expect(router.push).toHaveBeenCalledWith({
 					path: `/rooms/${contextId}`,
@@ -289,9 +296,10 @@ describe("ContextExternalToolConfigurator", () => {
 			it("should display a notification when created", async () => {
 				const { wrapper, notifierModule, template } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
+				await Vue.nextTick();
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "components.administration.externalToolsSection.notification.created",
@@ -342,9 +350,10 @@ describe("ContextExternalToolConfigurator", () => {
 					contextType,
 				} = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
+				await Vue.nextTick();
 
 				expect(
 					contextExternalToolsModule.updateContextExternalTool
@@ -371,9 +380,10 @@ describe("ContextExternalToolConfigurator", () => {
 			it("should redirect back to context settings page when there is no error", async () => {
 				const { wrapper, template, contextId } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
+				await Vue.nextTick();
 
 				expect(router.push).toHaveBeenCalledWith({
 					path: `/rooms/${contextId}`,
@@ -384,9 +394,10 @@ describe("ContextExternalToolConfigurator", () => {
 			it("should display a notification when updated", async () => {
 				const { wrapper, notifierModule, template } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
+				await Vue.nextTick();
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "components.administration.externalToolsSection.notification.updated",
@@ -415,13 +426,14 @@ describe("ContextExternalToolConfigurator", () => {
 			it("should display an alert", async () => {
 				const { wrapper } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit(
 						"save",
 						contextExternalToolConfigurationTemplateFactory.build(),
 						[]
 					);
+				await Vue.nextTick();
 
 				expect(wrapper.find(".v-alert__content").exists()).toBeTruthy();
 			});
@@ -429,13 +441,14 @@ describe("ContextExternalToolConfigurator", () => {
 			it("should not redirect", async () => {
 				const { wrapper } = setup();
 
-				await wrapper
+				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit(
 						"save",
 						contextExternalToolConfigurationTemplateFactory.build(),
 						[]
 					);
+				await Vue.nextTick();
 
 				expect(router.push).not.toHaveBeenCalled();
 			});

@@ -1,5 +1,12 @@
 <template>
-	<v-alert :color="color" :icon="icon" class="mb-0">
+	<v-alert
+		:color="color"
+		:icon="icon"
+		:closable="showCloseIcon"
+		:closeIcon="showCloseIcon ? closeIcon : null"
+		class="mb-0"
+		variant="text"
+	>
 		<div class="text-black" v-if="$slots.default">
 			<slot />
 		</div>
@@ -15,6 +22,11 @@ export default defineComponent({
 	props: {
 		color: { type: String },
 		icon: { type: String as PropType<IconProps["icon"]> },
+		closeIcon: { type: String as PropType<IconProps["icon"]> },
+		showCloseIcon: {
+			type: Boolean,
+			default: false,
+		},
 	},
 });
 </script>

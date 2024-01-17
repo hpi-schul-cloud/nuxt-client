@@ -43,8 +43,6 @@
 					persistent-hint
 					:append-icon="mdiTriangleSmallDown"
 					:menu-props="{ bottom: true, offsetY: true, nudgeBottom: 28 }"
-					variant="underlined"
-					color="primary"
 				/>
 			</div>
 		</template>

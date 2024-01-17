@@ -11,7 +11,6 @@
 			"
 			readonly
 			density="compact"
-			variant="underlined"
 			@blur="linkCopyFinished(0)"
 		>
 			<template #append>
@@ -62,7 +61,6 @@
 								:color="getCopyStatus(system._id) ? 'success' : 'primary'"
 								readonly
 								density="compact"
-								variant="underlined"
 								@blur="linkCopyFinished"
 							>
 								<template #append>
@@ -97,7 +95,7 @@
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
 							</v-btn>
 							<v-btn
-								v-if="isEditable(system) && hasSystemCreatePermission"
+								v-if="isRemovable(system) && hasSystemCreatePermission"
 								class="delete-system-btn"
 								icon
 								variant="text"
@@ -209,18 +207,15 @@ export default {
 			};
 		},
 		isEditable(system) {
-			if (envConfigModule.getProvisioningOptionsEnabled) {
-				return (
-					system.ldapConfig?.provider === "general" || system.alias === "SANIS"
-				);
-			}
+			return (
+				system.ldapConfig?.provider === "general" || system.alias === "SANIS"
+			);
+		},
+		isRemovable(system) {
 			return system.ldapConfig?.provider === "general";
 		},
 		redirectTo(system) {
-			if (
-				envConfigModule.getProvisioningOptionsEnabled &&
-				system.alias === "SANIS"
-			) {
+			if (system.alias === "SANIS") {
 				return `/administration/school-settings/provisioning-options?systemId=${system._id}`;
 			}
 			return `/administration/ldap/config?id=${system._id}`;

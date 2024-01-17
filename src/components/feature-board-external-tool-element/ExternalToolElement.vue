@@ -144,12 +144,17 @@ export default defineComponent({
 				!!displayData.value?.status.isOutdatedOnScopeContext
 		);
 
+		const isToolIncomplete: ComputedRef<boolean> = computed(
+			() => !!displayData.value?.status.isIncompleteOnScopeContext
+		);
+
 		const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatus> =
 			computed(() => {
 				return (
 					displayData.value?.status ?? {
 						isOutdatedOnScopeSchool: false,
 						isOutdatedOnScopeContext: false,
+						isIncompleteOnScopeContext: false,
 						isDeactivated: false,
 					}
 				);
@@ -207,7 +212,7 @@ export default defineComponent({
 			if (modelValue.value.contextExternalToolId) {
 				await fetchDisplayData(modelValue.value.contextExternalToolId);
 
-				if (!isToolOutdated.value) {
+				if (!isToolOutdated.value && !isToolIncomplete.value) {
 					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
 				}
 			}
@@ -223,6 +228,7 @@ export default defineComponent({
 			error,
 			isLoading,
 			isToolOutdated,
+			isToolIncomplete,
 			isConfigurationDialogOpen,
 			toolConfigurationStatus,
 			mdiPuzzleOutline,

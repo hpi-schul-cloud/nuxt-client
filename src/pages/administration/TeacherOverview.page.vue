@@ -32,11 +32,10 @@
 				</template>
 			</base-input>
 
-			<data-filter
-				:filters="filters"
-				:backend-filtering="true"
-				v-model:active-filters="currentFilterQuery"
-				data-testid="data_filter"
+			<DataFilter
+				@update:filter="onUpdateFilter"
+				filter-for="teacher"
+				:class-names="classNameList"
 			/>
 
 			<backend-data-table
@@ -132,8 +131,7 @@ import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
 import AdminTableLegend from "@/components/molecules/AdminTableLegend";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter";
-import { teacherFilter } from "@/utils/adminFilter";
+
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
@@ -146,14 +144,15 @@ import {
 } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
+import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 
 export default {
 	components: {
-		DataFilter,
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
 		ProgressModal,
+		DataFilter,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -291,7 +290,6 @@ export default {
 					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
 			],
-			filters: teacherFilter(this),
 			searchQuery:
 				(this.getUiState("filter", "pages.administration.teachers.index") &&
 					this.getUiState("filter", "pages.administration.teachers.index")
@@ -299,6 +297,7 @@ export default {
 				"",
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
+			classNameList: [],
 		};
 	},
 	computed: {
@@ -443,6 +442,7 @@ export default {
 	},
 	created() {
 		this.find();
+		this.getClassNameList();
 	},
 	methods: {
 		find() {
@@ -627,6 +627,27 @@ export default {
 		dialogConfirm(confirmDialogProps) {
 			this.confirmDialogProps = confirmDialogProps;
 			this.isConfirmDialogActive = true;
+		},
+		onUpdateFilter(query) {
+			this.currentFilterQuery = query;
+			this.find();
+		},
+		async getClassNameList() {
+			const { currentYear } = this.$store.getters["authModule/getSchool"];
+			await this.$store.dispatch("classes/find", {
+				query: {
+					$limit: 1000,
+					year: currentYear?.id,
+				},
+			});
+			this.classNameList = this.$store.state["classes"].list.reduce(
+				(acc, item) =>
+					acc.concat({
+						label: item.displayName,
+						value: item.displayName,
+					}),
+				[]
+			);
 		},
 	},
 	mounted() {

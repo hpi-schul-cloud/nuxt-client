@@ -45,8 +45,8 @@ export default class EnvConfigModule extends VuexModule {
 		FEATURE_SHOW_OUTDATED_USERS: false,
 		FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: false,
 		FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: false,
-		FEATURE_PROVISIONING_OPTIONS_ENABLED: false,
 		FEATURE_CTL_TOOLS_TAB_ENABLED: false,
+		FEATURE_CTL_TOOLS_COPY_ENABLED: false,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -189,8 +189,8 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED ?? false;
 	}
 
-	get getProvisioningOptionsEnabled(): boolean {
-		return this.env.FEATURE_PROVISIONING_OPTIONS_ENABLED ?? false;
+	get getCtlToolsCopyEnabled(): boolean {
+		return this.env.FEATURE_CTL_TOOLS_COPY_ENABLED ?? false;
 	}
 
 	get getEnv(): Envs {

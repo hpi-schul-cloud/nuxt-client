@@ -43,7 +43,7 @@ export default {
 	}
 
 	@include breakpoint(desktop) {
-		max-width: calc(100vw - var(--sidebar-width));
+		max-width: calc(100vw - var(--sidebar-width) - 10px);
 	}
 }
 </style>
