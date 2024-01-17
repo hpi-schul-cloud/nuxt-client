@@ -2,7 +2,6 @@
 	<v-card
 		class="mb-4"
 		data-testid="board-file-element"
-		dense
 		elevation="0"
 		:variant="isOutlined ? 'outlined' : 'elevated'"
 		ref="fileContentElement"

@@ -1,5 +1,5 @@
 <template>
-	<v-app-bar v-if="isEditMode" flat color="transparent">
+	<v-toolbar v-if="isEditMode" flat color="transparent" class="pl-4 py-4">
 		<FilePicker
 			v-if="!fileWasPicked"
 			@update:file="onFileSelect"
@@ -10,9 +10,10 @@
 			v-else
 			data-testid="board-file-element-progress-bar"
 			indeterminate
+			color="primary"
 		/>
 		<slot />
-	</v-app-bar>
+	</v-toolbar>
 </template>
 
 <script lang="ts">
