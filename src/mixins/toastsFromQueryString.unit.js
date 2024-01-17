@@ -8,7 +8,6 @@ describe("@/mixins/toastsFromQueryString", () => {
 		setupStores({
 			notifierModule: NotifierModule,
 		});
-		jest.clearAllMocks();
 	});
 	it.each([
 		["error", "errorMessage", undefined],
@@ -25,10 +24,12 @@ describe("@/mixins/toastsFromQueryString", () => {
 					writable: false,
 					value: "http://schul-cloud.com",
 				});
-				Object.defineProperty(location, "origin", {
+				Object.defineProperty(window, "location", {
+					value: {
+						origin: "http://schul-cloud.com"
+					},
 					configurable: true, // defaults to false
 					writable: false,
-					value: "http://schul-cloud.com",
 				});
 				this.$route = {
 					query: {
@@ -61,11 +62,13 @@ describe("@/mixins/toastsFromQueryString", () => {
 						writable: false,
 						value: ref,
 					});
-					Object.defineProperty(location, "origin", {
-						configurable: true, // defaults to false
-						writable: false,
-						value: "http://schul-cloud.com",
-					});
+					Object.defineProperty(window, "location", {
+					value: {
+						origin: "http://schul-cloud.com"
+					},
+					configurable: true, // defaults to false
+					writable: false,
+				});
 					this.$route = {
 						query: {
 							"toast-type": "error",
