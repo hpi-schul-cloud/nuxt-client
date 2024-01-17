@@ -11,7 +11,7 @@
 			<template #body>
 				<div class="content-modal__body">
 					<v-select
-						:model-value="selectedCourse"
+						v-model="selectedCourse"
 						return-object
 						item-value="_id"
 						item-title="name"
@@ -22,7 +22,7 @@
 					<transition name="fade">
 						<v-select
 							v-show="!!(selectedCourse || {})._id"
-							:model-value="selectedLesson"
+							v-model="selectedLesson"
 							return-object
 							item-value="_id"
 							item-title="name"
@@ -81,8 +81,8 @@ export default {
 	},
 	data() {
 		return {
-			selectedCourse: {},
-			selectedLesson: {},
+			selectedCourse: null,
+			selectedLesson: null,
 		};
 	},
 	computed: {
@@ -110,7 +110,7 @@ export default {
 	},
 	watch: {
 		selectedCourse(to, from) {
-			this.selectedLesson = {};
+			this.selectedLesson = null;
 			if (to) {
 				this.findLessons(to);
 			} else if (!to && !!from) {
@@ -154,8 +154,8 @@ export default {
 			contentModule.getLessons(course._id);
 		},
 		clearState() {
-			this.selectedCourse = {};
-			this.selectedLesson = {};
+			this.selectedCourse = null;
+			this.selectedLesson = null;
 		},
 	},
 };
