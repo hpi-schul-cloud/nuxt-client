@@ -500,16 +500,13 @@ export default {
 					selectionType,
 				});
 				notifierModule.show({
-					text: this.$tc(
-						"pages.administration.sendMail.success",
-						rowIds.length
-					),
+					text: this.$t("pages.administration.sendMail.success", rowIds.length),
 					status: "success",
 					timeout: 10000,
 				});
 			} catch (error) {
 				notifierModule.show({
-					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
+					text: this.$t("pages.administration.sendMail.error", rowIds.length),
 					status: "error",
 					timeout: 10000,
 				});
@@ -526,14 +523,14 @@ export default {
 					this.$_printQRs(this.qrLinks);
 				} else {
 					notifierModule.show({
-						text: this.$tc("pages.administration.printQr.emptyUser"),
+						text: this.$t("pages.administration.printQr.emptyUser"),
 						status: "info",
 						timeout: 10000,
 					});
 				}
 			} catch (error) {
 				notifierModule.show({
-					text: this.$tc("pages.administration.printQr.error", rowIds.length),
+					text: this.$t("pages.administration.printQr.error", rowIds.length),
 					status: "error",
 					timeout: 10000,
 				});
@@ -566,7 +563,7 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = this.$tc(
+				message = this.$t(
 					"pages.administration.teachers.index.remove.confirm.message.some",
 					rowIds.length,
 					{ number: rowIds.length }
