@@ -12,7 +12,7 @@ describe("@/components/share/ShareModalOptionsForm", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				type: "course",
+				type: "courses",
 			},
 		});
 		return { wrapper };
