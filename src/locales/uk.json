@@ -967,6 +967,7 @@
 	"pages.rooms.fab.import": "Імпорт",
 	"pages.rooms.fab.import.aria": "Імпорт курсу",
 	"pages.rooms.fab.import.course": "Імпортувати курс",
+	"pages.rooms.fab.upload.course": "Завантажити курс",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.groupName": "Курси",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",

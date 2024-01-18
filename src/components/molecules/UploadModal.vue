@@ -9,14 +9,18 @@
 		@dialog-closed="cancel"
 		@dialog-confirmed="confirmUpload"
 	>
+		<template slot="title">
+			{{ $t("pages.rooms.uploadCourse.title") }}
+		</template>
 		<template slot="content">
-			<h1>Upload</h1>
-			<input
-				type="file"
-				name="file"
+			<v-file-input
+				v-model="file"
+				label="course-upload"
 				accept=".imscc, .zip"
-				@change="onFileChange($event)"
-				capture
+				clearable
+				show-size
+				outlined
+				dense
 			/>
 		</template>
 	</vCustomDialog>
@@ -43,12 +47,12 @@ export default defineComponent({
 		},
 	},
 	setup: (_props, { emit }) => {
-		const file = ref<File | null>(null);
+		const file = ref<File | undefined>(undefined);
 		const modalButtons = computed(() => {
 			return ["cancel", "confirm"];
 		});
 		const uploadButtonName = computed(() => {
-			return "Upload";
+			return "pages.rooms.uploadCourse.confirm";
 		});
 		const businessError = computed(() => {
 			return roomsModule.getBusinessError;
@@ -58,14 +62,6 @@ export default defineComponent({
 			emit("dialog-closed", false);
 		}
 
-		function onFileChange(event: Event): void {
-			const target = event.target as HTMLInputElement;
-
-			if (target && target.files && target.files[0]) {
-				file.value = target.files[0];
-			}
-		}
-
 		async function confirmUpload(): Promise<void> {
 			if (file.value) {
 				await roomsModule.uploadCourse(file.value);
@@ -73,11 +69,11 @@ export default defineComponent({
 		}
 
 		return {
+			file,
 			modalButtons,
 			uploadButtonName,
 			businessError,
 			cancel,
-			onFileChange,
 			confirmUpload,
 		};
 	},

@@ -34,6 +34,11 @@
 			class="import-modal"
 			@update-rooms="updateRooms"
 		/>
+		<upload-modal
+			v-model="uploadDialog.isOpen"
+			class="upload-modal"
+			:update-rooms="updateRooms"
+		/>
 	</default-wireframe>
 </template>
 
@@ -42,7 +47,8 @@ import { authModule, envConfigModule, roomsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import ImportModal from "@/components/molecules/ImportModal.vue";
-import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
+import UploadModal from "@/components/molecules/UploadModal.vue";
+import { mdiPlus, mdiCloudDownload, mdiCloudUpload, mdiSchool } from "@mdi/js";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -50,6 +56,7 @@ export default Vue.extend({
 		DefaultWireframe,
 		vCustomEmptyState,
 		ImportModal,
+		UploadModal,
 	},
 	props: {
 		hasRooms: {
@@ -66,6 +73,9 @@ export default Vue.extend({
 			importDialog: {
 				isOpen: false,
 			},
+			uploadDialog: {
+				isOpen: false,
+			},
 		};
 	},
 	computed: {
@@ -73,33 +83,58 @@ export default Vue.extend({
 			if (
 				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
-				if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
-					return {
+				if (
+					envConfigModule.getEnv.FEATURE_COURSE_SHARE ||
+					envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED
+				) {
+					const fabItems = {
 						icon: mdiPlus,
 						title: this.$t("common.actions.create"),
 						ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
 						testId: "add-course-button",
 						actions: [
 							{
-								label: this.$t("pages.rooms.fab.add.course"),
 								icon: mdiSchool,
+								label: this.$t("pages.rooms.fab.add.course"),
 								href: "/courses/add",
 								dataTestid: "fab_button_add_course",
 								ariaLabel: this.$t("pages.rooms.fab.add.course"),
 							},
-							{
-								label: this.$t("pages.rooms.fab.import.course"),
-								icon: mdiCloudDownload,
-								dataTestid: "fab_button_import_course",
-								ariaLabel: this.$t("pages.rooms.fab.import.course"),
-								customEvent: {
-									name: "fabButtonEvent",
-									value: true,
-								},
-							},
 						],
 					};
+
+					if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
+						fabItems.actions.push({
+							label: this.$t("pages.rooms.fab.import.course"),
+							icon: mdiCloudDownload,
+							dataTestid: "fab_button_import_course",
+							ariaLabel: this.$t("pages.rooms.fab.import.course"),
+							customEvent: {
+								name: "fabButtonEvent",
+								value: "import",
+							},
+						});
+					}
+
+					if (
+						envConfigModule.getEnv
+							.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED
+					) {
+						fabItems.actions.push({
+							label: this.$t("pages.rooms.fab.upload.course"),
+							icon: mdiCloudUpload,
+							dataTestid: "fab_button_upload_course",
+							ariaLabel: this.$t("pages.rooms.fab.upload.course"),
+							customEvent: {
+								name: "fabButtonEvent",
+								value: "upload",
+							},
+						});
+					}
+
+					return fabItems;
 				}
+
 				return {
 					icon: mdiPlus,
 					title: this.$t("common.actions.create"),
@@ -119,8 +154,14 @@ export default Vue.extend({
 		},
 	},
 	methods: {
-		fabClick() {
-			this.$data.importDialog.isOpen = true;
+		fabClick(event) {
+			if (event === "import") {
+				this.$data.importDialog.isOpen = true;
+			}
+
+			if (event === "upload") {
+				this.$data.uploadDialog.isOpen = true;
+			}
 		},
 		async updateRooms() {
 			await roomsModule.fetchAllElements();
