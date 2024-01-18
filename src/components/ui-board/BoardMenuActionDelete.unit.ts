@@ -18,8 +18,6 @@ const mockedUseDeleteConfirmationDialog = jest.mocked(
 
 describe("BoardMenuActionMoveDown Component", () => {
 	const setup = (options: { scope: BoardMenuScope }) => {
-		// document.body.setAttribute("data-app", "true");
-
 		const wrapper = mount(BoardMenuActionDelete, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
