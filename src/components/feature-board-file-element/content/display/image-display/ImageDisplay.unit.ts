@@ -1,7 +1,9 @@
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { I18N_KEY } from "@/utils/inject";
-import { fileElementResponseFactory, i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { fileElementResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { ColorOverlay } from "@ui-color-overlay";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { shallowMount } from "@vue/test-utils";
@@ -18,8 +20,6 @@ const mockedConvertDownloadToPreviewUrl = jest.mocked(
 
 describe("ImageDisplay", () => {
 	const setup = (props: { isEditMode: boolean; alternativeText?: string }) => {
-		document.body.setAttribute("data-app", "true");
-
 		const element = fileElementResponseFactory.build({
 			content: { alternativeText: props.alternativeText },
 		});
@@ -42,10 +42,7 @@ describe("ImageDisplay", () => {
 		const wrapper = shallowMount(ImageDisplay, {
 			attachTo: document.body,
 			propsData,
-			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-			},
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
@@ -57,7 +54,7 @@ describe("ImageDisplay", () => {
 			open,
 		};
 	};
-	const imageSelektor = "previewimage-stub";
+	const imageSelektor = "preview-image-stub";
 
 	describe("when isEditMode is false", () => {
 		it("should be found in dom", () => {
@@ -85,7 +82,7 @@ describe("ImageDisplay", () => {
 			const image = wrapper.find(imageSelektor);
 
 			expect(image.exists()).toBe(true);
-			expect(image.attributes("contain")).toBe("true");
+			expect(image.attributes("cover")).toBe("true");
 			expect(image.attributes("src")).toBe(previewSrc);
 			expect(image.attributes("alt")).toBe(
 				"components.cardElement.fileElement.emptyAlt " + nameProp
@@ -95,8 +92,8 @@ describe("ImageDisplay", () => {
 		describe("when preview image emits error", () => {
 			it("should disable color overlay", async () => {
 				const { wrapper } = setup({ isEditMode: false });
-				const previewImage = wrapper.find("previewimage-stub");
-				await previewImage.vm.$emit("error");
+				const previewImage = wrapper.find(imageSelektor);
+				await previewImage.trigger("error");
 
 				const colorOverlay = wrapper.findComponent(ColorOverlay);
 				expect(colorOverlay.props("isOverlayDisabled")).toBe(true);

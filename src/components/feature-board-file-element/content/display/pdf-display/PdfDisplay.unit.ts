@@ -9,8 +9,6 @@ import PdfDisplay from "./PdfDisplay.vue";
 
 describe("PdfDisplay", () => {
 	const setup = (props: { isEditMode: boolean }) => {
-		document.body.setAttribute("data-app", "true");
-
 		const element = fileElementResponseFactory.build();
 		const propsData = {
 			src: "url/1/file-record #1.txt",
