@@ -1,5 +1,9 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { mdiFileDocumentOutline } from "@mdi/js";
+import { ContentElementBar } from "@ui-board";
 import { mount, shallowMount } from "@vue/test-utils";
 import FileDescription from "./FileDescription.vue";
 
@@ -23,8 +27,8 @@ describe("FileDescription", () => {
 			src: props.src,
 		};
 		const wrapper = shallowMount(FileDescription, {
-			propsData,
-			...createComponentMocks({}),
+			props: propsData,
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
@@ -54,8 +58,8 @@ describe("FileDescription", () => {
 			src: props.src,
 		};
 		const wrapper = mount(FileDescription, {
-			propsData,
-			...createComponentMocks({}),
+			props: propsData,
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
@@ -75,7 +79,7 @@ describe("FileDescription", () => {
 					showMenu: true,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.exists()).toBe(true);
 			});
@@ -99,7 +103,7 @@ describe("FileDescription", () => {
 					showMenu: true,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.props("hasGreyBackground")).toBe(false);
 			});
@@ -111,7 +115,7 @@ describe("FileDescription", () => {
 					showMenu: true,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.props("icon")).toBe(mdiFileDocumentOutline);
 			});
@@ -155,7 +159,7 @@ describe("FileDescription", () => {
 					showMenu: false,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.exists()).toBe(false);
 			});
@@ -183,7 +187,7 @@ describe("FileDescription", () => {
 					showMenu: true,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.exists()).toBe(true);
 			});
@@ -207,7 +211,7 @@ describe("FileDescription", () => {
 					showMenu: true,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.props("hasGreyBackground")).toBe(true);
 			});
