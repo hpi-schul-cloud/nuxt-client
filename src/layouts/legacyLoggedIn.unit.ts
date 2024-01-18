@@ -1,6 +1,4 @@
-import Vue from "vue";
-import { mount, MountOptions } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount } from "@vue/test-utils";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { authModule, envConfigModule, filePathsModule } from "@/store";
 import AuthModule from "@/store/auth";
@@ -12,7 +10,13 @@ import StatusAlertsModule from "@/store/status-alerts";
 import setupStores from "@@/tests/test-utils/setupStores";
 import legacyLoggedIn from "./legacyLoggedIn.vue";
 import { Envs } from "@/store/types/env-config";
-import { I18N_KEY, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { useRoute } from "vue-router";
+import { STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import { reactive } from "vue";
 
 const $route = {
 	query: {
@@ -67,24 +71,37 @@ envConfigModule.setEnvs({
 	ALERT_STATUS_URL: "https://status.dbildungscloud.de",
 } as Envs);
 
+jest.mock("vue-router");
+const useRouteMock = <jest.Mock>useRoute;
+
 describe("legacyLoggedIn", () => {
 	it("should mark active links", () => {
 		const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
 			getStatusAlerts: [],
 		});
 
-		const wrapper = mount(legacyLoggedIn as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-				[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
-			},
-			mocks: {
-				$theme: {
-					name: "instance name",
+		useRouteMock.mockImplementation(() => reactive($route));
+
+		const wrapper = mount(legacyLoggedIn, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 				},
-				$router,
-				$route,
+				mocks: {
+					$theme: {
+						name: "instance name",
+					},
+					$router,
+					$route,
+				},
+				stubs: [
+					"base-input",
+					"base-modal",
+					"base-link",
+					"base-qr-code",
+					"router-link",
+				],
 			},
 		});
 
