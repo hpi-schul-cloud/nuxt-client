@@ -40,8 +40,7 @@ describe("ImageDisplay", () => {
 		);
 
 		const wrapper = shallowMount(ImageDisplay, {
-			attachTo: document.body,
-			propsData,
+			props: propsData,
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
