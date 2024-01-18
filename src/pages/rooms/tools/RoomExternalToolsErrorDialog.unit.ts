@@ -10,7 +10,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import { VCard, VDialog } from "vuetify/lib/components/index.mjs";
 
 describe("RoomExternalToolsErrorDialog", () => {
 	const getWrapper = (props: {
