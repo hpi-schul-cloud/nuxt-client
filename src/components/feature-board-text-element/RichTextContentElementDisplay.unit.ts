@@ -1,13 +1,17 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import { RenderHTML } from "@feature-render-html";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("RichTextContentElementDisplay", () => {
 	const setup = (options: {}) => {
-		const wrapper = shallowMount(RichTextContentElementDisplay, {
+		const wrapper = mount(RichTextContentElementDisplay, {
 			props: {
 				...options
 			},
+			global: {
+				plugins: [vueDompurifyHTMLPlugin],
+			}
 		});
 
 		return wrapper;
@@ -23,7 +27,7 @@ describe("RichTextContentElementDisplay", () => {
 		it("should pass props to ck-editor component", () => {
 			const wrapper = setup({ value: "test value" });
 			const editorComponent = wrapper.findComponent(RenderHTML);
-			expect(editorComponent.vm.html).toStrictEqual("test value");
+			expect(editorComponent.text()).toStrictEqual("test value");
 		});
 	});
 });
