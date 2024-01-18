@@ -1,10 +1,6 @@
 <template>
 	<div>
-		<base-modal
-			class="modal"
-			:active="showCopyModal"
-			@onBackdropClick="closeModal"
-		>
+		<base-modal class="modal" v-model:active="showModal">
 			<template #header>{{
 				$t("components.molecules.AddContentModal")
 			}}</template>
@@ -106,6 +102,16 @@ export default {
 					};
 				})
 			);
+		},
+		showModal: {
+			get() {
+				return this.showCopyModal;
+			},
+			set(value) {
+				if (!value) {
+					this.closeModal();
+				}
+			},
 		},
 	},
 	watch: {

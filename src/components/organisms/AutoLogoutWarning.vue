@@ -1,5 +1,5 @@
 <template>
-	<base-modal :active="active" @onBackdropClick="extendSession">
+	<base-modal v-model:active="active">
 		<template #body>
 			<div class="wrapper">
 				<img
@@ -60,8 +60,15 @@ export default {
 				return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth_error.svg";
 			return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth.svg";
 		},
-		active() {
-			return autoLogoutModule.getActive;
+		active: {
+			get() {
+				return autoLogoutModule.getActive;
+			},
+			set(value) {
+				if (!value) {
+					this.extendSession();
+				}
+			},
 		},
 		error() {
 			return autoLogoutModule.getError;
