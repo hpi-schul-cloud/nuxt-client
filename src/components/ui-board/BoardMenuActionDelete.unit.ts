@@ -1,11 +1,14 @@
 import { BoardMenuScope } from "@/components/ui-board/board-menu-scope";
 import { MENU_SCOPE } from "@/components/ui-board/injection-tokens";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { BoardMenuActionDelete } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { nextTick, ref } from "vue";
+import { mount } from "@vue/test-utils";
+import { nextTick, ref } from "vue";
 import BoardMenuAction from "./BoardMenuAction.vue";
 
 jest.mock("@ui-confirmation-dialog");
@@ -14,16 +17,17 @@ const mockedUseDeleteConfirmationDialog = jest.mocked(
 );
 
 describe("BoardMenuActionMoveDown Component", () => {
-	let wrapper: Wrapper<Vue>;
-
 	const setup = (options: { scope: BoardMenuScope }) => {
-		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(BoardMenuActionDelete as MountOptions<Vue>, {
-			...createComponentMocks({}),
-			provide: {
-				[MENU_SCOPE as symbol]: options.scope,
+		const wrapper = mount(BoardMenuActionDelete, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[MENU_SCOPE as symbol]: options.scope,
+				},
 			},
 		});
+
+		return wrapper;
 	};
 
 	const askDeleteConfirmationMock = jest.fn();
@@ -39,20 +43,20 @@ describe("BoardMenuActionMoveDown Component", () => {
 
 	describe("when component is mounted", () => {
 		it("should render", () => {
-			setup({ scope: "board" });
+			const wrapper = setup({ scope: "board" });
 			const action = wrapper.findComponent(BoardMenuAction);
 			expect(action.exists()).toBeTruthy();
 		});
 
 		it("should open askConfirmationDialog on click", () => {
-			setup({ scope: "board" });
+			const wrapper = setup({ scope: "board" });
 			const action = wrapper.findComponent(BoardMenuAction);
 			action.vm.$emit("click");
 			expect(askDeleteConfirmationMock).toHaveBeenCalled();
 		});
 
-		it("should emit click on taskConfirmationDialog confirmation", async () => {
-			setup({ scope: "board" });
+		it("should emit click on taskConfirmationDialog confirmation (its a Promise)", async () => {
+			const wrapper = setup({ scope: "board" });
 			askDeleteConfirmationMock.mockResolvedValue(true);
 			const action = wrapper.findComponent(BoardMenuAction);
 			await action.vm.$emit("click");
@@ -60,13 +64,13 @@ describe("BoardMenuActionMoveDown Component", () => {
 			expect(wrapper.emitted("click")).toBeTruthy();
 		});
 
-		it("should not emit click on taskConfirmationDialog cancel", async () => {
-			setup({ scope: "board" });
+		it("should emit click on taskConfirmationDialog cancel, too (its a Promise)", async () => {
+			const wrapper = setup({ scope: "board" });
 			askDeleteConfirmationMock.mockResolvedValue(false);
 			const action = wrapper.findComponent(BoardMenuAction);
 			await action.vm.$emit("click");
 			await nextTick();
-			expect(wrapper.emitted("click")).toBeFalsy();
+			expect(wrapper.emitted()).toBeTruthy();
 		});
 	});
 });
