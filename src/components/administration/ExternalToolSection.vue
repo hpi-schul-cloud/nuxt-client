@@ -41,6 +41,7 @@
 			class="mt-8 mb-4 button-save float-right"
 			color="primary"
 			depressed
+			data-testid="add-external-tool-button"
 			:to="{ name: 'administration-tool-config-overview' }"
 		>
 			{{ t("components.administration.externalToolsSection.action.add") }}
