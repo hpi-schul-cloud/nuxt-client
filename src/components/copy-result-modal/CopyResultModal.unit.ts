@@ -17,6 +17,10 @@ const etherpadItem = {
 	title: "Etherpad Element Title",
 	type: CopyApiResponseTypeEnum.LessonContentEtherpad,
 };
+const nexboardItem = {
+	title: "Nexboard Element Title",
+	type: CopyApiResponseTypeEnum.LessonContentNexboard,
+};
 const courseGroupItem = {
 	title: "CourseGroup Group Example",
 	type: CopyApiResponseTypeEnum.CoursegroupGroup,
@@ -31,6 +35,7 @@ const mockResultItems = (
 		geoGebraItem,
 		etherpadItem,
 		courseGroupItem,
+		nexboardItem,
 		fileItem,
 	]
 ) => {
