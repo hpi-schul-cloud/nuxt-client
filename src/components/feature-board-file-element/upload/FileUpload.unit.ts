@@ -6,8 +6,8 @@ import { createMock } from "@golevelup/ts-jest";
 import * as utilBoard from "@util-board";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import FilePicker from "./file-picker/FilePicker.vue";
 import FileUpload from "./FileUpload.vue";
+import FilePicker from "./file-picker/FilePicker.vue";
 
 const setupUseSharedLastCreatedElementMock = () => {
 	const mockedUse =
@@ -27,7 +27,7 @@ describe(FileUpload.name, () => {
 			const setup = (fileName = "") => {
 				setupUseSharedLastCreatedElementMock();
 
-				const propsData = {
+				const props = {
 					fileName,
 					elementId: "element 123",
 					url: "1/file-record #1.txt",
@@ -37,7 +37,7 @@ describe(FileUpload.name, () => {
 				const testSlot = "testSlot";
 				const wrapper = mount(FileUpload, {
 					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-					props: propsData,
+					props,
 					slots: {
 						default: testSlot,
 					},
@@ -45,9 +45,9 @@ describe(FileUpload.name, () => {
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileName,
-					urlProp: propsData.url,
-					elementId: propsData.elementId,
+					fileNameProp: props.fileName,
+					urlProp: props.url,
+					elementId: props.elementId,
 					testSlot,
 				};
 			};
@@ -83,7 +83,7 @@ describe(FileUpload.name, () => {
 			const setup = (fileName = "") => {
 				setupUseSharedLastCreatedElementMock();
 
-				const propsData = {
+				const props = {
 					fileName,
 					elementId: "element 123",
 					url: "1/file-record #1.txt",
@@ -93,7 +93,7 @@ describe(FileUpload.name, () => {
 				const testSlot = "testSlot";
 				const wrapper = mount(FileUpload, {
 					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-					props: propsData,
+					props,
 					slots: {
 						default: testSlot,
 					},
@@ -101,9 +101,9 @@ describe(FileUpload.name, () => {
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileName,
-					urlProp: propsData.url,
-					elementId: propsData.elementId,
+					fileNameProp: props.fileName,
+					urlProp: props.url,
+					elementId: props.elementId,
 					testSlot,
 				};
 			};
@@ -170,7 +170,7 @@ describe(FileUpload.name, () => {
 			const setup = (fileName = "") => {
 				setupUseSharedLastCreatedElementMock();
 
-				const propsData = {
+				const props = {
 					fileName,
 					elementId: "element 123",
 					url: "1/file-record #1.txt",
@@ -180,7 +180,7 @@ describe(FileUpload.name, () => {
 				const testSlot = "testSlot";
 				const wrapper = mount(FileUpload, {
 					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-					props: propsData,
+					props,
 					slots: {
 						default: testSlot,
 					},
@@ -188,9 +188,9 @@ describe(FileUpload.name, () => {
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileName,
-					urlProp: propsData.url,
-					elementId: propsData.elementId,
+					fileNameProp: props.fileName,
+					urlProp: props.url,
+					elementId: props.elementId,
 					testSlot,
 				};
 			};
@@ -229,7 +229,7 @@ describe(FileUpload.name, () => {
 		const setup = (fileName = "") => {
 			setupUseSharedLastCreatedElementMock();
 
-			const propsData = {
+			const props = {
 				fileName,
 				elementId: "element 123",
 				url: "1/file-record #1.txt",
@@ -239,7 +239,7 @@ describe(FileUpload.name, () => {
 			const testSlot = "testSlot";
 			const wrapper = mount(FileUpload, {
 				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-				props: propsData,
+				props,
 				slots: {
 					default: testSlot,
 				},
@@ -247,9 +247,9 @@ describe(FileUpload.name, () => {
 
 			return {
 				wrapper,
-				fileNameProp: propsData.fileName,
-				urlProp: propsData.url,
-				elementId: propsData.elementId,
+				fileNameProp: props.fileName,
+				urlProp: props.url,
+				elementId: props.elementId,
 				testSlot,
 			};
 		};
