@@ -90,7 +90,6 @@ describe("LinkContentElement", () => {
 			// @ts-ignore
 			props: { ...props },
 		});
-		console.log(props.element.content);
 
 		return { wrapper };
 	};
@@ -172,37 +171,35 @@ describe("LinkContentElement", () => {
 		});
 
 		describe("when url was provided", () => {
-			// describe("when imageUrl was in metaTags", () => {
-			// 	it.skip("should create a preview image", async () => {
-			// 		const { wrapper } = setup({ isEditMode: true, isDetailView: false });
-			// 		const url = "https://abc.de/my-article";
-			// 		const fakeMetaTags: MetaTagExtractorResponse = {
-			// 			url,
-			// 			title: "my title",
-			// 			description: "",
-			// 			imageUrl: "https://abc.de/foto.png",
-			// 			type: "unknown",
-			// 			parentTitle: "",
-			// 			parentType: "unknown",
-			// 		};
+			describe("when imageUrl was in metaTags", () => {
+				it("should create a preview image", async () => {
+					const { wrapper } = setup({ isEditMode: true, isDetailView: false });
+					const url = "https://abc.de/my-article";
+					const fakeMetaTags: MetaTagExtractorResponse = {
+						url,
+						title: "my title",
+						description: "",
+						imageUrl: "https://abc.de/foto.png",
+						type: "unknown",
+						parentTitle: "",
+						parentType: "unknown",
+					};
 
-			// 		useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(
-			// 			fakeMetaTags
-			// 		);
+					useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(
+						fakeMetaTags
+					);
 
-			// 		usePreviewGeneratorMock.createPreviewImage.mockResolvedValue(
-			// 			"know i dont know..."
-			// 		);
+					const component = wrapper.getComponent(LinkContentElementCreate);
+					component.vm.$emit("create:url", url);
+					await nextTick();
+					await nextTick();
+					await nextTick();
 
-			// 		const component = wrapper.getComponent(LinkContentElementCreate);
-			// 		component.vm.$emit("create:url", url);
-			// 		nextTick();
-
-			// 		expect(
-			// 			usePreviewGeneratorMock.createPreviewImage
-			// 		).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
-			// 	});
-			// });
+					expect(
+						usePreviewGeneratorMock.createPreviewImage
+					).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
+				});
+			});
 
 			it("should sanitize the url", async () => {
 				const VALID_UNSANITIZED_URL =
