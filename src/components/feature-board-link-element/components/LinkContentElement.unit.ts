@@ -85,9 +85,6 @@ describe("LinkContentElement", () => {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
 			},
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			props: { ...props },
 		});
 
