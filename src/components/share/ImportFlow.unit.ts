@@ -25,6 +25,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("@components/share/ImportFlow", () => {
 	let copyModuleMock: CopyModule;
@@ -47,14 +48,17 @@ describe("@components/share/ImportFlow", () => {
 
 		const wrapper = mount(ImportFlow, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
 				provide: {
 					copyModule: copyModuleMock,
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
-				stubs: ["RenderHTML"],
 			},
 			props: {
 				token,
@@ -82,7 +86,7 @@ describe("@components/share/ImportFlow", () => {
 
 	describe("token is provided", () => {
 		it("should render with props", () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 
 			expect(wrapper).toBeTruthy();
 		});
