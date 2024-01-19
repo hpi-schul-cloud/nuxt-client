@@ -25,8 +25,6 @@ describe("FileDisplay", () => {
 	describe("when previewUrl is defined", () => {
 		describe("when mimeType is not a video type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
 				const props = {
 					fileProperties: {
@@ -87,8 +85,6 @@ describe("FileDisplay", () => {
 
 		describe("when mimeType is a video type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
 				const props = {
 					fileProperties: {
@@ -161,8 +157,6 @@ describe("FileDisplay", () => {
 
 		describe("when mimeType is pdf type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
 				const props = {
 					fileProperties: {
@@ -225,8 +219,6 @@ describe("FileDisplay", () => {
 	describe("when previewUrl is undefined", () => {
 		describe("when mimeType is a video type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
 				const props = {
 					fileProperties: {
@@ -288,8 +280,6 @@ describe("FileDisplay", () => {
 
 		describe("when mimeType is a audio type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
 				const props = {
 					fileProperties: {
@@ -348,8 +338,6 @@ describe("FileDisplay", () => {
 
 		describe("when mimeType is pdf type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
 				const props = {
 					fileProperties: {
@@ -406,8 +394,6 @@ describe("FileDisplay", () => {
 
 		describe("when mimeType is not a video or audio type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
 				const props = {
 					fileProperties: {
