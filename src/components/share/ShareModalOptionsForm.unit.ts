@@ -39,10 +39,10 @@ describe("@/components/share/ShareModalOptionsForm", () => {
 	it("should emit event on changes of hasExpiryDate checkbox", async () => {
 		const { wrapper } = setup();
 
-		const switchhasExpiryDate = wrapper.findComponent(
+		const checkboxHasExpiryDate = wrapper.findComponent(
 			'[data-testid="hasExpiryDate"]'
 		);
-		await switchhasExpiryDate.setValue(false);
+		await checkboxHasExpiryDate.setValue(false);
 
 		expect(wrapper.emitted("share-options-change")).toHaveLength(2);
 	});
