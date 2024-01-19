@@ -202,6 +202,50 @@ describe("@templates/RoomWrapper.vue", () => {
 			await wrapper.vm.$nextTick();
 			expect(updateRoomsMock).toHaveBeenCalled();
 		});
+
+		it("should open the upload-modal", async () => {
+			envConfigModule.setEnvs({
+				FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
+			} as Envs);
+
+			const wrapper = getWrapper();
+			const uploadModalComponent = wrapper.find(".upload-modal");
+
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			//@ts-ignore
+			expect(uploadModalComponent.vm.isOpen).toBe(false);
+
+			const fab = wrapper.find(".wireframe-fab");
+
+			await fab.trigger("click");
+
+			const uploadBtn = wrapper.find(
+				'[data-testid="fab_button_upload_course"]'
+			);
+
+			await uploadBtn.trigger("click");
+
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			//@ts-ignore
+			expect(uploadModalComponent.vm.isOpen).toBe(true);
+		});
+
+		it("should call the updateRooms method if upload-modal component emits 'update-rooms' event", async () => {
+			const updateRoomsMock = jest.fn();
+			const wrapper = getWrapper();
+
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			//@ts-ignore
+			wrapper.vm.updateRooms = updateRoomsMock;
+			await wrapper.setData({ uploadDialog: { isOpen: true } });
+
+			const uploadModalComponent = wrapper.find(".upload-modal");
+
+			await uploadModalComponent.vm.$emit("update-rooms");
+			await wrapper.vm.$nextTick();
+			await wrapper.vm.$nextTick();
+			expect(updateRoomsMock).toHaveBeenCalled();
+		});
 	});
 
 	describe("when user does not have course create permission", () => {

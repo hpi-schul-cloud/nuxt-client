@@ -333,6 +333,27 @@ describe("rooms module", () => {
 				expect(setBusinessErrorMock).toHaveBeenCalled();
 			});
 		});
+
+		describe("uploadCourse", () => {
+			it("should call the backend", async () => {
+				const course = new File([], "my-course.zip");
+				const roomsModule = new RoomsModule({});
+				const uploadCourseSpy = jest.spyOn(roomsModule, "uploadCourse");
+				uploadCourseSpy.mockImplementation();
+
+				await roomsModule.uploadCourse(course);
+				expect(uploadCourseSpy.mock.calls[0][0]).toStrictEqual(course);
+			});
+
+			it("should handle error", async () => {
+				const setBusinessErrorMock = jest.fn();
+				const roomsModule = new RoomsModule({});
+				roomsModule.setBusinessError = setBusinessErrorMock;
+
+				await roomsModule.uploadCourse(new File([], "my-course.zip"));
+				expect(setBusinessErrorMock).toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("mutations", () => {

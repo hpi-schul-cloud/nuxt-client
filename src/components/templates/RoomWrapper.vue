@@ -37,7 +37,7 @@
 		<upload-modal
 			v-model="uploadDialog.isOpen"
 			class="upload-modal"
-			:update-rooms="updateRooms"
+			@update-rooms="updateRooms"
 		/>
 	</default-wireframe>
 </template>

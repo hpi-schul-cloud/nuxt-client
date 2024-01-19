@@ -7,7 +7,7 @@
 		:buttons="modalButtons"
 		:confirm-btn-title-key="uploadButtonName"
 		@dialog-closed="cancel"
-		@dialog-confirmed="confirmUpload"
+		@dialog-confirmed="upload"
 	>
 		<template slot="title">
 			{{ $t("pages.rooms.uploadCourse.title") }}
@@ -15,7 +15,7 @@
 		<template slot="content">
 			<v-file-input
 				v-model="file"
-				label="course-upload"
+				:label="$t(fileInputLabel)"
 				accept=".imscc, .zip"
 				clearable
 				show-size
@@ -57,14 +57,21 @@ export default defineComponent({
 		const businessError = computed(() => {
 			return roomsModule.getBusinessError;
 		});
+		const fileInputLabel = computed(() => {
+			return "pages.rooms.uploadCourse.fileInputLabel";
+		});
 
 		function cancel(): void {
 			emit("dialog-closed", false);
+			file.value = undefined;
 		}
 
-		async function confirmUpload(): Promise<void> {
+		async function upload(): Promise<void> {
 			if (file.value) {
 				await roomsModule.uploadCourse(file.value);
+				emit("dialog-closed", false);
+				emit("update-rooms");
+				file.value = undefined;
 			}
 		}
 
@@ -73,8 +80,9 @@ export default defineComponent({
 			modalButtons,
 			uploadButtonName,
 			businessError,
+			fileInputLabel,
 			cancel,
-			confirmUpload,
+			upload,
 		};
 	},
 });
