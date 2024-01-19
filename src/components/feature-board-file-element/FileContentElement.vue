@@ -11,7 +11,7 @@
 		@keydown.up.down="onKeydownArrow"
 	>
 		<FileContent
-			v-if="fileProperties"
+			v-if="fileProperties && isUploading !== true"
 			:file-properties="fileProperties"
 			:alerts="alerts"
 			:is-edit-mode="isEditMode"
@@ -31,6 +31,7 @@
 			:elementId="element.id"
 			:isEditMode="isEditMode"
 			@upload:file="onUploadFile"
+			:isUploading="isUploading"
 		>
 			<BoardMenu scope="element">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
@@ -97,19 +98,22 @@ export default defineComponent({
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
-		const { fetchFile, upload, fileRecord } = useFileStorageApi(
-			element.value.id,
-			FileRecordParentType.BOARDNODES
-		);
+		const { fetchFile, upload, getFileRecord } = useFileStorageApi();
+
+		const fileRecord = getFileRecord(element.value.id);
 
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
+
+		const isUploading = computed(() => {
+			return fileRecord.value?.isUploading;
+		});
 
 		const fileProperties = computed(() => {
 			if (fileRecord.value === undefined) {
 				return;
 			}
 
-			const previewUrl = isPreviewPossible(fileRecord.value?.previewStatus)
+			const previewUrl = isPreviewPossible(fileRecord.value.previewStatus)
 				? convertDownloadToPreviewUrl(fileRecord.value.url, PreviewWidth._500)
 				: undefined;
 
@@ -132,12 +136,17 @@ export default defineComponent({
 		});
 
 		const isOutlined = computed(() => {
-			return fileRecord.value !== undefined || props.isEditMode === true;
+			const { isEditMode } = props;
+			const isUploadingInViewMode =
+				fileRecord.value?.id !== undefined && !isEditMode && !isUploading.value;
+
+			return isUploadingInViewMode || isEditMode;
 		});
 
 		onMounted(() => {
 			(async () => {
-				await fetchFile();
+				await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+
 				isLoadingFileRecord.value = false;
 			})();
 		});
@@ -151,14 +160,14 @@ export default defineComponent({
 
 		const onUploadFile = async (file: File): Promise<void> => {
 			try {
-				await upload(file);
+				await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
 			} catch (error) {
 				emit("delete:element", element.value.id);
 			}
 		};
 
 		const onFetchFile = async (): Promise<void> => {
-			await fetchFile();
+			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
 		};
 
 		const onUpdateAlternativeText = (value: string) => {
@@ -184,6 +193,7 @@ export default defineComponent({
 			isOutlined,
 			modelValue,
 			alerts,
+			isUploading,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,

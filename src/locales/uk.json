@@ -374,6 +374,7 @@
 	"components.cardElement.LinkElement.label": "Вставити адресу посилання",
 	"components.cardElement.titleElement": "Елемент заголовка",
 	"components.cardElement.lastUpdatedAt": "Відредаговано:",
+	"components.cardElement.notification.visibleAndEditable": "Ця дошка є видимою і доступною для редагування для всіх учасників курсу.",
 	"components.cardElement.titleElement.placeholder": "Додати назву",
 	"components.cardElement.titleElement.validation.required": "Будь ласка, введіть назву.",
 	"components.cardElement.titleElement.validation.maxLength": "Назва може містити лише {maxLength} символів.",
