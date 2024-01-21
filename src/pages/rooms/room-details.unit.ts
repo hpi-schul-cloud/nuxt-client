@@ -7,16 +7,19 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import { User } from "@/store/types/auth";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
+import { VueWrapper, mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
@@ -25,6 +28,11 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
+import {
+	businessErrorFactory,
+	contextExternalToolConfigurationTemplateFactory,
+} from "@@/tests/test-utils";
+import { VTab } from "vuetify/lib/components/index.mjs";
 
 const mockData = {
 	roomId: "123",
@@ -148,6 +156,7 @@ const getWrapper = () => {
 			},
 			stubs: {
 				RoomDashboard: true,
+				RoomExternalToolsOverview: true,
 			},
 		},
 	});
@@ -175,8 +184,9 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		notifierModuleMock = createModuleMocks(NotifierModule);
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
-			getParentType: ShareTokenBodyParamsParentTypeEnum.Lessons,
-			startShareFlow: jest.fn(),
+			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
+			createShareUrl: jest.fn(),
+			resetShareFlow: jest.fn(),
 		});
 
 		initializeAxios({
@@ -264,25 +274,33 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		};
 		it("should have the menu button for course teachers", () => {
 			const wrapper = getWrapper();
-			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
+			const menuButton = wrapper.find(
+				'button[data-testid="room-tool-three-dot-button"]'
+			);
 
-			expect(menuButton).toHaveLength(1);
+			expect(menuButton.exists()).toBe(true);
 		});
 
 		it("should not have the menu button for students", () => {
 			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
 			roomModule.setPermissionData(mockPermissionsStudent);
 			const wrapper = getWrapper();
-			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
-			expect(menuButton).toHaveLength(0);
+			const menuButton = wrapper.find(
+				'button[data-testid="room-tool-three-dot-button"]'
+			);
+
+			expect(menuButton.exists()).toBe(false);
 		});
 
 		it("should not have the menu button for substitution course teachers", () => {
 			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
 			roomModule.setPermissionData(mockPermissionsCourseSubstitutionTeacher);
 			const wrapper = getWrapper();
-			const menuButton = wrapper.findAll(`[data-testid="title-menu"]`);
-			expect(menuButton).toHaveLength(0);
+			const menuButton = wrapper.find(
+				'button[data-testid="room-tool-three-dot-button"]'
+			);
+
+			expect(menuButton.exists()).toBe(false);
 		});
 
 		it("should have the headline menu items", () => {
@@ -313,17 +331,24 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should redirect the page when 'Edit/Delete' menu clicked", async () => {
-			const location = window.location;
+			Object.defineProperty(window, "location", {
+				value: { href: "" },
+				writable: true,
+			});
+
 			const wrapper = getWrapper();
 
-			const threeDotButton = wrapper.find(".three-dot-button");
+			const threeDotButton = wrapper.findComponent(
+				'button[data-testid="room-tool-three-dot-button"]'
+			);
 			await threeDotButton.trigger("click");
-			const moreActionButton = wrapper.find(
+
+			const moreActionButton = wrapper.findComponent(
 				`[data-testid=title-menu-edit-delete]`
 			);
 			await moreActionButton.trigger("click");
 
-			expect(location.href).toStrictEqual("/courses/123/edit");
+			expect(window.location.href).toStrictEqual("/courses/123/edit");
 		});
 
 		describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
@@ -343,26 +368,34 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				const wrapper = getWrapper();
 				wrapper.vm.onCopyRoom = onCopyRoom;
 
-				const threeDotButton = wrapper.find(".three-dot-button");
+				const threeDotButton = wrapper.findComponent(
+					'button[data-testid="room-tool-three-dot-button"]'
+				);
 				await threeDotButton.trigger("click");
-				const moreActionButton = wrapper.find(`[data-testid=title-menu-copy]`);
+
+				const moreActionButton = wrapper.findComponent(
+					`[data-testid=title-menu-copy]`
+				);
 				await moreActionButton.trigger("click");
 
 				expect(onCopyRoom).toHaveBeenCalled();
 			});
 		});
 
-		it.only("should call shareCourse method when 'Share Course ' menu clicked", async () => {
+		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const shareCourseSpy = jest.fn();
 			const wrapper = getWrapper();
-			await nextTick();
-			console.log("---", wrapper.vm.items);
 			wrapper.vm.shareCourse = shareCourseSpy;
 
-			const threeDotButton = wrapper.find(".three-dot-button");
+			const threeDotButton = wrapper.findComponent(
+				'button[data-testid="room-tool-three-dot-button"]'
+			);
 			await threeDotButton.trigger("click");
-			const moreActionButton = wrapper.find(`[data-testid=title-menu-share]`);
+
+			const moreActionButton = wrapper.findComponent(
+				`[data-testid=title-menu-share]`
+			);
 			await moreActionButton.trigger("click");
 
 			expect(shareCourseSpy).toHaveBeenCalled();
@@ -372,9 +405,14 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
 			const wrapper = getWrapper();
 
-			const threeDotButton = wrapper.find(".three-dot-button");
+			const threeDotButton = wrapper.findComponent(
+				'button[data-testid="room-tool-three-dot-button"]'
+			);
 			await threeDotButton.trigger("click");
-			const moreActionButton = wrapper.find(`[data-testid=title-menu-share]`);
+
+			const moreActionButton = wrapper.findComponent(
+				`[data-testid=title-menu-share]`
+			);
 			await moreActionButton.trigger("click");
 
 			expect(shareModuleMock.startShareFlow).toHaveBeenCalled();
@@ -383,98 +421,99 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				type: ShareTokenBodyParamsParentTypeEnum.Courses,
 			});
 		});
+	});
 
-		// 	describe("modal views", () => {
-		// 		it("should open modal for sharing action", async () => {
-		// 			const wrapper = getWrapper();
-		// 			const modalView = wrapper.find(`[data-testid="share-dialog"]`);
+	describe("modal views", () => {
+		it("should open modal for sharing action", async () => {
+			const wrapper = getWrapper();
+			const modalView = wrapper.findComponent({
+				name: "share-modal",
+			});
+			const shareDialog = modalView.findComponent({ name: "v-custom-dialog" });
 
-		// 			expect(modalView.vm.isOpen).toBe(true);
-		// 		});
+			expect(shareDialog.props("isOpen")).toBe(true);
+		});
 
-		// 		it("should close the modal and call 'closeDialog' method", async () => {
-		// 			const closeDialogSpy = jest.fn();
-		// 			const wrapper = getWrapper();
-		// 			wrapper.vm.closeDialog = closeDialogSpy;
-		// 			wrapper.setData({
-		// 				dialog: {
-		// 					isOpen: true,
-		// 					model: "share",
-		// 					header: wrapper.vm.$i18n.t("pages.room.modal.course.share.header"),
-		// 					text: wrapper.vm.$i18n.t("pages.room.modal.course.share.text"),
-		// 					inputText: "shareToken_123456",
-		// 					subText: wrapper.vm.$i18n.t(
-		// 						"pages.room.modal.course.share.subText"
-		// 					),
-		// 					courseShareToken: "shareToken_123456",
-		// 					qrUrl: "/courses?import=shareToken_123456",
-		// 				},
-		// 			});
+		it("should close the modal and call 'closeDialog' method", async () => {
+			const closeDialogSpy = jest.fn();
+			const wrapper = getWrapper();
+			wrapper.vm.closeDialog = closeDialogSpy;
+			await wrapper.setData({
+				dialog: {
+					isOpen: true,
+					model: "share",
+					header: "pages.room.modal.course.share.header",
+					text: "pages.room.modal.course.share.text",
+					inputText: "shareToken_123456",
+					subText: "pages.room.modal.course.share.subText",
+					courseShareToken: "shareToken_123456",
+					qrUrl: "/courses?import=shareToken_123456",
+				},
+			});
+			const modalView = wrapper.findComponent({ name: "v-custom-dialog" });
 
-		// 			await wrapper.vm.$nextTick();
-		// 			const modalView = wrapper.find(`[data-testid="title-dialog"]`);
-		// 			const closeButton = modalView.find(`[data-testid="dialog-close"]`);
-		// 			await closeButton.trigger("click");
+			const closeButton = modalView.findComponent(
+				`[data-testid="dialog-close"]`
+			);
+			await closeButton.trigger("click");
 
-		// 			expect(closeDialogSpy).toHaveBeenCalled();
-		// 		});
-		// 	});
-		// });
+			expect(closeDialogSpy).toHaveBeenCalled();
+		});
+	});
 
-		// describe("tabs", () => {
-		// 	describe("when feature flag is enabled", () => {
-		// 		const setup = () => {
-		// 			envConfigModule.setEnvs({
-		// 				FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-		// 			} as Envs);
+	describe("tabs", () => {
+		describe("when feature flag is enabled", () => {
+			const setup = () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+				} as Envs);
 
-		// 			const wrapper = getWrapper();
+				const wrapper = getWrapper();
 
-		// 			return { wrapper };
-		// 		};
+				return { wrapper };
+			};
 
-		// 		it("should find tools(new)-tab", () => {
-		// 			const { wrapper } = setup();
+			it("should find tools(new)-tab", () => {
+				const { wrapper } = setup();
 
-		// 			const tabTitle = wrapper.find('[data-testid="tools-tab"]');
+				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
 
-		// 			expect(tabTitle.text()).toEqual(
-		// 				wrapper.vm.$t("pages.rooms.tabLabel.tools")
-		// 			);
-		// 		});
-		// 	});
+				expect(tabTitle.text()).toEqual("pages.rooms.tabLabel.tools");
+			});
+		});
 
-		// 	describe("when feature flag is disabled", () => {
-		// 		const setup = () => {
-		// 			envConfigModule.setEnvs({
-		// 				FEATURE_CTL_TOOLS_TAB_ENABLED: false,
-		// 			} as Envs);
+		describe("when feature flag is disabled", () => {
+			const setup = () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: false,
+				} as Envs);
 
-		// 			const wrapper = getWrapper();
+				const wrapper = getWrapper();
 
-		// 			return { wrapper };
-		// 		};
+				return { wrapper };
+			};
 
-		// 		it("should not find tools(new)-tab", () => {
-		// 			const { wrapper } = setup();
+			it("should not find tools(new)-tab", () => {
+				const { wrapper } = setup();
 
-		// 			const tabTitle = wrapper.find('[data-testid="tools-tab"]');
+				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
 
-		// 			expect(tabTitle.exists()).toEqual(false);
-		// 		});
-		// 	});
+				expect(tabTitle.exists()).toEqual(false);
+			});
+		});
 
-		// 	describe("when Tools(new) tab is active", () => {
-		// 		const setup = () => {
-		// 			envConfigModule.setEnvs({
-		// 				FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-		// 			} as Envs);
-		// 			authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
+		// VUE3_UPGRADE: is this still relevant?
+		// describe("when Tools(new) tab is active", () => {
+		// 	const setup = () => {
+		// 		envConfigModule.setEnvs({
+		// 			FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+		// 		} as Envs);
+		// 		authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
 
-		// 			const wrapper = getWrapper();
+		// 		const wrapper = getWrapper();
 
-		// 			return { wrapper };
-		// 		};
+		// 		return { wrapper };
+		// 	};
 
 		// 		it("should show the tools component", async () => {
 		// 			const { wrapper } = setup();
