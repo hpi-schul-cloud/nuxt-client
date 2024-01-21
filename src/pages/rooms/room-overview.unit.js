@@ -104,21 +104,6 @@ const spyMocks = {
 	storeModuleFetchAllMock: jest
 		.spyOn(roomsModule, "fetchAllElements")
 		.mockImplementation(async () => ({})),
-	// 	getElementNameByRefMock: jest.spyOn(
-	// 		RoomOverview.methods,
-	// 		"getElementNameByRef"
-	// 	),
-	// 	openDialogMock: jest.spyOn(RoomOverview.methods, "openDialog"),
-	// 	getDataObjectMock: jest.spyOn(RoomOverview.methods, "getDataObject"),
-	// 	hasGroupMock: jest.spyOn(RoomOverview.methods, "hasGroup"),
-	// 	findDataByPosMock: jest.spyOn(RoomOverview.methods, "findDataByPos"),
-	// 	getDeviceDimsMock: jest.spyOn(RoomOverview.methods, "getDeviceDims"),
-	// 	setDropElementMock: jest.spyOn(RoomOverview.methods, "setDropElement"),
-	// 	setGroupElementsMock: jest.spyOn(RoomOverview.methods, "setGroupElements"),
-	// 	addGroupElementsMock: jest.spyOn(RoomOverview.methods, "addGroupElements"),
-	// 	savePositionMock: jest.spyOn(RoomOverview.methods, "savePosition"),
-	// 	dragFromGroupMock: jest.spyOn(RoomOverview.methods, "dragFromGroup"),
-	// 	defaultNamingMock: jest.spyOn(RoomOverview.methods, "defaultNaming"),
 };
 
 let copyModuleMock;
@@ -253,16 +238,6 @@ describe("@/pages/RoomOverview", () => {
 		expect(customDialog.props("isOpen")).toBe(true);
 		expect(input.props("modelValue")).toBe("Fourth");
 	});
-
-	// it("should call the necessary methods for positioning while the page loading", async () => {
-	// 	const wrapper = getWrapper();
-	// 	await nextTick();
-	// 	expect(spyMocks.getDataObjectMock).toHaveBeenCalled();
-	// 	expect(spyMocks.findDataByPosMock).toHaveBeenCalled();
-	// 	await nextTick();
-	// 	expect(spyMocks.getDeviceDimsMock).toHaveBeenCalled();
-	// 	expect(spyMocks.hasGroupMock).toHaveBeenCalled();
-	// });
 
 	it("'$refs' should be placed correctly for the components", async () => {
 		const wrapper = getWrapper();
