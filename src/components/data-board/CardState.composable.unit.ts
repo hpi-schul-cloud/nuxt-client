@@ -31,13 +31,19 @@ const notifierModule = createModuleMocks(NotifierModule);
 
 const emitMock = jest.fn();
 
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+	};
+});
+
 const setup = (cardId = "123123", emitFn = emitMock) => {
 	return mountComposable(() => useCardState(cardId, emitFn), {
 		global: {
 			provide: {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
-			mocks: { t: (key: string) => key },
 		},
 	});
 };
@@ -46,8 +52,7 @@ jest.mock("./BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
 jest.mock("@/utils/helpers");
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const mockedDelay = jest.mocked(delay);
+jest.mocked(delay);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -124,7 +129,6 @@ describe("CardState composable", () => {
 			const cardId = "123124";
 
 			setup(cardId);
-			// jest.runAllTimers();
 			await nextTick();
 			expect(mockedSharedCardCalls.fetchCard).toHaveBeenCalledWith(cardId);
 		});
@@ -144,10 +148,10 @@ describe("CardState composable", () => {
 				.fn()
 				.mockRejectedValue(setupErrorResponse());
 
-			setup();
+			const cardId1 = "123124a";
+			const { fetchCard } = setup();
 
-			await nextTick();
-			await nextTick(); // test mounts it twice
+			await fetchCard(cardId1);
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
@@ -463,7 +467,7 @@ describe("CardState composable", () => {
 				const { card, moveElementDown } = setup();
 				card.value = boardCard;
 
-				mockedBoardApiCalls.updateCardTitle.mockRejectedValue(
+				mockedBoardApiCalls.moveElementCall.mockRejectedValue(
 					setupErrorResponse()
 				);
 				await moveElementDown({
@@ -569,7 +573,7 @@ describe("CardState composable", () => {
 				const { card, moveElementUp } = setup();
 				card.value = boardCard;
 
-				mockedBoardApiCalls.updateCardTitle.mockRejectedValue(
+				mockedBoardApiCalls.moveElementCall.mockRejectedValue(
 					setupErrorResponse()
 				);
 				await moveElementUp({

@@ -16,18 +16,32 @@ const mockedIsAxiosError = jest.mocked(isAxiosError);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-let translationMap: Record<string, string> = {};
+const keys = [
+	"components.board.notifications.errors.notCreated",
+	"components.board.notifications.errors.notLoaded",
+	"components.board.notifications.errors.notUpdated",
+	"components.board.notifications.errors.notDeleted",
+];
+const translationMap: Record<string, string> = {};
+
+keys.forEach((key) => (translationMap[key] = key));
+
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({
+			t: (key: string) => key,
+			tc: (key: string) => key,
+			te: (key: string) => translationMap[key] !== undefined,
+		}),
+	};
+});
 
 const mountErrorComposable = () => {
 	return mountComposable(() => useErrorHandler(), {
 		global: {
 			provide: {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			},
-			mocks: {
-				t: (key: string) => key,
-				tc: (key: string) => key,
-				te: (key: string) => translationMap[key] !== undefined,
 			},
 		},
 	});
@@ -54,13 +68,6 @@ describe("ErrorHandler.Composable", () => {
 	};
 
 	beforeEach(() => {
-		const keys = [
-			"components.board.notifications.errors.notCreated",
-			"components.board.notifications.errors.notLoaded",
-			"components.board.notifications.errors.notUpdated",
-			"components.board.notifications.errors.notDeleted",
-		];
-		translationMap = {};
 		keys.forEach((key) => (translationMap[key] = key));
 	});
 

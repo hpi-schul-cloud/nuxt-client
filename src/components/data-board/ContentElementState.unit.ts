@@ -21,6 +21,13 @@ const TEST_ELEMENT: RichTextElementResponse = {
 	},
 };
 
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("@vueuse/core"),
+		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+	};
+});
+
 describe("useContentElementState composable", () => {
 	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
 		return mountComposable(() => useContentElementState(options), {
@@ -28,7 +35,6 @@ describe("useContentElementState composable", () => {
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
-				mocks: { t: (key: string) => key },
 			},
 		});
 	};

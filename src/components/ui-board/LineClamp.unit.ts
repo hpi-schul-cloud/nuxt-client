@@ -1,13 +1,17 @@
-import { MountOptions, mount } from "@vue/test-utils";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
 import LineClamp from "@/components/ui-board/LineClamp.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe(LineClamp.name, () => {
 	const setup = (defaultSlotContent: string) => {
-		document.body.setAttribute("data-app", "true");
-
 		const icon = "mdi-test";
-		const wrapper = mount(LineClamp as MountOptions<Vue>, {
+		const wrapper = mount(LineClamp, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
 			slots: {
 				default: defaultSlotContent,
 			},

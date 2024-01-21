@@ -1,7 +1,7 @@
 <template>
 	<div style="width: 100%">
 		<WarningAlert v-if="isError">
-			{{ t("components.cardElement.fileElement.previewError") }}
+			{{ $t("components.cardElement.fileElement.previewError") }}
 		</WarningAlert>
 		<v-img
 			ref="imageRef"
@@ -9,8 +9,9 @@
 			loading="lazy"
 			:src="imageSrc"
 			:alt="alt"
-			:cover="contain"
+			:cover="cover"
 			:aspect-ratio="aspectRatio"
+			:position="position"
 			@load="setWidth"
 			@error="setError"
 			:max-width="imageWidth"
@@ -29,14 +30,13 @@ import { defineComponent, ref, computed } from "vue";
 import { useNaturalwidth } from "./NaturalWidth.composable";
 import errorImage from "@/assets/img/image-not-available.svg";
 import WarningAlert from "@/components/ui-alert/WarningAlert.vue";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "PreviewImage",
 	props: {
 		alt: { type: String, required: true },
 		src: { type: String, required: true },
-		contain: { type: Boolean, required: false, default: false },
+		cover: { type: Boolean, required: false, default: false },
 		aspectRatio: { type: Number, required: false },
 		position: { type: String, required: false },
 	},
@@ -45,7 +45,6 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const { imageRef, imageWidth, setWidth } = useNaturalwidth();
 		const isError = ref(false);
-		const { t } = useI18n();
 
 		const imageSrc = computed(() => {
 			if (isError.value) {
@@ -67,7 +66,6 @@ export default defineComponent({
 			imageSrc,
 			setError,
 			isError,
-			t,
 		};
 	},
 });

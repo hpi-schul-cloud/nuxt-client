@@ -1,6 +1,9 @@
 import ContentElementDisplay from "./ContentElementDisplay.vue";
-import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("ContentElementDisplay", () => {
 	const setup = () => {
@@ -8,7 +11,10 @@ describe("ContentElementDisplay", () => {
 		const menu = "menu-placeholder";
 		const display = "display-placeholder";
 
-		const wrapper = shallowMount(ContentElementDisplay as MountOptions<Vue>, {
+		const wrapper = shallowMount(ContentElementDisplay, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
 			slots: {
 				display,
 				menu,

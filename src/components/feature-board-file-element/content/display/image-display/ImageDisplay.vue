@@ -7,7 +7,7 @@
 		<PreviewImage
 			:src="previewSrc"
 			:alt="alternativeText"
-			:contain="true"
+			:cover="true"
 			class="rounded-t"
 			@error="onImageError"
 		/>

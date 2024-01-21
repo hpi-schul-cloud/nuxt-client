@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="ml-1">
-			<h3 aria-level="1" class="mt-3">
+			<h3 aria-level="1" class="mt-0">
 				{{ $t("pages.room.boardCard.label.courseBoard") }}
 			</h3>
 		</div>
