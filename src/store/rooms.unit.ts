@@ -336,22 +336,42 @@ describe("rooms module", () => {
 
 		describe("uploadCourse", () => {
 			it("should call the backend", async () => {
+				const mockApi = { courseControllerImportCourse: jest.fn() };
+				jest
+					.spyOn(serverApi, "CoursesApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 				const course = new File([], "my-course.zip");
 				const roomsModule = new RoomsModule({});
-				const uploadCourseSpy = jest.spyOn(roomsModule, "uploadCourse");
-				uploadCourseSpy.mockImplementation();
 
 				await roomsModule.uploadCourse(course);
-				expect(uploadCourseSpy.mock.calls[0][0]).toStrictEqual(course);
+				expect(mockApi.courseControllerImportCourse).toHaveBeenCalledTimes(1);
+			});
+
+			it("should call set loading", async () => {
+				const course = new File([], "my-course.zip");
+				const roomsModule = new RoomsModule({});
+				const setLoadingMock = jest.spyOn(roomsModule, "setLoading");
+
+				await roomsModule.uploadCourse(course);
+				expect(setLoadingMock).toHaveBeenCalledTimes(2);
 			});
 
 			it("should handle error", async () => {
-				const setBusinessErrorMock = jest.fn();
+				const mockApi = { courseControllerImportCourse: jest.fn() };
+				mockApi.courseControllerImportCourse.mockImplementation(() =>
+					Promise.reject()
+				);
+				jest
+					.spyOn(serverApi, "CoursesApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 				const roomsModule = new RoomsModule({});
-				roomsModule.setBusinessError = setBusinessErrorMock;
+				const setBusinessErrorMock = jest.spyOn(
+					roomsModule,
+					"setBusinessError"
+				);
 
 				await roomsModule.uploadCourse(new File([], "my-course.zip"));
-				expect(setBusinessErrorMock).toHaveBeenCalled();
+				expect(setBusinessErrorMock).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
