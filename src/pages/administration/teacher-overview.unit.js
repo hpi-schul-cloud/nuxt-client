@@ -69,13 +69,17 @@ const createMockStore = () => {
 						return { data: [] };
 					},
 				},
+				state: () => ({
+					list: [],
+				}),
 			},
-			schools: {
-				namespaced: true,
-				getters: {
-					schoolIsExternallyManaged: () => false,
-				},
-			},
+			// schools: {
+			// 	namespaced: true,
+			// 	getters: {
+			// 		schoolIsExternallyManaged: () => false,
+			// 		getSchool: () => ({ ...mockSchool, isExternal: isSchoolExternal }),
+			// 	},
+			// },
 			users: {
 				namespaced: true,
 				actions: {

@@ -633,7 +633,7 @@ export default {
 			this.find();
 		},
 		async getClassNameList() {
-			const { currentYear } = this.$store.getters["authModule/getSchool"];
+			const currentYear = schoolsModule.getCurrentYear;
 			await this.$store.dispatch("classes/find", {
 				query: {
 					$limit: 1000,
