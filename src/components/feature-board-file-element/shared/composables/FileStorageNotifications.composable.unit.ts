@@ -3,13 +3,22 @@ import NotifierModule from "@/store/notifier";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { useI18n } from "vue-i18n";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({
+			t: jest.fn().mockImplementation((key: string) => key),
+			n: jest.fn().mockImplementation((key: string) => key),
+		}),
+	};
+});
+
 const maxFileSize = 100;
-const i18nModule = {
-	t: jest.fn().mockImplementation((key: string) => key),
-	n: jest.fn().mockImplementation((key: number) => key),
-};
+const mockI18nModule = jest.mocked(useI18n());
+
 const notifierModule = createModuleMocks(NotifierModule);
 const configModule = createModuleMocks(EnvConfigModule, {
 	getMaxFileSize: 100,
@@ -22,7 +31,6 @@ const setupMountComposable = () => {
 				[NOTIFIER_MODULE_KEY as symbol]: notifierModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: configModule,
 			},
-			mocks: i18nModule,
 		},
 	});
 };
@@ -45,7 +53,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showForbiddenError();
 
-			expect(i18nModule.t).toBeCalledWith(i18nKey, undefined);
+			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
 		});
 
 		it("should call showFailure with correctly props", () => {
@@ -75,7 +83,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showUnauthorizedError();
 
-			expect(i18nModule.t).toBeCalledWith(i18nKey, undefined);
+			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
 		});
 
 		it("should call showFailure with correctly props", () => {
@@ -106,7 +114,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showInternalServerError();
 
-			expect(i18nModule.t).toBeCalledWith(i18nKey, undefined);
+			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
 		});
 
 		it("should call showFailure with correctly props", () => {
@@ -136,7 +144,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showFileExistsError();
 
-			expect(i18nModule.t).toBeCalledWith(i18nKey, undefined);
+			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
 		});
 
 		it("should call showFailure with correctly props", () => {
@@ -167,7 +175,7 @@ describe("FileStorageNotifier.composable", () => {
 
 			showFileTooBigError();
 
-			expect(i18nModule.t).toBeCalledWith(i18nKey, props);
+			expect(mockI18nModule.t).toBeCalledWith(i18nKey, props);
 		});
 
 		it("should call showFailure with correctly props", () => {
