@@ -37,7 +37,6 @@ describe("ToolConfigurationStatus.composable", () => {
 				return {
 					toolConfigurationStatus,
 					...composable,
-					authModule,
 				};
 			};
 
@@ -79,7 +78,6 @@ describe("ToolConfigurationStatus.composable", () => {
 				return {
 					toolConfigurationStatus,
 					...composable,
-					authModule,
 				};
 			};
 
@@ -121,7 +119,6 @@ describe("ToolConfigurationStatus.composable", () => {
 				return {
 					toolConfigurationStatus,
 					...composable,
-					authModule,
 				};
 			};
 
@@ -265,13 +262,16 @@ describe("ToolConfigurationStatus.composable", () => {
 				const composable = mountComposable(
 					() => useContextExternalToolConfigurationStatus(),
 					{
-						[AUTH_MODULE_KEY.valueOf()]: authModule,
+						global: {
+							provide: {
+								[AUTH_MODULE_KEY.valueOf()]: authModule,
+							},
+						},
 					}
 				);
 
 				return {
 					...composable,
-					authModule,
 				};
 			};
 
@@ -295,7 +295,11 @@ describe("ToolConfigurationStatus.composable", () => {
 				const composable = mountComposable(
 					() => useContextExternalToolConfigurationStatus(),
 					{
-						[AUTH_MODULE_KEY.valueOf()]: authModule,
+						global: {
+							provide: {
+								[AUTH_MODULE_KEY.valueOf()]: authModule,
+							},
+						},
 					}
 				);
 
