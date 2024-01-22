@@ -1,6 +1,9 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue, { nextTick } from "vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import FilePicker from "./FilePicker.vue";
 
 describe("FilePicker", () => {
@@ -10,10 +13,8 @@ describe("FilePicker", () => {
 
 	describe("when isFilePickerOpen is false", () => {
 		const setup = () => {
-			document.body.setAttribute("data-app", "true");
-
-			const wrapper: Wrapper<Vue> = mount(FilePicker as MountOptions<Vue>, {
-				...createComponentMocks({}),
+			const wrapper = mount(FilePicker, {
+				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				propsData: {
 					isFilePickerOpen: false,
 					maxFileSizeInByte: 100,
@@ -34,17 +35,16 @@ describe("FilePicker", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			const wrapper = mount(FilePicker as MountOptions<Vue>, {
-				...createComponentMocks({}),
+			const wrapper = mount(FilePicker, {
+				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				attachTo: document.body,
-				propsData: {
+				props: {
 					isFilePickerOpen: false,
 					maxFileSizeInByte: 100,
 				},
 			});
 
-			const input = (wrapper.vm.$refs.inputRef as any).$refs?.input;
-			input.click = jest.fn();
+			const input = wrapper.findComponent({ name: "v-file-input" });
 
 			return { wrapper, input };
 		};
@@ -71,19 +71,17 @@ describe("FilePicker", () => {
 
 			await wrapper.setProps({ isFilePickerOpen: true });
 			await nextTick();
+			await nextTick();
 
-			expect(input.click).toHaveBeenCalledTimes(1);
+			expect(input.emitted("update:focused")).toBeDefined();
 		});
 	});
 
 	describe("when file is selected", () => {
 		describe("when file size possible", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
-				const wrapper = mount(FilePicker as MountOptions<Vue>, {
-					...createComponentMocks({}),
-					attachTo: document.body,
+				const wrapper = mount(FilePicker, {
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 					propsData: {
 						isFilePickerOpen: false,
 						maxFileSizeInByte: 100000,
@@ -97,9 +95,9 @@ describe("FilePicker", () => {
 			it("should emit update:fileOpen", async () => {
 				const { wrapper, file } = setup();
 
-				const input = wrapper.findComponent({ ref: "inputRef" });
+				const input = wrapper.findComponent({ name: "v-file-input" });
 				// this also triggers the "change event"
-				await input.setData({ internalValue: file });
+				await input.setValue(file);
 				await nextTick();
 
 				expect(wrapper.emitted("update:file")).toHaveLength(1);

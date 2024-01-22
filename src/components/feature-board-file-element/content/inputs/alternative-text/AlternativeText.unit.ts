@@ -1,16 +1,18 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { mount, shallowMount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import AlternativeText from "./AlternativeText.vue";
 
 describe("AlternativeText", () => {
 	const mountSetup = () => {
-		document.body.setAttribute("data-app", "true");
-
 		const alternativeText = "test text";
 
 		const wrapper = mount(AlternativeText, {
-			propsData: { alternativeText },
-			...createComponentMocks({}),
+			props: { alternativeText },
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
@@ -19,13 +21,11 @@ describe("AlternativeText", () => {
 	};
 
 	const shallowMountSetup = () => {
-		document.body.setAttribute("data-app", "true");
-
 		const alternativeText = "test text";
 
 		const wrapper = shallowMount(AlternativeText, {
-			propsData: { alternativeText },
-			...createComponentMocks({}),
+			props: { alternativeText },
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
@@ -47,7 +47,8 @@ describe("AlternativeText", () => {
 
 		const textarea = wrapper.findComponent({ name: "v-textarea" });
 		const newText = "new text";
-		textarea.vm.$emit("input", newText);
+		await textarea.setValue(newText);
+		await nextTick();
 
 		expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 		expect(wrapper.emitted("update:alternativeText")?.[0][0]).toBe(newText);
@@ -57,8 +58,7 @@ describe("AlternativeText", () => {
 		const { wrapper, alternativeText } = shallowMountSetup();
 
 		const textarea = wrapper.find("v-textarea-stub");
-
-		const hint = textarea.attributes("value");
+		const hint = textarea.attributes("modelvalue");
 
 		expect(hint).toBe(alternativeText);
 	});
@@ -70,11 +70,7 @@ describe("AlternativeText", () => {
 
 		const hint = textarea.attributes("hint");
 
-		expect(hint).toBe(
-			wrapper.vm.$i18n
-				.t("components.cardElement.fileElement.altDescription")
-				.toString()
-		);
+		expect(hint).toBe("components.cardElement.fileElement.altDescription");
 	});
 
 	it("should have a label translation", async () => {
@@ -84,10 +80,6 @@ describe("AlternativeText", () => {
 
 		const label = textarea.attributes("label");
 
-		expect(label).toBe(
-			wrapper.vm.$i18n
-				.t("components.cardElement.fileElement.alternativeText")
-				.toString()
-		);
+		expect(label).toBe("components.cardElement.fileElement.alternativeText");
 	});
 });
