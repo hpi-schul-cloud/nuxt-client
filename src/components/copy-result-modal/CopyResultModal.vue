@@ -82,14 +82,16 @@ export default {
 	},
 	computed: {
 		items() {
-			const isNexboardCopyEnabled =
-				envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED;
+			if (envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED) {
+				return this.copyResultItems;
+			}
 
-			return this.copyResultItems.filter((item) => {
-				if (!isNexboardCopyEnabled && this.isNexboardElement(item)) {
-					return false;
-				}
-				return true;
+			return this.copyResultItems.map((item) => {
+				const filteredElements = item.elements.filter(
+					(element) =>
+						element.type !== CopyApiResponseTypeEnum.LessonContentNexboard
+				);
+				return { ...item, elements: filteredElements };
 			});
 		},
 
@@ -193,14 +195,6 @@ export default {
 					: null;
 			});
 			return found;
-		},
-		isNexboardElement(item) {
-			return (
-				item.elements &&
-				item.elements.some((e) =>
-					[CopyApiResponseTypeEnum.LessonContentNexboard].includes(e.type)
-				)
-			);
 		},
 		onDialogClosed() {
 			this.$emit("dialog-closed");
