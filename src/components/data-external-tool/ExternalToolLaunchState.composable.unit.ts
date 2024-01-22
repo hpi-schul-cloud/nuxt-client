@@ -25,8 +25,13 @@ describe("ExternalToolLaunchState.composable", () => {
 
 	afterEach(() => {
 		jest.clearAllMocks();
-
-		window.location.href = "";
+		Object.defineProperty(window, "location", {
+			configurable: true,
+			writable: false,
+			value: {
+				href: "",
+			},
+		});
 	});
 
 	describe("fetchLaunchRequest", () => {
@@ -233,6 +238,10 @@ describe("ExternalToolLaunchState.composable", () => {
 		});
 
 		describe("when the launch method is unknown", () => {
+			beforeEach(() => {
+				window.location.href = "";
+			});
+
 			const setup = () => {
 				const launchRequest = toolLaunchRequestFactory.build({
 					method: "unknown" as unknown as ToolLaunchRequestMethodEnum,
