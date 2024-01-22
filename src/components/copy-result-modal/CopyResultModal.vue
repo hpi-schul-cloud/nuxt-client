@@ -147,7 +147,7 @@ export default {
 		},
 		hasNexboardElement() {
 			return this.hasElementOfType(
-				this.filteredItems,
+				this.items,
 				CopyApiResponseTypeEnum.LessonContentNexboard
 			);
 		},
