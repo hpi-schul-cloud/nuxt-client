@@ -7,19 +7,16 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
-import ContextExternalToolsModule from "@/store/context-external-tools";
 import { User } from "@/store/types/auth";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { VueWrapper, mount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
@@ -27,12 +24,8 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { nextTick } from "vue";
-import {
-	businessErrorFactory,
-	contextExternalToolConfigurationTemplateFactory,
-} from "@@/tests/test-utils";
-import { VTab } from "vuetify/lib/components/index.mjs";
+
+jest.mock("./tools/RoomExternalToolsOverview.vue");
 
 const mockData = {
 	roomId: "123",
@@ -503,52 +496,52 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		// VUE3_UPGRADE: is this still relevant?
-		// describe("when Tools(new) tab is active", () => {
-		// 	const setup = () => {
-		// 		envConfigModule.setEnvs({
-		// 			FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-		// 		} as Envs);
-		// 		authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
+		describe("when Tools(new) tab is active", () => {
+			const setup = () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+				} as Envs);
+				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
 
-		// 		const wrapper = getWrapper();
+				const wrapper = getWrapper();
 
-		// 		return { wrapper };
-		// 	};
+				return { wrapper };
+			};
 
-		// 		it("should show the tools component", async () => {
-		// 			const { wrapper } = setup();
+			it("should show the tools component", async () => {
+				const { wrapper } = setup();
 
-		// 			const toolsTab = wrapper.find('[data-testid="tools-tab"]');
-		// 			await toolsTab.trigger("click");
+				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
+				await toolsTab.trigger("click");
 
-		// 			const toolsContent = wrapper.findComponent(RoomExternalToolsOverview);
+				const toolsContent = wrapper.findComponent(RoomExternalToolsOverview);
 
-		// 			expect(toolsContent.exists()).toBe(true);
-		// 		});
-		// 	});
+				expect(toolsContent.exists()).toBe(true);
+			});
+		});
 
-		// 	describe("when Tools(new) tab is active and the user has admin permissions", () => {
-		// 		const setup = () => {
-		// 			envConfigModule.setEnvs({
-		// 				FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-		// 			} as Envs);
-		// 			authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
+		describe("when Tools(new) tab is active and the user has admin permissions", () => {
+			const setup = () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+				} as Envs);
+				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
 
-		// 			const wrapper = getWrapper();
+				const wrapper = getWrapper();
 
-		// 			return { wrapper };
-		// 		};
+				return { wrapper };
+			};
 
-		// 		it("should show an 'add' button", async () => {
-		// 			const { wrapper } = setup();
+			it("should show an 'add' button", async () => {
+				const { wrapper } = setup();
 
-		// 			const toolsTab = wrapper.find('[data-testid="tools-tab"]');
-		// 			await toolsTab.trigger("click");
+				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
+				await toolsTab.trigger("click");
 
-		// 			const addButton = wrapper.find('[data-testid="add-tool-button"]');
+				const addButton = wrapper.find('[data-testid="add-tool-button"]');
 
-		// 			expect(addButton.exists()).toEqual(true);
-		// 		});
-		// 	});
+				expect(addButton.exists()).toEqual(true);
+			});
+		});
 	});
 });
