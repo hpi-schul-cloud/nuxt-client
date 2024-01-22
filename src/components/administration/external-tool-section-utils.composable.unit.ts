@@ -110,20 +110,16 @@ describe("useSchoolExternalToolUtils", () => {
 
 			const headers: DataTableHeader[] = getHeaders;
 
-			expect(headers[0]).toEqual({
-				text: expectedTranslation,
-				value: "name",
-			});
-			expect(headers[1]).toEqual({
-				text: expectedTranslation,
-				value: "status",
-			});
-			expect(headers[2]).toEqual({
-				text: "",
-				value: "actions",
-				sortable: false,
-				align: "end",
-			});
+			expect(headers[0].title).toEqual(expectedTranslation);
+			expect(headers[0].value).toEqual("name");
+
+			expect(headers[1].title).toEqual(expectedTranslation);
+			expect(headers[1].value).toEqual("status");
+
+			expect(headers[2].title).toEqual("");
+			expect(headers[2].value).toEqual("actions");
+			expect(headers[2].sortable).toBe(false);
+			expect(headers[2].align).toEqual("end");
 		});
 	});
 
