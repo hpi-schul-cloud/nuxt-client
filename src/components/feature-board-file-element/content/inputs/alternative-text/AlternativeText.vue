@@ -4,7 +4,7 @@
 		rows="1"
 		auto-grow
 		v-model="modelValue"
-		class="v-secondary-lighten1"
+		variant="underlined"
 		:persistent-hint="true"
 		:hint="$t('components.cardElement.fileElement.altDescription')"
 		:label="$t('components.cardElement.fileElement.alternativeText')"
