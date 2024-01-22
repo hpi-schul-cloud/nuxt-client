@@ -106,9 +106,7 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.etherpad"),
 				},
 				{
-					isShow:
-						this.hasNexboardElement &&
-						envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED,
+					isShow: this.hasNexboardElement,
 					text: this.nexboardInfoText,
 					title: this.$t("components.molecules.copyResult.label.nexboard"),
 				},
