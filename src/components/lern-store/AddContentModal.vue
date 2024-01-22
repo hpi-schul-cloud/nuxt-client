@@ -77,8 +77,8 @@ export default {
 	},
 	data() {
 		return {
-			selectedCourse: null,
-			selectedLesson: null,
+			selectedCourse: undefined,
+			selectedLesson: undefined,
 		};
 	},
 	computed: {
@@ -116,7 +116,7 @@ export default {
 	},
 	watch: {
 		selectedCourse(to, from) {
-			this.selectedLesson = null;
+			this.selectedLesson = undefined;
 			if (to) {
 				this.findLessons(to);
 			} else if (!to && !!from) {
@@ -160,8 +160,8 @@ export default {
 			contentModule.getLessons(course._id);
 		},
 		clearState() {
-			this.selectedCourse = null;
-			this.selectedLesson = null;
+			this.selectedCourse = undefined;
+			this.selectedLesson = undefined;
 		},
 	},
 };
