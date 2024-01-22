@@ -33,6 +33,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 	afterEach(() => {
 		jest.clearAllMocks();
+
 		window.location.href = "";
 	});
 
