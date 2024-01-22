@@ -6,7 +6,10 @@ import { mount } from "@vue/test-utils";
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 jest.mock("@data-board", () => {
 	return {
 		useBoardFocusHandler: jest.fn(),
@@ -46,24 +49,20 @@ describe("RichTextContentElement", () => {
 		element: RichTextElementResponse;
 		isEditMode: boolean;
 	}) => {
-		const wrapper = mount(
-			RichTextContentElementComponent,
-			{
-				propsData: props,
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule},
+		const wrapper = mount(RichTextContentElementComponent, {
+			propsData: props,
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
+			},
+		});
 
-				},
-			}
-		);
-
-		return wrapper;
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should render display if isEditMode is false", () => {
-			const wrapper = setup({
+			const { wrapper } = setup({
 				element: TEST_ELEMENT,
 				isEditMode: false,
 			});
@@ -73,7 +72,7 @@ describe("RichTextContentElement", () => {
 		});
 
 		it("should render edit if isEditMode is true", () => {
-			const wrapper = setup({
+			const { wrapper } = setup({
 				element: TEST_ELEMENT,
 				isEditMode: true,
 			});
@@ -83,7 +82,7 @@ describe("RichTextContentElement", () => {
 		});
 
 		it("should call deleteElement when it receives delete:element event from edit component", async () => {
-			const wrapper = setup({
+			const { wrapper } = setup({
 				element: TEST_ELEMENT,
 				isEditMode: true,
 			});
@@ -95,7 +94,7 @@ describe("RichTextContentElement", () => {
 			await wrapper.vm.$nextTick();
 			const emitted = wrapper.emitted("delete:element");
 
-			if(emitted) {
+			if (emitted) {
 				expect(emitted).toHaveLength(1);
 				expect(emitted[0][0]).toStrictEqual("test-id");
 			}

@@ -1,6 +1,9 @@
 import { mount } from "@vue/test-utils";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("RichTextContentElementEdit", () => {
 	const setup = (options: {}) => {
@@ -9,29 +12,31 @@ describe("RichTextContentElementEdit", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				...options
-			}
+				...options,
+			},
 		});
 
-		return wrapper;
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			const wrapper = setup({ value: "test value", autofocus: false });
+			const { wrapper } = setup({ value: "test value", autofocus: false });
 			const content = wrapper.findComponent(RichTextContentElementEdit);
 			expect(content.exists()).toBe(true);
 		});
 
 		it("should pass props to ck-editor component", async () => {
-			const wrapper = setup({ value: "test value", autofocus: true });
+			const { wrapper } = setup({ value: "test value", autofocus: true });
 			const ckEditorComponent = wrapper.findComponent({ name: "ck-editor" });
-			const ckEditorValue = ckEditorComponent.findComponent({ name: "ckeditor" }).vm.modelValue;
+			const ckEditorValue = ckEditorComponent.findComponent({
+				name: "ckeditor",
+			}).vm.modelValue;
 			expect(ckEditorValue).toStrictEqual("test value");
 		});
 
 		it("should emit delete:element on CK editor keyboard delete event", async () => {
-			const wrapper = setup({ value: "test value", autofocus: true });
+			const { wrapper } = setup({ value: "test value", autofocus: true });
 			const ckEditor = wrapper.findComponent({ name: "ck-editor" });
 			ckEditor.vm.$emit("keyboard:delete");
 
