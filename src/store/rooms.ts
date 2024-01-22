@@ -352,15 +352,19 @@ export default class RoomsModule extends VuexModule {
 
 	@Action
 	async uploadCourse(file: File): Promise<void> {
+		this.setLoading(true);
 		this.resetBusinessError();
 		try {
 			await this.coursesApi.courseControllerImportCourse(file);
+			await new Promise((resolve) => setTimeout(resolve, 10_000));
+			this.setLoading(false);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
 				message: error?.response?.statusText,
 				...error,
 			});
+			this.setLoading(false);
 		}
 	}
 }
