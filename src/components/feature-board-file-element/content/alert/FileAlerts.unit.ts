@@ -9,8 +9,6 @@ import FileAlerts from "./FileAlerts.vue";
 
 describe("FileAlerts", () => {
 	const setup = (alerts: FileAlert[]) => {
-		document.body.setAttribute("data-app", "true");
-
 		const wrapper = shallowMount(FileAlerts, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			propsData: { alerts },
