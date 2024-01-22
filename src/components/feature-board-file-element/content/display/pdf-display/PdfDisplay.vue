@@ -10,6 +10,7 @@
 			:aspect-ratio="1.77777"
 			position="top"
 			class="rounded-t"
+			:cover="true"
 		/>
 
 		<ContentElementBar class="menu">

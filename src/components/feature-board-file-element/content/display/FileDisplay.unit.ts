@@ -4,7 +4,10 @@ import {
 	isVideoMimeType,
 } from "@/utils/fileHelper";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import AudioDisplay from "./audio-display/AudioDisplay.vue";
 import FileDescription from "./file-description/FileDescription.vue";
@@ -22,10 +25,8 @@ describe("FileDisplay", () => {
 	describe("when previewUrl is defined", () => {
 		describe("when mimeType is not a video type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
-				const propsData = {
+				const props = {
 					fileProperties: {
 						name: "test",
 						size: 100,
@@ -42,15 +43,15 @@ describe("FileDisplay", () => {
 				isVideoMimeTypeMock.mockReturnValueOnce(false);
 
 				const wrapper = shallowMount(FileDisplay, {
-					propsData,
-					...createComponentMocks({}),
+					props,
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				});
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileProperties.name,
-					previewUrlProp: propsData.fileProperties.previewUrl,
-					srcProp: propsData.fileProperties.url,
+					fileNameProp: props.fileProperties.name,
+					previewUrlProp: props.fileProperties.previewUrl,
+					srcProp: props.fileProperties.url,
 				};
 			};
 
@@ -78,16 +79,14 @@ describe("FileDisplay", () => {
 
 				const props = wrapper.findComponent(FileDescription).attributes();
 
-				expect(props.showtitle).toBeFalsy();
+				expect(props.showtitle).toBe("false");
 			});
 		});
 
 		describe("when mimeType is a video type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
-				const propsData = {
+				const props = {
 					fileProperties: {
 						name: "test",
 						size: 100,
@@ -107,15 +106,15 @@ describe("FileDisplay", () => {
 				isAudioMimeTypeMock.mockReturnValueOnce(false);
 
 				const wrapper = shallowMount(FileDisplay, {
-					propsData,
-					...createComponentMocks({}),
+					props,
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				});
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileProperties.name,
-					previewUrlProp: propsData.fileProperties.previewUrl,
-					srcProp: propsData.fileProperties.url,
+					fileNameProp: props.fileProperties.name,
+					previewUrlProp: props.fileProperties.previewUrl,
+					srcProp: props.fileProperties.url,
 				};
 			};
 
@@ -152,16 +151,14 @@ describe("FileDisplay", () => {
 
 				const props = wrapper.findComponent(FileDescription).attributes();
 
-				expect(props.showtitle).toBeFalsy();
+				expect(props.showtitle).toBe("false");
 			});
 		});
 
 		describe("when mimeType is pdf type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
-				const propsData = {
+				const props = {
 					fileProperties: {
 						name: "test",
 						size: 100,
@@ -184,16 +181,16 @@ describe("FileDisplay", () => {
 				isPdfMimeTypeMock.mockReturnValueOnce(true);
 
 				const wrapper = shallowMount(FileDisplay, {
-					propsData,
-					...createComponentMocks({}),
+					props,
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				});
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileProperties.name,
-					previewUrlProp: propsData.fileProperties.previewUrl,
-					url: propsData.fileProperties.url,
-					srcProp: propsData.fileProperties.url,
+					fileNameProp: props.fileProperties.name,
+					previewUrlProp: props.fileProperties.previewUrl,
+					url: props.fileProperties.url,
+					srcProp: props.fileProperties.url,
 				};
 			};
 
@@ -222,10 +219,8 @@ describe("FileDisplay", () => {
 	describe("when previewUrl is undefined", () => {
 		describe("when mimeType is a video type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
-				const propsData = {
+				const props = {
 					fileProperties: {
 						name: "test",
 						size: 100,
@@ -245,15 +240,15 @@ describe("FileDisplay", () => {
 				isAudioMimeTypeMock.mockReturnValueOnce(false);
 
 				const wrapper = shallowMount(FileDisplay, {
-					propsData,
-					...createComponentMocks({}),
+					props,
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				});
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileProperties.name,
-					previewUrlProp: propsData.fileProperties.previewUrl,
-					url: propsData.fileProperties.url,
+					fileNameProp: props.fileProperties.name,
+					previewUrlProp: props.fileProperties.previewUrl,
+					url: props.fileProperties.url,
 				};
 			};
 
@@ -279,16 +274,14 @@ describe("FileDisplay", () => {
 
 				const props = wrapper.findComponent(FileDescription).attributes();
 
-				expect(props.showtitle).toBeFalsy();
+				expect(props.showtitle).toBe("false");
 			});
 		});
 
 		describe("when mimeType is a audio type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
-				const propsData = {
+				const props = {
 					fileProperties: {
 						name: "test",
 						size: 100,
@@ -307,14 +300,14 @@ describe("FileDisplay", () => {
 				isAudioMimeTypeMock.mockReturnValueOnce(true);
 
 				const wrapper = shallowMount(FileDisplay, {
-					propsData,
-					...createComponentMocks({}),
+					props,
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				});
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileProperties.name,
-					srcProp: propsData.fileProperties.url,
+					fileNameProp: props.fileProperties.name,
+					srcProp: props.fileProperties.url,
 				};
 			};
 
@@ -339,16 +332,14 @@ describe("FileDisplay", () => {
 
 				const props = wrapper.findComponent(FileDescription).attributes();
 
-				expect(props.showtitle).toBeFalsy();
+				expect(props.showtitle).toBe("false");
 			});
 		});
 
 		describe("when mimeType is pdf type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
-				const propsData = {
+				const props = {
 					fileProperties: {
 						name: "test",
 						size: 100,
@@ -371,16 +362,16 @@ describe("FileDisplay", () => {
 				isPdfMimeTypeMock.mockReturnValueOnce(true);
 
 				const wrapper = shallowMount(FileDisplay, {
-					propsData,
-					...createComponentMocks({}),
+					props,
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				});
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileProperties.name,
-					previewUrlProp: propsData.fileProperties.previewUrl,
-					url: propsData.fileProperties.url,
-					srcProp: propsData.fileProperties.url,
+					fileNameProp: props.fileProperties.name,
+					previewUrlProp: props.fileProperties.previewUrl,
+					url: props.fileProperties.url,
+					srcProp: props.fileProperties.url,
 				};
 			};
 
@@ -403,10 +394,8 @@ describe("FileDisplay", () => {
 
 		describe("when mimeType is not a video or audio type", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
-				const propsData = {
+				const props = {
 					fileProperties: {
 						name: "test",
 						size: 100,
@@ -429,8 +418,8 @@ describe("FileDisplay", () => {
 				isPdfMimeTypeMock.mockReturnValueOnce(false);
 
 				const wrapper = shallowMount(FileDisplay, {
-					propsData,
-					...createComponentMocks({}),
+					props,
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				});
 
 				return {

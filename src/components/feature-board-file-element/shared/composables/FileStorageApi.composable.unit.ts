@@ -5,10 +5,10 @@ import {
 } from "@/fileStorageApi/v3";
 import * as serverApi from "@/fileStorageApi/v3/api/file-api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
-import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { createMock } from "@golevelup/ts-jest";
 import { AxiosResponse } from "axios";
 import { setupFileStorageNotifier } from "../test-utils/fileStorageNotifier";
@@ -157,7 +157,8 @@ describe("FileStorageApi Composable", () => {
 					await fetchFile(parentId, parentType);
 
 					const fileRecord = getFileRecord(parentId);
-					expect(fileRecord.value).toBe(response.data.data[0]);
+
+					expect(fileRecord.value).toStrictEqual(response.data.data[0]);
 				});
 			});
 
@@ -173,7 +174,7 @@ describe("FileStorageApi Composable", () => {
 					await fetchFile(parentId, parentType);
 
 					const fileRecord = getFileRecord(parentId);
-					expect(fileRecord.value).toBe(response.data.data[0]);
+					expect(fileRecord.value).toStrictEqual(response.data.data[0]);
 				});
 			});
 		});
@@ -294,7 +295,7 @@ describe("FileStorageApi Composable", () => {
 				await upload(file, parentId, parentType);
 
 				const fileRecord = getFileRecord(parentId);
-				expect(fileRecord.value).toBe(fileRecordResponse);
+				expect(fileRecord.value).toStrictEqual(fileRecordResponse);
 			});
 		});
 
@@ -400,7 +401,7 @@ describe("FileStorageApi Composable", () => {
 				await uploadFromUrl(imageUrl, parentId, parentType);
 
 				const fileRecord = getFileRecord(parentId);
-				expect(fileRecord.value).toBe(fileRecordResponse);
+				expect(fileRecord.value).toStrictEqual(fileRecordResponse);
 			});
 		});
 
@@ -492,7 +493,7 @@ describe("FileStorageApi Composable", () => {
 				await rename(fileRecordResponse.id, renameFileParams);
 
 				const fileRecord = getFileRecord(parentId);
-				expect(fileRecord.value).toBe(fileRecordResponse);
+				expect(fileRecord.value).toStrictEqual(fileRecordResponse);
 			});
 		});
 
