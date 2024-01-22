@@ -3,7 +3,6 @@
 		class="mb-4"
 		data-testid="drawing-element"
 		variant="outlined"
-		dense
 		ref="drawingElement"
 		:ripple="false"
 		tabindex="0"
@@ -117,9 +116,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style lang="scss" scoped>
-::v-deep .v-btn__content .v-icon,
-.alert-text {
-	color: var(--v-black-base) !important;
-}
-</style>

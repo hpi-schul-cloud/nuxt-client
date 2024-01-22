@@ -5,7 +5,6 @@
 		:closable="showCloseIcon"
 		:closeIcon="showCloseIcon ? closeIcon : null"
 		class="mb-0"
-		variant="text"
 	>
 		<div class="text-black" v-if="$slots.default">
 			<slot />
