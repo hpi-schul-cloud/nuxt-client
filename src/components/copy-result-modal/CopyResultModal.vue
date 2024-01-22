@@ -82,8 +82,17 @@ export default {
 	},
 	computed: {
 		items() {
-			return this.copyResultItems;
+			const isNexboardCopyEnabled =
+				envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED;
+
+			return this.copyResultItems.filter((item) => {
+				if (!isNexboardCopyEnabled && this.isNexboardElement(item)) {
+					return false;
+				}
+				return true;
+			});
 		},
+
 		copyResultWarnings() {
 			return [
 				{
@@ -186,6 +195,14 @@ export default {
 					: null;
 			});
 			return found;
+		},
+		isNexboardElement(item) {
+			return (
+				item.elements &&
+				item.elements.some((e) =>
+					[CopyApiResponseTypeEnum.LessonContentNexboard].includes(e.type)
+				)
+			);
 		},
 		onDialogClosed() {
 			this.$emit("dialog-closed");
