@@ -13,6 +13,14 @@ import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable
 
 jest.mock("@data-external-tool/ExternalToolApi.composable");
 
+Object.defineProperty(window, "location", {
+	configurable: true,
+	writable: false,
+	value: {
+		href: "",
+	},
+});
+
 describe("ExternalToolLaunchState.composable", () => {
 	let useExternalToolApiMock: DeepMocked<ReturnType<typeof useExternalToolApi>>;
 
@@ -25,13 +33,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 	afterEach(() => {
 		jest.clearAllMocks();
-		Object.defineProperty(window, "location", {
-			configurable: true,
-			writable: false,
-			value: {
-				href: "",
-			},
-		});
+		window.location.href = "";
 	});
 
 	describe("fetchLaunchRequest", () => {
@@ -238,10 +240,6 @@ describe("ExternalToolLaunchState.composable", () => {
 		});
 
 		describe("when the launch method is unknown", () => {
-			beforeEach(() => {
-				window.location.href = "";
-			});
-
 			const setup = () => {
 				const launchRequest = toolLaunchRequestFactory.build({
 					method: "unknown" as unknown as ToolLaunchRequestMethodEnum,
