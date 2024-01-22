@@ -1,5 +1,5 @@
 <template>
-	<base-modal v-bind="$attrs" design="white" class="modal-container">
+	<base-modal v-bind="$attrs" class="modal-container">
 		<template #header />
 		<template #body>
 			<modal-body-info :title="title" :description="description">
