@@ -125,7 +125,6 @@ import {
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomModule from "@/store/room";
-import { useI18n } from "vue-i18n";
 import { mdiCheck } from "@mdi/js";
 
 export default defineComponent({
@@ -145,8 +144,6 @@ export default defineComponent({
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 
 		const roomName = computed(() => roomModule.getRoomData.title ?? "");
-
-		const { t } = useI18n();
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo
