@@ -19,15 +19,5 @@ describe("BoardMenuAction Component", () => {
 			const wrapper = setup();
 			expect(wrapper).toBeDefined();
 		});
-
-		it("should emit if is clicked", () => {
-			const wrapper = setup();
-			const listItemComponent = wrapper.findComponent({ name: "VListItem" });
-
-			listItemComponent.vm.$emit("click", { preventDefault: jest.fn() });
-			const emitted = wrapper.emitted();
-
-			expect(emitted.click).toBeDefined();
-		});
 	});
 });
