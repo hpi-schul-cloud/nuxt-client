@@ -73,13 +73,6 @@ const createMockStore = () => {
 					list: [],
 				}),
 			},
-			// schools: {
-			// 	namespaced: true,
-			// 	getters: {
-			// 		schoolIsExternallyManaged: () => false,
-			// 		getSchool: () => ({ ...mockSchool, isExternal: isSchoolExternal }),
-			// 	},
-			// },
 			users: {
 				namespaced: true,
 				actions: {
@@ -498,8 +491,6 @@ describe("teachers/index", () => {
 		const { wrapper, uiStateMutationsStubs } = setup();
 
 		jest.runAllTimers();
-
-		// uiStateMutationsStubs.set.mockClear();
 
 		const filterComponent = wrapper.findComponent(
 			`[data-testid="data_filter"]`

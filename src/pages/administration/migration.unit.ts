@@ -8,7 +8,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { VueWrapper, mount, shallowMount } from "@vue/test-utils";
+import { mount, shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 
@@ -209,27 +209,27 @@ describe("User Migration / Index", () => {
 		it("should show button for start inUserMigration", async () => {
 			const wrapper = getWrapper();
 
-			const btn = wrapper.findComponent(
+			const btn = wrapper.findComponent<typeof VBtn>(
 				"[data-testid=start_user_migration]"
-			) as VueWrapper<VBtn>;
+			);
 			expect(btn.vm.disabled).toBe(false);
-			const nextBtn = wrapper.findComponent(
+			const nextBtn = wrapper.findComponent<typeof VBtn>(
 				"[data-testid=migration_tutorial_next]"
-			) as VueWrapper<VBtn>;
+			);
 			expect(nextBtn.vm).toBe(undefined);
 
 			importUsersModule.setTotal(100);
 			schoolsModule.setSchool({ ...schoolMock, inUserMigration: true });
 			await nextTick();
 
-			const btnRemoved = wrapper.findComponent(
+			const btnRemoved = wrapper.findComponent<typeof VBtn>(
 				"[data-testid=start_user_migration]"
-			) as VueWrapper<VBtn>;
+			);
 			expect(btnRemoved.vm).toBe(undefined);
 
-			const nextBtn2 = wrapper.findComponent(
+			const nextBtn2 = wrapper.findComponent<typeof VBtn>(
 				"[data-testid=migration_tutorial_next]"
-			) as VueWrapper<VBtn>;
+			);
 			expect(nextBtn2.vm.disabled).toBe(false);
 		});
 	});

@@ -7,7 +7,7 @@ import {
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { VueWrapper, shallowMount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { VideoConferenceScope } from "@/serverApi/v3";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 import RoomModule from "@/store/room";
@@ -506,9 +506,9 @@ describe("RoomVideoConferenceSection", () => {
 				});
 				await card.vm.$emit("click");
 
-				const configurationDialog = wrapper.findComponent(
+				const configurationDialog = wrapper.findComponent<typeof VDialog>(
 					'[data-testId="videoconference-config-dialog"]'
-				) as VueWrapper<VDialog>;
+				);
 
 				expect(configurationDialog.props("modelValue")).toBe(true);
 			});
@@ -684,9 +684,9 @@ describe("RoomVideoConferenceSection", () => {
 			});
 			await card.vm.$emit("click");
 
-			const configurationDialog = wrapper.findComponent(
+			const configurationDialog = wrapper.findComponent<typeof VDialog>(
 				'[data-testid="videoconference-config-dialog"]'
-			) as VueWrapper<VDialog>;
+			);
 
 			const createBtn = wrapper.find('[data-testId="dialog-create"]');
 			await createBtn.trigger("click");
@@ -741,9 +741,9 @@ describe("RoomVideoConferenceSection", () => {
 			});
 			await card.vm.$emit("click");
 
-			const configurationDialog = wrapper.findComponent(
+			const configurationDialog = wrapper.findComponent<typeof VDialog>(
 				'[data-testId="videoconference-config-dialog"]'
-			) as VueWrapper<VDialog>;
+			);
 
 			const cancelBtn = configurationDialog.findComponent(
 				'[data-testid="dialog-cancel"]'

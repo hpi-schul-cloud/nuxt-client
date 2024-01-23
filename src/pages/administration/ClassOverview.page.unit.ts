@@ -112,9 +112,9 @@ const createWrapper = (
 };
 
 const findTableComponen = (wrapper: VueWrapper) => {
-	return wrapper.findComponent(
+	return wrapper.findComponent<typeof VDataTableServer>(
 		'[data-testid="admin-class-table"]'
-	) as VueWrapper<VDataTableServer>;
+	);
 };
 
 describe("ClassOverview", () => {
@@ -180,9 +180,9 @@ describe("ClassOverview", () => {
 			it("should display the entries in the table", async () => {
 				const { classes, wrapper } = setup();
 
-				const table = wrapper.findComponent(
+				const table = wrapper.findComponent<typeof VDataTableServer>(
 					'[data-testid="admin-class-table"]'
-				) as VueWrapper<VDataTableServer>;
+				);
 
 				expect(table.props("items")).toEqual(classes);
 			});
@@ -423,9 +423,9 @@ describe("ClassOverview", () => {
 				it("should redirect to group class members page", async () => {
 					const { wrapper } = setup();
 
-					const manageBtn = wrapper.findComponent(
+					const manageBtn = wrapper.findComponent<typeof VBtn>(
 						'[data-testid="class-table-members-manage-btn"]'
-					) as VueWrapper<VBtn>;
+					);
 
 					expect(manageBtn.attributes().href).toBeUndefined();
 					expect(manageBtn.props("to")).toBeDefined();
@@ -503,9 +503,9 @@ describe("ClassOverview", () => {
 			it("should display the upgrade button as disabled", () => {
 				const { wrapper } = setup();
 
-				const successorBtn = wrapper.findComponent(
+				const successorBtn = wrapper.findComponent<typeof VBtn>(
 					'[data-testid="class-table-successor-btn"]'
-				) as VueWrapper<VBtn>;
+				);
 
 				expect(successorBtn.props("disabled")).toEqual(true);
 			});

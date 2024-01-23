@@ -125,7 +125,7 @@ describe("RoomExternalToolOverview", () => {
 			};
 		};
 
-		it.only("should display the error in the alert", () => {
+		it("should display the error in the alert", () => {
 			const { wrapper } = setup();
 
 			const alert = wrapper.findComponent({ name: "v-alert" });
