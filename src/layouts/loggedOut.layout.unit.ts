@@ -43,8 +43,6 @@ describe("loggedOutLayout", () => {
 					$theme: {
 						name: "instance name",
 					},
-					$route,
-					$router,
 				},
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {

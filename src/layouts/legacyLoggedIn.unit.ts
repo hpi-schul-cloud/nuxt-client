@@ -25,8 +25,6 @@ const $route = {
 	path: "/administration/students/",
 };
 
-const $router = { push: jest.fn(), currentRoute: $route, afterEach: jest.fn() };
-
 setupStores({
 	authModule: AuthModule,
 	autoLogoutModule: AutoLogoutModule,
@@ -92,8 +90,6 @@ describe("legacyLoggedIn", () => {
 					$theme: {
 						name: "instance name",
 					},
-					$router,
-					$route,
 				},
 				stubs: [
 					"base-input",
