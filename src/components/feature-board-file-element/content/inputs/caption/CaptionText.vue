@@ -4,6 +4,8 @@
 		rows="1"
 		auto-grow
 		v-model="modelValue"
+		color="primary"
+		variant="underlined"
 		:label="$t('components.cardElement.fileElement.caption')"
 		:hide-details="true"
 	/>
