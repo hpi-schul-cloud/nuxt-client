@@ -176,7 +176,6 @@ describe("SubmissionContentElement", () => {
 	describe("when component is in edit mode", () => {
 		const setup = () => {
 			const element = submissionContainerElementResponseFactory.build();
-			document.body.setAttribute("data-app", "true");
 
 			const submissionContainerElementResponse =
 				submissionContainerElementResponseFactory.build();
