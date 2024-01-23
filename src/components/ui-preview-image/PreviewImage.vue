@@ -15,6 +15,7 @@
 			@load="setWidth"
 			@error="setError"
 			:max-width="imageWidth"
+			:max-height="maxHeight"
 		>
 			<template v-slot:placeholder>
 				<v-row class="fill-height ma-0" align="center" justify="center">
@@ -38,6 +39,7 @@ export default defineComponent({
 		src: { type: String, required: true },
 		cover: { type: Boolean, required: false, default: false },
 		aspectRatio: { type: Number, required: false },
+		maxHeight: { type: Number, required: false },
 		position: { type: String, required: false },
 	},
 	components: { WarningAlert },
