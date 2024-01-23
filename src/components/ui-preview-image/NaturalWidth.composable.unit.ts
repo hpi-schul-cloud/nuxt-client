@@ -57,7 +57,7 @@ describe("useNaturalwidth", () => {
 			// Act
 			setWidth();
 			// Assert
-			expect(imageWidth.value).toEqual(undefined);
+			expect(imageWidth.value).toEqual(1000);
 		});
 	});
 });

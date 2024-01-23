@@ -22,8 +22,8 @@
 				<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 			</v-btn>
 		</v-toolbar>
-		<v-row class="ma-0" style="height: 100%; overflow: auto" @click="close">
-			<v-col class="d-flex align-items-center pa-0" style="height: 100%">
+		<v-row class="ma-0" style="overflow: auto" @click="close">
+			<v-col class="d-flex align-items-center" style="height: 100%">
 				<PreviewImage
 					:src="lightBoxOptions.previewUrl"
 					:alt="lightBoxOptions.alt"
