@@ -29,7 +29,7 @@
 					</div>
 				</div>
 				<v-select
-					:model-value="selectedCourse"
+					v-model="selectedCourse"
 					return-object
 					item-value="id"
 					item-title="title"
@@ -41,7 +41,6 @@
 					:error="showError()"
 					:hint="$t('common.labels.course')"
 					persistent-hint
-					:append-icon="mdiTriangleSmallDown"
 					:menu-props="{ bottom: true, offsetY: true, nudgeBottom: 28 }"
 				/>
 			</div>
@@ -61,7 +60,7 @@ export default defineComponent({
 	components: {
 		vCustomDialog,
 	},
-	emits: ["import", "cancel"],
+	emits: ["import", "cancel", "next"],
 	props: {
 		isOpen: { type: Boolean },
 		parentName: { type: String, required: true },

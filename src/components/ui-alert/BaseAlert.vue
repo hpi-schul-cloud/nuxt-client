@@ -5,7 +5,6 @@
 		:closable="showCloseIcon"
 		:closeIcon="showCloseIcon ? closeIcon : null"
 		class="mb-0"
-		variant="text"
 	>
 		<div class="text-black" v-if="$slots.default">
 			<slot />
@@ -20,7 +19,9 @@ import { IconProps } from "vuetify/lib/framework.mjs";
 export default defineComponent({
 	name: "BaseAlert",
 	props: {
-		color: { type: String },
+		color: {
+			type: String as PropType<"success" | "error" | "warning" | "info">,
+		},
 		icon: { type: String as PropType<IconProps["icon"]> },
 		closeIcon: { type: String as PropType<IconProps["icon"]> },
 		showCloseIcon: {

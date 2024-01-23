@@ -1,14 +1,14 @@
-import { I18N_KEY } from "@/utils/inject";
-import { fileElementResponseFactory, i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { fileElementResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { ColorOverlay } from "@ui-color-overlay";
 import { shallowMount } from "@vue/test-utils";
 import PdfDisplay from "./PdfDisplay.vue";
 
 describe("PdfDisplay", () => {
 	const setup = (props: { isEditMode: boolean }) => {
-		document.body.setAttribute("data-app", "true");
-
 		const element = fileElementResponseFactory.build();
 		const propsData = {
 			src: "url/1/file-record #1.txt",
@@ -21,10 +21,7 @@ describe("PdfDisplay", () => {
 		const wrapper = shallowMount(PdfDisplay, {
 			attachTo: document.body,
 			propsData,
-			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-			},
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
@@ -39,7 +36,7 @@ describe("PdfDisplay", () => {
 	it("should display image with correct props", () => {
 		const { wrapper, previewSrc, nameProp } = setup({ isEditMode: false });
 
-		const image = wrapper.find("previewimage-stub");
+		const image = wrapper.find("preview-image-stub");
 
 		expect(image.exists()).toBe(true);
 		expect(image.attributes("src")).toBe(previewSrc);

@@ -1,13 +1,13 @@
 <template>
 	<v-app class="wireframe-container">
-		<v-container fluid class="wireframe-header sticky">
+		<v-container fluid class="wireframe-header sticky px-6 py-0">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
 			/>
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
-				<h1 class="text-h3">
+				<h1 class="text-h3 pl-2">
 					{{ headline }}
 				</h1>
 			</slot>
@@ -33,7 +33,7 @@
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
 			}"
-			class="main-content pl-6 pt-0 pb-0"
+			class="main-content"
 		>
 			<slot />
 		</v-main>
@@ -90,7 +90,7 @@ export default defineComponent({
 }
 
 .main-content {
-	padding: 0 var(--space-lg);
+	margin: 0 auto;
 }
 
 .container-max-width {
@@ -99,7 +99,7 @@ export default defineComponent({
 
 .container-full-width {
 	max-width: none;
-	margin: 0;
+	margin: 0px 24px;
 }
 
 .border {
