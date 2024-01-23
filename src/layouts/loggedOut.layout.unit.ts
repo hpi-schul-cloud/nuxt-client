@@ -50,6 +50,7 @@ describe("loggedOutLayout", () => {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 					mq: () => "desktop",
 				},
+				stubs: ["base-link"],
 			},
 		});
 
