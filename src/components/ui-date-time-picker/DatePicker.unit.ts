@@ -1,4 +1,3 @@
-import { nextTick } from "vue";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import {
 	createTestingI18n,
@@ -57,7 +56,6 @@ describe("DatePicker", () => {
 			const input = textField.find("input");
 
 			await input.setValue("");
-			await nextTick();
 
 			expect(wrapper.emitted("update:date")).toBeUndefined();
 			expect(wrapper.emitted("error")).toHaveLength(1);
@@ -72,7 +70,6 @@ describe("DatePicker", () => {
 			const input = textField.find("input");
 
 			await input.setValue("55.55.5555");
-			await nextTick();
 
 			expect(wrapper.emitted("update:date")).toBeUndefined();
 			expect(wrapper.emitted("error")).toHaveLength(1);
