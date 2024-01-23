@@ -34,6 +34,7 @@
 				<external-tool-toolbar
 					@delete="openDeleteDialog(item)"
 					@edit="editTool(item)"
+					@datasheet="createDatasheet(item)"
 				/>
 			</template>
 		</v-data-table>
@@ -180,6 +181,10 @@ export default defineComponent({
 			});
 		};
 
+		const createDatasheet = async (item: SchoolExternalToolItem) => {
+			await schoolExternalToolsModule.createDatasheet(item.id);
+		};
+
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
 				await schoolExternalToolsModule.deleteSchoolExternalTool(
@@ -232,6 +237,7 @@ export default defineComponent({
 			isLoading,
 			editTool,
 			onDeleteTool,
+			createDatasheet,
 			isDeleteDialogOpen,
 			openDeleteDialog,
 			onCloseDeleteDialog,

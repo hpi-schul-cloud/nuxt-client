@@ -297,4 +297,31 @@ export default class SchoolExternalToolsModule extends VuexModule {
 
 		this.setLoading(false);
 	}
+
+	@Action
+	async createDatasheet(schoolExternalToolId: string): Promise<void> {
+		this.setLoading(true);
+		this.resetBusinessError();
+
+		try {
+			const schoolExternalTool: SchoolExternalTool | undefined =
+				await this.loadSchoolExternalTool(schoolExternalToolId);
+
+			if (schoolExternalTool) {
+				await this.toolApi.toolControllerGetDatasheet(
+					schoolExternalTool.toolId
+				);
+			}
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
+			});
+		}
+
+		this.setLoading(false);
+	}
 }

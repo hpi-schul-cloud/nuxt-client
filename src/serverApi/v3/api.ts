@@ -15037,6 +15037,44 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Returns a pdf of the external tool information
+         * @param {string} externalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetDatasheet: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'externalToolId' is not null or undefined
+            assertParamExists('toolControllerGetDatasheet', 'externalToolId', externalToolId)
+            const localVarPath = `/tools/external-tools/{externalToolId}/datasheet`
+                .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Returns an ExternalTool for the given id
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
@@ -15712,6 +15750,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Returns a pdf of the external tool information
+         * @param {string} externalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolControllerGetDatasheet(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetDatasheet(externalToolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Returns an ExternalTool for the given id
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
@@ -16005,6 +16054,16 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Returns a pdf of the external tool information
+         * @param {string} externalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetDatasheet(externalToolId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.toolControllerGetDatasheet(externalToolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Returns an ExternalTool for the given id
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
@@ -16281,6 +16340,16 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse>;
+
+    /**
+     * 
+     * @summary Returns a pdf of the external tool information
+     * @param {string} externalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolControllerGetDatasheet(externalToolId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -16585,6 +16654,18 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any) {
         return ToolApiFp(this.configuration).toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns a pdf of the external tool information
+     * @param {string} externalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolControllerGetDatasheet(externalToolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerGetDatasheet(externalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
