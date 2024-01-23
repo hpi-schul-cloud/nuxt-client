@@ -468,9 +468,6 @@ describe("teachers/index", () => {
 
 		// run all existing timers
 		jest.runAllTimers();
-		// reset the mock call stack
-		// usersActionsStubs.findTeachers.mockClear();
-		// uiStateMutationsStubs.set.mockClear();
 
 		const searchBarInput = wrapper
 			.find(`[data-testid="searchbar"]`)
