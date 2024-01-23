@@ -6,12 +6,7 @@ export const useNaturalwidth = () => {
 	const imageWidth = ref();
 
 	const setWidth = () => {
-		const { naturalWidth } = imageRef.value.image;
-		const parenElementWidth = imageRef.value.$parent.$el.clientWidth;
-
-		if (naturalWidth < parenElementWidth) {
-			imageWidth.value = imageRef.value.image.naturalWidth;
-		}
+		imageWidth.value = imageRef.value.image.naturalWidth;
 	};
 
 	return {

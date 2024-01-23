@@ -1,29 +1,27 @@
 <template>
-	<div style="width: 100%">
-		<WarningAlert v-if="isError">
-			{{ $t("components.cardElement.fileElement.previewError") }}
-		</WarningAlert>
-		<v-img
-			ref="imageRef"
-			class="image rounded-t-sm"
-			loading="lazy"
-			:src="imageSrc"
-			:alt="alt"
-			:cover="cover"
-			:aspect-ratio="aspectRatio"
-			:position="position"
-			@load="setWidth"
-			@error="setError"
-			:max-width="imageWidth"
-			:max-height="maxHeight"
-		>
-			<template v-slot:placeholder>
-				<v-row class="fill-height ma-0" align="center" justify="center">
-					<VProgressCircular color="primary" indeterminate :size="36" />
-				</v-row>
-			</template>
-		</v-img>
-	</div>
+	<WarningAlert v-if="isError">
+		{{ $t("components.cardElement.fileElement.previewError") }}
+	</WarningAlert>
+
+	<v-img
+		ref="imageRef"
+		class="image rounded-t-sm mx-auto"
+		loading="lazy"
+		:src="imageSrc"
+		:alt="alt"
+		:cover="cover"
+		:aspect-ratio="aspectRatio"
+		:position="position"
+		@load="setWidth"
+		@error="setError"
+		:max-width="imageWidth"
+	>
+		<template v-slot:placeholder>
+			<v-row class="fill-height ma-0" align="center" justify="center">
+				<VProgressCircular color="primary" indeterminate :size="36" />
+			</v-row>
+		</template>
+	</v-img>
 </template>
 
 <script lang="ts">
@@ -39,7 +37,6 @@ export default defineComponent({
 		src: { type: String, required: true },
 		cover: { type: Boolean, required: false, default: false },
 		aspectRatio: { type: Number, required: false },
-		maxHeight: { type: Number, required: false },
 		position: { type: String, required: false },
 	},
 	components: { WarningAlert },
@@ -68,14 +65,8 @@ export default defineComponent({
 			imageSrc,
 			setError,
 			isError,
+			errorImage,
 		};
 	},
 });
 </script>
-
-<style scoped>
-.image {
-	left: 50%;
-	transform: translateX(-50%);
-}
-</style>
