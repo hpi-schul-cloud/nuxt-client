@@ -1,1 +1,1 @@
-export * from "./fileStorageFactoryMock";
+export * from "./fileStorageApiMock";

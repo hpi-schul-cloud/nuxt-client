@@ -1,15 +1,19 @@
 import {
 	CustomParameterResponse,
+	ToolLaunchRequestResponse,
 	ToolReferenceListResponse,
+	ToolReferenceResponse,
 } from "@/serverApi/v3";
+import { ExternalToolDisplayData } from "../external-tool-display-data";
+import { ToolLaunchRequest } from "../tool-launch-request";
+import { ToolParameter } from "../tool-parameter";
 import {
-	ToolConfigurationStatusMapping,
+	CommonToolMapper,
+	ToolLaunchRequestMethodMapping,
 	ToolParamLocationMapping,
 	ToolParamScopeMapping,
 	ToolParamTypeMapping,
-} from "@/composables/external-tool-mappings.composable";
-import { ExternalToolDisplayData } from "../external-tool-display-data";
-import { ToolParameter } from "../tool-parameter";
+} from "./common-tool.mapper";
 
 export class ExternalToolMapper {
 	static mapToToolParameter(response: CustomParameterResponse): ToolParameter {
@@ -22,6 +26,7 @@ export class ExternalToolMapper {
 			description: response.description,
 			displayName: response.displayName,
 			isOptional: response.isOptional,
+			isProtected: response.isProtected,
 			regex: response.regex,
 			regexComment: response.regexComment,
 		};
@@ -29,18 +34,42 @@ export class ExternalToolMapper {
 		return mapped;
 	}
 
-	static mapToExternalToolDisplayData(
+	static mapToExternalToolDisplayDataList(
 		response: ToolReferenceListResponse
 	): ExternalToolDisplayData[] {
 		const mapped: ExternalToolDisplayData[] = response.data.map(
-			(tool): ExternalToolDisplayData => ({
-				id: tool.contextToolId,
-				name: tool.displayName,
-				status: ToolConfigurationStatusMapping[tool.status],
-				logoUrl: tool.logoUrl,
-				openInNewTab: tool.openInNewTab,
-			})
+			(tool): ExternalToolDisplayData =>
+				ExternalToolMapper.mapToExternalToolDisplayData(tool)
 		);
+
+		return mapped;
+	}
+
+	static mapToExternalToolDisplayData(
+		response: ToolReferenceResponse
+	): ExternalToolDisplayData {
+		const mapped: ExternalToolDisplayData = {
+			contextExternalToolId: response.contextToolId,
+			name: response.displayName,
+			status: CommonToolMapper.mapContextExternalToolConfigurationStatus(
+				response.status
+			),
+			logoUrl: response.logoUrl,
+			openInNewTab: response.openInNewTab,
+		};
+
+		return mapped;
+	}
+
+	static mapToToolLaunchRequest(
+		response: ToolLaunchRequestResponse
+	): ToolLaunchRequest {
+		const mapped: ToolLaunchRequest = {
+			method: ToolLaunchRequestMethodMapping[response.method],
+			url: response.url,
+			payload: response.payload,
+			openNewTab: response.openNewTab,
+		};
 
 		return mapped;
 	}

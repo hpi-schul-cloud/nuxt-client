@@ -7,4 +7,5 @@ export const schoolExternalToolConfigurationTemplateFactory =
 		name: "Template Name",
 		parameters: [],
 		version: 1,
+		isDeactivated: false,
 	}));

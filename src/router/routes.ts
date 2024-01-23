@@ -1,16 +1,19 @@
-import { Route, RouteConfig } from "vue-router";
-import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Layouts } from "@/layouts/types";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
+import { ToolContextType } from "@/serverApi/v3";
 import {
+	isEnum,
 	isMongoId,
 	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
+	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
-import { ToolContextType } from "@/store/external-tool/tool-context-type.enum";
+import { Route, RouteConfig } from "vue-router";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 // routes configuration sorted in alphabetical order
 export const routes: Array<RouteConfig> = [
@@ -65,6 +68,19 @@ export const routes: Array<RouteConfig> = [
 		}),
 	},
 	{
+		path: "/administration/school-settings/provisioning-options",
+		component: () =>
+			import("@/components/administration/ProvisioningOptionsPage.vue"),
+		name: "provivisioning-options-page",
+		beforeEnter: createPermissionGuard([
+			"school_system_view",
+			"school_system_edit",
+		]),
+		props: (route: Route) => ({
+			systemId: route.query.systemId,
+		}),
+	},
+	{
 		path: "/administration/students",
 		component: () => import("@/pages/administration/StudentOverview.page.vue"),
 		name: "administration-students",
@@ -93,6 +109,25 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("@/pages/administration/TeacherCreate.page.vue"),
 		name: "administration-teachers-new",
 		beforeEnter: createPermissionGuard(["teacher_create"]),
+	},
+	{
+		path: "/administration/groups/classes",
+		component: () => import("@/pages/administration/ClassOverview.page.vue"),
+		name: "administration-groups-classes",
+		beforeEnter: createPermissionGuard(["class_list", "group_list"]),
+		props: (route: Route) => ({
+			tab: route.query.tab,
+		}),
+	},
+	{
+		path: `/administration/groups/classes/:groupId(${REGEX_ID})`,
+		name: "administration-groups-classes-members",
+		component: async () =>
+			(await import("@page-class-members")).ClassMembersPage,
+		beforeEnter: createPermissionGuard(["group_view"]),
+		props: (route: Route) => ({
+			groupId: route.params.groupId,
+		}),
 	},
 	{
 		path: "/cfiles",
@@ -150,22 +185,7 @@ export const routes: Array<RouteConfig> = [
 		component: () =>
 			import("@/pages/user-login-migration/UserLoginMigrationConsent.page.vue"),
 		name: "user-login-migration-consent",
-		beforeEnter: validateQueryParameters({
-			sourceSystem: (value: unknown) => !isDefined(value) || isMongoId(value),
-			targetSystem: isMongoId,
-			origin: (value: unknown, to: Route) =>
-				!isDefined(value) ||
-				(isMongoId(value) &&
-					(value === to.query.sourceSystem || value === to.query.targetSystem)),
-		}),
-		props: (route: Route) => ({
-			sourceSystem: route.query.sourceSystem,
-			targetSystem: route.query.targetSystem,
-			origin: route.query.origin,
-			mandatory: route.query.mandatory === "true",
-		}),
 		meta: {
-			isPublic: true,
 			layout: Layouts.LOGGED_OUT,
 		},
 	},
@@ -175,14 +195,12 @@ export const routes: Array<RouteConfig> = [
 			import("@/pages/user-login-migration/UserLoginMigrationError.page.vue"),
 		name: "user-login-migration-error",
 		beforeEnter: validateQueryParameters({
-			targetSystem: isMongoId,
 			sourceSchoolNumber: (value: unknown) =>
 				!isDefined(value) || isOfficialSchoolNumber(value),
 			targetSchoolNumber: (value: unknown) =>
 				!isDefined(value) || isOfficialSchoolNumber(value),
 		}),
 		props: (route: Route) => ({
-			targetSystem: route.query.targetSystem,
 			sourceSchoolNumber: route.query.sourceSchoolNumber,
 			targetSchoolNumber: route.query.targetSchoolNumber,
 		}),
@@ -226,14 +244,11 @@ export const routes: Array<RouteConfig> = [
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
-		component: () => import("../pages/ColumnBoard.page.vue"),
+		component: async () => (await import("@page-board")).ColumnBoardPage,
 		name: "rooms-board",
-	},
-	{
-		path: `/rooms/:id(${REGEX_ID})/create-beta-task`,
-		component: () => import("../pages/tasks/TaskCard.page.vue"),
-		name: "rooms-beta-task-new",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
+		props: (route: Route) => ({
+			boardId: route.params.id,
+		}),
 	},
 	{
 		path: "/rooms-list",
@@ -251,18 +266,6 @@ export const routes: Array<RouteConfig> = [
 		name: "tasks",
 	},
 	{
-		path: `/tasks/create-beta-task`,
-		component: () => import("../pages/tasks/TaskCard.page.vue"),
-		name: "tasks-beta-task-new",
-		beforeEnter: createPermissionGuard(["task_card_edit"]),
-	},
-	{
-		path: `/beta-task/:id(${REGEX_ID})`,
-		component: () => import("../pages/tasks/TaskCard.page.vue"),
-		name: "beta-task-view-edit",
-		beforeEnter: createPermissionGuard(["task_card_view"]),
-	},
-	{
 		path: `/tools/context/tool-configuration`,
 		component: () =>
 			import(
@@ -273,23 +276,38 @@ export const routes: Array<RouteConfig> = [
 			createPermissionGuard(["context_tool_admin"]),
 			validateQueryParameters({
 				contextId: isMongoId,
-				contextType: (value: any) =>
-					Object.values(ToolContextType).includes(value),
+				contextType: isEnum(ToolContextType),
 			}),
 		]),
+		children: [
+			{
+				path: ":configId",
+				name: "context-external-tool-configuration-edit",
+			},
+		],
 		props: (route: Route) => ({
 			contextId: route.query.contextId,
 			contextType: route.query.contextType,
+			configId: route.params.configId,
 		}),
 	},
 	{
-		// deprecated?
-		path: "/termsofuse",
-		component: () => import("@/pages/TermsOfUse.vue"),
-		name: "termsofuse",
-		meta: {
-			isPublic: true,
-			layout: Layouts.LOGGED_OUT,
-		},
+		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
+		component: () => import("../pages/h5p/H5PPlayer.page.vue"),
+		name: "h5pPlayer",
+		//beforeEnter: createPermissionGuard(["H5P"]),
+	},
+	{
+		path: `/h5p/editor/:id(${REGEX_H5P_ID})?`,
+		component: () => import("../pages/h5p/H5PEditor.page.vue"),
+		name: "h5pEditor",
+		beforeEnter: validateQueryParameters({
+			parentType: isEnum(H5PContentParentType),
+			parentId: isMongoId,
+		}),
+		props: (route: Route) => ({
+			parentId: route.query.parentId,
+			parentType: route.query.parentType,
+		}),
 	},
 ];

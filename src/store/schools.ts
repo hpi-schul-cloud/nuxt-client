@@ -1,58 +1,61 @@
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { $axios } from "@/utils/api";
-import { authModule } from "@/store";
-import { FederalState, OauthMigration, School, Year } from "./types/schools";
 import {
-	MigrationBody,
-	MigrationResponse,
 	SchoolApiFactory,
 	SchoolApiInterface,
+	SchoolFeature,
+	SchoolResponse,
+	SystemsApiFactory,
+	SystemsApiInterface,
 	UserImportApiFactory,
 	UserImportApiInterface,
-	ValidationError,
 } from "@/serverApi/v3";
-import { AxiosError, AxiosResponse } from "axios";
-import { ApplicationError } from "./types/application-error";
+import { authModule, envConfigModule } from "@/store";
+import { $axios } from "@/utils/api";
+import { AxiosError } from "axios";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { useApplicationError } from "../composables/application-error.composable";
+import { ApplicationError } from "./types/application-error";
+import { FederalState, School, Year } from "./types/schools";
 
 /**
  * The Api expects and returns a List of Feature-names. In the Frontend it is mapped to an object indexed by the feature-names.
  * This Type represents this change to the School entity.
  */
-declare type SchoolPayload = { features: string[] } & Omit<School, "features">;
+declare type SchoolPayload = {
+	features: string[];
+	enableStudentTeamCreation: boolean;
+} & Omit<School, "features">;
 
-const SCHOOL_FEATURES: (keyof School["features"])[] = [
-	"rocketChat",
-	"videoconference",
-	"studentVisibility", // deprecated
-	"ldapUniventionMigrationSchool",
-	"showOutdatedUsers",
-];
+const SCHOOL_FEATURES = Object.values(SchoolFeature);
 
-function transformSchoolServerToClient(school: SchoolPayload): School {
+function transformSchoolServerToClient(school: SchoolResponse): School {
 	const featureObject: Partial<School["features"]> = {};
+
 	SCHOOL_FEATURES.forEach((schoolFeature) => {
-		if (school.features.includes(schoolFeature)) {
+		if (school.features?.includes(schoolFeature)) {
 			featureObject[schoolFeature] = true;
 		} else {
 			featureObject[schoolFeature] = false;
 		}
 	});
+
 	return { ...school, features: featureObject as Required<School["features"]> };
 }
 
 function transformSchoolClientToServer(school: School): SchoolPayload {
-	const featureArray: string[] = [];
+	const features: string[] = [];
+	let enableStudentTeamCreation = false;
+
 	SCHOOL_FEATURES.forEach((schoolFeature) => {
-		if (school.features[schoolFeature]) {
-			featureArray.push(schoolFeature);
+		// This extra check for isTeamCreationByStudentsEnabled is needed for compatibility with api/v1.
+		// It can be removed when PATCH school is migrated to api/v3.
+		if (schoolFeature === SchoolFeature.IsTeamCreationByStudentsEnabled) {
+			enableStudentTeamCreation = true;
+		} else if (school.features[schoolFeature]) {
+			features.push(schoolFeature);
 		}
 	});
-	return { ...school, features: featureArray };
-}
 
-function isGracePeriodError(error: AxiosError<ValidationError>): boolean {
-	return !!error.response?.data.message.startsWith("grace_period_expired");
+	return { ...school, enableStudentTeamCreation, features };
 }
 
 @Module({
@@ -62,22 +65,32 @@ function isGracePeriodError(error: AxiosError<ValidationError>): boolean {
 })
 export default class SchoolsModule extends VuexModule {
 	school: School = {
-		_id: "",
+		id: "",
 		name: "",
+		logo_name: "",
 		fileStorageType: "",
-		federalState: "",
-		county: {
-			antaresKey: "",
-			_id: "",
-			countyId: "",
-			name: "",
+		federalState: {
 			id: "",
+			counties: [],
+			name: "",
+			abbreviation: "",
+			logoUrl: "",
 		},
-		systems: [],
+		county: {
+			id: "",
+			antaresKey: "",
+			countyId: 0,
+			name: "",
+		},
+		systemIds: [],
 		updatedAt: "",
 		createdAt: "",
-		__v: 0,
-		currentYear: "",
+		currentYear: {
+			id: "",
+			name: "",
+			startDate: "",
+			endDate: "",
+		},
 		purpose: "",
 		features: {
 			rocketChat: false,
@@ -85,40 +98,36 @@ export default class SchoolsModule extends VuexModule {
 			studentVisibility: false,
 			ldapUniventionMigrationSchool: false,
 			showOutdatedUsers: false,
+			enableLdapSyncDuringMigration: false,
+			isTeamCreationByStudentsEnabled: false,
+			oauthProvisioningEnabled: false,
+			nextcloud: false,
 		},
-		enableStudentTeamCreation: false,
 		permissions: {},
 		inMaintenance: false,
 		inUserMigration: false,
-		documentBaseDir: "",
 		isExternal: false,
-		id: "",
-		years: {},
-		isTeamCreationByStudentsEnabled: false,
-	};
-	currentYear: Year = {
-		_id: "",
-		name: "",
-		startDate: "",
-		endDate: "",
-		__v: 0,
-		years: {},
-		isTeamCreationByStudentsEnabled: false,
-	};
-	federalState: FederalState = {
-		_id: "",
-		counties: [],
-		name: "",
-		abbreviation: "",
-		logoUrl: "",
-		__v: 0,
-	};
-	oauthMigration: OauthMigration = {
-		enableMigrationStart: false,
-		oauthMigrationPossible: false,
-		oauthMigrationMandatory: false,
-		oauthMigrationFinished: "",
-		oauthMigrationFinalFinish: "",
+		years: {
+			nextYear: {
+				id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+			},
+			lastYear: {
+				id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+			},
+			activeYear: {
+				id: "",
+				name: "",
+				startDate: "",
+				endDate: "",
+			},
+			schoolYears: [],
+		},
 	};
 	systems: any[] = [];
 	loading = false;
@@ -134,16 +143,6 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setCurrentYear(currentYear: Year): void {
-		this.currentYear = currentYear;
-	}
-
-	@Mutation
-	setFederalState(federalState: FederalState): void {
-		this.federalState = federalState;
-	}
-
-	@Mutation
 	setSystems(systems: any[]): void {
 		this.systems = systems;
 	}
@@ -151,11 +150,6 @@ export default class SchoolsModule extends VuexModule {
 	@Mutation
 	setLoading(loading: boolean): void {
 		this.loading = loading;
-	}
-
-	@Mutation
-	setOauthMigration(state: OauthMigration): void {
-		this.oauthMigration = state;
 	}
 
 	@Mutation
@@ -167,12 +161,12 @@ export default class SchoolsModule extends VuexModule {
 		return this.school;
 	}
 
-	get getCurrentYear(): Year {
-		return this.currentYear;
+	get getCurrentYear(): Year | undefined {
+		return this.school.currentYear;
 	}
 
 	get getFederalState(): FederalState {
-		return this.federalState;
+		return this.school.federalState;
 	}
 
 	get getSystems(): any[] {
@@ -195,6 +189,7 @@ export default class SchoolsModule extends VuexModule {
 		return this.systems.some(
 			(system) =>
 				system.type === "tsp-school" ||
+				system.type === "oauth" ||
 				(system.type === "ldap" &&
 					(system.ldapConfig.provider === "iserv-idm" ||
 						system.ldapConfig.provider === "univention" ||
@@ -202,23 +197,18 @@ export default class SchoolsModule extends VuexModule {
 		);
 	}
 
-	get getOauthMigration(): OauthMigration {
-		return this.oauthMigration;
-	}
-
 	@Action
 	async fetchSchool(): Promise<void> {
 		this.setLoading(true);
-
 		if (authModule.getUser?.schoolId) {
 			try {
 				const school = (
-					await $axios.get(`/v1/schools/${authModule.getUser?.schoolId} `)
+					await this.schoolApi.schoolControllerGetSchoolById(
+						authModule.getUser?.schoolId
+					)
 				).data;
 
 				this.setSchool(transformSchoolServerToClient(school));
-
-				await this.fetchCurrentYear();
 
 				this.setLoading(false);
 			} catch (error: unknown) {
@@ -236,58 +226,11 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async fetchFederalState(): Promise<void> {
-		this.setLoading(true);
-		try {
-			const data = (
-				await $axios.get<FederalState>(
-					`/v1/federalStates/${this.school.federalState}`
-				)
-			).data;
-
-			this.setFederalState(data);
-			this.setLoading(false);
-		} catch (error: unknown) {
-			if (error instanceof AxiosError) {
-				this.setError(
-					useApplicationError().createApplicationError(
-						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
-					)
-				);
-			}
-			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async fetchCurrentYear(): Promise<void> {
-		this.setLoading(true);
-		try {
-			const currentYear = (
-				await $axios.get<Year>(`/v1/years/${this.school.currentYear}`)
-			).data;
-			this.setCurrentYear(currentYear);
-			this.setLoading(false);
-		} catch (error: unknown) {
-			if (error instanceof AxiosError) {
-				this.setError(
-					useApplicationError().createApplicationError(
-						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
-					)
-				);
-			}
-			this.setLoading(false);
-		}
-	}
-
-	@Action
 	async fetchSystems(): Promise<void> {
 		this.setLoading(true);
 		try {
 			// TODO - monitor if not checking for ldap key causes any errors in the future
-			const systemIds = this.school.systems;
+			const systemIds = this.school.systemIds;
 
 			const requests = systemIds.map((systemId) =>
 				$axios.get(`v1/systems/${systemId}`)
@@ -317,7 +260,9 @@ export default class SchoolsModule extends VuexModule {
 			await $axios.patch(`/v1/schools/${school.id}`, school);
 			// TODO: Patch returns old data in response since it doesn't have enough time to sync between db instances
 			// Get request can be removed after https://ticketsystem.dbildungscloud.de/browse/BC-3449 (need to be retested)
-			const data = (await $axios.get(`/v1/schools/${school.id}`)).data;
+			const data = (
+				await this.schoolApi.schoolControllerGetSchoolById(school.id)
+			).data;
 
 			this.setSchool(transformSchoolServerToClient(data));
 			this.setLoading(false);
@@ -338,13 +283,17 @@ export default class SchoolsModule extends VuexModule {
 	async deleteSystem(systemId: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			await $axios.delete(`v1/systems/${systemId}`);
+			if (envConfigModule.getEnv.FEATURE_NEST_SYSTEMS_API_ENABLED) {
+				await this.systemsApi.systemControllerDeleteSystem(systemId);
+			} else {
+				await $axios.delete(`v1/systems/${systemId}`);
+			}
 
 			const updatedSystemsList = this.systems.filter(
 				(system) => system._id !== systemId
 			);
-
 			this.setSystems(updatedSystemsList);
+
 			await this.fetchSchool();
 			this.setLoading(false);
 		} catch (error: unknown) {
@@ -415,72 +364,11 @@ export default class SchoolsModule extends VuexModule {
 		}
 	}
 
-	@Action
-	async fetchSchoolOAuthMigration(): Promise<void> {
-		if (!this.getSchool.id) {
-			await this.fetchSchool();
-		}
-
-		try {
-			const oauthMigration: AxiosResponse<MigrationResponse> =
-				await this.schoolApi.schoolControllerGetMigration(this.getSchool.id);
-			this.setOauthMigration({
-				enableMigrationStart: oauthMigration.data.enableMigrationStart,
-				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
-				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
-				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
-				oauthMigrationFinalFinish:
-					oauthMigration.data.oauthMigrationFinalFinish,
-			});
-		} catch (error: unknown) {
-			if (error instanceof AxiosError) {
-				this.setError(
-					useApplicationError().createApplicationError(
-						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
-					)
-				);
-			}
-		}
-	}
-
-	@Action
-	async setSchoolOauthMigration(migrationFlags: MigrationBody): Promise<void> {
-		if (!this.school._id) {
-			return;
-		}
-
-		try {
-			const oauthMigration: AxiosResponse<MigrationResponse> =
-				await this.schoolApi.schoolControllerSetMigration(
-					this.school._id,
-					migrationFlags
-				);
-			this.setOauthMigration({
-				enableMigrationStart: oauthMigration.data.enableMigrationStart,
-				oauthMigrationPossible: !!oauthMigration.data.oauthMigrationPossible,
-				oauthMigrationMandatory: !!oauthMigration.data.oauthMigrationMandatory,
-				oauthMigrationFinished: oauthMigration.data.oauthMigrationFinished,
-				oauthMigrationFinalFinish:
-					oauthMigration.data.oauthMigrationFinalFinish,
-			});
-		} catch (error: unknown) {
-			if (error instanceof AxiosError) {
-				const translationKey: string | undefined = isGracePeriodError(error)
-					? "pages.administration.school.index.error.gracePeriodExceeded"
-					: undefined;
-
-				this.setError(
-					useApplicationError().createApplicationError(
-						error.response?.status ?? 500,
-						translationKey
-					)
-				);
-			}
-		}
-	}
-
 	private get importUserApi(): UserImportApiInterface {
 		return UserImportApiFactory(undefined, "/v3", $axios);
+	}
+
+	private get systemsApi(): SystemsApiInterface {
+		return SystemsApiFactory(undefined, "/v3", $axios);
 	}
 }

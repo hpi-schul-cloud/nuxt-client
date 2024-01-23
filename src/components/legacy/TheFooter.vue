@@ -5,9 +5,9 @@
 			<template v-for="(link, index) in links">
 				<span v-if="index !== 0" :key="index"> - </span>
 				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">
-						{{ link.text }}
-					</base-link>
+					<base-link :key="link.text" class="footer-link" v-bind="link">{{
+						link.text
+					}}</base-link>
 				</template>
 				<template v-else>
 					<span :key="link.text">{{ link.text }}: </span>
@@ -41,13 +41,9 @@
 </template>
 
 <script>
-import { authModule, envConfigModule, filePathsModule } from "@/store";
+import { authModule, envConfigModule } from "@/store";
 
 export default {
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
 	computed: {
 		school() {
 			return authModule.getSchool;
@@ -62,13 +58,13 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: filePathsModule.getSpecificFiles.termsOfUseSchool,
+					href: "/termsofuse",
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
 				},
 				{
-					to: "/datenschutz",
+					to: "/privacypolicy",
 					text: this.$t("components.legacy.footer.privacy_policy"),
 					target: "_blank",
 					rel: "noopener",
@@ -96,9 +92,6 @@ export default {
 			});
 			return links;
 		},
-	},
-	mounted() {
-		// console.log(filePathsModule.getSpecificFiles.termsOfUseSchool);
 	},
 };
 </script>

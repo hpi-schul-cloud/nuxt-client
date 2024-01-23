@@ -27,7 +27,6 @@ export default class AuthModule extends VuexModule {
 	payload = null;
 	user: User | null = {
 		_id: "",
-		__v: 0,
 		firstName: "",
 		lastName: "",
 		email: "",
@@ -44,7 +43,6 @@ export default class AuthModule extends VuexModule {
 				createdAt: "",
 				roles: [],
 				permissions: [],
-				__v: 2,
 				displayName: "",
 				id: "",
 			},
@@ -276,8 +274,8 @@ export default class AuthModule extends VuexModule {
 	@Action
 	logout(redirectUrl = "/logout"): void {
 		localStorage.clear();
-		this.context.commit("clearAuthData");
-		window.location.assign(redirectUrl);
+		delete $axios.defaults.headers.common["Authorization"];
+		window.location.replace(redirectUrl);
 	}
 
 	private get userApi(): UserApiInterface {

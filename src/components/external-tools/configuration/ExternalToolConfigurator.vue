@@ -1,9 +1,11 @@
 <template>
 	<div>
-		<v-select
+		<v-autocomplete
 			:label="t('pages.tool.select.label')"
-			item-title="name"
+			item-text="name"
 			item-value="id"
+			hide-selected
+			clearable
 			:items="configurationTemplates"
 			v-model="selectedTemplate"
 			:no-data-text="t('common.nodata')"
@@ -11,7 +13,7 @@
 			:disabled="isInEditMode"
 			:loading="loading"
 			data-testId="configuration-select"
-			@change="fillParametersWithDefaultValues"
+			@change="onChangeSelection"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
@@ -22,16 +24,29 @@
 				/>
 			</template>
 			<template #item="{ item }">
-				<external-tool-selection-row :item="item" />
+				<external-tool-selection-row
+					data-testId="configuration-select-item"
+					:item="item"
+				/>
 			</template>
-		</v-select>
-		<template v-if="selectedTemplate && selectedTemplate.parameters.length > 0">
-			<external-tool-config-settings
-				:template="selectedTemplate"
-				v-model="parameterConfiguration"
-			/>
-		</template>
-		<v-spacer class="mt-10"></v-spacer>
+		</v-autocomplete>
+		<h2
+			v-if="
+				displaySettingsTitle &&
+				selectedTemplate &&
+				(!isAboveParametersSlotEmpty || selectedTemplate.parameters.length > 0)
+			"
+			class="text-h4 mb-10"
+		>
+			{{ $t("pages.tool.settings") }}
+		</h2>
+		<slot name="aboveParameters" :selectedTemplate="selectedTemplate" />
+		<external-tool-config-settings
+			v-if="selectedTemplate && selectedTemplate.parameters.length > 0"
+			:template="selectedTemplate"
+			v-model="parameterConfiguration"
+		/>
+		<v-spacer class="mt-10" />
 		<v-alert v-if="error && error.message" light prominent text type="error">
 			{{ t(getBusinessErrorTranslationKey(error)) }}
 		</v-alert>
@@ -64,10 +79,14 @@
 <script lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import { useI18n } from "@/composables/i18n.composable";
 import {
 	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
+	ToolParameter,
+	ToolParameterEntry,
 } from "@/store/external-tool";
+import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
 import {
 	computed,
@@ -77,16 +96,15 @@ import {
 	Ref,
 	ref,
 	toRef,
+	useSlots,
 	watch,
 } from "vue";
-import { useI18n } from "@/composables/i18n.composable";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 
 export default defineComponent({
-	emits: ["cancel", "save"],
+	emits: ["cancel", "save", "change"],
 	components: {
 		ExternalToolConfigSettings,
 		ExternalToolSelectionRow,
@@ -105,9 +123,15 @@ export default defineComponent({
 		loading: {
 			type: Boolean,
 		},
+		displaySettingsTitle: {
+			type: Boolean,
+			default: true,
+		},
 	},
 	setup(props, { emit }) {
 		const { t } = useI18n();
+
+		const slots = useSlots();
 
 		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
 
@@ -120,6 +144,10 @@ export default defineComponent({
 
 		const isInEditMode: ComputedRef<boolean> = computed(
 			() => !!loadedConfiguration.value
+		);
+
+		const isAboveParametersSlotEmpty: ComputedRef<boolean> = computed(
+			() => slots.aboveParameters?.({ selectedTemplate }) === undefined
 		);
 
 		const selectedTemplate: Ref<ExternalToolConfigurationTemplate | undefined> =
@@ -136,7 +164,37 @@ export default defineComponent({
 		};
 
 		const onSave = async () => {
-			emit("save", selectedTemplate.value, parameterConfiguration.value);
+			if (selectedTemplate.value) {
+				const parameterEntries: ToolParameterEntry[] = mapValidParameterEntries(
+					selectedTemplate.value
+				);
+
+				emit("save", selectedTemplate.value, parameterEntries);
+			}
+		};
+
+		const mapValidParameterEntries = (
+			template: ExternalToolConfigurationTemplate
+		) => {
+			const parameterEntries: ToolParameterEntry[] = template.parameters
+				.map(
+					(parameter: ToolParameter, index: number): ToolParameterEntry => ({
+						name: parameter.name,
+						value: parameterConfiguration.value[index],
+					})
+				)
+				.filter(
+					(parameterEntry: ToolParameterEntry) =>
+						parameterEntry.value !== undefined && parameterEntry.value !== ""
+				);
+
+			return parameterEntries;
+		};
+
+		const onChangeSelection = async () => {
+			fillParametersWithDefaultValues();
+
+			emit("change", selectedTemplate.value);
 		};
 
 		const populateEditMode = (configuration: ConfigurationTypes) => {
@@ -191,9 +249,11 @@ export default defineComponent({
 			selectedTemplate,
 			onCancel,
 			onSave,
+			onChangeSelection,
 			isInEditMode,
 			fillParametersWithDefaultValues,
 			parameterConfiguration,
+			isAboveParametersSlotEmpty,
 		};
 	},
 });

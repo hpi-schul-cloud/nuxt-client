@@ -14,7 +14,7 @@
 					data-testid="input_create-student_birthdate"
 					:class="{ hideCurrentDate: !date }"
 					type="date"
-				></v-text-field>
+				/>
 				<v-checkbox
 					v-model="sendRegistration"
 					name="switch"
@@ -28,7 +28,7 @@
 					v-if="businessError"
 					:message="$t('pages.administration.students.new.error')"
 					type="bc-error"
-				></info-message>
+				/>
 			</template>
 		</form-create-user>
 	</default-wireframe>
@@ -40,7 +40,7 @@ import InfoMessage from "@/components/atoms/InfoMessage";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { inputRangeDate } from "@/plugins/datetime";
 import { notifierModule } from "@/store";
-
+import { buildPageTitle } from "@/utils/pageTitle";
 import { mapGetters } from "vuex";
 
 export default {
@@ -106,9 +106,9 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t("pages.administration.students.new.title")} - ${
-			this.$theme.short_name
-		}`;
+		document.title = buildPageTitle(
+			this.$t("pages.administration.students.new.title")
+		);
 	},
 };
 </script>

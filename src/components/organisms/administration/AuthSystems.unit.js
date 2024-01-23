@@ -1,8 +1,7 @@
 import AuthSystems from "./AuthSystems";
-import { schoolsModule, envConfigModule, authModule } from "@/store";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mockUser } from "@@/tests/test-utils/mockObjects";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
@@ -17,7 +16,12 @@ const generateProps = () => ({
 			oauthConfig: { provider: "iserv-idm" },
 		}, // deletable: false, editable: false
 		{ _id: "3", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
-		{ _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }, // deletable: true, editable: false
+		{
+			_id: "4",
+			type: "oauth",
+			oauthConfig: { provider: "sanis-idm" },
+			alias: "SANIS",
+		}, // deletable: true, editable: false
 	],
 	confirmDeleteDialog: {
 		isOpen: false,
@@ -220,15 +224,15 @@ describe("AuthSystems", () => {
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
-			// { _id: "1234", type: "sample system" }, // deletable: true, editable: false
+			// { _id: "1", type: "sample system" }, // deletable: false, editable: false
 			expect(
 				tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
-			).toStrictEqual(true);
+			).toStrictEqual(false);
 			expect(
 				tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(false);
 
-			// { _id: "12345", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
+			// { _id: "2", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
 			expect(
 				tableCell.wrappers[5].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(false);
@@ -236,13 +240,72 @@ describe("AuthSystems", () => {
 				tableCell.wrappers[5].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(false);
 
-			// { _id: "123456", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
+			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
 			expect(
 				tableCell.wrappers[8].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(true);
 			expect(
 				tableCell.wrappers[8].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(true);
+
+			// { _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }, // deletable: false, editable: false
+			expect(
+				tableCell.wrappers[11].find(searchStrings.deleteSystemButton).exists()
+			).toStrictEqual(false);
+			expect(
+				tableCell.wrappers[11].find(searchStrings.editSystemButton).exists()
+			).toStrictEqual(true);
+		});
+
+		it("should redirect to ldap config page from edit button of general ldap system", () => {
+			authModule.setUser({
+				...mockUser,
+				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
+			});
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+
+			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
+
+			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
+			expect(
+				tableCell.wrappers[8].findComponent("routerlink-stub").props("to")
+			).toEqual("/administration/ldap/config?id=3");
+		});
+
+		it("should display system edit button and redirect to correct config page ", () => {
+			authModule.setUser({
+				...mockUser,
+				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
+			});
+			const wrapper = mount(AuthSystems, {
+				...createComponentMocks({
+					i18n: true,
+					vuetify: true,
+				}),
+				propsData: generateProps(),
+			});
+
+			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
+
+			// { _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }
+			expect(
+				tableCell.wrappers[11].find(searchStrings.editSystemButton).exists()
+			).toStrictEqual(true);
+			expect(
+				tableCell.wrappers[11].findComponent("routerlink-stub").props("to")
+			).toEqual(
+				"/administration/school-settings/provisioning-options?systemId=4"
+			);
+			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
+			expect(
+				tableCell.wrappers[8].findComponent("routerlink-stub").props("to")
+			).toEqual("/administration/ldap/config?id=3");
 		});
 
 		it("should NOT display the dialog", async () => {
@@ -338,7 +401,7 @@ describe("AuthSystems", () => {
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(false);
 			deleteButton.trigger("click");
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(true);
-			expect(wrapper.vm.$data.confirmDeleteDialog.systemId).toStrictEqual("1");
+			expect(wrapper.vm.$data.confirmDeleteDialog.systemId).toStrictEqual("3");
 		});
 	});
 	describe("display system buttons", () => {

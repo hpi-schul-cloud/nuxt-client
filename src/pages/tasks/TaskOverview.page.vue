@@ -6,14 +6,16 @@
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
 import AuthModule from "@/store/auth";
 import TasksModule from "@/store/tasks";
-import { AUTH_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useTitle } from "@vueuse/core";
 import { computed, defineComponent, inject, onMounted, ref } from "vue";
+import { useI18n } from "@/composables/i18n.composable";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default defineComponent({
 	components: { TasksDashboardMain },
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const tasksModule = inject<TasksModule | undefined>("tasksModule");
 
@@ -21,7 +23,7 @@ export default defineComponent({
 			throw new Error("tasksModule Module undefined"); // NUXT_REMOVAL use application error
 		}
 
-		useTitle(i18n.t("common.words.tasks").toString());
+		useTitle(buildPageTitle(t("common.words.tasks")));
 
 		onMounted(() => tasksModule.fetchAllTasks());
 

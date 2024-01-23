@@ -298,15 +298,15 @@ export default {
 				this.sortOrder === "asc"
 					? `, ${this.$t(
 							"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.asc"
-					  )}`
+						)}`
 					: `, ${this.$t(
 							"components.organisms.DataTable.TableHeadRow.ariaLabel.sortOrder.desc"
-					  )}`;
+						)}`;
 
 			const sortableText = column.sortable
 				? `, ${this.$t(
 						"components.organisms.DataTable.TableHeadRow.ariaLabel.changeSorting"
-				  )}`
+					)}`
 				: "";
 			return column.label + sortOrderText + sortableText;
 		},
@@ -412,7 +412,9 @@ export default {
 	button:not(.is-none):focus {
 		z-index: var(--layer-fab);
 		outline: none;
-		box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
+		box-shadow:
+			0 0 0 0 var(--v-white-base),
+			0 0 0 3px var(--button-background);
 	}
 }
 

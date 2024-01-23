@@ -22,4 +22,6 @@ export interface ToolParameter {
 	type: ToolParameterType;
 
 	isOptional: boolean;
+
+	isProtected: boolean;
 }

@@ -14,7 +14,7 @@
 		:full-width="false"
 	>
 		<div>
-			<form-news @save="create" @cancel="cancelHandler"> </form-news>
+			<form-news @save="create" @cancel="cancelHandler" />
 		</div>
 	</default-wireframe>
 </template>
@@ -23,6 +23,7 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import FormNews from "@/components/organisms/FormNews";
 import { newsModule, notifierModule } from "@/store";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -69,7 +70,6 @@ export default {
 					});
 				}
 			} catch (e) {
-				console.error(e);
 				notifierModule.show({
 					text: this.$t("components.organisms.FormNews.errors.create"),
 					status: "error",
@@ -84,7 +84,7 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = this.$t("pages.news.new.title").toString();
+		document.title = buildPageTitle(this.$t("pages.news.new.title"));
 	},
 };
 </script>

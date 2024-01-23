@@ -1,16 +1,19 @@
 import {
 	CustomParameterEntryParam,
+	SchoolExternalToolConfigurationStatusResponse,
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolConfigurationTemplateResponse,
+	SchoolExternalToolMetadataResponse,
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
-import { ToolConfigurationStatusMapping } from "@/composables/external-tool-mappings.composable";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolSave,
 } from "../school-external-tool";
+import { SchoolExternalToolConfigurationStatus } from "../school-external-tool-configuration-status";
+import { SchoolExternalToolMetadata } from "../school-external-tool-metadata";
 import { SchoolExternalToolConfigurationTemplate } from "../tool-configuration-template";
 import { ToolParameter } from "../tool-parameter";
 import { ToolParameterEntry } from "../tool-parameter-entry";
@@ -30,6 +33,7 @@ export class SchoolExternalToolMapper {
 					ExternalToolMapper.mapToToolParameter(parameter)
 			),
 			version: response.version,
+			isDeactivated: false,
 		};
 
 		return mapped;
@@ -58,6 +62,7 @@ export class SchoolExternalToolMapper {
 					CommonToolMapper.mapToCustomParameterEntryParam(parameter)
 			),
 			version: schoolExternalTool.version,
+			isDeactivated: schoolExternalTool.isDeactivated,
 		};
 
 		return mapped;
@@ -72,11 +77,12 @@ export class SchoolExternalToolMapper {
 			schoolId: response.schoolId,
 			toolId: response.toolId,
 			version: response.toolVersion,
-			status: ToolConfigurationStatusMapping[response.status],
+			status: this.mapSchoolToolConfigurationStatus(response.status),
 			parameters: response.parameters.map(
 				(parameter): ToolParameterEntry =>
 					CommonToolMapper.mapToToolParameterEntry(parameter)
 			),
+			isDeactivated: response.status.isDeactivated,
 		};
 
 		return mapped;
@@ -84,19 +90,16 @@ export class SchoolExternalToolMapper {
 
 	static mapTemplateToSchoolExternalToolSave(
 		template: SchoolExternalToolConfigurationTemplate,
-		parameterConfiguration: (string | undefined)[],
-		schoolId: string
+		parameterConfiguration: ToolParameterEntry[],
+		schoolId: string,
+		isDeactivated: boolean
 	): SchoolExternalToolSave {
 		const mapped: SchoolExternalToolSave = {
 			schoolId: schoolId,
 			toolId: template.externalToolId,
 			version: template.version,
-			parameters: template.parameters.map(
-				(parameter, index): ToolParameterEntry => ({
-					name: parameter.name,
-					value: parameterConfiguration[index],
-				})
-			),
+			parameters: parameterConfiguration,
+			isDeactivated,
 		};
 
 		return mapped;
@@ -109,6 +112,28 @@ export class SchoolExternalToolMapper {
 			(toolResponse: SchoolExternalToolResponse) =>
 				SchoolExternalToolMapper.mapToSchoolExternalTool(toolResponse)
 		);
+
+		return mapped;
+	}
+
+	static mapSchoolExternalToolMetadata(
+		response: SchoolExternalToolMetadataResponse
+	): SchoolExternalToolMetadata {
+		const mapped: SchoolExternalToolMetadata = {
+			course: response.contextExternalToolCountPerContext.course,
+			boardElement: response.contextExternalToolCountPerContext.boardElement,
+		};
+
+		return mapped;
+	}
+
+	static mapSchoolToolConfigurationStatus(
+		schoolToolStatus: SchoolExternalToolConfigurationStatusResponse
+	): SchoolExternalToolConfigurationStatus {
+		const mapped: SchoolExternalToolConfigurationStatus = {
+			isOutdatedOnScopeSchool: schoolToolStatus.isOutdatedOnScopeSchool,
+			isDeactivated: schoolToolStatus.isDeactivated,
+		};
 
 		return mapped;
 	}

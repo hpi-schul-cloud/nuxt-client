@@ -1,3 +1,7 @@
+// NUXT_REMOVAL change how global components are handled
+import "@/components/base/_globals";
+import "@/plugins/directives";
+import "@/plugins/polyfills";
 import {
 	accountsModule,
 	applicationErrorModule,
@@ -8,9 +12,9 @@ import {
 	contextExternalToolsModule,
 	copyModule,
 	envConfigModule,
-	externalToolsModule,
 	filePathsModule,
 	finishedTasksModule,
+	groupModule,
 	importUsersModule,
 	loadingStateModule,
 	newsModule,
@@ -23,30 +27,58 @@ import {
 	shareModule,
 	statusAlertsModule,
 	systemsModule,
-	taskCardModule,
 	tasksModule,
+	termsOfUseModule,
 	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
+
+import "@/styles/global.scss";
+// NUXT_REMOVAL set this based on the tenant theme
+import themeConfig from "@/theme.config";
+import { htmlConfig } from "@feature-render-html";
+import axios from "axios";
+import Cookies from "universal-cookie";
 import Vue from "vue";
+import VueDOMPurifyHTML from "vue-dompurify-html";
+// NUXT_REMOVAL try to solve without vue-mq dependency
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import VueMq from "vue-mq";
+import Vuelidate from "vuelidate";
 import App from "./App.vue";
+import { handleApplicationError } from "./plugins/application-error-handler";
 import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
+import { initializeAxios } from "./utils/api";
+
+import {
+	APPLICATION_ERROR_KEY,
+	AUTH_MODULE_KEY,
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	GROUP_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+	PRIVACY_POLICY_MODULE_KEY,
+	ROOM_MODULE_KEY,
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
+	STATUS_ALERTS_MODULE_KEY,
+	SYSTEMS_MODULE_KEY,
+	TERMS_OF_USE_MODULE_KEY,
+	USER_LOGIN_MIGRATION_MODULE_KEY,
+	VIDEO_CONFERENCE_MODULE_KEY,
+} from "./utils/inject";
 
 Vue.config.productionTip = false;
 
 Vue.config.errorHandler = handleApplicationError;
 
-// NUXT_REMOVAL set this based on the tenant theme
-import themeConfig from "@/theme.config";
 Vue.prototype.$theme = themeConfig;
 
-// NUXT_REMOVAL try to solve without vue-mq dependency
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import VueMq from "vue-mq";
 Vue.use(VueMq, {
 	breakpoints: {
 		mobile: 750,
@@ -58,7 +90,6 @@ Vue.use(VueMq, {
 	defaultBreakpoint: "mobile",
 });
 
-import Vuelidate from "vuelidate";
 Vue.use(Vuelidate);
 
 Vue.mixin({
@@ -69,37 +100,9 @@ Vue.mixin({
 	},
 });
 
-import htmlConfig from "@/components/common/render-html/config";
-import VueDOMPurifyHTML from "vue-dompurify-html";
-
 Vue.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
 });
-
-// NUXT_REMOVAL change how global components are handled
-import "@/components/base/_globals";
-import "@/plugins/directives";
-import "@/plugins/polyfills";
-
-import "@/styles/global.scss";
-import axios from "axios";
-import Cookies from "universal-cookie";
-import { handleApplicationError } from "./plugins/application-error-handler";
-import { initializeAxios } from "./utils/api";
-
-import {
-	APPLICATION_ERROR_KEY,
-	AUTH_MODULE_KEY,
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
-	I18N_KEY,
-	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
-	VIDEO_CONFERENCE_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-} from "./utils/inject";
 
 (async () => {
 	const runtimeConfigJson = await axios.get(
@@ -123,7 +126,7 @@ import {
 		try {
 			await authModule.login(jwt);
 		} catch (e) {
-			console.log("### JWT invalid: ", e);
+			console.error("### JWT invalid: ", e);
 		}
 	}
 
@@ -147,24 +150,24 @@ import {
 			[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: contextExternalToolsModule,
 			copyModule,
 			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-			[EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: externalToolsModule,
 			filePathsModule,
 			finishedTasksModule,
+			[GROUP_MODULE_KEY.valueOf()]: groupModule,
 			importUsersModule,
 			loadingStateModule,
 			newsModule,
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			privacyPolicyModule,
+			[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
+			[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
 			[ROOM_MODULE_KEY.valueOf()]: roomModule,
 			roomsModule,
 			[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
-			schoolsModule,
+			[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 			shareModule,
 			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
-			systemsModule,
-			taskCardModule,
+			[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
 			tasksModule,
-			userLoginMigrationModule,
+			[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 			[I18N_KEY.valueOf()]: i18n,
 			[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 		},

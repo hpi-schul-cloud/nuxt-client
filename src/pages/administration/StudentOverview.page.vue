@@ -65,8 +65,8 @@
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
 				</template>
-				<template #headcolumn-consent></template>
-				<template #columnlabel-consent></template>
+				<template #headcolumn-consent />
+				<template #columnlabel-consent />
 				<template #datacolumn-createdAt="{ data }">
 					<span class="text-content">{{ printDate(data) }}</span>
 				</template>
@@ -145,6 +145,7 @@ import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
 import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -287,10 +288,10 @@ export default {
 					label: this.isConsentNecessary
 						? this.$t(
 								"pages.administration.students.index.tableActions.consent"
-						  )
+							)
 						: this.$t(
 								"pages.administration.students.index.tableActions.registration"
-						  ),
+							),
 					icon: "$mdiCheck",
 					action: this.handleBulkConsent,
 					dataTestId: "consent_action",
@@ -464,9 +465,9 @@ export default {
 		this.find();
 	},
 	mounted() {
-		document.title = `${this.$t(
-			"pages.administration.students.index.title"
-		)} - ${this.$theme.short_name}`;
+		document.title = buildPageTitle(
+			this.$t("pages.administration.students.index.title")
+		);
 	},
 	methods: {
 		find() {
@@ -550,7 +551,6 @@ export default {
 					});
 				}
 			} catch (error) {
-				console.error(error);
 				notifierModule.show({
 					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
 					status: "error",
@@ -730,7 +730,9 @@ a.action-button {
 button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
-	box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
+	box-shadow:
+		0 0 0 0 var(--v-white-base),
+		0 0 0 3px var(--button-background);
 }
 
 .search-section {

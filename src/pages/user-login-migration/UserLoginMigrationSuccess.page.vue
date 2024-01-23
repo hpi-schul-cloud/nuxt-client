@@ -2,22 +2,22 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/migration_successful.svg" alt="" />
 		<h1 class="pl-4 pr-4">
-			{{ $t("pages.userMigration.success.title") }}
+			{{ t("pages.userMigration.success.title") }}
 		</h1>
 		<div>
 			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
 				:html="
-					$t('pages.userMigration.success.description', {
+					t('pages.userMigration.success.description', {
 						targetSystem: getSystemName(targetSystem),
-					}).toString()
+					})
 				"
 				component="p"
 			/>
 			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
 				{{
-					$t("pages.userMigration.success.login", {
+					t("pages.userMigration.success.login", {
 						targetSystem: getSystemName(targetSystem),
 					})
 				}}
@@ -27,14 +27,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, onMounted, ref, Ref } from "vue";
+import { defineComponent, onMounted, ref, Ref } from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
+import { useI18n } from "@/composables/i18n.composable";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
+import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
 
 export default defineComponent({
 	name: "UserLoginMigrationSuccess",
-	component: { RenderHTML },
+	components: { RenderHTML },
 	props: {
 		targetSystem: {
 			type: String,
@@ -42,8 +46,11 @@ export default defineComponent({
 		},
 	},
 	setup() {
-		const systemsModule: SystemsModule | undefined =
-			inject<SystemsModule>("systemsModule");
+		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
+		const { t } = useI18n();
+
+		const pageTitle = buildPageTitle(t("pages.userMigration.success.title"));
+		useTitle(pageTitle);
 
 		const getSystemName = (id: string): string => {
 			return (
@@ -61,6 +68,7 @@ export default defineComponent({
 		});
 
 		return {
+			t,
 			isLoading,
 			getSystemName,
 		};

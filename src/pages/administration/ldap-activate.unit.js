@@ -68,7 +68,6 @@ describe("ldap/activate", () => {
 			},
 		},
 	};
-	const short_name = "instance name";
 
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
@@ -86,9 +85,6 @@ describe("ldap/activate", () => {
 				store: mockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$router: { push: routerPushStub },
 				$route: { query: {} },
 			},
@@ -108,9 +104,6 @@ describe("ldap/activate", () => {
 				store: mockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$router: { push: routerPushStub },
 				$route,
 			},
@@ -135,9 +128,6 @@ describe("ldap/activate", () => {
 				store: customMockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$router: { push: routerPushStub },
 				$route,
 			},
@@ -158,9 +148,6 @@ describe("ldap/activate", () => {
 				store: mockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$router: { push: routerPushStub },
 				$route,
 			},
@@ -181,9 +168,6 @@ describe("ldap/activate", () => {
 				store: customMockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$router: { push: routerPushStub },
 				$route,
 			},
@@ -217,9 +201,6 @@ describe("ldap/activate", () => {
 				store: customMockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$router: { push: routerPushStub },
 				$route,
 			},
@@ -240,9 +221,6 @@ describe("ldap/activate", () => {
 				store: mockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$router: { push: routerPushStub },
 				$route,
 			},
@@ -261,11 +239,8 @@ describe("ldap/activate", () => {
 				store: mockStore,
 			}),
 			mocks: {
-				$theme: {
-					short_name,
-				},
 				$router: { push: routerPushStub },
-				$route: { query: {}},
+				$route: { query: {} },
 			},
 		});
 		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);

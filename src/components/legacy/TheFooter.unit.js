@@ -1,10 +1,10 @@
-import { envConfigModule, filePathsModule } from "@/store";
+import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TheFooter from "./TheFooter";
 
-describe("@/components/legacy/TheFooter", () => {
+describe("@/components/legacy/TheFooter.vue", () => {
 	beforeEach(() => {
 		setupStores({
 			filePathsModule: FilePathsModule,
@@ -15,21 +15,6 @@ describe("@/components/legacy/TheFooter", () => {
 	const $theme = {
 		name: "test",
 	};
-
-	it("Terms of use link is set correctly", () => {
-		filePathsModule.setSpecificFiles("https://dummy-url.org/");
-		const wrapper = shallowMount(TheFooter, {
-			...createComponentMocks({
-				mocks: {
-					$theme,
-				},
-				i18n: true,
-			}),
-		});
-		expect(wrapper.vm.links[1].href).toStrictEqual(
-			"https://dummy-url.org/Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf"
-		);
-	});
 
 	it.skip("Link to accessibility statement is set correctly", () => {
 		// accessibility statement is now part of the theme-specific TheFooter.vue implementation

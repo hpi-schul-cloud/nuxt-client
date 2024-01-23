@@ -41,9 +41,12 @@ export default class EnvConfigModule extends VuexModule {
 		I18N__DEFAULT_LANGUAGE: "",
 		I18N__DEFAULT_TIMEZONE: "",
 		SC_TITLE: "",
-		SC_SHORT_TITLE: "",
 		FILES_STORAGE__MAX_FILE_SIZE: 0,
 		FEATURE_SHOW_OUTDATED_USERS: false,
+		FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: false,
+		FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: false,
+		FEATURE_CTL_TOOLS_TAB_ENABLED: false,
+		FEATURE_CTL_TOOLS_COPY_ENABLED: false,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -111,6 +114,10 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
 	}
 
+	get getTeacherStudentVisibilityIsVisible() {
+		return this.env.TEACHER_STUDENT_VISIBILITY__IS_VISIBLE;
+	}
+
 	get getTheme() {
 		return this.env.SC_THEME;
 	}
@@ -120,7 +127,11 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	get getSchoolPolicyEnabled() {
-		return this.env.FEATURE_SCHOOL_POLICY_ENABLED;
+		return this.env.FEATURE_SCHOOL_POLICY_ENABLED_NEW;
+	}
+
+	get getSchoolTermsOfUseEnabled() {
+		return this.env.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED;
 	}
 
 	get getLoginLinkEnabled() {
@@ -143,10 +154,6 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.ACCESSIBILITY_REPORT_EMAIL;
 	}
 
-	get getClientUserLoginMigration(): boolean {
-		return this.env.FEATURE_CLIENT_USER_LOGIN_MIGRATION_ENABLED ?? false;
-	}
-
 	get getCtlToolsTabEnabled(): boolean {
 		return this.env.FEATURE_CTL_TOOLS_TAB_ENABLED ?? false;
 	}
@@ -161,6 +168,22 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getShowOutdatedUsers(): boolean {
 		return this.env.FEATURE_SHOW_OUTDATED_USERS ?? false;
+	}
+
+	get getEnableLdapSyncDuringMigration(): boolean {
+		return this.env.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION ?? false;
+	}
+
+	get getCtlContextConfigurationEnabled(): boolean {
+		return this.env.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED ?? false;
+	}
+
+	get getShowNewClassViewEnabled(): boolean {
+		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED ?? false;
+	}
+
+	get getCtlToolsCopyEnabled(): boolean {
+		return this.env.FEATURE_CTL_TOOLS_COPY_ENABLED ?? false;
 	}
 
 	get getEnv(): Envs {

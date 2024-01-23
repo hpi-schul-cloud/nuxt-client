@@ -12,14 +12,14 @@
 				<slot />
 			</div>
 			<the-footer class="footer" />
-			<application-error-routing> </application-error-routing>
+			<application-error-routing />
 		</div>
 	</v-app>
 </template>
 
 <script>
 import NavigationBar from "@/components/legacy/NavigationBar";
-import TheFooter from "@/components/legacy/TheFooter";
+import TheFooter from "@/components/legacy/TheFooter.vue";
 import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 

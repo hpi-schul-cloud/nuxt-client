@@ -2,11 +2,11 @@
 	<div class="actions-container">
 		<div class="primary-container">
 			<!-- @slot @mobile at the top, @tablet & @desktop at the right. First Item is placed on the most right position -->
-			<slot name="primary"></slot>
+			<slot name="primary" />
 		</div>
 		<div class="secondary-container">
 			<!-- @slot @mobile at the bottom, @tablet & @desktop at the left -->
-			<slot name="secondary"></slot>
+			<slot name="secondary" />
 		</div>
 	</div>
 </template>

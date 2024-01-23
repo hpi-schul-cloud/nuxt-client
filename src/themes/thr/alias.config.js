@@ -8,8 +8,8 @@ const config = {
 		"@/theme.config",
 		"@/assets/img/logo/logo-image-mono.svg",
 		"@/assets/img/logo/logo-transparent-mono-48-48.svg",
-		"@/components/legacy/TheFooter",
-		"@/components/templates/impressum",
+		"@/components/legacy/TheFooter.vue",
+		"@/components/templates/impressum.vue",
 		"@/styles/legacy.scss",
 	],
 };

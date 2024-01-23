@@ -1,7 +1,7 @@
 <template>
 	<div class="topbar">
 		<div
-			v-if="!fullscreen"
+			v-if="!fullscreenMode"
 			class="top-main"
 			:class="{ 'expanded-menu': expandedMenu }"
 		>
@@ -12,7 +12,7 @@
 				color="secondary darken-1"
 				:ripple="false"
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
-				data-test-id="top-menu-btn"
+				data-testid="top-menu-btn"
 				:aria-label="$t('global.topbar.mobileMenu.ariaLabel')"
 				role="menu"
 				@click.native="sendEvent('expandMenu')"
@@ -28,7 +28,7 @@
 					:color="statusAlertColor"
 					class="item exclamation-triangle"
 					centered
-					data-test-id="status-alerts-icon"
+					data-testid="status-alerts-icon"
 				>
 					<StatusAlerts :status-alerts="statusAlerts" />
 				</popup-icon>
@@ -38,7 +38,7 @@
 					color="secondary darken-1"
 					:title="$t('global.topbar.actions.fullscreen')"
 					:aria-label="$t('global.topbar.actions.fullscreen')"
-					data-test-id="fullscreen-btn"
+					data-testid="fullscreen-btn"
 					@click.native="sendEvent('fullscreen')"
 				>
 					<v-icon>$mdiArrowExpand</v-icon>
@@ -48,7 +48,7 @@
 					icon="$mdiQrcode"
 					:title="$t('global.topbar.actions.qrCode')"
 					:aria-label="$t('global.topbar.actions.qrCode')"
-					data-test-id="qr-code-btn"
+					data-testid="qr-code-btn"
 				>
 					<menu-qr-code />
 				</popup-icon>
@@ -57,7 +57,7 @@
 					icon="$mdiHelpCircleOutline"
 					:title="$t('global.topbar.actions.helpSection')"
 					:aria-label="$t('global.topbar.actions.helpSection')"
-					data-test-id="help-btn"
+					data-testid="help-btn"
 				>
 					<help-dropdown />
 				</popup-icon>
@@ -77,6 +77,7 @@
 					:last-name="user.lastName || 'Unknown'"
 					:user-role="role"
 					class="item"
+					data-testid="item"
 				>
 					<language-menu />
 					<a
@@ -84,6 +85,7 @@
 						class="account-link"
 						role="menuitem"
 						:aria-label="$t('global.topbar.settings').toString()"
+						data-testid="account-link"
 					>
 						{{ $t("global.topbar.settings") }}
 					</a>
@@ -116,14 +118,7 @@
 </template>
 
 <script lang="ts">
-import {
-	defineComponent,
-	PropType,
-	onMounted,
-	computed,
-	ref,
-	watch,
-} from "vue";
+import { defineComponent, PropType, onMounted, computed } from "vue";
 import {
 	I18N_KEY,
 	STATUS_ALERTS_MODULE_KEY,
@@ -167,20 +162,12 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const i18n = injectStrict(I18N_KEY);
 		const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
-		const fullscreen = ref(props.fullscreenMode);
 
 		onMounted(() => {
 			(async () => {
 				await statusAlertsModule.fetchStatusAlerts();
 			})();
 		});
-
-		watch(
-			() => props.fullscreenMode,
-			(newValue) => {
-				fullscreen.value = newValue;
-			}
-		);
 
 		const sendEvent = (eventName: string) => {
 			emit("action", eventName);
@@ -215,7 +202,6 @@ export default defineComponent({
 			statusAlerts,
 			showStatusAlertIcon,
 			statusAlertColor,
-			fullscreen,
 		};
 	},
 });

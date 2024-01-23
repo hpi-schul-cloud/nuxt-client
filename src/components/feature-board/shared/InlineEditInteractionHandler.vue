@@ -6,7 +6,7 @@
 			@dblclick.prevent.stop="onDoubleClick"
 			@keydown.escape="onKeydownEscape"
 		>
-			<slot></slot>
+			<slot />
 		</div>
 	</OnClickOutside>
 </template>
@@ -15,7 +15,7 @@
 import { defineComponent, provide, shallowRef } from "vue";
 
 import { OnClickOutside } from "@vueuse/components";
-import { InlineEditInteractionEvent } from "../types/InlineEditInteractionEvent.symbol";
+import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
 
 export default defineComponent({
 	name: "InlineEditInteractionHandler",
@@ -33,9 +33,28 @@ export default defineComponent({
 		const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
 		provide(InlineEditInteractionEvent, interactionEvent);
 
+		const isDatePicker = (target: HTMLElement): boolean | void => {
+			if (target.className?.includes("v-picker--date")) {
+				return true;
+			}
+
+			if (
+				target.className?.includes("v-menu__content") ||
+				!target.parentElement
+			) {
+				return false;
+			} else {
+				return isDatePicker(target.parentElement);
+			}
+		};
+
 		const isAllowedTarget = (event: MouseEvent): boolean => {
 			if (!(event.target instanceof HTMLElement)) return true;
-			return !event.target?.className?.includes("v-list-item");
+
+			return (
+				!event.target?.className?.includes("v-list-item") &&
+				!isDatePicker(event.target)
+			);
 		};
 
 		const onClickOutside = (event: MouseEvent) => {

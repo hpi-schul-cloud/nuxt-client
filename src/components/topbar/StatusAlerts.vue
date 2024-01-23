@@ -1,6 +1,6 @@
 <template>
 	<v-list
-		data-test-id="status-alerts"
+		data-testid="status-alerts"
 		min-width="250"
 		max-height="400"
 		class="alerts pa-0 rounded"
@@ -19,25 +19,26 @@
 			</v-list-item-icon>
 			<v-list-item-content>
 				<v-list-item-title
-					:data-test-id="`alert-title-${index}`"
+					:data-testid="`alert-title-${index}`"
 					class="subtitle-1 ma-0"
 				>
 					{{ item.title }}
 				</v-list-item-title>
 				<v-list-item-subtitle
-					:data-test-id="`alert-text-${index}`"
+					:data-testid="`alert-text-${index}`"
 					class="subtitle-2 text--primary ma-0 mt-1"
 				>
 					{{ item.text }}
 				</v-list-item-subtitle>
 				<v-list-item-subtitle
 					class="text-left text-caption d-flex flex-row alert-date text--secondary mt-0 mt-2"
-					:data-test-id="`alert-date-${index}`"
+					:data-testid="`alert-date-${index}`"
 				>
-					{{ $t("common.labels.updateAt") }}
-					{{ getDate(item.timestamp) }} |
-					{{ $t("common.labels.createAt") }}
-					{{ getCreatedDate(item.createdAt) }}
+					<template v-if="item.timestamp !== item.createdAt">
+						{{ $t("common.labels.updateAt") }}
+						{{ formatDate(item.timestamp) }} |
+					</template>
+					{{ $t("common.labels.createAt") }} {{ formatDate(item.createdAt) }}
 				</v-list-item-subtitle>
 			</v-list-item-content>
 		</v-list-item>
@@ -46,7 +47,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { printDateTime, fromNow } from "../../plugins/datetime";
+import { formatDateForAlerts } from "../../plugins/datetime";
 import { mdiAlertCircle, mdiInformation } from "@mdi/js";
 import { StatusAlert } from "@/store/types/status-alert";
 
@@ -65,14 +66,11 @@ export default defineComponent({
 				: { icon: mdiInformation, color: "info" };
 		};
 
-		const getDate = (date: string) => {
-			return fromNow(date, true);
-		};
-		const getCreatedDate = (dateTime: string) => {
-			return printDateTime(dateTime);
+		const formatDate = (dateTime: string) => {
+			return formatDateForAlerts(dateTime, true);
 		};
 
-		return { getIconTag, getDate, getCreatedDate };
+		return { getIconTag, formatDate };
 	},
 });
 </script>

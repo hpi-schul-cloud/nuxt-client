@@ -1,20 +1,31 @@
 import EnvConfigModule from "@/store/env-config";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	SYSTEMS_MODULE_KEY,
+	USER_LOGIN_MIGRATION_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import Vue from "vue";
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
+import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 describe("UserLoginMigrationError", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
+	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
 
 	const setup = (props: {
-		sourceSystem: string;
-		targetSystem: string;
 		sourceSchoolNumber?: string;
 		targetSchoolNumber?: string;
 	}) => {
@@ -36,6 +47,9 @@ describe("UserLoginMigrationError", () => {
 		envConfigModule = createModuleMocks(EnvConfigModule, {
 			getAccessibilityReportEmail: "nbc-support@netz-21.de",
 		});
+		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
+			getUserLoginMigration: userLoginMigrationFactory.build(),
+		});
 
 		const wrapper: Wrapper<Vue> = mount(
 			UserLoginMigrationError as MountOptions<Vue>,
@@ -44,8 +58,10 @@ describe("UserLoginMigrationError", () => {
 					i18n: true,
 				}),
 				provide: {
-					systemsModule,
+					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[I18N_KEY.valueOf()]: i18nMock,
+					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 				},
 				propsData: props,
 				mocks: {
@@ -64,27 +80,9 @@ describe("UserLoginMigrationError", () => {
 	};
 
 	describe("Rendering", () => {
-		describe("when all mandatory props are defined", () => {
-			it("should render the component", () => {
-				const { wrapper } = setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
-				});
-
-				const result: boolean = wrapper
-					.findComponent(UserLoginMigrationError)
-					.exists();
-
-				expect(result).toEqual(true);
-			});
-		});
-
 		describe("when the systems are loaded", () => {
 			it("should show the description text", () => {
-				const { wrapper } = setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
-				});
+				const { wrapper } = setup({});
 
 				const descriptionText = wrapper
 					.find("[data-testId=text-description]")
@@ -96,10 +94,7 @@ describe("UserLoginMigrationError", () => {
 			});
 
 			it("should show the 'back to login' button", () => {
-				const { wrapper } = setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
-				});
+				const { wrapper } = setup({});
 
 				const button = wrapper.find("[data-testId=btn-proceed]");
 
@@ -111,8 +106,6 @@ describe("UserLoginMigrationError", () => {
 		describe("when the systems and schoolnumbers are loaded", () => {
 			it("should show the schoolNumberMismatch text", () => {
 				const { wrapper } = setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
 					sourceSchoolNumber: "11111",
 					targetSchoolNumber: "22222",
 				});
@@ -129,8 +122,6 @@ describe("UserLoginMigrationError", () => {
 
 		it("should have specific subject in mailto support link", () => {
 			const { wrapper } = setup({
-				sourceSystem: "sourceSystemId",
-				targetSystem: "targetSystemId",
 				sourceSchoolNumber: "11111",
 				targetSchoolNumber: "22222",
 			});
@@ -147,13 +138,22 @@ describe("UserLoginMigrationError", () => {
 
 	describe("Api", () => {
 		describe("when mounting the component", () => {
-			it("should fetch the systems", () => {
-				setup({
-					sourceSystem: "sourceSystemId",
-					targetSystem: "targetSystemId",
-				});
+			it("should fetch the systems", async () => {
+				setup({});
+
+				await Vue.nextTick();
 
 				expect(systemsModule.fetchSystems).toHaveBeenCalledWith();
+			});
+
+			it("should fetch the user login migration", async () => {
+				setup({});
+
+				await Vue.nextTick();
+
+				expect(
+					userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser
+				).toHaveBeenCalled();
 			});
 		});
 	});

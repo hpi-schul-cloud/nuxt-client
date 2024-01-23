@@ -40,7 +40,7 @@
 		</div>
 		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
-				<div class="actions"></div>
+				<div class="actions" />
 				<div class="title">
 					<span>
 						{{ resource.title || resource.name }}
@@ -191,7 +191,8 @@ import {
 	isVideoContent,
 	isMerlinContent,
 } from "@/utils/helpers";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -310,7 +311,7 @@ export default {
 	},
 	methods: {
 		async goToMerlinContent(merlinReference) {
-			const requestUrl = `/v1/edu-sharing/merlinToken/?merlinReference=${merlinReference}`;
+			const requestUrl = `/v1/edu-sharing-merlinToken/?merlinReference=${merlinReference}`;
 			const url = (await this.$axios.get(requestUrl)).data;
 			window.open(url, "_blank");
 		},
@@ -332,15 +333,15 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = (
-			this.isInline
-				? {
-						title: this.$t("pages.content.page.window.title", {
-							instance: this.$theme.name,
-						}),
-				  }
-				: { title: this.$t("common.words.lernstore") }
-		).toString();
+		const pageTitle = this.isInline
+			? {
+					title: this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+					}),
+				}
+			: { title: this.$t("common.words.lernstore") };
+
+		document.title = buildPageTitle(pageTitle);
 	},
 };
 </script>

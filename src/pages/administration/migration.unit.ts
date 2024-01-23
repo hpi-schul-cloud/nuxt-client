@@ -1,14 +1,18 @@
+import migrationIndex from "@/pages/administration/Migration.page.vue";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
-import setupStores from "@@/tests/test-utils/setupStores";
-import migrationIndex from "@/pages/administration/Migration.page.vue";
-import { mount, shallowMount } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount, shallowMount } from "@vue/test-utils";
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 const $theme = {
-	short_name: "instance name",
+	name: "instance name",
 };
 
 const getWrapper: any = (props: object, options?: object) => {
@@ -38,26 +42,31 @@ const getWrapperShallow: any = (props: object, options?: object) => {
 };
 
 const schoolMock = {
-	_id: "5f2987e020834114b8efd6f8",
+	id: "5f2987e020834114b8efd6f8",
 	name: "Schule_100000",
 	fileStorageType: "awsS3",
-	federalState: "0000b186816abba584714c53",
-	county: {
-		antaresKey: "BRB",
-		_id: "5fa55eb53f472a2d986c8812",
-		countyId: "12051",
-		name: "Brandenburg an der Havel",
-		id: "5fa55eb53f472a2d986c8812",
+	federalState: {
+		id: "0000b186816abba584714c53",
+		counties: [],
+		name: "",
+		abbreviation: "",
+		logoUrl: "",
 	},
-	systems: [
-		"0000d186816abba584714c91",
-		"0000d186816abba584714c90",
-		"6204fb6dcd5e9eb7240bc93f",
-	],
+	logo_name: "Schule_logo",
+	county: {
+		id: "5fa55eb53f472a2d986c8812",
+		antaresKey: "BRB",
+		countyId: 12051,
+		name: "Brandenburg an der Havel",
+	},
 	updatedAt: "2022-02-10T11:56:22.817Z",
 	createdAt: "2017-01-01T00:06:37.148Z",
-	__v: 1,
-	currentYear: "5ebd6dc14a431f75ec9a3e77",
+	currentYear: {
+		id: "5ebd6dc14a431f75ec9a3e77",
+		name: "2021/22",
+		startDate: "2021-08-01T00:00:00.000Z",
+		endDate: "2022-07-31T00:00:00.000Z",
+	},
 	purpose: "demo",
 	features: {
 		rocketChat: true,
@@ -65,66 +74,51 @@ const schoolMock = {
 		studentVisibility: false,
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
+		enableLdapSyncDuringMigration: false,
+		isTeamCreationByStudentsEnabled: false,
+		nextcloud: false,
+		oauthProvisioningEnabled: false,
 	},
-	enableStudentTeamCreation: false,
 	permissions: { teacher: { STUDENT_LIST: true } },
 	officialSchoolNumber: "100000",
-	documentBaseDirType: "",
-	inMaintenanceSince: "2022-02-10T11:55:50.344Z",
 	inUserMigration: true,
-	ldapSchoolIdentifier: "100000",
 	inMaintenance: true,
-	documentBaseDir: "https://s3.hidrive.strato.com/cloud-instances/default/",
 	isExternal: true,
-	id: "5f2987e020834114b8efd6f8",
+	systemIds: [],
 	years: {
 		schoolYears: [
 			{
-				_id: "5ebd6dc14a431f75ec9a3e77",
+				id: "5ebd6dc14a431f75ec9a3e77",
 				name: "2021/22",
 				startDate: "2021-08-01T00:00:00.000Z",
 				endDate: "2022-07-31T00:00:00.000Z",
-				__v: 0,
 			},
 			{
-				_id: "5ebd6dc14a431f75ec9a3e78",
+				id: "5ebd6dc14a431f75ec9a3e78",
 				name: "2022/23",
 				startDate: "2022-08-01T00:00:00.000Z",
 				endDate: "2023-07-31T00:00:00.000Z",
-				__v: 0,
 			},
 		],
 		activeYear: {
-			_id: "5ebd6dc14a431f75ec9a3e77",
+			id: "5ebd6dc14a431f75ec9a3e77",
 			name: "2021/22",
 			startDate: "2021-08-01T00:00:00.000Z",
 			endDate: "2022-07-31T00:00:00.000Z",
-			__v: 0,
-		},
-		defaultYear: {
-			_id: "5ebd6dc14a431f75ec9a3e77",
-			name: "2021/22",
-			startDate: "2021-08-01T00:00:00.000Z",
-			endDate: "2022-07-31T00:00:00.000Z",
-			__v: 0,
 		},
 		nextYear: {
-			_id: "5ebd6dc14a431f75ec9a3e78",
+			id: "5ebd6dc14a431f75ec9a3e78",
 			name: "2022/23",
 			startDate: "2022-08-01T00:00:00.000Z",
 			endDate: "2023-07-31T00:00:00.000Z",
-			__v: 0,
 		},
 		lastYear: {
-			_id: "5d44297075e1502c27e405e2",
+			id: "5d44297075e1502c27e405e2",
 			name: "2020/21",
 			startDate: "2020-08-01T00:00:00.000Z",
 			endDate: "2021-07-31T00:00:00.000Z",
-			__v: 0,
 		},
 	},
-	isTeamCreationByStudentsEnabled: false,
-	enableMigrationStart: false,
 };
 
 window.scrollTo = jest.fn();
@@ -148,7 +142,7 @@ describe("User Migration / Index", () => {
 
 		const title = wrapper.vm.$i18n.t("pages.administration.migration.title", {
 			source: "LDAP",
-			instance: $theme.short_name,
+			instance: $theme.name,
 		});
 		expect(document.title).toBe(title);
 	});
@@ -293,7 +287,7 @@ describe("User Migration / Index", () => {
 			const summaryText = wrapper.vm.$i18n.t(
 				"pages.administration.migration.summary",
 				{
-					instance: $theme.short_name,
+					instance: $theme.name,
 					source: wrapper.vm.$i18n.t(
 						"pages.administration.migration.ldapSource"
 					),
@@ -369,7 +363,7 @@ describe("User Migration / Index", () => {
 					"pages.administration.migration.step4.linkingFinished",
 					{
 						source: "LDAP",
-						instance: $theme.short_name,
+						instance: $theme.name,
 					}
 				)
 			);

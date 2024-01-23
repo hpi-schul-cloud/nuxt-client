@@ -8,6 +8,7 @@
 		<div
 			class="column-header mb-4 rounded"
 			:class="{ 'grey lighten-2': isFocusContained }"
+			tabindex="0"
 			ref="columnHeader"
 		>
 			<div class="d-flex align-start py-2 px-2">
@@ -18,51 +19,47 @@
 					:placeholder="titlePlaceholder"
 					@update:value="onUpdateTitle"
 					class="w-100"
-				></BoardAnyTitleInput>
+				/>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
-					<BoardMenuAction @click="onStartEditMode">
-						<template #icon>
-							<VIcon>
-								{{ mdiPencilOutline }}
-							</VIcon>
-						</template>
-						{{ $t("common.actions.edit") }}
-					</BoardMenuAction>
-					<BoardMenuAction @click="onTryDelete">
-						<template #icon>
-							<VIcon>
-								{{ mdiTrashCanOutline }}
-							</VIcon>
-						</template>
-						{{ $t("components.board.action.delete") }}
-					</BoardMenuAction>
+					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
+					<BoardMenuActionMoveLeft @click="onMoveColumnLeft" />
+					<BoardMenuActionMoveRight @click="onMoveColumnRight" />
+					<BoardMenuActionDelete @click="onDelete" :name="title" />
 				</BoardMenu>
 			</div>
-			<VDivider aria-hidden="true" color="black"></VDivider>
+			<VDivider aria-hidden="true" color="black" />
 		</div>
 	</BoardColumnInteractionHandler>
 </template>
 
 <script lang="ts">
-import { useDeleteConfirmation } from "@/components/feature-confirmation-dialog/delete-confirmation.composable";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiTrashCanOutline, mdiPencilOutline } from "@mdi/js";
-import { defineComponent, ref } from "vue";
+import {
+	useBoardFocusHandler,
+	useBoardPermissions,
+	useEditMode,
+} from "@data-board";
+import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import {
+	BoardMenu,
+	BoardMenuActionEdit,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveLeft,
+	BoardMenuActionMoveRight,
+} from "@ui-board";
+import { defineComponent, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import BoardMenu from "../shared/BoardMenu.vue";
-import BoardMenuAction from "../shared/BoardMenuAction.vue";
-import { useEditMode } from "../shared/EditMode.composable";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
 
 export default defineComponent({
 	name: "BoardColumnHeader",
 	components: {
 		BoardMenu,
 		BoardAnyTitleInput,
-		BoardMenuAction,
+		BoardMenuActionEdit,
 		BoardColumnInteractionHandler,
+		BoardMenuActionDelete,
+		BoardMenuActionMoveLeft,
+		BoardMenuActionMoveRight,
 	},
 	props: {
 		columnId: {
@@ -78,18 +75,24 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["delete:column", "move:column-keyboard", "update:title"],
+	emits: [
+		"delete:column",
+		"move:column-keyboard",
+		"move:column-left",
+		"move:column-right",
+		"update:title",
+	],
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const columnId = toRef(props, "columnId");
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
-			props.columnId
+			columnId.value
 		);
 
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const columnHeader = ref<HTMLDivElement | null>(null);
 		const { isFocusContained } = useBoardFocusHandler(
-			props.columnId,
+			columnId.value,
 			columnHeader
 		);
 		const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
@@ -104,25 +107,18 @@ export default defineComponent({
 			stopEditMode();
 		};
 
-		const onTryDelete = async () => {
-			const message =
-				i18n
-					.t("components.cardHost.deletionModal.confirmation", {
-						title: props.title ? `"${props.title}"` : "",
-						type: i18n.t("components.boardColumn").toString(),
-					})
-					.toString() ?? "";
-
-			const { askConfirmation } = useDeleteConfirmation();
-
-			const shouldDelete = await askConfirmation({ message });
-			if (shouldDelete) {
-				emit("delete:column", props.columnId);
-			}
-		};
+		const onDelete = () => emit("delete:column", props.columnId);
 
 		const onMoveColumnKeyboard = (event: KeyboardEvent) => {
 			emit("move:column-keyboard", event.code);
+		};
+
+		const onMoveColumnLeft = () => {
+			emit("move:column-left");
+		};
+
+		const onMoveColumnRight = () => {
+			emit("move:column-right");
 		};
 
 		const onUpdateTitle = (newTitle: string) => {
@@ -139,8 +135,10 @@ export default defineComponent({
 			mdiPencilOutline,
 			onStartEditMode,
 			onEndEditMode,
-			onTryDelete,
+			onDelete,
 			onMoveColumnKeyboard,
+			onMoveColumnLeft,
+			onMoveColumnRight,
 			onUpdateTitle,
 		};
 	},

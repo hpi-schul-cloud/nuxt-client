@@ -99,9 +99,16 @@ export default defineComponent({
 					const sidebarCategoryItem = item as SidebarCategoryItem;
 					if (sidebarCategoryItem.children.length >= 1) {
 						sidebarCategoryItem.children = sidebarCategoryItem.children.filter(
-							(child) =>
-								!child.permission ||
-								user.value?.permissions?.includes?.(child.permission)
+							(child) => {
+								const hasFeature =
+									!!child.feature && !!envConfigModule.getEnv[child.feature];
+
+								return (
+									(!child.permission ||
+										user.value?.permissions?.includes?.(child.permission)) &&
+									(!child.feature || hasFeature)
+								);
+							}
 						);
 					}
 				}
@@ -113,8 +120,13 @@ export default defineComponent({
 					? user.value?.permissions?.includes?.(item.excludedPermission)
 					: false;
 
+				const hasFeatureFlag =
+					!!item.feature && !!envConfigModule.getEnv[item.feature];
+
 				return (
-					!item.permission || (hasRequiredPermission && !hasExcludedPermission)
+					(!item.permission ||
+						(hasRequiredPermission && !hasExcludedPermission)) &&
+					(!item.feature || hasFeatureFlag)
 				);
 			});
 

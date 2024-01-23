@@ -16,95 +16,78 @@
 		@keydown.space.prevent="onKeyPress"
 		@keydown.tab="$emit('tab-pressed')"
 	>
-		<template v-if="isBetaTask">
-			<v-card-text>
-				<div class="top-row-container mb-0">
-					<div class="tagline" data-testid="tagline">
-						<v-icon size="14" :color="titleIconColor" class="fill">
-							{{ titleIcon }}
-						</v-icon>
-						{{ cardTitle(task.dueDate) }}
-					</div>
+		<v-card-text data-testid="content-card-task-content">
+			<div class="top-row-container mb-0">
+				<div class="tagline" data-testid="tagline">
+					<v-icon size="14" class="fill">
+						{{ titleIcon }}
+					</v-icon>
+					{{ cardTitle(task.dueDate) }}
 				</div>
-				<h6 class="mb-2 task-name mt-1">
-					{{ task.name }}
-				</h6>
-			</v-card-text>
-		</template>
-		<template v-else>
-			<v-card-text data-testid="content-card-task-content">
-				<div class="top-row-container mb-0">
-					<div class="tagline" data-testid="tagline">
-						<v-icon size="14" :color="titleIconColor" class="fill">
-							{{ titleIcon }}
-						</v-icon>
-						{{ cardTitle(task.dueDate) }}
-					</div>
-					<div class="dot-menu-section">
-						<room-dot-menu
-							:menu-items="moreActionsMenuItems[role]"
-							data-testid="content-card-task-menu"
-							:aria-label="$t('pages.room.taskCard.menu.ariaLabel')"
-						/>
-					</div>
-				</div>
-				<h6 class="mt-1 mb-2 task-name">
-					{{ task.name }}
-				</h6>
-				<RenderHTML
-					v-if="canShowDescription"
-					class="text--primary mt-1 mb-0 pb-0 text-description"
-					tabindex="0"
-					:html="task.description"
-				/>
-			</v-card-text>
-			<v-card-text
-				v-if="!isPlanned && !isDraft && !isFinished"
-				class="ma-0 pb-0 pt-0 submitted-section"
-				data-testid="content-card-task-info"
-			>
-				<div class="chip-items-group">
-					<v-chip
-						v-for="(chip, index) in chipItems[role]"
-						:key="index"
-						:class="[chip.class]"
-						small
-						:data-testid="[chip.testid]"
-					>
-						<v-icon
-							v-if="chip.icon"
-							left
-							small
-							class="fill"
-							color="rgba(0, 0, 0, 0.87)"
-							d
-						>
-							{{ chip.icon }}
-						</v-icon>
-						{{ chip.name }}
-					</v-chip>
-					<v-custom-chip-time-remaining
-						v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
-						type="warning"
-						:due-date="task.dueDate"
-						:shorten-unit="$vuetify.breakpoint.xsOnly"
+				<div class="dot-menu-section">
+					<room-dot-menu
+						:menu-items="moreActionsMenuItems[role]"
+						data-testid="content-card-task-menu"
+						:aria-label="$t('pages.room.taskCard.menu.ariaLabel')"
 					/>
 				</div>
-			</v-card-text>
-			<v-card-actions class="pt-1 mt-2" data-testid="content-card-task-actions">
-				<v-btn
-					v-for="(action, index) in cardActions[role]"
+			</div>
+			<h6 class="mt-1 mb-2 task-name">
+				{{ task.name }}
+			</h6>
+			<RenderHTML
+				v-if="canShowDescription"
+				class="text--primary mt-1 mb-0 pb-0 text-description"
+				tabindex="0"
+				:html="task.description"
+			/>
+		</v-card-text>
+		<v-card-text
+			v-if="!isPlanned && !isDraft && !isFinished"
+			class="ma-0 pb-0 pt-0 submitted-section"
+			data-testid="content-card-task-info"
+		>
+			<div class="chip-items-group">
+				<v-chip
+					v-for="(chip, index) in chipItems[role]"
 					:key="index"
-					:class="`action-button action-button-${action.name
-						.split(' ')
-						.join('-')}`"
-					text
-					@click.stop="action.action"
+					:class="[chip.class]"
+					small
+					:data-testid="[chip.testid]"
 				>
-					{{ action.name }}
-				</v-btn>
-			</v-card-actions>
-		</template>
+					<v-icon
+						v-if="chip.icon"
+						left
+						small
+						class="fill"
+						color="rgba(0, 0, 0, 0.87)"
+						d
+					>
+						{{ chip.icon }}
+					</v-icon>
+					{{ chip.name }}
+				</v-chip>
+				<v-custom-chip-time-remaining
+					v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
+					type="warning"
+					:due-date="task.dueDate"
+					:shorten-unit="$vuetify.breakpoint.xsOnly"
+				/>
+			</div>
+		</v-card-text>
+		<v-card-actions class="pt-1 mt-2" data-testid="content-card-task-actions">
+			<v-btn
+				v-for="(action, index) in cardActions[role]"
+				:key="index"
+				:class="`action-button action-button-${action.name
+					.split(' ')
+					.join('-')}`"
+				text
+				@click.stop="action.action"
+			>
+				{{ action.name }}
+			</v-btn>
+		</v-card-actions>
 	</v-card>
 </template>
 
@@ -124,7 +107,7 @@ import { printDateFromStringUTC, fromNowToFuture } from "@/plugins/datetime";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining";
 import { envConfigModule } from "@/store";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
@@ -199,22 +182,8 @@ export default {
 				new Date(scheduledDate).getTime() - delay > new Date().getTime()
 			);
 		},
-		isBetaTask() {
-			return !!this.task.taskCardId;
-		},
-		taskEditRoute() {
-			return this.isBetaTask
-				? {
-						name: "beta-task-view-edit",
-						params: { id: this.task.taskCardId },
-				  }
-				: `/homework/${this.task.id}`;
-		},
 		titleIcon() {
-			return this.isBetaTask ? "$taskDoneFilled" : "$tasks";
-		},
-		titleIconColor() {
-			return this.isBetaTask ? "beta-task" : "";
+			return "$tasks";
 		},
 		cardActions() {
 			const roleBasedActions = {
@@ -393,9 +362,7 @@ export default {
 				return this.$t("pages.room.taskCard.label.taskDone");
 			}
 
-			const titlePrefix = this.isBetaTask
-				? this.$t("pages.room.taskCard.label.betaTask")
-				: this.$t("common.words.task");
+			const titlePrefix = this.$t("common.words.task");
 			let titleSuffix = "";
 
 			if (this.isDraft) {
@@ -404,10 +371,10 @@ export default {
 				titleSuffix = this.isPlanned
 					? `${this.$t("pages.tasks.labels.planned")} ${printDateFromStringUTC(
 							this.task.availableDate
-					  )}`
+						)}`
 					: `${this.$t(
 							"pages.room.taskCard.label.due"
-					  )} ${printDateFromStringUTC(dueDate)}`;
+						)} ${printDateFromStringUTC(dueDate)}`;
 			} else {
 				titleSuffix = this.$t("pages.room.taskCard.label.noDueDate");
 			}
@@ -416,9 +383,7 @@ export default {
 		},
 		handleClick() {
 			if (!this.dragInProgress) {
-				this.isBetaTask
-					? this.$router.push(this.taskEditRoute)
-					: this.redirectAction(this.taskEditRoute);
+				this.redirectAction(`/homework/${this.task.id}`);
 			}
 		},
 		redirectAction(value) {
@@ -464,15 +429,9 @@ export default {
 			}
 		},
 		getStyleClasses() {
-			let classes = "";
-
-			if (this.isBetaTask) {
-				classes = classes + " beta-task-bg";
-			}
-			if (this.isPlanned || (this.isDraft && !this.isFinished)) {
-				classes = classes + " task-hidden";
-			}
-			return classes;
+			return this.isPlanned || (this.isDraft && !this.isFinished)
+				? "task-hidden"
+				: "";
 		},
 	},
 };
@@ -498,6 +457,7 @@ export default {
 
 	.dot-menu-section {
 		text-align: right;
+		height: calc(var(--space-base-vuetify) * 9);
 	}
 }
 
@@ -535,10 +495,5 @@ export default {
 	.tagline {
 		opacity: 0.65;
 	}
-}
-
-.beta-task-bg {
-	// based on beta-task color #196c9e
-	background-color: rgba(25, 108, 158, 0.05) !important;
 }
 </style>

@@ -9,32 +9,17 @@
 			:can-edit="canEdit"
 			@delete="onOpenDeleteDialog"
 			@edit="onEditTool"
-			@click="onClickTool"
+			@error="onError"
 			:data-testid="`external-tool-card-${index}`"
-		></room-external-tool-card>
+		/>
 
-		<v-custom-dialog
-			:is-open="isErrorDialogOpen"
-			:has-buttons="true"
-			:buttons="['close']"
-			data-testId="error-dialog"
-			@dialog-closed="onCloseErrorDialog"
-		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{
-					t("pages.rooms.tools.outdatedDialog.title", {
-						toolName: selectedItemName,
-					})
-				}}
-			</h2>
-			<template v-slot:content>
-				<RenderHTML
-					:html="errorDialogText"
-					component="p"
-					class="text-md mt-2"
-				></RenderHTML>
-			</template>
-		</v-custom-dialog>
+		<template v-if="selectedItem">
+			<RoomExternalToolsErrorDialog
+				:selected-item="selectedItem"
+				:is-open="isErrorDialogOpen"
+				@closed="onCloseErrorDialog"
+			/>
+		</template>
 
 		<v-dialog
 			v-model="isDeleteDialogOpen"
@@ -59,7 +44,7 @@
 					/>
 				</v-card-text>
 				<v-card-actions>
-					<v-spacer></v-spacer>
+					<v-spacer />
 					<v-btn
 						data-testId="dialog-cancel"
 						depressed
@@ -84,23 +69,18 @@
 </template>
 
 <script lang="ts">
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
-import {
-	ToolLaunchRequestResponse,
-	ToolLaunchRequestResponseMethodEnum,
-} from "@/serverApi/v3";
+import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import ExternalToolsModule from "@/store/external-tools";
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
 } from "@/utils/inject";
+import { RenderHTML } from "@feature-render-html";
 import {
 	computed,
 	ComputedRef,
@@ -110,12 +90,13 @@ import {
 	Ref,
 } from "vue";
 import VueI18n from "vue-i18n";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { useRouter } from "vue-router/composables";
+import RoomExternalToolsErrorDialog from "@/pages/rooms/tools/RoomExternalToolsErrorDialog.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolsSection",
 	components: {
-		VCustomDialog,
+		RoomExternalToolsErrorDialog,
 		RoomExternalToolCard,
 		RenderHTML,
 	},
@@ -124,16 +105,19 @@ export default defineComponent({
 			type: Array as PropType<ExternalToolDisplayData[]>,
 			required: true,
 		},
+		roomId: {
+			type: String,
+			required: true,
+		},
 	},
-	setup() {
+	setup(props) {
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
-		const externalToolsModule: ExternalToolsModule = injectStrict(
-			EXTERNAL_TOOLS_MODULE_KEY
-		);
 		const i18n: VueI18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+
+		const router = useRouter();
 
 		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
 		const t = (key: string, values?: VueI18n.Values): string =>
@@ -166,7 +150,7 @@ export default defineComponent({
 		const onDeleteTool = async () => {
 			if (selectedItem.value) {
 				await contextExternalToolsModule.deleteContextExternalTool(
-					selectedItem.value.id
+					selectedItem.value.contextExternalToolId
 				);
 			}
 
@@ -175,82 +159,29 @@ export default defineComponent({
 
 		const onCloseErrorDialog = () => {
 			isErrorDialogOpen.value = false;
-
-			externalToolsModule.resetBusinessError();
 		};
 
-		const onEditTool = () => {
-			// TODO N21-XXXX implement onEditTool
+		const onEditTool = (tool: ExternalToolDisplayData) => {
+			router.push({
+				name: "context-external-tool-configuration-edit",
+				params: { configId: tool.contextExternalToolId },
+				query: {
+					contextId: props.roomId,
+					contextType: ToolContextType.Course,
+				},
+			});
 		};
 
-		const onClickTool = async (tool: ExternalToolDisplayData) => {
-			const launchToolResponse: ToolLaunchRequestResponse | undefined =
-				await externalToolsModule.loadToolLaunchData(tool.id);
-
-			switch (launchToolResponse?.method) {
-				case ToolLaunchRequestResponseMethodEnum.Get:
-					handleGetLaunchRequest(launchToolResponse);
-					break;
-				case ToolLaunchRequestResponseMethodEnum.Post:
-					handlePostLaunchRequest(launchToolResponse);
-					break;
-				default:
-					handleLaunchError(tool);
-					break;
-			}
+		const onError = (displayData: ExternalToolDisplayData): void => {
+			showErrorDialog(displayData);
 		};
 
-		const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
-			if (toolLaunch.openNewTab) {
-				window.open(toolLaunch.url, "_blank");
-				return;
-			}
-			window.location.href = toolLaunch.url;
+		const showErrorDialog = (
+			displayData: ExternalToolDisplayData | undefined
+		) => {
+			selectedItem.value = displayData;
+			isErrorDialogOpen.value = true;
 		};
-
-		const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequestResponse) => {
-			const form: HTMLFormElement = document.createElement("form");
-			form.method = "POST";
-			form.action = toolLaunch.url;
-			form.target = toolLaunch.openNewTab ? "_blank" : "_self";
-
-			const payload = JSON.parse(toolLaunch.payload || "{}");
-
-			for (const key in payload) {
-				if (Object.prototype.hasOwnProperty.call(payload, key)) {
-					const hiddenField = document.createElement("input");
-					hiddenField.type = "hidden";
-					hiddenField.name = key;
-					hiddenField.value = payload[key];
-
-					form.appendChild(hiddenField);
-				}
-			}
-
-			document.body.appendChild(form);
-			form.submit();
-		};
-
-		const handleLaunchError = (tool: ExternalToolDisplayData) => {
-			const businessErrorMessage = externalToolsModule.getBusinessError.message;
-
-			if (
-				["TOOL_STATUS_OUTDATED", "MISSING_TOOL_PARAMETER_VALUE"].some(
-					(keyword) => businessErrorMessage.includes(keyword)
-				)
-			) {
-				selectedItem.value = tool;
-				isErrorDialogOpen.value = true;
-			}
-		};
-
-		const errorDialogText: ComputedRef<string> = computed(() => {
-			if (authModule.getUserRoles.includes("teacher")) {
-				return t("pages.rooms.tools.outdatedDialog.content.teacher");
-			}
-
-			return t("pages.rooms.tools.outdatedDialog.content.student");
-		});
 
 		return {
 			t,
@@ -261,11 +192,10 @@ export default defineComponent({
 			onOpenDeleteDialog,
 			onCloseDeleteDialog,
 			onDeleteTool,
-			onClickTool,
 			onEditTool,
 			isErrorDialogOpen,
 			onCloseErrorDialog,
-			errorDialogText,
+			onError,
 		};
 	},
 });

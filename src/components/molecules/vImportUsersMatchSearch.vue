@@ -5,12 +5,12 @@
 				<v-toolbar-title>
 					{{
 						$t("components.molecules.importUsersMatch.title", {
-							instance: $theme.short_name,
+							instance: $theme.name,
 							source: ldapSource,
 						})
 					}}
 				</v-toolbar-title>
-				<v-spacer></v-spacer>
+				<v-spacer />
 				<v-toolbar-items>
 					<v-btn v-if="isDialog" icon dark @click="closeEdit">
 						<v-icon>{{ mdiClose }}</v-icon>
@@ -21,7 +21,7 @@
 			<v-card-text class="mt-5">
 				{{
 					$t("components.molecules.importUsersMatch.subtitle", {
-						instance: $theme.short_name,
+						instance: $theme.name,
 						source: ldapSource,
 					})
 				}}
@@ -58,7 +58,7 @@
 						</v-list-item>
 					</v-col>
 					<v-col class="md-6">
-						<v-card-title>{{ $theme.short_name }}</v-card-title>
+						<v-card-title>{{ $theme.name }}</v-card-title>
 						<v-list-item>
 							<v-list-item-content v-if="selectedItem">
 								<v-list-item-title>
@@ -148,7 +148,7 @@
 								</v-list-item-content>
 							</template>
 							<template #append-item>
-								<div v-intersect="endIntersect" class="pa-2"></div>
+								<div v-intersect="endIntersect" class="pa-2" />
 							</template>
 						</v-autocomplete>
 					</v-col>

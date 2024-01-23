@@ -1,4 +1,6 @@
 export const REGEX_ID = "[a-z0-9]{24}";
+export const REGEX_H5P_ID = "[a-z0-9]+";
+
 export const REGEX_UUID =
 	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 export const REGEX_ACTIVATION_CODE = "[a-z0-9]+";
@@ -11,3 +13,8 @@ const REGEX_OFFICIAL_SCHOOL_NUMBER =
 export const isOfficialSchoolNumber = (value: unknown): boolean =>
 	typeof value === "string" &&
 	new RegExp(REGEX_OFFICIAL_SCHOOL_NUMBER).test(value);
+
+export const isEnum =
+	(enumType: object) =>
+	(val: unknown): boolean =>
+		Object.values(enumType).includes(val);

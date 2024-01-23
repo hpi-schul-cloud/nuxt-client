@@ -17,7 +17,7 @@
 			:aria-level="ariaLevel"
 			@keydown.enter="onEnter"
 			:tabindex="isEditMode ? 0 : -1"
-		></VTextarea>
+		/>
 	</div>
 </template>
 
@@ -33,7 +33,7 @@ import {
 	watch,
 } from "vue";
 import { VTextarea } from "vuetify/lib";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import { useBoardPermissions } from "@data-board";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 export default defineComponent({
@@ -80,8 +80,6 @@ export default defineComponent({
 			if (titleInput.value === null) return null;
 			return titleInput.value.$refs.input as HTMLTextAreaElement;
 		});
-
-		// useBoardFocusHandler("klasdfhasdklf", textarea, setFocusOnEdit);
 
 		onMounted(() => {
 			if (props.isFocused && props.isEditMode) setFocusOnEdit();
@@ -175,12 +173,13 @@ export default defineComponent({
 
 /** Edge */
 :deep(textarea)::-ms-input-placeholder {
-	color: var(--v-black) !important;
+	color: var(--v-secondary-base) !important;
 	opacity: 1;
 }
 /** Other common browsers */
 :deep(textarea)::placeholder {
-	color: var(--v-black) !important;
+	color: var(--v-secondary-base) !important;
 	opacity: 1;
 }
 </style>
+@data-board";

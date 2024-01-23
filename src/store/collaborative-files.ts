@@ -106,13 +106,13 @@ export default class CollaborativeFilesModule extends VuexModule {
 			await this.addFileMetaData(data);
 			this.setLoading(false);
 		} catch (error: any) {
-			console.log(error);
+			console.error(error);
 			this.setLoading(false);
 		}
 	}
 
 	@Action
-	async fetchTeamFiles(path: string): Promise<void> {
+	async fetchTeamFiles(): Promise<void> {
 		this.setLoading(true);
 		try {
 			// only mock data, comes from api in the future
@@ -141,7 +141,7 @@ export default class CollaborativeFilesModule extends VuexModule {
 			await this.addFileMetaData(data);
 			this.setLoading(false);
 		} catch (error: any) {
-			console.log(error);
+			console.error(error);
 			this.setLoading(false);
 		}
 	}

@@ -3,6 +3,7 @@
 		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
+		data-testId="context-external-tool-configurator-title"
 	>
 		<RenderHTML :html="t('pages.tool.description')" component="p" />
 		<v-spacer class="mt-10" />
@@ -13,26 +14,51 @@
 			:loading="loading"
 			@cancel="onCancel"
 			@save="onSave"
+			@change="onSelectionChange"
 		>
+			<template #aboveParameters="{ selectedTemplate }">
+				<v-text-field
+					v-if="selectedTemplate && canConfigureContextTools"
+					v-model="displayName"
+					:label="t('pages.tool.context.displayName')"
+					:hint="t('pages.tool.context.displayNameDescription')"
+					persistent-hint
+					validate-on-blur
+					data-testId="parameter-display-name"
+				/>
+			</template>
 		</external-tool-configurator>
 	</default-wireframe>
 </template>
 
 <script lang="ts">
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { useI18n } from "@/composables/i18n.composable";
+import { ToolContextType } from "@/serverApi/v3";
+import ContextExternalToolsModule from "@/store/context-external-tools";
+import EnvConfigModule from "@/store/env-config";
 import {
 	ContextExternalToolConfigurationTemplate,
-	ToolContextType,
+	ToolParameterEntry,
 } from "@/store/external-tool";
+import {
+	ContextExternalTool,
+	ContextExternalToolSave,
+} from "@/store/external-tool/context-external-tool";
+import { ContextExternalToolMapper } from "@/store/external-tool/mapper";
+import NotifierModule from "@/store/notifier";
+import RoomModule from "@/store/room";
 import { BusinessError } from "@/store/types/commons";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
+import { RenderHTML } from "@feature-render-html";
 import {
 	computed,
 	ComputedRef,
@@ -44,16 +70,6 @@ import {
 } from "vue";
 import VueRouter from "vue-router";
 import { useRouter } from "vue-router/composables";
-import NotifierModule from "@/store/notifier";
-import { ContextExternalToolMapper } from "@/store/external-tool/mapper";
-import { useI18n } from "@/composables/i18n.composable";
-import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
-import ContextExternalToolsModule from "@/store/context-external-tools";
-import RoomModule from "@/store/room";
-import {
-	ContextExternalTool,
-	ContextExternalToolSave,
-} from "@/store/external-tool/context-external-tool";
 
 export default defineComponent({
 	components: {
@@ -80,6 +96,9 @@ export default defineComponent({
 		);
 		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+		const envConfigModule: EnvConfigModule = injectStrict(
+			ENV_CONFIG_MODULE_KEY
+		);
 
 		const { t } = useI18n();
 
@@ -112,6 +131,10 @@ export default defineComponent({
 			() => !hasData.value || contextExternalToolsModule.getLoading
 		);
 
+		const canConfigureContextTools: ComputedRef<boolean> = computed(
+			() => envConfigModule.getCtlContextConfigurationEnabled
+		);
+
 		const configurationTemplates: ComputedRef<
 			ContextExternalToolConfigurationTemplate[]
 		> = computed(
@@ -120,6 +143,7 @@ export default defineComponent({
 		);
 
 		const configuration: Ref<ContextExternalTool | undefined> = ref();
+		const displayName: Ref<string | undefined> = ref();
 
 		const apiError: ComputedRef<BusinessError | undefined> = computed(() =>
 			contextExternalToolsModule.getBusinessError.message
@@ -132,20 +156,28 @@ export default defineComponent({
 			await router.push({ path: contextRoute, query: { tab: "tools" } });
 		};
 
+		const onSelectionChange = async () => {
+			displayName.value = undefined;
+		};
+
 		const onSave = async (
 			template: ContextExternalToolConfigurationTemplate,
-			configuredParameterValues: (string | undefined)[]
+			configuredParameterValues: ToolParameterEntry[]
 		) => {
 			const contextExternalTool: ContextExternalToolSave =
 				ContextExternalToolMapper.mapTemplateToContextExternalToolSave(
 					template,
 					configuredParameterValues,
 					props.contextId,
-					props.contextType
+					props.contextType,
+					displayName.value
 				);
 
 			if (props.configId) {
-				// TODO Implement updating of context tools
+				await contextExternalToolsModule.updateContextExternalTool({
+					contextExternalToolId: props.configId,
+					contextExternalTool,
+				});
 			} else {
 				await contextExternalToolsModule.createContextExternalTool(
 					contextExternalTool
@@ -156,10 +188,10 @@ export default defineComponent({
 				const message = props.configId
 					? t(
 							"components.administration.externalToolsSection.notification.updated"
-					  )
+						)
 					: t(
 							"components.administration.externalToolsSection.notification.created"
-					  );
+						);
 
 				notifierModule.show({
 					text: message,
@@ -177,8 +209,11 @@ export default defineComponent({
 					props.configId
 				);
 
-				//TODO Add loading of Context External Tools for updating
-				configuration.value = undefined;
+				configuration.value =
+					await contextExternalToolsModule.loadContextExternalTool(
+						props.configId
+					);
+				displayName.value = configuration.value?.displayName;
 			} else {
 				await contextExternalToolsModule.loadAvailableToolsForContext({
 					contextId: props.contextId,
@@ -201,6 +236,9 @@ export default defineComponent({
 			onCancel,
 			onSave,
 			configuration,
+			displayName,
+			onSelectionChange,
+			canConfigureContextTools,
 		};
 	},
 });

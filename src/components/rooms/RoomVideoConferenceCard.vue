@@ -5,14 +5,15 @@
 		test-id="vc-card"
 		@click="onClick"
 	>
-		<template v-slot:right>
-			<div
-				v-if="isRunning && hasPermission"
-				class="pulsating-dot my-auto"
-			></div>
+		<template #right>
+			<div v-if="isRunning && hasPermission" class="pulsating-dot my-auto" />
 		</template>
-		<template v-slot:footer>
-			<div v-show="!isRunning" class="mt-2">
+		<template #footer>
+			<div
+				v-show="!isRunning && !canStart"
+				class="mt-2"
+				data-testId="vc-info-box-show"
+			>
 				<v-alert dense text class="ma-0" type="info" data-testId="vc-info-box">
 					<div class="d-flex flex-wrap gap-4">
 						<span class="flex-1 my-auto">
@@ -44,7 +45,7 @@
 <script lang="ts">
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiReload } from "@mdi/js";
-import { defineComponent, ComputedRef, computed } from "vue";
+import { computed, ComputedRef, defineComponent } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
@@ -56,6 +57,10 @@ export default defineComponent({
 			required: true,
 		},
 		hasPermission: {
+			type: Boolean,
+			required: true,
+		},
+		canStart: {
 			type: Boolean,
 			required: true,
 		},
@@ -125,20 +130,24 @@ $pulseIconColor: #15ba97;
 	box-shadow: 0 0 0 0 $pulseIconColor;
 	transform: scale(1);
 	animation: pulse 1.5s infinite;
-}
 
-@keyframes pulse {
-	0% {
-		transform: scale(0.95);
-		box-shadow: 0 0 0 0 $pulseIconColor;
+	@keyframes pulse {
+		0% {
+			transform: scale(0.95);
+			box-shadow: 0 0 0 0 $pulseIconColor;
+		}
+		70% {
+			transform: scale(1);
+			box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+		}
+		100% {
+			transform: scale(0.95);
+			box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+		}
 	}
-	70% {
-		transform: scale(1);
-		box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-	}
-	100% {
-		transform: scale(0.95);
-		box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
 	}
 }
 </style>

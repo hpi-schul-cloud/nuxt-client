@@ -11,30 +11,30 @@ import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import CollaborativeFilesModule from "@/store/collaborative-files";
 import ContentModule from "@/store/content";
+import ContextExternalToolsModule from "@/store/context-external-tools";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
-import ExternalToolsModule from "@/store/external-tools";
 import FilePaths from "@/store/filePaths";
 import FinishedTasksModule from "@/store/finished-tasks";
+import GroupModule from "@/store/group";
 import ImportUsersModule from "@/store/import-users";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
-import PrivacyPolicyModule from "@/store/privacy-policy";
 import NotifierModule from "@/store/notifier";
+import PrivacyPolicyModule from "@/store/privacy-policy";
 import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
 import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
-import TaskCardModule from "@/store/task-card";
 import TasksModule from "@/store/tasks";
-import UserLoginMigrationModule from "@/store/user-login-migration";
+import TermsOfUseModule from "@/store/terms-of-use";
+import UserLoginMigrationModule from "@/store/user-login-migrations";
+import VideoConferenceModule from "@/store/video-conference";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
-import ContextExternalToolsModule from "@/store/context-external-tools";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
-import VideoConferenceModule from "@/store/video-conference";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -48,14 +48,15 @@ export let contentModule: ContentModule;
 export let contextExternalToolsModule: ContextExternalToolsModule;
 export let copyModule: CopyModule;
 export let envConfigModule: EnvConfigModule;
-export let externalToolsModule: ExternalToolsModule;
 export let filePathsModule: FilePaths;
 export let finishedTasksModule: FinishedTasksModule;
+export let groupModule: GroupModule;
 export let importUsersModule: ImportUsersModule;
 export let loadingStateModule: LoadingStateModule;
 export let newsModule: NewsModule;
 export let notifierModule: NotifierModule;
 export let privacyPolicyModule: PrivacyPolicyModule;
+export let termsOfUseModule: TermsOfUseModule;
 export let roomModule: RoomModule;
 export let roomsModule: RoomsModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
@@ -63,7 +64,6 @@ export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
 export let statusAlertsModule: StatusAlertsModule;
 export let systemsModule: SystemsModule;
-export let taskCardModule: TaskCardModule;
 export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
 export let videoConferenceModule: VideoConferenceModule;
@@ -79,14 +79,15 @@ export function initializeStores(store: Store<any>): void {
 	contextExternalToolsModule = getModule(ContextExternalToolsModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
-	externalToolsModule = getModule(ExternalToolsModule, store);
 	filePathsModule = getModule(FilePaths, store);
 	finishedTasksModule = getModule(FinishedTasksModule, store);
+	groupModule = getModule(GroupModule, store);
 	importUsersModule = getModule(ImportUsersModule, store);
 	loadingStateModule = getModule(LoadingStateModule, store);
 	newsModule = getModule(NewsModule, store);
 	notifierModule = getModule(NotifierModule, store);
 	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
+	termsOfUseModule = getModule(TermsOfUseModule, store);
 	roomModule = getModule(RoomModule, store);
 	roomsModule = getModule(RoomsModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
@@ -94,7 +95,6 @@ export function initializeStores(store: Store<any>): void {
 	shareModule = getModule(ShareModule, store);
 	statusAlertsModule = getModule(StatusAlertsModule, store);
 	systemsModule = getModule(SystemsModule, store);
-	taskCardModule = getModule(TaskCardModule, store);
 	tasksModule = getModule(TasksModule, store);
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
 	videoConferenceModule = getModule(VideoConferenceModule, store);
@@ -113,14 +113,15 @@ export const modules = {
 	contextExternalToolsModule: ContextExternalToolsModule,
 	copyModule: CopyModule,
 	envConfigModule: EnvConfigModule,
-	externalToolsModule: ExternalToolsModule,
 	filePathsModule: FilePaths,
 	finishedTasksModule: FinishedTasksModule,
+	groupModule: GroupModule,
 	importUsersModule: ImportUsersModule,
 	loadingStateModule: LoadingStateModule,
 	newsModule: NewsModule,
 	notifierModule: NotifierModule,
 	privacyPolicyModule: PrivacyPolicyModule,
+	termsOfUseModule: TermsOfUseModule,
 	roomModule: RoomModule,
 	roomsModule: RoomsModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
@@ -128,7 +129,6 @@ export const modules = {
 	shareModule: ShareModule,
 	statusAlertsModule: StatusAlertsModule,
 	systemsModule: SystemsModule,
-	taskCardModule: TaskCardModule,
 	tasksModule: TasksModule,
 	userLoginMigrationModule: UserLoginMigrationModule,
 	videoConferenceModule: VideoConferenceModule,

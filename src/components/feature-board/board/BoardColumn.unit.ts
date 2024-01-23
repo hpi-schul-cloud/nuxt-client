@@ -5,19 +5,28 @@ import {
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
 import CardHost from "../card/CardHost.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import {
+	useBoardPermissions,
+	useEditMode,
+	useSharedEditMode,
+} from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
+import { useDragAndDrop } from "../shared/DragAndDrop.composable";
+import Vue, { computed, nextTick } from "vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Container } = require("vue-dndrop");
 
-jest.mock("../shared/BoardPermissions.composable");
+const { isDragging, dragEnd } = useDragAndDrop();
+
+jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
+
+jest.mocked(useSharedEditMode);
 
 describe("BoardColumn", () => {
 	let wrapper: Wrapper<Vue>;
@@ -36,12 +45,21 @@ describe("BoardColumn", () => {
 			...options?.permissions,
 		});
 
+		const mockedUseEditMode = jest.mocked(useEditMode);
+
+		const isEditMode = computed(() => true);
+		mockedUseEditMode.mockReturnValue({
+			isEditMode,
+			startEditMode: jest.fn(),
+			stopEditMode: jest.fn(),
+		});
+
 		wrapper = shallowMount(BoardColumnVue as MountOptions<Vue>, {
 			...createComponentMocks({ i18n: true }),
 			provide: {
 				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			},
-			propsData: { column, index: 1 },
+			propsData: { column, index: 1, columnCount: 1 },
 		});
 	};
 
@@ -113,6 +131,41 @@ describe("BoardColumn", () => {
 		});
 	});
 
+	describe("when a card is started dragging", () => {
+		beforeEach(() => {
+			dragEnd();
+		});
+		describe("if payload has 'cardId'", () => {
+			it("should set 'isDragging' value to be true", () => {
+				setup();
+				const emitObject = {
+					isSource: false,
+					payload: { cardId: "card-id", height: 100 },
+					willAcceptDrop: false,
+				};
+				const containerComponent = wrapper.findComponent(Container);
+				containerComponent.vm.$emit("drag-start", emitObject);
+
+				expect(isDragging.value).toBe(true);
+			});
+		});
+
+		describe("if payload doesn't have 'cardId'", () => {
+			it("should not set 'isDragging' value to be true", () => {
+				setup();
+				const emitObject = {
+					isSource: false,
+					payload: "12345",
+					willAcceptDrop: false,
+				};
+				const containerComponent = wrapper.findComponent(Container);
+				containerComponent.vm.$emit("drag-start", emitObject);
+
+				expect(isDragging.value).toBe(false);
+			});
+		});
+	});
+
 	describe("user permissions", () => {
 		describe("when user is not permitted to move a column", () => {
 			it("should set drag-disabled", () => {
@@ -131,6 +184,66 @@ describe("BoardColumn", () => {
 				});
 
 				expect(addCardComponent.length).toStrictEqual(0);
+			});
+		});
+	});
+
+	describe("when reload:board was triggered by a card", () => {
+		it("should emit reload:board", async () => {
+			setup();
+
+			const cardComponents = wrapper.findAllComponents({
+				name: "CardHost",
+			});
+			cardComponents.at(0).vm.$emit("reload:board");
+			await nextTick();
+
+			const emitted = wrapper.emitted("reload:board");
+			expect(emitted).toHaveLength(1);
+		});
+	});
+
+	describe("when move was triggered by column header", () => {
+		describe("when move:column-keyboard was triggered by column header", () => {
+			it("should emit move:column-keyboard", async () => {
+				setup();
+
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
+				});
+				columnHeader.vm.$emit("move:column-keyboard", "ArrowLeft");
+				await nextTick();
+
+				const emitted = wrapper.emitted("move:column-keyboard");
+				expect(emitted).toHaveLength(1);
+			});
+		});
+		describe("when move:column-left was triggered by column header", () => {
+			it("should emit move:column-left", async () => {
+				setup();
+
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
+				});
+				columnHeader.vm.$emit("move:column-left");
+				await nextTick();
+
+				const emitted = wrapper.emitted("move:column-left");
+				expect(emitted).toHaveLength(1);
+			});
+		});
+		describe("when move:column-right was triggered by column header", () => {
+			it("should emit move:column-right", async () => {
+				setup();
+
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
+				});
+				columnHeader.vm.$emit("move:column-right");
+				await nextTick();
+
+				const emitted = wrapper.emitted("move:column-right");
+				expect(emitted).toHaveLength(1);
 			});
 		});
 	});

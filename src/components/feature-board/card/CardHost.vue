@@ -1,107 +1,113 @@
 <template>
-	<CardHostInteractionHandler
-		:isEditMode="isEditMode"
-		@start-edit-mode="onStartEditMode"
-		@end-edit-mode="onEndEditMode"
-		@move:card-keyboard="onMoveCardKeyboard"
-	>
-		<VCard
-			ref="cardHost"
-			:height="isLoading ? height : 'auto'"
-			class="transition-swing"
-			:class="{ 'drag-disabled': isEditMode }"
-			outlined
-			tabindex="0"
-			min-height="120px"
-			:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
-			:id="cardId"
-			:ripple="false"
-			:hover="isHovered"
+	<div>
+		<CardHostInteractionHandler
+			:isEditMode="isEditMode"
+			@start-edit-mode="onStartEditMode"
+			@end-edit-mode="onEndEditMode"
+			@move:card-keyboard="onMoveCardKeyboard"
 		>
-			<template v-if="isLoading">
-				<CardSkeleton :height="height" />
-			</template>
-			<template v-if="!isLoading && card">
-				<CardTitle
-					:isEditMode="isEditMode"
-					:value="card.title"
-					scope="card"
-					@update:value="onUpdateCardTitle"
-					:isFocused="isFocusedById"
-					@enter="addTextAfterTitle"
-				>
-				</CardTitle>
+			<VCard
+				ref="cardHost"
+				:height="isLoading ? height : 'auto'"
+				class="card-host"
+				:class="{ 'drag-disabled': isEditMode }"
+				outlined
+				tabindex="0"
+				min-height="120px"
+				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
+				:id="cardId"
+				:ripple="false"
+				:hover="isHovered"
+			>
+				<template v-if="isLoading">
+					<CardSkeleton :height="height" />
+				</template>
+				<template v-if="!isLoading && card">
+					<CardTitle
+						:isEditMode="isEditMode"
+						:value="card.title"
+						scope="card"
+						@update:value="onUpdateCardTitle"
+						:isFocused="isFocusedById"
+						@enter="addTextAfterTitle"
+					/>
 
-				<div class="board-menu" :class="boardMenuClasses">
-					<BoardMenu v-if="hasDeletePermission" scope="card">
-						<BoardMenuAction @click="onStartEditMode">
-							<template #icon>
-								<VIcon>
-									{{ mdiPencilOutline }}
-								</VIcon>
-							</template>
-							{{ $t("common.actions.edit") }}
-						</BoardMenuAction>
-						<BoardMenuAction @click="onDeleteCard">
-							<template #icon>
-								<VIcon>
-									{{ mdiTrashCanOutline }}
-								</VIcon>
-							</template>
-							{{ $t("components.board.action.delete") }}
-						</BoardMenuAction>
-					</BoardMenu>
-				</div>
+					<div class="board-menu" :class="boardMenuClasses">
+						<BoardMenu v-if="hasDeletePermission" scope="card">
+							<!-- <BoardMenuAction :icon="mdiArrowExpand" @click="onOpenDetailView">
+								{{ $t("components.board.action.detail-view") }}
+							</BoardMenuAction> -->
+							<BoardMenuActionEdit
+								v-if="!isEditMode"
+								@click="onStartEditMode"
+							/>
+							<BoardMenuActionDelete
+								@click="onDeleteCard"
+								data-test-id="board-menu-action-delete"
+								:name="card.title"
+							/>
+						</BoardMenu>
+					</div>
 
-				<ContentElementList
-					:elements="card.elements"
-					:isEditMode="isEditMode"
-					:deleteElement="deleteElement"
-					@move-down:element="onMoveContentElementDown"
-					@move-up:element="onMoveContentElementUp"
-					@move-keyboard:element="onMoveContentElementKeyboard"
-				></ContentElementList>
-				<CardAddElementMenu
-					@add-element="onAddElement"
-					v-if="isEditMode"
-				></CardAddElementMenu>
-			</template>
-		</VCard>
-		<FilePicker
-			@update:file="onFileSelect"
-			:isFilePickerOpen.sync="isFilePickerOpen"
+					<ContentElementList
+						:elements="card.elements"
+						:isEditMode="isEditMode"
+						:isDetailView="isDetailView"
+						@delete:element="onDeleteElement"
+						@move-down:element="onMoveContentElementDown"
+						@move-up:element="onMoveContentElementUp"
+						@move-keyboard:element="onMoveContentElementKeyboard"
+					/>
+					<CardAddElementMenu @add-element="onAddElement" v-if="isEditMode" />
+				</template>
+			</VCard>
+		</CardHostInteractionHandler>
+		<!-- Detail View -->
+		<CardHostDetailView
+			v-if="card"
+			:card="card"
+			:isOpen="isDetailView"
+			@delete:element="onDeleteElement"
+			@move-down:element="onMoveContentElementDown"
+			@move-up:element="onMoveContentElementUp"
+			@move-keyboard:element="onMoveContentElementKeyboard"
+			@add:element="onAddElement"
+			@enter:title="addTextAfterTitle"
+			@update:title="onUpdateCardTitle"
+			@close:detail-view="onCloseDetailView"
+			@delete:card="onDeleteCard"
 		/>
-	</CardHostInteractionHandler>
+	</div>
 </template>
 
 <script lang="ts">
-import { mdiTrashCanOutline, mdiPencilOutline } from "@mdi/js";
-import {
-	useDebounceFn,
-	useElementHover,
-	useElementSize,
-	watchDebounced,
-} from "@vueuse/core";
-import { computed, defineComponent, ref } from "vue";
-import ContentElementList from "../content-elements/ContentElementList.vue";
-import { useBoardFocusHandler } from "../shared/BoardFocusHandler.composable";
-import BoardMenu from "../shared/BoardMenu.vue";
-import BoardMenuAction from "../shared/BoardMenuAction.vue";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { useDeleteBoardNodeConfirmation } from "../shared/DeleteBoardNodeConfirmation.composable";
-import { useEditMode } from "../shared/EditMode.composable";
-import { useElementTypeSelection } from "../shared/ElementTypeSelection.composable";
-import FilePicker from "../shared/FilePicker.vue";
-import { useCardState } from "../state/CardState.composable";
-import CardAddElementMenu from "./CardAddElementMenu.vue";
-import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
-import CardSkeleton from "./CardSkeleton.vue";
-import CardTitle from "./CardTitle.vue";
 import {
 	DragAndDropKey,
 	ElementMove,
 	verticalCursorKeys,
-} from "../types/DragAndDrop";
+} from "@/types/board/DragAndDrop";
+import { delay } from "@/utils/helpers";
+import {
+	useBoardFocusHandler,
+	useBoardPermissions,
+	useCardState,
+	useEditMode,
+} from "@data-board";
+import { mdiArrowExpand } from "@mdi/js";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionEdit,
+} from "@ui-board";
+import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
+import { computed, defineComponent, ref, toRef } from "vue";
+import { useAddElementDialog } from "../shared/AddElementDialog.composable";
+import CardAddElementMenu from "./CardAddElementMenu.vue";
+import CardHostDetailView from "./CardHostDetailView.vue";
+import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+import CardSkeleton from "./CardSkeleton.vue";
+import CardTitle from "./CardTitle.vue";
+import ContentElementList from "./ContentElementList.vue";
 
 export default defineComponent({
 	name: "CardHost",
@@ -109,24 +115,28 @@ export default defineComponent({
 		CardSkeleton,
 		CardTitle,
 		BoardMenu,
-		BoardMenuAction,
+		BoardMenuActionEdit,
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		FilePicker,
+		BoardMenuActionDelete,
+		CardHostDetailView,
 	},
 	props: {
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
 	},
-	emits: ["move:card-keyboard", "delete:card"],
+	emits: ["move:card-keyboard", "delete:card", "reload:board"],
 	setup(props, { emit }) {
 		const cardHost = ref(null);
+		const cardId = toRef(props, "cardId");
 		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
-			props.cardId,
+			cardId.value,
 			cardHost
 		);
+
 		const isHovered = useElementHover(cardHost);
+		const isDetailView = ref(false);
 		const {
 			isLoading,
 			card,
@@ -137,47 +147,37 @@ export default defineComponent({
 			moveElementUp,
 			deleteElement,
 			addTextAfterTitle,
-		} = useCardState(props.cardId);
+		} = useCardState(cardId.value, emit);
+
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
-			props.cardId
+			cardId.value
 		);
 		const { hasDeletePermission } = useBoardPermissions();
-		const { askDeleteBoardNodeConfirmation, isDeleteDialogOpen } =
-			useDeleteBoardNodeConfirmation();
 
-		const { askType, onFileSelect, isFilePickerOpen, isDialogOpen } =
-			useElementTypeSelection(addElement);
+		const { askType } = useAddElementDialog(addElement);
 
-		const onMoveCardKeyboard = (event: KeyboardEvent) => {
+		const onMoveCardKeyboard = (event: KeyboardEvent) =>
 			emit("move:card-keyboard", event.code);
-		};
+
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
 
-		const onDeleteCard = async () => {
-			const shouldDelete = await askDeleteBoardNodeConfirmation(
-				card.value?.title,
-				"boardCard"
-			);
+		const onDeleteCard = () => emit("delete:card", card.value?.id);
 
-			if (shouldDelete) {
-				emit("delete:card", card.value?.id);
-			}
+		const onAddElement = () => askType();
+
+		const onDeleteElement = (elementId: string) => deleteElement(elementId);
+
+		const onStartEditMode = () => startEditMode();
+
+		const onEndEditMode = async () => {
+			stopEditMode();
+			await delay(300);
+			updateCardHeight(cardHostHeight.value);
 		};
 
-		const onAddElement = () => {
-			askType();
-		};
-
-		const onStartEditMode = () => {
-			startEditMode();
-		};
-
-		const onEndEditMode = () => {
-			if (!isDialogOpen.value && !isDeleteDialogOpen.value) {
-				stopEditMode();
-			}
-		};
+		const onOpenDetailView = () => (isDetailView.value = true);
+		const onCloseDetailView = () => (isDetailView.value = false);
 
 		const onMoveContentElementDown = async (payload: ElementMove) =>
 			await moveElementDown(payload);
@@ -206,12 +206,6 @@ export default defineComponent({
 			return "hidden";
 		});
 
-		watchDebounced(
-			cardHostHeight,
-			(newHeight: number) => updateCardHeight(newHeight),
-			{ debounce: 500, maxWait: 2000 }
-		);
-
 		return {
 			boardMenuClasses,
 			isLoading,
@@ -223,6 +217,7 @@ export default defineComponent({
 			onUpdateCardTitle,
 			onDeleteCard,
 			onAddElement,
+			onDeleteElement,
 			deleteElement,
 			onStartEditMode,
 			onEndEditMode,
@@ -231,11 +226,11 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
-			mdiTrashCanOutline,
-			mdiPencilOutline,
-			onFileSelect,
-			isFilePickerOpen,
 			addTextAfterTitle,
+			onOpenDetailView,
+			onCloseDetailView,
+			isDetailView,
+			mdiArrowExpand,
 		};
 	},
 });
@@ -260,7 +255,7 @@ export default defineComponent({
 }
 
 .v-card:focus {
-	outline: 2px solid var(--v-secondary-base);
+	outline: 2px solid var(--v-secondary-lighten1);
 	outline-offset: 0;
 }
 </style>

@@ -87,7 +87,6 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				currentPage: 1,
 			});
 			wrapper.find(`[aria-label="Go to next page"]`).trigger("click");
-			console.log(wrapper.emitted("update:current-page"));
 			expect(wrapper.emitted("update:current-page")).toStrictEqual([[2]]);
 		});
 	});

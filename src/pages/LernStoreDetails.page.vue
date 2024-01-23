@@ -21,6 +21,7 @@
 import { contentModule } from "@/store";
 import LernstoreDetailView from "@/components/lern-store/LernstoreDetailView";
 import LernstoreCollectionDetailView from "@/components/lern-store/LernstoreCollectionDetailView";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -47,13 +48,13 @@ export default {
 			return this.isInline
 				? this.$t("pages.content.page.window.title", {
 						instance: this.$theme.name,
-				  })
+					})
 				: this.$t("common.words.lernstore");
 		},
 	},
 	async created() {
 		await contentModule.getResourceMetadata(this.$route.params.id);
-		document.title = this.documentTitle;
+		document.title = buildPageTitle(this.documentTitle);
 	},
 };
 </script>

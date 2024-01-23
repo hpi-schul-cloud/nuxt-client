@@ -111,12 +111,10 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -145,12 +143,10 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -170,12 +166,10 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -202,12 +196,10 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -236,12 +228,10 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -267,12 +257,10 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 
@@ -300,12 +288,10 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
-			console.log(apiError);
-
 			this.setBusinessError({
 				error: apiError,
 				statusCode: apiError.code,
-				message: `${apiError.type}: ${apiError.message}}`,
+				message: apiError.message,
 			});
 		}
 

@@ -143,6 +143,7 @@ import {
 	mdiPencilOutline,
 	mdiPlus,
 } from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -630,9 +631,9 @@ export default {
 		},
 	},
 	mounted() {
-		document.title = `${this.$t(
-			"pages.administration.teachers.index.title"
-		)} - ${this.$theme.short_name}`;
+		document.title = buildPageTitle(
+			this.$t("pages.administration.teachers.index.title")
+		);
 	},
 };
 </script>
@@ -699,7 +700,9 @@ span {
 button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
-	box-shadow: 0 0 0 0 var(--v-white-base), 0 0 0 3px var(--button-background);
+	box-shadow:
+		0 0 0 0 var(--v-white-base),
+		0 0 0 3px var(--button-background);
 }
 
 .search-section {

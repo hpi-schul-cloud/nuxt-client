@@ -5,7 +5,7 @@ export class ApplicationError extends Error {
 	constructor(
 		public statusCode: HttpStatusCode,
 		public translationKey: string,
-		public message: string = ""
+		public message = ""
 	) {
 		super(message);
 	}

@@ -1,8 +1,6 @@
 import { Factory } from "fishery";
-import {
-	SchoolExternalTool,
-	ToolConfigurationStatus,
-} from "@/store/external-tool";
+import { SchoolExternalTool } from "@/store/external-tool";
+import { schoolToolConfigurationStatusFactory } from "./schoolExternalToolConfigurationFactory";
 
 export const schoolExternalToolFactory = Factory.define<SchoolExternalTool>(
 	({ sequence }) => ({
@@ -11,7 +9,8 @@ export const schoolExternalToolFactory = Factory.define<SchoolExternalTool>(
 		toolId: "toolId",
 		name: "name",
 		parameters: [],
-		status: ToolConfigurationStatus.Latest,
+		status: schoolToolConfigurationStatusFactory.build(),
 		version: 1,
+		isDeactivated: false,
 	})
 );

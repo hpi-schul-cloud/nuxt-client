@@ -4,6 +4,8 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import dayjs from "dayjs";
+import { formatDateForAlerts } from "@/plugins/datetime";
 
 const testProps = {
 	statusAlerts: mockStatusAlerts,
@@ -38,39 +40,38 @@ describe("@/components/topbar/StatusAlerts", () => {
 
 	it("should show alert title", () => {
 		const wrapper = getWrapper(testProps);
-		const title = wrapper.find("[data-test-id='alert-title-0']");
+		const title = wrapper.find("[data-testid='alert-title-0']");
 		expect(title.element.textContent).toContain(mockStatusAlerts[0].title);
 	});
 
 	it("should show alert text", () => {
 		const wrapper = getWrapper(testProps);
-		const title = wrapper.find("[data-test-id='alert-text-0']");
+		const title = wrapper.find("[data-testid='alert-text-0']");
 		expect(title.element.textContent).toContain(mockStatusAlerts[0].text);
 	});
 
 	it("should show multiple alerts", () => {
 		const wrapper = getWrapper(testProps);
-		const title0 = wrapper.find("[data-test-id='alert-title-0']");
+		const title0 = wrapper.find("[data-testid='alert-title-0']");
 		expect(title0.element.textContent).toContain(mockStatusAlerts[0].title);
-		const title1 = wrapper.find("[data-test-id='alert-title-1']");
+		const title1 = wrapper.find("[data-testid='alert-title-1']");
 		expect(title1.element.textContent).toContain(mockStatusAlerts[1].title);
-		const title2 = wrapper.find("[data-test-id='alert-title-2']");
+		const title2 = wrapper.find("[data-testid='alert-title-2']");
 		expect(title2.element.textContent).toContain(mockStatusAlerts[2].title);
 	});
 });
 
-describe("getCreatedDate", () => {
-	it("should be getCreatedDate function on the template", () => {
-		const wrapper = getWrapper(testProps);
-		const expectedDate = "05.05.2023 12:34";
-		const alertElement = wrapper.find(".alert-date");
-		expect(alertElement.element.innerHTML).toContain(expectedDate);
+describe("formatDate", () => {
+	const wrapper = getWrapper(testProps);
+	it("returns 'vor ein paar Sekunden' for seconds difference", () => {
+		const fewSecondsAgo = dayjs().subtract(30, "seconds");
+		const expectedOutput = "vor ein paar Sekunden";
+		const result = formatDateForAlerts(fewSecondsAgo);
+		expect(result).toBe(expectedOutput);
 	});
-
-	it("should returns expected result", () => {
-		const wrapper = getWrapper(testProps);
-		const expectedDate = "05.05.2023 12:34";
-		const dateTime = "May 5, 2023 12:34 PM";
-		expect(wrapper.vm.getCreatedDate(dateTime)).toEqual(expectedDate);
+	it("returns European format after 7 days", () => {
+		const pastDate = dayjs.utc().subtract(8, "days").toISOString();
+		const expectedDate = dayjs.utc(pastDate).format("DD.MM.YYYY");
+		expect(wrapper.vm.formatDate(pastDate)).toEqual(expectedDate);
 	});
 });

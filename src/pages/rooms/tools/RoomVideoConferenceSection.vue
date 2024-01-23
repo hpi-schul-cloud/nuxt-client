@@ -2,12 +2,13 @@
 	<div>
 		<room-video-conference-card
 			:has-permission="hasPermission"
+			:can-start="canStart"
 			:is-running="isRunning"
 			:is-refreshing="isRefreshing"
 			data-testid="video-conference-card"
 			@click="onClick"
 			@refresh="onRefresh"
-		></room-video-conference-card>
+		/>
 
 		<v-custom-dialog
 			:is-open="isErrorDialogOpen"
@@ -52,7 +53,7 @@
 							class="my-0"
 							inset
 							dense
-						></v-switch>
+						/>
 					</div>
 					<div class="d-flex justify-space-between">
 						<p class="text-md mt-1 mr-4">
@@ -68,7 +69,7 @@
 							class="my-0"
 							inset
 							dense
-						></v-switch>
+						/>
 					</div>
 					<div class="d-flex justify-space-between">
 						<p class="text-md mt-1 mr-4">
@@ -84,11 +85,11 @@
 							class="my-0"
 							inset
 							dense
-						></v-switch>
+						/>
 					</div>
 				</v-card-text>
 				<v-card-actions>
-					<v-spacer></v-spacer>
+					<v-spacer />
 					<v-btn
 						data-testId="dialog-cancel"
 						depressed
@@ -127,10 +128,10 @@ import {
 import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE_KEY,
-	injectStrict,
-	VIDEO_CONFERENCE_MODULE_KEY,
-	ROOM_MODULE_KEY,
 	I18N_KEY,
+	injectStrict,
+	ROOM_MODULE_KEY,
+	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import {
 	computed,
@@ -186,6 +187,7 @@ export default defineComponent({
 			() =>
 				authModule.getUserPermissions.includes("join_meeting") &&
 				(!authModule.getUserRoles.includes("expert") ||
+					authModule.getUserRoles.length > 1 ||
 					isWaitingRoomActive.value)
 		);
 
@@ -290,6 +292,7 @@ export default defineComponent({
 			videoConferenceInfo,
 			videoConferenceOptions,
 			hasPermission,
+			canStart,
 			isRunning,
 			isRefreshing,
 			onClick,

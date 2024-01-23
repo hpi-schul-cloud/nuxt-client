@@ -79,7 +79,7 @@
 				<h4>{{ dialog.header }}</h4>
 			</div>
 			<template slot="content">
-				<v-divider class="mb-4"></v-divider>
+				<v-divider class="mb-4" />
 				<div class="modal-text">
 					<p class="text-md mt-2">
 						{{ dialog.text }}
@@ -91,18 +91,15 @@
 						outlined
 						dense
 						data-testid="modal-input"
-					></v-text-field>
+					/>
 				</div>
 				<div class="modal-text modal-sub-text mb-2">
 					{{ dialog.subText }}
 				</div>
 				<div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
-					<base-qr-code
-						:url="dialog.qrUrl"
-						data-testid="modal-qrcode"
-					></base-qr-code>
+					<base-qr-code :url="dialog.qrUrl" data-testid="modal-qrcode" />
 				</div>
-				<v-divider></v-divider>
+				<v-divider />
 			</template>
 		</v-custom-dialog>
 
@@ -113,7 +110,7 @@
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
-		></copy-result-modal>
+		/>
 	</default-wireframe>
 </template>
 
@@ -149,6 +146,7 @@ import {
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default defineComponent({
 	setup() {
@@ -294,21 +292,6 @@ export default defineComponent({
 				});
 			}
 			if (
-				envConfigModule.getEnv.FEATURE_TASK_CARD_ENABLED &&
-				authModule.getUserPermissions.includes("TASK_CARD_EDIT".toLowerCase())
-			) {
-				const action = {
-					label: this.$t("pages.rooms.fab.add.betatask"),
-					icon: mdiFormatListChecks,
-					to: {
-						name: "rooms-beta-task-new",
-						params: { course: this.roomData.roomId },
-					},
-					dataTestid: "fab_button_add_beta_task",
-				};
-				actions.push(action);
-			}
-			if (
 				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
 			) {
 				actions.push({
@@ -424,7 +407,7 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		if (this.$route.query && this.$route.query.tab) {
+		if (this.$route.query?.tab) {
 			this.setActiveTab(this.$route.query.tab);
 		}
 
@@ -433,8 +416,25 @@ export default defineComponent({
 			courseId: this.courseId,
 			userId: authModule.getUser.id,
 		});
+
+		document.title = buildPageTitle(this.roomData.title);
+	},
+	mounted() {
+		window.addEventListener("pageshow", this.setActiveTabIfPageCached);
+	},
+	beforeDestroy() {
+		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
+		setActiveTabIfPageCached(event) {
+			if (event.persisted) {
+				if (this.$route.query?.tab) {
+					this.setActiveTab(this.$route.query.tab);
+				} else {
+					this.setActiveTab("learn-content");
+				}
+			}
+		},
 		setActiveTab(tabName) {
 			const index = this.tabItems.findIndex(
 				(tabItem) => tabItem.name === tabName
@@ -509,14 +509,9 @@ export default defineComponent({
 	watch: {
 		tabIndex(newIndex) {
 			if (newIndex >= 0 && newIndex < this.tabItems.length) {
-				this.$router.replace({
+				this.$router.push({
 					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
 				});
-			}
-		},
-		roomData(newRoomData, oldRoomData) {
-			if (newRoomData.title !== oldRoomData.title) {
-				document.title = `${newRoomData.title} - ${this.$theme.short_name}`;
 			}
 		},
 	},

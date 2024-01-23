@@ -12,7 +12,7 @@
 				class="my-0 mr-n3"
 				inset
 				dense
-			></v-switch>
+			/>
 		</div>
 		<div class="d-flex justify-space-between">
 			<div class="mt-1">
@@ -26,7 +26,7 @@
 				class="my-0 mr-n3"
 				inset
 				dense
-			></v-switch>
+			/>
 		</div>
 	</div>
 </template>

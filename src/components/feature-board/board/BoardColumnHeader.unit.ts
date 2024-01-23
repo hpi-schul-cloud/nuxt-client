@@ -3,18 +3,21 @@ import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import { useEditMode } from "../shared/EditMode.composable";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
+import {
+	useEditMode,
+	useBoardPermissions,
+	useBoardFocusHandler,
+} from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 import { I18N_KEY } from "@/utils/inject";
+import { BoardMenuActionMoveLeft, BoardMenuActionMoveRight } from "@ui-board";
 
-jest.mock("../shared/BoardPermissions.composable");
+jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
-
-jest.mock("../shared/EditMode.composable");
+const mockUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
 describe("BoardColumnHeader", () => {
 	let wrapper: Wrapper<Vue>;
@@ -34,6 +37,9 @@ describe("BoardColumnHeader", () => {
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
 			...options?.permissions,
+		});
+		mockUseBoardFocusHandler.mockReturnValue({
+			isFocusContained: undefined,
 		});
 
 		wrapper = shallowMount(BoardColumnHeader as MountOptions<Vue>, {
@@ -65,6 +71,30 @@ describe("BoardColumnHeader", () => {
 
 			const emitted = wrapper.emitted();
 			expect(emitted["update:title"]).toBeDefined();
+		});
+	});
+
+	describe("when the column should be moved to the left", () => {
+		it("should emit move:column-left", async () => {
+			setup();
+
+			const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
+			moveLeftButton.vm.$emit("click");
+
+			const emitted = wrapper.emitted();
+			expect(emitted["move:column-left"]).toBeDefined();
+		});
+	});
+
+	describe("when the column should be moved to the right", () => {
+		it("should emit move:column-right", async () => {
+			setup();
+
+			const moveRightButton = wrapper.findComponent(BoardMenuActionMoveRight);
+			moveRightButton.vm.$emit("click");
+
+			const emitted = wrapper.emitted();
+			expect(emitted["move:column-right"]).toBeDefined();
 		});
 	});
 

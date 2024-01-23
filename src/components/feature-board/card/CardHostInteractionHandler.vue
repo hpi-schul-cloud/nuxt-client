@@ -9,7 +9,7 @@
 			@keydown.up.down.left.right="onKeydownArrow"
 			@keydown.enter="onKeydownEnter"
 		>
-			<slot></slot>
+			<slot />
 		</div>
 	</InlineEditInteractionHandler>
 </template>
@@ -44,7 +44,10 @@ export default defineComponent({
 			}
 		};
 		const onKeydownEnter = (event: KeyboardEvent) => {
-			if (!props.isEditMode) {
+			const element = event.target as HTMLElement;
+			const classNames = event.target ? element.getAttribute("class") : "";
+			const isCardHost = classNames?.split(" ").includes("card-host");
+			if (!props.isEditMode && isCardHost) {
 				emit("start-edit-mode");
 				event.stopPropagation();
 				event.stopImmediatePropagation();

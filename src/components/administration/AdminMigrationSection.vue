@@ -1,117 +1,141 @@
 <template>
 	<div>
-		<h2 class="text-h4 mb-10">
-			{{ t("components.administration.adminMigrationSection.headers") }}
-		</h2>
-		<RenderHTML
-			data-testid="text-description"
-			:html="
-				t('components.administration.adminMigrationSection.description', {
-					supportLink,
-				})
-			"
-			component="p"
-		/>
-		<div v-if="!oauthMigration.oauthMigrationPossible">
-			<v-alert light prominent text type="info">
-				<RenderHTML
-					:html="t('components.administration.adminMigrationSection.infoText')"
-					component="span"
-				/>
-			</v-alert>
+		<div v-if="!isGracePeriodExpired" data-testId="migration-control-section">
+			<RenderHTML
+				data-testid="text-description"
+				:html="
+					t('components.administration.adminMigrationSection.description', {
+						supportLink,
+					})
+				"
+				component="p"
+			/>
+			<div v-if="isStartButtonVisible">
+				<v-alert light text type="info">
+					<div class="alert-text">
+						<RenderHTML
+							data-testid="migration-info-text"
+							:html="
+								t('components.administration.adminMigrationSection.infoText')
+							"
+							component="span"
+						/>
+					</div>
+				</v-alert>
+			</div>
+			<div v-else-if="isMigrationActive">
+				<v-alert light text type="info">
+					<div class="alert-text">
+						<RenderHTML
+							data-testid="migration-active-status"
+							:html="
+								t(
+									'components.administration.adminMigrationSection.migrationActive'
+								)
+							"
+							component="span"
+						/>
+					</div>
+				</v-alert>
+			</div>
+			<v-btn
+				v-if="isStartButtonVisible"
+				class="my-4 button-start"
+				color="primary"
+				depressed
+				:disabled="!officialSchoolNumber"
+				data-testid="migration-start-button"
+				@click="onToggleShowStartWarning"
+			>
+				{{
+					t(
+						"components.administration.adminMigrationSection.migrationEnableButton.label"
+					)
+				}}
+			</v-btn>
+			<v-btn
+				v-if="isEndButtonVisible"
+				class="my-4 button-end"
+				color="primary"
+				depressed
+				:disabled="!isMigrationActive"
+				data-testid="migration-end-button"
+				@click="onToggleShowEndWarning"
+			>
+				{{
+					t(
+						"components.administration.adminMigrationSection.migrationEndButton.label"
+					)
+				}}
+			</v-btn>
+			<v-switch
+				v-show="isShowMandatorySwitch"
+				:label="
+					t(
+						'components.administration.adminMigrationSection.mandatorySwitch.label'
+					)
+				"
+				:disabled="!isMigrationActive"
+				:true-value="true"
+				:false-value="false"
+				:value="isMigrationMandatory"
+				inset
+				dense
+				class="ml-1"
+				data-testid="migration-mandatory-switch"
+				@change="setMigrationMandatory(!isMigrationMandatory)"
+			/>
 		</div>
-		<div v-else>
-			<v-alert light prominent text type="info">
-				<RenderHTML
-					:html="
-						t('components.administration.adminMigrationSection.migrationActive')
-					"
-					component="span"
-				/>
-			</v-alert>
-		</div>
-		<v-btn
-			v-if="isShowStartButton"
-			class="my-5 button-start"
-			color="primary"
-			depressed
-			:disabled="
-				!oauthMigration.enableMigrationStart || isCurrentDateAfterFinalFinish
-			"
-			data-testid="migration-start-button"
-			@click="onToggleShowStartWarning"
-		>
-			{{
-				t(
-					"components.administration.adminMigrationSection.migrationEnableButton.label"
-				)
-			}}
-		</v-btn>
-		<v-btn
-			v-if="isShowEndButton"
-			class="my-5 button-end"
-			color="primary"
-			depressed
-			:disabled="!oauthMigration.oauthMigrationPossible"
-			data-testid="migration-end-button"
-			@click="onToggleShowEndWarning"
-		>
-			{{
-				t(
-					"components.administration.adminMigrationSection.migrationEndButton.label"
-				)
-			}}
-		</v-btn>
-		<v-switch
-			v-show="isShowMandatorySwitch"
-			:label="
-				t(
-					'components.administration.adminMigrationSection.mandatorySwitch.label'
-				)
-			"
-			:disabled="!oauthMigration.oauthMigrationPossible"
-			:true-value="true"
-			:false-value="false"
-			:value="oauthMigration.oauthMigrationMandatory"
-			inset
-			dense
-			class="ml-1"
-			data-testid="migration-mandatory-switch"
-			@change="setMigration(true, !oauthMigration.oauthMigrationMandatory)"
+
+		<migration-warning-card
+			value="start"
+			v-if="isStartWarningVisible"
+			data-testid="migration-start-warning-card"
+			@start="onToggleShowStartWarning"
+			@set="onStartMigration()"
 		/>
+
+		<migration-warning-card
+			value="end"
+			v-if="isEndWarningVisible"
+			data-testid="migration-end-warning-card"
+			@end="onToggleShowEndWarning"
+			@set="onCloseMigration()"
+		/>
+
 		<RenderHTML
-			v-if="oauthMigration.oauthMigrationFinished"
+			v-if="
+				userLoginMigration &&
+				userLoginMigration.closedAt &&
+				userLoginMigration.finishedAt
+			"
 			class="migration-completion-date"
 			data-testid="migration-finished-timestamp"
 			:html="
-				t(finalFinishText, {
-					date: dayjs(oauthMigration.oauthMigrationFinished).format(
-						'DD.MM.YYYY'
-					),
-					time: dayjs(oauthMigration.oauthMigrationFinished).format('HH:mm'),
-					finishDate: dayjs(oauthMigration.oauthMigrationFinalFinish).format(
-						'DD.MM.YYYY'
-					),
-					finishTime: dayjs(oauthMigration.oauthMigrationFinalFinish).format(
-						'HH:mm'
-					),
+				t(latestMigration, {
+					date: dayjs(userLoginMigration.closedAt).format('DD.MM.YYYY'),
+					time: dayjs(userLoginMigration.closedAt).format('HH:mm'),
+					finishDate: dayjs(userLoginMigration.finishedAt).format('DD.MM.YYYY'),
+					finishTime: dayjs(userLoginMigration.finishedAt).format('HH:mm'),
 				})
 			"
 			component="p"
 		/>
-		<migration-warning-card
-			value="start"
-			v-if="isShowStartWarning"
-			data-testid="migration-start-warning-card"
-			@start="onToggleShowStartWarning"
-			@set="setMigration(true, false)"
-		/>
-		<migration-warning-card
-			value="end"
-			v-if="isShowEndWarning"
-			data-testid="migration-end-warning-card"
-			@end="onToggleShowEndWarning"
-			@set="setMigration(false, oauthMigration.oauthMigrationMandatory)"
+
+		<v-switch
+			v-if="!isGracePeriodExpired & globalFeatureEnableLdapSyncDuringMigration"
+			:label="
+				t(
+					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
+				)
+			"
+			:disabled="!isMigrationActive"
+			v-model="school.features.enableLdapSyncDuringMigration"
+			inset
+			dense
+			class="ml-1"
+			data-testid="enable-sync-during-migration-switch"
+			@change="setSchoolFeatures"
 		/>
 		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
@@ -125,7 +149,7 @@
 			dense
 			class="ml-1"
 			data-testid="show-outdated-users-switch"
-			@change="setShowOutdatedUsers"
+			@change="setSchoolFeatures"
 		/>
 		<p
 			v-if="globalFeatureShowOutdatedUsers"
@@ -141,24 +165,26 @@
 </template>
 
 <script lang="ts">
-import { MigrationBody } from "@/serverApi/v3";
-import SchoolsModule from "@/store/schools";
-import { OauthMigration, School } from "@/store/types/schools";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import { useI18n } from "@/composables/i18n.composable";
+import { School } from "@/store/types/schools";
+import { UserLoginMigration } from "@/store/user-login-migration";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	SCHOOLS_MODULE_KEY,
+	USER_LOGIN_MIGRATION_MODULE_KEY,
+} from "@/utils/inject";
+import { RenderHTML } from "@feature-render-html";
 import dayjs from "dayjs";
 import {
 	computed,
 	ComputedRef,
 	defineComponent,
-	inject,
 	onMounted,
 	ref,
 	Ref,
-	watch,
 } from "vue";
-import VueI18n from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
-import RenderHTML from "@/components/common/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -167,97 +193,104 @@ export default defineComponent({
 		RenderHTML,
 	},
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
-		if (!schoolsModule || !i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
-
-		onMounted(async () => {
-			await schoolsModule.fetchSchoolOAuthMigration();
-		});
-
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
-
-		const oauthMigration: ComputedRef<OauthMigration> = computed(
-			() => schoolsModule.getOauthMigration
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+		const userLoginMigrationModule = injectStrict(
+			USER_LOGIN_MIGRATION_MODULE_KEY
 		);
 
-		const setMigration = (available: boolean, mandatory: boolean) => {
-			const migrationFlags: MigrationBody = {
-				oauthMigrationPossible: available,
-				oauthMigrationMandatory: mandatory,
-				oauthMigrationFinished: !available,
-			};
-			schoolsModule.setSchoolOauthMigration(migrationFlags);
+		onMounted(async () => {
+			await userLoginMigrationModule.fetchLatestUserLoginMigrationForSchool();
+		});
+
+		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
+			computed(() => userLoginMigrationModule.getUserLoginMigration);
+
+		const isMigrationActive: ComputedRef<boolean> = computed(
+			() =>
+				!!userLoginMigration.value?.startedAt &&
+				!userLoginMigration.value.closedAt
+		);
+
+		const isMigrationMandatory: ComputedRef<boolean> = computed(
+			() => !!userLoginMigration.value?.mandatorySince
+		);
+
+		const onStartMigration = () => {
+			if (userLoginMigration.value) {
+				userLoginMigrationModule.restartUserLoginMigration();
+			} else {
+				userLoginMigrationModule.startUserLoginMigration();
+			}
+		};
+
+		const setMigrationMandatory = (mandatory: boolean) => {
+			userLoginMigrationModule.setUserLoginMigrationMandatory(mandatory);
+		};
+
+		const onCloseMigration = () => {
+			userLoginMigrationModule.closeUserLoginMigration();
 		};
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
-		watch(school, () => {
-			schoolsModule.fetchSchoolOAuthMigration();
-		});
 
-		const isShowEndWarning: Ref<boolean> = ref(false);
+		const isEndWarningVisible: Ref<boolean> = ref(false);
 
 		const onToggleShowEndWarning = () => {
-			isShowEndWarning.value = !isShowEndWarning.value;
+			isEndWarningVisible.value = !isEndWarningVisible.value;
 		};
 
-		const isShowStartWarning: Ref<boolean> = ref(false);
+		const isStartWarningVisible: Ref<boolean> = ref(false);
 
 		const onToggleShowStartWarning = () => {
-			isShowStartWarning.value = !isShowStartWarning.value;
+			isStartWarningVisible.value = !isStartWarningVisible.value;
 		};
 
-		const isShowStartButton: ComputedRef<boolean> = computed(
+		const isEndButtonVisible: ComputedRef<boolean> = computed(
 			() =>
-				!oauthMigration.value.oauthMigrationPossible &&
-				!isShowEndWarning.value &&
-				!isShowStartWarning.value
+				isMigrationActive.value &&
+				!isEndWarningVisible.value &&
+				!isStartWarningVisible.value
 		);
 
-		const isShowEndButton: ComputedRef<boolean> = computed(
+		const isStartButtonVisible: ComputedRef<boolean> = computed(
 			() =>
-				oauthMigration.value.oauthMigrationPossible &&
-				!isShowEndWarning.value &&
-				!isShowStartWarning.value
+				!isEndButtonVisible.value &&
+				!isEndWarningVisible.value &&
+				!isStartWarningVisible.value
 		);
 
 		const isShowMandatorySwitch: ComputedRef<boolean> = computed(
-			() => !isShowEndWarning.value && !isShowStartWarning.value
+			() => !isEndWarningVisible.value && !isStartWarningVisible.value
 		);
 
-		const isCurrentDateAfterFinalFinish: ComputedRef<boolean> = computed(() => {
-			if (schoolsModule.getOauthMigration.oauthMigrationFinalFinish) {
+		const isGracePeriodExpired: ComputedRef<boolean> = computed(() => {
+			if (userLoginMigration.value?.finishedAt) {
 				return (
-					Date.now() >=
-					new Date(
-						schoolsModule.getOauthMigration.oauthMigrationFinalFinish
-					).getTime()
+					Date.now() >= new Date(userLoginMigration.value.finishedAt).getTime()
 				);
-			} else {
-				return false;
 			}
+
+			return false;
 		});
 
-		const finalFinishText: ComputedRef<string> = computed(() => {
-			if (isCurrentDateAfterFinalFinish.value) {
+		const latestMigration: ComputedRef<string> = computed(() => {
+			if (isGracePeriodExpired.value) {
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.textComplete";
 			} else {
 				return "components.administration.adminMigrationSection.oauthMigrationFinished.text";
 			}
 		});
-		const schoolNumber: ComputedRef<string | undefined> = computed(
+
+		const officialSchoolNumber: ComputedRef<string | undefined> = computed(
 			() => schoolsModule.getSchool.officialSchoolNumber
 		);
+
 		const getSubject = (): string => {
 			const subject = encodeURIComponent(
 				`Schule mit der Nummer: ${
-					schoolNumber.value ?? "???"
+					officialSchoolNumber.value ?? "???"
 				} soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!`
 			);
 
@@ -271,36 +304,52 @@ export default defineComponent({
 				}?subject=${getSubject()}`
 		);
 
+		const globalFeatureEnableLdapSyncDuringMigration: ComputedRef<boolean> =
+			computed(() => envConfigModule.getEnableLdapSyncDuringMigration);
+
 		const globalFeatureShowOutdatedUsers: ComputedRef<boolean> = computed(
 			() => envConfigModule.getShowOutdatedUsers
 		);
 
-		const setShowOutdatedUsers = () => {
-			schoolsModule.update({
+		const setSchoolFeatures = async () => {
+			await schoolsModule.update({
 				id: school.value.id,
 				features: school.value.features,
 			});
 		};
 
 		return {
-			oauthMigration,
-			setMigration,
+			userLoginMigration,
+			onStartMigration,
+			setMigrationMandatory,
+			onCloseMigration,
 			t,
-			isShowEndWarning,
+			isEndWarningVisible,
 			onToggleShowEndWarning,
-			isShowStartWarning,
+			isStartWarningVisible,
 			onToggleShowStartWarning,
-			isShowStartButton,
-			isShowEndButton,
+			isStartButtonVisible,
+			isEndButtonVisible,
 			isShowMandatorySwitch,
-			isCurrentDateAfterFinalFinish,
-			finalFinishText,
+			isGracePeriodExpired,
+			latestMigration,
 			dayjs,
 			supportLink,
 			school,
-			setShowOutdatedUsers,
+			setSchoolFeatures,
 			globalFeatureShowOutdatedUsers,
+			globalFeatureEnableLdapSyncDuringMigration,
+			officialSchoolNumber,
+			isMigrationActive,
+			isMigrationMandatory,
 		};
 	},
 });
 </script>
+
+<style lang="scss" scoped>
+.alert-text {
+	color: var(--v-black-base) !important;
+	line-height: var(--line-height-lg) !important;
+}
+</style>

@@ -1,7 +1,7 @@
 <template>
 	<div v-if="news">
 		<default-wireframe
-			:headline="$t('pages.news._id.edit.title')"
+			:headline="$t('pages.news.edit.title.default')"
 			:breadcrumbs="[
 				{
 					to: '/news',
@@ -12,7 +12,7 @@
 					text: news.title,
 				},
 				{
-					text: $t('pages.news._id.edit.title'),
+					text: $t('pages.news.edit.title.default'),
 					disabled: true,
 				},
 			]"
@@ -25,8 +25,7 @@
 					@save="save"
 					@delete="deleteHandler"
 					@cancel="cancelHandler"
-				>
-				</form-news>
+				/>
 			</div>
 		</default-wireframe>
 	</div>
@@ -36,6 +35,7 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import FormNews from "@/components/organisms/FormNews";
 import { newsModule, notifierModule } from "@/store";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -48,14 +48,18 @@ export default {
 	computed: {
 		news: () => newsModule.getCurrentNews,
 	},
-	mounted() {
-		newsModule.fetchNews(this.$route.params.id);
-		const hasTitle = (this.news || {}).title;
-		document.title = (
-			hasTitle
-				? `${(this.news || {}).title} bearbeiten`
-				: this.$t("pages.news._id.edit.title")
-		).toString();
+	async mounted() {
+		document.title = buildPageTitle(this.$t("pages.news.edit.title.default"));
+
+		await newsModule.fetchNews(this.$route.params.id);
+		const newsTitle = this.news?.title;
+		if (newsTitle) {
+			document.title = buildPageTitle(
+				this.$t("pages.news.edit.title", {
+					title: newsTitle,
+				})
+			);
+		}
 	},
 	methods: {
 		save: async function (newsToPatch) {
@@ -75,7 +79,6 @@ export default {
 					path: `/news/${this.news.id}`,
 				});
 			} catch (e) {
-				console.error(e);
 				notifierModule.show({
 					text: this.$t("components.organisms.FormNews.errors.patch"),
 					status: "error",
@@ -93,7 +96,6 @@ export default {
 				});
 				this.$router.push({ name: "news" });
 			} catch (e) {
-				console.error(e);
 				notifierModule.show({
 					text: this.$t("components.organisms.FormNews.errors.remove"),
 					status: "error",

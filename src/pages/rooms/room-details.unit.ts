@@ -10,7 +10,11 @@ import ShareModule from "@/store/share";
 import { User } from "@/store/types/auth";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject/injection-keys";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	I18N_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -72,7 +76,6 @@ const mockData = {
 };
 
 const mockAuthStoreDataStudentInvalid = {
-	__v: 0,
 	_id: "asdf",
 	id: "asdf",
 	firstName: "Arthur",
@@ -83,7 +86,6 @@ const mockAuthStoreDataStudentInvalid = {
 };
 
 const mockAuthStoreDataTeacher = {
-	__v: 1,
 	_id: "asdfg",
 	id: "asdfg",
 	firstName: "Peter",
@@ -94,7 +96,6 @@ const mockAuthStoreDataTeacher = {
 		"COURSE_CREATE",
 		"COURSE_EDIT",
 		"TOPIC_CREATE",
-		"TASK_CARD_EDIT",
 		"HOMEWORK_CREATE",
 	],
 };
@@ -123,14 +124,15 @@ let shareModuleMock: ShareModule;
 const $router = { push: jest.fn(), resolve: jest.fn(), replace: jest.fn() };
 
 const getWrapper: any = () => {
+	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+		getCtlToolsTabEnabled: false,
+	});
+
 	return mount(RoomDetailsPage, {
 		...createComponentMocks({
 			i18n: true,
 		}),
 		mocks: {
-			$theme: {
-				short_name: "instance name",
-			},
 			$router,
 			$route,
 		},
@@ -141,6 +143,7 @@ const getWrapper: any = () => {
 			shareModule: shareModuleMock,
 			[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 		},
 		stubs: {
 			RoomDashboard: true,
@@ -175,6 +178,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		initializeAxios({
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			get: async (path) => {
 				return { data: [] };
 			},
@@ -243,34 +247,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		expect(newTaskAction.href).toStrictEqual(
 			"/courses/123/topics/add?returnUrl=rooms/123"
 		);
-	});
-
-	describe("new task-card button", () => {
-		const mockRoute = {
-			name: "rooms-beta-task-new",
-			params: { course: "123" },
-		};
-		beforeEach(() => {
-			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: true } as Envs);
-		});
-		it("should show if FEATURE_TASK_CARD_ENABLED is true", () => {
-			const wrapper = getWrapper();
-			const fabComponent = wrapper.find(".wireframe-fab");
-			expect(fabComponent.vm.actions.length).toBe(3);
-		});
-		it("should not show if FEATURE_TASK_CARD_ENABLED is false", () => {
-			envConfigModule.setEnvs({ FEATURE_TASK_CARD_ENABLED: false } as Envs);
-			const wrapper = getWrapper();
-			const fabComponent = wrapper.find(".wireframe-fab");
-			expect(fabComponent.vm.actions.length).toBe(2);
-		});
-
-		it("should have correct path", async () => {
-			const wrapper = getWrapper();
-			const fabComponent = wrapper.find(".wireframe-fab");
-			const newTaskCardAction = fabComponent.vm.actions[1];
-			expect(newTaskCardAction.to).toStrictEqual(mockRoute);
-		});
 	});
 
 	describe("headline menus", () => {

@@ -8,7 +8,15 @@ export const useI18n = () => {
 		return i18n.tc(key, 0, values);
 	};
 
+	const te = (key: string, locale?: VueI18n.Locale): boolean => {
+		return i18n.te(key, locale);
+	};
+
+	const locale = i18n.locale;
+
 	return {
 		t,
+		te,
+		locale,
 	};
 };

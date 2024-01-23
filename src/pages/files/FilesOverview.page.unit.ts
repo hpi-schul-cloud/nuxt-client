@@ -9,6 +9,10 @@ import * as fileTableComposable from "@/pages/files/file-table-utils.composable"
 import { FilesPageConfig } from "@/pages/files/file-page-config.type";
 import { I18N_KEY } from "@/utils/inject";
 
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 const $route: Route = {
 	path: "/cfiles",
 } as Route;
@@ -30,6 +34,7 @@ describe("FileOverview", () => {
 	beforeAll(() => {
 		jest.spyOn(fileTableComposable, "useFileTableUtils").mockReturnValue({
 			...fileTableComposable.useFileTableUtils(collaborativeFilesModule, tMock),
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			getFilesPageForRoute(route: Route): FilesPageConfig {
 				return {
 					title: pageTitle,

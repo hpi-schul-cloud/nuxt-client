@@ -5,6 +5,13 @@ metadata:
   namespace: {{ NAMESPACE }}
   labels:
     app: nuxtclient
+    app.kubernetes.io/part-of: schulcloud-verbund
+    app.kubernetes.io/version: {{ NUXT_CLIENT_IMAGE_TAG }}
+    app.kubernetes.io/name: nuxtclient
+    app.kubernetes.io/component: client
+    app.kubernetes.io/managed-by: ansible
+    git.branch: {{ NUXT_CLIENT_BRANCH_NAME }}
+    git.repo: {{ NUXT_CLIENT_REPO_NAME }}
 spec:
   replicas: {{ NUXTCLIENT_REPLICAS|default("1", true) }}
   strategy:
@@ -20,6 +27,13 @@ spec:
     metadata:
       labels:
         app: nuxtclient
+        app.kubernetes.io/part-of: schulcloud-verbund
+        app.kubernetes.io/version: {{ NUXT_CLIENT_IMAGE_TAG }}
+        app.kubernetes.io/name: nuxtclient
+        app.kubernetes.io/component: client
+        app.kubernetes.io/managed-by: ansible
+        git.branch: {{ NUXT_CLIENT_BRANCH_NAME }}
+        git.repo: {{ NUXT_CLIENT_REPO_NAME }}
       annotations:
     spec:
       securityContext:
@@ -73,6 +87,43 @@ spec:
           requests:
             cpu: {{ NUXTCLIENT_CPU_REQUESTS|default("100m", true) }}
             memory: {{ NUXTCLIENT_MEMORY_REQUESTS|default("32Mi", true) }}
+{% if AFFINITY_ENABLE is defined and AFFINITY_ENABLE|bool %}
+      affinity:
+        podAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 9
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/part-of
+                  operator: In
+                  values:
+                  - schulcloud-verbund
+              topologyKey: "kubernetes.io/hostname"
+              namespaceSelector: {}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+{% if ANIT_AFFINITY_NODEPOOL_ENABLE is defined and ANIT_AFFINITY_NODEPOOL_ENABLE|bool %}
+          - weight: 10
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - nuxtclient
+              topologyKey: {{ ANIT_AFFINITY_NODEPOOL_TOPOLOGY_KEY }}
+{% endif %}
+          - weight: 20
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app.kubernetes.io/name
+                  operator: In
+                  values:
+                  - nuxtclient
+              topologyKey: "topology.kubernetes.io/zone"
+{% endif %}
       volumes:
       - name: pid-dir
         emptyDir: {}

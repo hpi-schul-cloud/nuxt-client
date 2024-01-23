@@ -4,9 +4,9 @@
 			<template v-for="(link, index) in links">
 				<span v-if="index !== 0" :key="index"> - </span>
 				<template v-if="!link.innerlinks">
-					<base-link :key="link.text" class="footer-link" v-bind="link">
-						{{ link.text }}
-					</base-link>
+					<base-link :key="link.text" class="footer-link" v-bind="link">{{
+						link.text
+					}}</base-link>
 				</template>
 				<template v-else>
 					<span :key="link.text">{{ link.text }}: </span>
@@ -43,10 +43,6 @@
 import { authModule, filePathsModule, envConfigModule } from "@/store";
 
 export default {
-	data() {
-		// This solely exists to appear in the coverage report
-		return {};
-	},
 	computed: {
 		school() {
 			return authModule.getSchool;
@@ -61,13 +57,13 @@ export default {
 					text: this.$t("components.legacy.footer.imprint"),
 				},
 				{
-					href: filePathsModule.getSpecificFiles.termsOfUseSchool,
+					href: "/termsofuse",
 					text: this.$t("components.legacy.footer.terms"),
 					target: "_blank",
 					rel: "noopener",
 				},
 				{
-					href: "/datenschutz",
+					href: "/privacypolicy",
 					text: this.$t("components.legacy.footer.privacy_policy_thr"),
 					target: "_blank",
 					rel: "noopener",
@@ -81,6 +77,7 @@ export default {
 					text: this.$t("components.legacy.footer.github"),
 				},
 			];
+
 			if (envConfigModule.getEnv.ALERT_STATUS_URL) {
 				links.push({
 					href: envConfigModule.getEnv.ALERT_STATUS_URL,
@@ -89,6 +86,7 @@ export default {
 					rel: "noopener",
 				});
 			}
+
 			if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL) {
 				links.push({
 					href:
@@ -101,17 +99,16 @@ export default {
 					rel: "noopener",
 				});
 			}
+
 			links.push({
 				href: filePathsModule.getSpecificFiles.accessibilityStatement,
 				text: this.$t("components.legacy.footer.accessibility.statement"),
 				target: "_blank",
 				rel: "noopener",
 			});
+
 			return links;
 		},
-	},
-	mounted() {
-		console.log(filePathsModule.getSpecificFiles.termsOfUseSchool);
 	},
 };
 </script>

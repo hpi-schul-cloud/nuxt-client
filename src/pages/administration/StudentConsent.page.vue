@@ -138,8 +138,7 @@
 						name="switch"
 						label=""
 						data-testid="check-confirm"
-					>
-					</base-input>
+					/>
 					<label @click="check = !check">
 						<i18n
 							path="pages.administration.students.consent.steps.register.confirm"
@@ -236,7 +235,7 @@
 			</section>
 
 			<base-modal :active.sync="cancelWarning">
-				<template #header></template>
+				<template #header />
 				<template #body>
 					<modal-body-info
 						:title="
@@ -319,6 +318,7 @@ import {
 	printDateFromDeUTC,
 } from "@/plugins/datetime";
 import { mdiAlert } from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -372,8 +372,8 @@ export default {
 			image: SafelyConnectedImage,
 			fileLinks: {
 				analogConsent: filePathsModule.getSpecificFiles.analogConsent,
-				termsOfUse: filePathsModule.getSpecificFiles.termsOfUseSchool,
-				dataProtection: "/datenschutz",
+				termsOfUse: "/termsofuse",
+				dataProtection: "/privacypolicy",
 			},
 			progressSteps: [
 				{
@@ -437,17 +437,17 @@ export default {
 			return this.isConsentNecessary
 				? this.$t(
 						"pages.administration.students.consent.steps.download.explanation"
-				  )
+					)
 				: this.$t(
 						"pages.administration.students.manualRegistration.steps.download.explanation"
-				  );
+					);
 		},
 		successMessage() {
 			return this.isConsentNecessary
 				? this.$t("pages.administration.students.consent.steps.success")
 				: this.$t(
 						"pages.administration.students.manualRegistration.steps.success"
-				  );
+					);
 		},
 	},
 	async created() {
@@ -461,7 +461,7 @@ export default {
 	},
 	mounted() {
 		this.checkTableData();
-		document.title = `${this.title} - ${this.$theme.short_name}`;
+		document.title = buildPageTitle(this.title);
 	},
 	methods: {
 		async find() {

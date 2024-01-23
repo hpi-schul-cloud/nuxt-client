@@ -34,7 +34,6 @@ setupStores({
 authModule.setUser({
 	permissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
 	roles: [{ name: "administrator" }],
-	__v: 0,
 	_id: "asdf",
 	id: "asdf",
 	firstName: "Arthur",
@@ -82,7 +81,7 @@ describe("legacyLoggedIn", () => {
 			},
 			mocks: {
 				$theme: {
-					short_name: "instance name",
+					name: "instance name",
 				},
 				$router,
 				$route,

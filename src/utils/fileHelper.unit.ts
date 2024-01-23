@@ -1,4 +1,20 @@
-import { convertFileSize, downloadFile, getFileExtension } from "./fileHelper";
+import {
+	FileRecordScanStatus,
+	PreviewStatus,
+	PreviewWidth,
+} from "@/fileStorageApi/v3";
+import {
+	convertDownloadToPreviewUrl,
+	convertFileSize,
+	downloadFile,
+	formatSecondsToHourMinSec,
+	getFileExtension,
+	isAudioMimeType,
+	isDownloadAllowed,
+	isPdfMimeType,
+	isPreviewPossible,
+	isVideoMimeType,
+} from "./fileHelper";
 
 describe("@/utils/fileHelper", () => {
 	describe("downloadFile", () => {
@@ -139,6 +155,341 @@ describe("@/utils/fileHelper", () => {
 				const result = getFileExtension("test");
 
 				expect(result).toEqual("test");
+			});
+		});
+	});
+
+	describe("convertDownloadToPreviewUrl", () => {
+		describe("when second argument width is undefined", () => {
+			it("should return the preview url", () => {
+				const url = "/file/download/233/text.txt";
+
+				const result = convertDownloadToPreviewUrl(url);
+
+				expect(result).toEqual(
+					`/file/preview/233/text.txt?outputFormat=image/webp`
+				);
+			});
+
+			it("should return the preview url with two download words in source", () => {
+				const url = "/file/download/233/download";
+
+				const result = convertDownloadToPreviewUrl(url);
+
+				expect(result).toEqual(
+					`/file/preview/233/download?outputFormat=image/webp`
+				);
+			});
+
+			it("should return the preview url with two download words in source with extension", () => {
+				const url = "/file/download/233/download.txt";
+
+				const result = convertDownloadToPreviewUrl(url);
+
+				expect(result).toEqual(
+					`/file/preview/233/download.txt?outputFormat=image/webp`
+				);
+			});
+		});
+
+		describe("when second argument width is set", () => {
+			it("should return the preview url", () => {
+				const url = "/file/download/233/text.txt";
+
+				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
+
+				expect(result).toEqual(
+					`/file/preview/233/text.txt?outputFormat=image/webp&width=500`
+				);
+			});
+
+			it("should return the preview url with two download words in source", () => {
+				const url = "/file/download/233/download";
+
+				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
+
+				expect(result).toEqual(
+					`/file/preview/233/download?outputFormat=image/webp&width=500`
+				);
+			});
+
+			it("should return the preview url with two download words in source with extension", () => {
+				const url = "/file/download/233/download.txt";
+
+				const result = convertDownloadToPreviewUrl(url, PreviewWidth._500);
+
+				expect(result).toEqual(
+					`/file/preview/233/download.txt?outputFormat=image/webp&width=500`
+				);
+			});
+
+			it("should return the preview url", () => {
+				const url = "/file/download/233/text.txt";
+
+				// @ts-expect-error Enum only provides on value currently but will provide more in the future
+				const result = convertDownloadToPreviewUrl(url, 1000);
+
+				expect(result).toEqual(
+					`/file/preview/233/text.txt?outputFormat=image/webp&width=1000`
+				);
+			});
+		});
+	});
+
+	describe("isDownloadAllowed", () => {
+		describe("when scan status is not blocked", () => {
+			it("should return true", () => {
+				const result = isDownloadAllowed(FileRecordScanStatus.VERIFIED);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when scan status is blocked", () => {
+			it("should return false", () => {
+				const result = isDownloadAllowed(FileRecordScanStatus.BLOCKED);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isPreviewPossible", () => {
+		describe("when preview status is possible", () => {
+			it("should return true", () => {
+				const result = isPreviewPossible(PreviewStatus.PREVIEW_POSSIBLE);
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when preview status is AWAITING_SCAN_STATUS", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(PreviewStatus.AWAITING_SCAN_STATUS);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_ERROR
+				);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_WONT_CHECK
+				);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED
+				);
+
+				expect(result).toBe(false);
+			});
+		});
+
+		describe("when preview status is PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE", () => {
+			it("should return false", () => {
+				const result = isPreviewPossible(
+					PreviewStatus.PREVIEW_NOT_POSSIBLE_WRONG_MIME_TYPE
+				);
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isVideoMimeType", () => {
+		describe("when file has video mime type", () => {
+			describe("when file mime type has video/ prefix", () => {
+				it("should return true", () => {
+					const result = isVideoMimeType("video/mp4");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isVideoMimeType("video/");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isVideoMimeType("video/ ");
+
+					expect(result).toBe(true);
+				});
+			});
+
+			describe("when file mime type has application/ prefix", () => {
+				it("should return true", () => {
+					const result = isVideoMimeType("application/x-mpegURL");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isVideoMimeType("application/vnd.ms-asf");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isVideoMimeType("application/ogg");
+
+					expect(result).toBe(true);
+				});
+			});
+		});
+
+		describe("when file has no video mime type", () => {
+			it("should return false", () => {
+				const result = isVideoMimeType("image/png");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isVideoMimeType("application/");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isVideoMimeType(" ");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isVideoMimeType("");
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isAudioMimeType", () => {
+		describe("when file has audio mime type", () => {
+			describe("when file mime type has audio/ prefix", () => {
+				it("should return true", () => {
+					const result = isAudioMimeType("audio/mp4");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isAudioMimeType("audio/");
+
+					expect(result).toBe(true);
+				});
+
+				it("should return true", () => {
+					const result = isAudioMimeType("audio/ ");
+
+					expect(result).toBe(true);
+				});
+			});
+		});
+
+		describe("when file has no audio mime type", () => {
+			it("should return false", () => {
+				const result = isAudioMimeType("image/png");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isAudioMimeType("application/");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isAudioMimeType(" ");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isAudioMimeType("");
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("isPdfMimeType", () => {
+		describe("when file has pdf mime type", () => {
+			it("should return true", () => {
+				const result = isPdfMimeType("application/pdf");
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when file has no pdf mime type", () => {
+			it("should return false", () => {
+				const result = isPdfMimeType("image/png");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isPdfMimeType("application/");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isPdfMimeType(" ");
+
+				expect(result).toBe(false);
+			});
+
+			it("should return false", () => {
+				const result = isPdfMimeType("");
+
+				expect(result).toBe(false);
+			});
+		});
+	});
+
+	describe("formatSecondsToHourMinSec", () => {
+		describe("when file has duration 0", () => {
+			it("should display 0 minutes & 0 seconds", () => {
+				const result = formatSecondsToHourMinSec(0);
+
+				expect(result).toBe("00:00");
+			});
+		});
+
+		describe("when file lasts some seconds", () => {
+			it("should display it in Minutes, Seconds format", () => {
+				const result = formatSecondsToHourMinSec(45);
+
+				expect(result).toBe("00:45");
+			});
+		});
+
+		describe("when file has duration in hours", () => {
+			it("should display it in Hours, Minutes, Seconds format", () => {
+				const result = formatSecondsToHourMinSec(1555125);
+
+				expect(result).toBe("23:58:45");
 			});
 		});
 	});

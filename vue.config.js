@@ -9,6 +9,8 @@ const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 
 const replacements = generateAliases(__dirname);
 
+const getDir = (subPath) => path.resolve(__dirname, subPath);
+
 module.exports = defineConfig({
 	assetsDir: "_nuxt",
 
@@ -18,19 +20,53 @@ module.exports = defineConfig({
 		plugins: [new NoncePlaceholderPlugin()],
 		resolve: {
 			alias: {
-				"@boardShared": path.resolve(
-					__dirname,
-					"src/components/feature-board/shared"
+				"@data-board": getDir("src/components/data-board"),
+				"@data-external-tool": getDir("src/components/data-external-tool"),
+				"@data-group": getDir("src/components/data-group"),
+				"@data-system": getDir("src/components/data-system"),
+				"@data-provisioning-options": getDir(
+					"src/components/data-provisioning-options"
 				),
-				"@boardState": path.resolve(
-					__dirname,
-					"src/components/feature-board/state"
+				"@feature-board-file-element": getDir(
+					"src/components/feature-board-file-element"
 				),
-				"@boardTypes": path.resolve(
-					__dirname,
-					"src/components/feature-board/types"
+				"@feature-board-submission-element": getDir(
+					"src/components/feature-board-submission-element"
 				),
+				"@feature-board-text-element": getDir(
+					"src/components/feature-board-text-element"
+				),
+				"@feature-board-link-element": getDir(
+					"src/components/feature-board-link-element"
+				),
+				"@feature-board-external-tool-element": getDir(
+					"src/components/feature-board-external-tool-element"
+				),
+				"@feature-board-drawing-element": getDir(
+					"src/components/feature-board-drawing-element"
+				),
+				"@feature-board": getDir("src/components/feature-board"),
+				"@feature-editor": getDir("src/components/feature-editor"),
+				"@feature-render-html": getDir("src/components/feature-render-html"),
+				"@ui-alert": getDir("src/components/ui-alert"),
+				"@ui-board": getDir("src/components/ui-board"),
+				"@ui-color-overlay": getDir("src/components/ui-color-overlay"),
+				"@ui-preview-image": getDir("src/components/ui-preview-image"),
+				"@ui-confirmation-dialog": getDir(
+					"src/components/ui-confirmation-dialog"
+				),
+				"@ui-date-time-picker": getDir("src/components/ui-date-time-picker"),
+				"@ui-light-box": getDir("src/components/ui-light-box"),
+				"@util-board": getDir("src/components/util-board"),
+				"@util-validators": getDir("src/components/util-validators"),
+				"@util-input-masks": getDir("src/components/util-input-masks"),
+				"@util-device-detection": getDir(
+					"src/components/util-device-detection"
+				),
+				"@page-board": getDir("src/components/page-board"),
+				"@page-class-members": getDir("src/components/page-class-members"),
 			},
+			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
 		},
 	},
@@ -46,6 +82,14 @@ module.exports = defineConfig({
 				options: {
 					configFile: TSCONFIG_PATH,
 				},
+			});
+		// avoid auto format on vue-loader to fix prettier errors
+		config.module
+			.rule("vue")
+			.use("vue-loader")
+			.tap((options) => {
+				options.prettify = false;
+				return options;
 			});
 		config.plugin("fork-ts-checker").tap((args) => {
 			args[0].typescript.configFile = TSCONFIG_PATH;

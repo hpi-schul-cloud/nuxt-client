@@ -1,12 +1,21 @@
 <template>
-	<v-custom-dialog :is-open="isOpen" :size="450" @dialog-closed="cancel">
+	<v-custom-dialog
+		:is-open="isOpen"
+		:size="425"
+		@dialog-closed="cancel"
+		has-buttons
+		confirm-btn-title-key="pages.administration.school.index.schoolPolicy.replace"
+		confirm-btn-icon="$mdiFileReplaceOutline"
+		:confirm-btn-disabled="!isValid"
+		@dialog-confirmed="submit"
+	>
 		<h4 class="text-h4 mt-0" slot="title">
 			{{ t("common.words.privacyPolicy") }}
 		</h4>
-		<template slot="content">
+		<template #content>
 			<v-form ref="policyForm" v-model="isValid">
-				<v-alert light text type="warning" class="mb-10" :icon="mdiAlert">
-					<div class="replace-alert-text">
+				<v-alert light text type="warning" class="mb-10" icon="$mdiAlert">
+					<div class="alert-text">
 						{{
 							t(
 								"pages.administration.school.index.schoolPolicy.longText.willReplaceAndSendConsent"
@@ -34,42 +43,15 @@
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
 					@blur="onBlur"
 				>
-					<template v-slot:append>
+					<template #append>
 						<v-icon
 							v-if="!isValid && isTouched"
 							color="var(--v-error-base)"
 							data-testid="warning-icon"
+							>$mdiAlert</v-icon
 						>
-							{{ mdiAlert }}
-						</v-icon>
 					</template>
 				</v-file-input>
-				<v-card-actions>
-					<v-spacer></v-spacer>
-					<div class="button-section button-right">
-						<v-btn
-							class="dialog-closed"
-							depressed
-							text
-							@click="cancel"
-							data-testid="cancel-button"
-						>
-							{{ t("pages.administration.school.index.schoolPolicy.cancel") }}
-						</v-btn>
-						<v-btn
-							class="icon-button dialog-confirmed px-6"
-							type="submit"
-							color="primary"
-							depressed
-							:disabled="!isValid"
-							@click.prevent="submit"
-							data-testid="submit-button"
-						>
-							<v-icon dense class="mr-1">{{ mdiFileReplaceOutline }}</v-icon>
-							{{ t("pages.administration.school.index.schoolPolicy.replace") }}
-						</v-btn>
-					</div>
-				</v-card-actions>
 			</v-form>
 		</template>
 	</v-custom-dialog>
@@ -77,16 +59,18 @@
 
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { computed, ComputedRef, defineComponent, inject, ref, Ref } from "vue";
-import SchoolsModule from "@/store/schools";
-import PrivacyPolicyModule from "@/store/privacy-policy";
-import { I18N_KEY, injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import VueI18n from "vue-i18n";
-import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
+import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
+import {
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+	PRIVACY_POLICY_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
+} from "@/utils/inject";
 import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
+import { useI18n } from "@/composables/i18n.composable";
 
 export default defineComponent({
 	name: "SchoolPolicyFormDialog",
@@ -101,24 +85,10 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const schoolsModule: SchoolsModule | undefined =
-			inject<SchoolsModule>("schoolsModule");
-		const privacyPolicyModule: PrivacyPolicyModule | undefined =
-			inject<PrivacyPolicyModule>("privacyPolicyModule");
+		const { t } = useI18n();
+		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);
 		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-		const i18n = injectStrict(I18N_KEY);
-
-		if (!notifierModule || !schoolsModule || !privacyPolicyModule || !i18n) {
-			throw new Error("Injection of dependencies failed");
-		}
-
-		const t = (key: string, values?: VueI18n.Values | undefined): string => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
 		const policyForm: Ref = ref(null);
 		const isValid: Ref<boolean> = ref(false);
@@ -184,8 +154,6 @@ export default defineComponent({
 			t,
 			file,
 			rules,
-			mdiFileReplaceOutline,
-			mdiAlert,
 			cancel,
 			submit,
 			onBlur,
@@ -199,8 +167,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.replace-alert-text {
+.alert-text {
 	color: var(--v-black-base) !important;
+	line-height: var(--line-height-lg) !important;
 }
 
 .button-left {

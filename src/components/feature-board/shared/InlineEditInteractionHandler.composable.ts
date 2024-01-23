@@ -1,6 +1,6 @@
 import { useCurrentElement, useElementBounding } from "@vueuse/core";
 import { inject, onMounted, ref, Ref, watch } from "vue";
-import { InlineEditInteractionEvent } from "../types/InlineEditInteractionEvent.symbol";
+import { InlineEditInteractionEvent } from "@/types/board/InlineEditInteractionEvent.symbol";
 
 export const useInlineEditInteractionHandler = (
 	onFocusCallback: (interactionBoundary: {

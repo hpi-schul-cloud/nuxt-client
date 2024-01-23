@@ -1,6 +1,7 @@
 import NotifierModule from "@/store/notifier";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { i18nMock } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import {
 	boardResponseFactory,
@@ -8,27 +9,38 @@ import {
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { ref } from "vue";
+import Vue, { nextTick, ref } from "vue";
 import { Route } from "vue-router";
-import { useBoardNotifier } from "../shared/BoardNotifications.composable";
-import { useBoardPermissions } from "../shared/BoardPermissions.composable";
-import { useBoardState } from "../state/BoardState.composable";
-import { Board } from "../types/Board";
+import {
+	useBoardState,
+	useBoardPermissions,
+	useSharedEditMode,
+	useSharedBoardPageInformation,
+} from "@data-board";
+import { useBoardNotifier } from "@util-board";
+import { Board } from "@/types/board/Board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
-} from "../types/Permissions";
+} from "@/types/board/Permissions";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 
-jest.mock("../state/BoardState.composable");
+jest.mock("@data-board");
 const mockedUseBoardState = jest.mocked(useBoardState);
+const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
+const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
+const mockedUseSharedBoardPageInformation = jest.mocked(
+	useSharedBoardPageInformation
+);
 
-jest.mock("../shared/BoardPermissions.composable");
-const mockedUserPermissions = jest.mocked(useBoardPermissions);
-
-jest.mock("../shared/BoardNotifications.composable");
+jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
 
 const $route: Route = {
 	params: {
@@ -45,16 +57,6 @@ const $route: Route = {
 
 const $router = { replace: jest.fn(), push: jest.fn(), afterEach: jest.fn() };
 
-const createCardMock = jest.fn();
-const createColumnMock = jest.fn();
-const createColumnWithCardMock = jest.fn();
-const deleteCardMock = jest.fn();
-const deleteColumnMock = jest.fn();
-const moveColumnMock = jest.fn();
-const moveCardMock = jest.fn();
-const updateColumnTitleMock = jest.fn();
-const fetchBoardMock = jest.fn();
-
 describe("Board", () => {
 	let wrapper: Wrapper<Vue>;
 
@@ -64,7 +66,8 @@ describe("Board", () => {
 		columns: [oneColumn],
 	});
 	const notifierModule = createModuleMocks(NotifierModule);
-	let mockedBoardNotifierCalls: Partial<ReturnType<typeof useBoardNotifier>>;
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let mockedBoardStateCalls: DeepMocked<ReturnType<typeof useBoardState>>;
 
 	const setup = (options?: {
 		board?: Board;
@@ -73,24 +76,30 @@ describe("Board", () => {
 	}) => {
 		const { board, isLoading } = options ?? {};
 		document.body.setAttribute("data-app", "true");
-		mockedUseBoardState.mockReturnValue({
-			board: ref<Board | undefined>(board ?? boardWithOneColumn),
-			isLoading: ref(isLoading ?? false),
-			createCard: createCardMock,
-			createColumn: createColumnMock,
-			createColumnWithCard: createColumnWithCardMock,
-			deleteColumn: deleteColumnMock,
-			deleteCard: deleteCardMock,
-			extractCard: jest.fn(),
-			fetchBoard: fetchBoardMock,
-			getColumnId: jest.fn(),
-			moveCard: moveCardMock,
-			moveColumn: moveColumnMock,
-			updateColumnTitle: updateColumnTitleMock,
-		});
-		mockedUserPermissions.mockReturnValue({
+
+		mockedBoardStateCalls = createMock<ReturnType<typeof useBoardState>>();
+		mockedBoardStateCalls.board = ref<Board | undefined>(
+			board ?? boardWithOneColumn
+		);
+		mockedBoardStateCalls.isLoading = ref(isLoading ?? false);
+		mockedUseBoardState.mockReturnValue(mockedBoardStateCalls);
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+		mockedUseBoardPermissions.mockReturnValue({
 			...defaultPermissions,
 			...options?.permissions,
+		});
+		mockedUseSharedEditMode.mockReturnValue({
+			editModeId: ref(""),
+			setEditModeId: jest.fn(),
+		});
+		mockedUseSharedBoardPageInformation.mockReturnValue({
+			createPageInformation: jest.fn(),
+			breadcrumbs: ref([]),
+			pageTitle: ref("page-title"),
 		});
 
 		const boardId = board?.id ?? boardWithOneColumn.id;
@@ -102,21 +111,13 @@ describe("Board", () => {
 			},
 			propsData: { boardId },
 			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+				[I18N_KEY.valueOf()]: i18nMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 		});
 	};
 
 	describe("when component is mounted", () => {
-		mockedBoardNotifierCalls = {
-			showInfo: jest.fn(),
-			resetNotifier: jest.fn(),
-		};
-		mockedUseBoardNotifier.mockReturnValue(
-			mockedBoardNotifierCalls as ReturnType<typeof useBoardNotifier>
-		);
-
 		it("should call 'useBoardState' composable", () => {
 			setup();
 
@@ -149,6 +150,20 @@ describe("Board", () => {
 			setup({ board: boardWithTwoColumns });
 
 			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
+		});
+
+		it("should propagate columnCount to BoardColumn components", () => {
+			const twoColumns = columnResponseFactory.buildList(2, { cards });
+			const boardWithTwoColumns = boardResponseFactory.build({
+				columns: twoColumns,
+			});
+			setup({ board: boardWithTwoColumns });
+
+			const boardColumnComponents = wrapper.findAllComponents({
+				name: "BoardColumn",
+			});
+			expect(boardColumnComponents.at(0).props("columnCount")).toBe(2);
+			expect(boardColumnComponents.at(1).props("columnCount")).toBe(2);
 		});
 
 		describe("Info message for teacher", () => {
@@ -225,7 +240,7 @@ describe("Board", () => {
 					});
 					columnComponent.vm.$emit("create:card");
 
-					expect(createCardMock).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.createCard).toHaveBeenCalled();
 				});
 			});
 
@@ -237,7 +252,7 @@ describe("Board", () => {
 					});
 					columnComponent.vm.$emit("create:card");
 
-					expect(createCardMock).not.toHaveBeenCalled();
+					expect(mockedBoardStateCalls.createCard).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -251,7 +266,7 @@ describe("Board", () => {
 					});
 					ghostColumnComponent.vm.$emit("create:column");
 
-					expect(createColumnMock).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.createColumn).toHaveBeenCalled();
 				});
 			});
 		});
@@ -265,7 +280,7 @@ describe("Board", () => {
 					});
 					ghostColumnComponent.vm.$emit("create:column-with-card");
 
-					expect(createColumnWithCardMock).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.createColumnWithCard).toHaveBeenCalled();
 				});
 			});
 		});
@@ -279,7 +294,7 @@ describe("Board", () => {
 					});
 					columnComponent.vm.$emit("delete:card");
 
-					expect(deleteCardMock).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.deleteCard).toHaveBeenCalled();
 				});
 			});
 
@@ -291,7 +306,7 @@ describe("Board", () => {
 					});
 					columnComponent.vm.$emit("delete:card");
 
-					expect(deleteCardMock).not.toHaveBeenCalled();
+					expect(mockedBoardStateCalls.deleteCard).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -305,7 +320,7 @@ describe("Board", () => {
 					});
 					columnComponent.vm.$emit("delete:column");
 
-					expect(deleteColumnMock).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.deleteColumn).toHaveBeenCalled();
 				});
 			});
 
@@ -317,7 +332,7 @@ describe("Board", () => {
 					});
 					columnComponent.vm.$emit("delete:column");
 
-					expect(deleteColumnMock).not.toHaveBeenCalled();
+					expect(mockedBoardStateCalls.deleteColumn).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -331,7 +346,7 @@ describe("Board", () => {
 					});
 					containerComponent.vm.$emit("drop");
 
-					expect(moveColumnMock).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.moveColumn).toHaveBeenCalled();
 				});
 			});
 
@@ -343,7 +358,59 @@ describe("Board", () => {
 					});
 					containerComponent.vm.$emit("drop");
 
-					expect(moveColumnMock).not.toHaveBeenCalled();
+					expect(mockedBoardStateCalls.moveColumn).not.toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("@onMoveColumnLeft", () => {
+			describe("when user is permitted to move a column", () => {
+				it("should call moveColumn method", () => {
+					setup();
+					const boardColumnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					boardColumnComponent.vm.$emit("move:column-left");
+
+					expect(mockedBoardStateCalls.moveColumn).toHaveBeenCalled();
+				});
+			});
+
+			describe("when user is not permitted to move a column", () => {
+				it("should not call moveColumn method", () => {
+					setup({ permissions: { hasMovePermission: false } });
+					const boardColumnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					boardColumnComponent.vm.$emit("move:column-left");
+
+					expect(mockedBoardStateCalls.moveColumn).not.toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("@onMoveColumnRight", () => {
+			describe("when user is permitted to move a column", () => {
+				it("should call moveColumn method", () => {
+					setup();
+					const boardColumnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					boardColumnComponent.vm.$emit("move:column-right");
+
+					expect(mockedBoardStateCalls.moveColumn).toHaveBeenCalled();
+				});
+			});
+
+			describe("when user is not permitted to move a column", () => {
+				it("should not call moveColumn method", () => {
+					setup({ permissions: { hasMovePermission: false } });
+					const boardColumnComponent = wrapper.findComponent({
+						name: "BoardColumn",
+					});
+					boardColumnComponent.vm.$emit("move:column-right");
+
+					expect(mockedBoardStateCalls.moveColumn).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -357,7 +424,7 @@ describe("Board", () => {
 					});
 					columnComponent.vm.$emit("update:card-position");
 
-					expect(moveCardMock).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.moveCard).toHaveBeenCalled();
 				});
 			});
 
@@ -369,7 +436,7 @@ describe("Board", () => {
 					});
 					columnComponent.vm.$emit("update:card-position");
 
-					expect(moveCardMock).not.toHaveBeenCalled();
+					expect(mockedBoardStateCalls.moveCard).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -383,7 +450,7 @@ describe("Board", () => {
 					});
 					columnComponent.vm.$emit("update:column-title");
 
-					expect(updateColumnTitleMock).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.updateColumnTitle).toHaveBeenCalled();
 				});
 			});
 
@@ -395,8 +462,24 @@ describe("Board", () => {
 					});
 					columnComponent.vm.$emit("update:column-title");
 
-					expect(updateColumnTitleMock).not.toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.updateColumnTitle
+					).not.toHaveBeenCalled();
 				});
+			});
+		});
+
+		describe("@onReloadBoard", () => {
+			it("should reload the board", async () => {
+				setup();
+
+				const boardColumnComponents = wrapper.findAllComponents({
+					name: "BoardColumn",
+				});
+				boardColumnComponents.at(0).vm.$emit("reload:board");
+				await nextTick();
+
+				expect(mockedBoardStateCalls.reloadBoard).toHaveBeenCalled();
 			});
 		});
 	});

@@ -3,11 +3,10 @@ import { DataTableHeader } from "vuetify";
 import { schoolExternalToolsModule } from "@/store";
 import {
 	SchoolExternalToolResponse,
-	SchoolExternalToolResponseStatusEnum,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { ToolConfigurationStatus } from "@/store/external-tool";
+import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 
 const schoolExternalToolsModuleMock = () => {
 	return {
@@ -16,7 +15,10 @@ const schoolExternalToolsModuleMock = () => {
 				id: "id",
 				name: "toolName",
 				version: 1,
-				status: "Latest",
+				status: {
+					isOutdatedOnScopeSchool: false,
+					isDeactivated: false,
+				},
 			},
 		],
 	};
@@ -45,18 +47,23 @@ describe("useSchoolExternalToolUtils", () => {
 					value: "value",
 				},
 			],
-			status: SchoolExternalToolResponseStatusEnum.Latest,
+			status: ContextExternalToolConfigurationStatusFactory.build({
+				isOutdatedOnScopeSchool: false,
+				isDeactivated: false,
+			}),
 		};
 		const listResponse: SchoolExternalToolSearchListResponse = {
 			data: [toolResponse],
 		};
 
-		const schoolExternaToolItem: SchoolExternalToolItem = {
-			name: toolResponse.name,
-			id: toolResponse.id,
-			status: ToolConfigurationStatus.Latest,
-			outdated: false,
-		};
+		const schoolExternaToolItem: SchoolExternalToolItem =
+			new SchoolExternalToolItem({
+				name: toolResponse.name,
+				id: toolResponse.id,
+				statusText: "translationKey",
+				isOutdated: false,
+				isDeactivated: false,
+			});
 
 		return {
 			getHeaders,
@@ -132,8 +139,9 @@ describe("useSchoolExternalToolUtils", () => {
 				{
 					id: "id",
 					name: "toolName",
-					status: "translated",
-					outdated: false,
+					statusText: "translated",
+					isOutdated: false,
+					isDeactivated: false,
 					version: undefined,
 				},
 			]);

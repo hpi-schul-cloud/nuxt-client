@@ -11,7 +11,7 @@ import { mountBaseComponents } from "@/components/base/_globals";
 import { setupI18n } from "@/plugins/i18n-test.js";
 import "@/plugins/directives";
 import globalStubs from "./stubs.js";
-import htmlConfig from "@/components/common/render-html/config";
+import { htmlConfig } from "@feature-render-html";
 
 // Don't warn about not using the production build of Vue, as
 // we care more about the quality of errors than performance

@@ -31,10 +31,10 @@
 						<slot name="footer">
 							<modal-footer>
 								<template #left>
-									<slot name="footer-left"></slot>
+									<slot name="footer-left" />
 								</template>
 								<template #right>
-									<slot name="footerRight"></slot>
+									<slot name="footerRight" />
 								</template>
 							</modal-footer>
 						</slot>

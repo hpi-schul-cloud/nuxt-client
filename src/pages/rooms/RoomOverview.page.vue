@@ -132,6 +132,7 @@ import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { roomsModule } from "@/store";
 import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiMagnify } from "@mdi/js";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
 	components: {
@@ -388,25 +389,28 @@ export default {
 		},
 		initCoursePolling(count = 0, started) {
 			const nextTimeout = count * count * 1000 + 5000;
-			setTimeout(async () => {
-				await roomsModule.fetch({ indicateLoading: false });
-				if (this.hasRoomsBeingCopied) {
-					this.initCoursePolling(count + 1, started ?? new Date());
-				} else {
-					this.notifierModule?.show({
-						text: this.$t("components.molecules.copyResult.timeoutSuccess"),
-						status: "success",
-						autoClose: true,
-						timeout: 10000,
-					});
-				}
-			}, Math.min(nextTimeout, 30000));
+			setTimeout(
+				async () => {
+					await roomsModule.fetch({ indicateLoading: false });
+					if (this.hasRoomsBeingCopied) {
+						this.initCoursePolling(count + 1, started ?? new Date());
+					} else {
+						this.notifierModule?.show({
+							text: this.$t("components.molecules.copyResult.timeoutSuccess"),
+							status: "success",
+							autoClose: true,
+							timeout: 10000,
+						});
+					}
+				},
+				Math.min(nextTimeout, 30000)
+			);
 		},
 	},
 	mounted() {
-		document.title = `${this.$t("pages.rooms.index.courses.active")} - ${
-			this.$theme.short_name
-		}`;
+		document.title = buildPageTitle(
+			this.$t("pages.rooms.index.courses.active")
+		);
 	},
 };
 </script>

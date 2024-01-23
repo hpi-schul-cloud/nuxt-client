@@ -1,3 +1,6 @@
+import { Envs } from "@/store/types/env-config";
+import { envConfigModule } from "@/store";
+
 export type SidebarItemBase = {
 	title: string;
 	icon: string;
@@ -5,6 +8,7 @@ export type SidebarItemBase = {
 	permission?: string;
 	excludedPermission?: string;
 	activeForUrls: string[];
+	feature?: keyof Envs;
 };
 
 export type SidebarItemExternalLink = {
@@ -168,13 +172,21 @@ const getSidebarItems = (): SidebarItemList => [
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
-			{
-				title: "global.sidebar.classes",
-				icon: "$class",
-				href: "/administration/classes",
-				testId: "Klassen",
-				activeForUrls: ["^/administration/classes($|/.*)"],
-			},
+			envConfigModule.getShowNewClassViewEnabled
+				? {
+						title: "global.sidebar.classes",
+						icon: "$class",
+						href: "/administration/groups/classes",
+						testId: "Klassen",
+						activeForUrls: ["^/administration/groups/classes($|/.*)"],
+					}
+				: {
+						title: "global.sidebar.classes",
+						icon: "$class",
+						href: "/administration/classes",
+						testId: "Klassen",
+						activeForUrls: ["^/administration/classes($|/.*)"],
+					},
 		],
 	},
 	{
@@ -206,13 +218,21 @@ const getSidebarItems = (): SidebarItemList => [
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
 			},
-			{
-				title: "global.sidebar.classes",
-				icon: "$class",
-				href: "/administration/classes",
-				testId: "Klassen",
-				activeForUrls: ["^/administration/classes($|/.*)"],
-			},
+			envConfigModule.getShowNewClassViewEnabled
+				? {
+						title: "global.sidebar.classes",
+						icon: "$class",
+						href: "/administration/groups/classes",
+						testId: "Klassen",
+						activeForUrls: ["^/administration/groups/classes($|/.*)"],
+					}
+				: {
+						title: "global.sidebar.classes",
+						icon: "$class",
+						href: "/administration/classes",
+						testId: "Klassen",
+						activeForUrls: ["^/administration/classes($|/.*)"],
+					},
 			{
 				title: "global.sidebar.teams",
 				icon: "$mdiAccountGroupOutline",

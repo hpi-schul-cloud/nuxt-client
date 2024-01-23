@@ -3,6 +3,7 @@
 // using the ./proxy.js serverMiddleware
 
 const mongoId = "[a-z0-9]{24}";
+const h5pId = "[a-z0-9]+";
 const activationCode = "[a-z0-9]+";
 const uuid =
 	"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
@@ -22,7 +23,10 @@ const vueRoutes = [
 	`^/administration/school-settings/?$`,
 	`^/administration/school-settings/tool-configuration/?$`,
 	`^/administration/school-settings/tool-configuration/${mongoId}/?$`,
+	`^/administration/school-settings/provisioning-options/?$`,
 	`^/administration/migration/?$`,
+	`^/administration/groups/classes/?$`,
+	`^/administration/groups/classes/${mongoId}/?$`,
 	`^/cfiles/?$`,
 	`^/cfiles/teams/?$`,
 	`^/cfiles/teams/.+`,
@@ -30,25 +34,23 @@ const vueRoutes = [
 	`^/content/${uuid}/?$`,
 	`^/error/?$`,
 	`^/imprint/?$`,
-	`^/termsofuse/?$`,
 	`^/news/new/?$`,
 	`^/news/${mongoId}/edit/?$`,
 	`^/poc-files/?$`,
 	`^/rooms-overview/?$`,
 	`^/rooms-list/?$`,
+	`^/h5p/player/${h5pId}/?$`,
+	`^/h5p/editor/?$`,
+	`^/h5p/editor/${h5pId}/?$`,
 	`^/rooms/${mongoId}/?$`,
 	`^/rooms/${mongoId}/board?$`,
-	`^/rooms/${mongoId}/create-beta-task/?$`,
 	`^/tasks/?$`,
-	`^/tasks/create-beta-task/?$`,
-	`^/beta-task/${mongoId}/?$`,
-	`^/beta-task/${mongoId}/?$`,
-	`^/termsofuse/?$`,
 	`^/error/?$`,
 	`^/migration/?$`,
 	`^/migration/success/?$`,
 	`^/migration/error/?$`,
 	`^/tools/context/tool-configuration/?$`,
+	`^/tools/context/tool-configuration/${mongoId}/?$`,
 ];
 
 const isVueClient = (path) => {

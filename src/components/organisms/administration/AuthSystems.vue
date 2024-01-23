@@ -1,8 +1,5 @@
 <template>
-	<section>
-		<h2 class="text-h4 mb-10">
-			{{ $t("pages.administration.school.index.authSystems.title") }}
-		</h2>
+	<div>
 		<v-text-field
 			v-if="customLoginLinkEnabled && !hasSystems"
 			id="school-login-link-0"
@@ -30,7 +27,11 @@
 				</v-btn>
 			</template>
 		</v-text-field>
-		<v-simple-table v-if="hasSystems" class="table-system">
+		<v-simple-table
+			v-if="hasSystems"
+			data-testid="system-table"
+			class="table-system"
+		>
 			<template #default>
 				<thead>
 					<tr>
@@ -47,7 +48,7 @@
 								)
 							}}
 						</th>
-						<th class="text-left"></th>
+						<th class="text-left" />
 					</tr>
 				</thead>
 				<tbody>
@@ -89,7 +90,7 @@
 								v-if="isEditable(system) && hasSystemEditPermission"
 								class="edit-system-btn"
 								icon
-								:to="`/administration/ldap/config?id=${system._id}`"
+								:to="redirectTo(system)"
 								:aria-label="ariaLabels(system).edit"
 							>
 								<v-icon>{{ iconMdiPencilOutline }}</v-icon>
@@ -111,7 +112,7 @@
 		<v-btn
 			v-if="hasSystemCreatePermission"
 			color="primary"
-			class="my-8 add-ldap"
+			class="mt-8 mb-4 add-ldap float-right"
 			depressed
 			to="/administration/ldap/config"
 		>
@@ -129,7 +130,7 @@
 					$t("pages.administration.school.index.authSystems.deleteAuthSystem")
 				}}
 			</h2>
-			<template slot="content">
+			<template #content>
 				<p class="text-md mt-2">
 					{{
 						$t(
@@ -139,16 +140,16 @@
 				</p>
 			</template>
 		</v-custom-dialog>
-	</section>
+	</div>
 </template>
 
 <script>
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import {
+	mdiCheckCircle,
+	mdiContentCopy,
 	mdiPencilOutline,
 	mdiTrashCanOutline,
-	mdiContentCopy,
-	mdiCheckCircle,
 } from "@mdi/js";
 import vCustomDialog from "@/components/organisms/vCustomDialog";
 
@@ -204,10 +205,18 @@ export default {
 			};
 		},
 		isEditable(system) {
-			return system.type === "ldap" && system.ldapConfig.provider === "general";
+			return (
+				system.ldapConfig?.provider === "general" || system.alias === "SANIS"
+			);
 		},
 		isRemovable(system) {
-			return system.type !== "ldap" || system.ldapConfig.provider === "general";
+			return system.ldapConfig?.provider === "general";
+		},
+		redirectTo(system) {
+			if (system.alias === "SANIS") {
+				return `/administration/school-settings/provisioning-options?systemId=${system._id}`;
+			}
+			return `/administration/ldap/config?id=${system._id}`;
 		},
 		openConfirmDeleteDialog(systemId) {
 			this.confirmDeleteDialog = {

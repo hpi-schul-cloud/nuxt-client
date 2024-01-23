@@ -4,6 +4,10 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 
+jest.mock("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 describe("students/new", () => {
 	const createStudentStub = jest.fn();
 	const mockStore = {
@@ -39,9 +43,6 @@ describe("students/new", () => {
 		const wrapper = mount(NewStudent, {
 			...createComponentMocks({ i18n: true, store: mockStore }),
 			mocks: {
-				$theme: {
-					short_name: "instance name",
-				},
 				$user: { schoolId: "123" },
 			},
 		});
