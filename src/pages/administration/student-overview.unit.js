@@ -199,16 +199,16 @@ describe("students/index", () => {
 		// select first entry
 		const checkbox = userRows
 			.at(0)
-			.find('.selection-column input[type="checkbox"]');
+			.find(".selection-column")
+			.get('input[type="checkbox"]');
 		checkbox.setChecked();
 
 		// open actions menu
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		const actionsBtn = wrapper.find(
 			".row-selection-info .actions button:first-child"
 		);
-		actionsBtn.trigger("click");
-		await wrapper.vm.$nextTick();
+		await actionsBtn.trigger("click");
 
 		// click delete menu button
 		const deleteBtn = wrapper
@@ -216,7 +216,9 @@ describe("students/index", () => {
 			.at(3);
 		await deleteBtn.trigger("click");
 
-		const confirmBtn = wrapper.find("[data-testid='btn-dialog-confirm']");
+		const confirmBtn = wrapper.findComponent(
+			"[data-testid='btn-dialog-confirm']"
+		);
 		await confirmBtn.trigger("click");
 
 		expect(usersActionsStubs.deleteUsers.mock.calls).toHaveLength(1);

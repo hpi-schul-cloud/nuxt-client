@@ -9,7 +9,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createStore } from "vuex";
-import { nextTick } from "vue";
+import { delay } from "@/utils/helpers";
 jest.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
@@ -74,9 +74,8 @@ describe("teachers/new", () => {
 			.find('[data-testid="button_create-user_submit"]')
 			.trigger("click");
 
-		// we need double nextTick() because of vuelidate validation?
-		await nextTick();
-		await nextTick();
+		// VUE3_UPGRADE we need to wait until everything is settled
+		await delay(10);
 
 		expect(createTeacherStub).toHaveBeenCalled();
 	});
@@ -113,11 +112,8 @@ describe("teachers/new", () => {
 			.find('[data-testid="button_create-user_submit"]')
 			.trigger("click");
 
-		await nextTick(); // trigger dispatch
-		await nextTick(); // trigger then clause of dispatch
-		// we need double nextTick() because of vuelidate validation?
-		await nextTick();
-		await nextTick();
+		// VUE3_UPGRADE we need to wait until everything is settled
+		await delay(10);
 
 		expect(notifierModuleMock).toHaveBeenCalled();
 	});
@@ -161,14 +157,8 @@ describe("teachers/new", () => {
 			.find('[data-testid="button_create-user_submit"]')
 			.trigger("click");
 
-		await nextTick(); // trigger dispatch
-		await nextTick(); // trigger catch clause of dispatch
-		await nextTick(); // display error component
-
-		// we need double nextTick() because of vuelidate validation?
-		await nextTick();
-		await nextTick();
-		await nextTick();
+		// VUE3_UPGRADE we need to wait until everything is settled
+		await delay(10);
 
 		errorMessageComponent = wrapper.find(".info-message.bc-error");
 		expect(errorMessageComponent.exists()).toBeTruthy();

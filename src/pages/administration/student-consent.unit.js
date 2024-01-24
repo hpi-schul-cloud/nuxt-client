@@ -289,9 +289,9 @@ describe("students/consent", () => {
 
 		await nextButton.trigger("click");
 
-		const nextButton_2 = wrapper.find(`[data-testid="button-next-2"]`);
+		const nextButton2 = wrapper.find(`[data-testid="button-next-2"]`);
 
-		await nextButton_2.trigger("click");
+		await nextButton2.trigger("click");
 
 		const confirmError = wrapper.find(`[data-testid="confirm-error"]`);
 		expect(confirmError.exists()).toBe(true);
@@ -309,9 +309,9 @@ describe("students/consent", () => {
 
 		await nextButton.trigger("click");
 
-		const nextButton_2 = wrapper.find(`[data-testid="button-next-2"]`);
+		const nextButton2 = wrapper.find(`[data-testid="button-next-2"]`);
 
-		await nextButton_2.trigger("click");
+		await nextButton2.trigger("click");
 
 		expect(notifierModuleMock).toHaveBeenCalled();
 	});
