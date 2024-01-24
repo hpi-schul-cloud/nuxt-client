@@ -27,7 +27,7 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import DownloadModalOptionsForm from "../DownloadModalOptionsForm.vue";
+import DownloadModalOptionsForm from "@/components/share/DownloadModalOptionsForm.vue";
 import { roomModule } from "@/store";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
