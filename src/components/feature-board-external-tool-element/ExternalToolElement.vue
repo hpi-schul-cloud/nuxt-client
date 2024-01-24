@@ -30,16 +30,14 @@
 				}}
 			</template>
 			<template #menu>
-				<slot>
-					<ExternalToolElementMenu
-						v-if="isEditMode"
-						ref="externalToolElementMenu"
-						@move-down:element="onMoveElementDown"
-						@move-up:element="onMoveElementUp"
-						@delete:element="onDeleteElement"
-						@edit:element="onEditElement"
-					/>
-				</slot>
+				<ExternalToolElementMenu
+					v-if="isEditMode"
+					ref="externalToolElementMenu"
+					@move-down:element="onMoveElementDown"
+					@move-up:element="onMoveElementUp"
+					@delete:element="onDeleteElement"
+					@edit:element="onEditElement"
+				/>
 			</template>
 		</ContentElementBar>
 		<ExternalToolElementAlert
@@ -261,15 +259,6 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-$card-padding: 16px;
-$logo-size: 24px;
-
-.card-container {
-	max-width: 100%;
-	min-height: calc($card-padding * 2 + $logo-size);
-	padding: $card-padding;
-}
-
 .gap-8 {
 	gap: 8px;
 }
