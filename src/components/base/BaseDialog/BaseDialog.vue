@@ -1,6 +1,6 @@
 <template>
 	<div ref="dialog" data-testid="dialog" class="v-application base-dialog">
-		<base-modal :active="active" @update:active="clickOutside">
+		<base-modal v-model:active="isActive">
 			<template #body>
 				<modal-body-info :title="message">
 					<template #icon>
@@ -91,6 +91,16 @@ export default {
 			return this.iconColor
 				? this.iconColor
 				: `rgba(var(--v-theme-${this.actionDesign}))`;
+		},
+		isActive: {
+			get() {
+				return this.active;
+			},
+			set(value) {
+				if (!value) {
+					this.clickOutside();
+				}
+			},
 		},
 	},
 	methods: {

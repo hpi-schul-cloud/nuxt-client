@@ -102,8 +102,6 @@ export default defineComponent({
 .display-container {
 	position: relative;
 	min-height: 52px;
-	display: flex;
-	align-items: center;
 }
 
 .display-overlay {

@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<WarningAlert v-if="error">
-			{{ t(errorMessage) }}
+			{{ $t(errorMessage) }}
 		</WarningAlert>
 
 		<WarningAlert v-if="toolStatus && toolStatus.isDeactivated">
 			{{
-				t("common.tool.information.deactivated", {
+				$t("common.tool.information.deactivated", {
 					toolDisplayName,
 				})
 			}}
@@ -87,7 +87,6 @@ export default defineComponent({
 		});
 
 		return {
-			t,
 			errorMessage,
 			outdatedMessage,
 			incompleteMessage,
