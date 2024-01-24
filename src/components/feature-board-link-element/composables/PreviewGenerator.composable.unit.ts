@@ -1,11 +1,12 @@
-import { mount } from "@vue/test-utils";
-import { defineComponent } from "vue";
-import { usePreviewGenerator } from "./PreviewGenerator.composable";
+import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
+import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import {
 	fileRecordResponseFactory,
 	setupFileStorageApiMock,
 } from "@@/tests/test-utils";
-import { PreviewStatus } from "@/fileStorageApi/v3";
+import { mount } from "@vue/test-utils";
+import { defineComponent, ref } from "vue";
+import { usePreviewGenerator } from "./PreviewGenerator.composable";
 
 jest.mock("@feature-board-file-element");
 
@@ -30,65 +31,131 @@ describe("usePreviewGenerator", () => {
 
 	describe("createPreviewImage", () => {
 		describe("when meta tags could be extracted", () => {
-			const setup = () => {
-				const elementId = "my-custom-mocked-id";
-				const uploadFromUrlMock = jest.fn();
-				const { fileRecord } = setupFileStorageApiMock({ uploadFromUrlMock });
-
-				const { wrapper, composable } = getWrapper(elementId);
-
-				return {
-					wrapper,
-					composable,
-					fileRecord,
-					uploadFromUrlMock,
-				};
-			};
-
-			it("should be defined", () => {
-				const { composable } = setup();
-
-				expect(composable?.createPreviewImage).toBeDefined();
-			});
-
-			it("should upload the external image", async () => {
-				const { composable, uploadFromUrlMock } = setup();
-
-				const imageUrl = "https://test.de/my-article/image.jpg";
-				await composable?.createPreviewImage(imageUrl);
-
-				expect(uploadFromUrlMock).toHaveBeenCalledWith(imageUrl);
-			});
-
 			describe("when image can be uploaded", () => {
+				const setup = () => {
+					const elementId = "my-custom-mocked-id";
+					const uploadFromUrlMock = jest.fn();
+					const fileRecord = fileRecordResponseFactory.build({
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
+					});
+					const getFileRecordMock = jest
+						.fn()
+						.mockReturnValueOnce(ref(fileRecord));
+					const { getFileRecord } = setupFileStorageApiMock({
+						uploadFromUrlMock,
+						getFileRecordMock,
+					});
+
+					const { wrapper, composable } = getWrapper(elementId);
+
+					return {
+						wrapper,
+						composable,
+						getFileRecord,
+						uploadFromUrlMock,
+						elementId,
+						fileRecord,
+					};
+				};
+
+				it("should be defined", () => {
+					const { composable } = setup();
+
+					expect(composable?.createPreviewImage).toBeDefined();
+				});
+
+				it("should upload the external image", async () => {
+					const { composable, uploadFromUrlMock, elementId } = setup();
+
+					const imageUrl = "https://test.de/my-article/image.jpg";
+					await composable?.createPreviewImage(imageUrl);
+
+					expect(uploadFromUrlMock).toHaveBeenCalledWith(
+						imageUrl,
+						elementId,
+						FileRecordParentType.BOARDNODES
+					);
+				});
+
 				it("should return image url for the preview image", async () => {
 					const { composable, fileRecord } = setup();
 
-					fileRecord.value = fileRecordResponseFactory.build({
-						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
-					});
-
 					const externalImageUrl = "https://test.de/my-article/image.jpg";
-					const previewImageUrl =
-						await composable?.createPreviewImage(externalImageUrl);
+					const result = await composable?.createPreviewImage(externalImageUrl);
 
-					expect(previewImageUrl).toEqual(
-						expect.stringContaining(fileRecord.value.url)
+					const expectedPreviewImageUrl = convertDownloadToPreviewUrl(
+						fileRecord.url
+					);
+					expect(result).toEqual(
+						expect.stringContaining(expectedPreviewImageUrl)
 					);
 				});
 			});
 
-			describe("when image can not be uploaded", () => {
-				it("should return nothing", async () => {
-					const { composable, fileRecord } = setup();
-
-					fileRecord.value = undefined;
-
+			describe("when upload throws error", () => {
+				const setup = () => {
 					const externalImageUrl = "https://test.de/my-article/image.jpg";
-					const previewImageUrl =
-						await composable?.createPreviewImage(externalImageUrl);
+					const elementId = "my-custom-mocked-id";
+					const error = new Error("upload failed");
+					const uploadFromUrlMock = jest.fn().mockRejectedValueOnce(error);
 
-					expect(previewImageUrl).toBeUndefined();
+					const { getFileRecord } = setupFileStorageApiMock({
+						uploadFromUrlMock,
+					});
+
+					const { wrapper, composable } = getWrapper(elementId);
+
+					return {
+						wrapper,
+						composable,
+						getFileRecord,
+						uploadFromUrlMock,
+						elementId,
+						externalImageUrl,
+						error,
+					};
+				};
+
+				it("should pass error", async () => {
+					const { composable, externalImageUrl, error } = setup();
+
+					await expect(
+						composable?.createPreviewImage(externalImageUrl)
+					).rejects.toThrowError(error);
+				});
+			});
+
+			describe("when getFileRecord returns undefined ref", () => {
+				const setup = () => {
+					const externalImageUrl = "https://test.de/my-article/image.jpg";
+					const elementId = "my-custom-mocked-id";
+					const uploadFromUrlMock = jest.fn();
+					const getFileRecordMock = jest
+						.fn()
+						.mockReturnValueOnce(ref(undefined));
+					const { getFileRecord } = setupFileStorageApiMock({
+						uploadFromUrlMock,
+						getFileRecordMock,
+					});
+
+					const { wrapper, composable } = getWrapper(elementId);
+
+					return {
+						wrapper,
+						composable,
+						getFileRecord,
+						uploadFromUrlMock,
+						elementId,
+						externalImageUrl,
+					};
+				};
+
+				it("should return undefined", async () => {
+					const { composable, externalImageUrl } = setup();
+
+					const result = await composable?.createPreviewImage(externalImageUrl);
+
+					expect(result).toBeUndefined();
 				});
 			});
 		});
