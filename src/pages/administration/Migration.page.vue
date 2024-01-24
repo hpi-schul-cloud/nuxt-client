@@ -98,7 +98,10 @@
 								<v-card-text>
 									<iframe class="full" :src="helpPageUri" />
 									<v-alert
-										v-if="!school.inUserMigration || totalImportUsers === 0"
+										v-if="
+											(!school.inUserMigration || totalImportUsers === 0) &&
+											!isNbc
+										"
 										dense
 										outlined
 										type="info"
@@ -224,7 +227,11 @@
 												:size="20"
 												indeterminate
 											/>
-											{{ $t("pages.administration.migration.migrate") }}
+											{{
+												isNbc
+													? $t("pages.administration.migration.nbc.migrate")
+													: $t("pages.administration.migration.migrate")
+											}}
 										</v-btn>
 									</div>
 								</div>
@@ -247,64 +254,80 @@
 								>
 									<v-card-text>
 										<v-row>
-											<p>
-												{{
-													$t(
-														"pages.administration.migration.step4.linkingFinished",
-														{
-															source: ldapSourceTranslation,
-															instance: $theme.name,
-														}
-													)
-												}}
-											</p>
-											<p>
-												{{
-													$t(
-														"pages.administration.migration.step4.transferphase"
-													)
-												}}
-											</p>
-											<ul>
-												<li>
+											<template v-if="isNbc">
+												<p>
 													{{
 														$t(
-															"pages.administration.migration.step4.bullets.linkedUsers",
-															{ source: ldapSourceTranslation }
+															"pages.administration.migration.step4.nbc.linkingFinished",
+															{
+																source: ldapSourceTranslation,
+																instance: $theme.name,
+																totalMatched: totalMatched,
+															}
 														)
 													}}
-												</li>
-												<li>
+												</p>
+											</template>
+											<template v-else>
+												<p>
 													{{
 														$t(
-															"pages.administration.migration.step4.bullets.newUsers",
-															{ instance: $theme.name }
+															"pages.administration.migration.step4.linkingFinished",
+															{
+																source: ldapSourceTranslation,
+																instance: $theme.name,
+															}
 														)
 													}}
-												</li>
-												<li>
+												</p>
+												<p>
 													{{
 														$t(
-															"pages.administration.migration.step4.bullets.classes",
-															{ source: ldapSourceTranslation }
+															"pages.administration.migration.step4.transferphase"
 														)
 													}}
-												</li>
-												<li>
+												</p>
+												<ul class="mb-2">
+													<li>
+														{{
+															$t(
+																"pages.administration.migration.step4.bullets.linkedUsers",
+																{ source: ldapSourceTranslation }
+															)
+														}}
+													</li>
+													<li>
+														{{
+															$t(
+																"pages.administration.migration.step4.bullets.newUsers",
+																{ instance: $theme.name }
+															)
+														}}
+													</li>
+													<li>
+														{{
+															$t(
+																"pages.administration.migration.step4.bullets.classes",
+																{ source: ldapSourceTranslation }
+															)
+														}}
+													</li>
+													<li>
+														{{
+															$t(
+																"pages.administration.migration.step4.bullets.oldUsers"
+															)
+														}}
+													</li>
+												</ul>
+												<p class="font-weight-bold">
 													{{
 														$t(
-															"pages.administration.migration.step4.bullets.oldUsers"
+															"pages.administration.migration.step4.endTransferphase"
 														)
 													}}
-												</li>
-											</ul>
-											<p class="font-weight-bold">
-												{{
-													$t(
-														"pages.administration.migration.step4.endTransferphase"
-													)
-												}}
-											</p>
+												</p>
+											</template>
 										</v-row>
 									</v-card-text>
 
@@ -315,7 +338,11 @@
 											@click="endMaintenance"
 										>
 											{{
-												$t("pages.administration.migration.finishTransferPhase")
+												isNbc
+													? $t("pages.administration.migration.finishWizard")
+													: $t(
+															"pages.administration.migration.finishTransferPhase"
+														)
 											}}
 										</v-btn>
 									</div>
@@ -332,50 +359,81 @@
 								class="pa-5 mb-10"
 								color="grey lighten-5"
 							>
-								<p>
-									{{ $t("pages.administration.migration.step5.syncReady1") }}
-								</p>
-								<p>
-									{{
-										$t("pages.administration.migration.step5.syncReady2", {
-											source: ldapSourceTranslation,
-											instance: $theme.name,
-										})
-									}}
-								</p>
+								<template v-if="isNbc">
+									<p>
+										{{
+											$t(
+												"pages.administration.migration.step5.nbc.linkingFinished",
+												{
+													source: ldapSourceTranslation,
+													instance: $theme.name,
+												}
+											)
+										}}
+									</p>
+									<ul class="mb-4">
+										<li>
+											{{
+												$t("pages.administration.migration.step5.nbc.bullet1", {
+													source: ldapSourceTranslation,
+												})
+											}}
+										</li>
+										<li>
+											{{
+												$t(
+													"pages.administration.migration.step4.bullets.oldUsers"
+												)
+											}}
+										</li>
+									</ul>
+								</template>
+								<template v-else>
+									<p>
+										{{ $t("pages.administration.migration.step5.syncReady1") }}
+									</p>
+									<p>
+										{{
+											$t("pages.administration.migration.step5.syncReady2", {
+												source: ldapSourceTranslation,
+												instance: $theme.name,
+											})
+										}}
+									</p>
 
-								<p>
-									{{
-										$t("pages.administration.migration.step5.afterSync", {
-											source: ldapSourceTranslation,
-											instance: $theme.name,
-										})
-									}}
-								</p>
-								<ul>
-									<li>
+									<p>
 										{{
-											$t(
-												"pages.administration.migration.step5.afterSync.bullet1",
-												{ source: ldapSourceTranslation }
-											)
+											$t("pages.administration.migration.step5.afterSync", {
+												source: ldapSourceTranslation,
+												instance: $theme.name,
+											})
 										}}
-									</li>
-									<li>
-										{{
-											$t(
-												"pages.administration.migration.step5.afterSync.bullet2"
-											)
-										}}
-									</li>
-									<li>
-										{{
-											$t(
-												"pages.administration.migration.step4.bullets.oldUsers"
-											)
-										}}
-									</li>
-								</ul>
+									</p>
+									<ul>
+										<li>
+											{{
+												$t(
+													"pages.administration.migration.step5.afterSync.bullet1",
+													{ source: ldapSourceTranslation }
+												)
+											}}
+										</li>
+										<li>
+											{{
+												$t(
+													"pages.administration.migration.step5.afterSync.bullet2"
+												)
+											}}
+										</li>
+										<li>
+											{{
+												$t(
+													"pages.administration.migration.step4.bullets.oldUsers"
+												)
+											}}
+										</li>
+									</ul>
+								</template>
 								<div class="text-right">
 									<v-btn
 										class="primary"
@@ -468,18 +526,20 @@ export default {
 		isBrb() {
 			return envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb";
 		},
+		isNbc() {
+			return envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21";
+		},
 		ldapSourceTranslation() {
 			if (this.isBrb) {
 				return this.$t("pages.administration.migration.brbSchulportal");
+			} else if (this.isNbc) {
+				return "moin.schule";
 			} else {
 				return this.$t("pages.administration.migration.ldapSource");
 			}
 		},
 		helpPageUri() {
-			if (this.isBrb) {
-				return "https://docs.dbildungscloud.de/x/DwK6Cw?frameable=true";
-			}
-			return "https://docs.dbildungscloud.de/x/VAEbDg?frameable=true";
+			return envConfigModule.getEnv.MIGRATION_WIZARD_DOCUMENTATION_LINK;
 		},
 	},
 	watch: {
@@ -594,7 +654,19 @@ export default {
 				return;
 			}
 			this.isLoading = true;
+
+			if (this.isNbc) {
+				await importUsersModule.fetchImportUsersFromExternalSystem();
+
+				if (importUsersModule.getBusinessError) {
+					this.isLoading = false;
+
+					return;
+				}
+			}
+
 			await schoolsModule.setSchoolInUserMigration();
+
 			this.checkTotalInterval();
 			if (schoolsModule.getError) {
 				// TODO better error handling
@@ -631,7 +703,7 @@ export default {
 					message: schoolsModule.getError.message,
 				});
 			} else {
-				this.school.inMaintenance = false;
+				this.school.inMaintenance = this.isNbc ? undefined : false;
 				this.migrationStep = 5;
 			}
 			this.isLoading = false;

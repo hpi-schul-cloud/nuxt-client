@@ -1,6 +1,7 @@
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
+import { Envs } from "@/store/types/env-config";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -44,6 +45,7 @@ describe("AdminMigrationSection", () => {
 
 		envConfigModule = createModuleMocks(EnvConfigModule, {
 			getAccessibilityReportEmail: "nbc-support@netz-21.de",
+			getEnv: {} as Envs,
 			...envConfigGetters,
 		});
 
@@ -984,6 +986,143 @@ describe("AdminMigrationSection", () => {
 						enableLdapSyncDuringMigration: true,
 					},
 				});
+			});
+		});
+	});
+
+	describe("Migration wizard button", () => {
+		describe("when the migration wizard feature is enabled", () => {
+			describe("when the migration is running and the school is migrated", () => {
+				it("should be enabled", () => {
+					const { wrapper } = setup(
+						{
+							getSchool: {
+								...mockSchool,
+								systemIds: ["targetSystemId"],
+							},
+						},
+						{
+							getUserLoginMigration: {
+								sourceSystemId: "sourceSystemId",
+								targetSystemId: "targetSystemId",
+								startedAt: new Date(2023, 1, 1),
+								closedAt: undefined,
+								finishedAt: undefined,
+								mandatorySince: undefined,
+							},
+						},
+						{
+							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as Envs,
+						}
+					);
+
+					const button = wrapper.find(
+						'[data-testid="migration-wizard-button"]'
+					);
+
+					expect(button.props("disabled")).toBeFalsy();
+				});
+
+				it("should redirect to the wizard", async () => {
+					const { wrapper } = setup(
+						{},
+						{
+							getUserLoginMigration: {
+								sourceSystemId: "sourceSystemId",
+								targetSystemId: "targetSystemId",
+								startedAt: new Date(2023, 1, 1),
+								closedAt: undefined,
+								finishedAt: undefined,
+								mandatorySince: undefined,
+							},
+						},
+						{
+							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as Envs,
+						}
+					);
+
+					const button = wrapper.find(
+						'[data-testid="migration-wizard-button"]'
+					);
+
+					expect(button.props("to")).toEqual({
+						name: "administration-migration",
+					});
+				});
+			});
+
+			describe("when the migration has not been started", () => {
+				it("should be disabled", () => {
+					const { wrapper } = setup(
+						{},
+						{
+							getUserLoginMigration: undefined,
+						},
+						{
+							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as Envs,
+						}
+					);
+
+					const button = wrapper.find(
+						'[data-testid="migration-wizard-button"]'
+					);
+
+					expect(button.props("disabled")).toBeTruthy();
+				});
+			});
+
+			describe("when the school has not been migrated", () => {
+				it("should be disabled", () => {
+					const { wrapper } = setup(
+						{
+							getSchool: {
+								...mockSchool,
+								systemIds: [],
+							},
+						},
+						{
+							getUserLoginMigration: {
+								sourceSystemId: "sourceSystemId",
+								targetSystemId: "targetSystemId",
+								startedAt: new Date(2023, 1, 1),
+								closedAt: undefined,
+								finishedAt: undefined,
+								mandatorySince: undefined,
+							},
+						},
+						{
+							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as Envs,
+						}
+					);
+
+					const button = wrapper.find(
+						'[data-testid="migration-wizard-button"]'
+					);
+
+					expect(button.props("disabled")).toBeTruthy();
+				});
+			});
+		});
+
+		describe("when the migration wizard feature is disabled", () => {
+			it("should not exist", () => {
+				const { wrapper } = setup(
+					{},
+					{
+						getUserLoginMigration: {
+							sourceSystemId: "sourceSystemId",
+							targetSystemId: "targetSystemId",
+							startedAt: new Date(2023, 1, 1),
+							closedAt: undefined,
+							finishedAt: undefined,
+							mandatorySince: undefined,
+						},
+					}
+				);
+
+				const button = wrapper.find('[data-testid="migration-wizard-button"]');
+
+				expect(button.exists()).toBeFalsy();
 			});
 		});
 	});

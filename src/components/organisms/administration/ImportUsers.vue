@@ -252,7 +252,7 @@
 
 <script>
 /* eslint-disable max-lines */
-import { importUsersModule, schoolsModule, envConfigModule } from "@/store";
+import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import { MatchedBy } from "@/store/import-users";
 import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch";
 import {
@@ -364,12 +364,11 @@ export default {
 		canStartMigration() {
 			return this.school.inUserMigration && this.school.inMaintenance;
 		},
-		canFinishMigration() {
-			return false;
-		},
 		ldapSourceTranslation() {
 			if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb") {
 				return this.$t("pages.administration.migration.brbSchulportal");
+			} else if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21") {
+				return "moin.schule";
 			} else {
 				return this.$t("pages.administration.migration.ldapSource");
 			}

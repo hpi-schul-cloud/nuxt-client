@@ -6,8 +6,12 @@ import {
 	UserImportApiInterface,
 	UserMatchListResponse,
 } from "@/serverApi/v3";
-import { BusinessError } from "@/store/types/commons";
-import { $axios } from "@/utils/api";
+import {
+	ApiResponseError,
+	ApiValidationError,
+	BusinessError,
+} from "@/store/types/commons";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 export enum MatchedBy {
@@ -394,6 +398,21 @@ export default class ImportUsersModule extends VuexModule {
 			this.setBusinessError({
 				statusCode: `${error.statusCode}`,
 				message: error.message,
+			});
+		}
+	}
+
+	@Action
+	async fetchImportUsersFromExternalSystem(): Promise<void> {
+		try {
+			await this.importUserApi.importUserControllerFetchImportUsers();
+		} catch (error: unknown) {
+			const apiError: ApiResponseError | ApiValidationError =
+				mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
 		}
 	}
