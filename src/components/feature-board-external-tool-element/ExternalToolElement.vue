@@ -257,17 +257,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped lang="scss">
-.gap-8 {
-	gap: 8px;
-}
-
-.flex-1 {
-	flex: 1;
-}
-
-.break-word {
-	word-break: break-word;
-}
-</style>
