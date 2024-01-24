@@ -1,6 +1,6 @@
 <template>
 	<v-card v-bind="$attrs">
-		<div class="content-card">
+		<div class="content-card" data-testid="learningstore-searchresult-item">
 			<base-link
 				class="title-link"
 				:to="{
