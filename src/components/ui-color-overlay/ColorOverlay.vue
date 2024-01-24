@@ -101,6 +101,7 @@ export default defineComponent({
 <style scoped>
 .display-container {
 	position: relative;
+	min-height: 52px;
 }
 
 .display-overlay {
