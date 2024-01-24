@@ -63,8 +63,6 @@ describe("SchoolPolicyFormDialog", () => {
 		it("should disable submit button", () => {
 			const wrapper = setup();
 
-			console.log(wrapper.findComponent('[data-testid="dialog-confirm"]'));
-
 			expect(
 				wrapper.findComponent('[data-testid="dialog-confirm"]').attributes()
 					.disabled
