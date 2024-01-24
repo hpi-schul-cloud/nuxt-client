@@ -87,17 +87,13 @@ describe("useSchoolExternalToolUtils", () => {
 
 		describe("when translate the headers", () => {
 			it("should call the translation function for name", () => {
-				const { getHeaders, tMock } = setup();
-
-				getHeaders;
+				const { tMock } = setup();
 
 				expect(tMock).toHaveBeenCalledWith("common.labels.name");
 			});
 
 			it("should call the translation function for value", () => {
-				const { getHeaders, tMock } = setup();
-
-				getHeaders;
+				const { tMock } = setup();
 
 				expect(tMock).toHaveBeenCalledWith(
 					"components.administration.externalToolsSection.table.header.status"
