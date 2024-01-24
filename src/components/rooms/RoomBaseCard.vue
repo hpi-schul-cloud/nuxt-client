@@ -2,7 +2,7 @@
 	<v-card
 		class="card d-flex align-items-center"
 		:aria-label="title"
-		:hover="vuetifyHover"
+		hover
 		@click="onClick"
 		:data-testId="testId"
 	>
@@ -13,7 +13,6 @@
 						height="100%"
 						class="mx-auto"
 						:src="logoUrl"
-						cover
 						:data-testid="`${testId}-logo`"
 						:alt="$t('pages.rooms.tools.logo')"
 					/>
@@ -44,7 +43,6 @@
 <script lang="ts">
 import { mdiOpenInNew } from "@mdi/js";
 import { defineComponent } from "vue";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	emits: ["click"],
@@ -64,25 +62,13 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const { t } = useI18n();
-
 		const onClick = () => {
 			emit("click");
 		};
 
-		/**
-		 * VUE3_UPGRADE
-		 * - There is a bug report on Vuetify that using the hover attribute on v-card components is problematic.
-		 * - https://github.com/vuetifyjs/vuetify/issues/17574
-		 * - Remove this 'vuetifyHover' flag after the upcoming Vuetify release if the issue is solved.
-		 */
-		const vuetifyHover = false;
-
 		return {
-			t,
 			onClick,
 			mdiOpenInNew,
-			vuetifyHover,
 		};
 	},
 });
