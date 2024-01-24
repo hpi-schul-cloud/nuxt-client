@@ -22,7 +22,7 @@ describe("@components/share/ImportModal", () => {
 				},
 				stubs: ["RenderHTML"],
 			},
-			propsData: {
+			props: {
 				isOpen: true,
 				parentName: "TestParentName",
 				parentType: "courses",
