@@ -63,6 +63,19 @@ describe("PreviewImage", () => {
 		expect(image.attributes("cover")).toBe("true");
 	});
 
+	it("should set max-width with correct value", async () => {
+		const { wrapper } = setupWithShallowMount({});
+		wrapper.vm.imageRef.image = {
+			naturalWidth: "100",
+		};
+
+		const image = wrapper.findComponent(VImg);
+
+		await image.trigger("load");
+
+		expect(image.attributes("maxwidth")).toBe("100");
+	});
+
 	it("should has loading spinner", () => {
 		const { wrapper } = setupWithMount({ isEditMode: false });
 
