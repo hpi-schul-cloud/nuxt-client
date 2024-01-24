@@ -9,6 +9,7 @@
 					'icon',
 				]"
 				aria-label="close detail view"
+				data-testid="learningstore-close-details-icon"
 				@click="goBack"
 			>
 				<v-icon size="20">{{ mdiClose }}</v-icon>
@@ -75,6 +76,7 @@
 						outlined
 						color="secondary"
 						class="content-button"
+						data-testid="learningstore-to-content-link"
 						@click="
 							() => {
 								goToMerlinContent(merlinTokenReference);
@@ -91,6 +93,7 @@
 						:href="downloadUrl"
 						class="content-button"
 						target="_blank"
+						data-testid="learningstore-to-content-link"
 					>
 						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
 						{{ $t("pages.content.material.toMaterial") }}
@@ -166,6 +169,7 @@
 					btn-color="primary"
 					:btn-label="$t('pages.content._id.addToTopic')"
 					:multiple="false"
+					data-testid="learningstore-add-content-button"
 				/>
 			</user-has-role>
 		</div>
