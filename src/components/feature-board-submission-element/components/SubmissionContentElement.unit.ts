@@ -6,7 +6,7 @@ import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/f
 import { createMock } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { shallowMount } from "@vue/test-utils";
-import { computed, nextTick, ref, unref } from "vue";
+import { computed, ref, unref } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
@@ -272,9 +272,6 @@ describe("SubmissionContentElement", () => {
 				})
 			);
 
-			await nextTick();
-			await nextTick();
-
 			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
 		});
 
@@ -289,9 +286,6 @@ describe("SubmissionContentElement", () => {
 					keyCode: 38,
 				})
 			);
-
-			await nextTick();
-			await nextTick();
 
 			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
 		});
