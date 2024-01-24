@@ -3,14 +3,10 @@
 		<template #body>
 			<modal-body-info :title="msg" :description="description">
 				<template v-if="isSuccess" #icon>
-					<v-icon class="material-icon" color="rgba(var(--v-theme-success));)">
-						$mdiCheckCircle
-					</v-icon>
+					<v-icon size="60" color="success">$mdiCheckCircle</v-icon>
 				</template>
 				<template v-else #icon>
-					<v-icon class="material-icon" color="rgba(var(--v-theme-error));">
-						$mdiAlertCircle
-					</v-icon>
+					<v-icon size="60" color="error">$mdiAlertCircle</v-icon>
 				</template>
 			</modal-body-info>
 		</template>

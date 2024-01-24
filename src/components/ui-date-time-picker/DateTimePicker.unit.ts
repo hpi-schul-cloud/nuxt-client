@@ -1,82 +1,70 @@
-import Vue from "vue";
-import { MountOptions, Wrapper, mount } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import DateTimePicker from "./DateTimePicker.vue";
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
-
-type DateTimePickerProps = {
-	dateTime: string;
-	dateInputLabel?: string;
-	dateInputAriaLabel?: string;
-	minDate?: string;
-	maxDate?: string;
-	timeInputLabel?: string;
-	timeInputAriaLabel?: string;
-	required?: boolean;
-};
 
 describe("DateTimePicker", () => {
-	let wrapper: Wrapper<Vue>;
-
-	const setup = (props: DateTimePickerProps) => {
-		document.body.setAttribute("data-app", "true");
-		wrapper = mount(DateTimePicker as MountOptions<Vue>, {
-			...createComponentMocks({}),
-			propsData: props,
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+	const mountComponent = (
+		options: ComponentMountingOptions<typeof DateTimePicker> = {}
+	) => {
+		return mount(DateTimePicker, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
+			...options,
+			attachTo: document.body,
 		});
 	};
 
 	it("should render component", () => {
-		setup({ dateTime: new Date().toISOString() });
+		const wrapper = mountComponent({
+			props: { dateTime: new Date().toISOString() },
+		});
 
 		expect(wrapper.findComponent(DateTimePicker).exists()).toBe(true);
 	});
 
 	describe("if date and time are set", () => {
 		it("should emit input event on date input", async () => {
-			setup({ dateTime: new Date().toISOString() });
+			const wrapper = mountComponent({
+				props: { dateTime: new Date().toISOString() },
+			});
 
 			const datePicker = wrapper.findComponent({ name: "date-picker" });
 			expect(datePicker.exists()).toBe(true);
 			const tomorrow = new Date();
 			tomorrow.setDate(tomorrow.getDate() + 1);
-			datePicker.vm.$emit("update:date", tomorrow);
+			datePicker.vm.$emit("update:date", tomorrow.toISOString());
 
-			await wrapper.vm.$nextTick();
-
-			expect(wrapper.emitted("input")).toHaveLength(1);
+			expect(wrapper.emitted("update:dateTime")).toHaveLength(1);
 		});
 
 		it("should emit input event on time input", async () => {
-			jest.useFakeTimers();
-			setup({ dateTime: new Date().toISOString() });
+			const wrapper = mountComponent({
+				props: { dateTime: new Date().toISOString() },
+			});
 
 			const timePicker = wrapper.findComponent({ name: "time-picker" });
 			expect(timePicker.exists()).toBe(true);
 			timePicker.vm.$emit("update:time", "00:00");
 
-			jest.advanceTimersByTime(1000);
-
-			expect(wrapper.emitted("input")).toHaveLength(1);
+			expect(wrapper.emitted("update:dateTime")).toHaveLength(1);
 		});
 	});
 
 	describe("if only date is set", () => {
 		it("should emit input event with time set to 23:59", async () => {
-			jest.useFakeTimers();
-			setup({ dateTime: "" });
+			const wrapper = mountComponent({
+				props: { dateTime: "" },
+			});
 
 			const datePicker = wrapper.findComponent({ name: "date-picker" });
 			const date = new Date("2030-01-01");
-			datePicker.vm.$emit("update:date", date);
+			datePicker.vm.$emit("update:date", date.toISOString());
 
-			jest.advanceTimersByTime(1000);
-
-			const emits = wrapper.emitted("input");
+			const emits = wrapper.emitted("update:dateTime");
 			expect(emits?.length).toEqual(1);
 			date.setHours(23);
 			date.setMinutes(59);
@@ -86,13 +74,12 @@ describe("DateTimePicker", () => {
 
 	describe("if only time is set", () => {
 		it("should emit no input event", async () => {
-			jest.useFakeTimers();
-			setup({ dateTime: "" });
+			const wrapper = mountComponent({
+				props: { dateTime: "" },
+			});
 
 			const timePicker = wrapper.findComponent({ name: "time-picker" });
 			timePicker.vm.$emit("update:time", "00:00");
-
-			jest.advanceTimersByTime(1000);
 
 			expect(wrapper.emitted("input")).toBe(undefined);
 		});
@@ -100,21 +87,19 @@ describe("DateTimePicker", () => {
 
 	describe("if date and time values are removed", () => {
 		it("should emit input event", async () => {
-			jest.useFakeTimers();
-			setup({ dateTime: new Date().toISOString() });
+			const wrapper = mountComponent({
+				props: { dateTime: new Date().toISOString() },
+			});
 
 			const datePicker = wrapper.findComponent({ name: "date-picker" });
 			datePicker.vm.$emit("update:date", "");
-			jest.advanceTimersByTime(1000);
 
-			expect(wrapper.emitted("input")).toBe(undefined);
+			expect(wrapper.emitted("update:dateTime")).toBe(undefined);
 
 			const timePicker = wrapper.findComponent({ name: "time-picker" });
 			timePicker.vm.$emit("update:time", "");
 
-			jest.advanceTimersByTime(1000);
-
-			expect(wrapper.emitted("input")).toHaveLength(1);
+			expect(wrapper.emitted("update:dateTime")).toHaveLength(1);
 		});
 	});
 });

@@ -1,23 +1,25 @@
 import { ToolContextType } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ContextExternalToolSave } from "@/store/external-tool/context-external-tool";
-import { CONTEXT_EXTERNAL_TOOLS_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { CONTEXT_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	businessErrorFactory,
 	contextExternalToolConfigurationTemplateFactory,
 	contextExternalToolFactory,
-	i18nMock,
 	toolParameterFactory,
 } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import flushPromises from "flush-promises";
-import Vue from "vue";
+import { mount, flushPromises } from "@vue/test-utils";
+import { nextTick } from "vue";
 import ExternalToolConfigurator from "../external-tools/configuration/ExternalToolConfigurator.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 jest.mock("@util-board");
 
@@ -38,8 +40,6 @@ describe("ExternalToolElementConfigurationDialog", () => {
 		props: { configId?: string } = {},
 		getters: Partial<ContextExternalToolsModule> = {}
 	) => {
-		document.body.setAttribute("data-app", "true");
-
 		const contextExternalToolsModule = createModuleMocks(
 			ContextExternalToolsModule,
 			{
@@ -58,20 +58,16 @@ describe("ExternalToolElementConfigurationDialog", () => {
 			...props,
 		};
 
-		const wrapper: Wrapper<Vue> = mount(
-			ExternalToolElementConfigurationDialog as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				propsData,
+		const wrapper = mount(ExternalToolElementConfigurationDialog, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
 					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						contextExternalToolsModule,
 				},
-			}
-		);
+			},
+			props: propsData,
+		});
 
 		wrapper.setProps({
 			...propsData,
@@ -79,7 +75,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 		});
 
 		// Wait for the DOM to update after opening the dialog
-		await Vue.nextTick();
+		await nextTick();
 
 		return {
 			wrapper,
@@ -99,7 +95,8 @@ describe("ExternalToolElementConfigurationDialog", () => {
 		it("should display the title", async () => {
 			const { wrapper } = await setup();
 
-			const title = wrapper.find("h2");
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const title = dialog.findComponent({ name: "v-card-title" });
 
 			expect(title.text()).toEqual(
 				"feature-board-external-tool-element.dialog.title"
@@ -112,7 +109,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 			it("should load the available tools for a context", async () => {
 				const { contextExternalToolsModule } = await getWrapper();
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					contextExternalToolsModule.loadAvailableToolsForContext
@@ -134,7 +131,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 					configId: "configId",
 				});
 
-				await Vue.nextTick();
+				await nextTick();
 
 				contextExternalToolsModule.loadContextExternalTool.mockResolvedValue(
 					contextExternalTool
@@ -171,7 +168,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 
 			const configurator = wrapper.findComponent(ExternalToolConfigurator);
 			configurator.vm.$emit("cancel");
-			await Vue.nextTick();
+			await nextTick();
 
 			expect(wrapper.emitted("close")).toBeDefined();
 		});
@@ -208,7 +205,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 						value: testValue,
 					},
 				]);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					contextExternalToolsModule.createContextExternalTool
@@ -376,7 +373,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 					contextExternalToolConfigurationTemplateFactory.build(),
 					[]
 				);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(configurator.props("error")).toEqual(error);
 			});
