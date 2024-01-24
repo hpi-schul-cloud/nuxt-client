@@ -64,6 +64,40 @@
 			</div>
 		</template>
 
+		<div style="position: absolute; left: 455px">
+			<speed-dial-menu orientation="right">
+				Menu
+
+				<template #actions>
+					<speed-dial-menu-action :icon="mdiPlus">Add</speed-dial-menu-action>
+					<speed-dial-menu-action :icon="mdiPlus" :href="'google.de'"
+						>Link</speed-dial-menu-action
+					>
+
+					<speed-dial-menu-action :icon="mdiPlus"
+						>Remove</speed-dial-menu-action
+					>
+				</template>
+			</speed-dial-menu>
+		</div>
+
+		<div style="position: absolute; left: 225px">
+			<speed-dial-menu orientation="left">
+				Menu
+
+				<template #actions>
+					<speed-dial-menu-action :icon="mdiPlus">Add</speed-dial-menu-action>
+					<speed-dial-menu-action :icon="mdiPlus" :href="'google.de'"
+						>Link</speed-dial-menu-action
+					>
+
+					<speed-dial-menu-action :icon="mdiPlus"
+						>Remove</speed-dial-menu-action
+					>
+				</template>
+			</speed-dial-menu>
+		</div>
+
 		<component
 			v-if="getCurrentComponent"
 			:is="getCurrentComponent"
@@ -130,6 +164,8 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
+import SpeedDialMenu from "@/components/ui-speed-dial-menu/SpeedDialMenu";
+import SpeedDialMenuAction from "@/components/ui-speed-dial-menu/SpeedDialMenuAction";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
@@ -167,6 +203,7 @@ export default defineComponent({
 			useCopy(isLoadingDialogOpen);
 
 		return {
+			mdiPlus,
 			copy,
 			backgroundCopyProcesses,
 			isCopyProcessInBackground,
@@ -180,6 +217,8 @@ export default defineComponent({
 		vCustomDialog,
 		CopyResultModal,
 		ShareModal,
+		SpeedDialMenu,
+		SpeedDialMenuAction,
 	},
 	inject: ["copyModule", "shareModule"],
 	data() {

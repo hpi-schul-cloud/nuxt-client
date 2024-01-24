@@ -13,7 +13,7 @@
 			</slot>
 			<div v-if="fabItems" class="fab-wrapper">
 				<slot name="fab">
-					<v-custom-fab
+					<!-- <v-custom-fab
 						:data-testid="fabItems.testId"
 						:icon="fabItems.icon"
 						:title="fabItems.title"
@@ -23,7 +23,7 @@
 						class="wireframe-fab"
 						:aria-label="fabItems.ariaLabel"
 						v-bind="$attrs"
-					/>
+					/> -->
 				</slot>
 			</div>
 			<div v-if="showBorder" class="border" />
@@ -43,13 +43,13 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
-import vCustomFab from "@/components/atoms/vCustomFab.vue";
+// import vCustomFab from "@/components/atoms/vCustomFab.vue";
 
 export default defineComponent({
 	inheritAttrs: false,
 	components: {
 		vCustomBreadcrumbs,
-		vCustomFab,
+		// vCustomFab,
 	},
 	props: {
 		breadcrumbs: {
