@@ -19,7 +19,7 @@
 		>
 			<template #title>
 				<h2 class="text-h4 my-2 text-break-word">
-					{{ t("error.generic") }}
+					{{ $t("error.generic") }}
 				</h2>
 			</template>
 		</v-custom-dialog>
@@ -36,7 +36,7 @@
 						data-testId="videoconference-config-dialog-title"
 					>
 						{{
-							t("pages.rooms.tools.configureVideoconferenceDialog.title", {
+							$t("pages.rooms.tools.configureVideoconferenceDialog.title", {
 								roomName: roomName,
 							})
 						}}
@@ -47,7 +47,7 @@
 						v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
 						data-testId="every-attendee-joins-muted"
 						:label="
-							t('pages.rooms.tools.configureVideoconferenceDialog.text.mute')
+							$t('pages.rooms.tools.configureVideoconferenceDialog.text.mute')
 						"
 						:hide-details="true"
 					/>
@@ -55,7 +55,7 @@
 						v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
 						data-testId="moderator-must-approve-join-requests"
 						:label="
-							t(
+							$t(
 								'pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom'
 							)
 						"
@@ -65,7 +65,7 @@
 						v-model="videoConferenceOptions.everybodyJoinsAsModerator"
 						data-testId="everybody-joins-as-moderator"
 						:label="
-							t(
+							$t(
 								'pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission'
 							)
 						"
@@ -125,7 +125,6 @@ import {
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomModule from "@/store/room";
-import { useI18n } from "vue-i18n";
 import { mdiCheck } from "@mdi/js";
 
 export default defineComponent({
@@ -145,8 +144,6 @@ export default defineComponent({
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 
 		const roomName = computed(() => roomModule.getRoomData.title ?? "");
-
-		const { t } = useI18n();
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo
@@ -269,7 +266,6 @@ export default defineComponent({
 		};
 
 		return {
-			t,
 			videoConferenceInfo,
 			videoConferenceOptions,
 			hasPermission,

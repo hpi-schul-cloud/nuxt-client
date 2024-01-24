@@ -2,16 +2,16 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/move.svg" alt="" />
 		<h1 class="pl-4 pr-4">
-			{{ t("pages.userMigration.title") }}
+			{{ $t("pages.userMigration.title") }}
 		</h1>
 		<div>
 			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
 				:html="
-					t(migrationDescription, {
+					$t(migrationDescription, {
 						targetSystem: getSystemName(),
-						startMigration: t('pages.userMigration.button.startMigration'),
+						startMigration: $t('pages.userMigration.button.startMigration'),
 					})
 				"
 				component="p"
@@ -27,7 +27,7 @@
 					:to="canSkipMigration ? '/dashboard' : '/logout'"
 				>
 					{{
-						t(
+						$t(
 							canSkipMigration
 								? "pages.userMigration.button.skip"
 								: "common.actions.logout"
@@ -41,7 +41,7 @@
 					data-testId="btn-proceed"
 					:href="`/login/oauth2/${userLoginMigration.targetSystemId}?migration=true`"
 				>
-					{{ t("pages.userMigration.button.startMigration") }}
+					{{ $t("pages.userMigration.button.startMigration") }}
 				</v-btn>
 			</div>
 		</div>
@@ -115,7 +115,6 @@ export default defineComponent({
 		});
 
 		return {
-			t,
 			isLoading,
 			migrationDescription,
 			canSkipMigration,
