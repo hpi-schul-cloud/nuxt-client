@@ -46,7 +46,7 @@ export default defineComponent({
 			default: "",
 		},
 		placeholder: {
-			type: String,
+			type: [String, undefined],
 			default: "",
 		},
 		type: {

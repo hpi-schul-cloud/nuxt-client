@@ -1,5 +1,5 @@
 <template>
-	<VListItem data-testid="board-menu-action" @click.prevent="onClick">
+	<VListItem data-testid="board-menu-action">
 		<template v-slot:prepend>
 			<slot name="icon" data-testid="board-menu-action-icon">
 				<v-icon :icon="icon" />
@@ -19,13 +19,6 @@ export default defineComponent({
 	name: "BoardMenuAction",
 	props: {
 		icon: { type: String as PropType<IconProps["icon"]> },
-	},
-	setup(props, { emit }) {
-		const onClick = ($event: Event) => emit("click", $event);
-
-		return {
-			onClick,
-		};
 	},
 });
 </script>

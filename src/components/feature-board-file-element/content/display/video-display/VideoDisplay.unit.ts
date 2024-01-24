@@ -3,19 +3,16 @@ import VideoDisplay from ".//VideoDisplay.vue";
 
 describe("VideoDisplay", () => {
 	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-
 		const src = "test-source";
 		const name = "test-name";
 		const slotContent = "test-slot-content";
-		const propsData = {
+		const props = {
 			src,
 			name,
 		};
 
 		const wrapper = mount(VideoDisplay, {
-			attachTo: document.body,
-			propsData,
+			props,
 			slots: {
 				default: slotContent,
 			},
@@ -41,7 +38,7 @@ describe("VideoDisplay", () => {
 		const video = wrapper.find("video");
 		expect(video.attributes("src")).toBe(src);
 		expect(video.attributes("alt")).toBe(name);
-		expect(video.attributes("controls")).toBe("controls");
+		expect(video.attributes("controls")).toBe("");
 		expect(video.attributes("controlslist")).toBe("nodownload");
 		expect(video.attributes("loading")).toBe("lazy");
 	});
