@@ -621,5 +621,67 @@ describe("SchoolExternalToolsModule", () => {
 				});
 			});
 		});
+
+		describe("createDatasheet is called", () => {
+			describe("when it successfully calls the api", () => {
+				const setup = () => {
+					const schoolExternalToolResponse =
+						schoolExternalToolResponseFactory.build();
+
+					apiMock.toolSchoolControllerGetSchoolExternalTool.mockResolvedValue(
+						mockApiResponse({ data: schoolExternalToolResponse })
+					);
+
+					return {
+						schoolExternalToolResponse,
+					};
+				};
+
+				it("should get a schoolExternalTool", async () => {
+					setup();
+
+					await module.createDatasheet("schoolExternalToolId");
+
+					expect(
+						apiMock.toolSchoolControllerGetSchoolExternalTool
+					).toHaveBeenCalledWith("schoolExternalToolId");
+				});
+
+				it("should call the toolApi.toolControllerGetDatasheet", async () => {
+					const { schoolExternalToolResponse } = setup();
+
+					await module.createDatasheet("schoolExternalToolId");
+
+					expect(apiMock.toolControllerGetDatasheet).toHaveBeenCalledWith(
+						schoolExternalToolResponse.toolId
+					);
+				});
+			});
+
+			describe("when an error occurs", () => {
+				const setup = () => {
+					const error = axiosErrorFactory.build();
+					const apiError = mapAxiosErrorToResponseError(error);
+
+					apiMock.toolControllerGetDatasheet.mockRejectedValue(error);
+
+					return {
+						apiError,
+					};
+				};
+
+				it("should set the businessError", async () => {
+					const { apiError } = setup();
+
+					await module.createDatasheet("schoolExternalToolId");
+
+					expect(module.getBusinessError).toEqual<BusinessError>({
+						error: apiError,
+						statusCode: apiError.code,
+						message: apiError.message,
+					});
+				});
+			});
+		});
 	});
 });

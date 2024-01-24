@@ -49,7 +49,7 @@ import {
 
 export default defineComponent({
 	name: "ExternalToolToolbar",
-	emits: ["delete", "edit", "datasheet"],
+	emits: ["edit", "datasheet", "delete"],
 	setup() {
 		return {
 			mdiPencilOutline,

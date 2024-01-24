@@ -231,6 +231,9 @@ describe("ExternalToolSection", () => {
 					expect(
 						firstRowButtons.at(1).classes().includes("v-btn--icon")
 					).toBeTruthy();
+					expect(
+						firstRowButtons.at(2).classes().includes("v-btn--icon")
+					).toBeTruthy();
 				});
 
 				it("a dialog should be displayed with click on delete", async () => {
