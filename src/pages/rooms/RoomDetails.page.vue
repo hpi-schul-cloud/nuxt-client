@@ -370,21 +370,30 @@ export default defineComponent({
 				});
 			}
 
-			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
-				items.push({
-					icon: this.icons.mdiTrayArrowDown,
-					action: async () => await roomModule.downloadImsccCourse("1.1.0"),
-					name: this.$t("common.actions.download.v1.1"),
-					dataTestId: "title-menu-imscc-download-v1.1",
-				});
-			}
+			// TODO Dialog for download
+			// if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+			// 	items.push({
+			// 		icon: this.icons.mdiTrayArrowDown,
+			// 		action: async () => await roomModule.downloadImsccCourse("1.1.0"),
+			// 		name: this.$t("common.actions.download.v1.1"),
+			// 		dataTestId: "title-menu-imscc-download-v1.1",
+			// 	});
+			// }
 
+			// if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+			// 	items.push({
+			// 		icon: this.icons.mdiTrayArrowDown,
+			// 		action: async () => await roomModule.downloadImsccCourse("1.3.0"),
+			// 		name: this.$t("common.actions.download.v1.3"),
+			// 		dataTestId: "title-menu-imscc-download-v1.3",
+			// 	});
+			// }
 			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
 					icon: this.icons.mdiTrayArrowDown,
-					action: async () => await roomModule.downloadImsccCourse("1.3.0"),
-					name: this.$t("common.actions.download.v1.3"),
-					dataTestId: "title-menu-imscc-download-v1.3",
+					action: async () => await this.onDownload(),
+					name: this.$t("common.actions.download"),
+					dataTestId: "title-menu-imscc-download",
 				});
 			}
 
@@ -465,6 +474,19 @@ export default defineComponent({
 				this.dialog.isOpen = true;
 			}
 		},
+
+		async onDownload() {
+			// this.dialog.isOpen = false;
+			// await roomModule.fetchContent(this.courseId);
+			console.log("Download-Dialog-opened");
+		},
+		async onDownloadOptionsChoosed() {
+			// this.dialog.isOpen = false;
+			// await roomModule.fetchContent(this.courseId);
+			console.log("Download-Options-Dialog-opended");
+			console.log("Download-Options-Choosed-confirmed");
+		},
+
 		closeDialog() {
 			this.dialog.model = "";
 			this.dialog.header = "";
