@@ -16980,6 +16980,40 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
+         * Fetches import users from specific user migration fetching endpoint.
+         * @summary Fetch import users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerFetchImportUsers: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/fetch-import-users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @param {string} [firstName] 
          * @param {string} [lastName] 
@@ -17331,6 +17365,16 @@ export const UserImportApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Fetches import users from specific user migration fetching endpoint.
+         * @summary Fetch import users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerFetchImportUsers(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerFetchImportUsers(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * 
          * @param {string} [firstName] 
          * @param {string} [lastName] 
@@ -17432,6 +17476,15 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
             return localVarFp.importUserControllerEndSchoolInMaintenance(options).then((request) => request(axios, basePath));
         },
         /**
+         * Fetches import users from specific user migration fetching endpoint.
+         * @summary Fetch import users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerFetchImportUsers(options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerFetchImportUsers(options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @param {string} [firstName] 
          * @param {string} [lastName] 
@@ -17523,6 +17576,15 @@ export interface UserImportApiInterface {
      * @memberof UserImportApiInterface
      */
     importUserControllerEndSchoolInMaintenance(options?: any): AxiosPromise<void>;
+
+    /**
+     * Fetches import users from specific user migration fetching endpoint.
+     * @summary Fetch import users
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApiInterface
+     */
+    importUserControllerFetchImportUsers(options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -17617,6 +17679,17 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      */
     public importUserControllerEndSchoolInMaintenance(options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerEndSchoolInMaintenance(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Fetches import users from specific user migration fetching endpoint.
+     * @summary Fetch import users
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApi
+     */
+    public importUserControllerFetchImportUsers(options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerFetchImportUsers(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
