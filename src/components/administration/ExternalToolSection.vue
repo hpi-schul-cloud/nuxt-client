@@ -32,9 +32,9 @@
 			</template>
 			<template #[`item.actions`]="{ item }">
 				<external-tool-toolbar
-					@delete="openDeleteDialog(item)"
 					@edit="editTool(item)"
 					@datasheet="createDatasheet(item)"
+					@delete="openDeleteDialog(item)"
 				/>
 			</template>
 		</v-data-table>
