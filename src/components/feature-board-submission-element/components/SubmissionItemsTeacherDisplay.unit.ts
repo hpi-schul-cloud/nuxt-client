@@ -218,7 +218,6 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			expect(chip.exists()).toBe(true);
 
 			await chip.trigger("click");
-			await nextTick();
 
 			const tableContent = wrapper.find(".v-expansion-panel-text");
 			expect(tableContent.exists()).toBe(true);
