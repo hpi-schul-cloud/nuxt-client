@@ -26,7 +26,6 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
-import { useNaturalwidth } from "./NaturalWidth.composable";
 import errorImage from "@/assets/img/image-not-available.svg";
 import WarningAlert from "@/components/ui-alert/WarningAlert.vue";
 
@@ -42,8 +41,13 @@ export default defineComponent({
 	components: { WarningAlert },
 	emits: ["error"],
 	setup(props, { emit }) {
-		const { imageRef, imageWidth, setWidth } = useNaturalwidth();
 		const isError = ref(false);
+		const imageRef = ref();
+		const imageWidth = ref();
+
+		const setWidth = () => {
+			imageWidth.value = imageRef.value.image.naturalWidth;
+		};
 
 		const imageSrc = computed(() => {
 			if (isError.value) {
@@ -65,7 +69,6 @@ export default defineComponent({
 			imageSrc,
 			setError,
 			isError,
-			errorImage,
 		};
 	},
 });
