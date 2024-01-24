@@ -14,6 +14,14 @@
 		@click="onClickElement"
 	>
 		<ContentElementBar :has-grey-background="true" :icon="getIcon">
+			<template #logo v-if="displayData && displayData.logoUrl">
+				<v-img
+					height="100%"
+					class="mx-auto"
+					:src="displayData.logoUrl"
+					contain
+				/>
+			</template>
 			<template #title>
 				{{
 					hasLinkedTool
@@ -119,12 +127,11 @@ export default defineComponent({
 			autofocus.value = true;
 		});
 
-		const getIcon: ComputedRef<string> = computed(() => {
-			if (displayData.value && displayData.value?.logoUrl) {
-				console.log(displayData.value?.logoUrl);
-				return displayData.value?.logoUrl;
+		const getIcon: ComputedRef<string | undefined> = computed(() => {
+			if (!displayData.value?.logoUrl) {
+				return mdiPuzzleOutline;
 			}
-			return mdiPuzzleOutline;
+			return undefined;
 		});
 
 		const { lastCreatedElementId, resetLastCreatedElementId } =
@@ -261,11 +268,6 @@ $logo-size: 24px;
 	max-width: 100%;
 	min-height: calc($card-padding * 2 + $logo-size);
 	padding: $card-padding;
-}
-
-.logo-container {
-	width: $logo-size;
-	height: $logo-size;
 }
 
 .gap-8 {
