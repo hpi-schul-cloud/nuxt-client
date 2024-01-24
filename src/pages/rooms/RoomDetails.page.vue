@@ -120,6 +120,7 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import RoomDotMenu from "@/components/molecules/RoomDotMenu";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
+import DownloadModal from "@/components/share/DownloadModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
@@ -172,8 +173,9 @@ export default defineComponent({
 		vCustomDialog,
 		CopyResultModal,
 		ShareModal,
+		DownloadModal,
 	},
-	inject: ["copyModule", "shareModule"],
+	inject: ["copyModule", "shareModule", "downloadModule"],
 	data() {
 		return {
 			importDialog: {
@@ -374,7 +376,7 @@ export default defineComponent({
 			// if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 			// 	items.push({
 			// 		icon: this.icons.mdiTrayArrowDown,
-			// 		action: async () => await roomModule.downloadImsccCourse("1.1.0"),
+			// action: async () => await roomModule.downloadImsccCourse("1.1.0"),
 			// 		name: this.$t("common.actions.download.v1.1"),
 			// 		dataTestId: "title-menu-imscc-download-v1.1",
 			// 	});
@@ -476,15 +478,12 @@ export default defineComponent({
 		},
 
 		async onDownload() {
-			// this.dialog.isOpen = false;
-			// await roomModule.fetchContent(this.courseId);
-			console.log("Download-Dialog-opened");
-		},
-		async onDownloadOptionsChoosed() {
-			// this.dialog.isOpen = false;
-			// await roomModule.fetchContent(this.courseId);
-			console.log("Download-Options-Dialog-opended");
-			console.log("Download-Options-Choosed-confirmed");
+			this.dialog.model = "download";
+			this.dialog.header = "";
+			this.dialog.text = "";
+			this.dialog.inputText = "";
+			this.dialog.subText = "";
+			this.dialog.isOpen = true;
 		},
 
 		closeDialog() {
