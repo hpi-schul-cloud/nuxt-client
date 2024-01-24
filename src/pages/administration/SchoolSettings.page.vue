@@ -10,14 +10,6 @@
 			</div>
 		</v-alert>
 		<div v-else data-testid="no-error">
-			<v-alert light text type="info" class="mb-4">
-				<div class="alert-text">
-					{{ t("pages.administration.school.index.back") }}
-					<a href="/administration/school/">
-						{{ t("pages.administration.school.index.backLink") }}</a
-					>.
-				</div>
-			</v-alert>
 			<v-alert light text type="info" class="mb-12">
 				<div class="alert-text">
 					{{ t("pages.administration.school.index.info", { instituteTitle }) }}
