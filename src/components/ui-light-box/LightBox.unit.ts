@@ -88,7 +88,7 @@ describe("LightBox", () => {
 			const { wrapper } = setup({});
 
 			const closeButton = wrapper.findComponent(
-				"[data-test-id=light-box-close-btn]"
+				"[data-testid=light-box-close-btn]"
 			);
 
 			expect(closeButton.text()).toEqual(mdiClose);
@@ -99,7 +99,7 @@ describe("LightBox", () => {
 				const { close, wrapper } = setup({});
 
 				const closeButton = wrapper.findComponent(
-					"[data-test-id=light-box-close-btn]"
+					"[data-testid=light-box-close-btn]"
 				);
 				await closeButton.trigger("click");
 
@@ -148,7 +148,7 @@ describe("LightBox", () => {
 				const { wrapper } = setup({});
 
 				const downloadButton = wrapper.findComponent(
-					"[data-test-id=light-box-download-btn]"
+					"[data-testid=light-box-download-btn]"
 				);
 
 				expect(downloadButton.text()).toEqual(mdiTrayArrowDown);
@@ -159,7 +159,7 @@ describe("LightBox", () => {
 					const { lightBoxOptions, mockedDownloadFile, wrapper } = setup({});
 
 					const downloadButton = wrapper.findComponent(
-						"[data-test-id=light-box-download-btn]"
+						"[data-testid=light-box-download-btn]"
 					);
 					await downloadButton.trigger("click");
 
@@ -176,7 +176,7 @@ describe("LightBox", () => {
 				const { wrapper } = setup({ downloadUrl: "" });
 
 				const downloadButton = wrapper.findComponent(
-					"[data-test-id=light-box-download-btn]"
+					"[data-testid=light-box-download-btn]"
 				);
 				expect(downloadButton.exists()).toBe(false);
 			});

@@ -1,7 +1,7 @@
 <template>
 	<v-dialog fullscreen v-model="isLightBoxOpen">
 		<v-toolbar>
-			<v-btn icon @click="close" data-test-id="light-box-close-btn">
+			<v-btn icon @click="close" data-testid="light-box-close-btn">
 				<v-icon>{{ mdiClose }}</v-icon>
 			</v-btn>
 
@@ -17,7 +17,7 @@
 				v-if="lightBoxOptions.downloadUrl !== ''"
 				icon
 				@click="download"
-				data-test-id="light-box-download-btn"
+				data-testid="light-box-download-btn"
 			>
 				<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 			</v-btn>
