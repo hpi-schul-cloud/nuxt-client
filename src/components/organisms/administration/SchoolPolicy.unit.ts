@@ -58,10 +58,6 @@ describe("SchoolPolicy", () => {
 		},
 		userPermissions: string[] = ["school_edit"]
 	) => {
-		const el = document.createElement("div");
-		el.setAttribute("data-app", "true");
-		document.body.appendChild(el);
-
 		authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: userPermissions,
 		});
