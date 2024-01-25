@@ -974,6 +974,8 @@
 	"pages.rooms.uploadCourse.confirm": "Cargar",
 	"pages.rooms.uploadCourse.fileInputLabel": "Seleccionar archivo del curso",
 	"pages.rooms.uploadCourse.loading": "Cargando archivo...",
+	"pages.rooms.uploadCourse.success": "El curso se ha cargado correctamente.",
+	"pages.rooms.uploadCourse.error": "Se ha producido un error al cargar el curso.",
 	"pages.rooms.allRooms.emptyState.title": "Actualmente no hay cursos aquí.",
 	"pages.rooms.currentRooms.emptyState.title": "Actualmente no hay cursos aquí.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",

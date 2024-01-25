@@ -25,14 +25,12 @@
 				/>
 			</template>
 		</v-custom-dialog>
-		<loading-state-dialog />
 	</div>
 </template>
 
 <script lang="ts">
-import { loadingStateModule, roomsModule } from "@/store";
+import { loadingStateModule, notifierModule, roomsModule } from "@/store";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import { computed, defineComponent, ref } from "vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 
@@ -40,7 +38,6 @@ export default defineComponent({
 	name: "UploadModal",
 	components: {
 		vCustomDialog,
-		LoadingStateDialog,
 	},
 	model: {
 		prop: "isOpen",
@@ -56,7 +53,10 @@ export default defineComponent({
 		const i18n = injectStrict(I18N_KEY);
 		const file = ref<File | undefined>(undefined);
 		const modalButtons = computed(() => {
-			return ["cancel", "confirm"];
+			if (file.value) {
+				return ["cancel", "confirm"];
+			}
+			return ["cancel"];
 		});
 		const uploadButtonName = computed(() => {
 			return "pages.rooms.uploadCourse.confirm";
@@ -74,17 +74,24 @@ export default defineComponent({
 		}
 
 		async function upload(): Promise<void> {
-			if (file.value) {
-				loadingStateModule.open({
-					text: i18n.tc("pages.rooms.uploadCourse.loading"),
-				});
-				await roomsModule.uploadCourse(file.value);
-				loadingStateModule.close();
-				emit("dialog-closed", false);
-				emit("update-rooms");
-				// window.location.replace("/rooms-overview");
-				file.value = undefined;
+			if (!file.value) {
+				return;
 			}
+
+			loadingStateModule.open({
+				text: i18n.tc("pages.rooms.uploadCourse.loading"),
+			});
+			await roomsModule.uploadCourse(file.value);
+			emit("dialog-closed", false);
+			emit("update-rooms", false);
+			loadingStateModule.close();
+			notifierModule.show({
+				status: roomsModule.getAlertData.status,
+				text: i18n.tc(roomsModule.getAlertData.text as string),
+				autoClose: roomsModule.getAlertData.autoClose,
+				timeout: roomsModule.getAlertData.timeout,
+			});
+			file.value = undefined;
 		}
 
 		return {

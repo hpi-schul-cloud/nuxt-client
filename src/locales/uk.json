@@ -1009,6 +1009,8 @@
 	"pages.rooms.uploadCourse.confirm": "Завантажити",
 	"pages.rooms.uploadCourse.fileInputLabel": "Виберіть файл курсу",
 	"pages.rooms.uploadCourse.loading": "Завантажуємо файл...",
+	"pages.rooms.uploadCourse.success": "Курс успішно завантажено.",
+	"pages.rooms.uploadCourse.error": "Не вдалося завантажити курс.",
 	"pages.rooms.index.search.label": "Пошук курсу",
 	"pages.rooms.title": "Пошук курсу",
 	"pages.rooms.allRooms.emptyState.title": "Наразі тут курсів немає.",
