@@ -980,6 +980,7 @@
 	"pages.rooms.uploadCourse.title": "Kurs hochladen",
 	"pages.rooms.uploadCourse.confirm": "Hochladen",
 	"pages.rooms.uploadCourse.fileInputLabel": "Kursdatei auswählen",
+	"pages.rooms.uploadCourse.loading": "Lade Datei hoch...",
 	"pages.rooms.allRooms.emptyState.title": "Aktuell gibt es hier noch keine Kurse.",
 	"pages.rooms.currentRooms.emptyState.title": "Aktuell gibt es hier noch keine Kurse.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",

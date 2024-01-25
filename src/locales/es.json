@@ -973,6 +973,7 @@
 	"pages.rooms.uploadCourse.title": "Cargar curso",
 	"pages.rooms.uploadCourse.confirm": "Cargar",
 	"pages.rooms.uploadCourse.fileInputLabel": "Seleccionar archivo del curso",
+	"pages.rooms.uploadCourse.loading": "Cargando archivo...",
 	"pages.rooms.allRooms.emptyState.title": "Actualmente no hay cursos aquí.",
 	"pages.rooms.currentRooms.emptyState.title": "Actualmente no hay cursos aquí.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",

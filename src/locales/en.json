@@ -977,6 +977,7 @@
 	"pages.rooms.uploadCourse.title": "Upload course",
 	"pages.rooms.uploadCourse.confirm": "Upload",
 	"pages.rooms.uploadCourse.fileInputLabel": "Select course file",
+	"pages.rooms.uploadCourse.loading": "Uploading file...",
 	"pages.rooms.allRooms.emptyState.title": "Currently, there are no courses here.",
 	"pages.rooms.currentRooms.emptyState.title": "Currently, there are no courses here.",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",

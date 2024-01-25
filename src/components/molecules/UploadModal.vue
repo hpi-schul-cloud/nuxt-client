@@ -1,40 +1,46 @@
 <template>
-	<vCustomDialog
-		ref="uploadDialog"
-		:is-open="isOpen"
-		class="upload-dialog"
-		has-buttons
-		:buttons="modalButtons"
-		:confirm-btn-title-key="uploadButtonName"
-		@dialog-closed="cancel"
-		@dialog-confirmed="upload"
-	>
-		<template slot="title">
-			{{ $t("pages.rooms.uploadCourse.title") }}
-		</template>
-		<template slot="content">
-			<v-file-input
-				v-model="file"
-				:label="$t(fileInputLabel)"
-				accept=".imscc, .zip"
-				clearable
-				show-size
-				outlined
-				dense
-			/>
-		</template>
-	</vCustomDialog>
+	<div>
+		<v-custom-dialog
+			ref="uploadDialog"
+			:is-open="isOpen"
+			class="upload-dialog"
+			has-buttons
+			:buttons="modalButtons"
+			:confirm-btn-title-key="uploadButtonName"
+			@dialog-closed="cancel"
+			@dialog-confirmed="upload"
+		>
+			<template slot="title">
+				{{ $t("pages.rooms.uploadCourse.title") }}
+			</template>
+			<template slot="content">
+				<v-file-input
+					v-model="file"
+					:label="$t(fileInputLabel)"
+					accept=".imscc, .zip"
+					clearable
+					show-size
+					outlined
+					dense
+				/>
+			</template>
+		</v-custom-dialog>
+		<loading-state-dialog />
+	</div>
 </template>
 
 <script lang="ts">
-import { roomsModule } from "@/store";
+import { loadingStateModule, roomsModule } from "@/store";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import { computed, defineComponent, ref } from "vue";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "UploadModal",
 	components: {
 		vCustomDialog,
+		LoadingStateDialog,
 	},
 	model: {
 		prop: "isOpen",
@@ -47,6 +53,7 @@ export default defineComponent({
 		},
 	},
 	setup: (_props, { emit }) => {
+		const i18n = injectStrict(I18N_KEY);
 		const file = ref<File | undefined>(undefined);
 		const modalButtons = computed(() => {
 			return ["cancel", "confirm"];
@@ -68,9 +75,14 @@ export default defineComponent({
 
 		async function upload(): Promise<void> {
 			if (file.value) {
+				loadingStateModule.open({
+					text: i18n.tc("pages.rooms.uploadCourse.loading"),
+				});
 				await roomsModule.uploadCourse(file.value);
+				loadingStateModule.close();
 				emit("dialog-closed", false);
 				emit("update-rooms");
+				// window.location.replace("/rooms-overview");
 				file.value = undefined;
 			}
 		}
