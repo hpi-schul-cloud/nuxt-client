@@ -1,14 +1,14 @@
 <template>
 	<div>
 		<v-autocomplete
-			:label="t('pages.tool.select.label')"
+			:label="$t('pages.tool.select.label')"
 			item-title="name"
 			item-value="id"
 			hide-selected
 			clearable
 			:items="configurationTemplates"
 			v-model="selectedTemplate"
-			:no-data-text="t('common.nodata')"
+			:no-data-text="$t('common.nodata')"
 			return-object
 			:disabled="isInEditMode"
 			:loading="loading"
@@ -18,16 +18,17 @@
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
-					:item="item"
+					:item="item.raw"
 					max-height="20"
 					max-width="20"
 					data-testId=""
 				/>
 			</template>
-			<template #item="{ item }">
+			<template #item="{ item, props }">
 				<external-tool-selection-row
+					v-bind="props"
 					data-testId="configuration-select-item"
-					:item="item"
+					:item="item.raw"
 				/>
 			</template>
 		</v-autocomplete>
@@ -49,7 +50,7 @@
 		/>
 		<v-spacer class="mt-10" />
 		<v-alert v-if="error && error.message" type="error" :icon="mdiAlertCircle">
-			{{ t(getBusinessErrorTranslationKey(error)) }}
+			{{ $t(getBusinessErrorTranslationKey(error)!) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn
@@ -59,7 +60,7 @@
 				@click="onCancel"
 				data-testId="cancel-button"
 			>
-				{{ t("common.actions.cancel") }}
+				{{ $t("common.actions.cancel") }}
 			</v-btn>
 			<v-btn
 				class="mr-2"
@@ -70,7 +71,7 @@
 				data-testId="save-button"
 			>
 				{{
-					isInEditMode ? t("common.actions.update") : t("common.actions.add")
+					isInEditMode ? $t("common.actions.update") : $t("common.actions.add")
 				}}
 			</v-btn>
 		</v-row>
@@ -80,7 +81,6 @@
 <script lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
-import { useI18n } from "vue-i18n";
 import {
 	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
@@ -131,8 +131,6 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const { t } = useI18n();
-
 		const slots = useSlots();
 
 		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
@@ -243,7 +241,6 @@ export default defineComponent({
 		});
 
 		return {
-			t,
 			configurationTemplates,
 			loadedConfiguration,
 			getBusinessErrorTranslationKey,
