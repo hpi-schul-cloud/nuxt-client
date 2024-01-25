@@ -2,14 +2,14 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/migration_error.svg" alt="" />
 		<h1 class="pl-4 pr-4">
-			{{ t("pages.userMigration.error.title") }}
+			{{ $t("pages.userMigration.error.title") }}
 		</h1>
 		<div>
 			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
 				:html="
-					t('pages.userMigration.error.description', {
+					$t('pages.userMigration.error.description', {
 						targetSystem: getSystemName(),
 						instance: this.$theme.name,
 						supportLink,
@@ -21,7 +21,7 @@
 				data-testId="text-schoolnumber-mismatch"
 				v-if="targetSchoolNumber && sourceSchoolNumber"
 				:html="
-					t('pages.userMigration.error.schoolNumberMismatch', {
+					$t('pages.userMigration.error.schoolNumberMismatch', {
 						targetSystem: getSystemName(),
 						targetSchoolNumber,
 						sourceSchoolNumber,
@@ -35,7 +35,7 @@
 				data-testId="btn-proceed"
 				to="/logout"
 			>
-				{{ t("pages.userMigration.backToLogin") }}
+				{{ $t("pages.userMigration.backToLogin") }}
 			</v-btn>
 		</div>
 	</div>
@@ -128,7 +128,6 @@ export default defineComponent({
 		});
 
 		return {
-			t,
 			isLoading,
 			supportLink,
 			getSystemName,

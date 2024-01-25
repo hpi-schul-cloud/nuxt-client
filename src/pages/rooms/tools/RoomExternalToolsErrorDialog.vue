@@ -9,12 +9,12 @@
 	>
 		<template #title>
 			<h2 class="text-h4 my-2">
-				{{ t(getTitle, { toolName }) }}
+				{{ $t(getTitle, { toolName }) }}
 			</h2>
 		</template>
 		<template #content>
 			<RenderHTML
-				:html="t(getText, { toolName })"
+				:html="$t(getText, { toolName })"
 				component="p"
 				class="text-md mt-2"
 			/>
