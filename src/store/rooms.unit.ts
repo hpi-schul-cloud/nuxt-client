@@ -350,10 +350,16 @@ describe("rooms module", () => {
 			it("should call set loading", async () => {
 				const course = new File([], "my-course.zip");
 				const roomsModule = new RoomsModule({});
-				const setLoadingMock = jest.spyOn(roomsModule, "setLoading");
+				const setAlertDataMock = jest.spyOn(roomsModule, "setAlertData");
 
 				await roomsModule.uploadCourse(course);
-				expect(setLoadingMock).toHaveBeenCalledTimes(2);
+
+				expect(setAlertDataMock).toHaveBeenCalledTimes(1);
+				expect(setAlertDataMock).toHaveBeenCalledWith({
+					status: "success",
+					text: "pages.rooms.uploadCourse.success",
+					autoClose: true,
+				});
 			});
 
 			it("should handle error", async () => {
@@ -365,13 +371,16 @@ describe("rooms module", () => {
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 				const roomsModule = new RoomsModule({});
-				const setBusinessErrorMock = jest.spyOn(
-					roomsModule,
-					"setBusinessError"
-				);
+				const setAlertDataMock = jest.spyOn(roomsModule, "setAlertData");
 
 				await roomsModule.uploadCourse(new File([], "my-course.zip"));
-				expect(setBusinessErrorMock).toHaveBeenCalledTimes(1);
+
+				expect(setAlertDataMock).toHaveBeenCalledTimes(1);
+				expect(setAlertDataMock).toHaveBeenCalledWith({
+					status: "error",
+					text: "pages.rooms.uploadCourse.error",
+					autoClose: true,
+				});
 			});
 		});
 	});

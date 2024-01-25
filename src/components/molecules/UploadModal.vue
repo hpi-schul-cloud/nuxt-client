@@ -31,10 +31,10 @@
 <script lang="ts">
 import { loadingStateModule, notifierModule, roomsModule } from "@/store";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { computed, defineComponent, ref } from "vue";
+import { computed, ref } from "vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 
-export default defineComponent({
+export default {
 	name: "UploadModal",
 	components: {
 		vCustomDialog,
@@ -60,9 +60,6 @@ export default defineComponent({
 		});
 		const uploadButtonName = computed(() => {
 			return "pages.rooms.uploadCourse.confirm";
-		});
-		const businessError = computed(() => {
-			return roomsModule.getBusinessError;
 		});
 		const fileInputLabel = computed(() => {
 			return "pages.rooms.uploadCourse.fileInputLabel";
@@ -98,13 +95,12 @@ export default defineComponent({
 			file,
 			modalButtons,
 			uploadButtonName,
-			businessError,
 			fileInputLabel,
 			cancel,
 			upload,
 		};
 	},
-});
+};
 </script>
 
 <style lang="scss" scoped>
