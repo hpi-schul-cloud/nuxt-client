@@ -1,6 +1,5 @@
 import LernStorePlayer from "./LernStorePlayer";
 import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { initializeAxios } from "@/utils/api";
 
@@ -28,9 +27,8 @@ describe("@/components/molecules/LernStorePlayer", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("Renders Spinner", async () => {
+	it("Renders Spinner", () => {
 		const { wrapper } = setup({ loading: true });
-		await nextTick();
 		expect(wrapper.find(".player-iframe").exists()).toBe(false);
 		expect(
 			wrapper
@@ -39,31 +37,28 @@ describe("@/components/molecules/LernStorePlayer", () => {
 		).toBe(true);
 	});
 
-	it("Renders Iframe", async () => {
+	it("Renders Iframe", () => {
 		const { wrapper } = setup({ loading: false });
-		await nextTick();
 		expect(wrapper.find(".player-iframe").exists()).toBe(true);
 	});
 
-	it("Renders Iframe with data", async () => {
+	it("Renders Iframe with data", () => {
 		const { wrapper } = setup({
 			loading: false,
 			iframeSrc: "iframeTestSRC",
 			scriptSrc: "scriptTestSRC",
 		});
-		await nextTick();
 		expect(wrapper.find(".player-iframe").attributes("src")).toBe(
 			"iframeTestSRC"
 		);
 	});
 
-	it("Renders script data", async () => {
+	it("Renders script data", () => {
 		const { wrapper } = setup({
 			loading: false,
 			iframeSrc: "iframeTestSRC",
 			scriptSrc: "scriptTestSRC",
 		});
-		await nextTick();
 		expect(wrapper.props("scriptSrc")).toBe("scriptTestSRC");
 	});
 });
