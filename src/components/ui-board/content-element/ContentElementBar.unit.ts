@@ -1,5 +1,5 @@
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, mount } from "@vue/test-utils";
+import { mount, MountOptions } from "@vue/test-utils";
 import Vue from "vue";
 import ContentElementBar from "./ContentElementBar.vue";
 
@@ -13,6 +13,7 @@ describe("ContentElementBar", () => {
 		element?: string;
 		menu?: string;
 		subtitle?: string;
+		logo?: string;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
@@ -24,6 +25,7 @@ describe("ContentElementBar", () => {
 			title,
 			menu,
 			subtitle,
+			logo,
 			element,
 		} = props;
 		const propsData = {
@@ -37,6 +39,7 @@ describe("ContentElementBar", () => {
 			subtitle: subtitle ?? "",
 			description: description ?? "",
 			display: display ?? "",
+			logo: logo ?? "",
 		};
 		const wrapper = mount(ContentElementBar as MountOptions<Vue>, {
 			propsData,
@@ -52,6 +55,7 @@ describe("ContentElementBar", () => {
 			element,
 			menu,
 			subtitle,
+			logo,
 		};
 	};
 
@@ -197,6 +201,18 @@ describe("ContentElementBar", () => {
 
 			expect(title.exists()).toBe(true);
 			expect(title.text()).toEqual(expect.stringContaining(menu));
+		});
+	});
+
+	describe("when logo slot is defined", () => {
+		it("should render logo slot", () => {
+			const { wrapper, logo } = setup({
+				logo: "test logo slot",
+			});
+
+			const logoElement = wrapper.text();
+
+			expect(logoElement).toBe(logo);
 		});
 	});
 });
