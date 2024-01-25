@@ -799,40 +799,42 @@ describe("@/components/molecules/RoomTaskCard", () => {
 	describe("keypress events", () => {
 		const role = "teacher";
 		it("should call 'handleClick' event when 'enter' key is pressed", async () => {
-			const handleClickMock = jest.fn();
 			const wrapper = getWrapper({ ...testProps, role });
 
-			wrapper.vm.handleClick = handleClickMock;
+			Object.defineProperty(window, "location", {
+				set: jest.fn(),
+				get: () => createMock<Location>(),
+			});
 
-			await wrapper.trigger("keydown", { key: "enter" });
-			expect(handleClickMock).toHaveBeenCalled();
-			expect(handleClickMock.mock.calls[0][0].keyCode).toStrictEqual(13);
-			expect(handleClickMock.mock.calls[0][0].key).toStrictEqual("Enter");
+			const locationSpy = jest.spyOn(window, "location", "set");
+
+			await wrapper.trigger("keydown.enter");
+
+			expect(locationSpy).toHaveBeenCalledWith("/homework/123");
 		});
 
 		it("should call 'onKeyPress' event when 'up, down, space' keys are pressed", async () => {
-			const onKeyPressMock = jest.fn();
-			const wrapper = getWrapper({ ...testProps, role });
+			const wrapper = getWrapper({ ...testProps, keyDrag: true, role });
 
-			wrapper.vm.onKeyPress = onKeyPressMock;
+			await wrapper.trigger("keydown.up");
 
-			await wrapper.trigger("keydown", { key: "up" });
-			expect(onKeyPressMock).toHaveBeenCalled();
-			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(38);
-			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual("Up");
+			expect(wrapper.emitted("move-element")).toHaveLength(1);
+			expect(wrapper.emitted("move-element")[0][0]).toStrictEqual({
+				id: testProps.task.id,
+				moveIndex: -1,
+			});
 
-			jest.clearAllMocks();
-			await wrapper.trigger("keydown", { key: "down" });
-			expect(onKeyPressMock).toHaveBeenCalled();
-			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(40);
-			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual("Down");
+			await wrapper.trigger("keydown.down");
 
-			jest.clearAllMocks();
-			await wrapper.trigger("keydown", { key: "space" });
-			expect(onKeyPressMock).toHaveBeenCalled();
-			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(32);
-			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual(" ");
-			jest.clearAllMocks();
+			expect(wrapper.emitted("move-element")).toHaveLength(2);
+			expect(wrapper.emitted("move-element")[1][0]).toStrictEqual({
+				id: testProps.task.id,
+				moveIndex: 1,
+			});
+
+			await wrapper.trigger("keydown.space");
+
+			expect(wrapper.emitted("on-drag")).toHaveLength(1);
 		});
 
 		it("should emit 'tab-pressed' event when 'tab' key is pressed", async () => {
