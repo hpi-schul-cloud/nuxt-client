@@ -25,7 +25,7 @@
 			<h1 class="text-h3">
 				{{
 					$t("pages.administration.migration.title", {
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 						instance: $theme.name,
 					})
 				}}
@@ -192,7 +192,7 @@
 											:html="
 												$t('pages.administration.migration.summary', {
 													instance: $theme.name,
-													source: ldapSourceTranslation,
+													source: sourceSystemName,
 													importUsersCount: totalMatched,
 													importUsersUnmatchedCount:
 														totalImportUsers - totalMatched,
@@ -260,7 +260,7 @@
 														$t(
 															"pages.administration.migration.step4.nbc.linkingFinished",
 															{
-																source: ldapSourceTranslation,
+																source: sourceSystemName,
 																instance: $theme.name,
 																totalMatched: totalMatched,
 															}
@@ -274,7 +274,7 @@
 														$t(
 															"pages.administration.migration.step4.linkingFinished",
 															{
-																source: ldapSourceTranslation,
+																source: sourceSystemName,
 																instance: $theme.name,
 															}
 														)
@@ -292,7 +292,7 @@
 														{{
 															$t(
 																"pages.administration.migration.step4.bullets.linkedUsers",
-																{ source: ldapSourceTranslation }
+																{ source: sourceSystemName }
 															)
 														}}
 													</li>
@@ -308,7 +308,7 @@
 														{{
 															$t(
 																"pages.administration.migration.step4.bullets.classes",
-																{ source: ldapSourceTranslation }
+																{ source: sourceSystemName }
 															)
 														}}
 													</li>
@@ -365,7 +365,7 @@
 											$t(
 												"pages.administration.migration.step5.nbc.linkingFinished",
 												{
-													source: ldapSourceTranslation,
+													source: sourceSystemName,
 													instance: $theme.name,
 												}
 											)
@@ -375,7 +375,7 @@
 										<li>
 											{{
 												$t("pages.administration.migration.step5.nbc.bullet1", {
-													source: ldapSourceTranslation,
+													source: sourceSystemName,
 												})
 											}}
 										</li>
@@ -395,7 +395,7 @@
 									<p>
 										{{
 											$t("pages.administration.migration.step5.syncReady2", {
-												source: ldapSourceTranslation,
+												source: sourceSystemName,
 												instance: $theme.name,
 											})
 										}}
@@ -404,7 +404,7 @@
 									<p>
 										{{
 											$t("pages.administration.migration.step5.afterSync", {
-												source: ldapSourceTranslation,
+												source: sourceSystemName,
 												instance: $theme.name,
 											})
 										}}
@@ -414,7 +414,7 @@
 											{{
 												$t(
 													"pages.administration.migration.step5.afterSync.bullet1",
-													{ source: ldapSourceTranslation }
+													{ source: sourceSystemName }
 												)
 											}}
 										</li>
@@ -529,7 +529,7 @@ export default {
 		isNbc() {
 			return envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21";
 		},
-		ldapSourceTranslation() {
+		sourceSystemName() {
 			if (this.isBrb) {
 				return this.$t("pages.administration.migration.brbSchulportal");
 			} else if (this.isNbc) {
@@ -567,7 +567,7 @@ export default {
 	mounted() {
 		document.title = buildPageTitle(
 			this.$t("pages.administration.migration.title", {
-				source: this.ldapSourceTranslation,
+				source: this.sourceSystemName,
 				instance: this.$theme.name,
 			})
 		);
@@ -579,7 +579,7 @@ export default {
 			},
 			{
 				text: this.$t("pages.administration.migration.title", {
-					source: this.ldapSourceTranslation,
+					source: this.sourceSystemName,
 					instance: this.$theme.name,
 				}),
 				disabled: true,
@@ -656,7 +656,7 @@ export default {
 			this.isLoading = true;
 
 			if (this.isNbc) {
-				await importUsersModule.fetchImportUsersFromExternalSystem();
+				await importUsersModule.populateImportUsersFromExternalSystem();
 
 				if (importUsersModule.getBusinessError) {
 					this.isLoading = false;

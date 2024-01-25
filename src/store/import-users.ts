@@ -403,9 +403,9 @@ export default class ImportUsersModule extends VuexModule {
 	}
 
 	@Action
-	async fetchImportUsersFromExternalSystem(): Promise<void> {
+	async populateImportUsersFromExternalSystem(): Promise<void> {
 		try {
-			await this.importUserApi.importUserControllerFetchImportUsers();
+			await this.importUserApi.importUserControllerPopulateImportUsers();
 		} catch (error: unknown) {
 			const apiError: ApiResponseError | ApiValidationError =
 				mapAxiosErrorToResponseError(error);

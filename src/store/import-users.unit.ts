@@ -5,8 +5,8 @@ import {
 	UserMatchResponseRoleNamesEnum,
 } from "@/serverApi/v3/api";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
-import { axiosErrorFactory } from "../../tests/test-utils";
-import { mapAxiosErrorToResponseError } from "../utils/api";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { axiosErrorFactory } from "@@/tests/test-utils";
 import { BusinessError } from "./types/commons";
 
 const mockResponse = {
@@ -623,11 +623,11 @@ describe("import-users store actions", () => {
 			});
 		});
 
-		describe("fetchImportUsersFromExternalSystem", function () {
+		describe("populateImportUsersFromExternalSystem", function () {
 			describe("when fetching the data", () => {
 				const setup = () => {
 					mockApi = {
-						importUserControllerFetchImportUsers: jest.fn(),
+						importUserControllerPopulateImportUsers: jest.fn(),
 					};
 
 					spy.mockReturnValue(
@@ -638,10 +638,10 @@ describe("import-users store actions", () => {
 				it("should call the api", async () => {
 					setup();
 
-					await importUserModule.fetchImportUsersFromExternalSystem();
+					await importUserModule.populateImportUsersFromExternalSystem();
 
 					expect(
-						mockApi.importUserControllerFetchImportUsers
+						mockApi.importUserControllerPopulateImportUsers
 					).toHaveBeenCalledWith();
 				});
 			});
@@ -651,7 +651,7 @@ describe("import-users store actions", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 					mockApi = {
-						importUserControllerFetchImportUsers: jest.fn(() =>
+						importUserControllerPopulateImportUsers: jest.fn(() =>
 							Promise.reject(error)
 						),
 					};
@@ -669,7 +669,7 @@ describe("import-users store actions", () => {
 				it("should set a business error", async () => {
 					const { apiError } = setup();
 
-					await importUserModule.fetchImportUsersFromExternalSystem();
+					await importUserModule.populateImportUsersFromExternalSystem();
 
 					expect(importUserModule.getBusinessError).toEqual<BusinessError>({
 						statusCode: apiError.code,

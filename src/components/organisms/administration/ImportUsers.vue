@@ -10,7 +10,7 @@
 				v-if="dialogEdit"
 				:edited-item="editedItem"
 				:is-dialog="true"
-				:ldap-source="ldapSourceTranslation"
+				:ldap-source="sourceSystemName"
 				@close="closeEdit"
 				@saved-match="savedMatch"
 				@saved-flag="savedFlag"
@@ -215,7 +215,7 @@
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 
@@ -224,7 +224,7 @@
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 				<br />
@@ -232,7 +232,7 @@
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 				<br />
@@ -240,7 +240,7 @@
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 			</p>
@@ -364,7 +364,7 @@ export default {
 		canStartMigration() {
 			return this.school.inUserMigration && this.school.inMaintenance;
 		},
-		ldapSourceTranslation() {
+		sourceSystemName() {
 			if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb") {
 				return this.$t("pages.administration.migration.brbSchulportal");
 			} else if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21") {
