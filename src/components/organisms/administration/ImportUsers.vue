@@ -69,9 +69,8 @@
 								class="searchLastName"
 							/>
 						</td>
-						<td>
+						<td v-if="!isNbc">
 							<v-text-field
-								v-if="!isNbc"
 								v-model="searchLoginName"
 								type="string"
 								:label="$t('components.organisms.importUsers.searchUserName')"
