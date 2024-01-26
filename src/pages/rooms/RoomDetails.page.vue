@@ -65,7 +65,7 @@
 		</template>
 
 		<div style="position: absolute; left: 455px">
-			<speed-dial-menu orientation="right">
+			<speed-dial-menu orientation="right" direction="top">
 				Menu
 
 				<template #actions>
