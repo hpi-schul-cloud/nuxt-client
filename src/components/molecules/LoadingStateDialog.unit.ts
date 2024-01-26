@@ -44,7 +44,7 @@ describe("@/components/molecules/LoadingModal", () => {
 		});
 
 		const wrapper = mountComponent();
-		const dialog = wrapper.findComponent({ name: "v-card" });
+		const dialog = wrapper.findComponent(VCard);
 
 		expect(dialog.exists()).toBe(true);
 	});
@@ -56,7 +56,7 @@ describe("@/components/molecules/LoadingModal", () => {
 
 		const wrapper = mountComponent();
 
-		expect(wrapper.findComponent({ name: "v-card" }).exists()).toBe(false);
+		expect(wrapper.findComponent(VCard).exists()).toBe(false);
 	});
 
 	it("should display the text", async () => {
