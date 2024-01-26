@@ -8,50 +8,63 @@
 			:title="column.title"
 			:titlePlaceholder="titlePlaceholder"
 			@delete:column="onColumnDelete"
-			@move:column-keyboard="onMoveColumnKeyboard"
 			@move:column-left="onMoveColumnLeft"
 			@move:column-right="onMoveColumnRight"
 			@update:title="onUpdateTitle"
 			class="pl-2"
 		/>
-		<div class="scrollable-column">
-			<Container
-				group-name="cards"
-				drag-class="elevation-12"
-				drop-class="elevation-0"
-				:drop-placeholder="cardDropPlaceholderOptions"
-				:get-child-payload="getChildPayload"
-				:drag-begin-delay="isDesktop ? 0 : 300"
-				non-drag-area-selector=".drag-disabled"
-				@drag-start="onDragStart"
-				@drop="onDragEnd"
-				class="dndrop-container vertical pr-1 -mt-3"
+		<div>
+			<Sortable
+				:list="column.cards"
+				item-key="cardId"
+				tag="div"
+				:options="{
+					group: 'cards',
+					direction: 'vertical',
+					delay: 300, // isDesktop ? 0 : 300
+					delayOnTouchOnly: true,
+					disabled: !hasMovePermission,
+					ghostClass: 'sortable-drag-ghost',
+					easing: 'cubic-bezier(1, 0, 0, 1)',
+					dragClass: 'sortable-drag-board-card',
+					dragoverBubble: true,
+					draggable: '.draggable',
+					animation: 250,
+					scroll: true,
+					forceFallback: true,
+					bubbleScroll: true,
+				}"
 				:class="{ 'expanded-column': isDragging }"
+				class="scrollable-column"
+				@start="onDragStart"
+				@end="onDragEnd"
 			>
-				<Draggable v-for="(card, index) in column.cards" :key="card.cardId">
+				<template #item="{ element, index }">
 					<CardHost
-						class="my-3 mx-2"
-						:card-id="card.cardId"
-						:height="card.height"
-						:class="{ 'drag-disabled': !hasMovePermission }"
-						@move:card-keyboard="onMoveCardKeyboard(index, card, $event)"
+						:data-card-id="element.cardId"
+						class="draggable my-3 mx-2"
+						:card-id="element.cardId"
+						:height="element.height"
+						@move:card-keyboard="
+							onMoveCardKeyboard(index, element.cardId, $event)
+						"
 						@delete:card="onDeleteCard"
 						@reload:board="onReloadBoard"
 					/>
-				</Draggable>
-			</Container>
+				</template>
+			</Sortable>
+			<BoardAddCardButton
+				v-if="hasCreateColumnPermission && !isDragging"
+				@add-card="onCreateCard"
+			/>
 		</div>
-		<BoardAddCardButton
-			v-if="hasCreateColumnPermission && !isDragging"
-			@add-card="onCreateCard"
-		/>
 	</div>
 </template>
 
 <script lang="ts">
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useDebounceFn, useMediaQuery } from "@vueuse/core";
-import { PropType, computed, defineComponent, provide, ref } from "vue";
+import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 import { useBoardPermissions } from "@data-board";
@@ -59,7 +72,6 @@ import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
 	CardMove,
 	DragAndDropKey,
-	DragObject,
 	cardDropPlaceholderOptions,
 	horizontalCursorKeys,
 	verticalCursorKeys,
@@ -71,18 +83,18 @@ import {
 	BOARD_HAS_MULTIPLE_COLUMNS,
 	BOARD_IS_FIRST_COLUMN,
 	BOARD_IS_LAST_COLUMN,
+	extractDataAttribute,
 } from "@util-board";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Container, Draggable } = require("vue-dndrop");
+
+import { Sortable } from "sortablejs-vue3";
 
 export default defineComponent({
 	name: "BoardColumn",
 	components: {
 		CardHost,
-		Container,
-		Draggable,
 		BoardColumnHeader,
 		BoardAddCardButton,
+		Sortable,
 	},
 	props: {
 		column: {
@@ -99,7 +111,6 @@ export default defineComponent({
 		"create:card",
 		"delete:card",
 		"delete:column",
-		"move:column-keyboard",
 		"move:column-left",
 		"move:column-right",
 		"reload:board",
@@ -108,6 +119,7 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
+		const reactiveIndex = toRef(props, "index");
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
@@ -138,49 +150,58 @@ export default defineComponent({
 		};
 		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
-		const onDragStart = (element: DragObject): void => {
-			if (!element.payload.cardId) return;
+		const onDragStart = (): void => {
 			dragStart();
 		};
 
-		const onDragEnd = (dropResult: CardMove): void => {
+		const onDragEnd = async (event: any) => {
 			dragEnd();
-			const { removedIndex, addedIndex } = dropResult;
-			if (removedIndex === null && addedIndex === null) return;
-			emit("update:card-position", {
-				...dropResult,
-				columnId: props.column.id,
-			});
-		};
+			const { newIndex, oldIndex, to, from, item } = event;
+			const toColumnId = extractDataAttribute(to, "columnId");
+			const fromColumnId = extractDataAttribute(from, "columnId") as string;
+			const cardId = extractDataAttribute(event.item, "cardId") as string;
 
-		const onMoveCardKeyboard = (
-			cardIndex: number,
-			card: BoardSkeletonCard,
-			keyString: DragAndDropKey
-		) => {
+			if (toColumnId !== fromColumnId) {
+				item?.parentNode.removeChild(item);
+			}
+
 			const cardMove: CardMove = {
-				removedIndex: cardIndex,
-				addedIndex: -1,
-				payload: card,
-				columnIndex: props.index,
+				cardId,
+				newIndex,
+				oldIndex,
+				fromColumnId,
+				toColumnId,
 			};
-
-			if (verticalCursorKeys.includes(keyString)) {
-				const change = keyString === "ArrowUp" ? -1 : +1;
-				cardMove.addedIndex = cardIndex + change;
-			}
-
-			if (horizontalCursorKeys.includes(keyString)) {
-				const change = keyString === "ArrowLeft" ? -1 : +1;
-				cardMove.columnIndex = props.index + change;
-				cardMove.addedIndex = 0;
-			}
 
 			emit("update:card-position", cardMove);
 		};
 
-		const onMoveColumnKeyboard = (event: KeyboardEvent) => {
-			emit("move:column-keyboard", event);
+		const onMoveCardKeyboard = (
+			cardIndex: number,
+			cardId: string,
+			keyString: DragAndDropKey
+		) => {
+			const cardMove: CardMove = {
+				oldIndex: cardIndex,
+				newIndex: -1,
+				cardId,
+				fromColumnId: props.column.id,
+				toColumnId: props.column.id,
+			};
+
+			if (verticalCursorKeys.includes(keyString)) {
+				const change = keyString === "ArrowUp" ? -1 : +1;
+				if (change === 1 && cardIndex === props.column.cards.length - 1) return;
+				if (change === -1 && cardIndex === 0) return;
+				cardMove.newIndex = cardIndex + change;
+			}
+
+			if (horizontalCursorKeys.includes(keyString)) {
+				cardMove.columnDelta = keyString === "ArrowLeft" ? -1 : +1;
+				cardMove.newIndex = 0;
+			}
+
+			emit("update:card-position", cardMove);
 		};
 
 		const onMoveColumnLeft = () => {
@@ -213,6 +234,7 @@ export default defineComponent({
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
+			isDesktop,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
@@ -220,26 +242,35 @@ export default defineComponent({
 			onDragStart,
 			onDragEnd,
 			onMoveCardKeyboard,
-			onMoveColumnKeyboard,
 			onMoveColumnLeft,
 			onMoveColumnRight,
 			onReloadBoard,
 			onUpdateTitle,
 			getChildPayload,
-			isDesktop,
+			reactiveIndex,
 		};
 	},
 });
 </script>
 
 <style>
+.sortable-drag-ghost .v-card {
+	opacity: 0.8;
+	background-color: rgba(var(--v-theme-secondary-lighten-1));
+}
+</style>
+<style scoped>
 .elevate-transition {
 	transition: box-shadow 150ms all;
 }
 </style>
-<style scoped>
+<style>
 .expanded-column {
 	min-height: 75vh;
+}
+.draggable,
+.sortable-drag-board-card {
+	opacity: 1;
 }
 .scrollable-column {
 	overflow: auto;
@@ -262,7 +293,7 @@ export default defineComponent({
 	background-color: transparent;
 	border-radius: 5px;
 }
-.column-drag-handle:hover > .scrollable-column::-webkit-scrollbar-thumb {
+.column-drag-handle:hover .scrollable-column::-webkit-scrollbar-thumb {
 	background-color: rgba(var(--v-theme-secondary-lighten-1));
 	border-radius: 5px;
 }
