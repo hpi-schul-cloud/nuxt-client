@@ -19,6 +19,7 @@
 						)
 					"
 					class="ml-1 mt-0"
+					data-testid="admin-school-toggle-student-visibility"
 					@input-changed="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
@@ -51,6 +52,7 @@
 						)
 					"
 					class="ml-1 mt-0"
+					data-testid="admin-school-toggle-learning-store"
 					@input-changed="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
