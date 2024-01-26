@@ -6,7 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mdiFlag, mdiFlagOutline } from "@mdi/js";
-import { mount, shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import {
 	VAutocomplete,
@@ -29,24 +29,8 @@ const testProps = {
 	ldapSource: "LDAP",
 };
 
-const getWrapper: any = (props: object, options?: object) => {
+const getWrapper = (props: object, options?: object) => {
 	return mount(vImportUsersMatchSearch, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			mocks: {
-				$theme: {
-					name: "nbc",
-				},
-			},
-		},
-		props,
-
-		...options,
-	});
-};
-
-const getShallowMountWrapper: any = (props: object, options?: object) => {
-	return shallowMount(vImportUsersMatchSearch, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			mocks: {
@@ -63,7 +47,6 @@ const getShallowMountWrapper: any = (props: object, options?: object) => {
 
 describe("@/components/molecules/vImportUsersMatchSearch", () => {
 	beforeEach(() => {
-		document.body.setAttribute("data-app", "true");
 		setupStores({ importUsersModule: ImportUsersModule });
 	});
 
@@ -109,7 +92,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 			roleNames: ["teacher"],
 			text: "Cord Carl",
 		};
-		const wrapper = getShallowMountWrapper(testProps);
+		const wrapper = getWrapper(testProps);
 		const autoCompleteElement = wrapper.findComponent(VAutocomplete);
 		await autoCompleteElement.vm.$emit("update:modelValue", payload);
 

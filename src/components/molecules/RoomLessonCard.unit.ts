@@ -61,8 +61,6 @@ const getWrapper: any = (props: object, options?: object) => {
 
 describe("@/components/molecules/RoomLessonCard", () => {
 	beforeEach(() => {
-		document.body.setAttribute("data-app", "true");
-
 		window.location.pathname = "";
 		setupStores({ envConfigModule: EnvConfigModule });
 	});
