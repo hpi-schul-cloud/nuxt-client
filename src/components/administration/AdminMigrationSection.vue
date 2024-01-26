@@ -137,6 +137,31 @@
 			data-testid="enable-sync-during-migration-switch"
 			@change="setSchoolFeatures"
 		/>
+
+		<template v-if="showMigrationWizard">
+			<v-btn
+				:disabled="!isMigrationActive || !isSchoolMigrated"
+				class="my-4"
+				color="primary"
+				depressed
+				data-testid="migration-wizard-button"
+				:to="{ name: 'administration-migration' }"
+			>
+				{{
+					t(
+						"components.administration.adminMigrationSection.migrationWizardButton.label"
+					)
+				}}
+			</v-btn>
+			<p>
+				{{
+					t(
+						"components.administration.adminMigrationSection.migrationWizardButton.description"
+					)
+				}}
+			</p>
+		</template>
+
 		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
 			:label="
@@ -311,6 +336,22 @@ export default defineComponent({
 			() => envConfigModule.getShowOutdatedUsers
 		);
 
+		const isSchoolMigrated: ComputedRef<boolean> = computed(() => {
+			let hasTargetSystem = false;
+
+			if (userLoginMigration.value?.targetSystemId) {
+				hasTargetSystem = schoolsModule.getSchool.systemIds.includes(
+					userLoginMigration.value.targetSystemId
+				);
+			}
+
+			return hasTargetSystem;
+		});
+
+		const showMigrationWizard: ComputedRef<boolean> = computed(
+			() => !!envConfigModule.getEnv.FEATURE_SHOW_MIGRATION_WIZARD
+		);
+
 		const setSchoolFeatures = async () => {
 			await schoolsModule.update({
 				id: school.value.id,
@@ -342,6 +383,8 @@ export default defineComponent({
 			officialSchoolNumber,
 			isMigrationActive,
 			isMigrationMandatory,
+			showMigrationWizard,
+			isSchoolMigrated,
 		};
 	},
 });
