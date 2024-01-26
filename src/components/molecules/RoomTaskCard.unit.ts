@@ -472,9 +472,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const publishCardMock = jest.fn();
 				const wrapper = getWrapper({ ...draftTestProps, role });
 				wrapper.vm.publishCard = publishCardMock;
-				const buttonClassName = `.action-button-${"common.action.publish"}`;
 
-				const actionButton = wrapper.find(buttonClassName);
+				const actionButton = wrapper.findComponent(
+					`[data-testid="room-detail-task-action-publish"]`
+				);
 				await actionButton.trigger("click");
 
 				expect(publishCardMock).toHaveBeenCalled();
@@ -484,11 +485,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const publishCardMock = jest.fn();
 				const wrapper = getWrapper({ ...plannedTestProps, role });
 				wrapper.vm.publishCard = publishCardMock;
-				const buttonClassName = `.action-button-${wrapper.vm.$i18n.t(
-					"common.action.publish"
-				)}`;
 
-				const actionButton = wrapper.find(buttonClassName);
+				const actionButton = wrapper.find(
+					`[data-testid="room-detail-task-action-publish"]`
+				);
 				await actionButton.trigger("click");
 
 				expect(publishCardMock).toHaveBeenCalled();
@@ -498,11 +498,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const finishCardMock = jest.fn();
 				const wrapper = getWrapper({ ...testProps, role });
 				wrapper.vm.finishCard = finishCardMock;
-				const buttonClassName = `.action-button-${wrapper.vm.$i18n.t(
-					"pages.room.taskCard.label.done"
-				)}`;
 
-				const actionButton = wrapper.find(buttonClassName);
+				const actionButton = wrapper.find(
+					`[data-testid="room-detail-task-action-done"]`
+				);
 				await actionButton.trigger("click");
 
 				expect(finishCardMock).toHaveBeenCalled();
@@ -512,7 +511,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const wrapper = getWrapper({ ...overdueTestProps, role });
 				const overrdueElement = wrapper.find(".overdue");
 				expect(overrdueElement.element.innerHTML).toContain(
-					wrapper.vm.$i18n.t("pages.room.taskCard.teacher.label.overdue")
+					"pages.room.taskCard.teacher.label.overdue"
 				);
 			});
 
@@ -630,14 +629,12 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				const finishCardMock = jest.fn();
 				const wrapper = getWrapper({ ...studentTestProps, role });
 				wrapper.vm.finishCard = finishCardMock;
-				const buttonClassName = `.action-button-${wrapper.vm.$i18n
-					.t("pages.room.taskCard.label.done")
-					.split(" ")
-					.join("-")}`;
+				const actionButton = wrapper.findComponent(
+					`[data-testid="room-detail-task-action-done"]`
+				);
 
-				const actionButton = wrapper.find(buttonClassName);
 				expect(actionButton.element.textContent).toContain(
-					wrapper.vm.$i18n.t("pages.room.taskCard.label.done")
+					"pages.room.taskCard.label.done"
 				);
 
 				await actionButton.trigger("click");
@@ -802,46 +799,48 @@ describe("@/components/molecules/RoomTaskCard", () => {
 	describe("keypress events", () => {
 		const role = "teacher";
 		it("should call 'handleClick' event when 'enter' key is pressed", async () => {
-			const handleClickMock = jest.fn();
 			const wrapper = getWrapper({ ...testProps, role });
 
-			wrapper.vm.handleClick = handleClickMock;
+			Object.defineProperty(window, "location", {
+				set: jest.fn(),
+				get: () => createMock<Location>(),
+			});
+
+			const locationSpy = jest.spyOn(window, "location", "set");
 
 			await wrapper.trigger("keydown.enter");
-			expect(handleClickMock).toHaveBeenCalled();
-			expect(handleClickMock.mock.calls[0][0].keyCode).toStrictEqual(13);
-			expect(handleClickMock.mock.calls[0][0].key).toStrictEqual("Enter");
+
+			expect(locationSpy).toHaveBeenCalledWith("/homework/123");
 		});
 
 		it("should call 'onKeyPress' event when 'up, down, space' keys are pressed", async () => {
-			const onKeyPressMock = jest.fn();
-			const wrapper = getWrapper({ ...testProps, role });
-
-			wrapper.vm.onKeyPress = onKeyPressMock;
+			const wrapper = getWrapper({ ...testProps, keyDrag: true, role });
 
 			await wrapper.trigger("keydown.up");
-			expect(onKeyPressMock).toHaveBeenCalled();
-			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(38);
-			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual("Up");
 
-			jest.clearAllMocks();
+			expect(wrapper.emitted("move-element")).toHaveLength(1);
+			expect(wrapper.emitted("move-element")[0][0]).toStrictEqual({
+				id: testProps.task.id,
+				moveIndex: -1,
+			});
+
 			await wrapper.trigger("keydown.down");
-			expect(onKeyPressMock).toHaveBeenCalled();
-			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(40);
-			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual("Down");
 
-			jest.clearAllMocks();
+			expect(wrapper.emitted("move-element")).toHaveLength(2);
+			expect(wrapper.emitted("move-element")[1][0]).toStrictEqual({
+				id: testProps.task.id,
+				moveIndex: 1,
+			});
+
 			await wrapper.trigger("keydown.space");
-			expect(onKeyPressMock).toHaveBeenCalled();
-			expect(onKeyPressMock.mock.calls[0][0].keyCode).toStrictEqual(32);
-			expect(onKeyPressMock.mock.calls[0][0].key).toStrictEqual(" ");
-			jest.clearAllMocks();
+
+			expect(wrapper.emitted("on-drag")).toHaveLength(1);
 		});
 
 		it("should emit 'tab-pressed' event when 'tab' key is pressed", async () => {
 			const wrapper = getWrapper({ ...testProps, role });
 
-			await wrapper.trigger("keydown.tab");
+			await wrapper.trigger("keydown", { key: "tab" });
 
 			const emitted = wrapper.emitted();
 			expect(emitted["tab-pressed"]).toHaveLength(1);
