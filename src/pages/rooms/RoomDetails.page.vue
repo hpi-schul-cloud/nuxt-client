@@ -65,16 +65,21 @@
 		</template>
 
 		<div style="position: absolute; left: 455px">
-			<speed-dial-menu orientation="right" direction="top">
+			<speed-dial-menu orientation="right" direction="top" :icon="mdiPlus">
 				Menu
 
 				<template #actions>
-					<speed-dial-menu-action :icon="mdiPlus">Add</speed-dial-menu-action>
-					<speed-dial-menu-action :icon="mdiPlus" :href="'google.de'"
+					<speed-dial-menu-action :icon="mdiPlus" @click="console.log('add')"
+						>Add</speed-dial-menu-action
+					>
+					<speed-dial-menu-action
+						:icon="mdiPlus"
+						:href="'google.de'"
+						@click="console.log('link')"
 						>Link</speed-dial-menu-action
 					>
 
-					<speed-dial-menu-action :icon="mdiPlus"
+					<speed-dial-menu-action :icon="mdiPlus" @click="console.log('remove')"
 						>Remove</speed-dial-menu-action
 					>
 				</template>

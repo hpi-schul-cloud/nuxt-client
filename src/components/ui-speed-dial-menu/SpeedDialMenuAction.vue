@@ -9,7 +9,13 @@
 			:style="styles"
 		>
 			<template v-if="orientation === 'left'">
-				<v-btn color="primary" icon size="small">
+				<v-btn
+					color="primary"
+					icon
+					size="small"
+					role="menuitem"
+					@click="onClick"
+				>
 					<v-icon>{{ props.icon }}</v-icon>
 					<span class="d-sr-only"> <slot /></span>
 				</v-btn>
@@ -19,9 +25,12 @@
 					variant="tonal"
 					class="ml-4"
 					tabindex="-1"
-					><slot /> {{ props.speedDialIndex }}
+					aria-hidden="true"
+					@click="onClick"
+					><slot />
 				</v-btn>
 			</template>
+
 			<template v-else>
 				<v-btn
 					density="compact"
@@ -29,9 +38,17 @@
 					variant="tonal"
 					class="mr-4"
 					tabindex="-1"
-					><slot /> {{ props.speedDialIndex }}
+					aria-hidden="true"
+					@click="onClick"
+					><slot />
 				</v-btn>
-				<v-btn color="primary" icon size="small">
+				<v-btn
+					color="primary"
+					icon
+					size="small"
+					@click="onClick"
+					role="menuitem"
+				>
 					<v-icon>{{ props.icon }}</v-icon>
 					<span class="d-sr-only"> <slot /></span>
 				</v-btn>
@@ -42,6 +59,7 @@
 
 <script lang="ts" setup>
 import {
+	INJECT_SPEED_DIAL_ACTION_CLICKED,
 	INJECT_SPEED_DIAL_DIRECTION,
 	INJECT_SPEED_DIAL_ORIENTATION,
 } from "./injection-tokens";
@@ -60,11 +78,10 @@ const props = withDefaults(
 	}>(),
 	{ speedDialIndex: 0 }
 );
-defineEmits<{
+
+const emit = defineEmits<{
 	(event: "click"): void;
 }>();
-
-const isShow = ref(false);
 
 const orientation = injectStrict<Ref<"left" | "right">>(
 	INJECT_SPEED_DIAL_ORIENTATION
@@ -72,6 +89,9 @@ const orientation = injectStrict<Ref<"left" | "right">>(
 const direction = injectStrict<Ref<"top" | "bottom">>(
 	INJECT_SPEED_DIAL_DIRECTION
 );
+const closeMenu = injectStrict<() => void>(INJECT_SPEED_DIAL_ACTION_CLICKED);
+
+const isShow = ref(false);
 
 const classes = computed(() => {
 	const classList: string[] = [];
@@ -96,6 +116,11 @@ const styles = computed(() => {
 	}
 	return {};
 });
+
+const onClick = () => {
+	emit("click");
+	closeMenu();
+};
 
 onMounted(async () => {
 	const index = unref(props.speedDialIndex);
