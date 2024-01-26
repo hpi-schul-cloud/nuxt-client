@@ -14,6 +14,7 @@
 				@close="closeEdit"
 				@saved-match="savedMatch"
 				@saved-flag="savedFlag"
+				:is-nbc="isNbc"
 			/>
 		</v-dialog>
 
@@ -111,8 +112,8 @@
 												? 'primary'
 												: 'secondary'
 										"
-										>{{ mdiAccountPlus }}</v-icon
-									>
+										>{{ mdiAccountPlus }}
+									</v-icon>
 								</v-btn>
 								<v-btn
 									icon
@@ -128,8 +129,8 @@
 												? 'primary'
 												: 'secondary'
 										"
-										>{{ mdiAccountSwitch }}</v-icon
-									>
+										>{{ mdiAccountSwitch }}
+									</v-icon>
 								</v-btn>
 								<v-btn
 									icon
@@ -145,8 +146,8 @@
 												? 'primary'
 												: 'secondary'
 										"
-										>{{ mdiAccountSwitchOutline }}</v-icon
-									>
+										>{{ mdiAccountSwitchOutline }}
+									</v-icon>
 								</v-btn>
 							</v-btn-toggle>
 						</td>
@@ -201,9 +202,9 @@
 						:title="$t('components.organisms.importUsers.flagImportUser')"
 						@click="saveFlag(item)"
 					>
-						<v-icon small :color="item.flagged ? 'primary' : ''">{{
-							item.flagged ? mdiFlag : mdiFlagOutline
-						}}</v-icon>
+						<v-icon small :color="item.flagged ? 'primary' : ''"
+							>{{ item.flagged ? mdiFlag : mdiFlagOutline }}
+						</v-icon>
 					</v-btn>
 				</template>
 			</v-data-table>
@@ -319,7 +320,7 @@ export default {
 	},
 	computed: {
 		tableHead() {
-			return [
+			const tableHeaders = [
 				{
 					text: this.$t("components.organisms.importUsers.tableFirstName"),
 					value: "firstName",
@@ -331,11 +332,6 @@ export default {
 					value: "lastName",
 					sortable: true,
 					class: "head_lastName",
-				},
-				{
-					text: this.$t("components.organisms.importUsers.tableUserName"),
-					value: "loginName",
-					sortable: false,
 				},
 				{
 					text: this.$t("components.organisms.importUsers.tableRoles"),
@@ -360,6 +356,13 @@ export default {
 					sortable: false,
 				},
 			];
+			if (this.isNbc) {
+				tableHeaders.splice(2, 1);
+			}
+			return tableHeaders;
+		},
+		isNbc() {
+			return envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21";
 		},
 		canStartMigration() {
 			return this.school.inUserMigration && this.school.inMaintenance;
