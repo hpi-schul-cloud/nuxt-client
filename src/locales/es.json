@@ -972,7 +972,7 @@
 	"pages.rooms.importCourse.importErrorButton": "Bien, entendí",
 	"pages.rooms.uploadCourse.title": "Cargar curso",
 	"pages.rooms.uploadCourse.confirm": "Cargar",
-	"pages.rooms.uploadCourse.fileInputLabel": "Seleccionar archivo del curso",
+	"pages.rooms.uploadCourse.fileInputLabel": "Seleccionar archivo",
 	"pages.rooms.uploadCourse.loading": "Cargando archivo...",
 	"pages.rooms.uploadCourse.success": "El curso se ha cargado correctamente.",
 	"pages.rooms.uploadCourse.error": "Se ha producido un error al cargar el curso.",

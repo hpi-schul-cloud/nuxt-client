@@ -1007,7 +1007,7 @@
 	"pages.rooms.importCourse.step_3.text": "Назва курсу",
 	"pages.rooms.uploadCourse.title": "Завантажити курс",
 	"pages.rooms.uploadCourse.confirm": "Завантажити",
-	"pages.rooms.uploadCourse.fileInputLabel": "Виберіть файл курсу",
+	"pages.rooms.uploadCourse.fileInputLabel": "Виберіть файл",
 	"pages.rooms.uploadCourse.loading": "Завантажуємо файл...",
 	"pages.rooms.uploadCourse.success": "Курс успішно завантажено.",
 	"pages.rooms.uploadCourse.error": "Не вдалося завантажити курс.",

@@ -17,11 +17,10 @@
 				<v-file-input
 					v-model="file"
 					:label="$t(fileInputLabel)"
+					:prepend-icon="mdiUpload"
 					accept=".imscc, .zip"
 					clearable
 					show-size
-					outlined
-					dense
 				/>
 			</template>
 		</v-custom-dialog>
@@ -38,6 +37,7 @@ import {
 	ROOMS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
+import { mdiUpload } from "@mdi/js";
 
 export default defineComponent({
 	name: "UploadModal",
@@ -104,6 +104,7 @@ export default defineComponent({
 			modalButtons,
 			uploadButtonName,
 			fileInputLabel,
+			mdiUpload,
 			cancel,
 			upload,
 		};

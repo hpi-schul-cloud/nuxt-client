@@ -48,7 +48,12 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import ImportModal from "@/components/molecules/ImportModal.vue";
 import UploadModal from "@/components/molecules/UploadModal.vue";
-import { mdiPlus, mdiCloudDownload, mdiCloudUpload, mdiSchool } from "@mdi/js";
+import {
+	mdiPlus,
+	mdiCloudDownloadOutline,
+	mdiImport,
+	mdiSchoolOutline,
+} from "@mdi/js";
 import Vue from "vue";
 
 export default Vue.extend({
@@ -94,7 +99,7 @@ export default Vue.extend({
 						testId: "add-course-button",
 						actions: [
 							{
-								icon: mdiSchool,
+								icon: mdiSchoolOutline,
 								label: this.$t("pages.rooms.fab.add.course"),
 								href: "/courses/add",
 								dataTestid: "fab_button_add_course",
@@ -106,7 +111,7 @@ export default Vue.extend({
 					if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 						fabItems.actions.push({
 							label: this.$t("pages.rooms.fab.import.course"),
-							icon: mdiCloudDownload,
+							icon: mdiCloudDownloadOutline,
 							dataTestid: "fab_button_import_course",
 							ariaLabel: this.$t("pages.rooms.fab.import.course"),
 							customEvent: {
@@ -122,7 +127,7 @@ export default Vue.extend({
 					) {
 						fabItems.actions.push({
 							label: this.$t("pages.rooms.fab.upload.course"),
-							icon: mdiCloudUpload,
+							icon: mdiImport,
 							dataTestid: "fab_button_upload_course",
 							ariaLabel: this.$t("pages.rooms.fab.upload.course"),
 							customEvent: {

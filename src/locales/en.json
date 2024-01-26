@@ -976,7 +976,7 @@
 	"pages.rooms.importCourse.importErrorButton": "Okay, understood",
 	"pages.rooms.uploadCourse.title": "Upload course",
 	"pages.rooms.uploadCourse.confirm": "Upload",
-	"pages.rooms.uploadCourse.fileInputLabel": "Select course file",
+	"pages.rooms.uploadCourse.fileInputLabel": "Select file",
 	"pages.rooms.uploadCourse.loading": "Uploading file...",
 	"pages.rooms.uploadCourse.success": "Course was successfully uploaded.",
 	"pages.rooms.uploadCourse.error": "Course could not be uploaded.",

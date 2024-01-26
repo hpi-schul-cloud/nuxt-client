@@ -979,7 +979,7 @@
 	"pages.rooms.importCourse.importErrorButton": "Okay, verstanden",
 	"pages.rooms.uploadCourse.title": "Kurs hochladen",
 	"pages.rooms.uploadCourse.confirm": "Hochladen",
-	"pages.rooms.uploadCourse.fileInputLabel": "Kursdatei auswählen",
+	"pages.rooms.uploadCourse.fileInputLabel": "Datei auswählen",
 	"pages.rooms.uploadCourse.loading": "Lade Datei hoch...",
 	"pages.rooms.uploadCourse.success": "Der Kurs wurde erfolgreich hochgeladen.",
 	"pages.rooms.uploadCourse.error": "Beim Hochladen des Kurses ist ein Fehler aufgetreten.",
