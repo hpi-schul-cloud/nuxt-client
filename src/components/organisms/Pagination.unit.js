@@ -69,7 +69,7 @@ describe("@/components/organisms/Pagination", () => {
 			perPage: 5,
 		});
 		const select = wrapper.findComponent({ name: "v-select" });
-		select.vm.$emit("update:model-value", { text: "", value: 10 });
+		select.vm.$emit("update:modelValue", { text: "", value: 10 });
 
 		expect(wrapper.emitted("update:per-page")).toStrictEqual([[10]]);
 	});
