@@ -72,8 +72,9 @@ describe("@/components/molecules/UploadModal", () => {
 			expect(uploadDialog.buttons).toEqual(["cancel", "confirm"]);
 		});
 
-		it.skip("should upload file and trigger events dialog-closed and update-rooms", async () => {
+		it("should upload file and trigger events dialog-confirmed and dialog-closed", async () => {
 			const { wrapper } = setup();
+			const dialog = wrapper.find(".upload-dialog");
 
 			await wrapper.setProps({
 				isOpen: true,
@@ -82,21 +83,26 @@ describe("@/components/molecules/UploadModal", () => {
 				file: new File([""], "filename"),
 			});
 
-			const confirmBtn = wrapper.find("[data-testid='dialog-confirm']");
+			const confirmBtn = wrapper.find("[data-testId='dialog-confirm']");
 
 			confirmBtn.trigger("click");
 
-			const emitted = wrapper.emitted();
+			const emitted = dialog.emitted();
 
+			expect(emitted["dialog-confirmed"]).toHaveLength(1);
 			expect(emitted["dialog-closed"]).toHaveLength(1);
-			expect(emitted["update-rooms"]).toHaveLength(1);
 		});
 	});
 
 	describe("when canceling the upload", () => {
-		it.skip("should close the modal and emit dialog-closed event", () => {
+		it("should close the modal and emit dialog-closed event", async () => {
 			const { wrapper } = setup();
-			const btnCancel = wrapper.find("[data-testid='dialog-cancel']");
+
+			await wrapper.setProps({
+				isOpen: true,
+			});
+
+			const btnCancel = wrapper.find("[data-testId='dialog-cancel']");
 
 			btnCancel.trigger("click");
 
