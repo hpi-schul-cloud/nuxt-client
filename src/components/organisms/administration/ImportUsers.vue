@@ -334,6 +334,11 @@ export default {
 					class: "head_lastName",
 				},
 				{
+					text: this.$t("components.organisms.importUsers.tableUserName"),
+					value: "loginName",
+					sortable: false,
+				},
+				{
 					text: this.$t("components.organisms.importUsers.tableRoles"),
 					value: "roleNames",
 					sortable: false,
@@ -359,6 +364,7 @@ export default {
 			if (this.isNbc) {
 				tableHeaders.splice(2, 1);
 			}
+			console.log(tableHeaders);
 			return tableHeaders;
 		},
 		isNbc() {
