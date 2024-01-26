@@ -3,10 +3,7 @@ import { nextTick } from "vue";
 import ClassMembersInfoBox from "@/components/page-class-members/ClassMembersInfoBox.vue";
 import { useSystemApi } from "@data-system";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 jest.mock("@data-system");
@@ -18,11 +15,7 @@ describe("ClassMembersInfoBox", () => {
 		const wrapper = mount(ClassMembersInfoBox, {
 			props,
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), vueDompurifyHTMLPlugin],
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>
 						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
