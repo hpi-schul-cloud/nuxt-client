@@ -453,7 +453,7 @@
 	"pages.administration.migration.startUserMigration": "Start accounts migration",
 	"pages.administration.migration.step1": "Introduction",
 	"pages.administration.migration.step2": "Preparation",
-	"pages.administration.migration.step3": "Sumamry",
+	"pages.administration.migration.step3": "Summary",
 	"pages.administration.migration.step4": "Transfer phase",
 	"pages.administration.migration.step4.bullets.linkedUsers": "Users whose accounts have been linked can already log in with their {source} credentials. However, the personal data of these users (name, date of birth, roles, classes, etc.) has not yet been updated from {source}.",
 	"pages.administration.migration.step4.bullets.newUsers": "No new user accounts have been created yet. Users who did not have a user account in the {instance} and are to be imported by the migration wizard cannot log in yet.",
