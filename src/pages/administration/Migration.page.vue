@@ -9,7 +9,7 @@
 	>
 		<v-snackbar
 			v-if="businessError && businessError.statusCode !== '200'"
-			v-model="businessError"
+			:model-value="!!businessError"
 			:timeout="errorTimeout"
 			location="top centered"
 			color="error-darken-3"
