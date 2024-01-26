@@ -44,7 +44,6 @@ const getWrapper = (props?: object, statusAlerts: StatusAlert[] = []) => {
 			},
 		},
 		props,
-		// attachTo: document.body,
 	});
 
 	return wrapper;
