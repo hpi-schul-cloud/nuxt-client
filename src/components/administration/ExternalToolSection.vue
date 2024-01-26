@@ -33,7 +33,7 @@
 			<template #[`item.actions`]="{ item }">
 				<external-tool-toolbar
 					@edit="editTool(item)"
-					@datasheet="createDatasheet(item)"
+					@datasheet="showDatasheet(item)"
 					@delete="openDeleteDialog(item)"
 				/>
 			</template>
@@ -106,7 +106,6 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -117,6 +116,8 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { RenderHTML } from "@feature-render-html";
 import { mdiAlert, mdiCheckCircle } from "@mdi/js";
 import {
 	computed,
@@ -133,7 +134,6 @@ import { DataTableHeader } from "vuetify";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
 
 export default defineComponent({
 	name: "ExternalToolSection",
@@ -181,8 +181,10 @@ export default defineComponent({
 			});
 		};
 
-		const createDatasheet = async (item: SchoolExternalToolItem) => {
-			await schoolExternalToolsModule.createDatasheet(item.id);
+		const showDatasheet = (item: SchoolExternalToolItem) => {
+			window.open(
+				`${window.location.origin}/api/v3/tools/external-tools/${item.externalToolId}/datasheet`
+			);
 		};
 
 		const onDeleteTool = async () => {
@@ -237,7 +239,7 @@ export default defineComponent({
 			isLoading,
 			editTool,
 			onDeleteTool,
-			createDatasheet,
+			showDatasheet,
 			isDeleteDialogOpen,
 			openDeleteDialog,
 			onCloseDeleteDialog,

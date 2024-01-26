@@ -10,18 +10,18 @@ import {
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { i18nMock } from "@@/tests/test-utils/i18nMock";
-import { mdiAlert, mdiCheckCircle } from "@mdi/js";
-import { mount, Wrapper } from "@vue/test-utils";
-import Vue, { ref } from "vue";
-import ExternalToolSection from "./ExternalToolSection.vue";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
 import {
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils/factory";
+import { i18nMock } from "@@/tests/test-utils/i18nMock";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { mdiAlert, mdiCheckCircle } from "@mdi/js";
+import { mount, Wrapper } from "@vue/test-utils";
+import Vue, { ref } from "vue";
+import ExternalToolSection from "./ExternalToolSection.vue";
 
 jest.mock("@data-external-tool");
 
@@ -149,6 +149,7 @@ describe("ExternalToolSection", () => {
 					},
 				],
 			});
+
 			return {
 				wrapper,
 				schoolExternalToolsModule,
