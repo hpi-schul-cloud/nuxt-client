@@ -7,6 +7,16 @@ import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import Vue from "vue";
+import { i18nMock } from "@@/tests/test-utils/i18nMock";
+import {
+	I18N_KEY,
+	LOADING_STATE_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	ROOMS_MODULE_KEY,
+} from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
 
 const getWrapper = (computed: any = {}, device = "desktop") => {
 	return mount(RoomList, {
@@ -16,6 +26,13 @@ const getWrapper = (computed: any = {}, device = "desktop") => {
 		computed: {
 			$mq: () => device,
 			...computed,
+		},
+		provide: {
+			[I18N_KEY.valueOf()]: i18nMock,
+			[LOADING_STATE_MODULE_KEY.valueOf()]:
+				createModuleMocks(LoadingStateModule),
+			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
+			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
 		},
 	});
 };

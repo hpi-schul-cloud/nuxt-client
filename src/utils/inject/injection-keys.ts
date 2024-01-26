@@ -3,9 +3,11 @@ import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
+import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import RoomModule from "@/store/room";
+import RoomsModule from "@/store/rooms";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import StatusAlertsModule from "@/store/status-alerts";
@@ -45,3 +47,7 @@ export const TERMS_OF_USE_MODULE_KEY: InjectionKey<TermsOfUseModule> =
 	Symbol("termsOfUseModule");
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
 	Symbol("schoolsModule");
+export const ROOMS_MODULE_KEY: InjectionKey<RoomsModule> =
+	Symbol("roomsModule");
+export const LOADING_STATE_MODULE_KEY: InjectionKey<LoadingStateModule> =
+	Symbol("loadingStateModule");

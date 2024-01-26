@@ -2,12 +2,22 @@ import { authModule, envConfigModule, roomsModule } from "@/store";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, Wrapper } from "@vue/test-utils";
 import RoomWrapper from "./RoomWrapper.vue";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import Vue from "vue";
 import { Envs } from "@/store/types/env-config";
+import { i18nMock } from "@@/tests/test-utils/i18nMock";
+import {
+	I18N_KEY,
+	LOADING_STATE_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	ROOMS_MODULE_KEY,
+} from "@/utils/inject";
+import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
 
 const getWrapper = (
 	options: any = {
@@ -20,6 +30,13 @@ const getWrapper = (
 			i18n: true,
 		}),
 		...options,
+		provide: {
+			[I18N_KEY.valueOf()]: i18nMock,
+			[LOADING_STATE_MODULE_KEY.valueOf()]:
+				createModuleMocks(LoadingStateModule),
+			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
+			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
+		},
 	});
 };
 

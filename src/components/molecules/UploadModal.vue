@@ -29,12 +29,17 @@
 </template>
 
 <script lang="ts">
-import { loadingStateModule, notifierModule, roomsModule } from "@/store";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { computed, ref } from "vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { computed, defineComponent, ref } from "vue";
+import {
+	I18N_KEY,
+	LOADING_STATE_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	ROOMS_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 
-export default {
+export default defineComponent({
 	name: "UploadModal",
 	components: {
 		vCustomDialog,
@@ -51,6 +56,9 @@ export default {
 	},
 	setup: (_props, { emit }) => {
 		const i18n = injectStrict(I18N_KEY);
+		const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
+		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+		const roomsModule = injectStrict(ROOMS_MODULE_KEY);
 		const file = ref<File | undefined>(undefined);
 		const modalButtons = computed(() => {
 			if (file.value) {
@@ -100,7 +108,7 @@ export default {
 			upload,
 		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

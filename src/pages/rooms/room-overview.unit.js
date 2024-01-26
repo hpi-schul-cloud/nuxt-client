@@ -9,7 +9,9 @@ import RoomsModule from "@/store/rooms";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	I18N_KEY,
+	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	ROOMS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
@@ -145,6 +147,7 @@ const getWrapper = (
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 		getCtlToolsTabEnabled: false,
 	});
+	const roomsModuleMock = createModuleMocks(RoomsModule);
 	return mount(RoomOverview, {
 		...createComponentMocks({
 			vuetify: true,
@@ -161,6 +164,9 @@ const getWrapper = (
 			[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 			[I18N_KEY]: { t: (key) => key },
 			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+			[LOADING_STATE_MODULE_KEY.valueOf()]: loadingStateModuleMock,
+			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+			[ROOMS_MODULE_KEY.valueOf()]: roomsModuleMock,
 		},
 		propsData: {
 			role: "student",
