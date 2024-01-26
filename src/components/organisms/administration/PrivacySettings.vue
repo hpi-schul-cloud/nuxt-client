@@ -50,7 +50,7 @@
 						)
 					"
 					class="ml-1 mt-0"
-					@update:model-value="
+					@update:modelValue="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
@@ -83,7 +83,7 @@
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_chat"
-					@update:model-value="
+					@update:modelValue="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
 				/>
@@ -113,7 +113,7 @@
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_video_conference"
-					@update:model-value="
+					@update:modelValue="
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')
 					"

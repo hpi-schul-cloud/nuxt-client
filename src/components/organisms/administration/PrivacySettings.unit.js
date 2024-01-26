@@ -212,7 +212,6 @@ describe("PrivacySettings", () => {
 					const studentVisibilitySwitch = wrapper.findComponent(
 						`[data-testid=${searchStrings.studentVisibility}]`
 					);
-					console.log(studentVisibilitySwitch.props());
 
 					expect(studentVisibilitySwitch.props().modelValue).toBe(true);
 				});
@@ -431,7 +430,7 @@ describe("PrivacySettings", () => {
 				`[data-testid=${searchStrings.learnStore}]`
 			);
 
-			learnStoreSwitch.vm.$emit("update:model-value", false);
+			learnStoreSwitch.vm.$emit("update:modelValue", false);
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(1);
@@ -440,7 +439,7 @@ describe("PrivacySettings", () => {
 				"student.LERNSTORE_VIEW"
 			);
 
-			learnStoreSwitch.vm.$emit("update:model-value", true);
+			learnStoreSwitch.vm.$emit("update:modelValue", true);
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(2);
@@ -460,7 +459,7 @@ describe("PrivacySettings", () => {
 			const studentVisibilitySwitch = wrapper.findComponent(
 				`[data-testid=${searchStrings.studentVisibility}]`
 			);
-			studentVisibilitySwitch.vm.$emit("update:model-value", false);
+			studentVisibilitySwitch.vm.$emit("update:modelValue", false);
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(1);
@@ -469,7 +468,7 @@ describe("PrivacySettings", () => {
 				"teacher.STUDENT_LIST"
 			);
 
-			studentVisibilitySwitch.vm.$emit("update:model-value", true);
+			studentVisibilitySwitch.vm.$emit("update:modelValue", true);
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-privacy-settings"]).toHaveLength(2);
@@ -490,14 +489,14 @@ describe("PrivacySettings", () => {
 			const rocketChatSwitch = wrapper.findComponent(
 				`[data-testid=${searchStrings.rocketChat}]`
 			);
-			rocketChatSwitch.vm.$emit("update:model-value", false);
+			rocketChatSwitch.vm.$emit("update:modelValue", false);
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(1);
 			expect(emitted["update-feature-settings"][0][0]).toBe(false);
 			expect(emitted["update-feature-settings"][0][1]).toBe("rocketChat");
 
-			rocketChatSwitch.vm.$emit("update:model-value", true);
+			rocketChatSwitch.vm.$emit("update:modelValue", true);
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(2);
@@ -514,14 +513,14 @@ describe("PrivacySettings", () => {
 			const videoconferenceSwitch = wrapper.findComponent(
 				`[data-testid=${searchStrings.videoconference}]`
 			);
-			videoconferenceSwitch.vm.$emit("update:model-value", false);
+			videoconferenceSwitch.vm.$emit("update:modelValue", false);
 
 			let emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(1);
 			expect(emitted["update-feature-settings"][0][0]).toBe(false);
 			expect(emitted["update-feature-settings"][0][1]).toBe("videoconference");
 
-			videoconferenceSwitch.vm.$emit("update:model-value", true);
+			videoconferenceSwitch.vm.$emit("update:modelValue", true);
 
 			emitted = wrapper.emitted();
 			expect(emitted["update-feature-settings"]).toHaveLength(2);

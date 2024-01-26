@@ -138,7 +138,7 @@ describe("SchoolPolicy", () => {
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(true);
 		});
 
-		it.only("should render dialog component", async () => {
+		it("should render dialog component", async () => {
 			const wrapper = setup();
 			const editBtn = wrapper.find('[data-testid="edit-button"]');
 			await editBtn.trigger("click");
