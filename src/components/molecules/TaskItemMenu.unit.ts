@@ -5,13 +5,13 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
 import TaskItemMenu from "./TaskItemMenu";
+import { mount } from "@vue/test-utils";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const { tasksTeacher } = mocks;
 
