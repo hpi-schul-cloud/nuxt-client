@@ -96,6 +96,7 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import { useI18n } from "vue-i18n";
 import { Sortable } from "sortablejs-vue3";
+import { SortableEvent } from "sortablejs";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
 export default defineComponent({
@@ -166,11 +167,11 @@ export default defineComponent({
 			if (hasDeletePermission) await deleteColumn(columnId);
 		};
 
-		const onDropColumn = async (columnPayload: any) => {
+		const onDropColumn = async (columnPayload: SortableEvent) => {
 			if (!hasMovePermission) return;
 
 			const columnId = extractDataAttribute(columnPayload.item, "columnId");
-			if (columnId) {
+			if (columnId && columnPayload.newIndex && columnPayload.oldIndex) {
 				const columnMove: ColumnMove = {
 					addedIndex: columnPayload.newIndex,
 					removedIndex: columnPayload.oldIndex,
@@ -211,7 +212,10 @@ export default defineComponent({
 		};
 
 		const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-			if (hasMovePermission) await moveCard(cardMove);
+			const isSameColumn = cardMove.fromColumnId === cardMove.toColumnId;
+			const isMovingUp = cardMove.oldIndex - cardMove.newIndex === 1;
+			const forceNextTick = isSameColumn && isMovingUp;
+			if (hasMovePermission) await moveCard(cardMove, forceNextTick);
 		};
 
 		const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {

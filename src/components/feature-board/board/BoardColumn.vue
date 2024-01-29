@@ -88,6 +88,7 @@ import {
 } from "@util-board";
 
 import { Sortable } from "sortablejs-vue3";
+import { SortableEvent } from "sortablejs";
 
 export default defineComponent({
 	name: "BoardColumn",
@@ -155,7 +156,7 @@ export default defineComponent({
 			dragStart();
 		};
 
-		const onDragEnd = async (event: any) => {
+		const onDragEnd = async (event: SortableEvent) => {
 			dragEnd();
 			const { newIndex, oldIndex, to, from, item } = event;
 			const toColumnId = extractDataAttribute(to, "columnId");
@@ -163,18 +164,20 @@ export default defineComponent({
 			const cardId = extractDataAttribute(event.item, "cardId") as string;
 
 			if (toColumnId !== fromColumnId) {
-				item?.parentNode.removeChild(item);
+				item?.parentNode?.removeChild(item);
 			}
 
-			const cardMove: CardMove = {
-				cardId,
-				newIndex,
-				oldIndex,
-				fromColumnId,
-				toColumnId,
-			};
+			if (newIndex !== undefined && oldIndex !== undefined) {
+				const cardMove: CardMove = {
+					cardId,
+					newIndex,
+					oldIndex,
+					fromColumnId,
+					toColumnId,
+				};
 
-			emit("update:card-position", cardMove);
+				emit("update:card-position", cardMove);
+			}
 		};
 
 		const onMoveCardKeyboard = (
