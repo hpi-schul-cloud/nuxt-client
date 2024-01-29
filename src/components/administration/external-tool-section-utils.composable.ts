@@ -1,7 +1,7 @@
-import { DataTableHeader } from "vuetify";
-import { SchoolExternalToolItem } from "./school-external-tool-item";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { DataTableHeader } from "vuetify";
+import { SchoolExternalToolItem } from "./school-external-tool-item";
 
 export function useExternalToolsSectionUtils(
 	t: (key: string) => string = () => ""
@@ -40,6 +40,7 @@ export function useExternalToolsSectionUtils(
 
 			return {
 				id: tool.id,
+				externalToolId: tool.toolId,
 				name: tool.name,
 				statusText: t(statusTranslationKey),
 				isOutdated: tool.status.isOutdatedOnScopeSchool,

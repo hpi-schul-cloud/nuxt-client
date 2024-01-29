@@ -10,18 +10,18 @@ import {
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { i18nMock } from "@@/tests/test-utils/i18nMock";
-import { mdiAlert, mdiCheckCircle } from "@mdi/js";
-import { mount, Wrapper } from "@vue/test-utils";
-import Vue, { ref } from "vue";
-import ExternalToolSection from "./ExternalToolSection.vue";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
 import {
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils/factory";
+import { i18nMock } from "@@/tests/test-utils/i18nMock";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { mdiAlert, mdiCheckCircle } from "@mdi/js";
+import { mount, Wrapper } from "@vue/test-utils";
+import Vue, { ref } from "vue";
+import ExternalToolSection from "./ExternalToolSection.vue";
 
 jest.mock("@data-external-tool");
 
@@ -31,6 +31,8 @@ describe("ExternalToolSection", () => {
 	let useSchoolExternalToolUsageMock: DeepMocked<
 		ReturnType<typeof useSchoolExternalToolUsage>
 	>;
+
+	const deleteButtonIndex = 2;
 
 	const getWrapper = (getters: Partial<SchoolExternalToolsModule> = {}) => {
 		el = document.createElement("div");
@@ -149,6 +151,7 @@ describe("ExternalToolSection", () => {
 					},
 				],
 			});
+
 			return {
 				wrapper,
 				schoolExternalToolsModule,
@@ -241,7 +244,7 @@ describe("ExternalToolSection", () => {
 
 					const tableRows = wrapper.find("tbody").findAll("tr");
 					const firstRowButtons = tableRows.at(0).findAll("button");
-					const deleteButton = firstRowButtons.at(1);
+					const deleteButton = firstRowButtons.at(deleteButtonIndex);
 
 					await deleteButton.trigger("click");
 
@@ -257,7 +260,7 @@ describe("ExternalToolSection", () => {
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
 						const firstRowButtons = tableRows.at(0).findAll("button");
-						const deleteButton = firstRowButtons.at(1);
+						const deleteButton = firstRowButtons.at(deleteButtonIndex);
 
 						await deleteButton.trigger("click");
 
@@ -286,7 +289,7 @@ describe("ExternalToolSection", () => {
 
 						const firstRowButtons = tableRows.at(0).findAll("button");
 
-						const deleteButton = firstRowButtons.at(1);
+						const deleteButton = firstRowButtons.at(deleteButtonIndex);
 						await deleteButton.trigger("click");
 
 						const confirmButton = wrapper.find(
@@ -319,7 +322,7 @@ describe("ExternalToolSection", () => {
 
 						const firstRowButtons = tableRows.at(0).findAll("button");
 
-						const deleteButton = firstRowButtons.at(1);
+						const deleteButton = firstRowButtons.at(deleteButtonIndex);
 						await deleteButton.trigger("click");
 
 						const confirmButton = wrapper.find(
@@ -404,7 +407,7 @@ describe("ExternalToolSection", () => {
 
 				const firstRowButtons = tableRows.at(0).findAll("button");
 
-				const deleteButton = firstRowButtons.at(1);
+				const deleteButton = firstRowButtons.at(deleteButtonIndex);
 				await deleteButton.trigger("click");
 
 				const dialog = wrapper.find('[data-testid="delete-dialog"]');
@@ -419,7 +422,7 @@ describe("ExternalToolSection", () => {
 
 				const firstRowButtons = tableRows.at(0).findAll("button");
 
-				const deleteButton = firstRowButtons.at(1);
+				const deleteButton = firstRowButtons.at(deleteButtonIndex);
 				await deleteButton.trigger("click");
 
 				const dialogContent = wrapper.find(
@@ -438,7 +441,7 @@ describe("ExternalToolSection", () => {
 
 				const firstRowButtons = tableRows.at(0).findAll("button");
 
-				const deleteButton = firstRowButtons.at(1);
+				const deleteButton = firstRowButtons.at(deleteButtonIndex);
 				await deleteButton.trigger("click");
 
 				expect(notifierModule.show).not.toHaveBeenCalled();
@@ -469,7 +472,7 @@ describe("ExternalToolSection", () => {
 
 				const firstRowButtons = tableRows.at(0).findAll("button");
 
-				const deleteButton = firstRowButtons.at(1);
+				const deleteButton = firstRowButtons.at(deleteButtonIndex);
 				await deleteButton.trigger("click");
 
 				const dialog = wrapper.find('[data-testid="delete-dialog"]');
@@ -484,7 +487,7 @@ describe("ExternalToolSection", () => {
 
 				const firstRowButtons = tableRows.at(0).findAll("button");
 
-				const deleteButton = firstRowButtons.at(1);
+				const deleteButton = firstRowButtons.at(deleteButtonIndex);
 				await deleteButton.trigger("click");
 
 				expect(notifierModule.show).toHaveBeenCalledWith({

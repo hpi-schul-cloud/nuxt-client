@@ -1,5 +1,3 @@
-import { AxiosResponse } from "axios";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	SchoolExternalToolConfigurationTemplateListResponse,
 	SchoolExternalToolConfigurationTemplateResponse,
@@ -9,6 +7,8 @@ import {
 	ToolApiInterface,
 } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { AxiosResponse } from "axios";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolConfigurationTemplate,
@@ -285,33 +285,6 @@ export default class SchoolExternalToolsModule extends VuexModule {
 				params.schoolExternalToolId,
 				schoolExternalToolPostParams
 			);
-		} catch (error: unknown) {
-			const apiError = mapAxiosErrorToResponseError(error);
-
-			this.setBusinessError({
-				error: apiError,
-				statusCode: apiError.code,
-				message: apiError.message,
-			});
-		}
-
-		this.setLoading(false);
-	}
-
-	@Action
-	async createDatasheet(schoolExternalToolId: string): Promise<void> {
-		this.setLoading(true);
-		this.resetBusinessError();
-
-		try {
-			const schoolExternalTool: SchoolExternalTool | undefined =
-				await this.loadSchoolExternalTool(schoolExternalToolId);
-
-			if (schoolExternalTool) {
-				await this.toolApi.toolControllerGetDatasheet(
-					schoolExternalTool.toolId
-				);
-			}
 		} catch (error: unknown) {
 			const apiError = mapAxiosErrorToResponseError(error);
 
