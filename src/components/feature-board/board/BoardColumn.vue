@@ -197,6 +197,7 @@ export default defineComponent({
 				const change = keyString === "ArrowUp" ? -1 : +1;
 				if (change === 1 && cardIndex === props.column.cards.length - 1) return;
 				if (change === -1 && cardIndex === 0) return;
+				if (keyString === "ArrowUp") cardMove.forceNextTick = true;
 				cardMove.newIndex = cardIndex + change;
 			}
 

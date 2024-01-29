@@ -6,8 +6,9 @@ export interface CardMove {
 	oldIndex: number;
 	newIndex: number;
 	fromColumnId: string;
-	toColumnId?: string | undefined;
-	columnDelta?: number | undefined;
+	toColumnId?: string;
+	columnDelta?: number;
+	forceNextTick?: boolean;
 }
 
 export interface ColumnMove {
