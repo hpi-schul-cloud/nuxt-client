@@ -5,48 +5,62 @@
 				{{ $t("pages.room.boardCard.label.courseBoard") }}
 			</h3>
 		</div>
-		<div class="d-flex flex-row flex-shrink-1 ml-n4" @touchend="onTouchEnd">
-			<template v-if="board">
-				<Container
-					orientation="horizontal"
-					group-name="columns"
-					lock-axis="x"
-					:get-child-payload="getColumnId"
-					:drop-placeholder="placeholderOptions"
-					@drop="onDropColumn"
-					:non-drag-area-selector="'.drag-disabled'"
-					:drag-begin-delay="debounceTime"
-				>
-					<Draggable v-for="(column, index) in board.columns" :key="column.id">
-						<BoardColumn
-							:column="column"
-							:index="index"
-							:columnCount="board.columns.length"
-							:class="{ 'drag-disabled': isEditMode || !hasMovePermission }"
-							@reload:board="onReloadBoard"
-							@create:card="onCreateCard"
-							@delete:card="onDeleteCard"
-							@delete:column="onDeleteColumn"
-							@move:column-keyboard="
-								onMoveColumnKeyboard(index, column.id, $event)
-							"
-							@move:column-left="onMoveColumnLeft(index, column.id)"
-							@move:column-right="onMoveColumnRight(index, column.id)"
-							@update:card-position="onUpdateCardPosition(index, $event)"
-							@update:column-title="onUpdateColumnTitle(column.id, $event)"
-						/>
-					</Draggable>
-				</Container>
-				<BoardColumnGhost
-					v-if="hasCreateColumnPermission"
-					@create:column="onCreateColumn"
-					@create:column-with-card="onCreateColumnWithCard"
-				/>
-				<ConfirmationDialog />
-				<AddElementDialog />
-				<LightBox />
-			</template>
-		</div>
+		<template v-if="board">
+			<div class="d-flex flex-row flex-shrink-1 ml-n4">
+				<div>
+					<Sortable
+						:list="board.columns"
+						item-key="id"
+						tag="div"
+						:options="{
+							direction: 'horizontal',
+							disabled: isEditMode || !hasMovePermission,
+							group: 'columns',
+							delay: 300, // isDesktop ? 0 : 300
+							delayOnTouchOnly: true,
+							ghostClass: 'sortable-drag-ghost',
+							easing: 'cubic-bezier(1, 0, 0, 1)',
+							dragClass: 'sortable-drag-board-card',
+							dragoverBubble: true,
+							animation: 250,
+							scroll: true,
+							forceFallback: true,
+							bubbleScroll: true,
+						}"
+						class="d-flex flex-row flex-shrink-1 ml-n4"
+						@change="onDropColumn"
+					>
+						<template #item="{ element, index }">
+							<BoardColumn
+								:data-column-id="element.id"
+								:column="element"
+								:index="index"
+								:key="element.id"
+								:columnCount="board.columns.length"
+								@reload:board="onReloadBoard"
+								@create:card="onCreateCard"
+								@delete:card="onDeleteCard"
+								@delete:column="onDeleteColumn"
+								@update:card-position="onUpdateCardPosition(index, $event)"
+								@update:column-title="onUpdateColumnTitle(element.id, $event)"
+								@move:column-left="onMoveColumnLeft(index, element.id)"
+								@move:column-right="onMoveColumnRight(index, element.id)"
+							/>
+						</template>
+					</Sortable>
+				</div>
+				<div>
+					<BoardColumnGhost
+						v-if="hasCreateColumnPermission"
+						@create:column="onCreateColumn"
+					/>
+				</div>
+			</div>
+
+			<ConfirmationDialog />
+			<AddElementDialog />
+			<LightBox />
+		</template>
 	</div>
 </template>
 
@@ -55,8 +69,6 @@ import {
 	CardMove,
 	columnDropPlaceholderOptions,
 	ColumnMove,
-	DragAndDropKey,
-	horizontalCursorKeys,
 } from "@/types/board/DragAndDrop";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import {
@@ -67,7 +79,7 @@ import {
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
-import { useBoardNotifier } from "@util-board";
+import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useTouchDetection } from "@util-device-detection";
 import { useMediaQuery } from "@vueuse/core";
 import {
@@ -83,18 +95,18 @@ import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import { useI18n } from "vue-i18n";
+import { Sortable } from "sortablejs-vue3";
+import { SortableEvent } from "sortablejs";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Container, Draggable } = require("vue-dndrop");
 
 export default defineComponent({
 	components: {
 		BoardColumn,
-		Container,
-		Draggable,
 		BoardColumnGhost,
 		ConfirmationDialog,
 		AddElementDialog,
 		LightBox,
+		Sortable,
 	},
 	props: {
 		boardId: { type: String, required: true },
@@ -108,10 +120,8 @@ export default defineComponent({
 			board,
 			createCard,
 			createColumn,
-			createColumnWithCard,
 			deleteCard,
 			deleteColumn,
-			getColumnId,
 			moveCard,
 			moveColumn,
 			reloadBoard,
@@ -149,10 +159,6 @@ export default defineComponent({
 			if (hasCreateCardPermission) await createColumn();
 		};
 
-		const onCreateColumnWithCard = async (cardId: string) => {
-			if (hasCreateCardPermission) await createColumnWithCard(cardId);
-		};
-
 		const onDeleteCard = async (cardId: string) => {
 			if (hasCreateCardPermission) await deleteCard(cardId);
 		};
@@ -161,78 +167,61 @@ export default defineComponent({
 			if (hasDeletePermission) await deleteColumn(columnId);
 		};
 
-		const onDropColumn = async (columnPayload: ColumnMove) => {
-			if (hasMovePermission) await moveColumn(columnPayload);
-		};
+		const onDropColumn = async (columnPayload: SortableEvent) => {
+			if (!hasMovePermission) return;
 
-		/**
-		 * These classes should be removed automatically by vue-dndrop.
-		 * The library has a bug where it is not removing these classes on mobile devices, preventing scrolling and other touch interactions.
-		 */
-		const onTouchEnd = () => {
-			document.body.classList.remove(
-				"dndrop-no-user-select",
-				"dndrop-disable-touch-action"
-			);
-		};
-
-		const onMoveColumnKeyboard = async (
-			columnIndex: number,
-			columnId: string,
-			keyString: DragAndDropKey
-		) => {
-			if (!hasMovePermission && !horizontalCursorKeys.includes(keyString)) {
-				return;
+			const columnId = extractDataAttribute(columnPayload.item, "columnId");
+			if (columnId && columnPayload.newIndex && columnPayload.oldIndex) {
+				const columnMove: ColumnMove = {
+					addedIndex: columnPayload.newIndex,
+					removedIndex: columnPayload.oldIndex,
+					columnId,
+				};
+				await moveColumn(columnMove);
 			}
-
-			const columnMove: ColumnMove = {
-				addedIndex: -1,
-				removedIndex: columnIndex,
-				payload: columnId,
-			};
-
-			const change = keyString === "ArrowLeft" ? -1 : +1;
-			columnMove.addedIndex = columnIndex + change;
-			await moveColumn(columnMove);
 		};
 
 		const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
 			if (!hasMovePermission) return;
+			if (columnIndex === 0) return;
 
 			const columnMove: ColumnMove = {
-				addedIndex: -1,
+				addedIndex: columnIndex - 1,
 				removedIndex: columnIndex,
-				payload: columnId,
+				columnId,
 			};
 
-			columnMove.addedIndex = columnIndex - 1;
-			await moveColumn(columnMove);
+			await moveColumn(columnMove, true);
 		};
 
 		const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
 			if (!hasMovePermission) return;
+			if (board.value && columnIndex === board.value.columns.length - 1) return;
 
 			const columnMove: ColumnMove = {
-				addedIndex: -1,
+				addedIndex: columnIndex + 1,
 				removedIndex: columnIndex,
-				payload: columnId,
+				columnId,
 			};
 
-			columnMove.addedIndex = columnIndex + 1;
-			await moveColumn(columnMove);
+			await moveColumn(columnMove, true);
 		};
 
 		const onReloadBoard = async () => {
 			await reloadBoard();
 		};
 
-		const onUpdateCardPosition = async (_: unknown, payload: CardMove) => {
-			if (hasMovePermission) await moveCard(payload);
+		const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
+			const isSameColumn = cardMove.fromColumnId === cardMove.toColumnId;
+			const isMovingUp = cardMove.oldIndex - cardMove.newIndex === 1;
+			const forceNextTick = isSameColumn && isMovingUp;
+			if (hasMovePermission) await moveCard(cardMove, forceNextTick);
 		};
 
 		const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
 			if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
 		};
+
 		onMounted(() => {
 			if (isTeacher) {
 				showInfo(t("components.board.alert.info.teacher"), false);
@@ -258,15 +247,11 @@ export default defineComponent({
 			isEditMode,
 			isDesktop,
 			isTouchDetected,
-			getColumnId,
-			onTouchEnd,
 			onCreateCard,
 			onCreateColumn,
-			onCreateColumnWithCard,
 			onDeleteCard,
 			onDropColumn,
 			onDeleteColumn,
-			onMoveColumnKeyboard,
 			onMoveColumnLeft,
 			onMoveColumnRight,
 			onReloadBoard,
