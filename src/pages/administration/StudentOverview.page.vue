@@ -539,7 +539,7 @@ export default {
 				});
 				if (this.registrationLinks.totalMailsSend === rowIds.length) {
 					notifierModule.show({
-						text: this.$tc(
+						text: this.$t(
 							"pages.administration.sendMail.success",
 							rowIds.length
 						),
@@ -548,14 +548,14 @@ export default {
 					});
 				} else {
 					notifierModule.show({
-						text: this.$tc("pages.administration.sendMail.alreadyRegistered"),
+						text: this.$t("pages.administration.sendMail.alreadyRegistered"),
 						status: "info",
 						timeout: 10000,
 					});
 				}
 			} catch (error) {
 				notifierModule.show({
-					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
+					text: this.$t("pages.administration.sendMail.error", rowIds.length),
 					status: "error",
 					timeout: 10000,
 				});
@@ -572,14 +572,14 @@ export default {
 					this.$_printQRs(this.qrLinks);
 				} else {
 					notifierModule.show({
-						text: this.$tc("pages.administration.printQr.emptyUser"),
+						text: this.$t("pages.administration.printQr.emptyUser"),
 						status: "info",
 						timeout: 10000,
 					});
 				}
 			} catch (error) {
 				notifierModule.show({
-					text: this.$tc("pages.administration.printQr.error", rowIds.length),
+					text: this.$t("pages.administration.printQr.error", rowIds.length),
 					status: "error",
 					timeout: 10000,
 				});
@@ -612,7 +612,7 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = this.$tc(
+				message = this.$t(
 					"pages.administration.students.index.remove.confirm.message.some",
 					rowIds.length,
 					{ number: rowIds.length }

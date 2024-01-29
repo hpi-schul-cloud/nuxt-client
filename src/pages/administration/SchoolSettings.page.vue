@@ -11,30 +11,30 @@
 			data-testid="error-alert"
 		>
 			<div class="alert-text">
-				{{ t(error.translationKey) }}
+				{{ $t(error.translationKey) }}
 			</div>
 		</v-alert>
 		<div data-testid="no-error">
 			<v-alert type="info" class="mb-4">
 				<div class="alert-text">
-					{{ t("pages.administration.school.index.back") }}
+					{{ $t("pages.administration.school.index.back") }}
 					<a href="/administration/school/">
-						{{ t("pages.administration.school.index.backLink") }}</a
+						{{ $t("pages.administration.school.index.backLink") }}</a
 					>.
 				</div>
 			</v-alert>
 			<v-alert type="info" class="mb-12">
 				<div class="alert-text">
-					{{ t("pages.administration.school.index.info", { instituteTitle }) }}
+					{{ $t("pages.administration.school.index.info", { instituteTitle }) }}
 				</div>
 			</v-alert>
 
 			<v-expansion-panels multiple class="mb-9" :model-value="openedPanels">
 				<v-expansion-panel data-testid="general-settings-panel" value="general">
 					<v-expansion-panel-title hide-actions>
-						<template v-slot:default="{ expanded }">
+						<template v-slot:actions="{ expanded }">
 							<div class="text-h4">
-								{{ t("pages.administration.school.index.generalSettings") }}
+								{{ $t("pages.administration.school.index.generalSettings") }}
 							</div>
 							<div class="v-expansion-panel-header__icon">
 								<v-icon>
@@ -55,9 +55,9 @@
 					value="privacy"
 				>
 					<v-expansion-panel-title hide-actions>
-						<template v-slot:default="{ expanded }">
+						<template v-slot:actions="{ expanded }">
 							<div class="text-h4">
-								{{ t("common.words.privacyPolicy") }}
+								{{ $t("common.words.privacyPolicy") }}
 							</div>
 							<div class="v-expansion-panel-header__icon">
 								<v-icon>
@@ -78,9 +78,9 @@
 					value="terms"
 				>
 					<v-expansion-panel-title hide-actions>
-						<template v-slot:default="{ expanded }">
+						<template v-slot:actions="{ expanded }">
 							<div class="text-h4">
-								{{ t("common.words.termsOfUse") }}
+								{{ $t("common.words.termsOfUse") }}
 							</div>
 							<div class="v-expansion-panel-header__icon">
 								<v-icon>
@@ -101,10 +101,10 @@
 					value="migration"
 				>
 					<v-expansion-panel-title hide-actions>
-						<template v-slot:default="{ expanded }">
+						<template v-slot:actions="{ expanded }">
 							<div class="text-h4">
 								{{
-									t("components.administration.adminMigrationSection.headers")
+									$t("components.administration.adminMigrationSection.headers")
 								}}
 							</div>
 							<div class="v-expansion-panel-header__icon">
@@ -122,9 +122,9 @@
 
 				<v-expansion-panel data-testid="systems-panel" value="authentication">
 					<v-expansion-panel-title hide-actions>
-						<template v-slot:default="{ expanded }">
+						<template v-slot:actions="{ expanded }">
 							<div class="text-h4">
-								{{ t("pages.administration.school.index.authSystems.title") }}
+								{{ $t("pages.administration.school.index.authSystems.title") }}
 							</div>
 							<div class="v-expansion-panel-header__icon">
 								<v-icon>
@@ -148,9 +148,11 @@
 
 				<v-expansion-panel data-testid="tools-panel" value="tools">
 					<v-expansion-panel-title hide-actions>
-						<template v-slot:default="{ expanded }">
+						<template v-slot:actions="{ expanded }">
 							<div class="text-h4">
-								{{ t("components.administration.externalToolsSection.header") }}
+								{{
+									$t("components.administration.externalToolsSection.header")
+								}}
 							</div>
 							<div class="v-expansion-panel-header__icon">
 								<v-icon>
@@ -276,7 +278,6 @@ export default defineComponent({
 		});
 
 		return {
-			t,
 			headline,
 			breadcrumbs,
 			openedPanels,
