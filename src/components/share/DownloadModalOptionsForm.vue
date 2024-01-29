@@ -2,7 +2,7 @@
 	<div class="black--text">
 		<div class="d-flex justify-space-between">
 			<div class="mt-1">
-				{{ $t("common.actions.download.v1.1") }}
+				{{ $t("components.molecules.download.options.isV_1_1") }}
 			</div>
 			<v-switch
 				v-model="downloadOptions.isV_1_1"
@@ -16,7 +16,7 @@
 		</div>
 		<div class="d-flex justify-space-between">
 			<div class="mt-1">
-				{{ $t("common.actions.download.v1.3") }}
+				{{ $t("components.molecules.download.options.isV_1_3") }}
 			</div>
 			<v-switch
 				v-model="downloadOptions.isV_1_3"
@@ -33,19 +33,19 @@
 
 <script>
 import { defineComponent, reactive, watch } from "vue";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+// import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "DownloadModalOptionsForm",
 	emits: ["onDownloadOptionsChange"],
 	props: {
-		type: {
-			type: String,
-			required: true,
-			validator: (type) =>
-				Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
-		},
+		// type: {
+		// 	type: String,
+		// 	required: true,
+		// 	validator: (type) =>
+		// 		Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
+		// },
 	},
 	setup(props, { emit }) {
 		const downloadOptions = reactive({

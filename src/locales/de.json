@@ -887,6 +887,9 @@
 	"components.board.action.delete": "Löschen",
 	"components.board.action.detail-view": "Detailansicht",
 	"components.board.action.download": "Herunterladen",
+	"pages.room.modal.course.download.header": "Kontrollmöglichkeiten Export",
+	"pages.room.modal.course.download.text": "Wähle die gewünschte Version aus, um den Kurs herunterzuladen.",
+	
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.action.moveDown": "Nach unten verschieben",
 	"components.board.action.moveLeft": "Nach links verschieben",

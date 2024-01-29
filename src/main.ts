@@ -31,6 +31,7 @@ import {
 	termsOfUseModule,
 	userLoginMigrationModule,
 	videoConferenceModule,
+	downloadModule,
 } from "@/store";
 
 import "@/styles/global.scss";
@@ -170,6 +171,7 @@ Vue.use(VueDOMPurifyHTML, {
 			[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 			[I18N_KEY.valueOf()]: i18n,
 			[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
+			downloadModule,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");

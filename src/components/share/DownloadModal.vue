@@ -1,7 +1,7 @@
 <template>
 	<v-custom-dialog
 		:is-open="isOpen"
-		data-testid="title-menu-imscc-download"
+		data-testid="download-dialog"
 		:size="480"
 		has-buttons
 		:buttons="isOpen ? actionButtons : []"
@@ -11,16 +11,29 @@
 		<div slot="title" ref="textTitle" class="text-h4 my-2 text-break">
 			{{ modalTitle }}
 		</div>
-
-		<template slot="content">
-			<div v-if="step === 1 && isOpen">
+		<!-- <template slot="content"> -->
+		<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
+		<!-- <v-fade-transition>
 				<download-modal-options-form
 					:type="type"
 					@download-options-change="onDownloadOptionsChange"
 				/>
-			</div>
+			</v-fade-transition>
+		</template> -->
+		<template slot="content">
+			<v-fade-transition>
+				<div v-if="step === 1 && isOpen">
+					<download-modal-options-form
+						@download-options-change="onDownloadOptionsChange"
+					/>
+				</div>
 
-			<div v-if="step === 2 && isOpen">Step 2</div>
+				<div v-if="step === 2 && isOpen">
+					<download-modal-options-form
+						@download-options-change="onDownloadOptionsChange"
+					/>
+				</div>
+			</v-fade-transition>
 		</template>
 	</v-custom-dialog>
 </template>
@@ -29,7 +42,7 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import DownloadModalOptionsForm from "@/components/share/DownloadModalOptionsForm.vue";
 import { roomModule } from "@/store";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+// import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	I18N_KEY,
@@ -48,12 +61,12 @@ export default defineComponent({
 		vCustomDialog,
 	},
 	props: {
-		type: {
-			type: String,
-			required: true,
-			validator: (type) =>
-				Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
-		},
+		// type: {
+		// 	type: String,
+		// 	required: true,
+		// 	validator: (type) =>
+		// 		Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
+		// },
 	},
 	setup(props) {
 		const i18n = injectStrict(I18N_KEY);
@@ -76,18 +89,16 @@ export default defineComponent({
 			set: () => console.log("downloadModule.resetShareFlow()"),
 		});
 
-		const step = computed(() =>
-			shareModule.getShareUrl === undefined ? 1 : 2
-		);
+		const step = computed(() => (isOpen.value ? 1 : 2));
 
 		const modalOptions = computed(() => new Map([]));
 		modalOptions.value.set(1, {
-			title: t("common.actions.download.v1.1"),
-			actionButtons: ["cancel", "next"],
+			title: t("common.actions.download"),
+			actionButtons: ["next"],
 		});
 		modalOptions.value.set(2, {
-			title: t("common.actions.download.v1.3"),
-			actionButtons: ["cancel", "next"],
+			title: t("Kontrollsmöglichkeiten Export"),
+			actionButtons: ["cancel", "done"],
 		});
 
 		const actionButtons = computed(() => {
@@ -95,7 +106,6 @@ export default defineComponent({
 		});
 
 		const downloadOptions = ref(undefined);
-
 		const modalTitle = computed(
 			() => modalOptions.value.get(step.value)?.title ?? ""
 		);
@@ -110,9 +120,9 @@ export default defineComponent({
 			// open download option
 			//roomModule.downloadImsccCourse(newValue),
 			//shareModule.createShareUrl(newValue);
+			console.log("onNext", newValue);
 		};
 		const onDone = () => {
-			//shareModule.resetShareFlow();
 			if (downloadOptions.value.isV_1_1) {
 				roomModule.downloadImsccCourse("1.1.0");
 			} else if (downloadOptions.value.isV_1_3) {

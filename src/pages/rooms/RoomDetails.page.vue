@@ -69,6 +69,7 @@
 		</keep-alive>
 
 		<v-custom-dialog
+			v-if="isShare"
 			v-model="dialog.isOpen"
 			data-testid="title-dialog"
 			has-buttons
@@ -99,6 +100,34 @@
 				<div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
 					<base-qr-code :url="dialog.qrUrl" data-testid="modal-qrcode" />
 				</div>
+				<v-divider />
+			</template>
+		</v-custom-dialog>
+
+		<v-custom-dialog
+			v-if="isDownload"
+			v-model="dialog.isOpen"
+			data-testid="title-dialog"
+			has-buttons
+			:buttons="['close', 'next']"
+			@dialog-closed="closeDialog"
+		>
+			<div slot="title" class="dialog-header">
+				<h4>{{ dialog.header }}</h4>
+			</div>
+			<template slot="content">
+				<v-divider class="mb-4" />
+				<div class="modal-text">
+					<p class="text-md mt-2">
+						{{ dialog.text }}
+					</p>
+				</div>
+				<div class="modal-text modal-sub-text mb-2">
+					{{ dialog.subText }}
+				</div>
+				<!-- <div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
+					<base-qr-code :url="dialog.qrUrl" data-testid="modal-qrcode" />
+				</div> -->
 				<v-divider />
 			</template>
 		</v-custom-dialog>
@@ -216,6 +245,15 @@ export default defineComponent({
 		getCurrentComponent() {
 			return this.currentTab?.component;
 		},
+
+		isDownload() {
+			return this.dialog.model === "download";
+		},
+
+		isShare() {
+			return this.dialog.model === "share";
+		},
+
 		tabItems() {
 			const ctlToolsTabEnabled = envConfigModule.getCtlToolsTabEnabled;
 			const ltiToolsTabEnabled = envConfigModule.getLtiToolsTabEnabled;
@@ -479,10 +517,10 @@ export default defineComponent({
 
 		async onDownload() {
 			this.dialog.model = "download";
-			this.dialog.header = "";
-			this.dialog.text = "";
-			this.dialog.inputText = "";
-			this.dialog.subText = "";
+			this.dialog.header = this.$t("pages.room.modal.course.download.header");
+			this.dialog.text = this.$t("pages.room.modal.course.download.text");
+			// this.dialog.inputText = this.dialog.courseShareToken;
+			// this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
 			this.dialog.isOpen = true;
 		},
 
