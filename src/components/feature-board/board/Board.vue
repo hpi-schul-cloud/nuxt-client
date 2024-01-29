@@ -28,7 +28,7 @@
 							bubbleScroll: true,
 						}"
 						class="d-flex flex-row flex-shrink-1 ml-n4"
-						@change="onDropColumn"
+						@end="onDropColumn"
 					>
 						<template #item="{ element, index }">
 							<BoardColumn
