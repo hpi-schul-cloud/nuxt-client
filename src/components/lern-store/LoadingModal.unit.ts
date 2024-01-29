@@ -11,7 +11,7 @@ describe("@/components/molecules/LoadingModal", () => {
 	it(`check props are set correctly `, () => {
 		const wrapper = mount(LoadingModal, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-			propsData: {
+			props: {
 				title: "title",
 				description: "description",
 				btnText: "button",
