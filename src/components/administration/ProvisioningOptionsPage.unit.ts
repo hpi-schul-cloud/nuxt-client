@@ -5,27 +5,20 @@ import {
 } from "@data-provisioning-options";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, mount } from "@vue/test-utils";
-import Vue, { nextTick, ref } from "vue";
+import { nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import * as routerComposables from "vue-router";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import VCustomDialog from "../organisms/vCustomDialog.vue";
 
 jest.mock("@data-provisioning-options");
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
-
-// jest.mock("vue-router", () => ({
-// 	useRouter: () =>
-// 		jest.fn().mockImplementation(() => ({
-// 			push: jest.fn(),
-// 		})),
-// }));
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -38,7 +31,6 @@ describe("ProvisioningOptionsPage", () => {
 	let useProvisioningOptionsStateMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsState>
 	>;
-	// let router: DeepMocked<Router>;
 	const router = createMock<Router>();
 
 	const getWrapper = (
@@ -271,7 +263,7 @@ describe("ProvisioningOptionsPage", () => {
 					};
 				};
 
-				// TODO: check why this test is failing
+				// TODO: check why this test is failing -- logical complexity?
 				it.skip("should not call the update function", async () => {
 					const { saveButton } = await setup();
 
@@ -286,14 +278,10 @@ describe("ProvisioningOptionsPage", () => {
 					const { saveButton, wrapper } = await setup();
 
 					await saveButton.trigger("click");
-					await flushPromises();
 
-					const dialog = wrapper.find('[data-testId="warning-dialog"]');
+					const dialog = wrapper.findComponent(VCustomDialog);
 
-					expect(true).toEqual(true);
-
-					// TODO: check teleported dialog tests
-					// expect(dialog.props("isOpen")).toEqual(true);
+					expect(dialog.props("isOpen")).toEqual(true);
 				});
 			});
 
