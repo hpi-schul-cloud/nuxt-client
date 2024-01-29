@@ -1,0 +1,176 @@
+{
+	"baseUrl": ".",
+	"include": ["src/**/*"],
+	"compilerOptions": {
+		"baseUrl": ".",
+		"target": "esnext",
+		"module": "es2015",
+		"paths": {
+			"@components/legacy/TheFooter/*": [
+				"./src/themes/default/components/legacy/TheFooter.vue/*"
+			],
+			"@components/legacy/TheFooter": [
+				"./src/themes/default/components/legacy/TheFooter.vue/index.js",
+				"./src/themes/default/components/legacy/TheFooter.vue/index.json",
+				"./src/themes/default/components/legacy/TheFooter.vue/index.vue",
+				"./src/themes/default/components/legacy/TheFooter.vue/index.scss",
+				"./src/themes/default/components/legacy/TheFooter.vue/index.css"
+			],
+			"@/*": ["src/*"],
+			"@": [
+				"src/index.js",
+				"src/index.json",
+				"src/index.vue",
+				"src/index.scss",
+				"src/index.css"
+			],
+			"@@/*": ["./*"],
+			"@@": [
+				"./index.js",
+				"./index.json",
+				"./index.vue",
+				"./index.scss",
+				"./index.css"
+			],
+			"@locale/*": ["locale/*"],
+			"@locale": [
+				"locale/index.js",
+				"locale/index.json",
+				"locale/index.vue",
+				"locale/index.scss",
+				"locale/index.css"
+			],
+			"@assets/*": ["src/assets/*"],
+			"@assets": [
+				"src/assets/index.js",
+				"src/assets/index.json",
+				"src/assets/index.vue",
+				"src/assets/index.scss",
+				"src/assets/index.css"
+			],
+			"@components/*": ["src/components/*"],
+			"@components": [
+				"src/components/index.js",
+				"src/components/index.json",
+				"src/components/index.vue",
+				"src/components/index.scss",
+				"src/components/index.css"
+			],
+			"@basecomponents/*": ["src/components/base/*"],
+			"@basecomponents": [
+				"src/components/base/index.js",
+				"src/components/base/index.json",
+				"src/components/base/index.vue",
+				"src/components/base/index.scss",
+				"src/components/base/index.css"
+			],
+			"@docs/*": ["docs/*"],
+			"@docs": [
+				"docs/index.js",
+				"docs/index.json",
+				"docs/index.vue",
+				"docs/index.scss",
+				"docs/index.css"
+			],
+			"@layouts/*": ["src/layouts/*"],
+			"@layouts": [
+				"src/layouts/index.js",
+				"src/layouts/index.json",
+				"src/layouts/index.vue",
+				"src/layouts/index.scss",
+				"src/layouts/index.css"
+			],
+			"@middleware/*": ["src/middleware/*"],
+			"@middleware": [
+				"src/middleware/index.js",
+				"src/middleware/index.json",
+				"src/middleware/index.vue",
+				"src/middleware/index.scss",
+				"src/middleware/index.css"
+			],
+			"@mixins/*": ["src/mixins/*"],
+			"@mixins": [
+				"src/mixins/index.js",
+				"src/mixins/index.json",
+				"src/mixins/index.vue",
+				"src/mixins/index.scss",
+				"src/mixins/index.css"
+			],
+			"@pages/*": ["src/pages/*"],
+			"@pages": [
+				"src/pages/index.js",
+				"src/pages/index.json",
+				"src/pages/index.vue",
+				"src/pages/index.scss",
+				"src/pages/index.css"
+			],
+			"@utils/*": ["src/utils/*"],
+			"@utils": [
+				"src/utils/index.js",
+				"src/utils/index.json",
+				"src/utils/index.vue",
+				"src/utils/index.scss",
+				"src/utils/index.css"
+			],
+			"@plugins/*": ["src/plugins/*"],
+			"@plugins": [
+				"src/plugins/index.js",
+				"src/plugins/index.json",
+				"src/plugins/index.vue",
+				"src/plugins/index.scss",
+				"src/plugins/index.css"
+			],
+			"@serverMiddleware/*": ["src/serverMiddleware/*"],
+			"@serverMiddleware": [
+				"src/serverMiddleware/index.js",
+				"src/serverMiddleware/index.json",
+				"src/serverMiddleware/index.vue",
+				"src/serverMiddleware/index.scss",
+				"src/serverMiddleware/index.css"
+			],
+			"@store/*": ["src/store/*"],
+			"@store": [
+				"src/store/index.js",
+				"src/store/index.json",
+				"src/store/index.vue",
+				"src/store/index.scss",
+				"src/store/index.css"
+			],
+			"@static/*": ["src/themes/default/static/*"],
+			"@static": [
+				"src/themes/default/static/index.js",
+				"src/themes/default/static/index.json",
+				"src/themes/default/static/index.vue",
+				"src/themes/default/static/index.scss",
+				"src/themes/default/static/index.css"
+			],
+			"@theme/*": ["src/themes/default/*"],
+			"@theme": [
+				"src/themes/default/index.js",
+				"src/themes/default/index.json",
+				"src/themes/default/index.vue",
+				"src/themes/default/index.scss",
+				"src/themes/default/index.css"
+			],
+			"@styles/*": ["src/themes/default/styles/index.scss/*"],
+			"@styles": ["src/themes/default/styles/index.scss"],
+			"@styles-base/*": ["src/themes/base/styles/*"],
+			"@styles-base": [
+				"src/themes/base/styles/index.js",
+				"src/themes/base/styles/index.json",
+				"src/themes/base/styles/index.vue",
+				"src/themes/base/styles/index.scss",
+				"src/themes/base/styles/index.css"
+			],
+			"@variables/*": ["src/themes/default/styles/variables.scss/*"],
+			"@variables": [
+				"src/themes/default/styles/variables.scss/index.js",
+				"src/themes/default/styles/variables.scss/index.json",
+				"src/themes/default/styles/variables.scss/index.vue",
+				"src/themes/default/styles/variables.scss/index.scss",
+				"src/themes/default/styles/variables.scss/index.css"
+			]
+		}
+	},
+	"exclude": ["node_modules", ".nuxt", "dist"]
+}

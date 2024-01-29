@@ -34,8 +34,8 @@ const mockResultItems = (
 	elements = [
 		geoGebraItem,
 		etherpadItem,
-		nexboardItem,
 		courseGroupItem,
+		nexboardItem,
 		fileItem,
 	]
 ) => {
@@ -229,6 +229,9 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			["Kursgruppen", CopyApiResponseTypeEnum.CoursegroupGroup],
 			["Dateien", CopyApiResponseTypeEnum.File],
 		])("should render if there is a %s item", (title, type) => {
+			envConfigModule.setEnvs({
+				FEATURE_NEXBOARD_COPY_ENABLED: true,
+			} as Envs);
 			const copyResultItems = mockResultItems();
 			copyResultItems[0].elements = [
 				{

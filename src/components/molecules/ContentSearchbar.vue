@@ -12,6 +12,7 @@
 				@keyup.enter="enterKeyHandler"
 				@input="updateSearchString($event.target.value)"
 				@focus="isActive = true"
+				data-testid="learningstore-search-input"
 			/>
 			<div class="search__container--icon">
 				<v-icon
@@ -25,7 +26,14 @@
 				>
 					{{ mdiMagnify }}
 				</v-icon>
-				<v-btn v-else icon plain color="black" @click="clearBtnHandler">
+				<v-btn
+					v-else
+					icon
+					plain
+					color="black"
+					@click="clearBtnHandler"
+					data-testid="learningstore-clear-searchrequest-icon"
+				>
 					<v-icon x-large class="search-icon" aria-label="clear">
 						{{ mdiClose }}
 					</v-icon>

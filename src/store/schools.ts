@@ -216,7 +216,8 @@ export default class SchoolsModule extends VuexModule {
 					this.setError(
 						useApplicationError().createApplicationError(
 							error.response?.status ?? 500,
-							"pages.administration.school.index.error"
+							"pages.administration.school.index.error",
+							error.message
 						)
 					);
 				}
@@ -244,7 +245,8 @@ export default class SchoolsModule extends VuexModule {
 				this.setError(
 					useApplicationError().createApplicationError(
 						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
+						"pages.administration.school.index.error",
+						error.message
 					)
 				);
 			}
@@ -271,7 +273,8 @@ export default class SchoolsModule extends VuexModule {
 				this.setError(
 					useApplicationError().createApplicationError(
 						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
+						"pages.administration.school.index.error",
+						error.message
 					)
 				);
 			}
@@ -301,7 +304,8 @@ export default class SchoolsModule extends VuexModule {
 				this.setError(
 					useApplicationError().createApplicationError(
 						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
+						"pages.administration.school.index.error",
+						error.message
 					)
 				);
 			}
@@ -324,7 +328,8 @@ export default class SchoolsModule extends VuexModule {
 				this.setError(
 					useApplicationError().createApplicationError(
 						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
+						"pages.administration.school.index.error",
+						error.message
 					)
 				);
 			}
@@ -333,9 +338,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async setSchoolInUserMigration(
-		setSchoolInUserMigration = true
-	): Promise<void> {
+	async setSchoolInUserMigration(useCentralLdap = true): Promise<void> {
 		if (this.school.inUserMigration) {
 			return;
 		}
@@ -343,7 +346,7 @@ export default class SchoolsModule extends VuexModule {
 		this.setError(null);
 		try {
 			await this.importUserApi.importUserControllerStartSchoolInUserMigration(
-				setSchoolInUserMigration
+				useCentralLdap
 			);
 			this.setSchool({
 				...this.school,
@@ -356,7 +359,8 @@ export default class SchoolsModule extends VuexModule {
 				this.setError(
 					useApplicationError().createApplicationError(
 						error.response?.status ?? 500,
-						"pages.administration.school.index.error"
+						"pages.administration.school.index.error",
+						error.message
 					)
 				);
 			}

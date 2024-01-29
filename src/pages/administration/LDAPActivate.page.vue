@@ -259,9 +259,7 @@ export default {
 				},
 				{
 					text: this.$t("pages.administration.school.index.title"),
-					href: envConfigModule.getNewSchoolAdminPageAsDefault
-						? "/administration/school-settings"
-						: "/administration/school",
+					href: "/administration/school-settings",
 				},
 				{
 					text: this.$t("pages.administration.ldap.index.title"),
@@ -319,7 +317,7 @@ export default {
 		},
 		okButtonHandler() {
 			this.$router.push({
-				path: `/administration/school`,
+				path: `/administration/school-settings`,
 			});
 		},
 	},
