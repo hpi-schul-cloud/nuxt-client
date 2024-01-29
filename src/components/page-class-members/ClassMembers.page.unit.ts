@@ -14,15 +14,19 @@ import {
 } from "@@/tests/test-utils/setup";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
-jest.mock("@data-group");
+jest.mock("@data-group", () => {
+	return {
+		...jest.requireActual("@data-group"),
+		useGroupState: jest.fn(),
+	};
+});
 
 describe("@pages/ClassMembers.page.vue", () => {
 	let useGroupStateMock: DeepMocked<ReturnType<typeof useGroupState>>;
 
-	const getWrapper = (
-		props: { groupId: string },
-		group: Group = groupFactory.build()
-	) => {
+	const setup = (props: { groupId: string }) => {
+		const group: Group = groupFactory.build();
+
 		useGroupStateMock.isLoading = ref(false);
 		useGroupStateMock.group = ref(group);
 
@@ -31,10 +35,6 @@ describe("@pages/ClassMembers.page.vue", () => {
 		const wrapper = mount(ClassMembersPage, {
 			props,
 			global: {
-				mocks: {
-					$t: (key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
-				},
 				plugins: [
 					createTestingVuetify(),
 					createTestingI18n(),
@@ -47,6 +47,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 		});
 
 		return {
+			group,
 			wrapper,
 		};
 	};
@@ -62,24 +63,10 @@ describe("@pages/ClassMembers.page.vue", () => {
 	});
 
 	describe("title", () => {
-		const setup = () => {
-			const group: Group = groupFactory.build();
-
-			const { wrapper } = getWrapper(
-				{
-					groupId: "groupId",
-				},
-				group
-			);
-
-			return {
-				wrapper,
-				group,
-			};
-		};
-
 		it("should render static title", () => {
-			const { wrapper, group } = setup();
+			const { wrapper, group } = setup({
+				groupId: "groupId",
+			});
 
 			const title = wrapper.find("h1");
 
@@ -87,7 +74,9 @@ describe("@pages/ClassMembers.page.vue", () => {
 		});
 
 		it("should show subtitle that group is from external system", () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({
+				groupId: "groupId",
+			});
 
 			const title = wrapper.find("h1");
 			const subtitle = title.find("span");
@@ -97,24 +86,10 @@ describe("@pages/ClassMembers.page.vue", () => {
 	});
 
 	describe("breadcrumbs", () => {
-		const setup = () => {
-			const group: Group = groupFactory.build();
-
-			const { wrapper } = getWrapper(
-				{
-					groupId: "groupId",
-				},
-				group
-			);
-
-			return {
-				wrapper,
-				group,
-			};
-		};
-
 		it("should render static breadcrumbs", () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({
+				groupId: "groupId",
+			});
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
@@ -127,7 +102,9 @@ describe("@pages/ClassMembers.page.vue", () => {
 		});
 
 		it("should render dynamic class name breadcrumb", () => {
-			const { wrapper, group } = setup();
+			const { wrapper, group } = setup({
+				groupId: "groupId",
+			});
 
 			const breadcrumb = wrapper.findAll(".breadcrumbs-item").at(2);
 
@@ -137,7 +114,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 
 	describe("onMounted", () => {
 		it("should load the group for given groupId", async () => {
-			getWrapper({
+			setup({
 				groupId: "groupId",
 			});
 
@@ -146,24 +123,10 @@ describe("@pages/ClassMembers.page.vue", () => {
 	});
 
 	describe("datatable", () => {
-		const setup = () => {
-			const group = groupFactory.build();
-
-			const { wrapper } = getWrapper(
-				{
-					groupId: "groupId",
-				},
-				group
-			);
-
-			return {
-				wrapper,
-				group,
-			};
-		};
-
 		it("should render datatable", () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({
+				groupId: "groupId",
+			});
 
 			const datatable = wrapper.findComponent({ name: "v-data-table" });
 
@@ -171,28 +134,35 @@ describe("@pages/ClassMembers.page.vue", () => {
 		});
 
 		it("should render datatable with correct headers", () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({
+				groupId: "groupId",
+			});
 
 			const datatable = wrapper.findComponent({ name: "v-data-table" });
 
 			expect(datatable.props("headers")).toEqual([
 				{
-					text: "common.labels.name",
+					key: "lastName",
+					title: "common.labels.name",
 					value: "lastName",
 				},
 				{
-					text: "common.labels.firstName",
+					key: "firstName",
+					title: "common.labels.firstName",
 					value: "firstName",
 				},
 				{
-					text: "common.labels.role",
+					key: "roleName",
+					title: "common.labels.role",
 					value: "roleName",
 				},
 			]);
 		});
 
 		it("should render datatable with correct items", () => {
-			const { wrapper, group } = setup();
+			const { wrapper, group } = setup({
+				groupId: "groupId",
+			});
 
 			const datatable = wrapper.findComponent({ name: "v-data-table" });
 
@@ -200,7 +170,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 				{
 					firstName: group.users[0].firstName,
 					lastName: group.users[0].lastName,
-					roleName: "undefined",
+					roleName: "common.roleName.student",
 				},
 			]);
 		});
@@ -208,7 +178,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 
 	describe("ClassMembersInfoBox", () => {
 		it("should render ClassMembersInfoBox", () => {
-			const { wrapper } = getWrapper({
+			const { wrapper } = setup({
 				groupId: "groupId",
 			});
 
