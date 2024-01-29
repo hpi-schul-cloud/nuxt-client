@@ -167,8 +167,6 @@ export const useBoardState = (id: string) => {
 				}
 			}
 
-			if (cardId === undefined || newColumnId === undefined) return; // unclear situation
-
 			if (fromColumnIndex === newColumnIndex) {
 				if (newIndex === oldIndex && fromColumnIndex === newColumnIndex) return; // same position
 				if (newIndex < 0) return; // first card - can't move up
