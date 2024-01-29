@@ -1,6 +1,6 @@
 <template>
 	<v-hover v-model="isHovering" open-delay="200">
-		<div ref="ghostColumnRef">
+		<div ref="ghostColumnRef" class="pl-2">
 			<BoardColumnGhostHeader
 				ref="ghostColumnTitleRef"
 				:isColumnActive="isColumnActive"
@@ -30,7 +30,7 @@
 						forceFallback: true,
 						bubbleScroll: true,
 					}"
-					class="d-flex flex-row flex-shrink-1 ml-n4 sortable-container vertical"
+					class="d-flex flex-row flex-shrink-1 ml-n4 pl-2 sortable-container vertical"
 				/>
 			</div>
 		</div>
