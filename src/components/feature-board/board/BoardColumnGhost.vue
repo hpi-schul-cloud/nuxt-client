@@ -106,6 +106,6 @@ export default defineComponent({
 
 <style>
 .sortable-drag-ghost {
-	max-width: 350px !important;
+	width: 350px !important;
 }
 </style>
