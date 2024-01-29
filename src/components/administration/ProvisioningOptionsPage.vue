@@ -101,7 +101,7 @@
 						)
 					}}
 				</span>
-				<v-alert light text type="warning" class="mt-4 mb-0">
+				<v-alert variant="text" type="warning" class="mt-4 mb-0">
 					{{
 						t(
 							"components.administration.provisioningOptions.warning.consequence",
