@@ -137,7 +137,10 @@ export const useBoardState = (id: string) => {
 		isLoading.value = false;
 	};
 
-	const moveCard = async (cardMove: CardMove): Promise<void> => {
+	const moveCard = async (
+		cardMove: CardMove,
+		shouldForceNextTick = false
+	): Promise<void> => {
 		if (board.value === undefined) return;
 
 		try {
@@ -184,7 +187,7 @@ export const useBoardState = (id: string) => {
 			 * refreshes the board to force rerendering in tracked v-for
 			 * to maintain focus when moving columns by keyboard
 			 */
-			if (fromColumnId === toColumnId && newIndex < oldIndex) {
+			if (shouldForceNextTick) {
 				await nextTick();
 			}
 			board.value.columns[newColumnIndex].cards.splice(newIndex, 0, item);
