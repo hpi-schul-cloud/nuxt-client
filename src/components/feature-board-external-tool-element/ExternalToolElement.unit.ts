@@ -329,7 +329,7 @@ describe("ExternalToolElement", () => {
 		});
 	});
 
-	describe("Icon", () => {
+	describe("Logo", () => {
 		describe("when not logo is defined", () => {
 			const setup = () => {
 				const contextExternalToolId = "context-external-tool-id";
@@ -357,10 +357,10 @@ describe("ExternalToolElement", () => {
 				const { wrapper } = setup();
 
 				const icon = wrapper
-					.findComponent({ ref: "externalToolElement" })
-					.findComponent({ name: "v-icon" });
+					.findComponent({ name: "ContentElementBar" })
+					.attributes().icon;
 
-				expect(icon.text()).toEqual(mdiPuzzleOutline);
+				expect(icon).toEqual(mdiPuzzleOutline);
 			});
 		});
 
@@ -387,105 +387,14 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should show the logo", () => {
+			it("should not show the default icon", () => {
 				const { wrapper } = setup();
 
-				const img = wrapper
-					.findComponent({ ref: "externalToolElement" })
-					.findComponent({ name: "v-img" });
+				const icon = wrapper
+					.findComponent({ name: "ContentElementBar" })
+					.attributes().icon;
 
-				expect(img.isVisible()).toEqual(true);
-			});
-		});
-	});
-
-	describe("Title", () => {
-		describe("when no tool is selected", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper({
-					element: EMPTY_TEST_ELEMENT,
-					isEditMode: true,
-				});
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display a selection text", () => {
-				const { wrapper } = setup();
-
-				const title = wrapper
-					.findComponent({ ref: "externalToolElement" })
-					.find(".title");
-
-				expect(title.text()).toEqual(
-					"feature-board-external-tool-element.placeholder.selectTool"
-				);
-			});
-		});
-
-		describe("when the title is loading", () => {
-			const setup = () => {
-				const contextExternalToolId = "context-external-tool-id";
-
-				const { wrapper } = getWrapper({
-					element: {
-						...EMPTY_TEST_ELEMENT,
-						content: { contextExternalToolId },
-					},
-					isEditMode: false,
-				});
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display '...'", () => {
-				const { wrapper } = setup();
-
-				const title = wrapper
-					.findComponent({ ref: "externalToolElement" })
-					.find(".title");
-
-				expect(title.text()).toEqual("...");
-			});
-		});
-
-		describe("when the title is available", () => {
-			const setup = () => {
-				const contextExternalToolId = "context-external-tool-id";
-				const toolDisplayData = externalToolDisplayDataFactory.build({
-					contextExternalToolId,
-					logoUrl: "logo-url",
-				});
-
-				const { wrapper } = getWrapper(
-					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
-							content: { contextExternalToolId },
-						},
-						isEditMode: false,
-					},
-					toolDisplayData
-				);
-
-				return {
-					wrapper,
-					toolDisplayData,
-				};
-			};
-
-			it("should display the tools name", () => {
-				const { wrapper, toolDisplayData } = setup();
-
-				const title = wrapper
-					.findComponent({ ref: "externalToolElement" })
-					.find(".title");
-
-				expect(title.text()).toEqual(toolDisplayData.name);
+				expect(icon).toBeUndefined();
 			});
 		});
 	});
@@ -547,50 +456,6 @@ describe("ExternalToolElement", () => {
 				const title = wrapper.findComponent({ ref: "externalToolElement" });
 
 				expect(title.attributes("loading")).toBeFalsy();
-			});
-		});
-	});
-
-	describe("Menu", () => {
-		describe("when in edit mode", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper({
-					element: EMPTY_TEST_ELEMENT,
-					isEditMode: true,
-				});
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display the three dot menu", () => {
-				const { wrapper } = setup();
-
-				const menu = wrapper.findComponent({ ref: "externalToolElementMenu" });
-
-				expect(menu.isVisible()).toEqual(true);
-			});
-		});
-
-		describe("when in display mode", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper({
-					element: EMPTY_TEST_ELEMENT,
-					isEditMode: false,
-				});
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should not display the three dot menu", () => {
-				const { wrapper } = setup();
-
-				const menu = wrapper.findComponent({ ref: "externalToolElementMenu" });
-
-				expect(menu.exists()).toEqual(false);
 			});
 		});
 	});

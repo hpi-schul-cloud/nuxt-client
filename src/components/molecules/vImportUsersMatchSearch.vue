@@ -48,6 +48,8 @@
 									}}
 								</v-list-item-subtitle>
 								<v-list-item-subtitle
+									v-if="!$props.isNbc"
+									data-testid="edited-item-username"
 									>{{
 										`${$t("components.organisms.importUsers.tableUserName")}: ${
 											editedItem.loginName
@@ -92,9 +94,9 @@
 									}}
 								</v-list-item-subtitle>
 							</v-list-item-content>
-							<v-list-item-content v-else>{{
-								$t("components.molecules.importUsersMatch.unMatched")
-							}}</v-list-item-content>
+							<v-list-item-content v-else
+								>{{ $t("components.molecules.importUsersMatch.unMatched") }}
+							</v-list-item-content>
 						</v-list-item>
 						<v-autocomplete
 							v-model="selectedItem"
@@ -156,8 +158,8 @@
 			</v-card-text>
 			<v-card-actions class="px-4">
 				<v-col class="col-6 pa-0"
-					>{{ $t("components.molecules.importUsersMatch.flag")
-					}}<v-btn
+					>{{ $t("components.molecules.importUsersMatch.flag") }}
+					<v-btn
 						v-model="flagged"
 						icon
 						:color="flagged ? 'primary' : ''"
@@ -252,6 +254,10 @@ export default {
 			flagged: {
 				type: Boolean,
 			},
+		},
+		isNbc: {
+			type: Boolean,
+			default: false,
 		},
 	},
 	data() {
