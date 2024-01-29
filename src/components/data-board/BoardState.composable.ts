@@ -180,12 +180,15 @@ export const useBoardState = (id: string) => {
 				oldIndex,
 				1
 			)[0];
-			board.value.columns[newColumnIndex].cards.splice(newIndex, 0, item);
 			/**
 			 * refreshes the board to force rerendering in tracked v-for
 			 * to maintain focus when moving columns by keyboard
 			 */
-			await nextTick();
+			if (fromColumnId === toColumnId && newIndex < oldIndex) {
+				await nextTick();
+			}
+			board.value.columns[newColumnIndex].cards.splice(newIndex, 0, item);
+
 			await moveCardCall(cardId, newColumnId, newIndex);
 		} catch (error) {
 			handleError(error, {
