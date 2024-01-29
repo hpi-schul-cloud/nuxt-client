@@ -11,11 +11,11 @@ describe("DefaultWireframe", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props: { fullWidth: true, headline: "dummy titel" },
+			props: { fullWidth: true, headline: "dummy title" },
 		});
 
 		const h1 = wrapper.find("h1");
-		expect(h1.text()).toBe("dummy titel");
+		expect(h1.text()).toBe("dummy title");
 	});
 	it("shows breadcrumbs", () => {
 		const wrapper = mount(DefaultWireframe, {
@@ -24,7 +24,7 @@ describe("DefaultWireframe", () => {
 			},
 			props: {
 				fullWidth: true,
-				headline: "dummy titel",
+				headline: "dummy title",
 				breadcrumbs: [
 					{
 						title: "dummy breadcrumb 1",
@@ -51,7 +51,7 @@ describe("DefaultWireframe", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props: { headline: "dummy titel", fullWidth: true },
+			props: { headline: "dummy title", fullWidth: true },
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
@@ -64,7 +64,7 @@ describe("DefaultWireframe", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props: { headline: "dummy titel", fullWidth: false },
+			props: { headline: "dummy title", fullWidth: false },
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
@@ -77,7 +77,7 @@ describe("DefaultWireframe", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props: { headline: "dummy titel", fullWidth: false },
+			props: { headline: "dummy title", fullWidth: false },
 			slots: {
 				default: ["<p>some stuff</p>", "text"],
 			},
@@ -94,13 +94,13 @@ describe("DefaultWireframe", () => {
 			props: { headline: "property title", fullWidth: false },
 			slots: {
 				header: [
-					"<h1>slot titel</h1>",
+					"<h1>slot title</h1>",
 					"<div class='menu'>a custom menu or searchbar</div>",
 				],
 			},
 		});
 		const h1 = wrapper.find("h1");
-		expect(h1.text()).toBe("slot titel");
+		expect(h1.text()).toBe("slot title");
 		const menu = wrapper.find(".menu");
 		expect(menu.text()).toBe("a custom menu or searchbar");
 	});
