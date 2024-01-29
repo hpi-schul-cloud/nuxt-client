@@ -171,7 +171,11 @@ export default defineComponent({
 			if (!hasMovePermission) return;
 
 			const columnId = extractDataAttribute(columnPayload.item, "columnId");
-			if (columnId && columnPayload.newIndex && columnPayload.oldIndex) {
+			if (
+				columnId &&
+				columnPayload.newIndex !== undefined &&
+				columnPayload.oldIndex !== undefined
+			) {
 				const columnMove: ColumnMove = {
 					addedIndex: columnPayload.newIndex,
 					removedIndex: columnPayload.oldIndex,
@@ -212,10 +216,7 @@ export default defineComponent({
 		};
 
 		const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-			const isSameColumn = cardMove.fromColumnId === cardMove.toColumnId;
-			const isMovingUp = cardMove.oldIndex - cardMove.newIndex === 1;
-			const forceNextTick = isSameColumn && isMovingUp;
-			if (hasMovePermission) await moveCard(cardMove, forceNextTick);
+			if (hasMovePermission) await moveCard(cardMove);
 		};
 
 		const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
