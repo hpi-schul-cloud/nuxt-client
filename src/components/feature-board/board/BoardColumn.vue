@@ -43,6 +43,7 @@
 					<CardHost
 						:data-card-id="element.cardId"
 						class="draggable my-3 mx-2"
+						:class="hasMovePermission ? '' : 'drag-disabled'"
 						:card-id="element.cardId"
 						:height="element.height"
 						@move:card-keyboard="
@@ -255,8 +256,11 @@ export default defineComponent({
 
 <style>
 .sortable-drag-ghost .v-card {
-	opacity: 0.8;
+	opacity: 0.6;
 	background-color: rgba(var(--v-theme-secondary-lighten-1));
+}
+.sortable-drag-ghost .v-card .v-btn.v-btn--icon {
+	background-color: rgba(var(--v-theme-secondary-lighten-1)) !important;
 }
 </style>
 <style scoped>
