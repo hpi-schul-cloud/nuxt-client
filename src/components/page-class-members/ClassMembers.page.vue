@@ -1,6 +1,6 @@
 <template>
 	<DefaultWireframe
-		:headline="t('pages.administration.classes.index.title')"
+		:headline="$t('pages.administration.classes.index.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="true"
 		data-testid="admin-class-title"
@@ -9,7 +9,7 @@
 			<h1 class="text-h3">
 				{{ title }}
 				<span v-show="isExternal" class="text-subtitle-1">
-					({{ t("page-class-members.title.info") }})
+					({{ $t("page-class-members.title.info") }})
 				</span>
 			</h1>
 		</template>
@@ -17,8 +17,8 @@
 			:items="items"
 			:headers="headers"
 			:loading="isLoading"
-			:loading-text="t('common.loading.text')"
-			:no-data-text="t('common.nodata')"
+			:loading-text="$t('common.loading.text')"
+			:no-data-text="$t('common.nodata')"
 			data-testid="class-members-table"
 		/>
 		<ClassMembersInfoBox class="mt-5" :system-id="externalSystemId" />

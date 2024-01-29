@@ -1,6 +1,6 @@
-import { I18N_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useConfirmationDialog } from "./Confirmation.composable";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 describe("Confirmation composable", () => {
 	describe("askConfirmation", () => {
@@ -8,9 +8,7 @@ describe("Confirmation composable", () => {
 			const { askConfirmation, isDialogOpen } = mountComposable(
 				() => useConfirmationDialog(),
 				{
-					global: {
-						mocks: { t: (k: string) => k },
-					},
+					global: { plugins: [createTestingI18n()] },
 				}
 			);
 
