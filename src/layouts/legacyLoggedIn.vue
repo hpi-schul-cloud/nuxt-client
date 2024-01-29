@@ -85,7 +85,9 @@ export default defineComponent({
 		});
 
 		const sidebarItems = computed(() => {
-			let sidebarItems = getSidebarItems();
+			let sidebarItems = getSidebarItems(
+				envConfigModule.getNewSchoolAdminPageAsDefault
+			);
 
 			const isSidebarCategoryItem = (
 				item: SidebarItem | SidebarCategoryItem
