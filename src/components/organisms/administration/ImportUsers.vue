@@ -10,10 +10,11 @@
 				v-if="dialogEdit"
 				:edited-item="editedItem"
 				:is-dialog="true"
-				:ldap-source="ldapSourceTranslation"
+				:ldap-source="sourceSystemName"
 				@close="closeEdit"
 				@saved-match="savedMatch"
 				@saved-flag="savedFlag"
+				:is-nbc="isNbc"
 			/>
 		</v-dialog>
 
@@ -66,7 +67,7 @@
 								class="searchLastName"
 							/>
 						</td>
-						<td>
+						<td v-if="!isNbc">
 							<v-text-field
 								v-model="searchLoginName"
 								type="string"
@@ -112,8 +113,8 @@
 												? 'primary'
 												: 'secondary'
 										"
-										>{{ mdiAccountPlus }}</v-icon
-									>
+										>{{ mdiAccountPlus }}
+									</v-icon>
 								</v-btn>
 								<v-btn
 									icon
@@ -130,8 +131,8 @@
 												? 'primary'
 												: 'secondary'
 										"
-										>{{ mdiAccountSwitch }}</v-icon
-									>
+										>{{ mdiAccountSwitch }}
+									</v-icon>
 								</v-btn>
 								<v-btn
 									icon
@@ -148,8 +149,8 @@
 												? 'primary'
 												: 'secondary'
 										"
-										>{{ mdiAccountSwitchOutline }}</v-icon
-									>
+										>{{ mdiAccountSwitchOutline }}
+									</v-icon>
 								</v-btn>
 							</v-btn-toggle>
 						</td>
@@ -219,7 +220,7 @@
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 
@@ -228,7 +229,7 @@
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 				<br />
@@ -236,7 +237,7 @@
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 				<br />
@@ -244,7 +245,7 @@
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 			</p>
@@ -256,7 +257,7 @@
 
 <script>
 /* eslint-disable max-lines */
-import { importUsersModule, schoolsModule, envConfigModule } from "@/store";
+import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import { MatchedBy } from "@/store/import-users";
 import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch";
 import {
@@ -325,7 +326,7 @@ export default {
 	},
 	computed: {
 		tableHead() {
-			return [
+			const tableHeaders = [
 				{
 					title: this.$t("components.organisms.importUsers.tableFirstName"),
 					value: "firstName",
@@ -366,16 +367,22 @@ export default {
 					sortable: false,
 				},
 			];
+			if (this.isNbc) {
+				tableHeaders.splice(2, 1);
+			}
+			return tableHeaders;
+		},
+		isNbc() {
+			return envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21";
 		},
 		canStartMigration() {
 			return this.school.inUserMigration && this.school.inMaintenance;
 		},
-		canFinishMigration() {
-			return false;
-		},
-		ldapSourceTranslation() {
+		sourceSystemName() {
 			if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb") {
 				return this.$t("pages.administration.migration.brbSchulportal");
+			} else if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21") {
+				return "moin.schule";
 			} else {
 				return this.$t("pages.administration.migration.ldapSource");
 			}
