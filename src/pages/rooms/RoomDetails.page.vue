@@ -557,6 +557,10 @@ export default defineComponent({
 .v-tab {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
+
+	&.v-tab.v-btn.no-active {
+		color: rgba(var(--v-theme-secondary));
+	}
 }
 
 :deep(.v-slide-group__prev),
