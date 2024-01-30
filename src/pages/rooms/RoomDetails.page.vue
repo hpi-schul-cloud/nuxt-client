@@ -39,13 +39,7 @@
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs
-					v-model="tabIndex"
-					color="primary"
-					class="tabs-max-width"
-					grow
-					mandatory
-				>
+				<v-tabs v-model="tabIndex" class="tabs-max-width" grow mandatory>
 					<template v-for="tabItem in tabItems" :key="tabItem.name">
 						<v-tab
 							:data-testid="tabItem.dataTestId"
