@@ -5,7 +5,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { nextTick } from "vue";
 
 describe("MigrationWarningCard", () => {
 	const setup = (value = "start") => {
@@ -31,7 +30,7 @@ describe("MigrationWarningCard", () => {
 		it("should be found in the dom", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.findComponent(MigrationWarningCard).exists()).toBeTruthy();
+			expect(wrapper.exists()).toBeTruthy();
 		});
 	});
 
@@ -39,33 +38,28 @@ describe("MigrationWarningCard", () => {
 		describe("when component is rendered", () => {
 			it("should have 2 buttons", async () => {
 				const { wrapper } = setup();
-				const cardComponent = wrapper.findComponent(MigrationWarningCard);
-				const cardButtonAgree = cardComponent.find("[data-testId=agree-btn]");
-				const cardButtonDisagree = cardComponent.find(
-					"[data-testId=disagree-btn]"
-				);
+				const cardButtonAgree = wrapper.find("[data-testId=agree-btn]");
+				const cardButtonDisagree = wrapper.find("[data-testId=disagree-btn]");
 
 				expect(cardButtonAgree.exists()).toBe(true);
 				expect(cardButtonDisagree.exists()).toBe(true);
 			});
 
-			it("should have the right text elements ", async () => {
+			it("should have the right text elements ", () => {
 				const { wrapper } = setup();
-				const cardComponent = wrapper.findComponent(MigrationWarningCard);
 
-				await nextTick();
+				const renderHtml = wrapper.findComponent({ name: "RenderHTML" });
 
-				expect(cardComponent.html()).toContain(
+				expect(wrapper.html()).toContain(
 					"components.administration.adminMigrationSection.startWarningCard.title"
 				);
-				// TODO: fix this test
-				// expect(cardComponent.text()).toContain(
-				// 	"components.administration.adminMigrationSection.startWarningCard.text"
-				// );
-				expect(cardComponent.text()).toContain(
+				expect(renderHtml.props("html")).toContain(
+					"components.administration.adminMigrationSection.startWarningCard.text"
+				);
+				expect(wrapper.text()).toContain(
 					"components.administration.adminMigrationSection.startWarningCard.agree"
 				);
-				expect(cardComponent.text()).toContain(
+				expect(wrapper.text()).toContain(
 					"components.administration.adminMigrationSection.startWarningCard.disagree"
 				);
 			});
@@ -74,8 +68,7 @@ describe("MigrationWarningCard", () => {
 		describe("when agree-button is clicked", () => {
 			it("should emit 2 events", async () => {
 				const { wrapper } = setup();
-				const cardComponent = wrapper.findComponent(MigrationWarningCard);
-				const cardButtonAgree = cardComponent.find("[data-testId=agree-btn]");
+				const cardButtonAgree = wrapper.find("[data-testId=agree-btn]");
 				await cardButtonAgree.trigger("click");
 
 				expect(wrapper.emitted("start")).toHaveLength(1);
@@ -86,10 +79,7 @@ describe("MigrationWarningCard", () => {
 		describe("when disagree-button is clicked", () => {
 			it("should emit 1 event", async () => {
 				const { wrapper } = setup();
-				const cardComponent = wrapper.findComponent(MigrationWarningCard);
-				const cardButtonDisagree = cardComponent.find(
-					"[data-testId=agree-btn]"
-				);
+				const cardButtonDisagree = wrapper.find("[data-testId=agree-btn]");
 				await cardButtonDisagree.trigger("click");
 
 				expect(wrapper.emitted("start")).toHaveLength(1);
@@ -101,11 +91,8 @@ describe("MigrationWarningCard", () => {
 		describe("when component is rendered", () => {
 			it("should have 2 buttons", async () => {
 				const { wrapper } = setup("end");
-				const cardComponent = wrapper.findComponent(MigrationWarningCard);
-				const cardButtonAgree = cardComponent.find("[data-testid=agree-btn]");
-				const cardButtonDisagree = cardComponent.find(
-					"[data-testid=disagree-btn]"
-				);
+				const cardButtonAgree = wrapper.find("[data-testid=agree-btn]");
+				const cardButtonDisagree = wrapper.find("[data-testid=disagree-btn]");
 
 				expect(cardButtonAgree.exists()).toBe(true);
 				expect(cardButtonDisagree.exists()).toBe(true);
@@ -113,38 +100,37 @@ describe("MigrationWarningCard", () => {
 
 			it("should have the right text elements ", async () => {
 				const { wrapper } = setup("end");
-				const cardComponent = wrapper.findComponent(MigrationWarningCard);
 
-				expect(cardComponent.text()).toContain(
+				const renderHtml = wrapper.findComponent({ name: "RenderHTML" });
+
+				expect(wrapper.text()).toContain(
 					"components.administration.adminMigrationSection.endWarningCard.title"
 				);
-
-				// TODO: fix this test
-				// expect(cardComponent.text()).toContain(
-				// 	"components.administration.adminMigrationSection.endWarningCard.text"
-				// );
-				expect(cardComponent.text()).toContain(
+				expect(renderHtml.props("html")).toContain(
+					"components.administration.adminMigrationSection.endWarningCard.text"
+				);
+				expect(wrapper.text()).toContain(
 					"components.administration.adminMigrationSection.endWarningCard.agree"
 				);
-				expect(cardComponent.text()).toContain(
+				expect(wrapper.text()).toContain(
 					"components.administration.adminMigrationSection.endWarningCard.disagree"
 				);
 			});
 		});
 
 		describe("confirmation checkbox is rendered", () => {
-			// TODO: fix this test
-			it.skip("should enable agree-button when is checked", async () => {
+			it("should enable agree-button when is checked", async () => {
 				const { wrapper } = setup("end");
 
-				const agreeButton = wrapper.find("[data-testid=agree-btn]");
-				expect(agreeButton.attributes("disabled")).toBeTruthy();
+				const buttons = wrapper.findAllComponents({ name: "v-btn" });
 
-				await wrapper
-					.find("[data-testid=migration-confirmation-checkbox]")
-					.trigger("click");
+				expect(buttons[1].props("disabled")).toBeTruthy();
 
-				expect(agreeButton.attributes("disabled")).toBeFalsy();
+				const checkbox = wrapper.findComponent({ name: "v-checkbox" });
+
+				await checkbox.vm.$emit("update:modelValue", true);
+
+				expect(buttons[1].props("disabled")).toBeFalsy();
 			});
 		});
 
@@ -165,10 +151,7 @@ describe("MigrationWarningCard", () => {
 			it("should emit 1 event", async () => {
 				const { wrapper } = setup("end");
 
-				const cardComponent = wrapper.findComponent(MigrationWarningCard);
-				const cardButtonDisagree = cardComponent.find(
-					"[data-testid=disagree-btn]"
-				);
+				const cardButtonDisagree = wrapper.find("[data-testid=disagree-btn]");
 				await cardButtonDisagree.trigger("click");
 
 				expect(wrapper.emitted("end")).toHaveLength(1);
