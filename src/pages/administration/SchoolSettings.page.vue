@@ -31,16 +31,13 @@
 
 			<v-expansion-panels multiple class="mb-9" :model-value="openedPanels">
 				<v-expansion-panel data-testid="general-settings-panel" value="general">
-					<v-expansion-panel-title hide-actions>
+					<v-expansion-panel-title>
+						<div class="text-h4">
+							{{ $t("pages.administration.school.index.generalSettings") }}
+						</div>
 						<template v-slot:actions="{ expanded }">
-							<div class="text-h4">
-								{{ $t("pages.administration.school.index.generalSettings") }}
-							</div>
 							<div class="v-expansion-panel-header__icon">
-								<v-icon>
-									<template v-if="!expanded">$mdiPlus</template>
-									<template v-else>$mdiMinus</template>
-								</v-icon>
+								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
 					</v-expansion-panel-title>
@@ -54,16 +51,13 @@
 					data-testid="policy-panel"
 					value="privacy"
 				>
-					<v-expansion-panel-title hide-actions>
+					<v-expansion-panel-title>
+						<div class="text-h4">
+							{{ $t("common.words.privacyPolicy") }}
+						</div>
 						<template v-slot:actions="{ expanded }">
-							<div class="text-h4">
-								{{ $t("common.words.privacyPolicy") }}
-							</div>
 							<div class="v-expansion-panel-header__icon">
-								<v-icon>
-									<template v-if="!expanded">$mdiPlus</template>
-									<template v-else>$mdiMinus</template>
-								</v-icon>
+								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
 					</v-expansion-panel-title>
@@ -77,16 +71,13 @@
 					data-testid="terms-panel"
 					value="terms"
 				>
-					<v-expansion-panel-title hide-actions>
+					<v-expansion-panel-title>
+						<div class="text-h4">
+							{{ $t("common.words.termsOfUse") }}
+						</div>
 						<template v-slot:actions="{ expanded }">
-							<div class="text-h4">
-								{{ $t("common.words.termsOfUse") }}
-							</div>
 							<div class="v-expansion-panel-header__icon">
-								<v-icon>
-									<template v-if="!expanded">$mdiPlus</template>
-									<template v-else>$mdiMinus</template>
-								</v-icon>
+								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
 					</v-expansion-panel-title>
@@ -100,18 +91,15 @@
 					data-testid="migration-panel"
 					value="migration"
 				>
-					<v-expansion-panel-title hide-actions>
+					<v-expansion-panel-title>
+						<div class="text-h4">
+							{{
+								$t("components.administration.adminMigrationSection.headers")
+							}}
+						</div>
 						<template v-slot:actions="{ expanded }">
-							<div class="text-h4">
-								{{
-									$t("components.administration.adminMigrationSection.headers")
-								}}
-							</div>
 							<div class="v-expansion-panel-header__icon">
-								<v-icon>
-									<template v-if="!expanded">$mdiPlus</template>
-									<template v-else>$mdiMinus</template>
-								</v-icon>
+								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
 					</v-expansion-panel-title>
@@ -121,16 +109,13 @@
 				</v-expansion-panel>
 
 				<v-expansion-panel data-testid="systems-panel" value="authentication">
-					<v-expansion-panel-title hide-actions>
+					<v-expansion-panel-title>
+						<div class="text-h4">
+							{{ $t("pages.administration.school.index.authSystems.title") }}
+						</div>
 						<template v-slot:actions="{ expanded }">
-							<div class="text-h4">
-								{{ $t("pages.administration.school.index.authSystems.title") }}
-							</div>
 							<div class="v-expansion-panel-header__icon">
-								<v-icon>
-									<template v-if="!expanded">$mdiPlus</template>
-									<template v-else>$mdiMinus</template>
-								</v-icon>
+								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
 					</v-expansion-panel-title>
@@ -147,18 +132,13 @@
 				</v-expansion-panel>
 
 				<v-expansion-panel data-testid="tools-panel" value="tools">
-					<v-expansion-panel-title hide-actions>
+					<v-expansion-panel-title>
+						<div class="text-h4">
+							{{ $t("components.administration.externalToolsSection.header") }}
+						</div>
 						<template v-slot:actions="{ expanded }">
-							<div class="text-h4">
-								{{
-									$t("components.administration.externalToolsSection.header")
-								}}
-							</div>
 							<div class="v-expansion-panel-header__icon">
-								<v-icon>
-									<template v-if="!expanded">$mdiPlus</template>
-									<template v-else>$mdiMinus</template>
-								</v-icon>
+								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
 						</template>
 					</v-expansion-panel-title>
@@ -192,7 +172,7 @@ import {
 } from "@/utils/inject";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { mdiAlertCircle } from "@/components/icons/material";
+import { mdiAlertCircle, mdiPlus, mdiMinus } from "@/components/icons/material";
 
 export default defineComponent({
 	name: "SchoolSettings",
@@ -290,6 +270,8 @@ export default defineComponent({
 			isFeatureSchoolTermsOfUseEnabled,
 			instituteTitle,
 			mdiAlertCircle,
+			mdiPlus,
+			mdiMinus,
 		};
 	},
 });

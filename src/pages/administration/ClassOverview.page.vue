@@ -5,12 +5,7 @@
 		:full-width="true"
 		data-testid="admin-class-title"
 	>
-		<v-tabs
-			class="tabs-max-width mb-5"
-			grow
-			v-model="activeTab"
-			color="primary"
-		>
+		<v-tabs class="tabs-max-width mb-5" grow v-model="activeTab">
 			<v-tab value="next" data-testid="admin-class-next-year-tab">
 				<span>{{ nextYear }}</span>
 			</v-tab>

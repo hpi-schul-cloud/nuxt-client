@@ -20,7 +20,7 @@
 			</div>
 			<div v-else class="substitute-filter-placeholder" />
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="tab" class="tabs-max-width" grow color="primary">
+				<v-tabs v-model="tab" class="tabs-max-width" grow>
 					<v-tab :value="tabRoutes[0]">
 						<v-icon size="default" class="tab-icon mr-sm-3">{{
 							tabOneHeader.icon
