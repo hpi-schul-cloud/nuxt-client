@@ -267,8 +267,7 @@ describe("ExternalToolSection", () => {
 					});
 				});
 
-				// TODO: check teleport testing
-				describe.skip("when deletion is confirmed", () => {
+				describe("when deletion is confirmed", () => {
 					it("should call externalToolsModule.deleteSchoolExternalTool", async () => {
 						const { wrapper, schoolExternalToolsModule } = getWrapper({
 							getSchoolExternalTools: [
@@ -286,13 +285,11 @@ describe("ExternalToolSection", () => {
 						});
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
-
 						const firstRowButtons = tableRows[0].findAll("button");
-
 						const deleteButton = firstRowButtons[1];
 						await deleteButton.trigger("click");
 
-						const confirmButton = wrapper.find(
+						const confirmButton = wrapper.getComponent(
 							"[data-testId=delete-dialog-confirm]"
 						);
 						await confirmButton.trigger("click");
@@ -325,7 +322,7 @@ describe("ExternalToolSection", () => {
 						const deleteButton = firstRowButtons[1];
 						await deleteButton.trigger("click");
 
-						const confirmButton = wrapper.find(
+						const confirmButton = wrapper.findComponent(
 							"[data-testId=delete-dialog-confirm]"
 						);
 						await confirmButton.trigger("click");
@@ -403,8 +400,7 @@ describe("ExternalToolSection", () => {
 				};
 			};
 
-			// TODO: check teleport testing
-			it.skip("should display delete dialog", async () => {
+			it("should display delete dialog", async () => {
 				const { wrapper } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
@@ -414,13 +410,12 @@ describe("ExternalToolSection", () => {
 				const deleteButton = firstRowButtons[1];
 				await deleteButton.trigger("click");
 
-				const dialog = wrapper.find('[data-testid="delete-dialog"]');
+				const dialog = wrapper.findComponent({ name: "v-dialog" });
 
 				expect(dialog.isVisible()).toBeTruthy();
 			});
 
-			// TODO: check teleport testing
-			it.skip("should display tool usage count", async () => {
+			it("should display tool usage count", async () => {
 				const { wrapper, schoolExternalToolMetadata } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
@@ -430,13 +425,14 @@ describe("ExternalToolSection", () => {
 				const deleteButton = firstRowButtons[1];
 				await deleteButton.trigger("click");
 
-				const dialogContent = wrapper.find(
-					'[data-testid="delete-dialog-content"]'
+				const dialogContent = wrapper.findComponent({ name: "renderHTML" });
+
+				expect(dialogContent.props("html")).toEqual(
+					"components.administration.externalToolsSection.dialog.content"
 				);
 
-				expect(dialogContent.text()).toEqual(
-					`components.administration.externalToolsSection.dialog.content {"itemName":"name","courseCount":${schoolExternalToolMetadata.course},"boardElementCount":${schoolExternalToolMetadata.boardElement}}`
-				);
+				expect(wrapper.vm.getItemName).toEqual("name");
+				expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
 			});
 
 			it("should not display notification", async () => {
