@@ -1,16 +1,20 @@
 import { contentModule } from "@/store";
 import ContentModule from "@/store/content";
+import { initializeAxios } from "@/utils/api";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
+import { AxiosInstance } from "axios";
 import { nextTick } from "vue";
-import { VSelect } from "vuetify/lib/components/index.mjs";
+import { VBtn, VSelect } from "vuetify/lib/components/index.mjs";
 import { createStore } from "vuex";
 import AddContentModal from "./AddContentModal.vue";
 
+initializeAxios(createMock<AxiosInstance>());
 const testProps = {
 	showCopyModal: true,
 	resource: {
@@ -85,8 +89,6 @@ const lessons = {
 	],
 };
 
-const addToLesson = jest.fn().mockReturnValue(Promise.resolve());
-
 const createMockStore = () => {
 	const createStudentStub = jest.fn();
 	const mockStore = createStore({
@@ -94,27 +96,7 @@ const createMockStore = () => {
 			courses: {
 				namespaced: true,
 				getters: {
-					getCoursesOptions: () => {
-						console.log("getCoursesOptions");
-						return courseOptions;
-					},
-				},
-				state: () => ({
-					coursesOptions: courseOptions,
-				}),
-			},
-			content: {
-				actions: {
-					addToLesson,
-					getLessons: () => Promise.resolve(),
-				},
-				state: {
-					lessons: {
-						data: lessonsMock,
-					},
-				},
-				getters: {
-					getLessons: () => ({ data: lessonsMock }),
+					getCoursesOptions: () => courseOptions,
 				},
 			},
 		},
@@ -122,7 +104,7 @@ const createMockStore = () => {
 	return { mockStore, createStudentStub };
 };
 
-const getWrapper: any = (props: object, options?: object) => {
+const getWrapper: any = (props: object) => {
 	const { mockStore } = createMockStore();
 	return mount(AddContentModal, {
 		global: {
@@ -131,11 +113,7 @@ const getWrapper: any = (props: object, options?: object) => {
 				$store: mockStore,
 			},
 		},
-
-		// store: mockStore,
-
 		props,
-		...options,
 	});
 };
 
@@ -209,13 +187,21 @@ describe("@/components/molecules/AddContentModal", () => {
 
 	it("cancel modal action", async () => {
 		const wrapper = getWrapper(testProps);
-		const cancelBtn = wrapper.find("button");
-		wrapper.vm.selectedCourse = courseOptions[0];
-		wrapper.vm.selectedLesson = lessonsMock[0];
+		const cancelBtn = wrapper.findComponent(VBtn);
+		const courseSelection = wrapper.findAllComponents(VSelect)[0];
+		const lessonSelection = wrapper.findAllComponents(VSelect)[1];
+
+		courseSelection.vm.$emit("update:modelValue", courseOptions[0]);
+		await nextTick();
+		lessonSelection.vm.$emit("update:modelValue", lessonsMock[0]);
+		await nextTick();
+		expect(lessonSelection.props("modelValue")).toEqual(lessonsMock[0]);
+		expect(courseSelection.props("modelValue")).toEqual(courseOptions[0]);
+
 		await cancelBtn.trigger("click");
-		expect(Object.keys(wrapper.vm.selectedCourse)).toHaveLength(0);
-		expect(Object.keys(wrapper.vm.selectedLesson)).toHaveLength(0);
-		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalsy();
+
+		expect(wrapper.emitted("update:show-copy-modal", false)).toHaveLength(1);
+		expect(lessonSelection.props("modelValue")).toBeNull();
+		expect(courseSelection.props("modelValue")).toBeNull();
 	});
 });
