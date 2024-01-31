@@ -35,12 +35,4 @@ defineProps({
 .custom-breadcrumb {
 	display: inline-flex;
 }
-
-:deep(.v-breadcrumbs-item) {
-	color: rgba(var(--v-theme-primary));
-}
-
-:deep(.v-breadcrumbs-item--disabled) {
-	color: rgba(var(--v-theme-secondary));
-}
 </style>
