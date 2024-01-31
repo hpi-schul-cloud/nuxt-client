@@ -17,11 +17,7 @@
 					"
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
-<<<<<<< HEAD
-					data-testid="student-visibility-switch"
-=======
 					data-testid="admin-school-toggle-student-visibility"
->>>>>>> af25453650a80f666408829b9fdca877fdc24ce4
 					@update:modelValue="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
