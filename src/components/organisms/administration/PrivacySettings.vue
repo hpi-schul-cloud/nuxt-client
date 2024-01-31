@@ -17,7 +17,11 @@
 					"
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
+<<<<<<< HEAD
 					data-testid="student-visibility-switch"
+=======
+					data-testid="admin-school-toggle-student-visibility"
+>>>>>>> af25453650a80f666408829b9fdca877fdc24ce4
 					@update:modelValue="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
@@ -50,12 +54,12 @@
 						)
 					"
 					class="ml-1 mt-0"
+					data-testid="admin-school-toggle-learning-store"
 					@update:modelValue="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
 					:true-icon="mdiCheck"
-					data-testid="learnstore-switch"
 				/>
 				<p class="switch-hint">
 					{{

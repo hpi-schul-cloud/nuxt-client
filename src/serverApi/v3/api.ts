@@ -117,6 +117,93 @@ export interface AccountSearchListResponse {
 /**
  * 
  * @export
+ * @interface AdminApiSchoolCreateResponseDto
+ */
+export interface AdminApiSchoolCreateResponseDto {
+    /**
+     * 
+     * @type {string}
+     * @memberof AdminApiSchoolCreateResponseDto
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AdminApiSchoolCreateResponseDto
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
+ * @interface AdminApiUserCreateBodyParams
+ */
+export interface AdminApiUserCreateBodyParams {
+    /**
+     * The mail adress of the new user. Will also be used as username.
+     * @type {string}
+     * @memberof AdminApiUserCreateBodyParams
+     */
+    email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AdminApiUserCreateBodyParams
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AdminApiUserCreateBodyParams
+     */
+    lastName: string;
+    /**
+     * The roles of the new user
+     * @type {Array<RoleName>}
+     * @memberof AdminApiUserCreateBodyParams
+     */
+    roleNames: Array<RoleName>;
+    /**
+     * id of the school the user should be created in
+     * @type {string}
+     * @memberof AdminApiUserCreateBodyParams
+     */
+    schoolId: string;
+}
+/**
+ * 
+ * @export
+ * @interface AdminApiUserCreateResponse
+ */
+export interface AdminApiUserCreateResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof AdminApiUserCreateResponse
+     */
+    userId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AdminApiUserCreateResponse
+     */
+    accountId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AdminApiUserCreateResponse
+     */
+    username: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AdminApiUserCreateResponse
+     */
+    initialPassword: string;
+}
+/**
+ * 
+ * @export
  * @interface ApiValidationError
  */
 export interface ApiValidationError {
@@ -4133,6 +4220,33 @@ export interface RichTextElementResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum RoleName {
+    Administrator = 'administrator',
+    CourseAdministrator = 'courseAdministrator',
+    CourseStudent = 'courseStudent',
+    CourseSubstitutionTeacher = 'courseSubstitutionTeacher',
+    CourseTeacher = 'courseTeacher',
+    Demo = 'demo',
+    DemoStudent = 'demoStudent',
+    DemoTeacher = 'demoTeacher',
+    Expert = 'expert',
+    Helpdesk = 'helpdesk',
+    Student = 'student',
+    Superhero = 'superhero',
+    Teacher = 'teacher',
+    Teamadministrator = 'teamadministrator',
+    Teamexpert = 'teamexpert',
+    Teamleader = 'teamleader',
+    Teammember = 'teammember',
+    Teamowner = 'teamowner',
+    User = 'user'
+}
+
+/**
+ * 
+ * @export
  * @interface SchoolExternalToolConfigurationStatusResponse
  */
 export interface SchoolExternalToolConfigurationStatusResponse {
@@ -4457,6 +4571,12 @@ export interface SchoolResponse {
      * @memberof SchoolResponse
      */
     systemIds: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolResponse
+     */
+    inUserMigration?: boolean;
     /**
      * 
      * @type {boolean}
@@ -5527,7 +5647,7 @@ export interface UserLoginMigrationMandatoryParams {
  */
 export interface UserLoginMigrationResponse {
     /**
-     * 
+     * Id of the migration
      * @type {string}
      * @memberof UserLoginMigrationResponse
      */
@@ -5576,7 +5696,7 @@ export interface UserLoginMigrationResponse {
  */
 export interface UserLoginMigrationSearchListResponse {
     /**
-     * The items for the current page.
+     * Contains user login migration responses
      * @type {Array<UserLoginMigrationResponse>}
      * @memberof UserLoginMigrationSearchListResponse
      */
@@ -6458,6 +6578,256 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
      */
     public accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any) {
         return AccountApiFp(this.configuration).accountControllerUpdateMyAccount(patchMyAccountParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * AdminApiUsersApi - axios parameter creator
+ * @export
+ */
+export const AdminApiUsersApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary create a user together with an account
+         * @param {AdminApiUserCreateBodyParams} adminApiUserCreateBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiUsersControllerCreateSchool: async (adminApiUserCreateBodyParams: AdminApiUserCreateBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'adminApiUserCreateBodyParams' is not null or undefined
+            assertParamExists('adminApiUsersControllerCreateSchool', 'adminApiUserCreateBodyParams', adminApiUserCreateBodyParams)
+            const localVarPath = `/admin/users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(adminApiUserCreateBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AdminApiUsersApi - functional programming interface
+ * @export
+ */
+export const AdminApiUsersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AdminApiUsersApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary create a user together with an account
+         * @param {AdminApiUserCreateBodyParams} adminApiUserCreateBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async adminApiUsersControllerCreateSchool(adminApiUserCreateBodyParams: AdminApiUserCreateBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AdminApiUserCreateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiUsersControllerCreateSchool(adminApiUserCreateBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * AdminApiUsersApi - factory interface
+ * @export
+ */
+export const AdminApiUsersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AdminApiUsersApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary create a user together with an account
+         * @param {AdminApiUserCreateBodyParams} adminApiUserCreateBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiUsersControllerCreateSchool(adminApiUserCreateBodyParams: AdminApiUserCreateBodyParams, options?: any): AxiosPromise<AdminApiUserCreateResponse> {
+            return localVarFp.adminApiUsersControllerCreateSchool(adminApiUserCreateBodyParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AdminApiUsersApi - interface
+ * @export
+ * @interface AdminApiUsersApi
+ */
+export interface AdminApiUsersApiInterface {
+    /**
+     * 
+     * @summary create a user together with an account
+     * @param {AdminApiUserCreateBodyParams} adminApiUserCreateBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiUsersApiInterface
+     */
+    adminApiUsersControllerCreateSchool(adminApiUserCreateBodyParams: AdminApiUserCreateBodyParams, options?: any): AxiosPromise<AdminApiUserCreateResponse>;
+
+}
+
+/**
+ * AdminApiUsersApi - object-oriented interface
+ * @export
+ * @class AdminApiUsersApi
+ * @extends {BaseAPI}
+ */
+export class AdminApiUsersApi extends BaseAPI implements AdminApiUsersApiInterface {
+    /**
+     * 
+     * @summary create a user together with an account
+     * @param {AdminApiUserCreateBodyParams} adminApiUserCreateBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminApiUsersApi
+     */
+    public adminApiUsersControllerCreateSchool(adminApiUserCreateBodyParams: AdminApiUserCreateBodyParams, options?: any) {
+        return AdminApiUsersApiFp(this.configuration).adminApiUsersControllerCreateSchool(adminApiUserCreateBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * AdminSchoolApi - axios parameter creator
+ * @export
+ */
+export const AdminSchoolApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary create an empty school
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiSchoolsControllerCreateSchool: async (body: object, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('adminApiSchoolsControllerCreateSchool', 'body', body)
+            const localVarPath = `/admin/schools`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AdminSchoolApi - functional programming interface
+ * @export
+ */
+export const AdminSchoolApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AdminSchoolApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary create an empty school
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async adminApiSchoolsControllerCreateSchool(body: object, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AdminApiSchoolCreateResponseDto>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiSchoolsControllerCreateSchool(body, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * AdminSchoolApi - factory interface
+ * @export
+ */
+export const AdminSchoolApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AdminSchoolApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary create an empty school
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiSchoolsControllerCreateSchool(body: object, options?: any): AxiosPromise<AdminApiSchoolCreateResponseDto> {
+            return localVarFp.adminApiSchoolsControllerCreateSchool(body, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AdminSchoolApi - interface
+ * @export
+ * @interface AdminSchoolApi
+ */
+export interface AdminSchoolApiInterface {
+    /**
+     * 
+     * @summary create an empty school
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSchoolApiInterface
+     */
+    adminApiSchoolsControllerCreateSchool(body: object, options?: any): AxiosPromise<AdminApiSchoolCreateResponseDto>;
+
+}
+
+/**
+ * AdminSchoolApi - object-oriented interface
+ * @export
+ * @class AdminSchoolApi
+ * @extends {BaseAPI}
+ */
+export class AdminSchoolApi extends BaseAPI implements AdminSchoolApiInterface {
+    /**
+     * 
+     * @summary create an empty school
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminSchoolApi
+     */
+    public adminApiSchoolsControllerCreateSchool(body: object, options?: any) {
+        return AdminSchoolApiFp(this.configuration).adminApiSchoolsControllerCreateSchool(body, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -17116,6 +17486,40 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
+         * Populates import users from specific user migration populate endpoint.
+         * @summary Populates import users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerPopulateImportUsers: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/populate-import-users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {*} [options] Override http request option.
@@ -17363,6 +17767,16 @@ export const UserImportApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Populates import users from specific user migration populate endpoint.
+         * @summary Populates import users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerPopulateImportUsers(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerPopulateImportUsers(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * 
          * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {*} [options] Override http request option.
@@ -17462,6 +17876,15 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
             return localVarFp.importUserControllerFindAllUnmatchedUsers(name, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
+         * Populates import users from specific user migration populate endpoint.
+         * @summary Populates import users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerPopulateImportUsers(options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerPopulateImportUsers(options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {*} [options] Override http request option.
@@ -17553,6 +17976,15 @@ export interface UserImportApiInterface {
      * @memberof UserImportApiInterface
      */
     importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserMatchListResponse>;
+
+    /**
+     * Populates import users from specific user migration populate endpoint.
+     * @summary Populates import users
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApiInterface
+     */
+    importUserControllerPopulateImportUsers(options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -17651,6 +18083,17 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      */
     public importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerFindAllUnmatchedUsers(name, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Populates import users from specific user migration populate endpoint.
+     * @summary Populates import users
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApi
+     */
+    public importUserControllerPopulateImportUsers(options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerPopulateImportUsers(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
