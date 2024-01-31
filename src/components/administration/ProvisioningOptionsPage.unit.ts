@@ -196,9 +196,6 @@ describe("ProvisioningOptionsPage", () => {
 						query: { openPanels: "authentication" },
 					};
 
-					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
-					useProvisioningOptionsStateMock.error.value = undefined;
-
 					return {
 						saveButton,
 						redirect,
@@ -230,6 +227,9 @@ describe("ProvisioningOptionsPage", () => {
 			});
 
 			describe("when disabling options", () => {
+				beforeEach(() => {
+					jest.clearAllMocks();
+				});
 				const setup = async () => {
 					const { wrapper } = getWrapper(
 						{
@@ -244,18 +244,12 @@ describe("ProvisioningOptionsPage", () => {
 						'[data-testid="provisioning-options-save-button"]'
 					);
 
-					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
-					useProvisioningOptionsStateMock.error.value = undefined;
-
-					// await OnMounted
 					await flushPromises();
 
-					const checkbox = wrapper.find(
-						'[data-testid="checkbox-option-class"]'
-					);
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					// @ts-ignore
-					await checkbox.setChecked(false);
+					const checkBoxes = wrapper.findAllComponents({ name: "v-checkbox" });
+
+					const classCheckbox = checkBoxes[0];
+					await classCheckbox.vm.$emit("update:modelValue", false);
 
 					return {
 						wrapper,
@@ -263,8 +257,7 @@ describe("ProvisioningOptionsPage", () => {
 					};
 				};
 
-				// TODO: check why this test is failing -- logical complexity?
-				it.skip("should not call the update function", async () => {
+				it("should not call the update function", async () => {
 					const { saveButton } = await setup();
 
 					await saveButton.trigger("click");
