@@ -163,7 +163,7 @@ describe("ldap/activate", () => {
 			storeOptions,
 		});
 
-		const confirmModal = wrapper.find(`[data-testid="confirmModal"]`);
+		const confirmModal = wrapper.findComponent({ name: "v-dialog" });
 		expect(confirmModal.exists()).toBe(true);
 	});
 
@@ -179,7 +179,10 @@ describe("ldap/activate", () => {
 			storeOptions,
 		});
 
-		const confirmBtn = wrapper.find(`[data-testid="ldapOkButton"]`);
+		const confirmModal = wrapper.findComponent({ name: "v-dialog" });
+		const confirmBtn = confirmModal
+			.findComponent({ name: "v-card" })
+			.find('[data-testid="ldapOkButton"]');
 		expect(confirmBtn.exists()).toBe(true);
 		await confirmBtn.trigger("click");
 

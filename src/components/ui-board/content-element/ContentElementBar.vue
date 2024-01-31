@@ -16,6 +16,7 @@
 			class="rounded-b pb-4"
 			v-if="
 				icon ||
+				$slots.logo ||
 				$slots.title ||
 				$slots.menu ||
 				$slots.element ||
@@ -26,6 +27,10 @@
 			<v-card-title
 				class="text-subtitle-1 d-inline-block font-weight-bold d-flex flex-nowrap gb-1 pt-5 pb-0"
 			>
+				<div v-if="$slots.logo" class="logo-container mr-2">
+					<slot name="logo" />
+				</div>
+
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
 				<LineClamp
@@ -100,23 +105,33 @@ export default defineComponent({
 	line-height: 24px;
 	color: var(--v-black-base);
 }
+
 a.v-card .content-element-bar:hover {
 	.content-element-title {
 		text-decoration: underline;
 	}
+
 	.content-element-display {
 		filter: brightness(80%);
 	}
 }
+
+.subtitle,
+.description {
+	line-height: 20px;
+}
+
 .three-dot-menu {
 	position: absolute;
 	right: 10px;
 	top: 10px;
 	z-index: 100;
+
 	.v-icon {
 		color: var(--v-black-base);
 	}
 }
+
 .v-card__text {
 	margin-top: 0px;
 }
@@ -125,7 +140,13 @@ a.v-card .content-element-bar:hover {
 	color: var(--v-black-base) !important;
 	text-decoration: none;
 }
+
 .content-element-title :deep(a:hover) {
 	text-decoration: underline;
+}
+
+.logo-container {
+	width: 24px;
+	height: 24px;
 }
 </style>
