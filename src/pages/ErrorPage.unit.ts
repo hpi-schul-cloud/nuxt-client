@@ -19,7 +19,7 @@ jest.mock("@/composables/locale-storage.composable", () => ({
 	useStorage: () => ({
 		set: jest.fn(),
 		get: jest.fn(),
-		getMultiple: jest.fn(),
+		getMultiple: jest.fn().mockReturnValue([401, "de.unauthorized", false]),
 		remove: jest.fn(),
 	}),
 }));
