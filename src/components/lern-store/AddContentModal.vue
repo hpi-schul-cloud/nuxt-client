@@ -91,7 +91,6 @@ export default {
 			return contentModule.getLessonsGetter;
 		},
 		isSendEnabled() {
-			console.log(this.selectedLesson);
 			return (this.selectedLesson || {})._id !== undefined;
 		},
 		lessonsOptions() {

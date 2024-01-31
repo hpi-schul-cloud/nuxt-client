@@ -6,6 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import { VSelect } from "vuetify/lib/components/index.mjs";
 import { createStore } from "vuex";
 import AddContentModal from "./AddContentModal.vue";
@@ -91,17 +92,11 @@ const createMockStore = () => {
 	const mockStore = createStore({
 		modules: {
 			courses: {
+				namespaced: true,
 				getters: {
 					getCoursesOptions: () => {
 						console.log("getCoursesOptions");
-						return courseOptions
-							.filter((course) => course.isArchived === false)
-							.map((course) => {
-								return {
-									_id: course._id,
-									name: course.name,
-								};
-							});
+						return courseOptions;
 					},
 				},
 				state: () => ({
@@ -171,7 +166,7 @@ describe("@/components/molecules/AddContentModal", () => {
 		expect(submitBtn.attributes().disabled).toBeUndefined();
 	});
 
-	it.only("create coursesOptions", async () => {
+	it("create coursesOptions", async () => {
 		const wrapper = getWrapper(testProps);
 		const selection = wrapper.findComponent(VSelect);
 		expect(selection.props("items")).toBe(courseOptions);
@@ -192,8 +187,8 @@ describe("@/components/molecules/AddContentModal", () => {
 			selectedLesson: lessonsMock[0],
 		});
 		expect(wrapper.vm.isSendEnabled).toBe(true);
-		await wrapper.vm.$nextTick();
-		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
+		await nextTick();
+		const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
 		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalsy();
@@ -205,8 +200,8 @@ describe("@/components/molecules/AddContentModal", () => {
 			selectedLesson: lessonsMock[0],
 		});
 		expect(wrapper.vm.isSendEnabled).toBe(true);
-		await wrapper.vm.$nextTick();
-		const submitBtn = wrapper.find('[data-testid="modal_submit_btn"]');
+		await nextTick();
+		const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
 		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBe(false);
