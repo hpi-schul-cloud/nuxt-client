@@ -24,7 +24,7 @@ const generateProps = () => ({
 });
 
 const searchStrings = {
-	studentVisibility: "student-visibility-switch",
+	studentVisibility: "admin-school-toggle-student-visibility",
 	learnStore: "admin-school-toggle-learning-store",
 	rocketChat: "toggle_chat",
 	videoconference: "toggle_video_conference",
