@@ -458,6 +458,7 @@
 	"components.organisms.importUsers.legendAdminMatched": "{source} Обліковий запис адміністратора, пов’язаний із користувачем {instance}.",
 	"components.organisms.importUsers.legendAutoMatched": "Обліковий запис {source} автоматично пов’язано з користувачем {instance}.",
 	"components.organisms.importUsers.legendUnMatched": "{instance} Користувача не знайдено. Після завершення міграції новий обліковий запис користувача буде створено автоматично, щойно користувач {source} уперше ввійде до {instance}.",
+	"components.organisms.importUsers.legendFlag": "Записи, які слід позначити та, за потреби, перевірити пізніше, можна позначити прапорцем.",
 	"components.organisms.importUsers.roleAdministrator": "Адміністратор",
 	"components.organisms.importUsers.searchAutoMatched": "Фільтрувати за автоматично зіставленими",
 	"components.organisms.importUsers.searchClass": "Пошук класу",
