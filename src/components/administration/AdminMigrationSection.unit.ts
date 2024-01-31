@@ -958,11 +958,8 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const button = wrapper.find(
-						'[data-testid="migration-wizard-button"]'
-					);
-
-					expect(button.props("disabled")).toBeFalsy();
+					const buttons = wrapper.findAllComponents({ name: "v-btn" });
+					expect(buttons[1].props("disabled")).toBeFalsy();
 				});
 
 				it("should redirect to the wizard", async () => {
@@ -983,11 +980,8 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const button = wrapper.find(
-						'[data-testid="migration-wizard-button"]'
-					);
-
-					expect(button.props("to")).toEqual({
+					const buttons = wrapper.findAllComponents({ name: "v-btn" });
+					expect(buttons[1].props("to")).toEqual({
 						name: "administration-migration",
 					});
 				});
@@ -1005,11 +999,8 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const button = wrapper.find(
-						'[data-testid="migration-wizard-button"]'
-					);
-
-					expect(button.props("disabled")).toBeTruthy();
+					const buttons = wrapper.findAllComponents({ name: "v-btn" });
+					expect(buttons[1].props("disabled")).toBeTruthy();
 				});
 			});
 
@@ -1037,11 +1028,8 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const button = wrapper.find(
-						'[data-testid="migration-wizard-button"]'
-					);
-
-					expect(button.props("disabled")).toBeTruthy();
+					const buttons = wrapper.findAllComponents({ name: "v-btn" });
+					expect(buttons[1].props("disabled")).toBeTruthy();
 				});
 			});
 		});
@@ -1063,7 +1051,6 @@ describe("AdminMigrationSection", () => {
 				);
 
 				const button = wrapper.find('[data-testid="migration-wizard-button"]');
-
 				expect(button.exists()).toBeFalsy();
 			});
 		});
