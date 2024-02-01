@@ -28,7 +28,7 @@
 			</div>
 			<div v-if="showBorder" class="border" />
 		</div>
-		<v-main
+		<v-container
 			:class="{
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
@@ -36,7 +36,7 @@
 			class="main-content"
 		>
 			<slot />
-		</v-main>
+		</v-container>
 	</v-container>
 </template>
 
@@ -85,12 +85,17 @@ export default defineComponent({
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
 }
+
+.wireframe-container {
+	padding: 0 var(--space-lg);
+}
+
 :deep(.v-application__wrap) {
 	min-height: unset;
 }
 
 .main-content {
-	margin: 0 auto;
+	padding: 0;
 }
 
 .container-max-width {
@@ -99,7 +104,7 @@ export default defineComponent({
 
 .container-full-width {
 	max-width: none;
-	margin: 0px 24px;
+	margin: 0;
 }
 
 .border {
