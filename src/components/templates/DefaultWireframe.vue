@@ -18,12 +18,15 @@
 						:direction="isMobile ? 'top' : 'bottom'"
 						:orientation="'right'"
 						:icon="fabItems.icon"
+						:href="fabItems.href"
 						:data-testid="fabItems.dataTestId"
 					>
 						{{ fabItems.title }}
 						<template #actions>
 							<speed-dial-menu-action
-								v-for="(action, index) in fabItems.actions"
+								v-for="(action, index) in fabItems.actions
+									.concat(fabItems.actions)
+									.concat(fabItems.actions)"
 								:key="index"
 								:data-testid="action.dataTestId"
 								:icon="action.icon"

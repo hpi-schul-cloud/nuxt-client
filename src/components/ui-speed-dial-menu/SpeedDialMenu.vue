@@ -5,9 +5,18 @@
 			role="menu"
 			class="position-relative d-inline-block overflow-visible"
 		>
-			<v-btn rounded color="primary" size="large" @click="onClick">
-				<v-icon v-if="icon">{{ icon }}</v-icon>
-				<slot />
+			<v-btn
+				:rounded="!isMenuOpen"
+				class="size-transform"
+				:class="!isMenuOpen ? 'default-width' : ''"
+				:icon="isMenuOpen"
+				color="primary"
+				size="large"
+				@click="onClick"
+			>
+				<v-icon v-if="icon && !isMenuOpen">{{ icon }}</v-icon>
+				<v-icon v-if="isMenuOpen">{{ mdiClose }}</v-icon>
+				<span :class="isMenuOpen ? 'd-sr-only' : 'd-block'"><slot /></span>
 			</v-btn>
 			<div
 				v-if="isMenuOpen"
@@ -20,13 +29,20 @@
 				</template>
 			</div>
 		</div>
+		<div v-else>
+			<v-btn rounded color="primary" size="large" :href="href">
+				<v-icon v-if="icon">{{ isMenuOpen ? mdiClose : icon }}</v-icon>
+				<slot />
+			</v-btn>
+		</div>
 	</OnClickOutside>
 </template>
 
 <script lang="ts" setup>
+import { mdiClose } from "@mdi/js";
+import { OnClickOutside } from "@vueuse/components";
 import {
 	computed,
-	onMounted,
 	provide,
 	ref,
 	toRef,
@@ -39,12 +55,12 @@ import {
 	INJECT_SPEED_DIAL_DIRECTION,
 	INJECT_SPEED_DIAL_ORIENTATION,
 } from "./injection-tokens";
-import { OnClickOutside } from "@vueuse/components";
 const slots = useSlots();
 
 const props = withDefaults(
 	defineProps<{
 		icon?: string;
+		href?: string;
 		direction?: "top" | "bottom";
 		orientation?: "left" | "right";
 	}>(),
@@ -94,16 +110,16 @@ const hasPseudoRenderElement = (actionsInSlot: VNode[]) => {
 		Array.isArray(actionsInSlot[0].children)
 	);
 };
-
-onMounted(() => {
-	console.log(actions.value);
-});
 </script>
 
 <style scoped lang="scss">
 .position-absolute {
 	position: absolute;
 	z-index: 100;
+}
+
+.default-width {
+	width: 120px !important;
 }
 
 .position-relative {
@@ -124,5 +140,9 @@ onMounted(() => {
 
 .fix-to-top {
 	top: -72px;
+}
+
+.size-transition {
+	transition: all 200ms ease-in-out;
 }
 </style>
