@@ -4500,10 +4500,10 @@ export interface SchoolForLdapLoginResponse {
     name: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<SystemForLdapLoginResponse>}
      * @memberof SchoolForLdapLoginResponse
      */
-    systems: Array<string>;
+    systems: Array<SystemForLdapLoginResponse>;
 }
 /**
  * 
@@ -5164,6 +5164,31 @@ export interface SuccessfulResponse {
      * @memberof SuccessfulResponse
      */
     successful: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface SystemForLdapLoginResponse
+ */
+export interface SystemForLdapLoginResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemForLdapLoginResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemForLdapLoginResponse
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemForLdapLoginResponse
+     */
+    alias: string;
 }
 /**
  * 
