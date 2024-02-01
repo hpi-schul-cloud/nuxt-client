@@ -1,7 +1,7 @@
 <template>
 	<div ref="textElement" class="line-clamp">
 		<v-tooltip
-			top
+			location="top"
 			start
 			origin="auto"
 			transition="fade"

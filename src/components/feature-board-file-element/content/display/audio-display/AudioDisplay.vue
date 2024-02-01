@@ -1,7 +1,7 @@
 <template>
 	<ContentElementBar class="audio-player bg-grey-darken-3">
 		<template #element>
-			<div class="d-flex flex-nowrap pb-0">
+			<div class="d-flex flex-nowrap pb-0 fill-height align-center">
 				<audio ref="audio" loading="lazy" />
 				<v-btn
 					v-if="playing"
@@ -9,8 +9,9 @@
 						$t('component.cardElement.fileElement.audioPlayer.pause')
 					"
 					icon
+					variant="flat"
 					@click="onPlay"
-					color="white"
+					color="transparent"
 					size="small"
 				>
 					<v-icon> {{ mdiPause }}</v-icon>
@@ -19,8 +20,9 @@
 					v-else
 					:aria-label="$t('component.cardElement.fileElement.audioPlayer.play')"
 					icon
+					variant="flat"
 					@click="onPlay"
-					color="white"
+					color="transparent"
 					size="small"
 				>
 					<v-icon>{{ mdiPlay }}</v-icon>

@@ -1,31 +1,24 @@
 <template>
 	<div tabindex="-1" class="content-element-bar">
-		<div v-if="$slots.display">
-			<ContentElementDisplay>
-				<template #display>
-					<slot name="display" />
-				</template>
-
-				<template #menu>
-					<slot name="menu" />
-				</template>
-			</ContentElementDisplay>
+		<div v-if="$slots.menu" class="three-dot-menu">
+			<slot name="menu" />
 		</div>
+
+		<div v-if="$slots.display">
+			<slot name="display" />
+		</div>
+
 		<div
-			:class="backgroundClass"
-			class="rounded-b pb-4"
+			:class="dynamicClasses"
+			class="content-element-bar-texts rounded-b py-4"
 			v-if="
-				icon ||
-				$slots.logo ||
-				$slots.title ||
-				$slots.menu ||
-				$slots.element ||
-				$slots.subtitle ||
-				$slots.description
+				$slots.title || $slots.element || $slots.subtitle || $slots.description
 			"
 		>
-			<v-card-title
-				class="text-subtitle-1 d-inline-block font-weight-bold d-flex flex-nowrap gb-1 pt-5 pb-0"
+			<div
+				v-if="$slots.title"
+				class="content-element-title d-flex flex-row px-4 pb-0"
+				:class="{ 'mr-8': $slots.menu && !$slots.display }"
 			>
 				<div v-if="$slots.logo" class="logo-container mr-2">
 					<slot name="logo" />
@@ -33,80 +26,73 @@
 
 				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
 
-				<LineClamp
-					v-if="$slots.title"
-					class="font-narrow content-element-title flex-grow-1"
-				>
+				<LineClamp class="content-element-title">
 					<slot name="title" />
 				</LineClamp>
+			</div>
 
-				<div v-if="$slots.element" class="flex-grow-1">
-					<slot name="element" />
-				</div>
+			<div v-if="$slots.element" class="pl-2 pr-3 mt-n1">
+				<slot name="element" />
+			</div>
 
-				<div v-if="$slots.menu && !$slots.display" class="pl-10">
-					<div class="three-dot-menu">
-						<slot name="menu" />
-					</div>
-				</div>
-			</v-card-title>
-			<v-card-subtitle
-				v-if="$slots.subtitle || $slots.description"
-				class="pt-1"
-			>
-				<div v-if="$slots.subtitle" class="gb-2">
-					<slot name="subtitle" />
-				</div>
+			<div v-if="$slots.subtitle" class="px-4">
+				<slot name="subtitle" />
+			</div>
 
-				<div v-if="$slots.description" class="gb-2 description">
-					<slot name="description" />
-				</div>
-			</v-card-subtitle>
+			<div v-if="$slots.description" class="px-4">
+				<slot name="description" />
+			</div>
 		</div>
 	</div>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, PropType } from "vue";
-import ContentElementDisplay from "./ContentElementDisplay.vue";
-import LineClamp from "../LineClamp.vue";
+<script setup lang="ts">
+import { computed, defineProps, PropType } from "vue";
 import ContentElementTitleIcon from "./ContentElementTitleIcon.vue";
+import LineClamp from "../LineClamp.vue";
 import { IconProps } from "vuetify";
 
-export default defineComponent({
-	name: "ContentElementBar",
-	props: {
-		hasGreyBackground: { type: Boolean, required: false },
-		icon: { type: String as PropType<IconProps["icon"]>, required: false },
+const props = defineProps({
+	hasGreyBackground: {
+		type: Boolean,
+		required: false,
 	},
-	components: {
-		ContentElementDisplay,
-		ContentElementTitleIcon,
-		LineClamp,
+	icon: {
+		type: String as PropType<IconProps["icon"]>,
+		required: false,
 	},
-	setup(props) {
-		const backgroundClass = computed(() => {
-			return props.hasGreyBackground ? "bg-grey-lighten-4" : "";
-		});
+});
 
-		return {
-			backgroundClass,
-		};
-	},
+const dynamicClasses = computed(() => {
+	return {
+		"bg-grey-lighten-4": props.hasGreyBackground === true,
+	};
 });
 </script>
 
-<style scoped type="text/scss">
-.font-narrow {
+<style scoped lang="scss">
+.content-element-title {
 	font-family: var(--font-accent) !important;
+	font-size: 1rem !important;
+	font-weight: 700;
+
+	:deep(a) {
+		color: var(--v-black-base) !important;
+		text-decoration: none;
+	}
+	:deep(a:hover) {
+		text-decoration: underline;
+	}
+}
+.content-element-bar-texts > div ~ div {
+	padding-top: 8px;
 }
 
 .content-element-bar {
-	line-height: 24px;
+	position: relative;
 	color: var(--v-black-base);
 }
-
-a.v-card .content-element-bar:hover {
+.content-element-bar:hover {
 	.content-element-title {
 		text-decoration: underline;
 	}
@@ -116,15 +102,10 @@ a.v-card .content-element-bar:hover {
 	}
 }
 
-.subtitle,
-.description {
-	line-height: 20px;
-}
-
 .three-dot-menu {
 	position: absolute;
-	right: 10px;
-	top: 10px;
+	right: 0.75rem;
+	top: 0.75rem;
 	z-index: 100;
 
 	.v-icon {
@@ -134,15 +115,6 @@ a.v-card .content-element-bar:hover {
 
 .v-card__text {
 	margin-top: 0px;
-}
-
-.content-element-title :deep(a) {
-	color: var(--v-black-base) !important;
-	text-decoration: none;
-}
-
-.content-element-title :deep(a:hover) {
-	text-decoration: underline;
 }
 
 .logo-container {
