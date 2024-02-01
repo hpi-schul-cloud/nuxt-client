@@ -24,6 +24,8 @@
 							dragoverBubble: true,
 							animation: 250,
 							scroll: true,
+							filter: '.v-card',
+							preventOnFilter: false,
 							forceFallback: true,
 							bubbleScroll: true,
 						}"

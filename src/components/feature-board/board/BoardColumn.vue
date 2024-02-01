@@ -29,6 +29,8 @@
 					dragoverBubble: false,
 					draggable: '.draggable',
 					easing: 'cubic-bezier(1, 0, 0, 1)',
+					filter: '.v-input, v-btn',
+					preventOnFilter: false,
 					forceFallback: true,
 					ghostClass: 'sortable-drag-ghost',
 					scroll: true,
