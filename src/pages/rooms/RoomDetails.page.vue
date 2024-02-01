@@ -47,7 +47,9 @@
 							class="no-active"
 						>
 							<template #default>
-								<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }}</v-icon>
+								<v-icon size="large" class="tab-icon mr-sm-3">
+									{{ tabItem.icon }}</v-icon
+								>
 								<span class="d-none d-sm-inline">
 									{{ tabItem.label }}
 								</span>
