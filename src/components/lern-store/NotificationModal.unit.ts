@@ -1,9 +1,9 @@
-import Vuex from "vuex";
-import NotificationModal from "@/components/molecules/NotificationModal";
-import { createLocalVue } from "@vue/test-utils";
-
-const localVue = createLocalVue();
-localVue.use(Vuex);
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import NotificationModal from "./NotificationModal.vue";
 
 const testProps = {
 	showNotificationModal: true,
@@ -13,32 +13,24 @@ const testProps = {
 };
 
 describe("@/components/molecules/NotificationModal", () => {
-	let wrapper;
-
-	const setup = (isSuccess) => {
-		document.body.setAttribute("data-app", "true");
-		wrapper = mount(NotificationModal, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			propsData: {
+	const setup = (isSuccess: boolean) => {
+		return mount(NotificationModal, {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			props: {
 				...testProps,
 				isSuccess,
 			},
 		});
 	};
 	it("success case", async () => {
-		setup(true);
+		const wrapper = setup(true);
 
 		expect(wrapper.find(".modal-description").text()).toBe(
 			testProps.description
 		);
 		expect(wrapper.find(".modal-title").text()).toBe(testProps.successMsg);
 		expect(
-			wrapper
-				.find(".material-icon")
-				.element.innerHTML.includes("$mdiCheckCircle")
+			wrapper.find(".icon").element.innerHTML.includes("$mdiCheckCircle")
 		).toBe(true);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
@@ -48,16 +40,14 @@ describe("@/components/molecules/NotificationModal", () => {
 	});
 
 	it("error case", async () => {
-		setup(false);
+		const wrapper = setup(false);
 
 		expect(wrapper.find(".modal-description").text()).toBe(
 			testProps.description
 		);
 		expect(wrapper.find(".modal-title").text()).toBe(testProps.errorMsg);
 		expect(
-			wrapper
-				.find(".material-icon")
-				.element.innerHTML.includes("$mdiAlertCircle")
+			wrapper.find(".icon").element.innerHTML.includes("$mdiAlertCircle")
 		).toBe(true);
 		setTimeout(() => {
 			expect(wrapper.find(".footer-button").attributes("style")).toBe(
@@ -67,7 +57,7 @@ describe("@/components/molecules/NotificationModal", () => {
 	});
 
 	it("executes close action after close", async () => {
-		setup(false);
+		const wrapper = setup(false);
 
 		const button = wrapper.find(".btn-confirm");
 		button.trigger("click");

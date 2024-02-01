@@ -148,7 +148,7 @@ export default {
 				this.$nextTick(() => {
 					const menu = this.$refs["context-menu"];
 					if (to && menu) {
-						menu.querySelector("button").focus();
+						menu.querySelector("button")?.focus();
 					}
 				});
 			},
