@@ -1,6 +1,6 @@
 <template>
-	<v-app class="wireframe-container">
-		<v-container fluid class="wireframe-header sticky px-6 py-0">
+	<v-container fluid class="wireframe-container">
+		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -27,7 +27,7 @@
 				</slot>
 			</div>
 			<div v-if="showBorder" class="border" />
-		</v-container>
+		</div>
 		<v-main
 			:class="{
 				'container-max-width': !fullWidth,
@@ -37,7 +37,7 @@
 		>
 			<slot />
 		</v-main>
-	</v-app>
+	</v-container>
 </template>
 
 <script lang="ts">
