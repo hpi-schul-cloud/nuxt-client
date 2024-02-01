@@ -370,13 +370,13 @@ export default class RoomsModule extends VuexModule {
 			await this.coursesApi.courseControllerImportCourse(file);
 			this.setAlertData({
 				status: "success",
-				text: "pages.rooms.uploadCourse.success",
+				text: "pages.rooms.ccImportCourse.success",
 				autoClose: true,
 			});
 		} catch (error: any) {
 			this.setAlertData({
 				status: "error",
-				text: "pages.rooms.uploadCourse.error",
+				text: "pages.rooms.ccImportCourse.error",
 				autoClose: true,
 			});
 		}

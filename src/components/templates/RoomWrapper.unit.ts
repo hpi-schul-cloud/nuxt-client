@@ -254,7 +254,7 @@ describe("@templates/RoomWrapper.vue", () => {
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			wrapper.vm.updateRooms = updateRoomsMock;
-			await wrapper.setData({ uploadDialog: { isOpen: true } });
+			await wrapper.setData({ ccImportDialog: { isOpen: true } });
 
 			const uploadModalComponent = wrapper.find(".upload-modal");
 

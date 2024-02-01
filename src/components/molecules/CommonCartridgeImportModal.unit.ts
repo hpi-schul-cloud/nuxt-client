@@ -1,19 +1,21 @@
 import RoomsModule from "@/store/rooms";
-import UploadModal from "./UploadModal.vue";
+import CommonCartridgeImportModal from "./CommonCartridgeImportModal.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions } from "@vue/test-utils";
 import Vue from "vue";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
+import {
+	I18N_KEY,
+	LOADING_STATE_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	ROOMS_MODULE_KEY,
+} from "@/utils/inject";
+import { i18nMock } from "@@/tests/test-utils";
+import { createModuleMocks } from "@/utils/mock-store-module";
 
-jest.mock("@/utils/inject", () => ({
-	__esModule: true,
-	...jest.requireActual("@/utils/inject"),
-	injectStrict: jest.fn(),
-}));
-
-describe("@/components/molecules/UploadModal", () => {
+describe("@/components/molecules/CommonCartridgeImportModal", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
@@ -21,75 +23,82 @@ describe("@/components/molecules/UploadModal", () => {
 			notifierModule: NotifierModule,
 			roomsModule: RoomsModule,
 		});
-		const wrapper = mount(UploadModal as MountOptions<Vue>, {
+		const wrapper = mount(CommonCartridgeImportModal as MountOptions<Vue>, {
 			...createComponentMocks({
 				i18n: true,
 			}),
 			propsData: {
 				isOpen: false,
 			},
+			provide: {
+				[I18N_KEY.valueOf()]: i18nMock,
+				[LOADING_STATE_MODULE_KEY.valueOf()]:
+					createModuleMocks(LoadingStateModule),
+				[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
+				[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
+			},
 		});
-		return {
-			wrapper,
-		};
+		return { wrapper };
 	};
 
 	describe("when uploading a file", () => {
 		it("should open and close the modal", async () => {
 			const { wrapper } = setup();
-			const dialog = wrapper.find(".upload-dialog");
-			const uploadDialog = wrapper.vm.$refs.uploadDialog as any;
+			const importDialog = wrapper.vm.$refs.commonCartridgeImportDialog as any;
 
-			expect(dialog.exists()).toBe(true);
-			expect(uploadDialog.isOpen).toBe(false);
+			expect(importDialog).toBeDefined();
+			expect(importDialog.value).toBe(false);
 
 			await wrapper.setProps({
 				isOpen: true,
 			});
 
-			expect(uploadDialog.isOpen).toBe(true);
+			expect(importDialog.value).toBe(true);
 
 			await wrapper.setProps({
 				isOpen: false,
 			});
 
-			expect(uploadDialog.isOpen).toBe(false);
+			expect(importDialog.value).toBe(false);
 		});
 
-		it("should view upload button after selecting a file", async () => {
+		it("should enabled confirm button after selecting a file", async () => {
 			const { wrapper } = setup();
-			const uploadDialog = wrapper.vm.$refs.uploadDialog as any;
-
-			expect(uploadDialog.buttons).toEqual(["cancel"]);
 
 			await wrapper.setProps({
 				isOpen: true,
 			});
+
+			const confirmBtn = wrapper.find("[data-testid='dialog-confirm-btn']");
+
+			expect(confirmBtn.exists()).toBe(true);
+			expect(confirmBtn.vm.$props.disabled).toBe(true);
+
 			await wrapper.setData({
 				file: new File([""], "filename"),
 			});
 
-			expect(uploadDialog.buttons).toEqual(["cancel", "confirm"]);
+			expect(confirmBtn.vm.$props.disabled).toBe(false);
 		});
 
 		it("should upload file and trigger events dialog-confirmed and dialog-closed", async () => {
 			const { wrapper } = setup();
-			const dialog = wrapper.find(".upload-dialog");
 
 			await wrapper.setProps({
 				isOpen: true,
 			});
+
+			const confirmBtn = wrapper.find("[data-testid='dialog-confirm-btn']");
+
 			await wrapper.setData({
 				file: new File([""], "filename"),
 			});
 
-			const confirmBtn = wrapper.find("[data-testId='dialog-confirm']");
+			await confirmBtn.trigger("click");
 
-			confirmBtn.trigger("click");
+			const emitted = wrapper.emitted();
 
-			const emitted = dialog.emitted();
-
-			expect(emitted["dialog-confirmed"]).toHaveLength(1);
+			expect(emitted["update-rooms"]).toHaveLength(1);
 			expect(emitted["dialog-closed"]).toHaveLength(1);
 		});
 	});
@@ -102,7 +111,7 @@ describe("@/components/molecules/UploadModal", () => {
 				isOpen: true,
 			});
 
-			const btnCancel = wrapper.find("[data-testId='dialog-cancel']");
+			const btnCancel = wrapper.find("[data-testid='dialog-cancel-btn']");
 
 			btnCancel.trigger("click");
 

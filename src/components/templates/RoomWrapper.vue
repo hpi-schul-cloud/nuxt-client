@@ -34,8 +34,8 @@
 			class="import-modal"
 			@update-rooms="updateRooms"
 		/>
-		<upload-modal
-			v-model="uploadDialog.isOpen"
+		<common-cartridge-import-modal
+			v-model="ccImportDialog.isOpen"
 			class="upload-modal"
 			@update-rooms="updateRooms"
 		/>
@@ -46,8 +46,8 @@
 import { authModule, envConfigModule, roomsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
 import ImportModal from "@/components/molecules/ImportModal.vue";
-import UploadModal from "@/components/molecules/UploadModal.vue";
 import {
 	mdiPlus,
 	mdiCloudDownloadOutline,
@@ -61,7 +61,7 @@ export default Vue.extend({
 		DefaultWireframe,
 		vCustomEmptyState,
 		ImportModal,
-		UploadModal,
+		CommonCartridgeImportModal,
 	},
 	props: {
 		hasRooms: {
@@ -78,7 +78,7 @@ export default Vue.extend({
 			importDialog: {
 				isOpen: false,
 			},
-			uploadDialog: {
+			ccImportDialog: {
 				isOpen: false,
 			},
 		};
@@ -126,10 +126,10 @@ export default Vue.extend({
 							.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED
 					) {
 						fabItems.actions.push({
-							label: this.$t("pages.rooms.fab.upload.course"),
+							label: this.$t("pages.rooms.fab.import.course"),
 							icon: mdiImport,
 							dataTestid: "fab_button_upload_course",
-							ariaLabel: this.$t("pages.rooms.fab.upload.course"),
+							ariaLabel: this.$t("pages.rooms.fab.import.course"),
 							customEvent: {
 								name: "fabButtonEvent",
 								value: "upload",
@@ -165,7 +165,7 @@ export default Vue.extend({
 			}
 
 			if (event === "upload") {
-				this.$data.uploadDialog.isOpen = true;
+				this.$data.ccImportDialog.isOpen = true;
 			}
 		},
 		async updateRooms() {
