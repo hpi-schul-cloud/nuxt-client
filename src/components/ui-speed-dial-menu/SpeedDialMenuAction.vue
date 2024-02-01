@@ -11,21 +11,21 @@
 			<template v-if="orientation === 'left'">
 				<v-btn
 					color="primary"
+					class="elevation-6"
 					icon
 					size="small"
-					role="menuitem"
+					:href="href"
 					@click="onClick"
+					role="menuitem"
 				>
 					<v-icon>{{ props.icon }}</v-icon>
-					<span class="d-sr-only"> <slot /></span>
+					<span class="d-sr-only"> <slot /> </span>
 				</v-btn>
 				<v-btn
-					density="compact"
-					color="secondary"
-					variant="tonal"
-					class="ml-4"
+					class="ml-4 elevation-6"
 					tabindex="-1"
 					aria-hidden="true"
+					:href="href"
 					@click="onClick"
 					><slot />
 				</v-btn>
@@ -33,19 +33,19 @@
 
 			<template v-else>
 				<v-btn
-					density="compact"
-					color="secondary"
-					variant="tonal"
-					class="mr-4"
+					class="mr-4 elevation-6"
 					tabindex="-1"
 					aria-hidden="true"
+					:href="href"
 					@click="onClick"
 					><slot />
 				</v-btn>
 				<v-btn
 					color="primary"
+					class="elevation-6"
 					icon
 					size="small"
+					:href="href"
 					@click="onClick"
 					role="menuitem"
 				>

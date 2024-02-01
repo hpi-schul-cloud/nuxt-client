@@ -24,7 +24,16 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, provide, ref, toRef, useSlots, withDefaults } from "vue";
+import {
+	computed,
+	onMounted,
+	provide,
+	ref,
+	toRef,
+	useSlots,
+	VNode,
+	withDefaults,
+} from "vue";
 import {
 	INJECT_SPEED_DIAL_ACTION_CLICKED,
 	INJECT_SPEED_DIAL_DIRECTION,
@@ -46,7 +55,14 @@ provide(INJECT_SPEED_DIAL_DIRECTION, toRef(props, "direction"));
 provide(INJECT_SPEED_DIAL_ORIENTATION, toRef(props, "orientation"));
 provide(INJECT_SPEED_DIAL_ACTION_CLICKED, () => (isMenuOpen.value = false));
 
-const actions = computed(() => (slots.actions ? slots.actions() : []));
+const actions = computed(() => {
+	const actionsInSlot = slots.actions ? slots.actions() : [];
+	if (hasPseudoRenderElement(actionsInSlot)) {
+		return actionsInSlot[0].children as VNode[];
+	}
+	return actionsInSlot;
+});
+
 const isMenu = computed(() => actions.value.length > 0);
 const isMenuOpen = ref(false);
 
@@ -66,6 +82,22 @@ const classes = computed(() => {
 
 const onClick = () => (isMenuOpen.value = !isMenuOpen.value);
 const onClickOutside = () => (isMenuOpen.value = false);
+
+/**
+ * Returns true if the actions in actions-slot are wrapped by a pseudo element.
+ * This is the case if the actions were rendered in a v-for-loop
+ */
+const hasPseudoRenderElement = (actionsInSlot: VNode[]) => {
+	return (
+		actionsInSlot.length === 1 &&
+		actionsInSlot[0].props === null &&
+		Array.isArray(actionsInSlot[0].children)
+	);
+};
+
+onMounted(() => {
+	console.log(actions.value);
+});
 </script>
 
 <style scoped lang="scss">
@@ -76,6 +108,7 @@ const onClickOutside = () => (isMenuOpen.value = false);
 
 .position-relative {
 	position: relative;
+	z-index: 100;
 }
 
 .overflow-visible {
