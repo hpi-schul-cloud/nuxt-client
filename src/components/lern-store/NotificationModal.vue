@@ -21,11 +21,13 @@
 </template>
 
 <script>
+import BaseModal from "../base/BaseModal";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 export default {
 	name: "NotificationModal",
 	components: {
+		BaseModal,
 		ModalBodyInfo,
 		ModalFooterConfirm,
 	},

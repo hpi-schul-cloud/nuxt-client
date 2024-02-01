@@ -1,45 +1,42 @@
-import Vuetify from "vuetify";
-import vCustomEmptyState from "./vCustomEmptyState";
-
-let vuetify;
-let wrapper;
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import vCustomEmptyState from "./vCustomEmptyState.vue";
 
 const title = "Test title";
 const subtitle = "Test subtitle";
 const image = "@/assets/img/empty-state/tasks-empty-state.svg";
 
 describe("@/components/molecules/vCustomEmptyState", () => {
-	beforeEach(() => {
-		vuetify = new Vuetify();
-
-		wrapper = mount(vCustomEmptyState, {
-			...createComponentMocks(
-				{
-					i18n: true,
-					vuetify: true,
-				},
-				vuetify
-			),
-			propsData: {
+	const getWrapper = () => {
+		return mount(vCustomEmptyState, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
 				image,
 				title,
 			},
 		});
-	});
-
-	afterEach(() => {
-		wrapper.destroy();
-	});
+	};
 
 	it("should render a title", () => {
+		const wrapper = getWrapper();
+
 		const h1 = wrapper.find("h1");
+
 		expect(h1.text()).toBe(title);
 	});
 
 	it("should render subtitle, if it is passed as props", async () => {
+		const wrapper = getWrapper();
 		const h2 = wrapper.find("h2");
+
 		expect(h2.exists()).toBe(false);
-		expect(wrapper.props().subtitle).toBe("");
+		// @ts-expect-error type error
+		expect(wrapper.props("subtitle")).toBe("");
 
 		wrapper.setProps({ subtitle });
 		await wrapper.vm.$nextTick();
