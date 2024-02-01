@@ -13,19 +13,9 @@
 			</slot>
 			<div v-if="fabItems" class="fab-wrapper">
 				<slot name="fab">
-					<!-- <v-custom-fab
-						:data-testid="fabItems.testId"
-						:icon="fabItems.icon"
-						:title="fabItems.title"
-						:href="fabItems.href"
-						:actions="fabItems.actions"
-						:class="fabItems.class"
-						class="wireframe-fab"
-						:aria-label="fabItems.ariaLabel"
-						v-bind="$attrs"
-					/> -->
 					<speed-dial-menu
-						:direction="'bottom'"
+						class="wireframe-fab"
+						:direction="isMobile ? 'top' : 'bottom'"
 						:orientation="'right'"
 						:icon="fabItems.icon"
 						:data-testid="fabItems.dataTestId"
@@ -62,6 +52,7 @@
 import { defineComponent, onMounted } from "vue";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenuAction, SpeedDialMenu } from "@ui-speed-dial-menu";
+import { useVuetifyBreakpoints } from "@util-device-detection";
 
 export default defineComponent({
 	inheritAttrs: false,
@@ -98,7 +89,14 @@ export default defineComponent({
 	},
 	setup(props) {
 		onMounted(() => console.log(props.fabItems));
-		return {};
+
+		const { isSmallerOrEqual } = useVuetifyBreakpoints();
+
+		const isMobile = isSmallerOrEqual("md");
+
+		return {
+			isMobile,
+		};
 	},
 });
 </script>
@@ -155,6 +153,8 @@ export default defineComponent({
 @media #{map-get($display-breakpoints, 'md-and-down')} {
 	.wireframe-fab {
 		position: fixed !important;
+		bottom: 2rem;
+		right: 1rem;
 	}
 }
 
