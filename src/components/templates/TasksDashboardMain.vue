@@ -22,17 +22,17 @@
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" class="tabs-max-width" grow>
 					<v-tab :value="tabRoutes[0]">
-						<v-icon size="large" class="tab-icon mr-sm-3">{{
-							tabOneHeader.icon
-						}}</v-icon>
+						<v-icon size="large" class="tab-icon mr-sm-3">
+							{{ tabOneHeader.icon }}
+						</v-icon>
 						<span class="d-none d-sm-inline" data-testid="openTasks">
 							{{ tabOneHeader.title }}
 						</span>
 					</v-tab>
 					<v-tab :value="tabRoutes[1]">
-						<v-icon size="large" class="tab-icon mr-sm-3">{{
-							tabTwoHeader.icon
-						}}</v-icon>
+						<v-icon size="large" class="tab-icon mr-sm-3">
+							{{ tabTwoHeader.icon }}
+						</v-icon>
 						<span
 							class="d-none d-sm-inline"
 							:data-testid="tabTwoHeader.dataTestId"
@@ -41,9 +41,9 @@
 						</span>
 					</v-tab>
 					<v-tab :value="tabRoutes[2]"
-						><v-icon size="large" class="tab-icon mr-sm-3">{{
-							tabThreeHeader.icon
-						}}</v-icon>
+						><v-icon size="large" class="tab-icon mr-sm-3">
+							{{ tabThreeHeader.icon }}
+						</v-icon>
 						<span class="d-none d-sm-inline" data-testid="finishedTasks">
 							{{ tabThreeHeader.title }}
 						</span>
