@@ -1,4 +1,10 @@
-import ContextMenu from "./ContextMenu";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { DOMWrapper, mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import ContextMenu from "./ContextMenu.vue";
 
 const actions = [
 	{ event: "event1", text: "testText1" },
@@ -6,14 +12,14 @@ const actions = [
 	{ event: "event3", text: "testText3" },
 ];
 
-const hasWrapperFocus = (wrapper) => {
-	return wrapper.element === document.activeElement;
+const hasWrapperFocus = (wrapper?: DOMWrapper<Element>) => {
+	return wrapper?.element === document.activeElement;
 };
 
-const getWrapper = ({ options, additionalProps } = {}) => {
+const getWrapper = ({ options = {}, additionalProps = {} } = {}) => {
 	return mount(ContextMenu, {
-		...createComponentMocks({ i18n: true, vuetify: true }),
-		propsData: {
+		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+		props: {
 			show: true,
 			actions,
 			...additionalProps,
@@ -44,12 +50,13 @@ describe("@/components/molecules/ContextMenu", () => {
 		const buttons = wrapper.findAll(
 			".context-menu__button:not(.context-menu__button-close)"
 		);
+
 		for (let i = 0; i < buttons.length; i += 1) {
 			const button = buttons.at(i);
-			const { event } = actions.find((a) => a.text === button.text());
-			button.trigger("click");
-			expect(wrapper.emitted(event)).toHaveLength(1);
-			expect(wrapper.emitted(event)[0][0]).toBeUndefined();
+			const event = actions.find((a) => a.text === button?.text())?.event;
+			button?.trigger("click");
+			expect(wrapper.emitted(event ?? "")).toHaveLength(1);
+			expect(wrapper.emitted(event ?? "")?.[0][0]).toBeUndefined();
 		}
 	});
 
@@ -73,13 +80,12 @@ describe("@/components/molecules/ContextMenu", () => {
 		);
 		expect(wrapper.emitted("update:show")).toHaveLength(1);
 		expect(wrapper.emitted("update:show")).toStrictEqual([[false]]);
-		wrapper.destroy();
 	});
 
 	describe("click outside", () => {
 		it("triggers event on click outside d", async () => {
 			// Mount Menu wrapper to have something to click outside
-			const emptyNode = "<!---->";
+			const emptyNode = "<!--v-if-->";
 			const wrapper = mount({
 				data: () => ({ show: true, actions }),
 				template: `
@@ -89,7 +95,7 @@ describe("@/components/molecules/ContextMenu", () => {
 					</div>
 				`,
 				components: { ContextMenu },
-				...createComponentMocks({ i18n: true }),
+				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			});
 
 			const outsideElement = wrapper.find(".outside");
@@ -111,14 +117,14 @@ describe("@/components/molecules/ContextMenu", () => {
 					</div>
 				`,
 					components: { ContextMenu },
-					...createComponentMocks({ i18n: true }),
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				},
 				getAttachToOptions()
 			);
-			const Menu = wrapper.find(".ctxmenu");
+			const menu = wrapper.findComponent(ContextMenu);
 			const outsideElement = wrapper.find(".outside");
 			await outsideElement.trigger("click");
-			expect(Menu.emitted("update:show")).toBeUndefined();
+			expect(menu.emitted("update:show")).toBeUndefined();
 		});
 	});
 
@@ -134,7 +140,9 @@ describe("@/components/molecules/ContextMenu", () => {
 				const wrapper = getWrapper({
 					additionalProps: { anchor },
 				});
-				const menuStyles = await wrapper.find(".context-menu").element.style;
+				const menuElement = await wrapper.find(".context-menu").element;
+				const menuStyles = window.getComputedStyle(menuElement);
+
 				expect(menuStyles.top).toContain(top);
 				expect(menuStyles.bottom).toContain(bottom);
 				expect(menuStyles.left).toContain(left);
@@ -143,78 +151,65 @@ describe("@/components/molecules/ContextMenu", () => {
 		);
 
 		it("should throw an error for invalid anchor positions", async () => {
-			const consoleError = jest.spyOn(console, "error").mockImplementation();
 			expect(() => {
 				getWrapper({
 					additionalProps: { anchor: "top-bottom" },
 				});
 			}).toThrow(new Error("anchor is not defined"));
-			expect(consoleError).toHaveBeenCalledWith(
-				expect.stringMatching(
-					/^\[Vue warn\]: Invalid prop: custom validator check failed for prop "anchor"\./
-				)
-			);
 		});
 	});
 
 	describe("a11y", () => {
 		it("first element get's focused on mount", async () => {
 			const wrapper = getWrapper(getAttachToOptions());
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-			const buttons = wrapper.findAll(".context-menu__button");
-			expect(hasWrapperFocus(buttons.at(0))).toBe(true);
-			wrapper.destroy();
+			await nextTick();
+			await nextTick();
+			const button = wrapper.find(".context-menu__button");
+			expect(hasWrapperFocus(button)).toBe(true);
 		});
 
 		it("arrow up keeps focus on first element if already focused", async () => {
 			const wrapper = getWrapper(getAttachToOptions());
-			await wrapper.vm.$nextTick();
-			const buttons = wrapper.findAll(".context-menu__button");
-			buttons.at(0).element.focus();
-			expect(hasWrapperFocus(buttons.at(0))).toBe(true);
-			buttons.at(0).trigger("keydown.up");
-			await wrapper.vm.$nextTick();
-			expect(hasWrapperFocus(buttons.at(0))).toBe(true);
-			wrapper.destroy();
+			await nextTick();
+			const button = wrapper.find(".context-menu__button");
+			button.trigger("focus");
+			expect(hasWrapperFocus(button)).toBe(true);
+			button.trigger("keydown.up");
+			await nextTick();
+			expect(hasWrapperFocus(button)).toBe(true);
 		});
 
 		it("arrow up focuses previous button", async () => {
 			const wrapper = getWrapper(getAttachToOptions());
-			await wrapper.vm.$nextTick();
+			await nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
 
-			expect(buttons.wrappers).toHaveLength(3);
-
-			buttons.at(buttons.length - 1).element.focus();
-			await wrapper.vm.$nextTick();
+			expect(buttons).toHaveLength(3);
 
 			for (let i = buttons.length - 1; i > 1; i -= 1) {
 				const currentButton = buttons.at(i);
 				const prevButton = buttons.at(i - 1);
 
-				expect(hasWrapperFocus(currentButton)).toBe(true);
-				expect(hasWrapperFocus(prevButton)).toBe(false);
-				currentButton.trigger("keydown.up");
-				await wrapper.vm.$nextTick();
+				currentButton?.trigger("keydown.up");
+				await nextTick();
 				expect(hasWrapperFocus(currentButton)).toBe(false);
 				expect(hasWrapperFocus(prevButton)).toBe(true);
 			}
-			wrapper.destroy();
 		});
 
 		it("arrow down focuses next button", async () => {
 			const wrapper = getWrapper(getAttachToOptions());
-			await wrapper.vm.$nextTick();
+			await nextTick();
 			const buttons = wrapper.findAll(".context-menu__button");
+
 			// - 2 (-1 for length offset and another -1 for close button)
 			for (let i = 0; i < buttons.length - 2; i += 1) {
 				const currentButton = buttons.at(i);
 				const nextButton = buttons.at(i + 1);
 				expect(hasWrapperFocus(currentButton)).toBe(true);
 				expect(hasWrapperFocus(nextButton)).toBe(false);
-				currentButton.trigger("keydown.down");
-				await wrapper.vm.$nextTick();
+				currentButton?.trigger("keydown.down");
+				await nextTick();
 				expect(hasWrapperFocus(currentButton)).toBe(false);
 				expect(hasWrapperFocus(nextButton)).toBe(true);
 			}

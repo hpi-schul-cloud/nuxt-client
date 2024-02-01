@@ -5,35 +5,38 @@ import {
 import CopyModule from "@/store/copy";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import TaskItemStudent from "./TaskItemStudent";
-
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
+import { mount } from "@vue/test-utils";
+import TaskItemStudent from "./TaskItemStudent.vue";
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
 	mocks;
 
-let tasksModuleMock;
-let copyModuleMock;
-let notifierModuleMock;
+let tasksModuleMock: TasksModule;
+let copyModuleMock: CopyModule;
+let notifierModuleMock: NotifierModule;
 
 const mockRouter = {
 	push: jest.fn(),
 };
 
-const getWrapper = (props, options) => {
+const getWrapper = (props: object, options?: object) => {
 	return mount(TaskItemStudent, {
-		...createComponentMocks({
-			i18n: true,
-			vuetify: true,
-		}),
-		provide: {
-			tasksModule: tasksModuleMock,
-			copyModule: copyModuleMock,
-			[NOTIFIER_MODULE_KEY]: notifierModuleMock,
-			[I18N_KEY]: { t: (key) => key },
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				tasksModule: tasksModuleMock,
+				copyModule: copyModuleMock,
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+			},
 		},
-		propsData: props,
+		props,
 		...options,
 		mocks: {
 			$router: mockRouter,
@@ -49,12 +52,17 @@ describe("@/components/molecules/TaskItemStudent", () => {
 	});
 
 	it("Should direct user to legacy task details page", () => {
-		const { location } = window;
+		Object.defineProperty(window, "location", {
+			set: jest.fn(),
+			get: () => createMock<Location>(),
+		});
+		const locationSpy = jest.spyOn(window, "location", "set");
+
 		const wrapper = getWrapper({ task: tasks[0] });
 		const taskCard = wrapper.findComponent({ name: "v-list-item" });
 		taskCard.trigger("click");
 
-		expect(location.pathname).toStrictEqual(`/homework/${tasks[0].id}`);
+		expect(locationSpy).toHaveBeenCalledWith(`/homework/${tasks[0].id}`);
 	});
 
 	it("Should display no due date label if task has no dueDate", () => {
@@ -67,10 +75,8 @@ describe("@/components/molecules/TaskItemStudent", () => {
 	it("Should display due date label if task has dueDate", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
 
-		const convertedDueDate = dateTimeFromUTC(tasks[0].dueDate);
-		const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
-			"pages.tasks.labels.due"
-		)} ${convertedDueDate}`;
+		const convertedDueDate = dateTimeFromUTC((tasks[0] as any).dueDate);
+		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
 		expect(dueDateLabel.text()).toBe(expectedDueDateLabel);
@@ -139,10 +145,8 @@ describe("@/components/molecules/TaskItemStudent", () => {
 
 		wrapper.vm.$vuetify.display.xs = true;
 
-		const convertedDueDate = dateFromUTC(tasks[0].dueDate);
-		const expectedDueDateLabel = `${wrapper.vm.$i18n.t(
-			"pages.tasks.labels.due"
-		)} ${convertedDueDate}`;
+		const convertedDueDate = dateFromUTC((tasks[0] as any).dueDate);
+		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
 		expect(wrapper.vm.dueDateLabel).toBe(expectedDueDateLabel);
 	});
@@ -163,6 +167,8 @@ describe("@/components/molecules/TaskItemStudent", () => {
 	it("should display topic", () => {
 		const wrapper = getWrapper({ task: openTasksWithDueDate[0] });
 
-		expect(wrapper.text()).toContain("Thema Malen nach Zahlen");
+		expect(wrapper.text()).toContain(
+			"offencommon.words.topic Malen nach Zahlen"
+		);
 	});
 });

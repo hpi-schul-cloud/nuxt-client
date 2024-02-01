@@ -1,23 +1,34 @@
-import ContentEduSharingFooter from "./ContentEduSharingFooter";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import ContentEduSharingFooter from "./ContentEduSharingFooter.vue";
 
 describe("@/components/molecules/ContentEduSharingFooter", () => {
-	const wrapper = shallowMount(ContentEduSharingFooter, {
-		...createComponentMocks({ i18n: true }),
+	const wrapper = mount(ContentEduSharingFooter, {
+		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		data: () => ({}),
+		props: {
+			img: "@/assets/img/edusharing/edusharing-logo.svg",
+		},
 	});
 
 	it("Renders svg image", () => {
 		expect(wrapper.find(".edusharing-footer__logo").exists()).toBe(true);
 		expect(wrapper.find(".edusharing-footer__logo").attributes("alt")).toBe(
-			"edusharing-logo"
+			"components.molecules.EdusharingFooter.img_alt"
 		);
+
 		expect(wrapper.find(".edusharing-footer__logo").attributes("src")).toBe(
-			"@/assets/img/edusharing/edusharing-logo.svg"
+			wrapper.vm.img
 		);
 	});
 
 	it("Provides proper text", () => {
 		expect(wrapper.find(".edusharing-footer__text").exists()).toBe(true);
-		expect(wrapper.find(".edusharing-footer__text").text()).toBe("powered by");
+		expect(wrapper.find(".edusharing-footer__text").text()).toBe(
+			"components.molecules.EdusharingFooter.text"
+		);
 	});
 });

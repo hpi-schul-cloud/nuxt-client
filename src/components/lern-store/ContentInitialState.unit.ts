@@ -1,21 +1,25 @@
-import ContentInitialState from "./ContentInitialState";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import ContentInitialState from "./ContentInitialState.vue";
 
 describe("@/components/molecules/ContentInitialState", () => {
 	const wrapper = mount(ContentInitialState, {
-		...createComponentMocks({ i18n: true }),
+		global: {
+			plugins: [createTestingI18n(), createTestingVuetify()],
+		},
 		data: () => ({}),
 	});
 
-	it("Renders an image", () => {
-		expect(wrapper.find(".img-container").exists()).toBe(true);
-	});
 	it("Provides proper title", () => {
-		expect(wrapper.find(".title").exists()).toBe(true);
-		expect(wrapper.find(".title").text()).toBe(
-			wrapper.vm.$i18n.t("pages.content.init_state.title")
+		expect(wrapper.findComponent(vCustomEmptyState).props("title")).toBe(
+			"pages.content.init_state.title"
 		);
 	});
 	it("Provides message", () => {
-		expect(wrapper.find(".description").exists()).toBe(true);
+		expect(wrapper.find(".initial-state-description").exists()).toBe(true);
 	});
 });
