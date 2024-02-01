@@ -4,16 +4,16 @@
 			<slot name="menu" />
 		</div>
 
-		<div v-if="$slots.display">
+		<div v-if="$slots.display" class="content-element-display">
 			<slot name="display" />
 		</div>
 
 		<div
-			:class="dynamicClasses"
-			class="content-element-bar-texts rounded-b py-4"
 			v-if="
 				$slots.title || $slots.element || $slots.subtitle || $slots.description
 			"
+			:class="dynamicClasses"
+			class="content-element-bar-texts rounded-b py-4"
 		>
 			<div
 				v-if="$slots.title"
@@ -24,7 +24,9 @@
 					<slot name="logo" />
 				</div>
 
-				<ContentElementTitleIcon v-if="icon" :icon="icon" class="mr-2" />
+				<v-icon v-if="icon" color="black" size="20" class="mr-2">{{
+					icon
+				}}</v-icon>
 
 				<LineClamp class="content-element-title">
 					<slot name="title" />
@@ -48,7 +50,6 @@
 
 <script setup lang="ts">
 import { computed, defineProps, PropType } from "vue";
-import ContentElementTitleIcon from "./ContentElementTitleIcon.vue";
 import LineClamp from "../LineClamp.vue";
 import { IconProps } from "vuetify";
 
@@ -111,10 +112,6 @@ const dynamicClasses = computed(() => {
 	.v-icon {
 		color: var(--v-black-base);
 	}
-}
-
-.v-card__text {
-	margin-top: 0px;
 }
 
 .logo-container {
