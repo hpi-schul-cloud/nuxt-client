@@ -561,7 +561,7 @@ export default defineComponent({
 	text-transform: none !important;
 
 	&.v-tab.v-btn.no-active {
-		color: rgba(var(--v-theme-secondary));
+		color: rgba(0, 0, 0, 0.54);
 	}
 }
 
