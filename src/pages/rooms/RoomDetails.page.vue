@@ -111,27 +111,22 @@
 			has-buttons
 			:buttons="['close', 'next']"
 			@dialog-closed="closeDialog"
+			@next="nextDialog"
 		>
 			<div slot="title" class="dialog-header">
 				<h4>{{ dialog.header }}</h4>
 			</div>
 			<template slot="content">
 				<v-divider class="mb-4" />
-				<div class="modal-text">
-					<p class="text-md mt-2">
-						{{ dialog.text }}
-					</p>
-				</div>
-				<div class="modal-text modal-sub-text mb-2">
-					{{ dialog.subText }}
-				</div>
-				<!-- <div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
-					<base-qr-code :url="dialog.qrUrl" data-testid="modal-qrcode" />
-				</div> -->
-				<v-divider />
+				<!-- <v-radio-group v-model="dialog.radios">
+					<v-radio label="V1.1" id="v1.1" value="1.1.0" />
+					<br />
+					<v-radio label="V1.3" id="v1.3" value="1.3.0" />
+					<br />
+				</v-radio-group>
+				<v-divider /> -->
 			</template>
 		</v-custom-dialog>
-
 		<share-modal type="courses" />
 
 		<copy-result-modal
@@ -219,6 +214,8 @@ export default defineComponent({
 				subText: "",
 				qrUrl: "",
 				courseShareToken: "",
+				radios: "",
+				step: 1,
 			},
 			icons: {
 				mdiPencilOutline,
@@ -248,6 +245,10 @@ export default defineComponent({
 
 		isDownload() {
 			return this.dialog.model === "download";
+		},
+
+		isDownloadVersionSelected() {
+			return this.dialog.radios;
 		},
 
 		isShare() {
@@ -516,11 +517,9 @@ export default defineComponent({
 		},
 
 		async onDownload() {
+			this.downloadModule.startDownloadFlow();
 			this.dialog.model = "download";
 			this.dialog.header = this.$t("pages.room.modal.course.download.header");
-			this.dialog.text = this.$t("pages.room.modal.course.download.text");
-			// this.dialog.inputText = this.dialog.courseShareToken;
-			// this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
 			this.dialog.isOpen = true;
 		},
 
@@ -530,6 +529,10 @@ export default defineComponent({
 			this.dialog.text = "";
 			this.dialog.inputText = "";
 			this.dialog.subText = "";
+		},
+		nextDialog() {
+			this.dialog.isOpen = true;
+			// await roomModule.downloadImsccCourse(this.dialog.radios);
 		},
 		async onCopyRoom(courseId) {
 			const loadingText = this.$t(

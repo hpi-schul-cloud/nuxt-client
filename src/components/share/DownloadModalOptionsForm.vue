@@ -49,8 +49,8 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const downloadOptions = reactive({
-			isV_1_1: true,
-			isV_1_3: false,
+			isV_1_1: "1.1.0",
+			isV_1_3: "1.3.0",
 		});
 
 		watch(downloadOptions, (newValue) => {

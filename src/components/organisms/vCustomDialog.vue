@@ -135,6 +135,10 @@ export default {
 		closeDialog(event) {
 			this.$emit("dialog-closed", false, event);
 		},
+		// nextDialog() {
+		// 	this.$emit("dialog-next");
+		// 	this.$emit("dialog-closed", true);
+		// },
 		checkButtons(buttonName) {
 			return this.buttons.some((button) => button == buttonName);
 		},

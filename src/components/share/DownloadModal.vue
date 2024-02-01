@@ -11,27 +11,24 @@
 		<div slot="title" ref="textTitle" class="text-h4 my-2 text-break">
 			{{ modalTitle }}
 		</div>
-		<!-- <template slot="content"> -->
-		<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
-		<!-- <v-fade-transition>
-				<download-modal-options-form
-					:type="type"
-					@download-options-change="onDownloadOptionsChange"
-				/>
-			</v-fade-transition>
-		</template> -->
 		<template slot="content">
+			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
 				<div v-if="step === 1 && isOpen">
+					<v-radio-group v-model="dialog.radios">
+						<v-radio label="V1.1" id="v1.1" value="1.1.0" />
+						<br />
+						<v-radio label="V1.3" id="v1.3" value="1.3.0" />
+						<br />
+					</v-radio-group>
+					<v-divider />
 					<download-modal-options-form
 						@download-options-change="onDownloadOptionsChange"
 					/>
 				</div>
 
 				<div v-if="step === 2 && isOpen">
-					<download-modal-options-form
-						@download-options-change="onDownloadOptionsChange"
-					/>
+					<download-modal-result :download-url="downloadUrl" @done="onDone" />
 				</div>
 			</v-fade-transition>
 		</template>
@@ -40,15 +37,8 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import DownloadModalOptionsForm from "@/components/share/DownloadModalOptionsForm.vue";
-import { roomModule } from "@/store";
-// import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
-	injectStrict,
-	// NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+// import DownloadModalOptionsForm from "@/components/share/DownloadModalOptionsForm.vue";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
 
@@ -56,7 +46,7 @@ import { computed, defineComponent, inject, ref } from "vue";
 export default defineComponent({
 	name: "DownloadModal",
 	components: {
-		DownloadModalOptionsForm,
+		// DownloadModalOptionsForm,
 		// DownloadModalResult,
 		vCustomDialog,
 	},
@@ -86,19 +76,19 @@ export default defineComponent({
 			get: () =>
 				downloadModule.getIsDownloadModalOpen &&
 				downloadModule.getParentType === props.type,
-			set: () => console.log("downloadModule.resetShareFlow()"),
+			set: () => downloadModule.resetDownloadFlow(),
 		});
 
-		const step = computed(() => (isOpen.value ? 1 : 2));
+		const step = computed(() => (downloadModule.version === "" ? 1 : 2));
 
 		const modalOptions = computed(() => new Map([]));
 		modalOptions.value.set(1, {
-			title: t("common.actions.download"),
-			actionButtons: ["next"],
+			title: t("pages.room.modal.course.download.header"),
+			actionButtons: ["close", "next"],
 		});
 		modalOptions.value.set(2, {
-			title: t("Kontrollsmöglichkeiten Export"),
-			actionButtons: ["cancel", "done"],
+			title: t("pages.room.modal.course.download.header"),
+			actionButtons: ["back", "confirm", "close"],
 		});
 
 		const actionButtons = computed(() => {
@@ -106,6 +96,7 @@ export default defineComponent({
 		});
 
 		const downloadOptions = ref(undefined);
+
 		const modalTitle = computed(
 			() => modalOptions.value.get(step.value)?.title ?? ""
 		);
@@ -114,20 +105,15 @@ export default defineComponent({
 			downloadOptions.value = newValue;
 		};
 		const onCloseDialog = () => {
-			//shareModule.resetShareFlow();
+			downloadModule.resetDownloadFlow();
 		};
 		const onNext = (newValue) => {
-			// open download option
-			//roomModule.downloadImsccCourse(newValue),
-			//shareModule.createShareUrl(newValue);
-			console.log("onNext", newValue);
+			// open download options
+			downloadOptions.value = newValue;
 		};
 		const onDone = () => {
-			if (downloadOptions.value.isV_1_1) {
-				roomModule.downloadImsccCourse("1.1.0");
-			} else if (downloadOptions.value.isV_1_3) {
-				roomModule.downloadImsccCourse("1.3.0");
-			}
+			// download
+			downloadModule.startDownload(downloadOptions.value);
 		};
 
 		const ctlToolsEnabled = computed(() => {
