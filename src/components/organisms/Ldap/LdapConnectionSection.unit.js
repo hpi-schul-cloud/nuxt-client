@@ -73,17 +73,18 @@ describe("@/components/organisms/LdapConnectionSection", () => {
 	});
 
 	it("invalid validation is true when any of the input values are invalid", async () => {
-		const wrapper = getWrapper();
+		const wrapper = getWrapper({
+			modelValue: {
+				url: "invalid",
+				rootPath: "invalid",
+				basisPath: "invalid",
+				searchUser: "invalid",
+				searchUserPassword: "",
+			},
+		});
 
-		const inputUrl = wrapper.find("input[data-testid=ldapDataConnectionUrl]");
-		expect(inputUrl.exists()).toBe(true);
+		await wrapper.vm.v$.$touch();
 
-		await inputUrl.setValue("");
-		await inputUrl.trigger("blur");
-
-		expect(inputUrl.element.value).toBe("");
-		expect(wrapper.vm.v$.$invalid).toBe(true);
-		await wrapper.vm.$nextTick();
 		const errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
 		);

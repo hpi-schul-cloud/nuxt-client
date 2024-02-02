@@ -75,19 +75,19 @@ describe("@/components/organisms/LdapUsersSection", () => {
 	});
 
 	it("invalid validation is true when any of the input values are invalid", async () => {
-		const wrapper = getWrapper();
+		const wrapper = getWrapper({
+			modelValue: {
+				userPath: "invalid",
+				firstName: "",
+				familyName: "",
+				email: "",
+				uid: "",
+				uuid: "",
+			},
+		});
 
-		const inputFirstName = wrapper.find(
-			"input[data-testid=ldapDataUsersFirstName]"
-		);
-		expect(inputFirstName.exists()).toBe(true);
+		await wrapper.vm.v$.$touch();
 
-		await inputFirstName.setValue("");
-		await inputFirstName.trigger("blur");
-
-		expect(inputFirstName.element.value).toBe("");
-		expect(wrapper.vm.v$.$invalid).toBe(true);
-		await wrapper.vm.$nextTick();
 		const errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataUsersFirstName'] .base-input-info.base-input-error"
 		);

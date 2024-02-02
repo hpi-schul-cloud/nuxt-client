@@ -77,19 +77,20 @@ describe("@/components/organisms/LdapRolesSection", () => {
 	});
 
 	it("invalid validation is true when any of the input values are invalid", async () => {
-		const wrapper = getWrapper({ groupOption: "group" });
+		const wrapper = getWrapper({
+			modelValue: {
+				// validations are only active when groupOption === group
+				groupOption: "group",
+				member: "",
+				student: "invalid",
+				teacher: "invalid",
+				admin: "invalid",
+				user: "invalid",
+			},
+		});
 
-		const inputStudent = wrapper.find(
-			"input[data-testid=ldapDataRolesStudent]"
-		);
-		expect(inputStudent.exists()).toBe(true);
+		await wrapper.vm.v$.$touch();
 
-		await inputStudent.setValue("not valid");
-		await inputStudent.trigger("blur");
-
-		expect(inputStudent.element.value).toBe("not valid");
-		expect(wrapper.vm.v$.$invalid).toBe(true);
-		await wrapper.vm.$nextTick();
 		const errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataRolesStudent'] .base-input-info.base-input-error"
 		);
