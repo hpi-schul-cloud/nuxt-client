@@ -60,7 +60,6 @@ import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
-
 import SpeedMenu from "./SpeedMenu.vue";
 
 export default defineComponent({
