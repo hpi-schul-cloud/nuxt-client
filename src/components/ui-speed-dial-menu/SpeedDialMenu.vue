@@ -7,7 +7,7 @@
 		>
 			<v-btn
 				:rounded="!isMenuOpen"
-				class="size-transform"
+				class="size-transition"
 				:class="!isMenuOpen ? 'default-width' : ''"
 				:icon="isMenuOpen"
 				color="primary"
@@ -40,6 +40,7 @@
 
 <script lang="ts" setup>
 import { mdiClose } from "@mdi/js";
+import { useVuetifyBreakpoints } from "@util-device-detection";
 import { OnClickOutside } from "@vueuse/components";
 import {
 	computed,
@@ -55,7 +56,6 @@ import {
 	INJECT_SPEED_DIAL_DIRECTION,
 	INJECT_SPEED_DIAL_ORIENTATION,
 } from "./injection-tokens";
-const slots = useSlots();
 
 const props = withDefaults(
 	defineProps<{
@@ -66,6 +66,8 @@ const props = withDefaults(
 	}>(),
 	{ direction: "bottom", orientation: "left" }
 );
+
+const slots = useSlots();
 
 provide(INJECT_SPEED_DIAL_DIRECTION, toRef(props, "direction"));
 provide(INJECT_SPEED_DIAL_ORIENTATION, toRef(props, "orientation"));
@@ -81,6 +83,8 @@ const actions = computed(() => {
 
 const isMenu = computed(() => actions.value.length > 0);
 const isMenuOpen = ref(false);
+
+const isMobile = useVuetifyBreakpoints().isSmallerOrEqual("md");
 
 const classes = computed(() => {
 	const classList: string[] = [];
