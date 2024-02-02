@@ -621,5 +621,26 @@ describe("SchoolExternalToolsModule", () => {
 				});
 			});
 		});
+
+		describe("showDatasheet", () => {
+			describe("when method is called", () => {
+				const setup = () => {
+					const id = "externalToolId";
+					const url = `${window.location.origin}/api/v3/tools/external-tools/${id}/datasheet`;
+
+					window.open = jest.fn();
+
+					return { id, url };
+				};
+
+				it("should open a new tab", () => {
+					const { id, url } = setup();
+
+					module.showDatasheet(id);
+
+					expect(window.open).toHaveBeenCalledWith(url);
+				});
+			});
+		});
 	});
 });
