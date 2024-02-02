@@ -28,10 +28,6 @@ describe("@/components/organisms/AutoLogoutWarning", () => {
 		});
 	});
 
-	afterEach(() => {
-		jest.restoreAllMocks();
-	});
-
 	const setup = (autoLogoutModuleGetters = {}) => {
 		const autoLogoutModuleMock = createModuleMocks(
 			AutoLogoutModule,
