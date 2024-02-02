@@ -85,7 +85,7 @@ const actions = computed(() => {
 const isMenu = computed(() => actions.value.length > 0);
 const isMenuOpen = ref(false);
 
-const isMobile = useVuetifyBreakpoints().isSmallerOrEqual("md");
+const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
 const { y: scrollOffsetY } = useWindowScroll();
 
 const isForceCollapseOnMobileScroll = ref(false);
@@ -93,7 +93,8 @@ const isForceCollapseOnMobileScroll = ref(false);
 watchThrottled(
 	scrollOffsetY,
 	(newVal, oldVal) => {
-		if (!isMobile) {
+		if (!isMobile.value) {
+			isForceCollapseOnMobileScroll.value = false;
 			return;
 		}
 		if (oldVal > 0 && oldVal > newVal) {

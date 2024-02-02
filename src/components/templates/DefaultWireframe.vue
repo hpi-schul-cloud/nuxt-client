@@ -89,7 +89,7 @@ export default defineComponent({
 		},
 	},
 	setup() {
-		const isMobile = useVuetifyBreakpoints().isSmallerOrEqual("md");
+		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
 
 		return {
 			isMobile,
