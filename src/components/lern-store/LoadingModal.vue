@@ -27,11 +27,13 @@
 	</base-modal>
 </template>
 <script>
+import BaseModal from "../base/BaseModal";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import { defineComponent } from "vue";
 export default defineComponent({
 	components: {
 		ModalBodyInfo,
+		BaseModal,
 	},
 	props: {
 		color: {

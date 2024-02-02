@@ -252,6 +252,9 @@ export default defineComponent({
 	transition: opacity 200ms;
 	opacity: 0;
 }
+.card-host {
+	background: white;
+}
 </style>
 
 <style>

@@ -76,11 +76,10 @@
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
-				:class="`action-button action-button-${action.name
-					.split(' ')
-					.join('-')}`"
+				:class="`action-button`"
 				variant="text"
 				color="primary"
+				:data-testid="action.testid"
 				@click.stop="action.action"
 			>
 				{{ action.name }}
@@ -194,12 +193,14 @@ export default {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishCard(),
 						name: this.$t("common.action.publish"),
+						testid: "room-detail-task-action-publish",
 					});
 				}
 				if (!this.isPlanned && !this.isDraft && !this.isFinished) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
+						testid: "room-detail-task-action-done",
 					});
 				}
 			}
@@ -209,6 +210,7 @@ export default {
 					roleBasedActions[Roles.Student].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
+						testid: "room-detail-task-action-done",
 					});
 				}
 			}

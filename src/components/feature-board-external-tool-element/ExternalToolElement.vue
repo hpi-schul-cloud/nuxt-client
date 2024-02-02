@@ -12,30 +12,28 @@
 		@keydown.up.down="onKeydownArrow"
 		@click="onClickElement"
 	>
-		<div class="card-container d-flex gap-8 bg-grey-lighten-4">
-			<div
-				v-if="displayData && displayData.logoUrl"
-				class="logo-container my-auto mr-1"
-			>
+		<ContentElementBar :has-grey-background="true" :icon="getIcon">
+			<template #logo v-if="displayData && displayData.logoUrl">
 				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" cover />
-			</div>
-			<v-icon v-else>{{ mdiPuzzleOutline }}</v-icon>
-			<span class="align-self-center text-h6 flex-1 break-word">
+			</template>
+			<template #title>
 				{{
 					hasLinkedTool
 						? toolDisplayName
 						: t("feature-board-external-tool-element.placeholder.selectTool")
 				}}
-			</span>
-			<ExternalToolElementMenu
-				v-if="isEditMode"
-				ref="externalToolElementMenu"
-				@move-down:element="onMoveElementDown"
-				@move-up:element="onMoveElementUp"
-				@delete:element="onDeleteElement"
-				@edit:element="onEditElement"
-			/>
-		</div>
+			</template>
+			<template #menu>
+				<ExternalToolElementMenu
+					v-if="isEditMode"
+					ref="externalToolElementMenu"
+					@move-down:element="onMoveElementDown"
+					@move-up:element="onMoveElementUp"
+					@delete:element="onDeleteElement"
+					@edit:element="onEditElement"
+				/>
+			</template>
+		</ContentElementBar>
 		<ExternalToolElementAlert
 			:toolDisplayName="toolDisplayName"
 			:error="error"
@@ -79,9 +77,11 @@ import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
+import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 
 export default defineComponent({
 	components: {
+		ContentElementBar,
 		ExternalToolElementAlert,
 		ExternalToolElementConfigurationDialog,
 		ExternalToolElementMenu,
@@ -117,6 +117,13 @@ export default defineComponent({
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, ref(null), () => {
 			autofocus.value = true;
+		});
+
+		const getIcon: ComputedRef<string | undefined> = computed(() => {
+			if (!displayData.value?.logoUrl) {
+				return mdiPuzzleOutline;
+			}
+			return undefined;
 		});
 
 		const { lastCreatedElementId, resetLastCreatedElementId } =
@@ -221,6 +228,7 @@ export default defineComponent({
 
 		return {
 			t,
+			getIcon,
 			hasLinkedTool,
 			toolDisplayName,
 			displayData,
@@ -243,31 +251,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped lang="scss">
-$card-padding: 16px;
-$logo-size: 24px;
-
-.card-container {
-	max-width: 100%;
-	min-height: calc($card-padding * 2 + $logo-size);
-	padding: $card-padding;
-}
-
-.logo-container {
-	width: $logo-size;
-	height: $logo-size;
-}
-
-.gap-8 {
-	gap: 8px;
-}
-
-.flex-1 {
-	flex: 1;
-}
-
-.break-word {
-	word-break: break-word;
-}
-</style>

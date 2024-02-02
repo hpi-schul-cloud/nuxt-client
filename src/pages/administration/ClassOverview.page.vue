@@ -5,12 +5,7 @@
 		:full-width="true"
 		data-testid="admin-class-title"
 	>
-		<v-tabs
-			class="tabs-max-width mb-5"
-			grow
-			v-model="activeTab"
-			color="primary"
-		>
+		<v-tabs class="tabs-max-width mb-5" grow v-model="activeTab">
 			<v-tab value="next" data-testid="admin-class-next-year-tab">
 				<span>{{ nextYear }}</span>
 			</v-tab>
@@ -117,7 +112,7 @@
 		<v-custom-dialog
 			:is-open="isDeleteDialogOpen"
 			max-width="360"
-			data-testId="delete-dialog"
+			data-testid="delete-dialog"
 			has-buttons
 			:buttons="['cancel', 'confirm']"
 			@dialog-closed="onCancelClassDeletion"
@@ -194,7 +189,7 @@ import {
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { ClassRequestContext, SchoolYearQueryType } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
@@ -216,6 +211,7 @@ export default defineComponent({
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
+		const route = useRoute();
 		const router = useRouter();
 
 		const { t } = useI18n();
@@ -277,7 +273,7 @@ export default defineComponent({
 			});
 
 			await router.replace({
-				query: { ...router.currentRoute.value.query, tab },
+				query: { ...route.query, tab },
 			});
 		};
 

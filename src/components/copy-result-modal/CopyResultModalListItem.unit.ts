@@ -18,6 +18,7 @@ const mockItem: CopyResultItem = {
 			type: CopyApiResponseTypeEnum.LessonContentNexboard,
 		},
 	],
+	
 	url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
 };
 

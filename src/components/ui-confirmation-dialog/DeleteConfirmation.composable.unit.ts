@@ -1,8 +1,17 @@
-import { I18N_KEY } from "@/utils/inject";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { useI18n } from "vue-i18n";
 jest.mock("./Confirmation.composable");
+
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn(),
+	};
+});
+const useI18nMock = <jest.Mock>useI18n;
 
 describe("DeleteConfirmation composable", () => {
 	describe("askDeleteConfirmation", () => {
@@ -22,11 +31,21 @@ describe("DeleteConfirmation composable", () => {
 				askConfirmationMock,
 			});
 
-			const translateMock = jest.fn().mockImplementation((key: string) => key);
+			const translateMock = jest
+				.fn()
+				.mockImplementation(
+					(key: string, dynamic?: object): string =>
+						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
+				);
+			useI18nMock.mockReturnValue({
+				t: translateMock,
+			});
 
 			const { askDeleteConfirmation } = mountComposable(
 				() => useDeleteConfirmationDialog(),
-				{ global: { mocks: { t: translateMock } } }
+				{
+					global: { plugins: [createTestingI18n()] },
+				}
 			);
 
 			return {
@@ -77,7 +96,7 @@ describe("DeleteConfirmation composable", () => {
 				await askDeleteConfirmation(title, typeLanguageKey);
 
 				expect(askConfirmation).toHaveBeenCalledWith({
-					message: titleTranslationKey,
+					message: expect.stringContaining(titleTranslationKey),
 				});
 			});
 
@@ -119,7 +138,7 @@ describe("DeleteConfirmation composable", () => {
 				await askDeleteConfirmation("", typeLanguageKey);
 
 				expect(askConfirmation).toHaveBeenCalledWith({
-					message: titleTranslationKey,
+					message: expect.stringContaining(titleTranslationKey),
 				});
 			});
 

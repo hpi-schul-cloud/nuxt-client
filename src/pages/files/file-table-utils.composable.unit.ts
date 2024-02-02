@@ -1,6 +1,5 @@
 import { DataTableHeader } from "@/store/types/data-table-header";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import { Route } from "vue-router";
 import { FileMetaListResponse } from "@/store/collaborative-files/file-meta-list.response";
 import { FileTypeResponse } from "@/store/collaborative-files/file-meta.response";
 import {
@@ -11,6 +10,7 @@ import {
 import { useFileTableUtils } from "@/pages/files/file-table-utils.composable";
 import { FilesPageConfig } from "@/pages/files/file-page-config.type";
 import { collaborativeFilesModule } from "@/store";
+import { RouteLocation } from "vue-router";
 
 jest.mock("@/store", () => ({
 	collaborativeFilesModule: {
@@ -96,7 +96,7 @@ describe("UseFileTableUtils", () => {
 			]);
 
 			expect(deepBreadcumbs.length).toEqual(1);
-			expect(deepBreadcumbs[0].text).toEqual(class10);
+			expect(deepBreadcumbs[0].title).toEqual(class10);
 			expect(deepBreadcumbs[0].to).toEqual(`/cfiles/teams/${class10}`);
 		});
 	});
@@ -128,10 +128,10 @@ describe("UseFileTableUtils", () => {
 		describe("getFilesOverview", () => {
 			it("should return the filesOverview as filesPage", async () => {
 				const { getFilesPageForRoute, tMock, expectedTranslation } = setup();
-				const route: Route = {
+				const route: RouteLocation = {
 					path: "/cfiles/",
 					params: {},
-				} as Route;
+				} as RouteLocation;
 
 				const filesOverview: FilesPageConfig = getFilesPageForRoute(route);
 				await filesOverview.loadFilesFunction();
@@ -146,16 +146,16 @@ describe("UseFileTableUtils", () => {
 		describe("getTeamsOverview", () => {
 			it("should return the teamsOverview as filesPage", async () => {
 				const { getFilesPageForRoute, tMock, expectedTranslation } = setup();
-				const route: Route = {
+				const route: RouteLocation = {
 					path: "/cfiles/teams",
 					params: {},
-				} as Route;
+				} as RouteLocation;
 
 				const filesOverview: FilesPageConfig = getFilesPageForRoute(route);
 				await filesOverview.loadFilesFunction();
 
 				expect(filesOverview.breadcrumbs).toEqual([
-					{ text: expectedTranslation, to: "/cfiles/" },
+					{ title: expectedTranslation, to: "/cfiles/" },
 				]);
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.headline");
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.teamFiles");
@@ -166,18 +166,18 @@ describe("UseFileTableUtils", () => {
 		describe("getTeamsPage", () => {
 			it("should return teamsPage as filesPage", async () => {
 				const { getFilesPageForRoute, tMock, expectedTranslation } = setup();
-				const route: Route = {
+				const route: RouteLocation = {
 					path: "/cfiles/teams/testFolder1/testFolder2",
 					params: { catchAll: "testFolder1/testFolder2" } as unknown,
-				} as Route;
+				} as RouteLocation;
 
 				const filesOverview: FilesPageConfig = getFilesPageForRoute(route);
 				await filesOverview.loadFilesFunction();
 
 				expect(filesOverview.breadcrumbs).toEqual([
-					{ text: expectedTranslation, to: "/cfiles/" },
-					{ text: expectedTranslation, to: "/cfiles/teams" },
-					{ text: "testFolder1", to: "/cfiles/teams/testFolder1" },
+					{ title: expectedTranslation, to: "/cfiles/" },
+					{ title: expectedTranslation, to: "/cfiles/teams" },
+					{ title: "testFolder1", to: "/cfiles/teams/testFolder1" },
 				]);
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.headline");
 				expect(tMock).toHaveBeenCalledWith("pages.files.overview.teamFiles");
@@ -187,10 +187,10 @@ describe("UseFileTableUtils", () => {
 
 		it("should return error when currentCategory not exists", async () => {
 			const { getFilesPageForRoute } = setup();
-			const route: Route = {
+			const route: RouteLocation = {
 				path: "/cfiles/unknown/anything",
 				params: {},
-			} as Route;
+			} as RouteLocation;
 
 			expect(() => getFilesPageForRoute(route)).toThrowError("page not found");
 		});

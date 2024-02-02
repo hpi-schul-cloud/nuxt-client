@@ -13,9 +13,12 @@
 </template>
 <script>
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import BaseModal from "../base/BaseModal.vue";
+
 export default {
 	components: {
 		ModalBodyInfo,
+		BaseModal,
 	},
 	props: {
 		title: {

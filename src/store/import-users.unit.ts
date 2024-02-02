@@ -1,10 +1,13 @@
-import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	ImportUserResponseRoleNamesEnum,
 	UserMatchResponseMatchedByEnum,
 	UserMatchResponseRoleNamesEnum,
 } from "@/serverApi/v3/api";
+import ImportUsersModule, { MatchedBy } from "@/store/import-users";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { axiosErrorFactory } from "@@/tests/test-utils";
+import { BusinessError } from "./types/commons";
 
 const mockResponse = {
 	data: {
@@ -617,6 +620,62 @@ describe("import-users store actions", () => {
 
 				expect(importUserModule.getBusinessError).toStrictEqual(error);
 				expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(1);
+			});
+		});
+
+		describe("populateImportUsersFromExternalSystem", function () {
+			describe("when fetching the data", () => {
+				const setup = () => {
+					mockApi = {
+						importUserControllerPopulateImportUsers: jest.fn(),
+					};
+
+					spy.mockReturnValue(
+						mockApi as unknown as serverApi.UserImportApiInterface
+					);
+				};
+
+				it("should call the api", async () => {
+					setup();
+
+					await importUserModule.populateImportUsersFromExternalSystem();
+
+					expect(
+						mockApi.importUserControllerPopulateImportUsers
+					).toHaveBeenCalledWith();
+				});
+			});
+
+			describe("when an error occurs", () => {
+				const setup = () => {
+					const error = axiosErrorFactory.build();
+					const apiError = mapAxiosErrorToResponseError(error);
+					mockApi = {
+						importUserControllerPopulateImportUsers: jest.fn(() =>
+							Promise.reject(error)
+						),
+					};
+
+					spy.mockReturnValue(
+						mockApi as unknown as serverApi.UserImportApiInterface
+					);
+
+					return {
+						error,
+						apiError,
+					};
+				};
+
+				it("should set a business error", async () => {
+					const { apiError } = setup();
+
+					await importUserModule.populateImportUsersFromExternalSystem();
+
+					expect(importUserModule.getBusinessError).toEqual<BusinessError>({
+						statusCode: apiError.code,
+						message: apiError.message,
+					});
+				});
 			});
 		});
 	});
