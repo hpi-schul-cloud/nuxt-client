@@ -75,6 +75,7 @@ export const useBoardState = (id: string) => {
 
 		try {
 			const newColumn = await createColumnCall(board.value.id);
+			useBoardFocusHandler().setFocus(newColumn.id);
 			setEditModeId(newColumn.id);
 			board.value.columns.push(newColumn);
 			return newColumn;

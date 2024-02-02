@@ -32,6 +32,7 @@ import {
 	watch,
 } from "vue";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
+import { VTextarea } from "vuetify/lib/components/index.mjs";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -63,13 +64,15 @@ export default defineComponent({
 
 		const internalIsFocused = ref(false);
 
+		const titleInput = ref<typeof VTextarea | null>(null);
+
 		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();
-			await nextTick();
 		});
 		const setFocusOnEdit = async () => {
 			await nextTick();
 			internalIsFocused.value = true;
+			if (titleInput.value) titleInput.value.focus();
 		};
 
 		onMounted(() => {
@@ -130,6 +133,7 @@ export default defineComponent({
 			hasValue,
 			onEnter,
 			internalIsFocused,
+			titleInput,
 		};
 	},
 });
