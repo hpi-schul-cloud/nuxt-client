@@ -2,11 +2,14 @@
 <!-- VUE3_UPGRADE re-enable linter rule when v-stepper was released -->
 <template>
 	<default-wireframe
-		v-if="isAllowed"
-		:headline="$t('pages.administration.migration.title')"
+		:headline="$t('pages.administration.migration.vue3.title')"
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
 	>
+		<v-alert dense outlined type="info">
+			{{ $t("pages.administration.migration.vue3.notification") }}
+		</v-alert>
+		<!--
 		<v-snackbar
 			v-if="businessError && businessError.statusCode !== '200'"
 			:model-value="!!businessError"
@@ -455,41 +458,46 @@
 					</v-stepper-window-item>
 				</v-stepper-window>
 			</v-stepper>
-		</div>
+		</div> -->
 	</default-wireframe>
 </template>
 <script>
 /* eslint-disable max-lines */
-import { mdiClose, mdiLoading } from "@mdi/js";
-import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
+// import { mdiClose, mdiLoading } from "@mdi/js";
+// import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import ImportUsers from "@/components/organisms/administration/ImportUsers";
-import { RenderHTML } from "@feature-render-html";
-import { buildPageTitle } from "@/utils/pageTitle";
+// import ImportUsers from "@/components/organisms/administration/ImportUsers";
+// import { RenderHTML } from "@feature-render-html";
+// import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
-	components: { DefaultWireframe, ImportUsers, RenderHTML },
+	components: { DefaultWireframe /* , ImportUsers, RenderHTML */ },
 	data() {
 		return {
-			mdiClose,
-			mdiLoading,
-			migrationStep: 1,
+			// mdiClose,
+			//mdiLoading,
+			// migrationStep: 1,
 			breadcrumbs: [
 				{
 					title: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
 				{
+<<<<<<< Updated upstream
 					title: this.$t("pages.administration.migration.title"),
+=======
+					text: this.$t("pages.administration.migration.vue3.title"),
+>>>>>>> Stashed changes
 					disabled: true,
 				},
 			],
-			isMigrationConfirm: false,
-			errorTimeout: 7500,
-			isLoading: false,
-			checkTotal: null,
+			// isMigrationConfirm: false,
+			// errorTimeout: 7500,
+			// isLoading: false,
+			// checkTotal: null,
 		};
 	},
+<<<<<<< Updated upstream
 	computed: {
 		isMigrationNotStarted() {
 			return this.school.inUserMigration === undefined;
@@ -733,10 +741,255 @@ export default {
 			this.migrationStep = nextStep;
 		},
 	},
+=======
+	// computed: {
+	// isMigrationNotStarted() {
+	// 	return this.school.inUserMigration === undefined;
+	// },
+	// canPerformMigration() {
+	// 	return this.school.inUserMigration === true && this.school.inMaintenance;
+	// },
+	// isMigrationFinished() {
+	// 	return this.school.inUserMigration === false;
+	// },
+	// canFinishMaintenance() {
+	// 	return this.isMigrationConfirm || this.isMigrationFinished;
+	// },
+	// isMaintenanceFinished() {
+	// 	return !this.school.inMaintenance;
+	// },
+	// school() {
+	// 	return schoolsModule.getSchool;
+	// },
+	// businessError() {
+	// 	const error = importUsersModule.getBusinessError;
+	// 	if (error && error.message && error.statusCode) {
+	// 		return {
+	// 			message: error.message,
+	// 			statusCode: error.statusCode,
+	// 		};
+	// 	}
+	// 	return false;
+	// },
+	// totalMatched() {
+	// 	return importUsersModule.getTotalMatched;
+	// },
+	// totalUnmatched() {
+	// 	return importUsersModule.getTotalUnmatched;
+	// },
+	// totalImportUsers() {
+	// 	return importUsersModule.getTotal;
+	// },
+	// isBrb() {
+	// 	return envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb";
+	// },
+	// isNbc() {
+	// 	return envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21";
+	// },
+	// sourceSystemName() {
+	// 	if (this.isBrb) {
+	// 		return this.$t("pages.administration.migration.brbSchulportal");
+	// 	} else if (this.isNbc) {
+	// 		return "moin.schule";
+	// 	} else {
+	// 		return this.$t("pages.administration.migration.ldapSource");
+	// 	}
+	// },
+	// helpPageUri() {
+	// 	return envConfigModule.getEnv.MIGRATION_WIZARD_DOCUMENTATION_LINK;
+	// },
+	// },
+	// watch: {
+	// 	async migrationStep(val) {
+	// 		if (val === 1 || val === 3) {
+	// 			await this.summary();
+	// 		}
+	// 		this.scrollToTop();
+	// 	},
+	// 	totalImportUsers(val) {
+	// 		if (val > 0) {
+	// 			clearInterval(this.checkTotal);
+	// 		}
+	// 	},
+	// },
+	// async created() {
+	// 	const allowed = await this.isAllowed();
+	// 	if (!allowed) {
+	// 		await this.$router.push("/");
+	// 		return;
+	// 	}
+	// 	await this.summary();
+	// 	this.checkTotalInterval();
+	// },
+	// mounted() {
+	// 	document.title = buildPageTitle(
+	// 		this.$t("pages.administration.migration.title", {
+	// 			source: this.sourceSystemName,
+	// 			instance: this.$theme.name,
+	// 		})
+	// 	);
+	//
+	// 	this.breadcrumbs = [
+	// 		{
+	// 			text: this.$t("pages.administration.index.title"),
+	// 			to: "/administration/",
+	// 		},
+	// 		{
+	// 			text: this.$t("pages.administration.migration.title", {
+	// 				source: this.sourceSystemName,
+	// 				instance: this.$theme.name,
+	// 			}),
+	// 			disabled: true,
+	// 		},
+	// 	];
+	// },
+	// methods: {
+	// 	async isAllowed() {
+	// 		if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true) {
+	// 			return true;
+	// 		}
+	// 		if (this.school.id === "") {
+	// 			await schoolsModule.fetchSchool();
+	// 		}
+	// 		return this.school.features.ldapUniventionMigrationSchool === true;
+	// 	},
+	// 	isStepEditable(step) {
+	// 		switch (step) {
+	// 			case 1:
+	// 				return !this.isLoading && !this.isMaintenanceFinished;
+	// 			case 2:
+	// 				return (
+	// 					this.canPerformMigration &&
+	// 					!this.isMigrationFinished &&
+	// 					this.totalImportUsers > 0
+	// 				);
+	// 			case 3:
+	// 				return (
+	// 					this.canPerformMigration &&
+	// 					!this.isMigrationFinished &&
+	// 					this.totalImportUsers > 0
+	// 				);
+	// 			case 4:
+	// 				return (
+	// 					!this.isLoading &&
+	// 					this.isMigrationFinished &&
+	// 					!this.isMaintenanceFinished
+	// 				);
+	// 			case 5:
+	// 				return (
+	// 					!this.isLoading &&
+	// 					this.isMigrationFinished &&
+	// 					this.isMaintenanceFinished
+	// 				);
+	// 			default:
+	// 				return false;
+	// 		}
+	// 	},
+	// 	async summary() {
+	// 		if (this.school.id === "") {
+	// 			await schoolsModule.fetchSchool();
+	// 		}
+	// 		if (!this.canPerformMigration) {
+	// 			return;
+	// 		}
+	// 		await importUsersModule.fetchTotal();
+	// 		await importUsersModule.fetchTotalMatched();
+	// 		await importUsersModule.fetchTotalUnmatched();
+	// 	},
+	// 	checkTotalInterval() {
+	// 		if (this.school.inUserMigration && this.totalImportUsers === 0) {
+	// 			this.checkTotal = setInterval(() => {
+	// 				importUsersModule.fetchTotal();
+	// 			}, 5000);
+	// 		}
+	// 		if (this.totalImportUsers > 0) {
+	// 			clearInterval(this.checkTotal);
+	// 		}
+	// 	},
+	// 	async setSchoolInUserMigration() {
+	// 		if (this.school.inUserMigration) {
+	// 			return;
+	// 		}
+	// 		this.isLoading = true;
+	//
+	// 		if (this.isNbc) {
+	// 			await importUsersModule.populateImportUsersFromExternalSystem();
+	//
+	// 			if (importUsersModule.getBusinessError) {
+	// 				this.isLoading = false;
+	//
+	// 				return;
+	// 			}
+	// 		}
+	//
+	// 		await schoolsModule.setSchoolInUserMigration();
+	//
+	// 		this.checkTotalInterval();
+	// 		if (schoolsModule.getError) {
+	// 			// TODO better error handling
+	// 			importUsersModule.setBusinessError({
+	// 				statusCode: "500",
+	// 				message: schoolsModule.getError.message,
+	// 			});
+	// 		} else {
+	// 			this.school.inUserMigration = true;
+	// 			this.school.inMaintenance = true;
+	// 		}
+	// 		this.isLoading = false;
+	// 	},
+	// 	async performMigration() {
+	// 		this.isLoading = true;
+	// 		await importUsersModule.performMigration();
+	// 		if (!importUsersModule.getBusinessError) {
+	// 			schoolsModule.setSchool({
+	// 				...schoolsModule.getSchool,
+	// 				inUserMigration: false,
+	// 			});
+	// 			this.school.inUserMigration = false;
+	// 			this.isLoading = false;
+	// 			this.migrationStep = 4;
+	// 		}
+	// 	},
+	// 	async endMaintenance() {
+	// 		this.isLoading = true;
+	// 		await schoolsModule.migrationStartSync();
+	// 		if (schoolsModule.getError) {
+	// 			// TODO better error handling
+	// 			importUsersModule.setBusinessError({
+	// 				statusCode: "500",
+	// 				message: schoolsModule.getError.message,
+	// 			});
+	// 		} else {
+	// 			this.school.inMaintenance = this.isNbc ? undefined : false;
+	// 			this.migrationStep = 5;
+	// 		}
+	// 		this.isLoading = false;
+	// 	},
+	// 	resetBusinessError() {
+	// 		importUsersModule.setBusinessError(null);
+	// 	},
+	// 	scrollToTop() {
+	// 		window.scrollTo(0, 0);
+	// 	},
+	// 	nextStep() {
+	// 		let nextStep;
+	// 		if (this.migrationStep === 1) {
+	// 			nextStep = 2;
+	// 			if (this.isMigrationFinished) {
+	// 				nextStep = 4;
+	// 			}
+	// 			if (this.isMaintenanceFinished) {
+	// 				nextStep = 5;
+	// 			}
+	// 		}
+	// 		this.migrationStep = nextStep;
+	// 	},
+	// },
+>>>>>>> Stashed changes
 };
 </script>
 <style scoped>
-.v-stepper__content {
+/* .v-stepper__content {
 	padding: 0;
 }
 
@@ -749,5 +1002,5 @@ iframe.full {
 	min-height: 800px;
 	overflow: scroll;
 	border: none;
-}
+} */
 </style>
