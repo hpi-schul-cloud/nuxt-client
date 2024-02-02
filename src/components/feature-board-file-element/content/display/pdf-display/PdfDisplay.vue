@@ -1,14 +1,16 @@
 <template>
 	<ContentElementBar>
 		<template #display>
-			<PreviewImage
-				:src="previewSrc"
-				:alt="altText"
-				:aspect-ratio="1.77777"
-				position="top"
-				class="rounded-t"
-				:cover="true"
-			/>
+			<div @click="openPdf">
+				<PreviewImage
+					:src="previewSrc"
+					:alt="altText"
+					:aspect-ratio="1.77777"
+					position="top"
+					class="rounded-t"
+					:cover="true"
+				/>
+			</div>
 		</template>
 		<template #menu><slot /></template>
 	</ContentElementBar>

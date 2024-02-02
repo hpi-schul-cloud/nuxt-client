@@ -66,6 +66,7 @@ module.exports = defineConfig({
 				"@ui-light-box": getDir("src/components/ui-light-box"),
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
+				"@util-vue": getDir("src/components/util-vue"),
 				"@util-input-masks": getDir("src/components/util-input-masks"),
 				"@util-device-detection": getDir(
 					"src/components/util-device-detection"

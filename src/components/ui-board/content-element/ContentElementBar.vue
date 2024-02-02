@@ -18,7 +18,9 @@
 			<div
 				v-if="$slots.title"
 				class="content-element-title d-flex flex-row px-4 pb-0"
-				:class="{ 'mr-8': $slots.menu && !$slots.display }"
+				:class="{
+					'mr-10': hasSlotContent($slots.menu) && !$slots.display,
+				}"
 			>
 				<div v-if="$slots.logo" class="logo-container mr-2">
 					<slot name="logo" />
@@ -33,7 +35,11 @@
 				</LineClamp>
 			</div>
 
-			<div v-if="$slots.element" class="pl-2 pr-3 mt-n1">
+			<div
+				v-if="$slots.element"
+				class="pl-2 pr-3 mt-n1"
+				:class="{ 'mr-10': hasSlotContent($slots.menu) }"
+			>
 				<slot name="element" />
 			</div>
 
@@ -52,6 +58,7 @@
 import { computed, defineProps, PropType } from "vue";
 import LineClamp from "../LineClamp.vue";
 import { IconProps } from "vuetify";
+import { hasSlotContent } from "@util-vue";
 
 const props = defineProps({
 	hasGreyBackground: {

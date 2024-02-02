@@ -44,9 +44,6 @@
 					step="durationStep"
 					:min="0"
 					:max="duration"
-					@click="stopPropagation"
-					@mousedown="stopPropagation"
-					@mouseup="stopPropagation"
 					@update:model-value="onInputSlider"
 				/>
 				<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
@@ -63,6 +60,7 @@ import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
+
 import SpeedMenu from "./SpeedMenu.vue";
 
 export default defineComponent({
@@ -107,11 +105,6 @@ export default defineComponent({
 			return currentTimeValue + " / " + durationValue;
 		});
 
-		const stopPropagation = (event: Event) => {
-			event.stopPropagation();
-			event.stopImmediatePropagation();
-		};
-
 		// Moving these variables to template causes the audio not to play on iOS
 		const durationStep = 0.0000001;
 		const volumeStep = 0.01;
@@ -130,7 +123,6 @@ export default defineComponent({
 			mdiPause,
 			mdiPlaySpeed,
 			onPlay,
-			stopPropagation,
 			onInputSlider,
 			durationDisplay,
 		};

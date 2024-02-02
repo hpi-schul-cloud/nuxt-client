@@ -1,13 +1,14 @@
 <template>
 	<ContentElementBar class="menu">
 		<template #display>
-			<PreviewImage
-				:src="previewSrc"
-				:alt="alternativeText"
-				:cover="true"
-				class="rounded-t"
-				@error="onImageError"
-			/>
+			<div @click="openLightBox">
+				<PreviewImage
+					:src="previewSrc"
+					:alt="alternativeText"
+					:cover="true"
+					@error="onImageError"
+				/>
+			</div>
 		</template>
 		<template #menu>
 			<slot />

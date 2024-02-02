@@ -55,6 +55,7 @@
 			"@ui-light-box": ["src/components/ui-light-box"],
 			"@util-board": ["src/components/util-board"],
 			"@util-validators": ["src/components/util-validators"],
+			"@util-vue": ["src/components/util-vue"],
 			"@util-input-masks": ["src/components/util-input-masks"],
 			"@util-device-detection": ["src/components/util-device-detection"],
 			"@page-board": ["src/components/page-board"],
