@@ -483,7 +483,7 @@ export default {
 					href: "/administration/",
 				},
 				{
-					text: this.$t("pages.administration.migration.vue3.title"),
+					title: this.$t("pages.administration.migration.vue3.title"),
 					disabled: true,
 				},
 			],
