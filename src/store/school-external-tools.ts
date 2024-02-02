@@ -297,11 +297,4 @@ export default class SchoolExternalToolsModule extends VuexModule {
 
 		this.setLoading(false);
 	}
-
-	@Action
-	showDatasheet(externalToolId: string) {
-		// TODO N21-1626 try to get the generated url from the api
-		const url = `${window.location.origin}/api/v3/tools/external-tools/${externalToolId}/datasheet`;
-		window.open(url);
-	}
 }
