@@ -24,9 +24,7 @@
 						{{ fabItems.title }}
 						<template #actions>
 							<speed-dial-menu-action
-								v-for="(action, index) in fabItems.actions
-									.concat(fabItems.actions)
-									.concat(fabItems.actions)"
+								v-for="(action, index) in fabItems.actions"
 								:key="index"
 								:data-testid="action.dataTestId"
 								:icon="action.icon"
@@ -52,10 +50,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted } from "vue";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
-import { SpeedDialMenuAction, SpeedDialMenu } from "@ui-speed-dial-menu";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	inheritAttrs: false,
@@ -90,12 +88,8 @@ export default defineComponent({
 			return !!(this.headline || this.$slots.header);
 		},
 	},
-	setup(props) {
-		onMounted(() => console.log(props.fabItems));
-
-		const { isSmallerOrEqual } = useVuetifyBreakpoints();
-
-		const isMobile = isSmallerOrEqual("md");
+	setup() {
+		const isMobile = useVuetifyBreakpoints().isSmallerOrEqual("md");
 
 		return {
 			isMobile,

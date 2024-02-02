@@ -6,17 +6,17 @@
 			class="position-relative d-inline-block overflow-visible"
 		>
 			<v-btn
-				:rounded="!isMenuOpen"
+				:rounded="!isCollapsed"
 				class="size-transition"
-				:class="!isMenuOpen ? 'default-width' : ''"
-				:icon="isMenuOpen"
+				:class="!isCollapsed ? 'default-width' : ''"
+				:icon="isCollapsed"
 				color="primary"
 				size="large"
 				@click="onClick"
 			>
 				<v-icon v-if="icon && !isMenuOpen">{{ icon }}</v-icon>
 				<v-icon v-if="isMenuOpen">{{ mdiClose }}</v-icon>
-				<span :class="isMenuOpen ? 'd-sr-only' : 'd-block'"><slot /></span>
+				<span :class="isCollapsed ? 'd-sr-only' : 'd-block'"><slot /></span>
 			</v-btn>
 			<div
 				v-if="isMenuOpen"
@@ -31,7 +31,7 @@
 		</div>
 		<div v-else>
 			<v-btn rounded color="primary" size="large" :href="href">
-				<v-icon v-if="icon">{{ isMenuOpen ? mdiClose : icon }}</v-icon>
+				<v-icon v-if="icon">{{ isCollapsed ? mdiClose : icon }}</v-icon>
 				<slot />
 			</v-btn>
 		</div>
@@ -40,8 +40,9 @@
 
 <script lang="ts" setup>
 import { mdiClose } from "@mdi/js";
-// import { useVuetifyBreakpoints } from "@util-device-detection";
+import { useVuetifyBreakpoints } from "@util-device-detection";
 import { OnClickOutside } from "@vueuse/components";
+import { useWindowScroll, watchThrottled } from "@vueuse/core";
 import {
 	computed,
 	provide,
@@ -84,7 +85,31 @@ const actions = computed(() => {
 const isMenu = computed(() => actions.value.length > 0);
 const isMenuOpen = ref(false);
 
-// const isMobile = useVuetifyBreakpoints().isSmallerOrEqual("md");
+const isMobile = useVuetifyBreakpoints().isSmallerOrEqual("md");
+const { y: scrollOffsetY } = useWindowScroll();
+
+const isForceCollapseOnMobileScroll = ref(false);
+
+watchThrottled(
+	scrollOffsetY,
+	(newVal, oldVal) => {
+		if (!isMobile) {
+			return;
+		}
+		if (oldVal > 0 && oldVal > newVal) {
+			isForceCollapseOnMobileScroll.value = false;
+			return;
+		}
+		if (newVal > 100) {
+			isForceCollapseOnMobileScroll.value = true;
+		}
+	},
+	{ throttle: 200 }
+);
+
+const isCollapsed = computed(
+	() => isMenuOpen.value || isForceCollapseOnMobileScroll.value
+);
 
 const classes = computed(() => {
 	const classList: string[] = [];
