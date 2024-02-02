@@ -32,7 +32,7 @@
 		<div v-else>
 			<v-btn rounded color="primary" size="large" :href="href">
 				<v-icon v-if="icon">{{ isCollapsed ? mdiClose : icon }}</v-icon>
-				<slot />
+				<span :class="isCollapsed ? 'd-sr-only' : 'd-block'"><slot /></span>
 			</v-btn>
 		</div>
 	</OnClickOutside>
