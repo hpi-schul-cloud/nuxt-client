@@ -271,8 +271,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("'add task' button should have correct path", async () => {
-			const fabComponent = wrapper.find(".wireframe-fab");
-			expect(fabComponent.attributes("href")).toStrictEqual(
+			const fabComponent = await wrapper.findComponent(SpeedDialMenu);
+			expect(fabComponent.props("href")).toStrictEqual(
 				"/homework/new?returnUrl=tasks"
 			);
 		});
