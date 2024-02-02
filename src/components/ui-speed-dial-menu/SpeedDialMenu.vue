@@ -16,7 +16,8 @@
 			>
 				<v-icon v-if="icon && !isMenuOpen">{{ icon }}</v-icon>
 				<v-icon v-if="isMenuOpen">{{ mdiClose }}</v-icon>
-				<span :class="isCollapsed ? 'd-sr-only' : 'd-block'"><slot /></span>
+				<span v-if="!isCollapsed" class="d-block"><slot /></span>
+				<span v-else class="d-sr-only"><slot /></span>
 			</v-btn>
 			<div
 				v-if="isMenuOpen"
@@ -32,7 +33,8 @@
 		<div v-else>
 			<v-btn rounded color="primary" size="large" :href="href">
 				<v-icon v-if="icon">{{ isCollapsed ? mdiClose : icon }}</v-icon>
-				<span :class="isCollapsed ? 'd-sr-only' : 'd-block'"><slot /></span>
+				<span v-if="!isCollapsed" class="d-block"><slot /></span>
+				<span v-else class="d-sr-only"><slot /></span>
 			</v-btn>
 		</div>
 	</OnClickOutside>
