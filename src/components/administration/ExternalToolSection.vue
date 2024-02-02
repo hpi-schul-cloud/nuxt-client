@@ -106,6 +106,8 @@
 </template>
 
 <script lang="ts">
+import { ToolApiAxiosParamCreator } from "@/serverApi/v3";
+import { RequestArgs } from "@/serverApi/v3/base";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -181,8 +183,13 @@ export default defineComponent({
 			});
 		};
 
-		const showDatasheet = (item: SchoolExternalToolItem) => {
-			schoolExternalToolsModule.showDatasheet(item.externalToolId);
+		const showDatasheet = async (item: SchoolExternalToolItem) => {
+			const requestArgs: RequestArgs =
+				await ToolApiAxiosParamCreator().toolControllerGetDatasheet(
+					item.externalToolId
+				);
+
+			window.open("/api/v3" + requestArgs.url);
 		};
 
 		const onDeleteTool = async () => {
