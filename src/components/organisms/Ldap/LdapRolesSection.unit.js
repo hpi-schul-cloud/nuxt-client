@@ -28,14 +28,6 @@ describe("@/components/organisms/LdapRolesSection", () => {
 			},
 		});
 	};
-	// const ldapConfigData = {
-	// 	groupOption: "group",
-	// 	member: "description",
-	// 	student: "cn=schueler,ou=rolle",
-	// 	teacher: "cn=lehrer,ou=rolle",
-	// 	admin: "cn=admin,ou=rolle",
-	// 	user: "cn=ehemalige,ou=rolle",
-	// };
 
 	it("has correct child components", () => {
 		const wrapper = getWrapper();
@@ -152,7 +144,6 @@ describe("@/components/organisms/LdapRolesSection", () => {
 
 		await inputMember.trigger("blur"); // without this the error is not displayed
 
-		await wrapper.vm.$nextTick();
 		errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataRolesStudent'] .base-input-info.base-input-error"
 		);
