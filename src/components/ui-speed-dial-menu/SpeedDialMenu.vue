@@ -40,7 +40,7 @@
 
 <script lang="ts" setup>
 import { mdiClose } from "@mdi/js";
-import { useVuetifyBreakpoints } from "@util-device-detection";
+// import { useVuetifyBreakpoints } from "@util-device-detection";
 import { OnClickOutside } from "@vueuse/components";
 import {
 	computed,
@@ -84,7 +84,7 @@ const actions = computed(() => {
 const isMenu = computed(() => actions.value.length > 0);
 const isMenuOpen = ref(false);
 
-const isMobile = useVuetifyBreakpoints().isSmallerOrEqual("md");
+// const isMobile = useVuetifyBreakpoints().isSmallerOrEqual("md");
 
 const classes = computed(() => {
 	const classList: string[] = [];
