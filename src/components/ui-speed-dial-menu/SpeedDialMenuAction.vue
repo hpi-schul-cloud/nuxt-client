@@ -96,10 +96,10 @@ const isShow = ref(false);
 const classes = computed(() => {
 	const classList: string[] = [];
 	if (orientation.value === "left") {
-		classList.push("justify-start");
+		classList.push("justify-start pl-2");
 	}
 	if (orientation.value === "right") {
-		classList.push("justify-end");
+		classList.push("justify-end pr-2");
 	}
 	if (direction.value === "top") {
 		classList.push("fix-to-top");

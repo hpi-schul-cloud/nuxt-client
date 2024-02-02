@@ -1,4 +1,3 @@
-import vCustomFab from "@/components/atoms/vCustomFab.vue";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
@@ -21,6 +20,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
 
 const $route = {
 	query: {
@@ -162,7 +162,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should not render add task button", () => {
-			const fab = wrapper.findComponent(vCustomFab);
+			const fab = wrapper.findComponent(SpeedDialMenu);
 			expect(fab.exists()).toBe(false);
 		});
 
