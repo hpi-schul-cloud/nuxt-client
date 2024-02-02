@@ -154,6 +154,13 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.ACCESSIBILITY_REPORT_EMAIL;
 	}
 
+	get getNewSchoolAdminPageAsDefault(): boolean {
+		return (
+			this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED ??
+			false
+		);
+	}
+
 	get getCtlToolsTabEnabled(): boolean {
 		return this.env.FEATURE_CTL_TOOLS_TAB_ENABLED ?? false;
 	}
