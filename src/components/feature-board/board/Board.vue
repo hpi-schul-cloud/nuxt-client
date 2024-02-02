@@ -6,7 +6,7 @@
 			</h3>
 		</div>
 		<template v-if="board">
-			<div class="d-flex flex-row flex-shrink-1 ml-n4">
+			<div class="d-flex flex-row flex-shrink-1">
 				<div>
 					<Sortable
 						:list="board.columns"

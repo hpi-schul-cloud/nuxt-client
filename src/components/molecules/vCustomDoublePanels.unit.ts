@@ -1,5 +1,10 @@
-import Vuetify from "vuetify";
-import vCustomDoublePanels from "./vCustomDoublePanels";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { VExpansionPanels } from "vuetify/lib/components/index.mjs";
+import vCustomDoublePanels from "./vCustomDoublePanels.vue";
 
 describe("@/components/molecules/vCustomDoublePanels", () => {
 	const propsData = {
@@ -54,20 +59,12 @@ describe("@/components/molecules/vCustomDoublePanels", () => {
 	const slot = "<div class='slot' />";
 	const slot2 = "<div class='slot2' />";
 
-	let vuetify;
-
-	beforeEach(() => {
-		vuetify = new Vuetify();
-	});
-
 	it("Should render its slots", () => {
 		const wrapper = mount(vCustomDoublePanels, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData,
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
+			props: propsData,
 			slots: {
 				panelOne: slot,
 				panelTwo: slot,
@@ -115,12 +112,10 @@ describe("@/components/molecules/vCustomDoublePanels", () => {
 
 	it("Should render skeleton loader when the status is pending", () => {
 		const wrapper = mount(vCustomDoublePanels, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: propsDataLoading,
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
+			props: propsDataLoading,
 		});
 
 		expect(wrapper.find(".v-skeleton-loader__text").exists()).toBe(true);
@@ -128,144 +123,128 @@ describe("@/components/molecules/vCustomDoublePanels", () => {
 
 	it("Should render only panel 1 disabled, if panel 2 has data", () => {
 		const wrapper = mount(vCustomDoublePanels, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: propsDataPanelOneEmpty,
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
+			props: propsDataPanelOneEmpty,
 		});
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
-		expect(expansionPanels.exists()).toBe(true);
 		expect(expansionPanels).toHaveLength(2);
-		expect(expansionPanels.at(0).classes()).toContain(
+		expect(expansionPanels.at(0)?.classes()).toContain(
 			"v-expansion-panel--disabled"
 		);
-		expect(expansionPanels.at(1).classes()).not.toContain(
+		expect(expansionPanels.at(1)?.classes()).not.toContain(
 			"v-expansion-panel--disabled"
 		);
 	});
 
 	it("Should render only panel 2 disabled, if panel 1 has data", () => {
 		const wrapper = mount(vCustomDoublePanels, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: propsDataPanelTwoEmpty,
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
+			props: propsDataPanelTwoEmpty,
 		});
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
-		expect(expansionPanels.exists()).toBe(true);
 		expect(expansionPanels).toHaveLength(2);
-		expect(expansionPanels.at(0).classes()).not.toContain(
+		expect(expansionPanels.at(0)?.classes()).not.toContain(
 			"v-expansion-panel--disabled"
 		);
-		expect(expansionPanels.at(1).classes()).toContain(
+		expect(expansionPanels.at(1)?.classes()).toContain(
 			"v-expansion-panel--disabled"
 		);
 	});
 
 	it("Should open panel 2, if panel 1 disabled", () => {
 		const wrapper = mount(vCustomDoublePanels, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: propsDataPanelOneEmpty,
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
+			props: propsDataPanelOneEmpty,
 		});
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
-		expect(expansionPanels.exists()).toBe(true);
 		expect(expansionPanels).toHaveLength(2);
-		expect(expansionPanels.at(0).classes()).toContain(
+		expect(expansionPanels.at(0)?.classes()).toContain(
 			"v-expansion-panel--disabled"
 		);
-		expect(expansionPanels.at(1).classes()).not.toContain(
+		expect(expansionPanels.at(1)?.classes()).not.toContain(
 			"v-expansion-panel--disabled"
 		);
-		expect(expansionPanels.at(1).classes()).toContain(
+		expect(expansionPanels.at(1)?.classes()).toContain(
 			"v-expansion-panel--active"
 		);
 	});
 
 	it("Should open panel 1, if panel 2 disabled", () => {
 		const wrapper = mount(vCustomDoublePanels, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
 			propsData: propsDataPanelTwoEmpty,
 		});
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
-		expect(expansionPanels.exists()).toBe(true);
 		expect(expansionPanels).toHaveLength(2);
-		expect(expansionPanels.at(0).classes()).not.toContain(
+		expect(expansionPanels.at(0)?.classes()).not.toContain(
 			"v-expansion-panel--disabled"
 		);
-		expect(expansionPanels.at(0).classes()).toContain(
+		expect(expansionPanels.at(0)?.classes()).toContain(
 			"v-expansion-panel--active"
 		);
-		expect(expansionPanels.at(1).classes()).toContain(
+		expect(expansionPanels.at(1)?.classes()).toContain(
 			"v-expansion-panel--disabled"
 		);
 	});
 
 	it("Shouldn't render headers, if it's empty", () => {
 		const wrapper = mount(vCustomDoublePanels, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: propsDataEmpty,
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
+			props: propsDataEmpty,
 		});
 
 		expect(wrapper.find(".v-expansion-panel-header").exists()).toBe(false);
 	});
 
 	it("Should trigger toggle on panel header click", async () => {
-		const mockMethod = jest.spyOn(vCustomDoublePanels.methods, "toggle");
 		const wrapper = mount(vCustomDoublePanels, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData: propsData,
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
+			props: propsData,
 		});
 
 		await wrapper.find("button").trigger("click");
-		expect(mockMethod).toHaveBeenCalled();
+
+		const panels = wrapper.findComponent(VExpansionPanels);
+		expect(panels.props("modelValue")).toBe(1);
 	});
 
 	it("'toggle()' should collapse expanded panel and expand the collapsed one", async () => {
 		const wrapper = mount(vCustomDoublePanels, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			vuetify,
-			propsData,
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
+			props: propsData,
 			slots: {
 				panelOne: slot,
 				panelTwo: slot2,
 			},
 		});
 
-		const expansionDivs = wrapper.findAll("div[aria-expanded]");
-		expect(expansionDivs.at(0).attributes("aria-expanded")).toBe("true");
-		expect(expansionDivs.at(1).attributes("aria-expanded")).toBe("false");
+		const expansionDivs = wrapper.findAll(`[aria-expanded]`);
+
+		expect(expansionDivs.at(0)?.attributes("aria-expanded")).toBe("true");
+		expect(expansionDivs.at(1)?.attributes("aria-expanded")).toBe("false");
 
 		await wrapper.vm.toggle();
 		await wrapper.vm.$nextTick();
 
-		expect(expansionDivs.at(0).attributes("aria-expanded")).toBe("false");
-		expect(expansionDivs.at(1).attributes("aria-expanded")).toBe("true");
+		expect(expansionDivs.at(0)?.attributes("aria-expanded")).toBe("false");
+		expect(expansionDivs.at(1)?.attributes("aria-expanded")).toBe("true");
 	});
 });

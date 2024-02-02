@@ -1,6 +1,6 @@
 <template>
-	<v-app class="wireframe-container">
-		<v-container fluid class="wireframe-header sticky px-6 py-0">
+	<v-container fluid class="wireframe-container">
+		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -13,22 +13,31 @@
 			</slot>
 			<div v-if="fabItems" class="fab-wrapper">
 				<slot name="fab">
-					<v-custom-fab
-						:data-testid="fabItems.testId"
-						:icon="fabItems.icon"
-						:title="fabItems.title"
-						:href="fabItems.href"
-						:actions="fabItems.actions"
-						:class="fabItems.class"
+					<speed-dial-menu
 						class="wireframe-fab"
-						:aria-label="fabItems.ariaLabel"
-						v-bind="$attrs"
-					/>
+						:direction="isMobile ? 'top' : 'bottom'"
+						:orientation="'right'"
+						:icon="fabItems.icon"
+						:href="fabItems.href"
+						:data-testid="fabItems.dataTestId"
+					>
+						{{ fabItems.title }}
+						<template #actions>
+							<speed-dial-menu-action
+								v-for="(action, index) in fabItems.actions"
+								:key="index"
+								:data-testid="action.dataTestId"
+								:icon="action.icon"
+								:href="action.href"
+								>{{ action.label }}</speed-dial-menu-action
+							>
+						</template>
+					</speed-dial-menu>
 				</slot>
 			</div>
 			<div v-if="showBorder" class="border" />
-		</v-container>
-		<v-main
+		</div>
+		<v-container
 			:class="{
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
@@ -36,20 +45,22 @@
 			class="main-content"
 		>
 			<slot />
-		</v-main>
-	</v-app>
+		</v-container>
+	</v-container>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
-import vCustomFab from "@/components/atoms/vCustomFab.vue";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { useVuetifyBreakpoints } from "@util-device-detection";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	inheritAttrs: false,
 	components: {
 		vCustomBreadcrumbs,
-		vCustomFab,
+		SpeedDialMenu,
+		SpeedDialMenuAction,
 	},
 	props: {
 		breadcrumbs: {
@@ -77,6 +88,13 @@ export default defineComponent({
 			return !!(this.headline || this.$slots.header);
 		},
 	},
+	setup() {
+		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+
+		return {
+			isMobile,
+		};
+	},
 });
 </script>
 <style lang="scss" scoped>
@@ -85,12 +103,17 @@ export default defineComponent({
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
 }
+
+.wireframe-container {
+	padding: 0 var(--space-lg);
+}
+
 :deep(.v-application__wrap) {
 	min-height: unset;
 }
 
 .main-content {
-	margin: 0 auto;
+	padding: 0;
 }
 
 .container-max-width {
@@ -99,7 +122,7 @@ export default defineComponent({
 
 .container-full-width {
 	max-width: none;
-	margin: 0px 24px;
+	margin: 0;
 }
 
 .border {
@@ -132,6 +155,8 @@ export default defineComponent({
 @media #{map-get($display-breakpoints, 'md-and-down')} {
 	.wireframe-fab {
 		position: fixed !important;
+		bottom: 2rem;
+		right: 1rem;
 	}
 }
 

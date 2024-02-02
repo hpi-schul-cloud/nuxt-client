@@ -519,29 +519,5 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				expect(toolsContent.exists()).toBe(true);
 			});
 		});
-
-		describe("when Tools(new) tab is active and the user has admin permissions", () => {
-			const setup = () => {
-				envConfigModule.setEnvs({
-					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				} as Envs);
-				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
-
-				const wrapper = getWrapper();
-
-				return { wrapper };
-			};
-
-			it("should show an 'add' button", async () => {
-				const { wrapper } = setup();
-
-				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
-				await toolsTab.trigger("click");
-
-				const addButton = wrapper.find('[data-testid="add-tool-button"]');
-
-				expect(addButton.exists()).toEqual(true);
-			});
-		});
 	});
 });

@@ -1,11 +1,18 @@
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
+import { mount } from "@vue/test-utils";
+import { VBtn, VHover, VListItem } from "vuetify/lib/components/index.mjs";
 import TaskItemMenu from "./TaskItemMenu.vue";
-import TaskItemTeacher from "./TaskItemTeacher";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import TaskItemTeacher from "./TaskItemTeacher.vue";
 
 const {
 	tasksTeacher,
@@ -15,7 +22,7 @@ const {
 	noDueDateTasksTeacher,
 } = mocks;
 
-const defineWindowWidth = (width) => {
+const defineWindowWidth = (width: number) => {
 	Object.defineProperty(window, "innerWidth", {
 		writable: true,
 		configurable: true,
@@ -24,29 +31,25 @@ const defineWindowWidth = (width) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
-let tasksModuleMock;
-let copyModuleMock;
-let notifierModuleMock;
+let tasksModuleMock: TasksModule;
+let copyModuleMock: CopyModule;
+let notifierModuleMock: NotifierModule;
 
 const mockRouter = {
 	push: jest.fn(),
 };
 
-const getWrapper = (props, options) => {
+const getWrapper = (props: { task: object }) => {
 	return mount(TaskItemTeacher, {
-		...createComponentMocks({
-			i18n: true,
-			vuetify: true,
-		}),
-		provide: {
-			tasksModule: tasksModuleMock,
-			copyModule: copyModuleMock,
-			[NOTIFIER_MODULE_KEY]: notifierModuleMock,
-			[I18N_KEY]: { t: (key) => key },
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				tasksModule: tasksModuleMock,
+				copyModule: copyModuleMock,
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+			},
 		},
-		propsData: props,
-		attachTo: document.body,
-		...options,
+		props: props,
 		mocks: {
 			$router: mockRouter,
 		},
@@ -72,12 +75,17 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 	});
 
 	it("should direct user to legacy task details page", () => {
-		const { location } = window;
+		Object.defineProperty(window, "location", {
+			set: jest.fn(),
+			get: () => createMock<Location>(),
+		});
+		const locationSpy = jest.spyOn(window, "location", "set");
+
 		const wrapper = getWrapper({ task: tasksTeacher[0] });
-		const taskCard = wrapper.findComponent({ name: "v-list-item" });
+		const taskCard = wrapper.findComponent(VListItem);
 		taskCard.trigger("click");
 
-		expect(location.pathname).toStrictEqual(`/homework/${tasksTeacher[0].id}`);
+		expect(locationSpy).toHaveBeenCalledWith(`/homework/${tasksTeacher[0].id}`);
 	});
 
 	it("should passthrough copy-task event", async () => {
@@ -109,8 +117,10 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				const taskLabel = wrapper.find("[data-testid='task-label']");
 
 				expect(taskLabel.exists()).toBe(true);
-				expect(taskLabel.text()).toMatch(/Ohne Kurszuordnung/i);
-				expect(wrapper.vm.courseName).toStrictEqual("Ohne Kurszuordnung");
+				expect(taskLabel.text()).toContain("pages.tasks.labels.noCourse");
+				expect(wrapper.vm.courseName).toStrictEqual(
+					"pages.tasks.labels.noCourse"
+				);
 			});
 
 			it("should show createdAt date in label", () => {
@@ -121,11 +131,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				const taskLabel = wrapper.find("[data-testid='task-label']");
 
 				expect(taskLabel.exists()).toBe(true);
-				expect(taskLabel.text()).toMatch(
-					/Ohne Kurszuordnung - Erstellt 28.09.17/i
+				expect(taskLabel.text()).toContain(
+					"components.molecules.TaskItemMenu.labels.createdAt 28.09.17"
 				);
 				expect(wrapper.vm.taskLabel).toStrictEqual(
-					"Ohne Kurszuordnung - Erstellt 28.09.17"
+					"pages.tasks.labels.noCourse - components.molecules.TaskItemMenu.labels.createdAt 28.09.17"
 				);
 			});
 
@@ -138,9 +148,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 					const taskLabel = wrapper.find("[data-testid='task-label']");
 
 					expect(taskLabel.exists()).toBe(true);
-					expect(taskLabel.text()).toMatch(/Vertretung Ohne Kurszuordnung/i);
+					expect(taskLabel.text()).toContain(
+						"common.words.substitute pages.tasks.labels.noCourse"
+					);
 					expect(wrapper.vm.courseName).toStrictEqual(
-						"Vertretung Ohne Kurszuordnung"
+						"common.words.substitute pages.tasks.labels.noCourse"
 					);
 				});
 			});
@@ -191,8 +203,10 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				const taskLabel = wrapper.find("[data-testid='task-label']");
 
 				expect(taskLabel.exists()).toBe(true);
-				expect(taskLabel.text()).toMatch(/Vertretung Mathe/i);
-				expect(wrapper.vm.courseName).toStrictEqual("Vertretung Mathe");
+				expect(taskLabel.text()).toContain("common.words.substitute Mathe");
+				expect(wrapper.vm.courseName).toStrictEqual(
+					"common.words.substitute Mathe"
+				);
 			});
 		});
 
@@ -237,8 +251,12 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.exists()).toBe(true);
-			expect(taskLabel.text()).toStrictEqual("Deutsch - Geplant 28.09.00");
-			expect(wrapper.vm.taskLabel).toStrictEqual("Deutsch - Geplant 28.09.00");
+			expect(taskLabel.text()).toStrictEqual(
+				"Deutsch - pages.tasks.labels.planned 28.09.00"
+			);
+			expect(wrapper.vm.taskLabel).toStrictEqual(
+				"Deutsch - pages.tasks.labels.planned 28.09.00"
+			);
 		});
 	});
 
@@ -265,9 +283,11 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			const taskLabel = wrapper.find("[data-testid='task-label']");
 
 			expect(taskLabel.exists()).toBe(true);
-			expect(taskLabel.text()).toMatch(/Vertretung Mathe - Abgabe 11.06.00/i);
+			expect(taskLabel.text()).toMatch(
+				"common.words.substitute Mathe - pages.tasks.labels.due 11.06.00"
+			);
 			expect(wrapper.vm.taskLabel).toStrictEqual(
-				`Vertretung Mathe - Abgabe 11.06.00`
+				`common.words.substitute Mathe - pages.tasks.labels.due 11.06.00`
 			);
 		});
 	});
@@ -281,8 +301,10 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			const topicLabel = wrapper.find("[data-testid='task-topic']");
 
 			expect(topicLabel.exists()).toBe(true);
-			expect(topicLabel.text()).toMatch(/Thema Malen nach Zahlen/i);
-			expect(wrapper.vm.topic).toStrictEqual(`Thema Malen nach Zahlen`);
+			expect(topicLabel.text()).toMatch("common.words.topic Malen nach Zahlen");
+			expect(wrapper.vm.topic).toStrictEqual(
+				"common.words.topic Malen nach Zahlen"
+			);
 		});
 	});
 
@@ -330,11 +352,15 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 					task: drafts[1],
 				});
 
-				const menuBtn = wrapper.find(".v-btn");
+				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				expect(wrapper.vm.isMenuActive).toBe(true);
-				expect(wrapper.find(".menuable__content__active").exists()).toBe(true);
+				const hover = wrapper.findComponent(VHover);
+				console.log(hover.vm.$props);
+
+				expect(
+					wrapper.findComponent(`[data-testid="task-edit"]`).isVisible()
+				).toBe(true);
 			});
 
 			it("should close menu on btn click", async () => {
@@ -359,9 +385,14 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 					task: drafts[1],
 				});
 
-				await wrapper.trigger("focus");
+				const vListItem = wrapper.findComponent(VListItem);
+				await vListItem.vm.$emit("focus");
+
 				expect(wrapper.vm.isActive).toBe(true);
-				const menuBtn = wrapper.find("#task-menu-btn");
+				const menuBtn = wrapper.findComponent(
+					`[aria-label="common.words.task"]`
+				);
+
 				expect(menuBtn.isVisible()).toBe(true);
 			});
 		});
@@ -371,9 +402,9 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				task: tasksTeacher[0],
 			});
 
-			const menuBtn = wrapper.find(".v-btn");
+			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");
-			const editBtn = wrapper.find("#task-action-edit");
+			const editBtn = wrapper.findComponent(`[data-testid="task-edit"]`);
 
 			expect(editBtn.attributes("href")).toBe(
 				`/homework/${tasksTeacher[0].id}/edit`
@@ -387,7 +418,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				task: tasksTeacher[0],
 			});
 
-			const menuBtn = wrapper.find("#task-menu-btn");
+			const menuBtn = wrapper.findComponent(VBtn);
 			expect(menuBtn.isVisible()).toBe(true);
 		});
 	});

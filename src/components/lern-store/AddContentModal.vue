@@ -53,12 +53,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { contentModule } from "@/store";
 import ModalFooter from "@/components/molecules/ModalFooter";
+import { contentModule } from "@/store";
+import { mapGetters } from "vuex";
+import BaseModal from "../base/BaseModal";
 export default {
 	components: {
 		ModalFooter,
+		BaseModal,
 	},
 	props: {
 		title: { type: String, default: "" },

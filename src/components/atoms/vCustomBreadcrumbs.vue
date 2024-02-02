@@ -34,6 +34,7 @@ defineProps({
 <style lang="scss" scoped>
 .custom-breadcrumb {
 	display: inline-flex;
+	font-size: 14px;
 }
 
 :deep(.v-breadcrumbs-item) {

@@ -1,3 +1,4 @@
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { envConfigModule, finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
@@ -5,17 +6,22 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
+import { Envs } from "@/store/types/env-config";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import TaskItemMenu from "./TaskItemMenu";
 import { mount } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { VBtn } from "vuetify/lib/components/index.mjs";
+import TaskItemMenu from "./TaskItemMenu.vue";
 
 const { tasksTeacher } = mocks;
 
-const defineWindowWidth = (width) => {
+const defineWindowWidth = (width: number) => {
 	Object.defineProperty(window, "innerWidth", {
 		writable: true,
 		configurable: true,
@@ -24,33 +30,38 @@ const defineWindowWidth = (width) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
-let tasksModuleMock;
-let copyModuleMock;
-let loadingStateModuleMock;
-let notifierModuleMock;
+let tasksModuleMock: TasksModule;
+let copyModuleMock: CopyModule;
+let loadingStateModuleMock: LoadingStateModule;
+let notifierModuleMock: NotifierModule;
 
-const getWrapper = (props, options = {}) => {
+const getWrapper = (
+	props: {
+		taskId?: string;
+		taskIsFinished?: boolean;
+		taskIsPublished?: boolean;
+		userRole?: string;
+		courseId?: string;
+	},
+	options = {}
+) => {
 	return mount(TaskItemMenu, {
-		...createComponentMocks({
-			i18n: true,
-			vuetify: true,
-		}),
-		propsData: props,
-		attachTo: document.body,
-		provide: {
-			tasksModule: tasksModuleMock,
-			copyModule: copyModuleMock,
-			loadingStateModule: loadingStateModuleMock,
-			[NOTIFIER_MODULE_KEY]: notifierModuleMock,
-			[I18N_KEY]: { t: (key) => key },
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				tasksModule: tasksModuleMock,
+				copyModule: copyModuleMock,
+				loadingStateModule: loadingStateModuleMock,
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+			},
 		},
+		props,
 		...options,
 	});
 };
 
 describe("@/components/molecules/TaskItemMenu", () => {
 	beforeEach(() => {
-		document.body.setAttribute("data-app", "true");
 		setupStores({
 			finishedTasksModule: FinishedTasksModule,
 			envConfigModule: EnvConfigModule,
@@ -133,10 +144,10 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 
-			const menuBtn = wrapper.find("#task-menu-btn");
+			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");
 
-			const finishBtn = wrapper.find("#task-action-revert");
+			const finishBtn = wrapper.findComponent("[data-testId=task-revert]");
 			await finishBtn.trigger("click");
 
 			expect(tasksModuleMock.revertPublishedTask).toHaveBeenCalled();
@@ -153,10 +164,10 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 
-			const menuBtn = wrapper.find("#task-menu-btn");
+			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");
 
-			const finishBtn = wrapper.find("#task-action-finish");
+			const finishBtn = wrapper.findComponent("[data-testId=task-finish]");
 			await finishBtn.trigger("click");
 
 			expect(tasksModuleMock.finishTask).toHaveBeenCalled();
@@ -174,11 +185,11 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 
-			const menuBtn = wrapper.find("#task-menu-btn");
+			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");
 
-			const restoreBtn = wrapper.find("#task-action-finish");
-			await restoreBtn.trigger("click");
+			const finishBtn = wrapper.findComponent("[data-testId=task-finish]");
+			await finishBtn.trigger("click");
 
 			expect(restoreTaskMock).toHaveBeenCalled();
 		});
@@ -194,14 +205,14 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				userRole: "teacher",
 			});
 
-			const menuBtn = wrapper.find("#task-menu-btn");
+			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");
 
-			const deleteBtn = wrapper.find("#task-action-delete");
+			const deleteBtn = wrapper.findComponent("[data-testId=task-delete]");
 			await deleteBtn.trigger("click");
 
-			const confirmBtn = wrapper.find(".dialog-confirmed");
-			await confirmBtn.trigger("click");
+			const confirmBtn = wrapper.findComponent(vCustomDialog);
+			await confirmBtn.vm.$emit("dialog-confirmed");
 
 			expect(tasksModuleMock.deleteTask).toHaveBeenCalled();
 		});
@@ -218,12 +229,12 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					userRole: "teacher",
 					courseId: "18",
 				});
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
 
-				const menuBtn = wrapper.find("#task-menu-btn");
+				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const copyBtn = wrapper.find("#task-action-copy");
+				const copyBtn = wrapper.findComponent("[data-testId=task-copy]");
 				await copyBtn.trigger("click");
 
 				expect(wrapper.emitted("copy-task")).toStrictEqual([
@@ -245,12 +256,12 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 					userRole: "teacher",
 				});
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true });
+				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
 
-				const menuBtn = wrapper.find("#task-menu-btn");
+				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const copyBtn = wrapper.find("#task-action-copy");
+				const copyBtn = wrapper.findComponent("[data-testId=task-copy]");
 				await copyBtn.trigger("click");
 
 				expect(wrapper.emitted("copy-task")).toStrictEqual([
@@ -273,12 +284,12 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false });
+			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false } as Envs);
 
-			const menuBtn = wrapper.find("#task-menu-btn");
+			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");
 
-			const copyBtn = wrapper.findAll("#task-action-copy");
+			const copyBtn = wrapper.findAllComponents("[data-testId=task-copy]");
 
 			expect(copyBtn).toHaveLength(0);
 		});
