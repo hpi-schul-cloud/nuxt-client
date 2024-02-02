@@ -5,7 +5,6 @@
 		:full-width="true"
 	>
 		<v-data-table
-			:disable-pagination="true"
 			:hide-default-footer="true"
 			:items="items"
 			:headers="headers"
@@ -25,6 +24,7 @@
 			<template #[`item.lastChanged`]="{ item }"
 				>{{ timesAgo(item.lastChanged) }}
 			</template>
+			<template #bottom />
 		</v-data-table>
 	</default-wireframe>
 </template>
