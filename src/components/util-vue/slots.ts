@@ -24,6 +24,8 @@ function isSlotEmpty(slot: Slot | undefined, props = {}): boolean {
 }
 
 function isVNodeEmpty(vNode: VNode | VNode[]) {
+	if (!vNode) return true;
+
 	const vNodes = asArray(vNode);
 	if (vNodes.every((vnode) => vnode.type === Comment)) return true;
 	if (vNodes.length === 0) return true;
