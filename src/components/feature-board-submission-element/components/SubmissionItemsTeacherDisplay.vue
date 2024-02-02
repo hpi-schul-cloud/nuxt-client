@@ -68,7 +68,6 @@
 					<v-data-table
 						:headers="headers"
 						:items="filteredSubmissions"
-						disable-pagination
 						hide-default-footer
 					>
 						<template #[`item.status`]="{ item }">
@@ -78,6 +77,7 @@
 								</v-icon>
 							</span>
 						</template>
+						<template #bottom />
 					</v-data-table>
 				</v-expansion-panel-text>
 			</VExpansionPanel>
