@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import { config, mount, shallowMount } from "@vue/test-utils";
 
 // VUE3_UPGRADE enable rendering of default slot on stubbed components

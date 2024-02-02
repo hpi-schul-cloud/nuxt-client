@@ -1,6 +1,6 @@
 <template>
-	<v-app class="wireframe-container">
-		<v-container fluid class="wireframe-header sticky px-6 py-0">
+	<v-container fluid class="wireframe-container">
+		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -36,8 +36,8 @@
 				</slot>
 			</div>
 			<div v-if="showBorder" class="border" />
-		</v-container>
-		<v-main
+		</div>
+		<v-container
 			:class="{
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
@@ -45,8 +45,8 @@
 			class="main-content"
 		>
 			<slot />
-		</v-main>
-	</v-app>
+		</v-container>
+	</v-container>
 </template>
 
 <script lang="ts">
@@ -103,12 +103,17 @@ export default defineComponent({
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
 }
+
+.wireframe-container {
+	padding: 0 var(--space-lg);
+}
+
 :deep(.v-application__wrap) {
 	min-height: unset;
 }
 
 .main-content {
-	margin: 0 auto;
+	padding: 0;
 }
 
 .container-max-width {
@@ -117,7 +122,7 @@ export default defineComponent({
 
 .container-full-width {
 	max-width: none;
-	margin: 0px 24px;
+	margin: 0;
 }
 
 .border {

@@ -6,7 +6,6 @@
 		<v-data-table
 			data-testid="external-tool-section-table"
 			v-if="items.length"
-			:disable-pagination="true"
 			:hide-default-footer="true"
 			:items="items"
 			:headers="headers"
@@ -40,6 +39,7 @@
 					@edit="editTool(item)"
 				/>
 			</template>
+			<template #bottom />
 		</v-data-table>
 		<v-btn
 			class="mt-8 mb-4 button-save float-right"

@@ -5,7 +5,7 @@
 ### Setup
 We have a couple of test helpers taht can be used to setup unit tests: `tests/test-utils/setup/index.ts`
 
-The global setup file `tests/unit/setup.js` has to be refactored and adapted to the new requirements.
+The global setup file `tests/setup.js` has to be refactored and adapted to the new requirements.
 ### Mounting a component
 
 Example: `src/components/organisms/vCustomDialog.unit.ts`
