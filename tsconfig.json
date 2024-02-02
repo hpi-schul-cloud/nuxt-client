@@ -53,6 +53,7 @@
 			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
 			"@ui-date-time-picker": ["src/components/ui-date-time-picker"],
 			"@ui-light-box": ["src/components/ui-light-box"],
+			"@ui-speed-dial-menu": ["src/components/ui-speed-dial-menu"],
 			"@util-board": ["src/components/util-board"],
 			"@util-validators": ["src/components/util-validators"],
 			"@util-input-masks": ["src/components/util-input-masks"],

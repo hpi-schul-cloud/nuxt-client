@@ -13,17 +13,26 @@
 			</slot>
 			<div v-if="fabItems" class="fab-wrapper">
 				<slot name="fab">
-					<v-custom-fab
-						:data-testid="fabItems.testId"
-						:icon="fabItems.icon"
-						:title="fabItems.title"
-						:href="fabItems.href"
-						:actions="fabItems.actions"
-						:class="fabItems.class"
+					<speed-dial-menu
 						class="wireframe-fab"
-						:aria-label="fabItems.ariaLabel"
-						v-bind="$attrs"
-					/>
+						:direction="isMobile ? 'top' : 'bottom'"
+						:orientation="'right'"
+						:icon="fabItems.icon"
+						:href="fabItems.href"
+						:data-testid="fabItems.dataTestId"
+					>
+						{{ fabItems.title }}
+						<template #actions>
+							<speed-dial-menu-action
+								v-for="(action, index) in fabItems.actions"
+								:key="index"
+								:data-testid="action.dataTestId"
+								:icon="action.icon"
+								:href="action.href"
+								>{{ action.label }}</speed-dial-menu-action
+							>
+						</template>
+					</speed-dial-menu>
 				</slot>
 			</div>
 			<div v-if="showBorder" class="border" />
@@ -41,15 +50,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
-import vCustomFab from "@/components/atoms/vCustomFab.vue";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { useVuetifyBreakpoints } from "@util-device-detection";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	inheritAttrs: false,
 	components: {
 		vCustomBreadcrumbs,
-		vCustomFab,
+		SpeedDialMenu,
+		SpeedDialMenuAction,
 	},
 	props: {
 		breadcrumbs: {
@@ -76,6 +87,13 @@ export default defineComponent({
 		showBorder(): boolean {
 			return !!(this.headline || this.$slots.header);
 		},
+	},
+	setup() {
+		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+
+		return {
+			isMobile,
+		};
 	},
 });
 </script>
@@ -137,6 +155,8 @@ export default defineComponent({
 @media #{map-get($display-breakpoints, 'md-and-down')} {
 	.wireframe-fab {
 		position: fixed !important;
+		bottom: 2rem;
+		right: 1rem;
 	}
 }
 

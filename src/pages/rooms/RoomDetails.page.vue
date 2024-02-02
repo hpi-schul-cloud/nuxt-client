@@ -161,6 +161,7 @@ export default defineComponent({
 			useCopy(isLoadingDialogOpen);
 
 		return {
+			mdiPlus,
 			copy,
 			backgroundCopyProcesses,
 			isCopyProcessInBackground,
