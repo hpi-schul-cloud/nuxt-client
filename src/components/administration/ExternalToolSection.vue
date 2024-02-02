@@ -182,9 +182,7 @@ export default defineComponent({
 		};
 
 		const showDatasheet = (item: SchoolExternalToolItem) => {
-			window.open(
-				`${window.location.origin}/api/v3/tools/external-tools/${item.externalToolId}/datasheet`
-			);
+			schoolExternalToolsModule.showDatasheet(item.externalToolId);
 		};
 
 		const onDeleteTool = async () => {

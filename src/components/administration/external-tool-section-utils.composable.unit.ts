@@ -5,7 +5,7 @@ import {
 import { schoolExternalToolsModule } from "@/store";
 import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import { DataTableHeader } from "vuetify";
-import SchoolExternalToolsModule from "../../store/school-external-tools";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 
