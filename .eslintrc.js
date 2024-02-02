@@ -126,9 +126,6 @@ module.exports = {
 			globals: {
 				mount: false,
 				shallowMount: false,
-				createComponentMocks: false,
-				rendersSlotContent: false,
-				wait: false,
 			},
 		},
 	],
