@@ -65,11 +65,7 @@
 					</v-chip>
 				</VExpansionPanelTitle>
 				<v-expansion-panel-text>
-					<v-data-table
-						:headers="headers"
-						:items="filteredSubmissions"
-						hide-default-footer
-					>
+					<v-data-table :headers="headers" :items="filteredSubmissions">
 						<template #[`item.status`]="{ item }">
 							<span data-testid="submission-item">
 								<v-icon color="black" size="small">
@@ -248,7 +244,7 @@ export default defineComponent({
 		border-top-left-radius: 0;
 	}
 
-	.v-expansion-panel-content__wrap {
+	.v-expansion-panel-text__wrapper {
 		padding: 0;
 	}
 
