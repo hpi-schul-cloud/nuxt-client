@@ -297,25 +297,28 @@ export default {
 		},
 	},
 	watch: {
-		selectionKeys(to) {
-			/**
-			 * toggle whenever the selection changes
-			 *
-			 * @event update:selection
-			 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
-			 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
-			 * Inclusive means all items in the passed array are selected.
-			 * Exclusive means all items not in the passed array are selected.
-			 */
-			this.$emit(
-				"update:selection",
-				Object.keys(to),
-				this.$_controllableDataSelectionType
-			);
-			/**
-			 * helper event for the selectedRowIds .sync modifier
-			 */
-			this.$emit("update:selectedRowIds", Object.keys(to));
+		selectionKeys: {
+			handler(to) {
+				/**
+				 * toggle whenever the selection changes
+				 *
+				 * @event update:selection
+				 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
+				 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
+				 * Inclusive means all items in the passed array are selected.
+				 * Exclusive means all items not in the passed array are selected.
+				 */
+				this.$emit(
+					"update:selection",
+					Object.keys(to),
+					this.$_controllableDataSelectionType
+				);
+				/**
+				 * helper event for the selectedRowIds .sync modifier
+				 */
+				this.$emit("update:selectedRowIds", Object.keys(to));
+			},
+			deep: true,
 		},
 		selectedRowIds: {
 			handler(to) {
@@ -330,7 +333,7 @@ export default {
 					return obj;
 				}, {});
 				this.selectionKeys = newSelectionKeys;
-				getCurrentInstance().appContext.forceUpdate();
+				// this.$forceUpdate(); // VUE3_UPGRADE do we still need this?
 			},
 			immediate: true,
 		},
