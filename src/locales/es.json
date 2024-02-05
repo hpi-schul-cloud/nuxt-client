@@ -181,6 +181,7 @@
 	"components.administration.externalToolsSection.description": "Los parámetros específicos de la escuela para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta estará disponible dentro de la escuela.<br><br>\nMás información está disponible en nuestro <a href=\"https://docs.dbildungscloud.de/x/uoKqDg\" target=\" _blank\">Sección de ayuda sobre herramientas externas</a>.",
 	"components.administration.externalToolsSection.table.header.status": "Estado",
 	"components.administration.externalToolsSection.action.add": "Añadir Herramienta Externa",
+	"components.administration.externalToolsSection.action.showDatasheet": "Ver hoja de datos",
 	"components.administration.externalToolsSection.action.edit": "Editar herramienta",
 	"components.administration.externalToolsSection.action.delete": "Eliminar herramienta",
 	"components.administration.externalToolsSection.dialog.title": "Quitar Herramienta Externa",
