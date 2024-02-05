@@ -12,7 +12,7 @@
 			v-if="
 				$slots.title || $slots.element || $slots.subtitle || $slots.description
 			"
-			:class="dynamicClasses"
+			:class="{ 'bg-grey-lighten-4': props.hasGreyBackground === true }"
 			class="content-element-bar-texts rounded-b py-4"
 		>
 			<div
@@ -26,9 +26,7 @@
 					<slot name="logo" />
 				</div>
 
-				<v-icon v-if="icon" color="black" size="20" class="mr-2">{{
-					icon
-				}}</v-icon>
+				<v-icon v-if="icon" :icon="icon" color="black" size="20" class="mr-2" />
 
 				<LineClamp class="content-element-title">
 					<slot name="title" />
@@ -55,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, PropType } from "vue";
+import { defineProps, PropType } from "vue";
 import LineClamp from "../LineClamp.vue";
 import { IconProps } from "vuetify";
 import { hasSlotContent } from "@util-vue";
@@ -69,12 +67,6 @@ const props = defineProps({
 		type: String as PropType<IconProps["icon"]>,
 		required: false,
 	},
-});
-
-const dynamicClasses = computed(() => {
-	return {
-		"bg-grey-lighten-4": props.hasGreyBackground === true,
-	};
 });
 </script>
 
@@ -98,7 +90,7 @@ const dynamicClasses = computed(() => {
 
 .content-element-bar {
 	position: relative;
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 }
 .content-element-bar:hover {
 	.content-element-title {
