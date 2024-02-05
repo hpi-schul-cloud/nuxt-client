@@ -10,7 +10,9 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { nextTick } from "vue";
+import { VBtn } from "vuetify/lib/components/index.mjs";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -172,14 +174,15 @@ describe("@templates/RoomWrapper.vue", () => {
 			});
 			expect(importModalComponent.vm.isOpen).toBe(false);
 
-			const fabComponent = wrapper.findComponent(SpeedDialMenu);
-			await fabComponent.trigger("click");
+			const menu = await wrapper.findComponent(SpeedDialMenu);
+			const menuButton = await menu.findComponent(VBtn);
+			await menuButton.trigger("click");
+			jest.advanceTimersByTime(1000);
+			await nextTick();
 
-			const importBtn = await wrapper.findComponent(
-				'[data-testid="fab_button_import_course"]'
-			);
-			console.log(importBtn.html());
-			await importBtn.trigger("click");
+			const menuActions = await wrapper.findAllComponents(SpeedDialMenuAction);
+			await menuActions[1].findComponent(VBtn).trigger("click");
+			await nextTick();
 
 			expect(importModalComponent.vm.isOpen).toBe(true);
 		});

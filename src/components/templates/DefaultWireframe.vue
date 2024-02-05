@@ -28,7 +28,7 @@
 								:key="index"
 							>
 								<speed-dial-menu-action
-									:data-testid="action.dataTestId"
+									:dataTestId="action.dataTestId"
 									:icon="action.icon"
 									:href="action.href"
 									:to="action.to"
@@ -58,7 +58,6 @@
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { toRef } from "@vueuse/core";
 import { defineComponent } from "vue";
 
 export default defineComponent({
