@@ -363,8 +363,6 @@ describe("ExternalToolSection", () => {
 					isDeactivated: false,
 				};
 
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 
 				expect(itemName).toEqual(expectedName);
@@ -375,12 +373,8 @@ describe("ExternalToolSection", () => {
 			it("should return an empty string", () => {
 				const { wrapper } = getWrapper();
 
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
 				wrapper.vm.itemToDelete = undefined;
 
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 
 				expect(itemName).toEqual("");
