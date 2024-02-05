@@ -27,6 +27,10 @@ const $theme = {
 	name: "instance name",
 };
 
+jest
+	.spyOn(window, "scrollTo")
+	.mockImplementation(() => ({ top: 0, behavior: "smooth" }));
+
 describe("ProvisioningOptionsPage", () => {
 	let useProvisioningOptionsStateMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsState>
