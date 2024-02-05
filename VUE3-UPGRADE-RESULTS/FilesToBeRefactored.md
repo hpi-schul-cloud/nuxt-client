@@ -17,12 +17,6 @@
 - **Potantial Effort:** depending on selected solution
 - **Estimation time for refactoring:** _TBD depending on selected solution_
 
-### `src/components/atoms/vCustomFab.vue`
-
-- The component uses the vuetify `speed-dial` component and it seems not to be exported in Vuetify-3 yet. There is an open PR in library's repository but no info when will be released.
-- **Recommended Solution:** Wait until it's upcoming release.
-- **Estimation time for refactoring:** _TBD_
-
 ### `src/pages/rooms/RoomOverview.page.vue`
 
 - The moving avatar components are based on the `this.$refs` selector. The `$refs` object's properties have been changed in vue-3. So we need to find another way to spot the dragging object properties instead of using `$refs`. This whole page refactoring might be necessary.

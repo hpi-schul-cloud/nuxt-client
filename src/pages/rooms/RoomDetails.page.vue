@@ -47,7 +47,9 @@
 							class="no-active"
 						>
 							<template #default>
-								<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }}</v-icon>
+								<v-icon size="large" class="tab-icon mr-sm-3">
+									{{ tabItem.icon }}</v-icon
+								>
 								<span class="d-none d-sm-inline">
 									{{ tabItem.label }}
 								</span>
@@ -161,6 +163,7 @@ export default defineComponent({
 			useCopy(isLoadingDialogOpen);
 
 		return {
+			mdiPlus,
 			copy,
 			backgroundCopyProcesses,
 			isCopyProcessInBackground,
@@ -557,6 +560,10 @@ export default defineComponent({
 .v-tab {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
+
+	&.v-tab.v-btn.no-active {
+		color: rgba(0, 0, 0, 0.54);
+	}
 }
 
 :deep(.v-slide-group__prev),

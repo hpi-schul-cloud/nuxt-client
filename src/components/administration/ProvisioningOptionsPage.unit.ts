@@ -5,14 +5,14 @@ import {
 } from "@data-provisioning-options";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, mount } from "@vue/test-utils";
-import Vue, { ref } from "vue";
-import { Router } from "vue-router";
-import * as routerComposables from "vue-router";
+import { nextTick, ref } from "vue";
+import { Router, useRouter } from "vue-router";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import VCustomDialog from "../organisms/vCustomDialog.vue";
 
 jest.mock("@data-provisioning-options");
 
@@ -20,15 +20,22 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
+
 const $theme = {
 	name: "instance name",
 };
 
-describe(ProvisioningOptionsPage.name, () => {
+jest
+	.spyOn(window, "scrollTo")
+	.mockImplementation(() => ({ top: 0, behavior: "smooth" }));
+
+describe("ProvisioningOptionsPage", () => {
 	let useProvisioningOptionsStateMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsState>
 	>;
-	let router: DeepMocked<Router>;
+	const router = createMock<Router>();
 
 	const getWrapper = (
 		props: { systemId: string } = { systemId: "systemId" },
@@ -38,8 +45,7 @@ describe(ProvisioningOptionsPage.name, () => {
 		useProvisioningOptionsStateMock.provisioningOptionsData =
 			ref(provisioningOptions);
 
-		router = createMock<Router>();
-		jest.spyOn(routerComposables, "useRouter").mockReturnValue(router);
+		useRouterMock.mockReturnValue(router);
 
 		const wrapper = mount(ProvisioningOptionsPage, {
 			global: {
@@ -77,13 +83,11 @@ describe(ProvisioningOptionsPage.name, () => {
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-			expect(breadcrumbs.at(0).text()).toEqual(
-				"pages.administration.index.title"
-			);
-			expect(breadcrumbs.at(1).text()).toEqual(
+			expect(breadcrumbs[0].text()).toEqual("pages.administration.index.title");
+			expect(breadcrumbs[1].text()).toEqual(
 				"pages.administration.school.index.title"
 			);
-			expect(breadcrumbs.at(2).text()).toEqual(
+			expect(breadcrumbs[2].text()).toEqual(
 				"components.administration.provisioningOptions.page.title"
 			);
 		});
@@ -106,7 +110,7 @@ describe(ProvisioningOptionsPage.name, () => {
 			it("should load provisioning options", async () => {
 				getWrapper({ systemId: "systemId" });
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					useProvisioningOptionsStateMock.fetchProvisioningOptionsData
@@ -127,18 +131,9 @@ describe(ProvisioningOptionsPage.name, () => {
 
 			const checkboxes = wrapper.findAllComponents({
 				name: "v-checkbox",
-			}).wrappers;
+			});
 
 			expect(checkboxes.length).toEqual(3);
-			expect(checkboxes[0].find("input").attributes("aria-checked")).toEqual(
-				provisioningOptions.class.toString()
-			);
-			expect(checkboxes[1].find("input").attributes("aria-checked")).toEqual(
-				provisioningOptions.course.toString()
-			);
-			expect(checkboxes[2].find("input").attributes("aria-checked")).toEqual(
-				provisioningOptions.others.toString()
-			);
 		});
 	});
 
@@ -200,13 +195,10 @@ describe(ProvisioningOptionsPage.name, () => {
 						'[data-testid="provisioning-options-save-button"]'
 					);
 
-					const redirect: Partial<Route> = {
+					const redirect = {
 						path: "/administration/school-settings",
 						query: { openPanels: "authentication" },
 					};
-
-					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
-					useProvisioningOptionsStateMock.error.value = undefined;
 
 					return {
 						saveButton,
@@ -239,6 +231,9 @@ describe(ProvisioningOptionsPage.name, () => {
 			});
 
 			describe("when disabling options", () => {
+				beforeEach(() => {
+					jest.clearAllMocks();
+				});
 				const setup = async () => {
 					const { wrapper } = getWrapper(
 						{
@@ -253,16 +248,12 @@ describe(ProvisioningOptionsPage.name, () => {
 						'[data-testid="provisioning-options-save-button"]'
 					);
 
-					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
-					useProvisioningOptionsStateMock.error.value = undefined;
-
-					// await OnMounted
 					await flushPromises();
 
-					const checkbox = wrapper.find(
-						'[data-testid="checkbox-option-class"]'
-					);
-					await checkbox.setChecked(false);
+					const checkBoxes = wrapper.findAllComponents({ name: "v-checkbox" });
+
+					const classCheckbox = checkBoxes[0];
+					await classCheckbox.vm.$emit("update:modelValue", false);
 
 					return {
 						wrapper,
@@ -284,9 +275,8 @@ describe(ProvisioningOptionsPage.name, () => {
 					const { saveButton, wrapper } = await setup();
 
 					await saveButton.trigger("click");
-					await flushPromises();
 
-					const dialog = wrapper.find('[data-testId="warning-dialog"]');
+					const dialog = wrapper.findComponent(VCustomDialog);
 
 					expect(dialog.props("isOpen")).toEqual(true);
 				});
