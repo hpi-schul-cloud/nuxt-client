@@ -13,6 +13,7 @@
 			v-if="element.thumbnailUrl"
 			:src="element.thumbnailUrl"
 			class="flex-fill"
+			min-height="100px"
 			cover
 		/>
 		<div v-else class="flex-fill placeholder" />

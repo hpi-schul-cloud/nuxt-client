@@ -54,10 +54,10 @@ const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
 <style scoped>
 .sortable-drag-ghost {
 	opacity: 0.6;
-	background-color: rgba(var(--v-theme-secondary-lighten-1));
+	background-color: rgba(var(--v-theme-secondary-lighten-1)) !important;
 }
 
 .sortable-chosen {
-	background-color: rgba(var(--v-theme-secondary-lighten-1), 0.6);
+	background-color: rgba(var(--v-theme-secondary-lighten-1), 0.6) !important;
 }
 </style>

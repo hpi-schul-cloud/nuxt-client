@@ -100,7 +100,7 @@ const gridMode = ref(false);
 
 .sortable-drag-ghost {
 	opacity: 0.6;
-	background-color: rgba(var(--v-theme-secondary-lighten-1));
+	background-color: rgba(var(--v-theme-secondary-lighten-1)) !important;
 }
 
 .sortable-chosen {

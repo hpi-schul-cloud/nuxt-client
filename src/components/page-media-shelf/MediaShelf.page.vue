@@ -19,43 +19,43 @@ const mediaBoard: Ref<IMediaBoard> = ref({
 	lines: [
 		{
 			id: "line1",
-			title: "Title 1",
+			title: "Meine Favoriten",
 			elements: [
 				{
 					id: "element1",
-					title: "Element 1",
-					description: "This is element 1",
+					title: "Windows Hintergründe",
+					description: "Die besten Hintergründe",
 					thumbnailUrl: "https://i.wfcdn.de/teaser/1920/67538.png",
 				},
 				{
 					id: "element2",
-					title: "Element 2",
+					title: "Die Leere",
 				},
 			],
 		},
 		{
 			id: "line2",
-			title: "Title 2",
+			title: "Alles Andere",
 			elements: [
 				{
 					id: "element3",
-					title: "Element 3",
+					title: "Grüne Wiesen",
 					thumbnailUrl: "https://i.wfcdn.de/teaser/1920/67538.png",
 				},
 				{
 					id: "element4",
-					title: "Element 4",
+					title: "Enthusiasmus - Eine Sammlung der besten Text",
 					thumbnailUrl: "https://i.wfcdn.de/teaser/1920/67538.png",
 					description:
-						"This is a way too long description for an element of this size and I hope that people will not paste a 500 word assay into this field",
+						"Die Beschreibung ist viel zu lang für dieses Element und ich hoffe, dass niemand einen ganzen Roman in diese Zeile schreiben wird.",
 				},
 				{
 					id: "element5",
-					title: "Element 5",
+					title: "Ein hauch von Nichts",
 				},
 				{
 					id: "element6",
-					title: "Element 6",
+					title: "Bücherstapel",
 					thumbnailUrl:
 						"https://i.pinimg.com/originals/8e/df/4b/8edf4b2330d25b1ca1d85b69f7538d2e.png",
 				},
