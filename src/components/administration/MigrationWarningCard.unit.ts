@@ -5,13 +5,18 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("MigrationWarningCard", () => {
 	const setup = (value = "start") => {
 		document.body.setAttribute("data-app", "true");
 		const wrapper = mount(MigrationWarningCard, {
 			global: {
-				plugins: [createTestingI18n(), createTestingVuetify()],
+				plugins: [
+					createTestingI18n(),
+					createTestingVuetify(),
+					vueDompurifyHTMLPlugin,
+				],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: {
 						getMigrationEndGracePeriod: () => 86400000,
