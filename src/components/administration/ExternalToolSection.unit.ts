@@ -23,8 +23,13 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("@data-external-tool");
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -54,9 +59,16 @@ describe("ExternalToolSection", () => {
 			} as User,
 		});
 
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
+
 		const wrapper = mount(ExternalToolSection, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
 
 				provide: {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
