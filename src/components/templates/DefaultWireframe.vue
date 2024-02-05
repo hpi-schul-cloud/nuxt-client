@@ -23,16 +23,19 @@
 					>
 						{{ fabItems.title }}
 						<template #actions>
-							<speed-dial-menu-action
+							<template
 								v-for="(action, index) in fabItems.actions"
 								:key="index"
-								:data-testid="action.dataTestId"
-								:icon="action.icon"
-								:href="action.href"
-								:to="action.to"
-								@click="action.customEvent"
-								>{{ action.label }}</speed-dial-menu-action
 							>
+								<speed-dial-menu-action
+									:data-testid="action.dataTestId"
+									:icon="action.icon"
+									:href="action.href"
+									:to="action.to"
+									@click="action.customEvent"
+									>{{ action.label }}</speed-dial-menu-action
+								>
+							</template>
 						</template>
 					</speed-dial-menu>
 				</slot>
@@ -91,9 +94,8 @@ export default defineComponent({
 			return !!(this.headline || this.$slots.header);
 		},
 	},
-	setup(props) {
+	setup() {
 		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
-		console.log(toRef(props, "fabItems").value);
 		return {
 			isMobile,
 		};

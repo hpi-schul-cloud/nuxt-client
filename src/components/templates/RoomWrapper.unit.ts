@@ -10,6 +10,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -157,11 +158,12 @@ describe("@templates/RoomWrapper.vue", () => {
 		it("should display fab", () => {
 			const wrapper = getWrapper();
 
-			const fabComponent = wrapper.find(".wireframe-fab");
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(true);
 		});
 
 		it("should open the import-modal", async () => {
+			jest.useFakeTimers();
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const wrapper = getWrapper();
 
@@ -170,12 +172,13 @@ describe("@templates/RoomWrapper.vue", () => {
 			});
 			expect(importModalComponent.vm.isOpen).toBe(false);
 
-			const fab = wrapper.find(".wireframe-fab");
-			await fab.trigger("click");
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
+			await fabComponent.trigger("click");
 
-			const importBtn = wrapper.find(
+			const importBtn = await wrapper.findComponent(
 				'[data-testid="fab_button_import_course"]'
 			);
+			console.log(importBtn.html());
 			await importBtn.trigger("click");
 
 			expect(importModalComponent.vm.isOpen).toBe(true);

@@ -53,7 +53,6 @@ import { mdiClose } from "@mdi/js";
 import { useVuetifyBreakpoints } from "@util-device-detection";
 import { OnClickOutside } from "@vueuse/components";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";
-import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 import {
 	computed,
 	provide,
