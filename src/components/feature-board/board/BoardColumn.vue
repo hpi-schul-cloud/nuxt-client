@@ -263,7 +263,7 @@ export default defineComponent({
 .sortable-drag-ghost .v-card {
 	opacity: 0.6;
 	background-color: rgba(var(--v-theme-secondary-lighten-1));
-	width: 350px;
+	width: 346px; /* size of the card - column has 400px width and some paddings and margins */
 }
 .sortable-drag-ghost .v-card .v-btn.v-btn--icon {
 	background-color: rgba(var(--v-theme-secondary-lighten-1)) !important;
