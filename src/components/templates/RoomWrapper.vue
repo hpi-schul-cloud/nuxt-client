@@ -92,10 +92,7 @@ export default defineComponent({
 								icon: mdiCloudDownload,
 								dataTestid: "fab_button_import_course",
 								ariaLabel: this.$t("pages.rooms.fab.import.course"),
-								customEvent: {
-									name: "fabButtonEvent",
-									value: true,
-								},
+								customEvent: fabClick,
 							},
 						],
 					};

@@ -31,8 +31,16 @@
 			</div>
 		</div>
 		<div v-else>
-			<v-btn rounded color="primary" size="large" :href="href">
-				<v-icon v-if="icon">{{ isCollapsed ? mdiClose : icon }}</v-icon>
+			<v-btn
+				:rounded="!isCollapsed"
+				class="size-transition"
+				:class="!isCollapsed ? 'default-width' : ''"
+				:icon="isCollapsed"
+				color="primary"
+				size="large"
+				:href="href"
+			>
+				<v-icon v-if="icon">{{ isMenuOpen ? mdiClose : icon }}</v-icon>
 				<span v-if="!isCollapsed" class="d-block"><slot /></span>
 				<span v-else class="d-sr-only"><slot /></span>
 			</v-btn>
@@ -45,6 +53,7 @@ import { mdiClose } from "@mdi/js";
 import { useVuetifyBreakpoints } from "@util-device-detection";
 import { OnClickOutside } from "@vueuse/components";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";
+import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 import {
 	computed,
 	provide,

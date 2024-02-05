@@ -17,10 +17,11 @@ const componentWithFlatSlots = defineComponent({
       DefaultSlotLabel
       <template #actions>
         <SpeedDialMenuAction :icon="mdiClose" :href="'example.com'">Action1</SpeedDialMenuAction>
-        <SpeedDialMenuAction :icon="mdiClose">Action2</SpeedDialMenuAction>
+        <SpeedDialMenuAction :icon="mdiClose" :to="'example.com'">Action2</SpeedDialMenuAction>
         <SpeedDialMenuAction :icon="mdiClose">Action3</SpeedDialMenuAction>
       </template>
     </SpeedDialMenu>
+    <button id="clickOutside">Test</button>
   </template>
   `,
 	setup() {
@@ -48,12 +49,13 @@ const componentWithIteratedSlots = defineComponent({
         </SpeedDialMenuAction>
       </template>
     </SpeedDialMenu>
+    <button id="clickOutside">Test</button>
   </template>
   `,
 	setup() {
 		const actions = [
 			{ label: "Action1", icon: mdiClose, href: "example.com" },
-			{ label: "Action2", icon: mdiClose },
+			{ label: "Action2", icon: mdiClose, to: "example.com" },
 			{ label: "Action3", icon: mdiClose },
 		];
 
@@ -70,8 +72,6 @@ describe("SpeedDialMenu", () => {
 	}: {
 		component: DefineComponent<any, any, any>;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		const slot = "TestSlot";
 		const wrapper = mount(component, {
 			global: {

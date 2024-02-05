@@ -37,6 +37,7 @@
 					tabindex="-1"
 					aria-hidden="true"
 					:href="href"
+					:to="to"
 					@click="onClick"
 					><slot />
 				</v-btn>
@@ -70,13 +71,13 @@ import { computed, onMounted, Ref, ref, unref, withDefaults } from "vue";
 const props = withDefaults(
 	defineProps<{
 		icon: string;
-		/**
-		 * internal prop for animation order
-		 */
 		speedDialIndex?: number;
 		href?: string;
+		to?: string;
 	}>(),
-	{ speedDialIndex: 0 }
+	{
+		speedDialIndex: 0,
+	}
 );
 
 const emit = defineEmits<{

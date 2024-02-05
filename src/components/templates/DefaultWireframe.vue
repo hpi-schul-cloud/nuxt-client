@@ -29,6 +29,8 @@
 								:data-testid="action.dataTestId"
 								:icon="action.icon"
 								:href="action.href"
+								:to="action.to"
+								@click="action.customEvent"
 								>{{ action.label }}</speed-dial-menu-action
 							>
 						</template>
@@ -53,6 +55,7 @@
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
+import { toRef } from "@vueuse/core";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -88,9 +91,9 @@ export default defineComponent({
 			return !!(this.headline || this.$slots.header);
 		},
 	},
-	setup() {
+	setup(props) {
 		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
-
+		console.log(toRef(props, "fabItems").value);
 		return {
 			isMobile,
 		};
