@@ -60,6 +60,7 @@
 			"@util-device-detection": ["src/components/util-device-detection"],
 			"@page-board": ["src/components/page-board"],
 			"@page-class-members": ["src/components/page-class-members"],
+			"@page-media-shelf": ["src/components/page-media-shelf"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},

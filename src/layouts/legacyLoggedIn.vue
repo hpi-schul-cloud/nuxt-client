@@ -3,16 +3,6 @@
 		<skip-links />
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
-				<!-- Vue3 Upgrade:  Bug Hunt Alert -->
-				<v-alert
-					color="red"
-					density="compact"
-					variant="flat"
-					class="ma-2"
-					style="text-align: center"
-				>
-					Bug Hunt: You are on a Vue page
-				</v-alert>
 				<the-top-bar
 					v-if="!isInline"
 					:fullscreen-mode="fullScreenMode"
@@ -38,18 +28,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
-import { useRoute } from "vue-router";
+import TheFooter from "@/components/legacy/TheFooter.vue";
+import TheSidebar from "@/components/legacy/TheSidebar.vue";
+import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
+import TheTopBar from "@/components/topbar/TheTopBar.vue";
+import toastsFromQueryString from "@/mixins/toastsFromQueryString";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import getSidebarItems, {
 	SidebarCategoryItem,
 	SidebarItem,
 } from "@/utils/sidebar-base-items";
-import toastsFromQueryString from "@/mixins/toastsFromQueryString";
-import TheTopBar from "@/components/topbar/TheTopBar.vue";
-import TheSidebar from "@/components/legacy/TheSidebar.vue";
-import TheFooter from "@/components/legacy/TheFooter.vue";
-import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
+import { computed, defineComponent, ref } from "vue";
+import { useRoute } from "vue-router";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
 
 export default defineComponent({

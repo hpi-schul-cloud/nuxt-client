@@ -73,6 +73,7 @@ module.exports = defineConfig({
 				),
 				"@page-board": getDir("src/components/page-board"),
 				"@page-class-members": getDir("src/components/page-class-members"),
+				"@page-media-shelf": getDir("src/components/page-media-shelf"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
