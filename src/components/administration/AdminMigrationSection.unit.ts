@@ -15,6 +15,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { nextTick } from "vue";
 
 describe("AdminMigrationSection", () => {
@@ -54,7 +55,11 @@ describe("AdminMigrationSection", () => {
 
 		const wrapper = mount(AdminMigrationSection, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
 				provide: {
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
