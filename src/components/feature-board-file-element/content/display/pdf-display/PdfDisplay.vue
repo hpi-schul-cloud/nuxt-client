@@ -1,28 +1,24 @@
 <template>
-	<ColorOverlay
-		:isOverlayDisabled="isEditMode"
-		@on:action="openPdf"
-		color="rgba(var(--v-theme-black))"
-	>
-		<PreviewImage
-			:src="previewSrc"
-			:alt="altText"
-			:aspect-ratio="1.77777"
-			position="top"
-			class="rounded-t"
-			:cover="true"
-		/>
-
-		<ContentElementBar class="menu">
-			<template #menu><slot /></template>
-		</ContentElementBar>
-	</ColorOverlay>
+	<ContentElementBar>
+		<template #display>
+			<div @click="openPdf">
+				<PreviewImage
+					:src="previewSrc"
+					:alt="altText"
+					:aspect-ratio="1.77777"
+					position="top"
+					class="rounded-t"
+					:cover="true"
+				/>
+			</div>
+		</template>
+		<template #menu><slot /></template>
+	</ContentElementBar>
 </template>
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
 import { PropType, defineComponent } from "vue";
-import { ColorOverlay } from "@ui-color-overlay";
 import { PreviewImage } from "@ui-preview-image";
 import { useI18n } from "vue-i18n";
 import { ContentElementBar } from "@ui-board";
@@ -36,7 +32,7 @@ export default defineComponent({
 		previewSrc: { type: String, required: true },
 		src: { type: String, required: true },
 	},
-	components: { ContentElementBar, ColorOverlay, PreviewImage },
+	components: { ContentElementBar, PreviewImage },
 	setup(props) {
 		const { t } = useI18n();
 
@@ -55,11 +51,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.menu {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-}
-</style>

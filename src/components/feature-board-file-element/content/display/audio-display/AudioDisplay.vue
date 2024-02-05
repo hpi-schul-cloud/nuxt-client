@@ -1,7 +1,7 @@
 <template>
 	<ContentElementBar class="audio-player bg-grey-darken-3">
 		<template #element>
-			<div class="d-flex flex-nowrap pb-0">
+			<div class="d-flex flex-nowrap pb-0 fill-height align-center">
 				<audio ref="audio" loading="lazy" />
 				<v-btn
 					v-if="playing"
@@ -9,8 +9,9 @@
 						$t('component.cardElement.fileElement.audioPlayer.pause')
 					"
 					icon
+					variant="flat"
 					@click="onPlay"
-					color="white"
+					color="transparent"
 					size="small"
 				>
 					<v-icon> {{ mdiPause }}</v-icon>
@@ -19,8 +20,9 @@
 					v-else
 					:aria-label="$t('component.cardElement.fileElement.audioPlayer.play')"
 					icon
+					variant="flat"
 					@click="onPlay"
-					color="white"
+					color="transparent"
 					size="small"
 				>
 					<v-icon>{{ mdiPlay }}</v-icon>
@@ -42,9 +44,6 @@
 					step="durationStep"
 					:min="0"
 					:max="duration"
-					@click="stopPropagation"
-					@mousedown="stopPropagation"
-					@mouseup="stopPropagation"
 					@update:model-value="onInputSlider"
 				/>
 				<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
@@ -105,11 +104,6 @@ export default defineComponent({
 			return currentTimeValue + " / " + durationValue;
 		});
 
-		const stopPropagation = (event: Event) => {
-			event.stopPropagation();
-			event.stopImmediatePropagation();
-		};
-
 		// Moving these variables to template causes the audio not to play on iOS
 		const durationStep = 0.0000001;
 		const volumeStep = 0.01;
@@ -128,7 +122,6 @@ export default defineComponent({
 			mdiPause,
 			mdiPlaySpeed,
 			onPlay,
-			stopPropagation,
 			onInputSlider,
 			durationDisplay,
 		};

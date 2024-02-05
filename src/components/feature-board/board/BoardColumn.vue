@@ -20,19 +20,20 @@
 				tag="div"
 				:options="{
 					group: 'cards',
-					direction: 'vertical',
-					delay: 300, // isDesktop ? 0 : 300
-					delayOnTouchOnly: true,
-					disabled: !hasMovePermission,
-					ghostClass: 'sortable-drag-ghost',
-					easing: 'cubic-bezier(1, 0, 0, 1)',
-					dragClass: 'sortable-drag-board-card',
-					dragoverBubble: true,
-					draggable: '.draggable',
 					animation: 250,
-					scroll: true,
-					forceFallback: true,
 					bubbleScroll: true,
+					direction: 'vertical',
+					delay: isDesktop ? 2 : 300,
+					disabled: !hasMovePermission,
+					dragClass: 'elevation-10',
+					dragoverBubble: false,
+					draggable: '.draggable',
+					easing: 'cubic-bezier(1, 0, 0, 1)',
+					filter: '.v-input, v-btn',
+					preventOnFilter: false,
+					forceFallback: true,
+					ghostClass: 'sortable-drag-ghost',
+					scroll: true,
 				}"
 				:class="{ 'expanded-column': isDragging }"
 				class="scrollable-column"
@@ -262,6 +263,7 @@ export default defineComponent({
 .sortable-drag-ghost .v-card {
 	opacity: 0.6;
 	background-color: rgba(var(--v-theme-secondary-lighten-1));
+	width: 346px; /* size of the card - column has 400px width and some paddings and margins */
 }
 .sortable-drag-ghost .v-card .v-btn.v-btn--icon {
 	background-color: rgba(var(--v-theme-secondary-lighten-1)) !important;
