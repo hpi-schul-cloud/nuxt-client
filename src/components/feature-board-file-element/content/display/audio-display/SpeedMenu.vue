@@ -6,7 +6,8 @@
 				v-bind="props"
 				icon
 				size="small"
-				color="white"
+				variant="flat"
+				color="transparent"
 				:aria-label="$t('component.cardElement.fileElement.audioPlayer.speed')"
 			>
 				<v-icon>

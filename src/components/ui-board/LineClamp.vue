@@ -1,8 +1,7 @@
 <template>
 	<div ref="textElement" class="line-clamp">
 		<v-tooltip
-			top
-			start
+			location="top"
 			origin="auto"
 			transition="fade"
 			:max-width="tooltipWidth"

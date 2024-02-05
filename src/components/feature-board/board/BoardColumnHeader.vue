@@ -19,7 +19,7 @@
 					:placeholder="titlePlaceholder"
 					@update:value="onUpdateTitle"
 					class="w-100"
-					:is-focused="isFocusedById"
+					:isFocused="isFocusedById"
 				/>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
 					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
@@ -157,6 +157,9 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.column-header {
+	align-items: top;
+}
 .column-header:focus {
 	outline: none;
 }
