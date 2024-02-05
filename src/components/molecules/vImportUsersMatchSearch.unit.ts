@@ -184,4 +184,14 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 
 		expect(saveMatchButton.vm.disabled).toBe(true);
 	});
+
+	it("should not display username when prop nbc is set", () => {
+		const wrapper = getWrapper({ ...testProps, isNbc: true });
+
+		const editedItemUsername = wrapper.find(
+			"[data-testid=edited-item-username]"
+		);
+
+		expect(editedItemUsername.exists()).toBe(false);
+	});
 });

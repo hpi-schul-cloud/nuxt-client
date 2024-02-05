@@ -34,8 +34,8 @@ const mockResultItems = (
 	elements = [
 		geoGebraItem,
 		etherpadItem,
-		nexboardItem,
 		courseGroupItem,
+		nexboardItem,
 		fileItem,
 	]
 ) => {
@@ -66,12 +66,16 @@ const getWrapper = (props?: any) => {
 };
 
 describe("@/components/copy-result-modal/CopyResultModal", () => {
-	beforeEach(() => {
+	beforeAll(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});
+	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
 	});
 
 	describe("basic functions", () => {
@@ -152,6 +156,35 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
+		describe("when root item is a Course, has no failed file and CTL_TOOLS_COPY feature flag is enabled", () => {
+			const setup = () => {
+				const copyResultItems = mockResultItems([]);
+				const wrapper = getWrapper({
+					isOpen: true,
+					copyResultItems,
+					copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+				});
+
+				return { wrapper };
+			};
+
+			it("should render ctl tools copy info ", () => {
+				envConfigModule.setEnvs({
+					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+					FEATURE_CTL_TOOLS_COPY_ENABLED: true,
+				} as Envs);
+				const { wrapper } = setup();
+
+				expect(
+					wrapper.find('[data-testid="copy-result-notifications"]').text()
+				).toContain(
+					wrapper.vm.$i18n.t(
+						"components.molecules.copyResult.ctlTools.withFeature.info"
+					)
+				);
+			});
+		});
+
 		it("should merge file error and coursefiles info if root item is a Course and has a failed file ", () => {
 			const copyResultItems = mockResultItems([fileItem]);
 
@@ -196,6 +229,9 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			["Kursgruppen", CopyApiResponseTypeEnum.CoursegroupGroup],
 			["Dateien", CopyApiResponseTypeEnum.File],
 		])("should render if there is a %s item", (title, type) => {
+			envConfigModule.setEnvs({
+				FEATURE_NEXBOARD_COPY_ENABLED: true,
+			} as Envs);
 			const copyResultItems = mockResultItems();
 			copyResultItems[0].elements = [
 				{

@@ -1,4 +1,11 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import {
+	SchoolExternalToolConfigurationTemplateListResponse,
+	SchoolExternalToolPostParams,
+	SchoolExternalToolSearchListResponse,
+	ToolApiInterface,
+} from "@/serverApi/v3";
+import * as serverApi from "@/serverApi/v3/api";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,
 	customParameterResponseFactory,
@@ -10,14 +17,7 @@ import {
 	schoolExternalToolSaveFactory,
 	toolParameterEntryFactory,
 } from "@@/tests/test-utils";
-import {
-	SchoolExternalToolConfigurationTemplateListResponse,
-	SchoolExternalToolPostParams,
-	SchoolExternalToolSearchListResponse,
-	ToolApiInterface,
-} from "@/serverApi/v3";
-import * as serverApi from "@/serverApi/v3/api";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolConfigurationTemplate,

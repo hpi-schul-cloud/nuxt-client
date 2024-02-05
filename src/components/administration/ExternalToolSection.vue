@@ -32,8 +32,9 @@
 			</template>
 			<template #[`item.actions`]="{ item }">
 				<external-tool-toolbar
-					@delete="openDeleteDialog(item)"
 					@edit="editTool(item)"
+					@datasheet="showDatasheet(item)"
+					@delete="openDeleteDialog(item)"
 				/>
 			</template>
 		</v-data-table>
@@ -41,6 +42,7 @@
 			class="mt-8 mb-4 button-save float-right"
 			color="primary"
 			depressed
+			data-testid="add-external-tool-button"
 			:to="{ name: 'administration-tool-config-overview' }"
 		>
 			{{ t("components.administration.externalToolsSection.action.add") }}
@@ -104,7 +106,8 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
+import { ToolApiAxiosParamCreator } from "@/serverApi/v3";
+import { RequestArgs } from "@/serverApi/v3/base";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -115,6 +118,8 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { RenderHTML } from "@feature-render-html";
 import { mdiAlert, mdiCheckCircle } from "@mdi/js";
 import {
 	computed,
@@ -131,7 +136,6 @@ import { DataTableHeader } from "vuetify";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
 
 export default defineComponent({
 	name: "ExternalToolSection",
@@ -177,6 +181,15 @@ export default defineComponent({
 				name: "administration-tool-config-edit",
 				params: { configId: item.id },
 			});
+		};
+
+		const showDatasheet = async (item: SchoolExternalToolItem) => {
+			const requestArgs: RequestArgs =
+				await ToolApiAxiosParamCreator().toolControllerGetDatasheet(
+					item.externalToolId
+				);
+
+			window.open("/api/v3" + requestArgs.url);
 		};
 
 		const onDeleteTool = async () => {
@@ -231,6 +244,7 @@ export default defineComponent({
 			isLoading,
 			editTool,
 			onDeleteTool,
+			showDatasheet,
 			isDeleteDialogOpen,
 			openDeleteDialog,
 			onCloseDeleteDialog,
