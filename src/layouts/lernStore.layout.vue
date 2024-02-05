@@ -1,5 +1,15 @@
 <template>
 	<v-app>
+		<!-- Vue3 Upgrade:  Bug Hunt Alert -->
+		<v-alert
+			color="red"
+			density="compact"
+			variant="flat"
+			class="ma-2"
+			style="text-align: center"
+		>
+			Bug Hunt: You are on a Vue page
+		</v-alert>
 		<legacy-logged-in v-if="legacyLayout">
 			<v-main id="main-content" class="content">
 				<snackbar />

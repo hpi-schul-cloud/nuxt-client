@@ -678,6 +678,8 @@
 	"pages.administration.migration.title": "Перенести облікові записи користувачів із",
 	"pages.administration.migration.tutorialWait": "Зауважте, що після початку переміщення школи для отримання даних може знадобитися до 1 години. Після цього можна переходити до наступного кроку.",
 	"pages.administration.migration.waiting": "Очікування синхронізації даних...",
+	"pages.administration.migration.vue3.title": "Міграція",
+	"pages.administration.migration.vue3.notification": "Наразі ця функція вимкнена..",
 	"pages.administration.or": "або",
 	"pages.administration.printQr.emptyUser": "Вибраний користувач(-і) вже зареєстрований(-і)",
 	"pages.administration.printQr.error": "Не вдалося згенерувати посилання для реєстрації",
