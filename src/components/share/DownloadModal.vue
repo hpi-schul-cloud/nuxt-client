@@ -6,62 +6,99 @@
 		has-buttons
 		:buttons="isOpen ? actionButtons : []"
 		@dialog-closed="onCloseDialog"
-		@next="onNext(downloadOptions)"
+		@next="onNext(radios)"
+		@dialog-confirmed="onDownload"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2 text-break">
+		<template slot="title">
 			{{ modalTitle }}
-		</div>
+		</template>
 		<template slot="content">
-			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
-			<v-fade-transition>
-				<div v-if="step === 1 && isOpen">
-					<v-radio-group v-model="dialog.radios">
-						<v-radio label="V1.1" id="v1.1" value="1.1.0" />
-						<br />
-						<v-radio label="V1.3" id="v1.3" value="1.3.0" />
-						<br />
-					</v-radio-group>
-					<v-divider />
-					<download-modal-options-form
-						@download-options-change="onDownloadOptionsChange"
-					/>
-				</div>
+			<v-divider />
+			<div v-if="step === 1 && isOpen">
+				<v-radio-group v-model="radios">
+					<v-radio label="CC Version 1.1" id="v1.1" value="1.1.0" />
+					<br />
+					<v-radio label="CC Version 1.3" id="v1.3" value="1.3.0" />
+					<br />
+				</v-radio-group>
+				<v-divider />
+			</div>
 
-				<div v-if="step === 2 && isOpen">
-					<download-modal-result :download-url="downloadUrl" @done="onDone" />
+			<div v-if="step === 2 && isOpen">
+				<div
+					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
+				>
+					<div class="mx-2">
+						<v-icon color="warning">{{ mdiAlert }}</v-icon>
+					</div>
+					<div>
+						<p class="black--text mb-0 aligned-with-icon">
+							<strong>{{
+								$t(`components.molecules.downloadResult.label.geogebra`)
+							}}</strong>
+							&middot;
+							{{
+								$t(`components.molecules.downloadResult.geogebraDownload.info`)
+							}}
+							<br />
+						</p>
+						<p class="black--text mb-0 aligned-with-icon">
+							<strong>{{
+								$t(`components.molecules.downloadResult.label.etherpad`)
+							}}</strong>
+							&middot;
+							{{
+								$t(`components.molecules.downloadResult.etherpadDownload.info`)
+							}}
+							<br />
+						</p>
+						<p class="black--text mb-0 aligned-with-icon">
+							<strong>{{
+								$t(`components.molecules.downloadResult.label.files`)
+							}}</strong>
+							&middot;
+							{{ $t(`components.molecules.downloadResult.courseFiles.info`) }}
+						</p>
+					</div>
 				</div>
-			</v-fade-transition>
+				<v-container fluid>
+					<v-row>
+						<v-col cols="12" sm="4" md="4">
+							<v-checkbox label="Textelemente" />
+							<v-checkbox label="Aufgaben" />
+							<v-checkbox label="Themen" />
+						</v-col>
+						<v-col cols="12" sm="4" md="4">
+							<v-checkbox label="Geogebra" />
+						</v-col>
+					</v-row>
+					<!-- <v-row class="mt-12">
+						<v-col cols="12" sm="4" md="4">
+							<v-checkbox label="Geogebra" />
+						</v-col>
+					</v-row> -->
+					<v-divider />
+				</v-container>
+			</div>
 		</template>
 	</v-custom-dialog>
 </template>
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-// import DownloadModalOptionsForm from "@/components/share/DownloadModalOptionsForm.vue";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiInformation } from "@mdi/js";
+import { I18N_KEY, injectStrict } from "@/utils/inject";
+import { mdiAlert } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
-
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "DownloadModal",
 	components: {
-		// DownloadModalOptionsForm,
-		// DownloadModalResult,
 		vCustomDialog,
 	},
-	props: {
-		// type: {
-		// 	type: String,
-		// 	required: true,
-		// 	validator: (type) =>
-		// 		Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
-		// },
-	},
-	setup(props) {
+	props: {},
+	setup() {
 		const i18n = injectStrict(I18N_KEY);
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		// const notifier = injectStrict(NOTIFIER_MODULE_KEY);
+		const radios = ref("");
 
 		const t = (key) => {
 			const translateResult = i18n.t(key);
@@ -73,22 +110,20 @@ export default defineComponent({
 
 		const downloadModule = inject("downloadModule");
 		const isOpen = computed({
-			get: () =>
-				downloadModule.getIsDownloadModalOpen &&
-				downloadModule.getParentType === props.type,
+			get: () => downloadModule.getIsDownloadModalOpen,
 			set: () => downloadModule.resetDownloadFlow(),
 		});
 
-		const step = computed(() => (downloadModule.version === "" ? 1 : 2));
+		const step = computed(() => (downloadModule.getVersion === "" ? 1 : 2));
 
 		const modalOptions = computed(() => new Map([]));
 		modalOptions.value.set(1, {
 			title: t("pages.room.modal.course.download.header"),
-			actionButtons: ["close", "next"],
+			actionButtons: ["next"],
 		});
 		modalOptions.value.set(2, {
 			title: t("pages.room.modal.course.download.header"),
-			actionButtons: ["back", "confirm", "close"],
+			actionButtons: ["download"],
 		});
 
 		const actionButtons = computed(() => {
@@ -101,37 +136,31 @@ export default defineComponent({
 			() => modalOptions.value.get(step.value)?.title ?? ""
 		);
 
-		const onDownloadOptionsChange = (newValue) => {
-			downloadOptions.value = newValue;
-		};
 		const onCloseDialog = () => {
 			downloadModule.resetDownloadFlow();
 		};
+
 		const onNext = (newValue) => {
-			// open download options
-			downloadOptions.value = newValue;
-		};
-		const onDone = () => {
-			// download
-			downloadModule.startDownload(downloadOptions.value);
+			// choose version then open download options
+			downloadModule.setVersion(newValue);
 		};
 
-		const ctlToolsEnabled = computed(() => {
-			return envConfigModule.getCtlToolsTabEnabled;
-		});
+		const onDownload = () => {
+			// download
+			downloadModule.startDownload();
+		};
 
 		return {
-			onDownloadOptionsChange,
 			onCloseDialog,
 			onNext,
-			onDone,
+			onDownload,
 			step,
 			actionButtons,
 			modalTitle,
 			isOpen,
 			downloadOptions,
-			mdiInformation,
-			ctlToolsEnabled,
+			mdiAlert,
+			radios,
 		};
 	},
 });

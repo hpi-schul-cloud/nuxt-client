@@ -1,10 +1,6 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { roomModule } from "./store-accessor";
 
-export interface StartFlow {
-	version: string;
-}
-
 export interface DownloadOption {
 	version: "1.1.0" | "1.3.0";
 }
@@ -18,8 +14,10 @@ export default class DownloadModule extends VuexModule {
 	private version = "";
 
 	@Action
-	async startDownload(downloadOption: DownloadOption): Promise<void> {
-		roomModule.downloadImsccCourse(downloadOption.version);
+	async startDownload(): Promise<void> {
+		if (this.version === "1.1.0" || this.version === "1.3.0") {
+			roomModule.downloadImsccCourse(this.version);
+		}
 	}
 
 	@Action

@@ -69,7 +69,6 @@
 		</keep-alive>
 
 		<v-custom-dialog
-			v-if="isShare"
 			v-model="dialog.isOpen"
 			data-testid="title-dialog"
 			has-buttons
@@ -104,29 +103,6 @@
 			</template>
 		</v-custom-dialog>
 
-		<v-custom-dialog
-			v-if="isDownload"
-			v-model="dialog.isOpen"
-			data-testid="title-dialog"
-			has-buttons
-			:buttons="['close', 'next']"
-			@dialog-closed="closeDialog"
-			@next="nextDialog"
-		>
-			<div slot="title" class="dialog-header">
-				<h4>{{ dialog.header }}</h4>
-			</div>
-			<template slot="content">
-				<v-divider class="mb-4" />
-				<!-- <v-radio-group v-model="dialog.radios">
-					<v-radio label="V1.1" id="v1.1" value="1.1.0" />
-					<br />
-					<v-radio label="V1.3" id="v1.3" value="1.3.0" />
-					<br />
-				</v-radio-group>
-				<v-divider /> -->
-			</template>
-		</v-custom-dialog>
 		<share-modal type="courses" />
 
 		<copy-result-modal
@@ -135,6 +111,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
 		/>
+		<download-modal v-model="downloadDialog.isOpen" />
 	</default-wireframe>
 </template>
 
@@ -205,6 +182,13 @@ export default defineComponent({
 			importDialog: {
 				isOpen: false,
 			},
+			downloadDialog: {
+				isOpen: false,
+				model: "",
+				header: "",
+				step: 1,
+				radios: "",
+			},
 			dialog: {
 				isOpen: false,
 				model: "",
@@ -214,8 +198,6 @@ export default defineComponent({
 				subText: "",
 				qrUrl: "",
 				courseShareToken: "",
-				radios: "",
-				step: 1,
 			},
 			icons: {
 				mdiPencilOutline,
@@ -242,19 +224,6 @@ export default defineComponent({
 		getCurrentComponent() {
 			return this.currentTab?.component;
 		},
-
-		isDownload() {
-			return this.dialog.model === "download";
-		},
-
-		isDownloadVersionSelected() {
-			return this.dialog.radios;
-		},
-
-		isShare() {
-			return this.dialog.model === "share";
-		},
-
 		tabItems() {
 			const ctlToolsTabEnabled = envConfigModule.getCtlToolsTabEnabled;
 			const ltiToolsTabEnabled = envConfigModule.getLtiToolsTabEnabled;
@@ -411,28 +380,10 @@ export default defineComponent({
 				});
 			}
 
-			// TODO Dialog for download
-			// if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
-			// 	items.push({
-			// 		icon: this.icons.mdiTrayArrowDown,
-			// action: async () => await roomModule.downloadImsccCourse("1.1.0"),
-			// 		name: this.$t("common.actions.download.v1.1"),
-			// 		dataTestId: "title-menu-imscc-download-v1.1",
-			// 	});
-			// }
-
-			// if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
-			// 	items.push({
-			// 		icon: this.icons.mdiTrayArrowDown,
-			// 		action: async () => await roomModule.downloadImsccCourse("1.3.0"),
-			// 		name: this.$t("common.actions.download.v1.3"),
-			// 		dataTestId: "title-menu-imscc-download-v1.3",
-			// 	});
-			// }
 			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
 					icon: this.icons.mdiTrayArrowDown,
-					action: async () => await this.onDownload(),
+					action: () => this.onDownload(),
 					name: this.$t("common.actions.download"),
 					dataTestId: "title-menu-imscc-download",
 				});
@@ -516,11 +467,13 @@ export default defineComponent({
 			}
 		},
 
-		async onDownload() {
+		onDownload() {
 			this.downloadModule.startDownloadFlow();
-			this.dialog.model = "download";
-			this.dialog.header = this.$t("pages.room.modal.course.download.header");
-			this.dialog.isOpen = true;
+			this.downloadDialog.model = "download";
+			this.downloadDialog.header = this.$t(
+				"pages.room.modal.course.download.header"
+			);
+			this.downloadDialog.isOpen = true;
 		},
 
 		closeDialog() {
@@ -529,10 +482,6 @@ export default defineComponent({
 			this.dialog.text = "";
 			this.dialog.inputText = "";
 			this.dialog.subText = "";
-		},
-		nextDialog() {
-			this.dialog.isOpen = true;
-			// await roomModule.downloadImsccCourse(this.dialog.radios);
 		},
 		async onCopyRoom(courseId) {
 			const loadingText = this.$t(

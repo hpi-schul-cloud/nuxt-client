@@ -69,6 +69,15 @@
 						{{ $t("common.labels.close") }}
 					</v-btn>
 					<v-btn
+						v-if="checkButtons('download')"
+						data-testId="download-dialog"
+						color="primary"
+						depressed
+						@click="confirmDialog"
+					>
+						{{ $t("common.actions.download") }}
+					</v-btn>
+					<v-btn
 						v-if="checkButtons('next')"
 						data-testId="dialog-next"
 						color="primary"
@@ -135,10 +144,6 @@ export default {
 		closeDialog(event) {
 			this.$emit("dialog-closed", false, event);
 		},
-		// nextDialog() {
-		// 	this.$emit("dialog-next");
-		// 	this.$emit("dialog-closed", true);
-		// },
 		checkButtons(buttonName) {
 			return this.buttons.some((button) => button == buttonName);
 		},
