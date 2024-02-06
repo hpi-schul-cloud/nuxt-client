@@ -1,7 +1,9 @@
 <template>
 	<ContentElementBar class="audio-player bg-grey-darken-3">
 		<template #element>
-			<div class="d-flex flex-nowrap pb-0 pl-2 pr-1 fill-height align-center">
+			<div
+				class="d-flex flex-nowrap mt-1 pb-0 pl-2 pr-1 fill-height align-center"
+			>
 				<audio ref="audio" loading="lazy" />
 				<v-btn
 					v-if="playing"
@@ -135,6 +137,9 @@ export default defineComponent({
 	border-top-right-radius: 0.25rem;
 	border-top-left-radius: 0.25rem;
 }
+.audio-player:focus {
+	outline: none;
+}
 .duration {
 	white-space: nowrap;
 	color: white;
@@ -143,7 +148,6 @@ export default defineComponent({
 	width: 40%;
 	max-height: 2rem;
 }
-
 :deep() {
 	.v-slider-track__fill {
 		height: 2px !important;
