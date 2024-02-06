@@ -37,7 +37,9 @@
 					class="duration-slider"
 					color="white"
 					thumb-color="white"
+					thumb-size="12px"
 					track-color="black"
+					track-size="2px"
 					:model-value="currentTime"
 					start="0"
 					end="duration"
@@ -140,5 +142,11 @@ export default defineComponent({
 .duration-slider {
 	width: 40%;
 	max-height: 2rem;
+}
+
+:deep() {
+	.v-slider-track__fill {
+		height: 2px !important;
+	}
 }
 </style>
