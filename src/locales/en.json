@@ -987,7 +987,7 @@
 	"pages.rooms.ccImportCourse.title": "Import course",
 	"pages.rooms.ccImportCourse.confirm": "Import",
 	"pages.rooms.ccImportCourse.fileInputLabel": "Select file",
-	"pages.rooms.ccImportCourse.loading": "Importing course...",
+	"pages.rooms.ccImportCourse.loading": "Import is running...",
 	"pages.rooms.ccImportCourse.success": "Course {name} was successfully imported.",
 	"pages.rooms.ccImportCourse.error": "An error occured while importing the course.",
 	"pages.rooms.allRooms.emptyState.title": "Currently, there are no courses here.",
