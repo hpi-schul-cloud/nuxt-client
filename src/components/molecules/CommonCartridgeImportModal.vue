@@ -8,27 +8,29 @@
 		data-testid="common-cartridge-import-dialog"
 	>
 		<v-card :ripple="false">
-			<v-card-title data-testid="dialog-title">
-				{{ $t("pages.rooms.ccImportCourse.title") }}
+			<v-card-title>
+				<div ref="textTitle" class="text-h4 my-2 text-break">
+					{{ $t("pages.rooms.ccImportCourse.title") }}
+				</div>
 			</v-card-title>
 			<v-card-text class="text--primary">
 				<v-file-input
 					v-model="file"
 					:label="$t('pages.rooms.ccImportCourse.fileInputLabel')"
-					:prepend-icon="mdiUpload"
+					:prepend-icon="mdiTrayArrowUp"
 					accept=".imscc, .zip"
 					clearable
 					show-size
 				/>
 			</v-card-text>
 			<v-card-actions>
-				<div class="button-section button-left">
+				<v-spacer />
+				<div class="button-section">
 					<v-btn data-testid="dialog-cancel-btn" depressed @click="cancel">
 						{{ $t("common.labels.close") }}
 					</v-btn>
 				</div>
-				<v-spacer />
-				<div class="button-section button-right">
+				<div class="button-section">
 					<v-btn
 						data-testid="dialog-confirm-btn"
 						color="primary"
@@ -52,7 +54,7 @@ import {
 	ROOMS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
-import { mdiUpload } from "@mdi/js";
+import { mdiTrayArrowUp } from "@mdi/js";
 
 export default defineComponent({
 	name: "CommonCartridgeImportModal",
@@ -119,7 +121,7 @@ export default defineComponent({
 		return {
 			file,
 			importButtonDisabled,
-			mdiUpload,
+			mdiTrayArrowUp,
 			cancel,
 			confirm,
 		};
@@ -128,16 +130,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.button-left {
-	width: 25%;
-	text-align: left;
-}
-
-.button-right {
-	display: inline-block;
-	width: 75%;
-	text-align: right;
-}
 .button-section {
 	margin-bottom: calc(var(--space-base-vuetify) * 2);
 }
