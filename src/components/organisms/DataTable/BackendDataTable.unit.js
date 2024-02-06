@@ -458,10 +458,8 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				}
 			);
 
-			// check that basic slot content gets rendered
 			expect(wrapper.html()).toContain(testSlotContent);
 
-			// check that content from props.data got rendered
 			const renderedData = await getTableRowsContent(wrapper);
 			renderedData.forEach((row, index) => {
 				expect(row[0]).toContain(smallData[index]["firstName"]);
@@ -486,7 +484,6 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 
 			expect(wrapper.html()).toContain(testSlotContent);
 
-			// check that content from props.data got rendered
 			const renderedData = await getTableRowsContent(wrapper);
 			renderedData.forEach((row, index) => {
 				expect(row[2]).toContain(smallData[index].address.city);

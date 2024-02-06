@@ -79,7 +79,6 @@ import Pagination from "@/components/organisms/Pagination.vue";
 import RowSelectionBar from "./RowSelectionBar.vue";
 
 import controllableData from "@/mixins/controllableData";
-import { getCurrentInstance } from "vue";
 
 export default {
 	components: {

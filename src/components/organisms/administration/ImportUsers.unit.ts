@@ -115,6 +115,7 @@ const getWrapper = (data?: object, options?: object) => {
 };
 
 // VUE3_UPGRADE component is currently unused. fix test when component is needed.
+// https://ticketsystem.dbildungscloud.de/browse/BC-6337
 describe.skip("@/components/molecules/importUsers", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
