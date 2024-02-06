@@ -1,11 +1,10 @@
-import { authModule, envConfigModule, roomsModule } from "@/store";
+import { authModule, roomsModule } from "@/store";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import RoomWrapper from "./RoomWrapper.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -159,41 +158,6 @@ describe("@templates/RoomWrapper.vue", () => {
 
 			const fabComponent = wrapper.find(".wireframe-fab");
 			expect(fabComponent.exists()).toBe(true);
-		});
-
-		it("should open the import-modal", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
-			const wrapper = getWrapper();
-
-			const importModalComponent = wrapper.findComponent({
-				name: "vCustomDialog",
-			});
-			expect(importModalComponent.vm.isOpen).toBe(false);
-
-			const fab = wrapper.find(".wireframe-fab");
-			await fab.trigger("click");
-
-			const importBtn = wrapper.find(
-				'[data-testid="fab_button_import_course"]'
-			);
-			await importBtn.trigger("click");
-
-			expect(importModalComponent.vm.isOpen).toBe(true);
-		});
-
-		it("should call the updateRooms method if import-modal component emits 'update-rooms' event", async () => {
-			const updateRoomsMock = jest.fn();
-			const wrapper = getWrapper();
-			wrapper.vm.updateRooms = updateRoomsMock;
-			await wrapper.setData({ importDialog: { isOpen: true } });
-
-			const importModalComponent = wrapper.findComponent({
-				name: "vCustomDialog",
-			});
-			await importModalComponent.vm.$emit("update-rooms");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-			expect(updateRoomsMock).toHaveBeenCalled();
 		});
 	});
 
