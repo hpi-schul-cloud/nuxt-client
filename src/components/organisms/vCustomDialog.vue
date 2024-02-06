@@ -76,6 +76,7 @@
 						@click="confirmDialog"
 					>
 						{{ $t("common.actions.download") }}
+						<v-icon right>{{ mdiTrayArrowDown }}</v-icon>
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('next')"
@@ -93,6 +94,8 @@
 </template>
 
 <script>
+import { mdiTrayArrowDown } from "@mdi/js";
+
 export default {
 	model: {
 		prop: "isOpen",
@@ -131,6 +134,11 @@ export default {
 			type: Array,
 			default: () => ["cancel", "confirm"],
 		},
+	},
+	data() {
+		return {
+			mdiTrayArrowDown,
+		};
 	},
 	methods: {
 		confirmDialog() {

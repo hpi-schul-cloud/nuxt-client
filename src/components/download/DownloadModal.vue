@@ -72,11 +72,6 @@
 							<v-checkbox label="Geogebra" />
 						</v-col>
 					</v-row>
-					<!-- <v-row class="mt-12">
-						<v-col cols="12" sm="4" md="4">
-							<v-checkbox label="Geogebra" />
-						</v-col>
-					</v-row> -->
 					<v-divider />
 				</v-container>
 			</div>

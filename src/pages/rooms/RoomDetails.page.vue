@@ -121,7 +121,7 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import RoomDotMenu from "@/components/molecules/RoomDotMenu";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
-import DownloadModal from "@/components/share/DownloadModal.vue";
+import DownloadModal from "@/components/download/DownloadModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";

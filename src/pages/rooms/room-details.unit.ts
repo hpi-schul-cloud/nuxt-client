@@ -22,6 +22,7 @@ import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import DownloadModule from "@/store/download";
 
 const mockData = {
 	roomId: "123",
@@ -120,6 +121,7 @@ let copyModuleMock: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
 let notifierModuleMock: NotifierModule;
 let shareModuleMock: ShareModule;
+let downloadModuleMock: DownloadModule;
 
 const $router = { push: jest.fn(), resolve: jest.fn(), replace: jest.fn() };
 
@@ -141,6 +143,7 @@ const getWrapper: any = () => {
 			loadingStateModule: loadingStateModuleMock,
 			notifierModule: notifierModuleMock,
 			shareModule: shareModuleMock,
+			downloadModule: downloadModuleMock,
 			[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
@@ -175,6 +178,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			getIsShareModalOpen: true,
 			getParentType: ShareTokenBodyParamsParentTypeEnum.Lessons,
 			startShareFlow: jest.fn(),
+		});
+		downloadModuleMock = createModuleMocks(DownloadModule, {
+			getIsDownloadModalOpen: false,
+			getVersion: "",
 		});
 
 		initializeAxios({
@@ -390,6 +397,24 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			expect(shareModuleMock.startShareFlow).toHaveBeenCalledWith({
 				id: "123",
 				type: ShareTokenBodyParamsParentTypeEnum.Courses,
+			});
+		});
+
+		describe("download modal", () => {
+			it("should open download modal", async () => {
+				envConfigModule.setEnvs({
+					FEATURE_IMSCC_COURSE_EXPORT_ENABLED: true,
+				} as Envs);
+
+				const wrapper = getWrapper();
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const downloadButton = wrapper.find(
+					`[data-testid=title-menu-imscc-download]`
+				);
+				await downloadButton.trigger("click");
+
+				expect(downloadModuleMock.startDownloadFlow).toHaveBeenCalled();
 			});
 		});
 
