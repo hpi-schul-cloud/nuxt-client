@@ -7,7 +7,7 @@
 		:rows="1"
 		auto-grow
 		flat
-		class="mx-n3 mb-n2"
+		class="mx-n4 mb-n2 mt-n2"
 		:placeholder="placeholder"
 		bg-color="transparent"
 		ref="titleInput"
@@ -72,7 +72,10 @@ export default defineComponent({
 		const setFocusOnEdit = async () => {
 			await nextTick();
 			internalIsFocused.value = true;
-			if (titleInput.value) titleInput.value.focus();
+
+			if (titleInput.value) {
+				titleInput.value.focus();
+			}
 		};
 
 		onMounted(() => {

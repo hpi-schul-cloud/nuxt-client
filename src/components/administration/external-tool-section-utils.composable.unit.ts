@@ -5,24 +5,30 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
-import { SchoolExternalToolItem } from "./school-external-tool-item";
 import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { SchoolExternalToolItem } from "./school-external-tool-item";
 
-const schoolExternalToolsModuleMock = () => {
-	return {
-		getSchoolExternalTools: [
-			{
-				id: "id",
-				name: "toolName",
-				version: 1,
-				status: {
-					isOutdatedOnScopeSchool: false,
+const schoolExternalToolsModuleMock =
+	(): Partial<SchoolExternalToolsModule> => {
+		return {
+			getSchoolExternalTools: [
+				{
+					id: "id",
+					name: "toolName",
+					version: 1,
 					isDeactivated: false,
+					toolId: "toolId",
+					schoolId: "schoolId",
+					parameters: [],
+					status: {
+						isOutdatedOnScopeSchool: false,
+						isDeactivated: false,
+					},
 				},
-			},
-		],
+			],
+		};
 	};
-};
 
 jest.mock("@/store", () => ({
 	schoolExternalToolsModule: schoolExternalToolsModuleMock(),
@@ -60,6 +66,7 @@ describe("useSchoolExternalToolUtils", () => {
 			new SchoolExternalToolItem({
 				name: toolResponse.name,
 				id: toolResponse.id,
+				externalToolId: toolResponse.toolId,
 				statusText: "translationKey",
 				isOutdated: false,
 				isDeactivated: false,
@@ -87,17 +94,13 @@ describe("useSchoolExternalToolUtils", () => {
 
 		describe("when translate the headers", () => {
 			it("should call the translation function for name", () => {
-				const { getHeaders, tMock } = setup();
-
-				getHeaders;
+				const { tMock } = setup();
 
 				expect(tMock).toHaveBeenCalledWith("common.labels.name");
 			});
 
 			it("should call the translation function for value", () => {
-				const { getHeaders, tMock } = setup();
-
-				getHeaders;
+				const { tMock } = setup();
 
 				expect(tMock).toHaveBeenCalledWith(
 					"components.administration.externalToolsSection.table.header.status"
@@ -110,20 +113,16 @@ describe("useSchoolExternalToolUtils", () => {
 
 			const headers: DataTableHeader[] = getHeaders;
 
-			expect(headers[0]).toEqual({
-				text: expectedTranslation,
-				value: "name",
-			});
-			expect(headers[1]).toEqual({
-				text: expectedTranslation,
-				value: "status",
-			});
-			expect(headers[2]).toEqual({
-				text: "",
-				value: "actions",
-				sortable: false,
-				align: "end",
-			});
+			expect(headers[0].title).toEqual(expectedTranslation);
+			expect(headers[0].value).toEqual("name");
+
+			expect(headers[1].title).toEqual(expectedTranslation);
+			expect(headers[1].value).toEqual("status");
+
+			expect(headers[2].title).toEqual("");
+			expect(headers[2].value).toEqual("actions");
+			expect(headers[2].sortable).toBe(false);
+			expect(headers[2].align).toEqual("end");
 		});
 	});
 
@@ -135,14 +134,14 @@ describe("useSchoolExternalToolUtils", () => {
 				schoolExternalToolsModule
 			);
 
-			expect(items).toEqual([
+			expect(items).toEqual<SchoolExternalToolItem[]>([
 				{
 					id: "id",
+					externalToolId: "toolId",
 					name: "toolName",
 					statusText: "translated",
 					isOutdated: false,
 					isDeactivated: false,
-					version: undefined,
 				},
 			]);
 		});

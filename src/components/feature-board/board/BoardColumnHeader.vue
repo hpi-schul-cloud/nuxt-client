@@ -157,6 +157,9 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.column-header {
+	align-items: top;
+}
 .column-header:focus {
 	outline: none;
 }
