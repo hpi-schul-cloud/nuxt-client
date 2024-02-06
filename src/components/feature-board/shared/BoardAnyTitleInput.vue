@@ -68,7 +68,6 @@ export default defineComponent({
 
 		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();
-			await nextTick();
 		});
 		const setFocusOnEdit = async () => {
 			await nextTick();

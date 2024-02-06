@@ -33,7 +33,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span>
-							<v-icon size="large">{{ item.icon }}</v-icon>
+							<v-icon size="x-large">{{ item.icon }}</v-icon>
 						</span>
 						<span class="subtitle">{{ $t(item.label) }}</span>
 					</span>

@@ -1,12 +1,14 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import { useBoardPermissions } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock("./InlineEditInteractionHandler.composable");
 
@@ -21,7 +23,7 @@ const defaultProps = {
 };
 
 describe("BoardAnyTitleTitleInput", () => {
-	let wrapper: Wrapper<Vue>;
+	let wrapper: ReturnType<typeof mount>;
 
 	const setup = (
 		props: {
@@ -40,8 +42,13 @@ describe("BoardAnyTitleTitleInput", () => {
 			...options?.permissions,
 		});
 
-		wrapper = mount(BoardAnyTitleInput as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		wrapper = mount(BoardAnyTitleInput, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					CARD_HOST_INTERACTION_EVENT: undefined,
+				},
+			},
 			propsData: {
 				...defaultProps,
 				...props,
@@ -62,14 +69,14 @@ describe("BoardAnyTitleTitleInput", () => {
 			setup({ isEditMode: true, scope: "card" });
 			const newValue = "new title";
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			textAreaComponent.vm.$emit("input", "new title");
+			textAreaComponent.vm.$emit("update:modelValue", "new title");
 			const emitted = wrapper.emitted();
 
 			if (emitted["update:value"] === undefined) {
 				throw new Error("Emitted should be defined");
 			}
 
-			expect(emitted["update:value"][0][0]).toContain(newValue);
+			expect(emitted["update:value"][0]).toContain(newValue);
 		});
 
 		it("should emit enter on hitting 'enter' key in card title", async () => {

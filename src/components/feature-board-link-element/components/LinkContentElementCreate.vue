@@ -13,7 +13,6 @@
 						rows="1"
 						@keydown="onKeydown"
 						class="text"
-						variant="underlined"
 					/>
 
 					<div class="align-self-center pl-2">
