@@ -39,7 +39,7 @@
 			<div v-if="hasErrors" class="black--text">
 				<p>{{ $t("components.molecules.copyResult.information") }}</p>
 			</div>
-			<copy-result-modal-list :items="items" />
+			<copy-result-modal-list :items="filteredItems" />
 		</template>
 	</v-custom-dialog>
 </template>
@@ -84,6 +84,21 @@ export default {
 		items() {
 			return this.copyResultItems;
 		},
+
+		filteredItems() {
+			if (envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED) {
+				return this.copyResultItems;
+			}
+
+			return this.copyResultItems.map((item) => {
+				const filteredElements = item.elements.filter(
+					(element) =>
+						element.type !== CopyApiResponseTypeEnum.LessonContentNexboard
+				);
+				return { ...item, elements: filteredElements };
+			});
+		},
+
 		copyResultWarnings() {
 			return [
 				{

@@ -1,28 +1,34 @@
-import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
-import { DataTableHeader } from "vuetify";
-import { schoolExternalToolsModule } from "@/store";
 import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
-import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { schoolExternalToolsModule } from "@/store";
 import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { DataTableHeader } from "vuetify";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
+import { SchoolExternalToolItem } from "./school-external-tool-item";
 
-const schoolExternalToolsModuleMock = () => {
-	return {
-		getSchoolExternalTools: [
-			{
-				id: "id",
-				name: "toolName",
-				version: 1,
-				status: {
-					isOutdatedOnScopeSchool: false,
+const schoolExternalToolsModuleMock =
+	(): Partial<SchoolExternalToolsModule> => {
+		return {
+			getSchoolExternalTools: [
+				{
+					id: "id",
+					name: "toolName",
+					version: 1,
 					isDeactivated: false,
+					toolId: "toolId",
+					schoolId: "schoolId",
+					parameters: [],
+					status: {
+						isOutdatedOnScopeSchool: false,
+						isDeactivated: false,
+					},
 				},
-			},
-		],
+			],
+		};
 	};
-};
 
 jest.mock("@/store", () => ({
 	schoolExternalToolsModule: schoolExternalToolsModuleMock(),
@@ -60,6 +66,7 @@ describe("useSchoolExternalToolUtils", () => {
 			new SchoolExternalToolItem({
 				name: toolResponse.name,
 				id: toolResponse.id,
+				externalToolId: toolResponse.toolId,
 				statusText: "translationKey",
 				isOutdated: false,
 				isDeactivated: false,
@@ -135,14 +142,14 @@ describe("useSchoolExternalToolUtils", () => {
 				schoolExternalToolsModule
 			);
 
-			expect(items).toEqual([
+			expect(items).toEqual<SchoolExternalToolItem[]>([
 				{
 					id: "id",
+					externalToolId: "toolId",
 					name: "toolName",
 					statusText: "translated",
 					isOutdated: false,
 					isDeactivated: false,
-					version: undefined,
 				},
 			]);
 		});

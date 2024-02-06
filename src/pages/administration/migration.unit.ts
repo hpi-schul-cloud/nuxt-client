@@ -134,6 +134,8 @@ describe("User Migration / Index", () => {
 		document.body.setAttribute("data-app", "true");
 		envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
 		envConfigModule.getEnv.SC_THEME = "default";
+		envConfigModule.getEnv.MIGRATION_WIZARD_DOCUMENTATION_LINK =
+			"https://docs.dbildungscloud.de/x/VAEbDg?frameable=true";
 		importUsersModule.setTotal(100);
 	});
 
