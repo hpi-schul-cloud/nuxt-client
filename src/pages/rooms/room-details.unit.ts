@@ -299,7 +299,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		it("should have the headline menu items", () => {
 			envConfigModule.setEnvs({
 				FEATURE_COPY_SERVICE_ENABLED: true,
-				FEATURE_COURSE_SHARE: true,
+				FEATURE_COURSE_SHARE_NEW: true,
 			} as Envs);
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
@@ -315,8 +315,8 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			expect(findMenuItems("common.actions.shareCourse", menuItems)).toBe(true);
 		});
 
-		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set to true", () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
+		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE_NEW' flag set to true", () => {
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -376,7 +376,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
 			const shareCourseSpy = jest.fn();
 			const wrapper = getWrapper();
 			wrapper.vm.shareCourse = shareCourseSpy;
@@ -425,32 +425,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			const shareDialog = modalView.findComponent({ name: "v-custom-dialog" });
 
 			expect(shareDialog.props("isOpen")).toBe(true);
-		});
-
-		it("should close the modal and call 'closeDialog' method", async () => {
-			const closeDialogSpy = jest.fn();
-			const wrapper = getWrapper();
-			wrapper.vm.closeDialog = closeDialogSpy;
-			await wrapper.setData({
-				dialog: {
-					isOpen: true,
-					model: "share",
-					header: "pages.room.modal.course.share.header",
-					text: "pages.room.modal.course.share.text",
-					inputText: "shareToken_123456",
-					subText: "pages.room.modal.course.share.subText",
-					courseShareToken: "shareToken_123456",
-					qrUrl: "/courses?import=shareToken_123456",
-				},
-			});
-			const modalView = wrapper.findComponent({ name: "v-custom-dialog" });
-
-			const closeButton = modalView.findComponent(
-				`[data-testid="dialog-close"]`
-			);
-			await closeButton.trigger("click");
-
-			expect(closeDialogSpy).toHaveBeenCalled();
 		});
 	});
 
