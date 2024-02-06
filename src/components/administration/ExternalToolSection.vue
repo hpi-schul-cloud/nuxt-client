@@ -35,8 +35,9 @@
 			</template>
 			<template #[`item.actions`]="{ item }">
 				<external-tool-toolbar
-					@delete="openDeleteDialog(item)"
 					@edit="editTool(item)"
+					@datasheet="showDatasheet(item)"
+					@delete="openDeleteDialog(item)"
 				/>
 			</template>
 			<template #bottom />
@@ -108,7 +109,8 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
+import { ToolApiAxiosParamCreator } from "@/serverApi/v3";
+import { RequestArgs } from "@/serverApi/v3/base";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -118,6 +120,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { RenderHTML } from "@feature-render-html";
 import { mdiAlert, mdiCheckCircle } from "@mdi/js";
 import {
 	computed,
@@ -178,6 +181,15 @@ export default defineComponent({
 			});
 		};
 
+		const showDatasheet = async (item: SchoolExternalToolItem) => {
+			const requestArgs: RequestArgs =
+				await ToolApiAxiosParamCreator().toolControllerGetDatasheet(
+					item.externalToolId
+				);
+
+			window.open("/api/v3" + requestArgs.url);
+		};
+
 		const onDeleteTool = async () => {
 			if (itemToDelete.value) {
 				await schoolExternalToolsModule.deleteSchoolExternalTool(
@@ -230,6 +242,7 @@ export default defineComponent({
 			isLoading,
 			editTool,
 			onDeleteTool,
+			showDatasheet,
 			isDeleteDialogOpen,
 			openDeleteDialog,
 			onCloseDeleteDialog,

@@ -10,7 +10,7 @@ import {
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mdiAlert, mdiCheckCircle } from "@mdi/js";
 import { mount } from "@vue/test-utils";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import ExternalToolSection from "./ExternalToolSection.vue";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
@@ -37,6 +37,9 @@ describe("ExternalToolSection", () => {
 	let useSchoolExternalToolUsageMock: DeepMocked<
 		ReturnType<typeof useSchoolExternalToolUsage>
 	>;
+
+	const createDatasheetButtonIndex = 1;
+	const deleteButtonIndex = 2;
 
 	const getWrapper = (getters: Partial<SchoolExternalToolsModule> = {}) => {
 		el = document.createElement("div");
@@ -126,18 +129,20 @@ describe("ExternalToolSection", () => {
 		const setupItems = () => {
 			const firstToolName = "Test";
 			const secondToolName = "Test2";
+			const schoolExternalTool = schoolExternalToolFactory.build({
+				id: "testId",
+				toolId: "toolId",
+				schoolId: "schoolId",
+				parameters: [],
+				name: firstToolName,
+				status: schoolToolConfigurationStatusFactory.build(),
+				version: 1,
+				isDeactivated: false,
+			});
+
 			const { wrapper, schoolExternalToolsModule } = getWrapper({
 				getSchoolExternalTools: [
-					{
-						id: "testId",
-						toolId: "toolId",
-						schoolId: "schoolId",
-						parameters: [],
-						name: firstToolName,
-						status: schoolToolConfigurationStatusFactory.build(),
-						version: 1,
-						isDeactivated: false,
-					},
+					schoolExternalTool,
 					{
 						id: "testId2",
 						toolId: "toolId",
@@ -164,11 +169,15 @@ describe("ExternalToolSection", () => {
 					},
 				],
 			});
+
+			jest.spyOn(window, "open");
+
 			return {
 				wrapper,
 				schoolExternalToolsModule,
 				firstToolName,
 				secondToolName,
+				schoolExternalTool,
 			};
 		};
 
@@ -248,6 +257,27 @@ describe("ExternalToolSection", () => {
 					expect(
 						firstRowButtons[1].classes().includes("v-btn--icon")
 					).toBeTruthy();
+					expect(
+						firstRowButtons.at(2)?.classes().includes("v-btn--icon")
+					).toBeTruthy();
+				});
+
+				it("should open a new tab with click on create datasheet", async () => {
+					const { wrapper, schoolExternalTool } = setupItems();
+					const toolId = schoolExternalTool.toolId;
+
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const firstRowButtons = tableRows.at(0)?.findAll("button");
+					const datasheetButton = firstRowButtons?.at(
+						createDatasheetButtonIndex
+					);
+
+					await datasheetButton!.trigger("click");
+					await nextTick();
+
+					expect(window.open).toHaveBeenCalledWith(
+						`/api/v3/tools/external-tools/${toolId}/datasheet`
+					);
 				});
 
 				it("a dialog should be displayed with click on delete", async () => {
