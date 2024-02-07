@@ -129,6 +129,7 @@ const onFilterClick = (val: FilterOptionsType) => {
 
 const onRemoveChipFilter = (val: FilterOption) => {
 	removeChipFilter(val);
+	removeFilter();
 	emit("update:filter", filterQuery.value);
 };
 
