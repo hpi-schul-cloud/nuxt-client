@@ -1,33 +1,31 @@
 <template>
 	<ContentElementBar class="audio-player bg-grey-darken-3">
 		<template #element>
-			<div
-				class="d-flex flex-nowrap mt-1 pb-0 pl-2 pr-1 fill-height align-center"
-			>
+			<div class="d-flex flex-nowrap pb-0 pl-2 pr-1 fill-height align-center">
 				<audio ref="audio" loading="lazy" />
 				<v-btn
 					v-if="playing"
 					:aria-label="
 						$t('component.cardElement.fileElement.audioPlayer.pause')
 					"
+					color="transparent"
+					density="comfortable"
 					icon
 					variant="flat"
 					@click="onPlay"
-					color="transparent"
-					size="28px"
 				>
-					<v-icon size="24px"> {{ mdiPause }}</v-icon>
+					<v-icon> {{ mdiPause }}</v-icon>
 				</v-btn>
 				<v-btn
 					v-else
 					:aria-label="$t('component.cardElement.fileElement.audioPlayer.play')"
+					color="transparent"
+					density="comfortable"
 					icon
 					variant="flat"
 					@click="onPlay"
-					color="transparent"
-					size="28px"
 				>
-					<v-icon size="24px">{{ mdiPlay }}</v-icon>
+					<v-icon>{{ mdiPlay }}</v-icon>
 				</v-btn>
 				<div class="duration pb-1 pl-1 pr-2 pt-1 text-body-2">
 					{{ durationDisplay }}
@@ -39,9 +37,7 @@
 					class="duration-slider"
 					color="white"
 					thumb-color="white"
-					thumb-size="12px"
 					track-color="black"
-					track-size="2px"
 					:model-value="currentTime"
 					start="0"
 					end="duration"
@@ -149,10 +145,5 @@ export default defineComponent({
 .duration-slider {
 	width: 40%;
 	max-height: 2rem;
-}
-:deep() {
-	.v-slider-track__fill {
-		height: 2px !important;
-	}
 }
 </style>

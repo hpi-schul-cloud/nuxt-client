@@ -4,15 +4,13 @@
 			<v-btn
 				data-testid="speed-menu-play-speed"
 				v-bind="props"
-				icon
-				size="28px"
-				variant="flat"
 				color="transparent"
+				density="comfortable"
+				icon
+				variant="flat"
 				:aria-label="$t('component.cardElement.fileElement.audioPlayer.speed')"
 			>
-				<v-icon size="24px">
-					{{ mdiPlaySpeed }}
-				</v-icon>
+				<v-icon>{{ mdiPlaySpeed }}</v-icon>
 			</v-btn>
 		</template>
 
