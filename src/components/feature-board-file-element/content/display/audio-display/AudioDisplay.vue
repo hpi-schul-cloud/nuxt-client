@@ -50,7 +50,9 @@
 					:max="duration"
 					@update:model-value="onInputSlider"
 				/>
-				<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
+				<div class="pl-2">
+					<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
+				</div>
 			</div>
 		</template>
 		<template #menu><slot /></template>
