@@ -49,7 +49,7 @@ describe("DownloadModule", () => {
 			it("should set isDownloadModalOpen to the given value", () => {
 				const downloadModule = new DownloadModule({});
 
-				downloadModule.setDownloadModalOpen(true);
+				downloadModule.setIsDownloadModalOpen(true);
 
 				expect(downloadModule.getIsDownloadModalOpen).toBe(true);
 			});

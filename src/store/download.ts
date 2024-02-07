@@ -23,23 +23,23 @@ export default class DownloadModule extends VuexModule {
 	@Action
 	startDownloadFlow(): void {
 		this.setVersion("");
-		this.setDownloadModalOpen(true);
+		this.setIsDownloadModalOpen(true);
 	}
 
 	@Action
 	resetDownloadFlow(): void {
 		this.setVersion("");
-		this.setDownloadModalOpen(false);
-	}
-
-	@Mutation
-	setDownloadModalOpen(open: boolean): void {
-		this.isDownloadModalOpen = open;
+		this.setIsDownloadModalOpen(false);
 	}
 
 	@Mutation
 	setVersion(version: string): void {
 		this.version = version;
+	}
+
+	@Mutation
+	setIsDownloadModalOpen(open: boolean): void {
+		this.isDownloadModalOpen = open;
 	}
 
 	get getVersion(): string {

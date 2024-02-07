@@ -7,6 +7,7 @@
 		:buttons="isOpen ? actionButtons : []"
 		@dialog-closed="onCloseDialog"
 		@next="onNext(radios)"
+		@back="onBack"
 		@dialog-confirmed="onDownload"
 	>
 		<template slot="title">
@@ -16,7 +17,11 @@
 			<v-divider />
 			<div v-if="step === 1 && isOpen">
 				<v-radio-group v-model="radios">
-					<v-radio label="CC Version 1.1" id="v1.1" value="1.1.0" />
+					<v-radio
+						label="CC Version 1.1   (z.B kompatibel mit Moodle)"
+						id="v1.1"
+						value="1.1.0"
+					/>
 					<br />
 					<v-radio label="CC Version 1.3" id="v1.3" value="1.3.0" />
 					<br />
@@ -32,7 +37,7 @@
 						<v-icon color="warning">{{ mdiAlert }}</v-icon>
 					</div>
 					<div>
-						<p class="black--text mb-0 aligned-with-icon">
+						<!-- <p class="black--text mb-0 aligned-with-icon">
 							<strong>{{
 								$t(`components.molecules.downloadResult.label.geogebra`)
 							}}</strong>
@@ -51,7 +56,7 @@
 								$t(`components.molecules.downloadResult.etherpadDownload.info`)
 							}}
 							<br />
-						</p>
+						</p> -->
 						<p class="black--text mb-0 aligned-with-icon">
 							<strong>{{
 								$t(`components.molecules.downloadResult.label.files`)
@@ -63,13 +68,21 @@
 				</div>
 				<v-container fluid>
 					<v-row>
-						<v-col cols="12" sm="4" md="4">
-							<v-checkbox label="Textelemente" />
+						<v-col cols="4" sm="">
 							<v-checkbox label="Aufgaben" />
-							<v-checkbox label="Themen" />
 						</v-col>
-						<v-col cols="12" sm="4" md="4">
+					</v-row>
+					<v-divider />
+					<v-row>
+						<v-col cols="4" sm="">
+							<v-checkbox label="Themen:" />
+						</v-col>
+						<v-col cols="4" sm="">
+							<v-checkbox label="Aufgabe" />
+							<v-checkbox label="Etherpad" />
 							<v-checkbox label="Geogebra" />
+							<v-checkbox label="Lern-Material (aus dem Lern-Store)" />
+							<v-checkbox label="Textelemente" />
 						</v-col>
 					</v-row>
 					<v-divider />
@@ -84,7 +97,7 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiAlert } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
-// eslint-disable-next-line vue/require-direct-export
+
 export default defineComponent({
 	name: "DownloadModal",
 	components: {
@@ -114,11 +127,11 @@ export default defineComponent({
 		const modalOptions = computed(() => new Map([]));
 		modalOptions.value.set(1, {
 			title: t("pages.room.modal.course.download.header"),
-			actionButtons: ["next"],
+			actionButtons: ["next", "cancel"],
 		});
 		modalOptions.value.set(2, {
 			title: t("pages.room.modal.course.download.header"),
-			actionButtons: ["download"],
+			actionButtons: ["download", "back"],
 		});
 
 		const actionButtons = computed(() => {
@@ -145,9 +158,17 @@ export default defineComponent({
 			downloadModule.startDownload();
 		};
 
+		const onBack = () => {
+			// go back to choose version
+			downloadModule.setVersion("");
+			downloadModule.setIsDownloadModalOpen(true);
+			downloadModule.startDownload();
+		};
+
 		return {
 			onCloseDialog,
 			onNext,
+			onBack,
 			onDownload,
 			step,
 			actionButtons,
