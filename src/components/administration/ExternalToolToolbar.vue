@@ -34,6 +34,7 @@
 		</v-btn>
 		<v-btn
 			icon
+			variant="text"
 			data-testId="deleteAction"
 			:title="
 				$t('components.administration.externalToolsSection.action.delete')
