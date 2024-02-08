@@ -15,6 +15,9 @@ describe("ExternalToolSelectionRow", () => {
 				item: {
 					logoUrl: "expectedLogoUrl",
 					name: "expectedName",
+					externalToolId: "expectedExternalToolId",
+					version: 1,
+					parameters: [],
 				},
 				maxHeight: maxHeight,
 				maxWidth: maxWidth,
@@ -45,9 +48,9 @@ describe("ExternalToolSelectionRow", () => {
 		it("should have to v-image with url from props", () => {
 			const { wrapper } = setup();
 
-			const image = wrapper.findComponent({ name: "v-img" });
+			const image = wrapper.find("img");
 
-			expect(image.props("src")).toEqual("expectedLogoUrl");
+			expect(image.attributes("src")).toEqual("expectedLogoUrl");
 		});
 
 		it("should have sizes from props", () => {
@@ -55,10 +58,11 @@ describe("ExternalToolSelectionRow", () => {
 			const expectedMaxWidth = 15;
 			const { wrapper } = setup(expectedMaxHeight, expectedMaxWidth);
 
-			const image = wrapper.findComponent({ name: "v-img" });
+			const image = wrapper.find("img");
 
-			expect(image.props("maxHeight")).toEqual(expectedMaxHeight);
-			expect(image.props("maxWidth")).toEqual(expectedMaxWidth);
+			expect(image.attributes("style")).toEqual(
+				`max-height: ${expectedMaxHeight}px; max-width: ${expectedMaxWidth}px;`
+			);
 		});
 	});
 });
