@@ -10,7 +10,7 @@
 			v-for="(item, index) in statusAlerts"
 			:key="index"
 			:data-test-id="`alert-item-${index}`"
-			class="alert-item"
+			class="alert-item py-2"
 		>
 			<template v-slot:prepend>
 				<v-icon
@@ -92,6 +92,10 @@ export default defineComponent({
 		border-top: 1px solid map-get($grey, lighten-2);
 		&:first-child {
 			border-top: none;
+		}
+
+		:deep(.v-list-item__prepend) {
+			align-self: start;
 		}
 	}
 
