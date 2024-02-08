@@ -1,6 +1,6 @@
 <template>
 	<v-card-title
-		class="pa-0"
+		class="pa-0 d-flex align-center"
 		data-testid="board-submission-element-edit"
 		inactive
 	>

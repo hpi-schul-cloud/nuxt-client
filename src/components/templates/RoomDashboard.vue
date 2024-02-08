@@ -277,7 +277,6 @@ export default {
 			await roomModule.sortElements(idList);
 		},
 		async moveByKeyboard(e) {
-			console.log(e);
 			if (this.role === this.Roles.Student) return;
 			const items = this.roomData.elements.map((item) => {
 				return item.content.id;
@@ -292,8 +291,6 @@ export default {
 				items[itemIndex + e.moveIndex],
 				items[itemIndex],
 			];
-
-			console.log(this.$refs[`item_${position}`]);
 
 			await roomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`].$el.focus();

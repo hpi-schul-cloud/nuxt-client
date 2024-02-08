@@ -3,7 +3,7 @@
 		<v-list-item
 			:key="task.id"
 			v-outside-click="() => handleFocus(false)"
-			class="mx-n4 mx-sm-0"
+			class="px-xxl-4 px-xl-4 px-lg-4 px-md-4 px-sm-4 px-0"
 			v-bind="$attrs"
 			:aria-label="ariaLabel"
 			role="article"
@@ -29,7 +29,7 @@
 				<!-- item title -->
 				<div
 					:class="hasUnpublishedLesson ? 'opacity-0-5' : ''"
-					class="task-item__main-info align-self-center"
+					class="task-item__main-info align-self-center flex-grow-1"
 				>
 					<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
 						<span class="text-truncate" data-testid="taskSubtitle">
@@ -88,7 +88,7 @@
 					data-testid="task-status"
 					class="mr-4 d-flex align-self-center"
 				>
-					<div class="hidden-xs px-4 mr-4 text-center">
+					<div class="hidden-xs px-4 mr-4 text-center task-stats">
 						<v-list-item-subtitle>
 							{{ $t("components.molecules.TaskItemTeacher.submitted") }}
 						</v-list-item-subtitle>
@@ -96,7 +96,7 @@
 							{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
 						</v-list-item-title>
 					</div>
-					<div class="hidden-xs px-4 text-center">
+					<div class="hidden-xs px-4 text-center task-stats">
 						<v-list-item-subtitle>
 							{{ $t("components.molecules.TaskItemTeacher.graded") }}
 						</v-list-item-subtitle>
@@ -105,10 +105,7 @@
 						</v-list-item-title>
 					</div>
 				</section>
-			</div>
 
-			<!-- item menu -->
-			<template v-slot:append>
 				<v-list-item-action
 					:id="`task-menu-${task.id}`"
 					class="context-menu-min-width"
@@ -126,7 +123,7 @@
 						@share-task="onShareTask"
 					/>
 				</v-list-item-action>
-			</template>
+			</div>
 		</v-list-item>
 	</v-hover>
 </template>
@@ -140,7 +137,6 @@ import {
 } from "@/plugins/datetime";
 import { vOnClickOutside } from "@vueuse/components";
 
-// TODO - different requiredKeys for finished and other tasks?
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
 const finishedTaskRequiredKeys = ["createdAt", "id", "name"];
 
@@ -278,9 +274,8 @@ export default {
 	opacity: 0.5;
 }
 
-// stylelint-disable sh-waqar/declaration-use-variable
-.context-menu-min-width {
-	min-width: 45px;
+.task-item__main-info {
+	overflow: hidden;
 }
 
 :deep(.v-list-item__prepend .v-icon) {
@@ -288,7 +283,7 @@ export default {
 	height: inherit;
 }
 
-:deep(.task-item__main-info) {
-	width: 60%;
+.task-stats {
+	min-width: 7rem;
 }
 </style>

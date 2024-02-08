@@ -3,7 +3,7 @@
 		<v-list-item
 			:key="task.id"
 			v-outside-click="() => handleFocus(false)"
-			class="mx-n4 mx-sm-0"
+			class="px-xxl-4 px-xl-4 px-lg-4 px-md-4 px-sm-4 px-0"
 			v-bind="$attrs"
 			:aria-label="ariaLabel"
 			role="article"
@@ -29,8 +29,22 @@
 						{{ task.name }}
 					</v-list-item-title>
 					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
+					<v-list-item-subtitle
+						class="d-xxl-none d-xl-none d-la-none d-md-none d-sm-none d-xs-block due-date-label"
+						><div
+							class="text-subtitle-2 due-date-label"
+							data-test-id="dueDateLabel"
+						>
+							{{ dueDateLabel }}
+						</div>
+						<v-custom-chip-time-remaining
+							v-if="taskState === 'warning'"
+							:type="taskState"
+							:due-date="task.dueDate"
+							:shorten-unit="$vuetify.display.xs"
+					/></v-list-item-subtitle>
 				</div>
-				<div class="mr-4 text-right">
+				<div class="hidden-xs mr-4 text-right">
 					<div
 						class="text-subtitle-2 due-date-label"
 						data-test-id="dueDateLabel"

@@ -4,7 +4,7 @@
 		:model-value="isOpen"
 		:max-width="defaultSize"
 		@keydown.esc="onClose"
-		@click:outside="onClose"
+		@update:model-value="onClose"
 	>
 		<v-card class="menu-text">
 			<div class="d-flex justify-center mt-4 text-h4">
