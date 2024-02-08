@@ -1,23 +1,36 @@
 import { mount } from "@vue/test-utils";
 import LdapUsersSection from "./LdapUsersSection";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 
 describe("@/components/organisms/LdapUsersSection", () => {
-	const ldapConfigData = {
-		userPath: "user=path;;user=p",
-		firstName: "givenName",
-		familyName: "sn",
-		email: "mail@de.de",
-		uid: "uid",
-		uuid: "uuid",
+	const getWrapper = (props = {}) => {
+		return mount(LdapUsersSection, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				components: {
+					"base-input": BaseInput,
+				},
+			},
+			props: {
+				modelValue: {
+					userPath: "user=path;;user=p",
+					firstName: "givenName",
+					familyName: "sn",
+					email: "mail@de.de",
+					uid: "uid",
+					uuid: "uuid",
+				},
+				...props,
+			},
+		});
 	};
 
 	it("has correct child components", () => {
-		const wrapper = mount(LdapUsersSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigData,
-			},
-		});
+		const wrapper = getWrapper();
 
 		expect(wrapper.find("[data-testid=ldapDataUsersUserPath]").exists()).toBe(
 			true
@@ -36,75 +49,45 @@ describe("@/components/organisms/LdapUsersSection", () => {
 	});
 
 	it("loads the validator", () => {
-		const wrapper = mount(LdapUsersSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigData,
-			},
-		});
-		expect(wrapper.vm.$v).not.toBeUndefined();
+		const wrapper = getWrapper();
+		expect(wrapper.vm.v$).not.toBeUndefined();
 	});
 
 	it("invalid validation is false when valid values are sent through props", async () => {
-		const wrapper = mount(LdapUsersSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigData,
-			},
-		});
+		const wrapper = getWrapper();
+
 		// default props values are valid so expect this assertion to succeed
-		expect(wrapper.vm.$v.$invalid).toBe(false);
+		expect(wrapper.vm.v$.$invalid).toBe(false);
 	});
 
 	it("invalid validation is true when invalid values are sent through props", async () => {
-		const wrapper = mount(LdapUsersSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: {
-					userPath: "invalid",
-					firstName: "",
-					familyName: "",
-					email: "",
-					uid: "",
-					uuid: "",
-				},
+		const wrapper = getWrapper({
+			modelValue: {
+				userPath: "invalid",
+				firstName: "",
+				familyName: "",
+				email: "",
+				uid: "",
+				uuid: "",
 			},
 		});
-		expect(wrapper.vm.$v.$invalid).toBe(true);
+		expect(wrapper.vm.v$.$invalid).toBe(true);
 	});
 
 	it("invalid validation is true when any of the input values are invalid", async () => {
-		const ldapConfigDataTestSpecific = {
-			...ldapConfigData,
-		};
-		const wrapper = mount(LdapUsersSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigDataTestSpecific,
-			},
-			listeners: {
-				input: (event) => {
-					ldapConfigDataTestSpecific.userPath = event.userPath;
-					ldapConfigDataTestSpecific.firstName = event.firstName;
-					ldapConfigDataTestSpecific.familyName = event.familyName;
-					ldapConfigDataTestSpecific.email = event.email;
-					ldapConfigDataTestSpecific.uid = event.uid;
-					ldapConfigDataTestSpecific.uuid = event.uuid;
-				},
+		const wrapper = getWrapper({
+			modelValue: {
+				userPath: "invalid",
+				firstName: "",
+				familyName: "",
+				email: "",
+				uid: "",
+				uuid: "",
 			},
 		});
 
-		const inputFirstName = wrapper.find(
-			"input[data-testid=ldapDataUsersFirstName]"
-		);
-		expect(inputFirstName.exists()).toBe(true);
+		await wrapper.vm.v$.$touch();
 
-		inputFirstName.setValue("");
-		inputFirstName.trigger("blur");
-
-		expect(inputFirstName.element.value).toBe("");
-		expect(wrapper.vm.$v.$invalid).toBe(true);
-		await wrapper.vm.$nextTick();
 		const errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataUsersFirstName'] .base-input-info.base-input-error"
 		);
@@ -112,12 +95,8 @@ describe("@/components/organisms/LdapUsersSection", () => {
 	});
 
 	it("it emits update:errors event when validate prop changes value", async () => {
-		const wrapper = mount(LdapUsersSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigData,
-				validate: false,
-			},
+		const wrapper = getWrapper({
+			validate: false,
 		});
 		expect(wrapper.emitted("update:errors")).toBeUndefined();
 
@@ -139,27 +118,14 @@ describe("@/components/organisms/LdapUsersSection", () => {
 			uid: "",
 			uuid: "",
 		};
-		const wrapper = mount(LdapUsersSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigDataTestSpecific,
-			},
-			listeners: {
-				input: (event) => {
-					ldapConfigDataTestSpecific.userPath = event.userPath;
-					ldapConfigDataTestSpecific.firstName = event.firstName;
-					ldapConfigDataTestSpecific.familyName = event.familyName;
-					ldapConfigDataTestSpecific.email = event.email;
-					ldapConfigDataTestSpecific.uid = event.uid;
-					ldapConfigDataTestSpecific.uuid = event.uuid;
-				},
-			},
+		const wrapper = getWrapper({
+			modelValue: ldapConfigDataTestSpecific,
 		});
 
 		let errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataUsersFirstName'] .base-input-info.base-input-error"
 		);
-		expect(wrapper.vm.$v.$invalid).toBe(true);
+		expect(wrapper.vm.v$.$invalid).toBe(true);
 		expect(errorMessageComponent.exists()).toBeFalsy();
 
 		const inputFirstName = wrapper.find(
@@ -170,9 +136,8 @@ describe("@/components/organisms/LdapUsersSection", () => {
 			ldapConfigDataTestSpecific.firstName
 		);
 
-		inputFirstName.trigger("blur"); // without this the error is not displayed
+		await inputFirstName.trigger("blur"); // without this the error is not displayed
 
-		await wrapper.vm.$nextTick();
 		errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataUsersFirstName'] .base-input-info.base-input-error"
 		);

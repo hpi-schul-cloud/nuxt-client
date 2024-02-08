@@ -35,7 +35,7 @@
 			>
 				<room-avatar-iterator
 					ref="avatar-iterator"
-					:items="data.groupElements"
+					:avatars="data.groupElements"
 					condense-layout
 					item-size="0.8em"
 					:can-draggable="draggable"
@@ -50,6 +50,7 @@
 		</div>
 	</div>
 </template>
+
 <script>
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 export default {
@@ -119,6 +120,7 @@ export default {
 	},
 };
 </script>
+
 <style lang="scss" scoped>
 @import "~vuetify/settings";
 @import "@/utils/multiline-ellipsis.scss";
