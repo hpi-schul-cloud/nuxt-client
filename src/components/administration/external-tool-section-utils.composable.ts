@@ -43,6 +43,7 @@ export function useExternalToolsSectionUtils(
 
 			return {
 				id: tool.id,
+				externalToolId: tool.toolId,
 				name: tool.name,
 				statusText: t(statusTranslationKey),
 				isOutdated: tool.status.isOutdatedOnScopeSchool,

@@ -27,9 +27,10 @@ describe("ExternalToolToolbar", () => {
 
 			const actions = wrapper.findAll("button");
 
-			expect(actions.length).toEqual(2);
+			expect(actions.length).toEqual(3);
 			expect(actions.at(0)?.classes().includes("v-btn--icon")).toBeTruthy();
 			expect(actions.at(1)?.classes().includes("v-btn--icon")).toBeTruthy();
+			expect(actions.at(2)?.classes().includes("v-btn--icon")).toBeTruthy();
 		});
 
 		describe("when action button is clicked", () => {
@@ -40,6 +41,15 @@ describe("ExternalToolToolbar", () => {
 				await editButton.trigger("click");
 
 				expect(wrapper.emitted("edit")).toHaveLength(1);
+			});
+
+			it("should emit datasheet event", async () => {
+				const { wrapper } = setup();
+
+				const datasheetButton = wrapper.find("[data-testId=datasheetAction]");
+				await datasheetButton.trigger("click");
+
+				expect(wrapper.emitted("datasheet")).toHaveLength(1);
 			});
 
 			it("should emit delete event", async () => {

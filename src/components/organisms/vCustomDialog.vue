@@ -7,7 +7,7 @@
 		@keydown.esc="closeDialog"
 	>
 		<v-card :ripple="false">
-			<v-card-title data-testid="dialog-title">
+			<v-card-title data-testid="dialog-title" class="dialog-title px-6 pt-4">
 				<slot name="title" />
 			</v-card-title>
 			<v-card-text class="text--primary">
@@ -171,5 +171,10 @@ const checkButtons = (buttonName: string) => {
 
 .button-section > button {
 	margin-left: calc(var(--space-base-vuetify) * 2);
+}
+
+.dialog-title {
+	white-space: normal;
+	hyphens: none;
 }
 </style>

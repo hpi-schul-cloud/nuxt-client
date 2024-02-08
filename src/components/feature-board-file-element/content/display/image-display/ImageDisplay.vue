@@ -1,21 +1,19 @@
 <template>
-	<ColorOverlay
-		:isOverlayDisabled="isEditMode || hasImageError"
-		@on:action="openLightBox"
-		color="rgba(var(--v-theme-black))"
-	>
-		<PreviewImage
-			:src="previewSrc"
-			:alt="alternativeText"
-			:cover="true"
-			class="rounded-t"
-			@error="onImageError"
-		/>
-
-		<ContentElementBar class="menu">
-			<template #menu><slot /></template>
-		</ContentElementBar>
-	</ColorOverlay>
+	<ContentElementBar class="menu">
+		<template #display>
+			<div @click="openLightBox">
+				<PreviewImage
+					:src="previewSrc"
+					:alt="alternativeText"
+					:cover="true"
+					@error="onImageError"
+				/>
+			</div>
+		</template>
+		<template #menu>
+			<slot />
+		</template>
+	</ContentElementBar>
 </template>
 
 <script lang="ts">
@@ -24,7 +22,6 @@ import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PropType, computed, defineComponent, ref } from "vue";
 import { ContentElementBar } from "@ui-board";
-import { ColorOverlay } from "@ui-color-overlay";
 import { PreviewImage } from "@ui-preview-image";
 import { useI18n } from "vue-i18n";
 
@@ -39,7 +36,6 @@ export default defineComponent({
 	},
 	components: {
 		ContentElementBar,
-		ColorOverlay,
 		PreviewImage,
 	},
 	setup(props) {
@@ -83,11 +79,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.menu {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-}
-</style>

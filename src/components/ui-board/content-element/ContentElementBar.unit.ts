@@ -3,7 +3,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VCardTitle, VIcon } from "vuetify/lib/components/index.mjs";
 import ContentElementBar from "./ContentElementBar.vue";
 
 type Props = { icon?: string; hasGreyBackground?: boolean };
@@ -38,15 +37,19 @@ describe("ContentElementBar", () => {
 	};
 
 	describe("when icon prop is defined", () => {
-		it("should render icon", () => {
-			const icon = "mdi-test-icon";
-			const { wrapper } = setup({
-				icon: "mdi-test-icon",
-			});
+		it("should render icon next to the title", () => {
+			const { wrapper } = setup(
+				{
+					icon: "mdi-test-icon",
+				},
+				{
+					title: "my title",
+				}
+			);
 
-			const iconComponent = wrapper.findComponent(VIcon);
+			const iconElement = wrapper.find(".content-element-title .v-icon");
 
-			expect(iconComponent.html()).toContain(icon);
+			expect(iconElement.exists()).toBe(true);
 		});
 	});
 
@@ -171,57 +174,20 @@ describe("ContentElementBar", () => {
 		});
 	});
 
-	describe("when menu slot and display slot are defined", () => {
-		it("should render menu slot in display", () => {
-			const menu = "test menu slot content";
-			const { wrapper } = setup(
-				{},
-				{
-					display: "display content",
-					menu,
-				}
-			);
-
-			const contentElementDisplay = wrapper.find(".content-element-display");
-
-			expect(contentElementDisplay.exists()).toBe(true);
-			expect(contentElementDisplay.text()).toEqual(
-				expect.stringContaining(menu)
-			);
-		});
-	});
-
-	describe("when menu slot is defined but not display slot", () => {
-		it("should render menu slot in title", () => {
-			const menu = "test menu slot content";
-			const { wrapper } = setup(
-				{},
-				{
-					title: "title content",
-					menu,
-				}
-			);
-
-			const title = wrapper.findComponent(VCardTitle);
-
-			expect(title.exists()).toBe(true);
-			expect(title.text()).toEqual(expect.stringContaining(menu));
-		});
-	});
-
 	describe("when logo slot is defined", () => {
-		it("should render logo slot", () => {
+		it("should render logo slot next to the title", () => {
 			const logo = "test logo slot";
 			const { wrapper } = setup(
 				{},
 				{
 					logo,
+					title: "my title",
 				}
 			);
 
-			const logoElement = wrapper.text();
+			const titleElement = wrapper.find(".content-element-title");
 
-			expect(logoElement).toBe(logo);
+			expect(titleElement.text()).toContain(logo);
 		});
 	});
 });

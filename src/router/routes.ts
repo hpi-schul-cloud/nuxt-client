@@ -134,18 +134,6 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		}),
 	},
 	{
-		path: "/cfiles",
-		component: () => import("@/pages/files/FilesOverview.page.vue"),
-		name: "files",
-		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
-	},
-	{
-		path: "/cfiles/teams/:catchAll(.*)",
-		component: () => import("@/pages/files/FilesOverview.page.vue"),
-		name: "teamfiles",
-		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
-	},
-	{
 		path: "/content",
 		component: () => import("@/pages/LernStoreOverview.page.vue"),
 		name: "content",

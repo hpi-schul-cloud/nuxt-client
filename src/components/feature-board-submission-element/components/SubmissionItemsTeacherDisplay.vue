@@ -20,6 +20,7 @@
 						:class="getFilterClass('open', openCount)"
 						size="small"
 						label
+						variant="outlined"
 						:ripple="false"
 						:disabled="isDisabled(openCount)"
 						:tabindex="getTabIndex(isDisabled(openCount))"
@@ -36,6 +37,7 @@
 						:class="getFilterClass('completed', completedCount)"
 						size="small"
 						label
+						variant="outlined"
 						:ripple="false"
 						:disabled="isDisabled(completedCount)"
 						:tabindex="getTabIndex(isDisabled(completedCount))"
@@ -53,6 +55,7 @@
 						:class="getFilterClass('expired', overdueCount)"
 						size="small"
 						label
+						variant="outlined"
 						:ripple="false"
 						:disabled="isDisabled(overdueCount)"
 						:tabindex="getTabIndex(isDisabled(overdueCount))"
@@ -65,11 +68,7 @@
 					</v-chip>
 				</VExpansionPanelTitle>
 				<v-expansion-panel-text>
-					<v-data-table
-						:headers="headers"
-						:items="filteredSubmissions"
-						hide-default-footer
-					>
+					<v-data-table :headers="headers" :items="filteredSubmissions" hover>
 						<template #[`item.status`]="{ item }">
 							<span data-testid="submission-item">
 								<v-icon color="black" size="small">
@@ -222,60 +221,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "~vuetify/settings";
 
-.v-chip {
-	opacity: 1;
-	flex: none;
-}
-
 :deep {
-	.theme--light.v-expansion-panels .v-expansion-panel {
-		background-color: transparent;
-	}
-
-	.v-data-table
-		> .v-data-table__wrapper
-		tbody
-		tr:first-child:hover
-		td:last-child {
-		border-top-right-radius: 0;
-	}
-
-	.v-data-table
-		> .v-data-table__wrapper
-		tbody
-		tr:first-child:hover
-		td:first-child {
-		border-top-left-radius: 0;
-	}
-
-	.v-expansion-panel-content__wrap {
+	.v-expansion-panel-text__wrapper {
 		padding: 0;
 	}
 
-	.v-data-table__wrapper {
-		overflow-x: hidden;
-
-		.text-start {
-			font-size: 0.75rem;
-		}
-
-		table > thead > tr > th > .v-icon {
-			font-size: 0.75rem !important;
-			height: 0.75rem !important;
-			width: 0.75rem !important;
-			margin-left: 2px;
-		}
+	.v-expansion-panel-title--active > .v-expansion-panel-title__overlay {
+		opacity: 0;
 	}
-
-	.v-chip--clickable:active {
-		box-shadow: unset;
-	}
-}
-
-.filter-chip {
-	background-color: rgba(var(--v-theme-white)) !important;
-	border: 1px solid map-get($grey, base);
-	border-color: map-get($grey, base);
 }
 
 .filter-chip--active {
@@ -288,9 +241,5 @@ export default defineComponent({
 	background-color: rgba(var(--v-theme-white)) !important;
 	color: rgba(map-get($grey, base), 0.9);
 	border: 1px solid rgba(map-get($grey, base), 0.4);
-}
-
-.v-chip {
-	flex: none;
 }
 </style>

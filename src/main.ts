@@ -3,7 +3,6 @@ import {
 	applicationErrorModule,
 	authModule,
 	autoLogoutModule,
-	collaborativeFilesModule,
 	contentModule,
 	contextExternalToolsModule,
 	copyModule,
@@ -145,7 +144,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(APPLICATION_ERROR_KEY.valueOf(), applicationErrorModule);
 	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
 	app.provide("autoLogoutModule", autoLogoutModule);
-	app.provide("collaborativeFilesModule", collaborativeFilesModule);
 	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(
 		CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),

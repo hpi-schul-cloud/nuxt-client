@@ -21,9 +21,17 @@
 				</v-toolbar-items>
 			</v-toolbar>
 
-			<v-card-text class="mt-5">
+			<v-card-text v-if="!$props.isNbc" class="mt-5">
 				{{
 					$t("components.molecules.importUsersMatch.subtitle", {
+						instance: $theme.name,
+						source: ldapSource,
+					})
+				}}
+			</v-card-text>
+			<v-card-text v-else class="mt-5">
+				{{
+					$t("components.molecules.importUsersMatch.subtitle.nbc", {
 						instance: $theme.name,
 						source: ldapSource,
 					})
@@ -98,7 +106,14 @@
 								</v-list-item-subtitle>
 							</div>
 							<div v-else>
-								{{ $t("components.molecules.importUsersMatch.unMatched") }}
+								<template v-if="!$props.isNbc">
+									{{ $t("components.molecules.importUsersMatch.unMatched") }}
+								</template>
+								<template v-else>
+									{{
+										$t("components.molecules.importUsersMatch.unMatched.nbc")
+									}}
+								</template>
 							</div>
 						</v-list-item>
 						<v-autocomplete
