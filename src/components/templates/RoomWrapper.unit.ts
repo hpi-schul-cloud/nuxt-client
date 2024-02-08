@@ -10,6 +10,9 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { nextTick } from "vue";
+import { VBtn } from "vuetify/lib/components/index.mjs";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -157,11 +160,12 @@ describe("@templates/RoomWrapper.vue", () => {
 		it("should display fab", () => {
 			const wrapper = getWrapper();
 
-			const fabComponent = wrapper.find(".wireframe-fab");
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(true);
 		});
 
 		it("should open the import-modal", async () => {
+			jest.useFakeTimers();
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const wrapper = getWrapper();
 
@@ -170,13 +174,15 @@ describe("@templates/RoomWrapper.vue", () => {
 			});
 			expect(importModalComponent.vm.isOpen).toBe(false);
 
-			const fab = wrapper.find(".wireframe-fab");
-			await fab.trigger("click");
+			const menu = await wrapper.findComponent(SpeedDialMenu);
+			const menuButton = await menu.findComponent(VBtn);
+			await menuButton.trigger("click");
+			jest.advanceTimersByTime(1000);
+			await nextTick();
 
-			const importBtn = wrapper.find(
-				'[data-testid="fab_button_import_course"]'
-			);
-			await importBtn.trigger("click");
+			const menuActions = await wrapper.findAllComponents(SpeedDialMenuAction);
+			await menuActions[1].findComponent(VBtn).trigger("click");
+			await nextTick();
 
 			expect(importModalComponent.vm.isOpen).toBe(true);
 		});

@@ -4,7 +4,6 @@
 		headline=""
 		:full-width="true"
 		:fab-items="fabItems"
-		@fabButtonEvent="fabClick"
 	>
 		<template #header>
 			<slot name="header" />
@@ -78,7 +77,7 @@ export default defineComponent({
 						icon: mdiPlus,
 						title: this.$t("common.actions.create"),
 						ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
-						testId: "add-course-button",
+						dataTestid: "add-course-button",
 						actions: [
 							{
 								label: this.$t("pages.rooms.fab.add.course"),
@@ -92,10 +91,7 @@ export default defineComponent({
 								icon: mdiCloudDownload,
 								dataTestid: "fab_button_import_course",
 								ariaLabel: this.$t("pages.rooms.fab.import.course"),
-								customEvent: {
-									name: "fabButtonEvent",
-									value: true,
-								},
+								customEvent: this.fabClick,
 							},
 						],
 					};
@@ -105,7 +101,7 @@ export default defineComponent({
 					title: this.$t("common.actions.create"),
 					href: "/courses/add",
 					ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
-					testId: "add-course-button",
+					dataTestid: "add-course-button",
 				};
 			}
 
