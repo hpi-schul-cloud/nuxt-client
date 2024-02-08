@@ -355,6 +355,10 @@ export default {
 				this.$_controllableDataSelectionType === "inclusive" ? state : !state;
 
 			if (newState) {
+				this.selectionKeys = {
+					...this.selectionKeys,
+					[getValueByPath(row, this.trackBy)]: true,
+				};
 				this.selectionKeys[getValueByPath(row, this.trackBy)] = true;
 			} else {
 				delete this.selectionKeys[getValueByPath(row, this.trackBy)];
