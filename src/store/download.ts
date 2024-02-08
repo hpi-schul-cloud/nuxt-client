@@ -1,9 +1,6 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { roomModule } from "./store-accessor";
 
-export interface DownloadOption {
-	version: "1.1.0" | "1.3.0";
-}
 @Module({
 	name: "downloadModule",
 	namespaced: true,

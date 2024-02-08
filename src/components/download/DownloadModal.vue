@@ -19,11 +19,12 @@
 				<v-radio-group v-model="radios">
 					<v-radio
 						label="CC Version 1.1   (z.B kompatibel mit Moodle)"
-						id="v1.1"
+						id="1.1.0"
 						value="1.1.0"
+						true-value="true"
 					/>
 					<br />
-					<v-radio label="CC Version 1.3" id="v1.3" value="1.3.0" />
+					<v-radio label="CC Version 1.3" id="1.3.0" value="1.3.0" />
 					<br />
 				</v-radio-group>
 				<v-divider />
@@ -106,7 +107,7 @@ export default defineComponent({
 	props: {},
 	setup() {
 		const i18n = injectStrict(I18N_KEY);
-		const radios = ref("");
+		const radios = ref("1.1.0");
 
 		const t = (key) => {
 			const translateResult = i18n.t(key);
@@ -137,8 +138,6 @@ export default defineComponent({
 		const actionButtons = computed(() => {
 			return modalOptions.value.get(step.value)?.actionButtons ?? [];
 		});
-
-		const downloadOptions = ref(undefined);
 
 		const modalTitle = computed(
 			() => modalOptions.value.get(step.value)?.title ?? ""
@@ -174,7 +173,6 @@ export default defineComponent({
 			actionButtons,
 			modalTitle,
 			isOpen,
-			downloadOptions,
 			mdiAlert,
 			radios,
 		};
