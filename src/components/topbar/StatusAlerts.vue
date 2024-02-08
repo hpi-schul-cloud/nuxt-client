@@ -12,7 +12,7 @@
 			:data-test-id="`alert-item-${index}`"
 			class="alert-item"
 		>
-			<template v-slot:prepend="">
+			<template v-slot:prepend>
 				<v-icon
 					:color="`rgba(var(--v-theme-${getIconTag(item.status).color}))`"
 				>
@@ -21,18 +21,18 @@
 			</template>
 			<v-list-item-title
 				:data-testid="`alert-title-${index}`"
-				class="text-subtitle-1 ma-0"
+				class="item-title ma-0"
 			>
 				{{ item.title }}
 			</v-list-item-title>
 			<v-list-item-subtitle
 				:data-testid="`alert-text-${index}`"
-				class="text-subtitle-2 text--primary ma-0 mt-1"
+				class="item-subtitle text-black ma-0 mt-1"
 			>
 				{{ item.text }}
 			</v-list-item-subtitle>
 			<v-list-item-subtitle
-				class="text-left text-caption d-flex flex-row alert-date text--secondary mt-0 mt-2"
+				class="text-left text-caption d-flex flex-row alert-date text-black mt-0 mt-2"
 				:data-testid="`alert-date-${index}`"
 			>
 				<template v-if="item.timestamp !== item.createdAt">
@@ -95,17 +95,19 @@ export default defineComponent({
 		}
 	}
 
-	.subtitle-1 {
+	.item-title {
 		overflow: visible;
 		text-overflow: clip;
 		white-space: normal;
+		word-break: break-word;
 	}
-	.subtitle-2 {
+	.item-subtitle {
 		overflow: unset;
 		text-overflow: unset;
 		white-space: unset;
 		display: flex;
 		flex-wrap: wrap;
+		word-break: break-word;
 	}
 }
 </style>
