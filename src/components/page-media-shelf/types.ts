@@ -5,7 +5,7 @@ export interface IMediaBoardElement {
 
 	description?: string;
 
-	thumbnailUrl?: string;
+	thumbnail?: string;
 }
 
 export interface IMediaBoardLine {
@@ -14,6 +14,12 @@ export interface IMediaBoardLine {
 	title: string;
 
 	elements: IMediaBoardElement[];
+
+	isPrimary: boolean;
+
+	color: string;
+
+	gridMode: boolean;
 }
 
 export interface IMediaBoard {

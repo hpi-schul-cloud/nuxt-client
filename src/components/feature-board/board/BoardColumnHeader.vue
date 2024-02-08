@@ -7,7 +7,7 @@
 	>
 		<div
 			class="column-header mb-4 rounded"
-			:class="{ 'bg-grey-lighten-2': isFocusContained }"
+			:class="{ 'bg-grey-lighten-2': isFocusContained && useFocusHighlight }"
 			tabindex="0"
 			ref="columnHeader"
 		>
@@ -21,12 +21,7 @@
 					class="w-100"
 					:is-focused="isFocusedById"
 				/>
-				<BoardMenu v-if="hasDeletePermission" scope="column">
-					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
-					<BoardMenuActionMoveLeft @click="onMoveColumnLeft" />
-					<BoardMenuActionMoveRight @click="onMoveColumnRight" />
-					<BoardMenuActionDelete :name="title" @click="onDelete" />
-				</BoardMenu>
+				<slot name="menu" />
 			</div>
 			<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
 		</div>
@@ -34,19 +29,8 @@
 </template>
 
 <script lang="ts">
-import {
-	useBoardFocusHandler,
-	useBoardPermissions,
-	useEditMode,
-} from "@data-board";
+import { useBoardFocusHandler, useEditMode } from "@data-board";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
-import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionEdit,
-	BoardMenuActionMoveLeft,
-	BoardMenuActionMoveRight,
-} from "@ui-board";
 import { defineComponent, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
@@ -54,13 +38,8 @@ import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 export default defineComponent({
 	name: "BoardColumnHeader",
 	components: {
-		BoardMenu,
 		BoardAnyTitleInput,
-		BoardMenuActionEdit,
 		BoardColumnInteractionHandler,
-		BoardMenuActionDelete,
-		BoardMenuActionMoveLeft,
-		BoardMenuActionMoveRight,
 	},
 	props: {
 		columnId: {
@@ -75,6 +54,14 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+		canEdit: {
+			type: Boolean,
+			required: true,
+		},
+		useFocusHighlight: {
+			type: Boolean,
+			default: true,
+		},
 	},
 	emits: [
 		"delete:column",
@@ -84,6 +71,7 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const columnId = toRef(props, "columnId");
+		const canEdit = toRef(props, "canEdit");
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			columnId.value
 		);
@@ -95,15 +83,14 @@ export default defineComponent({
 			columnId.value,
 			columnHeader
 		);
-		const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
 		const onStartEditMode = () => {
-			if (!hasEditPermission) return;
+			if (!canEdit.value) return;
 			startEditMode();
 		};
 
 		const onEndEditMode = () => {
-			if (!hasEditPermission) return;
+			if (!canEdit.value) return;
 			stopEditMode();
 		};
 
@@ -141,7 +128,6 @@ export default defineComponent({
 			isEditMode,
 			isFocusContained,
 			isDeleteModalOpen,
-			hasDeletePermission,
 			mdiTrashCanOutline,
 			mdiPencilOutline,
 			onStartEditMode,

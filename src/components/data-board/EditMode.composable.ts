@@ -1,6 +1,5 @@
 import { createSharedComposable } from "@vueuse/core";
-import { computed, ref, Ref } from "vue";
-import { useBoardPermissions } from "./BoardPermissions.composable";
+import { computed, ComputedRef, ref, Ref } from "vue";
 
 /**
  * Handles EditMode for a specific card.
@@ -8,21 +7,21 @@ import { useBoardPermissions } from "./BoardPermissions.composable";
  * Use this to set a card to edit mode from **inside** a card scope.
  */
 export const useEditMode = (id: string) => {
-	const { hasEditPermission } = useBoardPermissions();
+	// TODO const { hasEditPermission } = useBoardPermissions();
 	const { editModeId, setEditModeId } = useSharedEditMode();
 
 	const isEditMode = computed(() => {
-		if (!hasEditPermission) return false;
+		//if (!hasEditPermission) return false;
 		return editModeId.value !== undefined && id === editModeId.value;
 	});
 
 	const startEditMode = () => {
-		if (!hasEditPermission) return;
+		//if (!hasEditPermission) return;
 		setEditModeId(id);
 	};
 
 	const stopEditMode = () => {
-		if (isEditMode.value === true) {
+		if (isEditMode.value) {
 			setEditModeId(undefined);
 		}
 	};
@@ -42,11 +41,15 @@ export const useEditMode = (id: string) => {
 const sharedEditMode = () => {
 	const editModeId: Ref<string | undefined> = ref(undefined);
 
-	const setEditModeId = (id: string | undefined) => {
+	const setEditModeId = (id: string | undefined): void => {
 		editModeId.value = id;
 	};
 
-	return { editModeId, setEditModeId };
+	const isInEditMode: ComputedRef<boolean> = computed(
+		() => editModeId.value !== undefined
+	);
+
+	return { editModeId, setEditModeId, isInEditMode };
 };
 
 export const useSharedEditMode = createSharedComposable(sharedEditMode);

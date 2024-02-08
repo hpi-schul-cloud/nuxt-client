@@ -3,7 +3,7 @@
 		:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
 		class="column-drag-handle bg-white px-4"
 	>
-		<BoardColumnHeader
+		<ColumnBoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
 			:titlePlaceholder="titlePlaceholder"
@@ -63,38 +63,38 @@
 </template>
 
 <script lang="ts">
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useDebounceFn, useMediaQuery } from "@vueuse/core";
-import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
-import CardHost from "../card/CardHost.vue";
-import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { useBoardPermissions } from "@data-board";
 import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
+	cardDropPlaceholderOptions,
 	CardMove,
 	DragAndDropKey,
-	cardDropPlaceholderOptions,
 	horizontalCursorKeys,
 	verticalCursorKeys,
 } from "@/types/board/DragAndDrop";
-import BoardAddCardButton from "./BoardAddCardButton.vue";
-import BoardColumnHeader from "./BoardColumnHeader.vue";
-import { useI18n } from "vue-i18n";
+import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+import { useBoardPermissions } from "@data-board";
 import {
 	BOARD_HAS_MULTIPLE_COLUMNS,
 	BOARD_IS_FIRST_COLUMN,
 	BOARD_IS_LAST_COLUMN,
 	extractDataAttribute,
 } from "@util-board";
+import { useDebounceFn, useMediaQuery } from "@vueuse/core";
+import { SortableEvent } from "sortablejs";
 
 import { Sortable } from "sortablejs-vue3";
-import { SortableEvent } from "sortablejs";
+import { computed, defineComponent, PropType, provide, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
+import CardHost from "../card/CardHost.vue";
+import { useDragAndDrop } from "../shared/DragAndDrop.composable";
+import BoardAddCardButton from "./BoardAddCardButton.vue";
+import ColumnBoardColumnHeader from "./ColumnBoardColumnHeader.vue";
 
 export default defineComponent({
 	name: "BoardColumn",
 	components: {
+		ColumnBoardColumnHeader,
 		CardHost,
-		BoardColumnHeader,
 		BoardAddCardButton,
 		Sortable,
 	},

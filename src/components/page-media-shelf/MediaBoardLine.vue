@@ -1,100 +1,164 @@
 <template>
 	<div
 		class="line line-drag-handle px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
-		style="position: relative"
+		:style="{ 'background-color': lineColor }"
 	>
-		<span class="text-h4">{{ line.title }}</span>
-		<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
-		<div class="menu">
-			<VMenu location="bottom end" min-width="250">
-				<template v-slot:activator="{ props }">
-					<VBtn
-						variant="text"
-						:ripple="false"
-						v-bind="props"
-						icon
-						@click.stop.prevent="() => {}"
-						@dblclick.stop.prevent="() => {}"
-						@keydown.enter.stop
-						@keydown.left.right.up.down.stop="() => {}"
-						size="small"
-						style="height: 36px; width: 36px"
-					>
-						<VIcon class="text-grey-darken-2">
-							{{ mdiDotsVertical }}
-						</VIcon>
-					</VBtn>
-				</template>
-				<VList>
-					<VListItem @click="gridMode = !gridMode">
-						<VListItemTitle>Toggle Grid Mode</VListItemTitle>
-					</VListItem>
-				</VList>
-			</VMenu>
-		</div>
-		<Sortable
-			:list="line.elements"
-			item-key="id"
-			tag="div"
-			:options="{
-				group: 'elements',
-				direction: 'horizontal',
-				delay: 300,
-				delayOnTouchOnly: true,
-				disabled: false,
-				ghostClass: 'sortable-drag-ghost',
-				easing: 'cubic-bezier(1, 0, 0, 1)',
-				chosenClass: isMobile ? 'sortable-chosen' : '',
-				dragoverBubble: true,
-				draggable: '.draggable',
-				animation: 250,
-				scroll: !gridMode,
-				forceFallback: true,
-				bubbleScroll: true,
-			}"
-			:class="{ 'flex-wrap': gridMode, 'scrollable-line': !gridMode }"
-			class="d-flex flex-grid flex-shrink-1 pa-2 ga-4 flex-1-1"
-			@start="dragStart"
-			@end="dragEnd"
+		<BoardColumnHeader
+			:title="line.title"
+			:title-placeholder="titlePlaceholder"
+			:column-id="line.id"
+			:can-edit="true"
+			:use-focus-highlight="false"
+			@update:title="onUpdateTitle"
 		>
-			<template #item="{ element, index }">
-				<MediaBoardElement
-					:index="index"
-					:key="element.id"
-					:element="element"
-					class="draggable"
+			<template #menu>
+				<MediaBoardLineMenu
+					:line-id="line.id"
+					v-model:color="lineColor"
+					v-model:grid-mode="gridMode"
+					v-model:collapsed="collapsed"
+					@delete:line="$emit('delete:line', $event)"
 				/>
 			</template>
-		</Sortable>
+		</BoardColumnHeader>
+		<VExpansionPanels v-model="openLines">
+			<VExpansionPanel
+				value="linePanel"
+				elevation="0"
+				class="pa-0 bg-transparent"
+			>
+				<VExpansionPanelText class="no-inner-padding">
+					<Sortable
+						:list="line.elements"
+						item-key="id"
+						tag="div"
+						:options="{
+							group: 'elements',
+							direction: 'horizontal',
+							delay: 300,
+							delayOnTouchOnly: true,
+							ghostClass: 'sortable-drag-ghost',
+							easing: 'cubic-bezier(1, 0, 0, 1)',
+							chosenClass: isMobile ? 'sortable-chosen' : '',
+							dragoverBubble: true,
+							animation: 250,
+							scroll: !gridMode,
+							forceFallback: true,
+							bubbleScroll: true,
+						}"
+						:class="{ 'flex-wrap': gridMode, 'scrollable-line': !gridMode }"
+						class="d-flex flex-grid flex-shrink-1 pa-2 ga-4 flex-1-1"
+						@end="onElementDragEnd"
+					>
+						<template #item="{ element }">
+							<MediaBoardElement
+								:data-element-id="element.id"
+								:key="element.id"
+								:element="element"
+							/>
+						</template>
+					</Sortable>
+				</VExpansionPanelText>
+			</VExpansionPanel>
+		</VExpansionPanels>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
-import { mdiDotsVertical } from "@mdi/js";
+import BoardColumnHeader from "@feature-board/board/BoardColumnHeader.vue";
+import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
+import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { PropType, ref } from "vue";
+import {
+	computed,
+	ComputedRef,
+	PropType,
+	Ref,
+	ref,
+	toRef,
+	WritableComputedRef,
+} from "vue";
+import { CardMove } from "../../types/board/DragAndDrop";
 import MediaBoardElement from "./MediaBoardElement.vue";
+import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { IMediaBoardLine } from "./types";
 
-defineProps({
+const props = defineProps({
 	line: {
 		type: Object as PropType<IMediaBoardLine>,
 		required: true,
 	},
+	index: {
+		type: Number,
+		required: true,
+	},
+});
+const emit = defineEmits<{
+	(e: "update:line-title", newTitle: string): void;
+	(e: "update:element-position", value: CardMove): void;
+	(e: "delete:line", lineId: string): void;
+}>();
+
+const isMobile: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Mobile);
+
+const gridMode: Ref<boolean> = ref(false);
+const lineColor: Ref<string> = ref("#FFFFFF");
+
+const collapsed: Ref<boolean> = ref(false);
+const openLines: WritableComputedRef<string[]> = computed({
+	get() {
+		return collapsed.value ? [] : ["linePanel"];
+	},
+	set(value: string[]) {
+		collapsed.value = value.includes("linePanel");
+	},
 });
 
-const { dragStart, dragEnd } = useDragAndDrop();
+const titlePlaceholder: ComputedRef<string> = computed(
+	() => `Reihe ${props.index + 1}`
+);
 
-const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
+const line: Ref<IMediaBoardLine> = toRef(props, "line");
 
-const gridMode = ref(false);
+const onUpdateTitle = (newTitle: string) => {
+	emit("update:line-title", newTitle);
+};
+
+const onElementDragEnd = async (event: SortableEvent) => {
+	const { newIndex, oldIndex, to, from, item } = event;
+	const toColumnId = extractDataAttribute(to, "lineId");
+	const fromColumnId = extractDataAttribute(from, "lineId") as string;
+	const cardId = extractDataAttribute(event.item, "elementId") as string;
+
+	if (toColumnId !== fromColumnId) {
+		item?.parentNode?.removeChild(item);
+	}
+
+	if (newIndex !== undefined && oldIndex !== undefined) {
+		const cardMove: CardMove = {
+			cardId,
+			newIndex,
+			oldIndex,
+			fromColumnId,
+			toColumnId,
+		};
+
+		emit("update:element-position", cardMove);
+	}
+};
 </script>
+
+<style>
+.no-inner-padding > * {
+	padding: 0;
+}
+</style>
 
 <style scoped>
 .line {
+	position: relative;
 	background-color: white;
 }
 
@@ -114,7 +178,7 @@ const gridMode = ref(false);
 /* Custom Scroll Bar*/
 /* height */
 .scrollable-line::-webkit-scrollbar {
-	height: 6px;
+	height: 8px;
 }
 
 /* Track */
@@ -136,12 +200,5 @@ const gridMode = ref(false);
 /* Handle on hover */
 .scrollable-line::-webkit-scrollbar-thumb:hover {
 	background: rgba(var(--v-theme-secondary)) !important;
-}
-
-.menu {
-	position: absolute;
-	top: 0.25rem;
-	right: 0.25rem;
-	z-index: 1;
 }
 </style>
