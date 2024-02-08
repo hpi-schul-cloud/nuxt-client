@@ -1,7 +1,11 @@
 <template>
 	<ContentElementBar class="menu">
 		<template #display>
-			<div @click="openLightBox">
+			<div
+				class="d-flex align-center"
+				style="min-height: 52px"
+				@click="openLightBox"
+			>
 				<PreviewImage
 					:src="previewSrc"
 					:alt="alternativeText"
@@ -19,10 +23,10 @@
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { PropType, computed, defineComponent, ref } from "vue";
 import { ContentElementBar } from "@ui-board";
+import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PreviewImage } from "@ui-preview-image";
+import { PropType, computed, defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
