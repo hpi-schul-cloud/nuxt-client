@@ -332,7 +332,6 @@ export default {
 					return obj;
 				}, {});
 				this.selectionKeys = newSelectionKeys;
-				// this.$forceUpdate(); // VUE3_UPGRADE do we still need this?
 			},
 			immediate: true,
 		},
