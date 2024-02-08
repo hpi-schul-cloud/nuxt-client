@@ -15,6 +15,7 @@
 			<template v-slot:prepend>
 				<v-icon
 					:color="`rgba(var(--v-theme-${getIconTag(item.status).color}))`"
+					class="item-icon"
 				>
 					{{ getIconTag(item.status).icon }}
 				</v-icon>
@@ -97,6 +98,10 @@ export default defineComponent({
 		:deep(.v-list-item__prepend) {
 			align-self: start;
 		}
+	}
+
+	.item-icon {
+		opacity: unset;
 	}
 
 	.item-title {
