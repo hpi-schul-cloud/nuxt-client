@@ -77,8 +77,9 @@ export default {
 			}
 		},
 		async cancelHandler() {
+			console.log("cancelHandler");
 			this.$router.push({
-				name: "news",
+				name: "news-cancel",
 			});
 		},
 	},
