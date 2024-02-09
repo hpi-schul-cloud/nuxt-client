@@ -3,8 +3,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { ColorOverlay } from "@ui-color-overlay";
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import PdfDisplay from "./PdfDisplay.vue";
 
 describe("PdfDisplay", () => {
@@ -18,10 +17,13 @@ describe("PdfDisplay", () => {
 			isEditMode: props.isEditMode,
 		};
 
-		const wrapper = shallowMount(PdfDisplay, {
+		const wrapper = mount(PdfDisplay, {
 			attachTo: document.body,
 			propsData,
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { PreviewImage: true },
+			},
 		});
 
 		return {
@@ -46,23 +48,15 @@ describe("PdfDisplay", () => {
 		expect(image.attributes("aspectratio")).toBe("1.77777");
 	});
 
-	it("should render color overlay with correct props", () => {
-		const { wrapper } = setup({ isEditMode: false });
-
-		const colorOverlay = wrapper.findComponent(ColorOverlay);
-
-		expect(colorOverlay.exists()).toBe(true);
-		expect(colorOverlay.props("color")).toBe("rgba(var(--v-theme-black))");
-	});
-
-	describe("when color overlay emits on:action", () => {
+	describe("when div emits click", () => {
 		it("should call open function", () => {
 			const { wrapper, src } = setup({ isEditMode: false });
 
 			const windowOpenSpy = jest.spyOn(window, "open");
-			const colorOverlay = wrapper.findComponent(ColorOverlay);
 
-			colorOverlay.vm.$emit("on:action");
+			const image = wrapper.find("preview-image-stub");
+			expect(image.exists()).toBe(true);
+			image.trigger("click");
 
 			expect(windowOpenSpy).toHaveBeenCalledTimes(1);
 			expect(windowOpenSpy).toHaveBeenCalledWith(src, "_blank");
