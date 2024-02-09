@@ -359,7 +359,6 @@ export default {
 					...this.selectionKeys,
 					[getValueByPath(row, this.trackBy)]: true,
 				};
-				this.selectionKeys[getValueByPath(row, this.trackBy)] = true;
 			} else {
 				delete this.selectionKeys[getValueByPath(row, this.trackBy)];
 			}
