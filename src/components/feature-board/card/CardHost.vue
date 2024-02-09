@@ -163,6 +163,7 @@ export default defineComponent({
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
 
 		const onDeleteCard = async (confirmation: Promise<boolean>) => {
+			stopEditMode();
 			const shouldDelete = await confirmation;
 			if (shouldDelete) {
 				emit("delete:card", card.value?.id);
