@@ -122,7 +122,7 @@ export default defineComponent({
 }
 
 .main-content {
-	overflow: scroll;
+	overflow: auto;
 	padding: 0;
 }
 
