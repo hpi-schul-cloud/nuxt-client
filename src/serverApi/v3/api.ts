@@ -2801,6 +2801,156 @@ export interface Lti11ToolConfigUpdateParams {
 /**
  * 
  * @export
+ * @interface MeAccountResponse
+ */
+export interface MeAccountResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeAccountResponse
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
+ * @interface MeResponse
+ */
+export interface MeResponse {
+    /**
+     * 
+     * @type {MeSchoolResponse}
+     * @memberof MeResponse
+     */
+    school: MeSchoolResponse;
+    /**
+     * 
+     * @type {MeUserResponse}
+     * @memberof MeResponse
+     */
+    user: MeUserResponse;
+    /**
+     * 
+     * @type {Array<MeRolesReponse>}
+     * @memberof MeResponse
+     */
+    roles: Array<MeRolesReponse>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MeResponse
+     */
+    permissions: Array<string>;
+    /**
+     * 
+     * @type {MeAccountResponse}
+     * @memberof MeResponse
+     */
+    account: MeAccountResponse;
+}
+/**
+ * 
+ * @export
+ * @interface MeRolesReponse
+ */
+export interface MeRolesReponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeRolesReponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeRolesReponse
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
+ * @interface MeSchoolLogoResponse
+ */
+export interface MeSchoolLogoResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSchoolLogoResponse
+     */
+    url?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSchoolLogoResponse
+     */
+    name?: string;
+}
+/**
+ * 
+ * @export
+ * @interface MeSchoolResponse
+ */
+export interface MeSchoolResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSchoolResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSchoolResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {MeSchoolLogoResponse}
+     * @memberof MeSchoolResponse
+     */
+    logo: MeSchoolLogoResponse;
+}
+/**
+ * 
+ * @export
+ * @interface MeUserResponse
+ */
+export interface MeUserResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeUserResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeUserResponse
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeUserResponse
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeUserResponse
+     */
+    language?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeUserResponse
+     */
+    customAvatarBackgroundColor?: string;
+}
+/**
+ * 
+ * @export
  * @interface MetaTagExtractorResponse
  */
 export interface MetaTagExtractorResponse {
@@ -10187,6 +10337,120 @@ export class LessonApi extends BaseAPI implements LessonApiInterface {
      */
     public lessonControllerDelete(lessonId: string, options?: any) {
         return LessonApiFp(this.configuration).lessonControllerDelete(lessonId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * MeApi - axios parameter creator
+ * @export
+ */
+export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        meControllerMe: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MeApi - functional programming interface
+ * @export
+ */
+export const MeApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MeApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async meControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MeResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.meControllerMe(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MeApi - factory interface
+ * @export
+ */
+export const MeApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MeApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        meControllerMe(options?: any): AxiosPromise<MeResponse> {
+            return localVarFp.meControllerMe(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MeApi - interface
+ * @export
+ * @interface MeApi
+ */
+export interface MeApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MeApiInterface
+     */
+    meControllerMe(options?: any): AxiosPromise<MeResponse>;
+
+}
+
+/**
+ * MeApi - object-oriented interface
+ * @export
+ * @class MeApi
+ * @extends {BaseAPI}
+ */
+export class MeApi extends BaseAPI implements MeApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MeApi
+     */
+    public meControllerMe(options?: any) {
+        return MeApiFp(this.configuration).meControllerMe(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
