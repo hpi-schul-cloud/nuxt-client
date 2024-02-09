@@ -1,8 +1,8 @@
 <template>
 	<v-custom-dialog
 		:is-open="isOpen"
-		data-testid="download-dialog"
-		:size="480"
+		data-testid="export-dialog"
+		:size="560"
 		has-buttons
 		:buttons="isOpen ? actionButtons : []"
 		@dialog-closed="onCloseDialog"
@@ -11,82 +11,54 @@
 		@dialog-confirmed="onDownload"
 	>
 		<template slot="title">
-			{{ modalTitle }}
+			<h4>{{ modalTitle }}</h4>
 		</template>
 		<template slot="content">
-			<v-divider />
 			<div v-if="step === 1 && isOpen">
 				<v-radio-group v-model="radios">
 					<v-radio
-						label="CC Version 1.1   (z.B kompatibel mit Moodle)"
+						label="Common Cartridge Version 1.1   (z.B kompatibel mit Moodle)"
 						id="1.1.0"
 						value="1.1.0"
-						true-value="true"
 					/>
-					<br />
-					<v-radio label="CC Version 1.3" id="1.3.0" value="1.3.0" />
-					<br />
+					<v-radio
+						label="Common Cartridge Version 1.3"
+						id="1.3.0"
+						value="1.3.0"
+					/>
 				</v-radio-group>
-				<v-divider />
 			</div>
 
 			<div v-if="step === 2 && isOpen">
 				<div
-					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
+					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
 				>
 					<div class="mx-2">
-						<v-icon color="warning">{{ mdiAlert }}</v-icon>
+						<v-icon color="info">{{ mdiInformation }}</v-icon>
 					</div>
-					<div>
-						<!-- <p class="black--text mb-0 aligned-with-icon">
-							<strong>{{
-								$t(`components.molecules.downloadResult.label.geogebra`)
-							}}</strong>
-							&middot;
-							{{
-								$t(`components.molecules.downloadResult.geogebraDownload.info`)
-							}}
-							<br />
-						</p>
-						<p class="black--text mb-0 aligned-with-icon">
-							<strong>{{
-								$t(`components.molecules.downloadResult.label.etherpad`)
-							}}</strong>
-							&middot;
-							{{
-								$t(`components.molecules.downloadResult.etherpadDownload.info`)
-							}}
-							<br />
-						</p> -->
-						<p class="black--text mb-0 aligned-with-icon">
-							<strong>{{
-								$t(`components.molecules.downloadResult.label.files`)
-							}}</strong>
-							&middot;
-							{{ $t(`components.molecules.downloadResult.courseFiles.info`) }}
-						</p>
-					</div>
+					<p>
+						<strong>
+							{{ $t(`components.molecules.download.options.info`) }}
+						</strong>
+						<br />
+						&middot;
+						{{ $t(`components.molecules.download.options.info.points`) }}
+						<br />
+						&middot;
+						{{ $t(`components.molecules.download.options.info.points`) }}
+					</p>
 				</div>
 				<v-container fluid>
-					<v-row>
-						<v-col cols="4" sm="">
-							<v-checkbox label="Aufgaben" />
-						</v-col>
-					</v-row>
-					<v-divider />
-					<v-row>
-						<v-col cols="4" sm="">
-							<v-checkbox label="Themen:" />
-						</v-col>
-						<v-col cols="4" sm="">
-							<v-checkbox label="Aufgabe" />
-							<v-checkbox label="Etherpad" />
-							<v-checkbox label="Geogebra" />
-							<v-checkbox label="Lern-Material (aus dem Lern-Store)" />
-							<v-checkbox label="Textelemente" />
-						</v-col>
-					</v-row>
-					<v-divider />
+					<v-checkbox label="Aufgaben" class="mt-2" />
+					<v-checkbox label="Themen:" class="mt-2" />
+					<v-checkbox label="Aufgabe" class="mt-2 ml-8" />
+					<v-checkbox label="Etherpad" class="mt-2 ml-8" />
+					<v-checkbox label="Geogebra" class="mt-2 ml-8" />
+					<v-checkbox
+						label="Lern-Material (aus dem Lern-Store)"
+						class="mt-2 ml-8"
+					/>
+					<v-checkbox label="Textelemente" class="mt-2 ml-8" />
 				</v-container>
 			</div>
 		</template>
@@ -96,7 +68,7 @@
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiAlert } from "@mdi/js";
+import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
 
 export default defineComponent({
@@ -131,8 +103,8 @@ export default defineComponent({
 			actionButtons: ["next", "cancel"],
 		});
 		modalOptions.value.set(2, {
-			title: t("pages.room.modal.course.download.header"),
-			actionButtons: ["download", "back"],
+			title: t("pages.room.modal.course.download.options.header"),
+			actionButtons: ["export", "cancel", "back"],
 		});
 
 		const actionButtons = computed(() => {
@@ -173,9 +145,12 @@ export default defineComponent({
 			actionButtons,
 			modalTitle,
 			isOpen,
-			mdiAlert,
+			mdiInformation,
 			radios,
 		};
 	},
 });
 </script>
+<style lang="scss" scoped>
+@import "~vuetify/src/styles/styles.sass";
+</style>

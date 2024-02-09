@@ -20,7 +20,7 @@
 						v-if="checkButtons('back')"
 						data-testId="dialog-back"
 						depressed
-						outlined
+						text
 						@click="$emit('back')"
 					>
 						{{ $t("common.actions.back") }}
@@ -69,14 +69,14 @@
 						{{ $t("common.labels.close") }}
 					</v-btn>
 					<v-btn
-						v-if="checkButtons('download')"
-						data-testId="download-dialog"
+						v-if="checkButtons('export')"
+						data-testId="export-dialog"
 						color="primary"
 						depressed
 						@click="confirmDialog"
 					>
-						{{ $t("common.actions.download") }}
-						<v-icon right>{{ mdiTrayArrowDown }}</v-icon>
+						{{ $t("common.actions.export") }}
+						<v-icon right>{{ mdiExport }}</v-icon>
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('next')"
@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import { mdiTrayArrowDown } from "@mdi/js";
+import { mdiExport } from "@mdi/js";
 
 export default {
 	model: {
@@ -137,7 +137,7 @@ export default {
 	},
 	data() {
 		return {
-			mdiTrayArrowDown,
+			mdiExport,
 		};
 	},
 	methods: {

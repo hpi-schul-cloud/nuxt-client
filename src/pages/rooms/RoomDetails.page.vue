@@ -143,7 +143,7 @@ import {
 	mdiPlus,
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
-	mdiTrayArrowDown,
+	mdiExport,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
@@ -204,7 +204,7 @@ export default defineComponent({
 				mdiEmailPlusOutline,
 				mdiShareVariantOutline,
 				mdiContentCopy,
-				mdiTrayArrowDown,
+				mdiExport,
 			},
 			breadcrumbs: [
 				{
@@ -382,9 +382,9 @@ export default defineComponent({
 
 			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
 				items.push({
-					icon: this.icons.mdiTrayArrowDown,
+					icon: this.icons.mdiExport,
 					action: () => this.onDownload(),
-					name: this.$t("common.actions.download"),
+					name: this.$t("common.actions.export"),
 					dataTestId: "title-menu-imscc-download",
 				});
 			}
