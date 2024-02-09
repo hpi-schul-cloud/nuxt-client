@@ -77,19 +77,19 @@ export default defineComponent({
 						icon: mdiPlus,
 						title: this.$t("common.actions.create"),
 						ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
-						dataTestid: "add-course-button",
+						dataTestId: "add-course-button",
 						actions: [
 							{
 								label: this.$t("pages.rooms.fab.add.course"),
 								icon: mdiSchool,
 								href: "/courses/add",
-								dataTestid: "fab_button_add_course",
+								dataTestId: "fab_button_add_course",
 								ariaLabel: this.$t("pages.rooms.fab.add.course"),
 							},
 							{
 								label: this.$t("pages.rooms.fab.import.course"),
 								icon: mdiCloudDownload,
-								dataTestid: "fab_button_import_course",
+								dataTestId: "fab_button_import_course",
 								ariaLabel: this.$t("pages.rooms.fab.import.course"),
 								customEvent: this.fabClick,
 							},
@@ -101,7 +101,7 @@ export default defineComponent({
 					title: this.$t("common.actions.create"),
 					href: "/courses/add",
 					ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
-					dataTestid: "add-course-button",
+					dataTestId: "add-course-button",
 				};
 			}
 
