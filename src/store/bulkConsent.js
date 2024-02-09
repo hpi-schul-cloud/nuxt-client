@@ -7,24 +7,15 @@ export const actions = {
 
 		if (Array.isArray(payload)) {
 			const errors = [];
-			const promiseResult = await Promise.allSettled(
-				payload.forEach((user) => {
-					registered.push(user._id);
-					$axios
-						.patch("/v1/users/admin/students/" + user._id, {
-							...user,
-							createAccount: true,
-						})
-						.catch((error) => errors.push({ updateError: error }));
-				})
-			);
 
-			promiseResult.forEach((promise) => {
-				if (promise.status !== "fulfilled") {
-					errors.push(promise);
-				}
-				if (errors.length)
-					commit("setRegisterError", { promiseErrors: errors });
+			payload.forEach(async (user) => {
+				registered.push(user._id);
+				await $axios
+					.patch("/v1/users/admin/students/" + user._id, {
+						...user,
+						createAccount: true,
+					})
+					.catch((error) => errors.push({ updateError: error }));
 			});
 
 			commit("setRegisteredStudents", registered);
@@ -38,9 +29,6 @@ export const actions = {
 		const response = (
 			await $axios.get(`/v1/users/admin/students`, {
 				params: query,
-				// paramsSerializer: (params) => {
-				// 	return qs.stringify(params);
-				// },
 			})
 		).data;
 
