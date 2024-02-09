@@ -1,8 +1,8 @@
 <template>
-	<ContentElementBar class="menu">
+	<ContentElementBar class="image-display menu">
 		<template #display>
 			<div
-				class="image-display d-flex align-center"
+				class="d-flex align-center"
 				style="min-height: 52px"
 				@click="openLightBox"
 			>
