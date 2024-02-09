@@ -94,7 +94,7 @@ export const useBoardState = (id: string) => {
 			const columnIndex = board.value.columns.findIndex(
 				(column) => column.cards.find((c) => c.cardId === id) !== undefined
 			);
-			if (columnIndex) {
+			if (columnIndex !== -1) {
 				const cardIndex = board.value.columns[columnIndex].cards.findIndex(
 					(c) => c.cardId === id
 				);
