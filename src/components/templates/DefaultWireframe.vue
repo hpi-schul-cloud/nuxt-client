@@ -49,7 +49,9 @@
 			}"
 			class="main-content"
 		>
-			<slot />
+			<div style="padding: 0 var(--space-lg)">
+				<slot />
+			</div>
 		</v-container>
 	</v-container>
 </template>
@@ -108,8 +110,11 @@ export default defineComponent({
 	margin-bottom: var(--space-md);
 }
 
-.wireframe-container {
+.wireframe-header {
 	padding: 0 var(--space-lg);
+}
+.wireframe-container {
+	padding: 0;
 }
 
 :deep(.v-application__wrap) {
@@ -117,6 +122,7 @@ export default defineComponent({
 }
 
 .main-content {
+	overflow: scroll;
 	padding: 0;
 }
 
