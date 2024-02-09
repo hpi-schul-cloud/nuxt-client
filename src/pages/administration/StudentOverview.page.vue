@@ -41,7 +41,7 @@
 			<backend-data-table
 				:actions="filteredActions"
 				:columns="filteredColumns"
-				v-model:current-page-selection-state="page"
+				v-model:current-page="page"
 				:data="students"
 				:paginated="true"
 				v-model:rows-per-page="limit"
