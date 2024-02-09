@@ -218,11 +218,6 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		},
 	},
 	{
-		path: "/news-cancel",
-		redirect: "/news",
-		name: "news-cancel",
-	},
-	{
 		path: "/news/new",
 		component: () => import("@/pages/NewsCreate.page.vue"),
 		name: "news-new",
