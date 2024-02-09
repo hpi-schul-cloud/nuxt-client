@@ -109,6 +109,7 @@ export default defineComponent({
 		text-overflow: clip;
 		white-space: normal;
 		word-break: break-word;
+		line-height: 1rem;
 	}
 	.item-subtitle {
 		overflow: unset;
