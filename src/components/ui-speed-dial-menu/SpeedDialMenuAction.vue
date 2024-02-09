@@ -1,3 +1,4 @@
+-
 <template>
 	<transition
 		:name="orientation === 'left' ? 'slide-fade-left' : 'slide-fade-right'"
@@ -15,6 +16,7 @@
 					icon
 					size="small"
 					:href="href"
+					:to="to"
 					@click="onClick"
 					role="menuitem"
 					:data-testid="dataTestId"
@@ -27,6 +29,7 @@
 					tabindex="-1"
 					aria-hidden="true"
 					:href="href"
+					:to="to"
 					@click="onClick"
 					><slot />
 				</v-btn>
@@ -49,6 +52,7 @@
 					icon
 					size="small"
 					:href="href"
+					:to="to"
 					@click="onClick"
 					role="menuitem"
 				>
