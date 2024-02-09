@@ -27,7 +27,7 @@
 				>
 					<v-icon>{{ mdiPlay }}</v-icon>
 				</v-btn>
-				<div class="duration pb-1 pl-1 pr-2 pt-1 text-body-2">
+				<div class="duration py-1 pl-1 pr-2 text-body-2">
 					{{ durationDisplay }}
 				</div>
 				<v-slider
