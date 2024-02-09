@@ -2,16 +2,18 @@
 	<ContentElementBar class="menu">
 		<template #display>
 			<div
-				class="d-flex align-center"
+				class="image-display d-flex align-center"
 				style="min-height: 52px"
 				@click="openLightBox"
 			>
-				<PreviewImage
-					:src="previewSrc"
-					:alt="alternativeText"
-					:cover="true"
-					@error="onImageError"
-				/>
+				<div class="w-100 h-100">
+					<PreviewImage
+						:src="previewSrc"
+						:alt="alternativeText"
+						:cover="true"
+						@error="onImageError"
+					/>
+				</div>
 			</div>
 		</template>
 		<template #menu>
@@ -83,3 +85,8 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped lang="scss">
+.image-display:focus {
+	outline: none;
+}
+</style>

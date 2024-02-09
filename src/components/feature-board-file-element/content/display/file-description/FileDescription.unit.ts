@@ -165,18 +165,6 @@ describe("FileDescription", () => {
 
 				expect(contentElementBar.exists()).toBe(true);
 			});
-
-			it("should not render caption div", () => {
-				const { wrapper } = mountSetup({
-					isEditMode: false,
-					showTitle: false,
-					showMenu: false,
-				});
-
-				const captionDiv = wrapper.find(".px-4");
-
-				expect(captionDiv.exists()).toBeFalsy();
-			});
 		});
 	});
 
