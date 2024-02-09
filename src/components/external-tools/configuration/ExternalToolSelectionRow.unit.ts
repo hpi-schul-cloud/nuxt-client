@@ -15,6 +15,9 @@ describe("ExternalToolSelectionRow", () => {
 				item: {
 					logoUrl: "expectedLogoUrl",
 					name: "expectedName",
+					externalToolId: "expectedExternalToolId",
+					version: 1,
+					parameters: [],
 				},
 				maxHeight: maxHeight,
 				maxWidth: maxWidth,
