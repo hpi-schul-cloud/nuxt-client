@@ -4,10 +4,10 @@
 			<v-img
 				cover
 				v-if="item.logoUrl"
-				:max-height="$props.maxHeight"
-				:max-width="$props.maxWidth"
+				:max-height="maxHeight"
+				:max-width="maxWidth"
 				:src="item.logoUrl"
-				:width="$props.maxHeight"
+				:width="maxHeight"
 				class="mx-2"
 			/>
 		</template>
