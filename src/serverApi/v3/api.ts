@@ -8931,6 +8931,44 @@ export const BoardSubmissionApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @summary Delete a single submission item.
+         * @param {string} submissionItemId The id of the submission item.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardSubmissionControllerDeleteSubmissionItem: async (submissionItemId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'submissionItemId' is not null or undefined
+            assertParamExists('boardSubmissionControllerDeleteSubmissionItem', 'submissionItemId', submissionItemId)
+            const localVarPath = `/board-submissions/{submissionItemId}`
+                .replace(`{${"submissionItemId"}}`, encodeURIComponent(String(submissionItemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get a list of submission items by their parent container.
          * @param {string} submissionContainerId The id of the submission container.
          * @param {*} [options] Override http request option.
@@ -9035,6 +9073,17 @@ export const BoardSubmissionApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Delete a single submission item.
+         * @param {string} submissionItemId The id of the submission item.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardSubmissionControllerDeleteSubmissionItem(submissionItemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardSubmissionControllerDeleteSubmissionItem(submissionItemId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get a list of submission items by their parent container.
          * @param {string} submissionContainerId The id of the submission container.
          * @param {*} [options] Override http request option.
@@ -9079,6 +9128,16 @@ export const BoardSubmissionApiFactory = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Delete a single submission item.
+         * @param {string} submissionItemId The id of the submission item.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardSubmissionControllerDeleteSubmissionItem(submissionItemId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.boardSubmissionControllerDeleteSubmissionItem(submissionItemId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get a list of submission items by their parent container.
          * @param {string} submissionContainerId The id of the submission container.
          * @param {*} [options] Override http request option.
@@ -9117,6 +9176,16 @@ export interface BoardSubmissionApiInterface {
      * @memberof BoardSubmissionApiInterface
      */
     boardSubmissionControllerCreateElement(submissionItemId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse>;
+
+    /**
+     * 
+     * @summary Delete a single submission item.
+     * @param {string} submissionItemId The id of the submission item.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardSubmissionApiInterface
+     */
+    boardSubmissionControllerDeleteSubmissionItem(submissionItemId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -9159,6 +9228,18 @@ export class BoardSubmissionApi extends BaseAPI implements BoardSubmissionApiInt
      */
     public boardSubmissionControllerCreateElement(submissionItemId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any) {
         return BoardSubmissionApiFp(this.configuration).boardSubmissionControllerCreateElement(submissionItemId, createContentElementBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete a single submission item.
+     * @param {string} submissionItemId The id of the submission item.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardSubmissionApi
+     */
+    public boardSubmissionControllerDeleteSubmissionItem(submissionItemId: string, options?: any) {
+        return BoardSubmissionApiFp(this.configuration).boardSubmissionControllerDeleteSubmissionItem(submissionItemId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
