@@ -6,21 +6,20 @@ export const actions = {
 		const registered = [];
 
 		if (Array.isArray(payload)) {
-			const errors = [];
-
 			payload.forEach(async (user) => {
-				registered.push(user._id);
 				await $axios
 					.patch("/v1/users/admin/students/" + user._id, {
 						...user,
 						createAccount: true,
 					})
-					.catch((error) => errors.push({ updateError: error }));
+					.catch((error) => {
+						commit("setRegisterError", error);
+					});
+
+				registered.push(user._id);
 			});
 
 			commit("setRegisteredStudents", registered);
-		} else {
-			commit("setRegisterError", { mapError: true });
 		}
 	},
 
