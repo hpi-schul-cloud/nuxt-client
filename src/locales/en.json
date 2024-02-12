@@ -208,7 +208,6 @@
 	"components.elementTypeSelection.elements.submissionElement.subtitle": "Submission",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle": "External tools",
-	"components.elementTypeSelection.elements.boardElement.subtitle": "Whiteboard",
 	"components.legacy.footer.ariaLabel": "Link, {itemName}",
 	"components.legacy.footer.accessibility.report": "Accessibility feedback",
 	"components.legacy.footer.accessibility.statement": "Accessibility statement",
