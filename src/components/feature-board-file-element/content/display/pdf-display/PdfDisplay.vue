@@ -1,5 +1,5 @@
 <template>
-	<ContentElementBar>
+	<ContentElementBar class="pdf-display">
 		<template #display>
 			<div @click="openPdf">
 				<PreviewImage
@@ -18,10 +18,10 @@
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
-import { PropType, defineComponent } from "vue";
-import { PreviewImage } from "@ui-preview-image";
-import { useI18n } from "vue-i18n";
 import { ContentElementBar } from "@ui-board";
+import { PreviewImage } from "@ui-preview-image";
+import { PropType, defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "PdfDisplay",
@@ -51,3 +51,8 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped lang="scss">
+.pdf-display:focus {
+	outline: none;
+}
+</style>
