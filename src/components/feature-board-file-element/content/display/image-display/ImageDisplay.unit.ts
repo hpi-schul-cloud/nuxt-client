@@ -4,9 +4,8 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { ColorOverlay } from "@ui-color-overlay";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { ref } from "vue";
 import ImageDisplay from "./ImageDisplay.vue";
 
@@ -39,9 +38,12 @@ describe("ImageDisplay", () => {
 			(downloadUrl) => downloadUrl
 		);
 
-		const wrapper = shallowMount(ImageDisplay, {
+		const wrapper = mount(ImageDisplay, {
 			props: propsData,
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { PreviewImage: true },
+			},
 		});
 
 		return {
@@ -64,17 +66,6 @@ describe("ImageDisplay", () => {
 			expect(fileContentElement.exists()).toBe(true);
 		});
 
-		it("should render color overlay with correct props", () => {
-			const { wrapper } = setup({ isEditMode: false });
-
-			const colorOverlay = wrapper.findComponent(ColorOverlay);
-
-			expect(colorOverlay.exists()).toBe(true);
-			expect(colorOverlay.props("isOverlayDisabled")).toBe(false);
-			expect(colorOverlay.props("color")).toBe("rgba(var(--v-theme-black))");
-			expect(colorOverlay.props("opacity")).toBeUndefined;
-		});
-
 		it("should display image with correct props", () => {
 			const { wrapper, previewSrc, nameProp } = setup({ isEditMode: false });
 
@@ -86,17 +77,6 @@ describe("ImageDisplay", () => {
 			expect(image.attributes("alt")).toBe(
 				"components.cardElement.fileElement.emptyAlt " + nameProp
 			);
-		});
-
-		describe("when preview image emits error", () => {
-			it("should disable color overlay", async () => {
-				const { wrapper } = setup({ isEditMode: false });
-				const previewImage = wrapper.find(imageSelektor);
-				await previewImage.trigger("error");
-
-				const colorOverlay = wrapper.findComponent(ColorOverlay);
-				expect(colorOverlay.props("isOverlayDisabled")).toBe(true);
-			});
 		});
 
 		describe("when alternative text is defined", () => {
@@ -125,7 +105,7 @@ describe("ImageDisplay", () => {
 			});
 		});
 
-		describe("when color overlay emits on:action", () => {
+		describe("when div emits click", () => {
 			it("should call open function", () => {
 				const alternativeText = "alternative text";
 				const { wrapper, src, nameProp, open } = setup({
@@ -139,8 +119,9 @@ describe("ImageDisplay", () => {
 					name: nameProp,
 				};
 
-				const colorOverlay = wrapper.findComponent(ColorOverlay);
-				colorOverlay.vm.$emit("on:action");
+				const image = wrapper.find(imageSelektor);
+				expect(image.exists()).toBe(true);
+				image.trigger("click");
 
 				expect(open).toHaveBeenCalledTimes(1);
 				expect(open).toHaveBeenCalledWith(options);
@@ -155,17 +136,6 @@ describe("ImageDisplay", () => {
 			const fileContentElement = wrapper.findComponent(ImageDisplay);
 
 			expect(fileContentElement.exists()).toBe(true);
-		});
-
-		it("should render color overlay with correct props", () => {
-			const { wrapper } = setup({ isEditMode: true });
-
-			const colorOverlay = wrapper.findComponent(ColorOverlay);
-
-			expect(colorOverlay.exists()).toBe(true);
-			expect(colorOverlay.props("isOverlayDisabled")).toBe(true);
-			expect(colorOverlay.props("color")).toBe("rgba(var(--v-theme-black))");
-			expect(colorOverlay.props("opacity")).toBeUndefined;
 		});
 
 		it("should display image with correct props", () => {

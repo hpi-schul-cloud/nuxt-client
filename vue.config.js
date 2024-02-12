@@ -57,7 +57,6 @@ module.exports = defineConfig({
 				"@feature-news-form": getDir("src/components/feature-news-form"),
 				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
-				"@ui-color-overlay": getDir("src/components/ui-color-overlay"),
 				"@ui-preview-image": getDir("src/components/ui-preview-image"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"

@@ -1,18 +1,16 @@
 <template>
-	<v-menu max-height="120px" min-width="150px" offset="75px">
+	<v-menu max-height="120px" min-width="150px" location="bottom center">
 		<template v-slot:activator="{ props }">
 			<v-btn
 				data-testid="speed-menu-play-speed"
 				v-bind="props"
-				icon
-				size="small"
-				variant="flat"
 				color="transparent"
+				density="comfortable"
+				icon
+				variant="flat"
 				:aria-label="$t('component.cardElement.fileElement.audioPlayer.speed')"
 			>
-				<v-icon>
-					{{ mdiPlaySpeed }}
-				</v-icon>
+				<v-icon>{{ mdiPlaySpeed }}</v-icon>
 			</v-btn>
 		</template>
 
