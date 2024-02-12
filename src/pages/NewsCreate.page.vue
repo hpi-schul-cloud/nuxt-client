@@ -14,7 +14,7 @@
 		:full-width="false"
 	>
 		<div>
-			<form-news @save="create" @cancel="cancelHandler" />
+			<form-news @save="create" @cancel="onCancel" />
 		</div>
 	</default-wireframe>
 </template>
@@ -76,10 +76,8 @@ export default {
 				});
 			}
 		},
-		async cancelHandler() {
-			this.$router.push({
-				name: "news",
-			});
+		async onCancel() {
+			this.$router.go(-1);
 		},
 	},
 	mounted() {
