@@ -2,24 +2,60 @@ import generatePassword from "@/mixins/generatePassword";
 import { $axios } from "@/utils/api";
 
 export const actions = {
+	/**
+	 * The register method is disabled and re-implemented simply below.
+	 * The promiseResult.forEach is not working as expected and the errors are not being caught.
+	 */
+	// async register({ commit }, payload) {
+	// 	const registered = [];
+
+	// 	if (Array.isArray(payload)) {
+	// 		const errors = [];
+	// 		const promiseResult = await Promise.allSettled(
+	// 			payload.forEach((user) => {
+	// 				registered.push(user._id);
+	// 				$axios
+	// 					.patch("/v1/users/admin/students/" + user._id, {
+	// 						...user,
+	// 						createAccount: true,
+	// 					})
+	// 					.catch((error) => errors.push({ updateError: error }));
+	// 			})
+	// 		);
+
+	// 		promiseResult.forEach((promise) => {
+	// 			if (promise.status !== "fulfilled") {
+	// 				errors.push(promise);
+	// 			}
+	// 			if (errors.length)
+	// 				commit("setRegisterError", { promiseErrors: errors });
+	// 		});
+
+	// 		commit("setRegisteredStudents", registered);
+	// 	} else {
+	// 		commit("setRegisterError", { mapError: true });
+	// 	}
+	// },
+
 	async register({ commit }, payload) {
 		const registered = [];
 
 		if (Array.isArray(payload)) {
+			const errors = [];
+
 			payload.forEach(async (user) => {
+				registered.push(user._id);
 				await $axios
 					.patch("/v1/users/admin/students/" + user._id, {
 						...user,
 						createAccount: true,
 					})
-					.catch((error) => {
-						commit("setRegisterError", error);
-					});
-
-				registered.push(user._id);
+					.catch((error) => errors.push({ updateError: error }));
 			});
 
 			commit("setRegisteredStudents", registered);
+		} else {
+			commit("setRegisterError", { mapError: true });
 		}
 	},
 
