@@ -1088,7 +1088,7 @@
 	"pages.videoConference.info.notStarted": "La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.noPermission": "La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",
 	"pages.videoConference.action.refresh": "Estado de actualización",
-	"ui-confirmation-dialog.ask-delete.card": "¿Eliminar {type} {title}?",
+	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type} {title}?",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-board-external-tool-element.placeholder.selectTool": "Herramienta de selección...",
 	"feature-board-external-tool-element.dialog.title": "Selección y configuración",
