@@ -1,15 +1,13 @@
 <template>
-	<v-app>
-		<legacy-logged-in>
-			<v-main id="main-content" class="content">
-				<application-error-wrapper>
-					<snackbar />
-					<router-view />
-				</application-error-wrapper>
-			</v-main>
-			<loading-state-dialog />
-		</legacy-logged-in>
-	</v-app>
+	<legacy-logged-in>
+		<v-main id="main-content" class="content">
+			<application-error-wrapper>
+				<snackbar />
+				<router-view />
+			</application-error-wrapper>
+		</v-main>
+		<loading-state-dialog />
+	</legacy-logged-in>
 </template>
 
 <script>

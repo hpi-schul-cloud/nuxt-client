@@ -1,20 +1,18 @@
 <template>
-	<v-app>
-		<div class="page">
-			<div class="topbar" data-testid="logged-out-top-bar">
-				<navigation-bar
-					:buttons="true"
-					:img="require('@/assets/img/logo/logo-image-mono.svg')"
-					:links="navbarItems"
-				/>
-			</div>
-			<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
-				<slot />
-			</div>
-			<the-footer class="footer" />
-			<application-error-routing />
+	<div class="page">
+		<div class="topbar" data-testid="logged-out-top-bar">
+			<navigation-bar
+				:buttons="true"
+				:img="require('@/assets/img/logo/logo-image-mono.svg')"
+				:links="navbarItems"
+			/>
 		</div>
-	</v-app>
+		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
+			<slot />
+		</div>
+		<the-footer class="footer" />
+		<application-error-routing />
+	</div>
 </template>
 
 <script>
