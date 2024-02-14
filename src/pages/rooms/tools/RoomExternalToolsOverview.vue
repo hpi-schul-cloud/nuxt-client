@@ -115,6 +115,15 @@ export default defineComponent({
 			course.value = await roomModule.fetchCourse(props.roomId);
 		});
 
+		const refreshTimeInMs = 299000;
+
+		setInterval(async () => {
+			await contextExternalToolsModule.loadExternalToolDisplayData({
+				contextId: props.roomId,
+				contextType: ToolContextType.Course,
+			});
+		}, refreshTimeInMs);
+
 		const apiError: ComputedRef<BusinessError> = computed(
 			() => contextExternalToolsModule.getBusinessError
 		);
