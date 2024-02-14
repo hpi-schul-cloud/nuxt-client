@@ -29,7 +29,7 @@
 				</v-btn>
 				<context-menu
 					v-model:show="actionsMenuOpen"
-					anchor="top-right"
+					anchor="top-left"
 					:actions="contextActions"
 					@action="fireAction"
 				/>

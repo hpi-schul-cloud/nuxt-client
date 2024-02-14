@@ -250,6 +250,10 @@ export default defineComponent({
 	.marker-dull-green {
 		background-color: var(--ck-highlight-marker-dull-green);
 	}
+	ul,
+	ol {
+		padding-left: revert;
+	}
 }
 
 .ck-blurred {

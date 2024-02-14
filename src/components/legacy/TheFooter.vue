@@ -97,12 +97,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/mixins";
+
 .footer {
 	width: 100%;
 	padding: 0 var(--space-md);
 	margin: var(--space-lg) 0 var(--space-md);
 	color: rgba(var(--v-theme-secondary-darken-1));
 	text-align: center;
+
+	@include breakpoint(tablet) {
+		max-width: calc(100vw - var(--sidebar-width-tablet));
+	}
+
+	@include breakpoint(desktop) {
+		max-width: calc(100vw - var(--sidebar-width));
+	}
 }
 
 .top-line {

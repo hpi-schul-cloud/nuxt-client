@@ -111,7 +111,7 @@ const onDelete = async () => {
 };
 
 const onCancel = async () => {
-	router.push({ path: `/news/${route.params.id}` });
+	router.go(-1);
 };
 
 const showNotifier = (type: AlertStatus, method: "remove" | "patch") => {
