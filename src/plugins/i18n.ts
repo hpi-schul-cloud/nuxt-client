@@ -1,5 +1,5 @@
 import { authModule, envConfigModule } from "@/store";
-import { createI18n, useI18n } from "vue-i18n";
+import { createI18n } from "vue-i18n";
 import { deDE } from "../locales/de";
 import { enGB } from "../locales/en";
 import { esES } from "../locales/es";
@@ -50,5 +50,3 @@ const localCreateI18n = () => {
 };
 
 export { localCreateI18n as createI18n };
-
-useI18n();
