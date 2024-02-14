@@ -1,6 +1,6 @@
-import { I18nKeys } from "@/plugins/i18n";
+import { I18nLanguage } from "@/plugins/i18n";
 
-export const esES: I18nKeys = {
+export const esES: I18nLanguage = {
 	"pages.rooms.tools.incomplete": "Configuración incompleta",
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Por favor pasa esta información: {sourceSchoolNumber}, número de escuela en {targetSystem}: {targetSchoolNumber}.</b>",

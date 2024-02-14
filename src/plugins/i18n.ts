@@ -1,17 +1,17 @@
 import { authModule, envConfigModule } from "@/store";
-import { createI18n } from "vue-i18n";
+import { createI18n, useI18n } from "vue-i18n";
 import { deDE } from "../locales/de";
 import { enGB } from "../locales/en";
 import { esES } from "../locales/es";
 import { ukUA } from "../locales/uk";
 
-export declare type I18nKeys = typeof deDE;
+export declare type I18nLanguage = typeof deDE;
 
-export declare type I18nConfig = { message: I18nKeys };
+export declare type I18nConfig = { message: I18nLanguage };
 
 declare type SupportedLanguages = "en" | "de" | "es" | "uk";
 
-const messages: Record<SupportedLanguages, I18nKeys> = {
+const messages: Record<SupportedLanguages, I18nLanguage> = {
 	en: enGB,
 	de: deDE,
 	es: esES,
@@ -38,7 +38,7 @@ const numberFormats = {
 };
 
 const localCreateI18n = () => {
-	const i18n = createI18n<I18nKeys, SupportedLanguages>({
+	const i18n = createI18n<I18nLanguage, SupportedLanguages>({
 		legacy: false,
 		locale: authModule.getLocale,
 		fallbackLocale: envConfigModule.getFallbackLanguage,
@@ -50,3 +50,5 @@ const localCreateI18n = () => {
 };
 
 export { localCreateI18n as createI18n };
+
+useI18n();

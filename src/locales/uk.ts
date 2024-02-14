@@ -1,6 +1,6 @@
-import { I18nKeys } from "@/plugins/i18n";
+import { I18nLanguage } from "@/plugins/i18n";
 
-export const ukUA: I18nKeys = {
+export const ukUA: I18nLanguage = {
 	"pages.rooms.tools.incomplete": "Конфігурація не завершена",
 	"components.organisms.importUsers.searchAdminMatched":
 		"Пошук підключено адміністратором",
