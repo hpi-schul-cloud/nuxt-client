@@ -12,7 +12,10 @@ import {
 	defaultPermissions,
 } from "@/types/board/Permissions";
 import { BoardMenuActionMoveLeft, BoardMenuActionMoveRight } from "@ui-board";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -40,7 +43,7 @@ describe("BoardColumnHeader", () => {
 
 		const wrapper = shallowMount(BoardColumnHeader, {
 			global: {
-				plugins: [createTestingI18n()],
+				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
 			propsData: {
 				title: "title-text",
