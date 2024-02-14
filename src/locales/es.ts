@@ -1,6 +1,6 @@
 import { I18nLanguage } from "@/plugins/i18n";
 
-export const enGB: I18nLanguage = {
+export const esES: I18nLanguage = {
 	"common.action.publish": "Publicar",
 	"common.actions.add": "Añadir",
 	"common.actions.back": "Atrás",
