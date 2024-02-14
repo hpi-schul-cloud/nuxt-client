@@ -43,7 +43,6 @@
 
 <script lang="ts">
 import { FileRecordParentType, PreviewWidth } from "@/fileStorageApi/v3";
-import { I18nConfig } from "@/plugins/i18n";
 import { FileElementResponse } from "@/serverApi/v3";
 import {
 	convertDownloadToPreviewUrl,
