@@ -1,23 +1,23 @@
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import flushPromises from "flush-promises";
-import Vue from "vue";
 import RoomModule from "@/store/room";
-import {
-	courseFactory,
-	businessErrorFactory,
-	externalToolDisplayDataFactory,
-} from "@@/tests/test-utils/factory";
 import { CourseFeatures } from "@/store/types/room";
-import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	I18N_KEY,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	businessErrorFactory,
+	courseFactory,
+	externalToolDisplayDataFactory,
+} from "@@/tests/test-utils/factory";
+import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import flushPromises from "flush-promises";
+import Vue from "vue";
+import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 
 describe("RoomExternalToolOverview", () => {
 	let el: HTMLDivElement;
@@ -182,6 +182,31 @@ describe("RoomExternalToolOverview", () => {
 			});
 
 			expect(vcSection.exists()).toEqual(false);
+		});
+	});
+
+	describe("when refresh time is over", () => {
+		const setup = () => {
+			const { contextExternalToolsModule } = getWrapper([]);
+
+			return {
+				contextExternalToolsModule,
+			};
+		};
+
+		it("should call tool reference endpoint again", () => {
+			jest.useFakeTimers("legacy");
+			const { contextExternalToolsModule } = setup();
+
+			expect(
+				contextExternalToolsModule.loadExternalToolDisplayData
+			).toHaveBeenCalledTimes(1);
+
+			jest.advanceTimersByTime(300000);
+
+			expect(
+				contextExternalToolsModule.loadExternalToolDisplayData
+			).toHaveBeenCalledTimes(2);
 		});
 	});
 });

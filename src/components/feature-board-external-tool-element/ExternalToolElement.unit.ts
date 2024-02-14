@@ -661,4 +661,42 @@ describe("ExternalToolElement", () => {
 			});
 		});
 	});
+
+	describe("when refresh time is over", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper(
+				{
+					element: {
+						...EMPTY_TEST_ELEMENT,
+						content: { contextExternalToolId: "contextExternalToolId" },
+					},
+					isEditMode: false,
+				},
+				externalToolDisplayDataFactory.build({
+					status: schoolToolConfigurationStatusFactory.build(),
+				})
+			);
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should call tool reference endpoint again", async () => {
+			jest.useFakeTimers("legacy");
+			setup();
+			await Vue.nextTick();
+
+			expect(
+				useExternalToolLaunchStateMock.fetchLaunchRequest
+			).toHaveBeenCalledTimes(1);
+
+			jest.advanceTimersByTime(300000);
+			await Vue.nextTick();
+
+			expect(
+				useExternalToolLaunchStateMock.fetchLaunchRequest
+			).toHaveBeenCalledTimes(2);
+		});
+	});
 });
