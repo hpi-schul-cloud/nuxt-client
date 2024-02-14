@@ -1,15 +1,21 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { authModule, envConfigModule } from "@/store";
 import { createI18n } from "vue-i18n";
+import { deDE } from "../locales/de";
+import { enGB } from "../locales/en";
+import { esES } from "../locales/es";
+import { ukUA } from "../locales/uk";
 
-const loadLocaleMessages = () => {
-	const messages = {
-		en: require("../locales/en.json").default,
-		de: require("../locales/de.json").default,
-		es: require("../locales/es.json").default,
-		uk: require("../locales/uk.json").default,
-	};
-	return messages;
+export declare type I18nKeys = typeof deDE;
+
+export declare type I18nConfig = { message: I18nKeys };
+
+declare type SupportedLanguages = "en" | "de" | "es" | "uk";
+
+const messages: Record<SupportedLanguages, I18nKeys> = {
+	en: enGB,
+	de: deDE,
+	es: esES,
+	uk: ukUA,
 };
 
 const fileSizeFormat = {
@@ -32,11 +38,11 @@ const numberFormats = {
 };
 
 const localCreateI18n = () => {
-	const i18n = createI18n({
+	const i18n = createI18n<I18nKeys, SupportedLanguages>({
 		legacy: false,
 		locale: authModule.getLocale,
 		fallbackLocale: envConfigModule.getFallbackLanguage,
-		messages: loadLocaleMessages(),
+		messages: messages,
 		numberFormats,
 	});
 
