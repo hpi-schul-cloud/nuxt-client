@@ -6,6 +6,7 @@
 				variant="text"
 				class="mb-2"
 				:color="isColumnActive ? 'text-black' : 'text-grey-darken-2'"
+				data-testid="add-column"
 				@click="onAddColumn"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>
