@@ -471,7 +471,7 @@ export default defineComponent({
 			this.downloadModule.startDownloadFlow();
 			this.downloadDialog.model = "download";
 			this.downloadDialog.header = this.$t(
-				"pages.room.modal.course.download.header"
+				"pages.room.modal.course.export.header"
 			);
 			this.downloadDialog.isOpen = true;
 		},

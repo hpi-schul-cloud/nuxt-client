@@ -11,9 +11,9 @@ export default class DownloadModule extends VuexModule {
 	private version = "";
 
 	@Action
-	async startDownload(): Promise<void> {
-		if (this.version === "1.1.0" || this.version === "1.3.0") {
-			roomModule.downloadImsccCourse(this.version);
+	async startDownload(version: string): Promise<void> {
+		if (version === "1.1.0" || version === "1.3.0") {
+			await roomModule.downloadImsccCourse(version);
 		}
 	}
 

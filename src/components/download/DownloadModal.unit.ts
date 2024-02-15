@@ -1,14 +1,16 @@
 import DownloadModal from "@/components/download/DownloadModal.vue";
 import DownloadModule from "@/store/download";
-import { I18N_KEY } from "@/utils/inject";
+import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { MountOptions, mount } from "@vue/test-utils";
 import Vue from "vue";
+import NotifierModule from "@/store/notifier";
 
 describe("@/components/download/DownloadModal", () => {
 	let downloadModuleMock: DownloadModule;
+	let notifierModuleMock: NotifierModule;
 
 	const getWrapper = () => {
 		const wrapper = mount(DownloadModal as MountOptions<Vue>, {
@@ -20,6 +22,7 @@ describe("@/components/download/DownloadModal", () => {
 				[I18N_KEY.valueOf()]: {
 					t: (key: string) => key,
 				},
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				$store: {
 					dispatch: downloadModuleMock.startDownloadFlow,
 				},
@@ -38,6 +41,7 @@ describe("@/components/download/DownloadModal", () => {
 			startDownload: jest.fn(),
 			resetDownloadFlow: jest.fn(),
 		});
+		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
 	it("should render", () => {

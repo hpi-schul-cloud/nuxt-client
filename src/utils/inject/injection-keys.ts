@@ -1,6 +1,7 @@
 import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
+import DownloadModule from "@/store/download";
 import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
 import NotifierModule from "@/store/notifier";
@@ -45,3 +46,5 @@ export const TERMS_OF_USE_MODULE_KEY: InjectionKey<TermsOfUseModule> =
 	Symbol("termsOfUseModule");
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
 	Symbol("schoolsModule");
+export const DOWNLOAD_MODULE_KEY: InjectionKey<DownloadModule> =
+	Symbol("downloadModule");

@@ -20,7 +20,7 @@
 						v-if="checkButtons('back')"
 						data-testId="dialog-back"
 						depressed
-						text
+						outlined
 						@click="$emit('back')"
 					>
 						{{ $t("common.actions.back") }}
@@ -69,16 +69,6 @@
 						{{ $t("common.labels.close") }}
 					</v-btn>
 					<v-btn
-						v-if="checkButtons('export')"
-						data-testId="export-dialog"
-						color="primary"
-						depressed
-						@click="confirmDialog"
-					>
-						{{ $t("common.actions.export") }}
-						<v-icon right>{{ mdiExport }}</v-icon>
-					</v-btn>
-					<v-btn
 						v-if="checkButtons('next')"
 						data-testId="dialog-next"
 						color="primary"
@@ -94,8 +84,6 @@
 </template>
 
 <script>
-import { mdiExport } from "@mdi/js";
-
 export default {
 	model: {
 		prop: "isOpen",
@@ -134,11 +122,6 @@ export default {
 			type: Array,
 			default: () => ["cancel", "confirm"],
 		},
-	},
-	data() {
-		return {
-			mdiExport,
-		};
 	},
 	methods: {
 		confirmDialog() {

@@ -59,6 +59,7 @@ import {
 	APPLICATION_ERROR_KEY,
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	DOWNLOAD_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	I18N_KEY,
@@ -172,6 +173,7 @@ Vue.use(VueDOMPurifyHTML, {
 			[I18N_KEY.valueOf()]: i18n,
 			[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 			downloadModule,
+			[DOWNLOAD_MODULE_KEY.valueOf()]: downloadModule,
 		},
 		render: (h) => h(App),
 	}).$mount("#app");
