@@ -11,6 +11,7 @@ import { User } from "@/store/types/auth";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
+	DOWNLOAD_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -143,7 +144,7 @@ const getWrapper: any = () => {
 			loadingStateModule: loadingStateModuleMock,
 			notifierModule: notifierModuleMock,
 			shareModule: shareModuleMock,
-			downloadModule: downloadModuleMock,
+			[DOWNLOAD_MODULE_KEY.valueOf()]: downloadModuleMock,
 			[I18N_KEY.valueOf()]: { t: (key: string) => key },
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
@@ -370,6 +371,26 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 		});
 
+		describe("test Course export", () => {
+			it("should call onDownload method when 'Export Course' menu clicked", async () => {
+				envConfigModule.setEnvs({
+					FEATURE_IMSCC_COURSE_EXPORT_ENABLED: true,
+				} as Envs);
+				const onDownload = jest.fn();
+				const wrapper = getWrapper();
+				wrapper.vm.onDownload = onDownload;
+
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const moreActionButton = wrapper.find(
+					`[data-testid=title-menu-imscc-download]`
+				);
+				await moreActionButton.trigger("click");
+
+				expect(onDownload).toHaveBeenCalled();
+			});
+		});
+
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const shareCourseSpy = jest.fn();
@@ -397,24 +418,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			expect(shareModuleMock.startShareFlow).toHaveBeenCalledWith({
 				id: "123",
 				type: ShareTokenBodyParamsParentTypeEnum.Courses,
-			});
-		});
-
-		describe("download modal", () => {
-			it("should open download modal", async () => {
-				envConfigModule.setEnvs({
-					FEATURE_IMSCC_COURSE_EXPORT_ENABLED: true,
-				} as Envs);
-
-				const wrapper = getWrapper();
-				const threeDotButton = wrapper.find(".three-dot-button");
-				await threeDotButton.trigger("click");
-				const downloadButton = wrapper.find(
-					`[data-testid=title-menu-imscc-download]`
-				);
-				await downloadButton.trigger("click");
-
-				expect(downloadModuleMock.startDownloadFlow).toHaveBeenCalled();
 			});
 		});
 

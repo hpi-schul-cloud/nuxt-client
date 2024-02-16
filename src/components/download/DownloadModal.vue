@@ -38,9 +38,7 @@
 							<v-icon color="info">{{ mdiInformation }}</v-icon>
 						</div>
 						<p>
-							<strong>
-								{{ $t(`components.molecules.download.options.info`) }}
-							</strong>
+							{{ $t(`components.molecules.download.options.info`) }}
 							<br />
 							&middot;
 							{{ $t(`components.molecules.download.options.info.point1`) }}
@@ -49,14 +47,13 @@
 							{{ $t(`components.molecules.download.options.info.point2`) }}
 						</p>
 					</div>
-					<v-container fluid>
+					<v-container fluid class="pt-0">
 						<v-checkbox
 							:value="allTopicsSelected"
 							:indeterminate="someTopicsSelected"
 							@click="toggleAllTopics"
 							label="Themen:"
 						/>
-
 						<v-checkbox
 							v-for="item in allTopics"
 							v-model="item.isSelected"
@@ -70,7 +67,6 @@
 							@click="toggleAllTasks"
 							label="Aufgaben:"
 						/>
-
 						<v-checkbox
 							v-for="item in allTasks"
 							v-model="item.isSelected"
@@ -84,15 +80,32 @@
 			<v-card-actions>
 				<div class="button-section">
 					<v-btn
-						v-if="isOpen"
-						data-testid="dialog-cancel-btn"
-						@click="onCloseDialog"
+						v-if="step === 1 && isOpen"
+						data-testid="dialog-back-btn"
+						depressed
+						@click="onBack"
 					>
-						{{ $t("common.actions.cancel") }}
+						{{ $t("common.actions.back") }}
 					</v-btn>
 				</div>
 				<v-spacer />
 				<div class="button-section">
+					<v-btn
+						v-if="step === 1 && isOpen"
+						data-testid="dialog-cancel-btn"
+						depressed
+						@click="onCloseDialog"
+					>
+						{{ $t("common.actions.cancel") }}
+					</v-btn>
+					<v-btn
+						v-if="step === 0 && isOpen"
+						data-testid="dialog-cancel-btn"
+						depressed
+						@click="onCloseDialog"
+					>
+						{{ $t("common.actions.cancel") }}
+					</v-btn>
 					<v-btn
 						v-if="step === 0 && isOpen"
 						data-testid="dialog-next-btn"
@@ -100,13 +113,6 @@
 						@click="onNext"
 					>
 						{{ $t("common.actions.continue") }}
-					</v-btn>
-					<v-btn
-						v-if="step === 1 && isOpen"
-						data-testid="dialog-back-btn"
-						@click="onBack"
-					>
-						{{ $t("common.actions.back") }}
 					</v-btn>
 					<v-btn
 						v-if="step === 1 && isOpen"
@@ -222,6 +228,7 @@ export default defineComponent({
 				timeout: 10000,
 			});
 			await downloadModule.startDownload(radios.value);
+			onCloseDialog();
 		}
 
 		function onBack(): void {
@@ -248,13 +255,13 @@ export default defineComponent({
 		}
 
 		return {
-			title,
 			onNext,
 			onBack,
 			onDownload,
 			toggleAllTopics,
 			toggleAllTasks,
 			onCloseDialog,
+			title,
 			step,
 			mdiInformation,
 			radios,
