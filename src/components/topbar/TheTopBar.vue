@@ -209,6 +209,14 @@ export default defineComponent({
 	align-items: center;
 	height: var(--sidebar-item-height);
 
+	@include breakpoint(tablet) {
+		max-width: calc(100vw - var(--sidebar-width-tablet));
+	}
+
+	@include breakpoint(desktop) {
+		max-width: calc(100vw - var(--sidebar-width));
+	}
+
 	.top-main {
 		display: flex;
 		flex-direction: row;

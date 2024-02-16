@@ -24,6 +24,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -131,6 +132,13 @@ const getWrapper = () => {
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 		getCtlToolsTabEnabled: false,
 	});
+
+	// we need this because in order for useMediaQuery (vueuse) to work
+	// window.matchMedia has to return a reasonable result.
+	// https://github.com/vueuse/vueuse/blob/main/packages/core/useMediaQuery/index.ts#L44
+	jest
+		.spyOn(window, "matchMedia")
+		.mockReturnValue(createMock<MediaQueryList>());
 
 	return mount(RoomDetailsPage, {
 		global: {
