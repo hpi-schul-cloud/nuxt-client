@@ -3,7 +3,7 @@
 		<template v-slot:activator="{ props }">
 			<VBtn
 				variant="text"
-				data-testid="board-menu-button"
+				:data-testid="dataTestid"
 				v-bind="props"
 				:ripple="false"
 				:class="{ 'bg-white': hasBackground }"
@@ -15,9 +15,7 @@
 				size="small"
 				style="height: 36px; width: 36px"
 			>
-				<VIcon data-testid="board-menu-icon" class="text-grey-darken-2">{{
-					mdiDotsVertical
-				}}</VIcon>
+				<VIcon class="text-grey-darken-2">{{ mdiDotsVertical }}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
 					<template v-if="scope === 'board'">
 						{{ $t("components.board.menu.board") }}
@@ -52,6 +50,10 @@ export default defineComponent({
 		scope: {
 			type: String as PropType<BoardMenuScope>,
 			required: true,
+		},
+		dataTestid: {
+			type: String,
+			default: "board-menu-button",
 		},
 	},
 	setup(props) {

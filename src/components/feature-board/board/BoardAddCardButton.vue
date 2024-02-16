@@ -5,7 +5,6 @@
 		ref="sticky"
 	>
 		<VBtn
-			data-testid="add-card"
 			@click.stop="onAddCard"
 			@dblclick.stop="() => {}"
 			elevation="6"

@@ -7,6 +7,7 @@
 			:columnId="column.id"
 			:title="column.title"
 			:titlePlaceholder="titlePlaceholder"
+			:index="index"
 			@delete:column="onColumnDelete"
 			@move:column-left="onMoveColumnLeft"
 			@move:column-right="onMoveColumnRight"
@@ -57,6 +58,7 @@
 			</Sortable>
 			<BoardAddCardButton
 				v-if="hasCreateColumnPermission && !isDragging"
+				:data-testid="`add-card-${index}`"
 				@add-card="onCreateCard"
 			/>
 		</div>
