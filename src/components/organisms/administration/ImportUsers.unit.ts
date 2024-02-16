@@ -6,6 +6,7 @@ import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
+import { schoolFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -14,7 +15,6 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VDataTable } from "vuetify/lib/components/index.mjs";
-import { schoolFactory } from "../../../../tests/test-utils";
 import ImportUsers from "./ImportUsers.vue";
 
 const mockImportUsers: ImportUserListResponse = {
