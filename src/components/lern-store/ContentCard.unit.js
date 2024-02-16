@@ -1,27 +1,44 @@
 import ContentCard from "./ContentCard";
 import { Resource } from "@@/tests/test-utils/mockDataResource";
 import { Collection } from "@@/tests/test-utils/mockDataCollection";
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
+import ContentModule from "@/store/content";
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import { RouterLinkStub } from "@vue/test-utils";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 describe("@/components/organisms/ContentCard", () => {
-	const authModule = createModuleMocks(AuthModule);
-	const wrapper = mount(ContentCard, {
-		global: {
-			plugins: [createTestingVuetify()],
-			provide: {
-				[AUTH_MODULE_KEY.valueOf()]: authModule,
-			},
-			mocks: {
-				$route: { query: { course: "Kurs" } },
-			},
-		},
-		props: { resource: Resource },
+	beforeEach(() => {
+		setupStores({
+			authModule: AuthModule,
+			contentModule: ContentModule,
+		});
 	});
 
+	const setup = (resource = Resource) => {
+		const wrapper = mount(ContentCard, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$route: { query: { course: "Kurs" } },
+				},
+				components: {
+					"base-input": BaseInput,
+					"router-link": RouterLinkStub,
+				},
+			},
+			props: { resource },
+		});
+		return { wrapper };
+	};
+
 	it("Sets inline attribute to query when the prop is set to true", () => {
+		const { wrapper } = setup();
+
 		wrapper.setProps({ inline: true });
 		wrapper.vm.$nextTick(() => {
 			expect(wrapper.vm.inline).toBe(true);
@@ -30,10 +47,13 @@ describe("@/components/organisms/ContentCard", () => {
 	});
 
 	it("Renders head of contentCard as a link", () => {
+		const { wrapper } = setup();
 		expect(wrapper.find(".title-link").exists()).toBe(true);
 	});
 
 	it("Renders contentCard img", () => {
+		const { wrapper } = setup();
+
 		expect(wrapper.find(".content__img-thumbnail").exists()).toBe(true);
 		expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(
 			Resource.preview.url
@@ -42,6 +62,8 @@ describe("@/components/organisms/ContentCard", () => {
 	});
 
 	it("Renders title of content Card", () => {
+		const { wrapper } = setup();
+
 		expect(wrapper.find(".content__title").exists()).toBe(true);
 		expect(wrapper.find(".content__title").text()).toBe(
 			"Technik der Dotierung"
@@ -49,47 +71,53 @@ describe("@/components/organisms/ContentCard", () => {
 	});
 
 	it("Renders footer of content Card for single elements", () => {
+		const { wrapper } = setup();
+
 		expect(wrapper.find(".footer").exists()).toBe(true);
 		expect(wrapper.find(".footer__icon-container").exists()).toBe(true);
 	});
-});
 
-describe("@/components/organisms/ContentCard Collection", () => {
-	const wrapper = mount(ContentCard, {
-		global: {
-			plugins: [createTestingVuetify()],
-		},
-		props: { resource: Collection },
-	});
+	describe("@/components/organisms/ContentCard Collection", () => {
+		it("Renders head of contentCard as a link", () => {
+			const { wrapper } = setup(Collection);
+			expect(wrapper.find(".title-link").exists()).toBe(true);
+		});
 
-	it("Renders head of contentCard as a link", () => {
-		expect(wrapper.find(".title-link").exists()).toBe(true);
-	});
+		it("Renders contentCard img", () => {
+			const { wrapper } = setup(Collection);
 
-	it("Renders contentCard img", () => {
-		expect(wrapper.find(".content__img-thumbnail").exists()).toBe(true);
-		expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(
-			Collection.preview.url
-		);
-		expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe("");
-	});
+			expect(wrapper.find(".content__img-thumbnail").exists()).toBe(true);
+			expect(wrapper.find(".content__img-thumbnail").attributes("src")).toBe(
+				Collection.preview.url
+			);
+			expect(wrapper.find(".content__img-thumbnail").attributes("alt")).toBe(
+				""
+			);
+		});
 
-	it("Renders collection icon", () => {
-		const contentTextIcon = wrapper.find(".content__text-icon");
-		expect(wrapper.find(".card-tag").exists()).toBe(true);
-		expect(contentTextIcon.exists()).toBe(true);
-		expect(contentTextIcon.element.innerHTML.includes("$ic_collection")).toBe(
-			true
-		);
-	});
+		it("Renders collection icon", () => {
+			const { wrapper } = setup(Collection);
 
-	it("Renders title of content Card", () => {
-		expect(wrapper.find(".content__title").exists()).toBe(true);
-		expect(wrapper.find(".content__title").text()).toBe("heimische Singvögel");
-	});
+			const cardTag = wrapper.get(".card-tag");
+			const collectionIcon = cardTag.getComponent({ name: "v-icon" });
 
-	it("Renders footer of content Card for single elements", () => {
-		expect(wrapper.find(".footer").exists()).toBe(true);
-		expect(wrapper.find(".footer__icon-container").exists()).toBe(true);
+			expect(collectionIcon.props("icon")).toBe("$ic_collection");
+		});
+
+		it("Renders title of content Card", () => {
+			const { wrapper } = setup(Collection);
+
+			expect(wrapper.find(".content__title").exists()).toBe(true);
+			expect(wrapper.find(".content__title").text()).toBe(
+				"heimische Singvögel"
+			);
+		});
+
+		it("Renders footer of content Card for single elements", () => {
+			const { wrapper } = setup(Collection);
+
+			expect(wrapper.find(".footer").exists()).toBe(true);
+			expect(wrapper.find(".footer__icon-container").exists()).toBe(true);
+		});
 	});
 });
