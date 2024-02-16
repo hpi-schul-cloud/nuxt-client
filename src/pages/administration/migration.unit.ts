@@ -1,3 +1,5 @@
+// VUE3_UPGRADE currently disabled until LDAP migration is upgraded to Vue3
+it.todo("re-enable when LDAP migration is upgraded to Vue3");
 // import migrationIndex from "@/pages/administration/Migration.page.vue";
 // import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 // import EnvConfigModule from "@/store/env-config";
