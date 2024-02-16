@@ -357,8 +357,6 @@ export const enGB: I18nLanguage = {
 	"components.editor.highlight.dullPink": "Pink marker (dull)",
 	"components.editor.highlight.dullYellow": "Yellow marker (dull)",
 	"components.elementTypeSelection.dialog.title": "Add element",
-	"components.elementTypeSelection.elements.boardElement.subtitle":
-		"Whiteboard",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"External tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "File",
@@ -446,7 +444,7 @@ export const enGB: I18nLanguage = {
 	"components.molecules.copyResult.nexboardCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Content is not copied as NeXboard is being replaced by Tldraw. You can add Tldraw in the Column Board by adding a new Whiteboard element.",
+		"Old neXboard sections have not been copied as the tool is being removed from our platform. As a replacement, the innovative whiteboard tool tldraw is now available in the column board.",
 	"components.molecules.copyResult.successfullyCopied":
 		"All elements were successfully copied.",
 	"components.molecules.copyResult.timeoutCopy":
