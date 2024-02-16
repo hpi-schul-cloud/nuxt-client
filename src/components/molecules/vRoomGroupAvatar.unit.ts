@@ -112,7 +112,7 @@ describe("vRoomGroupAvatar", () => {
 
 		expect(iterator).toBeTruthy();
 		expect(iterator.props("itemSize")).toStrictEqual("0.8em");
-		expect(iterator.props("avatars")).toStrictEqual(mockData.groupElements);
+		expect(iterator.props("items")).toStrictEqual(mockData.groupElements);
 		expect(iterator.props("condenseLayout")).toBe(true);
 	});
 
