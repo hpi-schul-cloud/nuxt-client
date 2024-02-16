@@ -160,7 +160,7 @@ export default defineComponent({
 		},
 		dragend() {
 			this.isDragging = false;
-			this.$emit("dragend");
+			this.$emit("dragendAvatar");
 		},
 		dropAvatar() {
 			this.$emit("dropAvatar");

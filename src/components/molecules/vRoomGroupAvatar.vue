@@ -113,7 +113,7 @@ export default {
 			this.$emit("dropGroupAvatar");
 		},
 		dragend() {
-			this.$emit("dragend");
+			this.$emit("dragendGroupAvatar");
 			this.isDragging = false;
 		},
 	},
