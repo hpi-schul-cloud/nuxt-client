@@ -72,7 +72,7 @@ describe("@/components/base/BaseDialog", () => {
 			const cancelBtn = wrapper.findComponent(
 				`[data-testid="btn-dialog-cancel"]`
 			);
-			expect(confirmBtn.classes("bg-success")).toBe(true);
+			expect(confirmBtn.classes("text-success")).toBe(true);
 			expect(cancelBtn.classes("v-btn")).toBe(true);
 		});
 
