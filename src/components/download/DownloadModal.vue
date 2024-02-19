@@ -50,6 +50,7 @@
 					<v-container fluid class="pt-0">
 						<v-checkbox
 							:value="allTopicsSelected"
+							data-testid="all-topics-checkbox"
 							:indeterminate="someTopicsSelected"
 							@click="toggleAllTopics"
 							label="Themen:"
@@ -63,6 +64,7 @@
 						/>
 						<v-checkbox
 							:value="allTasksSelected"
+							data-testid="all-tasks-checkbox"
 							:indeterminate="someTasksSelected"
 							@click="toggleAllTasks"
 							label="Aufgaben:"
@@ -233,8 +235,13 @@ export default defineComponent({
 
 		function onBack(): void {
 			// go back to choose version
-			step.value--;
-			downloadModule.setVersion("");
+			step.value = 0;
+			allTasks.value.forEach((task) => {
+				task.isSelected = false;
+			});
+			allTopics.value.forEach((topic) => {
+				topic.isSelected = false;
+			});
 			downloadModule.setIsDownloadModalOpen(true);
 		}
 
