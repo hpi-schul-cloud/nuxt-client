@@ -54,6 +54,7 @@ import { BusinessError } from "@/store/types/commons";
 import { Course, CourseFeatures } from "@/store/types/room";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	I18N_KEY,
 	injectStrict,
 	ROOM_MODULE_KEY,
@@ -88,6 +89,7 @@ export default defineComponent({
 		);
 		const i18n: VueI18n = injectStrict(I18N_KEY);
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 		const course: Ref<Course | null> = ref(null);
 
@@ -115,7 +117,7 @@ export default defineComponent({
 			course.value = await roomModule.fetchCourse(props.roomId);
 		});
 
-		const refreshTimeInMs = 299000;
+		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
 		setInterval(async () => {
 			await contextExternalToolsModule.loadExternalToolDisplayData({

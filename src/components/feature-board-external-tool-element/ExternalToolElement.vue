@@ -62,6 +62,7 @@ import { useI18n } from "@/composables/i18n.composable";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
 import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	useExternalToolElementDisplayState,
@@ -107,6 +108,7 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const { modelValue } = useContentElementState(props, {
 			autoSaveDebounce: 0,
 		});
@@ -240,7 +242,7 @@ export default defineComponent({
 
 		onMounted(loadCardData);
 
-		const refreshTimeInMs = 299000;
+		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
 		setInterval(async () => {
 			await loadCardData();
