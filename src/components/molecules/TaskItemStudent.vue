@@ -29,9 +29,10 @@
 						{{ task.name }}
 					</v-list-item-title>
 					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
-					<v-list-item-subtitle
-						class="d-xxl-none d-xl-none d-la-none d-md-none d-sm-none d-xs-block due-date-label"
-						><div
+					<div
+						class="d-xxl-none d-xl-none d-la-none d-md-none d-sm-none d-xs-block d-flex"
+					>
+						<div
 							class="text-subtitle-2 due-date-label"
 							data-test-id="dueDateLabel"
 						>
@@ -39,10 +40,11 @@
 						</div>
 						<v-custom-chip-time-remaining
 							v-if="taskState === 'warning'"
+							class="ml-2"
 							:type="taskState"
 							:due-date="task.dueDate"
-							:shorten-unit="$vuetify.display.xs"
-					/></v-list-item-subtitle>
+						/>
+					</div>
 				</div>
 				<div class="hidden-xs mr-4 text-right">
 					<div
@@ -55,7 +57,6 @@
 						v-if="taskState === 'warning'"
 						:type="taskState"
 						:due-date="task.dueDate"
-						:shorten-unit="$vuetify.display.xs"
 					/>
 				</div>
 			</div>
