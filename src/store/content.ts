@@ -332,13 +332,10 @@ export default class ContentModule extends VuexModule {
 	}
 
 	@Action
-	async getLessons(payload: string) {
-		const params = {
-			courseId: payload,
-		};
-		if (params.courseId) {
+	async getLessons(courseId: string) {
+		if (courseId) {
 			//only search if courseId is existing
-			const res = await $axios.get("/v1/lessons", { params });
+			const res = await $axios.get(`/v3/lessons/course/${courseId}`);
 			this.setLessons(res.data);
 		}
 	}
