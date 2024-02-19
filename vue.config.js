@@ -80,7 +80,7 @@ module.exports = defineConfig({
 		module: {
 			rules: [
 				{
-					test: /\.ts$/,
+					test: /\.json$/,
 					type: "javascript/auto",
 					loader: path.resolve(__dirname, "webpack-config/vue-i18n-loader.js"),
 					include: [path.resolve(__dirname, "src/locales")],
