@@ -312,7 +312,7 @@ export const esES: I18nLanguage = {
 	"components.boardElement": "elemento",
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
-	"components.cardElement.drawingElement": "Whiteboard",
+	"components.cardElement.drawingElement": "Pizarra",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
@@ -364,8 +364,6 @@ export const esES: I18nLanguage = {
 	"components.editor.highlight.dullPink": "Marcador rosa (mate)",
 	"components.editor.highlight.dullYellow": "Marcador amarillo (mate)",
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
-	"components.elementTypeSelection.elements.boardElement.subtitle":
-		"Whiteboard",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
@@ -457,7 +455,7 @@ export const esES: I18nLanguage = {
 	"components.molecules.copyResult.nexboardCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"El contenido no se copia ya que NeXboard está siendo reemplazado por Tldraw. Puede añadir Tldraw en el Tablero de columna añadiendo un nuevo elemento Whiteboard.",
+		"Las antiguas secciones de neXboard no se han copiado, ya que la herramienta se está retirando de nuestra plataforma. Como reemplazo, la innovadora herramienta de pizarra digital tldraw está ahora disponible en el tablero de columnas.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Todos los elementos se copiaron con éxito.",
 	"components.molecules.copyResult.timeoutCopy":

@@ -359,8 +359,6 @@ export const deDE = {
 	"components.editor.highlight.dullPink": "Pinker Marker (matt)",
 	"components.editor.highlight.dullYellow": "Gelber Marker (matt)",
 	"components.elementTypeSelection.dialog.title": "Element hinzufügen",
-	"components.elementTypeSelection.elements.boardElement.subtitle":
-		"Whiteboard",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
@@ -449,7 +447,7 @@ export const deDE = {
 	"components.molecules.copyResult.nexboardCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Der Inhalt wird nicht kopiert, da NeXboard durch Tldraw ersetzt wird. Sie können Tldraw im Spalten-Board hinzufügen, indem Sie ein neues Whiteboard-Element hinzufügen.",
+		"Alte neXboard-Abschnitte wurden nicht kopiert, da das Tool von unserer Plattform entfernt wird. Als Ersatz steht nun das innovative Whiteboard-Tool tldraw im Spaltenboard zur Verfügung.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.timeoutCopy":
