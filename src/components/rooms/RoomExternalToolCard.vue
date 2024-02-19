@@ -41,6 +41,7 @@
 
 <script lang="ts">
 import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
+import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
 import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
@@ -48,7 +49,6 @@ import { useExternalToolLaunchState } from "@data-external-tool";
 import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, PropType, watch } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
-import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
@@ -78,13 +78,15 @@ export default defineComponent({
 
 		const t = (key: string): string => i18n.tc(key, 0);
 
-		const handleClick = () => {
+		const handleClick = async () => {
 			if (!isToolLaunchable.value) {
 				emit("error", props.tool);
 				return;
 			}
 
 			launchTool();
+
+			await fetchLaunchRequest(props.tool.contextExternalToolId);
 
 			if (launchError.value) {
 				emit("error", props.tool);

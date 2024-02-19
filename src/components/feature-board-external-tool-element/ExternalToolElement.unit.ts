@@ -570,6 +570,21 @@ describe("ExternalToolElement", () => {
 
 				expect(useExternalToolLaunchStateMock.launchTool).toHaveBeenCalled();
 			});
+
+			it("should fetch launch request after launch", async () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({
+					ref: "externalToolElement",
+				});
+
+				card.vm.$emit("click");
+				await Vue.nextTick();
+
+				expect(
+					useExternalToolLaunchStateMock.fetchLaunchRequest
+				).toHaveBeenCalled();
+			});
 		});
 	});
 

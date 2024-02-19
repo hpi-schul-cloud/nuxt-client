@@ -200,9 +200,17 @@ export default defineComponent({
 			isConfigurationDialogOpen.value = true;
 		};
 
-		const onClickElement = () => {
+		const onClickElement = async () => {
 			if (hasLinkedTool.value && !props.isEditMode) {
 				launchTool();
+
+				if (
+					!isToolOutdated.value &&
+					!isToolIncomplete.value &&
+					modelValue.value.contextExternalToolId
+				) {
+					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
+				}
 			}
 
 			if (!hasLinkedTool.value && props.isEditMode) {

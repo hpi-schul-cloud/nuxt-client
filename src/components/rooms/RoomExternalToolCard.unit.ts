@@ -2,6 +2,7 @@ import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
@@ -11,7 +12,6 @@ import { mount, MountOptions, Wrapper } from "@vue/test-utils";
 import flushPromises from "flush-promises";
 import Vue from "vue";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 
 jest.mock("@data-external-tool");
 
@@ -440,6 +440,16 @@ describe("RoomExternalToolCard", () => {
 				await wrapper.trigger("click");
 
 				expect(useExternalToolLaunchStateMock.launchTool).toHaveBeenCalled();
+			});
+
+			it("should fetch launch request after launch", async () => {
+				const { wrapper } = await setup();
+
+				await wrapper.trigger("click");
+
+				expect(
+					useExternalToolLaunchStateMock.fetchLaunchRequest
+				).toHaveBeenCalled();
 			});
 		});
 
