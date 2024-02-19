@@ -12,7 +12,7 @@
 				@keydown.space.stop
 			/>
 		</template>
-		<v-list>
+		<v-list role="menu">
 			<v-list-item
 				v-for="(item, i) in menuItems"
 				:key="i"
@@ -20,6 +20,7 @@
 				@click="handleClick(item)"
 				density="comfortable"
 				class="dotmenu-action"
+				role="menuitem"
 			>
 				<v-list-item-title>
 					<v-icon :icon="item.icon" class="dotmenu-action-icon" />
