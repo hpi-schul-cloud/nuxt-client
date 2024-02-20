@@ -11,6 +11,8 @@
 				<div
 					class="text-h3 pb-2 course-title"
 					data-testid="courses-course-title"
+					role="heading"
+					aria-level="1"
 				>
 					{{ roomData.title }}
 				</div>
