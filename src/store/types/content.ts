@@ -12,25 +12,25 @@ export type Resource = {
 	aspects: string[];
 	collection: any;
 	commentCount: number | null;
-	content: {};
+	content: object;
 	createdAt: any;
-	createdBy: {};
+	createdBy: object;
 	downloadUrl: string | null;
 	iconURL: string | null;
 	isDirectory: boolean;
-	license: {};
+	license: object;
 	mediatype: string;
 	metadataset: string;
 	mimetype: string;
 	modifiedAt: any;
-	modifiedBy: {};
+	modifiedBy: object;
 	name: string;
-	owner: {};
-	parent: {};
-	preview: {};
+	owner: object;
+	parent: object;
+	preview: object;
 	properties: ResourceProperties;
 	rating: any;
-	ref: {};
+	ref: object;
 	remote: any;
 	repositoryType: string;
 	size: string;
@@ -127,7 +127,7 @@ export type Lessons = {
 
 export type AddToLessonQuery = {
 	lessonId: string;
-	event: {};
+	event: object;
 	material: {
 		client: string;
 		merlinReference: string;

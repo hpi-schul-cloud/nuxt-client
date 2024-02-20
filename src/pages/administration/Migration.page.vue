@@ -6,7 +6,7 @@
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
 	>
-		<v-alert dense outlined type="info">
+		<v-alert density="compact" variant="outlined" type="info">
 			{{ $t("pages.administration.migration.vue3.notification") }}
 		</v-alert>
 		<!--
