@@ -8,7 +8,6 @@
 		:variant="isDraft ? 'outlined' : 'elevated'"
 		hover
 		data-testid="content-card-task"
-		role="button"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -30,7 +29,7 @@
 					/>
 				</div>
 			</div>
-			<h6 class="mt-1 mb-2 task-name">
+			<h6 class="mt-1 mb-2 task-name" tabindex="-1">
 				{{ task.name }}
 			</h6>
 			<RenderHTML

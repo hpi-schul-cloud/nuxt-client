@@ -17,7 +17,7 @@
 	>
 		<v-card-text class="pb-0" data-testid="content-card-lesson-content">
 			<div class="top-row-container mb-0">
-				<div class="title-section" tabindex="0">
+				<div class="title-section">
 					{{ $t("common.words.topic") }}
 				</div>
 				<div class="dot-menu-section">
@@ -28,7 +28,7 @@
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary mb-2 lesson-name" tabindex="0">
+			<div class="text-h6 text--primary mb-2 lesson-name" tabindex="-1">
 				{{ lesson.name }}
 			</div>
 		</v-card-text>
