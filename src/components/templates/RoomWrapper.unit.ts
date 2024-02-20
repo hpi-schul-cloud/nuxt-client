@@ -7,7 +7,7 @@ import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import Vue from "vue";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 
 const getWrapper = (
 	options: any = {
@@ -167,7 +167,7 @@ describe("@templates/RoomWrapper.vue", () => {
 		});
 
 		it("should open the import-modal", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as ConfigResponse);
 			const wrapper = getWrapper();
 
 			const importModalComponent = wrapper.find(".import-modal");

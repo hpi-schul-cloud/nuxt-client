@@ -11,7 +11,7 @@ import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
 import SchoolsModule from "./schools";
-import { Envs } from "./types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -303,7 +303,7 @@ describe("schools module", () => {
 				it("should call backend and sets state correctly", async () => {
 					envConfigModule.setEnvs({
 						FEATURE_NEST_SYSTEMS_API_ENABLED: true,
-					} as Envs);
+					} as ConfigResponse);
 					const systemId = "id_1";
 					const schoolsModule = new SchoolsModule({});
 					const systems = [
@@ -334,7 +334,7 @@ describe("schools module", () => {
 				it("should trigger error and goes into the catch block", async () => {
 					envConfigModule.setEnvs({
 						FEATURE_NEST_SYSTEMS_API_ENABLED: true,
-					} as Envs);
+					} as ConfigResponse);
 					const systemId = "id_1";
 					systemsApi.systemControllerDeleteSystem.mockRejectedValueOnce(
 						new AxiosError()
@@ -359,7 +359,7 @@ describe("schools module", () => {
 				it("should call backend and sets state correctly", async () => {
 					envConfigModule.setEnvs({
 						FEATURE_NEST_SYSTEMS_API_ENABLED: false,
-					} as Envs);
+					} as ConfigResponse);
 					const systemId = "id_1";
 					initializeAxios({
 						delete: async (path: string) => {
@@ -395,7 +395,7 @@ describe("schools module", () => {
 				it("should trigger error and goes into the catch block", async () => {
 					envConfigModule.setEnvs({
 						FEATURE_NEST_SYSTEMS_API_ENABLED: false,
-					} as Envs);
+					} as ConfigResponse);
 					const systemId = "id_1";
 					initializeAxios({
 						delete: async (path: string) => {

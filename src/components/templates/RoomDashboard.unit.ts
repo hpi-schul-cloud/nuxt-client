@@ -10,7 +10,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import ShareModule from "@/store/share";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import {
@@ -147,7 +147,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			copyModule: CopyModule,
 		});
 		const env = { FEATURE_LESSON_SHARE: true, FEATURE_TASK_SHARE: true };
-		envConfigModule.setEnvs(env as unknown as Envs);
+		envConfigModule.setEnvs(env as unknown as ConfigResponse);
 	});
 	describe("common features", () => {
 		it("should have props", async () => {
@@ -546,7 +546,9 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyTask Process", () => {
 		beforeEach(() => {
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+			envConfigModule.setEnvs({
+				FEATURE_COPY_SERVICE_ENABLED: true,
+			} as ConfigResponse);
 		});
 
 		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
@@ -582,7 +584,9 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyLesson Process", () => {
 		beforeEach(() => {
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+			envConfigModule.setEnvs({
+				FEATURE_COPY_SERVICE_ENABLED: true,
+			} as ConfigResponse);
 		});
 
 		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {

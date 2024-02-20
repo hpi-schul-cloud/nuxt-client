@@ -5,7 +5,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { envConfigModule } from "@/store";
 import Vue from "vue";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 
 const baseTestProps = {
 	room: {
@@ -172,7 +172,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should have 'copy' more action if copying feature is enabled", async () => {
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+				envConfigModule.setEnvs({
+					FEATURE_COPY_SERVICE_ENABLED: true,
+				} as ConfigResponse);
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
 				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
@@ -186,7 +188,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			it("should not have 'copy' more action if copying feature is not enabled", async () => {
 				envConfigModule.setEnvs({
 					FEATURE_COPY_SERVICE_ENABLED: false,
-				} as Envs);
+				} as ConfigResponse);
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
 				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
@@ -198,7 +200,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+				envConfigModule.setEnvs({
+					FEATURE_COPY_SERVICE_ENABLED: true,
+				} as ConfigResponse);
 				const copyCard = jest.fn();
 				const wrapper = getWrapper({ ...baseTestProps, role });
 				wrapper.vm.copyCard = copyCard;
@@ -228,7 +232,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should have 'share' more action if env flag is set", async () => {
-				envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true } as Envs);
+				envConfigModule.setEnvs({
+					FEATURE_LESSON_SHARE: true,
+				} as ConfigResponse);
 				const wrapper = getWrapper({ ...baseTestProps, role });
 
 				const hasShareMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(

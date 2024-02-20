@@ -17,7 +17,7 @@ import Vue, { computed, ref } from "vue";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
@@ -31,7 +31,7 @@ const mockedUseContentElementState = jest.mocked(useContentElementState);
 
 let defaultElement = linkElementResponseFactory.build();
 const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<Envs>({
+	getEnv: createMock<ConfigResponse>({
 		FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 		FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 		FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,

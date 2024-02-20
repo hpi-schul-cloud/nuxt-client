@@ -11,7 +11,7 @@ import SchoolsModule from "@/store/schools";
 import StatusAlertsModule from "@/store/status-alerts";
 import setupStores from "@@/tests/test-utils/setupStores";
 import legacyLoggedIn from "./legacyLoggedIn.vue";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import { I18N_KEY, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 
 const $route = {
@@ -65,7 +65,7 @@ filePathsModule.setSpecificFiles("https://dbildungscloud.de");
 
 envConfigModule.setEnvs({
 	ALERT_STATUS_URL: "https://status.dbildungscloud.de",
-} as Envs);
+} as ConfigResponse);
 
 describe("legacyLoggedIn", () => {
 	it("should mark active links", () => {

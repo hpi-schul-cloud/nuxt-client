@@ -6,11 +6,11 @@ import { mount, MountOptions } from "@vue/test-utils";
 import Vue, { nextTick } from "vue";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 
 const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<Envs>({
+	getEnv: createMock<ConfigResponse>({
 		FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 		FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 		FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,

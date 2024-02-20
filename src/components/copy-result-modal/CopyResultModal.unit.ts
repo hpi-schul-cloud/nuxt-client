@@ -7,7 +7,7 @@ import Vue from "vue";
 import { envConfigModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 
 const geoGebraItem = {
 	title: "GeoGebra Element Title",
@@ -142,7 +142,9 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 
 		it("should render ctl tools info if root item is a Course and has no failed file ", () => {
 			const copyResultItems = mockResultItems([]);
-			envConfigModule.setEnvs({ FEATURE_CTL_TOOLS_TAB_ENABLED: true } as Envs);
+			envConfigModule.setEnvs({
+				FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+			} as ConfigResponse);
 			const wrapper = getWrapper({
 				isOpen: true,
 				copyResultItems,
@@ -172,7 +174,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 					FEATURE_CTL_TOOLS_COPY_ENABLED: true,
-				} as Envs);
+				} as ConfigResponse);
 				const { wrapper } = setup();
 
 				expect(
@@ -231,7 +233,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 		])("should render if there is a %s item", (title, type) => {
 			envConfigModule.setEnvs({
 				FEATURE_NEXBOARD_COPY_ENABLED: true,
-			} as Envs);
+			} as ConfigResponse);
 			const copyResultItems = mockResultItems();
 			copyResultItems[0].elements = [
 				{

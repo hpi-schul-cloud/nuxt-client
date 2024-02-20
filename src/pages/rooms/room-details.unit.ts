@@ -8,7 +8,7 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
 import { User } from "@/store/types/auth";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import { initializeAxios } from "@/utils/api";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -284,7 +284,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			envConfigModule.setEnvs({
 				FEATURE_COPY_SERVICE_ENABLED: true,
 				FEATURE_COURSE_SHARE: true,
-			} as Envs);
+			} as ConfigResponse);
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -309,7 +309,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set to true", () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as ConfigResponse);
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -337,7 +337,9 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 			it("should have 'Copy Course' menu if 'FEATURE_COPY_SERVICE_ENABLED' flag set to true", () => {
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+				envConfigModule.setEnvs({
+					FEATURE_COPY_SERVICE_ENABLED: true,
+				} as ConfigResponse);
 				const wrapper = getWrapper();
 				const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -349,7 +351,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			it("should call the onCopyRoom method when 'Copy course' menu clicked", async () => {
 				envConfigModule.setEnvs({
 					FEATURE_COPY_SERVICE_ENABLED: true,
-				} as Envs);
+				} as ConfigResponse);
 				const onCopyRoom = jest.fn();
 				const wrapper = getWrapper();
 				wrapper.vm.onCopyRoom = onCopyRoom;
@@ -364,7 +366,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as ConfigResponse);
 			const shareCourseSpy = jest.fn();
 			const wrapper = getWrapper();
 			wrapper.vm.shareCourse = shareCourseSpy;
@@ -378,7 +380,9 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call store action after 'Share Course' menu clicked", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
+			envConfigModule.setEnvs({
+				FEATURE_COURSE_SHARE_NEW: true,
+			} as ConfigResponse);
 			const wrapper = getWrapper();
 
 			const threeDotButton = wrapper.find(".three-dot-button");
@@ -435,7 +439,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			const setup = () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				} as Envs);
+				} as ConfigResponse);
 
 				const wrapper = getWrapper();
 
@@ -457,7 +461,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			const setup = () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: false,
-				} as Envs);
+				} as ConfigResponse);
 
 				const wrapper = getWrapper();
 
@@ -477,7 +481,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			const setup = () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				} as Envs);
+				} as ConfigResponse);
 				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
 
 				const wrapper = getWrapper();
@@ -501,7 +505,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			const setup = () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				} as Envs);
+				} as ConfigResponse);
 				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
 
 				const wrapper = getWrapper();

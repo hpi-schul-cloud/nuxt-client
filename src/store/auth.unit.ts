@@ -6,7 +6,7 @@ import EnvConfigModule from "./env-config";
 import SchoolsModule from "./schools";
 import * as axios from "axios";
 import { initializeAxios } from "@/utils/api";
-import { Envs } from "./types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import * as serverApi from "@/serverApi/v3/api";
 
 const axiosInitializer = (options: object) => {
@@ -269,7 +269,7 @@ describe("auth store module", () => {
 			envConfigModule.setEnvs({
 				FEATURE_EXTENSIONS_ENABLED: true,
 				FEATURE_TEAMS_ENABLED: true,
-			} as Envs);
+			} as unknown as ConfigResponse);
 		});
 
 		const defaultUserData = {
