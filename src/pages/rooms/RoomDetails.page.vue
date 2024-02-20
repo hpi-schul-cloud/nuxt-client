@@ -309,7 +309,7 @@ export default defineComponent({
 				});
 			}
 
-			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
+			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				items.push({
 					icon: this.icons.mdiShareVariantOutline,
 					action: () => this.shareCourse(),
@@ -391,7 +391,7 @@ export default defineComponent({
 			this.tabIndex = index >= 0 ? index : 0;
 		},
 		async shareCourse() {
-			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
+			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				this.shareModule.startShareFlow({
 					id: this.courseId,
 					type: ShareTokenBodyParamsParentTypeEnum.Courses,

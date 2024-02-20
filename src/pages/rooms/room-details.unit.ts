@@ -299,7 +299,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		it("should have the headline menu items", () => {
 			envConfigModule.setEnvs({
 				FEATURE_COPY_SERVICE_ENABLED: true,
-				FEATURE_COURSE_SHARE_NEW: true,
+				FEATURE_COURSE_SHARE: true,
 			} as Envs);
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
@@ -315,8 +315,8 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			expect(findMenuItems("common.actions.shareCourse", menuItems)).toBe(true);
 		});
 
-		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE_NEW' flag set to true", () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
+		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set to true", () => {
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -376,7 +376,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const shareCourseSpy = jest.fn();
 			const wrapper = getWrapper();
 			wrapper.vm.shareCourse = shareCourseSpy;
@@ -395,7 +395,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call store action after 'Share Course' menu clicked", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const wrapper = getWrapper();
 
 			const threeDotButton = wrapper.findComponent(
