@@ -5,7 +5,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+	mounted() {
+		const section = this.$router.currentRoute.value.hash.replace("#", "");
+		if (section)
+			this.$nextTick(() =>
+				window.document.getElementById(section).scrollIntoView()
+			);
+	},
+};
 </script>
 
 <style lang="scss" scoped>

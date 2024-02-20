@@ -141,7 +141,7 @@
 				:disabled="!isMigrationActive || !isSchoolMigrated"
 				class="my-4"
 				color="primary"
-				depressed
+				variant="flat"
 				data-testid="migration-wizard-button"
 				:to="{ name: 'administration-migration' }"
 			>

@@ -6,10 +6,10 @@
 			class="mb-6"
 			data-testid="error-alert"
 			:icon="mdiAlertCircle"
-			:text="t('pages.administration.school.index.schoolPolicy.error')"
+			:text="$t('pages.administration.school.index.schoolPolicy.error')"
 		>
 			<div class="alert-text">
-				{{ t("pages.administration.school.index.schoolPolicy.error") }}
+				{{ $t("pages.administration.school.index.schoolPolicy.error") }}
 			</div>
 		</v-alert>
 		<template v-else>
@@ -32,19 +32,21 @@
 					<v-icon>$file_pdf_outline</v-icon>
 				</template>
 				<v-list-item-title class="text-body-1 text-black mb-2">
-					{{ t("pages.administration.school.index.schoolPolicy.fileName") }}
+					{{ $t("pages.administration.school.index.schoolPolicy.fileName") }}
 				</v-list-item-title>
 				<v-list-item-subtitle class="text-body-2">
 					<template v-if="privacyPolicy">
 						{{
-							t("pages.administration.school.index.schoolPolicy.uploadedOn", {
+							$t("pages.administration.school.index.schoolPolicy.uploadedOn", {
 								date: formatDate(privacyPolicy.publishedAt),
 							})
 						}}
 					</template>
 					<template v-else>
 						{{
-							t("pages.administration.school.index.schoolPolicy.notUploadedYet")
+							$t(
+								"pages.administration.school.index.schoolPolicy.notUploadedYet"
+							)
 						}}
 					</template>
 				</v-list-item-subtitle>
@@ -58,7 +60,7 @@
 							icon
 							variant="text"
 							:aria-label="
-								t('pages.administration.school.index.schoolPolicy.edit')
+								$t('pages.administration.school.index.schoolPolicy.edit')
 							"
 						>
 							<v-icon>$mdiTrayArrowUp</v-icon>
@@ -73,7 +75,9 @@
 							icon
 							variant="text"
 							:aria-label="
-								t('pages.administration.school.index.schoolPolicy.delete.title')
+								$t(
+									'pages.administration.school.index.schoolPolicy.delete.title'
+								)
 							"
 						>
 							<v-icon>$mdiTrashCanOutline</v-icon>
@@ -99,7 +103,7 @@
 				<template #title>
 					<h4 class="text-h4 mt-0">
 						{{
-							t("pages.administration.school.index.schoolPolicy.delete.title")
+							$t("pages.administration.school.index.schoolPolicy.delete.title")
 						}}
 					</h4>
 				</template>
@@ -107,7 +111,7 @@
 					<v-alert type="info" class="mb-0">
 						<div class="alert-text">
 							{{
-								t("pages.administration.school.index.schoolPolicy.delete.text")
+								$t("pages.administration.school.index.schoolPolicy.delete.text")
 							}}
 						</div>
 					</v-alert>
@@ -203,7 +207,6 @@ export default defineComponent({
 		};
 
 		return {
-			t,
 			isSchoolPolicyFormDialogOpen,
 			isDeletePolicyDialogOpen,
 			hasSchoolEditPermission,

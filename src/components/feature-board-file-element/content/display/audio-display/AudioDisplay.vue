@@ -1,33 +1,33 @@
 <template>
 	<ContentElementBar class="audio-player bg-grey-darken-3">
 		<template #element>
-			<div class="d-flex flex-nowrap pb-0 fill-height align-center">
+			<div class="d-flex flex-nowrap pb-0 pl-2 pr-1 fill-height align-center">
 				<audio ref="audio" loading="lazy" />
 				<v-btn
 					v-if="playing"
 					:aria-label="
 						$t('component.cardElement.fileElement.audioPlayer.pause')
 					"
+					color="transparent"
+					density="comfortable"
 					icon
 					variant="flat"
 					@click="onPlay"
-					color="transparent"
-					size="small"
 				>
 					<v-icon> {{ mdiPause }}</v-icon>
 				</v-btn>
 				<v-btn
 					v-else
 					:aria-label="$t('component.cardElement.fileElement.audioPlayer.play')"
+					color="transparent"
+					density="comfortable"
 					icon
 					variant="flat"
 					@click="onPlay"
-					color="transparent"
-					size="small"
 				>
 					<v-icon>{{ mdiPlay }}</v-icon>
 				</v-btn>
-				<div class="duration pr-2 pl-1 pt-1 text-body-2">
+				<div class="duration py-1 pl-1 pr-2 text-body-2">
 					{{ durationDisplay }}
 				</div>
 				<v-slider
@@ -46,7 +46,9 @@
 					:max="duration"
 					@update:model-value="onInputSlider"
 				/>
-				<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
+				<div class="pl-2">
+					<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
+				</div>
 			</div>
 		</template>
 		<template #menu><slot /></template>
@@ -132,6 +134,9 @@ export default defineComponent({
 .audio-player {
 	border-top-right-radius: 0.25rem;
 	border-top-left-radius: 0.25rem;
+}
+.audio-player:focus {
+	outline: none;
 }
 .duration {
 	white-space: nowrap;

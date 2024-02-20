@@ -4,18 +4,19 @@ import SchoolsModule from "@/store/schools";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { shallowMount, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount } from "@vue/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { ConsentVersion } from "@/store/types/consent-version";
 import {
 	AUTH_MODULE_KEY,
-	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { downloadFile } from "@/utils/fileHelper";
 
 jest.mock("@/utils/fileHelper");
@@ -57,10 +58,6 @@ describe("SchoolPolicy", () => {
 		},
 		userPermissions: string[] = ["school_edit"]
 	) => {
-		const el = document.createElement("div");
-		el.setAttribute("data-app", "true");
-		document.body.appendChild(el);
-
 		authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: userPermissions,
 		});
@@ -75,16 +72,15 @@ describe("SchoolPolicy", () => {
 
 		notifierModule = createModuleMocks(NotifierModule);
 
-		const wrapper: Wrapper<any> = shallowMount(SchoolPolicy, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-				[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
-				[AUTH_MODULE_KEY.valueOf()]: authModule,
-				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+		const wrapper = mount(SchoolPolicy, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
+					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
 			},
 		});
 
@@ -142,10 +138,14 @@ describe("SchoolPolicy", () => {
 			expect(wrapper.find('[data-testid="edit-button"]').exists()).toBe(true);
 		});
 
-		it("should render dialog component", () => {
+		it("should render dialog component", async () => {
 			const wrapper = setup();
+			const editBtn = wrapper.find('[data-testid="edit-button"]');
+			await editBtn.trigger("click");
 
-			expect(wrapper.find('[data-testid="form-dialog"]').exists()).toBe(true);
+			expect(
+				wrapper.findComponent({ name: "school-policy-form-dialog" }).exists()
+			).toBe(true);
 		});
 	});
 
@@ -184,12 +184,13 @@ describe("SchoolPolicy", () => {
 	});
 
 	describe("when user clicks policy item", () => {
-		it("should call downloadFile method", () => {
+		it("should call downloadFile method", async () => {
 			const wrapper = setup();
 
 			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
+			const policyItem = wrapper.find('[data-testid="policy-item"]');
+			await policyItem.trigger("click");
 
-			wrapper.find('[data-testid="policy-item"]').vm.$emit("click");
 			expect(downloadFileMock).toHaveBeenCalledTimes(1);
 		});
 	});

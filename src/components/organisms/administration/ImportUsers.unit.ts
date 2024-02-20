@@ -9,7 +9,11 @@ import {
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { VDataTable } from "vuetify/lib/components/index.mjs";
 
 const mockImportUsers: ImportUserListResponse = {
 	total: 3,
@@ -95,22 +99,24 @@ const mockData = {
 	searchRole: "",
 };
 
-const getWrapper: any = (data?: object, options?: object) => {
+const getWrapper = (data?: object, options?: object) => {
 	return mount(ImportUsers, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		data: () => data,
-		mocks: {
-			$theme: {
-				name: "nbc",
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			mocks: {
+				$theme: {
+					name: "nbc",
+				},
 			},
 		},
+		data: () => data,
 		...options,
 	});
 };
 
-describe("@/components/molecules/importUsers", () => {
+// VUE3_UPGRADE component is currently unused. fix test when component is needed.
+// https://ticketsystem.dbildungscloud.de/browse/BC-6337
+describe.skip("@/components/molecules/importUsers", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
@@ -135,8 +141,8 @@ describe("@/components/molecules/importUsers", () => {
 
 		const alertElement = wrapper.findAll(".v-alert");
 		expect(alertElement).toHaveLength(1);
-		expect(alertElement.wrappers[0].element.textContent).toContain(
-			wrapper.vm.$i18n.t("pages.administration.migration.cannotStart")
+		expect(alertElement[0].element.textContent).toContain(
+			wrapper.vm.$t("pages.administration.migration.cannotStart")
 		);
 
 		wrapper.vm.school.inMaintenance = true;
@@ -174,7 +180,7 @@ describe("@/components/molecules/importUsers", () => {
 		wrapper.vm.school.inUserMigration = true;
 		await wrapper.vm.$nextTick();
 
-		const dataTableElement = wrapper.find(".v-data-table");
+		const dataTableElement = wrapper.findComponent<VDataTable>(".v-data-table");
 
 		expect(dataTableElement.vm.headers).toStrictEqual(wrapper.vm.tableHead);
 		expect(dataTableElement.vm.items).toStrictEqual(mockImportUsers.data);

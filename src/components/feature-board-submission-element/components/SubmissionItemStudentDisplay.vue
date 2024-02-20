@@ -13,6 +13,7 @@
 			class="px-4"
 			:disabled="isOverdue"
 			:label="t('components.cardElement.submissionElement.completed')"
+			hide-details
 		/>
 	</div>
 </template>

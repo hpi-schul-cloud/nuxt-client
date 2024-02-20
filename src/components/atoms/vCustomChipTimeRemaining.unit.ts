@@ -35,7 +35,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-			)}${HOURS_UNTIL_DUE - 1} ${wrapper.vm.$tc(
+			)}${HOURS_UNTIL_DUE - 1} ${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintHours",
 				HOURS_UNTIL_DUE - 1
 			)}`;
@@ -47,7 +47,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-			)}${HOURS_UNTIL_DUE - 1} ${wrapper.vm.$tc(
+			)}${HOURS_UNTIL_DUE - 1} ${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintHoursShort"
 			)}`;
 			expect(wrapper.element.textContent).toContain(expectedResult);
@@ -68,7 +68,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-			)}${MINUTES_UNTIL_DUE - 1} ${wrapper.vm.$tc(
+			)}${MINUTES_UNTIL_DUE - 1} ${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintMinutes",
 				MINUTES_UNTIL_DUE - 1
 			)}`;
@@ -81,7 +81,7 @@ describe("@/components/atoms/vCustomChipTimeRemaining", () => {
 
 			const expectedResult = `${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintDueTime"
-			)}${MINUTES_UNTIL_DUE - 1} ${wrapper.vm.$tc(
+			)}${MINUTES_UNTIL_DUE - 1} ${wrapper.vm.$t(
 				"components.atoms.VCustomChipTimeRemaining.hintMinShort"
 			)}`;
 

@@ -1,9 +1,6 @@
 <template>
 	<div>
-		<v-row
-			class="student-visibility-switch"
-			v-if="isTeacherStudentVisibilityVisible"
-		>
+		<v-row v-if="isTeacherStudentVisibilityVisible">
 			<v-col>
 				<v-switch
 					:disabled="!isTeacherStudentVisibilityConfigurable"
@@ -38,7 +35,7 @@
 				</p>
 			</v-col>
 		</v-row>
-		<v-row v-if="toggleStudentLernstoreViewEnabled" class="learnstore-switch">
+		<v-row v-if="toggleStudentLernstoreViewEnabled">
 			<v-col>
 				<v-switch
 					:model-value="lernStoreVisibility"
@@ -54,7 +51,7 @@
 					"
 					class="ml-1 mt-0"
 					data-testid="admin-school-toggle-learning-store"
-					@update:model-value="
+					@update:modelValue="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
@@ -69,7 +66,7 @@
 				</p>
 			</v-col>
 		</v-row>
-		<v-row v-if="rocketChatEnabled" class="rocketchat-switch">
+		<v-row v-if="rocketChatEnabled">
 			<v-col>
 				<v-switch
 					:model-value="features.rocketChat"
@@ -86,7 +83,7 @@
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_chat"
-					@update:model-value="
+					@update:modelValue="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
 				/>
@@ -99,7 +96,7 @@
 				</p>
 			</v-col>
 		</v-row>
-		<v-row v-if="videoConferenceEnabled" class="videoconference-switch">
+		<v-row v-if="videoConferenceEnabled">
 			<v-col>
 				<v-switch
 					:model-value="features.videoconference"
@@ -116,7 +113,7 @@
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_video_conference"
-					@update:model-value="
+					@update:modelValue="
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')
 					"

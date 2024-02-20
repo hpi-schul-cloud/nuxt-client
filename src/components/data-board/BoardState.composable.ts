@@ -90,16 +90,16 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		try {
-			await deleteCardCall(id);
 			const columnIndex = board.value.columns.findIndex(
 				(column) => column.cards.find((c) => c.cardId === id) !== undefined
 			);
-			if (columnIndex) {
+			if (columnIndex !== -1) {
 				const cardIndex = board.value.columns[columnIndex].cards.findIndex(
 					(c) => c.cardId === id
 				);
 				board.value.columns[columnIndex].cards.splice(cardIndex, 1);
 			}
+			await deleteCardCall(id);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),

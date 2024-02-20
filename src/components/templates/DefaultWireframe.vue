@@ -23,14 +23,19 @@
 					>
 						{{ fabItems.title }}
 						<template #actions>
-							<speed-dial-menu-action
+							<template
 								v-for="(action, index) in fabItems.actions"
 								:key="index"
-								:data-testid="action.dataTestId"
-								:icon="action.icon"
-								:href="action.href"
-								>{{ action.label }}</speed-dial-menu-action
 							>
+								<speed-dial-menu-action
+									:dataTestId="action.dataTestId"
+									:icon="action.icon"
+									:href="action.href"
+									:to="action.to"
+									@click="action.customEvent"
+									>{{ action.label }}</speed-dial-menu-action
+								>
+							</template>
 						</template>
 					</speed-dial-menu>
 				</slot>
@@ -44,7 +49,9 @@
 			}"
 			class="main-content"
 		>
-			<slot />
+			<div style="padding: 0 var(--space-lg)">
+				<slot />
+			</div>
 		</v-container>
 	</v-container>
 </template>
@@ -90,7 +97,6 @@ export default defineComponent({
 	},
 	setup() {
 		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
-
 		return {
 			isMobile,
 		};
@@ -104,8 +110,11 @@ export default defineComponent({
 	margin-bottom: var(--space-md);
 }
 
-.wireframe-container {
+.wireframe-header {
 	padding: 0 var(--space-lg);
+}
+.wireframe-container {
+	padding: 0;
 }
 
 :deep(.v-application__wrap) {
@@ -113,6 +122,7 @@ export default defineComponent({
 }
 
 .main-content {
+	overflow-x: auto;
 	padding: 0;
 }
 

@@ -1,5 +1,7 @@
 /* eslint-disable max-lines */
 
+import { Task, TaskStatus } from "@/store/types/tasks";
+
 /*
 	Mockdata for tasks dashboards
 	This data is also used for unit tests, to ensure that the store works properly.
@@ -22,28 +24,31 @@ const generateStatus = (props = {}) =>
 const overDueTasks = [
 	{
 		id: "59cce4171113d1132c98dc07",
-		_id: "59cce4171113d1132c98dc07",
 		name: "Aufgabe an Marla (Mathe) - abgelaufen",
 		dueDate: "2017-07-28T15:00:00.000Z",
 		courseName: "Mathe",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-07-28T11:58:46.601Z",
 		createdAt: "2017-07-28T11:58:46.601Z",
 		status: generateStatus(),
 	},
 	{
 		id: "59cce2c61113d1132c98dc06",
-		_id: "59cce2c61113d1132c98dc06",
 		name: "Private Aufgabe von Marla - mit Kurs, abgelaufen",
 		dueDate: "2017-07-28T13:00:00.000Z",
 		courseName: "Mathe",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-09-28T11:49:39.924Z",
 		createdAt: "2017-09-28T11:49:39.924Z",
 		status: generateStatus(),
 	},
 	{
 		id: "59cce352c6abf042248e888c",
-		_id: "59cce352c6abf042248e888c",
 		name: "zu archivierende Aufgabe von Marla",
 		dueDate: "2017-06-07T09:30:00.000Z",
 		courseName: "Chemie",
+		courseId: "59cce4171113d1132c01dc07",
+		updatedAt: "2017-09-28T11:56:02.897Z",
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: generateStatus(),
 	},
@@ -51,39 +56,43 @@ const overDueTasks = [
 const openTasksWithDueDate = [
 	{
 		id: "59cce4c3c6abf042248e888e",
-		_id: "59cce4c3c6abf042248e888e",
 		name: "Private Aufgabe von Cord - mit Kurs, offen",
 		description: "Test",
 		dueDate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-09-28T12:02:11.432Z",
 		lessonName: "Malen nach Zahlen",
 		createdAt: "2017-09-28T12:02:11.432Z",
 		status: generateStatus(),
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
-		_id: "59cce1d381297026d02cdc4b",
 		name: "Private Aufgabe von Marla - mit Kurs, offen",
 		dueDate: "2300-09-28T13:00:00.000Z",
 		courseName: "Mathe",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-09-28T11:49:39.924Z",
 		createdAt: "2017-09-28T11:49:39.924Z",
 		status: generateStatus(),
 	},
 	{
 		id: "59cce3f6c6abf042248e888d",
-		_id: "59cce3f6c6abf042248e888d",
 		name: "Aufgabe an Marla (Mathe) - offen",
 		dueDate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-09-28T11:58:46.601Z",
 		createdAt: "2017-09-28T11:58:46.601Z",
 		status: generateStatus(),
 	},
 	{
 		id: "59cce6c6d5e50214e47b601d",
-		_id: "59cce6c6d5e50214e47b601d",
 		name: "Archivierte Aufgaben von Cord - mit Kurs, offen",
 		dueDate: "2300-10-25T15:00:00.000Z",
 		courseName: "Mathe",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-09-28T12:10:46.180Z",
 		createdAt: "2017-09-28T12:10:46.180Z",
 		status: generateStatus(),
 	},
@@ -91,9 +100,10 @@ const openTasksWithDueDate = [
 const openTasksWithoutDueDate = [
 	{
 		id: "59cce4171113d1132c98dc08",
-		_id: "59cce4171113d1132c98dc08",
 		name: "Aufgabe an Marla (Mathe) - ohne Abgabedatum",
 		courseName: "Mathe",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-07-28T11:58:46.601Z",
 		createdAt: "2017-07-28T11:58:46.601Z",
 		status: generateStatus(),
 	},
@@ -102,11 +112,12 @@ const openTasksWithoutDueDate = [
 const submittedTasks = [
 	{
 		id: "59cce4c3c6abf042248e968e",
-		_id: "59cce4c3c6abf042248e968e",
 		name: "Aufgabe von Cord - mit Kurs, abgegeben",
 		displayColor: "#00E5FF",
 		dueDate: "2300-06-11T14:00:00.000Z",
 		courseName: "Mathe",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-09-28T12:02:11.432Z",
 		createdAt: "2017-09-28T12:02:11.432Z",
 		status: generateStatus({
 			submitted: 1,
@@ -117,11 +128,12 @@ const submittedTasks = [
 const missedButGradedTasks = [
 	{
 		id: "59cce352c6abf001248e888c",
-		_id: "59cce352c6abf001248e888c",
 		name: "Aufgabe von Marla - abgelaufen, bewertet",
 		displayColor: "#1DE9B6",
 		dueDate: "2017-06-07T09:30:00.000Z",
 		courseName: "Biologie",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-09-28T11:56:02.897Z",
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: generateStatus({
 			graded: 1,
@@ -132,11 +144,12 @@ const missedButGradedTasks = [
 const gradedTasks = [
 	{
 		id: "59cce7u6c6abf042248e888d",
-		_id: "59cce7u6c6abf042248e888d",
 		name: "Aufgabe an Marla (Mathe) - abgegeben, bewertet",
 		displayColor: "#00E5FF",
 		dueDate: "2300-09-28T15:00:00.000Z",
 		courseName: "Mathe",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-09-28T11:58:46.601Z",
 		createdAt: "2017-09-28T11:58:46.601Z",
 		status: generateStatus({
 			submitted: 1,
@@ -145,11 +158,12 @@ const gradedTasks = [
 	},
 	{
 		id: "59cce352c6abf001248e888c",
-		_id: "59cce352c6abf001248e888c",
 		name: "Aufgabe von Marla - abgelaufen, bewertet",
 		displayColor: "#1DE9B6",
 		dueDate: "2017-06-07T09:30:00.000Z",
 		courseName: "Biologie",
+		courseId: "59cce4171113d1132c00dc07",
+		updatedAt: "2017-09-28T11:56:02.897Z",
 		createdAt: "2017-09-28T11:56:02.897Z",
 		status: generateStatus({
 			graded: 1,
@@ -163,7 +177,7 @@ const openTasks = [
 	...openTasksWithoutDueDate,
 ];
 const completedTasks = [...submittedTasks, ...gradedTasks];
-const tasks = [...openTasks, ...completedTasks];
+const tasks: Task[] = [...openTasks, ...completedTasks];
 
 const invalidTasks = [
 	{
@@ -175,7 +189,6 @@ const invalidTasks = [
 	},
 	{
 		id: "59cce1d381297026d02cdc4b",
-		_id: "59cce1d381297026d02cdc4b",
 		dueDate: "2300-09-28T13:00:00.000Z",
 		courseName: "Mathe",
 		createdAt: "2017-09-28T11:49:39.924Z",
@@ -460,12 +473,12 @@ const mathTasks = [
 	},
 ];
 
-const hex = (value) => Math.floor(value).toString(16);
+const hex = (value: number) => Math.floor(value).toString(16);
 const rnd = () => Math.random() * 16;
 const ObjectId = () =>
 	hex(Date.now() / 1000) + " ".repeat(16).replace(/./g, () => hex(rnd()));
 
-const generateTask = (status, props) => {
+const generateTask = (status: TaskStatus, props: any) => {
 	const id = ObjectId();
 
 	return Object.assign(

@@ -1,11 +1,13 @@
 <template>
 	<v-list-item :title="item.name">
-		<template #prepend>
+		<template #prepend v-if="item.logoUrl">
 			<v-img
+				cover
 				v-if="item.logoUrl"
-				:max-height="$props.maxHeight"
-				:max-width="$props.maxWidth"
+				:max-height="maxHeight"
+				:max-width="maxWidth"
 				:src="item.logoUrl"
+				:width="maxHeight"
 				class="mx-2"
 			/>
 		</template>

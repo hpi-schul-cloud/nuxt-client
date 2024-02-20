@@ -22,7 +22,7 @@
 		<template #content>
 			<room-avatar-iterator
 				class="iterator"
-				:items="groupData.groupElements"
+				:avatars="groupData.groupElements"
 				:item-size="itemSize"
 				:col-count="4"
 				:max-items="-1"
@@ -39,7 +39,6 @@ import { roomsModule } from "@/store";
 import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	components: {
 		vCustomDialog,

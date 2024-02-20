@@ -1,3 +1,4 @@
+-
 <template>
 	<transition
 		:name="orientation === 'left' ? 'slide-fade-left' : 'slide-fade-right'"
@@ -15,8 +16,10 @@
 					icon
 					size="small"
 					:href="href"
+					:to="to"
 					@click="onClick"
 					role="menuitem"
+					:data-testid="dataTestId"
 				>
 					<v-icon>{{ props.icon }}</v-icon>
 					<span class="d-sr-only"> <slot /> </span>
@@ -26,6 +29,7 @@
 					tabindex="-1"
 					aria-hidden="true"
 					:href="href"
+					:to="to"
 					@click="onClick"
 					><slot />
 				</v-btn>
@@ -37,7 +41,9 @@
 					tabindex="-1"
 					aria-hidden="true"
 					:href="href"
+					:to="to"
 					@click="onClick"
+					:data-testid="dataTestId"
 					><slot />
 				</v-btn>
 				<v-btn
@@ -46,6 +52,7 @@
 					icon
 					size="small"
 					:href="href"
+					:to="to"
 					@click="onClick"
 					role="menuitem"
 				>
@@ -58,25 +65,26 @@
 </template>
 
 <script lang="ts" setup>
+import { delay } from "@/utils/helpers";
+import { injectStrict } from "@/utils/inject";
+import { computed, onMounted, Ref, ref, unref, withDefaults } from "vue";
 import {
 	INJECT_SPEED_DIAL_ACTION_CLICKED,
 	INJECT_SPEED_DIAL_DIRECTION,
 	INJECT_SPEED_DIAL_ORIENTATION,
 } from "./injection-tokens";
-import { delay } from "@/utils/helpers";
-import { injectStrict } from "@/utils/inject";
-import { computed, onMounted, Ref, ref, unref, withDefaults } from "vue";
 
 const props = withDefaults(
 	defineProps<{
 		icon: string;
-		/**
-		 * internal prop for animation order
-		 */
+		dataTestId?: string;
 		speedDialIndex?: number;
 		href?: string;
+		to?: string;
 	}>(),
-	{ speedDialIndex: 0 }
+	{
+		speedDialIndex: 0,
+	}
 );
 
 const emit = defineEmits<{

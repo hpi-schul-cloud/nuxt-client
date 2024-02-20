@@ -3,16 +3,6 @@
 		<skip-links />
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
-				<!-- Vue3 Upgrade:  Bug Hunt Alert -->
-				<v-alert
-					color="red"
-					density="compact"
-					variant="flat"
-					class="ma-2"
-					style="text-align: center"
-				>
-					Bug Hunt: You are on a Vue page
-				</v-alert>
 				<the-top-bar
 					v-if="!isInline"
 					:fullscreen-mode="fullScreenMode"

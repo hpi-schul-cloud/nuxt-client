@@ -1,12 +1,17 @@
 <template>
 	<ContentElementBar v-if="isEditMode">
 		<template #element>
-			<v-progress-linear
+			<div
 				v-if="isUploading || fileWasPicked"
-				data-testid="board-file-element-progress-bar"
-				indeterminate
-				color="primary"
-			/>
+				class="d-flex align-center pt-1"
+				style="height: 32px"
+			>
+				<v-progress-linear
+					data-testid="board-file-element-progress-bar"
+					indeterminate
+					color="primary"
+				/>
+			</div>
 
 			<FilePicker
 				v-else

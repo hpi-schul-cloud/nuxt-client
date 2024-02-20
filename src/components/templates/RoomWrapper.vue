@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import { authModule, envConfigModule, roomsModule } from "@/store";
+import { authModule, roomsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
-import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
+import { mdiPlus } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -63,7 +63,7 @@ export default defineComponent({
 					title: this.$t("common.actions.create"),
 					href: "/courses/add",
 					ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
-					testId: "add-course-button",
+					dataTestId: "add-course-button",
 				};
 			}
 

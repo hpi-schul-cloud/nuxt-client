@@ -9,6 +9,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -156,7 +157,7 @@ describe("@templates/RoomWrapper.vue", () => {
 		it("should display fab", () => {
 			const wrapper = getWrapper();
 
-			const fabComponent = wrapper.find(".wireframe-fab");
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(true);
 		});
 	});

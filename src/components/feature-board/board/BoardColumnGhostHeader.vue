@@ -1,9 +1,10 @@
 <template>
-	<div class="mb-4 pt-2" ref="headerRef">
-		<div class="d-flex align-start justify-space-between pa-2">
+	<div class="mb-4" ref="headerRef">
+		<div class="d-flex align-start justify-space-between pt-2">
 			<VBtn
 				elevation="0"
 				variant="text"
+				class="mb-2"
 				:color="isColumnActive ? 'text-black' : 'text-grey-darken-2'"
 				@click="onAddColumn"
 			>

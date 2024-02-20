@@ -93,9 +93,6 @@ describe("@/components/organisms/FormCreateUser", () => {
 
 			await submitButton.trigger("click");
 
-			await nextTick();
-			await nextTick();
-
 			const eventUserData = wrapper.emitted();
 			expect(eventUserData["create-user"]).toBeUndefined();
 		});
