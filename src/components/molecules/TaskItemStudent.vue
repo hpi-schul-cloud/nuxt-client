@@ -21,11 +21,11 @@
 			<!-- item main info -->
 			<div class="d-flex align-center justify-space-between">
 				<!-- item title -->
-				<div class="task-item__main-info">
+				<div class="task-item__main-info w-65" :style="conditionalWidth">
 					<v-list-item-subtitle data-testid="taskSubtitle">
 						{{ taskLabel }}
 					</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle">
+					<v-list-item-title data-testid="taskTitle" class="text-truncate">
 						{{ task.name }}
 					</v-list-item-title>
 					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
@@ -46,7 +46,7 @@
 						/>
 					</div>
 				</div>
-				<div class="hidden-xs mr-4 text-right">
+				<div class="hidden-xs mr-4">
 					<div
 						class="text-subtitle-2 due-date-label"
 						data-test-id="dueDateLabel"
@@ -167,6 +167,12 @@ export default {
 		},
 		ariaLabel() {
 			return `${this.$t("common.words.task")} ${this.task.name}`;
+		},
+		conditionalWidth() {
+			if (this.$vuetify.display.xs) {
+				return "width: 96%";
+			}
+			return "width: 65%";
 		},
 	},
 	methods: {
