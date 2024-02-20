@@ -76,6 +76,7 @@ import {
 	ComputedRef,
 	defineComponent,
 	onMounted,
+	onUnmounted,
 	PropType,
 	Ref,
 	ref,
@@ -244,9 +245,13 @@ export default defineComponent({
 
 		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
-		setInterval(async () => {
+		const timer = setInterval(async () => {
 			await loadCardData();
 		}, refreshTimeInMs);
+
+		onUnmounted(() => {
+			clearInterval(timer);
+		});
 
 		return {
 			t,

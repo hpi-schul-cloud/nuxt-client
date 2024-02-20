@@ -6,6 +6,7 @@ import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
+import { Envs } from "@/store/types/env-config";
 import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -17,7 +18,6 @@ import {
 	timestampsResponseFactory,
 } from "@@/tests/test-utils";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	useContextExternalToolConfigurationStatus,
@@ -64,8 +64,6 @@ describe("ExternalToolElement", () => {
 	let useToolConfigurationStatusMock: DeepMocked<
 		ReturnType<typeof useContextExternalToolConfigurationStatus>
 	>;
-
-	const envConfigModuleMock = createModuleMocks(EnvConfigModule);
 
 	beforeEach(() => {
 		useContentElementStateMock =
@@ -119,6 +117,11 @@ describe("ExternalToolElement", () => {
 		useExternalToolElementDisplayStateMock.error = ref(undefined);
 		useSharedLastCreatedElementMock.lastCreatedElementId = ref(undefined);
 
+		const refreshTime = 299000;
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as Envs,
+		});
+
 		const wrapper: Wrapper<Vue> = shallowMount(
 			ExternalToolElement as MountOptions<Vue>,
 			{
@@ -141,14 +144,9 @@ describe("ExternalToolElement", () => {
 
 		return {
 			wrapper,
+			refreshTime,
 		};
 	};
-
-	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
-	});
 
 	afterEach(() => {
 		jest.resetAllMocks();
@@ -691,7 +689,8 @@ describe("ExternalToolElement", () => {
 
 	describe("when refresh time is over", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper(
+			jest.useFakeTimers("legacy");
+			const { wrapper, refreshTime } = getWrapper(
 				{
 					element: {
 						...EMPTY_TEST_ELEMENT,
@@ -704,9 +703,6 @@ describe("ExternalToolElement", () => {
 				})
 			);
 
-			const refreshTime = 299000;
-			// envConfigModule.getEnv?.CTL_TOOLS_RELOAD_TIME_MS ?? 299000;
-
 			return {
 				wrapper,
 				refreshTime,
@@ -714,7 +710,6 @@ describe("ExternalToolElement", () => {
 		};
 
 		it("should call tool reference endpoint again", async () => {
-			jest.useFakeTimers("legacy");
 			const { refreshTime } = setup();
 			await Vue.nextTick();
 

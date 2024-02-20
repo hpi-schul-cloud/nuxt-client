@@ -2,6 +2,7 @@ import ContextExternalToolsModule from "@/store/context-external-tools";
 import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import RoomModule from "@/store/room";
+import { Envs } from "@/store/types/env-config";
 import { CourseFeatures } from "@/store/types/room";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
@@ -16,7 +17,6 @@ import {
 	courseFactory,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
 import flushPromises from "flush-promises";
 import Vue from "vue";
@@ -47,7 +47,10 @@ describe("RoomExternalToolOverview", () => {
 			getLoading: false,
 		});
 
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule);
+		const refreshTime = 299000;
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as Envs,
+		});
 
 		roomModule.fetchCourse.mockResolvedValue(null);
 
@@ -76,14 +79,9 @@ describe("RoomExternalToolOverview", () => {
 			wrapper,
 			contextExternalToolsModule,
 			roomModule,
+			refreshTime,
 		};
 	};
-
-	beforeEach(() => {
-		setupStores({
-			envConfigModule: EnvConfigModule,
-		});
-	});
 
 	afterEach(() => {
 		jest.resetAllMocks();
@@ -198,11 +196,12 @@ describe("RoomExternalToolOverview", () => {
 	});
 
 	describe("when refresh time is over", () => {
+		afterEach(() => {
+			jest.useRealTimers();
+		});
 		const setup = () => {
-			const { contextExternalToolsModule } = getWrapper([]);
-
-			const refreshTime = 299000;
-			//envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS ?? 299000;
+			jest.useFakeTimers("legacy");
+			const { contextExternalToolsModule, refreshTime } = getWrapper([]);
 
 			return {
 				contextExternalToolsModule,
@@ -211,7 +210,6 @@ describe("RoomExternalToolOverview", () => {
 		};
 
 		it("should call tool reference endpoint again", () => {
-			jest.useFakeTimers("legacy");
 			const { contextExternalToolsModule, refreshTime } = setup();
 
 			expect(

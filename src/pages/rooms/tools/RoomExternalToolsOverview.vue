@@ -64,6 +64,7 @@ import {
 	ComputedRef,
 	defineComponent,
 	onMounted,
+	onUnmounted,
 	ref,
 	Ref,
 } from "vue";
@@ -119,7 +120,7 @@ export default defineComponent({
 
 		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
-		setInterval(async () => {
+		const timer = setInterval(async () => {
 			await contextExternalToolsModule.loadExternalToolDisplayData({
 				contextId: props.roomId,
 				contextType: ToolContextType.Course,
@@ -133,6 +134,10 @@ export default defineComponent({
 		const loading: ComputedRef<boolean> = computed(
 			() => contextExternalToolsModule.getLoading || roomModule.getLoading
 		);
+
+		onUnmounted(() => {
+			clearInterval(timer);
+		});
 
 		return {
 			loading,
