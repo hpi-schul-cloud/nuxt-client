@@ -19,9 +19,9 @@
 				</div>
 				<div class="d-flex flex-column w-100">
 					<div class="d-flex">
-						<h5 class="my-auto">
+						<h2 class="text-h5 my-auto">
 							{{ title }}
-						</h5>
+						</h2>
 						<v-icon
 							v-if="openInNewTab"
 							class="ml-1 my-auto text-no-wrap"
