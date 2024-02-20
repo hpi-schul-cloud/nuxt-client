@@ -1376,14 +1376,6 @@ export const esES: I18nLanguage = {
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.label.shareLesson": "Compartir copia del tema",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
-	"pages.room.modal.course.invite.header": "¡Enlace de invitación generado!",
-	"pages.room.modal.course.invite.text":
-		"Comparte el siguiente enlace con tus alumnos para invitarlos al curso. Los estudiantes deben iniciar sesión para usar el enlace.",
-	"pages.room.modal.course.share.header": "¡Se ha generado el código de copia!",
-	"pages.room.modal.course.share.subText":
-		"Como alternativa, puedes mostrarles a tus compañeros-profesores el siguiente código QR.",
-	"pages.room.modal.course.share.text":
-		"Distribuya el siguiente código a otros colegas para que puedan importar el curso como una copia. Los envíos de estudiantes antiguos se eliminan automáticamente para el curso recién copiado.",
 	"pages.room.student.emptyState":
 		"Aquí aparecen contenidos de aprendizaje como temas o tareas.",
 	"pages.room.taskCard.aria":
@@ -1411,7 +1403,6 @@ export const esES: I18nLanguage = {
 	"pages.rooms.fab.add.lesson": "Nuevo tema",
 	"pages.rooms.fab.add.task": "Nuevo tarea",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
-	"pages.rooms.fab.import.course": "Importar curso",
 	"pages.rooms.groupName": "Cursos",
 	"pages.rooms.headerSection.archived": "Archivo",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
