@@ -37,6 +37,8 @@ import { FileRecordResponse } from '../models';
 // @ts-ignore
 import { FileUrlParams } from '../models';
 // @ts-ignore
+import { FilesStorageConfigResponse } from '../models';
+// @ts-ignore
 import { PreviewOutputMimeTypes } from '../models';
 // @ts-ignore
 import { PreviewWidth } from '../models';
@@ -444,6 +446,40 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Useable configuration for clients
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publicConfig: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/file/config/public`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Restore all files of a parent entityId that are marked for deletion.
          * @param {string} schoolId 
          * @param {string} parentId 
@@ -754,6 +790,16 @@ export const FileApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Useable configuration for clients
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async publicConfig(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FilesStorageConfigResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.publicConfig(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Restore all files of a parent entityId that are marked for deletion.
          * @param {string} schoolId 
          * @param {string} parentId 
@@ -915,6 +961,15 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Useable configuration for clients
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        publicConfig(options?: any): AxiosPromise<FilesStorageConfigResponse> {
+            return localVarFp.publicConfig(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Restore all files of a parent entityId that are marked for deletion.
          * @param {string} schoolId 
          * @param {string} parentId 
@@ -1068,6 +1123,15 @@ export interface FileApiInterface {
      * @memberof FileApiInterface
      */
     patchFilename(fileRecordId: string, renameFileParams: RenameFileParams, options?: any): AxiosPromise<FileRecordResponse>;
+
+    /**
+     * 
+     * @summary Useable configuration for clients
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApiInterface
+     */
+    publicConfig(options?: any): AxiosPromise<FilesStorageConfigResponse>;
 
     /**
      * 
@@ -1239,6 +1303,17 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      */
     public patchFilename(fileRecordId: string, renameFileParams: RenameFileParams, options?: any) {
         return FileApiFp(this.configuration).patchFilename(fileRecordId, renameFileParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Useable configuration for clients
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FileApi
+     */
+    public publicConfig(options?: any) {
+        return FileApiFp(this.configuration).publicConfig(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
