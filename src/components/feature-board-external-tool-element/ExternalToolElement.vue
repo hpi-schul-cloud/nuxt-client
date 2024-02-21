@@ -9,6 +9,7 @@
 		:ripple="false"
 		tabindex="0"
 		:loading="isLoading"
+		@keydown.enter="onKeyDownEnter"
 		@keydown.up.down="onKeydownArrow"
 		@click="onClickElement"
 	>
@@ -54,6 +55,7 @@
 <script lang="ts">
 import { useI18n } from "vue-i18n";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
+import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
@@ -61,6 +63,7 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
+import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 import { useSharedLastCreatedElement } from "@util-board";
 import {
 	computed,
@@ -76,8 +79,6 @@ import {
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
-import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 
 export default defineComponent({
 	components: {
@@ -194,6 +195,10 @@ export default defineComponent({
 			isConfigurationDialogOpen.value = true;
 		};
 
+		const onKeyDownEnter = () => {
+			onClickElement();
+		};
+
 		const onClickElement = () => {
 			if (hasLinkedTool.value && !props.isEditMode) {
 				launchTool();
@@ -242,6 +247,7 @@ export default defineComponent({
 			onMoveElementDown,
 			onMoveElementUp,
 			onKeydownArrow,
+			onKeyDownEnter,
 			onDeleteElement,
 			onEditElement,
 			onClickElement,
