@@ -12,11 +12,11 @@ import {
 	FileApiInterface,
 	FilesStorageConfigResponse,
 } from "@/fileStorageApi/v3";
-/*
+
 import { applicationErrorModule } from "@/store";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-*/
+
 /*
 export const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
@@ -285,8 +285,10 @@ export default class EnvConfigModule extends VuexModule {
 			filePathsModule.init();
 			this.setStatus("completed");
 		} catch (error: unknown) {
-			// const applikationError = createApplicationError(HttpStatusCode.GatewayTimeout);
-			// applicationErrorModule.setError(applikationError);
+			const applikationError = createApplicationError(
+				HttpStatusCode.GatewayTimeout
+			);
+			applicationErrorModule.setError(applikationError);
 			console.error(`Configuration could not be loaded from the server`, error);
 
 			this.setStatus("error");
