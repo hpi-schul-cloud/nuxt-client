@@ -1,7 +1,8 @@
+import { I18nLanguage } from "@/plugins/i18n";
 import { createI18n } from "vue-i18n";
 
 export const createTestingI18n = (options = {}) => {
-	const i18n = createI18n({
+	const i18n = createI18n<I18nLanguage, "en">({
 		legacy: false,
 		locale: "en",
 		fallbackLocale: ["en"],
@@ -11,7 +12,7 @@ export const createTestingI18n = (options = {}) => {
 		fallbackWarn: false,
 		silentTranslationWarn: true,
 		messages: {
-			en: {},
+			en: {} as I18nLanguage,
 		},
 		...options,
 	});

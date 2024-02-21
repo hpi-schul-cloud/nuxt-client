@@ -1,6 +1,4 @@
-import { I18nLanguage } from "@/plugins/i18n";
-
-export const ukUA: I18nLanguage = {
+export default {
 	"common.action.publish": "Опублікувати",
 	"common.actions.add": "Додати",
 	"common.actions.back": "Назад",
