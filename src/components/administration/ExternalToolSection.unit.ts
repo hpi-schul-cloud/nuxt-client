@@ -288,7 +288,7 @@ describe("ExternalToolSection", () => {
 
 					await deleteButton.trigger("click");
 
-					expect(wrapper.find('div[role="dialog"]')).toBeDefined();
+					expect(wrapper.findComponent({ name: "v-dialog" })).toBeDefined();
 					expect(wrapper.vm.isDeleteDialogOpen).toBeTruthy();
 				});
 
@@ -360,7 +360,6 @@ describe("ExternalToolSection", () => {
 						});
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
-
 						const deleteButton = tableRows[0].get(
 							'[data-testid="deleteAction"]'
 						);
@@ -368,7 +367,7 @@ describe("ExternalToolSection", () => {
 						await deleteButton.trigger("click");
 
 						const confirmButton = wrapper.findComponent(
-							"[data-testId=delete-dialog-confirm]"
+							"[data-testId='delete-dialog-confirm']"
 						);
 						await confirmButton.trigger("click");
 
@@ -389,8 +388,6 @@ describe("ExternalToolSection", () => {
 				wrapper.vm.itemToDelete = {
 					id: "id",
 					name: expectedName,
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					//@ts-ignore
 					statusText: schoolToolConfigurationStatusFactory.build(),
 					isOutdated: false,
 					isDeactivated: false,
@@ -503,10 +500,8 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows[0].findAll("button");
-
-				const deleteButton = firstRowButtons[1];
 				await deleteButton.trigger("click");
 
 				const dialog = wrapper.find('[data-testid="delete-dialog"]');
