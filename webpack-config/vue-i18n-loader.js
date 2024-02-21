@@ -1,4 +1,4 @@
-const { generateJSON } = require("@intlify/bundle-utils");
+const { generateJavaScript } = require("@intlify/bundle-utils");
 
 const loader = function (source, sourceMap) {
 	// eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -29,7 +29,7 @@ const loader = function (source, sourceMap) {
 
 	try {
 		this.cacheable && this.cacheable();
-		const { code, map } = generateJSON(source, options);
+		const { code, map } = generateJavaScript(source, options);
 		this.callback(null, code, map);
 	} catch (err) {
 		loaderContext.emitError(new Error(`[vue-i18n-loader]: ${err.message}`));

@@ -1,6 +1,4 @@
-import { I18nLanguage } from "@/plugins/i18n";
-
-export const enGB: I18nLanguage = {
+export default {
 	"common.action.publish": "Publish",
 	"common.actions.add": "Add",
 	"common.actions.back": "Back",
