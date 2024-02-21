@@ -36,10 +36,11 @@ dayjs.extend(relativeTime);
 const TEST_DATETIME_TIMEZONE = "America/New_York";
 const TEST_USER_TIMEZONE = "Europe/Berlin";
 const TEST_CURRENT_LOCALE = "en";
+const TEST_CURRENT_LANGUAGE_CODE = "enGB";
 
 const translations = {
-	en: require("@/locales/en.json"),
-	de: require("@/locales/de.json"),
+	en: require("@/locales/en.ts"),
+	de: require("@/locales/de.ts"),
 };
 
 const defaultFormats = {
@@ -54,21 +55,21 @@ const getUTCOffsetForTimezone = (tz) => {
 const localizedFormats = {
 	de: {
 		...defaultFormats,
-		date: translations["de"]["format.date"],
-		dateYY: translations["de"]["format.dateYY"],
-		dateTime: translations["de"]["format.dateTime"],
-		dateTimeYY: translations["de"]["format.dateTimeYY"],
-		dateLong: translations["de"]["format.dateLong"],
-		time: translations["de"]["format.time"],
+		date: translations["de"]["deDE"]["format.date"],
+		dateYY: translations["de"]["deDE"]["format.dateYY"],
+		dateTime: translations["de"]["deDE"]["format.dateTime"],
+		dateTimeYY: translations["de"]["deDE"]["format.dateTimeYY"],
+		dateLong: translations["de"]["deDE"]["format.dateLong"],
+		time: translations["de"]["deDE"]["format.time"],
 	},
 	en: {
 		...defaultFormats,
-		date: translations["en"]["format.date"],
-		dateYY: translations["en"]["format.dateYY"],
-		dateTime: translations["en"]["format.dateTime"],
-		dateTimeYY: translations["en"]["format.dateTimeYY"],
-		dateLong: translations["en"]["format.dateLong"],
-		time: translations["en"]["format.time"],
+		date: translations["en"]["enGB"]["format.date"],
+		dateYY: translations["en"]["enGB"]["format.dateYY"],
+		dateTime: translations["en"]["enGB"]["format.dateTime"],
+		dateTimeYY: translations["en"]["enGB"]["format.dateTimeYY"],
+		dateLong: translations["en"]["enGB"]["format.dateLong"],
+		time: translations["en"]["enGB"]["format.time"],
 	},
 };
 
@@ -218,7 +219,9 @@ describe("@/plugins/datetime", () => {
 			currentTimezone: TEST_USER_TIMEZONE,
 		},
 		i18n: {
-			t: (key) => translations[TEST_CURRENT_LOCALE]?.[key] || key,
+			t: (key) =>
+				translations[TEST_CURRENT_LOCALE][TEST_CURRENT_LANGUAGE_CODE]?.[key] ||
+				key,
 		},
 	};
 
