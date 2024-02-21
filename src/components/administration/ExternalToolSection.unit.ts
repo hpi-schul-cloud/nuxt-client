@@ -169,7 +169,8 @@ describe("ExternalToolSection", () => {
 				],
 			});
 
-			jest.spyOn(window, "open");
+			const windowMock = createMock<Window>();
+			jest.spyOn(window, "open").mockImplementation(() => windowMock);
 
 			return {
 				wrapper,
@@ -283,8 +284,7 @@ describe("ExternalToolSection", () => {
 					const { wrapper } = setupItems();
 
 					const tableRows = wrapper.find("tbody").findAll("tr");
-					const firstRowButtons = tableRows[0].findAll("button");
-					const deleteButton = firstRowButtons[1];
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
 					await deleteButton.trigger("click");
 
@@ -297,8 +297,9 @@ describe("ExternalToolSection", () => {
 						const { wrapper } = setupItems();
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
-						const firstRowButtons = tableRows[0].findAll("button");
-						const deleteButton = firstRowButtons[1];
+						const deleteButton = tableRows[0].get(
+							'[data-testid="deleteAction"]'
+						);
 
 						await deleteButton.trigger("click");
 
@@ -326,8 +327,10 @@ describe("ExternalToolSection", () => {
 						});
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
-						const firstRowButtons = tableRows[0].findAll("button");
-						const deleteButton = firstRowButtons[1];
+						const deleteButton = tableRows[0].get(
+							'[data-testid="deleteAction"]'
+						);
+
 						await deleteButton.trigger("click");
 
 						const confirmButton = wrapper.getComponent(
@@ -358,9 +361,10 @@ describe("ExternalToolSection", () => {
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
 
-						const firstRowButtons = tableRows[0].findAll("button");
+						const deleteButton = tableRows[0].get(
+							'[data-testid="deleteAction"]'
+						);
 
-						const deleteButton = firstRowButtons[1];
 						await deleteButton.trigger("click");
 
 						const confirmButton = wrapper.findComponent(
@@ -439,10 +443,8 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows[0].findAll("button");
-
-				const deleteButton = firstRowButtons[1];
 				await deleteButton.trigger("click");
 
 				const dialog = wrapper.findComponent({ name: "v-dialog" });
@@ -454,10 +456,8 @@ describe("ExternalToolSection", () => {
 				const { wrapper, schoolExternalToolMetadata } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows[0].findAll("button");
-
-				const deleteButton = firstRowButtons[1];
 				await deleteButton.trigger("click");
 
 				const dialogContent = wrapper.findComponent({ name: "renderHTML" });
@@ -474,10 +474,8 @@ describe("ExternalToolSection", () => {
 				const { wrapper, notifierModule } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows[0].findAll("button");
-
-				const deleteButton = firstRowButtons[1];
 				await deleteButton.trigger("click");
 
 				expect(notifierModule.show).not.toHaveBeenCalled();
@@ -520,10 +518,8 @@ describe("ExternalToolSection", () => {
 				const { wrapper, notifierModule } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows[0].findAll("button");
-
-				const deleteButton = firstRowButtons[1];
 				await deleteButton.trigger("click");
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
