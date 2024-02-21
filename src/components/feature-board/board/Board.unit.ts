@@ -45,7 +45,13 @@ const mockedUseSharedBoardPageInformation = jest.mocked(
 );
 const mockUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
-jest.mock("@util-board");
+jest.mock("@util-board", () => {
+	return {
+		useBoardNotifier: jest.fn(),
+		useSharedLastCreatedElement: jest.fn(),
+		extractDataAttribute: jest.fn(() => "column-id"),
+	};
+});
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockedUseCardState = jest.mocked(useCardState);
 
@@ -139,6 +145,11 @@ describe("Board", () => {
 	const oneColumn = columnResponseFactory.build({ cards });
 	const boardWithOneColumn = boardResponseFactory.build({
 		columns: [oneColumn],
+	});
+
+	const twoColumns = columnResponseFactory.buildList(2, { cards });
+	const boardWithTwoColumns = boardResponseFactory.build({
+		columns: twoColumns,
 	});
 	const notifierModule = createModuleMocks(NotifierModule);
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -381,14 +392,21 @@ describe("Board", () => {
 			});
 		});
 
-		describe.skip("@onDropColumn", () => {
+		describe("@onDropColumn", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
-					const { wrapper } = setup();
-					const containerComponent = wrapper.findComponent({
+					const { wrapper } = setup({ board: boardWithTwoColumns });
+					const containerComponent = wrapper.findAllComponents({
 						name: "Sortable",
 					});
-					containerComponent.vm.$emit("end");
+
+					const payload = {
+						item: document.createElement("div"),
+						newIndex: 1,
+						oldIndex: 0,
+					};
+
+					containerComponent[0].vm.$emit("end", payload);
 
 					expect(mockedBoardStateCalls.moveColumn).toHaveBeenCalled();
 				});
@@ -398,25 +416,26 @@ describe("Board", () => {
 				it("should not call moveColumn method", () => {
 					const { wrapper } = setup({
 						permissions: { hasMovePermission: false },
+						board: boardWithTwoColumns,
 					});
-					const containerComponent = wrapper.findComponent({
+					const containerComponent = wrapper.findAllComponents({
 						name: "Sortable",
 					});
-					containerComponent.vm.$emit("end");
+					containerComponent[0].vm.$emit("move");
 
 					expect(mockedBoardStateCalls.moveColumn).not.toHaveBeenCalled();
 				});
 			});
 		});
 
-		describe.skip("@onMoveColumnLeft", () => {
+		describe("@onMoveColumnLeft", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
-					const { wrapper } = setup();
-					const boardColumnComponent = wrapper.findComponent({
+					const { wrapper } = setup({ board: boardWithTwoColumns });
+					const boardColumnComponent = wrapper.findAllComponents({
 						name: "BoardColumn",
 					});
-					boardColumnComponent.vm.$emit("move:column-left");
+					boardColumnComponent[1].vm.$emit("move:column-left");
 
 					expect(mockedBoardStateCalls.moveColumn).toHaveBeenCalled();
 				});
@@ -426,21 +445,22 @@ describe("Board", () => {
 				it("should not call moveColumn method", () => {
 					const { wrapper } = setup({
 						permissions: { hasMovePermission: false },
+						board: boardWithTwoColumns,
 					});
-					const boardColumnComponent = wrapper.findComponent({
+					const boardColumnComponent = wrapper.findAllComponents({
 						name: "BoardColumn",
 					});
-					boardColumnComponent.vm.$emit("move:column-left");
+					boardColumnComponent[1].vm.$emit("move:column-left");
 
 					expect(mockedBoardStateCalls.moveColumn).not.toHaveBeenCalled();
 				});
 			});
 		});
 
-		describe.skip("@onMoveColumnRight", () => {
+		describe("@onMoveColumnRight", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
-					const { wrapper } = setup();
+					const { wrapper } = setup({ board: boardWithTwoColumns });
 					const boardColumnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -454,6 +474,7 @@ describe("Board", () => {
 				it("should not call moveColumn method", () => {
 					const { wrapper } = setup({
 						permissions: { hasMovePermission: false },
+						board: boardWithTwoColumns,
 					});
 					const boardColumnComponent = wrapper.findComponent({
 						name: "BoardColumn",
