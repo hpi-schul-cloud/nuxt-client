@@ -13,6 +13,11 @@ import {
 	FilesStorageConfigResponse,
 } from "@/fileStorageApi/v3";
 /*
+import { applicationErrorModule } from "@/store";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+*/
+/*
 export const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
 	// JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
@@ -29,7 +34,19 @@ export const configsFromEnvironmentVars = {
 	),
 };
 */
-const retryLimit = 10;
+
+type CallbackFunctions = (paypal: number) => void;
+
+const retryLoading = (callback: CallbackFunctions, retry: number): void => {
+	if (retry <= 10) {
+		const increasedRetry = retry + 1;
+		setTimeout(() => {
+			callback(increasedRetry);
+		}, 1500);
+	} else {
+		throw new Error("Loading for config failed.");
+	}
+};
 
 @Module({
 	name: "envConfigModule",
@@ -38,9 +55,10 @@ const retryLimit = 10;
 })
 export default class EnvConfigModule extends VuexModule {
 	private defaultFileSize = 2684354560;
+	private retryConfigLoadingNumber = 9;
 
 	env: ConfigResponse = {
-		NOT_AUTHENTICATED_REDIRECT_URL: "/login",
+		NOT_AUTHENTICATED_REDIRECT_URL: "",
 		SC_THEME: "",
 		JWT_TIMEOUT_SECONDS: -1,
 		JWT_SHOW_TIMEOUT_WARNING_SECONDS: -1,
@@ -213,7 +231,7 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	public get getShowNewClassViewEnabled(): boolean {
-		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED ?? false;
+		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED;
 	}
 
 	private get serverApi(): DefaultApiInterface {
@@ -229,49 +247,49 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	@Action
-	async findEnvs(): Promise<void> {
+	async loadFileConfig(retry = 0): Promise<void> {
+		try {
+			const fileConfig = await this.fileApi.publicConfig();
+			this.setFileEnvs(fileConfig.data);
+		} catch (error) {
+			retryLoading(this.loadFileConfig, retry);
+		}
+	}
+
+	@Action
+	async loadCoreConfig(retry = 0): Promise<void> {
+		try {
+			const serverConfig =
+				await this.serverApi.serverConfigControllerPublicConfig();
+			this.setEnvs(serverConfig.data);
+		} catch (error) {
+			retryLoading(this.loadCoreConfig, retry);
+		}
+	}
+
+	@Action
+	async loadConfiguration(optional = false): Promise<void> {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-
-			const [promiseStatusServerConfig, promiseStatusFileConfig] =
+			if (optional) {
 				await Promise.allSettled([
-					this.serverApi.serverConfigControllerPublicConfig(),
-					this.fileApi.publicConfig(),
+					this.loadFileConfig(),
+					this.loadCoreConfig(),
 				]);
-
-			if (promiseStatusServerConfig.status === "fulfilled") {
-				const serverConfig = promiseStatusServerConfig.value;
-				this.setEnvs(serverConfig.data);
 			} else {
-				throw new Error("Required server config not loaded");
-			}
-
-			if (promiseStatusFileConfig.status === "fulfilled") {
-				const fileConfig = promiseStatusFileConfig.value;
-				this.setFileEnvs(fileConfig.data);
-			} else {
-				// throw for production
-				// log for development
-				// ....different execution for production and local is also bad
-				console.warn("Files storage config not loaded");
+				await Promise.all([this.loadFileConfig(), this.loadCoreConfig()]);
 			}
 
 			contentModule.init();
 			filePathsModule.init();
 			this.setStatus("completed");
-		} catch (error: any) {
-			// this is wrong typed....TypeGuard and so on is missed
-			this.setBusinessError(error);
-			this.setStatus("error");
-			console.error(`Configuration could not be loaded from the server`);
+		} catch (error: unknown) {
+			// const applikationError = createApplicationError(HttpStatusCode.GatewayTimeout);
+			// applicationErrorModule.setError(applikationError);
+			console.error(`Configuration could not be loaded from the server`, error);
 
-			if (this.loadingErrorCount < retryLimit) {
-				this.increaseLoadingErrorCount();
-				setTimeout(() => {
-					this.findEnvs();
-				}, 500);
-			}
+			this.setStatus("error");
 		}
 	}
 }

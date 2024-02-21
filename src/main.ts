@@ -112,7 +112,9 @@ Vue.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
-	await envConfigModule.findEnvs();
+	// if (prod)
+	await envConfigModule.loadConfiguration(true);
+	// else loadDevelopmentConfigs()
 
 	const cookies = new Cookies();
 	const jwt = cookies.get("jwt");
