@@ -18,12 +18,12 @@
 					<div class="">
 						<v-radio-group v-model="radios">
 							<v-radio
-								label="Common Cartridge Version 1.1   (z.B kompatibel mit Moodle)"
+								:label="$t('pages.room.modal.course.export.version1.1')"
 								id="1.1.0"
 								value="1.1.0"
 							/>
 							<v-radio
-								label="Common Cartridge Version 1.3"
+								:label="$t('pages.room.modal.course.export.version1.3')"
 								id="1.3.0"
 								value="1.3.0"
 							/>
@@ -49,11 +49,11 @@
 					</div>
 					<v-container fluid class="pt-0">
 						<v-checkbox
-							:value="allTopicsSelected"
+							v-model="allTopicsSelected"
 							data-testid="all-topics-checkbox"
 							:indeterminate="someTopicsSelected"
 							@click="toggleAllTopics"
-							label="Themen:"
+							:label="$t('pages.room.modal.course.export.options.topics')"
 						/>
 						<v-checkbox
 							v-for="item in allTopics"
@@ -63,11 +63,11 @@
 							class="mt-2 ml-8"
 						/>
 						<v-checkbox
-							:value="allTasksSelected"
+							v-model="allTasksSelected"
 							data-testid="all-tasks-checkbox"
 							:indeterminate="someTasksSelected"
 							@click="toggleAllTasks"
-							label="Aufgaben:"
+							:label="$t('pages.room.modal.course.export.options.tasks')"
 						/>
 						<v-checkbox
 							v-for="item in allTasks"
@@ -85,6 +85,7 @@
 						v-if="step === 1 && isOpen"
 						data-testid="dialog-back-btn"
 						depressed
+						color="white"
 						@click="onBack"
 					>
 						{{ $t("common.actions.back") }}
@@ -96,6 +97,7 @@
 						v-if="step === 1 && isOpen"
 						data-testid="dialog-cancel-btn"
 						depressed
+						color="white"
 						@click="onCloseDialog"
 					>
 						{{ $t("common.actions.cancel") }}
@@ -104,6 +106,7 @@
 						v-if="step === 0 && isOpen"
 						data-testid="dialog-cancel-btn"
 						depressed
+						color="white"
 						@click="onCloseDialog"
 					>
 						{{ $t("common.actions.cancel") }}
@@ -166,9 +169,9 @@ export default defineComponent({
 		const allTopics = ref<
 			Array<{ isSelected: boolean; title: string; id: string }>
 		>([
-			{ isSelected: false, title: "Thema-title1", id: "topic-1" },
-			{ isSelected: false, title: "Thema-title2", id: "topic-2" },
-			{ isSelected: false, title: "Thema-title3", id: "topic-3" },
+			{ isSelected: true, title: "Thema-title1", id: "topic-1" },
+			{ isSelected: true, title: "Thema-title2", id: "topic-2" },
+			{ isSelected: true, title: "Thema-title3", id: "topic-3" },
 		]);
 		const allTopicsSelected = computed(() => {
 			return allTopics.value.every((topic) => topic.isSelected);
@@ -176,9 +179,9 @@ export default defineComponent({
 		const allTasks = ref<
 			Array<{ isSelected: boolean; title: string; id: string }>
 		>([
-			{ isSelected: false, title: "Aufgabe-title1", id: "task-1" },
-			{ isSelected: false, title: "Aufgabe-title2", id: "task-2" },
-			{ isSelected: false, title: "Aufgabe-title3", id: "task-3" },
+			{ isSelected: true, title: "Aufgabe-title1", id: "task-1" },
+			{ isSelected: true, title: "Aufgabe-title2", id: "task-2" },
+			{ isSelected: true, title: "Aufgabe-title3", id: "task-3" },
 		]);
 		const allTasksSelected = computed(() => {
 			return allTasks.value.every((topic) => topic.isSelected);
@@ -197,6 +200,10 @@ export default defineComponent({
 			);
 		});
 
+		const aufgabenTitle = computed(() => {
+			return i18n.tc("pages.room.modal.course.export.options.tasks");
+		});
+
 		const someTasksSelected = computed(() => {
 			return (
 				allTasks.value.some((task) => task.isSelected) &&
@@ -209,10 +216,10 @@ export default defineComponent({
 			downloadModule.resetDownloadFlow();
 			step.value = 0;
 			allTasks.value.forEach((task) => {
-				task.isSelected = false;
+				task.isSelected = true;
 			});
 			allTopics.value.forEach((topic) => {
-				topic.isSelected = false;
+				topic.isSelected = true;
 			});
 		}
 
@@ -237,10 +244,10 @@ export default defineComponent({
 			// go back to choose version
 			step.value = 0;
 			allTasks.value.forEach((task) => {
-				task.isSelected = false;
+				task.isSelected = true;
 			});
 			allTopics.value.forEach((topic) => {
-				topic.isSelected = false;
+				topic.isSelected = true;
 			});
 			downloadModule.setIsDownloadModalOpen(true);
 		}
@@ -278,6 +285,7 @@ export default defineComponent({
 			allTasksSelected,
 			someTopicsSelected,
 			someTasksSelected,
+			aufgabenTitle,
 		};
 	},
 });

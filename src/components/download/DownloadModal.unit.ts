@@ -12,7 +12,6 @@ import Vue from "vue";
 import NotifierModule from "@/store/notifier";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
-// import roomsModule from "@/store";
 
 describe("@/components/download/DownloadModal", () => {
 	let downloadModuleMock: DownloadModule;
@@ -118,32 +117,32 @@ describe("@/components/download/DownloadModal", () => {
 	});
 
 	describe("toggleAllTopics", () => {
-		it("should change the value when click", async () => {
+		it("should start with true and change the value when click", async () => {
 			const wrapper = getWrapper();
 			await wrapper.setProps({ isOpen: true });
 			const nextBtn = wrapper.find("[data-testid='dialog-next-btn']");
 			await nextBtn.trigger("click");
 
 			const allTopics = wrapper.find("[data-testid='all-topics-checkbox']");
-			expect(allTopics.attributes().value).toBe("false");
+			expect(allTopics.attributes("aria-checked")).toBe("true");
 
 			await allTopics.trigger("click");
-			expect(allTopics.attributes().value).toBe("true");
+			expect(allTopics.attributes("aria-checked")).toBe("false");
 		});
 	});
 
 	describe("toggleAllTasks", () => {
-		it("should change the value for every task when click", async () => {
+		it("should start with true and change the value when click", async () => {
 			const wrapper = getWrapper();
 			await wrapper.setProps({ isOpen: true });
 			const nextBtn = wrapper.find("[data-testid='dialog-next-btn']");
 			await nextBtn.trigger("click");
 
 			const allTasks = wrapper.find("[data-testid='all-tasks-checkbox']");
-			expect(allTasks.attributes().value).toBe("false");
+			expect(allTasks.attributes("aria-checked")).toBe("true");
 
 			await allTasks.trigger("click");
-			expect(allTasks.attributes().value).toBe("true");
+			expect(allTasks.attributes("aria-checked")).toBe("false");
 		});
 	});
 });
