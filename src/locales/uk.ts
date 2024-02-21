@@ -314,7 +314,7 @@ export const ukUA: I18nLanguage = {
 	"components.boardElement": "Eлемент",
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
-	"components.cardElement.drawingElement": "Whiteboard",
+	"components.cardElement.drawingElement": "Дошка",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
@@ -365,8 +365,6 @@ export const ukUA: I18nLanguage = {
 	"components.editor.highlight.dullPink": "Рожевий маркер (матові)",
 	"components.editor.highlight.dullYellow": "Жовтий маркер (матові)",
 	"components.elementTypeSelection.dialog.title": "Додати елемент",
-	"components.elementTypeSelection.elements.boardElement.subtitle":
-		"Біла дошка",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Зовнішні інструменти",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",
@@ -455,7 +453,7 @@ export const ukUA: I18nLanguage = {
 	"components.molecules.copyResult.nexboardCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Вміст не копіюється, оскільки NeXboard замінюється на Tldraw. Ви можете додати Tldraw до Колонна дошка для стовпчиків, додавши новий елемент Whiteboard.",
+		"Старі розділи neXboard не були скопійовані, оскільки інструмент видаляється з нашої платформи. Як заміна, інноваційний інструмент для роботи з дошкою tldraw тепер доступний у колонці дошки.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Усі елементи успішно скопійовано.",
 	"components.molecules.copyResult.timeoutCopy":

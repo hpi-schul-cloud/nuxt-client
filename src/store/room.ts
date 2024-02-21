@@ -129,6 +129,7 @@ export default class RoomModule extends VuexModule {
 	async confirmImportLesson(shareToken: string): Promise<void> {
 		try {
 			this.resetBusinessError();
+			// TODO remove all this function as it is not used
 			const lesson = await $axios.get("/v1/lessons", {
 				params: { shareToken },
 			});

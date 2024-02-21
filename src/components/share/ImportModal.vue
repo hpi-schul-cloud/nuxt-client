@@ -23,17 +23,14 @@
 					</div>
 					<RenderHTML
 						data-testid="import-modal-external-tools-info"
-						v-show="ctlToolsEnabled"
+						v-if="ctlToolsEnabled && parentType === 'courses'"
 						:html="
 							$t(
 								`components.molecules.import.${parentType}.options.ctlTools.infoText`
 							)
 						"
 					/>
-					<div
-						v-show="!ctlToolsEnabled"
-						data-testid="import-modal-coursefiles-info"
-					>
+					<div v-else data-testid="import-modal-coursefiles-info">
 						{{
 							$t(`components.molecules.import.${parentType}.options.infoText`)
 						}}

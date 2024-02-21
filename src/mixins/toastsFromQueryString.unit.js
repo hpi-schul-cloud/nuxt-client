@@ -26,7 +26,7 @@ describe("@/mixins/toastsFromQueryString", () => {
 				});
 				Object.defineProperty(window, "location", {
 					value: {
-						origin: "http://schul-cloud.com"
+						origin: "http://schul-cloud.com",
 					},
 					configurable: true, // defaults to false
 					writable: false,
@@ -63,12 +63,12 @@ describe("@/mixins/toastsFromQueryString", () => {
 						value: ref,
 					});
 					Object.defineProperty(window, "location", {
-					value: {
-						origin: "http://schul-cloud.com"
-					},
-					configurable: true, // defaults to false
-					writable: false,
-				});
+						value: {
+							origin: "http://schul-cloud.com",
+						},
+						configurable: true, // defaults to false
+						writable: false,
+					});
 					this.$route = {
 						query: {
 							"toast-type": "error",
