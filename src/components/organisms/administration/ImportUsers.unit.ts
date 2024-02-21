@@ -1,19 +1,21 @@
-import SchoolsModule from "@/store/schools";
-import setupStores from "@@/tests/test-utils/setupStores";
-import ImportUsersModule, { MatchedBy } from "@/store/import-users";
-import { importUsersModule, envConfigModule } from "@/store";
-import { mount } from "@vue/test-utils";
-import ImportUsers from "./ImportUsers.vue";
 import {
 	ImportUserListResponse,
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
+import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import ImportUsersModule, { MatchedBy } from "@/store/import-users";
+import SchoolsModule from "@/store/schools";
+import { schoolFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import { VDataTable } from "vuetify/lib/components/index.mjs";
+import ImportUsers from "./ImportUsers.vue";
 
 const mockImportUsers: ImportUserListResponse = {
 	total: 3,
@@ -74,16 +76,6 @@ const mockData = {
 	mdiFlag: "mdiFlag",
 	mdiFlagOutline: "mdiFlagOutline",
 	mdiPencilOutline: "mdiPencilOutline",
-	options: {
-		page: 1,
-		itemsPerPage: 25,
-		sortBy: [],
-		sortDesc: [],
-		groupBy: [],
-		groupDesc: [],
-		mustSort: false,
-		multiSort: false,
-	},
 	roles: [
 		{ text: "Schüler/-in", value: "student" },
 		{ text: "Lehrer/-in", value: "teacher" },
@@ -114,9 +106,7 @@ const getWrapper = (data?: object, options?: object) => {
 	});
 };
 
-// VUE3_UPGRADE component is currently unused. fix test when component is needed.
-// https://ticketsystem.dbildungscloud.de/browse/BC-6337
-describe.skip("@/components/molecules/importUsers", () => {
+describe("@/components/molecules/importUsers", () => {
 	beforeEach(() => {
 		document.body.setAttribute("data-app", "true");
 		setupStores({
@@ -126,17 +116,29 @@ describe.skip("@/components/molecules/importUsers", () => {
 		});
 		importUsersModule.setImportUsersList(mockImportUsers);
 		envConfigModule.env.SC_THEME = "default";
+		schoolsModule.setSchool(
+			schoolFactory.build({
+				inUserMigration: true,
+				inMaintenance: true,
+			})
+		);
 	});
 
 	it("should have correct props", () => {
 		const wrapper = getWrapper(mockData);
 
 		expect(wrapper.vm.importUsers).toStrictEqual(mockImportUsers.data);
-		expect(wrapper.vm.options).toStrictEqual(mockData.options);
 		expect(wrapper.vm.roles).toStrictEqual(mockData.roles);
 	});
 
 	it("alert section should visible/invisible according to 'canStartMigration' value", async () => {
+		schoolsModule.setSchool(
+			schoolFactory.build({
+				inUserMigration: false,
+				inMaintenance: false,
+			})
+		);
+
 		const wrapper = getWrapper(mockData);
 
 		const alertElement = wrapper.findAll(".v-alert");
@@ -145,29 +147,40 @@ describe.skip("@/components/molecules/importUsers", () => {
 			wrapper.vm.$t("pages.administration.migration.cannotStart")
 		);
 
-		wrapper.vm.school.inMaintenance = true;
-		wrapper.vm.school.inUserMigration = true;
-		await wrapper.vm.$nextTick();
+		schoolsModule.setSchool(
+			schoolFactory.build({
+				inUserMigration: true,
+				inMaintenance: true,
+			})
+		);
+		await nextTick();
 
 		const invisibleAlertElement = wrapper.findAll(".v-alert");
 		expect(invisibleAlertElement).toHaveLength(0);
 	});
 
 	it("alert section should be visible/invisible according to 'canStartMigration' value", async () => {
+		schoolsModule.setSchool(
+			schoolFactory.build({
+				inUserMigration: false,
+				inMaintenance: true,
+			})
+		);
+
 		const wrapper = getWrapper({
 			...mockData,
 		});
 
-		wrapper.vm.school.inMaintenance = false;
-		wrapper.vm.school.inUserMigration = true;
-		await wrapper.vm.$nextTick();
-
 		const visibleAlertElement = wrapper.findAll(".v-alert");
 		expect(visibleAlertElement).toHaveLength(1);
 
-		wrapper.vm.school.inMaintenance = true;
-		wrapper.vm.school.inUserMigration = true;
-		await wrapper.vm.$nextTick();
+		schoolsModule.setSchool(
+			schoolFactory.build({
+				inUserMigration: true,
+				inMaintenance: true,
+			})
+		);
+		await nextTick();
 
 		const invisibleAlertElement = wrapper.findAll(".v-alert");
 		expect(invisibleAlertElement).toHaveLength(0);
@@ -176,10 +189,6 @@ describe.skip("@/components/molecules/importUsers", () => {
 	it("data table should have correct props", async () => {
 		const wrapper = getWrapper(mockData);
 
-		wrapper.vm.school.inMaintenance = true;
-		wrapper.vm.school.inUserMigration = true;
-		await wrapper.vm.$nextTick();
-
 		const dataTableElement = wrapper.findComponent<VDataTable>(".v-data-table");
 
 		expect(dataTableElement.vm.headers).toStrictEqual(wrapper.vm.tableHead);
@@ -187,84 +196,105 @@ describe.skip("@/components/molecules/importUsers", () => {
 	});
 
 	describe("should search with all columns", () => {
-		let getDataFromApiSpy: any;
-		let wrapper: any;
-		beforeEach(async () => {
-			getDataFromApiSpy = jest.fn();
-			wrapper = getWrapper(mockData);
-			wrapper.vm.getDataFromApi = getDataFromApiSpy;
-			wrapper.vm.school.inMaintenance = true;
-			wrapper.vm.school.inUserMigration = true;
-			await wrapper.vm.$nextTick();
-		});
+		const setup = () => {
+			const wrapper = getWrapper(mockData);
+
+			const getDataFromApiSpy = jest.spyOn(wrapper.vm, "getDataFromApi");
+
+			return {
+				wrapper,
+				getDataFromApiSpy,
+			};
+		};
 
 		afterEach(() => {
-			getDataFromApiSpy.mockClear();
+			jest.clearAllMocks();
 		});
 
 		it("should set search data properties when search first name changes", async () => {
-			const searchFirstNameElement = wrapper.find(".searchFirstName");
-			searchFirstNameElement.vm.$emit("input", "some text");
-			await wrapper.vm.$nextTick();
+			const { wrapper, getDataFromApiSpy } = setup();
+
+			const searchFirstNameElement = wrapper.getComponent(
+				'[data-testid="search-first-name"]'
+			);
+
+			await searchFirstNameElement.setValue("some text");
+
 			expect(wrapper.vm.searchFirstName).toStrictEqual("some text");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
 		});
 
 		it("should set search data properties when search last name changes", async () => {
-			const searchLastNameElement = wrapper.find(".searchLastName");
-			searchLastNameElement.vm.$emit("input", "some text");
-			await wrapper.vm.$nextTick();
+			const { wrapper, getDataFromApiSpy } = setup();
+
+			const searchLastNameElement = wrapper.getComponent(
+				'[data-testid="search-last-name"]'
+			);
+			await searchLastNameElement.setValue("some text");
+
 			expect(wrapper.vm.searchLastName).toStrictEqual("some text");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
 		});
 
 		it("should set search data properties when search username changes", async () => {
-			const searchLoginNameElement = wrapper.find(".searchLoginName");
-			searchLoginNameElement.vm.$emit("input", "some text");
-			await wrapper.vm.$nextTick();
+			const { wrapper, getDataFromApiSpy } = setup();
+
+			const searchLoginNameElement = wrapper.getComponent(
+				'[data-testid="search-login-name"]'
+			);
+			await searchLoginNameElement.setValue("some text");
+
 			expect(wrapper.vm.searchLoginName).toStrictEqual("some text");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
 		});
 
 		it("should set search data properties when search role changes", async () => {
-			const searchRoleElement = wrapper.find(".searchRole");
-			searchRoleElement.vm.$emit("input", "role search");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			const { wrapper, getDataFromApiSpy } = setup();
+
+			const searchRoleElement = wrapper.getComponent(
+				'[data-testid="search-role"]'
+			);
+			await searchRoleElement.setValue("role search");
+
 			expect(wrapper.vm.searchRole).toStrictEqual("role search");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
 		});
 
 		it("should set search data properties when search classes changes", async () => {
-			const searchClassesElement = wrapper.find(".searchClasses");
-			searchClassesElement.vm.$emit("input", "class search");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			const { wrapper, getDataFromApiSpy } = setup();
+
+			const searchClassesElement = wrapper.getComponent(
+				'[data-testid="search-classes"]'
+			);
+			await searchClassesElement.setValue("class search");
+
 			expect(wrapper.vm.searchClasses).toStrictEqual("class search");
 			expect(getDataFromApiSpy).toHaveBeenCalled();
 		});
 
 		it("should search data proprieties when match filter is set", async () => {
-			const searchMatchedByNoneElement = wrapper.find(".searchMatchedByNone");
-			const searchMatchedByAdminElement = wrapper.find(".searchMatchedByAdmin");
-			const searchMatchedByAutoElement = wrapper.find(".searchMatchedByAuto");
+			const { wrapper } = setup();
 
-			searchMatchedByNoneElement.trigger("click");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			const searchMatchedByNoneElement = wrapper.getComponent(
+				'[data-testid="search-matched-by-none"]'
+			);
+			const searchMatchedByAdminElement = wrapper.getComponent(
+				'[data-testid="search-matched-by-admin"]'
+			);
+			const searchMatchedByAutoElement = wrapper.getComponent(
+				'[data-testid="search-matched-by-auto"]'
+			);
+
+			await searchMatchedByNoneElement.trigger("click");
 			expect(wrapper.vm.searchMatchedBy).toStrictEqual([MatchedBy.None]);
 
-			searchMatchedByAdminElement.trigger("click");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			await searchMatchedByAdminElement.trigger("click");
 			expect(wrapper.vm.searchMatchedBy).toStrictEqual([
 				MatchedBy.None,
 				MatchedBy.Admin,
 			]);
 
-			searchMatchedByAutoElement.trigger("click");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			await searchMatchedByAutoElement.trigger("click");
 			expect(wrapper.vm.searchMatchedBy).toStrictEqual([
 				MatchedBy.None,
 				MatchedBy.Admin,
@@ -273,15 +303,15 @@ describe.skip("@/components/molecules/importUsers", () => {
 		});
 
 		it("should set search data proprieties when flag filter is toggle", async () => {
-			const searchFlaggedElement = wrapper.find(".searchFlagged");
-			searchFlaggedElement.trigger("click");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			const { wrapper, getDataFromApiSpy } = setup();
+
+			const searchFlaggedElement = wrapper.getComponent(
+				'[data-testid="search-flagged"]'
+			);
+			await searchFlaggedElement.trigger("click");
 			expect(wrapper.vm.searchFlagged).toBeTruthy();
 
-			searchFlaggedElement.trigger("click");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			await searchFlaggedElement.trigger("click");
 			expect(wrapper.vm.searchFlagged).toBeFalsy();
 
 			expect(getDataFromApiSpy).toHaveBeenCalled();
@@ -297,7 +327,7 @@ describe.skip("@/components/molecules/importUsers", () => {
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
 			wrapper.vm.school.inMaintenance = true;
 			wrapper.vm.school.inUserMigration = true;
-			await wrapper.vm.$nextTick();
+			await nextTick();
 		});
 
 		afterEach(() => {
@@ -305,33 +335,31 @@ describe.skip("@/components/molecules/importUsers", () => {
 		});
 
 		it("should sort by first name", async () => {
-			const sortFirstNameElement = wrapper.find(".head_firstName");
-			sortFirstNameElement.trigger("click");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			const sortFirstNameElement = wrapper.find(
+				'[data-testid="head-first-name"]'
+			);
+			await sortFirstNameElement.trigger("click");
 
-			expect(wrapper.vm.options.sortBy[0]).toBe("firstName");
-			expect(wrapper.vm.options.sortDesc[0]).toBe(false);
+			expect(wrapper.vm.options.sortBy[0].key).toEqual("firstName");
+			expect(wrapper.vm.options.sortBy[0].order).toEqual("asc");
 
-			sortFirstNameElement.trigger("click");
-			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.options.sortDesc[0]).toBe(true);
+			await sortFirstNameElement.trigger("click");
+			expect(wrapper.vm.options.sortBy[0].order).toEqual("desc");
 
 			getDataFromApiSpy.mockClear();
 		});
 
 		it("should sort by last name", async () => {
-			const sortLastNameElement = wrapper.find(".head_lastName");
-			sortLastNameElement.trigger("click");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+			const sortLastNameElement = wrapper.find(
+				'[data-testid="head-last-name"]'
+			);
+			await sortLastNameElement.trigger("click");
 
-			expect(wrapper.vm.options.sortBy[0]).toBe("lastName");
-			expect(wrapper.vm.options.sortDesc[0]).toBe(false);
+			expect(wrapper.vm.options.sortBy[0].key).toBe("lastName");
+			expect(wrapper.vm.options.sortBy[0].order).toBe("asc");
 
-			sortLastNameElement.trigger("click");
-			await wrapper.vm.$nextTick();
-			expect(wrapper.vm.options.sortDesc[0]).toBe(true);
+			await sortLastNameElement.trigger("click");
+			expect(wrapper.vm.options.sortBy[0].order).toBe("desc");
 
 			getDataFromApiSpy.mockClear();
 		});
