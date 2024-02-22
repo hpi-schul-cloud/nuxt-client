@@ -187,7 +187,7 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "vue-i18n";
+import { mdiCheck } from "@/components/icons/material";
 import { School } from "@/store/types/schools";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import {
@@ -206,8 +206,8 @@ import {
 	ref,
 	Ref,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
-import { mdiCheck } from "@/components/icons/material";
 
 export default defineComponent({
 	name: "AdminMigrationSection",

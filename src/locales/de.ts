@@ -1,4 +1,4 @@
-export const deDE = {
+export default {
 	"common.action.publish": "Veröffentlichen",
 	"common.actions.add": "Hinzufügen",
 	"common.actions.back": "Zurück",

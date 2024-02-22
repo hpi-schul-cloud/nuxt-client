@@ -45,7 +45,7 @@ export type School = {
 		isTeamCreationByStudentsEnabled: boolean;
 	};
 	permissions?: unknown;
-	inMaintenance: boolean;
+	inMaintenance?: boolean;
 	inUserMigration?: boolean;
 	isExternal: boolean;
 	officialSchoolNumber?: string;

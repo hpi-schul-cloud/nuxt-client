@@ -1,6 +1,4 @@
-import { I18nLanguage } from "@/plugins/i18n";
-
-export const esES: I18nLanguage = {
+export default {
 	"common.action.publish": "Publicar",
 	"common.actions.add": "Añadir",
 	"common.actions.back": "Atrás",
