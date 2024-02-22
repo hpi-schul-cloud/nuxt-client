@@ -433,7 +433,7 @@ describe("BoardState.composable", () => {
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
 
-		it.only("should move card", async () => {
+		it("should move card", async () => {
 			const card2 = cardSkeletonResponseFactory.build();
 			column.cards.push(card2);
 			const cardPayload: CardMove = {
