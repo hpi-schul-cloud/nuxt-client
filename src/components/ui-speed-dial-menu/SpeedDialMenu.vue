@@ -6,6 +6,7 @@
 			class="position-relative d-inline-block overflow-visible"
 		>
 			<v-btn
+				id="fab"
 				:rounded="!isCollapsed"
 				class="size-transition"
 				:class="!isCollapsed ? 'default-width' : ''"
@@ -32,6 +33,7 @@
 		</div>
 		<div v-else>
 			<v-btn
+				id="fab"
 				:rounded="!isCollapsed"
 				class="size-transition"
 				:class="!isCollapsed ? 'default-width' : ''"
