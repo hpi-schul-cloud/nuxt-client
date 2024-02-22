@@ -97,7 +97,7 @@ describe("RoomModal", () => {
 				const { wrapper } = setup();
 
 				const iterator = wrapper.findComponent(RoomAvatarIterator);
-				expect(iterator.props("items")).toEqual([]);
+				expect(iterator.props("avatars")).toEqual([]);
 			});
 		});
 
