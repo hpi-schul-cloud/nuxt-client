@@ -1,4 +1,7 @@
-import { createTestingI18n } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 
 import CardAddElementMenu from "./CardAddElementMenu.vue";
@@ -7,7 +10,7 @@ describe("CardAddElementMenu", () => {
 	const setup = () => {
 		const wrapper = shallowMount(CardAddElementMenu, {
 			global: {
-				plugins: [createTestingI18n()],
+				plugins: [createTestingI18n(), createTestingVuetify()],
 			},
 		});
 		return wrapper;
