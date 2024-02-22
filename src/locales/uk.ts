@@ -1356,14 +1356,6 @@ export default {
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.label.shareLesson": "надіслати копію теми",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
-	"pages.room.modal.course.invite.header": "Посилання на запрошення створено!",
-	"pages.room.modal.course.invite.text":
-		"Поділіться цим посиланням зі своїми учнями, щоб запросити їх на курс. Щоб скористатися посиланням, учні повинні увійти в систему.",
-	"pages.room.modal.course.share.header": "Скопійований код створено!",
-	"pages.room.modal.course.share.subText":
-		"Крім того, ви можете показати своїм колегам-викладачам такий QR-код.",
-	"pages.room.modal.course.share.text":
-		"Поширте такий код іншим колегам, щоб вони могли імпортувати курс як копію. Старі подання учня автоматично вилучаються для щойно скопійованого курсу.",
 	"pages.room.student.emptyState":
 		"Тут з’являється навчальний вміст, наприклад теми чи завдання.",
 	"pages.room.taskCard.aria":
@@ -1390,7 +1382,6 @@ export default {
 	"pages.rooms.fab.add.lesson": "Створити тему",
 	"pages.rooms.fab.add.task": "Створити завдання",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
-	"pages.rooms.fab.import.course": "Імпортувати курс",
 	"pages.rooms.groupName": "Курси",
 	"pages.rooms.headerSection.archived": "Архів",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
