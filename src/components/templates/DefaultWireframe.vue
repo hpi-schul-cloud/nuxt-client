@@ -44,10 +44,11 @@
 		</div>
 		<v-container
 			:class="{
+				'main-content': true,
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
+				'overflow-x': allowOverflowX,
 			}"
-			class="main-content"
 		>
 			<div style="padding: 0 var(--space-lg)">
 				<slot />
@@ -89,6 +90,11 @@ export default defineComponent({
 			required: false,
 			default: null,
 		},
+		allowOverflowX: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	computed: {
 		showBorder(): boolean {
@@ -122,8 +128,10 @@ export default defineComponent({
 }
 
 .main-content {
-	overflow-x: auto;
 	padding: 0;
+}
+.overflow-x {
+	overflow-x: auto;
 }
 
 .container-max-width {
