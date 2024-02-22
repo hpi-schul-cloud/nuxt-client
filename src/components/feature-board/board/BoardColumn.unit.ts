@@ -3,7 +3,6 @@ import {
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { shallowMount } from "@vue/test-utils";
-import CardHost from "../card/CardHost.vue";
 import { useBoardPermissions } from "@data-board";
 import {
 	BoardPermissionChecks,
@@ -57,33 +56,6 @@ describe("BoardColumn", () => {
 		it("should be found in dom", () => {
 			const { wrapper } = setup();
 			expect(wrapper.findComponent(BoardColumnVue).exists()).toBe(true);
-		});
-
-		it.skip("should get props and render CarHost components", () => {
-			const { wrapper } = setup();
-
-			expect(wrapper.findAllComponents(CardHost)).toHaveLength(3);
-		});
-	});
-
-	describe("when a card moved by key stroke", () => {
-		it.skip("should emit 'position-change-keyboard'", async () => {
-			const { wrapper } = setup();
-			const expectedEmitObject = {
-				removedIndex: 0,
-				addedIndex: 0,
-				payload: column.cards[0],
-				columnIndex: 0,
-			};
-
-			const cardHostComponent = wrapper.findComponent(CardHost);
-			cardHostComponent.vm.$emit("move:card-keyboard", "ArrowLeft");
-
-			const emitted = wrapper.emitted("update:card-position") || [[]];
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-
-			expect(emitted[0][0]).toStrictEqual(expectedEmitObject);
 		});
 	});
 
@@ -201,21 +173,6 @@ describe("BoardColumn", () => {
 
 				expect(addCardComponent.length).toStrictEqual(0);
 			});
-		});
-	});
-
-	describe("when reload:board was triggered by a card", () => {
-		it.skip("should emit reload:board", async () => {
-			const { wrapper } = setup();
-
-			const cardComponents = wrapper.findAllComponents({
-				name: "CardHost",
-			});
-			cardComponents[0].vm.$emit("reload:board");
-			await nextTick();
-
-			const emitted = wrapper.emitted("reload:board");
-			expect(emitted).toHaveLength(1);
 		});
 	});
 
