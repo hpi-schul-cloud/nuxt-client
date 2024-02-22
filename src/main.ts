@@ -112,8 +112,9 @@ Vue.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
-	// if (prod)
-	await envConfigModule.loadConfiguration(true);
+	// process env should pass over docker image for production
+	const isNotProduction = process.env.NODE_ENV !== "production";
+	await envConfigModule.loadConfiguration({ optional: isNotProduction });
 	// else loadDevelopmentConfigs()
 
 	const cookies = new Cookies();

@@ -286,7 +286,7 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	@Action
-	async loadConfiguration(optional = false): Promise<void> {
+	async loadConfiguration({ optional = false } = {}): Promise<void> {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
