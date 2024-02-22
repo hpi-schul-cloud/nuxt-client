@@ -35,19 +35,6 @@ export const configsFromEnvironmentVars = {
 };
 */
 
-type CallbackFunctions = (paypal: number) => void;
-
-const retryLoading = (callback: CallbackFunctions, retry: number): void => {
-	if (retry <= 10) {
-		const increasedRetry = retry + 1;
-		setTimeout(() => {
-			callback(increasedRetry);
-		}, 1500);
-	} else {
-		throw new Error("Loading for config failed.");
-	}
-};
-
 @Module({
 	name: "envConfigModule",
 	namespaced: true,
@@ -247,24 +234,16 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	@Action
-	async loadFileConfig(retry = 0): Promise<void> {
-		try {
-			const fileConfig = await this.fileApi.publicConfig();
-			this.setFileEnvs(fileConfig.data);
-		} catch (error) {
-			retryLoading(this.loadFileConfig, retry);
-		}
+	async loadFileConfig(): Promise<void> {
+		const fileConfig = await this.fileApi.publicConfig();
+		this.setFileEnvs(fileConfig.data);
 	}
 
 	@Action
-	async loadCoreConfig(retry = 0): Promise<void> {
-		try {
-			const serverConfig =
-				await this.serverApi.serverConfigControllerPublicConfig();
-			this.setEnvs(serverConfig.data);
-		} catch (error) {
-			retryLoading(this.loadCoreConfig, retry);
-		}
+	async loadCoreConfig(): Promise<void> {
+		const serverConfig =
+			await this.serverApi.serverConfigControllerPublicConfig();
+		this.setEnvs(serverConfig.data);
 	}
 
 	@Action
