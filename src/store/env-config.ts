@@ -152,46 +152,46 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.I18N__DEFAULT_TIMEZONE;
 	}
 
-	get getAdminToggleStudentLernstoreViewEnabled() {
+	get getAdminToggleStudentLernstoreViewEnabled(): boolean {
 		return (
 			this.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED &&
 			this.env.FEATURE_LERNSTORE_ENABLED
 		);
 	}
 
-	public get getFeatureSchoolSanisUserMigrationEnabled() {
+	public get getFeatureSchoolSanisUserMigrationEnabled(): boolean {
 		return this.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED;
 	}
 
-	public get getTheme() {
+	public get getTheme(): string {
 		return this.env.SC_THEME;
 	}
 
-	get getMigrationEndGracePeriod() {
+	get getMigrationEndGracePeriod(): number {
 		return this.env.MIGRATION_END_GRACE_PERIOD_MS;
 	}
 
-	get getTeacherStudentVisibilityIsConfigurable() {
+	get getTeacherStudentVisibilityIsConfigurable(): boolean {
 		return this.env.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE;
 	}
 
-	get getTeacherStudentVisibilityIsEnabledByDefault() {
+	get getTeacherStudentVisibilityIsEnabledByDefault(): boolean {
 		return this.env.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
 	}
 
-	get getTeacherStudentVisibilityIsVisible() {
+	get getTeacherStudentVisibilityIsVisible(): boolean {
 		return this.env.TEACHER_STUDENT_VISIBILITY__IS_VISIBLE;
 	}
 
-	get getVideoConferenceEnabled() {
+	get getVideoConferenceEnabled(): boolean {
 		return this.env.FEATURE_VIDEOCONFERENCE_ENABLED;
 	}
 
-	get getLoginLinkEnabled() {
+	get getLoginLinkEnabled(): boolean {
 		return this.env.FEATURE_LOGIN_LINK_ENABLED;
 	}
 
-	get getRocketChatEnabled() {
+	get getRocketChatEnabled(): boolean {
 		return this.env.ROCKETCHAT_SERVICE_ENABLED;
 	}
 
@@ -199,19 +199,19 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED;
 	}
 
-	public get getSchoolPolicyEnabled() {
+	public get getSchoolPolicyEnabled(): boolean {
 		return this.env.FEATURE_SCHOOL_POLICY_ENABLED_NEW;
 	}
 
-	public get getSchoolTermsOfUseEnabled() {
+	public get getSchoolTermsOfUseEnabled(): boolean {
 		return this.env.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED;
 	}
 
-	public get getAvailableLanguages() {
+	public get getAvailableLanguages(): string {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
 	}
 
-	public get getGhostBaseUrl() {
+	public get getGhostBaseUrl(): string {
 		return this.env.GHOST_BASE_URL;
 	}
 
