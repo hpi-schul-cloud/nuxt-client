@@ -1,27 +1,26 @@
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { envConfigModule, roomModule, tasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
-import TasksModule from "@/store/tasks";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { VueWrapper, mount } from "@vue/test-utils";
-import RoomDashboard from "./RoomDashboard.vue";
-import { Envs } from "@/store/types/env-config";
 import ShareModule from "@/store/share";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import TasksModule from "@/store/tasks";
+import { Envs } from "@/store/types/env-config";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount, VueWrapper } from "@vue/test-utils";
+import RoomDashboard from "./RoomDashboard.vue";
 
-import { Router, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
 import { nextTick } from "vue";
+import { Router, useRouter } from "vue-router";
 import { VCard } from "vuetify/lib/components/index.mjs";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;

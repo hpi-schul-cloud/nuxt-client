@@ -21,17 +21,18 @@
 			<!-- item main info -->
 			<div class="d-flex align-center justify-space-between">
 				<!-- item title -->
-				<div class="task-item__main-info">
+				<div class="task-item__main-info w-65" :style="conditionalWidth">
 					<v-list-item-subtitle data-testid="taskSubtitle">
 						{{ taskLabel }}
 					</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle">
+					<v-list-item-title data-testid="taskTitle" class="text-truncate">
 						{{ task.name }}
 					</v-list-item-title>
 					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
-					<v-list-item-subtitle
-						class="d-xxl-none d-xl-none d-la-none d-md-none d-sm-none d-xs-block due-date-label"
-						><div
+					<div
+						class="d-xxl-none d-xl-none d-la-none d-md-none d-sm-none d-xs-block d-flex"
+					>
+						<div
 							class="text-subtitle-2 due-date-label"
 							data-test-id="dueDateLabel"
 						>
@@ -39,12 +40,13 @@
 						</div>
 						<v-custom-chip-time-remaining
 							v-if="taskState === 'warning'"
+							class="ml-2"
 							:type="taskState"
 							:due-date="task.dueDate"
-							:shorten-unit="$vuetify.display.xs"
-					/></v-list-item-subtitle>
+						/>
+					</div>
 				</div>
-				<div class="hidden-xs mr-4 text-right">
+				<div class="hidden-xs mr-4">
 					<div
 						class="text-subtitle-2 due-date-label"
 						data-test-id="dueDateLabel"
@@ -55,7 +57,6 @@
 						v-if="taskState === 'warning'"
 						:type="taskState"
 						:due-date="task.dueDate"
-						:shorten-unit="$vuetify.display.xs"
 					/>
 				</div>
 			</div>
@@ -166,6 +167,12 @@ export default {
 		},
 		ariaLabel() {
 			return `${this.$t("common.words.task")} ${this.task.name}`;
+		},
+		conditionalWidth() {
+			if (this.$vuetify.display.xs) {
+				return "width: 96%";
+			}
+			return "width: 65%";
 		},
 	},
 	methods: {

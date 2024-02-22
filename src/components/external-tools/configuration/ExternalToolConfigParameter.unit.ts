@@ -18,7 +18,10 @@ describe("ExternalToolConfigParameter", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props,
+			props: {
+				...props,
+				modelValue: props.parameter.defaultValue,
+			},
 		});
 
 		return {
@@ -67,7 +70,7 @@ describe("ExternalToolConfigParameter", () => {
 				.findComponent(`[data-testId=${parameter.name}]`)
 				.setValue(true);
 
-			expect(wrapper.emitted("input")).toEqual([[true]]);
+			expect(wrapper.emitted("update:modelValue")).toEqual([[true]]);
 		});
 	});
 
@@ -102,7 +105,7 @@ describe("ExternalToolConfigParameter", () => {
 				.findComponent(`[data-testId=${parameter.name}]`)
 				.setValue("newValue");
 
-			expect(wrapper.emitted("input")).toEqual([["newValue"]]);
+			expect(wrapper.emitted("update:modelValue")).toEqual([["newValue"]]);
 		});
 	});
 
@@ -144,7 +147,7 @@ describe("ExternalToolConfigParameter", () => {
 				.findComponent(`[data-testId=${parameter.name}]`)
 				.setValue("1234");
 
-			expect(wrapper.emitted("input")).toEqual([["1234"]]);
+			expect(wrapper.emitted("update:modelValue")).toEqual([["1234"]]);
 		});
 	});
 });

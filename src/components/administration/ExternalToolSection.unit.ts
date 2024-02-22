@@ -39,7 +39,6 @@ describe("ExternalToolSection", () => {
 	>;
 
 	const createDatasheetButtonIndex = 1;
-	const deleteButtonIndex = 2;
 
 	const getWrapper = (getters: Partial<SchoolExternalToolsModule> = {}) => {
 		el = document.createElement("div");

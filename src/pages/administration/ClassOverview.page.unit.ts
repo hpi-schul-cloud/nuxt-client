@@ -9,7 +9,7 @@ import {
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { classInfoFactory, i18nMock } from "@@/tests/test-utils";
+import { classInfoFactory } from "@@/tests/test-utils";
 import { VueWrapper, mount } from "@vue/test-utils";
 import ClassOverview from "./ClassOverview.page.vue";
 import SchoolsModule from "@/store/schools";
