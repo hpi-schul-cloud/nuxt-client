@@ -60,7 +60,7 @@
 				@update:rows-per-page="onUpdateRowsPerPage"
 			>
 				<template #datacolumn-birthday="{ data }">
-					<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
+					<span class="text-content">{{ printDate(data) }}</span>
 				</template>
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
@@ -142,7 +142,7 @@ import AdminTableLegend from "@/components/molecules/AdminTableLegend";
 import { studentFilter } from "@/utils/adminFilter";
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
+import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
 import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -510,7 +510,6 @@ export default {
 			this.find();
 		},
 		printDate,
-		printDateFromDeUTC,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
