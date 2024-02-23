@@ -350,7 +350,6 @@ export default defineComponent({
 			}
 		},
 		addGroupElements(pos) {
-			console.log("add to group");
 			this.draggedElement.to = pos;
 			const toElementName = this.getElementNameByRef(pos);
 
@@ -367,7 +366,6 @@ export default defineComponent({
 			this.dragging = false;
 		},
 		dragFromGroup(element) {
-			console.log("drag from group");
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
