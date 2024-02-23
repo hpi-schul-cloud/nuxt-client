@@ -192,14 +192,19 @@
 									<VCardText>
 										<RenderHTML
 											:html="
-												t('pages.administration.migration.summary', {
-													instance: theme.name,
-													source: sourceSystemName,
-													importUsersCount: totalMatched,
-													importUsersUnmatchedCount:
-														totalImportUsers - totalMatched,
-													usersUnmatchedCount: totalUnmatched,
-												})
+												t(
+													isNbc
+														? 'pages.administration.migration.summary.nbc'
+														: 'pages.administration.migration.summary',
+													{
+														instance: theme.name,
+														source: sourceSystemName,
+														importUsersCount: totalMatched,
+														importUsersUnmatchedCount:
+															totalImportUsers - totalMatched,
+														usersUnmatchedCount: totalUnmatched,
+													}
+												)
 											"
 										/>
 										<VRow>
