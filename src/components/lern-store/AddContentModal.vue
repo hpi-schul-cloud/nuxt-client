@@ -91,19 +91,15 @@ export default {
 			return contentModule.getLessonsGetter;
 		},
 		isSendEnabled() {
-			return (this.selectedLesson || {})._id !== undefined;
+			return this.selectedLesson?._id !== undefined;
 		},
 		lessonsOptions() {
-			return (
-				this.lessons &&
-				this.lessons.data &&
-				this.lessons.data.map((lesson) => {
-					return {
-						_id: lesson._id,
-						name: lesson.name,
-					};
-				})
-			);
+			return this.lessons?.data?.map((lesson) => {
+				return {
+					_id: lesson._id,
+					name: lesson.name,
+				};
+			});
 		},
 		showModal: {
 			get() {
