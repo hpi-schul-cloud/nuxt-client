@@ -9,8 +9,8 @@
 			<slot name="header" />
 		</template>
 		<template v-if="isLoading">
-			<v-container class="loader"
-				><v-skeleton-loader
+			<v-container class="loader">
+				<v-skeleton-loader
 					ref="skeleton-loader"
 					type="date-picker-days"
 					class="mt-6"
@@ -28,27 +28,20 @@
 		<template v-else>
 			<slot name="page-content" />
 		</template>
-		<import-modal
-			v-model:isOpen="importDialog.isOpen"
-			class="import-modal"
-			@update-rooms="updateRooms"
-		/>
 	</default-wireframe>
 </template>
 
 <script>
-import { authModule, envConfigModule, roomsModule } from "@/store";
+import { authModule, roomsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
-import ImportModal from "@/components/molecules/ImportModal.vue";
-import { mdiPlus, mdiCloudDownload, mdiSchool } from "@mdi/js";
+import { mdiPlus } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
 	components: {
 		DefaultWireframe,
 		vCustomEmptyState,
-		ImportModal,
 	},
 	props: {
 		hasRooms: {
@@ -60,42 +53,11 @@ export default defineComponent({
 			required: false,
 		},
 	},
-	data() {
-		return {
-			importDialog: {
-				isOpen: false,
-			},
-		};
-	},
 	computed: {
 		fabItems() {
 			if (
 				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
-				if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
-					return {
-						icon: mdiPlus,
-						title: this.$t("common.actions.create"),
-						ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
-						dataTestId: "add-course-button",
-						actions: [
-							{
-								label: this.$t("pages.rooms.fab.add.course"),
-								icon: mdiSchool,
-								href: "/courses/add",
-								dataTestId: "fab_button_add_course",
-								ariaLabel: this.$t("pages.rooms.fab.add.course"),
-							},
-							{
-								label: this.$t("pages.rooms.fab.import.course"),
-								icon: mdiCloudDownload,
-								dataTestId: "fab_button_import_course",
-								ariaLabel: this.$t("pages.rooms.fab.import.course"),
-								customEvent: this.fabClick,
-							},
-						],
-					};
-				}
 				return {
 					icon: mdiPlus,
 					title: this.$t("common.actions.create"),
@@ -112,14 +74,6 @@ export default defineComponent({
 		},
 		isEmptyState() {
 			return !roomsModule.getLoading && !this.hasRooms && !this.hasImportToken;
-		},
-	},
-	methods: {
-		fabClick() {
-			this.$data.importDialog.isOpen = true;
-		},
-		async updateRooms() {
-			await roomsModule.fetchAllElements();
 		},
 	},
 });

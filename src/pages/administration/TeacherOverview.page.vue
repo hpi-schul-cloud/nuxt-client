@@ -396,21 +396,21 @@ export default {
 			return {
 				icon: mdiPlus,
 				title: this.$t("common.actions.create"),
-				testId: "fab_button_teachers_table",
+				dataTestId: "fab_button_teachers_table",
 				ariaLabel: this.$t("common.actions.create"),
 				actions: [
 					{
 						label: this.$t("pages.administration.teachers.fab.add"),
 						icon: mdiAccountPlus,
 						to: "/administration/teachers/new",
-						dataTestid: "fab_button_add_teachers",
+						dataTestId: "fab_button_add_teachers",
 						ariaLabel: this.$t("pages.administration.teachers.fab.add"),
 					},
 					{
 						label: this.$t("pages.administration.teachers.fab.import"),
 						icon: mdiCloudDownload,
 						href: "/administration/teachers/import",
-						dataTestid: "fab_button_import_teachers",
+						dataTestId: "fab_button_import_teachers",
 						ariaLabel: this.$t("pages.administration.teachers.fab.import"),
 					},
 				],

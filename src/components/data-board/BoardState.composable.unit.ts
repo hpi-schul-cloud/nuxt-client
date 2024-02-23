@@ -151,20 +151,16 @@ describe("BoardState.composable", () => {
 		it("should not call createCardCall when board value is undefined", async () => {
 			const { createColumn, board } = setup();
 			board.value = undefined;
-
 			await createColumn();
 			await nextTick();
-
 			expect(mockedBoardApiCalls.createColumnCall).not.toHaveBeenCalled();
 		});
 
 		it("should call createColumnCall", async () => {
 			const { createColumn, board } = setup();
 			board.value = testBoard;
-
 			await createColumn();
 			await nextTick();
-
 			expect(mockedBoardApiCalls.createColumnCall).toHaveBeenCalledWith(
 				board.value.id
 			);
@@ -175,10 +171,8 @@ describe("BoardState.composable", () => {
 			board.value = testBoard;
 			const newColumn = columnResponseFactory.build();
 			mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
-
 			const result = await createColumn();
 			await nextTick();
-
 			expect(setEditModeId).toHaveBeenCalledWith(newColumn.id);
 			expect(result).toEqual(newColumn);
 		});
@@ -190,53 +184,8 @@ describe("BoardState.composable", () => {
 				mockedBoardApiCalls.createColumnCall.mockRejectedValue(
 					setupErrorResponse()
 				);
-
 				await createColumn();
 				await nextTick();
-
-				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
-			});
-		});
-	});
-
-	describe("createColumnWithCard", () => {
-		it("should not call createColumnCall when board value is undefined", async () => {
-			const { createColumnWithCard, board } = setup();
-			board.value = undefined;
-
-			await createColumnWithCard(card.cardId);
-			await nextTick();
-
-			expect(mockedBoardApiCalls.createColumnCall).not.toHaveBeenCalled();
-		});
-
-		it("should create new column with card", async () => {
-			const { createColumnWithCard, board } = setup();
-			board.value = testBoard;
-			const newColumn = columnResponseFactory.build();
-			mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
-
-			await createColumnWithCard(card.cardId);
-			await nextTick();
-
-			expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalledWith(
-				card.cardId,
-				newColumn.id,
-				0
-			);
-		});
-
-		describe("when api returns an error", () => {
-			it("should use the error handler to react", async () => {
-				const { createColumnWithCard, board } = setup();
-				board.value = testBoard;
-				mockedBoardApiCalls.createColumnCall.mockRejectedValue(
-					setupErrorResponse()
-				);
-
-				await createColumnWithCard("any-id");
-				await nextTick();
-
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 			});
 		});
@@ -334,29 +283,6 @@ describe("BoardState.composable", () => {
 		});
 	});
 
-	describe("extractCard", () => {
-		it("should return undefined if board is not set", async () => {
-			const { extractCard, board } = setup();
-			board.value = undefined;
-
-			const result = await extractCard(card.cardId);
-			await nextTick();
-
-			expect(result).toEqual(undefined);
-		});
-
-		it("should extract card and return extracted card", async () => {
-			const { extractCard, board } = setup();
-			board.value = testBoard;
-
-			const result = await extractCard(card.cardId);
-			await nextTick();
-
-			expect(board.value.columns[0].cards).not.toContain(card);
-			expect(result).toEqual(card);
-		});
-	});
-
 	describe("fetchBoard", () => {
 		it("should fetch board on mount", async () => {
 			const boardId = "123124";
@@ -412,24 +338,24 @@ describe("BoardState.composable", () => {
 
 	describe("moveCard", () => {
 		const createCardPayload = ({
-			addedIndex,
-			columnIndex,
+			newIndex,
+			columnId,
 		}: {
-			addedIndex: number | null;
-			columnIndex?: number;
+			newIndex?: number;
+			columnId?: string;
 		}) => {
 			const cardPayload: CardMove = {
-				removedIndex: 2,
-				addedIndex,
-				payload: card,
-				columnId: column.id,
-				columnIndex,
+				cardId: card.cardId,
+				oldIndex: 2,
+				newIndex: newIndex ?? 2,
+				fromColumnId: column.id,
+				toColumnId: columnId,
 			};
 			return cardPayload;
 		};
 
 		it("should not call moveCardCall when board value is undefined", async () => {
-			const cardPayload = createCardPayload({ addedIndex: 1 });
+			const cardPayload = createCardPayload({ newIndex: 1 });
 			const { moveCard, board } = setup();
 			board.value = undefined;
 
@@ -439,10 +365,11 @@ describe("BoardState.composable", () => {
 			expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
 		});
 
-		it.each([-1, 1])(
-			"should not call moveCardCall when column index is %s",
-			async (columnIndex) => {
-				const cardPayload = createCardPayload({ addedIndex: 0, columnIndex });
+		describe("when column id is same as the card's column id", () => {
+			it("should not call moveCardCall", async () => {
+				const cardPayload = createCardPayload({
+					columnId: column.id,
+				});
 
 				const { moveCard, board } = setup();
 				board.value = testBoard;
@@ -451,13 +378,29 @@ describe("BoardState.composable", () => {
 				await nextTick();
 
 				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
-			}
-		);
+			});
+		});
+
+		describe("when column id is unknown", () => {
+			it("should not call moveCardCall", async () => {
+				const cardPayload = createCardPayload({
+					columnId: "59a3e4a4a2049554a93fec93",
+				});
+
+				const { moveCard, board } = setup();
+				board.value = testBoard;
+
+				await moveCard(cardPayload);
+				await nextTick();
+
+				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
+			});
+		});
 
 		it.each([-1, 1])(
-			"should not call moveCardCall when added index is %s",
-			async (addedIndex) => {
-				const cardPayload = createCardPayload({ addedIndex, columnIndex: 0 });
+			"should not call moveCardCall when new index is %s",
+			async (newIndex) => {
+				const cardPayload = createCardPayload({ newIndex });
 				const { moveCard, board } = setup();
 				board.value = testBoard;
 
@@ -469,16 +412,19 @@ describe("BoardState.composable", () => {
 		);
 
 		it("should handle error when api returns an error code", async () => {
+			const card2 = cardSkeletonResponseFactory.build();
+			column.cards.push(card2);
 			const { moveCard, board } = setup();
 			board.value = testBoard;
 
 			mockedBoardApiCalls.moveCardCall.mockRejectedValue(setupErrorResponse());
 
 			const cardPayload: CardMove = {
-				removedIndex: 2,
-				addedIndex: 1,
-				payload: card,
-				columnId: column.id,
+				cardId: card.cardId,
+				oldIndex: 0,
+				newIndex: 1,
+				fromColumnId: column.id,
+				toColumnId: column.id,
 			};
 
 			await moveCard(cardPayload);
@@ -490,7 +436,13 @@ describe("BoardState.composable", () => {
 		it("should move card", async () => {
 			const card2 = cardSkeletonResponseFactory.build();
 			column.cards.push(card2);
-			const cardPayload = createCardPayload({ addedIndex: 1, columnIndex: 0 });
+			const cardPayload: CardMove = {
+				cardId: card.cardId,
+				oldIndex: 0,
+				newIndex: 1,
+				fromColumnId: column.id,
+				toColumnId: column.id,
+			};
 
 			const { moveCard, board } = setup();
 			board.value = testBoard;
@@ -500,8 +452,8 @@ describe("BoardState.composable", () => {
 
 			expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalledWith(
 				card.cardId,
-				cardPayload.columnId,
-				cardPayload.addedIndex
+				cardPayload.toColumnId,
+				cardPayload.newIndex
 			);
 			expect(board.value.columns[0].cards).toEqual([card2, card]);
 		});
@@ -512,7 +464,7 @@ describe("BoardState.composable", () => {
 			const payload: ColumnMove = {
 				addedIndex: 0,
 				removedIndex: 0,
-				payload: column.id,
+				columnId: column.id,
 			};
 			const { moveColumn, board } = setup();
 			board.value = undefined;
@@ -535,7 +487,7 @@ describe("BoardState.composable", () => {
 			const payload: ColumnMove = {
 				addedIndex: 0,
 				removedIndex: 1,
-				payload: movingColumn.id,
+				columnId: movingColumn.id,
 			};
 
 			await moveColumn(payload);
@@ -550,7 +502,7 @@ describe("BoardState.composable", () => {
 			const payload: ColumnMove = {
 				addedIndex: 0,
 				removedIndex: 1,
-				payload: column2.id,
+				columnId: column2.id,
 			};
 			const { moveColumn, board } = setup();
 			board.value = testBoard;
@@ -559,7 +511,7 @@ describe("BoardState.composable", () => {
 			await nextTick();
 
 			expect(mockedBoardApiCalls.moveColumnCall).toHaveBeenCalledWith(
-				payload.payload,
+				payload.columnId,
 				board.value.id,
 				payload.addedIndex
 			);
@@ -628,26 +580,6 @@ describe("BoardState.composable", () => {
 				expect(mockedErrorHandlerCalls.notifyWithTemplate).toHaveBeenCalled();
 				expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalled();
 			});
-		});
-	});
-
-	describe("getColumnId", () => {
-		it("should get column id", () => {
-			const { getColumnId, board } = setup();
-			board.value = testBoard;
-
-			const result = getColumnId(0);
-
-			expect(result).toEqual(column.id);
-		});
-
-		it("should return undefined if board is not set", () => {
-			const { getColumnId, board } = setup();
-			board.value = undefined;
-
-			const result = getColumnId(0);
-
-			expect(result).toEqual(undefined);
 		});
 	});
 });

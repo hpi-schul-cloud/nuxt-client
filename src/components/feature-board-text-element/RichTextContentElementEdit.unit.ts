@@ -6,7 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 
 describe("RichTextContentElementEdit", () => {
-	const setup = (options: {}) => {
+	const setup = (options: { value: string; autofocus: boolean }) => {
 		const wrapper = mount(RichTextContentElementEdit, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
