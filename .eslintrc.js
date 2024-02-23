@@ -1,5 +1,3 @@
-const VUE3_UPGRADE = true;
-
 module.exports = {
 	root: true,
 	env: {
@@ -15,7 +13,7 @@ module.exports = {
 		ecmaVersion: 2020,
 	},
 	rules: {
-		"@typescript-eslint/no-explicit-any": VUE3_UPGRADE ? "warn" : "error",
+		"@typescript-eslint/no-explicit-any": "warn",
 		"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
 		"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
 		"no-useless-escape": "error",

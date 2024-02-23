@@ -1,6 +1,5 @@
 export * from "./ObjectIdMock";
 export * from "./api-mocks";
-// export * from "./componentMocks"; // VUE3_UPGRADE this imports legacy setup.js!
 export * from "./composable-mocks";
 export * from "./factory";
 export * from "./i18nMock";

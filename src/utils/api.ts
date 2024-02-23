@@ -7,7 +7,6 @@ let $axios: AxiosInstance;
 
 export const initializeAxios = (axios: AxiosInstance) => {
 	$axios = axios;
-	// VUE3_UPGRADE remove $axios property
 	const app = getCurrentInstance()?.appContext.app;
 	if (app) {
 		app.config.globalProperties.$axios = axios;

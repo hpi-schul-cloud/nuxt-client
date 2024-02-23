@@ -1,4 +1,3 @@
-// VUE3_UPGRADE -- Mounting Base Components - remove later
 import { mountBaseComponents } from "@/components/base/components";
 import {
 	accountsModule,
@@ -29,18 +28,16 @@ import {
 	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
-// NUXT_REMOVAL set this based on the tenant theme
 import themeConfig from "@/theme.config";
 import { htmlConfig } from "@feature-render-html";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
-// NUXT_REMOVAL change how global components are handled
 import "@/plugins/polyfills";
 
 import "@/styles/global.scss";
-// NUXT_REMOVAL try to solve without vue-mq dependency
+// TODO solve without vue-mq dependency
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { Vue3Mq } from "vue3-mq";
@@ -83,9 +80,6 @@ app.config.errorHandler = handleApplicationError;
 
 app.config.globalProperties.$theme = themeConfig;
 
-// NUXT_REMOVAL try to solve without vue-mq dependency
-// VUE3_UPGRADE in vue3-mw we have to specify a min value for each breakpoint
-// https://vue3-mq.info/migration/from-version-2.html#now-using-minimum-widths-for-breakpoints
 app.use(Vue3Mq, {
 	breakpoints: {
 		mobile: 0,

@@ -102,8 +102,6 @@ import {
 	mdiViewListOutline,
 } from "@mdi/js";
 
-// VUE3_UPGRADE remove the aliases when refactored to type-safe icon imports
-
 export {
 	mdiAccountBoxOutline,
 	mdiAccountCircleOutline,
