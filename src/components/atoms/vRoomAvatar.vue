@@ -46,8 +46,8 @@
 	</div>
 </template>
 <script>
-import { defineComponent } from "vue";
 import { mdiLock } from "@/components/icons/material";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	props: {
@@ -160,10 +160,10 @@ export default defineComponent({
 		},
 		dragend() {
 			this.isDragging = false;
-			this.$emit("dragend");
+			this.$emit("dragendAvatar");
 		},
 		dropAvatar() {
-			this.$emit("drop");
+			this.$emit("dropAvatar");
 		},
 	},
 });

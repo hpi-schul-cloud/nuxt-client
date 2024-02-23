@@ -1360,14 +1360,6 @@ export default {
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.label.shareLesson": "Themenkopie teilen",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
-	"pages.room.modal.course.invite.header": "Einladungslink generiert!",
-	"pages.room.modal.course.invite.text":
-		"Verteile folgenden Link an deine Schüler:innen, um sie zum Kurs einzuladen. Die Schüler:innen müssen dafür angemeldet sein.",
-	"pages.room.modal.course.share.header": "Kopiercode wurde generiert!",
-	"pages.room.modal.course.share.subText":
-		"Alternativ kannst du deinen Kolleg:innen auch folgenden QR-Code zeigen.",
-	"pages.room.modal.course.share.text":
-		"Verteile folgenden Code an andere Kolleg:innen, damit sie sich den Kurs als Kopie importieren können. Alte Abgaben von Schüler:innen werden für den neu kopierten Kurs automatisch entfernt.",
 	"pages.room.student.emptyState":
 		"Hier erscheinen Lerninhalte wie Themen oder Aufgaben.",
 	"pages.room.taskCard.aria":
@@ -1396,7 +1388,6 @@ export default {
 	"pages.rooms.fab.add.lesson": "Neues Thema",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
-	"pages.rooms.fab.import.course": "Kurs importieren",
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.headerSection.archived": "Archiv",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
