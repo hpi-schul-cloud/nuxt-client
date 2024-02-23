@@ -15,8 +15,9 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useRoute } from "vue-router";
-import { STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 import { reactive } from "vue";
+import NotifierModule from "@/store/notifier";
 
 const $route = {
 	query: {
@@ -74,9 +75,11 @@ const useRouteMock = <jest.Mock>useRoute;
 
 describe("legacyLoggedIn", () => {
 	it("should mark active links", () => {
+		const autoLogoutModule = createModuleMocks(AutoLogoutModule);
 		const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
 			getStatusAlerts: [],
 		});
+		const notifierModule = createModuleMocks(NotifierModule);
 
 		useRouteMock.mockImplementation(() => reactive($route));
 
@@ -84,9 +87,12 @@ describe("legacyLoggedIn", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
+					autoLogoutModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 				},
 				mocks: {
+					$route: { hash: "" },
 					$theme: {
 						name: "instance name",
 					},

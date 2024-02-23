@@ -1,5 +1,5 @@
 <template>
-	<VListItem data-testid="board-menu-action">
+	<VListItem data-testid="board-menu-action" role="menuitem">
 		<template v-slot:prepend>
 			<slot name="icon" data-testid="board-menu-action-icon">
 				<v-icon :icon="icon" />

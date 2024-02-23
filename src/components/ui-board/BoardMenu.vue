@@ -34,7 +34,7 @@
 				</span>
 			</VBtn>
 		</template>
-		<VList>
+		<VList role="menu">
 			<slot :scope="scope" />
 		</VList>
 	</VMenu>

@@ -49,7 +49,7 @@ export default {
 			this.hovered = true;
 		},
 		dropAvatar() {
-			this.$emit("drop");
+			this.$emit("dropEmptyAvatar");
 		},
 	},
 };
