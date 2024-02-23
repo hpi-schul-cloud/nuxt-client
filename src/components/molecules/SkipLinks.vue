@@ -7,7 +7,7 @@
 <script>
 export default {
 	mounted() {
-		const section = this.$router.currentRoute.value.hash.replace("#", "");
+		const section = this.$route.hash.replace("#", "");
 		if (section)
 			this.$nextTick(() =>
 				window.document.getElementById(section).scrollIntoView()

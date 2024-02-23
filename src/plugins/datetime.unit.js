@@ -27,6 +27,8 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import setupStores from "../../tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
+import de from "@/locales/de";
+import en from "@/locales/en";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -37,10 +39,7 @@ const TEST_DATETIME_TIMEZONE = "America/New_York";
 const TEST_USER_TIMEZONE = "Europe/Berlin";
 const TEST_CURRENT_LOCALE = "en";
 
-const translations = {
-	en: require("@/locales/en.json"),
-	de: require("@/locales/de.json"),
-};
+const translations = { de, en };
 
 const defaultFormats = {
 	...DATETIME_FORMAT,

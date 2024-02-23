@@ -3,7 +3,10 @@ import { mount } from "@vue/test-utils";
 import CopyResultModalList from "./CopyResultModalList.vue";
 import CopyResultModalListItem from "./CopyResultModalListItem.vue";
 import { CopyResultItem } from "./types/CopyResultItem";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 const mockItems: CopyResultItem[] = [
 	{
@@ -37,7 +40,7 @@ const createWrapper = (props: object) => {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
-		props
+		props,
 	});
 };
 
