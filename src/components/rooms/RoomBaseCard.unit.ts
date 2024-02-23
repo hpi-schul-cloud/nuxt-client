@@ -90,7 +90,7 @@ describe("RoomBaseCard", () => {
 		it("should display a title", async () => {
 			const { wrapper, title } = setup();
 
-			const titleTag = wrapper.find("h5");
+			const titleTag = wrapper.find("h2");
 
 			expect(titleTag.text()).toEqual(title);
 		});
