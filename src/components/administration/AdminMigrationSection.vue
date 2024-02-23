@@ -135,6 +135,31 @@
 			data-testid="enable-sync-during-migration-switch"
 			@update:model-value="setSchoolFeatures"
 		/>
+
+		<template v-if="showMigrationWizard">
+			<v-btn
+				:disabled="!isMigrationActive || !isSchoolMigrated"
+				class="my-4"
+				color="primary"
+				variant="flat"
+				data-testid="migration-wizard-button"
+				:to="{ name: 'administration-migration' }"
+			>
+				{{
+					t(
+						"components.administration.adminMigrationSection.migrationWizardButton.label"
+					)
+				}}
+			</v-btn>
+			<p>
+				{{
+					t(
+						"components.administration.adminMigrationSection.migrationWizardButton.description"
+					)
+				}}
+			</p>
+		</template>
+
 		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
 			:label="
@@ -162,7 +187,7 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "vue-i18n";
+import { mdiCheck } from "@/components/icons/material";
 import { School } from "@/store/types/schools";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import {
@@ -181,8 +206,8 @@ import {
 	ref,
 	Ref,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
-import { mdiCheck } from "@/components/icons/material";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -309,6 +334,22 @@ export default defineComponent({
 			() => envConfigModule.getShowOutdatedUsers
 		);
 
+		const isSchoolMigrated: ComputedRef<boolean> = computed(() => {
+			let hasTargetSystem = false;
+
+			if (userLoginMigration.value?.targetSystemId) {
+				hasTargetSystem = schoolsModule.getSchool.systemIds.includes(
+					userLoginMigration.value.targetSystemId
+				);
+			}
+
+			return hasTargetSystem;
+		});
+
+		const showMigrationWizard: ComputedRef<boolean> = computed(
+			() => !!envConfigModule.getEnv.FEATURE_SHOW_MIGRATION_WIZARD
+		);
+
 		const setSchoolFeatures = async () => {
 			await schoolsModule.update({
 				id: school.value.id,
@@ -341,6 +382,8 @@ export default defineComponent({
 			isMigrationActive,
 			isMigrationMandatory,
 			mdiCheck,
+			showMigrationWizard,
+			isSchoolMigrated,
 		};
 	},
 });

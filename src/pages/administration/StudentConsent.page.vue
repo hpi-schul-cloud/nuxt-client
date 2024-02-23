@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe ref="main" :full-width="true" :breadcrumbs="breadcrumbs">
+	<default-wireframe ref="main" :full-width="false" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<h1 class="mb--md h3">
 				{{ title }}
@@ -61,7 +61,7 @@
 							label=""
 							data-testid="birthday-input"
 							:birth-date="true"
-							@input="
+							@update:modelValue="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
 									birthDate: inputDateFormat($event),
@@ -76,7 +76,7 @@
 							label=""
 							data-testid="password-input"
 							class="base-input"
-							@input="
+							@update:modelValue="
 								inputPass({
 									id: tableData[slotProps.rowindex]._id,
 									pass: $event,
@@ -222,7 +222,7 @@
 					{{ successMessage }}
 				</h4>
 				<img
-					class="mb--md"
+					class="mb--md success-image mb-4"
 					:src="image"
 					:alt="
 						$t('pages.administration.students.consent.steps.success.image.alt')
@@ -656,6 +656,12 @@ export default {
 
 .warning {
 	color: rgba(var(--v-theme-error));
+}
+.success-image {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin: 0 auto;
 }
 
 :deep(.link) {

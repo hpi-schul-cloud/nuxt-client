@@ -9,7 +9,7 @@
 			item-value="value"
 			return-object
 			active
-			@update:model-value="setPagination"
+			@update:modelValue="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
 			<p class="total">

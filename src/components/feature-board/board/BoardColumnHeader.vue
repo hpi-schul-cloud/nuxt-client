@@ -19,7 +19,7 @@
 					:placeholder="titlePlaceholder"
 					@update:value="onUpdateTitle"
 					class="w-100"
-					:is-focused="isFocusedById"
+					:isFocused="isFocusedById"
 				/>
 				<BoardMenu v-if="hasDeletePermission" scope="column">
 					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
@@ -28,7 +28,7 @@
 					<BoardMenuActionDelete :name="title" @click="onDelete" />
 				</BoardMenu>
 			</div>
-			<VDivider aria-hidden="true" color="black" />
+			<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
 		</div>
 	</BoardColumnInteractionHandler>
 </template>
@@ -78,7 +78,6 @@ export default defineComponent({
 	},
 	emits: [
 		"delete:column",
-		"move:column-keyboard",
 		"move:column-left",
 		"move:column-right",
 		"update:title",
@@ -116,7 +115,13 @@ export default defineComponent({
 		};
 
 		const onMoveColumnKeyboard = (event: KeyboardEvent) => {
-			emit("move:column-keyboard", event.code);
+			if (event.code === "ArrowLeft") {
+				emit("move:column-left");
+			} else if (event.code === "ArrowRight") {
+				emit("move:column-right");
+			} else {
+				console.log("not supported key event");
+			}
 		};
 
 		const onMoveColumnLeft = () => {
@@ -152,6 +157,9 @@ export default defineComponent({
 });
 </script>
 <style scoped>
+.column-header {
+	align-items: top;
+}
 .column-header:focus {
 	outline: none;
 }

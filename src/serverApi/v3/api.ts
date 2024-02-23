@@ -2444,6 +2444,56 @@ export interface LessonCopyApiParams {
 /**
  * 
  * @export
+ * @interface LessonMetadataListResponse
+ */
+export interface LessonMetadataListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<LessonMetadataResponse>}
+     * @memberof LessonMetadataListResponse
+     */
+    data: Array<LessonMetadataResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof LessonMetadataListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof LessonMetadataListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof LessonMetadataListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface LessonMetadataResponse
+ */
+export interface LessonMetadataResponse {
+    /**
+     * The id of the Lesson entity
+     * @type {string}
+     * @memberof LessonMetadataResponse
+     */
+    _id: string;
+    /**
+     * Name of the Lesson entity
+     * @type {string}
+     * @memberof LessonMetadataResponse
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
  * @interface LinkContentBody
  */
 export interface LinkContentBody {
@@ -2797,6 +2847,156 @@ export interface Lti11ToolConfigUpdateParams {
      * @memberof Lti11ToolConfigUpdateParams
      */
     launch_presentation_locale: string;
+}
+/**
+ * 
+ * @export
+ * @interface MeAccountResponse
+ */
+export interface MeAccountResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeAccountResponse
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
+ * @interface MeResponse
+ */
+export interface MeResponse {
+    /**
+     * 
+     * @type {MeSchoolResponse}
+     * @memberof MeResponse
+     */
+    school: MeSchoolResponse;
+    /**
+     * 
+     * @type {MeUserResponse}
+     * @memberof MeResponse
+     */
+    user: MeUserResponse;
+    /**
+     * 
+     * @type {Array<MeRolesReponse>}
+     * @memberof MeResponse
+     */
+    roles: Array<MeRolesReponse>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof MeResponse
+     */
+    permissions: Array<string>;
+    /**
+     * 
+     * @type {MeAccountResponse}
+     * @memberof MeResponse
+     */
+    account: MeAccountResponse;
+}
+/**
+ * 
+ * @export
+ * @interface MeRolesReponse
+ */
+export interface MeRolesReponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeRolesReponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeRolesReponse
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
+ * @interface MeSchoolLogoResponse
+ */
+export interface MeSchoolLogoResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSchoolLogoResponse
+     */
+    url?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSchoolLogoResponse
+     */
+    name?: string;
+}
+/**
+ * 
+ * @export
+ * @interface MeSchoolResponse
+ */
+export interface MeSchoolResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSchoolResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSchoolResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {MeSchoolLogoResponse}
+     * @memberof MeSchoolResponse
+     */
+    logo: MeSchoolLogoResponse;
+}
+/**
+ * 
+ * @export
+ * @interface MeUserResponse
+ */
+export interface MeUserResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeUserResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeUserResponse
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeUserResponse
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeUserResponse
+     */
+    language?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeUserResponse
+     */
+    customAvatarBackgroundColor?: string;
 }
 /**
  * 
@@ -4133,6 +4333,19 @@ export interface RichTextElementResponse {
 /**
  * 
  * @export
+ * @interface SchoolExistsResponse
+ */
+export interface SchoolExistsResponse {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolExistsResponse
+     */
+    exists: boolean;
+}
+/**
+ * 
+ * @export
  * @interface SchoolExternalToolConfigurationStatusResponse
  */
 export interface SchoolExternalToolConfigurationStatusResponse {
@@ -4356,6 +4569,31 @@ export interface SchoolForExternalInviteResponse {
 /**
  * 
  * @export
+ * @interface SchoolForLdapLoginResponse
+ */
+export interface SchoolForLdapLoginResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolForLdapLoginResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolForLdapLoginResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {Array<SystemForLdapLoginResponse>}
+     * @memberof SchoolForLdapLoginResponse
+     */
+    systems: Array<SystemForLdapLoginResponse>;
+}
+/**
+ * 
+ * @export
  * @interface SchoolInfoResponse
  */
 export interface SchoolInfoResponse {
@@ -4457,6 +4695,12 @@ export interface SchoolResponse {
      * @memberof SchoolResponse
      */
     systemIds: Array<string>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolResponse
+     */
+    inUserMigration?: boolean;
     /**
      * 
      * @type {boolean}
@@ -5010,6 +5254,31 @@ export interface SuccessfulResponse {
 /**
  * 
  * @export
+ * @interface SystemForLdapLoginResponse
+ */
+export interface SystemForLdapLoginResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemForLdapLoginResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemForLdapLoginResponse
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SystemForLdapLoginResponse
+     */
+    alias: string;
+}
+/**
+ * 
+ * @export
  * @interface TargetInfoResponse
  */
 export interface TargetInfoResponse {
@@ -5527,7 +5796,7 @@ export interface UserLoginMigrationMandatoryParams {
  */
 export interface UserLoginMigrationResponse {
     /**
-     * 
+     * Id of the migration
      * @type {string}
      * @memberof UserLoginMigrationResponse
      */
@@ -5576,7 +5845,7 @@ export interface UserLoginMigrationResponse {
  */
 export interface UserLoginMigrationSearchListResponse {
     /**
-     * The items for the current page.
+     * Contains user login migration responses
      * @type {Array<UserLoginMigrationResponse>}
      * @memberof UserLoginMigrationSearchListResponse
      */
@@ -8712,6 +8981,44 @@ export const BoardSubmissionApiAxiosParamCreator = function (configuration?: Con
         },
         /**
          * 
+         * @summary Delete a single submission item.
+         * @param {string} submissionItemId The id of the submission item.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardSubmissionControllerDeleteSubmissionItem: async (submissionItemId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'submissionItemId' is not null or undefined
+            assertParamExists('boardSubmissionControllerDeleteSubmissionItem', 'submissionItemId', submissionItemId)
+            const localVarPath = `/board-submissions/{submissionItemId}`
+                .replace(`{${"submissionItemId"}}`, encodeURIComponent(String(submissionItemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get a list of submission items by their parent container.
          * @param {string} submissionContainerId The id of the submission container.
          * @param {*} [options] Override http request option.
@@ -8816,6 +9123,17 @@ export const BoardSubmissionApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Delete a single submission item.
+         * @param {string} submissionItemId The id of the submission item.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardSubmissionControllerDeleteSubmissionItem(submissionItemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardSubmissionControllerDeleteSubmissionItem(submissionItemId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get a list of submission items by their parent container.
          * @param {string} submissionContainerId The id of the submission container.
          * @param {*} [options] Override http request option.
@@ -8860,6 +9178,16 @@ export const BoardSubmissionApiFactory = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Delete a single submission item.
+         * @param {string} submissionItemId The id of the submission item.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardSubmissionControllerDeleteSubmissionItem(submissionItemId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.boardSubmissionControllerDeleteSubmissionItem(submissionItemId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get a list of submission items by their parent container.
          * @param {string} submissionContainerId The id of the submission container.
          * @param {*} [options] Override http request option.
@@ -8898,6 +9226,16 @@ export interface BoardSubmissionApiInterface {
      * @memberof BoardSubmissionApiInterface
      */
     boardSubmissionControllerCreateElement(submissionItemId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<RichTextElementResponse | FileElementResponse>;
+
+    /**
+     * 
+     * @summary Delete a single submission item.
+     * @param {string} submissionItemId The id of the submission item.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardSubmissionApiInterface
+     */
+    boardSubmissionControllerDeleteSubmissionItem(submissionItemId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -8940,6 +9278,18 @@ export class BoardSubmissionApi extends BaseAPI implements BoardSubmissionApiInt
      */
     public boardSubmissionControllerCreateElement(submissionItemId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any) {
         return BoardSubmissionApiFp(this.configuration).boardSubmissionControllerCreateElement(submissionItemId, createContentElementBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete a single submission item.
+     * @param {string} submissionItemId The id of the submission item.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardSubmissionApi
+     */
+    public boardSubmissionControllerDeleteSubmissionItem(submissionItemId: string, options?: any) {
+        return BoardSubmissionApiFp(this.configuration).boardSubmissionControllerDeleteSubmissionItem(submissionItemId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -10043,6 +10393,43 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} courseId The id of the course the lesson belongs to.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        lessonControllerGetCourseLessons: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('lessonControllerGetCourseLessons', 'courseId', courseId)
+            const localVarPath = `/lessons/course/{courseId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -10061,6 +10448,16 @@ export const LessonApiFp = function(configuration?: Configuration) {
          */
         async lessonControllerDelete(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerDelete(lessonId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} courseId The id of the course the lesson belongs to.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async lessonControllerGetCourseLessons(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LessonMetadataListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetCourseLessons(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -10082,6 +10479,15 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
         lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<boolean> {
             return localVarFp.lessonControllerDelete(lessonId, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} courseId The id of the course the lesson belongs to.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        lessonControllerGetCourseLessons(courseId: string, options?: any): AxiosPromise<LessonMetadataListResponse> {
+            return localVarFp.lessonControllerGetCourseLessons(courseId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -10099,6 +10505,15 @@ export interface LessonApiInterface {
      * @memberof LessonApiInterface
      */
     lessonControllerDelete(lessonId: string, options?: any): AxiosPromise<boolean>;
+
+    /**
+     * 
+     * @param {string} courseId The id of the course the lesson belongs to.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonApiInterface
+     */
+    lessonControllerGetCourseLessons(courseId: string, options?: any): AxiosPromise<LessonMetadataListResponse>;
 
 }
 
@@ -10118,6 +10533,131 @@ export class LessonApi extends BaseAPI implements LessonApiInterface {
      */
     public lessonControllerDelete(lessonId: string, options?: any) {
         return LessonApiFp(this.configuration).lessonControllerDelete(lessonId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} courseId The id of the course the lesson belongs to.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonApi
+     */
+    public lessonControllerGetCourseLessons(courseId: string, options?: any) {
+        return LessonApiFp(this.configuration).lessonControllerGetCourseLessons(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * MeApi - axios parameter creator
+ * @export
+ */
+export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        meControllerMe: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MeApi - functional programming interface
+ * @export
+ */
+export const MeApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MeApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async meControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MeResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.meControllerMe(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MeApi - factory interface
+ * @export
+ */
+export const MeApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MeApiFp(configuration)
+    return {
+        /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        meControllerMe(options?: any): AxiosPromise<MeResponse> {
+            return localVarFp.meControllerMe(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MeApi - interface
+ * @export
+ * @interface MeApi
+ */
+export interface MeApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MeApiInterface
+     */
+    meControllerMe(options?: any): AxiosPromise<MeResponse>;
+
+}
+
+/**
+ * MeApi - object-oriented interface
+ * @export
+ * @class MeApi
+ * @extends {BaseAPI}
+ */
+export class MeApi extends BaseAPI implements MeApiInterface {
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MeApi
+     */
+    public meControllerMe(options?: any) {
+        return MeApiFp(this.configuration).meControllerMe(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -12727,6 +13267,39 @@ export class SSOApi extends BaseAPI implements SSOApiInterface {
 export const SchoolApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerDoesSchoolExist: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerDoesSchoolExist', 'schoolId', schoolId)
+            const localVarPath = `/school/exists/id/{schoolId}`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Gets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -12843,6 +13416,35 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolListForLadpLogin: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/school/list-for-ldap-login`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -12900,6 +13502,16 @@ export const SchoolApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SchoolApiAxiosParamCreator(configuration)
     return {
         /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerDoesSchoolExist(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolExistsResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerDoesSchoolExist(schoolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Gets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -12931,6 +13543,15 @@ export const SchoolApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetSchoolListForLadpLogin(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolForLdapLoginResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolListForLadpLogin(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -12952,6 +13573,15 @@ export const SchoolApiFp = function(configuration?: Configuration) {
 export const SchoolApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = SchoolApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerDoesSchoolExist(schoolId: string, options?: any): AxiosPromise<SchoolExistsResponse> {
+            return localVarFp.schoolControllerDoesSchoolExist(schoolId, options).then((request) => request(axios, basePath));
+        },
         /**
          * Gets all provisioning options for a system at a school
          * @param {string} schoolId 
@@ -12981,6 +13611,14 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.schoolControllerGetSchoolListForExternalInvite(federalStateId, options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolListForLadpLogin(options?: any): AxiosPromise<Array<SchoolForLdapLoginResponse>> {
+            return localVarFp.schoolControllerGetSchoolListForLadpLogin(options).then((request) => request(axios, basePath));
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -13000,6 +13638,15 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
  * @interface SchoolApi
  */
 export interface SchoolApiInterface {
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerDoesSchoolExist(schoolId: string, options?: any): AxiosPromise<SchoolExistsResponse>;
+
     /**
      * Gets all provisioning options for a system at a school
      * @param {string} schoolId 
@@ -13029,6 +13676,14 @@ export interface SchoolApiInterface {
     schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any): AxiosPromise<Array<SchoolForExternalInviteResponse>>;
 
     /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetSchoolListForLadpLogin(options?: any): AxiosPromise<Array<SchoolForLdapLoginResponse>>;
+
+    /**
      * Sets all provisioning options for a system at a school
      * @param {string} schoolId 
      * @param {string} systemId 
@@ -13048,6 +13703,17 @@ export interface SchoolApiInterface {
  * @extends {BaseAPI}
  */
 export class SchoolApi extends BaseAPI implements SchoolApiInterface {
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerDoesSchoolExist(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerDoesSchoolExist(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Gets all provisioning options for a system at a school
      * @param {string} schoolId 
@@ -13080,6 +13746,16 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerGetSchoolListForExternalInvite(federalStateId?: string, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForExternalInvite(federalStateId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetSchoolListForLadpLogin(options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForLadpLogin(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -15037,6 +15713,44 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Returns a pdf of the external tool information
+         * @param {string} externalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetDatasheet: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'externalToolId' is not null or undefined
+            assertParamExists('toolControllerGetDatasheet', 'externalToolId', externalToolId)
+            const localVarPath = `/tools/external-tools/{externalToolId}/datasheet`
+                .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Returns an ExternalTool for the given id
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
@@ -15712,6 +16426,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Returns a pdf of the external tool information
+         * @param {string} externalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolControllerGetDatasheet(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetDatasheet(externalToolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Returns an ExternalTool for the given id
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
@@ -16005,6 +16730,16 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Returns a pdf of the external tool information
+         * @param {string} externalToolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerGetDatasheet(externalToolId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.toolControllerGetDatasheet(externalToolId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Returns an ExternalTool for the given id
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
@@ -16281,6 +17016,16 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any): AxiosPromise<ExternalToolSearchListResponse>;
+
+    /**
+     * 
+     * @summary Returns a pdf of the external tool information
+     * @param {string} externalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolControllerGetDatasheet(externalToolId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -16585,6 +17330,18 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolControllerFindExternalTool(name?: string, clientId?: string, skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'id' | 'name', options?: any) {
         return ToolApiFp(this.configuration).toolControllerFindExternalTool(name, clientId, skip, limit, sortOrder, sortBy, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns a pdf of the external tool information
+     * @param {string} externalToolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolControllerGetDatasheet(externalToolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerGetDatasheet(externalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -17116,6 +17873,40 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
+         * Populates import users from specific user migration populate endpoint.
+         * @summary Populates import users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerPopulateImportUsers: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/populate-import-users`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {*} [options] Override http request option.
@@ -17363,6 +18154,16 @@ export const UserImportApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Populates import users from specific user migration populate endpoint.
+         * @summary Populates import users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerPopulateImportUsers(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerPopulateImportUsers(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * 
          * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {*} [options] Override http request option.
@@ -17462,6 +18263,15 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
             return localVarFp.importUserControllerFindAllUnmatchedUsers(name, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
+         * Populates import users from specific user migration populate endpoint.
+         * @summary Populates import users
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerPopulateImportUsers(options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerPopulateImportUsers(options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @param {string} importUserId The id of an importuser object, that matches an internal user with an external user.
          * @param {*} [options] Override http request option.
@@ -17553,6 +18363,15 @@ export interface UserImportApiInterface {
      * @memberof UserImportApiInterface
      */
     importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any): AxiosPromise<UserMatchListResponse>;
+
+    /**
+     * Populates import users from specific user migration populate endpoint.
+     * @summary Populates import users
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApiInterface
+     */
+    importUserControllerPopulateImportUsers(options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -17651,6 +18470,17 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      */
     public importUserControllerFindAllUnmatchedUsers(name?: string, skip?: number, limit?: number, options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerFindAllUnmatchedUsers(name, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Populates import users from specific user migration populate endpoint.
+     * @summary Populates import users
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApi
+     */
+    public importUserControllerPopulateImportUsers(options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerPopulateImportUsers(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

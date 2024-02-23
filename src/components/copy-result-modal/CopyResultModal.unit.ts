@@ -186,9 +186,10 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				} as Envs);
 				const { wrapper } = setup();
 
-				expect(
-					wrapper.find('[data-testid="copy-result-notifications"]').text()
-				).toContain(
+				const dialog = wrapper.findComponent(vCustomDialog);
+				const content = dialog.findComponent(".v-card-text").text();
+
+				expect(content).toContain(
 					"components.molecules.copyResult.ctlTools.withFeature.info"
 				);
 			});
@@ -240,6 +241,9 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			["Kursgruppen", CopyApiResponseTypeEnum.CoursegroupGroup],
 			["Dateien", CopyApiResponseTypeEnum.File],
 		])("should render if there is a %s item", (title, type) => {
+			envConfigModule.setEnvs({
+				FEATURE_NEXBOARD_COPY_ENABLED: true,
+			} as Envs);
 			const copyResultItems = mockResultItems();
 			copyResultItems[0].elements = [
 				{

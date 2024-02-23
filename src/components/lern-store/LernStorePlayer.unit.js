@@ -1,18 +1,34 @@
 import LernStorePlayer from "./LernStorePlayer";
 import { mount } from "@vue/test-utils";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import { initializeAxios } from "@/utils/api";
+
+initializeAxios({
+	get: async () => {
+		return { data: [] };
+	},
+});
 
 describe("@/components/molecules/LernStorePlayer", () => {
-	const wrapper = mount(LernStorePlayer);
+	const setup = (props = {}) => {
+		const wrapper = mount(LernStorePlayer, {
+			props,
+			global: {
+				plugins: [createTestingVuetify()],
+			},
+		});
+		return {
+			wrapper,
+		};
+	};
 
 	it("Renders the wrapper", () => {
+		const { wrapper } = setup();
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("Renders Spinner", async () => {
-		wrapper.setData({
-			loading: true,
-		});
-		await wrapper.vm.$nextTick();
+	it("Renders Spinner", () => {
+		const { wrapper } = setup({ loading: true });
 		expect(wrapper.find(".player-iframe").exists()).toBe(false);
 		expect(
 			wrapper
@@ -21,33 +37,28 @@ describe("@/components/molecules/LernStorePlayer", () => {
 		).toBe(true);
 	});
 
-	it("Renders Iframe", async () => {
-		wrapper.setData({
-			loading: false,
-		});
-		await wrapper.vm.$nextTick();
+	it("Renders Iframe", () => {
+		const { wrapper } = setup({ loading: false });
 		expect(wrapper.find(".player-iframe").exists()).toBe(true);
 	});
 
-	it("Renders Iframe with data", async () => {
-		wrapper.setData({
+	it("Renders Iframe with data", () => {
+		const { wrapper } = setup({
 			loading: false,
 			iframeSrc: "iframeTestSRC",
 			scriptSrc: "scriptTestSRC",
 		});
-		await wrapper.vm.$nextTick();
 		expect(wrapper.find(".player-iframe").attributes("src")).toBe(
 			"iframeTestSRC"
 		);
 	});
 
-	it("Renders script data", async () => {
-		wrapper.setData({
+	it("Renders script data", () => {
+		const { wrapper } = setup({
 			loading: false,
 			iframeSrc: "iframeTestSRC",
 			scriptSrc: "scriptTestSRC",
 		});
-		await wrapper.vm.$nextTick();
 		expect(wrapper.props("scriptSrc")).toBe("scriptTestSRC");
 	});
 });

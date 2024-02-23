@@ -14,6 +14,7 @@ import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory/prov
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 jest.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
 
@@ -46,6 +47,7 @@ describe("ProvisioningOptionsState.composable", () => {
 							provide: {
 								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 							},
+							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
 					}
@@ -83,6 +85,7 @@ describe("ProvisioningOptionsState.composable", () => {
 							provide: {
 								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 							},
+							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
 					}
@@ -147,6 +150,7 @@ describe("ProvisioningOptionsState.composable", () => {
 							provide: {
 								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 							},
+							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
 					}
@@ -221,6 +225,7 @@ describe("ProvisioningOptionsState.composable", () => {
 							provide: {
 								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 							},
+							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
 					}
@@ -262,6 +267,7 @@ describe("ProvisioningOptionsState.composable", () => {
 							provide: {
 								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 							},
+							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
 					}
@@ -337,6 +343,7 @@ describe("ProvisioningOptionsState.composable", () => {
 							provide: {
 								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 							},
+							plugins: [createTestingI18n()],
 							mocks: i18nMock,
 						},
 					}

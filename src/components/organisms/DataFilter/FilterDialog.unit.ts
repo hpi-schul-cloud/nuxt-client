@@ -32,7 +32,7 @@ describe("@components/DataFilter/FilterDialog.vue", () => {
 		it("should emit the 'dialog:close' event on close", async () => {
 			const wrapper = mountComponent();
 			const dialog = wrapper.getComponent({ name: "v-dialog" });
-			await dialog.vm.$emit("click:outside");
+			await dialog.vm.$emit("update:modelValue", false);
 
 			expect(wrapper.emitted()).toHaveProperty("dialog-closed");
 		});

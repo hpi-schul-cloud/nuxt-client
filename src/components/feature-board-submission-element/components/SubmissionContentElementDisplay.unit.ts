@@ -1,36 +1,37 @@
-import Vue from "vue";
-import { AUTH_MODULE_KEY, I18N_KEY } from "@/utils/inject";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, MountOptions } from "@vue/test-utils";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { shallowMount } from "@vue/test-utils";
 import AuthModule from "@/store/auth";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
-import { i18nMock } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("SubmissionContentElementDisplay", () => {
 	const setup = (role: "teacher" | "student" = "teacher") => {
-		document.body.setAttribute("data-app", "true");
-
-		const propsData = {
+		const props = {
 			dueDate: "01.01.2023 01:23",
+			studentSubmission: { completed: false },
+			submissions: [],
+			loading: false,
+			isOverdue: false,
 		};
 		const authModule = createModuleMocks(AuthModule, {
 			getUserRoles: [role],
 		});
 
-		const wrapper = shallowMount(
-			SubmissionContentElementDisplay as MountOptions<Vue>,
-			{
-				...createComponentMocks({ i18n: true }),
-				propsData,
+		const wrapper = shallowMount(SubmissionContentElementDisplay, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
-			}
-		);
+			},
+			props,
+		});
 
 		return {
 			wrapper,

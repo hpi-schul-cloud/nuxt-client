@@ -3,7 +3,7 @@
 		<v-list-item
 			:key="task.id"
 			v-outside-click="() => handleFocus(false)"
-			class="mx-n4 mx-sm-0"
+			class="px-xxl-4 px-xl-4 px-lg-4 px-md-4 px-sm-4 px-0"
 			v-bind="$attrs"
 			:aria-label="ariaLabel"
 			role="article"
@@ -17,20 +17,21 @@
 					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
 				</v-avatar>
 			</template>
-
 			<!-- item main info -->
-			<div class="d-flex align-center justify-space-between">
+			<div
+				class="d-flex align-center justify-space-between flex-wrap flex-sm-nowrap"
+			>
 				<!-- item title -->
-				<div class="task-item__main-info">
+				<div class="task-item__main-info w-65" :style="conditionalWidth">
 					<v-list-item-subtitle data-testid="taskSubtitle">
 						{{ taskLabel }}
 					</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskTitle">
+					<v-list-item-title data-testid="taskTitle" class="text-truncate">
 						{{ task.name }}
 					</v-list-item-title>
 					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
 				</div>
-				<div class="mr-4 text-right">
+				<div class="d-sm-block mr-sm-4 d-flex">
 					<div
 						class="text-subtitle-2 due-date-label"
 						data-test-id="dueDateLabel"
@@ -39,9 +40,9 @@
 					</div>
 					<v-custom-chip-time-remaining
 						v-if="taskState === 'warning'"
+						class="ml-2 ml-sm-0 float-sm-right"
 						:type="taskState"
 						:due-date="task.dueDate"
-						:shorten-unit="$vuetify.display.xs"
 					/>
 				</div>
 			</div>
@@ -152,6 +153,12 @@ export default {
 		},
 		ariaLabel() {
 			return `${this.$t("common.words.task")} ${this.task.name}`;
+		},
+		conditionalWidth() {
+			if (this.$vuetify.display.xs) {
+				return "width: 96%";
+			}
+			return "width: 65%";
 		},
 	},
 	methods: {

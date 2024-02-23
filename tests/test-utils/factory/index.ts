@@ -51,3 +51,4 @@ export * from "./contextExternalToolConfigurationStatusResponseFactory";
 export * from "./schoolExternalToolConfigurationFactory";
 export * from "./schoolExternalToolConfigurationStatusResponseFactory";
 export * from "./provisioningOptionsDataFactory";
+export * from "./schoolFactory";

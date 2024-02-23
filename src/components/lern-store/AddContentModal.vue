@@ -1,17 +1,13 @@
 <template>
 	<div>
-		<base-modal
-			class="modal"
-			:active="showCopyModal"
-			@onBackdropClick="closeModal"
-		>
+		<base-modal class="modal" v-model:active="showModal">
 			<template #header>{{
 				$t("components.molecules.AddContentModal")
 			}}</template>
 			<template #body>
 				<div class="content-modal__body">
 					<v-select
-						:model-value="selectedCourse"
+						v-model="selectedCourse"
 						return-object
 						item-value="_id"
 						item-title="name"
@@ -22,7 +18,7 @@
 					<transition name="fade">
 						<v-select
 							v-show="!!(selectedCourse || {})._id"
-							:model-value="selectedLesson"
+							v-model="selectedLesson"
 							return-object
 							item-value="_id"
 							item-title="name"
@@ -57,12 +53,14 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { contentModule } from "@/store";
 import ModalFooter from "@/components/molecules/ModalFooter";
+import { contentModule } from "@/store";
+import { mapGetters } from "vuex";
+import BaseModal from "../base/BaseModal";
 export default {
 	components: {
 		ModalFooter,
+		BaseModal,
 	},
 	props: {
 		title: { type: String, default: "" },
@@ -81,8 +79,8 @@ export default {
 	},
 	data() {
 		return {
-			selectedCourse: {},
-			selectedLesson: {},
+			selectedCourse: undefined,
+			selectedLesson: undefined,
 		};
 	},
 	computed: {
@@ -107,10 +105,20 @@ export default {
 				})
 			);
 		},
+		showModal: {
+			get() {
+				return this.showCopyModal;
+			},
+			set(value) {
+				if (!value) {
+					this.closeModal();
+				}
+			},
+		},
 	},
 	watch: {
 		selectedCourse(to, from) {
-			this.selectedLesson = {};
+			this.selectedLesson = undefined;
 			if (to) {
 				this.findLessons(to);
 			} else if (!to && !!from) {
@@ -154,8 +162,8 @@ export default {
 			contentModule.getLessons(course._id);
 		},
 		clearState() {
-			this.selectedCourse = {};
-			this.selectedLesson = {};
+			this.selectedCourse = undefined;
+			this.selectedLesson = undefined;
 		},
 	},
 };

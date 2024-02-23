@@ -396,21 +396,21 @@ export default {
 			return {
 				icon: mdiPlus,
 				title: this.$t("common.actions.create"),
-				testId: "fab_button_teachers_table",
+				dataTestId: "fab_button_teachers_table",
 				ariaLabel: this.$t("common.actions.create"),
 				actions: [
 					{
 						label: this.$t("pages.administration.teachers.fab.add"),
 						icon: mdiAccountPlus,
 						to: "/administration/teachers/new",
-						dataTestid: "fab_button_add_teachers",
+						dataTestId: "fab_button_add_teachers",
 						ariaLabel: this.$t("pages.administration.teachers.fab.add"),
 					},
 					{
 						label: this.$t("pages.administration.teachers.fab.import"),
 						icon: mdiCloudDownload,
 						href: "/administration/teachers/import",
-						dataTestid: "fab_button_import_teachers",
+						dataTestId: "fab_button_import_teachers",
 						ariaLabel: this.$t("pages.administration.teachers.fab.import"),
 					},
 				],
@@ -500,16 +500,13 @@ export default {
 					selectionType,
 				});
 				notifierModule.show({
-					text: this.$tc(
-						"pages.administration.sendMail.success",
-						rowIds.length
-					),
+					text: this.$t("pages.administration.sendMail.success", rowIds.length),
 					status: "success",
 					timeout: 10000,
 				});
 			} catch (error) {
 				notifierModule.show({
-					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
+					text: this.$t("pages.administration.sendMail.error", rowIds.length),
 					status: "error",
 					timeout: 10000,
 				});
@@ -526,14 +523,14 @@ export default {
 					this.$_printQRs(this.qrLinks);
 				} else {
 					notifierModule.show({
-						text: this.$tc("pages.administration.printQr.emptyUser"),
+						text: this.$t("pages.administration.printQr.emptyUser"),
 						status: "info",
 						timeout: 10000,
 					});
 				}
 			} catch (error) {
 				notifierModule.show({
-					text: this.$tc("pages.administration.printQr.error", rowIds.length),
+					text: this.$t("pages.administration.printQr.error", rowIds.length),
 					status: "error",
 					timeout: 10000,
 				});
@@ -566,7 +563,7 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = this.$tc(
+				message = this.$t(
 					"pages.administration.teachers.index.remove.confirm.message.some",
 					rowIds.length,
 					{ number: rowIds.length }
@@ -636,7 +633,7 @@ export default {
 			this.find();
 		},
 		async getClassNameList() {
-			const { currentYear } = this.$store.getters["authModule/getSchool"];
+			const currentYear = schoolsModule.getCurrentYear;
 			await this.$store.dispatch("classes/find", {
 				query: {
 					$limit: 1000,

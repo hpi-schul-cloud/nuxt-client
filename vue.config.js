@@ -57,15 +57,16 @@ module.exports = defineConfig({
 				"@feature-news-form": getDir("src/components/feature-news-form"),
 				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
-				"@ui-color-overlay": getDir("src/components/ui-color-overlay"),
 				"@ui-preview-image": getDir("src/components/ui-preview-image"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
 				"@ui-date-time-picker": getDir("src/components/ui-date-time-picker"),
 				"@ui-light-box": getDir("src/components/ui-light-box"),
+				"@ui-speed-dial-menu": getDir("src/components/ui-speed-dial-menu"),
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
+				"@util-vue": getDir("src/components/util-vue"),
 				"@util-input-masks": getDir("src/components/util-input-masks"),
 				"@util-device-detection": getDir(
 					"src/components/util-device-detection"
@@ -79,7 +80,7 @@ module.exports = defineConfig({
 		module: {
 			rules: [
 				{
-					test: /\.json$/,
+					test: /\.ts$/,
 					type: "javascript/auto",
 					loader: path.resolve(__dirname, "webpack-config/vue-i18n-loader.js"),
 					include: [path.resolve(__dirname, "src/locales")],

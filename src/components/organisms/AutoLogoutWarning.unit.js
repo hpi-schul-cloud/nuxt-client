@@ -1,9 +1,19 @@
-import { autoLogoutModule, envConfigModule, notifierModule } from "@/store";
 import AutoLogoutModule from "@/store/autoLogout";
 import EnvConfigModule from "@/store/env-config";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+
 import setupStores from "@@/tests/test-utils/setupStores";
 import AutoLogoutWarning from "./AutoLogoutWarning";
 import NotifierModule from "@/store/notifier";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
+
+import BaseModal from "@/components/base/BaseModal";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+
+import { createModuleMocks } from "@/utils/mock-store-module";
 
 const toast = {
 	error401: -1,
@@ -11,135 +21,147 @@ const toast = {
 	success: 1,
 };
 
-const state = {
-	active: false,
-	error: false,
-	remainingTimeInSeconds: 120,
-	showToast: null,
-};
-
-const getters = {
-	getActive: () => state.active,
-	getError: () => state.error,
-	getRemainingTimeInSeconds: () => state.remainingTimeInSeconds,
-};
-
-const getMockActions = () => ({
-	init: jest.fn().mockReturnValue(Promise.resolve()),
-	extendSession: jest.fn().mockReturnValue(Promise.resolve()),
-});
-
-const getMocks = ({ actions = getMockActions() } = {}) =>
-	createComponentMocks({
-		i18n: true,
-		store: {
-			autoLogout: {
-				actions,
-				state,
-				getters,
-			},
-		},
-	});
-
 describe("@/components/organisms/AutoLogoutWarning", () => {
-	let actions;
-	let wrapper;
-
-	const showModal = () => {
-		autoLogoutModule.context.state.active = true;
-	};
-
-	const setShowToast = (value) => {
-		autoLogoutModule.context.state.toastValue = value;
-	};
-
 	beforeAll(() => {
 		setupStores({
-			autoLogoutModule: AutoLogoutModule,
 			envConfigModule: EnvConfigModule,
-			notifierModule: NotifierModule,
-		});
-
-		actions = getMockActions();
-		const mock = getMocks({ actions });
-		wrapper = mount(AutoLogoutWarning, {
-			...mock,
 		});
 	});
 
-	it("should call init on store", async () => {
-		const { showWarningOnRemainingSeconds, defaultRemainingTimeInSeconds } =
-			autoLogoutModule.context.state;
-		const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
-			envConfigModule.getEnv;
-		expect(showWarningOnRemainingSeconds).toBe(
-			JWT_SHOW_TIMEOUT_WARNING_SECONDS
+	const setup = (autoLogoutModuleGetters = {}) => {
+		const autoLogoutModuleMock = createModuleMocks(
+			AutoLogoutModule,
+			autoLogoutModuleGetters
 		);
-		expect(defaultRemainingTimeInSeconds).toBe(JWT_TIMEOUT_SECONDS);
-	});
 
-	it("changing the error property should toggle content of the modal", async () => {
-		showModal();
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find(".sloth").html()).toContain("Sloth.svg");
-		autoLogoutModule.context.state.error = true;
-		await wrapper.vm.$nextTick();
-		expect(wrapper.find(".sloth").html()).toContain("Sloth_error.svg");
-	});
+		const notifierModuleMock = createModuleMocks(NotifierModule);
 
-	it("calculate remaining time in minutes correctly", async () => {
-		autoLogoutModule.context.state.remainingTimeInSeconds = 120;
-		expect(autoLogoutModule.context.state.remainingTimeInSeconds).toBe(120);
-		expect(wrapper.vm.remainingTimeInMinutes).toBe(2);
-		autoLogoutModule.context.state.remainingTimeInSeconds = 100;
-		expect(wrapper.vm.remainingTimeInMinutes).toBe(1);
-		autoLogoutModule.context.state.remainingTimeInSeconds = -999;
-		expect(wrapper.vm.remainingTimeInMinutes).toBe(0);
-	});
-
-	describe("Extend secession", () => {
-		beforeEach(() => {
-			jest.resetAllMocks();
-		});
-		it("extend secession over modal", async () => {
-			const extendSpy = jest.fn();
-			autoLogoutModule.extendSessionAction = extendSpy;
-
-			showModal();
-			await wrapper.vm.$nextTick();
-
-			expect(wrapper.find("button")).toBeDefined();
-			wrapper.find("button").trigger("click");
-			await wrapper.vm.$nextTick();
-			expect(extendSpy.mock.calls).toHaveLength(1);
+		const wrapper = mount(AutoLogoutWarning, {
+			global: {
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
+				components: {
+					"base-modal": BaseModal,
+				},
+				provide: {
+					autoLogoutModule: autoLogoutModuleMock,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+				},
+			},
 		});
 
-		it("show success toast on showToast change", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
-			setShowToast(toast.success);
-			await wrapper.vm.$nextTick();
+		return {
+			wrapper,
+			autoLogoutModule: autoLogoutModuleMock,
+			notifierModule: notifierModuleMock,
+		};
+	};
 
-			expect(notifierMock).toHaveBeenCalled();
-			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("success");
+	it("should call init on store", () => {
+		const { autoLogoutModule } = setup();
+
+		expect(autoLogoutModule.init).toHaveBeenCalled();
+	});
+
+	describe("modal error state", () => {
+		describe("when error is false", () => {
+			it("should display a non-error image", () => {
+				const { wrapper } = setup({
+					getActive: true,
+					getError: false,
+				});
+
+				const slothImage = wrapper
+					.findComponent({ name: "v-card" })
+					.get("img.sloth");
+
+				expect(slothImage.attributes("src")).toContain("Sloth.svg");
+			});
+		});
+
+		describe("when error is true", () => {
+			it("should display an error image", () => {
+				const { wrapper } = setup({
+					getActive: true,
+					getError: true,
+				});
+
+				const slothImage = wrapper
+					.findComponent({ name: "v-card" })
+					.get("img.sloth");
+
+				expect(slothImage.attributes("src")).toContain("Sloth_error.svg");
+			});
+		});
+	});
+
+	describe("calculate remaining time in minutes correctly", () => {
+		it("120 seconds", () => {
+			const { wrapper } = setup({
+				getRemainingTimeInSeconds: 120,
+			});
+			expect(wrapper.vm.remainingTimeInMinutes).toBe(2);
+		});
+
+		it("100 seconds", () => {
+			const { wrapper } = setup({
+				getRemainingTimeInSeconds: 100,
+			});
+			expect(wrapper.vm.remainingTimeInMinutes).toBe(1);
+		});
+
+		it("-999 seconds", () => {
+			const { wrapper } = setup({
+				getRemainingTimeInSeconds: -999,
+			});
+			expect(wrapper.vm.remainingTimeInMinutes).toBe(0);
+		});
+	});
+
+	describe("Extend session", () => {
+		it("extend session over modal", async () => {
+			const { wrapper, autoLogoutModule } = setup({
+				getActive: true,
+				getError: false,
+			});
+
+			const button = wrapper.findComponent({ name: "v-btn" });
+			await button.trigger("click");
+
+			expect(autoLogoutModule.extendSessionAction).toHaveBeenCalled();
+		});
+
+		it("show success toast on showToast change", () => {
+			const { wrapper, notifierModule } = setup();
+
+			wrapper.vm.$options.watch.toastValue.call(wrapper.vm, toast.success);
+
+			expect(notifierModule.show).toHaveBeenCalledWith(
+				expect.objectContaining({ status: "success" })
+			);
 		});
 
 		it("show retry error toast on showToast change", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
-			setShowToast(toast.error);
-			await wrapper.vm.$nextTick();
+			const { wrapper, notifierModule } = setup();
 
-			expect(notifierMock).toHaveBeenCalled();
-			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
+			wrapper.vm.$options.watch.toastValue.call(wrapper.vm, toast.error);
+
+			expect(notifierModule.show).toHaveBeenCalledWith(
+				expect.objectContaining({ status: "error" })
+			);
 		});
 
 		it("show 401 error toast on showToast change", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const { wrapper, notifierModule } = setup();
 
-			setShowToast(toast.error401);
-			await wrapper.vm.$nextTick();
+			wrapper.vm.$options.watch.toastValue.call(wrapper.vm, toast.error401);
 
-			expect(notifierMock).toHaveBeenCalled();
-			expect(notifierMock.mock.calls[0][0].status).toStrictEqual("error");
+			expect(notifierModule.show).toHaveBeenCalledWith(
+				expect.objectContaining({ status: "error" })
+			);
 		});
 	});
 });

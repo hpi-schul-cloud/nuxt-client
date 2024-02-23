@@ -41,15 +41,15 @@
 			<backend-data-table
 				:actions="filteredActions"
 				:columns="filteredColumns"
-				v-model:current-page-selection-state="page"
+				v-model:current-page="page"
 				:data="students"
 				:paginated="true"
-				v-model:rows-per-pagecurrent-page-selection-state="limit"
+				v-model:rows-per-page="limit"
 				:rows-selectable="true"
 				:total="pagination.total"
 				track-by="_id"
-				v-model:selected-row-idscurrent-page-selection-state="tableSelection"
-				v-model:selection-typecurrent-page-selection-state="tableSelectionType"
+				v-model:selected-row-ids="tableSelection"
+				v-model:selection-type="tableSelectionType"
 				:sort-by="sortBy"
 				:sort-order="sortOrder"
 				:show-external-text="schoolIsExternallyManaged"
@@ -418,21 +418,21 @@ export default {
 			return {
 				icon: "$mdiPlus",
 				title: this.$t("common.actions.create"),
-				testId: "fab_button_students_table",
+				dataTestId: "fab_button_students_table",
 				ariaLabel: this.$t("common.actions.create"),
 				actions: [
 					{
 						label: this.$t("pages.administration.students.fab.add"),
 						icon: mdiAccountPlus,
 						to: "/administration/students/new",
-						dataTestid: "fab_button_add_students",
+						dataTestId: "fab_button_add_students",
 						ariaLabel: this.$t("pages.administration.students.fab.add"),
 					},
 					{
 						label: this.$t("pages.administration.students.fab.import"),
 						icon: mdiCloudDownload,
 						href: "/administration/students/import",
-						dataTestid: "fab_button_import_students",
+						dataTestId: "fab_button_import_students",
 						ariaLabel: this.$t("pages.administration.students.fab.import"),
 					},
 				],
@@ -539,7 +539,7 @@ export default {
 				});
 				if (this.registrationLinks.totalMailsSend === rowIds.length) {
 					notifierModule.show({
-						text: this.$tc(
+						text: this.$t(
 							"pages.administration.sendMail.success",
 							rowIds.length
 						),
@@ -548,14 +548,14 @@ export default {
 					});
 				} else {
 					notifierModule.show({
-						text: this.$tc("pages.administration.sendMail.alreadyRegistered"),
+						text: this.$t("pages.administration.sendMail.alreadyRegistered"),
 						status: "info",
 						timeout: 10000,
 					});
 				}
 			} catch (error) {
 				notifierModule.show({
-					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
+					text: this.$t("pages.administration.sendMail.error", rowIds.length),
 					status: "error",
 					timeout: 10000,
 				});
@@ -572,14 +572,14 @@ export default {
 					this.$_printQRs(this.qrLinks);
 				} else {
 					notifierModule.show({
-						text: this.$tc("pages.administration.printQr.emptyUser"),
+						text: this.$t("pages.administration.printQr.emptyUser"),
 						status: "info",
 						timeout: 10000,
 					});
 				}
 			} catch (error) {
 				notifierModule.show({
-					text: this.$tc("pages.administration.printQr.error", rowIds.length),
+					text: this.$t("pages.administration.printQr.error", rowIds.length),
 					status: "error",
 					timeout: 10000,
 				});
@@ -612,7 +612,7 @@ export default {
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = this.$tc(
+				message = this.$t(
 					"pages.administration.students.index.remove.confirm.message.some",
 					rowIds.length,
 					{ number: rowIds.length }

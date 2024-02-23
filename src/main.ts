@@ -1,9 +1,10 @@
+// VUE3_UPGRADE -- Mounting Base Components - remove later
+import { mountBaseComponents } from "@/components/base/components";
 import {
 	accountsModule,
 	applicationErrorModule,
 	authModule,
 	autoLogoutModule,
-	collaborativeFilesModule,
 	contentModule,
 	contextExternalToolsModule,
 	copyModule,
@@ -28,35 +29,37 @@ import {
 	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
-import { createApp } from "vue";
-import App from "./App.vue";
-import { createI18n } from "./plugins/i18n";
-import store from "./plugins/store";
-import vuetify from "./plugins/vuetify";
-import router from "./router";
 // NUXT_REMOVAL set this based on the tenant theme
 import themeConfig from "@/theme.config";
-// NUXT_REMOVAL try to solve without vue-mq dependency
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { Vue3Mq } from "vue3-mq";
 import { htmlConfig } from "@feature-render-html";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 // NUXT_REMOVAL change how global components are handled
 import "@/plugins/polyfills";
 
 import "@/styles/global.scss";
-import axios from "axios";
-import Cookies from "universal-cookie";
+// NUXT_REMOVAL try to solve without vue-mq dependency
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { Vue3Mq } from "vue3-mq";
+import App from "./App.vue";
 import { handleApplicationError } from "./plugins/application-error-handler";
+import { createI18n } from "./plugins/i18n";
+import store from "./plugins/store";
+import vuetify from "./plugins/vuetify";
+import router from "./router";
 import { initializeAxios } from "./utils/api";
 
 import {
 	APPLICATION_ERROR_KEY,
 	AUTH_MODULE_KEY,
+	CONTENT_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
+	NEWS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	ROOM_MODULE_KEY,
@@ -65,16 +68,13 @@ import {
 	STATUS_ALERTS_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
+	THEME_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
-	NEWS_MODULE_KEY,
-	CONTENT_MODULE_KEY,
 } from "./utils/inject";
 
 export const app = createApp(App);
 
-// VUE3_UPGRADE -- Mounting Base Components - remove later
-import { mountBaseComponents } from "@/components/base/components";
 mountBaseComponents(app);
 
 // app.config.productionTip = false;
@@ -145,7 +145,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(APPLICATION_ERROR_KEY.valueOf(), applicationErrorModule);
 	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
 	app.provide("autoLogoutModule", autoLogoutModule);
-	app.provide("collaborativeFilesModule", collaborativeFilesModule);
 	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(
 		CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),
@@ -178,6 +177,8 @@ app.use(VueDOMPurifyHTML, {
 		userLoginMigrationModule
 	);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
+
+	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");
 })();

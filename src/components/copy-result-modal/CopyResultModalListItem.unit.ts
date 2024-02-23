@@ -2,7 +2,10 @@ import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalListItem from "@/components/copy-result-modal/CopyResultModalListItem.vue";
 import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
 import { mount } from "@vue/test-utils";
-import { createTestingI18n, createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 const mockItem: CopyResultItem = {
 	type: CopyApiResponseTypeEnum.Lesson,
@@ -18,16 +21,17 @@ const mockItem: CopyResultItem = {
 			type: CopyApiResponseTypeEnum.LessonContentNexboard,
 		},
 	],
+
 	url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
 };
 
 const createWrapper = (props: object) => {
 	return mount(CopyResultModalListItem, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-			props
-		});
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+		},
+		props,
+	});
 };
 
 describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
@@ -42,19 +46,23 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 		// console.log(wrapper.html())
 		const elementTitle = wrapper.find("ul > li").text();
 
-		expect(elementTitle).toContain("components.molecules.copyResult.label.geogebra");
+		expect(elementTitle).toContain(
+			"components.molecules.copyResult.label.geogebra"
+		);
 		expect(elementTitle).toContain("Geogebra Element Title");
 	});
 
 	it("should render the elements with the correct element title", () => {
 		const wrapper = createWrapper({ item: mockItem });
-		const elementTitles = wrapper
-			.findAll("ul > li")
-			.map((el) => el.text());
+		const elementTitles = wrapper.findAll("ul > li").map((el) => el.text());
 
-		expect(elementTitles[0]).toContain("components.molecules.copyResult.label.geogebra");
+		expect(elementTitles[0]).toContain(
+			"components.molecules.copyResult.label.geogebra"
+		);
 		expect(elementTitles[0]).toContain("Geogebra Element Title");
-		expect(elementTitles[1]).toContain("components.molecules.copyResult.label.nexboard");
+		expect(elementTitles[1]).toContain(
+			"components.molecules.copyResult.label.nexboard"
+		);
 		expect(elementTitles[1]).toContain("Nexboard Element Title");
 	});
 

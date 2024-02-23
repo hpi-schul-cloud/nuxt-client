@@ -1,6 +1,6 @@
 <template>
-	<v-app class="wireframe-container">
-		<v-container fluid class="wireframe-header sticky px-6 py-0">
+	<v-container fluid class="wireframe-container">
+		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -13,43 +13,62 @@
 			</slot>
 			<div v-if="fabItems" class="fab-wrapper">
 				<slot name="fab">
-					<v-custom-fab
-						:data-testid="fabItems.testId"
-						:icon="fabItems.icon"
-						:title="fabItems.title"
-						:href="fabItems.href"
-						:actions="fabItems.actions"
-						:class="fabItems.class"
+					<speed-dial-menu
 						class="wireframe-fab"
-						:aria-label="fabItems.ariaLabel"
-						v-bind="$attrs"
-					/>
+						:direction="isMobile ? 'top' : 'bottom'"
+						:orientation="'right'"
+						:icon="fabItems.icon"
+						:href="fabItems.href"
+						:data-testid="fabItems.dataTestId"
+					>
+						{{ fabItems.title }}
+						<template #actions>
+							<template
+								v-for="(action, index) in fabItems.actions"
+								:key="index"
+							>
+								<speed-dial-menu-action
+									:dataTestId="action.dataTestId"
+									:icon="action.icon"
+									:href="action.href"
+									:to="action.to"
+									@click="action.customEvent"
+									>{{ action.label }}</speed-dial-menu-action
+								>
+							</template>
+						</template>
+					</speed-dial-menu>
 				</slot>
 			</div>
 			<div v-if="showBorder" class="border" />
-		</v-container>
-		<v-main
+		</div>
+		<v-container
 			:class="{
+				'main-content': true,
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
+				'overflow-x': allowOverflowX,
 			}"
-			class="main-content"
 		>
-			<slot />
-		</v-main>
-	</v-app>
+			<div style="padding: 0 var(--space-lg)">
+				<slot />
+			</div>
+		</v-container>
+	</v-container>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
-import vCustomFab from "@/components/atoms/vCustomFab.vue";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { useVuetifyBreakpoints } from "@util-device-detection";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	inheritAttrs: false,
 	components: {
 		vCustomBreadcrumbs,
-		vCustomFab,
+		SpeedDialMenu,
+		SpeedDialMenuAction,
 	},
 	props: {
 		breadcrumbs: {
@@ -71,11 +90,22 @@ export default defineComponent({
 			required: false,
 			default: null,
 		},
+		allowOverflowX: {
+			type: Boolean,
+			required: false,
+			default: false,
+		},
 	},
 	computed: {
 		showBorder(): boolean {
 			return !!(this.headline || this.$slots.header);
 		},
+	},
+	setup() {
+		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+		return {
+			isMobile,
+		};
 	},
 });
 </script>
@@ -85,12 +115,23 @@ export default defineComponent({
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
 }
+
+.wireframe-header {
+	padding: 0 var(--space-lg);
+}
+.wireframe-container {
+	padding: 0;
+}
+
 :deep(.v-application__wrap) {
 	min-height: unset;
 }
 
 .main-content {
-	margin: 0 auto;
+	padding: 0;
+}
+.overflow-x {
+	overflow-x: auto;
 }
 
 .container-max-width {
@@ -99,7 +140,7 @@ export default defineComponent({
 
 .container-full-width {
 	max-width: none;
-	margin: 0px 24px;
+	margin: 0;
 }
 
 .border {
@@ -132,6 +173,8 @@ export default defineComponent({
 @media #{map-get($display-breakpoints, 'md-and-down')} {
 	.wireframe-fab {
 		position: fixed !important;
+		bottom: 2rem;
+		right: 1rem;
 	}
 }
 

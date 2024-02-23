@@ -1,14 +1,14 @@
 import { FilterOption, Registration, User } from "./enums";
 import {
-	ChipTitle,
-	DateSelection,
-	FilterItem,
-	FilterOptionsType,
-	FilterQuery,
-	SelectOptionsType,
-	UiState,
-	UpdateFilterParamType,
-	UserBasedRegistrationOptions,
+	type ChipTitle,
+	type DateSelection,
+	type FilterItem,
+	type FilterOptionsType,
+	type FilterQuery,
+	type SelectOptionsType,
+	type UiState,
+	type UpdateFilterParamType,
+	type UserBasedRegistrationOptions,
 } from "./types";
 
 export {

@@ -57,4 +57,3 @@ export default defineComponent({
 	width: 380px;
 }
 </style>
-@data-board";

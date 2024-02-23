@@ -1,23 +1,23 @@
 <template>
 	<v-data-iterator
-		:items="items"
+		:items="avatars"
 		:items-per-page="maxItems"
 		hide-default-footer
 		no-data-text=""
 	>
-		<template #default>
+		<template #default="{ items }">
 			<v-container>
 				<v-row align="center">
 					<v-col
-						v-for="(item, key) in items"
-						:key="key"
+						v-for="(item, i) in items"
+						:key="`${item.raw.title}-${i}`"
 						class="d-flex justify-center ma-0 mt-1 mb-0.5 pa-0"
 						:cols="colCount"
 					>
 						<vRoomAvatar
 							:draggable="canDraggable"
 							class="room-avatar"
-							:item="item"
+							:item="item.raw"
 							:size="itemSize"
 							:show-badge="true"
 							:condense-layout="condenseLayout"
@@ -44,7 +44,7 @@ type ItemType = {
 };
 
 defineProps({
-	items: {
+	avatars: {
 		type: Array<ItemType>,
 		default: () => [{}],
 	},

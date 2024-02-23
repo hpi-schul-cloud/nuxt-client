@@ -1,10 +1,16 @@
 <template>
 	<div ref="dialog" data-testid="dialog" class="v-application base-dialog">
-		<base-modal :active="active" @update:active="clickOutside">
+		<base-modal v-model:active="isActive">
 			<template #body>
 				<modal-body-info :title="message">
 					<template #icon>
-						<v-icon v-if="icon" :color="currentIconColor">{{ icon }}</v-icon>
+						<v-icon
+							v-if="icon"
+							:color="currentIconColor"
+							class="pb-6"
+							size="85"
+							>{{ icon }}</v-icon
+						>
 					</template>
 				</modal-body-info>
 			</template>
@@ -14,11 +20,12 @@
 					:color="!invertedDesign ? 'secondary' : 'success'"
 					data-testid="btn-dialog-cancel"
 					@click="cancel"
+					class="mr-3"
 				>
 					{{ cancelText }}
 				</v-btn>
 				<v-btn
-					variant="flat"
+					variant="text"
 					:color="invertedDesign ? 'secondary' : 'success'"
 					data-testid="btn-dialog-confirm"
 					@click="confirm"
@@ -91,6 +98,16 @@ export default {
 			return this.iconColor
 				? this.iconColor
 				: `rgba(var(--v-theme-${this.actionDesign}))`;
+		},
+		isActive: {
+			get() {
+				return this.active;
+			},
+			set(value) {
+				if (!value) {
+					this.clickOutside();
+				}
+			},
 		},
 	},
 	methods: {

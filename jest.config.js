@@ -28,7 +28,7 @@ const config = deepmerge(defaultPreset, {
 		"^@@/(.*)$": "<rootDir>/$1",
 	},
 
-	setupFiles: ["./tests/unit/setupNew.js"],
+	setupFiles: ["./tests/setup.js"],
 
 	collectCoverageFrom: [
 		// Include
@@ -51,6 +51,14 @@ const config = deepmerge(defaultPreset, {
 		"!<rootDir>/src/pages/NewsEdit.page.vue",
 		"!<rootDir>/src/pages/ProxyError.page.vue",
 	],
+
+	globals: {
+		"vue-jest": {
+			compilerOptions: {
+				isCustomElement: (tag) => tag.startsWith("h5p-"),
+			},
+		},
+	},
 
 	// maxWorkers: 2, // limited for not taking all workers within of a single github action
 });

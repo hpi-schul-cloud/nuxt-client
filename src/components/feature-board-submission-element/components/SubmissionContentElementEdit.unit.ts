@@ -1,38 +1,33 @@
-import Vue from "vue";
-import { I18N_KEY } from "@/utils/inject";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, MountOptions } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
-import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
+import { submissionsResponseFactory } from "@@/tests/test-utils";
 import { DateTimePicker } from "@ui-date-time-picker";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
-const mockedSubmissions = submissionsResponseFactory.build();
+const mockedSubmissions = submissionsResponseFactory.buildList(1);
 
 describe("SubmissionContentElementEdit", () => {
 	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-
-		const propsData = {
+		const props = {
 			dueDate: "01.01.2023 01:23",
 			submissions: mockedSubmissions,
 			isOverdue: false,
 			loading: true,
 		};
-		const wrapper = shallowMount(
-			SubmissionContentElementEdit as MountOptions<Vue>,
-			{
-				...createComponentMocks({ i18n: true }),
-				propsData,
-				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
-				},
-			}
-		);
+		const wrapper = shallowMount(SubmissionContentElementEdit, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props,
+		});
 
 		return {
 			wrapper,
-			dueDate: propsData.dueDate,
+			dueDate: props.dueDate,
 		};
 	};
 
@@ -60,7 +55,7 @@ describe("SubmissionContentElementEdit", () => {
 			.findComponent(SubmissionItemsTeacherDisplay)
 			.props("submissions");
 
-		expect(submissions).toBe(mockedSubmissions);
+		expect(submissions).toEqual(mockedSubmissions);
 	});
 
 	it("should hand over loading prop to SubmissionItemsTeacherDisplay", () => {

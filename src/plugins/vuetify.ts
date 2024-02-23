@@ -12,6 +12,8 @@ export default createVuetify({
 		VFileInput: { variant: "underlined", color: "primary" },
 		VSelect: { variant: "underlined", color: "primary" },
 		VSwitch: { inset: true, flat: true, color: "primary" },
+		VTabs: { color: "primary" },
+		VTextarea: { variant: "underlined", color: "primary" },
 		VTextField: { variant: "underlined", color: "primary" },
 	},
 });

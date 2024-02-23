@@ -33,7 +33,7 @@ import { computed, defineComponent, inject, ref } from "vue";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectCourseModal from "./SelectCourseModal.vue";
 import { useI18n } from "vue-i18n";
-// eslint-disable-next-line vue/require-direct-export
+
 export default defineComponent({
 	name: "ImportFlow",
 	components: {

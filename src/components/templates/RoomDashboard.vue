@@ -293,7 +293,7 @@ export default {
 			];
 
 			await roomModule.sortElements({ elements: items });
-			this.$refs[`item_${position}`][0].$el.focus();
+			this.$refs[`item_${position}`].$el.focus();
 		},
 		async getSharedLesson(lessonId) {
 			if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {

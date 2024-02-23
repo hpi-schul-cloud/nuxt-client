@@ -4,7 +4,6 @@
 		:full-width="true"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
-		@fabButtonEvent="fabClick"
 	>
 		<template #header>
 			<div class="d-flex ma-2 mt-3">
@@ -39,13 +38,7 @@
 				</div>
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs
-					v-model="tabIndex"
-					color="primary"
-					class="tabs-max-width"
-					grow
-					mandatory
-				>
+				<v-tabs v-model="tabIndex" class="tabs-max-width" grow mandatory>
 					<template v-for="tabItem in tabItems" :key="tabItem.name">
 						<v-tab
 							:data-testid="tabItem.dataTestId"
@@ -53,7 +46,9 @@
 							class="no-active"
 						>
 							<template #default>
-								<v-icon class="tab-icon mr-sm-3"> {{ tabItem.icon }}</v-icon>
+								<v-icon size="large" class="tab-icon mr-sm-3">
+									{{ tabItem.icon }}</v-icon
+								>
 								<span class="d-none d-sm-inline">
 									{{ tabItem.label }}
 								</span>
@@ -73,46 +68,7 @@
 			@copy-board-element="onCopyBoardElement"
 			data-testid="room-content"
 		/>
-
-		<v-custom-dialog
-			v-model:is-open="dialog.isOpen"
-			data-testid="title-dialog"
-			has-buttons
-			:buttons="['close']"
-			@dialog-closed="closeDialog"
-		>
-			<template #title>
-				<div class="dialog-header">
-					<h4>{{ dialog.header }}</h4>
-				</div>
-			</template>
-			<template #content>
-				<v-divider class="mb-4" />
-				<div class="modal-text">
-					<p class="text-md mt-2">
-						{{ dialog.text }}
-					</p>
-				</div>
-				<div>
-					<v-text-field
-						:model-value="dialog.inputText"
-						variant="outlined"
-						density="compact"
-						data-testid="modal-input"
-					/>
-				</div>
-				<div class="modal-text modal-sub-text mb-2">
-					{{ dialog.subText }}
-				</div>
-				<div v-if="dialog.model === 'share' && dialog.qrUrl !== ''">
-					<base-qr-code :url="dialog.qrUrl" data-testid="modal-qrcode" />
-				</div>
-				<v-divider />
-			</template>
-		</v-custom-dialog>
-
 		<share-modal type="courses" />
-
 		<copy-result-modal
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
@@ -126,7 +82,6 @@
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import RoomDotMenu from "@/components/molecules/RoomDotMenu";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
@@ -167,6 +122,7 @@ export default defineComponent({
 			useCopy(isLoadingDialogOpen);
 
 		return {
+			mdiPlus,
 			copy,
 			backgroundCopyProcesses,
 			isCopyProcessInBackground,
@@ -177,26 +133,12 @@ export default defineComponent({
 		DefaultWireframe,
 		RoomDashboard,
 		RoomDotMenu,
-		vCustomDialog,
 		CopyResultModal,
 		ShareModal,
 	},
 	inject: ["copyModule", "shareModule"],
 	data() {
 		return {
-			importDialog: {
-				isOpen: false,
-			},
-			dialog: {
-				isOpen: false,
-				model: "",
-				header: "",
-				text: "",
-				inputText: "",
-				subText: "",
-				qrUrl: "",
-				courseShareToken: "",
-			},
 			icons: {
 				mdiPencilOutline,
 				mdiEmailPlusOutline,
@@ -296,7 +238,7 @@ export default defineComponent({
 					label: this.$t("pages.rooms.fab.add.task"),
 					icon: mdiFormatListChecks,
 					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
-					dataTestid: "fab_button_add_task",
+					dataTestId: "fab_button_add_task",
 					ariaLabel: this.$t("pages.rooms.fab.add.task"),
 				});
 			}
@@ -307,7 +249,7 @@ export default defineComponent({
 					label: this.$t("pages.rooms.fab.add.lesson"),
 					icon: mdiViewListOutline,
 					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
-					dataTestid: "fab_button_add_lesson",
+					dataTestId: "fab_button_add_lesson",
 					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
 				});
 			}
@@ -367,10 +309,7 @@ export default defineComponent({
 				});
 			}
 
-			if (
-				envConfigModule.getEnv.FEATURE_COURSE_SHARE ||
-				envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW
-			) {
+			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				items.push({
 					icon: this.icons.mdiShareVariantOutline,
 					action: () => this.shareCourse(),
@@ -451,35 +390,13 @@ export default defineComponent({
 
 			this.tabIndex = index >= 0 ? index : 0;
 		},
-		fabClick() {
-			if (this.currentTab.name === "learn-content") {
-				this.importDialog.isOpen = true;
-			}
-		},
 		async shareCourse() {
-			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE_NEW) {
+			if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
 				this.shareModule.startShareFlow({
 					id: this.courseId,
 					type: ShareTokenBodyParamsParentTypeEnum.Courses,
 				});
-			} else if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
-				await roomModule.createCourseShareToken(this.courseId);
-				this.dialog.courseShareToken = roomModule.getCourseShareToken;
-				this.dialog.model = "share";
-				this.dialog.header = this.$t("pages.room.modal.course.share.header");
-				this.dialog.text = this.$t("pages.room.modal.course.share.text");
-				this.dialog.inputText = this.dialog.courseShareToken;
-				this.dialog.subText = this.$t("pages.room.modal.course.share.subText");
-				this.dialog.qrUrl = `${window.location.origin}/courses?import=${this.dialog.courseShareToken}`;
-				this.dialog.isOpen = true;
 			}
-		},
-		closeDialog() {
-			this.dialog.model = "";
-			this.dialog.header = "";
-			this.dialog.text = "";
-			this.dialog.inputText = "";
-			this.dialog.subText = "";
 		},
 		async onCopyRoom(courseId) {
 			const loadingText = this.$t(
@@ -563,6 +480,10 @@ export default defineComponent({
 .v-tab {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
+
+	&.v-tab.v-btn.no-active {
+		color: rgba(0, 0, 0, 0.54);
+	}
 }
 
 :deep(.v-slide-group__prev),

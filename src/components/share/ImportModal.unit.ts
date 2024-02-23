@@ -1,8 +1,8 @@
-import { mount } from "@vue/test-utils";
 import ImportModal from "@/components/share/ImportModal.vue";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { mount } from "@vue/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -22,7 +22,7 @@ describe("@components/share/ImportModal", () => {
 				},
 				stubs: ["RenderHTML"],
 			},
-			propsData: {
+			props: {
 				isOpen: true,
 				parentName: "TestParentName",
 				parentType: "courses",
@@ -136,7 +136,7 @@ describe("@components/share/ImportModal", () => {
 					`[data-testid="import-modal-coursefiles-info"]`
 				);
 
-				expect(infoText.isVisible()).toBe(false);
+				expect(infoText.exists()).toBe(false);
 			});
 		});
 		describe("show ctl tool info is disabled", () => {
@@ -150,7 +150,7 @@ describe("@components/share/ImportModal", () => {
 					const infoText = cardText.find(
 						`[data-testid="import-modal-external-tools-info"]`
 					);
-					expect(infoText.isVisible()).toBe(false);
+					expect(infoText.exists()).toBe(false);
 				});
 
 				it("should show course file info", () => {

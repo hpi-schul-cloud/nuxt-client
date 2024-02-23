@@ -3,8 +3,9 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VCardTitle, VIcon } from "vuetify/lib/components/index.mjs";
 import ContentElementBar from "./ContentElementBar.vue";
+
+type Props = { icon?: string; hasGreyBackground?: boolean };
 
 type Slots = {
 	description?: string;
@@ -13,17 +14,12 @@ type Slots = {
 	element?: string;
 	menu?: string;
 	subtitle?: string;
+	logo?: string;
 };
 
 describe("ContentElementBar", () => {
-	const setup = (
-		props: {
-			icon?: string;
-			hasGreyBackground?: boolean;
-		},
-		slots?: Slots
-	) => {
-		document.body.setAttribute("data-app", "true");
+	const setup = (props: Props, slots?: Slots) => {
+		const { icon, hasGreyBackground } = props;
 
 		const wrapper = mount(ContentElementBar, {
 			global: {
@@ -33,25 +29,33 @@ describe("ContentElementBar", () => {
 			slots,
 		});
 
-		return wrapper;
+		return {
+			wrapper,
+			icon,
+			hasGreyBackground,
+		};
 	};
 
 	describe("when icon prop is defined", () => {
-		it("should render icon", () => {
-			const icon = "mdi-test-icon";
-			const wrapper = setup({
-				icon: "mdi-test-icon",
-			});
+		it("should render icon next to the title", () => {
+			const { wrapper } = setup(
+				{
+					icon: "mdi-test-icon",
+				},
+				{
+					title: "my title",
+				}
+			);
 
-			const iconComponent = wrapper.findComponent(VIcon);
+			const iconElement = wrapper.find(".content-element-title .v-icon");
 
-			expect(iconComponent.html()).toContain(icon);
+			expect(iconElement.exists()).toBe(true);
 		});
 	});
 
 	describe("when icon prop is undefined", () => {
 		it("should not render icon", () => {
-			const wrapper = setup({});
+			const { wrapper } = setup({});
 
 			const iconElement = wrapper.find("contentelementtitleicon-stub").exists();
 
@@ -62,7 +66,7 @@ describe("ContentElementBar", () => {
 	describe("when title slot is defined", () => {
 		it("should render title slot", () => {
 			const title = "test title slot";
-			const wrapper = setup(
+			const { wrapper } = setup(
 				{},
 				{
 					title,
@@ -77,7 +81,7 @@ describe("ContentElementBar", () => {
 
 	describe("when title slot is undefined", () => {
 		it("should not render toolbar-title", () => {
-			const wrapper = setup({});
+			const { wrapper } = setup({});
 
 			const toolbar = wrapper.find("v-toolbar-title-stub");
 
@@ -88,7 +92,7 @@ describe("ContentElementBar", () => {
 	describe("when element slot is defined", () => {
 		it("should render element slot", () => {
 			const elementSlot = "test element slot";
-			const wrapper = setup(
+			const { wrapper } = setup(
 				{},
 				{
 					element: elementSlot,
@@ -104,7 +108,7 @@ describe("ContentElementBar", () => {
 	describe("when menu slot is defined", () => {
 		it("should render menu slot", () => {
 			const menu = "test menu slot";
-			const wrapper = setup(
+			const { wrapper } = setup(
 				{},
 				{
 					menu,
@@ -120,7 +124,7 @@ describe("ContentElementBar", () => {
 	describe("when subtitle slot is defined", () => {
 		it("should render subtitle slot", () => {
 			const subtitle = "test subtitle slot";
-			const wrapper = setup(
+			const { wrapper } = setup(
 				{},
 				{
 					subtitle,
@@ -135,7 +139,7 @@ describe("ContentElementBar", () => {
 
 	describe("when subtitle slot is undefined", () => {
 		it("should not render subtitle div", () => {
-			const wrapper = setup({});
+			const { wrapper } = setup({});
 
 			const subtitle = wrapper.find("div.pt-0.pb-4.px-4");
 
@@ -145,8 +149,10 @@ describe("ContentElementBar", () => {
 
 	describe("when hasGreyBackground prop is true", () => {
 		it("should render grey background", () => {
-			const wrapper = setup(
-				{ hasGreyBackground: true },
+			const { wrapper } = setup(
+				{
+					hasGreyBackground: true,
+				},
 				{
 					title: "i have a dream",
 				}
@@ -160,7 +166,7 @@ describe("ContentElementBar", () => {
 
 	describe("when hasGreyBackground prop is false", () => {
 		it("should not render grey background", () => {
-			const wrapper = setup({});
+			const { wrapper } = setup({});
 
 			const divWithBackgroundClass = wrapper.find("div.bg-grey-lighten-4");
 
@@ -168,41 +174,20 @@ describe("ContentElementBar", () => {
 		});
 	});
 
-	describe("when menu slot and display slot are defined", () => {
-		it("should render menu slot in display", () => {
-			const menu = "test menu slot content";
-			const wrapper = setup(
+	describe("when logo slot is defined", () => {
+		it("should render logo slot next to the title", () => {
+			const logo = "test logo slot";
+			const { wrapper } = setup(
 				{},
 				{
-					display: "display content",
-					menu,
+					logo,
+					title: "my title",
 				}
 			);
 
-			const contentElementDisplay = wrapper.find(".content-element-display");
+			const titleElement = wrapper.find(".content-element-title");
 
-			expect(contentElementDisplay.exists()).toBe(true);
-			expect(contentElementDisplay.text()).toEqual(
-				expect.stringContaining(menu)
-			);
-		});
-	});
-
-	describe("when menu slot is defined but not display slot", () => {
-		it("should render menu slot in title", () => {
-			const menu = "test menu slot content";
-			const wrapper = setup(
-				{},
-				{
-					title: "title content",
-					menu,
-				}
-			);
-
-			const title = wrapper.findComponent(VCardTitle);
-
-			expect(title.exists()).toBe(true);
-			expect(title.text()).toEqual(expect.stringContaining(menu));
+			expect(titleElement.text()).toContain(logo);
 		});
 	});
 });

@@ -20,17 +20,19 @@
 			</div>
 			<div v-else class="substitute-filter-placeholder" />
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="tab" class="tabs-max-width" grow color="primary">
+				<v-tabs v-model="tab" class="tabs-max-width" grow>
 					<v-tab :value="tabRoutes[0]">
-						<v-icon size="default" class="tab-icon mr-sm-3">{{
-							tabOneHeader.icon
-						}}</v-icon>
+						<v-icon size="large" class="tab-icon mr-sm-3">
+							{{ tabOneHeader.icon }}
+						</v-icon>
 						<span class="d-none d-sm-inline" data-testid="openTasks">
 							{{ tabOneHeader.title }}
 						</span>
 					</v-tab>
 					<v-tab :value="tabRoutes[1]">
-						<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
+						<v-icon size="large" class="tab-icon mr-sm-3">
+							{{ tabTwoHeader.icon }}
+						</v-icon>
 						<span
 							class="d-none d-sm-inline"
 							:data-testid="tabTwoHeader.dataTestId"
@@ -39,7 +41,9 @@
 						</span>
 					</v-tab>
 					<v-tab :value="tabRoutes[2]"
-						><v-icon class="tab-icon mr-sm-3">{{ tabThreeHeader.icon }}</v-icon>
+						><v-icon size="large" class="tab-icon mr-sm-3">
+							{{ tabThreeHeader.icon }}
+						</v-icon>
 						<span class="d-none d-sm-inline" data-testid="finishedTasks">
 							{{ tabThreeHeader.title }}
 						</span>
@@ -385,16 +389,6 @@ export default {
 // even out border
 .v-tabs {
 	margin-bottom: -2px;
-}
-
-:deep(.v-tab) {
-	font-family: var(--font-primary);
-	font-size: var(--text-base-size);
-	font-weight: var(--font-weight-normal);
-}
-
-:deep(.v-tab.v-btn .v-icon) {
-	--v-icon-size-multiplier: 1;
 }
 
 :deep(.v-tab:not(.v-tab--selected)) {

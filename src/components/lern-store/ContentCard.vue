@@ -1,6 +1,6 @@
 <template>
 	<v-card v-bind="$attrs">
-		<div class="content-card">
+		<div class="content-card" data-testid="learningstore-searchresult-item">
 			<base-link
 				class="title-link"
 				:to="{
@@ -36,9 +36,10 @@
 							/>
 							<div v-show="isCollection()" class="card-tag">
 								<span>{{ $t("pages.content.card.collection") }}</span>
-								<v-icon class="custom-icon content__text-icon">
-									$ic_collection
-								</v-icon>
+								<v-icon
+									class="custom-icon content__text-icon"
+									icon="$ic_collection"
+								/>
 							</div>
 						</div>
 					</div>
