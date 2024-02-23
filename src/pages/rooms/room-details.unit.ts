@@ -477,7 +477,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 		});
 
-		// VUE3_UPGRADE: is this still relevant?
 		describe("when Tools(new) tab is active", () => {
 			const setup = () => {
 				envConfigModule.setEnvs({
