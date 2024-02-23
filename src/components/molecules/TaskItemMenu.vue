@@ -7,16 +7,18 @@
 				variant="text"
 				density="comfortable"
 				:aria-label="ariaLabel"
-				@keydown.space.stop
+				@keydown.left.right.up.down.stop
 			/>
+			<!-- for later refactoring: @keydown needed for a11y - perhaps because of nested v-lists -->
 		</template>
-		<v-list>
+		<v-list role="menu">
 			<v-list-item
 				v-if="isTeacher"
 				id="task-action-edit"
 				:href="editLink"
 				class="task-action"
 				data-testId="task-edit"
+				role="menuitem"
 			>
 				<v-list-item-title>
 					<v-icon :icon="mdiPencilOutline" class="task-action-icon" />
@@ -29,6 +31,7 @@
 				class="task-action"
 				data-testId="task-copy"
 				@click="onCopyTask"
+				role="menuitem"
 			>
 				<v-list-item-title>
 					<v-icon :icon="mdiContentCopy" class="task-action-icon" />
@@ -41,6 +44,7 @@
 				class="task-action"
 				data-testId="task-share"
 				@click="onShareTask"
+				role="menuitem"
 			>
 				<v-list-item-title>
 					<v-icon :icon="mdiShareVariantOutline" class="task-action-icon" />
@@ -53,6 +57,7 @@
 				class="task-action"
 				data-testId="task-revert"
 				@click="handleRevertPublished"
+				role="menuitem"
 			>
 				<v-list-item-title>
 					<v-icon :icon="mdiUndoVariant" class="task-action-icon" />
@@ -64,6 +69,7 @@
 				class="task-action"
 				data-testId="task-finish"
 				@click="handleFinish"
+				role="menuitem"
 			>
 				<v-list-item-title>
 					<template v-if="taskIsFinished">
@@ -82,6 +88,7 @@
 				class="task-action"
 				data-testId="task-delete"
 				@click="() => (confirmDeleteDialogIsOpen = true)"
+				role="menuitem"
 			>
 				<v-list-item-title>
 					<v-icon :icon="mdiTrashCanOutline" class="task-action-icon" />
