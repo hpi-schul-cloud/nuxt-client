@@ -25,6 +25,8 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { VBtn } from "vuetify/lib/components/index.mjs";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -227,43 +229,40 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		expect(fabComponent.exists()).toBe(false);
 	});
 
-	// VUE3_UPGRADE: disabled because of missing v-custom-fab
-	// it("should show FAB if user has permission to create courses", () => {
-	// 	const wrapper = getWrapper();
-	// 	const fabComponent = wrapper.find(".wireframe-fab");
-	// 	const actions = fabComponent.vm.actions.map((action: any) => {
-	// 		return action.label;
-	// 	});
-	// 	const hasNewTaskAction = actions.some((item: string) => {
-	// 		return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.task");
-	// 	});
-	// 	const hasNewLessonAction = actions.some((item: string) => {
-	// 		return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.lesson");
-	// 	});
-	// 	expect(fabComponent.exists()).toBe(true);
-	// 	expect(hasNewTaskAction).toBe(true);
-	// 	expect(hasNewLessonAction).toBe(true);
-	// });
+	describe("menu", () => {
+		it("should show FAB if user has permission to create courses", () => {
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
-	// VUE3_UPGRADE: disabled because of missing v-custom-fab
-	// it("'add task' button should have correct path", async () => {
-	// 	const wrapper = getWrapper();
-	// 	const fabComponent = wrapper.find(".wireframe-fab");
-	// 	const newTaskAction = fabComponent.vm.actions[0];
-	// 	expect(newTaskAction.href).toStrictEqual(
-	// 		"/homework/new?course=123&returnUrl=rooms/123"
-	// 	);
-	// });
+			expect(fabComponent.exists()).toBe(true);
+		});
 
-	// VUE3_UPGRADE: disabled because of missing v-custom-fab
-	// it("'add lesson' button should have correct path", async () => {
-	// 	const wrapper = getWrapper();
-	// 	const fabComponent = wrapper.find(".wireframe-fab");
-	// 	const newTaskAction = fabComponent.vm.actions[1];
-	// 	expect(newTaskAction.href).toStrictEqual(
-	// 		"/courses/123/topics/add?returnUrl=rooms/123"
-	// 	);
-	// });
+		it("'add task' button should have correct path", async () => {
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
+
+			// open menu
+			await fabComponent.findComponent(VBtn).trigger("click");
+			const newTaskAction = wrapper.findAllComponents(SpeedDialMenuAction)[0];
+
+			expect(newTaskAction.props("href")).toStrictEqual(
+				"/homework/new?course=123&returnUrl=rooms/123"
+			);
+		});
+
+		it("'add lesson' button should have correct path", async () => {
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
+
+			// open menu
+			await fabComponent.findComponent(VBtn).trigger("click");
+			const newTaskAction = wrapper.findAllComponents(SpeedDialMenuAction)[1];
+
+			expect(newTaskAction.props("href")).toStrictEqual(
+				"/courses/123/topics/add?returnUrl=rooms/123"
+			);
+		});
+	});
 
 	describe("headline menus", () => {
 		beforeEach(() => {
