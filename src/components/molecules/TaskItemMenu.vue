@@ -7,6 +7,7 @@
 				variant="text"
 				density="comfortable"
 				:aria-label="ariaLabel"
+				@keydown.space.stop
 				@keydown.left.right.up.down.stop
 			/>
 			<!-- for later refactoring: @keydown needed for a11y - perhaps because of nested v-lists -->
