@@ -201,8 +201,14 @@ describe("@/plugins/datetime", () => {
 	});
 
 	it("getTimeFromISOString", () => {
-		const ISOString = "2023-12-18T12:29:19.197Z";
-		expect(getTimeFromISOString(ISOString)).toStrictEqual("13:29");
+		const date = new Date();
+		const ISOString = date.toISOString();
+		const hours = date.getHours().toString().padStart(2, "0");
+		const minutes = date.getMinutes().toString().padStart(2, "0");
+
+		expect(getTimeFromISOString(ISOString)).toStrictEqual(
+			`${hours}:${minutes}`
+		);
 	});
 
 	const mockApp = {
