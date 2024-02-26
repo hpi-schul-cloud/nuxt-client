@@ -385,7 +385,7 @@ describe("rooms module", () => {
 				expect(setAlertDataMock).toHaveBeenCalledTimes(1);
 				expect(setAlertDataMock).toHaveBeenCalledWith({
 					status: "error",
-					text: "pages.rooms.uploadCourse.error",
+					text: "pages.rooms.ccImportCourse.error",
 					autoClose: true,
 				});
 			});
