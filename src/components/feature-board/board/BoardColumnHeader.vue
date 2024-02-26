@@ -14,7 +14,7 @@
 			<div class="d-flex align-center py-2 px-2">
 				<BoardAnyTitleInput
 					:value="title"
-					data-testid="column-title"
+					:data-testid="`column-title-${index}`"
 					scope="column"
 					:isEditMode="isEditMode"
 					:placeholder="titlePlaceholder"

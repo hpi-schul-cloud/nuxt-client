@@ -240,7 +240,7 @@ export default defineComponent({
 					icon: mdiPlus,
 					title: this.$t("common.actions.add"),
 					ariaLabel: this.$t("common.actions.add"),
-					testId: "add-tool-button",
+					dataTestId: "add-tool-button",
 					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
 				};
 
@@ -293,7 +293,7 @@ export default defineComponent({
 					label: this.$t("pages.rooms.fab.add.task"),
 					icon: mdiFormatListChecks,
 					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
-					dataTestid: "fab_button_add_task",
+					dataTestId: "fab_button_add_task",
 					ariaLabel: this.$t("pages.rooms.fab.add.task"),
 				});
 			}
@@ -304,7 +304,7 @@ export default defineComponent({
 					label: this.$t("pages.rooms.fab.add.lesson"),
 					icon: mdiViewListOutline,
 					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
-					dataTestid: "fab_button_add_lesson",
+					dataTestId: "fab_button_add_lesson",
 					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
 				});
 			}
@@ -316,7 +316,7 @@ export default defineComponent({
 				icon: mdiPlus,
 				title: this.$t("common.actions.create"),
 				ariaLabel: this.$t("common.actions.create"),
-				testId: "add-content-button",
+				dataTestId: "add-content-button",
 				actions: actions,
 			};
 			return items;
