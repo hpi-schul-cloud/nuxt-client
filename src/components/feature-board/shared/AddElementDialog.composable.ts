@@ -77,7 +77,7 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 	if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
 		options.push({
 			icon: mdiPresentation,
-			label: "components.elementTypeSelection.elements.boardElement.subtitle",
+			label: "components.cardElement.drawingElement",
 			action: () => onElementClick(ContentElementType.Drawing),
 			testId: "create-element-drawing-element",
 		});

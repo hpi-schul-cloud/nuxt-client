@@ -6,7 +6,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
 
 const ESPath = "/v1/edu-sharing";
-const lessonsPath = "/v1/lessons";
+const lessonsPath = "/v3/lessons/course";
 let requestPath: string;
 
 const mockResource: Resource = {
@@ -310,7 +310,7 @@ describe("content module", () => {
 			axiosInitializer();
 
 			await contentModule.getLessons("mockId");
-			expect(requestPath).toBe(lessonsPath);
+			expect(requestPath).toBe(`${lessonsPath}/mockId`);
 		});
 		it("getLessons should get lessons", async () => {
 			const contentModule = new ContentModule({});

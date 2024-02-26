@@ -1,10 +1,10 @@
+import ImportModal from "@/components/share/ImportModal.vue";
+import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { mount, MountOptions } from "@vue/test-utils";
-import ImportModal from "@/components/share/ImportModal.vue";
 import Vue from "vue";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
-import EnvConfigModule from "@/store/env-config";
-import { createModuleMocks } from "@/utils/mock-store-module";
 
 describe("@components/share/ImportModal", () => {
 	const getWrapper = (
@@ -135,7 +135,7 @@ describe("@components/share/ImportModal", () => {
 	});
 
 	describe("ctl tools info", () => {
-		describe("when ctl tools are enabled", () => {
+		describe("when ctl tools are enabled and parentType is courses", () => {
 			const setup = () => {
 				const wrapper = getWrapper(
 					{
@@ -185,7 +185,7 @@ describe("@components/share/ImportModal", () => {
 					`[data-testid="import-modal-coursefiles-info"]`
 				);
 
-				expect(infoText.isVisible()).toBe(false);
+				expect(infoText.exists()).toBe(false);
 			});
 		});
 
@@ -217,7 +217,7 @@ describe("@components/share/ImportModal", () => {
 						`[data-testid="import-modal-external-tools-info"]`
 					);
 
-					expect(infoText.isVisible()).toBe(false);
+					expect(infoText.exists()).toBe(false);
 				});
 
 				it("should show course file info", () => {
