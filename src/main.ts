@@ -113,6 +113,7 @@ Vue.use(VueDOMPurifyHTML, {
 	initializeAxios(axios);
 
 	// process env should pass over docker image for production
+	// TODO: this can not work must be take from route or runtime config or what ever
 	const isNotProduction = process.env.NODE_ENV !== "production";
 	await envConfigModule.loadConfiguration({ optional: isNotProduction });
 	// else loadDevelopmentConfigs()
