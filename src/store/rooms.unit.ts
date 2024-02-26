@@ -349,6 +349,12 @@ describe("rooms module", () => {
 			});
 
 			it("should call set loading", async () => {
+				const mockApi = {
+					courseControllerImportCourse: jest.fn().mockResolvedValue({}),
+				};
+				jest
+					.spyOn(serverApi, "CoursesApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 				const course = new File([], "my-course.zip");
 				const roomsModule = new RoomsModule({});
 				const setAlertDataMock = jest.spyOn(roomsModule, "setAlertData");
@@ -358,7 +364,7 @@ describe("rooms module", () => {
 				expect(setAlertDataMock).toHaveBeenCalledTimes(1);
 				expect(setAlertDataMock).toHaveBeenCalledWith({
 					status: "success",
-					text: "pages.rooms.uploadCourse.success",
+					text: "pages.rooms.ccImportCourse.success",
 					autoClose: true,
 				});
 			});
