@@ -2,6 +2,10 @@ import NavigationBar from "./NavigationBar";
 import { envConfigModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 const navbarLinks = [
 	{
@@ -20,8 +24,11 @@ const navbarLinks = [
 
 const getWrapper = () => {
 	return mount(NavigationBar, {
-		...createComponentMocks({ i18n: true }),
-		propsData: {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			stubs: ["base-link"],
+		},
+		props: {
 			links: navbarLinks,
 			img: "@/assets/img/logo/logo-dBildungscloud.svg",
 			buttons: true,

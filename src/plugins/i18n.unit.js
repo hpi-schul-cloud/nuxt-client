@@ -3,6 +3,7 @@ import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createI18n } from "./i18n";
+import { unref } from "vue";
 
 const envs = {
 	FALLBACK_DISABLED: false,
@@ -33,8 +34,8 @@ describe("i18n plugin", () => {
 
 		const i18n = createI18n();
 
-		expect(i18n.locale).toBe("fi");
-		expect(i18n.fallbackLocale).toBe("da");
+		expect(unref(i18n.global.locale)).toBe("fi");
+		expect(unref(i18n.global.fallbackLocale)).toBe("da");
 	});
 
 	it("sets the number formats for all supported languages correctly", () => {
@@ -43,9 +44,17 @@ describe("i18n plugin", () => {
 
 		const i18n = createI18n();
 
-		expect(i18n.numberFormats.de.fileSize.maximumFractionDigits).toBe(2);
-		expect(i18n.numberFormats.en.fileSize.maximumFractionDigits).toBe(2);
-		expect(i18n.numberFormats.es.fileSize.maximumFractionDigits).toBe(2);
-		expect(i18n.numberFormats.uk.fileSize.maximumFractionDigits).toBe(2);
+		expect(
+			unref(i18n.global.numberFormats).de.fileSize.maximumFractionDigits
+		).toBe(2);
+		expect(
+			unref(i18n.global.numberFormats).en.fileSize.maximumFractionDigits
+		).toBe(2);
+		expect(
+			unref(i18n.global.numberFormats).es.fileSize.maximumFractionDigits
+		).toBe(2);
+		expect(
+			unref(i18n.global.numberFormats).uk.fileSize.maximumFractionDigits
+		).toBe(2);
 	});
 });

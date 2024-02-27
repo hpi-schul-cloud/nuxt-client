@@ -141,7 +141,7 @@
 		</div>
 		<div class="bottom-buttons">
 			<v-btn
-				text
+				variant="text"
 				color="secondary"
 				data-testid="ldapBackButton"
 				@click="backButtonHandler"
@@ -151,7 +151,7 @@
 			</v-btn>
 			<v-btn
 				color="primary"
-				depressed
+				variant="flat"
 				data-testid="ldapSubmitButton"
 				:disabled="status === 'pending'"
 				@click="submitButtonHandler"
@@ -160,7 +160,7 @@
 			</v-btn>
 		</div>
 		<base-modal
-			:active.sync="submitted.ok"
+			v-model:active="submitted.ok"
 			:background-click-disabled="true"
 			data-testid="confirmModal"
 		>
@@ -170,7 +170,7 @@
 					:title="$t('pages.administration.ldap.activate.message')"
 				>
 					<template #icon>
-						<v-icon color="var(--v-success-base)" class="material-icon">
+						<v-icon color="rgba(var(--v-theme-success))" class="material-icon">
 							$mdiCheckCircle
 						</v-icon>
 					</template>
@@ -178,7 +178,7 @@
 			</template>
 			<template #footer>
 				<modal-footer-confirm
-					backgroundcolor="var(--v-success-base)"
+					backgroundcolor="rgba(var(--v-theme-success))"
 					:text="$t('pages.administration.ldap.activate.ok')"
 					data-testid="ldapOkButton"
 					@click="okButtonHandler"
@@ -254,21 +254,21 @@ export default {
 		breadcrumbs() {
 			return [
 				{
-					text: this.$t("pages.administration.index.title"),
+					title: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
 				{
-					text: this.$t("pages.administration.school.index.title"),
+					title: this.$t("pages.administration.school.index.title"),
 					href: envConfigModule.getNewSchoolAdminPageAsDefault
 						? "/administration/school-settings"
 						: "/administration/school",
 				},
 				{
-					text: this.$t("pages.administration.ldap.index.title"),
+					title: this.$t("pages.administration.ldap.index.title"),
 					href: this.ldapConfigRoute,
 				},
 				{
-					text: this.$t("pages.administration.ldap.activate.breadcrumb"),
+					title: this.$t("pages.administration.ldap.activate.breadcrumb"),
 					disabled: true,
 				},
 			];

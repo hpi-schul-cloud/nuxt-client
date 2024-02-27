@@ -2,13 +2,11 @@
 	<div
 		data-testid="board-link-element"
 		ref="linkContentElementDisplay"
-		:ripple="false"
 		tabindex="-1"
-		:loading="isLoading ? 'primary' : false"
 	>
 		<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
-			<template #display>
-				<v-img v-if="imageUrl" :src="imageUrl" alt="" class="rounded-t" />
+			<template #display v-if="imageUrl">
+				<v-img :src="imageUrl" alt="" class="rounded-t" />
 			</template>
 			<template #title>
 				{{ title }}
@@ -43,10 +41,6 @@ export default defineComponent({
 		imageUrl: {
 			type: String,
 			required: false,
-		},
-		isLoading: {
-			type: Boolean,
-			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
 	},

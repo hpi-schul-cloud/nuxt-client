@@ -1,19 +1,21 @@
 import NotifierModule from "@/store/notifier";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
 import { createMock } from "@golevelup/ts-jest";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { computed, ref } from "vue";
+import { shallowMount } from "@vue/test-utils";
+import { computed, ref, unref } from "vue";
 import SubmissionContentElement from "./SubmissionContentElement.vue";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useContentElementState } from "@data-board";
-import { i18nMock } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@feature-board");
@@ -39,8 +41,16 @@ jest.mock("../composables/SubmissionContentElementState.composable");
 const mockedUseSubmissionContentElementState = jest.mocked(
 	useSubmissionContentElementState
 );
-const mockedUseSubmissionContentElementStateResponse =
-	createMock<ReturnType<typeof useSubmissionContentElementState>>();
+const mockedUseSubmissionContentElementStateResponse: ReturnType<
+	typeof useSubmissionContentElementState
+> = {
+	submissions: ref([]),
+	studentSubmission: ref({ completed: false }),
+	fetchSubmissionItems: jest.fn(),
+	updateSubmissionItem: jest.fn(),
+	loading: ref(false),
+	isOverdue: computed(() => false),
+};
 
 mockedUseSubmissionContentElementState.mockReturnValue(
 	mockedUseSubmissionContentElementStateResponse
@@ -52,17 +62,15 @@ describe("SubmissionContentElement", () => {
 		element: AnyContentElement;
 		isEditMode: boolean;
 	}) => {
-		const wrapper = shallowMount(
-			SubmissionContentElement as MountOptions<Vue>,
-			{
-				...createComponentMocks({ i18n: true }),
+		const wrapper = shallowMount(SubmissionContentElement, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
-				propsData: { ...props },
-			}
-		);
+			},
+			props,
+		});
 
 		return { wrapper };
 	};
@@ -70,7 +78,6 @@ describe("SubmissionContentElement", () => {
 	describe("when component is in view mode", () => {
 		const setup = () => {
 			const element = submissionContainerElementResponseFactory.build();
-			document.body.setAttribute("data-app", "true");
 
 			const submissionContainerElementResponse =
 				submissionContainerElementResponseFactory.build();
@@ -126,7 +133,7 @@ describe("SubmissionContentElement", () => {
 				.props("submissions");
 
 			expect(completed).toBe(
-				mockedUseSubmissionContentElementStateResponse.submissions
+				unref(mockedUseSubmissionContentElementStateResponse.submissions)
 			);
 		});
 
@@ -138,7 +145,7 @@ describe("SubmissionContentElement", () => {
 				.props("loading");
 
 			expect(loading).toBe(
-				mockedUseSubmissionContentElementStateResponse.loading
+				unref(mockedUseSubmissionContentElementStateResponse.loading)
 			);
 		});
 
@@ -150,7 +157,7 @@ describe("SubmissionContentElement", () => {
 				.props("isOverdue");
 
 			expect(isOverdue).toBe(
-				mockedUseSubmissionContentElementStateResponse.isOverdue
+				unref(mockedUseSubmissionContentElementStateResponse.isOverdue)
 			);
 		});
 
@@ -169,7 +176,6 @@ describe("SubmissionContentElement", () => {
 	describe("when component is in edit mode", () => {
 		const setup = () => {
 			const element = submissionContainerElementResponseFactory.build();
-			document.body.setAttribute("data-app", "true");
 
 			const submissionContainerElementResponse =
 				submissionContainerElementResponseFactory.build();
@@ -226,7 +232,7 @@ describe("SubmissionContentElement", () => {
 				.props("submissions");
 
 			expect(completed).toBe(
-				mockedUseSubmissionContentElementStateResponse.submissions
+				unref(mockedUseSubmissionContentElementStateResponse.submissions)
 			);
 		});
 
@@ -238,7 +244,7 @@ describe("SubmissionContentElement", () => {
 				.props("loading");
 
 			expect(loading).toBe(
-				mockedUseSubmissionContentElementStateResponse.loading
+				unref(mockedUseSubmissionContentElementStateResponse.loading)
 			);
 		});
 
@@ -250,7 +256,7 @@ describe("SubmissionContentElement", () => {
 				.props("isOverdue");
 
 			expect(isOverdue).toBe(
-				mockedUseSubmissionContentElementStateResponse.isOverdue
+				unref(mockedUseSubmissionContentElementStateResponse.isOverdue)
 			);
 		});
 
@@ -266,9 +272,6 @@ describe("SubmissionContentElement", () => {
 				})
 			);
 
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-
 			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
 		});
 
@@ -283,9 +286,6 @@ describe("SubmissionContentElement", () => {
 					keyCode: 38,
 				})
 			);
-
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
 
 			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
 		});

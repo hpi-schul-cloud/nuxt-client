@@ -3,17 +3,17 @@ import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import {
-	I18N_KEY,
 	SYSTEMS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -45,23 +45,19 @@ describe("UserLoginMigrationConsent", () => {
 			getUserLoginMigration: userLoginMigrationMock,
 		});
 
-		const wrapper: Wrapper<Vue> = mount(
-			UserLoginMigrationConsent as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
+		const wrapper = shallowMount(UserLoginMigrationConsent, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
 					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
-					[I18N_KEY.valueOf()]: i18nMock,
 				},
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>
 						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 				},
-			}
-		);
+			},
+		});
 
 		return {
 			wrapper,
@@ -86,9 +82,9 @@ describe("UserLoginMigrationConsent", () => {
 			it("should show the normal description text", async () => {
 				const { wrapper } = await setup();
 
-				const descriptionText: string = wrapper
-					.find("[data-testId=text-description]")
-					.text();
+				const descriptionText = wrapper
+					.findComponent("[data-testId=text-description]")
+					.attributes("html");
 
 				expect(descriptionText).toEqual(
 					'pages.userMigration.description.fromSource {"targetSystem":"targetSystem","startMigration":"pages.userMigration.button.startMigration"}'
@@ -103,7 +99,7 @@ describe("UserLoginMigrationConsent", () => {
 				expect(button.text()).toEqual(
 					"pages.userMigration.button.startMigration"
 				);
-				expect(button.props().href).toEqual(
+				expect(button.attributes().href).toEqual(
 					"/login/oauth2/targetSystemId?migration=true"
 				);
 			});
@@ -114,7 +110,7 @@ describe("UserLoginMigrationConsent", () => {
 				const button = wrapper.find("[data-testId=btn-cancel]");
 
 				expect(button.text()).toEqual("pages.userMigration.button.skip");
-				expect(button.props().to).toEqual("/dashboard");
+				expect(button.attributes().to).toEqual("/dashboard");
 			});
 		});
 
@@ -124,9 +120,9 @@ describe("UserLoginMigrationConsent", () => {
 					mandatorySince: new Date(2000, 1, 1),
 				});
 
-				const descriptionText: string = wrapper
-					.find("[data-testId=text-description]")
-					.text();
+				const descriptionText = wrapper
+					.findComponent("[data-testId=text-description]")
+					.attributes("html");
 
 				expect(descriptionText).toEqual(
 					'pages.userMigration.description.fromSourceMandatory {"targetSystem":"targetSystem","startMigration":"pages.userMigration.button.startMigration"}'
@@ -141,7 +137,7 @@ describe("UserLoginMigrationConsent", () => {
 				const button = wrapper.find("[data-testId=btn-cancel]");
 
 				expect(button.text()).toEqual("common.actions.logout");
-				expect(button.props().to).toEqual("/logout");
+				expect(button.attributes().to).toEqual("/logout");
 			});
 		});
 	});

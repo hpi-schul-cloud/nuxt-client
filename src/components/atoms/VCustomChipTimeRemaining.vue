@@ -1,11 +1,12 @@
 <template>
 	<v-chip
 		v-if="type === 'warning'"
-		color="orange lighten-3"
-		small
+		color="orange-lighten-3"
+		size="small"
+		variant="flat"
 		data-test-id="dueDateHintLabel"
 	>
-		<v-icon left small> {{ mdiTimerSandComplete }} </v-icon>
+		<v-icon start size="small"> {{ mdiTimerSandComplete }} </v-icon>
 		{{ hintDueDate(dueDate, shortenUnit) }}
 	</v-chip>
 </template>
@@ -45,7 +46,7 @@ export default {
 
 				const label = shorten
 					? this.$t("components.atoms.VCustomChipTimeRemaining.hintMinShort")
-					: this.$tc(
+					: this.$t(
 							"components.atoms.VCustomChipTimeRemaining.hintMinutes",
 							diffMins
 						);
@@ -56,7 +57,7 @@ export default {
 			} else {
 				const label = shorten
 					? this.$t("components.atoms.VCustomChipTimeRemaining.hintHoursShort")
-					: this.$tc(
+					: this.$t(
 							"components.atoms.VCustomChipTimeRemaining.hintHours",
 							diffHrs
 						);

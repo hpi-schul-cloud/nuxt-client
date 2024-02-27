@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="grey lighten-4 pa-4 rounded">
+		<div class="bg-grey-lighten-4 pa-4 rounded">
 			<SubmissionContentElementTitle />
 			<div class="menu">
 				<slot />
@@ -12,7 +12,7 @@
 			:dateTime="dueDate"
 			:date-input-label="t('common.labels.date')"
 			:time-input-label="t('common.labels.time')"
-			@input="onDateTimeInput"
+			@update:date-time="onDateTimeInput"
 		/>
 		<SubmissionItemsTeacherDisplay
 			:submissions="submissions"
@@ -24,8 +24,8 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
+import { useI18n } from "vue-i18n";
 import { mdiLightbulbOnOutline } from "@mdi/js";
-import { useI18n } from "@/composables/i18n.composable";
 import { TeacherSubmission } from "../types/submission";
 import { DateTimePicker } from "@ui-date-time-picker";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";

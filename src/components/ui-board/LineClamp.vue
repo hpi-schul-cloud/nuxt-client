@@ -1,15 +1,14 @@
 <template>
 	<div ref="textElement" class="line-clamp">
 		<v-tooltip
-			top
-			start
+			location="top"
 			origin="auto"
 			transition="fade"
 			:max-width="tooltipWidth"
 			v-if="isOverflowingLongText"
 		>
-			<template v-slot:activator="{ on, attrs }">
-				<div v-bind="attrs" v-on="on" class="text-truncate">
+			<template v-slot:activator="{ props }">
+				<div v-bind="props" class="text-truncate">
 					<slot />
 				</div>
 			</template>

@@ -278,24 +278,6 @@ describe("rooms module", () => {
 				expect(roomsModule.getLoading).toBe(true);
 			});
 		});
-		describe("getSharedCourseData", () => {
-			it("should call the backend", async () => {
-				const roomsModule = new RoomsModule({});
-				const getSharedCourseDataSpy = jest.spyOn(
-					roomsModule,
-					"getSharedCourseData"
-				);
-				await roomsModule.getSharedCourseData("sampleCode");
-
-				expect(receivedRequests[0].path).toStrictEqual("/v1/courses-share");
-				expect(receivedRequests[1].data.params.shareToken).toStrictEqual(
-					"sampleCode"
-				);
-				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
-					"sampleCode"
-				);
-			}, 1000);
-		});
 
 		describe("confirmSharedCourseData", () => {
 			it("should call the backend", async () => {

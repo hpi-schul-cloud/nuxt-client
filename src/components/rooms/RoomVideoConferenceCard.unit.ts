@@ -1,34 +1,29 @@
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
-import { I18N_KEY } from "@/utils/inject";
+
+jest.mock("@/assets/img/bbb/no_permission.png", () => "noPermissionImagePath");
+jest.mock("@/assets/img/bbb/not_started.png", () => "notStartetImagePath");
+jest.mock("@/assets/img/bbb/available.png", () => "availableImagePath");
 
 describe("RoomVideoConferenceCard", () => {
-	const getWrapper = (props: {
+	const getWrapper = (propsData: {
 		isRunning: boolean;
 		hasPermission: boolean;
 		canStart: boolean;
 		isRefreshing: boolean;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
-		const wrapper: Wrapper<Vue> = mount(
-			RoomVideoConferenceCard as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				propsData: {
-					...props,
-				},
-				provide: {
-					[I18N_KEY.valueOf()]: {
-						tc: (key: string): string => key,
-					},
-				},
-			}
-		);
+		const wrapper = mount(RoomVideoConferenceCard, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				...propsData,
+			},
+		});
 
 		return wrapper;
 	};
@@ -54,7 +49,7 @@ describe("RoomVideoConferenceCard", () => {
 		it("should display a title", () => {
 			const { wrapper } = setup();
 
-			const text = wrapper.find("h5");
+			const text = wrapper.find("h2");
 
 			expect(text.text()).toEqual("pages.videoConference.title");
 		});
@@ -77,7 +72,7 @@ describe("RoomVideoConferenceCard", () => {
 		it("should display a logo", () => {
 			const { wrapper } = setup();
 
-			const logo = wrapper.find('[data-testId="vc-card-logo"]');
+			const logo = wrapper.findComponent('[data-testId="vc-card-logo"]');
 
 			expect(logo.exists()).toEqual(true);
 		});
@@ -85,9 +80,9 @@ describe("RoomVideoConferenceCard", () => {
 		it("should display a description text", () => {
 			const { wrapper } = setup();
 
-			const alert = wrapper.find('[data-testId="vc-info-box"]');
+			const alert = wrapper.findComponent('[data-testId="vc-info-box"]');
 
-			const text = alert.find("span");
+			const text = alert.find("span.my-auto");
 
 			expect(text.text()).toEqual("pages.videoConference.info.notStarted");
 		});
@@ -127,7 +122,7 @@ describe("RoomVideoConferenceCard", () => {
 			const { wrapper } = setup();
 
 			const alert = wrapper.find('[data-testId="vc-info-box-show"]');
-			const text = alert.find("span");
+			const text = alert.find("span.my-auto");
 
 			expect(text.isVisible()).toBeFalsy();
 		});
@@ -207,7 +202,7 @@ describe("RoomVideoConferenceCard", () => {
 
 			const alert = wrapper.find('[data-testId="vc-info-box"]');
 
-			const text = alert.find("span");
+			const text = alert.find("span.my-auto");
 
 			expect(text.text()).toEqual("pages.videoConference.info.noPermission");
 		});
@@ -288,9 +283,9 @@ describe("RoomVideoConferenceCard", () => {
 		it("should disable the refresh button", async () => {
 			const { wrapper } = setup();
 
-			const button = wrapper.find('[data-testId="refresh-btn"]');
+			const button = wrapper.findComponent('[data-testId="refresh-btn"]');
 
-			expect(button.attributes("disabled")).toEqual("disabled");
+			expect(button.attributes()).toHaveProperty("disabled");
 		});
 	});
 });
