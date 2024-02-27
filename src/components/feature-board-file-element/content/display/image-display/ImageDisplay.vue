@@ -1,32 +1,35 @@
 <template>
-	<ColorOverlay
-		:isOverlayDisabled="isEditMode || hasImageError"
-		@on:action="openLightBox"
-		color="var(--v-black-base)"
-	>
-		<PreviewImage
-			:src="previewSrc"
-			:alt="alternativeText"
-			:contain="true"
-			class="rounded-t"
-			@error="onImageError"
-		/>
-
-		<ContentElementBar class="menu">
-			<template #menu><slot /></template>
-		</ContentElementBar>
-	</ColorOverlay>
+	<ContentElementBar class="image-display menu">
+		<template #display>
+			<div
+				class="d-flex align-center"
+				style="min-height: 52px"
+				@click="openLightBox"
+			>
+				<div class="w-100 h-100">
+					<PreviewImage
+						:src="previewSrc"
+						:alt="alternativeText"
+						:cover="true"
+						@error="onImageError"
+					/>
+				</div>
+			</div>
+		</template>
+		<template #menu>
+			<slot />
+		</template>
+	</ContentElementBar>
 </template>
 
 <script lang="ts">
 import { FileElementResponse } from "@/serverApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { PropType, computed, defineComponent, ref } from "vue";
 import { ContentElementBar } from "@ui-board";
-import { ColorOverlay } from "@ui-color-overlay";
+import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PreviewImage } from "@ui-preview-image";
-import { useI18n } from "@/composables/i18n.composable";
+import { PropType, computed, defineComponent, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "ImageDisplay",
@@ -39,7 +42,6 @@ export default defineComponent({
 	},
 	components: {
 		ContentElementBar,
-		ColorOverlay,
 		PreviewImage,
 	},
 	setup(props) {
@@ -83,11 +85,8 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.menu {
-	position: absolute;
-	top: 0px;
-	right: 0px;
+<style scoped lang="scss">
+.image-display:focus {
+	outline: none;
 }
 </style>

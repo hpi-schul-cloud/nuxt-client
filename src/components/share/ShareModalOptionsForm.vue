@@ -1,44 +1,29 @@
 <template>
-	<div class="black--text">
-		<div class="d-flex justify-space-between">
-			<div class="mt-1">
-				{{ $t("components.molecules.share.options.schoolInternally") }}
-			</div>
-			<v-switch
-				v-model="shareOptions.isSchoolInternal"
-				data-testid="isSchoolInternal"
-				color="primary"
-				input-value="true"
-				class="my-0 mr-n3"
-				inset
-				dense
-			/>
-		</div>
-		<div class="d-flex justify-space-between">
-			<div class="mt-1">
-				{{ $t("components.molecules.share.options.expiresInDays") }}
-			</div>
-			<v-switch
-				v-model="shareOptions.hasExpiryDate"
-				data-testid="hasExpiryDate"
-				color="primary"
-				input-value="true"
-				class="my-0 mr-n3"
-				inset
-				dense
-			/>
-		</div>
-	</div>
+	<v-checkbox
+		v-model="shareOptions.isSchoolInternal"
+		data-testid="isSchoolInternal"
+		:label="$t('components.molecules.share.options.schoolInternally')"
+		:hide-details="true"
+		density="comfortable"
+	/>
+	<v-checkbox
+		v-model="shareOptions.hasExpiryDate"
+		data-testid="hasExpiryDate"
+		:label="$t('components.molecules.share.options.expiresInDays')"
+		:hide-details="true"
+		density="comfortable"
+	/>
 </template>
 
 <script>
 import { defineComponent, reactive, watch } from "vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { mdiCheck } from "@mdi/js";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ShareModalOptionsForm",
-	emits: ["shareOptionsChange"],
+	emits: ["share-options-change"],
 	props: {
 		type: {
 			type: String,
@@ -58,8 +43,10 @@ export default defineComponent({
 		});
 
 		emit("share-options-change", shareOptions);
+
 		return {
 			shareOptions,
+			mdiCheck,
 		};
 	},
 });

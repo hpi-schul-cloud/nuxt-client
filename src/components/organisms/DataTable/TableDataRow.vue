@@ -86,22 +86,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .table__row {
-	background-color: var(--v-white-base);
-	border-top: 1px solid var(--v-white-base);
-	border-bottom: 1px solid var(--v-white-base);
+	background-color: rgba(var(--v-theme-white));
+	border-top: 1px solid rgba(var(--v-theme-white));
+	border-bottom: 1px solid rgba(var(--v-theme-white));
 
 	&.highlight {
 		background-color: map-get($grey, lighten-3);
-		border-top: 1px solid var(--v-white-base);
-		border-bottom: 1px solid var(--v-white-base);
+		border-top: 1px solid rgba(var(--v-theme-white));
+		border-bottom: 1px solid rgba(var(--v-theme-white));
 	}
 
 	&.selected {
-		color: var(--v-white-base);
-		background-color: var(--v-secondary-lighten1);
-		border-top: 1px solid var(--v-white-base);
-		border-bottom: 1px solid var(--v-white-base);
+		color: rgba(var(--v-theme-white));
+		background-color: rgba(var(--v-theme-secondary-lighten-1));
+		border-top: 1px solid rgba(var(--v-theme-white));
+		border-bottom: 1px solid rgba(var(--v-theme-white));
 	}
 
 	td {
@@ -122,7 +124,7 @@ export default {
 	}
 
 	a.is-text {
-		color: var(--v-secondary-base);
+		color: rgba(var(--v-theme-secondary));
 	}
 }
 </style>

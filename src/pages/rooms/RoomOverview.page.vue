@@ -4,7 +4,7 @@
 			:has-rooms="hasCurrentRooms"
 			:has-import-token="!!importToken"
 		>
-			<template slot="header">
+			<template #header>
 				<h1 class="text-h3 pt-2">
 					{{ $t("pages.rooms.index.courses.active") }}
 				</h1>
@@ -12,8 +12,8 @@
 					<div class="btn">
 						<v-btn
 							color="secondary"
-							outlined
-							small
+							variant="outlined"
+							size="small"
 							to="/rooms-list"
 							data-testid="go-to-all-courses"
 						>
@@ -21,26 +21,28 @@
 						</v-btn>
 					</div>
 					<div class="toggle-div">
-						<v-custom-switch
+						<v-switch
 							v-if="isTouchDevice"
 							v-model="allowDragging"
 							class="enable-disable"
 							:label="$t('pages.rooms.index.courses.arrangeCourses')"
 							:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
+							:true-icon="mdiCheck"
 						/>
 					</div>
 				</div>
 			</template>
-			<template slot="page-content">
+			<template #page-content>
 				<div class="rooms-container">
 					<v-text-field
 						ref="search"
 						v-model="searchText"
 						class="room-search px-1"
-						solo
+						variant="solo"
 						rounded
+						single-line
 						:label="$t('pages.rooms.index.search.label')"
-						:append-icon="mdiMagnify"
+						:append-inner-icon="mdiMagnify"
 						:aria-label="$t('pages.rooms.index.search.label')"
 						data-testid="search-field"
 					/>
@@ -58,13 +60,17 @@
 							<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
 								<vRoomEmptyAvatar
 									v-if="isEmptyGroup(rowIndex, colIndex)"
-									:ref="`${rowIndex}-${colIndex}`"
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 									:size="dimensions.cellWidth"
-									@drop="setDropElement({ x: colIndex, y: rowIndex })"
+									@dropEmptyAvatar="
+										setDropElement({ x: colIndex, y: rowIndex })
+									"
+									data-avatar-type="vRoomEmptyAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
 								<vRoomGroupAvatar
 									v-else-if="hasGroup(rowIndex, colIndex)"
-									:ref="`${rowIndex}-${colIndex}`"
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 									class="room-group-avatar"
 									:data="getDataObject(rowIndex, colIndex)"
 									:size="dimensions.cellWidth"
@@ -74,28 +80,38 @@
 										openDialog(getDataObject(rowIndex, colIndex).groupId)
 									"
 									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-									@dragend="onDragend"
-									@drop="addGroupElements({ x: colIndex, y: rowIndex })"
+									@dragendGroupAvatar="onDragend"
+									@dropGroupAvatar="
+										addGroupElements({ x: colIndex, y: rowIndex })
+									"
+									data-avatar-type="vRoomGroupAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
 								<vRoomAvatar
 									v-else
-									:ref="`${rowIndex}-${colIndex}`"
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 									class="room-avatar"
 									:item="getDataObject(rowIndex, colIndex)"
 									:size="dimensions.cellWidth"
 									:show-badge="true"
 									:draggable="allowDragging"
 									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-									@dragend="onDragend"
-									@drop="setGroupElements({ x: colIndex, y: rowIndex })"
+									@dragendAvatar="onDragend"
+									@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
+									data-avatar-type="vRoomAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
 							</template>
 							<template v-else>
 								<vRoomEmptyAvatar
-									:ref="`${rowIndex}-${colIndex}`"
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 									:size="dimensions.cellWidth"
 									:show-outline="dragging"
-									@drop="setDropElement({ x: colIndex, y: rowIndex })"
+									@dropEmptyAvatar="
+										setDropElement({ x: colIndex, y: rowIndex })
+									"
+									data-avatar-type="vRoomEmptyAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
 							</template>
 						</div>
@@ -110,7 +126,7 @@
 			</template>
 		</room-wrapper>
 		<room-modal
-			v-model="groupDialog.isOpen"
+			v-model:isOpen="groupDialog.isOpen"
 			aria-describedby="folder open"
 			:group-data="groupDialog.groupData"
 			:avatar-size="dimensions.cellWidth"
@@ -122,7 +138,6 @@
 </template>
 
 <script>
-import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
 import RoomModal from "@/components/molecules/RoomModal";
@@ -130,23 +145,36 @@ import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { roomsModule } from "@/store";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { mdiMagnify } from "@mdi/js";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { mdiCheck, mdiMagnify } from "@mdi/js";
+import { defineComponent, reactive } from "vue";
 
-export default {
+export default defineComponent({
+	setup() {
+		const refs = reactive({});
+
+		const setElementRef = (rowIndex, colIndex, el) => {
+			refs[`${rowIndex}-${colIndex}`] = el;
+		};
+
+		const getElementNameByRef = (pos) => {
+			return refs[`${pos.y}-${pos.x}`].$attrs["data-avatar-type"];
+		};
+
+		return { setElementRef, getElementNameByRef };
+	},
 	components: {
 		RoomWrapper,
 		vRoomAvatar,
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		RoomModal,
-		vCustomSwitch,
 		ImportFlow,
 	},
 	inject: {
 		notifierModule: { from: NOTIFIER_MODULE_KEY },
-		i18n: { from: I18N_KEY },
+		mq: "mq",
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -174,6 +202,7 @@ export default {
 			searchText: "",
 			dragging: false,
 			allowDragging: false,
+			mdiCheck,
 		};
 	},
 	computed: {
@@ -224,8 +253,8 @@ export default {
 	},
 	methods: {
 		getDeviceDims() {
-			this.device = this.$mq;
-			switch (this.$mq) {
+			this.device = this.mq.current;
+			switch (this.device) {
 				case "tablet":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "4em";
@@ -340,9 +369,6 @@ export default {
 			}
 			this.dragging = false;
 		},
-		getElementNameByRef(pos) {
-			return this.$refs[`${pos.y}-${pos.x}`][0].$options["_componentTag"];
-		},
 		dragFromGroup(element) {
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
@@ -380,7 +406,7 @@ export default {
 		},
 		showImportSuccess(name) {
 			this.notifierModule?.show({
-				text: this.i18n.t("components.molecules.import.options.success", {
+				text: this.$t("components.molecules.import.options.success", {
 					name,
 				}),
 				status: "success",
@@ -412,7 +438,7 @@ export default {
 			this.$t("pages.rooms.index.courses.active")
 		);
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -441,11 +467,11 @@ export default {
 	}
 }
 
-::v-deep .v-messages {
+:deep(.v-messages) {
 	display: none;
 }
 
-::v-deep .v-input {
+:deep(.v-input) {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin-top: 0 !important;
 }

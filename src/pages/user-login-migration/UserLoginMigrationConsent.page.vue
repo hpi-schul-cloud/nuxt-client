@@ -2,16 +2,16 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/move.svg" alt="" />
 		<h1 class="pl-4 pr-4">
-			{{ t("pages.userMigration.title") }}
+			{{ $t("pages.userMigration.title") }}
 		</h1>
 		<div>
 			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
 				:html="
-					t(migrationDescription, {
+					$t(migrationDescription, {
 						targetSystem: getSystemName(),
-						startMigration: t('pages.userMigration.button.startMigration'),
+						startMigration: $t('pages.userMigration.button.startMigration'),
 					})
 				"
 				component="p"
@@ -22,12 +22,12 @@
 			>
 				<v-btn
 					class="mx-8 mb-8"
-					depressed
+					variant="flat"
 					data-testId="btn-cancel"
 					:to="canSkipMigration ? '/dashboard' : '/logout'"
 				>
 					{{
-						t(
+						$t(
 							canSkipMigration
 								? "pages.userMigration.button.skip"
 								: "common.actions.logout"
@@ -37,11 +37,11 @@
 				<v-btn
 					class="mx-8 mb-8"
 					color="primary"
-					depressed
+					variant="flat"
 					data-testId="btn-proceed"
 					:href="`/login/oauth2/${userLoginMigration.targetSystemId}?migration=true`"
 				>
-					{{ t("pages.userMigration.button.startMigration") }}
+					{{ $t("pages.userMigration.button.startMigration") }}
 				</v-btn>
 			</div>
 		</div>
@@ -68,7 +68,7 @@ import {
 } from "vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import { UserLoginMigration } from "@/store/user-login-migration";
 
 export default defineComponent({
@@ -115,7 +115,6 @@ export default defineComponent({
 		});
 
 		return {
-			t,
 			isLoading,
 			migrationDescription,
 			canSkipMigration,

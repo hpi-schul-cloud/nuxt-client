@@ -1,7 +1,7 @@
 <template>
 	<section class="task-dashboard-student">
-		<v-tabs-items v-model="tab">
-			<v-tab-item :value="tabRoutes[0]">
+		<v-window v-model="tab">
+			<v-window-item :value="tabRoutes[0]">
 				<v-custom-double-panels
 					class="pb-16"
 					:panel-one-count="noDueDateTasks.length"
@@ -35,8 +35,8 @@
 					:subtitle="emptyState.subtitle"
 					class="mt-16"
 				/>
-			</v-tab-item>
-			<v-tab-item :value="tabRoutes[1]">
+			</v-window-item>
+			<v-window-item :value="tabRoutes[1]">
 				<v-custom-double-panels
 					class="pb-16"
 					:panel-one-count="gradedTasks.length"
@@ -60,8 +60,8 @@
 					:title="emptyState.title"
 					class="mt-16"
 				/>
-			</v-tab-item>
-			<v-tab-item :value="tabRoutes[2]">
+			</v-window-item>
+			<v-window-item :value="tabRoutes[2]">
 				<tasks-list
 					class="pb-16"
 					:tasks="finishedTasks"
@@ -75,8 +75,8 @@
 					:title="emptyState.title"
 					class="mt-16"
 				/>
-			</v-tab-item>
-		</v-tabs-items>
+			</v-window-item>
+		</v-window>
 	</section>
 </template>
 

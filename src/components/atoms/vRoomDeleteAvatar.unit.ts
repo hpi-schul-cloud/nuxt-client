@@ -1,30 +1,35 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import vRoomDeleteAvatar from "./vRoomDeleteAvatar.vue";
 
 describe("vRoomDeleteAvatar", () => {
-	it("should emit 'deleteAvatar' event when an element drops onto it", async () => {
+	const setup = () => {
 		const wrapper = mount(vRoomDeleteAvatar, {
-			...createComponentMocks({
-				i18n: true,
-			}),
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
 		});
+		return { wrapper };
+	};
+	it("should emit 'deleteAvatar' event when an element drops onto it", async () => {
+		const { wrapper } = setup();
 		const avatarComponent = wrapper.find(".delete-avatar");
 
 		avatarComponent.trigger("drop");
 		await wrapper.vm.$nextTick();
 
 		const emitted = wrapper.emitted();
+
 		expect(emitted["deleteAvatar"]).toHaveLength(1);
 	});
 
 	it("should change its class name while 'drag' events triggered", async () => {
-		const wrapper = mount(vRoomDeleteAvatar, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-		});
+		const { wrapper } = setup();
 		const avatarComponent = wrapper.find(".delete-avatar");
+
 		expect(avatarComponent.element.className).not.toContain(
 			"hovered-delete-avatar"
 		);

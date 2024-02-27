@@ -353,21 +353,31 @@ describe("auth store module", () => {
 		});
 
 		describe("logout", () => {
-			const mockReplace = jest.fn();
-			window.location.replace = mockReplace;
+			const setup = () => {
+				const authModule = new AuthModule({});
+
+				axiosInitializer({
+					data: defaultUserData,
+				});
+
+				const mockReplace = jest.fn();
+				Object.defineProperty(window, "location", {
+					configurable: true,
+					value: { replace: mockReplace },
+				});
+
+				return { authModule, mockReplace };
+			};
 
 			describe("when logout action is called", () => {
 				it("should replace the window.location", () => {
-					axiosInitializer({
-						data: defaultUserData,
-					});
-					const authModule = new AuthModule({});
-					authModule.logout();
-					expect(mockReplace).toHaveBeenCalledWith("/logout");
+					const { authModule, mockReplace } = setup();
 
-					jest.clearAllMocks();
+					authModule.logout();
+					expect(mockReplace).toHaveBeenLastCalledWith("/logout");
+
 					authModule.logout("/to_another_path");
-					expect(mockReplace).toHaveBeenCalledWith("/to_another_path");
+					expect(mockReplace).toHaveBeenLastCalledWith("/to_another_path");
 				});
 			});
 		});

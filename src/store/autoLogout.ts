@@ -1,6 +1,12 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { envConfigModule, accountsModule } from "@/store";
 
+// feature for jwt timer reset is disabled in dev environments.
+// we should probably check the feature flag directly?
+const jwtTimerDisabled = () => {
+	return process.env.NODE_ENV === "development";
+};
+
 let processing = false; // will be true for the time of extending the session
 let retry = 0;
 let totalRetry = 0;
@@ -48,6 +54,9 @@ const decrementRemainingTime: any = (
 };
 
 const updateRemainingTime = (setRemainingTimeInSeconds: any) => {
+	if (jwtTimerDisabled()) {
+		return;
+	}
 	return setInterval(
 		async () => {
 			try {
@@ -83,6 +92,9 @@ const extendSession = async (
 	defaultRemainingTimeInSeconds: any,
 	setToastValue: any
 ) => {
+	if (jwtTimerDisabled()) {
+		return Promise.resolve();
+	}
 	try {
 		await accountsModule.resetJwtTimer();
 		processing = false;

@@ -1,9 +1,9 @@
-import VueI18n from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import { ToolParameter, ToolParameterType } from "@/store/external-tool";
 
-export function useExternalToolValidation(
-	t: (key: string, values?: VueI18n.Values | undefined) => string
-) {
+export function useExternalToolValidation() {
+	const { t } = useI18n();
+
 	const validateParameter = (
 		param: ToolParameter,
 		inputValue: string | undefined

@@ -1,24 +1,23 @@
 <template>
-	<div>
-		<VTextarea
-			hide-details="auto"
-			v-model="modelValue"
-			solo
-			dense
-			:rows="1"
-			auto-grow
-			flat
-			class="mx-n3 mb-n2"
-			:placeholder="placeholder"
-			background-color="transparent"
-			ref="titleInput"
-			:readonly="!isEditMode"
-			role="heading"
-			:aria-level="ariaLevel"
-			@keydown.enter="onEnter"
-			:tabindex="isEditMode ? 0 : -1"
-		/>
-	</div>
+	<VTextarea
+		hide-details="auto"
+		v-model="modelValue"
+		variant="solo"
+		density="compact"
+		:rows="1"
+		auto-grow
+		flat
+		class="mx-n4 mb-n2 mt-n2"
+		:placeholder="placeholder"
+		bg-color="transparent"
+		ref="titleInput"
+		:readonly="!isEditMode"
+		role="heading"
+		:aria-level="ariaLevel"
+		@keydown.enter="onEnter"
+		:tabindex="isEditMode ? 0 : -1"
+		:autofocus="internalIsFocused"
+	/>
 </template>
 
 <script lang="ts">
@@ -32,9 +31,8 @@ import {
 	ref,
 	watch,
 } from "vue";
-import { VTextarea } from "vuetify/lib";
-import { useBoardPermissions } from "@data-board";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
+import { VTextarea } from "vuetify/lib/components/index.mjs";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -63,23 +61,22 @@ export default defineComponent({
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
-		const { hasEditPermission } = useBoardPermissions();
-		const titleInput = ref<InstanceType<typeof VTextarea> | null>(null);
+
+		const internalIsFocused = ref(false);
+
+		const titleInput = ref<typeof VTextarea | null>(null);
 
 		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();
+		});
+		const setFocusOnEdit = async () => {
 			await nextTick();
-		});
-		const setFocusOnEdit = () => {
-			if (!hasEditPermission) return;
-			if (!textarea.value) return;
-			textarea.value.focus();
-		};
+			internalIsFocused.value = true;
 
-		const textarea = computed(() => {
-			if (titleInput.value === null) return null;
-			return titleInput.value.$refs.input as HTMLTextAreaElement;
-		});
+			if (titleInput.value) {
+				titleInput.value.focus();
+			}
+		};
 
 		onMounted(() => {
 			if (props.isFocused && props.isEditMode) setFocusOnEdit();
@@ -91,7 +88,7 @@ export default defineComponent({
 				if (props.scope !== "column" && !props.isFocused) return;
 				if (newVal && !oldVal) {
 					await nextTick();
-					setFocusOnEdit();
+					await setFocusOnEdit();
 				}
 			}
 		);
@@ -126,36 +123,27 @@ export default defineComponent({
 			}
 		});
 
-		const titleLength = () => {
-			if (!textarea.value) return;
-			return textarea.value.value.length;
-		};
-
 		const onEnter = ($event: KeyboardEvent) => {
 			if (props.scope !== "card") return;
-			if (!textarea.value) return;
-
-			if (titleLength() === textarea.value.selectionStart) {
-				$event.preventDefault();
-				emit("enter");
-			}
+			$event.preventDefault();
+			emit("enter");
 		};
 
 		return {
 			ariaLevel,
 			fontSize,
 			modelValue,
-			titleInput,
 			hasValue,
 			onEnter,
-			titleLength,
+			internalIsFocused,
+			titleInput,
 		};
 	},
 });
 </script>
 
 <style scoped>
-:deep(div.v-input__slot) {
+:deep(div.v-field__field) {
 	padding: 0;
 	font-family: var(--font-accent);
 }
@@ -172,14 +160,13 @@ export default defineComponent({
 }
 
 /** Edge */
-:deep(textarea)::-ms-input-placeholder {
-	color: var(--v-secondary-base) !important;
+:deep(textarea) {
+	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }
 /** Other common browsers */
 :deep(textarea)::placeholder {
-	color: var(--v-secondary-base) !important;
+	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }
 </style>
-@data-board";

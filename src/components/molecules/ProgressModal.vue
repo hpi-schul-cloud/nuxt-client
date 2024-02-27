@@ -1,11 +1,11 @@
 <template>
-	<base-modal v-bind="$attrs" v-on="$listeners">
+	<base-modal v-bind="$attrs">
 		<template #body>
 			<modal-body-info :title="title" :description="description" />
 			<v-progress-linear
-				:value="percent"
+				:model-value="percent"
 				height="15"
-				background-color="grey lighten-1"
+				bg-color="grey-lighten-1"
 				class="rounded"
 			/>
 		</template>
@@ -13,9 +13,12 @@
 </template>
 <script>
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import BaseModal from "../base/BaseModal.vue";
+
 export default {
 	components: {
 		ModalBodyInfo,
+		BaseModal,
 	},
 	props: {
 		title: {
@@ -40,7 +43,7 @@ export default {
 
 <style lang="scss" scoped>
 .rounded,
-::v-deep .v-progress-linear__determinate {
+:deep(.v-progress-linear__determinate) {
 	border-radius: var(--radius-round) !important;
 }
 </style>
