@@ -111,16 +111,6 @@ export default {
 				}
 			},
 		},
-		showModal: {
-			get() {
-				return this.showCopyModal;
-			},
-			set(value) {
-				if (!value) {
-					this.closeModal();
-				}
-			},
-		},
 	},
 	watch: {
 		selectedCourse(to, from) {

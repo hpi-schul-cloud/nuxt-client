@@ -162,34 +162,33 @@ describe("@templates/RoomWrapper.vue", () => {
 		});
 	});
 
-	// VUE3_UPGRADE disabled until we have a v-custom-fab replacement
-	// describe("when user does not have course create permission", () => {
-	// 	it("should not display fab", () => {
-	// 		authModule.setUser({
-	// 			...mockAuthStoreData,
-	// 			permissions: ["aksjdhf", "poikln"],
-	// 			updatedAt: "",
-	// 			birthday: "",
-	// 			createdAt: "",
-	// 			preferences: {},
-	// 			schoolId: "",
-	// 			emailSearchValues: [],
-	// 			firstNameSearchValues: [],
-	// 			lastNameSearchValues: [],
-	// 			consent: {},
-	// 			forcePasswordChange: false,
-	// 			language: "",
-	// 			fullName: "",
-	// 			avatarInitials: "",
-	// 			avatarBackgroundColor: "",
-	// 			age: 0,
-	// 			displayName: "",
-	// 			accountId: "",
-	// 			schoolName: "",
-	// 			externallyManaged: false,
-	// 		});
+	describe("when user does not have course create permission", () => {
+		it("should not display fab", () => {
+			authModule.setUser({
+				...mockAuthStoreData,
+				permissions: ["aksjdhf", "poikln"],
+				updatedAt: "",
+				birthday: "",
+				createdAt: "",
+				preferences: {},
+				schoolId: "",
+				emailSearchValues: [],
+				firstNameSearchValues: [],
+				lastNameSearchValues: [],
+				consent: {},
+				forcePasswordChange: false,
+				language: "",
+				fullName: "",
+				avatarInitials: "",
+				avatarBackgroundColor: "",
+				age: 0,
+				displayName: "",
+				accountId: "",
+				schoolName: "",
+				externallyManaged: false,
+			});
 
-	// 		const wrapper = getWrapper();
+			const wrapper = getWrapper();
 
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(false);
