@@ -49,7 +49,7 @@ describe("RoomVideoConferenceCard", () => {
 		it("should display a title", () => {
 			const { wrapper } = setup();
 
-			const text = wrapper.find("h5");
+			const text = wrapper.find("h2");
 
 			expect(text.text()).toEqual("pages.videoConference.title");
 		});

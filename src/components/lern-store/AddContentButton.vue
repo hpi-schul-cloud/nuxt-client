@@ -108,7 +108,7 @@ export default {
 			return contentModule.notificationModal;
 		},
 		itemId() {
-			return this.resource && this.resource.properties
+			return this.resource?.properties
 				? getMetadataAttribute(
 						this.resource.properties,
 						"ccm:replicationsourceuuid"
@@ -175,14 +175,7 @@ export default {
 				this.loadingModal.visible = false;
 				this.loadingModal.isLoading = false;
 				this.notificationModal.visible = true;
-				switch (value) {
-					case "successModal":
-						this.notificationModal.isSuccess = true;
-						break;
-					default:
-						this.notificationModal.isSuccess = false;
-						break;
-				}
+				this.notificationModal.isSuccess = value === "successModal";
 			}
 		},
 	},

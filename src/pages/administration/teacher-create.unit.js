@@ -74,7 +74,7 @@ describe("teachers/new", () => {
 			.find('[data-testid="button_create-user_submit"]')
 			.trigger("click");
 
-		// VUE3_UPGRADE we need to wait until everything is settled
+		// we need to wait until everything is settled
 		await delay(10);
 
 		expect(createTeacherStub).toHaveBeenCalled();
@@ -112,7 +112,7 @@ describe("teachers/new", () => {
 			.find('[data-testid="button_create-user_submit"]')
 			.trigger("click");
 
-		// VUE3_UPGRADE we need to wait until everything is settled
+		// we need to wait until everything is settled
 		await delay(10);
 
 		expect(notifierModuleMock).toHaveBeenCalled();
@@ -157,7 +157,7 @@ describe("teachers/new", () => {
 			.find('[data-testid="button_create-user_submit"]')
 			.trigger("click");
 
-		// VUE3_UPGRADE we need to wait until everything is settled
+		// we need to wait until everything is settled
 		await delay(10);
 
 		errorMessageComponent = wrapper.find(".info-message.bc-error");

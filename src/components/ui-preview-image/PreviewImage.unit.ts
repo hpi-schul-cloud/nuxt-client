@@ -59,7 +59,6 @@ describe("PreviewImage", () => {
 		expect(image.attributes("src")).toBe(src);
 		expect(image.attributes("alt")).toBe(alt);
 		expect(image.attributes("aspectratio")).toBe("1.77777");
-		expect(image.attributes("position")).toBe("top");
 		expect(image.attributes("cover")).toBe("true");
 	});
 

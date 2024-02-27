@@ -1,20 +1,15 @@
 import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
+	boardCardFactory,
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
-import { shallowMount } from "@vue/test-utils";
-import { nextTick, ref } from "vue";
-import {
-	useBoardState,
-	useBoardPermissions,
-	useSharedEditMode,
-	useSharedBoardPageInformation,
-} from "@data-board";
-import { useBoardNotifier } from "@util-board";
+import { mount } from "@vue/test-utils";
+import { Ref, computed, nextTick, ref } from "vue";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { Board } from "@/types/board/Board";
 import {
 	BoardPermissionChecks,
@@ -23,7 +18,23 @@ import {
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+
+import EnvConfigModule from "@/store/env-config";
+import { Envs } from "@/store/types/env-config";
+import {
+	useCardState,
+	useEditMode,
+	useBoardState,
+	useBoardPermissions,
+	useSharedEditMode,
+	useSharedBoardPageInformation,
+	useBoardFocusHandler,
+} from "@data-board";
+import { BoardCard } from "@/types/board/Card";
 
 jest.mock("@data-board");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -32,30 +43,61 @@ const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
 const mockedUseSharedBoardPageInformation = jest.mocked(
 	useSharedBoardPageInformation
 );
+const mockUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
-jest.mock("@util-board");
+jest.mock("@util-board", () => {
+	return {
+		useBoardNotifier: jest.fn(),
+		useSharedLastCreatedElement: jest.fn(),
+		extractDataAttribute: jest.fn(() => "column-id"),
+	};
+});
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockedUseCardState = jest.mocked(useCardState);
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-describe("Board", () => {
-	const cards = cardSkeletonResponseFactory.buildList(3);
-	const oneColumn = columnResponseFactory.build({ cards });
-	const boardWithOneColumn = boardResponseFactory.build({
-		columns: [oneColumn],
-	});
-	const notifierModule = createModuleMocks(NotifierModule);
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let mockedBoardStateCalls: DeepMocked<ReturnType<typeof useBoardState>>;
+const mockUseSharedLastCreatedElement = jest.mocked(
+	useSharedLastCreatedElement
+);
 
-	const setup = (options?: {
+const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
+	EnvConfigModule,
+	{
+		getEnv: {
+			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+		} as Envs,
+	}
+);
+const mockedEditMode = jest.mocked(useEditMode);
+
+describe("Board", () => {
+	const card = boardCardFactory.build();
+
+	const mockRequiredParams = (options?: {
 		board?: Board;
 		isLoading?: boolean;
 		permissions?: Partial<BoardPermissionChecks>;
 	}) => {
-		const { board, isLoading } = options ?? {};
+		mockedUseCardState.mockReturnValue({
+			fetchCard: jest.fn(),
+			updateTitle: jest.fn(),
+			deleteCard: jest.fn(),
+			updateCardHeight: jest.fn(),
+			addElement: jest.fn(),
+			addTextAfterTitle: jest.fn(),
+			moveElementDown: jest.fn(),
+			moveElementUp: jest.fn(),
+			deleteElement: jest.fn(),
+			card: card as unknown as Ref<BoardCard>,
+			isLoading: ref(false),
+			notifyWithTemplateAndReload: jest.fn(),
+		});
+		const { board, isLoading = false } = options ?? {};
 		document.body.setAttribute("data-app", "true");
 
 		mockedBoardStateCalls = createMock<ReturnType<typeof useBoardState>>();
@@ -74,7 +116,7 @@ describe("Board", () => {
 			...options?.permissions,
 		});
 		mockedUseSharedEditMode.mockReturnValue({
-			editModeId: ref(""),
+			editModeId: ref(undefined),
 			setEditModeId: jest.fn(),
 		});
 		mockedUseSharedBoardPageInformation.mockReturnValue({
@@ -83,15 +125,54 @@ describe("Board", () => {
 			pageTitle: ref("page-title"),
 		});
 
+		mockedEditMode.mockReturnValue({
+			isEditMode: computed(() => false),
+			startEditMode: jest.fn(),
+			stopEditMode: jest.fn(),
+		});
+
+		mockUseBoardFocusHandler.mockReturnValue({
+			isFocusContained: ref(false),
+		});
+
+		mockUseSharedLastCreatedElement.mockReturnValue({
+			lastCreatedElementId: computed(() => "element-id"),
+			resetLastCreatedElementId: jest.fn(),
+		});
+	};
+
+	const cards = cardSkeletonResponseFactory.buildList(3);
+	const oneColumn = columnResponseFactory.build({ cards });
+	const boardWithOneColumn = boardResponseFactory.build({
+		columns: [oneColumn],
+	});
+
+	const twoColumns = columnResponseFactory.buildList(2, { cards });
+	const boardWithTwoColumns = boardResponseFactory.build({
+		columns: twoColumns,
+	});
+	const notifierModule = createModuleMocks(NotifierModule);
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let mockedBoardStateCalls: DeepMocked<ReturnType<typeof useBoardState>>;
+
+	const setup = (options?: {
+		board?: Board;
+		isLoading?: boolean;
+		permissions?: Partial<BoardPermissionChecks>;
+	}) => {
+		mockRequiredParams(options);
+
+		const { board } = options ?? {};
 		const boardId = board?.id ?? boardWithOneColumn.id;
-		const wrapper = shallowMount(BoardVue, {
+		const wrapper = mount(BoardVue, {
 			global: {
-				plugins: [createTestingI18n()],
+				plugins: [createTestingI18n(), createTestingVuetify()],
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+				},
 			},
 			propsData: { boardId },
-			provide: {
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			},
 		});
 		return { wrapper };
 	};
@@ -101,8 +182,6 @@ describe("Board", () => {
 			const { wrapper } = setup();
 
 			expect(mockedUseBoardState).toHaveBeenCalled();
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			expect(wrapper.vm.board).toStrictEqual(boardWithOneColumn);
 		});
 
@@ -111,8 +190,9 @@ describe("Board", () => {
 			expect(wrapper.findComponent(BoardVue).exists()).toBeTruthy();
 		});
 
-		it("should fetch board from store and render it", () => {
-			const { wrapper } = setup();
+		it("should fetch board from store and render it", async () => {
+			const { wrapper } = setup({ isLoading: false });
+
 			expect(wrapper.findComponent(BoardColumnVue).exists()).toBeTruthy();
 		});
 
@@ -136,13 +216,13 @@ describe("Board", () => {
 			const boardWithTwoColumns = boardResponseFactory.build({
 				columns: twoColumns,
 			});
-			setup({ board: boardWithTwoColumns });
+			const { wrapper } = setup({ board: boardWithTwoColumns });
 
 			const boardColumnComponents = wrapper.findAllComponents({
 				name: "BoardColumn",
 			});
-			expect(boardColumnComponents.at(0).props("columnCount")).toBe(2);
-			expect(boardColumnComponents.at(1).props("columnCount")).toBe(2);
+			expect(boardColumnComponents[0].props("columnCount")).toBe(2);
+			expect(boardColumnComponents[1].props("columnCount")).toBe(2);
 		});
 
 		describe("Info message for teacher", () => {
@@ -183,7 +263,7 @@ describe("Board", () => {
 						name: "BoardColumnGhost",
 					});
 
-					expect(ghostColumnComponent.vm).not.toBeDefined();
+					expect(ghostColumnComponent.exists()).toBe(false);
 				});
 			});
 		});
@@ -209,8 +289,8 @@ describe("Board", () => {
 					permissions: { hasMovePermission: false },
 				});
 
-				const dndContainer = wrapper.findComponent({ name: "Container" });
-				expect(dndContainer.element.outerHTML).toContain(".drag-disabled");
+				const dndContainer = wrapper.findComponent({ name: "Sortable" });
+				expect(dndContainer.vm.options.disabled).toBe(true);
 			});
 		});
 
@@ -252,20 +332,6 @@ describe("Board", () => {
 					ghostColumnComponent.vm.$emit("create:column");
 
 					expect(mockedBoardStateCalls.createColumn).toHaveBeenCalled();
-				});
-			});
-		});
-
-		describe("@onCreateColumnWithCard", () => {
-			describe("when user is permitted to create a column with card", () => {
-				it("should call createColumn method", () => {
-					const { wrapper } = setup();
-					const ghostColumnComponent = wrapper.findComponent({
-						name: "BoardColumnGhost",
-					});
-					ghostColumnComponent.vm.$emit("create:column-with-card");
-
-					expect(mockedBoardStateCalls.createColumnWithCard).toHaveBeenCalled();
 				});
 			});
 		});
@@ -329,11 +395,18 @@ describe("Board", () => {
 		describe("@onDropColumn", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
-					const { wrapper } = setup();
-					const containerComponent = wrapper.findComponent({
-						name: "Container",
+					const { wrapper } = setup({ board: boardWithTwoColumns });
+					const containerComponent = wrapper.findAllComponents({
+						name: "Sortable",
 					});
-					containerComponent.vm.$emit("drop");
+
+					const payload = {
+						item: document.createElement("div"),
+						newIndex: 1,
+						oldIndex: 0,
+					};
+
+					containerComponent[0].vm.$emit("end", payload);
 
 					expect(mockedBoardStateCalls.moveColumn).toHaveBeenCalled();
 				});
@@ -343,11 +416,12 @@ describe("Board", () => {
 				it("should not call moveColumn method", () => {
 					const { wrapper } = setup({
 						permissions: { hasMovePermission: false },
+						board: boardWithTwoColumns,
 					});
-					const containerComponent = wrapper.findComponent({
-						name: "Container",
+					const containerComponent = wrapper.findAllComponents({
+						name: "Sortable",
 					});
-					containerComponent.vm.$emit("drop");
+					containerComponent[0].vm.$emit("move");
 
 					expect(mockedBoardStateCalls.moveColumn).not.toHaveBeenCalled();
 				});
@@ -357,11 +431,11 @@ describe("Board", () => {
 		describe("@onMoveColumnLeft", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
-					setup();
-					const boardColumnComponent = wrapper.findComponent({
+					const { wrapper } = setup({ board: boardWithTwoColumns });
+					const boardColumnComponent = wrapper.findAllComponents({
 						name: "BoardColumn",
 					});
-					boardColumnComponent.vm.$emit("move:column-left");
+					boardColumnComponent[1].vm.$emit("move:column-left");
 
 					expect(mockedBoardStateCalls.moveColumn).toHaveBeenCalled();
 				});
@@ -369,11 +443,14 @@ describe("Board", () => {
 
 			describe("when user is not permitted to move a column", () => {
 				it("should not call moveColumn method", () => {
-					setup({ permissions: { hasMovePermission: false } });
-					const boardColumnComponent = wrapper.findComponent({
+					const { wrapper } = setup({
+						permissions: { hasMovePermission: false },
+						board: boardWithTwoColumns,
+					});
+					const boardColumnComponent = wrapper.findAllComponents({
 						name: "BoardColumn",
 					});
-					boardColumnComponent.vm.$emit("move:column-left");
+					boardColumnComponent[1].vm.$emit("move:column-left");
 
 					expect(mockedBoardStateCalls.moveColumn).not.toHaveBeenCalled();
 				});
@@ -383,7 +460,7 @@ describe("Board", () => {
 		describe("@onMoveColumnRight", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
-					setup();
+					const { wrapper } = setup({ board: boardWithTwoColumns });
 					const boardColumnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
@@ -395,7 +472,10 @@ describe("Board", () => {
 
 			describe("when user is not permitted to move a column", () => {
 				it("should not call moveColumn method", () => {
-					setup({ permissions: { hasMovePermission: false } });
+					const { wrapper } = setup({
+						permissions: { hasMovePermission: false },
+						board: boardWithTwoColumns,
+					});
 					const boardColumnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});

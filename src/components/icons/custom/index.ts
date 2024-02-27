@@ -40,9 +40,6 @@ import tasks from "./tasks.vue";
 import teacher from "./teacher.vue";
 import thr from "./thr.vue";
 
-// VUE3_UPGRADE remove the aliases when refactored to type-safe icon imports
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const customAliases: Record<string, any> = {
 	brb: brb,
 	class: classIcon,

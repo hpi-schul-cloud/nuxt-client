@@ -62,7 +62,9 @@
 									v-if="isEmptyGroup(rowIndex, colIndex)"
 									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 									:size="dimensions.cellWidth"
-									@drop="setDropElement({ x: colIndex, y: rowIndex })"
+									@dropEmptyAvatar="
+										setDropElement({ x: colIndex, y: rowIndex })
+									"
 									data-avatar-type="vRoomEmptyAvatar"
 									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
@@ -78,8 +80,10 @@
 										openDialog(getDataObject(rowIndex, colIndex).groupId)
 									"
 									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-									@dragend="onDragend"
-									@drop="addGroupElements({ x: colIndex, y: rowIndex })"
+									@dragendGroupAvatar="onDragend"
+									@dropGroupAvatar="
+										addGroupElements({ x: colIndex, y: rowIndex })
+									"
 									data-avatar-type="vRoomGroupAvatar"
 									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
@@ -92,8 +96,8 @@
 									:show-badge="true"
 									:draggable="allowDragging"
 									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-									@dragend="onDragend"
-									@drop="setGroupElements({ x: colIndex, y: rowIndex })"
+									@dragendAvatar="onDragend"
+									@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
 									data-avatar-type="vRoomAvatar"
 									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
@@ -103,7 +107,9 @@
 									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 									:size="dimensions.cellWidth"
 									:show-outline="dragging"
-									@drop="setDropElement({ x: colIndex, y: rowIndex })"
+									@dropEmptyAvatar="
+										setDropElement({ x: colIndex, y: rowIndex })
+									"
 									data-avatar-type="vRoomEmptyAvatar"
 									:data-test-position="`${rowIndex}-${colIndex}`"
 								/>
@@ -140,10 +146,9 @@ import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { roomsModule } from "@/store";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { mdiMagnify, mdiCheck } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { defineComponent } from "vue";
-import { reactive } from "vue";
+import { mdiCheck, mdiMagnify } from "@mdi/js";
+import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
 	setup() {

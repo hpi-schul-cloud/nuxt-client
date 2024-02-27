@@ -1,12 +1,15 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue, { nextTick } from "vue";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import AddElementDialog from "./AddElementDialog.vue";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { Envs } from "@/store/types/env-config";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 jest.mock("./SharedElementTypeSelection.composable");
 
 const mockEnvs: Envs = {
@@ -81,15 +84,14 @@ describe("ElementTypeSelection", () => {
 
 			setupMocks();
 
-			const wrapper: Wrapper<Vue> = mount(
-				AddElementDialog as MountOptions<Vue>,
-				{
-					...createComponentMocks({}),
+			const wrapper = mount(AddElementDialog, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					},
-				}
-			);
+				},
+			});
 
 			return { wrapper };
 		};
@@ -107,15 +109,15 @@ describe("ElementTypeSelection", () => {
 
 			const { isDialogOpen, elementTypeOptions, closeDialog } = setupMocks();
 
-			const wrapper: Wrapper<Vue> = mount(
-				AddElementDialog as MountOptions<Vue>,
-				{
-					...createComponentMocks({}),
+			const wrapper = mount(AddElementDialog, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+
 					provide: {
 						[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					},
-				}
-			);
+				},
+			});
 
 			isDialogOpen.value = true;
 			await nextTick();
@@ -133,17 +135,10 @@ describe("ElementTypeSelection", () => {
 			const { elementTypeOptions, wrapper } = await setup();
 
 			for (const elementTypeOption of elementTypeOptions.value) {
-				const button = wrapper.find(
-					`[data-testId=${elementTypeOption.testId}]`
+				const button = wrapper.findComponent(
+					`[data-testid=${elementTypeOption.testId}]`
 				);
-
-				const icon = button.find(".v-icon");
-				icon.contains(elementTypeOption.icon);
-				const label = button.find(".subtitle");
-				label.contains(elementTypeOption.label);
-
 				await button.trigger("click");
-
 				await nextTick();
 
 				expect(elementTypeOption.action).toHaveBeenCalled();
@@ -153,7 +148,7 @@ describe("ElementTypeSelection", () => {
 		it("should close modal on close button click", async () => {
 			const { closeDialog, wrapper } = await setup();
 
-			const closeButton = wrapper.find("[data-testId=dialog-close]");
+			const closeButton = wrapper.findComponent("[data-testId=dialog-close]");
 			await closeButton.trigger("click");
 
 			await nextTick();

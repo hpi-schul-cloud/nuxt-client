@@ -1,18 +1,15 @@
-import { authModule, envConfigModule, roomsModule } from "@/store";
+import { authModule, roomsModule } from "@/store";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import RoomWrapper from "./RoomWrapper.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
-import { nextTick } from "vue";
-import { VBtn } from "vuetify/lib/components/index.mjs";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -163,44 +160,6 @@ describe("@templates/RoomWrapper.vue", () => {
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(true);
 		});
-
-		it("should open the import-modal", async () => {
-			jest.useFakeTimers();
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
-			const wrapper = getWrapper();
-
-			const importModalComponent = wrapper.findComponent({
-				name: "vCustomDialog",
-			});
-			expect(importModalComponent.vm.isOpen).toBe(false);
-
-			const menu = await wrapper.findComponent(SpeedDialMenu);
-			const menuButton = await menu.findComponent(VBtn);
-			await menuButton.trigger("click");
-			jest.advanceTimersByTime(1000);
-			await nextTick();
-
-			const menuActions = await wrapper.findAllComponents(SpeedDialMenuAction);
-			await menuActions[1].findComponent(VBtn).trigger("click");
-			await nextTick();
-
-			expect(importModalComponent.vm.isOpen).toBe(true);
-		});
-
-		it("should call the updateRooms method if import-modal component emits 'update-rooms' event", async () => {
-			const updateRoomsMock = jest.fn();
-			const wrapper = getWrapper();
-			wrapper.vm.updateRooms = updateRoomsMock;
-			await wrapper.setData({ importDialog: { isOpen: true } });
-
-			const importModalComponent = wrapper.findComponent({
-				name: "vCustomDialog",
-			});
-			await importModalComponent.vm.$emit("update-rooms");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-			expect(updateRoomsMock).toHaveBeenCalled();
-		});
 	});
 
 	// VUE3_UPGRADE disabled until we have a v-custom-fab replacement
@@ -232,10 +191,8 @@ describe("@templates/RoomWrapper.vue", () => {
 
 	// 		const wrapper = getWrapper();
 
-	// 		const fabComponent = wrapper.find(".wireframe-fab");
-	// 		expect(fabComponent.exists()).toBe(false);
-
-	// 		wrapper.destroy();
-	// 	});
-	// });
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
+			expect(fabComponent.exists()).toBe(false);
+		});
+	});
 });

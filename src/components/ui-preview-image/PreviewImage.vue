@@ -11,7 +11,6 @@
 		:alt="alt"
 		:cover="cover"
 		:aspect-ratio="aspectRatio"
-		:position="position"
 		@load="setWidth"
 		@error="setError"
 		:max-width="imageWidth"

@@ -50,7 +50,6 @@ export default defineComponent({
 	components: { BoardColumnGhostHeader, Sortable },
 	emits: ["create:column", "update:card-position"],
 	setup(props, { emit }) {
-		// const isDragPending = ref<boolean>(false);
 		const { isDragging } = useDragAndDrop();
 		const isHovering = ref(false);
 
@@ -62,7 +61,6 @@ export default defineComponent({
 
 		const isColumnActive = computed<boolean>(
 			() => isTitleHovered.value || focused.value
-			// || (isDragging.value && isHovering.value)
 		);
 		const colWidth = computed<number>(() => (isColumnActive.value ? 340 : 200));
 

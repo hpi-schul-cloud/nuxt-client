@@ -58,7 +58,6 @@
 			</Sortable>
 			<BoardAddCardButton
 				v-if="hasCreateColumnPermission && !isDragging"
-				:data-testid="`add-card-${index}`"
 				@add-card="onCreateCard"
 			/>
 		</div>
