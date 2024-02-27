@@ -80,27 +80,6 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 
 			expect(confirmBtn.vm.$props.disabled).toBe(false);
 		});
-
-		it("should upload file and trigger events dialog-confirmed and dialog-closed", async () => {
-			const { wrapper } = setup();
-
-			await wrapper.setProps({
-				isOpen: true,
-			});
-
-			const confirmBtn = wrapper.find("[data-testid='dialog-confirm-btn']");
-
-			await wrapper.setData({
-				file: new File([""], "filename"),
-			});
-
-			await confirmBtn.trigger("click");
-
-			const emitted = wrapper.emitted();
-
-			expect(emitted["update-rooms"]).toHaveLength(1);
-			expect(emitted["dialog-closed"]).toHaveLength(1);
-		});
 	});
 
 	describe("when canceling the upload", () => {

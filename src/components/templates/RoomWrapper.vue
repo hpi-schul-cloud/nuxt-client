@@ -37,7 +37,6 @@
 		<common-cartridge-import-modal
 			v-model="ccImportDialog.isOpen"
 			class="upload-modal"
-			@update-rooms="updateRooms"
 		/>
 	</default-wireframe>
 </template>

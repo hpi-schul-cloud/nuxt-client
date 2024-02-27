@@ -101,8 +101,8 @@ export default defineComponent({
 				text: i18n.tc("pages.rooms.ccImportCourse.loading"),
 			});
 			await roomsModule.uploadCourse(file.value);
+			await roomsModule.fetchAllElements();
 			emit("dialog-closed", false);
-			emit("update-rooms");
 			loadingStateModule.close();
 
 			const [newCourse] = roomsModule.getAllElements;
