@@ -941,9 +941,6 @@ export default {
 		"{source}-Konten mit bestehenden {instance}-Konten verknüpfen",
 	"pages.administration.migration.tutorialWait":
 		"Bitte beachten Sie, dass es nach Beginn der Schulmigration bis zu 1 Stunde dauern kann, bis die Daten abgerufen sind. Danach können Sie mit dem nächsten Schritt fortfahren.",
-	"pages.administration.migration.vue3.notification":
-		"Dieses Feature ist zurzeit deaktiviert.",
-	"pages.administration.migration.vue3.title": "Migration",
 	"pages.administration.migration.waiting":
 		"Warten auf die Datensynchronisation...",
 	"pages.administration.or": "oder",

@@ -962,9 +962,6 @@ export default {
 	"pages.administration.migration.title": "Migración de cuentas de usuario",
 	"pages.administration.migration.tutorialWait":
 		"Tenga en cuenta que, una vez que se inicie el proceso de migración de la escuela, puede tardar hasta 1 hora en obtener los datos. Después de esto, podrá continuar con el siguiente paso.",
-	"pages.administration.migration.vue3.notification":
-		"Esta función está actualmente desactivada.",
-	"pages.administration.migration.vue3.title": "Migración",
 	"pages.administration.migration.waiting":
 		"Esperando la sincronización de datos...",
 	"pages.administration.or": "o",

@@ -949,9 +949,6 @@ export default {
 		"Перенести облікові записи користувачів із",
 	"pages.administration.migration.tutorialWait":
 		"Зауважте, що після початку переміщення школи для отримання даних може знадобитися до 1 години. Після цього можна переходити до наступного кроку.",
-	"pages.administration.migration.vue3.notification":
-		"Наразі ця функція вимкнена..",
-	"pages.administration.migration.vue3.title": "Міграція",
 	"pages.administration.migration.waiting": "Очікування синхронізації даних...",
 	"pages.administration.or": "або",
 	"pages.administration.printQr.emptyUser":
