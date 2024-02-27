@@ -1,9 +1,7 @@
 import { SubmissionsResponse, SubmissionItemResponse } from "@/serverApi/v3";
 import { Factory } from "fishery";
-import {
-	submissionItemResponseFactory,
-	userDataResponseFactory,
-} from "@@/tests/test-utils";
+import { submissionItemResponseFactory } from "./submissionItemResponseFactory";
+import { userDataResponseFactory } from "./userDataResponseFactory";
 
 type TransientParams = {
 	numberOfSubmissionItems: number;

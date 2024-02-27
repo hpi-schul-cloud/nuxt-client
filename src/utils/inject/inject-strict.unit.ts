@@ -14,7 +14,9 @@ describe("injectStrict", () => {
 					return { provider };
 				},
 				{
-					[PROVIDER_KEY.valueOf()]: "provided",
+					global: {
+						provide: { [PROVIDER_KEY.valueOf()]: "provided" },
+					},
 				}
 			);
 
@@ -30,7 +32,9 @@ describe("injectStrict", () => {
 					return { provider };
 				},
 				{
-					[BOOLEAN_PROVIDER_KEY.valueOf()]: false,
+					global: {
+						provide: { [BOOLEAN_PROVIDER_KEY.valueOf()]: false },
+					},
 				}
 			);
 

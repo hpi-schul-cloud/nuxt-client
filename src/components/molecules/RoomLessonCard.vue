@@ -5,7 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		:outlined="isHidden"
+		:variant="isHidden ? 'outlined' : 'elevated'"
 		hover
 		data-testid="content-card-lesson"
 		@click="handleClick"
@@ -17,7 +17,7 @@
 	>
 		<v-card-text class="pb-0" data-testid="content-card-lesson-content">
 			<div class="top-row-container mb-0">
-				<div class="title-section" tabindex="0">
+				<div class="title-section">
 					{{ $t("common.words.topic") }}
 				</div>
 				<div class="dot-menu-section">
@@ -28,7 +28,12 @@
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary mb-2 lesson-name" tabindex="0">
+			<div
+				class="text-h6 text--primary mb-2 lesson-name"
+				role="heading"
+				aria-level="2"
+				tabindex="-1"
+			>
 				{{ lesson.name }}
 			</div>
 		</v-card-text>
@@ -38,7 +43,7 @@
 			data-testid="content-card-lesson-info"
 		>
 			<div class="chip-items-group">
-				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
+				<div class="bg-grey-lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
 					<div class="chip-value">
 						{{ taskChipValue }}
 					</div>
@@ -52,7 +57,8 @@
 				:class="`action-button action-button-${action.name
 					.split(' ')
 					.join('-')}`"
-				text
+				variant="text"
+				color="primary"
 				@click.stop="action.action"
 			>
 				{{ action.name }}
@@ -103,7 +109,7 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 			},
-			defaultTitleColor: "--v-secondary-base",
+			defaultTitleColor: "rgba(var(--v-theme-secondary))",
 		};
 	},
 	computed: {
@@ -328,10 +334,6 @@ export default {
 			color: rgba(0, 0, 0, 0.87);
 		}
 	}
-}
-
-.action-button {
-	color: var(--v-primary-base);
 }
 
 .v-card__text {

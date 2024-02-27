@@ -64,7 +64,7 @@
 			</div>
 			<div class="buttons-container">
 				<v-btn
-					text
+					variant="text"
 					color="secondary"
 					data-testid="ldapResetInputsButton"
 					@click="clearInputsHandler"
@@ -73,7 +73,7 @@
 				</v-btn>
 				<v-btn
 					color="primary"
-					depressed
+					variant="flat"
 					data-testid="ldapVerifyButton"
 					:disabled="status === 'pending'"
 					@click="validateHandler"
@@ -111,17 +111,17 @@ export default {
 		return {
 			breadcrumbs: [
 				{
-					text: this.$t("pages.administration.index.title"),
+					title: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
 				{
-					text: this.$t("pages.administration.school.index.title"),
+					title: this.$t("pages.administration.school.index.title"),
 					href: envConfigModule.getNewSchoolAdminPageAsDefault
 						? "/administration/school-settings"
 						: "/administration/school",
 				},
 				{
-					text: this.$t("pages.administration.ldap.index.title"),
+					title: this.$t("pages.administration.ldap.index.title"),
 					disabled: true,
 				},
 			],
@@ -252,7 +252,7 @@ export default {
 @import "@/styles/mixins";
 
 .link-style {
-	color: var(--v-primary-base);
+	color: rgba(var(--v-theme-primary));
 	text-decoration: none;
 }
 

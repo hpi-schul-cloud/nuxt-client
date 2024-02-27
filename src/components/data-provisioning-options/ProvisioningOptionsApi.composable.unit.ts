@@ -40,7 +40,9 @@ describe("ProvisioningOptionsApi.composable", () => {
 			};
 
 			const composable = mountComposable(() => useProvisioningOptionsApi(), {
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				global: {
+					provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
+				},
 			});
 
 			schoolApi.schoolControllerGetProvisioningOptions.mockResolvedValue(
@@ -85,7 +87,9 @@ describe("ProvisioningOptionsApi.composable", () => {
 				);
 
 				const composable = mountComposable(() => useProvisioningOptionsApi(), {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					global: {
+						provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
+					},
 				});
 
 				return {
@@ -118,7 +122,9 @@ describe("ProvisioningOptionsApi.composable", () => {
 			};
 
 			const composable = mountComposable(() => useProvisioningOptionsApi(), {
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				global: {
+					provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
+				},
 			});
 
 			schoolApi.schoolControllerSetProvisioningOptions.mockResolvedValue(
@@ -171,7 +177,9 @@ describe("ProvisioningOptionsApi.composable", () => {
 				);
 
 				const composable = mountComposable(() => useProvisioningOptionsApi(), {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					global: {
+						provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
+					},
 				});
 
 				const provisioningOptionsEntry: ProvisioningOptions = {

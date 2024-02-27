@@ -1,15 +1,13 @@
 <template>
-	<v-app>
-		<legacy-logged-in v-if="legacyLayout">
-			<v-main id="main-content" class="content">
-				<snackbar />
-				<router-view />
-			</v-main>
-			<loading-state-dialog />
-		</legacy-logged-in>
+	<legacy-logged-in v-if="legacyLayout">
+		<v-main id="main-content" class="content">
+			<snackbar />
+			<router-view />
+		</v-main>
+		<loading-state-dialog />
+	</legacy-logged-in>
 
-		<router-view v-else />
-	</v-app>
+	<router-view v-else />
 </template>
 
 <script>

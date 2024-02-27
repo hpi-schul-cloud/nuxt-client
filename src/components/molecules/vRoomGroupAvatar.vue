@@ -12,15 +12,14 @@
 		<v-badge
 			class="badge-component avatar-badge"
 			bordered
-			color="var(--v-primary-base)"
+			color="rgba(var(--v-theme-primary)"
 			icon="$mdiLock"
-			overlap
-			:value="hasNotifications"
+			:model-value="hasNotifications"
 		>
 			<v-card
 				:height="size"
 				:width="size"
-				outlined
+				variant="outlined"
 				class="ma-0 card-component"
 				:aria-label="
 					$t('pages.rooms.a11y.group.text', {
@@ -33,10 +32,11 @@
 				@dragenter.prevent.stop="dragEnter"
 				@keypress.enter="$emit('clicked', data.id)"
 				role="button"
+				tabindex="0"
 			>
 				<room-avatar-iterator
 					ref="avatar-iterator"
-					:items="data.groupElements"
+					:avatars="data.groupElements"
 					condense-layout
 					item-size="0.8em"
 					:can-draggable="draggable"
@@ -45,12 +45,13 @@
 					tabindex="-1"
 				/>
 			</v-card>
-			<div aria-hidden="true" class="justify-left mt-1 subtitle">
-				{{ data.title }}
-			</div>
 		</v-badge>
+		<div aria-hidden="true" class="mt-2 subtitle">
+			{{ data.title }}
+		</div>
 	</div>
 </template>
+
 <script>
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 export default {
@@ -111,18 +112,19 @@ export default {
 			this.isDragging = false;
 		},
 		dropAvatar() {
-			this.$emit("drop");
+			this.$emit("dropGroupAvatar");
 		},
 		dragend() {
-			this.$emit("dragend");
+			this.$emit("dragendGroupAvatar");
 			this.isDragging = false;
 		},
 	},
 };
 </script>
+
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 @import "@/utils/multiline-ellipsis.scss";
-@import "~vuetify/src/styles/styles.sass";
 
 .subtitle {
 	margin-right: calc(var(--space-base-vuetify) * -5);
@@ -137,7 +139,7 @@ export default {
 	);
 }
 
-@media #{map-get($display-breakpoints, 'xs-only')} {
+@media #{map-get($display-breakpoints, 'xs')} {
 	.subtitle {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin-right: unset;

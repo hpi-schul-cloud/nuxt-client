@@ -1,3 +1,4 @@
+import { mountComposable } from "@@/tests/test-utils";
 import { useExternalToolValidation } from "./external-tool-validation.composable";
 import {
 	ToolParameter,
@@ -5,12 +6,15 @@ import {
 	ToolParameterScope,
 	ToolParameterType,
 } from "@/store/external-tool";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 describe("useExternalToolValidation", () => {
 	const setup = () => {
-		const tMock = jest.fn().mockImplementation((args) => args);
-
-		const { validateParameter } = useExternalToolValidation(tMock);
+		const { validateParameter } = mountComposable(useExternalToolValidation, {
+			global: {
+				plugins: [createTestingI18n()],
+			},
+		});
 
 		const toolParameter: ToolParameter = {
 			name: "ToolParameter",

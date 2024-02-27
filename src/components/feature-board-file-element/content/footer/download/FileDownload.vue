@@ -1,11 +1,13 @@
 <template>
 	<v-btn
 		@click="onDownload"
+		:aria-label="$t('components.board.action.download')"
 		:disabled="!isDownloadAllowed"
 		data-testid="board-file-element-edit-menu-download"
 		class="float-right download-button"
 		icon
-		:aria-label="$t('components.board.action.download')"
+		size="small"
+		variant="text"
 	>
 		<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 	</v-btn>

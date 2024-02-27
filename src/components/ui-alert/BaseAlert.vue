@@ -2,12 +2,11 @@
 	<v-alert
 		:color="color"
 		:icon="icon"
-		:dismissible="showCloseIcon"
+		:closable="showCloseIcon"
 		:closeIcon="showCloseIcon ? closeIcon : null"
-		text
 		class="mb-0"
 	>
-		<div class="black--text" v-if="$slots.default">
+		<div class="text-black" v-if="$slots.default">
 			<slot />
 		</div>
 	</v-alert>
@@ -15,14 +14,16 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
-import { VuetifyIcon } from "vuetify/types/services/icons";
+import { IconProps } from "vuetify/lib/framework.mjs";
 
 export default defineComponent({
 	name: "BaseAlert",
 	props: {
-		color: { type: String },
-		icon: { type: String as PropType<VuetifyIcon> },
-		closeIcon: { type: String as PropType<VuetifyIcon> },
+		color: {
+			type: String as PropType<"success" | "error" | "warning" | "info">,
+		},
+		icon: { type: String as PropType<IconProps["icon"]> },
+		closeIcon: { type: String as PropType<IconProps["icon"]> },
 		showCloseIcon: {
 			type: Boolean,
 			default: false,

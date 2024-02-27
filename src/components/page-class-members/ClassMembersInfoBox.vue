@@ -1,26 +1,25 @@
 <template>
 	<div data-testid="class-members-info-box">
-		<v-alert v-show="hasSystem" light prominent text type="info" class="mb-0">
+		<v-alert v-show="hasSystem" type="info" class="mb-0">
 			<div class="alert-text">
 				{{
-					t("page-class-members.systemInfoText", {
+					$t("page-class-members.systemInfoText", {
 						systemName,
 					})
 				}}
 			</div>
 		</v-alert>
 		<h2 class="text-h4">
-			{{ t("page-class-members.classMembersInfoBox.title") }}
+			{{ $t("page-class-members.classMembersInfoBox.title") }}
 		</h2>
 		<RenderHTML
-			:html="t('page-class-members.classMembersInfoBox.text')"
+			:html="$t('page-class-members.classMembersInfoBox.text')"
 			data-testid="class-members-info-box-text"
 			component="div"
 		/>
 	</div>
 </template>
 <script lang="ts">
-import { useI18n } from "@/composables/i18n.composable";
 import { System, useSystemApi } from "@data-system";
 import {
 	computed,
@@ -43,7 +42,6 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { getSystem } = useSystemApi();
-		const { t } = useI18n();
 
 		const system: Ref<System | undefined> = ref();
 
@@ -69,7 +67,6 @@ export default defineComponent({
 		});
 
 		return {
-			t,
 			hasSystem,
 			systemName,
 		};

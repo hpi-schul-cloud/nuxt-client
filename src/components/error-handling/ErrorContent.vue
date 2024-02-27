@@ -2,8 +2,8 @@
 	<div>
 		<permission-error-svg
 			v-if="isPermissionError"
-			:svg-width="$vuetify.breakpoint.xs ? 200 : undefined"
-			fill="var(--v-primary-base)"
+			:svg-width="$vuetify.display.xs ? 200 : undefined"
+			fill="rgba(var(--v-theme-primary))"
 			data-testid="img-permission"
 		/>
 		<not-found-svg
@@ -32,8 +32,8 @@ import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
 import NotFoundSvg from "@/assets/img/NotFoundSvg.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useTitle } from "@vueuse/core";
-import { useI18n } from "@/composables/i18n.composable";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "ErrorContent",

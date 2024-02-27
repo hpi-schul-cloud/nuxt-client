@@ -1,42 +1,46 @@
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount } from "@vue/test-utils";
 import RoomExternalToolsErrorDialog from "@/pages/rooms/tools/RoomExternalToolsErrorDialog.vue";
 import { ExternalToolDisplayData } from "@/store/external-tool";
-import {
-	ContextExternalToolConfigurationStatusFactory,
-	i18nMock,
-} from "@@/tests/test-utils";
-import { AUTH_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import AuthModule from "@/store/auth";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("RoomExternalToolsErrorDialog", () => {
-	const getWrapper = (propsData: {
+	const getWrapper = (props: {
 		selectedItem: ExternalToolDisplayData;
 		isOpen?: boolean;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		const authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
 			getUserRoles: ["teacher"],
 		});
 
-		const wrapper: Wrapper<any> = mount(
-			RoomExternalToolsErrorDialog as MountOptions<Vue>,
-			{
-				...createComponentMocks({}),
-				propsData: {
-					isOpen: true,
-					...propsData,
-				},
+		const wrapper = mount(RoomExternalToolsErrorDialog, {
+			global: {
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[I18N_KEY.valueOf()]: i18nMock,
 				},
-			}
-		);
+				mocks: {
+					$t: (key: string, dynamic?: object): string =>
+						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+				},
+			},
+			props: {
+				isOpen: true,
+				...props,
+			},
+		});
 
 		return {
 			wrapper,
@@ -73,7 +77,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
 
-				const title = wrapper.find('[data-testid="dialog-title"]');
+				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
 				expect(title.text()).toEqual(
 					'pages.rooms.tools.outdatedDialog.title {"toolName":"Test Tool"}'
@@ -83,7 +87,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.find(".v-card__text");
+				const content = wrapper.findComponent(".v-card-text");
 
 				expect(content.text()).toEqual(
 					'common.tool.information.outdatedOnSchool.teacher {"toolName":"Test Tool"}'
@@ -105,7 +109,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct title", () => {
 				const { wrapper } = setup();
 
-				const title = wrapper.find('[data-testid="dialog-title"]');
+				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
 				expect(title.text()).toEqual(
 					'pages.rooms.tools.deactivatedDialog.title {"toolName":"Test Tool"}'
@@ -115,7 +119,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			it("should render the correct content text", () => {
 				const { wrapper } = setup();
 
-				const content = wrapper.find(".v-card__text");
+				const content = wrapper.findComponent(".v-card-text");
 
 				expect(content.text()).toEqual(
 					'common.tool.information.deactivated {"toolName":"Test Tool"}'

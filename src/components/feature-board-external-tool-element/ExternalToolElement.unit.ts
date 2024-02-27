@@ -5,16 +5,17 @@ import {
 import { ExternalToolDisplayData } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
-import { I18N_KEY } from "@/utils/inject";
 import {
 	ContextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,
 	externalToolDisplayDataFactory,
-	i18nMock,
 	schoolToolConfigurationStatusFactory,
 	timestampsResponseFactory,
 } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	useContextExternalToolConfigurationStatus,
@@ -24,9 +25,11 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { ref } from "vue";
+import { shallowMount } from "@vue/test-utils";
+import { nextTick, ref } from "vue";
 import ExternalToolElement from "./ExternalToolElement.vue";
+import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
+import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 
 jest.mock("@data-board");
 jest.mock("@data-external-tool");
@@ -101,37 +104,29 @@ describe("ExternalToolElement", () => {
 	});
 
 	const getWrapper = (
-		props: {
+		propsData: {
 			element: ExternalToolElementResponse;
 			isEditMode: boolean;
 		},
 		displayData?: ExternalToolDisplayData
 	) => {
-		document.body.setAttribute("data-app", "true");
-
-		useContentElementStateMock.modelValue = ref(props.element.content);
+		useContentElementStateMock.modelValue = ref(propsData.element.content);
 		useExternalToolElementDisplayStateMock.displayData = ref(displayData);
 		useExternalToolElementDisplayStateMock.error = ref(undefined);
 		useSharedLastCreatedElementMock.lastCreatedElementId = ref(undefined);
 
-		const wrapper: Wrapper<Vue> = shallowMount(
-			ExternalToolElement as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				propsData: {
-					isFirstElement: false,
-					isLastElement: false,
-					hasMultipleElements: false,
-					cardId: "cardId",
-					...props,
-				},
-				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
-				},
-			}
-		);
+		const wrapper = shallowMount(ExternalToolElement, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				isFirstElement: false,
+				isLastElement: false,
+				hasMultipleElements: false,
+				cardId: "cardId",
+				...propsData,
+			},
+		});
 
 		return {
 			wrapper,
@@ -158,7 +153,7 @@ describe("ExternalToolElement", () => {
 					})
 				);
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					useExternalToolElementDisplayStateMock.fetchDisplayData
@@ -179,7 +174,7 @@ describe("ExternalToolElement", () => {
 					})
 				);
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					useExternalToolLaunchStateMock.fetchLaunchRequest
@@ -205,7 +200,7 @@ describe("ExternalToolElement", () => {
 					})
 				);
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					useExternalToolLaunchStateMock.fetchLaunchRequest
@@ -230,7 +225,7 @@ describe("ExternalToolElement", () => {
 					})
 				);
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					useExternalToolLaunchStateMock.fetchLaunchRequest
@@ -248,10 +243,10 @@ describe("ExternalToolElement", () => {
 				useSharedLastCreatedElementMock.lastCreatedElementId.value =
 					EMPTY_TEST_ELEMENT.id;
 
-				await Vue.nextTick();
+				await nextTick();
 
-				const dialog = wrapper.find(
-					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				const dialog = wrapper.findComponent(
+					ExternalToolElementConfigurationDialog
 				);
 
 				expect(dialog.props("isOpen")).toEqual(true);
@@ -263,7 +258,7 @@ describe("ExternalToolElement", () => {
 					isEditMode: false,
 				});
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					useExternalToolElementDisplayStateMock.fetchDisplayData
@@ -276,7 +271,7 @@ describe("ExternalToolElement", () => {
 					isEditMode: false,
 				});
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					useExternalToolLaunchStateMock.fetchLaunchRequest
@@ -455,7 +450,7 @@ describe("ExternalToolElement", () => {
 
 				const title = wrapper.findComponent({ ref: "externalToolElement" });
 
-				expect(title.attributes("loading")).toBeFalsy();
+				expect(title.attributes("loading")).toBe("false");
 			});
 		});
 	});
@@ -481,10 +476,10 @@ describe("ExternalToolElement", () => {
 				});
 
 				card.vm.$emit("click");
-				await Vue.nextTick();
+				await nextTick();
 
-				const dialog = wrapper.find(
-					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				const dialog = wrapper.findComponent(
+					ExternalToolElementConfigurationDialog
 				);
 
 				expect(dialog.props("isOpen")).toEqual(true);
@@ -513,12 +508,12 @@ describe("ExternalToolElement", () => {
 			it("should update the elements content", async () => {
 				const { wrapper, savedTool } = setup();
 
-				const dialog = wrapper.find(
-					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				const dialog = wrapper.findComponent(
+					ExternalToolElementConfigurationDialog
 				);
 
 				dialog.vm.$emit("save", savedTool);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(useContentElementStateMock.modelValue.value).toEqual({
 					contextExternalToolId: savedTool.id,
@@ -528,12 +523,12 @@ describe("ExternalToolElement", () => {
 			it("should fetch the display data", async () => {
 				const { wrapper, savedTool } = setup();
 
-				const dialog = wrapper.find(
-					'[data-testid="board-external-tool-element-configuration-dialog"]'
+				const dialog = wrapper.findComponent(
+					ExternalToolElementConfigurationDialog
 				);
 
 				dialog.vm.$emit("save", savedTool);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					useExternalToolElementDisplayStateMock.fetchDisplayData
@@ -566,7 +561,7 @@ describe("ExternalToolElement", () => {
 				});
 
 				card.vm.$emit("click");
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(useExternalToolLaunchStateMock.launchTool).toHaveBeenCalled();
 			});
@@ -607,9 +602,7 @@ describe("ExternalToolElement", () => {
 			it("should display an outdated alert", async () => {
 				const { wrapper, toolOutdatedStatus } = setup();
 
-				const alert = wrapper.find(
-					'[data-testid="board-external-tool-element-alert"]'
-				);
+				const alert = wrapper.findComponent(ExternalToolElementAlert);
 
 				expect(alert.props("toolStatus")).toEqual(toolOutdatedStatus);
 			});
@@ -617,11 +610,9 @@ describe("ExternalToolElement", () => {
 			it("should display an error alert", async () => {
 				const { wrapper, error } = setup();
 
-				await Vue.nextTick();
+				await nextTick();
 
-				const alert = wrapper.find(
-					'[data-testid="board-external-tool-element-alert"]'
-				);
+				const alert = wrapper.findComponent(ExternalToolElementAlert);
 
 				expect(alert.props("error")).toEqual(error);
 			});
@@ -653,9 +644,7 @@ describe("ExternalToolElement", () => {
 			it("should display an incomplete alert", async () => {
 				const { wrapper, toolIncompleteStatus } = setup();
 
-				const alert = wrapper.find(
-					'[data-testid="board-external-tool-element-alert"]'
-				);
+				const alert = wrapper.findComponent(ExternalToolElementAlert);
 
 				expect(alert.props("toolStatus")).toEqual(toolIncompleteStatus);
 			});

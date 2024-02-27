@@ -5,10 +5,9 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		:outlined="isDraft"
+		:variant="isDraft ? 'outlined' : 'elevated'"
 		hover
 		data-testid="content-card-task"
-		role="button"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -19,9 +18,7 @@
 		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="tagline" data-testid="tagline">
-					<v-icon size="14" class="fill">
-						{{ titleIcon }}
-					</v-icon>
+					<v-icon size="14" class="fill" :icon="titleIcon" />
 					{{ cardTitle(task.dueDate) }}
 				</div>
 				<div class="dot-menu-section">
@@ -32,9 +29,9 @@
 					/>
 				</div>
 			</div>
-			<h6 class="mt-1 mb-2 task-name">
+			<h2 class="text-h6 mt-1 mb-2 task-name" tabindex="-1">
 				{{ task.name }}
-			</h6>
+			</h2>
 			<RenderHTML
 				v-if="canShowDescription"
 				class="text--primary mt-1 mb-0 pb-0 text-description"
@@ -52,16 +49,15 @@
 					v-for="(chip, index) in chipItems[role]"
 					:key="index"
 					:class="[chip.class]"
-					small
+					size="small"
 					:data-testid="[chip.testid]"
 				>
 					<v-icon
 						v-if="chip.icon"
-						left
-						small
+						start
+						size="small"
 						class="fill"
 						color="rgba(0, 0, 0, 0.87)"
-						d
 					>
 						{{ chip.icon }}
 					</v-icon>
@@ -71,7 +67,7 @@
 					v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
 					type="warning"
 					:due-date="task.dueDate"
-					:shorten-unit="$vuetify.breakpoint.xsOnly"
+					:shorten-unit="$vuetify.display.xs"
 				/>
 			</div>
 		</v-card-text>
@@ -79,10 +75,10 @@
 			<v-btn
 				v-for="(action, index) in cardActions[role]"
 				:key="index"
-				:class="`action-button action-button-${action.name
-					.split(' ')
-					.join('-')}`"
-				text
+				:class="`action-button`"
+				variant="text"
+				color="primary"
+				:data-testid="action.testid"
 				@click.stop="action.action"
 			>
 				{{ action.name }}
@@ -196,12 +192,14 @@ export default {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishCard(),
 						name: this.$t("common.action.publish"),
+						testid: "room-detail-task-action-publish",
 					});
 				}
 				if (!this.isPlanned && !this.isDraft && !this.isFinished) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
+						testid: "room-detail-task-action-done",
 					});
 				}
 			}
@@ -211,6 +209,7 @@ export default {
 					roleBasedActions[Roles.Student].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
+						testid: "room-detail-task-action-done",
 					});
 				}
 			}
@@ -467,10 +466,6 @@ export default {
 
 .text-description {
 	font-size: var(--text-md);
-}
-
-.action-button {
-	color: var(--v-primary-base);
 }
 
 .chip-items-group {

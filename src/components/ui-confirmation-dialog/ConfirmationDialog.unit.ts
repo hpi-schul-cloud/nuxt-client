@@ -1,9 +1,8 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { ref } from "vue";
+import { shallowMount } from "@vue/test-utils";
+import { ref } from "vue";
 import { useInternalConfirmationDialog } from "./Confirmation.composable";
 import DeleteConfirmation from "./ConfirmationDialog.vue";
-import { I18N_KEY } from "@/utils/inject";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 jest.mock("./Confirmation.composable");
 
 const mockedUseInternalConfirmationDialog = jest.mocked(
@@ -18,8 +17,6 @@ describe(DeleteConfirmation.name, () => {
 		title?: string;
 		typeName?: string;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		mockedUseInternalConfirmationDialog.mockReturnValue({
 			confirm: confirmSpy,
 			cancel: cancelSpy,
@@ -28,12 +25,9 @@ describe(DeleteConfirmation.name, () => {
 			isDialogOpen: ref(true),
 		});
 
-		const wrapper = shallowMount(DeleteConfirmation as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
-			},
-			propsData: {
+		const wrapper = shallowMount(DeleteConfirmation, {
+			global: { plugins: [createTestingI18n()] },
+			props: {
 				isDeleteModalOpen: options?.isDeleteModalOpen ?? true,
 				title: options.title ?? "title",
 				typeName: options.typeName ?? "card",

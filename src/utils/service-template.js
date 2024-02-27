@@ -1,4 +1,4 @@
-import Vue from "vue";
+import { reactive } from "vue";
 import { $axios } from "@/utils/api";
 
 export default function (endpoint) {
@@ -159,11 +159,15 @@ export default function (endpoint) {
 			// The qid must be manually assigned to `params.qid`
 			updatePaginationForQuery(state, { res, qid, query }) {
 				const { limit, skip, total } = res;
-				Vue.set(state.pagination, qid, {
-					limit: parseInt(limit),
-					skip: parseInt(skip),
-					total: parseInt(total),
-					query: parseInt(query),
+
+				state.pagination = reactive({
+					...state.pagination,
+					[qid]: {
+						limit: parseInt(limit),
+						skip: parseInt(skip),
+						total: parseInt(total),
+						query: parseInt(query),
+					},
 				});
 			},
 			setStatus(state, status) {

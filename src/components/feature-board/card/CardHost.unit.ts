@@ -3,8 +3,6 @@ import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
-import { I18N_KEY } from "@/utils/inject";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import {
 	boardCardFactory,
@@ -18,11 +16,15 @@ import {
 } from "@data-board";
 import { BoardMenuActionDelete } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue, { computed, ref } from "vue";
+import { shallowMount } from "@vue/test-utils";
+import { computed, ref } from "vue";
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import ContentElementList from "./ContentElementList.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@data-board/BoardPermissions.composable");
@@ -51,8 +53,6 @@ const CARD_WITH_FILE_ELEMENT: BoardCard = boardCardFactory.build({
 });
 
 describe("CardHost", () => {
-	let wrapper: Wrapper<Vue>;
-
 	const setup = (options?: {
 		card: BoardCard;
 		isLoading?: boolean;
@@ -112,33 +112,35 @@ describe("CardHost", () => {
 			isDeleteDialogOpen: ref(false),
 		});
 
-		wrapper = shallowMount(CardHost as MountOptions<Vue>, {
-			...createComponentMocks({}),
-			propsData: CARD_SKELETON,
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+		const wrapper = shallowMount(CardHost, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
+			propsData: CARD_SKELETON,
 		});
 
-		return { deleteElementMock };
+		return { deleteElementMock, wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ card: CARD_WITHOUT_ELEMENTS });
+			const { wrapper } = setup({ card: CARD_WITHOUT_ELEMENTS });
 			expect(wrapper.findComponent(CardHost).exists()).toBe(true);
 		});
 
 		describe("'CardSkeleton' component", () => {
 			it("should be rendered if loading is set 'true'", () => {
-				setup({ card: CARD_WITHOUT_ELEMENTS, isLoading: true });
+				const { wrapper } = setup({
+					card: CARD_WITHOUT_ELEMENTS,
+					isLoading: true,
+				});
 				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
 					true
 				);
 			});
 
 			it("should not be rendered if loading is set 'false'", () => {
-				setup({ card: CARD_WITHOUT_ELEMENTS });
+				const { wrapper } = setup({ card: CARD_WITHOUT_ELEMENTS });
 				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
 					false
 				);
@@ -147,7 +149,7 @@ describe("CardHost", () => {
 
 		describe("'ContentElementList' component", () => {
 			it("should be found in dom", () => {
-				setup({ card: CARD_WITH_FILE_ELEMENT });
+				const { wrapper } = setup({ card: CARD_WITH_FILE_ELEMENT });
 
 				const contentElementList = wrapper.findComponent(ContentElementList);
 
@@ -159,7 +161,7 @@ describe("CardHost", () => {
 	describe("user permissions", () => {
 		describe("when user is not permitted to delete", () => {
 			it("should not be rendered on DOM", () => {
-				setup({
+				const { wrapper } = setup({
 					card: CARD_WITHOUT_ELEMENTS,
 					permissions: { hasDeletePermission: false },
 				});
@@ -176,11 +178,11 @@ describe("CardHost", () => {
 	describe("card menus", () => {
 		describe("when users click delete menu", () => {
 			it("should emit 'delete:card'", async () => {
-				setup({ card: CARD_WITHOUT_ELEMENTS });
+				const { wrapper } = setup({ card: CARD_WITHOUT_ELEMENTS });
 
 				const deleteButton = wrapper.findComponent(BoardMenuActionDelete);
 
-				deleteButton.vm.$emit("click");
+				await deleteButton.vm.$emit("click", true);
 
 				await wrapper.vm.$nextTick();
 				await wrapper.vm.$nextTick();
