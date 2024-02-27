@@ -1,11 +1,11 @@
 <template>
 	<component
 		:is="component"
-		:vmodel="vmodel"
 		:validation-error="validationMessage"
 		v-bind="{ ...$attrs, ...$props }"
+		:model-value="modelValue"
 		class="input"
-		@input="handleInput($event)"
+		@update:model-value="handleInput($event)"
 		@blur="handleBlur($event)"
 		@focus="handleFocus($event)"
 	>
@@ -21,38 +21,24 @@
 import BaseInputDefault, {
 	supportedTypes as defaultInputTypes,
 } from "./BaseInputDefault";
-import BaseInputHidden, {
-	supportedTypes as hiddenInputTypes,
-} from "./BaseInputHidden";
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
 } from "./BaseInputCheckbox";
-import BaseInputRadio, {
-	supportedTypes as radioInputTypes,
-} from "./BaseInputRadio";
 
 const componentDictionary = {};
 defaultInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputDefault)
 );
-hiddenInputTypes.forEach(
-	(type) => (componentDictionary[type] = BaseInputHidden)
-);
 checkboxInputTypes.forEach(
 	(type) => (componentDictionary[type] = BaseInputCheckbox)
 );
-radioInputTypes.forEach((type) => (componentDictionary[type] = BaseInputRadio));
 export const supportedTypes = Object.keys(componentDictionary);
 
 export const validationDelay = 800;
 
 export default {
-	model: {
-		prop: "vmodel",
-		event: "update:vmodel",
-	},
 	props: {
-		vmodel: {
+		modelValue: {
 			type: [Array, String, Number, Boolean],
 			default: undefined,
 		},
@@ -86,7 +72,10 @@ export default {
 		validationMessage() {
 			if (this.validationModel && this.validationModel.$dirty) {
 				for (const entry of this.validationMessages) {
-					if (!this.validationModel[entry.key]) {
+					const error = this.validationModel.$errors.find(
+						(e) => e.$validator === entry.key
+					);
+					if (error) {
 						return entry.message;
 					}
 				}
@@ -116,8 +105,8 @@ export default {
 				);
 			}
 
-			this.$emit("update:vmodel", event);
-			this.$emit("input", event);
+			this.$emit("update:modelValue", event);
+			// this.$emit("input", event);
 		},
 		handleBlur(event) {
 			this.validationModel && this.validationModel.$touch();

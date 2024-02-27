@@ -1,28 +1,28 @@
-import LinkContentElementDisplayVue from "./LinkContentElementDisplay.vue";
-import { mount, MountOptions } from "@vue/test-utils";
-import Vue from "vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
+import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
+import { mount } from "@vue/test-utils";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
 
 type Props = {
 	url?: string;
 	title?: string;
 	imageUrl?: string;
-	isLoading?: boolean;
 	isEditMode?: boolean;
 };
 
-describe("LinkContentElementDisplay", () => {
+describe(LinkContentElementDisplay.name, () => {
 	const setup = (props: Props) => {
-		const wrapper = mount(LinkContentElementDisplayVue as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+		const wrapper = mount(LinkContentElementDisplay, {
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			props: {
+				url: "",
+				title: "",
+				isEditMode: false,
+				...props,
 			},
-			propsData: { title: "", isLoading: false, isEditMode: false, ...props },
 		});
-
 		return { wrapper };
 	};
 

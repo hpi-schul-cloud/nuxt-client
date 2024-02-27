@@ -3,9 +3,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { watch } from "vue";
-import { useRouter } from "vue-router/composables";
+import { defineComponent, watch } from "vue";
+import { useRouter } from "vue-router";
 import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
 
 /**
@@ -21,7 +20,7 @@ export default defineComponent({
 
 		const routeToErrorPage = () => {
 			// prevent NavigationDuplicated error: "navigationduplicated avoided redundant navigation to current location"
-			if (router.currentRoute.path !== "/error") {
+			if (router.currentRoute.value.path !== "/error") {
 				router.replace("/error");
 			}
 		};

@@ -40,18 +40,13 @@ export default defineComponent({
 			}
 		};
 
-		const onClick = async (): Promise<void> => {
-			let shouldDelete = true;
-			if (!props.skipDeleteConfirmation) {
-				shouldDelete = await askDeleteConfirmation(
-					props.name,
-					getLanguageKeyTypeName(scope)
-				);
-			}
+		const onClick = (): void => {
+			const promise = askDeleteConfirmation(
+				props.name,
+				getLanguageKeyTypeName(scope)
+			);
 
-			if (shouldDelete) {
-				emit("click");
-			}
+			emit("click", promise);
 		};
 
 		return {

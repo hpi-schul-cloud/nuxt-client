@@ -3,34 +3,26 @@ import {
 	schoolExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 describe("ExternalToolConfigSettings", () => {
 	const getWrapper = (
 		props: {
 			template: ExternalToolConfigurationTemplate;
-			value: (string | undefined)[];
+			modelValue: (string | undefined)[];
 		} = {
 			template: schoolExternalToolConfigurationTemplateFactory.build(),
-			value: [],
+			modelValue: [],
 		}
 	) => {
-		document.body.setAttribute("data-app", "true");
-
-		const wrapper: Wrapper<Vue> = shallowMount(
-			ExternalToolConfigSettings as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				propsData: {
-					...props,
-				},
-			}
-		);
+		const wrapper = shallowMount(ExternalToolConfigSettings, {
+			global: {
+				plugins: [createTestingI18n()],
+			},
+			props,
+		});
 
 		return {
 			wrapper,
@@ -55,7 +47,7 @@ describe("ExternalToolConfigSettings", () => {
 
 			const { wrapper } = getWrapper({
 				template,
-				value: [],
+				modelValue: [],
 			});
 
 			return {

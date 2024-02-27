@@ -2,8 +2,8 @@
 	<div class="resource">
 		<div ref="icons" class="icons">
 			<v-btn
-				fab
-				small
+				icon
+				size="small"
 				:class="[
 					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
 					'icon',
@@ -42,6 +42,7 @@
 		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
 				<div class="actions" />
+				<!--eslint-disable-next-line vuetify/no-deprecated-classes -->
 				<div class="title">
 					<span>
 						{{ resource.title || resource.name }}
@@ -73,7 +74,7 @@
 				<div v-else>
 					<v-btn
 						v-if="isMerlin"
-						outlined
+						variant="outlined"
 						color="secondary"
 						class="content-button"
 						data-testid="learningstore-to-content-link"
@@ -88,7 +89,7 @@
 					</v-btn>
 					<v-btn
 						v-else
-						outlined
+						variant="outlined"
 						color="secondary"
 						:href="downloadUrl"
 						class="content-button"
@@ -178,7 +179,7 @@
 
 <script>
 /* eslint-disable max-lines */
-import AddContentButton from "@/components/organisms/AddContentButton";
+import AddContentButton from "@/components/lern-store/AddContentButton";
 import UserHasRole from "@/components/helpers/UserHasRole";
 import contentMeta from "@/mixins/contentMeta";
 import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
@@ -229,6 +230,7 @@ export default {
 			},
 		};
 	},
+	inject: ["mq"],
 	computed: {
 		author() {
 			return getAuthor(this.resource.properties);
@@ -237,7 +239,9 @@ export default {
 			return this.resource.preview.url;
 		},
 		closeButtonStyleSelector() {
-			return this.$mq === "tabletPortrait" || this.$mq === "mobile";
+			return (
+				this.mq.current === "tabletPortrait" || this.mq.current === "mobile"
+			);
 		},
 		collectionLink() {
 			let relation = getMetadataAttribute(
@@ -310,7 +314,7 @@ export default {
 		window.addEventListener("resize", this.handleResize);
 		this.handleResize();
 	},
-	destroyed() {
+	unmounted() {
 		window.removeEventListener("resize", this.handleResize);
 	},
 	methods: {
@@ -351,6 +355,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 @import "@/styles/mixins";
 $tablet-portrait-width: 768px;
 
@@ -383,13 +388,13 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
-			color: var(--v-white-base);
+			color: rgba(var(--v-theme-white));
 			background-color: map-get($grey, darken-3);
 		}
 
 		.close-transparent {
-			color: var(--v-black-base);
-			background-color: var(--v-white-base);
+			color: rgba(var(--v-theme-black));
+			background-color: rgba(var(--v-theme-white));
 		}
 	}
 
@@ -433,7 +438,7 @@ $tablet-portrait-width: 768px;
 				z-index: var(--layer-behind);
 				width: 100%;
 				height: 100%;
-				background-color: var(--v-secondary-base);
+				background-color: rgba(var(--v-theme-secondary));
 			}
 
 			.preview-background {
@@ -483,7 +488,7 @@ $tablet-portrait-width: 768px;
 		max-height: 100vh;
 		padding-bottom: var(--space-sm);
 		overflow-y: scroll;
-		background-color: var(--v-white-base);
+		background-color: rgba(var(--v-theme-white));
 
 		@media (max-width: $tablet-portrait-width) {
 			max-height: none;
@@ -506,7 +511,7 @@ $tablet-portrait-width: 768px;
 		}
 
 		.external-content-warning {
-			color: var(--v-error-base);
+			color: rgba(var(--v-theme-error));
 
 			.external-content-title {
 				margin-top: var(--space-md);
@@ -534,7 +539,7 @@ $tablet-portrait-width: 768px;
 			font-weight: var(--font-weight-bold);
 
 			.content-link {
-				color: var(--v-secondary-base);
+				color: rgba(var(--v-theme-secondary));
 				text-decoration: underline;
 			}
 		}
@@ -581,15 +586,15 @@ $tablet-portrait-width: 768px;
 
 				.link {
 					margin-right: var(--space-xs);
-					color: var(--v-secondary-base);
+					color: rgba(var(--v-theme-secondary));
 				}
 
 				.tertiary-color {
-					color: var(--v-black-base);
+					color: rgba(var(--v-theme-black));
 					text-decoration: none;
 
 					:hover {
-						color: var(--v-black-base);
+						color: rgba(var(--v-theme-black));
 					}
 				}
 			}

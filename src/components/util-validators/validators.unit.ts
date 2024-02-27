@@ -68,29 +68,25 @@ describe("util-validators", () => {
 	});
 
 	describe("isValidTimeFormat", () => {
-		const isValid = isValidTimeFormat(ERROR);
-
 		it("should accept valid time format", () => {
-			expect(isValid("12:12")).toBe(true);
+			expect(isValidTimeFormat("12:12")).toBe(true);
 		});
 
 		it("should not accept invalid time format", () => {
-			expect(isValid("55:5")).toBe(ERROR);
-			expect(isValid("55:55")).toBe(ERROR);
+			expect(isValidTimeFormat("55:5")).toBe(false);
+			expect(isValidTimeFormat("55:55")).toBe(false);
 		});
 	});
 
 	describe("isValidDateFormat", () => {
-		const isValid = isValidDateFormat(ERROR);
-
 		it("should accept valid date format", () => {
-			expect(isValid("12.12.2023")).toBe(true);
+			expect(isValidDateFormat("12.12.2023")).toBe(true);
 		});
 
 		it("should not accept invalid date format", () => {
-			expect(isValid("31.31.2023")).toBe(ERROR);
-			expect(isValid("1.1.2001")).toBe(ERROR);
-			expect(isValid("1.101")).toBe(ERROR);
+			expect(isValidDateFormat("31.31.2023")).toBe(false);
+			expect(isValidDateFormat("1.1.2001")).toBe(false);
+			expect(isValidDateFormat("1.101")).toBe(false);
 		});
 	});
 });

@@ -1,20 +1,18 @@
 <template>
-	<div class="mb-4 pt-1" ref="headerRef">
-		<div class="d-flex align-start justify-space-between pt-2 mb-1">
+	<div class="mb-4" ref="headerRef">
+		<div class="d-flex align-start justify-space-between pt-2">
 			<VBtn
 				elevation="0"
-				text
-				:color="isColumnActive ? 'black' : 'grey darken-2'"
+				variant="text"
+				class="mb-2"
+				:color="isColumnActive ? 'text-black' : 'text-grey-darken-2'"
 				@click="onAddColumn"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>
 				{{ $t("components.board.column.ghost.placeholder") }}
 			</VBtn>
 		</div>
-		<VDivider
-			:color="isColumnActive ? 'black' : 'grey'"
-			class="margin-fix transition-divider"
-		/>
+		<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
 	</div>
 </template>
 

@@ -1,15 +1,20 @@
 import BaseInput from "./BaseInput";
 import BaseInputDefault, { supportedTypes } from "./BaseInputDefault";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
 
-function getMock(type, attributes) {
-	return mount({
-		...createComponentMocks({
-			i18n: true,
-			vuetify: true,
-		}),
-		data: () => ({ content: "" }),
-		template: `<base-input v-model="content" label="test" type="${type}" name="test" ${attributes}/>`,
-		components: { BaseInput },
+function createWrapper(type, props = {}) {
+	return mount(BaseInput, {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+		},
+		props: {
+			label: "test",
+			type,
+			...props,
+		},
 	});
 }
 
@@ -29,7 +34,7 @@ const mockInput = (type) => {
 describe("@/components/base/BaseInputDefault", () => {
 	it("input has correct type", () => {
 		supportedTypes.forEach((type) => {
-			const wrapper = getMock(type);
+			const wrapper = createWrapper(type);
 			const textInput = wrapper.find(`input[type="${type}"]`);
 			expect(textInput.exists()).toBe(true);
 		});
@@ -38,10 +43,10 @@ describe("@/components/base/BaseInputDefault", () => {
 	it("changing the element's value, updates the v-model", () => {
 		supportedTypes.forEach((type) => {
 			const testInput = mockInput(type);
-			const wrapper = getMock(type);
+			const wrapper = createWrapper(type);
 			const input = wrapper.find(`input[type="${type}"]`);
 			input.setValue(testInput);
-			expect(wrapper.vm.content).toBe(testInput);
+			expect(wrapper.emitted("update:modelValue")[0][0]).toEqual(testInput);
 		});
 	});
 
@@ -49,9 +54,8 @@ describe("@/components/base/BaseInputDefault", () => {
 		await Promise.all(
 			supportedTypes.map(async (type) => {
 				const testInput = mockInput(type);
-				const wrapper = getMock(type);
-				wrapper.setData({ content: testInput });
-				await wrapper.vm.$nextTick();
+				const wrapper = createWrapper(type);
+				await wrapper.setProps({ modelValue: testInput });
 				const input = wrapper.find(`input[type="${type}"]`);
 				expect(input.element.value.toString()).toBe(testInput.toString());
 			})
@@ -62,28 +66,28 @@ describe("@/components/base/BaseInputDefault", () => {
 		supportedTypes.forEach((type) => {
 			const testInput = mockInput(type);
 
-			const disabledWrapper = getMock(type, "disabled");
+			const disabledWrapper = createWrapper(type, { disabled: true });
 			const disabledInput = disabledWrapper.find(`input[type="${type}"]`);
 			disabledInput.setValue(testInput);
-			expect(disabledWrapper.vm.content).not.toBe(testInput);
+			expect(disabledWrapper.emitted("update:modelValue")).toBeUndefined();
 
-			const enabledWrapper = getMock(type);
+			const enabledWrapper = createWrapper(type);
 			const enabledInput = enabledWrapper.find(`input[type="${type}"]`);
 			enabledInput.setValue(testInput);
-			expect(enabledWrapper.vm.content).toBe(testInput);
+			expect(enabledWrapper.emitted("update:modelValue").length).toBe(1);
 		});
 	});
 
 	it("shows its info", () => {
 		supportedTypes.forEach((type) => {
-			const wrapper = getMock(type, "info='info'");
+			const wrapper = createWrapper(type, { info: "info" });
 			expect(wrapper.find(".help").text()).toBe("info");
 		});
 	});
 
 	it("shows its label when no placeholder is provided", () => {
 		supportedTypes.forEach((type) => {
-			const wrapperWithoutPlaceholder = getMock(type);
+			const wrapperWithoutPlaceholder = createWrapper(type);
 			const baseInputDefaultWithoutPlaceholder =
 				wrapperWithoutPlaceholder.findComponent(BaseInputDefault);
 			expect(baseInputDefaultWithoutPlaceholder.vm.showLabel).toBe(true);
@@ -95,21 +99,18 @@ describe("@/components/base/BaseInputDefault", () => {
 		await Promise.all(
 			supportedTypes.map(async (type) => {
 				const testInput = mockInput(type);
-				const wrapperWithPlaceHolder = getMock(
-					type,
-					"placeholder='placeholder'"
-				);
+				const wrapperWithPlaceHolder = createWrapper(type, {
+					placeholder: "placeholder",
+				});
 				const baseInputDefaultWithPlaceholder =
 					wrapperWithPlaceHolder.findComponent(BaseInputDefault);
-				const input = wrapperWithPlaceHolder.find(`input[type="${type}"]`);
 
 				expect(baseInputDefaultWithPlaceholder.vm.showLabel).toBe(false);
 				expect(
 					wrapperWithPlaceHolder.find(".label").element.style.display
 				).toBe("none");
 
-				input.setValue(testInput);
-				await wrapperWithPlaceHolder.vm.$nextTick();
+				await wrapperWithPlaceHolder.setProps({ modelValue: testInput });
 
 				expect(
 					wrapperWithPlaceHolder.find(".label").element.style.display
@@ -121,25 +122,14 @@ describe("@/components/base/BaseInputDefault", () => {
 
 	it("shows its hint", () => {
 		supportedTypes.forEach((type) => {
-			const wrapper = getMock(type, "hint='hint'");
+			const wrapper = createWrapper(type, { hint: "hint" });
 			expect(wrapper.find(".hint").text()).toBe("hint");
 		});
 	});
 
 	it("can show error icon and error message", () => {
 		supportedTypes.forEach((type) => {
-			const wrapper = mount(BaseInput, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: {
-					vmodel: "",
-					type,
-					label: "test",
-					error: "error",
-				},
-			});
+			const wrapper = createWrapper(type, { error: "error" });
 
 			const baseInputDefault = wrapper.findComponent(BaseInputDefault);
 			expect(baseInputDefault.vm.hasError).toBe(true);
@@ -152,34 +142,15 @@ describe("@/components/base/BaseInputDefault", () => {
 
 	it("can show success icon", () => {
 		supportedTypes.forEach((type) => {
-			const wrapper = mount(BaseInput, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: {
-					vmodel: "",
-					type,
-					label: "test",
-					success: true,
-				},
-			});
+			const wrapper = createWrapper(type, { success: true });
+
 			expect(wrapper.find(".icon-behind").exists()).toBe(true);
 		});
 	});
 
 	it("can toggle pwd visibility", async () => {
-		const wrapper = mount(BaseInput, {
-			...createComponentMocks({
-				i18n: true,
-				vuetify: true,
-			}),
-			propsData: {
-				vmodel: "",
-				type: "password",
-				label: "test",
-			},
-		});
+		const wrapper = createWrapper("password");
+
 		const inputField = wrapper.find("input");
 		const pwdToggle = wrapper.find(`[data-testid="pwd-visibility-toggle"]`);
 		expect(inputField.attributes("type")).toBe("password");
@@ -190,18 +161,8 @@ describe("@/components/base/BaseInputDefault", () => {
 
 	it("should have an aria label if the label is hidden", () => {
 		supportedTypes.forEach((type) => {
-			const wrapper = mount(BaseInput, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: {
-					vmodel: "",
-					type,
-					label: "test",
-					labelHidden: true,
-				},
-			});
+			const wrapper = createWrapper(type, { label: "test", labelHidden: true });
+
 			expect(wrapper.find(`[aria-label="test"]`).exists()).toBe(true);
 		});
 	});

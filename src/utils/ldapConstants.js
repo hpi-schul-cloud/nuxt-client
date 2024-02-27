@@ -1,4 +1,4 @@
-import { helpers } from "vuelidate/lib/validators";
+import { helpers } from "@vuelidate/validators";
 
 // Regex-based validator for the LDAP path.
 //
@@ -11,7 +11,6 @@ import { helpers } from "vuelidate/lib/validators";
 //
 // It matches the following format: nameComponent[, or ;;]nameComponent
 export const ldapPathRegexValidator = helpers.regex(
-	"alpha",
 	/^(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})+|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*(?:(,|;;)(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})+|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*")(?:\+(?:[A-Za-z][\w-]*|\d+(?:\.\d+)*)=(?:#(?:[\dA-Fa-f]{2})+|(?:[^,=+<>#;\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*|"(?:[^\\"]|\\[,=+<>#;\\"]|\\[\dA-Fa-f]{2})*"))*)*$/
 );
 
@@ -19,7 +18,6 @@ export const ldapPathRegexValidator = helpers.regex(
 // Allows both ldap:// and ldaps:// protocols.
 // Not recommended for use in production environment.
 export const ldapURLRegexValidator = helpers.regex(
-	"alpha",
 	/^ldaps?:\/\/(([\w.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/
 );
 
@@ -27,7 +25,6 @@ export const ldapURLRegexValidator = helpers.regex(
 // Allows only the ldaps:// protocol.
 // Should be used in every production environment.
 export const ldapSecuredURLRegexValidator = helpers.regex(
-	"alpha",
 	/^ldaps:\/\/(([\w.-]+\.[a-z]+)|((\d{0,3}\.){3}\d{0,3}))(:\d+)?$/
 );
 

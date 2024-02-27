@@ -1,12 +1,15 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
 import RoomBoardCard from "./RoomBoardCard.vue";
-import { I18N_KEY } from "@/utils/inject";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
-const $router = {
-	push: jest.fn(),
-};
+import { Router, useRouter } from "vue-router";
+import { createMock } from "@golevelup/ts-jest";
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 const mockBoardData = {
 	id: "test-id",
@@ -23,38 +26,34 @@ const mockCourseData = {
 };
 
 describe("RoomBoardCard", () => {
-	let wrapper: Wrapper<Vue>;
-
 	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-		wrapper = mount(RoomBoardCard as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
+		// Note: router has to be mocked before mounting the component
+		const wrapper = mount(RoomBoardCard, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			propsData: {
+			props: {
 				dragInProgress: false,
 				keyDrag: false,
 				columnBoardItem: mockBoardData,
 				courseData: mockCourseData,
 			},
-			mocks: { $router },
 		});
-	};
 
-	beforeEach(() => {
-		$router.push.mockReset();
-	});
+		return { wrapper, router };
+	};
 
 	describe("when a board card is rendered", () => {
 		it("should be found in dom", () => {
-			setup();
+			const { wrapper } = setup();
 			expect(wrapper.findComponent(RoomBoardCard).exists()).toBe(true);
 		});
 
 		it("should have correct board title", () => {
-			setup();
-			const expectedBoardTitle = "Kurs-Board";
+			const { wrapper } = setup();
+			const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
 			const boardTitle = wrapper.find(".board-title").element.textContent;
 
 			expect(boardTitle).toContain(expectedBoardTitle);
@@ -63,29 +62,29 @@ describe("RoomBoardCard", () => {
 
 	describe("when interacting with a board card", () => {
 		it("should redirect to column board when clicking on the card", () => {
-			setup();
-			const boardId = wrapper.props().columnBoardItem.columnBoardId;
+			const { wrapper, router } = setup();
+			const boardId = mockBoardData.columnBoardId;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			boardCard.vm.$emit("click");
 
-			expect($router.push).toHaveBeenCalledTimes(1);
-			expect($router.push).toHaveBeenCalledWith(`${boardId}/board`);
+			expect(router.push).toHaveBeenCalledTimes(1);
+			expect(router.push).toHaveBeenCalledWith(`${boardId}/board`);
 		});
 
 		it("should redirect to column board when pressing enter on the card", async () => {
-			setup();
-			const boardId = wrapper.props().columnBoardItem.columnBoardId;
+			const { wrapper, router } = setup();
+			const boardId = mockBoardData.columnBoardId;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			await boardCard.trigger("keydown.enter");
 
-			expect($router.push).toHaveBeenCalledTimes(1);
-			expect($router.push).toHaveBeenCalledWith(`${boardId}/board`);
+			expect(router.push).toHaveBeenCalledTimes(1);
+			expect(router.push).toHaveBeenCalledWith(`${boardId}/board`);
 		});
 
 		it("should not redirect to column board if a card is dragged", async () => {
-			setup();
+			const { wrapper, router } = setup();
 			await wrapper.setProps({ dragInProgress: true });
 
 			const boardCard = wrapper.findComponent({ name: "VCard" });
@@ -93,11 +92,11 @@ describe("RoomBoardCard", () => {
 			boardCard.vm.$emit("click");
 			await wrapper.vm.$nextTick();
 
-			expect($router.push).not.toHaveBeenCalled();
+			expect(router.push).not.toHaveBeenCalled();
 		});
 
 		it("should emit 'onDrag' when pressing space", async () => {
-			setup();
+			const { wrapper } = setup();
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			await boardCard.trigger("keydown.space");
@@ -106,7 +105,7 @@ describe("RoomBoardCard", () => {
 		});
 
 		it("should emit 'tab-pressed' when pressing tab", async () => {
-			setup();
+			const { wrapper } = setup();
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			await boardCard.trigger("keydown.tab");
@@ -117,7 +116,7 @@ describe("RoomBoardCard", () => {
 		it.each([["up"], ["down"]])(
 			"should emit 'move-element' when pressing the %s arrow key and keyDrag is true",
 			async (key) => {
-				setup();
+				const { wrapper } = setup();
 				await wrapper.setProps({ keyDrag: true });
 				const boardCard = wrapper.findComponent({ name: "VCard" });
 
@@ -130,7 +129,7 @@ describe("RoomBoardCard", () => {
 		it.each([["up"], ["down"]])(
 			"should not emit 'move-element' when pressing the %s arrow key and keyDrag is false",
 			async (key) => {
-				setup();
+				const { wrapper } = setup();
 				const boardCard = wrapper.findComponent({ name: "VCard" });
 
 				await boardCard.trigger(`keydown.${key}`);

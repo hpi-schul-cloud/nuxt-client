@@ -29,7 +29,7 @@
 				</base-link>
 			</strong>
 		</span>
-		<p class="grey--text mt-6">
+		<p class="text-grey mt-6">
 			{{
 				$t("components.molecules.admintablelegend.hint", {
 					institute_title: setInstituteTitle,
@@ -107,7 +107,7 @@ $vertically-center: auto 0;
 }
 
 .link-style {
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 	text-decoration: underline;
 }
 

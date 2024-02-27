@@ -1,36 +1,44 @@
 import { mount } from "@vue/test-utils";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("DefaultWireframe", () => {
 	it("shows title", () => {
 		const wrapper = mount(DefaultWireframe, {
-			...createComponentMocks({}),
-			propsData: { fullWidth: true, headline: "dummy titel" },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: { fullWidth: true, headline: "dummy title" },
 		});
 
 		const h1 = wrapper.find("h1");
-		expect(h1.text()).toBe("dummy titel");
+		expect(h1.text()).toBe("dummy title");
 	});
 	it("shows breadcrumbs", () => {
 		const wrapper = mount(DefaultWireframe, {
-			...createComponentMocks({}),
-			propsData: {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
 				fullWidth: true,
-				headline: "dummy titel",
+				headline: "dummy title",
 				breadcrumbs: [
 					{
-						text: "dummy breadcrumb 1",
+						title: "dummy breadcrumb 1",
 						href: "/path1/",
 					},
 					{
-						text: "dummy breadcrumb 2",
+						title: "dummy breadcrumb 2",
 						href: "/path1/path2",
 					},
 				],
 			},
 		});
 
-		const breadcrumbItems = wrapper.findAll(".v-breadcrumbs__item").wrappers;
+		const breadcrumbItems = wrapper.findAll(".v-breadcrumbs-item > a");
 		expect(breadcrumbItems).toHaveLength(2);
 		expect(breadcrumbItems[0].text()).toBe("dummy breadcrumb 1");
 		expect(breadcrumbItems[0].attributes("href")).toBe("/path1/");
@@ -40,8 +48,10 @@ describe("DefaultWireframe", () => {
 
 	it("has full width", () => {
 		const wrapper = mount(DefaultWireframe, {
-			...createComponentMocks({}),
-			propsData: { headline: "dummy titel", fullWidth: true },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: { headline: "dummy title", fullWidth: true },
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
@@ -51,8 +61,10 @@ describe("DefaultWireframe", () => {
 
 	it("has small width", () => {
 		const wrapper = mount(DefaultWireframe, {
-			...createComponentMocks({}),
-			propsData: { headline: "dummy titel", fullWidth: false },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: { headline: "dummy title", fullWidth: false },
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
@@ -62,8 +74,10 @@ describe("DefaultWireframe", () => {
 
 	it("displays content in slot", () => {
 		const wrapper = mount(DefaultWireframe, {
-			...createComponentMocks({}),
-			propsData: { headline: "dummy titel", fullWidth: false },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: { headline: "dummy title", fullWidth: false },
 			slots: {
 				default: ["<p>some stuff</p>", "text"],
 			},
@@ -74,17 +88,19 @@ describe("DefaultWireframe", () => {
 
 	it("displays headline in slot", () => {
 		const wrapper = mount(DefaultWireframe, {
-			...createComponentMocks({}),
-			propsData: { headline: "property title", fullWidth: false },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: { headline: "property title", fullWidth: false },
 			slots: {
 				header: [
-					"<h1>slot titel</h1>",
+					"<h1>slot title</h1>",
 					"<div class='menu'>a custom menu or searchbar</div>",
 				],
 			},
 		});
 		const h1 = wrapper.find("h1");
-		expect(h1.text()).toBe("slot titel");
+		expect(h1.text()).toBe("slot title");
 		const menu = wrapper.find(".menu");
 		expect(menu.text()).toBe("a custom menu or searchbar");
 	});

@@ -1,26 +1,25 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { BoardMenuAction, BoardMenuActionDelete } from "@ui-board";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 
 describe("ExternalToolElementMenu", () => {
-	const getWrapper = (props: {
+	const getWrapper = (propsData: {
 		isFirstElement: boolean;
 		isLastElement: boolean;
 		hasMultipleElements: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
-		const wrapper: Wrapper<Vue> = shallowMount(
-			ExternalToolElementMenu as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				propsData: props,
-			}
-		);
+		const wrapper = shallowMount(ExternalToolElementMenu, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: propsData,
+		});
 
 		return {
 			wrapper,
@@ -84,12 +83,12 @@ describe("ExternalToolElementMenu", () => {
 			expect(menuItem.exists()).toEqual(true);
 		});
 
-		it("should emit the delete event on click", () => {
+		it("should emit the delete event on click", async () => {
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
 
-			menuItem.vm.$emit("click");
+			await menuItem.trigger("click");
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});

@@ -1,22 +1,35 @@
 import { mount } from "@vue/test-utils";
 import LdapConnectionSection from "./LdapConnectionSection";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 
 describe("@/components/organisms/LdapConnectionSection", () => {
-	const ldapConfigData = {
-		url: "ldaps://url.u",
-		rootPath: "cn=schueler,ou=rolle",
-		basisPath: "cn=schueler,ou=rolle",
-		searchUser: "cn=schueler,ou=rolle",
-		searchUserPassword: "pass",
+	const getWrapper = (props = {}) => {
+		return mount(LdapConnectionSection, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				components: {
+					"base-input": BaseInput,
+				},
+			},
+			props: {
+				modelValue: {
+					url: "ldaps://url.u",
+					rootPath: "cn=schueler,ou=rolle",
+					basisPath: "cn=schueler,ou=rolle",
+					searchUser: "cn=schueler,ou=rolle",
+					searchUserPassword: "pass",
+				},
+				...props,
+			},
+		});
 	};
 
 	it("has correct child components", () => {
-		const wrapper = mount(LdapConnectionSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigData,
-			},
-		});
+		const wrapper = getWrapper();
 
 		expect(wrapper.find("[data-testid=ldapDataConnectionUrl]").exists()).toBe(
 			true
@@ -35,72 +48,43 @@ describe("@/components/organisms/LdapConnectionSection", () => {
 	});
 
 	it("loads the validator", () => {
-		const wrapper = mount(LdapConnectionSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigData,
-			},
-		});
-		expect(wrapper.vm.$v).not.toBeUndefined();
+		const wrapper = getWrapper();
+		expect(wrapper.vm.v$).not.toBeUndefined();
 	});
 
 	it("invalid validation is false when valid values are sent through props", async () => {
-		const wrapper = mount(LdapConnectionSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigData,
-			},
-		});
+		const wrapper = getWrapper();
 		// default props values are valid so expect this assertion to succeed
-		expect(wrapper.vm.$v.$invalid).toBe(false);
+		expect(wrapper.vm.v$.$invalid).toBe(false);
 	});
 
 	it("invalid validation is true when invalid values are sent through props", async () => {
-		const wrapper = mount(LdapConnectionSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: {
-					url: "invalid",
-					rootPath: "invalid",
-					basisPath: "invalid",
-					searchUser: "invalid",
-					searchUserPassword: "",
-				},
+		const wrapper = getWrapper({
+			modelValue: {
+				url: "invalid",
+				rootPath: "invalid",
+				basisPath: "invalid",
+				searchUser: "invalid",
+				searchUserPassword: "",
 			},
 		});
-		expect(wrapper.vm.$v.$invalid).toBe(true);
+
+		expect(wrapper.vm.v$.$invalid).toBe(true);
 	});
 
 	it("invalid validation is true when any of the input values are invalid", async () => {
-		const ldapConfigDataTestSpecific = {
-			...ldapConfigData,
-		};
-		const wrapper = mount(LdapConnectionSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigDataTestSpecific,
-			},
-			listeners: {
-				input: (event) => {
-					ldapConfigDataTestSpecific.url = event.url;
-					ldapConfigDataTestSpecific.rootPath = event.rootPath;
-					ldapConfigDataTestSpecific.basisPath = event.basisPath;
-					ldapConfigDataTestSpecific.searchUser = event.searchUser;
-					ldapConfigDataTestSpecific.searchUserPassword =
-						event.searchUserPassword;
-				},
+		const wrapper = getWrapper({
+			modelValue: {
+				url: "invalid",
+				rootPath: "invalid",
+				basisPath: "invalid",
+				searchUser: "invalid",
+				searchUserPassword: "",
 			},
 		});
 
-		const inputUrl = wrapper.find("input[data-testid=ldapDataConnectionUrl]");
-		expect(inputUrl.exists()).toBe(true);
+		await wrapper.vm.v$.$touch();
 
-		inputUrl.setValue("");
-		inputUrl.trigger("blur");
-
-		expect(inputUrl.element.value).toBe("");
-		expect(wrapper.vm.$v.$invalid).toBe(true);
-		await wrapper.vm.$nextTick();
 		const errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
 		);
@@ -108,12 +92,8 @@ describe("@/components/organisms/LdapConnectionSection", () => {
 	});
 
 	it("it emits update:errors event when validate prop changes value", async () => {
-		const wrapper = mount(LdapConnectionSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigData,
-				validate: false,
-			},
+		const wrapper = getWrapper({
+			validate: false,
 		});
 		expect(wrapper.emitted("update:errors")).toBeUndefined();
 
@@ -134,36 +114,22 @@ describe("@/components/organisms/LdapConnectionSection", () => {
 			searchUser: "invalid",
 			searchUserPassword: "",
 		};
-		const wrapper = mount(LdapConnectionSection, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				value: ldapConfigDataTestSpecific,
-			},
-			listeners: {
-				input: (event) => {
-					ldapConfigDataTestSpecific.url = event.url;
-					ldapConfigDataTestSpecific.rootPath = event.rootPath;
-					ldapConfigDataTestSpecific.basisPath = event.basisPath;
-					ldapConfigDataTestSpecific.searchUser = event.searchUser;
-					ldapConfigDataTestSpecific.searchUserPassword =
-						event.searchUserPassword;
-				},
-			},
+		const wrapper = getWrapper({
+			modelValue: ldapConfigDataTestSpecific,
 		});
 
 		let errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
 		);
-		expect(wrapper.vm.$v.$invalid).toBe(true);
+		expect(wrapper.vm.v$.$invalid).toBe(true);
 		expect(errorMessageComponent.exists()).toBeFalsy();
 
 		const inputUrl = wrapper.find("input[data-testid=ldapDataConnectionUrl]");
 		expect(inputUrl.exists()).toBe(true);
 		expect(inputUrl.element.value).toBe(ldapConfigDataTestSpecific.url);
 
-		inputUrl.trigger("blur"); // without this the error is not displayed
+		await inputUrl.trigger("blur"); // without this the error is not displayed
 
-		await wrapper.vm.$nextTick();
 		errorMessageComponent = wrapper.find(
 			"div[data-testid='ldapDataConnectionUrl'] .base-input-info.base-input-error"
 		);

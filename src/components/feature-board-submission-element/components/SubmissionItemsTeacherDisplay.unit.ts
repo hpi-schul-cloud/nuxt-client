@@ -1,9 +1,10 @@
-import Vue, { nextTick } from "vue";
-import { I18N_KEY } from "@/utils/inject";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import { nextTick } from "vue";
+import { mount } from "@vue/test-utils";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";
-import { i18nMock } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("SubmissionItemsTeacherDisplay", () => {
 	const setup = (
@@ -11,20 +12,17 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		loading = false,
 		isOverdue = false
 	) => {
-		document.body.setAttribute("data-app", "true");
-
-		const propsData = {
+		const props = {
 			isOverdue,
 			loading,
 			submissions,
 		};
 
-		const wrapper = mount(SubmissionItemsTeacherDisplay as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			propsData,
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+		const wrapper = mount(SubmissionItemsTeacherDisplay, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
+			props,
 		});
 
 		return {
@@ -96,7 +94,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 			const { wrapper } = setup(submissions);
 
 			const panelHeader = wrapper.findComponent({
-				name: "v-expansion-panel-header",
+				name: "v-expansion-panel-title",
 			});
 			expect(panelHeader.exists()).toBe(true);
 
@@ -112,17 +110,18 @@ describe("SubmissionItemsTeacherDisplay", () => {
 	});
 
 	describe("if dueDate has not expired yet", () => {
-		let wrapper: Wrapper<Vue>;
-
-		beforeAll(() => {
+		const setupNotExpired = () => {
 			const submissions = [
 				{ firstName: "Max", lastName: "Meyer", status: "open" },
 				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
 			];
-			wrapper = setup(submissions).wrapper;
-		});
+			const wrapper = setup(submissions).wrapper;
+
+			return { wrapper };
+		};
 
 		it("should not show expired-chip", () => {
+			const { wrapper } = setupNotExpired();
 			const chip = wrapper.findComponent({
 				ref: "v-chip-expired",
 			});
@@ -130,6 +129,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show open-chip", () => {
+			const { wrapper } = setupNotExpired();
 			const chip = wrapper.findComponent({
 				ref: "v-chip-open",
 			});
@@ -137,6 +137,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show completed-chip", () => {
+			const { wrapper } = setupNotExpired();
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",
 			});
@@ -145,19 +146,20 @@ describe("SubmissionItemsTeacherDisplay", () => {
 	});
 
 	describe("if dueDate has expired", () => {
-		let wrapper: Wrapper<Vue>;
-
-		beforeAll(() => {
+		const setupExpired = () => {
 			const loading = false;
 			const isOverdue = true;
 			const submissions = [
 				{ firstName: "Max", lastName: "Meyer", status: "expired" },
 				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
 			];
-			wrapper = setup(submissions, loading, isOverdue).wrapper;
-		});
+			const wrapper = setup(submissions, loading, isOverdue).wrapper;
+
+			return { wrapper };
+		};
 
 		it("should not show open-chip", () => {
+			const { wrapper } = setupExpired();
 			const chip = wrapper.findComponent({
 				ref: "v-chip-open",
 			});
@@ -165,6 +167,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show expired-chip", () => {
+			const { wrapper } = setupExpired();
 			const chip = wrapper.findComponent({
 				ref: "v-chip-expired",
 			});
@@ -172,6 +175,7 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should show completed-chip", () => {
+			const { wrapper } = setupExpired();
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",
 			});
@@ -180,17 +184,18 @@ describe("SubmissionItemsTeacherDisplay", () => {
 	});
 
 	describe("when a filter is clicked", () => {
-		let wrapper: Wrapper<Vue>;
-
-		beforeAll(() => {
+		const setupWithFilter = () => {
 			const submissions = [
 				{ firstName: "Max", lastName: "Meyer", status: "open" },
 				{ firstName: "Sabrina", lastName: "Schulz", status: "completed" },
 			];
-			wrapper = setup(submissions).wrapper;
-		});
+			const wrapper = setup(submissions).wrapper;
+
+			return { wrapper };
+		};
 
 		it("should expand panel", async () => {
+			const { wrapper } = setupWithFilter();
 			const chip = wrapper.findComponent({
 				ref: "v-chip-completed",
 			});
@@ -206,15 +211,15 @@ describe("SubmissionItemsTeacherDisplay", () => {
 		});
 
 		it("should only show filtered submissions", async () => {
+			const { wrapper } = setupWithFilter();
 			const chip = wrapper.findComponent({
 				ref: "v-chip-open",
 			});
 			expect(chip.exists()).toBe(true);
 
 			await chip.trigger("click");
-			await nextTick();
 
-			const tableContent = wrapper.find(".v-expansion-panel-content");
+			const tableContent = wrapper.find(".v-expansion-panel-text");
 			expect(tableContent.exists()).toBe(true);
 
 			const submissionItems = tableContent.findAll("tbody > tr");

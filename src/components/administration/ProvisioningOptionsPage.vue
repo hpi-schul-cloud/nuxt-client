@@ -8,15 +8,13 @@
 			:label="t('components.administration.provisioningOptions.class.label')"
 			:loading="isLoading"
 			v-model="provisioningOptions.class"
-			inset
-			dense
 			data-testid="checkbox-option-class"
 			class="ml-1"
 		/>
 		<p>
 			{{
 				t("components.administration.provisioningOptions.class.description", {
-					instance: $theme.name,
+					instance: themeName,
 				})
 			}}
 		</p>
@@ -25,15 +23,13 @@
 			:label="t('components.administration.provisioningOptions.course.label')"
 			:loading="isLoading"
 			v-model="provisioningOptions.course"
-			inset
-			dense
 			data-testid="checkbox-option-course"
 			class="ml-1"
 		/>
 		<p>
 			{{
 				t("components.administration.provisioningOptions.course.description", {
-					instance: $theme.name,
+					instance: themeName,
 				})
 			}}
 		</p>
@@ -44,8 +40,6 @@
 			"
 			:loading="isLoading"
 			v-model="provisioningOptions.others"
-			inset
-			dense
 			data-testid="checkbox-option-others"
 			class="ml-1"
 		/>
@@ -54,7 +48,7 @@
 				t(
 					"components.administration.provisioningOptions.otherGroups.description",
 					{
-						instance: $theme.name,
+						instance: themeName,
 					}
 				)
 			}}
@@ -65,7 +59,7 @@
 				class="mr-2"
 				data-testid="provisioning-options-cancel-button"
 				color="secondary"
-				outlined
+				variant="outlined"
 				@click="onCancel"
 				>{{ t("common.actions.cancel") }}</v-btn
 			>
@@ -74,7 +68,7 @@
 				class="mr-2"
 				data-testid="provisioning-options-save-button"
 				color="primary"
-				depressed
+				variant="flat"
 				@click="onSaveButtonClick"
 				:disabled="isLoading"
 				>{{ t("common.actions.save") }}</v-btn
@@ -89,9 +83,11 @@
 			@dialog-closed="isWarningDialogOpen = false"
 			@dialog-confirmed="saveOptions"
 		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{ t("components.administration.provisioningOptions.warning.title") }}
-			</h2>
+			<template #title>
+				<h2 class="text-h4 my-2">
+					{{ t("components.administration.provisioningOptions.warning.title") }}
+				</h2>
+			</template>
 			<template #content>
 				<span class="text-md mt-2">
 					{{
@@ -105,7 +101,7 @@
 						)
 					}}
 				</span>
-				<v-alert light text type="warning" class="mt-4 mb-0">
+				<v-alert type="warning" class="mt-4 mb-0">
 					{{
 						t(
 							"components.administration.provisioningOptions.warning.consequence",
@@ -123,14 +119,6 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "@/composables/i18n.composable";
-import { buildPageTitle } from "@/utils/pageTitle";
-import {
-	ProvisioningOptions,
-	ProvisioningOptionsEnum,
-	useProvisioningOptionsState,
-} from "@data-provisioning-options";
-import { useTitle } from "@vueuse/core";
 import {
 	computed,
 	ComputedRef,
@@ -139,10 +127,19 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import { useRouter } from "vue-router/composables";
+import { useI18n } from "vue-i18n";
+import { buildPageTitle } from "@/utils/pageTitle";
+import {
+	ProvisioningOptions,
+	ProvisioningOptionsEnum,
+	useProvisioningOptionsState,
+} from "@data-provisioning-options";
+import { useTitle } from "@vueuse/core";
+import { useRouter } from "vue-router";
 import VCustomDialog from "../organisms/vCustomDialog.vue";
 import { Breadcrumb } from "../templates/default-wireframe.types";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
+import themeConfig from "@/theme.config";
 
 const provisioningOptionTranslations = {
 	[ProvisioningOptionsEnum.COURSE]: "common.words.courses",
@@ -173,17 +170,17 @@ export default defineComponent({
 		useTitle(pageTitle);
 
 		const schoolSettingsPage: Breadcrumb = {
-			text: t("pages.administration.school.index.title"),
+			title: t("pages.administration.school.index.title"),
 			to: "/administration/school-settings",
 		};
 		const breadcrumbs: Breadcrumb[] = [
 			{
-				text: t("pages.administration.index.title"),
+				title: t("pages.administration.index.title"),
 				href: "/administration/",
 			},
 			schoolSettingsPage,
 			{
-				text: t("components.administration.provisioningOptions.page.title"),
+				title: t("components.administration.provisioningOptions.page.title"),
 				disabled: true,
 			},
 		];
@@ -268,6 +265,7 @@ export default defineComponent({
 			isWarningDialogOpen,
 			saveOptions,
 			onCancel,
+			themeName: themeConfig.name,
 			onSaveButtonClick,
 			newlyTurnedOffOptions,
 			translateProvisioningOption,

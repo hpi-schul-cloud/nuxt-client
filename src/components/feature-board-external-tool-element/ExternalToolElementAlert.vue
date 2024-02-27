@@ -1,12 +1,12 @@
 <template>
 	<div>
 		<WarningAlert v-if="error">
-			{{ t(errorMessage) }}
+			{{ $t(errorMessage) }}
 		</WarningAlert>
 
 		<WarningAlert v-if="toolStatus && toolStatus.isDeactivated">
 			{{
-				t("common.tool.information.deactivated", {
+				$t("common.tool.information.deactivated", {
 					toolDisplayName,
 				})
 			}}
@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import { BusinessError } from "@/store/types/commons";
 import { useBoardPermissions } from "@data-board";
 import { WarningAlert } from "@ui-alert";
@@ -87,7 +87,6 @@ export default defineComponent({
 		});
 
 		return {
-			t,
 			errorMessage,
 			outdatedMessage,
 			incompleteMessage,
