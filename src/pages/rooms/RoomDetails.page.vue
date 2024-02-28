@@ -187,7 +187,7 @@ export default defineComponent({
 					icon: mdiPlus,
 					title: this.$t("common.actions.add"),
 					ariaLabel: this.$t("common.actions.add"),
-					testId: "add-tool-button",
+					dataTestId: "add-tool-button",
 					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
 				};
 
@@ -263,7 +263,7 @@ export default defineComponent({
 				icon: mdiPlus,
 				title: this.$t("common.actions.create"),
 				ariaLabel: this.$t("common.actions.create"),
-				testId: "add-content-button",
+				dataTestId: "add-content-button",
 				actions: actions,
 			};
 			return items;
