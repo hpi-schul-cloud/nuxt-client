@@ -28,7 +28,7 @@ function evaluateGuards(
 			return;
 		}
 
-		// VUE3_UPGRADE improve typings or replace Multiguard
+		// TODO improve typings or replace Multiguard
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
 		next(nextArg);

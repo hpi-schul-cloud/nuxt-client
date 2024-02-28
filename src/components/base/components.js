@@ -1,5 +1,3 @@
-// VUE3_UPGRADE - remove this when legacy base components are obsolete
-
 import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseInputCheckbox from "@/components/base/BaseInput/BaseInputCheckbox.vue";

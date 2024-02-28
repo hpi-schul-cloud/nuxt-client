@@ -13,5 +13,4 @@ export const i18nMock = createMock<{
 		}`;
 		return str;
 	},
-	// VUE3_UPGRADE tc() was replaced by t() in vue-i18n 9.x and is not part of the I18n interface anymore
 });

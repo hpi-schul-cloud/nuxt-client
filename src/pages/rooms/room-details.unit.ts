@@ -24,6 +24,9 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
+import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { VBtn } from "vuetify/lib/components/index.mjs";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -132,6 +135,13 @@ const getWrapper = () => {
 		getCtlToolsTabEnabled: false,
 	});
 
+	// we need this because in order for useMediaQuery (vueuse) to work
+	// window.matchMedia has to return a reasonable result.
+	// https://github.com/vueuse/vueuse/blob/main/packages/core/useMediaQuery/index.ts#L44
+	jest
+		.spyOn(window, "matchMedia")
+		.mockReturnValue(createMock<MediaQueryList>());
+
 	return mount(RoomDetailsPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -219,43 +229,40 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		expect(fabComponent.exists()).toBe(false);
 	});
 
-	// VUE3_UPGRADE: disabled because of missing v-custom-fab
-	// it("should show FAB if user has permission to create courses", () => {
-	// 	const wrapper = getWrapper();
-	// 	const fabComponent = wrapper.find(".wireframe-fab");
-	// 	const actions = fabComponent.vm.actions.map((action: any) => {
-	// 		return action.label;
-	// 	});
-	// 	const hasNewTaskAction = actions.some((item: string) => {
-	// 		return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.task");
-	// 	});
-	// 	const hasNewLessonAction = actions.some((item: string) => {
-	// 		return item === wrapper.vm.$i18n.t("pages.rooms.fab.add.lesson");
-	// 	});
-	// 	expect(fabComponent.exists()).toBe(true);
-	// 	expect(hasNewTaskAction).toBe(true);
-	// 	expect(hasNewLessonAction).toBe(true);
-	// });
+	describe("menu", () => {
+		it("should show FAB if user has permission to create courses", () => {
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
-	// VUE3_UPGRADE: disabled because of missing v-custom-fab
-	// it("'add task' button should have correct path", async () => {
-	// 	const wrapper = getWrapper();
-	// 	const fabComponent = wrapper.find(".wireframe-fab");
-	// 	const newTaskAction = fabComponent.vm.actions[0];
-	// 	expect(newTaskAction.href).toStrictEqual(
-	// 		"/homework/new?course=123&returnUrl=rooms/123"
-	// 	);
-	// });
+			expect(fabComponent.exists()).toBe(true);
+		});
 
-	// VUE3_UPGRADE: disabled because of missing v-custom-fab
-	// it("'add lesson' button should have correct path", async () => {
-	// 	const wrapper = getWrapper();
-	// 	const fabComponent = wrapper.find(".wireframe-fab");
-	// 	const newTaskAction = fabComponent.vm.actions[1];
-	// 	expect(newTaskAction.href).toStrictEqual(
-	// 		"/courses/123/topics/add?returnUrl=rooms/123"
-	// 	);
-	// });
+		it("'add task' button should have correct path", async () => {
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
+
+			// open menu
+			await fabComponent.findComponent(VBtn).trigger("click");
+			const newTaskAction = wrapper.findAllComponents(SpeedDialMenuAction)[0];
+
+			expect(newTaskAction.props("href")).toStrictEqual(
+				"/homework/new?course=123&returnUrl=rooms/123"
+			);
+		});
+
+		it("'add lesson' button should have correct path", async () => {
+			const wrapper = getWrapper();
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
+
+			// open menu
+			await fabComponent.findComponent(VBtn).trigger("click");
+			const newTaskAction = wrapper.findAllComponents(SpeedDialMenuAction)[1];
+
+			expect(newTaskAction.props("href")).toStrictEqual(
+				"/courses/123/topics/add?returnUrl=rooms/123"
+			);
+		});
+	});
 
 	describe("headline menus", () => {
 		beforeEach(() => {
@@ -395,7 +402,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call store action after 'Share Course' menu clicked", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE_NEW: true } as Envs);
+			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const wrapper = getWrapper();
 
 			const threeDotButton = wrapper.findComponent(
@@ -425,32 +432,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			const shareDialog = modalView.findComponent({ name: "v-custom-dialog" });
 
 			expect(shareDialog.props("isOpen")).toBe(true);
-		});
-
-		it("should close the modal and call 'closeDialog' method", async () => {
-			const closeDialogSpy = jest.fn();
-			const wrapper = getWrapper();
-			wrapper.vm.closeDialog = closeDialogSpy;
-			await wrapper.setData({
-				dialog: {
-					isOpen: true,
-					model: "share",
-					header: "pages.room.modal.course.share.header",
-					text: "pages.room.modal.course.share.text",
-					inputText: "shareToken_123456",
-					subText: "pages.room.modal.course.share.subText",
-					courseShareToken: "shareToken_123456",
-					qrUrl: "/courses?import=shareToken_123456",
-				},
-			});
-			const modalView = wrapper.findComponent({ name: "v-custom-dialog" });
-
-			const closeButton = modalView.findComponent(
-				`[data-testid="dialog-close"]`
-			);
-			await closeButton.trigger("click");
-
-			expect(closeDialogSpy).toHaveBeenCalled();
 		});
 	});
 
@@ -495,7 +476,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 		});
 
-		// VUE3_UPGRADE: is this still relevant?
 		describe("when Tools(new) tab is active", () => {
 			const setup = () => {
 				envConfigModule.setEnvs({

@@ -1,7 +1,7 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { envConfigModule, accountsModule } from "@/store";
 
-// VUE3_UPGRADE feature for jwt timer reset is disabled in dev environments.
+// feature for jwt timer reset is disabled in dev environments.
 // we should probably check the feature flag directly?
 const jwtTimerDisabled = () => {
 	return process.env.NODE_ENV === "development";

@@ -8,4 +8,3 @@ export type DataTableHeader = {
 	class?: string;
 	cellClass?: string;
 };
-// VUE3_UPGRADE -- check 'title', 'class' and 'cellClass' work

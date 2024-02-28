@@ -34,7 +34,7 @@
 				</span>
 			</VBtn>
 		</template>
-		<VList>
+		<VList role="menu">
 			<slot :scope="scope" />
 		</VList>
 	</VMenu>
@@ -52,6 +52,10 @@ export default defineComponent({
 		scope: {
 			type: String as PropType<BoardMenuScope>,
 			required: true,
+		},
+		dataTestid: {
+			type: String,
+			default: "board-menu-button",
 		},
 	},
 	setup(props) {

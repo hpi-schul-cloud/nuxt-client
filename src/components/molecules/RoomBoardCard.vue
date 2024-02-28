@@ -3,7 +3,7 @@
 		class="mx-auto mb-4 board-card"
 		hover
 		tabindex="0"
-		role="button"
+		role="link"
 		color="rgba(var(--v-theme-primary-lighten))"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
@@ -21,9 +21,9 @@
 					</span>
 				</div>
 			</div>
-			<h6 class="board-title mt-2">
+			<h2 class="text-h6 board-title mt-2">
 				{{ $t("pages.room.boardCard.label.courseBoard") }}
-			</h6>
+			</h2>
 		</VCardText>
 	</VCard>
 </template>

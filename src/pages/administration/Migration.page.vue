@@ -1,6 +1,6 @@
 <template>
 	<DefaultWireframe
-		:headline="t('pages.administration.migration.vue3.title')"
+		:headline="t('pages.administration.migration.title')"
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
 	>
@@ -8,7 +8,7 @@
 			v-if="businessError && businessError.statusCode !== '200'"
 			:model-value="!!businessError"
 			:timeout="errorTimeout"
-			location="top centered"
+			location="top center"
 			color="error"
 			data-testid="error-dialog"
 		>

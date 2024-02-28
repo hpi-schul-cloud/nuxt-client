@@ -53,8 +53,8 @@
 </template>
 
 <script lang="ts">
+import { useI18n } from "vue-i18n";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
@@ -62,7 +62,6 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
-import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 import { useSharedLastCreatedElement } from "@util-board";
 import {
 	computed,
@@ -75,10 +74,11 @@ import {
 	toRef,
 	watch,
 } from "vue";
-import { useI18n } from "vue-i18n";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
+import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 
 export default defineComponent({
 	components: {

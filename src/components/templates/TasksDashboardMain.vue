@@ -395,7 +395,7 @@ export default {
 	color: rgba(0, 0, 0, 0.54);
 }
 
-// VUE3_UPGRADE remove background color from expansion panel title
+// remove background color from expansion panel title
 :deep(
 		.v-expansion-panel-title--active > .v-expansion-panel-title__overlay,
 		.v-expansion-panel-title[aria-haspopup="menu"][aria-expanded="true"]

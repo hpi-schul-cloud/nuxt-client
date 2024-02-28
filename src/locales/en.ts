@@ -935,9 +935,6 @@ export default {
 	"pages.administration.migration.title": "Migrate user accounts",
 	"pages.administration.migration.tutorialWait":
 		"Please note, once the school migration process starts, it can take up to 1 hour to fetch the data. After this, you will be able to continue to the next step.",
-	"pages.administration.migration.vue3.notification":
-		"This feature is currently deactivated.",
-	"pages.administration.migration.vue3.title": "Migration",
 	"pages.administration.migration.waiting": "Waiting for data sync...",
 	"pages.administration.or": "or",
 	"pages.administration.printQr.emptyUser":
@@ -1333,14 +1330,6 @@ export default {
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.label.shareLesson": "Share topic copy",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
-	"pages.room.modal.course.invite.header": "Invitation link generated!",
-	"pages.room.modal.course.invite.text":
-		"Share the following link with your students to invite them to the course. Students must be logged in to use the link.",
-	"pages.room.modal.course.share.header": "Copy code has been generated!",
-	"pages.room.modal.course.share.subText":
-		"Alternatively, you can show your teacher colleagues the following QR code.",
-	"pages.room.modal.course.share.text":
-		"Distribute the following code to other colleagues so that they can import the course as a copy. Old student submissions are automatically removed for the newly copied course.",
 	"pages.room.student.emptyState":
 		"Learning content such as topics or tasks appear here.",
 	"pages.room.taskCard.aria":
@@ -1369,7 +1358,6 @@ export default {
 	"pages.rooms.fab.add.lesson": "New topic",
 	"pages.rooms.fab.add.task": "New task",
 	"pages.rooms.fab.ariaLabel": "Create new course",
-	"pages.rooms.fab.import.course": "Import course",
 	"pages.rooms.groupName": "Courses",
 	"pages.rooms.headerSection.archived": "Archive",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",

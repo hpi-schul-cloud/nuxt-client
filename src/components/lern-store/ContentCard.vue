@@ -36,9 +36,10 @@
 							/>
 							<div v-show="isCollection()" class="card-tag">
 								<span>{{ $t("pages.content.card.collection") }}</span>
-								<v-icon class="custom-icon content__text-icon">
-									$ic_collection
-								</v-icon>
+								<v-icon
+									class="custom-icon content__text-icon"
+									icon="$ic_collection"
+								/>
 							</div>
 						</div>
 					</div>
