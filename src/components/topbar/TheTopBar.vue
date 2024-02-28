@@ -6,19 +6,18 @@
 			:class="{ 'expanded-menu': expandedMenu }"
 		>
 			<v-btn
-				icon
+				icon="$mdiMenu"
 				height="60"
 				width="60"
-				color="secondary darken-1"
+				color="secondary-darken-1"
+				variant="text"
 				:ripple="false"
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
 				data-testid="top-menu-btn"
 				:aria-label="$t('global.topbar.mobileMenu.ariaLabel')"
 				role="menu"
-				@click.native="sendEvent('expandMenu')"
-			>
-				<v-icon>$mdiMenu</v-icon>
-			</v-btn>
+				@click="sendEvent('expandMenu')"
+			/>
 			<div class="top-bar-actions">
 				<popup-icon
 					v-if="showStatusAlertIcon"
@@ -34,15 +33,15 @@
 				</popup-icon>
 				<v-btn
 					class="item"
-					icon
-					color="secondary darken-1"
+					icon="$mdiArrowExpand"
+					color="secondary-darken-1"
+					variant="text"
+					density="comfortable"
 					:title="$t('global.topbar.actions.fullscreen')"
 					:aria-label="$t('global.topbar.actions.fullscreen')"
 					data-testid="fullscreen-btn"
-					@click.native="sendEvent('fullscreen')"
-				>
-					<v-icon>$mdiArrowExpand</v-icon>
-				</v-btn>
+					@click="sendEvent('fullscreen')"
+				/>
 				<popup-icon
 					class="item"
 					icon="$mdiQrcode"
@@ -103,27 +102,20 @@
 		</div>
 		<v-btn
 			v-else
-			color="secondary darken-1"
-			fab
-			dark
-			depressed
+			color="secondary-darken-1"
+			icon="$mdiArrowCollapse"
+			variant="flat"
 			width="40"
 			height="40"
 			class="fullscreen-button-active"
-			@click.native="sendEvent('fullscreen')"
-		>
-			<v-icon>$mdiArrowCollapse</v-icon>
-		</v-btn>
+			@click="sendEvent('fullscreen')"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, onMounted, computed } from "vue";
-import {
-	I18N_KEY,
-	STATUS_ALERTS_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { User } from "@/store/types/auth";
 import PopupIcon from "@/components/topbar/PopupIcon.vue";
 import PopupIconInitials from "@/components/topbar/PopupIconInitials.vue";
@@ -131,6 +123,7 @@ import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
 import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import StatusAlerts from "@/components/topbar/StatusAlerts.vue";
 import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {
@@ -160,7 +153,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
 
 		onMounted(() => {
@@ -175,7 +168,7 @@ export default defineComponent({
 
 		const role = computed(() => {
 			const roleName = props.user.roles.map((r) => r.name);
-			return i18n.t(`common.roleName.${roleName[0]}`).toString();
+			return t(`common.roleName.${roleName[0]}`).toString();
 		});
 
 		const statusAlerts = computed(() => {
@@ -192,8 +185,8 @@ export default defineComponent({
 					.length !== 0;
 
 			return statusAlertsIncludeDanger
-				? "var(--v-error-base)"
-				: "var(--v-info-base)";
+				? "rgba(var(--v-theme-error))"
+				: "rgba(var(--v-theme-info))";
 		});
 
 		return {
@@ -215,6 +208,14 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	height: var(--sidebar-item-height);
+
+	@include breakpoint(tablet) {
+		max-width: calc(100vw - var(--sidebar-width-tablet));
+	}
+
+	@include breakpoint(desktop) {
+		max-width: calc(100vw - var(--sidebar-width));
+	}
 
 	.top-main {
 		display: flex;
@@ -302,7 +303,7 @@ export default defineComponent({
 
 	width: 100%;
 	padding: 8px 27px;
-	color: var(--v-secondary-base);
+	color: rgba(var(--v-theme-secondary));
 	text-align: left;
 	text-decoration: none;
 	cursor: pointer;

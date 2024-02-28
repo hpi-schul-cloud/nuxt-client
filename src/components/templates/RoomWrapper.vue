@@ -2,19 +2,18 @@
 	<default-wireframe
 		ref="main"
 		headline=""
-		:full-width="isLoading"
+		:full-width="true"
 		:fab-items="fabItems"
-		@fabButtonEvent="fabClick"
 	>
-		<template slot="header">
+		<template #header>
 			<slot name="header" />
 		</template>
 		<template v-if="isLoading">
-			<v-container fluid class="px-0"
-				><v-skeleton-loader
+			<v-container class="loader">
+				<v-skeleton-loader
 					ref="skeleton-loader"
 					type="date-picker-days"
-					class="mt-16"
+					class="mt-6"
 				/>
 			</v-container>
 		</template>
@@ -29,11 +28,6 @@
 		<template v-else>
 			<slot name="page-content" />
 		</template>
-		<import-modal
-			v-model="importDialog.isOpen"
-			class="import-modal"
-			@update-rooms="updateRooms"
-		/>
 		<common-cartridge-import-modal
 			v-model="ccImportDialog.isOpen"
 			class="upload-modal"
@@ -46,20 +40,13 @@ import { authModule, envConfigModule, roomsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
-import ImportModal from "@/components/molecules/ImportModal.vue";
-import {
-	mdiPlus,
-	mdiCloudDownloadOutline,
-	mdiImport,
-	mdiSchoolOutline,
-} from "@mdi/js";
-import Vue from "vue";
+import { mdiPlus, mdiImport, mdiSchoolOutline } from "@mdi/js";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
 	components: {
 		DefaultWireframe,
 		vCustomEmptyState,
-		ImportModal,
 		CommonCartridgeImportModal,
 	},
 	props: {
@@ -74,9 +61,6 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			importDialog: {
-				isOpen: false,
-			},
 			ccImportDialog: {
 				isOpen: false,
 			},
@@ -88,7 +72,6 @@ export default Vue.extend({
 				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
 				if (
-					envConfigModule.getEnv.FEATURE_COURSE_SHARE ||
 					envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED
 				) {
 					const fabItems = {
@@ -104,37 +87,18 @@ export default Vue.extend({
 								dataTestid: "fab_button_add_course",
 								ariaLabel: this.$t("pages.rooms.fab.add.course"),
 							},
+							{
+								label: this.$t("pages.rooms.fab.import.course"),
+								icon: mdiImport,
+								dataTestid: "fab_button_import_course",
+								ariaLabel: this.$t("pages.rooms.fab.import.course"),
+								customEvent: {
+									name: "fabButtonEvent",
+									value: "import",
+								},
+							},
 						],
 					};
-
-					if (envConfigModule.getEnv.FEATURE_COURSE_SHARE) {
-						fabItems.actions.push({
-							label: this.$t("pages.rooms.fab.import.course"),
-							icon: mdiCloudDownloadOutline,
-							dataTestid: "fab_button_import_course",
-							ariaLabel: this.$t("pages.rooms.fab.import.course"),
-							customEvent: {
-								name: "fabButtonEvent",
-								value: "import",
-							},
-						});
-					}
-
-					if (
-						envConfigModule.getEnv
-							.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED
-					) {
-						fabItems.actions.push({
-							label: this.$t("pages.rooms.fab.import.course"),
-							icon: mdiImport,
-							dataTestid: "fab_button_upload_course",
-							ariaLabel: this.$t("pages.rooms.fab.import.course"),
-							customEvent: {
-								name: "fabButtonEvent",
-								value: "upload",
-							},
-						});
-					}
 
 					return fabItems;
 				}
@@ -144,7 +108,7 @@ export default Vue.extend({
 					title: this.$t("common.actions.create"),
 					href: "/courses/add",
 					ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
-					testId: "add-course-button",
+					dataTestId: "add-course-button",
 				};
 			}
 
@@ -160,47 +124,43 @@ export default Vue.extend({
 	methods: {
 		fabClick(event) {
 			if (event === "import") {
-				this.$data.importDialog.isOpen = true;
-			}
-
-			if (event === "upload") {
 				this.$data.ccImportDialog.isOpen = true;
 			}
-		},
-		async updateRooms() {
-			await roomsModule.fetchAllElements();
 		},
 	},
 });
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/src/styles/styles.sass";
+@import "~vuetify/settings";
 
-::v-deep .v-skeleton-loader__date-picker-days {
+:deep(.v-skeleton-loader__date-picker-days) {
 	justify-content: space-between;
 	padding: 0;
 }
 
-::v-deep .v-skeleton-loader__avatar {
+:deep(.v-skeleton-loader__avatar) {
 	width: 80px;
 	max-width: 80px;
-	height: 80px;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin: 12px;
 }
 
+.loader {
+	// padding: 0 var(--space-lg); // Desktop
+	max-width: var(--size-content-width-max);
+}
+
 @media #{map-get($display-breakpoints, 'sm-and-up')} {
-	::v-deep .v-skeleton-loader__avatar {
+	:deep(.v-skeleton-loader__avatar) {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin: 12px 36px;
 	}
 }
 
 @media #{map-get($display-breakpoints, 'md-and-up')} {
-	::v-deep .v-skeleton-loader__avatar {
+	:deep(.v-skeleton-loader__avatar) {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
-		margin: 24px 48px;
+		margin: 24px 36px;
 	}
 }
 </style>

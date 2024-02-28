@@ -13,19 +13,18 @@
 						height="100%"
 						class="mx-auto"
 						:src="logoUrl"
-						contain
 						:data-testid="`${testId}-logo`"
 						:alt="$t('pages.rooms.tools.logo')"
 					/>
 				</div>
 				<div class="d-flex flex-column w-100">
 					<div class="d-flex">
-						<h5 class="my-auto">
+						<h2 class="text-h5 my-auto">
 							{{ title }}
-						</h5>
+						</h2>
 						<v-icon
 							v-if="openInNewTab"
-							class="ml-1 my-auto no-wrap"
+							class="ml-1 my-auto text-no-wrap"
 							data-testId="card-new-tab-icon"
 						>
 							{{ mdiOpenInNew }}
@@ -42,7 +41,6 @@
 </template>
 
 <script lang="ts">
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiOpenInNew } from "@mdi/js";
 import { defineComponent } from "vue";
 
@@ -64,16 +62,11 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
-		const t = (key: string): string => i18n.tc(key, 0);
-
 		const onClick = () => {
 			emit("click");
 		};
 
 		return {
-			t,
 			onClick,
 			mdiOpenInNew,
 		};

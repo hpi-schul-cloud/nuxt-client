@@ -7,7 +7,7 @@ describe("@/components/base/BaseInputHidden", () => {
 		const mockText = "test input";
 		supportedTypes.forEach(() => {
 			const wrapper = mount(BaseInput, {
-				propsData: {
+				props: {
 					type: "hidden",
 					vmodel: mockText,
 				},

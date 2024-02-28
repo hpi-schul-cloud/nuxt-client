@@ -1,11 +1,12 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount } from "@vue/test-utils";
+import { VueWrapper, mount } from "@vue/test-utils";
 import RoomAvatarIterator from "./RoomAvatarIterator.vue";
+import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 const propsData = {
 	itemSize: "4em",
 	maxItems: 2,
-	items: [
+	avatars: [
 		{
 			id: "123",
 			title: "Math 1a",
@@ -34,34 +35,45 @@ const propsData = {
 	condenseLayout: true,
 };
 
-const getWrapper = (props: object, options?: object) => {
+const getWrapper = () => {
 	return mount(RoomAvatarIterator, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		propsData: props,
-		...options,
+		global: {
+			plugins: [createTestingVuetify()],
+			stubs: {
+				VRoomAvatar: {
+					template: '<div class="room-avatar" />',
+					props: ["item", "draggable"],
+				},
+			},
+		},
+		props: propsData,
 	});
 };
 
 describe("RoomAvatarIterator", () => {
 	it("should have props", async () => {
-		const wrapper = getWrapper(propsData);
+		const wrapper = getWrapper();
 
-		expect(wrapper.vm.$props.itemSize).toStrictEqual("4em");
-		expect(wrapper.vm.$props.maxItems).toStrictEqual(2);
-		expect(wrapper.vm.$props.items).toStrictEqual(propsData.items);
-		expect(wrapper.vm.$props.colCount).toStrictEqual(4);
-		expect(wrapper.vm.$props.canDraggable).toBe(false);
-		expect(wrapper.vm.$props.condenseLayout).toBe(true);
+		expect(wrapper.props()).toEqual({
+			...propsData,
+			colCount: 4,
+			canDraggable: false,
+		});
 	});
 
 	it("should iterate 2 avatar components", async () => {
-		const wrapper = getWrapper(propsData);
-		const avatarComponents = wrapper.findAll(".room-avatar") as any;
+		const wrapper = getWrapper();
+		const avatarComponents = wrapper.findAllComponents(".room-avatar");
 
 		expect(avatarComponents).toHaveLength(2);
-		expect(avatarComponents.wrappers[0].vm.item.id).toStrictEqual("123");
-		expect(avatarComponents.wrappers[0].vm.draggable).toBe(false);
+
+		const avatarComponentOne = avatarComponents[0] as VueWrapper<
+			typeof vRoomAvatar
+		>;
+
+		expect(avatarComponentOne.props()).toEqual({
+			item: propsData.avatars[0],
+			draggable: false,
+		});
 	});
 });

@@ -1,9 +1,11 @@
 import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
+import ContentModule from "@/store/content";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
 import LoadingStateModule from "@/store/loading-state";
+import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import RoomModule from "@/store/room";
@@ -16,11 +18,9 @@ import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
 import { InjectionKey } from "vue";
-import VueI18n from "vue-i18n";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
-export const I18N_KEY: InjectionKey<VueI18n> = Symbol("i18n");
 export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
 	Symbol("notifierModule");
 export const AUTH_MODULE_KEY: InjectionKey<AuthModule> = Symbol("authModule");
@@ -51,3 +51,8 @@ export const ROOMS_MODULE_KEY: InjectionKey<RoomsModule> =
 	Symbol("roomsModule");
 export const LOADING_STATE_MODULE_KEY: InjectionKey<LoadingStateModule> =
 	Symbol("loadingStateModule");
+export const NEWS_MODULE_KEY: InjectionKey<NewsModule> = Symbol("newsModule");
+export const CONTENT_MODULE_KEY: InjectionKey<ContentModule> =
+	Symbol("contentModule");
+
+export const THEME_KEY: InjectionKey<{ name: string }> = Symbol("theme");

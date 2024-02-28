@@ -10,7 +10,6 @@
 		v-bind="$attrs"
 		:target="linkTarget"
 		:rel="external ? 'noreferrer' : undefined"
-		v-on="$listeners"
 	>
 		<slot />
 	</a>
@@ -20,7 +19,6 @@
 		:class="{ link: !noStyles, 'text-only': noStyles }"
 		:to="routerLinkTo"
 		v-bind="$attrs"
-		v-on="$listeners"
 	>
 		<slot />
 	</router-link>
@@ -138,18 +136,18 @@ export default {
 
 .link {
 	display: inline;
-	color: var(--v-primary-base);
+	color: rgba(var(--v-theme-primary));
 	text-decoration: none;
 	cursor: pointer;
-	border-bottom: 2px solid var(--v-gray-base);
+	border-bottom: 2px solid rgba(var(--v-theme-grey));
 
 	&:hover,
 	&:focus {
-		color: var(--v-primary-darken1);
+		color: rgba(var(--v-theme-primary-darken-1));
 	}
 
 	&:visited {
-		color: var(--v-primary-base);
+		color: rgba(var(--v-theme-primary));
 	}
 }
 
@@ -157,11 +155,11 @@ export default {
 	border: none;
 
 	&:active {
-		color: var(--v-primary-darken1);
+		color: rgba(var(--v-theme-primary-darken-1));
 	}
 
 	&:hover {
-		color: var(--v-primary-darken1);
+		color: rgba(var(--v-theme-primary-darken-1));
 	}
 }
 </style>

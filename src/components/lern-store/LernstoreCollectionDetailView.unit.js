@@ -1,12 +1,14 @@
 import LernstoreCollectionDetailView from "./LernstoreCollectionDetailView";
-import Vuex from "vuex";
 import { Collection } from "@@/tests/test-utils/mockDataCollection";
-import VueRouter from "vue-router";
-import { createLocalVue } from "@vue/test-utils";
 import ContentModule from "@/store/content";
 import NotifierModule from "@/store/notifier";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { initializeAxios } from "@/utils/api";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
+import { RouterLinkStub } from "@vue/test-utils";
 
 jest.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -24,12 +26,6 @@ const testProps = {
 
 jest.spyOn(window, "scrollTo").mockImplementation();
 
-const localVue = createLocalVue();
-localVue.use(VueRouter);
-localVue.use(Vuex);
-
-const router = new VueRouter();
-
 setupStores({
 	contentModule: ContentModule,
 	notifierModule: NotifierModule,
@@ -40,19 +36,29 @@ describe("@/components/organisms/LernstoreCollectionDetailView", () => {
 
 	beforeEach(() => {
 		wrapper = shallowMount(LernstoreCollectionDetailView, {
-			...createComponentMocks({ i18n: true }),
-			router,
-			localVue,
-			propsData: { ...testProps },
-			computed: {
-				loading: () => jest.fn(),
-				elements: () => jest.fn(),
-				selected: () => jest.fn(),
-			},
-			state: {
-				loading: true,
-				elements: {},
-				selected: [],
+			props: { ...testProps },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$route: {
+						query: {
+							id: "mockId",
+						},
+					},
+				},
+				stubs: {
+					RouterLink: RouterLinkStub,
+				},
+				computed: {
+					loading: () => jest.fn(),
+					elements: () => jest.fn(),
+					selected: () => jest.fn(),
+				},
+				state: {
+					loading: true,
+					elements: {},
+					selected: [],
+				},
 			},
 		});
 	});

@@ -316,33 +316,6 @@ export default class RoomsModule extends VuexModule {
 	}
 
 	@Action
-	async getSharedCourseData(courseCode: string): Promise<void> {
-		this.resetBusinessError();
-		const params = {
-			shareToken: courseCode,
-		};
-		try {
-			const courseName = (
-				await $axios.get("/v1/courses-share", {
-					params,
-				})
-			).data;
-			this.setSharedCourseData({
-				code: courseCode,
-				courseName: courseName,
-				status: "success",
-				message: "",
-			});
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
 	async confirmSharedCourseData(
 		courseData: SharingCourseObject
 	): Promise<void> {

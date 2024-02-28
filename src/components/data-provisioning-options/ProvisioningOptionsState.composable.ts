@@ -3,7 +3,7 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { ref, Ref } from "vue";
 import { ProvisioningOptions, useProvisioningOptionsApi } from "./index";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 export const useProvisioningOptionsState = () => {

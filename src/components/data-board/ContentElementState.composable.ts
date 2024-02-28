@@ -1,5 +1,5 @@
 import { watchDebounced } from "@vueuse/core";
-import { computed, ComputedRef, Ref, ref, toRef, unref } from "vue";
+import { computed, ComputedRef, Ref, ref, toRef, unref, UnwrapRef } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
@@ -43,7 +43,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 		};
 		try {
 			const response = await updateElementCall(payload);
-			_responseValue.value = response.data;
+			_responseValue.value = response.data as UnwrapRef<T>;
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplate("notUpdated", "boardElement"),

@@ -1,25 +1,29 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("BoardColumnGhostHeader", () => {
-	let wrapper: Wrapper<Vue>;
-
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		wrapper = shallowMount(BoardColumnGhostHeader as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		const wrapper = shallowMount(BoardColumnGhostHeader, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
 			propsData: {
 				isColumnActive: true,
 			},
 		});
+
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in the dom", () => {
-			setup();
+			const { wrapper } = setup();
 			expect(wrapper.findComponent(BoardColumnGhostHeader).exists()).toBe(true);
 			expect(wrapper.findComponent({ name: "VBtn" }).exists()).toBe(true);
 		});
@@ -27,7 +31,7 @@ describe("BoardColumnGhostHeader", () => {
 
 	describe("when 'add column' button clicked", () => {
 		it("should emit 'add-column'", () => {
-			setup();
+			const { wrapper } = setup();
 
 			const button = wrapper.findComponent({ name: "VBtn" });
 			button.vm.$emit("click");

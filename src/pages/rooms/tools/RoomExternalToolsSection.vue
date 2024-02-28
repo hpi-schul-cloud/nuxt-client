@@ -47,8 +47,7 @@
 					<v-spacer />
 					<v-btn
 						data-testId="dialog-cancel"
-						depressed
-						text
+						variant="text"
 						@click="onCloseDeleteDialog"
 					>
 						{{ t("common.actions.cancel") }}
@@ -57,7 +56,7 @@
 						data-testId="dialog-confirm"
 						class="px-6"
 						color="primary"
-						depressed
+						variant="flat"
 						@click="onDeleteTool"
 					>
 						{{ t("common.actions.confirm") }}
@@ -77,7 +76,6 @@ import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-dis
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	I18N_KEY,
 	injectStrict,
 } from "@/utils/inject";
 import { RenderHTML } from "@feature-render-html";
@@ -89,8 +87,8 @@ import {
 	ref,
 	Ref,
 } from "vue";
-import VueI18n from "vue-i18n";
-import { useRouter } from "vue-router/composables";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import RoomExternalToolsErrorDialog from "@/pages/rooms/tools/RoomExternalToolsErrorDialog.vue";
 
 export default defineComponent({
@@ -114,14 +112,12 @@ export default defineComponent({
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
-		const i18n: VueI18n = injectStrict(I18N_KEY);
+
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 		const router = useRouter();
 
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
+		const { t } = useI18n();
 
 		const isDeleteDialogOpen: Ref<boolean> = ref(false);
 

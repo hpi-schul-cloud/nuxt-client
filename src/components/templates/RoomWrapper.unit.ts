@@ -1,37 +1,40 @@
-import { authModule, envConfigModule, roomsModule } from "@/store";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, Wrapper } from "@vue/test-utils";
+import { authModule, roomsModule } from "@/store";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import RoomWrapper from "./RoomWrapper.vue";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import Vue from "vue";
-import { Envs } from "@/store/types/env-config";
-import { i18nMock } from "@@/tests/test-utils/i18nMock";
 import {
-	I18N_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOMS_MODULE_KEY,
 } from "@/utils/inject";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
 
 const getWrapper = (
-	options: any = {
-		propsData: { hasRooms: true },
-		computed: { $mq: () => "desktop", isLoading: () => false },
+	options: ComponentMountingOptions<typeof RoomWrapper> = {
+		props: { hasRooms: true },
 	}
 ) => {
 	return mount(RoomWrapper, {
-		...createComponentMocks({
-			i18n: true,
-		}),
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				mq: () => ({
+					current: "desktop",
+				}),
+			},
+		},
 		...options,
 		provide: {
-			[I18N_KEY.valueOf()]: i18nMock,
 			[LOADING_STATE_MODULE_KEY.valueOf()]:
 				createModuleMocks(LoadingStateModule),
 			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
@@ -89,63 +92,52 @@ const mockData = [
 ];
 
 describe("@templates/RoomWrapper.vue", () => {
-	let wrapper: Wrapper<Vue>;
-
 	beforeEach(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
 		setupStores({
 			roomsModule: RoomsModule,
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
 		});
-		roomsModule.setAllElements(mockData as any);
+		roomsModule.setAllElements(mockData);
 	});
 
 	describe("when data is not loaded yet", () => {
 		it("should display skeleton loader", () => {
-			wrapper = getWrapper({
+			roomsModule.setLoading(true);
+
+			const wrapper = getWrapper({
 				props: { hasRooms: false },
-				computed: { $mq: () => "desktop", isLoading: () => true },
 			});
 
 			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(
 				true
 			);
-
-			wrapper.destroy();
 		});
 	});
 
 	describe("when data is loaded", () => {
 		describe("when data is empty", () => {
-			it("should display empty state", () => {
-				wrapper = getWrapper({
+			it("should display empty state", async () => {
+				const wrapper = getWrapper({
 					props: { hasRooms: false },
-					computed: { $mq: () => "desktop", isLoading: () => false },
 				});
 
 				expect(
 					wrapper.findComponent({ ref: "rooms-empty-state" }).exists()
 				).toBe(true);
-
-				wrapper.destroy();
 			});
 		});
 
 		describe("when data is not empty", () => {
 			it("should render page content slot", () => {
-				wrapper = getWrapper({
-					propsData: { hasRooms: true },
-					computed: { $mq: () => "desktop", isLoading: () => false },
+				const wrapper = getWrapper({
+					props: { hasRooms: true },
 					slots: {
 						"page-content": "<div>Page Content</div>",
 					},
 				});
 
 				expect(wrapper.html()).toContain("<div>Page Content</div>");
-
-				wrapper.destroy();
 			});
 		});
 	});
@@ -179,89 +171,8 @@ describe("@templates/RoomWrapper.vue", () => {
 		it("should display fab", () => {
 			const wrapper = getWrapper();
 
-			const fabComponent = wrapper.find(".wireframe-fab");
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(true);
-		});
-
-		it("should open the import-modal", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
-			const wrapper = getWrapper();
-
-			const importModalComponent = wrapper.find(".import-modal");
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(importModalComponent.vm.isOpen).toBe(false);
-
-			const fab = wrapper.find(".wireframe-fab");
-			await fab.trigger("click");
-
-			const importBtn = wrapper.find(
-				'[data-testid="fab_button_import_course"]'
-			);
-			await importBtn.trigger("click");
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(importModalComponent.vm.isOpen).toBe(true);
-		});
-
-		it("should call the updateRooms method if import-modal component emits 'update-rooms' event", async () => {
-			const updateRoomsMock = jest.fn();
-			const wrapper = getWrapper();
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			wrapper.vm.updateRooms = updateRoomsMock;
-			await wrapper.setData({ importDialog: { isOpen: true } });
-
-			const importModalComponent = wrapper.find(".import-modal");
-			await importModalComponent.vm.$emit("update-rooms");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-			expect(updateRoomsMock).toHaveBeenCalled();
-		});
-
-		it("should open the upload-modal", async () => {
-			envConfigModule.setEnvs({
-				FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
-			} as Envs);
-
-			const wrapper = getWrapper();
-			const uploadModalComponent = wrapper.find(".upload-modal");
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(uploadModalComponent.vm.isOpen).toBe(false);
-
-			const fab = wrapper.find(".wireframe-fab");
-
-			await fab.trigger("click");
-
-			const uploadBtn = wrapper.find(
-				'[data-testid="fab_button_upload_course"]'
-			);
-
-			await uploadBtn.trigger("click");
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(uploadModalComponent.vm.isOpen).toBe(true);
-		});
-
-		it("should call the updateRooms method if upload-modal component emits 'update-rooms' event", async () => {
-			const updateRoomsMock = jest.fn();
-			const wrapper = getWrapper();
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			wrapper.vm.updateRooms = updateRoomsMock;
-			await wrapper.setData({ ccImportDialog: { isOpen: true } });
-
-			const uploadModalComponent = wrapper.find(".upload-modal");
-
-			await uploadModalComponent.vm.$emit("update-rooms");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-			expect(updateRoomsMock).toHaveBeenCalled();
 		});
 	});
 
@@ -293,10 +204,8 @@ describe("@templates/RoomWrapper.vue", () => {
 
 			const wrapper = getWrapper();
 
-			const fabComponent = wrapper.find(".wireframe-fab");
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(false);
-
-			wrapper.destroy();
 		});
 	});
 });

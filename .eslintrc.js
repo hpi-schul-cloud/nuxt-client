@@ -4,7 +4,7 @@ module.exports = {
 		node: true,
 	},
 	extends: [
-		"plugin:vue/essential",
+		"plugin:vue/vue3-essential",
 		"eslint:recommended",
 		"@vue/typescript/recommended",
 		"plugin:prettier/recommended",
@@ -13,9 +13,9 @@ module.exports = {
 		ecmaVersion: 2020,
 	},
 	rules: {
+		"@typescript-eslint/no-explicit-any": "warn",
 		"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
 		"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
-		// ----
 		"no-useless-escape": "error",
 		"no-irregular-whitespace": "error",
 		"no-undef": "warn",
@@ -28,7 +28,6 @@ module.exports = {
 		"@typescript-eslint/ban-ts-comment": "error",
 		"@typescript-eslint/no-inferrable-types": "error",
 		"@typescript-eslint/ban-types": "error",
-		"@typescript-eslint/no-explicit-any": "warn",
 		"vue/no-v-text-v-html-on-component": "error",
 		"vue/no-v-html": "error",
 		"vue/html-self-closing": [
@@ -119,9 +118,6 @@ module.exports = {
 			globals: {
 				mount: false,
 				shallowMount: false,
-				createComponentMocks: false,
-				rendersSlotContent: false,
-				wait: false,
 			},
 		},
 	],

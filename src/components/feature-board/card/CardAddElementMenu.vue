@@ -5,9 +5,8 @@
 				@click.stop="onAddElement()"
 				@dblclick.stop="() => {}"
 				elevation="0"
-				outlined
+				variant="outlined"
 				icon
-				large
 				data-testid="add-element-btn"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>
