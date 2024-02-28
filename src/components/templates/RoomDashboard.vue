@@ -26,6 +26,7 @@
 								courseName: roomData.title,
 								courseId: roomData.roomId,
 							}"
+							:board="item.content"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
@@ -173,20 +174,20 @@
 </template>
 
 <script>
-import {
-	BoardElementResponseTypeEnum,
-	ImportUserResponseRoleNamesEnum,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3";
-import { copyModule, roomModule, tasksModule, envConfigModule } from "@/store";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import RoomBoardCard from "@/components/molecules/RoomBoardCard.vue";
 import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import draggable from "vuedraggable";
 import ShareModal from "@/components/share/ShareModal.vue";
+import {
+	BoardElementResponseTypeEnum,
+	ImportUserResponseRoleNamesEnum,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
+import { copyModule, envConfigModule, roomModule, tasksModule } from "@/store";
+import { CopyParamsTypeEnum } from "@/store/copy";
+import draggable from "vuedraggable";
 
 export default {
 	components: {

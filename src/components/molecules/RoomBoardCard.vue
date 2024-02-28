@@ -22,7 +22,11 @@
 				</div>
 			</div>
 			<h2 class="text-h6 board-title mt-2">
-				{{ $t("pages.room.boardCard.label.courseBoard") }}
+				{{
+					board.title && board.title !== ""
+						? board.title
+						: $t("pages.room.boardCard.label.courseBoard")
+				}}
 			</h2>
 		</VCardText>
 	</VCard>
@@ -37,6 +41,7 @@ const props = defineProps({
 	courseData: { type: Object, required: true },
 	keyDrag: { type: Boolean, required: true },
 	dragInProgress: { type: Boolean, required: true },
+	board: { type: Object, required: true },
 });
 const emit = defineEmits(["tab-pressed", "on-drag", "move-element"]);
 
