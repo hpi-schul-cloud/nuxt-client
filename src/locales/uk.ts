@@ -1515,8 +1515,8 @@ export default {
 	"tldraw.error.403": "Tldraw вимкнено",
 	"tldraw.error.500": "Виникла помилка під час налаштування tldraw",
 	"tldraw.error.ws.4400": "Назва кімнати відсутня в параметрах URL-адреси",
-	"tldraw.error.ws.4401": "Ви не маєте дозволу на цю дошку tldraw",
-	"tldraw.error.ws.4404": "Дошки Tldraw з такою назвою не знайдено",
+	"tldraw.error.ws.4401": "Ви не маєте права дозволу до цієї дошки",
+	"tldraw.error.ws.4404": "Дошки з такою назвою не знайдено",
 	"tldraw.error.ws.4500":
 		"Виникла помилка під час з'єднання з веб-сокетом tldraw",
 	"ui-confirmation-dialog.ask-delete":

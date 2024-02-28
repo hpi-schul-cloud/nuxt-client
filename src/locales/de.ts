@@ -1523,8 +1523,8 @@ export default {
 	"tldraw.error.403": "Tldraw ist deaktiviert",
 	"tldraw.error.500": "Beim Einrichten von tldraw ist ein Fehler aufgetreten",
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
-	"tldraw.error.ws.4401": "Du hast keine Berechtigung für dieses Tldraw-Board",
-	"tldraw.error.ws.4404": "Tldraw-Board mit diesem Namen wurde nicht gefunden",
+	"tldraw.error.ws.4401": "Du hast keine Berechtigung für dieses Whiteboard",
+	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
 	"tldraw.error.ws.4500":
 		"Bei der Tldraw-Websocket-Verbindung ist ein Fehler aufgetreten",
 	"ui-confirmation-dialog.ask-delete": "{type} {title} wirklich löschen?",
