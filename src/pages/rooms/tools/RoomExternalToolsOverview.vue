@@ -42,6 +42,7 @@
 </template>
 
 <script lang="ts">
+import { mdiAlertCircle } from "@/components/icons/material";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
@@ -52,7 +53,6 @@ import { Course, CourseFeatures } from "@/store/types/room";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
 	injectStrict,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
@@ -68,7 +68,6 @@ import {
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import { mdiAlertCircle } from "@/components/icons/material";
 
 export default defineComponent({
 	components: {

@@ -1,28 +1,26 @@
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import { shallowMount } from "@vue/test-utils";
-import { flushPromises } from "@vue/test-utils";
 import RoomModule from "@/store/room";
 import { Envs } from "@/store/types/env-config";
 import { CourseFeatures } from "@/store/types/room";
-import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	businessErrorFactory,
 	courseFactory,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { flushPromises, shallowMount } from "@vue/test-utils";
+import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 
 describe("RoomExternalToolOverview", () => {
 	let el: HTMLDivElement;

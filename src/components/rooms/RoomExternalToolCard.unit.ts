@@ -1,21 +1,20 @@
+import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
 import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
+import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
-import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import { useExternalToolLaunchState } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mount, flushPromises } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
-import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 
 jest.mock("@data-external-tool");
 

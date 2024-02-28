@@ -7,7 +7,7 @@ import { ExternalToolDisplayData } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { Envs } from "@/store/types/env-config";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	ContextExternalToolConfigurationStatusFactory,
@@ -32,8 +32,8 @@ import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import ExternalToolElement from "./ExternalToolElement.vue";
-import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
+import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 
 jest.mock("@data-board");
 jest.mock("@data-external-tool");
@@ -119,10 +119,15 @@ describe("ExternalToolElement", () => {
 		useExternalToolElementDisplayStateMock.error = ref(undefined);
 		useSharedLastCreatedElementMock.lastCreatedElementId = ref(undefined);
 
-    const refreshTime = 299000;
-    const wrapper = shallowMount(ExternalToolElement, {
+		const refreshTime = 299000;
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as Envs,
+		});
+
+		const wrapper = shallowMount(ExternalToolElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock },
 			},
 			props: {
 				isFirstElement: false,
