@@ -15,7 +15,7 @@
 			</v-card-title>
 			<v-card-text class="text--primary">
 				<v-file-input
-					v-model="file"
+					:v-model="file"
 					:label="$t('pages.rooms.ccImportCourse.fileInputLabel')"
 					:prepend-icon="mdiTrayArrowUp"
 					accept=".imscc, .zip"
@@ -26,13 +26,13 @@
 			<v-card-actions>
 				<v-spacer />
 				<div class="button-section">
-					<v-btn data-testid="dialog-cancel-btn" depressed @click="cancel">
+					<v-btn data-testId="dialog-cancel-btn" depressed @click="cancel">
 						{{ $t("common.labels.close") }}
 					</v-btn>
 				</div>
 				<div class="button-section">
 					<v-btn
-						data-testid="dialog-confirm-btn"
+						data-testId="dialog-confirm-btn"
 						color="primary"
 						:disabled="importButtonDisabled"
 						@click="confirm"
@@ -48,13 +48,13 @@
 <script lang="ts">
 import { computed, defineComponent, ref } from "vue";
 import {
-	I18N_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOMS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
 import { mdiTrayArrowUp } from "@mdi/js";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "CommonCartridgeImportModal",
@@ -75,10 +75,9 @@ export default defineComponent({
 	emits: {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		"dialog-closed": (value: boolean): boolean => true,
-		"update-rooms": (): boolean => true,
 	},
 	setup: (_, { emit }) => {
-		const i18n = injectStrict(I18N_KEY);
+		const i18n = useI18n();
 		const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
 		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const roomsModule = injectStrict(ROOMS_MODULE_KEY);
@@ -98,7 +97,7 @@ export default defineComponent({
 			}
 
 			loadingStateModule.open({
-				text: i18n.tc("pages.rooms.ccImportCourse.loading"),
+				text: i18n.t("pages.rooms.ccImportCourse.loading").toString(),
 			});
 			await roomsModule.uploadCourse(file.value);
 			await roomsModule.fetchAllElements();
