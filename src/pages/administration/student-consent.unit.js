@@ -46,15 +46,9 @@ const mockData = [
 ];
 
 const specificFilesMock = {
-	privacyExemplary:
-		"https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 	privacy:
-		"https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Datenschutzerklaerung-Onlineeinwilligung.pdf",
-	termsOfUseExemplary:
-		"https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Nutzungsordnung-HPI-Schule-Schueler-Onlineeinwilligung.pdf",
+		"https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
 	termsOfUse:
-		"https://s3.hidrive.strato.com/cloud-instances/default/Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
-	termsOfUseSchool:
 		"https://s3.hidrive.strato.com/cloud-instances/default/Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 	analogConsent:
 		"https://s3.hidrive.strato.com/cloud-instances/default/Dokumente/Einwilligungserklaerung_analog.pdf",
