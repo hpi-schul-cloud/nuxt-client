@@ -6,13 +6,9 @@ import FilePathsModule from "./filePaths";
 const specificFiles = {
 	accessibilityStatement:
 		"Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
-	privacyExemplary:
+	privacy:
 		"Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
-	privacy: "Onlineeinwilligung/Datenschutzerklaerung-Onlineeinwilligung.pdf",
-	termsOfUseExemplary:
-		"Onlineeinwilligung/Nutzungsordnung-HPI-Schule-Schueler-Onlineeinwilligung.pdf",
-	termsOfUse: "Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
-	termsOfUseSchool:
+	termsOfUse:
 		"Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 	analogConsent: "Dokumente/Einwilligungserklaerung_analog.pdf",
 };
@@ -152,11 +148,8 @@ describe("filePaths module", () => {
 			const filePathsModule = new FilePathsModule({});
 			const mockSpecificFiles = {
 				accessibilityStatement: "mockValue",
-				privacyExemplary: "mockValue",
 				privacy: "mockValue",
-				termsOfUseExemplary: "mockValue",
 				termsOfUse: "mockValue",
-				termsOfUseSchool: "mockValue",
 				analogConsent: "mockValue",
 			};
 			filePathsModule.specificFiles = mockSpecificFiles;
