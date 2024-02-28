@@ -1,11 +1,7 @@
 <template>
 	<VCardText class="mb-n4">
-		<template v-for="(element, index) in elements">
-			<ContentElement
-				:key="element.id"
-				:index="index"
-				:elementCount="elements.length"
-			>
+		<template v-for="(element, index) in elements" :key="element.id">
+			<ContentElement :index="index" :elementCount="elements.length">
 				<RichTextContentElement
 					v-if="isRichTextElementResponse(element)"
 					:element="element"

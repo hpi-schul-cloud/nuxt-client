@@ -1,9 +1,11 @@
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import CopyResultModalListItem from "@/components/copy-result-modal/CopyResultModalListItem.vue";
 import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
-import { mount, MountOptions } from "@vue/test-utils";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 const mockItem: CopyResultItem = {
 	type: CopyApiResponseTypeEnum.Lesson,
@@ -19,49 +21,53 @@ const mockItem: CopyResultItem = {
 			type: CopyApiResponseTypeEnum.LessonContentNexboard,
 		},
 	],
-	
+
 	url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
 };
 
-const getWrapper = (props: object) => {
-	return mount<any>(CopyResultModalListItem as MountOptions<Vue>, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		propsData: props,
-		mocks: {},
+const createWrapper = (props: object) => {
+	return mount(CopyResultModalListItem, {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+		},
+		props,
 	});
 };
 
 describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 	it("Should render component", () => {
-		const wrapper = getWrapper({ item: mockItem });
+		const wrapper = createWrapper({ item: mockItem });
 
 		expect(wrapper.findComponent(CopyResultModalListItem).exists()).toBe(true);
 	});
 
 	it("should render the element with the correct element title", () => {
-		const wrapper = getWrapper({ item: mockItem });
+		const wrapper = createWrapper({ item: mockItem });
+		// console.log(wrapper.html())
 		const elementTitle = wrapper.find("ul > li").text();
 
-		expect(elementTitle).toContain("GeoGebra");
+		expect(elementTitle).toContain(
+			"components.molecules.copyResult.label.geogebra"
+		);
 		expect(elementTitle).toContain("Geogebra Element Title");
 	});
 
 	it("should render the elements with the correct element title", () => {
-		const wrapper = getWrapper({ item: mockItem });
-		const elementTitles = wrapper
-			.findAll("ul > li")
-			.wrappers.map((el) => el.text());
+		const wrapper = createWrapper({ item: mockItem });
+		const elementTitles = wrapper.findAll("ul > li").map((el) => el.text());
 
-		expect(elementTitles[0]).toContain("GeoGebra");
+		expect(elementTitles[0]).toContain(
+			"components.molecules.copyResult.label.geogebra"
+		);
 		expect(elementTitles[0]).toContain("Geogebra Element Title");
-		expect(elementTitles[1]).toContain("NeXboard");
+		expect(elementTitles[1]).toContain(
+			"components.molecules.copyResult.label.nexboard"
+		);
 		expect(elementTitles[1]).toContain("Nexboard Element Title");
 	});
 
 	it("should render the correct link", () => {
-		const wrapper = getWrapper({ item: mockItem });
+		const wrapper = createWrapper({ item: mockItem });
 		const parentInfoLink = wrapper.find("a");
 
 		expect(parentInfoLink.text()).toBe("Lesson Title");
@@ -69,7 +75,7 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 	});
 
 	it("should translate types", () => {
-		const wrapper = getWrapper({ item: mockItem });
+		const wrapper = createWrapper({ item: mockItem });
 
 		const map = [
 			[CopyApiResponseTypeEnum.Board, "common.words.learnContent"],
@@ -154,9 +160,7 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 		];
 
 		map.forEach(([constant, languageConstant]) => {
-			expect(wrapper.vm.getElementTypeName(constant)).toBe(
-				wrapper.vm.$i18n.t(languageConstant)
-			);
+			expect(wrapper.vm.getElementTypeName(constant)).toBe(languageConstant);
 		});
 	});
 });

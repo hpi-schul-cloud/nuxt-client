@@ -2,14 +2,14 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/migration_error.svg" alt="" />
 		<h1 class="pl-4 pr-4">
-			{{ t("pages.userMigration.error.title") }}
+			{{ $t("pages.userMigration.error.title") }}
 		</h1>
 		<div>
 			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
 				:html="
-					t('pages.userMigration.error.description', {
+					$t('pages.userMigration.error.description', {
 						targetSystem: getSystemName(),
 						instance: this.$theme.name,
 						supportLink,
@@ -21,7 +21,7 @@
 				data-testId="text-schoolnumber-mismatch"
 				v-if="targetSchoolNumber && sourceSchoolNumber"
 				:html="
-					t('pages.userMigration.error.schoolNumberMismatch', {
+					$t('pages.userMigration.error.schoolNumberMismatch', {
 						targetSystem: getSystemName(),
 						targetSchoolNumber,
 						sourceSchoolNumber,
@@ -29,8 +29,13 @@
 				"
 				component="p"
 			/>
-			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
-				{{ t("pages.userMigration.backToLogin") }}
+			<v-btn
+				color="primary"
+				variant="flat"
+				data-testId="btn-proceed"
+				to="/logout"
+			>
+				{{ $t("pages.userMigration.backToLogin") }}
 			</v-btn>
 		</div>
 	</div>
@@ -38,7 +43,6 @@
 
 <script lang="ts">
 import { RenderHTML } from "@feature-render-html";
-import { useI18n } from "@/composables/i18n.composable";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import {
@@ -60,6 +64,7 @@ import {
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import EnvConfigModule from "@/store/env-config";
 import { UserLoginMigration } from "@/store/user-login-migration";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
@@ -123,7 +128,6 @@ export default defineComponent({
 		});
 
 		return {
-			t,
 			isLoading,
 			supportLink,
 			getSystemName,

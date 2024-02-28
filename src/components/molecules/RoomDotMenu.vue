@@ -1,38 +1,29 @@
 <template>
-	<v-menu
-		v-if="menuItems.length"
-		v-model="showMenu"
-		bottom
-		left
-		offset-y
-		attach
-		:nudge-right="nudgeRight"
-	>
-		<template #activator="{ on, attrs }">
+	<v-menu v-if="menuItems.length > 0" location="bottom end">
+		<template v-slot:activator="{ props }">
 			<v-btn
-				v-on="on"
-				v-bind="attrs"
+				v-bind="props"
+				:icon="mdiDotsVertical"
+				variant="text"
+				density="comfortable"
 				class="three-dot-button"
 				data-testid="room-tool-three-dot-button"
-				icon
 				:aria-label="ariaLabel"
 				@keydown.space.stop
-			>
-				<v-icon>{{ mdiDotsVertical }}</v-icon>
-			</v-btn>
+			/>
 		</template>
-		<v-list v-if="menuItems.length">
+		<v-list role="menu">
 			<v-list-item
 				v-for="(item, i) in menuItems"
 				:key="i"
-				class="menu-action"
 				:data-testid="item.dataTestId || ''"
-				@click.stop="handleClick(item)"
+				@click="handleClick(item)"
+				density="comfortable"
+				class="dotmenu-action"
+				role="menuitem"
 			>
-				<v-icon class="menu-action-icon mr-1">
-					{{ item.icon }}
-				</v-icon>
-				<v-list-item-title class="pl-1">
+				<v-list-item-title>
+					<v-icon :icon="item.icon" class="dotmenu-action-icon" />
 					{{ item.name }}
 				</v-list-item-title>
 			</v-list-item>
@@ -40,51 +31,37 @@
 	</v-menu>
 </template>
 
-<script>
+<script setup>
 import { mdiDotsVertical } from "@mdi/js";
 
-export default {
-	components: {},
-	props: {
-		menuItems: {
-			type: Array,
-			required: true,
-		},
-		nudgeRight: {
-			type: String,
-			default: "0",
-		},
-		ariaLabel: {
-			type: String,
-			required: true,
-		},
+defineProps({
+	menuItems: {
+		type: Array,
+		required: true,
 	},
-	data() {
-		return {
-			mdiDotsVertical,
-			showMenu: false,
-		};
+	ariaLabel: {
+		type: String,
+		required: true,
 	},
-	methods: {
-		handleClick(menuItem) {
-			this.showMenu = false;
-			menuItem.action();
-		},
-	},
+});
+
+const handleClick = (menuItem) => {
+	menuItem.action();
 };
 </script>
 
 <style lang="scss" scoped>
-.menu-action {
-	min-height: var(--space-lg);
-	text-align: left;
+// stylelint-disable sh-waqar/declaration-use-variable
+.dotmenu-action {
+	min-height: 25px !important;
 }
 
-.menu-action-icon {
-	width: var(--space-md);
-	height: var(--space-md);
-	margin-top: calc(-0.5 + var(--space-base-vuetify));
-	font-size: var(--space-md);
-	color: map-get($grey, darken-3);
+.dotmenu-action-icon {
+	width: 1rem;
+	height: 1rem;
+	margin-top: -2px;
+	margin-right: 4px;
+	font-size: 1rem;
+	color: rgba(0, 0, 0, 0.87);
 }
 </style>

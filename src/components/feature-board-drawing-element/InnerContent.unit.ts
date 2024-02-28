@@ -1,8 +1,9 @@
-import { I18N_KEY } from "@/utils/inject";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
 import InnerContent from "./InnerContent.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("InnerContent", () => {
 	const propsData = {
@@ -15,12 +16,11 @@ describe("InnerContent", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const wrapper = shallowMount(InnerContent as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			propsData,
-			provide: {
-				[I18N_KEY.valueOf()]: { tc: (key: string) => key },
+		const wrapper = mount(InnerContent, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
+			propsData,
 		});
 
 		return {
@@ -31,18 +31,20 @@ describe("InnerContent", () => {
 
 	it("should be found in the DOM", () => {
 		const { wrapper } = setup();
+
 		expect(wrapper.exists()).toBe(true);
 	});
 
 	it("should display the image", () => {
 		const { wrapper } = setup();
-		const imageElement = wrapper.find("v-img-stub");
+		const imageElement = wrapper.findComponent({ name: "v-img" });
+
 		expect(imageElement.exists()).toBe(true);
 	});
 
 	it("should find the drawing-element language context", () => {
 		const { wrapper } = setup();
 
-		expect(wrapper.text()).toContain("Whiteboard");
+		expect(wrapper.text()).toContain("components.cardElement.drawingElement");
 	});
 });

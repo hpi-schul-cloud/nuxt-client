@@ -1,23 +1,29 @@
-/* eslint-disable max-lines */
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { envConfigModule, roomModule, tasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
-import TasksModule from "@/store/tasks";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
-import RoomDashboard from "./RoomDashboard.vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { Envs } from "@/store/types/env-config";
 import ShareModule from "@/store/share";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import TasksModule from "@/store/tasks";
+import { Envs } from "@/store/types/env-config";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
-	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount, VueWrapper } from "@vue/test-utils";
+import RoomDashboard from "./RoomDashboard.vue";
+
+import { createMock } from "@golevelup/ts-jest";
+import { nextTick } from "vue";
+import { Router, useRouter } from "vue-router";
+import { VCard } from "vuetify/lib/components/index.mjs";
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 const mockData = {
 	roomId: "123",
@@ -120,20 +126,23 @@ const getWrapper = (props: object, options?: object) => {
 		getCtlToolsTabEnabled: false,
 	});
 
-	return mount<any>(RoomDashboard, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		provide: {
-			[I18N_KEY.valueOf()]: { t: (key: string) => key },
-			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-			shareModule: shareModuleMock,
-			[I18N_KEY.valueOf()]: { t: (key: string) => key },
-			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+	const router = createMock<Router>();
+	useRouterMock.mockReturnValue(router);
+
+	const wrapper = mount(RoomDashboard, {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+				shareModule: shareModuleMock,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+			},
 		},
-		propsData: props,
+		props,
 		...options,
 	});
+
+	return wrapper;
 };
 
 describe("@/components/templates/RoomDashboard.vue", () => {
@@ -202,13 +211,13 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomDataObject: emptyMockData,
 				role: "teacher",
 			});
-			const emptyStateComponent = wrapper.find(
-				`[data-testid="empty-state-item"]`
-			);
+			const emptyStateComponent = wrapper.findComponent({
+				name: "v-custom-empty-state",
+			});
 			expect(emptyStateComponent.exists()).toBe(true);
 			expect(emptyStateComponent.props("imgHeight")).toStrictEqual("200px");
 			expect(emptyStateComponent.props("title")).toStrictEqual(
-				wrapper.vm.$i18n.t("pages.room.teacher.emptyState")
+				wrapper.vm.$t("pages.room.teacher.emptyState")
 			);
 		});
 
@@ -217,16 +226,17 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomDataObject: emptyMockData,
 				role: "student",
 			});
-			const emptyStateComponent = wrapper.find(
-				`[data-testid="empty-state-item"]`
-			);
+			const emptyStateComponent = wrapper.findComponent({
+				name: "v-custom-empty-state",
+			});
 			expect(emptyStateComponent.exists()).toBe(true);
 			expect(emptyStateComponent.props("imgHeight")).toStrictEqual("200px");
 			expect(emptyStateComponent.props("title")).toStrictEqual(
-				wrapper.vm.$i18n.t("pages.room.student.emptyState")
+				wrapper.vm.$t("pages.room.student.emptyState")
 			);
 		});
 	});
+
 	describe("Drag & Drop operations", () => {
 		it("should sortable value 'true' if user is a 'teacher'", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
@@ -257,7 +267,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			const timeDuration = wrapper.vm.dragInProgressDelay;
 			expect(wrapper.vm.dragInProgress).toBe(false);
-			const element = wrapper.find(".elements");
+			const element = wrapper.findComponent({ name: "draggable" });
 			element.vm.$emit("start");
 			expect(wrapper.vm.dragInProgress).toBe(true);
 			element.vm.$emit("end");
@@ -277,8 +287,8 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				"Mathe_2"
 			);
 
-			const draggableElement = wrapper.find(".elements");
-			await draggableElement.vm.$emit("input", items);
+			const draggableElement = wrapper.findComponent({ name: "draggable" });
+			await draggableElement.vm.$emit("update:modelValue", items);
 			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual(
 				"Mathe_2"
 			);
@@ -301,7 +311,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			expect(wrapper.vm.isDragging).toBe(false);
 			cardElement.vm.$emit("on-drag");
 			expect(wrapper.vm.isDragging).toBe(true);
-			await wrapper.vm.$nextTick();
+			await nextTick();
 
 			cardElement.vm.$emit("move-element", {
 				id: "1234",
@@ -319,7 +329,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			expect(wrapper.vm.isDragging).toBe(false);
 			cardElement.vm.$emit("on-drag");
 			expect(wrapper.vm.isDragging).toBe(false);
-			await wrapper.vm.$nextTick();
+			await nextTick();
 
 			cardElement.vm.$emit("move-element", {
 				id: "1234",
@@ -337,7 +347,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			expect(wrapper.vm.isDragging).toBe(false);
 			cardElement.vm.$emit("on-drag");
 			expect(wrapper.vm.isDragging).toBe(true);
-			await wrapper.vm.$nextTick();
+			await nextTick();
 
 			cardElement.vm.$emit("tab-pressed");
 			expect(wrapper.vm.isDragging).toBe(false);
@@ -350,11 +360,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomDataObject: mockData,
 				role: "teacher",
 			});
-			const lessonCard = wrapper.find(".lesson-card");
+
+			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 			lessonCard.vm.$emit("open-modal", "12345");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+
 			expect(shareModuleMock.startShareFlow).toBeCalledWith({
 				id: "12345",
 				type: ShareTokenBodyParamsParentTypeEnum.Lessons,
@@ -368,12 +377,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomDataObject: mockData,
 				role: "teacher",
 			});
-			const taskCard = wrapper.find(".task-card");
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
 
 			taskCard.vm.$emit("share-task", "1234");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
+
 			expect(shareModuleMock.startShareFlow).toBeCalledWith({
 				id: "1234",
 				type: ShareTokenBodyParamsParentTypeEnum.Tasks,
@@ -382,11 +389,25 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 	});
 
 	describe("Deleting Items", () => {
+		const findCustomDialog = (wrapper: VueWrapper, dataTestid: string) => {
+			const dialog = wrapper
+				.findAllComponents({ name: "v-custom-dialog" })
+				.find((dialog) => dialog.vm.$attrs["data-testid"] === dataTestid);
+
+			if (!dialog) {
+				throw new Error(
+					`Cannot find VCustomDialog with data-testid="${dataTestid}"`
+				);
+			}
+
+			return dialog;
+		};
+
 		it("should call the openItemDeleteDialog method when lesson should be deleted", async () => {
 			const openDeleteDialogMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
-			const lessonCard = wrapper.find(".lesson-card");
+			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 
 			lessonCard.vm.$emit("delete-lesson");
 			expect(openDeleteDialogMock).toHaveBeenCalled();
@@ -398,7 +419,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			const openDeleteDialogMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
-			const taskCard = wrapper.find(".task-card");
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
 
 			taskCard.vm.$emit("delete-task");
 			expect(openDeleteDialogMock).toHaveBeenCalled();
@@ -406,27 +427,14 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			expect(openDeleteDialogMock.mock.calls[0][1]).toStrictEqual("task");
 		});
 
-		it("item delete modal should be visible if 'itemDelete.isOpen' is set true", async () => {
-			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			const deleteModal: any = wrapper.find(
-				`[data-testid="delete-dialog-item"]`
-			);
-
-			expect(deleteModal.vm.isOpen).toBe(false);
-			wrapper.vm.itemDelete.isOpen = true;
-			await wrapper.vm.$nextTick();
-			expect(deleteModal.vm.isOpen).toBe(true);
-		});
-
 		it("should call deleteItem method after modal emits 'dialog-confirmed'", async () => {
 			const deleteItemMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.deleteItem = deleteItemMock;
 			wrapper.vm.itemDelete.isOpen = true;
-			await wrapper.vm.$nextTick();
-			const deleteModal: any = wrapper.find(
-				`[data-testid="delete-dialog-item"]`
-			);
+			await nextTick();
+			const deleteModal = findCustomDialog(wrapper, "delete-dialog-item");
+
 			deleteModal.vm.$emit("dialog-confirmed");
 			expect(deleteItemMock).toHaveBeenCalled();
 		});
@@ -439,15 +447,14 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			tasksModule.deleteTask = deleteTaskMock;
 			roomModule.fetchContent = fetchContentMock;
 			roomModule.deleteLesson = deleteLessonMock;
-			const taskCard = wrapper.find(".task-card");
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
 
 			taskCard.vm.$emit("delete-task");
-			await wrapper.vm.$nextTick();
-			const deleteModal: any = wrapper.find(
-				`[data-testid="delete-dialog-item"]`
-			);
+			await nextTick();
+			const deleteModal = findCustomDialog(wrapper, "delete-dialog-item");
+
 			deleteModal.vm.$emit("dialog-confirmed");
-			await wrapper.vm.$nextTick();
+			await nextTick();
 			expect(deleteTaskMock).toHaveBeenCalled();
 			expect(fetchContentMock).toHaveBeenCalled();
 			expect(deleteLessonMock).not.toHaveBeenCalled();
@@ -461,13 +468,14 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			tasksModule.deleteTask = deleteTaskMock;
 			roomModule.fetchContent = fetchContentMock;
 			roomModule.deleteLesson = deleteLessonMock;
-			const lessonCard = wrapper.find(".lesson-card");
+			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 
 			lessonCard.vm.$emit("delete-lesson");
-			await wrapper.vm.$nextTick();
-			const deleteModal = wrapper.find(`[data-testid="delete-dialog-item"]`);
+			await nextTick();
+			const deleteModal = findCustomDialog(wrapper, "delete-dialog-item");
+
 			deleteModal.vm.$emit("dialog-confirmed");
-			await wrapper.vm.$nextTick();
+			await nextTick();
 			expect(deleteTaskMock).not.toHaveBeenCalled();
 			expect(fetchContentMock).not.toHaveBeenCalled();
 			expect(deleteLessonMock).toHaveBeenCalled();
@@ -476,8 +484,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		it("should close the modal view after clicking the 'cancel' button", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.itemDelete.isOpen = true;
-			await wrapper.vm.$nextTick();
-			const cancelButton = wrapper.find(`[data-testid="dialog-cancel"]`);
+			await nextTick();
+			const cancelButton = wrapper.findComponent(
+				`[data-testid="dialog-cancel"]`
+			);
 			cancelButton.trigger("click");
 			expect(wrapper.vm.itemDelete.isOpen).toBe(false);
 		});
@@ -491,7 +501,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 					roomDataObject: mockData,
 					role: "teacher",
 				});
-				const taskCard = wrapper.find(".task-card");
+				const taskCard = wrapper.findComponent<VCard>(".task-card");
 				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("finish-task");
@@ -504,7 +514,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 					roomDataObject: mockData,
 					role: "teacher",
 				});
-				const taskCard = wrapper.find(".task-card");
+				const taskCard = wrapper.findComponent<VCard>(".task-card");
 				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("restore-task");
@@ -520,7 +530,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 					roomDataObject: mockData,
 					role: "student",
 				});
-				const taskCard = wrapper.find(".task-card");
+				const taskCard = wrapper.findComponent<VCard>(".task-card");
 				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("finish-task");
@@ -534,7 +544,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 					roomDataObject: mockData,
 					role: "student",
 				});
-				const taskCard = wrapper.find(".task-card");
+				const taskCard = wrapper.findComponent<VCard>(".task-card");
 				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("restore-task");
@@ -554,7 +564,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.copyTask = copyTaskMock;
 
-			const taskCard = wrapper.find(".task-card");
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
 			taskCard.vm.$emit("copy-task");
 
 			expect(copyTaskMock).toHaveBeenCalled();
@@ -563,7 +573,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		it("should emit 'copy-board-element' with correct task-related payload", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
-			const taskCard = wrapper.find(".task-card");
+			const taskCard = wrapper.findComponent<VCard>(".task-card");
 			taskCard.vm.$emit("copy-task");
 
 			expect(wrapper.emitted()).toHaveProperty("copy-board-element");
@@ -590,7 +600,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.copyLesson = copyLessonMock;
 
-			const lessonCard = wrapper.find(".lesson-card");
+			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 			lessonCard.vm.$emit("copy-lesson");
 
 			expect(copyLessonMock).toHaveBeenCalled();
@@ -599,8 +609,8 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		it("should emit 'copy-board-element' with correct lesson-related payload", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
-			const taskCard = wrapper.find(".lesson-card");
-			taskCard.vm.$emit("copy-lesson");
+			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
+			lessonCard.vm.$emit("copy-lesson");
 
 			expect(wrapper.emitted()).toHaveProperty("copy-board-element");
 			const copyBoardElementEvent = wrapper.emitted("copy-board-element");

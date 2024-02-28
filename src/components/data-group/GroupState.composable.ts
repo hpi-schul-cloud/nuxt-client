@@ -3,7 +3,7 @@ import { Group, useGroupApi } from "@data-group";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { BusinessError } from "@/store/types/commons";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 
 export const useGroupState = () => {
 	const { getGroup } = useGroupApi();

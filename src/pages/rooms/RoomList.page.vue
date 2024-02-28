@@ -1,6 +1,6 @@
 <template>
 	<room-wrapper :has-rooms="hasRooms">
-		<template slot="header">
+		<template #header>
 			<h1 class="text-h3 pt-2">
 				{{ $t("pages.rooms.index.courses.all") }}
 			</h1>
@@ -8,8 +8,8 @@
 				<div class="btn">
 					<v-btn
 						color="secondary"
-						outlined
-						small
+						variant="outlined"
+						size="small"
 						to="/rooms-overview"
 						data-testid="go-to-active-courses"
 						>{{ $t("pages.rooms.index.courses.active") }}
@@ -17,19 +17,19 @@
 				</div>
 			</div>
 		</template>
-		<template slot="page-content">
-			<v-row class="justify-center search">
-				<div class="d-flex justify-space-between col-sm-8">
-					<v-text-field
-						ref="search"
-						v-model="searchText"
-						rounded
-						solo
-						:label="$t('pages.rooms.index.search.label')"
-						:append-icon="mdiMagnify"
-						:aria-label="$t('pages.rooms.index.search.label')"
-					/>
-				</div>
+		<template #page-content>
+			<v-row class="d-flex justify-center search">
+				<v-text-field
+					ref="search"
+					class="px-1"
+					v-model="searchText"
+					variant="solo"
+					rounded
+					single-line
+					:label="$t('pages.rooms.index.search.label')"
+					:append-inner-icon="mdiMagnify"
+					:aria-label="$t('pages.rooms.index.search.label')"
+				/>
 			</v-row>
 			<v-row>
 				<v-container fluid>
@@ -60,15 +60,15 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 import { roomsModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { defineComponent } from "vue";
 
-export default Vue.extend({
+export default defineComponent({
 	components: {
 		RoomWrapper,
 		vRoomAvatar,
@@ -104,5 +104,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .search {
 	flex-wrap: nowrap;
+	max-width: 600px;
+	margin: 0 auto;
 }
 </style>

@@ -8,7 +8,7 @@ import { BoardCard } from "@/types/board/Card";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { axiosErrorFactory } from "@@/tests/test-utils";
 import {
@@ -31,10 +31,20 @@ const notifierModule = createModuleMocks(NotifierModule);
 
 const emitMock = jest.fn();
 
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+	};
+});
+
 const setup = (cardId = "123123", emitFn = emitMock) => {
 	return mountComposable(() => useCardState(cardId, emitFn), {
-		[I18N_KEY.valueOf()]: { t: (key: string) => key },
-		[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+		global: {
+			provide: {
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			},
+		},
 	});
 };
 
@@ -42,8 +52,7 @@ jest.mock("./BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
 jest.mock("@/utils/helpers");
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const mockedDelay = jest.mocked(delay);
+jest.mocked(delay);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -120,7 +129,6 @@ describe("CardState composable", () => {
 			const cardId = "123124";
 
 			setup(cardId);
-			// jest.runAllTimers();
 			await nextTick();
 			expect(mockedSharedCardCalls.fetchCard).toHaveBeenCalledWith(cardId);
 		});
@@ -140,10 +148,10 @@ describe("CardState composable", () => {
 				.fn()
 				.mockRejectedValue(setupErrorResponse());
 
-			setup();
+			const cardId1 = "123124a";
+			const { fetchCard } = setup();
 
-			await nextTick();
-			await nextTick(); // test mounts it twice
+			await fetchCard(cardId1);
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
@@ -459,7 +467,7 @@ describe("CardState composable", () => {
 				const { card, moveElementDown } = setup();
 				card.value = boardCard;
 
-				mockedBoardApiCalls.updateCardTitle.mockRejectedValue(
+				mockedBoardApiCalls.moveElementCall.mockRejectedValue(
 					setupErrorResponse()
 				);
 				await moveElementDown({
@@ -565,7 +573,7 @@ describe("CardState composable", () => {
 				const { card, moveElementUp } = setup();
 				card.value = boardCard;
 
-				mockedBoardApiCalls.updateCardTitle.mockRejectedValue(
+				mockedBoardApiCalls.moveElementCall.mockRejectedValue(
 					setupErrorResponse()
 				);
 				await moveElementUp({

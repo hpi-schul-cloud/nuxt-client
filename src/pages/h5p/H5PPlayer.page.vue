@@ -2,8 +2,7 @@
 	<section :class="{ inline: isInline }">
 		<v-btn
 			v-if="isInline"
-			text
-			plain
+			variant="plain"
 			:ripple="false"
 			design="none"
 			class="arrow__back"
@@ -24,7 +23,7 @@ import { useApplicationError } from "@/composables/application-error.composable"
 import { applicationErrorModule } from "@/store";
 import { mdiChevronLeft } from "@mdi/js";
 import { defineComponent } from "vue";
-import { useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router";
 
 import H5PPlayerComponent from "@/components/h5p/H5PPlayer.vue";
 import { mapAxiosErrorToResponseError } from "@/utils/api";

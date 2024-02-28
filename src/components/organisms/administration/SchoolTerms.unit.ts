@@ -4,19 +4,20 @@ import SchoolsModule from "@/store/schools";
 import TermsOfUseModule from "@/store/terms-of-use";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { shallowMount, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { VueWrapper, mount } from "@vue/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { ConsentVersion } from "@/store/types/consent-version";
 import {
 	AUTH_MODULE_KEY,
-	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
 import { downloadFile } from "@/utils/fileHelper";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock("@/utils/fileHelper");
 
@@ -57,10 +58,6 @@ describe("SchoolTerms", () => {
 		},
 		userPermissions: string[] = ["school_edit"]
 	) => {
-		const el = document.createElement("div");
-		el.setAttribute("data-app", "true");
-		document.body.appendChild(el);
-
 		authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: userPermissions,
 		});
@@ -75,16 +72,15 @@ describe("SchoolTerms", () => {
 
 		notifierModule = createModuleMocks(NotifierModule);
 
-		const wrapper: Wrapper<any> = shallowMount(SchoolTerms, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-				[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
-				[AUTH_MODULE_KEY.valueOf()]: authModule,
-				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+		const wrapper = mount(SchoolTerms, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
+					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
 			},
 		});
 
@@ -145,7 +141,9 @@ describe("SchoolTerms", () => {
 		it("should render dialog component", () => {
 			const wrapper = setup();
 
-			expect(wrapper.find('[data-testid="form-dialog"]').exists()).toBe(true);
+			expect(
+				wrapper.findComponent({ name: "school-terms-form-dialog" }).exists()
+			).toBe(true);
 		});
 	});
 
@@ -174,11 +172,13 @@ describe("SchoolTerms", () => {
 	});
 
 	describe("when user clicks delete button", () => {
-		it("should change isDeleteTermsDialogOpen to true", () => {
+		it("should change isDeleteTermsDialogOpen to true", async () => {
 			const wrapper = setup();
 
 			expect(wrapper.vm.isDeleteTermsDialogOpen).toBe(false);
-			wrapper.find('[data-testid="delete-button"]').trigger("click");
+			await wrapper
+				.findComponent('[data-testid="delete-button"]')
+				.trigger("click");
 			expect(wrapper.vm.isDeleteTermsDialogOpen).toBe(true);
 		});
 	});
@@ -188,8 +188,11 @@ describe("SchoolTerms", () => {
 			const wrapper = setup();
 
 			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
+			const termsItem = wrapper.findComponent(
+				'[data-testid="terms-item"]'
+			) as VueWrapper<typeof SchoolTerms>;
 
-			wrapper.find('[data-testid="terms-item"]').vm.$emit("click");
+			termsItem.vm.$emit("click");
 			expect(downloadFileMock).toHaveBeenCalledTimes(1);
 		});
 	});

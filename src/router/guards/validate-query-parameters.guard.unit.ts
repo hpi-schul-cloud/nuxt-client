@@ -1,6 +1,6 @@
 import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { NavigationGuardNext, Route } from "vue-router/types/router";
+import { NavigationGuardNext, RouteLocation } from "vue-router";
 import { validateQueryParameters } from "@/router/guards/validate-query-parameters.guard";
 import { isMongoId } from "@/utils/validationUtil";
 import Mock = jest.Mock;
@@ -26,7 +26,7 @@ describe("validateQueryParameters", () => {
 	});
 
 	function setup() {
-		const route: Route = {} as Route;
+		const route: RouteLocation = {} as RouteLocation;
 		const next: Mock<NavigationGuardNext> = jest.fn();
 		return { to: route, from: route, next };
 	}

@@ -66,7 +66,7 @@ export default defineComponent({
 	padding: 0.05px; // prevent margin collapse
 }
 
-::v-deep {
+:deep() {
 	.ck.ck-editor__editable_inline {
 		padding: 0;
 	}

@@ -1,6 +1,6 @@
 import { ContentElementType, DrawingElementResponse } from "@/serverApi/v3";
 import { Factory } from "fishery";
-import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
+import { timestampsResponseFactory } from "./timestampsResponseFactory";
 import { drawingContentElementFactory } from "./drawingContentElementFactory";
 
 export const drawingContentElementResponseFactory =

@@ -1,11 +1,11 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import { FileAlert } from "../shared/types/FileAlert.enum";
+import FileContent from "./FileContent.vue";
 import FileAlerts from "./alert/FileAlerts.vue";
 import FileDisplay from "./display/FileDisplay.vue";
-import FileContent from "./FileContent.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
 
@@ -13,8 +13,6 @@ describe("FileContent", () => {
 	describe("When EditMode is true", () => {
 		describe("When PreviewUrl is defined", () => {
 			const setup = () => {
-				document.body.setAttribute("data-app", "true");
-
 				const element = fileElementResponseFactory.build();
 
 				const fileProperties = {
@@ -29,12 +27,12 @@ describe("FileContent", () => {
 
 				const alerts = [FileAlert.AWAITING_SCAN_STATUS];
 				const wrapper = shallowMount(FileContent, {
-					propsData: {
+					props: {
 						fileProperties,
 						isEditMode: true,
 						alerts,
 					},
-					...createComponentMocks({}),
+					global: { plugins: [createTestingVuetify()] },
 				});
 
 				return {
