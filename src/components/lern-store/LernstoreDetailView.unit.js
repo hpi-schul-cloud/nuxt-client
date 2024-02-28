@@ -1,5 +1,9 @@
 import LernstoreDetailView from "./LernstoreDetailView";
 import { Resource } from "@@/tests/test-utils/mockDataResource";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
 
 jest.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -11,15 +15,20 @@ const testProps = {
 
 describe("@/components/molecules/LernstoreDetailView", () => {
 	const wrapper = shallowMount(LernstoreDetailView, {
-		...createComponentMocks({
-			i18n: true,
-			$route: {
-				query: {
-					id: "mockId",
+		props: { ...testProps },
+		global: {
+			provide: {
+				mq: "mockMode",
+			},
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			mocks: {
+				$route: {
+					query: {
+						id: "mockId",
+					},
 				},
 			},
-		}),
-		propsData: { ...testProps },
+		},
 	});
 
 	it("Renders close button", () => {
@@ -32,7 +41,9 @@ describe("@/components/molecules/LernstoreDetailView", () => {
 		expect(wrapper.find(".preview-img").attributes("src")).toBe(
 			Resource.preview.url
 		);
-		expect(wrapper.find(".preview-img").attributes("alt")).toBe("Bildvorschau");
+		expect(wrapper.find(".preview-img").attributes("alt")).toBe(
+			"pages.content.preview_img.alt"
+		);
 	});
 
 	it("Renders sidebar with data", () => {

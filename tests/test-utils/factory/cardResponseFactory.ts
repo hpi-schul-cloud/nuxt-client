@@ -1,6 +1,6 @@
 import { Factory } from "fishery";
 import { CardResponse } from "@/serverApi/v3";
-import { timestampsResponseFactory } from "@@/tests/test-utils";
+import { timestampsResponseFactory } from "./timestampsResponseFactory";
 
 export const cardResponseFactory = Factory.define<CardResponse>(
 	({ sequence }) => ({

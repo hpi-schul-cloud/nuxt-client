@@ -3,24 +3,19 @@
 		v-show="hasLinkedTool || isEditMode"
 		class="mb-4"
 		data-testid="board-external-tool-element"
-		dense
 		elevation="0"
-		outlined
+		variant="outlined"
 		ref="externalToolElement"
 		:ripple="false"
 		tabindex="0"
 		:loading="isLoading"
+		@keyup.enter="onClickElement"
 		@keydown.up.down="onKeydownArrow"
 		@click="onClickElement"
 	>
 		<ContentElementBar :has-grey-background="true" :icon="getIcon">
 			<template #logo v-if="displayData && displayData.logoUrl">
-				<v-img
-					height="100%"
-					class="mx-auto"
-					:src="displayData.logoUrl"
-					contain
-				/>
+				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" cover />
 			</template>
 			<template #title>
 				{{
@@ -58,7 +53,7 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
 import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";

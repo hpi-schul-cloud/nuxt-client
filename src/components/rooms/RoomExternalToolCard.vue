@@ -41,14 +41,15 @@
 
 <script lang="ts">
 import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
-import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
 import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useExternalToolLaunchState } from "@data-external-tool";
 import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, PropType, watch } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
+import { useI18n } from "vue-i18n";
+import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
@@ -65,7 +66,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const envConfigModule: EnvConfigModule = injectStrict(
 			ENV_CONFIG_MODULE_KEY
 		);
@@ -76,9 +77,7 @@ export default defineComponent({
 			error: launchError,
 		} = useExternalToolLaunchState();
 
-		const t = (key: string): string => i18n.tc(key, 0);
-
-		const handleClick = async () => {
+		const handleClick = () => {
 			if (!isToolLaunchable.value) {
 				emit("error", props.tool);
 				return;

@@ -37,7 +37,7 @@
 			<v-btn
 				color="primary"
 				data-testid="agree-btn"
-				:disabled="check && !isConfirmed"
+				:disabled="!!check && !isConfirmed"
 				@click="
 					$emit('set');
 					$emit(eventName);
@@ -88,7 +88,8 @@ export default defineComponent({
 			"components.administration.adminMigrationSection.startWarningCard.agree";
 		let disagree =
 			"components.administration.adminMigrationSection.startWarningCard.disagree";
-		let eventName = "start";
+		let eventName: MigrationWarningCardTypeEnum =
+			MigrationWarningCardTypeEnum.START;
 		let check: string | undefined;
 
 		if (type.value === MigrationWarningCardTypeEnum.END) {
@@ -102,7 +103,7 @@ export default defineComponent({
 				"components.administration.adminMigrationSection.endWarningCard.disagree";
 			check =
 				"components.administration.adminMigrationSection.endWarningCard.check";
-			eventName = "end";
+			eventName = MigrationWarningCardTypeEnum.END;
 		}
 
 		const gracePeriodInDays: ComputedRef<number | undefined> = computed(() => {

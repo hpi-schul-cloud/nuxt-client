@@ -1,38 +1,42 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("RichTextContentElementEdit", () => {
-	let wrapper: Wrapper<Vue>;
-
-	const setup = (props: { value: string; autofocus: boolean }) => {
-		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(RichTextContentElementEdit as MountOptions<Vue>, {
-			...createComponentMocks({}),
-			propsData: props,
+	const setup = (options: { value: string; autofocus: boolean }) => {
+		const wrapper = mount(RichTextContentElementEdit, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				...options,
+			},
 		});
+
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ value: "test value", autofocus: false });
-			expect(wrapper.findComponent(RichTextContentElementEdit).exists()).toBe(
-				true
-			);
+			const { wrapper } = setup({ value: "test value", autofocus: false });
+			const content = wrapper.findComponent(RichTextContentElementEdit);
+			expect(content.exists()).toBe(true);
 		});
 
 		it("should pass props to ck-editor component", async () => {
-			setup({ value: "test value", autofocus: true });
-
-			const ckEditor = wrapper.findComponent({ name: "ck-editor" });
-
-			expect(ckEditor.props("value")).toStrictEqual("test value");
+			const { wrapper } = setup({ value: "test value", autofocus: true });
+			const ckEditorComponent = wrapper.findComponent({ name: "ck-editor" });
+			const ckEditorValue = ckEditorComponent.findComponent({
+				name: "ckeditor",
+			}).vm.modelValue;
+			expect(ckEditorValue).toStrictEqual("test value");
 		});
 
 		it("should emit delete:element on CK editor keyboard delete event", async () => {
-			setup({ value: "test value", autofocus: true });
-
+			const { wrapper } = setup({ value: "test value", autofocus: true });
 			const ckEditor = wrapper.findComponent({ name: "ck-editor" });
 			ckEditor.vm.$emit("keyboard:delete");
 

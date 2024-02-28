@@ -1,26 +1,25 @@
-import { mount, MountOptions } from "@vue/test-utils";
-import Vue from "vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import ClassMembersInfoBox from "@/components/page-class-members/ClassMembersInfoBox.vue";
 import { useSystemApi } from "@data-system";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import flushPromises from "flush-promises";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 jest.mock("@data-system");
 
 describe("ClassMembersInfoBox", () => {
 	let useSystemApiMock: DeepMocked<ReturnType<typeof useSystemApi>>;
 
-	const getWrapper = (propsData: { systemId: string }) => {
-		document.body.setAttribute("data-app", "true");
-
-		const wrapper = mount(ClassMembersInfoBox as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			propsData: { ...propsData },
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+	const setup = (props = {}) => {
+		const wrapper = mount(ClassMembersInfoBox, {
+			props,
+			global: {
+				plugins: [createTestingVuetify(), vueDompurifyHTMLPlugin],
+				mocks: {
+					$t: (key: string, dynamic?: object): string =>
+						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+				},
 			},
 		});
 
@@ -33,6 +32,11 @@ describe("ClassMembersInfoBox", () => {
 		useSystemApiMock = createMock<ReturnType<typeof useSystemApi>>();
 
 		jest.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
+
+		useSystemApiMock.getSystem.mockResolvedValue({
+			id: "systemId",
+			displayName: "asdf",
+		});
 	});
 
 	afterEach(() => {
@@ -40,25 +44,12 @@ describe("ClassMembersInfoBox", () => {
 	});
 
 	describe("alert", () => {
-		const setup = async () => {
-			useSystemApiMock.getSystem.mockResolvedValue({
-				id: "systemId",
-				displayName: "asdf",
-			});
-
-			const { wrapper } = getWrapper({
+		it("should render alert component", async () => {
+			const { wrapper } = setup({
 				systemId: "systemId",
 			});
 
 			await flushPromises();
-
-			return {
-				wrapper,
-			};
-		};
-
-		it("should render alert component", async () => {
-			const { wrapper } = await setup();
 
 			const alert = wrapper.findComponent({ name: "v-alert" });
 
@@ -70,7 +61,7 @@ describe("ClassMembersInfoBox", () => {
 
 	describe("text", () => {
 		it("should render text", () => {
-			const { wrapper } = getWrapper({
+			const { wrapper } = setup({
 				systemId: "systemId",
 			});
 
@@ -83,8 +74,8 @@ describe("ClassMembersInfoBox", () => {
 	});
 
 	describe("onMounted", () => {
-		it("should load the system", async () => {
-			getWrapper({
+		it("should load the system", () => {
+			setup({
 				systemId: "systemId",
 			});
 
@@ -93,22 +84,14 @@ describe("ClassMembersInfoBox", () => {
 	});
 
 	describe("watch", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper({
+		it("should load the system when systemId changes", async () => {
+			const { wrapper } = setup({
 				systemId: "systemId",
 			});
 
-			return {
-				wrapper,
-			};
-		};
-
-		it("should load the system when systemId changes", async () => {
-			const { wrapper } = setup();
-
 			wrapper.setProps({ systemId: "systemId2" });
 
-			await Vue.nextTick();
+			await nextTick();
 
 			expect(useSystemApiMock.getSystem).toHaveBeenCalledWith("systemId");
 			expect(useSystemApiMock.getSystem).toHaveBeenCalledWith("systemId2");

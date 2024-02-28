@@ -15,14 +15,11 @@
 		</div>
 		<v-alert
 			v-if="apiError && apiError.message"
-			light
-			prominent
-			text
 			type="error"
 			data-testId="context-tool-error"
-		>
-			{{ apiError.message }}
-		</v-alert>
+			:icon="mdiAlertCircle"
+			:text="apiError.message"
+		/>
 
 		<v-progress-linear
 			:active="loading"
@@ -68,9 +65,10 @@ import {
 	ref,
 	Ref,
 } from "vue";
-import VueI18n from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
+import { mdiAlertCircle } from "@/components/icons/material";
 
 export default defineComponent({
 	components: {
@@ -88,15 +86,11 @@ export default defineComponent({
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
-		const i18n: VueI18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 		const course: Ref<Course | null> = ref(null);
-
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
 
 		const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
 			return (
@@ -145,6 +139,7 @@ export default defineComponent({
 			tools,
 			apiError,
 			isVideoConferenceAvailable,
+			mdiAlertCircle,
 		};
 	},
 });

@@ -2,8 +2,7 @@
 	<v-card
 		class="mb-4"
 		data-testid="drawing-element"
-		outlined
-		dense
+		variant="outlined"
 		ref="drawingElement"
 		:ripple="false"
 		tabindex="0"
@@ -94,12 +93,16 @@ export default defineComponent({
 		};
 		const onMoveDrawingElementEditDown = () => emit("move-down:edit");
 		const onMoveDrawingElementEditUp = () => emit("move-up:edit");
-		const onDeleteElement = () => emit("delete:element", element.value.id);
+		const onDeleteElement = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:element", props.element.id);
+			}
+		};
 
 		const isTeacher = computed(() => {
 			return userRoles.value.includes("teacher");
 		});
-
 		return {
 			drawingElement,
 			redirectToSanitizedUrl,
@@ -116,6 +119,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 ::v-deep .v-btn__content .v-icon,
 .alert-text {
-	color: var(--v-black-base) !important;
+	color: rgba(var(--v-theme-black)) !important;
 }
 </style>

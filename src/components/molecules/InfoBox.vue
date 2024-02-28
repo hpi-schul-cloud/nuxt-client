@@ -9,7 +9,7 @@
 			</p>
 			<div class="actions">
 				<slot name="actions" />
-				<v-btn text dark @click.self="close">
+				<v-btn variant="text" @click.self="close">
 					{{ $t("common.labels.close") }}
 				</v-btn>
 			</div>
@@ -38,12 +38,12 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper {
-	color: var(--v-white-base);
-	background-color: var(--v-info-base);
+	color: rgba(var(--v-theme-white));
+	background-color: rgba(var(--v-theme-info));
 	border-radius: var(--radius-lg);
 
 	h4 {
-		color: var(--v-white-base);
+		color: rgba(var(--v-theme-white));
 		text-align: center;
 	}
 }

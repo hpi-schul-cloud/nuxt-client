@@ -7,15 +7,15 @@
 		:buttons="['close']"
 		@dialog-closed="onDialogClosed"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2 wordbreak-normal">
-			{{ $t("components.molecules.copyResult.title.partial") }}
-		</div>
+		<template #title>
+			<div ref="textTitle" class="text-h4 my-2 wordbreak-normal">
+				{{ $t("components.molecules.copyResult.title.partial") }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
-				<div
-					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
-				>
+				<div class="d-flex flex-row pa-2 mb-4 rounded bg-orange-lighten-5">
 					<div class="mx-2">
 						<v-icon color="warning">{{ mdiAlert }}</v-icon>
 					</div>
@@ -24,7 +24,7 @@
 							<p
 								v-if="warning.isShow"
 								:key="index"
-								class="black--text mb-0 aligned-with-icon"
+								class="text-black mb-0 aligned-with-icon"
 								data-testid="warning-title"
 							>
 								<strong>{{ warning.title }}</strong>
@@ -36,7 +36,7 @@
 				</div>
 			</div>
 
-			<div v-if="hasErrors" class="black--text">
+			<div v-if="hasErrors" class="text-black">
 				<p>{{ $t("components.molecules.copyResult.information") }}</p>
 			</div>
 			<copy-result-modal-list :items="filteredItems" />

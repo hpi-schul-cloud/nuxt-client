@@ -213,27 +213,6 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async createCourseShareToken(courseId: string): Promise<void> {
-		this.resetBusinessError();
-		try {
-			const data = (await $axios.get(`/v1/courses-share/${courseId}`)).data;
-			if (!data.shareToken) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-generated",
-				});
-			}
-			this.setCourseShareToken(data.shareToken);
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
 	async finishTask(payload: object | any): Promise<void> {
 		this.resetBusinessError();
 		try {

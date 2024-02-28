@@ -11,7 +11,7 @@
 				:height="isLoading ? height : 'auto'"
 				class="card-host"
 				:class="{ 'drag-disabled': isEditMode }"
-				outlined
+				variant="outlined"
 				tabindex="0"
 				min-height="120px"
 				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
@@ -42,9 +42,9 @@
 								@click="onStartEditMode"
 							/>
 							<BoardMenuActionDelete
-								@click="onDeleteCard"
 								data-test-id="board-menu-action-delete"
 								:name="card.title"
+								@click="onDeleteCard"
 							/>
 						</BoardMenu>
 					</div>
@@ -162,7 +162,13 @@ export default defineComponent({
 
 		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
 
-		const onDeleteCard = () => emit("delete:card", card.value?.id);
+		const onDeleteCard = async (confirmation: Promise<boolean>) => {
+			stopEditMode();
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:card", card.value?.id);
+			}
+		};
 
 		const onAddElement = () => askType();
 
@@ -247,6 +253,9 @@ export default defineComponent({
 	transition: opacity 200ms;
 	opacity: 0;
 }
+.card-host {
+	background: white;
+}
 </style>
 
 <style>
@@ -255,7 +264,7 @@ export default defineComponent({
 }
 
 .v-card:focus {
-	outline: 2px solid var(--v-secondary-lighten1);
+	outline: 2px solid rgba(var(--v-theme-secondary-lighten-1));
 	outline-offset: 0;
 }
 </style>
