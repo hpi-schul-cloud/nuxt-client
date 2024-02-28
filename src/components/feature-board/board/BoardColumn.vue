@@ -7,6 +7,7 @@
 			:columnId="column.id"
 			:title="column.title"
 			:titlePlaceholder="titlePlaceholder"
+			:index="index"
 			@delete:column="onColumnDelete"
 			@move:column-left="onMoveColumnLeft"
 			@move:column-right="onMoveColumnRight"
