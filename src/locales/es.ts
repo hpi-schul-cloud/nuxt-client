@@ -958,15 +958,12 @@ export default {
 		"Con la siguiente ejecución de sincronización, todos los datos de la {source} se transfieren a la {instance}.",
 	"pages.administration.migration.step5": "Finalizar",
 	"pages.administration.migration.summary":
-		"<p>Se realizaron las siguientes asignaciones:</p><br><p><b>{importUsersCount}</b> {source}-las cuentas de usuario tienen una cuenta de usuario {instance} asignada. Estas cuentas de usuario se migrarán a {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}: las cuentas de usuario no tienen ninguna cuenta de usuario de {instance} asociada. </p> <p> <b>{usersUnmatchedCount}</b> A las cuentas de usuario de {instance} no se les asignó ninguna cuenta de {source}. Las cuentas de {instance} se conservan y se pueden eliminar posteriormente a través de la página de administración (o comuníquese con el servicio de atención al usuario).</p>",
+		"<p>Se realizaron las siguientes asignaciones:</p><br><p><b>{importUsersCount}</b> {source}-las cuentas de usuario tienen una cuenta de usuario {instance} asignada. Estas cuentas de usuario se migrarán a {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}: las cuentas de usuario no tienen ninguna cuenta de usuario de {instance} asociada. </p> <p> <b>{usersUnmatchedCount}</b> A las cuentas de usuario de {instance} no se les asignó ninguna cuenta de {source}. Las cuentas de {instancia} se conservan y se pueden eliminar posteriormente a través de la página de administración (o comuníquese con el servicio de atención al usuario).</p>",
 	"pages.administration.migration.summary.nbc":
 		"<p>Se realizaron las siguientes asignaciones:</p><br><p><b>{importUsersCount}</b> {source}-las cuentas de usuario tienen una cuenta de usuario {instance} asignada. Estas cuentas de usuario se migrarán a {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}: las cuentas de usuario no tienen ninguna cuenta de usuario de {instance} asociada. </p><p>Las cuentas de usuario de {instance} que no se han migrado a {source} se conservan y pueden migrarse en una fecha posterior o eliminarse posteriormente en administración.</p>",
 	"pages.administration.migration.title": "Migración de cuentas de usuario",
 	"pages.administration.migration.tutorialWait":
 		"Tenga en cuenta que, una vez que se inicie el proceso de migración de la escuela, puede tardar hasta 1 hora en obtener los datos. Después de esto, podrá continuar con el siguiente paso.",
-	"pages.administration.migration.vue3.notification":
-		"Esta función está actualmente desactivada.",
-	"pages.administration.migration.vue3.title": "Migración",
 	"pages.administration.migration.waiting":
 		"Esperando la sincronización de datos...",
 	"pages.administration.or": "o",

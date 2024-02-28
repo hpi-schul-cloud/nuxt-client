@@ -937,9 +937,6 @@ export default {
 	"pages.administration.migration.title": "Migrate user accounts",
 	"pages.administration.migration.tutorialWait":
 		"Please note, once the school migration process starts, it can take up to 1 hour to fetch the data. After this, you will be able to continue to the next step.",
-	"pages.administration.migration.vue3.notification":
-		"This feature is currently deactivated.",
-	"pages.administration.migration.vue3.title": "Migration",
 	"pages.administration.migration.waiting": "Waiting for data sync...",
 	"pages.administration.or": "or",
 	"pages.administration.printQr.emptyUser":

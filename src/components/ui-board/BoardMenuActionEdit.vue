@@ -1,5 +1,9 @@
 <template>
-	<BoardMenuAction :icon="mdiPencilOutline" @click="onClick">
+	<BoardMenuAction
+		:icon="mdiPencilOutline"
+		@click="onClick"
+		data-testid="board-menu-action-edit"
+	>
 		{{ $t("common.actions.edit") }}
 	</BoardMenuAction>
 </template>
