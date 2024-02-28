@@ -1,8 +1,7 @@
 import {
 	SchoolApiFactory,
 	SchoolApiInterface,
-	SchoolFeature,
-	SchoolResponse,
+	SchoolUpdateBodyParams,
 	SystemsApiFactory,
 	SystemsApiInterface,
 	UserImportApiFactory,
@@ -10,53 +9,12 @@ import {
 } from "@/serverApi/v3";
 import { authModule, envConfigModule } from "@/store";
 import { $axios } from "@/utils/api";
+import { mapSchoolServerToClient } from "@/utils/school-features";
 import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { useApplicationError } from "../composables/application-error.composable";
 import { ApplicationError } from "./types/application-error";
 import { FederalState, School, Year } from "./types/schools";
-
-/**
- * The Api expects and returns a List of Feature-names. In the Frontend it is mapped to an object indexed by the feature-names.
- * This Type represents this change to the School entity.
- */
-declare type SchoolPayload = {
-	features: string[];
-	enableStudentTeamCreation: boolean;
-} & Omit<School, "features">;
-
-const SCHOOL_FEATURES = Object.values(SchoolFeature);
-
-function transformSchoolServerToClient(school: SchoolResponse): School {
-	const featureObject: Partial<School["features"]> = {};
-
-	SCHOOL_FEATURES.forEach((schoolFeature) => {
-		if (school.features?.includes(schoolFeature)) {
-			featureObject[schoolFeature] = true;
-		} else {
-			featureObject[schoolFeature] = false;
-		}
-	});
-
-	return { ...school, features: featureObject as Required<School["features"]> };
-}
-
-function transformSchoolClientToServer(school: School): SchoolPayload {
-	const features: string[] = [];
-	let enableStudentTeamCreation = false;
-
-	SCHOOL_FEATURES.forEach((schoolFeature) => {
-		// This extra check for isTeamCreationByStudentsEnabled is needed for compatibility with api/v1.
-		// It can be removed when PATCH school is migrated to api/v3.
-		if (schoolFeature === SchoolFeature.IsTeamCreationByStudentsEnabled) {
-			enableStudentTeamCreation = true;
-		} else if (school.features[schoolFeature]) {
-			features.push(schoolFeature);
-		}
-	});
-
-	return { ...school, enableStudentTeamCreation, features };
-}
 
 @Module({
 	name: "schoolsModule",
@@ -208,7 +166,7 @@ export default class SchoolsModule extends VuexModule {
 					)
 				).data;
 
-				this.setSchool(transformSchoolServerToClient(school));
+				this.setSchool(mapSchoolServerToClient(school));
 
 				this.setLoading(false);
 			} catch (error: unknown) {
@@ -255,18 +213,18 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Action
-	async update(payload: Partial<School>): Promise<void> {
-		this.setLoading(true);
-		const school = transformSchoolClientToServer(payload as Required<School>);
+	async update(payload: {
+		id: string;
+		props: SchoolUpdateBodyParams;
+	}): Promise<void> {
+		const { id, props } = payload;
 		try {
-			await $axios.patch(`/v1/schools/${school.id}`, school);
-			// TODO: Patch returns old data in response since it doesn't have enough time to sync between db instances
-			// Get request can be removed after https://ticketsystem.dbildungscloud.de/browse/BC-3449 (need to be retested)
-			const data = (
-				await this.schoolApi.schoolControllerGetSchoolById(school.id)
-			).data;
+			const { data } = await this.schoolApi.schoolControllerUpdateSchool(
+				id,
+				props
+			);
 
-			this.setSchool(transformSchoolServerToClient(data));
+			this.setSchool(mapSchoolServerToClient(data));
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {

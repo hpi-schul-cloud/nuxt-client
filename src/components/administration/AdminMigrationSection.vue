@@ -208,6 +208,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
+import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -353,7 +354,9 @@ export default defineComponent({
 		const setSchoolFeatures = async () => {
 			await schoolsModule.update({
 				id: school.value.id,
-				features: school.value.features,
+				props: {
+					features: mapSchoolFeatureObjectToArray(school.value.features),
+				},
 			});
 		};
 

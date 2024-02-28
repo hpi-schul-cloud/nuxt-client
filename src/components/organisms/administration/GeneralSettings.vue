@@ -150,6 +150,7 @@ import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { printDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper.ts";
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
+import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 
 export default {
 	components: {
@@ -270,7 +271,7 @@ export default {
 				name: this.localSchool.name,
 				language: this.localSchool.language,
 				permissions: this.localSchool.permissions,
-				features: this.localSchool.features,
+				features: mapSchoolFeatureObjectToArray(this.localSchool.features),
 			};
 			if (
 				!this.school.officialSchoolNumber &&
@@ -292,7 +293,7 @@ export default {
 			updatedSchool.logo_name =
 				this.logoFile.length > 0 ? this.logoFile[0].name : "";
 
-			schoolsModule.update(updatedSchool);
+			schoolsModule.update({ id: this.localSchool.id, props: updatedSchool });
 		},
 	},
 };
