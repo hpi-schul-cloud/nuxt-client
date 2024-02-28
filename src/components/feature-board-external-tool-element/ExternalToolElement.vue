@@ -9,6 +9,7 @@
 		:ripple="false"
 		tabindex="0"
 		:loading="isLoading"
+		@keyup.enter="onClickElement"
 		@keydown.up.down="onKeydownArrow"
 		@click="onClickElement"
 	>

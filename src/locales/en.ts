@@ -932,6 +932,8 @@ export default {
 	"pages.administration.migration.step5": "Finish",
 	"pages.administration.migration.summary":
 		"<p>The following assignments were made:</p><br><p><b>{importUsersCount}</b> {source}-user accounts have a {instance} user account assigned. These user accounts will be migrated to {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}-user accounts have no associated {instance} user account. </p>  <p> <b>{usersUnmatchedCount}</b> {instance} user accounts were not assigned any {source}-accounts. The {instance} accounts are retained and can be subsequently deleted via the administration page (or contact user support).</p>",
+	"pages.administration.migration.summary.nbc":
+		"<p>The following assignments were made:</p><br><p><b>{importUsersCount}</b> {source}-user accounts have a {instance} user account assigned. These user accounts will be migrated to {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}-user accounts have no associated {instance} user account. </p>  <p>The {instance} user accounts that were not migrated to {source} are retained and can be migrated at a later date or subsequently deleted in administration.</p>",
 	"pages.administration.migration.title": "Migrate user accounts",
 	"pages.administration.migration.tutorialWait":
 		"Please note, once the school migration process starts, it can take up to 1 hour to fetch the data. After this, you will be able to continue to the next step.",
