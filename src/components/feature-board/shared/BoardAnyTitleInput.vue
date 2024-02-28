@@ -31,8 +31,8 @@ import {
 	ref,
 	watch,
 } from "vue";
-import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 import { VTextarea } from "vuetify/lib/components/index.mjs";
+import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -85,7 +85,12 @@ export default defineComponent({
 		watch(
 			() => props.isEditMode,
 			async (newVal, oldVal) => {
-				if (props.scope !== "column" && !props.isFocused) return;
+				if (
+					props.scope !== "column" &&
+					props.scope !== "board" &&
+					!props.isFocused
+				)
+					return;
 				if (newVal && !oldVal) {
 					await nextTick();
 					await setFocusOnEdit();

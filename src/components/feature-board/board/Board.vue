@@ -1,11 +1,15 @@
 <template>
 	<div>
-		<div class="ml-1">
-			<h3 aria-level="1" class="mt-0">
-				{{ $t("pages.room.boardCard.label.courseBoard") }}
-			</h3>
-		</div>
 		<template v-if="board">
+			<div class="ml-1">
+				<BoardHeader
+					:boardId="board.id"
+					:title="board.title"
+					:titlePlaceholder="'Title placeholder'"
+					@update:title="onUpdateBoardTitle"
+					class="pl-2"
+				/>
+			</div>
 			<div class="d-flex flex-row flex-shrink-1">
 				<div>
 					<Sortable
@@ -84,6 +88,8 @@ import { LightBox } from "@ui-light-box";
 import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useTouchDetection } from "@util-device-detection";
 import { useMediaQuery } from "@vueuse/core";
+import { SortableEvent } from "sortablejs";
+import { Sortable } from "sortablejs-vue3";
 import {
 	computed,
 	defineComponent,
@@ -92,19 +98,19 @@ import {
 	toRef,
 	watch,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-import { useI18n } from "vue-i18n";
-import { Sortable } from "sortablejs-vue3";
-import { SortableEvent } from "sortablejs";
+import BoardHeader from "./BoardHeader.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
 export default defineComponent({
 	components: {
 		BoardColumn,
 		BoardColumnGhost,
+		BoardHeader,
 		ConfirmationDialog,
 		AddElementDialog,
 		LightBox,
@@ -127,6 +133,7 @@ export default defineComponent({
 			moveCard,
 			moveColumn,
 			reloadBoard,
+			updateBoardTitle,
 			updateColumnTitle,
 		} = useBoardState(toRef(props, "boardId").value);
 
@@ -225,6 +232,10 @@ export default defineComponent({
 			if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
 		};
 
+		const onUpdateBoardTitle = async (newTitle: string) => {
+			if (hasEditPermission) await updateBoardTitle(newTitle);
+		};
+
 		onMounted(() => {
 			if (isTeacher) {
 				showInfo(t("components.board.alert.info.teacher"), false);
@@ -258,6 +269,7 @@ export default defineComponent({
 			onMoveColumnLeft,
 			onMoveColumnRight,
 			onReloadBoard,
+			onUpdateBoardTitle,
 			onUpdateCardPosition,
 			onUpdateColumnTitle,
 		};

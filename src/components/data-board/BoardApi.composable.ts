@@ -9,11 +9,11 @@ import {
 	ContentElementType,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
+	DrawingElementContent,
 	ExternalToolElementContentBody,
 	FileElementContentBody,
 	LinkElementContentBody,
 	RichTextElementContentBody,
-	DrawingElementContent,
 	RoomsApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
@@ -44,6 +44,12 @@ export const useBoardApi = () => {
 	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
 		const response = await boardApi.boardControllerCreateColumn(boardId);
 		return response.data;
+	};
+
+	const updateBoardTitleCall = async (id: string, title: string) => {
+		return boardApi.boardControllerUpdateBoardTitle(id, {
+			title,
+		});
 	};
 
 	const updateCardHeightCall = async (id: string, height: number) => {
@@ -209,6 +215,7 @@ export const useBoardApi = () => {
 		moveCardCall,
 		moveColumnCall,
 		moveElementCall,
+		updateBoardTitleCall,
 		updateCardHeightCall,
 		updateCardTitle,
 		updateColumnTitleCall,
