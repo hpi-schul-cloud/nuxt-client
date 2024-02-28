@@ -5,9 +5,9 @@
 				<BoardHeader
 					:boardId="board.id"
 					:title="board.title"
-					:titlePlaceholder="'Title placeholder'"
+					:titlePlaceholder="titlePlaceHolder"
 					@update:title="onUpdateBoardTitle"
-					class="pl-2"
+					class="mt-0"
 				/>
 			</div>
 			<div class="d-flex flex-row flex-shrink-1">
@@ -250,6 +250,11 @@ export default defineComponent({
 			resetNotifier();
 		});
 
+		// Add handling of "(#)" to the title place holder
+		const titlePlaceHolder = computed(
+			() => `${t("pages.room.boardCard.label.courseBoard").toString()} (#)`
+		);
+
 		return {
 			board,
 			columnDropPlaceholderOptions,
@@ -261,6 +266,7 @@ export default defineComponent({
 			isEditMode,
 			isDesktop,
 			isTouchDetected,
+			titlePlaceHolder,
 			onCreateCard,
 			onCreateColumn,
 			onDeleteCard,
