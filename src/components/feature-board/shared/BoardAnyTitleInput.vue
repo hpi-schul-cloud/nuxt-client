@@ -17,6 +17,7 @@
 		@keydown.enter="onEnter"
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
+		:maxlength="maxLength"
 	/>
 </template>
 
@@ -56,6 +57,10 @@ export default defineComponent({
 		},
 		isFocused: {
 			type: Boolean,
+		},
+		maxLength: {
+			type: Number,
+			default: null,
 		},
 	},
 	emits: ["update:value", "enter"],

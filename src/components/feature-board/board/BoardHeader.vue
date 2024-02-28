@@ -19,6 +19,7 @@
 					:placeholder="titlePlaceholder"
 					@update:value="onUpdateTitle"
 					:isFocused="isFocusedById"
+					:maxLength="100"
 				/>
 				<BoardMenu
 					v-if="hasEditPermission"
@@ -39,7 +40,8 @@ import {
 	useEditMode,
 } from "@data-board";
 import { BoardMenu, BoardMenuActionEdit } from "@ui-board";
-import { defineComponent, ref, toRef, watch } from "vue";
+import { useDebounceFn } from "@vueuse/core";
+import { defineComponent, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 
@@ -78,14 +80,6 @@ export default defineComponent({
 			boardHeader
 		);
 
-		watch(isFocusContained, (newValue, oldValue) => {
-			console.log(`isFocusContained changed from ${oldValue} to ${newValue}`);
-		});
-
-		watch(isFocusedById, (newValue, oldValue) => {
-			console.log(`isFocusedById changed from ${oldValue} to ${newValue}`);
-		});
-
 		const { hasEditPermission } = useBoardPermissions();
 
 		const onStartEditMode = () => {
@@ -98,9 +92,9 @@ export default defineComponent({
 			stopEditMode();
 		};
 
-		const onUpdateTitle = (newTitle: string) => {
+		const onUpdateTitle = useDebounceFn((newTitle: string) => {
 			emit("update:title", newTitle);
-		};
+		}, 1000);
 
 		return {
 			boardHeader,

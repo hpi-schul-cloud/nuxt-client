@@ -7,7 +7,7 @@ import { CardResponse, DrawingElementResponse } from "@/serverApi/v3/api";
 import { ApplicationError } from "@/store/types/application-error";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { AxiosPromise } from "axios";
 import { useBoardApi } from "./BoardApi.composable";
 
@@ -67,6 +67,22 @@ describe("BoardApi.composable", () => {
 			boardApi.boardControllerGetBoardSkeleton.mockRejectedValue(new Error());
 
 			await expect(fetchBoardCall(boardId)).rejects.toThrow(ApplicationError);
+		});
+	});
+
+	describe("updateBoardTitle", () => {
+		it("should call boardControllerUpdateBoardTitle api", async () => {
+			const { updateBoardTitleCall } = useBoardApi();
+			const payload = {
+				id: "update-card-id",
+				title: "update-title",
+			};
+
+			await updateBoardTitleCall(payload.id, payload.title);
+			expect(boardApi.boardControllerUpdateBoardTitle).toHaveBeenCalledWith(
+				payload.id,
+				{ title: payload.title }
+			);
 		});
 	});
 
