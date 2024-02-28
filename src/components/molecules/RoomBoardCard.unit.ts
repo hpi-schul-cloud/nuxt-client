@@ -1,12 +1,12 @@
-import { mount } from "@vue/test-utils";
-import RoomBoardCard from "./RoomBoardCard.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import RoomBoardCard from "./RoomBoardCard.vue";
 
-import { Router, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -26,7 +26,7 @@ const mockCourseData = {
 };
 
 describe("RoomBoardCard", () => {
-	const setup = () => {
+	const setup = (props?: { title: string | undefined }) => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 		// Note: router has to be mocked before mounting the component
@@ -37,7 +37,10 @@ describe("RoomBoardCard", () => {
 			props: {
 				dragInProgress: false,
 				keyDrag: false,
-				columnBoardItem: mockBoardData,
+				columnBoardItem: {
+					...mockBoardData,
+					title: props ? props.title : mockBoardData.title,
+				},
 				courseData: mockCourseData,
 			},
 		});
@@ -51,12 +54,36 @@ describe("RoomBoardCard", () => {
 			expect(wrapper.findComponent(RoomBoardCard).exists()).toBe(true);
 		});
 
-		it("should have correct board title", () => {
-			const { wrapper } = setup();
-			const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
-			const boardTitle = wrapper.find(".board-title").element.textContent;
+		describe("when board title is defined and not empty", () => {
+			it("should have correct board title", () => {
+				const { wrapper } = setup();
+				const expectedBoardTitle = mockBoardData.title;
+				const boardTitle = wrapper.find(".board-title").element.textContent;
 
-			expect(boardTitle).toContain(expectedBoardTitle);
+				expect(boardTitle).toContain(expectedBoardTitle);
+			});
+		});
+
+		describe("when title is defined but empty", () => {
+			it("should have correct board title", () => {
+				const props = { title: "" };
+				const { wrapper } = setup(props);
+				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
+				const boardTitle = wrapper.find(".board-title").element.textContent;
+
+				expect(boardTitle).toContain(expectedBoardTitle);
+			});
+		});
+
+		describe("when title is undefined", () => {
+			it("should have correct board title", () => {
+				const props = { title: undefined };
+				const { wrapper } = setup(props);
+				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
+				const boardTitle = wrapper.find(".board-title").element.textContent;
+
+				expect(boardTitle).toContain(expectedBoardTitle);
+			});
 		});
 	});
 

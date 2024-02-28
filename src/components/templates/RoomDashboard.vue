@@ -26,7 +26,6 @@
 								courseName: roomData.title,
 								courseId: roomData.roomId,
 							}"
-							:board="item.content"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
