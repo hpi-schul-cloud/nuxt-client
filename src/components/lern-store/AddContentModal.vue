@@ -57,6 +57,7 @@ import ModalFooter from "@/components/molecules/ModalFooter";
 import { contentModule } from "@/store";
 import { mapGetters } from "vuex";
 import BaseModal from "../base/BaseModal";
+
 export default {
 	components: {
 		ModalFooter,
@@ -100,16 +101,6 @@ export default {
 					name: lesson.name,
 				};
 			});
-		},
-		showModal: {
-			get() {
-				return this.showCopyModal;
-			},
-			set(value) {
-				if (!value) {
-					this.closeModal();
-				}
-			},
 		},
 		showModal: {
 			get() {
