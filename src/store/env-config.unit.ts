@@ -1,5 +1,5 @@
-import { AxiosInstance } from "axios";
 import { initializeAxios } from "@/utils/api";
+import { AxiosInstance } from "axios";
 import EnvConfigModule from "./env-config";
 import { Envs } from "./types/env-config";
 
@@ -29,6 +29,7 @@ const mockEnvs: Envs = {
 	FEATURE_SHOW_OUTDATED_USERS: true,
 	FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
 	FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
+	CTL_TOOLS_RELOAD_TIME_MS: 299000,
 };
 
 const URL = "/v1/config/app/public";
