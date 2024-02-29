@@ -22,11 +22,7 @@
 				</div>
 			</div>
 			<h2 class="text-h6 board-title mt-2">
-				{{
-					columnBoardItem.title && columnBoardItem.title !== ""
-						? columnBoardItem.title
-						: $t("pages.room.boardCard.label.courseBoard").toString()
-				}}
+				{{ boardTitle }}
 			</h2>
 		</VCardText>
 	</VCard>
@@ -34,7 +30,11 @@
 
 <script setup lang="ts">
 import { mdiViewDashboard } from "@mdi/js";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+
+const { t } = useI18n();
 
 const props = defineProps({
 	columnBoardItem: { type: Object, required: true },
@@ -69,6 +69,12 @@ const moveCardUp = () => {
 		});
 	}
 };
+
+const boardTitle = computed(() => {
+	return props.columnBoardItem.title && props.columnBoardItem.title !== ""
+		? props.columnBoardItem.title
+		: t("pages.room.boardCard.label.courseBoard").toString();
+});
 </script>
 
 <style lang="scss" scoped>
