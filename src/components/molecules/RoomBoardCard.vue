@@ -25,7 +25,7 @@
 				{{
 					columnBoardItem.title && columnBoardItem.title !== ""
 						? columnBoardItem.title
-						: $t("pages.room.boardCard.label.courseBoard")
+						: `${$t("pages.room.boardCard.label.courseBoard").toString()} (#)`
 				}}
 			</h2>
 		</VCardText>
