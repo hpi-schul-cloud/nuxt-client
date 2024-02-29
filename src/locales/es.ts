@@ -1539,8 +1539,7 @@ export default {
 	"tldraw.error.ws.4400":
 		"Falta el nombre de la sala en los parámetros de la URL",
 	"tldraw.error.ws.4401": "Usted no tiene permiso para esta pizarra",
-	"tldraw.error.ws.4404":
-		"No se ha encontrado la pizarra con este nombre",
+	"tldraw.error.ws.4404": "Nose ha encontrado la pizarra con este nombre",
 	"tldraw.error.ws.4500":
 		"Se ha producido un error en la conexión tldraw websocket",
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type} {title}?",
