@@ -1,15 +1,16 @@
-import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
-import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
-import AddElementDialog from "./AddElementDialog.vue";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { Envs } from "@/store/types/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
+import AddElementDialog from "./AddElementDialog.vue";
+
 jest.mock("./SharedElementTypeSelection.composable");
 
 const mockEnvs: Envs = {
@@ -39,6 +40,7 @@ const mockEnvs: Envs = {
 	FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
 	FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
 	FEATURE_TLDRAW_ENABLED: true,
+	CTL_TOOLS_RELOAD_TIME_MS: 299000,
 };
 
 describe("ElementTypeSelection", () => {

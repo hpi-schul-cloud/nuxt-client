@@ -2,9 +2,13 @@ import {
 	ContentElementType,
 	ExternalToolElementResponse,
 } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
+import { Envs } from "@/store/types/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	ContextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,
@@ -28,8 +32,8 @@ import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import ExternalToolElement from "./ExternalToolElement.vue";
-import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
+import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 
 jest.mock("@data-board");
 jest.mock("@data-external-tool");
@@ -115,9 +119,15 @@ describe("ExternalToolElement", () => {
 		useExternalToolElementDisplayStateMock.error = ref(undefined);
 		useSharedLastCreatedElementMock.lastCreatedElementId = ref(undefined);
 
+		const refreshTime = 299000;
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as Envs,
+		});
+
 		const wrapper = shallowMount(ExternalToolElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock },
 			},
 			props: {
 				isFirstElement: false,
@@ -130,6 +140,7 @@ describe("ExternalToolElement", () => {
 
 		return {
 			wrapper,
+			refreshTime,
 		};
 	};
 
@@ -565,6 +576,21 @@ describe("ExternalToolElement", () => {
 
 				expect(useExternalToolLaunchStateMock.launchTool).toHaveBeenCalled();
 			});
+
+			it("should fetch launch request after launch", async () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.findComponent({
+					ref: "externalToolElement",
+				});
+
+				card.vm.$emit("click");
+				await nextTick();
+
+				expect(
+					useExternalToolLaunchStateMock.fetchLaunchRequest
+				).toHaveBeenCalled();
+			});
 		});
 	});
 
@@ -648,6 +674,45 @@ describe("ExternalToolElement", () => {
 
 				expect(alert.props("toolStatus")).toEqual(toolIncompleteStatus);
 			});
+		});
+	});
+
+	describe("when refresh time is over", () => {
+		const setup = () => {
+			jest.useFakeTimers("legacy");
+			const { wrapper, refreshTime } = getWrapper(
+				{
+					element: {
+						...EMPTY_TEST_ELEMENT,
+						content: { contextExternalToolId: "contextExternalToolId" },
+					},
+					isEditMode: false,
+				},
+				externalToolDisplayDataFactory.build({
+					status: schoolToolConfigurationStatusFactory.build(),
+				})
+			);
+
+			return {
+				wrapper,
+				refreshTime,
+			};
+		};
+
+		it("should call tool reference endpoint again", async () => {
+			const { refreshTime } = setup();
+			await nextTick();
+
+			expect(
+				useExternalToolLaunchStateMock.fetchLaunchRequest
+			).toHaveBeenCalledTimes(1);
+
+			jest.advanceTimersByTime(refreshTime + 1000);
+			await nextTick();
+
+			expect(
+				useExternalToolLaunchStateMock.fetchLaunchRequest
+			).toHaveBeenCalledTimes(2);
 		});
 	});
 });

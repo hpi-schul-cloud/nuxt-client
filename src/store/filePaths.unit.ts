@@ -34,6 +34,7 @@ const requiredVars = {
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
 	SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
+	CTL_TOOLS_RELOAD_TIME_MS: 299000,
 };
 
 const configsFromEnvironmentVars = {
