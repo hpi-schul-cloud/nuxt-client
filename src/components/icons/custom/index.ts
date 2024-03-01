@@ -1,6 +1,11 @@
 import brb from "./brb.vue";
 import classIcon from "./class.vue";
 import dBildungscloud from "./dBildungscloud.vue";
+import filePdfOutline from "./file-pdf-outline.vue";
+import folderOpenCoursesOutline from "./folder_open_courses_outline.vue";
+import folderOpenSharedOutline from "./folder_open_shared_outline.vue";
+import folderOpenTeamsOutline from "./folder_open_teams_outline.vue";
+import folderOpenUserOutline from "./folder_open_user_outline.vue";
 import hourglassDisabled from "./hourglass-disabled.vue";
 import icCollection from "./ic_collection.vue";
 import icDefaultCircle from "./ic_default-circle.vue";
@@ -24,11 +29,6 @@ import langIconEs from "./lang-icon-es.vue";
 import langIconUk from "./lang-icon-uk.vue";
 import lernstoreOutline from "./lernstore_outline.vue";
 import n21 from "./n21.vue";
-import filePdfOutline from "./file-pdf-outline.vue";
-import folderOpenCoursesOutline from "./folder_open_courses_outline.vue";
-import folderOpenSharedOutline from "./folder_open_shared_outline.vue";
-import folderOpenTeamsOutline from "./folder_open_teams_outline.vue";
-import folderOpenUserOutline from "./folder_open_user_outline.vue";
 import schoolOutline from "./school_outline.vue";
 import taskDoneFilled from "./task-done-filled.vue";
 import taskDone from "./task-done.vue";
@@ -40,130 +40,57 @@ import tasks from "./tasks.vue";
 import teacher from "./teacher.vue";
 import thr from "./thr.vue";
 
-const customIcons = {
-	brb: {
-		component: brb,
-	},
-	class: {
-		component: classIcon,
-	},
-	dBildungscloud: {
-		component: dBildungscloud,
-	},
-	file_pdf_outline: {
-		component: filePdfOutline,
-	},
-	folder_open_courses_outline: {
-		component: folderOpenCoursesOutline,
-	},
-	folder_open_shared_outline: {
-		component: folderOpenSharedOutline,
-	},
-	folder_open_teams_outline: {
-		component: folderOpenTeamsOutline,
-	},
-	folder_open_user_outline: {
-		component: folderOpenUserOutline,
-	},
-	hourglassDisabled: {
-		component: hourglassDisabled,
-	},
-	ic_collection: {
-		component: icCollection,
-	},
-	"ic_default-circle": {
-		component: icDefaultCircle,
-	},
-	ic_default: {
-		component: icDefault,
-	},
-	"ic_image-circle": {
-		component: icImageCircle,
-	},
-	ic_image: {
-		component: icImage,
-	},
-	"ic_link-circle": {
-		component: icLinkCircle,
-	},
-	ic_link: {
-		component: icLink,
-	},
-	"ic_move-to": {
-		component: icMoveTo,
-	},
-	"ic_pdf-circle": {
-		component: icPdfCircle,
-	},
-	ic_pdf: {
-		component: icPdf,
-	},
-	"ic_sound-circle": {
-		component: icSoundCircle,
-	},
-	ic_sound: {
-		component: icSound,
-	},
-	"ic_video-circle": {
-		component: icVideoCircle,
-	},
-	ic_video: {
-		component: icVideo,
-	},
-	"ic_word-circle": {
-		component: icWordCircle,
-	},
-	ic_word: {
-		component: icWord,
-	},
-	langIconDe: {
-		component: langIconDe,
-	},
-	langIconEn: {
-		component: langIconEn,
-	},
-	langIconEs: {
-		component: langIconEs,
-	},
-	langIconUk: {
-		component: langIconUk,
-	},
-	lernstore_outline: {
-		component: lernstoreOutline,
-	},
-	n21: {
-		component: n21,
-	},
-	school_outline: {
-		component: schoolOutline,
-	},
-	taskDoneFilled: {
-		component: taskDoneFilled,
-	},
-	taskDone: {
-		component: taskDone,
-	},
-	taskDraft: {
-		component: taskDraft,
-	},
-	taskMissedFilled: {
-		component: taskMissedFilled,
-	},
-	taskMissed: {
-		component: taskMissed,
-	},
-	taskOpenFilled: {
-		component: taskOpenFilled,
-	},
-	tasks: {
-		component: tasks,
-	},
-	teacher: {
-		component: teacher,
-	},
-	thr: {
-		component: thr,
-	},
+const customAliases: Record<string, any> = {
+	brb: brb,
+	class: classIcon,
+	dBildungscloud: dBildungscloud,
+	file_pdf_outline: filePdfOutline,
+	folder_open_courses_outline: folderOpenCoursesOutline,
+	folder_open_shared_outline: folderOpenSharedOutline,
+	folder_open_teams_outline: folderOpenTeamsOutline,
+	folder_open_user_outline: folderOpenUserOutline,
+	hourglassDisabled: hourglassDisabled,
+	ic_collection: icCollection,
+	"ic_default-circle": icDefaultCircle,
+	ic_default: icDefault,
+	"ic_image-circle": icImageCircle,
+	ic_image: icImage,
+	"ic_link-circle": icLinkCircle,
+	ic_link: icLink,
+	"ic_move-to": icMoveTo,
+	"ic_pdf-circle": icPdfCircle,
+	ic_pdf: icPdf,
+	"ic_sound-circle": icSoundCircle,
+	ic_sound: icSound,
+	"ic_video-circle": icVideoCircle,
+	ic_video: icVideo,
+	"ic_word-circle": icWordCircle,
+	ic_word: icWord,
+	langIconDe: langIconDe,
+	langIconEn: langIconEn,
+	langIconEs: langIconEs,
+	langIconUk: langIconUk,
+	lernstore_outline: lernstoreOutline,
+	n21: n21,
+	school_outline: schoolOutline,
+	taskDoneFilled: taskDoneFilled,
+	taskDone: taskDone,
+	taskDraft: taskDraft,
+	taskMissedFilled: taskMissedFilled,
+	taskMissed: taskMissed,
+	taskOpenFilled: taskOpenFilled,
+	tasks: tasks,
+	teacher: teacher,
+	thr: thr,
 };
 
-export default customIcons;
+// const customSet: IconSet = {
+// 	component: (props: IconProps) =>
+// 		h(props.tag, [
+// 			h(customAliases[props.icon as string], {
+// 				class: "v-icon__svg",
+// 			}),
+// 		]),
+// };
+
+export { customAliases };

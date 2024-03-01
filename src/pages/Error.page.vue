@@ -8,7 +8,7 @@
 		<v-btn
 			class="mt-4"
 			color="primary"
-			depressed
+			variant="flat"
 			ref="btn-back"
 			data-testid="btn-back"
 			@click="onBackClick"
@@ -21,10 +21,11 @@
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { useStorage } from "@/composables/locale-storage.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { APPLICATION_ERROR_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
 import { useTitle } from "@vueuse/core";
 import { computed, defineComponent, onUnmounted } from "vue";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -40,18 +41,23 @@ export default defineComponent({
 			HttpStatusCode.Unauthorized,
 			HttpStatusCode.Forbidden,
 		];
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const applicationErrorModule = injectStrict(APPLICATION_ERROR_KEY);
 		const performanceNavigation = window.performance.getEntriesByType(
 			"navigation"
 		)[0] as PerformanceNavigationTiming;
 
 		const getError = () => {
-			if (performanceNavigation.type === "reload") {
-				const [statusCode, translationKey] = storage.getMultiple([
-					"applicationErrorStatusCode",
-					"applicationErrorTranslationKey",
-				]);
+			const [statusCode, translationKey, isTldrawError] = storage.getMultiple([
+				"applicationErrorStatusCode",
+				"applicationErrorTranslationKey",
+				"applicationErrorTldraw",
+			]);
+
+			if (
+				performanceNavigation.type === "reload" ||
+				(performanceNavigation.type === "navigate" && isTldrawError)
+			) {
 				return {
 					statusCode: Number(statusCode),
 					translationKey,
@@ -60,6 +66,8 @@ export default defineComponent({
 
 			storage.remove("applicationErrorStatusCode");
 			storage.remove("applicationErrorTranslationKey");
+			storage.remove("applicationErrorTldraw");
+
 			return {
 				statusCode: Number(applicationErrorModule.getStatusCode),
 				translationKey: applicationErrorModule.getTranslationKey,
@@ -67,6 +75,7 @@ export default defineComponent({
 		};
 
 		addEventListener("pagehide", (event) => {
+			storage.remove("applicationErrorTldraw");
 			if (event.persisted) return;
 
 			if (applicationErrorModule.getStatusCode) {
@@ -82,7 +91,7 @@ export default defineComponent({
 			}
 		});
 
-		useTitle(buildPageTitle(i18n.tc("error.generic")));
+		useTitle(buildPageTitle(t("error.generic")));
 
 		const onBackClick = () => {
 			window.location.assign("/dashboard");
@@ -108,12 +117,12 @@ export default defineComponent({
 		const translatedErrorMessage = computed(() => {
 			const translationKey = appErrorTranslationKey.value || "";
 
-			const translatedError = i18n.t(translationKey).toString();
+			const translatedError = t(translationKey);
 
 			const result =
 				translatedError !== translationKey
 					? translatedError
-					: i18n.t("error.generic").toString();
+					: t("error.generic");
 			return result;
 		});
 

@@ -3,7 +3,7 @@ import {
 	MetaTagExtractorResponse,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 
 type MetaTagResult = {
 	url: string;

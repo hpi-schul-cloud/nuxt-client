@@ -1,4 +1,4 @@
-import { DataTableHeader } from "vuetify";
+import { DataTableHeader } from "@/store/types/data-table-header";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -8,20 +8,23 @@ export function useExternalToolsSectionUtils(
 ) {
 	const getHeaders: DataTableHeader[] = [
 		{
-			text: t("common.labels.name"),
+			title: t("common.labels.name"),
 			value: "name",
+			key: "name",
 		},
 		{
-			text: t(
+			title: t(
 				"components.administration.externalToolsSection.table.header.status"
 			),
 			value: "status",
+			key: "status",
 		},
 		{
-			text: "",
+			title: "",
 			value: "actions",
 			sortable: false,
 			align: "end",
+			key: "actions",
 		},
 	];
 
@@ -40,6 +43,7 @@ export function useExternalToolsSectionUtils(
 
 			return {
 				id: tool.id,
+				externalToolId: tool.toolId,
 				name: tool.name,
 				statusText: t(statusTranslationKey),
 				isOutdated: tool.status.isOutdatedOnScopeSchool,

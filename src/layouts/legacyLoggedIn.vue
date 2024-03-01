@@ -29,7 +29,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
-import { useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import getSidebarItems, {
 	SidebarCategoryItem,
@@ -85,7 +85,9 @@ export default defineComponent({
 		});
 
 		const sidebarItems = computed(() => {
-			let sidebarItems = getSidebarItems();
+			let sidebarItems = getSidebarItems(
+				envConfigModule.getNewSchoolAdminPageAsDefault
+			);
 
 			const isSidebarCategoryItem = (
 				item: SidebarItem | SidebarCategoryItem

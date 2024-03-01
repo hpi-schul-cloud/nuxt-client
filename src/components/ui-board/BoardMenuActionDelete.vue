@@ -1,5 +1,9 @@
 <template>
-	<BoardMenuAction :icon="mdiTrashCanOutline" @click="onClick">
+	<BoardMenuAction
+		:icon="mdiTrashCanOutline"
+		@click="onClick"
+		data-testid="board-menu-action-delete"
+	>
 		{{ $t("components.board.action.delete") }}
 	</BoardMenuAction>
 </template>
@@ -40,18 +44,13 @@ export default defineComponent({
 			}
 		};
 
-		const onClick = async (): Promise<void> => {
-			let shouldDelete = true;
-			if (!props.skipDeleteConfirmation) {
-				shouldDelete = await askDeleteConfirmation(
-					props.name,
-					getLanguageKeyTypeName(scope)
-				);
-			}
+		const onClick = (): void => {
+			const promise = askDeleteConfirmation(
+				props.name,
+				getLanguageKeyTypeName(scope)
+			);
 
-			if (shouldDelete) {
-				emit("click");
-			}
+			emit("click", promise);
 		};
 
 		return {

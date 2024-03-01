@@ -1,6 +1,6 @@
 <template>
 	<v-form>
-		<v-overlay :value="loading" :absolute="true">
+		<v-overlay :model-value="loading" :absolute="true">
 			<v-progress-circular color="primary" indeterminate />
 		</v-overlay>
 		<v-row>
@@ -13,7 +13,7 @@
 							'pages.administration.school.index.generalSettings.labels.nameOfSchool'
 						)
 					"
-					dense
+					density="compact"
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSyncedSchool"
 					data-testid="school-name"
@@ -31,7 +31,7 @@
 							'pages.administration.school.index.generalSettings.labels.schoolNumber'
 						)
 					"
-					dense
+					density="compact"
 					:disabled="!!school.officialSchoolNumber"
 					:hint="
 						$t(
@@ -54,10 +54,9 @@
 						)
 					"
 					:items="federalState.counties"
-					item-text="name"
+					item-title="name"
 					item-value="id"
 					return-object
-					dense
 					:disabled="!!localSchool.county"
 					:hint="
 						$t(
@@ -78,7 +77,7 @@
 						)
 					"
 					v-model="logoFile"
-					dense
+					density="compact"
 					prepend-icon=""
 					prepend-inner-icon="$file"
 				/>
@@ -94,7 +93,7 @@
 							'pages.administration.school.index.generalSettings.labels.timezone'
 						)
 					"
-					dense
+					density="compact"
 					disabled
 					:hint="
 						$t('pages.administration.school.index.generalSettings.timezoneHint')
@@ -114,17 +113,15 @@
 						)
 					"
 					:items="languages"
-					item-text="name"
+					item-title="name"
 					item-value="abbreviation"
-					dense
 				>
-					<template #item="{ item }">
-						<v-icon class="me-2"> {{ item.flagIcon }} </v-icon>
-						{{ item.name }}
+					<template #item="{ props, item }">
+						<v-list-item v-bind="props" :prepend-icon="item.raw.flagIcon" />
 					</template>
 					<template #selection="{ item }">
-						<v-icon class="me-2"> {{ item.flagIcon }} </v-icon>
-						{{ item.name }}
+						<v-icon class="me-2"> {{ item.raw.flagIcon }} </v-icon>
+						{{ item.raw.name }}
 					</template>
 				</v-select>
 			</v-col>
@@ -139,7 +136,7 @@
 			class="mt-6 my-4 button-save float-right"
 			data-testid="save-general-setting"
 			color="primary"
-			depressed
+			variant="flat"
 			:disabled="loading"
 			@click="save"
 		>
@@ -170,7 +167,7 @@ export default {
 				permissions: {},
 				features: {},
 			},
-			logoFile: null,
+			logoFile: [],
 			fileStorageTypes: [{ type: "awsS3", name: "HPI Schul-Cloud" }],
 		};
 	},
@@ -205,11 +202,13 @@ export default {
 			handler: async function (newSchool) {
 				if (newSchool && newSchool.id) {
 					this.logoFile = newSchool.logo_dataUrl
-						? this.convertDataUrlToFile(
-								newSchool.logo_dataUrl,
-								newSchool.logo_name
-							)
-						: null;
+						? [
+								this.convertDataUrlToFile(
+									newSchool.logo_dataUrl,
+									newSchool.logo_name
+								),
+							]
+						: [];
 
 					await this.copyToLocalSchool();
 				}
@@ -288,13 +287,18 @@ export default {
 				updatedSchool.county = this.localSchool.county.id;
 			}
 
-			updatedSchool.logo_dataUrl = this.logoFile
-				? await toBase64(this.logoFile)
-				: "";
-			updatedSchool.logo_name = this.logoFile ? this.logoFile.name : "";
+			updatedSchool.logo_dataUrl =
+				this.logoFile.length > 0 ? await toBase64(this.logoFile[0]) : "";
+			updatedSchool.logo_name =
+				this.logoFile.length > 0 ? this.logoFile[0].name : "";
 
 			schoolsModule.update(updatedSchool);
 		},
 	},
 };
 </script>
+<style lang="scss" scoped>
+:deep(.v-list-item__prepend > .v-icon) {
+	opacity: 1;
+}
+</style>

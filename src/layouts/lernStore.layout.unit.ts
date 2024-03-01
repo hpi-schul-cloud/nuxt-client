@@ -1,9 +1,12 @@
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { contentModule, envConfigModule } from "@/store";
 import AuthModule from "@/store/auth";
 import ContentModule from "@/store/content";
 import EnvConfigModule from "@/store/env-config";
 import { Envs } from "@/store/types/env-config";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { shallowMount } from "@vue/test-utils";
 import lernStoreLayout from "./lernStore.layout.vue";
@@ -12,18 +15,23 @@ describe("lernStoreLayout", () => {
 	const params = {
 		id: "mockId",
 	};
+	const query = {
+		isCollection: "true",
+	};
 
-	const mountComponent = (attrs = {}) => {
+	const mountComponent = (globalAttr = {}) => {
 		return shallowMount(lernStoreLayout, {
-			...createComponentMocks({}),
-			provide: {
-				contentModule: ContentModule,
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					contentModule: ContentModule,
+				},
+				...globalAttr,
 			},
-			...attrs,
 		});
 	};
 
-	beforeEach(async () => {
+	beforeEach(() => {
 		setupStores({
 			contentModule: ContentModule,
 			envConfigModule: EnvConfigModule,
@@ -32,21 +40,15 @@ describe("lernStoreLayout", () => {
 	});
 
 	describe("when 'feature flag' is set", () => {
-		const query = {
-			isCollection: "true",
-		};
 		it("should render 'legacy-logged-in' layout if feature flag set true", async () => {
-			envConfigModule.setEnvs({ FEATURE_ES_COLLECTIONS_ENABLED: true } as Envs);
+			envConfigModule.setEnvs({
+				FEATURE_ES_COLLECTIONS_ENABLED: true,
+			} as Envs);
 			contentModule.init();
-			const mocks = {
-				$route: {
-					params,
-					query,
-				},
-			};
-			const wrapper = mountComponent({ mocks });
+
+			const wrapper = mountComponent({ mocks: { $route: { params, query } } });
 			const mainContentElement = wrapper.find(".content");
-			expect(mainContentElement.vm).toBeDefined();
+			expect(mainContentElement.exists()).toBe(true);
 		});
 
 		it("should not render 'legacy-logged-in' layout if feature flag set false", async () => {
@@ -54,15 +56,10 @@ describe("lernStoreLayout", () => {
 				FEATURE_ES_COLLECTIONS_ENABLED: false,
 			} as Envs);
 			contentModule.init();
-			const mocks = {
-				$route: {
-					params,
-					query,
-				},
-			};
-			const wrapper = mountComponent({ mocks });
+
+			const wrapper = mountComponent({ mocks: { $route: { params, query } } });
 			const mainContentElement = wrapper.find(".content");
-			expect(mainContentElement.vm).not.toBeDefined();
+			expect(mainContentElement.exists()).toBe(false);
 		});
 	});
 
@@ -72,32 +69,20 @@ describe("lernStoreLayout", () => {
 		});
 		it("should render any layout if 'isCollection' queryString is set true", async () => {
 			contentModule.init();
-			const mocks = {
-				$route: {
-					params,
-					query: {
-						isCollection: "true",
-					},
-				},
-			};
-			const wrapper = mountComponent({ mocks });
+			const wrapper = mountComponent({ mocks: { $route: { params, query } } });
+
 			const mainContentElement = wrapper.find(".content");
-			expect(mainContentElement.vm).toBeDefined();
+			expect(mainContentElement.exists()).toBe(true);
 		});
 
 		it("should not render any layout if 'isCollection' queryString is set false", async () => {
 			contentModule.init();
-			const mocks = {
-				$route: {
-					params,
-					query: {
-						isCollection: "false",
-					},
-				},
-			};
-			const wrapper = mountComponent({ mocks });
+			const wrapper = mountComponent({
+				mocks: { $route: { params, query: { isCollection: "false" } } },
+			});
+
 			const mainContentElement = wrapper.find(".content");
-			expect(mainContentElement.vm).not.toBeDefined();
+			expect(mainContentElement.exists()).toBe(false);
 		});
 	});
 });

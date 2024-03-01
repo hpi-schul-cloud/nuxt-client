@@ -10,6 +10,7 @@ import {
 	Lessons,
 	Query,
 	Resource,
+	ResourceProperties,
 	Resources,
 } from "./types/content";
 
@@ -60,7 +61,7 @@ const initialState = () => ({
 		owner: {},
 		parent: {},
 		preview: {},
-		properties: {},
+		properties: {} as ResourceProperties,
 		rating: null,
 		ref: {},
 		remote: null,
@@ -255,12 +256,12 @@ export default class ContentModule extends VuexModule {
 	}
 
 	@Action
-	async getResources(payload: Query): Promise<void> {
+	async getResources(searchQuery: string): Promise<void> {
 		this.incLoading();
 		const query = {
 			$limit: 12,
 			$skip: 0,
-			searchQuery: payload.searchQuery,
+			searchQuery,
 		};
 		const queryHash = hash(query);
 		this.setLastQuery(queryHash);
@@ -332,13 +333,10 @@ export default class ContentModule extends VuexModule {
 	}
 
 	@Action
-	async getLessons(payload: string) {
-		const params = {
-			courseId: payload,
-		};
-		if (params.courseId) {
+	async getLessons(courseId: string) {
+		if (courseId) {
 			//only search if courseId is existing
-			const res = await $axios.get("/v1/lessons", { params });
+			const res = await $axios.get(`/v3/lessons/course/${courseId}`);
 			this.setLessons(res.data);
 		}
 	}

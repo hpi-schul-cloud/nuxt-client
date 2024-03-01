@@ -47,6 +47,7 @@ export default class EnvConfigModule extends VuexModule {
 		FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: false,
 		FEATURE_CTL_TOOLS_TAB_ENABLED: false,
 		FEATURE_CTL_TOOLS_COPY_ENABLED: false,
+		CTL_TOOLS_RELOAD_TIME_MS: 299000,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -152,6 +153,13 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getAccessibilityReportEmail(): string | undefined {
 		return this.env.ACCESSIBILITY_REPORT_EMAIL;
+	}
+
+	get getNewSchoolAdminPageAsDefault(): boolean {
+		return (
+			this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED ??
+			false
+		);
 	}
 
 	get getCtlToolsTabEnabled(): boolean {

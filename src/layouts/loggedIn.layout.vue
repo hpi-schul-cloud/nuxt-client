@@ -1,15 +1,13 @@
 <template>
-	<v-app>
-		<legacy-logged-in>
-			<v-main id="main-content" class="content">
-				<application-error-wrapper>
-					<snackbar />
-					<router-view />
-				</application-error-wrapper>
-			</v-main>
-			<loading-state-dialog />
-		</legacy-logged-in>
-	</v-app>
+	<legacy-logged-in>
+		<v-main id="main-content" class="content">
+			<application-error-wrapper>
+				<snackbar />
+				<router-view />
+			</application-error-wrapper>
+		</v-main>
+		<loading-state-dialog />
+	</legacy-logged-in>
 </template>
 
 <script>
@@ -37,13 +35,6 @@ export default {
 	grid-area: content;
 	width: inherit;
 	max-width: 100vw;
-
-	@include breakpoint(tablet) {
-		max-width: calc(100vw - var(--sidebar-width-tablet));
-	}
-
-	@include breakpoint(desktop) {
-		max-width: calc(100vw - var(--sidebar-width));
-	}
+	overflow-x: auto;
 }
 </style>
