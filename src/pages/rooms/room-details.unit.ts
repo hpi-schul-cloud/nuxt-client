@@ -7,7 +7,6 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
-import { User } from "@/store/types/auth";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -27,6 +26,7 @@ import {
 import { createMock } from "@golevelup/ts-jest";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { VBtn } from "vuetify/lib/components/index.mjs";
+import { mockMe } from "@@/tests/test-utils";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -177,7 +177,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 		roomModule.setRoomData(mockData as any);
 		roomModule.setPermissionData(mockPermissionsCourseTeacher);
-		authModule.setUser(mockAuthStoreDataTeacher as User);
 		copyModuleMock = createModuleMocks(CopyModule, {
 			getIsResultModalOpen: false,
 		});
@@ -222,7 +221,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	it("should not show FAB if user does not have permission to create courses", () => {
-		authModule.setUser(mockAuthStoreDataStudentInvalid as User);
+		authModule.setMe(mockMe);
 		roomModule.setPermissionData(mockPermissionsStudent);
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");
@@ -230,7 +229,11 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	describe("menu", () => {
-		it("should show FAB if user has permission to create courses", () => {
+		it("should show FAB if user has permission to create homework", () => {
+			authModule.setMe({
+				...mockMe,
+				permissions: ["HOMEWORK_CREATE"],
+			});
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -238,6 +241,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("'add task' button should have correct path", async () => {
+			authModule.setMe({
+				...mockMe,
+				permissions: ["HOMEWORK_CREATE"],
+			});
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -251,6 +258,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("'add lesson' button should have correct path", async () => {
+			authModule.setMe({
+				...mockMe,
+				permissions: ["HOMEWORK_CREATE", "TOPIC_CREATE"],
+			});
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -266,7 +277,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 	describe("headline menus", () => {
 		beforeEach(() => {
-			authModule.setUser(mockAuthStoreDataTeacher as User);
+			authModule.setMe(mockMe);
 			roomModule.setPermissionData(mockPermissionsCourseTeacher);
 		});
 		const findMenuItems = (itemName: string, menuItems: Array<any>) => {
@@ -282,7 +293,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should not have the menu button for students", () => {
-			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
+			authModule.setMe(mockMe);
 			roomModule.setPermissionData(mockPermissionsStudent);
 			const wrapper = getWrapper();
 			const menuButton = wrapper.find(
@@ -293,7 +304,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should not have the menu button for substitution course teachers", () => {
-			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
+			authModule.setMe(mockMe);
 			roomModule.setPermissionData(mockPermissionsCourseSubstitutionTeacher);
 			const wrapper = getWrapper();
 			const menuButton = wrapper.find(
@@ -481,7 +492,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 				} as Envs);
-				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
+				authModule.addPermmission("CONTEXT_TOOL_ADMIN");
 
 				const wrapper = getWrapper();
 

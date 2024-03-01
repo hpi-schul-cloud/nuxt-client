@@ -17,8 +17,8 @@ describe("RoomExternalToolsErrorDialog", () => {
 		isOpen?: boolean;
 	}) => {
 		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
-			getUserRoles: ["teacher"],
+			getPermissions: ["CONTEXT_TOOL_ADMIN"],
+			getRoleNames: ["teacher"],
 		});
 
 		const wrapper = mount(RoomExternalToolsErrorDialog, {

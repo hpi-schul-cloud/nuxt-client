@@ -40,8 +40,8 @@ describe("RoomExternalToolsSection", () => {
 		);
 
 		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
-			getUserRoles: ["teacher"],
+			getPermissions: ["CONTEXT_TOOL_ADMIN"],
+			getRoleNames: ["teacher"],
 		});
 
 		const envConfigModule = createModuleMocks(EnvConfigModule, {

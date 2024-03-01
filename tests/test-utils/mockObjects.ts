@@ -1,52 +1,27 @@
-import { User } from "@/store/types/auth";
+import { MeResponse } from "@/serverApi/v3";
 import { School } from "@/store/types/schools";
 
-export const mockUser: User = {
-	_id: "",
-	firstName: "",
-	lastName: "",
-	email: "",
-	updatedAt: "",
-	birthday: "",
-	createdAt: "",
-	preferences: {},
-	schoolId: "",
-	roles: [
-		{
-			_id: "",
-			name: "test-role",
-			updatedAt: "",
-			createdAt: "",
-			roles: [],
-			permissions: [],
-			displayName: "test-display-name",
-			id: "",
-		},
-	],
-	emailSearchValues: [],
-	firstNameSearchValues: [],
-	lastNameSearchValues: [],
-	consent: {
-		userConsent: {
-			form: "",
-			privacyConsent: true,
-			termsOfUseConsent: true,
-			dateOfPrivacyConsent: "",
-			dateOfTermsOfUseConsent: "",
+export const mockMe: MeResponse = {
+	user: {
+		id: "",
+		firstName: "",
+		lastName: "",
+		language: "",
+		customAvatarBackgroundColor: "",
+	},
+	school: {
+		id: "",
+		name: "",
+		logo: {
+			url: "",
+			name: "",
 		},
 	},
-	forcePasswordChange: false,
-	language: "",
-	fullName: "",
-	id: "",
-	avatarInitials: "",
-	avatarBackgroundColor: "",
-	age: 44,
-	displayName: "",
-	permissions: ["test-permission"],
-	accountId: "",
-	schoolName: "",
-	externallyManaged: false,
+	roles: [],
+	permissions: [],
+	account: {
+		id: "",
+	},
 };
 
 export const mockSchool: School = {

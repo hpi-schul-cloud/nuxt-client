@@ -184,10 +184,10 @@ export default {
 		},
 		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
 		hasSystemCreatePermission: () => {
-			return authModule.getUserPermissions.includes("system_create");
+			return authModule.getPermissions.includes("system_create");
 		},
 		hasSystemEditPermission: () => {
-			return authModule.getUserPermissions.includes("system_edit");
+			return authModule.getPermissions.includes("system_edit");
 		},
 	},
 	methods: {

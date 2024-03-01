@@ -19,8 +19,8 @@ import EnvConfigModule from "@/store/env-config";
 
 const getWrapper = (props?: object, statusAlerts: StatusAlert[] = []) => {
 	const authModule = createModuleMocks(AuthModule, {
-		getUserPermissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
-		getUserRoles: ["administrator"],
+		getPermissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
+		getRoleNames: ["administrator"],
 		getAccessToken: "asdf",
 		getLocale: "de",
 	});

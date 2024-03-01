@@ -7,7 +7,7 @@ const mockError = jest.fn();
 
 jest.mock("@/store", () => ({
 	authModule: {
-		getUserPermissions: ["validPermission_1", "validPermission_2"],
+		getPermissions: ["validPermission_1", "validPermission_2"],
 	},
 	applicationErrorModule: {
 		setError: () => mockError(),

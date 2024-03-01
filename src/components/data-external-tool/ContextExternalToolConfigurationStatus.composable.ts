@@ -7,7 +7,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	const determineOutdatedTranslationKey = (
 		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string => {
-		const userRoles = authModule.getUserRoles;
+		const userRoles = authModule.getRoleNames;
 
 		if (userRoles.includes("teacher")) {
 			if (
@@ -26,7 +26,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 	};
 
 	const determineIncompleteTranslationKey = (): string => {
-		const userRoles = authModule.getUserRoles;
+		const userRoles = authModule.getRoleNames;
 
 		if (userRoles.includes("teacher")) {
 			return "common.tool.information.incompleteOnContext.teacher";

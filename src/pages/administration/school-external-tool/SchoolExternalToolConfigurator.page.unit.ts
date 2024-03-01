@@ -3,7 +3,6 @@ import AuthModule from "@/store/auth";
 import { SchoolExternalToolSave } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { User } from "@/store/types/auth";
 import {
 	AUTH_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -25,6 +24,7 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
 import { nextTick } from "vue";
+import { mockMe } from "@@/tests/test-utils";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -54,9 +54,7 @@ describe("SchoolExternalToolConfigurator", () => {
 
 		const schoolId = "schoolId";
 		const authModule = createModuleMocks(AuthModule, {
-			getUser: {
-				schoolId,
-			} as User,
+			getMe: { ...mockMe, school: { ...mockMe.school, id: schoolId } },
 		});
 
 		const notifierModule = createModuleMocks(NotifierModule);

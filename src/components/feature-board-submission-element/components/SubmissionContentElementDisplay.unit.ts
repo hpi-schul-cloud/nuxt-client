@@ -20,7 +20,7 @@ describe("SubmissionContentElementDisplay", () => {
 			isOverdue: false,
 		};
 		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: [role],
+			getRoleNames: [role],
 		});
 
 		const wrapper = shallowMount(SubmissionContentElementDisplay, {

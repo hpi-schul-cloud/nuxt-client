@@ -282,7 +282,7 @@ export default defineComponent({
 		);
 
 		const hasPermission: ComputedRef<boolean> = computed(() =>
-			authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
+			authModule.getPermissions.includes("CLASS_EDIT".toLowerCase())
 		);
 
 		const showClassAction = (item: ClassInfo) =>

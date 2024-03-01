@@ -13,7 +13,7 @@ import {
 	axiosErrorFactory,
 	businessErrorFactory,
 	mockApiResponse,
-	mockUser,
+	mockMe,
 	userLoginMigrationFactory,
 	userLoginMigrationResponseFactory,
 } from "@@/tests/test-utils";
@@ -126,7 +126,7 @@ describe("UserLoginMigrationModule", () => {
 		describe("getLatestUserLoginMigrationForCurrentUser", () => {
 			describe("when user id is not available", () => {
 				const setup = () => {
-					authModule.setUser({ ...mockUser, id: "" });
+					authModule.setMe({ ...mockMe });
 				};
 
 				it("should not get latest user login migration ", async () => {
@@ -143,7 +143,10 @@ describe("UserLoginMigrationModule", () => {
 			describe("when user is available", () => {
 				describe("when there is no migration for a user", () => {
 					const setup = () => {
-						authModule.setUser({ ...mockUser, id: "userId" });
+						authModule.setMe({
+							...mockMe,
+							user: { ...mockMe.user, id: "userId" },
+						});
 
 						const listResponse: UserLoginMigrationSearchListResponse = {
 							data: [],
@@ -170,7 +173,10 @@ describe("UserLoginMigrationModule", () => {
 
 				describe("when there are more than one migration for a user", () => {
 					const setup = () => {
-						authModule.setUser({ ...mockUser, id: "userId" });
+						authModule.setMe({
+							...mockMe,
+							user: { ...mockMe.user, id: "userId" },
+						});
 
 						const listResponse: UserLoginMigrationSearchListResponse = {
 							data: [
@@ -213,7 +219,10 @@ describe("UserLoginMigrationModule", () => {
 
 				describe("when there is one migration for a user", () => {
 					const setup = () => {
-						authModule.setUser({ ...mockUser, id: "userId" });
+						authModule.setMe({
+							...mockMe,
+							user: { ...mockMe.user, id: "userId" },
+						});
 
 						const userLoginMigrationResponse: UserLoginMigrationResponse =
 							userLoginMigrationResponseFactory.build({
@@ -273,7 +282,10 @@ describe("UserLoginMigrationModule", () => {
 
 			describe("when the api throws an error", () => {
 				const setup = () => {
-					authModule.setUser({ ...mockUser, id: "userId" });
+					authModule.setMe({
+						...mockMe,
+						user: { ...mockMe.user, id: "userId" },
+					});
 
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
@@ -315,7 +327,10 @@ describe("UserLoginMigrationModule", () => {
 
 			describe("when the api returns a bad request", () => {
 				const setup = () => {
-					authModule.setUser({ ...mockUser, id: "userId" });
+					authModule.setMe({
+						...mockMe,
+						user: { ...mockMe.user, id: "userId" },
+					});
 
 					apiMock.userLoginMigrationControllerGetMigrations.mockRejectedValue(
 						createApplicationError(HttpStatusCode.BadRequest)
@@ -338,7 +353,7 @@ describe("UserLoginMigrationModule", () => {
 		describe("getLatestUserLoginMigrationForSchool", () => {
 			describe("when school id is not available", () => {
 				const setup = () => {
-					authModule.setUser({ ...mockUser, schoolId: "" });
+					authModule.setMe(mockMe);
 				};
 
 				it("should not get latest user login migrations", async () => {
@@ -355,7 +370,10 @@ describe("UserLoginMigrationModule", () => {
 			describe("when school is available", () => {
 				describe("when there is no migration for a school", () => {
 					const setup = () => {
-						authModule.setUser({ ...mockUser, schoolId: "schoolId" });
+						authModule.setMe({
+							...mockMe,
+							school: { ...mockMe.school, id: "schoolId" },
+						});
 
 						const error = axiosErrorFactory.build({
 							response: {
@@ -381,7 +399,10 @@ describe("UserLoginMigrationModule", () => {
 
 				describe("when there is a migration for the school", () => {
 					const setup = () => {
-						authModule.setUser({ ...mockUser, schoolId: "schoolId" });
+						authModule.setMe({
+							...mockMe,
+							school: { ...mockMe.school, id: "schoolId" },
+						});
 
 						const userLoginMigrationResponse: UserLoginMigrationResponse =
 							userLoginMigrationResponseFactory.build({
@@ -434,7 +455,10 @@ describe("UserLoginMigrationModule", () => {
 
 			describe("when the api throws an error", () => {
 				const setup = () => {
-					authModule.setUser({ ...mockUser, schoolId: "schoolId" });
+					authModule.setMe({
+						...mockMe,
+						school: { ...mockMe.school, id: "schoolId" },
+					});
 
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);

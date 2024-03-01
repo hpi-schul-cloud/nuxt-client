@@ -3,8 +3,8 @@ import { authModule } from "@/store";
 import { BoardPermissionChecks } from "@/types/board/Permissions";
 
 const boardPermissions = (): BoardPermissionChecks => {
-	const permissions = authModule?.getUserPermissions || [];
-	const userRoles = authModule?.getUserRoles || [];
+	const permissions = authModule?.getPermissions || [];
+	const userRoles = authModule?.getRoleNames || [];
 
 	return {
 		hasMovePermission: permissions.includes("course_create"),

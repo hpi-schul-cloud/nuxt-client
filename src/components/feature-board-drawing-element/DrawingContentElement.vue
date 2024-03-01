@@ -74,7 +74,7 @@ export default defineComponent({
 		const drawingElement = ref<HTMLElement | null>(null);
 		const element = toRef(props, "element");
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-		const userRoles = ref(authModule.getUserRoles);
+		const userRoles = ref(authModule.getRoleNames);
 
 		const sanitizedUrl = computed(() =>
 			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)

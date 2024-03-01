@@ -1,14 +1,15 @@
-import NewStudent from "./StudentCreate.page.vue";
-import mock$objects from "@@/tests/test-utils/pageStubs";
-import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
-import { createStore } from "vuex";
+import { mockMe } from "@@/tests/test-utils";
+import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
+import { createStore } from "vuex";
+import NewStudent from "./StudentCreate.page.vue";
 
 jest.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -61,7 +62,7 @@ describe("students/new", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
 					$store: mockStore,
-					$user: { schoolId: "123" },
+					$me: mockMe,
 					$t: (key) => key,
 				},
 			},

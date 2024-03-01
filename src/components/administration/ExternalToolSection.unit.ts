@@ -1,7 +1,6 @@
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { User } from "@/store/types/auth";
 import {
 	AUTH_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -25,6 +24,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
+import { mockMe } from "@@/tests/test-utils";
 
 jest.mock("@data-external-tool");
 
@@ -56,9 +56,7 @@ describe("ExternalToolSection", () => {
 		const notifierModule = createModuleMocks(NotifierModule);
 
 		const authModule = createModuleMocks(AuthModule, {
-			getUser: {
-				schoolId: "schoolId",
-			} as User,
+			getMe: { ...mockMe, school: { ...mockMe.school, id: "schoolId" } },
 		});
 
 		const router = createMock<Router>();

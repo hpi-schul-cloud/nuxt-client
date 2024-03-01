@@ -272,7 +272,7 @@ export default {
 		fabItems() {
 			if (
 				!this.isStudent &&
-				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+				authModule.getPermissions.includes("HOMEWORK_CREATE".toLowerCase())
 			) {
 				return {
 					icon: mdiPlus,

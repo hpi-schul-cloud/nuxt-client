@@ -16,7 +16,7 @@ export function createPermissionGuard(
 		from: RouteLocationNormalized,
 		next: NavigationGuardNext
 	) => {
-		if (permissions.every((p) => authModule.getUserPermissions.includes(p))) {
+		if (permissions.every((p) => authModule.getPermissions.includes(p))) {
 			return next();
 		}
 

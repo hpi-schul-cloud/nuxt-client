@@ -18,6 +18,7 @@ import { useRoute } from "vue-router";
 import { NOTIFIER_MODULE_KEY, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 import { reactive } from "vue";
 import NotifierModule from "@/store/notifier";
+import { mockMe } from "@@/tests/test-utils";
 
 const $route = {
 	query: {
@@ -34,33 +35,9 @@ setupStores({
 	schoolsModule: SchoolsModule,
 });
 
-authModule.setUser({
-	permissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
-	roles: [{ name: "administrator" }],
-	_id: "asdf",
-	id: "asdf",
-	firstName: "Arthur",
-	lastName: "Dent",
-	email: "arthur.dent@hitchhiker.org",
-	updatedAt: "",
-	birthday: "",
-	createdAt: "",
-	preferences: {},
-	schoolId: "",
-	emailSearchValues: [],
-	firstNameSearchValues: [],
-	lastNameSearchValues: [],
-	consent: {},
-	forcePasswordChange: false,
-	language: "",
-	fullName: "",
-	avatarInitials: "",
-	avatarBackgroundColor: "",
-	age: 0,
-	displayName: "",
-	accountId: "",
-	schoolName: "",
-	externallyManaged: false,
+authModule.setMe({
+	...mockMe,
+	permissions: ["ADMIN_VIEW"],
 });
 authModule.setAccessToken("asdf");
 

@@ -2,9 +2,9 @@ import * as serverApi from "@/serverApi/v3/api";
 import { SystemsApiInterface } from "@/serverApi/v3/api";
 import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
-import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
-import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import { mockMe, mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
@@ -63,7 +63,10 @@ describe("schools module", () => {
 
 		describe("fetchSchool", () => {
 			it("should call backend and set state correctly", async () => {
-				authModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
+				authModule.setMe({
+					...mockMe,
+					school: { ...mockMe.school, id: "sampleSchoolId" },
+				});
 				const mockSchoolResponse = schoolResponseFactory.build();
 				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolResponse })
@@ -104,33 +107,9 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				authModule.setUser({
-					schoolId: "4711",
-					_id: "",
-					firstName: "",
-					lastName: "",
-					email: "",
-					updatedAt: "",
-					birthday: "",
-					createdAt: "",
-					preferences: {},
-					roles: [],
-					emailSearchValues: [],
-					firstNameSearchValues: [],
-					lastNameSearchValues: [],
-					consent: {},
-					forcePasswordChange: false,
-					language: "",
-					fullName: "",
-					id: "",
-					avatarInitials: "",
-					avatarBackgroundColor: "",
-					age: 0,
-					displayName: "",
-					permissions: [],
-					accountId: "",
-					schoolName: "",
-					externallyManaged: false,
+				authModule.setMe({
+					...mockMe,
+					school: { ...mockMe.school, id: "4711" },
 				});
 
 				await schoolsModule.fetchSchool();

@@ -423,7 +423,7 @@ describe("PrivacySettings", () => {
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
 			});
-			authModule.addUserPermmission("SCHOOL_EDIT");
+			authModule.addPermmission("SCHOOL_EDIT");
 
 			const wrapper = getWrapper();
 			const learnStoreSwitch = wrapper.findComponent(
@@ -482,7 +482,7 @@ describe("PrivacySettings", () => {
 			envConfigModule.setEnvs({
 				ROCKETCHAT_SERVICE_ENABLED: true,
 			});
-			authModule.addUserPermmission("SCHOOL_EDIT");
+			authModule.addPermmission("SCHOOL_EDIT");
 
 			const wrapper = getWrapper();
 

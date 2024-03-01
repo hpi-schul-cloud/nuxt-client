@@ -233,9 +233,7 @@ export default defineComponent({
 		},
 		learnContentFabItems() {
 			const actions = [];
-			if (
-				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
-			) {
+			if (authModule.getPermissions.includes("HOMEWORK_CREATE".toLowerCase())) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.task"),
 					icon: mdiFormatListChecks,
@@ -244,9 +242,7 @@ export default defineComponent({
 					ariaLabel: this.$t("pages.rooms.fab.add.task"),
 				});
 			}
-			if (
-				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
-			) {
+			if (authModule.getPermissions.includes("TOPIC_CREATE".toLowerCase())) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.lesson"),
 					icon: mdiViewListOutline,
@@ -275,7 +271,7 @@ export default defineComponent({
 			return roomModule.getPermissionData || [];
 		},
 		roles() {
-			return authModule.getUserRoles;
+			return authModule.getRoleNames;
 		},
 		dashBoardRole() {
 			if (this.roles.includes(Roles.Teacher)) return Roles.Teacher;
@@ -283,7 +279,7 @@ export default defineComponent({
 			return undefined;
 		},
 		canEditTools() {
-			return !!authModule?.getUserPermissions.includes(
+			return !!authModule?.getPermissions.includes(
 				"CONTEXT_TOOL_ADMIN".toLowerCase()
 			);
 		},
@@ -364,7 +360,7 @@ export default defineComponent({
 		await roomModule.fetchContent(this.courseId);
 		await roomModule.fetchScopePermission({
 			courseId: this.courseId,
-			userId: authModule.getUser.id,
+			userId: authModule.getUser?.id,
 		});
 
 		document.title = buildPageTitle(this.roomData.title);

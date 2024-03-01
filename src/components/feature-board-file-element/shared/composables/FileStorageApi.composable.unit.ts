@@ -13,6 +13,7 @@ import { createMock } from "@golevelup/ts-jest";
 import { AxiosResponse } from "axios";
 import { setupFileStorageNotifier } from "../test-utils/fileStorageNotifier";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
+import { mockMe } from "@@/tests/test-utils";
 jest.mock("./FileStorageNotifications.composable");
 
 jest.mock("@/utils/helpers");
@@ -24,7 +25,7 @@ const mockedMapAxiosErrorToResponseError = jest.mocked(
 
 jest.mock("@/store/store-accessor", () => ({
 	authModule: {
-		getUser: { schoolId: "schoolId" },
+		getMe: { ...mockMe, school: { ...mockMe.school, id: "schoolId" } },
 	},
 }));
 

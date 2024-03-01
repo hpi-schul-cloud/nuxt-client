@@ -130,7 +130,7 @@ export default defineComponent({
 		);
 
 		const canEdit: ComputedRef<boolean> = computed(() =>
-			authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
+			authModule.getPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
 		);
 
 		const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {

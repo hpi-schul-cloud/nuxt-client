@@ -16,7 +16,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		describe("when user is teacher and tool is outdated on scope school and context", () => {
 			const setup = () => {
 				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
+					getRoleNames: ["teacher"],
 				});
 
 				const toolConfigurationStatus =
@@ -55,7 +55,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		describe("when user is teacher and tool is outdated on scope school", () => {
 			const setup = () => {
 				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
+					getRoleNames: ["teacher"],
 				});
 
 				const toolConfigurationStatus =
@@ -96,7 +96,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		describe("when user is teacher and tool is outdated on scope context", () => {
 			const setup = () => {
 				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
+					getRoleNames: ["teacher"],
 				});
 
 				const toolConfigurationStatus =
@@ -137,7 +137,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		describe("when user is student and tool is outdated on scope school and context", () => {
 			const setup = () => {
 				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["student"],
+					getRoleNames: ["student"],
 				});
 
 				const toolConfigurationStatus =
@@ -176,7 +176,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		describe("when user is student and tool is outdated on scope school", () => {
 			const setup = () => {
 				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["student"],
+					getRoleNames: ["student"],
 				});
 
 				const toolConfigurationStatus =
@@ -215,7 +215,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		describe("when user is student and tool is outdated on scope context", () => {
 			const setup = () => {
 				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["student"],
+					getRoleNames: ["student"],
 				});
 
 				const toolConfigurationStatus =
@@ -256,7 +256,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		describe("when user is teacher and tool is incomplete on scope context", () => {
 			const setup = () => {
 				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
+					getRoleNames: ["teacher"],
 				});
 
 				const composable = mountComposable(
@@ -289,7 +289,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		describe("when user is student and tool is incomplete on scope context", () => {
 			const setup = () => {
 				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["student"],
+					getRoleNames: ["student"],
 				});
 
 				const composable = mountComposable(

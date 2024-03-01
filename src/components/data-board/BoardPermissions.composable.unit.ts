@@ -6,7 +6,7 @@ describe("BoardPermissions.composable", () => {
 	let authModuleMock: jest.Mocked<AuthModule>;
 	beforeEach(() => {
 		authModuleMock = createModuleMocks(AuthModule, {
-			getUserPermissions: ["course_edit", "course_create", "course_remove"],
+			getPermissions: ["course_edit", "course_create", "course_remove"],
 		});
 	});
 

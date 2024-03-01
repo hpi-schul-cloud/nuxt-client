@@ -6,7 +6,6 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
-import { User } from "@/store/types/auth";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -21,6 +20,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { VAutocomplete } from "vuetify/lib/components/index.mjs";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { mockMe } from "@@/tests/test-utils";
 
 const $route = {
 	query: {
@@ -46,21 +46,6 @@ const defaultTasksModuleGetters: Partial<TasksModule> = {
 	openTasksForStudentIsEmpty: true,
 	completedTasksForStudentIsEmpty: true,
 	hasTasks: false,
-};
-
-const mockAuthStoreDataTeacher = {
-	_id: "asdfg",
-	id: "asdfg",
-	firstName: "Peter",
-	lastName: "Parker",
-	email: "peter.parker@hitchhiker.org",
-	roles: [{ name: "teacher" }],
-	permissions: [
-		"COURSE_CREATE",
-		"COURSE_EDIT",
-		"TOPIC_CREATE",
-		"HOMEWORK_CREATE",
-	],
 };
 
 describe("@/components/templates/TasksDashboardMain", () => {
@@ -241,7 +226,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				envConfigModule: EnvConfigModule,
 			});
 
-			authModule.setUser(mockAuthStoreDataTeacher as User);
+			authModule.setMe({ ...mockMe, permissions: ["HOMEWORK_CREATE"] });
 			wrapper = mountComponent({
 				props: {
 					role: "teacher",

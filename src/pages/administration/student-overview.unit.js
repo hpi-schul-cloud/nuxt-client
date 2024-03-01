@@ -135,7 +135,7 @@ describe("students/index", () => {
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
-		authModule.setUser({
+		authModule.setMe({
 			roles: [
 				{
 					name: "administrator",
@@ -237,7 +237,7 @@ describe("students/index", () => {
 	it("should emit the 'delete' action when deleting a user", async () => {
 		const { wrapper } = setup();
 
-		authModule.addUserPermmission("STUDENT_DELETE");
+		authModule.addPermmission("STUDENT_DELETE");
 
 		// user row exists
 		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
@@ -426,7 +426,7 @@ describe("students/index", () => {
 	});
 
 	it("should render the fab-floating component if user has SUDENT_CREATE permission", () => {
-		authModule.addUserPermmission("STUDENT_CREATE");
+		authModule.addPermmission("STUDENT_CREATE");
 		const { wrapper } = setup();
 
 		const fabComponent = wrapper.find(
@@ -436,7 +436,7 @@ describe("students/index", () => {
 	});
 
 	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", () => {
-		authModule.setUser({
+		authModule.setMe({
 			roles: [
 				{
 					name: "administrator",

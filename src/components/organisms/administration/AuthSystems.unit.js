@@ -1,15 +1,15 @@
-import AuthSystems from "./AuthSystems";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
-import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
-import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { RouterLinkStub } from "@vue/test-utils";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mockMe, RouterLinkStub } from "@vue/test-utils";
+import AuthSystems from "./AuthSystems";
 
 const generateProps = () => ({
 	systems: [
@@ -158,8 +158,8 @@ describe("AuthSystems", () => {
 		});
 
 		it("ldap button should be visible", async () => {
-			authModule.setUser({
-				...mockUser,
+			authModule.setMe({
+				...mockMe,
 				permissions: ["SYSTEM_CREATE"],
 			});
 			const wrapper = createWrapper({ props: generateProps() });
@@ -191,8 +191,8 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the edit system button", async () => {
-			authModule.setUser({
-				...mockUser,
+			authModule.setMe({
+				...mockMe,
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
 			const wrapper = createWrapper({ props: generateProps() });
@@ -233,8 +233,8 @@ describe("AuthSystems", () => {
 		});
 
 		it("should redirect to ldap config page from edit button of general ldap system", () => {
-			authModule.setUser({
-				...mockUser,
+			authModule.setMe({
+				...mockMe,
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
 			const wrapper = createWrapper({ props: generateProps() });
@@ -249,8 +249,8 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display system edit button and redirect to correct config page ", () => {
-			authModule.setUser({
-				...mockUser,
+			authModule.setMe({
+				...mockMe,
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
 			const wrapper = createWrapper({ props: generateProps() });
@@ -279,8 +279,8 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the dialog", async () => {
-			authModule.setUser({
-				...mockUser,
+			authModule.setMe({
+				...mockMe,
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
 			const wrapper = createWrapper({ props: generateProps() });
@@ -299,8 +299,8 @@ describe("AuthSystems", () => {
 
 	describe("events", () => {
 		it("should call the action when 'dialog-confirmed' triggered", async () => {
-			authModule.setUser({
-				...mockUser,
+			authModule.setMe({
+				...mockMe,
 				permissions: ["SYSTEM_CREATE"],
 			});
 			const deleteSpy = jest.spyOn(schoolsModule, "deleteSystem");
@@ -318,8 +318,8 @@ describe("AuthSystems", () => {
 		});
 
 		it("should call the method when delete dialog confirmed", async () => {
-			authModule.setUser({
-				...mockUser,
+			authModule.setMe({
+				...mockMe,
 				permissions: ["SYSTEM_CREATE"],
 			});
 			const removeSystem = jest.spyOn(AuthSystems.methods, "removeSystem");
@@ -334,8 +334,8 @@ describe("AuthSystems", () => {
 		});
 
 		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", async () => {
-			authModule.setUser({
-				...mockUser,
+			authModule.setMe({
+				...mockMe,
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT", "SYSTEM_VIEW"],
 			});
 			const wrapper = createWrapper({ props: generateProps() });

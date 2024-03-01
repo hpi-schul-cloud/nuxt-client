@@ -25,8 +25,8 @@ useTitle(buildPageTitle(t("common.words.tasks")));
 onMounted(() => tasksModule.fetchAllTasks());
 
 const dashboardRole = computed(() => {
-	if (authModule.getUserRoles.includes("teacher")) return "teacher";
-	if (authModule.getUserRoles.includes("student")) return "student";
+	if (authModule.getRoleNames.includes("teacher")) return "teacher";
+	if (authModule.getRoleNames.includes("student")) return "student";
 	return undefined;
 });
 </script>

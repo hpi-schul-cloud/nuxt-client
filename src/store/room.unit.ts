@@ -1,15 +1,14 @@
-import { courseFactory } from "@@/tests/test-utils/factory";
-import RoomModule from "./room";
 import * as serverApi from "@/serverApi/v3/api";
-import { initializeAxios } from "@/utils/api";
-import AuthModule from "@/store/auth";
+import { applicationErrorModule, authModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
+import AuthModule from "@/store/auth";
+import { initializeAxios } from "@/utils/api";
+import { mockMe } from "@@/tests/test-utils";
+import { courseFactory } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
-
 import { AxiosError, AxiosInstance } from "axios";
-import { authModule, applicationErrorModule } from "@/store";
+import RoomModule from "./room";
 import { HttpStatusCode } from "./types/http-status-code.enum";
-import { User } from "./types/auth";
 import { Course } from "./types/room";
 
 let receivedRequests: any[] = [];
@@ -389,7 +388,7 @@ describe("room module", () => {
 
 		describe("finishTask", () => {
 			beforeEach(() => {
-				authModule.setUser({ id: "testUser" } as User);
+				authModule.setMe(mockMe);
 			});
 
 			it("should make a 'PATCH' call to the backend", async () => {
@@ -472,7 +471,7 @@ describe("room module", () => {
 
 		describe("fetchScopePermission", () => {
 			beforeEach(() => {
-				authModule.setUser({ id: "testUser" } as User);
+				authModule.setMe(mockMe);
 			});
 
 			it("should make a 'GET' call to the backend to fetch the scoped 'room' permissions", async () => {
