@@ -1341,6 +1341,9 @@ export default {
 	"pages.news.title": "Новини",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
+	"pages.room.boardCard.menu.ariaLabel": "Меню форуму",
+	"pages.room.cards.aria":
+		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.cards.label.revert": "Повернути до стану чернетки",
 	"pages.room.copy.course.message.copied": "Курс успішно скопійовано.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1350,15 +1353,11 @@ export default {
 	"pages.room.itemDelete.text":
 		'Ви впевнені, що хочете видалити елемент " {itemTitle} "?',
 	"pages.room.itemDelete.title": "Видалити елемент",
-	"pages.room.lessonCard.aria":
-		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.label.shareLesson": "надіслати копію теми",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
 	"pages.room.student.emptyState":
 		"Тут з’являється навчальний вміст, наприклад теми чи завдання.",
-	"pages.room.taskCard.aria":
-		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.taskCard.label.done": "Завершити",
 	"pages.room.taskCard.label.due": "Термін",
 	"pages.room.taskCard.label.edit": "Редагувати",

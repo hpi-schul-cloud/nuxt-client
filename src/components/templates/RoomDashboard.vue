@@ -16,9 +16,10 @@
 			>
 				<template #item="{ element: item, index }">
 					<div>
-						<RoomBoardCard
+						<room-board-card
 							v-if="item.type === cardTypes.ColumnBoard"
 							:ref="`item_${index}`"
+							:role="role"
 							:key-drag="isDragging"
 							:drag-in-progress="dragInProgress"
 							:column-board-item="item.content"
@@ -26,9 +27,17 @@
 								courseName: roomData.title,
 								courseId: roomData.roomId,
 							}"
+							:aria-label="
+								$t('pages.room.cards.aria', {
+									itemType: $t('pages.room.boardCard.label.columnBoard'),
+									itemName: $t('pages.room.boardCard.label.courseBoard'),
+								})
+							"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
+							@publish-board="postDraftElement(item.content.id)"
+							@revert-board="revertPublishedElement(item.content.id)"
 						/>
 						<room-task-card
 							v-if="item.type === cardTypes.Task"
@@ -37,7 +46,7 @@
 							:room="taskData"
 							:task="item.content"
 							:aria-label="
-								$t('pages.room.taskCard.aria', {
+								$t('pages.room.cards.aria', {
 									itemType: $t('common.words.tasks'),
 									itemName: item.content.name,
 								})
@@ -63,7 +72,7 @@
 							:lesson="item.content"
 							:room="lessonData"
 							:aria-label="
-								$t('pages.room.lessonCard.aria', {
+								$t('pages.room.cards.aria', {
 									itemType: $t('common.words.topic'),
 									itemName: item.content.name,
 								})
@@ -86,9 +95,10 @@
 		</div>
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
-				<RoomBoardCard
+				<room-board-card
 					v-if="item.type === cardTypes.ColumnBoard"
 					:ref="`item_${index}`"
+					:role="role"
 					:key-drag="isDragging"
 					:drag-in-progress="dragInProgress"
 					:column-board-item="item.content"
@@ -96,6 +106,12 @@
 						courseName: roomData.title,
 						courseId: roomData.roomId,
 					}"
+					:aria-label="
+						$t('pages.room.cards.aria', {
+							itemType: $t('pages.room.boardCard.label.columnBoard'),
+							itemName: $t('pages.room.boardCard.label.courseBoard'),
+						})
+					"
 				/>
 				<room-task-card
 					v-if="item.type === cardTypes.Task"
@@ -103,7 +119,7 @@
 					:role="role"
 					:task="item.content"
 					:aria-label="
-						$t('pages.room.taskCard.aria', {
+						$t('pages.room.cards.aria', {
 							itemType: $t('common.words.tasks'),
 							itemName: item.content.name,
 						})
@@ -111,8 +127,6 @@
 					:key-drag="isDragging"
 					class="task-card"
 					:drag-in-progress="dragInProgress"
-					@post-task="postDraftElement(item.content.id)"
-					@revert-task="revertPublishedElement(item.content.id)"
 					@finish-task="finishTask(item.content.id)"
 					@restore-task="restoreTask(item.content.id)"
 				/>
@@ -123,7 +137,7 @@
 					:lesson="item.content"
 					:room="lessonData"
 					:aria-label="
-						$t('pages.room.lessonCard.aria', {
+						$t('pages.room.cards.aria', {
 							itemType: $t('common.words.topic'),
 							itemName: item.content.name,
 						})
@@ -131,8 +145,6 @@
 					:key-drag="isDragging"
 					class="lesson-card"
 					:drag-in-progress="dragInProgress"
-					@post-lesson="postDraftElement(item.content.id)"
-					@revert-lesson="revertPublishedElement(item.content.id)"
 				/>
 			</div>
 		</div>

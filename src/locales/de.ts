@@ -1342,6 +1342,9 @@ export default {
 	"pages.news.title": "Neuigkeiten",
 	"pages.room.boardCard.label.columnBoard": "Spalten-Board",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Board",
+	"pages.room.boardCard.menu.ariaLabel": "Board-Menü",
+	"pages.room.cards.aria":
+		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.copy.course.message.copied":
 		"Der Kurs wurde erfolgreich kopiert.",
@@ -1354,15 +1357,11 @@ export default {
 	"pages.room.itemDelete.text":
 		'Bist du dir sicher, dass du das Element "{itemTitle}" löschen möchtest?',
 	"pages.room.itemDelete.title": "Element löschen",
-	"pages.room.lessonCard.aria":
-		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.label.shareLesson": "Themenkopie teilen",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
 	"pages.room.student.emptyState":
 		"Hier erscheinen Lerninhalte wie Themen oder Aufgaben.",
-	"pages.room.taskCard.aria":
-		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.room.taskCard.label.done": "Abschließen",
 	"pages.room.taskCard.label.due": "Abgabe",
 	"pages.room.taskCard.label.edit": "Bearbeiten",
