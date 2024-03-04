@@ -7,7 +7,7 @@
 			/>
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
-				<h1 class="text-h3 pl-2">
+				<h1 class="text-h3 pl-2" :data-testid="dataTestId">
 					{{ headline }}
 				</h1>
 			</slot>
@@ -94,6 +94,10 @@ export default defineComponent({
 			type: Boolean,
 			required: false,
 			default: false,
+		},
+		dataTestId: {
+			type: String,
+			default: "",
 		},
 	},
 	computed: {
