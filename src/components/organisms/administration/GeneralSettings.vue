@@ -202,11 +202,11 @@ export default {
 		school: {
 			handler: async function (newSchool) {
 				if (newSchool && newSchool.id) {
-					this.logoFile = newSchool.logo_dataUrl
+					this.logoFile = newSchool.logo?.dataUrl
 						? [
 								this.convertDataUrlToFile(
-									newSchool.logo_dataUrl,
-									newSchool.logo_name
+									newSchool.logo?.dataUrl,
+									newSchool.logo?.name
 								),
 							]
 						: [];
@@ -241,8 +241,8 @@ export default {
 				return;
 			}
 			const schoolCopy = JSON.parse(JSON.stringify(this.school)); // create a deep copy
-			if (this.school.logo_dataUrl) {
-				schoolCopy.logo = this.school.logo_dataUrl;
+			if (this.school.logo?.dataUrl) {
+				schoolCopy.logo = this.school.logo?.dataUrl;
 			}
 			this.localSchool = schoolCopy;
 
@@ -272,6 +272,10 @@ export default {
 				language: this.localSchool.language,
 				permissions: this.localSchool.permissions,
 				features: mapSchoolFeatureObjectToArray(this.localSchool.features),
+				logo: {
+					dataUrl: this.localSchool.logo?.dataUrl,
+					name: this.localSchool.logo?.name,
+				},
 			};
 			if (
 				!this.school.officialSchoolNumber &&
@@ -284,9 +288,9 @@ export default {
 				updatedSchool.countyId = this.localSchool.county.id;
 			}
 
-			updatedSchool.logo_dataUrl =
+			updatedSchool.logo.dataUrl =
 				this.logoFile.length > 0 ? await toBase64(this.logoFile[0]) : "";
-			updatedSchool.logo_name =
+			updatedSchool.logo.name =
 				this.logoFile.length > 0 ? this.logoFile[0].name : "";
 
 			schoolsModule.update({ id: this.localSchool.id, props: updatedSchool });

@@ -25,7 +25,7 @@ export default class SchoolsModule extends VuexModule {
 	school: School = {
 		id: "",
 		name: "",
-		logo_name: "",
+		logo: { name: "", dataUrl: "" },
 		fileStorageType: "",
 		federalState: {
 			id: "",
@@ -218,6 +218,7 @@ export default class SchoolsModule extends VuexModule {
 		props: SchoolUpdateBodyParams;
 	}): Promise<void> {
 		const { id, props } = payload;
+		this.setLoading(true);
 		try {
 			const { data } = await this.schoolApi.schoolControllerUpdateSchool(
 				id,

@@ -1,3 +1,5 @@
+import { SchoolLogo } from "@/serverApi/v3";
+
 export type Year = {
 	id: string;
 	name: string;
@@ -23,8 +25,7 @@ export type FederalState = {
 export type School = {
 	id: string;
 	name: string;
-	logo_name?: string;
-	logo_dataUrl?: string;
+	logo?: SchoolLogo;
 	fileStorageType?: string;
 	federalState: FederalState;
 	county?: County;

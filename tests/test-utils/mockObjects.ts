@@ -52,7 +52,10 @@ export const mockUser: User = {
 export const mockSchool: School = {
 	id: "mockSchoolId",
 	name: "",
-	logo_name: "",
+	logo: {
+		name: "",
+		dataUrl: "",
+	},
 	fileStorageType: "",
 	federalState: {
 		id: "",

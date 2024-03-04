@@ -64,9 +64,9 @@
 					{{ school.name }}
 				</div>
 				<img
-					v-if="school && school.logo_dataUrl"
+					v-if="school && school.logo?.dataUrl"
 					class="school-logo"
-					:src="school.logo_dataUrl"
+					:src="school.logo?.dataUrl"
 					ref="image"
 					alt=""
 				/>

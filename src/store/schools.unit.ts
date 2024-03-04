@@ -208,25 +208,12 @@ describe("schools module", () => {
 
 			it("should call backend and set state correctly", async () => {
 				const uploadData = {
-					id: "id_123",
 					name: "Paul Newname Gymnasium",
 					features: [serverApi.SchoolFeature.RocketChat],
 				};
-				initializeAxios({
-					patch: async (path: string) => {
-						receivedRequests.push({ path });
-						return {
-							data: {
-								id: "id_123",
-								name: "Paul Newname Gymnasium",
-								features: ["rocketChat"],
-							},
-						};
-					},
-				} as unknown as AxiosInstance);
 
 				const mockSchoolResponse = schoolResponseFactory.build();
-				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
+				schoolApi.schoolControllerUpdateSchool.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolResponse })
 				);
 
@@ -237,12 +224,17 @@ describe("schools module", () => {
 
 				await schoolsModule.update({ id: "111", props: uploadData });
 
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual("/v1/schools/id_123");
+				expect(schoolApi.schoolControllerUpdateSchool).toHaveBeenCalledWith(
+					"111",
+					{
+						features: ["rocketChat"],
+						name: "Paul Newname Gymnasium",
+					}
+				);
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(schoolApi.schoolControllerGetSchoolById).toHaveBeenCalled();
 				expect(setSchoolSpy).toHaveBeenCalled();
+				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 
@@ -259,13 +251,17 @@ describe("schools module", () => {
 					features: [serverApi.SchoolFeature.RocketChat],
 				};
 				const schoolsModule = new SchoolsModule({});
+				schoolApi.schoolControllerUpdateSchool.mockRejectedValueOnce(
+					new AxiosError()
+				);
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 
 				await schoolsModule.update({ id: "111", props: uploadData });
 
-				expect(receivedRequests).toHaveLength(0);
+				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
