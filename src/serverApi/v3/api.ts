@@ -258,6 +258,12 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     timestamps: TimestampsResponse;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponse
+     */
+    isVisible: boolean;
 }
 /**
  * 
@@ -6706,6 +6712,19 @@ export enum VideoConferenceStateResponse {
 /**
  * 
  * @export
+ * @interface VisibilityBodyParams
+ */
+export interface VisibilityBodyParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VisibilityBodyParams
+     */
+    isVisible: boolean;
+}
+/**
+ * 
+ * @export
  * @interface VisibilitySettingsResponse
  */
 export interface VisibilitySettingsResponse {
@@ -7811,6 +7830,50 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
+         * @param {VisibilityBodyParams} visibilityBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerUpdateVisibility: async (boardId: string, visibilityBodyParams: VisibilityBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerUpdateVisibility', 'boardId', boardId)
+            // verify required parameter 'visibilityBodyParams' is not null or undefined
+            assertParamExists('boardControllerUpdateVisibility', 'visibilityBodyParams', visibilityBodyParams)
+            const localVarPath = `/boards/{boardId}/visibility`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(visibilityBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -7877,6 +7940,18 @@ export const BoardApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateBoardTitle(boardId, renameBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
+         * @param {VisibilityBodyParams} visibilityBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateVisibility(boardId, visibilityBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -7938,6 +8013,17 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
             return localVarFp.boardControllerUpdateBoardTitle(boardId, renameBodyParams, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
+         * @param {VisibilityBodyParams} visibilityBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.boardControllerUpdateVisibility(boardId, visibilityBodyParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -7997,6 +8083,17 @@ export interface BoardApiInterface {
      * @memberof BoardApiInterface
      */
     boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Update the visibility of a board.
+     * @param {string} boardId The id of the board.
+     * @param {VisibilityBodyParams} visibilityBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -8066,6 +8163,19 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      */
     public boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any) {
         return BoardApiFp(this.configuration).boardControllerUpdateBoardTitle(boardId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update the visibility of a board.
+     * @param {string} boardId The id of the board.
+     * @param {VisibilityBodyParams} visibilityBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerUpdateVisibility(boardId, visibilityBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

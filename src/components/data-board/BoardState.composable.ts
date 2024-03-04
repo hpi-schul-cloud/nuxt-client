@@ -21,8 +21,10 @@ export const useBoardState = (id: string) => {
 		deleteColumnCall,
 		moveCardCall,
 		moveColumnCall,
+		updateBoardTitleCall,
 		updateColumnTitleCall,
 		createCardCall,
+		publishBoard,
 	} = useBoardApi();
 	const { setEditModeId } = useSharedEditMode();
 
@@ -241,6 +243,33 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
+	const updateBoardTitle = async (newTitle: string) => {
+		if (board.value === undefined) return;
+
+		try {
+			await updateBoardTitleCall(board.value.id, newTitle);
+			board.value.title = newTitle;
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "board"),
+			});
+		}
+	};
+
+	const updateBoardVisibility = async (newVisibility: boolean) => {
+		if (board.value === undefined) return;
+
+		try {
+			await publishBoard(board.value.id, newVisibility);
+			board.value.isVisible = newVisibility;
+			// reloadBoard();
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "board"),
+			});
+		}
+	};
+
 	const notifyWithTemplateAndReload = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
@@ -278,6 +307,8 @@ export const useBoardState = (id: string) => {
 		moveColumn,
 		notifyWithTemplateAndReload,
 		reloadBoard,
+		updateBoardTitle,
+		updateBoardVisibility,
 		updateColumnTitle,
 	};
 };

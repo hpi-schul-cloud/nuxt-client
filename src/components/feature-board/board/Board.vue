@@ -1,11 +1,18 @@
 <template>
 	<div>
-		<div class="ml-1">
-			<h3 aria-level="1" class="mt-0">
-				{{ $t("pages.room.boardCard.label.courseBoard") }}
-			</h3>
-		</div>
 		<template v-if="board">
+			<div class="ml-1">
+				<BoardHeader
+					:boardId="board.id"
+					:title="board.title"
+					:titlePlaceholder="$t('pages.room.boardCard.label.courseBoard')"
+					:isDraft="isDraft"
+					@publish:board="onPublishBoard"
+					@revert:board="onRevertPublishedBoard"
+					@update:title="onUpdateBoardTitle"
+					class="mt-0"
+				/>
+			</div>
 			<div class="d-flex flex-row flex-shrink-1">
 				<div>
 					<Sortable
@@ -99,12 +106,14 @@ import BoardColumnGhost from "./BoardColumnGhost.vue";
 import { useI18n } from "vue-i18n";
 import { Sortable } from "sortablejs-vue3";
 import { SortableEvent } from "sortablejs";
+import BoardHeader from "./BoardHeader.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
 export default defineComponent({
 	components: {
 		BoardColumn,
 		BoardColumnGhost,
+		BoardHeader,
 		ConfirmationDialog,
 		AddElementDialog,
 		LightBox,
@@ -127,6 +136,8 @@ export default defineComponent({
 			moveCard,
 			moveColumn,
 			reloadBoard,
+			updateBoardTitle,
+			updateBoardVisibility,
 			updateColumnTitle,
 		} = useBoardState(toRef(props, "boardId").value);
 
@@ -213,8 +224,16 @@ export default defineComponent({
 			await moveColumn(columnMove, true);
 		};
 
+		const onPublishBoard = async () => {
+			if (hasEditPermission) await updateBoardVisibility(true);
+		};
+
 		const onReloadBoard = async () => {
 			await reloadBoard();
+		};
+
+		const onRevertPublishedBoard = async () => {
+			if (hasEditPermission) await updateBoardVisibility(false);
 		};
 
 		const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
@@ -225,8 +244,19 @@ export default defineComponent({
 			if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
 		};
 
+		const onUpdateBoardTitle = async (newTitle: string) => {
+			if (hasEditPermission) await updateBoardTitle(newTitle);
+		};
+
+		const isDraft = computed(() => {
+			return !board.value?.isVisible;
+		});
+
 		onMounted(() => {
-			if (isTeacher) {
+			if (isTeacher && isDraft.value === true) {
+				showInfo(t("components.board.alert.info.draft"), false);
+			}
+			if (isTeacher && isDraft.value === false) {
 				showInfo(t("components.board.alert.info.teacher"), false);
 			}
 		});
@@ -249,6 +279,7 @@ export default defineComponent({
 			placeholderOptions,
 			isEditMode,
 			isDesktop,
+			isDraft,
 			isTouchDetected,
 			onCreateCard,
 			onCreateColumn,
@@ -257,7 +288,10 @@ export default defineComponent({
 			onDeleteColumn,
 			onMoveColumnLeft,
 			onMoveColumnRight,
+			onPublishBoard,
 			onReloadBoard,
+			onRevertPublishedBoard,
+			onUpdateBoardTitle,
 			onUpdateCardPosition,
 			onUpdateColumnTitle,
 		};

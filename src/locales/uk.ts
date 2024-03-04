@@ -286,6 +286,8 @@ export default {
 	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
+	"components.board.alert.info.draft":
+		"Ця дошка більше не відображається для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.board.column.ghost.placeholder": "Додати стовпець",
 	"components.board.menu.board": "Налаштування дошки",

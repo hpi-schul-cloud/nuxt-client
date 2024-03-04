@@ -284,6 +284,8 @@ export default {
 	"components.board.action.moveUp": "Levantar",
 	"components.board.alert.info.teacher":
 		"Este tablero es visible para todos los participantes en el curso.",
+	"components.board.alert.info.draft":
+		"Este tablero ya no es visible para los participantes en el curso.",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.placeholder": "Añadir columna",
 	"components.board.menu.board": "Configuración del tablero",

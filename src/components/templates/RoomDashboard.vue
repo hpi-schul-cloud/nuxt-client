@@ -96,7 +96,7 @@
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
 				<room-board-card
-					v-if="item.type === cardTypes.ColumnBoard"
+					v-if="item.type === cardTypes.ColumnBoard && item.content.published"
 					:ref="`item_${index}`"
 					:role="role"
 					:key-drag="isDragging"

@@ -278,6 +278,8 @@ export default {
 	"components.board.action.moveUp": "Move up",
 	"components.board.alert.info.teacher":
 		"This board is visible to all course participants.",
+	"components.board.alert.info.draft":
+		"This board is no longer visible to course participants.",
 	"components.board.column.defaultTitle": "New column",
 	"components.board.column.ghost.placeholder": "Add column",
 	"components.board.menu.board": "Board settings",

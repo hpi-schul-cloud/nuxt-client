@@ -563,6 +563,48 @@ describe("BoardState.composable", () => {
 		});
 	});
 
+	describe("updateBoardTitle", () => {
+		const NEW_TITLE = "newTitle";
+		it("should not call updateBoardTitleCall when board value is undefined", async () => {
+			const { updateBoardTitle, board } = setup();
+			board.value = undefined;
+
+			await updateBoardTitle(NEW_TITLE);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateBoardTitleCall).not.toHaveBeenCalled();
+		});
+
+		it("shouldhandle error when api returns an error code", async () => {
+			const { updateBoardTitle, board } = setup();
+			board.value = testBoard;
+
+			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue(
+				setupErrorResponse()
+			);
+
+			await updateBoardTitle(NEW_TITLE);
+			await nextTick();
+
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+		});
+
+		it("should update board title", async () => {
+			const { updateBoardTitle, board } = setup();
+			board.value = testBoard;
+
+			await updateBoardTitle(NEW_TITLE);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateBoardTitleCall).toHaveBeenCalledWith(
+				board.value.id,
+				NEW_TITLE
+			);
+
+			expect(board.value.title).toStrictEqual(NEW_TITLE);
+		});
+	});
+
 	describe("notifyWithTemplateAndReload", () => {
 		describe("when is called", () => {
 			it("should call notifyWithTemplate", async () => {

@@ -281,6 +281,8 @@ export default {
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.alert.info.teacher":
 		"Dieses Board ist sichtbar für alle Kursteilnehmenden.",
+	"components.board.alert.info.draft":
+		"Dieses Board ist nicht mehr für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neue Spalte",
 	"components.board.column.ghost.placeholder": "Spalte hinzufügen",
 	"components.board.menu.board": "Board-Einstellungen",

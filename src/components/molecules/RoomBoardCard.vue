@@ -86,7 +86,10 @@ const emit = defineEmits([
 const router = useRouter();
 
 const cardTitle = () => {
-	const titlePrefix = t("pages.room.boardCard.label.columnBoard");
+	const titlePrefix =
+		props.columnBoardItem.title && props.columnBoardItem.title !== ""
+			? props.columnBoardItem.title
+			: t("pages.room.boardCard.label.courseBoard");
 	let titleSuffix = "";
 
 	if (isDraft.value) {

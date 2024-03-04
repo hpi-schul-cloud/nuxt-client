@@ -70,6 +70,22 @@ describe("BoardApi.composable", () => {
 		});
 	});
 
+	describe("updateBoardTitle", () => {
+		it("should call boardControllerUpdateBoardTitle api", async () => {
+			const { updateBoardTitleCall } = useBoardApi();
+			const payload = {
+				id: "update-card-id",
+				title: "update-title",
+			};
+
+			await updateBoardTitleCall(payload.id, payload.title);
+			expect(boardApi.boardControllerUpdateBoardTitle).toHaveBeenCalledWith(
+				payload.id,
+				{ title: payload.title }
+			);
+		});
+	});
+
 	describe("updateCardHeight", () => {
 		it("should call cardControllerUpdateCardHeight api", async () => {
 			const { updateCardHeightCall } = useBoardApi();

@@ -17,6 +17,7 @@
 		@keydown.enter="onEnter"
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
+		:maxlength="maxLength"
 	/>
 </template>
 
@@ -57,6 +58,10 @@ export default defineComponent({
 		isFocused: {
 			type: Boolean,
 		},
+		maxLength: {
+			type: Number,
+			default: null,
+		},
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
@@ -85,7 +90,12 @@ export default defineComponent({
 		watch(
 			() => props.isEditMode,
 			async (newVal, oldVal) => {
-				if (props.scope !== "column" && !props.isFocused) return;
+				if (
+					props.scope !== "column" &&
+					props.scope !== "board" &&
+					!props.isFocused
+				)
+					return;
 				if (newVal && !oldVal) {
 					await nextTick();
 					await setFocusOnEdit();
