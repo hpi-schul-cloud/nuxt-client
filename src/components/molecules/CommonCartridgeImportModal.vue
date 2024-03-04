@@ -1,10 +1,10 @@
 <template>
 	<v-dialog
 		ref="commonCartridgeImportDialog"
-		:value="isOpen"
-		:max-width="maxWidth"
-		@click:outside="$emit('dialog-closed', false)"
-		@keydown.esc="$emit('dialog-closed', false)"
+		:v-model="commonCartridgeImportModule.isOpen"
+		:max-width="props.maxWidth"
+		@click:outside="commonCartridgeImportModule.closeImportModal()"
+		@keydown.esc="commonCartridgeImportModule.closeImportModal()"
 		data-testid="common-cartridge-import-dialog"
 	>
 		<v-card :ripple="false">
@@ -45,87 +45,31 @@
 	</v-dialog>
 </template>
 
-<script lang="ts">
-import { computed, defineComponent, ref } from "vue";
-import {
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	ROOMS_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+<script setup lang="ts">
+import { computed, defineProps, defineModel, withDefaults } from "vue";
+import { commonCartridgeImportModule } from "@/store";
 import { mdiTrayArrowUp } from "@mdi/js";
-import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "CommonCartridgeImportModal",
-	model: {
-		prop: "isOpen",
-		event: "dialog-closed",
-	},
-	props: {
-		isOpen: {
-			type: Boolean,
-			required: true,
-		},
-		maxWidth: {
-			type: Number,
-			default: 480,
-		},
-	},
-	emits: {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		"dialog-closed": (value: boolean): boolean => true,
-	},
-	setup: (_, { emit }) => {
-		const i18n = useI18n();
-		const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
-		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-		const roomsModule = injectStrict(ROOMS_MODULE_KEY);
-		const file = ref<File | undefined>(undefined);
-		const importButtonDisabled = computed(() => {
-			return !file.value;
-		});
-
-		function cancel(): void {
-			emit("dialog-closed", false);
-			file.value = undefined;
-		}
-
-		async function confirm(): Promise<void> {
-			if (!file.value) {
-				return;
-			}
-
-			loadingStateModule.open({
-				text: i18n.t("pages.rooms.ccImportCourse.loading").toString(),
-			});
-			await roomsModule.uploadCourse(file.value);
-			await roomsModule.fetchAllElements();
-			emit("dialog-closed", false);
-			loadingStateModule.close();
-
-			const [newCourse] = roomsModule.getAllElements;
-
-			notifierModule.show({
-				status: roomsModule.getAlertData.status,
-				text: i18n
-					.t(roomsModule.getAlertData.text as string, { name: newCourse.title })
-					.toString(),
-				autoClose: roomsModule.getAlertData.autoClose,
-				timeout: roomsModule.getAlertData.timeout,
-			});
-			file.value = undefined;
-		}
-
-		return {
-			file,
-			importButtonDisabled,
-			mdiTrayArrowUp,
-			cancel,
-			confirm,
-		};
-	},
+const props = withDefaults(
+	defineProps<{
+		maxWidth: number;
+	}>(),
+	{
+		maxWidth: 480,
+	}
+);
+const file = defineModel<File>();
+const importButtonDisabled = computed(() => {
+	return !file.value;
 });
+
+function cancel(): void {
+	commonCartridgeImportModule.closeImportModal();
+}
+
+async function confirm(): Promise<void> {
+	await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
+}
 </script>
 
 <style lang="scss" scoped>

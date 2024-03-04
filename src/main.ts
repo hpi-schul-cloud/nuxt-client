@@ -4,6 +4,7 @@ import {
 	applicationErrorModule,
 	authModule,
 	autoLogoutModule,
+	commonCartridgeImportModule,
 	contentModule,
 	contextExternalToolsModule,
 	copyModule,
@@ -52,6 +53,7 @@ import { initializeAxios } from "./utils/api";
 import {
 	APPLICATION_ERROR_KEY,
 	AUTH_MODULE_KEY,
+	COMMON_CARTRIDGE_IMPORT_MODULE,
 	CONTENT_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -175,6 +177,10 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
 	app.provide(LOADING_STATE_MODULE_KEY.valueOf(), loadingStateModule);
 	app.provide(ROOMS_MODULE_KEY.valueOf(), roomsModule);
+	app.provide(
+		COMMON_CARTRIDGE_IMPORT_MODULE.valueOf(),
+		commonCartridgeImportModule
+	);
 	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");

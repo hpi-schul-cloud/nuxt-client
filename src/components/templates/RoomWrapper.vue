@@ -4,6 +4,7 @@
 		headline=""
 		:full-width="true"
 		:fab-items="fabItems"
+		@onFabItemClick="fabItemClickHandler"
 	>
 		<template #header>
 			<slot name="header" />
@@ -28,15 +29,17 @@
 		<template v-else>
 			<slot name="page-content" />
 		</template>
-		<common-cartridge-import-modal
-			v-model="ccImportDialog.isOpen"
-			class="upload-modal"
-		/>
+		<common-cartridge-import-modal :max-width="480" class="upload-modal" />
 	</default-wireframe>
 </template>
 
-<script>
-import { authModule, envConfigModule, roomsModule } from "@/store";
+<script lang="ts">
+import {
+	authModule,
+	commonCartridgeImportModule,
+	envConfigModule,
+	roomsModule,
+} from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
@@ -58,13 +61,6 @@ export default defineComponent({
 			type: Boolean,
 			required: false,
 		},
-	},
-	data() {
-		return {
-			ccImportDialog: {
-				isOpen: false,
-			},
-		};
 	},
 	computed: {
 		fabItems() {
@@ -92,10 +88,7 @@ export default defineComponent({
 								icon: mdiImport,
 								dataTestid: "fab_button_import_course",
 								ariaLabel: this.$t("pages.rooms.fab.import.course"),
-								customEvent: {
-									name: "fabButtonEvent",
-									value: "import",
-								},
+								customEvent: "import",
 							},
 						],
 					};
@@ -122,9 +115,9 @@ export default defineComponent({
 		},
 	},
 	methods: {
-		fabClick(event) {
+		fabItemClickHandler(event: string) {
 			if (event === "import") {
-				this.$data.ccImportDialog.isOpen = true;
+				commonCartridgeImportModule.openImportModal();
 			}
 		},
 	},

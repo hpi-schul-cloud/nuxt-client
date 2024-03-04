@@ -17,6 +17,7 @@ import SystemsModule from "@/store/systems";
 import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { InjectionKey } from "vue";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
@@ -54,5 +55,7 @@ export const LOADING_STATE_MODULE_KEY: InjectionKey<LoadingStateModule> =
 export const NEWS_MODULE_KEY: InjectionKey<NewsModule> = Symbol("newsModule");
 export const CONTENT_MODULE_KEY: InjectionKey<ContentModule> =
 	Symbol("contentModule");
+export const COMMON_CARTRIDGE_IMPORT_MODULE: InjectionKey<CommonCartridgeImportModule> =
+	Symbol("commonCartridgeImportModule");
 
 export const THEME_KEY: InjectionKey<{ name: string }> = Symbol("theme");
