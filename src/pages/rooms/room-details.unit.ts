@@ -82,31 +82,6 @@ const mockData = {
 	],
 };
 
-const mockAuthStoreDataStudentInvalid = {
-	_id: "asdf",
-	id: "asdf",
-	firstName: "Arthur",
-	lastName: "Dent",
-	email: "arthur.dent@hitchhiker.org",
-	roles: [{ name: "student" }],
-	permissions: ["ABC", "DEF"],
-};
-
-const mockAuthStoreDataTeacher = {
-	_id: "asdfg",
-	id: "asdfg",
-	firstName: "Peter",
-	lastName: "Parker",
-	email: "peter.parker@hitchhiker.org",
-	roles: [{ name: "teacher" }],
-	permissions: [
-		"COURSE_CREATE",
-		"COURSE_EDIT",
-		"TOPIC_CREATE",
-		"HOMEWORK_CREATE",
-	],
-};
-
 const mockPermissionsCourseTeacher = ["COURSE_CREATE", "COURSE_EDIT"];
 
 const mockPermissionsCourseSubstitutionTeacher = [
