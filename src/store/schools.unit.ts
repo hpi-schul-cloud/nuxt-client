@@ -2,11 +2,11 @@ import * as serverApi from "@/serverApi/v3/api";
 import { SystemsApiInterface } from "@/serverApi/v3/api";
 import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
-import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
@@ -80,7 +80,6 @@ describe("schools module", () => {
 					ldapUniventionMigrationSchool: false,
 					showOutdatedUsers: false,
 					enableLdapSyncDuringMigration: false,
-					isTeamCreationByStudentsEnabled: false,
 					oauthProvisioningEnabled: false,
 					nextcloud: false,
 				};
@@ -93,6 +92,7 @@ describe("schools module", () => {
 				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual({
 					...mockSchoolResponse,
 					features: expectedFeatureObject,
+					instanceFeatures: [],
 				});
 			});
 
@@ -210,17 +210,7 @@ describe("schools module", () => {
 				const uploadData = {
 					id: "id_123",
 					name: "Paul Newname Gymnasium",
-					features: {
-						rocketChat: true,
-						studentVisibility: false,
-						videoconference: false,
-						ldapUniventionMigrationSchool: false,
-						showOutdatedUsers: false,
-						enableLdapSyncDuringMigration: false,
-						isTeamCreationByStudentsEnabled: false,
-						nextcloud: false,
-						oauthProvisioningEnabled: false,
-					},
+					features: [serverApi.SchoolFeature.RocketChat],
 				};
 				initializeAxios({
 					patch: async (path: string) => {
@@ -245,7 +235,7 @@ describe("schools module", () => {
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 
-				await schoolsModule.update(uploadData);
+				await schoolsModule.update({ id: "111", props: uploadData });
 
 				expect(receivedRequests.length).toBeGreaterThan(0);
 				expect(receivedRequests[0].path).toStrictEqual("/v1/schools/id_123");
@@ -265,26 +255,15 @@ describe("schools module", () => {
 				} as AxiosInstance);
 
 				const uploadData = {
-					id: "id_123",
 					data: "some data to be updated",
-					features: {
-						rocketChat: true,
-						studentVisibility: false,
-						videoconference: false,
-						ldapUniventionMigrationSchool: false,
-						showOutdatedUsers: false,
-						enableLdapSyncDuringMigration: false,
-						isTeamCreationByStudentsEnabled: false,
-						nextcloud: false,
-						oauthProvisioningEnabled: false,
-					},
+					features: [serverApi.SchoolFeature.RocketChat],
 				};
 				const schoolsModule = new SchoolsModule({});
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 
-				await schoolsModule.update(uploadData);
+				await schoolsModule.update({ id: "111", props: uploadData });
 
 				expect(receivedRequests).toHaveLength(0);
 				expect(setErrorSpy).toHaveBeenCalled();

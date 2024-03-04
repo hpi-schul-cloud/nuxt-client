@@ -18,6 +18,7 @@ export const mapSchoolFeatureObjectToArray = (f: SchoolFeatureObject) => {
 
 export const mapSchoolServerToClient = (school: SchoolResponse): School => {
 	const featureObject: Partial<School["features"]> = {};
+	const instanceFeatures: Array<SchoolFeature> = [];
 
 	SCHOOL_FEATURES.forEach((schoolFeature) => {
 		if (school.features?.includes(schoolFeature)) {
@@ -27,5 +28,9 @@ export const mapSchoolServerToClient = (school: SchoolResponse): School => {
 		}
 	});
 
-	return { ...school, features: featureObject as Required<School["features"]> };
+	return {
+		...school,
+		features: featureObject as Required<School["features"]>,
+		instanceFeatures,
+	};
 };

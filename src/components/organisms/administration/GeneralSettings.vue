@@ -280,12 +280,8 @@ export default {
 				updatedSchool.officialSchoolNumber =
 					this.localSchool.officialSchoolNumber;
 			}
-			if (
-				!this.school.county &&
-				this.localSchool.county &&
-				this.localSchool.county.id
-			) {
-				updatedSchool.county = this.localSchool.county.id;
+			if (!this.school.county && this.localSchool?.county?.id) {
+				updatedSchool.countyId = this.localSchool.county.id;
 			}
 
 			updatedSchool.logo_dataUrl =

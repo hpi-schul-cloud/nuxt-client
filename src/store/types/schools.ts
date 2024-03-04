@@ -42,8 +42,8 @@ export type School = {
 		oauthProvisioningEnabled: boolean;
 		showOutdatedUsers: boolean;
 		enableLdapSyncDuringMigration: boolean;
-		isTeamCreationByStudentsEnabled: boolean;
 	};
+	instanceFeatures: string[];
 	permissions?: unknown;
 	inMaintenance?: boolean;
 	inUserMigration?: boolean;
