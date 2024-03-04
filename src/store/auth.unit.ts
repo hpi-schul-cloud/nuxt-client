@@ -1,5 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { envConfigModule, schoolsModule } from "@/store";
+import { envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import { mockApiResponse } from "@@/tests/test-utils";
 import { mockMe } from "@@/tests/test-utils/mockObjects";
@@ -8,7 +8,6 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
-import SchoolsModule from "./schools";
 import { Envs } from "./types/env-config";
 
 jest.useFakeTimers();
@@ -138,36 +137,26 @@ describe("auth store module", () => {
 	describe("getters", () => {
 		beforeEach(() => {
 			setupStores({
-				schoolsModule: SchoolsModule,
 				envConfigModule: EnvConfigModule,
 			});
 		});
 		describe("locale", () => {
-			it("should return the user's language", () => {
+			it("should return the set locale", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "mock";
 				expect(authModule.getLocale).toBe("mock");
 			});
 
-			it("should return the school's language", () => {
+			it("should return the default language if locale is not set", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "";
-				schoolsModule.school.language = "fi";
-				expect(authModule.getLocale).toBe("fi");
-			});
-
-			it("should return the instance language", () => {
-				const authModule = new AuthModule({});
-				authModule.locale = "";
-				schoolsModule.school.language = "";
 				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "fu";
 				expect(authModule.getLocale).toBe("fu");
 			});
 
-			it("should return the default language", () => {
+			it("should return the fallback language if neither locale nor default language are set", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "";
-				schoolsModule.school.language = "";
 				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "";
 				expect(authModule.getLocale).toBe("de");
 			});

@@ -95,9 +95,6 @@ export default class AuthModule extends VuexModule {
 		if (this.locale) {
 			return this.locale;
 		}
-		if (this.getUser?.language) {
-			return this.getUser?.language;
-		}
 		if (envConfigModule.getEnv.I18N__DEFAULT_LANGUAGE) {
 			return envConfigModule.getEnv.I18N__DEFAULT_LANGUAGE;
 		}
