@@ -8,7 +8,7 @@ import {
 	UserApiFactory,
 	UserApiInterface,
 } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+import { envConfigModule, schoolsModule } from "@/store";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
@@ -151,6 +151,10 @@ export default class AuthModule extends VuexModule {
 		if (meRes.user.language) {
 			this.setLocale(meRes.user.language);
 		}
+
+		// There are several places in the app, where more school data is needed, than is included in the MeResponse (e.g. on school admin page).
+		// It is not easily possible to fetch it there when needed. That's why it is fetched here centrally.
+		await schoolsModule.fetchSchool();
 
 		//TODO Remove once added to User permissions SC-2401
 		if (envConfigModule.getEnv.FEATURE_EXTENSIONS_ENABLED) {
