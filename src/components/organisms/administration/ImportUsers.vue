@@ -47,7 +47,7 @@
 						type="table-thead, table-tbody"
 					/>
 				</template>
-				<template #body>
+				<template #[`body.prepend`]>
 					<tr class="head">
 						<td class="col-2">
 							<VTextField
