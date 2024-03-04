@@ -717,12 +717,6 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_COURSE_SHARE_NEW: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
     FEATURE_LOGIN_LINK_ENABLED: boolean;
     /**
      * 
@@ -2795,6 +2789,64 @@ export interface LdapAuthorizationBodyParams {
 /**
  * 
  * @export
+ * @interface LessonContentResponse
+ */
+export interface LessonContentResponse {
+    /**
+     * 
+     * @type {object}
+     * @memberof LessonContentResponse
+     */
+    content: object;
+    /**
+     * The id of the Material entity
+     * @type {string}
+     * @memberof LessonContentResponse
+     * @deprecated
+     */
+    _id: string;
+    /**
+     * The id of the Material entity
+     * @type {string}
+     * @memberof LessonContentResponse
+     */
+    id: string;
+    /**
+     * Title of the Material entity
+     * @type {string}
+     * @memberof LessonContentResponse
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonContentResponse
+     */
+    component: LessonContentResponseComponentEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LessonContentResponse
+     */
+    hidden: boolean;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum LessonContentResponseComponentEnum {
+    Etherpad = 'Etherpad',
+    GeoGebra = 'geoGebra',
+    Internal = 'internal',
+    Resources = 'resources',
+    Text = 'text',
+    NeXboard = 'neXboard'
+}
+
+/**
+ * 
+ * @export
  * @interface LessonCopyApiParams
  */
 export interface LessonCopyApiParams {
@@ -2854,6 +2906,68 @@ export interface LessonMetadataResponse {
      * @memberof LessonMetadataResponse
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface LessonResponse
+ */
+export interface LessonResponse {
+    /**
+     * The id of the Lesson entity
+     * @type {string}
+     * @memberof LessonResponse
+     * @deprecated
+     */
+    _id: string;
+    /**
+     * The id of the Lesson entity
+     * @type {string}
+     * @memberof LessonResponse
+     */
+    id: string;
+    /**
+     * Name of the Lesson entity
+     * @type {string}
+     * @memberof LessonResponse
+     */
+    name: string;
+    /**
+     * The id of the Course entity
+     * @type {string}
+     * @memberof LessonResponse
+     */
+    courseId?: string;
+    /**
+     * The id of the Course-group entity
+     * @type {string}
+     * @memberof LessonResponse
+     */
+    courseGroupId?: string;
+    /**
+     * Hidden status of the Lesson entity
+     * @type {boolean}
+     * @memberof LessonResponse
+     */
+    hidden: boolean;
+    /**
+     * Position of the Lesson entity
+     * @type {number}
+     * @memberof LessonResponse
+     */
+    position: number;
+    /**
+     * Contents of the Lesson entity
+     * @type {Array<LessonContentResponse>}
+     * @memberof LessonResponse
+     */
+    contents: Array<LessonContentResponse>;
+    /**
+     * Materials of the Lesson entity
+     * @type {Array<MaterialResponse>}
+     * @memberof LessonResponse
+     */
+    materials: Array<MaterialResponse>;
 }
 /**
  * 
@@ -3199,6 +3313,61 @@ export interface Lti11ToolConfigUpdateParams {
      * @memberof Lti11ToolConfigUpdateParams
      */
     launch_presentation_locale: string;
+}
+/**
+ * 
+ * @export
+ * @interface MaterialResponse
+ */
+export interface MaterialResponse {
+    /**
+     * The id of the Material entity
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    _id: string;
+    /**
+     * The id of the Material entity
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    id: string;
+    /**
+     * Title of the Material entity
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    title: string;
+    /**
+     * ?
+     * @type {Array<string>}
+     * @memberof MaterialResponse
+     */
+    relatedResources: Array<string>;
+    /**
+     * Url of the material
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    url: string;
+    /**
+     * Position of the Lesson entity
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    client: string;
+    /**
+     * Description of the material license
+     * @type {Array<string>}
+     * @memberof MaterialResponse
+     */
+    license: Array<string>;
+    /**
+     * For material from Merlin, the Merlin reference
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    merlinReference: string;
 }
 /**
  * 
@@ -11080,6 +11249,43 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        lessonControllerGetLesson: async (lessonId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lessonId' is not null or undefined
+            assertParamExists('lessonControllerGetLesson', 'lessonId', lessonId)
+            const localVarPath = `/lessons/{lessonId}`
+                .replace(`{${"lessonId"}}`, encodeURIComponent(String(lessonId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -11110,6 +11316,16 @@ export const LessonApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetCourseLessons(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async lessonControllerGetLesson(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LessonResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetLesson(lessonId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -11138,6 +11354,15 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
         lessonControllerGetCourseLessons(courseId: string, options?: any): AxiosPromise<LessonMetadataListResponse> {
             return localVarFp.lessonControllerGetCourseLessons(courseId, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        lessonControllerGetLesson(lessonId: string, options?: any): AxiosPromise<LessonResponse> {
+            return localVarFp.lessonControllerGetLesson(lessonId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -11164,6 +11389,15 @@ export interface LessonApiInterface {
      * @memberof LessonApiInterface
      */
     lessonControllerGetCourseLessons(courseId: string, options?: any): AxiosPromise<LessonMetadataListResponse>;
+
+    /**
+     * 
+     * @param {string} lessonId The id of the lesson.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonApiInterface
+     */
+    lessonControllerGetLesson(lessonId: string, options?: any): AxiosPromise<LessonResponse>;
 
 }
 
@@ -11194,6 +11428,17 @@ export class LessonApi extends BaseAPI implements LessonApiInterface {
      */
     public lessonControllerGetCourseLessons(courseId: string, options?: any) {
         return LessonApiFp(this.configuration).lessonControllerGetCourseLessons(courseId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} lessonId The id of the lesson.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonApi
+     */
+    public lessonControllerGetLesson(lessonId: string, options?: any) {
+        return LessonApiFp(this.configuration).lessonControllerGetLesson(lessonId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
