@@ -1,15 +1,17 @@
-import ContentCard from "./ContentCard";
-import { Resource } from "@@/tests/test-utils/mockDataResource";
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import { authModule } from "@/store";
+import AuthModule from "@/store/auth";
+import ContentModule from "@/store/content";
+import { mockMe } from "@@/tests/test-utils";
 import { Collection } from "@@/tests/test-utils/mockDataCollection";
+import { Resource } from "@@/tests/test-utils/mockDataResource";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import AuthModule from "@/store/auth";
-import ContentModule from "@/store/content";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import { RouterLinkStub } from "@vue/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { RouterLinkStub } from "@vue/test-utils";
+import ContentCard from "./ContentCard";
 
 describe("@/components/organisms/ContentCard", () => {
 	beforeEach(() => {
@@ -17,6 +19,9 @@ describe("@/components/organisms/ContentCard", () => {
 			authModule: AuthModule,
 			contentModule: ContentModule,
 		});
+
+		// The role can be anything here except "student", because of the "isNotStudent" method in ContentCard.
+		authModule.setMe({ ...mockMe, roles: [{ name: "teacher" }] });
 	});
 
 	const setup = (resource = Resource) => {
