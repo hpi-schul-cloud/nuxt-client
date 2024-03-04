@@ -148,8 +148,8 @@ export default class AuthModule extends VuexModule {
 
 		this.setMe(meRes);
 
-		if (meRes.user.language) {
-			this.setLocale(meRes.user.language);
+		if (meRes.language) {
+			this.setLocale(meRes.language);
 		}
 
 		// There are several places in the app, where more school data is needed, than is included in the MeResponse (e.g. on school admin page).

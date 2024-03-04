@@ -6,7 +6,6 @@ export const mockMe: MeResponse = {
 		id: "",
 		firstName: "",
 		lastName: "",
-		language: "",
 		customAvatarBackgroundColor: "",
 	},
 	school: {
@@ -19,6 +18,7 @@ export const mockMe: MeResponse = {
 	},
 	roles: [],
 	permissions: [],
+	language: "",
 	account: {
 		id: "",
 	},
