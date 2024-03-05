@@ -186,6 +186,16 @@ describe("auth store module", () => {
 				envConfigModule: EnvConfigModule,
 			});
 		});
+		describe("getMe", () => {
+			it("should return the me state", () => {
+				const authModule = new AuthModule({});
+				const mockMe = setupMockMe({});
+				authModule.setMe(mockMe);
+
+				expect(authModule.getMe).toStrictEqual(mockMe);
+			});
+		});
+
 		describe("getLocale", () => {
 			it("should return the set locale", () => {
 				const authModule = new AuthModule({});
