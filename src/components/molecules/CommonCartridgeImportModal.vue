@@ -45,9 +45,16 @@
 
 <script setup lang="ts">
 import { computed, defineProps, ref, withDefaults } from "vue";
-import { commonCartridgeImportModule } from "@/store";
+import {
+	commonCartridgeImportModule,
+	loadingStateModule,
+	notifierModule,
+	roomsModule,
+} from "@/store";
 import { mdiTrayArrowUp } from "@mdi/js";
+import { useI18n } from "vue-i18n";
 
+const i18n = useI18n();
 const props = withDefaults(
 	defineProps<{
 		maxWidth: number;
@@ -70,9 +77,37 @@ function cancel(): void {
 }
 
 async function confirm(): Promise<void> {
-	const [uploadedFile] = file.value;
+	const [selectedFile] = file.value;
 
-	await commonCartridgeImportModule.importCommonCartridgeFile(uploadedFile);
+	commonCartridgeImportModule.closeImportModal();
+	loadingStateModule.open({
+		text: i18n.t("pages.rooms.ccImportCourse.loading"),
+	});
+
+	await commonCartridgeImportModule.importCommonCartridgeFile(selectedFile);
+
+	if (commonCartridgeImportModule.isSuccess) {
+		await Promise.allSettled([
+			roomsModule.fetch(),
+			roomsModule.fetchAllElements(),
+		]);
+		loadingStateModule.close();
+		const [{ title }] = roomsModule.allElements;
+		notifierModule.show({
+			status: "success",
+			text: i18n.t("pages.rooms.ccImportCourse.success", { name: title }),
+			autoClose: true,
+		});
+	} else {
+		loadingStateModule.close();
+		notifierModule.show({
+			status: "error",
+			text: i18n.t("pages.rooms.ccImportCourse.error"),
+			autoClose: true,
+		});
+	}
+
+	file.value = [];
 }
 </script>
 

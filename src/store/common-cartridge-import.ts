@@ -1,7 +1,5 @@
 import { CoursesApiFactory, CoursesApiInterface } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { notifierModule, loadingStateModule } from "@/store";
-// import { useI18n } from "vue-i18n";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 
 @Module({
@@ -10,15 +8,24 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 	stateFactory: true,
 })
 export default class CommonCartridgeImportModule extends VuexModule {
-	// private readonly i18n = useI18n();
 	private _isOpen = false;
+	private _isSuccess = false;
 
 	public get isOpen(): boolean {
 		return this._isOpen;
 	}
 
+	public get isSuccess(): boolean {
+		return this._isSuccess;
+	}
+
 	private get coursesApi(): CoursesApiInterface {
 		return CoursesApiFactory(undefined, "/v3", $axios);
+	}
+
+	@Mutation
+	public setIsSuccess(value: boolean): void {
+		this._isSuccess = value;
 	}
 
 	@Mutation
@@ -32,33 +39,16 @@ export default class CommonCartridgeImportModule extends VuexModule {
 	}
 
 	@Action
-	async importCommonCartridgeFile(
-		file: Record<string, unknown> | null
-	): Promise<void> {
+	async importCommonCartridgeFile(file: File | undefined): Promise<void> {
 		if (!file) {
 			return;
 		}
 
 		try {
-			loadingStateModule.open({
-				// text: this.i18n.t("pages.rooms.ccImportCourse.loading").toString(),
-				text: "pages.rooms.ccImportCourse.loading",
-			});
 			await this.coursesApi.courseControllerImportCourse(file);
-			notifierModule.show({
-				status: "success",
-				text: "pages.rooms.ccImportCourse.success",
-				autoClose: true,
-			});
+			this.setIsSuccess(true);
 		} catch (error) {
-			notifierModule.show({
-				status: "error",
-				text: "pages.rooms.ccImportCourse.error",
-				autoClose: true,
-			});
-		} finally {
-			this.closeImportModal();
-			loadingStateModule.close();
+			this.setIsSuccess(false);
 		}
 	}
 }

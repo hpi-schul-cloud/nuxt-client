@@ -33,7 +33,7 @@
 	</default-wireframe>
 </template>
 
-<script lang="ts">
+<script>
 import {
 	authModule,
 	commonCartridgeImportModule,
@@ -115,7 +115,7 @@ export default defineComponent({
 		},
 	},
 	methods: {
-		fabItemClickHandler(event: string) {
+		fabItemClickHandler(event) {
 			if (event === "import") {
 				commonCartridgeImportModule.openImportModal();
 			}

@@ -336,22 +336,4 @@ export default class RoomsModule extends VuexModule {
 			});
 		}
 	}
-
-	@Action
-	async uploadCourse(file: File): Promise<void> {
-		try {
-			await this.coursesApi.courseControllerImportCourse(file);
-			this.setAlertData({
-				status: "success",
-				text: "pages.rooms.ccImportCourse.success",
-				autoClose: true,
-			});
-		} catch (error: any) {
-			this.setAlertData({
-				status: "error",
-				text: "pages.rooms.ccImportCourse.error",
-				autoClose: true,
-			});
-		}
-	}
 }
