@@ -4,12 +4,7 @@
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 	>
-		<div
-			class="board-header rounded"
-			:class="{ 'bg-grey-lighten-2': isFocusContained }"
-			tabindex="0"
-			ref="boardHeader"
-		>
+		<div class="board-header rounded" tabindex="0" ref="boardHeader">
 			<div class="d-flex align-center gap-5 px-2 py-2">
 				<BoardAnyTitleInput
 					scope="board"
