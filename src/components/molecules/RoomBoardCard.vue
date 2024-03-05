@@ -5,6 +5,7 @@
 		tabindex="0"
 		role="link"
 		color="rgba(var(--v-theme-primary-lighten))"
+		data-testid="room-board-card"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"
