@@ -290,6 +290,7 @@ describe("auth store module", () => {
 			it("should set the me state", async () => {
 				const mockMe = setupMockMe({
 					user: { id: "test-id", firstName: "", lastName: "" },
+					language: "jib",
 				});
 				meApi.meControllerMe.mockResolvedValueOnce(
 					mockApiResponse({ data: mockMe })
@@ -298,7 +299,7 @@ describe("auth store module", () => {
 
 				await authModule.login("sample-jwt");
 
-				expect(authModule.getLocale).toStrictEqual("de");
+				expect(authModule.getLocale).toStrictEqual("jib");
 				expect(authModule.getPermissions).toStrictEqual([
 					"addons_enabled",
 					"teams_enabled",
