@@ -128,7 +128,7 @@
 		</v-row>
 		<privacy-settings
 			:permissions="localSchool.permissions || {}"
-			:features="localSchool.features || {}"
+			:features="localSchool.featureObject || {}"
 			@update-privacy-settings="onUpdatePrivacySettings"
 			@update-feature-settings="onUpdateFeatureSettings"
 		/>
@@ -263,7 +263,7 @@ export default {
 			this.localSchool.permissions = newPermissions;
 		},
 		onUpdateFeatureSettings(value, settingName) {
-			this.localSchool.features[settingName] = value;
+			this.localSchool.featureObject[settingName] = value;
 		},
 		async save() {
 			const updatedSchool = {
@@ -271,7 +271,7 @@ export default {
 				name: this.localSchool.name,
 				language: this.localSchool.language,
 				permissions: this.localSchool.permissions,
-				features: mapSchoolFeatureObjectToArray(this.localSchool.features),
+				features: mapSchoolFeatureObjectToArray(this.localSchool.featureObject),
 				logo: {
 					dataUrl: this.localSchool.logo?.dataUrl,
 					name: this.localSchool.logo?.name,

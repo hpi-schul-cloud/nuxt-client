@@ -56,7 +56,7 @@ export const mockSchool: School = {
 		name: "",
 		dataUrl: "",
 	},
-	fileStorageType: "",
+	fileStorageType: undefined,
 	federalState: {
 		id: "",
 		counties: [],
@@ -79,8 +79,9 @@ export const mockSchool: School = {
 		startDate: "",
 		endDate: "",
 	},
-	purpose: "",
-	features: {
+	purpose: undefined,
+	features: [],
+	featureObject: {
 		rocketChat: false,
 		videoconference: false,
 		studentVisibility: false,
@@ -90,7 +91,7 @@ export const mockSchool: School = {
 		nextcloud: false,
 		oauthProvisioningEnabled: false,
 	},
-	instanceFeatures: ["isTeamCreationByStudentsEnabled"],
+	instanceFeatures: [],
 	permissions: {},
 	inMaintenance: false,
 	inUserMigration: false,

@@ -1,9 +1,8 @@
-import { SchoolFeature, SchoolResponse } from "@/serverApi/v3";
-import { School } from "@/store/types/schools";
+import { SchoolFeature } from "@/serverApi/v3";
 
 const SCHOOL_FEATURES = Object.values(SchoolFeature);
 
-type SchoolFeatureObject = Record<SchoolFeature, boolean>;
+export type SchoolFeatureObject = Record<SchoolFeature, boolean>;
 
 export const mapSchoolFeatureObjectToArray = (f: SchoolFeatureObject) => {
 	const features: SchoolFeature[] = [];
@@ -16,21 +15,18 @@ export const mapSchoolFeatureObjectToArray = (f: SchoolFeatureObject) => {
 	return features;
 };
 
-export const mapSchoolServerToClient = (school: SchoolResponse): School => {
-	const featureObject: Partial<School["features"]> = {};
-	const instanceFeatures: Array<SchoolFeature> = [];
+export const mapFeaturesToFeaturesObject = (
+	features: SchoolFeature[]
+): SchoolFeatureObject => {
+	const featureObject: SchoolFeatureObject = {} as SchoolFeatureObject; // Initialize featureObject
 
 	SCHOOL_FEATURES.forEach((schoolFeature) => {
-		if (school.features?.includes(schoolFeature)) {
+		if (features.includes(schoolFeature)) {
 			featureObject[schoolFeature] = true;
 		} else {
 			featureObject[schoolFeature] = false;
 		}
 	});
 
-	return {
-		...school,
-		features: featureObject as Required<School["features"]>,
-		instanceFeatures,
-	};
+	return featureObject;
 };

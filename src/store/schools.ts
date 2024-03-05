@@ -1,7 +1,10 @@
 import {
+	FederalStateResponse,
 	SchoolApiFactory,
 	SchoolApiInterface,
+	SchoolResponse,
 	SchoolUpdateBodyParams,
+	SchoolYearResponse,
 	SystemsApiFactory,
 	SystemsApiInterface,
 	UserImportApiFactory,
@@ -9,12 +12,12 @@ import {
 } from "@/serverApi/v3";
 import { authModule, envConfigModule } from "@/store";
 import { $axios } from "@/utils/api";
-import { mapSchoolServerToClient } from "@/utils/school-features";
+import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
 import { AxiosError } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { useApplicationError } from "../composables/application-error.composable";
 import { ApplicationError } from "./types/application-error";
-import { FederalState, School, Year } from "./types/schools";
+import { School } from "./types/schools";
 
 @Module({
 	name: "schoolsModule",
@@ -26,7 +29,7 @@ export default class SchoolsModule extends VuexModule {
 		id: "",
 		name: "",
 		logo: { name: "", dataUrl: "" },
-		fileStorageType: "",
+		fileStorageType: undefined,
 		federalState: {
 			id: "",
 			counties: [],
@@ -49,8 +52,9 @@ export default class SchoolsModule extends VuexModule {
 			startDate: "",
 			endDate: "",
 		},
-		purpose: "",
-		features: {
+		purpose: undefined,
+		features: [],
+		featureObject: {
 			rocketChat: false,
 			videoconference: false,
 			studentVisibility: false,
@@ -96,8 +100,9 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setSchool(updatedSchool: School): void {
-		this.school = updatedSchool;
+	setSchool(updatedSchool: SchoolResponse): void {
+		const featureObject = mapFeaturesToFeaturesObject(updatedSchool.features);
+		this.school = { ...updatedSchool, featureObject };
 	}
 
 	@Mutation
@@ -119,11 +124,11 @@ export default class SchoolsModule extends VuexModule {
 		return this.school;
 	}
 
-	get getCurrentYear(): Year | undefined {
+	get getCurrentYear(): SchoolYearResponse | undefined {
 		return this.school.currentYear;
 	}
 
-	get getFederalState(): FederalState {
+	get getFederalState(): FederalStateResponse | undefined {
 		return this.school.federalState;
 	}
 
@@ -166,7 +171,7 @@ export default class SchoolsModule extends VuexModule {
 					)
 				).data;
 
-				this.setSchool(mapSchoolServerToClient(school));
+				this.setSchool(school);
 
 				this.setLoading(false);
 			} catch (error: unknown) {
@@ -225,7 +230,7 @@ export default class SchoolsModule extends VuexModule {
 				props
 			);
 
-			this.setSchool(mapSchoolServerToClient(data));
+			this.setSchool(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {

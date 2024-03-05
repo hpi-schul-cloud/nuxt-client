@@ -129,7 +129,7 @@
 				)
 			"
 			:disabled="!isMigrationActive"
-			v-model="school.features.enableLdapSyncDuringMigration"
+			v-model="school.featureObject.enableLdapSyncDuringMigration"
 			class="ml-1"
 			:true-icon="mdiCheck"
 			data-testid="enable-sync-during-migration-switch"
@@ -167,7 +167,7 @@
 					'components.administration.adminMigrationSection.showOutdatedUsers.label'
 				)
 			"
-			v-model="school.features.showOutdatedUsers"
+			v-model="school.featureObject.showOutdatedUsers"
 			class="ml-1"
 			:true-icon="mdiCheck"
 			data-testid="show-outdated-users-switch"
@@ -355,7 +355,7 @@ export default defineComponent({
 			await schoolsModule.update({
 				id: school.value.id,
 				props: {
-					features: mapSchoolFeatureObjectToArray(school.value.features),
+					features: mapSchoolFeatureObjectToArray(school.value.featureObject),
 				},
 			});
 		};
