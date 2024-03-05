@@ -53,6 +53,10 @@ export default defineComponent({
 			type: String as PropType<BoardMenuScope>,
 			required: true,
 		},
+		dataTestid: {
+			type: String,
+			default: "board-menu-button",
+		},
 	},
 	setup(props) {
 		const scope = toRef(props, "scope");

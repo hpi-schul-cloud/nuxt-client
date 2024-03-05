@@ -499,6 +499,355 @@ export interface ColumnResponse {
 /**
  * 
  * @export
+ * @interface ConfigResponse
+ */
+export interface ConfigResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    ACCESSIBILITY_REPORT_EMAIL: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof ConfigResponse
+     */
+    MIGRATION_END_GRACE_PERIOD_MS: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_CTL_TOOLS_TAB_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_LTI_TOOLS_TAB_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_SHOW_OUTDATED_USERS: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_CTL_TOOLS_COPY_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_SHOW_MIGRATION_WIZARD: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    MIGRATION_WIZARD_DOCUMENTATION_LINK?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_TLDRAW_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    TLDRAW__ASSETS_ENABLED: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof ConfigResponse
+     */
+    TLDRAW__ASSETS_MAX_SIZE: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    TLDRAW__ASSETS_ALLOWED_EXTENSIONS_LIST?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    ALERT_STATUS_URL: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_ES_COLLECTIONS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_EXTENSIONS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_TEAMS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_LERNSTORE_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_SCHOOL_POLICY_ENABLED_NEW: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_NEXBOARD_COPY_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_VIDEOCONFERENCE_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COLUMN_BOARD_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COURSE_SHARE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_LOGIN_LINK_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_LESSON_SHARE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_TASK_SHARE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_USER_MIGRATION_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COPY_SERVICE_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_CONSENT_NECESSARY: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_IMSCC_COURSE_EXPORT_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_NEST_SYSTEMS_API_ENABLED: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    GHOST_BASE_URL: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    ROCKETCHAT_SERVICE_ENABLED: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    I18N__AVAILABLE_LANGUAGES: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    I18N__DEFAULT_LANGUAGE: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    I18N__FALLBACK_LANGUAGE: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    I18N__DEFAULT_TIMEZONE: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ConfigResponse
+     */
+    JWT_SHOW_TIMEOUT_WARNING_SECONDS: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ConfigResponse
+     */
+    JWT_TIMEOUT_SECONDS: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    NOT_AUTHENTICATED_REDIRECT_URL: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    DOCUMENT_BASE_DIR: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    SC_THEME: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    SC_TITLE: string;
+}
+/**
+ * 
+ * @export
  * @interface ConsentRequestBody
  */
 export interface ConsentRequestBody {
@@ -2431,6 +2780,64 @@ export interface LdapAuthorizationBodyParams {
 /**
  * 
  * @export
+ * @interface LessonContentResponse
+ */
+export interface LessonContentResponse {
+    /**
+     * 
+     * @type {object}
+     * @memberof LessonContentResponse
+     */
+    content: object;
+    /**
+     * The id of the Material entity
+     * @type {string}
+     * @memberof LessonContentResponse
+     * @deprecated
+     */
+    _id: string;
+    /**
+     * The id of the Material entity
+     * @type {string}
+     * @memberof LessonContentResponse
+     */
+    id: string;
+    /**
+     * Title of the Material entity
+     * @type {string}
+     * @memberof LessonContentResponse
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonContentResponse
+     */
+    component: LessonContentResponseComponentEnum;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LessonContentResponse
+     */
+    hidden: boolean;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum LessonContentResponseComponentEnum {
+    Etherpad = 'Etherpad',
+    GeoGebra = 'geoGebra',
+    Internal = 'internal',
+    Resources = 'resources',
+    Text = 'text',
+    NeXboard = 'neXboard'
+}
+
+/**
+ * 
+ * @export
  * @interface LessonCopyApiParams
  */
 export interface LessonCopyApiParams {
@@ -2490,6 +2897,68 @@ export interface LessonMetadataResponse {
      * @memberof LessonMetadataResponse
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface LessonResponse
+ */
+export interface LessonResponse {
+    /**
+     * The id of the Lesson entity
+     * @type {string}
+     * @memberof LessonResponse
+     * @deprecated
+     */
+    _id: string;
+    /**
+     * The id of the Lesson entity
+     * @type {string}
+     * @memberof LessonResponse
+     */
+    id: string;
+    /**
+     * Name of the Lesson entity
+     * @type {string}
+     * @memberof LessonResponse
+     */
+    name: string;
+    /**
+     * The id of the Course entity
+     * @type {string}
+     * @memberof LessonResponse
+     */
+    courseId?: string;
+    /**
+     * The id of the Course-group entity
+     * @type {string}
+     * @memberof LessonResponse
+     */
+    courseGroupId?: string;
+    /**
+     * Hidden status of the Lesson entity
+     * @type {boolean}
+     * @memberof LessonResponse
+     */
+    hidden: boolean;
+    /**
+     * Position of the Lesson entity
+     * @type {number}
+     * @memberof LessonResponse
+     */
+    position: number;
+    /**
+     * Contents of the Lesson entity
+     * @type {Array<LessonContentResponse>}
+     * @memberof LessonResponse
+     */
+    contents: Array<LessonContentResponse>;
+    /**
+     * Materials of the Lesson entity
+     * @type {Array<MaterialResponse>}
+     * @memberof LessonResponse
+     */
+    materials: Array<MaterialResponse>;
 }
 /**
  * 
@@ -2773,12 +3242,6 @@ export interface Lti11ToolConfigCreateParams {
      * @type {string}
      * @memberof Lti11ToolConfigCreateParams
      */
-    resource_link_id?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11ToolConfigCreateParams
-     */
     lti_message_type: string;
     /**
      * 
@@ -2828,12 +3291,6 @@ export interface Lti11ToolConfigUpdateParams {
      * @type {string}
      * @memberof Lti11ToolConfigUpdateParams
      */
-    resource_link_id?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Lti11ToolConfigUpdateParams
-     */
     lti_message_type: string;
     /**
      * 
@@ -2847,6 +3304,61 @@ export interface Lti11ToolConfigUpdateParams {
      * @memberof Lti11ToolConfigUpdateParams
      */
     launch_presentation_locale: string;
+}
+/**
+ * 
+ * @export
+ * @interface MaterialResponse
+ */
+export interface MaterialResponse {
+    /**
+     * The id of the Material entity
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    _id: string;
+    /**
+     * The id of the Material entity
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    id: string;
+    /**
+     * Title of the Material entity
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    title: string;
+    /**
+     * ?
+     * @type {Array<string>}
+     * @memberof MaterialResponse
+     */
+    relatedResources: Array<string>;
+    /**
+     * Url of the material
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    url: string;
+    /**
+     * Position of the Lesson entity
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    client: string;
+    /**
+     * Description of the material license
+     * @type {Array<string>}
+     * @memberof MaterialResponse
+     */
+    license: Array<string>;
+    /**
+     * For material from Merlin, the Merlin reference
+     * @type {string}
+     * @memberof MaterialResponse
+     */
+    merlinReference: string;
 }
 /**
  * 
@@ -4756,6 +5268,89 @@ export interface SchoolResponse {
      */
     years: YearsResponse;
 }
+/**
+ * 
+ * @export
+ * @interface SchoolUpdateBodyParams
+ */
+export interface SchoolUpdateBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    officialSchoolNumber?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    logo_dataUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    logo_name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    fileStorageType?: SchoolUpdateBodyParamsFileStorageTypeEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    language?: SchoolUpdateBodyParamsLanguageEnum;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SchoolUpdateBodyParams
+     */
+    features?: Array<SchoolUpdateBodyParamsFeaturesEnum>;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum SchoolUpdateBodyParamsFileStorageTypeEnum {
+    AwsS3 = 'awsS3'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum SchoolUpdateBodyParamsLanguageEnum {
+    De = 'de',
+    En = 'en',
+    Es = 'es',
+    Uk = 'uk'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum SchoolUpdateBodyParamsFeaturesEnum {
+    RocketChat = 'rocketChat',
+    Videoconference = 'videoconference',
+    Nextcloud = 'nextcloud',
+    StudentVisibility = 'studentVisibility',
+    LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
+    OauthProvisioningEnabled = 'oauthProvisioningEnabled',
+    ShowOutdatedUsers = 'showOutdatedUsers',
+    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
+    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+}
+
 /**
  * 
  * @export
@@ -9552,6 +10147,51 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Imports a course from a Common Cartridge file.
+         * @param {any} file The Common Cartridge file to import.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerImportCourse: async (file: any, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'file' is not null or undefined
+            assertParamExists('courseControllerImportCourse', 'file', file)
+            const localVarPath = `/courses/import`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+            if (file !== undefined) { 
+                localVarFormParams.append('file', file as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams;
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -9584,6 +10224,17 @@ export const CoursesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerFindForUser(skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Imports a course from a Common Cartridge file.
+         * @param {any} file The Common Cartridge file to import.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerImportCourse(file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerImportCourse(file, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -9614,6 +10265,16 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse> {
             return localVarFp.courseControllerFindForUser(skip, limit, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Imports a course from a Common Cartridge file.
+         * @param {any} file The Common Cartridge file to import.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerImportCourse(file: any, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerImportCourse(file, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -9642,6 +10303,16 @@ export interface CoursesApiInterface {
      * @memberof CoursesApiInterface
      */
     courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse>;
+
+    /**
+     * 
+     * @summary Imports a course from a Common Cartridge file.
+     * @param {any} file The Common Cartridge file to import.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerImportCourse(file: any, options?: any): AxiosPromise<void>;
 
 }
 
@@ -9674,6 +10345,18 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerFindForUser(skip?: number, limit?: number, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerFindForUser(skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Imports a course from a Common Cartridge file.
+     * @param {any} file The Common Cartridge file to import.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerImportCourse(file: any, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerImportCourse(file, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -9993,7 +10676,38 @@ export class DashboardApi extends BaseAPI implements DashboardApiInterface {
 export const DefaultApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * default route to test public access
+         * 
+         * @summary Useable configuration for clients
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        serverConfigControllerPublicConfig: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/config/public`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Default route to test public access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10032,7 +10746,18 @@ export const DefaultApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration)
     return {
         /**
-         * default route to test public access
+         * 
+         * @summary Useable configuration for clients
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async serverConfigControllerPublicConfig(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ConfigResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.serverConfigControllerPublicConfig(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Default route to test public access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10051,7 +10776,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = DefaultApiFp(configuration)
     return {
         /**
-         * default route to test public access
+         * 
+         * @summary Useable configuration for clients
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        serverConfigControllerPublicConfig(options?: any): AxiosPromise<ConfigResponse> {
+            return localVarFp.serverConfigControllerPublicConfig(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Default route to test public access
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10068,7 +10803,17 @@ export const DefaultApiFactory = function (configuration?: Configuration, basePa
  */
 export interface DefaultApiInterface {
     /**
-     * default route to test public access
+     * 
+     * @summary Useable configuration for clients
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApiInterface
+     */
+    serverConfigControllerPublicConfig(options?: any): AxiosPromise<ConfigResponse>;
+
+    /**
+     * 
+     * @summary Default route to test public access
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApiInterface
@@ -10085,7 +10830,19 @@ export interface DefaultApiInterface {
  */
 export class DefaultApi extends BaseAPI implements DefaultApiInterface {
     /**
-     * default route to test public access
+     * 
+     * @summary Useable configuration for clients
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DefaultApi
+     */
+    public serverConfigControllerPublicConfig(options?: any) {
+        return DefaultApiFp(this.configuration).serverConfigControllerPublicConfig(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Default route to test public access
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof DefaultApi
@@ -10430,6 +11187,43 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        lessonControllerGetLesson: async (lessonId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lessonId' is not null or undefined
+            assertParamExists('lessonControllerGetLesson', 'lessonId', lessonId)
+            const localVarPath = `/lessons/{lessonId}`
+                .replace(`{${"lessonId"}}`, encodeURIComponent(String(lessonId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -10460,6 +11254,16 @@ export const LessonApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetCourseLessons(courseId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async lessonControllerGetLesson(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LessonResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetLesson(lessonId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -10488,6 +11292,15 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
         lessonControllerGetCourseLessons(courseId: string, options?: any): AxiosPromise<LessonMetadataListResponse> {
             return localVarFp.lessonControllerGetCourseLessons(courseId, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        lessonControllerGetLesson(lessonId: string, options?: any): AxiosPromise<LessonResponse> {
+            return localVarFp.lessonControllerGetLesson(lessonId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -10514,6 +11327,15 @@ export interface LessonApiInterface {
      * @memberof LessonApiInterface
      */
     lessonControllerGetCourseLessons(courseId: string, options?: any): AxiosPromise<LessonMetadataListResponse>;
+
+    /**
+     * 
+     * @param {string} lessonId The id of the lesson.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonApiInterface
+     */
+    lessonControllerGetLesson(lessonId: string, options?: any): AxiosPromise<LessonResponse>;
 
 }
 
@@ -10545,6 +11367,17 @@ export class LessonApi extends BaseAPI implements LessonApiInterface {
     public lessonControllerGetCourseLessons(courseId: string, options?: any) {
         return LessonApiFp(this.configuration).lessonControllerGetCourseLessons(courseId, options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * 
+     * @param {string} lessonId The id of the lesson.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonApi
+     */
+    public lessonControllerGetLesson(lessonId: string, options?: any) {
+        return LessonApiFp(this.configuration).lessonControllerGetLesson(lessonId, options).then((request) => request(this.axios, this.basePath));
+    }
 }
 
 
@@ -10556,6 +11389,7 @@ export const MeApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Resolve jwt and response informations about the owner of the jwt.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10599,6 +11433,7 @@ export const MeApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Resolve jwt and response informations about the owner of the jwt.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10618,6 +11453,7 @@ export const MeApiFactory = function (configuration?: Configuration, basePath?: 
     return {
         /**
          * 
+         * @summary Resolve jwt and response informations about the owner of the jwt.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -10635,6 +11471,7 @@ export const MeApiFactory = function (configuration?: Configuration, basePath?: 
 export interface MeApiInterface {
     /**
      * 
+     * @summary Resolve jwt and response informations about the owner of the jwt.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MeApiInterface
@@ -10652,6 +11489,7 @@ export interface MeApiInterface {
 export class MeApi extends BaseAPI implements MeApiInterface {
     /**
      * 
+     * @summary Resolve jwt and response informations about the owner of the jwt.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MeApi
@@ -13491,6 +14329,50 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Updating school props by school administrators
+         * @param {string} schoolId 
+         * @param {SchoolUpdateBodyParams} schoolUpdateBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerUpdateSchool: async (schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerUpdateSchool', 'schoolId', schoolId)
+            // verify required parameter 'schoolUpdateBodyParams' is not null or undefined
+            assertParamExists('schoolControllerUpdateSchool', 'schoolUpdateBodyParams', schoolUpdateBodyParams)
+            const localVarPath = `/school/{schoolId}`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(schoolUpdateBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -13563,6 +14445,18 @@ export const SchoolApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Updating school props by school administrators
+         * @param {string} schoolId 
+         * @param {SchoolUpdateBodyParams} schoolUpdateBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerUpdateSchool(schoolId, schoolUpdateBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -13629,6 +14523,17 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
         schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse> {
             return localVarFp.schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Updating school props by school administrators
+         * @param {string} schoolId 
+         * @param {SchoolUpdateBodyParams} schoolUpdateBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: any): AxiosPromise<SchoolResponse> {
+            return localVarFp.schoolControllerUpdateSchool(schoolId, schoolUpdateBodyParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -13693,6 +14598,17 @@ export interface SchoolApiInterface {
      * @memberof SchoolApiInterface
      */
     schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any): AxiosPromise<SchulConneXProvisioningOptionsResponse>;
+
+    /**
+     * 
+     * @summary Updating school props by school administrators
+     * @param {string} schoolId 
+     * @param {SchoolUpdateBodyParams} schoolUpdateBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: any): AxiosPromise<SchoolResponse>;
 
 }
 
@@ -13769,6 +14685,19 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerSetProvisioningOptions(schoolId: string, systemId: string, schulConneXProvisioningOptionsParams: SchulConneXProvisioningOptionsParams, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerSetProvisioningOptions(schoolId, systemId, schulConneXProvisioningOptionsParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Updating school props by school administrators
+     * @param {string} schoolId 
+     * @param {SchoolUpdateBodyParams} schoolUpdateBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerUpdateSchool(schoolId, schoolUpdateBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

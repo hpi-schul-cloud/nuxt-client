@@ -14,6 +14,7 @@
 			<div class="d-flex align-center py-2 px-2">
 				<BoardAnyTitleInput
 					:value="title"
+					:data-testid="`column-title-${index}`"
 					scope="column"
 					:isEditMode="isEditMode"
 					:placeholder="titlePlaceholder"
@@ -21,7 +22,11 @@
 					class="w-100"
 					:isFocused="isFocusedById"
 				/>
-				<BoardMenu v-if="hasDeletePermission" scope="column">
+				<BoardMenu
+					v-if="hasDeletePermission"
+					scope="column"
+					:data-testid="`column-menu-btn-${index}`"
+				>
 					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
 					<BoardMenuActionMoveLeft @click="onMoveColumnLeft" />
 					<BoardMenuActionMoveRight @click="onMoveColumnRight" />
@@ -74,6 +79,9 @@ export default defineComponent({
 		titlePlaceholder: {
 			type: String,
 			required: true,
+		},
+		index: {
+			type: Number,
 		},
 	},
 	emits: [
