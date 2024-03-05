@@ -21,13 +21,6 @@
 					:isFocused="isFocusedById"
 					:maxLength="100"
 				/>
-				<BoardMenu
-					v-if="hasEditPermission"
-					scope="board"
-					data-testid="board-menu-btn"
-				>
-					<BoardMenuActionEdit @click="onStartEditMode" />
-				</BoardMenu>
 			</div>
 		</div>
 	</BoardColumnInteractionHandler>
@@ -39,7 +32,6 @@ import {
 	useBoardPermissions,
 	useEditMode,
 } from "@data-board";
-import { BoardMenu, BoardMenuActionEdit } from "@ui-board";
 import { useDebounceFn } from "@vueuse/core";
 import { defineComponent, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
@@ -49,8 +41,6 @@ export default defineComponent({
 	name: "BoardHeader",
 	components: {
 		BoardAnyTitleInput,
-		BoardMenu,
-		BoardMenuActionEdit,
 		BoardColumnInteractionHandler,
 	},
 	props: {
