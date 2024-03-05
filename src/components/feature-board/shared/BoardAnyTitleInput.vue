@@ -129,6 +129,15 @@ export default defineComponent({
 			}
 		});
 
+		const fontColor = computed(() => {
+			switch (props.scope) {
+				case "board":
+					return "var(--v-black-base)";
+				default:
+					return "var(--v-theme-secondary)";
+			}
+		});
+
 		const onEnter = ($event: KeyboardEvent) => {
 			if (props.scope !== "card") return;
 			$event.preventDefault();
@@ -138,6 +147,7 @@ export default defineComponent({
 		return {
 			ariaLevel,
 			fontSize,
+			fontColor,
 			modelValue,
 			hasValue,
 			onEnter,
@@ -164,12 +174,12 @@ export default defineComponent({
 
 /** Edge */
 :deep(textarea) {
-	color: rgba(var(--v-theme-secondary)) !important;
+	color: rgba(v-bind(fontColor)) !important;
 	opacity: 1;
 }
 /** Other common browsers */
 :deep(textarea)::placeholder {
-	color: rgba(var(--v-theme-secondary)) !important;
+	color: rgba(v-bind(fontColor)) !important;
 	opacity: 1;
 }
 </style>
