@@ -142,11 +142,6 @@ export default class AuthModule extends VuexModule {
 	async login(jwt: string) {
 		const meRes = (await this.meApi.meControllerMe()).data;
 
-		if (!meRes) {
-			this.clearAuthData();
-			return;
-		}
-
 		this.setMe(meRes);
 
 		if (meRes.language) {
