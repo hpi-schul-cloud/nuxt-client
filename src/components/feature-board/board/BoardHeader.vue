@@ -78,7 +78,9 @@ export default defineComponent({
 		};
 
 		const onUpdateTitle = useDebounceFn((newTitle: string) => {
-			emit("update:title", newTitle);
+			if (newTitle.length > 1) {
+				emit("update:title", newTitle);
+			}
 		}, 1000);
 
 		return {
