@@ -151,9 +151,9 @@ export default defineComponent({
 		const router = useRouter();
 
 		onMounted(async () => {
-			if (authModule.getMe) {
+			if (authModule.getSchool) {
 				await schoolExternalToolsModule.loadSchoolExternalTools(
-					authModule.getMe.school.id
+					authModule.getSchool.id
 				);
 			}
 		});
