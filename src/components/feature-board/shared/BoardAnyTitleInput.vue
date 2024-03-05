@@ -158,9 +158,6 @@ export default defineComponent({
 	font-size: v-bind(fontSize);
 	background: transparent !important;
 }
-:deep(input) {
-	font-size: v-bind(fontSize);
-}
 :deep(textarea[readonly]) {
 	cursor: pointer;
 }
