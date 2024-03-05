@@ -73,9 +73,31 @@ describe("schools module", () => {
 				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 
+				await schoolsModule.fetchSchool();
+
+				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(setSchoolSpy).toHaveBeenCalled();
+				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual(mockSchoolResponse);
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+			});
+
+			it("should call backend and set school state correctly", async () => {
+				authModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
+				const mockSchoolResponse = schoolResponseFactory.build({
+					features: [
+						serverApi.SchoolFeature.RocketChat,
+						serverApi.SchoolFeature.Videoconference,
+					],
+				});
+				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
+					mockApiResponse({ data: mockSchoolResponse })
+				);
+				const schoolsModule = new SchoolsModule({});
+
 				const expectedFeatureObject = {
-					rocketChat: false,
-					videoconference: false,
+					rocketChat: true,
+					videoconference: true,
 					studentVisibility: false,
 					ldapUniventionMigrationSchool: false,
 					showOutdatedUsers: false,
@@ -86,14 +108,8 @@ describe("schools module", () => {
 
 				await schoolsModule.fetchSchool();
 
-				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setSchoolSpy).toHaveBeenCalled();
-				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual({
-					...mockSchoolResponse,
-					features: expectedFeatureObject,
-					instanceFeatures: [],
-				});
+				const school = schoolsModule.getSchool;
+				expect(school.featureObject).toStrictEqual(expectedFeatureObject);
 			});
 
 			it("should set error if api client throws error", async () => {
