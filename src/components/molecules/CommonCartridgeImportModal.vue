@@ -1,10 +1,8 @@
 <template>
 	<v-dialog
 		ref="commonCartridgeImportDialog"
-		:v-model="commonCartridgeImportModule.isOpen"
+		v-model="isOpen"
 		:max-width="props.maxWidth"
-		@click:outside="commonCartridgeImportModule.closeImportModal()"
-		@keydown.esc="commonCartridgeImportModule.closeImportModal()"
 		data-testid="common-cartridge-import-dialog"
 	>
 		<v-card :ripple="false">
@@ -15,7 +13,7 @@
 			</v-card-title>
 			<v-card-text class="text--primary">
 				<v-file-input
-					:v-model="file"
+					v-model="file"
 					:label="$t('pages.rooms.ccImportCourse.fileInputLabel')"
 					:prepend-icon="mdiTrayArrowUp"
 					accept=".imscc, .zip"
@@ -32,10 +30,10 @@
 				</div>
 				<div class="button-section">
 					<v-btn
-						data-testId="dialog-confirm-btn"
+						v-bind:disabled="importButtonDisabled"
+						v-on:click="confirm"
 						color="primary"
-						:disabled="importButtonDisabled"
-						@click="confirm"
+						data-testId="dialog-confirm-btn"
 					>
 						{{ $t("pages.rooms.ccImportCourse.confirm") }}
 					</v-btn>
@@ -46,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, defineModel, withDefaults } from "vue";
+import { computed, defineProps, ref, withDefaults } from "vue";
 import { commonCartridgeImportModule } from "@/store";
 import { mdiTrayArrowUp } from "@mdi/js";
 
@@ -58,7 +56,11 @@ const props = withDefaults(
 		maxWidth: 480,
 	}
 );
-const file = defineModel<File>();
+const file = ref<File[]>([]);
+const isOpen = computed({
+	get: () => commonCartridgeImportModule.isOpen,
+	set: () => commonCartridgeImportModule.closeImportModal(),
+});
 const importButtonDisabled = computed(() => {
 	return !file.value;
 });
@@ -68,7 +70,9 @@ function cancel(): void {
 }
 
 async function confirm(): Promise<void> {
-	await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
+	const [uploadedFile] = file.value;
+
+	await commonCartridgeImportModule.importCommonCartridgeFile(uploadedFile);
 }
 </script>
 

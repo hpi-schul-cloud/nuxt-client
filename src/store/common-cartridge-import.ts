@@ -13,7 +13,7 @@ export default class CommonCartridgeImportModule extends VuexModule {
 	// private readonly i18n = useI18n();
 	private _isOpen = false;
 
-	get isOpen(): boolean {
+	public get isOpen(): boolean {
 		return this._isOpen;
 	}
 
@@ -32,7 +32,9 @@ export default class CommonCartridgeImportModule extends VuexModule {
 	}
 
 	@Action
-	async importCommonCartridgeFile(file: File | undefined): Promise<void> {
+	async importCommonCartridgeFile(
+		file: Record<string, unknown> | null
+	): Promise<void> {
 		if (!file) {
 			return;
 		}
