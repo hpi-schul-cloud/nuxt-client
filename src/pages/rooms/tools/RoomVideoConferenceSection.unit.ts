@@ -34,8 +34,8 @@ describe("RoomVideoConferenceSection", () => {
 		});
 
 		const authModule = createModuleMocks(AuthModule, {
-			getPermissions: userPermissions,
-			getRoleNames: isExpert ? ["expert"] : [],
+			getUserPermissions: userPermissions,
+			getUserRoles: isExpert ? ["expert"] : [],
 		});
 
 		const videoConferenceModule = createModuleMocks(VideoConferenceModule, {

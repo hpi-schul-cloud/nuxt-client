@@ -74,7 +74,7 @@ describe("auth store module", () => {
 
 				authModule.addPermmission(permissionToBeAdded);
 
-				expect(authModule.getPermissions).toContain(permissionToBeAdded);
+				expect(authModule.getUserPermissions).toContain(permissionToBeAdded);
 			});
 		});
 
@@ -197,7 +197,7 @@ describe("auth store module", () => {
 			});
 		});
 
-		describe("getRoleNames", () => {
+		describe("getUserRoles", () => {
 			it("should return the userRoles state", () => {
 				const authModule = new AuthModule({});
 				const mockMe = meResponseFactory.build({
@@ -205,11 +205,11 @@ describe("auth store module", () => {
 				});
 				authModule.setMe(mockMe);
 
-				expect(authModule.getRoleNames).toStrictEqual(["test-role"]);
+				expect(authModule.getUserRoles).toStrictEqual(["test-role"]);
 			});
 		});
 
-		describe("getPermissions", () => {
+		describe("getUserPermissions", () => {
 			it("should return the userPermissions state", () => {
 				const authModule = new AuthModule({});
 				const mockMe = meResponseFactory.build({
@@ -217,7 +217,9 @@ describe("auth store module", () => {
 				});
 				authModule.setMe(mockMe);
 
-				expect(authModule.getPermissions).toStrictEqual(["test-permission"]);
+				expect(authModule.getUserPermissions).toStrictEqual([
+					"test-permission",
+				]);
 			});
 		});
 
@@ -267,7 +269,7 @@ describe("auth store module", () => {
 				await authModule.login("sample-jwt");
 
 				expect(authModule.getLocale).toStrictEqual("jib");
-				expect(authModule.getPermissions).toStrictEqual([
+				expect(authModule.getUserPermissions).toStrictEqual([
 					"addons_enabled",
 					"teams_enabled",
 				]);

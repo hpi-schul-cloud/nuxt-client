@@ -54,7 +54,7 @@ describe("ExternalToolElementAlert", () => {
 		);
 
 		const authModule = createModuleMocks(AuthModule, {
-			getRoleNames: userRoles,
+			getUserRoles: userRoles,
 		});
 
 		const wrapper = mount(ExternalToolElementAlert, {

@@ -59,7 +59,7 @@ describe("SchoolTerms", () => {
 		userPermissions: string[] = ["school_edit"]
 	) => {
 		authModule = createModuleMocks(AuthModule, {
-			getPermissions: userPermissions,
+			getUserPermissions: userPermissions,
 		});
 
 		schoolsModule = createModuleMocks(SchoolsModule, {

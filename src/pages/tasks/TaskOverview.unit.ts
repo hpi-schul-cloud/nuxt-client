@@ -18,7 +18,7 @@ describe("TaskOverview", () => {
 				plugins: [createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: {
-						getRoleNames: [userRole],
+						getUserRoles: [userRole],
 					},
 					tasksModule: {
 						fetchAllTasks: fetchAllTasksSpy,

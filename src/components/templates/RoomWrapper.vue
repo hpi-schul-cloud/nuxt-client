@@ -55,7 +55,9 @@ export default defineComponent({
 	},
 	computed: {
 		fabItems() {
-			if (authModule.getPermissions.includes("COURSE_CREATE".toLowerCase())) {
+			if (
+				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
+			) {
 				return {
 					icon: mdiPlus,
 					title: this.$t("common.actions.create"),

@@ -24,7 +24,7 @@ export default {
 	},
 	computed: {
 		userRoles() {
-			return authModule.getRoleNames;
+			return authModule.getUserRoles;
 		},
 		hasRole() {
 			return typeof this.role === "string"

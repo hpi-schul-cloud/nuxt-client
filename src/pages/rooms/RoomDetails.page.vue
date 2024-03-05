@@ -233,7 +233,9 @@ export default defineComponent({
 		},
 		learnContentFabItems() {
 			const actions = [];
-			if (authModule.getPermissions.includes("HOMEWORK_CREATE".toLowerCase())) {
+			if (
+				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.task"),
 					icon: mdiFormatListChecks,
@@ -242,7 +244,9 @@ export default defineComponent({
 					ariaLabel: this.$t("pages.rooms.fab.add.task"),
 				});
 			}
-			if (authModule.getPermissions.includes("TOPIC_CREATE".toLowerCase())) {
+			if (
+				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
+			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.lesson"),
 					icon: mdiViewListOutline,
@@ -271,7 +275,7 @@ export default defineComponent({
 			return roomModule.getPermissionData || [];
 		},
 		roles() {
-			return authModule.getRoleNames;
+			return authModule.getUserRoles;
 		},
 		dashBoardRole() {
 			if (this.roles.includes(Roles.Teacher)) return Roles.Teacher;
@@ -279,7 +283,7 @@ export default defineComponent({
 			return undefined;
 		},
 		canEditTools() {
-			return !!authModule?.getPermissions.includes(
+			return !!authModule?.getUserPermissions.includes(
 				"CONTEXT_TOOL_ADMIN".toLowerCase()
 			);
 		},

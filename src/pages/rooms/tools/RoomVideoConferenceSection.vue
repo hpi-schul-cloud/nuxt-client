@@ -163,14 +163,14 @@ export default defineComponent({
 
 		const canJoin: ComputedRef<boolean> = computed(
 			() =>
-				authModule.getPermissions.includes("join_meeting") &&
-				(!authModule.getRoleNames.includes("expert") ||
-					authModule.getRoleNames.length > 1 ||
+				authModule.getUserPermissions.includes("join_meeting") &&
+				(!authModule.getUserRoles.includes("expert") ||
+					authModule.getUserRoles.length > 1 ||
 					isWaitingRoomActive.value)
 		);
 
 		const canStart: ComputedRef<boolean> = computed(() =>
-			authModule.getPermissions.includes("start_meeting")
+			authModule.getUserPermissions.includes("start_meeting")
 		);
 
 		const hasPermission: ComputedRef<boolean> = computed(() => {

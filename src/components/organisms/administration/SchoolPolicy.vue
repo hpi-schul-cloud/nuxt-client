@@ -166,7 +166,7 @@ export default defineComponent({
 		);
 
 		const hasSchoolEditPermission: ComputedRef<boolean> = computed(() =>
-			authModule.getPermissions.includes("school_edit")
+			authModule.getUserPermissions.includes("school_edit")
 		);
 		const privacyPolicy: ComputedRef<ConsentVersion | null> = computed(
 			() => privacyPolicyModule.getPrivacyPolicy

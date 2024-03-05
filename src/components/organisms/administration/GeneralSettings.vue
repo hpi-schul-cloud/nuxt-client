@@ -194,7 +194,7 @@ export default {
 			});
 		},
 		hasSchoolEditPermission: () => {
-			return authModule.getPermissions.includes("school_edit");
+			return authModule.getUserPermissions.includes("school_edit");
 		},
 	},
 	watch: {

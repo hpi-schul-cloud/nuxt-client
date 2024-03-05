@@ -69,7 +69,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const { t } = useI18n();
-		const userRoles = ref(authModule.getRoleNames);
+		const userRoles = ref(authModule.getUserRoles);
 
 		const isStudent = computed(() => {
 			return userRoles.value.includes("student");

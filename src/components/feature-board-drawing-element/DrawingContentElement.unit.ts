@@ -54,7 +54,7 @@ describe("DrawingContentElement", () => {
 		document.body.setAttribute("data-app", "true");
 
 		const authModule = createModuleMocks(AuthModule, {
-			getRoleNames: ["teacher"],
+			getUserRoles: ["teacher"],
 		});
 
 		const wrapper = shallowMount(DrawingContentElement, {

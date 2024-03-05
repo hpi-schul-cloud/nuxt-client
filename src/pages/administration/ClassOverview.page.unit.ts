@@ -64,7 +64,7 @@ const createWrapper = (
 	});
 
 	const authModule = createModuleMocks(AuthModule, {
-		getPermissions: ["CLASS_EDIT".toLowerCase()],
+		getUserPermissions: ["CLASS_EDIT".toLowerCase()],
 	});
 
 	const schoolModule = createModuleMocks(SchoolsModule, {

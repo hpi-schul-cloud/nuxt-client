@@ -117,7 +117,7 @@ export default class AuthModule extends VuexModule {
 		return this.accessToken;
 	}
 
-	get getRoleNames(): string[] {
+	get getUserRoles(): string[] {
 		const roleNames = this.me?.roles.map((r) => r.name.toLowerCase());
 
 		return roleNames ?? [];
@@ -128,7 +128,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	// TODO - why are we using toLowerCase() on permissions here?
-	get getPermissions(): string[] {
+	get getUserPermissions(): string[] {
 		const permissions = this.me?.permissions.map((p) => p.toLowerCase());
 
 		return permissions ?? [];

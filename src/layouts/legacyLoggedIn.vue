@@ -76,7 +76,7 @@ export default defineComponent({
 			return authModule.getSchool;
 		});
 		const roleNames = computed(() => {
-			return authModule.getRoleNames;
+			return authModule.getUserRoles;
 		});
 		const authenticated = computed(() => {
 			return authModule.getAuthenticated;
@@ -111,7 +111,7 @@ export default defineComponent({
 
 								return (
 									(!child.permission ||
-										authModule.getPermissions.includes(child.permission)) &&
+										authModule.getUserPermissions.includes(child.permission)) &&
 									(!child.feature || hasFeature)
 								);
 							}
@@ -120,10 +120,12 @@ export default defineComponent({
 				}
 
 				const hasRequiredPermission = item.permission
-					? authModule.getPermissions.includes(item.permission.toLowerCase())
+					? authModule.getUserPermissions.includes(
+							item.permission.toLowerCase()
+						)
 					: false;
 				const hasExcludedPermission = item.excludedPermission
-					? authModule.getPermissions.includes(
+					? authModule.getUserPermissions.includes(
 							item.excludedPermission.toLowerCase()
 						)
 					: false;

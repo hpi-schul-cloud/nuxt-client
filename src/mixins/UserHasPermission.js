@@ -9,7 +9,7 @@ export default {
 	},
 	computed: {
 		userPermissions() {
-			return authModule.getPermissions;
+			return authModule.getUserPermissions;
 		},
 		$_hasPermission() {
 			return this.$_userHasPermission(this.permission);

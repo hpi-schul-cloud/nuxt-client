@@ -335,7 +335,7 @@ export default {
 			);
 
 			// filters out the QR bulk action is user is not an admin
-			if (!authModule.getRoleNames.some((name) => name === "administrator")) {
+			if (!authModule.getUserRoles.some((name) => name === "administrator")) {
 				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
@@ -359,7 +359,7 @@ export default {
 			// filters out edit column if school is external or if user is not an admin
 			if (
 				this.schoolIsExternallyManaged ||
-				!authModule.getRoleNames.some((name) => name === "administrator")
+				!authModule.getUserRoles.some((name) => name === "administrator")
 			) {
 				editedColumns = this.tableColumns.filter(
 					// _id field sets the edit column
