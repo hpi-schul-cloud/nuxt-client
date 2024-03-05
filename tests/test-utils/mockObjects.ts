@@ -1,28 +1,4 @@
-import { MeResponse } from "@/serverApi/v3";
 import { School } from "@/store/types/schools";
-
-export const mockMe: MeResponse = {
-	user: {
-		id: "",
-		firstName: "",
-		lastName: "",
-		customAvatarBackgroundColor: "",
-	},
-	school: {
-		id: "",
-		name: "",
-		logo: {
-			url: "",
-			name: "",
-		},
-	},
-	roles: [],
-	permissions: [],
-	language: "",
-	account: {
-		id: "",
-	},
-};
 
 export const mockSchool: School = {
 	id: "mockSchoolId",

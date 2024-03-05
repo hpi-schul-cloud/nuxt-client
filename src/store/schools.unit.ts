@@ -2,9 +2,10 @@ import * as serverApi from "@/serverApi/v3/api";
 import { SystemsApiInterface } from "@/serverApi/v3/api";
 import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
+import { meResponseFactory } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import { mockMe, mockSchool } from "@@/tests/test-utils/mockObjects";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
@@ -63,10 +64,10 @@ describe("schools module", () => {
 
 		describe("fetchSchool", () => {
 			it("should call backend and set state correctly", async () => {
-				authModule.setMe({
-					...mockMe,
-					school: { ...mockMe.school, id: "sampleSchoolId" },
+				const mockMe = meResponseFactory.build({
+					school: { id: "sampleSchoolId" },
 				});
+				authModule.setMe(mockMe);
 				const mockSchoolResponse = schoolResponseFactory.build();
 				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolResponse })
@@ -107,10 +108,10 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				authModule.setMe({
-					...mockMe,
-					school: { ...mockMe.school, id: "4711" },
+				const mockMe = meResponseFactory.build({
+					school: { id: "4711" },
 				});
+				authModule.setMe(mockMe);
 
 				await schoolsModule.fetchSchool();
 

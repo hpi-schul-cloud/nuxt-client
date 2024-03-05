@@ -14,6 +14,7 @@ import ExternalToolSection from "./ExternalToolSection.vue";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import {
+	meResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
 	schoolToolConfigurationStatusFactory,
@@ -24,7 +25,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
-import { mockMe } from "@@/tests/test-utils";
 
 jest.mock("@data-external-tool");
 
@@ -55,8 +55,9 @@ describe("ExternalToolSection", () => {
 
 		const notifierModule = createModuleMocks(NotifierModule);
 
+		const mockMe = meResponseFactory.build({ school: { id: "schoolId" } });
 		const authModule = createModuleMocks(AuthModule, {
-			getMe: { ...mockMe, school: { ...mockMe.school, id: "schoolId" } },
+			getSchool: mockMe.school,
 		});
 
 		const router = createMock<Router>();

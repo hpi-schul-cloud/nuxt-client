@@ -2,7 +2,7 @@ import { notifierModule } from "@/store";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import { delay } from "@/utils/helpers";
-import { mockMe } from "@@/tests/test-utils";
+import { meResponseFactory } from "@@/tests/test-utils";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
 	createTestingI18n,
@@ -47,6 +47,7 @@ describe("teachers/new", () => {
 	it("should call 'createTeacher' action", async () => {
 		const createTeacherStub = jest.fn();
 		const mockStore = createMockStore(createTeacherStub);
+		const mockMe = meResponseFactory.build();
 
 		const wrapper = mount(NewTeacher, {
 			global: {
@@ -85,6 +86,7 @@ describe("teachers/new", () => {
 	it("should call notifier successful", async () => {
 		const createTeacherStub = jest.fn();
 		const mockStore = createMockStore(createTeacherStub);
+		const mockMe = meResponseFactory.build();
 
 		const notifierModuleMock = jest.spyOn(notifierModule, "show");
 		const wrapper = mount(NewTeacher, {
@@ -123,6 +125,7 @@ describe("teachers/new", () => {
 	it("should show error", async () => {
 		const failingCreateAction = jest.fn(() => Promise.reject());
 		const mockStore = createMockStore(failingCreateAction);
+		const mockMe = meResponseFactory.build();
 
 		mockStore.users = {
 			actions: {

@@ -1,6 +1,7 @@
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
+import EnvConfigModule from "@/store/env-config";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
@@ -8,19 +9,18 @@ import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { VueWrapper, mount } from "@vue/test-utils";
-import TasksDashboardMain from "./TasksDashboardMain.vue";
-import TasksDashboardStudent from "./TasksDashboardStudent.vue";
-import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import EnvConfigModule from "@/store/env-config";
+import { meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
-import { mockMe } from "@@/tests/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import TasksDashboardMain from "./TasksDashboardMain.vue";
+import TasksDashboardStudent from "./TasksDashboardStudent.vue";
+import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 
 const $route = {
 	query: {
@@ -226,7 +226,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				envConfigModule: EnvConfigModule,
 			});
 
-			authModule.setMe({ ...mockMe, permissions: ["HOMEWORK_CREATE"] });
+			const mockMe = meResponseFactory.build({
+				permissions: ["HOMEWORK_CREATE"],
+			});
+			authModule.setMe(mockMe);
 			wrapper = mountComponent({
 				props: {
 					role: "teacher",

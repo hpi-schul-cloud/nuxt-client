@@ -3,7 +3,7 @@ import { applicationErrorModule, authModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import { initializeAxios } from "@/utils/api";
-import { mockMe } from "@@/tests/test-utils";
+import { meResponseFactory } from "@@/tests/test-utils";
 import { courseFactory } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosInstance } from "axios";
@@ -388,6 +388,7 @@ describe("room module", () => {
 
 		describe("finishTask", () => {
 			beforeEach(() => {
+				const mockMe = meResponseFactory.build();
 				authModule.setMe(mockMe);
 			});
 
@@ -471,6 +472,7 @@ describe("room module", () => {
 
 		describe("fetchScopePermission", () => {
 			beforeEach(() => {
+				const mockMe = meResponseFactory.build();
 				authModule.setMe(mockMe);
 			});
 

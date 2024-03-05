@@ -14,19 +14,19 @@ import {
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
-import { AxiosInstance } from "axios";
-import RoomDetailsPage from "./RoomDetails.page.vue";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-jest";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { mount } from "@vue/test-utils";
+import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
-import { mockMe } from "@@/tests/test-utils";
+import RoomDetailsPage from "./RoomDetails.page.vue";
+import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -196,6 +196,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	it("should not show FAB if user does not have permission to create courses", () => {
+		const mockMe = meResponseFactory.build();
 		authModule.setMe(mockMe);
 		roomModule.setPermissionData(mockPermissionsStudent);
 		const wrapper = getWrapper();
@@ -205,10 +206,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 	describe("menu", () => {
 		it("should show FAB if user has permission to create homework", () => {
-			authModule.setMe({
-				...mockMe,
+			const mockMe = meResponseFactory.build({
 				permissions: ["HOMEWORK_CREATE"],
 			});
+			authModule.setMe(mockMe);
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -216,10 +217,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("'add task' button should have correct path", async () => {
-			authModule.setMe({
-				...mockMe,
+			const mockMe = meResponseFactory.build({
 				permissions: ["HOMEWORK_CREATE"],
 			});
+			authModule.setMe(mockMe);
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -233,10 +234,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("'add lesson' button should have correct path", async () => {
-			authModule.setMe({
-				...mockMe,
+			const mockMe = meResponseFactory.build({
 				permissions: ["HOMEWORK_CREATE", "TOPIC_CREATE"],
 			});
+			authModule.setMe(mockMe);
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -252,6 +253,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 	describe("headline menus", () => {
 		beforeEach(() => {
+			const mockMe = meResponseFactory.build();
 			authModule.setMe(mockMe);
 			roomModule.setPermissionData(mockPermissionsCourseTeacher);
 		});
@@ -268,7 +270,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should not have the menu button for students", () => {
-			authModule.setMe(mockMe);
 			roomModule.setPermissionData(mockPermissionsStudent);
 			const wrapper = getWrapper();
 			const menuButton = wrapper.find(
@@ -279,7 +280,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should not have the menu button for substitution course teachers", () => {
-			authModule.setMe(mockMe);
 			roomModule.setPermissionData(mockPermissionsCourseSubstitutionTeacher);
 			const wrapper = getWrapper();
 			const menuButton = wrapper.find(

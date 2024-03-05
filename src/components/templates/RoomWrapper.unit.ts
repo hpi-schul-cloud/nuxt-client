@@ -10,7 +10,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
-import { mockMe } from "@@/tests/test-utils";
+import { meResponseFactory } from "@@/tests/test-utils";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -121,7 +121,10 @@ describe("@templates/RoomWrapper.vue", () => {
 
 	describe("when user has course create permission", () => {
 		beforeEach(() => {
-			authModule.setMe({ ...mockMe, permissions: ["COURSE_CREATE"] });
+			const mockMe = meResponseFactory.build({
+				permissions: ["COURSE_CREATE"],
+			});
+			authModule.setMe(mockMe);
 		});
 
 		it("should display fab", () => {
@@ -134,6 +137,7 @@ describe("@templates/RoomWrapper.vue", () => {
 
 	describe("when user does not have course create permission", () => {
 		it("should not display fab", () => {
+			const mockMe = meResponseFactory.build();
 			authModule.setMe(mockMe);
 
 			const wrapper = getWrapper();

@@ -1,6 +1,6 @@
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
-import { mockMe } from "@@/tests/test-utils";
+import { meResponseFactory } from "@@/tests/test-utils";
 import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
 	createTestingI18n,
@@ -56,6 +56,7 @@ describe("students/new", () => {
 
 	const setup = () => {
 		const { mockStore, createStudentStub } = createMockStore();
+		const mockMe = meResponseFactory.build();
 
 		const wrapper = mount(NewStudent, {
 			global: {

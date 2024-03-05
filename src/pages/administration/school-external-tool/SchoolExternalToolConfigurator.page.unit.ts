@@ -9,22 +9,22 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { meResponseFactory } from "@@/tests/test-utils";
 import {
 	businessErrorFactory,
 	schoolExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
-import { mount } from "@vue/test-utils";
-import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-jest";
-import { nextTick } from "vue";
-import { mockMe } from "@@/tests/test-utils";
+import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -53,8 +53,9 @@ describe("SchoolExternalToolConfigurator", () => {
 		);
 
 		const schoolId = "schoolId";
+		const mockMe = meResponseFactory.build({ school: { id: schoolId } });
 		const authModule = createModuleMocks(AuthModule, {
-			getMe: { ...mockMe, school: { ...mockMe.school, id: schoolId } },
+			getSchool: mockMe.school,
 		});
 
 		const notifierModule = createModuleMocks(NotifierModule);

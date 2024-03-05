@@ -2,7 +2,7 @@ import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import ContentModule from "@/store/content";
-import { mockMe } from "@@/tests/test-utils";
+import { meResponseFactory } from "@@/tests/test-utils";
 import { Collection } from "@@/tests/test-utils/mockDataCollection";
 import { Resource } from "@@/tests/test-utils/mockDataResource";
 import {
@@ -21,7 +21,8 @@ describe("@/components/organisms/ContentCard", () => {
 		});
 
 		// The role can be anything here except "student", because of the "isNotStudent" method in ContentCard.
-		authModule.setMe({ ...mockMe, roles: [{ name: "teacher" }] });
+		const mockMe = meResponseFactory.build({ roles: [{ name: "test-role" }] });
+		authModule.setMe(mockMe);
 	});
 
 	const setup = (resource = Resource) => {
