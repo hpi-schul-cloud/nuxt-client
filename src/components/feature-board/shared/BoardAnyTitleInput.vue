@@ -171,15 +171,12 @@ export default defineComponent({
 :deep(textarea[readonly]) {
 	cursor: pointer;
 }
-
-/** Edge */
 :deep(textarea) {
 	color: rgba(v-bind(fontColor)) !important;
 	opacity: 1;
 }
-/** Other common browsers */
 :deep(textarea)::placeholder {
-	color: rgba(v-bind(fontColor)) !important;
+	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }
 </style>
