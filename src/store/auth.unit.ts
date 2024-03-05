@@ -1,7 +1,7 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
-import { mockApiResponse } from "@@/tests/test-utils";
+import { meResponseFactory, mockApiResponse } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
@@ -10,43 +10,6 @@ import EnvConfigModule from "./env-config";
 import { Envs } from "./types/env-config";
 
 jest.useFakeTimers();
-
-// We create a new mock object for each test here, because using the mockMe object from test utils lead to a problem.
-// When passing the mockMe object to a test, you pass it by reference (even if you spread it, you only get a shallow copy).
-// If you then change the mockMe object in one test (i.e. here the addPermission test), it will also be changed in subsequent tests.
-const setupMockMe = ({
-	user = {
-		id: "",
-		firstName: "",
-		lastName: "",
-		customAvatarBackgroundColor: "",
-	},
-	school = {
-		id: "",
-		name: "",
-		logo: {
-			url: "",
-			name: "",
-		},
-	},
-	roles = [],
-	permissions = [],
-	language = "",
-	account = {
-		id: "",
-	},
-}: Partial<serverApi.MeResponse>) => {
-	const mockMe = {
-		user,
-		school,
-		roles,
-		permissions,
-		language,
-		account,
-	};
-
-	return mockMe;
-};
 
 describe("auth store module", () => {
 	let consoleErrorSpy: any;
@@ -69,7 +32,7 @@ describe("auth store module", () => {
 		describe("setMe", () => {
 			it("should set the me state", () => {
 				const authModule = new AuthModule({});
-				const mockMe = setupMockMe({});
+				const mockMe = meResponseFactory.build();
 				expect(authModule.getMe).not.toStrictEqual(mockMe);
 
 				authModule.setMe(mockMe);
@@ -106,7 +69,7 @@ describe("auth store module", () => {
 			it("should add the permission to the me state", () => {
 				const authModule = new AuthModule({});
 				const permissionToBeAdded = "permission_z";
-				const mockMe = setupMockMe({});
+				const mockMe = meResponseFactory.build();
 				authModule.setMe(mockMe);
 
 				authModule.addPermmission(permissionToBeAdded);
@@ -118,7 +81,7 @@ describe("auth store module", () => {
 		describe("clearAuthData", () => {
 			it("should clear the auth state", () => {
 				const authModule = new AuthModule({});
-				const mockMe = setupMockMe({});
+				const mockMe = meResponseFactory.build();
 				authModule.setMe(mockMe);
 				authModule.setAccessToken("test-access-token");
 
@@ -189,7 +152,7 @@ describe("auth store module", () => {
 		describe("getMe", () => {
 			it("should return the me state", () => {
 				const authModule = new AuthModule({});
-				const mockMe = setupMockMe({});
+				const mockMe = meResponseFactory.build();
 				authModule.setMe(mockMe);
 
 				expect(authModule.getMe).toStrictEqual(mockMe);
@@ -224,8 +187,8 @@ describe("auth store module", () => {
 		describe("getSchool", () => {
 			it("should return the school state", () => {
 				const authModule = new AuthModule({});
-				const mockMe = setupMockMe({
-					school: { id: "test-school-id", name: "test school", logo: {} },
+				const mockMe = meResponseFactory.build({
+					school: { id: "test-school-id", name: "test school" },
 				});
 				authModule.setMe(mockMe);
 
@@ -237,7 +200,9 @@ describe("auth store module", () => {
 		describe("getRoleNames", () => {
 			it("should return the userRoles state", () => {
 				const authModule = new AuthModule({});
-				const mockMe = setupMockMe({ roles: [{ id: "", name: "test-role" }] });
+				const mockMe = meResponseFactory.build({
+					roles: [{ id: "", name: "test-role" }],
+				});
 				authModule.setMe(mockMe);
 
 				expect(authModule.getRoleNames).toStrictEqual(["test-role"]);
@@ -247,7 +212,9 @@ describe("auth store module", () => {
 		describe("getPermissions", () => {
 			it("should return the userPermissions state", () => {
 				const authModule = new AuthModule({});
-				const mockMe = setupMockMe({ permissions: ["test-permission"] });
+				const mockMe = meResponseFactory.build({
+					permissions: ["test-permission"],
+				});
 				authModule.setMe(mockMe);
 
 				expect(authModule.getPermissions).toStrictEqual(["test-permission"]);
@@ -288,8 +255,8 @@ describe("auth store module", () => {
 
 		describe("login", () => {
 			it("should set the me state", async () => {
-				const mockMe = setupMockMe({
-					user: { id: "test-id", firstName: "", lastName: "" },
+				const mockMe = meResponseFactory.build({
+					user: { id: "test-id" },
 					language: "jib",
 				});
 				meApi.meControllerMe.mockResolvedValueOnce(
@@ -308,7 +275,7 @@ describe("auth store module", () => {
 			});
 
 			it("should set the access token", async () => {
-				const mockMe = setupMockMe({});
+				const mockMe = meResponseFactory.build();
 				const mockReturnValue = {
 					data: mockMe,
 				};
