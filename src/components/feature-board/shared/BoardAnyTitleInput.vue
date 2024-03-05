@@ -124,12 +124,8 @@ export default defineComponent({
 			switch (props.scope) {
 				case "board":
 					return "var(--heading-3)";
-				case "column":
-					return "var(--heading-5)";
-				case "card":
-					return "var(--heading-6)";
 				default:
-					return "--heading-6";
+					return "var(--heading-5)";
 			}
 		});
 
@@ -159,7 +155,7 @@ export default defineComponent({
 }
 
 :deep(textarea) {
-	font-size: var(--heading-5);
+	font-size: v-bind(fontSize);
 	background: transparent !important;
 }
 :deep(input) {
