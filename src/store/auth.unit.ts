@@ -2,7 +2,6 @@ import * as serverApi from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import { mockApiResponse } from "@@/tests/test-utils";
-import { mockMe } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
@@ -11,6 +10,43 @@ import EnvConfigModule from "./env-config";
 import { Envs } from "./types/env-config";
 
 jest.useFakeTimers();
+
+// We create a new mock object for each test here, because using the mockMe object from test utils lead to a problem.
+// When passing the mockMe object to a test, you pass it by reference (even if you spread it, you only get a shallow copy).
+// If you then change the mockMe object in one test (i.e. here the addPermission test), it will also be changed in subsequent tests.
+const setupMockMe = ({
+	user = {
+		id: "",
+		firstName: "",
+		lastName: "",
+		customAvatarBackgroundColor: "",
+	},
+	school = {
+		id: "",
+		name: "",
+		logo: {
+			url: "",
+			name: "",
+		},
+	},
+	roles = [],
+	permissions = [],
+	language = "",
+	account = {
+		id: "",
+	},
+}: Partial<serverApi.MeResponse>) => {
+	const mockMe = {
+		user,
+		school,
+		roles,
+		permissions,
+		language,
+		account,
+	};
+
+	return mockMe;
+};
 
 describe("auth store module", () => {
 	let consoleErrorSpy: any;
@@ -30,16 +66,15 @@ describe("auth store module", () => {
 	});
 
 	describe("mutations", () => {
-		describe("setUser", () => {
-			it("should set the user state", () => {
+		describe("setMe", () => {
+			it("should set the me state", () => {
 				const authModule = new AuthModule({});
-				const mockValue = {
-					...mockMe,
-					user: { ...mockMe.user, name: "mockName" },
-				};
-				expect(authModule.getMe).not.toStrictEqual(mockValue);
-				authModule.setMe(mockValue);
-				expect(authModule.getMe).toStrictEqual(mockValue);
+				const mockMe = setupMockMe({});
+				expect(authModule.getMe).not.toStrictEqual(mockMe);
+
+				authModule.setMe(mockMe);
+
+				expect(authModule.getMe).toStrictEqual(mockMe);
 			});
 		});
 
@@ -48,7 +83,9 @@ describe("auth store module", () => {
 				const authModule = new AuthModule({});
 				const localeMock = "mock";
 				expect(authModule.getLocale).not.toStrictEqual(localeMock);
+
 				authModule.setLocale(localeMock);
+
 				expect(authModule.getLocale).toStrictEqual(localeMock);
 			});
 		});
@@ -58,26 +95,30 @@ describe("auth store module", () => {
 				const authModule = new AuthModule({});
 				const tokenMock = "tokenMock";
 				expect(authModule.getAccessToken).not.toBe(tokenMock);
+
 				authModule.setAccessToken(tokenMock);
+
 				expect(authModule.getAccessToken).toBe(tokenMock);
 			});
 		});
 
 		describe("addPermission", () => {
-			it("should add the userPermission state", () => {
+			it("should add the permission to the me state", () => {
 				const authModule = new AuthModule({});
 				const permissionToBeAdded = "permission_z";
+				const mockMe = setupMockMe({});
 				authModule.setMe(mockMe);
 
 				authModule.addPermmission(permissionToBeAdded);
 
-				expect(authModule.getMe?.permissions).toContain(permissionToBeAdded);
+				expect(authModule.getPermissions).toContain(permissionToBeAdded);
 			});
 		});
 
 		describe("clearAuthData", () => {
 			it("should clear the auth state", () => {
 				const authModule = new AuthModule({});
+				const mockMe = setupMockMe({});
 				authModule.setMe(mockMe);
 				authModule.setAccessToken("test-access-token");
 
@@ -92,7 +133,9 @@ describe("auth store module", () => {
 			it("should set the status state", () => {
 				const authModule = new AuthModule({});
 				const statusMock = "pending";
+
 				authModule.setStatus(statusMock);
+
 				expect(authModule.status).toBe(statusMock);
 			});
 		});
@@ -104,7 +147,9 @@ describe("auth store module", () => {
 					statusCode: "418",
 					message: "I'm a teapot",
 				};
+
 				authModule.setBusinessError(businessErrorMock);
+
 				expect(authModule.businessError).toBe(businessErrorMock);
 			});
 		});
@@ -124,6 +169,7 @@ describe("auth store module", () => {
 				expect(authModule.businessError).toBe(businessErrorMock);
 
 				authModule.resetBusinessError();
+
 				expect(authModule.businessError.statusCode).toBe(
 					defaultbusinessErrorMock.statusCode
 				);
@@ -140,10 +186,11 @@ describe("auth store module", () => {
 				envConfigModule: EnvConfigModule,
 			});
 		});
-		describe("locale", () => {
+		describe("getLocale", () => {
 			it("should return the set locale", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "mock";
+
 				expect(authModule.getLocale).toBe("mock");
 			});
 
@@ -151,6 +198,7 @@ describe("auth store module", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "";
 				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "fu";
+
 				expect(authModule.getLocale).toBe("fu");
 			});
 
@@ -158,6 +206,7 @@ describe("auth store module", () => {
 				const authModule = new AuthModule({});
 				authModule.locale = "";
 				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "";
+
 				expect(authModule.getLocale).toBe("de");
 			});
 		});
@@ -165,14 +214,10 @@ describe("auth store module", () => {
 		describe("getSchool", () => {
 			it("should return the school state", () => {
 				const authModule = new AuthModule({});
-				authModule.setMe({
-					...mockMe,
-					school: {
-						...mockMe.school,
-						id: "test-school-id",
-						name: "test school",
-					},
+				const mockMe = setupMockMe({
+					school: { id: "test-school-id", name: "test school", logo: {} },
 				});
+				authModule.setMe(mockMe);
 
 				expect(authModule.getSchool?.id).toStrictEqual("test-school-id");
 				expect(authModule.getSchool?.name).toStrictEqual("test school");
@@ -182,11 +227,8 @@ describe("auth store module", () => {
 		describe("getRoleNames", () => {
 			it("should return the userRoles state", () => {
 				const authModule = new AuthModule({});
-				const mockValue = {
-					...mockMe,
-					roles: [{ id: "", name: "test-role" }],
-				};
-				authModule.setMe(mockValue);
+				const mockMe = setupMockMe({ roles: [{ id: "", name: "test-role" }] });
+				authModule.setMe(mockMe);
 
 				expect(authModule.getRoleNames).toStrictEqual(["test-role"]);
 			});
@@ -195,10 +237,8 @@ describe("auth store module", () => {
 		describe("getPermissions", () => {
 			it("should return the userPermissions state", () => {
 				const authModule = new AuthModule({});
-				authModule.setMe({
-					...mockMe,
-					permissions: ["test-permission"],
-				});
+				const mockMe = setupMockMe({ permissions: ["test-permission"] });
+				authModule.setMe(mockMe);
 
 				expect(authModule.getPermissions).toStrictEqual(["test-permission"]);
 			});
@@ -208,8 +248,8 @@ describe("auth store module", () => {
 			it("should return true if accessToken is set", () => {
 				const authModule = new AuthModule({});
 				expect(authModule.getAuthenticated).toBe(false);
-
 				authModule.setAccessToken("test-access-token");
+
 				expect(authModule.getAuthenticated).toStrictEqual("test-access-token");
 			});
 		});
@@ -218,8 +258,8 @@ describe("auth store module", () => {
 			it("should return true if accessToken is set", () => {
 				const authModule = new AuthModule({});
 				expect(authModule.isLoggedIn).toBe(false);
-
 				authModule.setAccessToken("test-access-token");
+
 				expect(authModule.isLoggedIn).toBe(true);
 			});
 		});
@@ -238,14 +278,11 @@ describe("auth store module", () => {
 
 		describe("login", () => {
 			it("should set the me state", async () => {
-				const mockReturnValue = {
-					data: {
-						...mockMe,
-						user: { ...mockMe.user, firstName: "returned name" },
-					},
-				};
+				const mockMe = setupMockMe({
+					user: { id: "test-id", firstName: "", lastName: "" },
+				});
 				meApi.meControllerMe.mockResolvedValueOnce(
-					mockApiResponse(mockReturnValue)
+					mockApiResponse({ data: mockMe })
 				);
 				const authModule = new AuthModule({});
 
@@ -256,10 +293,11 @@ describe("auth store module", () => {
 					"addons_enabled",
 					"teams_enabled",
 				]);
-				expect(authModule.getMe?.user.firstName).toStrictEqual("returned name");
+				expect(authModule.getUser?.id).toStrictEqual("test-id");
 			});
 
 			it("should set the access token", async () => {
+				const mockMe = setupMockMe({});
 				const mockReturnValue = {
 					data: mockMe,
 				};
@@ -288,11 +326,12 @@ describe("auth store module", () => {
 				jest
 					.spyOn(serverApi, "UserApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
-
 				const authModule = new AuthModule({});
+
 				authModule.updateUserLanguage(
 					serverApi.ChangeLanguageParamsLanguageEnum.De
 				);
+
 				expect(mockApi.userControllerChangeLanguage).toHaveBeenCalled();
 			});
 
@@ -305,11 +344,12 @@ describe("auth store module", () => {
 				jest
 					.spyOn(serverApi, "UserApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
-
 				const authModule = new AuthModule({});
+
 				authModule.updateUserLanguage(
 					serverApi.ChangeLanguageParamsLanguageEnum.De
 				);
+
 				expect(authModule.businessError.message).toStrictEqual("I'm an error");
 			});
 		});
