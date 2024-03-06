@@ -4,19 +4,17 @@
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 	>
-		<div class="board-header rounded" tabindex="0" ref="boardHeader">
-			<div class="d-flex align-center gap-5 px-2 py-2">
-				<BoardAnyTitleInput
-					scope="board"
-					:value="title"
-					data-testid="board-title"
-					:isEditMode="isEditMode"
-					:placeholder="titlePlaceholder"
-					@update:value="onUpdateTitle"
-					:isFocused="isFocusedById"
-					:maxLength="100"
-				/>
-			</div>
+		<div class="board-header" tabindex="0" ref="boardHeader">
+			<BoardAnyTitleInput
+				scope="board"
+				:value="title"
+				data-testid="board-title"
+				:isEditMode="isEditMode"
+				:placeholder="titlePlaceholder"
+				@update:value="onUpdateTitle"
+				:isFocused="isFocusedById"
+				:maxLength="100"
+			/>
 		</div>
 	</BoardColumnInteractionHandler>
 </template>
@@ -99,7 +97,7 @@ export default defineComponent({
 
 <style scoped>
 .board-header {
-	align-items: top;
+	margin-left: 7px;
 }
 .board-header:focus {
 	outline: none;
