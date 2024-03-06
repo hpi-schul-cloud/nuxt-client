@@ -753,7 +753,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_IMSCC_COURSE_EXPORT_ENABLED: boolean;
+    FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
