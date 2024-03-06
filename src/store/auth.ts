@@ -30,7 +30,7 @@ export default class AuthModule extends VuexModule {
 	payload = null;
 	me?: MeResponse;
 	publicPages: string[] = ["index", "login", "signup", "impressum"];
-	locale = "de"; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
+	locale?: string;
 
 	businessError: BusinessError = {
 		statusCode: "",
@@ -49,6 +49,10 @@ export default class AuthModule extends VuexModule {
 
 	@Mutation
 	setMe(me: MeResponse): void {
+		if (me.language) {
+			this.setLocale(me.language);
+		}
+
 		this.me = me;
 	}
 
@@ -143,10 +147,6 @@ export default class AuthModule extends VuexModule {
 		const { data } = await this.meApi.meControllerMe();
 
 		this.setMe(data);
-
-		if (data.language) {
-			this.setLocale(data.language);
-		}
 
 		// There are several places in the app, where more school data is needed, than is included in the MeResponse (e.g. on school admin page).
 		// It is not easily possible to fetch it there when needed. That's why it is fetched here centrally.
