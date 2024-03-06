@@ -2,7 +2,7 @@
 	<v-dialog
 		ref="downloadDialog"
 		v-model="isDownloadDialogOpen"
-		:width="560"
+		:width="520"
 		@click:outside="onCloseDialog"
 		@keydown.esc="onCloseDialog"
 		data-testid="download-dialog"
@@ -21,19 +21,19 @@
 								:label="$t('pages.room.modal.course.export.version1.1')"
 								id="1.1.0"
 								value="1.1.0"
+								color="primary"
 							/>
 							<v-radio
 								:label="$t('pages.room.modal.course.export.version1.3')"
 								id="1.3.0"
 								value="1.3.0"
+								color="primary"
 							/>
 						</v-radio-group>
 					</div>
 				</div>
 				<div v-if="step === 1 && isDownloadDialogOpen">
-					<div
-						class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
-					>
+					<div class="d-flex flex-row pa-2 mb-4 rounded blue bg-blue-lighten-5">
 						<div class="mx-2">
 							<v-icon color="info">{{ mdiInformation }}</v-icon>
 						</div>
@@ -60,7 +60,7 @@
 							v-model="item.isSelected"
 							:key="item.id"
 							:label="item.title"
-							class="mt-2 ml-8"
+							class="ml-8"
 						/>
 						<v-checkbox
 							v-model="allTasksSelected"
@@ -74,7 +74,7 @@
 							v-model="item.isSelected"
 							:key="item.id"
 							:label="item.title"
-							class="mt-2 ml-8"
+							class="ml-8"
 						/>
 					</v-container>
 				</div>
@@ -85,7 +85,6 @@
 						v-if="step === 1"
 						data-testid="dialog-back-btn"
 						depressed
-						color="white"
 						@click="onBack"
 					>
 						{{ $t("common.actions.back") }}
@@ -97,7 +96,6 @@
 						v-if="step === 1"
 						data-testid="dialog-cancel-btn"
 						depressed
-						color="white"
 						@click="onCloseDialog"
 					>
 						{{ $t("common.actions.cancel") }}
@@ -106,7 +104,6 @@
 						v-if="step === 0"
 						data-testid="dialog-cancel-btn"
 						depressed
-						color="white"
 						@click="onCloseDialog"
 					>
 						{{ $t("common.actions.cancel") }}
@@ -115,6 +112,7 @@
 						v-if="step === 0"
 						data-testid="dialog-next-btn"
 						color="primary"
+						variant="flat"
 						@click="onNext"
 					>
 						{{ $t("common.actions.continue") }}
@@ -124,6 +122,7 @@
 						data-testid="dialog-export-btn"
 						@click="onDownload"
 						color="primary"
+						variant="flat"
 					>
 						{{ $t("common.actions.export") }}
 					</v-btn>
@@ -202,7 +201,7 @@ const someTasksSelected = computed(() => {
 });
 
 function onCloseDialog(): void {
-	// emit("dialog-closed", false);
+	emit("dialog-closed", false);
 	downloadModule.resetDownloadFlow();
 	step.value = 0;
 	allTasks.value.forEach((task) => {
@@ -214,13 +213,13 @@ function onCloseDialog(): void {
 }
 
 function onNext(newValue: string): void {
-	// emit("next");
+	emit("next", false);
 	downloadModule.setVersion(newValue);
 	step.value++;
 }
 
 async function onDownload(): Promise<void> {
-	// emit("dialog-confirmed");
+	emit("dialog-confirmed", false);
 	notifier.show({
 		text: t("common.words.export"),
 		status: "success",
@@ -231,7 +230,7 @@ async function onDownload(): Promise<void> {
 }
 
 function onBack(): void {
-	// emit("back");
+	emit("back", false);
 	step.value = 0;
 	allTasks.value.forEach((task) => {
 		task.isSelected = true;

@@ -77,7 +77,10 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
 		/>
-		<download-modal v-model="downloadDialog.isOpen" />
+		<download-modal
+			v-model="downloadDialog.isOpen"
+			@dialog-closed="closeDownloadDialog"
+		/>
 	</default-wireframe>
 </template>
 
@@ -151,8 +154,6 @@ export default defineComponent({
 		return {
 			downloadDialog: {
 				isOpen: false,
-				model: "",
-				header: "",
 				step: 1,
 				radios: "",
 			},
@@ -407,8 +408,14 @@ export default defineComponent({
 			}
 		},
 
-		async onDownload() {
+		onDownload() {
 			downloadModule.startDownloadFlow();
+			this.downloadDialog.isOpen = downloadModule.getIsDownloadModalOpen;
+		},
+
+		closeDownloadDialog() {
+			downloadModule.resetDownloadFlow();
+			downloadModule.setIsDownloadModalOpen(false);
 			this.downloadDialog.isOpen = downloadModule.getIsDownloadModalOpen;
 		},
 
