@@ -117,7 +117,7 @@ export default defineComponent({
 	methods: {
 		fabItemClickHandler(event) {
 			if (event === "import") {
-				commonCartridgeImportModule.openImportModal();
+				commonCartridgeImportModule.setIsOpen(true);
 			}
 		},
 	},
