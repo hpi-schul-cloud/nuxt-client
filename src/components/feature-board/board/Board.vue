@@ -96,7 +96,6 @@ import {
 	defineComponent,
 	onMounted,
 	onUnmounted,
-	ref,
 	toRef,
 	watch,
 } from "vue";
@@ -141,8 +140,6 @@ export default defineComponent({
 			updateBoardVisibility,
 			updateColumnTitle,
 		} = useBoardState(toRef(props, "boardId").value);
-
-		const isDraft = ref<boolean>();
 
 		const { createPageInformation } = useSharedBoardPageInformation();
 
@@ -259,8 +256,7 @@ export default defineComponent({
 
 		onMounted(() => {
 			setTimeout(() => {
-				isDraft.value = !board.value?.isVisible;
-				if (isTeacher && isDraft.value) {
+				if (isTeacher && !board.value?.isVisible) {
 					showInfo(t("components.board.alert.info.draft"), false);
 					return;
 				}
@@ -287,7 +283,6 @@ export default defineComponent({
 			placeholderOptions,
 			isEditMode,
 			isDesktop,
-			isDraft,
 			isTouchDetected,
 			onCreateCard,
 			onCreateColumn,
