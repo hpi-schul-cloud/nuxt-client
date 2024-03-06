@@ -1,8 +1,8 @@
 <template>
 	<v-dialog
 		ref="downloadDialog"
-		:value="isOpen"
-		:max-width="maxWidth"
+		v-model="isDownloadDialogOpen"
+		:width="560"
 		@click:outside="onCloseDialog"
 		@keydown.esc="onCloseDialog"
 		data-testid="download-dialog"
@@ -14,7 +14,7 @@
 				</div>
 			</v-card-title>
 			<v-card-text class="text--primary">
-				<div v-if="step === 0 && isOpen">
+				<div v-if="step === 0 && isDownloadDialogOpen">
 					<div class="">
 						<v-radio-group v-model="radios">
 							<v-radio
@@ -30,7 +30,7 @@
 						</v-radio-group>
 					</div>
 				</div>
-				<div v-if="step === 1 && isOpen">
+				<div v-if="step === 1 && isDownloadDialogOpen">
 					<div
 						class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
 					>
@@ -82,7 +82,7 @@
 			<v-card-actions>
 				<div class="button-section">
 					<v-btn
-						v-if="step === 1 && isOpen"
+						v-if="step === 1"
 						data-testid="dialog-back-btn"
 						depressed
 						color="white"
@@ -94,7 +94,7 @@
 				<v-spacer />
 				<div class="button-section">
 					<v-btn
-						v-if="step === 1 && isOpen"
+						v-if="step === 1"
 						data-testid="dialog-cancel-btn"
 						depressed
 						color="white"
@@ -103,7 +103,7 @@
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
-						v-if="step === 0 && isOpen"
+						v-if="step === 0"
 						data-testid="dialog-cancel-btn"
 						depressed
 						color="white"
@@ -112,7 +112,7 @@
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
-						v-if="step === 0 && isOpen"
+						v-if="step === 0"
 						data-testid="dialog-next-btn"
 						color="primary"
 						@click="onNext"
@@ -120,7 +120,7 @@
 						{{ $t("common.actions.continue") }}
 					</v-btn>
 					<v-btn
-						v-if="step === 1 && isOpen"
+						v-if="step === 1"
 						data-testid="dialog-export-btn"
 						@click="onDownload"
 						color="primary"
@@ -133,162 +133,130 @@
 	</v-dialog>
 </template>
 
-<script lang="ts">
-import {
-	I18N_KEY,
-	injectStrict,
-	NOTIFIER_MODULE_KEY,
-	DOWNLOAD_MODULE_KEY,
-} from "@/utils/inject";
+<script setup lang="ts">
+import { downloadModule } from "@/store";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
-import { computed, defineComponent, ref } from "vue";
+import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "DownloadModal",
-	components: {},
-	model: {
-		prop: "isOpen",
-		event: "dialog-closed",
-	},
-	props: {
-		isOpen: {
-			type: Boolean,
-			required: true,
-		},
-		maxWidth: {
-			type: Number,
-			default: 560,
-		},
-	},
-	setup(_, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-		const notifier = injectStrict(NOTIFIER_MODULE_KEY);
-		const downloadModule = injectStrict(DOWNLOAD_MODULE_KEY);
-		const radios = ref("1.1.0");
-		const step = ref(0);
-		const allTopics = ref<
-			Array<{ isSelected: boolean; title: string; id: string }>
-		>([
-			{ isSelected: true, title: "Thema-title1", id: "topic-1" },
-			{ isSelected: true, title: "Thema-title2", id: "topic-2" },
-			{ isSelected: true, title: "Thema-title3", id: "topic-3" },
-		]);
-		const allTopicsSelected = computed(() => {
-			return allTopics.value.every((topic) => topic.isSelected);
-		});
-		const allTasks = ref<
-			Array<{ isSelected: boolean; title: string; id: string }>
-		>([
-			{ isSelected: true, title: "Aufgabe-title1", id: "task-1" },
-			{ isSelected: true, title: "Aufgabe-title2", id: "task-2" },
-			{ isSelected: true, title: "Aufgabe-title3", id: "task-3" },
-		]);
-		const allTasksSelected = computed(() => {
-			return allTasks.value.every((topic) => topic.isSelected);
-		});
+const { t } = useI18n();
+const notifier = injectStrict(NOTIFIER_MODULE_KEY);
+const emit = defineEmits([
+	"update:isDownloadDialogOpen",
+	"dialog-closed",
+	"dialog-confirmed",
+	"next",
+	"back",
+]);
 
-		const title = computed(() => {
-			return step.value === 0
-				? "pages.room.modal.course.export.header"
-				: "pages.room.modal.course.export.options.header";
-		});
-
-		const someTopicsSelected = computed(() => {
-			return (
-				allTopics.value.some((topic) => topic.isSelected) &&
-				!allTopicsSelected.value
-			);
-		});
-
-		const aufgabenTitle = computed(() => {
-			return i18n.tc("pages.room.modal.course.export.options.tasks");
-		});
-
-		const someTasksSelected = computed(() => {
-			return (
-				allTasks.value.some((task) => task.isSelected) &&
-				!allTasksSelected.value
-			);
-		});
-
-		function onCloseDialog(): void {
-			emit("dialog-closed", false);
-			downloadModule.resetDownloadFlow();
-			step.value = 0;
-			allTasks.value.forEach((task) => {
-				task.isSelected = true;
-			});
-			allTopics.value.forEach((topic) => {
-				topic.isSelected = true;
-			});
-		}
-
-		function onNext(newValue: string): void {
-			// choose version then open download options
-			downloadModule.setVersion(newValue);
-			step.value++;
-		}
-
-		async function onDownload(): Promise<void> {
-			// download
-			notifier.show({
-				text: i18n.tc("common.words.export").toString(),
-				status: "success",
-				timeout: 10000,
-			});
-			await downloadModule.startDownload(radios.value);
-			onCloseDialog();
-		}
-
-		function onBack(): void {
-			// go back to choose version
-			step.value = 0;
-			allTasks.value.forEach((task) => {
-				task.isSelected = true;
-			});
-			allTopics.value.forEach((topic) => {
-				topic.isSelected = true;
-			});
-			downloadModule.setIsDownloadModalOpen(true);
-		}
-
-		function toggleAllTopics(): void {
-			const newValue = !allTopicsSelected.value;
-
-			allTopics.value.forEach((topic) => {
-				topic.isSelected = newValue;
-			});
-		}
-
-		function toggleAllTasks(): void {
-			const newValue = !allTasksSelected.value;
-
-			allTasks.value.forEach((task) => {
-				task.isSelected = newValue;
-			});
-		}
-
-		return {
-			onNext,
-			onBack,
-			onDownload,
-			toggleAllTopics,
-			toggleAllTasks,
-			onCloseDialog,
-			title,
-			step,
-			mdiInformation,
-			radios,
-			allTopics,
-			allTasks,
-			allTopicsSelected,
-			allTasksSelected,
-			someTopicsSelected,
-			someTasksSelected,
-			aufgabenTitle,
-		};
+const isDownloadDialogOpen = computed({
+	get: () => downloadModule.getIsDownloadModalOpen,
+	set: (value: boolean) => {
+		emit(
+			"update:isDownloadDialogOpen",
+			downloadModule.setIsDownloadModalOpen(value)
+		);
 	},
 });
+const radios = ref("1.1.0");
+const step = ref(0);
+const allTopics = ref<
+	Array<{ isSelected: boolean; title: string; id: string }>
+>([
+	{ isSelected: true, title: "Thema-title1", id: "topic-1" },
+	{ isSelected: true, title: "Thema-title2", id: "topic-2" },
+	{ isSelected: true, title: "Thema-title3", id: "topic-3" },
+]);
+const allTopicsSelected = computed(() => {
+	return allTopics.value.every((topic) => topic.isSelected);
+});
+const allTasks = ref<Array<{ isSelected: boolean; title: string; id: string }>>(
+	[
+		{ isSelected: true, title: "Aufgabe-title1", id: "task-1" },
+		{ isSelected: true, title: "Aufgabe-title2", id: "task-2" },
+		{ isSelected: true, title: "Aufgabe-title3", id: "task-3" },
+	]
+);
+const allTasksSelected = computed(() => {
+	return allTasks.value.every((topic) => topic.isSelected);
+});
+
+const title = computed(() => {
+	return step.value === 0
+		? t("pages.room.modal.course.export.header")
+		: t("pages.room.modal.course.export.options.header");
+});
+
+const someTopicsSelected = computed(() => {
+	return (
+		allTopics.value.some((topic) => topic.isSelected) &&
+		!allTopicsSelected.value
+	);
+});
+
+const someTasksSelected = computed(() => {
+	return (
+		allTasks.value.some((task) => task.isSelected) && !allTasksSelected.value
+	);
+});
+
+function onCloseDialog(): void {
+	// emit("dialog-closed", false);
+	downloadModule.resetDownloadFlow();
+	step.value = 0;
+	allTasks.value.forEach((task) => {
+		task.isSelected = true;
+	});
+	allTopics.value.forEach((topic) => {
+		topic.isSelected = true;
+	});
+}
+
+function onNext(newValue: string): void {
+	// emit("next");
+	downloadModule.setVersion(newValue);
+	step.value++;
+}
+
+async function onDownload(): Promise<void> {
+	// emit("dialog-confirmed");
+	notifier.show({
+		text: t("common.words.export"),
+		status: "success",
+		timeout: 10000,
+	});
+	await downloadModule.startDownload(radios.value);
+	onCloseDialog();
+}
+
+function onBack(): void {
+	// emit("back");
+	step.value = 0;
+	allTasks.value.forEach((task) => {
+		task.isSelected = true;
+	});
+	allTopics.value.forEach((topic) => {
+		topic.isSelected = true;
+	});
+	downloadModule.setIsDownloadModalOpen(true);
+}
+
+function toggleAllTopics(): void {
+	const newValue = !allTopicsSelected.value;
+
+	allTopics.value.forEach((topic) => {
+		topic.isSelected = newValue;
+	});
+}
+
+function toggleAllTasks(): void {
+	const newValue = !allTasksSelected.value;
+
+	allTasks.value.forEach((task) => {
+		task.isSelected = newValue;
+	});
+}
 </script>
 
 <style lang="scss" scoped>

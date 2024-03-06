@@ -2,6 +2,7 @@
 	<div>
 		<v-btn
 			icon
+			variant="text"
 			data-testId="editAction"
 			:title="$t('components.administration.externalToolsSection.action.edit')"
 			:aria-label="
@@ -15,6 +16,7 @@
 		</v-btn>
 		<v-btn
 			icon
+			variant="text"
 			data-testId="datasheetAction"
 			:title="
 				$t(
@@ -32,6 +34,7 @@
 		</v-btn>
 		<v-btn
 			icon
+			variant="text"
 			data-testId="deleteAction"
 			:title="
 				$t('components.administration.externalToolsSection.action.delete')
@@ -48,23 +51,12 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
-	mdiFileDocumentOutline,
 	mdiPencilOutline,
 	mdiTrashCanOutline,
+	mdiFileDocumentOutline,
 } from "@mdi/js";
-import { defineComponent } from "vue";
 
-export default defineComponent({
-	name: "ExternalToolToolbar",
-	emits: ["edit", "datasheet", "delete"],
-	setup() {
-		return {
-			mdiPencilOutline,
-			mdiTrashCanOutline,
-			mdiFileDocumentOutline,
-		};
-	},
-});
+defineEmits(["edit", "datasheet", "delete"]);
 </script>

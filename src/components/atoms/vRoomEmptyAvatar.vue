@@ -3,10 +3,9 @@
 		<v-badge
 			class="ma-0 badge-component"
 			bordered
-			color="var(--v-primary-base)"
-			icon="$mdiLock"
-			overlap
-			:value="false"
+			color="rgba(var(--v-theme-primary))"
+			:icon="mdiLock"
+			:model-value="false"
 		>
 			<v-avatar
 				class="ma-0 pa-1 avatar-component-empty"
@@ -24,6 +23,7 @@
 	</div>
 </template>
 <script>
+import { mdiLock } from "@/components/icons/material";
 export default {
 	props: {
 		size: {
@@ -38,6 +38,7 @@ export default {
 	data() {
 		return {
 			hovered: false,
+			mdiLock,
 		};
 	},
 	methods: {
@@ -48,7 +49,7 @@ export default {
 			this.hovered = true;
 		},
 		dropAvatar() {
-			this.$emit("drop");
+			this.$emit("dropEmptyAvatar");
 		},
 	},
 };
@@ -56,12 +57,12 @@ export default {
 <style scoped>
 .outlined {
 	border: 2px dashed;
-	border-color: var(--v-secondary-base);
+	border-color: rgba(var(--v-theme-secondary));
 }
 
 .hovered-avatar {
 	border: 2px solid;
-	border-color: var(--v-secondary-base);
+	border-color: rgba(var(--v-theme-secondary));
 }
 
 .avatar-component-empty {

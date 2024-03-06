@@ -5,7 +5,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+	mounted() {
+		const section = this.$route.hash.replace("#", "");
+		if (section)
+			this.$nextTick(() =>
+				window.document.getElementById(section).scrollIntoView()
+			);
+	},
+};
 </script>
 
 <style lang="scss" scoped>
@@ -14,8 +22,8 @@ export default {};
 	top: -100px;
 	left: 50%;
 	padding: var(--space-xs);
-	color: var(--v-primary-base);
-	background-color: var(--v-white-base);
+	color: rgba(var(--v-theme-primary));
+	background-color: rgba(var(--v-theme-white));
 	border: 1px solid #555;
 	border-radius: var(--radius-xs);
 	transform: translate(-50%, 0);

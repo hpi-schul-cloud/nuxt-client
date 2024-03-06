@@ -1,6 +1,6 @@
 <template>
 	<v-card-title
-		class="pa-0"
+		class="pa-0 d-flex align-center"
 		data-testid="board-submission-element-edit"
 		inactive
 	>
@@ -13,7 +13,7 @@
 			$mdiLightbulbOnOutline
 		</v-icon>
 		<span
-			class="subtitle-1 d-inline-block text-truncate black--text font-weight-bold"
+			class="text-subtitle-1 d-inline-block text-truncate text-black font-weight-bold"
 			data-testid="board-submission-element-edit-content"
 		>
 			{{ t("components.cardElement.submissionElement") }}
@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SubmissionContentElementTitle",

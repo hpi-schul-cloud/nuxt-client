@@ -1,20 +1,21 @@
 <template>
-	<VMenu offset-y left min-width="250">
-		<template v-slot:activator="{ on, attrs }">
+	<VMenu location="bottom end" min-width="250">
+		<template v-slot:activator="{ props }">
 			<VBtn
+				variant="text"
 				data-testid="board-menu-button"
-				v-bind="attrs"
-				v-on="on"
+				v-bind="props"
 				:ripple="false"
-				:class="{ white: hasBackground }"
+				:class="{ 'bg-white': hasBackground }"
 				icon
 				@click.stop.prevent="() => {}"
 				@dblclick.stop.prevent="() => {}"
 				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
+				size="small"
 				style="height: 36px; width: 36px"
 			>
-				<VIcon data-testid="board-menu-icon" size="x-small" color="black">{{
+				<VIcon data-testid="board-menu-icon" class="text-grey-darken-2">{{
 					mdiDotsVertical
 				}}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
@@ -33,7 +34,7 @@
 				</span>
 			</VBtn>
 		</template>
-		<VList>
+		<VList role="menu">
 			<slot :scope="scope" />
 		</VList>
 	</VMenu>
@@ -51,6 +52,10 @@ export default defineComponent({
 		scope: {
 			type: String as PropType<BoardMenuScope>,
 			required: true,
+		},
+		dataTestid: {
+			type: String,
+			default: "board-menu-button",
 		},
 	},
 	setup(props) {

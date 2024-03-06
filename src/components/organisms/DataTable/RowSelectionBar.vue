@@ -20,24 +20,24 @@
 				<v-btn
 					data-test-id="context-menu-open"
 					class="context-menu-open"
-					small
-					depressed
+					size="small"
+					variant="flat"
 					color="secondary"
 					@click="actionsMenuOpen = true"
 				>
 					{{ $t("pages.administration.actions") }}
 				</v-btn>
 				<context-menu
-					:show.sync="actionsMenuOpen"
-					anchor="top-right"
+					v-model:show="actionsMenuOpen"
+					anchor="top-left"
 					:actions="contextActions"
 					@action="fireAction"
 				/>
 			</div>
 		</div>
 		<v-btn
-			fab
-			depressed
+			icon
+			variant="flat"
 			color="secondary"
 			width="40"
 			height="40"
@@ -98,7 +98,7 @@ export default {
 			}
 		},
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		this.actionsMenuOpen = false;
 	},
 	methods: {
@@ -122,8 +122,8 @@ export default {
 	justify-content: space-between;
 	width: 100%;
 	padding: var(--space-xs) var(--space-md);
-	color: var(--v-white-base);
-	background-color: var(--v-secondary-lighten1);
+	color: rgba(var(--v-theme-white));
+	background-color: rgba(var(--v-theme-secondary-lighten-1));
 }
 
 .actions {
@@ -141,12 +141,12 @@ export default {
 }
 
 .select-all-rows {
-	color: var(--v-white-base);
+	color: rgba(var(--v-theme-white));
 	text-decoration: underline;
 	cursor: pointer;
 }
 
 .close {
-	color: var(--v-white-base);
+	color: rgba(var(--v-theme-white));
 }
 </style>

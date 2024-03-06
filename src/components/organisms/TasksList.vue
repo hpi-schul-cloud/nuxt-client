@@ -1,8 +1,11 @@
 <template>
-	<v-list role="feed" subheader two-line>
-		<v-subheader v-if="title && isListFilled" class="subtitle-1 mx-n4 mx-sm-0">
+	<v-list role="feed" lines="two">
+		<v-list-subheader
+			v-if="title && isListFilled"
+			class="text-subtitle-1 ml-n4 mx-sm-0"
+		>
 			{{ title }}
-		</v-subheader>
+		</v-list-subheader>
 		<template v-if="showSkeleton">
 			<v-skeleton-loader type="text" :max-width="'15%'" />
 			<v-skeleton-loader
@@ -12,7 +15,7 @@
 				:type="'list-item-avatar-two-line'"
 			/>
 		</template>
-		<template v-for="(task, index) of tasks" v-else>
+		<template v-for="(task, index) of tasks" :key="index" v-else>
 			<template v-if="userRole === 'student'">
 				<task-item-student
 					v-if="isLastTaskItem(index)"
@@ -20,8 +23,8 @@
 					v-intersect="loadMore"
 					:task="task"
 				/>
-				<task-item-student v-else :key="index" :task="task" role="article" />
-				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
+				<task-item-student v-else :task="task" role="article" />
+				<v-divider v-if="index < tasks.length - 1" />
 			</template>
 			<template v-if="userRole === 'teacher'">
 				<task-item-teacher
@@ -34,13 +37,12 @@
 				/>
 				<task-item-teacher
 					v-else
-					:key="index"
 					:task="task"
 					role="article"
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
 				/>
-				<v-divider v-if="index < tasks.length - 1" :key="`divider-${index}`" />
+				<v-divider v-if="index < tasks.length - 1" />
 			</template>
 		</template>
 		<div v-if="showSpinner" class="d-flex justify-center my-10">

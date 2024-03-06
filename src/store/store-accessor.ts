@@ -9,7 +9,6 @@ import AccountsModule from "@/store/accounts";
 import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
-import CollaborativeFilesModule from "@/store/collaborative-files";
 import ContentModule from "@/store/content";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import CopyModule from "@/store/copy";
@@ -44,7 +43,6 @@ export let accountsModule: AccountsModule;
 export let applicationErrorModule: ApplicationErrorModule;
 export let authModule: AuthModule;
 export let autoLogoutModule: AutoLogoutModule;
-export let collaborativeFilesModule: CollaborativeFilesModule;
 export let contentModule: ContentModule;
 export let contextExternalToolsModule: ContextExternalToolsModule;
 export let copyModule: CopyModule;
@@ -76,7 +74,6 @@ export function initializeStores(store: Store<any>): void {
 	applicationErrorModule = getModule(ApplicationErrorModule, store);
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
-	collaborativeFilesModule = getModule(CollaborativeFilesModule, store);
 	contentModule = getModule(ContentModule, store);
 	contextExternalToolsModule = getModule(ContextExternalToolsModule, store);
 	copyModule = getModule(CopyModule, store);
@@ -111,7 +108,6 @@ export const modules = {
 	applicationErrorModule: ApplicationErrorModule,
 	authModule: AuthModule,
 	autoLogoutModule: AutoLogoutModule,
-	collaborativeFilesModule: CollaborativeFilesModule,
 	contentModule: ContentModule,
 	contextExternalToolsModule: ContextExternalToolsModule,
 	copyModule: CopyModule,

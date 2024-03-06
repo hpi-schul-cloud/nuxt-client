@@ -13,13 +13,14 @@
 			class="px-4"
 			:disabled="isOverdue"
 			:label="t('components.cardElement.submissionElement.completed')"
+			hide-details
 		/>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent, PropType, computed } from "vue";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import { StudentSubmission } from "../types/submission";
 
 export default defineComponent({

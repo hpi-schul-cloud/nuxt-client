@@ -1,106 +1,92 @@
 <template>
-	<v-form
-		autocomplete="off"
-		novalidate
-		v-on="$listeners"
-		@submit.prevent="submitHandler"
-	>
+	<form>
 		<v-text-field
 			v-model="userData.firstName"
 			:label="$t('common.labels.firstName')"
 			:hint="$t('common.placeholder.firstName')"
+			required
+			:error-messages="getErrorMessages(v$.firstName)"
 			data-testid="input_create-user_firstname"
-			:error-messages="getErrors('firstName', $v.userData.firstName)"
-			@blur="$v.userData.firstName.$touch"
+			@blur="v$.firstName.$touch"
 		/>
 		<v-text-field
 			v-model="userData.lastName"
 			:label="$t('common.labels.lastName')"
 			:hint="$t('common.placeholder.lastName')"
+			required
+			:error-messages="getErrorMessages(v$.lastName)"
 			data-testid="input_create-user_lastname"
-			:error-messages="getErrors('lastName', $v.userData.lastName)"
-			@blur="$v.userData.lastName.$touch"
+			@blur="v$.lastName.$touch"
 		/>
 		<v-text-field
 			v-model="userData.email"
 			:label="$t('common.labels.email')"
 			:hint="$t('common.placeholder.email')"
+			required
+			:error-messages="getErrorMessages(v$.email)"
 			data-testid="input_create-user_email"
-			:error-messages="getErrors('email', $v.userData.email)"
-			@blur="$v.userData.email.$touch"
+			@blur="v$.email.$touch"
 		/>
 		<slot name="inputs" />
 
 		<slot name="errors" />
 		<v-btn
-			type="submit"
 			color="primary"
-			depressed
+			variant="flat"
 			class="w-100 mt--lg"
 			data-testid="button_create-user_submit"
+			@click.prevent="onSubmit"
 		>
 			{{ $t("common.actions.add") }}
 		</v-btn>
 		<v-btn
 			class="w-100 mt--lg"
-			text
+			variant="text"
 			color="secondary"
 			data-testid="button_create-user_abort"
 			@click.prevent="$router.go(-1)"
 		>
 			{{ $t("common.actions.back") }}
 		</v-btn>
-	</v-form>
+	</form>
 </template>
 
-<script>
-import { email, required } from "vuelidate/lib/validators";
+<script setup>
+import { reactive } from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { email, required } from "@vuelidate/validators";
+import { useI18n } from "vue-i18n";
+import { unref } from "vue";
 
-export default {
-	data() {
-		return {
-			dataParam: "zuoi",
-			userData: {
-				firstName: "",
-				lastName: "",
-				email: "",
-			},
-		};
-	},
-	methods: {
-		submitHandler() {
-			this.$v.$touch();
-			this.$emit("trigger-validation", this.$v);
-			if (!this.$v.$invalid) {
-				this.$emit("create-user", this.userData);
-			}
-		},
-		getErrors(name, model) {
-			const errors = [];
-			if (!model.$dirty) return errors;
-			switch (name) {
-				case "firstName":
-					!model.required && errors.push(this.$t("common.validation.required"));
-					break;
-				case "lastName":
-					!model.required && errors.push(this.$t("common.validation.required"));
-					break;
-				case "email":
-					!model.email && errors.push(this.$t("common.validation.email"));
-					!model.required && errors.push(this.$t("common.validation.required"));
-					break;
-				default:
-					break;
-			}
-			return errors;
-		},
-	},
-	validations: {
-		userData: {
-			firstName: { required },
-			lastName: { required },
-			email: { required, email },
-		},
-	},
+const emit = defineEmits(["create-user"]);
+const { t } = useI18n();
+
+const userData = reactive({
+	firstName: "",
+	lastName: "",
+	email: "",
+});
+
+const validations = {
+	firstName: { required },
+	lastName: { required },
+	email: { required, email },
+};
+
+const v$ = useVuelidate(validations, userData);
+
+const getErrorMessages = (validationModel) => {
+	const messages = validationModel.$errors.map((e) =>
+		t(`common.validation.${e.$validator}`)
+	);
+	return messages;
+};
+
+const onSubmit = async () => {
+	const isValid = await unref(v$).$validate();
+
+	if (isValid) {
+		emit("create-user", unref(userData));
+	}
 };
 </script>

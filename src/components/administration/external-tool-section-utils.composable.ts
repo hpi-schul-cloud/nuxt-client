@@ -1,27 +1,30 @@
+import { DataTableHeader } from "@/store/types/data-table-header";
+import { SchoolExternalToolItem } from "./school-external-tool-item";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { DataTableHeader } from "vuetify";
-import { SchoolExternalToolItem } from "./school-external-tool-item";
 
 export function useExternalToolsSectionUtils(
 	t: (key: string) => string = () => ""
 ) {
 	const getHeaders: DataTableHeader[] = [
 		{
-			text: t("common.labels.name"),
+			title: t("common.labels.name"),
 			value: "name",
+			key: "name",
 		},
 		{
-			text: t(
+			title: t(
 				"components.administration.externalToolsSection.table.header.status"
 			),
 			value: "status",
+			key: "status",
 		},
 		{
-			text: "",
+			title: "",
 			value: "actions",
 			sortable: false,
 			align: "end",
+			key: "actions",
 		},
 	];
 

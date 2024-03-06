@@ -15,14 +15,11 @@
 		</div>
 		<v-alert
 			v-if="apiError && apiError.message"
-			light
-			prominent
-			text
 			type="error"
 			data-testId="context-tool-error"
-		>
-			{{ apiError.message }}
-		</v-alert>
+			:icon="mdiAlertCircle"
+			:text="apiError.message"
+		/>
 
 		<v-progress-linear
 			:active="loading"
@@ -45,6 +42,7 @@
 </template>
 
 <script lang="ts">
+import { mdiAlertCircle } from "@/components/icons/material";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
@@ -54,7 +52,7 @@ import { BusinessError } from "@/store/types/commons";
 import { Course, CourseFeatures } from "@/store/types/room";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	I18N_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
@@ -63,10 +61,11 @@ import {
 	ComputedRef,
 	defineComponent,
 	onMounted,
+	onUnmounted,
 	ref,
 	Ref,
 } from "vue";
-import VueI18n from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 
@@ -86,14 +85,11 @@ export default defineComponent({
 		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
 			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
 		);
-		const i18n: VueI18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 		const course: Ref<Course | null> = ref(null);
-
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
 
 		const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
 			return (
@@ -115,6 +111,15 @@ export default defineComponent({
 			course.value = await roomModule.fetchCourse(props.roomId);
 		});
 
+		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
+
+		const timer = setInterval(async () => {
+			await contextExternalToolsModule.loadExternalToolDisplayData({
+				contextId: props.roomId,
+				contextType: ToolContextType.Course,
+			});
+		}, refreshTimeInMs);
+
 		const apiError: ComputedRef<BusinessError> = computed(
 			() => contextExternalToolsModule.getBusinessError
 		);
@@ -123,12 +128,17 @@ export default defineComponent({
 			() => contextExternalToolsModule.getLoading || roomModule.getLoading
 		);
 
+		onUnmounted(() => {
+			clearInterval(timer);
+		});
+
 		return {
 			loading,
 			t,
 			tools,
 			apiError,
 			isVideoConferenceAvailable,
+			mdiAlertCircle,
 		};
 	},
 });

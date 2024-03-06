@@ -1,5 +1,10 @@
 <template>
-	<BoardMenuAction :icon="mdiArrowDown" @click="onClick" v-if="isVisible">
+	<BoardMenuAction
+		:icon="mdiArrowDown"
+		@click="onClick"
+		v-if="isVisible"
+		data-testid="board-menu-action-move-down"
+	>
 		{{ $t("components.board.action.moveDown") }}
 	</BoardMenuAction>
 </template>

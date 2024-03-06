@@ -5,38 +5,32 @@
 		:full-width="true"
 		data-testid="admin-class-title"
 	>
-		<v-tabs
-			class="tabs-max-width mb-5"
-			grow
-			@change="onTabsChange"
-			:value="activeTab"
-		>
-			<v-tab tab-value="next" data-testid="admin-class-next-year-tab">
+		<v-tabs class="tabs-max-width mb-5" grow v-model="activeTab">
+			<v-tab value="next" data-testid="admin-class-next-year-tab">
 				<span>{{ nextYear }}</span>
 			</v-tab>
-			<v-tab tab-value="current" data-testid="admin-class-current-year-tab">
+			<v-tab value="current" data-testid="admin-class-current-year-tab">
 				<span>{{ currentYear }}</span>
 			</v-tab>
-			<v-tab tab-value="archive" data-testid="admin-class-previous-years-tab">
+			<v-tab value="archive" data-testid="admin-class-previous-years-tab">
 				<span>{{ t("pages.administration.classes.label.archive") }}</span>
 			</v-tab>
 		</v-tabs>
 
-		<v-data-table
+		<v-data-table-server
 			:headers="headers"
 			:items="classes"
-			:items-per-page.sync="pagination.limit"
-			:server-items-length="pagination.total"
+			v-model:items-per-page="pagination.limit"
+			:items-length="pagination.total"
 			:sort-by="sortBy"
-			:sort-Order="sortOrder"
 			:page="page"
-			:footer-props="footerProps"
+			:items-per-page-text="footerProps.itemsPerPageText"
+			:items-per-page-options="footerProps.itemsPerPageOptions"
 			data-testid="admin-class-table"
 			class="elevation-1"
 			:no-data-text="t('common.nodata')"
-			@update:sort-by="onUpdateSortBy"
-			@update:sort-desc="updateSortOrder"
-			@update:items-per-page="onUpdateItemsPerPage"
+			@update:sortBy="onUpdateSortBy"
+			@update:itemsPerPage="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
 			<template v-slot:[`item.actions`]="{ item }">
@@ -45,9 +39,9 @@
 						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="legacy-class-table-manage-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:href="`/administration/classes/${item.id}/manage`"
 						class="mx-1 px-1"
 						min-width="0"
@@ -58,9 +52,9 @@
 						:title="t('pages.administration.classes.edit')"
 						:aria-label="t('pages.administration.classes.edit')"
 						data-testid="class-table-edit-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:href="`/administration/classes/${item.id}/edit`"
 						class="mx-1 px-1"
 						min-width="0"
@@ -71,9 +65,9 @@
 						:title="$t('pages.administration.classes.delete')"
 						:aria-label="$t('pages.administration.classes.delete')"
 						data-testid="class-table-delete-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						@click="onClickDeleteIcon(item)"
 						class="mx-1 px-1"
 						min-width="0"
@@ -85,9 +79,9 @@
 						:aria-label="t('pages.administration.classes.createSuccessor')"
 						:title="t('pages.administration.classes.createSuccessor')"
 						data-testid="class-table-successor-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:href="`/administration/classes/${item.id}/createSuccessor`"
 						class="mx-1 px-1"
 						min-width="0"
@@ -100,9 +94,9 @@
 						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="class-table-members-manage-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:to="{
 							name: 'administration-groups-classes-members',
 							params: { groupId: item.id },
@@ -114,20 +108,21 @@
 					</v-btn>
 				</template>
 			</template>
-		</v-data-table>
-
+		</v-data-table-server>
 		<v-custom-dialog
 			:is-open="isDeleteDialogOpen"
 			max-width="360"
-			data-testId="delete-dialog"
+			data-testid="delete-dialog"
 			has-buttons
 			:buttons="['cancel', 'confirm']"
 			@dialog-closed="onCancelClassDeletion"
 			@dialog-confirmed="onConfirmClassDeletion"
 		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{ t("pages.administration.classes.deleteDialog.title") }}
-			</h2>
+			<template #title>
+				<h2 class="text-h4 my-2">
+					{{ t("pages.administration.classes.deleteDialog.title") }}
+				</h2>
+			</template>
 			<template #content>
 				<RenderHTML
 					class="text-md mt-2"
@@ -144,7 +139,7 @@
 		<v-btn
 			class="my-5 button-start"
 			color="primary"
-			depressed
+			variant="flat"
 			data-testid="admin-class-add-button"
 			href="/administration/classes/create"
 		>
@@ -164,8 +159,17 @@
 <script lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useI18n } from "@/composables/i18n.composable";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	onMounted,
+	PropType,
+	ref,
+	Ref,
+} from "vue";
 import GroupModule from "@/store/group";
+import { useI18n } from "vue-i18n";
 import { ClassInfo, ClassRootType } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
@@ -182,25 +186,17 @@ import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	PropType,
-	ref,
-	Ref,
-	WritableComputedRef,
-} from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
-import { useRouter } from "vue-router/composables";
+import { useRoute, useRouter } from "vue-router";
 import { ClassRequestContext, SchoolYearQueryType } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 
 type Tab = "current" | "next" | "archive";
+// vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
+type SortItem = { key: string; order?: boolean | "asc" | "desc" };
 
 export default defineComponent({
 	components: { DefaultWireframe, RenderHTML, VCustomDialog },
@@ -215,13 +211,18 @@ export default defineComponent({
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
+		const route = useRoute();
 		const router = useRouter();
 
 		const { t } = useI18n();
 
-		const activeTab: WritableComputedRef<string> = computed({
-			get: () => props.tab,
-			set: () => ({}),
+		const activeTab = computed({
+			get() {
+				return props.tab;
+			},
+			set(newTab: string) {
+				onTabsChange(newTab);
+			},
 		});
 
 		const footerProps = {
@@ -229,16 +230,16 @@ export default defineComponent({
 			itemsPerPageOptions: [5, 10, 25, 50, 100],
 		};
 
-		const breadcrumbs: Breadcrumb[] = [
+		const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 			{
-				text: t("pages.administration.index.title"),
+				title: t("pages.administration.index.title"),
 				href: "/administration/",
 			},
 			{
-				text: t("pages.administration.classes.index.title"),
+				title: t("pages.administration.classes.index.title"),
 				disabled: true,
 			},
-		];
+		]);
 
 		useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 
@@ -271,7 +272,9 @@ export default defineComponent({
 				calledFrom: ClassRequestContext.ClassOverview,
 			});
 
-			await router.replace({ query: { ...router.currentRoute.query, tab } });
+			await router.replace({
+				query: { ...route.query, tab },
+			});
 		};
 
 		const classes: ComputedRef<ClassInfo[]> = computed(
@@ -310,7 +313,12 @@ export default defineComponent({
 			() => groupModule.getPagination
 		);
 
-		const sortBy: ComputedRef<string> = computed(() => groupModule.getSortBy);
+		const sortBy: ComputedRef<SortItem[]> = computed(() => [
+			{
+				key: groupModule.getSortBy,
+				order: groupModule.getSortOrder,
+			},
+		]);
 		const sortOrder: ComputedRef<SortOrder> = computed(
 			() => groupModule.getSortOrder
 		);
@@ -319,27 +327,28 @@ export default defineComponent({
 		const headers = [
 			{
 				value: "name",
-				text: t("common.labels.classes"),
+				title: t("common.labels.classes"),
 				sortable: true,
 			},
 			{
 				value: "externalSourceName",
-				text: t("common.labels.externalsource"),
+				title: t("common.labels.externalsource"),
 				sortable: true,
 			},
 			{
-				value: "teachers",
-				text: t("common.labels.teacher"),
+				key: "teachers",
+				value: (item: ClassInfo) => item.teachers.join(", "),
+				title: t("common.labels.teacher"),
 				sortable: true,
 			},
 			{
 				value: "studentCount",
-				text: t("common.labels.students"),
+				title: t("common.labels.students"),
 				sortable: true,
 			},
 			{
 				value: "actions",
-				text: "",
+				title: "",
 				sortable: false,
 			},
 		];
@@ -353,16 +362,12 @@ export default defineComponent({
 			}
 		};
 
-		const onUpdateSortBy = async (sortBy: string) => {
-			groupModule.setSortBy(sortBy);
+		const onUpdateSortBy = async (sortBy: SortItem[]) => {
+			const fieldToSortBy = sortBy[0];
+			groupModule.setSortBy(fieldToSortBy ? fieldToSortBy.key : "");
 
-			await groupModule.loadClassesForSchool({
-				schoolYearQuery: schoolYearQueryType.value,
-				calledFrom: ClassRequestContext.ClassOverview,
-			});
-		};
-		const updateSortOrder = async (sortDesc: boolean) => {
-			const sortOrder = sortDesc ? SortOrder.DESC : SortOrder.ASC;
+			const sortOrder =
+				fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
 			groupModule.setSortOrder(sortOrder);
 
 			await groupModule.loadClassesForSchool({
@@ -370,6 +375,7 @@ export default defineComponent({
 				calledFrom: ClassRequestContext.ClassOverview,
 			});
 		};
+
 		const onUpdateCurrentPage = async (currentPage: number) => {
 			groupModule.setPage(currentPage);
 			const skip = (currentPage - 1) * groupModule.getPagination.limit;
@@ -429,7 +435,6 @@ export default defineComponent({
 			onCancelClassDeletion,
 			onConfirmClassDeletion,
 			onUpdateSortBy,
-			updateSortOrder,
 			onUpdateCurrentPage,
 			onUpdateItemsPerPage,
 			mdiAccountGroupOutline,
