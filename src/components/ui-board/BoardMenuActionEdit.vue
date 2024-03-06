@@ -2,7 +2,7 @@
 	<BoardMenuAction
 		:icon="mdiPencilOutline"
 		@click="onClick"
-		data-testid="board-menu-action-edit"
+		dataTestId="board-menu-action-edit"
 	>
 		{{ $t("common.actions.edit") }}
 	</BoardMenuAction>

@@ -2,7 +2,7 @@
 	<BoardMenuAction
 		:icon="mdiTrashCanOutline"
 		@click="onClick"
-		data-testid="board-menu-action-delete"
+		dataTestId="board-menu-action-delete"
 	>
 		{{ $t("components.board.action.delete") }}
 	</BoardMenuAction>
