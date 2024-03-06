@@ -19,6 +19,7 @@
 						<RoomBoardCard
 							v-if="item.type === cardTypes.ColumnBoard"
 							:ref="`item_${index}`"
+							:role="role"
 							:key-drag="isDragging"
 							:drag-in-progress="dragInProgress"
 							:column-board-item="item.content"

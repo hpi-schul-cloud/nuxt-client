@@ -15,11 +15,22 @@
 	>
 		<VCardText>
 			<div class="mb-0">
-				<div class="d-flex align-center mb-3">
-					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
-					<span class="title-board-card">
-						{{ $t("pages.room.boardCard.label.columnBoard") }}
-					</span>
+				<div
+					class="d-flex align-center justify-space-between mb-3 title-board-card"
+				>
+					<div class="d-flex align-center">
+						<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
+						<span>
+							{{ $t("pages.room.boardCard.label.columnBoard") }}
+						</span>
+					</div>
+					<div>
+						<room-dot-menu
+							:menu-items="moreActionsMenuItems"
+							data-testid="content-card-task-menu"
+							:aria-label="$t('pages.room.taskCard.menu.ariaLabel')"
+						/>
+					</div>
 				</div>
 			</div>
 			<h2 class="text-h6 board-title mt-2">
@@ -30,18 +41,31 @@
 </template>
 
 <script setup lang="ts">
-import { mdiViewDashboard } from "@mdi/js";
+import { mdiContentCopy, mdiViewDashboard } from "@/components/icons/material";
+import { useCopy } from "@/composables/copy";
+import { useLoadingState } from "@/composables/loadingState";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { CopyParamsTypeEnum } from "@/store/copy";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import RoomDotMenu from "./RoomDotMenu.vue";
 
 const props = defineProps({
 	columnBoardItem: { type: Object, required: true },
 	courseData: { type: Object, required: true },
 	keyDrag: { type: Boolean, required: true },
 	dragInProgress: { type: Boolean, required: true },
+	role: { type: String, required: true },
 });
 const emit = defineEmits(["tab-pressed", "on-drag", "move-element"]);
 
 const router = useRouter();
+const { t } = useI18n();
+const { isLoadingDialogOpen } = useLoadingState(
+	t("components.molecules.copyResult.title.loading")
+);
+const { copy } = useCopy(isLoadingDialogOpen);
 
 const openBoard = async () => {
 	if (!props.dragInProgress) {
@@ -66,6 +90,34 @@ const moveCardUp = () => {
 		});
 	}
 };
+
+const copyBoard = async (boardId: string) => {
+	const copyParams = {
+		id: boardId,
+		type: CopyParamsTypeEnum.ColumnBoard,
+	};
+
+	await copy(copyParams);
+
+	router.go(0);
+};
+
+const moreActionsMenuItems = computed(() => {
+	const actions = [];
+
+	if (props.role === Roles.Teacher) {
+		actions.push({
+			icon: mdiContentCopy,
+			action: () => {
+				copyBoard(props.columnBoardItem.columnBoardId);
+			},
+			name: t("common.actions.copy"),
+			dataTestId: "content-card-board-menu-copy",
+		});
+	}
+
+	return actions;
+});
 </script>
 
 <style lang="scss" scoped>
