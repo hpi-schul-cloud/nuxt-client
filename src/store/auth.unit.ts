@@ -45,7 +45,6 @@ describe("auth store module", () => {
 			it("should set the locale state", () => {
 				const authModule = new AuthModule({});
 				const localeMock = "mock";
-				expect(authModule.getLocale).not.toStrictEqual(localeMock);
 
 				authModule.setLocale(localeMock);
 

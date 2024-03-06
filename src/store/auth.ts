@@ -50,7 +50,7 @@ export default class AuthModule extends VuexModule {
 	@Mutation
 	setMe(me: MeResponse): void {
 		if (me.language) {
-			this.setLocale(me.language);
+			this.locale = me.language;
 		}
 
 		this.me = me;
