@@ -1,9 +1,11 @@
 <template>
 	<v-dialog
-		ref="commonCartridgeImportDialog"
-		v-model="isOpen"
+		ref="commonCartridgeImportModal"
+		v-model="isDialogOpen"
 		:max-width="props.maxWidth"
-		data-testid="common-cartridge-import-dialog"
+		@click:outside="onCancel()"
+		@keydown.esc="onCancel()"
+		data-testid="common-cartridge-import-modal"
 	>
 		<v-card :ripple="false">
 			<v-card-title>
@@ -24,16 +26,16 @@
 			<v-card-actions>
 				<v-spacer />
 				<div class="button-section">
-					<v-btn data-testId="dialog-cancel-btn" depressed @click="cancel">
+					<v-btn data-testid="dialog-cancel-btn" depressed @click="onCancel">
 						{{ $t("common.labels.close") }}
 					</v-btn>
 				</div>
 				<div class="button-section">
 					<v-btn
 						v-bind:disabled="importButtonDisabled"
-						v-on:click="confirm"
+						v-on:click="onConfirm"
 						color="primary"
-						data-testId="dialog-confirm-btn"
+						data-testid="dialog-confirm-btn"
 					>
 						{{ $t("pages.rooms.ccImportCourse.confirm") }}
 					</v-btn>
@@ -45,41 +47,51 @@
 
 <script setup lang="ts">
 import { computed, defineProps, ref, withDefaults } from "vue";
-import {
-	commonCartridgeImportModule,
-	loadingStateModule,
-	notifierModule,
-	roomsModule,
-} from "@/store";
 import { mdiTrayArrowUp } from "@mdi/js";
 import { useI18n } from "vue-i18n";
+import {
+	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
+	LOADING_STATE_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	ROOMS_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 
 const i18n = useI18n();
+const roomsModule = injectStrict(ROOMS_MODULE_KEY);
+const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+const commonCartridgeImportModule = injectStrict(
+	COMMON_CARTRIDGE_IMPORT_MODULE_KEY
+);
 const props = withDefaults(
 	defineProps<{
+		isOpen: boolean;
 		maxWidth: number;
 	}>(),
 	{
+		isOpen: false,
 		maxWidth: 480,
 	}
 );
 const file = ref<File[]>([]);
-const isOpen = computed({
-	get: () => commonCartridgeImportModule.isOpen,
-	set: () => commonCartridgeImportModule.closeImportModal(),
+const isDialogOpen = computed({
+	get: () => commonCartridgeImportModule.isOpen || props.isOpen,
+	set: (value: boolean) => commonCartridgeImportModule.setIsOpen(value),
 });
 const importButtonDisabled = computed(() => {
-	return !file.value;
+	return file.value.length === 0;
 });
 
-function cancel(): void {
-	commonCartridgeImportModule.closeImportModal();
+function onCancel(): void {
+	file.value = [];
+	commonCartridgeImportModule.setIsOpen(false);
 }
 
-async function confirm(): Promise<void> {
+async function onConfirm(): Promise<void> {
 	const [selectedFile] = file.value;
 
-	commonCartridgeImportModule.closeImportModal();
+	commonCartridgeImportModule.setIsOpen(false);
 	loadingStateModule.open({
 		text: i18n.t("pages.rooms.ccImportCourse.loading"),
 	});

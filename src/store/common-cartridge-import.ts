@@ -19,8 +19,13 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		return this._isSuccess;
 	}
 
-	private get coursesApi(): CoursesApiInterface {
+	public get coursesApi(): CoursesApiInterface {
 		return CoursesApiFactory(undefined, "/v3", $axios);
+	}
+
+	@Mutation
+	public setIsOpen(value: boolean): void {
+		this._isOpen = value;
 	}
 
 	@Mutation
@@ -28,19 +33,11 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		this._isSuccess = value;
 	}
 
-	@Mutation
-	public openImportModal(): void {
-		this._isOpen = true;
-	}
-
-	@Mutation
-	public closeImportModal(): void {
-		this._isOpen = false;
-	}
-
 	@Action
 	async importCommonCartridgeFile(file: File | undefined): Promise<void> {
 		if (!file) {
+			this.setIsSuccess(false);
+
 			return;
 		}
 
