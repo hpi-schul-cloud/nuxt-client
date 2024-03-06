@@ -140,12 +140,12 @@ export default class AuthModule extends VuexModule {
 
 	@Action
 	async login(jwt: string) {
-		const meRes = (await this.meApi.meControllerMe()).data;
+		const { data } = await this.meApi.meControllerMe();
 
-		this.setMe(meRes);
+		this.setMe(data);
 
-		if (meRes.language) {
-			this.setLocale(meRes.language);
+		if (data.language) {
+			this.setLocale(data.language);
 		}
 
 		// There are several places in the app, where more school data is needed, than is included in the MeResponse (e.g. on school admin page).
