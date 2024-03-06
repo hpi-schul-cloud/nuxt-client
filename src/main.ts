@@ -53,7 +53,7 @@ import { initializeAxios } from "./utils/api";
 import {
 	APPLICATION_ERROR_KEY,
 	AUTH_MODULE_KEY,
-	COMMON_CARTRIDGE_IMPORT_MODULE,
+	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -178,7 +178,7 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(LOADING_STATE_MODULE_KEY.valueOf(), loadingStateModule);
 	app.provide(ROOMS_MODULE_KEY.valueOf(), roomsModule);
 	app.provide(
-		COMMON_CARTRIDGE_IMPORT_MODULE.valueOf(),
+		COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf(),
 		commonCartridgeImportModule
 	);
 	app.provide(THEME_KEY.valueOf(), themeConfig);
