@@ -4,7 +4,7 @@
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 	>
-		<div class="board-header" tabindex="0" ref="boardHeader">
+		<div class="board-header ml-2" tabindex="0" ref="boardHeader">
 			<BoardAnyTitleInput
 				scope="board"
 				:value="title"
@@ -94,9 +94,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.board-header {
-	margin-left: 7px;
-}
 .board-header:focus {
 	outline: none;
 }
