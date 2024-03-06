@@ -65,14 +65,14 @@ describe("auth store module", () => {
 			});
 		});
 
-		describe("addPermission", () => {
+		describe("addUserPermission", () => {
 			it("should add the permission to the me state", () => {
 				const authModule = new AuthModule({});
 				const permissionToBeAdded = "permission_z";
 				const mockMe = meResponseFactory.build();
 				authModule.setMe(mockMe);
 
-				authModule.addPermmission(permissionToBeAdded);
+				authModule.addUserPermission(permissionToBeAdded);
 
 				expect(authModule.getUserPermissions).toContain(permissionToBeAdded);
 			});

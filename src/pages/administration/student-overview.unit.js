@@ -237,7 +237,7 @@ describe("students/index", () => {
 	it("should emit the 'delete' action when deleting a user", async () => {
 		const { wrapper } = setup();
 
-		authModule.addPermmission("STUDENT_DELETE");
+		authModule.addUserPermission("STUDENT_DELETE");
 
 		// user row exists
 		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
@@ -426,7 +426,7 @@ describe("students/index", () => {
 	});
 
 	it("should render the fab-floating component if user has SUDENT_CREATE permission", () => {
-		authModule.addPermmission("STUDENT_CREATE");
+		authModule.addUserPermission("STUDENT_CREATE");
 		const { wrapper } = setup();
 
 		const fabComponent = wrapper.find(

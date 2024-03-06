@@ -63,7 +63,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	@Mutation
-	addPermmission(permission: string): void {
+	addUserPermission(permission: string): void {
 		this.me?.permissions.push(permission);
 	}
 
@@ -154,10 +154,10 @@ export default class AuthModule extends VuexModule {
 
 		//TODO Remove once added to User permissions SC-2401
 		if (envConfigModule.getEnv.FEATURE_EXTENSIONS_ENABLED) {
-			this.addPermmission("ADDONS_ENABLED");
+			this.addUserPermission("ADDONS_ENABLED");
 		}
 		if (envConfigModule.getEnv.FEATURE_TEAMS_ENABLED) {
-			this.addPermmission("TEAMS_ENABLED");
+			this.addUserPermission("TEAMS_ENABLED");
 		}
 
 		this.setAccessToken(jwt);

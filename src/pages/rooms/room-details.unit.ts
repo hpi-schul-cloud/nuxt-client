@@ -467,7 +467,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 				} as Envs);
-				authModule.addPermmission("CONTEXT_TOOL_ADMIN");
+				authModule.addUserPermission("CONTEXT_TOOL_ADMIN");
 
 				const wrapper = getWrapper();
 
