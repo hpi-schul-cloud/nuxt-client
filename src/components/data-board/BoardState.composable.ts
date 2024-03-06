@@ -262,7 +262,6 @@ export const useBoardState = (id: string) => {
 		try {
 			await publishBoard(board.value.id, newVisibility);
 			board.value.isVisible = newVisibility;
-			// reloadBoard();
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "board"),

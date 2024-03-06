@@ -205,8 +205,8 @@ export const useBoardApi = () => {
 		};
 	};
 
-	const publishBoard = async (id: string, isVisible: boolean) => {
-		return boardApi.boardControllerUpdateVisibility(id, { isVisible });
+	const publishBoard = async (boardId: string, isVisible: boolean) => {
+		return boardApi.boardControllerUpdateVisibility(boardId, { isVisible });
 	};
 
 	return {

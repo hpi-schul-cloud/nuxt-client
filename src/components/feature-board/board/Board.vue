@@ -6,7 +6,7 @@
 					:boardId="board.id"
 					:title="board.title"
 					:titlePlaceholder="$t('pages.room.boardCard.label.courseBoard')"
-					:isDraft="isDraft"
+					:isDraft="!board.isVisible"
 					@publish:board="onPublishBoard"
 					@revert:board="onRevertPublishedBoard"
 					@update:title="onUpdateBoardTitle"
@@ -96,6 +96,7 @@ import {
 	defineComponent,
 	onMounted,
 	onUnmounted,
+	ref,
 	toRef,
 	watch,
 } from "vue";
@@ -140,6 +141,8 @@ export default defineComponent({
 			updateBoardVisibility,
 			updateColumnTitle,
 		} = useBoardState(toRef(props, "boardId").value);
+
+		const isDraft = ref<boolean>();
 
 		const { createPageInformation } = useSharedBoardPageInformation();
 
@@ -225,7 +228,10 @@ export default defineComponent({
 		};
 
 		const onPublishBoard = async () => {
-			if (hasEditPermission) await updateBoardVisibility(true);
+			if (hasEditPermission) {
+				await updateBoardVisibility(true);
+				showInfo(t("components.board.alert.info.teacher"), false);
+			}
 		};
 
 		const onReloadBoard = async () => {
@@ -233,7 +239,10 @@ export default defineComponent({
 		};
 
 		const onRevertPublishedBoard = async () => {
-			if (hasEditPermission) await updateBoardVisibility(false);
+			if (hasEditPermission) {
+				await updateBoardVisibility(false);
+				showInfo(t("components.board.alert.info.draft"), false);
+			}
 		};
 
 		const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
@@ -248,17 +257,16 @@ export default defineComponent({
 			if (hasEditPermission) await updateBoardTitle(newTitle);
 		};
 
-		const isDraft = computed(() => {
-			return !board.value?.isVisible;
-		});
-
 		onMounted(() => {
-			if (isTeacher && isDraft.value === true) {
-				showInfo(t("components.board.alert.info.draft"), false);
-			}
-			if (isTeacher && isDraft.value === false) {
-				showInfo(t("components.board.alert.info.teacher"), false);
-			}
+			setTimeout(() => {
+				isDraft.value = !board.value?.isVisible;
+				if (isTeacher && isDraft.value) {
+					showInfo(t("components.board.alert.info.draft"), false);
+					return;
+				}
+				if (isTeacher)
+					showInfo(t("components.board.alert.info.teacher"), false);
+			}, 100);
 		});
 
 		const debounceTime = computed(() => {
