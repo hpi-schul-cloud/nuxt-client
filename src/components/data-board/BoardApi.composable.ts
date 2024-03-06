@@ -47,6 +47,8 @@ export const useBoardApi = () => {
 	};
 
 	const updateBoardTitleCall = async (id: string, title: string) => {
+		if (title.length < 1) return;
+
 		return boardApi.boardControllerUpdateBoardTitle(id, {
 			title,
 		});
