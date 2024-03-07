@@ -52,7 +52,7 @@ const fileStorageApi = () => {
 		parentType: FileRecordParentType
 	): Promise<void> => {
 		try {
-			const schoolId = authModule.getUser?.schoolId as string;
+			const schoolId = authModule.getSchool?.id as string;
 			const response = await fileApi.list(schoolId, parentId, parentType);
 
 			updateOrAddFileRecord(parentId, response.data.data[0]);
@@ -68,7 +68,7 @@ const fileStorageApi = () => {
 		parentType: FileRecordParentType
 	): Promise<void> => {
 		try {
-			const schoolId = authModule.getUser?.schoolId as string;
+			const schoolId = authModule.getSchool?.id as string;
 			const response = await fileApi.upload(
 				schoolId,
 				parentId,
@@ -91,7 +91,7 @@ const fileStorageApi = () => {
 		try {
 			const { pathname } = new URL(imageUrl);
 			const fileName = pathname.substring(pathname.lastIndexOf("/") + 1);
-			const schoolId = authModule.getUser?.schoolId as string;
+			const schoolId = authModule.getSchool?.id as string;
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
 				fileName,

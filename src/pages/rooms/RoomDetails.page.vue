@@ -375,7 +375,7 @@ export default defineComponent({
 		await roomModule.fetchContent(this.courseId);
 		await roomModule.fetchScopePermission({
 			courseId: this.courseId,
-			userId: authModule.getUser.id,
+			userId: authModule.getUser?.id,
 		});
 
 		document.title = buildPageTitle(this.roomData.title);

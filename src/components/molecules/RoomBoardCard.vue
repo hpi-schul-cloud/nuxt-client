@@ -31,7 +31,7 @@
 		</template>
 		<VCardText>
 			<h2 class="text-h6 mt-0">
-				{{ $t("pages.room.boardCard.label.courseBoard") }}
+				{{ boardTitle }}
 			</h2>
 		</VCardText>
 	</VCard>
@@ -44,7 +44,7 @@ import {
 	mdiTrashCanOutline,
 	mdiViewDashboard,
 } from "@mdi/js";
-import { PropType } from "vue";
+import { PropType, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import RoomDotMenu from "./RoomDotMenu.vue";
@@ -60,6 +60,7 @@ const props = defineProps({
 		default: Roles.Teacher,
 	},
 });
+
 const emit = defineEmits([
 	"tab-pressed",
 	"on-drag",
@@ -94,6 +95,12 @@ const moveCardUp = () => {
 	}
 };
 
+const boardTitle = computed(() => {
+	return props.columnBoardItem.title && props.columnBoardItem.title !== ""
+		? props.columnBoardItem.title
+		: t("pages.room.boardCard.label.courseBoard").toString();
+});
+
 const actionsMenuItems = () => {
 	const roleBasedMoreActions = [];
 
@@ -101,7 +108,7 @@ const actionsMenuItems = () => {
 		roleBasedMoreActions.push({
 			icon: mdiPencilOutline,
 			action: openBoard,
-			name: t("pages.room.taskCard.label.edit"),
+			name: t("common.actions.edit"),
 			dataTestId: "content-card-board-menu-edit",
 		});
 		roleBasedMoreActions.push({

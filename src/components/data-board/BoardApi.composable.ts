@@ -51,6 +51,14 @@ export const useBoardApi = () => {
 		return response.data;
 	};
 
+	const updateBoardTitleCall = async (id: string, title: string) => {
+		if (title.length < 1) return;
+
+		return boardApi.boardControllerUpdateBoardTitle(id, {
+			title,
+		});
+	};
+
 	const updateCardHeightCall = async (id: string, height: number) => {
 		return cardsApi.cardControllerUpdateCardHeight(id, {
 			height,
@@ -214,6 +222,7 @@ export const useBoardApi = () => {
 		moveCardCall,
 		moveColumnCall,
 		moveElementCall,
+		updateBoardTitleCall,
 		updateCardHeightCall,
 		updateCardTitle,
 		updateColumnTitleCall,
