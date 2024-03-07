@@ -21,6 +21,7 @@
 					accept=".imscc, .zip"
 					clearable
 					show-size
+					data-testid="dialog-file-input"
 				/>
 			</v-card-text>
 			<v-card-actions>
@@ -66,7 +67,8 @@ const commonCartridgeImportModule = injectStrict(
 );
 const props = withDefaults(
 	defineProps<{
-		isOpen: boolean;
+		// isOpen exists only for testing purposes, because otherwise we can not open the dialog in tests
+		isOpen?: boolean;
 		maxWidth: number;
 	}>(),
 	{
@@ -76,6 +78,7 @@ const props = withDefaults(
 );
 const file = ref<File[]>([]);
 const isDialogOpen = computed({
+	// this or condition is necessary, because we want to open the dialog in tests
 	get: () => commonCartridgeImportModule.isOpen || props.isOpen,
 	set: (value: boolean) => commonCartridgeImportModule.setIsOpen(value),
 });
@@ -121,6 +124,11 @@ async function onConfirm(): Promise<void> {
 
 	file.value = [];
 }
+
+defineExpose({
+	file,
+	isDialogOpen,
+});
 </script>
 
 <style lang="scss" scoped>

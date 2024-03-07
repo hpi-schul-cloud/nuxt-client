@@ -17,7 +17,7 @@ import {
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
 describe("@/components/molecules/CommonCartridgeImportModal", () => {
-	const setup = () => {
+	const setupWrapper = () => {
 		document.body.setAttribute("data-app", "true");
 
 		const commonCartridgeImportModule = new CommonCartridgeImportModule({});
@@ -44,56 +44,46 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 	};
 
 	describe("when dialog is open", () => {
-		it("should disable confirm button", async () => {
-			const { wrapper } = setup();
+		const setup = async () => {
+			const { wrapper } = setupWrapper();
 
 			await wrapper.setProps({
 				isOpen: true,
 			});
 
+			return { wrapper };
+		};
+
+		it("should contain disabled confirm button", async () => {
+			const { wrapper } = await setup();
+
 			const confirmBtn = wrapper.findComponent(
 				"[data-testId='dialog-confirm-btn']"
-			);
+			) as any;
 
 			expect(confirmBtn.exists()).toBe(true);
-			// expect(confirmBtn.).toBe(true);
+			expect(confirmBtn.isDisabled()).toBe(true);
 		});
 
-		// it("should enabled confirm button after selecting a file", async () => {
-		// 	const { wrapper } = setup();
+		it("should contain enabled cancel button", async () => {
+			const { wrapper } = await setup();
 
-		// 	await wrapper.setProps({
-		// 		isOpen: true,
-		// 	});
+			const cancelBtn = wrapper.findComponent(
+				"[data-testid='dialog-cancel-btn']"
+			) as any;
 
-		// 	const confirmBtn = wrapper.find("[data-testId='dialog-confirm-btn']");
+			expect(cancelBtn.exists()).toBe(true);
+			expect(cancelBtn.isDisabled()).toBe(false);
+		});
 
-		// 	expect(confirmBtn.exists()).toBe(true);
-		// 	expect(confirmBtn.attributes()["disabled"]).toBe(true);
+		it("should contain file input", async () => {
+			const { wrapper } = await setup();
 
-		// 	await wrapper.setData({
-		// 		file: new File([""], "filename"),
-		// 	});
+			const fileInput = wrapper.findComponent(
+				"[data-testid='dialog-file-input']"
+			) as any;
 
-		// 	expect(confirmBtn.attributes()["disabled"]).toBe(false);
-		// });
+			expect(fileInput.exists()).toBe(true);
+		});
 	});
-
-	// describe("when canceling the upload", () => {
-	// 	it("should close the modal and emit dialog-closed event", async () => {
-	// 		const { wrapper } = setup();
-
-	// 		await wrapper.setProps({
-	// 			isOpen: true,
-	// 		});
-
-	// 		const btnCancel = wrapper.find("[data-testid='dialog-cancel-btn']");
-
-	// 		btnCancel.trigger("click");
-
-	// 		const emitted = wrapper.emitted();
-
-	// 		expect(emitted["dialog-closed"]).toHaveLength(1);
-	// 	});
-	// });
 });
