@@ -4,7 +4,6 @@
 		hover
 		tabindex="0"
 		role="link"
-		color="rgba(var(--v-theme-primary-lighten))"
 		data-testid="room-board-card"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
@@ -13,16 +12,25 @@
 		@keydown.down.prevent="moveCardDown"
 		@keydown.up.prevent="moveCardUp"
 	>
-		<VCardText>
-			<div class="mb-0">
-				<div class="d-flex align-center mb-3">
-					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
-					<span class="title-board-card">
-						{{ $t("pages.room.boardCard.label.columnBoard") }}
-					</span>
-				</div>
+		<template #item>
+			<div class="d-flex align-center">
+				<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
+				<span class="title-board-card">
+					{{ $t("pages.room.boardCard.label.columnBoard") }}
+				</span>
 			</div>
-			<h2 class="text-h6 board-title mt-2">
+		</template>
+		<template #append>
+			<div>
+				<RoomDotMenu
+					:menu-items="actionsMenuItems()"
+					data-testid="content-card-board-menu"
+					:aria-label="$t('pages.room.boardCard.menu.ariaLabel')"
+				/>
+			</div>
+		</template>
+		<VCardText>
+			<h2 class="text-h6 mt-0">
 				{{ $t("pages.room.boardCard.label.courseBoard") }}
 			</h2>
 		</VCardText>
@@ -30,18 +38,37 @@
 </template>
 
 <script setup lang="ts">
-import { mdiViewDashboard } from "@mdi/js";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import {
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiViewDashboard,
+} from "@mdi/js";
+import { PropType } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import RoomDotMenu from "./RoomDotMenu.vue";
 
 const props = defineProps({
 	columnBoardItem: { type: Object, required: true },
 	courseData: { type: Object, required: true },
 	keyDrag: { type: Boolean, required: true },
 	dragInProgress: { type: Boolean, required: true },
+	role: {
+		type: String as PropType<Roles>,
+		required: false,
+		default: Roles.Teacher,
+	},
 });
-const emit = defineEmits(["tab-pressed", "on-drag", "move-element"]);
+const emit = defineEmits([
+	"tab-pressed",
+	"on-drag",
+	"move-element",
+	"delete-board",
+]);
 
 const router = useRouter();
+const { t } = useI18n();
 
 const openBoard = async () => {
 	if (!props.dragInProgress) {
@@ -66,10 +93,25 @@ const moveCardUp = () => {
 		});
 	}
 };
-</script>
 
-<style lang="scss" scoped>
-.title-board-card {
-	margin-top: calc(var(--space-base-vuetify) / 2);
-}
-</style>
+const actionsMenuItems = () => {
+	const roleBasedMoreActions = [];
+
+	if (props.role === Roles.Teacher) {
+		roleBasedMoreActions.push({
+			icon: mdiPencilOutline,
+			action: openBoard,
+			name: t("pages.room.taskCard.label.edit"),
+			dataTestId: "content-card-board-menu-edit",
+		});
+		roleBasedMoreActions.push({
+			icon: mdiTrashCanOutline,
+			action: () => emit("delete-board"),
+			name: t("common.actions.remove"),
+			dataTestId: "content-card-board-menu-remove",
+		});
+	}
+
+	return roleBasedMoreActions;
+};
+</script>

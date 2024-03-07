@@ -1,8 +1,5 @@
-import { applicationErrorModule } from "@/store";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	SingleColumnBoardResponse,
+	BoardApiFactory,
 	CoursesApiFactory,
 	LessonApiFactory,
 	LessonApiInterface,
@@ -10,10 +7,14 @@ import {
 	PatchVisibilityParams,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	SingleColumnBoardResponse,
 	TaskApiFactory,
 	TaskApiInterface,
 } from "@/serverApi/v3";
+import { applicationErrorModule } from "@/store";
 import { $axios } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
@@ -172,8 +173,34 @@ export default class RoomModule extends VuexModule {
 		this.resetBusinessError();
 		try {
 			await this.lessonApi.lessonControllerDelete(lessonId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
 
-			await this.fetchContent(this.roomData.roomId);
+	@Action
+	async deleteTask(taskId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			await this.taskApi.taskControllerDelete(taskId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async deleteBoard(boardId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			await this.boardApi.boardControllerDeleteBoard(boardId);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -336,5 +363,9 @@ export default class RoomModule extends VuexModule {
 
 	private get taskApi(): TaskApiInterface {
 		return TaskApiFactory(undefined, "/v3", $axios);
+	}
+
+	private get boardApi() {
+		return BoardApiFactory(undefined, "/v3", $axios);
 	}
 }
