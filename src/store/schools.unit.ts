@@ -2,9 +2,10 @@ import * as serverApi from "@/serverApi/v3/api";
 import { SystemsApiInterface } from "@/serverApi/v3/api";
 import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
+import { meResponseFactory } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
-import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
@@ -63,7 +64,10 @@ describe("schools module", () => {
 
 		describe("fetchSchool", () => {
 			it("should call backend and set state correctly", async () => {
-				authModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
+				const mockMe = meResponseFactory.build({
+					school: { id: "sampleSchoolId" },
+				});
+				authModule.setMe(mockMe);
 				const mockSchoolResponse = schoolResponseFactory.build();
 				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolResponse })
@@ -83,7 +87,10 @@ describe("schools module", () => {
 			});
 
 			it("should call backend and set school state correctly", async () => {
-				authModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
+				const mockMe = meResponseFactory.build({
+					school: { id: "sampleSchoolId" },
+				});
+				authModule.setMe(mockMe);
 				const mockSchoolResponse = schoolResponseFactory.build({
 					features: [
 						serverApi.SchoolFeature.RocketChat,
@@ -120,34 +127,10 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				authModule.setUser({
-					schoolId: "4711",
-					_id: "",
-					firstName: "",
-					lastName: "",
-					email: "",
-					updatedAt: "",
-					birthday: "",
-					createdAt: "",
-					preferences: {},
-					roles: [],
-					emailSearchValues: [],
-					firstNameSearchValues: [],
-					lastNameSearchValues: [],
-					consent: {},
-					forcePasswordChange: false,
-					language: "",
-					fullName: "",
-					id: "",
-					avatarInitials: "",
-					avatarBackgroundColor: "",
-					age: 0,
-					displayName: "",
-					permissions: [],
-					accountId: "",
-					schoolName: "",
-					externallyManaged: false,
+				const mockMe = meResponseFactory.build({
+					school: { id: "4711" },
 				});
+				authModule.setMe(mockMe);
 
 				await schoolsModule.fetchSchool();
 

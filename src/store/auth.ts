@@ -1,14 +1,17 @@
 import {
 	ChangeLanguageParamsLanguageEnum,
+	MeApiFactory,
+	MeApiInterface,
+	MeResponse,
+	MeSchoolResponse,
+	MeUserResponse,
 	UserApiFactory,
 	UserApiInterface,
 } from "@/serverApi/v3";
 import { envConfigModule, schoolsModule } from "@/store";
-import { User } from "@/store/types/auth";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
-import { School } from "./types/schools";
 
 const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	const d = new Date();
@@ -25,55 +28,9 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 export default class AuthModule extends VuexModule {
 	accessToken: string | null = "";
 	payload = null;
-	user: User | null = {
-		_id: "",
-		firstName: "",
-		lastName: "",
-		email: "",
-		updatedAt: "",
-		birthday: "",
-		createdAt: "",
-		preferences: {},
-		schoolId: "",
-		roles: [
-			{
-				_id: "",
-				name: "",
-				updatedAt: "",
-				createdAt: "",
-				roles: [],
-				permissions: [],
-				displayName: "",
-				id: "",
-			},
-		],
-		emailSearchValues: [],
-		firstNameSearchValues: [],
-		lastNameSearchValues: [],
-		consent: {
-			userConsent: {
-				form: "",
-				privacyConsent: true,
-				termsOfUseConsent: true,
-				dateOfPrivacyConsent: "",
-				dateOfTermsOfUseConsent: "",
-			},
-		},
-		forcePasswordChange: false,
-		language: "",
-		fullName: "",
-		id: "",
-		avatarInitials: "",
-		avatarBackgroundColor: "",
-		age: 44,
-		displayName: "",
-		permissions: [],
-		accountId: "",
-		schoolName: "",
-		externallyManaged: false,
-	};
+	me?: MeResponse;
 	publicPages: string[] = ["index", "login", "signup", "impressum"];
-	locale = "de"; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
+	locale?: string;
 
 	businessError: BusinessError = {
 		statusCode: "",
@@ -82,9 +39,18 @@ export default class AuthModule extends VuexModule {
 
 	status: Status = "";
 
+	private get meApi(): MeApiInterface {
+		return MeApiFactory(undefined, "/v3", $axios);
+	}
+
+	private get userApi(): UserApiInterface {
+		return UserApiFactory(undefined, "/v3", $axios);
+	}
+
 	@Mutation
-	setUser(user: User): void {
-		this.user = user;
+	setMe(me: MeResponse): void {
+		this.locale = me.language;
+		this.me = me;
 	}
 
 	@Mutation
@@ -98,14 +64,14 @@ export default class AuthModule extends VuexModule {
 	}
 
 	@Mutation
-	addUserPermmission(permission: string): void {
-		this.user?.permissions.push(permission);
+	addUserPermission(permission: string): void {
+		this.me?.permissions.push(permission);
 	}
 
 	@Mutation
 	clearAuthData(): void {
 		this.accessToken = null;
-		this.user = null;
+		this.me = undefined;
 	}
 
 	@Mutation
@@ -130,21 +96,22 @@ export default class AuthModule extends VuexModule {
 		if (this.locale) {
 			return this.locale;
 		}
-		if (schoolsModule.getSchool && schoolsModule.getSchool.language) {
-			return schoolsModule.getSchool.language;
-		}
 		if (envConfigModule.getEnv.I18N__DEFAULT_LANGUAGE) {
 			return envConfigModule.getEnv.I18N__DEFAULT_LANGUAGE;
 		}
 		return "de"; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
 	}
 
-	get getSchool(): School {
-		return schoolsModule.getSchool;
+	get getMe(): MeResponse | undefined {
+		return this.me;
 	}
 
-	get getUser(): User | null {
-		return this.user;
+	get getUser(): MeUserResponse | undefined {
+		return this.me?.user;
+	}
+
+	get getSchool(): MeSchoolResponse | undefined {
+		return this.me?.school;
 	}
 
 	get getAccessToken(): string | null {
@@ -152,13 +119,9 @@ export default class AuthModule extends VuexModule {
 	}
 
 	get getUserRoles(): string[] {
-		return this.user?.roles
-			? this.user.roles.map((r) => r.name.toLowerCase())
-			: [];
-	}
+		const roleNames = this.me?.roles.map((r) => r.name.toLowerCase());
 
-	get getUserRolesDisplayName(): string | string[] {
-		return this.user?.roles ? this.user.roles.map((r) => r.displayName) : [];
+		return roleNames ?? [];
 	}
 
 	get getAuthenticated(): string | boolean {
@@ -167,13 +130,9 @@ export default class AuthModule extends VuexModule {
 
 	// TODO - why are we using toLowerCase() on permissions here?
 	get getUserPermissions(): string[] {
-		return this.user?.permissions
-			? this.user.permissions.map((p) => p.toLowerCase())
-			: [];
-	}
+		const permissions = this.me?.permissions.map((p) => p.toLowerCase());
 
-	get userIsExternallyManaged() {
-		return !!this.user?.externallyManaged;
+		return permissions ?? [];
 	}
 
 	get isLoggedIn(): boolean {
@@ -182,42 +141,22 @@ export default class AuthModule extends VuexModule {
 
 	@Action
 	async login(jwt: string) {
-		const user: User | undefined = await $axios.get("/v1/me").then(
-			(resp) => resp.data,
-			() => undefined
-		);
+		const { data } = await this.meApi.meControllerMe();
 
-		if (user === undefined) {
-			this.clearAuthData();
-			return;
-		}
+		this.setMe(data);
 
-		const roles: { permissions: string[] }[] = (
-			await $axios.get(`/v1/roles/user/${user.id}`)
-		).data;
-
-		user.permissions = roles.reduce(
-			(acc, role) => [...new Set(acc.concat(role.permissions))],
-			[] as string[]
-		);
-		this.setUser(user);
-
-		if (user.schoolId) {
-			await schoolsModule.fetchSchool();
-		}
-		if (user.language) {
-			this.setLocale(user.language);
-		}
+		// There are several places in the app, where more school data is needed, than is included in the MeResponse (e.g. on school admin page).
+		// It is not easily possible to fetch it there when needed. That's why it is fetched here centrally.
+		await schoolsModule.fetchSchool();
 
 		//TODO Remove once added to User permissions SC-2401
 		if (envConfigModule.getEnv.FEATURE_EXTENSIONS_ENABLED) {
-			this.addUserPermmission("ADDONS_ENABLED");
+			this.addUserPermission("ADDONS_ENABLED");
 		}
 		if (envConfigModule.getEnv.FEATURE_TEAMS_ENABLED) {
-			this.addUserPermmission("TEAMS_ENABLED");
+			this.addUserPermission("TEAMS_ENABLED");
 		}
 
-		// isLoggedIn => true
 		this.setAccessToken(jwt);
 	}
 
@@ -244,13 +183,5 @@ export default class AuthModule extends VuexModule {
 		localStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
 		window.location.replace(redirectUrl);
-	}
-
-	private get userApi(): UserApiInterface {
-		return UserApiFactory(
-			undefined,
-			"/v3", //`${EnvConfigModule.getApiUrl}/v3`,
-			$axios
-		);
 	}
 }

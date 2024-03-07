@@ -3414,6 +3414,12 @@ export interface MeResponse {
     permissions: Array<string>;
     /**
      * 
+     * @type {string}
+     * @memberof MeResponse
+     */
+    language?: string;
+    /**
+     * 
      * @type {MeAccountResponse}
      * @memberof MeResponse
      */
@@ -3506,12 +3512,6 @@ export interface MeUserResponse {
      * @memberof MeUserResponse
      */
     lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeUserResponse
-     */
-    language?: string;
     /**
      * 
      * @type {string}
