@@ -30,14 +30,15 @@ describe("auth store module", () => {
 
 	describe("mutations", () => {
 		describe("setMe", () => {
-			it("should set the me state", () => {
+			it("should set the me and locale state", () => {
 				const authModule = new AuthModule({});
-				const mockMe = meResponseFactory.build();
+				const mockMe = meResponseFactory.build({ language: "jib" });
 				expect(authModule.getMe).not.toStrictEqual(mockMe);
 
 				authModule.setMe(mockMe);
 
 				expect(authModule.getMe).toStrictEqual(mockMe);
+				expect(authModule.getLocale).toStrictEqual("jib");
 			});
 		});
 
