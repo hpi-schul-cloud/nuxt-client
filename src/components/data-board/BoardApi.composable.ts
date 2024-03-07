@@ -7,6 +7,8 @@ import {
 	CardResponse,
 	ColumnResponse,
 	ContentElementType,
+	CreateBoardBodyParamsParentTypeEnum,
+	CreateBoardResponse,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
 	DrawingElementContent,
@@ -41,9 +43,16 @@ export const useBoardApi = () => {
 		}
 	};
 
-	const createBoardCall = async (courseId: string): Promise<any> => {
-		// TODO: implement call to create board
-		console.log("Creating board for course", courseId);
+	const createBoardCall = async (
+		courseId: string
+	): Promise<CreateBoardResponse> => {
+		const response = await boardApi.boardControllerCreateBoard({
+			title: "Geo Board",
+			parentType: CreateBoardBodyParamsParentTypeEnum.Course,
+			parentId: courseId,
+		});
+
+		return response.data;
 	};
 
 	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {

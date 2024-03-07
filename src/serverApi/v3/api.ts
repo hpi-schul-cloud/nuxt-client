@@ -13,13 +13,13 @@
  */
 
 
+import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from './configuration';
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import { assertParamExists, createRequestFunction, DUMMY_BASE_URL, serializeDataIfNeeded, setBearerAuthToObject, setSearchParams, toPathString } from './common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BaseAPI, BASE_PATH, RequestArgs } from './base';
 
 /**
  * 
@@ -1458,6 +1458,53 @@ export interface CourseMetadataResponse {
      * @memberof CourseMetadataResponse
      */
     copyingSince?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateBoardBodyParams
+ */
+export interface CreateBoardBodyParams {
+    /**
+     * The title of the board
+     * @type {string}
+     * @memberof CreateBoardBodyParams
+     */
+    title: string;
+    /**
+     * The id of the parent
+     * @type {string}
+     * @memberof CreateBoardBodyParams
+     */
+    parentId: string;
+    /**
+     * The type of the parent
+     * @type {string}
+     * @memberof CreateBoardBodyParams
+     */
+    parentType: CreateBoardBodyParamsParentTypeEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CreateBoardBodyParamsParentTypeEnum {
+    Course = 'course'
+}
+
+/**
+ * 
+ * @export
+ * @interface CreateBoardResponse
+ */
+export interface CreateBoardResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateBoardResponse
+     */
+    id: string;
 }
 /**
  * 
@@ -7617,6 +7664,46 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCreateBoard: async (createBoardBodyParams: CreateBoardBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createBoardBodyParams' is not null or undefined
+            assertParamExists('boardControllerCreateBoard', 'createBoardBodyParams', createBoardBodyParams)
+            const localVarPath = `/boards`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createBoardBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -7823,6 +7910,17 @@ export const BoardApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateBoardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCreateBoard(createBoardBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -7889,6 +7987,16 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): AxiosPromise<CreateBoardResponse> {
+            return localVarFp.boardControllerCreateBoard(createBoardBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -7949,6 +8057,16 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
 export interface BoardApiInterface {
     /**
      * 
+     * @summary Create a new board.
+     * @param {CreateBoardBodyParams} createBoardBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): AxiosPromise<CreateBoardResponse>;
+
+    /**
+     * 
      * @summary Create a new column on a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
@@ -8007,6 +8125,18 @@ export interface BoardApiInterface {
  * @extends {BaseAPI}
  */
 export class BoardApi extends BaseAPI implements BoardApiInterface {
+    /**
+     * 
+     * @summary Create a new board.
+     * @param {CreateBoardBodyParams} createBoardBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerCreateBoard(createBoardBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Create a new column on a board.
