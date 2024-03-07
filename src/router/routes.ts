@@ -1,19 +1,19 @@
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
-	isEnum,
-	isMongoId,
-	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
+	isEnum,
+	isMongoId,
+	isOfficialSchoolNumber,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
-import { RouteRecordRaw, RouteLocationNormalized } from "vue-router";
-import { H5PContentParentType } from "@/h5pEditorApi/v3";
+import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 // routes configuration sorted in alphabetical order
 export const routes: Readonly<RouteRecordRaw[]> = [
@@ -240,6 +240,14 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		name: "rooms-board",
 		props: (route: RouteLocationNormalized) => ({
 			boardId: route.params.id,
+		}),
+	},
+	{
+		path: `/rooms/:id(${REGEX_ID})/create/board`,
+		component: async () => (await import("@page-board")).CreateColumnBoardPage,
+		name: "rooms-new-board",
+		props: (route: RouteLocationNormalized) => ({
+			courseId: route.params.id,
 		}),
 	},
 	{

@@ -9,11 +9,11 @@ import {
 	ContentElementType,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
+	DrawingElementContent,
 	ExternalToolElementContentBody,
 	FileElementContentBody,
 	LinkElementContentBody,
 	RichTextElementContentBody,
-	DrawingElementContent,
 	RoomsApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
@@ -39,6 +39,11 @@ export const useBoardApi = () => {
 
 			throw createApplicationError(responseError.code);
 		}
+	};
+
+	const createBoardCall = async (courseId: string): Promise<any> => {
+		// TODO: implement call to create board
+		console.log("Creating board for course", courseId);
 	};
 
 	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
@@ -215,5 +220,6 @@ export const useBoardApi = () => {
 		updateElementCall,
 		createCardCall,
 		getContextInfo,
+		createBoardCall,
 	};
 };
