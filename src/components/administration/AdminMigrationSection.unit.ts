@@ -730,12 +730,12 @@ describe("AdminMigrationSection", () => {
 
 				await switchComponents[0].vm.$emit("update:modelValue", true);
 
-				const expectedFeature = { features: ["showOutdatedUsers"] };
+				const expectedProps = { features: ["showOutdatedUsers"] };
 
 				expect(schoolsModule.update).toHaveBeenCalledWith({
 					id: mockSchool.id,
 					props: {
-						...expectedFeature,
+						...expectedProps,
 					},
 				});
 			});

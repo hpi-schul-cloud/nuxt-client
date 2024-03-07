@@ -63,7 +63,7 @@ describe("schools module", () => {
 		});
 
 		describe("fetchSchool", () => {
-			it("should call backend and set state correctly", async () => {
+			it("should call mutations correctly", async () => {
 				const mockMe = meResponseFactory.build({
 					school: { id: "sampleSchoolId" },
 				});
@@ -86,7 +86,7 @@ describe("schools module", () => {
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 
-			it("should call backend and set school state correctly", async () => {
+			it("should set school state correctly", async () => {
 				const mockMe = meResponseFactory.build({
 					school: { id: "sampleSchoolId" },
 				});
