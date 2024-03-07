@@ -1,16 +1,15 @@
 <template>
-	<BoardColumnInteractionHandler
-		:isEditMode="isEditMode"
-		@start-edit-mode="onStartEditMode"
-		@end-edit-mode="onEndEditMode"
-	>
-		<div
-			class="board-header rounded"
-			:class="{ 'bg-grey-lighten-2': isFocusContained }"
-			tabindex="0"
-			ref="boardHeader"
+	<div class="d-flex gap-5">
+		<InlineEditInteractionHandler
+			:isEditMode="isEditMode"
+			@start-edit-mode="onStartEditMode"
+			@end-edit-mode="onEndEditMode"
 		>
-			<div class="d-flex flex-row gap-5 px-2 py-2">
+			<div
+				class="board-header d-flex flex-row gap-5 px-2 py-2"
+				ref="boardHeader"
+				tabindex="0"
+			>
 				<BoardAnyTitleInput
 					scope="board"
 					:value="title"
@@ -21,9 +20,6 @@
 					:isFocused="isFocusedById"
 					:maxLength="100"
 				/>
-				<v-chip v-if="isDraft" size="small" class="align-self-center">{{
-					t("common.words.draft")
-				}}</v-chip>
 				<BoardMenu
 					v-if="hasEditPermission"
 					scope="board"
@@ -37,8 +33,11 @@
 					/>
 				</BoardMenu>
 			</div>
-		</div>
-	</BoardColumnInteractionHandler>
+		</InlineEditInteractionHandler>
+		<v-chip v-if="isDraft" size="small" class="align-self-center">{{
+			t("common.words.draft")
+		}}</v-chip>
+	</div>
 </template>
 
 <script lang="ts">
@@ -57,7 +56,7 @@ import { useDebounceFn } from "@vueuse/core";
 import { defineComponent, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
+import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 export default defineComponent({
 	name: "BoardHeader",
 	components: {
@@ -66,7 +65,7 @@ export default defineComponent({
 		BoardMenuActionEdit,
 		BoardMenuActionPublish,
 		BoardMenuActionRevert,
-		BoardColumnInteractionHandler,
+		InlineEditInteractionHandler,
 	},
 	props: {
 		boardId: {
