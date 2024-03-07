@@ -112,6 +112,7 @@ import { defineComponent } from "vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 
 export default defineComponent({
 	setup() {
@@ -138,7 +139,10 @@ export default defineComponent({
 		CopyResultModal,
 		ShareModal,
 	},
-	inject: ["copyModule", "shareModule"],
+	inject: {
+		copyModule: { from: COPY_MODULE_KEY },
+		shareModule: "shareModule",
+	},
 	data() {
 		return {
 			icons: {

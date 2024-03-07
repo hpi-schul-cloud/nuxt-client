@@ -2,6 +2,7 @@ import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import ContentModule from "@/store/content";
 import ContextExternalToolsModule from "@/store/context-external-tools";
+import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
 import NewsModule from "@/store/news";
@@ -48,5 +49,6 @@ export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
 export const NEWS_MODULE_KEY: InjectionKey<NewsModule> = Symbol("newsModule");
 export const CONTENT_MODULE_KEY: InjectionKey<ContentModule> =
 	Symbol("contentModule");
+export const COPY_MODULE_KEY: InjectionKey<CopyModule> = Symbol("copyModule");
 
 export const THEME_KEY: InjectionKey<{ name: string }> = Symbol("theme");

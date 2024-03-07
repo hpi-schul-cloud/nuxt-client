@@ -1,12 +1,15 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
-import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
+import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import { injectStrict } from "@/utils/inject";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject/injection-keys";
-import { Ref, inject, ref } from "vue";
+import {
+	COPY_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject/injection-keys";
+import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
-	const copyModule = inject<CopyModule>("copyModule");
+	const copyModule = injectStrict(COPY_MODULE_KEY);
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	const { t } = useI18n();
 
