@@ -18,21 +18,38 @@ describe("CommonCartridgeImportModule", () => {
 	});
 
 	describe("getters", () => {
+		it("file", () => {
+			expect(sut.file).toBeUndefined();
+		});
+
 		it("isOpen", () => {
 			expect(sut.isOpen).toBe(false);
 		});
+
 		it("isSuccess", () => {
 			expect(sut.isSuccess).toBe(false);
 		});
 	});
 
 	describe("mutations", () => {
-		describe("setIsSuccess", () => {
-			it("should set isSuccess to the given value", () => {
-				sut.setIsSuccess(true);
+		it("setFile", () => {
+			const file = new File([""], "file.txt");
 
-				expect(sut.isSuccess).toBe(true);
-			});
+			sut.setFile(file);
+
+			expect(sut.file).toBe(file);
+		});
+
+		it("setIsOpen", () => {
+			sut.setIsOpen(true);
+
+			expect(sut.isOpen).toBe(true);
+		});
+
+		it("setIsSuccess", () => {
+			sut.setIsSuccess(true);
+
+			expect(sut.isSuccess).toBe(true);
 		});
 	});
 

@@ -1,7 +1,7 @@
 <template>
 	<v-dialog
 		ref="commonCartridgeImportModal"
-		v-model="isDialogOpen"
+		v-model="isOpen"
 		:max-width="props.maxWidth"
 		@click:outside="onCancel()"
 		@keydown.esc="onCancel()"
@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps, ref, withDefaults } from "vue";
+import { computed, defineProps, withDefaults } from "vue";
 import { mdiTrayArrowUp } from "@mdi/js";
 import { useI18n } from "vue-i18n";
 import {
@@ -67,19 +67,19 @@ const commonCartridgeImportModule = injectStrict(
 );
 const props = withDefaults(
 	defineProps<{
-		// isOpen exists only for testing purposes, because otherwise we can not open the dialog in tests
-		isOpen?: boolean;
-		maxWidth: number;
+		maxWidth?: number;
 	}>(),
 	{
-		isOpen: false,
 		maxWidth: 480,
 	}
 );
-const file = ref<File[]>([]);
-const isDialogOpen = computed({
-	// this or condition is necessary, because we want to open the dialog in tests
-	get: () => commonCartridgeImportModule.isOpen || props.isOpen,
+const file = computed<File[]>({
+	get: () =>
+		commonCartridgeImportModule.file ? [commonCartridgeImportModule.file] : [],
+	set: (value: File[]) => commonCartridgeImportModule.setFile(value[0]),
+});
+const isOpen = computed<boolean>({
+	get: () => commonCartridgeImportModule.isOpen,
 	set: (value: boolean) => commonCartridgeImportModule.setIsOpen(value),
 });
 const importButtonDisabled = computed(() => {
@@ -107,7 +107,7 @@ async function onConfirm(): Promise<void> {
 			roomsModule.fetchAllElements(),
 		]);
 		loadingStateModule.close();
-		const [{ title }] = roomsModule.allElements;
+		const title = roomsModule.getAllElements[0]?.title;
 		notifierModule.show({
 			status: "success",
 			text: i18n.t("pages.rooms.ccImportCourse.success", { name: title }),
@@ -124,11 +124,6 @@ async function onConfirm(): Promise<void> {
 
 	file.value = [];
 }
-
-defineExpose({
-	file,
-	isDialogOpen,
-});
 </script>
 
 <style lang="scss" scoped>

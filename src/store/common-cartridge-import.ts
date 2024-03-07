@@ -10,6 +10,11 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 export default class CommonCartridgeImportModule extends VuexModule {
 	private _isOpen = false;
 	private _isSuccess = false;
+	private _file: File | undefined;
+
+	public get file(): File | undefined {
+		return this._file;
+	}
 
 	public get isOpen(): boolean {
 		return this._isOpen;
@@ -21,6 +26,11 @@ export default class CommonCartridgeImportModule extends VuexModule {
 
 	public get coursesApi(): CoursesApiInterface {
 		return CoursesApiFactory(undefined, "/v3", $axios);
+	}
+
+	@Mutation
+	public setFile(file: File | undefined): void {
+		this._file = file;
 	}
 
 	@Mutation
