@@ -4,7 +4,7 @@
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 	>
-		<div class="board-header ml-2" tabindex="0" ref="boardHeader">
+		<div class="board-header" tabindex="0" ref="boardHeader">
 			<BoardAnyTitleInput
 				scope="board"
 				:value="title"

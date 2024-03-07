@@ -1,5 +1,25 @@
 <template>
+	<VTextField
+		v-if="scope === 'board'"
+		hide-details="auto"
+		v-model="modelValue"
+		variant="solo"
+		density="compact"
+		auto-grow
+		flat
+		:placeholder="placeholder"
+		bg-color="transparent"
+		ref="titleInput"
+		:readonly="!isEditMode"
+		role="heading"
+		:aria-level="ariaLevel"
+		@keydown.enter="onEnter"
+		:tabindex="isEditMode ? 0 : -1"
+		:autofocus="internalIsFocused"
+		:maxlength="maxLength"
+	/>
 	<VTextarea
+		v-else
 		hide-details="auto"
 		v-model="modelValue"
 		variant="solo"
@@ -120,24 +140,6 @@ export default defineComponent({
 			}
 		});
 
-		const fontSize = computed(() => {
-			switch (props.scope) {
-				case "board":
-					return "var(--heading-3)";
-				default:
-					return "var(--heading-5)";
-			}
-		});
-
-		const fontColor = computed(() => {
-			switch (props.scope) {
-				case "board":
-					return "var(--v-black-base)";
-				default:
-					return "var(--v-theme-secondary)";
-			}
-		});
-
 		const onEnter = ($event: KeyboardEvent) => {
 			if (props.scope !== "card") return;
 			$event.preventDefault();
@@ -146,8 +148,6 @@ export default defineComponent({
 
 		return {
 			ariaLevel,
-			fontSize,
-			fontColor,
 			modelValue,
 			hasValue,
 			onEnter,
@@ -165,17 +165,28 @@ export default defineComponent({
 }
 
 :deep(textarea) {
-	font-size: v-bind(fontSize);
+	color: rgba(var(--v-theme-secondary)) !important;
 	background: transparent !important;
+	opacity: 1;
+	font-size: var(--heading-5) !important;
 }
+
 :deep(textarea[readonly]) {
 	cursor: pointer;
 }
-:deep(textarea) {
-	color: rgba(v-bind(fontColor)) !important;
+
+:deep(textarea)::placeholder {
+	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }
-:deep(textarea)::placeholder {
+
+:deep(input) {
+	font-size: var(--heading-3);
+	color: rgba(var(--v-black-base));
+	background: transparent !important;
+}
+
+:deep(input)::placeholder {
 	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }
