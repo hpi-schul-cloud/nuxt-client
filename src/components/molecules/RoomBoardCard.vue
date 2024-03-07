@@ -34,7 +34,7 @@
 				</div>
 			</div>
 			<h2 class="text-h6 board-title mt-2">
-				{{ $t("pages.room.boardCard.label.courseBoard") }}
+				{{ boardTitle }}
 			</h2>
 		</VCardText>
 	</VCard>
@@ -104,6 +104,12 @@ const moreActionsMenuItems = computed(() => {
 	}
 
 	return actions;
+});
+
+const boardTitle = computed(() => {
+	return props.columnBoardItem.title && props.columnBoardItem.title !== ""
+		? props.columnBoardItem.title
+		: t("pages.room.boardCard.label.courseBoard").toString();
 });
 </script>
 
