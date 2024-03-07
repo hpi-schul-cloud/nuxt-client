@@ -1,6 +1,3 @@
-import { mount } from "@vue/test-utils";
-import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
-import { useBoardPermissions } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
@@ -9,6 +6,9 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useBoardPermissions } from "@data-board";
+import { mount } from "@vue/test-utils";
+import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 
 jest.mock("./InlineEditInteractionHandler.composable");
 
@@ -31,6 +31,7 @@ describe("BoardAnyTitleTitleInput", () => {
 			scope: "card" | "column" | "board";
 			placeholder?: string;
 			isFocused?: boolean;
+			maxLength?: number;
 		},
 		options?: {
 			permissions?: BoardPermissionChecks;
@@ -63,6 +64,13 @@ describe("BoardAnyTitleTitleInput", () => {
 		it("should be found in dom", () => {
 			setup({ isEditMode: false, scope: "card" });
 			expect(wrapper).toBeDefined();
+		});
+
+		it("should forward maxLength prop to VTextarea", () => {
+			setup({ isEditMode: false, scope: "board", maxLength: 10 });
+			const inputs = wrapper.findAll("input");
+			const maxLength = inputs[0].element.getAttribute("maxlength");
+			expect(maxLength).toBe("10");
 		});
 
 		it("should emit if value changes", async () => {
@@ -105,6 +113,38 @@ describe("BoardAnyTitleTitleInput", () => {
 			const emitted = wrapper.emitted();
 
 			expect(emitted["enter"]).toBe(undefined);
+		});
+
+		it("should not emit enter on hitting 'enter' key in board title", async () => {
+			setup({ isEditMode: true, scope: "board" });
+			const textFieldComponent = wrapper.findComponent({ name: "VTextField" });
+			textFieldComponent.vm.$emit(
+				"keydown",
+				new KeyboardEvent("keydown", {
+					key: "Enter",
+				})
+			);
+			const emitted = wrapper.emitted();
+
+			expect(emitted["enter"]).toBe(undefined);
+		});
+
+		it("should display VTextField when scope is board", () => {
+			setup({ isEditMode: true, scope: "board" });
+			const textFieldComponent = wrapper.findComponent({ name: "VTextField" });
+			expect(textFieldComponent.exists()).toBe(true);
+		});
+
+		it("should display VTextarea when scope is card", () => {
+			setup({ isEditMode: true, scope: "card" });
+			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+			expect(textAreaComponent.exists()).toBe(true);
+		});
+
+		it("should display VTextarea when scope is column", () => {
+			setup({ isEditMode: true, scope: "column" });
+			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+			expect(textAreaComponent.exists()).toBe(true);
 		});
 	});
 });
