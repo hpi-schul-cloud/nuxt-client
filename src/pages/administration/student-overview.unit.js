@@ -1,22 +1,23 @@
-import StudentPage from "./StudentOverview.page.vue";
-import mock$objects from "../../../tests/test-utils/pageStubs";
+import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import BaseLink from "@/components/base/BaseLink.vue";
+import BaseModal from "@/components/base/BaseModal.vue";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
-import SchoolsModule from "@/store/schools";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import { createStore } from "vuex";
+import SchoolsModule from "@/store/schools";
+import { meResponseFactory } from "@@/tests/test-utils";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseLink from "@/components/base/BaseLink.vue";
-import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
-import BaseModal from "@/components/base/BaseModal.vue";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
+import { createStore } from "vuex";
+import mock$objects from "../../../tests/test-utils/pageStubs";
+import StudentPage from "./StudentOverview.page.vue";
 
 const mockData = [
 	{
@@ -135,14 +136,8 @@ describe("students/index", () => {
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
-		authModule.setUser({
-			roles: [
-				{
-					name: "administrator",
-				},
-			],
-			permissions: ["STUDENT_CREATE", "STUDENT_DELETE"],
-		});
+		const mockMe = meResponseFactory.build();
+		authModule.setMe(mockMe);
 	});
 
 	afterAll(() => {
@@ -190,6 +185,7 @@ describe("students/index", () => {
 
 	it("should call 'deleteUsers' action", async () => {
 		const { wrapper, usersActionsStubs } = setup();
+		authModule.addUserPermission("STUDENT_DELETE");
 
 		await nextTick();
 
@@ -237,7 +233,7 @@ describe("students/index", () => {
 	it("should emit the 'delete' action when deleting a user", async () => {
 		const { wrapper } = setup();
 
-		authModule.addUserPermmission("STUDENT_DELETE");
+		authModule.addUserPermission("STUDENT_DELETE");
 
 		// user row exists
 		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
@@ -426,7 +422,7 @@ describe("students/index", () => {
 	});
 
 	it("should render the fab-floating component if user has SUDENT_CREATE permission", () => {
-		authModule.addUserPermmission("STUDENT_CREATE");
+		authModule.addUserPermission("STUDENT_CREATE");
 		const { wrapper } = setup();
 
 		const fabComponent = wrapper.find(
@@ -436,7 +432,7 @@ describe("students/index", () => {
 	});
 
 	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", () => {
-		authModule.setUser({
+		authModule.setMe({
 			roles: [
 				{
 					name: "administrator",

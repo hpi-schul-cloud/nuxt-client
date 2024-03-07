@@ -1,7 +1,6 @@
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { User } from "@/store/types/auth";
 import {
 	AUTH_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -15,6 +14,7 @@ import ExternalToolSection from "./ExternalToolSection.vue";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import {
+	meResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
 	schoolToolConfigurationStatusFactory,
@@ -55,10 +55,9 @@ describe("ExternalToolSection", () => {
 
 		const notifierModule = createModuleMocks(NotifierModule);
 
+		const mockMe = meResponseFactory.build({ school: { id: "schoolId" } });
 		const authModule = createModuleMocks(AuthModule, {
-			getUser: {
-				schoolId: "schoolId",
-			} as User,
+			getSchool: mockMe.school,
 		});
 
 		const router = createMock<Router>();
