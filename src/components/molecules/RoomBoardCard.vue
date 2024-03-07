@@ -122,3 +122,8 @@ const actionsMenuItems = () => {
 	return roleBasedMoreActions;
 };
 </script>
+<style scoped>
+.title-board-card {
+	font-size: 14px;
+}
+</style>
