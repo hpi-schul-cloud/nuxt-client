@@ -201,7 +201,7 @@ export default {
 	watch: {
 		school: {
 			handler: async function (newSchool) {
-				if (newSchool && newSchool.id) {
+				if (newSchool?.id) {
 					this.logoFile = newSchool.logo?.dataUrl
 						? [
 								this.convertDataUrlToFile(
