@@ -68,8 +68,8 @@ describe("BoardAnyTitleTitleInput", () => {
 
 		it("should forward maxLength prop to VTextarea", () => {
 			setup({ isEditMode: false, scope: "board", maxLength: 10 });
-			const textAreas = wrapper.findAll("textarea");
-			const maxLength = textAreas[0].element.getAttribute("maxlength");
+			const inputs = wrapper.findAll("input");
+			const maxLength = inputs[0].element.getAttribute("maxlength");
 			expect(maxLength).toBe("10");
 		});
 
@@ -117,8 +117,8 @@ describe("BoardAnyTitleTitleInput", () => {
 
 		it("should not emit enter on hitting 'enter' key in board title", async () => {
 			setup({ isEditMode: true, scope: "board" });
-			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			textAreaComponent.vm.$emit(
+			const textFieldComponent = wrapper.findComponent({ name: "VTextField" });
+			textFieldComponent.vm.$emit(
 				"keydown",
 				new KeyboardEvent("keydown", {
 					key: "Enter",
@@ -127,6 +127,24 @@ describe("BoardAnyTitleTitleInput", () => {
 			const emitted = wrapper.emitted();
 
 			expect(emitted["enter"]).toBe(undefined);
+		});
+
+		it("should display VTextField when scope is board", () => {
+			setup({ isEditMode: true, scope: "board" });
+			const textFieldComponent = wrapper.findComponent({ name: "VTextField" });
+			expect(textFieldComponent.exists()).toBe(true);
+		});
+
+		it("should display VTextarea when scope is card", () => {
+			setup({ isEditMode: true, scope: "card" });
+			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+			expect(textAreaComponent.exists()).toBe(true);
+		});
+
+		it("should display VTextarea when scope is column", () => {
+			setup({ isEditMode: true, scope: "column" });
+			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+			expect(textAreaComponent.exists()).toBe(true);
 		});
 	});
 });

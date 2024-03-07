@@ -68,7 +68,7 @@ describe("BoardHeader", () => {
 			const { wrapper } = setup();
 
 			const titleInput = wrapper.findComponent(BoardAnyTitleInput);
-			titleInput.vm.$emit("update:value");
+			titleInput.vm.$emit("update:value", "new-title");
 
 			jest.runAllTimers(); // Run all timers
 
