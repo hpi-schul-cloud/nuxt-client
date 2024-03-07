@@ -130,7 +130,7 @@ describe("teachers/index", () => {
 		});
 
 		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
-		authModule.setUser({
+		authModule.setMe({
 			roles: [
 				{
 					name: "administrator",

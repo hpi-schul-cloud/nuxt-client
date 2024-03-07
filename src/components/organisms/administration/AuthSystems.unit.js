@@ -1,15 +1,16 @@
-import AuthSystems from "./AuthSystems";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
-import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
-import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
+import { meResponseFactory } from "@@/tests/test-utils";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { RouterLinkStub } from "@vue/test-utils";
+import AuthSystems from "./AuthSystems";
 
 const generateProps = () => ({
 	systems: [
@@ -158,10 +159,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("ldap button should be visible", async () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE"],
 			});
+			authModule.setMe(mockMe);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const ldapButtonVisibility = wrapper.findAllComponents(
@@ -191,10 +192,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the edit system button", async () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
+			authModule.setMe(mockMe);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
@@ -233,10 +234,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should redirect to ldap config page from edit button of general ldap system", () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
+			authModule.setMe(mockMe);
 			const wrapper = createWrapper({ props: generateProps() });
 			const editSystemButton = wrapper.findComponent(
 				searchStrings.editSystemButton
@@ -249,10 +250,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display system edit button and redirect to correct config page ", () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
+			authModule.setMe(mockMe);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const systemEditButtons = wrapper.findAllComponents(
@@ -279,10 +280,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should display the dialog", async () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
+			authModule.setMe(mockMe);
 			const wrapper = createWrapper({ props: generateProps() });
 
 			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
@@ -299,10 +300,10 @@ describe("AuthSystems", () => {
 
 	describe("events", () => {
 		it("should call the action when 'dialog-confirmed' triggered", async () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE"],
 			});
+			authModule.setMe(mockMe);
 			const deleteSpy = jest.spyOn(schoolsModule, "deleteSystem");
 			const wrapper = createWrapper({ props: generateProps() });
 
@@ -318,10 +319,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should call the method when delete dialog confirmed", async () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE"],
 			});
+			authModule.setMe(mockMe);
 			const removeSystem = jest.spyOn(AuthSystems.methods, "removeSystem");
 			const wrapper = createWrapper({ props: generateProps() });
 
@@ -334,10 +335,10 @@ describe("AuthSystems", () => {
 		});
 
 		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", async () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT", "SYSTEM_VIEW"],
 			});
+			authModule.setMe(mockMe);
 			const wrapper = createWrapper({ props: generateProps() });
 			const deleteButton = wrapper.find(searchStrings.deleteSystemButton);
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(false);

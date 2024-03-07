@@ -5,14 +5,15 @@ import {
 } from "@/fileStorageApi/v3";
 import * as serverApi from "@/fileStorageApi/v3/api/file-api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { createMock } from "@golevelup/ts-jest";
 import { AxiosResponse } from "axios";
 import { setupFileStorageNotifier } from "../test-utils/fileStorageNotifier";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
+
 jest.mock("./FileStorageNotifications.composable");
 
 jest.mock("@/utils/helpers");
@@ -24,7 +25,7 @@ const mockedMapAxiosErrorToResponseError = jest.mocked(
 
 jest.mock("@/store/store-accessor", () => ({
 	authModule: {
-		getUser: { schoolId: "schoolId" },
+		getSchool: { id: "schoolId" },
 	},
 }));
 
