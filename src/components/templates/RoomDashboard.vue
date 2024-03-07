@@ -30,6 +30,7 @@
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
+							@copy-board="copyBoard(item.content.columnBoardId)"
 						/>
 						<room-task-card
 							v-if="item.type === cardTypes.Task"
@@ -336,23 +337,30 @@ export default {
 		async restoreTask(itemId) {
 			await roomModule.finishTask({ itemId, action: "restore" });
 		},
-		async copyTask(taskId) {
+		async deleteTask(itemId) {
+			await tasksModule.deleteTask(itemId);
+			await roomModule.fetchContent(this.roomData.roomId);
+		},
+		copyTask(taskId) {
 			this.$emit("copy-board-element", {
 				id: taskId,
 				type: CopyParamsTypeEnum.Task,
 				courseId: this.roomData.roomId,
 			});
 		},
-		async copyLesson(lessonId) {
+		copyLesson(lessonId) {
 			this.$emit("copy-board-element", {
 				id: lessonId,
 				type: CopyParamsTypeEnum.Lesson,
 				courseId: this.roomData.roomId,
 			});
 		},
-		async deleteTask(itemId) {
-			await tasksModule.deleteTask(itemId);
-			await roomModule.fetchContent(this.roomData.roomId);
+		copyBoard(columnBoardId) {
+			this.$emit("copy-board-element", {
+				id: columnBoardId,
+				type: CopyParamsTypeEnum.ColumnBoard,
+				courseId: this.roomData.roomId,
+			});
 		},
 	},
 };

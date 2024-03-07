@@ -42,10 +42,7 @@
 
 <script setup lang="ts">
 import { mdiContentCopy, mdiViewDashboard } from "@/components/icons/material";
-import { useCopy } from "@/composables/copy";
-import { useLoadingState } from "@/composables/loadingState";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
@@ -58,14 +55,15 @@ const props = defineProps({
 	dragInProgress: { type: Boolean, required: true },
 	role: { type: String, required: true },
 });
-const emit = defineEmits(["tab-pressed", "on-drag", "move-element"]);
+const emit = defineEmits([
+	"tab-pressed",
+	"on-drag",
+	"move-element",
+	"copy-board",
+]);
 
 const router = useRouter();
 const { t } = useI18n();
-const { isLoadingDialogOpen } = useLoadingState(
-	t("components.molecules.copyResult.title.loading")
-);
-const { copy } = useCopy(isLoadingDialogOpen);
 
 const openBoard = async () => {
 	if (!props.dragInProgress) {
@@ -91,17 +89,6 @@ const moveCardUp = () => {
 	}
 };
 
-const copyBoard = async (boardId: string) => {
-	const copyParams = {
-		id: boardId,
-		type: CopyParamsTypeEnum.ColumnBoard,
-	};
-
-	await copy(copyParams);
-
-	router.go(0);
-};
-
 const moreActionsMenuItems = computed(() => {
 	const actions = [];
 
@@ -109,7 +96,7 @@ const moreActionsMenuItems = computed(() => {
 		actions.push({
 			icon: mdiContentCopy,
 			action: () => {
-				copyBoard(props.columnBoardItem.columnBoardId);
+				emit("copy-board");
 			},
 			name: t("common.actions.copy"),
 			dataTestId: "content-card-board-menu-copy",
