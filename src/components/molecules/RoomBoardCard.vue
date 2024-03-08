@@ -30,7 +30,7 @@
 			</div>
 		</template>
 		<VCardText>
-			<h2 class="text-h6 mt-0">
+			<h2 class="text-h6 board-title mt-0">
 				{{ boardTitle }}
 			</h2>
 		</VCardText>
@@ -56,8 +56,7 @@ const props = defineProps({
 	dragInProgress: { type: Boolean, required: true },
 	role: {
 		type: String as PropType<Roles>,
-		required: false,
-		default: Roles.Teacher,
+		required: true,
 	},
 });
 
