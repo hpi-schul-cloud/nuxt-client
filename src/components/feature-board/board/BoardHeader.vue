@@ -1,42 +1,43 @@
 <template>
-	<div class="d-flex gap-5">
+	<div>
 		<InlineEditInteractionHandler
 			:isEditMode="isEditMode"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 		>
-			<div
-				class="board-header d-flex flex-row gap-5 px-2 py-2"
-				ref="boardHeader"
-				tabindex="0"
-			>
+			<div class="board-header" tabindex="0" ref="boardHeader">
 				<BoardAnyTitleInput
+					ref="boardHeader"
 					scope="board"
 					:value="title"
 					data-testid="board-title"
 					:isEditMode="isEditMode"
 					:placeholder="titlePlaceholder"
-					@update:value="onUpdateTitle"
 					:isFocused="isFocusedById"
 					:maxLength="100"
+					:style="{ width: `${fieldWidth}px` }"
+					@update:value="onUpdateTitle"
 				/>
-				<BoardMenu
-					v-if="hasEditPermission"
-					scope="board"
-					data-testid="board-menu-btn"
-				>
-					<BoardMenuActionEdit @click="onStartEditMode" />
-					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-					<BoardMenuActionRevert
-						v-if="!isDraft"
-						@click="onRevertPublishedBoard"
-					/>
-				</BoardMenu>
+				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 			</div>
 		</InlineEditInteractionHandler>
-		<v-chip v-if="isDraft" size="small" class="align-self-center">{{
-			t("common.words.draft")
-		}}</v-chip>
+		<div class="">
+			<v-chip v-if="isDraft" size="small" class="align-self-center">
+				{{ t("common.words.draft") }}
+			</v-chip>
+			<BoardMenu
+				v-if="hasEditPermission"
+				scope="board"
+				data-testid="board-menu-btn"
+			>
+				<BoardMenuActionEdit @click="onStartEditMode" />
+				<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+				<BoardMenuActionRevert
+					v-if="!isDraft"
+					@click="onRevertPublishedBoard"
+				/>
+			</BoardMenu>
+		</div>
 	</div>
 </template>
 
@@ -53,10 +54,12 @@ import {
 	BoardMenuActionRevert,
 } from "@ui-board";
 import { useDebounceFn } from "@vueuse/core";
-import { defineComponent, ref, toRef } from "vue";
+// import { useVModel } from "@vueuse/core";
+import { defineComponent, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
+
 export default defineComponent({
 	name: "BoardHeader",
 	components: {
@@ -98,27 +101,64 @@ export default defineComponent({
 			boardHeader
 		);
 		const { hasEditPermission } = useBoardPermissions();
+
+		const boardTitle = ref("");
+		const inputWidthCalcSpan = ref<HTMLElement>();
+		const fieldWidth = ref(0);
+
+		watchEffect(() => {
+			boardTitle.value = props.title;
+		});
+
+		onMounted(() => {
+			calculateWidth();
+		});
+
 		const onStartEditMode = () => {
 			if (!hasEditPermission) return;
 			startEditMode();
 		};
+
 		const onEndEditMode = () => {
 			if (!hasEditPermission) return;
 			stopEditMode();
 		};
+
 		const onPublishBoard = () => {
 			if (!hasEditPermission) return;
 			emit("publish:board");
 		};
+
 		const onRevertPublishedBoard = () => {
 			if (!hasEditPermission) return;
 			emit("revert:board");
 		};
-		const onUpdateTitle = useDebounceFn((newTitle: string) => {
+
+		const onUpdateTitle = async (newTitle: string) => {
+			calculateWidth(newTitle);
+			await emitTitle(newTitle);
+		};
+
+		const emitTitle = useDebounceFn((newTitle: string) => {
 			if (newTitle.length < 1) return;
 
 			emit("update:title", newTitle);
-		}, 1000);
+		}, 100);
+
+		const calculateWidth = (newTitle?: string) => {
+			if (!inputWidthCalcSpan.value) return;
+			console.log(boardTitle.value, newTitle);
+			// boardTitle.value = newTitle;
+
+			inputWidthCalcSpan.value.innerHTML = boardTitle.value.replace(
+				/\s/g,
+				"&nbsp;"
+			);
+
+			const width = inputWidthCalcSpan.value.offsetWidth;
+			fieldWidth.value = width;
+		};
+
 		return {
 			boardHeader,
 			hasEditPermission,
@@ -130,17 +170,30 @@ export default defineComponent({
 			onPublishBoard,
 			onRevertPublishedBoard,
 			onUpdateTitle,
+			calculateWidth,
+			fieldWidth,
+			inputWidthCalcSpan,
 			t,
 		};
 	},
 });
 </script>
 
-<style scoped>
-.board-header {
-	align-items: top;
-}
+<style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .board-header:focus {
 	outline: none;
+}
+
+.input-width-calc-span {
+	position: absolute;
+	/* left: -9999px; */
+	display: inline-block;
+	min-width: 6em;
+	padding: 0 $field-control-padding-end 0 $field-control-padding-start;
+	font-size: var(--heading-3);
+	font-family: var(--font-accent);
+	letter-spacing: $field-letter-spacing;
 }
 </style>

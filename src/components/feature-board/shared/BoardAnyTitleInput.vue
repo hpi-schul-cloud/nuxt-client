@@ -5,7 +5,6 @@
 		v-model="modelValue"
 		variant="solo"
 		density="compact"
-		auto-grow
 		flat
 		:placeholder="placeholder"
 		bg-color="transparent"
