@@ -23,8 +23,10 @@ import { AnyContentElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { AxiosPromise } from "axios";
+import { useI18n } from "vue-i18n";
 
 export const useBoardApi = () => {
+	const { t } = useI18n();
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
@@ -47,7 +49,7 @@ export const useBoardApi = () => {
 		courseId: string
 	): Promise<CreateBoardResponse> => {
 		const response = await boardApi.boardControllerCreateBoard({
-			title: "Geo Board",
+			title: t("pages.room.boardCard.label.courseBoard"),
 			parentType: CreateBoardBodyParamsParentTypeEnum.Course,
 			parentId: courseId,
 		});
