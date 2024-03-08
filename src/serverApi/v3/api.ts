@@ -3722,6 +3722,12 @@ export interface NewsResponse {
      */
     displayAt: string;
     /**
+     * The point in time from when the News entity update should be displayed
+     * @type {string}
+     * @memberof NewsResponse
+     */
+    displayUpdateAt?: string;
+    /**
      * The type of source of the News entity
      * @type {string}
      * @memberof NewsResponse
