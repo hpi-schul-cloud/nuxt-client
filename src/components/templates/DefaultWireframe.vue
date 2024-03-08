@@ -61,7 +61,7 @@
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	inheritAttrs: false,
@@ -96,7 +96,7 @@ export default defineComponent({
 			default: false,
 		},
 		dataTestId: {
-			type: String,
+			type: String as PropType<string | null>,
 			default: null,
 		},
 	},
