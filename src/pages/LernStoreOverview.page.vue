@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
 	<section :class="{ inline: isInline }">
 		<v-btn
@@ -25,6 +26,7 @@
 							"
 							:placeholder="$t('pages.content.index.search.placeholder')"
 							@update:model-value="onInput"
+							data-testid="learningstore-search-input"
 						>
 							<template v-slot:append-inner>
 								<v-btn

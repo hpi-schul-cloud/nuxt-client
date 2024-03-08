@@ -3,10 +3,9 @@
 		:headline="$t('pages.administration.classes.index.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="true"
-		data-testid="admin-class-title"
 	>
 		<template #header>
-			<h1 class="text-h3">
+			<h1 class="text-h3" data-testid="admin-class-title">
 				{{ title }}
 				<span v-show="isExternal" class="text-subtitle-1">
 					({{ $t("page-class-members.title.info") }})
