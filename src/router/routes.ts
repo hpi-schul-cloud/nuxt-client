@@ -1,19 +1,19 @@
-import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
+import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { ToolContextType } from "@/serverApi/v3";
 import {
+	isEnum,
+	isMongoId,
+	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
-	isEnum,
-	isMongoId,
-	isOfficialSchoolNumber,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
-import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
+import { RouteRecordRaw, RouteLocationNormalized } from "vue-router";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 // routes configuration sorted in alphabetical order
 export const routes: Readonly<RouteRecordRaw[]> = [
