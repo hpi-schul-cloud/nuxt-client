@@ -520,4 +520,16 @@ describe("BoardApi.composable", () => {
 			);
 		});
 	});
+
+	describe("updateBoardVisibilityCall", () => {
+		it("should call boardControllerUpdateVisibility api", async () => {
+			const { publishBoard } = useBoardApi();
+
+			await publishBoard("board-id", true);
+			expect(boardApi.boardControllerUpdateVisibility).toHaveBeenCalledWith(
+				"board-id",
+				{ isVisible: true }
+			);
+		});
+	});
 });
