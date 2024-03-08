@@ -90,7 +90,7 @@ import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
-	CreateBoardBodyParamsParentTypeEnum,
+	BoardParentType,
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
@@ -256,9 +256,7 @@ export default defineComponent({
 					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
 				});
 			}
-			if (
-				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
-			) {
+			if (authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
 					icon: mdiViewListOutline,
@@ -449,7 +447,7 @@ export default defineComponent({
 		async onCreateBoard(courseId) {
 			const params = {
 				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
-				parentType: CreateBoardBodyParamsParentTypeEnum.Course,
+				parentType: BoardParentType.Course,
 				parentId: courseId,
 			};
 			const board = await roomModule.createBoard(params);

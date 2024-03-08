@@ -13,13 +13,13 @@
  */
 
 
-import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from './configuration';
+import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { assertParamExists, createRequestFunction, DUMMY_BASE_URL, serializeDataIfNeeded, setBearerAuthToObject, setSearchParams, toPathString } from './common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
 // @ts-ignore
-import { BaseAPI, BASE_PATH, RequestArgs } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
  * 
@@ -225,6 +225,15 @@ export enum BoardElementResponseTypeEnum {
  * @enum {string}
  */
 export enum BoardExternalReferenceType {
+    Course = 'course'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum BoardParentType {
     Course = 'course'
 }
 
@@ -1478,21 +1487,12 @@ export interface CreateBoardBodyParams {
      */
     parentId: string;
     /**
-     * The type of the parent
-     * @type {string}
+     * 
+     * @type {BoardParentType}
      * @memberof CreateBoardBodyParams
      */
-    parentType: CreateBoardBodyParamsParentTypeEnum;
+    parentType: BoardParentType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CreateBoardBodyParamsParentTypeEnum {
-    Course = 'course'
-}
-
 /**
  * 
  * @export
