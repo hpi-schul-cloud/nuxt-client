@@ -9,7 +9,7 @@
 	>
 		<v-card :ripple="false">
 			<v-card-title>
-				<div ref="textTitle" class="text-h4 my-2 text-break">
+				<div ref="textTitle" class="text-h4 my-2 px-6 text-break">
 					{{ $t(title) }}
 				</div>
 			</v-card-title>
@@ -47,8 +47,9 @@
 							{{ $t(`components.molecules.download.options.info.point2`) }}
 						</p>
 					</div>
-					<v-container fluid class="pt-0">
+					<v-container class="pt-0">
 						<v-checkbox
+							class="check-options"
 							v-model="allTopicsSelected"
 							data-testid="all-topics-checkbox"
 							:indeterminate="someTopicsSelected"
@@ -56,13 +57,14 @@
 							:label="$t('pages.room.modal.course.export.options.topics')"
 						/>
 						<v-checkbox
+							class="check-options ml-8"
 							v-for="item in allTopics"
 							v-model="item.isSelected"
 							:key="item.id"
 							:label="item.title"
-							class="ml-8"
 						/>
 						<v-checkbox
+							class="check-options"
 							v-model="allTasksSelected"
 							data-testid="all-tasks-checkbox"
 							:indeterminate="someTasksSelected"
@@ -70,11 +72,11 @@
 							:label="$t('pages.room.modal.course.export.options.tasks')"
 						/>
 						<v-checkbox
+							class="check-options ml-8"
 							v-for="item in allTasks"
 							v-model="item.isSelected"
 							:key="item.id"
 							:label="item.title"
-							class="ml-8"
 						/>
 					</v-container>
 				</div>
@@ -133,14 +135,18 @@
 </template>
 
 <script setup lang="ts">
-import { downloadModule } from "@/store";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	DOWNLOAD_MODULE_KEY,
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const notifier = injectStrict(NOTIFIER_MODULE_KEY);
+const downloadModule = injectStrict(DOWNLOAD_MODULE_KEY);
 const emit = defineEmits([
 	"update:isDownloadDialogOpen",
 	"dialog-closed",
@@ -265,5 +271,8 @@ function toggleAllTasks(): void {
 
 .button-section > button {
 	margin-left: calc(var(--space-base-vuetify) * 2);
+}
+.check-options {
+	display: flex;
 }
 </style>
