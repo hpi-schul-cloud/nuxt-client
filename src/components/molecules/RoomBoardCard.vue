@@ -32,7 +32,7 @@
 				</div>
 			</div>
 			<h2 class="text-h6 board-title mt-2">
-				{{ t("pages.room.boardCard.label.courseBoard") }}
+				{{ boardTitle }}
 			</h2>
 		</VCardText>
 		<VCardActions
@@ -86,10 +86,7 @@ const emit = defineEmits([
 const router = useRouter();
 
 const cardTitle = () => {
-	const titlePrefix =
-		props.columnBoardItem.title && props.columnBoardItem.title !== ""
-			? props.columnBoardItem.title
-			: t("pages.room.boardCard.label.courseBoard");
+	const titlePrefix = t("pages.room.boardCard.label.columnBoard");
 	let titleSuffix = "";
 
 	if (isDraft.value) {
@@ -155,6 +152,12 @@ const moveCardUp = () => {
 		});
 	}
 };
+
+const boardTitle = computed(() => {
+	return props.columnBoardItem.title && props.columnBoardItem.title !== ""
+		? props.columnBoardItem.title
+		: t("pages.room.boardCard.label.courseBoard").toString();
+});
 </script>
 
 <style lang="scss" scoped>

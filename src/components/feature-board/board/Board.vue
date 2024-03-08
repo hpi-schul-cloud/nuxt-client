@@ -10,7 +10,6 @@
 					@publish:board="onPublishBoard"
 					@revert:board="onRevertPublishedBoard"
 					@update:title="onUpdateBoardTitle"
-					class="mt-0"
 				/>
 			</div>
 			<div class="d-flex flex-row flex-shrink-1">
@@ -91,6 +90,8 @@ import { LightBox } from "@ui-light-box";
 import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useTouchDetection } from "@util-device-detection";
 import { useMediaQuery } from "@vueuse/core";
+import { SortableEvent } from "sortablejs";
+import { Sortable } from "sortablejs-vue3";
 import {
 	computed,
 	defineComponent,
@@ -99,13 +100,11 @@ import {
 	toRef,
 	watch,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-import { useI18n } from "vue-i18n";
-import { Sortable } from "sortablejs-vue3";
-import { SortableEvent } from "sortablejs";
 import BoardHeader from "./BoardHeader.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 

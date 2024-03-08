@@ -200,11 +200,11 @@ export default class SchoolsModule extends VuexModule {
 	@Action
 	async fetchSchool(): Promise<void> {
 		this.setLoading(true);
-		if (authModule.getUser?.schoolId) {
+		if (authModule.getSchool?.id) {
 			try {
 				const school = (
 					await this.schoolApi.schoolControllerGetSchoolById(
-						authModule.getUser?.schoolId
+						authModule.getSchool?.id
 					)
 				).data;
 

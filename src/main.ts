@@ -93,8 +93,8 @@ app.use(Vue3Mq, {
 
 app.mixin({
 	computed: {
-		$user() {
-			return authModule.getUser;
+		$me() {
+			return authModule.getMe;
 		},
 	},
 });

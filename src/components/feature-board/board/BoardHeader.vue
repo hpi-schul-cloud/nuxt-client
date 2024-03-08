@@ -115,6 +115,8 @@ export default defineComponent({
 			emit("revert:board");
 		};
 		const onUpdateTitle = useDebounceFn((newTitle: string) => {
+			if (newTitle.length < 1) return;
+
 			emit("update:title", newTitle);
 		}, 1000);
 		return {

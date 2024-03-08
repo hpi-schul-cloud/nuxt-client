@@ -1,14 +1,14 @@
-import { nextTick, onMounted, ref } from "vue";
-import { useBoardApi } from "./BoardApi.composable";
-import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { useSharedEditMode } from "./EditMode.composable";
-import { Board } from "@/types/board/Board";
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	BoardObjectType,
 	ErrorType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
+import { Board } from "@/types/board/Board";
+import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
+import { nextTick, onMounted, ref } from "vue";
+import { useBoardApi } from "./BoardApi.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
+import { useSharedEditMode } from "./EditMode.composable";
 
 export const useBoardState = (id: string) => {
 	const { handleError, notifyWithTemplate } = useErrorHandler();

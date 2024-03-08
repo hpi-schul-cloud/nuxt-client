@@ -71,18 +71,35 @@ describe("BoardApi.composable", () => {
 	});
 
 	describe("updateBoardTitle", () => {
-		it("should call boardControllerUpdateBoardTitle api", async () => {
-			const { updateBoardTitleCall } = useBoardApi();
-			const payload = {
-				id: "update-card-id",
-				title: "update-title",
-			};
+		describe("when title is empty", () => {
+			it("should not call boardControllerUpdateBoardTitle api", async () => {
+				const { updateBoardTitleCall } = useBoardApi();
+				const payload = {
+					id: "update-card-id",
+					title: "",
+				};
 
-			await updateBoardTitleCall(payload.id, payload.title);
-			expect(boardApi.boardControllerUpdateBoardTitle).toHaveBeenCalledWith(
-				payload.id,
-				{ title: payload.title }
-			);
+				await updateBoardTitleCall(payload.id, payload.title);
+
+				expect(boardApi.boardControllerUpdateBoardTitle).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when title is not empty", () => {
+			it("should call boardControllerUpdateBoardTitle api", async () => {
+				const { updateBoardTitleCall } = useBoardApi();
+				const payload = {
+					id: "update-card-id",
+					title: "update-title",
+				};
+
+				await updateBoardTitleCall(payload.id, payload.title);
+
+				expect(boardApi.boardControllerUpdateBoardTitle).toHaveBeenCalledWith(
+					payload.id,
+					{ title: payload.title }
+				);
+			});
 		});
 	});
 
