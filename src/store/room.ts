@@ -1,6 +1,8 @@
 import {
 	BoardApiFactory,
 	CoursesApiFactory,
+	CreateBoardBodyParams,
+	CreateBoardResponse,
 	LessonApiFactory,
 	LessonApiInterface,
 	PatchOrderParams,
@@ -201,6 +203,24 @@ export default class RoomModule extends VuexModule {
 		this.resetBusinessError();
 		try {
 			await this.boardApi.boardControllerDeleteBoard(boardId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async createBoard(
+		prams: CreateBoardBodyParams
+	): Promise<CreateBoardResponse | undefined> {
+		this.resetBusinessError();
+		try {
+			const { data } = await this.boardApi.boardControllerCreateBoard(prams);
+
+			return data;
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,

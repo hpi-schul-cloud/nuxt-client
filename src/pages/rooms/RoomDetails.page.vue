@@ -90,6 +90,7 @@ import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
+	CreateBoardBodyParamsParentTypeEnum,
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
@@ -261,7 +262,7 @@ export default defineComponent({
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
 					icon: mdiViewListOutline,
-					href: `/rooms/${this.roomData.roomId}/create/board`,
+					customEvent: () => this.onCreateBoard(this.roomData.roomId),
 					dataTestId: "fab_button_add_board",
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),
 				});
@@ -443,6 +444,16 @@ export default defineComponent({
 		},
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
+		},
+
+		async onCreateBoard(courseId) {
+			const params = {
+				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
+				parentType: CreateBoardBodyParamsParentTypeEnum.Course,
+				parentId: courseId,
+			};
+			const board = await roomModule.createBoard(params);
+			await this.$router.push(`/rooms/${board.id}/board`);
 		},
 	},
 	watch: {

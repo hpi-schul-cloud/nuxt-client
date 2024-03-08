@@ -243,14 +243,6 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		}),
 	},
 	{
-		path: `/rooms/:id(${REGEX_ID})/create/board`,
-		component: async () => (await import("@page-board")).CreateColumnBoardPage,
-		name: "rooms-new-board",
-		props: (route: RouteLocationNormalized) => ({
-			courseId: route.params.id,
-		}),
-	},
-	{
 		path: "/rooms-list",
 		component: () => import("@/pages/rooms/RoomList.page.vue"),
 		name: "rooms-list",

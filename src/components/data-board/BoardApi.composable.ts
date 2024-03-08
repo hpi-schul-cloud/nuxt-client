@@ -7,8 +7,6 @@ import {
 	CardResponse,
 	ColumnResponse,
 	ContentElementType,
-	CreateBoardBodyParamsParentTypeEnum,
-	CreateBoardResponse,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
 	DrawingElementContent,
@@ -23,10 +21,8 @@ import { AnyContentElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { AxiosPromise } from "axios";
-import { useI18n } from "vue-i18n";
 
 export const useBoardApi = () => {
-	const { t } = useI18n();
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
@@ -43,18 +39,6 @@ export const useBoardApi = () => {
 
 			throw createApplicationError(responseError.code);
 		}
-	};
-
-	const createBoardCall = async (
-		courseId: string
-	): Promise<CreateBoardResponse> => {
-		const response = await boardApi.boardControllerCreateBoard({
-			title: t("pages.room.boardCard.label.courseBoard"),
-			parentType: CreateBoardBodyParamsParentTypeEnum.Course,
-			parentId: courseId,
-		});
-
-		return response.data;
 	};
 
 	const createColumnCall = async (boardId: string): Promise<ColumnResponse> => {
@@ -240,6 +224,5 @@ export const useBoardApi = () => {
 		updateElementCall,
 		createCardCall,
 		getContextInfo,
-		createBoardCall,
 	};
 };

@@ -1,4 +1,3 @@
-import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardPermissions } from "./BoardPermissions.composable";
@@ -8,7 +7,6 @@ import { useContentElementState } from "./ContentElementState.composable";
 import { useEditMode, useSharedEditMode } from "./EditMode.composable";
 
 export {
-	useBoardApi,
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useBoardState,
