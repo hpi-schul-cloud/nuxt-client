@@ -12,7 +12,7 @@ import {
 } from "@@/tests/test-utils/factory";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { nextTick, ref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
@@ -560,6 +560,48 @@ describe("BoardState.composable", () => {
 
 			const boardColumn = board.value.columns.find((c) => c.id === column.id);
 			expect(boardColumn?.title).toStrictEqual(NEW_TITLE);
+		});
+	});
+
+	describe("updateBoardTitle", () => {
+		const NEW_TITLE = "newTitle";
+		it("should not call updateBoardTitleCall when board value is undefined", async () => {
+			const { updateBoardTitle, board } = setup();
+			board.value = undefined;
+
+			await updateBoardTitle(NEW_TITLE);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateBoardTitleCall).not.toHaveBeenCalled();
+		});
+
+		it("shouldhandle error when api returns an error code", async () => {
+			const { updateBoardTitle, board } = setup();
+			board.value = testBoard;
+
+			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue(
+				setupErrorResponse()
+			);
+
+			await updateBoardTitle(NEW_TITLE);
+			await nextTick();
+
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+		});
+
+		it("should update board title", async () => {
+			const { updateBoardTitle, board } = setup();
+			board.value = testBoard;
+
+			await updateBoardTitle(NEW_TITLE);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateBoardTitleCall).toHaveBeenCalledWith(
+				board.value.id,
+				NEW_TITLE
+			);
+
+			expect(board.value.title).toStrictEqual(NEW_TITLE);
 		});
 	});
 
