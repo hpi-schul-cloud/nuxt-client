@@ -6316,6 +6316,19 @@ export interface ToolReferenceResponse {
 /**
  * 
  * @export
+ * @interface UpdateBoardTitleParams
+ */
+export interface UpdateBoardTitleParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateBoardTitleParams
+     */
+    title: string;
+}
+/**
+ * 
+ * @export
  * @interface UpdateElementContentBodyParams
  */
 export interface UpdateElementContentBodyParams {
@@ -7840,15 +7853,15 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
+         * @param {UpdateBoardTitleParams} updateBoardTitleParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateBoardTitle: async (boardId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
+        boardControllerUpdateBoardTitle: async (boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerUpdateBoardTitle', 'boardId', boardId)
-            // verify required parameter 'renameBodyParams' is not null or undefined
-            assertParamExists('boardControllerUpdateBoardTitle', 'renameBodyParams', renameBodyParams)
+            // verify required parameter 'updateBoardTitleParams' is not null or undefined
+            assertParamExists('boardControllerUpdateBoardTitle', 'updateBoardTitleParams', updateBoardTitleParams)
             const localVarPath = `/boards/{boardId}/title`
                 .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -7873,7 +7886,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(renameBodyParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateBoardTitleParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -7938,12 +7951,12 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
+         * @param {UpdateBoardTitleParams} updateBoardTitleParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateBoardTitle(boardId, renameBodyParams, options);
+        async boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -8000,12 +8013,12 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
+         * @param {UpdateBoardTitleParams} updateBoardTitleParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.boardControllerUpdateBoardTitle(boardId, renameBodyParams, options).then((request) => request(axios, basePath));
+        boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): AxiosPromise<void> {
+            return localVarFp.boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -8060,12 +8073,12 @@ export interface BoardApiInterface {
      * 
      * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
-     * @param {RenameBodyParams} renameBodyParams 
+     * @param {UpdateBoardTitleParams} updateBoardTitleParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardApiInterface
      */
-    boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
+    boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -8128,13 +8141,13 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * 
      * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
-     * @param {RenameBodyParams} renameBodyParams 
+     * @param {UpdateBoardTitleParams} updateBoardTitleParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardApi
      */
-    public boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any) {
-        return BoardApiFp(this.configuration).boardControllerUpdateBoardTitle(boardId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
