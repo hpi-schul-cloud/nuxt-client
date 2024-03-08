@@ -5,6 +5,7 @@
 				ref="ghostColumnTitleRef"
 				:isColumnActive="isColumnActive"
 				@add-column="onAddColumn"
+				data-testid="add-column"
 			/>
 			<div
 				:style="{ 'min-width': colWidth + 'px' }"
