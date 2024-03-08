@@ -3,7 +3,7 @@
 		:headline="t('pages.administration.classes.index.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="true"
-		dataTestId="admin-class-title"
+		data-testid="admin-class-title"
 	>
 		<v-tabs class="tabs-max-width mb-5" grow v-model="activeTab">
 			<v-tab value="next" data-testid="admin-class-next-year-tab">

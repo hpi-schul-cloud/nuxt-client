@@ -97,7 +97,7 @@ export default defineComponent({
 		},
 		dataTestId: {
 			type: String,
-			default: "",
+			default: null,
 		},
 	},
 	computed: {

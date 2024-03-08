@@ -19,7 +19,7 @@ export default defineComponent({
 	name: "BoardMenuAction",
 	props: {
 		icon: { type: String as PropType<IconProps["icon"]> },
-		dataTestId: { type: String, default: "" },
+		dataTestId: { type: String, default: null },
 	},
 });
 </script>
