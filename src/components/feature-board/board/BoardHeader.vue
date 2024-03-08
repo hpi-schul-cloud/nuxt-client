@@ -9,14 +9,14 @@
 				<BoardAnyTitleInput
 					ref="boardHeader"
 					scope="board"
-					:value="title"
+					:value="boardTitle"
 					data-testid="board-title"
 					:isEditMode="isEditMode"
 					:placeholder="titlePlaceholder"
 					:isFocused="isFocusedById"
 					:maxLength="100"
 					:style="{ width: `${fieldWidth}px` }"
-					@update:value="onUpdateTitle"
+					@update:value="updateBoardTitle"
 				/>
 				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 			</div>
@@ -54,7 +54,6 @@ import {
 	BoardMenuActionRevert,
 } from "@ui-board";
 import { useDebounceFn } from "@vueuse/core";
-// import { useVModel } from "@vueuse/core";
 import { defineComponent, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
@@ -102,16 +101,17 @@ export default defineComponent({
 		);
 		const { hasEditPermission } = useBoardPermissions();
 
-		const boardTitle = ref("");
 		const inputWidthCalcSpan = ref<HTMLElement>();
 		const fieldWidth = ref(0);
 
-		watchEffect(() => {
-			boardTitle.value = props.title;
-		});
-
 		onMounted(() => {
 			calculateWidth();
+		});
+
+		const boardTitle = ref("");
+
+		watchEffect(() => {
+			boardTitle.value = props.title;
 		});
 
 		const onStartEditMode = () => {
@@ -134,21 +134,20 @@ export default defineComponent({
 			emit("revert:board");
 		};
 
-		const onUpdateTitle = async (newTitle: string) => {
-			calculateWidth(newTitle);
-			await emitTitle(newTitle);
+		const updateBoardTitle = async (value: string) => {
+			boardTitle.value = value;
+			calculateWidth();
+			await emitTitle(value);
 		};
 
 		const emitTitle = useDebounceFn((newTitle: string) => {
 			if (newTitle.length < 1) return;
 
 			emit("update:title", newTitle);
-		}, 100);
+		}, 1000);
 
-		const calculateWidth = (newTitle?: string) => {
+		const calculateWidth = () => {
 			if (!inputWidthCalcSpan.value) return;
-			console.log(boardTitle.value, newTitle);
-			// boardTitle.value = newTitle;
 
 			inputWidthCalcSpan.value.innerHTML = boardTitle.value.replace(
 				/\s/g,
@@ -160,7 +159,9 @@ export default defineComponent({
 		};
 
 		return {
+			t,
 			boardHeader,
+			boardTitle,
 			hasEditPermission,
 			isEditMode,
 			isFocusContained,
@@ -169,11 +170,10 @@ export default defineComponent({
 			onEndEditMode,
 			onPublishBoard,
 			onRevertPublishedBoard,
-			onUpdateTitle,
 			calculateWidth,
 			fieldWidth,
 			inputWidthCalcSpan,
-			t,
+			updateBoardTitle,
 		};
 	},
 });
@@ -188,7 +188,7 @@ export default defineComponent({
 
 .input-width-calc-span {
 	position: absolute;
-	/* left: -9999px; */
+	left: -9999px;
 	display: inline-block;
 	min-width: 6em;
 	padding: 0 $field-control-padding-end 0 $field-control-padding-start;
