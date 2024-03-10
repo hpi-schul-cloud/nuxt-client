@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="d-flex align-items-center">
 		<InlineEditInteractionHandler
 			:isEditMode="isEditMode"
 			@start-edit-mode="onStartEditMode"
@@ -21,7 +21,7 @@
 				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 			</div>
 		</InlineEditInteractionHandler>
-		<div class="">
+		<div class="d-flex">
 			<v-chip v-if="isDraft" size="small" class="align-self-center">
 				{{ t("common.words.draft") }}
 			</v-chip>
