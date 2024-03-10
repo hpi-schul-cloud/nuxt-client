@@ -4,28 +4,18 @@
 		@click="onClick"
 		data-testid="board-menu-action-publish"
 	>
-		{{ $t("common.action.publish") }}
+		{{ t("common.action.publish") }}
 	</BoardMenuAction>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiEyeOutline } from "@mdi/js";
 import { BoardMenuAction } from "@ui-board";
-import { defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "BoardMenuActionPublish",
-	components: {
-		BoardMenuAction,
-	},
-	emits: ["click"],
-	setup(_, { emit }) {
-		const onClick = ($event: Event) => emit("click", $event);
+const { t } = useI18n();
 
-		return {
-			onClick,
-			mdiEyeOutline,
-		};
-	},
-});
+const emit = defineEmits(["click"]);
+
+const onClick = ($event: Event) => emit("click", $event);
 </script>
