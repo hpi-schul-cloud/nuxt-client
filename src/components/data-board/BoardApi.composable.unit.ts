@@ -523,9 +523,9 @@ describe("BoardApi.composable", () => {
 
 	describe("updateBoardVisibilityCall", () => {
 		it("should call boardControllerUpdateVisibility api", async () => {
-			const { publishBoard } = useBoardApi();
+			const { updateBoardVisibilityCall } = useBoardApi();
 
-			await publishBoard("board-id", true);
+			await updateBoardVisibilityCall("board-id", true);
 			expect(boardApi.boardControllerUpdateVisibility).toHaveBeenCalledWith(
 				"board-id",
 				{ isVisible: true }

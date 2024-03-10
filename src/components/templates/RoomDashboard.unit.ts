@@ -568,7 +568,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			const boardCard = wrapper.findComponent({ name: "room-board-card" });
 			roomModule.publishCard = publishCardMock;
 
-			boardCard.vm.$emit("publish-board");
+			boardCard.vm.$emit("update-visibility", true);
 
 			expect(publishCardMock).toHaveBeenCalled();
 			expect(publishCardMock.mock.calls[0][0].visibility).toStrictEqual(true);

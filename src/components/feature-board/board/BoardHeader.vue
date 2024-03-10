@@ -32,10 +32,7 @@
 			>
 				<BoardMenuActionEdit @click="onStartEditMode" />
 				<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-				<BoardMenuActionRevert
-					v-if="!isDraft"
-					@click="onRevertPublishedBoard"
-				/>
+				<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 			</BoardMenu>
 		</div>
 	</div>
@@ -87,7 +84,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["publish:board", "revert:board", "update:title"],
+	emits: ["update:title", "update:visibility"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 		const boardId = toRef(props, "boardId");
@@ -126,12 +123,12 @@ export default defineComponent({
 
 		const onPublishBoard = () => {
 			if (!hasEditPermission) return;
-			emit("publish:board");
+			emit("update:visibility", true);
 		};
 
-		const onRevertPublishedBoard = () => {
+		const onUnpublishBoard = () => {
 			if (!hasEditPermission) return;
-			emit("revert:board");
+			emit("update:visibility", false);
 		};
 
 		const updateBoardTitle = async (value: string) => {
@@ -169,7 +166,7 @@ export default defineComponent({
 			onStartEditMode,
 			onEndEditMode,
 			onPublishBoard,
-			onRevertPublishedBoard,
+			onUnpublishBoard,
 			calculateWidth,
 			fieldWidth,
 			inputWidthCalcSpan,

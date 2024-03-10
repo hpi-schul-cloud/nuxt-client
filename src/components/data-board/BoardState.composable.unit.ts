@@ -633,10 +633,9 @@ describe("BoardState.composable", () => {
 			await updateBoardVisibility(true);
 			await nextTick();
 
-			expect(mockedBoardApiCalls.publishBoard).toHaveBeenCalledWith(
-				board.value.id,
-				true
-			);
+			expect(
+				mockedBoardApiCalls.updateBoardVisibilityCall
+			).toHaveBeenCalledWith(board.value.id, true);
 
 			expect(board.value.isVisible).toStrictEqual(true);
 		});
@@ -645,7 +644,9 @@ describe("BoardState.composable", () => {
 			const { updateBoardVisibility, board } = setup();
 			board.value = testBoard;
 
-			mockedBoardApiCalls.publishBoard.mockRejectedValue(setupErrorResponse());
+			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue(
+				setupErrorResponse()
+			);
 
 			await updateBoardVisibility(false);
 			await nextTick();

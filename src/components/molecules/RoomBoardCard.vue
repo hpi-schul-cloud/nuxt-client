@@ -1,7 +1,7 @@
 <template>
 	<VCard
 		class="mx-auto mb-4 board-card"
-		:class="getStyleClasses()"
+		:class="{ 'board-hidden': isDraft }"
 		hover
 		:aria-label="ariaLabel"
 		tabindex="0"
@@ -20,10 +20,13 @@
 				<div class="d-flex align-center mb-3 tagline">
 					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
 					<span class="title-board-card">
-						{{ cardTitle() }}
+						{{ cardTitle }}
 					</span>
 				</div>
-				<div class="dot-menu-section" v-if="!isDraft && role === Roles.Teacher">
+				<div
+					class="dot-menu-section"
+					v-if="!isDraft && userRole === Roles.Teacher"
+				>
 					<RoomDotMenu
 						:menu-items="moreActionsMenuItems"
 						data-testid="content-card-board-menu"
@@ -37,7 +40,7 @@
 		</VCardText>
 		<VCardActions
 			data-testid="content-card-task-actions"
-			v-if="isDraft && role === Roles.Teacher"
+			v-if="isDraft && userRole === Roles.Teacher"
 		>
 			<VBtn
 				v-for="(action, index) in cardActions"
@@ -73,43 +76,38 @@ const props = defineProps({
 		type: String,
 		default: "",
 	},
-	role: { type: String, required: true },
+	userRole: { type: String, required: true },
 });
 const emit = defineEmits([
 	"tab-pressed",
 	"on-drag",
 	"move-element",
-	"publish-board",
-	"revert-board",
+	"update-visibility",
 ]);
 
 const router = useRouter();
 
-const cardTitle = () => {
+const cardTitle = computed(() => {
 	const titlePrefix = t("pages.room.boardCard.label.columnBoard");
-	let titleSuffix = "";
 
 	if (isDraft.value) {
-		titleSuffix = ` - ${t("common.words.draft")}`;
+		const titleSuffix = ` - ${t("common.words.draft")}`;
+		return titlePrefix + titleSuffix;
 	}
 
-	return titlePrefix + titleSuffix;
-};
-
-const getStyleClasses = () => {
-	return isDraft.value ? "board-hidden" : "";
-};
+	return titlePrefix;
+});
 
 const isDraft = computed(() => {
 	return !props.columnBoardItem.published;
 });
 
-const handlePublish = () => {
-	emit("publish-board");
+const onPublish = () => {
+	emit("update-visibility", true);
 };
 
-const handleRevert = () => {
-	emit("revert-board");
+const onUnpublish = () => {
+	emit("update-visibility", false);
 };
 
 const openBoard = async () => {
@@ -120,7 +118,7 @@ const openBoard = async () => {
 
 const cardActions = [
 	{
-		action: handlePublish,
+		action: onPublish,
 		name: t("common.action.publish"),
 		dataTestId: "content-card-board-menu-publish",
 	},
@@ -129,9 +127,9 @@ const cardActions = [
 const moreActionsMenuItems = [
 	{
 		icon: mdiUndoVariant,
-		action: handleRevert,
+		action: onUnpublish,
 		name: t("pages.room.cards.label.revert"),
-		dataTestId: "content-card-board-menu-revert",
+		dataTestId: "content-card-board-menu-unpublish",
 	},
 ];
 

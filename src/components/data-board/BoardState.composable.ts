@@ -23,8 +23,8 @@ export const useBoardState = (id: string) => {
 		moveColumnCall,
 		updateBoardTitleCall,
 		updateColumnTitleCall,
+		updateBoardVisibilityCall,
 		createCardCall,
-		publishBoard,
 	} = useBoardApi();
 	const { setEditModeId } = useSharedEditMode();
 
@@ -260,7 +260,7 @@ export const useBoardState = (id: string) => {
 		if (board.value === undefined) return;
 
 		try {
-			await publishBoard(board.value.id, newVisibility);
+			await updateBoardVisibilityCall(board.value.id, newVisibility);
 			board.value.isVisible = newVisibility;
 		} catch (error) {
 			handleError(error, {

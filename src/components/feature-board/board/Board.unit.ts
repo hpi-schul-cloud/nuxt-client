@@ -608,28 +608,14 @@ describe("Board", () => {
 			});
 		});
 
-		describe("@onPublishBoard", () => {
+		describe("@onUpdateBoardVisibility", () => {
 			it("should update board visibility", async () => {
 				const { wrapper } = setup();
 
 				const boardHeader = wrapper.findComponent({
 					name: "BoardHeader",
 				});
-				boardHeader.vm.$emit("publish:board");
-				await nextTick();
-
-				expect(mockedBoardStateCalls.updateBoardVisibility).toHaveBeenCalled();
-			});
-		});
-
-		describe("@onRevertBoard", () => {
-			it("should update board visibility", async () => {
-				const { wrapper } = setup();
-
-				const boardHeader = wrapper.findComponent({
-					name: "BoardHeader",
-				});
-				boardHeader.vm.$emit("revert:board");
+				boardHeader.vm.$emit("update:visibility");
 				await nextTick();
 
 				expect(mockedBoardStateCalls.updateBoardVisibility).toHaveBeenCalled();

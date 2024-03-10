@@ -207,7 +207,10 @@ export const useBoardApi = () => {
 		};
 	};
 
-	const publishBoard = async (boardId: string, isVisible: boolean) => {
+	const updateBoardVisibilityCall = async (
+		boardId: string,
+		isVisible: boolean
+	) => {
 		return boardApi.boardControllerUpdateVisibility(boardId, { isVisible });
 	};
 
@@ -222,12 +225,12 @@ export const useBoardApi = () => {
 		moveColumnCall,
 		moveElementCall,
 		updateBoardTitleCall,
+		updateBoardVisibilityCall,
 		updateCardHeightCall,
 		updateCardTitle,
 		updateColumnTitleCall,
 		updateElementCall,
 		createCardCall,
 		getContextInfo,
-		publishBoard,
 	};
 };

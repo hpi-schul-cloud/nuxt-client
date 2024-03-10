@@ -13,7 +13,7 @@ const useRouterMock = <jest.Mock>useRouter;
 
 type BoardData = {
 	id: string;
-	title: string | undefined;
+	title?: string;
 	published: boolean;
 	createdAt: string;
 	updatedAt: string;
@@ -71,15 +71,21 @@ describe("RoomBoardCard", () => {
 	});
 
 	describe("when a board card is rendered", () => {
-		const role = "teacher";
+		const userRole = "teacher";
 		it("should be found in dom", () => {
-			const { wrapper } = setup({ boardData: mockDraftBoardData }, { role });
+			const { wrapper } = setup(
+				{ boardData: mockDraftBoardData },
+				{ userRole }
+			);
 			expect(wrapper.findComponent(RoomBoardCard).exists()).toBe(true);
 		});
 
 		describe("when board title is defined and not empty", () => {
 			it("should have correct board title", () => {
-				const { wrapper } = setup({ boardData: mockDraftBoardData }, { role });
+				const { wrapper } = setup(
+					{ boardData: mockDraftBoardData },
+					{ userRole }
+				);
 				const expectedBoardTitle = mockDraftBoardData.title;
 				const boardTitle = wrapper.find(".board-title").element.textContent;
 
@@ -91,7 +97,7 @@ describe("RoomBoardCard", () => {
 			it("should have correct board title", () => {
 				const { wrapper } = setup(
 					{ boardData: { ...mockDraftBoardData, title: "" } },
-					{ role }
+					{ userRole }
 				);
 				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
 				const boardTitle = wrapper.find(".board-title").element.textContent;
@@ -104,7 +110,7 @@ describe("RoomBoardCard", () => {
 			it("should have correct board title", () => {
 				const { wrapper } = setup(
 					{ boardData: { ...mockDraftBoardData, title: undefined } },
-					{ role }
+					{ userRole }
 				);
 				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
 				const boardTitle = wrapper.find(".board-title").element.textContent;
@@ -114,7 +120,10 @@ describe("RoomBoardCard", () => {
 		});
 
 		it("should have correct combined card title for draft board", () => {
-			const { wrapper } = setup({ boardData: mockDraftBoardData }, { role });
+			const { wrapper } = setup(
+				{ boardData: mockDraftBoardData },
+				{ userRole }
+			);
 			const boardCardTitle =
 				wrapper.find(".title-board-card").element.textContent;
 
@@ -126,14 +135,14 @@ describe("RoomBoardCard", () => {
 		it("should use hidden UI only for draft board cards", async () => {
 			const { wrapper: wrapperDraft } = setup(
 				{ boardData: mockDraftBoardData },
-				{ role }
+				{ userRole }
 			);
 			const boardDraftCard = wrapperDraft.find(".board-card");
 			expect(boardDraftCard.element.className).toContain("board-hidden");
 
 			const { wrapper: wrapperPublished } = setup(
 				{ boardData: mockPublishedBoardData },
-				{ role }
+				{ userRole }
 			);
 			const boardPublishedCard = wrapperPublished.find(".board-card");
 			expect(boardPublishedCard.element.className).not.toContain(
@@ -141,17 +150,17 @@ describe("RoomBoardCard", () => {
 			);
 		});
 
-		it("should show three dot menu and find revert button for teachers on published boards", async () => {
+		it("should show three dot menu and find unpublish button for teachers on published boards", async () => {
 			const { wrapper: wrapperPublished } = setup(
 				{ boardData: mockPublishedBoardData },
-				{ role }
+				{ userRole }
 			);
 
 			const threeDotMenuPublished = wrapperPublished.find(".three-dot-button");
 			await threeDotMenuPublished.trigger("click");
 
 			const moreActionButtons = wrapperPublished.findAllComponents(
-				`[data-testid="content-card-board-menu-revert"]`
+				`[data-testid="content-card-board-menu-unpublish"]`
 			);
 			expect(moreActionButtons).toHaveLength(1);
 		});
@@ -159,7 +168,7 @@ describe("RoomBoardCard", () => {
 		it("should show publish action button for teachers on draft boards", async () => {
 			const { wrapper: wrapperDraft } = setup(
 				{ boardData: mockDraftBoardData },
-				{ role }
+				{ userRole }
 			);
 
 			const cardActionButtons = wrapperDraft.findAllComponents(
@@ -171,7 +180,7 @@ describe("RoomBoardCard", () => {
 		it("should not show three dot menu for students at all or for teachers on draft boards", async () => {
 			const { wrapper: wrapperPublishedStudent } = setup(
 				{ boardData: mockPublishedBoardData },
-				{ role: "student" }
+				{ userRole: "student" }
 			);
 			const threeDotMenuPublishedStudent =
 				wrapperPublishedStudent.find(".three-dot-button");
@@ -179,7 +188,7 @@ describe("RoomBoardCard", () => {
 
 			const { wrapper: wrapperDraftStudent } = setup(
 				{ boardData: mockDraftBoardData },
-				{ role: "student" }
+				{ userRole: "student" }
 			);
 			const threeDotMenuDraftStudent =
 				wrapperDraftStudent.find(".three-dot-button");
@@ -187,7 +196,7 @@ describe("RoomBoardCard", () => {
 
 			const { wrapper: wrapperDraft } = setup(
 				{ boardData: mockDraftBoardData },
-				{ role }
+				{ userRole }
 			);
 			const threeDotMenuDraft = wrapperDraft.find(".three-dot-button");
 			expect(threeDotMenuDraft.exists()).toBe(false);
@@ -196,7 +205,7 @@ describe("RoomBoardCard", () => {
 		it("should not show card actions for students at all or for teachers on published boards", async () => {
 			const { wrapper: wrapperDraftStudent } = setup(
 				{ boardData: mockDraftBoardData },
-				{ role: "student" }
+				{ userRole: "student" }
 			);
 			const boardDraftCardStudent = wrapperDraftStudent.find(".board-card");
 			const actionButtonsDraftStudent =
@@ -205,7 +214,7 @@ describe("RoomBoardCard", () => {
 
 			const { wrapper: wrapperPublishedStudent } = setup(
 				{ boardData: mockPublishedBoardData },
-				{ role: "student" }
+				{ userRole: "student" }
 			);
 			const boardPublishedCardStudent =
 				wrapperPublishedStudent.find(".board-card");
@@ -215,7 +224,7 @@ describe("RoomBoardCard", () => {
 
 			const { wrapper: wrapperPublished } = setup(
 				{ boardData: mockPublishedBoardData },
-				{ role }
+				{ userRole }
 			);
 			const boardPublishedCard = wrapperPublished.find(".board-card");
 			const actionButtonsPublished =
@@ -302,10 +311,10 @@ describe("RoomBoardCard", () => {
 			}
 		);
 
-		it("should emit 'publish-board' when card action button is pressed on draft board", async () => {
+		it("should emit 'update-visibility' when card action button is pressed on draft board", async () => {
 			const { wrapper } = setup(
 				{ boardData: mockDraftBoardData },
-				{ role: "teacher" }
+				{ userRole: "teacher" }
 			);
 			const boardCard = wrapper.find(".board-card");
 			const cardActionButtons = boardCard.findAllComponents(
@@ -313,24 +322,24 @@ describe("RoomBoardCard", () => {
 			);
 
 			await cardActionButtons[0].trigger("click");
-			const emitted = wrapper.emitted("publish-board");
+			const emitted = wrapper.emitted("update-visibility");
 			expect(emitted).toHaveLength(1);
 		});
 
-		it("should emit 'revert-board' when three dot menu button and action button is pressed on published board", async () => {
+		it("should emit 'update-visibility' when three dot menu button and action button is pressed on published board", async () => {
 			const { wrapper } = setup(
 				{ boardData: mockPublishedBoardData },
-				{ role: "teacher" }
+				{ userRole: "teacher" }
 			);
 
 			const threeDotMenuPublished = wrapper.find(".three-dot-button");
 			await threeDotMenuPublished.trigger("click");
 			const moreActionButtons = wrapper.findAllComponents(
-				`[data-testid="content-card-board-menu-revert"]`
+				`[data-testid="content-card-board-menu-unpublish"]`
 			);
 
 			await moreActionButtons[0].trigger("click");
-			const emitted = wrapper.emitted("revert-board");
+			const emitted = wrapper.emitted("update-visibility");
 			expect(emitted).toHaveLength(1);
 		});
 	});

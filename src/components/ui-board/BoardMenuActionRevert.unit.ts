@@ -6,7 +6,7 @@ import { BoardMenuActionRevert } from "@ui-board";
 import { mount } from "@vue/test-utils";
 import BoardMenuAction from "./BoardMenuAction.vue";
 
-describe("BoardMenuActionPublish Component", () => {
+describe("BoardMenuActionRevert Component", () => {
 	const setup = () => {
 		const wrapper = mount(BoardMenuActionRevert, {
 			global: {

@@ -16,10 +16,10 @@
 			>
 				<template #item="{ element: item, index }">
 					<div>
-						<room-board-card
+						<RoomBoardCard
 							v-if="item.type === cardTypes.ColumnBoard"
 							:ref="`item_${index}`"
-							:role="role"
+							:user-role="role"
 							:key-drag="isDragging"
 							:drag-in-progress="dragInProgress"
 							:column-board-item="item.content"
@@ -36,13 +36,12 @@
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
-							@publish-board="postDraftElement(item.content.id)"
-							@revert-board="revertPublishedElement(item.content.id)"
+							@update-visibility="updateCardVisibility(item.content.id, $event)"
 						/>
-						<room-task-card
+						<RoomTaskCard
 							v-if="item.type === cardTypes.Task"
 							:ref="`item_${index}`"
-							:role="role"
+							:user-role="role"
 							:room="taskData"
 							:task="item.content"
 							:aria-label="
@@ -54,8 +53,7 @@
 							:key-drag="isDragging"
 							class="task-card"
 							:drag-in-progress="dragInProgress"
-							@post-task="postDraftElement(item.content.id)"
-							@revert-task="revertPublishedElement(item.content.id)"
+							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
@@ -65,10 +63,10 @@
 							@copy-task="copyTask(item.content.id)"
 							@share-task="getSharedTask(item.content.id)"
 						/>
-						<room-lesson-card
+						<RoomLessonCard
 							v-if="item.type === cardTypes.Lesson"
 							:ref="`item_${index}`"
-							:role="role"
+							:user-role="role"
 							:lesson="item.content"
 							:room="lessonData"
 							:aria-label="
@@ -80,8 +78,7 @@
 							:key-drag="isDragging"
 							class="lesson-card"
 							:drag-in-progress="dragInProgress"
-							@post-lesson="postDraftElement(item.content.id)"
-							@revert-lesson="revertPublishedElement(item.content.id)"
+							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
@@ -95,10 +92,10 @@
 		</div>
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
-				<room-board-card
+				<RoomBoardCard
 					v-if="item.type === cardTypes.ColumnBoard && item.content.published"
 					:ref="`item_${index}`"
-					:role="role"
+					:user-role="role"
 					:key-drag="isDragging"
 					:drag-in-progress="dragInProgress"
 					:column-board-item="item.content"
@@ -113,10 +110,10 @@
 						})
 					"
 				/>
-				<room-task-card
+				<RoomTaskCard
 					v-if="item.type === cardTypes.Task"
 					:ref="`item_${index}`"
-					:role="role"
+					:user-role="role"
 					:task="item.content"
 					:aria-label="
 						$t('pages.room.cards.aria', {
@@ -130,10 +127,10 @@
 					@finish-task="finishTask(item.content.id)"
 					@restore-task="restoreTask(item.content.id)"
 				/>
-				<room-lesson-card
+				<RoomLessonCard
 					v-if="item.type === cardTypes.Lesson"
 					:ref="`item_${index}`"
-					:role="role"
+					:user-role="role"
 					:lesson="item.content"
 					:room="lessonData"
 					:aria-label="
@@ -274,11 +271,8 @@ export default {
 		}
 	},
 	methods: {
-		async postDraftElement(elementId) {
-			await roomModule.publishCard({ elementId, visibility: true });
-		},
-		async revertPublishedElement(elementId) {
-			await roomModule.publishCard({ elementId, visibility: false });
+		async updateCardVisibility(elementId, visibility) {
+			await roomModule.publishCard({ elementId, visibility });
 		},
 		async onSort(items) {
 			const idList = {};
