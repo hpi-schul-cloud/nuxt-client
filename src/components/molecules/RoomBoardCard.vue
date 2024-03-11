@@ -19,7 +19,7 @@
 			<div class="top-row-container mb-0">
 				<div class="d-flex align-center mb-3 tagline">
 					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
-					<span class="title-board-card">
+					<span class="title-board-card" data-testid="card-title">
 						{{ cardTitle }}
 					</span>
 				</div>
@@ -34,7 +34,7 @@
 					/>
 				</div>
 			</div>
-			<h2 class="text-h6 board-title mt-2">
+			<h2 class="text-h6 board-title mt-2" data-testid="board-title">
 				{{ boardTitle }}
 			</h2>
 		</VCardText>

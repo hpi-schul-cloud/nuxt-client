@@ -22,7 +22,12 @@
 			</div>
 		</InlineEditInteractionHandler>
 		<div class="d-flex">
-			<v-chip v-if="isDraft" size="small" class="align-self-center">
+			<v-chip
+				v-if="isDraft"
+				size="small"
+				class="align-self-center"
+				data-testid="board-draft-chip"
+			>
 				{{ t("common.words.draft") }}
 			</v-chip>
 			<div class="mx-2">
