@@ -24,7 +24,7 @@
 					:hint="t('pages.tool.context.displayNameDescription')"
 					persistent-hint
 					validate-on="blur"
-					data-testid="parameter-display-name"
+					data-testId="parameter-display-name"
 				/>
 			</template>
 		</external-tool-configurator>

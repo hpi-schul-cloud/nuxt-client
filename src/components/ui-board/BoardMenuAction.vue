@@ -5,7 +5,7 @@
 				<v-icon :icon="icon" data-testid="board-menu-action-icon" />
 			</slot>
 		</template>
-		<VListItemTitle :data-testid="dataTestid">
+		<VListItemTitle :data-testid="dataTestId">
 			<slot />
 		</VListItemTitle>
 	</VListItem>
@@ -19,7 +19,7 @@ export default defineComponent({
 	name: "BoardMenuAction",
 	props: {
 		icon: { type: String as PropType<IconProps["icon"]> },
-		dataTestid: { type: String as PropType<string | null>, default: null },
+		dataTestId: { type: String as PropType<string | null>, default: null },
 	},
 });
 </script>
