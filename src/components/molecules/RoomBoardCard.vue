@@ -28,7 +28,7 @@
 					v-if="!isDraft && userRole === Roles.Teacher"
 				>
 					<RoomDotMenu
-						:menu-items="moreActionsMenuItems"
+						:menu-items="actionsMenuItems()"
 						data-testid="content-card-board-menu"
 						:aria-label="$t('pages.room.boardCard.menu.ariaLabel')"
 					/>
@@ -58,14 +58,17 @@
 </template>
 
 <script setup lang="ts">
-import { mdiUndoVariant, mdiViewDashboard } from "@mdi/js";
+import {
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiUndoVariant,
+	mdiViewDashboard,
+} from "@mdi/js";
 import RoomDotMenu from "./RoomDotMenu.vue";
-import { computed } from "vue";
+import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-
-const { t } = useI18n();
 
 const props = defineProps({
 	columnBoardItem: { type: Object, required: true },
@@ -76,16 +79,18 @@ const props = defineProps({
 		type: String,
 		default: "",
 	},
-	userRole: { type: String, required: true },
+	userRole: { type: String as PropType<Roles>, required: true },
 });
 const emit = defineEmits([
 	"tab-pressed",
 	"on-drag",
 	"move-element",
 	"update-visibility",
+	"delete-board",
 ]);
 
 const router = useRouter();
+const { t } = useI18n();
 
 const cardTitle = computed(() => {
 	const titlePrefix = t("pages.room.boardCard.label.columnBoard");
@@ -124,15 +129,6 @@ const cardActions = [
 	},
 ];
 
-const moreActionsMenuItems = [
-	{
-		icon: mdiUndoVariant,
-		action: onUnpublish,
-		name: t("pages.room.cards.label.revert"),
-		dataTestId: "content-card-board-menu-unpublish",
-	},
-];
-
 const moveCardDown = () => {
 	if (props.keyDrag) {
 		emit("move-element", {
@@ -156,11 +152,37 @@ const boardTitle = computed(() => {
 		? props.columnBoardItem.title
 		: t("pages.room.boardCard.label.courseBoard").toString();
 });
-</script>
 
-<style lang="scss" scoped>
+const actionsMenuItems = () => {
+	const roleBasedMoreActions = [];
+
+	if (props.userRole === Roles.Teacher) {
+		roleBasedMoreActions.push({
+			icon: mdiPencilOutline,
+			action: openBoard,
+			name: t("common.actions.edit"),
+			dataTestId: "content-card-board-menu-edit",
+		});
+		roleBasedMoreActions.push({
+			icon: mdiTrashCanOutline,
+			action: () => emit("delete-board"),
+			name: t("common.actions.remove"),
+			dataTestId: "content-card-board-menu-remove",
+		});
+		roleBasedMoreActions.push({
+			icon: mdiUndoVariant,
+			action: onUnpublish,
+			name: t("pages.room.cards.label.revert"),
+			dataTestId: "content-card-board-menu-unpublish",
+		});
+	}
+
+	return roleBasedMoreActions;
+};
+</script>
+<style scoped>
 .title-board-card {
-	margin-top: calc(var(--space-base-vuetify) / 2);
+	font-size: 14px;
 }
 .board-hidden {
 	.board-title {

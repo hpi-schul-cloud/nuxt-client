@@ -7,7 +7,6 @@ import RoomBoardCard from "./RoomBoardCard.vue";
 
 import { createMock } from "@golevelup/ts-jest";
 import { Router, useRouter } from "vue-router";
-
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 

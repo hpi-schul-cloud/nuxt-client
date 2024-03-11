@@ -1380,6 +1380,7 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.lesson": "Створити тему",
+	"pages.rooms.fab.add.board": "Нова дошка",
 	"pages.rooms.fab.add.task": "Створити завдання",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.groupName": "Курси",

@@ -1399,6 +1399,7 @@ export default {
 		"Actualmente no hay cursos aquí.",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.lesson": "Nuevo tema",
+	"pages.rooms.fab.add.board": "Nuevo tablero de columna",
 	"pages.rooms.fab.add.task": "Nuevo tarea",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
 	"pages.rooms.groupName": "Cursos",
