@@ -64,9 +64,7 @@ describe("schools module", () => {
 
 		describe("fetchSchool", () => {
 			it("should call mutations correctly", async () => {
-				const mockMe = meResponseFactory.build({
-					school: { id: "sampleSchoolId" },
-				});
+				const mockMe = meResponseFactory.build();
 				authModule.setMe(mockMe);
 				const mockSchoolResponse = schoolResponseFactory.build();
 				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
@@ -87,9 +85,7 @@ describe("schools module", () => {
 			});
 
 			it("should set school state correctly", async () => {
-				const mockMe = meResponseFactory.build({
-					school: { id: "sampleSchoolId" },
-				});
+				const mockMe = meResponseFactory.build();
 				authModule.setMe(mockMe);
 				const mockSchoolResponse = schoolResponseFactory.build({
 					features: [
