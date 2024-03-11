@@ -114,16 +114,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, onMounted, computed } from "vue";
-import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
+import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
+import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import PopupIcon from "@/components/topbar/PopupIcon.vue";
 import PopupIconInitials from "@/components/topbar/PopupIconInitials.vue";
-import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
-import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import StatusAlerts from "@/components/topbar/StatusAlerts.vue";
-import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
-import { useI18n } from "vue-i18n";
 import { MeSchoolResponse, MeUserResponse } from "@/serverApi/v3";
+import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { PropType, computed, defineComponent, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {

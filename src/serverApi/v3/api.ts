@@ -2755,6 +2755,15 @@ export enum ImportUserResponseRoleNamesEnum {
 /**
  *
  * @export
+ * @enum {string}
+ */
+export enum InstanceFeature {
+    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+}
+
+/**
+ *
+ * @export
  * @interface LdapAuthorizationBodyParams
  */
 export interface LdapAuthorizationBodyParams {
@@ -5061,8 +5070,7 @@ export enum SchoolFeature {
     LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
     OauthProvisioningEnabled = 'oauthProvisioningEnabled',
     ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
-    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration'
 }
 
 /**
@@ -5127,6 +5135,44 @@ export interface SchoolInfoResponse {
      * @memberof SchoolInfoResponse
      */
     name: string;
+}
+/**
+ *
+ * @export
+ * @interface SchoolLogo
+ */
+export interface SchoolLogo {
+    /**
+     *
+     * @type {string}
+     * @memberof SchoolLogo
+     */
+    dataUrl?: string;
+    /**
+     *
+     * @type {string}
+     * @memberof SchoolLogo
+     */
+    name?: string;
+}
+/**
+ *
+ * @export
+ * @interface SchoolPermissionsParams
+ */
+export interface SchoolPermissionsParams {
+    /**
+     *
+     * @type {TeacherPermissionParams}
+     * @memberof SchoolPermissionsParams
+     */
+    teacher?: TeacherPermissionParams;
+    /**
+     *
+     * @type {StudentPermissionParams}
+     * @memberof SchoolPermissionsParams
+     */
+    student?: StudentPermissionParams;
 }
 /**
  *
@@ -5233,16 +5279,10 @@ export interface SchoolResponse {
     isExternal: boolean;
     /**
      *
-     * @type {string}
+     * @type {SchoolLogo}
      * @memberof SchoolResponse
      */
-    logo_dataUrl?: string;
-    /**
-     *
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    logo_name?: string;
+    logo?: SchoolLogo;
     /**
      *
      * @type {FileStorageType}
@@ -5273,6 +5313,12 @@ export interface SchoolResponse {
      * @memberof SchoolResponse
      */
     years: YearsResponse;
+    /**
+     *
+     * @type {Array<InstanceFeature>}
+     * @memberof SchoolResponse
+     */
+    instanceFeatures: Array<InstanceFeature>;
 }
 /**
  *
@@ -5294,16 +5340,10 @@ export interface SchoolUpdateBodyParams {
     officialSchoolNumber?: string;
     /**
      *
-     * @type {string}
+     * @type {SchoolLogo}
      * @memberof SchoolUpdateBodyParams
      */
-    logo_dataUrl?: string;
-    /**
-     *
-     * @type {string}
-     * @memberof SchoolUpdateBodyParams
-     */
-    logo_name?: string;
+    logo?: SchoolLogo;
     /**
      *
      * @type {string}
@@ -5318,10 +5358,28 @@ export interface SchoolUpdateBodyParams {
     language?: SchoolUpdateBodyParamsLanguageEnum;
     /**
      *
-     * @type {Array<string>}
+     * @type {Array<SchoolFeature>}
      * @memberof SchoolUpdateBodyParams
      */
-    features?: Array<SchoolUpdateBodyParamsFeaturesEnum>;
+    features?: Array<SchoolFeature>;
+    /**
+     *
+     * @type {SchoolPermissionsParams}
+     * @memberof SchoolUpdateBodyParams
+     */
+    permissions?: SchoolPermissionsParams;
+    /**
+     *
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    countyId?: string;
+    /**
+     *
+     * @type {boolean}
+     * @memberof SchoolUpdateBodyParams
+     */
+    enableStudentTeamCreation?: boolean;
 }
 
 /**
@@ -5340,21 +5398,6 @@ export enum SchoolUpdateBodyParamsLanguageEnum {
     En = 'en',
     Es = 'es',
     Uk = 'uk'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SchoolUpdateBodyParamsFeaturesEnum {
-    RocketChat = 'rocketChat',
-    Videoconference = 'videoconference',
-    Nextcloud = 'nextcloud',
-    StudentVisibility = 'studentVisibility',
-    LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
-    OauthProvisioningEnabled = 'oauthProvisioningEnabled',
-    ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
-    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
 }
 
 /**
@@ -5650,6 +5693,19 @@ export interface SingleColumnBoardResponse {
      * @memberof SingleColumnBoardResponse
      */
     isArchived: boolean;
+}
+/**
+ *
+ * @export
+ * @interface StudentPermissionParams
+ */
+export interface StudentPermissionParams {
+    /**
+     *
+     * @type {boolean}
+     * @memberof StudentPermissionParams
+     */
+    LERNSTORE_VIEW?: boolean;
 }
 /**
  *
@@ -6073,6 +6129,19 @@ export interface TaskStatusResponse {
      * @memberof TaskStatusResponse
      */
     isFinished: boolean;
+}
+/**
+ *
+ * @export
+ * @interface TeacherPermissionParams
+ */
+export interface TeacherPermissionParams {
+    /**
+     *
+     * @type {boolean}
+     * @memberof TeacherPermissionParams
+     */
+    STUDENT_LIST?: boolean;
 }
 /**
  *
