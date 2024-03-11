@@ -8,6 +8,7 @@ const baseState = base.state();
 const teacherEndpoint = "/v1/users/admin/teachers";
 const studentEndpoint = "/v1/users/admin/students";
 const getTeacherEndpoint = "/v3/users/admin/teachers";
+const getStudentEndpoint = "/v3/users/admin/students";
 
 const usersModule = mergeDeep(base, {
 	state: () =>
@@ -69,7 +70,7 @@ const usersModule = mergeDeep(base, {
 			const { qid = "default", query } = payload;
 			commit("setStatus", "pending");
 			const res = (
-				await $axios.get("/v3/users/admin/students", {
+				await $axios.get(getStudentEndpoint, {
 					params: query,
 					// paramsSerializer: (params) => {
 					// 	return qs.stringify(params);
@@ -109,7 +110,7 @@ const usersModule = mergeDeep(base, {
 		},
 		async findConsentUsers({ commit }, query) {
 			const res = (
-				await $axios.get(`/v3/users/admin/students`, {
+				await $axios.get(getStudentEndpoint, {
 					params: query,
 					// paramsSerializer: (params) => {
 					// 	return qs.stringify(params);
