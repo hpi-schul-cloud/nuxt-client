@@ -152,11 +152,10 @@ export default defineComponent({
 
 		const calculateWidth = () => {
 			if (!inputWidthCalcSpan.value) return;
+			const title =
+				boardTitle.value || t("pages.room.boardCard.label.courseBoard");
 
-			inputWidthCalcSpan.value.innerHTML = boardTitle.value.replace(
-				/\s/g,
-				"&nbsp;"
-			);
+			inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
 
 			const width = inputWidthCalcSpan.value.offsetWidth;
 			fieldWidth.value = width;
@@ -194,7 +193,7 @@ export default defineComponent({
 	position: absolute;
 	left: -9999px;
 	display: inline-block;
-	min-width: 6em;
+	min-width: 1em;
 	padding: 0 $field-control-padding-end 0 $field-control-padding-start;
 	font-size: var(--heading-3);
 	font-family: var(--font-accent);
