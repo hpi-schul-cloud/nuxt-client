@@ -2749,6 +2749,15 @@ export enum ImportUserResponseRoleNamesEnum {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum InstanceFeature {
+    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+}
+
+/**
+ * 
+ * @export
  * @interface LdapAuthorizationBodyParams
  */
 export interface LdapAuthorizationBodyParams {
@@ -3405,6 +3414,12 @@ export interface MeResponse {
     permissions: Array<string>;
     /**
      * 
+     * @type {string}
+     * @memberof MeResponse
+     */
+    language?: string;
+    /**
+     * 
      * @type {MeAccountResponse}
      * @memberof MeResponse
      */
@@ -3497,12 +3512,6 @@ export interface MeUserResponse {
      * @memberof MeUserResponse
      */
     lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeUserResponse
-     */
-    language?: string;
     /**
      * 
      * @type {string}
@@ -5055,8 +5064,7 @@ export enum SchoolFeature {
     LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
     OauthProvisioningEnabled = 'oauthProvisioningEnabled',
     ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
-    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration'
 }
 
 /**
@@ -5121,6 +5129,44 @@ export interface SchoolInfoResponse {
      * @memberof SchoolInfoResponse
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolLogo
+ */
+export interface SchoolLogo {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolLogo
+     */
+    dataUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolLogo
+     */
+    name?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolPermissionsParams
+ */
+export interface SchoolPermissionsParams {
+    /**
+     * 
+     * @type {TeacherPermissionParams}
+     * @memberof SchoolPermissionsParams
+     */
+    teacher?: TeacherPermissionParams;
+    /**
+     * 
+     * @type {StudentPermissionParams}
+     * @memberof SchoolPermissionsParams
+     */
+    student?: StudentPermissionParams;
 }
 /**
  * 
@@ -5227,16 +5273,10 @@ export interface SchoolResponse {
     isExternal: boolean;
     /**
      * 
-     * @type {string}
+     * @type {SchoolLogo}
      * @memberof SchoolResponse
      */
-    logo_dataUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    logo_name?: string;
+    logo?: SchoolLogo;
     /**
      * 
      * @type {FileStorageType}
@@ -5267,6 +5307,12 @@ export interface SchoolResponse {
      * @memberof SchoolResponse
      */
     years: YearsResponse;
+    /**
+     * 
+     * @type {Array<InstanceFeature>}
+     * @memberof SchoolResponse
+     */
+    instanceFeatures: Array<InstanceFeature>;
 }
 /**
  * 
@@ -5288,16 +5334,10 @@ export interface SchoolUpdateBodyParams {
     officialSchoolNumber?: string;
     /**
      * 
-     * @type {string}
+     * @type {SchoolLogo}
      * @memberof SchoolUpdateBodyParams
      */
-    logo_dataUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUpdateBodyParams
-     */
-    logo_name?: string;
+    logo?: SchoolLogo;
     /**
      * 
      * @type {string}
@@ -5312,10 +5352,28 @@ export interface SchoolUpdateBodyParams {
     language?: SchoolUpdateBodyParamsLanguageEnum;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<SchoolFeature>}
      * @memberof SchoolUpdateBodyParams
      */
-    features?: Array<SchoolUpdateBodyParamsFeaturesEnum>;
+    features?: Array<SchoolFeature>;
+    /**
+     * 
+     * @type {SchoolPermissionsParams}
+     * @memberof SchoolUpdateBodyParams
+     */
+    permissions?: SchoolPermissionsParams;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    countyId?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolUpdateBodyParams
+     */
+    enableStudentTeamCreation?: boolean;
 }
 
 /**
@@ -5334,21 +5392,6 @@ export enum SchoolUpdateBodyParamsLanguageEnum {
     En = 'en',
     Es = 'es',
     Uk = 'uk'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SchoolUpdateBodyParamsFeaturesEnum {
-    RocketChat = 'rocketChat',
-    Videoconference = 'videoconference',
-    Nextcloud = 'nextcloud',
-    StudentVisibility = 'studentVisibility',
-    LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
-    OauthProvisioningEnabled = 'oauthProvisioningEnabled',
-    ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
-    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
 }
 
 /**
@@ -5644,6 +5687,19 @@ export interface SingleColumnBoardResponse {
      * @memberof SingleColumnBoardResponse
      */
     isArchived: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface StudentPermissionParams
+ */
+export interface StudentPermissionParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentPermissionParams
+     */
+    LERNSTORE_VIEW?: boolean;
 }
 /**
  * 
@@ -6071,6 +6127,19 @@ export interface TaskStatusResponse {
 /**
  * 
  * @export
+ * @interface TeacherPermissionParams
+ */
+export interface TeacherPermissionParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeacherPermissionParams
+     */
+    STUDENT_LIST?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface TeamPermissionsBody
  */
 export interface TeamPermissionsBody {
@@ -6243,6 +6312,19 @@ export interface ToolReferenceResponse {
      * @memberof ToolReferenceResponse
      */
     status: ContextExternalToolConfigurationStatusResponse;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateBoardTitleParams
+ */
+export interface UpdateBoardTitleParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateBoardTitleParams
+     */
+    title: string;
 }
 /**
  * 
@@ -7771,15 +7853,15 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
+         * @param {UpdateBoardTitleParams} updateBoardTitleParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateBoardTitle: async (boardId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
+        boardControllerUpdateBoardTitle: async (boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerUpdateBoardTitle', 'boardId', boardId)
-            // verify required parameter 'renameBodyParams' is not null or undefined
-            assertParamExists('boardControllerUpdateBoardTitle', 'renameBodyParams', renameBodyParams)
+            // verify required parameter 'updateBoardTitleParams' is not null or undefined
+            assertParamExists('boardControllerUpdateBoardTitle', 'updateBoardTitleParams', updateBoardTitleParams)
             const localVarPath = `/boards/{boardId}/title`
                 .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -7804,7 +7886,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(renameBodyParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateBoardTitleParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -7869,12 +7951,12 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
+         * @param {UpdateBoardTitleParams} updateBoardTitleParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateBoardTitle(boardId, renameBodyParams, options);
+        async boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -7931,12 +8013,12 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
+         * @param {UpdateBoardTitleParams} updateBoardTitleParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.boardControllerUpdateBoardTitle(boardId, renameBodyParams, options).then((request) => request(axios, basePath));
+        boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): AxiosPromise<void> {
+            return localVarFp.boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -7991,12 +8073,12 @@ export interface BoardApiInterface {
      * 
      * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
-     * @param {RenameBodyParams} renameBodyParams 
+     * @param {UpdateBoardTitleParams} updateBoardTitleParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardApiInterface
      */
-    boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
+    boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -8059,13 +8141,13 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * 
      * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
-     * @param {RenameBodyParams} renameBodyParams 
+     * @param {UpdateBoardTitleParams} updateBoardTitleParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardApi
      */
-    public boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any) {
-        return BoardApiFp(this.configuration).boardControllerUpdateBoardTitle(boardId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

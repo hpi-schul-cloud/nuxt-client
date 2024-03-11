@@ -64,9 +64,9 @@
 					{{ school.name }}
 				</div>
 				<img
-					v-if="school && school.logo_dataUrl"
+					v-if="school?.logo?.url"
 					class="school-logo"
-					:src="school.logo_dataUrl"
+					:src="school.logo.url"
 					ref="image"
 					alt=""
 				/>
@@ -114,15 +114,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, onMounted, computed } from "vue";
-import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { User } from "@/store/types/auth";
+import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
+import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
+import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import PopupIcon from "@/components/topbar/PopupIcon.vue";
 import PopupIconInitials from "@/components/topbar/PopupIconInitials.vue";
-import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
-import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import StatusAlerts from "@/components/topbar/StatusAlerts.vue";
-import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
+import { MeSchoolResponse, MeUserResponse } from "@/serverApi/v3";
+import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { PropType, computed, defineComponent, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -142,14 +142,18 @@ export default defineComponent({
 			type: Boolean,
 		},
 		school: {
-			type: Object,
+			type: Object as PropType<MeSchoolResponse>,
 			default: () => ({
 				name: "",
 			}),
 		},
 		user: {
-			type: Object as PropType<User>,
+			type: Object as PropType<MeUserResponse>,
 			default: null,
+		},
+		roleNames: {
+			type: Array as PropType<string[]>,
+			default: () => [],
 		},
 	},
 	setup(props, { emit }) {
@@ -166,9 +170,8 @@ export default defineComponent({
 			emit("action", eventName);
 		};
 
-		const role = computed(() => {
-			const roleName = props.user.roles.map((r) => r.name);
-			return t(`common.roleName.${roleName[0]}`).toString();
+		const translatedRoleName = computed(() => {
+			return t(`common.roleName.${props.roleNames[0]}`).toString();
 		});
 
 		const statusAlerts = computed(() => {
@@ -191,7 +194,7 @@ export default defineComponent({
 
 		return {
 			sendEvent,
-			role,
+			role: translatedRoleName,
 			statusAlerts,
 			showStatusAlertIcon,
 			statusAlertColor,

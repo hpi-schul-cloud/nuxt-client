@@ -1,59 +1,13 @@
-import { User } from "@/store/types/auth";
 import { School } from "@/store/types/schools";
-
-export const mockUser: User = {
-	_id: "",
-	firstName: "",
-	lastName: "",
-	email: "",
-	updatedAt: "",
-	birthday: "",
-	createdAt: "",
-	preferences: {},
-	schoolId: "",
-	roles: [
-		{
-			_id: "",
-			name: "test-role",
-			updatedAt: "",
-			createdAt: "",
-			roles: [],
-			permissions: [],
-			displayName: "test-display-name",
-			id: "",
-		},
-	],
-	emailSearchValues: [],
-	firstNameSearchValues: [],
-	lastNameSearchValues: [],
-	consent: {
-		userConsent: {
-			form: "",
-			privacyConsent: true,
-			termsOfUseConsent: true,
-			dateOfPrivacyConsent: "",
-			dateOfTermsOfUseConsent: "",
-		},
-	},
-	forcePasswordChange: false,
-	language: "",
-	fullName: "",
-	id: "",
-	avatarInitials: "",
-	avatarBackgroundColor: "",
-	age: 44,
-	displayName: "",
-	permissions: ["test-permission"],
-	accountId: "",
-	schoolName: "",
-	externallyManaged: false,
-};
 
 export const mockSchool: School = {
 	id: "mockSchoolId",
 	name: "",
-	logo_name: "",
-	fileStorageType: "",
+	logo: {
+		name: "",
+		dataUrl: "",
+	},
+	fileStorageType: undefined,
 	federalState: {
 		id: "",
 		counties: [],
@@ -76,18 +30,19 @@ export const mockSchool: School = {
 		startDate: "",
 		endDate: "",
 	},
-	purpose: "",
-	features: {
+	purpose: undefined,
+	features: [],
+	featureObject: {
 		rocketChat: false,
 		videoconference: false,
 		studentVisibility: false,
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
 		enableLdapSyncDuringMigration: false,
-		isTeamCreationByStudentsEnabled: false,
 		nextcloud: false,
 		oauthProvisioningEnabled: false,
 	},
+	instanceFeatures: [],
 	permissions: {},
 	inMaintenance: false,
 	inUserMigration: false,

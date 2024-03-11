@@ -1534,7 +1534,7 @@ export default {
 	"tldraw.error.ws.4500":
 		"Виникла помилка під час з'єднання з веб-сокетом tldraw",
 	"ui-confirmation-dialog.ask-delete":
-		"{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
+		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",
