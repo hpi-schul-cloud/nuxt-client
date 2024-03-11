@@ -1318,6 +1318,7 @@ export default {
 	"pages.news.title": "News",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
+	"pages.room.boardCard.menu.ariaLabel": "Board menu",
 	"pages.room.cards.label.revert": "Revert to draft",
 	"pages.room.copy.course.message.copied": "Course was successfully copied.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1358,6 +1359,7 @@ export default {
 		"Currently, there are no courses here.",
 	"pages.rooms.fab.add.course": "New course",
 	"pages.rooms.fab.add.lesson": "New topic",
+	"pages.rooms.fab.add.board": "New column board",
 	"pages.rooms.fab.add.task": "New task",
 	"pages.rooms.fab.ariaLabel": "Create new course",
 	"pages.rooms.groupName": "Courses",

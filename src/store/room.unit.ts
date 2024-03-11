@@ -1,4 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
+import { BoardParentType } from "@/serverApi/v3/api";
 import { applicationErrorModule, authModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
@@ -197,13 +198,11 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.LessonApiInterface);
 
 				const roomModule = new RoomModule({});
-				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 
 				await roomModule.deleteLesson("id");
 
 				expect(mockApi.lessonControllerDelete).toHaveBeenCalledTimes(1);
 				expect(mockApi.lessonControllerDelete).toHaveBeenCalledWith("id");
-				expect(fetchContentSpy).toHaveBeenCalledTimes(1);
 
 				spy.mockRestore();
 			});
@@ -220,6 +219,129 @@ describe("room module", () => {
 				const roomModule = new RoomModule({});
 
 				await roomModule.deleteLesson("id");
+
+				expect(roomModule.businessError).toStrictEqual(error);
+
+				spy.mockRestore();
+			});
+		});
+
+		describe("deleteTask", () => {
+			it("should call api to delete a lesson", async () => {
+				const mockApi = {
+					taskControllerDelete: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				await roomModule.deleteTask("id");
+
+				expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
+				expect(mockApi.taskControllerDelete).toHaveBeenCalledWith("id");
+
+				spy.mockRestore();
+			});
+
+			it("should catch error in catch block", async () => {
+				const error = { statusCode: 418, message: "I'm a teapot" };
+				const mockApi = {
+					taskControllerDelete: jest.fn(() => Promise.reject({ ...error })),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				await roomModule.deleteTask("id");
+
+				expect(roomModule.businessError).toStrictEqual(error);
+
+				spy.mockRestore();
+			});
+		});
+
+		describe("createBoard", () => {
+			it("should call api to create a board", async () => {
+				const mockApi = {
+					boardControllerCreateBoard: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+				const params = {
+					title: "title",
+					parentId: "parentId",
+					parentType: BoardParentType.Course,
+				};
+				await roomModule.createBoard(params);
+
+				expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
+				expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledWith(params);
+
+				spy.mockRestore();
+			});
+
+			it("should catch error in catch block", async () => {
+				const error = { statusCode: 418, message: "I'm a teapot" };
+				const mockApi = {
+					boardControllerCreateBoard: jest.fn().mockRejectedValue(error),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				const params = {
+					title: "title",
+					parentId: "parentId",
+					parentType: BoardParentType.Course,
+				};
+				await roomModule.createBoard(params);
+
+				expect(roomModule.businessError).toStrictEqual(error);
+
+				spy.mockRestore();
+			});
+		});
+
+		describe("deleteBoard", () => {
+			it("should call api to delete a board", async () => {
+				const mockApi = {
+					boardControllerDeleteBoard: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				await roomModule.deleteBoard("id");
+
+				expect(mockApi.boardControllerDeleteBoard).toHaveBeenCalledTimes(1);
+				expect(mockApi.boardControllerDeleteBoard).toHaveBeenCalledWith("id");
+
+				spy.mockRestore();
+			});
+
+			it("should catch error in catch block", async () => {
+				const error = { statusCode: 418, message: "I'm a teapot" };
+				const mockApi = {
+					boardControllerDeleteBoard: jest.fn().mockRejectedValue(error),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				await roomModule.deleteBoard("id");
 
 				expect(roomModule.businessError).toStrictEqual(error);
 
