@@ -87,18 +87,70 @@ describe("@/components/download/DownloadModal", () => {
 	});
 
 	describe("onDownload", () => {
-		it("should call startDownload and close the dialog", async () => {
+		it("should call startDownload and confirm then close the dialog", async () => {
 			const wrapper = setup();
 			const nextBtn = wrapper.findComponent("[data-testid='dialog-next-btn']");
 			await nextBtn.trigger("click");
-			const downloadBtn = wrapper.findComponent(
+			const exportBtn = wrapper.findComponent(
 				'[data-testid="dialog-export-btn"]'
 			);
-			await downloadBtn.trigger("click");
+			await exportBtn.trigger("click");
+			const emit = wrapper.emitted();
+			expect(emit).toHaveProperty("dialog-confirmed");
+			expect(emit).toHaveProperty("dialog-closed");
+
 			downloadModuleMock.startDownload("1.1.0");
 
-			expect(downloadBtn.exists()).toBe(false);
+			expect(exportBtn.exists()).toBe(false);
 			expect(downloadModuleMock.startDownload).toHaveBeenCalled();
+		});
+	});
+
+	describe("toggleAllTopics", () => {
+		it("should start with true and change the value when click", async () => {
+			const wrapper = setup();
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const allTopics = wrapper.findComponent(
+				'[data-testid="all-topics-checkbox"]'
+			);
+			expect(
+				allTopics
+					.findAll("input")
+					.some((input) => input.attributes("value") === "true")
+			).toBe(true);
+
+			await allTopics.trigger("click");
+			expect(
+				allTopics
+					.findAll("input")
+					.some((input) => input.attributes("value") === "false")
+			).toBe(false);
+		});
+	});
+
+	describe("toggleAllTasks", () => {
+		it("should start with true and change the value when click", async () => {
+			const wrapper = setup();
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const allTasks = wrapper.findComponent(
+				'[data-testid="all-tasks-checkbox"]'
+			);
+			expect(
+				allTasks
+					.findAll("input")
+					.some((input) => input.attributes("value") === "true")
+			).toBe(true);
+
+			await allTasks.trigger("click");
+			expect(
+				allTasks
+					.findAll("input")
+					.some((input) => input.attributes("value") === "false")
+			).toBe(false);
 		});
 	});
 });
