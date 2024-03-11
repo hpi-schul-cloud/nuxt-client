@@ -1,15 +1,17 @@
-import { default as NewTeacher } from "./TeacherCreate.page.vue";
-import mock$objects from "@@/tests/test-utils/pageStubs";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { notifierModule } from "@/store";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
-import { notifierModule } from "@/store";
+import { delay } from "@/utils/helpers";
+import { meResponseFactory } from "@@/tests/test-utils";
+import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
-import { delay } from "@/utils/helpers";
+import { default as NewTeacher } from "./TeacherCreate.page.vue";
+
 jest.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
@@ -45,12 +47,13 @@ describe("teachers/new", () => {
 	it("should call 'createTeacher' action", async () => {
 		const createTeacherStub = jest.fn();
 		const mockStore = createMockStore(createTeacherStub);
+		const mockMe = meResponseFactory.build();
 
 		const wrapper = mount(NewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
-					$user: { schoolId: "123" },
+					$me: mockMe,
 					$store: mockStore,
 				},
 			},
@@ -83,13 +86,14 @@ describe("teachers/new", () => {
 	it("should call notifier successful", async () => {
 		const createTeacherStub = jest.fn();
 		const mockStore = createMockStore(createTeacherStub);
+		const mockMe = meResponseFactory.build();
 
 		const notifierModuleMock = jest.spyOn(notifierModule, "show");
 		const wrapper = mount(NewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
-					$user: { schoolId: "123" },
+					$me: mockMe,
 					$store: mockStore,
 				},
 			},
@@ -121,6 +125,7 @@ describe("teachers/new", () => {
 	it("should show error", async () => {
 		const failingCreateAction = jest.fn(() => Promise.reject());
 		const mockStore = createMockStore(failingCreateAction);
+		const mockMe = meResponseFactory.build();
 
 		mockStore.users = {
 			actions: {
@@ -132,7 +137,7 @@ describe("teachers/new", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
-					$user: { schoolId: "123" },
+					$me: mockMe,
 					$store: mockStore,
 				},
 			},

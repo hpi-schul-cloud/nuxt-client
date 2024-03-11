@@ -49,7 +49,7 @@ export default {
 			try {
 				const newsTarget = this.getNewsTarget(
 					this.$route.query,
-					this.$user.schoolId
+					this.$me.school.id
 				);
 				await newsModule.createNews({
 					title: news.title,
