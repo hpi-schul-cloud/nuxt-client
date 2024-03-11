@@ -128,7 +128,7 @@
 		</v-row>
 		<privacy-settings
 			:permissions="localSchool.permissions || {}"
-			:features="localSchool.features || {}"
+			:features="localSchool.featureObject || {}"
 			@update-privacy-settings="onUpdatePrivacySettings"
 			@update-feature-settings="onUpdateFeatureSettings"
 		/>
@@ -150,6 +150,7 @@ import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { printDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper.ts";
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
+import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 
 export default {
 	components: {
@@ -200,12 +201,12 @@ export default {
 	watch: {
 		school: {
 			handler: async function (newSchool) {
-				if (newSchool && newSchool.id) {
-					this.logoFile = newSchool.logo_dataUrl
+				if (newSchool?.id) {
+					this.logoFile = newSchool.logo?.dataUrl
 						? [
 								this.convertDataUrlToFile(
-									newSchool.logo_dataUrl,
-									newSchool.logo_name
+									newSchool.logo?.dataUrl,
+									newSchool.logo?.name
 								),
 							]
 						: [];
@@ -240,8 +241,8 @@ export default {
 				return;
 			}
 			const schoolCopy = JSON.parse(JSON.stringify(this.school)); // create a deep copy
-			if (this.school.logo_dataUrl) {
-				schoolCopy.logo = this.school.logo_dataUrl;
+			if (this.school.logo?.dataUrl) {
+				schoolCopy.logo = this.school.logo?.dataUrl;
 			}
 			this.localSchool = schoolCopy;
 
@@ -262,7 +263,7 @@ export default {
 			this.localSchool.permissions = newPermissions;
 		},
 		onUpdateFeatureSettings(value, settingName) {
-			this.localSchool.features[settingName] = value;
+			this.localSchool.featureObject[settingName] = value;
 		},
 		async save() {
 			const updatedSchool = {
@@ -270,7 +271,11 @@ export default {
 				name: this.localSchool.name,
 				language: this.localSchool.language,
 				permissions: this.localSchool.permissions,
-				features: this.localSchool.features,
+				features: mapSchoolFeatureObjectToArray(this.localSchool.featureObject),
+				logo: {
+					dataUrl: this.localSchool.logo?.dataUrl,
+					name: this.localSchool.logo?.name,
+				},
 			};
 			if (
 				!this.school.officialSchoolNumber &&
@@ -279,20 +284,16 @@ export default {
 				updatedSchool.officialSchoolNumber =
 					this.localSchool.officialSchoolNumber;
 			}
-			if (
-				!this.school.county &&
-				this.localSchool.county &&
-				this.localSchool.county.id
-			) {
-				updatedSchool.county = this.localSchool.county.id;
+			if (!this.school.county && this.localSchool?.county?.id) {
+				updatedSchool.countyId = this.localSchool.county.id;
 			}
 
-			updatedSchool.logo_dataUrl =
+			updatedSchool.logo.dataUrl =
 				this.logoFile.length > 0 ? await toBase64(this.logoFile[0]) : "";
-			updatedSchool.logo_name =
+			updatedSchool.logo.name =
 				this.logoFile.length > 0 ? this.logoFile[0].name : "";
 
-			schoolsModule.update(updatedSchool);
+			schoolsModule.update({ id: this.localSchool.id, props: updatedSchool });
 		},
 	},
 };
