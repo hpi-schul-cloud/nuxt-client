@@ -126,48 +126,6 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async confirmImportLesson(shareToken: string): Promise<void> {
-		try {
-			this.resetBusinessError();
-			// TODO remove all this function as it is not used
-			const lesson = await $axios.get("/v1/lessons", {
-				params: { shareToken },
-			});
-
-			if (!lesson.data.data.length) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-found",
-				});
-				return;
-			}
-
-			const copiedLesson = (
-				await $axios.post("/v1/lessons/copy", {
-					lessonId: lesson.data.data[0]._id,
-					newCourseId: this.roomData.roomId,
-					shareToken,
-				})
-			)?.data;
-
-			if (!copiedLesson) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-created",
-				});
-				return;
-			}
-			await this.fetchContent(this.roomData.roomId);
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
 	async deleteLesson(lessonId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
