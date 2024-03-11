@@ -3,8 +3,11 @@ import { School } from "@/store/types/schools";
 export const mockSchool: School = {
 	id: "mockSchoolId",
 	name: "",
-	logo_name: "",
-	fileStorageType: "",
+	logo: {
+		name: "",
+		dataUrl: "",
+	},
+	fileStorageType: undefined,
 	federalState: {
 		id: "",
 		counties: [],
@@ -27,18 +30,19 @@ export const mockSchool: School = {
 		startDate: "",
 		endDate: "",
 	},
-	purpose: "",
-	features: {
+	purpose: undefined,
+	features: [],
+	featureObject: {
 		rocketChat: false,
 		videoconference: false,
 		studentVisibility: false,
 		ldapUniventionMigrationSchool: false,
 		showOutdatedUsers: false,
 		enableLdapSyncDuringMigration: false,
-		isTeamCreationByStudentsEnabled: false,
 		nextcloud: false,
 		oauthProvisioningEnabled: false,
 	},
+	instanceFeatures: [],
 	permissions: {},
 	inMaintenance: false,
 	inUserMigration: false,
