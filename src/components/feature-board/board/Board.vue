@@ -120,7 +120,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { t } = useI18n();
-		const { showInfo, resetNotifier } = useBoardNotifier();
+		const { resetNotifier, showCustomNotifier } = useBoardNotifier();
 		const { editModeId } = useSharedEditMode();
 		const isEditMode = computed(() => editModeId.value !== undefined);
 		const {
@@ -228,7 +228,7 @@ export default defineComponent({
 			if (!hasEditPermission) return;
 
 			await updateBoardVisibility(newVisibility);
-			setAlert();
+			await setAlert();
 		};
 
 		const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
@@ -243,8 +243,8 @@ export default defineComponent({
 			if (hasEditPermission) await updateBoardTitle(newTitle);
 		};
 
-		onMounted(() => {
-			setAlert();
+		onMounted(async () => {
+			await setAlert();
 		});
 
 		const debounceTime = computed(() => {
@@ -259,9 +259,17 @@ export default defineComponent({
 			if (!isTeacher) return;
 
 			if (!board.value?.isVisible) {
-				showInfo(t("components.board.alert.info.draft"), false);
+				showCustomNotifier(
+					t("components.board.alert.info.draft"),
+					"info",
+					10000
+				);
 			} else {
-				showInfo(t("components.board.alert.info.teacher"), false);
+				showCustomNotifier(
+					t("components.board.alert.info.teacher"),
+					"info",
+					10000
+				);
 			}
 		}, 100);
 
