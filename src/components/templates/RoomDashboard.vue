@@ -93,7 +93,7 @@
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
 				<RoomBoardCard
-					v-if="item.type === cardTypes.ColumnBoard && item.content.published"
+					v-if="boardCardIsVisibleToStudent(item)"
 					:ref="`item_${index}`"
 					:user-role="role"
 					:key-drag="isDragging"
@@ -358,6 +358,11 @@ export default {
 		async deleteTask(itemId) {
 			await tasksModule.deleteTask(itemId);
 			await roomModule.fetchContent(this.roomData.roomId);
+		},
+		boardCardIsVisibleToStudent(card) {
+			const isBoardCard = card.type === this.cardTypes.ColumnBoard;
+			const isVisibleToStudent = card.content.published;
+			return isBoardCard && isVisibleToStudent;
 		},
 	},
 };

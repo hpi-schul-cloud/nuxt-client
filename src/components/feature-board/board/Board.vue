@@ -230,11 +230,7 @@ export default defineComponent({
 			if (!hasEditPermission) return;
 
 			await updateBoardVisibility(newVisibility);
-			if (newVisibility) {
-				showInfo(t("components.board.alert.info.teacher"), false);
-			} else {
-				showInfo(t("components.board.alert.info.draft"), false);
-			}
+			setAlert();
 		};
 
 		const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
