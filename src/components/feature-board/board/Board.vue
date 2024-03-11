@@ -1,16 +1,14 @@
 <template>
 	<div>
 		<template v-if="board">
-			<div class="ml-1">
-				<BoardHeader
-					:boardId="board.id"
-					:title="board.title"
-					:titlePlaceholder="$t('pages.room.boardCard.label.courseBoard')"
-					:isDraft="!board.isVisible"
-					@update:visibility="onUpdateBoardVisibility"
-					@update:title="onUpdateBoardTitle"
-				/>
-			</div>
+			<BoardHeader
+				:boardId="board.id"
+				:title="board.title"
+				:titlePlaceholder="$t('pages.room.boardCard.label.courseBoard')"
+				:isDraft="!board.isVisible"
+				@update:visibility="onUpdateBoardVisibility"
+				@update:title="onUpdateBoardTitle"
+			/>
 			<div class="d-flex flex-row flex-shrink-1">
 				<div>
 					<Sortable

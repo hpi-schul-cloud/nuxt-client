@@ -12,10 +12,10 @@
 		:readonly="!isEditMode"
 		role="heading"
 		:aria-level="ariaLevel"
-		@keydown.enter="onEnter"
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
+		@keydown.enter="onEnter"
 	/>
 	<VTextarea
 		v-else
