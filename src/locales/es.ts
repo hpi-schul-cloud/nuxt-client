@@ -1357,6 +1357,7 @@ export default {
 	"pages.news.title": "Noticias",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
+	"pages.room.boardCard.menu.ariaLabel": "Menú del tablero",
 	"pages.room.cards.label.revert": "Volver al borrador",
 	"pages.room.copy.course.message.copied":
 		"El curso se ha copiado correctamente.",
@@ -1398,6 +1399,7 @@ export default {
 		"Actualmente no hay cursos aquí.",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.lesson": "Nuevo tema",
+	"pages.rooms.fab.add.board": "Nuevo tablero de columna",
 	"pages.rooms.fab.add.task": "Nuevo tarea",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
 	"pages.rooms.groupName": "Cursos",
@@ -1545,7 +1547,7 @@ export default {
 		"No se ha encontrado el tablero Tldraw con este nombre",
 	"tldraw.error.ws.4500":
 		"Se ha producido un error en la conexión tldraw websocket",
-	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type} {title}?",
+	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",

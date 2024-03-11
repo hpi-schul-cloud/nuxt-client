@@ -231,6 +231,15 @@ export enum BoardExternalReferenceType {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum BoardParentType {
+    Course = 'course'
+}
+
+/**
+ * 
+ * @export
  * @interface BoardResponse
  */
 export interface BoardResponse {
@@ -1458,6 +1467,44 @@ export interface CourseMetadataResponse {
      * @memberof CourseMetadataResponse
      */
     copyingSince?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateBoardBodyParams
+ */
+export interface CreateBoardBodyParams {
+    /**
+     * The title of the board
+     * @type {string}
+     * @memberof CreateBoardBodyParams
+     */
+    title: string;
+    /**
+     * The id of the parent
+     * @type {string}
+     * @memberof CreateBoardBodyParams
+     */
+    parentId: string;
+    /**
+     * 
+     * @type {BoardParentType}
+     * @memberof CreateBoardBodyParams
+     */
+    parentType: BoardParentType;
+}
+/**
+ * 
+ * @export
+ * @interface CreateBoardResponse
+ */
+export interface CreateBoardResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateBoardResponse
+     */
+    id: string;
 }
 /**
  * 
@@ -2744,6 +2791,15 @@ export enum ImportUserResponseRoleNamesEnum {
     Student = 'student',
     Teacher = 'teacher',
     Admin = 'admin'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum InstanceFeature {
+    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
 }
 
 /**
@@ -5055,8 +5111,7 @@ export enum SchoolFeature {
     LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
     OauthProvisioningEnabled = 'oauthProvisioningEnabled',
     ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
-    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration'
 }
 
 /**
@@ -5121,6 +5176,44 @@ export interface SchoolInfoResponse {
      * @memberof SchoolInfoResponse
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolLogo
+ */
+export interface SchoolLogo {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolLogo
+     */
+    dataUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolLogo
+     */
+    name?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolPermissionsParams
+ */
+export interface SchoolPermissionsParams {
+    /**
+     * 
+     * @type {TeacherPermissionParams}
+     * @memberof SchoolPermissionsParams
+     */
+    teacher?: TeacherPermissionParams;
+    /**
+     * 
+     * @type {StudentPermissionParams}
+     * @memberof SchoolPermissionsParams
+     */
+    student?: StudentPermissionParams;
 }
 /**
  * 
@@ -5227,16 +5320,10 @@ export interface SchoolResponse {
     isExternal: boolean;
     /**
      * 
-     * @type {string}
+     * @type {SchoolLogo}
      * @memberof SchoolResponse
      */
-    logo_dataUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    logo_name?: string;
+    logo?: SchoolLogo;
     /**
      * 
      * @type {FileStorageType}
@@ -5267,6 +5354,12 @@ export interface SchoolResponse {
      * @memberof SchoolResponse
      */
     years: YearsResponse;
+    /**
+     * 
+     * @type {Array<InstanceFeature>}
+     * @memberof SchoolResponse
+     */
+    instanceFeatures: Array<InstanceFeature>;
 }
 /**
  * 
@@ -5288,16 +5381,10 @@ export interface SchoolUpdateBodyParams {
     officialSchoolNumber?: string;
     /**
      * 
-     * @type {string}
+     * @type {SchoolLogo}
      * @memberof SchoolUpdateBodyParams
      */
-    logo_dataUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUpdateBodyParams
-     */
-    logo_name?: string;
+    logo?: SchoolLogo;
     /**
      * 
      * @type {string}
@@ -5312,10 +5399,28 @@ export interface SchoolUpdateBodyParams {
     language?: SchoolUpdateBodyParamsLanguageEnum;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<SchoolFeature>}
      * @memberof SchoolUpdateBodyParams
      */
-    features?: Array<SchoolUpdateBodyParamsFeaturesEnum>;
+    features?: Array<SchoolFeature>;
+    /**
+     * 
+     * @type {SchoolPermissionsParams}
+     * @memberof SchoolUpdateBodyParams
+     */
+    permissions?: SchoolPermissionsParams;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    countyId?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolUpdateBodyParams
+     */
+    enableStudentTeamCreation?: boolean;
 }
 
 /**
@@ -5334,21 +5439,6 @@ export enum SchoolUpdateBodyParamsLanguageEnum {
     En = 'en',
     Es = 'es',
     Uk = 'uk'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SchoolUpdateBodyParamsFeaturesEnum {
-    RocketChat = 'rocketChat',
-    Videoconference = 'videoconference',
-    Nextcloud = 'nextcloud',
-    StudentVisibility = 'studentVisibility',
-    LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
-    OauthProvisioningEnabled = 'oauthProvisioningEnabled',
-    ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
-    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
 }
 
 /**
@@ -5644,6 +5734,19 @@ export interface SingleColumnBoardResponse {
      * @memberof SingleColumnBoardResponse
      */
     isArchived: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface StudentPermissionParams
+ */
+export interface StudentPermissionParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentPermissionParams
+     */
+    LERNSTORE_VIEW?: boolean;
 }
 /**
  * 
@@ -6067,6 +6170,19 @@ export interface TaskStatusResponse {
      * @memberof TaskStatusResponse
      */
     isFinished: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface TeacherPermissionParams
+ */
+export interface TeacherPermissionParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeacherPermissionParams
+     */
+    STUDENT_LIST?: boolean;
 }
 /**
  * 
@@ -7630,6 +7746,46 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCreateBoard: async (createBoardBodyParams: CreateBoardBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createBoardBodyParams' is not null or undefined
+            assertParamExists('boardControllerCreateBoard', 'createBoardBodyParams', createBoardBodyParams)
+            const localVarPath = `/boards`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createBoardBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -7836,6 +7992,17 @@ export const BoardApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateBoardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCreateBoard(createBoardBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -7902,6 +8069,16 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): AxiosPromise<CreateBoardResponse> {
+            return localVarFp.boardControllerCreateBoard(createBoardBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -7962,6 +8139,16 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
 export interface BoardApiInterface {
     /**
      * 
+     * @summary Create a new board.
+     * @param {CreateBoardBodyParams} createBoardBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): AxiosPromise<CreateBoardResponse>;
+
+    /**
+     * 
      * @summary Create a new column on a board.
      * @param {string} boardId The id of the board.
      * @param {*} [options] Override http request option.
@@ -8020,6 +8207,18 @@ export interface BoardApiInterface {
  * @extends {BaseAPI}
  */
 export class BoardApi extends BaseAPI implements BoardApiInterface {
+    /**
+     * 
+     * @summary Create a new board.
+     * @param {CreateBoardBodyParams} createBoardBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerCreateBoard(createBoardBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Create a new column on a board.

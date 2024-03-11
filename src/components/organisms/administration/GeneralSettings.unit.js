@@ -1,14 +1,14 @@
-import GeneralSettings from "./GeneralSettings";
 import { envConfigModule, schoolsModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
-import EnvConfigModule from "@/store/env-config";
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schools";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
+import GeneralSettings from "./GeneralSettings";
 
 const school = {
 	id: "5f2987e020834114b8efd6f8",
@@ -48,6 +48,7 @@ const school = {
 	},
 	purpose: "demo",
 	officialSchoolNumber: "123",
+	features: [],
 };
 
 const syncedSystem = [
@@ -212,11 +213,12 @@ describe("GeneralSettings", () => {
 
 		it("school number text should not be disabled if the number is not set", async () => {
 			const wrapper = getWrapper();
-
 			delete school.officialSchoolNumber;
-			await wrapper.setData(mockData);
+			schoolsModule.setSchool(school);
 
+			await wrapper.setData(mockData);
 			const ele = wrapper.findComponent(searchStrings.schoolNumber);
+
 			expect(ele.vm.disabled).toBeFalsy();
 		});
 
