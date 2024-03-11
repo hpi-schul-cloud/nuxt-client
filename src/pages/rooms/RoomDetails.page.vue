@@ -8,13 +8,16 @@
 		<template #header>
 			<div class="d-flex ma-2 mt-3">
 				<div
-					class="text-h3 pb-2 course-title"
+					class="text-h3 pb-2 px-4 course-title"
 					data-testid="courses-course-title"
 					role="heading"
 					aria-level="1"
 				>
 					{{ roomData.title }}
 				</div>
+				<v-chip v-if="roomData.isArchived" size="small" class="mt-1">
+					{{ $t("pages.rooms.headerSection.archived") }}
+				</v-chip>
 				<div class="mx-2">
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
@@ -22,9 +25,6 @@
 						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
-				<v-chip v-if="roomData.isArchived" label size="small" class="mt-1">
-					{{ $t("pages.rooms.headerSection.archived") }}
-				</v-chip>
 			</div>
 			<div class="mb-5 header-div">
 				<div class="btn">

@@ -25,15 +25,17 @@
 			<v-chip v-if="isDraft" size="small" class="align-self-center">
 				{{ t("common.words.draft") }}
 			</v-chip>
-			<BoardMenu
-				v-if="hasEditPermission"
-				scope="board"
-				data-testid="board-menu-btn"
-			>
-				<BoardMenuActionEdit @click="onStartEditMode" />
-				<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-				<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-			</BoardMenu>
+			<div class="mx-2">
+				<BoardMenu
+					v-if="hasEditPermission"
+					scope="board"
+					data-testid="board-menu-btn"
+				>
+					<BoardMenuActionEdit @click="onStartEditMode" />
+					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+				</BoardMenu>
+			</div>
 		</div>
 	</div>
 </template>
