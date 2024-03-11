@@ -7,7 +7,7 @@
 			/>
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
-				<h1 class="text-h3 pl-2">
+				<h1 class="text-h3 pl-2" :data-testid="dataTestId">
 					{{ headline }}
 				</h1>
 			</slot>
@@ -61,7 +61,7 @@
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	inheritAttrs: false,
@@ -94,6 +94,10 @@ export default defineComponent({
 			type: Boolean,
 			required: false,
 			default: false,
+		},
+		dataTestId: {
+			type: String as PropType<string | null>,
+			default: null,
 		},
 	},
 	computed: {
