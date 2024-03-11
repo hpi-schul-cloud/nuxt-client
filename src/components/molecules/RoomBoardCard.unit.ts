@@ -1,3 +1,4 @@
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -7,7 +8,6 @@ import RoomBoardCard from "./RoomBoardCard.vue";
 
 import { createMock } from "@golevelup/ts-jest";
 import { Router, useRouter } from "vue-router";
-
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
@@ -26,7 +26,10 @@ const mockCourseData = {
 };
 
 describe("RoomBoardCard", () => {
-	const setup = (props?: { title: string | undefined }) => {
+	const setup = (props?: {
+		title?: string | undefined;
+		role?: Roles | undefined;
+	}) => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 		// Note: router has to be mocked before mounting the component
@@ -35,6 +38,7 @@ describe("RoomBoardCard", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
+				role: props?.role ?? Roles.Teacher,
 				dragInProgress: false,
 				keyDrag: false,
 				columnBoardItem: {
@@ -84,6 +88,28 @@ describe("RoomBoardCard", () => {
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
+		});
+	});
+
+	describe("when user is a teacher", () => {
+		it("should show three dot menu", () => {
+			const { wrapper } = setup({ role: Roles.Teacher });
+			const threeDotMenu = wrapper.find(
+				'[aria-label="pages.room.boardCard.menu.ariaLabel"]'
+			);
+
+			expect(threeDotMenu.exists()).toBe(true);
+		});
+	});
+
+	describe("when user is a student", () => {
+		it("should don't show three dot menu", () => {
+			const { wrapper } = setup({ role: Roles.Student });
+			const threeDotMenu = wrapper.find(
+				'[aria-label="pages.room.boardCard.menu.ariaLabel"]'
+			);
+
+			expect(threeDotMenu.exists()).toBe(false);
 		});
 	});
 
