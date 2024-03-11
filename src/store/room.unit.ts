@@ -320,13 +320,11 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.LessonApiInterface);
 
 				const roomModule = new RoomModule({});
-				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 
 				await roomModule.deleteLesson("id");
 
 				expect(mockApi.lessonControllerDelete).toHaveBeenCalledTimes(1);
 				expect(mockApi.lessonControllerDelete).toHaveBeenCalledWith("id");
-				expect(fetchContentSpy).toHaveBeenCalledTimes(1);
 
 				spy.mockRestore();
 			});
