@@ -1,4 +1,3 @@
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
@@ -10,13 +9,14 @@ import {
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { mount } from "@vue/test-utils";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
@@ -730,9 +730,13 @@ describe("AdminMigrationSection", () => {
 
 				await switchComponents[0].vm.$emit("update:modelValue", true);
 
+				const expectedProps = { features: ["showOutdatedUsers"] };
+
 				expect(schoolsModule.update).toHaveBeenCalledWith({
 					id: mockSchool.id,
-					features: { ...mockSchool.features, showOutdatedUsers: true },
+					props: {
+						...expectedProps,
+					},
 				});
 			});
 		});
