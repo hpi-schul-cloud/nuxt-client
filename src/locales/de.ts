@@ -1530,7 +1530,7 @@ export default {
 	"tldraw.error.ws.4404": "Tldraw-Board mit diesem Namen wurde nicht gefunden",
 	"tldraw.error.ws.4500":
 		"Bei der Tldraw-Websocket-Verbindung ist ein Fehler aufgetreten",
-	"ui-confirmation-dialog.ask-delete": "{type} {title} wirklich löschen?",
+	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

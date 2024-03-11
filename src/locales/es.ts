@@ -1546,7 +1546,7 @@ export default {
 		"No se ha encontrado el tablero Tldraw con este nombre",
 	"tldraw.error.ws.4500":
 		"Se ha producido un error en la conexión tldraw websocket",
-	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type} {title}?",
+	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",
