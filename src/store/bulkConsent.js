@@ -62,7 +62,7 @@ export const actions = {
 	async findConsentUsers({ commit, state }, query) {
 		query.users = state.selectedStudents;
 		const response = (
-			await $axios.get(`/v1/users/admin/students`, {
+			await $axios.get(`/v3/users/admin/students`, {
 				params: query,
 			})
 		).data;
