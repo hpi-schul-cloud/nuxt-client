@@ -240,15 +240,6 @@ export enum BoardParentType {
 /**
  *
  * @export
- * @enum {string}
- */
-export enum BoardParentType {
-    Course = 'course'
-}
-
-/**
- *
- * @export
  * @interface BoardResponse
  */
 export interface BoardResponse {

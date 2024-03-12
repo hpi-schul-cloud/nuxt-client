@@ -180,10 +180,11 @@ const actionsMenuItems = () => {
 	return roleBasedMoreActions;
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .title-board-card {
 	font-size: 14px;
 }
+
 .board-hidden {
 	.board-title {
 		opacity: 0.5;
