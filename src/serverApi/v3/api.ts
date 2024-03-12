@@ -1515,44 +1515,6 @@ export interface CreateBoardResponse {
 /**
  *
  * @export
- * @interface CreateBoardBodyParams
- */
-export interface CreateBoardBodyParams {
-    /**
-     * The title of the board
-     * @type {string}
-     * @memberof CreateBoardBodyParams
-     */
-    title: string;
-    /**
-     * The id of the parent
-     * @type {string}
-     * @memberof CreateBoardBodyParams
-     */
-    parentId: string;
-    /**
-     *
-     * @type {BoardParentType}
-     * @memberof CreateBoardBodyParams
-     */
-    parentType: BoardParentType;
-}
-/**
- *
- * @export
- * @interface CreateBoardResponse
- */
-export interface CreateBoardResponse {
-    /**
-     *
-     * @type {string}
-     * @memberof CreateBoardResponse
-     */
-    id: string;
-}
-/**
- *
- * @export
  * @interface CreateCardBodyParams
  */
 export interface CreateCardBodyParams {
@@ -7826,6 +7788,7 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
 
 
             localVarHeaderParameter['Content-Type'] = 'application/json';
