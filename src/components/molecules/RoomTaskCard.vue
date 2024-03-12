@@ -23,7 +23,7 @@
 				</div>
 				<div class="dot-menu-section">
 					<room-dot-menu
-						:menu-items="moreActionsMenuItems[role]"
+						:menu-items="moreActionsMenuItems[userRole]"
 						data-testid="content-card-task-menu"
 						:aria-label="$t('pages.room.taskCard.menu.ariaLabel')"
 					/>
@@ -46,7 +46,7 @@
 		>
 			<div class="chip-items-group">
 				<v-chip
-					v-for="(chip, index) in chipItems[role]"
+					v-for="(chip, index) in chipItems[userRole]"
 					:key="index"
 					:class="[chip.class]"
 					size="small"
@@ -64,7 +64,7 @@
 					{{ chip.name }}
 				</v-chip>
 				<v-custom-chip-time-remaining
-					v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
+					v-if="roles.Student === userRole && isCloseToDueDate && !isSubmitted"
 					type="warning"
 					:due-date="task.dueDate"
 					:shorten-unit="$vuetify.display.xs"
@@ -73,7 +73,7 @@
 		</v-card-text>
 		<v-card-actions class="pt-1 mt-2" data-testid="content-card-task-actions">
 			<v-btn
-				v-for="(action, index) in cardActions[role]"
+				v-for="(action, index) in cardActions[userRole]"
 				:key="index"
 				:class="`action-button`"
 				variant="text"
@@ -119,7 +119,7 @@ export default {
 			type: Object,
 			default: () => ({}),
 		},
-		role: { type: String, required: true },
+		userRole: { type: String, required: true },
 		ariaLabel: {
 			type: String,
 			default: "",
@@ -187,7 +187,7 @@ export default {
 				[Roles.Student]: [],
 			};
 
-			if (this.role === Roles.Teacher) {
+			if (this.userRole === Roles.Teacher) {
 				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishCard(),
@@ -204,7 +204,7 @@ export default {
 				}
 			}
 
-			if (this.role === Roles.Student) {
+			if (this.userRole === Roles.Student) {
 				if (!this.isFinished) {
 					roleBasedActions[Roles.Student].push({
 						action: () => this.finishCard(),
@@ -222,7 +222,7 @@ export default {
 				[Roles.Student]: [],
 			};
 
-			if (this.role === Roles.Teacher) {
+			if (this.userRole === Roles.Teacher) {
 				roleBasedChips[Roles.Teacher].push({
 					name: `${this.task.status.submitted}/${
 						this.task.status.maxSubmissions
@@ -246,7 +246,7 @@ export default {
 				}
 			}
 
-			if (this.role === Roles.Student) {
+			if (this.userRole === Roles.Student) {
 				if (this.isSubmittedNotGraded) {
 					roleBasedChips[Roles.Student].push({
 						icon: "$taskDone",
@@ -288,7 +288,7 @@ export default {
 				[Roles.Student]: [],
 			};
 
-			if (this.role === Roles.Teacher) {
+			if (this.userRole === Roles.Teacher) {
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiPencilOutline,
 					action: () =>
@@ -320,7 +320,7 @@ export default {
 				if (!this.isDraft && !this.isFinished) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
-						action: () => this.revertPublishedCard(),
+						action: () => this.unPublishCard(),
 						name: this.$t("pages.room.cards.label.revert"),
 						dataTestId: "content-card-task-menu-revert",
 					});
@@ -334,7 +334,7 @@ export default {
 				});
 			}
 
-			if (this.role === Roles.Student) {
+			if (this.userRole === Roles.Student) {
 				// if more action is needed for the students add actions like above
 			}
 
@@ -389,10 +389,10 @@ export default {
 			window.location = value;
 		},
 		publishCard() {
-			this.$emit("post-task");
+			this.$emit("update-visibility", true);
 		},
-		revertPublishedCard() {
-			this.$emit("revert-task");
+		unPublishCard() {
+			this.$emit("update-visibility", false);
 		},
 		finishCard() {
 			this.$emit("finish-task");
