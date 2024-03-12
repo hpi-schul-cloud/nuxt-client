@@ -1,11 +1,10 @@
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import { envConfigModule, roomModule, tasksModule } from "@/store";
+import { envConfigModule, roomModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
-import TasksModule from "@/store/tasks";
 import { Envs } from "@/store/types/env-config";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -14,7 +13,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { VueWrapper, mount } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 
 import { createMock } from "@golevelup/ts-jest";
@@ -121,7 +120,7 @@ const shareModuleMock = createModuleMocks(ShareModule, {
 });
 const notifierModuleMock = createModuleMocks(NotifierModule);
 
-const getWrapper = (props: object, options?: object) => {
+const getWrapper = (props: any, options?: object) => {
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 		getCtlToolsTabEnabled: false,
 	});
@@ -150,7 +149,6 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			tasksModule: TasksModule,
 			roomModule: RoomModule,
 			envConfigModule: EnvConfigModule,
 			copyModule: CopyModule,
@@ -444,7 +442,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			tasksModule.deleteTask = deleteTaskMock;
+			roomModule.deleteTask = deleteTaskMock;
 			roomModule.fetchContent = fetchContentMock;
 			roomModule.deleteLesson = deleteLessonMock;
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
@@ -463,9 +461,9 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		it("should call store methods after modal emits 'dialog-confirmed' when deleting lesson", async () => {
 			const deleteTaskMock = jest.fn();
 			const fetchContentMock = jest.fn();
-			const deleteLessonMock = jest.fn();
+			const deleteLessonMock = jest.fn().mockResolvedValue(true);
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			tasksModule.deleteTask = deleteTaskMock;
+			roomModule.deleteTask = deleteTaskMock;
 			roomModule.fetchContent = fetchContentMock;
 			roomModule.deleteLesson = deleteLessonMock;
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
@@ -477,8 +475,8 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			deleteModal.vm.$emit("dialog-confirmed");
 			await nextTick();
 			expect(deleteTaskMock).not.toHaveBeenCalled();
-			expect(fetchContentMock).not.toHaveBeenCalled();
 			expect(deleteLessonMock).toHaveBeenCalled();
+			expect(fetchContentMock).not.toHaveBeenCalled();
 		});
 
 		it("should close the modal view after clicking the 'cancel' button", async () => {
