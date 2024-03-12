@@ -254,13 +254,15 @@ describe("Board", () => {
 				setup();
 				jest.runAllTimers();
 
-				expect(mockedBoardNotifierCalls.showInfo).toHaveBeenCalled();
+				expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
 			});
 
 			it("should not call the board notifier when the user is not a teacher", async () => {
 				defaultPermissions.isTeacher = false;
 				setup();
-				expect(mockedBoardNotifierCalls.showInfo).not.toHaveBeenCalled();
+				expect(
+					mockedBoardNotifierCalls.showCustomNotifier
+				).not.toHaveBeenCalled();
 			});
 		});
 
