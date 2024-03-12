@@ -1342,6 +1342,7 @@ export default {
 	"pages.news.title": "Neuigkeiten",
 	"pages.room.boardCard.label.columnBoard": "Spalten-Board",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Board",
+	"pages.room.boardCard.menu.ariaLabel": "Boardmenü",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.copy.course.message.copied":
 		"Der Kurs wurde erfolgreich kopiert.",
@@ -1385,6 +1386,7 @@ export default {
 		"Aktuell gibt es hier noch keine Kurse.",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.lesson": "Neues Thema",
+	"pages.rooms.fab.add.board": "Neues Spalten-Board",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.groupName": "Kurse",
@@ -1529,7 +1531,7 @@ export default {
 	"tldraw.error.ws.4404": "Tldraw-Board mit diesem Namen wurde nicht gefunden",
 	"tldraw.error.ws.4500":
 		"Bei der Tldraw-Websocket-Verbindung ist ein Fehler aufgetreten",
-	"ui-confirmation-dialog.ask-delete": "{type} {title} wirklich löschen?",
+	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

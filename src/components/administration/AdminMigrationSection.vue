@@ -129,7 +129,7 @@
 				)
 			"
 			:disabled="!isMigrationActive"
-			v-model="school.features.enableLdapSyncDuringMigration"
+			v-model="school.featureObject.enableLdapSyncDuringMigration"
 			class="ml-1"
 			:true-icon="mdiCheck"
 			data-testid="enable-sync-during-migration-switch"
@@ -167,7 +167,7 @@
 					'components.administration.adminMigrationSection.showOutdatedUsers.label'
 				)
 			"
-			v-model="school.features.showOutdatedUsers"
+			v-model="school.featureObject.showOutdatedUsers"
 			class="ml-1"
 			:true-icon="mdiCheck"
 			data-testid="show-outdated-users-switch"
@@ -208,6 +208,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
+import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -353,7 +354,9 @@ export default defineComponent({
 		const setSchoolFeatures = async () => {
 			await schoolsModule.update({
 				id: school.value.id,
-				features: school.value.features,
+				props: {
+					features: mapSchoolFeatureObjectToArray(school.value.featureObject),
+				},
 			});
 		};
 
