@@ -624,4 +624,34 @@ describe("BoardState.composable", () => {
 			});
 		});
 	});
+
+	describe("updateBoardVisibility", () => {
+		it("should update board visibility", async () => {
+			const { updateBoardVisibility, board } = setup();
+			board.value = testBoard;
+
+			await updateBoardVisibility(true);
+			await nextTick();
+
+			expect(
+				mockedBoardApiCalls.updateBoardVisibilityCall
+			).toHaveBeenCalledWith(board.value.id, true);
+
+			expect(board.value.isVisible).toStrictEqual(true);
+		});
+
+		it("should handle error when api returns an error code", async () => {
+			const { updateBoardVisibility, board } = setup();
+			board.value = testBoard;
+
+			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue(
+				setupErrorResponse()
+			);
+
+			await updateBoardVisibility(false);
+			await nextTick();
+
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+		});
+	});
 });
