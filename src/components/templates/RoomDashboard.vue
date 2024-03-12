@@ -31,6 +31,7 @@
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
 							@copy-board="copyBoard(item.content.columnBoardId)"
+							@delete-board="openItemDeleteDialog(item.content, item.type)"
 						/>
 						<room-task-card
 							v-if="item.type === cardTypes.Task"
@@ -165,7 +166,7 @@
 				<p class="text-md mt-2">
 					{{
 						$t("pages.room.itemDelete.text", {
-							itemTitle: itemDelete.itemData.name,
+							itemTitle: itemDelete.itemData.name || itemDelete.itemData.title,
 						})
 					}}
 				</p>
@@ -175,20 +176,20 @@
 </template>
 
 <script>
-import {
-	BoardElementResponseTypeEnum,
-	ImportUserResponseRoleNamesEnum,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3";
-import { copyModule, roomModule, tasksModule, envConfigModule } from "@/store";
-import { CopyParamsTypeEnum } from "@/store/copy";
 import RoomBoardCard from "@/components/molecules/RoomBoardCard.vue";
 import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import draggable from "vuedraggable";
 import ShareModal from "@/components/share/ShareModal.vue";
+import {
+	BoardElementResponseTypeEnum,
+	ImportUserResponseRoleNamesEnum,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
+import { copyModule, envConfigModule, roomModule } from "@/store";
+import { CopyParamsTypeEnum } from "@/store/copy";
+import draggable from "vuedraggable";
 
 export default {
 	components: {
@@ -325,11 +326,15 @@ export default {
 		},
 		async deleteItem() {
 			if (this.itemDelete.itemType === this.cardTypes.Task) {
-				await tasksModule.deleteTask(this.itemDelete.itemData.id);
-				await roomModule.fetchContent(this.roomData.roomId);
-				return Promise.resolve();
+				await roomModule.deleteTask(this.itemDelete.itemData.id);
+			} else if (this.itemDelete.itemType === this.cardTypes.Lesson) {
+				await roomModule.deleteLesson(this.itemDelete.itemData.id);
+			} else if (this.itemDelete.itemType === this.cardTypes.ColumnBoard) {
+				await roomModule.deleteBoard(this.itemDelete.itemData.columnBoardId);
+			} else {
+				return;
 			}
-			await roomModule.deleteLesson(this.itemDelete.itemData.id);
+			await roomModule.fetchContent(this.roomData.roomId);
 		},
 		async finishTask(itemId) {
 			await roomModule.finishTask({ itemId, action: "finish" });

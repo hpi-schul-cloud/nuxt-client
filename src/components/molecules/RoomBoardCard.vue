@@ -4,7 +4,6 @@
 		hover
 		tabindex="0"
 		role="link"
-		color="rgba(var(--v-theme-primary-lighten))"
 		data-testid="room-board-card"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
@@ -13,27 +12,25 @@
 		@keydown.down.prevent="moveCardDown"
 		@keydown.up.prevent="moveCardUp"
 	>
-		<VCardText>
-			<div class="mb-0">
-				<div
-					class="d-flex align-center justify-space-between mb-3 title-board-card"
-				>
-					<div class="d-flex align-center">
-						<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
-						<span>
-							{{ $t("pages.room.boardCard.label.columnBoard") }}
-						</span>
-					</div>
-					<div>
-						<room-dot-menu
-							:menu-items="moreActionsMenuItems"
-							data-testid="content-card-task-menu"
-							:aria-label="$t('pages.room.taskCard.menu.ariaLabel')"
-						/>
-					</div>
-				</div>
+		<template #item>
+			<div class="d-flex align-center">
+				<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
+				<span class="title-board-card">
+					{{ $t("pages.room.boardCard.label.columnBoard") }}
+				</span>
 			</div>
-			<h2 class="text-h6 board-title mt-2">
+		</template>
+		<template #append>
+			<div>
+				<RoomDotMenu
+					:menu-items="actionsMenuItems"
+					data-testid="content-card-board-menu"
+					:aria-label="$t('pages.room.boardCard.menu.ariaLabel')"
+				/>
+			</div>
+		</template>
+		<VCardText>
+			<h2 class="text-h6 board-title mt-0">
 				{{ boardTitle }}
 			</h2>
 		</VCardText>
@@ -41,9 +38,14 @@
 </template>
 
 <script setup lang="ts">
-import { mdiContentCopy, mdiViewDashboard } from "@/components/icons/material";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { computed } from "vue";
+import {
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiViewDashboard,
+	mdiContentCopy,
+} from "@mdi/js";
+import { PropType, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import RoomDotMenu from "./RoomDotMenu.vue";
@@ -53,13 +55,18 @@ const props = defineProps({
 	courseData: { type: Object, required: true },
 	keyDrag: { type: Boolean, required: true },
 	dragInProgress: { type: Boolean, required: true },
-	role: { type: String, required: true },
+	role: {
+		type: String as PropType<Roles>,
+		required: true,
+	},
 });
+
 const emit = defineEmits([
 	"tab-pressed",
 	"on-drag",
 	"move-element",
 	"copy-board",
+	"delete-board",
 ]);
 
 const router = useRouter();
@@ -89,32 +96,41 @@ const moveCardUp = () => {
 	}
 };
 
-const moreActionsMenuItems = computed(() => {
-	const actions = [];
-
-	if (props.role === Roles.Teacher) {
-		actions.push({
-			icon: mdiContentCopy,
-			action: () => {
-				emit("copy-board");
-			},
-			name: t("common.actions.copy"),
-			dataTestId: "content-card-board-menu-copy",
-		});
-	}
-
-	return actions;
-});
-
 const boardTitle = computed(() => {
 	return props.columnBoardItem.title && props.columnBoardItem.title !== ""
 		? props.columnBoardItem.title
 		: t("pages.room.boardCard.label.courseBoard").toString();
 });
-</script>
 
-<style lang="scss" scoped>
+const actionsMenuItems = computed(() => {
+	const roleBasedMoreActions = [];
+
+	if (props.role === Roles.Teacher) {
+		roleBasedMoreActions.push({
+			icon: mdiPencilOutline,
+			action: openBoard,
+			name: t("common.actions.edit"),
+			dataTestId: "content-card-board-menu-edit",
+		});
+		roleBasedMoreActions.push({
+			icon: mdiContentCopy,
+			action: () => emit("copy-board"),
+			name: t("common.actions.copy"),
+			dataTestId: "content-card-board-menu-copy",
+		});
+		roleBasedMoreActions.push({
+			icon: mdiTrashCanOutline,
+			action: () => emit("delete-board"),
+			name: t("common.actions.remove"),
+			dataTestId: "content-card-board-menu-remove",
+		});
+	}
+
+	return roleBasedMoreActions;
+});
+</script>
+<style scoped>
 .title-board-card {
-	margin-top: calc(var(--space-base-vuetify) / 2);
+	font-size: 14px;
 }
 </style>

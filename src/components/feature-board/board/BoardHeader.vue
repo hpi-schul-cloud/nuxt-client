@@ -8,7 +8,7 @@
 			<BoardAnyTitleInput
 				scope="board"
 				:value="title"
-				data-testid="board-title"
+				data-testid="course-board-title"
 				:isEditMode="isEditMode"
 				:placeholder="titlePlaceholder"
 				@update:value="onUpdateTitle"

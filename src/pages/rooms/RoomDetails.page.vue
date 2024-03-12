@@ -90,11 +90,13 @@ import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
+	BoardParentType,
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
@@ -109,8 +111,6 @@ import {
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 
@@ -257,6 +257,15 @@ export default defineComponent({
 					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_lesson",
 					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
+				});
+			}
+			if (authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())) {
+				actions.push({
+					label: this.$t("pages.rooms.fab.add.board"),
+					icon: mdiViewListOutline,
+					customEvent: () => this.onCreateBoard(this.roomData.roomId),
+					dataTestId: "fab_button_add_board",
+					ariaLabel: this.$t("pages.rooms.fab.add.board"),
 				});
 			}
 
@@ -436,6 +445,16 @@ export default defineComponent({
 		},
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
+		},
+
+		async onCreateBoard(courseId) {
+			const params = {
+				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
+				parentType: BoardParentType.Course,
+				parentId: courseId,
+			};
+			const board = await roomModule.createBoard(params);
+			await this.$router.push(`/rooms/${board.id}/board`);
 		},
 	},
 	watch: {
