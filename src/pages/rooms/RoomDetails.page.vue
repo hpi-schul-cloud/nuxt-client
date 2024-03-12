@@ -150,10 +150,6 @@ export default defineComponent({
 	inject: ["copyModule", "shareModule"],
 	data() {
 		return {
-			downloadDialog: {
-				step: 1,
-				radios: "",
-			},
 			icons: {
 				mdiPencilOutline,
 				mdiEmailPlusOutline,

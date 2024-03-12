@@ -2,7 +2,7 @@
 	<v-dialog
 		ref="downloadDialog"
 		v-model="isDownloadDialogOpen"
-		:width="520"
+		:width="560"
 		@click:outside="onCloseDialog"
 		@keydown.esc="onCloseDialog"
 		data-testid="download-dialog"
