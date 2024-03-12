@@ -183,7 +183,7 @@
 				</template>
 
 				<template #[`item.classNames`]="{ item }">
-					{{ item.classNames.join(", ") }}
+					{{ item.classNames?.join(", ") }}
 				</template>
 
 				<template #[`item.match`]="{ item }">
