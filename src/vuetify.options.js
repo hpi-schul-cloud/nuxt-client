@@ -5,7 +5,7 @@ const custom = {
 	theme: {
 		themes: {
 			light: {
-				color: {
+				colors: {
 					primary: "#9e292b",
 					"primary-darken-1": "#800416",
 					"primary-lighten": "#f5eaea",
