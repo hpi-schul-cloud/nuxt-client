@@ -4,7 +4,11 @@ import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	boardCardFactory,
@@ -36,6 +40,7 @@ import {
 	useSharedBoardPageInformation,
 	useSharedEditMode,
 } from "@data-board";
+import CopyModule from "@/store/copy";
 
 jest.mock("@data-board");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -156,6 +161,8 @@ describe("Board", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardStateCalls: DeepMocked<ReturnType<typeof useBoardState>>;
 
+	const copyModule = createModuleMocks(CopyModule);
+
 	const setup = (options?: {
 		board?: Board;
 		isLoading?: boolean;
@@ -171,6 +178,7 @@ describe("Board", () => {
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[COPY_MODULE_KEY.valueOf()]: copyModule,
 				},
 			},
 			propsData: { boardId },

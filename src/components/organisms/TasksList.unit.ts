@@ -8,7 +8,7 @@ import mocks from "@@/tests/test-utils/mockDataTasks";
 import { mount } from "@vue/test-utils";
 import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -27,7 +27,7 @@ describe("@/components/organisms/TasksList", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					copyModule: copyModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					tasksModule: tasksModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,

@@ -10,6 +10,7 @@ import ShareModule from "@/store/share";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
+	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
@@ -125,7 +126,7 @@ const getWrapper = () => {
 				$route,
 			},
 			provide: {
-				copyModule: copyModuleMock,
+				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				notifierModule: notifierModuleMock,
 				shareModule: shareModuleMock,

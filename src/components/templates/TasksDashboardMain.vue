@@ -139,7 +139,7 @@ export default {
 		};
 	},
 	inject: {
-		tasksModule: "taskModule",
+		tasksModule: "tasksModule",
 		copyModule: { from: COPY_MODULE_KEY },
 		finishedTasksModule: "finishedTasksModule",
 		loadingStateModule: "loadingStateModule",
