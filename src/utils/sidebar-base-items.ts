@@ -75,7 +75,6 @@ const getSidebarItems = (
 	},
 	{
 		title: "global.sidebar.files-old",
-		excludedPermission: "COLLABORATIVE_FILES_ONLY",
 		href: "/files",
 		icon: "$mdiFolderOpenOutline",
 		testId: "Meine Dateien",
@@ -111,14 +110,6 @@ const getSidebarItems = (
 				activeForUrls: ["^/files/shared($|/.*)"],
 			},
 		],
-	},
-	{
-		title: "global.sidebar.files",
-		permission: "COLLABORATIVE_FILES",
-		href: "/cfiles",
-		icon: "$mdiFolderOpenOutline",
-		testId: "Dateien",
-		activeForUrls: ["^/cfiles($|/.*)"],
 	},
 	{
 		title: "pages.news.title",

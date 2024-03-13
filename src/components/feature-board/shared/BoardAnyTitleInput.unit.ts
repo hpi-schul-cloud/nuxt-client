@@ -1,12 +1,14 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
-import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
-import { useBoardPermissions } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { useBoardPermissions } from "@data-board";
+import { mount } from "@vue/test-utils";
+import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 
 jest.mock("./InlineEditInteractionHandler.composable");
 
@@ -21,7 +23,7 @@ const defaultProps = {
 };
 
 describe("BoardAnyTitleTitleInput", () => {
-	let wrapper: Wrapper<Vue>;
+	let wrapper: ReturnType<typeof mount>;
 
 	const setup = (
 		props: {
@@ -29,6 +31,7 @@ describe("BoardAnyTitleTitleInput", () => {
 			scope: "card" | "column" | "board";
 			placeholder?: string;
 			isFocused?: boolean;
+			maxLength?: number;
 		},
 		options?: {
 			permissions?: BoardPermissionChecks;
@@ -40,8 +43,13 @@ describe("BoardAnyTitleTitleInput", () => {
 			...options?.permissions,
 		});
 
-		wrapper = mount(BoardAnyTitleInput as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		wrapper = mount(BoardAnyTitleInput, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					CARD_HOST_INTERACTION_EVENT: undefined,
+				},
+			},
 			propsData: {
 				...defaultProps,
 				...props,
@@ -58,18 +66,25 @@ describe("BoardAnyTitleTitleInput", () => {
 			expect(wrapper).toBeDefined();
 		});
 
+		it("should forward maxLength prop to VTextarea", () => {
+			setup({ isEditMode: false, scope: "board", maxLength: 10 });
+			const inputs = wrapper.findAll("input");
+			const maxLength = inputs[0].element.getAttribute("maxlength");
+			expect(maxLength).toBe("10");
+		});
+
 		it("should emit if value changes", async () => {
 			setup({ isEditMode: true, scope: "card" });
 			const newValue = "new title";
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			textAreaComponent.vm.$emit("input", "new title");
+			textAreaComponent.vm.$emit("update:modelValue", "new title");
 			const emitted = wrapper.emitted();
 
 			if (emitted["update:value"] === undefined) {
 				throw new Error("Emitted should be defined");
 			}
 
-			expect(emitted["update:value"][0][0]).toContain(newValue);
+			expect(emitted["update:value"][0]).toContain(newValue);
 		});
 
 		it("should emit enter on hitting 'enter' key in card title", async () => {
@@ -98,6 +113,38 @@ describe("BoardAnyTitleTitleInput", () => {
 			const emitted = wrapper.emitted();
 
 			expect(emitted["enter"]).toBe(undefined);
+		});
+
+		it("should not emit enter on hitting 'enter' key in board title", async () => {
+			setup({ isEditMode: true, scope: "board" });
+			const textFieldComponent = wrapper.findComponent({ name: "VTextField" });
+			textFieldComponent.vm.$emit(
+				"keydown",
+				new KeyboardEvent("keydown", {
+					key: "Enter",
+				})
+			);
+			const emitted = wrapper.emitted();
+
+			expect(emitted["enter"]).toBe(undefined);
+		});
+
+		it("should display VTextField when scope is board", () => {
+			setup({ isEditMode: true, scope: "board" });
+			const textFieldComponent = wrapper.findComponent({ name: "VTextField" });
+			expect(textFieldComponent.exists()).toBe(true);
+		});
+
+		it("should display VTextarea when scope is card", () => {
+			setup({ isEditMode: true, scope: "card" });
+			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+			expect(textAreaComponent.exists()).toBe(true);
+		});
+
+		it("should display VTextarea when scope is column", () => {
+			setup({ isEditMode: true, scope: "column" });
+			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+			expect(textAreaComponent.exists()).toBe(true);
 		});
 	});
 });

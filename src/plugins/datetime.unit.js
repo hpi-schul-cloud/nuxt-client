@@ -1,31 +1,34 @@
-import {
-	printDate,
+import de from "@/locales/de";
+import en from "@/locales/en";
+import datetime, {
+	calculateUTC,
+	createInputDateTime,
 	currentDate,
+	DATETIME_FORMAT,
+	formatDateForAlerts,
 	fromInputDateTime,
 	fromNow,
-	formatDateForAlerts,
 	fromNowToFuture,
-	createInputDateTime,
-	inputRangeDate,
+	getTimeFromISOString,
+	getUtcOffset,
 	inputDateFromDeUTC,
+	inputRangeDate,
+	isDateTimeInPast,
+	printDate,
 	printDateFromDeUTC,
 	printDateFromStringUTC,
 	printDateTimeFromStringUTC,
-	setDefaultTimezone,
-	getUtcOffset,
-	calculateUTC,
 	setDefaultFormats,
-	DATETIME_FORMAT,
-	isDateTimeInPast,
+	setDefaultTimezone,
 } from "@/plugins/datetime";
-import datetime from "@/plugins/datetime";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc"; // dependent on utc plugin
-import timezone from "dayjs/plugin/timezone";
-import relativeTime from "dayjs/plugin/relativeTime";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import setupStores from "../../tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import relativeTime from "dayjs/plugin/relativeTime";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc"; // dependent on utc plugin
+import setupStores from "../../tests/test-utils/setupStores";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -36,10 +39,7 @@ const TEST_DATETIME_TIMEZONE = "America/New_York";
 const TEST_USER_TIMEZONE = "Europe/Berlin";
 const TEST_CURRENT_LOCALE = "en";
 
-const translations = {
-	en: require("@/locales/en.json"),
-	de: require("@/locales/de.json"),
-};
+const translations = { de, en };
 
 const defaultFormats = {
 	...DATETIME_FORMAT,
@@ -95,7 +95,7 @@ describe("@/plugins/datetime", () => {
 	const timeLocalString = dateLocal.format("HH:mm");
 
 	beforeEach(() => {
-		setupStores({ authModule: AuthModule });
+		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 	});
 
 	it("getUtcOffset", () => {
@@ -198,6 +198,17 @@ describe("@/plugins/datetime", () => {
 	it("isDateTimeInPast", () => {
 		const date = new Date("1991-12-31");
 		expect(isDateTimeInPast(date)).toStrictEqual(true);
+	});
+
+	it("getTimeFromISOString", () => {
+		const date = new Date();
+		const ISOString = date.toISOString();
+		const hours = date.getHours().toString().padStart(2, "0");
+		const minutes = date.getMinutes().toString().padStart(2, "0");
+
+		expect(getTimeFromISOString(ISOString)).toStrictEqual(
+			`${hours}:${minutes}`
+		);
 	});
 
 	const mockApp = {

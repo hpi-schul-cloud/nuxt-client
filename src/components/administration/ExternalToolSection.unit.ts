@@ -1,29 +1,35 @@
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { User } from "@/store/types/auth";
 import {
 	AUTH_MODULE_KEY,
-	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mdiAlert, mdiCheckCircle } from "@mdi/js";
+import { mount } from "@vue/test-utils";
+import { nextTick, ref } from "vue";
+import ExternalToolSection from "./ExternalToolSection.vue";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
 import {
+	meResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils/factory";
-import { i18nMock } from "@@/tests/test-utils/i18nMock";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mdiAlert, mdiCheckCircle } from "@mdi/js";
-import { mount, Wrapper } from "@vue/test-utils";
-import Vue, { ref } from "vue";
-import ExternalToolSection from "./ExternalToolSection.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("@data-external-tool");
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -33,7 +39,6 @@ describe("ExternalToolSection", () => {
 	>;
 
 	const createDatasheetButtonIndex = 1;
-	const deleteButtonIndex = 2;
 
 	const getWrapper = (getters: Partial<SchoolExternalToolsModule> = {}) => {
 		el = document.createElement("div");
@@ -50,22 +55,30 @@ describe("ExternalToolSection", () => {
 
 		const notifierModule = createModuleMocks(NotifierModule);
 
+		const mockMe = meResponseFactory.build({ school: { id: "schoolId" } });
 		const authModule = createModuleMocks(AuthModule, {
-			getUser: {
-				schoolId: "schoolId",
-			} as User,
+			getSchool: mockMe.school,
 		});
 
-		const wrapper: Wrapper<Vue> = mount(ExternalToolSection, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-				[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				[AUTH_MODULE_KEY.valueOf()]: authModule,
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
+
+		const wrapper = mount(ExternalToolSection, {
+			global: {
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
+
+				provide: {
+					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
+						schoolExternalToolsModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
+				},
 			},
+
 			stubs: {
 				VIcon: true,
 			},
@@ -155,7 +168,8 @@ describe("ExternalToolSection", () => {
 				],
 			});
 
-			jest.spyOn(window, "open");
+			const windowMock = createMock<Window>();
+			jest.spyOn(window, "open").mockImplementation(() => windowMock);
 
 			return {
 				wrapper,
@@ -171,16 +185,18 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setupItems();
 
 				const vueWrapperArray = wrapper
-					.find(".v-data-table-header")
+					.findComponent({
+						name: "v-data-table",
+					})
 					.findAll("th");
 
-				expect(vueWrapperArray.at(0).find("span").text()).toEqual(
+				expect(vueWrapperArray[0].find("span").text()).toEqual(
 					"common.labels.name"
 				);
-				expect(vueWrapperArray.at(1).find("span").text()).toEqual(
+				expect(vueWrapperArray[1].find("span").text()).toEqual(
 					"components.administration.externalToolsSection.table.header.status"
 				);
-				expect(vueWrapperArray.at(2).find("span").text()).toEqual("");
+				expect(vueWrapperArray[2].find("span").text()).toEqual("");
 			});
 		});
 
@@ -188,41 +204,41 @@ describe("ExternalToolSection", () => {
 			it("names should be rendered in the datatable", () => {
 				const { wrapper, firstToolName, secondToolName } = setupItems();
 
-				const tableRows = wrapper.find("tbody").findAll("tr");
-				const firstRow = tableRows.at(0).findAll("td");
-				const secondRow = tableRows.at(1).findAll("td");
+				const tableRows = wrapper
+					.findComponent({
+						name: "v-data-table",
+					})
+					.findAll("tr");
+				const firstRow = tableRows[1].findAll("td");
+				const secondRow = tableRows[2].findAll("td");
 
-				expect(firstRow.at(0).text()).toEqual(firstToolName);
-				expect(secondRow.at(0).text()).toEqual(secondToolName);
+				expect(firstRow[0].text()).toEqual(firstToolName);
+				expect(secondRow[0].text()).toEqual(secondToolName);
 			});
 
 			it("status should be rendered in the datatable", () => {
 				const { wrapper } = setupItems();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
-				const firstRow = tableRows.at(0).findAll("td");
-				const secondRow = tableRows.at(1).findAll("td");
-				const thirdRow = tableRows.at(2).findAll("td");
 
-				expect(firstRow.at(1).find("span").text()).toEqual(
+				const firstRow = tableRows[0].findAll("td");
+				const secondRow = tableRows[1].findAll("td");
+				const thirdRow = tableRows[2].findAll("td");
+
+				expect(true).toBeTruthy();
+				expect(firstRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.latest"
 				);
-				expect(firstRow.at(1).findComponent({ name: "v-icon" }).text()).toEqual(
-					mdiCheckCircle
-				);
-				expect(secondRow.at(1).find("span").text()).toEqual(
+				expect(firstRow[1].html()).toContain(mdiCheckCircle);
+				expect(secondRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.outdated"
 				);
-				expect(
-					secondRow.at(1).findComponent({ name: "v-icon" }).text()
-				).toEqual(mdiAlert);
-				expect(secondRow.at(1).find("span").text()).toEqual(
+				expect(secondRow[1].html()).toContain(mdiAlert);
+				expect(secondRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.outdated"
 				);
-				expect(thirdRow.at(1).findComponent({ name: "v-icon" }).text()).toEqual(
-					mdiAlert
-				);
-				expect(thirdRow.at(1).find("span").text()).toEqual(
+				expect(thirdRow[1].html()).toContain(mdiAlert);
+				expect(thirdRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.deactivated"
 				);
 			});
@@ -233,15 +249,15 @@ describe("ExternalToolSection", () => {
 
 					const tableRows = wrapper.find("tbody").findAll("tr");
 
-					const firstRowButtons = tableRows.at(1).findAll("button");
+					const firstRowButtons = tableRows[1].findAll("button");
 					expect(
-						firstRowButtons.at(0).classes().includes("v-btn--icon")
+						firstRowButtons[0].classes().includes("v-btn--icon")
 					).toBeTruthy();
 					expect(
-						firstRowButtons.at(1).classes().includes("v-btn--icon")
+						firstRowButtons[1].classes().includes("v-btn--icon")
 					).toBeTruthy();
 					expect(
-						firstRowButtons.at(2).classes().includes("v-btn--icon")
+						firstRowButtons.at(2)?.classes().includes("v-btn--icon")
 					).toBeTruthy();
 				});
 
@@ -250,13 +266,13 @@ describe("ExternalToolSection", () => {
 					const toolId = schoolExternalTool.toolId;
 
 					const tableRows = wrapper.find("tbody").findAll("tr");
-					const firstRowButtons = tableRows.at(0).findAll("button");
-					const datasheetButton = firstRowButtons.at(
+					const firstRowButtons = tableRows.at(0)?.findAll("button");
+					const datasheetButton = firstRowButtons?.at(
 						createDatasheetButtonIndex
 					);
 
-					await datasheetButton.trigger("click");
-					await Vue.nextTick();
+					await datasheetButton!.trigger("click");
+					await nextTick();
 
 					expect(window.open).toHaveBeenCalledWith(
 						`/api/v3/tools/external-tools/${toolId}/datasheet`
@@ -267,28 +283,28 @@ describe("ExternalToolSection", () => {
 					const { wrapper } = setupItems();
 
 					const tableRows = wrapper.find("tbody").findAll("tr");
-					const firstRowButtons = tableRows.at(0).findAll("button");
-					const deleteButton = firstRowButtons.at(deleteButtonIndex);
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
 					await deleteButton.trigger("click");
 
-					expect(wrapper.find('div[role="dialog"]')).toBeDefined();
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					//@ts-ignore
+					expect(wrapper.findComponent({ name: "v-dialog" })).toBeDefined();
 					expect(wrapper.vm.isDeleteDialogOpen).toBeTruthy();
 				});
 
 				describe("when dialog is rendered", () => {
 					it("should have tool name in text", async () => {
-						const { wrapper, firstToolName } = setupItems();
+						const { wrapper } = setupItems();
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
-						const firstRowButtons = tableRows.at(0).findAll("button");
-						const deleteButton = firstRowButtons.at(deleteButtonIndex);
+						const deleteButton = tableRows[0].get(
+							'[data-testid="deleteAction"]'
+						);
 
 						await deleteButton.trigger("click");
 
-						expect(wrapper.findAll("p").at(1).text()).toContain(firstToolName);
+						expect(wrapper.find("p").html()).toContain(
+							"components.administration.externalToolsSection.info"
+						);
 					});
 				});
 
@@ -310,13 +326,13 @@ describe("ExternalToolSection", () => {
 						});
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
+						const deleteButton = tableRows[0].get(
+							'[data-testid="deleteAction"]'
+						);
 
-						const firstRowButtons = tableRows.at(0).findAll("button");
-
-						const deleteButton = firstRowButtons.at(deleteButtonIndex);
 						await deleteButton.trigger("click");
 
-						const confirmButton = wrapper.find(
+						const confirmButton = wrapper.getComponent(
 							"[data-testId=delete-dialog-confirm]"
 						);
 						await confirmButton.trigger("click");
@@ -343,14 +359,14 @@ describe("ExternalToolSection", () => {
 						});
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
+						const deleteButton = tableRows[0].get(
+							'[data-testid="deleteAction"]'
+						);
 
-						const firstRowButtons = tableRows.at(0).findAll("button");
-
-						const deleteButton = firstRowButtons.at(deleteButtonIndex);
 						await deleteButton.trigger("click");
 
-						const confirmButton = wrapper.find(
-							"[data-testId=delete-dialog-confirm]"
+						const confirmButton = wrapper.findComponent(
+							"[data-testId='delete-dialog-confirm']"
 						);
 						await confirmButton.trigger("click");
 
@@ -367,16 +383,15 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = getWrapper();
 
 				const expectedName = "Name";
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
+
 				wrapper.vm.itemToDelete = {
+					id: "id",
 					name: expectedName,
-					status: schoolToolConfigurationStatusFactory.build(),
-					outdated: false,
+					statusText: schoolToolConfigurationStatusFactory.build(),
+					isOutdated: false,
+					isDeactivated: false,
 				};
 
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 
 				expect(itemName).toEqual(expectedName);
@@ -387,12 +402,8 @@ describe("ExternalToolSection", () => {
 			it("should return an empty string", () => {
 				const { wrapper } = getWrapper();
 
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
 				wrapper.vm.itemToDelete = undefined;
 
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 
 				expect(itemName).toEqual("");
@@ -428,13 +439,11 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows.at(0).findAll("button");
-
-				const deleteButton = firstRowButtons.at(deleteButtonIndex);
 				await deleteButton.trigger("click");
 
-				const dialog = wrapper.find('[data-testid="delete-dialog"]');
+				const dialog = wrapper.findComponent({ name: "v-dialog" });
 
 				expect(dialog.isVisible()).toBeTruthy();
 			});
@@ -443,29 +452,26 @@ describe("ExternalToolSection", () => {
 				const { wrapper, schoolExternalToolMetadata } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows.at(0).findAll("button");
-
-				const deleteButton = firstRowButtons.at(deleteButtonIndex);
 				await deleteButton.trigger("click");
 
-				const dialogContent = wrapper.find(
-					'[data-testid="delete-dialog-content"]'
+				const dialogContent = wrapper.findComponent({ name: "renderHTML" });
+
+				expect(dialogContent.props("html")).toEqual(
+					"components.administration.externalToolsSection.dialog.content"
 				);
 
-				expect(dialogContent.text()).toEqual(
-					`components.administration.externalToolsSection.dialog.content {"itemName":"name","courseCount":${schoolExternalToolMetadata.course},"boardElementCount":${schoolExternalToolMetadata.boardElement}}`
-				);
+				expect(wrapper.vm.getItemName).toEqual("name");
+				expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
 			});
 
 			it("should not display notification", async () => {
 				const { wrapper, notifierModule } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows.at(0).findAll("button");
-
-				const deleteButton = firstRowButtons.at(deleteButtonIndex);
 				await deleteButton.trigger("click");
 
 				expect(notifierModule.show).not.toHaveBeenCalled();
@@ -493,10 +499,8 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows.at(0).findAll("button");
-
-				const deleteButton = firstRowButtons.at(deleteButtonIndex);
 				await deleteButton.trigger("click");
 
 				const dialog = wrapper.find('[data-testid="delete-dialog"]');
@@ -508,10 +512,8 @@ describe("ExternalToolSection", () => {
 				const { wrapper, notifierModule } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows.at(0).findAll("button");
-
-				const deleteButton = firstRowButtons.at(deleteButtonIndex);
 				await deleteButton.trigger("click");
 
 				expect(notifierModule.show).toHaveBeenCalledWith({

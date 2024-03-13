@@ -1,15 +1,14 @@
 <template>
 	<DefaultWireframe
-		:headline="t('pages.administration.classes.index.title')"
+		:headline="$t('pages.administration.classes.index.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="true"
-		data-testid="admin-class-title"
 	>
 		<template #header>
-			<h1 class="text-h3">
+			<h1 class="text-h3" data-testid="admin-class-title">
 				{{ title }}
 				<span v-show="isExternal" class="text-subtitle-1">
-					({{ t("page-class-members.title.info") }})
+					({{ $t("page-class-members.title.info") }})
 				</span>
 			</h1>
 		</template>
@@ -17,8 +16,8 @@
 			:items="items"
 			:headers="headers"
 			:loading="isLoading"
-			:loading-text="t('common.loading.text')"
-			:no-data-text="t('common.nodata')"
+			:loading-text="$t('common.loading.text')"
+			:no-data-text="$t('common.nodata')"
 			data-testid="class-members-table"
 		/>
 		<ClassMembersInfoBox class="mt-5" :system-id="externalSystemId" />
@@ -28,11 +27,11 @@
 <script lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import { GroupMapper, GroupUser, useGroupState } from "@data-group";
 import { computed, ComputedRef, defineComponent, onMounted } from "vue";
-import { DataTableHeader } from "vuetify";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
+import { DataTableHeader } from "@/types/vuetify";
 
 interface GroupUserTableData {
 	firstName: string;
@@ -67,15 +66,15 @@ export default defineComponent({
 
 		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => [
 			{
-				text: t("pages.administration.index.title"),
+				title: t("pages.administration.index.title"),
 				href: "/administration/",
 			},
 			{
-				text: t("pages.administration.classes.index.title"),
+				title: t("pages.administration.classes.index.title"),
 				to: "/administration/groups/classes",
 			},
 			{
-				text: title.value,
+				title: title.value,
 				disabled: true,
 			},
 		]);
@@ -100,16 +99,19 @@ export default defineComponent({
 
 		const headers: DataTableHeader[] = [
 			{
-				text: t("common.labels.name"),
+				title: t("common.labels.name"),
 				value: "lastName",
+				key: "lastName",
 			},
 			{
-				text: t("common.labels.firstName"),
+				title: t("common.labels.firstName"),
 				value: "firstName",
+				key: "firstName",
 			},
 			{
-				text: t("common.labels.role"),
+				title: t("common.labels.role"),
 				value: "roleName",
+				key: "roleName",
 			},
 		];
 

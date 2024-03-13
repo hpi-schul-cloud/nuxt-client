@@ -3,7 +3,7 @@
 		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
 		:full-width="false"
-		data-testId="context-external-tool-configurator-title"
+		data-testid="context-external-tool-configurator-title"
 	>
 		<RenderHTML :html="t('pages.tool.description')" component="p" />
 		<v-spacer class="mt-10" />
@@ -23,7 +23,7 @@
 					:label="t('pages.tool.context.displayName')"
 					:hint="t('pages.tool.context.displayNameDescription')"
 					persistent-hint
-					validate-on-blur
+					validate-on="blur"
 					data-testId="parameter-display-name"
 				/>
 			</template>
@@ -35,7 +35,7 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import { ToolContextType } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import EnvConfigModule from "@/store/env-config";
@@ -68,8 +68,7 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import VueRouter from "vue-router";
-import { useRouter } from "vue-router/composables";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
 	components: {
@@ -107,14 +106,14 @@ export default defineComponent({
 		const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 			const crumbs: Breadcrumb[] = [
 				{
-					text: t("common.words.courses"),
+					title: t("common.words.courses"),
 					to: "/rooms-overview/",
 				},
 			];
 
 			if (courseTitle.value) {
 				crumbs.push({
-					text: courseTitle.value,
+					title: courseTitle.value,
 					to: contextRoute,
 				});
 			}
@@ -151,7 +150,7 @@ export default defineComponent({
 				: undefined
 		);
 
-		const router: VueRouter = useRouter();
+		const router = useRouter();
 		const onCancel = async () => {
 			await router.push({ path: contextRoute, query: { tab: "tools" } });
 		};

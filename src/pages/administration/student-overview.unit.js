@@ -1,27 +1,24 @@
-import { default as StudentPage } from "./StudentOverview.page.vue";
-import mock$objects from "../../../tests/test-utils/pageStubs";
+import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import BaseLink from "@/components/base/BaseLink.vue";
+import BaseModal from "@/components/base/BaseModal.vue";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
+import SchoolsModule from "@/store/schools";
+import { meResponseFactory } from "@@/tests/test-utils";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { nextTick } from "vue";
+import { createStore } from "vuex";
+import mock$objects from "../../../tests/test-utils/pageStubs";
+import StudentPage from "./StudentOverview.page.vue";
 
-const envs = {
-	FALLBACK_DISABLED: false,
-	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
-	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
-	JWT_TIMEOUT_SECONDS: 7200,
-	SC_THEME: process.env.SC_THEME || "default",
-	I18N__AVAILABLE_LANGUAGES: "",
-	I18N__DEFAULT_LANGUAGE: "",
-	I18N__DEFAULT_TIMEZONE: "",
-	I18N__FALLBACK_LANGUAGE: "",
-	DOCUMENT_BASE_DIR: "",
-	SC_TITLE: "",
-	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-};
 const mockData = [
 	{
 		_id: "0000d231816abba584714c9e",
@@ -40,40 +37,52 @@ const mockData = [
 	},
 ];
 
-describe("students/index", () => {
-	const deleteUsersStub = jest.fn();
-	const OLD_ENV = process.env;
+const envs = {
+	FALLBACK_DISABLED: false,
+	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
+	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
+	JWT_TIMEOUT_SECONDS: 7200,
+	SC_THEME: process.env.SC_THEME || "default",
+	I18N__AVAILABLE_LANGUAGES: "",
+	I18N__DEFAULT_LANGUAGE: "",
+	I18N__DEFAULT_TIMEZONE: "",
+	I18N__FALLBACK_LANGUAGE: "",
+	DOCUMENT_BASE_DIR: "",
+	SC_TITLE: "",
+	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
+};
 
-	let mockStore;
-
-	beforeEach(() => {
-		jest.useFakeTimers();
-		jest.clearAllMocks();
-
-		jest.resetModules(); // reset module registry to avoid conflicts
-		process.env = { ...OLD_ENV }; // make a copy
-
-		setupStores({
-			authModule: AuthModule,
-			envConfigModule: EnvConfigModule,
-			schoolsModule: SchoolsModule,
-			notifierModule: NotifierModule,
-		});
-
-		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
-
-		mockStore = {
+const createMockStore = () => {
+	const storeOptions = {
+		modules: {
 			classes: {
+				namespaced: true,
 				actions: {
 					find: () => {
 						return { data: [] };
 					},
 				},
+				state: () => ({
+					list: [],
+				}),
+			},
+			authModule: {
+				namespaced: true,
+				getters: {
+					getSchool: () => () => ({ ...mockSchool, isExternal: false }),
+				},
+			},
+			schools: {
+				namespaced: true,
+				getters: {
+					schoolIsExternallyManaged: () => false,
+				},
 			},
 			users: {
+				namespaced: true,
 				actions: {
 					findStudents: jest.fn(),
-					deleteUsers: deleteUsersStub,
+					deleteUsers: jest.fn(),
 					getQrRegistrationLinks: jest.fn(),
 					sendRegistrationLink: jest.fn(),
 				},
@@ -92,6 +101,7 @@ describe("students/index", () => {
 				},
 			},
 			uiState: {
+				namespaced: true,
 				getters: {
 					get: () => () => ({ page: 1 }),
 				},
@@ -99,7 +109,39 @@ describe("students/index", () => {
 					set: jest.fn(),
 				},
 			},
-		};
+		},
+	};
+
+	const mockStore = createStore(storeOptions);
+	const usersActionsStubs = storeOptions.modules.users.actions;
+	const uiStateMutationsStubs = storeOptions.modules.uiState.mutations;
+
+	return { mockStore, usersActionsStubs, uiStateMutationsStubs };
+};
+
+describe("students/index", () => {
+	const OLD_ENV = process.env;
+
+	beforeEach(() => {
+		jest.useFakeTimers();
+
+		jest.resetModules(); // reset module registry to avoid conflicts
+		process.env = { ...OLD_ENV }; // make a copy
+
+		setupStores({
+			authModule: AuthModule,
+			envConfigModule: EnvConfigModule,
+			schoolsModule: SchoolsModule,
+			notifierModule: NotifierModule,
+		});
+
+		schoolsModule.setSchool({ ...mockSchool, isExternal: false });
+		const mockMe = meResponseFactory.build();
+		authModule.setMe(mockMe);
+	});
+
+	afterAll(() => {
+		process.env = OLD_ENV; // restore old environment
 	});
 
 	const mockUiState = {
@@ -116,29 +158,36 @@ describe("students/index", () => {
 		set: (key, identifier) => ({}),
 	};
 
-	afterAll(() => {
-		process.env = OLD_ENV; // restore old environment
-	});
+	const setup = () => {
+		const { mockStore, usersActionsStubs, uiStateMutationsStubs } =
+			createMockStore();
 
-	it("should call 'deleteUsers' action", async () => {
-		authModule.setUser({
-			roles: [
-				{
-					name: "administrator",
-				},
-			],
-			permissions: ["STUDENT_CREATE", "STUDENT_DELETE"],
-		});
 		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-				uiState: mockUiState,
-			}),
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$store: mockStore,
+					uiState: mockUiState,
+				},
+				components: {
+					"base-input": BaseInput,
+					"base-link": BaseLink,
+					"base-dialog": BaseDialog,
+					"base-modal": BaseModal,
+				},
+			},
 		});
+
 		mock$objects(wrapper);
 
-		await wrapper.vm.$nextTick();
+		return { wrapper, mockStore, usersActionsStubs, uiStateMutationsStubs };
+	};
+
+	it("should call 'deleteUsers' action", async () => {
+		const { wrapper, usersActionsStubs } = setup();
+		authModule.addUserPermission("STUDENT_DELETE");
+
+		await nextTick();
 
 		const userRows = wrapper.findAll('[data-testid="table-data-row"]');
 		expect(userRows).toHaveLength(2);
@@ -146,16 +195,16 @@ describe("students/index", () => {
 		// select first entry
 		const checkbox = userRows
 			.at(0)
-			.find('.selection-column input[type="checkbox"]');
+			.find(".selection-column")
+			.get('input[type="checkbox"]');
 		checkbox.setChecked();
 
 		// open actions menu
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		const actionsBtn = wrapper.find(
 			".row-selection-info .actions button:first-child"
 		);
-		actionsBtn.trigger("click");
-		await wrapper.vm.$nextTick();
+		await actionsBtn.trigger("click");
 
 		// click delete menu button
 		const deleteBtn = wrapper
@@ -163,38 +212,31 @@ describe("students/index", () => {
 			.at(3);
 		await deleteBtn.trigger("click");
 
-		const confirmBtn = wrapper.find("[data-testid='btn-dialog-confirm']");
+		const confirmBtn = wrapper.findComponent(
+			"[data-testid='btn-dialog-confirm']"
+		);
 		await confirmBtn.trigger("click");
 
-		expect(deleteUsersStub.mock.calls).toHaveLength(1);
-		expect(deleteUsersStub.mock.calls[0][1]).toStrictEqual({
+		expect(usersActionsStubs.deleteUsers.mock.calls).toHaveLength(1);
+		expect(usersActionsStubs.deleteUsers.mock.calls[0][1]).toStrictEqual({
 			ids: [mockData[0]._id],
 			userType: "student",
 		});
 	});
 
 	it("should dispatch the 'findStudents action on load'", () => {
-		mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
-		expect(mockStore.users.actions.findStudents).toHaveBeenCalled();
+		const { usersActionsStubs } = setup();
+
+		expect(usersActionsStubs.findStudents).toHaveBeenCalled();
 	});
 
 	it("should emit the 'delete' action when deleting a user", async () => {
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
-		mock$objects(wrapper);
-		authModule.addUserPermmission("STUDENT_DELETE");
+		const { wrapper } = setup();
+
+		authModule.addUserPermission("STUDENT_DELETE");
 
 		// user row exists
-		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
+		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
 		expect(dataRow.exists()).toBe(true);
 		// user row checkbox is clicked
 		const checkBox = dataRow.find(".select");
@@ -206,7 +248,7 @@ describe("students/index", () => {
 		expect(dataRow.vm.selected).toBe(true);
 
 		// selection row component is rendered
-		const selectionBar = wrapper.find(".row-selection-info");
+		const selectionBar = wrapper.findComponent(".row-selection-info");
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
@@ -232,16 +274,10 @@ describe("students/index", () => {
 	});
 
 	it("should emit the 'registration_link' action when the action button is clicked", async () => {
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
-		mock$objects(wrapper);
+		const { wrapper, usersActionsStubs } = setup();
 
 		// user row exists
-		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
+		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
 		expect(dataRow.exists()).toBe(true);
 		// user row checkbox is clicked
 		const checkBox = dataRow.find(".select");
@@ -252,7 +288,7 @@ describe("students/index", () => {
 		expect(dataRow.vm.selected).toBe(true);
 
 		// selection row component is rendered
-		const selectionBar = wrapper.find(".row-selection-info");
+		const selectionBar = wrapper.findComponent(".row-selection-info");
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
@@ -277,20 +313,14 @@ describe("students/index", () => {
 		);
 
 		// store action is called
-		expect(mockStore.users.actions.sendRegistrationLink).toHaveBeenCalled();
+		expect(usersActionsStubs.sendRegistrationLink).toHaveBeenCalled();
 	});
 
 	it("should emit the 'qr_code' action when the action button is clicked", async () => {
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
-		mock$objects(wrapper);
+		const { wrapper, usersActionsStubs } = setup();
 
 		// user row exists
-		const dataRow = wrapper.find(`[data-testid="table-data-row"]`);
+		const dataRow = wrapper.findComponent(`[data-testid="table-data-row"]`);
 		expect(dataRow.exists()).toBe(true);
 		// user row checkbox is clicked
 		const checkBox = dataRow.find(".select");
@@ -301,7 +331,7 @@ describe("students/index", () => {
 		expect(dataRow.vm.selected).toBe(true);
 
 		// selection row component is rendered
-		const selectionBar = wrapper.find(".row-selection-info");
+		const selectionBar = wrapper.findComponent(".row-selection-info");
 		expect(selectionBar.exists()).toBe(true);
 
 		// contextMenu is rendered
@@ -325,17 +355,13 @@ describe("students/index", () => {
 		);
 
 		// store action is called
-		expect(mockStore.users.actions.getQrRegistrationLinks).toHaveBeenCalled();
+		expect(usersActionsStubs.getQrRegistrationLinks).toHaveBeenCalled();
 	});
 
 	it("should display the same number of elements as in the mockData object", () => {
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
-		const table = wrapper.find(`[data-testid="students_table"]`);
+		const { wrapper } = setup();
+
+		const table = wrapper.findComponent(`[data-testid="students_table"]`);
 		expect(table.vm.data).toHaveLength(mockData.length);
 	});
 
@@ -344,12 +370,7 @@ describe("students/index", () => {
 			...envs,
 			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
 		});
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
 
@@ -365,12 +386,7 @@ describe("students/index", () => {
 			...envs,
 			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
 		});
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
 
@@ -382,49 +398,33 @@ describe("students/index", () => {
 	});
 
 	it("should display the edit button if school is not external", () => {
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
+
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.exists()).toBe(true);
 	});
 
 	it("should not display the edit button if school is external", () => {
 		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
+
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
 		expect(editBtn.exists()).toBe(false);
 	});
 
-	it("editBtn's to property should have the expected URL", () => {
+	it("editBtn's to property should have the expected URL", async () => {
 		const expectedURL =
 			"/administration/students/0000d231816abba584714c9e/edit?returnUrl=/administration/students";
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
+
 		const editBtn = wrapper.find(`[data-testid="edit_student_button"]`);
-		expect(editBtn.vm.href).toStrictEqual(expectedURL);
+		expect(editBtn.attributes("href")).toStrictEqual(expectedURL);
 	});
 
 	it("should render the fab-floating component if user has SUDENT_CREATE permission", () => {
-		authModule.addUserPermmission("STUDENT_CREATE");
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		authModule.addUserPermission("STUDENT_CREATE");
+		const { wrapper } = setup();
+
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_students_table"]`
 		);
@@ -432,7 +432,7 @@ describe("students/index", () => {
 	});
 
 	it("should not render the fab-floating component if user does not have STUDENT_CREATE permission", () => {
-		authModule.setUser({
+		authModule.setMe({
 			roles: [
 				{
 					name: "administrator",
@@ -440,13 +440,7 @@ describe("students/index", () => {
 			],
 			permissions: ["STUDENT_DELETE"],
 		});
-		const customMockStore = { ...mockStore };
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: customMockStore,
-			}),
-		});
+		const { wrapper } = setup();
 
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_students_table"]`
@@ -457,12 +451,8 @@ describe("students/index", () => {
 	it("should not render the fab-floating component if isExternal is true", () => {
 		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
 
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
+
 		const fabComponent = wrapper.find(
 			`[data-testid="fab_button_students_table"]`
 		);
@@ -472,41 +462,25 @@ describe("students/index", () => {
 	it("should render the adminTableLegend component when school is external", () => {
 		schoolsModule.setSchool({ ...mockSchool, isExternal: true });
 
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
+
 		const externalHint = wrapper.find(".external-sync-hint");
 
 		expect(externalHint.exists()).toBe(true);
 	});
 
 	it("should not render the adminTableLegend component when school is not external", () => {
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
+
 		const externalHint = wrapper.find(".external-sync-hint");
 		expect(externalHint.exists()).toBe(false);
 	});
 
 	it("should call barSearch method when searchbar component's value change", () => {
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper, usersActionsStubs, uiStateMutationsStubs } = setup();
 
 		//run all existing timers
 		jest.runAllTimers();
-		//reset the mock call stack
-		mockStore.users.actions.findStudents.mockClear();
-		mockStore.uiState.mutations.set.mockClear();
 
 		const searchBarInput = wrapper.find(`input[data-testid="searchbar"]`);
 		expect(searchBarInput.exists()).toBe(true);
@@ -516,42 +490,33 @@ describe("students/index", () => {
 		//run new timer from updating the value
 		jest.runAllTimers();
 
-		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
+		expect(uiStateMutationsStubs.set).toHaveBeenCalled();
 
-		expect(mockStore.users.actions.findStudents).toHaveBeenCalled();
+		expect(usersActionsStubs.findStudents).toHaveBeenCalled();
 	});
 
 	// currently disabled, will be reactivated when the new components are in use
 	it.skip("should table filter options call uiState after passing props", async () => {
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper, uiStateMutationsStubs } = setup();
 
-		mockStore.uiState.mutations.set.mockClear();
+		uiStateMutationsStubs.set.mockClear();
 
 		const filterComponent = wrapper.find(`[data-testid="data_filter"]`);
 		expect(filterComponent.exists()).toBe(true);
 
 		filterComponent.setProps({ activeFilters: { classes: ["mockclassname"] } });
 
-		await wrapper.vm.$nextTick();
+		await nextTick();
 
-		expect(mockStore.uiState.mutations.set).toHaveBeenCalled();
+		expect(uiStateMutationsStubs.set).toHaveBeenCalled();
 	});
 
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
 		envConfigModule.setEnvs({
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
+
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
 		);
@@ -564,12 +529,7 @@ describe("students/index", () => {
 		envConfigModule.setEnvs({
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
 
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
@@ -583,12 +543,7 @@ describe("students/index", () => {
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 			FEATURE_CONSENT_NECESSARY: false,
 		});
-		const wrapper = mount(StudentPage, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-		});
+		const { wrapper } = setup();
 
 		expect(envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY).toBe(false);
 
@@ -598,13 +553,13 @@ describe("students/index", () => {
 		expect(wrapper.vm.icons).toStrictEqual([
 			{
 				icon: "$mdiCheckAll",
-				color: "var(--v-success-base)",
-				label: "Registrierung abgeschlossen",
+				color: "rgba(var(--v-theme-success))",
+				label: "pages.administration.students.legend.icon.success",
 			},
 			{
 				icon: "$mdiClose",
-				color: "var(--v-error-base)",
-				label: "Nutzer:in angelegt",
+				color: "rgba(var(--v-theme-error))",
+				label: "utils.adminFilter.consent.label.missing",
 			},
 		]);
 	});

@@ -1,12 +1,16 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue, { nextTick } from "vue";
-import AddElementDialog from "./AddElementDialog.vue";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { ConfigResponse } from "@/serverApi/v3/api";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
+import AddElementDialog from "./AddElementDialog.vue";
+
 jest.mock("./SharedElementTypeSelection.composable");
 
 const mockEnvs: ConfigResponse = {
@@ -49,6 +53,7 @@ const mockEnvs: ConfigResponse = {
 	TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: false,
 	FEATURE_SCHOOL_POLICY_ENABLED_NEW: false,
 	FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: false,
+	FEATURE_NEST_SYSTEMS_API_ENABLED: false,
 	FEATURE_NEXBOARD_COPY_ENABLED: false,
 	FEATURE_VIDEOCONFERENCE_ENABLED: false,
 	FEATURE_COLUMN_BOARD_ENABLED: false,
@@ -56,7 +61,6 @@ const mockEnvs: ConfigResponse = {
 	FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: false,
 	FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: false,
 	FEATURE_COURSE_SHARE: false,
-	FEATURE_COURSE_SHARE_NEW: false,
 	FEATURE_LOGIN_LINK_ENABLED: false,
 	FEATURE_LESSON_SHARE: false,
 	FEATURE_TASK_SHARE: false,
@@ -110,15 +114,14 @@ describe("ElementTypeSelection", () => {
 
 			setupMocks();
 
-			const wrapper: Wrapper<Vue> = mount(
-				AddElementDialog as MountOptions<Vue>,
-				{
-					...createComponentMocks({}),
+			const wrapper = mount(AddElementDialog, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					},
-				}
-			);
+				},
+			});
 
 			return { wrapper };
 		};
@@ -136,15 +139,15 @@ describe("ElementTypeSelection", () => {
 
 			const { isDialogOpen, elementTypeOptions, closeDialog } = setupMocks();
 
-			const wrapper: Wrapper<Vue> = mount(
-				AddElementDialog as MountOptions<Vue>,
-				{
-					...createComponentMocks({}),
+			const wrapper = mount(AddElementDialog, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+
 					provide: {
 						[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					},
-				}
-			);
+				},
+			});
 
 			isDialogOpen.value = true;
 			await nextTick();
@@ -162,17 +165,10 @@ describe("ElementTypeSelection", () => {
 			const { elementTypeOptions, wrapper } = await setup();
 
 			for (const elementTypeOption of elementTypeOptions.value) {
-				const button = wrapper.find(
-					`[data-testId=${elementTypeOption.testId}]`
+				const button = wrapper.findComponent(
+					`[data-testid=${elementTypeOption.testId}]`
 				);
-
-				const icon = button.find(".v-icon");
-				icon.contains(elementTypeOption.icon);
-				const label = button.find(".subtitle");
-				label.contains(elementTypeOption.label);
-
 				await button.trigger("click");
-
 				await nextTick();
 
 				expect(elementTypeOption.action).toHaveBeenCalled();
@@ -182,7 +178,7 @@ describe("ElementTypeSelection", () => {
 		it("should close modal on close button click", async () => {
 			const { closeDialog, wrapper } = await setup();
 
-			const closeButton = wrapper.find("[data-testId=dialog-close]");
+			const closeButton = wrapper.findComponent("[data-testId=dialog-close]");
 			await closeButton.trigger("click");
 
 			await nextTick();

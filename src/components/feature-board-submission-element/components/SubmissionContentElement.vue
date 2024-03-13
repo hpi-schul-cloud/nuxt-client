@@ -4,7 +4,7 @@
 		data-testid="board-submission-element"
 		dense
 		elevation="0"
-		outlined
+		variant="outlined"
 		ref="submissionContentElement"
 		:ripple="false"
 		tabindex="0"
@@ -45,7 +45,7 @@ import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.v
 import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
@@ -103,7 +103,12 @@ export default defineComponent({
 
 		const onMoveElementUp = () => emit("move-up:edit");
 
-		const onDeleteElement = () => emit("delete:element", element.value.id);
+		const onDeleteElement = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:element", element.value.id);
+			}
+		};
 
 		const onUpdateCompleted = (completed: boolean) => {
 			updateSubmissionItem(completed);

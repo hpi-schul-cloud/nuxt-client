@@ -13,6 +13,7 @@ import { createMock } from "@golevelup/ts-jest";
 import { AxiosResponse } from "axios";
 import { setupFileStorageNotifier } from "../test-utils/fileStorageNotifier";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
+
 jest.mock("./FileStorageNotifications.composable");
 
 jest.mock("@/utils/helpers");
@@ -24,7 +25,7 @@ const mockedMapAxiosErrorToResponseError = jest.mocked(
 
 jest.mock("@/store/store-accessor", () => ({
 	authModule: {
-		getUser: { schoolId: "schoolId" },
+		getSchool: { id: "schoolId" },
 	},
 }));
 
@@ -157,7 +158,8 @@ describe("FileStorageApi Composable", () => {
 					await fetchFile(parentId, parentType);
 
 					const fileRecord = getFileRecord(parentId);
-					expect(fileRecord.value).toBe(response.data.data[0]);
+
+					expect(fileRecord.value).toStrictEqual(response.data.data[0]);
 				});
 			});
 
@@ -173,7 +175,7 @@ describe("FileStorageApi Composable", () => {
 					await fetchFile(parentId, parentType);
 
 					const fileRecord = getFileRecord(parentId);
-					expect(fileRecord.value).toBe(response.data.data[0]);
+					expect(fileRecord.value).toStrictEqual(response.data.data[0]);
 				});
 			});
 		});
@@ -294,7 +296,7 @@ describe("FileStorageApi Composable", () => {
 				await upload(file, parentId, parentType);
 
 				const fileRecord = getFileRecord(parentId);
-				expect(fileRecord.value).toBe(fileRecordResponse);
+				expect(fileRecord.value).toStrictEqual(fileRecordResponse);
 			});
 		});
 
@@ -400,7 +402,7 @@ describe("FileStorageApi Composable", () => {
 				await uploadFromUrl(imageUrl, parentId, parentType);
 
 				const fileRecord = getFileRecord(parentId);
-				expect(fileRecord.value).toBe(fileRecordResponse);
+				expect(fileRecord.value).toStrictEqual(fileRecordResponse);
 			});
 		});
 
@@ -492,7 +494,7 @@ describe("FileStorageApi Composable", () => {
 				await rename(fileRecordResponse.id, renameFileParams);
 
 				const fileRecord = getFileRecord(parentId);
-				expect(fileRecord.value).toBe(fileRecordResponse);
+				expect(fileRecord.value).toStrictEqual(fileRecordResponse);
 			});
 		});
 

@@ -4,24 +4,24 @@
 		:breadcrumbs="[
 			{
 				to: '/news',
-				text: $t('pages.news.title'),
+				title: $t('pages.news.title'),
 			},
 			{
-				text: $t('pages.news.new.title'),
+				title: $t('pages.news.new.title'),
 				disabled: true,
 			},
 		]"
 		:full-width="false"
 	>
 		<div>
-			<form-news @save="create" @cancel="cancelHandler" />
+			<form-news @save="create" @cancel="onCancel" />
 		</div>
 	</default-wireframe>
 </template>
 
 <script>
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import FormNews from "@/components/organisms/FormNews";
+import { FormNews } from "@feature-news-form";
 import { newsModule, notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 
@@ -49,13 +49,12 @@ export default {
 			try {
 				const newsTarget = this.getNewsTarget(
 					this.$route.query,
-					this.$user.schoolId
+					this.$me.school.id
 				);
 				await newsModule.createNews({
 					title: news.title,
 					content: news.content,
 					displayAt: news.displayAt,
-					schoolId: this.$user.schoolId,
 					targetId: newsTarget.targetId,
 					targetModel: newsTarget.targetModel,
 				});
@@ -77,10 +76,8 @@ export default {
 				});
 			}
 		},
-		async cancelHandler() {
-			this.$router.push({
-				name: "news",
-			});
+		async onCancel() {
+			this.$router.go(-1);
 		},
 	},
 	mounted() {

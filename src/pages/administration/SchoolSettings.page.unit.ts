@@ -2,18 +2,22 @@ import SchoolSettings from "./SchoolSettings.page.vue";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { shallowMount, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { shallowMount } from "@vue/test-utils";
 import { FederalState } from "@/store/types/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import {
-	I18N_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
-} from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
+import { ENV_CONFIG_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
 import { useApplicationError } from "@/composables/application-error.composable";
-import VueRouter from "vue-router";
+import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { nextTick, reactive } from "vue";
+jest.mock("vue-router");
+
+const useRouteMock = <jest.Mock<Partial<RouteLocationNormalizedLoaded>>>(
+	useRoute
+);
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -72,27 +76,26 @@ describe("SchoolSettingsPage", () => {
 			...envConfigGetters,
 		});
 
-		const componentOptions = createComponentMocks({ i18n: true });
-		const { localVue } = componentOptions;
-		localVue.use(VueRouter);
-		const router = new VueRouter({ routes: [{ path: "home" }] });
+		useRouteMock.mockImplementation(() =>
+			reactive({ path: "home", query: {} })
+		);
 
-		const wrapper: Wrapper<any> = shallowMount(SchoolSettings, {
-			...componentOptions,
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+		const wrapper = shallowMount(SchoolSettings, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+				},
 			},
-			router,
 		});
 
-		return wrapper;
+		return { wrapper };
 	};
 
 	describe("when feature school policy is enabled", () => {
 		it("should render privacy policy expansion panel", () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 
 			expect(wrapper.find('[data-testid="policy-panel"]').exists()).toBe(true);
 		});
@@ -100,7 +103,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("when feature school policy is disabled", () => {
 		it("should not render privacy policy expansion panel", () => {
-			const wrapper = setup({
+			const { wrapper } = setup({
 				getSchoolPolicyEnabled: false,
 			});
 
@@ -110,7 +113,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("when feature school terms of use is enabled", () => {
 		it("should render terms of use expansion panel", () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 
 			expect(wrapper.find('[data-testid="terms-panel"]').exists()).toBe(true);
 		});
@@ -118,7 +121,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("when feature school terms of use is disabled", () => {
 		it("should not render terms of use expansion panel", () => {
-			const wrapper = setup({
+			const { wrapper } = setup({
 				getSchoolTermsOfUseEnabled: false,
 			});
 
@@ -128,7 +131,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("when feature admin migration is enabled", () => {
 		it("should render admin migration expansion panel", () => {
-			const wrapper = setup();
+			const { wrapper } = setup();
 
 			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(
 				true
@@ -138,7 +141,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("when feature admin migration is disabled", () => {
 		it("should not render admin migration expansion panel", () => {
-			const wrapper = setup({
+			const { wrapper } = setup({
 				getFeatureSchoolSanisUserMigrationEnabled: false,
 			});
 
@@ -149,14 +152,14 @@ describe("SchoolSettingsPage", () => {
 	});
 
 	it("should compute systems correctly", () => {
-		const wrapper = setup();
+		const { wrapper } = setup();
 
 		expect(Array.isArray(wrapper.vm.systems)).toBeTruthy();
 		expect(wrapper.vm.systems[0].type).toStrictEqual("itslearning");
 	});
 
 	it("should show skeleton while loading", () => {
-		const wrapper = setup(undefined, {
+		const { wrapper } = setup(undefined, {
 			getLoading: true,
 		});
 
@@ -166,12 +169,12 @@ describe("SchoolSettingsPage", () => {
 	});
 
 	it("should render alert on error", () => {
-		const wrapper = setup(undefined, {
+		const { wrapper } = setup(undefined, {
 			getError: useApplicationError().createApplicationError(500, "someKey"),
 		});
 
-		const noError = wrapper.find('[data-testid="no-error"]');
-		const errorAlert = wrapper.find('[data-testid="error-alert"]');
+		const noError = wrapper.findComponent('[data-testid="no-error"]');
+		const errorAlert = wrapper.findComponent('[data-testid="error-alert"]');
 
 		expect(noError.exists()).toBe(false);
 		expect(errorAlert.exists()).toBe(true);
@@ -180,8 +183,8 @@ describe("SchoolSettingsPage", () => {
 	it("should load needed data from server", async () => {
 		const fetchSystemsSpy = jest.spyOn(schoolsModule, "fetchSystems");
 
-		const wrapper = setup();
-		await wrapper.vm.$nextTick();
+		setup();
+		await nextTick();
 
 		expect(fetchSystemsSpy).toHaveBeenCalled();
 	});

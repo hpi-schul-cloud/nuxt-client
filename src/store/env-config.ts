@@ -1,17 +1,17 @@
-import { contentModule, filePathsModule } from "@/store";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { $axios } from "../utils/api";
-import { BusinessError, Status } from "./types/commons";
-import {
-	DefaultApiFactory,
-	DefaultApiInterface,
-	ConfigResponse,
-} from "../serverApi/v3/api";
 import {
 	FileApiFactory,
 	FileApiInterface,
 	FilesStorageConfigResponse,
 } from "@/fileStorageApi/v3";
+import { contentModule, filePathsModule } from "@/store";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import {
+	ConfigResponse,
+	DefaultApiFactory,
+	DefaultApiInterface,
+} from "../serverApi/v3/api";
+import { $axios } from "../utils/api";
+import { BusinessError, Status } from "./types/commons";
 /*
 export const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
@@ -79,6 +79,7 @@ export default class EnvConfigModule extends VuexModule {
 		TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: false,
 		FEATURE_SCHOOL_POLICY_ENABLED_NEW: false,
 		FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: false,
+		FEATURE_NEST_SYSTEMS_API_ENABLED: false,
 		FEATURE_NEXBOARD_COPY_ENABLED: false,
 		FEATURE_VIDEOCONFERENCE_ENABLED: false,
 		FEATURE_COLUMN_BOARD_ENABLED: false,
@@ -86,7 +87,6 @@ export default class EnvConfigModule extends VuexModule {
 		FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: false,
 		FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: false,
 		FEATURE_COURSE_SHARE: false,
-		FEATURE_COURSE_SHARE_NEW: false,
 		FEATURE_LOGIN_LINK_ENABLED: false,
 		FEATURE_LESSON_SHARE: false,
 		FEATURE_TASK_SHARE: false,

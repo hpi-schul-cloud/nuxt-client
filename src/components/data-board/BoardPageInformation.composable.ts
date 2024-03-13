@@ -1,14 +1,9 @@
-import { useI18n } from "@/composables/i18n.composable";
-import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { ref, Ref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
-
-export type BoardBreadcrumb = {
-	text: string | undefined;
-	to?: string;
-	disabled?: boolean;
-};
+import { useI18n } from "vue-i18n";
+import { Breadcrumb } from "../templates/default-wireframe.types";
+import { createSharedComposable } from "@vueuse/core";
 
 const useBoardPageInformation = () => {
 	const { t } = useI18n();
@@ -23,20 +18,22 @@ const useBoardPageInformation = () => {
 	};
 
 	const pageTitle: Ref<string> = ref(getPageTitle());
-	const breadcrumbs: Ref<BoardBreadcrumb[]> = ref([]);
+	const breadcrumbs: Ref<Breadcrumb[]> = ref([]);
 
 	function getBreadcrumbs(
 		contextInfo: { id: string; name: string } | undefined
-	): BoardBreadcrumb[] {
+	): Breadcrumb[] {
 		return contextInfo
 			? [
 					{
-						text: t("common.words.courses"),
+						title: t("common.words.courses"),
 						to: "/rooms-overview",
+						disabled: false,
 					},
 					{
-						text: contextInfo.name ?? t("common.labels.course"),
+						title: contextInfo.name ?? t("common.labels.course"),
 						to: `/rooms/${contextInfo.id}`,
+						disabled: false,
 					},
 				]
 			: [];
@@ -55,6 +52,6 @@ const useBoardPageInformation = () => {
 	};
 };
 
-export const useSharedBoardPageInformation = createTestableSharedComposable(
+export const useSharedBoardPageInformation = createSharedComposable(
 	useBoardPageInformation
 );

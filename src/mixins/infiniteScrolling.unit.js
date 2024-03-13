@@ -51,7 +51,7 @@ describe("@/mixins/infiniteScrolling", () => {
 			.mockImplementation()
 			.mockImplementation();
 		const wrapper = getInstance();
-		wrapper.destroy();
+		wrapper.unmount();
 		expect(window.removeEventListener.mock.calls[0]).toContain("scroll");
 	});
 	it("updates data on scroll event", () => {

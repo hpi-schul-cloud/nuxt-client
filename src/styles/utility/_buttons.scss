@@ -1,0 +1,11 @@
+$button-font-size: 1rem;
+.v-btn {
+  font-family: var(--font-accent);
+
+  &--size-small,
+	&--size-default,
+	&--size-large,
+	&--size-x-large {
+		font-size: $button-font-size;
+	}
+}

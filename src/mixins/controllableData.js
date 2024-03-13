@@ -37,7 +37,7 @@ export default (props) => {
 					return this[`${localDataPrefix}${upperCaseFirstChar(prop)}`];
 				},
 				set(to) {
-					this.$set(this, `${localDataPrefix}${upperCaseFirstChar(prop)}`, to);
+					this[`${localDataPrefix}${upperCaseFirstChar(prop)}`] = to;
 					this.$emit(`update:${toKebabCase(prop)}`, to);
 				},
 			};

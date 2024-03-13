@@ -1,7 +1,12 @@
-import { mount, MountOptions } from "@vue/test-utils";
+import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { VBadge, VCard } from "vuetify/lib/components/index.mjs";
 import vRoomGroupAvatar from "./vRoomGroupAvatar.vue";
-import Vue from "vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 const mockData = {
 	id: "4",
@@ -65,10 +70,8 @@ const propsData = {
 };
 
 const getWrapper = (props: object, options?: object) => {
-	return mount(vRoomGroupAvatar as MountOptions<Vue>, {
-		...createComponentMocks({
-			i18n: true,
-		}),
+	return mount(vRoomGroupAvatar, {
+		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		propsData: props,
 		...options,
 	});
@@ -85,11 +88,10 @@ describe("vRoomGroupAvatar", () => {
 
 	it("should display the badge", () => {
 		const wrapper = getWrapper(propsData);
-		const badgeElement = wrapper.find(".badge-component");
+		const badgeElement = wrapper.findComponent(VBadge);
 
 		expect(badgeElement).toBeTruthy();
-		expect(badgeElement.vm.$props.value).toBeTruthy();
-		expect(badgeElement.vm.$data.isActive).toBeTruthy();
+		expect(badgeElement.props("modelValue")).toBeTruthy();
 	});
 
 	it("should NOT display the badge", () => {
@@ -98,26 +100,25 @@ describe("vRoomGroupAvatar", () => {
 			size: "4em",
 			maxItems: 4,
 		});
-		const badgeElement = wrapper.find(".badge-component");
+		const badgeElement = wrapper.findComponent(VBadge);
 
 		expect(badgeElement).toBeTruthy();
-		expect(badgeElement.vm.$props.value).toBeFalsy();
-		expect(badgeElement.vm.$data.isActive).toBeFalsy();
+		expect(badgeElement.props("modelValue")).toBeFalsy();
 	});
 
 	it("should display the correct size and group-avatar property", () => {
 		const wrapper = getWrapper(propsData);
-		const iterator = wrapper.vm.$refs["avatar-iterator"] as any;
+		const iterator = wrapper.findComponent(RoomAvatarIterator);
 
 		expect(iterator).toBeTruthy();
-		expect(iterator.$props.itemSize).toStrictEqual("0.8em");
-		expect(iterator.$props.items).toStrictEqual(mockData.groupElements);
-		expect(iterator.$props.condenseLayout).toBe(true);
+		expect(iterator.props("itemSize")).toStrictEqual("0.8em");
+		expect(iterator.props("avatars")).toStrictEqual(mockData.groupElements);
+		expect(iterator.props("condenseLayout")).toBe(true);
 	});
 
 	it("should have correct amount of items", () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponents = wrapper.findAll(".room-avatar");
+		const avatarComponents = wrapper.findAllComponents(vRoomAvatar);
 
 		expect(avatarComponents).toBeTruthy();
 		expect(avatarComponents).toHaveLength(3);
@@ -125,37 +126,33 @@ describe("vRoomGroupAvatar", () => {
 
 	it("should contain the correct item", () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponents = wrapper.findAll(".room-avatar");
+		const avatarComponents = wrapper.findAllComponents(vRoomAvatar);
 
-		expect(avatarComponents.wrappers[0].vm.$props.item.id).toStrictEqual("5");
+		expect(avatarComponents[0].props("item").id).toStrictEqual("5");
 	});
 
 	it("should emit 'click' event with correct payload", async () => {
 		const wrapper = getWrapper(propsData);
-		const cardComponent = wrapper.find(".card-component");
+		const cardComponent = wrapper.findComponent(VCard);
 
 		cardComponent.trigger("click");
 		await Promise.resolve();
 		const emitted = wrapper.emitted();
 
 		expect(emitted["clicked"]).toHaveLength(1);
-		expect(emitted["clicked"] && emitted["clicked"][0][0]).toStrictEqual(
-			mockData.id
-		);
+		expect(emitted["clicked"]).toStrictEqual([[mockData.id]]);
 	});
 
 	it("should emit 'click' event with correct payload if keyboard event triggered", async () => {
 		const wrapper = getWrapper(propsData);
-		const cardComponent = wrapper.find(".card-component");
+		const cardComponent = wrapper.findComponent(VCard);
 
 		cardComponent.trigger("keypress.enter");
 		await Promise.resolve();
 		const emitted = wrapper.emitted();
 
 		expect(emitted["clicked"]).toHaveLength(1);
-		expect(emitted["clicked"] && emitted["clicked"][0][0]).toStrictEqual(
-			mockData.id
-		);
+		expect(emitted["clicked"]).toStrictEqual([[mockData.id]]);
 	});
 
 	it("should emit 'dragStart' event when it started dragging", async () => {
@@ -165,16 +162,14 @@ describe("vRoomGroupAvatar", () => {
 			maxItems: 4,
 			draggable: true,
 		});
-		const avatarComponent = wrapper.find(".room-avatar");
+		const avatarComponent = wrapper.findComponent(vRoomAvatar);
 
 		avatarComponent.trigger("dragstart");
 		await Promise.resolve();
 		const emitted = wrapper.emitted();
 
 		expect(emitted["startDrag"]).toHaveLength(1);
-		expect(emitted["startDrag"] && emitted["startDrag"][0][0]).toStrictEqual(
-			mockData
-		);
+		expect(emitted["startDrag"]).toStrictEqual([[mockData]]);
 	});
 
 	it("should NOT emit 'dragStart' event if 'draggable' prop is set false", async () => {
@@ -184,7 +179,7 @@ describe("vRoomGroupAvatar", () => {
 			maxItems: 4,
 			draggable: false,
 		});
-		const avatarComponent = wrapper.find(".v-avatar");
+		const avatarComponent = wrapper.findComponent(vRoomAvatar);
 
 		avatarComponent.trigger("dragstart");
 		await Promise.resolve();

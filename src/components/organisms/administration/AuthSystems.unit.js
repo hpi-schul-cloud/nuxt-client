@@ -1,10 +1,16 @@
-import AuthSystems from "./AuthSystems";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
-import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
-import setupStores from "@@/tests/test-utils/setupStores";
+import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
+import { meResponseFactory } from "@@/tests/test-utils";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { RouterLinkStub } from "@vue/test-utils";
+import AuthSystems from "./AuthSystems";
 
 const generateProps = () => ({
 	systems: [
@@ -43,14 +49,25 @@ const searchStrings = {
 };
 
 describe("AuthSystems", () => {
+	const RouterLinkStubMock = { ...RouterLinkStub, useLink: jest.fn() };
+	const createWrapper = (options = {}) => {
+		const wrapper = mount(AuthSystems, {
+			global: {
+				mocks: { RouterLink: RouterLinkStubMock },
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			...options,
+		});
+
+		return wrapper;
+	};
+
 	beforeEach(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 			authModule: AuthModule,
 		});
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
 	});
 
 	describe("displaying values", () => {
@@ -66,13 +83,7 @@ describe("AuthSystems", () => {
 					FEATURE_LOGIN_LINK_ENABLED: false,
 				});
 
-				const wrapper = mount(AuthSystems, {
-					...createComponentMocks({
-						i18n: true,
-						vuetify: true,
-					}),
-					propsData: generateProps(),
-				});
+				const wrapper = createWrapper({ props: generateProps() });
 
 				const loginLinkFieldVisibility = wrapper.findAll(
 					searchStrings.schoolLoginLink
@@ -83,13 +94,7 @@ describe("AuthSystems", () => {
 
 			it("login link field should be visible for all systems", () => {
 				schoolsModule.setSchool(mockSchool);
-				const wrapper = mount(AuthSystems, {
-					...createComponentMocks({
-						i18n: true,
-						vuetify: true,
-					}),
-					propsData: generateProps(),
-				});
+				const wrapper = createWrapper({ props: generateProps() });
 
 				const loginLinkFieldVisibility = wrapper.findAll(
 					searchStrings.schoolLoginLink
@@ -113,13 +118,7 @@ describe("AuthSystems", () => {
 				const props = generateProps();
 				props.systems = [];
 
-				const wrapper = mount(AuthSystems, {
-					...createComponentMocks({
-						i18n: true,
-						vuetify: true,
-					}),
-					propsData: props,
-				});
+				const wrapper = createWrapper({ props });
 
 				const loginLinkFieldVisibility = wrapper.findAll(
 					searchStrings.schoolLoginLink
@@ -147,18 +146,12 @@ describe("AuthSystems", () => {
 					},
 				});
 				const clipboardSpy = jest.spyOn(navigator.clipboard, "writeText");
-				const wrapper = mount(AuthSystems, {
-					...createComponentMocks({
-						i18n: true,
-						vuetify: true,
-					}),
-					propsData: generateProps(),
-				});
+				const wrapper = createWrapper({ props: generateProps() });
 
 				const loginLinkFieldVisibility = wrapper.findAll(
 					searchStrings.schoolLoginLink
 				);
-				loginLinkFieldVisibility.wrappers[0].find(".v-icon").trigger("click");
+				loginLinkFieldVisibility[0].find(".v-icon").trigger("click");
 
 				expect(loginLinkFieldVisibility).toHaveLength(3);
 				expect(clipboardSpy).toHaveBeenCalledWith(mockElem.value);
@@ -166,36 +159,27 @@ describe("AuthSystems", () => {
 		});
 
 		it("ldap button should be visible", async () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE"],
 			});
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+			authModule.setMe(mockMe);
+			const wrapper = createWrapper({ props: generateProps() });
 
-			const ldapButtonVisibility = wrapper.findAll(searchStrings.addLdap);
+			const ldapButtonVisibility = wrapper.findAllComponents(
+				searchStrings.addLdap
+			);
 			expect(ldapButtonVisibility).toHaveLength(1);
 			expect(ldapButtonVisibility.at(0).text().trim()).toStrictEqual(
-				"LDAP-System hinzufügen"
+				"pages.administration.school.index.authSystems.addLdap"
 			);
-			expect(ldapButtonVisibility.wrappers[0].vm.to).toStrictEqual(
+
+			expect(ldapButtonVisibility[0].vm.to).toStrictEqual(
 				"/administration/ldap/config"
 			);
 		});
 
 		it("table should exist and display the correct data", async () => {
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+			const wrapper = createWrapper({ props: generateProps() });
 
 			const systemTable = wrapper.find(searchStrings.tableSystem);
 
@@ -204,199 +188,158 @@ describe("AuthSystems", () => {
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
 			expect(tableCell).toHaveLength(wrapper.props().systems.length * 3);
-			expect(tableCell.wrappers[1].element.textContent).toStrictEqual(
-				"sample system"
-			);
+			expect(tableCell[1].element.textContent).toStrictEqual("sample system");
 		});
 
 		it("should display the edit system button", async () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+			authModule.setMe(mockMe);
+			const wrapper = createWrapper({ props: generateProps() });
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
 			// { _id: "1", type: "sample system" }, // deletable: false, editable: false
 			expect(
-				tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
+				tableCell[2].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(false);
 			expect(
-				tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
+				tableCell[2].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(false);
 
 			// { _id: "2", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
 			expect(
-				tableCell.wrappers[5].find(searchStrings.deleteSystemButton).exists()
+				tableCell[5].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(false);
 			expect(
-				tableCell.wrappers[5].find(searchStrings.editSystemButton).exists()
+				tableCell[5].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(false);
 
 			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
 			expect(
-				tableCell.wrappers[8].find(searchStrings.deleteSystemButton).exists()
+				tableCell[8].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(true);
 			expect(
-				tableCell.wrappers[8].find(searchStrings.editSystemButton).exists()
+				tableCell[8].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(true);
 
 			// { _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }, // deletable: false, editable: false
 			expect(
-				tableCell.wrappers[11].find(searchStrings.deleteSystemButton).exists()
+				tableCell[11].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(false);
 			expect(
-				tableCell.wrappers[11].find(searchStrings.editSystemButton).exists()
+				tableCell[11].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(true);
 		});
 
 		it("should redirect to ldap config page from edit button of general ldap system", () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+			authModule.setMe(mockMe);
+			const wrapper = createWrapper({ props: generateProps() });
+			const editSystemButton = wrapper.findComponent(
+				searchStrings.editSystemButton
+			);
 
-			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
-
-			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
-			expect(
-				tableCell.wrappers[8].findComponent("routerlink-stub").props("to")
-			).toEqual("/administration/ldap/config?id=3");
+			expect(editSystemButton.exists()).toBe(true);
+			expect(editSystemButton.props("to")).toEqual(
+				"/administration/ldap/config?id=3"
+			);
 		});
 
 		it("should display system edit button and redirect to correct config page ", () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+			authModule.setMe(mockMe);
+			const wrapper = createWrapper({ props: generateProps() });
 
-			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
+			const systemEditButtons = wrapper.findAllComponents(
+				searchStrings.editSystemButton
+			);
 
 			// { _id: "4", type: "oauth", oauthConfig: { provider: "sanis-idm" } }
-			expect(
-				tableCell.wrappers[11].find(searchStrings.editSystemButton).exists()
-			).toStrictEqual(true);
-			expect(
-				tableCell.wrappers[11].findComponent("routerlink-stub").props("to")
-			).toEqual(
+			expect(systemEditButtons.length).toStrictEqual(2);
+			expect(systemEditButtons[1].props("to")).toEqual(
 				"/administration/school-settings/provisioning-options?systemId=4"
 			);
 			// { _id: "3", type: "ldap", ldapConfig: { provider: "general" } }
-			expect(
-				tableCell.wrappers[8].findComponent("routerlink-stub").props("to")
-			).toEqual("/administration/ldap/config?id=3");
+			expect(systemEditButtons[0].props("to")).toEqual(
+				"/administration/ldap/config?id=3"
+			);
 		});
 
 		it("should NOT display the dialog", async () => {
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
-
-			await wrapper.setData({
-				confirmDeleteDialog: {
-					isOpen: false,
-					systemId: undefined,
-				},
-			});
+			const wrapper = createWrapper({ props: generateProps() });
 
 			const customDialog = wrapper.findAll(searchStrings.customDialog);
 
-			expect(customDialog).toHaveLength(1);
-			expect(customDialog.wrappers[0].vm.isOpen).toStrictEqual(false);
+			expect(customDialog).toHaveLength(0);
 		});
 
 		it("should display the dialog", async () => {
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
+			const mockMe = meResponseFactory.build({
+				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT"],
 			});
+			authModule.setMe(mockMe);
+			const wrapper = createWrapper({ props: generateProps() });
 
-			await wrapper.setData({
-				confirmDeleteDialog: {
-					isOpen: true,
-					systemId: undefined,
-				},
+			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
+			await deleteBtn.trigger("click");
+
+			const customDialog = wrapper.findAllComponents({
+				name: "v-custom-dialog",
 			});
-
-			const customDialog = wrapper.findAll(searchStrings.customDialog);
 
 			expect(customDialog).toHaveLength(1);
-			expect(customDialog.wrappers[0].vm.isOpen).toStrictEqual(true);
+			expect(customDialog[0].vm.isOpen).toStrictEqual(true);
 		});
 	});
 
 	describe("events", () => {
 		it("should call the action when 'dialog-confirmed' triggered", async () => {
-			const deleteSpy = jest.spyOn(schoolsModule, "deleteSystem");
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-
-					vuetify: true,
-				}),
-				propsData: generateProps(),
+			const mockMe = meResponseFactory.build({
+				permissions: ["SYSTEM_CREATE"],
 			});
-			const customDialog = wrapper.find(searchStrings.customDialog);
+			authModule.setMe(mockMe);
+			const deleteSpy = jest.spyOn(schoolsModule, "deleteSystem");
+			const wrapper = createWrapper({ props: generateProps() });
+
+			expect(wrapper.findAll("tr").length).toBe(5);
+
+			const deleteBtn = wrapper.findComponent(searchStrings.deleteSystemButton);
+			await deleteBtn.trigger("click");
+
+			const customDialog = wrapper.findComponent({ name: "v-custom-dialog" });
 
 			customDialog.vm.$emit("dialog-confirmed", 123);
 			expect(deleteSpy).toHaveBeenCalled();
 		});
 
 		it("should call the method when delete dialog confirmed", async () => {
-			const removeSystem = jest.spyOn(AuthSystems.methods, "removeSystem");
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
+			const mockMe = meResponseFactory.build({
+				permissions: ["SYSTEM_CREATE"],
 			});
-			const customDialog = wrapper.find(searchStrings.customDialog);
+			authModule.setMe(mockMe);
+			const removeSystem = jest.spyOn(AuthSystems.methods, "removeSystem");
+			const wrapper = createWrapper({ props: generateProps() });
+
+			const deleteBtn = wrapper.find(searchStrings.deleteSystemButton);
+			await deleteBtn.trigger("click");
+			const customDialog = wrapper.findComponent({ name: "v-custom-dialog" });
 
 			customDialog.vm.$emit("dialog-confirmed");
 			expect(removeSystem).toHaveBeenCalled();
 		});
 
 		it("should open the 'delete dialog' when clicked the 'delete-system-btn'", async () => {
-			authModule.setUser({
-				...mockUser,
+			const mockMe = meResponseFactory.build({
 				permissions: ["SYSTEM_CREATE", "SYSTEM_EDIT", "SYSTEM_VIEW"],
 			});
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+			authModule.setMe(mockMe);
+			const wrapper = createWrapper({ props: generateProps() });
 			const deleteButton = wrapper.find(searchStrings.deleteSystemButton);
 			expect(wrapper.vm.$data.confirmDeleteDialog.isOpen).toStrictEqual(false);
 			deleteButton.trigger("click");
@@ -406,13 +349,7 @@ describe("AuthSystems", () => {
 	});
 	describe("display system buttons", () => {
 		const setup = () => {
-			const wrapper = mount(AuthSystems, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				propsData: generateProps(),
-			});
+			const wrapper = createWrapper({ props: generateProps() });
 
 			const tableCell = wrapper.findAll(`${searchStrings.tableSystem} td`);
 
@@ -425,16 +362,16 @@ describe("AuthSystems", () => {
 			it("should not display the add ldap, system edit and system delete buttons", () => {
 				const { tableCell } = setup();
 
+				expect(tableCell[2].find(searchStrings.addLdap).exists()).toStrictEqual(
+					false
+				);
+
 				expect(
-					tableCell.wrappers[2].find(searchStrings.addLdap).exists()
+					tableCell[2].find(searchStrings.editSystemButton).exists()
 				).toStrictEqual(false);
 
 				expect(
-					tableCell.wrappers[2].find(searchStrings.editSystemButton).exists()
-				).toStrictEqual(false);
-
-				expect(
-					tableCell.wrappers[2].find(searchStrings.deleteSystemButton).exists()
+					tableCell[2].find(searchStrings.deleteSystemButton).exists()
 				).toStrictEqual(false);
 			});
 		});

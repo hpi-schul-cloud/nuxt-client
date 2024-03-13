@@ -1,17 +1,20 @@
+import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
 import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { useExternalToolLaunchState } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import flushPromises from "flush-promises";
-import Vue from "vue";
+import { flushPromises, mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 
 jest.mock("@data-external-tool");
 
@@ -34,31 +37,22 @@ describe("RoomExternalToolCard", () => {
 	});
 
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
-		document.body.setAttribute("data-app", "true");
-
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getCtlContextConfigurationEnabled: true,
 		});
 
-		const wrapper: Wrapper<Vue> = mount(
-			RoomExternalToolCard as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				propsData: {
-					tool,
-					canEdit,
-				},
+		const wrapper = mount(RoomExternalToolCard, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[I18N_KEY.valueOf()]: {
-						$t: (key: string): string => key,
-						tc: (key: string): string => key,
-					},
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
-			}
-		);
+			},
+			props: {
+				tool,
+				canEdit,
+			},
+		});
 
 		return {
 			wrapper,
@@ -74,7 +68,7 @@ describe("RoomExternalToolCard", () => {
 				false
 			);
 
-			await Vue.nextTick();
+			await nextTick();
 
 			expect(
 				useExternalToolLaunchStateMock.fetchLaunchRequest
@@ -441,6 +435,16 @@ describe("RoomExternalToolCard", () => {
 
 				expect(useExternalToolLaunchStateMock.launchTool).toHaveBeenCalled();
 			});
+
+			it("should fetch launch request after launch", async () => {
+				const { wrapper } = await setup();
+
+				await wrapper.trigger("click");
+
+				expect(
+					useExternalToolLaunchStateMock.fetchLaunchRequest
+				).toHaveBeenCalled();
+			});
 		});
 
 		describe("when the launch failed and an error is set", () => {
@@ -489,7 +493,7 @@ describe("RoomExternalToolCard", () => {
 		it("should display the item menu", () => {
 			const { wrapper } = setup();
 
-			const itemMenu = wrapper.find('[data-testId="tool-card-menu"]');
+			const itemMenu = wrapper.findComponent(RoomDotMenu);
 
 			expect(itemMenu.isVisible()).toEqual(true);
 		});
@@ -497,12 +501,14 @@ describe("RoomExternalToolCard", () => {
 		it("should display the edit menu item", async () => {
 			const { wrapper } = setup();
 
-			const itemMenu = wrapper.find(
-				'[data-testId="tool-card-menu"] > .three-dot-button'
-			);
-			await itemMenu.trigger("click");
+			const menuButton = wrapper
+				.findComponent(RoomDotMenu)
+				.get('[data-testid="room-tool-three-dot-button"]');
+			await menuButton.trigger("click");
 
-			const toolEditMenuItem = wrapper.find('[data-testId="tool-edit"]');
+			const toolEditMenuItem = wrapper.findComponent(
+				'[data-testid="tool-edit"]'
+			);
 
 			expect(toolEditMenuItem.exists()).toEqual(true);
 		});
@@ -510,12 +516,15 @@ describe("RoomExternalToolCard", () => {
 		it("should display the delete menu item", async () => {
 			const { wrapper } = setup();
 
-			const itemMenu = wrapper.find(
-				'[data-testId="tool-card-menu"] > .three-dot-button'
-			);
-			await itemMenu.trigger("click");
+			const menuButton = wrapper
+				.findComponent(RoomDotMenu)
+				.get('[data-testid="room-tool-three-dot-button"]');
 
-			const toolDeleteMenuItem = wrapper.find('[data-testId="tool-delete"]');
+			await menuButton.trigger("click");
+
+			const toolDeleteMenuItem = wrapper.findComponent(
+				'[data-testId="tool-delete"]'
+			);
 
 			expect(toolDeleteMenuItem.exists()).toEqual(true);
 		});
@@ -524,12 +533,15 @@ describe("RoomExternalToolCard", () => {
 			it("should emit the edit event", async () => {
 				const { wrapper, tool } = setup();
 
-				const itemMenu = wrapper.find(
-					'[data-testId="tool-card-menu"] > .three-dot-button'
-				);
-				await itemMenu.trigger("click");
+				const menuButton = wrapper
+					.findComponent(RoomDotMenu)
+					.get('[data-testid="room-tool-three-dot-button"]');
+				await menuButton.trigger("click");
 
-				const toolDeleteMenuItem = wrapper.find('[data-testId="tool-edit"]');
+				const toolDeleteMenuItem = wrapper.findComponent(
+					'[data-testId="tool-edit"]'
+				);
+
 				await toolDeleteMenuItem.trigger("click");
 
 				expect(wrapper.emitted("edit")).toContainEqual([tool]);
@@ -540,12 +552,15 @@ describe("RoomExternalToolCard", () => {
 			it("should emit the delete event", async () => {
 				const { wrapper, tool } = setup();
 
-				const itemMenu = wrapper.find(
-					'[data-testId="tool-card-menu"] > .three-dot-button'
-				);
-				await itemMenu.trigger("click");
+				const menuButton = wrapper
+					.findComponent(RoomDotMenu)
+					.get('[data-testid="room-tool-three-dot-button"]');
+				await menuButton.trigger("click");
 
-				const toolDeleteMenuItem = wrapper.find('[data-testId="tool-delete"]');
+				const toolDeleteMenuItem = wrapper.findComponent(
+					'[data-testId="tool-delete"]'
+				);
+
 				await toolDeleteMenuItem.trigger("click");
 
 				expect(wrapper.emitted("delete")).toContainEqual([tool]);

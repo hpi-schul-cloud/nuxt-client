@@ -1,39 +1,36 @@
-import { RawLocation, Route } from "vue-router";
-import Vue from "vue";
-
-type NextFunctionArg =
-	| false
-	| void
-	| RawLocation
-	| ((vm: Vue) => unknown)
-	| undefined;
-type NextFunction = (nextArg?: NextFunctionArg) => void;
-type Guard = (to: Route, from: Route, next: NextFunction) => void;
+import {
+	NavigationGuard,
+	NavigationGuardNext,
+	RouteLocationNormalized,
+} from "vue-router";
 
 function isUndefined(value: unknown): value is undefined {
 	return value === undefined;
 }
 
 function evaluateGuards(
-	guards: Guard[],
-	to: Route,
-	from: Route,
-	next: NextFunction
+	guards: NavigationGuard[],
+	to: RouteLocationNormalized,
+	from: RouteLocationNormalized,
+	next: NavigationGuardNext
 ): void {
-	const guardsLeft: Guard[] = [...guards];
-	const nextGuard: Guard | undefined = guardsLeft.shift();
+	const guardsLeft: NavigationGuard[] = [...guards];
+	const nextGuard: NavigationGuard | undefined = guardsLeft.shift();
 
 	if (isUndefined(nextGuard)) {
 		next();
 		return;
 	}
 
-	nextGuard(to, from, (nextArg?: NextFunctionArg) => {
+	nextGuard(to, from, (nextArg?: unknown) => {
 		if (isUndefined(nextArg)) {
 			evaluateGuards(guardsLeft, to, from, next);
 			return;
 		}
 
+		// TODO improve typings or replace Multiguard
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore
 		next(nextArg);
 	});
 }
@@ -45,12 +42,18 @@ function evaluateGuards(
  * @param guards The guards to call
  * @returns A guard that calls the given guards in order
  */
-export const Multiguard = function (guards: Guard[]): Guard {
+export const Multiguard = function (
+	guards: NavigationGuard[]
+): NavigationGuard {
 	if (!Array.isArray(guards)) {
 		throw new Error("You must specify an array of guards");
 	}
 
-	return (to: Route, from: Route, next: NextFunction) => {
+	return (
+		to: RouteLocationNormalized,
+		from: RouteLocationNormalized,
+		next: NavigationGuardNext
+	) => {
 		evaluateGuards(guards, to, from, next);
 	};
 };

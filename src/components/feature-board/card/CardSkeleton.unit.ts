@@ -1,22 +1,22 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import CardSkeleton from "./CardSkeleton.vue";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("CardSkeleton", () => {
-	let wrapper: Wrapper<Vue>;
-
-	const setup = (props: object) => {
+	const setup = (props: { height: number }) => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(CardSkeleton as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		const wrapper = shallowMount(CardSkeleton, {
+			global: {
+				plugins: [createTestingVuetify()],
+			},
 			propsData: props,
 		});
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ height: 400 });
+			const { wrapper } = setup({ height: 400 });
 			expect(wrapper.findComponent(CardSkeleton).exists()).toBe(true);
 		});
 	});
