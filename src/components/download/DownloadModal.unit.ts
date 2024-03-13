@@ -37,13 +37,13 @@ describe("@/components/download/DownloadModal", () => {
 		return wrapper;
 	};
 
-	it("should render", () => {
+	it("should render DownloadModal component", () => {
 		const wrapper = setup();
 		expect(wrapper.exists()).toBe(true);
 	});
 
 	describe("when getIsDownloadModalOpen is true", () => {
-		it("schould open the Dialog", async () => {
+		it("should open the Dialog", async () => {
 			const wrapper = setup();
 			const dialog = wrapper.findComponent(VDialog);
 			expect(dialog.props("modelValue")).toBe(true);
