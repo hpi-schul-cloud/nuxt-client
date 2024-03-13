@@ -16,16 +16,16 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { mount } from "@vue/test-utils";
-import { Ref, computed, nextTick, ref } from "vue";
+import { computed, nextTick, Ref, ref } from "vue";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
 
+import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
 import { BoardCard } from "@/types/board/Card";
 import {
 	useBoardFocusHandler,
@@ -71,7 +71,7 @@ const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-		} as Envs,
+		} as ConfigResponse,
 	}
 );
 const mockedEditMode = jest.mocked(useEditMode);
