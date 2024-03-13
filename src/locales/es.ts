@@ -284,6 +284,8 @@ export default {
 	"components.board.action.moveUp": "Levantar",
 	"components.board.alert.info.teacher":
 		"Este tablero es visible para todos los participantes en el curso.",
+	"components.board.alert.info.draft":
+		"Este tablero ya no es visible para los participantes en el curso.",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.placeholder": "Añadir columna",
 	"components.board.menu.board": "Configuración del tablero",
@@ -1358,6 +1360,8 @@ export default {
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
 	"pages.room.boardCard.menu.ariaLabel": "Menú del tablero",
+	"pages.room.cards.aria":
+		"{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.cards.label.revert": "Volver al borrador",
 	"pages.room.copy.course.message.copied":
 		"El curso se ha copiado correctamente.",
@@ -1369,15 +1373,11 @@ export default {
 	"pages.room.itemDelete.text":
 		'¿Estás seguro de que deseas eliminar el elemento "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Eliminar elemento",
-	"pages.room.lessonCard.aria":
-		"{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.label.shareLesson": "Compartir copia del tema",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
 	"pages.room.student.emptyState":
 		"Aquí aparecen contenidos de aprendizaje como temas o tareas.",
-	"pages.room.taskCard.aria":
-		"{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.taskCard.label.done": "Terminar",
 	"pages.room.taskCard.label.due": "Entrega",
 	"pages.room.taskCard.label.edit": "Editar",

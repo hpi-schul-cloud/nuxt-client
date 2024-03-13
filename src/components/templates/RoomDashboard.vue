@@ -19,7 +19,7 @@
 						<RoomBoardCard
 							v-if="item.type === cardTypes.ColumnBoard"
 							:ref="`item_${index}`"
-							:role="role"
+							:user-role="role"
 							:key-drag="isDragging"
 							:drag-in-progress="dragInProgress"
 							:column-board-item="item.content"
@@ -27,20 +27,27 @@
 								courseName: roomData.title,
 								courseId: roomData.roomId,
 							}"
+							:aria-label="
+								$t('pages.room.cards.aria', {
+									itemType: $t('pages.room.boardCard.label.columnBoard'),
+									itemName: $t('pages.room.boardCard.label.courseBoard'),
+								})
+							"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
 							@copy-board="copyBoard(item.content.columnBoardId)"
+							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@delete-board="openItemDeleteDialog(item.content, item.type)"
 						/>
-						<room-task-card
+						<RoomTaskCard
 							v-if="item.type === cardTypes.Task"
 							:ref="`item_${index}`"
-							:role="role"
+							:user-role="role"
 							:room="taskData"
 							:task="item.content"
 							:aria-label="
-								$t('pages.room.taskCard.aria', {
+								$t('pages.room.cards.aria', {
 									itemType: $t('common.words.tasks'),
 									itemName: item.content.name,
 								})
@@ -48,8 +55,7 @@
 							:key-drag="isDragging"
 							class="task-card"
 							:drag-in-progress="dragInProgress"
-							@post-task="postDraftElement(item.content.id)"
-							@revert-task="revertPublishedElement(item.content.id)"
+							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
@@ -59,14 +65,14 @@
 							@copy-task="copyTask(item.content.id)"
 							@share-task="getSharedTask(item.content.id)"
 						/>
-						<room-lesson-card
+						<RoomLessonCard
 							v-if="item.type === cardTypes.Lesson"
 							:ref="`item_${index}`"
-							:role="role"
+							:user-role="role"
 							:lesson="item.content"
 							:room="lessonData"
 							:aria-label="
-								$t('pages.room.lessonCard.aria', {
+								$t('pages.room.cards.aria', {
 									itemType: $t('common.words.topic'),
 									itemName: item.content.name,
 								})
@@ -74,8 +80,7 @@
 							:key-drag="isDragging"
 							class="lesson-card"
 							:drag-in-progress="dragInProgress"
-							@post-lesson="postDraftElement(item.content.id)"
-							@revert-lesson="revertPublishedElement(item.content.id)"
+							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
@@ -90,8 +95,9 @@
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
 				<RoomBoardCard
-					v-if="item.type === cardTypes.ColumnBoard"
+					v-if="boardCardIsVisibleToStudent(item)"
 					:ref="`item_${index}`"
+					:user-role="role"
 					:key-drag="isDragging"
 					:drag-in-progress="dragInProgress"
 					:column-board-item="item.content"
@@ -99,14 +105,20 @@
 						courseName: roomData.title,
 						courseId: roomData.roomId,
 					}"
+					:aria-label="
+						$t('pages.room.cards.aria', {
+							itemType: $t('pages.room.boardCard.label.columnBoard'),
+							itemName: $t('pages.room.boardCard.label.courseBoard'),
+						})
+					"
 				/>
-				<room-task-card
+				<RoomTaskCard
 					v-if="item.type === cardTypes.Task"
 					:ref="`item_${index}`"
-					:role="role"
+					:user-role="role"
 					:task="item.content"
 					:aria-label="
-						$t('pages.room.taskCard.aria', {
+						$t('pages.room.cards.aria', {
 							itemType: $t('common.words.tasks'),
 							itemName: item.content.name,
 						})
@@ -114,19 +126,17 @@
 					:key-drag="isDragging"
 					class="task-card"
 					:drag-in-progress="dragInProgress"
-					@post-task="postDraftElement(item.content.id)"
-					@revert-task="revertPublishedElement(item.content.id)"
 					@finish-task="finishTask(item.content.id)"
 					@restore-task="restoreTask(item.content.id)"
 				/>
-				<room-lesson-card
+				<RoomLessonCard
 					v-if="item.type === cardTypes.Lesson"
 					:ref="`item_${index}`"
-					:role="role"
+					:user-role="role"
 					:lesson="item.content"
 					:room="lessonData"
 					:aria-label="
-						$t('pages.room.lessonCard.aria', {
+						$t('pages.room.cards.aria', {
 							itemType: $t('common.words.topic'),
 							itemName: item.content.name,
 						})
@@ -134,8 +144,6 @@
 					:key-drag="isDragging"
 					class="lesson-card"
 					:drag-in-progress="dragInProgress"
-					@post-lesson="postDraftElement(item.content.id)"
-					@revert-lesson="revertPublishedElement(item.content.id)"
 				/>
 			</div>
 		</div>
@@ -265,11 +273,8 @@ export default {
 		}
 	},
 	methods: {
-		async postDraftElement(elementId) {
-			await roomModule.publishCard({ elementId, visibility: true });
-		},
-		async revertPublishedElement(elementId) {
-			await roomModule.publishCard({ elementId, visibility: false });
+		async updateCardVisibility(elementId, visibility) {
+			await roomModule.publishCard({ elementId, visibility });
 		},
 		async onSort(items) {
 			const idList = {};
@@ -342,10 +347,6 @@ export default {
 		async restoreTask(itemId) {
 			await roomModule.finishTask({ itemId, action: "restore" });
 		},
-		async deleteTask(itemId) {
-			await tasksModule.deleteTask(itemId);
-			await roomModule.fetchContent(this.roomData.roomId);
-		},
 		copyTask(taskId) {
 			this.$emit("copy-board-element", {
 				id: taskId,
@@ -366,6 +367,11 @@ export default {
 				type: CopyParamsTypeEnum.ColumnBoard,
 				courseId: this.roomData.roomId,
 			});
+		},
+		boardCardIsVisibleToStudent(card) {
+			const isBoardCard = card.type === this.cardTypes.ColumnBoard;
+			const isVisibleToStudent = card.content.published;
+			return isBoardCard && isVisibleToStudent;
 		},
 	},
 };

@@ -278,6 +278,8 @@ export default {
 	"components.board.action.moveUp": "Move up",
 	"components.board.alert.info.teacher":
 		"This board is visible to all course participants.",
+	"components.board.alert.info.draft":
+		"This board is no longer visible to course participants.",
 	"components.board.column.defaultTitle": "New column",
 	"components.board.column.ghost.placeholder": "Add column",
 	"components.board.menu.board": "Board settings",
@@ -1319,6 +1321,7 @@ export default {
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.menu.ariaLabel": "Board menu",
+	"pages.room.cards.aria": "{itemType}, link, {itemName}, press enter to open",
 	"pages.room.cards.label.revert": "Revert to draft",
 	"pages.room.copy.course.message.copied": "Course was successfully copied.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1328,15 +1331,11 @@ export default {
 	"pages.room.itemDelete.text":
 		'Are you sure, you want to delete item "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Delete item",
-	"pages.room.lessonCard.aria":
-		"{itemType}, link, {itemName}, press enter to open",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.label.shareLesson": "Share topic copy",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
 	"pages.room.student.emptyState":
 		"Learning content such as topics or tasks appear here.",
-	"pages.room.taskCard.aria":
-		"{itemType}, link, {itemName}, press enter to open",
 	"pages.room.taskCard.label.done": "Finish",
 	"pages.room.taskCard.label.due": "Due",
 	"pages.room.taskCard.label.edit": "Edit",

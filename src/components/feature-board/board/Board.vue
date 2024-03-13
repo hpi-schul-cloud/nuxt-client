@@ -1,12 +1,14 @@
 <template>
 	<div>
-		<v-btn @click="onCopyBoard">Copy</v-btn>
 		<template v-if="board">
 			<BoardHeader
 				:boardId="board.id"
 				:title="board.title"
 				:titlePlaceholder="$t('pages.room.boardCard.label.courseBoard')"
+				:isDraft="!board.isVisible"
+				@update:visibility="onUpdateBoardVisibility"
 				@update:title="onUpdateBoardTitle"
+				@copyBoard="onCopyBoard"
 			/>
 			<div class="d-flex flex-row flex-shrink-1">
 				<div>
@@ -85,6 +87,7 @@ import {
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { extractDataAttribute, useBoardNotifier } from "@util-board";
+import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onMounted, onUnmounted, toRef, watch } from "vue";
@@ -107,7 +110,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { showInfo, resetNotifier } = useBoardNotifier();
+const { resetNotifier, showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 const {
@@ -120,6 +123,7 @@ const {
 	moveColumn,
 	reloadBoard,
 	updateBoardTitle,
+	updateBoardVisibility,
 	updateColumnTitle,
 } = useBoardState(toRef(props, "boardId").value);
 
@@ -204,6 +208,13 @@ const onReloadBoard = async () => {
 	await reloadBoard();
 };
 
+const onUpdateBoardVisibility = async (newVisibility: boolean) => {
+	if (!hasEditPermission) return;
+
+	await updateBoardVisibility(newVisibility);
+	await setAlert();
+};
+
 const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
 	if (hasMovePermission) await moveCard(cardMove);
 };
@@ -217,14 +228,22 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 };
 
 onMounted(() => {
-	if (isTeacher) {
-		showInfo(t("components.board.alert.info.teacher"), false);
-	}
+	setAlert();
 });
 
 onUnmounted(() => {
 	resetNotifier();
 });
+
+const setAlert = useDebounceFn(() => {
+	if (!isTeacher) return;
+
+	if (!board.value?.isVisible) {
+		showCustomNotifier(t("components.board.alert.info.draft"), "info", 10000);
+	} else {
+		showCustomNotifier(t("components.board.alert.info.teacher"), "info", 10000);
+	}
+}, 100);
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")
