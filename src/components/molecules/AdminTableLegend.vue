@@ -68,7 +68,7 @@ export default {
 				case "brb":
 					return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
 				default:
-					return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
+					return "Dataport";
 			}
 		},
 	},
