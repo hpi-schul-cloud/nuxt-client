@@ -75,7 +75,7 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
-import RoomDotMenu from "./RoomDotMenu";
+import { RoomDotMenu } from "@ui-room-details";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 const lessonRequiredKeys = ["createdAt", "id", "name"];

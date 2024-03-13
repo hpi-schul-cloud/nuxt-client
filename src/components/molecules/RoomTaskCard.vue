@@ -93,7 +93,7 @@
 
 <script>
 import { fromNow } from "@/plugins/datetime";
-import RoomDotMenu from "./RoomDotMenu";
+import { RoomDotMenu } from "@ui-room-details";
 import {
 	mdiPencilOutline,
 	mdiFormatListChecks,

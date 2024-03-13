@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts">
-import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
+import { RoomDotMenu } from "@ui-room-details";
 import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
 import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";

@@ -187,7 +187,7 @@
 </template>
 
 <script>
-import RoomBoardCard from "@/components/molecules/RoomBoardCard.vue";
+import { RoomBoardCard } from "@ui-room-details";
 import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";

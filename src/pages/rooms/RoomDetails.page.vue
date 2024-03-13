@@ -84,7 +84,7 @@
 <script>
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import RoomDotMenu from "@/components/molecules/RoomDotMenu";
+import { RoomDotMenu } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
