@@ -9,7 +9,7 @@
 	</BoardMenuAction>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { injectStrict } from "@/utils/inject";
 import { mdiArrowDown } from "@mdi/js";
 import { BoardMenuAction } from "@ui-board";
@@ -17,30 +17,15 @@ import {
 	BOARD_CARD_HAS_MULTIPLE_ELEMENTS,
 	BOARD_CARD_IS_LAST_ELEMENT,
 } from "@util-board";
-import { computed, defineComponent, ref } from "vue";
+import { computed, ref } from "vue";
 
-export default defineComponent({
-	name: "BoardMenuActionMoveDown",
-	components: {
-		BoardMenuAction,
-	},
-	emits: ["click"],
-	setup(props, { emit }) {
-		const hasMultipleElements = ref(
-			injectStrict(BOARD_CARD_HAS_MULTIPLE_ELEMENTS)
-		);
-		const isLastElement = ref(injectStrict(BOARD_CARD_IS_LAST_ELEMENT));
-		const isVisible = computed(
-			() => hasMultipleElements.value && !isLastElement.value
-		);
+const emit = defineEmits(["click"]);
 
-		const onClick = ($event: Event) => emit("click", $event);
+const hasMultipleElements = ref(injectStrict(BOARD_CARD_HAS_MULTIPLE_ELEMENTS));
+const isLastElement = ref(injectStrict(BOARD_CARD_IS_LAST_ELEMENT));
+const isVisible = computed(
+	() => hasMultipleElements.value && !isLastElement.value
+);
 
-		return {
-			onClick,
-			mdiArrowDown,
-			isVisible,
-		};
-	},
-});
+const onClick = ($event: Event) => emit("click", $event);
 </script>
