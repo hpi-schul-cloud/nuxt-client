@@ -1,11 +1,14 @@
 <template>
 	<div>
-		<div class="ml-1">
-			<h3 aria-level="1" class="mt-0">
-				{{ $t("pages.room.boardCard.label.courseBoard") }}
-			</h3>
-		</div>
 		<template v-if="board">
+			<BoardHeader
+				:boardId="board.id"
+				:title="board.title"
+				:titlePlaceholder="$t('pages.room.boardCard.label.courseBoard')"
+				:isDraft="!board.isVisible"
+				@update:visibility="onUpdateBoardVisibility"
+				@update:title="onUpdateBoardTitle"
+			/>
 			<div class="d-flex flex-row flex-shrink-1">
 				<div>
 					<Sortable
@@ -83,7 +86,9 @@ import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useTouchDetection } from "@util-device-detection";
-import { useMediaQuery } from "@vueuse/core";
+import { useDebounceFn, useMediaQuery } from "@vueuse/core";
+import { SortableEvent } from "sortablejs";
+import { Sortable } from "sortablejs-vue3";
 import {
 	computed,
 	defineComponent,
@@ -92,19 +97,19 @@ import {
 	toRef,
 	watch,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-import { useI18n } from "vue-i18n";
-import { Sortable } from "sortablejs-vue3";
-import { SortableEvent } from "sortablejs";
+import BoardHeader from "./BoardHeader.vue";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 
 export default defineComponent({
 	components: {
 		BoardColumn,
 		BoardColumnGhost,
+		BoardHeader,
 		ConfirmationDialog,
 		AddElementDialog,
 		LightBox,
@@ -115,7 +120,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { t } = useI18n();
-		const { showInfo, resetNotifier } = useBoardNotifier();
+		const { resetNotifier, showCustomNotifier } = useBoardNotifier();
 		const { editModeId } = useSharedEditMode();
 		const isEditMode = computed(() => editModeId.value !== undefined);
 		const {
@@ -127,6 +132,8 @@ export default defineComponent({
 			moveCard,
 			moveColumn,
 			reloadBoard,
+			updateBoardTitle,
+			updateBoardVisibility,
 			updateColumnTitle,
 		} = useBoardState(toRef(props, "boardId").value);
 
@@ -217,6 +224,13 @@ export default defineComponent({
 			await reloadBoard();
 		};
 
+		const onUpdateBoardVisibility = async (newVisibility: boolean) => {
+			if (!hasEditPermission) return;
+
+			await updateBoardVisibility(newVisibility);
+			await setAlert();
+		};
+
 		const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
 			if (hasMovePermission) await moveCard(cardMove);
 		};
@@ -225,10 +239,12 @@ export default defineComponent({
 			if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
 		};
 
-		onMounted(() => {
-			if (isTeacher) {
-				showInfo(t("components.board.alert.info.teacher"), false);
-			}
+		const onUpdateBoardTitle = async (newTitle: string) => {
+			if (hasEditPermission) await updateBoardTitle(newTitle);
+		};
+
+		onMounted(async () => {
+			await setAlert();
 		});
 
 		const debounceTime = computed(() => {
@@ -238,6 +254,24 @@ export default defineComponent({
 		onUnmounted(() => {
 			resetNotifier();
 		});
+
+		const setAlert = useDebounceFn(() => {
+			if (!isTeacher) return;
+
+			if (!board.value?.isVisible) {
+				showCustomNotifier(
+					t("components.board.alert.info.draft"),
+					"info",
+					10000
+				);
+			} else {
+				showCustomNotifier(
+					t("components.board.alert.info.teacher"),
+					"info",
+					10000
+				);
+			}
+		}, 100);
 
 		return {
 			board,
@@ -258,6 +292,8 @@ export default defineComponent({
 			onMoveColumnLeft,
 			onMoveColumnRight,
 			onReloadBoard,
+			onUpdateBoardTitle,
+			onUpdateBoardVisibility,
 			onUpdateCardPosition,
 			onUpdateColumnTitle,
 		};

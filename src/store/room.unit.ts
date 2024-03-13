@@ -1,15 +1,15 @@
-import { courseFactory } from "@@/tests/test-utils/factory";
-import RoomModule from "./room";
 import * as serverApi from "@/serverApi/v3/api";
-import { initializeAxios } from "@/utils/api";
-import AuthModule from "@/store/auth";
+import { BoardParentType } from "@/serverApi/v3/api";
+import { applicationErrorModule, authModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
+import AuthModule from "@/store/auth";
+import { initializeAxios } from "@/utils/api";
+import { meResponseFactory } from "@@/tests/test-utils";
+import { courseFactory } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
-
 import { AxiosError, AxiosInstance } from "axios";
-import { authModule, applicationErrorModule } from "@/store";
+import RoomModule from "./room";
 import { HttpStatusCode } from "./types/http-status-code.enum";
-import { User } from "./types/auth";
 import { Course } from "./types/room";
 
 let receivedRequests: any[] = [];
@@ -188,129 +188,6 @@ describe("room module", () => {
 			});
 		});
 
-		describe("confirmImportLesson", () => {
-			it("should call the backend", async () => {
-				const roomModule = new RoomModule({});
-				const confirmImportLessonSpy = jest.spyOn(
-					roomModule,
-					"confirmImportLesson"
-				);
-				await roomModule.confirmImportLesson("123456");
-
-				expect(receivedRequests[0].path).toStrictEqual("/v1/lessons");
-				expect(receivedRequests[1].params.params).toStrictEqual({
-					shareToken: "123456",
-				});
-				expect(confirmImportLessonSpy.mock.calls[0][0]).toStrictEqual("123456");
-			});
-
-			it("should set businessError if server couldn't find any lesson", async () => {
-				(() => {
-					initializeAxios({
-						get: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							if (path === "/v1/lessons") {
-								return { data: { data: [] } };
-							}
-						},
-					} as AxiosInstance);
-				})();
-
-				const roomModule = new RoomModule({});
-				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
-				await roomModule.confirmImportLesson("123456");
-
-				expect(roomModule.businessError).toStrictEqual({
-					statusCode: "400",
-					message: "not-found",
-				});
-				expect(fetchContentSpy).not.toHaveBeenCalled();
-			});
-
-			it("should set businessError if the server sends nothing after creating lesson ", async () => {
-				(() => {
-					initializeAxios({
-						get: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							if (path === "/v1/lessons") {
-								return { data: { data: ["123", "465"] } };
-							}
-						},
-						post: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							if (path === "/v1/lessons/copy") {
-								return undefined;
-							}
-						},
-					} as AxiosInstance);
-				})();
-
-				const roomModule = new RoomModule({});
-				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
-				await roomModule.confirmImportLesson("123456");
-
-				expect(roomModule.businessError).toStrictEqual({
-					statusCode: "400",
-					message: "not-created",
-				});
-				expect(fetchContentSpy).not.toHaveBeenCalled();
-			});
-
-			it("should trigger fetchContent method after copying lesson", async () => {
-				(() => {
-					initializeAxios({
-						get: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							if (path === "/v1/lessons") {
-								return { data: { data: ["123", "465"] } };
-							}
-						},
-						post: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							if (path === "/v1/lessons/copy") {
-								return { data: { _id: "123456" } };
-							}
-						},
-					} as AxiosInstance);
-				})();
-
-				const roomModule = new RoomModule({});
-				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
-				await roomModule.confirmImportLesson("123456");
-
-				expect(fetchContentSpy).toHaveBeenCalled();
-			});
-
-			it("should catch error in catch block", async () => {
-				const error = { statusCode: 404, message: "friendly error" };
-
-				(() => {
-					initializeAxios({
-						get: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
-							if (path === "/v1/lessons") {
-								return Promise.reject({ ...error });
-							}
-						},
-					} as AxiosInstance);
-				})();
-
-				const roomModule = new RoomModule({});
-				await roomModule.confirmImportLesson("123456");
-
-				expect(roomModule.businessError.statusCode).toStrictEqual(404);
-				expect(roomModule.businessError.message).toStrictEqual(
-					"friendly error"
-				);
-			});
-		});
-
 		describe("deleteLesson", () => {
 			it("should call api to delete a lesson", async () => {
 				const mockApi = {
@@ -321,13 +198,11 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.LessonApiInterface);
 
 				const roomModule = new RoomModule({});
-				const fetchContentSpy = jest.spyOn(roomModule, "fetchContent");
 
 				await roomModule.deleteLesson("id");
 
 				expect(mockApi.lessonControllerDelete).toHaveBeenCalledTimes(1);
 				expect(mockApi.lessonControllerDelete).toHaveBeenCalledWith("id");
-				expect(fetchContentSpy).toHaveBeenCalledTimes(1);
 
 				spy.mockRestore();
 			});
@@ -344,6 +219,129 @@ describe("room module", () => {
 				const roomModule = new RoomModule({});
 
 				await roomModule.deleteLesson("id");
+
+				expect(roomModule.businessError).toStrictEqual(error);
+
+				spy.mockRestore();
+			});
+		});
+
+		describe("deleteTask", () => {
+			it("should call api to delete a lesson", async () => {
+				const mockApi = {
+					taskControllerDelete: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				await roomModule.deleteTask("id");
+
+				expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
+				expect(mockApi.taskControllerDelete).toHaveBeenCalledWith("id");
+
+				spy.mockRestore();
+			});
+
+			it("should catch error in catch block", async () => {
+				const error = { statusCode: 418, message: "I'm a teapot" };
+				const mockApi = {
+					taskControllerDelete: jest.fn(() => Promise.reject({ ...error })),
+				};
+				const spy = jest
+					.spyOn(serverApi, "TaskApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				await roomModule.deleteTask("id");
+
+				expect(roomModule.businessError).toStrictEqual(error);
+
+				spy.mockRestore();
+			});
+		});
+
+		describe("createBoard", () => {
+			it("should call api to create a board", async () => {
+				const mockApi = {
+					boardControllerCreateBoard: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+				const params = {
+					title: "title",
+					parentId: "parentId",
+					parentType: BoardParentType.Course,
+				};
+				await roomModule.createBoard(params);
+
+				expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
+				expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledWith(params);
+
+				spy.mockRestore();
+			});
+
+			it("should catch error in catch block", async () => {
+				const error = { statusCode: 418, message: "I'm a teapot" };
+				const mockApi = {
+					boardControllerCreateBoard: jest.fn().mockRejectedValue(error),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				const params = {
+					title: "title",
+					parentId: "parentId",
+					parentType: BoardParentType.Course,
+				};
+				await roomModule.createBoard(params);
+
+				expect(roomModule.businessError).toStrictEqual(error);
+
+				spy.mockRestore();
+			});
+		});
+
+		describe("deleteBoard", () => {
+			it("should call api to delete a board", async () => {
+				const mockApi = {
+					boardControllerDeleteBoard: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				await roomModule.deleteBoard("id");
+
+				expect(mockApi.boardControllerDeleteBoard).toHaveBeenCalledTimes(1);
+				expect(mockApi.boardControllerDeleteBoard).toHaveBeenCalledWith("id");
+
+				spy.mockRestore();
+			});
+
+			it("should catch error in catch block", async () => {
+				const error = { statusCode: 418, message: "I'm a teapot" };
+				const mockApi = {
+					boardControllerDeleteBoard: jest.fn().mockRejectedValue(error),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				await roomModule.deleteBoard("id");
 
 				expect(roomModule.businessError).toStrictEqual(error);
 
@@ -389,7 +387,8 @@ describe("room module", () => {
 
 		describe("finishTask", () => {
 			beforeEach(() => {
-				authModule.setUser({ id: "testUser" } as User);
+				const mockMe = meResponseFactory.build();
+				authModule.setMe(mockMe);
 			});
 
 			it("should make a 'PATCH' call to the backend", async () => {
@@ -472,7 +471,8 @@ describe("room module", () => {
 
 		describe("fetchScopePermission", () => {
 			beforeEach(() => {
-				authModule.setUser({ id: "testUser" } as User);
+				const mockMe = meResponseFactory.build();
+				authModule.setMe(mockMe);
 			});
 
 			it("should make a 'GET' call to the backend to fetch the scoped 'room' permissions", async () => {

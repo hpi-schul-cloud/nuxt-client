@@ -163,7 +163,7 @@ describe("@/pages/RoomOverview", () => {
 	beforeEach(() => {
 		roomsModule.setRoomData(mockRoomStoreData);
 		roomsModule.setAllElements(mockCourseData);
-		authModule.setUser(mockAuthStoreData);
+		authModule.setMe(mockAuthStoreData);
 	});
 
 	afterEach(() => {

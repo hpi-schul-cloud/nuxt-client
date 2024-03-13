@@ -1,34 +1,34 @@
-import {
-	printDate,
+import de from "@/locales/de";
+import en from "@/locales/en";
+import datetime, {
+	calculateUTC,
+	createInputDateTime,
 	currentDate,
+	DATETIME_FORMAT,
+	formatDateForAlerts,
 	fromInputDateTime,
 	fromNow,
-	formatDateForAlerts,
 	fromNowToFuture,
-	createInputDateTime,
-	inputRangeDate,
+	getTimeFromISOString,
+	getUtcOffset,
 	inputDateFromDeUTC,
+	inputRangeDate,
+	isDateTimeInPast,
+	printDate,
 	printDateFromDeUTC,
 	printDateFromStringUTC,
 	printDateTimeFromStringUTC,
-	setDefaultTimezone,
-	getUtcOffset,
-	calculateUTC,
 	setDefaultFormats,
-	DATETIME_FORMAT,
-	isDateTimeInPast,
-	getTimeFromISOString,
+	setDefaultTimezone,
 } from "@/plugins/datetime";
-import datetime from "@/plugins/datetime";
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc"; // dependent on utc plugin
-import timezone from "dayjs/plugin/timezone";
-import relativeTime from "dayjs/plugin/relativeTime";
-import customParseFormat from "dayjs/plugin/customParseFormat";
-import setupStores from "../../tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
-import de from "@/locales/de";
-import en from "@/locales/en";
+import EnvConfigModule from "@/store/env-config";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import relativeTime from "dayjs/plugin/relativeTime";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc"; // dependent on utc plugin
+import setupStores from "../../tests/test-utils/setupStores";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
@@ -95,7 +95,7 @@ describe("@/plugins/datetime", () => {
 	const timeLocalString = dateLocal.format("HH:mm");
 
 	beforeEach(() => {
-		setupStores({ authModule: AuthModule });
+		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 	});
 
 	it("getUtcOffset", () => {

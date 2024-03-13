@@ -1,12 +1,11 @@
-import PrivacySettings from "./PrivacySettings";
-import { authModule, envConfigModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import AuthModule from "@/store/auth";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import PrivacySettings from "./PrivacySettings";
 
 const generateProps = () => ({
 	permissions: {
@@ -42,7 +41,6 @@ const getWrapper = (props = generateProps()) => {
 describe("PrivacySettings", () => {
 	beforeEach(() => {
 		setupStores({
-			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
 		});
 	});
@@ -423,7 +421,6 @@ describe("PrivacySettings", () => {
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
 			});
-			authModule.addUserPermmission("SCHOOL_EDIT");
 
 			const wrapper = getWrapper();
 			const learnStoreSwitch = wrapper.findComponent(
@@ -482,7 +479,6 @@ describe("PrivacySettings", () => {
 			envConfigModule.setEnvs({
 				ROCKETCHAT_SERVICE_ENABLED: true,
 			});
-			authModule.addUserPermmission("SCHOOL_EDIT");
 
 			const wrapper = getWrapper();
 

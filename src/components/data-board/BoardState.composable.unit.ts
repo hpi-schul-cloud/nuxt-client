@@ -12,7 +12,7 @@ import {
 } from "@@/tests/test-utils/factory";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { nextTick, ref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
@@ -563,6 +563,48 @@ describe("BoardState.composable", () => {
 		});
 	});
 
+	describe("updateBoardTitle", () => {
+		const NEW_TITLE = "newTitle";
+		it("should not call updateBoardTitleCall when board value is undefined", async () => {
+			const { updateBoardTitle, board } = setup();
+			board.value = undefined;
+
+			await updateBoardTitle(NEW_TITLE);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateBoardTitleCall).not.toHaveBeenCalled();
+		});
+
+		it("shouldhandle error when api returns an error code", async () => {
+			const { updateBoardTitle, board } = setup();
+			board.value = testBoard;
+
+			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue(
+				setupErrorResponse()
+			);
+
+			await updateBoardTitle(NEW_TITLE);
+			await nextTick();
+
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+		});
+
+		it("should update board title", async () => {
+			const { updateBoardTitle, board } = setup();
+			board.value = testBoard;
+
+			await updateBoardTitle(NEW_TITLE);
+			await nextTick();
+
+			expect(mockedBoardApiCalls.updateBoardTitleCall).toHaveBeenCalledWith(
+				board.value.id,
+				NEW_TITLE
+			);
+
+			expect(board.value.title).toStrictEqual(NEW_TITLE);
+		});
+	});
+
 	describe("notifyWithTemplateAndReload", () => {
 		describe("when is called", () => {
 			it("should call notifyWithTemplate", async () => {
@@ -580,6 +622,36 @@ describe("BoardState.composable", () => {
 				expect(mockedErrorHandlerCalls.notifyWithTemplate).toHaveBeenCalled();
 				expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalled();
 			});
+		});
+	});
+
+	describe("updateBoardVisibility", () => {
+		it("should update board visibility", async () => {
+			const { updateBoardVisibility, board } = setup();
+			board.value = testBoard;
+
+			await updateBoardVisibility(true);
+			await nextTick();
+
+			expect(
+				mockedBoardApiCalls.updateBoardVisibilityCall
+			).toHaveBeenCalledWith(board.value.id, true);
+
+			expect(board.value.isVisible).toStrictEqual(true);
+		});
+
+		it("should handle error when api returns an error code", async () => {
+			const { updateBoardVisibility, board } = setup();
+			board.value = testBoard;
+
+			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue(
+				setupErrorResponse()
+			);
+
+			await updateBoardVisibility(false);
+			await nextTick();
+
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
 	});
 });

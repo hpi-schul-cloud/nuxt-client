@@ -286,6 +286,8 @@ export default {
 	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
+	"components.board.alert.info.draft":
+		"Ця дошка більше не відображається для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.board.column.ghost.placeholder": "Додати стовпець",
 	"components.board.menu.board": "Налаштування дошки",
@@ -1341,6 +1343,9 @@ export default {
 	"pages.news.title": "Новини",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
+	"pages.room.boardCard.menu.ariaLabel": "Меню форуму",
+	"pages.room.cards.aria":
+		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.cards.label.revert": "Повернути до стану чернетки",
 	"pages.room.copy.course.message.copied": "Курс успішно скопійовано.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1350,15 +1355,11 @@ export default {
 	"pages.room.itemDelete.text":
 		'Ви впевнені, що хочете видалити елемент " {itemTitle} "?',
 	"pages.room.itemDelete.title": "Видалити елемент",
-	"pages.room.lessonCard.aria":
-		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.label.shareLesson": "надіслати копію теми",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
 	"pages.room.student.emptyState":
 		"Тут з’являється навчальний вміст, наприклад теми чи завдання.",
-	"pages.room.taskCard.aria":
-		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.taskCard.label.done": "Завершити",
 	"pages.room.taskCard.label.due": "Термін",
 	"pages.room.taskCard.label.edit": "Редагувати",
@@ -1379,6 +1380,7 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.lesson": "Створити тему",
+	"pages.rooms.fab.add.board": "Нова дошка",
 	"pages.rooms.fab.add.task": "Створити завдання",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.fab.import.course": "Імпортувати курс",
@@ -1529,7 +1531,7 @@ export default {
 	"tldraw.error.ws.4500":
 		"Виникла помилка під час з'єднання з веб-сокетом tldraw",
 	"ui-confirmation-dialog.ask-delete":
-		"{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
+		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",

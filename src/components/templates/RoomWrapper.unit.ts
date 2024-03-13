@@ -18,6 +18,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { meResponseFactory } from "@@/tests/test-utils";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -41,16 +42,6 @@ const getWrapper = (
 			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
 		},
 	});
-};
-
-const mockAuthStoreData = {
-	_id: "asdf",
-	id: "asdf",
-	firstName: "Arthur",
-	lastName: "Dent",
-	email: "arthur.dent@hitchhiker.org",
-	roles: ["student"],
-	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
 };
 
 const mockData = [
@@ -144,28 +135,10 @@ describe("@templates/RoomWrapper.vue", () => {
 
 	describe("when user has course create permission", () => {
 		beforeEach(() => {
-			authModule.setUser({
-				...mockAuthStoreData,
-				updatedAt: "",
-				birthday: "",
-				createdAt: "",
-				preferences: {},
-				schoolId: "",
-				emailSearchValues: [],
-				firstNameSearchValues: [],
-				lastNameSearchValues: [],
-				consent: {},
-				forcePasswordChange: false,
-				language: "",
-				fullName: "",
-				avatarInitials: "",
-				avatarBackgroundColor: "",
-				age: 0,
-				displayName: "",
-				accountId: "",
-				schoolName: "",
-				externallyManaged: false,
+			const mockMe = meResponseFactory.build({
+				permissions: ["COURSE_CREATE"],
 			});
+			authModule.setMe(mockMe);
 		});
 
 		it("should display fab", () => {
@@ -178,29 +151,8 @@ describe("@templates/RoomWrapper.vue", () => {
 
 	describe("when user does not have course create permission", () => {
 		it("should not display fab", () => {
-			authModule.setUser({
-				...mockAuthStoreData,
-				permissions: ["aksjdhf", "poikln"],
-				updatedAt: "",
-				birthday: "",
-				createdAt: "",
-				preferences: {},
-				schoolId: "",
-				emailSearchValues: [],
-				firstNameSearchValues: [],
-				lastNameSearchValues: [],
-				consent: {},
-				forcePasswordChange: false,
-				language: "",
-				fullName: "",
-				avatarInitials: "",
-				avatarBackgroundColor: "",
-				age: 0,
-				displayName: "",
-				accountId: "",
-				schoolName: "",
-				externallyManaged: false,
-			});
+			const mockMe = meResponseFactory.build();
+			authModule.setMe(mockMe);
 
 			const wrapper = getWrapper();
 

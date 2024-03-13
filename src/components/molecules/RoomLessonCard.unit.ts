@@ -66,9 +66,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 	});
 
 	describe("common behaviors and actions", () => {
-		const role = "teacher";
+		const userRole = "teacher";
 		it("should have correct props", () => {
-			const wrapper = getWrapper({ ...baseTestProps, role });
+			const wrapper = getWrapper({ ...baseTestProps, userRole });
 
 			expect(wrapper.vm.ariaLabel).toStrictEqual(baseTestProps.ariaLabel);
 			expect(wrapper.vm.lesson).toStrictEqual(baseTestProps.lesson);
@@ -76,7 +76,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 		});
 
 		it("should redirect to lesson page", async () => {
-			const wrapper = getWrapper({ ...baseTestProps, role });
+			const wrapper = getWrapper({ ...baseTestProps, userRole });
 
 			Object.defineProperty(window, "location", {
 				set: jest.fn(),
@@ -95,7 +95,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 		it("should NOT redirect to lesson page if dragging is in progress", () => {
 			const wrapper = getWrapper({
 				...baseTestProps,
-				role,
+				userRole,
 				dragInProgress: true,
 			});
 
@@ -113,24 +113,24 @@ describe("@/components/molecules/RoomLessonCard", () => {
 		});
 
 		it("should have correct title", () => {
-			const wrapper = getWrapper({ ...baseTestProps, role });
+			const wrapper = getWrapper({ ...baseTestProps, userRole });
 			const title = wrapper.find(".title-section");
 
 			expect(title.element.textContent).toContain("common.words.topic");
 		});
 
 		it("should use hidden lesson UI only for hidden lesson cards", async () => {
-			const hiddenLessonWrapper = getWrapper({ ...hiddenTestProps, role });
+			const hiddenLessonWrapper = getWrapper({ ...hiddenTestProps, userRole });
 			const hiddenLessonCard = hiddenLessonWrapper.find(".lesson-card");
 			expect(hiddenLessonCard.element.className).toContain("hidden-lesson");
 
-			const regularLessonWrapper = getWrapper({ ...baseTestProps, role });
+			const regularLessonWrapper = getWrapper({ ...baseTestProps, userRole });
 			const lessonCard = regularLessonWrapper.find(".lesson-card");
 			expect(lessonCard.element.className).not.toContain("hidden-lesson");
 		});
 
 		it("should show information about the visibility of tasks for hidden lesson card", async () => {
-			const wrapper = getWrapper({ ...hiddenTestProps, role });
+			const wrapper = getWrapper({ ...hiddenTestProps, userRole });
 			const chipElement = wrapper.find(".chip-value");
 			expect(chipElement.element.textContent).toContain(
 				"pages.room.lessonCard.label.notVisible"
@@ -140,9 +140,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 
 	describe("user role based behaviors and actions", () => {
 		describe("teachers", () => {
-			const role = "teacher";
+			const userRole = "teacher";
 			it("should have one action button if lesson is hidden", () => {
-				const wrapper = getWrapper({ ...hiddenTestProps, role });
+				const wrapper = getWrapper({ ...hiddenTestProps, userRole });
 				const actionButtons = wrapper.findAll(".action-button");
 
 				expect(actionButtons).toHaveLength(1);
@@ -150,7 +150,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should have no action button when lesson is visible", () => {
-				const wrapper = getWrapper({ ...baseTestProps, role });
+				const wrapper = getWrapper({ ...baseTestProps, userRole });
 				const actionButtons = wrapper.findAll(".action-button");
 
 				expect(actionButtons).toHaveLength(0);
@@ -158,7 +158,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 
 			it("should trigger the 'redirectAction' method when 'more action' edit button is clicked", async () => {
 				const redirectActionMock = jest.fn();
-				const wrapper = getWrapper({ ...baseTestProps, role });
+				const wrapper = getWrapper({ ...baseTestProps, userRole });
 				wrapper.vm.redirectAction = redirectActionMock;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
@@ -175,20 +175,20 @@ describe("@/components/molecules/RoomLessonCard", () => {
 				);
 			});
 
-			it("should trigger the 'post' method when 'post' button is clicked", async () => {
-				const postLessonMock = jest.fn();
-				const wrapper = getWrapper({ ...hiddenTestProps, role });
-				wrapper.vm.postLesson = postLessonMock;
+			it("should trigger the 'publishLesson' method when 'publish' button is clicked", async () => {
+				const publishLessonMock = jest.fn();
+				const wrapper = getWrapper({ ...hiddenTestProps, userRole });
+				wrapper.vm.publishLesson = publishLessonMock;
 
 				const actionButton = wrapper.find(".action-button");
 				await actionButton.trigger("click");
 
-				expect(postLessonMock).toHaveBeenCalled();
+				expect(publishLessonMock).toHaveBeenCalled();
 			});
 
 			it("should have 'copy' more action if copying feature is enabled", async () => {
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
-				const wrapper = getWrapper({ ...baseTestProps, role });
+				const wrapper = getWrapper({ ...baseTestProps, userRole });
 
 				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
 					(item: any) => {
@@ -202,7 +202,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 				envConfigModule.setEnvs({
 					FEATURE_COPY_SERVICE_ENABLED: false,
 				} as Envs);
-				const wrapper = getWrapper({ ...baseTestProps, role });
+				const wrapper = getWrapper({ ...baseTestProps, userRole });
 
 				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
 					(item: any) => {
@@ -215,7 +215,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
 				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
 				const copyCard = jest.fn();
-				const wrapper = getWrapper({ ...baseTestProps, role });
+				const wrapper = getWrapper({ ...baseTestProps, userRole });
 				wrapper.vm.copyCard = copyCard;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
@@ -229,10 +229,10 @@ describe("@/components/molecules/RoomLessonCard", () => {
 				expect(copyCard).toHaveBeenCalled();
 			});
 
-			it("should trigger the 'revertPublishedCard' method when 'more action' revert button is clicked", async () => {
-				const revertPublishedCardMock = jest.fn();
-				const wrapper = getWrapper({ ...baseTestProps, role });
-				wrapper.vm.revertPublishedCard = revertPublishedCardMock;
+			it("should trigger the 'unPublishCard' method when 'more action' unpublish button is clicked", async () => {
+				const unPublishCardMock = jest.fn();
+				const wrapper = getWrapper({ ...baseTestProps, userRole });
+				wrapper.vm.unPublishCard = unPublishCardMock;
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
@@ -243,12 +243,12 @@ describe("@/components/molecules/RoomLessonCard", () => {
 
 				await wrapper.vm.$nextTick();
 
-				expect(revertPublishedCardMock).toHaveBeenCalled();
+				expect(unPublishCardMock).toHaveBeenCalled();
 			});
 
 			it("should have 'share' more action if env flag is set", async () => {
 				envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true } as Envs);
-				const wrapper = getWrapper({ ...baseTestProps, role });
+				const wrapper = getWrapper({ ...baseTestProps, userRole });
 
 				const hasShareMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
 					(item: any) => {
@@ -259,7 +259,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should emit 'delete-lesson' when delete action button clicked'", async () => {
-				const wrapper = getWrapper({ ...baseTestProps, role });
+				const wrapper = getWrapper({ ...baseTestProps, userRole });
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 
@@ -295,7 +295,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 					dragInProgress: false,
 				};
 
-				const wrapper = getWrapper({ ...lessonObject, role });
+				const wrapper = getWrapper({ ...lessonObject, userRole });
 				const expectedString = `common.words.tasks: 3 common.words.published / 4 common.words.planned / 2 common.words.drafts`;
 				const chipElement = wrapper.find(".chip-value");
 
@@ -325,7 +325,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 					dragInProgress: false,
 				};
 
-				const wrapper = getWrapper({ ...lessonObject, role });
+				const wrapper = getWrapper({ ...lessonObject, userRole });
 				const expectedString = `common.words.tasks: 3 common.words.ready / 4 common.words.planned / 2 common.words.drafts`;
 				const chipElement = wrapper.find(".chip-value");
 
@@ -355,7 +355,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 					dragInProgress: false,
 				};
 
-				const wrapper = getWrapper({ ...lessonObject, role });
+				const wrapper = getWrapper({ ...lessonObject, userRole });
 				const expectedString = `common.words.tasks: 3 common.words.published / 2 common.words.drafts`;
 
 				const chipElement = wrapper.find(".chip-value");
@@ -385,7 +385,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 					keyDrag: false,
 					dragInProgress: false,
 				};
-				const wrapper = getWrapper({ ...lessonObject, role });
+				const wrapper = getWrapper({ ...lessonObject, userRole });
 				const chipElement = wrapper.findAll(".chip-value");
 
 				expect(chipElement).toHaveLength(0);
@@ -410,16 +410,16 @@ describe("@/components/molecules/RoomLessonCard", () => {
 					keyDrag: false,
 					dragInProgress: false,
 				};
-				const wrapper = getWrapper({ ...lessonObject, role });
+				const wrapper = getWrapper({ ...lessonObject, userRole });
 				const chipElement = wrapper.findAll(".chip-value");
 
 				expect(chipElement).toHaveLength(0);
 			});
 		});
 		describe("students", () => {
-			const role = "student";
+			const userRole = "student";
 			it("should have no action button", () => {
-				const wrapper = getWrapper({ ...baseTestProps, role });
+				const wrapper = getWrapper({ ...baseTestProps, userRole });
 				const actionButtons = wrapper.findAll(".action-button");
 
 				expect(actionButtons).toHaveLength(0);
@@ -428,9 +428,9 @@ describe("@/components/molecules/RoomLessonCard", () => {
 	});
 
 	describe("keypress events", () => {
-		const role = "teacher";
+		const userRole = "teacher";
 		it("should call 'handleClick' event when 'enter' key is pressed", async () => {
-			const wrapper = getWrapper({ ...baseTestProps, role });
+			const wrapper = getWrapper({ ...baseTestProps, userRole });
 
 			Object.defineProperty(window, "location", {
 				set: jest.fn(),
@@ -446,7 +446,11 @@ describe("@/components/molecules/RoomLessonCard", () => {
 
 		describe("when keydrag is true", () => {
 			it("should call 'onKeyPress' event when 'up, down, space' keys are pressed", async () => {
-				const wrapper = getWrapper({ ...baseTestProps, keyDrag: true, role });
+				const wrapper = getWrapper({
+					...baseTestProps,
+					keyDrag: true,
+					userRole,
+				});
 
 				await wrapper.trigger("keydown.up");
 
@@ -469,7 +473,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 		});
 
 		it("should emit 'tab-pressed' event when 'tab' key is pressed", async () => {
-			const wrapper = getWrapper({ ...baseTestProps, role });
+			const wrapper = getWrapper({ ...baseTestProps, userRole });
 
 			await wrapper.trigger("keydown.tab");
 
