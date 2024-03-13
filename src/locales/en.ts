@@ -1388,7 +1388,7 @@ export default {
 	"pages.rooms.ccImportCourse.success":
 		"Course {name} was successfully imported.",
 	"pages.rooms.ccImportCourse.error":
-		"An error occured while importing the course.",
+		"An error occurred while importing the course.",
 	"pages.rooms.index.courses.active": "Current courses",
 	"pages.rooms.index.courses.all": "All courses",
 	"pages.rooms.index.courses.arrangeCourses": "Arrange courses",
