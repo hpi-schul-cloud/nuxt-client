@@ -43,6 +43,7 @@
 						<RoomTaskCard
 							v-if="item.type === cardTypes.Task"
 							:ref="`item_${index}`"
+							:task-card-index="index"
 							:user-role="role"
 							:room="taskData"
 							:task="item.content"
@@ -116,6 +117,7 @@
 				<RoomTaskCard
 					v-if="item.type === cardTypes.Task"
 					:ref="`item_${index}`"
+					:task-card-index="index"
 					:user-role="role"
 					:task="item.content"
 					:aria-label="
