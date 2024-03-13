@@ -7,6 +7,7 @@ import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import {
+	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOMS_MODULE_KEY,
@@ -19,6 +20,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { meResponseFactory } from "@@/tests/test-utils";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {
@@ -40,6 +42,9 @@ const getWrapper = (
 				createModuleMocks(LoadingStateModule),
 			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
+			[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
+				CommonCartridgeImportModule
+			),
 		},
 	});
 };

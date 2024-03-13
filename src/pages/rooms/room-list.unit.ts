@@ -6,6 +6,7 @@ import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import {
+	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOMS_MODULE_KEY,
@@ -18,6 +19,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
 const getWrapper = (device = "desktop") => {
 	return mount(RoomList, {
@@ -32,6 +34,9 @@ const getWrapper = (device = "desktop") => {
 				createModuleMocks(LoadingStateModule),
 			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
+			[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
+				CommonCartridgeImportModule
+			),
 		},
 	});
 };

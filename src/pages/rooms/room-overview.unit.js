@@ -6,11 +6,13 @@ import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomsModule from "@/store/rooms";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOMS_MODULE_KEY,
+	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -139,6 +141,9 @@ const getWrapper = (device = "desktop", options = {}) => {
 				loadingStateModule: loadingStateModuleMock,
 				[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
+					CommonCartridgeImportModule
+				),
 			},
 			mocks: defaultMocks,
 		},
