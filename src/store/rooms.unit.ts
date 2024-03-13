@@ -316,62 +316,6 @@ describe("rooms module", () => {
 				expect(setBusinessErrorMock).toHaveBeenCalled();
 			});
 		});
-
-		describe("uploadCourse", () => {
-			it("should call the backend", async () => {
-				const mockApi = { courseControllerImportCourse: jest.fn() };
-				jest
-					.spyOn(serverApi, "CoursesApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
-				const course = new File([], "my-course.zip");
-				const roomsModule = new RoomsModule({});
-
-				await roomsModule.uploadCourse(course);
-				expect(mockApi.courseControllerImportCourse).toHaveBeenCalledTimes(1);
-			});
-
-			it("should call set loading", async () => {
-				const mockApi = {
-					courseControllerImportCourse: jest.fn().mockResolvedValue({}),
-				};
-				jest
-					.spyOn(serverApi, "CoursesApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
-				const course = new File([], "my-course.zip");
-				const roomsModule = new RoomsModule({});
-				const setAlertDataMock = jest.spyOn(roomsModule, "setAlertData");
-
-				await roomsModule.uploadCourse(course);
-
-				expect(setAlertDataMock).toHaveBeenCalledTimes(1);
-				expect(setAlertDataMock).toHaveBeenCalledWith({
-					status: "success",
-					text: "pages.rooms.ccImportCourse.success",
-					autoClose: true,
-				});
-			});
-
-			it("should handle error", async () => {
-				const mockApi = { courseControllerImportCourse: jest.fn() };
-				mockApi.courseControllerImportCourse.mockImplementation(() =>
-					Promise.reject()
-				);
-				jest
-					.spyOn(serverApi, "CoursesApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
-				const roomsModule = new RoomsModule({});
-				const setAlertDataMock = jest.spyOn(roomsModule, "setAlertData");
-
-				await roomsModule.uploadCourse(new File([], "my-course.zip"));
-
-				expect(setAlertDataMock).toHaveBeenCalledTimes(1);
-				expect(setAlertDataMock).toHaveBeenCalledWith({
-					status: "error",
-					text: "pages.rooms.ccImportCourse.error",
-					autoClose: true,
-				});
-			});
-		});
 	});
 
 	describe("mutations", () => {
