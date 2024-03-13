@@ -170,7 +170,7 @@ const actionsMenuItems = () => {
 		icon: mdiPencilOutline,
 		action: openBoard,
 		name: t("common.actions.edit"),
-		dataTestId: `board-card-menu-action-edit-${
+		dataTestid: `board-card-menu-action-edit-${
 			toRef(props, "boardCardIndex").value
 		}`,
 	});
@@ -178,7 +178,7 @@ const actionsMenuItems = () => {
 		icon: mdiTrashCanOutline,
 		action: () => emit("delete-board"),
 		name: t("common.actions.remove"),
-		dataTestId: `board-card-menu-action-remove-${
+		dataTestid: `board-card-menu-action-remove-${
 			toRef(props, "boardCardIndex").value
 		}`,
 	});
@@ -186,7 +186,7 @@ const actionsMenuItems = () => {
 		icon: mdiUndoVariant,
 		action: onUnpublish,
 		name: t("pages.room.cards.label.revert"),
-		dataTestId: `board-card-menu-action-unpublish-${
+		dataTestid: `board-card-menu-action-unpublish-${
 			toRef(props, "boardCardIndex").value
 		}`,
 	});
