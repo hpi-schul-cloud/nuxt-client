@@ -146,6 +146,7 @@
 </template>
 
 <script>
+import vCustomDialog from "@/components/organisms/vCustomDialog";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import {
 	mdiCheckCircle,
@@ -153,7 +154,6 @@ import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import vCustomDialog from "@/components/organisms/vCustomDialog";
 
 export default {
 	components: {
@@ -182,7 +182,8 @@ export default {
 		hasSystems() {
 			return this.systems.length > 0;
 		},
-		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
+		customLoginLinkEnabled: () =>
+			envConfigModule.getEnv.FEATURE_LOGIN_LINK_ENABLED,
 		hasSystemCreatePermission: () => {
 			return authModule.getUserPermissions.includes("system_create");
 		},
