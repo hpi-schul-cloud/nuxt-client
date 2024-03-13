@@ -1,22 +1,48 @@
 <template>
-	<BoardColumnInteractionHandler
-		:isEditMode="isEditMode"
-		@start-edit-mode="onStartEditMode"
-		@end-edit-mode="onEndEditMode"
-	>
-		<div class="board-header" tabindex="0" ref="boardHeader">
-			<BoardAnyTitleInput
-				scope="board"
-				:value="title"
-				data-testid="course-board-title"
-				:isEditMode="isEditMode"
-				:placeholder="titlePlaceholder"
-				@update:value="onUpdateTitle"
-				:isFocused="isFocusedById"
-				:maxLength="100"
-			/>
+	<div class="d-flex align-items-center">
+		<InlineEditInteractionHandler
+			:isEditMode="isEditMode"
+			@start-edit-mode="onStartEditMode"
+			@end-edit-mode="onEndEditMode"
+		>
+			<div class="board-header" tabindex="0" ref="boardHeader">
+				<BoardAnyTitleInput
+					ref="boardHeader"
+					scope="board"
+					:value="boardTitle"
+					data-testid="board-title"
+					:isEditMode="isEditMode"
+					:placeholder="titlePlaceholder"
+					:isFocused="isFocusedById"
+					:maxLength="100"
+					:style="{ width: `${fieldWidth}px` }"
+					@update:value="updateBoardTitle"
+				/>
+				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
+			</div>
+		</InlineEditInteractionHandler>
+		<div class="d-flex">
+			<v-chip
+				v-if="isDraft"
+				size="small"
+				class="align-self-center"
+				data-testid="board-draft-chip"
+			>
+				{{ t("common.words.draft") }}
+			</v-chip>
+			<div class="mx-2">
+				<BoardMenu
+					v-if="hasEditPermission"
+					scope="board"
+					data-testid="board-menu-btn"
+				>
+					<BoardMenuActionEdit @click="onStartEditMode" />
+					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+				</BoardMenu>
+			</div>
 		</div>
-	</BoardColumnInteractionHandler>
+	</div>
 </template>
 
 <script lang="ts">
@@ -25,16 +51,27 @@ import {
 	useBoardPermissions,
 	useEditMode,
 } from "@data-board";
+import {
+	BoardMenu,
+	BoardMenuActionEdit,
+	BoardMenuActionPublish,
+	BoardMenuActionRevert,
+} from "@ui-board";
 import { useDebounceFn } from "@vueuse/core";
-import { defineComponent, ref, toRef } from "vue";
+import { defineComponent, onMounted, ref, toRef, watchEffect } from "vue";
+import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
+import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 
 export default defineComponent({
 	name: "BoardHeader",
 	components: {
 		BoardAnyTitleInput,
-		BoardColumnInteractionHandler,
+		BoardMenu,
+		BoardMenuActionEdit,
+		BoardMenuActionPublish,
+		BoardMenuActionRevert,
+		InlineEditInteractionHandler,
 	},
 	props: {
 		boardId: {
@@ -49,21 +86,37 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+		isDraft: {
+			type: Boolean,
+			required: true,
+		},
 	},
-	emits: ["update:title"],
+	emits: ["update:title", "update:visibility"],
 	setup(props, { emit }) {
+		const { t } = useI18n();
 		const boardId = toRef(props, "boardId");
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
 			boardId.value
 		);
-
 		const boardHeader = ref<HTMLDivElement | null>(null);
 		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
 			boardId.value,
 			boardHeader
 		);
-
 		const { hasEditPermission } = useBoardPermissions();
+
+		const inputWidthCalcSpan = ref<HTMLElement>();
+		const fieldWidth = ref(0);
+
+		onMounted(() => {
+			calculateWidth();
+		});
+
+		const boardTitle = ref("");
+
+		watchEffect(() => {
+			boardTitle.value = props.title;
+		});
 
 		const onStartEditMode = () => {
 			if (!hasEditPermission) return;
@@ -75,28 +128,75 @@ export default defineComponent({
 			stopEditMode();
 		};
 
-		const onUpdateTitle = useDebounceFn((newTitle: string) => {
+		const onPublishBoard = () => {
+			if (!hasEditPermission) return;
+			emit("update:visibility", true);
+		};
+
+		const onUnpublishBoard = () => {
+			if (!hasEditPermission) return;
+			emit("update:visibility", false);
+		};
+
+		const updateBoardTitle = async (value: string) => {
+			boardTitle.value = value;
+			calculateWidth();
+			await emitTitle(value);
+		};
+
+		const emitTitle = useDebounceFn((newTitle: string) => {
 			if (newTitle.length < 1) return;
 
 			emit("update:title", newTitle);
 		}, 1000);
 
+		const calculateWidth = () => {
+			if (!inputWidthCalcSpan.value) return;
+			const title =
+				boardTitle.value || t("pages.room.boardCard.label.courseBoard");
+
+			inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
+
+			const width = inputWidthCalcSpan.value.offsetWidth;
+			fieldWidth.value = width;
+		};
+
 		return {
+			t,
 			boardHeader,
+			boardTitle,
 			hasEditPermission,
 			isEditMode,
 			isFocusContained,
 			isFocusedById,
 			onStartEditMode,
 			onEndEditMode,
-			onUpdateTitle,
+			onPublishBoard,
+			onUnpublishBoard,
+			calculateWidth,
+			fieldWidth,
+			inputWidthCalcSpan,
+			updateBoardTitle,
 		};
 	},
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .board-header:focus {
 	outline: none;
+}
+
+.input-width-calc-span {
+	position: absolute;
+	left: -9999px;
+	display: inline-block;
+	min-width: 1em;
+	padding: 0 $field-control-padding-end 0 $field-control-padding-start;
+	font-size: var(--heading-3);
+	font-family: var(--font-accent);
+	letter-spacing: $field-letter-spacing;
 }
 </style>

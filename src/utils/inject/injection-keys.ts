@@ -5,10 +5,12 @@ import ContextExternalToolsModule from "@/store/context-external-tools";
 import DownloadModule from "@/store/download";
 import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
+import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import RoomModule from "@/store/room";
+import RoomsModule from "@/store/rooms";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import StatusAlertsModule from "@/store/status-alerts";
@@ -16,6 +18,7 @@ import SystemsModule from "@/store/systems";
 import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { InjectionKey } from "vue";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
@@ -48,8 +51,14 @@ export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
 	Symbol("schoolsModule");
 export const DOWNLOAD_MODULE_KEY: InjectionKey<DownloadModule> =
 	Symbol("downloadModule");
+export const ROOMS_MODULE_KEY: InjectionKey<RoomsModule> =
+	Symbol("roomsModule");
+export const LOADING_STATE_MODULE_KEY: InjectionKey<LoadingStateModule> =
+	Symbol("loadingStateModule");
 export const NEWS_MODULE_KEY: InjectionKey<NewsModule> = Symbol("newsModule");
 export const CONTENT_MODULE_KEY: InjectionKey<ContentModule> =
 	Symbol("contentModule");
+export const COMMON_CARTRIDGE_IMPORT_MODULE_KEY: InjectionKey<CommonCartridgeImportModule> =
+	Symbol("commonCartridgeImportModule");
 
 export const THEME_KEY: InjectionKey<{ name: string }> = Symbol("theme");

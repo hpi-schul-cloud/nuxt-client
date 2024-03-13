@@ -3,7 +3,7 @@
 		<template v-slot:activator="{ props }">
 			<VBtn
 				variant="text"
-				data-testid="board-menu-button"
+				:data-testid="dataTestid"
 				v-bind="props"
 				:ripple="false"
 				:class="{ 'bg-white': hasBackground }"

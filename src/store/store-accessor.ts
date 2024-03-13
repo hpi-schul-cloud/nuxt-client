@@ -32,6 +32,7 @@ import TasksModule from "@/store/tasks";
 import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import DownloadModule from "./download";
@@ -67,6 +68,7 @@ export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
 export let videoConferenceModule: VideoConferenceModule;
 export let downloadModule: DownloadModule;
+export let commonCartridgeImportModule: CommonCartridgeImportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<any>): void {
@@ -98,6 +100,7 @@ export function initializeStores(store: Store<any>): void {
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
 	videoConferenceModule = getModule(VideoConferenceModule, store);
 	downloadModule = getModule(DownloadModule, store);
+	commonCartridgeImportModule = getModule(CommonCartridgeImportModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -132,4 +135,5 @@ export const modules = {
 	userLoginMigrationModule: UserLoginMigrationModule,
 	videoConferenceModule: VideoConferenceModule,
 	downloadModule: DownloadModule,
+	commonCartridgeImportModule: CommonCartridgeImportModule,
 };
