@@ -1,4 +1,3 @@
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -11,7 +10,16 @@ import { Router, useRouter } from "vue-router";
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
-const mockBoardData = {
+type BoardData = {
+	id: string;
+	title?: string;
+	published: boolean;
+	createdAt: string;
+	updatedAt: string;
+	columnBoardId: string;
+};
+
+const mockDraftBoardData = {
 	id: "test-id",
 	title: "title",
 	published: false,
@@ -20,16 +28,22 @@ const mockBoardData = {
 	columnBoardId: "column-board-id",
 };
 
+const mockPublishedBoardData = {
+	id: "test-id-2",
+	title: "title-2",
+	published: true,
+	createdAt: "2023-05-31T15:34:59.276Z",
+	updatedAt: "2023-05-31T15:34:59.276Z",
+	columnBoardId: "column-board-id-2",
+};
+
 const mockCourseData = {
 	courseId: "test-course-id",
 	courseName: "test-course-name",
 };
 
 describe("RoomBoardCard", () => {
-	const setup = (props?: {
-		title?: string | undefined;
-		role?: Roles | undefined;
-	}) => {
+	const setup = (props: { boardData: BoardData }, options?: object) => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 		// Note: router has to be mocked before mounting the component
@@ -38,30 +52,40 @@ describe("RoomBoardCard", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				role: props?.role ?? Roles.Teacher,
 				dragInProgress: false,
 				keyDrag: false,
 				columnBoardItem: {
-					...mockBoardData,
-					title: props ? props.title : mockBoardData.title,
+					...props.boardData,
 				},
 				courseData: mockCourseData,
+				...options,
 			},
 		});
 
 		return { wrapper, router };
 	};
 
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
 	describe("when a board card is rendered", () => {
+		const userRole = "teacher";
 		it("should be found in dom", () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup(
+				{ boardData: mockDraftBoardData },
+				{ userRole }
+			);
 			expect(wrapper.findComponent(RoomBoardCard).exists()).toBe(true);
 		});
 
 		describe("when board title is defined and not empty", () => {
 			it("should have correct board title", () => {
-				const { wrapper } = setup();
-				const expectedBoardTitle = mockBoardData.title;
+				const { wrapper } = setup(
+					{ boardData: mockDraftBoardData },
+					{ userRole }
+				);
+				const expectedBoardTitle = mockDraftBoardData.title;
 				const boardTitle = wrapper.find(".board-title").element.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
@@ -70,8 +94,10 @@ describe("RoomBoardCard", () => {
 
 		describe("when title is defined but empty", () => {
 			it("should have correct board title", () => {
-				const props = { title: "" };
-				const { wrapper } = setup(props);
+				const { wrapper } = setup(
+					{ boardData: { ...mockDraftBoardData, title: "" } },
+					{ userRole }
+				);
 				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
 				const boardTitle = wrapper.find(".board-title").element.textContent;
 
@@ -81,42 +107,135 @@ describe("RoomBoardCard", () => {
 
 		describe("when title is undefined", () => {
 			it("should have correct board title", () => {
-				const props = { title: undefined };
-				const { wrapper } = setup(props);
+				const { wrapper } = setup(
+					{ boardData: { ...mockDraftBoardData, title: undefined } },
+					{ userRole }
+				);
 				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
 				const boardTitle = wrapper.find(".board-title").element.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
 		});
-	});
 
-	describe("when user is a teacher", () => {
-		it("should show three dot menu", () => {
-			const { wrapper } = setup({ role: Roles.Teacher });
-			const threeDotMenu = wrapper.find(
-				'[aria-label="pages.room.boardCard.menu.ariaLabel"]'
+		it("should have correct combined card title for draft board", () => {
+			const { wrapper } = setup(
+				{ boardData: mockDraftBoardData },
+				{ userRole }
 			);
+			const boardCardTitle =
+				wrapper.find(".title-board-card").element.textContent;
 
-			expect(threeDotMenu.exists()).toBe(true);
+			expect(boardCardTitle).toContain(
+				"pages.room.boardCard.label.columnBoard - common.words.draft"
+			);
 		});
-	});
 
-	describe("when user is a student", () => {
-		it("should don't show three dot menu", () => {
-			const { wrapper } = setup({ role: Roles.Student });
-			const threeDotMenu = wrapper.find(
-				'[aria-label="pages.room.boardCard.menu.ariaLabel"]'
+		it("should use hidden UI only for draft board cards", async () => {
+			const { wrapper: wrapperDraft } = setup(
+				{ boardData: mockDraftBoardData },
+				{ userRole }
+			);
+			const boardDraftCard = wrapperDraft.find(".board-card");
+			expect(boardDraftCard.element.className).toContain("board-hidden");
+
+			const { wrapper: wrapperPublished } = setup(
+				{ boardData: mockPublishedBoardData },
+				{ userRole }
+			);
+			const boardPublishedCard = wrapperPublished.find(".board-card");
+			expect(boardPublishedCard.element.className).not.toContain(
+				"board-hidden"
+			);
+		});
+
+		it("should show three dot menu and find unpublish button for teachers on published boards", async () => {
+			const { wrapper: wrapperPublished } = setup(
+				{ boardData: mockPublishedBoardData },
+				{ userRole }
 			);
 
-			expect(threeDotMenu.exists()).toBe(false);
+			const threeDotMenuPublished = wrapperPublished.find(".three-dot-button");
+			await threeDotMenuPublished.trigger("click");
+
+			const moreActionButtons = wrapperPublished.findAllComponents(
+				`[data-testid="content-card-board-menu-unpublish"]`
+			);
+			expect(moreActionButtons).toHaveLength(1);
+		});
+
+		it("should show publish action button for teachers on draft boards", async () => {
+			const { wrapper: wrapperDraft } = setup(
+				{ boardData: mockDraftBoardData },
+				{ userRole }
+			);
+
+			const cardActionButtons = wrapperDraft.findAllComponents(
+				`[data-testid="content-card-board-menu-publish"]`
+			);
+			expect(cardActionButtons).toHaveLength(1);
+		});
+
+		it("should not show three dot menu for students at all or for teachers on draft boards", async () => {
+			const { wrapper: wrapperPublishedStudent } = setup(
+				{ boardData: mockPublishedBoardData },
+				{ userRole: "student" }
+			);
+			const threeDotMenuPublishedStudent =
+				wrapperPublishedStudent.find(".three-dot-button");
+			expect(threeDotMenuPublishedStudent.exists()).toBe(false);
+
+			const { wrapper: wrapperDraftStudent } = setup(
+				{ boardData: mockDraftBoardData },
+				{ userRole: "student" }
+			);
+			const threeDotMenuDraftStudent =
+				wrapperDraftStudent.find(".three-dot-button");
+			expect(threeDotMenuDraftStudent.exists()).toBe(false);
+
+			const { wrapper: wrapperDraft } = setup(
+				{ boardData: mockDraftBoardData },
+				{ userRole }
+			);
+			const threeDotMenuDraft = wrapperDraft.find(".three-dot-button");
+			expect(threeDotMenuDraft.exists()).toBe(false);
+		});
+
+		it("should not show card actions for students at all or for teachers on published boards", async () => {
+			const { wrapper: wrapperDraftStudent } = setup(
+				{ boardData: mockDraftBoardData },
+				{ userRole: "student" }
+			);
+			const boardDraftCardStudent = wrapperDraftStudent.find(".board-card");
+			const actionButtonsDraftStudent =
+				boardDraftCardStudent.findAll(".action-button");
+			expect(actionButtonsDraftStudent).toHaveLength(0);
+
+			const { wrapper: wrapperPublishedStudent } = setup(
+				{ boardData: mockPublishedBoardData },
+				{ userRole: "student" }
+			);
+			const boardPublishedCardStudent =
+				wrapperPublishedStudent.find(".board-card");
+			const actionButtonsPublishedStudent =
+				boardPublishedCardStudent.findAll(".action-button");
+			expect(actionButtonsPublishedStudent).toHaveLength(0);
+
+			const { wrapper: wrapperPublished } = setup(
+				{ boardData: mockPublishedBoardData },
+				{ userRole }
+			);
+			const boardPublishedCard = wrapperPublished.find(".board-card");
+			const actionButtonsPublished =
+				boardPublishedCard.findAll(".action-button");
+			expect(actionButtonsPublished).toHaveLength(0);
 		});
 	});
 
 	describe("when interacting with a board card", () => {
 		it("should redirect to column board when clicking on the card", () => {
-			const { wrapper, router } = setup();
-			const boardId = mockBoardData.columnBoardId;
+			const { wrapper, router } = setup({ boardData: mockDraftBoardData });
+			const boardId = mockDraftBoardData.columnBoardId;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			boardCard.vm.$emit("click");
@@ -126,8 +245,8 @@ describe("RoomBoardCard", () => {
 		});
 
 		it("should redirect to column board when pressing enter on the card", async () => {
-			const { wrapper, router } = setup();
-			const boardId = mockBoardData.columnBoardId;
+			const { wrapper, router } = setup({ boardData: mockDraftBoardData });
+			const boardId = mockDraftBoardData.columnBoardId;
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			await boardCard.trigger("keydown.enter");
@@ -137,7 +256,7 @@ describe("RoomBoardCard", () => {
 		});
 
 		it("should not redirect to column board if a card is dragged", async () => {
-			const { wrapper, router } = setup();
+			const { wrapper, router } = setup({ boardData: mockDraftBoardData });
 			await wrapper.setProps({ dragInProgress: true });
 
 			const boardCard = wrapper.findComponent({ name: "VCard" });
@@ -149,7 +268,7 @@ describe("RoomBoardCard", () => {
 		});
 
 		it("should emit 'onDrag' when pressing space", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ boardData: mockDraftBoardData });
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			await boardCard.trigger("keydown.space");
@@ -158,7 +277,7 @@ describe("RoomBoardCard", () => {
 		});
 
 		it("should emit 'tab-pressed' when pressing tab", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ boardData: mockDraftBoardData });
 			const boardCard = wrapper.findComponent({ name: "VCard" });
 
 			await boardCard.trigger("keydown.tab");
@@ -169,7 +288,7 @@ describe("RoomBoardCard", () => {
 		it.each([["up"], ["down"]])(
 			"should emit 'move-element' when pressing the %s arrow key and keyDrag is true",
 			async (key) => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({ boardData: mockDraftBoardData });
 				await wrapper.setProps({ keyDrag: true });
 				const boardCard = wrapper.findComponent({ name: "VCard" });
 
@@ -182,7 +301,7 @@ describe("RoomBoardCard", () => {
 		it.each([["up"], ["down"]])(
 			"should not emit 'move-element' when pressing the %s arrow key and keyDrag is false",
 			async (key) => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({ boardData: mockDraftBoardData });
 				const boardCard = wrapper.findComponent({ name: "VCard" });
 
 				await boardCard.trigger(`keydown.${key}`);
@@ -190,5 +309,37 @@ describe("RoomBoardCard", () => {
 				expect(wrapper.emitted("move-element")).toBeUndefined();
 			}
 		);
+
+		it("should emit 'update-visibility' when card action button is pressed on draft board", async () => {
+			const { wrapper } = setup(
+				{ boardData: mockDraftBoardData },
+				{ userRole: "teacher" }
+			);
+			const boardCard = wrapper.find(".board-card");
+			const cardActionButtons = boardCard.findAllComponents(
+				`[data-testid="content-card-board-menu-publish"]`
+			);
+
+			await cardActionButtons[0].trigger("click");
+			const emitted = wrapper.emitted("update-visibility");
+			expect(emitted).toHaveLength(1);
+		});
+
+		it("should emit 'update-visibility' when three dot menu button and action button is pressed on published board", async () => {
+			const { wrapper } = setup(
+				{ boardData: mockPublishedBoardData },
+				{ userRole: "teacher" }
+			);
+
+			const threeDotMenuPublished = wrapper.find(".three-dot-button");
+			await threeDotMenuPublished.trigger("click");
+			const moreActionButtons = wrapper.findAllComponents(
+				`[data-testid="content-card-board-menu-unpublish"]`
+			);
+
+			await moreActionButtons[0].trigger("click");
+			const emitted = wrapper.emitted("update-visibility");
+			expect(emitted).toHaveLength(1);
+		});
 	});
 });

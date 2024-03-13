@@ -11,6 +11,7 @@ import {
 	useBoardPermissions,
 	useEditMode,
 } from "@data-board";
+import { BoardMenuActionEdit } from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
@@ -74,6 +75,17 @@ describe("BoardHeader", () => {
 
 			const emitted = wrapper.emitted("update:title");
 			expect(emitted).toBeDefined();
+		});
+	});
+
+	describe("when the 'edit' menu button is clicked", () => {
+		it("should call startEditMode", async () => {
+			const { startEditMode, wrapper } = setup();
+
+			const editButton = wrapper.findComponent(BoardMenuActionEdit);
+			editButton.vm.$emit("click");
+
+			expect(startEditMode).toBeCalled();
 		});
 	});
 

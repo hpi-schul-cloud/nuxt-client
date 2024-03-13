@@ -100,7 +100,7 @@ const mockData = {
 			content: {
 				id: "column-board-id",
 				title: "title",
-				published: false,
+				isVisible: false,
 				createdAt: "2023-05-31T15:34:59.276Z",
 				updatedAt: "2023-05-31T15:34:59.276Z",
 			},
@@ -503,9 +503,11 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("finish-task");
+
 				expect(finishTaskMock).toHaveBeenCalled();
 				expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("finish");
 			});
+
 			it("should call restoreTask action", async () => {
 				const finishTaskMock = jest.fn();
 				const wrapper = getWrapper({
@@ -516,6 +518,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("restore-task");
+
 				expect(finishTaskMock).toHaveBeenCalled();
 				expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("restore");
 			});
@@ -532,6 +535,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				roomModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("finish-task");
+
 				expect(finishTaskMock).toHaveBeenCalled();
 				expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("finish");
 			});
@@ -549,6 +553,23 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				expect(finishTaskMock).toHaveBeenCalled();
 				expect(finishTaskMock.mock.calls[0][0].action).toStrictEqual("restore");
 			});
+		});
+	});
+
+	describe("Publishing and unpublishing a board", () => {
+		it("should call publishBoard action", async () => {
+			const publishCardMock = jest.fn();
+			const wrapper = getWrapper({
+				roomDataObject: mockData,
+				role: "teacher",
+			});
+			const boardCard = wrapper.findComponent({ name: "room-board-card" });
+			roomModule.publishCard = publishCardMock;
+
+			boardCard.vm.$emit("update-visibility", true);
+
+			expect(publishCardMock).toHaveBeenCalled();
+			expect(publishCardMock.mock.calls[0][0].visibility).toStrictEqual(true);
 		});
 	});
 

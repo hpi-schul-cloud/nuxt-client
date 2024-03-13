@@ -5,6 +5,8 @@
 				:boardId="board.id"
 				:title="board.title"
 				:titlePlaceholder="$t('pages.room.boardCard.label.courseBoard')"
+				:isDraft="!board.isVisible"
+				@update:visibility="onUpdateBoardVisibility"
 				@update:title="onUpdateBoardTitle"
 			/>
 			<div class="d-flex flex-row flex-shrink-1">
@@ -84,7 +86,7 @@ import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useTouchDetection } from "@util-device-detection";
-import { useMediaQuery } from "@vueuse/core";
+import { useDebounceFn, useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import {
@@ -118,7 +120,7 @@ export default defineComponent({
 	},
 	setup(props) {
 		const { t } = useI18n();
-		const { showInfo, resetNotifier } = useBoardNotifier();
+		const { resetNotifier, showCustomNotifier } = useBoardNotifier();
 		const { editModeId } = useSharedEditMode();
 		const isEditMode = computed(() => editModeId.value !== undefined);
 		const {
@@ -131,6 +133,7 @@ export default defineComponent({
 			moveColumn,
 			reloadBoard,
 			updateBoardTitle,
+			updateBoardVisibility,
 			updateColumnTitle,
 		} = useBoardState(toRef(props, "boardId").value);
 
@@ -221,6 +224,13 @@ export default defineComponent({
 			await reloadBoard();
 		};
 
+		const onUpdateBoardVisibility = async (newVisibility: boolean) => {
+			if (!hasEditPermission) return;
+
+			await updateBoardVisibility(newVisibility);
+			await setAlert();
+		};
+
 		const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
 			if (hasMovePermission) await moveCard(cardMove);
 		};
@@ -233,10 +243,8 @@ export default defineComponent({
 			if (hasEditPermission) await updateBoardTitle(newTitle);
 		};
 
-		onMounted(() => {
-			if (isTeacher) {
-				showInfo(t("components.board.alert.info.teacher"), false);
-			}
+		onMounted(async () => {
+			await setAlert();
 		});
 
 		const debounceTime = computed(() => {
@@ -246,6 +254,24 @@ export default defineComponent({
 		onUnmounted(() => {
 			resetNotifier();
 		});
+
+		const setAlert = useDebounceFn(() => {
+			if (!isTeacher) return;
+
+			if (!board.value?.isVisible) {
+				showCustomNotifier(
+					t("components.board.alert.info.draft"),
+					"info",
+					10000
+				);
+			} else {
+				showCustomNotifier(
+					t("components.board.alert.info.teacher"),
+					"info",
+					10000
+				);
+			}
+		}, 100);
 
 		return {
 			board,
@@ -267,6 +293,7 @@ export default defineComponent({
 			onMoveColumnRight,
 			onReloadBoard,
 			onUpdateBoardTitle,
+			onUpdateBoardVisibility,
 			onUpdateCardPosition,
 			onUpdateColumnTitle,
 		};
