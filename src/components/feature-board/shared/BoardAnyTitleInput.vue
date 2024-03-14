@@ -5,7 +5,6 @@
 		v-model="modelValue"
 		variant="solo"
 		density="compact"
-		auto-grow
 		flat
 		:placeholder="placeholder"
 		bg-color="transparent"
@@ -13,10 +12,10 @@
 		:readonly="!isEditMode"
 		role="heading"
 		:aria-level="ariaLevel"
-		@keydown.enter="onEnter"
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
+		@keydown.enter="onEnter"
 	/>
 	<VTextarea
 		v-else

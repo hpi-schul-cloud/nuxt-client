@@ -231,6 +231,15 @@ export enum BoardExternalReferenceType {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum BoardParentType {
+    Course = 'course'
+}
+
+/**
+ * 
+ * @export
  * @interface BoardResponse
  */
 export interface BoardResponse {
@@ -258,6 +267,12 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     timestamps: TimestampsResponse;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponse
+     */
+    isVisible: boolean;
 }
 /**
  * 
@@ -1458,6 +1473,44 @@ export interface CourseMetadataResponse {
      * @memberof CourseMetadataResponse
      */
     copyingSince?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateBoardBodyParams
+ */
+export interface CreateBoardBodyParams {
+    /**
+     * The title of the board
+     * @type {string}
+     * @memberof CreateBoardBodyParams
+     */
+    title: string;
+    /**
+     * The id of the parent
+     * @type {string}
+     * @memberof CreateBoardBodyParams
+     */
+    parentId: string;
+    /**
+     * 
+     * @type {BoardParentType}
+     * @memberof CreateBoardBodyParams
+     */
+    parentType: BoardParentType;
+}
+/**
+ * 
+ * @export
+ * @interface CreateBoardResponse
+ */
+export interface CreateBoardResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateBoardResponse
+     */
+    id: string;
 }
 /**
  * 
@@ -2744,6 +2797,15 @@ export enum ImportUserResponseRoleNamesEnum {
     Student = 'student',
     Teacher = 'teacher',
     Admin = 'admin'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum InstanceFeature {
+    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
 }
 
 /**
@@ -5055,8 +5117,7 @@ export enum SchoolFeature {
     LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
     OauthProvisioningEnabled = 'oauthProvisioningEnabled',
     ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
-    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration'
 }
 
 /**
@@ -5121,6 +5182,44 @@ export interface SchoolInfoResponse {
      * @memberof SchoolInfoResponse
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolLogo
+ */
+export interface SchoolLogo {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolLogo
+     */
+    dataUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolLogo
+     */
+    name?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolPermissionsParams
+ */
+export interface SchoolPermissionsParams {
+    /**
+     * 
+     * @type {TeacherPermissionParams}
+     * @memberof SchoolPermissionsParams
+     */
+    teacher?: TeacherPermissionParams;
+    /**
+     * 
+     * @type {StudentPermissionParams}
+     * @memberof SchoolPermissionsParams
+     */
+    student?: StudentPermissionParams;
 }
 /**
  * 
@@ -5227,16 +5326,10 @@ export interface SchoolResponse {
     isExternal: boolean;
     /**
      * 
-     * @type {string}
+     * @type {SchoolLogo}
      * @memberof SchoolResponse
      */
-    logo_dataUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    logo_name?: string;
+    logo?: SchoolLogo;
     /**
      * 
      * @type {FileStorageType}
@@ -5267,6 +5360,12 @@ export interface SchoolResponse {
      * @memberof SchoolResponse
      */
     years: YearsResponse;
+    /**
+     * 
+     * @type {Array<InstanceFeature>}
+     * @memberof SchoolResponse
+     */
+    instanceFeatures: Array<InstanceFeature>;
 }
 /**
  * 
@@ -5288,16 +5387,10 @@ export interface SchoolUpdateBodyParams {
     officialSchoolNumber?: string;
     /**
      * 
-     * @type {string}
+     * @type {SchoolLogo}
      * @memberof SchoolUpdateBodyParams
      */
-    logo_dataUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUpdateBodyParams
-     */
-    logo_name?: string;
+    logo?: SchoolLogo;
     /**
      * 
      * @type {string}
@@ -5312,10 +5405,28 @@ export interface SchoolUpdateBodyParams {
     language?: SchoolUpdateBodyParamsLanguageEnum;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<SchoolFeature>}
      * @memberof SchoolUpdateBodyParams
      */
-    features?: Array<SchoolUpdateBodyParamsFeaturesEnum>;
+    features?: Array<SchoolFeature>;
+    /**
+     * 
+     * @type {SchoolPermissionsParams}
+     * @memberof SchoolUpdateBodyParams
+     */
+    permissions?: SchoolPermissionsParams;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    countyId?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolUpdateBodyParams
+     */
+    enableStudentTeamCreation?: boolean;
 }
 
 /**
@@ -5334,21 +5445,6 @@ export enum SchoolUpdateBodyParamsLanguageEnum {
     En = 'en',
     Es = 'es',
     Uk = 'uk'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SchoolUpdateBodyParamsFeaturesEnum {
-    RocketChat = 'rocketChat',
-    Videoconference = 'videoconference',
-    Nextcloud = 'nextcloud',
-    StudentVisibility = 'studentVisibility',
-    LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
-    OauthProvisioningEnabled = 'oauthProvisioningEnabled',
-    ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
-    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
 }
 
 /**
@@ -5644,6 +5740,19 @@ export interface SingleColumnBoardResponse {
      * @memberof SingleColumnBoardResponse
      */
     isArchived: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface StudentPermissionParams
+ */
+export interface StudentPermissionParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentPermissionParams
+     */
+    LERNSTORE_VIEW?: boolean;
 }
 /**
  * 
@@ -6067,6 +6176,19 @@ export interface TaskStatusResponse {
      * @memberof TaskStatusResponse
      */
     isFinished: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface TeacherPermissionParams
+ */
+export interface TeacherPermissionParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeacherPermissionParams
+     */
+    STUDENT_LIST?: boolean;
 }
 /**
  * 
@@ -6716,6 +6838,19 @@ export enum VideoConferenceStateResponse {
     Finished = 'FINISHED'
 }
 
+/**
+ * 
+ * @export
+ * @interface VisibilityBodyParams
+ */
+export interface VisibilityBodyParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VisibilityBodyParams
+     */
+    isVisible: boolean;
+}
 /**
  * 
  * @export
@@ -7630,6 +7765,46 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCreateBoard: async (createBoardBodyParams: CreateBoardBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createBoardBodyParams' is not null or undefined
+            assertParamExists('boardControllerCreateBoard', 'createBoardBodyParams', createBoardBodyParams)
+            const localVarPath = `/boards`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createBoardBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -7824,6 +7999,50 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
+         * @param {VisibilityBodyParams} visibilityBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerUpdateVisibility: async (boardId: string, visibilityBodyParams: VisibilityBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerUpdateVisibility', 'boardId', boardId)
+            // verify required parameter 'visibilityBodyParams' is not null or undefined
+            assertParamExists('boardControllerUpdateVisibility', 'visibilityBodyParams', visibilityBodyParams)
+            const localVarPath = `/boards/{boardId}/visibility`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(visibilityBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -7834,6 +8053,17 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
 export const BoardApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = BoardApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateBoardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCreateBoard(createBoardBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @summary Create a new column on a board.
@@ -7890,6 +8120,18 @@ export const BoardApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
+         * @param {VisibilityBodyParams} visibilityBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateVisibility(boardId, visibilityBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -7900,6 +8142,16 @@ export const BoardApiFp = function(configuration?: Configuration) {
 export const BoardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = BoardApiFp(configuration)
     return {
+        /**
+         * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): AxiosPromise<CreateBoardResponse> {
+            return localVarFp.boardControllerCreateBoard(createBoardBodyParams, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @summary Create a new column on a board.
@@ -7951,6 +8203,17 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): AxiosPromise<void> {
             return localVarFp.boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
+         * @param {VisibilityBodyParams} visibilityBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.boardControllerUpdateVisibility(boardId, visibilityBodyParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -7960,6 +8223,16 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
  * @interface BoardApi
  */
 export interface BoardApiInterface {
+    /**
+     * 
+     * @summary Create a new board.
+     * @param {CreateBoardBodyParams} createBoardBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): AxiosPromise<CreateBoardResponse>;
+
     /**
      * 
      * @summary Create a new column on a board.
@@ -8011,6 +8284,17 @@ export interface BoardApiInterface {
      */
     boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): AxiosPromise<void>;
 
+    /**
+     * 
+     * @summary Update the visibility of a board.
+     * @param {string} boardId The id of the board.
+     * @param {VisibilityBodyParams} visibilityBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): AxiosPromise<void>;
+
 }
 
 /**
@@ -8020,6 +8304,18 @@ export interface BoardApiInterface {
  * @extends {BaseAPI}
  */
 export class BoardApi extends BaseAPI implements BoardApiInterface {
+    /**
+     * 
+     * @summary Create a new board.
+     * @param {CreateBoardBodyParams} createBoardBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerCreateBoard(createBoardBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Create a new column on a board.
@@ -8079,6 +8375,19 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      */
     public boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any) {
         return BoardApiFp(this.configuration).boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update the visibility of a board.
+     * @param {string} boardId The id of the board.
+     * @param {VisibilityBodyParams} visibilityBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerUpdateVisibility(boardId, visibilityBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -207,6 +207,13 @@ export const useBoardApi = () => {
 		};
 	};
 
+	const updateBoardVisibilityCall = async (
+		boardId: string,
+		isVisible: boolean
+	) => {
+		return boardApi.boardControllerUpdateVisibility(boardId, { isVisible });
+	};
+
 	return {
 		fetchBoardCall,
 		createColumnCall,
@@ -218,6 +225,7 @@ export const useBoardApi = () => {
 		moveColumnCall,
 		moveElementCall,
 		updateBoardTitleCall,
+		updateBoardVisibilityCall,
 		updateCardHeightCall,
 		updateCardTitle,
 		updateColumnTitleCall,

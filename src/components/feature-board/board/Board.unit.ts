@@ -248,15 +248,21 @@ describe("Board", () => {
 				jest.clearAllMocks();
 			});
 
-			it("should call the board notifier when the user is teacher", () => {
+			it("should call the board notifier when the user is teacher", async () => {
+				jest.useFakeTimers();
+
 				setup();
-				expect(mockedBoardNotifierCalls.showInfo).toHaveBeenCalled();
+				jest.runAllTimers();
+
+				expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
 			});
 
 			it("should not call the board notifier when the user is not a teacher", async () => {
 				defaultPermissions.isTeacher = false;
 				setup();
-				expect(mockedBoardNotifierCalls.showInfo).not.toHaveBeenCalled();
+				expect(
+					mockedBoardNotifierCalls.showCustomNotifier
+				).not.toHaveBeenCalled();
 			});
 		});
 
@@ -601,6 +607,20 @@ describe("Board", () => {
 				await nextTick();
 
 				expect(mockedBoardStateCalls.reloadBoard).toHaveBeenCalled();
+			});
+		});
+
+		describe("@onUpdateBoardVisibility", () => {
+			it("should update board visibility", async () => {
+				const { wrapper } = setup();
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				boardHeader.vm.$emit("update:visibility");
+				await nextTick();
+
+				expect(mockedBoardStateCalls.updateBoardVisibility).toHaveBeenCalled();
 			});
 		});
 	});

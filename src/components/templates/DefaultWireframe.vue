@@ -7,7 +7,7 @@
 			/>
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
-				<h1 class="text-h3 pl-2" :data-testid="dataTestId">
+				<h1 class="text-h3 pl-2" :data-testid="dataTestid">
 					{{ headline }}
 				</h1>
 			</slot>
@@ -32,7 +32,7 @@
 									:icon="action.icon"
 									:href="action.href"
 									:to="action.to"
-									@click="action.customEvent"
+									@click="$emit('onFabItemClick', action.customEvent)"
 									>{{ action.label }}</speed-dial-menu-action
 								>
 							</template>
@@ -95,10 +95,13 @@ export default defineComponent({
 			required: false,
 			default: false,
 		},
-		dataTestId: {
+		dataTestid: {
 			type: String as PropType<string | null>,
 			default: null,
 		},
+	},
+	emits: {
+		onFabItemClick: (event: string) => (event ? true : false),
 	},
 	computed: {
 		showBorder(): boolean {
