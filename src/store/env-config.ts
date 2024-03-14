@@ -305,10 +305,10 @@ export default class EnvConfigModule extends VuexModule {
 			filePathsModule.init();
 			this.setStatus("completed");
 		} catch (error: unknown) {
-			const applikationError = createApplicationError(
+			const applicationError = createApplicationError(
 				HttpStatusCode.GatewayTimeout
 			);
-			applicationErrorModule.setError(applikationError);
+			applicationErrorModule.setError(applicationError);
 			console.error(`Configuration could not be loaded from the server`, error);
 
 			this.setStatus("error");
