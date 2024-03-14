@@ -1,4 +1,5 @@
 import { mountBaseComponents } from "@/components/base/components";
+import "@/plugins/polyfills";
 import {
 	accountsModule,
 	applicationErrorModule,
@@ -34,7 +35,6 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
-import "@/plugins/polyfills";
 
 import "@/styles/global.scss";
 // TODO solve without vue-mq dependency
@@ -60,8 +60,8 @@ import {
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	ROOM_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
@@ -111,11 +111,8 @@ app.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
-	// process env should pass over docker image for production
-	// TODO: this can not work must be take from route or runtime config or what ever
-	const isNotProduction = process.env.NODE_ENV !== "production";
-	await envConfigModule.loadConfiguration({ optional: isNotProduction });
-	// else loadDevelopmentConfigs()
+	const isDevelopment = process.env.NODE_ENV === "development";
+	await envConfigModule.loadConfiguration({ optional: isDevelopment });
 
 	const cookies = new Cookies();
 	const jwt = cookies.get("jwt");
