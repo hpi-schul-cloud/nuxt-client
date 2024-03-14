@@ -1,11 +1,12 @@
 export type ClassInfo = {
 	name: string;
 	externalSourceName?: string;
-	teachers: string[];
+	teacherNames: string[];
 	type: ClassRootType;
 	id: string;
 	isUpgradable?: boolean;
 	studentCount: number;
+	synchronizedCourses?: string[];
 };
 
 export enum ClassRootType {

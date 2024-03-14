@@ -1363,6 +1363,7 @@ export default {
 	"pages.rooms.fab.ariaLabel": "Create new course",
 	"pages.rooms.groupName": "Courses",
 	"pages.rooms.headerSection.archived": "Archive",
+	"pages.rooms.headerSection.synchronized": "Synchronized",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
 	"pages.rooms.importCourse.btn.continue": "Continue",

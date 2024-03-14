@@ -5,7 +5,7 @@ export const classInfoResponseFactory = Factory.define<ClassInfoResponse>(
 	({ sequence }) => ({
 		name: `className${sequence}`,
 		externalSourceName: "Source",
-		teachers: ["TestTeacher"],
+		teacherNames: ["TestTeacher"],
 		type: ClassInfoResponseTypeEnum.Class,
 		id: `id-${sequence}`,
 		studentCount: 2,

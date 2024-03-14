@@ -1385,6 +1385,7 @@ export default {
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.groupName": "Курси",
 	"pages.rooms.headerSection.archived": "Архів",
+	"pages.rooms.headerSection.synchronized": "Синхронізовано",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",

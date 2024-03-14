@@ -15,11 +15,12 @@ export class GroupMapper {
 			(classInfoResponse: ClassInfoResponse): ClassInfo => ({
 				name: classInfoResponse.name,
 				externalSourceName: classInfoResponse.externalSourceName,
-				teachers: classInfoResponse.teachers,
+				teacherNames: classInfoResponse.teacherNames,
 				type: ClassRootTypeMapping[classInfoResponse.type],
 				id: classInfoResponse.id,
 				isUpgradable: classInfoResponse.isUpgradable,
 				studentCount: classInfoResponse.studentCount,
+				synchronizedCourses: classInfoResponse.synchronizedCourses,
 			})
 		);
 

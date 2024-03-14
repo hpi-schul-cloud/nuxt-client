@@ -33,6 +33,7 @@ export default class RoomModule extends VuexModule {
 		displayColor: "",
 		elements: [],
 		isArchived: false,
+		isSynchronized: false,
 	};
 	scopePermissions: string[] = [];
 	loading = false;

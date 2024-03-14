@@ -16,9 +16,19 @@
 				>
 					{{ roomData.title }}
 				</div>
-				<v-chip v-if="roomData.isArchived" size="small" class="mt-1">
+				<VChip
+					v-if="roomData.isSynchronized"
+					size="small"
+					class="mt-1 ml-2"
+					color="primary"
+					variant="flat"
+				>
+					<VIcon :icon="mdiSync" />
+					{{ $t("pages.rooms.headerSection.synchronized") }}
+				</VChip>
+				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">
 					{{ $t("pages.rooms.headerSection.archived") }}
-				</v-chip>
+				</VChip>
 				<div class="mx-2">
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
@@ -108,6 +118,7 @@ import {
 	mdiPlus,
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
+	mdiSync,
 	mdiTrayArrowDown,
 	mdiViewListOutline,
 } from "@mdi/js";
@@ -163,6 +174,9 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		mdiSync() {
+			return mdiSync;
+		},
 		getCurrentFabItems() {
 			return this.currentTab?.fabItems;
 		},

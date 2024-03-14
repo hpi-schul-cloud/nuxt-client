@@ -5,6 +5,7 @@ export type RoomsData = {
 	displayColor: string;
 	xPosition: number;
 	yPosition: number;
+	isSynchronized: boolean;
 };
 
 export type DroppedObject = {
