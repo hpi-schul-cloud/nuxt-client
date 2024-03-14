@@ -1,3 +1,4 @@
+import { ConfigResponse } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { CTL_TOOLS_RELOAD_TIME_MS } from "@/utils/ctl-tools-reload-time";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -80,6 +81,10 @@ describe("filePaths module", () => {
 
 		it("init should call the setDocumentBaseDir, setSpecificFiles, and setGlobalFiles mutations", async () => {
 			const filePathsModule = new FilePathsModule({});
+			const mockURL = "http://mock.url/";
+			envConfigModule.setEnvs({
+				DOCUMENT_BASE_DIR: mockURL,
+			} as ConfigResponse);
 			const spyBaseDir = jest.fn();
 			const spySpecificFiles = jest.fn();
 			const spyGlobalFiles = jest.fn();
@@ -101,7 +106,10 @@ describe("filePaths module", () => {
 		it("sets baseDir to DOCUMENT_BASE_DIR env if it is defined", async () => {
 			const filePathsModule = new FilePathsModule({});
 			const mockURL = "http://mock.url/";
-			envConfigModule.setEnvs({ ...envs, DOCUMENT_BASE_DIR: mockURL });
+			envConfigModule.setEnvs({
+				...envs,
+				DOCUMENT_BASE_DIR: mockURL,
+			} as unknown as ConfigResponse);
 			await filePathsModule.init();
 			expect(filePathsModule.getDocumentBaseDir).toBe(
 				`${mockURL}${requiredVars.SC_THEME}/`
