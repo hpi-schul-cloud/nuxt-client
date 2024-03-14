@@ -71,6 +71,7 @@ describe("RoomBoardCard", () => {
 
 	describe("when a board card is rendered", () => {
 		const userRole = "teacher";
+
 		it("should be found in dom", () => {
 			const { wrapper } = setup(
 				{ boardData: mockDraftBoardData },
@@ -118,117 +119,149 @@ describe("RoomBoardCard", () => {
 			});
 		});
 
-		it("should have correct combined card title for draft board", () => {
-			const { wrapper } = setup(
-				{ boardData: mockDraftBoardData },
-				{ userRole }
-			);
-			const boardCardTitle =
-				wrapper.find(".title-board-card").element.textContent;
+		describe("when user is a teacher", () => {
+			it("should show three dot menu", async () => {
+				const { wrapper: wrapperPublishedTeacher } = setup(
+					{ boardData: mockPublishedBoardData },
+					{ userRole }
+				);
+				const threeDotMenu = wrapperPublishedTeacher.find(".three-dot-button");
+				expect(threeDotMenu.exists()).toBe(true);
 
-			expect(boardCardTitle).toContain(
-				"pages.room.boardCard.label.columnBoard - common.words.draft"
-			);
+				const { wrapper: wrapperDraftTeacher } = setup(
+					{ boardData: mockDraftBoardData },
+					{ userRole }
+				);
+				const threeDotMenuDraftStudent =
+					wrapperDraftTeacher.find(".three-dot-button");
+				expect(threeDotMenuDraftStudent.exists()).toBe(true);
+			});
+
+			describe("when board is a draft", () => {
+				it("should have correct combined card title", () => {
+					const { wrapper } = setup(
+						{ boardData: mockDraftBoardData },
+						{ userRole }
+					);
+					const boardCardTitle =
+						wrapper.find(".title-board-card").element.textContent;
+
+					expect(boardCardTitle).toContain(
+						"pages.room.boardCard.label.columnBoard - common.words.draft"
+					);
+				});
+
+				it("should use hidden UI", async () => {
+					const { wrapper: wrapperDraft } = setup(
+						{ boardData: mockDraftBoardData },
+						{ userRole }
+					);
+					const boardDraftCard = wrapperDraft.find(".board-card");
+					expect(boardDraftCard.element.className).toContain("board-hidden");
+
+					const { wrapper: wrapperPublished } = setup(
+						{ boardData: mockPublishedBoardData },
+						{ userRole }
+					);
+					const boardPublishedCard = wrapperPublished.find(".board-card");
+					expect(boardPublishedCard.element.className).not.toContain(
+						"board-hidden"
+					);
+				});
+
+				it("should show publish action button in menu", async () => {
+					const { wrapper: wrapperDraft } = setup(
+						{ boardData: mockDraftBoardData },
+						{ userRole }
+					);
+
+					const cardActionButtons = wrapperDraft.findAllComponents(
+						`[data-testid="content-card-board-menu-publish"]`
+					);
+					expect(cardActionButtons).toHaveLength(1);
+				});
+
+				it("should show publish card action", () => {
+					const { wrapper: wrapperDraft } = setup(
+						{ boardData: mockDraftBoardData },
+						{ userRole }
+					);
+					const boardPublishedCard = wrapperDraft.find(".board-card");
+					const actionButtonsPublished =
+						boardPublishedCard.findAll(".action-button");
+					expect(actionButtonsPublished).toHaveLength(1);
+				});
+			});
+
+			describe("when board is published", () => {
+				it("should show unpublish button in menu", async () => {
+					const { wrapper: wrapperPublished } = setup(
+						{ boardData: mockPublishedBoardData },
+						{ userRole }
+					);
+
+					const threeDotMenuPublished =
+						wrapperPublished.find(".three-dot-button");
+					await threeDotMenuPublished.trigger("click");
+
+					const moreActionButtons = wrapperPublished.findAllComponents(
+						`[data-testid="content-card-board-menu-unpublish"]`
+					);
+					expect(moreActionButtons).toHaveLength(1);
+				});
+
+				it("should not show publish card action", () => {
+					const { wrapper: wrapperPublished } = setup(
+						{ boardData: mockPublishedBoardData },
+						{ userRole }
+					);
+					const boardPublishedCard = wrapperPublished.find(".board-card");
+					const actionButtonsPublished =
+						boardPublishedCard.findAll(".action-button");
+					expect(actionButtonsPublished).toHaveLength(0);
+				});
+			});
 		});
 
-		it("should use hidden UI only for draft board cards", async () => {
-			const { wrapper: wrapperDraft } = setup(
-				{ boardData: mockDraftBoardData },
-				{ userRole }
-			);
-			const boardDraftCard = wrapperDraft.find(".board-card");
-			expect(boardDraftCard.element.className).toContain("board-hidden");
+		describe("when user is a student", () => {
+			it("should not show three dot menu", async () => {
+				const { wrapper: wrapperPublishedStudent } = setup(
+					{ boardData: mockPublishedBoardData },
+					{ userRole: "student" }
+				);
+				const threeDotMenuPublishedStudent =
+					wrapperPublishedStudent.find(".three-dot-button");
+				expect(threeDotMenuPublishedStudent.exists()).toBe(false);
 
-			const { wrapper: wrapperPublished } = setup(
-				{ boardData: mockPublishedBoardData },
-				{ userRole }
-			);
-			const boardPublishedCard = wrapperPublished.find(".board-card");
-			expect(boardPublishedCard.element.className).not.toContain(
-				"board-hidden"
-			);
-		});
+				const { wrapper: wrapperDraftStudent } = setup(
+					{ boardData: mockDraftBoardData },
+					{ userRole: "student" }
+				);
+				const threeDotMenuDraftStudent =
+					wrapperDraftStudent.find(".three-dot-button");
+				expect(threeDotMenuDraftStudent.exists()).toBe(false);
+			});
 
-		it("should show three dot menu and find unpublish button for teachers on published boards", async () => {
-			const { wrapper: wrapperPublished } = setup(
-				{ boardData: mockPublishedBoardData },
-				{ userRole }
-			);
+			it("should not show card actions", async () => {
+				const { wrapper: wrapperDraftStudent } = setup(
+					{ boardData: mockDraftBoardData },
+					{ userRole: "student" }
+				);
+				const boardDraftCardStudent = wrapperDraftStudent.find(".board-card");
+				const actionButtonsDraftStudent =
+					boardDraftCardStudent.findAll(".action-button");
+				expect(actionButtonsDraftStudent).toHaveLength(0);
 
-			const threeDotMenuPublished = wrapperPublished.find(".three-dot-button");
-			await threeDotMenuPublished.trigger("click");
-
-			const moreActionButtons = wrapperPublished.findAllComponents(
-				`[data-testid="content-card-board-menu-unpublish"]`
-			);
-			expect(moreActionButtons).toHaveLength(1);
-		});
-
-		it("should show publish action button for teachers on draft boards", async () => {
-			const { wrapper: wrapperDraft } = setup(
-				{ boardData: mockDraftBoardData },
-				{ userRole }
-			);
-
-			const cardActionButtons = wrapperDraft.findAllComponents(
-				`[data-testid="content-card-board-menu-publish"]`
-			);
-			expect(cardActionButtons).toHaveLength(1);
-		});
-
-		it("should not show three dot menu for students at all or for teachers on draft boards", async () => {
-			const { wrapper: wrapperPublishedStudent } = setup(
-				{ boardData: mockPublishedBoardData },
-				{ userRole: "student" }
-			);
-			const threeDotMenuPublishedStudent =
-				wrapperPublishedStudent.find(".three-dot-button");
-			expect(threeDotMenuPublishedStudent.exists()).toBe(false);
-
-			const { wrapper: wrapperDraftStudent } = setup(
-				{ boardData: mockDraftBoardData },
-				{ userRole: "student" }
-			);
-			const threeDotMenuDraftStudent =
-				wrapperDraftStudent.find(".three-dot-button");
-			expect(threeDotMenuDraftStudent.exists()).toBe(false);
-
-			const { wrapper: wrapperDraft } = setup(
-				{ boardData: mockDraftBoardData },
-				{ userRole }
-			);
-			const threeDotMenuDraft = wrapperDraft.find(".three-dot-button");
-			expect(threeDotMenuDraft.exists()).toBe(false);
-		});
-
-		it("should not show card actions for students at all or for teachers on published boards", async () => {
-			const { wrapper: wrapperDraftStudent } = setup(
-				{ boardData: mockDraftBoardData },
-				{ userRole: "student" }
-			);
-			const boardDraftCardStudent = wrapperDraftStudent.find(".board-card");
-			const actionButtonsDraftStudent =
-				boardDraftCardStudent.findAll(".action-button");
-			expect(actionButtonsDraftStudent).toHaveLength(0);
-
-			const { wrapper: wrapperPublishedStudent } = setup(
-				{ boardData: mockPublishedBoardData },
-				{ userRole: "student" }
-			);
-			const boardPublishedCardStudent =
-				wrapperPublishedStudent.find(".board-card");
-			const actionButtonsPublishedStudent =
-				boardPublishedCardStudent.findAll(".action-button");
-			expect(actionButtonsPublishedStudent).toHaveLength(0);
-
-			const { wrapper: wrapperPublished } = setup(
-				{ boardData: mockPublishedBoardData },
-				{ userRole }
-			);
-			const boardPublishedCard = wrapperPublished.find(".board-card");
-			const actionButtonsPublished =
-				boardPublishedCard.findAll(".action-button");
-			expect(actionButtonsPublished).toHaveLength(0);
+				const { wrapper: wrapperPublishedStudent } = setup(
+					{ boardData: mockPublishedBoardData },
+					{ userRole: "student" }
+				);
+				const boardPublishedCardStudent =
+					wrapperPublishedStudent.find(".board-card");
+				const actionButtonsPublishedStudent =
+					boardPublishedCardStudent.findAll(".action-button");
+				expect(actionButtonsPublishedStudent).toHaveLength(0);
+			});
 		});
 	});
 
