@@ -36,7 +36,7 @@
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
-							@copy-board="copyBoard(item.content.columnBoardId)"
+							@copy-board="copyBoard(item.content.id)"
 							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@delete-board="openItemDeleteDialog(item.content, item.type)"
 						/>

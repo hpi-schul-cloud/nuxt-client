@@ -138,7 +138,6 @@ import {
 import { defineComponent } from "vue";
 import { useCopy } from "@/composables/copy";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
 		const { copy } = useCopy();
