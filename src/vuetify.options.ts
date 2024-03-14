@@ -12,8 +12,8 @@ const defaultTheme: ThemeDefinition = {
 		"secondary-lighten-1": "#8a9199",
 		"secondary-darken-1": "#3a424b",
 		accent: "#e98404",
-		"on-surface": "#04CACA",
-		"on-background": "#01D94B",
+		"on-surface": "#01A4A4",
+		"on-background": "#01A238",
 	},
 };
 
