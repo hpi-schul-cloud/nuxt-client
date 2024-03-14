@@ -97,7 +97,7 @@ describe("env-config module", () => {
 			const envConfigModule = new EnvConfigModule({});
 			axiosInitializer(mockEnvs);
 
-			await envConfigModule.findEnvs();
+			await envConfigModule.loadConfiguration();
 			// expect(requestPath).toStrictEqual(URL);
 		});
 
@@ -105,7 +105,7 @@ describe("env-config module", () => {
 			const envConfigModule = new EnvConfigModule({});
 			axiosInitializer(mockEnvs);
 
-			await envConfigModule.findEnvs();
+			await envConfigModule.loadConfiguration();
 			expect(envConfigModule.getEnv).toStrictEqual(mockEnvs);
 		});
 
@@ -124,7 +124,7 @@ describe("env-config module", () => {
 			expect(setStatusSpy).not.toBeCalled();
 			expect(setEnvsSpy).not.toBeCalled();
 
-			await envConfigModule.findEnvs();
+			await envConfigModule.loadConfiguration();
 
 			expect(businessErrorSpy).toBeCalled();
 			expect(setStatusSpy).toBeCalled();
@@ -141,7 +141,7 @@ describe("env-config module", () => {
 			};
 			axiosInitializer({ ...mockEnvs, ...misingRequiredVars });
 
-			await envConfigModule.findEnvs();
+			await envConfigModule.loadConfiguration();
 			expect(consoleWarnSpy.mock.calls).toHaveLength(
 				Object.keys(misingRequiredVars).length
 			);
@@ -158,7 +158,7 @@ describe("env-config module", () => {
 
 			expect(envConfigModule.loadingErrorCount).toBe(0);
 
-			await envConfigModule.findEnvs();
+			await envConfigModule.loadConfiguration();
 			jest.runOnlyPendingTimers();
 
 			expect(envConfigModule.loadingErrorCount).toBe(1);
@@ -177,7 +177,7 @@ describe("env-config module", () => {
 			envConfigModule.loadingErrorCount = 10;
 			expect(envConfigModule.loadingErrorCount).toBe(10);
 
-			await envConfigModule.findEnvs();
+			await envConfigModule.loadConfiguration();
 			jest.runOnlyPendingTimers();
 
 			expect(envConfigModule.loadingErrorCount).toBe(10);

@@ -111,7 +111,11 @@ app.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
-	await envConfigModule.findEnvs();
+	// process env should pass over docker image for production
+	// TODO: this can not work must be take from route or runtime config or what ever
+	const isNotProduction = process.env.NODE_ENV !== "production";
+	await envConfigModule.loadConfiguration({ optional: isNotProduction });
+	// else loadDevelopmentConfigs()
 
 	const cookies = new Cookies();
 	const jwt = cookies.get("jwt");

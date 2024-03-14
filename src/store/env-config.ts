@@ -3,7 +3,13 @@ import {
 	FileApiInterface,
 	FilesStorageConfigResponse,
 } from "@/fileStorageApi/v3";
-import { contentModule, filePathsModule } from "@/store";
+import {
+	applicationErrorModule,
+	contentModule,
+	filePathsModule,
+} from "@/store";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
 	ConfigResponse,
@@ -12,6 +18,7 @@ import {
 } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
+
 /*
 export const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
@@ -29,7 +36,6 @@ export const configsFromEnvironmentVars = {
 	),
 };
 */
-const retryLimit = 10;
 
 @Module({
 	name: "envConfigModule",
@@ -38,9 +44,10 @@ const retryLimit = 10;
 })
 export default class EnvConfigModule extends VuexModule {
 	private defaultFileSize = 2684354560;
+	private retryConfigLoadingNumber = 9;
 
 	env: ConfigResponse = {
-		NOT_AUTHENTICATED_REDIRECT_URL: "/login",
+		NOT_AUTHENTICATED_REDIRECT_URL: "",
 		SC_THEME: "",
 		JWT_TIMEOUT_SECONDS: -1,
 		JWT_SHOW_TIMEOUT_WARNING_SECONDS: -1,
@@ -147,35 +154,66 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.I18N__DEFAULT_TIMEZONE;
 	}
 
-	public get getFeatureSchoolSanisUserMigrationEnabled() {
+	get getAdminToggleStudentLernstoreViewEnabled(): boolean {
+		return (
+			this.env.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED &&
+			this.env.FEATURE_LERNSTORE_ENABLED
+		);
+	}
+
+	public get getFeatureSchoolSanisUserMigrationEnabled(): boolean {
 		return this.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED;
 	}
 
-	public get getTheme() {
+	public get getTheme(): string {
 		return this.env.SC_THEME;
 	}
 
-	get getMigrationEndGracePeriod() {
+	get getMigrationEndGracePeriod(): number {
 		return this.env.MIGRATION_END_GRACE_PERIOD_MS;
+	}
+
+	get getTeacherStudentVisibilityIsConfigurable(): boolean {
+		return this.env.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE;
+	}
+
+	get getTeacherStudentVisibilityIsEnabledByDefault(): boolean {
+		return this.env.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
+	}
+
+	get getTeacherStudentVisibilityIsVisible(): boolean {
+		return this.env.TEACHER_STUDENT_VISIBILITY__IS_VISIBLE;
+	}
+
+	get getVideoConferenceEnabled(): boolean {
+		return this.env.FEATURE_VIDEOCONFERENCE_ENABLED;
+	}
+
+	get getLoginLinkEnabled(): boolean {
+		return this.env.FEATURE_LOGIN_LINK_ENABLED;
+	}
+
+	get getRocketChatEnabled(): boolean {
+		return this.env.ROCKETCHAT_SERVICE_ENABLED;
 	}
 
 	get getNewSchoolAdminPageAsDefault(): boolean {
 		return this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED;
 	}
 
-	public get getSchoolPolicyEnabled() {
+	public get getSchoolPolicyEnabled(): boolean {
 		return this.env.FEATURE_SCHOOL_POLICY_ENABLED_NEW;
 	}
 
-	public get getSchoolTermsOfUseEnabled() {
+	public get getSchoolTermsOfUseEnabled(): boolean {
 		return this.env.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED;
 	}
 
-	public get getAvailableLanguages() {
+	public get getAvailableLanguages(): string {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
 	}
 
-	public get getGhostBaseUrl() {
+	public get getGhostBaseUrl(): string {
 		return this.env.GHOST_BASE_URL;
 	}
 
@@ -199,6 +237,14 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED;
 	}
 
+	get getLtiToolsTabEnabled(): boolean {
+		return this.env.FEATURE_LTI_TOOLS_TAB_ENABLED ?? true;
+	}
+
+	get getCtlToolsCopyEnabled(): boolean {
+		return this.env.FEATURE_CTL_TOOLS_COPY_ENABLED ?? false;
+	}
+
 	public get getEnv(): ConfigResponse {
 		return this.env;
 	}
@@ -213,7 +259,7 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	public get getShowNewClassViewEnabled(): boolean {
-		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED ?? false;
+		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED;
 	}
 
 	private get serverApi(): DefaultApiInterface {
@@ -229,49 +275,43 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	@Action
-	async findEnvs(): Promise<void> {
+	async loadFileConfig(): Promise<void> {
+		const fileConfig = await this.fileApi.publicConfig();
+		this.setFileEnvs(fileConfig.data);
+	}
+
+	@Action
+	async loadCoreConfig(): Promise<void> {
+		const serverConfig =
+			await this.serverApi.serverConfigControllerPublicConfig();
+		this.setEnvs(serverConfig.data);
+	}
+
+	@Action
+	async loadConfiguration({ optional = false } = {}): Promise<void> {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-
-			const [promiseStatusServerConfig, promiseStatusFileConfig] =
+			if (optional) {
 				await Promise.allSettled([
-					this.serverApi.serverConfigControllerPublicConfig(),
-					this.fileApi.publicConfig(),
+					this.loadFileConfig(),
+					this.loadCoreConfig(),
 				]);
-
-			if (promiseStatusServerConfig.status === "fulfilled") {
-				const serverConfig = promiseStatusServerConfig.value;
-				this.setEnvs(serverConfig.data);
 			} else {
-				throw new Error("Required server config not loaded");
-			}
-
-			if (promiseStatusFileConfig.status === "fulfilled") {
-				const fileConfig = promiseStatusFileConfig.value;
-				this.setFileEnvs(fileConfig.data);
-			} else {
-				// throw for production
-				// log for development
-				// ....different execution for production and local is also bad
-				console.warn("Files storage config not loaded");
+				await Promise.all([this.loadFileConfig(), this.loadCoreConfig()]);
 			}
 
 			contentModule.init();
 			filePathsModule.init();
 			this.setStatus("completed");
-		} catch (error: any) {
-			// this is wrong typed....TypeGuard and so on is missed
-			this.setBusinessError(error);
-			this.setStatus("error");
-			console.error(`Configuration could not be loaded from the server`);
+		} catch (error: unknown) {
+			const applikationError = createApplicationError(
+				HttpStatusCode.GatewayTimeout
+			);
+			applicationErrorModule.setError(applikationError);
+			console.error(`Configuration could not be loaded from the server`, error);
 
-			if (this.loadingErrorCount < retryLimit) {
-				this.increaseLoadingErrorCount();
-				setTimeout(() => {
-					this.findEnvs();
-				}, 500);
-			}
+			this.setStatus("error");
 		}
 	}
 }
