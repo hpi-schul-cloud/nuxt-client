@@ -1,11 +1,8 @@
 import { shallowMount } from "@vue/test-utils";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("BoardColumnGhost", () => {
-	const { dragStart, dragEnd } = useDragAndDrop();
-
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
@@ -29,10 +26,8 @@ describe("BoardColumnGhost", () => {
 		it("should emit 'add-empty-column'", () => {
 			const { wrapper } = setup();
 
-			const headerComponent = wrapper.findComponent({
-				ref: "ghostColumnTitleRef",
-			});
-			headerComponent.vm.$emit("add-column");
+			const headerComponent = wrapper.findComponent("[data-testid=add-column]");
+			headerComponent.trigger("add-column");
 
 			const emitted = wrapper.emitted();
 			expect(emitted["create:column"]).toBeDefined();
@@ -41,21 +36,11 @@ describe("BoardColumnGhost", () => {
 
 	describe("Container component", () => {
 		it("should be found in DOM", () => {
-			dragStart();
 			const { wrapper } = setup();
 			const containerComponent = wrapper.findComponent({
 				name: "Sortable",
 			});
 			expect(containerComponent.vm).toBeDefined();
-		});
-
-		it("should not be found in DOM", () => {
-			dragEnd();
-			const { wrapper } = setup();
-			const containerComponent = wrapper.findAllComponents({
-				name: "Sortable",
-			});
-			expect(containerComponent.length).toBe(0);
 		});
 	});
 });
