@@ -304,7 +304,7 @@ export default {
 <style lang="scss" scoped>
 .top-row-container {
 	display: grid;
-	grid-template-columns: 95% 5%;
+	grid-template-columns: 94% 6%;
 	align-items: center;
 
 	.title-section {

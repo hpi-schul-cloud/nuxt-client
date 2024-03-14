@@ -443,7 +443,7 @@ export default {
 
 .top-row-container {
 	display: grid;
-	grid-template-columns: 95% 5%;
+	grid-template-columns: 94% 6%;
 	align-items: center;
 
 	.tagline {
