@@ -9,7 +9,7 @@ import mocks from "@@/tests/test-utils/mockDataTasks";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
 import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
-import { mount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestingI18n,
@@ -26,10 +26,9 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 	let notifierModuleMock: NotifierModule;
 
 	const mountComponent = (options = {}) => {
-		const wrapper = mount(TasksDashboardStudent, {
+		const wrapper = shallowMount(TasksDashboardStudent, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-
 				provide: {
 					tasksModule: tasksModuleMock,
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
