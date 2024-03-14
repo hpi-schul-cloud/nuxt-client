@@ -84,7 +84,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["copyBoard", "update:title", "update:visibility"]);
+const emit = defineEmits(["copy:board", "update:title", "update:visibility"]);
 
 const { t } = useI18n();
 const boardId = toRef(props, "boardId");
@@ -118,7 +118,7 @@ const onEndEditMode = () => {
 
 const onCopyBoard = () => {
 	if (!hasEditPermission) return;
-	emit("copyBoard", true);
+	emit("copy:board");
 };
 
 const onPublishBoard = () => {

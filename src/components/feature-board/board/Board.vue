@@ -8,7 +8,7 @@
 				:isDraft="!board.isVisible"
 				@update:visibility="onUpdateBoardVisibility"
 				@update:title="onUpdateBoardTitle"
-				@copyBoard="onCopyBoard"
+				@copy:board="onCopyBoard"
 			/>
 			<div class="d-flex flex-row flex-shrink-1">
 				<div>
@@ -62,7 +62,6 @@
 					/>
 				</div>
 			</div>
-
 			<ConfirmationDialog />
 			<AddElementDialog />
 			<LightBox />
@@ -103,7 +102,6 @@ import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { useRouter } from "vue-router";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 
 const props = defineProps({
 	boardId: { type: String, required: true },
