@@ -1,6 +1,5 @@
 import { ConfigResponse } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { CTL_TOOLS_RELOAD_TIME_MS } from "@/utils/ctl-tools-reload-time";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
 import FilePathsModule from "./filePaths";
@@ -36,7 +35,7 @@ const requiredVars = {
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
 	SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
-	CTL_TOOLS_RELOAD_TIMES_MS: CTL_TOOLS_RELOAD_TIME_MS,
+	CTL_TOOLS_RELOAD_TIME_MS: 299000,
 };
 
 const configsFromEnvironmentVars = {

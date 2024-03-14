@@ -2,10 +2,13 @@ import {
 	ContentElementType,
 	ExternalToolElementResponse,
 } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
-import { CTL_TOOLS_RELOAD_TIME_MS } from "@/utils/ctl-tools-reload-time";
+import { Envs } from "@/store/types/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	ContextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,
@@ -116,11 +119,15 @@ describe("ExternalToolElement", () => {
 		useExternalToolElementDisplayStateMock.error = ref(undefined);
 		useSharedLastCreatedElementMock.lastCreatedElementId = ref(undefined);
 
-		const refreshTime = CTL_TOOLS_RELOAD_TIME_MS;
+		const refreshTime = 299000;
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as Envs,
+		});
 
 		const wrapper = shallowMount(ExternalToolElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock },
 			},
 			props: {
 				isFirstElement: false,

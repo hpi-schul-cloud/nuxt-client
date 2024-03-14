@@ -50,9 +50,9 @@ import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-dis
 import RoomModule from "@/store/room";
 import { BusinessError } from "@/store/types/commons";
 import { Course, CourseFeatures } from "@/store/types/room";
-import { CTL_TOOLS_RELOAD_TIME_MS } from "@/utils/ctl-tools-reload-time";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
@@ -87,6 +87,8 @@ export default defineComponent({
 		);
 		const { t } = useI18n();
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
 		const course: Ref<Course | null> = ref(null);
 
 		const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
@@ -109,7 +111,7 @@ export default defineComponent({
 			course.value = await roomModule.fetchCourse(props.roomId);
 		});
 
-		const refreshTimeInMs = CTL_TOOLS_RELOAD_TIME_MS;
+		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
 		const timer = setInterval(async () => {
 			await contextExternalToolsModule.loadExternalToolDisplayData({

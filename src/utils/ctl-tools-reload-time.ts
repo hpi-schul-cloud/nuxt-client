@@ -1,1 +1,0 @@
-export const CTL_TOOLS_RELOAD_TIME_MS = 299000;

@@ -53,10 +53,11 @@
 </template>
 
 <script lang="ts">
+import { useI18n } from "vue-i18n";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
 import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
-import { CTL_TOOLS_RELOAD_TIME_MS } from "@/utils/ctl-tools-reload-time";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	useExternalToolElementDisplayState,
@@ -77,7 +78,6 @@ import {
 	toRef,
 	watch,
 } from "vue";
-import { useI18n } from "vue-i18n";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
@@ -104,6 +104,7 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const { modelValue } = useContentElementState(props, {
 			autoSaveDebounce: 0,
 		});
@@ -237,7 +238,7 @@ export default defineComponent({
 
 		onMounted(loadCardData);
 
-		const refreshTimeInMs = CTL_TOOLS_RELOAD_TIME_MS;
+		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
 		const timer = setInterval(async () => {
 			await loadCardData();
