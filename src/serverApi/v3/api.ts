@@ -774,6 +774,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: boolean;
     /**
      * 
