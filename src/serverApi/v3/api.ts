@@ -567,6 +567,12 @@ export interface ConfigResponse {
     FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: boolean;
     /**
      * 
+     * @type {number}
+     * @memberof ConfigResponse
+     */
+    CTL_TOOLS_RELOAD_TIME_MS: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof ConfigResponse
      */
