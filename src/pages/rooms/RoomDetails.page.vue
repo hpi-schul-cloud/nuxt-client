@@ -4,6 +4,7 @@
 		:full-width="true"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
+		@onFabItemClick="fabItemClickHandler"
 	>
 		<template #header>
 			<div class="d-flex ma-2 mt-3">
@@ -261,7 +262,7 @@ export default defineComponent({
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
 					icon: mdiViewListOutline,
-					customEvent: () => this.onCreateBoard(this.roomData.roomId),
+					customEvent: "board-create",
 					dataTestId: "fab_button_add_board",
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),
 				});
@@ -391,6 +392,11 @@ export default defineComponent({
 		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
+		fabItemClickHandler(event) {
+			if (event === "board-create") {
+				this.onCreateBoard(this.roomData.roomId);
+			}
+		},
 		setActiveTabIfPageCached(event) {
 			if (event.persisted) {
 				if (this.$route.query?.tab) {
