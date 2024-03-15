@@ -377,6 +377,24 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		describe("test Course export", () => {
+			it("should not find export button when feature flag is false", async () => {
+				envConfigModule.setEnvs({
+					FEATURE_IMSCC_COURSE_EXPORT_ENABLED: false,
+				} as Envs);
+				const onDownload = jest.fn();
+				const wrapper = getWrapper();
+				wrapper.vm.onDownload = onDownload;
+
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const moreActionButton = wrapper.findAll(
+					`[data-testid=title-menu-imscc-download]`
+				);
+
+				expect(moreActionButton).not.toContain(
+					`[data-testid=title-menu-imscc-download]`
+				);
+			});
 			it("should call onDownload method when 'Export Course' menu clicked", async () => {
 				envConfigModule.setEnvs({
 					FEATURE_IMSCC_COURSE_EXPORT_ENABLED: true,
