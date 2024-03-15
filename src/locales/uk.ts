@@ -758,6 +758,7 @@ export default {
 	"pages.administration.classes.index.title": "Керувати заняттями",
 	"pages.administration.classes.label.archive": "Архів",
 	"pages.administration.classes.manage": "Керувати класом",
+	"pages.administration.classes.header.sync": "Синхронізовано з",
 	"pages.administration.index.title": "Адміністрування",
 	"pages.administration.ldap.activate.breadcrumb": "Cинхронізація",
 	"pages.administration.ldap.activate.className": "Ім'я",

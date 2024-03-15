@@ -17,14 +17,7 @@
 				>
 					{{ roomData.title }}
 				</div>
-				<VChip
-					v-if="roomData.isSynchronized"
-					size="small"
-					class="mt-1 ml-2"
-					color="primary"
-					variant="flat"
-				>
-					<VIcon :icon="mdiSync" />
+				<VChip v-if="roomData.isSynchronized" size="small" class="mt-1 ml-2">
 					{{ $t("pages.rooms.headerSection.synchronized") }}
 				</VChip>
 				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">

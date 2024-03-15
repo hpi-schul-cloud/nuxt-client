@@ -6,7 +6,12 @@ export type ClassInfo = {
 	id: string;
 	isUpgradable?: boolean;
 	studentCount: number;
-	synchronizedCourses?: string[];
+	synchronizedCourses?: CourseInfo[];
+};
+
+export type CourseInfo = {
+	id: string;
+	name: string;
 };
 
 export enum ClassRootType {

@@ -765,6 +765,7 @@ export default {
 	"pages.administration.classes.index.title": "Administrar clases",
 	"pages.administration.classes.label.archive": "Archivo",
 	"pages.administration.classes.manage": "Administrar clase",
+	"pages.administration.classes.header.sync": "Sincronizado con",
 	"pages.administration.index.title": "Administración",
 	"pages.administration.ldap.activate.breadcrumb": "Sincronización",
 	"pages.administration.ldap.activate.className": "Nombre",

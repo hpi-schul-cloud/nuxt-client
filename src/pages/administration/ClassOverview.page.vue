@@ -33,15 +33,6 @@
 			@update:itemsPerPage="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
-			<template #[`item.synchronizedCourses`]="{ item }">
-				<VAvatar
-					v-if="item.synchronizedCourses && item.synchronizedCourses.length"
-					:icon="mdiSync"
-					color="primary"
-					size="small"
-					:aria-label="$t('Synchronisiert mit einem Kurs')"
-				/>
-			</template>
 			<template #[`item.actions`]="{ item }">
 				<template v-if="showClassAction(item)">
 					<v-btn
@@ -175,13 +166,15 @@ import {
 	SchoolYearQueryType,
 } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
 import SchoolsModule from "@/store/schools";
-import { ClassInfo, ClassRootType } from "@/store/types/class-info";
+import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
@@ -192,7 +185,6 @@ import {
 	mdiAccountGroupOutline,
 	mdiArrowUp,
 	mdiPencilOutline,
-	mdiSync,
 	mdiTrashCanOutline,
 } from "@mdi/js";
 import { useTitle } from "@vueuse/core";
@@ -214,6 +206,7 @@ const props = defineProps({
 const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -319,39 +312,55 @@ const pagination: ComputedRef<Pagination> = computed(
 
 const page: ComputedRef<number> = computed(() => groupModule.getPage);
 
-const headers = [
-	{
-		value: "name",
-		title: t("common.labels.classes"),
-		sortable: true,
-	},
-	{
-		value: "externalSourceName",
-		title: t("common.labels.externalsource"),
-		sortable: true,
-	},
-	{
-		value: "synchronizedCourses",
-		title: t("pages.rooms.headerSection.synchronized"),
-		sortable: true,
-	},
-	{
-		key: "teacherNames",
-		value: (item: ClassInfo) => item.teacherNames.join(", "),
-		title: t("common.labels.teacher"),
-		sortable: true,
-	},
-	{
-		value: "studentCount",
-		title: t("common.labels.students"),
-		sortable: true,
-	},
-	{
-		value: "actions",
-		title: "",
-		sortable: false,
-	},
-];
+const courseSyncEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
+);
+
+const headers = computed(() => {
+	const headerList: unknown[] = [
+		{
+			value: "name",
+			title: t("common.labels.classes"),
+			sortable: true,
+		},
+	];
+	if (courseSyncEnabled.value) {
+		headerList.push({
+			key: "synchronizedCourses",
+			value: (item: ClassInfo) =>
+				item.synchronizedCourses
+					?.map((course: CourseInfo): string => course.name)
+					.join(", "),
+			title: t("pages.administration.classes.header.sync"),
+			sortable: true,
+		});
+	}
+	headerList.push(
+		{
+			value: "externalSourceName",
+			title: t("common.labels.externalsource"),
+			sortable: true,
+		},
+		{
+			key: "teacherNames",
+			value: (item: ClassInfo) => item.teacherNames.join(", "),
+			title: t("common.labels.teacher"),
+			sortable: true,
+		},
+		{
+			value: "studentCount",
+			title: t("common.labels.students"),
+			sortable: true,
+		},
+		{
+			value: "actions",
+			title: "",
+			sortable: false,
+		}
+	);
+
+	return headerList;
+});
 
 const onConfirmClassDeletion = async () => {
 	if (selectedItem.value) {
