@@ -1,6 +1,7 @@
 import {
 	ClassInfoResponse,
 	ClassInfoSearchListResponse,
+	ClassSortBy,
 	GroupApiInterface,
 	SchoolYearQueryType,
 } from "@/serverApi/v3";
@@ -95,7 +96,7 @@ describe("GroupModule", () => {
 					{
 						name: "3a",
 						externalSourceName: "Klasse",
-						teachers: ["Carlie"],
+						teacherNames: ["Carlie"],
 						type: ClassRootType.Class,
 						id: "id",
 						studentCount: 0,
@@ -140,7 +141,7 @@ describe("GroupModule", () => {
 			});
 
 			it("should return the changed state", () => {
-				const sortBy = "externalSource";
+				const sortBy = ClassSortBy.ExternalSourceName;
 
 				module.setSortBy(sortBy);
 
