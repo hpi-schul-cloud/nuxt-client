@@ -1,4 +1,5 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { ConfigResponse } from "@/serverApi/v3";
 import { envConfigModule, finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
@@ -6,7 +7,6 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
-import { Envs } from "@/store/types/env-config";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
@@ -229,7 +229,9 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					userRole: "teacher",
 					courseId: "18",
 				});
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+				envConfigModule.setEnvs({
+					FEATURE_COPY_SERVICE_ENABLED: true,
+				} as ConfigResponse);
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
@@ -256,7 +258,9 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 					userRole: "teacher",
 				});
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+				envConfigModule.setEnvs({
+					FEATURE_COPY_SERVICE_ENABLED: true,
+				} as ConfigResponse);
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
@@ -284,7 +288,9 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false } as Envs);
+			envConfigModule.setEnvs({
+				FEATURE_COPY_SERVICE_ENABLED: false,
+			} as ConfigResponse);
 
 			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");
