@@ -3,6 +3,7 @@ import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import { RoomsData } from "./types/rooms";
 import { AxiosInstance } from "axios";
+import { AlertPayload } from "./types/alert-payload";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
@@ -739,6 +740,20 @@ describe("rooms module", () => {
 				expect(roomsModule.hasCurrentRooms).toStrictEqual(false);
 				roomsModule.setRoomData(itemsToBeSet as any);
 				expect(roomsModule.hasCurrentRooms).toStrictEqual(true);
+			});
+		});
+
+		describe("getAlertData", () => {
+			it("should return alert data", () => {
+				const roomsModule = new RoomsModule({});
+				const alertData: AlertPayload = {
+					status: "success",
+					text: "pages.rooms.uploadCourse.success",
+					autoClose: true,
+				};
+
+				roomsModule.setAlertData(alertData);
+				expect(roomsModule.getAlertData).toStrictEqual(alertData);
 			});
 		});
 	});
