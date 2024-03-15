@@ -379,7 +379,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		describe("test Course export", () => {
 			it("should not find export button when feature flag is false", async () => {
 				envConfigModule.setEnvs({
-					FEATURE_IMSCC_COURSE_EXPORT_ENABLED: false,
+					FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
 				} as Envs);
 				const onDownload = jest.fn();
 				const wrapper = getWrapper();
@@ -397,7 +397,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 			it("should call onDownload method when 'Export Course' menu clicked", async () => {
 				envConfigModule.setEnvs({
-					FEATURE_IMSCC_COURSE_EXPORT_ENABLED: true,
+					FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
 				} as Envs);
 				const onDownload = jest.fn();
 				const wrapper = getWrapper();
