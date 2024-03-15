@@ -27,15 +27,21 @@
 			<v-card-actions>
 				<v-spacer />
 				<div class="button-section">
-					<v-btn data-testid="dialog-cancel-btn" depressed @click="onCancel">
+					<v-btn
+						data-testid="dialog-cancel-btn"
+						variant="outlined"
+						@click="onCancel"
+					>
 						{{ $t("common.labels.close") }}
 					</v-btn>
 				</div>
 				<div class="button-section">
 					<v-btn
+						type="submit"
+						variant="flat"
+						color="primary"
 						v-bind:disabled="importButtonDisabled"
 						v-on:click="onConfirm"
-						color="primary"
 						data-testid="dialog-confirm-btn"
 					>
 						{{ $t("pages.rooms.ccImportCourse.confirm") }}
@@ -133,5 +139,6 @@ async function onConfirm(): Promise<void> {
 
 .button-section > button {
 	margin-left: calc(var(--space-base-vuetify) * 2);
+	margin-right: calc(var(--space-base-vuetify) * 2);
 }
 </style>
