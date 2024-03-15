@@ -69,6 +69,7 @@ const mockEnvs: ConfigResponse = {
 	FEATURE_IMSCC_COURSE_EXPORT_ENABLED: false,
 	FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
 	ROCKETCHAT_SERVICE_ENABLED: false,
+	CTL_TOOLS_RELOAD_TIME_MS: 299000,
 };
 
 describe("ElementTypeSelection", () => {

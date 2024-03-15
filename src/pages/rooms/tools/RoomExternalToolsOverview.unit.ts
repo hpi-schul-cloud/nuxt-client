@@ -1,8 +1,8 @@
+import { ConfigResponse } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import RoomModule from "@/store/room";
-import { Envs } from "@/store/types/env-config";
 import { CourseFeatures } from "@/store/types/room";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
@@ -49,7 +49,7 @@ describe("RoomExternalToolOverview", () => {
 
 		const refreshTime = 299000;
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as Envs,
+			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as ConfigResponse,
 		});
 
 		roomModule.fetchCourse.mockResolvedValue(null);
