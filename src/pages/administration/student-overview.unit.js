@@ -2,6 +2,7 @@ import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
 import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
@@ -42,8 +43,8 @@ const envs = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
-	SC_THEME: process.env.SC_THEME || "default",
-	I18N__AVAILABLE_LANGUAGES: "",
+	SC_THEME: process.env.SC_THEME || SchulcloudTheme.Default,
+	I18N__AVAILABLE_LANGUAGES: [],
 	I18N__DEFAULT_LANGUAGE: "",
 	I18N__DEFAULT_TIMEZONE: "",
 	I18N__FALLBACK_LANGUAGE: "",

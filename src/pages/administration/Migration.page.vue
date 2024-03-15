@@ -469,6 +469,7 @@
 import ImportUsers from "@/components/organisms/administration/ImportUsers";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
@@ -535,11 +536,11 @@ const totalImportUsers = computed(() => {
 });
 
 const isBrb = computed(() => {
-	return envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb";
+	return envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.Brb;
 });
 
 const isNbc = computed(() => {
-	return envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21";
+	return envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21;
 });
 
 const sourceSystemName = computed(() => {

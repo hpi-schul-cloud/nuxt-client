@@ -131,6 +131,7 @@
 </template>
 
 <script setup lang="ts">
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { mdiCheck } from "@mdi/js";
 import { computed } from "vue";
@@ -182,9 +183,9 @@ const studentVisibility = computed(() => {
 
 const studentVisibilityTextKey = computed(() => {
 	switch (theme.value) {
-		case "n21":
+		case SchulcloudTheme.N21:
 			return "pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen";
-		case "brb":
+		case SchulcloudTheme.Brb:
 			return "pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg";
 		default:
 			return "pages.administration.school.index.privacySettings.longText.studentVisibility";

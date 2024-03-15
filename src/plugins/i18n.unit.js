@@ -1,21 +1,22 @@
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { authModule, envConfigModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createI18n } from "./i18n";
 import { unref } from "vue";
+import { createI18n } from "./i18n";
 
 const envs = {
 	FALLBACK_DISABLED: false,
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
-	SC_THEME: process.env.SC_THEME || "default",
+	SC_THEME: process.env.SC_THEME || SchulcloudTheme.Default,
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: null,
 	FEATURE_ES_COLLECTIONS_ENABLED: null,
 	FEATURE_EXTENSIONS_ENABLED: null,
 	FEATURE_TEAMS_ENABLED: null,
-	I18N__AVAILABLE_LANGUAGES: "",
+	I18N__AVAILABLE_LANGUAGES: [],
 	I18N__DEFAULT_LANGUAGE: "",
 	I18N__DEFAULT_TIMEZONE: "",
 	I18N__FALLBACK_LANGUAGE: "",

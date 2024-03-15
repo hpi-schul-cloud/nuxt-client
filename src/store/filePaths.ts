@@ -1,7 +1,8 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { GlobalFiles, SpecificFiles } from "./types/filePaths";
-import { BusinessError } from "./types/commons";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { BusinessError } from "./types/commons";
+import { GlobalFiles, SpecificFiles } from "./types/filePaths";
 
 const specificFiles = {
 	accessibilityStatement:
@@ -106,7 +107,7 @@ export default class FilePathsModule extends VuexModule {
 	init() {
 		try {
 			const theme = envConfigModule.getTheme;
-			if (theme === "thr") {
+			if (theme === SchulcloudTheme.Thr) {
 				specificFiles.termsOfUse = termsOfUseThr;
 				specificFiles.privacy = privacyThr;
 			}

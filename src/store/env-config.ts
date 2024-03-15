@@ -4,6 +4,13 @@ import {
 	FilesStorageConfigResponse,
 } from "@/fileStorageApi/v3";
 import {
+	ConfigResponse,
+	DefaultApiFactory,
+	DefaultApiInterface,
+	Language,
+	SchulcloudTheme,
+} from "@/serverApi/v3";
+import {
 	applicationErrorModule,
 	contentModule,
 	filePathsModule,
@@ -11,11 +18,6 @@ import {
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import {
-	ConfigResponse,
-	DefaultApiFactory,
-	DefaultApiInterface,
-} from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
 
@@ -48,7 +50,7 @@ export default class EnvConfigModule extends VuexModule {
 
 	env: ConfigResponse = {
 		NOT_AUTHENTICATED_REDIRECT_URL: "",
-		SC_THEME: "",
+		SC_THEME: SchulcloudTheme.Default,
 		JWT_TIMEOUT_SECONDS: -1,
 		JWT_SHOW_TIMEOUT_WARNING_SECONDS: -1,
 		FEATURE_LERNSTORE_ENABLED: false,
@@ -58,7 +60,7 @@ export default class EnvConfigModule extends VuexModule {
 		FEATURE_CONSENT_NECESSARY: false,
 		FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
 		GHOST_BASE_URL: "",
-		I18N__AVAILABLE_LANGUAGES: "",
+		I18N__AVAILABLE_LANGUAGES: [],
 		I18N__FALLBACK_LANGUAGE: "",
 		I18N__DEFAULT_LANGUAGE: "",
 		I18N__DEFAULT_TIMEZONE: "",
@@ -166,7 +168,7 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED;
 	}
 
-	public get getTheme(): string {
+	public get getTheme(): SchulcloudTheme {
 		return this.env.SC_THEME;
 	}
 
@@ -210,7 +212,7 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED;
 	}
 
-	public get getAvailableLanguages(): string {
+	public get getAvailableLanguages(): Language[] {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
 	}
 

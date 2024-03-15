@@ -1,3 +1,4 @@
+import { Language } from "@/serverApi/v3";
 import { envConfigModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
@@ -143,7 +144,7 @@ describe("GeneralSettings", () => {
 		schoolsModule.setSchool(school);
 
 		envConfigModule.setEnvs({
-			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+			I18N__AVAILABLE_LANGUAGES: [Language.De, Language.En, Language.Es],
 		});
 	});
 

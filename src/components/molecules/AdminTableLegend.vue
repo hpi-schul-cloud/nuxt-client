@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import { SchulcloudTheme } from "@/serverApi/v3";
+
 export default {
 	props: {
 		icons: {
@@ -61,11 +63,11 @@ export default {
 	computed: {
 		setInstituteTitle() {
 			switch (process.env.SC_THEME) {
-				case "n21":
+				case SchulcloudTheme.N21:
 					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
-				case "thr":
+				case SchulcloudTheme.Thr:
 					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-				case "brb":
+				case SchulcloudTheme.Brb:
 					return "Dataport";
 				default:
 					return "Dataport";

@@ -807,10 +807,10 @@ export interface ConfigResponse {
     ROCKETCHAT_SERVICE_ENABLED: boolean;
     /**
      * 
-     * @type {string}
+     * @type {Array<Language>}
      * @memberof ConfigResponse
      */
-    I18N__AVAILABLE_LANGUAGES: string;
+    I18N__AVAILABLE_LANGUAGES: Array<Language>;
     /**
      * 
      * @type {string}
@@ -855,10 +855,10 @@ export interface ConfigResponse {
     DOCUMENT_BASE_DIR: string;
     /**
      * 
-     * @type {string}
+     * @type {SchulcloudTheme}
      * @memberof ConfigResponse
      */
-    SC_THEME: string;
+    SC_THEME: SchulcloudTheme;
     /**
      * 
      * @type {string}
@@ -2812,6 +2812,18 @@ export enum ImportUserResponseRoleNamesEnum {
  */
 export enum InstanceFeature {
     IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum Language {
+    De = 'de',
+    En = 'en',
+    Es = 'es',
+    Uk = 'uk'
 }
 
 /**
@@ -5405,10 +5417,10 @@ export interface SchoolUpdateBodyParams {
     fileStorageType?: SchoolUpdateBodyParamsFileStorageTypeEnum;
     /**
      * 
-     * @type {string}
+     * @type {Language}
      * @memberof SchoolUpdateBodyParams
      */
-    language?: SchoolUpdateBodyParamsLanguageEnum;
+    language?: Language;
     /**
      * 
      * @type {Array<SchoolFeature>}
@@ -5441,16 +5453,6 @@ export interface SchoolUpdateBodyParams {
     */
 export enum SchoolUpdateBodyParamsFileStorageTypeEnum {
     AwsS3 = 'awsS3'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SchoolUpdateBodyParamsLanguageEnum {
-    De = 'de',
-    En = 'en',
-    Es = 'es',
-    Uk = 'uk'
 }
 
 /**
@@ -5545,6 +5547,18 @@ export interface SchulConneXProvisioningOptionsResponse {
      */
     groupProvisioningOtherEnabled: boolean;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum SchulcloudTheme {
+    Brb = 'brb',
+    Default = 'default',
+    N21 = 'n21',
+    Thr = 'thr'
+}
+
 /**
  * 
  * @export

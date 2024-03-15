@@ -1,4 +1,4 @@
-import { ConfigResponse } from "@/serverApi/v3";
+import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
@@ -34,7 +34,7 @@ const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
-	SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
+	SC_THEME: process.env.SC_THEME || SchulcloudTheme.Default,
 	CTL_TOOLS_RELOAD_TIME_MS: 299000,
 };
 
@@ -49,7 +49,7 @@ const envs = {
 	...configsFromEnvironmentVars,
 	FALLBACK_DISABLED: false,
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-	I18N__AVAILABLE_LANGUAGES: "",
+	I18N__AVAILABLE_LANGUAGES: [],
 	I18N__DEFAULT_LANGUAGE: "",
 	I18N__DEFAULT_TIMEZONE: "",
 	I18N__FALLBACK_LANGUAGE: "",

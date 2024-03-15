@@ -1,4 +1,4 @@
-import { ConfigResponse } from "@/serverApi/v3/api";
+import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3/api";
 import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
 import EnvConfigModule from "./env-config";
@@ -10,12 +10,12 @@ const mockEnvs: ConfigResponse = {
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
 	FEATURE_LERNSTORE_ENABLED: true,
-	SC_THEME: "mockValue",
+	SC_THEME: SchulcloudTheme.Default,
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 	FEATURE_ES_COLLECTIONS_ENABLED: false,
 	FEATURE_EXTENSIONS_ENABLED: true,
 	FEATURE_TEAMS_ENABLED: true,
-	I18N__AVAILABLE_LANGUAGES: "mockValue",
+	I18N__AVAILABLE_LANGUAGES: [],
 	I18N__DEFAULT_LANGUAGE: "mockValue",
 	I18N__DEFAULT_TIMEZONE: "mockValue",
 	I18N__FALLBACK_LANGUAGE: "mockValue",
@@ -60,6 +60,7 @@ const mockEnvs: ConfigResponse = {
 	FEATURE_IMSCC_COURSE_EXPORT_ENABLED: false,
 	FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
 	ROCKETCHAT_SERVICE_ENABLED: false,
+	CTL_TOOLS_RELOAD_TIME_MS: 299000,
 };
 /*
 const mockFileEnvs: FilesStorageConfigResponse = {

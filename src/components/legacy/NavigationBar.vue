@@ -39,6 +39,7 @@
 	</div>
 </template>
 <script>
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { mdiLogin } from "@mdi/js";
 
@@ -71,10 +72,12 @@ export default {
 	},
 	computed: {
 		hasButtons() {
-			return envConfigModule.getEnv.SC_THEME === "default" ? true : false;
+			return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default;
 		},
 		linksToDisplay() {
-			return envConfigModule.getEnv.SC_THEME === "default" ? this.links : [];
+			return envConfigModule.getEnv.SC_THEME === SchulcloudTheme.Default
+				? this.links
+				: [];
 		},
 	},
 	methods: {

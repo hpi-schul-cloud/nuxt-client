@@ -152,27 +152,28 @@
 </template>
 
 <script lang="ts">
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import GeneralSettings from "@/components/organisms/administration/GeneralSettings.vue";
-import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";
-import AuthSystems from "@/components/organisms/administration/AuthSystems.vue";
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection.vue";
+import { mdiAlertCircle, mdiMinus, mdiPlus } from "@/components/icons/material";
+import AuthSystems from "@/components/organisms/administration/AuthSystems.vue";
+import GeneralSettings from "@/components/organisms/administration/GeneralSettings.vue";
+import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";
 import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
-import { useI18n } from "vue-i18n";
-import { School } from "@/store/types/schools";
-import { useTitle } from "@vueuse/core";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { ApplicationError } from "@/store/types/application-error";
-import { buildPageTitle } from "@/utils/pageTitle";
+import { School } from "@/store/types/schools";
 import {
-	injectStrict,
 	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { mdiAlertCircle, mdiPlus, mdiMinus } from "@/components/icons/material";
 
 export default defineComponent({
 	name: "SchoolSettings",
@@ -246,11 +247,11 @@ export default defineComponent({
 			computed(() => envConfigModule.getSchoolTermsOfUseEnabled);
 		const instituteTitle: ComputedRef<string> = computed(() => {
 			switch (envConfigModule.getTheme) {
-				case "n21":
+				case SchulcloudTheme.N21:
 					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
-				case "thr":
+				case SchulcloudTheme.Thr:
 					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-				case "brb":
+				case SchulcloudTheme.Brb:
 					return "Dataport";
 				default:
 					return "Dataport";

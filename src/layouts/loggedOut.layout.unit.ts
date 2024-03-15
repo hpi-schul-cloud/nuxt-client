@@ -1,4 +1,4 @@
-import { ConfigResponse } from "@/serverApi/v3";
+import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import EnvConfigModule from "@/store/env-config";
@@ -27,7 +27,7 @@ describe("loggedOutLayout", () => {
 		envConfigModule.setEnvs({
 			GHOST_BASE_URL: "https://works-like-charm.com",
 			// SC_THEME must be set here because of dependency to NavigationBar
-			SC_THEME: "default",
+			SC_THEME: SchulcloudTheme.Default,
 		} as ConfigResponse);
 
 		const applicationErrorModuleMock = createModuleMocks(

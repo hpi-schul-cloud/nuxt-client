@@ -157,19 +157,17 @@
 </template>
 
 <script lang="ts">
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	PropType,
-	ref,
-	Ref,
-} from "vue";
+	ClassRequestContext,
+	SchoolYearQueryType,
+	SchulcloudTheme,
+} from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
 import GroupModule from "@/store/group";
-import { useI18n } from "vue-i18n";
+import SchoolsModule from "@/store/schools";
 import { ClassInfo, ClassRootType } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
@@ -179,6 +177,7 @@ import {
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
 import {
 	mdiAccountGroupOutline,
@@ -186,13 +185,18 @@ import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import AuthModule from "@/store/auth";
-import SchoolsModule from "@/store/schools";
-import { useRoute, useRouter } from "vue-router";
-import { ClassRequestContext, SchoolYearQueryType } from "@/serverApi/v3";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	onMounted,
+	PropType,
+	ref,
+	Ref,
+} from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 
 type Tab = "current" | "next" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -401,11 +405,11 @@ export default defineComponent({
 
 		const getInstituteTitle: ComputedRef<string> = computed(() => {
 			switch (process.env.SC_THEME) {
-				case "n21":
+				case SchulcloudTheme.N21:
 					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
-				case "thr":
+				case SchulcloudTheme.Thr:
 					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-				case "brb":
+				case SchulcloudTheme.Brb:
 					return "Dataport";
 				default:
 					return "Dataport";
