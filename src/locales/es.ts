@@ -397,6 +397,12 @@ export default {
 	"components.molecules.admintablelegend.help": "Sección de ayuda",
 	"components.molecules.admintablelegend.hint":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
+	"components.molecules.admintablelegend.n21":
+		"Iniciativa estatal n-21: Escuelas de Niedersachsen en Internet e.V.",
+	"components.molecules.admintablelegend.thr":
+		"Instituto de Formación del Profesorado, Desarrollo Curricular y Medios de Comunicación de Turingia",
+	"components.molecules.admintablelegend.brb":
+		"Ministerio de Educación, Juventud y Deporte del Estado de Brandenburg",
 	"components.molecules.ContentCard.report.body":
 		"Informar del contenido con el ID",
 	"components.molecules.ContentCard.report.email":

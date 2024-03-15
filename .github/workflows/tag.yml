@@ -4,7 +4,7 @@ name: Build and push Docker Image on Tag
 on:
   push:
     tags:
-      - '[0-9]*'
+      - "[0-9]*"
 
 jobs:
   build_and_push_nuxt:
@@ -46,7 +46,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           build-args: |
-            SC_THEME=${{ matrix.tenants }}
+            VUE_APP_SC_THEME=${{ matrix.tenants }}
           context: .
           file: ./Dockerfile
           platforms: linux/amd64

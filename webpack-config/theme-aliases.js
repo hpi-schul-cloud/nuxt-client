@@ -20,7 +20,7 @@ const isThemeAvailable = (dirname, themeName) => {
 
 const generateAliases = (dirname) => {
 	const aliases = [];
-	const usedTheme = process.env.SC_THEME;
+	const usedTheme = process.env.VUE_APP_SC_THEME;
 
 	if (usedTheme && isThemeAvailable(dirname, usedTheme)) {
 		const themePath = `./src/themes/${usedTheme}`;

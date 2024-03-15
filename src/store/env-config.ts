@@ -8,7 +8,7 @@ export const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
-	SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
+	VUE_APP_SC_THEME: process.env.VUE_APP_SC_THEME || "default", // currently not loaded from server, but inserted at build time
 };
 
 export const configsFromEnvironmentVars = {
@@ -48,6 +48,7 @@ export default class EnvConfigModule extends VuexModule {
 		FEATURE_CTL_TOOLS_TAB_ENABLED: false,
 		FEATURE_CTL_TOOLS_COPY_ENABLED: false,
 		CTL_TOOLS_RELOAD_TIME_MS: 299000,
+		VUE_APP_SC_THEME: "",
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -120,7 +121,7 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	get getTheme() {
-		return this.env.SC_THEME;
+		return this.env.VUE_APP_SC_THEME;
 	}
 
 	get getVideoConferenceEnabled() {

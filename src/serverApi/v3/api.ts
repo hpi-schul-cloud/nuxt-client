@@ -13,13 +13,13 @@
  */
 
 
+import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from './configuration';
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import { assertParamExists, createRequestFunction, DUMMY_BASE_URL, serializeDataIfNeeded, setBearerAuthToObject, setSearchParams, toPathString } from './common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BaseAPI, BASE_PATH, RequestArgs } from './base';
 
 /**
  *
@@ -852,7 +852,7 @@ export interface ConfigResponse {
      * @type {string}
      * @memberof ConfigResponse
      */
-    SC_THEME: string;
+    VUE_APP_SC_THEME: string;
     /**
      *
      * @type {string}

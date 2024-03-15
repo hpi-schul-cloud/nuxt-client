@@ -60,13 +60,13 @@ export default {
 	},
 	computed: {
 		setInstituteTitle() {
-			switch (process.env.SC_THEME) {
+			switch (process.env.VUE_APP_SC_THEME) {
 				case "n21":
-					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+					return this.$t("components.molecules.admintablelegend.n21");
 				case "thr":
-					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
+					return this.$t("components.molecules.admintablelegend.thr");
 				case "brb":
-					return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
+					return this.$t("components.molecules.admintablelegend.brb");
 				default:
 					return "Dataport";
 			}
