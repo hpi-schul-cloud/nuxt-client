@@ -179,11 +179,13 @@
 
 <script>
 /* eslint-disable max-lines */
-import UserHasRole from "@/components/helpers/UserHasRole";
 import AddContentButton from "@/components/lern-store/AddContentButton";
-import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
+import UserHasRole from "@/components/helpers/UserHasRole";
 import contentMeta from "@/mixins/contentMeta";
+import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
+import BaseLink from "../base/BaseLink";
 import { printDateFromTimestamp } from "@/plugins/datetime";
+import { mdiClose, mdiOpenInNew } from "@mdi/js";
 import {
 	getAuthor,
 	getDescription,
@@ -191,13 +193,11 @@ import {
 	getMetadataAttribute,
 	getProvider,
 	getTags,
-	isMerlinContent,
 	isVideoContent,
+	isMerlinContent,
 } from "@/utils/helpers";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
-import { mdiClose, mdiOpenInNew } from "@mdi/js";
-import BaseLink from "../base/BaseLink";
+import { buildPageTitle } from "@/utils/pageTitle";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -282,7 +282,7 @@ export default {
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
 		isBrandenburg() {
-			return process.env.VUE_APP_SC_THEME === "brb";
+			return process.env.SC_THEME === "brb";
 		},
 		isInline() {
 			return !!this.$route.query.inline;

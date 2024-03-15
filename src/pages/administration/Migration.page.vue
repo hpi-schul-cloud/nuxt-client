@@ -535,11 +535,11 @@ const totalImportUsers = computed(() => {
 });
 
 const isBrb = computed(() => {
-	return envConfigModule.getEnv.VUE_APP_SC_THEME.toLowerCase() === "brb";
+	return envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb";
 });
 
 const isNbc = computed(() => {
-	return envConfigModule.getEnv.VUE_APP_SC_THEME.toLowerCase() === "n21";
+	return envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21";
 });
 
 const sourceSystemName = computed(() => {

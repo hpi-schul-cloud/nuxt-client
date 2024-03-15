@@ -33,7 +33,7 @@ const requiredVars = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
-	VUE_APP_SC_THEME: process.env.VUE_APP_SC_THEME || "default", // currently not loaded from server, but inserted at build time
+	SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
 	CTL_TOOLS_RELOAD_TIME_MS: 299000,
 };
 
@@ -103,7 +103,7 @@ describe("filePaths module", () => {
 			envConfigModule.setEnvs({ ...envs, DOCUMENT_BASE_DIR: mockURL });
 			await filePathsModule.init();
 			expect(filePathsModule.getDocumentBaseDir).toBe(
-				`${mockURL}${requiredVars.VUE_APP_SC_THEME}/`
+				`${mockURL}${requiredVars.SC_THEME}/`
 			);
 		});
 	});

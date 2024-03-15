@@ -71,14 +71,10 @@ export default {
 	},
 	computed: {
 		hasButtons() {
-			return envConfigModule.getEnv.VUE_APP_SC_THEME === "default"
-				? true
-				: false;
+			return envConfigModule.getEnv.SC_THEME === "default" ? true : false;
 		},
 		linksToDisplay() {
-			return envConfigModule.getEnv.VUE_APP_SC_THEME === "default"
-				? this.links
-				: [];
+			return envConfigModule.getEnv.SC_THEME === "default" ? this.links : [];
 		},
 	},
 	methods: {

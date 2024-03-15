@@ -394,12 +394,6 @@ export default {
 	"components.molecules.admintablelegend.help": "Hilfebereich",
 	"components.molecules.admintablelegend.hint":
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {institute_title}.",
-	"components.molecules.admintablelegend.n21":
-		"Landesinitiative n-21: Schulen in Niedersachsen online e.V.",
-	"components.molecules.admintablelegend.thr":
-		"Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien",
-	"components.molecules.admintablelegend.brb":
-		"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg",
 	"components.molecules.ContentCard.report.body":
 		"Melden des Inhaltes mit der ID",
 	"components.molecules.ContentCard.report.email":

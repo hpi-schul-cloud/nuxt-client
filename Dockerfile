@@ -13,8 +13,8 @@ COPY babel.config.js .eslintrc.js LICENSE.md .prettierrc.js tsconfig.json tsconf
 COPY public ./public
 COPY src ./src
 COPY webpack-config ./webpack-config
-ARG VUE_APP_SC_THEME=default
-ENV VUE_APP_SC_THEME ${VUE_APP_SC_THEME}
+ARG SC_THEME=default
+ENV SC_THEME ${SC_THEME}
 RUN NODE_ENV=production npm run build
 
 COPY .git ./

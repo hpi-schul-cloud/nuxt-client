@@ -116,7 +116,7 @@ module.exports = defineConfig({
 		config.plugin("html").tap((args) => {
 			args[0].title = "Deine digitale Lernumgebung";
 			args[0].favicon = `./public/themes/${
-				process.env.VUE_APP_SC_THEME || "default"
+				process.env.SC_THEME || "default"
 			}/favicon.png`;
 			return args;
 		});
