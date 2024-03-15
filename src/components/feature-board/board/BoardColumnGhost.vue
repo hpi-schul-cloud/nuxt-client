@@ -38,13 +38,17 @@ import { useElementHover } from "@vueuse/core";
 import { computed, ref } from "vue";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 import { Sortable } from "sortablejs-vue3";
+import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 
 const ghostColumnRef = ref<HTMLDivElement | undefined>();
 
 const emit = defineEmits(["create:column", "update:card-position"]);
 
 const isColumnHovered = useElementHover(ghostColumnRef);
-const colWidth = computed<number>(() => (isColumnHovered.value ? 340 : 200));
+const { isDragging } = useDragAndDrop();
+const colWidth = computed<number>(() =>
+	isColumnHovered.value && isDragging.value ? 340 : 200
+);
 
 const onAddColumn = () => emit("create:column");
 </script>
