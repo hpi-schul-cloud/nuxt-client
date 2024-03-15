@@ -13,22 +13,14 @@
 			{{ $t("pages.content.index.backToCourse") }}
 		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
-			<iframe
-				src="https://repo.test.mediathek.dev.dbildungsplattform.de/edu-sharing/components/search"
-				style="height: calc(100vh - var(--sidebar-item-height) - 105.58px)"
-				title="edu-sharing-search-environment"
-			/>
+			<EduSharingApp />
 		</div>
 	</section>
 </template>
 
 <script setup lang="ts">
+import EduSharingApp from "@/components/edu-sharing/EduSharingApp.vue";
 import themeConfig from "@/theme.config";
-import {
-	CONTENT_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiChevronLeft } from "@mdi/js";
 import { useDebounceFn, watchDebounced } from "@vueuse/core";
@@ -39,13 +31,10 @@ import { useRoute, useRouter } from "vue-router";
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
-const contentModule = injectStrict(CONTENT_MODULE_KEY);
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const searchQuery = ref("");
 const activateTransition = ref(false);
 const searchQueryResult = ref("");
-const queryOptions = ref({ $limit: 12, $skip: 0 });
 
 onMounted(() => {
 	const pageTitle = isInline.value
@@ -63,75 +52,6 @@ onMounted(() => {
 });
 
 const isInline = computed(() => !!route.query.inline);
-const resources = computed(() => contentModule.getResourcesGetter);
-const loading = computed(() => contentModule.getLoading);
-const reachedTotal = computed(
-	() =>
-		resources.value.total !== 0 &&
-		resources.value.data.length >= resources.value.total
-);
-
-const onInput = async () => {
-	await searchContent();
-	activateTransition.value = true;
-};
-
-const searchContent = useDebounceFn(async () => {
-	try {
-		await contentModule.getResources(searchQuery.value);
-	} catch (error) {
-		notifierModule.show({
-			text: t("pages.content.notification.lernstoreNotAvailable"),
-			status: "error",
-			timeout: 10000,
-		});
-	}
-}, 500);
-
-const onLoad = async ({
-	done,
-}: {
-	side: "start" | "end" | "both";
-	done: (status: "ok" | "empty" | "loading" | "error") => void;
-}) => {
-	if (reachedTotal.value) {
-		done("empty");
-		return;
-	}
-
-	if (!resources.value.data.length && searchQuery.value) {
-		await searchContent();
-
-		if (!resources.value.data.length) {
-			done("empty");
-			return;
-		}
-	} else {
-		await addContent();
-	}
-
-	done("ok");
-};
-
-const addContent = async () => {
-	queryOptions.value.$skip += queryOptions.value.$limit;
-
-	const query = {
-		$limit: queryOptions.value.$limit,
-		$skip: queryOptions.value.$skip,
-		searchQuery: searchQuery.value,
-	};
-
-	try {
-		await contentModule.addResources(query);
-	} catch (error) {
-		notifierModule.show({
-			text: t("pages.content.notification.lernstoreNotAvailable"),
-			status: "error",
-			timeout: 10000,
-		});
-	}
-};
 
 const updateURLQueryDebounced = useDebounceFn(() => {
 	searchQueryResult.value = searchQuery.value;

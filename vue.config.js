@@ -107,6 +107,9 @@ module.exports = defineConfig({
 			.use("vue-loader")
 			.tap((options) => {
 				options.prettify = false;
+				options.compilerOptions = {
+					isCustomElement: (tag) => tag === "edu-sharing-app",
+				};
 				return options;
 			});
 		config.plugin("fork-ts-checker").tap((args) => {

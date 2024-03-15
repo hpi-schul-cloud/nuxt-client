@@ -1,0 +1,13 @@
+{
+  "supportedLanguages": ["de", "en"],
+  "extension": "",
+  "registerUrl": "",
+  "loginUrl": "",
+  "recoverPasswordUrl": "",
+  "editProfileUrl": "",
+  "searchColumns": [],
+  "hideMainMenu": [],
+  "branding": true,
+  "editProfile": true,
+  "nodeReport": true
+}
