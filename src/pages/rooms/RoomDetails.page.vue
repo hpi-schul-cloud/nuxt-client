@@ -347,7 +347,7 @@ export default defineComponent({
 					icon: this.icons.mdiExport,
 					action: () => this.onDownload(),
 					name: this.$t("common.actions.export"),
-					dataTestId: "title-menu-imscc-download",
+					dataTestId: "title-menu-common-cartridge-download",
 				});
 			}
 

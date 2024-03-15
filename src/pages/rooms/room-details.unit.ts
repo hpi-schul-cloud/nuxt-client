@@ -388,11 +388,11 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 				const moreActionButton = wrapper.findAll(
-					`[data-testid=title-menu-imscc-download]`
+					`[data-testid=title-menu-common-cartridge-download]`
 				);
 
 				expect(moreActionButton).not.toContain(
-					`[data-testid=title-menu-imscc-download]`
+					`[data-testid=title-menu-common-cartridge-download]`
 				);
 			});
 			it("should call onDownload method when 'Export Course' menu clicked", async () => {
@@ -406,7 +406,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid=title-menu-imscc-download]`
+					`[data-testid=title-menu-common-cartridge-download]`
 				);
 				await moreActionButton.trigger("click");
 

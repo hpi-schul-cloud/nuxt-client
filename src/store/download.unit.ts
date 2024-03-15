@@ -13,7 +13,7 @@ describe("DownloadModule", () => {
 				const roomModule = new RoomModule({});
 
 				downloadModule.setVersion("1.1.0");
-				roomModule.downloadImsccCourse("1.1.0");
+				roomModule.downloadCommonCartridgeCourse("1.1.0");
 
 				expect(downloadModule.getVersion).toBe("1.1.0");
 			});

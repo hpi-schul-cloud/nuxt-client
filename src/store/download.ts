@@ -13,7 +13,7 @@ export default class DownloadModule extends VuexModule {
 	@Action
 	async startDownload(version: string): Promise<void> {
 		if (version === "1.1.0" || version === "1.3.0") {
-			await roomModule.downloadImsccCourse(version);
+			await roomModule.downloadCommonCartridgeCourse(version);
 		}
 	}
 
