@@ -336,7 +336,9 @@ export default defineComponent({
 				});
 			}
 
-			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+			if (
+				envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED
+			) {
 				items.push({
 					icon: this.icons.mdiTrayArrowDown,
 					action: async () => await roomModule.downloadImsccCourse("1.1.0"),
@@ -345,7 +347,9 @@ export default defineComponent({
 				});
 			}
 
-			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+			if (
+				envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED
+			) {
 				items.push({
 					icon: this.icons.mdiTrayArrowDown,
 					action: async () => await roomModule.downloadImsccCourse("1.3.0"),
