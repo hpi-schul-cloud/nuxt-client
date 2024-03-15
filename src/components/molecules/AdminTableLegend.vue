@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { envConfigModule } from "@/store";
 export default {
 	props: {
 		icons: {
@@ -60,7 +61,7 @@ export default {
 	},
 	computed: {
 		setInstituteTitle() {
-			switch (process.env.SC_THEME) {
+			switch (envConfigModule.getTheme) {
 				case "n21":
 					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
 				case "thr":
