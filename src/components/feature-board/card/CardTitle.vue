@@ -14,6 +14,7 @@
 			:isFocused="isFocused"
 			@update:value="onUpdateValue"
 			@enter="onEnter"
+			data-testid="card-title"
 		/>
 	</VCardTitle>
 </template>

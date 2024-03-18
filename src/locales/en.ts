@@ -278,6 +278,8 @@ export default {
 	"components.board.action.moveUp": "Move up",
 	"components.board.alert.info.teacher":
 		"This board is visible to all course participants.",
+	"components.board.alert.info.draft":
+		"This board is no longer visible to course participants.",
 	"components.board.column.defaultTitle": "New column",
 	"components.board.column.ghost.placeholder": "Add column",
 	"components.board.menu.board": "Board settings",
@@ -298,10 +300,10 @@ export default {
 		"{type} could not be loaded.",
 	"components.board.notifications.errors.notUpdated":
 		"Your changes could not be saved.",
-	"components.board": "Board",
-	"components.boardCard": "Card",
-	"components.boardColumn": "Column",
-	"components.boardElement": "Element",
+	"components.board": "board",
+	"components.boardCard": "card",
+	"components.boardColumn": "column",
+	"components.boardElement": "element",
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.drawingElement": "Whiteboard",
@@ -1318,6 +1320,8 @@ export default {
 	"pages.news.title": "News",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
+	"pages.room.boardCard.menu.ariaLabel": "Board menu",
+	"pages.room.cards.aria": "{itemType}, link, {itemName}, press enter to open",
 	"pages.room.cards.label.revert": "Revert to draft",
 	"pages.room.copy.course.message.copied": "Course was successfully copied.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1327,15 +1331,11 @@ export default {
 	"pages.room.itemDelete.text":
 		'Are you sure, you want to delete item "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Delete item",
-	"pages.room.lessonCard.aria":
-		"{itemType}, link, {itemName}, press enter to open",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.label.shareLesson": "Share topic copy",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
 	"pages.room.student.emptyState":
 		"Learning content such as topics or tasks appear here.",
-	"pages.room.taskCard.aria":
-		"{itemType}, link, {itemName}, press enter to open",
 	"pages.room.taskCard.label.done": "Finish",
 	"pages.room.taskCard.label.due": "Due",
 	"pages.room.taskCard.label.edit": "Edit",
@@ -1358,8 +1358,10 @@ export default {
 		"Currently, there are no courses here.",
 	"pages.rooms.fab.add.course": "New course",
 	"pages.rooms.fab.add.lesson": "New topic",
+	"pages.rooms.fab.add.board": "New column board",
 	"pages.rooms.fab.add.task": "New task",
 	"pages.rooms.fab.ariaLabel": "Create new course",
+	"pages.rooms.fab.import.course": "Import course",
 	"pages.rooms.groupName": "Courses",
 	"pages.rooms.headerSection.archived": "Archive",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
@@ -1380,6 +1382,14 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Course name",
 	"pages.rooms.importCourse.step_3":
 		"The imported course can be renamed in the next step.",
+	"pages.rooms.ccImportCourse.title": "Import course",
+	"pages.rooms.ccImportCourse.confirm": "Import",
+	"pages.rooms.ccImportCourse.fileInputLabel": "Select file",
+	"pages.rooms.ccImportCourse.loading": "Import is running...",
+	"pages.rooms.ccImportCourse.success":
+		"Course {name} was successfully imported.",
+	"pages.rooms.ccImportCourse.error":
+		"An error occurred while importing the course.",
 	"pages.rooms.index.courses.active": "Current courses",
 	"pages.rooms.index.courses.all": "All courses",
 	"pages.rooms.index.courses.arrangeCourses": "Arrange courses",
@@ -1499,7 +1509,7 @@ export default {
 	"tldraw.error.ws.4401": "You do not have permission to this whiteboard",
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"tldraw.error.ws.4500": "An error occured within tldraw websocket connection",
-	"ui-confirmation-dialog.ask-delete": "Delete {type} {title}?",
+	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",

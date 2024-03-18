@@ -4,17 +4,22 @@
 		:full-width="true"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
+		@onFabItemClick="fabItemClickHandler"
 	>
 		<template #header>
 			<div class="d-flex ma-2 mt-3">
 				<div
 					class="text-h3 pb-2 course-title"
+					:class="{ 'pr-5': roomData.isArchived }"
 					data-testid="courses-course-title"
 					role="heading"
 					aria-level="1"
 				>
 					{{ roomData.title }}
 				</div>
+				<v-chip v-if="roomData.isArchived" size="small" class="mt-1">
+					{{ $t("pages.rooms.headerSection.archived") }}
+				</v-chip>
 				<div class="mx-2">
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
@@ -22,9 +27,6 @@
 						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
-				<v-chip v-if="roomData.isArchived" label size="small" class="mt-1">
-					{{ $t("pages.rooms.headerSection.archived") }}
-				</v-chip>
 			</div>
 			<div class="mb-5 header-div">
 				<div class="btn">
@@ -90,11 +92,13 @@ import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
+	BoardParentType,
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
@@ -109,9 +113,8 @@ import {
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
+import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 
 export default defineComponent({
 	setup() {
@@ -255,6 +258,15 @@ export default defineComponent({
 					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
 				});
 			}
+			if (authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())) {
+				actions.push({
+					label: this.$t("pages.rooms.fab.add.board"),
+					icon: mdiViewListOutline,
+					customEvent: "board-create",
+					dataTestId: "fab_button_add_board",
+					ariaLabel: this.$t("pages.rooms.fab.add.board"),
+				});
+			}
 
 			if (actions.length === 0) {
 				return null;
@@ -320,7 +332,9 @@ export default defineComponent({
 				});
 			}
 
-			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+			if (
+				envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED
+			) {
 				items.push({
 					icon: this.icons.mdiTrayArrowDown,
 					action: async () => await roomModule.downloadImsccCourse("1.1.0"),
@@ -329,7 +343,9 @@ export default defineComponent({
 				});
 			}
 
-			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+			if (
+				envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED
+			) {
 				items.push({
 					icon: this.icons.mdiTrayArrowDown,
 					action: async () => await roomModule.downloadImsccCourse("1.3.0"),
@@ -364,7 +380,7 @@ export default defineComponent({
 		await roomModule.fetchContent(this.courseId);
 		await roomModule.fetchScopePermission({
 			courseId: this.courseId,
-			userId: authModule.getUser.id,
+			userId: authModule.getUser?.id,
 		});
 
 		document.title = buildPageTitle(this.roomData.title);
@@ -376,6 +392,11 @@ export default defineComponent({
 		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
+		fabItemClickHandler(event) {
+			if (event === "board-create") {
+				this.onCreateBoard(this.roomData.roomId);
+			}
+		},
 		setActiveTabIfPageCached(event) {
 			if (event.persisted) {
 				if (this.$route.query?.tab) {
@@ -432,6 +453,16 @@ export default defineComponent({
 		},
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
+		},
+
+		async onCreateBoard(courseId) {
+			const params = {
+				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
+				parentType: BoardParentType.Course,
+				parentId: courseId,
+			};
+			const board = await roomModule.createBoard(params);
+			await this.$router.push(`/rooms/${board.id}/board`);
 		},
 	},
 	watch: {

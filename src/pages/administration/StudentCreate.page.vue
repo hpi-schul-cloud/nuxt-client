@@ -90,7 +90,7 @@ export default {
 				email: userData.email,
 				birthday: this.date,
 				roles: ["student"],
-				schoolId: this.$user.schoolId,
+				schoolId: this.$me.school.id,
 				sendRegistration: this.sendRegistration,
 			});
 			if (!this.businessError) {

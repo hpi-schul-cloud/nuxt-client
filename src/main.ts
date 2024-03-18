@@ -4,6 +4,7 @@ import {
 	applicationErrorModule,
 	authModule,
 	autoLogoutModule,
+	commonCartridgeImportModule,
 	contentModule,
 	contextExternalToolsModule,
 	copyModule,
@@ -52,14 +53,17 @@ import { initializeAxios } from "./utils/api";
 import {
 	APPLICATION_ERROR_KEY,
 	AUTH_MODULE_KEY,
+	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
+	LOADING_STATE_MODULE_KEY,
 	NEWS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	ROOM_MODULE_KEY,
+	ROOMS_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
@@ -93,8 +97,8 @@ app.use(Vue3Mq, {
 
 app.mixin({
 	computed: {
-		$user() {
-			return authModule.getUser;
+		$me() {
+			return authModule.getMe;
 		},
 	},
 });
@@ -171,7 +175,12 @@ app.use(VueDOMPurifyHTML, {
 		userLoginMigrationModule
 	);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
-
+	app.provide(LOADING_STATE_MODULE_KEY.valueOf(), loadingStateModule);
+	app.provide(ROOMS_MODULE_KEY.valueOf(), roomsModule);
+	app.provide(
+		COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf(),
+		commonCartridgeImportModule
+	);
 	app.provide(THEME_KEY.valueOf(), themeConfig);
 
 	app.mount("#app");

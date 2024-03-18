@@ -281,6 +281,8 @@ export default {
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.alert.info.teacher":
 		"Dieses Board ist sichtbar für alle Kursteilnehmenden.",
+	"components.board.alert.info.draft":
+		"Dieses Board ist nicht mehr für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neue Spalte",
 	"components.board.column.ghost.placeholder": "Spalte hinzufügen",
 	"components.board.menu.board": "Board-Einstellungen",
@@ -1342,6 +1344,9 @@ export default {
 	"pages.news.title": "Neuigkeiten",
 	"pages.room.boardCard.label.columnBoard": "Spalten-Board",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Board",
+	"pages.room.boardCard.menu.ariaLabel": "Board-Menü",
+	"pages.room.cards.aria":
+		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.copy.course.message.copied":
 		"Der Kurs wurde erfolgreich kopiert.",
@@ -1354,15 +1359,11 @@ export default {
 	"pages.room.itemDelete.text":
 		'Bist du dir sicher, dass du das Element "{itemTitle}" löschen möchtest?',
 	"pages.room.itemDelete.title": "Element löschen",
-	"pages.room.lessonCard.aria":
-		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.label.shareLesson": "Themenkopie teilen",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
 	"pages.room.student.emptyState":
 		"Hier erscheinen Lerninhalte wie Themen oder Aufgaben.",
-	"pages.room.taskCard.aria":
-		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
 	"pages.room.taskCard.label.done": "Abschließen",
 	"pages.room.taskCard.label.due": "Abgabe",
 	"pages.room.taskCard.label.edit": "Bearbeiten",
@@ -1385,8 +1386,10 @@ export default {
 		"Aktuell gibt es hier noch keine Kurse.",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.lesson": "Neues Thema",
+	"pages.rooms.fab.add.board": "Neues Spalten-Board",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
+	"pages.rooms.fab.import.course": "Kurs importieren",
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.headerSection.archived": "Archiv",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
@@ -1407,6 +1410,14 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Kursname",
 	"pages.rooms.importCourse.step_3":
 		"Der importierte Kurs kann im nächsten Schritt umbenannt werden.",
+	"pages.rooms.ccImportCourse.title": "Kurs importieren",
+	"pages.rooms.ccImportCourse.confirm": "Importieren",
+	"pages.rooms.ccImportCourse.fileInputLabel": "Datei auswählen",
+	"pages.rooms.ccImportCourse.loading": "Import läuft...",
+	"pages.rooms.ccImportCourse.success":
+		"Kurs {name} wurde erfolgreich importiert.",
+	"pages.rooms.ccImportCourse.error":
+		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.index.courses.active": "Aktuelle Kurse",
 	"pages.rooms.index.courses.all": "Alle Kurse",
 	"pages.rooms.index.courses.arrangeCourses": "Kurse umordnen",
@@ -1529,7 +1540,7 @@ export default {
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
 	"tldraw.error.ws.4500":
 		"Bei der Tldraw-Websocket-Verbindung ist ein Fehler aufgetreten",
-	"ui-confirmation-dialog.ask-delete": "{type} {title} wirklich löschen?",
+	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

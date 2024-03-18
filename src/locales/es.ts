@@ -284,6 +284,8 @@ export default {
 	"components.board.action.moveUp": "Levantar",
 	"components.board.alert.info.teacher":
 		"Este tablero es visible para todos los participantes en el curso.",
+	"components.board.alert.info.draft":
+		"Este tablero ya no es visible para los participantes en el curso.",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.placeholder": "Añadir columna",
 	"components.board.menu.board": "Configuración del tablero",
@@ -1357,6 +1359,9 @@ export default {
 	"pages.news.title": "Noticias",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
+	"pages.room.boardCard.menu.ariaLabel": "Menú del tablero",
+	"pages.room.cards.aria":
+		"{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.cards.label.revert": "Volver al borrador",
 	"pages.room.copy.course.message.copied":
 		"El curso se ha copiado correctamente.",
@@ -1368,15 +1373,11 @@ export default {
 	"pages.room.itemDelete.text":
 		'¿Estás seguro de que deseas eliminar el elemento "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Eliminar elemento",
-	"pages.room.lessonCard.aria":
-		"{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.label.shareLesson": "Compartir copia del tema",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
 	"pages.room.student.emptyState":
 		"Aquí aparecen contenidos de aprendizaje como temas o tareas.",
-	"pages.room.taskCard.aria":
-		"{itemType}, enlace, {itemName}, presione Intro para abrir",
 	"pages.room.taskCard.label.done": "Terminar",
 	"pages.room.taskCard.label.due": "Entrega",
 	"pages.room.taskCard.label.edit": "Editar",
@@ -1398,8 +1399,10 @@ export default {
 		"Actualmente no hay cursos aquí.",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.lesson": "Nuevo tema",
+	"pages.rooms.fab.add.board": "Nuevo tablero de columna",
 	"pages.rooms.fab.add.task": "Nuevo tarea",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
+	"pages.rooms.fab.import.course": "Importar curso",
 	"pages.rooms.groupName": "Cursos",
 	"pages.rooms.headerSection.archived": "Archivo",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
@@ -1420,6 +1423,14 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Nombre del curso",
 	"pages.rooms.importCourse.step_3":
 		"El curso importado se puede renombrar en el siguiente paso.",
+	"pages.rooms.ccImportCourse.title": "Importar curso",
+	"pages.rooms.ccImportCourse.confirm": "Importar",
+	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
+	"pages.rooms.ccImportCourse.loading": "Importación en curso...",
+	"pages.rooms.ccImportCourse.success":
+		"El curso {name} se ha importado correctamente.",
+	"pages.rooms.ccImportCourse.error":
+		"Se ha producido un error al importar el curso.",
 	"pages.rooms.index.courses.active": "Cursos actuales",
 	"pages.rooms.index.courses.all": "Todos los cursos",
 	"pages.rooms.index.courses.arrangeCourses": "Organizar cursos",
@@ -1544,7 +1555,7 @@ export default {
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"tldraw.error.ws.4500":
 		"Se ha producido un error en la conexión tldraw websocket",
-	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type} {title}?",
+	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",

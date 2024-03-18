@@ -1,23 +1,24 @@
-import { mount } from "@vue/test-utils";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import { authModule, envConfigModule, filePathsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
+import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import StatusAlertsModule from "@/store/status-alerts";
-import setupStores from "@@/tests/test-utils/setupStores";
-import legacyLoggedIn from "./legacyLoggedIn.vue";
 import { Envs } from "@/store/types/env-config";
+import { NOTIFIER_MODULE_KEY, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import { meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { useRoute } from "vue-router";
-import { NOTIFIER_MODULE_KEY, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount } from "@vue/test-utils";
 import { reactive } from "vue";
-import NotifierModule from "@/store/notifier";
+import { useRoute } from "vue-router";
+import legacyLoggedIn from "./legacyLoggedIn.vue";
 
 const $route = {
 	query: {
@@ -34,34 +35,8 @@ setupStores({
 	schoolsModule: SchoolsModule,
 });
 
-authModule.setUser({
-	permissions: ["ADMIN_VIEW", "LERNSTORE_VIEW"],
-	roles: [{ name: "administrator" }],
-	_id: "asdf",
-	id: "asdf",
-	firstName: "Arthur",
-	lastName: "Dent",
-	email: "arthur.dent@hitchhiker.org",
-	updatedAt: "",
-	birthday: "",
-	createdAt: "",
-	preferences: {},
-	schoolId: "",
-	emailSearchValues: [],
-	firstNameSearchValues: [],
-	lastNameSearchValues: [],
-	consent: {},
-	forcePasswordChange: false,
-	language: "",
-	fullName: "",
-	avatarInitials: "",
-	avatarBackgroundColor: "",
-	age: 0,
-	displayName: "",
-	accountId: "",
-	schoolName: "",
-	externallyManaged: false,
-});
+const mockMe = meResponseFactory.build({ permissions: ["ADMIN_VIEW"] });
+authModule.setMe(mockMe);
 authModule.setAccessToken("asdf");
 
 filePathsModule.setSpecificFiles("https://dbildungscloud.de");
