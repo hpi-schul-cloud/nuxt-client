@@ -1535,13 +1535,13 @@ export default {
 		"Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї.",
 	"pages.videoConference.info.notStarted": "Відеоконференція ще не почалася.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
-	"tldraw.error.403": "Tldraw вимкнено",
-	"tldraw.error.500": "Виникла помилка під час налаштування tldraw",
+	"tldraw.error.403": "Дошку вимкнено",
+	"tldraw.error.500": "Виникла помилка під час налаштування дошки",
 	"tldraw.error.ws.4400": "Назва кімнати відсутня в параметрах URL-адреси",
 	"tldraw.error.ws.4401": "Ви не маєте права дозволу до цієї дошки",
 	"tldraw.error.ws.4404": "Дошки з такою назвою не знайдено",
 	"tldraw.error.ws.4500":
-		"Виникла помилка під час з'єднання з веб-сокетом tldraw",
+		"Виникла помилка під час з'єднання з веб-сокетом дошки",
 	"ui-confirmation-dialog.ask-delete":
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
 	"util-validators-invalid-url": "Esta URL no es válida.",
