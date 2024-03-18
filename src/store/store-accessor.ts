@@ -35,6 +35,7 @@ import VideoConferenceModule from "@/store/video-conference";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
+import CommonCartridgeExportModule from "./common-cartridge-export";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -66,6 +67,7 @@ export let systemsModule: SystemsModule;
 export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
 export let videoConferenceModule: VideoConferenceModule;
+export let commonCartridgeExportModule: CommonCartridgeExportModule;
 export let commonCartridgeImportModule: CommonCartridgeImportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
@@ -97,6 +99,7 @@ export function initializeStores(store: Store<any>): void {
 	tasksModule = getModule(TasksModule, store);
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
 	videoConferenceModule = getModule(VideoConferenceModule, store);
+	commonCartridgeExportModule = getModule(CommonCartridgeExportModule, store);
 	commonCartridgeImportModule = getModule(CommonCartridgeImportModule, store);
 }
 
@@ -131,5 +134,6 @@ export const modules = {
 	tasksModule: TasksModule,
 	userLoginMigrationModule: UserLoginMigrationModule,
 	videoConferenceModule: VideoConferenceModule,
+	commonCartridgeExportModule: CommonCartridgeExportModule,
 	commonCartridgeImportModule: CommonCartridgeImportModule,
 };

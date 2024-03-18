@@ -349,7 +349,7 @@ describe("room module", () => {
 			});
 		});
 
-		describe("downloadImsccCourse", () => {
+		describe("downloadCommonCartridgeCourse", () => {
 			it("should call backend api", async () => {
 				const roomModule = new RoomModule({});
 				const mockApi = {
@@ -360,7 +360,7 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
 				await expect(
-					roomModule.downloadImsccCourse("1.1.0")
+					roomModule.downloadCommonCartridgeCourse("1.1.0")
 				).resolves.not.toBeDefined();
 
 				spy.mockRestore();
@@ -377,7 +377,7 @@ describe("room module", () => {
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
-				await roomModule.downloadImsccCourse("1.1.0");
+				await roomModule.downloadCommonCartridgeCourse("1.1.0");
 
 				expect(roomModule.businessError).toStrictEqual(error);
 
