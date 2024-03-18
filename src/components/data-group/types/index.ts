@@ -3,3 +3,4 @@ export * from "./GroupType";
 export * from "./GroupUser";
 export * from "./GroupUserRole";
 export * from "./ExternalSource";
+export * from "./GroupListFilter";

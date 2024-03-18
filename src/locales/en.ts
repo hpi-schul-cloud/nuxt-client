@@ -1357,6 +1357,7 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title":
 		"Currently, there are no courses here.",
 	"pages.rooms.fab.add.course": "New course",
+	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
 	"pages.rooms.fab.add.lesson": "New topic",
 	"pages.rooms.fab.add.board": "New column board",
 	"pages.rooms.fab.add.task": "New task",
@@ -1510,6 +1511,10 @@ export default {
 	"tldraw.error.ws.4404": "Tldraw board with this name was not found",
 	"tldraw.error.ws.4500": "An error occured within tldraw websocket connection",
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
+	"ui-course-sync.group-selection-dialog.title": "Select user group",
+	"ui-course-sync.group-selection-dialog.text":
+		"In the next step, the selected user group will be synchronized with the newly created course.",
+	"ui-course-sync.group-selection-dialog.selection.label": "Group selection",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",

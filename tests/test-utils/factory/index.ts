@@ -25,6 +25,7 @@ export * from "./fileElementResponseFactory";
 export * from "./filerecordResponse.factory";
 export * from "./groupFactory";
 export * from "./groupResponseFactory";
+export * from "./groupEntryResponseFactory";
 export * from "./meResponseFactory";
 export * from "./provisioningOptionsDataFactory";
 export * from "./schoolExternalToolConfigurationFactory";

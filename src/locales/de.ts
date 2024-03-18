@@ -1385,6 +1385,7 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title":
 		"Aktuell gibt es hier noch keine Kurse.",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
+	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.add.lesson": "Neues Thema",
 	"pages.rooms.fab.add.board": "Neues Spalten-Board",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
@@ -1541,6 +1542,10 @@ export default {
 	"tldraw.error.ws.4500":
 		"Bei der Tldraw-Websocket-Verbindung ist ein Fehler aufgetreten",
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
+	"ui-course-sync.group-selection-dialog.title": "Nutzendengruppe auswählen",
+	"ui-course-sync.group-selection-dialog.text":
+		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
+	"ui-course-sync.group-selection-dialog.selection.label": "Gruppen-Auswahl",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

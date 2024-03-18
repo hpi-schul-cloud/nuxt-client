@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe
+	<DefaultWireframe
 		ref="main"
 		headline=""
 		:full-width="true"
@@ -10,16 +10,16 @@
 			<slot name="header" />
 		</template>
 		<template v-if="isLoading">
-			<v-container class="loader">
-				<v-skeleton-loader
+			<VContainer class="loader">
+				<VSkeletonLoader
 					ref="skeleton-loader"
 					type="date-picker-days"
 					class="mt-6"
 				/>
-			</v-container>
+			</VContainer>
 		</template>
 		<template v-else-if="isEmptyState">
-			<v-custom-empty-state
+			<vCustomEmptyState
 				ref="rooms-empty-state"
 				image="rooms-empty-state"
 				:title="$t('pages.rooms.allRooms.emptyState.title')"
@@ -29,99 +29,117 @@
 		<template v-else>
 			<slot name="page-content" />
 		</template>
-		<common-cartridge-import-modal :max-width="480" class="upload-modal" />
-	</default-wireframe>
+		<GroupSelectionDialog v-model:is-open="isCourseSyncDialogOpen" />
+		<CommonCartridgeImportModal :max-width="480" class="upload-modal" />
+	</DefaultWireframe>
 </template>
 
-<script>
+<script setup lang="ts">
+import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
+import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
 	authModule,
 	commonCartridgeImportModule,
 	envConfigModule,
 	roomsModule,
 } from "@/store";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
-import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
-import { mdiPlus, mdiImport, mdiSchoolOutline } from "@mdi/js";
-import { defineComponent } from "vue";
+import { GroupSelectionDialog } from "@feature-course-sync";
+import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@mdi/js";
+import { computed, ComputedRef, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { Fab, FabAction } from "./default-wireframe.types";
 
-export default defineComponent({
-	components: {
-		DefaultWireframe,
-		vCustomEmptyState,
-		CommonCartridgeImportModal,
+enum RoomFabEvent {
+	COMMON_CARTRIDGE_IMPORT = "import",
+	SYNCHRONIZED_COURSE = "syncedCourse",
+}
+
+const { t } = useI18n();
+
+const props = defineProps({
+	hasRooms: {
+		type: Boolean,
+		required: true,
 	},
-	props: {
-		hasRooms: {
-			type: Boolean,
-			required: true,
-		},
-		hasImportToken: {
-			type: Boolean,
-			required: false,
-		},
-	},
-	computed: {
-		fabItems() {
-			if (
-				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
-			) {
-				if (
-					envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED
-				) {
-					const fabItems = {
-						icon: mdiPlus,
-						title: this.$t("common.actions.create"),
-						ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
-						dataTestId: "add-course-button",
-						actions: [
-							{
-								icon: mdiSchoolOutline,
-								label: this.$t("pages.rooms.fab.add.course"),
-								href: "/courses/add",
-								dataTestId: "fab_button_add_course",
-								ariaLabel: this.$t("pages.rooms.fab.add.course"),
-							},
-							{
-								label: this.$t("pages.rooms.fab.import.course"),
-								icon: mdiImport,
-								dataTestId: "fab_button_import_course",
-								ariaLabel: this.$t("pages.rooms.fab.import.course"),
-								customEvent: "import",
-							},
-						],
-					};
-
-					return fabItems;
-				}
-
-				return {
-					icon: mdiPlus,
-					title: this.$t("common.actions.create"),
-					href: "/courses/add",
-					ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
-					dataTestId: "add-course-button",
-				};
-			}
-
-			return null;
-		},
-		isLoading() {
-			return roomsModule.getLoading;
-		},
-		isEmptyState() {
-			return !roomsModule.getLoading && !this.hasRooms && !this.hasImportToken;
-		},
-	},
-	methods: {
-		fabItemClickHandler(event) {
-			if (event === "import") {
-				commonCartridgeImportModule.setIsOpen(true);
-			}
-		},
+	hasImportToken: {
+		type: Boolean,
+		required: false,
 	},
 });
+
+const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
+
+const fabItems: ComputedRef<Fab | null> = computed(() => {
+	if (authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())) {
+		const actions: FabAction[] = [
+			{
+				icon: mdiSchoolOutline,
+				label: t("pages.rooms.fab.add.course"),
+				ariaLabel: t("pages.rooms.fab.add.course"),
+				dataTestId: "fab_button_add_course",
+				href: "/courses/add",
+			},
+		];
+
+		if (
+			// eslint-disable-next-line no-constant-condition
+			true ||
+			envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
+		) {
+			actions.push({
+				icon: mdiSync,
+				label: t("pages.rooms.fab.add.syncedCourse"),
+				ariaLabel: t("pages.rooms.fab.add.syncedCourse"),
+				dataTestId: "fab_button_add_synced_course",
+				customEvent: RoomFabEvent.SYNCHRONIZED_COURSE,
+			});
+		}
+
+		if (envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED) {
+			actions.push({
+				icon: mdiImport,
+				label: t("pages.rooms.fab.import.course"),
+				ariaLabel: t("pages.rooms.fab.import.course"),
+				dataTestId: "fab_button_import_course",
+				customEvent: RoomFabEvent.COMMON_CARTRIDGE_IMPORT,
+			});
+		}
+
+		const fab: Fab = {
+			icon: mdiPlus,
+			title: t("common.actions.create"),
+			ariaLabel: t("pages.rooms.fab.ariaLabel"),
+			dataTestId: "add-course-button",
+		};
+
+		if (actions.length <= 1) {
+			fab.href = "/courses/add";
+		} else {
+			fab.actions = actions;
+		}
+
+		return fab;
+	}
+
+	return null;
+});
+
+const isLoading: ComputedRef<boolean> = computed(() => {
+	return roomsModule.getLoading;
+});
+
+const isEmptyState: ComputedRef<boolean> = computed(() => {
+	return !roomsModule.getLoading && !props.hasRooms && !props.hasImportToken;
+});
+
+const fabItemClickHandler = (event: RoomFabEvent): void => {
+	if (event === RoomFabEvent.SYNCHRONIZED_COURSE) {
+		isCourseSyncDialogOpen.value = true;
+	} else if (event === RoomFabEvent.COMMON_CARTRIDGE_IMPORT) {
+		commonCartridgeImportModule.setIsOpen(true);
+	}
+};
 </script>
 
 <style lang="scss" scoped>

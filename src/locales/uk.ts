@@ -1379,6 +1379,7 @@ export default {
 	"pages.rooms.allRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.fab.add.course": "Новий курс",
+	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.add.lesson": "Створити тему",
 	"pages.rooms.fab.add.board": "Нова дошка",
 	"pages.rooms.fab.add.task": "Створити завдання",
@@ -1532,6 +1533,10 @@ export default {
 		"Виникла помилка під час з'єднання з веб-сокетом tldraw",
 	"ui-confirmation-dialog.ask-delete":
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
+	"ui-course-sync.group-selection-dialog.title": "Виберіть групу користувачів",
+	"ui-course-sync.group-selection-dialog.text":
+		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
+	"ui-course-sync.group-selection-dialog.selection.label": "Вибір групи",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",

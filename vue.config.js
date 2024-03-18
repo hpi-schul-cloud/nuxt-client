@@ -52,6 +52,7 @@ module.exports = defineConfig({
 					"src/components/feature-board-drawing-element"
 				),
 				"@feature-board": getDir("src/components/feature-board"),
+				"@feature-course-sync": getDir("src/components/feature-course-sync"),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
 				"@feature-news-form": getDir("src/components/feature-news-form"),

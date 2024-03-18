@@ -2599,6 +2599,25 @@ export interface GetMetaTagDataBody {
 /**
  * 
  * @export
+ * @interface GroupEntryResponse
+ */
+export interface GroupEntryResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupEntryResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof GroupEntryResponse
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
  * @interface GroupResponse
  */
 export interface GroupResponse {
@@ -11253,6 +11272,45 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Get a list of all groups.
+         * @param {boolean} [availableSyncedGroups] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerGetAllGroups: async (availableSyncedGroups?: boolean, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/groups`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (availableSyncedGroups !== undefined) {
+                localVarQueryParameter['availableSyncedGroups'] = availableSyncedGroups;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get a group by id.
          * @param {string} groupId 
          * @param {*} [options] Override http request option.
@@ -11317,6 +11375,17 @@ export const GroupApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a list of all groups.
+         * @param {boolean} [availableSyncedGroups] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async groupControllerGetAllGroups(availableSyncedGroups?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<GroupEntryResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetAllGroups(availableSyncedGroups, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get a group by id.
          * @param {string} groupId 
          * @param {*} [options] Override http request option.
@@ -11350,6 +11419,16 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          */
         groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
             return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a list of all groups.
+         * @param {boolean} [availableSyncedGroups] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerGetAllGroups(availableSyncedGroups?: boolean, options?: any): AxiosPromise<Array<GroupEntryResponse>> {
+            return localVarFp.groupControllerGetAllGroups(availableSyncedGroups, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -11387,6 +11466,16 @@ export interface GroupApiInterface {
 
     /**
      * 
+     * @summary Get a list of all groups.
+     * @param {boolean} [availableSyncedGroups] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApiInterface
+     */
+    groupControllerGetAllGroups(availableSyncedGroups?: boolean, options?: any): AxiosPromise<Array<GroupEntryResponse>>;
+
+    /**
+     * 
      * @summary Get a group by id.
      * @param {string} groupId 
      * @param {*} [options] Override http request option.
@@ -11419,6 +11508,18 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      */
     public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: 'name' | 'externalSourceName', type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any) {
         return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a list of all groups.
+     * @param {boolean} [availableSyncedGroups] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public groupControllerGetAllGroups(availableSyncedGroups?: boolean, options?: any) {
+        return GroupApiFp(this.configuration).groupControllerGetAllGroups(availableSyncedGroups, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
