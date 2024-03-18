@@ -7,7 +7,7 @@
 			/>
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
-				<h1 class="text-h3 pl-2">
+				<h1 class="text-h3 pl-2" :data-testid="dataTestid">
 					{{ headline }}
 				</h1>
 			</slot>
@@ -32,7 +32,7 @@
 									:icon="action.icon"
 									:href="action.href"
 									:to="action.to"
-									@click="action.customEvent"
+									@click="$emit('onFabItemClick', action.customEvent)"
 									>{{ action.label }}</speed-dial-menu-action
 								>
 							</template>
@@ -61,7 +61,7 @@
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	inheritAttrs: false,
@@ -95,6 +95,13 @@ export default defineComponent({
 			required: false,
 			default: false,
 		},
+		dataTestid: {
+			type: String as PropType<string | null>,
+			default: null,
+		},
+	},
+	emits: {
+		onFabItemClick: (event: string) => (event ? true : false),
 	},
 	computed: {
 		showBorder(): boolean {

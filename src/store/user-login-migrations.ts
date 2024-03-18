@@ -81,7 +81,7 @@ export default class UserLoginMigrationModule extends VuexModule {
 			try {
 				const response: AxiosResponse<UserLoginMigrationSearchListResponse> =
 					await this.userLoginMigrationApi.userLoginMigrationControllerGetMigrations(
-						authModule.getUser.id
+						authModule.getUser?.id
 					);
 
 				if (response.data.total > 1) {
@@ -121,11 +121,11 @@ export default class UserLoginMigrationModule extends VuexModule {
 
 		this.resetBusinessError();
 
-		if (authModule.getUser?.schoolId) {
+		if (authModule.getSchool?.id) {
 			try {
 				const response: AxiosResponse<UserLoginMigrationResponse> =
 					await this.userLoginMigrationApi.userLoginMigrationControllerFindUserLoginMigrationBySchool(
-						authModule.getUser?.schoolId
+						authModule.getSchool?.id
 					);
 
 				const userLoginMigration: UserLoginMigration =

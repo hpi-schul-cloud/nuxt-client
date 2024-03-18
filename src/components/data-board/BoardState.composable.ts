@@ -1,14 +1,14 @@
-import { nextTick, onMounted, ref } from "vue";
-import { useBoardApi } from "./BoardApi.composable";
-import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { useSharedEditMode } from "./EditMode.composable";
-import { Board } from "@/types/board/Board";
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	BoardObjectType,
 	ErrorType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
+import { Board } from "@/types/board/Board";
+import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
+import { nextTick, onMounted, ref } from "vue";
+import { useBoardApi } from "./BoardApi.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
+import { useSharedEditMode } from "./EditMode.composable";
 
 export const useBoardState = (id: string) => {
 	const { handleError, notifyWithTemplate } = useErrorHandler();
@@ -21,7 +21,9 @@ export const useBoardState = (id: string) => {
 		deleteColumnCall,
 		moveCardCall,
 		moveColumnCall,
+		updateBoardTitleCall,
 		updateColumnTitleCall,
+		updateBoardVisibilityCall,
 		createCardCall,
 	} = useBoardApi();
 	const { setEditModeId } = useSharedEditMode();
@@ -241,6 +243,32 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
+	const updateBoardTitle = async (newTitle: string) => {
+		if (board.value === undefined) return;
+
+		try {
+			await updateBoardTitleCall(board.value.id, newTitle);
+			board.value.title = newTitle;
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "board"),
+			});
+		}
+	};
+
+	const updateBoardVisibility = async (newVisibility: boolean) => {
+		if (board.value === undefined) return;
+
+		try {
+			await updateBoardVisibilityCall(board.value.id, newVisibility);
+			board.value.isVisible = newVisibility;
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "board"),
+			});
+		}
+	};
+
 	const notifyWithTemplateAndReload = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
@@ -278,6 +306,8 @@ export const useBoardState = (id: string) => {
 		moveColumn,
 		notifyWithTemplateAndReload,
 		reloadBoard,
+		updateBoardTitle,
+		updateBoardVisibility,
 		updateColumnTitle,
 	};
 };

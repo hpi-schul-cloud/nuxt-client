@@ -9,9 +9,7 @@ export default {
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
-	"common.actions.download.v1.1": "Download (CC v1.1)",
-	"common.actions.download.v1.3": "Download (CC v1.3)",
-	"common.actions.download": "Download",
+	"common.actions.export": "Export",
 	"common.actions.edit": "Edit",
 	"common.actions.finish": "Finish",
 	"common.actions.import": "Import",
@@ -165,6 +163,7 @@ export default {
 	"common.words.topic": "Topic",
 	"common.words.topics": "Topics",
 	"common.words.yes": "Yes",
+	"common.words.export": "Course export is downloading",
 	"component.cardElement.fileElement.audioPlayer.pause": "Pause",
 	"component.cardElement.fileElement.audioPlayer.play": "Play",
 	"component.cardElement.fileElement.audioPlayer.slider": "Audio slider",
@@ -278,6 +277,8 @@ export default {
 	"components.board.action.moveUp": "Move up",
 	"components.board.alert.info.teacher":
 		"This board is visible to all course participants.",
+	"components.board.alert.info.draft":
+		"This board is no longer visible to course participants.",
 	"components.board.column.defaultTitle": "New column",
 	"components.board.column.ghost.placeholder": "Add column",
 	"components.board.menu.board": "Board settings",
@@ -298,10 +299,10 @@ export default {
 		"{type} could not be loaded.",
 	"components.board.notifications.errors.notUpdated":
 		"Your changes could not be saved.",
-	"components.board": "Board",
-	"components.boardCard": "Card",
-	"components.boardColumn": "Column",
-	"components.boardElement": "Element",
+	"components.board": "board",
+	"components.boardCard": "card",
+	"components.boardColumn": "column",
+	"components.boardElement": "element",
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.drawingElement": "Whiteboard",
@@ -540,6 +541,12 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Submitted",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Local files are currently not supported.",
+	"components.molecules.export.options.info":
+		"The following content is not exported:",
+	"components.molecules.export.options.info.point1":
+		"Uploaded files within the course.",
+	"components.molecules.export.options.info.point2":
+		"Submissions assigned to a task.",
 	"components.organisms.AutoLogoutWarning.confirm": "Extend session",
 	"components.organisms.AutoLogoutWarning.error.401":
 		"Your session has already expired. Please log in again.",
@@ -1318,6 +1325,8 @@ export default {
 	"pages.news.title": "News",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
+	"pages.room.boardCard.menu.ariaLabel": "Board menu",
+	"pages.room.cards.aria": "{itemType}, link, {itemName}, press enter to open",
 	"pages.room.cards.label.revert": "Revert to draft",
 	"pages.room.copy.course.message.copied": "Course was successfully copied.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1327,15 +1336,11 @@ export default {
 	"pages.room.itemDelete.text":
 		'Are you sure, you want to delete item "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Delete item",
-	"pages.room.lessonCard.aria":
-		"{itemType}, link, {itemName}, press enter to open",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.label.shareLesson": "Share topic copy",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
 	"pages.room.student.emptyState":
 		"Learning content such as topics or tasks appear here.",
-	"pages.room.taskCard.aria":
-		"{itemType}, link, {itemName}, press enter to open",
 	"pages.room.taskCard.label.done": "Finish",
 	"pages.room.taskCard.label.due": "Due",
 	"pages.room.taskCard.label.edit": "Edit",
@@ -1358,8 +1363,10 @@ export default {
 		"Currently, there are no courses here.",
 	"pages.rooms.fab.add.course": "New course",
 	"pages.rooms.fab.add.lesson": "New topic",
+	"pages.rooms.fab.add.board": "New column board",
 	"pages.rooms.fab.add.task": "New task",
 	"pages.rooms.fab.ariaLabel": "Create new course",
+	"pages.rooms.fab.import.course": "Import course",
 	"pages.rooms.groupName": "Courses",
 	"pages.rooms.headerSection.archived": "Archive",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
@@ -1380,6 +1387,14 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Course name",
 	"pages.rooms.importCourse.step_3":
 		"The imported course can be renamed in the next step.",
+	"pages.rooms.ccImportCourse.title": "Import course",
+	"pages.rooms.ccImportCourse.confirm": "Import",
+	"pages.rooms.ccImportCourse.fileInputLabel": "Select file",
+	"pages.rooms.ccImportCourse.loading": "Import is running...",
+	"pages.rooms.ccImportCourse.success":
+		"Course {name} was successfully imported.",
+	"pages.rooms.ccImportCourse.error":
+		"An error occurred while importing the course.",
 	"pages.rooms.index.courses.active": "Current courses",
 	"pages.rooms.index.courses.all": "All courses",
 	"pages.rooms.index.courses.arrangeCourses": "Arrange courses",
@@ -1408,6 +1423,13 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Tool menu",
 	"pages.rooms.tools.outdated": "Tool outdated",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ outdated",
+	"pages.room.modal.course.export.header": "Export Format",
+	"pages.room.modal.course.export.options.header": "Export settings",
+	"pages.room.modal.course.export.options.topics": "Topics",
+	"pages.room.modal.course.export.options.tasks": "Tasks without Topic",
+	"pages.room.modal.course.export.version1.1":
+		"Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
+	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",
@@ -1499,7 +1521,7 @@ export default {
 	"tldraw.error.ws.4401": "You do not have permission to this whiteboard",
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"tldraw.error.ws.4500": "An error occured within tldraw websocket connection",
-	"ui-confirmation-dialog.ask-delete": "Delete {type} {title}?",
+	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",

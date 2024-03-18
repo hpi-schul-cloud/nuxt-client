@@ -47,7 +47,7 @@
 						type="table-thead, table-tbody"
 					/>
 				</template>
-				<template #body>
+				<template #[`body.prepend`]>
 					<tr class="head">
 						<td class="col-2">
 							<VTextField
@@ -183,7 +183,7 @@
 				</template>
 
 				<template #[`item.classNames`]="{ item }">
-					{{ item.classNames.join(", ") }}
+					{{ item.classNames?.join(", ") }}
 				</template>
 
 				<template #[`item.match`]="{ item }">

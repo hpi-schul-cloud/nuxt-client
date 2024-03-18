@@ -163,4 +163,8 @@ onMounted(async () => {
 .fix-to-top {
 	top: 0;
 }
+
+button {
+	color: rgba(var(--v-theme-primary));
+}
 </style>

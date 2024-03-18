@@ -9,9 +9,7 @@ export default {
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Скасувати",
-	"common.actions.download.v1.1": "Завантажити (CC v1.1)",
-	"common.actions.download.v1.3": "Завантажити (CC v1.3)",
-	"common.actions.download": "Завантажити",
+	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
 	"common.actions.import": "Імпорт",
@@ -168,6 +166,7 @@ export default {
 	"common.words.topic": "Тема",
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
+	"common.words.export": "Завантажується експорт курсу",
 	"component.cardElement.fileElement.audioPlayer.pause": "пауза",
 	"component.cardElement.fileElement.audioPlayer.play": "грати",
 	"component.cardElement.fileElement.audioPlayer.slider": "повзунок",
@@ -286,6 +285,8 @@ export default {
 	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
+	"components.board.alert.info.draft":
+		"Ця дошка більше не відображається для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.board.column.ghost.placeholder": "Додати стовпець",
 	"components.board.menu.board": "Налаштування дошки",
@@ -555,6 +556,12 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Надіслано",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Наразі локальні файли не підтримуються.",
+	"components.molecules.export.options.info":
+		"Наступний вміст не експортується:",
+	"components.molecules.export.options.info.point1":
+		"Завантажені файли в межах курсу.",
+	"components.molecules.export.options.info.point2":
+		"Подання, призначені до завдання.",
 	"components.organisms.AutoLogoutWarning.confirm": "Подовжити сеанс",
 	"components.organisms.AutoLogoutWarning.error.401":
 		"Термін дії сеансу минув. Увійдіть ще раз.",
@@ -1341,6 +1348,9 @@ export default {
 	"pages.news.title": "Новини",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
+	"pages.room.boardCard.menu.ariaLabel": "Меню форуму",
+	"pages.room.cards.aria":
+		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.cards.label.revert": "Повернути до стану чернетки",
 	"pages.room.copy.course.message.copied": "Курс успішно скопійовано.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1350,15 +1360,11 @@ export default {
 	"pages.room.itemDelete.text":
 		'Ви впевнені, що хочете видалити елемент " {itemTitle} "?',
 	"pages.room.itemDelete.title": "Видалити елемент",
-	"pages.room.lessonCard.aria":
-		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.label.shareLesson": "надіслати копію теми",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
 	"pages.room.student.emptyState":
 		"Тут з’являється навчальний вміст, наприклад теми чи завдання.",
-	"pages.room.taskCard.aria":
-		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
 	"pages.room.taskCard.label.done": "Завершити",
 	"pages.room.taskCard.label.due": "Термін",
 	"pages.room.taskCard.label.edit": "Редагувати",
@@ -1379,8 +1385,10 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.lesson": "Створити тему",
+	"pages.rooms.fab.add.board": "Нова дошка",
 	"pages.rooms.fab.add.task": "Створити завдання",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
+	"pages.rooms.fab.import.course": "Імпортувати курс",
 	"pages.rooms.groupName": "Курси",
 	"pages.rooms.headerSection.archived": "Архів",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
@@ -1401,6 +1409,12 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Назва курсу",
 	"pages.rooms.importCourse.step_3":
 		"Імпортований курс можна перейменувати під час наступного кроку.",
+	"pages.rooms.ccImportCourse.title": "Імпортний курс",
+	"pages.rooms.ccImportCourse.confirm": "Імпорт",
+	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
+	"pages.rooms.ccImportCourse.loading": "Імпорт виконується...",
+	"pages.rooms.ccImportCourse.success": "Курс {name} успішно імпортовано.",
+	"pages.rooms.ccImportCourse.error": "Виникла помилка під час імпорту курсу.",
 	"pages.rooms.index.courses.active": "Поточні курси",
 	"pages.rooms.index.courses.all": "Всі курси",
 	"pages.rooms.index.courses.arrangeCourses": "Упорядкувати курси",
@@ -1430,6 +1444,13 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Меню інструментів",
 	"pages.rooms.tools.outdated": "Інструмент застарів",
 	"pages.rooms.tools.outdatedDialog.title": "Інструмент „{toolName}“ застарів",
+	"pages.room.modal.course.export.header": "Формат експорту",
+	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
+	"pages.room.modal.course.export.options.topics": "Теми",
+	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
+	"pages.room.modal.course.export.version1.1":
+		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
+	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",
@@ -1522,7 +1543,7 @@ export default {
 	"tldraw.error.ws.4500":
 		"Виникла помилка під час з'єднання з веб-сокетом tldraw",
 	"ui-confirmation-dialog.ask-delete":
-		"{type} {title} буде видалена. Ви впевнені, що хочете видалити?",
+		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",

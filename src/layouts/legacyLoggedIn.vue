@@ -9,6 +9,7 @@
 					:expanded-menu="expandedMenu"
 					:user="user"
 					:school="school"
+					:roleNames="roleNames"
 					@action="handleTopAction"
 				/>
 			</div>
@@ -28,18 +29,18 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
-import { useRoute } from "vue-router";
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import TheFooter from "@/components/legacy/TheFooter.vue";
+import TheSidebar from "@/components/legacy/TheSidebar.vue";
+import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
+import TheTopBar from "@/components/topbar/TheTopBar.vue";
+import toastsFromQueryString from "@/mixins/toastsFromQueryString";
+import { authModule, envConfigModule } from "@/store";
 import getSidebarItems, {
 	SidebarCategoryItem,
 	SidebarItem,
 } from "@/utils/sidebar-base-items";
-import toastsFromQueryString from "@/mixins/toastsFromQueryString";
-import TheTopBar from "@/components/topbar/TheTopBar.vue";
-import TheSidebar from "@/components/legacy/TheSidebar.vue";
-import TheFooter from "@/components/legacy/TheFooter.vue";
-import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
+import { computed, defineComponent, ref } from "vue";
+import { useRoute } from "vue-router";
 import SkipLinks from "../components/molecules/SkipLinks.vue";
 
 export default defineComponent({
@@ -72,7 +73,10 @@ export default defineComponent({
 			return authModule.getUser;
 		});
 		const school = computed(() => {
-			return schoolsModule.getSchool;
+			return authModule.getSchool;
+		});
+		const roleNames = computed(() => {
+			return authModule.getUserRoles;
 		});
 		const authenticated = computed(() => {
 			return authModule.getAuthenticated;
@@ -107,7 +111,7 @@ export default defineComponent({
 
 								return (
 									(!child.permission ||
-										user.value?.permissions?.includes?.(child.permission)) &&
+										authModule.getUserPermissions.includes(child.permission)) &&
 									(!child.feature || hasFeature)
 								);
 							}
@@ -116,10 +120,14 @@ export default defineComponent({
 				}
 
 				const hasRequiredPermission = item.permission
-					? user.value?.permissions?.includes?.(item.permission)
+					? authModule.getUserPermissions.includes(
+							item.permission.toLowerCase()
+						)
 					: false;
 				const hasExcludedPermission = item.excludedPermission
-					? user.value?.permissions?.includes?.(item.excludedPermission)
+					? authModule.getUserPermissions.includes(
+							item.excludedPermission.toLowerCase()
+						)
 					: false;
 
 				const hasFeatureFlag =
@@ -141,6 +149,7 @@ export default defineComponent({
 			handleTopAction,
 			user,
 			school,
+			roleNames,
 			authenticated,
 			style,
 			isInline,

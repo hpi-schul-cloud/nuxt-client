@@ -109,6 +109,7 @@
 				<v-list-item-action
 					:id="`task-menu-${task.id}`"
 					class="context-menu-min-width"
+					data-testid="three-dot-task-option-menu"
 				>
 					<task-item-menu
 						:task-id="task.id"
