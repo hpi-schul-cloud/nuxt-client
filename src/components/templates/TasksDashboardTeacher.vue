@@ -90,7 +90,6 @@ import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
 import { useI18n } from "vue-i18n";
-import { COPY_MODULE_KEY } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -120,7 +119,6 @@ export default defineComponent({
 	inject: {
 		tasksModule: "tasksModule",
 		finishedTasksModule: "finishedTasksModule",
-		copyModule: { from: COPY_MODULE_KEY },
 		shareModule: "shareModule",
 	},
 	computed: {

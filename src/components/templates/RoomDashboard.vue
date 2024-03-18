@@ -195,7 +195,7 @@ import {
 	ImportUserResponseRoleNamesEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { copyModule, envConfigModule, roomModule } from "@/store";
+import { envConfigModule, roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import draggable from "vuedraggable";
 
@@ -234,9 +234,6 @@ export default {
 				roomId: this.roomData.roomId,
 				displayColor: this.roomData.displayColor,
 			};
-		},
-		isCopyModalLoading() {
-			return copyModule?.getLoading ?? false;
 		},
 		taskData() {
 			return {
