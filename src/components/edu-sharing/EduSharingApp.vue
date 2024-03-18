@@ -24,8 +24,9 @@ export default {
 		// configured the `.env` file.
 		//
 		window.__env = {
-			EDU_SHARING_API_URL: "/edu-sharing/rest",
-			//  EDU_SHARING_API_URL: 'http://repository.127.0.0.1.nip.io:8100/edu-sharing/rest',
+			// EDU_SHARING_API_URL: "/edu-sharing/rest",
+			EDU_SHARING_API_URL:
+				"https://repo.test.mediathek.dev.dbildungsplattform.de/edu-sharing/rest",
 		};
 
 		const runtime = document.createElement("script");
