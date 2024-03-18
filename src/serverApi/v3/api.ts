@@ -555,6 +555,12 @@ export interface ConfigResponse {
     FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: boolean;
     /**
      * 
+     * @type {number}
+     * @memberof ConfigResponse
+     */
+    CTL_TOOLS_RELOAD_TIME_MS: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof ConfigResponse
      */
@@ -795,28 +801,28 @@ export interface ConfigResponse {
     ROCKETCHAT_SERVICE_ENABLED: boolean;
     /**
      * 
-     * @type {string}
+     * @type {Array<Language>}
      * @memberof ConfigResponse
      */
-    I18N__AVAILABLE_LANGUAGES: string;
+    I18N__AVAILABLE_LANGUAGES: Array<Language>;
     /**
      * 
-     * @type {string}
+     * @type {Language}
      * @memberof ConfigResponse
      */
-    I18N__DEFAULT_LANGUAGE: string;
+    I18N__DEFAULT_LANGUAGE: Language;
     /**
      * 
-     * @type {string}
+     * @type {Language}
      * @memberof ConfigResponse
      */
-    I18N__FALLBACK_LANGUAGE: string;
+    I18N__FALLBACK_LANGUAGE: Language;
     /**
      * 
-     * @type {string}
+     * @type {Timezone}
      * @memberof ConfigResponse
      */
-    I18N__DEFAULT_TIMEZONE: string;
+    I18N__DEFAULT_TIMEZONE: Timezone;
     /**
      * 
      * @type {number}
@@ -843,10 +849,10 @@ export interface ConfigResponse {
     DOCUMENT_BASE_DIR: string;
     /**
      * 
-     * @type {string}
+     * @type {SchulcloudTheme}
      * @memberof ConfigResponse
      */
-    SC_THEME: string;
+    SC_THEME: SchulcloudTheme;
     /**
      * 
      * @type {string}
@@ -5538,6 +5544,18 @@ export interface SchulConneXProvisioningOptionsResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum SchulcloudTheme {
+    Brb = 'brb',
+    Default = 'default',
+    N21 = 'n21',
+    Thr = 'thr'
+}
+
+/**
+ * 
+ * @export
  * @interface SetHeightBodyParams
  */
 export interface SetHeightBodyParams {
@@ -6248,6 +6266,15 @@ export interface TimestampsResponse {
      */
     deletedAt?: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum Timezone {
+    EuropeBerlin = 'Europe/Berlin'
+}
+
 /**
  * 
  * @export
