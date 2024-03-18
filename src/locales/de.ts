@@ -1389,6 +1389,7 @@ export default {
 	"pages.rooms.fab.add.board": "Neues Spalten-Board",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
+	"pages.rooms.fab.import.course": "Kurs importieren",
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.headerSection.archived": "Archiv",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
@@ -1409,6 +1410,14 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Kursname",
 	"pages.rooms.importCourse.step_3":
 		"Der importierte Kurs kann im nächsten Schritt umbenannt werden.",
+	"pages.rooms.ccImportCourse.title": "Kurs importieren",
+	"pages.rooms.ccImportCourse.confirm": "Importieren",
+	"pages.rooms.ccImportCourse.fileInputLabel": "Datei auswählen",
+	"pages.rooms.ccImportCourse.loading": "Import läuft...",
+	"pages.rooms.ccImportCourse.success":
+		"Kurs {name} wurde erfolgreich importiert.",
+	"pages.rooms.ccImportCourse.error":
+		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.index.courses.active": "Aktuelle Kurse",
 	"pages.rooms.index.courses.all": "Alle Kurse",
 	"pages.rooms.index.courses.arrangeCourses": "Kurse umordnen",
