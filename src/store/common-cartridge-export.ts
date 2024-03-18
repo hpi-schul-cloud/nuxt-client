@@ -2,31 +2,31 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { roomModule } from "./store-accessor";
 
 @Module({
-	name: "downloadModule",
+	name: "commonCartridgeExportModule",
 	namespaced: true,
 	stateFactory: true,
 })
-export default class DownloadModule extends VuexModule {
-	private isDownloadModalOpen = false;
+export default class CommonCartridgeExportModule extends VuexModule {
+	private isExportModalOpen = false;
 	private version = "";
 
 	@Action
-	async startDownload(version: string): Promise<void> {
+	async startExport(version: string): Promise<void> {
 		if (version === "1.1.0" || version === "1.3.0") {
 			await roomModule.downloadCommonCartridgeCourse(version);
 		}
 	}
 
 	@Action
-	startDownloadFlow(): void {
+	startExportFlow(): void {
 		this.setVersion("");
-		this.setIsDownloadModalOpen(true);
+		this.setIsExportModalOpen(true);
 	}
 
 	@Action
-	resetDownloadFlow(): void {
+	resetExportFlow(): void {
 		this.setVersion("");
-		this.setIsDownloadModalOpen(false);
+		this.setIsExportModalOpen(false);
 	}
 
 	@Mutation
@@ -35,14 +35,14 @@ export default class DownloadModule extends VuexModule {
 	}
 
 	@Mutation
-	setIsDownloadModalOpen(open: boolean): void {
-		this.isDownloadModalOpen = open;
+	setIsExportModalOpen(open: boolean): void {
+		this.isExportModalOpen = open;
 	}
 
 	get getVersion(): string {
 		return this.version;
 	}
-	get getIsDownloadModalOpen(): boolean {
-		return this.isDownloadModalOpen;
+	get getIsExportModalOpen(): boolean {
+		return this.isExportModalOpen;
 	}
 }

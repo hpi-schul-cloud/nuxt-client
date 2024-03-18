@@ -556,11 +556,11 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Надіслано",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Наразі локальні файли не підтримуються.",
-	"components.molecules.download.options.info":
+	"components.molecules.export.options.info":
 		"Наступний вміст не експортується:",
-	"components.molecules.download.options.info.point1":
+	"components.molecules.export.options.info.point1":
 		"Завантажені файли в межах курсу.",
-	"components.molecules.download.options.info.point2":
+	"components.molecules.export.options.info.point2":
 		"Подання, призначені до завдання.",
 	"components.organisms.AutoLogoutWarning.confirm": "Подовжити сеанс",
 	"components.organisms.AutoLogoutWarning.error.401":
@@ -1449,7 +1449,7 @@ export default {
 	"pages.room.modal.course.export.options.topics": "Теми",
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
 	"pages.room.modal.course.export.version1.1":
-		"Загальний картридж версії 1.1 (наприклад, сумісний з Moodle)",
+		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

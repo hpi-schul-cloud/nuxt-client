@@ -2,7 +2,6 @@ import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import ContentModule from "@/store/content";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import DownloadModule from "@/store/download";
 import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
 import LoadingStateModule from "@/store/loading-state";
@@ -20,6 +19,7 @@ import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { InjectionKey } from "vue";
+import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
@@ -49,8 +49,8 @@ export const TERMS_OF_USE_MODULE_KEY: InjectionKey<TermsOfUseModule> =
 	Symbol("termsOfUseModule");
 export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
 	Symbol("schoolsModule");
-export const DOWNLOAD_MODULE_KEY: InjectionKey<DownloadModule> =
-	Symbol("downloadModule");
+export const COMMON_CARTRIDGE_EXPORT_MODULE_KEY: InjectionKey<CommonCartridgeExportModule> =
+	Symbol("commonCartridgeExportModule");
 export const ROOMS_MODULE_KEY: InjectionKey<RoomsModule> =
 	Symbol("roomsModule");
 export const LOADING_STATE_MODULE_KEY: InjectionKey<LoadingStateModule> =

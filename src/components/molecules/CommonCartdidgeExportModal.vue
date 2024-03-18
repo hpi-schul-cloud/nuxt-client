@@ -1,11 +1,11 @@
 <template>
 	<v-dialog
-		ref="downloadDialog"
-		v-model="isDownloadDialogOpen"
-		:width="560"
+		ref="exportDialog"
+		v-model="isExportModalOpen"
+		:max-width="560"
 		@click:outside="onCloseDialog"
 		@keydown.esc="onCloseDialog"
-		data-testid="download-dialog"
+		data-testid="export-dialog"
 	>
 		<v-card :ripple="false">
 			<v-card-title>
@@ -14,7 +14,7 @@
 				</div>
 			</v-card-title>
 			<v-card-text class="text--primary">
-				<div v-if="step === 0 && isDownloadDialogOpen">
+				<div v-if="step === 0 && isExportModalOpen">
 					<div class="">
 						<v-radio-group v-model="radios">
 							<v-radio
@@ -32,19 +32,19 @@
 						</v-radio-group>
 					</div>
 				</div>
-				<div v-if="step === 1 && isDownloadDialogOpen">
+				<div v-if="step === 1 && isExportModalOpen">
 					<div class="d-flex flex-row pa-2 mb-4 rounded blue bg-blue-lighten-5">
 						<div class="mx-2">
 							<v-icon color="info">{{ mdiInformation }}</v-icon>
 						</div>
 						<p>
-							{{ $t(`components.molecules.download.options.info`) }}
+							{{ $t(`components.molecules.export.options.info`) }}
 							<br />
 							&middot;
-							{{ $t(`components.molecules.download.options.info.point1`) }}
+							{{ $t(`components.molecules.export.options.info.point1`) }}
 							<br />
 							&middot;
-							{{ $t(`components.molecules.download.options.info.point2`) }}
+							{{ $t(`components.molecules.export.options.info.point2`) }}
 						</p>
 					</div>
 					<v-container class="pt-0">
@@ -122,7 +122,7 @@
 					<v-btn
 						v-if="step === 1"
 						data-testid="dialog-export-btn"
-						@click="onDownload"
+						@click="onExport"
 						color="primary"
 						variant="flat"
 					>
@@ -136,7 +136,7 @@
 
 <script setup lang="ts">
 import {
-	DOWNLOAD_MODULE_KEY,
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
@@ -146,21 +146,23 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const notifier = injectStrict(NOTIFIER_MODULE_KEY);
-const downloadModule = injectStrict(DOWNLOAD_MODULE_KEY);
+const commonCartridgeExportModule = injectStrict(
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY
+);
 const emit = defineEmits([
-	"update:isDownloadDialogOpen",
+	"update:isExportModalOpen",
 	"dialog-closed",
 	"dialog-confirmed",
 	"next",
 	"back",
 ]);
 
-const isDownloadDialogOpen = computed({
-	get: () => downloadModule.getIsDownloadModalOpen,
+const isExportModalOpen = computed({
+	get: () => commonCartridgeExportModule.getIsExportModalOpen,
 	set: (value: boolean) => {
 		emit(
-			"update:isDownloadDialogOpen",
-			downloadModule.setIsDownloadModalOpen(value)
+			"update:isExportModalOpen",
+			commonCartridgeExportModule.setIsExportModalOpen(value)
 		);
 	},
 });
@@ -208,7 +210,7 @@ const someTasksSelected = computed(() => {
 
 function onCloseDialog(): void {
 	emit("dialog-closed", false);
-	downloadModule.resetDownloadFlow();
+	commonCartridgeExportModule.resetExportFlow();
 	step.value = 0;
 	allTasks.value.forEach((task) => {
 		task.isSelected = true;
@@ -220,18 +222,18 @@ function onCloseDialog(): void {
 
 function onNext(newValue: string): void {
 	emit("next", false);
-	downloadModule.setVersion(newValue);
+	commonCartridgeExportModule.setVersion(newValue);
 	step.value++;
 }
 
-async function onDownload(): Promise<void> {
+async function onExport(): Promise<void> {
 	emit("dialog-confirmed", false);
 	notifier.show({
 		text: t("common.words.export"),
 		status: "success",
 		timeout: 10000,
 	});
-	await downloadModule.startDownload(radios.value);
+	await commonCartridgeExportModule.startExport(radios.value);
 	onCloseDialog();
 }
 
@@ -244,7 +246,7 @@ function onBack(): void {
 	allTopics.value.forEach((topic) => {
 		topic.isSelected = true;
 	});
-	downloadModule.setIsDownloadModalOpen(true);
+	commonCartridgeExportModule.setIsExportModalOpen(true);
 }
 
 function toggleAllTopics(): void {

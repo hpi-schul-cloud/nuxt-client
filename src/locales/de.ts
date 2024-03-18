@@ -490,11 +490,11 @@ export default {
 		"Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Die Aufgabe kann im Folgenden umbenannt werden.",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Der Kurs, in den die Aufgabe importiert werden soll, muss im Folgenden ausgewählt werden.",
-	"components.molecules.download.options.info":
+	"components.molecules.export.options.info":
 		"Folgende Inhalte werden nicht exportiert:",
-	"components.molecules.download.options.info.point1":
+	"components.molecules.export.options.info.point1":
 		"Hochgeladene Dateien innerhalb des Kurses.",
-	"components.molecules.download.options.info.point2":
+	"components.molecules.export.options.info.point2":
 		"Abgaben, die einer Aufgabe zugeordnet sind.",
 	"components.molecules.import.tasks.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.tasks.options.title": "Aufgabe importieren",
@@ -1456,7 +1456,7 @@ export default {
 	"pages.room.modal.course.export.options.topics": "Themen",
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
 	"pages.room.modal.course.export.version1.1":
-		"Common Cartridge Version 1.1   (z.B kompatibel mit Moodle)",
+		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":

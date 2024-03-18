@@ -10,7 +10,7 @@ import ShareModule from "@/store/share";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
-	DOWNLOAD_MODULE_KEY,
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
@@ -28,7 +28,7 @@ import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import DownloadModule from "@/store/download";
+import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -104,7 +104,7 @@ let copyModuleMock: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
 let notifierModuleMock: NotifierModule;
 let shareModuleMock: ShareModule;
-let downloadModuleMock: DownloadModule;
+let downloadModuleMock: CommonCartridgeExportModule;
 
 const $router = { push: jest.fn(), resolve: jest.fn(), replace: jest.fn() };
 
@@ -134,7 +134,7 @@ const getWrapper = () => {
 				shareModule: shareModuleMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-				[DOWNLOAD_MODULE_KEY.valueOf()]: downloadModuleMock,
+				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModuleMock,
 			},
 			stubs: {
 				RoomDashboard: true,
@@ -169,8 +169,8 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			createShareUrl: jest.fn(),
 			resetShareFlow: jest.fn(),
 		});
-		downloadModuleMock = createModuleMocks(DownloadModule, {
-			getIsDownloadModalOpen: false,
+		downloadModuleMock = createModuleMocks(CommonCartridgeExportModule, {
+			getIsExportModalOpen: false,
 			getVersion: "",
 		});
 
@@ -381,9 +381,9 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				envConfigModule.setEnvs({
 					FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
 				} as Envs);
-				const onDownload = jest.fn();
+				const onExport = jest.fn();
 				const wrapper = getWrapper();
-				wrapper.vm.onDownload = onDownload;
+				wrapper.vm.onExport = onExport;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
@@ -395,13 +395,14 @@ describe("@/pages/RoomDetails.page.vue", () => {
 					`[data-testid=title-menu-common-cartridge-download]`
 				);
 			});
-			it("should call onDownload method when 'Export Course' menu clicked", async () => {
+
+			it("should call onExport method when 'Export Course' menu clicked", async () => {
 				envConfigModule.setEnvs({
 					FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
 				} as Envs);
-				const onDownload = jest.fn();
+				const onExport = jest.fn();
 				const wrapper = getWrapper();
-				wrapper.vm.onDownload = onDownload;
+				wrapper.vm.onExport = onExport;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
@@ -410,7 +411,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				);
 				await moreActionButton.trigger("click");
 
-				expect(onDownload).toHaveBeenCalled();
+				expect(onExport).toHaveBeenCalled();
 			});
 		});
 

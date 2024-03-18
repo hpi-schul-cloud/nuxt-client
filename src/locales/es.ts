@@ -556,11 +556,11 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Entregado",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Actualmente no se admiten archivos locales.",
-	"components.molecules.download.options.info":
+	"components.molecules.export.options.info":
 		"El siguiente contenido no se exporta:",
-	"components.molecules.download.options.info.point1":
+	"components.molecules.export.options.info.point1":
 		"Archivos subidos dentro del curso.",
-	"components.molecules.download.options.info.point2":
+	"components.molecules.export.options.info.point2":
 		"Envíos asignados a una tarea.",
 	"components.organisms.AutoLogoutWarning.confirm": "Ampliar sesión",
 	"components.organisms.AutoLogoutWarning.error.401":
@@ -1470,7 +1470,7 @@ export default {
 	"pages.room.modal.course.export.options.topics": "Temas",
 	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",
 	"pages.room.modal.course.export.version1.1":
-		"Common Cartridge versión 1.1 (por ejemplo, compatible con Moodle)",
+		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

@@ -1,9 +1,9 @@
-import DownloadModal from "@/components/download/DownloadModal.vue";
-import DownloadModule from "@/store/download";
+import CommonCartdidgeExportModal from "./CommonCartdidgeExportModal.vue";
+import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import NotifierModule from "@/store/notifier";
 import RoomsModule from "@/store/rooms";
 import {
-	DOWNLOAD_MODULE_KEY,
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
@@ -15,20 +15,20 @@ import {
 import { mount } from "@vue/test-utils";
 import { VDialog } from "vuetify/lib/components/index.mjs";
 
-describe("@/components/download/DownloadModal", () => {
-	let downloadModuleMock: DownloadModule;
+describe("@/components/molecules/CommonCartdidgeExportModal", () => {
+	let exportModuleMock: CommonCartridgeExportModule;
 	const setup = () => {
-		downloadModuleMock = createModuleMocks(DownloadModule, {
-			getIsDownloadModalOpen: true,
+		exportModuleMock = createModuleMocks(CommonCartridgeExportModule, {
+			getIsExportModalOpen: true,
 			getVersion: "1.1.0",
-			startDownload: jest.fn(),
-			resetDownloadFlow: jest.fn(),
+			startExport: jest.fn(),
+			resetExportFlow: jest.fn(),
 		});
-		const wrapper = mount(DownloadModal, {
+		const wrapper = mount(CommonCartdidgeExportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[DOWNLOAD_MODULE_KEY.valueOf()]: downloadModuleMock,
+					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: exportModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 					[ROOM_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
 				},
@@ -37,12 +37,12 @@ describe("@/components/download/DownloadModal", () => {
 		return wrapper;
 	};
 
-	it("should render DownloadModal component", () => {
+	it("should render CommonCartridgeExportModal component", () => {
 		const wrapper = setup();
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	describe("when getIsDownloadModalOpen is true", () => {
+	describe("when getIsExportModalOpen is true", () => {
 		it("should open the Dialog", async () => {
 			const wrapper = setup();
 			const dialog = wrapper.findComponent(VDialog);
@@ -86,8 +86,8 @@ describe("@/components/download/DownloadModal", () => {
 		});
 	});
 
-	describe("onDownload", () => {
-		it("should call startDownload and confirm then close the dialog", async () => {
+	describe("onExport", () => {
+		it("should call startExport and confirm then close the dialog", async () => {
 			const wrapper = setup();
 			const nextBtn = wrapper.findComponent("[data-testid='dialog-next-btn']");
 			await nextBtn.trigger("click");
@@ -99,10 +99,10 @@ describe("@/components/download/DownloadModal", () => {
 			expect(emit).toHaveProperty("dialog-confirmed");
 			expect(emit).toHaveProperty("dialog-closed");
 
-			downloadModuleMock.startDownload("1.1.0");
+			exportModuleMock.startExport("1.1.0");
 
 			expect(exportBtn.exists()).toBe(false);
-			expect(downloadModuleMock.startDownload).toHaveBeenCalled();
+			expect(exportModuleMock.startExport).toHaveBeenCalled();
 		});
 	});
 

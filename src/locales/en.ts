@@ -541,11 +541,11 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Submitted",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Local files are currently not supported.",
-	"components.molecules.download.options.info":
+	"components.molecules.export.options.info":
 		"The following content is not exported:",
-	"components.molecules.download.options.info.point1":
+	"components.molecules.export.options.info.point1":
 		"Uploaded files within the course.",
-	"components.molecules.download.options.info.point2":
+	"components.molecules.export.options.info.point2":
 		"Submissions assigned to a task.",
 	"components.organisms.AutoLogoutWarning.confirm": "Extend session",
 	"components.organisms.AutoLogoutWarning.error.401":

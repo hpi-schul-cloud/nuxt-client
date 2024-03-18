@@ -79,7 +79,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
 		/>
-		<download-modal />
+		<common-cartridge-export-modal />
 	</default-wireframe>
 </template>
 
@@ -88,7 +88,7 @@ import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import RoomDotMenu from "@/components/molecules/RoomDotMenu";
 import ShareModal from "@/components/share/ShareModal.vue";
-import DownloadModal from "@/components/download/DownloadModal.vue";
+import commonCartridgeExportModal from "@/components/molecules/CommonCartdidgeExportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
@@ -102,7 +102,7 @@ import {
 	authModule,
 	envConfigModule,
 	roomModule,
-	downloadModule,
+	commonCartridgeExportModule,
 } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -147,7 +147,7 @@ export default defineComponent({
 		RoomDotMenu,
 		CopyResultModal,
 		ShareModal,
-		DownloadModal,
+		commonCartridgeExportModal,
 	},
 	inject: ["copyModule", "shareModule"],
 	data() {
@@ -345,7 +345,7 @@ export default defineComponent({
 			) {
 				items.push({
 					icon: this.icons.mdiExport,
-					action: () => this.onDownload(),
+					action: () => this.onExport(),
 					name: this.$t("common.actions.export"),
 					dataTestId: "title-menu-common-cartridge-download",
 				});
@@ -419,8 +419,8 @@ export default defineComponent({
 			}
 		},
 
-		onDownload() {
-			downloadModule.startDownloadFlow();
+		onExport() {
+			commonCartridgeExportModule.startExportFlow();
 		},
 
 		async onCopyRoom(courseId) {
