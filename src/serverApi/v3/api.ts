@@ -813,10 +813,10 @@ export interface ConfigResponse {
     I18N__FALLBACK_LANGUAGE: Language;
     /**
      * 
-     * @type {string}
+     * @type {Timezone}
      * @memberof ConfigResponse
      */
-    I18N__DEFAULT_TIMEZONE: string;
+    I18N__DEFAULT_TIMEZONE: Timezone;
     /**
      * 
      * @type {number}
@@ -6260,6 +6260,15 @@ export interface TimestampsResponse {
      */
     deletedAt?: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum Timezone {
+    EuropeBerlin = 'Europe/Berlin'
+}
+
 /**
  * 
  * @export

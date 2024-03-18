@@ -1,4 +1,9 @@
-import { ConfigResponse, Language, SchulcloudTheme } from "@/serverApi/v3/api";
+import {
+	ConfigResponse,
+	Language,
+	SchulcloudTheme,
+	Timezone,
+} from "@/serverApi/v3/api";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -26,7 +31,7 @@ const mockEnvs: ConfigResponse = {
 	FEATURE_TEAMS_ENABLED: true,
 	I18N__AVAILABLE_LANGUAGES: [],
 	I18N__DEFAULT_LANGUAGE: Language.De,
-	I18N__DEFAULT_TIMEZONE: "mockValue",
+	I18N__DEFAULT_TIMEZONE: Timezone.EuropeBerlin,
 	I18N__FALLBACK_LANGUAGE: Language.En,
 	DOCUMENT_BASE_DIR: "mockValue",
 	SC_TITLE: "mockValue",

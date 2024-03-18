@@ -1,4 +1,9 @@
-import { ConfigResponse, Language, SchulcloudTheme } from "@/serverApi/v3/api";
+import {
+	ConfigResponse,
+	Language,
+	SchulcloudTheme,
+	Timezone,
+} from "@/serverApi/v3/api";
 import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
 import EnvConfigModule from "./env-config";
@@ -17,7 +22,7 @@ const mockEnvs: ConfigResponse = {
 	FEATURE_TEAMS_ENABLED: true,
 	I18N__AVAILABLE_LANGUAGES: [],
 	I18N__DEFAULT_LANGUAGE: Language.De,
-	I18N__DEFAULT_TIMEZONE: "mockValue",
+	I18N__DEFAULT_TIMEZONE: Timezone.EuropeBerlin,
 	I18N__FALLBACK_LANGUAGE: Language.En,
 	DOCUMENT_BASE_DIR: "mockValue",
 	SC_TITLE: "mockValue",
@@ -239,8 +244,7 @@ describe("env-config module", () => {
 
 		it("getDefaultTimeZone should get 'Europe/Berlin' if I18N__DEFAULT_TIMEZONE is not defined", () => {
 			const envConfigModule = new EnvConfigModule({});
-			expect(envConfigModule.env.I18N__DEFAULT_TIMEZONE).toBe("");
-			expect(envConfigModule.getDefaultTimezone).toBe("Europe/Berlin");
+			expect(envConfigModule.getDefaultTimezone).toBe(Timezone.EuropeBerlin);
 		});
 
 		it("getMaxFileSize should get default value if MAX_FILE_SIZE is not defined", () => {

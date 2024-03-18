@@ -9,6 +9,7 @@ import {
 	DefaultApiInterface,
 	Language,
 	SchulcloudTheme,
+	Timezone,
 } from "@/serverApi/v3";
 import {
 	applicationErrorModule,
@@ -63,7 +64,7 @@ export default class EnvConfigModule extends VuexModule {
 		I18N__AVAILABLE_LANGUAGES: [],
 		I18N__FALLBACK_LANGUAGE: Language.De,
 		I18N__DEFAULT_LANGUAGE: Language.De,
-		I18N__DEFAULT_TIMEZONE: "",
+		I18N__DEFAULT_TIMEZONE: Timezone.EuropeBerlin,
 		SC_TITLE: "",
 		FEATURE_SHOW_OUTDATED_USERS: false,
 		FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: false,
@@ -153,7 +154,7 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.I18N__FALLBACK_LANGUAGE || this.env.I18N__DEFAULT_LANGUAGE;
 	}
 
-	public get getDefaultTimezone(): string {
+	public get getDefaultTimezone(): Timezone {
 		return this.env.I18N__DEFAULT_TIMEZONE;
 	}
 
