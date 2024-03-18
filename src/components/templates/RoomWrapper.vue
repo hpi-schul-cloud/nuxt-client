@@ -74,19 +74,19 @@ export default defineComponent({
 						icon: mdiPlus,
 						title: this.$t("common.actions.create"),
 						ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
-						testId: "add-course-button",
+						dataTestId: "add-course-button",
 						actions: [
 							{
 								icon: mdiSchoolOutline,
 								label: this.$t("pages.rooms.fab.add.course"),
 								href: "/courses/add",
-								dataTestid: "fab_button_add_course",
+								dataTestId: "fab_button_add_course",
 								ariaLabel: this.$t("pages.rooms.fab.add.course"),
 							},
 							{
 								label: this.$t("pages.rooms.fab.import.course"),
 								icon: mdiImport,
-								dataTestid: "fab_button_import_course",
+								dataTestId: "fab_button_import_course",
 								ariaLabel: this.$t("pages.rooms.fab.import.course"),
 								customEvent: "import",
 							},
