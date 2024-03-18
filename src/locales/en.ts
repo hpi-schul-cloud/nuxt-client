@@ -1520,7 +1520,8 @@ export default {
 	"tldraw.error.ws.4400": "Room name is missing in URL params",
 	"tldraw.error.ws.4401": "You do not have permission to this whiteboard",
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
-	"tldraw.error.ws.4500": "An error occured within whiteboard websocket connection",
+	"tldraw.error.ws.4500":
+		"An error occured within whiteboard websocket connection",
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
