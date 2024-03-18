@@ -357,23 +357,11 @@ export interface CardSkeletonResponse {
 export interface ChangeLanguageParams {
     /**
      * 
-     * @type {string}
+     * @type {Language}
      * @memberof ChangeLanguageParams
      */
-    language: ChangeLanguageParamsLanguageEnum;
+    language: Language;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ChangeLanguageParamsLanguageEnum {
-    De = 'de',
-    En = 'en',
-    Es = 'es',
-    Uk = 'uk'
-}
-
 /**
  * 
  * @export
@@ -813,16 +801,16 @@ export interface ConfigResponse {
     I18N__AVAILABLE_LANGUAGES: Array<Language>;
     /**
      * 
-     * @type {string}
+     * @type {Language}
      * @memberof ConfigResponse
      */
-    I18N__DEFAULT_LANGUAGE: string;
+    I18N__DEFAULT_LANGUAGE: Language;
     /**
      * 
-     * @type {string}
+     * @type {Language}
      * @memberof ConfigResponse
      */
-    I18N__FALLBACK_LANGUAGE: string;
+    I18N__FALLBACK_LANGUAGE: Language;
     /**
      * 
      * @type {string}
@@ -3485,10 +3473,10 @@ export interface MeResponse {
     permissions: Array<string>;
     /**
      * 
-     * @type {string}
+     * @type {Language}
      * @memberof MeResponse
      */
-    language?: string;
+    language: Language;
     /**
      * 
      * @type {MeAccountResponse}

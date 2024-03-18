@@ -1,4 +1,4 @@
-import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3/api";
+import { ConfigResponse, Language, SchulcloudTheme } from "@/serverApi/v3/api";
 import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
 import EnvConfigModule from "./env-config";
@@ -16,9 +16,9 @@ const mockEnvs: ConfigResponse = {
 	FEATURE_EXTENSIONS_ENABLED: true,
 	FEATURE_TEAMS_ENABLED: true,
 	I18N__AVAILABLE_LANGUAGES: [],
-	I18N__DEFAULT_LANGUAGE: "mockValue",
+	I18N__DEFAULT_LANGUAGE: Language.De,
 	I18N__DEFAULT_TIMEZONE: "mockValue",
-	I18N__FALLBACK_LANGUAGE: "mockValue",
+	I18N__FALLBACK_LANGUAGE: Language.En,
 	DOCUMENT_BASE_DIR: "mockValue",
 	SC_TITLE: "mockValue",
 	GHOST_BASE_URL: "mockValue",
@@ -234,8 +234,7 @@ describe("env-config module", () => {
 	describe("getters", () => {
 		it("getFallbackLanguage should get 'de' if I18N__FALLBACK_LANGUAGE is not defined", () => {
 			const envConfigModule = new EnvConfigModule({});
-			expect(envConfigModule.env.I18N__FALLBACK_LANGUAGE).toBe("");
-			expect(envConfigModule.getFallbackLanguage).toBe("de");
+			expect(envConfigModule.getFallbackLanguage).toBe(Language.De);
 		});
 
 		it("getDefaultTimeZone should get 'Europe/Berlin' if I18N__DEFAULT_TIMEZONE is not defined", () => {
