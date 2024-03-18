@@ -168,10 +168,7 @@ export default defineComponent({
 	},
 	methods: {
 		async onCopyTask(payload) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
-			await this.copy(payload, loadingText);
+			await this.copy(payload);
 
 			this.tasksModule.setActiveTab("drafts");
 			await this.tasksModule.fetchAllTasks();

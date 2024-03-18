@@ -136,15 +136,8 @@ import {
 	mdiUndoVariant,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import { useCopy } from "@/composables/copy";
 
 export default defineComponent({
-	setup() {
-		const { copy } = useCopy();
-		return {
-			copy,
-		};
-	},
 	emits: ["toggledMenu", "focusChanged", "copyTask", "shareTask"],
 	components: { vCustomDialog },
 	props: {

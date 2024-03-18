@@ -426,17 +426,13 @@ export default defineComponent({
 			}
 		},
 		async onCopyRoom(courseId) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
-
 			const copyParams = {
 				id: courseId,
 				courseId,
 				type: CopyParamsTypeEnum.Course,
 			};
 
-			await this.copy(copyParams, loadingText);
+			await this.copy(copyParams);
 
 			const copyResult = this.copyModule.getCopyResult;
 
@@ -449,10 +445,7 @@ export default defineComponent({
 			}
 		},
 		async onCopyBoardElement(payload) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
-			await this.copy(payload, loadingText);
+			await this.copy(payload);
 			await roomModule.fetchContent(payload.courseId);
 		},
 		onCopyResultModalClosed() {
