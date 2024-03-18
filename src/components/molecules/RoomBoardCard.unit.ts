@@ -120,7 +120,7 @@ describe("RoomBoardCard", () => {
 		});
 
 		describe("when user is a teacher", () => {
-			it("should show three dot menu", async () => {
+			it("should show three dot menu", () => {
 				const { wrapper: wrapperPublishedTeacher } = setup({
 					boardData: mockPublishedBoardData,
 					userRole,
@@ -151,7 +151,7 @@ describe("RoomBoardCard", () => {
 					);
 				});
 
-				it("should use hidden UI", async () => {
+				it("should use hidden UI", () => {
 					const { wrapper: wrapperDraft } = setup({
 						boardData: mockDraftBoardData,
 						userRole,
@@ -169,7 +169,7 @@ describe("RoomBoardCard", () => {
 					);
 				});
 
-				it("should show publish action button in menu", async () => {
+				it("should show publish action button in menu", () => {
 					const { wrapper: wrapperDraft } = setup({
 						boardData: mockDraftBoardData,
 						userRole,
@@ -227,7 +227,7 @@ describe("RoomBoardCard", () => {
 		describe("when user is a student", () => {
 			const userRole = ImportUserResponseRoleNamesEnum.Student;
 
-			it("should not show three dot menu", async () => {
+			it("should not show three dot menu", () => {
 				const { wrapper: wrapperPublishedStudent } = setup({
 					boardData: mockPublishedBoardData,
 					userRole,
@@ -245,7 +245,7 @@ describe("RoomBoardCard", () => {
 				expect(threeDotMenuDraftStudent.exists()).toBe(false);
 			});
 
-			it("should not show card actions", async () => {
+			it("should not show card actions", () => {
 				const { wrapper: wrapperDraftStudent } = setup({
 					boardData: mockDraftBoardData,
 					userRole,
