@@ -1,4 +1,3 @@
-import CommonCartdidgeExportModal from "./CommonCartdidgeExportModal.vue";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import NotifierModule from "@/store/notifier";
 import RoomsModule from "@/store/rooms";
@@ -14,8 +13,9 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { VDialog } from "vuetify/lib/components/index.mjs";
+import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 
-describe("@/components/molecules/CommonCartdidgeExportModal", () => {
+describe("@/components/molecules/CommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;
 	const setup = () => {
 		exportModuleMock = createModuleMocks(CommonCartridgeExportModule, {
@@ -24,7 +24,7 @@ describe("@/components/molecules/CommonCartdidgeExportModal", () => {
 			startExport: jest.fn(),
 			resetExportFlow: jest.fn(),
 		});
-		const wrapper = mount(CommonCartdidgeExportModal, {
+		const wrapper = mount(CommonCartridgeExportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {

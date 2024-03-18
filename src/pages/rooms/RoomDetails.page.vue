@@ -88,7 +88,7 @@ import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import RoomDotMenu from "@/components/molecules/RoomDotMenu";
 import ShareModal from "@/components/share/ShareModal.vue";
-import commonCartridgeExportModal from "@/components/molecules/CommonCartdidgeExportModal.vue";
+import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
