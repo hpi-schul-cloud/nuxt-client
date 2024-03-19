@@ -36,6 +36,7 @@ export default class RoomModule extends VuexModule {
 	};
 	scopePermissions: string[] = [];
 	loading = false;
+	hasDrawingChild = false;
 	error: null | object = null;
 	businessError: BusinessError = {
 		statusCode: "",
@@ -248,6 +249,17 @@ export default class RoomModule extends VuexModule {
 		this.setPermissionData(ret_val[payload.userId]);
 	}
 
+	@Action
+	async fetchHasDrawingChild(boardId: string): Promise<void> {
+		try {
+			const { data } =
+				await this.boardApi.boardControllerHasDrawingChild(boardId);
+			this.setHasDrawingChild(data);
+		} catch (error: any) {
+			this.setError(error);
+		}
+	}
+
 	@Mutation
 	setRoomData(payload: SingleColumnBoardResponse): void {
 		this.roomData = payload;
@@ -305,6 +317,11 @@ export default class RoomModule extends VuexModule {
 		this.courseShareToken = payload;
 	}
 
+	@Mutation
+	setHasDrawingChild(hasDrawingChild: boolean): void {
+		this.hasDrawingChild = hasDrawingChild;
+	}
+
 	get getLoading(): boolean {
 		return this.loading;
 	}
@@ -335,6 +352,10 @@ export default class RoomModule extends VuexModule {
 
 	get getRoomId(): string {
 		return this.roomData.roomId;
+	}
+
+	get getHasDrawingChild(): boolean {
+		return this.hasDrawingChild;
 	}
 
 	private get finishedLoading(): boolean {

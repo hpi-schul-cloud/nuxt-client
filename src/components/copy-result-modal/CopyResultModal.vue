@@ -54,7 +54,7 @@ import {
 	mdiCloseCircle,
 	mdiInformation,
 } from "@mdi/js";
-import { envConfigModule } from "@/store";
+import { envConfigModule, roomModule } from "@/store";
 
 export default {
 	name: "CopyResultModal",
@@ -117,6 +117,11 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.nexboard"),
 				},
 				{
+					isShow: this.hasDrawingElement,
+					text: this.$t("components.molecules.copyResult.tldrawCopy.info"),
+					title: this.$t("components.molecules.copyResult.label.tldraw"),
+				},
+				{
 					isShow: this.hasFileElement || this.isCourse,
 					text: this.filesInfoText,
 					title: this.$t("components.molecules.copyResult.label.files"),
@@ -150,6 +155,9 @@ export default {
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentNexboard
 			);
+		},
+		hasDrawingElement() {
+			return this.isCourse && roomModule.hasDrawingChild;
 		},
 		hasFileElement() {
 			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);
