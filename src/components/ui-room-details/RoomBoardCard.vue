@@ -12,8 +12,8 @@
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"
 		@keydown.tab="$emit('tab-pressed')"
-		@keydown.down.prevent="moveCardDown"
-		@keydown.up.prevent="moveCardUp"
+		@keydown.down.prevent="onMoveCardDown"
+		@keydown.up.prevent="onMoveCardUp"
 	>
 		<VCardText class="pb-1">
 			<div class="top-row-container mb-0">
@@ -26,12 +26,9 @@
 						{{ cardTitle }}
 					</span>
 				</div>
-				<div
-					class="dot-menu-section"
-					v-if="!isDraft && userRole === Roles.Teacher"
-				>
+				<div v-if="userRole === Roles.Teacher" class="dot-menu-section">
 					<RoomDotMenu
-						:menu-items="actionsMenuItems()"
+						:menu-items="actionsMenuItems"
 						:data-testid="`board-card-menu-${boardCardIndex}`"
 						:aria-label="$t('pages.room.boardCard.menu.ariaLabel')"
 					/>
@@ -69,6 +66,7 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 	mdiViewDashboard,
+	mdiContentCopy,
 } from "@mdi/js";
 import RoomDotMenu from "./RoomDotMenu.vue";
 import { computed, PropType, toRef } from "vue";
@@ -93,6 +91,7 @@ const emit = defineEmits([
 	"tab-pressed",
 	"on-drag",
 	"move-element",
+	"copy-board",
 	"update-visibility",
 	"delete-board",
 ]);
@@ -129,7 +128,7 @@ const openBoard = async () => {
 	}
 };
 
-const moveCardDown = () => {
+const onMoveCardDown = () => {
 	if (props.keyDrag) {
 		emit("move-element", {
 			id: props.columnBoardItem.id,
@@ -138,7 +137,7 @@ const moveCardDown = () => {
 	}
 };
 
-const moveCardUp = () => {
+const onMoveCardUp = () => {
 	if (props.keyDrag) {
 		emit("move-element", {
 			id: props.columnBoardItem.id,
@@ -163,10 +162,10 @@ const cardActions = [
 	},
 ];
 
-const actionsMenuItems = () => {
-	const roleBasedMoreActions = [];
+const actionsMenuItems = computed(() => {
+	const actions = [];
 
-	roleBasedMoreActions.push({
+	actions.push({
 		icon: mdiPencilOutline,
 		action: openBoard,
 		name: t("common.actions.edit"),
@@ -174,25 +173,35 @@ const actionsMenuItems = () => {
 			toRef(props, "boardCardIndex").value
 		}`,
 	});
-	roleBasedMoreActions.push({
-		icon: mdiTrashCanOutline,
-		action: () => emit("delete-board"),
-		name: t("common.actions.remove"),
-		dataTestId: `board-card-menu-action-remove-${
-			toRef(props, "boardCardIndex").value
-		}`,
-	});
-	roleBasedMoreActions.push({
-		icon: mdiUndoVariant,
-		action: onUnpublish,
-		name: t("pages.room.cards.label.revert"),
-		dataTestId: `board-card-menu-action-unpublish-${
+	actions.push({
+		icon: mdiContentCopy,
+		action: () => emit("copy-board"),
+		name: t("common.actions.copy"),
+		dataTestId: `board-card-menu-action-copy-${
 			toRef(props, "boardCardIndex").value
 		}`,
 	});
 
-	return roleBasedMoreActions;
-};
+	if (!isDraft.value) {
+		actions.push({
+			icon: mdiUndoVariant,
+			action: onUnpublish,
+			name: t("pages.room.cards.label.revert"),
+			dataTestId: `board-card-menu-action-unpublish-${
+				toRef(props, "boardCardIndex").value
+			}`,
+		});
+	}
+
+	actions.push({
+		icon: mdiTrashCanOutline,
+		action: () => emit("delete-board"),
+		name: t("common.actions.remove"),
+		dataTestId: "content-card-board-menu-remove",
+	});
+
+	return actions;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -212,7 +221,7 @@ const actionsMenuItems = () => {
 
 .top-row-container {
 	display: grid;
-	grid-template-columns: 95% 5%;
+	grid-template-columns: 94% 6%;
 	align-items: center;
 
 	.tagline {
