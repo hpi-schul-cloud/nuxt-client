@@ -126,6 +126,7 @@ import {
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 
 export default defineComponent({
 	setup() {
@@ -153,7 +154,10 @@ export default defineComponent({
 		ShareModal,
 		commonCartridgeExportModal,
 	},
-	inject: ["copyModule", "shareModule"],
+	inject: {
+		copyModule: { from: COPY_MODULE_KEY },
+		shareModule: "shareModule",
+	},
 	data() {
 		return {
 			icons: {
@@ -431,17 +435,13 @@ export default defineComponent({
 		},
 
 		async onCopyRoom(courseId) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
-
 			const copyParams = {
 				id: courseId,
 				courseId,
 				type: CopyParamsTypeEnum.Course,
 			};
 
-			await this.copy(copyParams, loadingText);
+			await this.copy(copyParams);
 
 			const copyResult = this.copyModule.getCopyResult;
 
@@ -454,10 +454,7 @@ export default defineComponent({
 			}
 		},
 		async onCopyBoardElement(payload) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
-			await this.copy(payload, loadingText);
+			await this.copy(payload);
 			await roomModule.fetchContent(payload.courseId);
 		},
 		onCopyResultModalClosed() {
