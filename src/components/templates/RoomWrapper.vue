@@ -82,11 +82,7 @@ const fabItems: ComputedRef<Fab | null> = computed(() => {
 			},
 		];
 
-		if (
-			// eslint-disable-next-line no-constant-condition
-			true ||
-			envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
-		) {
+		if (envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED) {
 			actions.push({
 				icon: mdiSync,
 				label: t("pages.rooms.fab.add.syncedCourse"),

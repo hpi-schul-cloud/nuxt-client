@@ -1,36 +1,8 @@
 import { initializeAxios } from "@/utils/api";
+import { envsFactory } from "@@/tests/test-utils";
 import { AxiosInstance } from "axios";
 import EnvConfigModule from "./env-config";
 import { Envs } from "./types/env-config";
-
-const mockEnvs: Envs = {
-	ALERT_STATUS_URL: "mockValue",
-	NOT_AUTHENTICATED_REDIRECT_URL: "/mock",
-	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
-	JWT_TIMEOUT_SECONDS: 7200,
-	FEATURE_LERNSTORE_ENABLED: true,
-	SC_THEME: "mockValue",
-	FALLBACK_DISABLED: false,
-	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-	FEATURE_ES_COLLECTIONS_ENABLED: false,
-	FEATURE_EXTENSIONS_ENABLED: true,
-	FEATURE_TEAMS_ENABLED: true,
-	I18N__AVAILABLE_LANGUAGES: "mockValue",
-	I18N__DEFAULT_LANGUAGE: "mockValue",
-	I18N__DEFAULT_TIMEZONE: "mockValue",
-	I18N__FALLBACK_LANGUAGE: "mockValue",
-	DOCUMENT_BASE_DIR: "mockValue",
-	SC_TITLE: "mockValue",
-	GHOST_BASE_URL: "mockValue",
-	FEATURE_CONSENT_NECESSARY: true,
-	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,
-	MIGRATION_END_GRACE_PERIOD_MS: 1,
-	FILES_STORAGE__MAX_FILE_SIZE: 0,
-	FEATURE_SHOW_OUTDATED_USERS: true,
-	FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
-	FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
-	CTL_TOOLS_RELOAD_TIME_MS: 299000,
-};
 
 const URL = "/v1/config/app/public";
 let requestPath: string;
@@ -64,7 +36,7 @@ describe("env-config module", () => {
 	describe("actions", () => {
 		it("findEnv should make a get request to the right path", async () => {
 			const envConfigModule = new EnvConfigModule({});
-			axiosInitializer(mockEnvs);
+			axiosInitializer(envsFactory.build());
 
 			await envConfigModule.findEnvs();
 			expect(requestPath).toStrictEqual(URL);
@@ -72,15 +44,15 @@ describe("env-config module", () => {
 
 		it("findEnv should get envs", async () => {
 			const envConfigModule = new EnvConfigModule({});
-			axiosInitializer(mockEnvs);
+			axiosInitializer(envsFactory.build());
 
 			await envConfigModule.findEnvs();
-			expect(envConfigModule.getEnv).toStrictEqual(mockEnvs);
+			expect(envConfigModule.getEnv).toStrictEqual(envsFactory.build());
 		});
 
 		it("findEnv should call resetBusinessError, setStatus, and setEnvs mutations", async () => {
 			const envConfigModule = new EnvConfigModule({});
-			axiosInitializer(mockEnvs);
+			axiosInitializer(envsFactory.build());
 
 			const businessErrorSpy = jest.spyOn(
 				envConfigModule,
@@ -107,8 +79,8 @@ describe("env-config module", () => {
 				JWT_SHOW_TIMEOUT_WARNING_SECONDS: null,
 				JWT_TIMEOUT_SECONDS: null,
 				SC_THEME: null,
-			};
-			axiosInitializer({ ...mockEnvs, ...misingRequiredVars });
+			} as unknown as Envs;
+			axiosInitializer(envsFactory.build({ ...misingRequiredVars }));
 
 			await envConfigModule.findEnvs();
 			expect(consoleWarnSpy.mock.calls).toHaveLength(
@@ -117,7 +89,7 @@ describe("env-config module", () => {
 		});
 
 		it("findEnvs should retry on error", async () => {
-			axiosInitializer(mockEnvs, true);
+			axiosInitializer(envsFactory.build(), true);
 
 			const envConfigModule = new EnvConfigModule({});
 			const businessErrorSpy = jest.spyOn(
@@ -159,8 +131,8 @@ describe("env-config module", () => {
 		it("setEnvs should set envs", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.env.SC_THEME).not.toBe("mockValue");
-			envConfigModule.setEnvs(mockEnvs);
-			expect(envConfigModule.env.SC_THEME).toBe("mockValue");
+			envConfigModule.setEnvs(envsFactory.build());
+			expect(envConfigModule.env.SC_THEME).toBe("default");
 		});
 
 		it("increaseLoadingErrorCount should increase loadingErrorCount value by 1", () => {
@@ -220,31 +192,31 @@ describe("env-config module", () => {
 
 		it("getEnv should get env", () => {
 			const envConfigModule = new EnvConfigModule({});
-			expect(envConfigModule.getEnv).not.toStrictEqual(mockEnvs);
-			envConfigModule.env = mockEnvs;
-			expect(envConfigModule.getEnv).toStrictEqual(mockEnvs);
+			expect(envConfigModule.getEnv).not.toStrictEqual(envsFactory.build());
+			envConfigModule.env = envsFactory.build();
+			expect(envConfigModule.getEnv).toStrictEqual(envsFactory.build());
 		});
 
 		it("getMigrationEndGracePeriod should get MIGRATION_END_GRACE_PERIOD_MS", () => {
 			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
+			envConfigModule.env = envsFactory.build();
 			expect(envConfigModule.getMigrationEndGracePeriod).toStrictEqual(
-				mockEnvs.MIGRATION_END_GRACE_PERIOD_MS
+				envsFactory.build().MIGRATION_END_GRACE_PERIOD_MS
 			);
 		});
 
 		it("getShowOutdatedUsers should get FEATURE_SHOW_OUTDATED_USERS", () => {
 			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
+			envConfigModule.env = envsFactory.build();
 
 			expect(envConfigModule.getShowOutdatedUsers).toStrictEqual(
-				mockEnvs.FEATURE_SHOW_OUTDATED_USERS
+				envsFactory.build().FEATURE_SHOW_OUTDATED_USERS
 			);
 		});
 
 		it("getShowOutdatedUsers should not get FEATURE_SHOW_OUTDATED_USERS", () => {
 			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
+			envConfigModule.env = envsFactory.build();
 			delete envConfigModule.env.FEATURE_SHOW_OUTDATED_USERS;
 
 			expect(envConfigModule.getShowOutdatedUsers).toEqual(false);
@@ -254,18 +226,20 @@ describe("env-config module", () => {
 			describe("when feature exists", () => {
 				it("should return value", () => {
 					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.env = mockEnvs;
+					envConfigModule.env = envsFactory.build();
 
 					expect(
 						envConfigModule.getEnableLdapSyncDuringMigration
-					).toStrictEqual(mockEnvs.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION);
+					).toStrictEqual(
+						envsFactory.build().FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION
+					);
 				});
 			});
 
 			describe("when feature does not exist", () => {
 				it("return false", () => {
 					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.env = mockEnvs;
+					envConfigModule.env = envsFactory.build();
 					delete envConfigModule.env.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION;
 
 					expect(envConfigModule.getEnableLdapSyncDuringMigration).toEqual(
@@ -277,16 +251,18 @@ describe("env-config module", () => {
 
 		it("getCtlContextConfigurationEnabled should get FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
+			envConfigModule.env = envsFactory.build({
+				FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
+			});
 
 			expect(envConfigModule.getCtlContextConfigurationEnabled).toStrictEqual(
-				mockEnvs.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED
+				true
 			);
 		});
 
 		it("getCtlContextConfigurationEnabled should not get FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
+			envConfigModule.env = envsFactory.build();
 			delete envConfigModule.env.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED;
 
 			expect(envConfigModule.getCtlContextConfigurationEnabled).toEqual(false);

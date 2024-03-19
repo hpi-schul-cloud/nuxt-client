@@ -43,7 +43,7 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { GroupEntryResponse } from "@/serverApi/v3";
 import { useGroupListState } from "@data-group";
-import { ModelRef, Ref, ref, watch } from "vue";
+import { ModelRef, Ref, ref, watchEffect } from "vue";
 
 const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 	type: Boolean,
@@ -56,8 +56,6 @@ const closeDialog = () => {
 
 const onConfirm = async () => {
 	if (selectedGroup.value) {
-		closeDialog();
-
 		window.location.assign(
 			`/courses/add?syncWithGroup=${selectedGroup.value.id}`
 		);
@@ -87,8 +85,8 @@ const loadGroups = async () => {
 	});
 };
 
-watch(isOpen, async (newValue, oldValue) => {
-	if (newValue !== oldValue && newValue) {
+watchEffect(async () => {
+	if (isOpen.value) {
 		await loadGroups();
 	}
 });
