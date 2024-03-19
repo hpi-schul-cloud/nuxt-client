@@ -136,16 +136,8 @@ import {
 	mdiUndoVariant,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import { useCopy } from "../../composables/copy";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	setup() {
-		const { copy } = useCopy();
-		return {
-			copy,
-		};
-	},
 	emits: ["toggledMenu", "focusChanged", "copyTask", "shareTask"],
 	components: { vCustomDialog },
 	props: {

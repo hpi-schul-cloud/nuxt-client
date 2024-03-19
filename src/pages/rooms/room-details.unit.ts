@@ -7,26 +7,29 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
-import { User } from "@/store/types/auth";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
+	COPY_MODULE_KEY,
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { mount } from "@vue/test-utils";
-import { AxiosInstance } from "axios";
-import RoomDetailsPage from "./RoomDetails.page.vue";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-jest";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
+import { mount } from "@vue/test-utils";
+import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
+import RoomDetailsPage from "./RoomDetails.page.vue";
+import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -82,31 +85,6 @@ const mockData = {
 	],
 };
 
-const mockAuthStoreDataStudentInvalid = {
-	_id: "asdf",
-	id: "asdf",
-	firstName: "Arthur",
-	lastName: "Dent",
-	email: "arthur.dent@hitchhiker.org",
-	roles: [{ name: "student" }],
-	permissions: ["ABC", "DEF"],
-};
-
-const mockAuthStoreDataTeacher = {
-	_id: "asdfg",
-	id: "asdfg",
-	firstName: "Peter",
-	lastName: "Parker",
-	email: "peter.parker@hitchhiker.org",
-	roles: [{ name: "teacher" }],
-	permissions: [
-		"COURSE_CREATE",
-		"COURSE_EDIT",
-		"TOPIC_CREATE",
-		"HOMEWORK_CREATE",
-	],
-};
-
 const mockPermissionsCourseTeacher = ["COURSE_CREATE", "COURSE_EDIT"];
 
 const mockPermissionsCourseSubstitutionTeacher = [
@@ -127,6 +105,7 @@ let copyModuleMock: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
 let notifierModuleMock: NotifierModule;
 let shareModuleMock: ShareModule;
+let downloadModuleMock: CommonCartridgeExportModule;
 
 const $router = { push: jest.fn(), resolve: jest.fn(), replace: jest.fn() };
 
@@ -150,12 +129,13 @@ const getWrapper = () => {
 				$route,
 			},
 			provide: {
-				copyModule: copyModuleMock,
+				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				notifierModule: notifierModuleMock,
 				shareModule: shareModuleMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModuleMock,
 			},
 			stubs: {
 				RoomDashboard: true,
@@ -177,7 +157,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 		roomModule.setRoomData(mockData as any);
 		roomModule.setPermissionData(mockPermissionsCourseTeacher);
-		authModule.setUser(mockAuthStoreDataTeacher as User);
 		copyModuleMock = createModuleMocks(CopyModule, {
 			getIsResultModalOpen: false,
 		});
@@ -190,6 +169,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 			createShareUrl: jest.fn(),
 			resetShareFlow: jest.fn(),
+		});
+		downloadModuleMock = createModuleMocks(CommonCartridgeExportModule, {
+			getIsExportModalOpen: false,
+			getVersion: "",
 		});
 
 		initializeAxios({
@@ -204,25 +187,26 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		jest.resetAllMocks();
 	});
 
-	it("should fetch data", async () => {
+	it("should fetch data", () => {
 		const wrapper = getWrapper();
 		expect(wrapper.vm.roomData).toStrictEqual(mockData);
 	});
 
-	it("'to course files' button should have correct path", async () => {
+	it("'to course files' button should have correct path", () => {
 		const wrapper = getWrapper();
 		const backButton = wrapper.find(".back-button");
 		expect(backButton.attributes("href")).toStrictEqual("/files/courses/123");
 	});
 
-	it("title should be the course name", async () => {
+	it("title should be the course name", () => {
 		const wrapper = getWrapper();
 		const title = wrapper.find(".course-title");
 		expect(title.element.textContent).toContain("Sample Course");
 	});
 
 	it("should not show FAB if user does not have permission to create courses", () => {
-		authModule.setUser(mockAuthStoreDataStudentInvalid as User);
+		const mockMe = meResponseFactory.build();
+		authModule.setMe(mockMe);
 		roomModule.setPermissionData(mockPermissionsStudent);
 		const wrapper = getWrapper();
 		const fabComponent = wrapper.find(".wireframe-fab");
@@ -230,7 +214,11 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	describe("menu", () => {
-		it("should show FAB if user has permission to create courses", () => {
+		it("should show FAB if user has permission to create homework", () => {
+			const mockMe = meResponseFactory.build({
+				permissions: ["HOMEWORK_CREATE"],
+			});
+			authModule.setMe(mockMe);
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -238,6 +226,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("'add task' button should have correct path", async () => {
+			const mockMe = meResponseFactory.build({
+				permissions: ["HOMEWORK_CREATE"],
+			});
+			authModule.setMe(mockMe);
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -251,6 +243,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("'add lesson' button should have correct path", async () => {
+			const mockMe = meResponseFactory.build({
+				permissions: ["HOMEWORK_CREATE", "TOPIC_CREATE"],
+			});
+			authModule.setMe(mockMe);
 			const wrapper = getWrapper();
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
@@ -266,7 +262,8 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 	describe("headline menus", () => {
 		beforeEach(() => {
-			authModule.setUser(mockAuthStoreDataTeacher as User);
+			const mockMe = meResponseFactory.build();
+			authModule.setMe(mockMe);
 			roomModule.setPermissionData(mockPermissionsCourseTeacher);
 		});
 		const findMenuItems = (itemName: string, menuItems: Array<any>) => {
@@ -282,7 +279,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should not have the menu button for students", () => {
-			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
 			roomModule.setPermissionData(mockPermissionsStudent);
 			const wrapper = getWrapper();
 			const menuButton = wrapper.find(
@@ -293,7 +289,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should not have the menu button for substitution course teachers", () => {
-			authModule.setUser(mockAuthStoreDataStudentInvalid as User);
 			roomModule.setPermissionData(mockPermissionsCourseSubstitutionTeacher);
 			const wrapper = getWrapper();
 			const menuButton = wrapper.find(
@@ -382,6 +377,45 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 		});
 
+		describe("test Course export", () => {
+			it("should not find export button when feature flag is false", async () => {
+				envConfigModule.setEnvs({
+					FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
+				} as Envs);
+				const onExport = jest.fn();
+				const wrapper = getWrapper();
+				wrapper.vm.onExport = onExport;
+
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const moreActionButton = wrapper.findAll(
+					`[data-testid=title-menu-common-cartridge-download]`
+				);
+
+				expect(moreActionButton).not.toContain(
+					`[data-testid=title-menu-common-cartridge-download]`
+				);
+			});
+
+			it("should call onExport method when 'Export Course' menu clicked", async () => {
+				envConfigModule.setEnvs({
+					FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
+				} as Envs);
+				const onExport = jest.fn();
+				const wrapper = getWrapper();
+				wrapper.vm.onExport = onExport;
+
+				const threeDotButton = wrapper.find(".three-dot-button");
+				await threeDotButton.trigger("click");
+				const moreActionButton = wrapper.findComponent(
+					`[data-testid=title-menu-common-cartridge-download]`
+				);
+				await moreActionButton.trigger("click");
+
+				expect(onExport).toHaveBeenCalled();
+			});
+		});
+
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
 			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
 			const shareCourseSpy = jest.fn();
@@ -424,7 +458,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	describe("modal views", () => {
-		it("should open modal for sharing action", async () => {
+		it("should open modal for sharing action", () => {
 			const wrapper = getWrapper();
 			const modalView = wrapper.findComponent({
 				name: "share-modal",
@@ -481,7 +515,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				envConfigModule.setEnvs({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 				} as Envs);
-				authModule.addUserPermmission("CONTEXT_TOOL_ADMIN");
 
 				const wrapper = getWrapper();
 

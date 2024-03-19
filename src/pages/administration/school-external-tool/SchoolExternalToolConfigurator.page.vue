@@ -134,12 +134,12 @@ export default defineComponent({
 			template: SchoolExternalToolConfigurationTemplate,
 			configuredParameterValues: ToolParameterEntry[]
 		) => {
-			if (authModule.getUser) {
+			if (authModule.getSchool) {
 				const schoolExternalTool: SchoolExternalToolSave =
 					SchoolExternalToolMapper.mapTemplateToSchoolExternalToolSave(
 						template,
 						configuredParameterValues,
-						authModule.getUser.schoolId,
+						authModule.getSchool.id,
 						isDeactivated.value
 					);
 
@@ -190,9 +190,9 @@ export default defineComponent({
 
 				isDeactivated.value =
 					configuration.value?.status.isDeactivated ?? false;
-			} else if (authModule.getUser) {
+			} else if (authModule.getSchool) {
 				await schoolExternalToolsModule.loadAvailableToolsForSchool(
-					authModule.getUser?.schoolId
+					authModule.getSchool.id
 				);
 			}
 

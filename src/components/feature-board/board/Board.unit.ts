@@ -1,5 +1,14 @@
 import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { Board } from "@/types/board/Board";
+import {
+	BoardPermissionChecks,
+	defaultPermissions,
+} from "@/types/board/Permissions";
+import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	boardCardFactory,
@@ -7,34 +16,36 @@ import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
-import { mount } from "@vue/test-utils";
-import { Ref, computed, nextTick, ref } from "vue";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
-import { Board } from "@/types/board/Board";
-import {
-	BoardPermissionChecks,
-	defaultPermissions,
-} from "@/types/board/Permissions";
-import BoardVue from "./Board.vue";
-import BoardColumnVue from "./BoardColumn.vue";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { mount } from "@vue/test-utils";
+import { Ref, computed, ref } from "vue";
+import BoardVue from "./Board.vue";
+import BoardColumnVue from "./BoardColumn.vue";
+import BoardHeaderVue from "./BoardHeader.vue";
 
 import EnvConfigModule from "@/store/env-config";
 import { Envs } from "@/store/types/env-config";
+import { BoardCard } from "@/types/board/Card";
 import {
+	useBoardFocusHandler,
+	useBoardPermissions,
+	useBoardState,
 	useCardState,
 	useEditMode,
-	useBoardState,
-	useBoardPermissions,
-	useSharedEditMode,
 	useSharedBoardPageInformation,
-	useBoardFocusHandler,
+	useSharedEditMode,
 } from "@data-board";
-import { BoardCard } from "@/types/board/Card";
+import CopyModule from "@/store/copy";
+import { useCopy } from "@/composables/copy";
+import LoadingStateModule from "@/store/loading-state";
+import { Router, useRouter } from "vue-router";
+import { CopyApiResponse } from "@/serverApi/v3";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 
 jest.mock("@data-board");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -63,6 +74,9 @@ const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement
 );
 
+jest.mock("@/composables/copy");
+const mockUseCopy = jest.mocked(useCopy);
+
 const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
 	EnvConfigModule,
 	{
@@ -74,6 +88,9 @@ const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
 	}
 );
 const mockedEditMode = jest.mocked(useEditMode);
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 describe("Board", () => {
 	const card = boardCardFactory.build();
@@ -139,6 +156,12 @@ describe("Board", () => {
 			lastCreatedElementId: computed(() => "element-id"),
 			resetLastCreatedElementId: jest.fn(),
 		});
+
+		mockedCopyCalls = createMock<ReturnType<typeof useCopy>>();
+		mockUseCopy.mockReturnValue(mockedCopyCalls);
+
+		router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 	};
 
 	const cards = cardSkeletonResponseFactory.buildList(3);
@@ -154,6 +177,15 @@ describe("Board", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardStateCalls: DeepMocked<ReturnType<typeof useBoardState>>;
+	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
+
+	let router: DeepMocked<Router>;
+
+	const copyModule = createModuleMocks(CopyModule, {
+		getIsResultModalOpen: false,
+		getCopyResult: createMock<CopyApiResponse>({ id: "42" }),
+	});
+	const loadingStateModule = createModuleMocks(LoadingStateModule);
 
 	const setup = (options?: {
 		board?: Board;
@@ -170,6 +202,8 @@ describe("Board", () => {
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[COPY_MODULE_KEY.valueOf()]: copyModule,
+					loadingStateModule,
 				},
 			},
 			propsData: { boardId },
@@ -190,39 +224,56 @@ describe("Board", () => {
 			expect(wrapper.findComponent(BoardVue).exists()).toBeTruthy();
 		});
 
-		it("should fetch board from store and render it", async () => {
-			const { wrapper } = setup({ isLoading: false });
+		describe("BoardHeader component", () => {
+			it("should fetch board from store and render board header", () => {
+				const { wrapper } = setup();
+				expect(wrapper.findComponent(BoardHeaderVue).exists()).toBeTruthy();
+			});
 
-			expect(wrapper.findComponent(BoardColumnVue).exists()).toBeTruthy();
+			it("should fetch board from store and render board header with title", () => {
+				const { wrapper } = setup();
+				const boardHeaderComponent = wrapper.findComponent(BoardHeaderVue);
+				expect(boardHeaderComponent.props("title")).toBe(
+					boardWithOneColumn.title
+				);
+			});
 		});
 
-		it("should fetch board from store and render one column", () => {
-			const { wrapper } = setup();
-			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(1);
-		});
+		describe("BoardColumn component", () => {
+			it("should fetch board from store and render it", async () => {
+				const { wrapper } = setup({ isLoading: false });
 
-		it("should fetch board from store and render two columns", () => {
-			const twoColumns = columnResponseFactory.buildList(2, { cards });
-			const boardWithTwoColumns = boardResponseFactory.build({
-				columns: twoColumns,
+				expect(wrapper.findComponent(BoardColumnVue).exists()).toBeTruthy();
 			});
-			const { wrapper } = setup({ board: boardWithTwoColumns });
 
-			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
-		});
-
-		it("should propagate columnCount to BoardColumn components", () => {
-			const twoColumns = columnResponseFactory.buildList(2, { cards });
-			const boardWithTwoColumns = boardResponseFactory.build({
-				columns: twoColumns,
+			it("should fetch board from store and render one column", () => {
+				const { wrapper } = setup();
+				expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(1);
 			});
-			const { wrapper } = setup({ board: boardWithTwoColumns });
 
-			const boardColumnComponents = wrapper.findAllComponents({
-				name: "BoardColumn",
+			it("should fetch board from store and render two columns", () => {
+				const twoColumns = columnResponseFactory.buildList(2, { cards });
+				const boardWithTwoColumns = boardResponseFactory.build({
+					columns: twoColumns,
+				});
+				const { wrapper } = setup({ board: boardWithTwoColumns });
+
+				expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
 			});
-			expect(boardColumnComponents[0].props("columnCount")).toBe(2);
-			expect(boardColumnComponents[1].props("columnCount")).toBe(2);
+
+			it("should propagate columnCount to BoardColumn components", () => {
+				const twoColumns = columnResponseFactory.buildList(2, { cards });
+				const boardWithTwoColumns = boardResponseFactory.build({
+					columns: twoColumns,
+				});
+				const { wrapper } = setup({ board: boardWithTwoColumns });
+
+				const boardColumnComponents = wrapper.findAllComponents({
+					name: "BoardColumn",
+				});
+				expect(boardColumnComponents[0].props("columnCount")).toBe(2);
+				expect(boardColumnComponents[1].props("columnCount")).toBe(2);
+			});
 		});
 
 		describe("Info message for teacher", () => {
@@ -230,15 +281,21 @@ describe("Board", () => {
 				jest.clearAllMocks();
 			});
 
-			it("should call the board notifier when the user is teacher", () => {
+			it("should call the board notifier when the user is teacher", async () => {
+				jest.useFakeTimers();
+
 				setup();
-				expect(mockedBoardNotifierCalls.showInfo).toHaveBeenCalled();
+				jest.runAllTimers();
+
+				expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
 			});
 
 			it("should not call the board notifier when the user is not a teacher", async () => {
 				defaultPermissions.isTeacher = false;
 				setup();
-				expect(mockedBoardNotifierCalls.showInfo).not.toHaveBeenCalled();
+				expect(
+					mockedBoardNotifierCalls.showCustomNotifier
+				).not.toHaveBeenCalled();
 			});
 		});
 
@@ -265,6 +322,13 @@ describe("Board", () => {
 
 					expect(ghostColumnComponent.exists()).toBe(false);
 				});
+			});
+		});
+
+		describe("CopyResultModal", () => {
+			it("should have a result modal component", () => {
+				const { wrapper } = setup();
+				expect(wrapper.findComponent(CopyResultModal).exists()).toBe(true);
 			});
 		});
 	});
@@ -486,6 +550,34 @@ describe("Board", () => {
 			});
 		});
 
+		describe("@onUpdateBoardTitle", () => {
+			describe("when user is permitted to edit", () => {
+				it("should call updateBoardTitle method", () => {
+					const { wrapper } = setup();
+					const headearComponent = wrapper.findComponent({
+						name: "BoardHeader",
+					});
+					headearComponent.vm.$emit("update:title");
+
+					expect(mockedBoardStateCalls.updateBoardTitle).toHaveBeenCalled();
+				});
+			});
+
+			describe("when user is not permitted to edit", () => {
+				it("should not call updateBoardTitle method", () => {
+					const { wrapper } = setup({
+						permissions: { hasEditPermission: false },
+					});
+					const headearComponent = wrapper.findComponent({
+						name: "BoardHeader",
+					});
+					headearComponent.vm.$emit("update:title");
+
+					expect(mockedBoardStateCalls.updateBoardTitle).not.toHaveBeenCalled();
+				});
+			});
+		});
+
 		describe("@onUpdateCardPosition", () => {
 			describe("when user is permitted to move a card", () => {
 				it("should call moveCardMock method", () => {
@@ -551,10 +643,49 @@ describe("Board", () => {
 				const boardColumnComponents = wrapper.findAllComponents({
 					name: "BoardColumn",
 				});
-				boardColumnComponents.at(0)?.vm.$emit("reload:board");
-				await nextTick();
+				await boardColumnComponents.at(0)?.vm.$emit("reload:board");
 
 				expect(mockedBoardStateCalls.reloadBoard).toHaveBeenCalled();
+			});
+		});
+
+		describe("@onUpdateBoardVisibility", () => {
+			it("should update board visibility", async () => {
+				const { wrapper } = setup();
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("update:visibility");
+
+				expect(mockedBoardStateCalls.updateBoardVisibility).toHaveBeenCalled();
+			});
+		});
+
+		describe("@onCopyBoard", () => {
+			it("should call the copy function", async () => {
+				const { wrapper } = setup();
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("copy:board");
+
+				expect(mockedCopyCalls.copy).toHaveBeenCalled();
+			});
+
+			it("should redirect to the board copy", async () => {
+				const { wrapper } = setup();
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("copy:board");
+
+				expect(router.push).toHaveBeenCalledWith({
+					name: "rooms-board",
+					params: { id: copyModule.getCopyResult?.id },
+				});
 			});
 		});
 	});

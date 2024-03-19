@@ -231,6 +231,15 @@ export enum BoardExternalReferenceType {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum BoardParentType {
+    Course = 'course'
+}
+
+/**
+ * 
+ * @export
  * @interface BoardResponse
  */
 export interface BoardResponse {
@@ -258,6 +267,12 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     timestamps: TimestampsResponse;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardResponse
+     */
+    isVisible: boolean;
 }
 /**
  * 
@@ -753,7 +768,13 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_IMSCC_COURSE_EXPORT_ENABLED: boolean;
+    FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -1458,6 +1479,44 @@ export interface CourseMetadataResponse {
      * @memberof CourseMetadataResponse
      */
     copyingSince?: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateBoardBodyParams
+ */
+export interface CreateBoardBodyParams {
+    /**
+     * The title of the board
+     * @type {string}
+     * @memberof CreateBoardBodyParams
+     */
+    title: string;
+    /**
+     * The id of the parent
+     * @type {string}
+     * @memberof CreateBoardBodyParams
+     */
+    parentId: string;
+    /**
+     * 
+     * @type {BoardParentType}
+     * @memberof CreateBoardBodyParams
+     */
+    parentType: BoardParentType;
+}
+/**
+ * 
+ * @export
+ * @interface CreateBoardResponse
+ */
+export interface CreateBoardResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateBoardResponse
+     */
+    id: string;
 }
 /**
  * 
@@ -2749,6 +2808,15 @@ export enum ImportUserResponseRoleNamesEnum {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum InstanceFeature {
+    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+}
+
+/**
+ * 
+ * @export
  * @interface LdapAuthorizationBodyParams
  */
 export interface LdapAuthorizationBodyParams {
@@ -3405,6 +3473,12 @@ export interface MeResponse {
     permissions: Array<string>;
     /**
      * 
+     * @type {string}
+     * @memberof MeResponse
+     */
+    language?: string;
+    /**
+     * 
      * @type {MeAccountResponse}
      * @memberof MeResponse
      */
@@ -3497,12 +3571,6 @@ export interface MeUserResponse {
      * @memberof MeUserResponse
      */
     lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeUserResponse
-     */
-    language?: string;
     /**
      * 
      * @type {string}
@@ -5055,8 +5123,7 @@ export enum SchoolFeature {
     LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
     OauthProvisioningEnabled = 'oauthProvisioningEnabled',
     ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
-    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
+    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration'
 }
 
 /**
@@ -5121,6 +5188,44 @@ export interface SchoolInfoResponse {
      * @memberof SchoolInfoResponse
      */
     name: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolLogo
+ */
+export interface SchoolLogo {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolLogo
+     */
+    dataUrl?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolLogo
+     */
+    name?: string;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolPermissionsParams
+ */
+export interface SchoolPermissionsParams {
+    /**
+     * 
+     * @type {TeacherPermissionParams}
+     * @memberof SchoolPermissionsParams
+     */
+    teacher?: TeacherPermissionParams;
+    /**
+     * 
+     * @type {StudentPermissionParams}
+     * @memberof SchoolPermissionsParams
+     */
+    student?: StudentPermissionParams;
 }
 /**
  * 
@@ -5227,16 +5332,10 @@ export interface SchoolResponse {
     isExternal: boolean;
     /**
      * 
-     * @type {string}
+     * @type {SchoolLogo}
      * @memberof SchoolResponse
      */
-    logo_dataUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolResponse
-     */
-    logo_name?: string;
+    logo?: SchoolLogo;
     /**
      * 
      * @type {FileStorageType}
@@ -5267,6 +5366,12 @@ export interface SchoolResponse {
      * @memberof SchoolResponse
      */
     years: YearsResponse;
+    /**
+     * 
+     * @type {Array<InstanceFeature>}
+     * @memberof SchoolResponse
+     */
+    instanceFeatures: Array<InstanceFeature>;
 }
 /**
  * 
@@ -5288,16 +5393,10 @@ export interface SchoolUpdateBodyParams {
     officialSchoolNumber?: string;
     /**
      * 
-     * @type {string}
+     * @type {SchoolLogo}
      * @memberof SchoolUpdateBodyParams
      */
-    logo_dataUrl?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolUpdateBodyParams
-     */
-    logo_name?: string;
+    logo?: SchoolLogo;
     /**
      * 
      * @type {string}
@@ -5312,10 +5411,28 @@ export interface SchoolUpdateBodyParams {
     language?: SchoolUpdateBodyParamsLanguageEnum;
     /**
      * 
-     * @type {Array<string>}
+     * @type {Array<SchoolFeature>}
      * @memberof SchoolUpdateBodyParams
      */
-    features?: Array<SchoolUpdateBodyParamsFeaturesEnum>;
+    features?: Array<SchoolFeature>;
+    /**
+     * 
+     * @type {SchoolPermissionsParams}
+     * @memberof SchoolUpdateBodyParams
+     */
+    permissions?: SchoolPermissionsParams;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUpdateBodyParams
+     */
+    countyId?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchoolUpdateBodyParams
+     */
+    enableStudentTeamCreation?: boolean;
 }
 
 /**
@@ -5334,21 +5451,6 @@ export enum SchoolUpdateBodyParamsLanguageEnum {
     En = 'en',
     Es = 'es',
     Uk = 'uk'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SchoolUpdateBodyParamsFeaturesEnum {
-    RocketChat = 'rocketChat',
-    Videoconference = 'videoconference',
-    Nextcloud = 'nextcloud',
-    StudentVisibility = 'studentVisibility',
-    LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
-    OauthProvisioningEnabled = 'oauthProvisioningEnabled',
-    ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
-    IsTeamCreationByStudentsEnabled = 'isTeamCreationByStudentsEnabled'
 }
 
 /**
@@ -5644,6 +5746,19 @@ export interface SingleColumnBoardResponse {
      * @memberof SingleColumnBoardResponse
      */
     isArchived: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface StudentPermissionParams
+ */
+export interface StudentPermissionParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof StudentPermissionParams
+     */
+    LERNSTORE_VIEW?: boolean;
 }
 /**
  * 
@@ -6071,6 +6186,19 @@ export interface TaskStatusResponse {
 /**
  * 
  * @export
+ * @interface TeacherPermissionParams
+ */
+export interface TeacherPermissionParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TeacherPermissionParams
+     */
+    STUDENT_LIST?: boolean;
+}
+/**
+ * 
+ * @export
  * @interface TeamPermissionsBody
  */
 export interface TeamPermissionsBody {
@@ -6243,6 +6371,19 @@ export interface ToolReferenceResponse {
      * @memberof ToolReferenceResponse
      */
     status: ContextExternalToolConfigurationStatusResponse;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateBoardTitleParams
+ */
+export interface UpdateBoardTitleParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateBoardTitleParams
+     */
+    title: string;
 }
 /**
  * 
@@ -6703,6 +6844,19 @@ export enum VideoConferenceStateResponse {
     Finished = 'FINISHED'
 }
 
+/**
+ * 
+ * @export
+ * @interface VisibilityBodyParams
+ */
+export interface VisibilityBodyParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof VisibilityBodyParams
+     */
+    isVisible: boolean;
+}
 /**
  * 
  * @export
@@ -7617,6 +7771,84 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
+         * @summary Create a board copy.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCopyBoard: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerCopyBoard', 'boardId', boardId)
+            const localVarPath = `/boards/{boardId}/copy`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCreateBoard: async (createBoardBodyParams: CreateBoardBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createBoardBodyParams' is not null or undefined
+            assertParamExists('boardControllerCreateBoard', 'createBoardBodyParams', createBoardBodyParams)
+            const localVarPath = `/boards`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createBoardBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new column on a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -7771,15 +8003,15 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
          * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
+         * @param {UpdateBoardTitleParams} updateBoardTitleParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateBoardTitle: async (boardId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
+        boardControllerUpdateBoardTitle: async (boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
             assertParamExists('boardControllerUpdateBoardTitle', 'boardId', boardId)
-            // verify required parameter 'renameBodyParams' is not null or undefined
-            assertParamExists('boardControllerUpdateBoardTitle', 'renameBodyParams', renameBodyParams)
+            // verify required parameter 'updateBoardTitleParams' is not null or undefined
+            assertParamExists('boardControllerUpdateBoardTitle', 'updateBoardTitleParams', updateBoardTitleParams)
             const localVarPath = `/boards/{boardId}/title`
                 .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -7804,7 +8036,51 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(renameBodyParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(updateBoardTitleParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
+         * @param {VisibilityBodyParams} visibilityBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerUpdateVisibility: async (boardId: string, visibilityBodyParams: VisibilityBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerUpdateVisibility', 'boardId', boardId)
+            // verify required parameter 'visibilityBodyParams' is not null or undefined
+            assertParamExists('boardControllerUpdateVisibility', 'visibilityBodyParams', visibilityBodyParams)
+            const localVarPath = `/boards/{boardId}/visibility`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(visibilityBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -7821,6 +8097,28 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
 export const BoardApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = BoardApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @summary Create a board copy.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerCopyBoard(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCopyBoard(boardId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateBoardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCreateBoard(createBoardBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @summary Create a new column on a board.
@@ -7869,12 +8167,24 @@ export const BoardApiFp = function(configuration?: Configuration) {
          * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
+         * @param {UpdateBoardTitleParams} updateBoardTitleParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateBoardTitle(boardId, renameBodyParams, options);
+        async boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
+         * @param {VisibilityBodyParams} visibilityBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerUpdateVisibility(boardId, visibilityBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -7887,6 +8197,26 @@ export const BoardApiFp = function(configuration?: Configuration) {
 export const BoardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = BoardApiFp(configuration)
     return {
+        /**
+         * 
+         * @summary Create a board copy.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCopyBoard(boardId: string, options?: any): AxiosPromise<CopyApiResponse> {
+            return localVarFp.boardControllerCopyBoard(boardId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Create a new board.
+         * @param {CreateBoardBodyParams} createBoardBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): AxiosPromise<CreateBoardResponse> {
+            return localVarFp.boardControllerCreateBoard(createBoardBodyParams, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @summary Create a new column on a board.
@@ -7931,12 +8261,23 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
          * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
-         * @param {RenameBodyParams} renameBodyParams 
+         * @param {UpdateBoardTitleParams} updateBoardTitleParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.boardControllerUpdateBoardTitle(boardId, renameBodyParams, options).then((request) => request(axios, basePath));
+        boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): AxiosPromise<void> {
+            return localVarFp.boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update the visibility of a board.
+         * @param {string} boardId The id of the board.
+         * @param {VisibilityBodyParams} visibilityBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.boardControllerUpdateVisibility(boardId, visibilityBodyParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -7947,6 +8288,26 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
  * @interface BoardApi
  */
 export interface BoardApiInterface {
+    /**
+     * 
+     * @summary Create a board copy.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerCopyBoard(boardId: string, options?: any): AxiosPromise<CopyApiResponse>;
+
+    /**
+     * 
+     * @summary Create a new board.
+     * @param {CreateBoardBodyParams} createBoardBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any): AxiosPromise<CreateBoardResponse>;
+
     /**
      * 
      * @summary Create a new column on a board.
@@ -7991,12 +8352,23 @@ export interface BoardApiInterface {
      * 
      * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
-     * @param {RenameBodyParams} renameBodyParams 
+     * @param {UpdateBoardTitleParams} updateBoardTitleParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardApiInterface
      */
-    boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
+    boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Update the visibility of a board.
+     * @param {string} boardId The id of the board.
+     * @param {VisibilityBodyParams} visibilityBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -8007,6 +8379,30 @@ export interface BoardApiInterface {
  * @extends {BaseAPI}
  */
 export class BoardApi extends BaseAPI implements BoardApiInterface {
+    /**
+     * 
+     * @summary Create a board copy.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerCopyBoard(boardId: string, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerCopyBoard(boardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Create a new board.
+     * @param {CreateBoardBodyParams} createBoardBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerCreateBoard(createBoardBodyParams: CreateBoardBodyParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerCreateBoard(createBoardBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Create a new column on a board.
@@ -8059,13 +8455,26 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      * 
      * @summary Update the title of a board.
      * @param {string} boardId The id of the board.
-     * @param {RenameBodyParams} renameBodyParams 
+     * @param {UpdateBoardTitleParams} updateBoardTitleParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof BoardApi
      */
-    public boardControllerUpdateBoardTitle(boardId: string, renameBodyParams: RenameBodyParams, options?: any) {
-        return BoardApiFp(this.configuration).boardControllerUpdateBoardTitle(boardId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public boardControllerUpdateBoardTitle(boardId: string, updateBoardTitleParams: UpdateBoardTitleParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerUpdateBoardTitle(boardId, updateBoardTitleParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update the visibility of a board.
+     * @param {string} boardId The id of the board.
+     * @param {VisibilityBodyParams} visibilityBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerUpdateVisibility(boardId: string, visibilityBodyParams: VisibilityBodyParams, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerUpdateVisibility(boardId, visibilityBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -10063,11 +10472,11 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * 
          * @param {string} courseId The id of the course
-         * @param {'1.1.0' | '1.3.0'} version The version of CC export
+         * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse: async (courseId: string, version: '1.1.0' | '1.3.0', options: any = {}): Promise<RequestArgs> => {
+        courseControllerExportCourse: async (courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerExportCourse', 'courseId', courseId)
             // verify required parameter 'version' is not null or undefined
@@ -10205,11 +10614,11 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} courseId The id of the course
-         * @param {'1.1.0' | '1.3.0'} version The version of CC export
+         * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, version, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -10248,11 +10657,11 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         /**
          * 
          * @param {string} courseId The id of the course
-         * @param {'1.1.0' | '1.3.0'} version The version of CC export
+         * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): AxiosPromise<void> {
+        courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any): AxiosPromise<void> {
             return localVarFp.courseControllerExportCourse(courseId, version, options).then((request) => request(axios, basePath));
         },
         /**
@@ -10287,12 +10696,12 @@ export interface CoursesApiInterface {
     /**
      * 
      * @param {string} courseId The id of the course
-     * @param {'1.1.0' | '1.3.0'} version The version of CC export
+     * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any): AxiosPromise<void>;
+    courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -10326,12 +10735,12 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
     /**
      * 
      * @param {string} courseId The id of the course
-     * @param {'1.1.0' | '1.3.0'} version The version of CC export
+     * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApi
      */
-    public courseControllerExportCourse(courseId: string, version: '1.1.0' | '1.3.0', options?: any) {
+    public courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any) {
         return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, version, options).then((request) => request(this.axios, this.basePath));
     }
 

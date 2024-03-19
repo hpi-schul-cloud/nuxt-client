@@ -66,7 +66,7 @@ export default {
 					lastName: teacherData.lastName,
 					email: teacherData.email,
 					roles: ["teacher"],
-					schoolId: this.$user.schoolId,
+					schoolId: this.$me.school.id,
 					sendRegistration: this.sendRegistration,
 					generateRegistrationLink: true,
 				})
