@@ -185,7 +185,16 @@ describe("GroupModule", () => {
 	describe("loadClassesForSchool", () => {
 		describe("when the api returns a response", () => {
 			const setup = () => {
-				const classes: ClassInfoResponse[] = [classInfoResponseFactory.build()];
+				const classes: ClassInfoResponse[] = [
+					classInfoResponseFactory.build({
+						synchronizedCourses: [
+							{
+								id: "courseId",
+								name: "courseName",
+							},
+						],
+					}),
+				];
 				const sortBy = "name";
 				const sortOrder: SortOrder = SortOrder.ASC;
 				const pagination: Pagination = {

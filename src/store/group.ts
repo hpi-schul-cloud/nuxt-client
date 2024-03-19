@@ -31,7 +31,7 @@ export default class GroupModule extends VuexModule {
 		total: 0,
 	};
 
-	private sortBy?: ClassSortBy | undefined = ClassSortBy.Name;
+	private sortBy?: ClassSortBy = ClassSortBy.Name;
 	private sortOrder: SortOrder = SortOrder.ASC;
 	private page = 1;
 

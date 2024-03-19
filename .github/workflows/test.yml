@@ -37,11 +37,13 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         with:
           args: >
-            -Dsonar.sources=.
             -Dsonar.organization=schulcloud-verbund
             -Dsonar.projectKey=hpi-schul-cloud_nuxt-client
+            -Dsonar.sources=src
+            -Dsonar.tests=src
             -Dsonar.exclusions=src/serverApi/**/*.*,src/fileStorageApi/**/*.*,src/h5pEditorApi/**/*.*
-            -Dsonar.cpd.exclusions=**/*.test.ts,**/tests/**/*.*,**/*.unit.ts
+            -Dsonar.coverage.exclusions=**/*.unit.ts,**/*.unit.js
+            -Dsonar.cpd.exclusions=**/*.unit.ts,**/*.unit.js,**/locales/*.ts
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
 
   lint:
