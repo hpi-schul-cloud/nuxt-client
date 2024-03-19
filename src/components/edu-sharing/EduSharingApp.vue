@@ -9,7 +9,7 @@
 				placeholder="Search"
 			/>
 		</form>
-		<edu-sharing-app />
+		<!-- <edu-sharing-app /> -->
 	</main>
 </template>
 
