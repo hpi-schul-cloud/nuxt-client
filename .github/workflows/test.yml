@@ -39,7 +39,7 @@ jobs:
           args: >
             -Dsonar.organization=schulcloud-verbund
             -Dsonar.projectKey=hpi-schul-cloud_nuxt-client
-            -Dsonar.sources=src
+            -Dsonar.sources=.
             -Dsonar.tests=src
             -Dsonar.exclusions=src/serverApi/**/*.*,src/fileStorageApi/**/*.*,src/h5pEditorApi/**/*.*
             -Dsonar.coverage.exclusions=**/*.unit.ts,**/*.unit.js
