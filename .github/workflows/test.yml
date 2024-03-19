@@ -41,7 +41,7 @@ jobs:
             -Dsonar.organization=schulcloud-verbund
             -Dsonar.projectKey=hpi-schul-cloud_nuxt-client
             -Dsonar.exclusions=src/serverApi/**/*.*,src/fileStorageApi/**/*.*,src/h5pEditorApi/**/*.*
-            -Dsonar.cpd.exclusions=**/*.test.ts,**/tests/**/*.*,**/*.unit.ts
+            -Dsonar.cpd.exclusions=**/*.test.ts,**/tests/**/*.*,**/*.unit.ts,**/locales/*.ts
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
 
   lint:
