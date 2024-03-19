@@ -1,7 +1,7 @@
 <template>
 	<v-card
 		class="mx-auto mb-4 lesson-card"
-		:class="getStyleClasses()"
+		:class="{ 'hidden-lesson': isHidden }"
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
@@ -21,10 +21,11 @@
 					{{ $t("common.words.topic") }}
 				</div>
 				<div class="dot-menu-section">
-					<room-dot-menu
-						:menu-items="moreActionsMenuItems[userRole]"
+					<RoomDotMenu
+						v-if="userRole === Roles.Teacher"
+						:menu-items="moreActionsMenuItems"
 						data-testid="content-card-lesson-menu"
-						:aria-label="$t('pages.room.lessonCard.menu.ariaLabel')"
+						:ariaLabel="$t('pages.room.lessonCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
@@ -50,9 +51,13 @@
 				</div>
 			</div>
 		</v-card-text>
-		<v-card-actions class="pt-1" data-testid="content-card-lesson-actions">
+		<v-card-actions
+			v-if="userRole === Roles.Teacher"
+			class="pt-1"
+			data-testid="content-card-lesson-actions"
+		>
 			<v-btn
-				v-for="(action, index) in cardActions[userRole]"
+				v-for="(action, index) in cardActions"
 				:key="index"
 				:class="`action-button action-button-${action.name
 					.split(' ')
@@ -67,7 +72,7 @@
 	</v-card>
 </template>
 
-<script>
+<script setup lang="ts">
 import {
 	mdiPencilOutline,
 	mdiUndoVariant,
@@ -75,229 +80,223 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
+import { PropType, computed } from "vue";
+import { useI18n } from "vue-i18n";
+
 import { RoomDotMenu } from "@ui-room-details";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-const lessonRequiredKeys = ["createdAt", "id", "name"];
 
-export default {
-	components: { RoomDotMenu },
-	props: {
-		lesson: {
-			type: Object,
-			required: true,
-			validator: (lesson) => lessonRequiredKeys.every((key) => key in lesson),
-		},
-		room: {
-			type: Object,
-			required: true,
-		},
-		userRole: { type: String, required: true },
-		ariaLabel: {
-			type: String,
-			default: "",
-		},
-		keyDrag: { type: Boolean, required: true },
-		dragInProgress: { type: Boolean, required: true },
+type RoomData = {
+	roomId: string;
+	displayColor?: string;
+};
+
+type LessonData = {
+	createdAt: string;
+	hidden: boolean;
+	id: string;
+	name: string;
+	numberOfDraftTasks: number;
+	numberOfPlannedTasks: number;
+	numberOfPublishedTasks: number;
+	updatedAt: string;
+};
+
+const props = defineProps({
+	lesson: {
+		type: Object as PropType<LessonData>,
+		required: true,
+		validator: (lesson: LessonData) =>
+			["createdAt", "id", "name"].every((key) => key in lesson),
 	},
-	data() {
-		return {
-			icons: {
-				mdiPencilOutline,
-				mdiUndoVariant,
-				mdiShareVariantOutline,
-				mdiTrashCanOutline,
-				mdiContentCopy,
-			},
-			defaultTitleColor: "rgba(var(--v-theme-secondary))",
-		};
+	room: {
+		type: Object as PropType<RoomData>,
+		required: true,
 	},
-	computed: {
-		titleColor() {
-			return this.room.displayColor || this.defaultTitleColor;
-		},
-		isHidden() {
-			return this.lesson.hidden;
-		},
-		cardActions() {
-			const roleBasedActions = {
-				[Roles.Teacher]: [],
-				[Roles.Student]: [],
-			};
+	userRole: { type: String, required: true },
+	ariaLabel: {
+		type: String,
+		default: "",
+	},
+	keyDrag: { type: Boolean, required: true },
+	dragInProgress: { type: Boolean, required: true },
+});
 
-			if (this.userRole === Roles.Teacher) {
-				if (this.isHidden) {
-					roleBasedActions[Roles.Teacher].push({
-						icon: "lessonSend",
-						action: () => this.publishLesson(),
-						name: this.$t("common.action.publish"),
-					});
-				}
-			}
+const emit = defineEmits([
+	"tab-pressed",
+	"on-drag",
+	"move-element",
+	"copy-lesson",
+	"update-visibility",
+	"delete-lesson",
+	"open-modal",
+]);
 
-			if (this.userRole === Roles.Student) {
-				// if action is needed for the students add actions like above
-			}
-			return roleBasedActions;
-		},
-		moreActionsMenuItems() {
-			const roleBasedMoreActions = {
-				[Roles.Teacher]: [],
-				[Roles.Student]: [],
-			};
+const { t } = useI18n();
 
-			if (this.userRole === Roles.Teacher) {
-				roleBasedMoreActions[Roles.Teacher].push({
-					icon: this.icons.mdiPencilOutline,
-					action: () =>
-						this.redirectAction(
-							`/courses/${this.room.roomId}/topics/${this.lesson.id}/edit?returnUrl=rooms/${this.room.roomId}`
-						),
-					name: this.$t("pages.room.taskCard.label.edit"),
-					dataTestId: "content-card-lesson-menu-edit",
+const isHidden = computed(() => {
+	return props.lesson.hidden;
+});
+
+const cardActions = computed(() => {
+	const actions = [];
+
+	if (isHidden.value) {
+		actions.push({
+			icon: "lessonSend",
+			action: () => publishLesson(),
+			name: t("common.action.publish"),
+		});
+	}
+
+	return actions;
+});
+
+const moreActionsMenuItems = computed(() => {
+	const actions = [];
+
+	actions.push({
+		icon: mdiPencilOutline,
+		action: () =>
+			redirectAction(
+				`/courses/${props.room.roomId}/topics/${props.lesson.id}/edit?returnUrl=rooms/${props.room.roomId}`
+			),
+		name: t("pages.room.taskCard.label.edit"),
+		dataTestId: "content-card-lesson-menu-edit",
+	});
+
+	if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
+		actions.push({
+			icon: mdiContentCopy,
+			action: () => copyCard(),
+			name: t("common.actions.copy"),
+			dataTestId: "content-card-lesson-menu-copy",
+		});
+	}
+
+	if (!isHidden.value) {
+		actions.push({
+			icon: mdiUndoVariant,
+			action: () => unPublishCard(),
+			name: t("pages.room.cards.label.revert"),
+			dataTestId: "content-card-lesson-menu-revert",
+		});
+	}
+
+	if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
+		actions.push({
+			icon: mdiShareVariantOutline,
+			action: () => emit("open-modal", props.lesson.id),
+			name: t("pages.room.lessonCard.label.shareLesson"),
+			dataTestId: "content-card-lesson-menu-share",
+		});
+	}
+
+	actions.push({
+		icon: mdiTrashCanOutline,
+		action: () => emit("delete-lesson"),
+		name: t("common.actions.remove"),
+		dataTestId: "content-card-lesson-menu-remove",
+	});
+
+	return actions;
+});
+
+const showChip = computed(() => {
+	return (
+		(props.lesson.numberOfPublishedTasks !== 0 &&
+			props.lesson.numberOfPublishedTasks !== undefined) ||
+		(props.lesson.numberOfPlannedTasks !== 0 &&
+			props.lesson.numberOfPlannedTasks !== undefined) ||
+		(props.lesson.numberOfDraftTasks !== 0 &&
+			props.lesson.numberOfDraftTasks !== undefined)
+	);
+});
+
+const taskChipValue = computed(() => {
+	const chipValueArray = [];
+
+	if (props.lesson.numberOfPublishedTasks) {
+		chipValueArray.push(
+			`${props.lesson.numberOfPublishedTasks} ${
+				isHidden.value ? t("common.words.ready") : t("common.words.published")
+			}`
+		);
+	}
+
+	if (props.lesson.numberOfPlannedTasks) {
+		chipValueArray.push(
+			`${props.lesson.numberOfPlannedTasks} ${t("common.words.planned")}`
+		);
+	}
+
+	if (props.lesson.numberOfDraftTasks) {
+		chipValueArray.push(
+			`${props.lesson.numberOfDraftTasks} ${
+				props.lesson.numberOfDraftTasks === 1
+					? t("common.words.draft")
+					: t("common.words.drafts")
+			}`
+		);
+	}
+
+	let chipStr = chipValueArray.length ? `${t("common.words.tasks")}: ` : "";
+
+	chipStr += chipValueArray.join(" / ");
+
+	if (isHidden.value && props.lesson.numberOfDraftTasks === 0) {
+		chipStr += ` (${t("pages.room.lessonCard.label.notVisible")})`;
+	}
+
+	return chipStr;
+});
+
+const handleClick = () => {
+	if (!props.dragInProgress) {
+		window.location.href = `/courses/${props.room.roomId}/topics/${props.lesson.id}`;
+	}
+};
+
+const redirectAction = (value: string) => {
+	window.location.href = value;
+};
+
+const publishLesson = () => {
+	emit("update-visibility", true);
+};
+
+const copyCard = () => {
+	emit("copy-lesson");
+};
+
+const unPublishCard = () => {
+	emit("update-visibility", false);
+};
+
+const onKeyPress = (e: KeyboardEvent) => {
+	switch (e.key) {
+		case " ":
+			emit("on-drag");
+			break;
+		case "ArrowUp":
+			if (props.keyDrag)
+				emit("move-element", {
+					id: props.lesson.id,
+					moveIndex: -1,
 				});
-
-				if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
-					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiContentCopy,
-						action: () => this.copyCard(),
-						name: this.$t("common.actions.copy"),
-						dataTestId: "content-card-lesson-menu-copy",
-					});
-				}
-
-				if (!this.isHidden) {
-					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiUndoVariant,
-						action: () => this.unPublishCard(),
-						name: this.$t("pages.room.cards.label.revert"),
-						dataTestId: "content-card-lesson-menu-revert",
-					});
-				}
-
-				if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
-					roleBasedMoreActions[Roles.Teacher].push({
-						icon: this.icons.mdiShareVariantOutline,
-						action: () => this.$emit("open-modal", this.lesson.id),
-						name: this.$t("pages.room.lessonCard.label.shareLesson"),
-						dataTestId: "content-card-lesson-menu-share",
-					});
-				}
-
-				roleBasedMoreActions[Roles.Teacher].push({
-					icon: this.icons.mdiTrashCanOutline,
-					action: () => this.$emit("delete-lesson"),
-					name: this.$t("common.actions.remove"),
-					dataTestId: "content-card-lesson-menu-remove",
+			break;
+		case "ArrowDown":
+			if (props.keyDrag)
+				emit("move-element", {
+					id: props.lesson.id,
+					moveIndex: 1,
 				});
-			}
+			break;
 
-			if (this.userRole === Roles.Student) {
-				// if more action is needed for the students add actions like above
-			}
-
-			return roleBasedMoreActions;
-		},
-		showChip() {
-			return (
-				(this.lesson.numberOfPublishedTasks !== 0 &&
-					this.lesson.numberOfPublishedTasks !== undefined) ||
-				(this.lesson.numberOfPlannedTasks !== 0 &&
-					this.lesson.numberOfPlannedTasks !== undefined) ||
-				(this.lesson.numberOfDraftTasks !== 0 &&
-					this.lesson.numberOfDraftTasks !== undefined)
-			);
-		},
-		taskChipValue() {
-			const chipValueArray = [];
-
-			if (this.lesson.numberOfPublishedTasks) {
-				chipValueArray.push(
-					`${this.lesson.numberOfPublishedTasks} ${
-						this.isHidden
-							? this.$t("common.words.ready")
-							: this.$t("common.words.published")
-					}`
-				);
-			}
-
-			if (this.lesson.numberOfPlannedTasks) {
-				chipValueArray.push(
-					`${this.lesson.numberOfPlannedTasks} ${this.$t(
-						"common.words.planned"
-					)}`
-				);
-			}
-
-			if (this.lesson.numberOfDraftTasks) {
-				chipValueArray.push(
-					`${this.lesson.numberOfDraftTasks} ${
-						this.lesson.numberOfDraftTasks === 1
-							? this.$t("common.words.draft")
-							: this.$t("common.words.drafts")
-					}`
-				);
-			}
-
-			let chipStr = chipValueArray.length
-				? `${this.$t("common.words.tasks")}: `
-				: "";
-
-			chipStr += chipValueArray.join(" / ");
-
-			if (this.isHidden && this.lesson.numberOfDraftTasks === 0) {
-				chipStr += ` (${this.$t("pages.room.lessonCard.label.notVisible")})`;
-			}
-
-			return chipStr;
-		},
-	},
-	methods: {
-		handleClick() {
-			if (!this.dragInProgress) {
-				window.location = `/courses/${this.room.roomId}/topics/${this.lesson.id}`;
-			}
-		},
-		redirectAction(value) {
-			window.location = value;
-		},
-		publishLesson() {
-			this.$emit("update-visibility", true);
-		},
-		copyCard() {
-			this.$emit("copy-lesson");
-		},
-		unPublishCard() {
-			this.$emit("update-visibility", false);
-		},
-		onKeyPress(e) {
-			switch (e.keyCode) {
-				case 32:
-					this.$emit("on-drag");
-					break;
-				case 38:
-					if (this.keyDrag)
-						this.$emit("move-element", {
-							id: this.lesson.id,
-							moveIndex: -1,
-						});
-					break;
-				case 40:
-					if (this.keyDrag)
-						this.$emit("move-element", {
-							id: this.lesson.id,
-							moveIndex: 1,
-						});
-					break;
-
-				default:
-					break;
-			}
-		},
-		getStyleClasses() {
-			return this.isHidden ? "hidden-lesson" : "";
-		},
-	},
+		default:
+			break;
+	}
 };
 </script>
 
