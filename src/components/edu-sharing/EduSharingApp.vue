@@ -1,15 +1,15 @@
 <template>
 	<base href="/" />
 	<main class="main-container">
-		<form class="search-form" :onsubmit="onSubmit">
+		<!-- <form class="search-form" :onsubmit="onSubmit">
 			<input
 				name="searchString"
 				class="search-input"
 				type="text"
 				placeholder="Search"
 			/>
-		</form>
-		<!-- <edu-sharing-app /> -->
+		</form> -->
+		<edu-sharing-app />
 	</main>
 </template>
 
