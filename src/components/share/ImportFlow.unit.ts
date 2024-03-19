@@ -19,7 +19,11 @@ import SelectCourseModal from "@/components/share/SelectCourseModal.vue";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import {
 	createTestingI18n,
@@ -54,7 +58,7 @@ describe("@components/share/ImportFlow", () => {
 					vueDompurifyHTMLPlugin,
 				],
 				provide: {
-					copyModule: copyModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,

@@ -37,6 +37,7 @@
 					data-testid="board-menu-btn"
 				>
 					<BoardMenuActionEdit @click="onStartEditMode" />
+					<BoardMenuActionCopy @click="onCopyBoard" />
 					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 				</BoardMenu>
@@ -45,7 +46,7 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
@@ -53,133 +54,104 @@ import {
 } from "@data-board";
 import {
 	BoardMenu,
+	BoardMenuActionCopy,
 	BoardMenuActionEdit,
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
 } from "@ui-board";
 import { useDebounceFn } from "@vueuse/core";
-import { defineComponent, onMounted, ref, toRef, watchEffect } from "vue";
+import { onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 
-export default defineComponent({
-	name: "BoardHeader",
-	components: {
-		BoardAnyTitleInput,
-		BoardMenu,
-		BoardMenuActionEdit,
-		BoardMenuActionPublish,
-		BoardMenuActionRevert,
-		InlineEditInteractionHandler,
+const props = defineProps({
+	boardId: {
+		type: String,
+		required: true,
 	},
-	props: {
-		boardId: {
-			type: String,
-			required: true,
-		},
-		title: {
-			type: String,
-			required: true,
-		},
-		titlePlaceholder: {
-			type: String,
-			required: true,
-		},
-		isDraft: {
-			type: Boolean,
-			required: true,
-		},
+	title: {
+		type: String,
+		required: true,
 	},
-	emits: ["update:title", "update:visibility"],
-	setup(props, { emit }) {
-		const { t } = useI18n();
-		const boardId = toRef(props, "boardId");
-		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
-			boardId.value
-		);
-		const boardHeader = ref<HTMLDivElement | null>(null);
-		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
-			boardId.value,
-			boardHeader
-		);
-		const { hasEditPermission } = useBoardPermissions();
-
-		const inputWidthCalcSpan = ref<HTMLElement>();
-		const fieldWidth = ref(0);
-
-		onMounted(() => {
-			calculateWidth();
-		});
-
-		const boardTitle = ref("");
-
-		watchEffect(() => {
-			boardTitle.value = props.title;
-		});
-
-		const onStartEditMode = () => {
-			if (!hasEditPermission) return;
-			startEditMode();
-		};
-
-		const onEndEditMode = () => {
-			if (!hasEditPermission) return;
-			stopEditMode();
-		};
-
-		const onPublishBoard = () => {
-			if (!hasEditPermission) return;
-			emit("update:visibility", true);
-		};
-
-		const onUnpublishBoard = () => {
-			if (!hasEditPermission) return;
-			emit("update:visibility", false);
-		};
-
-		const updateBoardTitle = async (value: string) => {
-			boardTitle.value = value;
-			calculateWidth();
-			await emitTitle(value);
-		};
-
-		const emitTitle = useDebounceFn((newTitle: string) => {
-			if (newTitle.length < 1) return;
-
-			emit("update:title", newTitle);
-		}, 1000);
-
-		const calculateWidth = () => {
-			if (!inputWidthCalcSpan.value) return;
-			const title =
-				boardTitle.value || t("pages.room.boardCard.label.courseBoard");
-
-			inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
-
-			const width = inputWidthCalcSpan.value.offsetWidth;
-			fieldWidth.value = width;
-		};
-
-		return {
-			t,
-			boardHeader,
-			boardTitle,
-			hasEditPermission,
-			isEditMode,
-			isFocusContained,
-			isFocusedById,
-			onStartEditMode,
-			onEndEditMode,
-			onPublishBoard,
-			onUnpublishBoard,
-			calculateWidth,
-			fieldWidth,
-			inputWidthCalcSpan,
-			updateBoardTitle,
-		};
+	titlePlaceholder: {
+		type: String,
+		required: true,
+	},
+	isDraft: {
+		type: Boolean,
+		required: true,
 	},
 });
+
+const emit = defineEmits(["copy:board", "update:title", "update:visibility"]);
+
+const { t } = useI18n();
+const boardId = toRef(props, "boardId");
+const { isEditMode, startEditMode, stopEditMode } = useEditMode(boardId.value);
+const boardHeader = ref<HTMLDivElement | null>(null);
+const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
+const { hasEditPermission } = useBoardPermissions();
+
+const inputWidthCalcSpan = ref<HTMLElement>();
+const fieldWidth = ref(0);
+
+onMounted(() => {
+	calculateWidth();
+});
+
+const boardTitle = ref("");
+
+watchEffect(() => {
+	boardTitle.value = props.title;
+});
+
+const onStartEditMode = () => {
+	if (!hasEditPermission) return;
+	startEditMode();
+};
+
+const onEndEditMode = () => {
+	if (!hasEditPermission) return;
+	stopEditMode();
+};
+
+const onCopyBoard = () => {
+	if (!hasEditPermission) return;
+	emit("copy:board");
+};
+
+const onPublishBoard = () => {
+	if (!hasEditPermission) return;
+	emit("update:visibility", true);
+};
+
+const onUnpublishBoard = () => {
+	if (!hasEditPermission) return;
+	emit("update:visibility", false);
+};
+
+const updateBoardTitle = async (value: string) => {
+	boardTitle.value = value;
+	calculateWidth();
+	await emitTitle(value);
+};
+
+const emitTitle = useDebounceFn((newTitle: string) => {
+	if (newTitle.length < 1) return;
+
+	emit("update:title", newTitle);
+}, 1000);
+
+const calculateWidth = () => {
+	if (!inputWidthCalcSpan.value) return;
+	const title = boardTitle.value || t("pages.room.boardCard.label.courseBoard");
+
+	inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
+
+	const width = inputWidthCalcSpan.value.offsetWidth;
+	fieldWidth.value = width;
+};
 </script>
 
 <style lang="scss" scoped>

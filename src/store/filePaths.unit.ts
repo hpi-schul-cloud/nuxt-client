@@ -1,6 +1,7 @@
 import { envConfigModule } from "@/store";
 import { envsFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { envsFactory } from "../../tests/test-utils";
 import EnvConfigModule from "./env-config";
 import FilePathsModule from "./filePaths";
 
