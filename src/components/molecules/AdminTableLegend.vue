@@ -29,7 +29,10 @@
 				</base-link>
 			</strong>
 		</span>
-		<p class="text-grey mt-6">
+		<p v-if="theme === 'thr'" class="text-grey mt-6">
+			{{ $t("components.molecules.admintablelegend.thr") }}
+		</p>
+		<p v-else class="text-grey mt-6">
 			{{
 				$t("components.molecules.admintablelegend.hint", {
 					institute_title: setInstituteTitle,
@@ -57,7 +60,7 @@ export default {
 	},
 	data() {
 		// This solely exists to appear in the coverage report
-		return {};
+		return { theme: envConfigModule.getTheme };
 	},
 	computed: {
 		setInstituteTitle() {
