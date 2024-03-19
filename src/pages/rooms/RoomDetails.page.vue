@@ -4,6 +4,7 @@
 		:full-width="true"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
+		@onFabItemClick="fabItemClickHandler"
 	>
 		<template #header>
 			<div class="d-flex ma-2 mt-3">
@@ -78,6 +79,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
 		/>
+		<common-cartridge-export-modal />
 	</default-wireframe>
 </template>
 
@@ -86,6 +88,7 @@ import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import { RoomDotMenu } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
+import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
@@ -95,7 +98,12 @@ import {
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { authModule, envConfigModule, roomModule } from "@/store";
+import {
+	authModule,
+	envConfigModule,
+	roomModule,
+	commonCartridgeExportModule,
+} from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
@@ -108,7 +116,7 @@ import {
 	mdiPlus,
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
-	mdiTrayArrowDown,
+	mdiExport,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
@@ -139,6 +147,7 @@ export default defineComponent({
 		RoomDotMenu,
 		CopyResultModal,
 		ShareModal,
+		commonCartridgeExportModal,
 	},
 	inject: ["copyModule", "shareModule"],
 	data() {
@@ -148,7 +157,7 @@ export default defineComponent({
 				mdiEmailPlusOutline,
 				mdiShareVariantOutline,
 				mdiContentCopy,
-				mdiTrayArrowDown,
+				mdiExport,
 			},
 			breadcrumbs: [
 				{
@@ -261,7 +270,7 @@ export default defineComponent({
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
 					icon: mdiViewListOutline,
-					customEvent: () => this.onCreateBoard(this.roomData.roomId),
+					customEvent: "board-create",
 					dataTestId: "fab_button_add_board",
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),
 				});
@@ -331,21 +340,14 @@ export default defineComponent({
 				});
 			}
 
-			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+			if (
+				envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED
+			) {
 				items.push({
-					icon: this.icons.mdiTrayArrowDown,
-					action: async () => await roomModule.downloadImsccCourse("1.1.0"),
-					name: this.$t("common.actions.download.v1.1"),
-					dataTestId: "title-menu-imscc-download-v1.1",
-				});
-			}
-
-			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
-				items.push({
-					icon: this.icons.mdiTrayArrowDown,
-					action: async () => await roomModule.downloadImsccCourse("1.3.0"),
-					name: this.$t("common.actions.download.v1.3"),
-					dataTestId: "title-menu-imscc-download-v1.3",
+					icon: this.icons.mdiExport,
+					action: () => this.onExport(),
+					name: this.$t("common.actions.export"),
+					dataTestId: "title-menu-common-cartridge-download",
 				});
 			}
 
@@ -387,6 +389,11 @@ export default defineComponent({
 		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
+		fabItemClickHandler(event) {
+			if (event === "board-create") {
+				this.onCreateBoard(this.roomData.roomId);
+			}
+		},
 		setActiveTabIfPageCached(event) {
 			if (event.persisted) {
 				if (this.$route.query?.tab) {
@@ -411,6 +418,11 @@ export default defineComponent({
 				});
 			}
 		},
+
+		onExport() {
+			commonCartridgeExportModule.startExportFlow();
+		},
+
 		async onCopyRoom(courseId) {
 			const loadingText = this.$t(
 				"components.molecules.copyResult.title.loading"

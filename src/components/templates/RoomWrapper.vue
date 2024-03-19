@@ -4,6 +4,7 @@
 		headline=""
 		:full-width="true"
 		:fab-items="fabItems"
+		@onFabItemClick="fabItemClickHandler"
 	>
 		<template #header>
 			<slot name="header" />
@@ -28,20 +29,28 @@
 		<template v-else>
 			<slot name="page-content" />
 		</template>
+		<common-cartridge-import-modal :max-width="480" class="upload-modal" />
 	</default-wireframe>
 </template>
 
 <script>
-import { authModule, roomsModule } from "@/store";
+import {
+	authModule,
+	commonCartridgeImportModule,
+	envConfigModule,
+	roomsModule,
+} from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
-import { mdiPlus } from "@mdi/js";
+import CommonCartridgeImportModal from "@/components/molecules/CommonCartridgeImportModal.vue";
+import { mdiPlus, mdiImport, mdiSchoolOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 
 export default defineComponent({
 	components: {
 		DefaultWireframe,
 		vCustomEmptyState,
+		CommonCartridgeImportModal,
 	},
 	props: {
 		hasRooms: {
@@ -58,6 +67,35 @@ export default defineComponent({
 			if (
 				authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())
 			) {
+				if (
+					envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED
+				) {
+					const fabItems = {
+						icon: mdiPlus,
+						title: this.$t("common.actions.create"),
+						ariaLabel: this.$t("pages.rooms.fab.ariaLabel"),
+						dataTestId: "add-course-button",
+						actions: [
+							{
+								icon: mdiSchoolOutline,
+								label: this.$t("pages.rooms.fab.add.course"),
+								href: "/courses/add",
+								dataTestId: "fab_button_add_course",
+								ariaLabel: this.$t("pages.rooms.fab.add.course"),
+							},
+							{
+								label: this.$t("pages.rooms.fab.import.course"),
+								icon: mdiImport,
+								dataTestId: "fab_button_import_course",
+								ariaLabel: this.$t("pages.rooms.fab.import.course"),
+								customEvent: "import",
+							},
+						],
+					};
+
+					return fabItems;
+				}
+
 				return {
 					icon: mdiPlus,
 					title: this.$t("common.actions.create"),
@@ -74,6 +112,13 @@ export default defineComponent({
 		},
 		isEmptyState() {
 			return !roomsModule.getLoading && !this.hasRooms && !this.hasImportToken;
+		},
+	},
+	methods: {
+		fabItemClickHandler(event) {
+			if (event === "import") {
+				commonCartridgeImportModule.setIsOpen(true);
+			}
 		},
 	},
 });

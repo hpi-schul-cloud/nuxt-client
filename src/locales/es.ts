@@ -9,9 +9,7 @@ export default {
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
-	"common.actions.download.v1.1": "Descargar (CC v1.1)",
-	"common.actions.download.v1.3": "Descargar (CC v1.3)",
-	"common.actions.download": "Descargar",
+	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
 	"common.actions.import": "Importar",
@@ -168,6 +166,7 @@ export default {
 	"common.words.topic": "Tema",
 	"common.words.topics": "Temas",
 	"common.words.yes": "Sí",
+	"common.words.export": "La exportación del curso se está descargando",
 	"component.cardElement.fileElement.audioPlayer.pause": "Pausa",
 	"component.cardElement.fileElement.audioPlayer.play": "Reproducir",
 	"component.cardElement.fileElement.audioPlayer.slider": "Control deslizante",
@@ -557,6 +556,12 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Entregado",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Actualmente no se admiten archivos locales.",
+	"components.molecules.export.options.info":
+		"El siguiente contenido no se exporta:",
+	"components.molecules.export.options.info.point1":
+		"Archivos subidos dentro del curso.",
+	"components.molecules.export.options.info.point2":
+		"Envíos asignados a una tarea.",
 	"components.organisms.AutoLogoutWarning.confirm": "Ampliar sesión",
 	"components.organisms.AutoLogoutWarning.error.401":
 		"Tu sesión ya ha caducado. Inicia sesión de nuevo.",
@@ -1402,6 +1407,7 @@ export default {
 	"pages.rooms.fab.add.board": "Nuevo tablero de columna",
 	"pages.rooms.fab.add.task": "Nuevo tarea",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
+	"pages.rooms.fab.import.course": "Importar curso",
 	"pages.rooms.groupName": "Cursos",
 	"pages.rooms.headerSection.archived": "Archivo",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
@@ -1422,6 +1428,14 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Nombre del curso",
 	"pages.rooms.importCourse.step_3":
 		"El curso importado se puede renombrar en el siguiente paso.",
+	"pages.rooms.ccImportCourse.title": "Importar curso",
+	"pages.rooms.ccImportCourse.confirm": "Importar",
+	"pages.rooms.ccImportCourse.fileInputLabel": "Seleccionar archivo",
+	"pages.rooms.ccImportCourse.loading": "Importación en curso...",
+	"pages.rooms.ccImportCourse.success":
+		"El curso {name} se ha importado correctamente.",
+	"pages.rooms.ccImportCourse.error":
+		"Se ha producido un error al importar el curso.",
 	"pages.rooms.index.courses.active": "Cursos actuales",
 	"pages.rooms.index.courses.all": "Todos los cursos",
 	"pages.rooms.index.courses.arrangeCourses": "Organizar cursos",
@@ -1451,6 +1465,13 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Menú de herramienta",
 	"pages.rooms.tools.outdated": "Herramienta obsoleta",
 	"pages.rooms.tools.outdatedDialog.title": "Herramienta „{toolName}“ obsoleta",
+	"pages.room.modal.course.export.header": "Formato de exportación",
+	"pages.room.modal.course.export.options.header": "Exportar configuración",
+	"pages.room.modal.course.export.options.topics": "Temas",
+	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",
+	"pages.room.modal.course.export.version1.1":
+		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
+	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",

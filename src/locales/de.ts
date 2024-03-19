@@ -9,9 +9,6 @@ export default {
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
-	"common.actions.download.v1.1": "Herunterladen (CC v1.1)",
-	"common.actions.download.v1.3": "Herunterladen (CC v1.3)",
-	"common.actions.download": "Herunterladen",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
@@ -22,6 +19,7 @@ export default {
 	"common.actions.save": "Speichern",
 	"common.actions.scrollToTop": "Nach oben scrollen",
 	"common.actions.share": "Teilen",
+	"common.actions.export": "Exportieren",
 	"common.actions.shareCourse": "Kurskopie teilen",
 	"common.actions.update": "Aktualisieren",
 	"common.labels.admin": "Admin(s)",
@@ -147,6 +145,7 @@ export default {
 	"common.words.languages.es": "Spanisch",
 	"common.words.languages.uk": "Ukrainisch",
 	"common.words.learnContent": "Lerninhalte",
+	"common.words.export": "Kurs-Export wird heruntergeladen",
 	"common.words.lernstore": "Lern-Store",
 	"common.words.no": "Nein",
 	"common.words.noChoice": "Keine Auswahl",
@@ -491,6 +490,12 @@ export default {
 		"Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Die Aufgabe kann im Folgenden umbenannt werden.",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Der Kurs, in den die Aufgabe importiert werden soll, muss im Folgenden ausgewählt werden.",
+	"components.molecules.export.options.info":
+		"Folgende Inhalte werden nicht exportiert:",
+	"components.molecules.export.options.info.point1":
+		"Hochgeladene Dateien innerhalb des Kurses.",
+	"components.molecules.export.options.info.point2":
+		"Abgaben, die einer Aufgabe zugeordnet sind.",
 	"components.molecules.import.tasks.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.tasks.options.title": "Aufgabe importieren",
 	"components.molecules.importUsersMatch.deleteMatch": "Verknüpfung löschen",
@@ -1389,6 +1394,7 @@ export default {
 	"pages.rooms.fab.add.board": "Neues Spalten-Board",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
+	"pages.rooms.fab.import.course": "Kurs importieren",
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.headerSection.archived": "Archiv",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
@@ -1409,6 +1415,14 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Kursname",
 	"pages.rooms.importCourse.step_3":
 		"Der importierte Kurs kann im nächsten Schritt umbenannt werden.",
+	"pages.rooms.ccImportCourse.title": "Kurs importieren",
+	"pages.rooms.ccImportCourse.confirm": "Importieren",
+	"pages.rooms.ccImportCourse.fileInputLabel": "Datei auswählen",
+	"pages.rooms.ccImportCourse.loading": "Import läuft...",
+	"pages.rooms.ccImportCourse.success":
+		"Kurs {name} wurde erfolgreich importiert.",
+	"pages.rooms.ccImportCourse.error":
+		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.index.courses.active": "Aktuelle Kurse",
 	"pages.rooms.index.courses.all": "Alle Kurse",
 	"pages.rooms.index.courses.arrangeCourses": "Kurse umordnen",
@@ -1437,6 +1451,13 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Tool Menü",
 	"pages.rooms.tools.outdated": "Tool veraltet",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ veraltet",
+	"pages.room.modal.course.export.header": "Export-Format",
+	"pages.room.modal.course.export.options.header": "Export-Einstellung",
+	"pages.room.modal.course.export.options.topics": "Themen",
+	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
+	"pages.room.modal.course.export.version1.1":
+		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
+	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
