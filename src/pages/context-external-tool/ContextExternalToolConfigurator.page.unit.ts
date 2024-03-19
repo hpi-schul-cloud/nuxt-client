@@ -18,16 +18,16 @@ import {
 	contextExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
-import { mount } from "@vue/test-utils";
-import { Router, useRouter } from "vue-router";
-import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.page.vue";
-import { createMock } from "@golevelup/ts-jest";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRouter } from "vue-router";
+import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.page.vue";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
@@ -69,6 +69,7 @@ describe("ContextExternalToolConfigurator", () => {
 				displayColor: "#ffffff",
 				elements: [],
 				isArchived: false,
+				isSynchronized: false,
 			},
 		});
 
