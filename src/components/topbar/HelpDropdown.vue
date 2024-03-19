@@ -4,12 +4,11 @@
 			<v-list-item
 				:href="item.action"
 				:target="item.target"
+				:title="$t(item.label)"
 				:ripple="false"
 				:prepend-icon="item.icon"
 				class="mb-0"
-			>
-				<v-list-item-title class="link">{{ $t(item.label) }}</v-list-item-title>
-			</v-list-item>
+			/>
 			<v-divider v-if="index !== menuItems.length - 1" />
 		</template>
 	</v-list>
@@ -52,15 +51,6 @@ const menuItems = [
 </script>
 
 <style lang="scss" scoped>
-.link {
-	padding-left: var(--space-sm); // space in legacy client 8px;
-	text-transform: uppercase;
-	&:hover,
-	&:focus {
-		text-decoration: underline;
-	}
-}
-
 .menu-width {
 	width: 261px;
 	min-width: 10rem;
