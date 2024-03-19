@@ -1,4 +1,5 @@
 import RoomBoardCard from "./RoomBoardCard.vue";
+import RoomLessonCard from "./RoomLessonCard.vue";
 import RoomDotMenu from "./RoomDotMenu.vue";
 
-export { RoomBoardCard, RoomDotMenu };
+export { RoomBoardCard, RoomLessonCard, RoomDotMenu };
