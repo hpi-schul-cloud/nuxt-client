@@ -38,6 +38,7 @@
 				>
 					<BoardMenuActionEdit @click="onStartEditMode" />
 					<BoardMenuActionCopy @click="onCopyBoard" />
+					<BoardMenuActionShare @click="onShareBoard" />
 					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 				</BoardMenu>
@@ -58,6 +59,7 @@ import {
 	BoardMenuActionEdit,
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
+	BoardMenuActionShare,
 } from "@ui-board";
 import { useDebounceFn } from "@vueuse/core";
 import { onMounted, ref, toRef, watchEffect } from "vue";
@@ -84,7 +86,12 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["copy:board", "update:title", "update:visibility"]);
+const emit = defineEmits([
+	"copy:board",
+	"share:board",
+	"update:title",
+	"update:visibility",
+]);
 
 const { t } = useI18n();
 const boardId = toRef(props, "boardId");
@@ -119,6 +126,11 @@ const onEndEditMode = () => {
 const onCopyBoard = () => {
 	if (!hasEditPermission) return;
 	emit("copy:board");
+};
+
+const onShareBoard = () => {
+	if (!hasEditPermission) return;
+	emit("share:board");
 };
 
 const onPublishBoard = () => {

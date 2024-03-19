@@ -21,6 +21,7 @@ export default {
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.actions.share": "Compartir",
 	"common.actions.shareCourse": "Compartir copia de la cotización",
+	"common.actions.shareBoard": "Compartir copia de la tablón",
 	"common.actions.update": "Actualizar",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",

@@ -61,7 +61,8 @@ import {
 	mdiUndoVariant,
 	mdiViewDashboard,
 	mdiContentCopy,
-} from "@mdi/js";
+	mdiShareVariantOutline,
+} from "@/components/icons/material";
 import RoomDotMenu from "./RoomDotMenu.vue";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
@@ -84,6 +85,7 @@ const emit = defineEmits([
 	"on-drag",
 	"move-element",
 	"copy-board",
+	"share-board",
 	"update-visibility",
 	"delete-board",
 ]);
@@ -168,6 +170,15 @@ const actionsMenuItems = computed(() => {
 		name: t("common.actions.copy"),
 		dataTestId: "content-card-board-menu-copy",
 	});
+
+	// if (envConfigModule.getEnv.FEATURE_COLUMNBOARD_SHARE) {
+	actions.push({
+		icon: mdiShareVariantOutline,
+		action: () => emit("share-board"),
+		name: t("common.actions.shareBoard"),
+		dataTestId: "content-card-board-menu-share",
+	});
+	// }
 
 	if (!isDraft.value) {
 		actions.push({

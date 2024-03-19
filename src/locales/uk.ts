@@ -21,6 +21,7 @@ export default {
 	"common.actions.scrollToTop": "Прокрутити вгору",
 	"common.actions.share": "Поділіться",
 	"common.actions.shareCourse": "Копія котирування акцій",
+	"common.actions.shareBoard": "Копія котирування дошки",
 	"common.actions.update": "Оновити",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",

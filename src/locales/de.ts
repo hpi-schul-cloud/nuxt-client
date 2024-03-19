@@ -21,6 +21,7 @@ export default {
 	"common.actions.share": "Teilen",
 	"common.actions.export": "Exportieren",
 	"common.actions.shareCourse": "Kurskopie teilen",
+	"common.actions.shareBoard": "Boardkopie teilen",
 	"common.actions.update": "Aktualisieren",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",

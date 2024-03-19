@@ -21,6 +21,7 @@ export default {
 	"common.actions.scrollToTop": "Scroll up",
 	"common.actions.share": "Share",
 	"common.actions.shareCourse": "Share course copy",
+	"common.actions.shareBoard": "Share board copy",
 	"common.actions.update": "Update",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
