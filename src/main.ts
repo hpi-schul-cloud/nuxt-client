@@ -57,6 +57,7 @@ import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	COPY_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
@@ -150,7 +151,7 @@ app.use(VueDOMPurifyHTML, {
 		CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),
 		contextExternalToolsModule
 	);
-	app.provide("copyModule", copyModule);
+	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide(ENV_CONFIG_MODULE_KEY.valueOf(), envConfigModule);
 	app.provide("filePathsModule", filePathsModule);
 	app.provide("finishedTasksModule", finishedTasksModule);
