@@ -1,15 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Vue from "vue";
-
-interface User {
-	_id: number;
-	name: string;
-	schoolId: string;
-	firstName: string;
-}
+import { MeResponse } from "@/serverApi/v3";
 
 declare module "vue/types/vue" {
 	interface Vue {
-		$user: User;
+		$me: MeResponse;
 	}
 }

@@ -308,9 +308,6 @@ export default {
 			deletedPercent: "getPercent",
 			qrLinks: "getQrLinks",
 		}),
-		user() {
-			return authModule.getUser;
-		},
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
@@ -338,7 +335,7 @@ export default {
 			);
 
 			// filters out the QR bulk action is user is not an admin
-			if (!this.user?.roles?.some((role) => role.name === "administrator")) {
+			if (!authModule.getUserRoles.some((name) => name === "administrator")) {
 				editedActions = editedActions.filter(
 					(action) =>
 						action.label !==
@@ -362,7 +359,7 @@ export default {
 			// filters out edit column if school is external or if user is not an admin
 			if (
 				this.schoolIsExternallyManaged ||
-				!this.user?.roles?.some((role) => role.name === "administrator")
+				!authModule.getUserRoles.some((name) => name === "administrator")
 			) {
 				editedColumns = this.tableColumns.filter(
 					// _id field sets the edit column

@@ -1,10 +1,12 @@
-import { mount } from "@vue/test-utils";
-import vRoomAvatar from "./vRoomAvatar.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
+import { mdiSync } from "@mdi/js";
+import { mount } from "@vue/test-utils";
+import { VBadge } from "vuetify/lib/components/index.mjs";
+import vRoomAvatar from "./vRoomAvatar.vue";
 
 const mockData = {
 	id: "456",
@@ -17,6 +19,7 @@ const mockData = {
 	untilDate: "2020-12-16T23:00:00.000Z",
 	titleDate: "2019/20",
 	href: "/rooms/456",
+	isSynchronized: false,
 };
 
 describe("vRoomAvatar", () => {
@@ -68,6 +71,13 @@ describe("vRoomAvatar", () => {
 		const badgeElement = wrapper.findComponent({ name: "VBadge" });
 
 		expect(badgeElement.props().modelValue).toBe(true);
+	});
+
+	it("should display the synchronized badge", async () => {
+		const { wrapper } = setup({ item: { ...mockData, isSynchronized: true } });
+		const badgeElement = wrapper.findComponent(VBadge);
+
+		expect(badgeElement.props().icon).toBe(mdiSync);
 	});
 
 	it("should NOT display the badge", () => {

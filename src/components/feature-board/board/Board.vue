@@ -1,11 +1,15 @@
 <template>
 	<div>
-		<div class="ml-1">
-			<h3 aria-level="1" class="mt-0">
-				{{ $t("pages.room.boardCard.label.courseBoard") }}
-			</h3>
-		</div>
 		<template v-if="board">
+			<BoardHeader
+				:boardId="board.id"
+				:title="board.title"
+				:titlePlaceholder="$t('pages.room.boardCard.label.courseBoard')"
+				:isDraft="!board.isVisible"
+				@update:visibility="onUpdateBoardVisibility"
+				@update:title="onUpdateBoardTitle"
+				@copy:board="onCopyBoard"
+			/>
 			<div class="d-flex flex-row flex-shrink-1">
 				<div>
 					<Sortable
@@ -58,21 +62,21 @@
 					/>
 				</div>
 			</div>
-
 			<ConfirmationDialog />
 			<AddElementDialog />
 			<LightBox />
+			<CopyResultModal
+				:is-open="isCopyModalOpen"
+				:copy-result-items="copyResultModalItems"
+				:copy-result-root-item-type="copyResultRootItemType"
+				@dialog-closed="onCopyResultModalClosed"
+			/>
 		</template>
 	</div>
 </template>
 
-<script lang="ts">
-import {
-	CardMove,
-	columnDropPlaceholderOptions,
-	ColumnMove,
-} from "@/types/board/DragAndDrop";
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+<script setup lang="ts">
+import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	useBoardPermissions,
 	useBoardState,
@@ -82,185 +86,188 @@ import {
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { extractDataAttribute, useBoardNotifier } from "@util-board";
-import { useTouchDetection } from "@util-device-detection";
-import { useMediaQuery } from "@vueuse/core";
-import {
-	computed,
-	defineComponent,
-	onMounted,
-	onUnmounted,
-	toRef,
-	watch,
-} from "vue";
+import { useDebounceFn } from "@vueuse/core";
+import { SortableEvent } from "sortablejs";
+import { Sortable } from "sortablejs-vue3";
+import { computed, onMounted, onUnmounted, toRef, watch } from "vue";
+import { useI18n } from "vue-i18n";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-import { useI18n } from "vue-i18n";
-import { Sortable } from "sortablejs-vue3";
-import { SortableEvent } from "sortablejs";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+import BoardHeader from "./BoardHeader.vue";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
+import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useCopy } from "@/composables/copy";
+import { useLoadingState } from "@/composables/loadingState";
+import { CopyParamsTypeEnum } from "@/store/copy";
+import { useRouter } from "vue-router";
 
-export default defineComponent({
-	components: {
-		BoardColumn,
-		BoardColumnGhost,
-		ConfirmationDialog,
-		AddElementDialog,
-		LightBox,
-		Sortable,
-	},
-	props: {
-		boardId: { type: String, required: true },
-	},
-	setup(props) {
-		const { t } = useI18n();
-		const { showInfo, resetNotifier } = useBoardNotifier();
-		const { editModeId } = useSharedEditMode();
-		const isEditMode = computed(() => editModeId.value !== undefined);
-		const {
-			board,
-			createCard,
-			createColumn,
-			deleteCard,
-			deleteColumn,
-			moveCard,
-			moveColumn,
-			reloadBoard,
-			updateColumnTitle,
-		} = useBoardState(toRef(props, "boardId").value);
-
-		const { createPageInformation } = useSharedBoardPageInformation();
-
-		const { isTouchDetected } = useTouchDetection();
-
-		watch(board, async () => {
-			await createPageInformation(props.boardId);
-		});
-
-		useBodyScrolling();
-
-		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
-
-		const {
-			hasMovePermission,
-			hasCreateCardPermission,
-			hasCreateColumnPermission,
-			hasDeletePermission,
-			hasEditPermission,
-			isTeacher,
-		} = useBoardPermissions();
-
-		const placeholderOptions = columnDropPlaceholderOptions;
-
-		const onCreateCard = async (columnId: string) => {
-			if (hasCreateCardPermission) await createCard(columnId);
-		};
-
-		const onCreateColumn = async () => {
-			if (hasCreateCardPermission) await createColumn();
-		};
-
-		const onDeleteCard = async (cardId: string) => {
-			if (hasCreateCardPermission) await deleteCard(cardId);
-		};
-
-		const onDeleteColumn = async (columnId: string) => {
-			if (hasDeletePermission) await deleteColumn(columnId);
-		};
-
-		const onDropColumn = async (columnPayload: SortableEvent) => {
-			if (!hasMovePermission) return;
-
-			const columnId = extractDataAttribute(columnPayload.item, "columnId");
-			if (
-				columnId &&
-				columnPayload.newIndex !== undefined &&
-				columnPayload.oldIndex !== undefined
-			) {
-				const columnMove: ColumnMove = {
-					addedIndex: columnPayload.newIndex,
-					removedIndex: columnPayload.oldIndex,
-					columnId,
-				};
-				await moveColumn(columnMove);
-			}
-		};
-
-		const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
-			if (!hasMovePermission) return;
-			if (columnIndex === 0) return;
-
-			const columnMove: ColumnMove = {
-				addedIndex: columnIndex - 1,
-				removedIndex: columnIndex,
-				columnId,
-			};
-
-			await moveColumn(columnMove, true);
-		};
-
-		const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
-			if (!hasMovePermission) return;
-			if (board.value && columnIndex === board.value.columns.length - 1) return;
-
-			const columnMove: ColumnMove = {
-				addedIndex: columnIndex + 1,
-				removedIndex: columnIndex,
-				columnId,
-			};
-
-			await moveColumn(columnMove, true);
-		};
-
-		const onReloadBoard = async () => {
-			await reloadBoard();
-		};
-
-		const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-			if (hasMovePermission) await moveCard(cardMove);
-		};
-
-		const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
-			if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
-		};
-
-		onMounted(() => {
-			if (isTeacher) {
-				showInfo(t("components.board.alert.info.teacher"), false);
-			}
-		});
-
-		const debounceTime = computed(() => {
-			return isTouchDetected.value === true ? 300 : 0;
-		});
-
-		onUnmounted(() => {
-			resetNotifier();
-		});
-
-		return {
-			board,
-			columnDropPlaceholderOptions,
-			debounceTime,
-			hasMovePermission,
-			hasCreateCardPermission,
-			hasCreateColumnPermission,
-			placeholderOptions,
-			isEditMode,
-			isDesktop,
-			isTouchDetected,
-			onCreateCard,
-			onCreateColumn,
-			onDeleteCard,
-			onDropColumn,
-			onDeleteColumn,
-			onMoveColumnLeft,
-			onMoveColumnRight,
-			onReloadBoard,
-			onUpdateCardPosition,
-			onUpdateColumnTitle,
-		};
-	},
+const props = defineProps({
+	boardId: { type: String, required: true },
 });
+
+const { t } = useI18n();
+const { resetNotifier, showCustomNotifier } = useBoardNotifier();
+const { editModeId } = useSharedEditMode();
+const isEditMode = computed(() => editModeId.value !== undefined);
+const {
+	board,
+	createCard,
+	createColumn,
+	deleteCard,
+	deleteColumn,
+	moveCard,
+	moveColumn,
+	reloadBoard,
+	updateBoardTitle,
+	updateBoardVisibility,
+	updateColumnTitle,
+} = useBoardState(toRef(props, "boardId").value);
+
+const { createPageInformation } = useSharedBoardPageInformation();
+
+watch(board, async () => {
+	await createPageInformation(props.boardId);
+});
+
+useBodyScrolling();
+
+const {
+	hasMovePermission,
+	hasCreateCardPermission,
+	hasCreateColumnPermission,
+	hasDeletePermission,
+	hasEditPermission,
+	isTeacher,
+} = useBoardPermissions();
+
+const onCreateCard = async (columnId: string) => {
+	if (hasCreateCardPermission) await createCard(columnId);
+};
+
+const onCreateColumn = async () => {
+	if (hasCreateCardPermission) await createColumn();
+};
+
+const onDeleteCard = async (cardId: string) => {
+	if (hasCreateCardPermission) await deleteCard(cardId);
+};
+
+const onDeleteColumn = async (columnId: string) => {
+	if (hasDeletePermission) await deleteColumn(columnId);
+};
+
+const onDropColumn = async (columnPayload: SortableEvent) => {
+	if (!hasMovePermission) return;
+
+	const columnId = extractDataAttribute(columnPayload.item, "columnId");
+	if (
+		columnId &&
+		columnPayload.newIndex !== undefined &&
+		columnPayload.oldIndex !== undefined
+	) {
+		const columnMove: ColumnMove = {
+			addedIndex: columnPayload.newIndex,
+			removedIndex: columnPayload.oldIndex,
+			columnId,
+		};
+		await moveColumn(columnMove);
+	}
+};
+
+const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
+	if (!hasMovePermission) return;
+	if (columnIndex === 0) return;
+
+	const columnMove: ColumnMove = {
+		addedIndex: columnIndex - 1,
+		removedIndex: columnIndex,
+		columnId,
+	};
+
+	await moveColumn(columnMove, true);
+};
+
+const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
+	if (!hasMovePermission) return;
+	if (board.value && columnIndex === board.value.columns.length - 1) return;
+
+	const columnMove: ColumnMove = {
+		addedIndex: columnIndex + 1,
+		removedIndex: columnIndex,
+		columnId,
+	};
+
+	await moveColumn(columnMove, true);
+};
+
+const onReloadBoard = async () => {
+	await reloadBoard();
+};
+
+const onUpdateBoardVisibility = async (newVisibility: boolean) => {
+	if (!hasEditPermission) return;
+
+	await updateBoardVisibility(newVisibility);
+	await setAlert();
+};
+
+const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
+	if (hasMovePermission) await moveCard(cardMove);
+};
+
+const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
+	if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
+};
+
+const onUpdateBoardTitle = async (newTitle: string) => {
+	if (hasEditPermission) await updateBoardTitle(newTitle);
+};
+
+onMounted(() => {
+	setAlert();
+});
+
+onUnmounted(() => {
+	resetNotifier();
+});
+
+const setAlert = useDebounceFn(() => {
+	if (!isTeacher) return;
+
+	if (!board.value?.isVisible) {
+		showCustomNotifier(t("components.board.alert.info.draft"), "info", 10000);
+	} else {
+		showCustomNotifier(t("components.board.alert.info.teacher"), "info", 10000);
+	}
+}, 100);
+
+const { isLoadingDialogOpen } = useLoadingState(
+	t("components.molecules.copyResult.title.loading")
+);
+
+const { copy } = useCopy(isLoadingDialogOpen);
+
+const copyModule = injectStrict(COPY_MODULE_KEY);
+
+const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
+
+const copyResultModalItems = computed(
+	() => copyModule.getCopyResultFailedItems
+);
+
+const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
+
+const onCopyResultModalClosed = () => {
+	copyModule.reset();
+};
+
+const router = useRouter();
+
+const onCopyBoard = async () => {
+	await copy({ id: props.boardId, type: CopyParamsTypeEnum.ColumnBoard });
+	const copyId = copyModule.getCopyResult?.id;
+	router.push({ name: "rooms-board", params: { id: copyId } });
+};
 </script>

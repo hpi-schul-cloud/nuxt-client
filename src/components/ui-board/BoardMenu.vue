@@ -3,7 +3,7 @@
 		<template v-slot:activator="{ props }">
 			<VBtn
 				variant="text"
-				data-testid="board-menu-button"
+				:data-testid="dataTestid"
 				v-bind="props"
 				:ripple="false"
 				:class="{ 'bg-white': hasBackground }"
@@ -40,36 +40,27 @@
 	</VMenu>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiDotsVertical } from "@mdi/js";
-import { computed, defineComponent, PropType, provide, toRef } from "vue";
+import { computed, PropType, provide, toRef } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
 import { MENU_SCOPE } from "./injection-tokens";
 
-export default defineComponent({
-	name: "BoardMenu",
-	props: {
-		scope: {
-			type: String as PropType<BoardMenuScope>,
-			required: true,
-		},
-		dataTestid: {
-			type: String,
-			default: "board-menu-button",
-		},
+const props = defineProps({
+	scope: {
+		type: String as PropType<BoardMenuScope>,
+		required: true,
 	},
-	setup(props) {
-		const scope = toRef(props, "scope");
-		provide(MENU_SCOPE, scope.value);
-
-		const hasBackground = computed<boolean>(
-			() => scope.value === "card" || scope.value === "element"
-		);
-
-		return {
-			hasBackground,
-			mdiDotsVertical,
-		};
+	dataTestid: {
+		type: String,
+		default: "board-menu-button",
 	},
 });
+
+const scope = toRef(props, "scope");
+provide(MENU_SCOPE, scope.value);
+
+const hasBackground = computed<boolean>(
+	() => scope.value === "card" || scope.value === "element"
+);
 </script>

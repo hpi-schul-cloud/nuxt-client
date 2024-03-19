@@ -1,19 +1,22 @@
-import { applicationErrorModule } from "@/store";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	SingleColumnBoardResponse,
+	BoardApiFactory,
 	CoursesApiFactory,
+	CreateBoardBodyParams,
+	CreateBoardResponse,
 	LessonApiFactory,
 	LessonApiInterface,
 	PatchOrderParams,
 	PatchVisibilityParams,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	SingleColumnBoardResponse,
 	TaskApiFactory,
 	TaskApiInterface,
 } from "@/serverApi/v3";
+import { applicationErrorModule } from "@/store";
 import { $axios } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
@@ -30,6 +33,7 @@ export default class RoomModule extends VuexModule {
 		displayColor: "",
 		elements: [],
 		isArchived: false,
+		isSynchronized: false,
 	};
 	scopePermissions: string[] = [];
 	loading = false;
@@ -126,54 +130,10 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async confirmImportLesson(shareToken: string): Promise<void> {
-		try {
-			this.resetBusinessError();
-			// TODO remove all this function as it is not used
-			const lesson = await $axios.get("/v1/lessons", {
-				params: { shareToken },
-			});
-
-			if (!lesson.data.data.length) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-found",
-				});
-				return;
-			}
-
-			const copiedLesson = (
-				await $axios.post("/v1/lessons/copy", {
-					lessonId: lesson.data.data[0]._id,
-					newCourseId: this.roomData.roomId,
-					shareToken,
-				})
-			)?.data;
-
-			if (!copiedLesson) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-created",
-				});
-				return;
-			}
-			await this.fetchContent(this.roomData.roomId);
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
 	async deleteLesson(lessonId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
 			await this.lessonApi.lessonControllerDelete(lessonId);
-
-			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -184,7 +144,55 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async downloadImsccCourse(version: "1.1.0" | "1.3.0"): Promise<void> {
+	async deleteTask(taskId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			await this.taskApi.taskControllerDelete(taskId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async deleteBoard(boardId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			await this.boardApi.boardControllerDeleteBoard(boardId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async createBoard(
+		prams: CreateBoardBodyParams
+	): Promise<CreateBoardResponse | undefined> {
+		this.resetBusinessError();
+		try {
+			const { data } = await this.boardApi.boardControllerCreateBoard(prams);
+
+			return data;
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async downloadCommonCartridgeCourse(
+		version: "1.1.0" | "1.3.0"
+	): Promise<void> {
 		this.resetBusinessError();
 		try {
 			const response = await CoursesApiFactory(
@@ -336,5 +344,9 @@ export default class RoomModule extends VuexModule {
 
 	private get taskApi(): TaskApiInterface {
 		return TaskApiFactory(undefined, "/v3", $axios);
+	}
+
+	private get boardApi() {
+		return BoardApiFactory(undefined, "/v3", $axios);
 	}
 }

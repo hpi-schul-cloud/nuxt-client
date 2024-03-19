@@ -5,12 +5,7 @@
 		@end-edit-mode="onEndEditMode"
 		@move:column-keyboard="onMoveColumnKeyboard"
 	>
-		<div
-			class="column-header mb-4 rounded"
-			:class="{ 'bg-grey-lighten-2': isFocusContained }"
-			tabindex="0"
-			ref="columnHeader"
-		>
+		<div class="column-header mb-4 rounded" tabindex="0" ref="columnHeader">
 			<div class="d-flex align-center py-2 px-2">
 				<BoardAnyTitleInput
 					:value="title"

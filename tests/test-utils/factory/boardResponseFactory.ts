@@ -8,5 +8,6 @@ export const boardResponseFactory = Factory.define<BoardResponse>(
 		title: `board #${sequence}`,
 		columns: [],
 		timestamps: timestampsResponseFactory.build(),
+		isVisible: false,
 	})
 );

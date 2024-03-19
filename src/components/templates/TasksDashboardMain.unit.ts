@@ -1,26 +1,30 @@
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
+import EnvConfigModule from "@/store/env-config";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
-import { User } from "@/store/types/auth";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { VueWrapper, mount } from "@vue/test-utils";
-import TasksDashboardMain from "./TasksDashboardMain.vue";
-import TasksDashboardStudent from "./TasksDashboardStudent.vue";
-import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import EnvConfigModule from "@/store/env-config";
+import { meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import TasksDashboardMain from "./TasksDashboardMain.vue";
+import TasksDashboardStudent from "./TasksDashboardStudent.vue";
+import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 
 const $route = {
 	query: {
@@ -48,21 +52,6 @@ const defaultTasksModuleGetters: Partial<TasksModule> = {
 	hasTasks: false,
 };
 
-const mockAuthStoreDataTeacher = {
-	_id: "asdfg",
-	id: "asdfg",
-	firstName: "Peter",
-	lastName: "Parker",
-	email: "peter.parker@hitchhiker.org",
-	roles: [{ name: "teacher" }],
-	permissions: [
-		"COURSE_CREATE",
-		"COURSE_EDIT",
-		"TOPIC_CREATE",
-		"HOMEWORK_CREATE",
-	],
-};
-
 describe("@/components/templates/TasksDashboardMain", () => {
 	let tasksModuleMock: TasksModule;
 	let copyModuleMock: CopyModule;
@@ -83,7 +72,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					tasksModule: tasksModuleMock,
-					copyModule: copyModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
@@ -241,7 +230,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				envConfigModule: EnvConfigModule,
 			});
 
-			authModule.setUser(mockAuthStoreDataTeacher as User);
+			const mockMe = meResponseFactory.build({
+				permissions: ["HOMEWORK_CREATE"],
+			});
+			authModule.setMe(mockMe);
 			wrapper = mountComponent({
 				props: {
 					role: "teacher",

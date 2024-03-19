@@ -1,5 +1,24 @@
 <template>
+	<VTextField
+		v-if="scope === 'board'"
+		hide-details="auto"
+		v-model="modelValue"
+		variant="solo"
+		density="compact"
+		flat
+		:placeholder="placeholder"
+		bg-color="transparent"
+		ref="titleInput"
+		:readonly="!isEditMode"
+		role="heading"
+		:aria-level="ariaLevel"
+		:tabindex="isEditMode ? 0 : -1"
+		:autofocus="internalIsFocused"
+		:maxlength="maxLength"
+		@keydown.enter="onEnter"
+	/>
 	<VTextarea
+		v-else
 		hide-details="auto"
 		v-model="modelValue"
 		variant="solo"
@@ -17,6 +36,7 @@
 		@keydown.enter="onEnter"
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
+		:maxlength="maxLength"
 	/>
 </template>
 
@@ -31,8 +51,8 @@ import {
 	ref,
 	watch,
 } from "vue";
-import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 import { VTextarea } from "vuetify/lib/components/index.mjs";
+import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -56,6 +76,10 @@ export default defineComponent({
 		},
 		isFocused: {
 			type: Boolean,
+		},
+		maxLength: {
+			type: Number,
+			default: null,
 		},
 	},
 	emits: ["update:value", "enter"],
@@ -85,7 +109,12 @@ export default defineComponent({
 		watch(
 			() => props.isEditMode,
 			async (newVal, oldVal) => {
-				if (props.scope !== "column" && !props.isFocused) return;
+				if (
+					props.scope !== "column" &&
+					props.scope !== "board" &&
+					!props.isFocused
+				)
+					return;
 				if (newVal && !oldVal) {
 					await nextTick();
 					await setFocusOnEdit();
@@ -110,19 +139,6 @@ export default defineComponent({
 			}
 		});
 
-		const fontSize = computed(() => {
-			switch (props.scope) {
-				case "board":
-					return "var(--heading-3)";
-				case "column":
-					return "var(--heading-5)";
-				case "card":
-					return "var(--heading-6)";
-				default:
-					return "--heading-6";
-			}
-		});
-
 		const onEnter = ($event: KeyboardEvent) => {
 			if (props.scope !== "card") return;
 			$event.preventDefault();
@@ -131,7 +147,6 @@ export default defineComponent({
 
 		return {
 			ariaLevel,
-			fontSize,
 			modelValue,
 			hasValue,
 			onEnter,
@@ -149,23 +164,28 @@ export default defineComponent({
 }
 
 :deep(textarea) {
-	font-size: var(--heading-5);
+	color: rgba(var(--v-theme-secondary)) !important;
 	background: transparent !important;
+	opacity: 1;
+	font-size: var(--heading-5) !important;
 }
-:deep(input) {
-	font-size: v-bind(fontSize);
-}
+
 :deep(textarea[readonly]) {
 	cursor: pointer;
 }
 
-/** Edge */
-:deep(textarea) {
+:deep(textarea)::placeholder {
 	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }
-/** Other common browsers */
-:deep(textarea)::placeholder {
+
+:deep(input) {
+	font-size: var(--heading-3);
+	color: rgba(var(--v-black-base));
+	background: transparent !important;
+}
+
+:deep(input)::placeholder {
 	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }

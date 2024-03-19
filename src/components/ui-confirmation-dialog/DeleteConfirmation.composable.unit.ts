@@ -17,7 +17,7 @@ describe("DeleteConfirmation composable", () => {
 	describe("askDeleteConfirmation", () => {
 		const setup = (isConfirmed: boolean) => {
 			const title = "title";
-			const titleString = `"${title}"`;
+			const titleString = ` "${title}"`;
 			const typeLanguageKey:
 				| "components.boardCard"
 				| "components.boardElement" = "components.boardElement";
