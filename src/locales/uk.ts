@@ -9,9 +9,7 @@ export default {
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Скасувати",
-	"common.actions.download.v1.1": "Завантажити (CC v1.1)",
-	"common.actions.download.v1.3": "Завантажити (CC v1.3)",
-	"common.actions.download": "Завантажити",
+	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
 	"common.actions.import": "Імпорт",
@@ -168,6 +166,7 @@ export default {
 	"common.words.topic": "Тема",
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
+	"common.words.export": "Завантажується експорт курсу",
 	"component.cardElement.fileElement.audioPlayer.pause": "пауза",
 	"component.cardElement.fileElement.audioPlayer.play": "грати",
 	"component.cardElement.fileElement.audioPlayer.slider": "повзунок",
@@ -557,6 +556,12 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Надіслано",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Наразі локальні файли не підтримуються.",
+	"components.molecules.export.options.info":
+		"Наступний вміст не експортується:",
+	"components.molecules.export.options.info.point1":
+		"Завантажені файли в межах курсу.",
+	"components.molecules.export.options.info.point2":
+		"Подання, призначені до завдання.",
 	"components.organisms.AutoLogoutWarning.confirm": "Подовжити сеанс",
 	"components.organisms.AutoLogoutWarning.error.401":
 		"Термін дії сеансу минув. Увійдіть ще раз.",
@@ -1441,6 +1446,13 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Меню інструментів",
 	"pages.rooms.tools.outdated": "Інструмент застарів",
 	"pages.rooms.tools.outdatedDialog.title": "Інструмент „{toolName}“ застарів",
+	"pages.room.modal.course.export.header": "Формат експорту",
+	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
+	"pages.room.modal.course.export.options.topics": "Теми",
+	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
+	"pages.room.modal.course.export.version1.1":
+		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
+	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

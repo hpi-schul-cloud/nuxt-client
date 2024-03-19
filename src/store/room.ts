@@ -190,7 +190,9 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async downloadImsccCourse(version: "1.1.0" | "1.3.0"): Promise<void> {
+	async downloadCommonCartridgeCourse(
+		version: "1.1.0" | "1.3.0"
+	): Promise<void> {
 		this.resetBusinessError();
 		try {
 			const response = await CoursesApiFactory(
