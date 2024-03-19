@@ -1,21 +1,21 @@
 <template>
 	<base href="/" />
 	<main class="main-container">
-		<!-- <form class="search-form" :onsubmit="onSubmit">
+		<form class="search-form" :onsubmit="onSubmit">
 			<input
 				name="searchString"
 				class="search-input"
 				type="text"
 				placeholder="Search"
 			/>
-		</form> -->
+		</form>
 		<edu-sharing-app />
 	</main>
 </template>
 
 <script>
 export default {
-	name: "EduSharingApp",
+	name: "EduSharingWrapper",
 	components: {},
 	mounted() {
 		// Provide the backend URL for edu-sharing.

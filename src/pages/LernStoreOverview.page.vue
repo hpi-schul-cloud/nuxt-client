@@ -13,13 +13,13 @@
 			{{ $t("pages.content.index.backToCourse") }}
 		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
-			<EduSharingApp />
+			<EduSharingWrapper />
 		</div>
 	</section>
 </template>
 
 <script setup lang="ts">
-import EduSharingApp from "@/components/edu-sharing/EduSharingApp.vue";
+import EduSharingWrapper from "@/components/edu-sharing/EduSharingWrapper.vue";
 import themeConfig from "@/theme.config";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiChevronLeft } from "@mdi/js";
