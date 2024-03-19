@@ -107,7 +107,6 @@ const removePopup = () => {
 		width: 214px;
 		padding: var(--space-xs) 0;
 		margin-top: var(--space-xs-4);
-		color: rgba(var(--v-theme-black));
 		white-space: nowrap;
 		background-color: rgba(var(--v-theme-white));
 		border: 1px solid map-get($grey, lighten-2);

@@ -5,14 +5,10 @@
 				:href="item.action"
 				:target="item.target"
 				:ripple="false"
+				:prepend-icon="item.icon"
 				class="mb-0"
 			>
-				<template v-slot:prepend
-					><v-icon :icon="item.icon" color="primary" />
-				</template>
-				<v-list-item-title class="text-primary link">{{
-					$t(item.label)
-				}}</v-list-item-title>
+				<v-list-item-title class="link">{{ $t(item.label) }}</v-list-item-title>
 			</v-list-item>
 			<v-divider v-if="index !== menuItems.length - 1" />
 		</template>

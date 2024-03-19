@@ -9,7 +9,6 @@
 				icon="$mdiMenu"
 				height="60"
 				width="60"
-				color="secondary-darken-1"
 				variant="text"
 				:ripple="false"
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
@@ -34,7 +33,6 @@
 				<v-btn
 					class="item"
 					icon="$mdiArrowExpand"
-					color="secondary-darken-1"
 					variant="text"
 					density="comfortable"
 					:title="$t('global.topbar.actions.fullscreen')"
@@ -102,7 +100,6 @@
 		</div>
 		<v-btn
 			v-else
-			color="secondary-darken-1"
 			icon="$mdiArrowCollapse"
 			variant="flat"
 			width="40"
@@ -306,7 +303,6 @@ export default defineComponent({
 
 	width: 100%;
 	padding: 8px 27px;
-	color: rgba(var(--v-theme-secondary));
 	text-align: left;
 	text-decoration: none;
 	cursor: pointer;
