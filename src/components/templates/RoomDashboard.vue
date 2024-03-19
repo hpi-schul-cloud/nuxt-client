@@ -70,6 +70,7 @@
 						<RoomLessonCard
 							v-if="item.type === cardTypes.Lesson"
 							:ref="`item_${index}`"
+							:lesson-card-index="index"
 							:user-role="role"
 							:lesson="item.content"
 							:room="lessonData"
@@ -136,6 +137,7 @@
 				<RoomLessonCard
 					v-if="item.type === cardTypes.Lesson"
 					:ref="`item_${index}`"
+					:lesson-card-index="index"
 					:user-role="role"
 					:lesson="item.content"
 					:room="lessonData"

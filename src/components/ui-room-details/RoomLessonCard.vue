@@ -7,7 +7,7 @@
 		tabindex="0"
 		:variant="isHidden ? 'outlined' : 'elevated'"
 		hover
-		data-testid="content-card-lesson"
+		:data-testid="`room-lesson-card-${lessonCardIndex}`"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -24,7 +24,7 @@
 					<RoomDotMenu
 						v-if="userRole === Roles.Teacher"
 						:menu-items="moreActionsMenuItems"
-						data-testid="content-card-lesson-menu"
+						:data-testid="`lesson-card-${lessonCardIndex}`"
 						:ariaLabel="$t('pages.room.lessonCard.menu.ariaLabel')"
 					/>
 				</div>
@@ -34,6 +34,7 @@
 				role="heading"
 				aria-level="2"
 				tabindex="-1"
+				:data-testid="`lesson-name-${lessonCardIndex}`"
 			>
 				{{ lesson.name }}
 			</div>
@@ -54,7 +55,7 @@
 		<v-card-actions
 			v-if="userRole === Roles.Teacher"
 			class="pt-1"
-			data-testid="content-card-lesson-actions"
+			:data-testid="`lesson-card-actions-${lessonCardIndex}`"
 		>
 			<v-btn
 				v-for="(action, index) in cardActions"
@@ -80,7 +81,7 @@ import {
 	mdiTrashCanOutline,
 	mdiContentCopy,
 } from "@mdi/js";
-import { PropType, computed } from "vue";
+import { PropType, computed, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
 import { RoomDotMenu } from "@ui-room-details";
@@ -121,6 +122,7 @@ const props = defineProps({
 	},
 	keyDrag: { type: Boolean, required: true },
 	dragInProgress: { type: Boolean, required: true },
+	lessonCardIndex: { type: Number, required: true },
 });
 
 const emit = defineEmits([
@@ -163,7 +165,9 @@ const moreActionsMenuItems = computed(() => {
 				`/courses/${props.room.roomId}/topics/${props.lesson.id}/edit?returnUrl=rooms/${props.room.roomId}`
 			),
 		name: t("pages.room.taskCard.label.edit"),
-		dataTestId: "content-card-lesson-menu-edit",
+		dataTestId: `lesson-card-menu-action-edit-${
+			toRef(props, "lessonCardIndex").value
+		}`,
 	});
 
 	if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
@@ -171,7 +175,9 @@ const moreActionsMenuItems = computed(() => {
 			icon: mdiContentCopy,
 			action: () => copyCard(),
 			name: t("common.actions.copy"),
-			dataTestId: "content-card-lesson-menu-copy",
+			dataTestId: `lesson-card-menu-action-copy-${
+				toRef(props, "lessonCardIndex").value
+			}`,
 		});
 	}
 
@@ -180,7 +186,9 @@ const moreActionsMenuItems = computed(() => {
 			icon: mdiUndoVariant,
 			action: () => unPublishCard(),
 			name: t("pages.room.cards.label.revert"),
-			dataTestId: "content-card-lesson-menu-revert",
+			dataTestId: `lesson-card-menu-action-revert-${
+				toRef(props, "lessonCardIndex").value
+			}`,
 		});
 	}
 
@@ -189,7 +197,9 @@ const moreActionsMenuItems = computed(() => {
 			icon: mdiShareVariantOutline,
 			action: () => emit("open-modal", props.lesson.id),
 			name: t("pages.room.lessonCard.label.shareLesson"),
-			dataTestId: "content-card-lesson-menu-share",
+			dataTestId: `lesson-card-menu-action-share-${
+				toRef(props, "lessonCardIndex").value
+			}`,
 		});
 	}
 
@@ -197,7 +207,9 @@ const moreActionsMenuItems = computed(() => {
 		icon: mdiTrashCanOutline,
 		action: () => emit("delete-lesson"),
 		name: t("common.actions.remove"),
-		dataTestId: "content-card-lesson-menu-remove",
+		dataTestId: `lesson-card-menu-action-remove-${
+			toRef(props, "lessonCardIndex").value
+		}`,
 	});
 
 	return actions;
