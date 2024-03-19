@@ -1547,7 +1547,7 @@ export default {
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
 	"tldraw.error.403": "Whiteboard ist deaktiviert",
 	"tldraw.error.500":
-		"Beim Einrichten von Whiteboard ist ein Fehler aufgetreten",
+		"Beim Einrichten vom Whiteboard ist ein Fehler aufgetreten",
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
 	"tldraw.error.ws.4401": "Du hast keine Berechtigung für dieses Whiteboard",
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
