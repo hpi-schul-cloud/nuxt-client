@@ -53,3 +53,4 @@ export * from "./userLoginMigrationResponse.factory";
 export * from "./videoConferenceInfoFactory";
 export * from "./videoConferenceInfoResponseFactory";
 export * from "./videoConferenceJoinResponseFactory";
+export * from "./envsFactory";
