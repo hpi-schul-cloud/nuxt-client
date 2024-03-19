@@ -187,18 +187,18 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		jest.resetAllMocks();
 	});
 
-	it("should fetch data", async () => {
+	it("should fetch data", () => {
 		const wrapper = getWrapper();
 		expect(wrapper.vm.roomData).toStrictEqual(mockData);
 	});
 
-	it("'to course files' button should have correct path", async () => {
+	it("'to course files' button should have correct path", () => {
 		const wrapper = getWrapper();
 		const backButton = wrapper.find(".back-button");
 		expect(backButton.attributes("href")).toStrictEqual("/files/courses/123");
 	});
 
-	it("title should be the course name", async () => {
+	it("title should be the course name", () => {
 		const wrapper = getWrapper();
 		const title = wrapper.find(".course-title");
 		expect(title.element.textContent).toContain("Sample Course");
@@ -458,7 +458,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	describe("modal views", () => {
-		it("should open modal for sharing action", async () => {
+		it("should open modal for sharing action", () => {
 			const wrapper = getWrapper();
 			const modalView = wrapper.findComponent({
 				name: "share-modal",
