@@ -9,33 +9,20 @@
 	</BoardMenuAction>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { injectStrict } from "@/utils/inject";
 import { mdiArrowLeft } from "@mdi/js";
 import { BoardMenuAction } from "@ui-board";
 import { BOARD_HAS_MULTIPLE_COLUMNS, BOARD_IS_FIRST_COLUMN } from "@util-board";
-import { computed, defineComponent, ref } from "vue";
+import { computed, ref } from "vue";
 
-export default defineComponent({
-	name: "BoardMenuActionMoveLeft",
-	components: {
-		BoardMenuAction,
-	},
-	emits: ["click"],
-	setup(_, { emit }) {
-		const hasMultipleColumns = ref(injectStrict(BOARD_HAS_MULTIPLE_COLUMNS));
-		const isFirstColumn = ref(injectStrict(BOARD_IS_FIRST_COLUMN));
-		const isVisible = computed(
-			() => hasMultipleColumns.value && !isFirstColumn.value
-		);
+const emit = defineEmits(["click"]);
 
-		const onClick = ($event: Event) => emit("click", $event);
+const hasMultipleColumns = ref(injectStrict(BOARD_HAS_MULTIPLE_COLUMNS));
+const isFirstColumn = ref(injectStrict(BOARD_IS_FIRST_COLUMN));
+const isVisible = computed(
+	() => hasMultipleColumns.value && !isFirstColumn.value
+);
 
-		return {
-			onClick,
-			mdiArrowLeft,
-			isVisible,
-		};
-	},
-});
+const onClick = ($event: Event) => emit("click", $event);
 </script>
