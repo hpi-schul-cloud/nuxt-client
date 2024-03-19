@@ -28,6 +28,7 @@ import {
 	termsOfUseModule,
 	userLoginMigrationModule,
 	videoConferenceModule,
+	commonCartridgeExportModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
 import { htmlConfig } from "@feature-render-html";
@@ -57,6 +58,7 @@ import {
 	CONTENT_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	COPY_MODULE_KEY,
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
@@ -168,6 +170,10 @@ app.use(VueDOMPurifyHTML, {
 	);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
 	app.provide("shareModule", shareModule);
+	app.provide(
+		COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(),
+		commonCartridgeExportModule
+	);
 	app.provide(STATUS_ALERTS_MODULE_KEY.valueOf(), statusAlertsModule);
 	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
 	app.provide("tasksModule", tasksModule);

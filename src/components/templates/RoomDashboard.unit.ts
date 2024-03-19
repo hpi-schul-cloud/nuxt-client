@@ -661,7 +661,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			expect(copyBoardMock).toHaveBeenCalled();
 		});
 
-		it.only("should emit 'copy-board-element' with correct board-related payload", () => {
+		it("should emit 'copy-board-element' with correct board-related payload", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
 			const boardCard = wrapper.findComponent<VCard>({ name: "RoomBoardCard" });
