@@ -17,7 +17,7 @@
 				v-for="(item, i) in menuItems"
 				:key="i"
 				:data-testid="item.dataTestId || ''"
-				@click="handleClick(item)"
+				@click="onClick(item)"
 				density="comfortable"
 				class="dotmenu-action"
 				role="menuitem"
@@ -31,12 +31,14 @@
 	</v-menu>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { mdiDotsVertical } from "@mdi/js";
+import { PropType } from "vue";
+import { MenuItem } from "./types";
 
 defineProps({
 	menuItems: {
-		type: Array,
+		type: Array as PropType<MenuItem[]>,
 		required: true,
 	},
 	ariaLabel: {
@@ -45,7 +47,7 @@ defineProps({
 	},
 });
 
-const handleClick = (menuItem) => {
+const onClick = (menuItem: MenuItem) => {
 	menuItem.action();
 };
 </script>
