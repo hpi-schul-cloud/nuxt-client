@@ -1,3 +1,4 @@
+import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import NotifierModule from "@/store/notifier";
 import RoomsModule from "@/store/rooms";
@@ -13,7 +14,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { VDialog } from "vuetify/lib/components/index.mjs";
-import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 
 describe("@/components/molecules/CommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;
@@ -21,6 +21,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 		exportModuleMock = createModuleMocks(CommonCartridgeExportModule, {
 			getIsExportModalOpen: true,
 			getVersion: "1.1.0",
+			getTopics: ["topic"],
 			startExport: jest.fn(),
 			resetExportFlow: jest.fn(),
 		});
@@ -31,6 +32,15 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: exportModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 					[ROOM_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
+				},
+			},
+			props: {
+				roomDataObject: {
+					roomId: "1",
+					title: "title",
+					displayColor: "color",
+					elements: [],
+					isArchived: false,
 				},
 			},
 		});
@@ -99,7 +109,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			expect(emit).toHaveProperty("dialog-confirmed");
 			expect(emit).toHaveProperty("dialog-closed");
 
-			exportModuleMock.startExport("1.1.0");
+			exportModuleMock.startExport();
 
 			expect(exportBtn.exists()).toBe(false);
 			expect(exportModuleMock.startExport).toHaveBeenCalled();

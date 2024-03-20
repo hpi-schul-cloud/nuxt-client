@@ -172,6 +172,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		downloadModuleMock = createModuleMocks(CommonCartridgeExportModule, {
 			getIsExportModalOpen: false,
 			getVersion: "",
+			getTopics: [],
 		});
 
 		initializeAxios({
