@@ -670,6 +670,16 @@ describe("room module", () => {
 				expect(roomModule.getPermissionData).toStrictEqual(expectedPermissions);
 			});
 		});
+
+		describe("setHasDrawingChild", () => {
+			it("should set the state", () => {
+				const roomModule = new RoomModule({});
+				const payload = true;
+
+				roomModule.setHasDrawingChild(payload);
+				expect(roomModule.getHasDrawingChild).toStrictEqual(payload);
+			});
+		});
 	});
 
 	describe("getters", () => {
