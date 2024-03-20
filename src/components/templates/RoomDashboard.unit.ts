@@ -98,7 +98,7 @@ const mockData = {
 		{
 			type: "column-board",
 			content: {
-				id: "column-board-id",
+				id: "9876",
 				title: "title",
 				isVisible: false,
 				createdAt: "2023-05-31T15:34:59.276Z",
@@ -642,6 +642,44 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 					{
 						id: "3456",
 						type: CopyParamsTypeEnum.Lesson,
+						courseId: "123",
+					},
+				],
+			]);
+		});
+	});
+
+	describe("CopyBoard Process", () => {
+		beforeEach(() => {
+			envConfigModule.setEnvs({
+				FEATURE_COPY_SERVICE_ENABLED: true,
+			} as ConfigResponse);
+		});
+
+		it("should call the copyBoard method when a board component emits 'copy-board' custom event", async () => {
+			const copyBoardMock = jest.fn();
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+			wrapper.vm.copyBoard = copyBoardMock;
+
+			const boardCard = wrapper.findComponent<VCard>({ name: "RoomBoardCard" });
+			boardCard.vm.$emit("copy-board");
+
+			expect(copyBoardMock).toHaveBeenCalled();
+		});
+
+		it("should emit 'copy-board-element' with correct board-related payload", () => {
+			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
+
+			const boardCard = wrapper.findComponent<VCard>({ name: "RoomBoardCard" });
+			boardCard.vm.$emit("copy-board");
+
+			expect(wrapper.emitted()).toHaveProperty("copy-board-element");
+			const copyBoardElementEvent = wrapper.emitted("copy-board-element");
+			expect(copyBoardElementEvent).toStrictEqual([
+				[
+					{
+						id: "9876",
+						type: CopyParamsTypeEnum.ColumnBoard,
 						courseId: "123",
 					},
 				],

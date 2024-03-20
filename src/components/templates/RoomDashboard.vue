@@ -36,6 +36,7 @@
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
+							@copy-board="copyBoard(item.content.id)"
 							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@delete-board="openItemDeleteDialog(item.content, item.type)"
 						/>
@@ -194,7 +195,7 @@ import {
 	ImportUserResponseRoleNamesEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { copyModule, envConfigModule, roomModule } from "@/store";
+import { envConfigModule, roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import draggable from "vuedraggable";
 
@@ -233,9 +234,6 @@ export default {
 				roomId: this.roomData.roomId,
 				displayColor: this.roomData.displayColor,
 			};
-		},
-		isCopyModalLoading() {
-			return copyModule?.getLoading ?? false;
 		},
 		taskData() {
 			return {
@@ -346,17 +344,24 @@ export default {
 		async restoreTask(itemId) {
 			await roomModule.finishTask({ itemId, action: "restore" });
 		},
-		async copyTask(taskId) {
+		copyTask(taskId) {
 			this.$emit("copy-board-element", {
 				id: taskId,
 				type: CopyParamsTypeEnum.Task,
 				courseId: this.roomData.roomId,
 			});
 		},
-		async copyLesson(lessonId) {
+		copyLesson(lessonId) {
 			this.$emit("copy-board-element", {
 				id: lessonId,
 				type: CopyParamsTypeEnum.Lesson,
+				courseId: this.roomData.roomId,
+			});
+		},
+		copyBoard(columnBoardId) {
+			this.$emit("copy-board-element", {
+				id: columnBoardId,
+				type: CopyParamsTypeEnum.ColumnBoard,
 				courseId: this.roomData.roomId,
 			});
 		},

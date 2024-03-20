@@ -11,15 +11,12 @@
 	</VListItem>
 </template>
 
-<script lang="ts">
-import { PropType, defineComponent } from "vue";
+<script setup lang="ts">
+import { PropType } from "vue";
 import { IconProps } from "vuetify";
 
-export default defineComponent({
-	name: "BoardMenuAction",
-	props: {
-		icon: { type: String as PropType<IconProps["icon"]> },
-		dataTestId: { type: String as PropType<string | null>, default: null },
-	},
+defineProps({
+	icon: { type: String as PropType<IconProps["icon"]> },
+	dataTestId: { type: String as PropType<string | null>, default: null },
 });
 </script>

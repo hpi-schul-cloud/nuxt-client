@@ -4,7 +4,11 @@ import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	boardCardFactory,
@@ -19,13 +23,17 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { mount } from "@vue/test-utils";
-import { computed, nextTick, Ref, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
 
-import { ConfigResponse } from "@/serverApi/v3";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
+import { useCopy } from "@/composables/copy";
+import { ConfigResponse, CopyApiResponse } from "@/serverApi/v3";
+import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
+import LoadingStateModule from "@/store/loading-state";
 import { BoardCard } from "@/types/board/Card";
 import {
 	useBoardFocusHandler,
@@ -36,6 +44,7 @@ import {
 	useSharedBoardPageInformation,
 	useSharedEditMode,
 } from "@data-board";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("@data-board");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -64,6 +73,9 @@ const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement
 );
 
+jest.mock("@/composables/copy");
+const mockUseCopy = jest.mocked(useCopy);
+
 const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
 	EnvConfigModule,
 	{
@@ -75,6 +87,9 @@ const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
 	}
 );
 const mockedEditMode = jest.mocked(useEditMode);
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 describe("Board", () => {
 	const card = boardCardFactory.build();
@@ -140,6 +155,12 @@ describe("Board", () => {
 			lastCreatedElementId: computed(() => "element-id"),
 			resetLastCreatedElementId: jest.fn(),
 		});
+
+		mockedCopyCalls = createMock<ReturnType<typeof useCopy>>();
+		mockUseCopy.mockReturnValue(mockedCopyCalls);
+
+		router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 	};
 
 	const cards = cardSkeletonResponseFactory.buildList(3);
@@ -155,6 +176,15 @@ describe("Board", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardStateCalls: DeepMocked<ReturnType<typeof useBoardState>>;
+	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
+
+	let router: DeepMocked<Router>;
+
+	const copyModule = createModuleMocks(CopyModule, {
+		getIsResultModalOpen: false,
+		getCopyResult: createMock<CopyApiResponse>({ id: "42" }),
+	});
+	const loadingStateModule = createModuleMocks(LoadingStateModule);
 
 	const setup = (options?: {
 		board?: Board;
@@ -171,6 +201,8 @@ describe("Board", () => {
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[COPY_MODULE_KEY.valueOf()]: copyModule,
+					loadingStateModule,
 				},
 			},
 			propsData: { boardId },
@@ -289,6 +321,13 @@ describe("Board", () => {
 
 					expect(ghostColumnComponent.exists()).toBe(false);
 				});
+			});
+		});
+
+		describe("CopyResultModal", () => {
+			it("should have a result modal component", () => {
+				const { wrapper } = setup();
+				expect(wrapper.findComponent(CopyResultModal).exists()).toBe(true);
 			});
 		});
 	});
@@ -603,8 +642,7 @@ describe("Board", () => {
 				const boardColumnComponents = wrapper.findAllComponents({
 					name: "BoardColumn",
 				});
-				boardColumnComponents.at(0)?.vm.$emit("reload:board");
-				await nextTick();
+				await boardColumnComponents.at(0)?.vm.$emit("reload:board");
 
 				expect(mockedBoardStateCalls.reloadBoard).toHaveBeenCalled();
 			});
@@ -617,10 +655,36 @@ describe("Board", () => {
 				const boardHeader = wrapper.findComponent({
 					name: "BoardHeader",
 				});
-				boardHeader.vm.$emit("update:visibility");
-				await nextTick();
+				await boardHeader.vm.$emit("update:visibility");
 
 				expect(mockedBoardStateCalls.updateBoardVisibility).toHaveBeenCalled();
+			});
+		});
+
+		describe("@onCopyBoard", () => {
+			it("should call the copy function", async () => {
+				const { wrapper } = setup();
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("copy:board");
+
+				expect(mockedCopyCalls.copy).toHaveBeenCalled();
+			});
+
+			it("should redirect to the board copy", async () => {
+				const { wrapper } = setup();
+
+				const boardHeader = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await boardHeader.vm.$emit("copy:board");
+
+				expect(router.push).toHaveBeenCalledWith({
+					name: "rooms-board",
+					params: { id: copyModule.getCopyResult?.id },
+				});
 			});
 		});
 	});

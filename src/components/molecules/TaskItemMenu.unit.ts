@@ -7,7 +7,7 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import {
@@ -50,7 +50,7 @@ const getWrapper = (
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				tasksModule: tasksModuleMock,
-				copyModule: copyModuleMock,
+				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			},

@@ -8,7 +8,7 @@ import {
 	SchulcloudTheme,
 	Timezone,
 } from "@/serverApi/v3/api";
-import { businessErrorFactory } from "@@/tests/test-utils";
+import { businessErrorFactory, envsFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-jest";
 import { AxiosResponse } from "axios";
@@ -16,66 +16,6 @@ import ApplicationErrorModule from "./application-error";
 import ContentModule from "./content";
 import EnvConfigModule from "./env-config";
 import FilePathsModule from "./filePaths";
-
-const mockEnvs: ConfigResponse = {
-	ALERT_STATUS_URL: "mockValue",
-	NOT_AUTHENTICATED_REDIRECT_URL: "/mock",
-	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
-	JWT_TIMEOUT_SECONDS: 7200,
-	FEATURE_LERNSTORE_ENABLED: true,
-	SC_THEME: SchulcloudTheme.Thr,
-	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-	FEATURE_ES_COLLECTIONS_ENABLED: true,
-	FEATURE_EXTENSIONS_ENABLED: true,
-	FEATURE_TEAMS_ENABLED: true,
-	I18N__AVAILABLE_LANGUAGES: [],
-	I18N__DEFAULT_LANGUAGE: Language.De,
-	I18N__DEFAULT_TIMEZONE: Timezone.EuropeBerlin,
-	I18N__FALLBACK_LANGUAGE: Language.En,
-	DOCUMENT_BASE_DIR: "mockValue",
-	SC_TITLE: "mockValue",
-	GHOST_BASE_URL: "mockValue",
-	FEATURE_CONSENT_NECESSARY: true,
-	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,
-	MIGRATION_END_GRACE_PERIOD_MS: 1,
-	FEATURE_SHOW_OUTDATED_USERS: true,
-	FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
-	FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
-	ACCESSIBILITY_REPORT_EMAIL: "",
-	FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED: false,
-	FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-	FEATURE_LTI_TOOLS_TAB_ENABLED: true,
-	FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: true,
-	FEATURE_CTL_TOOLS_COPY_ENABLED: true,
-	FEATURE_SHOW_MIGRATION_WIZARD: true,
-	FEATURE_TLDRAW_ENABLED: true,
-	TLDRAW__ASSETS_ENABLED: true,
-	TLDRAW__ASSETS_MAX_SIZE: 0,
-	FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
-	TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
-	TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: true,
-	TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
-	FEATURE_SCHOOL_POLICY_ENABLED_NEW: true,
-	FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: true,
-	FEATURE_NEST_SYSTEMS_API_ENABLED: true,
-	FEATURE_NEXBOARD_COPY_ENABLED: true,
-	FEATURE_VIDEOCONFERENCE_ENABLED: true,
-	FEATURE_COLUMN_BOARD_ENABLED: true,
-	FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-	FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-	FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-	FEATURE_COURSE_SHARE: true,
-	FEATURE_LOGIN_LINK_ENABLED: true,
-	FEATURE_LESSON_SHARE: true,
-	FEATURE_TASK_SHARE: true,
-	FEATURE_USER_MIGRATION_ENABLED: true,
-	FEATURE_COPY_SERVICE_ENABLED: true,
-	FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
-	FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
-	FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
-	ROCKETCHAT_SERVICE_ENABLED: true,
-	CTL_TOOLS_RELOAD_TIME_MS: 299000,
-};
 
 const mockFileEnvs: FilesStorageConfigResponse = {
 	MAX_FILE_SIZE: 10,
@@ -105,7 +45,7 @@ describe("env-config module", () => {
 					const serverConfigresponse = createMock<
 						AxiosResponse<ConfigResponse, any>
 					>({
-						data: mockEnvs,
+						data: envsFactory.build(),
 					});
 					const fileStorageConfigResponse = createMock<
 						AxiosResponse<FilesStorageConfigResponse, any>
@@ -193,7 +133,7 @@ describe("env-config module", () => {
 
 						await envConfigModule.loadConfiguration();
 
-						expect(envConfigModule.env).toStrictEqual(mockEnvs);
+						expect(envConfigModule.env).toStrictEqual(envsFactory.build());
 						expect(envConfigModule.envFile).toStrictEqual(mockFileEnvs);
 					});
 
@@ -250,7 +190,7 @@ describe("env-config module", () => {
 
 						await envConfigModule.loadConfiguration();
 
-						expect(envConfigModule.env).toStrictEqual(mockEnvs);
+						expect(envConfigModule.env).toStrictEqual(envsFactory.build());
 						expect(envConfigModule.envFile).toStrictEqual(mockFileEnvs);
 					});
 
@@ -271,7 +211,7 @@ describe("env-config module", () => {
 					const serverConfigresponse = createMock<
 						AxiosResponse<ConfigResponse, any>
 					>({
-						data: mockEnvs,
+						data: envsFactory.build(),
 					});
 					const error = new Error("testError");
 
@@ -452,9 +392,12 @@ describe("env-config module", () => {
 			const envConfigModule = new EnvConfigModule({});
 			expect(envConfigModule.env.SC_THEME).not.toBe(SchulcloudTheme.Thr);
 
-			envConfigModule.setEnvs(mockEnvs);
+			const envsMock = envsFactory.build();
+			envConfigModule.setEnvs(envsMock);
 
-			expect(envConfigModule.env.SC_THEME).toBe(SchulcloudTheme.Thr);
+			expect(envConfigModule.env.JWT_TIMEOUT_SECONDS).toBe(
+				envsMock.JWT_TIMEOUT_SECONDS
+			);
 		});
 
 		it("setFileEnvs should set fileEnvs", () => {
@@ -597,22 +540,23 @@ describe("env-config module", () => {
 
 		it("getTheme should get SC_THEME", () => {
 			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
+			envConfigModule.env = envsFactory.build();
 
-			expect(envConfigModule.getTheme).toBe(SchulcloudTheme.Thr);
+			expect(envConfigModule.getTheme).toBe(SchulcloudTheme.Default);
 		});
 
 		it("getMigrationEndGracePeriod should get MIGRATION_END_GRACE_PERIOD_MS", () => {
 			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
+			envConfigModule.env = envsFactory.build();
 
 			expect(envConfigModule.getMigrationEndGracePeriod).toStrictEqual(
-				mockEnvs.MIGRATION_END_GRACE_PERIOD_MS
+				envsFactory.build().MIGRATION_END_GRACE_PERIOD_MS
 			);
 		});
 
 		it("getTeacherStudentVisibilityIsConfigurable should get TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(
@@ -622,6 +566,7 @@ describe("env-config module", () => {
 
 		it("getTeacherStudentVisibilityIsEnabledByDefault should get TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(
@@ -633,6 +578,7 @@ describe("env-config module", () => {
 
 		it("getTeacherStudentVisibilityIsVisible should get TEACHER_STUDENT_VISIBILITY__IS_VISIBLE", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(
@@ -642,6 +588,7 @@ describe("env-config module", () => {
 
 		it("getVideoConferenceEnabled should get FEATURE_VIDEOCONFERENCE_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getVideoConferenceEnabled).toStrictEqual(
@@ -651,6 +598,7 @@ describe("env-config module", () => {
 
 		it("getLoginLinkEnabled should get FEATURE_LOGIN_LINK_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getLoginLinkEnabled).toStrictEqual(
@@ -660,6 +608,7 @@ describe("env-config module", () => {
 
 		it("getRocketChatEnabled should get ROCKETCHAT_SERVICE_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getRocketChatEnabled).toStrictEqual(
@@ -669,6 +618,8 @@ describe("env-config module", () => {
 
 		it("getNewSchoolAdminPageAsDefault should get FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
+
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getNewSchoolAdminPageAsDefault).toStrictEqual(
@@ -678,6 +629,7 @@ describe("env-config module", () => {
 
 		it("getSchoolPolicyEnabled should get FEATURE_SCHOOL_POLICY_ENABLED_NEW", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getSchoolPolicyEnabled).toStrictEqual(
@@ -687,6 +639,7 @@ describe("env-config module", () => {
 
 		it("getFeatureSchoolTermsOfUseEnabled should get FEATURE_SCHOOL_TERMS_OF_USE_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getSchoolTermsOfUseEnabled).toStrictEqual(
@@ -696,6 +649,7 @@ describe("env-config module", () => {
 
 		it("getAvailableLanguages should get I18N__AVAILABLE_LANGUAGES", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getAvailableLanguages).toStrictEqual(
@@ -705,6 +659,7 @@ describe("env-config module", () => {
 
 		it("getGhostBaseUrl should get GHOST_BASE_URL", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getGhostBaseUrl).toStrictEqual(
@@ -714,6 +669,7 @@ describe("env-config module", () => {
 
 		it("getAccessiblityReportEmail should get ACCESSIBILITY_REPORT_EMAIL", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getAccessibilityReportEmail).toStrictEqual(
@@ -723,6 +679,7 @@ describe("env-config module", () => {
 
 		it("getCtlToolsTabEnabled should get FEATURE_CTL_TOOLS_TAB_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getCtlToolsTabEnabled).toStrictEqual(
@@ -732,15 +689,16 @@ describe("env-config module", () => {
 
 		it("getShowOutdatedUsers should get FEATURE_SHOW_OUTDATED_USERS", () => {
 			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
+			envConfigModule.env = envsFactory.build();
 
 			expect(envConfigModule.getShowOutdatedUsers).toStrictEqual(
-				mockEnvs.FEATURE_SHOW_OUTDATED_USERS
+				envsFactory.build().FEATURE_SHOW_OUTDATED_USERS
 			);
 		});
 
 		it("getEnableLdapSyncDuringMigration should get FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getEnableLdapSyncDuringMigration).toStrictEqual(
@@ -750,15 +708,18 @@ describe("env-config module", () => {
 
 		it("getCtlContextConfigurationEnabled should get FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = mockEnvs;
+			envConfigModule.env = envsFactory.build({
+				FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
+			});
 
 			expect(envConfigModule.getCtlContextConfigurationEnabled).toStrictEqual(
-				mockEnvs.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED
+				true
 			);
 		});
 
 		it("getLtiToolsTabEnabled should get FEATURE_LTI_TOOLS_TAB_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getLtiToolsTabEnabled).toStrictEqual(
@@ -768,6 +729,7 @@ describe("env-config module", () => {
 
 		it("getCtlToolsCopyEnabled should get FEATURE_CTL_TOOLS_COPY_ENABLED", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getCtlToolsCopyEnabled).toStrictEqual(
@@ -777,6 +739,7 @@ describe("env-config module", () => {
 
 		it("getEnv should get env", () => {
 			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
 			expect(envConfigModule.getEnv).not.toStrictEqual(mockEnvs);
 			envConfigModule.env = mockEnvs;
 

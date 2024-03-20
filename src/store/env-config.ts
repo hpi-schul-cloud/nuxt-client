@@ -106,6 +106,7 @@ export default class EnvConfigModule extends VuexModule {
 		FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: false,
 		FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: false,
 		ROCKETCHAT_SERVICE_ENABLED: false,
+		FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: false,
 		CTL_TOOLS_RELOAD_TIME_MS: 299000,
 	};
 	envFile: FilesStorageConfigResponse = {
