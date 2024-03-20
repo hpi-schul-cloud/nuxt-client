@@ -2,7 +2,7 @@ import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { ref, watch } from "vue";
@@ -28,7 +28,7 @@ describe("copy composable", () => {
 			global: {
 				plugins: [createTestingI18n()],
 				provide: {
-					copyModule: copyModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					loadingStateModule: loadingStateModuleMock,
 				},
