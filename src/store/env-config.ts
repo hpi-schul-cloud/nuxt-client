@@ -152,11 +152,11 @@ export default class EnvConfigModule extends VuexModule {
 		this.status = status;
 	}
 
-	public get getFallbackLanguage(): string {
+	get getFallbackLanguage(): string {
 		return this.env.I18N__FALLBACK_LANGUAGE || this.env.I18N__DEFAULT_LANGUAGE;
 	}
 
-	public get getDefaultTimezone(): Timezone {
+	get getDefaultTimezone(): Timezone {
 		return this.env.I18N__DEFAULT_TIMEZONE;
 	}
 
@@ -167,11 +167,11 @@ export default class EnvConfigModule extends VuexModule {
 		);
 	}
 
-	public get getFeatureSchoolSanisUserMigrationEnabled(): boolean {
+	get getFeatureSchoolSanisUserMigrationEnabled(): boolean {
 		return this.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED;
 	}
 
-	public get getTheme(): SchulcloudTheme {
+	get getTheme(): SchulcloudTheme {
 		return this.env.SC_THEME;
 	}
 
@@ -207,39 +207,39 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED;
 	}
 
-	public get getSchoolPolicyEnabled(): boolean {
+	get getSchoolPolicyEnabled(): boolean {
 		return this.env.FEATURE_SCHOOL_POLICY_ENABLED_NEW;
 	}
 
-	public get getSchoolTermsOfUseEnabled(): boolean {
+	get getSchoolTermsOfUseEnabled(): boolean {
 		return this.env.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED;
 	}
 
-	public get getAvailableLanguages(): LanguageType[] {
+	get getAvailableLanguages(): LanguageType[] {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
 	}
 
-	public get getGhostBaseUrl(): string {
+	get getGhostBaseUrl(): string {
 		return this.env.GHOST_BASE_URL;
 	}
 
-	public get getAccessibilityReportEmail(): string {
+	get getAccessibilityReportEmail(): string {
 		return this.env.ACCESSIBILITY_REPORT_EMAIL;
 	}
 
-	public get getCtlToolsTabEnabled(): boolean {
+	get getCtlToolsTabEnabled(): boolean {
 		return this.env.FEATURE_CTL_TOOLS_TAB_ENABLED;
 	}
 
-	public get getShowOutdatedUsers(): boolean {
+	get getShowOutdatedUsers(): boolean {
 		return this.env.FEATURE_SHOW_OUTDATED_USERS;
 	}
 
-	public get getEnableLdapSyncDuringMigration(): boolean {
+	get getEnableLdapSyncDuringMigration(): boolean {
 		return this.env.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION;
 	}
 
-	public get getCtlContextConfigurationEnabled(): boolean {
+	get getCtlContextConfigurationEnabled(): boolean {
 		return this.env.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED;
 	}
 
@@ -251,11 +251,11 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_CTL_TOOLS_COPY_ENABLED;
 	}
 
-	public get getEnv(): ConfigResponse {
+	get getEnv(): ConfigResponse {
 		return this.env;
 	}
 
-	public get getMaxFileSize(): number {
+	get getMaxFileSize(): number {
 		const maxFileSize =
 			this.envFile.MAX_FILE_SIZE === -1
 				? this.defaultFileSize // when config not loaded
