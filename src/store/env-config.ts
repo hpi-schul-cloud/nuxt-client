@@ -22,33 +22,12 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
 
-/*
-export const requiredVars = {
-	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
-	// JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
-	// JWT_TIMEOUT_SECONDS: 7200,
-	// SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
-};
-
-
-export const configsFromEnvironmentVars = {
-	FEATURE_LERNSTORE_ENABLED:
-		process.env.FEATURE_LERNSTORE_ENABLED?.toLowerCase() == "true",
-	MIGRATION_END_GRACE_PERIOD_MS: Number(
-		process.env.MIGRATION_END_GRACE_PERIOD_MS
-	),
-};
-*/
-
 @Module({
 	name: "envConfigModule",
 	namespaced: true,
 	stateFactory: true,
 })
 export default class EnvConfigModule extends VuexModule {
-	private defaultFileSize = 2684354560;
-	private retryConfigLoadingNumber = 9;
-
 	env: ConfigResponse = {
 		NOT_AUTHENTICATED_REDIRECT_URL: "",
 		SC_THEME: SchulcloudTheme.Default,
@@ -110,7 +89,7 @@ export default class EnvConfigModule extends VuexModule {
 		CTL_TOOLS_RELOAD_TIME_MS: 299000,
 	};
 	envFile: FilesStorageConfigResponse = {
-		MAX_FILE_SIZE: -1,
+		MAX_FILE_SIZE: 2684354560,
 	};
 	loadingErrorCount = 0;
 	status: Status = "";
@@ -256,12 +235,7 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	get getMaxFileSize(): number {
-		const maxFileSize =
-			this.envFile.MAX_FILE_SIZE === -1
-				? this.defaultFileSize // when config not loaded
-				: this.envFile.MAX_FILE_SIZE;
-
-		return maxFileSize;
+		return this.envFile.MAX_FILE_SIZE;
 	}
 
 	public get getShowNewClassViewEnabled(): boolean {
