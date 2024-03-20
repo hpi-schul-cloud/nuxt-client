@@ -24,7 +24,7 @@
 					<RoomDotMenu
 						v-if="userRole === Roles.Teacher"
 						:menu-items="moreActionsMenuItems"
-						:data-testid="`lesson-card-${lessonCardIndex}`"
+						:data-testid="`lesson-card-menu-${lessonCardIndex}`"
 						:ariaLabel="$t('pages.room.lessonCard.menu.ariaLabel')"
 					/>
 				</div>
@@ -86,13 +86,8 @@ import { useI18n } from "vue-i18n";
 import { RoomDotMenu } from "@ui-room-details";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { RoomData, Lesson } from "@/store/types/room";
-
-type LessonData = Lesson & {
-	numberOfDraftTasks: number;
-	numberOfPlannedTasks: number;
-	numberOfPublishedTasks: number;
-};
+import { RoomData } from "@/store/types/room";
+import { LessonData } from "./types";
 
 const props = defineProps({
 	lesson: {
@@ -105,7 +100,7 @@ const props = defineProps({
 		type: Object as PropType<Partial<RoomData>>,
 		required: true,
 	},
-	userRole: { type: String, required: true },
+	userRole: { type: String as PropType<Roles>, required: true },
 	ariaLabel: {
 		type: String,
 		default: "",
@@ -295,7 +290,6 @@ const onKeyPress = (e: KeyboardEvent) => {
 					moveIndex: 1,
 				});
 			break;
-
 		default:
 			break;
 	}
