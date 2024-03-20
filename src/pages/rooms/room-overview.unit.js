@@ -13,6 +13,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	ROOMS_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
+	COPY_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -137,7 +138,7 @@ const getWrapper = (device = "desktop", options = {}) => {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				mq: { current: device },
-				copyModule: copyModuleMock,
+				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,

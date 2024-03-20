@@ -1,29 +1,31 @@
+import { ClassRequestContext } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
+import SchoolsModule from "@/store/schools";
 import { ClassRootType } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
+import { School, Year } from "@/store/types/schools";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { classInfoFactory } from "@@/tests/test-utils";
-import { VueWrapper, mount } from "@vue/test-utils";
-import ClassOverview from "./ClassOverview.page.vue";
-import SchoolsModule from "@/store/schools";
-import { School, Year } from "@/store/types/schools";
-import { createMock } from "@golevelup/ts-jest";
-import { Router, useRoute, useRouter } from "vue-router";
-import { ClassRequestContext } from "@/serverApi/v3";
+import { classInfoFactory, envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { VBtn, VDataTableServer } from "vuetify/lib/components/index.mjs";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRoute, useRouter } from "vue-router";
+import { VBtn, VDataTableServer } from "vuetify/lib/components/index.mjs";
+import ClassOverview from "./ClassOverview.page.vue";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
@@ -83,6 +85,12 @@ const createWrapper = (
 		...schoolsModuleGetters,
 	});
 
+	const envConfigModule = createModuleMocks(EnvConfigModule, {
+		getEnv: envsFactory.build({
+			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+		}),
+	});
+
 	const wrapper = mount(ClassOverview, {
 		global: {
 			plugins: [
@@ -94,6 +102,7 @@ const createWrapper = (
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			},
 		},
 		props,
