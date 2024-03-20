@@ -9,6 +9,7 @@ import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -16,7 +17,6 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
-import mock$objects from "../../../tests/test-utils/pageStubs";
 import TeacherPage from "./TeacherOverview.page.vue";
 
 const mockData = [
