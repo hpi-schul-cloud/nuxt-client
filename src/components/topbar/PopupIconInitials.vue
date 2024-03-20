@@ -83,13 +83,9 @@ const removePopup = () => {
 	color: rgba(var(--v-theme-white));
 	cursor: pointer;
 	-webkit-user-select: none;
-	background-color: rgba(var(--v-theme-secondary));
+	background-color: rgba(var(--v-theme-on-surface));
 	border: none;
 	border-radius: var(--radius-round);
-
-	&:hover {
-		background-color: rgba(var(--v-theme-secondary-darken-1));
-	}
 }
 
 .popup {
