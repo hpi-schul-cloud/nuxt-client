@@ -14,8 +14,8 @@
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
 			color="rgba(var(--v-theme-primary))"
-			:icon="mdiLock"
-			:model-value="displayBadge"
+			:model-value="!!badgeIcon"
+			:icon="badgeIcon"
 		>
 			<v-avatar
 				:color="avatarColor"
@@ -30,9 +30,9 @@
 				role="button"
 				data-testid="course-icon"
 			>
-				<span :class="avatarTextClass" data-testid="course-short-title">{{
-					item.shortTitle
-				}}</span>
+				<span :class="avatarTextClass" data-testid="course-short-title">
+					{{ item.shortTitle }}
+				</span>
 			</v-avatar>
 		</v-badge>
 		<div
@@ -48,6 +48,7 @@
 <script>
 import { mdiLock } from "@/components/icons/material";
 import { defineComponent } from "vue";
+import { mdiSync } from "@mdi/js";
 
 export default defineComponent({
 	props: {
@@ -76,8 +77,16 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		displayBadge() {
-			return this.showBadge === true && this.item.notification === true;
+		badgeIcon() {
+			if (this.showBadge && this.item.notification === true) {
+				return mdiLock;
+			}
+
+			if (this.item.isSynchronized) {
+				return mdiSync;
+			}
+
+			return null;
 		},
 		stillBeingCopied() {
 			return this.item.copyingSince !== undefined;

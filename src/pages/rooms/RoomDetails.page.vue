@@ -17,9 +17,12 @@
 				>
 					{{ roomData.title }}
 				</div>
-				<v-chip v-if="roomData.isArchived" size="small" class="mt-1">
+				<VChip v-if="roomData.isSynchronized" size="small" class="mt-1 ml-2">
+					{{ $t("pages.rooms.headerSection.synchronized") }}
+				</VChip>
+				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">
 					{{ $t("pages.rooms.headerSection.archived") }}
-				</v-chip>
+				</VChip>
 				<div class="mx-2">
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
@@ -116,11 +119,13 @@ import {
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
 	mdiExport,
+	mdiSync,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 
 export default defineComponent({
 	setup() {
@@ -148,7 +153,10 @@ export default defineComponent({
 		ShareModal,
 		commonCartridgeExportModal,
 	},
-	inject: ["copyModule", "shareModule"],
+	inject: {
+		copyModule: { from: COPY_MODULE_KEY },
+		shareModule: "shareModule",
+	},
 	data() {
 		return {
 			icons: {
@@ -171,6 +179,9 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		mdiSync() {
+			return mdiSync;
+		},
 		getCurrentFabItems() {
 			return this.currentTab?.fabItems;
 		},
@@ -423,17 +434,13 @@ export default defineComponent({
 		},
 
 		async onCopyRoom(courseId) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
-
 			const copyParams = {
 				id: courseId,
 				courseId,
 				type: CopyParamsTypeEnum.Course,
 			};
 
-			await this.copy(copyParams, loadingText);
+			await this.copy(copyParams);
 
 			const copyResult = this.copyModule.getCopyResult;
 
@@ -446,10 +453,7 @@ export default defineComponent({
 			}
 		},
 		async onCopyBoardElement(payload) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
-			await this.copy(payload, loadingText);
+			await this.copy(payload);
 			await roomModule.fetchContent(payload.courseId);
 		},
 		onCopyResultModalClosed() {

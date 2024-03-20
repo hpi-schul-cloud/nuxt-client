@@ -61,7 +61,7 @@
 				:current-page="page"
 			>
 				<template #datacolumn-birthday="{ data }">
-					<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
+					<span class="text-content">{{ printDate(data) }}</span>
 				</template>
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
@@ -142,7 +142,7 @@ import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable"
 import AdminTableLegend from "@/components/molecules/AdminTableLegend";
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
+import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
 import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -513,7 +513,6 @@ export default {
 			this.find();
 		},
 		printDate,
-		printDateFromDeUTC,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,

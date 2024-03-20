@@ -111,6 +111,7 @@ import {
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 
 const roleBasedRoutes = {
 	[Roles.Teacher]: ["current", "drafts", "finished"],
@@ -137,12 +138,12 @@ export default {
 			mdiCheck,
 		};
 	},
-	inject: [
-		"tasksModule",
-		"copyModule",
-		"finishedTasksModule",
-		"loadingStateModule",
-	],
+	inject: {
+		tasksModule: "tasksModule",
+		copyModule: { from: COPY_MODULE_KEY },
+		finishedTasksModule: "finishedTasksModule",
+		loadingStateModule: "loadingStateModule",
+	},
 	computed: {
 		hasTasks() {
 			return this.tasksModule.hasTasks;
