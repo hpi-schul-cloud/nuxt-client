@@ -62,6 +62,5 @@ const handleClick = (menuItem) => {
 	margin-top: -2px;
 	margin-right: 4px;
 	font-size: 1rem;
-	color: rgba(0, 0, 0, 0.87);
 }
 </style>
