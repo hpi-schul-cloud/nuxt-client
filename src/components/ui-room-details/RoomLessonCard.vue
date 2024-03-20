@@ -83,25 +83,15 @@ import {
 } from "@mdi/js";
 import { PropType, computed, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-
 import { RoomDotMenu } from "@ui-room-details";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
+import { RoomData, Lesson } from "@/store/types/room";
 
-type RoomData = {
-	roomId: string;
-	displayColor?: string;
-};
-
-type LessonData = {
-	createdAt: string;
-	hidden: boolean;
-	id: string;
-	name: string;
+type LessonData = Lesson & {
 	numberOfDraftTasks: number;
 	numberOfPlannedTasks: number;
 	numberOfPublishedTasks: number;
-	updatedAt: string;
 };
 
 const props = defineProps({
@@ -112,7 +102,7 @@ const props = defineProps({
 			["createdAt", "id", "name"].every((key) => key in lesson),
 	},
 	room: {
-		type: Object as PropType<RoomData>,
+		type: Object as PropType<Partial<RoomData>>,
 		required: true,
 	},
 	userRole: { type: String, required: true },
