@@ -43,6 +43,7 @@
 				"src/components/feature-board-drawing-element"
 			],
 			"@feature-board": ["src/components/feature-board"],
+			"@feature-course-sync": ["src/components/feature-course-sync"],
 			"@feature-editor": ["src/components/feature-editor"],
 			"@feature-render-html": ["src/components/feature-render-html"],
 			"@feature-news-form": ["src/components/feature-news-form"],
