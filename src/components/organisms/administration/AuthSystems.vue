@@ -49,16 +49,16 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="system in systems" :key="system._id">
+					<tr v-for="system in systems" :key="system.id">
 						<td>{{ system.alias }}</td>
 						<td>{{ system.type }}</td>
 						<td v-if="customLoginLinkEnabled">
 							<v-text-field
 								v-if="isLoginSystem(system)"
-								:id="`school-login-link-${system._id}`"
+								:id="`school-login-link-${system.id}`"
 								:model-value="generateLoginLink(system)"
 								class="school-login-link"
-								:color="getCopyStatus(system._id) ? 'success' : 'primary'"
+								:color="getCopyStatus(system.id) ? 'success' : 'primary'"
 								readonly
 								density="compact"
 								@blur="linkCopyFinished"
@@ -67,7 +67,7 @@
 									<v-btn
 										icon
 										variant="text"
-										@click="copyLoginLink(system._id)"
+										@click="copyLoginLink(system.id)"
 										:aria-label="
 											$t(
 												'pages.administration.school.index.authSystems.copyLink'
@@ -75,7 +75,7 @@
 										"
 									>
 										<v-icon>{{
-											getCopyStatus(system._id)
+											getCopyStatus(system.id)
 												? iconMdiCheckCircle
 												: iconMdiContentCopy
 										}}</v-icon>
@@ -100,7 +100,7 @@
 								icon
 								variant="text"
 								:aria-label="ariaLabels(system).delete"
-								@click.stop="openConfirmDeleteDialog(system._id)"
+								@click.stop="openConfirmDeleteDialog(system.id)"
 							>
 								<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
 							</v-btn>
@@ -146,6 +146,7 @@
 </template>
 
 <script>
+import vCustomDialog from "@/components/organisms/vCustomDialog";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import {
 	mdiCheckCircle,
@@ -153,7 +154,6 @@ import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import vCustomDialog from "@/components/organisms/vCustomDialog";
 
 export default {
 	components: {
@@ -216,9 +216,9 @@ export default {
 		},
 		redirectTo(system) {
 			if (system.alias === "SANIS") {
-				return `/administration/school-settings/provisioning-options?systemId=${system._id}`;
+				return `/administration/school-settings/provisioning-options?systemId=${system.id}`;
 			}
-			return `/administration/ldap/config?id=${system._id}`;
+			return `/administration/ldap/config?id=${system.id}`;
 		},
 		openConfirmDeleteDialog(systemId) {
 			this.confirmDeleteDialog = {

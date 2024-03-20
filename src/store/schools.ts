@@ -3,6 +3,7 @@ import {
 	SchoolApiFactory,
 	SchoolApiInterface,
 	SchoolResponse,
+	SchoolSystemResponse,
 	SchoolUpdateBodyParams,
 	SchoolYearResponse,
 	SystemsApiFactory,
@@ -106,7 +107,7 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	@Mutation
-	setSystems(systems: any[]): void {
+	setSystems(systems: SchoolSystemResponse[]): void {
 		this.systems = systems;
 	}
 
@@ -193,15 +194,11 @@ export default class SchoolsModule extends VuexModule {
 	async fetchSystems(): Promise<void> {
 		this.setLoading(true);
 		try {
-			// TODO - monitor if not checking for ldap key causes any errors in the future
-			const systemIds = this.school.systemIds;
-
-			const requests = systemIds.map((systemId) =>
-				$axios.get(`v1/systems/${systemId}`)
+			const { data } = await this.schoolApi.schoolControllerGetSchoolSystems(
+				this.school.id
 			);
-			const responses = await Promise.all(requests);
 
-			this.setSystems(responses.map((response) => response.data));
+			this.setSystems(data);
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
