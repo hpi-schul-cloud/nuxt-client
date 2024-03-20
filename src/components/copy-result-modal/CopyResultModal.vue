@@ -157,7 +157,7 @@ export default {
 			);
 		},
 		hasDrawingElement() {
-			return this.isCourse && roomModule.hasDrawingChild;
+			return this.isCourse && roomModule.getHasDrawingChild;
 		},
 		hasFileElement() {
 			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);
