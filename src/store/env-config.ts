@@ -73,7 +73,7 @@ export default class EnvConfigModule extends VuexModule {
 		FEATURE_CTL_TOOLS_COPY_ENABLED: false,
 		ACCESSIBILITY_REPORT_EMAIL: "",
 		FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED: false,
-		FEATURE_LTI_TOOLS_TAB_ENABLED: false,
+		FEATURE_LTI_TOOLS_TAB_ENABLED: true,
 		FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: false,
 		FEATURE_SHOW_MIGRATION_WIZARD: false,
 		FEATURE_TLDRAW_ENABLED: false,
@@ -243,11 +243,11 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	get getLtiToolsTabEnabled(): boolean {
-		return this.env.FEATURE_LTI_TOOLS_TAB_ENABLED ?? true;
+		return this.env.FEATURE_LTI_TOOLS_TAB_ENABLED;
 	}
 
 	get getCtlToolsCopyEnabled(): boolean {
-		return this.env.FEATURE_CTL_TOOLS_COPY_ENABLED ?? false;
+		return this.env.FEATURE_CTL_TOOLS_COPY_ENABLED;
 	}
 
 	public get getEnv(): ConfigResponse {
