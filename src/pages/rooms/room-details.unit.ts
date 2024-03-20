@@ -10,6 +10,7 @@ import ShareModule from "@/store/share";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
+	COPY_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
@@ -128,7 +129,7 @@ const getWrapper = () => {
 				$route,
 			},
 			provide: {
-				copyModule: copyModuleMock,
+				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				notifierModule: notifierModuleMock,
 				shareModule: shareModuleMock,
@@ -187,18 +188,18 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		jest.resetAllMocks();
 	});
 
-	it("should fetch data", async () => {
+	it("should fetch data", () => {
 		const wrapper = getWrapper();
 		expect(wrapper.vm.roomData).toStrictEqual(mockData);
 	});
 
-	it("'to course files' button should have correct path", async () => {
+	it("'to course files' button should have correct path", () => {
 		const wrapper = getWrapper();
 		const backButton = wrapper.find(".back-button");
 		expect(backButton.attributes("href")).toStrictEqual("/files/courses/123");
 	});
 
-	it("title should be the course name", async () => {
+	it("title should be the course name", () => {
 		const wrapper = getWrapper();
 		const title = wrapper.find(".course-title");
 		expect(title.element.textContent).toContain("Sample Course");
@@ -458,7 +459,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	describe("modal views", () => {
-		it("should open modal for sharing action", async () => {
+		it("should open modal for sharing action", () => {
 			const wrapper = getWrapper();
 			const modalView = wrapper.findComponent({
 				name: "share-modal",

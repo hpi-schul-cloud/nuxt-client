@@ -1,6 +1,7 @@
 import {
 	ClassInfoSearchListResponse,
 	ClassRequestContext,
+	ClassSortBy,
 	GroupApiFactory,
 	GroupApiInterface,
 	SchoolYearQueryType,
@@ -30,7 +31,7 @@ export default class GroupModule extends VuexModule {
 		total: 0,
 	};
 
-	private sortBy = "name";
+	private sortBy?: ClassSortBy = ClassSortBy.Name;
 	private sortOrder: SortOrder = SortOrder.ASC;
 	private page = 1;
 
@@ -54,7 +55,7 @@ export default class GroupModule extends VuexModule {
 		return this.pagination;
 	}
 
-	get getSortBy(): string {
+	get getSortBy(): ClassSortBy | undefined {
 		return this.sortBy;
 	}
 
@@ -92,7 +93,7 @@ export default class GroupModule extends VuexModule {
 	}
 
 	@Mutation
-	setSortBy(sortBy: string): void {
+	setSortBy(sortBy: ClassSortBy | undefined): void {
 		this.sortBy = sortBy;
 	}
 
@@ -137,17 +138,12 @@ export default class GroupModule extends VuexModule {
 	}): Promise<void> {
 		this.setLoading(true);
 		try {
-			const sortBy =
-				this.getSortBy === "name" || this.getSortBy === "externalSourceName"
-					? this.getSortBy
-					: undefined;
-
 			const response: AxiosResponse<ClassInfoSearchListResponse> =
 				await this.groupApi.groupControllerFindClasses(
 					this.pagination.skip,
 					this.pagination.limit,
 					this.getSortOrder,
-					sortBy,
+					this.getSortBy,
 					data?.schoolYearQuery,
 					data?.calledFrom
 				);

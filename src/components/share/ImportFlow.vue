@@ -28,7 +28,11 @@
 import ImportModal from "@/components/share/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
-import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	COPY_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { computed, defineComponent, inject, ref } from "vue";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectCourseModal from "./SelectCourseModal.vue";
@@ -57,7 +61,7 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const { t } = useI18n();
-		const copyModule = inject("copyModule");
+		const copyModule = injectStrict(COPY_MODULE_KEY);
 		const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 		const loadingStateModule = inject("loadingStateModule");
 

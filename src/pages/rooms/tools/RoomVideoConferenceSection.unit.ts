@@ -1,4 +1,6 @@
+import { VideoConferenceScope } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
+import RoomModule from "@/store/room";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {
@@ -7,15 +9,13 @@ import {
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { shallowMount } from "@vue/test-utils";
-import { VideoConferenceScope } from "@/serverApi/v3";
-import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import RoomModule from "@/store/room";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 import { VDialog, VSwitch } from "vuetify/lib/components/index.mjs";
+import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 
 describe("RoomVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";
@@ -58,6 +58,7 @@ describe("RoomVideoConferenceSection", () => {
 				displayColor: "displayColor",
 				elements: [],
 				isArchived: false,
+				isSynchronized: false,
 			},
 		});
 
