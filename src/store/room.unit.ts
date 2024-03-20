@@ -349,6 +349,46 @@ describe("room module", () => {
 			});
 		});
 
+		describe("fetchHasDrawingChild", () => {
+			it("should call api to get info if has drawing child", async () => {
+				const mockApi = {
+					boardControllerHasDrawingChild: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				await roomModule.fetchHasDrawingChild("id");
+
+				expect(mockApi.boardControllerHasDrawingChild).toHaveBeenCalledTimes(1);
+				expect(mockApi.boardControllerHasDrawingChild).toHaveBeenCalledWith(
+					"id"
+				);
+
+				spy.mockRestore();
+			});
+
+			it("should catch error in catch block", async () => {
+				const error = { statusCode: 418, message: "I'm a teapot" };
+				const mockApi = {
+					boardControllerHasDrawingChild: jest.fn().mockRejectedValue(error),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+
+				await roomModule.fetchHasDrawingChild("id");
+
+				expect(roomModule.error).toStrictEqual(error);
+
+				spy.mockRestore();
+			});
+		});
+
 		describe("downloadCommonCartridgeCourse", () => {
 			it("should call backend api", async () => {
 				const roomModule = new RoomModule({});
