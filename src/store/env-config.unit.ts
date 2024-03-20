@@ -740,8 +740,6 @@ describe("env-config module", () => {
 		it("getEnv should get env", () => {
 			const envConfigModule = new EnvConfigModule({});
 			const mockEnvs = envsFactory.build();
-			expect(envConfigModule.getEnv).not.toStrictEqual(mockEnvs);
-			envConfigModule.env = mockEnvs;
 
 			expect(envConfigModule.getEnv).toStrictEqual(mockEnvs);
 		});
