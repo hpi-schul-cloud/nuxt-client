@@ -11,16 +11,16 @@
 				</template>
 				<template v-else>
 					<span :key="link.text">{{ link.text }}: </span>
-					<template v-for="(innerlink, innerindex) in link.innerlinks">
+					<template
+						v-for="(innerlink, innerindex) in link.innerlinks"
+						:key="innerlink.text"
+					>
 						<span v-if="innerindex !== 0" :key="`${index}-${innerindex}`">
 							/
 						</span>
-						<base-link
-							:key="innerlink.text"
-							v-bind="innerlink"
-							class="footer-link"
-							>{{ innerlink.text }}</base-link
-						>
+						<base-link v-bind="innerlink" class="footer-link">{{
+							innerlink.text
+						}}</base-link>
 					</template>
 				</template>
 			</template>
@@ -97,12 +97,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/styles/mixins";
+
 .footer {
 	width: 100%;
 	padding: 0 var(--space-md);
 	margin: var(--space-lg) 0 var(--space-md);
-	color: var(--v-secondary-darken1);
+	color: rgba(var(--v-theme-secondary-darken-1));
 	text-align: center;
+
+	@include breakpoint(tablet) {
+		max-width: calc(100vw - var(--sidebar-width-tablet));
+	}
+
+	@include breakpoint(desktop) {
+		max-width: calc(100vw - var(--sidebar-width));
+	}
 }
 
 .top-line {
@@ -121,7 +131,7 @@ export default {
 	margin-top: var(--space-xs);
 
 	.heart {
-		color: var(--v-primary-base);
+		color: rgba(var(--v-theme-primary));
 	}
 
 	.poweredby-logo {
@@ -131,17 +141,17 @@ export default {
 }
 
 .footer-link {
-	color: var(--v-primary-base);
+	color: rgba(var(--v-theme-primary));
 	border: none;
 
 	&:focus,
 	&:hover {
-		color: var(--v-primary-darken1);
+		color: rgba(var(--v-theme-primary-darken-1));
 		text-decoration: underline;
 	}
 
 	&:visited {
-		color: var(--v-primary-base);
+		color: rgba(var(--v-theme-primary));
 	}
 }
 </style>

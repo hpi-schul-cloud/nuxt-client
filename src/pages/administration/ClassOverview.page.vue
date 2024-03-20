@@ -5,49 +5,43 @@
 		:full-width="true"
 		data-testid="admin-class-title"
 	>
-		<v-tabs
-			class="tabs-max-width mb-5"
-			grow
-			@change="onTabsChange"
-			:value="activeTab"
-		>
-			<v-tab tab-value="next" data-testid="admin-class-next-year-tab">
+		<v-tabs class="tabs-max-width mb-5" grow v-model="activeTab">
+			<v-tab value="next" data-testid="admin-class-next-year-tab">
 				<span>{{ nextYear }}</span>
 			</v-tab>
-			<v-tab tab-value="current" data-testid="admin-class-current-year-tab">
+			<v-tab value="current" data-testid="admin-class-current-year-tab">
 				<span>{{ currentYear }}</span>
 			</v-tab>
-			<v-tab tab-value="archive" data-testid="admin-class-previous-years-tab">
+			<v-tab value="archive" data-testid="admin-class-previous-years-tab">
 				<span>{{ t("pages.administration.classes.label.archive") }}</span>
 			</v-tab>
 		</v-tabs>
 
-		<v-data-table
+		<v-data-table-server
 			:headers="headers"
 			:items="classes"
-			:items-per-page.sync="pagination.limit"
-			:server-items-length="pagination.total"
-			:sort-by="sortBy"
-			:sort-Order="sortOrder"
+			v-model:items-per-page="pagination.limit"
+			:items-length="pagination.total"
 			:page="page"
-			:footer-props="footerProps"
+			:items-per-page-text="footerProps.itemsPerPageText"
+			:items-per-page-options="footerProps.itemsPerPageOptions"
+			:loading="isLoading"
 			data-testid="admin-class-table"
 			class="elevation-1"
 			:no-data-text="t('common.nodata')"
-			@update:sort-by="onUpdateSortBy"
-			@update:sort-desc="updateSortOrder"
-			@update:items-per-page="onUpdateItemsPerPage"
+			@update:sortBy="onUpdateSortBy"
+			@update:itemsPerPage="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
-			<template v-slot:[`item.actions`]="{ item }">
+			<template #[`item.actions`]="{ item }">
 				<template v-if="showClassAction(item)">
 					<v-btn
 						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="legacy-class-table-manage-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:href="`/administration/classes/${item.id}/manage`"
 						class="mx-1 px-1"
 						min-width="0"
@@ -58,9 +52,9 @@
 						:title="t('pages.administration.classes.edit')"
 						:aria-label="t('pages.administration.classes.edit')"
 						data-testid="class-table-edit-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:href="`/administration/classes/${item.id}/edit`"
 						class="mx-1 px-1"
 						min-width="0"
@@ -71,9 +65,9 @@
 						:title="$t('pages.administration.classes.delete')"
 						:aria-label="$t('pages.administration.classes.delete')"
 						data-testid="class-table-delete-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						@click="onClickDeleteIcon(item)"
 						class="mx-1 px-1"
 						min-width="0"
@@ -85,9 +79,9 @@
 						:aria-label="t('pages.administration.classes.createSuccessor')"
 						:title="t('pages.administration.classes.createSuccessor')"
 						data-testid="class-table-successor-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:href="`/administration/classes/${item.id}/createSuccessor`"
 						class="mx-1 px-1"
 						min-width="0"
@@ -100,9 +94,9 @@
 						:title="t('pages.administration.classes.manage')"
 						:aria-label="t('pages.administration.classes.manage')"
 						data-testid="class-table-members-manage-btn"
-						outlined
+						variant="outlined"
 						color="secondary"
-						small
+						size="small"
 						:to="{
 							name: 'administration-groups-classes-members',
 							params: { groupId: item.id },
@@ -114,20 +108,21 @@
 					</v-btn>
 				</template>
 			</template>
-		</v-data-table>
-
+		</v-data-table-server>
 		<v-custom-dialog
 			:is-open="isDeleteDialogOpen"
 			max-width="360"
-			data-testId="delete-dialog"
+			data-testid="delete-dialog"
 			has-buttons
 			:buttons="['cancel', 'confirm']"
 			@dialog-closed="onCancelClassDeletion"
 			@dialog-confirmed="onConfirmClassDeletion"
 		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{ t("pages.administration.classes.deleteDialog.title") }}
-			</h2>
+			<template #title>
+				<h2 class="text-h4 my-2">
+					{{ t("pages.administration.classes.deleteDialog.title") }}
+				</h2>
+			</template>
 			<template #content>
 				<RenderHTML
 					class="text-md mt-2"
@@ -144,7 +139,7 @@
 		<v-btn
 			class="my-5 button-start"
 			color="primary"
-			depressed
+			variant="flat"
 			data-testid="admin-class-add-button"
 			href="/administration/classes/create"
 		>
@@ -161,20 +156,30 @@
 	</default-wireframe>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useI18n } from "@/composables/i18n.composable";
+import {
+	ClassRequestContext,
+	ClassSortBy,
+	SchoolYearQueryType,
+} from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
-import { ClassInfo, ClassRootType } from "@/store/types/class-info";
+import SchoolsModule from "@/store/schools";
+import { ClassInfo, ClassRootType, CourseInfo } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	injectStrict,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
 import {
 	mdiAccountGroupOutline,
@@ -182,263 +187,240 @@ import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	PropType,
-	ref,
-	Ref,
-	WritableComputedRef,
-} from "vue";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import AuthModule from "@/store/auth";
-import SchoolsModule from "@/store/schools";
-import { useRouter } from "vue-router/composables";
-import { ClassRequestContext, SchoolYearQueryType } from "@/serverApi/v3";
-import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
+import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 
 type Tab = "current" | "next" | "archive";
+// vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
+type ClassSortItem = { key: ClassSortBy; order?: boolean | "asc" | "desc" };
 
-export default defineComponent({
-	components: { DefaultWireframe, RenderHTML, VCustomDialog },
-	props: {
-		tab: {
-			type: String as PropType<Tab>,
-			default: "current",
+const props = defineProps({
+	tab: {
+		type: String as PropType<Tab>,
+		default: "current",
+	},
+});
+
+const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
+const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
+const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
+const route = useRoute();
+const router = useRouter();
+
+const { t } = useI18n();
+
+const activeTab = computed({
+	get() {
+		return props.tab;
+	},
+	set(newTab: string) {
+		onTabsChange(newTab);
+	},
+});
+
+const footerProps = {
+	itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
+	itemsPerPageOptions: [5, 10, 25, 50, 100],
+};
+
+const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
+	{
+		title: t("pages.administration.index.title"),
+		href: "/administration/",
+	},
+	{
+		title: t("pages.administration.classes.index.title"),
+		disabled: true,
+	},
+]);
+
+useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
+
+const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
+	switch (props.tab) {
+		case "next":
+			return SchoolYearQueryType.NextYear;
+		case "current":
+			return SchoolYearQueryType.CurrentYear;
+		case "archive":
+			return SchoolYearQueryType.PreviousYears;
+		default:
+			return SchoolYearQueryType.CurrentYear;
+	}
+});
+
+const nextYear: ComputedRef<string> = computed(
+	() => schoolsModule.getSchool.years.nextYear.name
+);
+
+const currentYear: ComputedRef<string> = computed(
+	() => schoolsModule.getSchool.years.activeYear.name
+);
+
+const onTabsChange = async (tab: string) => {
+	await groupModule.loadClassesForSchool({
+		schoolYearQuery: schoolYearQueryType.value,
+		calledFrom: ClassRequestContext.ClassOverview,
+	});
+
+	await router.replace({
+		query: { ...route.query, tab },
+	});
+};
+
+const classes: ComputedRef<ClassInfo[]> = computed(
+	() => groupModule.getClasses
+);
+
+const isLoading: ComputedRef<boolean> = computed(() => groupModule.getLoading);
+
+const hasPermission: ComputedRef<boolean> = computed(() =>
+	authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
+);
+
+const showClassAction = (item: ClassInfo) =>
+	hasPermission.value && item.type === ClassRootType.Class;
+
+const showGroupAction = (item: ClassInfo) =>
+	hasPermission.value && item.type === ClassRootType.Group;
+
+const isDeleteDialogOpen: Ref<boolean> = ref(false);
+
+const selectedItem: Ref<ClassInfo | undefined> = ref();
+
+const selectedItemName: ComputedRef<string> = computed(
+	() => selectedItem.value?.name || "???"
+);
+
+const onClickDeleteIcon = (selectedClass: ClassInfo) => {
+	selectedItem.value = selectedClass;
+	isDeleteDialogOpen.value = true;
+};
+
+const onCancelClassDeletion = () => {
+	selectedItem.value = undefined;
+	isDeleteDialogOpen.value = false;
+};
+
+const pagination: ComputedRef<Pagination> = computed(
+	() => groupModule.getPagination
+);
+
+const page: ComputedRef<number> = computed(() => groupModule.getPage);
+
+const courseSyncEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
+);
+
+const headers = computed(() => {
+	const headerList: unknown[] = [
+		{
+			value: "name",
+			title: t("common.labels.classes"),
+			sortable: true,
 		},
-	},
-	setup(props) {
-		const groupModule: GroupModule = injectStrict(GROUP_MODULE_KEY);
-		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-		const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
-
-		const router = useRouter();
-
-		const { t } = useI18n();
-
-		const activeTab: WritableComputedRef<string> = computed({
-			get: () => props.tab,
-			set: () => ({}),
+	];
+	if (courseSyncEnabled.value) {
+		headerList.push({
+			key: "synchronizedCourses",
+			value: (item: ClassInfo) =>
+				item.synchronizedCourses
+					?.map((course: CourseInfo): string => course.name)
+					.join(", "),
+			title: t("pages.administration.classes.header.sync"),
+			sortable: true,
 		});
+	}
+	headerList.push(
+		{
+			value: "externalSourceName",
+			title: t("common.labels.externalsource"),
+			sortable: true,
+		},
+		{
+			key: "teacherNames",
+			value: (item: ClassInfo) => item.teacherNames.join(", "),
+			title: t("common.labels.teacher"),
+			sortable: true,
+		},
+		{
+			value: "studentCount",
+			title: t("common.labels.students"),
+			sortable: true,
+		},
+		{
+			value: "actions",
+			title: "",
+			sortable: false,
+		}
+	);
 
-		const footerProps = {
-			itemsPerPageText: t("components.organisms.Pagination.recordsPerPage"),
-			itemsPerPageOptions: [5, 10, 25, 50, 100],
-		};
+	return headerList;
+});
 
-		const breadcrumbs: Breadcrumb[] = [
-			{
-				text: t("pages.administration.index.title"),
-				href: "/administration/",
-			},
-			{
-				text: t("pages.administration.classes.index.title"),
-				disabled: true,
-			},
-		];
-
-		useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
-
-		const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(
-			() => {
-				switch (props.tab) {
-					case "next":
-						return SchoolYearQueryType.NextYear;
-					case "current":
-						return SchoolYearQueryType.CurrentYear;
-					case "archive":
-						return SchoolYearQueryType.PreviousYears;
-					default:
-						return SchoolYearQueryType.CurrentYear;
-				}
-			}
-		);
-
-		const nextYear: ComputedRef<string> = computed(
-			() => schoolsModule.getSchool.years.nextYear.name
-		);
-
-		const currentYear: ComputedRef<string> = computed(
-			() => schoolsModule.getSchool.years.activeYear.name
-		);
-
-		const onTabsChange = async (tab: string) => {
-			await groupModule.loadClassesForSchool({
-				schoolYearQuery: schoolYearQueryType.value,
-				calledFrom: ClassRequestContext.ClassOverview,
-			});
-
-			await router.replace({ query: { ...router.currentRoute.query, tab } });
-		};
-
-		const classes: ComputedRef<ClassInfo[]> = computed(
-			() => groupModule.getClasses
-		);
-
-		const hasPermission: ComputedRef<boolean> = computed(() =>
-			authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
-		);
-
-		const showClassAction = (item: ClassInfo) =>
-			hasPermission.value && item.type === ClassRootType.Class;
-
-		const showGroupAction = (item: ClassInfo) =>
-			hasPermission.value && item.type === ClassRootType.Group;
-
-		const isDeleteDialogOpen: Ref<boolean> = ref(false);
-
-		const selectedItem: Ref<ClassInfo | undefined> = ref();
-
-		const selectedItemName: ComputedRef<string> = computed(
-			() => selectedItem.value?.name || "???"
-		);
-
-		const onClickDeleteIcon = (selectedClass: ClassInfo) => {
-			selectedItem.value = selectedClass;
-			isDeleteDialogOpen.value = true;
-		};
-
-		const onCancelClassDeletion = () => {
-			selectedItem.value = undefined;
-			isDeleteDialogOpen.value = false;
-		};
-
-		const pagination: ComputedRef<Pagination> = computed(
-			() => groupModule.getPagination
-		);
-
-		const sortBy: ComputedRef<string> = computed(() => groupModule.getSortBy);
-		const sortOrder: ComputedRef<SortOrder> = computed(
-			() => groupModule.getSortOrder
-		);
-		const page: ComputedRef<number> = computed(() => groupModule.getPage);
-
-		const headers = [
-			{
-				value: "name",
-				text: t("common.labels.classes"),
-				sortable: true,
-			},
-			{
-				value: "externalSourceName",
-				text: t("common.labels.externalsource"),
-				sortable: true,
-			},
-			{
-				value: "teachers",
-				text: t("common.labels.teacher"),
-				sortable: true,
-			},
-			{
-				value: "studentCount",
-				text: t("common.labels.students"),
-				sortable: true,
-			},
-			{
-				value: "actions",
-				text: "",
-				sortable: false,
-			},
-		];
-
-		const onConfirmClassDeletion = async () => {
-			if (selectedItem.value) {
-				await groupModule.deleteClass({
-					classId: selectedItem.value.id,
-					query: schoolYearQueryType.value,
-				});
-			}
-		};
-
-		const onUpdateSortBy = async (sortBy: string) => {
-			groupModule.setSortBy(sortBy);
-
-			await groupModule.loadClassesForSchool({
-				schoolYearQuery: schoolYearQueryType.value,
-				calledFrom: ClassRequestContext.ClassOverview,
-			});
-		};
-		const updateSortOrder = async (sortDesc: boolean) => {
-			const sortOrder = sortDesc ? SortOrder.DESC : SortOrder.ASC;
-			groupModule.setSortOrder(sortOrder);
-
-			await groupModule.loadClassesForSchool({
-				schoolYearQuery: schoolYearQueryType.value,
-				calledFrom: ClassRequestContext.ClassOverview,
-			});
-		};
-		const onUpdateCurrentPage = async (currentPage: number) => {
-			groupModule.setPage(currentPage);
-			const skip = (currentPage - 1) * groupModule.getPagination.limit;
-			groupModule.setPagination({ ...pagination.value, skip });
-
-			await groupModule.loadClassesForSchool({
-				schoolYearQuery: schoolYearQueryType.value,
-				calledFrom: ClassRequestContext.ClassOverview,
-			});
-		};
-		const onUpdateItemsPerPage = async (itemsPerPage: number) => {
-			groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
-
-			await groupModule.loadClassesForSchool({
-				schoolYearQuery: schoolYearQueryType.value,
-				calledFrom: ClassRequestContext.ClassOverview,
-			});
-		};
-
-		onMounted(() => {
-			onTabsChange(activeTab.value);
+const onConfirmClassDeletion = async () => {
+	if (selectedItem.value) {
+		await groupModule.deleteClass({
+			classId: selectedItem.value.id,
+			query: schoolYearQueryType.value,
 		});
+	}
+};
 
-		const getInstituteTitle: ComputedRef<string> = computed(() => {
-			switch (process.env.SC_THEME) {
-				case "n21":
-					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
-				case "thr":
-					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-				case "brb":
-					return "Dataport";
-				default:
-					return "Dataport";
-			}
-		});
+const onUpdateSortBy = async (sortBy: ClassSortItem[]) => {
+	const fieldToSortBy: ClassSortItem = sortBy[0];
+	const key: ClassSortBy | undefined = fieldToSortBy
+		? fieldToSortBy.key
+		: undefined;
+	groupModule.setSortBy(key);
 
-		return {
-			t,
-			footerProps,
-			breadcrumbs,
-			nextYear,
-			currentYear,
-			onTabsChange,
-			headers,
-			classes,
-			hasPermission,
-			showClassAction,
-			showGroupAction,
-			page,
-			sortBy,
-			sortOrder,
-			pagination,
-			selectedItem,
-			selectedItemName,
-			isDeleteDialogOpen,
-			onClickDeleteIcon,
-			onCancelClassDeletion,
-			onConfirmClassDeletion,
-			onUpdateSortBy,
-			updateSortOrder,
-			onUpdateCurrentPage,
-			onUpdateItemsPerPage,
-			mdiAccountGroupOutline,
-			mdiPencilOutline,
-			mdiTrashCanOutline,
-			mdiArrowUp,
-			getInstituteTitle,
-			activeTab,
-		};
-	},
+	const sortOrder =
+		fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
+	groupModule.setSortOrder(sortOrder);
+
+	await groupModule.loadClassesForSchool({
+		schoolYearQuery: schoolYearQueryType.value,
+		calledFrom: ClassRequestContext.ClassOverview,
+	});
+};
+
+const onUpdateCurrentPage = async (currentPage: number) => {
+	groupModule.setPage(currentPage);
+	const skip = (currentPage - 1) * groupModule.getPagination.limit;
+	groupModule.setPagination({ ...pagination.value, skip });
+
+	await groupModule.loadClassesForSchool({
+		schoolYearQuery: schoolYearQueryType.value,
+		calledFrom: ClassRequestContext.ClassOverview,
+	});
+};
+const onUpdateItemsPerPage = async (itemsPerPage: number) => {
+	groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
+
+	await groupModule.loadClassesForSchool({
+		schoolYearQuery: schoolYearQueryType.value,
+		calledFrom: ClassRequestContext.ClassOverview,
+	});
+};
+
+onMounted(() => {
+	onTabsChange(activeTab.value);
+});
+
+const getInstituteTitle: ComputedRef<string> = computed(() => {
+	switch (process.env.SC_THEME) {
+		case "n21":
+			return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
+		case "thr":
+			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
+		case "brb":
+			return "Dataport";
+		default:
+			return "Dataport";
+	}
 });
 </script>

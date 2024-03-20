@@ -2,9 +2,8 @@
 	<v-card
 		class="mb-4"
 		data-testid="board-file-element"
-		dense
 		elevation="0"
-		:outlined="isOutlined"
+		:variant="isOutlined ? 'outlined' : 'elevated'"
 		ref="fileContentElement"
 		:ripple="false"
 		tabindex="0"
@@ -181,7 +180,14 @@ export default defineComponent({
 		const onAddAlert = (alert: FileAlert) => {
 			addAlert(alert);
 		};
-		const onDelete = () => emit("delete:element", element.value.id);
+
+		const onDelete = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:element", element.value.id);
+			}
+		};
+
 		const onMoveUp = () => emit("move-up:edit");
 		const onMoveDown = () => emit("move-down:edit");
 

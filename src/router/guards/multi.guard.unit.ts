@@ -1,11 +1,16 @@
-import { NavigationGuard, RawLocation, Route } from "vue-router";
+import {
+	NavigationGuard,
+	RouteLocation,
+	RouteLocationRaw,
+	RouteMeta,
+} from "vue-router";
 import { Multiguard } from "@/router/guards/multi.guard";
 
-const createRoute = (name: string, path: string): Route => {
+const createRoute = (name: string, path: string): RouteLocation => {
 	return {
 		matched: [],
-		meta: undefined,
-		redirectedFrom: "",
+		meta: {} as RouteMeta,
+		redirectedFrom: {} as RouteLocation,
 		name,
 		path,
 		fullPath: path,
@@ -34,8 +39,8 @@ describe("Multiguard", () => {
 
 	describe("when the argument is an empty array", () => {
 		const setup = () => {
-			const to: Route = createRoute("to", "/to");
-			const from: Route = createRoute("from", "/from");
+			const to: RouteLocation = createRoute("to", "/to");
+			const from: RouteLocation = createRoute("from", "/from");
 			const next = jest.fn();
 
 			const multiguard = Multiguard([]);
@@ -54,12 +59,12 @@ describe("Multiguard", () => {
 
 	describe("when a single guard is specified", () => {
 		const setup = () => {
-			const expected: RawLocation = {
+			const expected: RouteLocationRaw = {
 				name: "example.route.name",
 				path: "/path",
 			};
-			const to: Route = createRoute("to", "/to");
-			const from: Route = createRoute("from", "/from");
+			const to: RouteLocation = createRoute("to", "/to");
+			const from: RouteLocation = createRoute("from", "/from");
 			const next = jest.fn();
 
 			const multiguard = Multiguard([(to, from, next) => next(expected)]);
@@ -78,8 +83,8 @@ describe("Multiguard", () => {
 
 	describe("when all guards pass", () => {
 		const setup = () => {
-			const to: Route = createRoute("to", "/to");
-			const from: Route = createRoute("from", "/from");
+			const to: RouteLocation = createRoute("to", "/to");
+			const from: RouteLocation = createRoute("from", "/from");
 			const next = jest.fn();
 
 			const multiguard = Multiguard([
@@ -101,12 +106,12 @@ describe("Multiguard", () => {
 
 	describe("when the first guard has a non-undefined value", () => {
 		const setup = () => {
-			const expected: RawLocation = {
+			const expected: RouteLocationRaw = {
 				name: "example.route.name",
 				path: "/path",
 			};
-			const to: Route = createRoute("to", "/to");
-			const from: Route = createRoute("from", "/from");
+			const to: RouteLocation = createRoute("to", "/to");
+			const from: RouteLocation = createRoute("from", "/from");
 			const next = jest.fn();
 
 			const multiguard = Multiguard([
@@ -128,12 +133,12 @@ describe("Multiguard", () => {
 
 	describe("when the first guard has a non-undefined value and should not call the second guard", () => {
 		const setup = () => {
-			const expected: RawLocation = {
+			const expected: RouteLocationRaw = {
 				name: "example.route.name",
 				path: "/path",
 			};
-			const to: Route = createRoute("to", "/to");
-			const from: Route = createRoute("from", "/from");
+			const to: RouteLocation = createRoute("to", "/to");
+			const from: RouteLocation = createRoute("from", "/from");
 			const next = jest.fn();
 
 			const multiguard = Multiguard([

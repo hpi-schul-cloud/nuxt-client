@@ -1,308 +1,338 @@
+import { ClassRequestContext } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 import GroupModule from "@/store/group";
-import { ClassInfo, ClassRootType } from "@/store/types/class-info";
+import SchoolsModule from "@/store/schools";
+import { ClassRootType } from "@/store/types/class-info";
 import { Pagination } from "@/store/types/commons";
+import { School, Year } from "@/store/types/schools";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
 	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
-	I18N_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { classInfoFactory, i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
-import ClassOverview from "./ClassOverview.page.vue";
-import SchoolsModule from "@/store/schools";
-import { School, Year } from "@/store/types/schools";
+import { classInfoFactory, envsFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
-import VueRouter from "vue-router";
-import { ClassRequestContext } from "@/serverApi/v3";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { nextTick } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRoute, useRouter } from "vue-router";
+import { VBtn, VDataTableServer } from "vuetify/lib/components/index.mjs";
+import ClassOverview from "./ClassOverview.page.vue";
 
-const $router = createMock<VueRouter>();
+jest.mock("vue-router", () => ({
+	useRoute: jest.fn(),
+	useRouter: jest.fn(),
+}));
+const useRouteMock = <jest.Mock>useRoute;
+const useRouterMock = <jest.Mock>useRouter;
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-describe("ClassOverview", () => {
-	const getWrapper = (
-		getters: Partial<GroupModule> = {},
-		propsData: { tab: string } = { tab: "current" }
-	) => {
-		document.body.setAttribute("data-app", "true");
+const createWrapper = (
+	groupModuleGetters: Partial<GroupModule> = {},
+	schoolsModuleGetters: Partial<SchoolsModule> = {},
+	props: { tab: string } = { tab: "current" }
+) => {
+	const route = { query: { tab: "current" } };
+	useRouteMock.mockReturnValue(route);
+	const router = createMock<Router>();
+	useRouterMock.mockReturnValue(router);
 
-		const groupModule = createModuleMocks(GroupModule, {
-			getClasses: [
-				classInfoFactory.build(),
-				classInfoFactory.build({
-					externalSourceName: undefined,
-					type: ClassRootType.Class,
-					isUpgradable: true,
-				}),
-			],
-			getPagination: {
-				limit: 10,
-				skip: 0,
-				total: 30,
-			},
-			...getters,
-		});
-
-		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: ["CLASS_EDIT".toLowerCase()],
-		});
-
-		const schoolModule = createModuleMocks(SchoolsModule, {
-			getSchool: {
-				years: {
-					schoolYears: [],
-					nextYear: {
-						name: "2024/25",
-					} as Year,
-					activeYear: {
-						name: "2023/24",
-					} as Year,
-					lastYear: {} as Year,
-				},
-			} as unknown as School,
-			...getters,
-		});
-
-		const wrapper: Wrapper<Vue> = mount(ClassOverview as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
+	const groupModule = createModuleMocks(GroupModule, {
+		getClasses: [
+			classInfoFactory.build(),
+			classInfoFactory.build({
+				externalSourceName: undefined,
+				type: ClassRootType.Class,
+				isUpgradable: true,
 			}),
+		],
+		getPagination: {
+			limit: 10,
+			skip: 0,
+			total: 30,
+		},
+		...groupModuleGetters,
+	});
+
+	const authModule = createModuleMocks(AuthModule, {
+		getUserPermissions: ["CLASS_EDIT".toLowerCase()],
+	});
+
+	const schoolModule = createModuleMocks(SchoolsModule, {
+		getSchool: {
+			years: {
+				schoolYears: [],
+				nextYear: {
+					name: "2024/25",
+				} as Year,
+				activeYear: {
+					name: "2023/24",
+				} as Year,
+				lastYear: {} as Year,
+			},
+		} as unknown as School,
+		...schoolsModuleGetters,
+	});
+
+	const envConfigModule = createModuleMocks(EnvConfigModule, {
+		getEnv: envsFactory.build({
+			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+		}),
+	});
+
+	const wrapper = mount(ClassOverview, {
+		global: {
+			plugins: [
+				createTestingVuetify(),
+				createTestingI18n(),
+				vueDompurifyHTMLPlugin,
+			],
 			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
 				[GROUP_MODULE_KEY.valueOf()]: groupModule,
 				[SCHOOLS_MODULE_KEY.valueOf()]: schoolModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			},
-			mocks: { $router },
-			propsData,
-		});
+		},
+		props,
+	});
 
-		const calledFrom = ClassRequestContext.ClassOverview;
+	const calledFrom = ClassRequestContext.ClassOverview;
 
-		return {
-			wrapper,
-			groupModule,
-			schoolModule,
-			calledFrom,
-		};
+	return {
+		wrapper,
+		route,
+		router,
+		groupModule,
+		schoolModule,
+		calledFrom,
 	};
+};
 
+const findTableComponen = (wrapper: VueWrapper) => {
+	return wrapper.findComponent<typeof VDataTableServer>(
+		'[data-testid="admin-class-table"]'
+	);
+};
+
+describe("ClassOverview", () => {
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
-	describe("breadcrumbs", () => {
-		it("should render static breadcrumbs", () => {
-			const { wrapper } = getWrapper({});
+	describe("general", () => {
+		const setup = () => createWrapper();
 
-			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
-
-			expect(breadcrumbs.at(0).text()).toEqual(
-				"pages.administration.index.title"
-			);
-			expect(breadcrumbs.at(1).text()).toEqual(
-				"pages.administration.classes.index.title"
-			);
+		it("should mount", () => {
+			const { wrapper } = setup();
+			expect(wrapper.exists()).toBe(true);
 		});
-	});
 
-	describe("onMounted", () => {
-		describe("when loading the page", () => {
-			it("should load the classes", async () => {
-				const { groupModule } = getWrapper();
+		describe("breadcrumbs", () => {
+			it("should render static breadcrumbs", () => {
+				const { wrapper } = setup();
 
-				await Vue.nextTick();
+				const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
+				expect(breadcrumbs.at(0)?.text()).toEqual(
+					"pages.administration.index.title"
+				);
+				expect(breadcrumbs.at(1)?.text()).toEqual(
+					"pages.administration.classes.index.title"
+				);
+			});
+		});
+
+		describe("onMounted", () => {
+			describe("when loading the page", () => {
+				it("should load the classes", async () => {
+					const { groupModule } = setup();
+
+					await nextTick();
+
+					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
+				});
 			});
 		});
 	});
 
 	describe("when there are classes or groups to display", () => {
-		const setup = () => {
-			const classes: ClassInfo[] = [
-				classInfoFactory.build(),
-				classInfoFactory.build({
-					externalSourceName: undefined,
-					type: ClassRootType.Class,
-					isUpgradable: true,
-				}),
-			];
-
-			const { wrapper, groupModule } = getWrapper({
-				getClasses: classes,
-			});
-
-			return {
-				classes,
-				wrapper,
-				groupModule,
-			};
-		};
-
-		it("should display the entries in the table", async () => {
-			const { classes, wrapper } = setup();
-
-			const table = wrapper.find('[data-testid="admin-class-table"]');
-
-			expect(table.props("items")).toEqual(classes);
-		});
-	});
-
-	describe("onUpdateSortBy", () => {
-		describe("when changing the sortBy", () => {
+		describe("classes", () => {
 			const setup = () => {
-				const sortBy = "externalSourceName";
+				const classes = [
+					classInfoFactory.build(),
+					classInfoFactory.build({
+						externalSourceName: undefined,
+						type: ClassRootType.Class,
+						isUpgradable: true,
+					}),
+				];
 
-				const { wrapper, groupModule } = getWrapper();
+				const { wrapper } = createWrapper({
+					getClasses: classes,
+				});
 
-				return {
-					sortBy,
-					wrapper,
-					groupModule,
-				};
+				return { wrapper, classes };
 			};
 
-			it("should call store to change sort by", async () => {
-				const { sortBy, wrapper, groupModule } = setup();
+			it("should display the entries in the table", async () => {
+				const { classes, wrapper } = setup();
 
-				wrapper
-					.find('[data-testid="admin-class-table"]')
-					.vm.$emit("update:sort-by", sortBy);
-				await Vue.nextTick();
+				const table = wrapper.findComponent<typeof VDataTableServer>(
+					'[data-testid="admin-class-table"]'
+				);
 
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-				expect(groupModule.setSortBy).toHaveBeenCalledWith(sortBy);
+				expect(table.props("items")).toEqual(classes);
 			});
 		});
-	});
 
-	describe("updateSortOrder", () => {
-		describe("when changing the sort order", () => {
-			const setup = () => {
-				const sortOrder = true;
+		describe("onUpdateSortBy", () => {
+			describe("when changing the sortBy", () => {
+				const setup = () => {
+					const sortBy = { key: "externalSourceName" };
 
-				const { wrapper, groupModule } = getWrapper();
+					const { wrapper, groupModule } = createWrapper();
 
-				return {
-					sortOrder,
-					wrapper,
-					groupModule,
+					return {
+						sortBy,
+						wrapper,
+						groupModule,
+					};
 				};
-			};
 
-			it("should call store to change sort order", async () => {
-				const { sortOrder, wrapper, groupModule } = setup();
+				it("should call store to change sort by", async () => {
+					const { sortBy, wrapper, groupModule } = setup();
 
-				wrapper
-					.find('[data-testid="admin-class-table"]')
-					.vm.$emit("update:sort-desc", sortOrder);
-				await Vue.nextTick();
+					findTableComponen(wrapper).vm.$emit("update:sortBy", [sortBy]);
+					await nextTick();
 
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-				expect(groupModule.setSortOrder).toHaveBeenCalledWith(SortOrder.DESC);
+					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
+					expect(groupModule.setSortBy).toHaveBeenCalledWith(sortBy.key);
+				});
 			});
 		});
-	});
 
-	describe("onUpdateItemsPerPage", () => {
-		describe("when changing the number of items per page", () => {
-			const setup = () => {
-				const itemsPerPage = 20;
+		describe("updateSortOrder", () => {
+			describe("when changing the sort order", () => {
+				const setup = () => {
+					const sortBy = { key: "externalSourceName", order: "desc" };
 
-				const pagination: Pagination = {
-					limit: 10,
-					skip: 0,
-					total: 30,
+					const { wrapper, groupModule } = createWrapper();
+
+					return {
+						sortBy,
+						wrapper,
+						groupModule,
+					};
 				};
 
-				const { wrapper, groupModule } = getWrapper({
-					getPagination: {
+				it("should call store to change sort order", async () => {
+					const { sortBy, wrapper, groupModule } = setup();
+
+					findTableComponen(wrapper).vm.$emit("update:sortBy", [sortBy]);
+					await nextTick();
+
+					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
+					expect(groupModule.setSortOrder).toHaveBeenCalledWith(SortOrder.DESC);
+				});
+			});
+		});
+
+		describe("onUpdateItemsPerPage", () => {
+			describe("when changing the number of items per page", () => {
+				const setup = () => {
+					const itemsPerPage = 20;
+
+					const pagination: Pagination = {
 						limit: 10,
 						skip: 0,
 						total: 30,
-					},
-				});
+					};
 
-				return {
-					itemsPerPage,
-					pagination,
-					wrapper,
-					groupModule,
+					const { wrapper, groupModule } = createWrapper({
+						getPagination: {
+							limit: 10,
+							skip: 0,
+							total: 30,
+						},
+					});
+
+					return {
+						itemsPerPage,
+						pagination,
+						wrapper,
+						groupModule,
+					};
 				};
-			};
 
-			it("should call store to change the limit in pagination", async () => {
-				const { itemsPerPage, wrapper, groupModule, pagination } = setup();
+				it("should call store to change the limit in pagination", async () => {
+					const { itemsPerPage, wrapper, groupModule, pagination } = setup();
 
-				wrapper
-					.find('[data-testid="admin-class-table"]')
-					.vm.$emit("update:items-per-page", itemsPerPage);
-				await Vue.nextTick();
+					findTableComponen(wrapper).vm.$emit(
+						"update:itemsPerPage",
+						itemsPerPage
+					);
+					await nextTick();
 
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-				expect(groupModule.setPagination).toHaveBeenCalledWith({
-					...pagination,
-					limit: itemsPerPage,
+					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
+					expect(groupModule.setPagination).toHaveBeenCalledWith({
+						...pagination,
+						limit: itemsPerPage,
+					});
 				});
 			});
 		});
-	});
 
-	describe("onUpdateCurrentPage", () => {
-		describe("when changing the table page", () => {
-			const setup = () => {
-				const page = 2;
-				const pagination: Pagination = {
-					limit: 10,
-					skip: 0,
-					total: 30,
+		describe("onUpdateCurrentPage", () => {
+			describe("when changing the table page", () => {
+				const setup = () => {
+					const page = 2;
+					const pagination: Pagination = {
+						limit: 10,
+						skip: 0,
+						total: 30,
+					};
+
+					pagination.skip = (page - 1) * pagination.limit;
+
+					const { wrapper, groupModule } = createWrapper();
+
+					return {
+						page,
+						pagination,
+						wrapper,
+						groupModule,
+					};
 				};
 
-				pagination.skip = (page - 1) * pagination.limit;
+				it("should call store to update current page", async () => {
+					const { page, wrapper, groupModule, pagination } = setup();
 
-				const { wrapper, groupModule } = getWrapper();
+					findTableComponen(wrapper).vm.$emit("update:page", page);
+					await nextTick();
 
-				return {
-					page,
-					pagination,
-					wrapper,
-					groupModule,
-				};
-			};
-
-			it("should call store to update current page", async () => {
-				const { page, wrapper, groupModule, pagination } = setup();
-
-				wrapper
-					.find('[data-testid="admin-class-table"]')
-					.vm.$emit("update:page", page);
-				await Vue.nextTick();
-
-				expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
-				expect(groupModule.setPage).toHaveBeenCalledWith(page);
-				expect(groupModule.setPagination).toHaveBeenCalledWith(pagination);
+					expect(groupModule.loadClassesForSchool).toHaveBeenCalled();
+					expect(groupModule.setPage).toHaveBeenCalledWith(page);
+					expect(groupModule.setPagination).toHaveBeenCalledWith(pagination);
+				});
 			});
 		});
 	});
 
 	describe("action buttons", () => {
 		describe("when legacy classes are available", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper();
-
-				return {
-					wrapper,
-				};
-			};
+			const setup = () => createWrapper();
 
 			it("should render 4 buttons", () => {
 				const { wrapper } = setup();
@@ -329,15 +359,10 @@ describe("ClassOverview", () => {
 		});
 
 		describe("when no classes are available", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper({
+			const setup = () =>
+				createWrapper({
 					getClasses: [classInfoFactory.build()],
 				});
-
-				return {
-					wrapper,
-				};
-			};
 
 			it("should render only manage button which refers to members page", () => {
 				const { wrapper } = setup();
@@ -366,7 +391,7 @@ describe("ClassOverview", () => {
 		describe("when clicking on the manage class button", () => {
 			describe("when group class root type is class", () => {
 				const setup = () => {
-					const { wrapper, groupModule } = getWrapper();
+					const { wrapper, groupModule } = createWrapper();
 
 					const classId: string = groupModule.getClasses[1].id;
 
@@ -394,7 +419,7 @@ describe("ClassOverview", () => {
 
 			describe("when class root type is group", () => {
 				const setup = () => {
-					const { wrapper, groupModule } = getWrapper();
+					const { wrapper, groupModule } = createWrapper();
 
 					const classId: string = groupModule.getClasses[0].id;
 
@@ -407,21 +432,19 @@ describe("ClassOverview", () => {
 				it("should redirect to group class members page", async () => {
 					const { wrapper } = setup();
 
-					const manageBtn = wrapper.find(
+					const manageBtn = wrapper.findComponent<typeof VBtn>(
 						'[data-testid="class-table-members-manage-btn"]'
 					);
 
-					const routerLink = manageBtn.findComponent({ name: "router-link" });
-
 					expect(manageBtn.attributes().href).toBeUndefined();
-					expect(routerLink.exists()).toBeTruthy();
+					expect(manageBtn.props("to")).toBeDefined();
 				});
 			});
 		});
 
 		describe("when clicking on the edit class button", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = getWrapper();
+				const { wrapper, groupModule } = createWrapper();
 
 				const classId: string = groupModule.getClasses[1].id;
 
@@ -445,7 +468,7 @@ describe("ClassOverview", () => {
 		describe("when class is upgradable", () => {
 			describe("when clicking on the upgrade class button", () => {
 				const setup = () => {
-					const { wrapper, groupModule } = getWrapper();
+					const { wrapper, groupModule } = createWrapper();
 
 					const classId: string = groupModule.getClasses[1].id;
 
@@ -471,7 +494,7 @@ describe("ClassOverview", () => {
 
 		describe("when class is not upgradable", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper({
+				const { wrapper } = createWrapper({
 					getClasses: [
 						classInfoFactory.build({
 							externalSourceName: undefined,
@@ -489,7 +512,7 @@ describe("ClassOverview", () => {
 			it("should display the upgrade button as disabled", () => {
 				const { wrapper } = setup();
 
-				const successorBtn = wrapper.find(
+				const successorBtn = wrapper.findComponent<typeof VBtn>(
 					'[data-testid="class-table-successor-btn"]'
 				);
 
@@ -499,7 +522,7 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on the delete class button", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper();
+				const { wrapper } = createWrapper();
 
 				return {
 					wrapper,
@@ -512,16 +535,16 @@ describe("ClassOverview", () => {
 				await wrapper
 					.find('[data-testid="class-table-delete-btn"]')
 					.trigger("click");
+				await nextTick();
 
-				const dialog = wrapper.find('[data-testid="delete-dialog"]');
-
-				expect(dialog.props("isOpen")).toBeTruthy();
+				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+				expect(dialog.vm.isOpen).toBe(true);
 			});
 		});
 
 		describe("when delete dialog is open", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = getWrapper();
+				const { wrapper, groupModule } = createWrapper();
 
 				return {
 					wrapper,
@@ -537,9 +560,11 @@ describe("ClassOverview", () => {
 						.find('[data-testid="class-table-delete-btn"]')
 						.trigger("click");
 
-					const dialog = wrapper.find('[data-testid="delete-dialog"]');
+					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 
-					await dialog.find('[data-testid="dialog-cancel"').trigger("click");
+					await dialog
+						.findComponent('[data-testid="dialog-cancel"')
+						.trigger("click");
 
 					expect(groupModule.deleteClass).not.toHaveBeenCalled();
 				});
@@ -553,9 +578,11 @@ describe("ClassOverview", () => {
 						.find('[data-testid="class-table-delete-btn"]')
 						.trigger("click");
 
-					const dialog = wrapper.find('[data-testid="delete-dialog"]');
+					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 
-					await dialog.find('[data-testid="dialog-confirm"').trigger("click");
+					await dialog
+						.findComponent('[data-testid="dialog-confirm"')
+						.trigger("click");
 
 					expect(groupModule.deleteClass).toHaveBeenCalled();
 				});
@@ -566,7 +593,7 @@ describe("ClassOverview", () => {
 	describe("tabs", () => {
 		describe("when loading page", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper();
+				const { wrapper } = createWrapper();
 
 				return {
 					wrapper,
@@ -600,28 +627,30 @@ describe("ClassOverview", () => {
 					'[data-testid="admin-class-current-year-tab"]'
 				);
 
-				expect(currentYearTab.classes()).toContain("v-tab--active");
+				expect(currentYearTab.classes()).toContain("v-tab--selected");
 			});
 		});
 
 		describe("when clicking on a tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule } = getWrapper();
+				const { wrapper, route, router, groupModule } = createWrapper();
 
 				return {
 					wrapper,
+					route,
+					router,
 					groupModule,
 				};
 			};
 
 			it("should replace the route to the given tab ", async () => {
-				const { wrapper } = setup();
+				const { wrapper, router } = setup();
 
 				await wrapper
 					.find('[data-testid="admin-class-next-year-tab"]')
 					.trigger("click");
 
-				expect($router.replace).toHaveBeenCalledWith({
+				expect(router.replace).toHaveBeenCalledWith({
 					query: { tab: "next" },
 				});
 			});
@@ -629,7 +658,8 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on next year tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule, calledFrom } = getWrapper(
+				const { wrapper, groupModule, calledFrom } = createWrapper(
+					{},
 					{},
 					{ tab: "next" }
 				);
@@ -657,7 +687,8 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on previous years tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule, calledFrom } = getWrapper(
+				const { wrapper, groupModule, calledFrom } = createWrapper(
+					{},
 					{},
 					{ tab: "archive" }
 				);
@@ -685,7 +716,7 @@ describe("ClassOverview", () => {
 
 		describe("when clicking on current year tab", () => {
 			const setup = () => {
-				const { wrapper, groupModule, calledFrom } = getWrapper();
+				const { wrapper, groupModule, calledFrom } = createWrapper();
 
 				return {
 					wrapper,
@@ -716,7 +747,7 @@ describe("ClassOverview", () => {
 	describe("addClass", () => {
 		describe("when clicking on add class buttton", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper();
+				const { wrapper } = createWrapper();
 
 				return {
 					wrapper,

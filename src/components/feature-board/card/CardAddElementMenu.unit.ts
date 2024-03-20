@@ -1,22 +1,24 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 
 describe("CardAddElementMenu", () => {
-	let wrapper: Wrapper<Vue>;
-
 	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(CardAddElementMenu as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		const wrapper = shallowMount(CardAddElementMenu, {
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+			},
 		});
+		return wrapper;
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup();
+			const wrapper = setup();
 			expect(wrapper.findComponent(CardAddElementMenu).exists()).toBe(true);
 		});
 	});

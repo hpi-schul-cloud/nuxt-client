@@ -13,6 +13,14 @@ import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable
 
 jest.mock("@data-external-tool/ExternalToolApi.composable");
 
+Object.defineProperty(window, "location", {
+	configurable: true,
+	writable: false,
+	value: {
+		href: "",
+	},
+});
+
 describe("ExternalToolLaunchState.composable", () => {
 	let useExternalToolApiMock: DeepMocked<ReturnType<typeof useExternalToolApi>>;
 

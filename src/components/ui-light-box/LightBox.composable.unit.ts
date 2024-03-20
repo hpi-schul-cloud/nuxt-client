@@ -1,10 +1,10 @@
-import { I18N_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import {
 	LightBoxOptions,
 	useInternalLightBox,
 	useLightBox,
 } from "./LightBox.composable";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 const defaultLightBoxOptions: LightBoxOptions = {
 	downloadUrl: "",
@@ -17,7 +17,7 @@ describe("LightBox composable", () => {
 	describe("useLightBox", () => {
 		const setup = () => {
 			const { open, isLightBoxOpen } = mountComposable(() => useLightBox(), {
-				[I18N_KEY.valueOf()]: { t: (k: string) => k },
+				global: { plugins: [createTestingI18n()] },
 			});
 
 			return {
@@ -55,7 +55,7 @@ describe("LightBox composable", () => {
 		const setup = () => {
 			const { close, isLightBoxOpen, lightBoxOptions, openInternal } =
 				mountComposable(() => useInternalLightBox(), {
-					[I18N_KEY.valueOf()]: { t: (k: string) => k },
+					global: { mocks: { t: (k: string) => k } },
 				});
 
 			return {
@@ -86,7 +86,7 @@ describe("LightBox composable", () => {
 				openInternal(data);
 
 				expect(isLightBoxOpen.value).toBe(true);
-				expect(lightBoxOptions.value).toBe(data);
+				expect(lightBoxOptions.value).toEqual(data);
 			});
 		});
 

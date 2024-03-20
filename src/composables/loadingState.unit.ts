@@ -10,9 +10,7 @@ describe("loadingState composable", () => {
 		const loadingMessage = "test message";
 		const { isLoadingDialogOpen } = mountComposable(
 			() => useLoadingState(loadingMessage),
-			{
-				loadingStateModule: loadingStateModuleMock,
-			}
+			{ global: { provide: { loadingStateModule: loadingStateModuleMock } } }
 		);
 
 		isLoadingDialogOpen.value = true;
@@ -29,9 +27,7 @@ describe("loadingState composable", () => {
 
 		const { isLoadingDialogOpen } = mountComposable(
 			() => useLoadingState("...loading"),
-			{
-				loadingStateModule: loadingStateModuleMock,
-			}
+			{ global: { provide: { loadingStateModule: loadingStateModuleMock } } }
 		);
 
 		isLoadingDialogOpen.value = false;

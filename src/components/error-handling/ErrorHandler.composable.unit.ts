@@ -8,7 +8,7 @@ import { isAxiosError } from "axios";
 
 import { useErrorHandler } from "./ErrorHandler.composable";
 import { mountComposable } from "@@/tests/test-utils";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { notifierModule } from "@/store";
 
 jest.mock("axios");
@@ -16,16 +16,34 @@ const mockedIsAxiosError = jest.mocked(isAxiosError);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-let translationMap: Record<string, string> = {};
+const keys = [
+	"components.board.notifications.errors.notCreated",
+	"components.board.notifications.errors.notLoaded",
+	"components.board.notifications.errors.notUpdated",
+	"components.board.notifications.errors.notDeleted",
+];
+const translationMap: Record<string, string> = {};
 
-const mountErrorComposable = () => {
-	return mountComposable(() => useErrorHandler(), {
-		[I18N_KEY.valueOf()]: {
+keys.forEach((key) => (translationMap[key] = key));
+
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({
 			t: (key: string) => key,
 			tc: (key: string) => key,
 			te: (key: string) => translationMap[key] !== undefined,
+		}),
+	};
+});
+
+const mountErrorComposable = () => {
+	return mountComposable(() => useErrorHandler(), {
+		global: {
+			provide: {
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			},
 		},
-		[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 	});
 };
 
@@ -50,13 +68,6 @@ describe("ErrorHandler.Composable", () => {
 	};
 
 	beforeEach(() => {
-		const keys = [
-			"components.board.notifications.errors.notCreated",
-			"components.board.notifications.errors.notLoaded",
-			"components.board.notifications.errors.notUpdated",
-			"components.board.notifications.errors.notDeleted",
-		];
-		translationMap = {};
 		keys.forEach((key) => (translationMap[key] = key));
 	});
 

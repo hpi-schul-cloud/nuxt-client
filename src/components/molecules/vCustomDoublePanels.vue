@@ -1,14 +1,14 @@
 <template>
 	<section>
-		<v-expansion-panels v-model="expanded" flat accordion mandatory>
-			<v-expansion-panel :disabled="isPanelOneDisabled">
-				<v-expansion-panel-header v-if="isLoading">
+		<v-expansion-panels :model-value="expanded" variant="accordion" mandatory>
+			<v-expansion-panel elevation="0" :disabled="isPanelOneDisabled">
+				<v-expansion-panel-title v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />
 					<template #actions>
 						<v-skeleton-loader type="chip" />
 					</template>
-				</v-expansion-panel-header>
-				<v-expansion-panel-header
+				</v-expansion-panel-title>
+				<v-expansion-panel-title
 					v-else-if="!isEmpty"
 					data-testid="upperTaskSection"
 					class="text-h6 font-weight-bold pa-0"
@@ -21,19 +21,19 @@
 							$expand
 						</v-icon>
 					</template>
-				</v-expansion-panel-header>
-				<v-expansion-panel-content class="pa-0">
+				</v-expansion-panel-title>
+				<v-expansion-panel-text class="pa-0">
 					<slot name="panelOne" />
-				</v-expansion-panel-content>
+				</v-expansion-panel-text>
 			</v-expansion-panel>
-			<v-expansion-panel :disabled="isPanelTwoDisabled">
-				<v-expansion-panel-header v-if="isLoading">
+			<v-expansion-panel elevation="0" :disabled="isPanelTwoDisabled">
+				<v-expansion-panel-title v-if="isLoading">
 					<v-skeleton-loader type="text" max-width="30%" />
 					<template #actions>
 						<v-skeleton-loader type="chip" />
 					</template>
-				</v-expansion-panel-header>
-				<v-expansion-panel-header
+				</v-expansion-panel-title>
+				<v-expansion-panel-title
 					v-else-if="!isEmpty"
 					class="text-h6 font-weight-bold pa-0"
 					data-testid="lowerTaskSection"
@@ -46,10 +46,10 @@
 							$expand
 						</v-icon>
 					</template>
-				</v-expansion-panel-header>
-				<v-expansion-panel-content class="pa-0">
+				</v-expansion-panel-title>
+				<v-expansion-panel-text class="pa-0">
 					<slot name="panelTwo" />
-				</v-expansion-panel-content>
+				</v-expansion-panel-text>
 			</v-expansion-panel>
 		</v-expansion-panels>
 	</section>
@@ -161,7 +161,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-::v-deep .v-expansion-panel-content__wrap {
-	padding: 0;
+:deep(.v-expansion-panel-text__wrapper) {
+	padding: 0 0 8px 0;
 }
 </style>

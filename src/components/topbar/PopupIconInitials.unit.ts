@@ -1,21 +1,25 @@
-import Vue from "vue";
-import { MountOptions, mount } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount } from "@vue/test-utils";
 import PopupIconInitials from "./PopupIconInitials.vue";
-
-const getWrapper = (props: object, options?: object) => {
-	return mount(PopupIconInitials as MountOptions<Vue>, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		propsData: props,
-		...options,
-	});
-};
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("@/components/topbar/PopupIconInitials", () => {
+	const setup = (props: object, options?: object) => {
+		const wrapper = mount(PopupIconInitials, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props,
+			...options,
+		});
+
+		return { wrapper };
+	};
+
 	it("computes the initals from first- and lastname", () => {
-		const wrapper = getWrapper({
+		const { wrapper } = setup({
 			firstName: "Max",
 			lastName: "Mustermann",
 			userRole: "teacher",
@@ -24,7 +28,7 @@ describe("@/components/topbar/PopupIconInitials", () => {
 	});
 
 	it("it pops up when it is clicked", async () => {
-		const wrapper = getWrapper({
+		const { wrapper } = setup({
 			firstName: "Max",
 			lastName: "Mustermann",
 			userRole: "teacher",

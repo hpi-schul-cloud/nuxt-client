@@ -70,6 +70,39 @@ describe("BoardApi.composable", () => {
 		});
 	});
 
+	describe("updateBoardTitle", () => {
+		describe("when title is empty", () => {
+			it("should not call boardControllerUpdateBoardTitle api", async () => {
+				const { updateBoardTitleCall } = useBoardApi();
+				const payload = {
+					id: "update-card-id",
+					title: "",
+				};
+
+				await updateBoardTitleCall(payload.id, payload.title);
+
+				expect(boardApi.boardControllerUpdateBoardTitle).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when title is not empty", () => {
+			it("should call boardControllerUpdateBoardTitle api", async () => {
+				const { updateBoardTitleCall } = useBoardApi();
+				const payload = {
+					id: "update-card-id",
+					title: "update-title",
+				};
+
+				await updateBoardTitleCall(payload.id, payload.title);
+
+				expect(boardApi.boardControllerUpdateBoardTitle).toHaveBeenCalledWith(
+					payload.id,
+					{ title: payload.title }
+				);
+			});
+		});
+	});
+
 	describe("updateCardHeight", () => {
 		it("should call cardControllerUpdateCardHeight api", async () => {
 			const { updateCardHeightCall } = useBoardApi();
@@ -484,6 +517,18 @@ describe("BoardApi.composable", () => {
 					id: FAKE_ROOM_RESPONSE.data.roomId,
 					name: FAKE_ROOM_RESPONSE.data.title,
 				})
+			);
+		});
+	});
+
+	describe("updateBoardVisibilityCall", () => {
+		it("should call boardControllerUpdateVisibility api", async () => {
+			const { updateBoardVisibilityCall } = useBoardApi();
+
+			await updateBoardVisibilityCall("board-id", true);
+			expect(boardApi.boardControllerUpdateVisibility).toHaveBeenCalledWith(
+				"board-id",
+				{ isVisible: true }
 			);
 		});
 	});

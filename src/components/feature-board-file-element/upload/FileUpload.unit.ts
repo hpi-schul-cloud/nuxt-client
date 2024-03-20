@@ -1,10 +1,13 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
 import * as utilBoard from "@util-board";
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import FilePicker from "./file-picker/FilePicker.vue";
 import FileUpload from "./FileUpload.vue";
+import FilePicker from "./file-picker/FilePicker.vue";
 
 const setupUseSharedLastCreatedElementMock = () => {
 	const mockedUse =
@@ -22,11 +25,9 @@ describe(FileUpload.name, () => {
 	describe("when isEditMode is true", () => {
 		describe("when file is not picked", () => {
 			const setup = (fileName = "") => {
-				document.body.setAttribute("data-app", "true");
-
 				setupUseSharedLastCreatedElementMock();
 
-				const propsData = {
+				const props = {
 					fileName,
 					elementId: "element 123",
 					url: "1/file-record #1.txt",
@@ -34,9 +35,9 @@ describe(FileUpload.name, () => {
 					isUploading: false,
 				};
 				const testSlot = "testSlot";
-				const wrapper = shallowMount(FileUpload, {
-					...createComponentMocks({ i18n: true }),
-					propsData,
+				const wrapper = mount(FileUpload, {
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					props,
 					slots: {
 						default: testSlot,
 					},
@@ -44,9 +45,9 @@ describe(FileUpload.name, () => {
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileName,
-					urlProp: propsData.url,
-					elementId: propsData.elementId,
+					fileNameProp: props.fileName,
+					urlProp: props.url,
+					elementId: props.elementId,
 					testSlot,
 				};
 			};
@@ -61,7 +62,7 @@ describe(FileUpload.name, () => {
 			it("should render default slot", () => {
 				const { wrapper, testSlot } = setup();
 
-				expect(wrapper.text()).toContain(testSlot);
+				expect(wrapper.html()).toContain(testSlot);
 			});
 
 			it("should not show notification on page unload", async () => {
@@ -80,11 +81,9 @@ describe(FileUpload.name, () => {
 
 		describe("when file gets picked and is uploading", () => {
 			const setup = (fileName = "") => {
-				document.body.setAttribute("data-app", "true");
-
 				setupUseSharedLastCreatedElementMock();
 
-				const propsData = {
+				const props = {
 					fileName,
 					elementId: "element 123",
 					url: "1/file-record #1.txt",
@@ -92,9 +91,9 @@ describe(FileUpload.name, () => {
 					isUploading: false,
 				};
 				const testSlot = "testSlot";
-				const wrapper = shallowMount(FileUpload, {
-					...createComponentMocks({ i18n: true }),
-					propsData,
+				const wrapper = mount(FileUpload, {
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					props,
 					slots: {
 						default: testSlot,
 					},
@@ -102,9 +101,9 @@ describe(FileUpload.name, () => {
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileName,
-					urlProp: propsData.url,
-					elementId: propsData.elementId,
+					fileNameProp: props.fileName,
+					urlProp: props.url,
+					elementId: props.elementId,
 					testSlot,
 				};
 			};
@@ -130,7 +129,9 @@ describe(FileUpload.name, () => {
 
 				await nextTick();
 
-				const progressLinear = wrapper.find("v-progress-linear-stub");
+				const progressLinear = wrapper.findComponent({
+					name: "v-progress-linear",
+				});
 				expect(progressLinear.exists()).toBe(true);
 			});
 
@@ -167,11 +168,9 @@ describe(FileUpload.name, () => {
 
 		describe("when file is already uploading", () => {
 			const setup = (fileName = "") => {
-				document.body.setAttribute("data-app", "true");
-
 				setupUseSharedLastCreatedElementMock();
 
-				const propsData = {
+				const props = {
 					fileName,
 					elementId: "element 123",
 					url: "1/file-record #1.txt",
@@ -179,9 +178,9 @@ describe(FileUpload.name, () => {
 					isUploading: true,
 				};
 				const testSlot = "testSlot";
-				const wrapper = shallowMount(FileUpload, {
-					...createComponentMocks({ i18n: true }),
-					propsData,
+				const wrapper = mount(FileUpload, {
+					global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+					props,
 					slots: {
 						default: testSlot,
 					},
@@ -189,9 +188,9 @@ describe(FileUpload.name, () => {
 
 				return {
 					wrapper,
-					fileNameProp: propsData.fileName,
-					urlProp: propsData.url,
-					elementId: propsData.elementId,
+					fileNameProp: props.fileName,
+					urlProp: props.url,
+					elementId: props.elementId,
 					testSlot,
 				};
 			};
@@ -199,7 +198,9 @@ describe(FileUpload.name, () => {
 			it("should render v-progress-linear component", async () => {
 				const { wrapper } = setup();
 
-				const progressLinear = wrapper.find("v-progress-linear-stub");
+				const progressLinear = wrapper.findComponent({
+					name: "v-progress-linear",
+				});
 				expect(progressLinear.exists()).toBe(true);
 			});
 
@@ -226,11 +227,9 @@ describe(FileUpload.name, () => {
 
 	describe("when isEditMode is false and already uploading", () => {
 		const setup = (fileName = "") => {
-			document.body.setAttribute("data-app", "true");
-
 			setupUseSharedLastCreatedElementMock();
 
-			const propsData = {
+			const props = {
 				fileName,
 				elementId: "element 123",
 				url: "1/file-record #1.txt",
@@ -238,9 +237,9 @@ describe(FileUpload.name, () => {
 				isUploading: true,
 			};
 			const testSlot = "testSlot";
-			const wrapper = shallowMount(FileUpload, {
-				...createComponentMocks({ i18n: true }),
-				propsData,
+			const wrapper = mount(FileUpload, {
+				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+				props,
 				slots: {
 					default: testSlot,
 				},
@@ -248,9 +247,9 @@ describe(FileUpload.name, () => {
 
 			return {
 				wrapper,
-				fileNameProp: propsData.fileName,
-				urlProp: propsData.url,
-				elementId: propsData.elementId,
+				fileNameProp: props.fileName,
+				urlProp: props.url,
+				elementId: props.elementId,
 				testSlot,
 			};
 		};
@@ -271,7 +270,9 @@ describe(FileUpload.name, () => {
 		it("should not render progress bar", () => {
 			const { wrapper } = setup();
 
-			const progressLinear = wrapper.find("v-progress-linear-stub");
+			const progressLinear = wrapper.findComponent({
+				name: "v-progress-linear",
+			});
 			expect(progressLinear.exists()).toBe(false);
 		});
 

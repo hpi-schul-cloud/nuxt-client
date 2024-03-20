@@ -8,13 +8,14 @@
 			@click.stop="onAddCard"
 			@dblclick.stop="() => {}"
 			elevation="6"
-			class="white"
+			class="bg-white"
 			icon
-			large
 			v-if="!isEditMode"
 		>
 			<VIcon>{{ mdiPlus }}</VIcon>
-			<span class="d-sr-only">{{ $t("components.board.action.addCard") }}</span>
+			<span class="d-sr-only" data-testid="add-card">{{
+				$t("components.board.action.addCard")
+			}}</span>
 		</VBtn>
 	</div>
 </template>
@@ -58,4 +59,3 @@ export default defineComponent({
 	width: 380px;
 }
 </style>
-@data-board";

@@ -6,19 +6,14 @@ import { envConfigModule } from "@/store";
 const specificFiles = {
 	accessibilityStatement:
 		"Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
-	privacyExemplary:
+	privacy:
 		"Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
-	privacy: "Onlineeinwilligung/Datenschutzerklaerung-Onlineeinwilligung.pdf",
-
-	termsOfUseExemplary:
-		"Onlineeinwilligung/Nutzungsordnung-HPI-Schule-Schueler-Onlineeinwilligung.pdf",
-	termsOfUse: "Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
-	termsOfUseSchool:
+	termsOfUse:
 		"Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 	analogConsent: "Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
-const termsOfUseSchoolThr = "Willkommensordner/Datenschutz/Nutzungsordnung.pdf";
+const termsOfUseThr = "Willkommensordner/Datenschutz/Nutzungsordnung.pdf";
 const privacyThr = "Onlineeinwilligung/Datenschutzhinweise.pdf";
 
 const globalFiles = {
@@ -46,11 +41,8 @@ export default class FilePathsModule extends VuexModule {
 	documentBaseDir = "";
 	specificFiles: SpecificFiles = {
 		accessibilityStatement: "",
-		privacyExemplary: "",
 		privacy: "",
-		termsOfUseExemplary: "",
 		termsOfUse: "",
-		termsOfUseSchool: "",
 		analogConsent: "",
 	};
 	globalFiles: GlobalFiles = {
@@ -115,7 +107,7 @@ export default class FilePathsModule extends VuexModule {
 		try {
 			const theme = envConfigModule.getTheme;
 			if (theme === "thr") {
-				specificFiles.termsOfUseSchool = termsOfUseSchoolThr;
+				specificFiles.termsOfUse = termsOfUseThr;
 				specificFiles.privacy = privacyThr;
 			}
 			const baseDir =

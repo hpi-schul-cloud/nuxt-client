@@ -7,12 +7,14 @@
 		data-testId="error-dialog"
 		@dialog-closed="onCloseCustomDialog"
 	>
-		<h2 slot="title" class="text-h4 my-2">
-			{{ t(getTitle, { toolName }) }}
-		</h2>
+		<template #title>
+			<h2 class="text-h4 my-2">
+				{{ $t(getTitle, { toolName }) }}
+			</h2>
+		</template>
 		<template #content>
 			<RenderHTML
-				:html="t(getText, { toolName })"
+				:html="$t(getText, { toolName })"
 				component="p"
 				class="text-md mt-2"
 			/>
@@ -25,7 +27,7 @@ import RenderHTML from "@/components/feature-render-html/RenderHTML.vue";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
 import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
 import { ExternalToolDisplayData } from "@/store/external-tool";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "RoomExternalToolsErrorDialog",

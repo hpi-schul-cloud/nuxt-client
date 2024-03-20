@@ -5,7 +5,7 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		:outlined="isHidden"
+		:variant="isHidden ? 'outlined' : 'elevated'"
 		hover
 		data-testid="content-card-lesson"
 		@click="handleClick"
@@ -17,18 +17,23 @@
 	>
 		<v-card-text class="pb-0" data-testid="content-card-lesson-content">
 			<div class="top-row-container mb-0">
-				<div class="title-section" tabindex="0">
+				<div class="title-section">
 					{{ $t("common.words.topic") }}
 				</div>
 				<div class="dot-menu-section">
 					<room-dot-menu
-						:menu-items="moreActionsMenuItems[role]"
+						:menu-items="moreActionsMenuItems[userRole]"
 						data-testid="content-card-lesson-menu"
 						:aria-label="$t('pages.room.lessonCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
-			<div class="text-h6 text--primary mb-2 lesson-name" tabindex="0">
+			<div
+				class="text-h6 text--primary mb-2 lesson-name"
+				role="heading"
+				aria-level="2"
+				tabindex="-1"
+			>
 				{{ lesson.name }}
 			</div>
 		</v-card-text>
@@ -38,7 +43,7 @@
 			data-testid="content-card-lesson-info"
 		>
 			<div class="chip-items-group">
-				<div class="grey lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
+				<div class="bg-grey-lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
 					<div class="chip-value">
 						{{ taskChipValue }}
 					</div>
@@ -47,12 +52,13 @@
 		</v-card-text>
 		<v-card-actions class="pt-1" data-testid="content-card-lesson-actions">
 			<v-btn
-				v-for="(action, index) in cardActions[role]"
+				v-for="(action, index) in cardActions[userRole]"
 				:key="index"
 				:class="`action-button action-button-${action.name
 					.split(' ')
 					.join('-')}`"
-				text
+				variant="text"
+				color="primary"
 				@click.stop="action.action"
 			>
 				{{ action.name }}
@@ -86,7 +92,7 @@ export default {
 			type: Object,
 			required: true,
 		},
-		role: { type: String, required: true },
+		userRole: { type: String, required: true },
 		ariaLabel: {
 			type: String,
 			default: "",
@@ -103,7 +109,7 @@ export default {
 				mdiTrashCanOutline,
 				mdiContentCopy,
 			},
-			defaultTitleColor: "--v-secondary-base",
+			defaultTitleColor: "rgba(var(--v-theme-secondary))",
 		};
 	},
 	computed: {
@@ -119,17 +125,17 @@ export default {
 				[Roles.Student]: [],
 			};
 
-			if (this.role === Roles.Teacher) {
+			if (this.userRole === Roles.Teacher) {
 				if (this.isHidden) {
 					roleBasedActions[Roles.Teacher].push({
 						icon: "lessonSend",
-						action: () => this.postLesson(),
+						action: () => this.publishLesson(),
 						name: this.$t("common.action.publish"),
 					});
 				}
 			}
 
-			if (this.role === Roles.Student) {
+			if (this.userRole === Roles.Student) {
 				// if action is needed for the students add actions like above
 			}
 			return roleBasedActions;
@@ -140,7 +146,7 @@ export default {
 				[Roles.Student]: [],
 			};
 
-			if (this.role === Roles.Teacher) {
+			if (this.userRole === Roles.Teacher) {
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiPencilOutline,
 					action: () =>
@@ -163,7 +169,7 @@ export default {
 				if (!this.isHidden) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
-						action: () => this.revertPublishedCard(),
+						action: () => this.unPublishCard(),
 						name: this.$t("pages.room.cards.label.revert"),
 						dataTestId: "content-card-lesson-menu-revert",
 					});
@@ -186,7 +192,7 @@ export default {
 				});
 			}
 
-			if (this.role === Roles.Student) {
+			if (this.userRole === Roles.Student) {
 				// if more action is needed for the students add actions like above
 			}
 
@@ -255,14 +261,14 @@ export default {
 		redirectAction(value) {
 			window.location = value;
 		},
-		postLesson() {
-			this.$emit("post-lesson");
+		publishLesson() {
+			this.$emit("update-visibility", true);
 		},
 		copyCard() {
 			this.$emit("copy-lesson");
 		},
-		revertPublishedCard() {
-			this.$emit("revert-lesson");
+		unPublishCard() {
+			this.$emit("update-visibility", false);
 		},
 		onKeyPress(e) {
 			switch (e.keyCode) {
@@ -298,7 +304,7 @@ export default {
 <style lang="scss" scoped>
 .top-row-container {
 	display: grid;
-	grid-template-columns: 95% 5%;
+	grid-template-columns: 94% 6%;
 	align-items: center;
 
 	.title-section {
@@ -328,10 +334,6 @@ export default {
 			color: rgba(0, 0, 0, 0.87);
 		}
 	}
-}
-
-.action-button {
-	color: var(--v-primary-base);
 }
 
 .v-card__text {

@@ -10,7 +10,7 @@
 				<v-btn
 					v-for="(route, idx) in linksToDisplay"
 					:key="route.href"
-					text
+					variant="text"
 					class="font-weight-regular mx-0"
 					:class="{ li: true, active: activeLink === route.href }"
 					:to="route.to"
@@ -21,11 +21,16 @@
 					{{ route.title }}
 				</v-btn>
 				<div v-if="hasButtons" class="buttons-container">
-					<v-btn color="primary" outlined to="/loginRedirect" class="mx-2">
+					<v-btn
+						color="primary"
+						variant="outlined"
+						to="/loginRedirect"
+						class="mx-2"
+					>
 						<v-icon size="20" class="mr-1">{{ mdiLogin }}</v-icon>
 						{{ $t("common.labels.login") }}
 					</v-btn>
-					<v-btn color="primary" depressed to="/community">
+					<v-btn color="primary" variant="flat" to="/community">
 						{{ $t("common.labels.register") }}
 					</v-btn>
 				</div>
@@ -81,6 +86,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 @import "@/styles/mixins";
 
 .header {
@@ -94,9 +100,9 @@ export default {
 	justify-content: center;
 	width: 100%;
 	line-height: var(--line-height-lg);
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 	text-align: center;
-	background-color: var(--v-white-base);
+	background-color: rgba(var(--v-theme-white));
 	-webkit-backdrop-filter: blur(5px);
 	backdrop-filter: blur(5px);
 }
@@ -210,7 +216,7 @@ export default {
 	padding: var(--space-xs) var(--space-md);
 	font-family: var(--font-primary);
 	font-size: var(--text-md);
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 
 	@include breakpoint(tablet) {
 		display: flex;
@@ -228,13 +234,13 @@ export default {
 
 a.active {
 	font-weight: var(--font-weight-bold);
-	color: var(--v-white-base);
-	background-color: var(--v-accent-base);
+	color: rgba(var(--v-theme-white));
+	background-color: rgba(var(--v-theme-accent));
 	border-radius: var(--radius-sm);
 
 	&:hover {
-		color: var(--v-white-base);
-		background-color: var(--v-accent-base);
+		color: rgba(var(--v-theme-white));
+		background-color: rgba(var(--v-theme-accent));
 		border-radius: var(--radius-sm);
 	}
 }

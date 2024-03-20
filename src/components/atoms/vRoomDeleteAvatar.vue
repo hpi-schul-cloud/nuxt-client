@@ -39,7 +39,7 @@ export default {
 	left: 40%;
 	width: 200px;
 	height: 50px;
-	background: var(--v-error-base);
+	background: rgba(var(--v-theme-error));
 }
 
 .hovered-delete-avatar {
@@ -49,7 +49,7 @@ export default {
 	left: 40%;
 	width: 250px;
 	height: 75px;
-	background: var(--v-error-base);
+	background: rgba(var(--v-theme-error));
 	border: 1px solid;
 }
 </style>

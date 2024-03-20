@@ -1,9 +1,9 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
 	<section :class="{ inline: isInline }">
 		<v-btn
 			v-if="isInline"
-			text
-			plain
+			variant="plain"
 			:ripple="false"
 			design="none"
 			class="arrow__back"
@@ -14,222 +14,248 @@
 		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
 			<div>
-				<content-searchbar
-					v-model.lazy="searchQuery"
-					:class="
-						!activateTransition
-							? 'first-search__searchbar'
-							: 'content__searchbar'
-					"
-					:placeholder="$t('pages.content.index.search.placeholder')"
-					@keyup:enter="enterKeyHandler"
-				/>
+				<div class="search">
+					<div class="search__input-container">
+						<v-text-field
+							v-model="searchQuery"
+							autofocus
+							:class="
+								activateTransition
+									? 'content__searchbar'
+									: 'first-search__searchbar'
+							"
+							:placeholder="$t('pages.content.index.search.placeholder')"
+							@update:model-value="onInput"
+							data-testid="learningstore-search-input"
+						>
+							<template v-slot:append-inner>
+								<v-btn
+									v-if="searchQuery"
+									:icon="mdiClose"
+									:aria-label="$t('common.actions.delete')"
+									color="rgba(var(--v-theme-black))"
+									density="compact"
+									size="x-large"
+									variant="text"
+									:ripple="false"
+									@click="searchQuery = ''"
+								/>
+								<v-icon
+									v-else
+									:icon="mdiMagnify"
+									color="rgba(var(--v-theme-black))"
+									size="x-large"
+								/>
+							</template>
+						</v-text-field>
+					</div>
+				</div>
 				<transition name="fade">
-					<div class="content__container">
-						<p
-							v-show="resources.data.length !== 0 && searchQuery.length > 1"
-							class="content__total"
-						>
-							{{ resources.total }}
-							{{ $t("pages.content.index.search_results") }} "{{
-								searchQueryResult
-							}}"
-						</p>
+					<div class="content__container" v-if="true">
+						<template v-if="searchQuery.length > 1">
+							<p v-show="resources.data.length !== 0" class="content__total">
+								{{ resources.total }}
+								{{ $t("pages.content.index.search_results") }} "{{
+									searchQueryResult
+								}}"
+							</p>
+							<v-infinite-scroll width="100%" :items="resources" @load="onLoad">
+								<lern-store-grid
+									column-width="14rem"
+									data-testid="lernStoreCardsContainer"
+								>
+									<content-card
+										v-for="resource of resources.data"
+										:key="resource.properties['ccm:replicationsourceuuid'][0]"
+										class="card"
+										:inline="isInline"
+										:resource="resource"
+									/>
+								</lern-store-grid>
+								<template #loading>
+									<v-progress-circular
+										indeterminate
+										color="secondary"
+										size="115"
+										class="align-self-center mt-4"
+									/>
+								</template>
+								<template #empty>
+									<div v-if="!reachedTotal" class="content__no_results">
+										<content-empty-state />
+									</div>
+								</template>
+							</v-infinite-scroll>
+						</template>
 						<span v-if="!loading" class="content__container_child">
-							<!-- initial state, empty search -->
 							<content-initial-state v-if="searchQuery.length === 0" />
-							<!-- search query not empty and there are no results -->
-							<div
-								v-else-if="resources.data.length === 0"
-								class="content__no_results"
-							>
-								<content-empty-state />
-							</div>
 						</span>
-						<!-- search query not empty and there are results -->
-						<lern-store-grid
-							v-if="searchQuery.length > 1"
-							column-width="14rem"
-							data-testid="lernStoreCardsContainer"
-						>
-							<content-card
-								v-for="resource of resources.data"
-								:key="resource.properties['ccm:replicationsourceuuid'][0]"
-								class="card"
-								:inline="isInline"
-								:resource="resource"
-							/>
-						</lern-store-grid>
 					</div>
 				</transition>
 			</div>
-			<v-progress-circular
-				v-if="loading"
-				indeterminate
-				color="secondary"
-				size="115"
-				class="align-self-center mt-4"
-			/>
 			<content-edu-sharing-footer class="content__footer" />
 		</div>
 	</section>
 </template>
 
-<script>
-import { contentModule, notifierModule } from "@/store";
-import ContentSearchbar from "@/components/molecules/ContentSearchbar";
-import ContentCard from "@/components/organisms/ContentCard";
-import ContentEmptyState from "@/components/molecules/ContentEmptyState";
-import infiniteScrolling from "@/mixins/infiniteScrolling";
-import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
-import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
-import ContentInitialState from "@/components/molecules/ContentInitialState";
-import { mdiChevronLeft } from "@mdi/js";
+<script setup lang="ts">
+import { onMounted, computed, ref } from "vue";
+import { useDebounceFn, watchDebounced } from "@vueuse/core";
+import { mdiChevronLeft, mdiMagnify, mdiClose } from "@mdi/js";
+import {
+	CONTENT_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import ContentCard from "@/components/lern-store/ContentCard.vue";
+import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
+import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
+import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter.vue";
+import ContentInitialState from "@/components/lern-store/ContentInitialState.vue";
+import { useI18n } from "vue-i18n";
+import themeConfig from "@/theme.config";
+import { useRoute, useRouter } from "vue-router";
 
-export default {
-	components: {
-		ContentSearchbar,
-		ContentCard,
-		ContentEmptyState,
-		LernStoreGrid,
-		ContentInitialState,
-		ContentEduSharingFooter,
-	},
-	mixins: [infiniteScrolling],
-	data() {
-		return {
-			searchQuery: "",
-			searchQueryResult: "",
-			backToTopScrollYLimit: 115,
-			activateTransition: false,
-			prevRoute: null,
-			mdiChevronLeft,
-		};
-	},
-	computed: {
-		resources() {
-			return contentModule.getResourcesGetter;
-		},
-		player() {
-			return contentModule.getCurrentPlayer;
-		},
-		loading() {
-			return contentModule.getLoading;
-		},
-		query() {
-			const query = {
-				$limit: 12,
-				$skip: 0,
-			};
-			if (this.searchQuery) {
-				query["searchQuery"] = this.searchQuery;
-			}
-			return query;
-		},
-		isInline() {
-			return !!this.$route.query.inline;
-		},
-	},
-	watch: {
-		bottom(bottom) {
-			const { data, total } = this.resources;
-			if (bottom && !this.loading && data.length < total) {
-				this.addContent();
-			}
-		},
-		loading() {
-			return this.loading;
-		},
-		searchQuery(to, from) {
-			if (this.$options.debounce) {
-				clearInterval(this.$options.debounce);
-			}
+const { t } = useI18n();
+const router = useRouter();
+const route = useRoute();
+const contentModule = injectStrict(CONTENT_MODULE_KEY);
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-			if (to === from || !to) {
-				this.$router.push({
-					query: {
-						...this.$route.query,
-						q: "",
-					},
-				});
-				return;
-			}
-			this.$options.debounce = setInterval(() => {
-				this.searchQueryResult = this.searchQuery;
+const searchQuery = ref("");
+const activateTransition = ref(false);
+const searchQueryResult = ref("");
+const queryOptions = ref({ $limit: 12, $skip: 0 });
 
-				clearInterval(this.$options.debounce);
-				this.$router.push({
-					query: {
-						...this.$route.query,
-						q: this.searchQuery,
-					},
-				});
-			}, 200);
-		},
-		resources() {
-			return this.resources;
-		},
-	},
-	mounted() {
-		const pageTitle = this.isInline
-			? this.$t("pages.content.page.window.title", {
-					instance: this.$theme.name,
-				})
-			: this.$t("common.words.lernstore");
-		document.title = buildPageTitle(pageTitle);
+onMounted(() => {
+	const pageTitle = isInline.value
+		? t("pages.content.page.window.title", {
+				instance: themeConfig.name,
+			})
+		: t("common.words.lernstore");
+	document.title = buildPageTitle(pageTitle);
 
-		const initialSearchQuery = this.$route.query.q;
-		if (initialSearchQuery) {
-			this.searchQuery = initialSearchQuery;
-			this.activateTransition = true;
-			if (this.resources.data.length === 0) {
-				this.enterKeyHandler();
-			}
-		}
-	},
-	methods: {
-		async addContent() {
-			if (this.resources.data.length < this.resources.total) {
-				this.query.$skip += this.query.$limit;
-				await contentModule.addResources(this.query);
-			}
-		},
-		async searchContent() {
-			try {
-				await contentModule.getResources(this.query);
-			} catch (error) {
-				notifierModule.show({
-					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
-					status: "error",
-					timeout: 10000,
-				});
-			}
-		},
-		async searchH5P() {
-			await contentModule.getResources({
-				$limit: 4,
-				$skip: 0,
-				searchQuery: "h5p",
-			});
-		},
-		enterKeyHandler() {
-			if (this.$options.debounceTyping) {
-				clearTimeout(this.$options.debounceTyping);
-			}
-			this.$options.debounceTyping = setTimeout(() => {
-				this.searchContent();
-				this.activateTransition = true;
-			}, 500);
-		},
-		goBack() {
-			window.close();
-		},
-	},
+	const initialSearchQuery = route.query.q;
+	if (initialSearchQuery) {
+		searchQuery.value = initialSearchQuery as string;
+		activateTransition.value = true;
+	}
+});
+
+const isInline = computed(() => !!route.query.inline);
+const resources = computed(() => contentModule.getResourcesGetter);
+const loading = computed(() => contentModule.getLoading);
+const reachedTotal = computed(
+	() =>
+		resources.value.total !== 0 &&
+		resources.value.data.length >= resources.value.total
+);
+
+const onInput = async () => {
+	await searchContent();
+	activateTransition.value = true;
 };
+
+const searchContent = useDebounceFn(async () => {
+	try {
+		await contentModule.getResources(searchQuery.value);
+	} catch (error) {
+		notifierModule.show({
+			text: t("pages.content.notification.lernstoreNotAvailable"),
+			status: "error",
+			timeout: 10000,
+		});
+	}
+}, 500);
+
+const onLoad = async ({
+	done,
+}: {
+	side: "start" | "end" | "both";
+	done: (status: "ok" | "empty" | "loading" | "error") => void;
+}) => {
+	if (reachedTotal.value) {
+		done("empty");
+		return;
+	}
+
+	if (!resources.value.data.length && searchQuery.value) {
+		await searchContent();
+
+		if (!resources.value.data.length) {
+			done("empty");
+			return;
+		}
+	} else {
+		await addContent();
+	}
+
+	done("ok");
+};
+
+const addContent = async () => {
+	queryOptions.value.$skip += queryOptions.value.$limit;
+
+	const query = {
+		$limit: queryOptions.value.$limit,
+		$skip: queryOptions.value.$skip,
+		searchQuery: searchQuery.value,
+	};
+
+	try {
+		await contentModule.addResources(query);
+	} catch (error) {
+		notifierModule.show({
+			text: t("pages.content.notification.lernstoreNotAvailable"),
+			status: "error",
+			timeout: 10000,
+		});
+	}
+};
+
+const updateURLQueryDebounced = useDebounceFn(() => {
+	searchQueryResult.value = searchQuery.value;
+	router.push({
+		query: {
+			...route.query,
+			q: searchQuery.value,
+		},
+	});
+}, 200);
+
+const goBack = () => {
+	window.close();
+};
+
+watchDebounced(
+	searchQuery,
+	async (to, from) => {
+		if (to === from || !to) {
+			router.push({
+				query: {
+					...route.query,
+					q: "",
+				},
+			});
+			return;
+		}
+
+		await updateURLQueryDebounced();
+	},
+	{ debounce: 200 }
+);
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
+
+:deep {
+	.v-infinite-scroll--vertical {
+		overflow-y: visible;
+	}
+}
+
 .content {
 	display: flex;
 	flex-direction: column;
@@ -242,7 +268,7 @@ export default {
 	.arrow__back {
 		margin-top: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: var(--v-secondary-base);
+		color: rgba(var(--v-theme-secondary));
 		cursor: pointer;
 	}
 
@@ -279,6 +305,31 @@ export default {
 		padding-bottom: var(--space-sm);
 	}
 }
+.search {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 100%;
+
+	&__input-container {
+		width: calc(
+			2 * var(--size-content-width-min)
+		); // keep in sync with wrapper in content (EmptyState.vue)
+
+		:deep(.v-field__input) {
+			font-size: var(--text-lg);
+			text-align: center;
+
+			@media #{map-get($display-breakpoints, 'sm-and-up')} {
+				font-size: var(--heading-6);
+			}
+
+			@media #{map-get($display-breakpoints, 'md-and-up')} {
+				font-size: var(--heading-4);
+			}
+		}
+	}
+}
 
 .inline {
 	min-height: calc(100vh - calc(24 * var(--border-width-bold)));
@@ -300,11 +351,5 @@ export default {
 .fade-enter,
 .fade-leave-to {
 	opacity: 0;
-}
-
-::v-deep
-	.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover)
-	.v-btn__content {
-	opacity: 1;
 }
 </style>

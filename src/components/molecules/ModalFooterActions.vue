@@ -29,7 +29,7 @@ export default {
 
 .actions {
 	padding: 0;
-	background-color: var(--v-secondary-base);
+	background-color: rgba(var(--v-theme-secondary));
 }
 
 .slot-container {

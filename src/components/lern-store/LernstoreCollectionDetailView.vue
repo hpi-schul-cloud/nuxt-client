@@ -83,7 +83,7 @@
 							{{ $t("pages.content._id.collection.selectElements") }}
 						</h4>
 						<transition name="fade">
-							<div class="content__container">
+							<div class="content__container" v-if="true">
 								<lern-store-grid
 									v-if="elements.data && elements.data.length"
 									column-width="14rem"
@@ -138,9 +138,9 @@ import { printDateFromTimestamp } from "@/plugins/datetime";
 import contentMeta from "@/mixins/contentMeta";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
 import { contentModule, notifierModule } from "@/store";
-import AddContentButton from "@/components/organisms/AddContentButton";
-import ContentCard from "@/components/organisms/ContentCard";
-import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
+import AddContentButton from "@/components/lern-store/AddContentButton";
+import ContentCard from "@/components/lern-store/ContentCard";
+import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter";
 import UserHasRole from "@/components/helpers/UserHasRole";
 import BaseLink from "../base/BaseLink";
 import { RenderHTML } from "@feature-render-html";
@@ -303,13 +303,13 @@ $tablet-portrait-width: 768px;
 	.arrow__back {
 		margin-top: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: var(--v-secondary-base);
+		color: rgba(var(--v-theme-secondary));
 		text-decoration: none;
 		cursor: pointer;
 		border: none;
 
 		&:visited {
-			color: var(--v-secondary-base);
+			color: rgba(var(--v-theme-secondary));
 		}
 	}
 
@@ -355,7 +355,7 @@ $tablet-portrait-width: 768px;
 		}
 
 		.external-content-warning {
-			color: var(--v-error-base);
+			color: rgba(var(--v-theme-error));
 
 			.external-content-title {
 				margin-top: var(--space-md);
@@ -385,7 +385,7 @@ $tablet-portrait-width: 768px;
 			font-weight: var(--font-weight-bold);
 
 			.content-link {
-				color: var(--v-secondary-base);
+				color: rgba(var(--v-theme-secondary));
 				text-decoration: underline;
 			}
 		}
@@ -425,15 +425,15 @@ $tablet-portrait-width: 768px;
 
 			.link {
 				margin-right: var(--space-xs);
-				color: var(--v-secondary-base);
+				color: rgba(var(--v-theme-secondary));
 			}
 
 			.tertiary-color {
-				color: var(--v-black-base);
+				color: rgba(var(--v-theme-black));
 				text-decoration: none;
 
 				:hover {
-					color: var(--v-black-base);
+					color: rgba(var(--v-theme-black));
 				}
 			}
 		}

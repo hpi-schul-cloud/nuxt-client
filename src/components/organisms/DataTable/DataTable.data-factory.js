@@ -1,9 +1,5 @@
 import users from "./testUserData";
 
-import InputCheckbox from "@/components/organisms/DataFilter/inputs/Checkbox";
-import InputRadio from "@/components/organisms/DataFilter/inputs/Radio";
-import InputDefault from "@/components/organisms/DataFilter/inputs/Default";
-
 const tableData = (n) => users.slice(0, n);
 
 const tableColumns = [
@@ -69,7 +65,6 @@ const tableFilters = [
 			{
 				attribute: "$limit",
 				operator: "<",
-				input: InputRadio,
 				options: [
 					{ value: 25, label: "25" },
 					{ value: 50, label: "50" },
@@ -86,7 +81,6 @@ const tableFilters = [
 				attribute: "age",
 				applyNegated: true,
 				operator: "<=",
-				input: InputDefault,
 				label: "Alter",
 				attributes: {
 					type: "number",
@@ -102,7 +96,6 @@ const tableFilters = [
 			{
 				attribute: "birthday",
 				operator: "=",
-				input: InputDefault,
 				label: "Geburtstag",
 				attributes: {
 					type: "date",
@@ -118,7 +111,6 @@ const tableFilters = [
 			{
 				attribute: "agreed",
 				operator: "=",
-				input: InputCheckbox,
 				options: [
 					{ value: "true", label: "Einverständniserklärung vorhanden" },
 					{ value: "false", label: "Keine Einverständniserklärung" },
@@ -133,7 +125,6 @@ const tableFilters = [
 			{
 				attribute: "firstName",
 				operator: "includes",
-				input: InputDefault,
 				label: "Vorname",
 				attributes: {
 					type: "text",

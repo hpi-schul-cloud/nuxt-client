@@ -1,13 +1,14 @@
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useSubmissionContentElementState } from "./SubmissionContentElementState.composable";
 import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ref } from "vue";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { SubmissionsResponse } from "@/serverApi/v3";
-import { i18nMock, submissionsResponseFactory } from "@@/tests/test-utils";
+import { submissionsResponseFactory } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -38,8 +39,12 @@ describe("SubmissionContentElementState.composable", () => {
 		return mountComposable(
 			() => useSubmissionContentElementState(contentElementId, dueDate),
 			{
-				[I18N_KEY.valueOf()]: i18nMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				global: {
+					plugins: [createTestingI18n()],
+					provide: {
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					},
+				},
 			}
 		);
 	};

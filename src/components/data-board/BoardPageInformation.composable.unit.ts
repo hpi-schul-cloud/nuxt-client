@@ -1,5 +1,4 @@
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
+// import { i18nMock } from "@@/tests/test-utils";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardApi } from "./BoardApi.composable";
@@ -15,6 +14,13 @@ jest.mock<typeof import("@/utils/create-shared-composable")>(
 	})
 );
 
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+	};
+});
+
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
@@ -27,10 +33,6 @@ describe("BoardPageInformation.composable", () => {
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 	});
 
-	afterEach(() => {
-		jest.resetAllMocks();
-	});
-
 	describe("when board context exists", () => {
 		const setup = () => {
 			mockedBoardApiCalls.getContextInfo.mockResolvedValue({
@@ -39,10 +41,7 @@ describe("BoardPageInformation.composable", () => {
 			});
 
 			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(
-				() => useSharedBoardPageInformation(),
-				{
-					[I18N_KEY.valueOf()]: i18nMock,
-				}
+				() => useSharedBoardPageInformation()
 			);
 
 			return { createPageInformation, breadcrumbs, pageTitle };
@@ -51,7 +50,7 @@ describe("BoardPageInformation.composable", () => {
 		it("should return two breadcrumbs: 1. course page and and 2. course-overview page", async () => {
 			const { createPageInformation, breadcrumbs } = setup();
 
-			const fakeId = "abc123";
+			const fakeId = "abc123-1";
 
 			await createPageInformation(fakeId);
 
@@ -61,7 +60,7 @@ describe("BoardPageInformation.composable", () => {
 		it("should set page title", async () => {
 			const { createPageInformation, pageTitle } = setup();
 
-			const fakeId = "abc123";
+			const fakeId = "abc123-2";
 
 			await createPageInformation(fakeId);
 
@@ -70,14 +69,15 @@ describe("BoardPageInformation.composable", () => {
 	});
 
 	describe("when board context does not exist", () => {
+		beforeEach(() => {
+			jest.resetAllMocks();
+		});
+
 		const setup = () => {
 			mockedBoardApiCalls.getContextInfo.mockResolvedValue(undefined);
 
 			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(
-				() => useSharedBoardPageInformation(),
-				{
-					[I18N_KEY.valueOf()]: i18nMock,
-				}
+				() => useSharedBoardPageInformation()
 			);
 
 			return { createPageInformation, breadcrumbs, pageTitle };

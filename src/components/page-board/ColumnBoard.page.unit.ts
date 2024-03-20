@@ -1,8 +1,8 @@
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue from "vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 import ColumnBoardPage from "./ColumnBoard.page.vue";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
@@ -13,13 +13,12 @@ describe("@pages/ColumnBoard.page.vue", () => {
 	const setup = () => {
 		const boardId = "test-board-id";
 
-		const wrapper = shallowMount(ColumnBoardPage as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
+		const wrapper = shallowMount(ColumnBoardPage, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
 			propsData: {
 				boardId,
-			},
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
 			},
 		});
 

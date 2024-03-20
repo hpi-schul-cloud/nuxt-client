@@ -3,6 +3,7 @@ import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TheFooter from "./TheFooter";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 describe("@/components/legacy/TheFooter.vue", () => {
 	beforeEach(() => {
@@ -11,6 +12,18 @@ describe("@/components/legacy/TheFooter.vue", () => {
 			envConfigModule: EnvConfigModule,
 		});
 	});
+
+	const setup = () => {
+		const wrapper = shallowMount(TheFooter, {
+			global: {
+				plugins: [createTestingI18n()],
+				mocks: { $theme },
+				stubs: ["base-link"],
+			},
+		});
+
+		return { wrapper };
+	};
 
 	const $theme = {
 		name: "test",
@@ -22,14 +35,9 @@ describe("@/components/legacy/TheFooter.vue", () => {
 
 	it("Env-Variable sets the status page link correctly", () => {
 		envConfigModule.setEnvs({ ALERT_STATUS_URL: "dummy-url.org" });
-		const wrapper = shallowMount(TheFooter, {
-			...createComponentMocks({
-				mocks: {
-					$theme,
-				},
-				i18n: true,
-			}),
-		});
+
+		const { wrapper } = setup();
+
 		expect(wrapper.vm.links[5].href).toStrictEqual("dummy-url.org");
 	});
 
@@ -42,14 +50,9 @@ describe("@/components/legacy/TheFooter.vue", () => {
 			ACCESSIBILITY_REPORT_EMAIL: "dummy-email@org.de",
 			ALERT_STATUS_URL: "dummy-url.org",
 		});
-		const wrapper = shallowMount(TheFooter, {
-			...createComponentMocks({
-				mocks: {
-					$theme,
-				},
-				i18n: true,
-			}),
-		});
+
+		const { wrapper } = setup();
+
 		expect(wrapper.vm.links).toHaveLength(7);
 		expect(wrapper.find(".bottom-line span").text()).toBe(
 			"©" + new Date().getFullYear() + " " + $theme.name

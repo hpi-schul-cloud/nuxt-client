@@ -1,21 +1,42 @@
 import { roomsModule } from "@/store";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, Wrapper } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import RoomList from "./RoomList.page.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import Vue from "vue";
+import {
+	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
+	LOADING_STATE_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	ROOMS_MODULE_KEY,
+} from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
+import { nextTick } from "vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
-const getWrapper = (computed: any = {}, device = "desktop") => {
+const getWrapper = (device = "desktop") => {
 	return mount(RoomList, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		computed: {
-			$mq: () => device,
-			...computed,
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				mq: { current: device },
+			},
+		},
+		provide: {
+			[LOADING_STATE_MODULE_KEY.valueOf()]:
+				createModuleMocks(LoadingStateModule),
+			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
+			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
+			[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
+				CommonCartridgeImportModule
+			),
 		},
 	});
 };
@@ -59,31 +80,25 @@ const mockData = [
 ];
 
 describe("@/pages/room-list.vue", () => {
-	let wrapper: Wrapper<Vue>;
-
 	beforeEach(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
 		setupStores({
 			roomsModule: RoomsModule,
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
 		});
-		roomsModule.setAllElements(mockData as any);
+		roomsModule.setAllElements(mockData);
 	});
 
 	describe("when data is not loaded yet", () => {
-		beforeEach(() => {
-			wrapper = getWrapper({ isLoading: () => true });
-		});
+		const setup = () => {
+			const wrapper = getWrapper();
 
-		afterEach(() => {
-			wrapper.destroy();
-			jest.clearAllMocks();
-		});
+			return { wrapper };
+		};
 
 		it("should fetch data", async () => {
-			await wrapper.vm.$nextTick();
+			const { wrapper } = setup();
+			await nextTick();
 
 			const expectedItem = {
 				id: "123",
@@ -108,26 +123,29 @@ describe("@/pages/room-list.vue", () => {
 	});
 
 	describe("when data is loaded", () => {
+		const setup = () => {
+			const wrapper = getWrapper();
+
+			return { wrapper };
+		};
+
 		describe("when data is not empty", () => {
 			it("should search elements on list", async () => {
-				wrapper = getWrapper({
-					isLoading: () => false,
-					hasRooms: () => true,
-				});
-				await wrapper.vm.$nextTick();
+				const { wrapper } = setup();
+				await nextTick();
 
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(4);
-				wrapper.vm.$data.searchText = "math";
+				wrapper.vm.searchText = "math";
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(1);
-				wrapper.vm.$data.searchText = "";
+				wrapper.vm.searchText = "";
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(4);
-				wrapper.vm.$data.searchText = "15";
+				wrapper.vm.searchText = "15";
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(1);
@@ -145,8 +163,6 @@ describe("@/pages/room-list.vue", () => {
 					isArchived: true,
 					to: "/rooms/234",
 				});
-
-				wrapper.destroy();
 			});
 		});
 	});

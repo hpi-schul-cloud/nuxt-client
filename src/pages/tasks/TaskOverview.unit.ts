@@ -1,10 +1,10 @@
 import TaskOverview from "./TaskOverview.page.vue";
 import { shallowMount } from "@vue/test-utils";
 import TasksDashboardMain from "@/components/templates/TasksDashboardMain.vue";
-import { AUTH_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { i18nMock } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -14,13 +14,15 @@ describe("TaskOverview", () => {
 	const fetchAllTasksSpy = jest.fn();
 	const getWrapper = (userRole: string) => {
 		return shallowMount(TaskOverview, {
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-				[AUTH_MODULE_KEY.valueOf()]: {
-					getUserRoles: [userRole],
-				},
-				tasksModule: {
-					fetchAllTasks: fetchAllTasksSpy,
+			global: {
+				plugins: [createTestingI18n()],
+				provide: {
+					[AUTH_MODULE_KEY.valueOf()]: {
+						getUserRoles: [userRole],
+					},
+					tasksModule: {
+						fetchAllTasks: fetchAllTasksSpy,
+					},
 				},
 			},
 		});

@@ -42,7 +42,12 @@ export default defineComponent({
 	setup(_, { emit }) {
 		const onEdit = () => emit("edit:element");
 
-		const onDelete = () => emit("delete:element");
+		const onDelete = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:element");
+			}
+		};
 
 		const onMoveDown = () => emit("move-down:element");
 

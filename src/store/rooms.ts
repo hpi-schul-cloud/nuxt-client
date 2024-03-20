@@ -17,6 +17,7 @@ import {
 	RoomsData,
 	SharingCourseObject,
 } from "./types/rooms";
+import { AlertPayload } from "./types/alert-payload";
 
 @Module({
 	name: "roomsModule",
@@ -41,6 +42,10 @@ export default class RoomsModule extends VuexModule {
 		statusCode: "",
 		message: "",
 		error: {},
+	};
+
+	alertData: AlertPayload = {
+		status: "info",
 	};
 
 	@Mutation
@@ -150,6 +155,11 @@ export default class RoomsModule extends VuexModule {
 		};
 	}
 
+	@Mutation
+	setAlertData(payload: AlertPayload): void {
+		this.alertData = payload;
+	}
+
 	get getRoomsData(): Array<RoomsData> {
 		return this.roomsData;
 	}
@@ -188,6 +198,10 @@ export default class RoomsModule extends VuexModule {
 
 	get hasCurrentRooms(): boolean {
 		return this.roomsData.length > 0;
+	}
+
+	get getAlertData(): AlertPayload {
+		return this.alertData;
 	}
 
 	private get dashboardApi(): DashboardApiInterface {
@@ -298,33 +312,6 @@ export default class RoomsModule extends VuexModule {
 		} catch (error: any) {
 			this.setError(error);
 			this.setLoading(false);
-		}
-	}
-
-	@Action
-	async getSharedCourseData(courseCode: string): Promise<void> {
-		this.resetBusinessError();
-		const params = {
-			shareToken: courseCode,
-		};
-		try {
-			const courseName = (
-				await $axios.get("/v1/courses-share", {
-					params,
-				})
-			).data;
-			this.setSharedCourseData({
-				code: courseCode,
-				courseName: courseName,
-				status: "success",
-				message: "",
-			});
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
 		}
 	}
 

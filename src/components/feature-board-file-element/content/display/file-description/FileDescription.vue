@@ -1,11 +1,10 @@
 <template>
 	<div>
 		<ContentElementBar
-			v-if="showTitle"
 			:hasGreyBackground="!isEditMode"
 			:icon="mdiFileDocumentOutline"
 		>
-			<template #title>
+			<template #title v-if="showTitle">
 				<a v-if="src" :href="src" target="_blank">{{ name }}</a>
 				<span v-else>{{ name }}</span>
 			</template>
@@ -16,10 +15,6 @@
 				{{ caption }}
 			</template>
 		</ContentElementBar>
-
-		<div v-else-if="caption && !isEditMode" class="pa-4 grey lighten-4">
-			{{ caption }}
-		</div>
 	</div>
 </template>
 

@@ -1,21 +1,24 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { mdiCheck } from "@mdi/js";
 import { shallowMount } from "@vue/test-utils";
 import SpeedMenu from "./SpeedMenu.vue";
 
 describe("SpeedMenu", () => {
+	const listItemSelektor = "v-list-item";
+
 	describe("when rate is 0.5", () => {
 		const setup = () => {
-			document.body.setAttribute("data-app", "true");
-
 			const rate = 0.5;
 			const wrapper = shallowMount(SpeedMenu, {
-				attachTo: document.body,
-				propsData: {
+				props: {
 					rate,
 				},
-				...createComponentMocks({}),
+				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			});
+
 			return {
 				wrapper,
 				rate,
@@ -26,23 +29,26 @@ describe("SpeedMenu", () => {
 			const { wrapper, rate } = setup();
 
 			const listItem = wrapper
-				.findAllComponents({ name: "v-list-item" })
+				.findAllComponents({ name: listItemSelektor })
 				.filter((listItem) => listItem.text().includes(`${rate}`))
 				.at(0);
-			const icon = listItem.findComponent({ name: "v-list-item-icon" });
 
-			expect(icon.text()).toBe(mdiCheck);
+			const icon = listItem?.vm.$slots.append()[0].children.default()[0]
+				.children;
+
+			expect(icon).toBe(mdiCheck);
 		});
 
 		describe("when selecting 1.25 value", () => {
-			it("should emit updateRate", () => {
+			it("should emit updateRate", async () => {
 				const { wrapper } = setup();
 				const value = 1.25;
 				const listItem = wrapper
-					.findAllComponents({ name: "v-list-item" })
+					.findAllComponents({ name: listItemSelektor })
 					.filter((listItem) => listItem.text().includes(`${value}`))
 					.at(0);
-				listItem.vm.$emit("click");
+
+				listItem?.vm.$emit("click");
 
 				const emits = wrapper.emitted("updateRate");
 				expect(emits).toHaveLength(1);
@@ -53,15 +59,12 @@ describe("SpeedMenu", () => {
 
 	describe("when rate is 0.75", () => {
 		const setup = () => {
-			document.body.setAttribute("data-app", "true");
-
 			const rate = 0.75;
 			const wrapper = shallowMount(SpeedMenu, {
-				attachTo: document.body,
-				propsData: {
+				props: {
 					rate,
 				},
-				...createComponentMocks({}),
+				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			});
 			return {
 				wrapper,
@@ -73,12 +76,13 @@ describe("SpeedMenu", () => {
 			const { wrapper, rate } = setup();
 
 			const listItem = wrapper
-				.findAllComponents({ name: "v-list-item" })
+				.findAllComponents({ name: listItemSelektor })
 				.filter((listItem) => listItem.text().includes(`${rate}`))
 				.at(0);
-			const icon = listItem.findComponent({ name: "v-list-item-icon" });
+			const icon = listItem?.vm.$slots.append()[0].children.default()[0]
+				.children;
 
-			expect(icon.text()).toBe(mdiCheck);
+			expect(icon).toBe(mdiCheck);
 		});
 	});
 });

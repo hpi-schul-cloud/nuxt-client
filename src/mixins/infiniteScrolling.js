@@ -9,7 +9,7 @@ export default {
 		window.scrollTo({ top: 0, behavior: "smooth" });
 		window.addEventListener("scroll", this.$_scrollEventHandler);
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener("scroll", this.$_scrollEventHandler);
 	},
 	methods: {

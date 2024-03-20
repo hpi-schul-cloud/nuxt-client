@@ -1,45 +1,56 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
 import RenderHTML from "./RenderHTML.vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { default as htmlConfig } from "./config";
 
 describe("RenderHTML", () => {
-	let wrapper: Wrapper<Vue>;
-
 	const setup = (props: {
 		html: string;
 		component?: string;
 		config?: string;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-		wrapper = mount(RenderHTML as MountOptions<Vue>, {
-			...createComponentMocks({}),
-			propsData: props,
+		const wrapper = mount(RenderHTML, {
+			global: {
+				plugins: [
+					[
+						vueDompurifyHTMLPlugin,
+						{
+							namedConfigurations: htmlConfig,
+						},
+					],
+				],
+			},
+			props,
 		});
+
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should render html in tags", () => {
-			setup({ html: "<b>test value</b>" });
+			const { wrapper } = setup({ html: "<b>test value</b>" });
 			expect(wrapper.findComponent(RenderHTML).exists()).toBe(true);
 			expect(wrapper.find("b").exists()).toBe(true);
 		});
 
 		it("should render with div", () => {
-			setup({ html: "<b>test value</b>" });
+			const { wrapper } = setup({ html: "<b>test value</b>" });
 			expect(wrapper.findComponent(RenderHTML).exists()).toBe(true);
 			expect(wrapper.element.nodeName).toStrictEqual("DIV");
 		});
 
 		it("should render with span", () => {
-			setup({ html: "<b>test value</b>", component: "span" });
+			const { wrapper } = setup({
+				html: "<b>test value</b>",
+				component: "span",
+			});
 			expect(wrapper.findComponent(RenderHTML).exists()).toBe(true);
 			expect(wrapper.element.nodeName).toStrictEqual("SPAN");
 		});
 
 		describe("when ck5 config is active", () => {
 			it("should strip non whitelisted tags", () => {
-				setup({
+				const { wrapper } = setup({
 					html: "<h1>test value</h1>",
 					component: "span",
 					config: "ck5",
@@ -48,7 +59,7 @@ describe("RenderHTML", () => {
 			});
 
 			it("should allow whitelisted tags", () => {
-				setup({
+				const { wrapper } = setup({
 					html: "<h5>test value</h5>",
 					component: "span",
 					config: "ck5",
@@ -57,7 +68,7 @@ describe("RenderHTML", () => {
 			});
 
 			it("should strip non whitelisted attributes", () => {
-				setup({
+				const { wrapper } = setup({
 					html: '<span id="someId" style="font-color: green;" class="someclass">test value</span>',
 					component: "div",
 					config: "ck5",
@@ -68,7 +79,7 @@ describe("RenderHTML", () => {
 			});
 
 			it("should allow whitelisted attributes", () => {
-				setup({
+				const { wrapper } = setup({
 					html: '<span style="font-color: green;" class="someclass">test value</span>',
 					component: "div",
 					config: "ck5",
@@ -81,17 +92,23 @@ describe("RenderHTML", () => {
 
 		describe("when translations config is active", () => {
 			it("should strip non whiteltisted tags", () => {
-				setup({ html: "<h5>test value</h5>", component: "span" });
+				const { wrapper } = setup({
+					html: "<h5>test value</h5>",
+					component: "span",
+				});
 				expect(wrapper.find("h5").exists()).toBe(false);
 			});
 
 			it("should allow whitelisted tags", () => {
-				setup({ html: "<div>test value</div>", component: "span" });
+				const { wrapper } = setup({
+					html: "<div>test value</div>",
+					component: "span",
+				});
 				expect(wrapper.find("div").exists()).toBe(false);
 			});
 
 			it("should strip non whitelisted attributes", () => {
-				setup({
+				const { wrapper } = setup({
 					html: '<b id="someId" class="someclass">test value</b>',
 					component: "span",
 				});
@@ -101,7 +118,7 @@ describe("RenderHTML", () => {
 			});
 
 			it("should allow whitelisted attributes", () => {
-				setup({
+				const { wrapper } = setup({
 					html: '<b class="someclass">test value</b>',
 					component: "span",
 				});

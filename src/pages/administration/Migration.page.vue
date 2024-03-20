@@ -1,267 +1,274 @@
 <template>
-	<default-wireframe
-		v-if="isAllowed"
-		:headline="$t('pages.administration.migration.title')"
+	<DefaultWireframe
+		:headline="t('pages.administration.migration.title')"
 		:full-width="true"
 		:breadcrumbs="breadcrumbs"
 	>
-		<v-snackbar
+		<VSnackbar
 			v-if="businessError && businessError.statusCode !== '200'"
-			v-model="businessError"
+			:model-value="!!businessError"
 			:timeout="errorTimeout"
-			top
-			centered
-			color="error darken-3"
+			location="top center"
+			color="error"
+			data-testid="error-dialog"
 		>
-			{{ $t("pages.administration.migration.error") }}
-			<template #action="{ attrs }">
-				<v-btn color="white" icon v-bind="attrs" @click="resetBusinessError">
-					<v-icon>{{ mdiClose }}</v-icon>
-				</v-btn>
+			{{ t("pages.administration.migration.error") }}
+			<template #actions>
+				<VBtn color="white" :icon="mdiClose" @click="resetBusinessError" />
 			</template>
-		</v-snackbar>
+		</VSnackbar>
 
-		<div slot="header">
+		<template #header>
 			<h1 class="text-h3">
 				{{
-					$t("pages.administration.migration.title", {
+					t("pages.administration.migration.title", {
 						source: sourceSystemName,
-						instance: $theme.name,
+						instance: theme.name,
 					})
 				}}
 			</h1>
-			<v-stepper v-model="migrationStep" flat class="stepper">
-				<v-stepper-header>
-					<v-stepper-step
+			<VStepper v-model="migrationStep" flat class="stepper">
+				<VStepperHeader>
+					<VStepperItem
 						:complete="isMigrationFinished && isMaintenanceFinished"
-						:editable="isStepEditable(1)"
-						:step="1"
+						:value="1"
+						color="primary"
 						data-testid="migration_tutorial_head"
 					>
-						{{ $t("pages.administration.migration.step1") }}
-					</v-stepper-step>
-					<v-divider />
-					<v-stepper-step
+						{{ t("pages.administration.migration.step1") }}
+					</VStepperItem>
+					<VDivider />
+					<VStepperItem
 						:complete="isMigrationFinished"
-						:editable="isStepEditable(2)"
-						:step="2"
+						:value="2"
+						color="primary"
 						data-testid="migration_importUsers_head"
 					>
-						{{ $t("pages.administration.migration.step2") }}
-					</v-stepper-step>
-					<v-divider />
-					<v-stepper-step
-						:editable="isStepEditable(3)"
+						{{ t("pages.administration.migration.step2") }}
+					</VStepperItem>
+					<VDivider />
+					<VStepperItem
 						:complete="isMigrationFinished"
-						:step="3"
+						:value="3"
+						color="primary"
 						data-testid="migration_summary_head"
 					>
-						{{ $t("pages.administration.migration.step3") }}
-					</v-stepper-step>
-					<v-divider />
-					<v-stepper-step
+						{{ t("pages.administration.migration.step3") }}
+					</VStepperItem>
+					<VDivider />
+					<VStepperItem
 						:complete="isMigrationFinished && isMaintenanceFinished"
-						:editable="isStepEditable(4)"
-						:step="4"
+						:value="4"
+						color="primary"
 						data-testid="migration_finish_head"
 					>
-						{{ $t("pages.administration.migration.step4") }}
-					</v-stepper-step>
-					<v-divider />
-					<v-stepper-step
-						:step="5"
-						:editable="isStepEditable(5)"
+						{{ t("pages.administration.migration.step4") }}
+					</VStepperItem>
+					<VDivider />
+					<VStepperItem
+						:value="5"
 						:complete="migrationStep === 5"
+						color="primary"
 						data-testid="migration_waitForSync_head"
 					>
-						{{ $t("pages.administration.migration.step5") }}
-					</v-stepper-step>
-				</v-stepper-header>
-			</v-stepper>
-		</div>
+						{{ t("pages.administration.migration.step5") }}
+					</VStepperItem>
+				</VStepperHeader>
+			</VStepper>
+		</template>
 
 		<div>
-			<v-stepper v-model="migrationStep" v-ripple="false" flat>
-				<v-stepper-items>
-					<v-stepper-content step="1" data-testid="migration_tutorial">
-						<v-container>
-							<v-card
+			<VStepper v-model="migrationStep" flat>
+				<VStepperWindow :model-value="migrationStep">
+					<VStepperWindowItem :value="1" data-testid="migration_tutorial">
+						<VContainer>
+							<VCard
 								:ripple="false"
 								elevation="2"
 								class="pa-5 mb-10"
-								color="grey lighten-5"
+								color="grey-lighten-5"
 							>
-								<v-progress-linear
+								<VProgressLinear
 									v-if="school.inUserMigration && totalImportUsers === 0"
 									indeterminate
 								/>
-								<v-card-text>
+								<VCardText>
 									<iframe class="full" :src="helpPageUri" />
 									<v-alert
 										v-if="
 											(!school.inUserMigration || totalImportUsers === 0) &&
 											!isNbc
 										"
-										dense
-										outlined
+										density="compact"
+										variant="outlined"
 										type="info"
-									>
-										{{ $t("pages.administration.migration.tutorialWait") }}
-									</v-alert>
-								</v-card-text>
-								<v-card-actions>
-									<v-row align="center" justify="end">
-										<v-btn
+										:text="t('pages.administration.migration.tutorialWait')"
+									/>
+								</VCardText>
+								<VCardActions>
+									<VRow align="center" justify="end">
+										<VBtn
 											v-if="isMigrationNotStarted"
 											data-testid="start_user_migration"
+											variant="flat"
 											color="primary"
+											:disabled="isLoading"
 											@click="setSchoolInUserMigration"
 										>
+											<VProgressCircular
+												v-if="isLoading"
+												:size="20"
+												indeterminate
+											/>
 											{{
-												$t("pages.administration.migration.startUserMigration")
+												t("pages.administration.migration.startUserMigration")
 											}}
-										</v-btn>
-										<v-btn
+										</VBtn>
+										<VBtn
 											v-else-if="canPerformMigration"
 											data-testid="migration_tutorial_next"
 											:disabled="totalImportUsers === 0"
+											variant="flat"
 											color="primary"
 											@click="nextStep"
 										>
-											<v-progress-circular
-												v-if="
-													totalImportUsers === 0 &&
-													school.inUserMigration === true
-												"
+											<VProgressCircular
+												v-if="totalImportUsers === 0 && school.inUserMigration"
 												:size="20"
 												indeterminate
 											/>
 											{{
 												totalImportUsers > 0 || school.inUserMigration === false
-													? $t("pages.administration.migration.next")
-													: $t("pages.administration.migration.waiting")
+													? t("pages.administration.migration.next")
+													: t("pages.administration.migration.waiting")
 											}}
-										</v-btn>
-										<v-btn
+										</VBtn>
+										<VBtn
 											v-else-if="isMigrationFinished"
 											id="migration_tutorial_skip"
+											variant="flat"
 											color="primary"
 											@click="nextStep"
 										>
-											{{ $t("pages.administration.migration.next") }}
-										</v-btn>
-									</v-row>
-								</v-card-actions>
-							</v-card>
-						</v-container>
-					</v-stepper-content>
+											{{ t("pages.administration.migration.next") }}
+										</VBtn>
+									</VRow>
+								</VCardActions>
+							</VCard>
+						</VContainer>
+					</VStepperWindowItem>
 
-					<v-stepper-content step="2" data-testid="migration_importUsers">
-						<import-users />
+					<VStepperWindowItem :value="2" data-testid="migration_importUsers">
+						<ImportUsers />
 						<div class="text-right">
-							<v-btn color="secondary" @click="migrationStep = 1">
-								{{ $t("pages.administration.migration.back") }}
-							</v-btn>
-							<v-btn
+							<VBtn color="secondary" @click="migrationStep = 1">
+								{{ t("pages.administration.migration.back") }}
+							</VBtn>
+							<VBtn
 								class="ml-2"
 								id="migration_importUsers_next"
 								color="primary"
 								:disabled="!canPerformMigration"
 								@click="migrationStep = 3"
 							>
-								{{ $t("pages.administration.migration.next") }}
-							</v-btn>
+								{{ t("pages.administration.migration.next") }}
+							</VBtn>
 						</div>
-					</v-stepper-content>
+					</VStepperWindowItem>
 
-					<v-stepper-content
+					<VStepperWindowItem
 						v-if="canPerformMigration && !isMigrationFinished"
-						step="3"
+						:value="3"
 						data-testid="migration_summary"
 					>
-						<v-container>
-							<v-card
+						<VContainer>
+							<VCard
 								:ripple="false"
 								elevation="2"
 								class="pa-5 mb-10"
-								color="grey lighten-5"
+								color="grey-lighten-5"
 							>
 								<div v-if="!isLoading">
-									<v-card-text>
+									<VCardText>
 										<RenderHTML
 											:html="
-												$t('pages.administration.migration.summary', {
-													instance: $theme.name,
-													source: sourceSystemName,
-													importUsersCount: totalMatched,
-													importUsersUnmatchedCount:
-														totalImportUsers - totalMatched,
-													usersUnmatchedCount: totalUnmatched,
-												})
+												t(
+													isNbc
+														? 'pages.administration.migration.summary.nbc'
+														: 'pages.administration.migration.summary',
+													{
+														instance: theme.name,
+														source: sourceSystemName,
+														importUsersCount: totalMatched,
+														importUsersUnmatchedCount:
+															totalImportUsers - totalMatched,
+														usersUnmatchedCount: totalUnmatched,
+													}
+												)
 											"
 										/>
-										<v-row>
-											<v-checkbox
+										<VRow>
+											<VCheckbox
 												v-model="isMigrationConfirm"
-												:label="$t('pages.administration.migration.confirm')"
+												:label="t('pages.administration.migration.confirm')"
 											/>
-										</v-row>
-									</v-card-text>
+										</VRow>
+									</VCardText>
 									<div class="text-right">
-										<v-btn
+										<VBtn
 											color="secondary"
 											:disabled="isLoading"
 											@click="migrationStep = 2"
-											>{{ $t("pages.administration.migration.back") }}
-										</v-btn>
+											>{{ t("pages.administration.migration.back") }}
+										</VBtn>
 
-										<v-btn
+										<VBtn
 											class="ml-2"
 											color="primary"
 											:disabled="!isMigrationConfirm || isLoading"
 											data-testid="migration_performMigration"
 											@click="performMigration"
 										>
-											<v-progress-circular
+											<VProgressCircular
 												v-if="isLoading"
 												:size="20"
 												indeterminate
 											/>
 											{{
 												isNbc
-													? $t("pages.administration.migration.nbc.migrate")
-													: $t("pages.administration.migration.migrate")
+													? t("pages.administration.migration.nbc.migrate")
+													: t("pages.administration.migration.migrate")
 											}}
-										</v-btn>
+										</VBtn>
 									</div>
 								</div>
 								<div v-else>
-									<v-progress-linear indeterminate />
-									{{ $t("pages.administration.migration.performingMigration") }}
+									<VProgressLinear indeterminate />
+									{{ t("pages.administration.migration.performingMigration") }}
 								</div>
-							</v-card>
-						</v-container>
-					</v-stepper-content>
+							</VCard>
+						</VContainer>
+					</VStepperWindowItem>
 
-					<v-stepper-content data-testid="migration_finish" step="4">
+					<VStepperWindowItem :value="4" data-testid="migration_finish">
 						<div v-if="canFinishMaintenance">
-							<v-container>
-								<v-card
+							<VContainer>
+								<VCard
 									:ripple="false"
 									elevation="2"
 									class="pa-5 mb-10"
-									color="grey lighten-5"
+									color="grey-lighten-5"
 								>
-									<v-card-text>
-										<v-row>
+									<VCardText>
+										<VRow>
 											<template v-if="isNbc">
 												<p>
 													{{
-														$t(
+														t(
 															"pages.administration.migration.step4.nbc.linkingFinished",
 															{
 																source: sourceSystemName,
-																instance: $theme.name,
+																instance: theme.name,
 																totalMatched: totalMatched,
 															}
 														)
@@ -271,18 +278,18 @@
 											<template v-else>
 												<p>
 													{{
-														$t(
+														t(
 															"pages.administration.migration.step4.linkingFinished",
 															{
 																source: sourceSystemName,
-																instance: $theme.name,
+																instance: theme.name,
 															}
 														)
 													}}
 												</p>
 												<p>
 													{{
-														$t(
+														t(
 															"pages.administration.migration.step4.transferphase"
 														)
 													}}
@@ -290,7 +297,7 @@
 												<ul class="mb-2">
 													<li>
 														{{
-															$t(
+															t(
 																"pages.administration.migration.step4.bullets.linkedUsers",
 																{ source: sourceSystemName }
 															)
@@ -298,15 +305,15 @@
 													</li>
 													<li>
 														{{
-															$t(
+															t(
 																"pages.administration.migration.step4.bullets.newUsers",
-																{ instance: $theme.name }
+																{ instance: theme.name }
 															)
 														}}
 													</li>
 													<li>
 														{{
-															$t(
+															t(
 																"pages.administration.migration.step4.bullets.classes",
 																{ source: sourceSystemName }
 															)
@@ -314,7 +321,7 @@
 													</li>
 													<li>
 														{{
-															$t(
+															t(
 																"pages.administration.migration.step4.bullets.oldUsers"
 															)
 														}}
@@ -322,414 +329,400 @@
 												</ul>
 												<p class="font-weight-bold">
 													{{
-														$t(
+														t(
 															"pages.administration.migration.step4.endTransferphase"
 														)
 													}}
 												</p>
 											</template>
-										</v-row>
-									</v-card-text>
+										</VRow>
+									</VCardText>
 
 									<div class="text-right">
-										<v-btn
-											class="primary"
+										<VBtn
+											class="bg-primary"
 											data-testid="migration_endMaintenance"
 											@click="endMaintenance"
 										>
 											{{
 												isNbc
-													? $t("pages.administration.migration.finishWizard")
-													: $t(
+													? t("pages.administration.migration.finishWizard")
+													: t(
 															"pages.administration.migration.finishTransferPhase"
 														)
 											}}
-										</v-btn>
+										</VBtn>
 									</div>
-								</v-card>
-							</v-container>
+								</VCard>
+							</VContainer>
 						</div>
-					</v-stepper-content>
+					</VStepperWindowItem>
 
-					<v-stepper-content step="5" data-testid="migration_waitForSync">
-						<v-container>
-							<v-card
+					<VStepperWindowItem :value="5" data-testid="migration_waitForSync">
+						<VContainer>
+							<VCard
 								:ripple="false"
 								elevation="2"
 								class="pa-5 mb-10"
-								color="grey lighten-5"
+								color="grey-lighten-5"
 							>
-								<template v-if="isNbc">
-									<p>
-										{{
-											$t(
-												"pages.administration.migration.step5.nbc.linkingFinished",
-												{
-													source: sourceSystemName,
-													instance: $theme.name,
-												}
-											)
-										}}
-									</p>
-									<ul class="mb-4">
-										<li>
+								<VCardText>
+									<template v-if="isNbc">
+										<p>
 											{{
-												$t("pages.administration.migration.step5.nbc.bullet1", {
+												t(
+													"pages.administration.migration.step5.nbc.linkingFinished",
+													{
+														source: sourceSystemName,
+														instance: theme.name,
+													}
+												)
+											}}
+										</p>
+										<ul class="mb-4">
+											<li>
+												{{
+													t(
+														"pages.administration.migration.step5.nbc.bullet1",
+														{
+															source: sourceSystemName,
+														}
+													)
+												}}
+											</li>
+											<li>
+												{{
+													t(
+														"pages.administration.migration.step4.bullets.oldUsers"
+													)
+												}}
+											</li>
+										</ul>
+									</template>
+									<template v-else>
+										<p>
+											{{ t("pages.administration.migration.step5.syncReady1") }}
+										</p>
+										<p>
+											{{
+												t("pages.administration.migration.step5.syncReady2", {
 													source: sourceSystemName,
+													instance: theme.name,
 												})
 											}}
-										</li>
-										<li>
-											{{
-												$t(
-													"pages.administration.migration.step4.bullets.oldUsers"
-												)
-											}}
-										</li>
-									</ul>
-								</template>
-								<template v-else>
-									<p>
-										{{ $t("pages.administration.migration.step5.syncReady1") }}
-									</p>
-									<p>
-										{{
-											$t("pages.administration.migration.step5.syncReady2", {
-												source: sourceSystemName,
-												instance: $theme.name,
-											})
-										}}
-									</p>
+										</p>
 
-									<p>
-										{{
-											$t("pages.administration.migration.step5.afterSync", {
-												source: sourceSystemName,
-												instance: $theme.name,
-											})
-										}}
-									</p>
-									<ul>
-										<li>
+										<p>
 											{{
-												$t(
-													"pages.administration.migration.step5.afterSync.bullet1",
-													{ source: sourceSystemName }
-												)
+												t("pages.administration.migration.step5.afterSync", {
+													source: sourceSystemName,
+													instance: theme.name,
+												})
 											}}
-										</li>
-										<li>
-											{{
-												$t(
-													"pages.administration.migration.step5.afterSync.bullet2"
-												)
-											}}
-										</li>
-										<li>
-											{{
-												$t(
-													"pages.administration.migration.step4.bullets.oldUsers"
-												)
-											}}
-										</li>
-									</ul>
-								</template>
+										</p>
+										<ul>
+											<li>
+												{{
+													t(
+														"pages.administration.migration.step5.afterSync.bullet1",
+														{ source: sourceSystemName }
+													)
+												}}
+											</li>
+											<li>
+												{{
+													t(
+														"pages.administration.migration.step5.afterSync.bullet2"
+													)
+												}}
+											</li>
+											<li>
+												{{
+													t(
+														"pages.administration.migration.step4.bullets.oldUsers"
+													)
+												}}
+											</li>
+										</ul>
+									</template>
+								</VCardText>
 								<div class="text-right">
-									<v-btn
-										class="primary"
+									<VBtn
+										class="bg-primary"
 										data-testid="migration_backToAdministration"
 										to="/administration"
 									>
 										{{
-											$t("pages.administration.migration.backToAdministration")
+											t("pages.administration.migration.backToAdministration")
 										}}
-									</v-btn>
+									</VBtn>
 								</div>
-							</v-card>
-						</v-container>
-					</v-stepper-content>
-				</v-stepper-items>
-			</v-stepper>
+							</VCard>
+						</VContainer>
+					</VStepperWindowItem>
+				</VStepperWindow>
+			</VStepper>
 		</div>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
-<script>
-/* eslint-disable max-lines */
-import { mdiClose, mdiLoading } from "@mdi/js";
-import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+<script setup lang="ts">
 import ImportUsers from "@/components/organisms/administration/ImportUsers";
-import { RenderHTML } from "@feature-render-html";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
+import { BusinessError } from "@/store/types/commons";
+import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RenderHTML } from "@feature-render-html";
+import { mdiClose } from "@mdi/js";
+import { useTitle } from "@vueuse/core";
+import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
-export default {
-	components: { DefaultWireframe, ImportUsers, RenderHTML },
-	data() {
-		return {
-			mdiClose,
-			mdiLoading,
-			migrationStep: 1,
-			breadcrumbs: [
-				{
-					text: this.$t("pages.administration.index.title"),
-					href: "/administration/",
-				},
-				{
-					text: this.$t("pages.administration.migration.title"),
-					disabled: true,
-				},
-			],
-			isMigrationConfirm: false,
-			errorTimeout: 7500,
-			isLoading: false,
-			checkTotal: null,
-		};
+const { t } = useI18n();
+
+const theme = injectStrict(THEME_KEY);
+
+const migrationStep: Ref<number> = ref(1);
+
+const isMigrationConfirm: Ref<boolean> = ref(false);
+
+const errorTimeout: Ref<number> = ref(7500);
+
+const isLoading: Ref<boolean> = ref(false);
+
+const checkTotal: Ref<NodeJS.Timeout | undefined> = ref(undefined);
+
+const isMigrationNotStarted = computed(() => {
+	return school.value.inUserMigration === undefined;
+});
+
+const canPerformMigration = computed(() => {
+	return school.value.inUserMigration && school.value.inMaintenance;
+});
+
+const isMigrationFinished = computed(() => {
+	return school.value.inUserMigration === false;
+});
+
+const canFinishMaintenance = computed(() => {
+	return isMigrationConfirm.value || isMigrationFinished.value;
+});
+
+const isMaintenanceFinished = computed(() => {
+	return !school.value.inMaintenance;
+});
+
+const school = computed(() => {
+	return schoolsModule.getSchool;
+});
+
+const businessError: ComputedRef<BusinessError | null> = computed(() => {
+	return importUsersModule.getBusinessError;
+});
+
+const totalMatched = computed(() => {
+	return importUsersModule.getTotalMatched;
+});
+
+const totalUnmatched = computed(() => {
+	return importUsersModule.getTotalUnmatched;
+});
+
+const totalImportUsers = computed(() => {
+	return importUsersModule.getTotal;
+});
+
+const isBrb = computed(() => {
+	return envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb";
+});
+
+const isNbc = computed(() => {
+	return envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21";
+});
+
+const sourceSystemName = computed(() => {
+	if (isBrb.value) {
+		return t("pages.administration.migration.brbSchulportal");
+	} else if (isNbc.value) {
+		return "moin.schule";
+	} else {
+		return t("pages.administration.migration.ldapSource");
+	}
+});
+
+const breadcrumbs: Ref<Breadcrumb[]> = ref([
+	{
+		title: t("pages.administration.index.title"),
+		to: "/administration/",
 	},
-	computed: {
-		isMigrationNotStarted() {
-			return this.school.inUserMigration === undefined;
-		},
-		canPerformMigration() {
-			return this.school.inUserMigration === true && this.school.inMaintenance;
-		},
-		isMigrationFinished() {
-			return this.school.inUserMigration === false;
-		},
-		canFinishMaintenance() {
-			return this.isMigrationConfirm || this.isMigrationFinished;
-		},
-		isMaintenanceFinished() {
-			return !this.school.inMaintenance;
-		},
-		school() {
-			return schoolsModule.getSchool;
-		},
-		businessError() {
-			const error = importUsersModule.getBusinessError;
-			if (error && error.message && error.statusCode) {
-				return {
-					message: error.message,
-					statusCode: error.statusCode,
-				};
-			}
-			return false;
-		},
-		totalMatched() {
-			return importUsersModule.getTotalMatched;
-		},
-		totalUnmatched() {
-			return importUsersModule.getTotalUnmatched;
-		},
-		totalImportUsers() {
-			return importUsersModule.getTotal;
-		},
-		isBrb() {
-			return envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb";
-		},
-		isNbc() {
-			return envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21";
-		},
-		sourceSystemName() {
-			if (this.isBrb) {
-				return this.$t("pages.administration.migration.brbSchulportal");
-			} else if (this.isNbc) {
-				return "moin.schule";
-			} else {
-				return this.$t("pages.administration.migration.ldapSource");
-			}
-		},
-		helpPageUri() {
-			return envConfigModule.getEnv.MIGRATION_WIZARD_DOCUMENTATION_LINK;
-		},
+	{
+		title: t("pages.administration.migration.title", {
+			source: sourceSystemName.value,
+			instance: theme.name,
+		}),
+		disabled: true,
 	},
-	watch: {
-		async migrationStep(val) {
-			if (val === 1 || val === 3) {
-				await this.summary();
-			}
-			this.scrollToTop();
-		},
-		totalImportUsers(val) {
-			if (val > 0) {
-				clearInterval(this.checkTotal);
-			}
-		},
-	},
-	async created() {
-		const allowed = await this.isAllowed();
-		if (!allowed) {
-			await this.$router.push("/");
+]);
+
+const helpPageUri = computed(() => {
+	return envConfigModule.getEnv.MIGRATION_WIZARD_DOCUMENTATION_LINK;
+});
+
+useTitle(
+	buildPageTitle(
+		t("pages.administration.migration.title", {
+			source: sourceSystemName.value,
+			instance: theme.name,
+		})
+	)
+);
+
+const isAllowed = async () => {
+	if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true) {
+		return true;
+	}
+	if (school.value.id === "") {
+		await schoolsModule.fetchSchool();
+	}
+	return school.value.features.ldapUniventionMigrationSchool;
+};
+
+const summary = async () => {
+	if (school.value.id === "") {
+		await schoolsModule.fetchSchool();
+	}
+	if (!canPerformMigration.value) {
+		return;
+	}
+	await importUsersModule.fetchTotal();
+	await importUsersModule.fetchTotalMatched();
+	await importUsersModule.fetchTotalUnmatched();
+};
+
+const checkTotalInterval = () => {
+	if (school.value.inUserMigration && totalImportUsers.value === 0) {
+		checkTotal.value = setInterval(() => {
+			importUsersModule.fetchTotal();
+		}, 5000);
+	}
+	if (totalImportUsers.value > 0) {
+		clearInterval(checkTotal.value);
+	}
+};
+
+const setSchoolInUserMigration = async () => {
+	if (school.value.inUserMigration) {
+		return;
+	}
+
+	isLoading.value = true;
+
+	if (isNbc.value) {
+		await importUsersModule.populateImportUsersFromExternalSystem();
+
+		if (importUsersModule.getBusinessError) {
+			isLoading.value = false;
+
 			return;
 		}
-		await this.summary();
-		this.checkTotalInterval();
-	},
-	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.migration.title", {
-				source: this.sourceSystemName,
-				instance: this.$theme.name,
-			})
-		);
+	}
 
-		this.breadcrumbs = [
-			{
-				text: this.$t("pages.administration.index.title"),
-				to: "/administration/",
-			},
-			{
-				text: this.$t("pages.administration.migration.title", {
-					source: this.sourceSystemName,
-					instance: this.$theme.name,
-				}),
-				disabled: true,
-			},
-		];
-	},
-	methods: {
-		async isAllowed() {
-			if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true) {
-				return true;
-			}
-			if (this.school.id === "") {
-				await schoolsModule.fetchSchool();
-			}
-			return this.school.features.ldapUniventionMigrationSchool === true;
-		},
-		isStepEditable(step) {
-			switch (step) {
-				case 1:
-					return !this.isLoading && !this.isMaintenanceFinished;
-				case 2:
-					return (
-						this.canPerformMigration &&
-						!this.isMigrationFinished &&
-						this.totalImportUsers > 0
-					);
-				case 3:
-					return (
-						this.canPerformMigration &&
-						!this.isMigrationFinished &&
-						this.totalImportUsers > 0
-					);
-				case 4:
-					return (
-						!this.isLoading &&
-						this.isMigrationFinished &&
-						!this.isMaintenanceFinished
-					);
-				case 5:
-					return (
-						!this.isLoading &&
-						this.isMigrationFinished &&
-						this.isMaintenanceFinished
-					);
-				default:
-					return false;
-			}
-		},
-		async summary() {
-			if (this.school.id === "") {
-				await schoolsModule.fetchSchool();
-			}
-			if (!this.canPerformMigration) {
-				return;
-			}
-			await importUsersModule.fetchTotal();
-			await importUsersModule.fetchTotalMatched();
-			await importUsersModule.fetchTotalUnmatched();
-		},
-		checkTotalInterval() {
-			if (this.school.inUserMigration && this.totalImportUsers === 0) {
-				this.checkTotal = setInterval(() => {
-					importUsersModule.fetchTotal();
-				}, 5000);
-			}
-			if (this.totalImportUsers > 0) {
-				clearInterval(this.checkTotal);
-			}
-		},
-		async setSchoolInUserMigration() {
-			if (this.school.inUserMigration) {
-				return;
-			}
-			this.isLoading = true;
+	await schoolsModule.setSchoolInUserMigration();
 
-			if (this.isNbc) {
-				await importUsersModule.populateImportUsersFromExternalSystem();
+	checkTotalInterval();
+	if (schoolsModule.getError) {
+		// TODO better error handling
+		importUsersModule.setBusinessError({
+			statusCode: "500",
+			message: schoolsModule.getError.message,
+		});
+	}
 
-				if (importUsersModule.getBusinessError) {
-					this.isLoading = false;
-
-					return;
-				}
-			}
-
-			await schoolsModule.setSchoolInUserMigration();
-
-			this.checkTotalInterval();
-			if (schoolsModule.getError) {
-				// TODO better error handling
-				importUsersModule.setBusinessError({
-					statusCode: "500",
-					message: schoolsModule.getError.message,
-				});
-			} else {
-				this.school.inUserMigration = true;
-				this.school.inMaintenance = true;
-			}
-			this.isLoading = false;
-		},
-		async performMigration() {
-			this.isLoading = true;
-			await importUsersModule.performMigration();
-			if (!importUsersModule.getBusinessError) {
-				schoolsModule.setSchool({
-					...schoolsModule.getSchool,
-					inUserMigration: false,
-				});
-				this.school.inUserMigration = false;
-				this.isLoading = false;
-				this.migrationStep = 4;
-			}
-		},
-		async endMaintenance() {
-			this.isLoading = true;
-			await schoolsModule.migrationStartSync();
-			if (schoolsModule.getError) {
-				// TODO better error handling
-				importUsersModule.setBusinessError({
-					statusCode: "500",
-					message: schoolsModule.getError.message,
-				});
-			} else {
-				this.school.inMaintenance = this.isNbc ? undefined : false;
-				this.migrationStep = 5;
-			}
-			this.isLoading = false;
-		},
-		resetBusinessError() {
-			importUsersModule.setBusinessError(null);
-		},
-		scrollToTop() {
-			window.scrollTo(0, 0);
-		},
-		nextStep() {
-			let nextStep;
-			if (this.migrationStep === 1) {
-				nextStep = 2;
-				if (this.isMigrationFinished) {
-					nextStep = 4;
-				}
-				if (this.isMaintenanceFinished) {
-					nextStep = 5;
-				}
-			}
-			this.migrationStep = nextStep;
-		},
-	},
+	isLoading.value = false;
 };
+
+const performMigration = async () => {
+	isLoading.value = true;
+
+	await importUsersModule.performMigration();
+
+	if (!importUsersModule.getBusinessError) {
+		schoolsModule.setSchool({
+			...schoolsModule.getSchool,
+			inUserMigration: false,
+		});
+		isLoading.value = false;
+		migrationStep.value = 4;
+	}
+};
+const endMaintenance = async () => {
+	isLoading.value = true;
+	await schoolsModule.migrationStartSync();
+	if (schoolsModule.getError) {
+		// TODO better error handling
+		importUsersModule.setBusinessError({
+			statusCode: "500",
+			message: schoolsModule.getError.message,
+		});
+	} else {
+		school.value.inMaintenance = isNbc.value ? undefined : false;
+		migrationStep.value = 5;
+	}
+	isLoading.value = false;
+};
+
+const resetBusinessError = () => {
+	importUsersModule.setBusinessError(null);
+};
+
+const scrollToTop = () => {
+	window.scrollTo(0, 0);
+};
+
+const nextStep = () => {
+	let nextStep = 0;
+
+	if (migrationStep.value === 1) {
+		nextStep = 2;
+		if (isMigrationFinished.value) {
+			nextStep = 4;
+		}
+		if (isMaintenanceFinished.value) {
+			nextStep = 5;
+		}
+	}
+
+	migrationStep.value = nextStep;
+};
+
+watch(migrationStep, async (val) => {
+	if (val === 1 || val === 3) {
+		await summary();
+	}
+
+	scrollToTop();
+});
+
+watch(totalImportUsers, (val) => {
+	if (val > 0) {
+		clearInterval(checkTotal.value);
+	}
+});
+
+onMounted(async () => {
+	const allowed = await isAllowed();
+	if (!allowed) {
+		const router = useRouter();
+		await router.push("/");
+		return;
+	}
+	await summary();
+	checkTotalInterval();
+});
 </script>
+
 <style scoped>
 .v-stepper__content {
 	padding: 0;

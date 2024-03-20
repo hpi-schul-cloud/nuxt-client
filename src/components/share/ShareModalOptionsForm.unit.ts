@@ -1,42 +1,48 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import ShareModalOptionsForm from "./ShareModalOptionsForm.vue";
-import Vue from "vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("@/components/share/ShareModalOptionsForm", () => {
-	const getWrapper = (attrs = { propsData: { type: "course" } }) => {
-		const wrapper = mount(ShareModalOptionsForm as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			...attrs,
+	const setup = () => {
+		const wrapper = mount(ShareModalOptionsForm, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				type: "courses",
+			},
 		});
-
-		return wrapper;
+		return { wrapper };
 	};
 
 	it("should emit initial event during setup", () => {
-		const wrapper = getWrapper();
+		const { wrapper } = setup();
 
 		expect(wrapper.emitted("share-options-change")).toHaveLength(1);
 	});
 
-	it("should emit event on changes of isSchoolInternal switch", async () => {
-		const wrapper = getWrapper();
+	it("should emit event on changes of isSchoolInternal checkbox", async () => {
+		const { wrapper } = setup();
 
-		const switchIsSchoolInternal = wrapper.find(
+		const checkboxIsSchoolInternal = wrapper.findComponent(
 			'[data-testid="isSchoolInternal"]'
 		);
-		await switchIsSchoolInternal.setChecked(false);
+
+		await checkboxIsSchoolInternal.setValue(false);
 
 		expect(wrapper.emitted("share-options-change")).toHaveLength(2);
 	});
 
-	it("should emit event on changes of hasExpiryDate switch", async () => {
-		const wrapper = getWrapper();
+	it("should emit event on changes of hasExpiryDate checkbox", async () => {
+		const { wrapper } = setup();
 
-		const switchhasExpiryDate = wrapper.find('[data-testid="hasExpiryDate"]');
-		await switchhasExpiryDate.setChecked(false);
+		const checkboxHasExpiryDate = wrapper.findComponent(
+			'[data-testid="hasExpiryDate"]'
+		);
+		await checkboxHasExpiryDate.setValue(false);
 
 		expect(wrapper.emitted("share-options-change")).toHaveLength(2);
 	});

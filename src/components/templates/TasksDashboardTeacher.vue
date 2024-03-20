@@ -1,7 +1,7 @@
 <template>
 	<section class="task-dashboard-teacher">
-		<v-tabs-items v-model="tab">
-			<v-tab-item :value="tabRoutes[0]" class="padding-bottom">
+		<v-window v-model="tab">
+			<v-window-item :value="tabRoutes[0]" class="padding-bottom">
 				<v-custom-double-panels
 					:panel-one-count="noDueDateTasks.length"
 					:panel-two-count="withDueDateTasks.length + overdueTasks.length"
@@ -43,8 +43,8 @@
 					:subtitle="emptyState.subtitle"
 					class="mt-16"
 				/>
-			</v-tab-item>
-			<v-tab-item :value="tabRoutes[1]" class="padding-bottom">
+			</v-window-item>
+			<v-window-item :value="tabRoutes[1]" class="padding-bottom">
 				<tasks-list
 					:tasks="draftTasks"
 					user-role="teacher"
@@ -57,8 +57,8 @@
 					:title="emptyState.title"
 					class="mt-16"
 				/>
-			</v-tab-item>
-			<v-tab-item :value="tabRoutes[2]" class="padding-bottom">
+			</v-window-item>
+			<v-window-item :value="tabRoutes[2]" class="padding-bottom">
 				<tasks-list
 					:tasks="finishedTasks"
 					user-role="teacher"
@@ -73,8 +73,8 @@
 					:title="emptyState.title"
 					class="mt-16"
 				/>
-			</v-tab-item>
-		</v-tabs-items>
+			</v-window-item>
+		</v-window>
 		<share-modal type="tasks" />
 	</section>
 </template>
@@ -86,17 +86,17 @@ import TasksList from "@/components/organisms/TasksList";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const { isLoadingDialogOpen } = useLoadingState(
-			i18n.t("components.molecules.copyResult.title.loading")
+			t("components.molecules.copyResult.title.loading")
 		);
 
 		const { copy } = useCopy(isLoadingDialogOpen);
@@ -116,7 +116,11 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	inject: ["tasksModule", "finishedTasksModule", "copyModule", "shareModule"],
+	inject: {
+		tasksModule: "tasksModule",
+		finishedTasksModule: "finishedTasksModule",
+		shareModule: "shareModule",
+	},
 	computed: {
 		openTasks() {
 			return this.tasksModule.getOpenTasksForTeacher;
@@ -162,10 +166,7 @@ export default defineComponent({
 	},
 	methods: {
 		async onCopyTask(payload) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
-			await this.copy(payload, loadingText);
+			await this.copy(payload);
 
 			this.tasksModule.setActiveTab("drafts");
 			await this.tasksModule.fetchAllTasks();

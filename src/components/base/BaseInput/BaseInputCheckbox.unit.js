@@ -1,3 +1,4 @@
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInputCheckbox";
 
@@ -5,122 +6,77 @@ describe("@/components/base/BaseInputCheckbox", () => {
 	it(`Check if input type="checkbox" is rendered`, () => {
 		supportedTypes.forEach((type) => {
 			const wrapper = mount(BaseInput, {
-				...createComponentMocks({
-					vuetify: true,
-				}),
-				propsData: {
+				global: {
+					plugins: [createTestingVuetify()],
+				},
+				props: {
 					label: "Checkbox",
-					name: "checkbox",
 					type,
-					vmodel: true,
-					color: `var(--v-secondary-base)`,
+					modelValue: true,
+					color: `rgba(var(--v-theme-secondary))`,
 				},
 			});
 			expect(wrapper.find("input[type='checkbox']").exists()).toBe(true);
 		});
 	});
 
-	it.skip(`input toggles boolean vmodel`, () => {
-		supportedTypes.forEach((type) => {
-			const wrapper = mount({
-				data: () => ({ value: false }),
-				template: `<base-input v-model="value" label="test" type="${type}" name="checkbox" />`,
-				components: { BaseInput },
-			});
-			const input = wrapper.find("input");
-			expect(wrapper.vm.value).toBe(false);
-			input.setChecked(true);
-			expect(wrapper.vm.value).toBe(true);
-			input.setChecked(false);
-			expect(wrapper.vm.value).toBe(false);
-
-			["input", "label"].forEach((clickTargetSelector) => {
-				const clickTarget = wrapper.find(clickTargetSelector);
-				expect(wrapper.vm.value).toBe(false);
-				clickTarget.trigger("click");
-				expect(wrapper.vm.value).toBe(true);
-				clickTarget.trigger("click");
-				expect(wrapper.vm.value).toBe(false);
-			});
-		});
-	});
-
-	it(`use array v-model if value is specified`, () => {
+	it(`use array v-model if value is specified`, async () => {
 		const testValue = "test";
-		const wrapper = mount({
-			...createComponentMocks({
-				vuetify: true,
-			}),
-			data: () => ({ value: ["other Value"] }),
-			template: `<base-input v-model="value" value="${testValue}" label="test" type="checkbox" name="checkbox"/>`,
-			components: { BaseInput },
+		const wrapper = mount(BaseInput, {
+			global: {
+				plugins: [createTestingVuetify()],
+			},
+			props: {
+				label: "Checkbox",
+				type: "checkbox",
+				modelValue: [],
+				value: testValue,
+			},
 		});
 
 		const input = wrapper.find("input");
-		const valueBefore = wrapper.vm.value.length;
 		input.setChecked(true);
-		expect(wrapper.vm.value).toHaveLength(valueBefore + 1);
-		expect(wrapper.vm.value).toContain(testValue);
+		expect(wrapper.emitted("update:modelValue")[0][0]).toEqual([testValue]);
 		input.setChecked(false);
-		expect(wrapper.vm.value).toHaveLength(valueBefore);
-		expect(wrapper.vm.value).not.toContain(testValue);
-	});
-
-	it.skip(`shows checkmark only when it is checked`, async () => {
-		await Promise.all(
-			["input", "label"].map(async (clickTargetSelector) => {
-				const wrapper = mount({
-					data: () => ({ value: false }),
-					template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" />`,
-					components: { BaseInput },
-				});
-
-				const clickTarget = wrapper.find(clickTargetSelector);
-
-				expect(
-					wrapper.element.innerHTML.includes("$mdiCheckboxBlankOutline")
-				).toBe(true);
-				clickTarget.trigger("click");
-				await wrapper.vm.$nextTick();
-				expect(wrapper.element.innerHTML.includes("$mdiCheckboxOutline")).toBe(
-					true
-				);
-				clickTarget.trigger("click");
-				await wrapper.vm.$nextTick();
-				expect(
-					wrapper.element.innerHTML.includes("$mdiCheckboxBlankOutline")
-				).toBe(true);
-			})
-		);
+		expect(wrapper.emitted("update:modelValue")[1][0]).toEqual([]);
 	});
 
 	it(`can show indeterminated state for undefined values`, async () => {
 		const wrapper = mount(BaseInput, {
-			...createComponentMocks({
-				vuetify: true,
-			}),
-			propsData: {
+			global: {
+				plugins: [createTestingVuetify()],
+			},
+			props: {
 				label: "Checkbox",
 				name: "checkbox",
 				type: "checkbox",
-				vmodel: undefined,
+				modelValue: undefined,
 				showUndefinedState: true,
 			},
 		});
 
-		expect(wrapper.element.innerHTML.includes("$mdiCheckboxIntermediate")).toBe(
-			true
-		);
+		expect(
+			wrapper
+				.html()
+				.includes(
+					`<path d="M19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M19,19H5V5H19V19M17,17H7V7H17V17Z"></path>`
+				)
+		).toBe(true);
 	});
 
 	it(`throws an error if show-undefined-state is set when v-model is of type Array`, async () => {
-		console.error = jest.fn();
-
 		expect(() =>
-			mount({
-				data: () => ({ value: [] }),
-				template: `<base-input v-model="value" label="test" type="checkbox" name="checkbox" :show-undefined-state="true" />`,
-				components: { BaseInput },
+			mount(BaseInput, {
+				global: {
+					plugins: [createTestingVuetify()],
+				},
+				props: {
+					label: "Checkbox",
+					name: "checkbox",
+					type: "checkbox",
+					modelValue: [],
+					showUndefinedState: true,
+				},
 			})
 		).toThrow("showUndefinedState is not allowed if v-model is of type Array.");
 	});

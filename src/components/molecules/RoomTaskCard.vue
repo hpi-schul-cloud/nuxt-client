@@ -5,10 +5,9 @@
 		max-width="100%"
 		:aria-label="ariaLabel"
 		tabindex="0"
-		:outlined="isDraft"
+		:variant="isDraft ? 'outlined' : 'elevated'"
 		hover
 		data-testid="content-card-task"
-		role="button"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -19,22 +18,20 @@
 		<v-card-text data-testid="content-card-task-content">
 			<div class="top-row-container mb-0">
 				<div class="tagline" data-testid="tagline">
-					<v-icon size="14" class="fill">
-						{{ titleIcon }}
-					</v-icon>
+					<v-icon size="14" class="fill" :icon="titleIcon" />
 					{{ cardTitle(task.dueDate) }}
 				</div>
 				<div class="dot-menu-section">
 					<room-dot-menu
-						:menu-items="moreActionsMenuItems[role]"
+						:menu-items="moreActionsMenuItems[userRole]"
 						data-testid="content-card-task-menu"
 						:aria-label="$t('pages.room.taskCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
-			<h6 class="mt-1 mb-2 task-name">
+			<h2 class="text-h6 mt-1 mb-2 task-name" tabindex="-1">
 				{{ task.name }}
-			</h6>
+			</h2>
 			<RenderHTML
 				v-if="canShowDescription"
 				class="text--primary mt-1 mb-0 pb-0 text-description"
@@ -49,40 +46,39 @@
 		>
 			<div class="chip-items-group">
 				<v-chip
-					v-for="(chip, index) in chipItems[role]"
+					v-for="(chip, index) in chipItems[userRole]"
 					:key="index"
 					:class="[chip.class]"
-					small
+					size="small"
 					:data-testid="[chip.testid]"
 				>
 					<v-icon
 						v-if="chip.icon"
-						left
-						small
+						start
+						size="small"
 						class="fill"
 						color="rgba(0, 0, 0, 0.87)"
-						d
 					>
 						{{ chip.icon }}
 					</v-icon>
 					{{ chip.name }}
 				</v-chip>
 				<v-custom-chip-time-remaining
-					v-if="roles.Student === role && isCloseToDueDate && !isSubmitted"
+					v-if="roles.Student === userRole && isCloseToDueDate && !isSubmitted"
 					type="warning"
 					:due-date="task.dueDate"
-					:shorten-unit="$vuetify.breakpoint.xsOnly"
+					:shorten-unit="$vuetify.display.xs"
 				/>
 			</div>
 		</v-card-text>
 		<v-card-actions class="pt-1 mt-2" data-testid="content-card-task-actions">
 			<v-btn
-				v-for="(action, index) in cardActions[role]"
+				v-for="(action, index) in cardActions[userRole]"
 				:key="index"
-				:class="`action-button action-button-${action.name
-					.split(' ')
-					.join('-')}`"
-				text
+				:class="`action-button`"
+				variant="text"
+				color="primary"
+				:data-testid="action.testid"
 				@click.stop="action.action"
 			>
 				{{ action.name }}
@@ -123,7 +119,7 @@ export default {
 			type: Object,
 			default: () => ({}),
 		},
-		role: { type: String, required: true },
+		userRole: { type: String, required: true },
 		ariaLabel: {
 			type: String,
 			default: "",
@@ -191,26 +187,29 @@ export default {
 				[Roles.Student]: [],
 			};
 
-			if (this.role === Roles.Teacher) {
+			if (this.userRole === Roles.Teacher) {
 				if (this.isPlanned || (this.isDraft && !this.isFinished)) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.publishCard(),
 						name: this.$t("common.action.publish"),
+						testid: "room-detail-task-action-publish",
 					});
 				}
 				if (!this.isPlanned && !this.isDraft && !this.isFinished) {
 					roleBasedActions[Roles.Teacher].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
+						testid: "room-detail-task-action-done",
 					});
 				}
 			}
 
-			if (this.role === Roles.Student) {
+			if (this.userRole === Roles.Student) {
 				if (!this.isFinished) {
 					roleBasedActions[Roles.Student].push({
 						action: () => this.finishCard(),
 						name: this.$t("pages.room.taskCard.label.done"),
+						testid: "room-detail-task-action-done",
 					});
 				}
 			}
@@ -223,7 +222,7 @@ export default {
 				[Roles.Student]: [],
 			};
 
-			if (this.role === Roles.Teacher) {
+			if (this.userRole === Roles.Teacher) {
 				roleBasedChips[Roles.Teacher].push({
 					name: `${this.task.status.submitted}/${
 						this.task.status.maxSubmissions
@@ -247,7 +246,7 @@ export default {
 				}
 			}
 
-			if (this.role === Roles.Student) {
+			if (this.userRole === Roles.Student) {
 				if (this.isSubmittedNotGraded) {
 					roleBasedChips[Roles.Student].push({
 						icon: "$taskDone",
@@ -289,7 +288,7 @@ export default {
 				[Roles.Student]: [],
 			};
 
-			if (this.role === Roles.Teacher) {
+			if (this.userRole === Roles.Teacher) {
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiPencilOutline,
 					action: () =>
@@ -321,7 +320,7 @@ export default {
 				if (!this.isDraft && !this.isFinished) {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiUndoVariant,
-						action: () => this.revertPublishedCard(),
+						action: () => this.unPublishCard(),
 						name: this.$t("pages.room.cards.label.revert"),
 						dataTestId: "content-card-task-menu-revert",
 					});
@@ -335,7 +334,7 @@ export default {
 				});
 			}
 
-			if (this.role === Roles.Student) {
+			if (this.userRole === Roles.Student) {
 				// if more action is needed for the students add actions like above
 			}
 
@@ -390,10 +389,10 @@ export default {
 			window.location = value;
 		},
 		publishCard() {
-			this.$emit("post-task");
+			this.$emit("update-visibility", true);
 		},
-		revertPublishedCard() {
-			this.$emit("revert-task");
+		unPublishCard() {
+			this.$emit("update-visibility", false);
 		},
 		finishCard() {
 			this.$emit("finish-task");
@@ -444,7 +443,7 @@ export default {
 
 .top-row-container {
 	display: grid;
-	grid-template-columns: 95% 5%;
+	grid-template-columns: 94% 6%;
 	align-items: center;
 
 	.tagline {
@@ -467,10 +466,6 @@ export default {
 
 .text-description {
 	font-size: var(--text-md);
-}
-
-.action-button {
-	color: var(--v-primary-base);
 }
 
 .chip-items-group {

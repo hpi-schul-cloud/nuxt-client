@@ -1,4 +1,7 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import FileAttributes from "./attributes/FileAttributes.vue";
 import ContentElementFooter from "./ContentElementFooter.vue";
@@ -19,7 +22,9 @@ describe("ContentElementFooter", () => {
 
 		const wrapper = shallowMount(ContentElementFooter, {
 			propsData,
-			...createComponentMocks({}),
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
 		});
 
 		return {

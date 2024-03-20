@@ -17,9 +17,11 @@
 			data-testId="error-dialog"
 			@dialog-closed="onCloseErrorDialog"
 		>
-			<h2 slot="title" class="text-h4 my-2 text-break-word">
-				{{ t("error.generic") }}
-			</h2>
+			<template #title>
+				<h2 class="text-h4 my-2 text-break-word">
+					{{ $t("error.generic") }}
+				</h2>
+			</template>
 		</v-custom-dialog>
 
 		<v-dialog
@@ -34,66 +36,47 @@
 						data-testId="videoconference-config-dialog-title"
 					>
 						{{
-							t("pages.rooms.tools.configureVideoconferenceDialog.title", {
+							$t("pages.rooms.tools.configureVideoconferenceDialog.title", {
 								roomName: roomName,
 							})
 						}}
 					</h2>
 				</v-card-title>
-				<v-card-text class="text--primary">
-					<div class="d-flex justify-space-between">
-						<p class="text-md mt-1 mr-4">
-							{{
-								t("pages.rooms.tools.configureVideoconferenceDialog.text.mute")
-							}}
-						</p>
-						<v-switch
-							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
-							data-testId="every-attendee-joins-muted"
-							class="my-0"
-							inset
-							dense
-						/>
-					</div>
-					<div class="d-flex justify-space-between">
-						<p class="text-md mt-1 mr-4">
-							{{
-								t(
-									"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom"
-								)
-							}}
-						</p>
-						<v-switch
-							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
-							data-testId="moderator-must-approve-join-requests"
-							class="my-0"
-							inset
-							dense
-						/>
-					</div>
-					<div class="d-flex justify-space-between">
-						<p class="text-md mt-1 mr-4">
-							{{
-								t(
-									"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission"
-								)
-							}}
-						</p>
-						<v-switch
-							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
-							data-testId="everybody-joins-as-moderator"
-							class="my-0"
-							inset
-							dense
-						/>
-					</div>
+				<v-card-text>
+					<v-checkbox
+						v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
+						data-testId="every-attendee-joins-muted"
+						:label="
+							$t('pages.rooms.tools.configureVideoconferenceDialog.text.mute')
+						"
+						:hide-details="true"
+					/>
+					<v-checkbox
+						v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
+						data-testId="moderator-must-approve-join-requests"
+						:label="
+							$t(
+								'pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom'
+							)
+						"
+						:hide-details="true"
+					/>
+					<v-checkbox
+						v-model="videoConferenceOptions.everybodyJoinsAsModerator"
+						data-testId="everybody-joins-as-moderator"
+						:label="
+							$t(
+								'pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission'
+							)
+						"
+						:hide-details="true"
+					/>
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer />
 					<v-btn
 						data-testId="dialog-cancel"
-						depressed
-						text
+						variant="text"
 						@click="onCloseConfigurationDialog"
 					>
 						{{ $t("common.actions.cancel") }}
@@ -102,7 +85,7 @@
 						data-testId="dialog-create"
 						class="px-6"
 						color="primary"
-						depressed
+						variant="flat"
 						@click="startVideoConference"
 					>
 						{{ $t("common.actions.create") }}
@@ -128,7 +111,6 @@ import {
 import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE_KEY,
-	I18N_KEY,
 	injectStrict,
 	ROOM_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
@@ -143,7 +125,7 @@ import {
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomModule from "@/store/room";
-import VueI18n from "vue-i18n";
+import { mdiCheck } from "@mdi/js";
 
 export default defineComponent({
 	name: "RoomVideoConferenceSection",
@@ -155,7 +137,6 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n = injectStrict(I18N_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
 			VIDEO_CONFERENCE_MODULE_KEY
@@ -163,9 +144,6 @@ export default defineComponent({
 		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 
 		const roomName = computed(() => roomModule.getRoomData.title ?? "");
-
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo
@@ -288,7 +266,6 @@ export default defineComponent({
 		};
 
 		return {
-			t,
 			videoConferenceInfo,
 			videoConferenceOptions,
 			hasPermission,
@@ -303,6 +280,7 @@ export default defineComponent({
 			isErrorDialogOpen,
 			onCloseErrorDialog,
 			roomName,
+			mdiCheck,
 		};
 	},
 });

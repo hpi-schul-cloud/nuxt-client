@@ -1,25 +1,47 @@
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import BaseLink from "@/components/base/BaseLink.vue";
 import BackendDataTable from "./BackendDataTable";
 import { tableData, tableColumns } from "./DataTable.data-factory.js";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import {
+	mdiCheckboxBlankOutline,
+	mdiCheckboxIntermediate,
+	mdiCheckboxOutline,
+	mdiMenuDownOutline,
+	mdiMenuUpOutline,
+} from "@/components/icons/material";
 
 const defaultData = tableData(5);
 
-function getWrapper(attributes, options) {
+function getWrapper(props, options) {
 	return mount(BackendDataTable, {
-		...createComponentMocks({ i18n: true, vuetify: true }),
-		propsData: {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			components: {
+				"base-input": BaseInput,
+				"base-link": BaseLink,
+			},
+			mocks: {
+				$t: (key, dynamic) =>
+					key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+			},
+		},
+		props: {
 			data: defaultData,
 			trackBy: "_id",
 			columns: tableColumns,
-			...attributes,
+			...props,
 		},
 		...options,
 	});
 }
 
 const getTableRowsContent = async (wrapper) => {
-	await wrapper.vm.$nextTick();
-	return wrapper.findAll("tbody tr").wrappers.map((rowWrapper) => {
-		return rowWrapper.findAll("td").wrappers.map((cell) => cell.text());
+	return wrapper.findAll("tbody tr").map((rowWrapper) => {
+		return rowWrapper.findAll("td").map((cell) => cell.text());
 	});
 };
 
@@ -64,6 +86,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				rowsPerPage: pageSize,
 				currentPage: 2,
 			});
+
 			const paginationText = wrapper
 				.get(".pagination")
 				.text()
@@ -73,7 +96,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			const expectedTotal = total;
 			expect(paginationText).toStrictEqual(
 				expect.stringContaining(
-					`${expectedFrom} bis ${expectedTo} von ${expectedTotal}`
+					`components.organisms.Pagination.perPagecomponents.organisms.Pagination.currentPage {"start":${expectedFrom},"end":${expectedTo},"total":${expectedTotal}}`
 				)
 			);
 		});
@@ -94,8 +117,8 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 	describe("sort", () => {
 		const getSortButton = (wrapper, text = "Vorname") =>
 			wrapper
-				.findAll("button.is-sortable")
-				.wrappers.find((w) => w.text().startsWith(text));
+				.findAll(".v-btn.is-sortable")
+				.find((w) => w.text().startsWith(text));
 
 		const setup = () => {
 			const wrapper = getWrapper({
@@ -114,36 +137,34 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 
 		const getSortIcon = (wrapper, buttonText) => {
 			const sortButton = getSortButton(wrapper, buttonText);
-			const sortIcon = sortButton.find(".material-icons").element.innerHTML;
+			const sortIcon = sortButton.get(".v-icon path").attributes("d");
 			return sortIcon;
 		};
 
 		it("should update ui if sortBy prop changes", async () => {
 			const { sortIcon, wrapper } = setup();
 
-			expect(sortIcon).toEqual("$mdiMenuUpOutline");
+			expect(sortIcon).toEqual(mdiMenuUpOutline);
 
-			wrapper.setProps({
+			await wrapper.setProps({
 				sortBy: "address.city",
 			});
-			await wrapper.vm.$nextTick();
 
 			const updatedSortIcon = getSortIcon(wrapper, "Stadt");
-			expect(updatedSortIcon).toEqual("$mdiMenuUpOutline");
+			expect(updatedSortIcon).toEqual(mdiMenuUpOutline);
 		});
 
 		it("should update ui if sortOrder prop changes", async () => {
 			const { sortIcon, wrapper } = setup();
 
-			expect(sortIcon).toEqual("$mdiMenuUpOutline");
+			expect(sortIcon).toEqual(mdiMenuUpOutline);
 
-			wrapper.setProps({
+			await wrapper.setProps({
 				sortOrder: "desc",
 			});
-			await wrapper.vm.$nextTick();
 
 			const updatedSortIcon = getSortIcon(wrapper, "Vorname");
-			expect(updatedSortIcon).toEqual("$mdiMenuDownOutline");
+			expect(updatedSortIcon).toEqual(mdiMenuDownOutline);
 		});
 
 		it("should emit sort events on click on sortable coloumn", async () => {
@@ -152,14 +173,10 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			});
 			const sortButton = getSortButton(wrapper);
 			const otherSortButton = getSortButton(wrapper, "Stadt");
-			sortButton.trigger("click");
-			await wrapper.vm.$nextTick();
-			sortButton.trigger("click");
-			await wrapper.vm.$nextTick();
-			sortButton.trigger("click");
-			await wrapper.vm.$nextTick();
-			otherSortButton.trigger("click");
-			await wrapper.vm.$nextTick();
+			await sortButton.trigger("click");
+			await sortButton.trigger("click");
+			await sortButton.trigger("click");
+			await otherSortButton.trigger("click");
 			expect(wrapper.emitted()).toMatchObject({
 				"update:sort": [
 					["firstName", "asc"],
@@ -185,25 +202,19 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			_id: String(index), // simplify IDs of test data for easier testing
 		}));
 
-		const getVisibleSelections = async (wrapper) => {
-			await wrapper.vm.$nextTick();
-			const rowWrappers = wrapper.findAll("tbody tr").wrappers;
+		const getVisibleSelections = (wrapper) => {
+			const rowWrappers = wrapper.findAll("tbody tr");
 			return rowWrappers
 				.filter((rowWrapper) => {
 					return rowWrapper.find("input[type=checkbox]").element.checked;
 				})
 				.map((rowWrapper) => {
-					return rowWrapper.findAll("td").wrappers.map((cell) => cell.text());
+					return rowWrapper.findAll("td").map((cell) => cell.text());
 				});
 		};
 
-		const hasVisibleSelections = async (
-			wrapper,
-			data,
-			expectedSelectionIds
-		) => {
-			await wrapper.vm.$nextTick();
-			const visibleSelections = await getVisibleSelections(wrapper);
+		const hasVisibleSelections = (wrapper, data, expectedSelectionIds) => {
+			const visibleSelections = getVisibleSelections(wrapper);
 			return (
 				visibleSelections.length === expectedSelectionIds.length &&
 				expectedSelectionIds.every((expectedId) => {
@@ -225,12 +236,12 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			const checkboxElement = wrapper.find("tbody tr input[type=checkbox]");
 
 			await checkboxElement.trigger("click");
-			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
+			expect(getVisibleSelections(wrapper)).toHaveLength(1);
 
-			const dataRow = wrapper.find('[data-testid="table-data-row"]');
+			const dataRow = wrapper.findComponent('[data-testid="table-data-row"]');
 			await dataRow.vm.$emit("update:selected", true);
 
-			expect(await wrapper.emitted("update:selection")).toStrictEqual([
+			expect(wrapper.emitted("update:selection")).toStrictEqual([
 				[[testData[0]._id], "inclusive"],
 			]);
 			expect(wrapper.emitted("update:selectedRowIds")).toStrictEqual([
@@ -246,12 +257,12 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				rowsSelectable: true,
 			});
 
-			expect(await getVisibleSelections(wrapper)).toHaveLength(1);
-			wrapper.find("tbody tr input[type=checkbox]").trigger("click");
+			expect(getVisibleSelections(wrapper)).toHaveLength(1);
+			await wrapper.find("tbody tr input[type=checkbox]").trigger("click");
 
-			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
+			expect(getVisibleSelections(wrapper)).toHaveLength(0);
 
-			const dataRow = wrapper.find('[data-testid="table-data-row"]');
+			const dataRow = wrapper.findComponent('[data-testid="table-data-row"]');
 			await dataRow.vm.$emit("update:selected", false);
 
 			expect(wrapper.emitted("update:selection")).toStrictEqual([
@@ -274,19 +285,19 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 				rowsSelectable: true,
 				total,
 			});
-			expect(await getVisibleSelections(wrapper)).toHaveLength(0);
-			wrapper.find("thead tr input[type=checkbox]").trigger("click");
+			expect(getVisibleSelections(wrapper)).toHaveLength(0);
+			await wrapper.find("thead tr input[type=checkbox]").trigger("click");
 
-			const rowSelectionBarElement = wrapper.find(
+			const rowSelectionBarElement = wrapper.findComponent(
 				'[data-testid="table-data-head"]'
 			);
 			await rowSelectionBarElement.vm.$emit(
 				"update:current-page-selection-state",
 				"all"
 			);
-			expect(
-				await hasVisibleSelections(wrapper, testData, expectedSelection)
-			).toBe(true);
+			expect(hasVisibleSelections(wrapper, testData, expectedSelection)).toBe(
+				true
+			);
 			expect(wrapper.emitted("update:selection")[0]).toStrictEqual([
 				expectedSelection,
 				"inclusive",
@@ -334,27 +345,28 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 						selectionType: "inclusive",
 						rowsSelectable: true,
 					});
-					const checkboxIcon = wrapper.get("thead tr .material-icons").element
-						.innerHTML;
+					const checkboxIcon = wrapper
+						.get("thead tr .v-icon path")
+						.attributes("d");
 					return { checkboxIcon };
 				};
 
 				it("checked state if all values are selected", async () => {
 					const { checkboxIcon } = setup(testData.length);
 
-					expect(checkboxIcon).toEqual("$mdiCheckboxOutline");
+					expect(checkboxIcon).toEqual(mdiCheckboxOutline);
 				});
 
 				it("unchecked state if no values are selected", async () => {
 					const { checkboxIcon } = setup(0);
 
-					expect(checkboxIcon).toEqual("$mdiCheckboxBlankOutline");
+					expect(checkboxIcon).toEqual(mdiCheckboxBlankOutline);
 				});
 
 				it("intermediate state if some values are selected", async () => {
 					const { checkboxIcon } = setup(Math.round(testData.length / 2));
 
-					expect(checkboxIcon).toEqual("$mdiCheckboxIntermediate");
+					expect(checkboxIcon).toEqual(mdiCheckboxIntermediate);
 				});
 			});
 			describe("on exclusive selection", () => {
@@ -366,27 +378,28 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 						selectionType: "exclusive",
 						rowsSelectable: true,
 					});
-					const checkboxIcon = wrapper.get("thead tr .material-icons").element
-						.innerHTML;
+					const checkboxIcon = wrapper
+						.get("thead tr .v-icon path")
+						.attributes("d");
 					return { checkboxIcon };
 				};
 
 				it("checked state if no values are unselected", async () => {
 					const { checkboxIcon } = setup(0);
 
-					expect(checkboxIcon).toEqual("$mdiCheckboxOutline");
+					expect(checkboxIcon).toEqual(mdiCheckboxOutline);
 				});
 
 				it("unchecked state if all values are unselected", async () => {
 					const { checkboxIcon } = setup(testData.length);
 
-					expect(checkboxIcon).toEqual("$mdiCheckboxBlankOutline");
+					expect(checkboxIcon).toEqual(mdiCheckboxBlankOutline);
 				});
 
 				it("intermediate state if some values are unselected", async () => {
 					const { checkboxIcon } = setup(Math.round(testData.length / 2));
 
-					expect(checkboxIcon).toEqual("$mdiCheckboxIntermediate");
+					expect(checkboxIcon).toEqual(mdiCheckboxIntermediate);
 				});
 			});
 		});
@@ -394,38 +407,33 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 		describe("actions", () => {
 			const findButtonByText = (wrapper, text) =>
 				wrapper
-					.findAll("button")
-					.wrappers.filter((button) => button.text().includes(text))[0];
+					.findAll(".v-btn")
+					.filter((button) => button.text().includes(text))[0];
 
 			const getActionsButton = (wrapper) =>
-				findButtonByText(wrapper, "Aktionen");
+				findButtonByText(wrapper, "pages.administration.actions");
 
 			it("can trigger on selected rows", async () => {
 				const totalSelections = testData.length;
 				const selection = [...Array(totalSelections).keys()].map(String);
 				const testAction = jest.fn();
 				const actionLabel = "TestAction";
-				const wrapper = getWrapper(
-					{
-						rowsSelectable: true,
-						selectedRowIds: selection,
-						selectionType: "inclusive",
-						actions: [
-							{
-								label: actionLabel,
-								action: testAction,
-							},
-						],
-					},
-					createComponentMocks({ i18n: true })
-				);
+				const wrapper = getWrapper({
+					rowsSelectable: true,
+					selectedRowIds: selection,
+					selectionType: "inclusive",
+					actions: [
+						{
+							label: actionLabel,
+							action: testAction,
+						},
+					],
+				});
 
 				const actionsButton = getActionsButton(wrapper);
-				actionsButton.trigger("click");
-				await wrapper.vm.$nextTick();
+				await actionsButton.trigger("click");
 				const actionButton = findButtonByText(wrapper, actionLabel);
-				actionButton.trigger("click");
-				await wrapper.vm.$nextTick();
+				await actionButton.trigger("click");
 
 				expect(testAction).toHaveBeenCalledWith(selection, "inclusive");
 			});
@@ -437,22 +445,21 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 		it("renders scopedSlots with data", async () => {
 			const testSlotContent = `some random slot content`;
 
-			const wrapper = mount(BackendDataTable, {
-				...createComponentMocks({ i18n: true }),
-				propsData: {
+			const wrapper = getWrapper(
+				{
 					data: smallData,
 					trackBy: "_id",
 					columns: tableColumns,
 				},
-				scopedSlots: {
-					"datacolumn-firstName": `<p> {{props.data}} ${testSlotContent}</p>`,
-				},
-			});
+				{
+					slots: {
+						"datacolumn-firstName": `<template #datacolumn-firstName="slotProps">{{slotProps.data}} ${testSlotContent}</template>`,
+					},
+				}
+			);
 
-			// check that basic slot content gets rendered
 			expect(wrapper.html()).toContain(testSlotContent);
 
-			// check that content from props.data got rendered
 			const renderedData = await getTableRowsContent(wrapper);
 			renderedData.forEach((row, index) => {
 				expect(row[0]).toContain(smallData[index]["firstName"]);
@@ -462,21 +469,21 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 		it("renders scopedSlots with data for nested keys", async () => {
 			const testSlotContent = `some random slot content`;
 
-			const wrapper = mount(BackendDataTable, {
-				...createComponentMocks({ i18n: true }),
-				propsData: {
+			const wrapper = getWrapper(
+				{
 					data: smallData,
 					trackBy: "_id",
 					columns: tableColumns,
 				},
-				scopedSlots: {
-					"datacolumn-address-city": `<p> {{props.data}} ${testSlotContent}</p>`,
-				},
-			});
-			// check that basic slot content gets rendered
+				{
+					slots: {
+						"datacolumn-address-city": `<template #datacolumn-address-city="slotProps">{{slotProps.data}} ${testSlotContent}</template>`,
+					},
+				}
+			);
+
 			expect(wrapper.html()).toContain(testSlotContent);
 
-			// check that content from props.data got rendered
 			const renderedData = await getTableRowsContent(wrapper);
 			renderedData.forEach((row, index) => {
 				expect(row[2]).toContain(smallData[index].address.city);

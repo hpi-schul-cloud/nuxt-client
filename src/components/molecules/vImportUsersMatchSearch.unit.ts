@@ -1,11 +1,19 @@
-import { mount, MountOptions } from "@vue/test-utils";
-import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
-import { mdiFlag, mdiFlagOutline } from "@mdi/js";
 import { importUsersModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
 import ImportUsersModule from "@/store/import-users";
-import Vue from "vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mdiFlag, mdiFlagOutline } from "@mdi/js";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import {
+	VAutocomplete,
+	VBtn,
+	VListItem,
+} from "vuetify/lib/components/index.mjs";
+import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 
 const testProps = {
 	editedItem: {
@@ -21,43 +29,36 @@ const testProps = {
 	ldapSource: "LDAP",
 };
 
-const getWrapper: any = (props: object, options?: object) => {
-	return mount(vImportUsersMatchSearch as MountOptions<Vue>, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		propsData: props,
-		mocks: {
-			$theme: {
-				name: "nbc",
+const getWrapper = (props: object, options?: object) => {
+	return mount(vImportUsersMatchSearch, {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			mocks: {
+				$theme: {
+					name: "nbc",
+				},
 			},
 		},
+		props,
+
 		...options,
 	});
 };
 
 describe("@/components/molecules/vImportUsersMatchSearch", () => {
 	beforeEach(() => {
-		document.body.setAttribute("data-app", "true");
 		setupStores({ importUsersModule: ImportUsersModule });
-	});
-
-	it("should have correct props", () => {
-		const wrapper = getWrapper(testProps);
-
-		expect(wrapper.vm.editedItem).toStrictEqual(testProps.editedItem);
-		expect(wrapper.vm.isDialog).toStrictEqual(testProps.isDialog);
 	});
 
 	it("should display 'editedItem' property in HTML section", async () => {
 		const wrapper = getWrapper(testProps);
-		const editedItemElement = wrapper.find("[data-testid=edited-item]");
+		const editedItemElement = wrapper.find("[data-testid=edited-item]").html();
 
-		expect(editedItemElement.element.textContent).toContain("Max");
-		expect(editedItemElement.element.textContent).toContain("Mustermann");
-		expect(editedItemElement.element.textContent).toContain("Schüler:in");
-		expect(editedItemElement.element.textContent).toContain("max_mus");
-		expect(editedItemElement.element.textContent).toContain("6a");
+		expect(editedItemElement).toContain("Max");
+		expect(editedItemElement).toContain("Mustermann");
+		expect(editedItemElement).toContain("common.roleName.student");
+		expect(editedItemElement).toContain("max_mus");
+		expect(editedItemElement).toContain("6a");
 	});
 
 	it("should set 'flagged' property true when flag-button clicked", async () => {
@@ -75,8 +76,8 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		await flagButtonElement.trigger("click");
 
 		expect(saveFlagMock).toHaveBeenCalled();
-		await wrapper.vm.$nextTick();
-		await wrapper.vm.$nextTick();
+		await nextTick();
+		await nextTick();
 
 		expect(flagButtonElement.element.innerHTML).toContain(mdiFlag);
 		expect(wrapper.vm.flagged).toBe(true);
@@ -92,11 +93,15 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 			text: "Cord Carl",
 		};
 		const wrapper = getWrapper(testProps);
-		const autoCompleteElement = wrapper.find(".v-autocomplete");
-		await autoCompleteElement.vm.$emit("input", payload);
-		await wrapper.vm.$nextTick();
+		const autoCompleteElement = wrapper.findComponent(VAutocomplete);
+		await autoCompleteElement.vm.$emit("update:modelValue", payload);
 
-		expect(wrapper.vm.selectedItem).toStrictEqual(payload);
+		const editedItemElement = wrapper.findAllComponents(VListItem)[1].html();
+
+		expect(editedItemElement).toContain(payload.firstName);
+		expect(editedItemElement).toContain(payload.lastName);
+		expect(editedItemElement).toContain("common.roleName.teacher");
+
 		expect(wrapper.vm.canSave).toStrictEqual(true);
 	});
 
@@ -117,19 +122,20 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 
 		const wrapper = getWrapper(testProps);
 
-		const autoCompleteElement = wrapper.find(".v-autocomplete");
-		await autoCompleteElement.vm.$emit("input", match);
-		await wrapper.vm.$nextTick();
+		const autoCompleteElement = wrapper.findComponent(VAutocomplete);
+		await autoCompleteElement.vm.$emit("update:modelValue", match);
+		await nextTick();
 
 		const saveMatchButton = wrapper.find("[data-testid=save-match-btn]");
 		await saveMatchButton.trigger("click");
+		await nextTick();
 
 		expect(saveMatchMock).toHaveBeenCalledTimes(1);
 		expect(saveMatchMock).toHaveBeenCalledWith({
 			importUserId: testProps.editedItem.importUserId,
 			userId: match.userId,
 		});
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.emitted()["saved-match"]).toBeTruthy();
 	});
 
@@ -162,7 +168,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		});
 		const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
 		await deleteMatchButton.trigger("click");
-		await wrapper.vm.$nextTick();
+		await nextTick();
 
 		expect(deleteMatchMock).toHaveBeenCalledTimes(1);
 		expect(deleteMatchMock).toHaveBeenCalledWith(
@@ -173,16 +179,25 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 
 	it("should disable delete button when edited item has no match", () => {
 		const wrapper = getWrapper(testProps);
-		const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
+		const deleteMatchButton = wrapper
+			.findAllComponents(VBtn)
+			.filter(
+				(btn: any) => btn.attributes("data-testid") === "delete-match-btn"
+			)[0];
 
-		expect(deleteMatchButton.vm.disabled).toBe(true);
+		expect(deleteMatchButton.props("disabled")).toBe(true);
 	});
 
 	it("should disable save button when no no item was selected", () => {
 		const wrapper = getWrapper(testProps);
-		const saveMatchButton = wrapper.find("[data-testid=save-match-btn]");
 
-		expect(saveMatchButton.vm.disabled).toBe(true);
+		const saveMatchButton = wrapper
+			.findAllComponents(VBtn)
+			.filter(
+				(btn: any) => btn.attributes("data-testid") === "save-match-btn"
+			)[0];
+
+		expect(saveMatchButton.props("disabled")).toBe(true);
 	});
 
 	it("should not display username when prop nbc is set", () => {

@@ -1,23 +1,24 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import InlineEditInteractionHandler from "./InlineEditInteractionHandler.vue";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("InlineEditInteractionHandler", () => {
-	let wrapper: Wrapper<Vue>;
-
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		wrapper = shallowMount(InlineEditInteractionHandler as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		const wrapper = shallowMount(InlineEditInteractionHandler, {
+			global: {
+				plugins: [createTestingVuetify()],
+			},
 			propsData: { isEditMode: false },
 		});
+
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in the dom", () => {
-			setup();
+			const { wrapper } = setup();
 			expect(wrapper.findComponent(InlineEditInteractionHandler).exists()).toBe(
 				true
 			);
@@ -27,7 +28,7 @@ describe("InlineEditInteractionHandler", () => {
 	describe("when clicked outside", () => {
 		it("should emit 'end-edit-mode'", async () => {
 			const event = document.createEvent("MouseEvent");
-			setup();
+			const { wrapper } = setup();
 			wrapper.setProps({ isEditMode: true });
 			await wrapper.vm.$nextTick();
 
@@ -41,8 +42,8 @@ describe("InlineEditInteractionHandler", () => {
 
 	describe("when double clicked", () => {
 		it("should emit 'start-edit-mode'", () => {
-			setup();
-			const divElement = wrapper.findComponent({ ref: "event-handle" });
+			const { wrapper } = setup();
+			const divElement = wrapper.find('[data-testid="event-handle"]');
 			divElement.trigger("dblclick");
 
 			const emitted = wrapper.emitted();
@@ -52,11 +53,11 @@ describe("InlineEditInteractionHandler", () => {
 
 	describe("when 'esc' keystoke", () => {
 		it("should emit 'end-edit-mode'", async () => {
-			setup();
+			const { wrapper } = setup();
 			wrapper.setProps({ isEditMode: true });
 			await wrapper.vm.$nextTick();
 
-			const divElement = wrapper.findComponent({ ref: "event-handle" });
+			const divElement = wrapper.find('[data-testid="event-handle"]');
 			divElement.trigger("keydown.escape");
 
 			const emitted = wrapper.emitted();

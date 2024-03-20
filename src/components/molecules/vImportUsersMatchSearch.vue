@@ -1,109 +1,108 @@
 <template>
 	<div>
-		<v-card :ripple="false" min-height="550px">
-			<v-toolbar dark color="primary">
-				<v-toolbar-title>
+		<VCard :ripple="false">
+			<VToolbar dark color="primary">
+				<VToolbarTitle>
 					{{
 						$t("components.molecules.importUsersMatch.title", {
 							instance: $theme.name,
 							source: ldapSource,
 						})
 					}}
-				</v-toolbar-title>
-				<v-spacer />
-				<v-toolbar-items>
-					<v-btn v-if="isDialog" icon dark @click="closeEdit">
-						<v-icon>{{ mdiClose }}</v-icon>
-					</v-btn>
-				</v-toolbar-items>
-			</v-toolbar>
+				</VToolbarTitle>
+				<VToolbarItems>
+					<VBtn
+						v-if="isDialog"
+						:aria-label="$t('common.labels.close')"
+						:icon="mdiClose"
+						@click="closeEdit"
+					/>
+				</VToolbarItems>
+			</VToolbar>
 
-			<v-card-text v-if="!$props.isNbc" class="mt-5">
+			<VCardText class="mt-5">
 				{{
-					$t("components.molecules.importUsersMatch.subtitle", {
-						instance: $theme.name,
-						source: ldapSource,
-					})
+					$t(
+						isNbc
+							? "components.molecules.importUsersMatch.subtitle.nbc"
+							: "components.molecules.importUsersMatch.subtitle",
+						{
+							instance: $theme.name,
+							source: ldapSource,
+						}
+					)
 				}}
-			</v-card-text>
-			<v-card-text v-else class="mt-5">
-				{{
-					$t("components.molecules.importUsersMatch.subtitle.nbc", {
-						instance: $theme.name,
-						source: ldapSource,
-					})
-				}}
-			</v-card-text>
-			<v-card-text class="px-5">
-				<v-row>
-					<v-col class="md-6">
-						<v-card-title>{{ ldapSource }}</v-card-title>
-						<v-list-item>
-							<v-list-item-content data-testid="edited-item">
-								<v-list-item-title data-testid="edited-item-fullname"
-									>{{ `${editedItem.firstName} ${editedItem.lastName}` }}
-								</v-list-item-title>
-								<v-list-item-subtitle>
+			</VCardText>
+			<VCardText class="px-5">
+				<VRow>
+					<VCol class="md-6">
+						<VCardTitle>{{ ldapSource }}</VCardTitle>
+						<VListItem>
+							<div data-testid="edited-item">
+								<VListItemTitle data-testid="edited-item-fullname">
+									{{ `${editedItem.firstName} ${editedItem.lastName}` }}
+								</VListItemTitle>
+								<VListItemSubtitle>
 									{{ mapRoleNames(editedItem.roleNames) }}
-								</v-list-item-subtitle>
-								<v-list-item-subtitle
-									>{{
-										`${$t("components.organisms.importUsers.tableClasses")}: ${
-											editedItem.classNames
-												? editedItem.classNames.join(", ")
-												: ""
-										}`
+								</VListItemSubtitle>
+								<VListItemSubtitle
+									v-if="editedItem.classNames && editedItem.classNames.length"
+								>
+									{{
+										`${$t(
+											"components.organisms.importUsers.tableClasses"
+										)}: ${editedItem.classNames.join(", ")}`
 									}}
-								</v-list-item-subtitle>
-								<v-list-item-subtitle
-									v-if="!$props.isNbc"
+								</VListItemSubtitle>
+								<VListItemSubtitle
+									v-if="!isNbc"
 									data-testid="edited-item-username"
 									>{{
 										`${$t("components.organisms.importUsers.tableUserName")}: ${
 											editedItem.loginName
 										}`
 									}}
-								</v-list-item-subtitle>
-							</v-list-item-content>
-						</v-list-item>
-					</v-col>
-					<v-col class="md-6">
-						<v-card-title>{{ $theme.name }}</v-card-title>
-						<v-list-item>
-							<v-list-item-content v-if="selectedItem">
-								<v-list-item-title>
+								</VListItemSubtitle>
+							</div>
+						</VListItem>
+					</VCol>
+					<VCol class="md-6">
+						<VCardTitle>{{ $theme.name }}</VCardTitle>
+						<VListItem>
+							<div v-if="selectedItem">
+								<VListItemTitle>
 									{{ `${selectedItem.firstName} ${selectedItem.lastName}` }}
-								</v-list-item-title>
-								<v-list-item-subtitle>
+								</VListItemTitle>
+								<VListItemSubtitle>
 									{{ mapRoleNames(selectedItem.roleNames) }}
-								</v-list-item-subtitle>
-								<v-list-item-subtitle>
+								</VListItemSubtitle>
+								<VListItemSubtitle v-if="!isNbc">
 									{{
 										`${$t("components.organisms.importUsers.tableUserName")}: ${
 											selectedItem.loginName
 										}`
 									}}
-								</v-list-item-subtitle>
-							</v-list-item-content>
-							<v-list-item-content v-else-if="editedItem.match">
-								<v-list-item-title>
+								</VListItemSubtitle>
+							</div>
+							<div v-else-if="editedItem.match">
+								<VListItemTitle>
 									{{
 										`${editedItem.match.firstName} ${editedItem.match.lastName}`
 									}}
-								</v-list-item-title>
-								<v-list-item-subtitle>
+								</VListItemTitle>
+								<VListItemSubtitle>
 									{{ mapRoleNames(editedItem.match.roleNames) }}
-								</v-list-item-subtitle>
-								<v-list-item-subtitle>
+								</VListItemSubtitle>
+								<VListItemSubtitle v-if="!isNbc">
 									{{
 										`${$t("components.organisms.importUsers.tableUserName")}: ${
 											editedItem.match.loginName
 										}`
 									}}
-								</v-list-item-subtitle>
-							</v-list-item-content>
-							<v-list-item-content v-else>
-								<template v-if="!$props.isNbc">
+								</VListItemSubtitle>
+							</div>
+							<div v-else>
+								<template v-if="!isNbc">
 									{{ $t("components.molecules.importUsersMatch.unMatched") }}
 								</template>
 								<template v-else>
@@ -111,15 +110,16 @@
 										$t("components.molecules.importUsersMatch.unMatched.nbc")
 									}}
 								</template>
-							</v-list-item-content>
-						</v-list-item>
-						<v-autocomplete
+							</div>
+						</VListItem>
+						<VAutocomplete
 							v-model="selectedItem"
-							class="px-4"
+							class="px-4 mt-2"
 							item-value="userId"
+							item-title="text"
 							:items="items"
 							:loading="loading"
-							:search-input.sync="searchUser"
+							v-model:search="searchUser"
 							hide-no-data
 							hide-selected
 							:prepend-inner-icon="mdiAccountSearch"
@@ -132,49 +132,34 @@
 								$t('components.molecules.importUsersMatch.notFound')
 							"
 							no-filter
-							solo
+							variant="solo"
 							rounded
-							small-chips
 						>
-							<template #selection="{ attr, on, item, selected }">
-								<v-chip
-									v-bind="attr"
-									:input-value="selected"
-									color="blue-grey"
-									class="white--text"
-									v-on="on"
-								>
-									<span>{{ `${item.firstName} ${item.lastName}` }}</span>
-								</v-chip>
-							</template>
-							<template #item="{ item }">
-								<v-list-item-content max-width="450px">
-									<v-list-item-title>
-										{{ item.firstName }} {{ item.lastName }}
-									</v-list-item-title>
-									<v-list-item-subtitle>
-										{{ mapRoleNames(item.roleNames) }}
-									</v-list-item-subtitle>
-									<v-list-item-subtitle>
+							<template #item="{ item, props }">
+								<VListItem style="max-width: 450px" v-bind="props">
+									<VListItemSubtitle>
+										{{ mapRoleNames(item.raw.roleNames) }}
+									</VListItemSubtitle>
+									<VListItemSubtitle v-if="!isNbc">
 										{{
 											`${$t(
 												"components.organisms.importUsers.tableUserName"
-											)}: ${item.loginName}`
+											)}: ${item.raw.loginName}`
 										}}
-									</v-list-item-subtitle>
-								</v-list-item-content>
+									</VListItemSubtitle>
+								</VListItem>
 							</template>
 							<template #append-item>
 								<div v-intersect="endIntersect" class="pa-2" />
 							</template>
-						</v-autocomplete>
-					</v-col>
-				</v-row>
-			</v-card-text>
-			<v-card-actions class="px-4">
-				<v-col class="col-6 pa-0"
+						</VAutocomplete>
+					</VCol>
+				</VRow>
+			</VCardText>
+			<VCardActions class="px-4">
+				<VCol class="col-6 pa-0"
 					>{{ $t("components.molecules.importUsersMatch.flag") }}
-					<v-btn
+					<VBtn
 						v-model="flagged"
 						icon
 						:color="flagged ? 'primary' : ''"
@@ -182,37 +167,37 @@
 						data-testid="flag-button"
 						@click="saveFlag"
 					>
-						<v-icon color="primary"
-							>{{ flagged ? mdiFlag : mdiFlagOutline }}
-						</v-icon>
-					</v-btn>
-				</v-col>
-				<v-col class="col-6 text-right pa-0">
-					<v-btn
-						text
+						<VIcon color="primary">
+							{{ flagged ? mdiFlag : mdiFlagOutline }}
+						</VIcon>
+					</VBtn>
+				</VCol>
+				<VCol class="col-6 text-right pa-0">
+					<VBtn
+						variant="text"
 						:class="canSave ? 'primary' : ''"
 						class="m-2"
 						:disabled="!canSave"
 						data-testid="save-match-btn"
 						@click="saveMatch"
 					>
-						<v-icon small>{{ mdiContentSave }}</v-icon>
+						<VIcon size="small">{{ mdiContentSave }}</VIcon>
 						{{ $t("components.molecules.importUsersMatch.saveMatch") }}
-					</v-btn>
-					<v-btn
-						text
+					</VBtn>
+					<VBtn
+						variant="text"
 						:class="canDelete ? 'secondary' : ''"
 						class="m-2"
 						:disabled="!canDelete"
 						data-testid="delete-match-btn"
 						@click="deleteMatch"
 					>
-						<v-icon small>{{ mdiDelete }}</v-icon>
+						<VIcon size="small">{{ mdiDelete }}</VIcon>
 						{{ $t("components.molecules.importUsersMatch.deleteMatch") }}
-					</v-btn>
-				</v-col>
-			</v-card-actions>
-		</v-card>
+					</VBtn>
+				</VCol>
+			</VCardActions>
+		</VCard>
 	</div>
 </template>
 <script>

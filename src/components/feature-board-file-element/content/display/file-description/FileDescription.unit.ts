@@ -1,5 +1,9 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { mdiFileDocumentOutline } from "@mdi/js";
+import { ContentElementBar } from "@ui-board";
 import { mount, shallowMount } from "@vue/test-utils";
 import FileDescription from "./FileDescription.vue";
 
@@ -23,8 +27,8 @@ describe("FileDescription", () => {
 			src: props.src,
 		};
 		const wrapper = shallowMount(FileDescription, {
-			propsData,
-			...createComponentMocks({}),
+			props: propsData,
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
@@ -47,15 +51,15 @@ describe("FileDescription", () => {
 
 		const propsData = {
 			name: props.name ?? "testName",
-			caption: props.caption ?? "testCaption",
+			caption: props.caption,
 			isEditMode: props.isEditMode,
 			showTitle: props.showTitle,
 			showMenu: props.showMenu,
 			src: props.src,
 		};
 		const wrapper = mount(FileDescription, {
-			propsData,
-			...createComponentMocks({}),
+			props: propsData,
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
@@ -75,16 +79,18 @@ describe("FileDescription", () => {
 					showMenu: true,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.exists()).toBe(true);
 			});
 
 			it("should not render caption", () => {
-				const { wrapper, caption } = mountSetup({
+				const caption = "testCaption";
+				const { wrapper } = mountSetup({
 					isEditMode: true,
 					showTitle: true,
 					showMenu: true,
+					caption,
 				});
 
 				const text = wrapper.text();
@@ -99,7 +105,7 @@ describe("FileDescription", () => {
 					showMenu: true,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.props("hasGreyBackground")).toBe(false);
 			});
@@ -111,7 +117,7 @@ describe("FileDescription", () => {
 					showMenu: true,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.props("icon")).toBe(mdiFileDocumentOutline);
 			});
@@ -148,28 +154,16 @@ describe("FileDescription", () => {
 		});
 
 		describe("when showTitle is false", () => {
-			it("should not render content element bar", () => {
+			it("should render content element bar", () => {
 				const { wrapper } = shallowMountSetup({
 					isEditMode: true,
 					showTitle: false,
 					showMenu: false,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
-				expect(contentElementBar.exists()).toBe(false);
-			});
-
-			it("should not render caption", () => {
-				const { wrapper, caption } = mountSetup({
-					isEditMode: true,
-					showTitle: false,
-					showMenu: false,
-				});
-
-				const text = wrapper.text();
-
-				expect(text).not.toContain(caption);
+				expect(contentElementBar.exists()).toBe(true);
 			});
 		});
 	});
@@ -183,16 +177,18 @@ describe("FileDescription", () => {
 					showMenu: true,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.exists()).toBe(true);
 			});
 
 			it("should render caption", () => {
-				const { wrapper, caption } = mountSetup({
+				const caption = "testCaption";
+				const { wrapper } = mountSetup({
 					isEditMode: false,
 					showTitle: true,
 					showMenu: true,
+					caption,
 				});
 
 				const text = wrapper.text();
@@ -207,7 +203,7 @@ describe("FileDescription", () => {
 					showMenu: true,
 				});
 
-				const contentElementBar = wrapper.find("contentelementbar-stub");
+				const contentElementBar = wrapper.findComponent(ContentElementBar);
 
 				expect(contentElementBar.props("hasGreyBackground")).toBe(true);
 			});
@@ -245,7 +241,7 @@ describe("FileDescription", () => {
 
 		describe("when showTitle is false", () => {
 			it("should not render title", () => {
-				const { wrapper, name } = shallowMountSetup({
+				const { wrapper, name } = mountSetup({
 					isEditMode: false,
 					showTitle: false,
 					showMenu: false,
@@ -259,7 +255,7 @@ describe("FileDescription", () => {
 			describe("when caption is defined", () => {
 				it("should render caption", () => {
 					const caption = "testCaption";
-					const { wrapper } = shallowMountSetup({
+					const { wrapper } = mountSetup({
 						isEditMode: false,
 						showTitle: false,
 						showMenu: false,
@@ -274,13 +270,13 @@ describe("FileDescription", () => {
 
 			describe("when caption is undefined", () => {
 				it("should not render caption div", () => {
-					const { wrapper } = shallowMountSetup({
+					const { wrapper } = mountSetup({
 						isEditMode: false,
 						showTitle: false,
 						showMenu: false,
 					});
 
-					const captionDiv = wrapper.find(".pa-4.grey.lighten-4");
+					const captionDiv = wrapper.find(".px-4");
 
 					expect(captionDiv.exists()).toBeFalsy();
 				});

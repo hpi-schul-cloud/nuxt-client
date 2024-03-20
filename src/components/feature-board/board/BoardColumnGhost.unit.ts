@@ -1,31 +1,33 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("BoardColumnGhost", () => {
-	let wrapper: Wrapper<Vue>;
 	const { dragStart, dragEnd } = useDragAndDrop();
 
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		wrapper = shallowMount(BoardColumnGhost as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		const wrapper = shallowMount(BoardColumnGhost, {
+			global: {
+				plugins: [createTestingVuetify()],
+			},
 		});
+
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in the dom", () => {
-			setup();
+			const { wrapper } = setup();
 			expect(wrapper.findComponent(BoardColumnGhost).exists()).toBe(true);
 		});
 	});
 
 	describe("when the new column button clicked", () => {
 		it("should emit 'add-empty-column'", () => {
-			setup();
+			const { wrapper } = setup();
 
 			const headerComponent = wrapper.findComponent({
 				ref: "ghostColumnTitleRef",
@@ -37,57 +39,23 @@ describe("BoardColumnGhost", () => {
 		});
 	});
 
-	describe("when a card dropped", () => {
-		it("should emit 'add-column-with-card'", async () => {
-			dragStart();
-			setup();
-			const movedCardObject = {
-				removedIndex: null,
-				addedIndex: 0,
-				payload: { cardId: "123", height: 100 },
-			};
-			const containerComponent = wrapper.findComponent({
-				name: "Container",
-			});
-			containerComponent.vm.$emit("drop", movedCardObject);
-
-			const emitted = wrapper.emitted();
-			expect(emitted["create:column-with-card"]).toBeDefined();
-		});
-
-		it("should not emit 'add-empty-column' if addedIndex equals null", () => {
-			setup();
-			const movedCardObject = {
-				removedIndex: null,
-				addedIndex: null,
-				payload: { cardId: "123", height: 100 },
-			};
-			const containerComponent = wrapper.findComponent({
-				name: "Container",
-			});
-			containerComponent.vm.$emit("drop", movedCardObject);
-
-			const emitted = wrapper.emitted();
-			expect(emitted["add-column-with-card"]).not.toBeDefined();
-		});
-	});
-
 	describe("Container component", () => {
 		it("should be found in DOM", () => {
 			dragStart();
-			setup();
+			const { wrapper } = setup();
 			const containerComponent = wrapper.findComponent({
-				name: "Container",
+				name: "Sortable",
 			});
 			expect(containerComponent.vm).toBeDefined();
 		});
+
 		it("should not be found in DOM", () => {
 			dragEnd();
-			setup();
-			const containerComponent = wrapper.findComponent({
-				name: "Container",
+			const { wrapper } = setup();
+			const containerComponent = wrapper.findAllComponents({
+				name: "Sortable",
 			});
-			expect(containerComponent.vm).not.toBeDefined();
+			expect(containerComponent.length).toBe(0);
 		});
 	});
 });

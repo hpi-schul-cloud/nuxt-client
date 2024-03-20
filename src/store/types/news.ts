@@ -1,3 +1,5 @@
+import { UpdateNewsParams } from "@/serverApi/v3";
+
 export type UserInfo = {
 	/**
 	 * The id of the User entity
@@ -36,18 +38,10 @@ export type News = {
 	creator: UserInfo;
 	displayAt: string;
 	school: SchoolInfo;
-	// source: string;
 	title: string;
 	updater?: UserInfo;
+	targetId: string;
+	targetModel: string;
 };
 
-export type CreateNewsPayload = {
-	title: string;
-	content: string;
-	displayAt?: string | undefined;
-	schoolId: string;
-	targetId: any;
-	targetModel: any;
-};
-
-export type PatchNewsPayload = CreateNewsPayload & { id: string };
+export type PatchNewsPayload = UpdateNewsParams & { id: string };

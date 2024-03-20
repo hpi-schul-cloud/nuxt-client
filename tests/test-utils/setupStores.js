@@ -1,8 +1,8 @@
 import { initializeStores } from "@/store";
-import Vuex from "vuex";
+import { createStore } from "vuex";
 
 export default function setupStores(modules) {
-	const store = new Vuex.Store({
+	const store = createStore({
 		modules,
 	});
 

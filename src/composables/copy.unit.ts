@@ -2,11 +2,12 @@ import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import CopyModule, { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { ref, watch } from "vue";
 import { useCopy } from "./copy";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 jest.mock("./loadingState");
 
@@ -21,15 +22,17 @@ describe("copy composable", () => {
 		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		const copyModuleMock = createModuleMocks(CopyModule);
 
-		const i18n = { t: jest.fn().mockReturnValue("placeholder") };
-
 		const isLoadingDialogOpen = ref(false);
 
 		const { copy } = mountComposable(() => useCopy(isLoadingDialogOpen), {
-			copyModule: copyModuleMock,
-			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-			loadingStateModule: loadingStateModuleMock,
-			[I18N_KEY.valueOf()]: i18n,
+			global: {
+				plugins: [createTestingI18n()],
+				provide: {
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+					loadingStateModule: loadingStateModuleMock,
+				},
+			},
 		});
 
 		return {

@@ -1,139 +1,101 @@
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { createMock } from "@golevelup/ts-jest";
-import { mount, MountOptions } from "@vue/test-utils";
-import Vue, { nextTick } from "vue";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
-
-const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<Envs>({
-		FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-		FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-		FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-	}),
-});
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { Envs } from "@/store/types/env-config";
 
 const VALID_URL = "https://www.abc.de/my-article";
 const INVALID_URL = "my-article";
 
-describe("LinkContentElementCreate", () => {
+describe(LinkContentElementCreate.name, () => {
+	beforeEach(() => {
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
+	});
+
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
 	const setup = () => {
-		const wrapper = mount(LinkContentElementCreate as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
-			},
+		envConfigModule.setEnvs({
+			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+		} as Envs);
+
+		const wrapper = mount(LinkContentElementCreate, {
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
-
-		const insertUrl = (url: string) => {
-			const textAreaComponent = wrapper.findComponent({ name: "v-textarea" });
-			textAreaComponent.vm.$emit("input", url);
-		};
-
-		const submitByClick = async () => {
-			const button = wrapper.find("button");
-			await button.trigger("click");
-			await nextTick();
-		};
-
-		const submitByEnter = async () => {
-			const textAreaComponent = wrapper.findComponent({ name: "v-textarea" });
-			textAreaComponent.vm.$emit(
-				"keydown",
-				new KeyboardEvent("keydown", {
-					key: "Enter",
-					keyCode: 13,
-				})
-			);
-			await nextTick();
-		};
-
-		const hasEmitted = (eventName: string): string | false => {
-			const emitted = wrapper.emitted(eventName);
-			return emitted ? emitted[0][0] : false;
-		};
-
-		const areRulesActive = () => {
-			const rulesProperty = wrapper
-				.findComponent({ name: "v-textarea" })
-				.props("rules");
-			return typeof rulesProperty === "function";
-		};
 
 		return {
 			wrapper,
-			insertUrl,
-			submitByClick,
-			submitByEnter,
-			hasEmitted,
-			areRulesActive,
 		};
 	};
 
 	describe("when valid url was entered", () => {
 		describe("when enter is pressed", () => {
 			it("should not show error-message", async () => {
-				const { wrapper, insertUrl, submitByClick } = setup();
+				const { wrapper } = setup();
 
-				insertUrl(VALID_URL);
-				await submitByClick();
+				await wrapper.findComponent({ name: "v-textarea" }).setValue(VALID_URL);
+				await wrapper.find("form").trigger("submit.prevent");
 
 				const alerts = wrapper.find('[role="alert"]');
 
-				expect(alerts.exists()).toBe(false);
+				expect(alerts.text()).toBe("");
 			});
 
 			it("should emit create:url event", async () => {
-				const { insertUrl, submitByEnter, hasEmitted } = setup();
+				const { wrapper } = setup();
 
-				insertUrl(VALID_URL);
-				await submitByEnter();
+				await wrapper.findComponent({ name: "v-textarea" }).setValue(VALID_URL);
+				await wrapper
+					.findComponent({ name: "v-textarea" })
+					.trigger("keydown.enter");
+				await nextTick();
 
-				expect(hasEmitted("create:url")).toEqual(VALID_URL);
+				expect(wrapper.emitted("create:url")).toEqual([[VALID_URL]]);
 			});
 		});
 	});
 
 	describe("when invalid url was entered", () => {
 		it("should not be validated during input", async () => {
-			const { wrapper, insertUrl } = setup();
+			const { wrapper } = setup();
 
-			insertUrl(INVALID_URL);
+			await wrapper.findComponent({ name: "v-textarea" }).setValue(INVALID_URL);
 			await nextTick();
 
 			const alerts = wrapper.find('[role="alert"]');
 
-			expect(alerts.exists()).toBe(false);
+			expect(alerts.text()).toBe("");
 		});
 
 		describe("when enter is pressed", () => {
 			it("should show invalid-url-error", async () => {
-				const { wrapper, insertUrl, submitByEnter } = setup();
+				const { wrapper } = setup();
 
-				insertUrl(INVALID_URL);
-				await submitByEnter();
+				const textarea = await wrapper.findComponent({ name: "v-textarea" });
+				await textarea.setValue(INVALID_URL);
+				await textarea.trigger("keydown.enter");
 
 				const alerts = wrapper.find('[role="alert"]').text();
 
-				expect(alerts).toEqual(
-					expect.stringContaining("util-validators-invalid-url")
-				);
+				expect(alerts).toEqual("util-validators-invalid-url");
 			});
 
 			it("should not emit create:url event", async () => {
-				const { wrapper, insertUrl, submitByEnter } = setup();
+				const { wrapper } = setup();
 
-				insertUrl(INVALID_URL);
-				await submitByEnter();
+				const textarea = await wrapper.findComponent({ name: "v-textarea" });
+				await textarea.setValue(INVALID_URL);
+				await textarea.trigger("keydown.enter");
 
 				const emitted = wrapper.emitted("create:url");
 				expect(emitted).toBeUndefined();
@@ -144,23 +106,22 @@ describe("LinkContentElementCreate", () => {
 	describe("when url field is empty", () => {
 		describe("when submit button is clicked", () => {
 			it("should show required-error-message", async () => {
-				const { wrapper, submitByEnter } = setup();
+				const { wrapper } = setup();
 
-				await submitByEnter();
+				await wrapper.find("form").trigger("submit.prevent");
 
 				const alerts = wrapper.find('[role="alert"]').text();
-				expect(alerts).toEqual(
-					expect.stringContaining("common.validation.required2")
-				);
+
+				expect(alerts).toEqual("common.validation.required2");
 			});
 
 			it("should not emit create:url event", async () => {
-				const { wrapper, submitByClick } = setup();
+				const { wrapper } = setup();
 
-				await submitByClick();
+				await wrapper.findComponent({ name: "v-textarea" }).setValue(VALID_URL);
+				await wrapper.find("form").trigger("submit.prevent");
 
-				const emitted = wrapper.emitted("create:url");
-				expect(emitted).toBeUndefined();
+				expect(wrapper.emitted("create:url")).toBeUndefined();
 			});
 		});
 	});

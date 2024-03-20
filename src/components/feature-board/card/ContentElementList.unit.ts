@@ -2,10 +2,8 @@ import { ContentElementType } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import { Envs } from "@/store/types/env-config";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { DrawingContentElement } from "@feature-board-drawing-element";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
@@ -13,17 +11,18 @@ import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { createMock } from "@golevelup/ts-jest";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import ContentElementList from "./ContentElementList.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("ContentElementList", () => {
-	let wrapper: Wrapper<Vue>;
-
 	const setup = (props: {
 		elements: AnyContentElement[];
 		isEditMode: boolean;
-		cardId: string;
+		isDetailView: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
@@ -36,22 +35,25 @@ describe("ContentElementList", () => {
 			}),
 		});
 
-		wrapper = shallowMount(ContentElementList as MountOptions<Vue>, {
-			...createComponentMocks({}),
-			propsData: { ...props },
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
+		const wrapper = shallowMount(ContentElementList, {
+			global: {
+				plugins: [createTestingI18n(), createTestingVuetify()],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
+				},
 			},
+			props: { ...props },
 		});
+
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({
+			const { wrapper } = setup({
 				elements: [],
 				isEditMode: false,
-				cardId: "cardId",
+				isDetailView: false,
 			});
 			expect(wrapper.findComponent(ContentElementList).exists()).toBe(true);
 		});
@@ -86,10 +88,10 @@ describe("ContentElementList", () => {
 		it.each(elementComponents)(
 			"should render $elementType-elements",
 			({ elementType, component }) => {
-				setup({
+				const { wrapper } = setup({
 					elements: [{ type: elementType } as AnyContentElement],
 					isEditMode: false,
-					cardId: "cardId",
+					isDetailView: false,
 				});
 				expect(wrapper.findComponent(component).exists()).toBe(true);
 			}
@@ -100,10 +102,10 @@ describe("ContentElementList", () => {
 			({ elementType, component }) => {
 				const isEditModeResult = true;
 
-				setup({
+				const { wrapper } = setup({
 					elements: [{ type: elementType } as AnyContentElement],
 					isEditMode: isEditModeResult,
-					cardId: "cardId",
+					isDetailView: false,
 				});
 
 				const childComponent = wrapper.findComponent(component);

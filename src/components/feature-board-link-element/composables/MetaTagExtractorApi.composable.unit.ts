@@ -2,12 +2,8 @@ import * as serverApi from "@/serverApi/v3/api";
 import { MetaTagExtractorResponse } from "@/serverApi/v3/api";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
-import {
-	i18nMock,
-	mockApiResponse,
-	mountComposable,
-} from "@@/tests/test-utils";
-import { I18N_KEY } from "@/utils/inject";
+import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 describe("useMetaTagExtractorApi", () => {
 	let api: DeepMocked<serverApi.MetaTagExtractorApi>;
@@ -41,7 +37,7 @@ describe("useMetaTagExtractorApi", () => {
 					);
 
 					const composable = mountComposable(() => useMetaTagExtractorApi(), {
-						[I18N_KEY.valueOf()]: i18nMock,
+						global: { plugins: [createTestingI18n()] },
 					});
 
 					return {
@@ -84,7 +80,7 @@ describe("useMetaTagExtractorApi", () => {
 						);
 
 						const composable = mountComposable(() => useMetaTagExtractorApi(), {
-							[I18N_KEY.valueOf()]: i18nMock,
+							global: { plugins: [createTestingI18n()] },
 						});
 
 						return {
@@ -128,7 +124,7 @@ describe("useMetaTagExtractorApi", () => {
 						);
 
 						const composable = mountComposable(() => useMetaTagExtractorApi(), {
-							[I18N_KEY.valueOf()]: i18nMock,
+							global: { plugins: [createTestingI18n()] },
 						});
 
 						return {
@@ -166,7 +162,7 @@ describe("useMetaTagExtractorApi", () => {
 				api.metaTagExtractorControllerGetMetaTags.mockRejectedValue(false);
 
 				const composable = mountComposable(() => useMetaTagExtractorApi(), {
-					[I18N_KEY.valueOf()]: { t: (key: string) => key },
+					global: { plugins: [createTestingI18n()] },
 				});
 
 				return {

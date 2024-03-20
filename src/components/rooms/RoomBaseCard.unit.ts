@@ -1,29 +1,26 @@
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
-import { I18N_KEY } from "@/utils/inject";
+import { mount } from "@vue/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
 describe("RoomBaseCard", () => {
-	const getWrapper = (props: { logoUrl?: string; openInNewTab?: boolean }) => {
-		document.body.setAttribute("data-app", "true");
-
+	const getWrapper = (propsData: {
+		logoUrl?: string;
+		openInNewTab?: boolean;
+	}) => {
 		const title = "Test Card Title";
 		const testId = "test-card";
 
-		const wrapper: Wrapper<Vue> = mount(RoomBaseCard as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			propsData: {
-				...props,
+		const wrapper = mount(RoomBaseCard, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				...propsData,
 				title,
 				testId,
-			},
-			provide: {
-				[I18N_KEY.valueOf()]: {
-					tc: (key: string): string => key,
-				},
 			},
 		});
 
@@ -93,7 +90,7 @@ describe("RoomBaseCard", () => {
 		it("should display a title", async () => {
 			const { wrapper, title } = setup();
 
-			const titleTag = wrapper.find("h5");
+			const titleTag = wrapper.find("h2");
 
 			expect(titleTag.text()).toEqual(title);
 		});

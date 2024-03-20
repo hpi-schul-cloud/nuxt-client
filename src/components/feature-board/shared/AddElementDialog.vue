@@ -7,11 +7,13 @@
 		@dialog-closed="onCloseDialog"
 		:buttons="actionButtons"
 	>
-		<div slot="title" class="text-h4 my-2 text-break">
-			{{ $t("components.elementTypeSelection.dialog.title") }}
-		</div>
+		<template #title>
+			<div class="text-h4 my-2 text-break">
+				{{ $t("components.elementTypeSelection.dialog.title") }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<div
 				class="d-flex flex-sm-row flex-column flex-wrap align-items-center"
 				:class="{ 'justify-content-space-between': submissionsEnabled }"
@@ -19,8 +21,8 @@
 				<v-btn
 					v-for="(item, key) in elementTypeOptions"
 					:key="key"
-					plain
-					large
+					variant="plain"
+					size="large"
 					:height="84"
 					:width="126"
 					class="d-sm-flex button-alignment-center"
@@ -31,7 +33,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span>
-							<v-icon large>{{ item.icon }}</v-icon>
+							<v-icon size="x-large">{{ item.icon }}</v-icon>
 						</span>
 						<span class="subtitle">{{ $t(item.label) }}</span>
 					</span>
@@ -94,9 +96,6 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-@import "@/utils/multiline-ellipsis.scss";
-@import "~vuetify/src/styles/styles.sass";
-
 .subtitle {
 	overflow-wrap: break-word;
 	white-space: normal;

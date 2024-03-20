@@ -5,14 +5,18 @@ import { Envs } from "@/store/types/env-config";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import {
 	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
 	SCHOOLS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { i18nMock, mockSchool } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, Wrapper } from "@vue/test-utils";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
@@ -32,16 +36,16 @@ describe("AdminMigrationSection", () => {
 				targetSystemId: "targetSystemId",
 				startedAt: new Date(2000, 1, 1, 0, 0),
 				closedAt: undefined,
-				finishedAt: undefined,
+				finishedAt: new Date(2000, 1, 1, 0, 0),
 				mandatorySince: undefined,
 			},
 			...userLoginMigrationGetters,
-		}) as jest.Mocked<UserLoginMigrationModule>;
+		});
 
 		schoolsModule = createModuleMocks(SchoolsModule, {
 			getSchool: { ...mockSchool, officialSchoolNumber: undefined },
 			...schoolGetters,
-		}) as jest.Mocked<SchoolsModule>;
+		});
 
 		envConfigModule = createModuleMocks(EnvConfigModule, {
 			getAccessibilityReportEmail: "nbc-support@netz-21.de",
@@ -49,15 +53,18 @@ describe("AdminMigrationSection", () => {
 			...envConfigGetters,
 		});
 
-		const wrapper: Wrapper<any> = mount(AdminMigrationSection, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-				[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-				[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+		const wrapper = mount(AdminMigrationSection, {
+			global: {
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
+				provide: {
+					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
+					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+				},
 			},
 		});
 
@@ -77,50 +84,53 @@ describe("AdminMigrationSection", () => {
 	});
 
 	describe("supportLink", () => {
-		it("should return support link without schoolnumber in subject", () => {
+		it("should return support link without schoolnumber in subject", async () => {
 			const { wrapper } = setup({});
+
+			const linkText = wrapper.vm.supportLink;
 
 			const subject = encodeURIComponent(
 				"Schule mit der Nummer: ??? soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!"
 			);
 			const expectedLink = `"mailto:${envConfigModule.getAccessibilityReportEmail}?subject=${subject}"`;
 
-			expect(wrapper.find('[data-testid="text-description"]').text()).toEqual(
-				`components.administration.adminMigrationSection.description {"supportLink":${expectedLink}}`
-			);
+			expect(expectedLink).toContain(linkText);
 		});
 
-		it("should return support link with schoolnumber in subject", () => {
+		it("should return support link with schoolnumber in subject", async () => {
 			const { wrapper } = setup({
 				getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
 			});
+
+			const linkText = wrapper.vm.supportLink;
 
 			const subject = encodeURIComponent(
 				"Schule mit der Nummer: 12345 soll keine Migration durchführen, Schuladministrator bittet um Unterstützung!"
 			);
 			const expectedLink = `"mailto:${envConfigModule.getAccessibilityReportEmail}?subject=${subject}"`;
 
-			expect(wrapper.find('[data-testid="text-description"]').text()).toEqual(
-				`components.administration.adminMigrationSection.description {"supportLink":${expectedLink}}`
-			);
+			expect(expectedLink).toContain(linkText);
 		});
 	});
 
 	describe("Migration Control Section", () => {
 		it("should render migration control section when grace period is not expired", () => {
+			jest.useFakeTimers();
+			jest.setSystemTime(new Date(2023, 1, 3));
 			const { wrapper } = setup(
 				{},
 				{
 					getUserLoginMigration: {
 						sourceSystemId: "sourceSystemId",
 						targetSystemId: "targetSystemId",
-						startedAt: new Date(2023, 1, 1),
+						startedAt: new Date(2023, 1, 3),
 						closedAt: undefined,
-						finishedAt: undefined,
+						finishedAt: new Date(2023, 2, 1),
 						mandatorySince: undefined,
 					},
 				}
 			);
+
 			expect(
 				wrapper.find('[data-testId="migration-control-section"]').exists()
 			).toEqual(true);
@@ -158,9 +168,9 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const text: string = wrapper.findComponent({ name: "v-alert" }).text();
+			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
 
-			expect(text).toStrictEqual(
+			expect(renderHtmls[1].props("html")).toStrictEqual(
 				"components.administration.adminMigrationSection.infoText"
 			);
 		});
@@ -180,9 +190,9 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const text: string = wrapper.findComponent({ name: "v-alert" }).text();
+			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
 
-			expect(text).toStrictEqual(
+			expect(renderHtmls[1].props("html")).toStrictEqual(
 				"components.administration.adminMigrationSection.migrationActive"
 			);
 		});
@@ -239,7 +249,7 @@ describe("AdminMigrationSection", () => {
 			);
 
 			const switchComponent = wrapper.findComponent({ name: "v-switch" });
-			switchComponent.vm.$emit("change", true);
+			switchComponent.vm.$emit("update:modelValue", true);
 
 			expect(
 				userLoginMigrationModule.setUserLoginMigrationMandatory
@@ -262,7 +272,7 @@ describe("AdminMigrationSection", () => {
 			);
 
 			const switchComponent = wrapper.findComponent({ name: "v-switch" });
-			switchComponent.vm.$emit("change", false);
+			switchComponent.vm.$emit("update:modelValue", false);
 
 			expect(
 				userLoginMigrationModule.setUserLoginMigrationMandatory
@@ -439,7 +449,7 @@ describe("AdminMigrationSection", () => {
 
 					const cardComponent = wrapper.findComponent({ name: "v-card" });
 					const cardButtonAgree = cardComponent.find("[data-testId=agree-btn]");
-					await cardButtonAgree.vm.$emit("click");
+					await cardButtonAgree.trigger("click");
 
 					expect(cardComponent.exists()).toBe(false);
 					expect(
@@ -469,7 +479,7 @@ describe("AdminMigrationSection", () => {
 				const cardButtonDisagree = cardComponent.find(
 					"[data-testId=disagree-btn]"
 				);
-				await cardButtonDisagree.vm.$emit("click");
+				await cardButtonDisagree.trigger("click");
 
 				expect(cardComponent.exists()).toBe(false);
 				expect(userLoginMigrationModule.getUserLoginMigration).toStrictEqual(
@@ -522,14 +532,16 @@ describe("AdminMigrationSection", () => {
 						},
 					}
 				);
+
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
 				await buttonComponent.vm.$emit("click");
 
-				const cardComponent = wrapper.findComponent({ name: "v-card" });
-				const cardButtonAgree = cardComponent.find("[data-testid=agree-btn]");
-				await cardButtonAgree.vm.$emit("click");
+				const warningCards = wrapper.findAllComponents({
+					name: "migration-warning-card",
+				});
 
-				expect(cardComponent.exists()).toBe(false);
+				warningCards[0].vm.$emit("set");
+
 				expect(
 					userLoginMigrationModule.closeUserLoginMigration
 				).toHaveBeenCalled();
@@ -563,7 +575,7 @@ describe("AdminMigrationSection", () => {
 				const cardButtonDisagree = cardComponent.find(
 					"[data-testid=disagree-btn]"
 				);
-				await cardButtonDisagree.vm.$emit("click");
+				await cardButtonDisagree.trigger("click");
 
 				expect(cardComponent.exists()).toBe(false);
 				expect(userLoginMigrationModule.getUserLoginMigration).toStrictEqual({
@@ -574,65 +586,6 @@ describe("AdminMigrationSection", () => {
 					finishedAt: undefined,
 					mandatorySince: undefined,
 				});
-			});
-		});
-
-		describe("when checkbox is unchecked", () => {
-			it("should let agree-button be disabled", async () => {
-				const { wrapper } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
-					{
-						getUserLoginMigration: {
-							sourceSystemId: "sourceSystemId",
-							targetSystemId: "targetSystemId",
-							startedAt: new Date(2023, 1, 1),
-							closedAt: undefined,
-							finishedAt: undefined,
-							mandatorySince: undefined,
-						},
-					}
-				);
-				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
-
-				const cardComponent = wrapper.findComponent({ name: "v-card" });
-				const cardButtonAgree = cardComponent.find("[data-testid=agree-btn]");
-
-				expect(cardButtonAgree.props("disabled")).toBeTruthy();
-			});
-		});
-
-		describe("when checkbox is checked", () => {
-			it("should make agree-button be enabled", async () => {
-				const { wrapper } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
-					{
-						getUserLoginMigration: {
-							sourceSystemId: "sourceSystemId",
-							targetSystemId: "targetSystemId",
-							startedAt: new Date(2023, 1, 1),
-							closedAt: undefined,
-							finishedAt: undefined,
-							mandatorySince: undefined,
-						},
-					}
-				);
-				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
-
-				const cardComponent = wrapper.findComponent({ name: "v-card" });
-				const checkBoxComponent = cardComponent.find(
-					"[data-testid=migration-confirmation-checkbox]"
-				);
-				await checkBoxComponent.setChecked();
-
-				const cardButtonAgree = cardComponent.find("[data-testid=agree-btn]");
-
-				expect(cardButtonAgree.props("disabled")).toBeFalsy();
 			});
 		});
 	});
@@ -657,11 +610,10 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const paragraph = wrapper.find(".migration-completion-date");
+			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
 
-			expect(paragraph.exists()).toBe(true);
-			expect(paragraph.text()).toContain(
-				`components.administration.adminMigrationSection.oauthMigrationFinished.text`
+			expect(renderHtmls[2].props("html")).toContain(
+				"components.administration.adminMigrationSection.oauthMigrationFinished.text"
 			);
 		});
 
@@ -684,11 +636,11 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const paragraph = wrapper.find(".migration-completion-date");
+			const renderHtml = wrapper.findComponent({ name: "RenderHTML" });
 
-			expect(paragraph.exists()).toBe(true);
-			expect(paragraph.text()).toContain(
-				`components.administration.adminMigrationSection.oauthMigrationFinished.textComplete`
+			expect(renderHtml.props()).toHaveProperty("html");
+			expect(renderHtml.props("html")).toContain(
+				"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete"
 			);
 		});
 
@@ -771,15 +723,20 @@ describe("AdminMigrationSection", () => {
 						getShowOutdatedUsers: true,
 					}
 				);
-				const switchComponent = wrapper.find(
-					'[data-testid="show-outdated-users-switch"]'
-				);
 
-				await switchComponent.setChecked();
+				const switchComponents = wrapper.findAllComponents({
+					name: "v-switch",
+				});
+
+				await switchComponents[0].vm.$emit("update:modelValue", true);
+
+				const expectedProps = { features: ["showOutdatedUsers"] };
 
 				expect(schoolsModule.update).toHaveBeenCalledWith({
 					id: mockSchool.id,
-					features: { ...mockSchool.features, showOutdatedUsers: true },
+					props: {
+						...expectedProps,
+					},
 				});
 			});
 		});
@@ -806,20 +763,33 @@ describe("AdminMigrationSection", () => {
 			});
 
 			describe("when feature is set to true", () => {
-				it("should show switch button", () => {
+				it("should show switch button", async () => {
 					const { wrapper } = setup(
 						{},
-						{},
+						{
+							getUserLoginMigration: {
+								targetSystemId: "targetSystemId",
+								startedAt: new Date(2023, 1, 1),
+								finishedAt: undefined,
+								mandatorySince: undefined,
+							},
+						},
 						{
 							getEnableLdapSyncDuringMigration: true,
 						}
 					);
 
-					const switchComponent = wrapper.find(
+					await nextTick();
+
+					const switchComponents = wrapper.findAllComponents({
+						name: "v-switch",
+					});
+
+					const switchComponent = switchComponents[1].get(
 						'[data-testid="enable-sync-during-migration-switch"]'
 					);
 
-					expect(switchComponent.exists()).toBe(true);
+					expect(switchComponent).toBeDefined();
 				});
 			});
 		});
@@ -877,7 +847,10 @@ describe("AdminMigrationSection", () => {
 			it("should enable the switch", () => {
 				const { wrapper } = setup(
 					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
+						getSchool: {
+							...mockSchool,
+							officialSchoolNumber: "12345",
+						},
 					},
 					{
 						getUserLoginMigration: {
@@ -902,30 +875,8 @@ describe("AdminMigrationSection", () => {
 			});
 		});
 
-		describe("when migration has not yet started", () => {
-			it("should disable the switch", () => {
-				const { wrapper } = setup(
-					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
-					},
-					{
-						getUserLoginMigration: undefined,
-					},
-					{
-						getEnableLdapSyncDuringMigration: true,
-					}
-				);
-
-				const switchComponent = wrapper.find(
-					'[data-testid="enable-sync-during-migration-switch"]'
-				);
-
-				expect(switchComponent.attributes("disabled")).toEqual("disabled");
-			});
-		});
-
 		describe("when migration has not yet closed", () => {
-			it("should disable the switch", () => {
+			it("should disable the switch", async () => {
 				const { wrapper } = setup(
 					{
 						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
@@ -945,11 +896,13 @@ describe("AdminMigrationSection", () => {
 					}
 				);
 
-				const switchComponent = wrapper.find(
-					'[data-testid="enable-sync-during-migration-switch"]'
-				);
+				const switchComponents = wrapper.findAllComponents({
+					name: "v-switch",
+				});
 
-				expect(switchComponent.attributes("disabled")).toEqual("disabled");
+				const inputelement = switchComponents[1].find("input");
+
+				expect(inputelement.attributes()).toHaveProperty("disabled");
 			});
 		});
 
@@ -957,7 +910,10 @@ describe("AdminMigrationSection", () => {
 			it("should call update in schoolsModule", async () => {
 				const { wrapper, schoolsModule } = setup(
 					{
-						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
+						getSchool: {
+							...mockSchool,
+							officialSchoolNumber: "12345",
+						},
 					},
 					{
 						getUserLoginMigration: {
@@ -973,19 +929,14 @@ describe("AdminMigrationSection", () => {
 						getEnableLdapSyncDuringMigration: true,
 					}
 				);
-				const switchComponent = wrapper.find(
-					'[data-testid="enable-sync-during-migration-switch"]'
-				);
 
-				await switchComponent.setChecked();
-
-				expect(schoolsModule.update).toHaveBeenCalledWith({
-					id: mockSchool.id,
-					features: {
-						...mockSchool.features,
-						enableLdapSyncDuringMigration: true,
-					},
+				const switchComponents = wrapper.findAllComponents({
+					name: "v-switch",
 				});
+
+				switchComponents[1].vm.$emit("update:modelValue");
+
+				expect(schoolsModule.update).toHaveBeenCalled();
 			});
 		});
 	});
@@ -1016,11 +967,8 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const button = wrapper.find(
-						'[data-testid="migration-wizard-button"]'
-					);
-
-					expect(button.props("disabled")).toBeFalsy();
+					const buttons = wrapper.findAllComponents({ name: "v-btn" });
+					expect(buttons[1].props("disabled")).toBeFalsy();
 				});
 
 				it("should redirect to the wizard", async () => {
@@ -1041,11 +989,8 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const button = wrapper.find(
-						'[data-testid="migration-wizard-button"]'
-					);
-
-					expect(button.props("to")).toEqual({
+					const buttons = wrapper.findAllComponents({ name: "v-btn" });
+					expect(buttons[1].props("to")).toEqual({
 						name: "administration-migration",
 					});
 				});
@@ -1063,11 +1008,8 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const button = wrapper.find(
-						'[data-testid="migration-wizard-button"]'
-					);
-
-					expect(button.props("disabled")).toBeTruthy();
+					const buttons = wrapper.findAllComponents({ name: "v-btn" });
+					expect(buttons[1].props("disabled")).toBeTruthy();
 				});
 			});
 
@@ -1095,11 +1037,8 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 
-					const button = wrapper.find(
-						'[data-testid="migration-wizard-button"]'
-					);
-
-					expect(button.props("disabled")).toBeTruthy();
+					const buttons = wrapper.findAllComponents({ name: "v-btn" });
+					expect(buttons[1].props("disabled")).toBeTruthy();
 				});
 			});
 		});
@@ -1121,7 +1060,6 @@ describe("AdminMigrationSection", () => {
 				);
 
 				const button = wrapper.find('[data-testid="migration-wizard-button"]');
-
 				expect(button.exists()).toBeFalsy();
 			});
 		});

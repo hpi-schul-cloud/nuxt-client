@@ -1,20 +1,20 @@
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
 import { mdiAlert } from "@mdi/js";
-import Vue from "vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("RoomCardChip", () => {
 	const getWrapper = () => {
-		document.body.setAttribute("data-app", "true");
 		const slotContent = "Slot Content";
-		const wrapper: Wrapper<any> = shallowMount(
-			RoomCardChip as MountOptions<Vue>,
-			{
-				...createComponentMocks({}),
-				slots: { default: slotContent },
-			}
-		);
+		const wrapper = shallowMount(RoomCardChip, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			slots: { default: slotContent },
+		});
 
 		return {
 			wrapper,

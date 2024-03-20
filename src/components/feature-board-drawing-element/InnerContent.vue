@@ -22,7 +22,7 @@ import { mdiPresentation } from "@mdi/js";
 import image from "@/assets/img/tldraw.png";
 import { ContentElementBar } from "@ui-board";
 import dayjs from "dayjs";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "InnerContent",

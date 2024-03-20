@@ -3,24 +3,19 @@
 		v-show="hasLinkedTool || isEditMode"
 		class="mb-4"
 		data-testid="board-external-tool-element"
-		dense
 		elevation="0"
-		outlined
+		variant="outlined"
 		ref="externalToolElement"
 		:ripple="false"
 		tabindex="0"
 		:loading="isLoading"
+		@keyup.enter="onClickElement"
 		@keydown.up.down="onKeydownArrow"
 		@click="onClickElement"
 	>
 		<ContentElementBar :has-grey-background="true" :icon="getIcon">
 			<template #logo v-if="displayData && displayData.logoUrl">
-				<v-img
-					height="100%"
-					class="mx-auto"
-					:src="displayData.logoUrl"
-					contain
-				/>
+				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" cover />
 			</template>
 			<template #title>
 				{{
@@ -58,21 +53,25 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
+import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	useExternalToolElementDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
+import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 import { useSharedLastCreatedElement } from "@util-board";
 import {
 	computed,
 	ComputedRef,
 	defineComponent,
 	onMounted,
+	onUnmounted,
 	PropType,
 	Ref,
 	ref,
@@ -82,8 +81,6 @@ import {
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
-import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 
 export default defineComponent({
 	components: {
@@ -107,6 +104,7 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const { modelValue } = useContentElementState(props, {
 			autoSaveDebounce: 0,
 		});
@@ -200,9 +198,17 @@ export default defineComponent({
 			isConfigurationDialogOpen.value = true;
 		};
 
-		const onClickElement = () => {
+		const onClickElement = async () => {
 			if (hasLinkedTool.value && !props.isEditMode) {
 				launchTool();
+
+				if (
+					!isToolOutdated.value &&
+					!isToolIncomplete.value &&
+					modelValue.value.contextExternalToolId
+				) {
+					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
+				}
 			}
 
 			if (!hasLinkedTool.value && props.isEditMode) {
@@ -231,6 +237,16 @@ export default defineComponent({
 		};
 
 		onMounted(loadCardData);
+
+		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
+
+		const timer = setInterval(async () => {
+			await loadCardData();
+		}, refreshTimeInMs);
+
+		onUnmounted(() => {
+			clearInterval(timer);
+		});
 
 		return {
 			t,

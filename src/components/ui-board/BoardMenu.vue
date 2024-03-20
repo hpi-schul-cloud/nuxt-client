@@ -1,20 +1,21 @@
 <template>
-	<VMenu offset-y left min-width="250">
-		<template v-slot:activator="{ on, attrs }">
+	<VMenu location="bottom end" min-width="250">
+		<template v-slot:activator="{ props }">
 			<VBtn
-				data-testid="board-menu-button"
-				v-bind="attrs"
-				v-on="on"
+				variant="text"
+				:data-testid="dataTestid"
+				v-bind="props"
 				:ripple="false"
-				:class="{ white: hasBackground }"
+				:class="{ 'bg-white': hasBackground }"
 				icon
 				@click.stop.prevent="() => {}"
 				@dblclick.stop.prevent="() => {}"
 				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
+				size="small"
 				style="height: 36px; width: 36px"
 			>
-				<VIcon data-testid="board-menu-icon" size="x-small" color="black">{{
+				<VIcon data-testid="board-menu-icon" class="text-grey-darken-2">{{
 					mdiDotsVertical
 				}}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
@@ -33,38 +34,33 @@
 				</span>
 			</VBtn>
 		</template>
-		<VList>
+		<VList role="menu">
 			<slot :scope="scope" />
 		</VList>
 	</VMenu>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiDotsVertical } from "@mdi/js";
-import { computed, defineComponent, PropType, provide, toRef } from "vue";
+import { computed, PropType, provide, toRef } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
 import { MENU_SCOPE } from "./injection-tokens";
 
-export default defineComponent({
-	name: "BoardMenu",
-	props: {
-		scope: {
-			type: String as PropType<BoardMenuScope>,
-			required: true,
-		},
+const props = defineProps({
+	scope: {
+		type: String as PropType<BoardMenuScope>,
+		required: true,
 	},
-	setup(props) {
-		const scope = toRef(props, "scope");
-		provide(MENU_SCOPE, scope.value);
-
-		const hasBackground = computed<boolean>(
-			() => scope.value === "card" || scope.value === "element"
-		);
-
-		return {
-			hasBackground,
-			mdiDotsVertical,
-		};
+	dataTestid: {
+		type: String,
+		default: "board-menu-button",
 	},
 });
+
+const scope = toRef(props, "scope");
+provide(MENU_SCOPE, scope.value);
+
+const hasBackground = computed<boolean>(
+	() => scope.value === "card" || scope.value === "element"
+);
 </script>

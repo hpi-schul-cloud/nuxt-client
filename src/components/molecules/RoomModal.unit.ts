@@ -1,6 +1,11 @@
+import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { roomsModule } from "@/store";
 import RoomsModule from "@/store/rooms";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import RoomModal from "./RoomModal.vue";
@@ -8,14 +13,11 @@ import RoomModal from "./RoomModal.vue";
 describe("RoomModal", () => {
 	const getWrapper = (props: { isOpen: boolean }) => {
 		const { isOpen } = props;
-		document.body.setAttribute("data-app", "true");
 		setupStores({ roomsModule: RoomsModule });
 
 		const wrapper = mount(RoomModal, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			propsData: {
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			props: {
 				isOpen,
 				groupData: { title: "dummy title", groupElements: [] },
 				draggable: true,
@@ -38,14 +40,16 @@ describe("RoomModal", () => {
 			it("it should be rendered", () => {
 				const { wrapper } = setup();
 
-				const dialog = wrapper.find(".room-dialog");
+				const dialog = wrapper.findComponent(vCustomDialog);
+
 				expect(dialog.exists()).toBe(true);
 			});
 
 			it("it should pass isOpen to vCustomDialog", () => {
 				const { wrapper } = setup();
-				const customDialog = wrapper.vm.$refs.customDialog as any;
-				expect(customDialog.isOpen).toBeFalsy();
+
+				const dialog = wrapper.findComponent(vCustomDialog);
+				expect(dialog.props("isOpen")).toBeFalsy();
 			});
 		});
 
@@ -62,8 +66,8 @@ describe("RoomModal", () => {
 			it("should pass isOpen to vCustomDialog", async () => {
 				const { wrapper } = await setup();
 
-				const customDialog = wrapper.vm.$refs.customDialog as any;
-				expect(customDialog.isOpen).toBeTruthy();
+				const dialog = wrapper.findComponent(vCustomDialog);
+				expect(dialog.props("isOpen")).toBeTruthy();
 			});
 		});
 	});
@@ -78,22 +82,22 @@ describe("RoomModal", () => {
 			it("should pass 'draggable' prop to room-avatar-iterator", () => {
 				const { wrapper } = setup();
 
-				const iterator = wrapper.find(".iterator");
-				expect(iterator.vm.$props.canDraggable).toBe(true);
+				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				expect(iterator.props("canDraggable")).toBe(true);
 			});
 
 			it("should pass itemsize prop to room-avatar-iterator", () => {
 				const { wrapper } = setup();
 
-				const iterator = wrapper.find(".iterator");
-				expect(iterator.vm.$props.itemSize).toBe("5em");
+				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				expect(iterator.props("itemSize")).toBe("5em");
 			});
 
 			it("should pass groupElements prop to room-avatar-iterator", () => {
 				const { wrapper } = setup();
 
-				const iterator = wrapper.find(".iterator");
-				expect(iterator.vm.$props.items).toEqual([]);
+				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				expect(iterator.props("avatars")).toEqual([]);
 			});
 		});
 
@@ -209,7 +213,7 @@ describe("RoomModal", () => {
 		describe("when room-avatar-iterator emits 'startDrag'", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
-				const iterator = wrapper.find(".iterator");
+				const iterator = wrapper.findComponent(RoomAvatarIterator);
 				const roomItem = {
 					id: "dummy id",
 					title: "dummy title",
@@ -218,7 +222,7 @@ describe("RoomModal", () => {
 					xPosition: 0,
 					yPosition: 0,
 				};
-				await iterator.vm.$emit("startDrag", roomItem);
+				iterator.vm.$emit("startDrag", roomItem);
 
 				return { wrapper, roomItem };
 			};
@@ -237,8 +241,8 @@ describe("RoomModal", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({ isOpen: true });
 
-			const customDialog = wrapper.vm.$refs.customDialog as any;
-			customDialog.$emit("dialog-closed");
+			const dialog = wrapper.findComponent(vCustomDialog);
+			dialog.vm.$emit("dialog-closed");
 
 			return { wrapper };
 		};

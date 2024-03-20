@@ -1,7 +1,6 @@
 import { createInputMask } from "@/components/util-input-masks/InputMask.factory";
-import { DirectiveBinding, DirectiveFunction } from "vue";
+import { DirectiveBinding, FunctionDirective, VNode } from "vue";
 import { vMaska, MaskInputOptions } from "maska";
-import { VNode } from "vue/types/umd";
 
 jest.mock("maska");
 
@@ -20,7 +19,7 @@ describe("InputMask.factory", () => {
 	it("should bind maska when directive function is called", () => {
 		const mockedMaska = vMaska;
 
-		const directive: DirectiveFunction = createInputMask({ mask: "" });
+		const directive: FunctionDirective = createInputMask({ mask: "" });
 		directive(
 			maskaDirectiveMock.element,
 			maskaDirectiveMock.binding,
@@ -35,7 +34,7 @@ describe("InputMask.factory", () => {
 
 		const options: MaskInputOptions = { mask: "##-##" };
 
-		const directive: DirectiveFunction = createInputMask(options);
+		const directive: FunctionDirective = createInputMask(options);
 		directive(
 			maskaDirectiveMock.element,
 			maskaDirectiveMock.binding,

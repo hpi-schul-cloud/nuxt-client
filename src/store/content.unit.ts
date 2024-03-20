@@ -1,7 +1,12 @@
 import ContentModule from "./content";
 import { initializeAxios } from "../utils/api";
 import { AxiosInstance } from "axios";
-import { Lessons, Resource, Resources } from "./types/content";
+import {
+	Lessons,
+	Resource,
+	ResourceProperties,
+	Resources,
+} from "./types/content";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
 
@@ -30,7 +35,7 @@ const mockResource: Resource = {
 	owner: {},
 	parent: {},
 	preview: {},
-	properties: {},
+	properties: {} as ResourceProperties,
 	rating: null,
 	ref: {},
 	remote: null,
@@ -111,11 +116,7 @@ describe("content module", () => {
 		it("getResources should call incLoading, setLastQuery, setResources, and decLoading mutations", async () => {
 			const contentModule = new ContentModule({});
 			axiosInitializer();
-			const query = {
-				$limit: 0,
-				$skip: 0,
-				searchQuery: "mock",
-			};
+			const searchQuery = "mock";
 			const incLoadingSpy = jest.fn();
 			const setLastQuerySpy = jest.fn();
 			const decLoadingSpy = jest.fn();
@@ -131,7 +132,7 @@ describe("content module", () => {
 			expect(decLoadingSpy).not.toBeCalled();
 			expect(setResourcesSpy).not.toBeCalled();
 
-			await contentModule.getResources(query);
+			await contentModule.getResources(searchQuery);
 
 			expect(incLoadingSpy).toBeCalled();
 			expect(setLastQuerySpy).toBeCalled();
@@ -141,24 +142,16 @@ describe("content module", () => {
 		it("getResources should make a get request to the right path", async () => {
 			const contentModule = new ContentModule({});
 			axiosInitializer();
-			const query = {
-				$limit: 0,
-				$skip: 0,
-				searchQuery: "mock",
-			};
-			await contentModule.getResources(query);
+			const searchQuery = "mock";
+			await contentModule.getResources(searchQuery);
 			expect(requestPath).toBe(ESPath);
 		});
 		it("getResources should get resources", async () => {
 			const contentModule = new ContentModule({});
 			axiosInitializer();
-			const query = {
-				$limit: 0,
-				$skip: 0,
-				searchQuery: "mock",
-			};
+			const searchQuery = "mock";
 
-			await contentModule.getResources(query);
+			await contentModule.getResources(searchQuery);
 			expect(contentModule.resources).toStrictEqual(mockResources.data);
 		});
 		it("addResources should call incLoading, addResourceMutation and decLoading mutations", async () => {

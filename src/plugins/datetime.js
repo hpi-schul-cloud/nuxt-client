@@ -298,7 +298,19 @@ export const currentDate = () => {
 };
 
 export const isDateTimeInPast = (dateTime) => {
+	if (!dateTime) return false;
+
 	return new Date(dateTime) < new Date();
+};
+
+export const getTimeFromISOString = (dateIsoString) => {
+	if (!dateIsoString) return "";
+
+	const locale = authModule?.getLocale || "de";
+	return new Date(dateIsoString).toLocaleTimeString(locale.value, {
+		timeStyle: "short",
+		hourCycle: "h23",
+	});
 };
 
 export const isToday = (date) => {

@@ -3,9 +3,7 @@
 		<ck-editor
 			v-model="modelValue"
 			:autofocus="autofocus"
-			:placeholder="
-				$t('components.cardElement.richTextElement.placeholder').toString()
-			"
+			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
 			type="balloon"
 			mode="simple"
 			@update:value="onUpdateValue"

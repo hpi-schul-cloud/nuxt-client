@@ -1,7 +1,7 @@
 import { Factory } from "fishery";
 import { ContentElementType, LinkElementResponse } from "@/serverApi/v3";
-import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
-import { timestampsResponseFactory } from "@@/tests/test-utils";
+import { linkElementContentFactory } from "./linkElementContentFactory";
+import { timestampsResponseFactory } from "./timestampsResponseFactory";
 
 export const linkElementResponseFactory = Factory.define<LinkElementResponse>(
 	({ sequence }) => ({

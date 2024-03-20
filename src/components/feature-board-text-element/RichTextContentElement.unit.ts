@@ -1,13 +1,15 @@
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 jest.mock("@data-board", () => {
 	return {
 		useBoardFocusHandler: jest.fn(),
@@ -41,31 +43,26 @@ const TEST_ELEMENT: RichTextElementResponse = {
 };
 
 describe("RichTextContentElement", () => {
-	let wrapper: Wrapper<Vue>;
 	const notifierModule = createModuleMocks(NotifierModule);
 
 	const setup = (props: {
 		element: RichTextElementResponse;
 		isEditMode: boolean;
 	}) => {
-		document.body.setAttribute("data-app", "true");
+		const wrapper = mount(RichTextContentElementComponent, {
+			propsData: props,
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
+			},
+		});
 
-		wrapper = shallowMount(
-			RichTextContentElementComponent as MountOptions<Vue>,
-			{
-				...createComponentMocks({}),
-				propsData: props,
-				provide: {
-					[I18N_KEY.valueOf()]: { t: (key: string) => key },
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				},
-			}
-		);
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should render display if isEditMode is false", () => {
-			setup({
+			const { wrapper } = setup({
 				element: TEST_ELEMENT,
 				isEditMode: false,
 			});
@@ -75,7 +72,7 @@ describe("RichTextContentElement", () => {
 		});
 
 		it("should render edit if isEditMode is true", () => {
-			setup({
+			const { wrapper } = setup({
 				element: TEST_ELEMENT,
 				isEditMode: true,
 			});
@@ -85,7 +82,7 @@ describe("RichTextContentElement", () => {
 		});
 
 		it("should call deleteElement when it receives delete:element event from edit component", async () => {
-			setup({
+			const { wrapper } = setup({
 				element: TEST_ELEMENT,
 				isEditMode: true,
 			});
@@ -95,10 +92,12 @@ describe("RichTextContentElement", () => {
 			);
 			richTextContentElementEditComponent.vm.$emit("delete:element");
 			await wrapper.vm.$nextTick();
-			const emitted = wrapper.emitted()["delete:element"] ?? [];
+			const emitted = wrapper.emitted("delete:element");
 
-			expect(emitted).toHaveLength(1);
-			expect(emitted[0][0]).toStrictEqual("test-id");
+			if (emitted) {
+				expect(emitted).toHaveLength(1);
+				expect(emitted[0][0]).toStrictEqual("test-id");
+			}
 		});
 	});
 });

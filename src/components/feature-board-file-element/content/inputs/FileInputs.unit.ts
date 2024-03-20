@@ -1,11 +1,11 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
 import { isPdfMimeType } from "@/utils/fileHelper";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
+import FileInputs from "./FileInputs.vue";
 import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
-import FileInputs from "./FileInputs.vue";
 
 jest.mock("@/utils/fileHelper");
 const isPdfMimeTypeMock = jest.mocked(isPdfMimeType);
@@ -16,8 +16,6 @@ describe("FileInputs", () => {
 		isEditMode: boolean;
 		isPdf?: boolean;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		const element = fileElementResponseFactory.build();
 		const fileProperties = {
 			name: "test",
@@ -33,8 +31,8 @@ describe("FileInputs", () => {
 		isPdfMimeTypeMock.mockReturnValueOnce(props.isPdf ?? false);
 
 		const wrapper = shallowMount(FileInputs, {
-			propsData: { fileProperties, isEditMode: props.isEditMode },
-			...createComponentMocks({}),
+			props: { fileProperties, isEditMode: props.isEditMode },
+			global: { plugins: [createTestingVuetify()] },
 		});
 
 		return {

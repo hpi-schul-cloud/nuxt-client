@@ -1,7 +1,7 @@
 <template>
-	<v-dialog fullscreen hide-overlay :value="isLightBoxOpen">
-		<v-toolbar flat>
-			<v-btn icon @click="close">
+	<v-dialog fullscreen v-model="isLightBoxOpen">
+		<v-toolbar>
+			<v-btn icon @click="close" data-testid="light-box-close-btn">
 				<v-icon>{{ mdiClose }}</v-icon>
 			</v-btn>
 
@@ -13,33 +13,23 @@
 				{{ lightBoxOptions.name }}
 			</v-toolbar-title>
 			<v-spacer />
-			<v-btn v-if="lightBoxOptions.downloadUrl !== ''" icon @click="download">
+			<v-btn
+				v-if="lightBoxOptions.downloadUrl !== ''"
+				icon
+				@click="download"
+				data-testid="light-box-download-btn"
+			>
 				<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 			</v-btn>
 		</v-toolbar>
-
-		<v-overlay absolute class="mt-16 pa-4" @click="close">
-			<div
-				class="d-flex align-items-center justify-content-center"
-				style="height: 100%"
-			>
-				<VProgressCircular
-					v-if="isImageLoading"
-					color="primary"
-					indeterminate
-					:size="36"
-				/>
-
-				<img
-					v-show="!isImageLoading"
+		<v-row class="ma-0" style="overflow: auto" @click="close">
+			<v-col class="d-flex align-items-center" style="height: 100%">
+				<PreviewImage
 					:src="lightBoxOptions.previewUrl"
 					:alt="lightBoxOptions.alt"
-					style="max-height: 100%; max-width: 100%"
-					@click.stop
-					@load="isImageLoading = false"
 				/>
-			</div>
-		</v-overlay>
+			</v-col>
+		</v-row>
 	</v-dialog>
 </template>
 
@@ -49,9 +39,13 @@ import { mdiClose, mdiFileDocumentOutline, mdiTrayArrowDown } from "@mdi/js";
 import { onKeyStroke } from "@vueuse/core";
 import { defineComponent, ref, watch } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
+import { PreviewImage } from "@ui-preview-image";
 
 export default defineComponent({
 	name: "LightBox",
+	components: {
+		PreviewImage,
+	},
 	setup() {
 		const { close, isLightBoxOpen, lightBoxOptions } = useInternalLightBox();
 		const isImageLoading = ref(true);
@@ -82,10 +76,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.v-overlay >>> .v-overlay__content {
-	height: 100%;
-	width: 100%;
-}
-</style>

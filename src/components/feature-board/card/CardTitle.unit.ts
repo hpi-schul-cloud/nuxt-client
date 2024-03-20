@@ -1,20 +1,22 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import CardTitle from "./CardTitle.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 const componentProps = {
 	value: "props value",
 	isFocused: true,
 };
 
-describe(CardTitle.name, () => {
-	let wrapper: Wrapper<Vue>;
-
+describe("CardTitle", () => {
 	const setup = (options: { isEditMode: boolean }) => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(CardTitle as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		const wrapper = shallowMount(CardTitle, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
 			propsData: {
 				...componentProps,
 				isEditMode: options.isEditMode,
@@ -23,16 +25,18 @@ describe(CardTitle.name, () => {
 				CARD_HOST_INTERACTION_EVENT: undefined,
 			},
 		});
+
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ isEditMode: false });
+			const { wrapper } = setup({ isEditMode: false });
 			expect(wrapper).toBeDefined();
 		});
 
 		it("should pass the value to its sub component", async () => {
-			setup({ isEditMode: true });
+			const { wrapper } = setup({ isEditMode: true });
 			const anyTitleInput = wrapper.findComponent({
 				name: "BoardAnyTitleInput",
 			});
@@ -40,7 +44,7 @@ describe(CardTitle.name, () => {
 		});
 
 		it("should bubble enter event", async () => {
-			setup({ isEditMode: true });
+			const { wrapper } = setup({ isEditMode: true });
 			const anyTitleInput = wrapper.findComponent({
 				name: "BoardAnyTitleInput",
 			});

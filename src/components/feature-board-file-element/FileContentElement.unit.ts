@@ -6,19 +6,22 @@ import {
 import NotifierModule from "@/store/notifier";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/api-mocks/fileStorageApiMock";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
-import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { computed, ref } from "vue";
-import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
-import FileContent from "./content/FileContent.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
+import { computed, nextTick, ref } from "vue";
 import FileContentElement from "./FileContentElement.vue";
-import { FileProperties } from "./shared/types/file-properties";
+import FileContent from "./content/FileContent.vue";
+import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
+import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
 
 jest.mock("@data-board", () => {
@@ -45,13 +48,12 @@ describe("FileContentElement", () => {
 			alerts: computed(() => []),
 		});
 
-		const wrapper = shallowMount(FileContentElement as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
+		const wrapper = shallowMount(FileContentElement, {
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
-			propsData: { ...props },
+			props,
 			slots: {
 				menu,
 			},
@@ -64,7 +66,6 @@ describe("FileContentElement", () => {
 		describe("when file record is not available", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
-				document.body.setAttribute("data-app", "true");
 
 				setupFileStorageApiMock({});
 
@@ -91,13 +92,13 @@ describe("FileContentElement", () => {
 
 				const card = wrapper.findComponent({ ref: "fileContentElement" });
 
-				expect(card.props("outlined")).toBe(false);
+				expect(card.props("variant")).toBe("elevated");
 			});
 
 			it("should not render FileContent component", async () => {
 				const { wrapper } = setup();
 
-				await wrapper.vm.$nextTick();
+				await nextTick();
 				const fileContent = wrapper.findComponent(FileContent);
 
 				expect(fileContent.exists()).toBe(false);
@@ -106,7 +107,7 @@ describe("FileContentElement", () => {
 			it("should not render FileUpload component", async () => {
 				const { wrapper } = setup();
 
-				await wrapper.vm.$nextTick();
+				await nextTick();
 
 				const fileUpload = wrapper.findComponent(FileUpload);
 				expect(fileUpload.exists()).toBe(true);
@@ -115,7 +116,7 @@ describe("FileContentElement", () => {
 			it("should not render slot menu component", async () => {
 				const { wrapper, menu } = setup();
 
-				await wrapper.vm.$nextTick();
+				await nextTick();
 
 				expect(wrapper.html()).not.toContain(menu);
 			});
@@ -128,8 +129,6 @@ describe("FileContentElement", () => {
 				isUploading?: boolean;
 			}) => {
 				const element = fileElementResponseFactory.build();
-				document.body.setAttribute("data-app", "true");
-
 				const fileRecordResponse = fileRecordResponseFactory.build({
 					securityCheckStatus:
 						props?.scanStatus ?? FileRecordScanStatus.PENDING,
@@ -178,11 +177,11 @@ describe("FileContentElement", () => {
 				it("should pass isOutlined prop to v-card", async () => {
 					const { wrapper } = setup();
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
 
-					expect(card.props("outlined")).toBe(true);
+					expect(card.props("variant")).toBe("outlined");
 				});
 			});
 
@@ -190,11 +189,11 @@ describe("FileContentElement", () => {
 				it("should pass isOutlined prop to v-card", async () => {
 					const { wrapper } = setup({ isUploading: true });
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
 
-					expect(card.props("outlined")).toBe(false);
+					expect(card.props("variant")).toBe("elevated");
 				});
 			});
 
@@ -202,7 +201,7 @@ describe("FileContentElement", () => {
 				it("should add event payload to emittedAlerts", async () => {
 					const { wrapper, addAlertMock } = setup();
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const fileContent = wrapper.findComponent(FileContent);
 					const alert = FileAlert.VIDEO_FORMAT_ERROR;
@@ -216,7 +215,7 @@ describe("FileContentElement", () => {
 				it("should call fetchFile when FileContent emits fetch:file event", async () => {
 					const { wrapper, fetchFile } = setup();
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					expect(fetchFile).toHaveBeenCalledTimes(1);
 
@@ -240,8 +239,8 @@ describe("FileContentElement", () => {
 						})
 					);
 
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
+					await nextTick();
+					await nextTick();
 
 					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
 				});
@@ -260,8 +259,8 @@ describe("FileContentElement", () => {
 						})
 					);
 
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
+					await nextTick();
+					await nextTick();
 
 					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
 				});
@@ -276,17 +275,17 @@ describe("FileContentElement", () => {
 				});
 
 				it("should call fetchFile", async () => {
-					const { wrapper, fetchFile } = setup();
+					const { fetchFile } = setup();
 
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
+					await nextTick();
+					await nextTick();
 
 					expect(fetchFile).toHaveBeenCalledTimes(1);
 				});
 
 				it("should render FileContent component", async () => {
 					const { wrapper } = setup();
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const fileContent = wrapper.findComponent(FileContent);
 
@@ -295,7 +294,7 @@ describe("FileContentElement", () => {
 
 				it("should pass correct fileProperties to FileContent", async () => {
 					const { wrapper, expectedFileProperties } = setup();
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const fileProperties = wrapper
 						.findComponent(FileContent)
@@ -306,7 +305,7 @@ describe("FileContentElement", () => {
 
 				it("should not render File Upload component", async () => {
 					const { wrapper } = setup();
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const fileUpload = wrapper.findComponent(FileUpload);
 					expect(fileUpload.exists()).toBe(false);
@@ -314,7 +313,7 @@ describe("FileContentElement", () => {
 
 				it("should not render slot menu component", async () => {
 					const { wrapper, menu } = setup();
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					expect(wrapper.html()).not.toContain(menu);
 				});
@@ -327,7 +326,7 @@ describe("FileContentElement", () => {
 						previewStatus:
 							PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED,
 					});
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const fileProperties = wrapper
 						.findComponent(FileContent)
@@ -378,13 +377,13 @@ describe("FileContentElement", () => {
 
 					const card = wrapper.findComponent({ ref: "fileContentElement" });
 
-					expect(card.props("outlined")).toBe(true);
+					expect(card.props("variant")).toBe("outlined");
 				});
 
 				it("should not render FileContent component", async () => {
 					const { wrapper } = setup();
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 					const fileContent = wrapper.findComponent(FileContent);
 
 					expect(fileContent.exists()).toBe(false);
@@ -393,7 +392,7 @@ describe("FileContentElement", () => {
 				it("should render FileUpload component", async () => {
 					const { wrapper } = setup();
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const fileUpload = wrapper.findComponent(FileUpload);
 					expect(fileUpload.exists()).toBe(true);
@@ -402,7 +401,7 @@ describe("FileContentElement", () => {
 				it("should pass correct props to FileUpload component", async () => {
 					const { wrapper, element } = setup();
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const props = wrapper.findComponent(FileUpload).props();
 
@@ -414,12 +413,12 @@ describe("FileContentElement", () => {
 					it("should call upload when FileUpload emits upload:file event", async () => {
 						const { wrapper, upload } = setup();
 
-						await wrapper.vm.$nextTick();
+						await nextTick();
 
 						const fileUpload = wrapper.findComponent(FileUpload);
 						fileUpload.vm.$emit("upload:file", { fileName: "mysample.txt" });
 
-						await wrapper.vm.$nextTick();
+						await nextTick();
 
 						expect(upload).toHaveBeenCalledTimes(1);
 					});
@@ -450,7 +449,7 @@ describe("FileContentElement", () => {
 				it("should render FileUpload component", async () => {
 					const { wrapper } = setup();
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const fileUpload = wrapper.findComponent(FileUpload);
 					expect(fileUpload.exists()).toBe(true);
@@ -460,10 +459,11 @@ describe("FileContentElement", () => {
 					const { wrapper } = setup();
 
 					const fileUpload = wrapper.findComponent(FileUpload);
-					fileUpload.vm.$emit("upload:file", { fileName: "mysample.txt" });
+					fileUpload.trigger("upload:file", { fileName: "mysample.txt" });
 
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
+					await nextTick();
+					await nextTick();
+					await nextTick();
 
 					expect(wrapper.emitted("delete:element")).toHaveLength(1);
 				});
@@ -526,7 +526,7 @@ describe("FileContentElement", () => {
 
 				const card = wrapper.findComponent({ ref: "fileContentElement" });
 
-				expect(card.props("outlined")).toBe(true);
+				expect(card.props("variant")).toBe("outlined");
 			});
 
 			describe("when v-card emits keydown.down event", () => {
@@ -542,8 +542,8 @@ describe("FileContentElement", () => {
 						})
 					);
 
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
+					await nextTick();
+					await nextTick();
 
 					expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
 				});
@@ -562,8 +562,8 @@ describe("FileContentElement", () => {
 						})
 					);
 
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
+					await nextTick();
+					await nextTick();
 
 					expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
 				});
@@ -579,16 +579,16 @@ describe("FileContentElement", () => {
 				});
 
 				it("should call fetchFile", async () => {
-					const { wrapper, fetchFile } = setup();
+					const { fetchFile } = setup();
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					expect(fetchFile).toHaveBeenCalledTimes(1);
 				});
 
 				it("should pass correct fileProperties to FileContent", async () => {
 					const { wrapper, expectedFileProperties } = setup();
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const fileProperties = wrapper
 						.findComponent(FileContent)
@@ -600,14 +600,14 @@ describe("FileContentElement", () => {
 				it("should call fetchFile when FileContent emits fetch:file event", async () => {
 					const { wrapper, fetchFile } = setup();
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					expect(fetchFile).toHaveBeenCalledTimes(1);
 
 					const fileContent = wrapper.findComponent(FileContent);
 					fileContent.vm.$emit("fetch:file");
 
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					expect(fetchFile).toHaveBeenCalledTimes(2);
 				});
@@ -616,7 +616,7 @@ describe("FileContentElement", () => {
 					it("should render FileContent component", async () => {
 						const { wrapper } = setup();
 
-						await wrapper.vm.$nextTick();
+						await nextTick();
 
 						const fileContent = wrapper.findComponent(FileContent);
 
@@ -625,7 +625,7 @@ describe("FileContentElement", () => {
 
 					it("should not render File Upload component", async () => {
 						const { wrapper } = setup();
-						await wrapper.vm.$nextTick();
+						await nextTick();
 
 						const fileUpload = wrapper.findComponent(FileUpload);
 						expect(fileUpload.exists()).toBe(false);
@@ -635,7 +635,7 @@ describe("FileContentElement", () => {
 				describe("when file is uploading", () => {
 					it("should render File Upload component", async () => {
 						const { wrapper } = setup({ isUploading: true });
-						await wrapper.vm.$nextTick();
+						await nextTick();
 
 						const fileUpload = wrapper.findComponent(FileUpload);
 						expect(fileUpload.exists()).toBe(true);
@@ -644,7 +644,7 @@ describe("FileContentElement", () => {
 					it("should not render FileContent component", async () => {
 						const { wrapper } = setup({ isUploading: true });
 
-						await wrapper.vm.$nextTick();
+						await nextTick();
 
 						const fileContent = wrapper.findComponent(FileContent);
 
@@ -660,7 +660,7 @@ describe("FileContentElement", () => {
 						previewStatus:
 							PreviewStatus.PREVIEW_NOT_POSSIBLE_SCAN_STATUS_BLOCKED,
 					});
-					await wrapper.vm.$nextTick();
+					await nextTick();
 
 					const fileProperties = wrapper
 						.findComponent(FileContent)

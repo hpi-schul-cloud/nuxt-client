@@ -5,29 +5,30 @@
 		@end-edit-mode="onEndEditMode"
 		@move:column-keyboard="onMoveColumnKeyboard"
 	>
-		<div
-			class="column-header mb-4 rounded"
-			:class="{ 'grey lighten-2': isFocusContained }"
-			tabindex="0"
-			ref="columnHeader"
-		>
-			<div class="d-flex align-start py-2 px-2">
+		<div class="column-header mb-4 rounded" tabindex="0" ref="columnHeader">
+			<div class="d-flex align-center py-2 px-2">
 				<BoardAnyTitleInput
 					:value="title"
+					:data-testid="`column-title-${index}`"
 					scope="column"
 					:isEditMode="isEditMode"
 					:placeholder="titlePlaceholder"
 					@update:value="onUpdateTitle"
 					class="w-100"
+					:isFocused="isFocusedById"
 				/>
-				<BoardMenu v-if="hasDeletePermission" scope="column">
+				<BoardMenu
+					v-if="hasDeletePermission"
+					scope="column"
+					:data-testid="`column-menu-btn-${index}`"
+				>
 					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
 					<BoardMenuActionMoveLeft @click="onMoveColumnLeft" />
 					<BoardMenuActionMoveRight @click="onMoveColumnRight" />
-					<BoardMenuActionDelete @click="onDelete" :name="title" />
+					<BoardMenuActionDelete :name="title" @click="onDelete" />
 				</BoardMenu>
 			</div>
-			<VDivider aria-hidden="true" color="black" />
+			<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
 		</div>
 	</BoardColumnInteractionHandler>
 </template>
@@ -41,8 +42,8 @@ import {
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import {
 	BoardMenu,
-	BoardMenuActionEdit,
 	BoardMenuActionDelete,
+	BoardMenuActionEdit,
 	BoardMenuActionMoveLeft,
 	BoardMenuActionMoveRight,
 } from "@ui-board";
@@ -74,10 +75,12 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
+		index: {
+			type: Number,
+		},
 	},
 	emits: [
 		"delete:column",
-		"move:column-keyboard",
 		"move:column-left",
 		"move:column-right",
 		"update:title",
@@ -91,7 +94,7 @@ export default defineComponent({
 		const isDeleteModalOpen = ref<boolean>(false);
 
 		const columnHeader = ref<HTMLDivElement | null>(null);
-		const { isFocusContained } = useBoardFocusHandler(
+		const { isFocusContained, isFocusedById } = useBoardFocusHandler(
 			columnId.value,
 			columnHeader
 		);
@@ -107,10 +110,21 @@ export default defineComponent({
 			stopEditMode();
 		};
 
-		const onDelete = () => emit("delete:column", props.columnId);
+		const onDelete = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:column", props.columnId);
+			}
+		};
 
 		const onMoveColumnKeyboard = (event: KeyboardEvent) => {
-			emit("move:column-keyboard", event.code);
+			if (event.code === "ArrowLeft") {
+				emit("move:column-left");
+			} else if (event.code === "ArrowRight") {
+				emit("move:column-right");
+			} else {
+				console.log("not supported key event");
+			}
 		};
 
 		const onMoveColumnLeft = () => {
@@ -140,11 +154,15 @@ export default defineComponent({
 			onMoveColumnLeft,
 			onMoveColumnRight,
 			onUpdateTitle,
+			isFocusedById,
 		};
 	},
 });
 </script>
 <style scoped>
+.column-header {
+	align-items: top;
+}
 .column-header:focus {
 	outline: none;
 }

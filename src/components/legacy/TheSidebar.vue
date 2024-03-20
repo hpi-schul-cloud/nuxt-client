@@ -71,8 +71,8 @@
 									class="icon"
 									:color="
 										isActive(child.title)
-											? 'var(--v-primary-base)'
-											: 'var(--v-secondary-base)'
+											? 'rgba(var(--v-theme-primary))'
+											: 'rgba(var(--v-theme-secondary))'
 									"
 									>{{ child.icon }}
 								</v-icon>
@@ -96,7 +96,7 @@ import {
 	SidebarItemList,
 	SidebarItemRouterLink,
 } from "@/utils/sidebar-base-items";
-import { useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
 	name: "TheSidebar",
@@ -152,8 +152,8 @@ export default defineComponent({
 
 		const getIconColor = (route: SidebarItem | SidebarCategoryItem) => {
 			return isActive(route.title) || isChildActive(route.title)
-				? "var(--v-primary-base)"
-				: "var(--v-secondary-base)";
+				? "rgba(var(--v-theme-primary))"
+				: "rgba(var(--v-theme-secondary))";
 		};
 
 		const hasChildren = (
@@ -191,7 +191,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-/* stylelint-disable sh-waqar/declaration-use-variable */
+@import "~vuetify/settings";
 @import "@/styles/mixins";
 
 @keyframes menu-expand {
@@ -213,7 +213,7 @@ export default defineComponent({
 	display: none;
 	height: calc(100vh - 55px);
 	overflow-y: auto;
-	background-color: var(--v-white-base);
+	background-color: rgba(var(--v-theme-white));
 	box-shadow: 0 5px 5px map-get($grey, lighten-3);
 	transition: display 2s;
 
@@ -311,7 +311,7 @@ export default defineComponent({
 					padding: 0 16px;
 					font-size: 16px;
 					line-height: 100%;
-					color: var(--v-secondary-base);
+					color: rgba(var(--v-theme-secondary));
 					border-bottom: none;
 
 					.icon {
@@ -342,14 +342,14 @@ export default defineComponent({
 
 				&:hover,
 				&.active {
-					color: var(--v-primary-base);
+					color: rgba(var(--v-theme-primary));
 					cursor: pointer;
 					background-color: map-get($grey, lighten-3);
 				}
 
 				&.active .list-content,
 				&.child-active .list-content {
-					color: var(--v-primary-base);
+					color: rgba(var(--v-theme-primary));
 				}
 			}
 		}

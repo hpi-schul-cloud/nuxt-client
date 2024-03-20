@@ -8,19 +8,19 @@
 		@dialog-closed="onCloseDialog"
 		@next="onNext(shareOptions)"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2 text-break">
-			{{ modalTitle }}
-		</div>
+		<template #title>
+			<div ref="textTitle" class="text-h4 my-2 text-break">
+				{{ modalTitle }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
 				<div v-if="step === 1 && isOpen">
-					<div
-						class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
-					>
+					<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 						<div class="mx-2">
-							<v-icon color="info">{{ mdiInformation }}</v-icon>
+							<v-icon color="info" :icon="mdiInformation" />
 						</div>
 						<div>
 							{{ $t(`components.molecules.share.${type}.options.infoText`) }}
@@ -64,12 +64,12 @@ import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
 	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, inject, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -88,17 +88,9 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const notifier = injectStrict(NOTIFIER_MODULE_KEY);
-
-		const t = (key) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
 
 		const shareModule = inject("shareModule");
 		const isOpen = computed({

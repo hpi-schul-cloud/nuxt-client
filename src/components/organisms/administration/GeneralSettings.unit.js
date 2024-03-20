@@ -1,9 +1,14 @@
-import GeneralSettings from "./GeneralSettings";
 import { envConfigModule, schoolsModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
-import EnvConfigModule from "@/store/env-config";
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schools";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { createStore } from "vuex";
+import GeneralSettings from "./GeneralSettings";
 
 const school = {
 	id: "5f2987e020834114b8efd6f8",
@@ -43,6 +48,7 @@ const school = {
 	},
 	purpose: "demo",
 	officialSchoolNumber: "123",
+	features: [],
 };
 
 const syncedSystem = [
@@ -61,7 +67,7 @@ const unsyncedSystem = [
 	},
 ];
 
-const generateMockStore = {
+const mockStore = createStore({
 	"env-config": {
 		getters: {
 			getTeacherStudentVisibilityIsConfigurable: () => {
@@ -78,7 +84,7 @@ const generateMockStore = {
 			},
 		},
 	},
-};
+});
 
 const searchStrings = {
 	schoolName: ".school-name",
@@ -118,6 +124,14 @@ const mockData = {
 	},
 };
 
+const getWrapper = () => {
+	return mount(GeneralSettings, {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n(), mockStore],
+		},
+	});
+};
+
 describe("GeneralSettings", () => {
 	beforeEach(() => {
 		setupStores({
@@ -135,156 +149,102 @@ describe("GeneralSettings", () => {
 
 	describe("env-config", () => {
 		it("should display select element with available languages", async () => {
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
-
+			const wrapper = getWrapper();
 			await wrapper.setData(mockData);
 
-			const ele = wrapper.find(searchStrings.languagesSelect);
+			const ele = wrapper.findComponent(searchStrings.languagesSelect);
 			expect(ele.vm.$props.items).toHaveLength(3);
-			expect(ele.vm.$props.items[0].name).toStrictEqual("Deutsch");
+			expect(ele.vm.$props.items[0].name).toStrictEqual(
+				"common.words.languages.de"
+			);
 			expect(ele.vm.$props.items[0].abbreviation).toStrictEqual("de");
-			expect(ele.vm.$props.items[1].name).toStrictEqual("Englisch");
+			expect(ele.vm.$props.items[1].name).toStrictEqual(
+				"common.words.languages.en"
+			);
 			expect(ele.vm.$props.items[1].abbreviation).toStrictEqual("en");
-			expect(ele.vm.$props.items[2].name).toStrictEqual("Spanisch");
+			expect(ele.vm.$props.items[2].name).toStrictEqual(
+				"common.words.languages.es"
+			);
 			expect(ele.vm.$props.items[2].abbreviation).toStrictEqual("es");
 		});
 	});
 
 	describe("displaying correct data", () => {
 		it("should display the school name", async () => {
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 			await wrapper.setData(mockData);
 
-			const ele = wrapper.find(searchStrings.schoolName);
+			const ele = wrapper.findComponent(searchStrings.schoolName);
 			expect(ele.vm.value).toBe("Paul-Gerhardt-Gymnasium");
 		});
 
 		it("should not be possible to edit the school name if the school is synced", async () => {
 			schoolsModule.setSystems(syncedSystem);
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 
-			const ele = wrapper.find(searchStrings.schoolName);
+			const ele = wrapper.findComponent(searchStrings.schoolName);
 			expect(ele.vm.disabled).toBeTruthy();
 		});
 
 		it("should be possible to edit the school name if the school is not synced", async () => {
 			schoolsModule.setSystems(unsyncedSystem);
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 
-			const ele = wrapper.find(searchStrings.schoolName);
+			const ele = wrapper.findComponent(searchStrings.schoolName);
 			expect(ele.vm.disabled).toBeFalsy();
 		});
 
 		it("should be possible to edit the school name if the school is not attached to a system", async () => {
 			schoolsModule.setSystems([]);
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 
-			const ele = wrapper.find(searchStrings.schoolName);
+			const ele = wrapper.findComponent(searchStrings.schoolName);
 			expect(ele.vm.disabled).toBeFalsy();
 		});
 
 		it("school number text should be disabled if the number is set", async () => {
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 			await wrapper.setData(mockData);
 
-			const ele = wrapper.find(searchStrings.schoolNumber);
+			const ele = wrapper.findComponent(searchStrings.schoolNumber);
 			expect(ele.vm.value).toStrictEqual("123");
 			expect(ele.vm.disabled).toBeTruthy();
 		});
 
 		it("school number text should not be disabled if the number is not set", async () => {
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
-
+			const wrapper = getWrapper();
 			delete school.officialSchoolNumber;
-			await wrapper.setData(mockData);
+			schoolsModule.setSchool(school);
 
-			const ele = wrapper.find(searchStrings.schoolNumber);
+			await wrapper.setData(mockData);
+			const ele = wrapper.findComponent(searchStrings.schoolNumber);
+
 			expect(ele.vm.disabled).toBeFalsy();
 		});
 
 		it("county select element should be disabled if the value is set", async () => {
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 			await wrapper.setData(mockData);
 
-			const ele = wrapper.find(searchStrings.schoolCounties);
+			const ele = wrapper.findComponent(searchStrings.schoolCounties);
 			expect(ele.vm.disabled).toBeTruthy();
 			expect(ele.vm.$props.items).toHaveLength(2);
 		});
 
 		it("county select element should NOT be disabled if the value is NOT set", async () => {
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 
 			mockData.localSchool.county = null;
 			await wrapper.setData(mockData);
 
-			const ele = wrapper.find(searchStrings.schoolCounties);
+			const ele = wrapper.findComponent(searchStrings.schoolCounties);
 
 			expect(ele.vm.disabled).toBe(false);
 			expect(ele.vm.$props.items).toHaveLength(2);
 		});
 
 		it("logo element should be found", async () => {
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 
 			await wrapper.setData(mockData);
 
@@ -293,19 +253,16 @@ describe("GeneralSettings", () => {
 		});
 
 		it("timezone input should display the correct data", async () => {
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 
 			await wrapper.setData(mockData);
 
-			const ele = wrapper.find(searchStrings.timezone);
-			expect(ele.element.textContent).toStrictEqual(
-				"ZeitzoneUm die Zeitzone für die Schule zu ändern, wenden Sie sich bitte an einen Admin."
+			const ele = wrapper.findComponent(searchStrings.timezone);
+			expect(ele.props().label).toStrictEqual(
+				"pages.administration.school.index.generalSettings.labels.timezone"
+			);
+			expect(ele.props().hint).toStrictEqual(
+				"pages.administration.school.index.generalSettings.timezoneHint"
 			);
 		});
 	});
@@ -313,13 +270,7 @@ describe("GeneralSettings", () => {
 	describe("events", () => {
 		it("update button should trigger save method", async () => {
 			const updateSpy = jest.spyOn(schoolsModule, "update");
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 			await wrapper.setData(mockData);
 
 			const buttonElement = wrapper.find(searchStrings.saveButton);
@@ -329,13 +280,7 @@ describe("GeneralSettings", () => {
 
 		it("update works without county", async () => {
 			const updateSpy = jest.spyOn(schoolsModule, "update");
-			const wrapper = mount(GeneralSettings, {
-				...createComponentMocks({
-					i18n: true,
-					store: generateMockStore,
-					vuetify: true,
-				}),
-			});
+			const wrapper = getWrapper();
 			const localMockData = {
 				localSchool: { ...mockData.localSchool, county: null },
 			};

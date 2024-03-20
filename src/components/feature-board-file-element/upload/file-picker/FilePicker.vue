@@ -1,10 +1,11 @@
 <template>
 	<v-file-input
+		density="compact"
 		ref="inputRef"
-		@change="onFileChange"
+		@update:modelValue="onFileChange"
 		prepend-icon="$mdiTrayArrowUp"
 		:placeholder="$t('feature-board-file-element.placeholder.uploadFile')"
-		hide-details="true"
+		:hide-details="true"
 	/>
 </template>
 
@@ -19,13 +20,13 @@ export default defineComponent({
 	props: {
 		isFilePickerOpen: { type: Boolean, required: true },
 	},
-	emits: ["update:file"],
+	emits: ["update:file", "update:isFilePickerOpen"],
 	setup(props, { emit }) {
 		const inputRef = ref();
 		const isFilePickerOpen = useVModel(props, "isFilePickerOpen", emit);
 
 		onMounted(() => {
-			inputRef.value.$refs.input.onclick = (e: Event) => {
+			inputRef.value.onclick = (e: Event) => {
 				e.stopPropagation();
 			};
 		});
@@ -34,15 +35,15 @@ export default defineComponent({
 			() => props.isFilePickerOpen,
 			(newValue: boolean) => {
 				if (newValue) {
-					inputRef.value.$refs.input.value = "";
-					inputRef.value.$refs.input.click();
+					inputRef.value.value = "";
+					inputRef.value.click();
 					isFilePickerOpen.value = false;
 				}
 			}
 		);
 
-		const onFileChange = (file: File) => {
-			emit("update:file", file);
+		const onFileChange = (files: File[]) => {
+			emit("update:file", files[0]);
 		};
 
 		return {

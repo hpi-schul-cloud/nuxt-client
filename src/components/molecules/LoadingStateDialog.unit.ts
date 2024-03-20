@@ -1,7 +1,11 @@
 import LoadingStateModule from "@/store/loading-state";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
+import { VCard } from "vuetify/lib/components/index.mjs";
 import LoadingStateDialog from "./LoadingStateDialog.vue";
 
 describe("@/components/molecules/LoadingModal", () => {
@@ -9,8 +13,10 @@ describe("@/components/molecules/LoadingModal", () => {
 
 	const mountComponent = (attrs = {}) => {
 		const wrapper = mount(LoadingStateDialog, {
-			...createComponentMocks({}),
-			provide: { loadingStateModule: loadingStateModuleMock },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: { loadingStateModule: loadingStateModuleMock },
+			},
 			...attrs,
 		});
 
@@ -38,8 +44,9 @@ describe("@/components/molecules/LoadingModal", () => {
 		});
 
 		const wrapper = mountComponent();
+		const dialog = wrapper.findComponent(VCard);
 
-		expect(wrapper.findComponent({ name: "v-card" }).exists()).toBe(true);
+		expect(dialog.exists()).toBe(true);
 	});
 
 	it("should hide its contents when not requested by store", () => {
@@ -49,7 +56,7 @@ describe("@/components/molecules/LoadingModal", () => {
 
 		const wrapper = mountComponent();
 
-		expect(wrapper.findComponent({ name: "v-card" }).exists()).toBe(false);
+		expect(wrapper.findComponent(VCard).exists()).toBe(false);
 	});
 
 	it("should display the text", async () => {
@@ -59,11 +66,10 @@ describe("@/components/molecules/LoadingModal", () => {
 		});
 
 		const wrapper = mountComponent();
+		const dialog = wrapper.findComponent(VCard);
+		const dialogTitle = dialog.find('[data-testid="dialog-text"]');
 
-		const dialogTitle = wrapper.find('[data-testid="dialog-text"]').element
-			.textContent;
-
-		expect(dialogTitle).toContain("Loading...");
+		expect(dialogTitle.text()).toBe("Loading...");
 	});
 
 	it("should display the progress bar", () => {
@@ -86,7 +92,7 @@ describe("@/components/molecules/LoadingModal", () => {
 		});
 
 		const wrapper = mountComponent();
-		wrapper.setData({ isDialogOpen: false });
+		wrapper.vm.isDialogOpen = false;
 
 		expect(loadingStateModuleMock.close).toHaveBeenCalled();
 	});

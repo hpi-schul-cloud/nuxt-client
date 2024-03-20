@@ -6,7 +6,6 @@
 		<v-data-table
 			data-testid="external-tool-section-table"
 			v-if="items.length"
-			:disable-pagination="true"
 			:hide-default-footer="true"
 			:items="items"
 			:headers="headers"
@@ -20,10 +19,14 @@
 				</span>
 			</template>
 			<template #[`item.status`]="{ item }">
-				<v-icon v-if="item.isOutdated || item.isDeactivated" color="warning">
+				<v-icon
+					v-if="item.isOutdated || item.isDeactivated"
+					color="warning"
+					start
+				>
 					{{ mdiAlert }}
 				</v-icon>
-				<v-icon v-else color="success">
+				<v-icon v-else color="success" start>
 					{{ mdiCheckCircle }}
 				</v-icon>
 				<span>
@@ -37,11 +40,12 @@
 					@delete="openDeleteDialog(item)"
 				/>
 			</template>
+			<template #bottom />
 		</v-data-table>
 		<v-btn
 			class="mt-8 mb-4 button-save float-right"
 			color="primary"
-			depressed
+			variant="flat"
 			data-testid="add-external-tool-button"
 			:to="{ name: 'administration-tool-config-overview' }"
 		>
@@ -84,8 +88,7 @@
 					<v-btn
 						data-testId="delete-dialog-cancel"
 						class="dialog-closed"
-						depressed
-						text
+						variant="text"
 						@click="onCloseDeleteDialog"
 					>
 						{{ t("common.actions.cancel") }}
@@ -94,7 +97,7 @@
 						data-testId="delete-dialog-confirm"
 						class="dialog-confirmed px-6"
 						color="primary"
-						depressed
+						variant="flat"
 						@click="onDeleteTool"
 					>
 						{{ t("common.actions.confirm") }}
@@ -113,12 +116,10 @@ import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	AUTH_MODULE_KEY,
-	I18N_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { RenderHTML } from "@feature-render-html";
 import { mdiAlert, mdiCheckCircle } from "@mdi/js";
 import {
@@ -129,38 +130,35 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import VueI18n from "vue-i18n";
-import { default as VueRouter } from "vue-router";
-import { useRouter } from "vue-router/composables";
-import { DataTableHeader } from "vuetify";
+import { useI18n } from "vue-i18n";
+import { DataTableHeader } from "@/store/types/data-table-header";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import { useRouter } from "vue-router";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
 
 export default defineComponent({
 	name: "ExternalToolSection",
 	components: { ExternalToolToolbar, RenderHTML },
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
 		const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 			SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 		);
 		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
-		const router: VueRouter = useRouter();
+		const router = useRouter();
 
 		onMounted(async () => {
-			if (authModule.getUser) {
+			if (authModule.getSchool) {
 				await schoolExternalToolsModule.loadSchoolExternalTools(
-					authModule.getUser.schoolId
+					authModule.getSchool.id
 				);
 			}
 		});
 
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
+		const { t } = useI18n();
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
 		const { fetchSchoolExternalToolUsage, metadata } =
@@ -261,11 +259,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 $arrow-offset: 8px;
 
-.v-data-table ::v-deep th i {
+.v-data-table :deep(th i) {
 	margin-left: $arrow-offset;
 }
 
-.v-data-table ::v-deep td {
+.v-data-table :deep(td) {
 	cursor: pointer;
 }
 </style>

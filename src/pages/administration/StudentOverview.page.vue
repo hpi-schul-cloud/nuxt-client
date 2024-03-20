@@ -25,32 +25,31 @@
 				class="search-section"
 				label=""
 				data-testid="searchbar"
-				@update:vmodel="barSearch"
+				@update:model-value="barSearch"
 			>
 				<template #icon>
 					<v-icon>$mdiMagnify</v-icon>
 				</template>
 			</base-input>
 
-			<data-filter
-				:filters="filters"
-				:backend-filtering="true"
-				:active-filters.sync="currentFilterQuery"
-				data-testid="data_filter"
+			<DataFilter
+				@update:filter="onUpdateFilter"
+				filter-for="student"
+				:class-names="classNameList"
 			/>
 
 			<backend-data-table
 				:actions="filteredActions"
 				:columns="filteredColumns"
-				:current-page.sync="page"
+				v-model:current-page="page"
 				:data="students"
 				:paginated="true"
-				:rows-per-page.sync="limit"
+				v-model:rows-per-page="limit"
 				:rows-selectable="true"
 				:total="pagination.total"
 				track-by="_id"
-				:selected-row-ids.sync="tableSelection"
-				:selection-type.sync="tableSelectionType"
+				v-model:selected-row-ids="tableSelection"
+				v-model:selection-type="tableSelectionType"
 				:sort-by="sortBy"
 				:sort-order="sortOrder"
 				:show-external-text="schoolIsExternallyManaged"
@@ -58,9 +57,11 @@
 				@update:sort="onUpdateSort"
 				@update:current-page="onUpdateCurrentPage"
 				@update:rows-per-page="onUpdateRowsPerPage"
+				:rows-per-page="limit"
+				:current-page="page"
 			>
 				<template #datacolumn-birthday="{ data }">
-					<span class="text-content">{{ printDateFromDeUTC(data) }}</span>
+					<span class="text-content">{{ printDate(data) }}</span>
 				</template>
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
@@ -81,19 +82,19 @@
 						<v-icon
 							v-if="status === 'ok'"
 							class="material-icon"
-							color="var(--v-success-base)"
+							color="rgba(var(--v-theme-success))"
 							>$mdiCheckAll</v-icon
 						>
 						<v-icon
 							v-else-if="status === 'parentsAgreed'"
 							class="material-icon"
-							color="var(--v-warning-base)"
+							color="rgba(var(--v-theme-warning))"
 							>$mdiCheck</v-icon
 						>
 						<v-icon
 							v-else-if="status === 'missing'"
 							class="material-icon"
-							color="var(--v-error-base)"
+							color="rgba(var(--v-theme-error))"
 							>$mdiClose</v-icon
 						>
 					</span>
@@ -101,6 +102,7 @@
 				<template #datacolumn-_id="{ data, selected, highlighted }">
 					<v-btn
 						icon
+						variant="text"
 						:class="{
 							'action-button': true,
 							'row-selected': selected,
@@ -137,23 +139,23 @@ import { mapGetters } from "vuex";
 import { envConfigModule, notifierModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import DataFilter from "@/components/organisms/DataFilter/DataFilter";
 import AdminTableLegend from "@/components/molecules/AdminTableLegend";
-import { studentFilter } from "@/utils/adminFilter";
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
-import { printDate, printDateFromDeUTC } from "@/plugins/datetime";
+import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
 import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { reactive } from "vue";
+import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
 
 export default {
 	components: {
-		DataFilter,
 		DefaultWireframe,
 		BackendDataTable,
 		AdminTableLegend,
 		ProgressModal,
+		DataFilter,
 	},
 	mixins: [print, UserHasPermission],
 	props: {
@@ -248,15 +250,14 @@ export default {
 			tableSelectionType: "inclusive",
 			breadcrumbs: [
 				{
-					text: this.$t("pages.administration.index.title"),
+					title: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
 				{
-					text: this.$t("pages.administration.students.index.title"),
+					title: this.$t("pages.administration.students.index.title"),
 					disabled: true,
 				},
 			],
-			filters: studentFilter(this),
 			active: false,
 			searchQuery:
 				(this.getUiState("filter", "pages.administration.students.index") &&
@@ -265,6 +266,7 @@ export default {
 				"",
 			confirmDialogProps: {},
 			isConfirmDialogActive: false,
+			classNameList: [],
 		};
 	},
 	computed: {
@@ -383,14 +385,14 @@ export default {
 
 			instanceBasedIcons.push({
 				icon: "$mdiCheckAll",
-				color: "var(--v-success-base)",
+				color: "rgba(var(--v-theme-success))",
 				label: this.$t("pages.administration.students.legend.icon.success"),
 			});
 
 			if (this.isConsentNecessary) {
 				instanceBasedIcons.push({
 					icon: "$mdiCheck",
-					color: "var(--v-warning-base)",
+					color: "rgba(var(--v-theme-warning))",
 					label: this.$t(
 						"utils.adminFilter.consent.label.parentsAgreementMissing"
 					),
@@ -399,7 +401,7 @@ export default {
 
 			instanceBasedIcons.push({
 				icon: "$mdiClose",
-				color: "var(--v-error-base)",
+				color: "rgba(var(--v-theme-error))",
 				label: this.$t("utils.adminFilter.consent.label.missing"),
 			});
 
@@ -416,21 +418,21 @@ export default {
 			return {
 				icon: "$mdiPlus",
 				title: this.$t("common.actions.create"),
-				testId: "fab_button_students_table",
+				dataTestId: "fab_button_students_table",
 				ariaLabel: this.$t("common.actions.create"),
 				actions: [
 					{
 						label: this.$t("pages.administration.students.fab.add"),
 						icon: mdiAccountPlus,
 						to: "/administration/students/new",
-						dataTestid: "fab_button_add_students",
+						dataTestId: "fab_button_add_students",
 						ariaLabel: this.$t("pages.administration.students.fab.add"),
 					},
 					{
 						label: this.$t("pages.administration.students.fab.import"),
 						icon: mdiCloudDownload,
 						href: "/administration/students/import",
-						dataTestid: "fab_button_import_students",
+						dataTestId: "fab_button_import_students",
 						ariaLabel: this.$t("pages.administration.students.fab.import"),
 					},
 				],
@@ -463,6 +465,7 @@ export default {
 	},
 	created() {
 		this.find();
+		this.getClassNameList();
 	},
 	mounted() {
 		document.title = buildPageTitle(
@@ -510,7 +513,6 @@ export default {
 			this.find();
 		},
 		printDate,
-		printDateFromDeUTC,
 		getQueryForSelection(rowIds, selectionType) {
 			return {
 				...this.currentFilterQuery,
@@ -536,7 +538,7 @@ export default {
 				});
 				if (this.registrationLinks.totalMailsSend === rowIds.length) {
 					notifierModule.show({
-						text: this.$tc(
+						text: this.$t(
 							"pages.administration.sendMail.success",
 							rowIds.length
 						),
@@ -545,14 +547,14 @@ export default {
 					});
 				} else {
 					notifierModule.show({
-						text: this.$tc("pages.administration.sendMail.alreadyRegistered"),
+						text: this.$t("pages.administration.sendMail.alreadyRegistered"),
 						status: "info",
 						timeout: 10000,
 					});
 				}
 			} catch (error) {
 				notifierModule.show({
-					text: this.$tc("pages.administration.sendMail.error", rowIds.length),
+					text: this.$t("pages.administration.sendMail.error", rowIds.length),
 					status: "error",
 					timeout: 10000,
 				});
@@ -569,14 +571,14 @@ export default {
 					this.$_printQRs(this.qrLinks);
 				} else {
 					notifierModule.show({
-						text: this.$tc("pages.administration.printQr.emptyUser"),
+						text: this.$t("pages.administration.printQr.emptyUser"),
 						status: "info",
 						timeout: 10000,
 					});
 				}
 			} catch (error) {
 				notifierModule.show({
-					text: this.$tc("pages.administration.printQr.error", rowIds.length),
+					text: this.$t("pages.administration.printQr.error", rowIds.length),
 					status: "error",
 					timeout: 10000,
 				});
@@ -604,12 +606,12 @@ export default {
 				}
 			};
 			const onCancel = () => {
-				this.$set(this, "tableSelection", []);
+				this.tableSelection = reactive([]);
 				this.tableSelectionType = "inclusive";
 			};
 			let message;
 			if (selectionType === "inclusive") {
-				message = this.$tc(
+				message = this.$t(
 					"pages.administration.students.index.remove.confirm.message.some",
 					rowIds.length,
 					{ number: rowIds.length }
@@ -633,7 +635,7 @@ export default {
 				),
 				cancelText: this.$t("common.actions.cancel"),
 				icon: "$mdiAlert",
-				iconColor: "var(--v-error-base)",
+				iconColor: "rgba(var(--v-theme-error))",
 				actionDesign: "danger",
 				onConfirm,
 				onCancel,
@@ -674,6 +676,27 @@ export default {
 			this.confirmDialogProps = confirmDialogProps;
 			this.isConfirmDialogActive = true;
 		},
+		onUpdateFilter(query) {
+			this.currentFilterQuery = query;
+			this.find();
+		},
+		async getClassNameList() {
+			const { currentYear } = this.$store.getters["authModule/getSchool"];
+			await this.$store.dispatch("classes/find", {
+				query: {
+					$limit: 1000,
+					year: currentYear?.id,
+				},
+			});
+			this.classNameList = this.$store.state["classes"].list.reduce(
+				(acc, item) =>
+					acc.concat({
+						label: item.displayName,
+						value: item.displayName,
+					}),
+				[]
+			);
+		},
 	},
 };
 </script>
@@ -681,20 +704,20 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/mixins";
 
-::v-deep .row-highlighted.theme--light.v-btn:hover::before {
+:deep(.row-highlighted.theme--light.v-btn:hover::before) {
 	opacity: 0;
 }
 
 a.action-button {
 	&.row-highlighted:hover {
-		background-color: var(--v-white-base);
+		background-color: rgba(var(--v-theme-white));
 	}
 
 	&.row-selected {
-		color: var(--v-white-base);
+		color: rgba(var(--v-theme-white));
 
 		&:hover {
-			background-color: var(--v-secondary-darken1);
+			background-color: rgba(var(--v-theme-secondary-darken-1));
 			box-shadow: none;
 		}
 	}
@@ -731,7 +754,7 @@ button:not(.is-none):focus {
 	z-index: var(--layer-fab);
 	outline: none;
 	box-shadow:
-		0 0 0 0 var(--v-white-base),
+		0 0 0 0 rgba(var(--v-theme-white)),
 		0 0 0 3px var(--button-background);
 }
 

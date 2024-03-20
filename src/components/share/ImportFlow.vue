@@ -28,11 +28,16 @@
 import ImportModal from "@/components/share/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
-import { I18N_KEY, NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	COPY_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { computed, defineComponent, inject, ref } from "vue";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
 import SelectCourseModal from "./SelectCourseModal.vue";
-// eslint-disable-next-line vue/require-direct-export
+import { useI18n } from "vue-i18n";
+
 export default defineComponent({
 	name: "ImportFlow",
 	components: {
@@ -55,8 +60,8 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-		const copyModule = inject("copyModule");
+		const { t } = useI18n();
+		const copyModule = injectStrict(COPY_MODULE_KEY);
 		const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 		const loadingStateModule = inject("loadingStateModule");
 
@@ -82,7 +87,7 @@ export default defineComponent({
 		);
 
 		const { isLoadingDialogOpen } = useLoadingState(
-			i18n.t("components.molecules.import.options.loadingMessage")
+			t("components.molecules.import.options.loadingMessage")
 		);
 
 		const openModal = (modalName) => {
@@ -98,10 +103,9 @@ export default defineComponent({
 
 		const showFailureBackend = (name) => {
 			notifier.show({
-				text: i18n.t(
-					"components.molecules.import.options.failure.backendError",
-					{ name }
-				),
+				text: t("components.molecules.import.options.failure.backendError", {
+					name,
+				}),
 				status: "error",
 				timeout: 10000,
 			});
@@ -110,9 +114,7 @@ export default defineComponent({
 
 		const showFailureInvalidToken = () => {
 			notifier.show({
-				text: i18n.t(
-					"components.molecules.import.options.failure.invalidToken"
-				),
+				text: t("components.molecules.import.options.failure.invalidToken"),
 				status: "error",
 				timeout: 10000,
 			});
@@ -121,9 +123,7 @@ export default defineComponent({
 
 		const showFailurePermission = () => {
 			notifier.show({
-				text: i18n.t(
-					"components.molecules.import.options.failure.permissionError"
-				),
+				text: t("components.molecules.import.options.failure.permissionError"),
 				status: "error",
 				timeout: 10000,
 			});

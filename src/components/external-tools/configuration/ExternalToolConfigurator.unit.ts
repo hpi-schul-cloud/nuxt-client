@@ -1,7 +1,5 @@
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
+import { VueWrapper, mount } from "@vue/test-utils";
 import {
 	schoolExternalToolConfigurationTemplateFactory,
 	schoolExternalToolFactory,
@@ -12,9 +10,12 @@ import {
 } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { VBtn } from "vuetify/lib/components/index.mjs";
 
 describe("ExternalToolConfigurator", () => {
 	jest
@@ -24,28 +25,18 @@ describe("ExternalToolConfigurator", () => {
 			getBusinessErrorTranslationKey: () => "",
 		});
 
-	const getWrapper = (propsData: {
+	const getWrapper = (props: {
 		templates: ExternalToolConfigurationTemplate[];
 		configuration?: SchoolExternalTool | ContextExternalTool;
 		error?: BusinessError;
 		loading?: boolean;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
-		const wrapper: Wrapper<Vue> = mount(
-			ExternalToolConfigurator as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
-				},
-				propsData: {
-					...propsData,
-				},
-			}
-		);
+		const wrapper = mount(ExternalToolConfigurator, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props,
+		});
 
 		return {
 			wrapper,
@@ -67,15 +58,13 @@ describe("ExternalToolConfigurator", () => {
 					templates: [template],
 				});
 
-				const openSelect = async (wrapper: Wrapper<Vue>) => {
+				const openSelect = async (wrapper: VueWrapper) => {
 					await wrapper
 						.find('[data-testId="configuration-select"]')
 						.trigger("click");
 
 					await wrapper
-						.find(".menuable__content__active")
-						.findAll(".v-list-item")
-						.at(0)
+						.find(".menuable__content__active .v-list-item:firstChild")
 						.trigger("click");
 				};
 
@@ -130,7 +119,9 @@ describe("ExternalToolConfigurator", () => {
 			it("should disable the selection", async () => {
 				const { wrapper } = setup();
 
-				const select = wrapper.find('[data-testId="configuration-select"]');
+				const select = wrapper
+					.findComponent('[data-testId="configuration-select"]')
+					.get("input");
 
 				expect(select.attributes("disabled")).toBeDefined();
 			});
@@ -138,11 +129,9 @@ describe("ExternalToolConfigurator", () => {
 			it("should display the edited tool in the selection", async () => {
 				const { wrapper, template } = setup();
 
-				const selectionRow = wrapper.find(".row");
+				const selectionRow = wrapper.find(".v-autocomplete .v-list-item-title");
 
-				expect(selectionRow.find("span").text()).toEqual(
-					expect.stringContaining(template.name)
-				);
+				expect(selectionRow.text()).toEqual(template.name);
 			});
 		});
 	});
@@ -155,7 +144,9 @@ describe("ExternalToolConfigurator", () => {
 						schoolExternalToolConfigurationTemplateFactory.buildList(1),
 				});
 
-				await wrapper.find('[data-testId="cancel-button"]').vm.$emit("click");
+				await wrapper
+					.findComponent<typeof VBtn>('[data-testId="cancel-button"]')
+					.trigger("click");
 
 				expect(wrapper.emitted("cancel")).toBeDefined();
 			});
@@ -171,8 +162,9 @@ describe("ExternalToolConfigurator", () => {
 					configuration: schoolExternalToolFactory.build(),
 				});
 
-				wrapper.find('[data-testId="save-button"]').vm.$emit("click");
-				await Vue.nextTick();
+				await wrapper
+					.findComponent<typeof VBtn>('[data-testId="save-button"]')
+					.trigger("click");
 
 				expect(wrapper.emitted("save")).toBeDefined();
 			});

@@ -1,130 +1,155 @@
 <template>
-	<div>
-		<vue-filter-ui
-			:label-add="$t('components.organisms.DataFilter.add')"
-			:label-apply="$t('common.actions.add')"
-			:label-remove="$t('common.actions.remove')"
-			:label-cancel="$t('common.actions.cancel')"
-			:filter="filters"
-			:parser="parser"
-			:query="activeFiltersProxy"
-			:component-modal="DataFilterModal"
-			:component-chips="DataFilterChips"
-			:component-select="DataFilterSelect"
-			:component-layout="DataFilterLayout"
-			@newQuery="setActiveFilters"
-		/>
-	</div>
+	<v-menu>
+		<template v-slot:activator="{ props }">
+			<v-btn v-bind="props" variant="flat">
+				<v-icon class="filter-icon mr-2">$mdiTune</v-icon>
+				<span data-testid="filter-title">{{ filterTitle }}</span>
+				<v-icon class="filter-icon">$mdiMenuDown</v-icon>
+			</v-btn>
+		</template>
+
+		<v-list>
+			<v-list-item v-for="(item, index) in filterMenuItems" :key="index">
+				<v-list-item-title
+					@click="onFilterClick(item.value as FilterOptionsType)"
+					class="menu-text"
+					hover
+				>
+					<span class="filter-menu-item">{{ item.label }}</span>
+				</v-list-item-title>
+			</v-list-item>
+		</v-list>
+	</v-menu>
+	<FilterChips
+		:filters="filterChipTitles"
+		@remove:filter="onRemoveChipFilter"
+		@click:filter="onFilterClick"
+	/>
+
+	<FilterDialog
+		:isOpen="dialogOpen"
+		@dialog-closed="onCloseDialog"
+		@remove:filter="onRemoveFilter"
+	>
+		<template #title> {{ modalTitle }} </template>
+		<template #content>
+			<ListSelection
+				v-if="isSelectFiltering"
+				:selection-list="selectionProps"
+				:selected-list="filteredValues"
+				@update:filter="onUpdateFilter"
+				@remove:filter="onRemoveFilter"
+				@dialog-closed="onCloseDialog"
+			/>
+			<DateBetween
+				v-if="isDateFiltering"
+				:selected-date="filteredValues"
+				@update:filter="onUpdateFilter"
+				@remove:filter="onRemoveFilter"
+				@dialog-closed="onCloseDialog"
+			/>
+		</template>
+	</FilterDialog>
 </template>
 
-<script>
-import VueFilterUi, { parser } from "vue-filter-ui";
+<script setup lang="ts">
+import FilterDialog from "./FilterDialog.vue";
+import { DateBetween, FilterChips, ListSelection } from "./filterComponents";
 import {
-	defaultFilters,
-	supportedFilterTypes,
-	supportedOperators,
-} from "./defaultFilters";
-import { unescape } from "lodash";
-import DataFilterModal from "./DataFilterModal";
-import DataFilterLayout from "./DataFilterLayout";
-import DataFilterChips from "./DataFilterChips";
-import DataFilterSelect from "./DataFilterSelect";
+	DateSelection,
+	FilterOption,
+	SelectOptionsType,
+	FilterOptionsType,
+	User,
+} from "./types";
+import { ref, computed, PropType } from "vue";
+import { useDataTableFilter } from "./composables/filter.composable";
 
-export default {
-	components: {
-		VueFilterUi,
+import { useI18n } from "vue-i18n";
+
+const props = defineProps({
+	filterFor: {
+		type: String,
+		default: () => User.STUDENT,
 	},
-	props: {
-		data: {
-			type: Array,
-			default: () => [],
-		},
-		backendFiltering: {
-			type: Boolean,
-		},
-		filters: {
-			type: Array,
-			required: true,
-		},
-		activeFilters: {
-			type: [Array, Object],
-			default: () => [],
-		},
+	classNames: {
+		type: Array as PropType<SelectOptionsType[]>,
+		default: () => [],
 	},
-	data() {
-		return {
-			DataFilterModal,
-			DataFilterChips,
-			DataFilterSelect,
-			DataFilterLayout,
-			localQuery: undefined,
-			localActiveFilters: undefined,
-		};
-	},
-	computed: {
-		parser() {
-			return this.backendFiltering ? parser.FeathersJS : parser.Default;
-		},
-		filteredData() {
-			// ToDo implement filtering for other data types than strings
-			if (!this.backendFiltering) {
-				return this.data.filter((row) =>
-					this.activeFiltersProxy.every((filter) => {
-						if (!filter.type || !supportedFilterTypes.includes(filter.type)) {
-							// comment in this line when different filter types are supported
-							// return true;
-						}
-						if (
-							filter.operator &&
-							// replace this line when other filter types than text are supported
-							// !supportedOperators[filter.type].includes(filter.operator)
-							!supportedOperators["text"].includes(filter.operator)
-						) {
-							return true;
-						}
-						if (filter.applyNegated) {
-							return !defaultFilters["text"][
-								unescape(filter.operator) || "default"
-							](row[filter.attribute].toString(), filter.value.toString());
-						}
-						return defaultFilters["text"][
-							unescape(filter.operator) || "default"
-						](row[filter.attribute].toString(), filter.value.toString());
-					})
-				);
-			}
-			return this.data;
-		},
-		activeFiltersProxy: {
-			get() {
-				return this.localActiveFilters || this.activeFilters;
-			},
-			set(to) {
-				this.localActiveFilters = to;
-				this.$emit("update:active-filters", to);
-				if (!this.backendFiltering) {
-					this.$emit("update:filtered-data", this.filteredData);
-				} else {
-					this.$emit("update:filter-query", to);
-				}
-			},
-		},
-	},
-	watch: {
-		activeFilters(to) {
-			this.activeFiltersProxy = to;
-		},
-	},
-	methods: {
-		setActiveFilters(newQuery) {
-			this.activeFiltersProxy = newQuery;
-		},
-	},
+});
+
+const emit = defineEmits(["update:filter"]);
+const { t } = useI18n();
+const filterTitle = computed(() => t("components.organisms.DataFilter.add"));
+const dialogOpen = ref(false);
+const userType = computed(() => props.filterFor);
+
+const {
+	defaultFilterMenuItems,
+	filterChipTitles,
+	filterMenuItems,
+	filterQuery,
+	isDateFiltering,
+	isSelectFiltering,
+	registrationOptions,
+	selectedFilterType,
+	removeChipFilter,
+	removeFilter,
+	updateFilter,
+} = useDataTableFilter(userType.value);
+
+const modalTitle = computed(
+	() =>
+		defaultFilterMenuItems.find(
+			(item: SelectOptionsType) => item.value == selectedFilterType.value
+		)?.label
+);
+
+const selectionProps = computed(() => {
+	return selectedFilterType.value == FilterOption.CLASSES
+		? props.classNames
+		: registrationOptions[userType.value as User];
+});
+
+const filteredValues = computed(() => {
+	if (!selectedFilterType.value) return;
+	return filterQuery.value[selectedFilterType.value] as string[] &
+		DateSelection;
+});
+
+const onCloseDialog = () => {
+	selectedFilterType.value = undefined;
+	dialogOpen.value = false;
 };
+
+const onFilterClick = (val: FilterOptionsType) => {
+	selectedFilterType.value = val;
+	dialogOpen.value = true;
+};
+
+const onRemoveChipFilter = (val: FilterOption) => {
+	removeChipFilter(val);
+	removeFilter();
+	emit("update:filter", filterQuery.value);
+};
+
+const onRemoveFilter = () => {
+	removeFilter();
+	dialogOpen.value = false;
+	emit("update:filter", filterQuery.value);
+};
+
+const onUpdateFilter = (value: string[] & DateSelection) => {
+	updateFilter(value);
+	dialogOpen.value = false;
+	emit("update:filter", filterQuery.value);
+};
+
+defineExpose({ dialogOpen });
 </script>
-<style lang="scss">
-.layout {
-	// this fixes some vuetify global styles side-effect in the filterUI
-	display: block;
+
+<style lang="scss" scoped>
+.menu-text {
+	cursor: pointer;
 }
 </style>

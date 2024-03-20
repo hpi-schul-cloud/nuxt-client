@@ -1,22 +1,19 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import CardHostInteractionHandlerVue from "./CardHostInteractionHandler.vue";
 
 describe("CardHostInteractionHandler", () => {
-	let wrapper: Wrapper<Vue>;
-
 	const setup = (options: { isEditMode: boolean }) => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(CardHostInteractionHandlerVue as MountOptions<Vue>, {
-			...createComponentMocks({}),
+		const wrapper = shallowMount(CardHostInteractionHandlerVue, {
 			propsData: { isEditMode: options?.isEditMode },
 		});
+
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ isEditMode: false });
+			const { wrapper } = setup({ isEditMode: false });
 			expect(
 				wrapper.findComponent(CardHostInteractionHandlerVue).exists()
 			).toBe(true);
@@ -28,7 +25,7 @@ describe("CardHostInteractionHandler", () => {
 			it.each(["up", "down", "left", "right"])(
 				"should emit 'move:card-keyboard' with '%s' key stroke when not editing",
 				async (key) => {
-					setup({ isEditMode: false });
+					const { wrapper } = setup({ isEditMode: false });
 					const eventHandle = await wrapper.find("[data-testid=event-handle]");
 					await eventHandle.trigger(`keydown.${key}`);
 					const emitted: KeyboardEvent[][] = wrapper.emitted(
@@ -42,7 +39,7 @@ describe("CardHostInteractionHandler", () => {
 			it.each(["up", "down", "left", "right"])(
 				"should not emit 'move:card-keyboard' with '%s' key stroke when editing",
 				async (key) => {
-					setup({ isEditMode: true });
+					const { wrapper } = setup({ isEditMode: true });
 					const eventHandle = await wrapper.find("[data-testid=event-handle]");
 					await eventHandle.trigger(`keydown.${key}`);
 					const emitted: KeyboardEvent[][] = wrapper.emitted(

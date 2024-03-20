@@ -1,35 +1,34 @@
 import { BoardCard } from "@/types/board/Card";
-import { I18N_KEY } from "@/utils/inject";
 import {
 	boardCardFactory,
 	fileElementResponseFactory,
 } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
 import CardHostDetailView from "./CardHostDetailView.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 const CARD_WITH_ELEMENTS: BoardCard = boardCardFactory.build({
 	elements: [fileElementResponseFactory.build()],
 });
 
 describe("CardHostDetailView", () => {
-	let wrapper: Wrapper<Vue>;
-
-	const setup = (props: { card: BoardCard }) => {
+	const setup = (props: { card: BoardCard; isOpen: boolean }) => {
 		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(CardHostDetailView as MountOptions<Vue>, {
-			...createComponentMocks({}),
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+		const wrapper = shallowMount(CardHostDetailView, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			propsData: props,
 		});
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ card: CARD_WITH_ELEMENTS });
+			const { wrapper } = setup({ card: CARD_WITH_ELEMENTS, isOpen: true });
 			expect(wrapper.findComponent(CardHostDetailView).exists()).toBe(true);
 		});
 	});

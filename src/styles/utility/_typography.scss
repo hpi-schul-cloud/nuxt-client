@@ -6,7 +6,7 @@ body {
 	font-family: var(--font-primary);
 	font-size: var(--text-base-size);
 	line-height: var(--line-height-md);
-	color: var(--v-black-base);
+	color: rgba(var(--v-theme-black));
 }
 
 /* heading size */
@@ -19,7 +19,7 @@ body {
 		font-size: var(--heading-#{$i});
 		font-weight: var(--font-weight-normal);
 		line-height: var(--line-height-sm);
-		color: var(--v-black-base);
+		color: rgba(var(--v-theme-black));
 	}
 }
 

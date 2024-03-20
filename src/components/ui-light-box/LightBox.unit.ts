@@ -1,8 +1,14 @@
 import { downloadFile } from "@/utils/fileHelper";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { mdiClose, mdiTrayArrowDown } from "@mdi/js";
-import { MountOptions, shallowMount } from "@vue/test-utils";
-import Vue, { nextTick, ref } from "vue";
+import { PreviewImage } from "@ui-preview-image";
+import { shallowMount } from "@vue/test-utils";
+import { nextTick, ref } from "vue";
+import {
+	VProgressCircular,
+	VRow,
+	VToolbarTitle,
+} from "vuetify/lib/components/index.mjs";
 import { LightBoxOptions, useInternalLightBox } from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
 
@@ -22,8 +28,6 @@ describe("LightBox", () => {
 		alt?: string;
 		name?: string;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		const close = jest.fn();
 		const isLightBoxOpen = ref(true);
 		const lightBoxOptions = ref<LightBoxOptions>({
@@ -42,8 +46,8 @@ describe("LightBox", () => {
 			openInternal: jest.fn(),
 		});
 
-		const wrapper = shallowMount(LightBox as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
+		const wrapper = shallowMount(LightBox, {
+			global: { plugins: [createTestingVuetify()] },
 		});
 
 		return {
@@ -67,7 +71,7 @@ describe("LightBox", () => {
 		it("should set image src correctly", () => {
 			const { lightBoxOptions, wrapper } = setup({});
 
-			const src = wrapper.find("img").attributes("src");
+			const src = wrapper.findComponent(PreviewImage).attributes("src");
 
 			expect(src).toEqual(lightBoxOptions.value.previewUrl);
 		});
@@ -75,25 +79,17 @@ describe("LightBox", () => {
 		it("should set image alt correctly", () => {
 			const { lightBoxOptions, wrapper } = setup({});
 
-			const alt = wrapper.find("img").attributes("alt");
+			const alt = wrapper.findComponent(PreviewImage).attributes("alt");
 
 			expect(alt).toEqual(lightBoxOptions.value.alt);
-		});
-
-		it("should display loading spinner", () => {
-			const { wrapper } = setup({});
-
-			const loadingSpinner = wrapper.findComponent({
-				name: "VProgressCircular",
-			});
-
-			expect(loadingSpinner.exists()).toBe(true);
 		});
 
 		it("should show close button", () => {
 			const { wrapper } = setup({});
 
-			const closeButton = wrapper.findAllComponents({ name: "v-btn" }).at(0);
+			const closeButton = wrapper.findComponent(
+				"[data-testid=light-box-close-btn]"
+			);
 
 			expect(closeButton.text()).toEqual(mdiClose);
 		});
@@ -102,8 +98,10 @@ describe("LightBox", () => {
 			it("should call close function", async () => {
 				const { close, wrapper } = setup({});
 
-				const closeButton = wrapper.findAllComponents({ name: "v-btn" }).at(0);
-				await closeButton.vm.$emit("click");
+				const closeButton = wrapper.findComponent(
+					"[data-testid=light-box-close-btn]"
+				);
+				await closeButton.trigger("click");
 
 				expect(close).toBeCalled();
 			});
@@ -113,7 +111,7 @@ describe("LightBox", () => {
 			it("should show toolbar title", () => {
 				const { wrapper } = setup({ name: "Esmeralda" });
 
-				const toolbarTitle = wrapper.findComponent({ name: "v-toolbar-title" });
+				const toolbarTitle = wrapper.findComponent(VToolbarTitle);
 
 				expect(toolbarTitle.exists()).toBe(true);
 			});
@@ -121,7 +119,7 @@ describe("LightBox", () => {
 			it("should show file name", () => {
 				const { wrapper } = setup({ name: "Esmeralda" });
 
-				const title = wrapper.find("v-toolbar-title-stub");
+				const title = wrapper.findComponent(VToolbarTitle);
 
 				expect(title.exists()).toBe(true);
 			});
@@ -129,7 +127,7 @@ describe("LightBox", () => {
 			it("should set file name correctly", () => {
 				const { lightBoxOptions, wrapper } = setup({});
 
-				const title = wrapper.find("v-toolbar-title-stub");
+				const title = wrapper.findComponent(VToolbarTitle);
 
 				expect(title.text()).toEqual(lightBoxOptions.value.name);
 			});
@@ -139,7 +137,7 @@ describe("LightBox", () => {
 			it("should not show toolbar title", () => {
 				const { wrapper } = setup({ name: "" });
 
-				const toolbarTitle = wrapper.findComponent({ name: "v-toolbar-title" });
+				const toolbarTitle = wrapper.findComponent(VToolbarTitle);
 
 				expect(toolbarTitle.exists()).toBe(false);
 			});
@@ -149,9 +147,9 @@ describe("LightBox", () => {
 			it("should show download button", () => {
 				const { wrapper } = setup({});
 
-				const downloadButton = wrapper
-					.findAllComponents({ name: "v-btn" })
-					.at(1);
+				const downloadButton = wrapper.findComponent(
+					"[data-testid=light-box-download-btn]"
+				);
 
 				expect(downloadButton.text()).toEqual(mdiTrayArrowDown);
 			});
@@ -160,10 +158,10 @@ describe("LightBox", () => {
 				it("should call downloadFile function", async () => {
 					const { lightBoxOptions, mockedDownloadFile, wrapper } = setup({});
 
-					const downloadButton = wrapper
-						.findAllComponents({ name: "v-btn" })
-						.at(1);
-					await downloadButton.vm.$emit("click");
+					const downloadButton = wrapper.findComponent(
+						"[data-testid=light-box-download-btn]"
+					);
+					await downloadButton.trigger("click");
 
 					expect(mockedDownloadFile).toBeCalledWith(
 						lightBoxOptions.value.downloadUrl,
@@ -177,9 +175,10 @@ describe("LightBox", () => {
 			it("should not show download button", () => {
 				const { wrapper } = setup({ downloadUrl: "" });
 
-				const buttons = wrapper.findAllComponents({ name: "v-btn" });
-
-				expect(buttons).toHaveLength(1);
+				const downloadButton = wrapper.findComponent(
+					"[data-testid=light-box-download-btn]"
+				);
+				expect(downloadButton.exists()).toBe(false);
 			});
 		});
 
@@ -187,14 +186,12 @@ describe("LightBox", () => {
 			it("should hide loading spinner", async () => {
 				const { wrapper } = setup({});
 
-				const image = wrapper.find("img");
+				const image = wrapper.findComponent(PreviewImage);
 				image.trigger("load");
 
 				await wrapper.vm.$nextTick();
 
-				const loadingSpinner = wrapper.findComponent({
-					name: "VProgressCircular",
-				});
+				const loadingSpinner = wrapper.findComponent(VProgressCircular);
 
 				expect(loadingSpinner.exists()).toBe(false);
 			});
@@ -218,7 +215,7 @@ describe("LightBox", () => {
 		it("should call close function", async () => {
 			const { close, wrapper } = setup({});
 
-			const overlay = wrapper.findComponent({ name: "v-overlay" });
+			const overlay = wrapper.findComponent(VRow);
 			await overlay.vm.$emit("click");
 
 			expect(close).toBeCalled();

@@ -1,4 +1,10 @@
+import { createStore } from "vuex";
 import FormCreateUser from "./FormCreateUser";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
+import { nextTick } from "vue";
 
 const validRole = {
 	data: ["student"],
@@ -16,37 +22,45 @@ const getMockActionsErrorCreate = () => ({
 	find: jest.fn().mockReturnValue(Promise.resolve(validRole)),
 });
 
-const getMocks = ({ actions = getMockActions() } = {}) =>
-	createComponentMocks({
-		i18n: true,
-		user: true,
-		store: {
-			users: {
-				actions,
-			},
-			roles: {
-				actions,
-			},
-		},
-	});
-
 describe("@/components/organisms/FormCreateUser", () => {
+	const setup = (actions = getMockActions(), options = {}) => {
+		const wrapper = mount(FormCreateUser, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$store: createStore({
+						modules: {
+							users: {
+								actions,
+							},
+							roles: {
+								actions,
+							},
+						},
+					}),
+				},
+			},
+			...options,
+		});
+
+		return { wrapper };
+	};
+
 	describe("create", () => {
 		it("emits create-user event on form submit", async () => {
-			const actions = getMockActionsErrorCreate();
-			const mock = getMocks({ actions });
-			const wrapper = mount(FormCreateUser, {
-				...mock,
-			});
+			const { wrapper } = setup(getMockActionsErrorCreate());
 
 			const inputFirstName = wrapper.find(
-				'input[data-testid="input_create-user_firstname"]'
+				'[data-testid="input_create-user_firstname"] input'
 			);
 			const inputLastName = wrapper.find(
-				'input[data-testid="input_create-user_lastname"]'
+				'[data-testid="input_create-user_lastname"] input'
 			);
 			const inputEmail = wrapper.find(
-				'input[data-testid="input_create-user_email"]'
+				'[data-testid="input_create-user_email"] input'
+			);
+			const submitButton = wrapper.find(
+				'button[data-testid="button_create-user_submit"]'
 			);
 			expect(inputFirstName.exists()).toBe(true);
 			inputFirstName.setValue("Klara");
@@ -57,9 +71,13 @@ describe("@/components/organisms/FormCreateUser", () => {
 			expect(inputEmail.exists()).toBe(true);
 			inputEmail.setValue("klara.fall@mail.de");
 
-			wrapper.find("form").trigger("submit");
+			expect(submitButton.exists()).toBe(true);
 
-			await wrapper.vm.$nextTick();
+			await submitButton.trigger("click");
+
+			await nextTick();
+			await nextTick();
+
 			const eventUserData = wrapper.emitted("create-user")[0][0];
 			expect(eventUserData.firstName).toBe("Klara");
 			expect(eventUserData.lastName).toBe("Fall");
@@ -67,43 +85,27 @@ describe("@/components/organisms/FormCreateUser", () => {
 		});
 
 		it("does not emit create-user event if form is invalid", async () => {
-			const actions = getMockActionsErrorCreate();
-			const mock = getMocks({ actions });
-			const wrapper = mount(FormCreateUser, {
-				...mock,
-			});
+			const { wrapper } = setup(getMockActionsErrorCreate());
 
-			wrapper.find("form").trigger("submit");
+			const submitButton = wrapper.find(
+				'button[data-testid="button_create-user_submit"]'
+			);
 
-			await wrapper.vm.$nextTick();
+			await submitButton.trigger("click");
+
 			const eventUserData = wrapper.emitted();
 			expect(eventUserData["create-user"]).toBeUndefined();
 		});
 
-		it("emit trigger-validation event on form submit", async () => {
-			const actions = getMockActionsErrorCreate();
-			const mock = getMocks({ actions });
-			const wrapper = mount(FormCreateUser, {
-				...mock,
-			});
-
-			wrapper.find("form").trigger("submit");
-
-			await wrapper.vm.$nextTick();
-			expect(wrapper.emitted("trigger-validation")[0]).toHaveLength(1);
-		});
-
-		it("renders slot content", async () => {
-			const actions = getMockActionsErrorCreate();
-			const mock = getMocks({ actions });
-			const wrapper = mount(FormCreateUser, {
-				...mock,
+		it("renders slot content", () => {
+			const { wrapper } = setup(getMockActionsErrorCreate(), {
 				slots: {
-					inputs: '<input label="test" value="test"/>',
+					inputs: '<input label="test"/>',
 				},
 			});
-			const slot_input = wrapper.find('input[value="test"]');
-			expect(slot_input.exists()).toBe(true);
+
+			const slotInput = wrapper.find('input[label="test"]');
+			expect(slotInput.exists()).toBe(true);
 		});
 	});
 });

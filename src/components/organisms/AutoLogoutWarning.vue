@@ -1,5 +1,5 @@
 <template>
-	<base-modal :active="active" @onBackdropClick="extendSession">
+	<base-modal v-model:active="active">
 		<template #body>
 			<div class="wrapper">
 				<img
@@ -13,7 +13,7 @@
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-center mb-4">
-				<v-btn color="primary" depressed @click="extendSession">
+				<v-btn color="primary" variant="flat" @click="extendSession">
 					{{ $t("components.organisms.AutoLogoutWarning.confirm") }}
 				</v-btn>
 			</div>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { autoLogoutModule, notifierModule } from "@/store";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { RenderHTML } from "@feature-render-html";
 
 const toast = {
@@ -35,6 +35,10 @@ export default {
 	components: {
 		RenderHTML,
 	},
+	inject: {
+		autoLogoutModule: { from: "autoLogoutModule" },
+		notifierModule: { from: NOTIFIER_MODULE_KEY },
+	},
 	computed: {
 		remainingTimeInMinutes() {
 			return Math.max(Math.floor(this.remainingTimeInSeconds / 60), 0);
@@ -43,7 +47,7 @@ export default {
 			if (this.error) {
 				return this.$t("components.organisms.AutoLogoutWarning.error");
 			} else {
-				const remainingTime = this.$tc(
+				const remainingTime = this.$t(
 					"components.organisms.AutoLogoutWarning.warning.remainingTime",
 					this.remainingTimeInMinutes,
 					{
@@ -60,17 +64,24 @@ export default {
 				return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth_error.svg";
 			return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth.svg";
 		},
-		active() {
-			return autoLogoutModule.getActive;
+		active: {
+			get() {
+				return this.autoLogoutModule.getActive;
+			},
+			set(value) {
+				if (!value) {
+					this.extendSession();
+				}
+			},
 		},
 		error() {
-			return autoLogoutModule.getError;
+			return this.autoLogoutModule.getError;
 		},
 		remainingTimeInSeconds() {
-			return autoLogoutModule.getRemainingTimeInSeconds;
+			return this.autoLogoutModule.getRemainingTimeInSeconds;
 		},
 		toastValue() {
-			return autoLogoutModule.getToastValue;
+			return this.autoLogoutModule.getToastValue;
 		},
 	},
 	watch: {
@@ -79,16 +90,16 @@ export default {
 		},
 	},
 	created() {
-		autoLogoutModule.init();
+		this.autoLogoutModule.init();
 	},
 	methods: {
 		extendSession() {
-			autoLogoutModule.extendSessionAction();
+			this.autoLogoutModule.extendSessionAction();
 		},
 		showToast(state) {
 			switch (state) {
 				case toast.success:
-					notifierModule.show({
+					this.notifierModule.show({
 						text: this.$t("components.organisms.AutoLogoutWarning.success"),
 						status: "success",
 						timeout: 10000,
@@ -96,7 +107,7 @@ export default {
 					break;
 
 				case toast.error:
-					notifierModule.show({
+					this.notifierModule.show({
 						text: this.$t("components.organisms.AutoLogoutWarning.error.retry"),
 						status: "error",
 						timeout: 10000,
@@ -104,7 +115,7 @@ export default {
 					break;
 
 				case toast.error401:
-					notifierModule.show({
+					this.notifierModule.show({
 						text: this.$t("components.organisms.AutoLogoutWarning.error.401"),
 						status: "error",
 						timeout: 10000,

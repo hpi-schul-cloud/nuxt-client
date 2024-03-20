@@ -2,22 +2,27 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/migration_successful.svg" alt="" />
 		<h1 class="pl-4 pr-4">
-			{{ t("pages.userMigration.success.title") }}
+			{{ $t("pages.userMigration.success.title") }}
 		</h1>
 		<div>
 			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
 				:html="
-					t('pages.userMigration.success.description', {
+					$t('pages.userMigration.success.description', {
 						targetSystem: getSystemName(targetSystem),
 					})
 				"
 				component="p"
 			/>
-			<v-btn color="primary" depressed data-testId="btn-proceed" to="/logout">
+			<v-btn
+				color="primary"
+				variant="flat"
+				data-testId="btn-proceed"
+				to="/logout"
+			>
 				{{
-					t("pages.userMigration.success.login", {
+					$t("pages.userMigration.success.login", {
 						targetSystem: getSystemName(targetSystem),
 					})
 				}}
@@ -31,10 +36,10 @@ import { defineComponent, onMounted, ref, Ref } from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { RenderHTML } from "@feature-render-html";
-import { useI18n } from "@/composables/i18n.composable";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "UserLoginMigrationSuccess",

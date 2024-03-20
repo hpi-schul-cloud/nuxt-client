@@ -49,7 +49,6 @@ export default defineComponent({
 			const isCardHost = classNames?.split(" ").includes("card-host");
 			if (!props.isEditMode && isCardHost) {
 				emit("start-edit-mode");
-				event.stopPropagation();
 				event.stopImmediatePropagation();
 				event.preventDefault();
 			}

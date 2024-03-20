@@ -11,7 +11,7 @@
 				component="p"
 			/>
 			<div v-if="isStartButtonVisible">
-				<v-alert light text type="info">
+				<v-alert type="info">
 					<div class="alert-text">
 						<RenderHTML
 							data-testid="migration-info-text"
@@ -24,7 +24,7 @@
 				</v-alert>
 			</div>
 			<div v-else-if="isMigrationActive">
-				<v-alert light text type="info">
+				<v-alert type="info">
 					<div class="alert-text">
 						<RenderHTML
 							data-testid="migration-active-status"
@@ -42,7 +42,7 @@
 				v-if="isStartButtonVisible"
 				class="my-4 button-start"
 				color="primary"
-				depressed
+				variant="flat"
 				:disabled="!officialSchoolNumber"
 				data-testid="migration-start-button"
 				@click="onToggleShowStartWarning"
@@ -57,7 +57,7 @@
 				v-if="isEndButtonVisible"
 				class="my-4 button-end"
 				color="primary"
-				depressed
+				variant="flat"
 				:disabled="!isMigrationActive"
 				data-testid="migration-end-button"
 				@click="onToggleShowEndWarning"
@@ -78,12 +78,11 @@
 				:disabled="!isMigrationActive"
 				:true-value="true"
 				:false-value="false"
-				:value="isMigrationMandatory"
-				inset
-				dense
+				:true-icon="mdiCheck"
+				:model-value="isMigrationMandatory"
 				class="ml-1"
 				data-testid="migration-mandatory-switch"
-				@change="setMigrationMandatory(!isMigrationMandatory)"
+				@update:model-value="setMigrationMandatory(!isMigrationMandatory)"
 			/>
 		</div>
 
@@ -123,19 +122,18 @@
 		/>
 
 		<v-switch
-			v-if="!isGracePeriodExpired & globalFeatureEnableLdapSyncDuringMigration"
+			v-if="!isGracePeriodExpired && globalFeatureEnableLdapSyncDuringMigration"
 			:label="
 				t(
 					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
 				)
 			"
 			:disabled="!isMigrationActive"
-			v-model="school.features.enableLdapSyncDuringMigration"
-			inset
-			dense
+			v-model="school.featureObject.enableLdapSyncDuringMigration"
 			class="ml-1"
+			:true-icon="mdiCheck"
 			data-testid="enable-sync-during-migration-switch"
-			@change="setSchoolFeatures"
+			@update:model-value="setSchoolFeatures"
 		/>
 
 		<template v-if="showMigrationWizard">
@@ -143,7 +141,7 @@
 				:disabled="!isMigrationActive || !isSchoolMigrated"
 				class="my-4"
 				color="primary"
-				depressed
+				variant="flat"
 				data-testid="migration-wizard-button"
 				:to="{ name: 'administration-migration' }"
 			>
@@ -169,12 +167,11 @@
 					'components.administration.adminMigrationSection.showOutdatedUsers.label'
 				)
 			"
-			v-model="school.features.showOutdatedUsers"
-			inset
-			dense
+			v-model="school.featureObject.showOutdatedUsers"
 			class="ml-1"
+			:true-icon="mdiCheck"
 			data-testid="show-outdated-users-switch"
-			@change="setSchoolFeatures"
+			@update:model-value="setSchoolFeatures"
 		/>
 		<p
 			v-if="globalFeatureShowOutdatedUsers"
@@ -190,7 +187,7 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "@/composables/i18n.composable";
+import { mdiCheck } from "@/components/icons/material";
 import { School } from "@/store/types/schools";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import {
@@ -209,7 +206,9 @@ import {
 	ref,
 	Ref,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
+import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -355,7 +354,9 @@ export default defineComponent({
 		const setSchoolFeatures = async () => {
 			await schoolsModule.update({
 				id: school.value.id,
-				features: school.value.features,
+				props: {
+					features: mapSchoolFeatureObjectToArray(school.value.featureObject),
+				},
 			});
 		};
 
@@ -383,6 +384,7 @@ export default defineComponent({
 			officialSchoolNumber,
 			isMigrationActive,
 			isMigrationMandatory,
+			mdiCheck,
 			showMigrationWizard,
 			isSchoolMigrated,
 		};
@@ -392,7 +394,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .alert-text {
-	color: var(--v-black-base) !important;
+	color: rgba(var(--v-theme-black)) !important;
 	line-height: var(--line-height-lg) !important;
 }
 </style>

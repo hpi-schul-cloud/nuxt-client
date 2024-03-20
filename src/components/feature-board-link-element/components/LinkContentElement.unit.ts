@@ -1,19 +1,17 @@
-import { AnyContentElement } from "@/types/board/ContentElement";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { LinkContentElement } from "@feature-board-link-element";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { MountOptions, shallowMount } from "@vue/test-utils";
-import { LinkElementContent, MetaTagExtractorResponse } from "@/serverApi/v3";
+import { shallowMount } from "@vue/test-utils";
+import {
+	LinkElementContent,
+	MetaTagExtractorResponse,
+	LinkElementResponse,
+} from "@/serverApi/v3";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
-import Vue, { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
@@ -21,12 +19,17 @@ import { Envs } from "@/store/types/env-config";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock("@data-board/ContentElementState.composable");
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("../composables/MetaTagExtractorApi.composable");
 jest.mock("../composables/PreviewGenerator.composable");
+
 const mockedUseContentElementState = jest.mocked(useContentElementState);
 
 let defaultElement = linkElementResponseFactory.build();
@@ -38,7 +41,7 @@ const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
 	}),
 });
 
-describe(LinkContentElement.name, () => {
+describe("LinkContentElement", () => {
 	let useBoardFocusHandlerMock: DeepMocked<
 		ReturnType<typeof useBoardFocusHandler>
 	>;
@@ -69,18 +72,20 @@ describe(LinkContentElement.name, () => {
 	});
 
 	const getWrapper = (props: {
-		element: AnyContentElement;
+		element: LinkElementResponse;
 		isEditMode: boolean;
+		isDetailView?: boolean;
 	}) => {
 		const notifierModule = createModuleMocks(NotifierModule);
-		const wrapper = shallowMount(LinkContentElement as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
+		const wrapper = shallowMount(LinkContentElement, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
 			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
 			},
-			propsData: { ...props },
+			props: { ...props },
 		});
 
 		return { wrapper };
@@ -90,12 +95,16 @@ describe(LinkContentElement.name, () => {
 		options: {
 			content?: LinkElementContent;
 			isEditMode: boolean;
-		} = { content: undefined, isEditMode: true }
+			isDetailView?: boolean;
+		} = { content: undefined, isEditMode: true, isDetailView: false }
 	) => {
 		const element = {
 			...defaultElement,
-			content:
-				options.content ?? linkElementContentFactory.build({ url: undefined }),
+			content: linkElementContentFactory.build({
+				url: undefined,
+				title: "test-title",
+				...options.content,
+			}),
 		};
 		document.body.setAttribute("data-app", "true");
 
@@ -105,9 +114,23 @@ describe(LinkContentElement.name, () => {
 			isLoading: ref(false),
 		});
 
+		useMetaTagExtractorApiMock.getMetaTags.mockImplementation(
+			async (url: string) => ({
+				url,
+				title: "Super duper mega page title",
+				description: "This page is sooo cool!",
+				imageUrl: "https://imagestock.com/great-image.jpg",
+			})
+		);
+
+		usePreviewGeneratorMock.createPreviewImage.mockResolvedValue(
+			"https://some.schulcloud.de/my-upload-preview-image.jpg"
+		);
+
 		const { wrapper } = getWrapper({
 			element,
 			isEditMode: true,
+			isDetailView: false,
 		});
 
 		return {
@@ -118,17 +141,20 @@ describe(LinkContentElement.name, () => {
 
 	describe("onCreateUrl", () => {
 		it("should request meta tags for the given url", async () => {
-			const { wrapper } = setup({ isEditMode: true });
+			const { wrapper } = setup({ isEditMode: true, isDetailView: false });
 
 			const component = wrapper.getComponent(LinkContentElementCreate);
-			component.vm.$emit("create:url", "https://abc.de");
+			component.vm.$emit(
+				"create:url",
+				"https://abc.de/bravo-fox-delta-ohhh-mega"
+			);
 
 			expect(useMetaTagExtractorApiMock.getMetaTags).toHaveBeenCalled();
 		});
 
 		describe("when no protocol was provided", () => {
 			it("should add https-protocol", async () => {
-				const { wrapper } = setup({ isEditMode: true });
+				const { wrapper } = setup({ isEditMode: true, isDetailView: false });
 				const url = "abc.de/my-article";
 
 				const component = wrapper.getComponent(LinkContentElementCreate);
@@ -144,7 +170,7 @@ describe(LinkContentElement.name, () => {
 		describe("when url was provided", () => {
 			describe("when imageUrl was in metaTags", () => {
 				it("should create a preview image", async () => {
-					const { wrapper } = setup({ isEditMode: true });
+					const { wrapper } = setup({ isEditMode: true, isDetailView: false });
 					const url = "https://abc.de/my-article";
 					const fakeMetaTags: MetaTagExtractorResponse = {
 						url,
@@ -162,8 +188,9 @@ describe(LinkContentElement.name, () => {
 
 					const component = wrapper.getComponent(LinkContentElementCreate);
 					component.vm.$emit("create:url", url);
-					await wrapper.vm.$nextTick();
-					await wrapper.vm.$nextTick();
+					await nextTick();
+					await nextTick();
+					await nextTick();
 
 					expect(
 						usePreviewGeneratorMock.createPreviewImage
@@ -179,6 +206,7 @@ describe(LinkContentElement.name, () => {
 						url: VALID_UNSANITIZED_URL,
 					}),
 					isEditMode: false,
+					isDetailView: false,
 				});
 
 				const expectedUrl = "https://example.com";
@@ -193,6 +221,7 @@ describe(LinkContentElement.name, () => {
 						url: INVALID_UNSANITIZED_URL,
 					}),
 					isEditMode: false,
+					isDetailView: false,
 				});
 
 				const expectedUrl = "about:blank";
@@ -206,6 +235,7 @@ describe(LinkContentElement.name, () => {
 						url: INVALID_UNSANITIZED_URL,
 					}),
 					isEditMode: false,
+					isDetailView: false,
 				});
 
 				const expectedUrl = "de.wikipedia.org";
@@ -219,6 +249,7 @@ describe(LinkContentElement.name, () => {
 			it("should NOT emit 'move-keyboard:edit'", async () => {
 				const { wrapper } = setup({
 					isEditMode: true,
+					isDetailView: false,
 				});
 
 				const element = wrapper.findComponent({ ref: "linkContentElement" });

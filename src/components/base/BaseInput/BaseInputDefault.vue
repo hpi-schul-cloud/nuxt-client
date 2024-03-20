@@ -12,7 +12,7 @@
 					<label
 						v-show="showLabel"
 						:class="{ label: true, 'base-input-info': true }"
-						:for="`input-${$uid}`"
+						:for="`input-${uid}`"
 					>
 						{{ label }}
 					</label>
@@ -28,14 +28,14 @@
 				<div class="core">
 					<slot>
 						<input
-							:id="`input-${$uid}`"
+							:id="`input-${uid}`"
 							ref="input"
 							v-focus-on-mount="focus"
 							:aria-label="showLabel ? undefined : label"
 							v-bind="$attrs"
 							:placeholder="placeholder"
 							:type="appliedType"
-							:value="vmodel"
+							:value="modelValue"
 							:disabled="disabled"
 							:class="classes"
 							:min="appliedType === 'date' && birthDate ? minDate : ''"
@@ -55,7 +55,7 @@
 					<v-btn
 						v-if="type === 'password' && !error && !success"
 						icon
-						plain
+						variant="plain"
 						type="button"
 						data-testid="pwd-visibility-toggle"
 						class="pwd-toggle"
@@ -64,8 +64,10 @@
 					>
 						<v-icon>{{ visibilityIcon }}</v-icon>
 					</v-btn>
-					<v-icon v-if="hasError" color="var(--v-error-base)">$mdiAlert</v-icon>
-					<v-icon v-if="success" color="var(--v-success-base)">
+					<v-icon v-if="hasError" color="rgba(var(--v-theme-error))"
+						>$mdiAlert</v-icon
+					>
+					<v-icon v-if="success" color="rgba(var(--v-theme-success))">
 						$mdiCheckCircleOutline
 					</v-icon>
 				</div>
@@ -86,8 +88,9 @@
 </template>
 <script>
 import { inputRangeDate } from "@/plugins/datetime";
-import uidMixin from "@/mixins/uid";
 import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
+import { defineComponent } from "vue";
+import { useUid } from "@/utils/uid";
 
 export const supportedTypes = [
 	"email",
@@ -102,14 +105,23 @@ export const supportedTypes = [
 	"time",
 ];
 
-export default {
-	mixins: [uidMixin],
-	model: {
-		prop: "vmodel",
-		event: "input",
+export default defineComponent({
+	setup() {
+		const { uid } = useUid();
+
+		return {
+			uid,
+		};
+	},
+	directives: {
+		focusOnMount: {
+			mounted(el, binding) {
+				if (binding.value) el.focus();
+			},
+		},
 	},
 	props: {
-		vmodel: { type: [String, Number], default: undefined },
+		modelValue: { type: [String, Number], default: undefined },
 		type: {
 			type: [String, Boolean], // Boolean is used to disable validation when the slot is used
 			required: true,
@@ -156,7 +168,7 @@ export default {
 			return (
 				(this.hasFocus ||
 					this.disabled ||
-					Boolean(this.vmodel) ||
+					Boolean(this.modelValue) ||
 					!this.placeholder) &&
 				!this.labelHidden
 			);
@@ -171,7 +183,7 @@ export default {
 			if (this.type === "number") {
 				newVal = parseInt(newVal, 10);
 			}
-			this.$emit("input", newVal);
+			this.$emit("update:modelValue", newVal);
 		},
 		togglePasswordVisibility() {
 			this.passwordVisible = !this.passwordVisible;
@@ -185,10 +197,12 @@ export default {
 			this.$emit("blur", event);
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .wrapper {
 	display: block;
 
@@ -204,7 +218,7 @@ export default {
 	&:focus-within,
 	&:hover:not(.disabled) {
 		.label {
-			color: var(--v-primary-base);
+			color: rgba(var(--v-theme-primary));
 		}
 
 		.help {
@@ -212,7 +226,7 @@ export default {
 		}
 
 		.visible {
-			fill: var(--v-primary-base);
+			fill: rgba(var(--v-theme-primary));
 		}
 	}
 }
@@ -223,11 +237,11 @@ export default {
 
 .top {
 	width: 100%;
-	border-bottom: var(--border-width) solid var(--v-black-base);
+	border-bottom: var(--border-width) solid rgba(var(--v-theme-black));
 
 	&:focus-within,
 	&:hover:not(.disabled) {
-		border-bottom: var(--border-width-bold) solid var(--v-primary-base);
+		border-bottom: var(--border-width-bold) solid rgba(var(--v-theme-primary));
 		outline: none;
 
 		~ .bottom-line {
@@ -236,7 +250,7 @@ export default {
 	}
 
 	&.base-input-error {
-		border-bottom-color: var(--v-error-base);
+		border-bottom-color: rgba(var(--v-theme-error));
 	}
 
 	&.disabled {
@@ -317,7 +331,7 @@ export default {
 		color: map-get($grey, darken-3);
 		outline: none;
 		box-shadow:
-			0 0 0 3px var(--v-white-base),
+			0 0 0 3px rgba(var(--v-theme-white)),
 			0 0 0 6px map-get($grey, darken-3);
 	}
 }
@@ -329,7 +343,7 @@ export default {
 }
 
 .base-input-info.base-input-error {
-	color: var(--v-error-base);
+	color: rgba(var(--v-theme-error));
 }
 
 .fade-enter-active {

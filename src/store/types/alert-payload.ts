@@ -3,10 +3,12 @@ export interface AlertMessage {
 	text: string;
 }
 
+export type AlertStatus = "success" | "error" | "warning" | "info";
+
 export interface AlertPayload {
 	text?: string;
 	messages?: Array<AlertMessage>;
-	status: "success" | "error" | "warning" | "info";
+	status: AlertStatus;
 	autoClose?: boolean;
 	timeout?: number;
 }

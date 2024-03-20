@@ -9,17 +9,17 @@
 		@dialog-confirmed="onConfirm"
 		@dialog-canceled="onCancel"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2">
-			{{ $t(`components.molecules.import.${parentType}.options.title`) }}
-		</div>
+		<template #title>
+			<div ref="textTitle" class="text-h4 my-2">
+				{{ $t(`components.molecules.import.${parentType}.options.title`) }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<div>
-				<div
-					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
-				>
+				<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 					<div class="mx-2">
-						<v-icon color="info">{{ mdiInformation }}</v-icon>
+						<v-icon color="info" :icon="mdiInformation" />
 					</div>
 					<RenderHTML
 						data-testid="import-modal-external-tools-info"
@@ -49,12 +49,12 @@
 
 <script>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY, injectStrict } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, defineComponent, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { RenderHTML } from "@feature-render-html";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ImportModal",
 	components: {
@@ -68,12 +68,12 @@ export default defineComponent({
 		parentType: { type: String, required: true },
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const nameInput = ref(undefined);
 
 		const rules = reactive({
-			required: (value) => !!value || i18n.t("common.validation.required"),
+			required: (value) => !!value || t("common.validation.required"),
 		});
 
 		const newName = computed({

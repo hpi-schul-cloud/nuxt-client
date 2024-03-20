@@ -17,8 +17,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
 import { ContentElementBar } from "@ui-board";
+import { defineComponent } from "vue";
 import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
 export default defineComponent({
@@ -44,6 +44,7 @@ export default defineComponent({
 .video {
 	width: 100%;
 	display: block;
+	outline: none;
 }
 
 .menu {

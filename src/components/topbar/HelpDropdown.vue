@@ -1,74 +1,58 @@
 <template>
 	<v-list class="pa-0 menu-width">
-		<template v-for="(item, index) in menuItems">
+		<template v-for="(item, index) in menuItems" :key="item.label">
 			<v-list-item
-				:key="item.label"
 				:href="item.action"
 				:target="item.target"
 				:ripple="false"
 				class="mb-0"
 			>
-				<v-list-item-icon class="ma-3 ml-0">
-					<v-icon color="primary">{{ item.icon }}</v-icon>
-				</v-list-item-icon>
-				<v-list-item-content>
-					<v-list-item-title class="primary--text link">
-						{{ item.label }}
-					</v-list-item-title>
-				</v-list-item-content>
+				<template v-slot:prepend
+					><v-icon :icon="item.icon" color="primary" />
+				</template>
+				<v-list-item-title class="text-primary link">{{
+					$t(item.label)
+				}}</v-list-item-title>
 			</v-list-item>
-			<v-divider v-if="index !== menuItems.length - 1" :key="index" />
+			<v-divider v-if="index !== menuItems.length - 1" />
 		</template>
 	</v-list>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
+<script setup lang="ts">
 import {
 	mdiChatOutline,
-	mdiFileQuestionOutline,
 	mdiFileCertificateOutline,
+	mdiFileQuestionOutline,
 	mdiGiftOutline,
 } from "@mdi/js";
 
-export default defineComponent({
-	name: "HelpDropdown",
-	setup() {
-		const i18n = injectStrict(I18N_KEY);
-
-		const menuItems = [
-			{
-				label: i18n.t("global.topbar.actions.helpSection"),
-				icon: mdiFileQuestionOutline,
-				action: "/help",
-				target: "_self",
-			},
-			{
-				label: i18n.t("global.topbar.actions.contactSupport"),
-				icon: mdiChatOutline,
-				action: "/help/contact",
-				target: "_self",
-			},
-			{
-				label: i18n.t("global.topbar.actions.releaseNotes"),
-				icon: mdiGiftOutline,
-				action: "/help/releases",
-				target: "_self",
-			},
-			{
-				label: i18n.t("global.topbar.actions.training"),
-				icon: mdiFileCertificateOutline,
-				action: "https://www.lernen.cloud/",
-				target: "_blank",
-			},
-		];
-
-		return {
-			menuItems,
-		};
+const menuItems = [
+	{
+		label: "global.topbar.actions.helpSection",
+		icon: mdiFileQuestionOutline,
+		action: "/help",
+		target: "_self",
 	},
-});
+	{
+		label: "global.topbar.actions.contactSupport",
+		icon: mdiChatOutline,
+		action: "/help/contact",
+		target: "_self",
+	},
+	{
+		label: "global.topbar.actions.releaseNotes",
+		icon: mdiGiftOutline,
+		action: "/help/releases",
+		target: "_self",
+	},
+	{
+		label: "global.topbar.actions.training",
+		icon: mdiFileCertificateOutline,
+		action: "https://www.lernen.cloud/",
+		target: "_blank",
+	},
+];
 </script>
 
 <style lang="scss" scoped>

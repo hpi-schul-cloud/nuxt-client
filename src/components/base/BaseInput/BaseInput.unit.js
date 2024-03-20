@@ -1,51 +1,41 @@
-import Vue from "vue";
-import VueI18n from "vue-i18n";
 import BaseInput from "./BaseInput";
 import { supportedTypes } from "./BaseInput";
-Vue.use(VueI18n);
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
+
+function createWrapper(props = {}) {
+	return mount(BaseInput, {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+		},
+		props,
+	});
+}
 
 describe("@/components/base/BaseInput", () => {
-	// BaseInput passes all given slots to it's child components
-	it("passes all given slots to it's child components", async () => {
-		const slotNames = ["default", "icon", "someRandomSlot"];
-		slotNames.forEach((slotName) => {
-			const slots = {};
-			slots[slotName] = `<p>Test-Slot: ${slotName}</p>`;
-			const wrapper = shallowMount(BaseInput, {
-				propsData: { vmodel: "test", type: "text", label: "Label" },
-				slots,
-			});
-			const childSlots = wrapper.vm.$children[0].$slots;
-			// expect(childSlots.hasOwnProperty(slotName)).toBe(true);
-			expect(Object.prototype.hasOwnProperty.call(childSlots, slotName)).toBe(
-				true
-			);
-			expect(childSlots[slotName]).toHaveLength(1);
-		});
-	});
-
 	it("all types have a label", () => {
 		const testLabel = "MyTestLabel";
 		supportedTypes
 			.filter((type) => type !== "hidden") // hidden inputs doesn't need a label
-			.forEach((type, index) => {
-				const wrapper = mount({
-					data: () => ({ value: false }),
-					template: `<base-input v-model="value" label="${testLabel}" type="${type}" value="${index}" name="test" />`,
-					components: { BaseInput },
+			.forEach((type) => {
+				const wrapper = createWrapper({
+					label: testLabel,
+					type,
 				});
 				expect(wrapper.find(".label").exists()).toBe(true);
 				expect(wrapper.text()).toContain(testLabel);
 			});
 	});
 
-	it("label of checkboxes, switches and radio buttons can be hidden", () => {
+	it("labels of checkboxes can be hidden", () => {
 		const testLabel = "MyTestLabel";
-		["checkbox", "radio"].forEach((type, index) => {
-			const wrapper = mount({
-				data: () => ({ value: "" }),
-				template: `<base-input v-model="value" label="${testLabel}" label-hidden type="${type}" value="${index}"/>`,
-				components: { BaseInput },
+		["checkbox"].forEach((type) => {
+			const wrapper = createWrapper({
+				label: testLabel,
+				labelHidden: true,
+				type,
 			});
 			expect(wrapper.find(".label").exists()).toBe(false);
 			expect(wrapper.find("input").attributes("aria-label")).toBe(testLabel);
@@ -55,19 +45,13 @@ describe("@/components/base/BaseInput", () => {
 	it("all types are passing through attributes", () => {
 		const attributes = { "data-test": "testAttrValue" };
 		supportedTypes.forEach((type) => {
-			const wrapper = mount(BaseInput, {
-				...createComponentMocks({
-					i18n: true,
-					vuetify: true,
-				}),
-				attrs: attributes,
-				propsData: {
-					vmodel: "",
-					label: "test",
-					name: "test",
-					value: "test",
-					type,
-				},
+			const wrapper = createWrapper({
+				modelValue: "",
+				label: "test",
+				name: "test",
+				value: "test",
+				type,
+				...attributes,
 			});
 			const input = wrapper.find("input, .input");
 			Object.keys(attributes).forEach((attr) => {
@@ -77,12 +61,10 @@ describe("@/components/base/BaseInput", () => {
 	});
 
 	it("writes an error to the console on unsupported types", () => {
-		mount({
-			data: () => ({ value: "" }),
-			template: `<base-input v-model="value" label="Label" type="bla" name="test" />`,
-			components: { BaseInput },
-		});
 		jest.spyOn(console, "error");
-		expect(console.error).not.toHaveBeenCalled();
+		createWrapper({
+			type: "unsupported",
+		});
+		expect(console.error).toHaveBeenCalled();
 	});
 });

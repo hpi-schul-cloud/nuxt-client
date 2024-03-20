@@ -38,6 +38,7 @@ export default {
 <style lang="scss" scoped>
 .icon {
 	font-size: var(--sidebar-item-height);
+	margin-bottom: var(--space-md);
 }
 
 .body-container {

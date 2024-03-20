@@ -4,6 +4,7 @@ const { createDevServerConfig } = require("./webpack-config/dev-server-config");
 const generateAliases = require("./webpack-config/theme-aliases");
 const ThemeResolverPlugin = require("./webpack-config/theme-resolver-plugin");
 const NoncePlaceholderPlugin = require("./webpack-config/nonce-placeholder-plugin");
+const { VuetifyPlugin } = require("webpack-plugin-vuetify");
 
 const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 
@@ -14,10 +15,15 @@ const getDir = (subPath) => path.resolve(__dirname, subPath);
 module.exports = defineConfig({
 	assetsDir: "_nuxt",
 
+	runtimeCompiler: true,
+
 	transpileDependencies: ["vuetify"],
 
 	configureWebpack: {
-		plugins: [new NoncePlaceholderPlugin()],
+		plugins: [
+			new VuetifyPlugin({ styles: { configFile: "src/styles/settings.scss" } }),
+			new NoncePlaceholderPlugin(),
+		],
 		resolve: {
 			alias: {
 				"@data-board": getDir("src/components/data-board"),
@@ -48,17 +54,19 @@ module.exports = defineConfig({
 				"@feature-board": getDir("src/components/feature-board"),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
+				"@feature-news-form": getDir("src/components/feature-news-form"),
 				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
-				"@ui-color-overlay": getDir("src/components/ui-color-overlay"),
 				"@ui-preview-image": getDir("src/components/ui-preview-image"),
 				"@ui-confirmation-dialog": getDir(
 					"src/components/ui-confirmation-dialog"
 				),
 				"@ui-date-time-picker": getDir("src/components/ui-date-time-picker"),
 				"@ui-light-box": getDir("src/components/ui-light-box"),
+				"@ui-speed-dial-menu": getDir("src/components/ui-speed-dial-menu"),
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
+				"@util-vue": getDir("src/components/util-vue"),
 				"@util-input-masks": getDir("src/components/util-input-masks"),
 				"@util-device-detection": getDir(
 					"src/components/util-device-detection"
@@ -68,6 +76,16 @@ module.exports = defineConfig({
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
+		},
+		module: {
+			rules: [
+				{
+					test: /\.ts$/,
+					type: "javascript/auto",
+					loader: path.resolve(__dirname, "webpack-config/vue-i18n-loader.js"),
+					include: [path.resolve(__dirname, "src/locales")],
+				},
+			],
 		},
 	},
 
@@ -89,6 +107,10 @@ module.exports = defineConfig({
 			.use("vue-loader")
 			.tap((options) => {
 				options.prettify = false;
+				options.compilerOptions = {
+					...(options.compilerOptions || {}),
+					isCustomElement: (tag) => tag.startsWith("h5p-"),
+				};
 				return options;
 			});
 		config.plugin("fork-ts-checker").tap((args) => {

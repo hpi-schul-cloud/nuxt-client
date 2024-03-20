@@ -1,7 +1,10 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
 import { mdiPause, mdiPlay } from "@mdi/js";
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { useMediaControls } from "@vueuse/core";
 import { ref } from "vue";
 import AudioDisplay from "./AudioDisplay.vue";
@@ -18,11 +21,9 @@ jest.mock("@vueuse/core", () => {
 describe("AudioDisplay", () => {
 	describe("when audio is not playing", () => {
 		const setup = () => {
-			document.body.setAttribute("data-app", "true");
-
 			const src = "test-source";
 			const slotContent = "test-slot-content";
-			const propsData = {
+			const props = {
 				src,
 			};
 
@@ -43,13 +44,16 @@ describe("AudioDisplay", () => {
 			});
 			jest.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
 
-			const wrapper = shallowMount(AudioDisplay, {
-				attachTo: document.body,
-				propsData,
+			const wrapper = mount(AudioDisplay, {
+				props,
 				slots: {
 					default: slotContent,
 				},
-				...createComponentMocks({}),
+				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			});
+
+			const contentElementBar = wrapper.findComponent({
+				name: "ContentElementBar",
 			});
 
 			return {
@@ -59,6 +63,7 @@ describe("AudioDisplay", () => {
 				durationRef,
 				playingRef,
 				rateRef,
+				contentElementBar,
 				onSourceErrorMock,
 			};
 		};
@@ -87,14 +92,16 @@ describe("AudioDisplay", () => {
 			const { wrapper, durationRef } = setup();
 
 			const slider = wrapper.findComponent({ name: "v-slider" });
-			expect(slider.attributes("max")).toBe(`${durationRef.value}`);
+
+			expect(slider.props("max")).toBe(durationRef.value);
 		});
 
 		it("should pass currentTime to v-slider", () => {
 			const { wrapper, currentTimeRef } = setup();
 
 			const slider = wrapper.findComponent({ name: "v-slider" });
-			expect(slider.attributes("value")).toBe(`${currentTimeRef.value}`);
+
+			expect(slider.props("modelValue")).toBe(currentTimeRef.value);
 		});
 
 		it("should have an accessible play button", () => {
@@ -104,9 +111,9 @@ describe("AudioDisplay", () => {
 			const playIcon = wrapper.findComponent({ name: "v-icon" });
 
 			expect(playButton.attributes("aria-label")).toBe(
-				wrapper.vm.$i18n.t("component.cardElement.fileElement.audioPlayer.play")
+				"component.cardElement.fileElement.audioPlayer.play"
 			);
-			expect(playIcon.text()).toBe(mdiPlay);
+			expect(playIcon.html()).toContain(mdiPlay);
 		});
 
 		it("should display duration", () => {
@@ -121,6 +128,7 @@ describe("AudioDisplay", () => {
 				const { wrapper, playingRef } = setup();
 
 				const playButton = wrapper.findComponent({ name: "v-btn" });
+
 				playButton.vm.$emit("click");
 
 				await wrapper.vm.$nextTick();
@@ -134,7 +142,8 @@ describe("AudioDisplay", () => {
 				const { wrapper, currentTimeRef } = setup();
 
 				const audioSlider = wrapper.findComponent({ name: "v-slider" });
-				audioSlider.vm.$emit("input", 10);
+
+				audioSlider.vm.$emit("update:model-value", 10);
 
 				await wrapper.vm.$nextTick();
 
@@ -166,11 +175,9 @@ describe("AudioDisplay", () => {
 
 	describe("when audio is playing", () => {
 		const setup = () => {
-			document.body.setAttribute("data-app", "true");
-
 			const src = "test-source";
 			const slotContent = "test-slot-content";
-			const propsData = {
+			const props = {
 				src,
 			};
 
@@ -189,13 +196,12 @@ describe("AudioDisplay", () => {
 			});
 			jest.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
 
-			const wrapper = shallowMount(AudioDisplay, {
-				attachTo: document.body,
-				propsData,
+			const wrapper = mount(AudioDisplay, {
+				props,
 				slots: {
 					default: slotContent,
 				},
-				...createComponentMocks({}),
+				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			});
 
 			return {
@@ -222,11 +228,9 @@ describe("AudioDisplay", () => {
 			const playIcon = wrapper.findComponent({ name: "v-icon" });
 
 			expect(playButton.attributes("aria-label")).toBe(
-				wrapper.vm.$i18n.t(
-					"component.cardElement.fileElement.audioPlayer.pause"
-				)
+				"component.cardElement.fileElement.audioPlayer.pause"
 			);
-			expect(playIcon.text()).toBe(mdiPause);
+			expect(playIcon.html()).toContain(mdiPause);
 		});
 
 		describe("when play button is clicked", () => {

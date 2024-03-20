@@ -33,28 +33,24 @@ export default defineComponent({
 		const interactionEvent = shallowRef<{ x: number; y: number } | undefined>();
 		provide(InlineEditInteractionEvent, interactionEvent);
 
-		const isDatePicker = (target: HTMLElement): boolean | void => {
-			if (target.className?.includes("v-picker--date")) {
-				return true;
-			}
+		const isDatePicker = (target: HTMLElement | SVGElement): boolean | void => {
+			return !!target.closest(".v-date-picker");
+		};
 
-			if (
-				target.className?.includes("v-menu__content") ||
-				!target.parentElement
-			) {
-				return false;
-			} else {
-				return isDatePicker(target.parentElement);
-			}
+		const isListItem = (target: HTMLElement | SVGElement): boolean => {
+			if (target instanceof SVGElement) return false;
+
+			return target.className?.includes("v-list-item");
 		};
 
 		const isAllowedTarget = (event: MouseEvent): boolean => {
-			if (!(event.target instanceof HTMLElement)) return true;
+			if (
+				!(event.target instanceof HTMLElement) &&
+				!(event.target instanceof SVGElement)
+			)
+				return true;
 
-			return (
-				!event.target?.className?.includes("v-list-item") &&
-				!isDatePicker(event.target)
-			);
+			return !isListItem(event.target) && !isDatePicker(event.target);
 		};
 
 		const onClickOutside = (event: MouseEvent) => {

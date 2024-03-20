@@ -1,10 +1,11 @@
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import { I18N_KEY } from "@/utils/inject";
-import { fileElementResponseFactory, i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { ColorOverlay } from "@ui-color-overlay";
+import { fileElementResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { ref } from "vue";
 import ImageDisplay from "./ImageDisplay.vue";
 
@@ -18,8 +19,6 @@ const mockedConvertDownloadToPreviewUrl = jest.mocked(
 
 describe("ImageDisplay", () => {
 	const setup = (props: { isEditMode: boolean; alternativeText?: string }) => {
-		document.body.setAttribute("data-app", "true");
-
 		const element = fileElementResponseFactory.build({
 			content: { alternativeText: props.alternativeText },
 		});
@@ -39,12 +38,11 @@ describe("ImageDisplay", () => {
 			(downloadUrl) => downloadUrl
 		);
 
-		const wrapper = shallowMount(ImageDisplay, {
-			attachTo: document.body,
-			propsData,
-			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+		const wrapper = mount(ImageDisplay, {
+			props: propsData,
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { PreviewImage: true },
 			},
 		});
 
@@ -57,7 +55,7 @@ describe("ImageDisplay", () => {
 			open,
 		};
 	};
-	const imageSelektor = "previewimage-stub";
+	const imageSelektor = "preview-image-stub";
 
 	describe("when isEditMode is false", () => {
 		it("should be found in dom", () => {
@@ -68,39 +66,17 @@ describe("ImageDisplay", () => {
 			expect(fileContentElement.exists()).toBe(true);
 		});
 
-		it("should render color overlay with correct props", () => {
-			const { wrapper } = setup({ isEditMode: false });
-
-			const colorOverlay = wrapper.findComponent(ColorOverlay);
-
-			expect(colorOverlay.exists()).toBe(true);
-			expect(colorOverlay.props("isOverlayDisabled")).toBe(false);
-			expect(colorOverlay.props("color")).toBe("var(--v-black-base)");
-			expect(colorOverlay.props("opacity")).toBeUndefined;
-		});
-
 		it("should display image with correct props", () => {
 			const { wrapper, previewSrc, nameProp } = setup({ isEditMode: false });
 
 			const image = wrapper.find(imageSelektor);
 
 			expect(image.exists()).toBe(true);
-			expect(image.attributes("contain")).toBe("true");
+			expect(image.attributes("cover")).toBe("true");
 			expect(image.attributes("src")).toBe(previewSrc);
 			expect(image.attributes("alt")).toBe(
 				"components.cardElement.fileElement.emptyAlt " + nameProp
 			);
-		});
-
-		describe("when preview image emits error", () => {
-			it("should disable color overlay", async () => {
-				const { wrapper } = setup({ isEditMode: false });
-				const previewImage = wrapper.find("previewimage-stub");
-				await previewImage.vm.$emit("error");
-
-				const colorOverlay = wrapper.findComponent(ColorOverlay);
-				expect(colorOverlay.props("isOverlayDisabled")).toBe(true);
-			});
 		});
 
 		describe("when alternative text is defined", () => {
@@ -129,7 +105,7 @@ describe("ImageDisplay", () => {
 			});
 		});
 
-		describe("when color overlay emits on:action", () => {
+		describe("when div emits click", () => {
 			it("should call open function", () => {
 				const alternativeText = "alternative text";
 				const { wrapper, src, nameProp, open } = setup({
@@ -143,8 +119,9 @@ describe("ImageDisplay", () => {
 					name: nameProp,
 				};
 
-				const colorOverlay = wrapper.findComponent(ColorOverlay);
-				colorOverlay.vm.$emit("on:action");
+				const image = wrapper.find(imageSelektor);
+				expect(image.exists()).toBe(true);
+				image.trigger("click");
 
 				expect(open).toHaveBeenCalledTimes(1);
 				expect(open).toHaveBeenCalledWith(options);
@@ -159,17 +136,6 @@ describe("ImageDisplay", () => {
 			const fileContentElement = wrapper.findComponent(ImageDisplay);
 
 			expect(fileContentElement.exists()).toBe(true);
-		});
-
-		it("should render color overlay with correct props", () => {
-			const { wrapper } = setup({ isEditMode: true });
-
-			const colorOverlay = wrapper.findComponent(ColorOverlay);
-
-			expect(colorOverlay.exists()).toBe(true);
-			expect(colorOverlay.props("isOverlayDisabled")).toBe(true);
-			expect(colorOverlay.props("color")).toBe("var(--v-black-base)");
-			expect(colorOverlay.props("opacity")).toBeUndefined;
 		});
 
 		it("should display image with correct props", () => {

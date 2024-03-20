@@ -2,8 +2,8 @@
 	<v-hover v-model="isHovering" :disabled="isMenuActive">
 		<v-list-item
 			:key="task.id"
-			v-click-outside="() => handleFocus(false)"
-			class="mx-n4 mx-sm-0"
+			v-outside-click="() => handleFocus(false)"
+			class="px-xxl-4 px-xl-4 px-lg-4 px-md-4 px-sm-4 px-0"
 			v-bind="$attrs"
 			:aria-label="ariaLabel"
 			role="article"
@@ -11,39 +11,53 @@
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"
 		>
-			<v-list-item-avatar>
-				<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
-			</v-list-item-avatar>
-			<v-list-item-content>
-				<v-list-item-subtitle data-testid="taskSubtitle">
-					{{ taskLabel }}
-				</v-list-item-subtitle>
-				<v-list-item-title data-testid="taskTitle">
-					{{ task.name }}
-				</v-list-item-title>
-				<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
-			</v-list-item-content>
-			<v-list-item-action>
-				<v-list-item-action-text class="subtitle-2" data-test-id="dueDateLabel">
-					{{ dueDateLabel }}
-				</v-list-item-action-text>
-				<v-spacer />
-				<v-custom-chip-time-remaining
-					v-if="taskState === 'warning'"
-					:type="taskState"
-					:due-date="task.dueDate"
-					:shorten-unit="$vuetify.breakpoint.xsOnly"
-				/>
-			</v-list-item-action>
-			<v-list-item-action :id="`task-menu-${task.id}`" class="context-menu-btn">
-				<task-item-menu
-					:task-id="task.id"
-					:task-is-finished="task.status.isFinished"
-					user-role="student"
-					@toggled-menu="toggleMenu"
-					@focus-changed="handleFocus"
-				/>
-			</v-list-item-action>
+			<!-- item avatar -->
+			<template v-slot:prepend>
+				<v-avatar>
+					<v-icon class="fill" :color="iconColor">{{ taskIcon }}</v-icon>
+				</v-avatar>
+			</template>
+			<!-- item main info -->
+			<div
+				class="d-flex align-center justify-space-between flex-wrap flex-sm-nowrap"
+			>
+				<!-- item title -->
+				<div class="task-item__main-info w-65" :style="conditionalWidth">
+					<v-list-item-subtitle data-testid="taskSubtitle">
+						{{ taskLabel }}
+					</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskTitle" class="text-truncate">
+						{{ task.name }}
+					</v-list-item-title>
+					<v-list-item-subtitle>{{ topic }}</v-list-item-subtitle>
+				</div>
+				<div class="d-sm-block mr-sm-4 d-flex">
+					<div
+						class="text-subtitle-2 due-date-label"
+						data-test-id="dueDateLabel"
+					>
+						{{ dueDateLabel }}
+					</div>
+					<v-custom-chip-time-remaining
+						v-if="taskState === 'warning'"
+						class="ml-2 ml-sm-0 float-sm-right"
+						:type="taskState"
+						:due-date="task.dueDate"
+					/>
+				</div>
+			</div>
+
+			<template v-slot:append>
+				<div :id="`task-menu-${task.id}`" class="context-menu-btn">
+					<task-item-menu
+						:task-id="task.id"
+						:task-is-finished="task.status.isFinished"
+						user-role="student"
+						@toggled-menu="toggleMenu"
+						@focus-changed="handleFocus"
+					/>
+				</div>
+			</template>
 		</v-list-item>
 	</v-hover>
 </template>
@@ -56,11 +70,15 @@ import {
 	fromNowToFuture,
 } from "@/plugins/datetime";
 import TaskItemMenu from "@/components/molecules/TaskItemMenu.vue";
+import { vOnClickOutside } from "@vueuse/components";
 
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name"];
 
 export default {
 	components: { VCustomChipTimeRemaining, TaskItemMenu },
+	directives: {
+		outsideClick: vOnClickOutside,
+	},
 	props: {
 		task: {
 			type: Object,
@@ -122,7 +140,7 @@ export default {
 		},
 		dueDateLabel() {
 			const dueDate = this.task.dueDate;
-			const convertedDueDate = this.$vuetify.breakpoint.xsOnly
+			const convertedDueDate = this.$vuetify.display.xs
 				? dateFromUTC(dueDate)
 				: dateTimeFromUTC(dueDate);
 
@@ -135,6 +153,12 @@ export default {
 		},
 		ariaLabel() {
 			return `${this.$t("common.words.task")} ${this.task.name}`;
+		},
+		conditionalWidth() {
+			if (this.$vuetify.display.xs) {
+				return "width: 96%";
+			}
+			return "width: 65%";
 		},
 	},
 	methods: {
@@ -160,8 +184,12 @@ export default {
 	fill: currentColor;
 }
 
-// stylelint-disable sh-waqar/declaration-use-variable
-.context-menu-btn {
-	min-width: 45px;
+:deep(.v-list-item__prepend .v-icon) {
+	width: inherit;
+	height: inherit;
+}
+
+:deep(.due-date-label) {
+	opacity: var(--v-medium-emphasis-opacity);
 }
 </style>

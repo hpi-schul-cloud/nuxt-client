@@ -1,28 +1,30 @@
-/* eslint-disable max-lines */
-import vCustomFab from "@/components/atoms/vCustomFab.vue";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
+import EnvConfigModule from "@/store/env-config";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
-import { User } from "@/store/types/auth";
 import {
+	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { meResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { VAutocomplete } from "vuetify/lib/components/index.mjs";
 import TasksDashboardMain from "./TasksDashboardMain.vue";
 import TasksDashboardStudent from "./TasksDashboardStudent.vue";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import EnvConfigModule from "../../store/env-config";
 
 const $route = {
 	query: {
@@ -50,21 +52,6 @@ const defaultTasksModuleGetters: Partial<TasksModule> = {
 	hasTasks: false,
 };
 
-const mockAuthStoreDataTeacher = {
-	_id: "asdfg",
-	id: "asdfg",
-	firstName: "Peter",
-	lastName: "Parker",
-	email: "peter.parker@hitchhiker.org",
-	roles: [{ name: "teacher" }],
-	permissions: [
-		"COURSE_CREATE",
-		"COURSE_EDIT",
-		"TOPIC_CREATE",
-		"HOMEWORK_CREATE",
-	],
-};
-
 describe("@/components/templates/TasksDashboardMain", () => {
 	let tasksModuleMock: TasksModule;
 	let copyModuleMock: CopyModule;
@@ -73,31 +60,32 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let notifierModuleMock: NotifierModule;
 	let shareModuleMock: ShareModule;
 	let authModuleMock: AuthModule;
-	let wrapper: Wrapper<Vue>;
+	let wrapper: VueWrapper;
 
-	const mountComponent = (attrs = {}) => {
+	const mountComponent = (options = {}) => {
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			getCtlToolsTabEnabled: false,
 		});
 
-		return mount(TasksDashboardMain as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-				$router,
-				$route,
-			}),
-			provide: {
-				tasksModule: tasksModuleMock,
-				copyModule: copyModuleMock,
-				finishedTasksModule: finishedTasksModuleMock,
-				loadingStateModule: loadingStateModuleMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-				shareModule: shareModuleMock,
-				authModule: authModuleMock,
-				[I18N_KEY as symbol]: { t: (key: string) => key },
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+		return mount(TasksDashboardMain, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					tasksModule: tasksModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+					finishedTasksModule: finishedTasksModuleMock,
+					loadingStateModule: loadingStateModuleMock,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+					shareModule: shareModuleMock,
+					authModule: authModuleMock,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
+				mocks: {
+					$router,
+					$route,
+				},
 			},
-			...attrs,
+			...options,
 		});
 	};
 
@@ -125,7 +113,9 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				TasksModule,
 				defaultTasksModuleGetters
 			);
-			copyModuleMock = createModuleMocks(CopyModule);
+			copyModuleMock = createModuleMocks(CopyModule, {
+				getIsResultModalOpen: false,
+			});
 			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 
 			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
@@ -138,7 +128,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 
 			wrapper = mountComponent({
-				propsData: {
+				props: {
 					role: "student",
 				},
 			});
@@ -161,7 +151,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should not render add task button", () => {
-			const fab = wrapper.findComponent(vCustomFab);
+			const fab = wrapper.findComponent(SpeedDialMenu);
 			expect(fab.exists()).toBe(false);
 		});
 
@@ -187,15 +177,16 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				});
 
 				wrapper = mountComponent({
-					propsData: {
+					props: {
 						role: "student",
 					},
 				});
 			});
 
-			it("should call 'setCourseFilters' mutation with v-autocomplete on change", () => {
-				const autocompleteEl = wrapper.find(".v-autocomplete");
-				autocompleteEl.vm.$emit("selected-item");
+			it("should call 'setCourseFilters' mutation with v-autocomplete on change", async () => {
+				const autocompleteEl =
+					wrapper.findComponent<VAutocomplete>(".v-autocomplete");
+				autocompleteEl.vm.$emit("update:modelValue");
 
 				expect(tasksModuleMock.setCourseFilters).toHaveBeenCalled();
 			});
@@ -224,7 +215,9 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 			loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 			notifierModuleMock = createModuleMocks(NotifierModule);
-			shareModuleMock = createModuleMocks(ShareModule);
+			shareModuleMock = createModuleMocks(ShareModule, {
+				getIsShareModalOpen: false,
+			});
 
 			finishedTasksModuleMock = createModuleMocks(FinishedTasksModule, {
 				getTasks: [],
@@ -237,9 +230,12 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				envConfigModule: EnvConfigModule,
 			});
 
-			authModule.setUser(mockAuthStoreDataTeacher as User);
+			const mockMe = meResponseFactory.build({
+				permissions: ["HOMEWORK_CREATE"],
+			});
+			authModule.setMe(mockMe);
 			wrapper = mountComponent({
-				propsData: {
+				props: {
 					role: "teacher",
 				},
 			});
@@ -262,13 +258,13 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should render add task button", () => {
-			const fabComponent: any = wrapper.find(".wireframe-fab");
+			const fabComponent = wrapper.find(".wireframe-fab");
 			expect(fabComponent.exists()).toEqual(true);
 		});
 
 		it("'add task' button should have correct path", async () => {
-			const fabComponent: any = wrapper.find(".wireframe-fab");
-			expect(fabComponent.vm.href).toStrictEqual(
+			const fabComponent = await wrapper.findComponent(SpeedDialMenu);
+			expect(fabComponent.props("href")).toStrictEqual(
 				"/homework/new?returnUrl=tasks"
 			);
 		});
@@ -286,7 +282,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 
 			wrapper = mountComponent({
-				propsData: {
+				props: {
 					role: "teacher",
 				},
 			});
@@ -303,7 +299,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 
 			wrapper = mountComponent({
-				propsData: {
+				props: {
 					role: "teacher",
 				},
 			});
@@ -320,7 +316,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 
 			wrapper = mountComponent({
-				propsData: {
+				props: {
 					role: "teacher",
 				},
 			});
@@ -337,7 +333,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 
 			wrapper = mountComponent({
-				propsData: {
+				props: {
 					role: "teacher",
 				},
 			});
@@ -348,8 +344,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should call 'setSubstituteFilter' mutation on switch 'input-changed' event", async () => {
-			const switchEl = wrapper.find(".v-input--switch");
-			switchEl.vm.$emit("input-changed");
+			const switchEl = wrapper
+				.findComponent({ name: "v-switch" })
+				.get('input[type="checkbox"');
+			await switchEl.trigger("input");
 			expect(tasksModuleMock.setSubstituteFilter).toHaveBeenCalled();
 		});
 
@@ -363,7 +361,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				});
 
 				wrapper = mountComponent({
-					propsData: {
+					props: {
 						role: "teacher",
 					},
 				});
@@ -398,7 +396,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 
 			wrapper = mountComponent({
-				propsData: {
+				props: {
 					role: "student",
 				},
 			});
@@ -431,7 +429,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 
 			wrapper = mountComponent({
-				propsData: {
+				props: {
 					role: "student",
 				},
 			});

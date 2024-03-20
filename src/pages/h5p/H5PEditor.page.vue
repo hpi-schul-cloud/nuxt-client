@@ -2,8 +2,7 @@
 	<section :class="{ inline: isInline }">
 		<v-btn
 			v-if="isInline"
-			text
-			plain
+			variant="plain"
 			:ripple="false"
 			design="none"
 			class="arrow__back"
@@ -36,13 +35,12 @@ import { useApplicationError } from "@/composables/application-error.composable"
 import { applicationErrorModule, notifierModule } from "@/store";
 import { mdiChevronLeft } from "@mdi/js";
 import { PropType, defineComponent, ref } from "vue";
-import VueI18n from "vue-i18n";
-import { useRoute } from "vue-router/composables";
+import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "H5PEditor",
@@ -62,16 +60,7 @@ export default defineComponent({
 	setup() {
 		const { createApplicationError } = useApplicationError();
 
-		const i18n = injectStrict(I18N_KEY);
-
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values | undefined): string => {
-			const translateResult = i18n.t(key, values);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const { t } = useI18n();
 
 		const route = useRoute();
 

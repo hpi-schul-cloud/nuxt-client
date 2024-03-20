@@ -107,12 +107,11 @@ describe("news store", () => {
 				.mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
 			const newsModule = new NewsModule({});
 
-			const newsToCreate = {
+			const newsToCreate: serverApi.CreateNewsParams = {
 				title: "a news title",
 				content: "a news content",
-				schoolId: "1234",
-				targetId: null,
-				targetModel: null,
+				targetId: "4711",
+				targetModel: serverApi.CreateNewsParamsTargetModelEnum.Courses,
 			};
 
 			newsModule.createNews(newsToCreate).then(() => {
@@ -137,11 +136,12 @@ describe("news store", () => {
 				.spyOn(serverApi, "NewsApiFactory")
 				.mockReturnValue(mockApi as unknown as serverApi.NewsApiInterface);
 			const newsModule = new NewsModule({});
-			const newsToCreate = {
+			const newsToCreate: serverApi.CreateNewsParams = {
 				title: "a news title",
 				content: "a news content",
 				schoolId: "1234",
-				targetId: null,
+				targetId: "4711",
+				// @ts-expect-error intended
 				targetModel: null,
 			};
 

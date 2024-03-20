@@ -8,15 +8,15 @@
 		@next="onNext(selectedCourse)"
 		@dialog-canceled="onCancel"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2">
-			{{ $t(`components.molecules.import.${parentType}.options.title`) }}
-		</div>
+		<template #title>
+			<div ref="textTitle" class="text-h4 my-2">
+				{{ $t(`components.molecules.import.${parentType}.options.title`) }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<div>
-				<div
-					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
-				>
+				<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 					<div class="mx-2">
 						<v-icon color="info">{{ mdiInformation }}</v-icon>
 					</div>
@@ -32,7 +32,7 @@
 					v-model="selectedCourse"
 					return-object
 					item-value="id"
-					item-text="title"
+					item-title="title"
 					:items="courses"
 					:placeholder="
 						$t(`components.molecules.import.${parentType}.options.selectCourse`)
@@ -41,7 +41,6 @@
 					:error="showError()"
 					:hint="$t('common.labels.course')"
 					persistent-hint
-					:append-icon="mdiTriangleSmallDown"
 					:menu-props="{ bottom: true, offsetY: true, nudgeBottom: 28 }"
 				/>
 			</div>
@@ -51,9 +50,9 @@
 
 <script type="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation, mdiTriangleSmallDown } from "@mdi/js";
 import { defineComponent, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -61,7 +60,7 @@ export default defineComponent({
 	components: {
 		vCustomDialog,
 	},
-	emits: ["import", "cancel"],
+	emits: ["import", "cancel", "next"],
 	props: {
 		isOpen: { type: Boolean },
 		parentName: { type: String, required: true },
@@ -69,7 +68,7 @@ export default defineComponent({
 		courses: { type:Array, required: true }
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 
 		const selectedCourse = ref(undefined);
 
@@ -77,7 +76,7 @@ export default defineComponent({
 		const showError = () => !(selectedCourse.value) && showErrorOnEmpty.value;
 
 		const rules = reactive({
-          required: value => !!value || i18n.t("common.validation.required"),
+          required: value => !!value || t("common.validation.required"),
 		});
 
 		const onNext = () => {

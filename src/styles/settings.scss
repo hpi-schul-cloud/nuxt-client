@@ -1,0 +1,58 @@
+@forward 'vuetify/settings' with (
+  $body-font-family: var(--font-primary),
+  $heading-font-family: var(--font-accent),
+  $line-height-root: var(--line-height-md),
+
+  $typography: (
+    "h1": (
+      "size": var(--heading-1),
+      "line-height": var(--line-height-sm),
+    ),
+    "h2": (
+      "size": var(--heading-2),
+      "line-height": var(--line-height-sm),
+    ),
+    "h3": (
+      "size": var(--heading-3),
+      "line-height": var(--line-height-sm),
+    ),
+    "h4": (
+      "size": var(--heading-4),
+      "line-height": var(--line-height-sm),
+    ),
+    "h5": (
+      "size": var(--heading-5),
+      "line-height": var(--line-height-sm),
+      "weight": var(--font-weight-bold),
+    ),
+    "h6": (
+      "size": var(--heading-6),
+      "line-height": var(--line-height-sm),
+      "weight": var(--font-weight-bold),
+    ),
+  ),
+
+  // v-btn
+  $button-font-size: 1rem,
+  $button-text-transform: none,
+  $button-font-weight: var(--font-weight-bold),
+  $button-text-letter-spacing: 0.044em,
+  // $button-focus-opacity: 0,
+
+  // tabs
+  // $tabs-item-letter-spacing: inherit,
+
+  // table
+  // $data-table-regular-header-font-size: 1rem,
+  // $data-table-regular-row-font-size: 1rem,
+
+  // card
+  $card-text-letter-spacing: normal,
+
+  // list
+  $list-item-icon-margin-start: 8px,
+
+  // treeview
+  // $treeview-node-margin: 0,
+  // $treeview-node-padding: 0,
+);

@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<v-text-field
-			filled
-			:value="shareUrl"
+			variant="filled"
+			:model-value="shareUrl"
 			readonly
 			:label="`${$t(`components.molecules.share.${type}.result.linkLabel`)}`"
 		/>
@@ -12,8 +12,8 @@
 				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
 			>
 				<v-btn
-					plain
-					large
+					variant="plain"
+					size="large"
 					class="d-sm-none d-flex button-alignment-top mb-2"
 					:height="84"
 					data-testid="mobilePlatformAction"
@@ -23,14 +23,14 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiShareVariantOutline }}</v-icon></span
+							<v-icon size="large">{{ mdiShareVariantOutline }}</v-icon></span
 						>
 						<span class="subtitle">{{ $t("common.actions.share") }}</span>
 					</span>
 				</v-btn>
 				<v-btn
-					plain
-					large
+					variant="plain"
+					size="large"
 					:height="84"
 					class="d-sm-flex d-none button-alignment-top"
 					data-testid="shareMailAction"
@@ -40,7 +40,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
+							<v-icon size="large">{{ mdiEmailOutline }}</v-icon></span
 						>
 						<span class="subtitle">{{
 							$t("components.molecules.share.result.mailShare")
@@ -49,8 +49,8 @@
 				</v-btn>
 
 				<v-btn
-					plain
-					large
+					variant="plain"
+					size="large"
 					:height="84"
 					class="d-sm-flex d-none button-alignment-top"
 					data-testid="copyAction"
@@ -60,7 +60,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiContentCopy }}</v-icon></span
+							<v-icon size="large">{{ mdiContentCopy }}</v-icon></span
 						>
 						<span class="subtitle">{{
 							$t("components.molecules.share.result.copyClipboard")
@@ -69,8 +69,8 @@
 				</v-btn>
 
 				<v-btn
-					plain
-					large
+					variant="plain"
+					size="large"
 					:height="84"
 					data-testid="qrCodeAction"
 					class="button-alignment-top"
@@ -80,7 +80,7 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiQrcode }}</v-icon></span
+							<v-icon size="large">{{ mdiQrcode }}</v-icon></span
 						>
 						<span class="subtitle">{{
 							$t("components.molecules.share.result.qrCodeScan")
@@ -101,7 +101,6 @@
 <script>
 import BaseQrCode from "@/components/base/BaseQrCode";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiContentCopy,
 	mdiEmailOutline,
@@ -109,6 +108,7 @@ import {
 	mdiShareVariantOutline,
 } from "@mdi/js";
 import { defineComponent, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -129,15 +129,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
-		const t = (key) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
+		const { t } = useI18n();
 
 		const onMailShareUrl = (shareUrl, type) => {
 			const subject = encodeURIComponent(
@@ -188,9 +180,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "@/utils/multiline-ellipsis.scss";
-@import "~vuetify/src/styles/styles.sass";
-
 .subtitle {
 	overflow-wrap: break-word;
 	white-space: normal;

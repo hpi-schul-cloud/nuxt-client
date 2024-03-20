@@ -33,7 +33,7 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import AuthModule from "@/store/auth";
 import {
 	SchoolExternalTool,
@@ -62,8 +62,7 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import VueRouter from "vue-router";
-import { useRouter } from "vue-router/composables";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
 	components: {
@@ -89,17 +88,17 @@ export default defineComponent({
 		useTitle(pageTitle);
 
 		const schoolSetting: Breadcrumb = {
-			text: t("pages.administration.school.index.title"),
+			title: t("pages.administration.school.index.title"),
 			to: "/administration/school-settings",
 		};
 		const breadcrumbs: Breadcrumb[] = [
 			{
-				text: t("pages.administration.index.title"),
+				title: t("pages.administration.index.title"),
 				to: "/administration/",
 			},
 			schoolSetting,
 			{
-				text: t("pages.tool.title"),
+				title: t("pages.tool.title"),
 				disabled: true,
 			},
 		];
@@ -124,9 +123,9 @@ export default defineComponent({
 				: undefined
 		);
 
-		const router: VueRouter = useRouter();
+		const router = useRouter();
 		const onCancel = () => {
-			router.push({ path: schoolSetting.to });
+			router.push({ path: schoolSetting.to! });
 		};
 
 		const isDeactivated: Ref<boolean> = ref(false);
@@ -135,12 +134,12 @@ export default defineComponent({
 			template: SchoolExternalToolConfigurationTemplate,
 			configuredParameterValues: ToolParameterEntry[]
 		) => {
-			if (authModule.getUser) {
+			if (authModule.getSchool) {
 				const schoolExternalTool: SchoolExternalToolSave =
 					SchoolExternalToolMapper.mapTemplateToSchoolExternalToolSave(
 						template,
 						configuredParameterValues,
-						authModule.getUser.schoolId,
+						authModule.getSchool.id,
 						isDeactivated.value
 					);
 
@@ -191,9 +190,9 @@ export default defineComponent({
 
 				isDeactivated.value =
 					configuration.value?.status.isDeactivated ?? false;
-			} else if (authModule.getUser) {
+			} else if (authModule.getSchool) {
 				await schoolExternalToolsModule.loadAvailableToolsForSchool(
-					authModule.getUser?.schoolId
+					authModule.getSchool.id
 				);
 			}
 

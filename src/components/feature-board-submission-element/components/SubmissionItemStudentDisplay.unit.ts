@@ -1,10 +1,10 @@
-import Vue from "vue";
-import { I18N_KEY } from "@/utils/inject";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { i18nMock } from "@@/tests/test-utils";
-import { mount, MountOptions } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import { StudentSubmission } from "../types/submission";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("SubmissionItemStudentDisplay", () => {
 	const setup = (
@@ -12,20 +12,17 @@ describe("SubmissionItemStudentDisplay", () => {
 		studentSubmission = { completed: true },
 		isOverdue = false
 	) => {
-		document.body.setAttribute("data-app", "true");
-
-		const propsData = {
+		const props = {
 			isOverdue,
 			loading,
 			studentSubmission,
 		};
 
-		const wrapper = mount(SubmissionItemStudentDisplay as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
-			propsData,
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+		const wrapper = mount(SubmissionItemStudentDisplay, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
+			props,
 		});
 
 		return {
@@ -43,8 +40,8 @@ describe("SubmissionItemStudentDisplay", () => {
 	it("should emit 'update:completed' when completed state changes", async () => {
 		const { wrapper } = setup();
 
-		const component = wrapper.findComponent({ name: "v-checkbox" });
-		component.vm.$emit("change");
+		const checkbox = wrapper.findComponent({ name: "v-checkbox" });
+		await checkbox.setValue(true);
 
 		const emitted = wrapper.emitted();
 		expect(emitted["update:completed"]).toBeDefined();
@@ -95,10 +92,9 @@ describe("SubmissionItemStudentDisplay", () => {
 
 				const checked = wrapper
 					.findComponent({ name: "v-checkbox" })
-					.find("input")
-					.attributes("aria-checked");
+					.get("input").element.checked;
 
-				expect(checked).toEqual("false");
+				expect(checked).toBe(false);
 			});
 		});
 
@@ -109,10 +105,9 @@ describe("SubmissionItemStudentDisplay", () => {
 
 				const checked = wrapper
 					.findComponent({ name: "v-checkbox" })
-					.find("input")
-					.attributes("aria-checked");
+					.get("input").element.checked;
 
-				expect(checked).toEqual("true");
+				expect(checked).toBe(true);
 			});
 		});
 

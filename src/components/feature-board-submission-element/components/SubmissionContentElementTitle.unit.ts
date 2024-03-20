@@ -1,23 +1,17 @@
-import Vue from "vue";
-import { I18N_KEY } from "@/utils/inject";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { shallowMount, MountOptions } from "@vue/test-utils";
-import { i18nMock } from "@@/tests/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("SubmissionContentElementTitle", () => {
 	const setup = () => {
-		document.body.setAttribute("data-app", "true");
-
-		const wrapper = shallowMount(
-			SubmissionContentElementTitle as MountOptions<Vue>,
-			{
-				...createComponentMocks({ i18n: true }),
-				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
-				},
-			}
-		);
+		const wrapper = shallowMount(SubmissionContentElementTitle, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+		});
 
 		return {
 			wrapper,

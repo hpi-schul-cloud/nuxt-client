@@ -1,11 +1,11 @@
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
-import { MountOptions, shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
-import Vue from "vue";
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -13,14 +13,13 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 
 describe("@/components/error-handling/ErrorContent.vue", () => {
 	const getWrapper = (errorText: string, statusCode: HttpStatusCode) => {
-		return shallowMount(ErrorContent as MountOptions<Vue>, {
-			...createComponentMocks({ i18n: true }),
+		return mount(ErrorContent, {
 			propsData: {
 				errorText,
 				statusCode,
 			},
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
 	};
@@ -35,18 +34,15 @@ describe("@/components/error-handling/ErrorContent.vue", () => {
 	});
 
 	it("should show generic error svg", async () => {
+		const errorMessage = "I'm an error message";
 		const wrapper = getWrapper(
-			"an error has occurred",
+			errorMessage,
 			HttpStatusCode.InternalServerError
 		);
+
 		const genericErrorImage = wrapper.find('[data-testid="img-generic"]');
 		expect(genericErrorImage.element).toBeInstanceOf(HTMLImageElement);
-		const genericErrorImageContent = await wrapper.find(
-			'[data-testid="img-generic"]'
-		);
-		expect(genericErrorImageContent.attributes("src")).toContain(
-			"assets/img/pc_repair.png"
-		);
+		expect(genericErrorImage.attributes("alt")).toContain(errorMessage);
 	});
 
 	it.each([HttpStatusCode.Unauthorized, HttpStatusCode.Forbidden])(
@@ -56,7 +52,7 @@ describe("@/components/error-handling/ErrorContent.vue", () => {
 				"an permission error has occurred",
 				statusCode
 			);
-			const permissionElement = await wrapper.findComponent(PermissionErrorSvg);
+			const permissionElement = wrapper.findComponent(PermissionErrorSvg);
 			expect(permissionElement.exists()).toBe(true);
 		}
 	);

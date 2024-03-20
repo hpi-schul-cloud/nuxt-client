@@ -1,14 +1,17 @@
 <template>
-	<v-row no-gutters align="center">
-		<v-img
-			v-if="item.logoUrl"
-			:max-height="$props.maxHeight"
-			:max-width="$props.maxWidth"
-			:src="item.logoUrl"
-			class="mx-2"
-		/>
-		<span> {{ item.name }} </span>
-	</v-row>
+	<v-list-item :title="item.name">
+		<template #prepend v-if="item.logoUrl">
+			<v-img
+				cover
+				v-if="item.logoUrl"
+				:max-height="maxHeight"
+				:max-width="maxWidth"
+				:src="item.logoUrl"
+				:width="maxHeight"
+				class="mx-2"
+			/>
+		</template>
+	</v-list-item>
 </template>
 
 <script lang="ts">

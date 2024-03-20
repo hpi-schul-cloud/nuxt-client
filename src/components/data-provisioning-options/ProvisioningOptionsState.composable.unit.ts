@@ -11,9 +11,10 @@ import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
 import { ProvisioningOptions } from "./type";
 import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory/provisioningOptionsDataFactory";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 jest.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
 
@@ -42,8 +43,13 @@ describe("ProvisioningOptionsState.composable", () => {
 				const composable = mountComposable(
 					() => useProvisioningOptionsState(),
 					{
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						[I18N_KEY.valueOf()]: i18nMock,
+						global: {
+							provide: {
+								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+							},
+							plugins: [createTestingI18n()],
+							mocks: i18nMock,
+						},
 					}
 				);
 
@@ -75,8 +81,13 @@ describe("ProvisioningOptionsState.composable", () => {
 				const composable = mountComposable(
 					() => useProvisioningOptionsState(),
 					{
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						[I18N_KEY.valueOf()]: i18nMock,
+						global: {
+							provide: {
+								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+							},
+							plugins: [createTestingI18n()],
+							mocks: i18nMock,
+						},
 					}
 				);
 
@@ -135,8 +146,13 @@ describe("ProvisioningOptionsState.composable", () => {
 				const composable = mountComposable(
 					() => useProvisioningOptionsState(),
 					{
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						[I18N_KEY.valueOf()]: i18nMock,
+						global: {
+							provide: {
+								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+							},
+							plugins: [createTestingI18n()],
+							mocks: i18nMock,
+						},
 					}
 				);
 
@@ -205,8 +221,13 @@ describe("ProvisioningOptionsState.composable", () => {
 				const composable = mountComposable(
 					() => useProvisioningOptionsState(),
 					{
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						[I18N_KEY.valueOf()]: i18nMock,
+						global: {
+							provide: {
+								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+							},
+							plugins: [createTestingI18n()],
+							mocks: i18nMock,
+						},
 					}
 				);
 
@@ -242,8 +263,13 @@ describe("ProvisioningOptionsState.composable", () => {
 				const composable = mountComposable(
 					() => useProvisioningOptionsState(),
 					{
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						[I18N_KEY.valueOf()]: i18nMock,
+						global: {
+							provide: {
+								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+							},
+							plugins: [createTestingI18n()],
+							mocks: i18nMock,
+						},
 					}
 				);
 
@@ -313,8 +339,13 @@ describe("ProvisioningOptionsState.composable", () => {
 				const composable = mountComposable(
 					() => useProvisioningOptionsState(),
 					{
-						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-						[I18N_KEY.valueOf()]: i18nMock,
+						global: {
+							provide: {
+								[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+							},
+							plugins: [createTestingI18n()],
+							mocks: i18nMock,
+						},
 					}
 				);
 

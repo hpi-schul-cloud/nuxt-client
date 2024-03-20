@@ -5,22 +5,24 @@
 		class="room-dialog"
 		@dialog-closed="$emit('update:isOpen', false)"
 	>
-		<div slot="title" class="pt-2 room-title">
-			<v-text-field
-				v-model="data.title"
-				dense
-				flat
-				:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
-				:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
-				:label="$t('pages.rooms.roomModal.courseGroupTitle')"
-				@blur="onBlur"
-				@keyup.enter="onEnterInput"
-			/>
-		</div>
-		<template slot="content">
+		<template #title>
+			<div class="pt-2 room-title">
+				<v-text-field
+					v-model="data.title"
+					density="compact"
+					flat
+					:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
+					:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
+					:label="$t('pages.rooms.roomModal.courseGroupTitle')"
+					@blur="onBlur"
+					@keyup.enter="onEnterInput"
+				/>
+			</div>
+		</template>
+		<template #content>
 			<room-avatar-iterator
 				class="iterator"
-				:items="groupData.groupElements"
+				:avatars="groupData.groupElements"
 				:item-size="itemSize"
 				:col-count="4"
 				:max-items="-1"
@@ -30,22 +32,17 @@
 		</template>
 	</vCustomDialog>
 </template>
-<script lang="ts">
+<script>
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { roomsModule } from "@/store";
 import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
-import Vue from "vue";
+import { defineComponent } from "vue";
 
-// eslint-disable-next-line vue/require-direct-export
-export default Vue.extend({
+export default defineComponent({
 	components: {
 		vCustomDialog,
 		RoomAvatarIterator,
-	},
-	model: {
-		prop: "isOpen",
-		event: "update:isOpen",
 	},
 	props: {
 		isOpen: {
@@ -64,6 +61,7 @@ export default Vue.extend({
 			type: Boolean,
 		},
 	},
+	emits: ["update:isOpen", "drag-from-group"],
 	data() {
 		return {
 			mdiPencilOutline,

@@ -6,8 +6,8 @@
 
 <script lang="ts">
 import { convertFileSize, getFileExtension } from "@/utils/fileHelper";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { computed, defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "FileAttributes",
@@ -23,11 +23,11 @@ export default defineComponent({
 	},
 
 	setup(props) {
-		const i18n = injectStrict(I18N_KEY);
+		const { n } = useI18n();
 
 		const humanReadableFileSize = computed(() => {
 			const { convertedSize, unit } = convertFileSize(props.fileSize);
-			const localizedFileSize = i18n.n(convertedSize, "fileSize");
+			const localizedFileSize = n(convertedSize, "fileSize");
 			const localizedString = localizedFileSize + " " + unit;
 
 			return localizedString;

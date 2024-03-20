@@ -1,19 +1,23 @@
-import { mount, Wrapper } from "@vue/test-utils";
-import Alert from "./Alert.vue";
 import { notifierModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
 import NotifierModule from "@/store/notifier";
-import Vue from "vue";
 import { AlertPayload } from "@/store/types/alert-payload";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import { VAlert } from "vuetify/lib/components/index.mjs";
+import Alert from "./Alert.vue";
 
-const getWrapper: any = (device = "desktop", options?: object) => {
+const getWrapper = (device = "desktop", options?: object) => {
 	return mount(Alert, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		computed: {
-			$mq: () => device,
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				mq: { current: device },
+			},
 		},
 		...options,
 	});
@@ -30,7 +34,7 @@ describe("Alert", () => {
 		const wrapper = getWrapper();
 		expect(wrapper.vm.showNotifier).toBe(false);
 		notifierModule.setNotifier({ text: "some text", status: "success" });
-		await wrapper.vm.$nextTick();
+		await nextTick();
 
 		expect(wrapper.vm.showNotifier).toBe(true);
 	});
@@ -42,7 +46,7 @@ describe("Alert", () => {
 			status: "success",
 		};
 		notifierModule.show(data);
-		await wrapper.vm.$nextTick();
+		await nextTick();
 
 		expect(wrapper.vm.showNotifier).toBe(true);
 	});
@@ -54,7 +58,7 @@ describe("Alert", () => {
 			status: "success",
 		};
 		notifierModule.show(data);
-		await wrapper.vm.$nextTick();
+		await nextTick();
 
 		expect(wrapper.vm.showNotifier).toBe(true);
 	});
@@ -68,10 +72,10 @@ describe("Alert", () => {
 		};
 		notifierModule.show(data);
 
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
@@ -85,10 +89,10 @@ describe("Alert", () => {
 		};
 		notifierModule.show(data);
 
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
@@ -104,10 +108,10 @@ describe("Alert", () => {
 		};
 		notifierModule.show(data);
 
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(5000);
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
@@ -123,10 +127,10 @@ describe("Alert", () => {
 		};
 		notifierModule.show(data);
 
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(true);
 		jest.advanceTimersByTime(testTimeout);
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
@@ -140,12 +144,12 @@ describe("Alert", () => {
 		};
 		notifierModule.show(data);
 
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(true);
 
 		jest.runAllTimers();
 
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
@@ -159,30 +163,31 @@ describe("Alert", () => {
 		};
 		notifierModule.show(data);
 
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(true);
 
 		jest.runAllTimers();
 
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(true);
 
-		const alertComponent = wrapper.find(".alert");
-		await alertComponent.vm.$emit("input");
-		await wrapper.vm.$nextTick();
+		const alertComponent = wrapper.findComponent(VAlert);
+		await alertComponent.vm.$emit("update:modelValue");
+
+		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(false);
 	});
 
 	it("should set mobile position-class as default if the device is mobile", async () => {
-		const wrapper: Wrapper<Vue> = getWrapper("mobile");
-		await wrapper.vm.$nextTick();
+		const wrapper = getWrapper("mobile");
+		await nextTick();
 		const result = wrapper.find(".alert-wrapper-mobile");
 		expect(result.element).toBeTruthy();
 	});
 
 	it("should set desktop position-class as default if the device is desktop or tablet", async () => {
-		const wrapper: Wrapper<Vue> = getWrapper("desktop");
-		await wrapper.vm.$nextTick();
+		const wrapper = getWrapper("desktop");
+		await nextTick();
 		const result = wrapper.get(".alert-wrapper");
 		expect(result.element).toBeTruthy();
 	});

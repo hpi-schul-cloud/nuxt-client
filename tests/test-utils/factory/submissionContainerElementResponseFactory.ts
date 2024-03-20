@@ -3,7 +3,7 @@ import {
 	SubmissionContainerElementResponse,
 } from "@/serverApi/v3";
 import { Factory } from "fishery";
-import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
+import { timestampsResponseFactory } from "./timestampsResponseFactory";
 import { submissionContainerElementContent } from "./submissionContainerElementContentFactory";
 
 export const submissionContainerElementResponseFactory =

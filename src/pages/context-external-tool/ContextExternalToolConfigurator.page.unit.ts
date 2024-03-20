@@ -8,35 +8,45 @@ import RoomModule from "@/store/room";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { contextExternalToolFactory, i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { contextExternalToolFactory } from "@@/tests/test-utils";
 import {
 	businessErrorFactory,
 	contextExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRouter } from "vue-router";
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.page.vue";
 
-describe("ContextExternalToolConfigurator", () => {
-	const routerPush = jest.fn();
+jest.mock("vue-router", () => ({
+	useRoute: jest.fn(),
+	useRouter: jest.fn(),
+}));
 
+const useRouterMock = <jest.Mock>useRouter;
+const router = createMock<Router>();
+useRouterMock.mockReturnValue(router);
+
+describe("ContextExternalToolConfigurator", () => {
 	const getWrapper = (
-		propsData: {
+		props: {
 			contextId: string;
 			contextType: ToolContextType;
 			configId?: string;
 		},
 		getters: Partial<ContextExternalToolsModule> = {}
 	) => {
-		document.body.setAttribute("data-app", "true");
-
 		const contextExternalToolsModule = createModuleMocks(
 			ContextExternalToolsModule,
 			{
@@ -59,6 +69,7 @@ describe("ContextExternalToolConfigurator", () => {
 				displayColor: "#ffffff",
 				elements: [],
 				isArchived: false,
+				isSynchronized: false,
 			},
 		});
 
@@ -66,32 +77,25 @@ describe("ContextExternalToolConfigurator", () => {
 			getCtlContextConfigurationEnabled: true,
 		});
 
-		const $router = {
-			push: routerPush,
-		};
-
-		const wrapper: Wrapper<Vue> = mount(
-			ContextExternalToolConfigurator as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
+		const wrapper = mount(ContextExternalToolConfigurator, {
+			global: {
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
 				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ROOM_MODULE_KEY.valueOf()]: roomModule,
 					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						contextExternalToolsModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
-				propsData: {
-					...propsData,
-				},
-				mocks: {
-					$router,
-				},
-			}
-		);
+			},
+			props: {
+				...props,
+			},
+		});
 
 		return {
 			wrapper,
@@ -115,8 +119,8 @@ describe("ContextExternalToolConfigurator", () => {
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-			expect(breadcrumbs.at(0).text()).toEqual("common.words.courses");
-			expect(breadcrumbs.at(1).text()).toEqual(roomTitle);
+			expect(breadcrumbs.at(0)?.text()).toEqual("common.words.courses");
+			expect(breadcrumbs.at(1)?.text()).toEqual(roomTitle);
 		});
 	});
 
@@ -139,7 +143,7 @@ describe("ContextExternalToolConfigurator", () => {
 					contextType: ToolContextType.Course,
 				});
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					contextExternalToolsModule.loadAvailableToolsForContext
@@ -162,7 +166,7 @@ describe("ContextExternalToolConfigurator", () => {
 					contextType: ToolContextType.Course,
 				});
 
-				await Vue.nextTick();
+				await nextTick();
 
 				contextExternalToolsModule.loadContextExternalTool.mockResolvedValue(
 					contextExternalTool
@@ -202,7 +206,7 @@ describe("ContextExternalToolConfigurator", () => {
 
 			await wrapper.findComponent(ExternalToolConfigurator).vm.$emit("cancel");
 
-			expect(routerPush).toHaveBeenCalledWith({
+			expect(router.push).toHaveBeenCalledWith({
 				path: "/rooms/contextId",
 				query: { tab: "tools" },
 			});
@@ -257,7 +261,7 @@ describe("ContextExternalToolConfigurator", () => {
 							value: testValue,
 						},
 					]);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					contextExternalToolsModule.createContextExternalTool
@@ -282,9 +286,9 @@ describe("ContextExternalToolConfigurator", () => {
 				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
-				await Vue.nextTick();
+				await nextTick();
 
-				expect(routerPush).toHaveBeenCalledWith({
+				expect(router.push).toHaveBeenCalledWith({
 					path: `/rooms/${contextId}`,
 					query: { tab: "tools" },
 				});
@@ -296,7 +300,7 @@ describe("ContextExternalToolConfigurator", () => {
 				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "components.administration.externalToolsSection.notification.created",
@@ -350,7 +354,7 @@ describe("ContextExternalToolConfigurator", () => {
 				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					contextExternalToolsModule.updateContextExternalTool
@@ -380,9 +384,9 @@ describe("ContextExternalToolConfigurator", () => {
 				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
-				await Vue.nextTick();
+				await nextTick();
 
-				expect(routerPush).toHaveBeenCalledWith({
+				expect(router.push).toHaveBeenCalledWith({
 					path: `/rooms/${contextId}`,
 					query: { tab: "tools" },
 				});
@@ -394,7 +398,7 @@ describe("ContextExternalToolConfigurator", () => {
 				wrapper
 					.findComponent(ExternalToolConfigurator)
 					.vm.$emit("save", template, []);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "components.administration.externalToolsSection.notification.updated",
@@ -430,7 +434,7 @@ describe("ContextExternalToolConfigurator", () => {
 						contextExternalToolConfigurationTemplateFactory.build(),
 						[]
 					);
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(wrapper.find(".v-alert__content").exists()).toBeTruthy();
 			});
@@ -445,9 +449,9 @@ describe("ContextExternalToolConfigurator", () => {
 						contextExternalToolConfigurationTemplateFactory.build(),
 						[]
 					);
-				await Vue.nextTick();
+				await nextTick();
 
-				expect(routerPush).not.toHaveBeenCalled();
+				expect(router.push).not.toHaveBeenCalled();
 			});
 		});
 	});

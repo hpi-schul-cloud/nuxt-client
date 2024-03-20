@@ -1,6 +1,7 @@
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
 import { shallowMount } from "@vue/test-utils";
 import { FileAlert } from "../../shared/types/FileAlert.enum";
@@ -8,13 +9,8 @@ import FileAlerts from "./FileAlerts.vue";
 
 describe("FileAlerts", () => {
 	const setup = (alerts: FileAlert[]) => {
-		document.body.setAttribute("data-app", "true");
-
 		const wrapper = shallowMount(FileAlerts, {
-			...createComponentMocks({ i18n: true }),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-			},
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			propsData: { alerts },
 		});
 		return { wrapper, alerts };

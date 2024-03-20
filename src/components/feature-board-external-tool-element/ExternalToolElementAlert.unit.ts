@@ -1,15 +1,14 @@
 import { BusinessError } from "@/store/types/commons";
-import { AUTH_MODULE_KEY, I18N_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import {
-	ContextExternalToolConfigurationStatusFactory,
-	i18nMock,
-} from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { useBoardPermissions } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { WarningAlert } from "@ui-alert";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
@@ -50,8 +49,6 @@ describe("ExternalToolElementAlert", () => {
 		},
 		userRoles?: string[]
 	) => {
-		document.body.setAttribute("data-app", "true");
-
 		useToolConfigurationStatusMock.determineOutdatedTranslationKey.mockReturnValue(
 			"translated"
 		);
@@ -60,23 +57,23 @@ describe("ExternalToolElementAlert", () => {
 			getUserRoles: userRoles,
 		});
 
-		const wrapper: Wrapper<Vue> = mount(
-			ExternalToolElementAlert as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				propsData: {
-					toolDisplayName: "Tool name",
-					toolStatus: ContextExternalToolConfigurationStatusFactory.build(),
-					...propsData,
-				},
+		const wrapper = mount(ExternalToolElementAlert, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
-			}
-		);
+				mocks: {
+					$t: (key: string, dynamic?: object): string =>
+						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+				},
+			},
+			props: {
+				toolDisplayName: "Tool name",
+				toolStatus: ContextExternalToolConfigurationStatusFactory.build(),
+				...propsData,
+			},
+		});
 
 		return {
 			wrapper,
@@ -111,7 +108,7 @@ describe("ExternalToolElementAlert", () => {
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts.at(0).text()).toEqual(
+				expect(alerts[0].text()).toEqual(
 					"feature-board-external-tool-element.alert.error.teacher"
 				);
 			});
@@ -139,7 +136,7 @@ describe("ExternalToolElementAlert", () => {
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts.at(0).text()).toEqual(
+				expect(alerts[0].text()).toEqual(
 					"feature-board-external-tool-element.alert.error.student"
 				);
 			});
@@ -173,7 +170,7 @@ describe("ExternalToolElementAlert", () => {
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts.at(0).text()).toEqual(
+				expect(alerts[0].text()).toEqual(
 					"common.tool.information.outdatedOnSchool.teacher"
 				);
 			});
@@ -204,7 +201,7 @@ describe("ExternalToolElementAlert", () => {
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts.at(0).text()).toEqual(
+				expect(alerts[0].text()).toEqual(
 					"common.tool.information.outdated.student"
 				);
 			});
@@ -237,7 +234,7 @@ describe("ExternalToolElementAlert", () => {
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts.at(0).text()).toEqual(
+				expect(alerts[0].text()).toEqual(
 					"common.tool.information.outdatedOnContext.teacher"
 				);
 			});
@@ -268,7 +265,7 @@ describe("ExternalToolElementAlert", () => {
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts.at(0).text()).toEqual(
+				expect(alerts[0].text()).toEqual(
 					"common.tool.information.outdated.student"
 				);
 			});
@@ -301,7 +298,7 @@ describe("ExternalToolElementAlert", () => {
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts.at(0).text()).toEqual(
+				expect(alerts[0].text()).toEqual(
 					"common.tool.information.outdatedOnSchoolAndContext.teacher"
 				);
 			});
@@ -332,7 +329,7 @@ describe("ExternalToolElementAlert", () => {
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts.at(0).text()).toEqual(
+				expect(alerts[0].text()).toEqual(
 					"common.tool.information.outdated.student"
 				);
 			});
@@ -355,7 +352,7 @@ describe("ExternalToolElementAlert", () => {
 			const alerts = wrapper.findAllComponents(WarningAlert);
 
 			expect(alerts).toHaveLength(1);
-			expect(alerts.at(0).text()).toEqual(
+			expect(alerts[0].text()).toEqual(
 				'common.tool.information.deactivated {"toolDisplayName":"Tool name"}'
 			);
 		});
@@ -386,7 +383,7 @@ describe("ExternalToolElementAlert", () => {
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts.at(0).text()).toEqual(
+				expect(alerts[0].text()).toEqual(
 					"common.tool.information.incompleteOnContext.teacher"
 				);
 			});
@@ -416,7 +413,7 @@ describe("ExternalToolElementAlert", () => {
 				const alerts = wrapper.findAllComponents(WarningAlert);
 
 				expect(alerts).toHaveLength(1);
-				expect(alerts.at(0).text()).toEqual(
+				expect(alerts[0].text()).toEqual(
 					"common.tool.information.incomplete.student"
 				);
 			});

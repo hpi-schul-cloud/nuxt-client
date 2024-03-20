@@ -6,3 +6,4 @@ LICENSE.md
 /src/serverApi/**
 /src/fileStorageApi/**
 /src/h5pEditorApi/**
+/VUE3-UPGRADE-RESULTS/**/*.md

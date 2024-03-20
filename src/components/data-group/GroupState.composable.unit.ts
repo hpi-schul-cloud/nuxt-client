@@ -3,8 +3,9 @@ import { Group, useGroupApi, useGroupState } from "./index";
 import { groupFactory } from "@@/tests/test-utils/factory/groupFactory";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
-import { i18nMock, mountComposable } from "@@/tests/test-utils";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { mountComposable } from "@@/tests/test-utils";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 jest.mock("@data-group/GroupApi.composable");
 
@@ -25,8 +26,12 @@ describe("GroupState.composable", () => {
 
 	const getComposable = () => {
 		const composable = mountComposable(() => useGroupState(), {
-			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			[I18N_KEY.valueOf()]: i18nMock,
+			global: {
+				plugins: [createTestingI18n()],
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
+			},
 		});
 
 		return {

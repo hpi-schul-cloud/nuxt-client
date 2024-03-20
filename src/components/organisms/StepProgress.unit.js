@@ -1,4 +1,5 @@
 import StepProgress from "./StepProgress";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("@/components/organisms/StepProgress", () => {
 	it("Test that all steps are rendered", () => {
@@ -11,7 +12,10 @@ describe("@/components/organisms/StepProgress", () => {
 			{ name: "Test six" },
 		];
 		const wrapper = shallowMount(StepProgress, {
-			propsData: {
+			global: {
+				plugins: [createTestingVuetify()],
+			},
+			props: {
 				steps: mockSteps,
 				currentStep: 0,
 			},
@@ -31,7 +35,10 @@ describe("@/components/organisms/StepProgress", () => {
 		];
 		const step = 3;
 		const wrapper = shallowMount(StepProgress, {
-			propsData: {
+			global: {
+				plugins: [createTestingVuetify()],
+			},
+			props: {
 				steps: mockSteps,
 				currentStep: step,
 			},
@@ -49,7 +56,11 @@ describe("@/components/organisms/StepProgress", () => {
 	});
 
 	it("Test with required default data only active on step 0", () => {
-		const wrapper = shallowMount(StepProgress);
+		const wrapper = shallowMount(StepProgress, {
+			global: {
+				plugins: [createTestingVuetify()],
+			},
+		});
 		expect(wrapper.find("li").classes()).toContain("active");
 	});
 });

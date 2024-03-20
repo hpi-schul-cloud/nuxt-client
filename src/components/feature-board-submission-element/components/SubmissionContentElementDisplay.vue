@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<div class="grey lighten-4 pa-4 rounded-t">
+		<div class="bg-grey-lighten-4 pa-4 rounded-t">
 			<SubmissionContentElementTitle />
 			<v-card-subtitle
-				class="pa-0 mt-1 subtitle-1"
+				class="pa-0 mt-1 text-subtitle-1"
 				data-testid="board-submission-element-due-date"
 			>
 				{{ formattedDueDate }}
@@ -30,7 +30,7 @@ import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { defineComponent, ref, computed, PropType } from "vue";
 import dayjs from "dayjs";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";

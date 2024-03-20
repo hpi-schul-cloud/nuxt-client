@@ -2,8 +2,8 @@
 	<v-hover v-model="isHovering" :disabled="isMenuActive">
 		<v-list-item
 			:key="task.id"
-			v-click-outside="() => handleFocus(false)"
-			class="mx-n4 mx-sm-0"
+			v-outside-click="() => handleFocus(false)"
+			class="px-xxl-4 px-xl-4 px-lg-4 px-md-4 px-sm-4 px-0"
 			v-bind="$attrs"
 			:aria-label="ariaLabel"
 			role="article"
@@ -11,101 +11,120 @@
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"
 		>
-			<v-list-item-avatar>
-				<v-icon
-					class="fill"
-					:class="hasUnpublishedLesson ? 'opacity-0-5' : ''"
-					:color="iconColor"
-				>
-					{{ avatarIcon }}
-				</v-icon>
-			</v-list-item-avatar>
-			<v-list-item-content :class="hasUnpublishedLesson ? 'opacity-0-5' : ''">
-				<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
-					<span class="text-truncate" data-testid="taskSubtitle">
-						{{ taskLabel }}
-					</span>
-				</v-list-item-subtitle>
-				<v-list-item-title data-testid="taskTitle">
-					{{ task.name }}
-				</v-list-item-title>
-				<v-list-item-subtitle
-					v-if="topic && currentBreakpoint !== 'xs'"
-					data-testid="task-topic"
-					class="d-inline-flex"
-				>
-					<span class="text-truncate">{{ topic }}</span>
-				</v-list-item-subtitle>
-				<v-list-item-subtitle class="hidden-sm-and-up text--primary text-wrap">
-					<v-chip
-						v-if="hasUnpublishedLesson"
-						x-small
-						data-testid="task-lesson-chip-small"
+			<!-- item avatar -->
+			<template v-slot:prepend>
+				<v-avatar>
+					<v-icon
+						class="fill"
+						:class="hasUnpublishedLesson ? 'opacity-0-5' : ''"
+						:color="iconColor"
 					>
+						{{ avatarIcon }}
+					</v-icon>
+				</v-avatar>
+			</template>
+
+			<!-- item main info -->
+			<div class="d-flex">
+				<!-- item title -->
+				<div
+					:class="hasUnpublishedLesson ? 'opacity-0-5' : ''"
+					class="task-item__main-info align-self-center flex-grow-1"
+				>
+					<v-list-item-subtitle data-testId="task-label" class="d-inline-flex">
+						<span class="text-truncate" data-testid="taskSubtitle">
+							{{ taskLabel }}
+						</span>
+					</v-list-item-subtitle>
+					<v-list-item-title data-testid="taskTitle">
+						{{ task.name }}
+					</v-list-item-title>
+					<v-list-item-subtitle
+						v-if="topic && currentBreakpoint !== 'xs'"
+						data-testid="task-topic"
+						class="d-inline-flex"
+					>
+						<span class="text-truncate">{{ topic }}</span>
+					</v-list-item-subtitle>
+					<v-list-item-subtitle
+						class="hidden-sm-and-up text--primary text-wrap"
+					>
+						<v-chip
+							v-if="hasUnpublishedLesson"
+							size="x-small"
+							data-testid="task-lesson-chip-small"
+						>
+							{{
+								$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
+							}}
+						</v-chip>
+						<i18n-t
+							v-else
+							keypath="components.molecules.TaskItemTeacher.status"
+							scope="global"
+							data-testid="task-status-small"
+						>
+							<template #submitted>{{ task.status.submitted }}</template>
+							<template #max>{{ task.status.maxSubmissions }}</template>
+							<template #graded>{{ task.status.graded }}</template>
+						</i18n-t>
+					</v-list-item-subtitle>
+				</div>
+
+				<!-- item additional info -->
+				<section
+					v-if="hasUnpublishedLesson"
+					data-testid="task-lesson-chip-large"
+					class="hidden-xs mr-8 pl-4 align-self-center"
+				>
+					<v-chip size="small">
 						{{
 							$t("components.molecules.TaskItemTeacher.lessonIsNotPublished")
 						}}
 					</v-chip>
-					<i18n
-						v-else
-						path="components.molecules.TaskItemTeacher.status"
-						data-testid="task-status-small"
-					>
-						<template #submitted>{{ task.status.submitted }}</template>
-						<template #max>{{ task.status.maxSubmissions }}</template>
-						<template #graded>{{ task.status.graded }}</template>
-					</i18n>
-				</v-list-item-subtitle>
-			</v-list-item-content>
+				</section>
+				<section
+					v-else-if="showTaskStatus"
+					data-testid="task-status"
+					class="mr-4 d-flex align-self-center"
+				>
+					<div class="hidden-xs px-4 mr-4 text-center task-stats">
+						<v-list-item-subtitle>
+							{{ $t("components.molecules.TaskItemTeacher.submitted") }}
+						</v-list-item-subtitle>
+						<v-list-item-title data-testid="taskSubmitted">
+							{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
+						</v-list-item-title>
+					</div>
+					<div class="hidden-xs px-4 text-center task-stats">
+						<v-list-item-subtitle>
+							{{ $t("components.molecules.TaskItemTeacher.graded") }}
+						</v-list-item-subtitle>
+						<v-list-item-title data-testid="taskGraded">
+							{{ task.status.graded }}
+						</v-list-item-title>
+					</div>
+				</section>
 
-			<section
-				v-if="hasUnpublishedLesson"
-				data-testid="task-lesson-chip-large"
-				class="hidden-xs-only mr-8 pl-4"
-			>
-				<v-chip small>
-					{{ $t("components.molecules.TaskItemTeacher.lessonIsNotPublished") }}
-				</v-chip>
-			</section>
-			<section
-				v-else-if="showTaskStatus"
-				data-testid="task-status"
-				class="mr-8"
-			>
-				<v-list-item-action class="hidden-xs-only pl-4">
-					<v-list-item-subtitle>
-						{{ $t("components.molecules.TaskItemTeacher.submitted") }}
-					</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskSubmitted">
-						{{ task.status.submitted }}/{{ task.status.maxSubmissions }}
-					</v-list-item-title>
+				<v-list-item-action
+					:id="`task-menu-${task.id}`"
+					class="context-menu-min-width"
+					data-testid="three-dot-task-option-menu"
+				>
+					<task-item-menu
+						:task-id="task.id"
+						:task-is-finished="task.status.isFinished"
+						:task-is-published="!task.status.isDraft && !task.status.isFinished"
+						:task-title="task.name"
+						:course-id="task.courseId"
+						user-role="teacher"
+						@toggled-menu="toggleMenu"
+						@focus-changed="handleFocus"
+						@copy-task="onCopyTask"
+						@share-task="onShareTask"
+					/>
 				</v-list-item-action>
-				<v-list-item-action class="hidden-xs-only">
-					<v-list-item-subtitle>
-						{{ $t("components.molecules.TaskItemTeacher.graded") }}
-					</v-list-item-subtitle>
-					<v-list-item-title data-testid="taskGraded">
-						{{ task.status.graded }}
-					</v-list-item-title>
-				</v-list-item-action>
-			</section>
-			<v-list-item-action
-				:id="`task-menu-${task.id}`"
-				class="context-menu-min-width"
-			>
-				<task-item-menu
-					:task-id="task.id"
-					:task-is-finished="task.status.isFinished"
-					:task-is-published="!task.status.isDraft && !task.status.isFinished"
-					:task-title="task.name"
-					:course-id="task.courseId"
-					user-role="teacher"
-					@toggled-menu="toggleMenu"
-					@focus-changed="handleFocus"
-					@copy-task="onCopyTask"
-					@share-task="onShareTask"
-				/>
-			</v-list-item-action>
+			</div>
 		</v-list-item>
 	</v-hover>
 </template>
@@ -117,13 +136,16 @@ import {
 	printDateFromStringUTC as dateFromUTC,
 	printTimeFromStringUTC,
 } from "@/plugins/datetime";
+import { vOnClickOutside } from "@vueuse/components";
 
-// TODO - different requiredKeys for finished and other tasks?
 const taskRequiredKeys = ["courseName", "createdAt", "id", "name", "status"];
 const finishedTaskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
 	components: { TaskItemMenu },
+	directives: {
+		outsideClick: vOnClickOutside,
+	},
 	props: {
 		task: {
 			type: Object,
@@ -214,7 +236,7 @@ export default {
 			return this.task.lessonHidden && !this.isDraft;
 		},
 		currentBreakpoint() {
-			return this.$vuetify.breakpoint.name;
+			return this.$vuetify.display.name;
 		},
 		ariaLabel() {
 			return `${this.$t("common.words.task")} ${this.task.name}`;
@@ -253,8 +275,16 @@ export default {
 	opacity: 0.5;
 }
 
-// stylelint-disable sh-waqar/declaration-use-variable
-.context-menu-min-width {
-	min-width: 45px;
+.task-item__main-info {
+	overflow: hidden;
+}
+
+:deep(.v-list-item__prepend .v-icon) {
+	width: inherit;
+	height: inherit;
+}
+
+.task-stats {
+	min-width: 7rem;
 }
 </style>

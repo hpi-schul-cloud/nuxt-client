@@ -2,17 +2,19 @@ import { BoardColumn, BoardSkeletonCard } from "./Board";
 import { AnyContentElement } from "./ContentElement";
 
 export interface CardMove {
-	removedIndex: number | null;
-	addedIndex: number | null;
-	payload: BoardSkeletonCard;
-	columnId?: string;
-	columnIndex?: number;
+	cardId: string;
+	oldIndex: number;
+	newIndex: number;
+	fromColumnId: string;
+	toColumnId?: string;
+	columnDelta?: number;
+	forceNextTick?: boolean;
 }
 
 export interface ColumnMove {
 	addedIndex: number;
-	removedIndex: number;
-	payload: BoardColumn["id"];
+	removedIndex?: number | null;
+	columnId: BoardColumn["id"];
 }
 
 export interface ElementMove {

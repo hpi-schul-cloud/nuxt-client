@@ -4,8 +4,11 @@ import {
 	mdiAccountGroupOutline,
 	mdiAccountOffOutline,
 	mdiAccountOutline,
+	mdiAccountPlus,
 	mdiAccountSchoolOutline,
 	mdiAccountSearch,
+	mdiAccountSwitch,
+	mdiAccountSwitchOutline,
 	mdiAlert,
 	mdiAlertCircle,
 	mdiArchiveOutline,
@@ -60,6 +63,7 @@ import {
 	mdiImage,
 	mdiInformation,
 	mdiLightbulbOnOutline,
+	mdiLock,
 	mdiLockOutline,
 	mdiLogin,
 	mdiMagnify,
@@ -98,14 +102,17 @@ import {
 	mdiViewListOutline,
 } from "@mdi/js";
 
-const materialIcons = {
+export {
 	mdiAccountBoxOutline,
 	mdiAccountCircleOutline,
 	mdiAccountGroupOutline,
 	mdiAccountOffOutline,
 	mdiAccountOutline,
+	mdiAccountPlus,
 	mdiAccountSchoolOutline,
 	mdiAccountSearch,
+	mdiAccountSwitch,
+	mdiAccountSwitchOutline,
 	mdiAlert,
 	mdiAlertCircle,
 	mdiArchiveOutline,
@@ -160,6 +167,7 @@ const materialIcons = {
 	mdiImage,
 	mdiInformation,
 	mdiLightbulbOnOutline,
+	mdiLock,
 	mdiLockOutline,
 	mdiLogin,
 	mdiMagnify,
@@ -197,5 +205,3 @@ const materialIcons = {
 	mdiViewGridOutline,
 	mdiViewListOutline,
 };
-
-export default materialIcons;

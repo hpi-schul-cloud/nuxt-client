@@ -3,15 +3,20 @@ import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import { APPLICATION_ERROR_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
-import VueRouter from "vue-router";
+import { mount } from "@vue/test-utils";
+import { useRouter } from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 describe("loggedOutLayout", () => {
-	const mountComponent = (attrs = {}) => {
+	const mountComponent = () => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
 			filePathsModule: FilePathsModule,
@@ -23,24 +28,30 @@ describe("loggedOutLayout", () => {
 			ApplicationErrorModule
 		);
 
-		const componentOptions = createComponentMocks({ i18n: true });
-		const { localVue } = componentOptions;
-		localVue.use(VueRouter);
-		const router = new VueRouter({ routes: [{ path: "home" }] });
+		const $route = { path: "home" };
+		const $router = {
+			push: jest.fn(),
+			currentRoute: { value: $route },
+			replace: jest.fn(),
+			afterEach: jest.fn(),
+		};
+		useRouterMock.mockReturnValue($router);
 
 		const wrapper = mount(loggedOut, {
-			...componentOptions,
-			mocks: {
-				$theme: {
-					name: "instance name",
+			global: {
+				mocks: {
+					$theme: {
+						name: "instance name",
+					},
 				},
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+					mq: () => "desktop",
+				},
+				stubs: ["base-link"],
 			},
-			provide: {
-				[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-			},
-			router,
-			...attrs,
 		});
 
 		return wrapper;
@@ -51,7 +62,7 @@ describe("loggedOutLayout", () => {
 
 		const links = wrapper
 			.findAll('[data-testid="logged-out-top-bar"] .link-container > a')
-			.wrappers.map((el: Wrapper<Vue>) => el.element as HTMLLinkElement);
+			.map((el) => el.element as HTMLLinkElement);
 
 		expect(links.length).toBe(3);
 		expect(new URL(links[0].href).host).toEqual("works-like-charm.com");

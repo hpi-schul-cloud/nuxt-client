@@ -1,5 +1,10 @@
 <template>
-	<DefaultWireframe ref="main" :full-width="true" :breadcrumbs="breadcrumbs">
+	<DefaultWireframe
+		ref="main"
+		:full-width="true"
+		:breadcrumbs="breadcrumbs"
+		:allow-overflow-x="true"
+	>
 		<Board :board-id="boardId" />
 	</DefaultWireframe>
 </template>

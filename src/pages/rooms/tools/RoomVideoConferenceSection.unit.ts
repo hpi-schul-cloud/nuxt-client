@@ -1,20 +1,21 @@
+import { VideoConferenceScope } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
+import RoomModule from "@/store/room";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE_KEY,
-	I18N_KEY,
 	ROOM_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { MountOptions, shallowMount, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
-import { VideoConferenceScope } from "@/serverApi/v3";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
+import { VDialog, VSwitch } from "vuetify/lib/components/index.mjs";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
-import RoomModule from "@/store/room";
-import { i18nMock } from "@@/tests/test-utils/i18nMock";
 
 describe("RoomVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";
@@ -25,8 +26,6 @@ describe("RoomVideoConferenceSection", () => {
 		isExpert: boolean,
 		videoConferenceModuleGetter?: Partial<VideoConferenceModule>
 	) => {
-		document.body.setAttribute("data-app", "true");
-
 		Object.defineProperty(window, "location", {
 			value: {
 				origin: mockUrl,
@@ -59,26 +58,25 @@ describe("RoomVideoConferenceSection", () => {
 				displayColor: "displayColor",
 				elements: [],
 				isArchived: false,
+				isSynchronized: false,
 			},
 		});
 
-		const wrapper: Wrapper<Vue> = shallowMount(
-			RoomVideoConferenceSection as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				propsData: {
-					...props,
-				},
+		const wrapper = shallowMount(RoomVideoConferenceSection, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 					[ROOM_MODULE_KEY.valueOf()]: roomModule,
 				},
-			}
-		);
+				mocks: {
+					$t: (key: string, dynamic?: object): string =>
+						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
+				},
+			},
+			props,
+		});
 
 		return {
 			wrapper,
@@ -509,11 +507,11 @@ describe("RoomVideoConferenceSection", () => {
 				});
 				await card.vm.$emit("click");
 
-				const configurationDialog = wrapper.find(
-					'[data-testid="videoconference-config-dialog"]'
+				const configurationDialog = wrapper.findComponent<typeof VDialog>(
+					'[data-testId="videoconference-config-dialog"]'
 				);
 
-				expect(configurationDialog.props("value")).toBe(true);
+				expect(configurationDialog.props("modelValue")).toBe(true);
 			});
 		});
 	});
@@ -613,22 +611,22 @@ describe("RoomVideoConferenceSection", () => {
 			});
 			await card.vm.$emit("click");
 
-			const svEveryAttendeeJoinsMuted = wrapper.find(
+			const svEveryAttendeeJoinsMuted = wrapper.findComponent<VSwitch>(
 				'[data-testId="every-attendee-joins-muted"]'
 			);
-			const svModeratorMustApproveJoinRequests = wrapper.find(
+			const svModeratorMustApproveJoinRequests = wrapper.findComponent<VSwitch>(
 				'[data-testId="moderator-must-approve-join-requests"]'
 			);
-			const svEverybodyJoinsAsModerator = wrapper.find(
+			const svEverybodyJoinsAsModerator = wrapper.findComponent<VSwitch>(
 				'[data-testId="everybody-joins-as-moderator"]'
 			);
 
-			await svEveryAttendeeJoinsMuted.vm.$emit("change", true);
-			await svModeratorMustApproveJoinRequests.vm.$emit("change", true);
-			await svEverybodyJoinsAsModerator.vm.$emit("change", true);
+			svEveryAttendeeJoinsMuted.vm.$emit("update:modelValue", true);
+			svModeratorMustApproveJoinRequests.vm.$emit("update:modelValue", true);
+			svEverybodyJoinsAsModerator.vm.$emit("update:modelValue", true);
 
 			const createBtn = wrapper.find('[data-testId="dialog-create"]');
-			await createBtn.vm.$emit("click");
+			await createBtn.trigger("click");
 
 			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
 				scope: params.scope,
@@ -650,22 +648,22 @@ describe("RoomVideoConferenceSection", () => {
 			});
 			await card.vm.$emit("click");
 
-			const svEveryAttendeeJoinsMuted = wrapper.find(
+			const svEveryAttendeeJoinsMuted = wrapper.findComponent<VSwitch>(
 				'[data-testId="every-attendee-joins-muted"]'
 			);
-			const svModeratorMustApproveJoinRequests = wrapper.find(
+			const svModeratorMustApproveJoinRequests = wrapper.findComponent<VSwitch>(
 				'[data-testId="moderator-must-approve-join-requests"]'
 			);
-			const svEverybodyJoinsAsModerator = wrapper.find(
+			const svEverybodyJoinsAsModerator = wrapper.findComponent<VSwitch>(
 				'[data-testId="everybody-joins-as-moderator"]'
 			);
 
-			await svEveryAttendeeJoinsMuted.vm.$emit("change", false);
-			await svModeratorMustApproveJoinRequests.vm.$emit("change", false);
-			await svEverybodyJoinsAsModerator.vm.$emit("change", false);
+			svEveryAttendeeJoinsMuted.vm.$emit("update:modelValue", false);
+			svModeratorMustApproveJoinRequests.vm.$emit("update:modelValue", false);
+			svEverybodyJoinsAsModerator.vm.$emit("update:modelValue", false);
 
 			const createBtn = wrapper.find('[data-testId="dialog-create"]');
-			await createBtn.vm.$emit("click");
+			await createBtn.trigger("click");
 
 			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
 				scope: params.scope,
@@ -687,14 +685,14 @@ describe("RoomVideoConferenceSection", () => {
 			});
 			await card.vm.$emit("click");
 
-			const configurationDialog = wrapper.find(
+			const configurationDialog = wrapper.findComponent<typeof VDialog>(
 				'[data-testid="videoconference-config-dialog"]'
 			);
 
 			const createBtn = wrapper.find('[data-testId="dialog-create"]');
-			await createBtn.vm.$emit("click");
+			await createBtn.trigger("click");
 
-			expect(configurationDialog.props("value")).toBe(false);
+			expect(configurationDialog.props("modelValue")).toBe(false);
 			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
 				scope: params.scope,
 				scopeId: params.scopeId,
@@ -744,16 +742,16 @@ describe("RoomVideoConferenceSection", () => {
 			});
 			await card.vm.$emit("click");
 
-			const configurationDialog = wrapper.find(
-				'[data-testid="videoconference-config-dialog"]'
+			const configurationDialog = wrapper.findComponent<typeof VDialog>(
+				'[data-testId="videoconference-config-dialog"]'
 			);
 
-			const cancelBtn = configurationDialog.find(
+			const cancelBtn = configurationDialog.findComponent(
 				'[data-testid="dialog-cancel"]'
 			);
-			await cancelBtn.vm.$emit("click");
+			await cancelBtn.trigger("click");
 
-			expect(configurationDialog.props("value")).toBe(false);
+			expect(configurationDialog.props("modelValue")).toBe(false);
 			expect(videoConferenceModule.startVideoConference).not.toHaveBeenCalled();
 			expect(videoConferenceModule.joinVideoConference).not.toHaveBeenCalled();
 		});
@@ -801,7 +799,7 @@ describe("RoomVideoConferenceSection", () => {
 
 				const dialog = wrapper.find('[data-testId="error-dialog"]');
 
-				expect(dialog.props("isOpen")).toBe(true);
+				expect(dialog.attributes("isopen")).toBe("true");
 			});
 		});
 
@@ -839,11 +837,10 @@ describe("RoomVideoConferenceSection", () => {
 					name: "room-video-conference-card",
 				});
 				await card.vm.$emit("click");
-				await wrapper.vm.$nextTick();
 
 				const dialog = wrapper.find('[data-testId="error-dialog"]');
 
-				expect(dialog.props("isOpen")).toBe(false);
+				expect(dialog.attributes("isopen")).toBe("false");
 			});
 		});
 	});

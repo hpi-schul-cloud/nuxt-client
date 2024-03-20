@@ -1,32 +1,34 @@
 <template>
 	<div>
 		<v-autocomplete
-			:label="t('pages.tool.select.label')"
-			item-text="name"
+			:label="$t('pages.tool.select.label')"
+			item-title="name"
 			item-value="id"
 			hide-selected
 			clearable
 			:items="configurationTemplates"
 			v-model="selectedTemplate"
-			:no-data-text="t('common.nodata')"
+			:no-data-text="$t('common.nodata')"
 			return-object
 			:disabled="isInEditMode"
 			:loading="loading"
 			data-testId="configuration-select"
-			@change="onChangeSelection"
+			@update:modelValue="onChangeSelection"
+			variant="underlined"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
-					:item="item"
+					:item="item.raw"
 					max-height="20"
 					max-width="20"
 					data-testId=""
 				/>
 			</template>
-			<template #item="{ item }">
+			<template #item="{ item, props }">
 				<external-tool-selection-row
+					v-bind="props"
 					data-testId="configuration-select-item"
-					:item="item"
+					:item="item.raw"
 				/>
 			</template>
 		</v-autocomplete>
@@ -47,29 +49,29 @@
 			v-model="parameterConfiguration"
 		/>
 		<v-spacer class="mt-10" />
-		<v-alert v-if="error && error.message" light prominent text type="error">
-			{{ t(getBusinessErrorTranslationKey(error)) }}
+		<v-alert v-if="error && error.message" type="error" :icon="mdiAlertCircle">
+			{{ $t(getBusinessErrorTranslationKey(error)!) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">
 			<v-btn
 				class="mr-2"
 				color="secondary"
-				outlined
+				variant="outlined"
 				@click="onCancel"
 				data-testId="cancel-button"
 			>
-				{{ t("common.actions.cancel") }}
+				{{ $t("common.actions.cancel") }}
 			</v-btn>
 			<v-btn
 				class="mr-2"
 				color="primary"
-				depressed
+				variant="flat"
 				:disabled="!parametersValid"
 				@click="onSave"
 				data-testId="save-button"
 			>
 				{{
-					isInEditMode ? t("common.actions.update") : t("common.actions.add")
+					isInEditMode ? $t("common.actions.update") : $t("common.actions.add")
 				}}
 			</v-btn>
 		</v-row>
@@ -79,7 +81,6 @@
 <script lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
-import { useI18n } from "@/composables/i18n.composable";
 import {
 	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
@@ -100,6 +101,7 @@ import {
 	watch,
 } from "vue";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
+import { mdiAlertCircle } from "@/components/icons/material";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 
@@ -129,8 +131,6 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const { t } = useI18n();
-
 		const slots = useSlots();
 
 		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
@@ -241,7 +241,6 @@ export default defineComponent({
 		});
 
 		return {
-			t,
 			configurationTemplates,
 			loadedConfiguration,
 			getBusinessErrorTranslationKey,
@@ -254,6 +253,7 @@ export default defineComponent({
 			fillParametersWithDefaultValues,
 			parameterConfiguration,
 			isAboveParametersSlotEmpty,
+			mdiAlertCircle,
 		};
 	},
 });

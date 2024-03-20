@@ -1,13 +1,16 @@
 import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
 import { isObject } from "@vueuse/core";
 import { AxiosInstance, isAxiosError } from "axios";
-import Vue from "vue";
+import { getCurrentInstance } from "vue";
 
 let $axios: AxiosInstance;
 
 export const initializeAxios = (axios: AxiosInstance) => {
 	$axios = axios;
-	Vue.prototype.$axios = axios;
+	const app = getCurrentInstance()?.appContext.app;
+	if (app) {
+		app.config.globalProperties.$axios = axios;
+	}
 };
 
 export const mapAxiosErrorToResponseError = (

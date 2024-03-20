@@ -4,9 +4,11 @@
 		:has-buttons="false"
 		@dialog-closed="onCancel"
 	>
-		<h2 slot="title" class="text-h4 my-2">
-			{{ t("feature-board-external-tool-element.dialog.title") }}
-		</h2>
+		<template #title>
+			<h2 class="text-h4 my-2">
+				{{ t("feature-board-external-tool-element.dialog.title") }}
+			</h2>
+		</template>
 		<template #content>
 			<external-tool-configurator
 				class="mb-2"
@@ -26,7 +28,7 @@
 						:label="t('pages.tool.context.displayName')"
 						:hint="t('pages.tool.context.displayNameDescription')"
 						persistent-hint
-						validate-on-blur
+						validate-on="blur"
 						data-testId="parameter-display-name"
 					/>
 				</template>
@@ -36,7 +38,7 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import { ToolContextType } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
 import {

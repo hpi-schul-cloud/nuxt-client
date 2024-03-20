@@ -4,11 +4,11 @@
 			ref="hiddenInput"
 			:aria-label="labelHidden ? label : undefined"
 			v-bind="$attrs"
-			:checked="vmodel === value"
+			:checked="modelValue === value"
 			:value="value"
 			type="radio"
 			class="visually-hidden"
-			@change="$emit('input', $event.target.value)"
+			@change="$emit('update:modelValue', $event.target.value)"
 			@blur="$emit('blur', $event)"
 			@focus="$emit('focus', $event)"
 		/>
@@ -24,12 +24,8 @@ export const supportedTypes = ["radio"];
 
 export default {
 	mixins: [userIsTabbingMixin],
-	model: {
-		prop: "vmodel",
-		event: "input",
-	},
 	props: {
-		vmodel: {
+		modelValue: {
 			type: String,
 			required: true,
 		},
@@ -69,7 +65,7 @@ label {
 	display: inline-block;
 	width: 0.7em;
 	height: 0.7em;
-	border: 2px solid var(--v-secondary-base);
+	border: 2px solid rgba(var(--v-theme-secondary));
 	border-radius: var(--radius-round);
 }
 
@@ -86,7 +82,7 @@ input:checked + .radio {
 		margin: 20% auto;
 		/* stylelint-enable */
 		content: "";
-		background: var(--v-secondary-base);
+		background: rgba(var(--v-theme-secondary));
 		border-radius: var(--radius-round);
 	}
 }
