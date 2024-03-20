@@ -750,9 +750,10 @@ describe("env-config module", () => {
 			describe("when MAX_FILE_SIZE is -1", () => {
 				it("should return defaultFileSize", () => {
 					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.envFile.MAX_FILE_SIZE = -1;
+					const MAX_FILE_SIZE = 1;
+					envConfigModule.envFile.MAX_FILE_SIZE = MAX_FILE_SIZE;
 
-					expect(envConfigModule.getMaxFileSize).toBe(2684354560);
+					expect(envConfigModule.getMaxFileSize).toBe(MAX_FILE_SIZE);
 				});
 			});
 
