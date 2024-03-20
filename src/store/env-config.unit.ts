@@ -4,7 +4,7 @@ import * as serverApi from "@/serverApi/v3/api";
 
 import {
 	ConfigResponse,
-	Language,
+	LanguageType,
 	SchulcloudTheme,
 	Timezone,
 } from "@/serverApi/v3/api";
@@ -458,9 +458,9 @@ describe("env-config module", () => {
 			describe("when I18N__FALLBACK_LANGUAGE is defined", () => {
 				it("should return I18N__FALLBACK_LANGUAGE", () => {
 					const envConfigModule = new EnvConfigModule({});
-					envConfigModule.env.I18N__FALLBACK_LANGUAGE = Language.En;
+					envConfigModule.env.I18N__FALLBACK_LANGUAGE = LanguageType.En;
 
-					expect(envConfigModule.getFallbackLanguage).toBe(Language.En);
+					expect(envConfigModule.getFallbackLanguage).toBe(LanguageType.En);
 				});
 			});
 
@@ -471,7 +471,7 @@ describe("env-config module", () => {
 					// @ts-expect-error: Logic should be removed
 					envConfigModule.env.I18N__FALLBACK_LANGUAGE = undefined;
 
-					expect(envConfigModule.getFallbackLanguage).toBe(Language.De);
+					expect(envConfigModule.getFallbackLanguage).toBe(LanguageType.De);
 				});
 			});
 		});
@@ -479,7 +479,7 @@ describe("env-config module", () => {
 		it("getFallbackLanguage should get 'de' if I18N__FALLBACK_LANGUAGE is not defined", () => {
 			const envConfigModule = new EnvConfigModule({});
 
-			expect(envConfigModule.getFallbackLanguage).toBe(Language.De);
+			expect(envConfigModule.getFallbackLanguage).toBe(LanguageType.De);
 		});
 
 		it("getDefaultTimeZone should get 'Europe/Berlin' if I18N__DEFAULT_TIMEZONE is not defined", () => {

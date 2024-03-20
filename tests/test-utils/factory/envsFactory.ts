@@ -1,6 +1,6 @@
 import {
 	ConfigResponse,
-	Language,
+	LanguageType,
 	SchulcloudTheme,
 	Timezone,
 } from "@/serverApi/v3";
@@ -18,9 +18,9 @@ export const envsFactory = Factory.define<ConfigResponse>(() => ({
 	FEATURE_EXTENSIONS_ENABLED: true,
 	FEATURE_TEAMS_ENABLED: true,
 	I18N__AVAILABLE_LANGUAGES: [],
-	I18N__DEFAULT_LANGUAGE: Language.De,
+	I18N__DEFAULT_LANGUAGE: LanguageType.De,
 	I18N__DEFAULT_TIMEZONE: Timezone.EuropeBerlin,
-	I18N__FALLBACK_LANGUAGE: Language.En,
+	I18N__FALLBACK_LANGUAGE: LanguageType.En,
 	DOCUMENT_BASE_DIR: "mockValue",
 	SC_TITLE: "mockValue",
 	GHOST_BASE_URL: "mockValue",

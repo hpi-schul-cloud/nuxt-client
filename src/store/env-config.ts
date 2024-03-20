@@ -7,7 +7,7 @@ import {
 	ConfigResponse,
 	DefaultApiFactory,
 	DefaultApiInterface,
-	Language,
+	LanguageType,
 	SchulcloudTheme,
 	Timezone,
 } from "@/serverApi/v3";
@@ -62,8 +62,8 @@ export default class EnvConfigModule extends VuexModule {
 		FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
 		GHOST_BASE_URL: "",
 		I18N__AVAILABLE_LANGUAGES: [],
-		I18N__FALLBACK_LANGUAGE: Language.De,
-		I18N__DEFAULT_LANGUAGE: Language.De,
+		I18N__FALLBACK_LANGUAGE: LanguageType.De,
+		I18N__DEFAULT_LANGUAGE: LanguageType.De,
 		I18N__DEFAULT_TIMEZONE: Timezone.EuropeBerlin,
 		SC_TITLE: "",
 		FEATURE_SHOW_OUTDATED_USERS: false,
@@ -215,7 +215,7 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED;
 	}
 
-	public get getAvailableLanguages(): Language[] {
+	public get getAvailableLanguages(): LanguageType[] {
 		return this.env.I18N__AVAILABLE_LANGUAGES;
 	}
 

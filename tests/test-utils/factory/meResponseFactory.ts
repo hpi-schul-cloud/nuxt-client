@@ -1,4 +1,4 @@
-import { Language, MeResponse } from "@/serverApi/v3";
+import { LanguageType, MeResponse } from "@/serverApi/v3";
 import { Factory } from "fishery";
 
 export const meResponseFactory = Factory.define<MeResponse>(({ sequence }) => ({
@@ -18,7 +18,7 @@ export const meResponseFactory = Factory.define<MeResponse>(({ sequence }) => ({
 	},
 	roles: [],
 	permissions: [],
-	language: Language.De,
+	language: LanguageType.De,
 	account: {
 		id: `account-${sequence}`,
 	},
