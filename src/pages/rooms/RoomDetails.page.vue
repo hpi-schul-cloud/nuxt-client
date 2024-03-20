@@ -4,6 +4,7 @@
 		:full-width="true"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
+		@onFabItemClick="fabItemClickHandler"
 	>
 		<template #header>
 			<div class="d-flex ma-2 mt-3">
@@ -16,9 +17,12 @@
 				>
 					{{ roomData.title }}
 				</div>
-				<v-chip v-if="roomData.isArchived" size="small" class="mt-1">
+				<VChip v-if="roomData.isSynchronized" size="small" class="mt-1 ml-2">
+					{{ $t("pages.rooms.headerSection.synchronized") }}
+				</VChip>
+				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">
 					{{ $t("pages.rooms.headerSection.archived") }}
-				</v-chip>
+				</VChip>
 				<div class="mx-2">
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
@@ -78,6 +82,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
 		/>
+		<common-cartridge-export-modal />
 	</default-wireframe>
 </template>
 
@@ -86,6 +91,7 @@ import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import RoomDotMenu from "@/components/molecules/RoomDotMenu";
 import ShareModal from "@/components/share/ShareModal.vue";
+import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
@@ -95,7 +101,12 @@ import {
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { authModule, envConfigModule, roomModule } from "@/store";
+import {
+	authModule,
+	envConfigModule,
+	roomModule,
+	commonCartridgeExportModule,
+} from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
@@ -108,12 +119,14 @@ import {
 	mdiPlus,
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
-	mdiTrayArrowDown,
+	mdiExport,
+	mdiSync,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 
 export default defineComponent({
 	setup() {
@@ -139,8 +152,12 @@ export default defineComponent({
 		RoomDotMenu,
 		CopyResultModal,
 		ShareModal,
+		commonCartridgeExportModal,
 	},
-	inject: ["copyModule", "shareModule"],
+	inject: {
+		copyModule: { from: COPY_MODULE_KEY },
+		shareModule: "shareModule",
+	},
 	data() {
 		return {
 			icons: {
@@ -148,7 +165,7 @@ export default defineComponent({
 				mdiEmailPlusOutline,
 				mdiShareVariantOutline,
 				mdiContentCopy,
-				mdiTrayArrowDown,
+				mdiExport,
 			},
 			breadcrumbs: [
 				{
@@ -163,6 +180,9 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		mdiSync() {
+			return mdiSync;
+		},
 		getCurrentFabItems() {
 			return this.currentTab?.fabItems;
 		},
@@ -261,7 +281,7 @@ export default defineComponent({
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
 					icon: mdiViewListOutline,
-					customEvent: () => this.onCreateBoard(this.roomData.roomId),
+					customEvent: "board-create",
 					dataTestId: "fab_button_add_board",
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),
 				});
@@ -331,21 +351,14 @@ export default defineComponent({
 				});
 			}
 
-			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
+			if (
+				envConfigModule.getEnv.FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED
+			) {
 				items.push({
-					icon: this.icons.mdiTrayArrowDown,
-					action: async () => await roomModule.downloadImsccCourse("1.1.0"),
-					name: this.$t("common.actions.download.v1.1"),
-					dataTestId: "title-menu-imscc-download-v1.1",
-				});
-			}
-
-			if (envConfigModule.getEnv.FEATURE_IMSCC_COURSE_EXPORT_ENABLED) {
-				items.push({
-					icon: this.icons.mdiTrayArrowDown,
-					action: async () => await roomModule.downloadImsccCourse("1.3.0"),
-					name: this.$t("common.actions.download.v1.3"),
-					dataTestId: "title-menu-imscc-download-v1.3",
+					icon: this.icons.mdiExport,
+					action: () => this.onExport(),
+					name: this.$t("common.actions.export"),
+					dataTestId: "title-menu-common-cartridge-download",
 				});
 			}
 
@@ -387,6 +400,11 @@ export default defineComponent({
 		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
+		fabItemClickHandler(event) {
+			if (event === "board-create") {
+				this.onCreateBoard(this.roomData.roomId);
+			}
+		},
 		setActiveTabIfPageCached(event) {
 			if (event.persisted) {
 				if (this.$route.query?.tab) {
@@ -411,18 +429,19 @@ export default defineComponent({
 				});
 			}
 		},
-		async onCopyRoom(courseId) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
 
+		onExport() {
+			commonCartridgeExportModule.startExportFlow();
+		},
+
+		async onCopyRoom(courseId) {
 			const copyParams = {
 				id: courseId,
 				courseId,
 				type: CopyParamsTypeEnum.Course,
 			};
 
-			await this.copy(copyParams, loadingText);
+			await this.copy(copyParams);
 
 			const copyResult = this.copyModule.getCopyResult;
 
@@ -435,10 +454,7 @@ export default defineComponent({
 			}
 		},
 		async onCopyBoardElement(payload) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
-			await this.copy(payload, loadingText);
+			await this.copy(payload);
 			await roomModule.fetchContent(payload.courseId);
 		},
 		onCopyResultModalClosed() {

@@ -9,9 +9,7 @@ export default {
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
-	"common.actions.download.v1.1": "Download (CC v1.1)",
-	"common.actions.download.v1.3": "Download (CC v1.3)",
-	"common.actions.download": "Download",
+	"common.actions.export": "Export",
 	"common.actions.edit": "Edit",
 	"common.actions.finish": "Finish",
 	"common.actions.import": "Import",
@@ -165,6 +163,7 @@ export default {
 	"common.words.topic": "Topic",
 	"common.words.topics": "Topics",
 	"common.words.yes": "Yes",
+	"common.words.export": "Course export is downloading",
 	"component.cardElement.fileElement.audioPlayer.pause": "Pause",
 	"component.cardElement.fileElement.audioPlayer.play": "Play",
 	"component.cardElement.fileElement.audioPlayer.slider": "Audio slider",
@@ -544,6 +543,12 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Submitted",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Local files are currently not supported.",
+	"components.molecules.export.options.info":
+		"The following content is not exported:",
+	"components.molecules.export.options.info.point1":
+		"Uploaded files within the course.",
+	"components.molecules.export.options.info.point2":
+		"Submissions assigned to a task.",
 	"components.organisms.AutoLogoutWarning.confirm": "Extend session",
 	"components.organisms.AutoLogoutWarning.error.401":
 		"Your session has already expired. Please log in again.",
@@ -747,6 +752,7 @@ export default {
 	"pages.administration.classes.index.title": "Manage classes",
 	"pages.administration.classes.label.archive": "Archive",
 	"pages.administration.classes.manage": "Manage class",
+	"pages.administration.classes.header.sync": "Synchronized with",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronization",
 	"pages.administration.ldap.activate.className": "Name",
@@ -1363,8 +1369,10 @@ export default {
 	"pages.rooms.fab.add.board": "New column board",
 	"pages.rooms.fab.add.task": "New task",
 	"pages.rooms.fab.ariaLabel": "Create new course",
+	"pages.rooms.fab.import.course": "Import course",
 	"pages.rooms.groupName": "Courses",
 	"pages.rooms.headerSection.archived": "Archive",
+	"pages.rooms.headerSection.synchronized": "Synchronized",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
 	"pages.rooms.importCourse.btn.continue": "Continue",
@@ -1383,6 +1391,14 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Course name",
 	"pages.rooms.importCourse.step_3":
 		"The imported course can be renamed in the next step.",
+	"pages.rooms.ccImportCourse.title": "Import course",
+	"pages.rooms.ccImportCourse.confirm": "Import",
+	"pages.rooms.ccImportCourse.fileInputLabel": "Select file",
+	"pages.rooms.ccImportCourse.loading": "Import is running...",
+	"pages.rooms.ccImportCourse.success":
+		"Course {name} was successfully imported.",
+	"pages.rooms.ccImportCourse.error":
+		"An error occurred while importing the course.",
 	"pages.rooms.index.courses.active": "Current courses",
 	"pages.rooms.index.courses.all": "All courses",
 	"pages.rooms.index.courses.arrangeCourses": "Arrange courses",
@@ -1411,6 +1427,13 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Tool menu",
 	"pages.rooms.tools.outdated": "Tool outdated",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ outdated",
+	"pages.room.modal.course.export.header": "Export Format",
+	"pages.room.modal.course.export.options.header": "Export settings",
+	"pages.room.modal.course.export.options.topics": "Topics",
+	"pages.room.modal.course.export.options.tasks": "Tasks without Topic",
+	"pages.room.modal.course.export.version1.1":
+		"Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
+	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",

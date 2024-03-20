@@ -9,9 +9,7 @@ export default {
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Скасувати",
-	"common.actions.download.v1.1": "Завантажити (CC v1.1)",
-	"common.actions.download.v1.3": "Завантажити (CC v1.3)",
-	"common.actions.download": "Завантажити",
+	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
 	"common.actions.import": "Імпорт",
@@ -168,6 +166,7 @@ export default {
 	"common.words.topic": "Тема",
 	"common.words.topics": "теми",
 	"common.words.yes": "Так",
+	"common.words.export": "Завантажується експорт курсу",
 	"component.cardElement.fileElement.audioPlayer.pause": "пауза",
 	"component.cardElement.fileElement.audioPlayer.play": "грати",
 	"component.cardElement.fileElement.audioPlayer.slider": "повзунок",
@@ -559,6 +558,12 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Надіслано",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Наразі локальні файли не підтримуються.",
+	"components.molecules.export.options.info":
+		"Наступний вміст не експортується:",
+	"components.molecules.export.options.info.point1":
+		"Завантажені файли в межах курсу.",
+	"components.molecules.export.options.info.point2":
+		"Подання, призначені до завдання.",
 	"components.organisms.AutoLogoutWarning.confirm": "Подовжити сеанс",
 	"components.organisms.AutoLogoutWarning.error.401":
 		"Термін дії сеансу минув. Увійдіть ще раз.",
@@ -760,6 +765,7 @@ export default {
 	"pages.administration.classes.index.title": "Керувати заняттями",
 	"pages.administration.classes.label.archive": "Архів",
 	"pages.administration.classes.manage": "Керувати класом",
+	"pages.administration.classes.header.sync": "Синхронізовано з",
 	"pages.administration.index.title": "Адміністрування",
 	"pages.administration.ldap.activate.breadcrumb": "Cинхронізація",
 	"pages.administration.ldap.activate.className": "Ім'я",
@@ -1385,8 +1391,10 @@ export default {
 	"pages.rooms.fab.add.board": "Нова дошка",
 	"pages.rooms.fab.add.task": "Створити завдання",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
+	"pages.rooms.fab.import.course": "Імпортувати курс",
 	"pages.rooms.groupName": "Курси",
 	"pages.rooms.headerSection.archived": "Архів",
+	"pages.rooms.headerSection.synchronized": "Синхронізовано",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
@@ -1405,6 +1413,12 @@ export default {
 	"pages.rooms.importCourse.step_3.text": "Назва курсу",
 	"pages.rooms.importCourse.step_3":
 		"Імпортований курс можна перейменувати під час наступного кроку.",
+	"pages.rooms.ccImportCourse.title": "Імпортний курс",
+	"pages.rooms.ccImportCourse.confirm": "Імпорт",
+	"pages.rooms.ccImportCourse.fileInputLabel": "Виберіть файл",
+	"pages.rooms.ccImportCourse.loading": "Імпорт виконується...",
+	"pages.rooms.ccImportCourse.success": "Курс {name} успішно імпортовано.",
+	"pages.rooms.ccImportCourse.error": "Виникла помилка під час імпорту курсу.",
 	"pages.rooms.index.courses.active": "Поточні курси",
 	"pages.rooms.index.courses.all": "Всі курси",
 	"pages.rooms.index.courses.arrangeCourses": "Упорядкувати курси",
@@ -1434,6 +1448,13 @@ export default {
 	"pages.rooms.tools.menu.ariaLabel": "Меню інструментів",
 	"pages.rooms.tools.outdated": "Інструмент застарів",
 	"pages.rooms.tools.outdatedDialog.title": "Інструмент „{toolName}“ застарів",
+	"pages.room.modal.course.export.header": "Формат експорту",
+	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
+	"pages.room.modal.course.export.options.topics": "Теми",
+	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
+	"pages.room.modal.course.export.version1.1":
+		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
+	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

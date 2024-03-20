@@ -11,7 +11,11 @@ import TasksList from "@/components/organisms/TasksList.vue";
 import { mount } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import ShareModule from "@/store/share";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import EnvConfigModule from "../../store/env-config";
 import {
 	createTestingI18n,
@@ -41,7 +45,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					tasksModule: tasksModuleMock,
-					copyModule: copyModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
