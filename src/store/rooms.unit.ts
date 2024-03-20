@@ -1,9 +1,9 @@
-import RoomsModule from "./rooms";
+import { AxiosInstance } from "axios";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
-import { RoomsData } from "./types/rooms";
-import { AxiosInstance } from "axios";
+import RoomsModule from "./rooms";
 import { AlertPayload } from "./types/alert-payload";
+import { RoomsData } from "./types/rooms";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
@@ -190,6 +190,7 @@ describe("rooms module", () => {
 					xPosition: 3,
 					yPosition: 3,
 					displayColor: "#FF0000",
+					isSynchronized: false,
 				};
 				roomsModule.setRoomDataId(roomsData.id);
 				await roomsModule.update(roomsData);
@@ -223,6 +224,7 @@ describe("rooms module", () => {
 					xPosition: 3,
 					yPosition: 3,
 					displayColor: "#FF0000",
+					isSynchronized: false,
 				};
 				roomsModule.setRoomDataId(roomsData.id);
 				await roomsModule.update(roomsData);
