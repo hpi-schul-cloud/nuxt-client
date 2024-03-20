@@ -7,8 +7,8 @@
 				variant="text"
 				density="comfortable"
 				class="three-dot-button"
-				data-testid="room-tool-three-dot-button"
 				:aria-label="ariaLabel"
+				:data-testid="dataTestid"
 				@keydown.space.stop
 			/>
 		</template>
@@ -44,6 +44,10 @@ defineProps({
 	ariaLabel: {
 		type: String,
 		required: true,
+	},
+	dataTestid: {
+		type: String,
+		default: "",
 	},
 });
 
