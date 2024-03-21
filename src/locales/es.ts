@@ -470,6 +470,11 @@ export default {
 	"components.molecules.courseheader.coursedata": "Archivos del curso",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
+	"components.molecules.import.columnBoard.options.title": "Importar tablero",
+	"components.molecules.import.columnBoard.options.selectCourse":
+		"Elija el curso",
+	"components.molecules.import.columnBoard.options.selectCourse.infoText":
+		"Los datos relacionados con los participantes no se copiarán. El tema se puede renombrar a continuación.",
 	"components.molecules.import.courses.label": "Curso",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Se creará una copia.<br>No se importarán datos personales.<br>No se copiarán herramientas externas.<br>Se puede cambiar el nombre del curso a continuación.",

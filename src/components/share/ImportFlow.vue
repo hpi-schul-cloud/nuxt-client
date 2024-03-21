@@ -160,8 +160,8 @@ async function startImport(name) {
 		});
 		if (copyResultModalItems.value.length === 0) {
 			loadingStateModule.close();
+			emit("success", newName.value, destinationCourseId.value);
 			copyModule.reset();
-			emit("success", newName.value);
 		} else {
 			openModal("result");
 		}

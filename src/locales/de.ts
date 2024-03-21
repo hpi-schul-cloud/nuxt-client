@@ -464,6 +464,10 @@ export default {
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.columnBoard.options.title": "Board importieren",
+	"components.molecules.import.columnBoard.options.selectCourse": "Kurs wählen",
+	"components.molecules.import.columnBoard.options.selectCourse.infoText":
+		"Der Kurs, in den das Thema importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.courses.label": "Kurs",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Es wird eine Kopie erstellt.<br>Personenbezogene Daten werden nicht importiert.<br>Externe Tools werden nicht kopiert. <br>Der Kurs kann im Folgenden umbenannt werden.",
