@@ -4,7 +4,7 @@
 			<BoardHeader
 				:boardId="board.id"
 				:title="board.title"
-				:titlePlaceholder="$t('pages.room.boardCard.label.courseBoard')"
+				:titlePlaceholder="t('pages.room.boardCard.label.courseBoard')"
 				:isDraft="!board.isVisible"
 				@update:visibility="onUpdateBoardVisibility"
 				@update:title="onUpdateBoardTitle"
