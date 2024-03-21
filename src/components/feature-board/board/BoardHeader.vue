@@ -38,7 +38,7 @@
 				>
 					<BoardMenuActionEdit @click="onStartEditMode" />
 					<BoardMenuActionCopy @click="onCopyBoard" />
-					<BoardMenuActionShare @click="onShareBoard" />
+					<BoardMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
 					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 				</BoardMenu>
@@ -48,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
@@ -62,7 +63,7 @@ import {
 	BoardMenuActionShare,
 } from "@ui-board";
 import { useDebounceFn } from "@vueuse/core";
-import { onMounted, ref, toRef, watchEffect } from "vue";
+import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
@@ -164,6 +165,11 @@ const calculateWidth = () => {
 	const width = inputWidthCalcSpan.value.offsetWidth;
 	fieldWidth.value = width;
 };
+
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const isShareEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
+);
 </script>
 
 <style lang="scss" scoped>
