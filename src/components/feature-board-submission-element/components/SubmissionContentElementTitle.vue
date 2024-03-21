@@ -5,7 +5,6 @@
 		inactive
 	>
 		<v-icon
-			color="black"
 			size="18"
 			class="mr-2"
 			data-testid="board-submission-element-edit-icon"
