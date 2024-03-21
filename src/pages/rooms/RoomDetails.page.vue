@@ -82,7 +82,7 @@
 			:copy-result-root-item-type="copyResultRootItemType"
 			@dialog-closed="onCopyResultModalClosed"
 		/>
-		<common-cartridge-export-modal :room-data-object="roomData" />
+		<common-cartridge-export-modal />
 	</default-wireframe>
 </template>
 

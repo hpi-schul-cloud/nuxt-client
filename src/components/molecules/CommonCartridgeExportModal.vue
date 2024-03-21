@@ -135,18 +135,16 @@
 </template>
 
 <script setup lang="ts">
-import {
-	BoardElementResponseTypeEnum,
-	SingleColumnBoardResponse,
-} from "@/serverApi/v3/api";
+import { BoardElementResponseTypeEnum } from "@/serverApi/v3/api";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
-import { computed, ref, watch, PropType } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { roomModule } from "@/store";
 
 type Selection = {
 	isSelected: boolean;
@@ -159,6 +157,7 @@ const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeExportModule = injectStrict(
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY
 );
+
 const emit = defineEmits([
 	"update:isExportModalOpen",
 	"dialog-closed",
@@ -166,14 +165,6 @@ const emit = defineEmits([
 	"next",
 	"back",
 ]);
-
-const props = defineProps({
-	roomDataObject: {
-		type: Object as PropType<SingleColumnBoardResponse>,
-		required: true,
-		default: () => ({}),
-	},
-});
 
 const isExportModalOpen = computed({
 	get: () => commonCartridgeExportModule.getIsExportModalOpen,
@@ -203,7 +194,7 @@ const allTasksSelected = computed(() => {
 });
 
 watch(
-	() => props.roomDataObject.elements,
+	() => roomModule.getRoomData.elements,
 	(newValue) => {
 		allTopics.value = [];
 

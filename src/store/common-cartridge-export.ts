@@ -13,14 +13,14 @@ export default class CommonCartridgeExportModule extends VuexModule {
 
 	@Action
 	async startExport(): Promise<void> {
-		const version = this.getVersion;
-		if (version === "1.1.0" || version === "1.3.0") {
-			const topics = this.getTopics;
-			await roomModule.downloadCommonCartridgeCourse({
-				version,
-				topics,
-			});
+		if (this.getVersion !== "1.1.0" && this.getVersion !== "1.3.0") {
+			return;
 		}
+
+		await roomModule.downloadCommonCartridgeCourse({
+			version: this.getVersion,
+			topics: this.getTopics,
+		});
 	}
 
 	@Action

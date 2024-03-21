@@ -203,7 +203,9 @@ export default class RoomModule extends VuexModule {
 			).courseControllerExportCourse(
 				this.roomData.roomId,
 				exportSettings.version,
-				exportSettings.topics.join(","),
+				{
+					topics: exportSettings.topics,
+				},
 				{
 					responseType: "blob",
 				}
