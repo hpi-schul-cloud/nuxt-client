@@ -21,6 +21,11 @@ import { shallowMount } from "@vue/test-utils";
 import { computed } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
+import { ENV_CONFIG_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import EnvConfigModule from "@/store/env-config";
+import ShareModule from "@/store/share";
+import { Envs } from "@/store/types/env-config";
 
 jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -50,9 +55,18 @@ describe("BoardHeader", () => {
 			isFocusContained: undefined,
 		});
 
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {} as Envs,
+		});
+		const shareModuleMock = createModuleMocks(ShareModule);
+
 		const wrapper = shallowMount(BoardHeader, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+				},
 			},
 			props: {
 				title: "title-text",

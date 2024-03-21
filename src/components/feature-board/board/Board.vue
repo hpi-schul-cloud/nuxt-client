@@ -9,6 +9,7 @@
 				@update:visibility="onUpdateBoardVisibility"
 				@update:title="onUpdateBoardTitle"
 				@copy:board="onCopyBoard"
+				@share:board="onShareBoard"
 			/>
 			<div class="d-flex flex-row flex-shrink-1">
 				<div>
@@ -71,6 +72,7 @@
 				:copy-result-root-item-type="copyResultRootItemType"
 				@dialog-closed="onCopyResultModalClosed"
 			/>
+			<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
 		</template>
 	</div>
 </template>
@@ -97,11 +99,18 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import { COPY_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	SHARE_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { useRouter } from "vue-router";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import ShareModal from "@/components/share/ShareModal.vue";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -269,5 +278,17 @@ const onCopyBoard = async () => {
 	await copy({ id: props.boardId, type: CopyParamsTypeEnum.ColumnBoard });
 	const copyId = copyModule.getCopyResult?.id;
 	router.push({ name: "rooms-board", params: { id: copyId } });
+};
+
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const shareModule = injectStrict(SHARE_MODULE_KEY);
+
+const onShareBoard = () => {
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
+		shareModule.startShareFlow({
+			id: props.boardId,
+			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+		});
+	}
 };
 </script>

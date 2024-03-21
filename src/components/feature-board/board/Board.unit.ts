@@ -8,6 +8,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -46,6 +47,7 @@ import LoadingStateModule from "@/store/loading-state";
 import { Router, useRouter } from "vue-router";
 import { CopyApiResponse } from "@/serverApi/v3";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
+import ShareModule from "@/store/share";
 
 jest.mock("@data-board");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -187,6 +189,8 @@ describe("Board", () => {
 	});
 	const loadingStateModule = createModuleMocks(LoadingStateModule);
 
+	const shareModule = createModuleMocks(ShareModule);
+
 	const setup = (options?: {
 		board?: Board;
 		isLoading?: boolean;
@@ -204,6 +208,7 @@ describe("Board", () => {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					loadingStateModule,
+					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				},
 			},
 			propsData: { boardId },
