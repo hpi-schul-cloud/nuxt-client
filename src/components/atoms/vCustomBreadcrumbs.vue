@@ -12,6 +12,7 @@
 					:disabled="item.disabled"
 					:exact="true"
 					class="breadcrumbs-item"
+					color="primary"
 				>
 					{{ item.title }}
 				</v-breadcrumbs-item>
