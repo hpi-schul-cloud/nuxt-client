@@ -305,7 +305,7 @@ export default {
 			await roomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`].$el.focus();
 		},
-		async getSharedBoard(boardId) {
+		getSharedBoard(boardId) {
 			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
 				this.shareModule.startShareFlow({
 					id: boardId,
@@ -313,7 +313,7 @@ export default {
 				});
 			}
 		},
-		async getSharedLesson(lessonId) {
+		getSharedLesson(lessonId) {
 			if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
 				this.shareModule.startShareFlow({
 					id: lessonId,
@@ -321,7 +321,7 @@ export default {
 				});
 			}
 		},
-		async getSharedTask(taskId) {
+		getSharedTask(taskId) {
 			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
 				this.shareModule.startShareFlow({
 					id: taskId,
