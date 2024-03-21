@@ -79,7 +79,7 @@
 					<language-menu />
 					<a
 						href="/account"
-						class="account-link"
+						class="account-link text-on-surface"
 						role="menuitem"
 						:aria-label="$t('global.topbar.settings').toString()"
 						data-testid="account-link"
@@ -314,6 +314,10 @@ export default defineComponent({
 	&:focus {
 		background-color: var(--hover-color);
 	}
+}
+
+.account-link {
+	color: rgba(var(--v-theme-on-surface));
 }
 
 .school-logo {
