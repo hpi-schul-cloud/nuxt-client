@@ -126,7 +126,7 @@ import {
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import { COPY_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 
 export default defineComponent({
 	setup() {
@@ -156,7 +156,7 @@ export default defineComponent({
 	},
 	inject: {
 		copyModule: { from: COPY_MODULE_KEY },
-		shareModule: "shareModule",
+		shareModule: { from: SHARE_MODULE_KEY },
 	},
 	data() {
 		return {

@@ -199,6 +199,7 @@ import {
 } from "@/serverApi/v3";
 import { envConfigModule, roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
 import draggable from "vuedraggable";
 
 export default {
@@ -219,7 +220,9 @@ export default {
 		},
 		role: { type: String, required: true },
 	},
-	inject: ["shareModule"],
+	inject: {
+		shareModule: { from: SHARE_MODULE_KEY },
+	},
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,

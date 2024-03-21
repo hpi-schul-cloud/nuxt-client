@@ -10,7 +10,7 @@
 	>
 		<template #title>
 			<div ref="textTitle" class="text-h4 my-2">
-				{{ $t(`components.molecules.import.${parentType}.options.title`) }}
+				{{ t(`components.molecules.import.${parentType}.options.title`) }}
 			</div>
 		</template>
 
@@ -22,7 +22,7 @@
 					</div>
 					<div>
 						{{
-							$t(
+							t(
 								`components.molecules.import.${parentType}.options.selectCourse.infoText`
 							)
 						}}
@@ -35,11 +35,11 @@
 					item-title="title"
 					:items="courses"
 					:placeholder="
-						$t(`components.molecules.import.${parentType}.options.selectCourse`)
+						t(`components.molecules.import.${parentType}.options.selectCourse`)
 					"
 					:rules="[rules.required]"
 					:error="showError()"
-					:hint="$t('common.labels.course')"
+					:hint="t('common.labels.course')"
 					persistent-hint
 					:menu-props="{ bottom: true, offsetY: true, nudgeBottom: 28 }"
 				/>
@@ -48,55 +48,36 @@
 	</v-custom-dialog>
 </template>
 
-<script type="ts">
+<script setup type="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { mdiInformation, mdiTriangleSmallDown } from "@mdi/js";
-import { defineComponent, reactive, ref } from "vue";
+import { mdiInformation } from "@/components/icons/material";
+import { reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-// eslint-disable-next-line vue/require-direct-export
-export default defineComponent({
-	name: "SelectCourseModal",
-	components: {
-		vCustomDialog,
-	},
-	emits: ["import", "cancel", "next"],
-	props: {
-		isOpen: { type: Boolean },
-		parentName: { type: String, required: true },
-		parentType: { type: String, required: true },
-		courses: { type:Array, required: true }
-	},
-	setup(props, { emit }) {
-		const { t } = useI18n();
-
-		const selectedCourse = ref(undefined);
-
-		const showErrorOnEmpty = ref(false);
-		const showError = () => !(selectedCourse.value) && showErrorOnEmpty.value;
-
-		const rules = reactive({
-          required: value => !!value || t("common.validation.required"),
-		});
-
-		const onNext = () => {
-			showErrorOnEmpty.value = true;
-			const id = selectedCourse.value?.id;
-			if (rules.required(id) === true) {
-				emit('next', id);
-			}
-		}
-		const onCancel = () => emit('cancel')
-
-		return {
-			onNext,
-			onCancel,
-			mdiInformation,
-			mdiTriangleSmallDown,
-			rules,
-			showError,
-			selectedCourse
-		};
-	},
+const emit = defineEmits(["import", "cancel", "next"]);
+defineProps({
+	isOpen: { type: Boolean },
+	parentName: { type: String, required: true },
+	parentType: { type: String, required: true },
+	courses: { type:Array, required: true }
 });
+	const { t } = useI18n();
+
+	const selectedCourse = ref(undefined);
+
+	const showErrorOnEmpty = ref(false);
+	const showError = () => !(selectedCourse.value) && showErrorOnEmpty.value;
+
+	const rules = reactive({
+				required: value => !!value || t("common.validation.required"),
+	});
+
+	const onNext = () => {
+		showErrorOnEmpty.value = true;
+		const id = selectedCourse.value?.id;
+		if (rules.required(id) === true) {
+			emit('next', id);
+		}
+	}
+	const onCancel = () => emit('cancel')
 </script>

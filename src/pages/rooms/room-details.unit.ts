@@ -14,6 +14,7 @@ import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { meResponseFactory } from "@@/tests/test-utils";
@@ -132,7 +133,7 @@ const getWrapper = () => {
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				notifierModule: notifierModuleMock,
-				shareModule: shareModuleMock,
+				[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModuleMock,

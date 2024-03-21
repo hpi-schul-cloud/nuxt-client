@@ -8,6 +8,10 @@ import RoomBoardCard from "./RoomBoardCard.vue";
 import { createMock } from "@golevelup/ts-jest";
 import { Router, useRouter } from "vue-router";
 import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import EnvConfigModule from "@/store/env-config";
+import { Envs } from "@/store/types/env-config";
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
@@ -51,10 +55,14 @@ describe("RoomBoardCard", () => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 		// Note: router has to be mocked before mounting the component
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {} as Envs,
+		});
 
 		const wrapper = mount(RoomBoardCard, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock },
 			},
 			props: {
 				dragInProgress: false,
