@@ -7,7 +7,6 @@
 			<v-progress-circular indeterminate color="secondary" size="115" />
 		</div>
 		<h5p-player
-			v-show="playerInitialized"
 			ref="h5pPlayerRef"
 			:content-id="contentId"
 			@initialized="playerInitialized = true"
