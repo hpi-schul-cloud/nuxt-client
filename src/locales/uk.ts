@@ -514,6 +514,8 @@ export default {
 		"немає. Обліковий запис буде створено знову.",
 	"components.molecules.importUsersMatch.write": "Введіть ім'я та прізвище",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
+	"components.molecules.share.columnBoard.options.infoText":
+		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
 	"components.molecules.share.courses.options.ctlTools.infotext":

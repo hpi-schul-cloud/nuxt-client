@@ -39,6 +39,7 @@
 							@copy-board="copyBoard(item.content.id)"
 							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@delete-board="openItemDeleteDialog(item.content, item.type)"
+							@share-board="getSharedBoard(item.content.columnBoardId)"
 						/>
 						<RoomTaskCard
 							v-if="item.type === cardTypes.Task"
@@ -155,6 +156,7 @@
 			data-testid="empty-state-item"
 			class="mt-16"
 		/>
+		<share-modal type="columnBoard" />
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
 		<v-custom-dialog
@@ -299,6 +301,14 @@ export default {
 
 			await roomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`].$el.focus();
+		},
+		async getSharedBoard(boardId) {
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
+				this.shareModule.startShareFlow({
+					id: boardId,
+					type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+				});
+			}
 		},
 		async getSharedLesson(lessonId) {
 			if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
