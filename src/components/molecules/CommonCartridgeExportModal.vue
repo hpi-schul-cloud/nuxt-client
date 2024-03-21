@@ -140,11 +140,11 @@ import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { roomModule } from "@/store";
 
 type Selection = {
 	isSelected: boolean;
@@ -157,6 +157,7 @@ const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeExportModule = injectStrict(
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY
 );
+const roomModule = injectStrict(ROOM_MODULE_KEY);
 
 const emit = defineEmits([
 	"update:isExportModalOpen",
