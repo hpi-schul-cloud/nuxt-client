@@ -412,7 +412,10 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
 				await expect(
-					roomModule.downloadCommonCartridgeCourse("1.1.0")
+					roomModule.downloadCommonCartridgeCourse({
+						version: "1.1.0",
+						topics: [],
+					})
 				).resolves.not.toBeDefined();
 
 				spy.mockRestore();
@@ -429,7 +432,10 @@ describe("room module", () => {
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
-				await roomModule.downloadCommonCartridgeCourse("1.1.0");
+				await roomModule.downloadCommonCartridgeCourse({
+					version: "1.1.0",
+					topics: [],
+				});
 
 				expect(roomModule.businessError).toStrictEqual(error);
 
