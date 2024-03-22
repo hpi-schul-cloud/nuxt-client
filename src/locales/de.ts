@@ -88,6 +88,7 @@ export default {
 	"common.labels.visible": "Sichtbar",
 	"common.loading.text": "Daten werden geladen...",
 	"common.nodata": "Keine Daten vorhanden",
+	"common.notification.error": "Es ist ein Fehler aufgetreten.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "TT.MM.JJJJ",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",

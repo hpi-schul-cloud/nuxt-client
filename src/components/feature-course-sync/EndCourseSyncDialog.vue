@@ -4,6 +4,7 @@
 		:has-buttons="true"
 		:buttons="['cancel', 'confirm']"
 		:is-open="isOpen"
+		:confirm-btn-disabled="!courseId"
 		@dialog-confirmed="onConfirm"
 		@dialog-canceled="closeDialog"
 	>
@@ -33,6 +34,7 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import WarningAlert from "@ui-alert/WarningAlert.vue";
 import { useI18n } from "vue-i18n";
+import { useCourseApi } from "../data-room";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
@@ -42,7 +44,7 @@ const isOpen = defineModel("isOpen", {
 	required: true,
 });
 
-defineProps({
+const props = defineProps({
 	courseName: {
 		type: String,
 		required: true,
@@ -50,6 +52,9 @@ defineProps({
 	groupName: {
 		type: String,
 		required: true,
+	},
+	courseId: {
+		type: String,
 	},
 });
 
@@ -61,10 +66,25 @@ const closeDialog = () => {
 	isOpen.value = false;
 };
 
-const onConfirm = () => {
+const { stopSynchronization } = useCourseApi();
+
+const onConfirm = async () => {
+	if (!props.courseId) {
+		return;
+	}
+
 	closeDialog();
 
-	// TODO call api
+	try {
+		await stopSynchronization(props.courseId);
+	} catch (errorResponse) {
+		notifierModule.show({
+			text: t("common.notification.error"),
+			status: "error",
+		});
+
+		return;
+	}
 
 	notifierModule.show({
 		text: t("feature-course-sync.EndCourseSyncDialog.success"),

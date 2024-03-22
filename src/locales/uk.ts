@@ -88,6 +88,7 @@ export default {
 	"common.labels.visible": "Видимий",
 	"common.loading.text": "Дані завантажуються...",
 	"common.nodata": "Немає даних",
+	"common.notification.error": "Сталася помилка.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email.confirmation":

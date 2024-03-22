@@ -87,6 +87,7 @@
 			v-model:is-open="isEndSyncDialogOpen"
 			group-name=""
 			:course-name="roomData.title"
+			:course-id="roomData.roomId"
 			@success="refreshRoom"
 		/>
 	</default-wireframe>

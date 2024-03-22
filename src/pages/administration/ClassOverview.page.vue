@@ -152,8 +152,9 @@
 		</v-custom-dialog>
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
-			:course-name="selectedItem?.synchronizedCourses?.[0]?.name ?? ''"
-			:group-name="selectedItem?.name ?? ''"
+			:course-name="selectedItemForSync.courseName"
+			:group-name="selectedItemForSync.groupName"
+			:course-id="selectedItemForSync.courseId"
 			@success="loadClassList"
 		/>
 
@@ -309,6 +310,21 @@ const selectedItem: Ref<ClassInfo | undefined> = ref();
 const selectedItemName: ComputedRef<string> = computed(
 	() => selectedItem.value?.name || "???"
 );
+
+const selectedItemForSync: ComputedRef<{
+	courseName: string;
+	groupName: string;
+	courseId?: string;
+}> = computed(() => {
+	const synchronizedCourse: CourseInfo | undefined =
+		selectedItem.value?.synchronizedCourses?.[0];
+
+	return {
+		courseId: synchronizedCourse?.id,
+		courseName: synchronizedCourse?.name ?? "",
+		groupName: selectedItem.value?.name ?? "",
+	};
+});
 
 const onClickEndSyncIcon = (selectedClass: ClassInfo) => {
 	selectedItem.value = selectedClass;
