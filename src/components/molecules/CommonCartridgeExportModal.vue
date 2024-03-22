@@ -203,7 +203,9 @@ watch(
 					title: element.content.name,
 					id: element.content.id,
 				});
-			} else if (element.type === BoardElementResponseTypeEnum.Task) {
+			}
+
+			if (element.type === BoardElementResponseTypeEnum.Task) {
 				allTasks.value.push({
 					isSelected: true,
 					title: element.content.name,
