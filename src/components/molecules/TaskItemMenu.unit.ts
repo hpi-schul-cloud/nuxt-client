@@ -1,5 +1,4 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { ConfigResponse } from "@/serverApi/v3";
 import { envConfigModule, finishedTasksModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
@@ -9,6 +8,7 @@ import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { envsFactory } from "@@/tests/test-utils";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import {
 	createTestingI18n,
@@ -229,9 +229,10 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					userRole: "teacher",
 					courseId: "18",
 				});
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_COPY_SERVICE_ENABLED: true,
-				} as ConfigResponse);
+				});
+				envConfigModule.setEnvs(envs);
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
@@ -258,9 +259,10 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 					userRole: "teacher",
 				});
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_COPY_SERVICE_ENABLED: true,
-				} as ConfigResponse);
+				});
+				envConfigModule.setEnvs(envs);
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
@@ -288,9 +290,10 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				FEATURE_COPY_SERVICE_ENABLED: false,
-			} as ConfigResponse);
+			});
+			envConfigModule.setEnvs(envs);
 
 			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");

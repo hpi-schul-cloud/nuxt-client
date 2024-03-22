@@ -8,7 +8,7 @@ import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
@@ -367,10 +367,11 @@ describe("students/index", () => {
 	});
 
 	it("should display the columns behind the migration feature flag", () => {
-		envConfigModule.setEnvs({
+		const envBuild = envsFactory.build({
 			...envs,
 			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
 		});
+		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
@@ -383,10 +384,11 @@ describe("students/index", () => {
 	});
 
 	it("should not display the columns behind the migration feature flag", () => {
-		envConfigModule.setEnvs({
+		const envBuild = envsFactory.build({
 			...envs,
 			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
 		});
+		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
@@ -513,9 +515,10 @@ describe("students/index", () => {
 	});
 
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
-		envConfigModule.setEnvs({
+		const envBuild = envsFactory.build({
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
+		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
 
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
@@ -527,9 +530,10 @@ describe("students/index", () => {
 	});
 
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
-		envConfigModule.setEnvs({
+		const envBuild = envsFactory.build({
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
+		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
 
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
@@ -540,10 +544,11 @@ describe("students/index", () => {
 	});
 
 	it("should not display consent warning icon if FEATURE_CONSENT_NECESSARY is false", () => {
-		envConfigModule.setEnvs({
+		const envBuild = envsFactory.build({
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 			FEATURE_CONSENT_NECESSARY: false,
 		});
+		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
 
 		expect(envConfigModule.getEnv.FEATURE_CONSENT_NECESSARY).toBe(false);

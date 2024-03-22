@@ -1,6 +1,6 @@
-import { ConfigResponse } from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -581,9 +581,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to true", () => {
 					it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-						envConfigModule.setEnvs({
+						const envs = envsFactory.build({
 							FEATURE_COPY_SERVICE_ENABLED: true,
-						} as ConfigResponse);
+						});
+						envConfigModule.setEnvs(envs);
 						const copyCard = jest.fn();
 						const wrapper = getWrapper({ ...testProps, userRole });
 						wrapper.vm.copyCard = copyCard;
@@ -602,9 +603,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to false", () => {
 					it("should not find the copy option in the 'more action' menu", async () => {
-						envConfigModule.setEnvs({
+						const envs = envsFactory.build({
 							FEATURE_COPY_SERVICE_ENABLED: false,
-						} as ConfigResponse);
+						});
+						envConfigModule.setEnvs(envs);
 						const wrapper = getWrapper({ ...testProps, userRole });
 
 						const threeDotButton = wrapper.find(".three-dot-button");

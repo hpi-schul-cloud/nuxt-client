@@ -1,4 +1,3 @@
-import { ConfigResponse } from "@/serverApi/v3/api";
 import { authModule, envConfigModule, filePathsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
@@ -13,7 +12,7 @@ import legacyLoggedIn from "./legacyLoggedIn.vue";
 
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -43,9 +42,10 @@ authModule.setAccessToken("asdf");
 
 filePathsModule.setSpecificFiles("https://dbildungscloud.de");
 
-envConfigModule.setEnvs({
+const envs = envsFactory.build({
 	ALERT_STATUS_URL: "https://status.dbildungscloud.de",
-} as ConfigResponse);
+});
+envConfigModule.setEnvs(envs);
 
 jest.mock("vue-router");
 const useRouteMock = <jest.Mock>useRoute;

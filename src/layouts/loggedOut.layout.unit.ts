@@ -1,10 +1,11 @@
-import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -24,11 +25,12 @@ describe("loggedOutLayout", () => {
 			filePathsModule: FilePathsModule,
 		});
 
-		envConfigModule.setEnvs({
+		const envs = envsFactory.build({
 			GHOST_BASE_URL: "https://works-like-charm.com",
 			// SC_THEME must be set here because of dependency to NavigationBar
 			SC_THEME: SchulcloudTheme.Default,
-		} as ConfigResponse);
+		});
+		envConfigModule.setEnvs(envs);
 
 		const applicationErrorModuleMock = createModuleMocks(
 			ApplicationErrorModule

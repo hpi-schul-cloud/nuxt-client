@@ -1,5 +1,4 @@
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import { ConfigResponse } from "@/serverApi/v3/api";
 import { envConfigModule, roomModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
@@ -16,6 +15,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, VueWrapper } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 
+import { envsFactory } from "@@/tests/test-utils";
 import { createMock } from "@golevelup/ts-jest";
 import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
@@ -153,8 +153,11 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			envConfigModule: EnvConfigModule,
 			copyModule: CopyModule,
 		});
-		const env = { FEATURE_LESSON_SHARE: true, FEATURE_TASK_SHARE: true };
-		envConfigModule.setEnvs(env as unknown as ConfigResponse);
+		const envs = envsFactory.build({
+			FEATURE_LESSON_SHARE: true,
+			FEATURE_TASK_SHARE: true,
+		});
+		envConfigModule.setEnvs(envs);
 	});
 	describe("common features", () => {
 		it("should have props", async () => {
@@ -575,9 +578,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyTask Process", () => {
 		beforeEach(() => {
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				FEATURE_COPY_SERVICE_ENABLED: true,
-			} as ConfigResponse);
+			});
+			envConfigModule.setEnvs(envs);
 		});
 
 		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
@@ -613,9 +617,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyLesson Process", () => {
 		beforeEach(() => {
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				FEATURE_COPY_SERVICE_ENABLED: true,
-			} as ConfigResponse);
+			});
+			envConfigModule.setEnvs(envs);
 		});
 
 		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {
@@ -651,9 +656,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyBoard Process", () => {
 		beforeEach(() => {
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				FEATURE_COPY_SERVICE_ENABLED: true,
-			} as ConfigResponse);
+			});
+			envConfigModule.setEnvs(envs);
 		});
 
 		it("should call the copyBoard method when a board component emits 'copy-board' custom event", async () => {

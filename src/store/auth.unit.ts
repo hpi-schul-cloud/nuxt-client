@@ -1,8 +1,12 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { ConfigResponse, LanguageType } from "@/serverApi/v3/api";
+import { LanguageType } from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory, mockApiResponse } from "@@/tests/test-utils";
+import {
+	envsFactory,
+	meResponseFactory,
+	mockApiResponse,
+} from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
@@ -250,10 +254,11 @@ describe("auth store module", () => {
 			setupStores({
 				envConfigModule: EnvConfigModule,
 			});
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				FEATURE_EXTENSIONS_ENABLED: true,
 				FEATURE_TEAMS_ENABLED: true,
-			} as unknown as ConfigResponse);
+			});
+			envConfigModule.setEnvs(envs);
 		});
 
 		describe("login", () => {

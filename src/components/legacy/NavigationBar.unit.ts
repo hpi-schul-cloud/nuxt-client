@@ -1,6 +1,7 @@
-import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -49,9 +50,8 @@ describe("@/components/legacy/NavigationBar", () => {
 	});
 
 	it("renders logo, links and buttons for default theme", () => {
-		envConfigModule.setEnvs({
-			SC_THEME: SchulcloudTheme.Default,
-		} as ConfigResponse);
+		const envs = envsFactory.build({ SC_THEME: SchulcloudTheme.Default });
+		envConfigModule.setEnvs(envs);
 		const { wrapper, img } = getWrapper();
 
 		expect(wrapper.find(".logo.logo-full").exists()).toBe(true);
@@ -67,7 +67,8 @@ describe("@/components/legacy/NavigationBar", () => {
 	it.each([SchulcloudTheme.N21, SchulcloudTheme.Brb])(
 		"does render logo but not links and Buttons for %s theme",
 		(theme) => {
-			envConfigModule.setEnvs({ SC_THEME: theme } as ConfigResponse);
+			const envs = envsFactory.build({ SC_THEME: theme });
+			envConfigModule.setEnvs(envs);
 			const { wrapper, img } = getWrapper();
 
 			expect(wrapper.find(".logo.logo-full").exists()).toBe(true);

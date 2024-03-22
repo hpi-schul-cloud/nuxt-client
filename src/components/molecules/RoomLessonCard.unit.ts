@@ -1,6 +1,6 @@
-import { ConfigResponse } from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -187,9 +187,8 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should have 'copy' more action if copying feature is enabled", async () => {
-				envConfigModule.setEnvs({
-					FEATURE_COPY_SERVICE_ENABLED: true,
-				} as ConfigResponse);
+				const envs = envsFactory.build({ FEATURE_COPY_SERVICE_ENABLED: true });
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper({ ...baseTestProps, userRole });
 
 				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
@@ -201,9 +200,8 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should not have 'copy' more action if copying feature is not enabled", async () => {
-				envConfigModule.setEnvs({
-					FEATURE_COPY_SERVICE_ENABLED: false,
-				} as ConfigResponse);
+				const envs = envsFactory.build({ FEATURE_COPY_SERVICE_ENABLED: false });
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper({ ...baseTestProps, userRole });
 
 				const hasCopyMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(
@@ -215,9 +213,8 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-				envConfigModule.setEnvs({
-					FEATURE_COPY_SERVICE_ENABLED: true,
-				} as ConfigResponse);
+				const envs = envsFactory.build({ FEATURE_COPY_SERVICE_ENABLED: true });
+				envConfigModule.setEnvs(envs);
 				const copyCard = jest.fn();
 				const wrapper = getWrapper({ ...baseTestProps, userRole });
 				wrapper.vm.copyCard = copyCard;
@@ -251,9 +248,8 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should have 'share' more action if env flag is set", async () => {
-				envConfigModule.setEnvs({
-					FEATURE_LESSON_SHARE: true,
-				} as ConfigResponse);
+				const envs = envsFactory.build({ FEATURE_LESSON_SHARE: true });
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper({ ...baseTestProps, userRole });
 
 				const hasShareMenuItem = wrapper.vm.moreActionsMenuItems.teacher.some(

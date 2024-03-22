@@ -1,7 +1,6 @@
-import { ConfigResponse } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
+import { envsFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { envsFactory } from "../../tests/test-utils";
 import EnvConfigModule from "./env-config";
 import FilePathsModule from "./filePaths";
 
@@ -52,9 +51,10 @@ describe("filePaths module", () => {
 		it("init should call the setDocumentBaseDir, setSpecificFiles, and setGlobalFiles mutations", async () => {
 			const filePathsModule = new FilePathsModule({});
 			const mockURL = "http://mock.url/";
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				DOCUMENT_BASE_DIR: mockURL,
-			} as ConfigResponse);
+			});
+			envConfigModule.setEnvs(envs);
 			const spyBaseDir = jest.fn();
 			const spySpecificFiles = jest.fn();
 			const spyGlobalFiles = jest.fn();

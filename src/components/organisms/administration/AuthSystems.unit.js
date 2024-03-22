@@ -2,7 +2,7 @@ import { authModule, envConfigModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
@@ -73,15 +73,17 @@ describe("AuthSystems", () => {
 	describe("displaying values", () => {
 		describe("login link", () => {
 			beforeEach(() => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_LOGIN_LINK_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 			});
 
 			it("login link field should not be visible", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_LOGIN_LINK_ENABLED: false,
 				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = createWrapper({ props: generateProps() });
 

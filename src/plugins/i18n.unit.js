@@ -2,6 +2,7 @@ import { SchulcloudTheme } from "@/serverApi/v3";
 import { authModule, envConfigModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
+import { envsFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { unref } from "vue";
 import { createI18n } from "./i18n";
@@ -31,7 +32,11 @@ describe("i18n plugin", () => {
 
 	it("sets locale to the locale computed in the auth store module", () => {
 		authModule.setLocale("fi");
-		envConfigModule.setEnvs({ ...envs, I18N__FALLBACK_LANGUAGE: "da" });
+		const envBuild = envsFactory.build({
+			...envs,
+			I18N__FALLBACK_LANGUAGE: "da",
+		});
+		envConfigModule.setEnvs(envBuild);
 
 		const i18n = createI18n();
 
@@ -41,7 +46,11 @@ describe("i18n plugin", () => {
 
 	it("sets the number formats for all supported languages correctly", () => {
 		authModule.setLocale("fi");
-		envConfigModule.setEnvs({ ...envs, I18N__FALLBACK_LANGUAGE: "da" });
+		const envBuild = envsFactory.build({
+			...envs,
+			I18N__FALLBACK_LANGUAGE: "da",
+		});
+		envConfigModule.setEnvs(envBuild);
 
 		const i18n = createI18n();
 

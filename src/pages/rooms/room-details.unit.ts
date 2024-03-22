@@ -1,7 +1,4 @@
-import {
-	ConfigResponse,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3/api";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
@@ -19,7 +16,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -301,10 +298,11 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should have the headline menu items", () => {
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				FEATURE_COPY_SERVICE_ENABLED: true,
 				FEATURE_COURSE_SHARE: true,
-			} as ConfigResponse);
+			});
+			envConfigModule.setEnvs(envs);
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -320,7 +318,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set to true", () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as ConfigResponse);
+			const envs = envsFactory.build({
+				FEATURE_COURSE_SHARE: true,
+			});
+			envConfigModule.setEnvs(envs);
 			const wrapper = getWrapper();
 			const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -350,9 +351,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 			it("should have 'Copy Course' menu if 'FEATURE_COPY_SERVICE_ENABLED' flag set to true", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_COPY_SERVICE_ENABLED: true,
-				} as ConfigResponse);
+				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper();
 				const menuItems = wrapper.vm.headlineMenuItems;
 
@@ -360,9 +362,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 
 			it("should call the onCopyRoom method when 'Copy course' menu clicked", async () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_COPY_SERVICE_ENABLED: true,
-				} as ConfigResponse);
+				});
+				envConfigModule.setEnvs(envs);
 				const onCopyRoom = jest.fn();
 				const wrapper = getWrapper();
 				wrapper.vm.onCopyRoom = onCopyRoom;
@@ -383,9 +386,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("test Course export", () => {
 			it("should not find export button when feature flag is false", async () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
-				} as ConfigResponse);
+				});
+				envConfigModule.setEnvs(envs);
 				const onExport = jest.fn();
 				const wrapper = getWrapper();
 				wrapper.vm.onExport = onExport;
@@ -402,9 +406,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 
 			it("should call onExport method when 'Export Course' menu clicked", async () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
-				} as ConfigResponse);
+				});
+				envConfigModule.setEnvs(envs);
 				const onExport = jest.fn();
 				const wrapper = getWrapper();
 				wrapper.vm.onExport = onExport;
@@ -421,7 +426,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as ConfigResponse);
+			const envs = envsFactory.build({
+				FEATURE_COURSE_SHARE: true,
+			});
+			envConfigModule.setEnvs(envs);
 			const shareCourseSpy = jest.fn();
 			const wrapper = getWrapper();
 			wrapper.vm.shareCourse = shareCourseSpy;
@@ -440,9 +448,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("should call store action after 'Share Course' menu clicked", async () => {
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				FEATURE_COURSE_SHARE: true,
-			} as ConfigResponse);
+			});
+			envConfigModule.setEnvs(envs);
 			const wrapper = getWrapper();
 
 			const threeDotButton = wrapper.findComponent(
@@ -478,9 +487,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	describe("tabs", () => {
 		describe("when feature flag is enabled", () => {
 			const setup = () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				} as ConfigResponse);
+				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 
@@ -498,9 +508,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("when feature flag is disabled", () => {
 			const setup = () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: false,
-				} as ConfigResponse);
+				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 
@@ -518,9 +529,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("when Tools(new) tab is active", () => {
 			const setup = () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				} as ConfigResponse);
+				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 
