@@ -256,6 +256,9 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		path: "/tasks",
 		component: () => import("../pages/tasks/TaskOverview.page.vue"),
 		name: "tasks",
+		meta: {
+			layout: Layouts.NEW_LOGGED_IN,
+		},
 	},
 	{
 		path: `/tools/context/tool-configuration`,
