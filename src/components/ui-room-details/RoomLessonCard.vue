@@ -45,7 +45,7 @@
 			data-testid="content-card-lesson-info"
 		>
 			<div class="chip-items-group">
-				<div class="bg-grey-lighten-2 chip-item px-1 mr-1 mb-0" tabindex="0">
+				<div class="bg-grey-lighten-2 chip-item px-1 mr-1 mb-0">
 					<div class="chip-value">
 						{{ taskChipValue }}
 					</div>
@@ -322,6 +322,7 @@ const onKeyPress = (e: KeyboardEvent) => {
 		width: fit-content;
 		text-align: center;
 		border-radius: var(--radius-sm);
+		font-size: var(--text-xs);
 
 		.chip-value {
 			font-size: var(--text-xs);

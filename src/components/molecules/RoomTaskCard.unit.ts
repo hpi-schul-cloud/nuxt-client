@@ -96,25 +96,6 @@ const overdueTestTask = {
 	description: "some description here",
 };
 
-// export type Task = {
-// 	id: string;
-// 	name: string;
-// 	description?: string;
-// 	availableDate?: string;
-// 	dueDate?: string;
-// 	courseName: string;
-// 	displayColor?: string;
-// 	status?: {
-// 		submitted: number;
-// 		maxSubmissions: number;
-// 		graded: number;
-// 		isDraft: boolean;
-// 		isSubstitutionTeacher: boolean;
-// 		isFinished: boolean;
-// 	};
-// 	createdAt: string;
-// 	updatedAt: string;
-// };
 const noDueTestTask = {
 	id: "123",
 	name: "Test Name",
