@@ -9,7 +9,6 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
-					style="color: rgba(var(--v-theme-secondary))"
 				/>
 			</div>
 		</th>
