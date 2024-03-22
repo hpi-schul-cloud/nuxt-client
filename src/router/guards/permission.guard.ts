@@ -16,11 +16,15 @@ export function createPermissionGuard(
 		from: RouteLocationNormalized,
 		next: NavigationGuardNext
 	) => {
+		console.log("permissions", permissions);
+		console.log("authModule.getUserPermissions", authModule.getUserPermissions);
 		if (permissions.every((p) => authModule.getUserPermissions.includes(p))) {
+			console.log("Permission granted");
 			return next();
 		}
 
 		if (fallbackRoute) {
+			console.log("fallbackRoute", fallbackRoute);
 			return next(fallbackRoute);
 		}
 
