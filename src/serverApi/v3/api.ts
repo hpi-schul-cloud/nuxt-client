@@ -5553,19 +5553,19 @@ export interface SchoolSystemResponse {
      * @type {string}
      * @memberof SchoolSystemResponse
      */
-    alias: string;
+    alias?: string;
     /**
      * 
      * @type {ProviderConfigResponse}
      * @memberof SchoolSystemResponse
      */
-    ldapConfig: ProviderConfigResponse;
+    ldapConfig?: ProviderConfigResponse;
     /**
      * 
      * @type {ProviderConfigResponse}
      * @memberof SchoolSystemResponse
      */
-    oauthConfig: ProviderConfigResponse;
+    oauthConfig?: ProviderConfigResponse;
 }
 /**
  * 

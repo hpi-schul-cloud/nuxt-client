@@ -4,6 +4,7 @@ import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import { meResponseFactory } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
+import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -15,7 +16,7 @@ import SchoolsModule from "./schools";
 import { Envs } from "./types/env-config";
 
 let receivedRequests: any[] = [];
-let getRequestReturn: any = {};
+const getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
@@ -143,39 +144,36 @@ describe("schools module", () => {
 			});
 
 			it("should call backend and sets state correctly", async () => {
-				axiosInitializer();
-				getRequestReturn = { data: "dummy response" };
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
 					systemIds: ["mockSystemId"],
 				});
 
+				const mockSchoolSystemResponse =
+					schoolSystemResponseFactory.buildList(1);
+				schoolApi.schoolControllerGetSchoolSystems.mockResolvedValueOnce(
+					mockApiResponse({ data: mockSchoolSystemResponse })
+				);
+
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
 				await schoolsModule.fetchSystems();
 
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual(
-					"v1/systems/mockSystemId"
-				);
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setSystemsSpy).toHaveBeenCalled();
-				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual([
-					"dummy response",
-				]);
+				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
+					mockSchoolSystemResponse
+				);
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
-				initializeAxios({
-					get: async (path: string) => {
-						throw new AxiosError(path);
-						return;
-					},
-				} as AxiosInstance);
+				schoolApi.schoolControllerGetSchoolSystems.mockRejectedValueOnce(
+					new AxiosError()
+				);
 
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
@@ -234,13 +232,6 @@ describe("schools module", () => {
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
-				initializeAxios({
-					patch: async (path: string) => {
-						throw new AxiosError(path);
-						return;
-					},
-				} as AxiosInstance);
-
 				const uploadData = {
 					data: "some data to be updated",
 					features: [serverApi.SchoolFeature.RocketChat],
@@ -602,7 +593,7 @@ describe("schools module", () => {
 		describe("setSystems", () => {
 			it("should set systems data", () => {
 				const schoolsModule = new SchoolsModule({});
-				const expectedSystemState = [{ id: "id_1", type: "ldap" }];
+				const expectedSystemState = [schoolSystemResponseFactory.build()];
 				expect(schoolsModule.getSystems).not.toStrictEqual(expectedSystemState);
 				schoolsModule.setSystems(expectedSystemState);
 				expect(schoolsModule.getSystems).toStrictEqual(expectedSystemState);
@@ -655,7 +646,7 @@ describe("schools module", () => {
 		describe("getSystems", () => {
 			it("should return systems state", () => {
 				const schoolsModule = new SchoolsModule({});
-				const systems = [{ id: "id_1", type: "ldap" }];
+				const systems = schoolSystemResponseFactory.buildList(1);
 				expect(schoolsModule.getSystems).not.toStrictEqual(systems);
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.getSystems).toStrictEqual(systems);
@@ -675,13 +666,13 @@ describe("schools module", () => {
 			it("should return correct sync status for iserv-idm schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "ldap",
 						ldapConfig: {
 							provider: "iserv-idm",
 						},
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
@@ -689,13 +680,13 @@ describe("schools module", () => {
 			it("should return correct sync status for univention schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "ldap",
 						ldapConfig: {
 							provider: "univention",
 						},
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
@@ -703,10 +694,10 @@ describe("schools module", () => {
 			it("should return correct sync status for TSP schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "tsp-school",
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
@@ -714,13 +705,13 @@ describe("schools module", () => {
 			it("should return correct sync status for ldap general schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "ldap",
 						ldapConfig: {
 							provider: "general",
 						},
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
@@ -728,10 +719,10 @@ describe("schools module", () => {
 			it("should return correct sync status for moodle schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "moodle",
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
@@ -739,10 +730,10 @@ describe("schools module", () => {
 			it("should return correct sync status for itslearning schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "itslearning",
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
