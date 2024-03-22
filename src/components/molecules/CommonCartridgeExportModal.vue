@@ -185,11 +185,7 @@ const allTopicsSelected = computed(() => {
 	return allTopics.value.every((topic) => topic.isSelected);
 });
 
-const allTasks = ref<Array<Selection>>([
-	{ isSelected: true, title: "Aufgabe-title1", id: "task-1" },
-	{ isSelected: true, title: "Aufgabe-title2", id: "task-2" },
-	{ isSelected: true, title: "Aufgabe-title3", id: "task-3" },
-]);
+const allTasks = ref<Array<Selection>>([]);
 const allTasksSelected = computed(() => {
 	return allTasks.value.every((topic) => topic.isSelected);
 });
@@ -198,10 +194,17 @@ watch(
 	() => roomModule.getRoomData.elements,
 	(newValue) => {
 		allTopics.value = [];
+		allTasks.value = [];
 
 		newValue.forEach((element: any) => {
 			if (element.type === BoardElementResponseTypeEnum.Lesson) {
 				allTopics.value.push({
+					isSelected: true,
+					title: element.content.name,
+					id: element.content.id,
+				});
+			} else if (element.type === BoardElementResponseTypeEnum.Task) {
+				allTasks.value.push({
 					isSelected: true,
 					title: element.content.name,
 					id: element.content.id,
@@ -259,8 +262,12 @@ async function onExport(): Promise<void> {
 	const topicIds: string[] = allTopics.value
 		.filter((topic) => topic.isSelected)
 		.map((topic) => topic.id);
+	const taskIds = allTasks.value
+		.filter((task) => task.isSelected)
+		.map((task) => task.id);
 
 	commonCartridgeExportModule.setTopics(topicIds);
+	commonCartridgeExportModule.setTasks(taskIds);
 	await commonCartridgeExportModule.startExport();
 	onCloseDialog();
 }
