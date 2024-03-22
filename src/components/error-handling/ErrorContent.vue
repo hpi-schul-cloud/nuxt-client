@@ -8,8 +8,8 @@
 		/>
 		<not-found-svg
 			v-else-if="isNotFoundError"
-			:svg-width="$vuetify.breakpoint.xs ? 200 : undefined"
-			fill="var(--v-primary-base)"
+			:svg-width="$vuetify.display.xs ? 200 : undefined"
+			fill="rgba(var(--v-theme-primary))"
 			data-testid="img-notfound"
 		/>
 		<img
