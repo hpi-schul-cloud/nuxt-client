@@ -108,6 +108,10 @@ module.exports = defineConfig({
 			.use("vue-loader")
 			.tap((options) => {
 				options.prettify = false;
+				options.compilerOptions = {
+					...(options.compilerOptions || {}),
+					isCustomElement: (tag) => tag.startsWith("h5p-"),
+				};
 				return options;
 			});
 		config.plugin("fork-ts-checker").tap((args) => {

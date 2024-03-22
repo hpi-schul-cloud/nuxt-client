@@ -134,6 +134,7 @@ const getWrapper = (
 	downloadModule = createModuleMocks(CommonCartridgeExportModule, {
 		getIsExportModalOpen: false,
 		getVersion: "",
+		getTopics: [],
 		startExportFlow: jest.fn(),
 	});
 	shareModule = createModuleMocks(ShareModule, {
