@@ -1466,19 +1466,6 @@ export interface CountyResponse {
 /**
  * 
  * @export
- * @interface CourseExportBodyParams
- */
-export interface CourseExportBodyParams {
-    /**
-     * The list of ids of topics which should be exported. If empty no topics are exported.
-     * @type {Array<string>}
-     * @memberof CourseExportBodyParams
-     */
-    topics: Array<string>;
-}
-/**
- * 
- * @export
  * @interface CourseInfoResponse
  */
 export interface CourseInfoResponse {
@@ -8818,6 +8805,44 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Get the information if board has whiteboard as a child.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerHasDrawingChild: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('boardControllerHasDrawingChild', 'boardId', boardId)
+            const localVarPath = `/boards/{boardId}/hasDrawingChild`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -8982,6 +9007,17 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get the information if board has whiteboard as a child.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async boardControllerHasDrawingChild(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerHasDrawingChild(boardId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -9076,6 +9112,16 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
+         * @summary Get the information if board has whiteboard as a child.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        boardControllerHasDrawingChild(boardId: string, options?: any): AxiosPromise<boolean> {
+            return localVarFp.boardControllerHasDrawingChild(boardId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -9164,6 +9210,16 @@ export interface BoardApiInterface {
      * @memberof BoardApiInterface
      */
     boardControllerGetBoardSkeleton(boardId: string, options?: any): AxiosPromise<BoardResponse>;
+
+    /**
+     * 
+     * @summary Get the information if board has whiteboard as a child.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApiInterface
+     */
+    boardControllerHasDrawingChild(boardId: string, options?: any): AxiosPromise<boolean>;
 
     /**
      * 
@@ -9266,6 +9322,18 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      */
     public boardControllerGetBoardSkeleton(boardId: string, options?: any) {
         return BoardApiFp(this.configuration).boardControllerGetBoardSkeleton(boardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get the information if board has whiteboard as a child.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardApi
+     */
+    public boardControllerHasDrawingChild(boardId: string, options?: any) {
+        return BoardApiFp(this.configuration).boardControllerHasDrawingChild(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -11290,17 +11358,14 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @param {string} courseId The id of the course
          * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
-         * @param {CourseExportBodyParams} courseExportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse: async (courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options: any = {}): Promise<RequestArgs> => {
+        courseControllerExportCourse: async (courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerExportCourse', 'courseId', courseId)
             // verify required parameter 'version' is not null or undefined
             assertParamExists('courseControllerExportCourse', 'version', version)
-            // verify required parameter 'courseExportBodyParams' is not null or undefined
-            assertParamExists('courseControllerExportCourse', 'courseExportBodyParams', courseExportBodyParams)
             const localVarPath = `/courses/{courseId}/export`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -11310,7 +11375,7 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -11324,12 +11389,9 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(courseExportBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -11438,12 +11500,11 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} courseId The id of the course
          * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
-         * @param {CourseExportBodyParams} courseExportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, version, courseExportBodyParams, options);
+        async courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, version, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -11482,12 +11543,11 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * 
          * @param {string} courseId The id of the course
          * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
-         * @param {CourseExportBodyParams} courseExportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.courseControllerExportCourse(courseId, version, courseExportBodyParams, options).then((request) => request(axios, basePath));
+        courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerExportCourse(courseId, version, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -11522,12 +11582,11 @@ export interface CoursesApiInterface {
      * 
      * @param {string} courseId The id of the course
      * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
-     * @param {CourseExportBodyParams} courseExportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): AxiosPromise<void>;
+    courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -11562,13 +11621,12 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      * 
      * @param {string} courseId The id of the course
      * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
-     * @param {CourseExportBodyParams} courseExportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApi
      */
-    public courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any) {
-        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, version, courseExportBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, version, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
