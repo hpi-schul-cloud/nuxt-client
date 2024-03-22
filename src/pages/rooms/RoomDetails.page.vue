@@ -101,7 +101,7 @@ import {
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { authModule, envConfigModule } from "@/store";
+import { envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
@@ -125,6 +125,7 @@ import {
 	COPY_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	ROOM_MODULE_KEY,
+	AUTH_MODULE_KEY,
 } from "@/utils/inject";
 
 export default defineComponent({
@@ -158,6 +159,7 @@ export default defineComponent({
 		shareModule: "shareModule",
 		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
 		roomModule: { from: ROOM_MODULE_KEY },
+		authModule: { from: AUTH_MODULE_KEY },
 	},
 	data() {
 		return {
@@ -257,7 +259,9 @@ export default defineComponent({
 		learnContentFabItems() {
 			const actions = [];
 			if (
-				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+				this.authModule.getUserPermissions.includes(
+					"HOMEWORK_CREATE".toLowerCase()
+				)
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.task"),
@@ -268,7 +272,9 @@ export default defineComponent({
 				});
 			}
 			if (
-				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
+				this.authModule.getUserPermissions.includes(
+					"TOPIC_CREATE".toLowerCase()
+				)
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.lesson"),
@@ -278,7 +284,9 @@ export default defineComponent({
 					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
 				});
 			}
-			if (authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())) {
+			if (
+				this.authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())
+			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
 					icon: mdiViewListOutline,
@@ -307,7 +315,7 @@ export default defineComponent({
 			return this.roomModule.getPermissionData || [];
 		},
 		roles() {
-			return authModule.getUserRoles;
+			return this.authModule.getUserRoles;
 		},
 		dashBoardRole() {
 			if (this.roles.includes(Roles.Teacher)) return Roles.Teacher;
@@ -315,7 +323,7 @@ export default defineComponent({
 			return undefined;
 		},
 		canEditTools() {
-			return !!authModule?.getUserPermissions.includes(
+			return !!this.authModule?.getUserPermissions.includes(
 				"CONTEXT_TOOL_ADMIN".toLowerCase()
 			);
 		},
@@ -389,7 +397,7 @@ export default defineComponent({
 		await this.roomModule.fetchContent(this.courseId);
 		await this.roomModule.fetchScopePermission({
 			courseId: this.courseId,
-			userId: authModule.getUser?.id,
+			userId: this.authModule.getUser?.id,
 		});
 
 		document.title = buildPageTitle(this.roomData.title);
