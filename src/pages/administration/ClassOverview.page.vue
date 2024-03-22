@@ -317,7 +317,7 @@ const selectedItemForSync: ComputedRef<{
 	courseId?: string;
 }> = computed(() => {
 	const synchronizedCourse: CourseInfo | undefined =
-		selectedItem.value?.synchronizedCourses?.[0];
+		selectedItem.value?.synchronizedCourse;
 
 	return {
 		courseId: synchronizedCourse?.id,
