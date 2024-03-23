@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent, ref, computed } from "vue";
 import errorImage from "@/assets/img/image-not-available.svg";
-import WarningAlert from "@/components/ui-alert/WarningAlert.vue";
+import { WarningAlert } from "@ui-alert";
 
 export default defineComponent({
 	name: "PreviewImage",
