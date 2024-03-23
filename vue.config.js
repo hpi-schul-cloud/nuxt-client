@@ -62,13 +62,11 @@ module.exports = defineConfig({
 				"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
 				"@ui-light-box": getDir("src/modules/ui/light-box"),
 				"@ui-speed-dial-menu": getDir("src/modules/ui/speed-dial-menu"),
-				"@util-board": getDir("src/components/util-board"),
-				"@util-validators": getDir("src/components/util-validators"),
-				"@util-vue": getDir("src/components/util-vue"),
-				"@util-input-masks": getDir("src/components/util-input-masks"),
-				"@util-device-detection": getDir(
-					"src/components/util-device-detection"
-				),
+				"@util-board": getDir("src/modules/util/board"),
+				"@util-validators": getDir("src/modules/util/validators"),
+				"@util-vue": getDir("src/modules/util/vue"),
+				"@util-input-masks": getDir("src/modules/util/input-masks"),
+				"@util-device-detection": getDir("src/modules/util/device-detection"),
 				"@page-board": getDir("src/components/page-board"),
 				"@page-class-members": getDir("src/components/page-class-members"),
 			},
