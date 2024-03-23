@@ -57,31 +57,27 @@ module.exports = {
 						message: "Do not deep import into a module",
 					},
 					{
-						group: ["@/components/data-*", "*/../data-*", "../**/data-*"],
+						group: ["@/modules/data/*", "*/../data/*", "../**/data/*"],
 						message:
 							"Data-Modules have to be imported using the pattern '@data-<name>'",
 					},
 					{
-						group: [
-							"@/components/feature-*",
-							"*/../feature-*",
-							"../**/feature-*",
-						],
+						group: ["@/modules/feature/*", "*/../feature/*", "../**/feature/*"],
 						message:
 							"Feature-Modules have to be imported using the pattern '@feature-<name>'",
 					},
 					{
-						group: ["@components/page-*", "*/../page-*", "../**/page-*/*"],
+						group: ["@modules/page/*", "*/../page/*", "../**/page/*/*"],
 						message:
 							"Page-Modules have to be imported using the pattern '@page-<name>'",
 					},
 					{
-						group: ["@components/ui-*", "*/../ui-*", "../**/ui-*/*"],
+						group: ["@modules/ui/*", "*/../ui/*", "../**/ui/*/*"],
 						message:
 							"Ui-Modules have to be imported using the pattern '@ui-<name>'",
 					},
 					{
-						group: ["@components/util-*", "*/../util-*", "../**/util-*/*"],
+						group: ["@modules/util/*", "*/../util/*", "../**/util/*/*"],
 						message:
 							"Util-Modules have to be imported using the pattern '@util-<name>'",
 					},
