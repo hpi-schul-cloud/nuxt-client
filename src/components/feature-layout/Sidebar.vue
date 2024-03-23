@@ -4,8 +4,9 @@
 		:permanent="!xs"
 		:temporary="xs"
 		:location="xs ? 'top' : 'left'"
-		height="100vh"
+		rail-width="var(--sidebar-width-tablet)"
 	>
+		<SidebarLogo />
 		<v-list :items="items" />
 	</v-navigation-drawer>
 </template>
@@ -13,6 +14,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useDisplay } from "vuetify";
+import SidebarLogo from "./SidebarLogo";
 
 const { mdAndDown, xs } = useDisplay();
 

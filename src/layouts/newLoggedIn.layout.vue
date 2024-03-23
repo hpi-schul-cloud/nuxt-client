@@ -1,10 +1,10 @@
 <template>
+	<Sidebar v-model="sidebar" />
 	<v-app-bar title="Application bar">
 		<template v-slot:prepend>
 			<v-app-bar-nav-icon @click="onClick" />
 		</template>
 	</v-app-bar>
-	<Sidebar v-model="sidebar" />
 
 	<v-main id="main-content" class="content">
 		<application-error-wrapper>
