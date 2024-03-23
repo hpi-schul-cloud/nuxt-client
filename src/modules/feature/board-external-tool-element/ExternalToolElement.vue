@@ -64,7 +64,7 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
-import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
+import { ContentElementBar } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
 import {
 	computed,
