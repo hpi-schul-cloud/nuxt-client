@@ -17,13 +17,11 @@
 		"baseUrl": ".",
 		"types": ["webpack-env", "jest"],
 		"paths": {
-			"@data-board": ["src/components/data-board"],
-			"@data-external-tool": ["src/components/data-external-tool"],
-			"@data-group": ["src/components/data-group"],
-			"@data-system": ["src/components/data-system"],
-			"@data-provisioning-options": [
-				"src/components/data-provisioning-options"
-			],
+			"@data-board": ["src/modules/data/board"],
+			"@data-external-tool": ["src/modules/data/external-tool"],
+			"@data-group": ["src/modules/data/group"],
+			"@data-system": ["src/modules/data/system"],
+			"@data-provisioning-options": ["src/modules/data/provisioning-options"],
 			"@feature-board-file-element": ["src/modules/feature/board-file-element"],
 			"@feature-board-submission-element": [
 				"src/modules/feature/board-submission-element"

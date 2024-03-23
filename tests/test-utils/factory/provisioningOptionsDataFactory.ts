@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { ProvisioningOptions } from "@/components/data-provisioning-options";
+import { ProvisioningOptions } from "@/modules/data/provisioning-options";
 
 export const provisioningOptionsDataFactory =
 	Factory.define<ProvisioningOptions>(() => ({

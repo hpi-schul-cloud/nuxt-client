@@ -26,12 +26,12 @@ module.exports = defineConfig({
 		],
 		resolve: {
 			alias: {
-				"@data-board": getDir("src/components/data-board"),
-				"@data-external-tool": getDir("src/components/data-external-tool"),
-				"@data-group": getDir("src/components/data-group"),
-				"@data-system": getDir("src/components/data-system"),
+				"@data-board": getDir("src/modules/data/board"),
+				"@data-external-tool": getDir("src/modules/data/external-tool"),
+				"@data-group": getDir("src/modules/data/group"),
+				"@data-system": getDir("src/modules/data/system"),
 				"@data-provisioning-options": getDir(
-					"src/components/data-provisioning-options"
+					"src/modules/data/provisioning-options"
 				),
 				"@feature-board-file-element": getDir(
 					"src/modules/feature/board-file-element"
