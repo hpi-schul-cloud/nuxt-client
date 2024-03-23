@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import LineClamp from "@/components/ui-board/LineClamp.vue";
+import LineClamp from "@/modules/ui/board/LineClamp.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,

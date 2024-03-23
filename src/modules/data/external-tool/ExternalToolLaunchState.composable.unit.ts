@@ -6,8 +6,8 @@ import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { axiosErrorFactory } from "../../../tests/test-utils";
-import { mapAxiosErrorToResponseError } from "../../utils/api";
+import { axiosErrorFactory } from "@@/tests/test-utils";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
 

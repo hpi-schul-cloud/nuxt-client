@@ -17,7 +17,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { mount, flushPromises } from "@vue/test-utils";
 import { nextTick } from "vue";
-import ExternalToolConfigurator from "../external-tools/configuration/ExternalToolConfigurator.vue";
+import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 

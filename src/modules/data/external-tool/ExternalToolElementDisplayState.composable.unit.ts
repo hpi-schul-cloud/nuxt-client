@@ -4,8 +4,8 @@ import {
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { BusinessError } from "../../store/types/commons";
-import { mapAxiosErrorToResponseError } from "../../utils/api";
+import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useContextExternalToolApi } from "./ContextExternalToolApi.composable";
 import { useExternalToolElementDisplayState } from "./ExternalToolElementDisplayState.composable";
 
