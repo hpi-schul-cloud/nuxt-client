@@ -71,3 +71,5 @@ export default defineComponent({
 	},
 });
 </script>
+./display/FileDisplay.vue./inputs/FileInputs.vue
+./display/FileDisplay.vue./inputs/FileInputs.vue

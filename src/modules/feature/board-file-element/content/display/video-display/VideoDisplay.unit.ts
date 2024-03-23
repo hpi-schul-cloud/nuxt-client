@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import VideoDisplay from ".//VideoDisplay.vue";
+import VideoDisplay from "./VideoDisplay.vue";
 
 describe("VideoDisplay", () => {
 	const setup = () => {

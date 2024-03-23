@@ -65,8 +65,8 @@ import {
 	Ref,
 	watch,
 } from "vue";
-import ExternalToolConfigurator from "../external-tools/configuration/ExternalToolConfigurator.vue";
-import VCustomDialog from "../organisms/vCustomDialog.vue";
+import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 export default defineComponent({
 	emits: ["close", "save"],

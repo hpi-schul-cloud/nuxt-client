@@ -41,3 +41,4 @@ export default defineComponent({
 	margin-top: 0;
 }
 </style>
+@/modules/feature/feature-render-html @/modules/feature/render-html

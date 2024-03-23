@@ -1,1 +1,1 @@
-export * from "../../../src/components/feature-board/test-utils/sharedElementTypeSelectionMock";
+export * from "../../../src/modules/feature/board/test-utils/sharedElementTypeSelectionMock";

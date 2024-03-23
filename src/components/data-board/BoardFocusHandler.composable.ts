@@ -10,7 +10,7 @@ import {
 } from "@vueuse/core";
 import { computed, nextTick, onMounted, onUnmounted, ref, Ref } from "vue";
 // WIP: InlineEditInteractionHandler needs to be extracted into it's own module... :: Feature-Modules have to be imported using the pattern '@feature-<name>'eslint@typescript-eslint/no-restricted-imports
-import { useInlineEditInteractionHandler } from "../feature-board/shared/InlineEditInteractionHandler.composable";
+import { useInlineEditInteractionHandler } from "../../modules/feature/board/shared/InlineEditInteractionHandler.composable";
 
 declare type FocusableId =
 	| BoardColumn["id"]

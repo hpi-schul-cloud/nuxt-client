@@ -2,7 +2,7 @@ import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { LinkContentElement } from "@feature-board-link-element";
+import { LinkContentElement } from "@/modules/feature/feature-board-link-element";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
 import {

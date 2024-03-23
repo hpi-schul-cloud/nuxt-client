@@ -31,7 +31,7 @@ import {
 	commonCartridgeExportModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
-import { htmlConfig } from "@feature-render-html";
+import { htmlConfig } from "@/modules/feature/render-html";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import { createApp } from "vue";

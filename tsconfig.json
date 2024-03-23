@@ -24,28 +24,22 @@
 			"@data-provisioning-options": [
 				"src/components/data-provisioning-options"
 			],
-			"@feature-board-file-element": [
-				"src/components/feature-board-file-element"
-			],
+			"@feature-board-file-element": ["src/modules/feature/board-file-element"],
 			"@feature-board-submission-element": [
-				"src/components/feature-board-submission-element"
+				"src/modules/feature/board-submission-element"
 			],
-			"@feature-board-text-element": [
-				"src/components/feature-board-text-element"
-			],
-			"@feature-board-link-element": [
-				"src/components/feature-board-link-element"
-			],
+			"@feature-board-text-element": ["src/modules/feature/board-text-element"],
+			"@feature-board-link-element": ["src/modules/feature/board-link-element"],
 			"@feature-board-external-tool-element": [
-				"src/components/feature-board-external-tool-element"
+				"src/modules/feature/board-external-tool-element"
 			],
 			"@feature-board-drawing-element": [
-				"src/components/feature-board-drawing-element"
+				"src/modules/feature/board-drawing-element"
 			],
-			"@feature-board": ["src/components/feature-board"],
+			"@feature-board": ["src/modules/feature/board"],
 			"@feature-editor": ["src/modules/feature/editor"],
-			"@feature-render-html": ["src/components/feature-render-html"],
-			"@feature-news-form": ["src/components/feature-news-form"],
+			"@feature-render-html": ["src/modules/feature/render-html"],
+			"@feature-news-form": ["src/modules/feature/news-form"],
 			"@ui-alert": ["src/components/ui-alert"],
 			"@ui-board": ["src/components/ui-board"],
 			"@ui-preview-image": ["src/components/ui-preview-image"],

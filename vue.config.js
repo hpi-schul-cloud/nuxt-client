@@ -34,27 +34,27 @@ module.exports = defineConfig({
 					"src/components/data-provisioning-options"
 				),
 				"@feature-board-file-element": getDir(
-					"src/components/feature-board-file-element"
+					"src/modules/feature/board-file-element"
 				),
 				"@feature-board-submission-element": getDir(
-					"src/components/feature-board-submission-element"
+					"src/modules/feature/board-submission-element"
 				),
 				"@feature-board-text-element": getDir(
-					"src/components/feature-board-text-element"
+					"src/modules/feature/board-text-element"
 				),
 				"@feature-board-link-element": getDir(
-					"src/components/feature-board-link-element"
+					"src/modules/feature/board-link-element"
 				),
 				"@feature-board-external-tool-element": getDir(
-					"src/components/feature-board-external-tool-element"
+					"src/modules/feature/board-external-tool-element"
 				),
 				"@feature-board-drawing-element": getDir(
-					"src/components/feature-board-drawing-element"
+					"src/modules/feature/board-drawing-element"
 				),
-				"@feature-board": getDir("src/components/feature-board"),
+				"@feature-board": getDir("src/modules/feature/board"),
 				"@feature-editor": getDir("src/modules/feature/editor"),
-				"@feature-render-html": getDir("src/components/feature-render-html"),
-				"@feature-news-form": getDir("src/components/feature-news-form"),
+				"@feature-render-html": getDir("src/modules/feature/render-html"),
+				"@feature-news-form": getDir("src/modules/feature/news-form"),
 				"@ui-alert": getDir("src/components/ui-alert"),
 				"@ui-board": getDir("src/components/ui-board"),
 				"@ui-preview-image": getDir("src/components/ui-preview-image"),
