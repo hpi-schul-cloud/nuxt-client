@@ -5,9 +5,17 @@
 		:temporary="xs"
 		:location="xs ? 'top' : 'left'"
 		rail-width="var(--sidebar-width-tablet)"
+		:width="isDesktop ? 'var(--sidebar-width)' : ''"
 	>
-		<SidebarLogo />
-		<v-list :items="items" />
+		<SidebarLogo :isTablet="isTablet" :isDesktop="isDesktop" />
+		<v-list>
+			<SidebarItem
+				v-for="item in getSidebarItems()"
+				:isTablet="isTablet"
+				:key="item.title"
+				:item="item"
+			/>
+		</v-list>
 	</v-navigation-drawer>
 </template>
 
@@ -15,12 +23,20 @@
 import { computed } from "vue";
 import { useDisplay } from "vuetify";
 import SidebarLogo from "./SidebarLogo";
+import SidebarItem from "./SidebarItem";
+import getSidebarItems from "@/utils/sidebar-base-items";
 
-const { mdAndDown, xs } = useDisplay();
+const { mdAndDown, xs, lgAndUp } = useDisplay();
 
 const isTablet = computed(() => {
 	return mdAndDown.value && !xs.value;
 });
+
+const isDesktop = computed(() => {
+	return lgAndUp.value;
+});
+
+console.log(getSidebarItems());
 
 const items = [
 	{

@@ -14,16 +14,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-import { useDisplay } from "vuetify";
-
-const { mdAndDown, xs, lgAndUp } = useDisplay();
-
-const isTablet = computed(() => {
-	return mdAndDown.value && !xs.value;
-});
-
-const isDesktop = computed(() => {
-	return lgAndUp.value;
+defineProps({
+	isDesktop: {
+		type: Boolean,
+	},
+	isTablet: {
+		type: Boolean,
+	},
 });
 </script>
