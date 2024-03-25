@@ -5,7 +5,7 @@
 		:size="480"
 		has-buttons
 		:buttons="['cancel', 'next']"
-		@next="onNext(selectedCourse)"
+		@next="onNext()"
 		@dialog-canceled="onCancel"
 	>
 		<template #title>
