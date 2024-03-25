@@ -24,6 +24,9 @@
 			"@data-provisioning-options": [
 				"src/components/data-provisioning-options"
 			],
+			"@data-room": [
+				"src/components/data-room"
+			],
 			"@feature-board-file-element": [
 				"src/components/feature-board-file-element"
 			],

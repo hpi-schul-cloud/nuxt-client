@@ -32,9 +32,9 @@
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import WarningAlert from "@ui-alert/WarningAlert.vue";
+import { useCourseApi } from "@data-room";
+import { WarningAlert } from "@ui-alert";
 import { useI18n } from "vue-i18n";
-import { useCourseApi } from "../data-room";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
@@ -73,10 +73,17 @@ const onConfirm = async () => {
 		return;
 	}
 
-	closeDialog();
-
 	try {
 		await stopSynchronization(props.courseId);
+
+		closeDialog();
+
+		notifierModule.show({
+			text: t("feature-course-sync.EndCourseSyncDialog.success"),
+			status: "success",
+		});
+
+		emit("success");
 	} catch (errorResponse) {
 		notifierModule.show({
 			text: t("common.notification.error"),
@@ -85,12 +92,5 @@ const onConfirm = async () => {
 
 		return;
 	}
-
-	notifierModule.show({
-		text: t("feature-course-sync.EndCourseSyncDialog.success"),
-		status: "success",
-	});
-
-	emit("success");
 };
 </script>
