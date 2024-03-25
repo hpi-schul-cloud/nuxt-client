@@ -477,7 +477,7 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse":
 		"Elija el curso",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
-		"Los datos relacionados con los participantes no se copiarán. El tema se puede renombrar a continuación.",
+		"Seleccione el curso al que desea importar el tablero.",
 	"components.molecules.import.courses.label": "Curso",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Se creará una copia.<br>No se importarán datos personales.<br>No se copiarán herramientas externas.<br>Se puede cambiar el nombre del curso a continuación.",

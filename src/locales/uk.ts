@@ -475,7 +475,7 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse":
 		"Оберіть курс",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
-		"Будь ласка, оберіть курс з якого ви хочете імпортувати тему",
+		"Виберіть курс, до якого ви бажаєте імпортувати дошку.",
 	"components.molecules.import.courses.label": "Курс",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Буде створено копію.<br>собисті дані не будуть імпортовані.<br>Зовнішні інструменти не будуть скопійовані.<br>Курс можна перейменувати нижче.",
