@@ -1,5 +1,9 @@
-import { ClassInfoResponse, ClassInfoResponseTypeEnum } from "@/serverApi/v3";
-import { ClassInfo, ClassRootType } from "../types/class-info";
+import {
+	ClassInfoResponse,
+	ClassInfoResponseTypeEnum,
+	CourseInfoResponse,
+} from "@/serverApi/v3";
+import { ClassInfo, ClassRootType, CourseInfo } from "../types/class-info";
 
 export const ClassRootTypeMapping: Record<
 	ClassInfoResponseTypeEnum,
@@ -15,11 +19,17 @@ export class GroupMapper {
 			(classInfoResponse: ClassInfoResponse): ClassInfo => ({
 				name: classInfoResponse.name,
 				externalSourceName: classInfoResponse.externalSourceName,
-				teachers: classInfoResponse.teachers,
+				teacherNames: classInfoResponse.teacherNames,
 				type: ClassRootTypeMapping[classInfoResponse.type],
 				id: classInfoResponse.id,
 				isUpgradable: classInfoResponse.isUpgradable,
 				studentCount: classInfoResponse.studentCount,
+				synchronizedCourses: classInfoResponse.synchronizedCourses?.map(
+					(course: CourseInfoResponse): CourseInfo => ({
+						id: course.id,
+						name: course.name,
+					})
+				),
 			})
 		);
 

@@ -1,5 +1,6 @@
 import BoardMenu from "./BoardMenu.vue";
 import BoardMenuAction from "./BoardMenuAction.vue";
+import BoardMenuActionCopy from "./BoardMenuActionCopy.vue";
 import BoardMenuActionEdit from "./BoardMenuActionEdit.vue";
 import BoardMenuActionDelete from "./BoardMenuActionDelete.vue";
 import BoardMenuActionMoveUp from "./BoardMenuActionMoveUp.vue";
@@ -13,6 +14,7 @@ import ContentElementBar from "./content-element/ContentElementBar.vue";
 export {
 	BoardMenu,
 	BoardMenuAction,
+	BoardMenuActionCopy,
 	BoardMenuActionEdit,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveUp,

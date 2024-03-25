@@ -2,6 +2,8 @@ import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultI
 import { AxiosStatic } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
+	BoardApiFactory,
+	BoardApiInterface,
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
@@ -26,6 +28,7 @@ export enum CopyParamsTypeEnum {
 	Task = "task",
 	Lesson = "lesson",
 	Course = "course",
+	ColumnBoard = "columnBoard",
 }
 
 interface CopyByShareTokenPayload {
@@ -51,6 +54,10 @@ export default class CopyModule extends VuexModule {
 
 	private get taskApi(): TaskApiInterface {
 		return TaskApiFactory(undefined, "/v3", $axios);
+	}
+
+	private get boardApi(): BoardApiInterface {
+		return BoardApiFactory(undefined, "/v3", $axios);
 	}
 
 	private get shareApi(): ShareTokenApiInterface {
@@ -81,6 +88,12 @@ export default class CopyModule extends VuexModule {
 		if (type === CopyParamsTypeEnum.Course) {
 			copyResult = await this.roomsApi
 				.roomsControllerCopyCourse(id)
+				.then((response) => response.data);
+		}
+
+		if (type === CopyParamsTypeEnum.ColumnBoard) {
+			copyResult = await this.boardApi
+				.boardControllerCopyBoard(id)
 				.then((response) => response.data);
 		}
 

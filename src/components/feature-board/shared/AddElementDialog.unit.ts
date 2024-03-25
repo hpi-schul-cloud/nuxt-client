@@ -1,7 +1,7 @@
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -13,45 +13,14 @@ import AddElementDialog from "./AddElementDialog.vue";
 
 jest.mock("./SharedElementTypeSelection.composable");
 
-const mockEnvs: Envs = {
-	ALERT_STATUS_URL: "mockValue",
-	NOT_AUTHENTICATED_REDIRECT_URL: "/mock",
-	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
-	JWT_TIMEOUT_SECONDS: 7200,
-	FEATURE_LERNSTORE_ENABLED: true,
-	SC_THEME: "mockValue",
-	FALLBACK_DISABLED: false,
-	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-	FEATURE_ES_COLLECTIONS_ENABLED: false,
-	FEATURE_EXTENSIONS_ENABLED: true,
-	FEATURE_TEAMS_ENABLED: true,
-	I18N__AVAILABLE_LANGUAGES: "mockValue",
-	I18N__DEFAULT_LANGUAGE: "mockValue",
-	I18N__DEFAULT_TIMEZONE: "mockValue",
-	I18N__FALLBACK_LANGUAGE: "mockValue",
-	DOCUMENT_BASE_DIR: "mockValue",
-	SC_TITLE: "mockValue",
-	GHOST_BASE_URL: "mockValue",
-	FEATURE_CONSENT_NECESSARY: true,
-	FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: true,
-	MIGRATION_END_GRACE_PERIOD_MS: 1,
-	FILES_STORAGE__MAX_FILE_SIZE: 0,
-	FEATURE_SHOW_OUTDATED_USERS: true,
-	FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: true,
-	FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
-	FEATURE_TLDRAW_ENABLED: true,
-	CTL_TOOLS_RELOAD_TIME_MS: 299000,
-};
-
 describe("ElementTypeSelection", () => {
 	const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
 		EnvConfigModule,
 		{
-			getEnv: {
-				...mockEnvs,
+			getEnv: envsFactory.build({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-			},
+			}),
 		}
 	);
 
