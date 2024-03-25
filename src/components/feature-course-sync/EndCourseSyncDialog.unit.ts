@@ -130,7 +130,7 @@ describe("EndCourseSyncDialog", () => {
 		});
 
 		it("should not emit a success event", async () => {
-			const { wrapper } = getWrapper();
+			const { wrapper } = setup();
 
 			const confirmBtn = wrapper.findComponent("[data-testid=dialog-confirm]");
 			await confirmBtn.trigger("click");
