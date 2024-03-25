@@ -5,41 +5,40 @@
 		ref="sticky"
 	>
 		<VBtn
-			@click.stop="onAddCard"
-			@dblclick.stop="() => {}"
+			v-if="!isEditMode"
 			elevation="6"
 			class="bg-white"
 			icon
-			v-if="!isEditMode"
+			:data-testid="dataTestid"
+			@click.stop="onAddCard"
+			@dblclick.stop="() => {}"
 		>
 			<VIcon>{{ mdiPlus }}</VIcon>
-			<span class="d-sr-only" data-testid="add-card">{{
-				$t("components.board.action.addCard")
-			}}</span>
+			<span class="d-sr-only">
+				{{ $t("components.board.action.addCard") }}
+			</span>
 		</VBtn>
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiPlus } from "@mdi/js";
-import { computed, defineComponent } from "vue";
+import { computed } from "vue";
 import { useSharedEditMode } from "@data-board";
 
-export default defineComponent({
-	name: "BoardAddCardButton",
-	emits: ["add-card"],
-	setup(props, { emit }) {
-		const { editModeId } = useSharedEditMode();
-		const onAddCard = () => emit("add-card");
-
-		const isEditMode = computed(() => editModeId.value !== undefined);
-		return {
-			mdiPlus,
-			onAddCard,
-			isEditMode,
-		};
+defineProps({
+	dataTestid: {
+		type: String,
+		default: "add-card-btn",
 	},
 });
+
+const emit = defineEmits(["add-card"]);
+
+const { editModeId } = useSharedEditMode();
+const onAddCard = () => emit("add-card");
+
+const isEditMode = computed(() => editModeId.value !== undefined);
 </script>
 
 <style scoped>
