@@ -19,6 +19,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
 	ROOM_MODULE_KEY,
 	AUTH_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
@@ -178,7 +179,7 @@ const getWrapper = (
 				[COPY_MODULE_KEY.valueOf()]: copyModule,
 				loadingStateModule: loadingStateModuleMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				shareModule: shareModule,
+				[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModule,
 				[ROOM_MODULE_KEY.valueOf()]: roomModule,

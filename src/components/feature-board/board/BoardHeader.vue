@@ -38,6 +38,7 @@
 				>
 					<BoardMenuActionEdit @click="onStartEditMode" />
 					<BoardMenuActionCopy @click="onCopyBoard" />
+					<BoardMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
 					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 				</BoardMenu>
@@ -47,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
@@ -58,9 +60,10 @@ import {
 	BoardMenuActionEdit,
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
+	BoardMenuActionShare,
 } from "@ui-board";
 import { useDebounceFn } from "@vueuse/core";
-import { onMounted, ref, toRef, watchEffect } from "vue";
+import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
@@ -84,7 +87,12 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["copy:board", "update:title", "update:visibility"]);
+const emit = defineEmits([
+	"copy:board",
+	"share:board",
+	"update:title",
+	"update:visibility",
+]);
 
 const { t } = useI18n();
 const boardId = toRef(props, "boardId");
@@ -121,6 +129,11 @@ const onCopyBoard = () => {
 	emit("copy:board");
 };
 
+const onShareBoard = () => {
+	if (!hasEditPermission) return;
+	emit("share:board");
+};
+
 const onPublishBoard = () => {
 	if (!hasEditPermission) return;
 	emit("update:visibility", true);
@@ -152,6 +165,11 @@ const calculateWidth = () => {
 	const width = inputWidthCalcSpan.value.offsetWidth;
 	fieldWidth.value = width;
 };
+
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const isShareEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
+);
 </script>
 
 <style lang="scss" scoped>

@@ -6,7 +6,11 @@ import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
 import { Envs } from "@/store/types/env-config";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -123,6 +127,7 @@ const notifierModuleMock = createModuleMocks(NotifierModule);
 const getWrapper = (props: any, options?: object) => {
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 		getCtlToolsTabEnabled: false,
+		getEnv: {} as Envs,
 	});
 
 	const router = createMock<Router>();
@@ -133,7 +138,7 @@ const getWrapper = (props: any, options?: object) => {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-				shareModule: shareModuleMock,
+				[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 			},
 		},
