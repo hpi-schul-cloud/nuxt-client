@@ -99,6 +99,7 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import { RoomDotMenu } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
@@ -111,6 +112,7 @@ import {
 import { envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { EndCourseSyncDialog } from "@feature-course-sync";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
@@ -123,6 +125,7 @@ import {
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
 	mdiSyncOff,
+	mdiViewDashboard,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
@@ -134,8 +137,6 @@ import {
 	ROOM_MODULE_KEY,
 	AUTH_MODULE_KEY,
 } from "@/utils/inject";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { EndCourseSyncDialog } from "@feature-course-sync";
 
 export default defineComponent({
 	setup() {
@@ -299,7 +300,7 @@ export default defineComponent({
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
-					icon: mdiViewListOutline,
+					icon: mdiViewDashboard,
 					customEvent: "board-create",
 					dataTestId: "fab_button_add_board",
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),
