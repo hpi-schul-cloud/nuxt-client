@@ -1392,7 +1392,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Abgelaufen",
 	"pages.room.taskCard.teacher.label.submitted": "Abgegeben",
 	"pages.room.teacher.emptyState":
-		"Lerninhalte wie Aufgaben oder Themen dem Kurs hinzufügen und anschließend sortieren.",
+		"Lerninhalte dem Kurs hinzufügen und sortieren.",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
 	"pages.rooms.allRooms.emptyState.title":
 		"Aktuell gibt es hier noch keine Kurse.",

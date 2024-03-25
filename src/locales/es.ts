@@ -1406,7 +1406,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Expirado",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
 	"pages.room.teacher.emptyState":
-		"Añada al curso contenidos de aprendizaje, como tareas o temas, y luego ordénelos.",
+		"Añada y ordene contenidos de aprendizaje al curso.",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
 	"pages.rooms.allRooms.emptyState.title": "Actualmente no hay cursos aquí.",
 	"pages.rooms.currentRooms.emptyState.title":
