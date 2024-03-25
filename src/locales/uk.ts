@@ -88,6 +88,7 @@ export default {
 	"common.labels.visible": "Видимий",
 	"common.loading.text": "Дані завантажуються...",
 	"common.nodata": "Немає даних",
+	"common.notification.error": "Сталася помилка.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email.confirmation":
@@ -684,6 +685,13 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Виберіть інструмент...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
+	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
+	"feature-course-sync.EndCourseSyncDialog.alert":
+		"Після завершення синхронізації її не можна розпочати знову. Дані користувача можна редагувати та підтримувати вручну так само, як і звичайні курси.",
+	"feature-course-sync.EndCourseSyncDialog.description":
+		"Чи дійсно слід завершити синхронізацію групи користувачів {groupName} у курсі {courseName}?",
+	"feature-course-sync.EndCourseSyncDialog.success":
+		"Синхронізацію успішно завершено",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1395,6 +1403,7 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Синхронізовано",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
+	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
 	"pages.rooms.importCourse.codeError": "Код курсу не використовується.",
 	"pages.rooms.importCourse.importError":
