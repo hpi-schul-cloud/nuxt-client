@@ -5,6 +5,7 @@ import {
 	applicationErrorModule,
 	authModule,
 	autoLogoutModule,
+	commonCartridgeExportModule,
 	commonCartridgeImportModule,
 	contentModule,
 	contextExternalToolsModule,
@@ -29,7 +30,6 @@ import {
 	termsOfUseModule,
 	userLoginMigrationModule,
 	videoConferenceModule,
-	commonCartridgeExportModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
 import { htmlConfig } from "@feature-render-html";
@@ -54,11 +54,11 @@ import { initializeAxios } from "./utils/api";
 import {
 	APPLICATION_ERROR_KEY,
 	AUTH_MODULE_KEY,
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	COPY_MODULE_KEY,
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
@@ -118,8 +118,8 @@ app.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
-	const isDevelopment = process.env.NODE_ENV === "development";
-	await envConfigModule.loadConfiguration({ optional: isDevelopment });
+	const isConfigOptional = process.env.VUE_APP_OPTIONAL_CONFIG === "true";
+	await envConfigModule.loadConfiguration({ optional: isConfigOptional });
 
 	const cookies = new Cookies();
 	const jwt = cookies.get("jwt");
