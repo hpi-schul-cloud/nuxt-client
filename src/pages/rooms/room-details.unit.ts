@@ -150,6 +150,7 @@ const getWrapper = () => {
 			stubs: {
 				RoomDashboard: true,
 				RoomExternalToolsOverview: true,
+				EndCourseSyncDialog: true,
 			},
 		},
 	});
