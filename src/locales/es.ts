@@ -397,6 +397,8 @@ export default {
 	"components.molecules.admintablelegend.help": "Sección de ayuda",
 	"components.molecules.admintablelegend.hint":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
+	"components.molecules.admintablelegend.thr":
+		"Algunos o todos los datos de los usuarios de su centro educativo se sincronizan desde una fuente externa (LDAP, IDM, portal del centro educativo, etc.). Por lo tanto, la edición de estos datos maestros de usuario sólo es posible en el sistema de origen, no en la nube de la escuela. La creación de nuevos alumnos o profesores sólo es posible en el sistema de origen.",
 	"components.molecules.ContentCard.report.body":
 		"Informar del contenido con el ID",
 	"components.molecules.ContentCard.report.email":
@@ -1406,7 +1408,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Expirado",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
 	"pages.room.teacher.emptyState":
-		"Añada al curso contenidos de aprendizaje, como tareas o temas, y luego ordénelos.",
+		"Añada y ordene contenidos de aprendizaje al curso.",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
 	"pages.rooms.allRooms.emptyState.title": "Actualmente no hay cursos aquí.",
 	"pages.rooms.currentRooms.emptyState.title":

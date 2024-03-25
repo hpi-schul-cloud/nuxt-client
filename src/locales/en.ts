@@ -389,6 +389,8 @@ export default {
 	"components.molecules.admintablelegend.help": "Help section",
 	"components.molecules.admintablelegend.hint":
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
+	"components.molecules.admintablelegend.thr":
+		"Some or all of your school's user data is synchronised from an external source (LDAP, IDM, school portal, etc.). Editing this user master data is therefore only possible in the source system, not in the school cloud. Creating new students or teachers is also only possible in the source system.",
 	"components.molecules.ContentCard.report.body":
 		"Report the content with the ID",
 	"components.molecules.ContentCard.report.email":
@@ -1364,7 +1366,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Expired",
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
 	"pages.room.teacher.emptyState":
-		"Add learning content such as assignments or topics to the course and then sort them.",
+		"Add and sort learning content to the course.",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
 	"pages.rooms.allRooms.emptyState.title":
 		"Currently, there are no courses here.",
