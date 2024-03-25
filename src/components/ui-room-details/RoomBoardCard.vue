@@ -197,7 +197,9 @@ const actionsMenuItems = computed(() => {
 		icon: mdiTrashCanOutline,
 		action: () => emit("delete-board"),
 		name: t("common.actions.remove"),
-		dataTestId: "content-card-board-menu-remove",
+		dataTestId: `board-card-menu-action-remove-${
+			toRef(props, "boardCardIndex").value
+		}`,
 	});
 
 	return actions;
