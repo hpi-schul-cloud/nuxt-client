@@ -1545,14 +1545,13 @@ export default {
 	"pages.videoConference.info.notStarted":
 		"Die Videokonferenz wurde noch nicht gestartet.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
-	"tldraw.error.403": "Whiteboard ist deaktiviert",
-	"tldraw.error.500":
-		"Beim Einrichten vom Whiteboard ist ein Fehler aufgetreten",
+	"error.500":
+		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",
+	"error.4500":
+		"Verbindungsfehler: Die Echtzeit-Session konnte nicht hergestellt werden. Bitte Verbindung überprüfen oder Seite neu laden.",
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
 	"tldraw.error.ws.4401": "Du hast keine Berechtigung für dieses Whiteboard",
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
-	"tldraw.error.ws.4500":
-		"Bei der Whiteboard-Websocket-Verbindung ist ein Fehler aufgetreten",
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
