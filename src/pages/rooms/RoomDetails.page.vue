@@ -89,9 +89,9 @@
 <script>
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
+import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import RoomDotMenu from "@/components/molecules/RoomDotMenu";
 import ShareModal from "@/components/share/ShareModal.vue";
-import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
@@ -103,30 +103,31 @@ import {
 } from "@/serverApi/v3";
 import {
 	authModule,
+	commonCartridgeExportModule,
 	envConfigModule,
 	roomModule,
-	commonCartridgeExportModule,
 } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
 	mdiEmailPlusOutline,
+	mdiExport,
 	mdiFileDocumentOutline,
 	mdiFormatListChecks,
 	mdiPencilOutline,
 	mdiPlus,
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
-	mdiExport,
 	mdiSync,
+	mdiViewDashboard,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import { COPY_MODULE_KEY } from "@/utils/inject";
 
 export default defineComponent({
 	setup() {
@@ -280,7 +281,7 @@ export default defineComponent({
 			if (authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
-					icon: mdiViewListOutline,
+					icon: mdiViewDashboard,
 					customEvent: "board-create",
 					dataTestId: "fab_button_add_board",
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),
