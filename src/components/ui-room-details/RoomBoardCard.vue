@@ -7,7 +7,7 @@
 		tabindex="0"
 		role="link"
 		:variant="isDraft ? 'outlined' : 'elevated'"
-		:data-testid="`room-board-card-${index}`"
+		:data-testid="`room-board-card-${boardCardIndex}`"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"
@@ -21,7 +21,7 @@
 					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
 					<span
 						class="title-board-card"
-						:data-testid="`board-card-title-${index}`"
+						:data-testid="`board-card-title-${boardCardIndex}`"
 					>
 						{{ cardTitle }}
 					</span>
@@ -29,14 +29,14 @@
 				<div v-if="userRole === Roles.Teacher" class="dot-menu-section">
 					<RoomDotMenu
 						:menu-items="actionsMenuItems"
-						:data-testid="`board-card-menu-${index}`"
+						:data-testid="`board-card-menu-${boardCardIndex}`"
 						:aria-label="$t('pages.room.boardCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
 			<h2
 				class="text-h6 board-title mt-2"
-				:data-testid="`board-title-${index}`"
+				:data-testid="`board-title-${boardCardIndex}`"
 			>
 				{{ boardTitle }}
 			</h2>
@@ -84,7 +84,7 @@ const props = defineProps({
 		default: "",
 	},
 	userRole: { type: String as PropType<Roles>, required: true },
-	index: { type: Number, required: true },
+	boardCardIndex: { type: Number, required: true },
 });
 
 const emit = defineEmits([
@@ -156,7 +156,9 @@ const cardActions = [
 	{
 		action: onPublish,
 		name: t("common.action.publish"),
-		dataTestId: `board-card-action-publish-${toRef(props, "index").value}`,
+		dataTestId: `board-card-action-publish-${
+			toRef(props, "boardCardIndex").value
+		}`,
 	},
 ];
 
@@ -167,13 +169,17 @@ const actionsMenuItems = computed(() => {
 		icon: mdiPencilOutline,
 		action: openBoard,
 		name: t("common.actions.edit"),
-		dataTestId: `board-card-menu-action-edit-${toRef(props, "index").value}`,
+		dataTestId: `board-card-menu-action-edit-${
+			toRef(props, "boardCardIndex").value
+		}`,
 	});
 	actions.push({
 		icon: mdiContentCopy,
 		action: () => emit("copy-board"),
 		name: t("common.actions.copy"),
-		dataTestId: `board-card-menu-action-copy-${toRef(props, "index").value}`,
+		dataTestId: `board-card-menu-action-copy-${
+			toRef(props, "boardCardIndex").value
+		}`,
 	});
 
 	if (!isDraft.value) {
@@ -182,7 +188,7 @@ const actionsMenuItems = computed(() => {
 			action: onUnpublish,
 			name: t("pages.room.cards.label.revert"),
 			dataTestId: `board-card-menu-action-unpublish-${
-				toRef(props, "index").value
+				toRef(props, "boardCardIndex").value
 			}`,
 		});
 	}

@@ -7,7 +7,7 @@
 		tabindex="0"
 		:variant="isHidden ? 'outlined' : 'elevated'"
 		hover
-		:data-testid="`room-lesson-card-${index}`"
+		:data-testid="`room-lesson-card-${lessonCardIndex}`"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -24,7 +24,7 @@
 					<RoomDotMenu
 						v-if="userRole === Roles.Teacher"
 						:menu-items="moreActionsMenuItems"
-						:data-testid="`lesson-card-menu-${index}`"
+						:data-testid="`lesson-card-menu-${lessonCardIndex}`"
 						:aria-label="$t('pages.room.lessonCard.menu.ariaLabel')"
 					/>
 				</div>
@@ -34,7 +34,7 @@
 				role="heading"
 				aria-level="2"
 				tabindex="-1"
-				:data-testid="`lesson-name-${index}`"
+				:data-testid="`lesson-name-${lessonCardIndex}`"
 			>
 				{{ lesson.name }}
 			</div>
@@ -55,7 +55,7 @@
 		<v-card-actions
 			v-if="userRole === Roles.Teacher"
 			class="pt-1"
-			:data-testid="`lesson-card-actions-${index}`"
+			:data-testid="`lesson-card-actions-${lessonCardIndex}`"
 		>
 			<v-btn
 				v-for="(action, index) in cardActions"
@@ -107,7 +107,7 @@ const props = defineProps({
 	},
 	keyDrag: { type: Boolean, required: true },
 	dragInProgress: { type: Boolean, required: true },
-	index: { type: Number, required: true },
+	lessonCardIndex: { type: Number, required: true },
 });
 
 const emit = defineEmits([
@@ -150,7 +150,9 @@ const moreActionsMenuItems = computed(() => {
 				`/courses/${props.room.roomId}/topics/${props.lesson.id}/edit?returnUrl=rooms/${props.room.roomId}`
 			),
 		name: t("pages.room.taskCard.label.edit"),
-		dataTestId: `lesson-card-menu-action-edit-${toRef(props, "index").value}`,
+		dataTestId: `lesson-card-menu-action-edit-${
+			toRef(props, "lessonCardIndex").value
+		}`,
 	});
 
 	if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
@@ -158,7 +160,9 @@ const moreActionsMenuItems = computed(() => {
 			icon: mdiContentCopy,
 			action: () => copyCard(),
 			name: t("common.actions.copy"),
-			dataTestId: `lesson-card-menu-action-copy-${toRef(props, "index").value}`,
+			dataTestId: `lesson-card-menu-action-copy-${
+				toRef(props, "lessonCardIndex").value
+			}`,
 		});
 	}
 
@@ -168,7 +172,7 @@ const moreActionsMenuItems = computed(() => {
 			action: () => unPublishCard(),
 			name: t("pages.room.cards.label.revert"),
 			dataTestId: `lesson-card-menu-action-revert-${
-				toRef(props, "index").value
+				toRef(props, "lessonCardIndex").value
 			}`,
 		});
 	}
@@ -179,7 +183,7 @@ const moreActionsMenuItems = computed(() => {
 			action: () => emit("open-modal", props.lesson.id),
 			name: t("pages.room.lessonCard.label.shareLesson"),
 			dataTestId: `lesson-card-menu-action-share-${
-				toRef(props, "index").value
+				toRef(props, "lessonCardIndex").value
 			}`,
 		});
 	}
@@ -188,7 +192,9 @@ const moreActionsMenuItems = computed(() => {
 		icon: mdiTrashCanOutline,
 		action: () => emit("delete-lesson"),
 		name: t("common.actions.remove"),
-		dataTestId: `lesson-card-menu-action-remove-${toRef(props, "index").value}`,
+		dataTestId: `lesson-card-menu-action-remove-${
+			toRef(props, "lessonCardIndex").value
+		}`,
 	});
 
 	return actions;
