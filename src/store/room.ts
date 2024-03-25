@@ -193,6 +193,7 @@ export default class RoomModule extends VuexModule {
 	async downloadCommonCartridgeCourse(exportSettings: {
 		version: "1.1.0" | "1.3.0";
 		topics: string[];
+		tasks: string[];
 	}): Promise<void> {
 		this.resetBusinessError();
 		try {
@@ -205,6 +206,7 @@ export default class RoomModule extends VuexModule {
 				exportSettings.version,
 				{
 					topics: exportSettings.topics,
+					tasks: exportSettings.tasks,
 				},
 				{
 					responseType: "blob",

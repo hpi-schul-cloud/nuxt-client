@@ -92,16 +92,14 @@ describe("GroupModule", () => {
 			});
 
 			it("should return the changed state", () => {
-				const classes: ClassInfo[] = [
-					{
-						name: "3a",
-						externalSourceName: "Klasse",
-						teacherNames: ["Carlie"],
-						type: ClassRootType.Class,
-						id: "id",
-						studentCount: 0,
-					},
-				];
+				const classes: ClassInfo[] = classInfoFactory.buildList(1, {
+					name: "3a",
+					externalSourceName: "Klasse",
+					teacherNames: ["Carlie"],
+					type: ClassRootType.Class,
+					id: "id",
+					studentCount: 0,
+				});
 
 				module.setClasses(classes);
 

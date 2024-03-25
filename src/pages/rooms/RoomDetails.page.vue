@@ -83,15 +83,23 @@
 			@dialog-closed="onCopyResultModalClosed"
 		/>
 		<common-cartridge-export-modal />
+		<end-course-sync-dialog
+			v-model:is-open="isEndSyncDialogOpen"
+			group-name=""
+			:course-name="roomData.title"
+			:course-id="roomData.roomId"
+			@success="refreshRoom"
+		/>
 	</default-wireframe>
 </template>
 
 <script>
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import RoomDotMenu from "@/components/molecules/RoomDotMenu";
-import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
+import RoomDotMenu from "@/components/molecules/RoomDotMenu";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import ShareModal from "@/components/share/ShareModal.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
@@ -103,30 +111,32 @@ import {
 } from "@/serverApi/v3";
 import {
 	authModule,
+	commonCartridgeExportModule,
 	envConfigModule,
 	roomModule,
-	commonCartridgeExportModule,
 } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { COPY_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { EndCourseSyncDialog } from "@feature-course-sync";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
 	mdiEmailPlusOutline,
+	mdiExport,
 	mdiFileDocumentOutline,
 	mdiFormatListChecks,
 	mdiPencilOutline,
 	mdiPlus,
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
-	mdiExport,
-	mdiSync,
+	mdiSyncOff,
+	mdiViewDashboard,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import { COPY_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 
 export default defineComponent({
 	setup() {
@@ -146,6 +156,8 @@ export default defineComponent({
 		};
 	},
 	components: {
+		EndCourseSyncDialog,
+		vCustomDialog,
 		BaseQrCode,
 		DefaultWireframe,
 		RoomDashboard,
@@ -166,6 +178,7 @@ export default defineComponent({
 				mdiShareVariantOutline,
 				mdiContentCopy,
 				mdiExport,
+				mdiSyncOff,
 			},
 			breadcrumbs: [
 				{
@@ -176,13 +189,11 @@ export default defineComponent({
 			],
 			courseId: this.$route.params.id,
 			isShareModalOpen: false,
+			isEndSyncDialogOpen: false,
 			tabIndex: 0,
 		};
 	},
 	computed: {
-		mdiSync() {
-			return mdiSync;
-		},
 		getCurrentFabItems() {
 			return this.currentTab?.fabItems;
 		},
@@ -280,7 +291,7 @@ export default defineComponent({
 			if (authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
-					icon: mdiViewListOutline,
+					icon: mdiViewDashboard,
 					customEvent: "board-create",
 					dataTestId: "fab_button_add_board",
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),
@@ -362,6 +373,17 @@ export default defineComponent({
 				});
 			}
 
+			if (this.roomData.isSynchronized) {
+				items.push({
+					icon: this.icons.mdiSyncOff,
+					action: () => {
+						this.isEndSyncDialogOpen = true;
+					},
+					name: this.$t("pages.rooms.menuItems.endSync"),
+					dataTestId: "title-menu-end-sync",
+				});
+			}
+
 			return items;
 		},
 		copyResultModalStatus() {
@@ -429,11 +451,12 @@ export default defineComponent({
 				});
 			}
 		},
-
 		onExport() {
 			commonCartridgeExportModule.startExportFlow();
 		},
-
+		async refreshRoom() {
+			await roomModule.fetchContent(this.courseId);
+		},
 		async onCopyRoom(courseId) {
 			const copyParams = {
 				id: courseId,
@@ -460,7 +483,6 @@ export default defineComponent({
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
 		},
-
 		async onCreateBoard(courseId) {
 			const params = {
 				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
