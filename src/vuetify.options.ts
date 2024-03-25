@@ -14,6 +14,7 @@ const defaultTheme: ThemeDefinition = {
 		accent: "#e98404",
 		"on-surface": "#01A4A4",
 		"on-background": "#01A238",
+		"on-white": "#01A238",
 	},
 };
 
