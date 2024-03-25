@@ -190,18 +190,28 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async downloadCommonCartridgeCourse(
-		version: "1.1.0" | "1.3.0"
-	): Promise<void> {
+	async downloadCommonCartridgeCourse(exportSettings: {
+		version: "1.1.0" | "1.3.0";
+		topics: string[];
+		tasks: string[];
+	}): Promise<void> {
 		this.resetBusinessError();
 		try {
 			const response = await CoursesApiFactory(
 				undefined,
 				"v3",
 				$axios
-			).courseControllerExportCourse(this.roomData.roomId, version, {
-				responseType: "blob",
-			});
+			).courseControllerExportCourse(
+				this.roomData.roomId,
+				exportSettings.version,
+				{
+					topics: exportSettings.topics,
+					tasks: exportSettings.tasks,
+				},
+				{
+					responseType: "blob",
+				}
+			);
 			const link = document.createElement("a");
 			link.href = URL.createObjectURL(
 				new Blob([response.data as unknown as Blob])
