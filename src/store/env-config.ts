@@ -210,18 +210,15 @@ export default class EnvConfigModule extends VuexModule {
 	}
 
 	@Action
-	async loadConfiguration({ optional = false } = {}): Promise<void> {
+	async loadConfiguration(): Promise<void> {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
 
-			const configCalls = [this.loadFileConfig(), this.loadCoreConfig()];
+			const requiredConfigCalls = [this.loadCoreConfig()];
+			const optionalConfigCalls = Promise.allSettled([this.loadFileConfig()]);
 
-			if (optional) {
-				await Promise.allSettled(configCalls);
-			} else {
-				await Promise.all(configCalls);
-			}
+			await Promise.all([...requiredConfigCalls, optionalConfigCalls]);
 
 			contentModule.init();
 			filePathsModule.init();

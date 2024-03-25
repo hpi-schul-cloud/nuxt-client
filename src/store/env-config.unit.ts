@@ -91,118 +91,59 @@ describe("env-config module", () => {
 					return { defaultApi, fileApi, contentInitMock, filePathsInitMock };
 				};
 
-				describe("when optional is false", () => {
-					it("should reset business error", async () => {
-						setup();
-						const envConfigModule = new EnvConfigModule({});
-						const businessError = businessErrorFactory.build();
-						envConfigModule.setBusinessError(businessError);
+				it("should reset business error", async () => {
+					setup();
+					const envConfigModule = new EnvConfigModule({});
+					const businessError = businessErrorFactory.build();
+					envConfigModule.setBusinessError(businessError);
 
-						await envConfigModule.loadConfiguration();
+					await envConfigModule.loadConfiguration();
 
-						expect(envConfigModule.businessError.statusCode).toBe("");
-						expect(envConfigModule.businessError.message).toBe("");
-					});
-
-					it("should handle status", async () => {
-						setup();
-						const envConfigModule = new EnvConfigModule({});
-						const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
-
-						await envConfigModule.loadConfiguration();
-
-						expect(setStatusSpy).toHaveBeenNthCalledWith(1, "pending");
-						expect(setStatusSpy).toHaveBeenNthCalledWith(2, "completed");
-					});
-
-					it("should load configs", async () => {
-						const { defaultApi, fileApi } = setup();
-						const envConfigModule = new EnvConfigModule({});
-
-						await envConfigModule.loadConfiguration();
-
-						expect(
-							defaultApi.serverConfigControllerPublicConfig
-						).toHaveBeenCalledTimes(1);
-						expect(fileApi.publicConfig).toHaveBeenCalledTimes(1);
-					});
-
-					it("should set envs", async () => {
-						setup();
-						const envConfigModule = new EnvConfigModule({});
-
-						await envConfigModule.loadConfiguration();
-
-						expect(envConfigModule.env).toStrictEqual(envsFactory.build());
-						expect(envConfigModule.envFile).toStrictEqual(mockFileEnvs);
-					});
-
-					it("should call init on contentModule and filePathsModule", async () => {
-						const { contentInitMock, filePathsInitMock } = setup();
-						const envConfigModule = new EnvConfigModule({});
-
-						await envConfigModule.loadConfiguration();
-
-						expect(contentInitMock).toHaveBeenCalledTimes(1);
-						expect(filePathsInitMock).toHaveBeenCalledTimes(1);
-					});
+					expect(envConfigModule.businessError.statusCode).toBe("");
+					expect(envConfigModule.businessError.message).toBe("");
 				});
 
-				describe("when optional is true", () => {
-					it("should reset business error", async () => {
-						setup();
-						const envConfigModule = new EnvConfigModule({});
-						const businessError = businessErrorFactory.build();
-						envConfigModule.setBusinessError(businessError);
+				it("should handle status", async () => {
+					setup();
+					const envConfigModule = new EnvConfigModule({});
+					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
 
-						await envConfigModule.loadConfiguration({ optional: true });
+					await envConfigModule.loadConfiguration();
 
-						expect(envConfigModule.businessError.statusCode).toBe("");
-						expect(envConfigModule.businessError.message).toBe("");
-					});
+					expect(setStatusSpy).toHaveBeenNthCalledWith(1, "pending");
+					expect(setStatusSpy).toHaveBeenNthCalledWith(2, "completed");
+				});
 
-					it("should handle status", async () => {
-						setup();
-						const envConfigModule = new EnvConfigModule({});
-						const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+				it("should load configs", async () => {
+					const { defaultApi, fileApi } = setup();
+					const envConfigModule = new EnvConfigModule({});
 
-						await envConfigModule.loadConfiguration({ optional: true });
+					await envConfigModule.loadConfiguration();
 
-						expect(setStatusSpy).toHaveBeenNthCalledWith(1, "pending");
-						expect(setStatusSpy).toHaveBeenNthCalledWith(2, "completed");
-					});
+					expect(
+						defaultApi.serverConfigControllerPublicConfig
+					).toHaveBeenCalledTimes(1);
+					expect(fileApi.publicConfig).toHaveBeenCalledTimes(1);
+				});
 
-					it("should load configs", async () => {
-						const { defaultApi, fileApi } = setup();
-						const envConfigModule = new EnvConfigModule({});
+				it("should set envs", async () => {
+					setup();
+					const envConfigModule = new EnvConfigModule({});
 
-						await envConfigModule.loadConfiguration({ optional: true });
+					await envConfigModule.loadConfiguration();
 
-						expect(
-							defaultApi.serverConfigControllerPublicConfig
-						).toHaveBeenCalledTimes(1);
-						expect(fileApi.publicConfig).toHaveBeenCalledTimes(1);
-					});
+					expect(envConfigModule.env).toStrictEqual(envsFactory.build());
+					expect(envConfigModule.envFile).toStrictEqual(mockFileEnvs);
+				});
 
-					it("should set envs", async () => {
-						setup();
-						const envConfigModule = new EnvConfigModule({});
+				it("should call init on contentModule and filePathsModule", async () => {
+					const { contentInitMock, filePathsInitMock } = setup();
+					const envConfigModule = new EnvConfigModule({});
 
-						await envConfigModule.loadConfiguration();
+					await envConfigModule.loadConfiguration();
 
-						expect(envConfigModule.env).toStrictEqual(envsFactory.build());
-						expect(envConfigModule.envFile).toStrictEqual(mockFileEnvs);
-					});
-
-					it("should call init on contentModule and filePathsModule", async () => {
-						const { contentInitMock, filePathsInitMock } = setup();
-						const envConfigModule = new EnvConfigModule({});
-
-						await envConfigModule.loadConfiguration();
-
-						expect(contentInitMock).toHaveBeenCalledTimes(1);
-						expect(filePathsInitMock).toHaveBeenCalledTimes(1);
-					});
+					expect(contentInitMock).toHaveBeenCalledTimes(1);
+					expect(filePathsInitMock).toHaveBeenCalledTimes(1);
 				});
 			});
 
@@ -269,40 +210,147 @@ describe("env-config module", () => {
 					};
 				};
 
-				describe("when optional is false", () => {
-					it("should not set status to completed", async () => {
-						setup();
-						const envConfigModule = new EnvConfigModule({});
-						const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+				it("should load configs", async () => {
+					const { defaultApi, fileApi } = setup();
+					const envConfigModule = new EnvConfigModule({});
 
-						await envConfigModule.loadConfiguration();
+					await envConfigModule.loadConfiguration();
 
-						expect(setStatusSpy).not.toHaveBeenCalledWith("completed");
+					expect(
+						defaultApi.serverConfigControllerPublicConfig
+					).toHaveBeenCalledTimes(1);
+					expect(fileApi.publicConfig).toHaveBeenCalledTimes(1);
+				});
+
+				it("should handle status", async () => {
+					setup();
+					const envConfigModule = new EnvConfigModule({});
+					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+
+					await envConfigModule.loadConfiguration();
+
+					expect(setStatusSpy).toHaveBeenNthCalledWith(1, "pending");
+					expect(setStatusSpy).toHaveBeenNthCalledWith(2, "completed");
+				});
+
+				it("should load configs", async () => {
+					const { defaultApi, fileApi } = setup();
+					const envConfigModule = new EnvConfigModule({});
+
+					await envConfigModule.loadConfiguration();
+
+					expect(
+						defaultApi.serverConfigControllerPublicConfig
+					).toHaveBeenCalledTimes(1);
+					expect(fileApi.publicConfig).toHaveBeenCalledTimes(1);
+				});
+
+				it("should call init on contentModule and filePathsModule", async () => {
+					const { contentModuleInitMock, filePathsModuleInitMock } = setup();
+					const envConfigModule = new EnvConfigModule({});
+
+					await envConfigModule.loadConfiguration();
+
+					expect(contentModuleInitMock).toHaveBeenCalledTimes(1);
+					expect(filePathsModuleInitMock).toHaveBeenCalledTimes(1);
+				});
+
+				it("should not set application error", async () => {
+					const { setErrorMock } = setup();
+					const envConfigModule = new EnvConfigModule({});
+
+					await envConfigModule.loadConfiguration();
+
+					expect(setErrorMock).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when loadCoreConfig throws error", () => {
+				const setup = () => {
+					const fileStorageConfigResponse = createMock<
+						AxiosResponse<FilesStorageConfigResponse, any>
+					>({
+						data: mockFileEnvs,
+					});
+					const error = new Error("testError");
+
+					const defaultApi = createMock<serverApi.DefaultApiInterface>();
+					jest
+						.spyOn(serverApi, "DefaultApiFactory")
+						.mockReturnValue(defaultApi);
+					defaultApi.serverConfigControllerPublicConfig.mockRejectedValueOnce(
+						error
+					);
+
+					const fileApi = createMock<fileStorageApi.FileApiInterface>();
+					jest.spyOn(fileStorageApi, "FileApiFactory").mockReturnValue(fileApi);
+					fileApi.publicConfig.mockResolvedValueOnce(fileStorageConfigResponse);
+
+					const contentInitMock = jest.fn();
+					const contentModuleMock = {
+						...ContentModule,
+						actions: {
+							...ContentModule.actions,
+							init: contentInitMock,
+						},
+					};
+
+					const filePathsInitMock = jest.fn();
+					const filePathsModuleMock = {
+						...FilePathsModule,
+						actions: {
+							...FilePathsModule.actions,
+							init: filePathsInitMock,
+						},
+					};
+
+					setupStores({
+						contentModule: contentModuleMock,
+						filePathsModule: filePathsModuleMock,
 					});
 
-					it("should load configs", async () => {
-						const { defaultApi, fileApi } = setup();
-						const envConfigModule = new EnvConfigModule({});
+					return {
+						defaultApi,
+						fileApi,
+						contentInitMock,
+						filePathsInitMock,
+						error,
+					};
+				};
 
-						await envConfigModule.loadConfiguration();
+				it("should not set status to completed", async () => {
+					setup();
+					const envConfigModule = new EnvConfigModule({});
+					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
 
-						expect(
-							defaultApi.serverConfigControllerPublicConfig
-						).toHaveBeenCalledTimes(1);
-						expect(fileApi.publicConfig).toHaveBeenCalledTimes(1);
-					});
+					await envConfigModule.loadConfiguration();
 
-					it("should not call init on contentModule and filePathsModule", async () => {
-						const { filePathsModuleInitMock, contentModuleInitMock } = setup();
-						const envConfigModule = new EnvConfigModule({});
+					expect(setStatusSpy).not.toHaveBeenCalledWith("completed");
+				});
 
-						await envConfigModule.loadConfiguration();
+				it("should load configs", async () => {
+					const { defaultApi, fileApi } = setup();
+					const envConfigModule = new EnvConfigModule({});
 
-						expect(contentModuleInitMock).not.toHaveBeenCalled();
-						expect(filePathsModuleInitMock).not.toHaveBeenCalled();
-					});
+					await envConfigModule.loadConfiguration();
 
-					/* it("should set application error", async () => {
+					expect(
+						defaultApi.serverConfigControllerPublicConfig
+					).toHaveBeenCalledTimes(1);
+					expect(fileApi.publicConfig).toHaveBeenCalledTimes(1);
+				});
+
+				it("should not call init on contentModule and filePathsModule", async () => {
+					const { filePathsInitMock, contentInitMock } = setup();
+					const envConfigModule = new EnvConfigModule({});
+
+					await envConfigModule.loadConfiguration();
+
+					expect(contentInitMock).not.toHaveBeenCalled();
+					expect(filePathsInitMock).not.toHaveBeenCalled();
+				});
+
+				/* it("should set application error", async () => {
 						const { setErrorMock } = setup();
 						const envConfigModule = new EnvConfigModule({});
 
@@ -316,72 +364,15 @@ describe("env-config module", () => {
 						expect(setErrorMock).toHaveBeenCalledWith(applicationError);
 					}); */
 
-					it("should call setStatus with error", async () => {
-						setup();
-						const envConfigModule = new EnvConfigModule({});
-						const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+				it("should call setStatus with error", async () => {
+					setup();
+					const envConfigModule = new EnvConfigModule({});
+					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
 
-						await envConfigModule.loadConfiguration();
+					await envConfigModule.loadConfiguration();
 
-						expect(setStatusSpy).toHaveBeenNthCalledWith(1, "pending");
-						expect(setStatusSpy).toHaveBeenNthCalledWith(2, "error");
-					});
-				});
-
-				describe("when optional is true", () => {
-					it("should load configs", async () => {
-						const { defaultApi, fileApi } = setup();
-						const envConfigModule = new EnvConfigModule({});
-
-						await envConfigModule.loadConfiguration({ optional: true });
-
-						expect(
-							defaultApi.serverConfigControllerPublicConfig
-						).toHaveBeenCalledTimes(1);
-						expect(fileApi.publicConfig).toHaveBeenCalledTimes(1);
-					});
-
-					it("should handle status", async () => {
-						setup();
-						const envConfigModule = new EnvConfigModule({});
-						const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
-
-						await envConfigModule.loadConfiguration({ optional: true });
-
-						expect(setStatusSpy).toHaveBeenNthCalledWith(1, "pending");
-						expect(setStatusSpy).toHaveBeenNthCalledWith(2, "completed");
-					});
-
-					it("should load configs", async () => {
-						const { defaultApi, fileApi } = setup();
-						const envConfigModule = new EnvConfigModule({});
-
-						await envConfigModule.loadConfiguration({ optional: true });
-
-						expect(
-							defaultApi.serverConfigControllerPublicConfig
-						).toHaveBeenCalledTimes(1);
-						expect(fileApi.publicConfig).toHaveBeenCalledTimes(1);
-					});
-
-					it("should call init on contentModule and filePathsModule", async () => {
-						const { contentModuleInitMock, filePathsModuleInitMock } = setup();
-						const envConfigModule = new EnvConfigModule({});
-
-						await envConfigModule.loadConfiguration({ optional: true });
-
-						expect(contentModuleInitMock).toHaveBeenCalledTimes(1);
-						expect(filePathsModuleInitMock).toHaveBeenCalledTimes(1);
-					});
-
-					it("should not set application error", async () => {
-						const { setErrorMock } = setup();
-						const envConfigModule = new EnvConfigModule({});
-
-						await envConfigModule.loadConfiguration({ optional: true });
-
-						expect(setErrorMock).not.toHaveBeenCalled();
-					});
+					expect(setStatusSpy).toHaveBeenNthCalledWith(1, "pending");
+					expect(setStatusSpy).toHaveBeenNthCalledWith(2, "error");
 				});
 			});
 		});

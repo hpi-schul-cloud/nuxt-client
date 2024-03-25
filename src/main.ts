@@ -118,8 +118,7 @@ app.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
-	const isConfigOptional = process.env.VUE_APP_OPTIONAL_CONFIG === "true";
-	await envConfigModule.loadConfiguration({ optional: isConfigOptional });
+	await envConfigModule.loadConfiguration();
 
 	const cookies = new Cookies();
 	const jwt = cookies.get("jwt");
