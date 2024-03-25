@@ -104,6 +104,9 @@ const createWrapper = (
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 			},
+			stubs: {
+				EndCourseSyncDialog: true,
+			},
 		},
 		props,
 	});

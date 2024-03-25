@@ -1,6 +1,7 @@
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import { authModule, envConfigModule, roomModule } from "@/store";
 import AuthModule from "@/store/auth";
+import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
@@ -10,10 +11,11 @@ import ShareModule from "@/store/share";
 import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
-	COPY_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
+	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { meResponseFactory } from "@@/tests/test-utils";
@@ -29,7 +31,6 @@ import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -136,10 +137,21 @@ const getWrapper = () => {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModuleMock,
+				[ROOM_MODULE_KEY.valueOf()]: createModuleMocks(RoomModule, {
+					getRoomData: {
+						roomId: "1",
+						title: "title",
+						displayColor: "color",
+						elements: [],
+						isArchived: false,
+						isSynchronized: false,
+					},
+				}),
 			},
 			stubs: {
 				RoomDashboard: true,
 				RoomExternalToolsOverview: true,
+				EndCourseSyncDialog: true,
 			},
 		},
 	});
@@ -173,6 +185,8 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		downloadModuleMock = createModuleMocks(CommonCartridgeExportModule, {
 			getIsExportModalOpen: false,
 			getVersion: "",
+			getTopics: [],
+			getTasks: [],
 		});
 
 		initializeAxios({

@@ -88,6 +88,7 @@ export default {
 	"common.labels.visible": "Sichtbar",
 	"common.loading.text": "Daten werden geladen...",
 	"common.nodata": "Keine Daten vorhanden",
+	"common.notification.error": "Es ist ein Fehler aufgetreten.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "TT.MM.JJJJ",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
@@ -678,6 +679,13 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Tool auswählen...",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
+	"feature-course-sync.EndCourseSyncDialog.title": "Synchronisation beenden",
+	"feature-course-sync.EndCourseSyncDialog.alert":
+		"Ist die Synchronisation einmal beendet, kann sie nicht wieder gestartet werden. Nutzendendaten können im Nachgang analog zu regulären Kursen manuell bearbeitet und gepflegt werden.",
+	"feature-course-sync.EndCourseSyncDialog.description":
+		"Soll die Synchronization der Nutzendengruppe {groupName} im Kurs {courseName} wirklich beendet werden?",
+	"feature-course-sync.EndCourseSyncDialog.success":
+		"Synchronisation erfolgreich beendet",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1402,6 +1410,7 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronisiert",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
 	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
+	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.importCourse.btn.continue": "Weiter",
 	"pages.rooms.importCourse.codeError": "Der Kurs-Code wird nicht verwendet.",
 	"pages.rooms.importCourse.importError":

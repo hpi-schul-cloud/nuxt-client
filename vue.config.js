@@ -33,6 +33,7 @@ module.exports = defineConfig({
 				"@data-provisioning-options": getDir(
 					"src/components/data-provisioning-options"
 				),
+				"@data-room": getDir("src/components/data-room"),
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),
@@ -108,6 +109,10 @@ module.exports = defineConfig({
 			.use("vue-loader")
 			.tap((options) => {
 				options.prettify = false;
+				options.compilerOptions = {
+					...(options.compilerOptions || {}),
+					isCustomElement: (tag) => tag.startsWith("h5p-"),
+				};
 				return options;
 			});
 		config.plugin("fork-ts-checker").tap((args) => {
