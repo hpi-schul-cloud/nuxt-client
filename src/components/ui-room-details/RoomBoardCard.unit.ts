@@ -64,6 +64,7 @@ describe("RoomBoardCard", () => {
 				},
 				courseData: mockCourseData,
 				userRole: props.userRole,
+				boardCardIndex: 0,
 			},
 			...options,
 		});
@@ -176,7 +177,7 @@ describe("RoomBoardCard", () => {
 					});
 
 					const cardActionButtons = wrapperDraft.findAllComponents(
-						`[data-testid="content-card-board-menu-publish"]`
+						`[data-testid="board-card-action-publish-0"]`
 					);
 					expect(cardActionButtons).toHaveLength(1);
 				});
@@ -206,7 +207,7 @@ describe("RoomBoardCard", () => {
 					await threeDotMenuPublished.trigger("click");
 
 					const moreActionButtons = wrapperPublished.findAllComponents(
-						`[data-testid="content-card-board-menu-unpublish"]`
+						`[data-testid="board-card-menu-action-unpublish-0"]`
 					);
 					expect(moreActionButtons).toHaveLength(1);
 				});
@@ -364,7 +365,7 @@ describe("RoomBoardCard", () => {
 			);
 			const boardCard = wrapper.find(".board-card");
 			const cardActionButtons = boardCard.findAllComponents(
-				`[data-testid="content-card-board-menu-publish"]`
+				`[data-testid="board-card-action-publish-0"]`
 			);
 
 			await cardActionButtons[0].trigger("click");
@@ -381,7 +382,7 @@ describe("RoomBoardCard", () => {
 			const threeDotMenuPublished = wrapper.find(".three-dot-button");
 			await threeDotMenuPublished.trigger("click");
 			const moreActionButtons = wrapper.findAllComponents(
-				`[data-testid="content-card-board-menu-unpublish"]`
+				`[data-testid="board-card-menu-action-unpublish-0"]`
 			);
 
 			await moreActionButtons[0].trigger("click");
