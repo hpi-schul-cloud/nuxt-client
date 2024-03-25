@@ -18,12 +18,14 @@ describe("commonCartridgeExportModule", () => {
 
 				commonCartridgeExportModule.setVersion("1.1.0");
 				commonCartridgeExportModule.setTopics(["topic"]);
+				commonCartridgeExportModule.setTasks(["task"]);
 
 				commonCartridgeExportModule.startExport();
 
 				expect(roomModuleMock).toHaveBeenCalledWith({
 					version: "1.1.0",
 					topics: ["topic"],
+					tasks: ["task"],
 				});
 			});
 		});
@@ -34,10 +36,12 @@ describe("commonCartridgeExportModule", () => {
 
 				commonCartridgeExportModule.setVersion("1.1.0");
 				commonCartridgeExportModule.setTopics(["topic"]);
+				commonCartridgeExportModule.setTasks(["task"]);
 				commonCartridgeExportModule.startExportFlow();
 
 				expect(commonCartridgeExportModule.getVersion).toBe("");
 				expect(commonCartridgeExportModule.getTopics).toEqual([]);
+				expect(commonCartridgeExportModule.getTasks).toEqual([]);
 				expect(commonCartridgeExportModule.getIsExportModalOpen).toBe(true);
 			});
 		});
@@ -48,10 +52,12 @@ describe("commonCartridgeExportModule", () => {
 
 				commonCartridgeExportModule.setVersion("1.1.0");
 				commonCartridgeExportModule.setTopics(["topic"]);
+				commonCartridgeExportModule.setTasks(["task"]);
 				commonCartridgeExportModule.resetExportFlow();
 
 				expect(commonCartridgeExportModule.getVersion).toBe("");
 				expect(commonCartridgeExportModule.getTopics).toEqual([]);
+				expect(commonCartridgeExportModule.getTasks).toEqual([]);
 				expect(commonCartridgeExportModule.getIsExportModalOpen).toBe(false);
 			});
 		});
@@ -86,6 +92,17 @@ describe("commonCartridgeExportModule", () => {
 				commonCartridgeExportModule.setTopics(["topic"]);
 
 				expect(commonCartridgeExportModule.getTopics).toEqual(["topic"]);
+			});
+		});
+
+		// AI next 9 lines
+		describe("setTasks", () => {
+			it("should set tasks to the given value", () => {
+				const commonCartridgeExportModule = new CommonCartridgeExportModule({});
+
+				commonCartridgeExportModule.setTasks(["task"]);
+
+				expect(commonCartridgeExportModule.getTasks).toEqual(["task"]);
 			});
 		});
 	});
