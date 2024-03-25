@@ -21,7 +21,7 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { mdiChevronLeft } from "@mdi/js";
 
 defineProps({
