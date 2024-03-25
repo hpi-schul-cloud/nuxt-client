@@ -111,7 +111,9 @@ export default defineComponent({
 
 								return (
 									(!child.permission ||
-										authModule.getUserPermissions.includes(child.permission)) &&
+										authModule.getUserPermissions.includes(
+											child.permission.toLowerCase()
+										)) &&
 									(!child.feature || hasFeature)
 								);
 							}

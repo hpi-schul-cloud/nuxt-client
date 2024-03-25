@@ -74,6 +74,7 @@ describe("RoomBoardCard", () => {
 				},
 				courseData: mockCourseData,
 				userRole: props.userRole,
+				boardCardIndex: 0,
 			},
 			...options,
 		});
@@ -169,7 +170,7 @@ describe("RoomBoardCard", () => {
 
 					const menuItem = await getMenuItem(
 						wrapper,
-						"content-card-board-menu-edit"
+						"board-card-menu-action-edit-0"
 					);
 					expect(menuItem?.exists()).toBe(true);
 				});
@@ -179,7 +180,7 @@ describe("RoomBoardCard", () => {
 
 					const menuItem = await getMenuItem(
 						wrapper,
-						"content-card-board-menu-copy"
+						"board-card-menu-action-copy-0"
 					);
 					expect(menuItem?.exists()).toBe(true);
 				});
@@ -192,7 +193,7 @@ describe("RoomBoardCard", () => {
 
 						const menuItem = await getMenuItem(
 							wrapper,
-							"content-card-board-menu-share"
+							"board-card-menu-action-share-0"
 						);
 						expect(menuItem?.exists()).toBe(true);
 					});
@@ -206,7 +207,7 @@ describe("RoomBoardCard", () => {
 
 						const menuItem = await getMenuItem(
 							wrapper,
-							"content-card-board-menu-share"
+							"board-card-menu-action-share-0"
 						);
 						expect(menuItem).toBeUndefined();
 					});
@@ -217,7 +218,7 @@ describe("RoomBoardCard", () => {
 
 					const menuItem = await getMenuItem(
 						wrapper,
-						"content-card-board-menu-remove"
+						"board-card-menu-action-remove-0"
 					);
 					expect(menuItem?.exists()).toBe(true);
 				});
@@ -228,7 +229,7 @@ describe("RoomBoardCard", () => {
 
 						const menuItem = await getMenuItem(
 							wrapper,
-							"content-card-board-menu-copy"
+							"board-card-menu-action-copy-0"
 						);
 
 						await menuItem?.trigger("click");
@@ -245,7 +246,7 @@ describe("RoomBoardCard", () => {
 
 						const menuItem = await getMenuItem(
 							wrapper,
-							"content-card-board-menu-share"
+							"board-card-menu-action-share-0"
 						);
 
 						await menuItem?.trigger("click");
@@ -294,7 +295,7 @@ describe("RoomBoardCard", () => {
 					});
 
 					const cardActionButtons = wrapperDraft.findAllComponents(
-						`[data-testid="content-card-board-menu-publish"]`
+						`[data-testid="board-card-action-publish-0"]`
 					);
 					expect(cardActionButtons).toHaveLength(1);
 				});
@@ -324,7 +325,7 @@ describe("RoomBoardCard", () => {
 					await threeDotMenuPublished.trigger("click");
 
 					const moreActionButtons = wrapperPublished.findAllComponents(
-						`[data-testid="content-card-board-menu-unpublish"]`
+						`[data-testid="board-card-menu-action-unpublish-0"]`
 					);
 					expect(moreActionButtons).toHaveLength(1);
 				});
@@ -482,7 +483,7 @@ describe("RoomBoardCard", () => {
 			);
 			const boardCard = wrapper.find(".board-card");
 			const cardActionButton = boardCard.findComponent(
-				`[data-testid="content-card-board-menu-publish"]`
+				`[data-testid="board-card-action-publish-0"]`
 			);
 
 			await cardActionButton.trigger("click");
@@ -499,7 +500,7 @@ describe("RoomBoardCard", () => {
 			const threeDotMenuPublished = wrapper.find(".three-dot-button");
 			await threeDotMenuPublished.trigger("click");
 			const moreActionButton = wrapper.findComponent(
-				`[data-testid="content-card-board-menu-unpublish"]`
+				`[data-testid="board-card-menu-action-unpublish-0"]`
 			);
 
 			await moreActionButton.trigger("click");

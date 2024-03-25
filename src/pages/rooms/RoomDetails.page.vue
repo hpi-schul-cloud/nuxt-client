@@ -26,7 +26,7 @@
 				<div class="mx-2">
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
-						data-testid="title-menu"
+						data-testid="room-menu"
 						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
@@ -40,7 +40,8 @@
 						size="small"
 						:href="`/files/courses/${roomData.roomId}`"
 						:data-testid="`room-${roomData.roomId}-files`"
-						>{{ $t("pages.rooms.headerSection.toCourseFiles") }}
+					>
+						{{ $t("pages.rooms.headerSection.toCourseFiles") }}
 					</v-btn>
 				</div>
 			</div>
@@ -65,7 +66,6 @@
 				</v-tabs>
 			</div>
 		</template>
-
 		<component
 			v-if="getCurrentComponent"
 			:is="getCurrentComponent"
@@ -96,10 +96,10 @@
 <script>
 import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
-import RoomDotMenu from "@/components/molecules/RoomDotMenu";
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { RoomDotMenu } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
+import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
 import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
@@ -109,14 +109,8 @@ import {
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import {
-	authModule,
-	commonCartridgeExportModule,
-	envConfigModule,
-	roomModule,
-} from "@/store";
+import { envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import { COPY_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { EndCourseSyncDialog } from "@feature-course-sync";
 import {
@@ -137,6 +131,13 @@ import {
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import {
+	COPY_MODULE_KEY,
+	SHARE_MODULE_KEY,
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
+	ROOM_MODULE_KEY,
+	AUTH_MODULE_KEY,
+} from "@/utils/inject";
 
 export default defineComponent({
 	setup() {
@@ -169,6 +170,9 @@ export default defineComponent({
 	inject: {
 		copyModule: { from: COPY_MODULE_KEY },
 		shareModule: { from: SHARE_MODULE_KEY },
+		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
+		roomModule: { from: ROOM_MODULE_KEY },
+		authModule: { from: AUTH_MODULE_KEY },
 	},
 	data() {
 		return {
@@ -267,7 +271,9 @@ export default defineComponent({
 		learnContentFabItems() {
 			const actions = [];
 			if (
-				authModule.getUserPermissions.includes("HOMEWORK_CREATE".toLowerCase())
+				this.authModule.getUserPermissions.includes(
+					"HOMEWORK_CREATE".toLowerCase()
+				)
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.task"),
@@ -278,7 +284,9 @@ export default defineComponent({
 				});
 			}
 			if (
-				authModule.getUserPermissions.includes("TOPIC_CREATE".toLowerCase())
+				this.authModule.getUserPermissions.includes(
+					"TOPIC_CREATE".toLowerCase()
+				)
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.lesson"),
@@ -288,7 +296,9 @@ export default defineComponent({
 					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
 				});
 			}
-			if (authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())) {
+			if (
+				this.authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())
+			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
 					icon: mdiViewDashboard,
@@ -311,13 +321,13 @@ export default defineComponent({
 			return items;
 		},
 		roomData() {
-			return roomModule.getRoomData;
+			return this.roomModule.getRoomData;
 		},
 		scopedPermissions() {
-			return roomModule.getPermissionData || [];
+			return this.roomModule.getPermissionData || [];
 		},
 		roles() {
-			return authModule.getUserRoles;
+			return this.authModule.getUserRoles;
 		},
 		dashBoardRole() {
 			if (this.roles.includes(Roles.Teacher)) return Roles.Teacher;
@@ -325,7 +335,7 @@ export default defineComponent({
 			return undefined;
 		},
 		canEditTools() {
-			return !!authModule?.getUserPermissions.includes(
+			return !!this.authModule?.getUserPermissions.includes(
 				"CONTEXT_TOOL_ADMIN".toLowerCase()
 			);
 		},
@@ -340,7 +350,7 @@ export default defineComponent({
 						this.$t("common.actions.edit") +
 						"/" +
 						this.$t("common.actions.remove"),
-					dataTestId: "title-menu-edit-delete",
+					dataTestId: "room-menu-edit-delete",
 				},
 			];
 
@@ -349,7 +359,7 @@ export default defineComponent({
 					icon: this.icons.mdiContentCopy,
 					action: () => this.onCopyRoom(this.roomData.roomId),
 					name: this.$t("common.actions.copy"),
-					dataTestId: "title-menu-copy",
+					dataTestId: "room-menu-copy",
 				});
 			}
 
@@ -358,7 +368,7 @@ export default defineComponent({
 					icon: this.icons.mdiShareVariantOutline,
 					action: () => this.shareCourse(),
 					name: this.$t("common.actions.shareCourse"),
-					dataTestId: "title-menu-share",
+					dataTestId: "room-menu-share",
 				});
 			}
 
@@ -369,7 +379,7 @@ export default defineComponent({
 					icon: this.icons.mdiExport,
 					action: () => this.onExport(),
 					name: this.$t("common.actions.export"),
-					dataTestId: "title-menu-common-cartridge-download",
+					dataTestId: "room-menu-common-cartridge-download",
 				});
 			}
 
@@ -407,10 +417,10 @@ export default defineComponent({
 			this.setActiveTab(this.$route.query.tab);
 		}
 
-		await roomModule.fetchContent(this.courseId);
-		await roomModule.fetchScopePermission({
+		await this.roomModule.fetchContent(this.courseId);
+		await this.roomModule.fetchScopePermission({
 			courseId: this.courseId,
-			userId: authModule.getUser?.id,
+			userId: this.authModule.getUser?.id,
 		});
 
 		document.title = buildPageTitle(this.roomData.title);
@@ -452,10 +462,10 @@ export default defineComponent({
 			}
 		},
 		onExport() {
-			commonCartridgeExportModule.startExportFlow();
+			this.commonCartridgeExportModule.startExportFlow();
 		},
 		async refreshRoom() {
-			await roomModule.fetchContent(this.courseId);
+			await this.roomModule.fetchContent(this.courseId);
 		},
 		async onCopyRoom(courseId) {
 			const copyParams = {
@@ -478,7 +488,7 @@ export default defineComponent({
 		},
 		async onCopyBoardElement(payload) {
 			await this.copy(payload);
-			await roomModule.fetchContent(payload.courseId);
+			await this.roomModule.fetchContent(payload.courseId);
 		},
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
@@ -489,7 +499,7 @@ export default defineComponent({
 				parentType: BoardParentType.Course,
 				parentId: courseId,
 			};
-			const board = await roomModule.createBoard(params);
+			const board = await this.roomModule.createBoard(params);
 			await this.$router.push(`/rooms/${board.id}/board`);
 		},
 	},

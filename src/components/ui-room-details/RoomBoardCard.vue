@@ -7,7 +7,7 @@
 		tabindex="0"
 		role="link"
 		:variant="isDraft ? 'outlined' : 'elevated'"
-		data-testid="room-board-card"
+		:data-testid="`room-board-card-${boardCardIndex}`"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"
@@ -19,24 +19,30 @@
 			<div class="top-row-container mb-0">
 				<div class="d-flex align-center mb-3 tagline">
 					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
-					<span class="title-board-card" data-testid="card-title">
+					<span
+						class="title-board-card"
+						:data-testid="`board-card-title-${boardCardIndex}`"
+					>
 						{{ cardTitle }}
 					</span>
 				</div>
 				<div v-if="userRole === Roles.Teacher" class="dot-menu-section">
 					<RoomDotMenu
 						:menu-items="actionsMenuItems"
-						data-testid="content-card-board-menu"
+						:data-testid="`board-card-menu-${boardCardIndex}`"
 						:aria-label="$t('pages.room.boardCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
-			<h2 class="text-h6 board-title mt-2" data-testid="board-title">
+			<h2
+				class="text-h6 board-title mt-2"
+				:data-testid="`board-title-${boardCardIndex}`"
+			>
 				{{ boardTitle }}
 			</h2>
 		</VCardText>
 		<VCardActions
-			data-testid="content-card-task-actions"
+			data-testid="board-card-actions"
 			v-if="isDraft && userRole === Roles.Teacher"
 		>
 			<VBtn
@@ -64,7 +70,7 @@ import {
 	mdiShareVariantOutline,
 } from "@/components/icons/material";
 import RoomDotMenu from "./RoomDotMenu.vue";
-import { computed, PropType } from "vue";
+import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
@@ -80,7 +86,9 @@ const props = defineProps({
 		default: "",
 	},
 	userRole: { type: String as PropType<Roles>, required: true },
+	boardCardIndex: { type: Number, required: true },
 });
+
 const emit = defineEmits([
 	"tab-pressed",
 	"on-drag",
@@ -143,19 +151,21 @@ const onMoveCardUp = () => {
 	}
 };
 
-const cardActions = [
-	{
-		action: onPublish,
-		name: t("common.action.publish"),
-		dataTestId: "content-card-board-menu-publish",
-	},
-];
-
 const boardTitle = computed(() => {
 	return props.columnBoardItem.title && props.columnBoardItem.title !== ""
 		? props.columnBoardItem.title
 		: t("pages.room.boardCard.label.courseBoard").toString();
 });
+
+const cardActions = [
+	{
+		action: onPublish,
+		name: t("common.action.publish"),
+		dataTestId: `board-card-action-publish-${
+			toRef(props, "boardCardIndex").value
+		}`,
+	},
+];
 
 const actionsMenuItems = computed(() => {
 	const actions = [];
@@ -164,14 +174,17 @@ const actionsMenuItems = computed(() => {
 		icon: mdiPencilOutline,
 		action: openBoard,
 		name: t("common.actions.edit"),
-		dataTestId: "content-card-board-menu-edit",
+		dataTestId: `board-card-menu-action-edit-${
+			toRef(props, "boardCardIndex").value
+		}`,
 	});
-
 	actions.push({
 		icon: mdiContentCopy,
 		action: () => emit("copy-board"),
 		name: t("common.actions.copy"),
-		dataTestId: "content-card-board-menu-copy",
+		dataTestId: `board-card-menu-action-copy-${
+			toRef(props, "boardCardIndex").value
+		}`,
 	});
 
 	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
@@ -179,7 +192,9 @@ const actionsMenuItems = computed(() => {
 			icon: mdiShareVariantOutline,
 			action: () => emit("share-board"),
 			name: t("common.actions.shareBoard"),
-			dataTestId: "content-card-board-menu-share",
+			dataTestId: `board-card-menu-action-share-${
+				toRef(props, "boardCardIndex").value
+			}`,
 		});
 	}
 
@@ -188,7 +203,9 @@ const actionsMenuItems = computed(() => {
 			icon: mdiUndoVariant,
 			action: onUnpublish,
 			name: t("pages.room.cards.label.revert"),
-			dataTestId: "content-card-board-menu-unpublish",
+			dataTestId: `board-card-menu-action-unpublish-${
+				toRef(props, "boardCardIndex").value
+			}`,
 		});
 	}
 
@@ -196,7 +213,9 @@ const actionsMenuItems = computed(() => {
 		icon: mdiTrashCanOutline,
 		action: () => emit("delete-board"),
 		name: t("common.actions.remove"),
-		dataTestId: "content-card-board-menu-remove",
+		dataTestId: `board-card-menu-action-remove-${
+			toRef(props, "boardCardIndex").value
+		}`,
 	});
 
 	return actions;

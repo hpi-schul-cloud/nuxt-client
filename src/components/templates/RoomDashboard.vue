@@ -19,6 +19,7 @@
 						<RoomBoardCard
 							v-if="item.type === cardTypes.ColumnBoard"
 							:ref="`item_${index}`"
+							:board-card-index="index"
 							:user-role="role"
 							:key-drag="isDragging"
 							:drag-in-progress="dragInProgress"
@@ -44,6 +45,7 @@
 						<RoomTaskCard
 							v-if="item.type === cardTypes.Task"
 							:ref="`item_${index}`"
+							:task-card-index="index"
 							:user-role="role"
 							:room="taskData"
 							:task="item.content"
@@ -69,6 +71,7 @@
 						<RoomLessonCard
 							v-if="item.type === cardTypes.Lesson"
 							:ref="`item_${index}`"
+							:lesson-card-index="index"
 							:user-role="role"
 							:lesson="item.content"
 							:room="lessonData"
@@ -98,6 +101,7 @@
 				<RoomBoardCard
 					v-if="boardCardIsVisibleToStudent(item)"
 					:ref="`item_${index}`"
+					:board-card-index="index"
 					:user-role="role"
 					:key-drag="isDragging"
 					:drag-in-progress="dragInProgress"
@@ -116,6 +120,7 @@
 				<RoomTaskCard
 					v-if="item.type === cardTypes.Task"
 					:ref="`item_${index}`"
+					:task-card-index="index"
 					:user-role="role"
 					:task="item.content"
 					:aria-label="
@@ -133,6 +138,7 @@
 				<RoomLessonCard
 					v-if="item.type === cardTypes.Lesson"
 					:ref="`item_${index}`"
+					:lesson-card-index="index"
 					:user-role="role"
 					:lesson="item.content"
 					:room="lessonData"
@@ -186,8 +192,7 @@
 </template>
 
 <script>
-import RoomBoardCard from "@/components/molecules/RoomBoardCard.vue";
-import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
+import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
