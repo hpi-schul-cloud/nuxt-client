@@ -88,6 +88,7 @@ export default {
 	"common.labels.visible": "Visible",
 	"common.loading.text": "Los datos se están cargando...",
 	"common.nodata": "Datos no disponibles",
+	"common.notification.error": "Se ha producido un error.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.AAAA",
 	"common.placeholder.email.confirmation":
@@ -694,6 +695,13 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Herramienta de selección...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
+	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
+	"feature-course-sync.EndCourseSyncDialog.alert":
+		"Una vez finalizada la sincronización, no se puede volver a iniciar. Los datos del usuario se pueden editar y mantener manualmente de la misma manera que los cursos regulares.",
+	"feature-course-sync.EndCourseSyncDialog.description":
+		"¿Debería realmente finalizarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
+	"feature-course-sync.EndCourseSyncDialog.success":
+		"Sincronización completada exitosamente",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",
@@ -1400,7 +1408,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Expirado",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
 	"pages.room.teacher.emptyState":
-		"Añada al curso contenidos de aprendizaje, como tareas o temas, y luego ordénelos.",
+		"Añada y ordene contenidos de aprendizaje al curso.",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
 	"pages.rooms.allRooms.emptyState.title": "Actualmente no hay cursos aquí.",
 	"pages.rooms.currentRooms.emptyState.title":
@@ -1416,6 +1424,7 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Sincronizado",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
 	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
+	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.importCourse.btn.continue": "Continuar",
 	"pages.rooms.importCourse.codeError": "El código del curso no está en uso.",
 	"pages.rooms.importCourse.importError":

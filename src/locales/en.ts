@@ -88,6 +88,7 @@ export default {
 	"common.labels.visible": "Visible",
 	"common.loading.text": "Data is loading...",
 	"common.nodata": "No data available",
+	"common.notification.error": "An error has occurred.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.YYYY",
 	"common.placeholder.email.confirmation": "Repeat e-mail address",
@@ -674,6 +675,13 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Select Tool...",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
+	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
+	"feature-course-sync.EndCourseSyncDialog.alert":
+		"Once synchronization has ended, it cannot be started again. User data can be edited and maintained manually in the same way as regular courses.",
+	"feature-course-sync.EndCourseSyncDialog.description":
+		"Should the synchronization of the user group {groupName} in the course {courseName} really be ended?",
+	"feature-course-sync.EndCourseSyncDialog.success":
+		"Synchronization completed successfully",
 	"format.date": "MM/DD/YYYY",
 	"format.dateLong": "dddd, MMMM DD. YYYY",
 	"format.dateTime": "MM/DD/YYYY HH:mm",
@@ -1358,7 +1366,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Expired",
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
 	"pages.room.teacher.emptyState":
-		"Add learning content such as assignments or topics to the course and then sort them.",
+		"Add and sort learning content to the course.",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
 	"pages.rooms.allRooms.emptyState.title":
 		"Currently, there are no courses here.",
@@ -1375,6 +1383,7 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronized",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
+	"pages.rooms.menuItems.endSync": "End synchronization",
 	"pages.rooms.importCourse.btn.continue": "Continue",
 	"pages.rooms.importCourse.codeError": "The course code is not in use.",
 	"pages.rooms.importCourse.importError":
