@@ -135,20 +135,30 @@
 </template>
 
 <script setup lang="ts">
+import { BoardElementResponseTypeEnum } from "@/serverApi/v3/api";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+
+type Selection = {
+	isSelected: boolean;
+	title: string;
+	id: string;
+};
 
 const { t } = useI18n();
 const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeExportModule = injectStrict(
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY
 );
+const roomModule = injectStrict(ROOM_MODULE_KEY);
+
 const emit = defineEmits([
 	"update:isExportModalOpen",
 	"dialog-closed",
@@ -166,28 +176,45 @@ const isExportModalOpen = computed({
 		);
 	},
 });
+
 const radios = ref("1.1.0");
 const step = ref(0);
-const allTopics = ref<
-	Array<{ isSelected: boolean; title: string; id: string }>
->([
-	{ isSelected: true, title: "Thema-title1", id: "topic-1" },
-	{ isSelected: true, title: "Thema-title2", id: "topic-2" },
-	{ isSelected: true, title: "Thema-title3", id: "topic-3" },
-]);
+
+const allTopics = ref<Array<Selection>>([]);
 const allTopicsSelected = computed(() => {
 	return allTopics.value.every((topic) => topic.isSelected);
 });
-const allTasks = ref<Array<{ isSelected: boolean; title: string; id: string }>>(
-	[
-		{ isSelected: true, title: "Aufgabe-title1", id: "task-1" },
-		{ isSelected: true, title: "Aufgabe-title2", id: "task-2" },
-		{ isSelected: true, title: "Aufgabe-title3", id: "task-3" },
-	]
-);
+
+const allTasks = ref<Array<Selection>>([]);
 const allTasksSelected = computed(() => {
 	return allTasks.value.every((topic) => topic.isSelected);
 });
+
+watch(
+	() => roomModule.getRoomData.elements,
+	(newValue) => {
+		allTopics.value = [];
+		allTasks.value = [];
+
+		newValue.forEach((element: any) => {
+			if (element.type === BoardElementResponseTypeEnum.Lesson) {
+				allTopics.value.push({
+					isSelected: true,
+					title: element.content.name,
+					id: element.content.id,
+				});
+			}
+
+			if (element.type === BoardElementResponseTypeEnum.Task) {
+				allTasks.value.push({
+					isSelected: true,
+					title: element.content.name,
+					id: element.content.id,
+				});
+			}
+		});
+	}
+);
 
 const title = computed(() => {
 	return step.value === 0
@@ -220,9 +247,9 @@ function onCloseDialog(): void {
 	});
 }
 
-function onNext(newValue: string): void {
+function onNext(): void {
 	emit("next", false);
-	commonCartridgeExportModule.setVersion(newValue);
+	commonCartridgeExportModule.setVersion(radios.value);
 	step.value++;
 }
 
@@ -233,7 +260,17 @@ async function onExport(): Promise<void> {
 		status: "success",
 		timeout: 10000,
 	});
-	await commonCartridgeExportModule.startExport(radios.value);
+
+	const topicIds: string[] = allTopics.value
+		.filter((topic) => topic.isSelected)
+		.map((topic) => topic.id);
+	const taskIds = allTasks.value
+		.filter((task) => task.isSelected)
+		.map((task) => task.id);
+
+	commonCartridgeExportModule.setTopics(topicIds);
+	commonCartridgeExportModule.setTasks(taskIds);
+	await commonCartridgeExportModule.startExport();
 	onCloseDialog();
 }
 

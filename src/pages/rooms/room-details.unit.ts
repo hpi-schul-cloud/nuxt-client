@@ -15,6 +15,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { meResponseFactory } from "@@/tests/test-utils";
@@ -136,6 +137,16 @@ const getWrapper = () => {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModuleMock,
+				[ROOM_MODULE_KEY.valueOf()]: createModuleMocks(RoomModule, {
+					getRoomData: {
+						roomId: "1",
+						title: "title",
+						displayColor: "color",
+						elements: [],
+						isArchived: false,
+						isSynchronized: false,
+					},
+				}),
 			},
 			stubs: {
 				RoomDashboard: true,
@@ -174,6 +185,8 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		downloadModuleMock = createModuleMocks(CommonCartridgeExportModule, {
 			getIsExportModalOpen: false,
 			getVersion: "",
+			getTopics: [],
+			getTasks: [],
 		});
 
 		initializeAxios({
