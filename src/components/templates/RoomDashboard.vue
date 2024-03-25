@@ -19,7 +19,7 @@
 						<RoomBoardCard
 							v-if="item.type === cardTypes.ColumnBoard"
 							:ref="`item_${index}`"
-							:board-card-index="index"
+							:index="index"
 							:user-role="role"
 							:key-drag="isDragging"
 							:drag-in-progress="dragInProgress"
@@ -44,7 +44,7 @@
 						<RoomTaskCard
 							v-if="item.type === cardTypes.Task"
 							:ref="`item_${index}`"
-							:task-card-index="index"
+							:index="index"
 							:user-role="role"
 							:room="taskData"
 							:task="item.content"
@@ -70,7 +70,7 @@
 						<RoomLessonCard
 							v-if="item.type === cardTypes.Lesson"
 							:ref="`item_${index}`"
-							:lesson-card-index="index"
+							:index="index"
 							:user-role="role"
 							:lesson="item.content"
 							:room="lessonData"
@@ -100,7 +100,7 @@
 				<RoomBoardCard
 					v-if="boardCardIsVisibleToStudent(item)"
 					:ref="`item_${index}`"
-					:board-card-index="index"
+					:index="index"
 					:user-role="role"
 					:key-drag="isDragging"
 					:drag-in-progress="dragInProgress"
@@ -119,7 +119,7 @@
 				<RoomTaskCard
 					v-if="item.type === cardTypes.Task"
 					:ref="`item_${index}`"
-					:task-card-index="index"
+					:index="index"
 					:user-role="role"
 					:task="item.content"
 					:aria-label="
@@ -137,7 +137,7 @@
 				<RoomLessonCard
 					v-if="item.type === cardTypes.Lesson"
 					:ref="`item_${index}`"
-					:lesson-card-index="index"
+					:index="index"
 					:user-role="role"
 					:lesson="item.content"
 					:room="lessonData"
