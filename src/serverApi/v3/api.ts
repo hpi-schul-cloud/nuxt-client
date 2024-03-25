@@ -1475,6 +1475,12 @@ export interface CourseExportBodyParams {
      * @memberof CourseExportBodyParams
      */
     topics: Array<string>;
+    /**
+     * The list of ids of tasks which should be exported. If empty no tasks are exported.
+     * @type {Array<string>}
+     * @memberof CourseExportBodyParams
+     */
+    tasks: Array<string>;
 }
 /**
  * 
@@ -4782,19 +4788,6 @@ export interface PatchVisibilityParams {
 /**
  * 
  * @export
- * @interface ProviderConfigResponse
- */
-export interface ProviderConfigResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ProviderConfigResponse
-     */
-    provider: string;
-}
-/**
- * 
- * @export
  * @interface PseudonymResponse
  */
 export interface PseudonymResponse {
@@ -5529,43 +5522,6 @@ export interface SchoolResponse {
      * @memberof SchoolResponse
      */
     instanceFeatures: Array<InstanceFeature>;
-}
-/**
- * 
- * @export
- * @interface SchoolSystemResponse
- */
-export interface SchoolSystemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolSystemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolSystemResponse
-     */
-    type: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolSystemResponse
-     */
-    alias?: string;
-    /**
-     * 
-     * @type {ProviderConfigResponse}
-     * @memberof SchoolSystemResponse
-     */
-    ldapConfig?: ProviderConfigResponse;
-    /**
-     * 
-     * @type {ProviderConfigResponse}
-     * @memberof SchoolSystemResponse
-     */
-    oauthConfig?: ProviderConfigResponse;
 }
 /**
  * 
@@ -11474,6 +11430,44 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Stop the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerStopSynchronization: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('courseControllerStopSynchronization', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/stop-sync`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -11518,6 +11512,17 @@ export const CoursesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerImportCourse(file, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Stop the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerStopSynchronization(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerStopSynchronization(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -11559,6 +11564,16 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         courseControllerImportCourse(file: any, options?: any): AxiosPromise<void> {
             return localVarFp.courseControllerImportCourse(file, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Stop the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerStopSynchronization(courseId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerStopSynchronization(courseId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -11598,6 +11613,16 @@ export interface CoursesApiInterface {
      * @memberof CoursesApiInterface
      */
     courseControllerImportCourse(file: any, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Stop the synchronization of a course with a group.
+     * @param {string} courseId The id of the course
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerStopSynchronization(courseId: string, options?: any): AxiosPromise<void>;
 
 }
 
@@ -11643,6 +11668,18 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerImportCourse(file: any, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerImportCourse(file, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Stop the synchronization of a course with a group.
+     * @param {string} courseId The id of the course
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerStopSynchronization(courseId: string, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerStopSynchronization(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -15764,7 +15801,7 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolSystems(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolSystemResponse>>> {
+        async schoolControllerGetSchoolSystems(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolSystems(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -15854,7 +15891,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>> {
+        schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<SchoolResponse> {
             return localVarFp.schoolControllerGetSchoolSystems(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -15941,7 +15978,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>>;
+    schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<SchoolResponse>;
 
     /**
      * Sets all provisioning options for a system at a school
