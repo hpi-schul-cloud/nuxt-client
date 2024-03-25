@@ -52,8 +52,8 @@
 			"@util-vue": ["src/modules/util/vue"],
 			"@util-input-masks": ["src/modules/util/input-masks"],
 			"@util-device-detection": ["src/modules/util/device-detection"],
-			"@page-board": ["src/components/page-board"],
-			"@page-class-members": ["src/components/page-class-members"],
+			"@page-board": ["src/modules/page/board"],
+			"@page-class-members": ["src/modules/page/class-members"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},
