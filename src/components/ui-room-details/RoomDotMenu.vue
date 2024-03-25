@@ -2,12 +2,12 @@
 	<v-menu v-if="menuItems.length > 0" location="bottom end">
 		<template v-slot:activator="{ props }">
 			<v-btn
-				v-bind="props"
+				v-bind="($attrs, props)"
 				:icon="mdiDotsVertical"
 				variant="text"
 				density="comfortable"
 				class="three-dot-button"
-				:aria-label="ariaLabel"
+				:aria-label="$attrs['aria-label']"
 				:data-testid="dataTestid"
 				@keydown.space.stop
 			/>
@@ -36,13 +36,13 @@ import { mdiDotsVertical } from "@mdi/js";
 import { PropType } from "vue";
 import { MenuItem } from "./types";
 
+defineOptions({
+	inheritAttrs: false,
+});
+
 defineProps({
 	menuItems: {
 		type: Array as PropType<MenuItem[]>,
-		required: true,
-	},
-	ariaLabel: {
-		type: String,
 		required: true,
 	},
 	dataTestid: {

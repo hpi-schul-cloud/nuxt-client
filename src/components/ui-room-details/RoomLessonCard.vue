@@ -25,7 +25,7 @@
 						v-if="userRole === Roles.Teacher"
 						:menu-items="moreActionsMenuItems"
 						:data-testid="`lesson-card-menu-${lessonCardIndex}`"
-						:ariaLabel="$t('pages.room.lessonCard.menu.ariaLabel')"
+						:aria-label="$t('pages.room.lessonCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>

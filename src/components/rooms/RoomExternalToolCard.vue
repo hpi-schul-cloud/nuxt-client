@@ -32,7 +32,7 @@
 				<room-dot-menu
 					:menu-items="menuItems"
 					data-testid="room-tool-three-dot-button"
-					:ariaLabel="t('pages.rooms.tools.menu.ariaLabel')"
+					:aria-label="t('pages.rooms.tools.menu.ariaLabel')"
 				/>
 			</div>
 		</template>

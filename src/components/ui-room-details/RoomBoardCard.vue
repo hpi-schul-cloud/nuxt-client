@@ -30,7 +30,7 @@
 					<RoomDotMenu
 						:menu-items="actionsMenuItems"
 						:data-testid="`board-card-menu-${boardCardIndex}`"
-						:ariaLabel="$t('pages.room.boardCard.menu.ariaLabel')"
+						:aria-label="$t('pages.room.boardCard.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
