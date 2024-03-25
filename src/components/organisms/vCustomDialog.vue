@@ -81,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, PropType } from "vue";
 
 const props = defineProps({
 	isOpen: { type: Boolean, required: true },
@@ -110,7 +110,9 @@ const props = defineProps({
 		type: Boolean,
 	},
 	buttons: {
-		type: Array,
+		type: Array as PropType<
+			("back" | "edit" | "cancel" | "confirm" | "close" | "next")[]
+		>,
 		default: () => ["cancel", "confirm"],
 	},
 });
