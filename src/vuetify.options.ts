@@ -12,9 +12,14 @@ const defaultTheme: ThemeDefinition = {
 		"secondary-lighten-1": "#8a9199",
 		"secondary-darken-1": "#3a424b",
 		accent: "#e98404",
-		"on-surface": "#01A4A4",
-		"on-background": "#01A238",
-		"on-white": "#01A238",
+		"on-surface": "#3a424b",
+		"on-background": "#3a424b",
+		"on-white": "#3a424b",
+	},
+	variables: {
+		"high-emphasis-opacity": 1,
+		"medium-emphasis-opacity": 0.8,
+		"disabled-opacity": 0.6,
 	},
 };
 
