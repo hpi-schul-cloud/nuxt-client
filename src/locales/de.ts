@@ -394,6 +394,8 @@ export default {
 	"components.molecules.admintablelegend.help": "Hilfebereich",
 	"components.molecules.admintablelegend.hint":
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {institute_title}.",
+	"components.molecules.admintablelegend.thr":
+		"Einige oder alle Nutzer:innendaten deiner Schule werden aus einer externen Quelle (LDAP, IDM, Schulportal o. ä.) synchronisiert. Die Bearbeitung dieser Nutzer:innen-Stammdaten ist deshalb nur im Quellsystem möglich, nicht in der Schul-Cloud. Das Anlegen neuer Schüler:innen oder Lehrkräfte ist ebenfalls nur im Quellsystem möglich.",
 	"components.molecules.ContentCard.report.body":
 		"Melden des Inhaltes mit der ID",
 	"components.molecules.ContentCard.report.email":
@@ -1392,7 +1394,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Abgelaufen",
 	"pages.room.taskCard.teacher.label.submitted": "Abgegeben",
 	"pages.room.teacher.emptyState":
-		"Lerninhalte wie Aufgaben oder Themen dem Kurs hinzufügen und anschließend sortieren.",
+		"Lerninhalte dem Kurs hinzufügen und sortieren.",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
 	"pages.rooms.allRooms.emptyState.title":
 		"Aktuell gibt es hier noch keine Kurse.",
