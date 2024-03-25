@@ -106,6 +106,21 @@
 					>
 						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
 					</v-btn>
+
+					<v-btn
+						v-if="item.synchronizedCourses && item.synchronizedCourses.length"
+						:title="t('feature-course-sync.EndCourseSyncDialog.title')"
+						:aria-label="t('feature-course-sync.EndCourseSyncDialog.title')"
+						data-testid="class-table-end-course-sync-btn"
+						variant="outlined"
+						color="secondary"
+						size="small"
+						class="mx-1 px-1"
+						min-width="0"
+						@click="onClickEndSyncIcon(item)"
+					>
+						<v-icon>{{ mdiSyncOff }}</v-icon>
+					</v-btn>
 				</template>
 			</template>
 		</v-data-table-server>
@@ -135,6 +150,13 @@
 				/>
 			</template>
 		</v-custom-dialog>
+		<end-course-sync-dialog
+			v-model:is-open="isEndSyncDialogOpen"
+			:course-name="selectedItemForSync.courseName"
+			:group-name="selectedItemForSync.groupName"
+			:course-id="selectedItemForSync.courseId"
+			@success="loadClassList"
+		/>
 
 		<v-btn
 			class="my-5 button-start"
@@ -180,11 +202,13 @@ import {
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { EndCourseSyncDialog } from "@feature-course-sync";
 import { RenderHTML } from "@feature-render-html";
 import {
 	mdiAccountGroupOutline,
 	mdiArrowUp,
 	mdiPencilOutline,
+	mdiSyncOff,
 	mdiTrashCanOutline,
 } from "@mdi/js";
 import { useTitle } from "@vueuse/core";
@@ -261,17 +285,6 @@ const currentYear: ComputedRef<string> = computed(
 	() => schoolsModule.getSchool.years.activeYear.name
 );
 
-const onTabsChange = async (tab: string) => {
-	await groupModule.loadClassesForSchool({
-		schoolYearQuery: schoolYearQueryType.value,
-		calledFrom: ClassRequestContext.ClassOverview,
-	});
-
-	await router.replace({
-		query: { ...route.query, tab },
-	});
-};
-
 const classes: ComputedRef<ClassInfo[]> = computed(
 	() => groupModule.getClasses
 );
@@ -290,11 +303,33 @@ const showGroupAction = (item: ClassInfo) =>
 
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
+const isEndSyncDialogOpen: Ref<boolean> = ref(false);
+
 const selectedItem: Ref<ClassInfo | undefined> = ref();
 
 const selectedItemName: ComputedRef<string> = computed(
 	() => selectedItem.value?.name || "???"
 );
+
+const selectedItemForSync: ComputedRef<{
+	courseName: string;
+	groupName: string;
+	courseId?: string;
+}> = computed(() => {
+	const synchronizedCourse: CourseInfo | undefined =
+		selectedItem.value?.synchronizedCourse;
+
+	return {
+		courseId: synchronizedCourse?.id,
+		courseName: synchronizedCourse?.name ?? "",
+		groupName: selectedItem.value?.name ?? "",
+	};
+});
+
+const onClickEndSyncIcon = (selectedClass: ClassInfo) => {
+	selectedItem.value = selectedClass;
+	isEndSyncDialogOpen.value = true;
+};
 
 const onClickDeleteIcon = (selectedClass: ClassInfo) => {
 	selectedItem.value = selectedClass;
@@ -371,6 +406,21 @@ const onConfirmClassDeletion = async () => {
 	}
 };
 
+const loadClassList = async () => {
+	await groupModule.loadClassesForSchool({
+		schoolYearQuery: schoolYearQueryType.value,
+		calledFrom: ClassRequestContext.ClassOverview,
+	});
+};
+
+const onTabsChange = async (tab: string) => {
+	await loadClassList();
+
+	await router.replace({
+		query: { ...route.query, tab },
+	});
+};
+
 const onUpdateSortBy = async (sortBy: ClassSortItem[]) => {
 	const fieldToSortBy: ClassSortItem = sortBy[0];
 	const key: ClassSortBy | undefined = fieldToSortBy
@@ -382,10 +432,7 @@ const onUpdateSortBy = async (sortBy: ClassSortItem[]) => {
 		fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
 	groupModule.setSortOrder(sortOrder);
 
-	await groupModule.loadClassesForSchool({
-		schoolYearQuery: schoolYearQueryType.value,
-		calledFrom: ClassRequestContext.ClassOverview,
-	});
+	await loadClassList();
 };
 
 const onUpdateCurrentPage = async (currentPage: number) => {
@@ -393,18 +440,12 @@ const onUpdateCurrentPage = async (currentPage: number) => {
 	const skip = (currentPage - 1) * groupModule.getPagination.limit;
 	groupModule.setPagination({ ...pagination.value, skip });
 
-	await groupModule.loadClassesForSchool({
-		schoolYearQuery: schoolYearQueryType.value,
-		calledFrom: ClassRequestContext.ClassOverview,
-	});
+	await loadClassList();
 };
 const onUpdateItemsPerPage = async (itemsPerPage: number) => {
 	groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
 
-	await groupModule.loadClassesForSchool({
-		schoolYearQuery: schoolYearQueryType.value,
-		calledFrom: ClassRequestContext.ClassOverview,
-	});
+	await loadClassList();
 };
 
 onMounted(() => {
@@ -412,13 +453,13 @@ onMounted(() => {
 });
 
 const getInstituteTitle: ComputedRef<string> = computed(() => {
-	switch (process.env.SC_THEME) {
+	switch (envConfigModule.getTheme) {
 		case "n21":
 			return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
 		case "thr":
 			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
 		case "brb":
-			return "Dataport";
+			return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
 		default:
 			return "Dataport";
 	}

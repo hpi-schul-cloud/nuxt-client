@@ -33,6 +33,7 @@ module.exports = defineConfig({
 				"@data-provisioning-options": getDir(
 					"src/modules/data/provisioning-options"
 				),
+				"@data-room": getDir("src/components/data-room"),
 				"@feature-board-file-element": getDir(
 					"src/modules/feature/board-file-element"
 				),
@@ -51,6 +52,7 @@ module.exports = defineConfig({
 				"@feature-board-drawing-element": getDir(
 					"src/modules/feature/board-drawing-element"
 				),
+				"@feature-course-sync": getDir("src/modules/feature/course-sync"),
 				"@feature-board": getDir("src/modules/feature/board"),
 				"@feature-editor": getDir("src/modules/feature/editor"),
 				"@feature-render-html": getDir("src/modules/feature/render-html"),
