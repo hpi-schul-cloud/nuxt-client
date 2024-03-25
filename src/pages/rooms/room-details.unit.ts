@@ -184,6 +184,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			getIsExportModalOpen: false,
 			getVersion: "",
 			getTopics: [],
+			getTasks: [],
 		});
 
 		initializeAxios({
