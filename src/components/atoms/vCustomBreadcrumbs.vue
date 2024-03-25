@@ -5,13 +5,14 @@
 			<template #divider>
 				<v-icon>{{ mdiChevronLeft }}</v-icon>
 			</template>
-			<template #item="{ item }">
+			<template #item="{ item, index }">
 				<v-breadcrumbs-item
 					:href="item.href"
 					:to="item.to"
 					:disabled="item.disabled"
 					:exact="true"
 					class="breadcrumbs-item"
+					:data-testid="`breadcrumb-${index}`"
 				>
 					{{ item.title }}
 				</v-breadcrumbs-item>
