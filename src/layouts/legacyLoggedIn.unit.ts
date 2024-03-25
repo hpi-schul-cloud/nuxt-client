@@ -6,20 +6,18 @@ import FilePathsModule from "@/store/filePaths";
 import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import StatusAlertsModule from "@/store/status-alerts";
-import { STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
-import setupStores from "@@/tests/test-utils/setupStores";
-import legacyLoggedIn from "./legacyLoggedIn.vue";
-
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { reactive } from "vue";
 import { useRoute } from "vue-router";
+import legacyLoggedIn from "./legacyLoggedIn.vue";
 
 const $route = {
 	query: {
