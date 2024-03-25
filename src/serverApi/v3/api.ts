@@ -3449,10 +3449,10 @@ export interface MeResponse {
     user: MeUserResponse;
     /**
      * 
-     * @type {Array<MeRolesReponse>}
+     * @type {Array<MeRoleResponse>}
      * @memberof MeResponse
      */
-    roles: Array<MeRolesReponse>;
+    roles: Array<MeRoleResponse>;
     /**
      * 
      * @type {Array<string>}
@@ -3475,19 +3475,19 @@ export interface MeResponse {
 /**
  * 
  * @export
- * @interface MeRolesReponse
+ * @interface MeRoleResponse
  */
-export interface MeRolesReponse {
+export interface MeRoleResponse {
     /**
      * 
      * @type {string}
-     * @memberof MeRolesReponse
+     * @memberof MeRoleResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof MeRolesReponse
+     * @memberof MeRoleResponse
      */
     name: string;
 }
