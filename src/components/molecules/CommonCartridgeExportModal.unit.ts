@@ -24,6 +24,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			getIsExportModalOpen: true,
 			getVersion: "1.1.0",
 			getTopics: ["topic"],
+			getTasks: ["task"],
 			startExport: jest.fn(),
 			resetExportFlow: jest.fn(),
 		});
