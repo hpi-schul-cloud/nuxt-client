@@ -45,7 +45,10 @@ import CopyModule from "@/store/copy";
 import { useCopy } from "@/composables/copy";
 import LoadingStateModule from "@/store/loading-state";
 import { Router, useRouter } from "vue-router";
-import { CopyApiResponse } from "@/serverApi/v3";
+import {
+	CopyApiResponse,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModule from "@/store/share";
 
@@ -79,16 +82,6 @@ const mockUseSharedLastCreatedElement = jest.mocked(
 jest.mock("@/composables/copy");
 const mockUseCopy = jest.mocked(useCopy);
 
-const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
-	EnvConfigModule,
-	{
-		getEnv: {
-			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-		} as Envs,
-	}
-);
 const mockedEditMode = jest.mocked(useEditMode);
 
 jest.mock("vue-router");
@@ -166,6 +159,23 @@ describe("Board", () => {
 		useRouterMock.mockReturnValue(router);
 	};
 
+	const mockEnvConfigModule = (envs: Partial<Envs> | undefined) => {
+		const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
+			EnvConfigModule,
+			{
+				getEnv: {
+					FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+					FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+					FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+					FEATURE_COLUMN_BOARD_SHARE: true,
+					...envs,
+				} as Envs,
+			}
+		);
+
+		return envConfigModule;
+	};
+
 	const cards = cardSkeletonResponseFactory.buildList(3);
 	const oneColumn = columnResponseFactory.build({ cards });
 	const boardWithOneColumn = boardResponseFactory.build({
@@ -195,8 +205,10 @@ describe("Board", () => {
 		board?: Board;
 		isLoading?: boolean;
 		permissions?: Partial<BoardPermissionChecks>;
+		envs?: Partial<Envs>;
 	}) => {
 		mockRequiredParams(options);
+		const envConfigModule = mockEnvConfigModule(options?.envs);
 
 		const { board } = options ?? {};
 		const boardId = board?.id ?? boardWithOneColumn.id;
@@ -667,7 +679,7 @@ describe("Board", () => {
 			});
 		});
 
-		describe("@onCopyBoard", () => {
+		describe("@copy:board", () => {
 			it("should call the copy function", async () => {
 				const { wrapper } = setup();
 
@@ -690,6 +702,39 @@ describe("Board", () => {
 				expect(router.push).toHaveBeenCalledWith({
 					name: "rooms-board",
 					params: { id: copyModule.getCopyResult?.id },
+				});
+			});
+		});
+
+		describe("@share:board", () => {
+			describe("when feature is enabled", () => {
+				it("should start the share flow", async () => {
+					const { wrapper } = setup({ board: boardWithOneColumn });
+
+					const boardHeader = wrapper.findComponent({
+						name: "BoardHeader",
+					});
+					await boardHeader.vm.$emit("share:board");
+
+					expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+						id: boardWithOneColumn.id,
+						type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+					});
+				});
+			});
+
+			describe("when feature is disabled", () => {
+				it("should do nothing", async () => {
+					const { wrapper } = setup({
+						envs: { FEATURE_COLUMN_BOARD_SHARE: false },
+					});
+
+					const boardHeader = wrapper.findComponent({
+						name: "BoardHeader",
+					});
+					await boardHeader.vm.$emit("share:board");
+
+					expect(shareModule.startShareFlow).not.toHaveBeenCalled();
 				});
 			});
 		});

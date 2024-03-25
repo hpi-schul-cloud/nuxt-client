@@ -238,9 +238,9 @@ describe("RoomBoardCard", () => {
 				});
 
 				describe("when 'share' item is clicked", () => {
-					it("should emit 'copy-board' event", async () => {
+					it("should emit 'share-board' event", async () => {
 						const { wrapper } = setupTeacherMenu({
-							FEATURE_COLUMN_BOARD_SHARE: false,
+							FEATURE_COLUMN_BOARD_SHARE: true,
 						});
 
 						const menuItem = await getMenuItem(
