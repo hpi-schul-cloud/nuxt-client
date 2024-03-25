@@ -41,43 +41,44 @@
 					:error="showError()"
 					:hint="t('common.labels.course')"
 					persistent-hint
-					:menu-props="{ bottom: true, offsetY: true, nudgeBottom: 28 }"
 				/>
 			</div>
 		</template>
 	</v-custom-dialog>
 </template>
 
-<script setup type="ts">
+<script setup lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiInformation } from "@/components/icons/material";
-import { reactive, ref } from "vue";
+import { PropType, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { AllItems, ListItemsObject } from "@/store/types/rooms";
 
 const emit = defineEmits(["import", "cancel", "next"]);
 defineProps({
 	isOpen: { type: Boolean },
 	parentName: { type: String, required: true },
 	parentType: { type: String, required: true },
-	courses: { type:Array, required: true }
+	courses: { type: Array as PropType<AllItems>, required: true },
 });
-	const { t } = useI18n();
+const { t } = useI18n();
 
-	const selectedCourse = ref(undefined);
+const selectedCourse = ref<ListItemsObject | undefined>(undefined);
 
-	const showErrorOnEmpty = ref(false);
-	const showError = () => !(selectedCourse.value) && showErrorOnEmpty.value;
+const showErrorOnEmpty = ref(false);
+const showError = () => !selectedCourse.value && showErrorOnEmpty.value;
 
-	const rules = reactive({
-				required: value => !!value || t("common.validation.required"),
-	});
+const rules = reactive({
+	required: (value: string | undefined) =>
+		!!value || t("common.validation.required"),
+});
 
-	const onNext = () => {
-		showErrorOnEmpty.value = true;
-		const id = selectedCourse.value?.id;
-		if (rules.required(id) === true) {
-			emit('next', id);
-		}
+const onNext = () => {
+	showErrorOnEmpty.value = true;
+	const id = selectedCourse.value?.id;
+	if (rules.required(id) === true) {
+		emit("next", id);
 	}
-	const onCancel = () => emit('cancel')
+};
+const onCancel = () => emit("cancel");
 </script>
