@@ -4800,6 +4800,19 @@ export interface PatchVisibilityParams {
 /**
  * 
  * @export
+ * @interface ProviderConfigResponse
+ */
+export interface ProviderConfigResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProviderConfigResponse
+     */
+    provider: string;
+}
+/**
+ * 
+ * @export
  * @interface PseudonymResponse
  */
 export interface PseudonymResponse {
@@ -5534,6 +5547,43 @@ export interface SchoolResponse {
      * @memberof SchoolResponse
      */
     instanceFeatures: Array<InstanceFeature>;
+}
+/**
+ * 
+ * @export
+ * @interface SchoolSystemResponse
+ */
+export interface SchoolSystemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolSystemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolSystemResponse
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolSystemResponse
+     */
+    alias?: string;
+    /**
+     * 
+     * @type {ProviderConfigResponse}
+     * @memberof SchoolSystemResponse
+     */
+    ldapConfig?: ProviderConfigResponse;
+    /**
+     * 
+     * @type {ProviderConfigResponse}
+     * @memberof SchoolSystemResponse
+     */
+    oauthConfig?: ProviderConfigResponse;
 }
 /**
  * 
@@ -15827,7 +15877,7 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolSystems(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
+        async schoolControllerGetSchoolSystems(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolSystemResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolSystems(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -15917,7 +15967,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<SchoolResponse> {
+        schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>> {
             return localVarFp.schoolControllerGetSchoolSystems(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -16004,7 +16054,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<SchoolResponse>;
+    schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>>;
 
     /**
      * Sets all provisioning options for a system at a school
