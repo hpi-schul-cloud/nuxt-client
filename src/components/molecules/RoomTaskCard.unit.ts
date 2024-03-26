@@ -1,6 +1,8 @@
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
+import { Task } from "@/store/types/room";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -9,8 +11,6 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import RoomTaskCard from "./RoomTaskCard.vue";
-import { Task } from "@/store/types/room";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 
 const testTask = {
 	id: "123",
@@ -575,9 +575,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			describe("test FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to true", () => {
 					it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-						envConfigModule.setEnvs({
+						const envs = envsFactory.build({
 							FEATURE_COPY_SERVICE_ENABLED: true,
-						} as Envs);
+						});
+						envConfigModule.setEnvs(envs);
 						const copyCard = jest.fn();
 						const wrapper = getWrapper({ task: testTask, userRole });
 						wrapper.vm.copyCard = copyCard;
@@ -596,9 +597,10 @@ describe("@/components/molecules/RoomTaskCard", () => {
 
 				describe("when FEATURE_COPY_SERVICE_ENABLED is set to false", () => {
 					it("should not find the copy option in the 'more action' menu", async () => {
-						envConfigModule.setEnvs({
+						const envs = envsFactory.build({
 							FEATURE_COPY_SERVICE_ENABLED: false,
-						} as Envs);
+						});
+						envConfigModule.setEnvs(envs);
 						const wrapper = getWrapper({ task: testTask, userRole });
 
 						const threeDotButton = wrapper.find(".three-dot-button");

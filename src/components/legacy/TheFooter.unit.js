@@ -1,9 +1,10 @@
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
+import { envsFactory } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TheFooter from "./TheFooter";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 describe("@/components/legacy/TheFooter.vue", () => {
 	beforeEach(() => {
@@ -34,7 +35,8 @@ describe("@/components/legacy/TheFooter.vue", () => {
 	});
 
 	it("Env-Variable sets the status page link correctly", () => {
-		envConfigModule.setEnvs({ ALERT_STATUS_URL: "dummy-url.org" });
+		const envs = envsFactory.build({ ALERT_STATUS_URL: "dummy-url.org" });
+		envConfigModule.setEnvs(envs);
 
 		const { wrapper } = setup();
 
@@ -46,10 +48,11 @@ describe("@/components/legacy/TheFooter.vue", () => {
 	});
 
 	it("check that all links are rendered in the footer", () => {
-		envConfigModule.setEnvs({
+		const envs = envsFactory.build({
 			ACCESSIBILITY_REPORT_EMAIL: "dummy-email@org.de",
 			ALERT_STATUS_URL: "dummy-url.org",
 		});
+		envConfigModule.setEnvs(envs);
 
 		const { wrapper } = setup();
 
