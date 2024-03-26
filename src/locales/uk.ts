@@ -527,6 +527,8 @@ export default {
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
+	"components.molecules.share.columnBoard.result.linkLabel":
+		"Посилання на копію дошки",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
 	"components.molecules.share.courses.options.ctlTools.infotext":

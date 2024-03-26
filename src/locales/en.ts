@@ -528,6 +528,8 @@ export default {
 	"components.molecules.share.lessons.result.linkLabel": "Link topic copy",
 	"components.molecules.share.columnBoard.options.infoText":
 		"With the following link, the board can be imported as a copy by other teachers. Personal data will not be imported.",
+	"components.molecules.share.columnBoard.result.linkLabel":
+		"Link to Board copy",
 	"components.molecules.share.options.expiresInDays":
 		"Link expires after 21 days",
 	"components.molecules.share.options.schoolInternally":
