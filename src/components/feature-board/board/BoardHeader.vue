@@ -17,6 +17,7 @@
 					:maxLength="100"
 					:style="{ width: `${fieldWidth}px` }"
 					@update:value="updateBoardTitle"
+					@blur="onBoardTitleBlur"
 				/>
 				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 			</div>
@@ -142,6 +143,12 @@ const onPublishBoard = () => {
 const onUnpublishBoard = () => {
 	if (!hasEditPermission) return;
 	emit("update:visibility", false);
+};
+
+const onBoardTitleBlur = () => {
+	if (boardTitle.value.length < 1) {
+		updateBoardTitle(t("pages.room.boardCard.label.courseBoard"));
+	}
 };
 
 const updateBoardTitle = async (value: string) => {
