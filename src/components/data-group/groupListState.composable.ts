@@ -1,4 +1,4 @@
-import { GroupEntryResponse } from "@/serverApi/v3";
+import { GroupListResponse, GroupResponse } from "@/serverApi/v3";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -12,7 +12,7 @@ export const useGroupListState = () => {
 	const { t } = useI18n();
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-	const groups: Ref<GroupEntryResponse[]> = ref([]);
+	const groups: Ref<GroupResponse[]> = ref([]);
 	const total: Ref<number> = ref(0);
 	const limit: Ref<number> = ref(10);
 	const skip: Ref<number> = ref(0);
@@ -20,11 +20,17 @@ export const useGroupListState = () => {
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 
-	const fetchGroups = async (options?: GroupListFilter): Promise<void> => {
+	const fetchGroups = async (filter?: GroupListFilter): Promise<void> => {
 		isLoading.value = true;
 
 		try {
-			groups.value = await getGroups(options);
+			const response: GroupListResponse = await getGroups(
+				{ limit: limit.value, skip: skip.value },
+				filter
+			);
+
+			total.value = response.total;
+			groups.value = response.data;
 		} catch (errorResponse) {
 			handleError(errorResponse);
 		}

@@ -100,7 +100,7 @@ describe("GroupSelectionDialog", () => {
 			await nextBtn.trigger("click");
 
 			expect(window.location.assign).toHaveBeenCalledWith(
-				`/courses/add?syncWithGroup=${group.id}`
+				`/courses/add?syncedGroupId=${group.id}`
 			);
 		});
 	});

@@ -1,10 +1,6 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { GroupEntryResponse, GroupResponse } from "@/serverApi/v3/api";
-import {
-	groupEntryResponseFactory,
-	groupResponseFactory,
-	mockApiResponse,
-} from "@@/tests/test-utils";
+import { GroupListResponse, GroupResponse } from "@/serverApi/v3/api";
+import { groupResponseFactory, mockApiResponse } from "@@/tests/test-utils";
 import { Group, GroupType, GroupUserRole, useGroupApi } from "@data-group";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 
@@ -67,42 +63,50 @@ describe("GroupApi.composable", () => {
 
 	describe("getGroups", () => {
 		const setup = () => {
-			const group: GroupEntryResponse = groupEntryResponseFactory.build();
+			const groupList: GroupListResponse = {
+				data: [groupResponseFactory.build()],
+				total: 1,
+				skip: 0,
+				limit: 10,
+			};
 
 			groupApi.groupControllerGetAllGroups.mockResolvedValue(
-				mockApiResponse({ data: [group] })
+				mockApiResponse({ data: groupList })
 			);
 
 			return {
-				group,
+				groupList,
 			};
 		};
 
 		it("should call the api for groups", async () => {
 			setup();
 
-			await useGroupApi().getGroups({
-				name: "testName",
-				availableForSynchronization: true,
-			});
+			await useGroupApi().getGroups(
+				{
+					skip: 1,
+					limit: 2,
+				},
+				{
+					name: "testName",
+					availableForSynchronization: true,
+				}
+			);
 
 			expect(groupApi.groupControllerGetAllGroups).toHaveBeenCalledWith(
-				"testName",
-				true
+				1,
+				2,
+				true,
+				"testName"
 			);
 		});
 
 		it("should return a group", async () => {
-			const { group } = setup();
+			const { groupList } = setup();
 
-			const result: GroupEntryResponse[] = await useGroupApi().getGroups();
+			const result: GroupListResponse = await useGroupApi().getGroups();
 
-			expect(result).toEqual<GroupEntryResponse[]>([
-				{
-					id: group.id,
-					name: group.name,
-				},
-			]);
+			expect(result).toEqual<GroupListResponse>(groupList);
 		});
 	});
 });
