@@ -473,6 +473,9 @@ export default {
 	"components.molecules.courseheader.coursedata": "Archivos del curso",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
+	"components.molecules.import.columnBoard.label": "Título del tablero",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Puede cambiar el nombre del tablero a continuación.",
 	"components.molecules.import.columnBoard.options.title": "Importar tablero",
 	"components.molecules.import.columnBoard.options.selectCourse":
 		"Elija el curso",

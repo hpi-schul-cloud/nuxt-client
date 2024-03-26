@@ -471,6 +471,9 @@ export default {
 	"components.molecules.courseheader.coursedata": "Дані курсу",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
+	"components.molecules.import.columnBoard.label": "Назва дошки",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Ви можете перейменувати дошку нижче",
 	"components.molecules.import.columnBoard.options.title": "Дошка імпорту",
 	"components.molecules.import.columnBoard.options.selectCourse":
 		"Оберіть курс",

@@ -467,6 +467,9 @@ export default {
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.columnBoard.label": "Board-Titel",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Das Board kann im Folgenden umbenannt werden. ",
 	"components.molecules.import.columnBoard.options.title": "Board importieren",
 	"components.molecules.import.columnBoard.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
