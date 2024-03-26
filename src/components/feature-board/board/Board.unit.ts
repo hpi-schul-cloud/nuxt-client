@@ -16,21 +16,31 @@ import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
+	envsFactory,
 } from "@@/tests/test-utils/factory";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { mount } from "@vue/test-utils";
-import { Ref, computed, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
 
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
+import { useCopy } from "@/composables/copy";
+import {
+	ConfigResponse,
+	CopyApiResponse,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
+import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
+import LoadingStateModule from "@/store/loading-state";
+import ShareModule from "@/store/share";
 import { BoardCard } from "@/types/board/Card";
 import {
 	useBoardFocusHandler,
@@ -41,16 +51,7 @@ import {
 	useSharedBoardPageInformation,
 	useSharedEditMode,
 } from "@data-board";
-import CopyModule from "@/store/copy";
-import { useCopy } from "@/composables/copy";
-import LoadingStateModule from "@/store/loading-state";
 import { Router, useRouter } from "vue-router";
-import {
-	CopyApiResponse,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import ShareModule from "@/store/share";
 
 jest.mock("@data-board");
 const mockedUseBoardState = jest.mocked(useBoardState);
@@ -159,17 +160,18 @@ describe("Board", () => {
 		useRouterMock.mockReturnValue(router);
 	};
 
-	const mockEnvConfigModule = (envs: Partial<Envs> | undefined) => {
+	const mockEnvConfigModule = (envs: Partial<ConfigResponse> | undefined) => {
+		const envsMock = envsFactory.build({
+			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+			FEATURE_COLUMN_BOARD_SHARE: true,
+			...envs,
+		});
 		const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
 			EnvConfigModule,
 			{
-				getEnv: {
-					FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-					FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-					FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-					FEATURE_COLUMN_BOARD_SHARE: true,
-					...envs,
-				} as Envs,
+				getEnv: envsMock,
 			}
 		);
 
@@ -205,7 +207,7 @@ describe("Board", () => {
 		board?: Board;
 		isLoading?: boolean;
 		permissions?: Partial<BoardPermissionChecks>;
-		envs?: Partial<Envs>;
+		envs?: Partial<ConfigResponse>;
 	}) => {
 		mockRequiredParams(options);
 		const envConfigModule = mockEnvConfigModule(options?.envs);

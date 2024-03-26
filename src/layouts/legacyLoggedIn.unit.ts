@@ -6,10 +6,9 @@ import FilePathsModule from "@/store/filePaths";
 import NotifierModule from "@/store/notifier";
 import SchoolsModule from "@/store/schools";
 import StatusAlertsModule from "@/store/status-alerts";
-import { Envs } from "@/store/types/env-config";
 import { NOTIFIER_MODULE_KEY, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -41,9 +40,10 @@ authModule.setAccessToken("asdf");
 
 filePathsModule.setSpecificFiles("https://dbildungscloud.de");
 
-envConfigModule.setEnvs({
+const envs = envsFactory.build({
 	ALERT_STATUS_URL: "https://status.dbildungscloud.de",
-} as Envs);
+});
+envConfigModule.setEnvs(envs);
 
 jest.mock("vue-router");
 const useRouteMock = <jest.Mock>useRoute;

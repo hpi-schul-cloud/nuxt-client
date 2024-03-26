@@ -161,6 +161,7 @@ import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue
 import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { ApplicationError } from "@/store/types/application-error";
 import { School } from "@/store/types/schools";
 import {
@@ -246,11 +247,11 @@ export default defineComponent({
 			computed(() => envConfigModule.getSchoolTermsOfUseEnabled);
 		const instituteTitle: ComputedRef<string> = computed(() => {
 			switch (envConfigModule.getTheme) {
-				case "n21":
+				case SchulcloudTheme.N21:
 					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
-				case "thr":
+				case SchulcloudTheme.Thr:
 					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-				case "brb":
+				case SchulcloudTheme.Brb:
 					return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
 				default:
 					return "Dataport";

@@ -2,16 +2,18 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { VueWrapper, mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import RoomBoardCard from "./RoomBoardCard.vue";
 
-import { createMock } from "@golevelup/ts-jest";
-import { Router, useRouter } from "vue-router";
-import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
+import {
+	ConfigResponse,
+	ImportUserResponseRoleNamesEnum,
+} from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
+import { createMock } from "@golevelup/ts-jest";
+import { Router, useRouter } from "vue-router";
 import { VListItem, VMenu } from "vuetify/lib/components/index.mjs";
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -52,13 +54,13 @@ describe("RoomBoardCard", () => {
 	const setup = (
 		props: { boardData: BoardData; userRole: ImportUserResponseRoleNamesEnum },
 		options?: object,
-		envs?: Partial<Envs>
+		envs?: Partial<ConfigResponse>
 	) => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 		// Note: router has to be mocked before mounting the component
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: { ...envs } as Envs,
+			getEnv: { ...envs } as ConfigResponse,
 		});
 
 		const wrapper = mount(RoomBoardCard, {
@@ -131,7 +133,7 @@ describe("RoomBoardCard", () => {
 		});
 
 		describe("when user is a teacher", () => {
-			const setupTeacherMenu = (envs?: Partial<Envs>) => {
+			const setupTeacherMenu = (envs?: Partial<ConfigResponse>) => {
 				const { wrapper } = setup(
 					{
 						boardData: mockPublishedBoardData,

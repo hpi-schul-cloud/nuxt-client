@@ -1,7 +1,11 @@
+import { ConfigResponse } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -12,8 +16,8 @@ import {
 	useEditMode,
 } from "@data-board";
 import {
-	BoardMenuActionEdit,
 	BoardMenuActionCopy,
+	BoardMenuActionEdit,
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
 	BoardMenuActionShare,
@@ -22,10 +26,6 @@ import { shallowMount } from "@vue/test-utils";
 import { computed } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
 
 jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -37,7 +37,7 @@ describe("BoardHeader", () => {
 	const setup = (
 		options?: {
 			permissions?: Partial<BoardPermissionChecks>;
-			envs?: Partial<Envs>;
+			envs?: Partial<ConfigResponse>;
 		},
 		props?: { isDraft: boolean }
 	) => {
@@ -57,7 +57,7 @@ describe("BoardHeader", () => {
 		});
 
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: { ...options?.envs } as Envs,
+			getEnv: { ...options?.envs } as ConfigResponse,
 		});
 
 		const wrapper = shallowMount(BoardHeader, {

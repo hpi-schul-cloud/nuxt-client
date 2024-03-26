@@ -1,16 +1,17 @@
-import SchoolsModule from "@/store/schools";
-import EnvConfigModule from "@/store/env-config";
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import BaseModal from "@/components/base/BaseModal.vue";
 import { envConfigModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { default as ldapActivate } from "./LDAPActivate.page.vue";
-import { createStore } from "vuex";
+import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schools";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseModal from "@/components/base/BaseModal.vue";
+import setupStores from "@@/tests/test-utils/setupStores";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { createStore } from "vuex";
+import { default as ldapActivate } from "./LDAPActivate.page.vue";
 
 const mockResponseData = {
 	ok: true,
@@ -109,7 +110,8 @@ describe("ldap/activate", () => {
 			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 		});
-		envConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: false });
+		const envs = envsFactory.build({ FEATURE_USER_MIGRATION_ENABLED: false });
+		envConfigModule.setEnvs(envs);
 	});
 
 	it("should call 'submitaData' action when submit button is clicked and this.$route.query.id is not defined", async () => {
@@ -226,7 +228,8 @@ describe("ldap/activate", () => {
 	});
 
 	it("should show checkbox for user migration", async () => {
-		envConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: true });
+		const envs = envsFactory.build({ FEATURE_USER_MIGRATION_ENABLED: true });
+		envConfigModule.setEnvs(envs);
 
 		const { storeOptions } = getStoreOptions();
 
