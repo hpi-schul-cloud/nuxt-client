@@ -3,6 +3,7 @@ import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
+import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
@@ -14,20 +15,24 @@ import AuthSystems from "./AuthSystems";
 
 const generateProps = () => ({
 	systems: [
-		{ _id: "1", type: "sample system" }, // deletable: true, editable: false
-		{
-			_id: "2",
+		schoolSystemResponseFactory.build({ id: "1", type: "sample system" }), // deletable: true, editable: false
+		schoolSystemResponseFactory.build({
+			id: "2",
 			type: "ldap",
 			ldapConfig: { provider: "iserv-idm" },
 			oauthConfig: { provider: "iserv-idm" },
-		}, // deletable: false, editable: false
-		{ _id: "3", type: "ldap", ldapConfig: { provider: "general" } }, // deletable: true, editable: true
-		{
-			_id: "4",
+		}), // deletable: false, editable: false
+		schoolSystemResponseFactory.build({
+			id: "3",
+			type: "ldap",
+			ldapConfig: { provider: "general" },
+		}), // deletable: true, editable: true
+		schoolSystemResponseFactory.build({
+			id: "4",
 			type: "oauth",
 			oauthConfig: { provider: "sanis-idm" },
 			alias: "SANIS",
-		}, // deletable: true, editable: false
+		}), // deletable: true, editable: false
 	],
 	confirmDeleteDialog: {
 		isOpen: false,
