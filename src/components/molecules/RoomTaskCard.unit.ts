@@ -29,7 +29,7 @@ const testTask = {
 	courseName: "Mathe",
 	availableDate: "2017-09-28T08:00:00.000Z",
 	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
+	displayColor: "#3a424b",
 	description: "some description here",
 };
 
@@ -50,7 +50,7 @@ const draftTestTask = {
 	courseName: "Mathe",
 	availableDate: "2017-09-28T08:00:00.000Z",
 	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
+	displayColor: "#3a424b",
 	description: "some description here",
 };
 
@@ -71,7 +71,7 @@ const finishedTestTask = {
 	courseName: "Mathe",
 	availableDate: "2017-09-28T08:00:00.000Z",
 	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
+	displayColor: "#3a424b",
 	description: "some description here",
 };
 
@@ -92,7 +92,7 @@ const overdueTestTask = {
 	courseName: "Mathe",
 	availableDate: "2017-09-28T08:00:00.000Z",
 	dueDate: "2015-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
+	displayColor: "#3a424b",
 	description: "some description here",
 };
 
@@ -113,7 +113,7 @@ const noDueTestTask = {
 	courseName: "Mathe",
 	availableDate: "2017-09-28T08:00:00.000Z",
 	dueDate: undefined,
-	displayColor: "#54616e",
+	displayColor: "#3a424b",
 	description: "some description here",
 };
 
@@ -134,7 +134,7 @@ const plannedTestTask = {
 	courseName: "Mathe",
 	availableDate: "2300-09-01T08:00:00.000Z",
 	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
+	displayColor: "#3a424b",
 	description: "some description here",
 };
 
@@ -155,7 +155,7 @@ const studentFinishedTestTask = {
 	courseName: "Mathe",
 	availableDate: "2017-09-28T08:00:00.000Z",
 	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
+	displayColor: "#3a424b",
 	description: "some description here",
 };
 
@@ -176,7 +176,7 @@ const studentTestTask = {
 	courseName: "Mathe",
 	availableDate: "2017-09-28T08:00:00.000Z",
 	dueDate: "2300-09-28T15:00:00.000Z",
-	displayColor: "#54616e",
+	displayColor: "#3a424b",
 	description: "some description here",
 };
 
@@ -533,7 +533,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						courseName: "Mathe",
 						availableDate: availableDate.toISOString(),
 						dueDate: "2300-09-28T15:00:00.000Z",
-						displayColor: "#54616e",
+						displayColor: "#3a424b",
 						description: "some description here",
 					},
 				};
@@ -563,7 +563,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						courseName: "Mathe",
 						availableDate: inFutureDate.toISOString(),
 						dueDate: "2300-09-28T15:00:00.000Z",
-						displayColor: "#54616e",
+						displayColor: "#3a424b",
 						description: "some description here",
 					},
 				};
@@ -677,7 +677,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						courseName: "Mathe",
 						availableDate: "2017-09-28T08:00:00.000Z",
 						dueDate: dueDate.toISOString(),
-						displayColor: "#54616e",
+						displayColor: "#3a424b",
 						description: "some description here",
 					},
 				};
@@ -707,7 +707,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						courseName: "Mathe",
 						availableDate: "2017-09-28T08:00:00.000Z",
 						dueDate: "2000-01-01T00:00:00.000Z",
-						displayColor: "#54616e",
+						displayColor: "#3a424b",
 						description: "some description here",
 					},
 				};
@@ -738,7 +738,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						courseName: "Mathe",
 						availableDate: "2017-09-28T08:00:00.000Z",
 						dueDate: "2000-01-01T00:00:00.000Z",
-						displayColor: "#54616e",
+						displayColor: "#3a424b",
 						description: "some description here",
 					},
 				};
@@ -769,7 +769,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 						courseName: "Mathe",
 						availableDate: "2017-09-28T08:00:00.000Z",
 						dueDate: "2000-01-01T00:00:00.000Z",
-						displayColor: "#54616e",
+						displayColor: "#3a424b",
 						description: "some description here",
 					},
 				};

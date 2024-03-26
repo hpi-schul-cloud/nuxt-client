@@ -10,7 +10,7 @@ describe("@components/share/SelectCourseModal", () => {
 		id: "1234",
 		title: "Mathe",
 		shortTitle: "Ma",
-		displayColor: "#54616e",
+		displayColor: "#3a424b",
 	};
 	const propsData = {
 		isOpen: true,

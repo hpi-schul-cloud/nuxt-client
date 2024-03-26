@@ -48,7 +48,7 @@ const setup = (
 ) => {
 	const room = {
 		roomId: "456",
-		displayColor: "#54616e",
+		displayColor: "#3a424b",
 	};
 	const ariaLabel =
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken";

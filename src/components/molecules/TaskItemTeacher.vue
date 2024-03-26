@@ -178,7 +178,7 @@ export default {
 			return this.isDraft ? "$taskDraft" : "$taskOpenFilled";
 		},
 		iconColor() {
-			const defaultColor = "#54616e";
+			const defaultColor = "#3a424b";
 			return this.task.displayColor || defaultColor;
 		},
 		taskLabel() {

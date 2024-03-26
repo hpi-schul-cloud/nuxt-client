@@ -6,7 +6,7 @@ export const courseMetadataResponseFactory =
 		id: `course${sequence}`,
 		title: "Mathe",
 		shortTitle: "Ma",
-		displayColor: "#54616e",
+		displayColor: "#3a424b",
 		startDate: new Date().toISOString(),
 		untilDate: new Date().toISOString(),
 		copyingSince: new Date().toISOString(),
