@@ -181,6 +181,7 @@ import {
 	ClassRequestContext,
 	ClassSortBy,
 	SchoolYearQueryType,
+	SchulcloudTheme,
 } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
@@ -449,11 +450,11 @@ onMounted(() => {
 
 const getInstituteTitle: ComputedRef<string> = computed(() => {
 	switch (envConfigModule.getTheme) {
-		case "n21":
+		case SchulcloudTheme.N21:
 			return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
-		case "thr":
+		case SchulcloudTheme.Thr:
 			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-		case "brb":
+		case SchulcloudTheme.Brb:
 			return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
 		default:
 			return "Dataport";

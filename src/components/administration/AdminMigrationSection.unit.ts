@@ -1,7 +1,7 @@
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -49,7 +49,7 @@ describe("AdminMigrationSection", () => {
 
 		envConfigModule = createModuleMocks(EnvConfigModule, {
 			getAccessibilityReportEmail: "nbc-support@netz-21.de",
-			getEnv: {} as Envs,
+			getEnv: {} as ConfigResponse,
 			...envConfigGetters,
 		});
 
@@ -963,7 +963,7 @@ describe("AdminMigrationSection", () => {
 							},
 						},
 						{
-							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as Envs,
+							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as ConfigResponse,
 						}
 					);
 
@@ -985,7 +985,7 @@ describe("AdminMigrationSection", () => {
 							},
 						},
 						{
-							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as Envs,
+							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as ConfigResponse,
 						}
 					);
 
@@ -1004,7 +1004,7 @@ describe("AdminMigrationSection", () => {
 							getUserLoginMigration: undefined,
 						},
 						{
-							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as Envs,
+							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as ConfigResponse,
 						}
 					);
 
@@ -1033,7 +1033,7 @@ describe("AdminMigrationSection", () => {
 							},
 						},
 						{
-							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as Envs,
+							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as ConfigResponse,
 						}
 					);
 

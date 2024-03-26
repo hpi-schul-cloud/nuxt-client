@@ -21,6 +21,7 @@ export default {
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.actions.share": "Compartir",
 	"common.actions.shareCourse": "Compartir copia de la cotización",
+	"common.actions.shareBoard": "Compartir copia de la tablón",
 	"common.actions.update": "Actualizar",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
@@ -472,6 +473,11 @@ export default {
 	"components.molecules.courseheader.coursedata": "Archivos del curso",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
+	"components.molecules.import.columnBoard.options.title": "Importar tablero",
+	"components.molecules.import.columnBoard.options.selectCourse":
+		"Elija el curso",
+	"components.molecules.import.columnBoard.options.selectCourse.infoText":
+		"Seleccione el curso al que desea importar el tablero.",
 	"components.molecules.import.courses.label": "Curso",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Se creará una copia.<br>No se importarán datos personales.<br>No se copiarán herramientas externas.<br>Se puede cambiar el nombre del curso a continuación.",
@@ -517,6 +523,8 @@ export default {
 		"Ninguno. El usuario es recién creado.",
 	"components.molecules.importUsersMatch.write": "Introduzca nombre o apellido",
 	"components.molecules.MintEcFooter.chapters": "Resumen del capítulo",
+	"components.molecules.share.columnBoard.options.infoText":
+		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
 	"components.molecules.share.courses.options.ctlTools.infotext":

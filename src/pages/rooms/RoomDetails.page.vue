@@ -132,6 +132,7 @@ import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import {
 	COPY_MODULE_KEY,
+	SHARE_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	ROOM_MODULE_KEY,
 	AUTH_MODULE_KEY,
@@ -167,7 +168,7 @@ export default defineComponent({
 	},
 	inject: {
 		copyModule: { from: COPY_MODULE_KEY },
-		shareModule: "shareModule",
+		shareModule: { from: SHARE_MODULE_KEY },
 		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
 		roomModule: { from: ROOM_MODULE_KEY },
 		authModule: { from: AUTH_MODULE_KEY },

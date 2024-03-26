@@ -67,12 +67,14 @@ import {
 	mdiUndoVariant,
 	mdiViewDashboard,
 	mdiContentCopy,
-} from "@mdi/js";
+	mdiShareVariantOutline,
+} from "@/components/icons/material";
 import RoomDotMenu from "./RoomDotMenu.vue";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 const props = defineProps({
 	columnBoardItem: { type: Object, required: true },
@@ -92,12 +94,15 @@ const emit = defineEmits([
 	"on-drag",
 	"move-element",
 	"copy-board",
+	"share-board",
 	"update-visibility",
 	"delete-board",
 ]);
 
 const router = useRouter();
 const { t } = useI18n();
+
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const cardTitle = computed(() => {
 	const titlePrefix = t("pages.room.boardCard.label.columnBoard");
@@ -181,6 +186,17 @@ const actionsMenuItems = computed(() => {
 			toRef(props, "boardCardIndex").value
 		}`,
 	});
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
+		actions.push({
+			icon: mdiShareVariantOutline,
+			action: () => emit("share-board"),
+			name: t("common.actions.shareBoard"),
+			dataTestId: `board-card-menu-action-share-${
+				toRef(props, "boardCardIndex").value
+			}`,
+		});
+	}
 
 	if (!isDraft.value) {
 		actions.push({

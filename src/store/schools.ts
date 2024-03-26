@@ -250,7 +250,10 @@ export default class SchoolsModule extends VuexModule {
 	async deleteSystem(systemId: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			if (envConfigModule.getEnv.FEATURE_NEST_SYSTEMS_API_ENABLED) {
+			if (
+				"FEATURE_NEST_SYSTEMS_API_ENABLED" in envConfigModule.getEnv &&
+				envConfigModule.getEnv.FEATURE_NEST_SYSTEMS_API_ENABLED
+			) {
 				await this.systemsApi.systemControllerDeleteSystem(systemId);
 			} else {
 				await $axios.delete(`v1/systems/${systemId}`);
