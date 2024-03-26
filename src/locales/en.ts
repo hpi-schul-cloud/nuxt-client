@@ -21,6 +21,7 @@ export default {
 	"common.actions.scrollToTop": "Scroll up",
 	"common.actions.share": "Share",
 	"common.actions.shareCourse": "Share course copy",
+	"common.actions.shareBoard": "Share board copy",
 	"common.actions.update": "Update",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
@@ -389,6 +390,8 @@ export default {
 	"components.molecules.admintablelegend.help": "Help section",
 	"components.molecules.admintablelegend.hint":
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
+	"components.molecules.admintablelegend.thr":
+		"Some or all of your school's user data is synchronised from an external source (LDAP, IDM, school portal, etc.). Editing this user master data is therefore only possible in the source system, not in the school cloud. Creating new students or teachers is also only possible in the source system.",
 	"components.molecules.ContentCard.report.body":
 		"Report the content with the ID",
 	"components.molecules.ContentCard.report.email":
@@ -459,6 +462,11 @@ export default {
 	"components.molecules.courseheader.coursedata": "Course data",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.columnBoard.options.title": "Import board",
+	"components.molecules.import.columnBoard.options.selectCourse":
+		"Select course",
+	"components.molecules.import.columnBoard.options.selectCourse.infoText":
+		"Please select the course into which you would like to import the board.",
 	"components.molecules.import.courses.label": "Course",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"A copy will be created.<br>Personal data will not be imported.<br>External tools will not be copied.<br>The course can be renamed below.",
@@ -515,6 +523,8 @@ export default {
 	"components.molecules.share.lessons.options.infoText":
 		"With the following link, the topic can be imported as a copy by other teachers. Personal data will not be imported.",
 	"components.molecules.share.lessons.result.linkLabel": "Link topic copy",
+	"components.molecules.share.columnBoard.options.infoText":
+		"With the following link, the board can be imported as a copy by other teachers. Personal data will not be imported.",
 	"components.molecules.share.options.expiresInDays":
 		"Link expires after 21 days",
 	"components.molecules.share.options.schoolInternally":
@@ -1364,7 +1374,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Expired",
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
 	"pages.room.teacher.emptyState":
-		"Add learning content such as assignments or topics to the course and then sort them.",
+		"Add and sort learning content to the course.",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
 	"pages.rooms.allRooms.emptyState.title":
 		"Currently, there are no courses here.",

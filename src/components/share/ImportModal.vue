@@ -11,7 +11,7 @@
 	>
 		<template #title>
 			<div ref="textTitle" class="text-h4 my-2">
-				{{ $t(`components.molecules.import.${parentType}.options.title`) }}
+				{{ t(`components.molecules.import.${parentType}.options.title`) }}
 			</div>
 		</template>
 
@@ -25,21 +25,21 @@
 						data-testid="import-modal-external-tools-info"
 						v-if="ctlToolsEnabled && parentType === 'courses'"
 						:html="
-							$t(
+							t(
 								`components.molecules.import.${parentType}.options.ctlTools.infoText`
 							)
 						"
 					/>
 					<div v-else data-testid="import-modal-coursefiles-info">
 						{{
-							$t(`components.molecules.import.${parentType}.options.infoText`)
+							t(`components.molecules.import.${parentType}.options.infoText`)
 						}}
 					</div>
 				</div>
 				<v-text-field
 					ref="nameInputText"
 					v-model="newName"
-					:label="$t(`components.molecules.import.${parentType}.label`)"
+					:label="t(`components.molecules.import.${parentType}.label`)"
 					:rules="[rules.required]"
 				/>
 			</div>
@@ -47,59 +47,42 @@
 	</v-custom-dialog>
 </template>
 
-<script>
+<script setup>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
-import { computed, defineComponent, reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { RenderHTML } from "@feature-render-html";
 
-export default defineComponent({
-	name: "ImportModal",
-	components: {
-		RenderHTML,
-		vCustomDialog,
-	},
-	emits: ["import", "cancel"],
-	props: {
-		isOpen: { type: Boolean },
-		parentName: { type: String, required: true },
-		parentType: { type: String, required: true },
-	},
-	setup(props, { emit }) {
-		const { t } = useI18n();
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		const nameInput = ref(undefined);
+const emit = defineEmits(["import", "cancel"]);
+const props = defineProps({
+	isOpen: { type: Boolean },
+	parentName: { type: String, required: true },
+	parentType: { type: String, required: true },
+});
 
-		const rules = reactive({
-			required: (value) => !!value || t("common.validation.required"),
-		});
+const { t } = useI18n();
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const nameInput = ref(undefined);
 
-		const newName = computed({
-			get: () => nameInput.value ?? props.parentName,
-			set: (value) => (nameInput.value = value),
-		});
+const rules = reactive({
+	required: (value) => !!value || t("common.validation.required"),
+});
 
-		const onConfirm = () => {
-			if (rules.required(newName.value) === true) {
-				emit("import", newName.value);
-			}
-		};
-		const onCancel = () => emit("cancel");
+const newName = computed({
+	get: () => nameInput.value ?? props.parentName,
+	set: (value) => (nameInput.value = value),
+});
 
-		const ctlToolsEnabled = computed(() => {
-			return envConfigModule.getCtlToolsTabEnabled;
-		});
+const onConfirm = () => {
+	if (rules.required(newName.value) === true) {
+		emit("import", newName.value);
+	}
+};
+const onCancel = () => emit("cancel");
 
-		return {
-			onConfirm,
-			onCancel,
-			mdiInformation,
-			rules,
-			newName,
-			ctlToolsEnabled,
-		};
-	},
+const ctlToolsEnabled = computed(() => {
+	return envConfigModule.getCtlToolsTabEnabled;
 });
 </script>

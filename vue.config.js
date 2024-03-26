@@ -66,6 +66,7 @@ module.exports = defineConfig({
 				"@ui-date-time-picker": getDir("src/components/ui-date-time-picker"),
 				"@ui-light-box": getDir("src/components/ui-light-box"),
 				"@ui-speed-dial-menu": getDir("src/components/ui-speed-dial-menu"),
+				"@ui-room-details": getDir("src/components/ui-room-details"),
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
 				"@util-vue": getDir("src/components/util-vue"),

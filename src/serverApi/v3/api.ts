@@ -641,10 +641,10 @@ export interface ConfigResponse {
     TLDRAW__ASSETS_MAX_SIZE: number;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof ConfigResponse
      */
-    TLDRAW__ASSETS_ALLOWED_EXTENSIONS_LIST?: string;
+    TLDRAW__ASSETS_ALLOWED_MIME_TYPES_LIST: Array<string>;
     /**
      * 
      * @type {boolean}
@@ -753,6 +753,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COLUMN_BOARD_SHARE: boolean;
     /**
      * 
      * @type {boolean}
@@ -3574,10 +3580,10 @@ export interface MeResponse {
     user: MeUserResponse;
     /**
      * 
-     * @type {Array<MeRolesReponse>}
+     * @type {Array<MeRoleResponse>}
      * @memberof MeResponse
      */
-    roles: Array<MeRolesReponse>;
+    roles: Array<MeRoleResponse>;
     /**
      * 
      * @type {Array<string>}
@@ -3600,19 +3606,19 @@ export interface MeResponse {
 /**
  * 
  * @export
- * @interface MeRolesReponse
+ * @interface MeRoleResponse
  */
-export interface MeRolesReponse {
+export interface MeRoleResponse {
     /**
      * 
      * @type {string}
-     * @memberof MeRolesReponse
+     * @memberof MeRoleResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof MeRolesReponse
+     * @memberof MeRoleResponse
      */
     name: string;
 }
@@ -5755,7 +5761,8 @@ export interface ShareTokenBodyParams {
 export enum ShareTokenBodyParamsParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**
@@ -5810,7 +5817,8 @@ export interface ShareTokenInfoResponse {
 export enum ShareTokenInfoResponseParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**
@@ -5840,7 +5848,8 @@ export interface ShareTokenPayloadResponse {
 export enum ShareTokenPayloadResponseParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**

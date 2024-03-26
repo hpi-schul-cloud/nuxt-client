@@ -454,13 +454,13 @@ onMounted(() => {
 });
 
 const getInstituteTitle: ComputedRef<string> = computed(() => {
-	switch (process.env.SC_THEME) {
+	switch (envConfigModule.getTheme) {
 		case SchulcloudTheme.N21:
 			return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
 		case SchulcloudTheme.Thr:
 			return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
 		case SchulcloudTheme.Brb:
-			return "Dataport";
+			return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
 		default:
 			return "Dataport";
 	}

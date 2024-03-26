@@ -412,6 +412,72 @@ describe("@components/share/ImportFlow", () => {
 					});
 				});
 			});
+
+			describe("when parent is a column board", () => {
+				const validateShareTokenMock = () =>
+					Promise.resolve({
+						token,
+						parentType: ShareTokenInfoResponseParentTypeEnum.ColumnBoard,
+						parentName: originalName,
+					});
+
+				it("should open selectCourseModal", async () => {
+					copyModuleMock.validateShareToken = validateShareTokenMock;
+					const { wrapper } = setup();
+					await nextTick();
+
+					const selectCourseModal = wrapper.findComponent({
+						name: "select-course-modal",
+					});
+
+					expect(selectCourseModal.props("isOpen")).toBe(true);
+				});
+
+				it("should open the importModal after selecting the course and closing the modal", async () => {
+					copyModuleMock.validateShareToken = validateShareTokenMock;
+					const { wrapper } = setup();
+					await nextTick();
+
+					const select = wrapper.findComponent({ name: "v-select" });
+					select.setValue(course);
+
+					const selectCourseDialog = wrapper
+						.findComponent(SelectCourseModal)
+						.findComponent(vCustomDialog);
+					selectCourseDialog.vm.$emit("next");
+
+					await nextTick();
+
+					const importModal = wrapper.findComponent({ name: "import-modal" });
+					expect(importModal.props("isOpen")).toBe(true);
+				});
+
+				it("should call copyByShareToken when import is started", async () => {
+					copyModuleMock.validateShareToken = validateShareTokenMock;
+					const { wrapper } = setup();
+					await nextTick();
+
+					const select = wrapper.findComponent({ name: "v-select" });
+					select.setValue(course);
+
+					const selectCourseDialog = wrapper
+						.findComponent(SelectCourseModal)
+						.findComponent(vCustomDialog);
+					selectCourseDialog.vm.$emit("next");
+
+					const importModalDialog = wrapper
+						.findComponent(ImportModal)
+						.findComponent(vCustomDialog);
+					importModalDialog.vm.$emit("dialog-confirmed");
+
+					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
+						destinationCourseId: course.id,
+						token,
+						type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+						newName: originalName,
+					});
+				});
+			});
 		});
 	});
 });

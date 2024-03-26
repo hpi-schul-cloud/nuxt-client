@@ -8,6 +8,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -15,6 +16,7 @@ import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
+	envsFactory,
 } from "@@/tests/test-utils/factory";
 import {
 	createTestingI18n,
@@ -30,10 +32,15 @@ import BoardHeaderVue from "./BoardHeader.vue";
 
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import { useCopy } from "@/composables/copy";
-import { ConfigResponse, CopyApiResponse } from "@/serverApi/v3";
+import {
+	ConfigResponse,
+	CopyApiResponse,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
+import ShareModule from "@/store/share";
 import { BoardCard } from "@/types/board/Card";
 import {
 	useBoardFocusHandler,
@@ -76,16 +83,6 @@ const mockUseSharedLastCreatedElement = jest.mocked(
 jest.mock("@/composables/copy");
 const mockUseCopy = jest.mocked(useCopy);
 
-const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
-	EnvConfigModule,
-	{
-		getEnv: {
-			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-		} as ConfigResponse,
-	}
-);
 const mockedEditMode = jest.mocked(useEditMode);
 
 jest.mock("vue-router");
@@ -163,6 +160,24 @@ describe("Board", () => {
 		useRouterMock.mockReturnValue(router);
 	};
 
+	const mockEnvConfigModule = (envs: Partial<ConfigResponse> | undefined) => {
+		const envsMock = envsFactory.build({
+			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+			FEATURE_COLUMN_BOARD_SHARE: true,
+			...envs,
+		});
+		const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(
+			EnvConfigModule,
+			{
+				getEnv: envsMock,
+			}
+		);
+
+		return envConfigModule;
+	};
+
 	const cards = cardSkeletonResponseFactory.buildList(3);
 	const oneColumn = columnResponseFactory.build({ cards });
 	const boardWithOneColumn = boardResponseFactory.build({
@@ -186,12 +201,16 @@ describe("Board", () => {
 	});
 	const loadingStateModule = createModuleMocks(LoadingStateModule);
 
+	const shareModule = createModuleMocks(ShareModule);
+
 	const setup = (options?: {
 		board?: Board;
 		isLoading?: boolean;
 		permissions?: Partial<BoardPermissionChecks>;
+		envs?: Partial<ConfigResponse>;
 	}) => {
 		mockRequiredParams(options);
+		const envConfigModule = mockEnvConfigModule(options?.envs);
 
 		const { board } = options ?? {};
 		const boardId = board?.id ?? boardWithOneColumn.id;
@@ -203,6 +222,7 @@ describe("Board", () => {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					loadingStateModule,
+					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				},
 			},
 			propsData: { boardId },
@@ -661,7 +681,7 @@ describe("Board", () => {
 			});
 		});
 
-		describe("@onCopyBoard", () => {
+		describe("@copy:board", () => {
 			it("should call the copy function", async () => {
 				const { wrapper } = setup();
 
@@ -684,6 +704,39 @@ describe("Board", () => {
 				expect(router.push).toHaveBeenCalledWith({
 					name: "rooms-board",
 					params: { id: copyModule.getCopyResult?.id },
+				});
+			});
+		});
+
+		describe("@share:board", () => {
+			describe("when feature is enabled", () => {
+				it("should start the share flow", async () => {
+					const { wrapper } = setup({ board: boardWithOneColumn });
+
+					const boardHeader = wrapper.findComponent({
+						name: "BoardHeader",
+					});
+					await boardHeader.vm.$emit("share:board");
+
+					expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+						id: boardWithOneColumn.id,
+						type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+					});
+				});
+			});
+
+			describe("when feature is disabled", () => {
+				it("should do nothing", async () => {
+					const { wrapper } = setup({
+						envs: { FEATURE_COLUMN_BOARD_SHARE: false },
+					});
+
+					const boardHeader = wrapper.findComponent({
+						name: "BoardHeader",
+					});
+					await boardHeader.vm.$emit("share:board");
+
+					expect(shareModule.startShareFlow).not.toHaveBeenCalled();
 				});
 			});
 		});

@@ -252,7 +252,7 @@ export default defineComponent({
 				case SchulcloudTheme.Thr:
 					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
 				case SchulcloudTheme.Brb:
-					return "Dataport";
+					return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
 				default:
 					return "Dataport";
 			}

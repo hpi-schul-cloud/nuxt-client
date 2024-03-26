@@ -29,7 +29,10 @@
 				</base-link>
 			</strong>
 		</span>
-		<p class="text-grey mt-6">
+		<p v-if="theme === 'thr'" class="text-grey mt-6">
+			{{ $t("components.molecules.admintablelegend.thr") }}
+		</p>
+		<p v-else class="text-grey mt-6">
 			{{
 				$t("components.molecules.admintablelegend.hint", {
 					institute_title: setInstituteTitle,
@@ -41,7 +44,7 @@
 
 <script>
 import { SchulcloudTheme } from "@/serverApi/v3";
-
+import { envConfigModule } from "@/store";
 export default {
 	props: {
 		icons: {
@@ -58,17 +61,17 @@ export default {
 	},
 	data() {
 		// This solely exists to appear in the coverage report
-		return {};
+		return { theme: envConfigModule.getTheme };
 	},
 	computed: {
 		setInstituteTitle() {
-			switch (process.env.SC_THEME) {
+			switch (envConfigModule.getTheme) {
 				case SchulcloudTheme.N21:
 					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
 				case SchulcloudTheme.Thr:
 					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
 				case SchulcloudTheme.Brb:
-					return "Dataport";
+					return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
 				default:
 					return "Dataport";
 			}
