@@ -5797,7 +5797,8 @@ export interface ShareTokenBodyParams {
 export enum ShareTokenBodyParamsParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**
@@ -5852,7 +5853,8 @@ export interface ShareTokenInfoResponse {
 export enum ShareTokenInfoResponseParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**
@@ -5882,7 +5884,8 @@ export interface ShareTokenPayloadResponse {
 export enum ShareTokenPayloadResponseParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**

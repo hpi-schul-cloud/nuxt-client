@@ -16,11 +16,16 @@ import {
 	BoardMenuActionCopy,
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
+	BoardMenuActionShare,
 } from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import EnvConfigModule from "@/store/env-config";
+import { Envs } from "@/store/types/env-config";
 
 jest.mock("@data-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -32,6 +37,7 @@ describe("BoardHeader", () => {
 	const setup = (
 		options?: {
 			permissions?: Partial<BoardPermissionChecks>;
+			envs?: Partial<Envs>;
 		},
 		props?: { isDraft: boolean }
 	) => {
@@ -50,9 +56,16 @@ describe("BoardHeader", () => {
 			isFocusContained: undefined,
 		});
 
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: { ...options?.envs } as Envs,
+		});
+
 		const wrapper = shallowMount(BoardHeader, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
 			},
 			props: {
 				title: "title-text",
@@ -98,6 +111,38 @@ describe("BoardHeader", () => {
 
 				expect(boardMenuComponent.length).toStrictEqual(1);
 			});
+
+			it("should enable copying", () => {
+				const { wrapper } = setup({
+					permissions: { hasEditPermission: true },
+				});
+
+				const editButton = wrapper.findComponent(BoardMenuActionEdit);
+
+				expect(editButton.exists()).toBe(true);
+			});
+
+			it("should enable sharing with feature flag", () => {
+				const { wrapper } = setup({
+					permissions: { hasEditPermission: true },
+					envs: { FEATURE_COLUMN_BOARD_SHARE: true },
+				});
+
+				const shareButton = wrapper.findComponent(BoardMenuActionShare);
+
+				expect(shareButton.exists()).toBe(true);
+			});
+
+			it("should disable sharing with feature flag", () => {
+				const { wrapper } = setup({
+					permissions: { hasEditPermission: true },
+					envs: { FEATURE_COLUMN_BOARD_SHARE: false },
+				});
+
+				const shareButton = wrapper.findComponent(BoardMenuActionShare);
+
+				expect(shareButton.exists()).toBe(false);
+			});
 		});
 	});
 
@@ -106,20 +151,20 @@ describe("BoardHeader", () => {
 			const { startEditMode, wrapper } = setup();
 
 			const editButton = wrapper.findComponent(BoardMenuActionEdit);
-			editButton.vm.$emit("click");
+			await editButton.trigger("click");
 
 			expect(startEditMode).toBeCalled();
 		});
 	});
 
 	describe("when the title is updated", () => {
-		it("should emit 'update:title'", () => {
+		it("should emit 'update:title'", async () => {
 			jest.useFakeTimers();
 
 			const { wrapper } = setup();
 
 			const titleInput = wrapper.findComponent(BoardAnyTitleInput);
-			titleInput.vm.$emit("update:value", "new-title");
+			await titleInput.vm.$emit("update:value", "new-title");
 
 			jest.runAllTimers();
 
@@ -135,7 +180,21 @@ describe("BoardHeader", () => {
 			const copyButton = wrapper.findComponent(BoardMenuActionCopy);
 			await copyButton.trigger("click");
 
-			expect(wrapper.emitted("copy:board")).toBeDefined();
+			expect(wrapper.emitted("copy:board")).toHaveLength(1);
+		});
+	});
+
+	describe("when the 'share' menu button is clicked", () => {
+		it("should emit 'share:board'", async () => {
+			const { wrapper } = setup({
+				permissions: { hasEditPermission: true },
+				envs: { FEATURE_COLUMN_BOARD_SHARE: true },
+			});
+
+			const copyButton = wrapper.findComponent(BoardMenuActionShare);
+			await copyButton.trigger("click");
+
+			expect(wrapper.emitted("share:board")).toHaveLength(1);
 		});
 	});
 

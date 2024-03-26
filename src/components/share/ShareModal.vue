@@ -23,15 +23,15 @@
 							<v-icon color="info" :icon="mdiInformation" />
 						</div>
 						<div>
-							{{ $t(`components.molecules.share.${type}.options.infoText`) }}
+							{{ t(`components.molecules.share.${type}.options.infoText`) }}
 							<br />
-							{{ $t("components.molecules.copyResult.courseFiles.info") }}
+							{{ t("components.molecules.copyResult.courseFiles.info") }}
 							<div
 								data-testid="share-modal-external-tools-info"
 								v-if="ctlToolsEnabled"
 							>
 								{{
-									$t(
+									t(
 										`components.molecules.share.courses.options.ctlTools.infotext`
 									)
 								}}
@@ -57,7 +57,7 @@
 	</v-custom-dialog>
 </template>
 
-<script>
+<script setup>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
@@ -66,105 +66,76 @@ import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { mdiInformation } from "@mdi/js";
-import { computed, defineComponent, inject, ref } from "vue";
+import { mdiInformation } from "@/components/icons/material";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-// eslint-disable-next-line vue/require-direct-export
-export default defineComponent({
-	name: "ShareModal",
-	components: {
-		ShareModalOptionsForm,
-		ShareModalResult,
-		vCustomDialog,
+const props = defineProps({
+	type: {
+		type: String,
+		required: true,
+		validator: (type) =>
+			Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
 	},
-	props: {
-		type: {
-			type: String,
-			required: true,
-			validator: (type) =>
-				Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
-		},
-	},
-	setup(props) {
-		const { t } = useI18n();
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-		const notifier = injectStrict(NOTIFIER_MODULE_KEY);
+});
 
-		const shareModule = inject("shareModule");
-		const isOpen = computed({
-			get: () =>
-				shareModule.getIsShareModalOpen &&
-				shareModule.getParentType === props.type,
-			set: () => shareModule.resetShareFlow(),
-		});
+const { t } = useI18n();
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const notifier = injectStrict(NOTIFIER_MODULE_KEY);
+const shareModule = injectStrict(SHARE_MODULE_KEY);
+const isOpen = computed({
+	get: () =>
+		shareModule.getIsShareModalOpen && shareModule.getParentType === props.type,
+	set: () => shareModule.resetShareFlow(),
+});
 
-		const step = computed(() =>
-			shareModule.getShareUrl === undefined ? 1 : 2
-		);
+const step = computed(() => (shareModule.getShareUrl === undefined ? 1 : 2));
 
-		const modalOptions = computed(() => new Map([]));
-		modalOptions.value.set(1, {
-			title: t("components.molecules.share.options.title"),
-			actionButtons: ["cancel", "next"],
-		});
-		modalOptions.value.set(2, {
-			title: t("components.molecules.share.result.title"),
-			actionButtons: ["close"],
-		});
+const modalOptions = computed(() => new Map([]));
+modalOptions.value.set(1, {
+	title: t("components.molecules.share.options.title"),
+	actionButtons: ["cancel", "next"],
+});
+modalOptions.value.set(2, {
+	title: t("components.molecules.share.result.title"),
+	actionButtons: ["close"],
+});
 
-		const shareUrl = computed(() => shareModule.getShareUrl);
+const shareUrl = computed(() => shareModule.getShareUrl);
 
-		const actionButtons = computed(() => {
-			return modalOptions.value.get(step.value)?.actionButtons ?? [];
-		});
+const actionButtons = computed(() => {
+	return modalOptions.value.get(step.value)?.actionButtons ?? [];
+});
 
-		const shareOptions = ref(undefined);
+const shareOptions = ref(undefined);
 
-		const modalTitle = computed(
-			() => modalOptions.value.get(step.value)?.title ?? ""
-		);
+const modalTitle = computed(
+	() => modalOptions.value.get(step.value)?.title ?? ""
+);
 
-		const onShareOptionsChange = (newValue) => {
-			shareOptions.value = newValue;
-		};
-		const onCloseDialog = () => {
-			shareModule.resetShareFlow();
-		};
-		const onNext = (newValue) => {
-			shareModule.createShareUrl(newValue);
-		};
-		const onDone = () => {
-			shareModule.resetShareFlow();
-		};
-		const onCopy = () => {
-			notifier.show({
-				text: t("common.words.copiedToClipboard"),
-				status: "success",
-				timeout: 10000,
-			});
-		};
+const onShareOptionsChange = (newValue) => {
+	shareOptions.value = newValue;
+};
+const onCloseDialog = () => {
+	shareModule.resetShareFlow();
+};
+const onNext = (newValue) => {
+	shareModule.createShareUrl(newValue);
+};
+const onDone = () => {
+	shareModule.resetShareFlow();
+};
+const onCopy = () => {
+	notifier.show({
+		text: t("common.words.copiedToClipboard"),
+		status: "success",
+		timeout: 10000,
+	});
+};
 
-		const ctlToolsEnabled = computed(() => {
-			return envConfigModule.getCtlToolsTabEnabled;
-		});
-
-		return {
-			onShareOptionsChange,
-			onCloseDialog,
-			onNext,
-			onDone,
-			step,
-			actionButtons,
-			modalTitle,
-			shareUrl,
-			isOpen,
-			shareOptions,
-			mdiInformation,
-			onCopy,
-			ctlToolsEnabled,
-		};
-	},
+const ctlToolsEnabled = computed(() => {
+	return envConfigModule.getCtlToolsTabEnabled;
 });
 </script>

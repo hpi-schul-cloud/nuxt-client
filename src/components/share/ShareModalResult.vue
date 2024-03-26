@@ -4,7 +4,7 @@
 			variant="filled"
 			:model-value="shareUrl"
 			readonly
-			:label="`${$t(`components.molecules.share.${type}.result.linkLabel`)}`"
+			:label="`${t(`components.molecules.share.${type}.result.linkLabel`)}`"
 		/>
 		<div class="mb-4">
 			<div
@@ -25,7 +25,7 @@
 						<span class="mb-2">
 							<v-icon size="large">{{ mdiShareVariantOutline }}</v-icon></span
 						>
-						<span class="subtitle">{{ $t("common.actions.share") }}</span>
+						<span class="subtitle">{{ t("common.actions.share") }}</span>
 					</span>
 				</v-btn>
 				<v-btn
@@ -43,7 +43,7 @@
 							<v-icon size="large">{{ mdiEmailOutline }}</v-icon></span
 						>
 						<span class="subtitle">{{
-							$t("components.molecules.share.result.mailShare")
+							t("components.molecules.share.result.mailShare")
 						}}</span>
 					</span>
 				</v-btn>
@@ -63,7 +63,7 @@
 							<v-icon size="large">{{ mdiContentCopy }}</v-icon></span
 						>
 						<span class="subtitle">{{
-							$t("components.molecules.share.result.copyClipboard")
+							t("components.molecules.share.result.copyClipboard")
 						}}</span>
 					</span>
 				</v-btn>
@@ -83,7 +83,7 @@
 							<v-icon size="large">{{ mdiQrcode }}</v-icon></span
 						>
 						<span class="subtitle">{{
-							$t("components.molecules.share.result.qrCodeScan")
+							t("components.molecules.share.result.qrCodeScan")
 						}}</span>
 					</span>
 				</v-btn>
@@ -98,7 +98,7 @@
 	</div>
 </template>
 
-<script>
+<script setup>
 import BaseQrCode from "@/components/base/BaseQrCode";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
@@ -106,77 +106,57 @@ import {
 	mdiEmailOutline,
 	mdiQrcode,
 	mdiShareVariantOutline,
-} from "@mdi/js";
-import { defineComponent, ref } from "vue";
+} from "@/components/icons/material";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-// eslint-disable-next-line vue/require-direct-export
-export default defineComponent({
-	name: "ShareModalResult",
-	components: {
-		BaseQrCode,
+defineProps({
+	shareUrl: {
+		type: String,
+		required: true,
 	},
-	props: {
-		shareUrl: {
-			type: String,
-			required: true,
-		},
-		type: {
-			type: String,
-			required: true,
-			validator: (type) =>
-				Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
-		},
-	},
-	setup(props, { emit }) {
-		const { t } = useI18n();
-
-		const onMailShareUrl = (shareUrl, type) => {
-			const subject = encodeURIComponent(
-				t(`components.molecules.share.${type}.mail.subject`)
-			);
-			const body = encodeURIComponent(
-				t(`components.molecules.share.${type}.mail.body`) + shareUrl
-			);
-			window.location.assign(`mailto:?subject=${subject}&body=${body}`);
-			emit("done");
-		};
-
-		const onCopy = (shareUrl) => {
-			navigator.clipboard.writeText(shareUrl);
-			emit("done");
-			emit("copied");
-		};
-
-		const onShareMobilePlatflorm = (shareUrl) => {
-			if (navigator.share) {
-				navigator
-					.share({
-						url: shareUrl,
-					})
-					.then(() => emit("done"))
-					.catch();
-			}
-		};
-
-		const isShowQrCode = ref(false);
-		const onShowQrCode = () => {
-			isShowQrCode.value = true;
-		};
-
-		return {
-			onMailShareUrl,
-			onCopy,
-			onShowQrCode,
-			onShareMobilePlatflorm,
-			isShowQrCode,
-			mdiEmailOutline,
-			mdiContentCopy,
-			mdiQrcode,
-			mdiShareVariantOutline,
-		};
+	type: {
+		type: String,
+		required: true,
+		validator: (type) =>
+			Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
 	},
 });
+const emit = defineEmits(["copied", "done"]);
+const { t } = useI18n();
+
+const onMailShareUrl = (shareUrl, type) => {
+	const subject = encodeURIComponent(
+		t(`components.molecules.share.${type}.mail.subject`)
+	);
+	const body = encodeURIComponent(
+		t(`components.molecules.share.${type}.mail.body`) + shareUrl
+	);
+	window.location.assign(`mailto:?subject=${subject}&body=${body}`);
+	emit("done");
+};
+
+const onCopy = (shareUrl) => {
+	navigator.clipboard.writeText(shareUrl);
+	emit("done");
+	emit("copied");
+};
+
+const onShareMobilePlatflorm = (shareUrl) => {
+	if (navigator.share) {
+		navigator
+			.share({
+				url: shareUrl,
+			})
+			.then(() => emit("done"))
+			.catch();
+	}
+};
+
+const isShowQrCode = ref(false);
+const onShowQrCode = () => {
+	isShowQrCode.value = true;
+};
 </script>
 
 <style lang="scss" scoped>

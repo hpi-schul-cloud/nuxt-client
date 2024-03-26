@@ -57,6 +57,7 @@
 			"@ui-date-time-picker": ["src/components/ui-date-time-picker"],
 			"@ui-light-box": ["src/components/ui-light-box"],
 			"@ui-speed-dial-menu": ["src/components/ui-speed-dial-menu"],
+			"@ui-room-details": ["src/components/ui-room-details"],
 			"@util-board": ["src/components/util-board"],
 			"@util-validators": ["src/components/util-validators"],
 			"@util-vue": ["src/components/util-vue"],

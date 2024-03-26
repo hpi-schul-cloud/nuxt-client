@@ -75,6 +75,7 @@ import {
 	THEME_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "./utils/inject";
 
 export const app = createApp(App);
@@ -169,7 +170,7 @@ app.use(VueDOMPurifyHTML, {
 		schoolExternalToolsModule
 	);
 	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
-	app.provide("shareModule", shareModule);
+	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
 	app.provide(
 		COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(),
 		commonCartridgeExportModule
