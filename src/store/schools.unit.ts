@@ -2,18 +2,17 @@ import * as serverApi from "@/serverApi/v3/api";
 import { SystemsApiInterface } from "@/serverApi/v3/api";
 import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
 import SchoolsModule from "./schools";
-import { Envs } from "./types/env-config";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
@@ -262,9 +261,10 @@ describe("schools module", () => {
 
 			describe("when using the nest api", () => {
 				it("should call backend and sets state correctly", async () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						FEATURE_NEST_SYSTEMS_API_ENABLED: true,
-					} as Envs);
+					});
+					envConfigModule.setEnvs(envs);
 					const systemId = "id_1";
 					const schoolsModule = new SchoolsModule({});
 					const systems = [
@@ -293,9 +293,10 @@ describe("schools module", () => {
 				});
 
 				it("should trigger error and goes into the catch block", async () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						FEATURE_NEST_SYSTEMS_API_ENABLED: true,
-					} as Envs);
+					});
+					envConfigModule.setEnvs(envs);
 					const systemId = "id_1";
 					systemsApi.systemControllerDeleteSystem.mockRejectedValueOnce(
 						new AxiosError()
@@ -318,9 +319,10 @@ describe("schools module", () => {
 
 			describe("when using the feathers api", () => {
 				it("should call backend and sets state correctly", async () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						FEATURE_NEST_SYSTEMS_API_ENABLED: false,
-					} as Envs);
+					});
+					envConfigModule.setEnvs(envs);
 					const systemId = "id_1";
 					initializeAxios({
 						delete: async (path: string) => {
@@ -354,9 +356,10 @@ describe("schools module", () => {
 				});
 
 				it("should trigger error and goes into the catch block", async () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						FEATURE_NEST_SYSTEMS_API_ENABLED: false,
-					} as Envs);
+					});
+					envConfigModule.setEnvs(envs);
 					const systemId = "id_1";
 					initializeAxios({
 						delete: async (path: string) => {

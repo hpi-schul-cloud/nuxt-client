@@ -1,9 +1,11 @@
 import { mountBaseComponents } from "@/components/base/components";
+import "@/plugins/polyfills";
 import {
 	accountsModule,
 	applicationErrorModule,
 	authModule,
 	autoLogoutModule,
+	commonCartridgeExportModule,
 	commonCartridgeImportModule,
 	contentModule,
 	contextExternalToolsModule,
@@ -28,7 +30,6 @@ import {
 	termsOfUseModule,
 	userLoginMigrationModule,
 	videoConferenceModule,
-	commonCartridgeExportModule,
 } from "@/store";
 import themeConfig from "@/theme.config";
 import { htmlConfig } from "@feature-render-html";
@@ -36,7 +37,6 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
-import "@/plugins/polyfills";
 
 import "@/styles/global.scss";
 // TODO solve without vue-mq dependency
@@ -54,21 +54,21 @@ import { initializeAxios } from "./utils/api";
 import {
 	APPLICATION_ERROR_KEY,
 	AUTH_MODULE_KEY,
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	COPY_MODULE_KEY,
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NEWS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
-	ROOM_MODULE_KEY,
 	ROOMS_MODULE_KEY,
-	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
+	ROOM_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
@@ -119,7 +119,7 @@ app.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
-	await envConfigModule.findEnvs();
+	await envConfigModule.loadConfiguration();
 
 	const cookies = new Cookies();
 	const jwt = cookies.get("jwt");

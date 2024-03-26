@@ -1,6 +1,7 @@
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -11,7 +12,6 @@ import { mount } from "@vue/test-utils";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import RoomLessonCard from "./RoomLessonCard.vue";
 import { LessonData } from "./types";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 
 const baseTestLesson = {
 	id: "123",
@@ -210,7 +210,10 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should have 'copy' more action if copying feature is enabled", async () => {
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+				const envs = envsFactory.build({
+					FEATURE_COPY_SERVICE_ENABLED: true,
+				});
+				envConfigModule.setEnvs(envs);
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 
 				const threeDotButton = wrapper.findComponent(
@@ -225,9 +228,10 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should not have 'copy' more action if copying feature is not enabled", async () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_COPY_SERVICE_ENABLED: false,
-				} as Envs);
+				});
+				envConfigModule.setEnvs(envs);
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 
 				const threeDotButton = wrapper.findComponent(
@@ -242,7 +246,10 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should trigger the 'copyCard' method when 'more action' copy button is clicked", async () => {
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+				const envs = envsFactory.build({
+					FEATURE_COPY_SERVICE_ENABLED: true,
+				});
+				envConfigModule.setEnvs(envs);
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 
 				const threeDotButton = wrapper.findComponent(
@@ -275,7 +282,10 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			it("should have 'share' more action if env flag is set", async () => {
-				envConfigModule.setEnvs({ FEATURE_LESSON_SHARE: true } as Envs);
+				const envs = envsFactory.build({
+					FEATURE_LESSON_SHARE: true,
+				});
+				envConfigModule.setEnvs(envs);
 				const { wrapper } = setup({ lesson: baseTestLesson, userRole });
 
 				const threeDotButton = wrapper.findComponent(

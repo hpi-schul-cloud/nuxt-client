@@ -1,7 +1,7 @@
 import {
+	BoardElementResponseTypeEnum as BoardTypes,
 	ShareTokenBodyParamsParentTypeEnum,
 	SingleColumnBoardResponse,
-	BoardElementResponseTypeEnum as BoardTypes,
 } from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 import AuthModule from "@/store/auth";
@@ -12,19 +12,18 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
-import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
+	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	SHARE_MODULE_KEY,
 	ROOM_MODULE_KEY,
-	AUTH_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -322,9 +321,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 			describe("when 'FEATURE_COPY_SERVICE_ENABLED' is turned on", () => {
 				it("should display 'copy' action", async () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						FEATURE_COPY_SERVICE_ENABLED: true,
-					} as Envs);
+					});
+					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper();
 
 					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
@@ -346,9 +346,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 			describe("when 'FEATURE_COURSE_SHARE' is turned on", () => {
 				it("should display 'share' action", async () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						FEATURE_COURSE_SHARE: true,
-					} as Envs);
+					});
+					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper();
 
 					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
@@ -391,9 +392,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 			describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
 				it("should call the onCopyRoom method when 'Copy course' menu was clicked", async () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						FEATURE_COPY_SERVICE_ENABLED: true,
-					} as Envs);
+					});
+					envConfigModule.setEnvs(envs);
 
 					const wrapper = getWrapper();
 
@@ -413,9 +415,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 			describe("test Course export", () => {
 				it("should not find export button when feature flag is false", async () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
-					} as Envs);
+					});
+					envConfigModule.setEnvs(envs);
 
 					const wrapper = getWrapper();
 
@@ -433,9 +436,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				});
 
 				it("should call onExport method when 'Export Course' menu clicked", async () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
-					} as Envs);
+					});
+					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper();
 
 					const threeDotButton = wrapper.findComponent(
@@ -452,7 +456,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 
 			it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
-				envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
+				const envs = envsFactory.build({
+					FEATURE_COURSE_SHARE: true,
+				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper();
 
 				const threeDotButton = wrapper.findComponent(
@@ -469,7 +476,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 			});
 
 			it("should call store action after 'Share Course' menu clicked", async () => {
-				envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
+				const envs = envsFactory.build({
+					FEATURE_COURSE_SHARE: true,
+				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper();
 
 				const threeDotButton = wrapper.findComponent(
@@ -506,9 +516,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	describe("tabs", () => {
 		describe("when feature flag is enabled", () => {
 			const setup = () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				} as Envs);
+				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 
@@ -526,9 +537,11 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("when feature flag is disabled", () => {
 			const setup = () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: false,
-				} as Envs);
+				});
+				envConfigModule.setEnvs(envs);
+
 				const wrapper = getWrapper();
 
 				return { wrapper };
@@ -544,9 +557,11 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("when Tools(new) tab is active", () => {
 			const setup = () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				} as Envs);
+				});
+				envConfigModule.setEnvs(envs);
+
 				const wrapper = getWrapper();
 
 				return { wrapper };

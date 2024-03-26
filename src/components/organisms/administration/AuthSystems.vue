@@ -182,7 +182,8 @@ export default {
 		hasSystems() {
 			return this.systems.length > 0;
 		},
-		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
+		customLoginLinkEnabled: () =>
+			envConfigModule.getEnv.FEATURE_LOGIN_LINK_ENABLED,
 		hasSystemCreatePermission: () => {
 			return authModule.getUserPermissions.includes("system_create");
 		},
