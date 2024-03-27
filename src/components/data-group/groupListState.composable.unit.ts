@@ -53,11 +53,11 @@ describe("groupListState.composable", () => {
 				const { composable } = getComposable();
 				const groupList: GroupListResponse = {
 					data: [groupResponseFactory.build()],
-					limit: 0,
+					limit: 10,
 					skip: 0,
 					total: 10,
 				};
-				const options: Required<GroupListFilter> = {
+				const filter: Required<GroupListFilter> = {
 					name: "testName",
 					availableForSynchronization: true,
 				};
@@ -67,32 +67,44 @@ describe("groupListState.composable", () => {
 				return {
 					groupList,
 					composable,
-					options,
+					filter,
 				};
 			};
 
 			it("should call the api to get a group", async () => {
-				const { composable, options } = setup();
+				const { composable, groupList } = setup();
 
-				await composable.fetchGroups(options);
+				await composable.fetchGroups({
+					name: "testName",
+					availableForSynchronization: true,
+				});
 
-				expect(useGroupApiMock.getGroups).toHaveBeenCalledWith(options);
+				expect(useGroupApiMock.getGroups).toHaveBeenCalledWith(
+					{
+						skip: groupList.skip,
+						limit: groupList.limit,
+					},
+					{
+						name: "testName",
+						availableForSynchronization: true,
+					}
+				);
 			});
 
 			it("should set the groups in the state", async () => {
-				const { composable, groupList, options } = setup();
+				const { composable, groupList } = setup();
 
-				await composable.fetchGroups(options);
+				await composable.fetchGroups();
 
 				expect(composable.groups.value).toEqual(groupList.data);
 			});
 
 			it("should set the total in the state", async () => {
-				const { composable, groupList, options } = setup();
+				const { composable, groupList } = setup();
 
-				await composable.fetchGroups(options);
+				await composable.fetchGroups();
 
-				expect(composable.total).toEqual(groupList.total);
+				expect(composable.total.value).toEqual(groupList.total);
 			});
 		});
 
