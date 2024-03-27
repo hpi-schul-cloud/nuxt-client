@@ -18,8 +18,8 @@ const defaultTheme: ThemeDefinition = {
 	},
 	variables: {
 		"high-emphasis-opacity": 1,
-		"medium-emphasis-opacity": 0.9,
-		"disabled-opacity": 0.7,
+		"medium-emphasis-opacity": 0.8,
+		"disabled-opacity": 0.6,
 	},
 };
 
