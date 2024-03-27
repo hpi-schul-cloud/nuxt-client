@@ -476,6 +476,9 @@ export default {
 	"components.molecules.courseheader.coursedata": "Archivos del curso",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
+	"components.molecules.import.columnBoard.label": "Título del tablero",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Puede cambiar el nombre del tablero a continuación.",
 	"components.molecules.import.columnBoard.options.title": "Importar tablero",
 	"components.molecules.import.columnBoard.options.selectCourse":
 		"Elija el curso",
@@ -528,6 +531,8 @@ export default {
 	"components.molecules.MintEcFooter.chapters": "Resumen del capítulo",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+	"components.molecules.share.columnBoard.result.linkLabel":
+		"Enlace a la copia del tablón",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
 	"components.molecules.share.courses.options.ctlTools.infotext":

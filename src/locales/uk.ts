@@ -474,6 +474,9 @@ export default {
 	"components.molecules.courseheader.coursedata": "Дані курсу",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
+	"components.molecules.import.columnBoard.label": "Назва дошки",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Ви можете перейменувати дошку нижче",
 	"components.molecules.import.columnBoard.options.title": "Дошка імпорту",
 	"components.molecules.import.columnBoard.options.selectCourse":
 		"Оберіть курс",
@@ -527,6 +530,8 @@ export default {
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
+	"components.molecules.share.columnBoard.result.linkLabel":
+		"Посилання на копію дошки",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
 	"components.molecules.share.courses.options.ctlTools.infotext":
