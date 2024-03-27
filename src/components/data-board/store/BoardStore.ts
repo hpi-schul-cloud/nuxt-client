@@ -48,15 +48,14 @@ export const useBoardStore = defineStore("boardStore", () => {
 		);
 	}
 
-	const fetchBoard = async (action: Action) => {
-		console.log("fetchBoard", action);
+	const fetchBoard = async (
+		action: ReturnType<typeof BoardActions.fetchBoardAction>
+	): Promise<void> => {
 		const response = await boardApi.boardControllerGetBoardSkeleton(
-			action.payload
+			action.payload.id
 		);
 
 		board.value = response.data;
-
-		console.log("fetchBoard", board.value);
 	};
 
 	function createCard(action: Action) {
