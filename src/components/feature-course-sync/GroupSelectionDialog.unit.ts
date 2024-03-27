@@ -28,6 +28,9 @@ describe("GroupSelectionDialog", () => {
 	) => {
 		useGroupListStateMock.isLoading = ref(false);
 		useGroupListStateMock.groups = ref([]);
+		useGroupListStateMock.skip = ref(0);
+		useGroupListStateMock.limit = ref(10);
+		useGroupListStateMock.total = ref(0);
 
 		const wrapper = mount(GroupSelectionDialog, {
 			global: {
@@ -84,6 +87,25 @@ describe("GroupSelectionDialog", () => {
 		});
 	});
 
+	describe("when searching for a specific group name", () => {
+		it("should load only groups with that name", async () => {
+			const { wrapper } = getWrapper();
+
+			const autocomplete = wrapper.findComponent(VAutocomplete);
+			await autocomplete.setValue("testGroup", "search");
+
+			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<
+				[GroupListFilter, { append: boolean }?]
+			>(
+				{
+					name: "testGroup",
+					availableForSynchronization: true,
+				},
+				undefined
+			);
+		});
+	});
+
 	describe("when clicking the continue button after selection a group", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper();
@@ -124,6 +146,18 @@ describe("GroupSelectionDialog", () => {
 			expect(window.location.assign).toHaveBeenCalledWith(
 				`/courses/add?syncedGroupId=${group.id}`
 			);
+		});
+	});
+
+	describe("when clicking the cancel button", () => {
+		it("should close the dialog", async () => {
+			const { wrapper } = getWrapper();
+
+			const cancelBtn = wrapper.findComponent("[data-testid=dialog-close]");
+			await cancelBtn.trigger("click");
+
+			expect(wrapper.vm.isOpen).toEqual(false);
+			expect(wrapper.emitted("update:isOpen")).toBeDefined();
 		});
 	});
 
