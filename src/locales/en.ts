@@ -462,6 +462,9 @@ export default {
 	"components.molecules.courseheader.coursedata": "Course data",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.columnBoard.label": "Board title",
+	"components.molecules.import.columnBoard.options.infoText":
+		"The board can be renamed below.",
 	"components.molecules.import.columnBoard.options.title": "Import board",
 	"components.molecules.import.columnBoard.options.selectCourse":
 		"Select course",
@@ -525,6 +528,8 @@ export default {
 	"components.molecules.share.lessons.result.linkLabel": "Link topic copy",
 	"components.molecules.share.columnBoard.options.infoText":
 		"With the following link, the board can be imported as a copy by other teachers. Personal data will not be imported.",
+	"components.molecules.share.columnBoard.result.linkLabel":
+		"Link to Board copy",
 	"components.molecules.share.options.expiresInDays":
 		"Link expires after 21 days",
 	"components.molecules.share.options.schoolInternally":
