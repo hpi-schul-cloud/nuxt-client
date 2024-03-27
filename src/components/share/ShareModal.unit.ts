@@ -6,7 +6,11 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
+} from "@/utils/inject";
 import NotifierModule from "@/store/notifier";
 import EnvConfigModule from "@/store/env-config";
 import {
@@ -26,7 +30,7 @@ describe("@/components/share/ShareModal", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					shareModule: shareModuleMock,
+					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},

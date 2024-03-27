@@ -1,14 +1,14 @@
-import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import LinkContentElementCreate from "./LinkContentElementCreate.vue";
+import { envsFactory } from "@@/tests/test-utils";
 import {
-	createTestingVuetify,
 	createTestingI18n,
+	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { Envs } from "@/store/types/env-config";
+import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
+import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 
 const VALID_URL = "https://www.abc.de/my-article";
 const INVALID_URL = "my-article";
@@ -25,9 +25,8 @@ describe(LinkContentElementCreate.name, () => {
 	});
 
 	const setup = () => {
-		envConfigModule.setEnvs({
-			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-		} as Envs);
+		const envs = envsFactory.build({ FEATURE_NEXBOARD_COPY_ENABLED: true });
+		envConfigModule.setEnvs(envs);
 
 		const wrapper = mount(LinkContentElementCreate, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },

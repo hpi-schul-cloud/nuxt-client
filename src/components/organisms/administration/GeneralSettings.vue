@@ -146,10 +146,10 @@
 </template>
 
 <script>
-import { authModule, envConfigModule, schoolsModule } from "@/store";
-import { printDate } from "@/plugins/datetime";
-import { toBase64 } from "@/utils/fileHelper.ts";
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
+import { printDate } from "@/plugins/datetime";
+import { authModule, envConfigModule, schoolsModule } from "@/store";
+import { toBase64 } from "@/utils/fileHelper.ts";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 
 export default {
@@ -187,7 +187,7 @@ export default {
 			return schoolsModule.getLoading;
 		},
 		languages() {
-			return this.availableLanguages.split(",").map((lang) => {
+			return this.availableLanguages.map((lang) => {
 				const name = this.$t(`common.words.languages.${lang}`);
 				const flagIcon =
 					"$langIcon" + lang.charAt(0).toUpperCase() + lang.slice(1);

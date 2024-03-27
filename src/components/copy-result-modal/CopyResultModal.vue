@@ -45,16 +45,16 @@
 </template>
 
 <script>
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import { envConfigModule, roomModule } from "@/store";
 import {
 	mdiAlert,
 	mdiCheckCircle,
 	mdiCloseCircle,
 	mdiInformation,
 } from "@mdi/js";
-import { envConfigModule, roomModule } from "@/store";
 
 export default {
 	name: "CopyResultModal",
@@ -192,7 +192,7 @@ export default {
 				: this.$t("components.molecules.copyResult.nexboardCopy.infoTldraw");
 		},
 		externalToolsInfoText() {
-			return envConfigModule.getCtlToolsCopyEnabled
+			return envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED
 				? this.$t("components.molecules.copyResult.ctlTools.withFeature.info")
 				: this.$t("components.molecules.copyResult.ctlTools.info");
 		},

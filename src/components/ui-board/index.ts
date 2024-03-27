@@ -9,6 +9,7 @@ import BoardMenuActionMoveLeft from "./BoardMenuActionMoveLeft.vue";
 import BoardMenuActionMoveRight from "./BoardMenuActionMoveRight.vue";
 import BoardMenuActionPublish from "./BoardMenuActionPublish.vue";
 import BoardMenuActionRevert from "./BoardMenuActionRevert.vue";
+import BoardMenuActionShare from "./BoardMenuActionShare.vue";
 import ContentElementBar from "./content-element/ContentElementBar.vue";
 
 export {
@@ -23,5 +24,6 @@ export {
 	BoardMenuActionMoveRight,
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
+	BoardMenuActionShare,
 	ContentElementBar,
 };

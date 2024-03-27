@@ -415,6 +415,7 @@ describe("room module", () => {
 					roomModule.downloadCommonCartridgeCourse({
 						version: "1.1.0",
 						topics: [],
+						tasks: [],
 					})
 				).resolves.not.toBeDefined();
 
@@ -435,6 +436,7 @@ describe("room module", () => {
 				await roomModule.downloadCommonCartridgeCourse({
 					version: "1.1.0",
 					topics: [],
+					tasks: [],
 				});
 
 				expect(roomModule.businessError).toStrictEqual(error);

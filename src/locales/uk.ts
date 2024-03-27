@@ -21,6 +21,7 @@ export default {
 	"common.actions.scrollToTop": "Прокрутити вгору",
 	"common.actions.share": "Поділіться",
 	"common.actions.shareCourse": "Копія котирування акцій",
+	"common.actions.shareBoard": "Копія котирування дошки",
 	"common.actions.update": "Оновити",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
@@ -88,6 +89,7 @@ export default {
 	"common.labels.visible": "Видимий",
 	"common.loading.text": "Дані завантажуються...",
 	"common.nodata": "Немає даних",
+	"common.notification.error": "Сталася помилка.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email.confirmation":
@@ -395,7 +397,9 @@ export default {
 		"Деякі або всі ваші дані користувача синхронізуються із зовнішнім джерелом даних (LDAP, IDM тощо). Тому неможливо редагувати таблицю вручну за допомогою шкільної хмари. Створення нових учнів або викладачів також можливо лише у вихідній системі. Додаткову інформацію можна знайти на",
 	"components.molecules.admintablelegend.help": "Розділ довідки",
 	"components.molecules.admintablelegend.hint":
-		"З усіма змінами та налаштуваннями в області адміністрування ви підтверджуєте, що ви є авторизованим адміністратором школи та маєте право вносити зміни до школи у шкільній хмарі. Ваші дії розглядаються як інструкція школи для HPI.",
+		"Усі зміни та налаштування в області адміністрування підтверджують, що вони здійснені уповноваженим адміністратором школи, який має повноваження вносити зміни до школи в хмарі. Налаштування, зроблені адміністратором школи, вважаються інструкціями від школи до оператора хмарного сервісу {institute_title}.",
+	"components.molecules.admintablelegend.thr":
+		"Деякі або всі дані користувачів вашої школи синхронізуються із зовнішнім джерелом (LDAP, IDM, шкільний портал тощо). Тому редагування цих основних даних користувачів можливе лише в системі-джерелі, а не в шкільній хмарі. Створення нових учнів або вчителів також можливе лише в системі-джерелі.",
 	"components.molecules.ContentCard.report.body":
 		"Повідомити про вміст з ідентифікатором",
 	"components.molecules.ContentCard.report.email":
@@ -470,6 +474,11 @@ export default {
 	"components.molecules.courseheader.coursedata": "Дані курсу",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
+	"components.molecules.import.columnBoard.options.title": "Дошка імпорту",
+	"components.molecules.import.columnBoard.options.selectCourse":
+		"Оберіть курс",
+	"components.molecules.import.columnBoard.options.selectCourse.infoText":
+		"Виберіть курс, до якого ви бажаєте імпортувати дошку.",
 	"components.molecules.import.courses.label": "Курс",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Буде створено копію.<br>собисті дані не будуть імпортовані.<br>Зовнішні інструменти не будуть скопійовані.<br>Курс можна перейменувати нижче.",
@@ -516,6 +525,8 @@ export default {
 		"немає. Обліковий запис буде створено знову.",
 	"components.molecules.importUsersMatch.write": "Введіть ім'я та прізвище",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
+	"components.molecules.share.columnBoard.options.infoText":
+		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
 	"components.molecules.share.courses.options.ctlTools.infotext":
@@ -687,6 +698,13 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Виберіть інструмент...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
+	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
+	"feature-course-sync.EndCourseSyncDialog.alert":
+		"Після завершення синхронізації її не можна розпочати знову. Дані користувача можна редагувати та підтримувати вручну так само, як і звичайні курси.",
+	"feature-course-sync.EndCourseSyncDialog.description":
+		"Чи дійсно слід завершити синхронізацію групи користувачів {groupName} у курсі {courseName}?",
+	"feature-course-sync.EndCourseSyncDialog.success":
+		"Синхронізацію успішно завершено",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1383,7 +1401,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Термін дії минув",
 	"pages.room.taskCard.teacher.label.submitted": "Надіслано",
 	"pages.room.teacher.emptyState":
-		"Додайте до курсу навчальний вміст, наприклад завдання чи теми, і відсортуйте їх відповідно.",
+		"Додавайте та сортуйте навчальний контент до курсу.",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
 	"pages.rooms.allRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
@@ -1398,6 +1416,7 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Синхронізовано",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
+	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
 	"pages.rooms.importCourse.codeError": "Код курсу не використовується.",
 	"pages.rooms.importCourse.importError":

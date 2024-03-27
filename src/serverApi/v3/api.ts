@@ -357,23 +357,11 @@ export interface CardSkeletonResponse {
 export interface ChangeLanguageParams {
     /**
      * 
-     * @type {string}
+     * @type {LanguageType}
      * @memberof ChangeLanguageParams
      */
-    language: ChangeLanguageParamsLanguageEnum;
+    language: LanguageType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ChangeLanguageParamsLanguageEnum {
-    De = 'de',
-    En = 'en',
-    Es = 'es',
-    Uk = 'uk'
-}
-
 /**
  * 
  * @export
@@ -605,6 +593,12 @@ export interface ConfigResponse {
     FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: boolean;
     /**
      * 
+     * @type {number}
+     * @memberof ConfigResponse
+     */
+    CTL_TOOLS_RELOAD_TIME_MS: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof ConfigResponse
      */
@@ -647,10 +641,10 @@ export interface ConfigResponse {
     TLDRAW__ASSETS_MAX_SIZE: number;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof ConfigResponse
      */
-    TLDRAW__ASSETS_ALLOWED_EXTENSIONS_LIST?: string;
+    TLDRAW__ASSETS_ALLOWED_MIME_TYPES_LIST: Array<string>;
     /**
      * 
      * @type {boolean}
@@ -764,6 +758,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_COLUMN_BOARD_SHARE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_COURSE_SHARE: boolean;
     /**
      * 
@@ -851,28 +851,28 @@ export interface ConfigResponse {
     ROCKETCHAT_SERVICE_ENABLED: boolean;
     /**
      * 
-     * @type {string}
+     * @type {Array<LanguageType>}
      * @memberof ConfigResponse
      */
-    I18N__AVAILABLE_LANGUAGES: string;
+    I18N__AVAILABLE_LANGUAGES: Array<LanguageType>;
     /**
      * 
-     * @type {string}
+     * @type {LanguageType}
      * @memberof ConfigResponse
      */
-    I18N__DEFAULT_LANGUAGE: string;
+    I18N__DEFAULT_LANGUAGE: LanguageType;
     /**
      * 
-     * @type {string}
+     * @type {LanguageType}
      * @memberof ConfigResponse
      */
-    I18N__FALLBACK_LANGUAGE: string;
+    I18N__FALLBACK_LANGUAGE: LanguageType;
     /**
      * 
-     * @type {string}
+     * @type {Timezone}
      * @memberof ConfigResponse
      */
-    I18N__DEFAULT_TIMEZONE: string;
+    I18N__DEFAULT_TIMEZONE: Timezone;
     /**
      * 
      * @type {number}
@@ -899,10 +899,10 @@ export interface ConfigResponse {
     DOCUMENT_BASE_DIR: string;
     /**
      * 
-     * @type {string}
+     * @type {SchulcloudTheme}
      * @memberof ConfigResponse
      */
-    SC_THEME: string;
+    SC_THEME: SchulcloudTheme;
     /**
      * 
      * @type {string}
@@ -1475,6 +1475,12 @@ export interface CourseExportBodyParams {
      * @memberof CourseExportBodyParams
      */
     topics: Array<string>;
+    /**
+     * The list of ids of tasks which should be exported. If empty no tasks are exported.
+     * @type {Array<string>}
+     * @memberof CourseExportBodyParams
+     */
+    tasks: Array<string>;
 }
 /**
  * 
@@ -2918,6 +2924,18 @@ export enum InstanceFeature {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum LanguageType {
+    De = 'de',
+    En = 'en',
+    Es = 'es',
+    Uk = 'uk'
+}
+
+/**
+ * 
+ * @export
  * @interface LdapAuthorizationBodyParams
  */
 export interface LdapAuthorizationBodyParams {
@@ -3562,10 +3580,10 @@ export interface MeResponse {
     user: MeUserResponse;
     /**
      * 
-     * @type {Array<MeRolesReponse>}
+     * @type {Array<MeRoleResponse>}
      * @memberof MeResponse
      */
-    roles: Array<MeRolesReponse>;
+    roles: Array<MeRoleResponse>;
     /**
      * 
      * @type {Array<string>}
@@ -3574,10 +3592,10 @@ export interface MeResponse {
     permissions: Array<string>;
     /**
      * 
-     * @type {string}
+     * @type {LanguageType}
      * @memberof MeResponse
      */
-    language?: string;
+    language: LanguageType;
     /**
      * 
      * @type {MeAccountResponse}
@@ -3588,19 +3606,19 @@ export interface MeResponse {
 /**
  * 
  * @export
- * @interface MeRolesReponse
+ * @interface MeRoleResponse
  */
-export interface MeRolesReponse {
+export interface MeRoleResponse {
     /**
      * 
      * @type {string}
-     * @memberof MeRolesReponse
+     * @memberof MeRoleResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof MeRolesReponse
+     * @memberof MeRoleResponse
      */
     name: string;
 }
@@ -4782,6 +4800,19 @@ export interface PatchVisibilityParams {
 /**
  * 
  * @export
+ * @interface ProviderConfigResponse
+ */
+export interface ProviderConfigResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProviderConfigResponse
+     */
+    provider: string;
+}
+/**
+ * 
+ * @export
  * @interface PseudonymResponse
  */
 export interface PseudonymResponse {
@@ -5520,6 +5551,43 @@ export interface SchoolResponse {
 /**
  * 
  * @export
+ * @interface SchoolSystemResponse
+ */
+export interface SchoolSystemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolSystemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolSystemResponse
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolSystemResponse
+     */
+    alias?: string;
+    /**
+     * 
+     * @type {ProviderConfigResponse}
+     * @memberof SchoolSystemResponse
+     */
+    ldapConfig?: ProviderConfigResponse;
+    /**
+     * 
+     * @type {ProviderConfigResponse}
+     * @memberof SchoolSystemResponse
+     */
+    oauthConfig?: ProviderConfigResponse;
+}
+/**
+ * 
+ * @export
  * @interface SchoolUpdateBodyParams
  */
 export interface SchoolUpdateBodyParams {
@@ -5549,10 +5617,10 @@ export interface SchoolUpdateBodyParams {
     fileStorageType?: SchoolUpdateBodyParamsFileStorageTypeEnum;
     /**
      * 
-     * @type {string}
+     * @type {LanguageType}
      * @memberof SchoolUpdateBodyParams
      */
-    language?: SchoolUpdateBodyParamsLanguageEnum;
+    language?: LanguageType;
     /**
      * 
      * @type {Array<SchoolFeature>}
@@ -5585,16 +5653,6 @@ export interface SchoolUpdateBodyParams {
     */
 export enum SchoolUpdateBodyParamsFileStorageTypeEnum {
     AwsS3 = 'awsS3'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SchoolUpdateBodyParamsLanguageEnum {
-    De = 'de',
-    En = 'en',
-    Es = 'es',
-    Uk = 'uk'
 }
 
 /**
@@ -5692,6 +5750,18 @@ export interface SchulConneXProvisioningOptionsResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum SchulcloudTheme {
+    Brb = 'brb',
+    Default = 'default',
+    N21 = 'n21',
+    Thr = 'thr'
+}
+
+/**
+ * 
+ * @export
  * @interface SetHeightBodyParams
  */
 export interface SetHeightBodyParams {
@@ -5741,7 +5811,8 @@ export interface ShareTokenBodyParams {
 export enum ShareTokenBodyParamsParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**
@@ -5796,7 +5867,8 @@ export interface ShareTokenInfoResponse {
 export enum ShareTokenInfoResponseParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**
@@ -5826,7 +5898,8 @@ export interface ShareTokenPayloadResponse {
 export enum ShareTokenPayloadResponseParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**
@@ -6408,6 +6481,15 @@ export interface TimestampsResponse {
      */
     deletedAt?: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum Timezone {
+    EuropeBerlin = 'Europe/Berlin'
+}
+
 /**
  * 
  * @export
@@ -8818,44 +8900,6 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @summary Get the information if board has whiteboard as a child.
-         * @param {string} boardId The id of the board.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        boardControllerHasDrawingChild: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'boardId' is not null or undefined
-            assertParamExists('boardControllerHasDrawingChild', 'boardId', boardId)
-            const localVarPath = `/boards/{boardId}/hasDrawingChild`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -9020,17 +9064,6 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get the information if board has whiteboard as a child.
-         * @param {string} boardId The id of the board.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async boardControllerHasDrawingChild(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<boolean>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerHasDrawingChild(boardId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -9125,16 +9158,6 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @summary Get the information if board has whiteboard as a child.
-         * @param {string} boardId The id of the board.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        boardControllerHasDrawingChild(boardId: string, options?: any): AxiosPromise<boolean> {
-            return localVarFp.boardControllerHasDrawingChild(boardId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Update the title of a board.
          * @param {string} boardId The id of the board.
          * @param {UpdateBoardTitleParams} updateBoardTitleParams 
@@ -9223,16 +9246,6 @@ export interface BoardApiInterface {
      * @memberof BoardApiInterface
      */
     boardControllerGetBoardSkeleton(boardId: string, options?: any): AxiosPromise<BoardResponse>;
-
-    /**
-     * 
-     * @summary Get the information if board has whiteboard as a child.
-     * @param {string} boardId The id of the board.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardApiInterface
-     */
-    boardControllerHasDrawingChild(boardId: string, options?: any): AxiosPromise<boolean>;
 
     /**
      * 
@@ -9335,18 +9348,6 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      */
     public boardControllerGetBoardSkeleton(boardId: string, options?: any) {
         return BoardApiFp(this.configuration).boardControllerGetBoardSkeleton(boardId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Get the information if board has whiteboard as a child.
-     * @param {string} boardId The id of the board.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardApi
-     */
-    public boardControllerHasDrawingChild(boardId: string, options?: any) {
-        return BoardApiFp(this.configuration).boardControllerHasDrawingChild(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -11505,6 +11506,44 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Stop the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerStopSynchronization: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('courseControllerStopSynchronization', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/stop-sync`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -11549,6 +11588,17 @@ export const CoursesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerImportCourse(file, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Stop the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerStopSynchronization(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerStopSynchronization(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -11590,6 +11640,16 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         courseControllerImportCourse(file: any, options?: any): AxiosPromise<void> {
             return localVarFp.courseControllerImportCourse(file, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Stop the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerStopSynchronization(courseId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerStopSynchronization(courseId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -11629,6 +11689,16 @@ export interface CoursesApiInterface {
      * @memberof CoursesApiInterface
      */
     courseControllerImportCourse(file: any, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Stop the synchronization of a course with a group.
+     * @param {string} courseId The id of the course
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerStopSynchronization(courseId: string, options?: any): AxiosPromise<void>;
 
 }
 
@@ -11674,6 +11744,18 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerImportCourse(file: any, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerImportCourse(file, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Stop the synchronization of a course with a group.
+     * @param {string} courseId The id of the course
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerStopSynchronization(courseId: string, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerStopSynchronization(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -15795,7 +15877,7 @@ export const SchoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetSchoolSystems(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolResponse>> {
+        async schoolControllerGetSchoolSystems(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolSystemResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolSystems(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -15885,7 +15967,7 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<SchoolResponse> {
+        schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>> {
             return localVarFp.schoolControllerGetSchoolSystems(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -15972,7 +16054,7 @@ export interface SchoolApiInterface {
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<SchoolResponse>;
+    schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>>;
 
     /**
      * Sets all provisioning options for a system at a school

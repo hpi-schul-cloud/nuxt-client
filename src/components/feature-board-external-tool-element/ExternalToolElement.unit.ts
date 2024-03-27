@@ -1,4 +1,5 @@
 import {
+	ConfigResponse,
 	ContentElementType,
 	ExternalToolElementResponse,
 } from "@/serverApi/v3";
@@ -6,7 +7,6 @@ import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool";
 import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
-import { Envs } from "@/store/types/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -121,7 +121,7 @@ describe("ExternalToolElement", () => {
 
 		const refreshTime = 299000;
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as Envs,
+			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as ConfigResponse,
 		});
 
 		const wrapper = shallowMount(ExternalToolElement, {

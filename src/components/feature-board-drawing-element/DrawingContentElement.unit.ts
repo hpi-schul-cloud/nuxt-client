@@ -10,7 +10,7 @@ import { ContentElementType, DrawingElementResponse } from "@/serverApi/v3";
 import DrawingContentElement from "./DrawingContentElement.vue";
 import NotifierModule from "@/store/notifier";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import InnerContent from "./InnerContent.vue";
 import AuthModule from "@/store/auth";
 import {
@@ -39,7 +39,7 @@ const DRAWING_ELEMENT: DrawingElementResponse = {
 };
 
 const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<Envs>({
+	getEnv: createMock<ConfigResponse>({
 		FEATURE_TLDRAW_ENABLED: true,
 	}),
 });

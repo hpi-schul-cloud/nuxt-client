@@ -8,14 +8,11 @@ import deDE from "../locales/de";
 import enGB from "../locales/en";
 import esES from "../locales/es";
 import ukUA from "../locales/uk";
-
-export declare type I18nLanguage = typeof deDE;
-
-export declare type I18nConfig = { message: I18nLanguage };
+import { MessageSchema } from "@/locales/schema";
 
 declare type SupportedLanguages = "en" | "de" | "es" | "uk";
 
-const messages: Record<SupportedLanguages, I18nLanguage> = {
+const messages: Record<SupportedLanguages, MessageSchema> = {
 	en: enGB,
 	de: deDE,
 	es: esES,
@@ -42,7 +39,9 @@ const numberFormats = {
 };
 
 const localCreateI18n = () => {
-	const i18n = createI18n<I18nLanguage, SupportedLanguages>({
+	// If false, the type is a Composer instance for the Composition API, if true, the type is a VueI18n instance for the legacy API
+	// https://vue-i18n.intlify.dev/guide/advanced/typescript#global-resource-schema-type-definition
+	const i18n = createI18n<false>({
 		legacy: false,
 		locale: authModule.getLocale,
 		fallbackLocale: envConfigModule.getFallbackLanguage,

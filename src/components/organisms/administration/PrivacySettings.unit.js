@@ -1,5 +1,6 @@
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -48,9 +49,10 @@ describe("PrivacySettings", () => {
 	describe("env config", () => {
 		describe("when env var for visibility is true", () => {
 			it("should render visibility switch", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 
@@ -62,9 +64,10 @@ describe("PrivacySettings", () => {
 
 		describe("when env var for visibility is false", () => {
 			it("should not render student visibility switch", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: false,
 				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 
@@ -76,10 +79,11 @@ describe("PrivacySettings", () => {
 
 		describe("when env var for configurability is true", () => {
 			it("should enable student visibility switch", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 					TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 
@@ -93,10 +97,11 @@ describe("PrivacySettings", () => {
 
 		describe("when env var for configurability is false", () => {
 			it("should disable student visibility switch", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 					TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 
@@ -110,10 +115,11 @@ describe("PrivacySettings", () => {
 
 		describe("when env vars for learn store are true", () => {
 			it("should display learn store switch", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 					FEATURE_LERNSTORE_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper();
 
 				expect(
@@ -124,10 +130,11 @@ describe("PrivacySettings", () => {
 
 		describe("when env vars for learn store are false", () => {
 			it("should hide learn store switch", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: false,
 					FEATURE_LERNSTORE_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper();
 
 				expect(
@@ -138,9 +145,10 @@ describe("PrivacySettings", () => {
 
 		describe("when env var for videoconference is true", () => {
 			it("should display videoconference feature switch", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_VIDEOCONFERENCE_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper();
 
 				expect(
@@ -151,9 +159,10 @@ describe("PrivacySettings", () => {
 
 		describe("when env var for videoconference is false", () => {
 			it("should hide videoconference feature switch", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_VIDEOCONFERENCE_ENABLED: false,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper();
 
 				expect(
@@ -164,9 +173,10 @@ describe("PrivacySettings", () => {
 
 		describe("when env var for rocketchat is true", () => {
 			it("should display rocketchat feature switch", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					ROCKETCHAT_SERVICE_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper();
 
 				expect(
@@ -177,9 +187,10 @@ describe("PrivacySettings", () => {
 
 		describe("when env var for rocketchat is false", () => {
 			it("should hide rocketchat feature switch", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					ROCKETCHAT_SERVICE_ENABLED: false,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper();
 
 				expect(
@@ -193,10 +204,11 @@ describe("PrivacySettings", () => {
 		describe("student visibility switch", () => {
 			describe("when configurable", () => {
 				it("should be set to true based on school permission", () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 						TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 					});
+					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper(
 						Object.assign(generateProps(), {
 							permissions: {
@@ -215,10 +227,11 @@ describe("PrivacySettings", () => {
 				});
 
 				it("should be set to false based on school permission", () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 						TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 					});
+					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper(
 						Object.assign(generateProps(), {
 							permissions: {
@@ -237,10 +250,11 @@ describe("PrivacySettings", () => {
 				});
 
 				it("should be set to false if no property found on school", () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 						TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 					});
+					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper(
 						Object.assign(generateProps(), {
 							permissions: {},
@@ -257,11 +271,12 @@ describe("PrivacySettings", () => {
 
 			describe("when not configurable", () => {
 				it("should be set to true based on env var", () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 						TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: true,
 						TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 					});
+					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper();
 
 					const studentVisibilitySwitch = wrapper.findComponent(
@@ -272,11 +287,12 @@ describe("PrivacySettings", () => {
 				});
 
 				it("should be set to false based on env var", () => {
-					envConfigModule.setEnvs({
+					const envs = envsFactory.build({
 						TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: false,
 						TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT: false,
 						TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 					});
+					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper();
 
 					const studentVisibilitySwitch = wrapper.findComponent(
@@ -290,10 +306,11 @@ describe("PrivacySettings", () => {
 
 		describe("learn store switch", () => {
 			it("should be set to true based on school permission", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 					FEATURE_LERNSTORE_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper(
 					Object.assign(generateProps(), {
 						permissions: {
@@ -312,10 +329,11 @@ describe("PrivacySettings", () => {
 			});
 
 			it("should be set to false based on school permission", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 					FEATURE_LERNSTORE_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper(
 					Object.assign(generateProps(), {
 						permissions: {
@@ -336,9 +354,10 @@ describe("PrivacySettings", () => {
 
 		describe("videoconference switch", () => {
 			it("should be set to true based on school feature", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_VIDEOCONFERENCE_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper(
 					Object.assign(generateProps(), {
 						features: {
@@ -355,9 +374,10 @@ describe("PrivacySettings", () => {
 			});
 
 			it("should be set to false based on school feature", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_VIDEOCONFERENCE_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper(
 					Object.assign(generateProps(), {
 						features: {
@@ -376,9 +396,10 @@ describe("PrivacySettings", () => {
 
 		describe("rocketchat switch", () => {
 			it("should be set to true based on school feature", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					ROCKETCHAT_SERVICE_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper(
 					Object.assign(generateProps(), {
 						features: {
@@ -395,9 +416,10 @@ describe("PrivacySettings", () => {
 			});
 
 			it("should be set to false based on school feature", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					ROCKETCHAT_SERVICE_ENABLED: true,
 				});
+				envConfigModule.setEnvs(envs);
 				const wrapper = getWrapper(
 					Object.assign(generateProps(), {
 						features: {
@@ -417,10 +439,11 @@ describe("PrivacySettings", () => {
 
 	describe("events", () => {
 		it("should emit on value change for learnstore switch", () => {
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED: true,
 				FEATURE_LERNSTORE_ENABLED: true,
 			});
+			envConfigModule.setEnvs(envs);
 
 			const wrapper = getWrapper();
 			const learnStoreSwitch = wrapper.findComponent(
@@ -447,10 +470,11 @@ describe("PrivacySettings", () => {
 		});
 
 		it("should emit on value change for student visibility switch", () => {
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE: true,
 				TEACHER_STUDENT_VISIBILITY__IS_VISIBLE: true,
 			});
+			envConfigModule.setEnvs(envs);
 			const wrapper = getWrapper();
 
 			const studentVisibilitySwitch = wrapper.findComponent(
@@ -476,9 +500,10 @@ describe("PrivacySettings", () => {
 		});
 
 		it("should emit on value change for rocketChat switch", () => {
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				ROCKETCHAT_SERVICE_ENABLED: true,
 			});
+			envConfigModule.setEnvs(envs);
 
 			const wrapper = getWrapper();
 
@@ -501,9 +526,10 @@ describe("PrivacySettings", () => {
 		});
 
 		it("should emit on value change for videoConference switch", () => {
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				FEATURE_VIDEOCONFERENCE_ENABLED: true,
 			});
+			envConfigModule.setEnvs(envs);
 			const wrapper = getWrapper();
 
 			const videoconferenceSwitch = wrapper.findComponent(
