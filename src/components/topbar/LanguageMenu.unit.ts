@@ -1,18 +1,19 @@
+import { LanguageType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { mount } from "@vue/test-utils";
-import LanguageMenu from "./LanguageMenu.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import LanguageMenu from "./LanguageMenu.vue";
 
 describe("@/components/topbar/LanguageMenu", () => {
 	const setup = (attrs = {}) => {
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getAvailableLanguages: "de,en",
+			getAvailableLanguages: [LanguageType.De, LanguageType.En],
 		});
 
 		const authModuleMock = createModuleMocks(AuthModule, {
@@ -46,7 +47,7 @@ describe("@/components/topbar/LanguageMenu", () => {
 
 			expect(wrapper.vm.availableItems).toStrictEqual([
 				{
-					language: "en",
+					language: LanguageType.En,
 					longName: "global.topbar.language.longName.en",
 					translatedName: "common.words.languages.en",
 					icon: "$langIconEn",
@@ -58,7 +59,7 @@ describe("@/components/topbar/LanguageMenu", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.vm.selectedItem).toStrictEqual({
-				language: "de",
+				language: LanguageType.De,
 				longName: "global.topbar.language.longName.de",
 				translatedName: "common.words.languages.de",
 				icon: "$langIconDe",

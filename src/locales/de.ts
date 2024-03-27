@@ -21,6 +21,7 @@ export default {
 	"common.actions.share": "Teilen",
 	"common.actions.export": "Exportieren",
 	"common.actions.shareCourse": "Kurskopie teilen",
+	"common.actions.shareBoard": "Boardkopie teilen",
 	"common.actions.update": "Aktualisieren",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
@@ -466,6 +467,13 @@ export default {
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.columnBoard.label": "Board-Titel",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Das Board kann im Folgenden umbenannt werden. ",
+	"components.molecules.import.columnBoard.options.title": "Board importieren",
+	"components.molecules.import.columnBoard.options.selectCourse": "Kurs wählen",
+	"components.molecules.import.columnBoard.options.selectCourse.infoText":
+		"Der Kurs, in den das Board importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.courses.label": "Kurs",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Es wird eine Kopie erstellt.<br>Personenbezogene Daten werden nicht importiert.<br>Externe Tools werden nicht kopiert. <br>Der Kurs kann im Folgenden umbenannt werden.",
@@ -518,6 +526,9 @@ export default {
 	"components.molecules.importUsersMatch.write":
 		"Vornamen oder Nachnamen eingeben",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
+	"components.molecules.share.columnBoard.options.infoText":
+		"Mit dem folgenden Link kann das Board als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+	"components.molecules.share.columnBoard.result.linkLabel": "Link Board-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
 	"components.molecules.share.courses.options.ctlTools.infotext":

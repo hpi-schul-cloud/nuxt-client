@@ -1,11 +1,14 @@
-import NavigationBar from "./NavigationBar";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount } from "@vue/test-utils";
+import NavigationBar from "./NavigationBar.vue";
 
 const navbarLinks = [
 	{
@@ -23,17 +26,20 @@ const navbarLinks = [
 ];
 
 const getWrapper = () => {
-	return mount(NavigationBar, {
+	const img = "@/assets/img/logo/logo-dBildungscloud.svg";
+	const wrapper = mount(NavigationBar, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			stubs: ["base-link"],
 		},
 		props: {
 			links: navbarLinks,
-			img: "@/assets/img/logo/logo-dBildungscloud.svg",
+			img,
 			buttons: true,
 		},
 	});
+
+	return { wrapper, img };
 };
 
 describe("@/components/legacy/NavigationBar", () => {
@@ -44,12 +50,12 @@ describe("@/components/legacy/NavigationBar", () => {
 	});
 
 	it("renders logo, links and buttons for default theme", () => {
-		const wrapper = getWrapper();
+		const envs = envsFactory.build({ SC_THEME: SchulcloudTheme.Default });
+		envConfigModule.setEnvs(envs);
+		const { wrapper, img } = getWrapper();
 
 		expect(wrapper.find(".logo.logo-full").exists()).toBe(true);
-		expect(wrapper.find(".logo.logo-full").attributes("src")).toBe(
-			wrapper.props().img
-		);
+		expect(wrapper.find(".logo.logo-full").attributes("src")).toBe(img);
 
 		expect(wrapper.find(".link-container").exists()).toBe(true);
 		expect(wrapper.vm.linksToDisplay).toHaveLength(3);
@@ -58,17 +64,15 @@ describe("@/components/legacy/NavigationBar", () => {
 		expect(wrapper.vm.hasButtons).toBe(true);
 	});
 
-	it.each(["n21", "brb"])(
+	it.each([SchulcloudTheme.N21, SchulcloudTheme.Brb])(
 		"does render logo but not links and Buttons for %s theme",
 		(theme) => {
-			envConfigModule.setEnvs({ SC_THEME: theme });
-
-			const wrapper = getWrapper();
+			const envs = envsFactory.build({ SC_THEME: theme });
+			envConfigModule.setEnvs(envs);
+			const { wrapper, img } = getWrapper();
 
 			expect(wrapper.find(".logo.logo-full").exists()).toBe(true);
-			expect(wrapper.find(".logo.logo-full").attributes("src")).toBe(
-				wrapper.props().img
-			);
+			expect(wrapper.find(".logo.logo-full").attributes("src")).toBe(img);
 
 			expect(wrapper.find(".link-container").exists()).toBe(false);
 			expect(wrapper.vm.linksToDisplay).toHaveLength(0);

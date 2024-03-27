@@ -2,12 +2,19 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import RoomBoardCard from "./RoomBoardCard.vue";
 
+import {
+	ConfigResponse,
+	ImportUserResponseRoleNamesEnum,
+} from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import { createMock } from "@golevelup/ts-jest";
 import { Router, useRouter } from "vue-router";
-import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
+import { VListItem, VMenu } from "vuetify/lib/components/index.mjs";
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
@@ -46,15 +53,20 @@ const mockCourseData = {
 describe("RoomBoardCard", () => {
 	const setup = (
 		props: { boardData: BoardData; userRole: ImportUserResponseRoleNamesEnum },
-		options?: object
+		options?: object,
+		envs?: Partial<ConfigResponse>
 	) => {
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 		// Note: router has to be mocked before mounting the component
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: { ...envs } as ConfigResponse,
+		});
 
 		const wrapper = mount(RoomBoardCard, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock },
 			},
 			props: {
 				dragInProgress: false,
@@ -121,21 +133,129 @@ describe("RoomBoardCard", () => {
 		});
 
 		describe("when user is a teacher", () => {
-			it("should show three dot menu", () => {
-				const { wrapper: wrapperPublishedTeacher } = setup({
-					boardData: mockPublishedBoardData,
-					userRole,
-				});
-				const threeDotMenu = wrapperPublishedTeacher.find(".three-dot-button");
-				expect(threeDotMenu.exists()).toBe(true);
+			const setupTeacherMenu = (envs?: Partial<ConfigResponse>) => {
+				const { wrapper } = setup(
+					{
+						boardData: mockPublishedBoardData,
+						userRole,
+					},
+					{},
+					envs
+				);
 
-				const { wrapper: wrapperDraftTeacher } = setup({
-					boardData: mockDraftBoardData,
-					userRole,
+				return { wrapper };
+			};
+			it("should show three dot menu", () => {
+				const { wrapper } = setupTeacherMenu();
+				const threeDotMenu = wrapper.find(".three-dot-button");
+				expect(threeDotMenu.exists()).toBe(true);
+			});
+
+			describe("three dot menu", () => {
+				const getMenuItem = async (wrapper: VueWrapper, dataTestid: string) => {
+					const threeDotMenu = wrapper.find(".three-dot-button");
+
+					await threeDotMenu.trigger("click");
+
+					const menu = wrapper.findComponent(VMenu);
+					const menuItems = menu.findAllComponents(VListItem);
+
+					const menuItem = menuItems.find(
+						(item) => item.attributes("data-testid") === dataTestid
+					);
+
+					return menuItem;
+				};
+
+				it("should include the 'edit' item", async () => {
+					const { wrapper } = setupTeacherMenu();
+
+					const menuItem = await getMenuItem(
+						wrapper,
+						"board-card-menu-action-edit-0"
+					);
+					expect(menuItem?.exists()).toBe(true);
 				});
-				const threeDotMenuDraftStudent =
-					wrapperDraftTeacher.find(".three-dot-button");
-				expect(threeDotMenuDraftStudent.exists()).toBe(true);
+
+				it("should include the 'copy' item", async () => {
+					const { wrapper } = setupTeacherMenu();
+
+					const menuItem = await getMenuItem(
+						wrapper,
+						"board-card-menu-action-copy-0"
+					);
+					expect(menuItem?.exists()).toBe(true);
+				});
+
+				describe("when share feature is enabled", () => {
+					it("should include the 'share' item", async () => {
+						const { wrapper } = setupTeacherMenu({
+							FEATURE_COLUMN_BOARD_SHARE: true,
+						});
+
+						const menuItem = await getMenuItem(
+							wrapper,
+							"board-card-menu-action-share-0"
+						);
+						expect(menuItem?.exists()).toBe(true);
+					});
+				});
+
+				describe("when share feature is disabled", () => {
+					it("should include the 'share' item", async () => {
+						const { wrapper } = setupTeacherMenu({
+							FEATURE_COLUMN_BOARD_SHARE: false,
+						});
+
+						const menuItem = await getMenuItem(
+							wrapper,
+							"board-card-menu-action-share-0"
+						);
+						expect(menuItem).toBeUndefined();
+					});
+				});
+
+				it("should include the 'remove' item", async () => {
+					const { wrapper } = setupTeacherMenu();
+
+					const menuItem = await getMenuItem(
+						wrapper,
+						"board-card-menu-action-remove-0"
+					);
+					expect(menuItem?.exists()).toBe(true);
+				});
+
+				describe("when 'copy' item is clicked", () => {
+					it("should emit 'copy-board' event", async () => {
+						const { wrapper } = setupTeacherMenu();
+
+						const menuItem = await getMenuItem(
+							wrapper,
+							"board-card-menu-action-copy-0"
+						);
+
+						await menuItem?.trigger("click");
+
+						expect(wrapper.emitted("copy-board")).toHaveLength(1);
+					});
+				});
+
+				describe("when 'share' item is clicked", () => {
+					it("should emit 'share-board' event", async () => {
+						const { wrapper } = setupTeacherMenu({
+							FEATURE_COLUMN_BOARD_SHARE: true,
+						});
+
+						const menuItem = await getMenuItem(
+							wrapper,
+							"board-card-menu-action-share-0"
+						);
+
+						await menuItem?.trigger("click");
+
+						expect(wrapper.emitted("share-board")).toHaveLength(1);
+					});
+				});
 			});
 
 			describe("when board is a draft", () => {
@@ -364,11 +484,11 @@ describe("RoomBoardCard", () => {
 				{ userRole: "teacher" }
 			);
 			const boardCard = wrapper.find(".board-card");
-			const cardActionButtons = boardCard.findAllComponents(
+			const cardActionButton = boardCard.findComponent(
 				`[data-testid="board-card-action-publish-0"]`
 			);
 
-			await cardActionButtons[0].trigger("click");
+			await cardActionButton.trigger("click");
 			const emitted = wrapper.emitted("update-visibility");
 			expect(emitted).toHaveLength(1);
 		});
@@ -381,11 +501,11 @@ describe("RoomBoardCard", () => {
 
 			const threeDotMenuPublished = wrapper.find(".three-dot-button");
 			await threeDotMenuPublished.trigger("click");
-			const moreActionButtons = wrapper.findAllComponents(
+			const moreActionButton = wrapper.findComponent(
 				`[data-testid="board-card-menu-action-unpublish-0"]`
 			);
 
-			await moreActionButtons[0].trigger("click");
+			await moreActionButton.trigger("click");
 			const emitted = wrapper.emitted("update-visibility");
 			expect(emitted).toHaveLength(1);
 		});

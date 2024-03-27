@@ -15,8 +15,9 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import EnvConfigModule from "../../store/env-config";
+import EnvConfigModule from "@/store/env-config";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -49,7 +50,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 					finishedTasksModule: finishedTasksModuleMock,
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-					shareModule: shareModuleMock,
+					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},

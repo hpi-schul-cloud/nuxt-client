@@ -21,6 +21,7 @@ export default {
 	"common.actions.scrollToTop": "Прокрутити вгору",
 	"common.actions.share": "Поділіться",
 	"common.actions.shareCourse": "Копія котирування акцій",
+	"common.actions.shareBoard": "Копія котирування дошки",
 	"common.actions.update": "Оновити",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
@@ -470,6 +471,14 @@ export default {
 	"components.molecules.courseheader.coursedata": "Дані курсу",
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
+	"components.molecules.import.columnBoard.label": "Назва дошки",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Ви можете перейменувати дошку нижче",
+	"components.molecules.import.columnBoard.options.title": "Дошка імпорту",
+	"components.molecules.import.columnBoard.options.selectCourse":
+		"Оберіть курс",
+	"components.molecules.import.columnBoard.options.selectCourse.infoText":
+		"Виберіть курс, до якого ви бажаєте імпортувати дошку.",
 	"components.molecules.import.courses.label": "Курс",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Буде створено копію.<br>собисті дані не будуть імпортовані.<br>Зовнішні інструменти не будуть скопійовані.<br>Курс можна перейменувати нижче.",
@@ -516,6 +525,10 @@ export default {
 		"немає. Обліковий запис буде створено знову.",
 	"components.molecules.importUsersMatch.write": "Введіть ім'я та прізвище",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
+	"components.molecules.share.columnBoard.options.infoText":
+		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
+	"components.molecules.share.columnBoard.result.linkLabel":
+		"Посилання на копію дошки",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
 	"components.molecules.share.courses.options.ctlTools.infotext":
