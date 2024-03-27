@@ -21,6 +21,7 @@ export default {
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.actions.share": "Compartir",
 	"common.actions.shareCourse": "Compartir copia de la cotización",
+	"common.actions.shareBoard": "Compartir copia de la tablón",
 	"common.actions.update": "Actualizar",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
@@ -397,6 +398,8 @@ export default {
 	"components.molecules.admintablelegend.help": "Sección de ayuda",
 	"components.molecules.admintablelegend.hint":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
+	"components.molecules.admintablelegend.thr":
+		"Algunos o todos los datos de los usuarios de su centro educativo se sincronizan desde una fuente externa (LDAP, IDM, portal del centro educativo, etc.). Por lo tanto, la edición de estos datos maestros de usuario sólo es posible en el sistema de origen, no en la nube de la escuela. La creación de nuevos alumnos o profesores sólo es posible en el sistema de origen.",
 	"components.molecules.ContentCard.report.body":
 		"Informar del contenido con el ID",
 	"components.molecules.ContentCard.report.email":
@@ -470,6 +473,14 @@ export default {
 	"components.molecules.courseheader.coursedata": "Archivos del curso",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
+	"components.molecules.import.columnBoard.label": "Título del tablero",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Puede cambiar el nombre del tablero a continuación.",
+	"components.molecules.import.columnBoard.options.title": "Importar tablero",
+	"components.molecules.import.columnBoard.options.selectCourse":
+		"Elija el curso",
+	"components.molecules.import.columnBoard.options.selectCourse.infoText":
+		"Seleccione el curso al que desea importar el tablero.",
 	"components.molecules.import.courses.label": "Curso",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Se creará una copia.<br>No se importarán datos personales.<br>No se copiarán herramientas externas.<br>Se puede cambiar el nombre del curso a continuación.",
@@ -515,6 +526,10 @@ export default {
 		"Ninguno. El usuario es recién creado.",
 	"components.molecules.importUsersMatch.write": "Introduzca nombre o apellido",
 	"components.molecules.MintEcFooter.chapters": "Resumen del capítulo",
+	"components.molecules.share.columnBoard.options.infoText":
+		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+	"components.molecules.share.columnBoard.result.linkLabel":
+		"Enlace a la copia del tablón",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
 	"components.molecules.share.courses.options.ctlTools.infotext":
@@ -1414,7 +1429,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Expirado",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
 	"pages.room.teacher.emptyState":
-		"Añada al curso contenidos de aprendizaje, como tareas o temas, y luego ordénelos.",
+		"Añada y ordene contenidos de aprendizaje al curso.",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
 	"pages.rooms.allRooms.emptyState.title": "Actualmente no hay cursos aquí.",
 	"pages.rooms.currentRooms.emptyState.title":

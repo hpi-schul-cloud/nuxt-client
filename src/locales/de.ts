@@ -21,6 +21,7 @@ export default {
 	"common.actions.share": "Teilen",
 	"common.actions.export": "Exportieren",
 	"common.actions.shareCourse": "Kurskopie teilen",
+	"common.actions.shareBoard": "Boardkopie teilen",
 	"common.actions.update": "Aktualisieren",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
@@ -394,6 +395,8 @@ export default {
 	"components.molecules.admintablelegend.help": "Hilfebereich",
 	"components.molecules.admintablelegend.hint":
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {institute_title}.",
+	"components.molecules.admintablelegend.thr":
+		"Einige oder alle Nutzer:innendaten deiner Schule werden aus einer externen Quelle (LDAP, IDM, Schulportal o. ä.) synchronisiert. Die Bearbeitung dieser Nutzer:innen-Stammdaten ist deshalb nur im Quellsystem möglich, nicht in der Schul-Cloud. Das Anlegen neuer Schüler:innen oder Lehrkräfte ist ebenfalls nur im Quellsystem möglich.",
 	"components.molecules.ContentCard.report.body":
 		"Melden des Inhaltes mit der ID",
 	"components.molecules.ContentCard.report.email":
@@ -464,6 +467,13 @@ export default {
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.columnBoard.label": "Board-Titel",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Das Board kann im Folgenden umbenannt werden. ",
+	"components.molecules.import.columnBoard.options.title": "Board importieren",
+	"components.molecules.import.columnBoard.options.selectCourse": "Kurs wählen",
+	"components.molecules.import.columnBoard.options.selectCourse.infoText":
+		"Der Kurs, in den das Board importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.courses.label": "Kurs",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Es wird eine Kopie erstellt.<br>Personenbezogene Daten werden nicht importiert.<br>Externe Tools werden nicht kopiert. <br>Der Kurs kann im Folgenden umbenannt werden.",
@@ -516,6 +526,9 @@ export default {
 	"components.molecules.importUsersMatch.write":
 		"Vornamen oder Nachnamen eingeben",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
+	"components.molecules.share.columnBoard.options.infoText":
+		"Mit dem folgenden Link kann das Board als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+	"components.molecules.share.columnBoard.result.linkLabel": "Link Board-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
 	"components.molecules.share.courses.options.ctlTools.infotext":
@@ -1398,7 +1411,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Abgelaufen",
 	"pages.room.taskCard.teacher.label.submitted": "Abgegeben",
 	"pages.room.teacher.emptyState":
-		"Lerninhalte wie Aufgaben oder Themen dem Kurs hinzufügen und anschließend sortieren.",
+		"Lerninhalte dem Kurs hinzufügen und sortieren.",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
 	"pages.rooms.allRooms.emptyState.title":
 		"Aktuell gibt es hier noch keine Kurse.",

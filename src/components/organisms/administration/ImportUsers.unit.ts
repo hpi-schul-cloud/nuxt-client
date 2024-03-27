@@ -1,6 +1,7 @@
 import {
 	ImportUserListResponse,
 	ImportUserResponseRoleNamesEnum,
+	SchulcloudTheme,
 } from "@/serverApi/v3";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
@@ -115,7 +116,7 @@ describe("@/components/molecules/importUsers", () => {
 			envConfigModule: EnvConfigModule,
 		});
 		importUsersModule.setImportUsersList(mockImportUsers);
-		envConfigModule.env.SC_THEME = "default";
+		envConfigModule.env.SC_THEME = SchulcloudTheme.Default;
 		schoolsModule.setSchool(
 			schoolFactory.build({
 				inUserMigration: true,

@@ -1,4 +1,4 @@
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 
 export type SidebarItemBase = {
@@ -8,7 +8,7 @@ export type SidebarItemBase = {
 	permission?: string;
 	excludedPermission?: string;
 	activeForUrls: string[];
-	feature?: keyof Envs;
+	feature?: keyof ConfigResponse;
 };
 
 export type SidebarItemExternalLink = {
@@ -165,7 +165,7 @@ const getSidebarItems = (
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
-			envConfigModule.getShowNewClassViewEnabled
+			envConfigModule.getEnv.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED
 				? {
 						title: "global.sidebar.classes",
 						icon: "$class",
@@ -211,7 +211,7 @@ const getSidebarItems = (
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
 			},
-			envConfigModule.getShowNewClassViewEnabled
+			envConfigModule.getEnv.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED
 				? {
 						title: "global.sidebar.classes",
 						icon: "$class",
