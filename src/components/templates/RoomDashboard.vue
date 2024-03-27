@@ -175,18 +175,13 @@
 		>
 			<template #title>
 				<h2 class="text-h4 my-2">
-					{{ $t("pages.room.itemDelete.title") }}
-				</h2>
-			</template>
-			<template #content>
-				<p class="text-md mt-2">
 					{{
 						$t("pages.room.itemDelete.text", {
 							itemTitle: itemDelete.itemData.name || itemDelete.itemData.title,
 							itemType: itemDelete.itemType,
 						})
 					}}
-				</p>
+				</h2>
 			</template>
 		</v-custom-dialog>
 	</div>
