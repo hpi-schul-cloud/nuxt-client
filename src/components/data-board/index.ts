@@ -6,6 +6,9 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useContentElementState } from "./ContentElementState.composable";
 import { useEditMode, useSharedEditMode } from "./EditMode.composable";
 
+import { useBoardStore } from "./store/BoardStore";
+import { fetchBoard } from "./store/types/Actions";
+
 export {
 	useBoardState,
 	useCardState,
@@ -15,4 +18,6 @@ export {
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useSharedBoardPageInformation,
+	useBoardStore,
+	fetchBoard,
 };
