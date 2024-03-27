@@ -680,6 +680,8 @@ export default {
 		"Should the synchronization of the user group {groupName} in the course {courseName} really be ended?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronization completed successfully",
+	"feature-course-sync.GroupSelectionDialog.noTeacher":
+		"The following data for creating a new course is not available in the user group {groupName}:<li>Teacher</li><br/>Please check in moin.schule and start course creation again.",
 	"format.date": "MM/DD/YYYY",
 	"format.dateLong": "dddd, MMMM DD. YYYY",
 	"format.dateTime": "MM/DD/YYYY HH:mm",

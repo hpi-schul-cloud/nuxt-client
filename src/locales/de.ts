@@ -686,6 +686,8 @@ export default {
 		"Soll die Synchronization der Nutzendengruppe {groupName} im Kurs {courseName} wirklich beendet werden?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronisation erfolgreich beendet",
+	"feature-course-sync.GroupSelectionDialog.noTeacher":
+		"Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe {groupName} nicht vorhanden:<li>Lehrkraft</li><br/>Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",

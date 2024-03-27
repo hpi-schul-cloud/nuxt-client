@@ -1,11 +1,8 @@
-import { GroupEntryResponse } from "@/serverApi/v3";
+import { GroupListResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import {
-	groupEntryResponseFactory,
-	mountComposable,
-} from "@@/tests/test-utils";
+import { groupResponseFactory, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { GroupListFilter, useGroupApi, useGroupListState } from "./index";
@@ -51,19 +48,24 @@ describe("groupListState.composable", () => {
 			});
 		});
 
-		describe("when data is loaded", () => {
+		describe("when data is loaded and append is false", () => {
 			const setup = () => {
 				const { composable } = getComposable();
-				const groupMock: GroupEntryResponse = groupEntryResponseFactory.build();
+				const groupList: GroupListResponse = {
+					data: [groupResponseFactory.build()],
+					limit: 0,
+					skip: 0,
+					total: 10,
+				};
 				const options: Required<GroupListFilter> = {
 					name: "testName",
 					availableForSynchronization: true,
 				};
 
-				useGroupApiMock.getGroups.mockResolvedValue([groupMock]);
+				useGroupApiMock.getGroups.mockResolvedValueOnce(groupList);
 
 				return {
-					groupMock,
+					groupList,
 					composable,
 					options,
 				};
@@ -77,12 +79,62 @@ describe("groupListState.composable", () => {
 				expect(useGroupApiMock.getGroups).toHaveBeenCalledWith(options);
 			});
 
-			it("should set the group in the state", async () => {
-				const { composable, groupMock, options } = setup();
+			it("should set the groups in the state", async () => {
+				const { composable, groupList, options } = setup();
 
 				await composable.fetchGroups(options);
 
-				expect(composable.groups.value).toEqual([groupMock]);
+				expect(composable.groups.value).toEqual(groupList.data);
+			});
+
+			it("should set the total in the state", async () => {
+				const { composable, groupList, options } = setup();
+
+				await composable.fetchGroups(options);
+
+				expect(composable.total).toEqual(groupList.total);
+			});
+		});
+
+		describe("when data is loaded and append is true", () => {
+			const setup = () => {
+				const { composable } = getComposable();
+				const groupA = groupResponseFactory.build();
+				const groupB = groupResponseFactory.build();
+
+				const options: Required<GroupListFilter> = {
+					name: "testName",
+					availableForSynchronization: true,
+				};
+
+				useGroupApiMock.getGroups.mockResolvedValueOnce({
+					data: [groupA],
+					limit: 1,
+					skip: 0,
+					total: 2,
+				});
+				useGroupApiMock.getGroups.mockResolvedValueOnce({
+					data: [groupB],
+					limit: 1,
+					skip: 1,
+					total: 2,
+				});
+
+				return {
+					groupA,
+					groupB,
+					composable,
+					options,
+				};
+			};
+
+			it("should append the groups in the state", async () => {
+				const { composable, groupA, groupB, options } = setup();
+
+				await composable.fetchGroups(options, { append: true });
+				await composable.fetchGroups(options, { append: true });
+
+				expect(composable.groups.value).toEqual([groupA, groupB]);
 			});
 		});
 

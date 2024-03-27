@@ -35,13 +35,18 @@
 					<div v-intersect="onGroupListIntersect" />
 				</template>
 			</VAutocomplete>
-			<WarningAlert v-if="selectedGroup && !hasTeacher(selectedGroup)">
-				Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe
-				{{ selectedGroup.name }} nicht vorhanden:
-				<li>Lehrkraft</li>
-				<br />
-				Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.
-				<!-- TODO -->
+			<WarningAlert
+				v-if="selectedGroup && !hasTeacher(selectedGroup)"
+				data-testid="no-teacher-warning"
+			>
+				<RenderHTML
+					component="span"
+					:html="
+						$t('feature-course-sync.GroupSelectionDialog.noTeacher', {
+							groupName: selectedGroup.name,
+						})
+					"
+				/>
 			</WarningAlert>
 		</template>
 	</vCustomDialog>
@@ -51,6 +56,7 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
 import { useGroupListState } from "@data-group";
+import { RenderHTML } from "@feature-render-html";
 import { WarningAlert } from "@ui-alert";
 import { ModelRef, Ref, ref, watch } from "vue";
 
@@ -84,20 +90,21 @@ const hasTeacher = (group: GroupResponse): boolean => {
 };
 
 const onGroupListIntersect = async (isIntersecting: boolean) => {
-	if (isIntersecting) {
-		if (total.value > groups.value.length) {
-			skip.value += limit.value;
+	if (isIntersecting && total.value > groups.value.length) {
+		skip.value += limit.value;
 
-			await loadGroups();
-		}
+		await loadGroups({ append: true });
 	}
 };
 
-const loadGroups = async () => {
-	await fetchGroups({
-		name: searchGroupName.value.trim(),
-		availableForSynchronization: true,
-	});
+const loadGroups = async (options?: { append: boolean }) => {
+	await fetchGroups(
+		{
+			name: searchGroupName.value,
+			availableForSynchronization: true,
+		},
+		options
+	);
 };
 
 watch(isOpen, async (newValue: boolean, oldValue: boolean) => {
@@ -107,7 +114,7 @@ watch(isOpen, async (newValue: boolean, oldValue: boolean) => {
 });
 
 watch(searchGroupName, async (newValue: string, oldValue: string) => {
-	if (newValue.trim() !== oldValue.trim()) {
+	if (newValue !== oldValue) {
 		skip.value = 0;
 		await loadGroups();
 	}

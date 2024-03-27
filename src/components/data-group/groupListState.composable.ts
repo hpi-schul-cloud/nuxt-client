@@ -20,7 +20,10 @@ export const useGroupListState = () => {
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 
-	const fetchGroups = async (filter?: GroupListFilter): Promise<void> => {
+	const fetchGroups = async (
+		filter?: GroupListFilter,
+		options?: { append: boolean }
+	): Promise<void> => {
 		isLoading.value = true;
 
 		try {
@@ -30,7 +33,12 @@ export const useGroupListState = () => {
 			);
 
 			total.value = response.total;
-			groups.value = response.data;
+
+			if (options?.append) {
+				groups.value.push(...response.data);
+			} else {
+				groups.value = response.data;
+			}
 		} catch (errorResponse) {
 			handleError(errorResponse);
 		}
