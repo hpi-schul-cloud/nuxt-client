@@ -17,6 +17,7 @@
 					:maxLength="100"
 					:style="{ width: `${fieldWidth}px` }"
 					@update:value="updateBoardTitle"
+					@blur="onBoardTitleBlur"
 				/>
 				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 			</div>
@@ -151,6 +152,12 @@ const onDeleteBoard = async (confirmation: Promise<boolean>) => {
 	const shouldDelete = await confirmation;
 	if (shouldDelete) {
 		emit("delete:board", props.boardId);
+	}
+};
+
+const onBoardTitleBlur = () => {
+	if (boardTitle.value.length < 1) {
+		updateBoardTitle(t("pages.room.boardCard.label.courseBoard"));
 	}
 };
 

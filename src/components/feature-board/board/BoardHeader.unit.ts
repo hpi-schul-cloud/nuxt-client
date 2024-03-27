@@ -159,18 +159,75 @@ describe("BoardHeader", () => {
 	});
 
 	describe("when the title is updated", () => {
-		it("should emit 'update:title'", async () => {
-			jest.useFakeTimers();
+		describe("when the title is empty", () => {
+			it("should not emit 'update:title'", async () => {
+				jest.useFakeTimers();
 
-			const { wrapper } = setup();
+				const { wrapper } = setup();
 
-			const titleInput = wrapper.findComponent(BoardAnyTitleInput);
-			await titleInput.vm.$emit("update:value", "new-title");
+				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
+				await titleInput.vm.$emit("update:value", "");
 
-			jest.runAllTimers();
+				jest.runAllTimers();
 
-			const emitted = wrapper.emitted("update:title");
-			expect(emitted).toBeDefined();
+				const emitted = wrapper.emitted("update:title");
+				expect(emitted).toBeUndefined();
+			});
+		});
+
+		describe("when the title is not empty", () => {
+			it("should emit 'update:title'", async () => {
+				jest.useFakeTimers();
+
+				const { wrapper } = setup();
+
+				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
+				await titleInput.vm.$emit("update:value", "new-title");
+
+				jest.runAllTimers();
+
+				const emitted = wrapper.emitted("update:title");
+				expect(emitted).toBeDefined();
+			});
+		});
+	});
+
+	describe("when the title loses focus", () => {
+		describe("when the title is empty", () => {
+			it("should emit 'update:title'", async () => {
+				jest.useFakeTimers();
+
+				const { wrapper } = setup();
+
+				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
+				await titleInput.vm.$emit("update:value", "");
+				await titleInput.vm.$emit("blur");
+
+				jest.runAllTimers();
+
+				const emitted = wrapper.emitted("update:title");
+				expect(emitted).toBeDefined();
+				expect(emitted?.[0][0]).toEqual(
+					"pages.room.boardCard.label.courseBoard"
+				);
+			});
+		});
+
+		describe("when the title is not empty", () => {
+			it("should not emit 'update:title'", async () => {
+				jest.useFakeTimers();
+
+				const { wrapper } = setup();
+
+				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
+				await titleInput.vm.$emit("update:value", "newTitle");
+				await titleInput.vm.$emit("blur");
+
+				jest.runAllTimers();
+
+				const emitted = wrapper.emitted("update:title");
+				expect(emitted?.[1]).toBeUndefined();
+			});
 		});
 	});
 
