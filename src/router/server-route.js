@@ -12,8 +12,13 @@ const isH5pEditor = (path) => {
 	return path.startsWith("/api/v3/h5p-editor");
 };
 
+const isEduSharing = (path) => {
+	return path.startsWith("/edu-sharing/rest");
+};
+
 module.exports = {
 	isServer,
 	isFileStorage,
 	isH5pEditor,
+	isEduSharing,
 };

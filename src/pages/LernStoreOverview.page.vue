@@ -13,120 +13,28 @@
 			{{ $t("pages.content.index.backToCourse") }}
 		</v-btn>
 		<div class="content" :class="{ inline: isInline }">
-			<div>
-				<div class="search">
-					<div class="search__input-container">
-						<v-text-field
-							v-model="searchQuery"
-							autofocus
-							:class="
-								activateTransition
-									? 'content__searchbar'
-									: 'first-search__searchbar'
-							"
-							:placeholder="$t('pages.content.index.search.placeholder')"
-							@update:model-value="onInput"
-							data-testid="learningstore-search-input"
-						>
-							<template v-slot:append-inner>
-								<v-btn
-									v-if="searchQuery"
-									:icon="mdiClose"
-									:aria-label="$t('common.actions.delete')"
-									color="rgba(var(--v-theme-black))"
-									density="compact"
-									size="x-large"
-									variant="text"
-									:ripple="false"
-									@click="searchQuery = ''"
-								/>
-								<v-icon
-									v-else
-									:icon="mdiMagnify"
-									color="rgba(var(--v-theme-black))"
-									size="x-large"
-								/>
-							</template>
-						</v-text-field>
-					</div>
-				</div>
-				<transition name="fade">
-					<div class="content__container" v-if="true">
-						<template v-if="searchQuery.length > 1">
-							<p v-show="resources.data.length !== 0" class="content__total">
-								{{ resources.total }}
-								{{ $t("pages.content.index.search_results") }} "{{
-									searchQueryResult
-								}}"
-							</p>
-							<v-infinite-scroll width="100%" :items="resources" @load="onLoad">
-								<lern-store-grid
-									column-width="14rem"
-									data-testid="lernStoreCardsContainer"
-								>
-									<content-card
-										v-for="resource of resources.data"
-										:key="resource.properties['ccm:replicationsourceuuid'][0]"
-										class="card"
-										:inline="isInline"
-										:resource="resource"
-									/>
-								</lern-store-grid>
-								<template #loading>
-									<v-progress-circular
-										indeterminate
-										color="secondary"
-										size="115"
-										class="align-self-center mt-4"
-									/>
-								</template>
-								<template #empty>
-									<div v-if="!reachedTotal" class="content__no_results">
-										<content-empty-state />
-									</div>
-								</template>
-							</v-infinite-scroll>
-						</template>
-						<span v-if="!loading" class="content__container_child">
-							<content-initial-state v-if="searchQuery.length === 0" />
-						</span>
-					</div>
-				</transition>
-			</div>
-			<content-edu-sharing-footer class="content__footer" />
+			<EduSharingWrapper />
 		</div>
 	</section>
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from "vue";
-import { useDebounceFn, watchDebounced } from "@vueuse/core";
-import { mdiChevronLeft, mdiMagnify, mdiClose } from "@mdi/js";
-import {
-	CONTENT_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
-import { buildPageTitle } from "@/utils/pageTitle";
-import ContentCard from "@/components/lern-store/ContentCard.vue";
-import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
-import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
-import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter.vue";
-import ContentInitialState from "@/components/lern-store/ContentInitialState.vue";
-import { useI18n } from "vue-i18n";
+import EduSharingWrapper from "@/components/edu-sharing/EduSharingWrapper.vue";
 import themeConfig from "@/theme.config";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { mdiChevronLeft } from "@mdi/js";
+import { useDebounceFn, watchDebounced } from "@vueuse/core";
+import { computed, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
-const contentModule = injectStrict(CONTENT_MODULE_KEY);
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const searchQuery = ref("");
 const activateTransition = ref(false);
 const searchQueryResult = ref("");
-const queryOptions = ref({ $limit: 12, $skip: 0 });
 
 onMounted(() => {
 	const pageTitle = isInline.value
@@ -144,75 +52,6 @@ onMounted(() => {
 });
 
 const isInline = computed(() => !!route.query.inline);
-const resources = computed(() => contentModule.getResourcesGetter);
-const loading = computed(() => contentModule.getLoading);
-const reachedTotal = computed(
-	() =>
-		resources.value.total !== 0 &&
-		resources.value.data.length >= resources.value.total
-);
-
-const onInput = async () => {
-	await searchContent();
-	activateTransition.value = true;
-};
-
-const searchContent = useDebounceFn(async () => {
-	try {
-		await contentModule.getResources(searchQuery.value);
-	} catch (error) {
-		notifierModule.show({
-			text: t("pages.content.notification.lernstoreNotAvailable"),
-			status: "error",
-			timeout: 10000,
-		});
-	}
-}, 500);
-
-const onLoad = async ({
-	done,
-}: {
-	side: "start" | "end" | "both";
-	done: (status: "ok" | "empty" | "loading" | "error") => void;
-}) => {
-	if (reachedTotal.value) {
-		done("empty");
-		return;
-	}
-
-	if (!resources.value.data.length && searchQuery.value) {
-		await searchContent();
-
-		if (!resources.value.data.length) {
-			done("empty");
-			return;
-		}
-	} else {
-		await addContent();
-	}
-
-	done("ok");
-};
-
-const addContent = async () => {
-	queryOptions.value.$skip += queryOptions.value.$limit;
-
-	const query = {
-		$limit: queryOptions.value.$limit,
-		$skip: queryOptions.value.$skip,
-		searchQuery: searchQuery.value,
-	};
-
-	try {
-		await contentModule.addResources(query);
-	} catch (error) {
-		notifierModule.show({
-			text: t("pages.content.notification.lernstoreNotAvailable"),
-			status: "error",
-			timeout: 10000,
-		});
-	}
-};
 
 const updateURLQueryDebounced = useDebounceFn(() => {
 	searchQueryResult.value = searchQuery.value;
@@ -261,7 +100,8 @@ watchDebounced(
 	flex-direction: column;
 	justify-content: space-between;
 	width: 100%;
-	min-height: calc(100vh - var(--sidebar-item-height));
+	min-height: calc(100vh - var(--sidebar-item-height) - 105.58px);
+	// footer height  6558px + margin 40px (24px top + 16px bottom)
 	padding: 0 var(--space-lg);
 	overflow-y: hidden;
 

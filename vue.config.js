@@ -112,7 +112,7 @@ module.exports = defineConfig({
 				options.prettify = false;
 				options.compilerOptions = {
 					...(options.compilerOptions || {}),
-					isCustomElement: (tag) => tag.startsWith("h5p-"),
+					isCustomElement: (tag) => tag.startsWith("h5p-") || tag === "edu-sharing-app",
 				};
 				return options;
 			});
