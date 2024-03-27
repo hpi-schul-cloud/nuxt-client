@@ -226,27 +226,32 @@ describe("copy module", () => {
 
 		describe("checkDrawingChildren", () => {
 			describe("when drawing element is not among types in passed property", () => {
-				const copyModule = new CopyModule({});
-				const payload: CopyApiResponseElementsTypesEnum[] = [
-					CopyApiResponseElementsTypesEnum.Board,
-					CopyApiResponseElementsTypesEnum.Card,
-					CopyApiResponseElementsTypesEnum.Column,
-				];
+				it("should not change hasDrawingChild property to true", () => {
+					const copyModule = new CopyModule({});
+					const payload: CopyApiResponseElementsTypesEnum[] = [
+						CopyApiResponseElementsTypesEnum.Board,
+						CopyApiResponseElementsTypesEnum.Card,
+						CopyApiResponseElementsTypesEnum.Column,
+					];
 
-				copyModule.checkDrawingChildren(payload);
-				expect(copyModule.getHasDrawingChild).toBe(false);
+					copyModule.checkDrawingChildren(payload);
+					expect(copyModule.getHasDrawingChild).toBe(false);
+				});
 			});
-			describe("when drawing element is among types in passed property", () => {
-				const copyModule = new CopyModule({});
-				const payload: CopyApiResponseElementsTypesEnum[] = [
-					CopyApiResponseElementsTypesEnum.Board,
-					CopyApiResponseElementsTypesEnum.Card,
-					CopyApiResponseElementsTypesEnum.Column,
-					CopyApiResponseElementsTypesEnum.DrawingElement,
-				];
 
-				copyModule.checkDrawingChildren(payload);
-				expect(copyModule.getHasDrawingChild).toBe(true);
+			describe("when drawing element is among types in passed property", () => {
+				it("should change hasDrawingChild property to true", () => {
+					const copyModule = new CopyModule({});
+					const payload: CopyApiResponseElementsTypesEnum[] = [
+						CopyApiResponseElementsTypesEnum.Board,
+						CopyApiResponseElementsTypesEnum.Card,
+						CopyApiResponseElementsTypesEnum.Column,
+						CopyApiResponseElementsTypesEnum.DrawingElement,
+					];
+
+					copyModule.checkDrawingChildren(payload);
+					expect(copyModule.getHasDrawingChild).toBe(true);
+				});
 			});
 		});
 
