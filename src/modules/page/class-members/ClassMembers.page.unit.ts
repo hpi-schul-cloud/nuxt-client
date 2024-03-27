@@ -1,11 +1,11 @@
 import { mount } from "@vue/test-utils";
 import { ref } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import ClassMembersPage from "@/components/page-class-members/ClassMembers.page.vue";
+import ClassMembersPage from "./ClassMembers.page.vue";
 import { Group, useGroupState } from "@data-group";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { groupFactory } from "@@/tests/test-utils/factory";
-import ClassMembersInfoBox from "@/components/page-class-members/ClassMembersInfoBox.vue";
+import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 import {

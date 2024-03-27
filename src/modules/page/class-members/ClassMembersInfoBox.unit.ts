@@ -1,6 +1,6 @@
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import ClassMembersInfoBox from "@/components/page-class-members/ClassMembersInfoBox.vue";
+import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { useSystemApi } from "@data-system";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
