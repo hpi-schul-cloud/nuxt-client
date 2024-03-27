@@ -116,9 +116,9 @@ export default class CopyModule extends VuexModule {
 
 	@Action
 	checkDrawingChildren(
-		copyResultElements: CopyApiResponseElementsTypesEnum[]
+		copyResultElementsTypes: CopyApiResponseElementsTypesEnum[]
 	): void {
-		const elementIndex = copyResultElements.indexOf(
+		const elementIndex = copyResultElementsTypes.indexOf(
 			CopyApiResponseElementsTypesEnum.DrawingElement
 		);
 		if (elementIndex !== -1) {
