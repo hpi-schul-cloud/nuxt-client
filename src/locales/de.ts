@@ -1551,8 +1551,8 @@ export default {
 		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",
 	"error.4500":
 		"Verbindungsfehler: Die Echtzeit-Session konnte nicht hergestellt werden. Bitte Verbindung überprüfen oder Seite neu laden.",
+	"error.4401": "Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
-	"tldraw.error.ws.4401": "Du hast keine Berechtigung für dieses Whiteboard",
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
