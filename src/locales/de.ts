@@ -467,6 +467,9 @@ export default {
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.columnBoard.label": "Board-Titel",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Das Board kann im Folgenden umbenannt werden. ",
 	"components.molecules.import.columnBoard.options.title": "Board importieren",
 	"components.molecules.import.columnBoard.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
@@ -525,6 +528,7 @@ export default {
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Mit dem folgenden Link kann das Board als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+	"components.molecules.share.columnBoard.result.linkLabel": "Link Board-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
 	"components.molecules.share.courses.options.ctlTools.infotext":
