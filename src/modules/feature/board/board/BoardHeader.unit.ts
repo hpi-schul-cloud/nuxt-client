@@ -160,13 +160,13 @@ describe("BoardHeader", () => {
 
 	describe("when the title is updated", () => {
 		describe("when the title is empty", () => {
-			it("should not emit 'update:title'", () => {
+			it("should not emit 'update:title'", async () => {
 				jest.useFakeTimers();
 
 				const { wrapper } = setup();
 
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
-				titleInput.vm.$emit("update:value", "");
+				await titleInput.vm.$emit("update:value", "");
 
 				jest.runAllTimers();
 
@@ -176,13 +176,13 @@ describe("BoardHeader", () => {
 		});
 
 		describe("when the title is not empty", () => {
-			it("should emit 'update:title'", () => {
+			it("should emit 'update:title'", async () => {
 				jest.useFakeTimers();
 
 				const { wrapper } = setup();
 
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
-				titleInput.vm.$emit("update:value", "new-title");
+				await titleInput.vm.$emit("update:value", "new-title");
 
 				jest.runAllTimers();
 
@@ -194,14 +194,14 @@ describe("BoardHeader", () => {
 
 	describe("when the title loses focus", () => {
 		describe("when the title is empty", () => {
-			it("should emit 'update:title'", () => {
+			it("should emit 'update:title'", async () => {
 				jest.useFakeTimers();
 
 				const { wrapper } = setup();
 
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
-				titleInput.vm.$emit("update:value", "");
-				titleInput.vm.$emit("blur");
+				await titleInput.vm.$emit("update:value", "");
+				await titleInput.vm.$emit("blur");
 
 				jest.runAllTimers();
 
@@ -214,14 +214,14 @@ describe("BoardHeader", () => {
 		});
 
 		describe("when the title is not empty", () => {
-			it("should not emit 'update:title'", () => {
+			it("should not emit 'update:title'", async () => {
 				jest.useFakeTimers();
 
 				const { wrapper } = setup();
 
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
-				titleInput.vm.$emit("update:value", "newTitle");
-				titleInput.vm.$emit("blur");
+				await titleInput.vm.$emit("update:value", "newTitle");
+				await titleInput.vm.$emit("blur");
 
 				jest.runAllTimers();
 

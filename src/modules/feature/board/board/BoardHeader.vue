@@ -148,13 +148,6 @@ const onUnpublishBoard = () => {
 	emit("update:visibility", false);
 };
 
-const onDeleteBoard = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
-	if (shouldDelete) {
-		emit("delete:board", props.boardId);
-	}
-};
-
 const onBoardTitleBlur = () => {
 	if (boardTitle.value.length < 1) {
 		updateBoardTitle(t("pages.room.boardCard.label.courseBoard"));
@@ -165,6 +158,13 @@ const updateBoardTitle = async (value: string) => {
 	boardTitle.value = value;
 	calculateWidth();
 	await emitTitle(value);
+};
+
+const onDeleteBoard = async (confirmation: Promise<boolean>) => {
+	const shouldDelete = await confirmation;
+	if (shouldDelete) {
+		emit("delete:board", props.boardId);
+	}
 };
 
 const emitTitle = useDebounceFn((newTitle: string) => {
