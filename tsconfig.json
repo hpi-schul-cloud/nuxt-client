@@ -22,7 +22,7 @@
 			"@data-group": ["src/modules/data/group"],
 			"@data-system": ["src/modules/data/system"],
 			"@data-provisioning-options": ["src/modules/data/provisioning-options"],
-			"@data-room": ["src/components/data-room"],
+			"@data-room": ["src/modules/data/room"],
 			"@feature-board-file-element": ["src/modules/feature/board-file-element"],
 			"@feature-board-submission-element": [
 				"src/modules/feature/board-submission-element"

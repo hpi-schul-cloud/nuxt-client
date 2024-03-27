@@ -33,7 +33,7 @@ module.exports = defineConfig({
 				"@data-provisioning-options": getDir(
 					"src/modules/data/provisioning-options"
 				),
-				"@data-room": getDir("src/components/data-room"),
+				"@data-room": getDir("src/modules/data/room"),
 				"@feature-board-file-element": getDir(
 					"src/modules/feature/board-file-element"
 				),
