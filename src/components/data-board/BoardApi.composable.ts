@@ -22,9 +22,6 @@ import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { AxiosPromise } from "axios";
 
-import { useBoardStore } from "./store/BoardStore";
-useBoardStore();
-
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 	const boardColumnApi = BoardColumnApiFactory(undefined, "/v3", $axios);
