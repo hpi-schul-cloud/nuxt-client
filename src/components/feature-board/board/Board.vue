@@ -102,6 +102,12 @@ import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { useRouter } from "vue-router";
+import { useBoardStore } from "@/components/data-board/store/BoardStore.ts";
+import { fetchBoardAction } from "@/components/data-board/store/types/Actions.ts";
+
+const boardStore = useBoardStore();
+// console.log(boardStore);
+// console.log(fetchBoardAction);
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -227,6 +233,9 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 onMounted(() => {
 	setAlert();
+	// console.log("fetch-board", props.boardId);
+	boardStore.dispatch(fetchBoardAction(props.boardId));
+	// boardStore.fetchBoard(props.boardId);
 });
 
 onUnmounted(() => {
