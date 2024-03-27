@@ -105,7 +105,6 @@ import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
-	BoardElementResponseTypeEnum,
 	BoardParentType,
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
@@ -475,14 +474,6 @@ export default defineComponent({
 				type: CopyParamsTypeEnum.Course,
 			};
 
-			const columnBoard = this.roomData.elements.find(
-				(value) => value.type === BoardElementResponseTypeEnum.ColumnBoard
-			);
-
-			if (columnBoard !== undefined) {
-				await roomModule.fetchHasDrawingChild(columnBoard.content.id);
-			}
-
 			await this.copy(copyParams);
 
 			const copyResult = this.copyModule.getCopyResult;
@@ -500,7 +491,6 @@ export default defineComponent({
 			await this.roomModule.fetchContent(payload.courseId);
 		},
 		onCopyResultModalClosed() {
-			roomModule.setHasDrawingChild(false);
 			this.copyModule.reset();
 		},
 		async onCreateBoard(courseId) {

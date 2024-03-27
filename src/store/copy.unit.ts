@@ -526,6 +526,22 @@ describe("copy module", () => {
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
 		});
+
+		describe("setHasDrawingChild", () => {
+			const setup = () => {
+				const roomModule = new CopyModule({});
+				const payload = true;
+
+				return { roomModule, payload };
+			};
+
+			it("should set the state", () => {
+				const { roomModule, payload } = setup();
+
+				roomModule.setHasDrawingChild(payload);
+				expect(roomModule.getHasDrawingChild).toStrictEqual(payload);
+			});
+		});
 	});
 
 	describe("getters", () => {
@@ -533,9 +549,11 @@ describe("copy module", () => {
 			const copyModule = new CopyModule({});
 			copyModule.setCopyResult(serverDataPartial);
 			copyModule.setResultModalOpen(true);
+			copyModule.setHasDrawingChild(true);
 			expect(copyModule.getId).toBe("123");
 			expect(copyModule.getTitle).toBe("Aufgabe");
 			expect(copyModule.getIsResultModalOpen).toBe(true);
+			expect(copyModule.getHasDrawingChild).toBe(true);
 		});
 	});
 });

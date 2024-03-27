@@ -349,58 +349,6 @@ describe("room module", () => {
 			});
 		});
 
-		describe("fetchHasDrawingChild", () => {
-			describe("when room has drawing child", () => {
-				const setup = () => {
-					const mockApi = {
-						boardControllerHasDrawingChild: jest.fn(),
-					};
-					const boardApiFactorySpy = jest
-						.spyOn(serverApi, "BoardApiFactory")
-						.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
-					const roomModule = new RoomModule({});
-					return { mockApi, boardApiFactorySpy, roomModule };
-				};
-
-				it("should call api to get info if has drawing child", async () => {
-					const { mockApi, boardApiFactorySpy, roomModule } = setup();
-
-					await roomModule.fetchHasDrawingChild("id");
-
-					expect(mockApi.boardControllerHasDrawingChild).toHaveBeenCalledTimes(
-						1
-					);
-					expect(mockApi.boardControllerHasDrawingChild).toHaveBeenCalledWith(
-						"id"
-					);
-
-					boardApiFactorySpy.mockRestore();
-				});
-			});
-			describe("when hasDrawingChild get error", () => {
-				const setup = () => {
-					const error = { statusCode: 418, message: "I'm a teapot" };
-					const mockApi = {
-						boardControllerHasDrawingChild: jest.fn().mockRejectedValue(error),
-					};
-					const boardApiFactorySpy = jest
-						.spyOn(serverApi, "BoardApiFactory")
-						.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
-					const roomModule = new RoomModule({});
-					return { boardApiFactorySpy, roomModule, error };
-				};
-				it("should catch error in catch block", async () => {
-					const { boardApiFactorySpy, roomModule, error } = setup();
-
-					await roomModule.fetchHasDrawingChild("id");
-
-					expect(roomModule.error).toStrictEqual(error);
-
-					boardApiFactorySpy.mockRestore();
-				});
-			});
-		});
-
 		describe("downloadCommonCartridgeCourse", () => {
 			it("should call backend api", async () => {
 				const roomModule = new RoomModule({});
@@ -691,21 +639,21 @@ describe("room module", () => {
 			});
 		});
 
-		describe("setHasDrawingChild", () => {
-			const setup = () => {
-				const roomModule = new RoomModule({});
-				const payload = true;
-
-				return { roomModule, payload };
-			};
-
-			it("should set the state", () => {
-				const { roomModule, payload } = setup();
-
-				roomModule.setHasDrawingChild(payload);
-				expect(roomModule.getHasDrawingChild).toStrictEqual(payload);
-			});
-		});
+		// describe("setHasDrawingChild", () => {
+		// 	const setup = () => {
+		// 		const roomModule = new RoomModule({});
+		// 		const payload = true;
+		//
+		// 		return { roomModule, payload };
+		// 	};
+		//
+		// 	it("should set the state", () => {
+		// 		const { roomModule, payload } = setup();
+		//
+		// 		roomModule.setHasDrawingChild(payload);
+		// 		expect(roomModule.getHasDrawingChild).toStrictEqual(payload);
+		// 	});
+		// });
 	});
 
 	describe("getters", () => {
@@ -822,21 +770,6 @@ describe("room module", () => {
 
 				roomModule.setPermissionData(expectedPermissions);
 				expect(roomModule.getPermissionData).toStrictEqual(expectedPermissions);
-			});
-		});
-
-		describe("getHasDrawingChild", () => {
-			const setup = () => {
-				const roomModule = new RoomModule({});
-				const payload = true;
-
-				return { roomModule, payload };
-			};
-			it("should return the permission data", () => {
-				const { roomModule, payload } = setup();
-
-				roomModule.setHasDrawingChild(payload);
-				expect(roomModule.getHasDrawingChild).toStrictEqual(payload);
 			});
 		});
 	});

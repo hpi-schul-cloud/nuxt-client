@@ -48,7 +48,7 @@
 import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import { envConfigModule, roomModule } from "@/store";
+import { envConfigModule, copyModule } from "@/store";
 import {
 	mdiAlert,
 	mdiCheckCircle,
@@ -157,7 +157,7 @@ export default {
 			);
 		},
 		hasDrawingElement() {
-			return this.isCourse && roomModule.getHasDrawingChild;
+			return this.isCourse && copyModule.getHasDrawingChild;
 		},
 		hasFileElement() {
 			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);
