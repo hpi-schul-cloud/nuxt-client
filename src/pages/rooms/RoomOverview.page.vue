@@ -399,10 +399,14 @@ export default defineComponent({
 			};
 			roomsModule.update(payload);
 		},
-		onImportSuccess(name) {
+		onImportSuccess(name, id) {
 			this.showImportSuccess(name);
-			this.$router.replace({ path: "/rooms-overview" });
-			roomsModule.fetch();
+			if (id) {
+				this.$router.replace({ name: "rooms-id", params: { id } });
+			} else {
+				this.$router.replace({ name: "rooms-overview" });
+				roomsModule.fetch();
+			}
 		},
 		showImportSuccess(name) {
 			this.notifierModule?.show({

@@ -1,19 +1,17 @@
+import { authModule, envConfigModule } from "@/store";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc"; // dependent on utc plugin
-import timezone from "dayjs/plugin/timezone";
-import relativeTime from "dayjs/plugin/relativeTime";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import "dayjs/locale/de";
 import "dayjs/locale/es";
 import "dayjs/locale/uk";
-import { authModule, envConfigModule } from "@/store";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import relativeTime from "dayjs/plugin/relativeTime";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(relativeTime);
-
-const DEFAULT_TIMEZONE = "Europe/Berlin";
 
 let currentTimezone;
 let schoolTimezone;
@@ -86,7 +84,7 @@ const initDefaultTimezone = (app, store) => {
 	schoolTimezone = store?.state?.schools?.school?.timezone;
 	instanceTimezone = envConfigModule.getDefaultTimezone;
 	userTimezone = getUserTimezone(app) || app.$datetime.currentTimezone;
-	currentTimezone = schoolTimezone || instanceTimezone || DEFAULT_TIMEZONE;
+	currentTimezone = schoolTimezone || instanceTimezone;
 	userHasSchoolTimezone = !schoolTimezone || currentTimezone === userTimezone;
 	setDefaultTimezone(currentTimezone);
 

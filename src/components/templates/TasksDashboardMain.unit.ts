@@ -11,6 +11,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { meResponseFactory } from "@@/tests/test-utils";
@@ -76,7 +77,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					finishedTasksModule: finishedTasksModuleMock,
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-					shareModule: shareModuleMock,
+					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 					authModule: authModuleMock,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},

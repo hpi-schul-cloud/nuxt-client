@@ -21,6 +21,7 @@ import VideoConferenceModule from "@/store/video-conference";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { InjectionKey } from "vue";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
+import ShareModule from "@/store/share";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
@@ -62,5 +63,7 @@ export const CONTENT_MODULE_KEY: InjectionKey<ContentModule> =
 export const COPY_MODULE_KEY: InjectionKey<CopyModule> = Symbol("copyModule");
 export const COMMON_CARTRIDGE_IMPORT_MODULE_KEY: InjectionKey<CommonCartridgeImportModule> =
 	Symbol("commonCartridgeImportModule");
+export const SHARE_MODULE_KEY: InjectionKey<ShareModule> =
+	Symbol("shareModule");
 
 export const THEME_KEY: InjectionKey<{ name: string }> = Symbol("theme");

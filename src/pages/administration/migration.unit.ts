@@ -1,4 +1,5 @@
 import MigrationWizard from "@/pages/administration/Migration.page.vue";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import ImportUsersModule from "@/store/import-users";
@@ -73,7 +74,7 @@ describe("User Migration / Index", () => {
 		});
 
 		envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
-		envConfigModule.getEnv.SC_THEME = "default";
+		envConfigModule.getEnv.SC_THEME = SchulcloudTheme.Default;
 		envConfigModule.getEnv.MIGRATION_WIZARD_DOCUMENTATION_LINK =
 			"https://docs.dbildungscloud.de/x/VAEbDg?frameable=true";
 		importUsersModule.setTotal(100);
