@@ -12,9 +12,6 @@ const n21Theme: ThemeDefinition = {
 		"secondary-lighten-1": "#536e8c",
 		"secondary-darken-1": "#283f5a",
 		accent: "#970000",
-		"on-surface": "#355478",
-		"on-background": "#355478",
-		"on-white": "#355478",
 	},
 };
 

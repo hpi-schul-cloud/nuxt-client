@@ -129,7 +129,7 @@
 					<mask id="mask-2" fill="white">
 						<use xlink:href="#path-1" />
 					</mask>
-					<use id="Combined-Shape" fill="#3a424b" xlink:href="#path-1" />
+					<use id="Combined-Shape" fill="#54616e" xlink:href="#path-1" />
 				</g>
 				<g
 					id="Group-16-Copy"

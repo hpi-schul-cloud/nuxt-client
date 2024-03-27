@@ -42,7 +42,7 @@ describe("@components/share/ImportFlow", () => {
 		id: "1234",
 		title: "Mathe",
 		shortTitle: "Ma",
-		displayColor: "#3a424b",
+		displayColor: "#54616e",
 	};
 
 	const setup = (attrs = {}) => {

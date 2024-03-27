@@ -95,7 +95,7 @@ export default {
 	},
 	computed: {
 		iconColor() {
-			const defaultColor = "#3a424b";
+			const defaultColor = "#54616e";
 			return this.task.displayColor || defaultColor;
 		},
 		isCloseToDueDate() {

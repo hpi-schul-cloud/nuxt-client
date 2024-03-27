@@ -82,7 +82,7 @@ const mockCourseData = [
 		id: "1234",
 		title: "Mathe",
 		shortTitle: "Ma",
-		displayColor: "#3a424b",
+		displayColor: "#54616e",
 	},
 ];
 
@@ -204,7 +204,7 @@ describe("@/pages/RoomOverview", () => {
 				searchText: "Mathe",
 				title: "Mathe",
 				shortTitle: "Ma",
-				displayColor: "#3a424b",
+				displayColor: "#54616e",
 				to: "/rooms/1234",
 			},
 		];

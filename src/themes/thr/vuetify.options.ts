@@ -12,9 +12,6 @@ const thrTheme: ThemeDefinition = {
 		"secondary-lighten-1": "#3b719a",
 		"secondary-darken-1": "#124266",
 		accent: "#f56b00",
-		"on-surface": "#185888",
-		"on-background": "#185888",
-		"on-white": "#185888",
 	},
 };
 

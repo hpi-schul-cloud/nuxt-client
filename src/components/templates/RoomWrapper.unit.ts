@@ -54,7 +54,7 @@ const mockData = [
 		id: "123",
 		title: "Mathe",
 		shortTitle: "Ma",
-		displayColor: "#3a424b",
+		displayColor: "#54616e",
 		startDate: "2019-12-07T23:00:00.000Z",
 		untilDate: "2020-12-16T23:00:00.000Z",
 		titleDate: "2019/20",
