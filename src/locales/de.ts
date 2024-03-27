@@ -686,6 +686,10 @@ export default {
 		"Soll die Synchronization der Nutzendengruppe {groupName} im Kurs {courseName} wirklich beendet werden?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronisation erfolgreich beendet",
+	"feature-course-sync.GroupSelectionDialog.title": "Nutzendengruppe auswählen",
+	"feature-course-sync.GroupSelectionDialog.text":
+		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
+	"feature-course-sync.GroupSelectionDialog.selection.label": "Gruppen-Auswahl",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe {groupName} nicht vorhanden:<li>Lehrkraft</li><br/>Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.",
 	"format.date": "DD.MM.YYYY",
@@ -1567,10 +1571,6 @@ export default {
 	"tldraw.error.ws.4500":
 		"Bei der Tldraw-Websocket-Verbindung ist ein Fehler aufgetreten",
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
-	"ui-course-sync.group-selection-dialog.title": "Nutzendengruppe auswählen",
-	"ui-course-sync.group-selection-dialog.text":
-		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
-	"ui-course-sync.group-selection-dialog.selection.label": "Gruppen-Auswahl",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

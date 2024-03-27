@@ -9,16 +9,16 @@
 	>
 		<template #title>
 			<div class="text-h4 my-2 text-break">
-				{{ $t("ui-course-sync.group-selection-dialog.title") }}
+				{{ $t("feature-course-sync.GroupSelectionDialog.title") }}
 			</div>
 		</template>
 
 		<template #content>
 			<p class="text-md mt-2">
-				{{ $t("ui-course-sync.group-selection-dialog.text") }}
+				{{ $t("feature-course-sync.GroupSelectionDialog.text") }}
 			</p>
 			<VAutocomplete
-				:label="$t('ui-course-sync.group-selection-dialog.selection.label')"
+				:label="$t('feature-course-sync.GroupSelectionDialog.selection.label')"
 				:no-data-text="$t('common.nodata')"
 				item-title="name"
 				item-value="id"

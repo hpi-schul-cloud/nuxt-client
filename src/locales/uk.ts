@@ -692,6 +692,11 @@ export default {
 		"Чи дійсно слід завершити синхронізацію групи користувачів {groupName} у курсі {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Синхронізацію успішно завершено",
+	"feature-course-sync.GroupSelectionDialog.title":
+		"Виберіть групу користувачів",
+	"feature-course-sync.GroupSelectionDialog.text":
+		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
+	"feature-course-sync.GroupSelectionDialog.selection.label": "Вибір групи",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}:<li>Викладач</li><br/>Перевірте moin.schule і почніть створення курсу знову.",
 	"format.date": "DD.MM.YYYY",
@@ -1558,10 +1563,6 @@ export default {
 		"Виникла помилка під час з'єднання з веб-сокетом tldraw",
 	"ui-confirmation-dialog.ask-delete":
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
-	"ui-course-sync.group-selection-dialog.title": "Виберіть групу користувачів",
-	"ui-course-sync.group-selection-dialog.text":
-		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
-	"ui-course-sync.group-selection-dialog.selection.label": "Вибір групи",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",

@@ -700,6 +700,12 @@ export default {
 		"¿Debería realmente finalizarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Sincronización completada exitosamente",
+	"feature-course-sync.GroupSelectionDialog.title":
+		"Seleccionar grupo de usuarios",
+	"feature-course-sync.GroupSelectionDialog.text":
+		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
+	"feature-course-sync.GroupSelectionDialog.selection.label":
+		"Selección de grupo",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}:<li>Profesor</li><br/>Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
 	"format.date": "DD/MM/YYYY",
@@ -1583,11 +1589,6 @@ export default {
 	"tldraw.error.ws.4500":
 		"Se ha producido un error en la conexión tldraw websocket",
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
-	"ui-course-sync.group-selection-dialog.title":
-		"Seleccionar grupo de usuarios",
-	"ui-course-sync.group-selection-dialog.text":
-		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
-	"ui-course-sync.group-selection-dialog.selection.label": "Selección de grupo",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",
