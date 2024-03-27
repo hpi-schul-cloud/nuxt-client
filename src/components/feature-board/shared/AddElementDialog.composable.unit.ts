@@ -1,6 +1,6 @@
 import { ContentElementType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import { Envs } from "@/store/types/env-config";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import { injectStrict } from "@/utils/inject";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
@@ -95,7 +95,7 @@ describe("ElementTypeSelection Composable", () => {
 
 	describe("elementTypeOptions actions", () => {
 		const setup = (
-			env: Partial<Envs> = {
+			env: Partial<ConfigResponse> = {
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 				FEATURE_TLDRAW_ENABLED: true,

@@ -1,18 +1,19 @@
-import FilePathsModule from "@/store/filePaths";
-import setupStores from "@@/tests/test-utils/setupStores";
-import ConsentPage from "./StudentConsent.page.vue";
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import BaseLink from "@/components/base/BaseLink.vue";
+import BaseModal from "@/components/base/BaseModal.vue";
 import { envConfigModule, notifierModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import FilePathsModule from "@/store/filePaths";
 import NotifierModule from "@/store/notifier";
-import { createStore } from "vuex";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseLink from "@/components/base/BaseLink.vue";
-import BaseModal from "@/components/base/BaseModal.vue";
+import { createStore } from "vuex";
+import ConsentPage from "./StudentConsent.page.vue";
 
 const mockData = [
 	{
@@ -243,9 +244,8 @@ describe("students/consent", () => {
 	});
 
 	it("confirm consent form should appear if consent is required", async () => {
-		envConfigModule.setEnvs({
-			FEATURE_CONSENT_NECESSARY: true,
-		});
+		const envs = envsFactory.build({ FEATURE_CONSENT_NECESSARY: true });
+		envConfigModule.setEnvs(envs);
 		const { wrapper } = setup();
 
 		mockData[0].birthday = "10.10.2010";
@@ -258,9 +258,8 @@ describe("students/consent", () => {
 	});
 
 	it("confirm consent form shouldn't appear if consent is not required", async () => {
-		envConfigModule.setEnvs({
-			FEATURE_CONSENT_NECESSARY: false,
-		});
+		const envs = envsFactory.build({ FEATURE_CONSENT_NECESSARY: false });
+		envConfigModule.setEnvs(envs);
 		const { wrapper } = setup();
 
 		mockData[0].birthday = "10.10.2010";
@@ -273,9 +272,8 @@ describe("students/consent", () => {
 	});
 
 	it("should not progress next step if checkBox is not checked and consent is required", async () => {
-		envConfigModule.setEnvs({
-			FEATURE_CONSENT_NECESSARY: true,
-		});
+		const envs = envsFactory.build({ FEATURE_CONSENT_NECESSARY: true });
+		envConfigModule.setEnvs(envs);
 		const { wrapper } = setup();
 
 		mockData[0].birthday = "10.10.2010";
@@ -293,9 +291,8 @@ describe("students/consent", () => {
 
 	it("should progress next step if consent is not required", async () => {
 		const notifierModuleMock = jest.spyOn(notifierModule, "show");
-		envConfigModule.setEnvs({
-			FEATURE_CONSENT_NECESSARY: false,
-		});
+		const envs = envsFactory.build({ FEATURE_CONSENT_NECESSARY: false });
+		envConfigModule.setEnvs(envs);
 		const { wrapper } = setup();
 
 		mockData[0].birthday = "10.10.2010";

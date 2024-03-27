@@ -1,6 +1,7 @@
 import setupStores from "@@/tests/test-utils/setupStores";
 import CommonCartridgeExportModule from "./common-cartridge-export";
 import RoomModule from "./room";
+import { roomModule } from "./store-accessor";
 
 describe("commonCartridgeExportModule", () => {
 	describe("actions", () => {
@@ -8,14 +9,24 @@ describe("commonCartridgeExportModule", () => {
 			setupStores({ roomModule: RoomModule });
 		});
 		describe("startExport", () => {
-			it("should call startExport with the correct version", () => {
+			it("should call roomModule.downloadCommonCartridgeCourse with the correct version and topic", () => {
 				const commonCartridgeExportModule = new CommonCartridgeExportModule({});
-				const roomModule = new RoomModule({});
+				const roomModuleMock = jest.spyOn(
+					roomModule,
+					"downloadCommonCartridgeCourse"
+				);
 
 				commonCartridgeExportModule.setVersion("1.1.0");
-				roomModule.downloadCommonCartridgeCourse("1.1.0");
+				commonCartridgeExportModule.setTopics(["topic"]);
+				commonCartridgeExportModule.setTasks(["task"]);
 
-				expect(commonCartridgeExportModule.getVersion).toBe("1.1.0");
+				commonCartridgeExportModule.startExport();
+
+				expect(roomModuleMock).toHaveBeenCalledWith({
+					version: "1.1.0",
+					topics: ["topic"],
+					tasks: ["task"],
+				});
 			});
 		});
 
@@ -24,9 +35,13 @@ describe("commonCartridgeExportModule", () => {
 				const commonCartridgeExportModule = new CommonCartridgeExportModule({});
 
 				commonCartridgeExportModule.setVersion("1.1.0");
+				commonCartridgeExportModule.setTopics(["topic"]);
+				commonCartridgeExportModule.setTasks(["task"]);
 				commonCartridgeExportModule.startExportFlow();
 
 				expect(commonCartridgeExportModule.getVersion).toBe("");
+				expect(commonCartridgeExportModule.getTopics).toEqual([]);
+				expect(commonCartridgeExportModule.getTasks).toEqual([]);
 				expect(commonCartridgeExportModule.getIsExportModalOpen).toBe(true);
 			});
 		});
@@ -36,9 +51,13 @@ describe("commonCartridgeExportModule", () => {
 				const commonCartridgeExportModule = new CommonCartridgeExportModule({});
 
 				commonCartridgeExportModule.setVersion("1.1.0");
+				commonCartridgeExportModule.setTopics(["topic"]);
+				commonCartridgeExportModule.setTasks(["task"]);
 				commonCartridgeExportModule.resetExportFlow();
 
 				expect(commonCartridgeExportModule.getVersion).toBe("");
+				expect(commonCartridgeExportModule.getTopics).toEqual([]);
+				expect(commonCartridgeExportModule.getTasks).toEqual([]);
 				expect(commonCartridgeExportModule.getIsExportModalOpen).toBe(false);
 			});
 		});
@@ -62,6 +81,28 @@ describe("commonCartridgeExportModule", () => {
 				commonCartridgeExportModule.setVersion("1.1.0");
 
 				expect(commonCartridgeExportModule.getVersion).toBe("1.1.0");
+			});
+		});
+
+		describe("setTopics", () => {
+			// AI next 7 lines
+			it("should set topics to the given value", () => {
+				const commonCartridgeExportModule = new CommonCartridgeExportModule({});
+
+				commonCartridgeExportModule.setTopics(["topic"]);
+
+				expect(commonCartridgeExportModule.getTopics).toEqual(["topic"]);
+			});
+		});
+
+		// AI next 9 lines
+		describe("setTasks", () => {
+			it("should set tasks to the given value", () => {
+				const commonCartridgeExportModule = new CommonCartridgeExportModule({});
+
+				commonCartridgeExportModule.setTasks(["task"]);
+
+				expect(commonCartridgeExportModule.getTasks).toEqual(["task"]);
 			});
 		});
 	});

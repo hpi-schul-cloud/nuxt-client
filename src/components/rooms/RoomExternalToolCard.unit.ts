@@ -1,4 +1,4 @@
-import RoomDotMenu from "@/components/molecules/RoomDotMenu.vue";
+import { RoomDotMenu } from "@ui-room-details";
 import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
@@ -581,7 +581,9 @@ describe("RoomExternalToolCard", () => {
 		it("should not display the item menu", () => {
 			const { wrapper } = setup();
 
-			const itemMenu = wrapper.find('[data-testId="tool-card-menu"]');
+			const itemMenu = wrapper.find(
+				'[data-testid="room-tool-three-dot-button"]'
+			);
 
 			expect(itemMenu.exists()).toEqual(false);
 		});

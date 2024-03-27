@@ -57,8 +57,9 @@
 				</template>
 			</Sortable>
 			<BoardAddCardButton
-				v-if="hasCreateColumnPermission && !isDragging"
+				v-if="showAddButton"
 				@add-card="onCreateCard"
+				:data-testid="`column-${index}-add-card-btn`"
 			/>
 		</div>
 	</div>
@@ -129,6 +130,9 @@ export default defineComponent({
 			useBoardPermissions();
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
+		const showAddButton = computed(
+			() => hasCreateColumnPermission && isDragging.value === false
+		);
 
 		const hasManyColumns = computed(() => props.columnCount > 1);
 		const isFirstColumn = computed(
@@ -255,6 +259,7 @@ export default defineComponent({
 			onUpdateTitle,
 			getChildPayload,
 			reactiveIndex,
+			showAddButton,
 		};
 	},
 });
