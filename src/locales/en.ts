@@ -16,7 +16,7 @@ export default {
 	"common.actions.invite": "Send course link",
 	"common.actions.logout": "Logout",
 	"common.actions.ok": "OK",
-	"common.actions.remove": "Remove",
+	"common.actions.remove": "Delete",
 	"common.actions.save": "Save",
 	"common.actions.scrollToTop": "Scroll up",
 	"common.actions.share": "Share",
@@ -1357,8 +1357,7 @@ export default {
 		"The course could not be copied completely.",
 	"pages.room.copy.lesson.message.copied": "Topic was successfully copied.",
 	"pages.room.copy.task.message.copied": "Task was successfully copied.",
-	"pages.room.itemDelete.text":
-		'Are you sure, you want to delete item "{itemTitle}"?',
+	"pages.room.itemDelete.text": "Delete {itemType} {itemTitle}?",
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.label.shareLesson": "Share topic copy",

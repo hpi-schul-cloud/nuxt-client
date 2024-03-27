@@ -183,6 +183,7 @@
 					{{
 						$t("pages.room.itemDelete.text", {
 							itemTitle: itemDelete.itemData.name || itemDelete.itemData.title,
+							itemType: itemDelete.itemType,
 						})
 					}}
 				</p>
@@ -192,7 +193,6 @@
 </template>
 
 <script>
-import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
@@ -205,6 +205,7 @@ import {
 import { envConfigModule, roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
+import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";
 
 export default {
