@@ -41,6 +41,7 @@
 					<BoardMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
 					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+					<BoardMenuActionDelete @click="onDeleteBoard" />
 				</BoardMenu>
 			</div>
 		</div>
@@ -57,6 +58,7 @@ import {
 import {
 	BoardMenu,
 	BoardMenuActionCopy,
+	BoardMenuActionDelete,
 	BoardMenuActionEdit,
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
@@ -92,6 +94,7 @@ const emit = defineEmits([
 	"share:board",
 	"update:title",
 	"update:visibility",
+	"delete:board",
 ]);
 
 const { t } = useI18n();
@@ -142,6 +145,13 @@ const onPublishBoard = () => {
 const onUnpublishBoard = () => {
 	if (!hasEditPermission) return;
 	emit("update:visibility", false);
+};
+
+const onDeleteBoard = async (confirmation: Promise<boolean>) => {
+	const shouldDelete = await confirmation;
+	if (shouldDelete) {
+		emit("delete:board", props.boardId);
+	}
 };
 
 const updateBoardTitle = async (value: string) => {
