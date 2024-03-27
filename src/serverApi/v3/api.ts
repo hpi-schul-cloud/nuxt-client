@@ -1378,7 +1378,7 @@ export interface CopyApiResponse {
      */
     elements?: Array<CopyApiResponse>;
     /**
-     * List of included sub elements types with recursive type structure
+     * Array with listed types of all sub elements
      * @type {Array<string>}
      * @memberof CopyApiResponse
      */
