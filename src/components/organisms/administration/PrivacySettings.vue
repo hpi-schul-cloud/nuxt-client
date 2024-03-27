@@ -131,9 +131,10 @@
 </template>
 
 <script setup lang="ts">
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { computed } from "vue";
 import { mdiCheck } from "@mdi/js";
+import { computed } from "vue";
 
 const props = defineProps({
 	permissions: {
@@ -147,22 +148,25 @@ const props = defineProps({
 });
 
 const toggleStudentLernstoreViewEnabled = computed(
-	() => envConfigModule.getAdminToggleStudentLernstoreViewEnabled
+	() =>
+		envConfigModule.getEnv.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED
 );
 
 const isTeacherStudentVisibilityConfigurable = computed(
-	() => envConfigModule.getTeacherStudentVisibilityIsConfigurable
+	() => envConfigModule.getEnv.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE
 );
 
 const isTeacherStudentVisibilityVisible = computed(
-	() => envConfigModule.getTeacherStudentVisibilityIsVisible
+	() => envConfigModule.getEnv.TEACHER_STUDENT_VISIBILITY__IS_VISIBLE
 );
 
 const videoConferenceEnabled = computed(
-	() => envConfigModule.getVideoConferenceEnabled
+	() => envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED
 );
 
-const rocketChatEnabled = computed(() => envConfigModule.getRocketChatEnabled);
+const rocketChatEnabled = computed(
+	() => envConfigModule.getEnv.ROCKETCHAT_SERVICE_ENABLED
+);
 
 const theme = computed(() => envConfigModule.getTheme);
 
@@ -172,15 +176,16 @@ const studentVisibility = computed(() => {
 			? props.permissions.teacher.STUDENT_LIST
 			: false;
 	} else {
-		return envConfigModule.getTeacherStudentVisibilityIsEnabledByDefault;
+		return envConfigModule.getEnv
+			.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
 	}
 });
 
 const studentVisibilityTextKey = computed(() => {
 	switch (theme.value) {
-		case "n21":
+		case SchulcloudTheme.N21:
 			return "pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen";
-		case "brb":
+		case SchulcloudTheme.Brb:
 			return "pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg";
 		default:
 			return "pages.administration.school.index.privacySettings.longText.studentVisibility";

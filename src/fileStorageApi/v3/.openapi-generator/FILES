@@ -15,6 +15,7 @@ models/file-record-parent-type.ts
 models/file-record-response.ts
 models/file-record-scan-status.ts
 models/file-url-params.ts
+models/files-storage-config-response.ts
 models/index.ts
 models/preview-output-mime-types.ts
 models/preview-status.ts

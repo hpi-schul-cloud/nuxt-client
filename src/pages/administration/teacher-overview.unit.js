@@ -1,22 +1,24 @@
-import TeacherPage from "./TeacherOverview.page.vue";
-import mock$objects from "../../../tests/test-utils/pageStubs";
+import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import BaseLink from "@/components/base/BaseLink.vue";
+import BaseModal from "@/components/base/BaseModal.vue";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import setupStores from "@@/tests/test-utils/setupStores";
 import AuthModule from "@/store/auth";
-import SchoolsModule from "@/store/schools";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import { createStore } from "vuex";
+import SchoolsModule from "@/store/schools";
+import { envsFactory } from "@@/tests/test-utils";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
+import mock$objects from "@@/tests/test-utils/pageStubs";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
-import BaseLink from "@/components/base/BaseLink.vue";
-import BaseDialog from "@/components/base/BaseDialog/BaseDialog.vue";
-import BaseModal from "@/components/base/BaseModal.vue";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick } from "vue";
+import { createStore } from "vuex";
+import TeacherPage from "./TeacherOverview.page.vue";
 
 const mockData = [
 	{
@@ -46,12 +48,12 @@ const envs = {
 	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
 	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
 	JWT_TIMEOUT_SECONDS: 7200,
-	SC_THEME: process.env.SC_THEME || "default",
+	SC_THEME: process.env.SC_THEME || SchulcloudTheme.Default,
 	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: false,
 	FEATURE_ES_COLLECTIONS_ENABLED: null,
 	FEATURE_EXTENSIONS_ENABLED: null,
 	FEATURE_TEAMS_ENABLED: null,
-	I18N__AVAILABLE_LANGUAGES: "",
+	I18N__AVAILABLE_LANGUAGES: [],
 	I18N__DEFAULT_LANGUAGE: "",
 	I18N__DEFAULT_TIMEZONE: "",
 	I18N__FALLBACK_LANGUAGE: "",
@@ -364,10 +366,11 @@ describe("teachers/index", () => {
 	});
 
 	it("should display the columns behind the migration feature flag", () => {
-		envConfigModule.setEnvs({
+		const envBuild = envsFactory.build({
 			...envs,
 			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
 		});
+		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
 
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
@@ -381,10 +384,11 @@ describe("teachers/index", () => {
 	});
 
 	it("should not display the columns behind the migration feature flag", () => {
-		envConfigModule.setEnvs({
+		const envBuild = envsFactory.build({
 			...envs,
 			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
 		});
+		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
 
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
@@ -502,10 +506,11 @@ describe("teachers/index", () => {
 	});
 
 	it("should display the consent column if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
-		envConfigModule.setEnvs({
+		const envBuild = envsFactory.build({
 			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
+		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true
@@ -516,10 +521,11 @@ describe("teachers/index", () => {
 	});
 
 	it("should display the legend's icons if ADMIN_TABLES_DISPLAY_CONSENT_COLUMN is true", () => {
-		envConfigModule.setEnvs({
+		const envBuild = envsFactory.build({
 			...envs,
 			ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
 		});
+		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
 		expect(envConfigModule.getEnv.ADMIN_TABLES_DISPLAY_CONSENT_COLUMN).toBe(
 			true

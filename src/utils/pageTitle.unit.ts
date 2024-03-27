@@ -1,8 +1,8 @@
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import { envsFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { buildPageTitle } from "./pageTitle";
-import { Envs } from "@/store/types/env-config";
 
 describe("pageTitle", () => {
 	const instanceTitle = "mockedTitle";
@@ -11,7 +11,10 @@ describe("pageTitle", () => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});
-		envConfigModule.setEnvs({ SC_TITLE: instanceTitle } as Envs);
+		const envs = envsFactory.build({
+			SC_TITLE: instanceTitle,
+		});
+		envConfigModule.setEnvs(envs);
 	});
 
 	it("should set default page title", async () => {

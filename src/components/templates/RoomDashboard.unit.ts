@@ -1,21 +1,28 @@
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import {
+	ConfigResponse,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
 import { envConfigModule, roomModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
-import { Envs } from "@/store/types/env-config";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { VueWrapper, mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
 
+import { envsFactory } from "@@/tests/test-utils";
 import { createMock } from "@golevelup/ts-jest";
 import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
@@ -123,6 +130,7 @@ const notifierModuleMock = createModuleMocks(NotifierModule);
 const getWrapper = (props: any, options?: object) => {
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 		getCtlToolsTabEnabled: false,
+		getEnv: {} as ConfigResponse,
 	});
 
 	const router = createMock<Router>();
@@ -133,7 +141,7 @@ const getWrapper = (props: any, options?: object) => {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-				shareModule: shareModuleMock,
+				[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 			},
 		},
@@ -153,8 +161,11 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			envConfigModule: EnvConfigModule,
 			copyModule: CopyModule,
 		});
-		const env = { FEATURE_LESSON_SHARE: true, FEATURE_TASK_SHARE: true };
-		envConfigModule.setEnvs(env as unknown as Envs);
+		const envs = envsFactory.build({
+			FEATURE_LESSON_SHARE: true,
+			FEATURE_TASK_SHARE: true,
+		});
+		envConfigModule.setEnvs(envs);
 	});
 	describe("common features", () => {
 		it("should have props", async () => {
@@ -575,7 +586,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyTask Process", () => {
 		beforeEach(() => {
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+			const envs = envsFactory.build({
+				FEATURE_COPY_SERVICE_ENABLED: true,
+			});
+			envConfigModule.setEnvs(envs);
 		});
 
 		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
@@ -611,7 +625,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyLesson Process", () => {
 		beforeEach(() => {
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+			const envs = envsFactory.build({
+				FEATURE_COPY_SERVICE_ENABLED: true,
+			});
+			envConfigModule.setEnvs(envs);
 		});
 
 		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {
@@ -647,7 +664,10 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 	describe("CopyBoard Process", () => {
 		beforeEach(() => {
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+			const envs = envsFactory.build({
+				FEATURE_COPY_SERVICE_ENABLED: true,
+			});
+			envConfigModule.setEnvs(envs);
 		});
 
 		it("should call the copyBoard method when a board component emits 'copy-board' custom event", async () => {

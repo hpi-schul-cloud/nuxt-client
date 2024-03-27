@@ -33,6 +33,7 @@ module.exports = defineConfig({
 				"@data-provisioning-options": getDir(
 					"src/components/data-provisioning-options"
 				),
+				"@data-room": getDir("src/components/data-room"),
 				"@feature-board-file-element": getDir(
 					"src/components/feature-board-file-element"
 				),
@@ -52,6 +53,7 @@ module.exports = defineConfig({
 					"src/components/feature-board-drawing-element"
 				),
 				"@feature-board": getDir("src/components/feature-board"),
+				"@feature-course-sync": getDir("src/components/feature-course-sync"),
 				"@feature-editor": getDir("src/components/feature-editor"),
 				"@feature-render-html": getDir("src/components/feature-render-html"),
 				"@feature-news-form": getDir("src/components/feature-news-form"),
@@ -64,6 +66,7 @@ module.exports = defineConfig({
 				"@ui-date-time-picker": getDir("src/components/ui-date-time-picker"),
 				"@ui-light-box": getDir("src/components/ui-light-box"),
 				"@ui-speed-dial-menu": getDir("src/components/ui-speed-dial-menu"),
+				"@ui-room-details": getDir("src/components/ui-room-details"),
 				"@util-board": getDir("src/components/util-board"),
 				"@util-validators": getDir("src/components/util-validators"),
 				"@util-vue": getDir("src/components/util-vue"),

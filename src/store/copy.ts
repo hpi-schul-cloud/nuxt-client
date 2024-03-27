@@ -133,6 +133,7 @@ export default class CopyModule extends VuexModule {
 				.then((response) => response.data);
 		}
 		if (
+			type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
 			type === ShareTokenBodyParamsParentTypeEnum.Lessons ||
 			type === ShareTokenBodyParamsParentTypeEnum.Tasks
 		) {

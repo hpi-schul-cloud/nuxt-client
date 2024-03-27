@@ -357,23 +357,11 @@ export interface CardSkeletonResponse {
 export interface ChangeLanguageParams {
     /**
      * 
-     * @type {string}
+     * @type {LanguageType}
      * @memberof ChangeLanguageParams
      */
-    language: ChangeLanguageParamsLanguageEnum;
+    language: LanguageType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ChangeLanguageParamsLanguageEnum {
-    De = 'de',
-    En = 'en',
-    Es = 'es',
-    Uk = 'uk'
-}
-
 /**
  * 
  * @export
@@ -489,6 +477,25 @@ export enum ClassRequestContext {
 /**
  * 
  * @export
+ * @interface ClassResponse
+ */
+export interface ClassResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ClassResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ClassResponse
+     */
+    gradeLevel: number;
+}
+/**
+ * 
+ * @export
  * @enum {string}
  */
 export enum ClassSortBy {
@@ -586,6 +593,12 @@ export interface ConfigResponse {
     FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: boolean;
     /**
      * 
+     * @type {number}
+     * @memberof ConfigResponse
+     */
+    CTL_TOOLS_RELOAD_TIME_MS: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof ConfigResponse
      */
@@ -628,10 +641,10 @@ export interface ConfigResponse {
     TLDRAW__ASSETS_MAX_SIZE: number;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof ConfigResponse
      */
-    TLDRAW__ASSETS_ALLOWED_EXTENSIONS_LIST?: string;
+    TLDRAW__ASSETS_ALLOWED_MIME_TYPES_LIST: Array<string>;
     /**
      * 
      * @type {boolean}
@@ -745,6 +758,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_COLUMN_BOARD_SHARE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_COURSE_SHARE: boolean;
     /**
      * 
@@ -832,28 +851,28 @@ export interface ConfigResponse {
     ROCKETCHAT_SERVICE_ENABLED: boolean;
     /**
      * 
-     * @type {string}
+     * @type {Array<LanguageType>}
      * @memberof ConfigResponse
      */
-    I18N__AVAILABLE_LANGUAGES: string;
+    I18N__AVAILABLE_LANGUAGES: Array<LanguageType>;
     /**
      * 
-     * @type {string}
+     * @type {LanguageType}
      * @memberof ConfigResponse
      */
-    I18N__DEFAULT_LANGUAGE: string;
+    I18N__DEFAULT_LANGUAGE: LanguageType;
     /**
      * 
-     * @type {string}
+     * @type {LanguageType}
      * @memberof ConfigResponse
      */
-    I18N__FALLBACK_LANGUAGE: string;
+    I18N__FALLBACK_LANGUAGE: LanguageType;
     /**
      * 
-     * @type {string}
+     * @type {Timezone}
      * @memberof ConfigResponse
      */
-    I18N__DEFAULT_TIMEZONE: string;
+    I18N__DEFAULT_TIMEZONE: Timezone;
     /**
      * 
      * @type {number}
@@ -880,10 +899,10 @@ export interface ConfigResponse {
     DOCUMENT_BASE_DIR: string;
     /**
      * 
-     * @type {string}
+     * @type {SchulcloudTheme}
      * @memberof ConfigResponse
      */
-    SC_THEME: string;
+    SC_THEME: SchulcloudTheme;
     /**
      * 
      * @type {string}
@@ -1055,6 +1074,25 @@ export interface ConsentSessionResponse {
      * @memberof ConsentSessionResponse
      */
     challenge: string;
+}
+/**
+ * 
+ * @export
+ * @interface ConsentsResponse
+ */
+export interface ConsentsResponse {
+    /**
+     * 
+     * @type {UserConsentResponse}
+     * @memberof ConsentsResponse
+     */
+    userConsent: UserConsentResponse;
+    /**
+     * 
+     * @type {Array<ParentConsentResponse>}
+     * @memberof ConsentsResponse
+     */
+    parentConsents: Array<ParentConsentResponse>;
 }
 /**
  * 
@@ -1424,6 +1462,25 @@ export interface CountyResponse {
      * @memberof CountyResponse
      */
     antaresKey: string;
+}
+/**
+ * 
+ * @export
+ * @interface CourseExportBodyParams
+ */
+export interface CourseExportBodyParams {
+    /**
+     * The list of ids of topics which should be exported. If empty no topics are exported.
+     * @type {Array<string>}
+     * @memberof CourseExportBodyParams
+     */
+    topics: Array<string>;
+    /**
+     * The list of ids of tasks which should be exported. If empty no tasks are exported.
+     * @type {Array<string>}
+     * @memberof CourseExportBodyParams
+     */
+    tasks: Array<string>;
 }
 /**
  * 
@@ -2867,6 +2924,18 @@ export enum InstanceFeature {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum LanguageType {
+    De = 'de',
+    En = 'en',
+    Es = 'es',
+    Uk = 'uk'
+}
+
+/**
+ * 
+ * @export
  * @interface LdapAuthorizationBodyParams
  */
 export interface LdapAuthorizationBodyParams {
@@ -3511,10 +3580,10 @@ export interface MeResponse {
     user: MeUserResponse;
     /**
      * 
-     * @type {Array<MeRolesReponse>}
+     * @type {Array<MeRoleResponse>}
      * @memberof MeResponse
      */
-    roles: Array<MeRolesReponse>;
+    roles: Array<MeRoleResponse>;
     /**
      * 
      * @type {Array<string>}
@@ -3523,10 +3592,10 @@ export interface MeResponse {
     permissions: Array<string>;
     /**
      * 
-     * @type {string}
+     * @type {LanguageType}
      * @memberof MeResponse
      */
-    language?: string;
+    language: LanguageType;
     /**
      * 
      * @type {MeAccountResponse}
@@ -3537,19 +3606,19 @@ export interface MeResponse {
 /**
  * 
  * @export
- * @interface MeRolesReponse
+ * @interface MeRoleResponse
  */
-export interface MeRolesReponse {
+export interface MeRoleResponse {
     /**
      * 
      * @type {string}
-     * @memberof MeRolesReponse
+     * @memberof MeRoleResponse
      */
     id: string;
     /**
      * 
      * @type {string}
-     * @memberof MeRolesReponse
+     * @memberof MeRoleResponse
      */
     name: string;
 }
@@ -4593,6 +4662,49 @@ export interface OidcContextResponse {
 /**
  * 
  * @export
+ * @interface ParentConsentResponse
+ */
+export interface ParentConsentResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ParentConsentResponse
+     */
+    form: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ParentConsentResponse
+     */
+    privacyConsent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ParentConsentResponse
+     */
+    termsOfUseConsent: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ParentConsentResponse
+     */
+    dateOfPrivacyConsent: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ParentConsentResponse
+     */
+    dateOfTermsOfUseConsent: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ParentConsentResponse
+     */
+    _id: string;
+}
+/**
+ * 
+ * @export
  * @interface PatchGroupParams
  */
 export interface PatchGroupParams {
@@ -4684,6 +4796,19 @@ export interface PatchVisibilityParams {
      * @memberof PatchVisibilityParams
      */
     visibility: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface ProviderConfigResponse
+ */
+export interface ProviderConfigResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof ProviderConfigResponse
+     */
+    provider: string;
 }
 /**
  * 
@@ -5426,6 +5551,43 @@ export interface SchoolResponse {
 /**
  * 
  * @export
+ * @interface SchoolSystemResponse
+ */
+export interface SchoolSystemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolSystemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolSystemResponse
+     */
+    type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolSystemResponse
+     */
+    alias?: string;
+    /**
+     * 
+     * @type {ProviderConfigResponse}
+     * @memberof SchoolSystemResponse
+     */
+    ldapConfig?: ProviderConfigResponse;
+    /**
+     * 
+     * @type {ProviderConfigResponse}
+     * @memberof SchoolSystemResponse
+     */
+    oauthConfig?: ProviderConfigResponse;
+}
+/**
+ * 
+ * @export
  * @interface SchoolUpdateBodyParams
  */
 export interface SchoolUpdateBodyParams {
@@ -5455,10 +5617,10 @@ export interface SchoolUpdateBodyParams {
     fileStorageType?: SchoolUpdateBodyParamsFileStorageTypeEnum;
     /**
      * 
-     * @type {string}
+     * @type {LanguageType}
      * @memberof SchoolUpdateBodyParams
      */
-    language?: SchoolUpdateBodyParamsLanguageEnum;
+    language?: LanguageType;
     /**
      * 
      * @type {Array<SchoolFeature>}
@@ -5491,16 +5653,6 @@ export interface SchoolUpdateBodyParams {
     */
 export enum SchoolUpdateBodyParamsFileStorageTypeEnum {
     AwsS3 = 'awsS3'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SchoolUpdateBodyParamsLanguageEnum {
-    De = 'de',
-    En = 'en',
-    Es = 'es',
-    Uk = 'uk'
 }
 
 /**
@@ -5598,6 +5750,18 @@ export interface SchulConneXProvisioningOptionsResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum SchulcloudTheme {
+    Brb = 'brb',
+    Default = 'default',
+    N21 = 'n21',
+    Thr = 'thr'
+}
+
+/**
+ * 
+ * @export
  * @interface SetHeightBodyParams
  */
 export interface SetHeightBodyParams {
@@ -5647,7 +5811,8 @@ export interface ShareTokenBodyParams {
 export enum ShareTokenBodyParamsParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**
@@ -5702,7 +5867,8 @@ export interface ShareTokenInfoResponse {
 export enum ShareTokenInfoResponseParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**
@@ -5732,7 +5898,8 @@ export interface ShareTokenPayloadResponse {
 export enum ShareTokenPayloadResponseParentTypeEnum {
     Courses = 'courses',
     Tasks = 'tasks',
-    Lessons = 'lessons'
+    Lessons = 'lessons',
+    ColumnBoard = 'columnBoard'
 }
 
 /**
@@ -6319,6 +6486,15 @@ export interface TimestampsResponse {
  * @export
  * @enum {string}
  */
+export enum Timezone {
+    EuropeBerlin = 'Europe/Berlin'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 export enum ToolContextType {
     Course = 'course',
     BoardElement = 'board-element'
@@ -6521,6 +6697,43 @@ export interface UpdateSubmissionItemBodyParams {
 /**
  * 
  * @export
+ * @interface UserConsentResponse
+ */
+export interface UserConsentResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserConsentResponse
+     */
+    form: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserConsentResponse
+     */
+    privacyConsent: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof UserConsentResponse
+     */
+    termsOfUseConsent: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserConsentResponse
+     */
+    dateOfPrivacyConsent: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserConsentResponse
+     */
+    dateOfTermsOfUseConsent: string;
+}
+/**
+ * 
+ * @export
  * @interface UserDataResponse
  */
 export interface UserDataResponse {
@@ -6567,6 +6780,37 @@ export interface UserInfoResponse {
      * @memberof UserInfoResponse
      */
     lastName?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UserListResponse
+ */
+export interface UserListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<UserResponse>}
+     * @memberof UserListResponse
+     */
+    data: Array<UserResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof UserListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof UserListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof UserListResponse
+     */
+    limit: number;
 }
 /**
  * 
@@ -6754,6 +6998,79 @@ export enum UserMatchResponseMatchedByEnum {
     Admin = 'admin'
 }
 
+/**
+ * 
+ * @export
+ * @interface UserResponse
+ */
+export interface UserResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    _id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    firstName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    lastName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    email: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    birthday: string;
+    /**
+     * 
+     * @type {object}
+     * @memberof UserResponse
+     */
+    preferences: object;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    consentStatus: string;
+    /**
+     * 
+     * @type {ConsentsResponse}
+     * @memberof UserResponse
+     */
+    consent: ConsentsResponse;
+    /**
+     * 
+     * @type {Array<ClassResponse>}
+     * @memberof UserResponse
+     */
+    classes: Array<ClassResponse>;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    importHash: string;
+}
 /**
  * 
  * @export
@@ -7532,6 +7849,532 @@ export class AccountApi extends BaseAPI implements AccountApiInterface {
      */
     public accountControllerUpdateMyAccount(patchMyAccountParams: PatchMyAccountParams, options?: any) {
         return AccountApiFp(this.configuration).accountControllerUpdateMyAccount(patchMyAccountParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * AdminStudentsApi - axios parameter creator
+ * @export
+ */
+export const AdminStudentsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Returns an student with given id.
+         * @param {string} id The id of the user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiStudentsControllerFindStudentById: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('adminApiStudentsControllerFindStudentById', 'id', id)
+            const localVarPath = `/users/admin/students/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Returns all students which satisfies the given criteria.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [$limit] Page limit, defaults to 25.
+         * @param {number} [$skip] Number of elements (not pages) to be skipped
+         * @param {Array<string>} [classes] 
+         * @param {string} [searchQuery] 
+         * @param {Array<string>} [users] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiStudentsControllerSearchStudents: async (skip?: number, limit?: number, $limit?: number, $skip?: number, classes?: Array<string>, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/admin/students`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if ($limit !== undefined) {
+                localVarQueryParameter['$limit'] = $limit;
+            }
+
+            if ($skip !== undefined) {
+                localVarQueryParameter['$skip'] = $skip;
+            }
+
+            if (classes) {
+                localVarQueryParameter['classes'] = classes;
+            }
+
+            if (searchQuery !== undefined) {
+                localVarQueryParameter['searchQuery'] = searchQuery;
+            }
+
+            if (users) {
+                localVarQueryParameter['users'] = users;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AdminStudentsApi - functional programming interface
+ * @export
+ */
+export const AdminStudentsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AdminStudentsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns an student with given id.
+         * @param {string} id The id of the user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async adminApiStudentsControllerFindStudentById(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiStudentsControllerFindStudentById(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Returns all students which satisfies the given criteria.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [$limit] Page limit, defaults to 25.
+         * @param {number} [$skip] Number of elements (not pages) to be skipped
+         * @param {Array<string>} [classes] 
+         * @param {string} [searchQuery] 
+         * @param {Array<string>} [users] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, classes?: Array<string>, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiStudentsControllerSearchStudents(skip, limit, $limit, $skip, classes, searchQuery, users, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * AdminStudentsApi - factory interface
+ * @export
+ */
+export const AdminStudentsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AdminStudentsApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns an student with given id.
+         * @param {string} id The id of the user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiStudentsControllerFindStudentById(id: string, options?: any): AxiosPromise<UserResponse> {
+            return localVarFp.adminApiStudentsControllerFindStudentById(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Returns all students which satisfies the given criteria.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [$limit] Page limit, defaults to 25.
+         * @param {number} [$skip] Number of elements (not pages) to be skipped
+         * @param {Array<string>} [classes] 
+         * @param {string} [searchQuery] 
+         * @param {Array<string>} [users] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, classes?: Array<string>, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
+            return localVarFp.adminApiStudentsControllerSearchStudents(skip, limit, $limit, $skip, classes, searchQuery, users, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AdminStudentsApi - interface
+ * @export
+ * @interface AdminStudentsApi
+ */
+export interface AdminStudentsApiInterface {
+    /**
+     * 
+     * @summary Returns an student with given id.
+     * @param {string} id The id of the user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminStudentsApiInterface
+     */
+    adminApiStudentsControllerFindStudentById(id: string, options?: any): AxiosPromise<UserResponse>;
+
+    /**
+     * 
+     * @summary Returns all students which satisfies the given criteria.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {number} [$limit] Page limit, defaults to 25.
+     * @param {number} [$skip] Number of elements (not pages) to be skipped
+     * @param {Array<string>} [classes] 
+     * @param {string} [searchQuery] 
+     * @param {Array<string>} [users] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminStudentsApiInterface
+     */
+    adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, classes?: Array<string>, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
+
+}
+
+/**
+ * AdminStudentsApi - object-oriented interface
+ * @export
+ * @class AdminStudentsApi
+ * @extends {BaseAPI}
+ */
+export class AdminStudentsApi extends BaseAPI implements AdminStudentsApiInterface {
+    /**
+     * 
+     * @summary Returns an student with given id.
+     * @param {string} id The id of the user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminStudentsApi
+     */
+    public adminApiStudentsControllerFindStudentById(id: string, options?: any) {
+        return AdminStudentsApiFp(this.configuration).adminApiStudentsControllerFindStudentById(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns all students which satisfies the given criteria.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {number} [$limit] Page limit, defaults to 25.
+     * @param {number} [$skip] Number of elements (not pages) to be skipped
+     * @param {Array<string>} [classes] 
+     * @param {string} [searchQuery] 
+     * @param {Array<string>} [users] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminStudentsApi
+     */
+    public adminApiStudentsControllerSearchStudents(skip?: number, limit?: number, $limit?: number, $skip?: number, classes?: Array<string>, searchQuery?: string, users?: Array<string>, options?: any) {
+        return AdminStudentsApiFp(this.configuration).adminApiStudentsControllerSearchStudents(skip, limit, $limit, $skip, classes, searchQuery, users, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * AdminTeachersApi - axios parameter creator
+ * @export
+ */
+export const AdminTeachersApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Returns a teacher with given id.
+         * @param {string} id The id of the user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiTeachersControllerFindTeacherById: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('adminApiTeachersControllerFindTeacherById', 'id', id)
+            const localVarPath = `/users/admin/teachers/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Returns all teachers which satisfies the given criteria.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [$limit] Page limit, defaults to 25.
+         * @param {number} [$skip] Number of elements (not pages) to be skipped
+         * @param {Array<string>} [classes] 
+         * @param {string} [searchQuery] 
+         * @param {Array<string>} [users] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiTeachersControllerSearchTeachers: async (skip?: number, limit?: number, $limit?: number, $skip?: number, classes?: Array<string>, searchQuery?: string, users?: Array<string>, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/admin/teachers`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if ($limit !== undefined) {
+                localVarQueryParameter['$limit'] = $limit;
+            }
+
+            if ($skip !== undefined) {
+                localVarQueryParameter['$skip'] = $skip;
+            }
+
+            if (classes) {
+                localVarQueryParameter['classes'] = classes;
+            }
+
+            if (searchQuery !== undefined) {
+                localVarQueryParameter['searchQuery'] = searchQuery;
+            }
+
+            if (users) {
+                localVarQueryParameter['users'] = users;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AdminTeachersApi - functional programming interface
+ * @export
+ */
+export const AdminTeachersApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AdminTeachersApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns a teacher with given id.
+         * @param {string} id The id of the user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async adminApiTeachersControllerFindTeacherById(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiTeachersControllerFindTeacherById(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Returns all teachers which satisfies the given criteria.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [$limit] Page limit, defaults to 25.
+         * @param {number} [$skip] Number of elements (not pages) to be skipped
+         * @param {Array<string>} [classes] 
+         * @param {string} [searchQuery] 
+         * @param {Array<string>} [users] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, classes?: Array<string>, searchQuery?: string, users?: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, classes, searchQuery, users, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * AdminTeachersApi - factory interface
+ * @export
+ */
+export const AdminTeachersApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AdminTeachersApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns a teacher with given id.
+         * @param {string} id The id of the user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiTeachersControllerFindTeacherById(id: string, options?: any): AxiosPromise<UserResponse> {
+            return localVarFp.adminApiTeachersControllerFindTeacherById(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Returns all teachers which satisfies the given criteria.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [$limit] Page limit, defaults to 25.
+         * @param {number} [$skip] Number of elements (not pages) to be skipped
+         * @param {Array<string>} [classes] 
+         * @param {string} [searchQuery] 
+         * @param {Array<string>} [users] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, classes?: Array<string>, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse> {
+            return localVarFp.adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, classes, searchQuery, users, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AdminTeachersApi - interface
+ * @export
+ * @interface AdminTeachersApi
+ */
+export interface AdminTeachersApiInterface {
+    /**
+     * 
+     * @summary Returns a teacher with given id.
+     * @param {string} id The id of the user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminTeachersApiInterface
+     */
+    adminApiTeachersControllerFindTeacherById(id: string, options?: any): AxiosPromise<UserResponse>;
+
+    /**
+     * 
+     * @summary Returns all teachers which satisfies the given criteria.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {number} [$limit] Page limit, defaults to 25.
+     * @param {number} [$skip] Number of elements (not pages) to be skipped
+     * @param {Array<string>} [classes] 
+     * @param {string} [searchQuery] 
+     * @param {Array<string>} [users] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminTeachersApiInterface
+     */
+    adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, classes?: Array<string>, searchQuery?: string, users?: Array<string>, options?: any): AxiosPromise<UserListResponse>;
+
+}
+
+/**
+ * AdminTeachersApi - object-oriented interface
+ * @export
+ * @class AdminTeachersApi
+ * @extends {BaseAPI}
+ */
+export class AdminTeachersApi extends BaseAPI implements AdminTeachersApiInterface {
+    /**
+     * 
+     * @summary Returns a teacher with given id.
+     * @param {string} id The id of the user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminTeachersApi
+     */
+    public adminApiTeachersControllerFindTeacherById(id: string, options?: any) {
+        return AdminTeachersApiFp(this.configuration).adminApiTeachersControllerFindTeacherById(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Returns all teachers which satisfies the given criteria.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {number} [$limit] Page limit, defaults to 25.
+     * @param {number} [$skip] Number of elements (not pages) to be skipped
+     * @param {Array<string>} [classes] 
+     * @param {string} [searchQuery] 
+     * @param {Array<string>} [users] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdminTeachersApi
+     */
+    public adminApiTeachersControllerSearchTeachers(skip?: number, limit?: number, $limit?: number, $skip?: number, classes?: Array<string>, searchQuery?: string, users?: Array<string>, options?: any) {
+        return AdminTeachersApiFp(this.configuration).adminApiTeachersControllerSearchTeachers(skip, limit, $limit, $skip, classes, searchQuery, users, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -10529,14 +11372,17 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
          * 
          * @param {string} courseId The id of the course
          * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
+         * @param {CourseExportBodyParams} courseExportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse: async (courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options: any = {}): Promise<RequestArgs> => {
+        courseControllerExportCourse: async (courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerExportCourse', 'courseId', courseId)
             // verify required parameter 'version' is not null or undefined
             assertParamExists('courseControllerExportCourse', 'version', version)
+            // verify required parameter 'courseExportBodyParams' is not null or undefined
+            assertParamExists('courseControllerExportCourse', 'courseExportBodyParams', courseExportBodyParams)
             const localVarPath = `/courses/{courseId}/export`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -10546,7 +11392,7 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -10560,9 +11406,12 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
 
 
     
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(courseExportBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -10657,6 +11506,44 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Stop the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerStopSynchronization: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('courseControllerStopSynchronization', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/stop-sync`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -10671,11 +11558,12 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * 
          * @param {string} courseId The id of the course
          * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
+         * @param {CourseExportBodyParams} courseExportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, version, options);
+        async courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerExportCourse(courseId, version, courseExportBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -10700,6 +11588,17 @@ export const CoursesApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerImportCourse(file, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Stop the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerStopSynchronization(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerStopSynchronization(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -10714,11 +11613,12 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * 
          * @param {string} courseId The id of the course
          * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
+         * @param {CourseExportBodyParams} courseExportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any): AxiosPromise<void> {
-            return localVarFp.courseControllerExportCourse(courseId, version, options).then((request) => request(axios, basePath));
+        courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerExportCourse(courseId, version, courseExportBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -10740,6 +11640,16 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         courseControllerImportCourse(file: any, options?: any): AxiosPromise<void> {
             return localVarFp.courseControllerImportCourse(file, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Stop the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerStopSynchronization(courseId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerStopSynchronization(courseId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -10753,11 +11663,12 @@ export interface CoursesApiInterface {
      * 
      * @param {string} courseId The id of the course
      * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
+     * @param {CourseExportBodyParams} courseExportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any): AxiosPromise<void>;
+    courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -10779,6 +11690,16 @@ export interface CoursesApiInterface {
      */
     courseControllerImportCourse(file: any, options?: any): AxiosPromise<void>;
 
+    /**
+     * 
+     * @summary Stop the synchronization of a course with a group.
+     * @param {string} courseId The id of the course
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerStopSynchronization(courseId: string, options?: any): AxiosPromise<void>;
+
 }
 
 /**
@@ -10792,12 +11713,13 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      * 
      * @param {string} courseId The id of the course
      * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
+     * @param {CourseExportBodyParams} courseExportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CoursesApi
      */
-    public courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', options?: any) {
-        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, version, options).then((request) => request(this.axios, this.basePath));
+    public courseControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerExportCourse(courseId, version, courseExportBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -10822,6 +11744,18 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerImportCourse(file: any, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerImportCourse(file, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Stop the synchronization of a course with a group.
+     * @param {string} courseId The id of the course
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerStopSynchronization(courseId: string, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerStopSynchronization(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -14748,6 +15682,44 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
+         * 
+         * @summary Get systems from school
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolSystems: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerGetSchoolSystems', 'schoolId', schoolId)
+            const localVarPath = `/school/{schoolId}/systems`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -14899,6 +15871,17 @@ export const SchoolApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @summary Get systems from school
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerGetSchoolSystems(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SchoolSystemResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetSchoolSystems(schoolId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -14978,6 +15961,16 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.schoolControllerGetSchoolListForLadpLogin(options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @summary Get systems from school
+         * @param {string} schoolId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>> {
+            return localVarFp.schoolControllerGetSchoolSystems(schoolId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -15052,6 +16045,16 @@ export interface SchoolApiInterface {
      * @memberof SchoolApiInterface
      */
     schoolControllerGetSchoolListForLadpLogin(options?: any): AxiosPromise<Array<SchoolForLdapLoginResponse>>;
+
+    /**
+     * 
+     * @summary Get systems from school
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>>;
 
     /**
      * Sets all provisioning options for a system at a school
@@ -15137,6 +16140,18 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerGetSchoolListForLadpLogin(options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerGetSchoolListForLadpLogin(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get systems from school
+     * @param {string} schoolId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerGetSchoolSystems(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetSchoolSystems(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

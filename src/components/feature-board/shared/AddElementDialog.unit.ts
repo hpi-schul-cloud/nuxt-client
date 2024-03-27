@@ -1,3 +1,4 @@
+import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -20,7 +21,7 @@ describe("ElementTypeSelection", () => {
 			getEnv: envsFactory.build({
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-			}),
+			}) as unknown as ConfigResponse,
 		}
 	);
 

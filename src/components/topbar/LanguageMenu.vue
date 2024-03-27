@@ -56,7 +56,6 @@ export default defineComponent({
 		availableItems: {
 			get() {
 				const languages = this.envConfigModule.getAvailableLanguages
-					.split(",")
 					.map((language) => this.buildLanguageItem(language))
 					.filter((language) => {
 						return language.language !== this.selectedItem.language;
