@@ -5,63 +5,71 @@ import {
 import { createAction, props } from "./ActionFactory";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 
-export const getColumnIndex = createAction(
+const getColumnIndex = createAction(
 	"get-column-index",
 	props<{ columnId: string }>()
 );
 
-export const getColumnId = createAction(
+const getColumnId = createAction(
 	"get-column-id",
 	props<{ columnIndex: number }>()
 );
 
-export const createCard = createAction(
-	"create-card",
-	props<{ columnId: string }>()
-);
+const createCard = createAction("create-card", props<{ columnId: string }>());
 
-export const createColumn = createAction(
-	"create-column",
-	props<{ boardId: string }>()
-);
+const createColumn = createAction("create-column", props());
 
-export const deleteCard = createAction(
-	"delete-card",
-	props<{ cardId: string }>()
-);
+const deleteCard = createAction("delete-card", props<{ cardId: string }>());
 
-export const deleteColumn = createAction(
+const deleteColumn = createAction(
 	"delete-column",
 	props<{ columnId: string }>()
 );
 
-export const fetchBoard = createAction("fetch-board", props<{ id: string }>());
+const fetchBoard = createAction("fetch-board", props<{ id: string }>());
 
-export const moveCard = createAction("move-card", props<CardMove>());
+const moveCard = createAction("move-card-abc", props<CardMove>());
 
-export const moveColumn = createAction(
+const moveColumn = createAction(
 	"move-column",
 	props<{ columnMove: ColumnMove; byKeyboard: boolean }>()
 );
 
-export const updateColumnTitle = createAction(
+const updateColumnTitle = createAction(
 	"update-column-title",
 	props<{ columnId: string; newTitle: string }>()
 );
 
-export const updateBoardTitle = createAction(
+const updateBoardTitle = createAction(
 	"update-board-title",
 	props<{ newTitle: string }>()
 );
 
-export const updateBoardVisibility = createAction(
+const updateBoardVisibility = createAction(
 	"update-board-visibility",
 	props<{ newVisibility: boolean }>()
 );
 
-export const notifyWithTemplateAndReload = createAction(
+const notifyWithTemplateAndReload = createAction(
 	"notify-with-template-and-reload",
 	props<{ errorType: ErrorType; boardObjectType?: BoardObjectType }>()
 );
 
-export const reloadBoard = createAction("reload-board", props<object>());
+const reloadBoard = createAction("reload-board", props());
+
+export {
+	getColumnIndex,
+	getColumnId,
+	createCard,
+	createColumn,
+	deleteCard,
+	deleteColumn,
+	fetchBoard,
+	moveCard,
+	moveColumn,
+	updateColumnTitle,
+	updateBoardTitle,
+	updateBoardVisibility,
+	notifyWithTemplateAndReload,
+	reloadBoard,
+};

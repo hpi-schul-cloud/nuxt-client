@@ -7,7 +7,7 @@ import { useContentElementState } from "./ContentElementState.composable";
 import { useEditMode, useSharedEditMode } from "./EditMode.composable";
 
 import { useBoardStore } from "./store/BoardStore";
-import { fetchBoard } from "./store/types/Actions";
+import * as boardActions from "./store/types/Actions";
 
 export {
 	useBoardState,
@@ -19,5 +19,5 @@ export {
 	useBoardPermissions,
 	useSharedBoardPageInformation,
 	useBoardStore,
-	fetchBoard,
+	boardActions,
 };
