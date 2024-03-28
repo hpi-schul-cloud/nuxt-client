@@ -3,7 +3,7 @@ import {
 	convertDownloadToPreviewUrl,
 	isPreviewPossible,
 } from "@/utils/fileHelper";
-import { useFileStorageApi } from "@/modules/feature/board-file-element";
+import { useFileStorageApi } from "@feature-board-file-element";
 
 export const usePreviewGenerator = (elementId: string) => {
 	const { getFileRecord, uploadFromUrl } = useFileStorageApi();

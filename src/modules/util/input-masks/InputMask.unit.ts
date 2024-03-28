@@ -1,4 +1,4 @@
-import { createInputMask } from "@/modules/util/input-masks/InputMask.factory";
+import { createInputMask } from "./InputMask.factory";
 import { DirectiveBinding, FunctionDirective, VNode } from "vue";
 import { vMaska, MaskInputOptions } from "maska";
 

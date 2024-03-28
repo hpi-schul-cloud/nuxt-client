@@ -1,4 +1,4 @@
-import { isTouchEvent } from "@/modules/util/device-detection/util/isTouchEvent";
+import { isTouchEvent } from "./isTouchEvent";
 
 const createTouchEvent = (force: number) => ({
 	clientX: 100,

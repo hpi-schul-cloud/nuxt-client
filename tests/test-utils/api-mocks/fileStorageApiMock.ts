@@ -1,5 +1,5 @@
 import { FileRecordResponse } from "@/fileStorageApi/v3";
-import { useFileStorageApi } from "@/modules/feature/board-file-element";
+import { useFileStorageApi } from "@feature-board-file-element";
 import { jest } from "@jest/globals";
 import { ref } from "vue";
 

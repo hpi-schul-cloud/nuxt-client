@@ -1,4 +1,4 @@
-import { useTouchDetection } from "@/modules/util/device-detection/TouchDetection.composable";
+import { useTouchDetection } from "./TouchDetection.composable";
 import { mount } from "@vue/test-utils";
 import { defineComponent } from "vue";
 

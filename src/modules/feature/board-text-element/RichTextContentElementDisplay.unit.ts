@@ -1,4 +1,4 @@
-import { RenderHTML } from "@/modules/feature/render-html";
+import { RenderHTML } from "@feature-render-html";
 import { mount } from "@vue/test-utils";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";

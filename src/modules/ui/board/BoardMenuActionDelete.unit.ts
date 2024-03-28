@@ -1,5 +1,5 @@
-import { BoardMenuScope } from "@/modules/ui/board/board-menu-scope";
-import { MENU_SCOPE } from "@/modules/ui/board/injection-tokens";
+import { BoardMenuScope } from "./board-menu-scope";
+import { MENU_SCOPE } from "./injection-tokens";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import {
 	createTestingI18n,

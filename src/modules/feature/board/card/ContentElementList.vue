@@ -267,7 +267,3 @@ export default defineComponent({
 	},
 });
 </script>
-@/modules/feature/feature-board-external-tool-element@/modules/feature/feature-board-file-element@/modules/feature/feature-board-link-element@/modules/feature/feature-board-submission-element@/modules/feature/feature-board-text-element@/modules/feature/feature-board-drawing-element
-@/modules/feature/board-external-tool-element
-@/modules/feature/board-file-element @/modules/feature/board-submission-element
-@/modules/feature/board-text-element
