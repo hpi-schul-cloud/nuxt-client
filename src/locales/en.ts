@@ -16,7 +16,7 @@ export default {
 	"common.actions.invite": "Send course link",
 	"common.actions.logout": "Logout",
 	"common.actions.ok": "OK",
-	"common.actions.remove": "Delete",
+	"common.actions.remove": "Remove",
 	"common.actions.save": "Save",
 	"common.actions.scrollToTop": "Scroll up",
 	"common.actions.share": "Share",
