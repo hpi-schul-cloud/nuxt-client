@@ -1,18 +1,14 @@
-import { authModule, roomsModule } from "@/store";
+import {
+	authModule,
+	commonCartridgeImportModule,
+	envConfigModule,
+	roomsModule,
+} from "@/store";
 import AuthModule from "@/store/auth";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import EnvConfigModule from "@/store/env-config";
-import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
 import RoomsModule from "@/store/rooms";
-import {
-	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	ROOMS_MODULE_KEY,
-} from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -20,6 +16,8 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { FabAction } from "./default-wireframe.types";
+import DefaultWireframe from "./DefaultWireframe.vue";
 import RoomWrapper from "./RoomWrapper.vue";
 
 const getWrapper = (
@@ -35,17 +33,12 @@ const getWrapper = (
 					current: "desktop",
 				}),
 			},
+			stubs: {
+				GroupSelectionDialog: true,
+				CommonCartridgeImportModal: true,
+			},
 		},
 		...options,
-		provide: {
-			[LOADING_STATE_MODULE_KEY.valueOf()]:
-				createModuleMocks(LoadingStateModule),
-			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
-			[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
-				CommonCartridgeImportModule
-			),
-		},
 	});
 };
 
@@ -93,6 +86,7 @@ describe("@templates/RoomWrapper.vue", () => {
 			roomsModule: RoomsModule,
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
+			commonCartridgeImportModule: CommonCartridgeImportModule,
 		});
 		roomsModule.setAllElements(mockData);
 	});
@@ -152,6 +146,54 @@ describe("@templates/RoomWrapper.vue", () => {
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(true);
 		});
+
+		describe("when course synchronization is active", () => {
+			beforeEach(() => {
+				envConfigModule.setEnvs(
+					envsFactory.build({ FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true })
+				);
+			});
+
+			it("should have the course sync sub menu action", async () => {
+				const wrapper = getWrapper();
+
+				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+				const fabActions: FabAction[] | undefined =
+					defaultWireframe.props().fabItems?.actions;
+
+				expect(
+					fabActions?.some(
+						(action: FabAction) =>
+							action.dataTestId === "fab_button_add_synced_course"
+					)
+				).toEqual(true);
+			});
+		});
+
+		describe("when course synchronization is active", () => {
+			beforeEach(() => {
+				envConfigModule.setEnvs(
+					envsFactory.build({
+						FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
+					})
+				);
+			});
+
+			it("should have the common cartridge sub menu action", async () => {
+				const wrapper = getWrapper();
+
+				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+				const fabActions: FabAction[] | undefined =
+					defaultWireframe.props().fabItems?.actions;
+
+				expect(
+					fabActions?.some(
+						(action: FabAction) =>
+							action.dataTestId === "fab_button_import_course"
+					)
+				).toEqual(true);
+			});
+		});
 	});
 
 	describe("when user does not have course create permission", () => {
@@ -163,6 +205,28 @@ describe("@templates/RoomWrapper.vue", () => {
 
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(false);
+		});
+	});
+
+	describe("when clicking on the course sync fab action", () => {
+		it("should open the course sync dialog", async () => {
+			const wrapper = getWrapper();
+
+			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+			defaultWireframe.vm.$emit("onFabItemClick", "syncedCourse");
+
+			expect(wrapper.vm.isCourseSyncDialogOpen).toEqual(true);
+		});
+	});
+
+	describe("when clicking on the common cartridge fab action", () => {
+		it("should open the common cartridge dialog", async () => {
+			const wrapper = getWrapper();
+
+			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+			defaultWireframe.vm.$emit("onFabItemClick", "import");
+
+			expect(commonCartridgeImportModule.isOpen).toEqual(true);
 		});
 	});
 });

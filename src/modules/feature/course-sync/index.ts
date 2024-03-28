@@ -1,3 +1,4 @@
+import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 import EndCourseSyncDialog from "./EndCourseSyncDialog.vue";
 
-export { EndCourseSyncDialog };
+export { GroupSelectionDialog, EndCourseSyncDialog };
