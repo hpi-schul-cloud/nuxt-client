@@ -1,4 +1,3 @@
-// import { i18nMock } from "@@/tests/test-utils";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardApi } from "./BoardApi.composable";

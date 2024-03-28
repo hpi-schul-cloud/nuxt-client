@@ -13,9 +13,9 @@
 					scope="column"
 					:isEditMode="isEditMode"
 					:placeholder="titlePlaceholder"
-					@update:value="onUpdateTitle"
 					class="w-100"
 					:isFocused="isFocusedById"
+					@update:value="onUpdateTitle"
 				/>
 				<BoardMenu
 					v-if="hasDeletePermission"
