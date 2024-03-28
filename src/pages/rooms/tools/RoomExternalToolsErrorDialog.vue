@@ -23,7 +23,7 @@
 </template>
 <script lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import RenderHTML from "@/components/feature-render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
 import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
 import { ExternalToolDisplayData } from "@/store/external-tool";
