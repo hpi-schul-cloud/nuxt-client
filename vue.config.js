@@ -26,56 +26,52 @@ module.exports = defineConfig({
 		],
 		resolve: {
 			alias: {
-				"@data-board": getDir("src/components/data-board"),
-				"@data-external-tool": getDir("src/components/data-external-tool"),
-				"@data-group": getDir("src/components/data-group"),
-				"@data-system": getDir("src/components/data-system"),
+				"@data-board": getDir("src/modules/data/board"),
+				"@data-external-tool": getDir("src/modules/data/external-tool"),
+				"@data-group": getDir("src/modules/data/group"),
+				"@data-system": getDir("src/modules/data/system"),
 				"@data-provisioning-options": getDir(
-					"src/components/data-provisioning-options"
+					"src/modules/data/provisioning-options"
 				),
-				"@data-room": getDir("src/components/data-room"),
+				"@data-room": getDir("src/modules/data/room"),
 				"@feature-board-file-element": getDir(
-					"src/components/feature-board-file-element"
+					"src/modules/feature/board-file-element"
 				),
 				"@feature-board-submission-element": getDir(
-					"src/components/feature-board-submission-element"
+					"src/modules/feature/board-submission-element"
 				),
 				"@feature-board-text-element": getDir(
-					"src/components/feature-board-text-element"
+					"src/modules/feature/board-text-element"
 				),
 				"@feature-board-link-element": getDir(
-					"src/components/feature-board-link-element"
+					"src/modules/feature/board-link-element"
 				),
 				"@feature-board-external-tool-element": getDir(
-					"src/components/feature-board-external-tool-element"
+					"src/modules/feature/board-external-tool-element"
 				),
 				"@feature-board-drawing-element": getDir(
-					"src/components/feature-board-drawing-element"
+					"src/modules/feature/board-drawing-element"
 				),
-				"@feature-board": getDir("src/components/feature-board"),
-				"@feature-course-sync": getDir("src/components/feature-course-sync"),
-				"@feature-editor": getDir("src/components/feature-editor"),
-				"@feature-render-html": getDir("src/components/feature-render-html"),
-				"@feature-news-form": getDir("src/components/feature-news-form"),
-				"@ui-alert": getDir("src/components/ui-alert"),
-				"@ui-board": getDir("src/components/ui-board"),
-				"@ui-preview-image": getDir("src/components/ui-preview-image"),
-				"@ui-confirmation-dialog": getDir(
-					"src/components/ui-confirmation-dialog"
-				),
-				"@ui-date-time-picker": getDir("src/components/ui-date-time-picker"),
-				"@ui-light-box": getDir("src/components/ui-light-box"),
-				"@ui-speed-dial-menu": getDir("src/components/ui-speed-dial-menu"),
-				"@ui-room-details": getDir("src/components/ui-room-details"),
-				"@util-board": getDir("src/components/util-board"),
-				"@util-validators": getDir("src/components/util-validators"),
-				"@util-vue": getDir("src/components/util-vue"),
-				"@util-input-masks": getDir("src/components/util-input-masks"),
-				"@util-device-detection": getDir(
-					"src/components/util-device-detection"
-				),
-				"@page-board": getDir("src/components/page-board"),
-				"@page-class-members": getDir("src/components/page-class-members"),
+				"@feature-course-sync": getDir("src/modules/feature/course-sync"),
+				"@feature-board": getDir("src/modules/feature/board"),
+				"@feature-editor": getDir("src/modules/feature/editor"),
+				"@feature-render-html": getDir("src/modules/feature/render-html"),
+				"@feature-news-form": getDir("src/modules/feature/news-form"),
+				"@ui-alert": getDir("src/modules/ui/alert"),
+				"@ui-board": getDir("src/modules/ui/board"),
+				"@ui-preview-image": getDir("src/modules/ui/preview-image"),
+				"@ui-confirmation-dialog": getDir("src/modules/ui/confirmation-dialog"),
+				"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
+				"@ui-light-box": getDir("src/modules/ui/light-box"),
+				"@ui-speed-dial-menu": getDir("src/modules/ui/speed-dial-menu"),
+				"@ui-room-details": getDir("src/modules/ui/room-details"),
+				"@util-board": getDir("src/modules/util/board"),
+				"@util-validators": getDir("src/modules/util/validators"),
+				"@util-vue": getDir("src/modules/util/vue"),
+				"@util-input-masks": getDir("src/modules/util/input-masks"),
+				"@util-device-detection": getDir("src/modules/util/device-detection"),
+				"@page-board": getDir("src/modules/page/board"),
+				"@page-class-members": getDir("src/modules/page/class-members"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
