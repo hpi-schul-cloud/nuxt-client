@@ -125,7 +125,7 @@ export const printDateFromDeUTC = (date) => {
  */
 export const inputDateFromDeUTC = (date) => {
 	if (date) {
-		const result = dayjs.tz(date, "DD.MM.YYYY", "UTC");
+		const result = dayjs.tz(date, "UTC");
 		return result.format(DATETIME_FORMAT.inputDate);
 	}
 	return null;
