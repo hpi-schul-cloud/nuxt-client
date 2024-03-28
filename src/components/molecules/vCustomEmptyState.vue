@@ -1516,7 +1516,7 @@
 			{{ title }}
 		</h1>
 		<h2 v-if="subtitle" class="h4 text-center mt-3">{{ subtitle }}</h2>
-		<div class="text-center text-secondary-lighten-1 text-sm">
+		<div class="text-center text-sm">
 			<slot name="description" />
 		</div>
 	</v-container>

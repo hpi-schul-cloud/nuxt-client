@@ -280,7 +280,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .alert-text {
-	color: rgba(var(--v-theme-black)) !important;
+	color: rgba(var(--v-theme-on-background)) !important;
 	line-height: var(--line-height-lg) !important;
 }
 </style>

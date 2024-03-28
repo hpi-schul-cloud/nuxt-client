@@ -34,7 +34,6 @@
 			<div class="mb-5 header-div">
 				<div class="btn">
 					<v-btn
-						color="secondary"
 						class="back-button"
 						variant="outlined"
 						size="small"
@@ -54,7 +53,7 @@
 							class="no-active"
 						>
 							<template #default>
-								<v-icon size="large" class="tab-icon mr-sm-3">
+								<v-icon size="large" class="mr-sm-3">
 									{{ tabItem.icon }}</v-icon
 								>
 								<span class="d-none d-sm-inline">
@@ -527,34 +526,20 @@ export default defineComponent({
 	opacity: 0;
 }
 
-.modal-text {
-	font-size: var(--space-md);
-	color: rgba(var(--v-theme-black));
-}
-
 @media #{map-get($display-breakpoints, 'md-and-up')} {
 	.tabs-max-width {
 		max-width: var(--size-content-width-max);
 	}
 }
 
-.tab-icon {
-	fill: currentColor;
-}
-
 // even out border
 .v-tabs {
 	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
-	font-family: var(--heading-font-family);
 }
 
 .v-tab {
 	font-size: var(--text-base-size);
 	text-transform: none !important;
-
-	&.v-tab.v-btn.no-active {
-		color: rgba(0, 0, 0, 0.54);
-	}
 }
 
 :deep(.v-slide-group__prev),

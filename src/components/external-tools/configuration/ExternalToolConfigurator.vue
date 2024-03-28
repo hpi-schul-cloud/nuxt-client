@@ -55,7 +55,6 @@
 		<v-row class="justify-end mt-10">
 			<v-btn
 				class="mr-2"
-				color="secondary"
 				variant="outlined"
 				@click="onCancel"
 				data-testId="cancel-button"

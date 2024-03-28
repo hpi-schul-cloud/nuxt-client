@@ -83,13 +83,9 @@ const removePopup = () => {
 	color: rgba(var(--v-theme-white));
 	cursor: pointer;
 	-webkit-user-select: none;
-	background-color: rgba(var(--v-theme-secondary));
+	background-color: rgba(var(--v-theme-on-surface));
 	border: none;
 	border-radius: var(--radius-round);
-
-	&:hover {
-		background-color: rgba(var(--v-theme-secondary-darken-1));
-	}
 }
 
 .popup {
@@ -107,7 +103,6 @@ const removePopup = () => {
 		width: 214px;
 		padding: var(--space-xs) 0;
 		margin-top: var(--space-xs-4);
-		color: rgba(var(--v-theme-black));
 		white-space: nowrap;
 		background-color: rgba(var(--v-theme-white));
 		border: 1px solid map-get($grey, lighten-2);

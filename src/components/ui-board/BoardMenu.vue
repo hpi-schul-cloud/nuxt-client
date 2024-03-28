@@ -15,9 +15,7 @@
 				size="small"
 				style="height: 36px; width: 36px"
 			>
-				<VIcon data-testid="board-menu-icon" class="text-grey-darken-2">{{
-					mdiDotsVertical
-				}}</VIcon>
+				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
 					<template v-if="scope === 'board'">
 						{{ $t("components.board.menu.board") }}

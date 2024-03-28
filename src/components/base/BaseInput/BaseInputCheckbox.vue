@@ -42,7 +42,6 @@ export default {
 		},
 		color: {
 			type: String,
-			default: `rgba(var(--v-theme-secondary))`,
 		},
 		label: {
 			type: String,

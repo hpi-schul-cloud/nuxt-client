@@ -51,7 +51,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="ldapActivatedColor">$mdiAccountOutline</v-icon>
+				<v-icon>$mdiAccountOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -71,7 +71,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiAccountSchoolOutline</v-icon>
+				<v-icon>$mdiAccountSchoolOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -90,7 +90,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor" class="custom-icon">$teacher</v-icon>
+				<v-icon class="custom-icon">$teacher</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -107,7 +107,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiShieldAccountVariantOutline</v-icon>
+				<v-icon>$mdiShieldAccountVariantOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -122,7 +122,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiAccountOffOutline</v-icon>
+				<v-icon>$mdiAccountOffOutline</v-icon>
 			</template>
 		</base-input>
 	</div>
@@ -153,7 +153,6 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			ldapActivatedColor: "currentColor",
 			memberValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
@@ -169,10 +168,6 @@ export default defineComponent({
 		groupOption() {
 			return this.modelValue.groupOption || "undefined";
 		},
-
-		fillColor() {
-			return "rgba(var(--v-theme-black))";
-		},
 	},
 	watch: {
 		validate: function () {
@@ -180,10 +175,6 @@ export default defineComponent({
 			this.$emit("update:errors", this.v$.$invalid, "roles");
 		},
 		groupOption: function () {
-			this.groupOption === "user_attribute"
-				? (this.ldapActivatedColor = this.fillColor)
-				: (this.ldapActivatedColor = "currentColor");
-
 			this.$emit("update:errors", this.v$.$invalid, "roles");
 		},
 	},

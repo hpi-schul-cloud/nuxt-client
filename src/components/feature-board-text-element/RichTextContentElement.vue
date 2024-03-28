@@ -61,7 +61,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .rich_text {
-	color: rgba(0, 0, 0, 0.87);
 	font-size: 1rem;
 	padding: 0.05px; // prevent margin collapse
 }

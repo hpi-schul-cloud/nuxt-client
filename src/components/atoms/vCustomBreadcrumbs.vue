@@ -12,6 +12,7 @@
 					:disabled="item.disabled"
 					:exact="true"
 					class="breadcrumbs-item"
+					color="primary"
 					:data-testid="`breadcrumb-${index}`"
 				>
 					{{ item.title }}

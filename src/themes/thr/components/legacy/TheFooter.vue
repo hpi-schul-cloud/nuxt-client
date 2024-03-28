@@ -118,7 +118,6 @@ export default {
 	width: 100%;
 	padding: 0 var(--space-md);
 	margin: var(--space-lg) 0 var(--space-md);
-	color: rgba(var(--v-theme-secondary-darken-1));
 	text-align: center;
 }
 

@@ -11,7 +11,6 @@
 				<div class="mb-5 header-div">
 					<div class="btn">
 						<v-btn
-							color="secondary"
 							variant="outlined"
 							size="small"
 							to="/rooms-list"

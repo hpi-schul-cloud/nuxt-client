@@ -19,7 +19,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiDnsOutline</v-icon>
+				<v-icon>$mdiDnsOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -37,7 +37,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiFileTreeOutline</v-icon>
+				<v-icon>$mdiFileTreeOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -55,7 +55,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
+				<v-icon>$mdiAccountCircleOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -76,7 +76,7 @@
 				})
 			"
 			><template #icon>
-				<v-icon :color="fillColor">$mdiLockOutline</v-icon>
+				<v-icon>$mdiLockOutline</v-icon>
 			</template>
 		</base-input>
 	</div>
@@ -129,9 +129,6 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		fillColor() {
-			return "rgba(var(--v-theme-black))";
-		},
 		insecureLDAPURLAllowed: () =>
 			envConfigModule?.getEnv.FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED,
 	},
