@@ -295,11 +295,8 @@ const onShareBoard = () => {
 };
 
 const openDeleteBoardDialog = async (id: string) => {
-	if (hasDeletePermission) {
-		await roomModule.deleteBoard(id);
-	} else {
-		return;
-	}
+	await roomModule.deleteBoard(id);
+
 	router.push({ path: "/rooms/" + roomModule.getRoomId });
 };
 </script>
