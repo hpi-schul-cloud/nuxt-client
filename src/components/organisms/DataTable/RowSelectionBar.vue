@@ -18,11 +18,10 @@
 				style="position: relative"
 			>
 				<v-btn
+					variant="tonal"
 					data-test-id="context-menu-open"
 					class="context-menu-open"
 					size="small"
-					variant="flat"
-					color="secondary"
 					@click="actionsMenuOpen = true"
 				>
 					{{ $t("pages.administration.actions") }}
@@ -35,14 +34,7 @@
 				/>
 			</div>
 		</div>
-		<v-btn
-			icon
-			variant="flat"
-			color="secondary"
-			width="40"
-			height="40"
-			@click="closeBanner"
-		>
+		<v-btn variant="text" icon width="40" height="40" @click="closeBanner">
 			<v-icon>{{ mdiClose }}</v-icon>
 		</v-btn>
 	</div>
@@ -122,8 +114,7 @@ export default {
 	justify-content: space-between;
 	width: 100%;
 	padding: var(--space-xs) var(--space-md);
-	color: rgba(var(--v-theme-white));
-	background-color: rgba(var(--v-theme-secondary-lighten-1));
+	background-color: rgba(var(--v-theme-primary), 0.12);
 }
 
 .actions {
@@ -141,12 +132,7 @@ export default {
 }
 
 .select-all-rows {
-	color: rgba(var(--v-theme-white));
 	text-decoration: underline;
 	cursor: pointer;
-}
-
-.close {
-	color: rgba(var(--v-theme-white));
 }
 </style>

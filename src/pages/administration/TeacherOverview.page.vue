@@ -662,21 +662,6 @@ export default {
 	opacity: 0;
 }
 
-a.action-button {
-	&.row-highlighted:hover {
-		background-color: rgba(var(--v-theme-white));
-	}
-
-	&.row-selected {
-		color: rgba(var(--v-theme-white));
-
-		&:hover {
-			background-color: rgba(var(--v-theme-secondary-darken-1));
-			box-shadow: none;
-		}
-	}
-}
-
 span {
 	font-weight: var(--font-weight-normal);
 }
