@@ -30,7 +30,7 @@
 					<span class="info-slot">
 						<v-btn
 							icon
-							variant="plain"
+							variant="text"
 							color="info"
 							class="info-button"
 							:aria-label="
