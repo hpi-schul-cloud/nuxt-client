@@ -5,6 +5,7 @@ import {
 	BoardApiFactory,
 	BoardApiInterface,
 	CopyApiResponse,
+	CopyApiResponseElementsTypesEnum,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 	RoomsApiFactory,
@@ -47,6 +48,7 @@ export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
 	private isResultModalOpen = false;
+	private hasDrawingChild = false;
 
 	private get roomsApi(): RoomsApiInterface {
 		return RoomsApiFactory(undefined, "/v3", $axios);
@@ -89,6 +91,10 @@ export default class CopyModule extends VuexModule {
 			copyResult = await this.roomsApi
 				.roomsControllerCopyCourse(id)
 				.then((response) => response.data);
+
+			if (copyResult && copyResult.elementsTypes) {
+				this.checkDrawingChildren(copyResult.elementsTypes);
+			}
 		}
 
 		if (type === CopyParamsTypeEnum.ColumnBoard) {
@@ -106,6 +112,18 @@ export default class CopyModule extends VuexModule {
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
 		return copyResult;
+	}
+
+	@Action
+	checkDrawingChildren(
+		copyResultElementsTypes: CopyApiResponseElementsTypesEnum[]
+	): void {
+		const elementIndex = copyResultElementsTypes.indexOf(
+			CopyApiResponseElementsTypesEnum.DrawingElement
+		);
+		if (elementIndex !== -1) {
+			this.setHasDrawingChild(true);
+		}
 	}
 
 	@Action({ rawError: true })
@@ -264,10 +282,16 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
+	setHasDrawingChild(hasDrawingChild: boolean): void {
+		this.hasDrawingChild = hasDrawingChild;
+	}
+
+	@Mutation
 	reset(): void {
 		this.copyResultFailedItems = [];
 		this.copyResult = undefined;
 		this.isResultModalOpen = false;
+		this.hasDrawingChild = false;
 	}
 
 	get getCopyResult(): CopyApiResponse | undefined {
@@ -288,5 +312,9 @@ export default class CopyModule extends VuexModule {
 
 	get getIsResultModalOpen(): boolean {
 		return this.isResultModalOpen;
+	}
+
+	get getHasDrawingChild(): boolean {
+		return this.hasDrawingChild;
 	}
 }
