@@ -445,6 +445,7 @@ export default {
 	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Abgaben",
 	"components.molecules.copyResult.label.text": "Text",
+	"components.molecules.copyResult.label.tldraw": "Whiteboard",
 	"components.molecules.copyResult.label.timeGroup": "Zeitgruppe",
 	"components.molecules.copyResult.label.unknown": "Unbekannt",
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
@@ -453,6 +454,8 @@ export default {
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.nexboardCopy.infoTldraw":
 		"Alte neXboard-Abschnitte wurden nicht kopiert, da das Tool von unserer Plattform entfernt wird. Als Ersatz steht nun das innovative Whiteboard-Tool tldraw im Spaltenboard zur Verfügung.",
+	"components.molecules.copyResult.tldrawCopy.info":
+		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.timeoutCopy":
