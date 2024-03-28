@@ -1,13 +1,17 @@
 import * as serverApi from "@/serverApi/v3/api";
+import { LanguageType } from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory, mockApiResponse } from "@@/tests/test-utils";
+import {
+	envsFactory,
+	meResponseFactory,
+	mockApiResponse,
+} from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
-import { Envs } from "./types/env-config";
 
 jest.useFakeTimers();
 
@@ -32,20 +36,20 @@ describe("auth store module", () => {
 		describe("setMe", () => {
 			it("should set the me and locale state", () => {
 				const authModule = new AuthModule({});
-				const mockMe = meResponseFactory.build({ language: "jib" });
+				const mockMe = meResponseFactory.build({ language: LanguageType.Es });
 				expect(authModule.getMe).not.toStrictEqual(mockMe);
 
 				authModule.setMe(mockMe);
 
 				expect(authModule.getMe).toStrictEqual(mockMe);
-				expect(authModule.getLocale).toStrictEqual("jib");
+				expect(authModule.getLocale).toStrictEqual(LanguageType.Es);
 			});
 		});
 
 		describe("setLocale", () => {
 			it("should set the locale state", () => {
 				const authModule = new AuthModule({});
-				const localeMock = "mock";
+				const localeMock = LanguageType.Uk;
 
 				authModule.setLocale(localeMock);
 
@@ -87,7 +91,7 @@ describe("auth store module", () => {
 
 				authModule.clearAuthData();
 
-				expect(authModule.getMe).toBe(undefined);
+				expect(authModule.getMe).toBeUndefined();
 				expect(authModule.getAccessToken).toBe(null);
 			});
 		});
@@ -162,23 +166,24 @@ describe("auth store module", () => {
 		describe("getLocale", () => {
 			it("should return the set locale", () => {
 				const authModule = new AuthModule({});
-				authModule.locale = "mock";
+				const localeMock = LanguageType.Uk;
+				authModule.locale = localeMock;
 
-				expect(authModule.getLocale).toBe("mock");
+				expect(authModule.getLocale).toBe(localeMock);
 			});
 
 			it("should return the default language if locale is not set", () => {
 				const authModule = new AuthModule({});
-				authModule.locale = "";
-				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "fu";
+				authModule.locale = "" as LanguageType;
+				envConfigModule.env.I18N__DEFAULT_LANGUAGE = LanguageType.Uk;
 
-				expect(authModule.getLocale).toBe("fu");
+				expect(authModule.getLocale).toBe(LanguageType.Uk);
 			});
 
 			it("should return the fallback language if neither locale nor default language are set", () => {
 				const authModule = new AuthModule({});
-				authModule.locale = "";
-				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "";
+				authModule.locale = "" as LanguageType;
+				envConfigModule.env.I18N__DEFAULT_LANGUAGE = "" as LanguageType;
 
 				expect(authModule.getLocale).toBe("de");
 			});
@@ -249,17 +254,19 @@ describe("auth store module", () => {
 			setupStores({
 				envConfigModule: EnvConfigModule,
 			});
-			envConfigModule.setEnvs({
+			const envs = envsFactory.build({
 				FEATURE_EXTENSIONS_ENABLED: true,
 				FEATURE_TEAMS_ENABLED: true,
-			} as Envs);
+			});
+			envConfigModule.setEnvs(envs);
 		});
 
 		describe("login", () => {
 			it("should set the me state", async () => {
+				const languageMock = LanguageType.Uk;
 				const mockMe = meResponseFactory.build({
 					user: { id: "test-id" },
-					language: "jib",
+					language: languageMock,
 				});
 				meApi.meControllerMe.mockResolvedValueOnce(
 					mockApiResponse({ data: mockMe })
@@ -268,7 +275,7 @@ describe("auth store module", () => {
 
 				await authModule.login("sample-jwt");
 
-				expect(authModule.getLocale).toStrictEqual("jib");
+				expect(authModule.getLocale).toStrictEqual(languageMock);
 				expect(authModule.getUserPermissions).toStrictEqual([
 					"addons_enabled",
 					"teams_enabled",
@@ -308,9 +315,7 @@ describe("auth store module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
 				const authModule = new AuthModule({});
 
-				authModule.updateUserLanguage(
-					serverApi.ChangeLanguageParamsLanguageEnum.De
-				);
+				authModule.updateUserLanguage(LanguageType.De);
 
 				expect(mockApi.userControllerChangeLanguage).toHaveBeenCalled();
 			});
@@ -326,9 +331,7 @@ describe("auth store module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
 				const authModule = new AuthModule({});
 
-				authModule.updateUserLanguage(
-					serverApi.ChangeLanguageParamsLanguageEnum.De
-				);
+				authModule.updateUserLanguage(LanguageType.De);
 
 				expect(authModule.businessError.message).toStrictEqual("I'm an error");
 			});

@@ -10,6 +10,7 @@ export default class CommonCartridgeExportModule extends VuexModule {
 	private isExportModalOpen = false;
 	private version = "";
 	private topics: string[] = [];
+	private tasks: string[] = [];
 
 	@Action
 	async startExport(): Promise<void> {
@@ -20,6 +21,7 @@ export default class CommonCartridgeExportModule extends VuexModule {
 		await roomModule.downloadCommonCartridgeCourse({
 			version: this.getVersion,
 			topics: this.getTopics,
+			tasks: this.getTasks,
 		});
 	}
 
@@ -27,6 +29,7 @@ export default class CommonCartridgeExportModule extends VuexModule {
 	startExportFlow(): void {
 		this.setVersion("");
 		this.setTopics([]);
+		this.setTasks([]);
 		this.setIsExportModalOpen(true);
 	}
 
@@ -34,6 +37,7 @@ export default class CommonCartridgeExportModule extends VuexModule {
 	resetExportFlow(): void {
 		this.setVersion("");
 		this.setTopics([]);
+		this.setTasks([]);
 		this.setIsExportModalOpen(false);
 	}
 
@@ -45,6 +49,11 @@ export default class CommonCartridgeExportModule extends VuexModule {
 	@Mutation
 	setTopics(topicIds: string[]) {
 		this.topics = topicIds;
+	}
+
+	@Mutation
+	setTasks(taskIds: string[]) {
+		this.tasks = taskIds;
 	}
 
 	@Mutation
@@ -62,5 +71,9 @@ export default class CommonCartridgeExportModule extends VuexModule {
 
 	get getTopics(): string[] {
 		return this.topics;
+	}
+
+	get getTasks(): string[] {
+		return this.tasks;
 	}
 }

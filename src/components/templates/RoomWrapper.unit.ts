@@ -1,26 +1,26 @@
 import { authModule, roomsModule } from "@/store";
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
-import RoomWrapper from "./RoomWrapper.vue";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import setupStores from "@@/tests/test-utils/setupStores";
-import RoomsModule from "@/store/rooms";
 import AuthModule from "@/store/auth";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import EnvConfigModule from "@/store/env-config";
+import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
+import RoomsModule from "@/store/rooms";
 import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOMS_MODULE_KEY,
 } from "@/utils/inject";
-import LoadingStateModule from "@/store/loading-state";
-import NotifierModule from "@/store/notifier";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import { meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { SpeedDialMenu } from "@ui-speed-dial-menu";
-import { meResponseFactory } from "@@/tests/test-utils";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import RoomWrapper from "./RoomWrapper.vue";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof RoomWrapper> = {

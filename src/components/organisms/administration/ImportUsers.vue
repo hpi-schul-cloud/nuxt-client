@@ -265,9 +265,6 @@
 </template>
 
 <script>
-import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
-import { MatchedBy } from "@/store/import-users";
-import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch";
 import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
@@ -277,7 +274,13 @@ import {
 	mdiFlagOutline,
 	mdiPencilOutline,
 } from "@/components/icons/material";
-import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
+import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch";
+import {
+	ImportUserResponseRoleNamesEnum,
+	SchulcloudTheme,
+} from "@/serverApi/v3";
+import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
+import { MatchedBy } from "@/store/import-users";
 
 export default {
 	components: {
@@ -388,15 +391,21 @@ export default {
 			return tableHeaders;
 		},
 		isNbc() {
-			return envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21";
+			return (
+				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21
+			);
 		},
 		canStartMigration() {
 			return this.school.inUserMigration && this.school.inMaintenance;
 		},
 		sourceSystemName() {
-			if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb") {
+			if (
+				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.Brb
+			) {
 				return this.$t("pages.administration.migration.brbSchulportal");
-			} else if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "n21") {
+			} else if (
+				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21
+			) {
 				return "moin.schule";
 			} else {
 				return this.$t("pages.administration.migration.ldapSource");

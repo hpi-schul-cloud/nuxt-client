@@ -1,7 +1,9 @@
+import { LanguageType } from "@/serverApi/v3";
 import { envConfigModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -142,9 +144,14 @@ describe("GeneralSettings", () => {
 
 		schoolsModule.setSchool(school);
 
-		envConfigModule.setEnvs({
-			I18N__AVAILABLE_LANGUAGES: "de,en,es",
+		const envs = envsFactory.build({
+			I18N__AVAILABLE_LANGUAGES: [
+				LanguageType.De,
+				LanguageType.En,
+				LanguageType.Es,
+			],
 		});
+		envConfigModule.setEnvs(envs);
 	});
 
 	describe("env-config", () => {
