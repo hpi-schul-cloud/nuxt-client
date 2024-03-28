@@ -449,6 +449,7 @@ export default {
 	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "підпорядкування",
 	"components.molecules.copyResult.label.text": "Текст",
+	"components.molecules.copyResult.label.tldraw": "Дошка",
 	"components.molecules.copyResult.label.timeGroup": "Група часу",
 	"components.molecules.copyResult.label.unknown": "Невідомий",
 	"components.molecules.copyResult.label.userGroup": "Група користувачів",
@@ -457,6 +458,8 @@ export default {
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.nexboardCopy.infoTldraw":
 		"Старі розділи neXboard не були скопійовані, оскільки інструмент видаляється з нашої платформи. Як заміна, інноваційний інструмент для роботи з дошкою tldraw тепер доступний у колонці дошки.",
+	"components.molecules.copyResult.tldrawCopy.info":
+		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Усі елементи успішно скопійовано.",
 	"components.molecules.copyResult.timeoutCopy":
