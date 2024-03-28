@@ -30,6 +30,11 @@ const baseTheme: ThemeDefinition = {
 		error: "#ff1134",
 		"error-darken-1": "#bf0d26",
 	},
+	variables: {
+		"high-emphasis-opacity": 1,
+		"medium-emphasis-opacity": 0.8,
+		"disabled-opacity": 0.6,
+	},
 };
 
 export default {

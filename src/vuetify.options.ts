@@ -16,11 +16,6 @@ const defaultTheme: ThemeDefinition = {
 		"on-background": "#3a424b",
 		"on-white": "#3a424b",
 	},
-	variables: {
-		"high-emphasis-opacity": 1,
-		"medium-emphasis-opacity": 0.8,
-		"disabled-opacity": 0.6,
-	},
 };
 
 const custom = {
