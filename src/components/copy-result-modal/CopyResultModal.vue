@@ -45,16 +45,16 @@
 </template>
 
 <script>
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import { envConfigModule, copyModule } from "@/store";
 import {
 	mdiAlert,
 	mdiCheckCircle,
 	mdiCloseCircle,
 	mdiInformation,
 } from "@mdi/js";
-import { envConfigModule } from "@/store";
 
 export default {
 	name: "CopyResultModal",
@@ -117,6 +117,11 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.nexboard"),
 				},
 				{
+					isShow: this.hasDrawingElement,
+					text: this.$t("components.molecules.copyResult.tldrawCopy.info"),
+					title: this.$t("components.molecules.copyResult.label.tldraw"),
+				},
+				{
 					isShow: this.hasFileElement || this.isCourse,
 					text: this.filesInfoText,
 					title: this.$t("components.molecules.copyResult.label.files"),
@@ -151,6 +156,9 @@ export default {
 				CopyApiResponseTypeEnum.LessonContentNexboard
 			);
 		},
+		hasDrawingElement() {
+			return this.isCourse && copyModule.getHasDrawingChild;
+		},
 		hasFileElement() {
 			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);
 		},
@@ -184,7 +192,7 @@ export default {
 				: this.$t("components.molecules.copyResult.nexboardCopy.infoTldraw");
 		},
 		externalToolsInfoText() {
-			return envConfigModule.getCtlToolsCopyEnabled
+			return envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED
 				? this.$t("components.molecules.copyResult.ctlTools.withFeature.info")
 				: this.$t("components.molecules.copyResult.ctlTools.info");
 		},
