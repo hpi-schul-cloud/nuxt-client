@@ -6,8 +6,9 @@ export type SidebarItemBaseData = {
 	icon: string;
 	testId: string;
 	permission?: string;
-	activeForUrls: string[];
+	activeForUrls?: string[];
 	children?: SidebarItemData[];
+	target?: string;
 };
 
 export type ExternalLink = {
@@ -221,6 +222,39 @@ export const getSidebarItemsNew = (
 		icon: "$mdiHelpCircleOutline",
 		testId: "Hilfebereich",
 		activeForUrls: ["^/help($|/.*)"],
+		children: [
+			{
+				title: "global.topbar.actions.helpSection",
+				icon: "$mdiFileQuestionOutline",
+				href: "/help",
+				target: "_self",
+				testId: "help-articles",
+				activeForUrls: ["^/help($|/.*)"],
+			},
+			{
+				title: "global.topbar.actions.contactSupport",
+				icon: "$mdiChatOutline",
+				href: "/help/contact",
+				target: "_self",
+				testId: "contact",
+				activeForUrls: ["^/help/contact($|/.*)"],
+			},
+			{
+				title: "global.topbar.actions.releaseNotes",
+				icon: "$mdiGiftOutline",
+				href: "/help/releases",
+				target: "_self",
+				testId: "releases",
+				activeForUrls: ["^/help/releases($|/.*)"],
+			},
+			{
+				title: "global.topbar.actions.training",
+				icon: "$mdiFileCertificateOutline",
+				href: "https://www.lernen.cloud/",
+				target: "_blank",
+				testId: "trainings",
+			},
+		],
 	},
 	{
 		title: "global.sidebar.myMaterial",
