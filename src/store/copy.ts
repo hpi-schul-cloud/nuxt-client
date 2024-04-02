@@ -2,7 +2,10 @@ import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultI
 import { AxiosStatic } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
+	BoardApiFactory,
+	BoardApiInterface,
 	CopyApiResponse,
+	CopyApiResponseElementsTypesEnum,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 	RoomsApiFactory,
@@ -26,6 +29,7 @@ export enum CopyParamsTypeEnum {
 	Task = "task",
 	Lesson = "lesson",
 	Course = "course",
+	ColumnBoard = "columnBoard",
 }
 
 interface CopyByShareTokenPayload {
@@ -44,6 +48,7 @@ export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
 	private isResultModalOpen = false;
+	private hasDrawingChild = false;
 
 	private get roomsApi(): RoomsApiInterface {
 		return RoomsApiFactory(undefined, "/v3", $axios);
@@ -51,6 +56,10 @@ export default class CopyModule extends VuexModule {
 
 	private get taskApi(): TaskApiInterface {
 		return TaskApiFactory(undefined, "/v3", $axios);
+	}
+
+	private get boardApi(): BoardApiInterface {
+		return BoardApiFactory(undefined, "/v3", $axios);
 	}
 
 	private get shareApi(): ShareTokenApiInterface {
@@ -82,6 +91,16 @@ export default class CopyModule extends VuexModule {
 			copyResult = await this.roomsApi
 				.roomsControllerCopyCourse(id)
 				.then((response) => response.data);
+
+			if (copyResult && copyResult.elementsTypes) {
+				this.checkDrawingChildren(copyResult.elementsTypes);
+			}
+		}
+
+		if (type === CopyParamsTypeEnum.ColumnBoard) {
+			copyResult = await this.boardApi
+				.boardControllerCopyBoard(id)
+				.then((response) => response.data);
 		}
 
 		if (copyResult === undefined) {
@@ -93,6 +112,18 @@ export default class CopyModule extends VuexModule {
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
 		return copyResult;
+	}
+
+	@Action
+	checkDrawingChildren(
+		copyResultElementsTypes: CopyApiResponseElementsTypesEnum[]
+	): void {
+		const elementIndex = copyResultElementsTypes.indexOf(
+			CopyApiResponseElementsTypesEnum.DrawingElement
+		);
+		if (elementIndex !== -1) {
+			this.setHasDrawingChild(true);
+		}
 	}
 
 	@Action({ rawError: true })
@@ -120,6 +151,7 @@ export default class CopyModule extends VuexModule {
 				.then((response) => response.data);
 		}
 		if (
+			type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
 			type === ShareTokenBodyParamsParentTypeEnum.Lessons ||
 			type === ShareTokenBodyParamsParentTypeEnum.Tasks
 		) {
@@ -250,10 +282,16 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
+	setHasDrawingChild(hasDrawingChild: boolean): void {
+		this.hasDrawingChild = hasDrawingChild;
+	}
+
+	@Mutation
 	reset(): void {
 		this.copyResultFailedItems = [];
 		this.copyResult = undefined;
 		this.isResultModalOpen = false;
+		this.hasDrawingChild = false;
 	}
 
 	get getCopyResult(): CopyApiResponse | undefined {
@@ -274,5 +312,9 @@ export default class CopyModule extends VuexModule {
 
 	get getIsResultModalOpen(): boolean {
 		return this.isResultModalOpen;
+	}
+
+	get getHasDrawingChild(): boolean {
+		return this.hasDrawingChild;
 	}
 }

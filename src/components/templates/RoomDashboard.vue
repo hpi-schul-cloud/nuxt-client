@@ -19,6 +19,7 @@
 						<RoomBoardCard
 							v-if="item.type === cardTypes.ColumnBoard"
 							:ref="`item_${index}`"
+							:board-card-index="index"
 							:user-role="role"
 							:key-drag="isDragging"
 							:drag-in-progress="dragInProgress"
@@ -36,12 +37,15 @@
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
 							@tab-pressed="isDragging = false"
+							@copy-board="copyBoard(item.content.id)"
 							@update-visibility="updateCardVisibility(item.content.id, $event)"
 							@delete-board="openItemDeleteDialog(item.content, item.type)"
+							@share-board="getSharedBoard(item.content.columnBoardId)"
 						/>
 						<RoomTaskCard
 							v-if="item.type === cardTypes.Task"
 							:ref="`item_${index}`"
+							:task-card-index="index"
 							:user-role="role"
 							:room="taskData"
 							:task="item.content"
@@ -67,6 +71,7 @@
 						<RoomLessonCard
 							v-if="item.type === cardTypes.Lesson"
 							:ref="`item_${index}`"
+							:lesson-card-index="index"
 							:user-role="role"
 							:lesson="item.content"
 							:room="lessonData"
@@ -96,6 +101,7 @@
 				<RoomBoardCard
 					v-if="boardCardIsVisibleToStudent(item)"
 					:ref="`item_${index}`"
+					:board-card-index="index"
 					:user-role="role"
 					:key-drag="isDragging"
 					:drag-in-progress="dragInProgress"
@@ -114,6 +120,7 @@
 				<RoomTaskCard
 					v-if="item.type === cardTypes.Task"
 					:ref="`item_${index}`"
+					:task-card-index="index"
 					:user-role="role"
 					:task="item.content"
 					:aria-label="
@@ -131,6 +138,7 @@
 				<RoomLessonCard
 					v-if="item.type === cardTypes.Lesson"
 					:ref="`item_${index}`"
+					:lesson-card-index="index"
 					:user-role="role"
 					:lesson="item.content"
 					:room="lessonData"
@@ -154,6 +162,7 @@
 			data-testid="empty-state-item"
 			class="mt-16"
 		/>
+		<share-modal type="columnBoard" />
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
 		<v-custom-dialog
@@ -183,8 +192,7 @@
 </template>
 
 <script>
-import RoomBoardCard from "@/components/molecules/RoomBoardCard.vue";
-import RoomLessonCard from "@/components/molecules/RoomLessonCard.vue";
+import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
@@ -194,8 +202,9 @@ import {
 	ImportUserResponseRoleNamesEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { copyModule, envConfigModule, roomModule } from "@/store";
+import { envConfigModule, roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
 import draggable from "vuedraggable";
 
 export default {
@@ -216,7 +225,9 @@ export default {
 		},
 		role: { type: String, required: true },
 	},
-	inject: ["shareModule"],
+	inject: {
+		shareModule: { from: SHARE_MODULE_KEY },
+	},
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,
@@ -233,9 +244,6 @@ export default {
 				roomId: this.roomData.roomId,
 				displayColor: this.roomData.displayColor,
 			};
-		},
-		isCopyModalLoading() {
-			return copyModule?.getLoading ?? false;
 		},
 		taskData() {
 			return {
@@ -302,7 +310,15 @@ export default {
 			await roomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`].$el.focus();
 		},
-		async getSharedLesson(lessonId) {
+		getSharedBoard(boardId) {
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {
+				this.shareModule.startShareFlow({
+					id: boardId,
+					type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+				});
+			}
+		},
+		getSharedLesson(lessonId) {
 			if (envConfigModule.getEnv.FEATURE_LESSON_SHARE) {
 				this.shareModule.startShareFlow({
 					id: lessonId,
@@ -310,7 +326,7 @@ export default {
 				});
 			}
 		},
-		async getSharedTask(taskId) {
+		getSharedTask(taskId) {
 			if (envConfigModule.getEnv.FEATURE_TASK_SHARE) {
 				this.shareModule.startShareFlow({
 					id: taskId,
@@ -346,17 +362,24 @@ export default {
 		async restoreTask(itemId) {
 			await roomModule.finishTask({ itemId, action: "restore" });
 		},
-		async copyTask(taskId) {
+		copyTask(taskId) {
 			this.$emit("copy-board-element", {
 				id: taskId,
 				type: CopyParamsTypeEnum.Task,
 				courseId: this.roomData.roomId,
 			});
 		},
-		async copyLesson(lessonId) {
+		copyLesson(lessonId) {
 			this.$emit("copy-board-element", {
 				id: lessonId,
 				type: CopyParamsTypeEnum.Lesson,
+				courseId: this.roomData.roomId,
+			});
+		},
+		copyBoard(columnBoardId) {
+			this.$emit("copy-board-element", {
+				id: columnBoardId,
+				type: CopyParamsTypeEnum.ColumnBoard,
 				courseId: this.roomData.roomId,
 			});
 		},

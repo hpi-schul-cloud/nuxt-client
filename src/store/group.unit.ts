@@ -1,6 +1,7 @@
 import {
 	ClassInfoResponse,
 	ClassInfoSearchListResponse,
+	ClassSortBy,
 	GroupApiInterface,
 	SchoolYearQueryType,
 } from "@/serverApi/v3";
@@ -91,16 +92,14 @@ describe("GroupModule", () => {
 			});
 
 			it("should return the changed state", () => {
-				const classes: ClassInfo[] = [
-					{
-						name: "3a",
-						externalSourceName: "Klasse",
-						teachers: ["Carlie"],
-						type: ClassRootType.Class,
-						id: "id",
-						studentCount: 0,
-					},
-				];
+				const classes: ClassInfo[] = classInfoFactory.buildList(1, {
+					name: "3a",
+					externalSourceName: "Klasse",
+					teacherNames: ["Carlie"],
+					type: ClassRootType.Class,
+					id: "id",
+					studentCount: 0,
+				});
 
 				module.setClasses(classes);
 
@@ -140,7 +139,7 @@ describe("GroupModule", () => {
 			});
 
 			it("should return the changed state", () => {
-				const sortBy = "externalSource";
+				const sortBy = ClassSortBy.ExternalSourceName;
 
 				module.setSortBy(sortBy);
 
@@ -184,7 +183,16 @@ describe("GroupModule", () => {
 	describe("loadClassesForSchool", () => {
 		describe("when the api returns a response", () => {
 			const setup = () => {
-				const classes: ClassInfoResponse[] = [classInfoResponseFactory.build()];
+				const classes: ClassInfoResponse[] = [
+					classInfoResponseFactory.build({
+						synchronizedCourses: [
+							{
+								id: "courseId",
+								name: "courseName",
+							},
+						],
+					}),
+				];
 				const sortBy = "name";
 				const sortOrder: SortOrder = SortOrder.ASC;
 				const pagination: Pagination = {

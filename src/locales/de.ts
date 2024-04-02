@@ -21,6 +21,7 @@ export default {
 	"common.actions.share": "Teilen",
 	"common.actions.export": "Exportieren",
 	"common.actions.shareCourse": "Kurskopie teilen",
+	"common.actions.shareBoard": "Boardkopie teilen",
 	"common.actions.update": "Aktualisieren",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
@@ -88,6 +89,7 @@ export default {
 	"common.labels.visible": "Sichtbar",
 	"common.loading.text": "Daten werden geladen...",
 	"common.nodata": "Keine Daten vorhanden",
+	"common.notification.error": "Es ist ein Fehler aufgetreten.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "TT.MM.JJJJ",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
@@ -393,6 +395,8 @@ export default {
 	"components.molecules.admintablelegend.help": "Hilfebereich",
 	"components.molecules.admintablelegend.hint":
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {institute_title}.",
+	"components.molecules.admintablelegend.thr":
+		"Einige oder alle Nutzer:innendaten deiner Schule werden aus einer externen Quelle (LDAP, IDM, Schulportal o. ä.) synchronisiert. Die Bearbeitung dieser Nutzer:innen-Stammdaten ist deshalb nur im Quellsystem möglich, nicht in der Schul-Cloud. Das Anlegen neuer Schüler:innen oder Lehrkräfte ist ebenfalls nur im Quellsystem möglich.",
 	"components.molecules.ContentCard.report.body":
 		"Melden des Inhaltes mit der ID",
 	"components.molecules.ContentCard.report.email":
@@ -441,6 +445,7 @@ export default {
 	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Abgaben",
 	"components.molecules.copyResult.label.text": "Text",
+	"components.molecules.copyResult.label.tldraw": "Whiteboard",
 	"components.molecules.copyResult.label.timeGroup": "Zeitgruppe",
 	"components.molecules.copyResult.label.unknown": "Unbekannt",
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
@@ -449,6 +454,8 @@ export default {
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.nexboardCopy.infoTldraw":
 		"Alte neXboard-Abschnitte wurden nicht kopiert, da das Tool von unserer Plattform entfernt wird. Als Ersatz steht nun das innovative Whiteboard-Tool tldraw im Spaltenboard zur Verfügung.",
+	"components.molecules.copyResult.tldrawCopy.info":
+		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.timeoutCopy":
@@ -463,6 +470,13 @@ export default {
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
+	"components.molecules.import.columnBoard.label": "Board-Titel",
+	"components.molecules.import.columnBoard.options.infoText":
+		"Das Board kann im Folgenden umbenannt werden. ",
+	"components.molecules.import.columnBoard.options.title": "Board importieren",
+	"components.molecules.import.columnBoard.options.selectCourse": "Kurs wählen",
+	"components.molecules.import.columnBoard.options.selectCourse.infoText":
+		"Der Kurs, in den das Board importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.courses.label": "Kurs",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Es wird eine Kopie erstellt.<br>Personenbezogene Daten werden nicht importiert.<br>Externe Tools werden nicht kopiert. <br>Der Kurs kann im Folgenden umbenannt werden.",
@@ -515,6 +529,9 @@ export default {
 	"components.molecules.importUsersMatch.write":
 		"Vornamen oder Nachnamen eingeben",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
+	"components.molecules.share.columnBoard.options.infoText":
+		"Mit dem folgenden Link kann das Board als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+	"components.molecules.share.columnBoard.result.linkLabel": "Link Board-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
 	"components.molecules.share.courses.options.ctlTools.infotext":
@@ -678,6 +695,13 @@ export default {
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Tool auswählen...",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
+	"feature-course-sync.EndCourseSyncDialog.title": "Synchronisation beenden",
+	"feature-course-sync.EndCourseSyncDialog.alert":
+		"Ist die Synchronisation einmal beendet, kann sie nicht wieder gestartet werden. Nutzendendaten können im Nachgang analog zu regulären Kursen manuell bearbeitet und gepflegt werden.",
+	"feature-course-sync.EndCourseSyncDialog.description":
+		"Soll die Synchronization der Nutzendengruppe {groupName} im Kurs {courseName} wirklich beendet werden?",
+	"feature-course-sync.EndCourseSyncDialog.success":
+		"Synchronisation erfolgreich beendet",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -757,6 +781,7 @@ export default {
 	"pages.administration.classes.index.title": "Klassen verwalten",
 	"pages.administration.classes.label.archive": "Archiv",
 	"pages.administration.classes.manage": "Klasse verwalten",
+	"pages.administration.classes.header.sync": "Synchronisiert mit",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronisation",
 	"pages.administration.ldap.activate.className": "Name",
@@ -1383,7 +1408,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Abgelaufen",
 	"pages.room.taskCard.teacher.label.submitted": "Abgegeben",
 	"pages.room.teacher.emptyState":
-		"Lerninhalte wie Aufgaben oder Themen dem Kurs hinzufügen und anschließend sortieren.",
+		"Lerninhalte dem Kurs hinzufügen und sortieren.",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
 	"pages.rooms.allRooms.emptyState.title":
 		"Aktuell gibt es hier noch keine Kurse.",
@@ -1397,8 +1422,10 @@ export default {
 	"pages.rooms.fab.import.course": "Kurs importieren",
 	"pages.rooms.groupName": "Kurse",
 	"pages.rooms.headerSection.archived": "Archiv",
+	"pages.rooms.headerSection.synchronized": "Synchronisiert",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
 	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
+	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.importCourse.btn.continue": "Weiter",
 	"pages.rooms.importCourse.codeError": "Der Kurs-Code wird nicht verwendet.",
 	"pages.rooms.importCourse.importError":

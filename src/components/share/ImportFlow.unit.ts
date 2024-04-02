@@ -19,7 +19,11 @@ import SelectCourseModal from "@/components/share/SelectCourseModal.vue";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { CopyResultItem } from "../copy-result-modal/types/CopyResultItem";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import {
 	createTestingI18n,
@@ -54,7 +58,7 @@ describe("@components/share/ImportFlow", () => {
 					vueDompurifyHTMLPlugin,
 				],
 				provide: {
-					copyModule: copyModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
@@ -405,6 +409,72 @@ describe("@components/share/ImportFlow", () => {
 						await copyResultModal.vm.$emit("dialog-closed");
 
 						expect(wrapper.emitted("success")).toHaveLength(1);
+					});
+				});
+			});
+
+			describe("when parent is a column board", () => {
+				const validateShareTokenMock = () =>
+					Promise.resolve({
+						token,
+						parentType: ShareTokenInfoResponseParentTypeEnum.ColumnBoard,
+						parentName: originalName,
+					});
+
+				it("should open selectCourseModal", async () => {
+					copyModuleMock.validateShareToken = validateShareTokenMock;
+					const { wrapper } = setup();
+					await nextTick();
+
+					const selectCourseModal = wrapper.findComponent({
+						name: "select-course-modal",
+					});
+
+					expect(selectCourseModal.props("isOpen")).toBe(true);
+				});
+
+				it("should open the importModal after selecting the course and closing the modal", async () => {
+					copyModuleMock.validateShareToken = validateShareTokenMock;
+					const { wrapper } = setup();
+					await nextTick();
+
+					const select = wrapper.findComponent({ name: "v-select" });
+					select.setValue(course);
+
+					const selectCourseDialog = wrapper
+						.findComponent(SelectCourseModal)
+						.findComponent(vCustomDialog);
+					selectCourseDialog.vm.$emit("next");
+
+					await nextTick();
+
+					const importModal = wrapper.findComponent({ name: "import-modal" });
+					expect(importModal.props("isOpen")).toBe(true);
+				});
+
+				it("should call copyByShareToken when import is started", async () => {
+					copyModuleMock.validateShareToken = validateShareTokenMock;
+					const { wrapper } = setup();
+					await nextTick();
+
+					const select = wrapper.findComponent({ name: "v-select" });
+					select.setValue(course);
+
+					const selectCourseDialog = wrapper
+						.findComponent(SelectCourseModal)
+						.findComponent(vCustomDialog);
+					selectCourseDialog.vm.$emit("next");
+
+					const importModalDialog = wrapper
+						.findComponent(ImportModal)
+						.findComponent(vCustomDialog);
+					importModalDialog.vm.$emit("dialog-confirmed");
+
+					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
+						destinationCourseId: course.id,
+						token,
+						type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+						newName: originalName,
 					});
 				});
 			});

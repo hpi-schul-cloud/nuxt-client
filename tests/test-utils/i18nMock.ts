@@ -1,9 +1,9 @@
-import { I18nLanguage } from "@/plugins/i18n";
+import { MessageSchema } from "@/locales/schema";
 import { createMock } from "@golevelup/ts-jest";
 
 export const i18nMock = createMock<{
 	t: (
-		key: keyof I18nLanguage,
+		key: keyof MessageSchema,
 		placeholders?: Record<string, unknown>
 	) => string;
 }>({

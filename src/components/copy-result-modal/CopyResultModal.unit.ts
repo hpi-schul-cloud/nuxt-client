@@ -1,15 +1,15 @@
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { mount } from "@vue/test-utils";
-import CopyResultModal from "./CopyResultModal.vue";
-import setupStores from "@@/tests/test-utils/setupStores";
-import EnvConfigModule from "@/store/env-config";
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { Envs } from "@/store/types/env-config";
+import EnvConfigModule from "@/store/env-config";
+import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount } from "@vue/test-utils";
+import CopyResultModal from "./CopyResultModal.vue";
 
 const mockGeoGebraItem = {
 	title: "GeoGebra Element Title",
@@ -152,7 +152,11 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 
 		it("should render ctl tools info if root item is a Course and has no failed file ", () => {
 			const copyResultItems = mockResultItems([]);
-			envConfigModule.setEnvs({ FEATURE_CTL_TOOLS_TAB_ENABLED: true } as Envs);
+
+			const envs = envsFactory.build({
+				FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+			});
+			envConfigModule.setEnvs(envs);
 			const wrapper = createWrapper({
 				isOpen: true,
 				copyResultItems,
@@ -180,10 +184,11 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			};
 
 			it("should render ctl tools copy info ", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 					FEATURE_CTL_TOOLS_COPY_ENABLED: true,
-				} as Envs);
+				});
+				envConfigModule.setEnvs(envs);
 				const { wrapper } = setup();
 
 				const dialog = wrapper.findComponent(vCustomDialog);
@@ -241,9 +246,8 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			["Kursgruppen", CopyApiResponseTypeEnum.CoursegroupGroup],
 			["Dateien", CopyApiResponseTypeEnum.File],
 		])("should render if there is a %s item", (title, type) => {
-			envConfigModule.setEnvs({
-				FEATURE_NEXBOARD_COPY_ENABLED: true,
-			} as Envs);
+			const envs = envsFactory.build({ FEATURE_NEXBOARD_COPY_ENABLED: true });
+			envConfigModule.setEnvs(envs);
 			const copyResultItems = mockResultItems();
 			copyResultItems[0].elements = [
 				{

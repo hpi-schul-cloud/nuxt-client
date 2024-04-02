@@ -1,21 +1,29 @@
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
-import { authModule, envConfigModule, roomModule } from "@/store";
+import {
+	BoardElementResponseTypeEnum as BoardTypes,
+	ShareTokenBodyParamsParentTypeEnum,
+	SingleColumnBoardResponse,
+} from "@/serverApi/v3/api";
+import { envConfigModule } from "@/store";
 import AuthModule from "@/store/auth";
+import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
-import { Envs } from "@/store/types/env-config";
 import { initializeAxios } from "@/utils/api";
 import {
+	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
+	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -28,17 +36,18 @@ import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
-const mockData = {
+const mockData: SingleColumnBoardResponse = {
 	roomId: "123",
 	title: "Sample Course",
 	displayColor: "black",
+	isArchived: false,
+	isSynchronized: false,
 	elements: [
 		{
-			type: "task",
+			type: BoardTypes.Task,
 			content: {
 				courseName: "Mathe",
 				id: "59cce1d381297026d02cdc4b",
@@ -60,7 +69,7 @@ const mockData = {
 			},
 		},
 		{
-			type: "task",
+			type: BoardTypes.Task,
 			content: {
 				courseName: "Mathe",
 				id: "59cce4c3c6abf042248e888e",
@@ -99,18 +108,56 @@ const $route = {
 	},
 	path: "/rooms/",
 };
-
-let copyModuleMock: CopyModule;
-let loadingStateModuleMock: LoadingStateModule;
-let notifierModuleMock: NotifierModule;
-let shareModuleMock: ShareModule;
-let downloadModuleMock: CommonCartridgeExportModule;
-
 const $router = { push: jest.fn(), resolve: jest.fn(), replace: jest.fn() };
 
-const getWrapper = () => {
+let copyModule: CopyModule;
+let loadingStateModuleMock: LoadingStateModule;
+let notifierModule: NotifierModule;
+let shareModule: ShareModule;
+let downloadModule: CommonCartridgeExportModule;
+let roomModule: RoomModule;
+let authModule: AuthModule;
+
+const getWrapper = (
+	permissionData = mockPermissionsCourseTeacher,
+	roleName = "teacher"
+) => {
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 		getCtlToolsTabEnabled: false,
+	});
+
+	notifierModule = createModuleMocks(NotifierModule);
+	copyModule = createModuleMocks(CopyModule, {
+		copy: jest.fn(),
+		getIsResultModalOpen: false,
+	});
+	downloadModule = createModuleMocks(CommonCartridgeExportModule, {
+		getIsExportModalOpen: false,
+		getVersion: "",
+		getTopics: [],
+		getTasks: [],
+		startExportFlow: jest.fn(),
+	});
+	shareModule = createModuleMocks(ShareModule, {
+		getIsShareModalOpen: true,
+		getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
+		createShareUrl: jest.fn(),
+		startShareFlow: jest.fn(),
+		resetShareFlow: jest.fn(),
+	});
+	roomModule = createModuleMocks(RoomModule, {
+		fetchContent: jest.fn(),
+		getRoomData: mockData,
+		getPermissionData: permissionData,
+	});
+
+	const mockMe = meResponseFactory.build();
+	mockMe.roles.push({ id: "0", name: roleName });
+
+	authModule = createModuleMocks(AuthModule, {
+		getMe: mockMe,
+		getUserRoles: [mockMe.roles[0].name],
+		getUserPermissions: permissionData,
 	});
 
 	// we need this because in order for useMediaQuery (vueuse) to work
@@ -128,17 +175,19 @@ const getWrapper = () => {
 				$route,
 			},
 			provide: {
-				copyModule: copyModuleMock,
+				[COPY_MODULE_KEY.valueOf()]: copyModule,
 				loadingStateModule: loadingStateModuleMock,
-				notifierModule: notifierModuleMock,
-				shareModule: shareModuleMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModuleMock,
+				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModule,
+				[ROOM_MODULE_KEY.valueOf()]: roomModule,
+				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 			stubs: {
 				RoomDashboard: true,
 				RoomExternalToolsOverview: true,
+				EndCourseSyncDialog: true,
 			},
 		},
 	});
@@ -146,32 +195,11 @@ const getWrapper = () => {
 
 describe("@/pages/RoomDetails.page.vue", () => {
 	beforeEach(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
-
 		setupStores({
-			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
-			roomModule: RoomModule,
-		});
-		roomModule.setRoomData(mockData as any);
-		roomModule.setPermissionData(mockPermissionsCourseTeacher);
-		copyModuleMock = createModuleMocks(CopyModule, {
-			getIsResultModalOpen: false,
 		});
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
 			getIsOpen: false,
-		});
-		notifierModuleMock = createModuleMocks(NotifierModule);
-		shareModuleMock = createModuleMocks(ShareModule, {
-			getIsShareModalOpen: true,
-			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
-			createShareUrl: jest.fn(),
-			resetShareFlow: jest.fn(),
-		});
-		downloadModuleMock = createModuleMocks(CommonCartridgeExportModule, {
-			getIsExportModalOpen: false,
-			getVersion: "",
 		});
 
 		initializeAxios({
@@ -187,49 +215,39 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	it("should fetch data", async () => {
-		const wrapper = getWrapper();
-		expect(wrapper.vm.roomData).toStrictEqual(mockData);
+		getWrapper();
+
+		expect(roomModule.fetchContent).toHaveBeenCalled();
 	});
 
-	it("'to course files' button should have correct path", async () => {
+	it("'to course files' button should have correct path", () => {
 		const wrapper = getWrapper();
 		const backButton = wrapper.find(".back-button");
 		expect(backButton.attributes("href")).toStrictEqual("/files/courses/123");
 	});
 
-	it("title should be the course name", async () => {
+	it("title should be the course name", () => {
 		const wrapper = getWrapper();
 		const title = wrapper.find(".course-title");
 		expect(title.element.textContent).toContain("Sample Course");
 	});
 
 	it("should not show FAB if user does not have permission to create courses", () => {
-		const mockMe = meResponseFactory.build();
-		authModule.setMe(mockMe);
-		roomModule.setPermissionData(mockPermissionsStudent);
-		const wrapper = getWrapper();
+		const wrapper = getWrapper(mockPermissionsStudent);
 		const fabComponent = wrapper.find(".wireframe-fab");
 		expect(fabComponent.exists()).toBe(false);
 	});
 
 	describe("menu", () => {
 		it("should show FAB if user has permission to create homework", () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["HOMEWORK_CREATE"],
-			});
-			authModule.setMe(mockMe);
-			const wrapper = getWrapper();
+			const wrapper = getWrapper(["homework_create"]);
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
 			expect(fabComponent.exists()).toBe(true);
 		});
 
 		it("'add task' button should have correct path", async () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["HOMEWORK_CREATE"],
-			});
-			authModule.setMe(mockMe);
-			const wrapper = getWrapper();
+			const wrapper = getWrapper(["homework_create"]);
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
 			// open menu
@@ -242,11 +260,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 		});
 
 		it("'add lesson' button should have correct path", async () => {
-			const mockMe = meResponseFactory.build({
-				permissions: ["HOMEWORK_CREATE", "TOPIC_CREATE"],
-			});
-			authModule.setMe(mockMe);
-			const wrapper = getWrapper();
+			const wrapper = getWrapper(["homework_create", "topic_create"]);
 			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 
 			// open menu
@@ -260,204 +274,235 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	});
 
 	describe("headline menus", () => {
-		beforeEach(() => {
-			const mockMe = meResponseFactory.build();
-			authModule.setMe(mockMe);
-			roomModule.setPermissionData(mockPermissionsCourseTeacher);
-		});
-		const findMenuItems = (itemName: string, menuItems: Array<any>) => {
-			return menuItems.some((item: object | any) => item.name === itemName);
-		};
-		it("should have the menu button for course teachers", () => {
-			const wrapper = getWrapper();
-			const menuButton = wrapper.find(
-				'button[data-testid="room-tool-three-dot-button"]'
-			);
+		describe("students", () => {
+			it("should not have the menu button for students", () => {
+				const wrapper = getWrapper(mockPermissionsStudent);
+				const menuButton = wrapper.find('[data-testid="room-menu"]');
 
-			expect(menuButton.exists()).toBe(true);
+				expect(menuButton.exists()).toBe(false);
+			});
 		});
 
-		it("should not have the menu button for students", () => {
-			roomModule.setPermissionData(mockPermissionsStudent);
-			const wrapper = getWrapper();
-			const menuButton = wrapper.find(
-				'button[data-testid="room-tool-three-dot-button"]'
-			);
+		describe("teachers", () => {
+			it("should have the menu button for course teachers", () => {
+				const wrapper = getWrapper();
+				const menuButton = wrapper.find('[data-testid="room-menu"]');
 
-			expect(menuButton.exists()).toBe(false);
-		});
-
-		it("should not have the menu button for substitution course teachers", () => {
-			roomModule.setPermissionData(mockPermissionsCourseSubstitutionTeacher);
-			const wrapper = getWrapper();
-			const menuButton = wrapper.find(
-				'button[data-testid="room-tool-three-dot-button"]'
-			);
-
-			expect(menuButton.exists()).toBe(false);
-		});
-
-		it("should have the headline menu items", () => {
-			envConfigModule.setEnvs({
-				FEATURE_COPY_SERVICE_ENABLED: true,
-				FEATURE_COURSE_SHARE: true,
-			} as Envs);
-			const wrapper = getWrapper();
-			const menuItems = wrapper.vm.headlineMenuItems;
-
-			expect(menuItems).toHaveLength(3);
-			expect(
-				findMenuItems(
-					"common.actions.edit" + "/" + "common.actions.remove",
-					menuItems
-				)
-			).toBe(true);
-			expect(findMenuItems("common.actions.copy", menuItems)).toBe(true);
-			expect(findMenuItems("common.actions.shareCourse", menuItems)).toBe(true);
-		});
-
-		it("should have 'Share Course' menu if 'FEATURE_COURSE_SHARE' flag set to true", () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
-			const wrapper = getWrapper();
-			const menuItems = wrapper.vm.headlineMenuItems;
-
-			expect(findMenuItems("common.actions.shareCourse", menuItems)).toBe(true);
-		});
-
-		it("should redirect the page when 'Edit/Delete' menu clicked", async () => {
-			Object.defineProperty(window, "location", {
-				value: { href: "" },
-				writable: true,
+				expect(menuButton.exists()).toBe(true);
 			});
 
-			const wrapper = getWrapper();
+			it("should not have the menu button for substitution course teachers", () => {
+				const wrapper = getWrapper(mockPermissionsCourseSubstitutionTeacher);
+				const menuButton = wrapper.find('[data-testid="room-menu"]');
 
-			const threeDotButton = wrapper.findComponent(
-				'button[data-testid="room-tool-three-dot-button"]'
-			);
-			await threeDotButton.trigger("click");
-
-			const moreActionButton = wrapper.findComponent(
-				`[data-testid=title-menu-edit-delete]`
-			);
-			await moreActionButton.trigger("click");
-
-			expect(window.location.href).toStrictEqual("/courses/123/edit");
-		});
-
-		describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
-			it("should have 'Copy Course' menu if 'FEATURE_COPY_SERVICE_ENABLED' flag set to true", () => {
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
-				const wrapper = getWrapper();
-				const menuItems = wrapper.vm.headlineMenuItems;
-
-				expect(findMenuItems("common.actions.copy", menuItems)).toBe(true);
+				expect(menuButton.exists()).toBe(false);
 			});
 
-			it("should call the onCopyRoom method when 'Copy course' menu clicked", async () => {
-				envConfigModule.setEnvs({
-					FEATURE_COPY_SERVICE_ENABLED: true,
-				} as Envs);
-				const onCopyRoom = jest.fn();
+			describe("when 'FEATURE_COURSE_SHARE' & 'FEATURE_COPY_SERVICE_ENABLED' are turned off", () => {
+				it("should only display 'edit/remove' action", async () => {
+					const wrapper = getWrapper();
+
+					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
+					await menuButton.trigger("click");
+
+					expect(
+						wrapper
+							.findComponent("[data-testid=room-menu-edit-delete]")
+							.exists()
+					).toBe(true);
+					expect(
+						wrapper.findComponent("[data-testid=room-menu-copy]").exists()
+					).toBe(false);
+					expect(
+						wrapper.findComponent("[data-testid=room-menu-share]").exists()
+					).toBe(false);
+				});
+			});
+
+			describe("when 'FEATURE_COPY_SERVICE_ENABLED' is turned on", () => {
+				it("should display 'copy' action", async () => {
+					const envs = envsFactory.build({
+						FEATURE_COPY_SERVICE_ENABLED: true,
+					});
+					envConfigModule.setEnvs(envs);
+					const wrapper = getWrapper();
+
+					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
+					await menuButton.trigger("click");
+
+					expect(
+						wrapper
+							.findComponent("[data-testid=room-menu-edit-delete]")
+							.exists()
+					).toBe(true);
+					expect(
+						wrapper.findComponent("[data-testid=room-menu-copy]").exists()
+					).toBe(true);
+					expect(
+						wrapper.findComponent("[data-testid=room-menu-share]").exists()
+					).toBe(false);
+				});
+			});
+
+			describe("when 'FEATURE_COURSE_SHARE' is turned on", () => {
+				it("should display 'share' action", async () => {
+					const envs = envsFactory.build({
+						FEATURE_COURSE_SHARE: true,
+					});
+					envConfigModule.setEnvs(envs);
+					const wrapper = getWrapper();
+
+					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
+					await menuButton.trigger("click");
+
+					expect(
+						wrapper
+							.findComponent("[data-testid=room-menu-edit-delete]")
+							.exists()
+					).toBe(true);
+					expect(
+						wrapper.findComponent("[data-testid=room-menu-copy]").exists()
+					).toBe(false);
+					expect(
+						wrapper.findComponent("[data-testid=room-menu-share]").exists()
+					).toBe(true);
+				});
+			});
+
+			it("should redirect the page when 'Edit/Delete' menu clicked", async () => {
+				Object.defineProperty(window, "location", {
+					value: { href: "" },
+					writable: true,
+				});
+
 				const wrapper = getWrapper();
-				wrapper.vm.onCopyRoom = onCopyRoom;
 
 				const threeDotButton = wrapper.findComponent(
-					'button[data-testid="room-tool-three-dot-button"]'
+					'[data-testid="room-menu"]'
 				);
 				await threeDotButton.trigger("click");
 
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid=title-menu-copy]`
+					`[data-testid=room-menu-edit-delete]`
 				);
 				await moreActionButton.trigger("click");
 
-				expect(onCopyRoom).toHaveBeenCalled();
-			});
-		});
-
-		describe("test Course export", () => {
-			it("should not find export button when feature flag is false", async () => {
-				envConfigModule.setEnvs({
-					FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
-				} as Envs);
-				const onExport = jest.fn();
-				const wrapper = getWrapper();
-				wrapper.vm.onExport = onExport;
-
-				const threeDotButton = wrapper.find(".three-dot-button");
-				await threeDotButton.trigger("click");
-				const moreActionButton = wrapper.findAll(
-					`[data-testid=title-menu-common-cartridge-download]`
-				);
-
-				expect(moreActionButton).not.toContain(
-					`[data-testid=title-menu-common-cartridge-download]`
-				);
+				expect(window.location.href).toStrictEqual("/courses/123/edit");
 			});
 
-			it("should call onExport method when 'Export Course' menu clicked", async () => {
-				envConfigModule.setEnvs({
-					FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
-				} as Envs);
-				const onExport = jest.fn();
-				const wrapper = getWrapper();
-				wrapper.vm.onExport = onExport;
+			describe("testing FEATURE_COPY_SERVICE_ENABLED feature flag", () => {
+				it("should call the onCopyRoom method when 'Copy course' menu was clicked", async () => {
+					const envs = envsFactory.build({
+						FEATURE_COPY_SERVICE_ENABLED: true,
+					});
+					envConfigModule.setEnvs(envs);
 
-				const threeDotButton = wrapper.find(".three-dot-button");
+					const wrapper = getWrapper();
+
+					const threeDotButton = wrapper.findComponent(
+						'[data-testid="room-menu"]'
+					);
+					await threeDotButton.trigger("click");
+
+					const moreActionButton = wrapper.findComponent(
+						`[data-testid=room-menu-copy]`
+					);
+					await moreActionButton.trigger("click");
+
+					expect(copyModule.copy).toHaveBeenCalled();
+				});
+			});
+
+			describe("test Course export", () => {
+				it("should not find export button when feature flag is false", async () => {
+					const envs = envsFactory.build({
+						FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: false,
+					});
+					envConfigModule.setEnvs(envs);
+
+					const wrapper = getWrapper();
+
+					const threeDotButton = wrapper.findComponent(
+						'[data-testid="room-menu"]'
+					);
+					await threeDotButton.trigger("click");
+					const moreActionButton = wrapper.findAll(
+						`[data-testid=room-menu-common-cartridge-download]`
+					);
+
+					expect(moreActionButton).not.toContain(
+						`[data-testid=room-menu-common-cartridge-download]`
+					);
+				});
+
+				it("should call onExport method when 'Export Course' menu clicked", async () => {
+					const envs = envsFactory.build({
+						FEATURE_COMMON_CARTRIDGE_COURSE_EXPORT_ENABLED: true,
+					});
+					envConfigModule.setEnvs(envs);
+					const wrapper = getWrapper();
+
+					const threeDotButton = wrapper.findComponent(
+						'[data-testid="room-menu"]'
+					);
+					await threeDotButton.trigger("click");
+					const moreActionButton = wrapper.findComponent(
+						`[data-testid=room-menu-common-cartridge-download]`
+					);
+					await moreActionButton.trigger("click");
+
+					expect(downloadModule.startExportFlow).toHaveBeenCalled();
+				});
+			});
+
+			it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
+				const envs = envsFactory.build({
+					FEATURE_COURSE_SHARE: true,
+				});
+				envConfigModule.setEnvs(envs);
+				const wrapper = getWrapper();
+
+				const threeDotButton = wrapper.findComponent(
+					'[data-testid="room-menu"]'
+				);
 				await threeDotButton.trigger("click");
+
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid=title-menu-common-cartridge-download]`
+					`[data-testid=room-menu-share]`
 				);
 				await moreActionButton.trigger("click");
 
-				expect(onExport).toHaveBeenCalled();
+				expect(shareModule.startShareFlow).toHaveBeenCalled();
 			});
-		});
 
-		it("should call shareCourse method when 'Share Course ' menu clicked", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
-			const shareCourseSpy = jest.fn();
-			const wrapper = getWrapper();
-			wrapper.vm.shareCourse = shareCourseSpy;
+			it("should call store action after 'Share Course' menu clicked", async () => {
+				const envs = envsFactory.build({
+					FEATURE_COURSE_SHARE: true,
+				});
+				envConfigModule.setEnvs(envs);
+				const wrapper = getWrapper();
 
-			const threeDotButton = wrapper.findComponent(
-				'button[data-testid="room-tool-three-dot-button"]'
-			);
-			await threeDotButton.trigger("click");
+				const threeDotButton = wrapper.findComponent(
+					'[data-testid="room-menu"]'
+				);
+				await threeDotButton.trigger("click");
 
-			const moreActionButton = wrapper.findComponent(
-				`[data-testid=title-menu-share]`
-			);
-			await moreActionButton.trigger("click");
+				const moreActionButton = wrapper.findComponent(
+					`[data-testid=room-menu-share]`
+				);
+				await moreActionButton.trigger("click");
 
-			expect(shareCourseSpy).toHaveBeenCalled();
-		});
-
-		it("should call store action after 'Share Course' menu clicked", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
-			const wrapper = getWrapper();
-
-			const threeDotButton = wrapper.findComponent(
-				'button[data-testid="room-tool-three-dot-button"]'
-			);
-			await threeDotButton.trigger("click");
-
-			const moreActionButton = wrapper.findComponent(
-				`[data-testid=title-menu-share]`
-			);
-			await moreActionButton.trigger("click");
-
-			expect(shareModuleMock.startShareFlow).toHaveBeenCalled();
-			expect(shareModuleMock.startShareFlow).toHaveBeenCalledWith({
-				id: "123",
-				type: ShareTokenBodyParamsParentTypeEnum.Courses,
+				expect(shareModule.startShareFlow).toHaveBeenCalled();
+				expect(shareModule.startShareFlow).toHaveBeenCalledWith({
+					id: "123",
+					type: ShareTokenBodyParamsParentTypeEnum.Courses,
+				});
 			});
 		});
 	});
 
 	describe("modal views", () => {
-		it("should open modal for sharing action", async () => {
+		it("should open modal for sharing action", () => {
 			const wrapper = getWrapper();
 			const modalView = wrapper.findComponent({
 				name: "share-modal",
@@ -471,9 +516,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	describe("tabs", () => {
 		describe("when feature flag is enabled", () => {
 			const setup = () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				} as Envs);
+				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 
@@ -491,9 +537,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("when feature flag is disabled", () => {
 			const setup = () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: false,
-				} as Envs);
+				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 
@@ -502,7 +549,6 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 			it("should not find tools(new)-tab", () => {
 				const { wrapper } = setup();
-
 				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
 
 				expect(tabTitle.exists()).toEqual(false);
@@ -511,9 +557,10 @@ describe("@/pages/RoomDetails.page.vue", () => {
 
 		describe("when Tools(new) tab is active", () => {
 			const setup = () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				} as Envs);
+				});
+				envConfigModule.setEnvs(envs);
 
 				const wrapper = getWrapper();
 

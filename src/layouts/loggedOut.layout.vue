@@ -19,7 +19,7 @@
 import NavigationBar from "@/components/legacy/NavigationBar";
 import TheFooter from "@/components/legacy/TheFooter.vue";
 import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { envConfigModule } from "@/store";
 
 export default {
 	name: "LoggedOutLayout",
@@ -30,11 +30,11 @@ export default {
 		TheFooter,
 	},
 
-	inject: { envConfigModule: { from: ENV_CONFIG_MODULE_KEY }, mq: "mq" },
+	inject: { mq: "mq" },
 
 	computed: {
 		ghostBaseUrl() {
-			return this.envConfigModule.getGhostBaseUrl;
+			return envConfigModule.getEnv.GHOST_BASE_URL;
 		},
 		navbarItems() {
 			return [

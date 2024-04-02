@@ -1,5 +1,5 @@
 import {
-	ChangeLanguageParamsLanguageEnum,
+	LanguageType,
 	MeApiFactory,
 	MeApiInterface,
 	MeResponse,
@@ -30,7 +30,7 @@ export default class AuthModule extends VuexModule {
 	payload = null;
 	me?: MeResponse;
 	publicPages: string[] = ["index", "login", "signup", "impressum"];
-	locale?: string;
+	locale?: LanguageType;
 
 	businessError: BusinessError = {
 		statusCode: "",
@@ -54,7 +54,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	@Mutation
-	setLocale(locale: string): void {
+	setLocale(locale: LanguageType): void {
 		this.locale = locale;
 	}
 
@@ -99,7 +99,7 @@ export default class AuthModule extends VuexModule {
 		if (envConfigModule.getEnv.I18N__DEFAULT_LANGUAGE) {
 			return envConfigModule.getEnv.I18N__DEFAULT_LANGUAGE;
 		}
-		return "de"; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
+		return LanguageType.De; // TODO why are we not using I18N__FALLBACK_LANGUAGE?
 	}
 
 	get getMe(): MeResponse | undefined {
@@ -161,7 +161,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	@Action
-	async updateUserLanguage(language: ChangeLanguageParamsLanguageEnum) {
+	async updateUserLanguage(language: LanguageType) {
 		this.resetBusinessError();
 		this.setStatus("pending");
 		try {

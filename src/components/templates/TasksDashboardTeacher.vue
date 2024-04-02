@@ -90,6 +90,7 @@ import { defineComponent } from "vue";
 import { useCopy } from "../../composables/copy";
 import { useLoadingState } from "../../composables/loadingState";
 import { useI18n } from "vue-i18n";
+import { SHARE_MODULE_KEY } from "@/utils/inject";
 
 // eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
@@ -116,7 +117,11 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	inject: ["tasksModule", "finishedTasksModule", "copyModule", "shareModule"],
+	inject: {
+		tasksModule: "tasksModule",
+		finishedTasksModule: "finishedTasksModule",
+		shareModule: { from: SHARE_MODULE_KEY },
+	},
 	computed: {
 		openTasks() {
 			return this.tasksModule.getOpenTasksForTeacher;
@@ -162,10 +167,7 @@ export default defineComponent({
 	},
 	methods: {
 		async onCopyTask(payload) {
-			const loadingText = this.$t(
-				"components.molecules.copyResult.title.loading"
-			);
-			await this.copy(payload, loadingText);
+			await this.copy(payload);
 
 			this.tasksModule.setActiveTab("drafts");
 			await this.tasksModule.fetchAllTasks();

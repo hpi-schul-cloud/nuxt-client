@@ -7,7 +7,12 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { meResponseFactory } from "@@/tests/test-utils";
 import {
@@ -68,11 +73,11 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					tasksModule: tasksModuleMock,
-					copyModule: copyModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-					shareModule: shareModuleMock,
+					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 					authModule: authModuleMock,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},

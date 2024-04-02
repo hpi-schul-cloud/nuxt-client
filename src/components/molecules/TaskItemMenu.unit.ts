@@ -6,9 +6,9 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
-import { Envs } from "@/store/types/env-config";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { envsFactory } from "@@/tests/test-utils";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import {
 	createTestingI18n,
@@ -50,7 +50,7 @@ const getWrapper = (
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				tasksModule: tasksModuleMock,
-				copyModule: copyModuleMock,
+				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			},
@@ -229,7 +229,10 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					userRole: "teacher",
 					courseId: "18",
 				});
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+				const envs = envsFactory.build({
+					FEATURE_COPY_SERVICE_ENABLED: true,
+				});
+				envConfigModule.setEnvs(envs);
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
@@ -256,7 +259,10 @@ describe("@/components/molecules/TaskItemMenu", () => {
 					taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 					userRole: "teacher",
 				});
-				envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: true } as Envs);
+				const envs = envsFactory.build({
+					FEATURE_COPY_SERVICE_ENABLED: true,
+				});
+				envConfigModule.setEnvs(envs);
 
 				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
@@ -284,7 +290,10 @@ describe("@/components/molecules/TaskItemMenu", () => {
 				taskIsPublished: !task.status.isFinished && !task.status.isDraft,
 				userRole: "teacher",
 			});
-			envConfigModule.setEnvs({ FEATURE_COPY_SERVICE_ENABLED: false } as Envs);
+			const envs = envsFactory.build({
+				FEATURE_COPY_SERVICE_ENABLED: false,
+			});
+			envConfigModule.setEnvs(envs);
 
 			const menuBtn = wrapper.findComponent(VBtn);
 			await menuBtn.trigger("click");

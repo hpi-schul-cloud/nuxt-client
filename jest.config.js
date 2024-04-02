@@ -19,11 +19,11 @@ const config = deepmerge(defaultPreset, {
 		"^axios$": require.resolve("axios"),
 		"\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
 			"<rootDir>/tests/test-utils/mediaFileMock.js",
-		"^@data-(.*)$": "<rootDir>/src/components/data-$1",
-		"^@feature-(.*)$": "<rootDir>/src/components/feature-$1",
-		"^@page-(.*)$": "<rootDir>/src/components/page-$1",
-		"^@ui-(.*)$": "<rootDir>/src/components/ui-$1",
-		"^@util-(.*)$": "<rootDir>/src/components/util-$1",
+		"^@data-(.*)$": "<rootDir>/src/modules/data/$1",
+		"^@feature-(.*)$": "<rootDir>/src/modules/feature/$1",
+		"^@page-(.*)$": "<rootDir>/src/modules/page/$1",
+		"^@ui-(.*)$": "<rootDir>/src/modules/ui/$1",
+		"^@util-(.*)$": "<rootDir>/src/modules/util/$1",
 		"^@/(.*)$": "<rootDir>/src/$1",
 		"^@@/(.*)$": "<rootDir>/$1",
 	},
@@ -33,6 +33,7 @@ const config = deepmerge(defaultPreset, {
 	collectCoverageFrom: [
 		// Include
 		"<rootDir>/src/components/**/*.{js,ts,vue}",
+		"<rootDir>/src/modules/**/*.{js,ts,vue}",
 		"<rootDir>/src/pages/**/*.{js,vue}",
 		"<rootDir>/src/mixins/**/*.js",
 		"<rootDir>/src/plugins/**/*.(js|ts)",
