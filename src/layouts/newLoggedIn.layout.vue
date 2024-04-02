@@ -1,10 +1,14 @@
 <template>
 	<div>
+		<!-- Skip Links not visible -->
 		<SkipLinks />
-		<Sidebar v-model="sidebar" />
+		<Sidebar v-model="sidebarExpanded" />
 		<v-app-bar title="Application bar">
 			<template v-slot:prepend>
-				<v-app-bar-nav-icon @click="onClick" />
+				<v-app-bar-nav-icon
+					:icon="sidebarToggleIcon"
+					@click="onToggleSidebar"
+				/>
 			</template>
 		</v-app-bar>
 
@@ -22,17 +26,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { useDisplay } from "vuetify";
 import SkipLinks from "@/components/molecules/SkipLinks.vue";
 import Sidebar from "@/components/feature-layout/Sidebar.vue";
 import Snackbar from "@/components/molecules/Alert.vue";
 import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
+import { mdiMenuClose, mdiMenuOpen } from "@/components/icons/material";
 
-const sidebar = ref(true);
+const { lgAndUp } = useDisplay();
 
-const onClick = () => {
-	sidebar.value = !sidebar.value;
+const isDesktop = computed(() => {
+	return lgAndUp.value;
+});
+
+const sidebarExpanded = ref(isDesktop.value);
+const sidebarToggleIcon = computed(() => {
+	return sidebarExpanded.value ? mdiMenuOpen : mdiMenuClose;
+});
+
+const onToggleSidebar = () => {
+	sidebarExpanded.value = !sidebarExpanded.value;
 };
 </script>
