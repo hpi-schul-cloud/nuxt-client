@@ -48,7 +48,7 @@
 import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+import { envConfigModule, copyModule } from "@/store";
 import {
 	mdiAlert,
 	mdiCheckCircle,
@@ -117,6 +117,11 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.nexboard"),
 				},
 				{
+					isShow: this.hasDrawingElement,
+					text: this.$t("components.molecules.copyResult.tldrawCopy.info"),
+					title: this.$t("components.molecules.copyResult.label.tldraw"),
+				},
+				{
 					isShow: this.hasFileElement || this.isCourse,
 					text: this.filesInfoText,
 					title: this.$t("components.molecules.copyResult.label.files"),
@@ -150,6 +155,9 @@ export default {
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentNexboard
 			);
+		},
+		hasDrawingElement() {
+			return this.isCourse && copyModule.getHasDrawingChild;
 		},
 		hasFileElement() {
 			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);
