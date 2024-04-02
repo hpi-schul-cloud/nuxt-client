@@ -1,10 +1,10 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const { isVueClient } = require("../src/router/vue-client-route");
+const { isVueClient } = require("../../src/router/vue-client-route");
 const {
 	isServer,
 	isFileStorage,
 	isH5pEditor,
-} = require("../src/router/server-route");
+} = require("../../src/router/server-route");
 const url = require("url");
 
 const createLegacyClientProxy = () => {
@@ -56,6 +56,7 @@ const createDevServerConfig = () => {
 				name: "dev-server-proxy",
 				middleware: (req, res, next) => {
 					const path = url.parse(req.originalUrl).pathname;
+					console.log("--- path", path);
 
 					if (isFileStorage(path)) {
 						fileStorageProxy(req, res, next);
@@ -64,8 +65,10 @@ const createDevServerConfig = () => {
 					} else if (isServer(path)) {
 						serverProxy(req, res, next);
 					} else if (isVueClient(path)) {
+						console.log("--- isVueClient");
 						next();
 					} else {
+						console.log("--- isLegacyCLient");
 						legacyClientProxy(req, res, next);
 					}
 				},

@@ -23,7 +23,7 @@ RUN echo "{\"sha\": \"$(git rev-parse HEAD)\", \"version\": \"$(git describe --t
 # run stage
 FROM docker.io/nginx:1.25
 RUN mkdir /etc/nginx/templates
-COPY dockerconf/nginx.conf.template /etc/nginx/templates/default.conf.template
+COPY config/docker/nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build-stage /app/dist /usr/share/nginx/html/frontend
 # second index.html needed for the location /h5p/ in csp rules
 COPY --from=build-stage /app/dist /usr/share/nginx/html/h5p

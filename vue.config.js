@@ -1,9 +1,9 @@
 const { defineConfig } = require("@vue/cli-service");
 const path = require("path");
-const { createDevServerConfig } = require("./webpack-config/dev-server-config");
+const { createDevServerConfig } = require("./config/webpack/dev-server-config");
 const generateAliases = require("./webpack-config/theme-aliases");
 const ThemeResolverPlugin = require("./webpack-config/theme-resolver-plugin");
-const NoncePlaceholderPlugin = require("./webpack-config/nonce-placeholder-plugin");
+const NoncePlaceholderPlugin = require("./config/webpack/nonce-placeholder-plugin");
 const { VuetifyPlugin } = require("webpack-plugin-vuetify");
 
 const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
