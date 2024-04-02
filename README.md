@@ -1,4 +1,4 @@
-# The next Level of HPI Schul-Cloud
+# The next Level of Schul-Cloud
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=hpi-schul-cloud_nuxt-client&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=hpi-schul-cloud_nuxt-client)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=hpi-schul-cloud_nuxt-client&metric=coverage)](https://sonarcloud.io/summary/new_code?id=hpi-schul-cloud_nuxt-client)
