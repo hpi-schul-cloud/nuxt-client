@@ -2,11 +2,10 @@
 	<v-navigation-drawer :width="SIDEBAR_WIDTH">
 		<SidebarLogo />
 		<v-list>
-			<SidebarItem
-				v-for="item in sidebarItems"
-				:key="item.title"
-				:item="item"
-			/>
+			<template v-for="item in sidebarItems" :key="item.title">
+				<SidebarCategoryItem v-if="item.children" :item="item" />
+				<SidebarItem v-else :item="item" />
+			</template>
 		</v-list>
 	</v-navigation-drawer>
 </template>
@@ -20,6 +19,7 @@ import {
 } from "@/utils/inject";
 import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
+import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { getSidebarItemsNew } from "@/utils/sidebar-base-items";
 
 const SIDEBAR_WIDTH = 241;
