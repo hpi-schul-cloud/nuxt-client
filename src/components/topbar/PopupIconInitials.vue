@@ -3,15 +3,9 @@
 		<v-btn
 			icon
 			variant="text"
-			density="comfortable"
 			class="icon-button"
 			data-testid="initials"
 			role="menu"
-			:title="
-				$t('global.topbar.userMenu.ariaLabel', {
-					userName: `${firstName} ${lastName} (${userRole})`,
-				})
-			"
 			:aria-label="
 				$t('global.topbar.userMenu.ariaLabel', {
 					userName: `${firstName} ${lastName} (${userRole})`,
@@ -19,7 +13,7 @@
 			"
 			@click="popup"
 		>
-			<div class="icon">{{ initials }}</div>
+			{{ initials }}
 		</v-btn>
 		<div v-if="visible" class="popuptext" data-testid="initials-popup">
 			<div class="username">
@@ -69,23 +63,14 @@ const removePopup = () => {
 <style lang="scss" scoped>
 @import "~vuetify/settings";
 
-.icon {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 40px;
-	min-width: 40px;
-	height: 40px;
-	padding: var(--space-xs-2);
-	font-family: var(--font-accent);
-	font-size: var(--text-lg);
-	font-weight: var(--font-weight-bold);
-	color: rgba(var(--v-theme-white));
-	cursor: pointer;
-	-webkit-user-select: none;
+.icon-button {
 	background-color: rgba(var(--v-theme-on-surface));
-	border: none;
-	border-radius: var(--radius-round);
+	color: rgba(var(--v-theme-white));
+	font-size: var(--text-lg);
+	font-family: var(--font-accent);
+	font-weight: var(--font-weight-bold);
+	width: 40px;
+	height: 40px;
 }
 
 .popup {
