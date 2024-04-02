@@ -1377,6 +1377,12 @@ export interface CopyApiResponse {
      * @memberof CopyApiResponse
      */
     elements?: Array<CopyApiResponse>;
+    /**
+     * Array with listed types of all sub elements
+     * @type {Array<string>}
+     * @memberof CopyApiResponse
+     */
+    elementsTypes?: Array<CopyApiResponseElementsTypesEnum>;
 }
 
 /**
@@ -1430,6 +1436,47 @@ export enum CopyApiResponseStatusEnum {
     NotDoing = 'not-doing',
     NotImplemented = 'not-implemented',
     Partial = 'partial'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CopyApiResponseElementsTypesEnum {
+    Board = 'BOARD',
+    Card = 'CARD',
+    Column = 'COLUMN',
+    Columnboard = 'COLUMNBOARD',
+    Content = 'CONTENT',
+    Course = 'COURSE',
+    CoursegroupGroup = 'COURSEGROUP_GROUP',
+    ExternalTool = 'EXTERNAL_TOOL',
+    ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
+    File = 'FILE',
+    FileElement = 'FILE_ELEMENT',
+    DrawingElement = 'DRAWING_ELEMENT',
+    FileGroup = 'FILE_GROUP',
+    Leaf = 'LEAF',
+    Lesson = 'LESSON',
+    LessonContentEtherpad = 'LESSON_CONTENT_ETHERPAD',
+    LessonContentGeogebra = 'LESSON_CONTENT_GEOGEBRA',
+    LessonContentGroup = 'LESSON_CONTENT_GROUP',
+    LessonContentLernstore = 'LESSON_CONTENT_LERNSTORE',
+    LessonContentNexboard = 'LESSON_CONTENT_NEXBOARD',
+    LessonContentTask = 'LESSON_CONTENT_TASK',
+    LessonContentText = 'LESSON_CONTENT_TEXT',
+    LernstoreMaterial = 'LERNSTORE_MATERIAL',
+    LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
+    LinkElement = 'LINK_ELEMENT',
+    LtitoolGroup = 'LTITOOL_GROUP',
+    Metadata = 'METADATA',
+    RichtextElement = 'RICHTEXT_ELEMENT',
+    SubmissionContainerElement = 'SUBMISSION_CONTAINER_ELEMENT',
+    SubmissionItem = 'SUBMISSION_ITEM',
+    SubmissionGroup = 'SUBMISSION_GROUP',
+    Task = 'TASK',
+    TaskGroup = 'TASK_GROUP',
+    TimeGroup = 'TIME_GROUP',
+    UserGroup = 'USER_GROUP'
 }
 
 /**
