@@ -61,7 +61,7 @@
 				:current-page="page"
 			>
 				<template #datacolumn-birthday="{ data }">
-					<span class="text-content">{{ data ? printDate(data) : "" }}</span>
+					<span class="text-content">{{ printDate(data) }}</span>
 				</template>
 				<template #datacolumn-classes="{ data }">
 					{{ (data || []).join(", ") }}
