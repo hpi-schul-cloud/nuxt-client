@@ -41,6 +41,9 @@ body.is-noscroll {
 	border: 0;
 }
 
+:focus {
+	outline-offset: 2px;
+}
 
 /* width */
 
