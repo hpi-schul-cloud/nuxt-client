@@ -6,7 +6,6 @@ export type SidebarItemBaseData = {
 	icon: string;
 	testId: string;
 	permission?: string;
-	excludedPermission?: string;
 	activeForUrls: string[];
 	children?: SidebarItemData[];
 };
@@ -60,6 +59,7 @@ export const getSidebarItemsNew = (
 		testId: "Aufgaben",
 		activeForUrls: ["^/tasks($|/.*)"],
 	},
+	// TODO - merge these?
 	{
 		title: "global.sidebar.tasks",
 		to: "/tasks",
@@ -141,7 +141,6 @@ export const getSidebarItemsNew = (
 		href: "/administration",
 		icon: "$mdiCogOutline",
 		permission: "TEACHER_LIST",
-		excludedPermission: "ADMIN_VIEW",
 		testId: "Verwaltung",
 		activeForUrls: ["^/administration($|/.*)"],
 		children: [
@@ -160,49 +159,11 @@ export const getSidebarItemsNew = (
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
-			envConfigModule.getEnv.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED
-				? {
-						title: "global.sidebar.classes",
-						icon: "$class",
-						href: "/administration/groups/classes",
-						testId: "Klassen",
-						activeForUrls: ["^/administration/groups/classes($|/.*)"],
-					}
-				: {
-						title: "global.sidebar.classes",
-						icon: "$class",
-						href: "/administration/classes",
-						testId: "Klassen",
-						activeForUrls: ["^/administration/classes($|/.*)"],
-					},
-		],
-	},
-	{
-		title: "global.sidebar.management",
-		href: "/administration",
-		icon: "$mdiCogOutline",
-		permission: "ADMIN_VIEW",
-		testId: "Verwaltung",
-		activeForUrls: ["^/administration($|/.*)"],
-		children: [
-			{
-				title: "global.sidebar.student",
-				icon: "$mdiAccountSchoolOutline",
-				to: "/administration/students",
-				testId: "Schüler:innen",
-				activeForUrls: ["^/administration/students($|/.*)"],
-			},
-			{
-				title: "global.sidebar.teacher",
-				icon: "$teacher",
-				to: "/administration/teachers",
-				testId: "Lehrkräfte",
-				activeForUrls: ["^/administration/teachers($|/.*)"],
-			},
 			{
 				title: "global.sidebar.courses",
 				icon: "$mdiSchoolOutline",
 				href: "/administration/courses",
+				permission: "ADMIN_VIEW",
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
 			},
@@ -225,6 +186,7 @@ export const getSidebarItemsNew = (
 				title: "global.sidebar.teams",
 				icon: "$mdiAccountGroupOutline",
 				href: "/administration/teams",
+				permission: "ADMIN_VIEW",
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
 			},
@@ -233,6 +195,7 @@ export const getSidebarItemsNew = (
 						title: "global.sidebar.school",
 						icon: "$school_outline",
 						to: "/administration/school-settings",
+						permission: "ADMIN_VIEW",
 						testId: "Schule",
 						activeForUrls: [
 							"^/administration/school($|/.*)",
@@ -243,6 +206,7 @@ export const getSidebarItemsNew = (
 						title: "global.sidebar.school",
 						icon: "$school_outline",
 						href: "/administration/school",
+						permission: "ADMIN_VIEW",
 						testId: "Schule",
 						activeForUrls: [
 							"^/administration/school($|/.*)",

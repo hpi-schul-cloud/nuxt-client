@@ -49,15 +49,8 @@ const sidebarItems = computed(() => {
 		const hasRequiredPermission = item.permission
 			? authModule.getUserPermissions.includes(item.permission.toLowerCase())
 			: false;
-		const hasExcludedPermission = item.excludedPermission
-			? authModule.getUserPermissions.includes(
-					item.excludedPermission.toLowerCase()
-				)
-			: false;
 
-		return (
-			!item.permission || (hasRequiredPermission && !hasExcludedPermission)
-		);
+		return !item.permission || hasRequiredPermission;
 	});
 
 	return sidebarItems;

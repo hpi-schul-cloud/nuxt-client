@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<!-- Skip Links not visible -->
+		<!-- TODO - Skip Links not visible -->
 		<SkipLinks />
 		<Sidebar v-model="sidebarExpanded" />
 		<v-app-bar title="Application bar">
