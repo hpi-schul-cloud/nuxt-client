@@ -1,5 +1,5 @@
 import { useBoardPermissions } from "./BoardPermissions.composable";
-import { useBoardState } from "./BoardState.composable";
+// import { useBoardState } from "./BoardState.composable";
 import { useCardState } from "./CardState.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
@@ -10,7 +10,7 @@ import { useBoardStore } from "./store/BoardStore";
 import * as boardActions from "./store/types/Actions";
 
 export {
-	useBoardState,
+	// useBoardState,
 	useCardState,
 	useContentElementState,
 	useEditMode,

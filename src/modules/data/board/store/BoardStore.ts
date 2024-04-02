@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
-import { PermittedStoreActions, handle, on } from "./types/ActionFactory";
+import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import * as BoardActions from "./types/Actions";
 import { Board } from "@/types/board/Board";
 import { useBoardApi } from "../BoardApi.composable";
@@ -76,7 +76,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const createCard = async (
 		action: ReturnType<typeof BoardActions.createCard>
 	): Promise<void> => {
-		console.log("createCard");
 		if (board.value === undefined) return;
 
 		try {

@@ -2,7 +2,7 @@ import {
 	BoardObjectType,
 	ErrorType,
 } from "@/components/error-handling/ErrorHandler.composable";
-import { createAction, props } from "./ActionFactory";
+import { createAction, props } from "@/types/board/ActionFactory";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 
 const getColumnIndex = createAction(
