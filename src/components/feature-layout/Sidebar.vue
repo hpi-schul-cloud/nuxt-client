@@ -1,7 +1,7 @@
 <template>
 	<v-navigation-drawer :width="SIDEBAR_WIDTH">
 		<SidebarLogo />
-		<v-list>
+		<v-list v-model:opened="open">
 			<template v-for="item in sidebarItems" :key="item.title">
 				<SidebarCategoryItem v-if="item.children" :item="item" />
 				<SidebarItem v-else :item="item" />
@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -26,6 +26,8 @@ const SIDEBAR_WIDTH = 241;
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const authModule = injectStrict(AUTH_MODULE_KEY);
+
+const open = ref<unknown[] | undefined>();
 
 const sidebarItems = computed(() => {
 	let sidebarItems = getSidebarItemsNew(
