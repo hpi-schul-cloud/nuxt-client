@@ -12,9 +12,9 @@ const brbTheme: ThemeDefinition = {
 		"secondary-lighten-1": "#567e8e",
 		"secondary-darken-1": "#2a4d5b",
 		accent: "#e4032e",
-		"on-surface": "#294C5A",
-		"on-background": "#294C5A",
-		"on-white": "#294C5A",
+		"on-surface": "#294c5a",
+		"on-background": "#294c5a",
+		"on-white": "#294c5a",
 	},
 };
 

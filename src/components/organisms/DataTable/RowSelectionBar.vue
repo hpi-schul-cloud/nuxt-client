@@ -34,9 +34,13 @@
 				/>
 			</div>
 		</div>
-		<v-btn variant="text" icon width="40" height="40" @click="closeBanner">
-			<v-icon>{{ mdiClose }}</v-icon>
-		</v-btn>
+		<v-btn
+			variant="text"
+			:icon="mdiClose"
+			width="40"
+			height="40"
+			@click="closeBanner"
+		/>
 	</div>
 </template>
 
