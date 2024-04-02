@@ -17,12 +17,12 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import Sidebar from "@/components/feature-layout/Sidebar";
-import Snackbar from "@/components/molecules/Alert";
-import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
-import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper";
+import Sidebar from "@/components/feature-layout/Sidebar.vue";
+import Snackbar from "@/components/molecules/Alert.vue";
+import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
+import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
 
-const sidebar = ref(null);
+const sidebar = ref(true);
 
 const onClick = () => {
 	sidebar.value = !sidebar.value;
