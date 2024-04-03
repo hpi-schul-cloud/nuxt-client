@@ -35,7 +35,6 @@
 						:alt="$t('pages.content.preview_img.alt')"
 						role="img"
 					/>
-					<div class="preview-background-color" />
 				</div>
 			</div>
 		</div>
@@ -428,18 +427,6 @@ $tablet-portrait-width: 768px;
 				color: white;
 			}
 
-			.preview-background-color {
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				z-index: var(--layer-behind);
-				width: 100%;
-				height: 100%;
-				background-color: rgba(var(--v-theme-secondary));
-			}
-
 			.preview-background {
 				position: absolute;
 				top: 0;
@@ -538,7 +525,6 @@ $tablet-portrait-width: 768px;
 			font-weight: var(--font-weight-bold);
 
 			.content-link {
-				color: rgba(var(--v-theme-secondary));
 				text-decoration: underline;
 			}
 		}

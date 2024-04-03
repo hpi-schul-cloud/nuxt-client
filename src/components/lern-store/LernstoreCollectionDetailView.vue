@@ -384,7 +384,6 @@ $tablet-portrait-width: 768px;
 			font-weight: var(--font-weight-bold);
 
 			.content-link {
-				color: rgba(var(--v-theme-secondary));
 				text-decoration: underline;
 			}
 		}

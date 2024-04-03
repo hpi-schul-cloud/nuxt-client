@@ -367,11 +367,6 @@ export default {
 			padding: var(--space-xs);
 			font-size: var(--text-md);
 			font-weight: var(--font-weight-normal);
-
-			svg {
-				font-size: calc(1.5 * var(--text-lg));
-				color: rgba(var(--v-theme-secondary));
-			}
 		}
 
 		.select-wrap {

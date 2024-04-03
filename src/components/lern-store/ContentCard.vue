@@ -57,7 +57,6 @@
 								:resource="resource"
 								:client="provider()"
 								round
-								btn-color="secondary"
 								:multiple="false"
 							/>
 						</div>
@@ -243,7 +242,6 @@ export default {
 	&__title {
 		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
-		color: rgba(var(--v-theme-secondary));
 
 		@include excerpt(
 			$font-size: var(--heading-6),
@@ -281,11 +279,6 @@ export default {
 		justify-content: space-between;
 		height: 100%;
 		padding: var(--space-xs-4) 0;
-
-		&-icon {
-			font-size: var(--text-lg);
-			color: rgba(var(--v-theme-secondary));
-		}
 	}
 
 	&_more {
