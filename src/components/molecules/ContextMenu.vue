@@ -247,7 +247,6 @@ export default {
 		&-text {
 			width: max-content;
 			font-size: var(--text-md);
-			color: rgba(var(--v-theme-black));
 			text-align: left;
 			white-space: normal;
 

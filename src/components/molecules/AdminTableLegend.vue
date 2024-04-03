@@ -111,11 +111,6 @@ $vertically-center: auto 0;
 	justify-content: left;
 }
 
-.link-style {
-	color: rgba(var(--v-theme-black));
-	text-decoration: underline;
-}
-
 .external-sync-hint {
 	margin: $vertically-center;
 }

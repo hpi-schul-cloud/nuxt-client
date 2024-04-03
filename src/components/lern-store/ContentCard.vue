@@ -242,6 +242,7 @@ export default {
 	&__title {
 		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
+		color: rgba(var(--v-on-surface));
 
 		@include excerpt(
 			$font-size: var(--heading-6),

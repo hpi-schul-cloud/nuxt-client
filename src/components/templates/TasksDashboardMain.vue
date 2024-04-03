@@ -402,7 +402,6 @@ export default {
 }
 
 :deep(.v-expansion-panel--disabled .v-expansion-panel-title) {
-	color: var(--v-theme-black);
 	.v-expansion-panel-title__overlay {
 		opacity: 0;
 	}
