@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { onMounted, ref, PropType } from "vue";
 import FilterActionButtons from "./FilterActionButtons.vue";
-import DatePicker from "@/components/ui-date-time-picker/DatePicker.vue";
+import { DatePicker } from "@ui-date-time-picker";
 import { DateSelection } from "../types";
 import { useI18n } from "vue-i18n";
 
