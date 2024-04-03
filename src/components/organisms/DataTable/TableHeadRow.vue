@@ -353,8 +353,7 @@ export default {
 	font-weight: var(--font-weight-bold);
 
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid
-			rgba(var(--v-theme-secondary));
+		border-bottom: calc(2 * var(--border-width)) solid;
 
 		&.is-current-sort {
 			opacity: 1;

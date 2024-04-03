@@ -75,7 +75,6 @@
 					<v-btn
 						v-if="isMerlin"
 						variant="outlined"
-						color="secondary"
 						class="content-button"
 						data-testid="learningstore-to-content-link"
 						@click="
@@ -90,7 +89,6 @@
 					<v-btn
 						v-else
 						variant="outlined"
-						color="secondary"
 						:href="downloadUrl"
 						class="content-button"
 						target="_blank"

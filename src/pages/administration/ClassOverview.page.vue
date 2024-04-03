@@ -108,7 +108,6 @@
 						:aria-label="t('feature-course-sync.EndCourseSyncDialog.title')"
 						data-testid="class-table-end-course-sync-btn"
 						variant="outlined"
-						color="secondary"
 						size="small"
 						class="mx-1 px-1"
 						min-width="0"

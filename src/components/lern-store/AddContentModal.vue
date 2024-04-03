@@ -33,7 +33,7 @@
 			<template #footer>
 				<modal-footer>
 					<template #right>
-						<v-btn variant="text" color="secondary" @click="closeModal">
+						<v-btn variant="text" @click="closeModal">
 							{{ $t("common.actions.cancel") }}
 						</v-btn>
 						<v-btn

@@ -103,7 +103,6 @@
 					<v-progress-circular
 						v-show="loading"
 						indeterminate
-						color="secondary"
 						size="115"
 						class="spinner mt-16"
 					/>

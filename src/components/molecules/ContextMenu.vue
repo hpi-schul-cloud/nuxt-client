@@ -242,7 +242,6 @@ export default {
 
 		&-icon {
 			margin: var(--space-md) !important;
-			color: rgba(var(--v-theme-secondary));
 		}
 
 		&-text {

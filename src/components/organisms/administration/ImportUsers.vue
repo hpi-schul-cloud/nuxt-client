@@ -225,7 +225,7 @@
 			<p class="text-sm">
 				<b>{{ $t("components.organisms.importUsers.legend") }}</b>
 				<br />
-				<VIcon color="secondary">{{ mdiAccountPlus }}</VIcon>
+				<VIcon>{{ mdiAccountPlus }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
 						instance: $theme.name,
@@ -234,7 +234,7 @@
 				}}
 
 				<br />
-				<VIcon color="secondary">{{ mdiAccountSwitch }}</VIcon>
+				<VIcon>{{ mdiAccountSwitch }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
 						instance: $theme.name,
@@ -242,7 +242,7 @@
 					})
 				}}
 				<br />
-				<VIcon color="secondary">{{ mdiAccountSwitchOutline }}</VIcon>
+				<VIcon>{{ mdiAccountSwitchOutline }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
 						instance: $theme.name,
@@ -250,7 +250,7 @@
 					})
 				}}
 				<br />
-				<VIcon color="secondary">{{ mdiFlagOutline }}</VIcon>
+				<VIcon>{{ mdiFlagOutline }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
 						instance: $theme.name,
