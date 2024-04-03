@@ -1,14 +1,19 @@
 <template>
 	<v-list-item
-		:href="(item as ItemData).href"
-		:to="(item as ItemData).to"
+		:href="item.href"
+		:to="item.to"
 		color="primary"
 		base-color="secondary"
 		:data-testid="item.testId"
-		height="var(--sidebar-item-height-2)"
+		:height="ITEM_HEIGHT"
+		:min-height="ITEM_HEIGHT"
 	>
-		<template #prepend v-if="hasIcon(item)">
-			<v-icon :icon="(item as ItemData).icon" class="mr-2" />
+		<template #prepend>
+			<v-icon
+				v-if="(item as ItemData).icon"
+				:icon="(item as ItemData).icon"
+				class="mr-2"
+			/>
 		</template>
 		<v-list-item-title>
 			{{ $t(item.title) }}
@@ -18,25 +23,18 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { ItemData, CategoryData, ChildData } from "@/utils/sidebar-base-items";
+import { ItemData, ChildData } from "@/utils/sidebar-base-items";
 
-defineProps({
+const props = defineProps({
 	item: {
-		type: Object as PropType<ItemData | CategoryData | ChildData>,
+		type: Object as PropType<ItemData | ChildData>,
 		required: true,
-	},
-	type: {
-		type: String as PropType<"child" | "category" | "simple">,
-		default: "simple",
 	},
 });
 
-const hasIcon = (item: ItemData | CategoryData | ChildData) => {
-	return (
-		(item as ItemData).icon !== undefined ||
-		(item as CategoryData).icon !== undefined
-	);
-};
+const ITEM_HEIGHT = (props.item as ItemData).icon
+	? "var(--sidebar-item-height-2)"
+	: "var(--sidebar-child-item-height)";
 </script>
 
 <style lang="scss">

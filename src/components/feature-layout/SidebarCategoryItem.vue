@@ -1,17 +1,29 @@
 <template>
 	<v-list-group ref="fucker" :value="item.title">
 		<template v-slot:activator="{ props }">
-			<SidebarItem v-bind="props" :item="item" />
+			<v-list-item
+				v-bind="props"
+				color="primary"
+				base-color="secondary"
+				:data-testid="item.testId"
+				height="var(--sidebar-item-height-2)"
+			>
+				<template #prepend>
+					<v-icon :icon="item.icon" class="mr-2" />
+				</template>
+				<v-list-item-title>
+					{{ $t(item.title) }}
+				</v-list-item-title>
+			</v-list-item>
 		</template>
 		<template v-for="child in item.children" :key="child.title">
-			<SidebarItem :item="child" type="child" />
+			<SidebarItem :item="child" />
 		</template>
 	</v-list-group>
 </template>
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { VListGroup } from "vuetify/components/VList";
 import { CategoryData } from "@/utils/sidebar-base-items";
 import SidebarItem from "./SidebarItem.vue";
 
