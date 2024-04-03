@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { CategoryData } from "@/utils/sidebar-base-items";
+import { CategoryData } from "./types";
 import SidebarItem from "./SidebarItem.vue";
 
 defineProps({

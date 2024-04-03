@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { ItemData, ChildData } from "@/utils/sidebar-base-items";
+import { ItemData, ChildData } from "./types";
 
 const props = defineProps({
 	item: {

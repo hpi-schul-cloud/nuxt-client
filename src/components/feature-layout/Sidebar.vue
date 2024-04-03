@@ -20,11 +20,8 @@ import {
 import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
-import {
-	CategoryData,
-	ItemData,
-	getSidebarItemsNew,
-} from "@/utils/sidebar-base-items";
+import { CategoryData, ItemData } from "./types";
+import getSidebarItems from "./sidebar-items";
 
 const SIDEBAR_WIDTH = 241;
 
@@ -38,7 +35,7 @@ const isSidebarCategoryItem = (
 };
 
 const sidebarItems = computed(() => {
-	let sidebarItems = getSidebarItemsNew(
+	let sidebarItems = getSidebarItems(
 		envConfigModule.getNewSchoolAdminPageAsDefault
 	);
 
