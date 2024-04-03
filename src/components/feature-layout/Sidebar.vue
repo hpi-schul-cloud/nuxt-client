@@ -1,7 +1,7 @@
 <template>
 	<v-navigation-drawer :width="SIDEBAR_WIDTH">
 		<SidebarLogo />
-		<v-list v-model:opened="open">
+		<v-list open-strategy="multiple">
 			<template v-for="item in sidebarItems" :key="item.title">
 				<SidebarCategoryItem v-if="item.children" :item="item" />
 				<SidebarItem v-else :item="item" />
@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -27,25 +27,19 @@ const SIDEBAR_WIDTH = 241;
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const authModule = injectStrict(AUTH_MODULE_KEY);
 
-const open = ref<unknown[] | undefined>();
-
 const sidebarItems = computed(() => {
 	let sidebarItems = getSidebarItemsNew(
 		envConfigModule.getNewSchoolAdminPageAsDefault
 	);
 
 	sidebarItems = sidebarItems.filter((item) => {
-		if (item.children) {
-			if (item.children.length >= 1) {
-				item.children = item.children.filter((child) => {
-					return (
-						!child.permission ||
-						authModule.getUserPermissions.includes(
-							child.permission.toLowerCase()
-						)
-					);
-				});
-			}
+		if (item.children && item.children.length >= 1) {
+			item.children = item.children.filter((child) => {
+				return (
+					!child.permission ||
+					authModule.getUserPermissions.includes(child.permission.toLowerCase())
+				);
+			});
 		}
 
 		const hasRequiredPermission = item.permission
