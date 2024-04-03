@@ -155,7 +155,7 @@ export default {
 	padding: var(--space-xs);
 	margin: var(--space-sm);
 	font-size: var(--text-xs);
-	color: rgba(var(--v-theme-black));
+	color: rgba(var(--v-theme-on-surface));
 	background: rgba(var(--v-theme-white));
 	filter: drop-shadow(0 2px 4px black);
 	border-radius: var(--radius-xs);
@@ -172,7 +172,7 @@ export default {
 	position: relative;
 	height: 200px;
 	color: rgba(var(--v-theme-white));
-	background-color: rgba(var(--v-theme-black));
+	background-color: rgba(var(--v-theme-on-surface));
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 

@@ -425,15 +425,6 @@ $tablet-portrait-width: 768px;
 				margin-right: var(--space-xs);
 				color: rgba(var(--v-theme-secondary));
 			}
-
-			.tertiary-color {
-				color: rgba(var(--v-theme-black));
-				text-decoration: none;
-
-				:hover {
-					color: rgba(var(--v-theme-black));
-				}
-			}
 		}
 	}
 

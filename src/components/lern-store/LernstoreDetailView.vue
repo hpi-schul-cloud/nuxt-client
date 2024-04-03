@@ -391,7 +391,6 @@ $tablet-portrait-width: 768px;
 		}
 
 		.close-transparent {
-			color: rgba(var(--v-theme-black));
 			background-color: rgba(var(--v-theme-white));
 		}
 	}
@@ -572,15 +571,6 @@ $tablet-portrait-width: 768px;
 				.link {
 					margin-right: var(--space-xs);
 					color: rgba(var(--v-theme-secondary));
-				}
-
-				.tertiary-color {
-					color: rgba(var(--v-theme-black));
-					text-decoration: none;
-
-					:hover {
-						color: rgba(var(--v-theme-black));
-					}
 				}
 			}
 		}
