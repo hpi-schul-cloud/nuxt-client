@@ -17,6 +17,7 @@ import {
 } from "@data-board";
 import {
 	BoardMenuActionCopy,
+	BoardMenuActionDelete,
 	BoardMenuActionEdit,
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
@@ -210,6 +211,17 @@ describe("BoardHeader", () => {
 
 			expect(emitted).toBeDefined();
 			expect(emitted![0]).toStrictEqual([false]);
+		});
+	});
+
+	describe("when the 'delete' menu button is clicked", () => {
+		it("should emit 'delete:board'", async () => {
+			const { wrapper } = setup();
+
+			const deleteButton = wrapper.findComponent(BoardMenuActionDelete);
+			await deleteButton.trigger("click");
+
+			expect(wrapper.emitted("delete:board")).toHaveLength(1);
 		});
 	});
 

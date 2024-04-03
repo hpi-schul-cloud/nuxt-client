@@ -41,7 +41,7 @@
 					<BoardMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
 					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-					<BoardMenuActionDelete @click="onDeleteBoard" />
+					<BoardMenuActionDelete :name="title" @click="onDeleteBoard" />
 				</BoardMenu>
 			</div>
 		</div>
