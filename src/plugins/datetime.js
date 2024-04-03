@@ -150,7 +150,11 @@ export const inputDateFormat = (date) => {
  * @return {String} Date string based on current timezone using locale date formating
  */
 export const printDate = (date) => {
-	return fromUTC(date).format(DATETIME_FORMAT.date);
+	if (date) {
+		const result = fromUTC(date).format(DATETIME_FORMAT.date);
+		return result;
+	}
+	return null;
 };
 
 /**
