@@ -19,7 +19,7 @@ import { H5PContentParentType } from "@/h5pEditorApi/v3";
 export const routes: Readonly<RouteRecordRaw[]> = [
 	{
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
-		component: () => import("../pages/ActivationCode.page.vue"),
+		component: () => import("@/pages/ActivationCode.page.vue"),
 		name: "activation-activationCode",
 		meta: {
 			isPublic: true,
@@ -254,7 +254,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: "/tasks",
-		component: () => import("../pages/tasks/TaskOverview.page.vue"),
+		component: () => import("@/pages/tasks/TaskOverview.page.vue"),
 		name: "tasks",
 	},
 	{
@@ -289,13 +289,13 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
-		component: () => import("../pages/h5p/H5PPlayer.page.vue"),
+		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
 		name: "h5pPlayer",
 		//beforeEnter: createPermissionGuard(["H5P"]),
 	},
 	{
 		path: `/h5p/editor/:id(${REGEX_H5P_ID})?`,
-		component: () => import("../pages/h5p/H5PEditor.page.vue"),
+		component: () => import("@/pages/h5p/H5PEditor.page.vue"),
 		name: "h5pEditor",
 		beforeEnter: validateQueryParameters({
 			parentType: isEnum(H5PContentParentType),

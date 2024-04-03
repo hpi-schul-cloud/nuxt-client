@@ -1,41 +1,78 @@
-const WebpackBar = require("webpackbar");
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 const { VuetifyPlugin } = require("webpack-plugin-vuetify");
 const NoncePlaceholderPlugin = require("./nonce-placeholder-plugin");
+const { DefinePlugin, ProgressPlugin } = require("webpack");
+const CopyPlugin = require("copy-webpack-plugin");
+const ESLintWebpackPlugin = require("eslint-webpack-plugin");
+const generateAliases = require("./theme-aliases");
+const ThemeResolverPlugin = require("./theme-resolver-plugin");
 
-//Just to help us with directories and folders path
 const __base = path.resolve(__dirname, "../..");
 const __src = path.resolve(__base, "src");
 
-// const replacements = generateAliases(__dirname);
+const replacements = generateAliases(__base);
 
 const getDir = (subPath) => path.resolve(__base, subPath);
 
 module.exports = {
-	devtool: "source-map",
+	devtool: false, // "source-map", see https://webpack.js.org/configuration/devtool/
 
-	//Entry: main file that init our application
-	entry: path.resolve(__src, "main.ts"),
+	// Entry: main file
+	entry: {
+		app: [path.resolve(__src, "main.ts")],
+	},
 
-	//Output: result of the bundle after webpack run
+	// Output
 	output: {
-		filename: "[name].bundle.js",
+		filename: "_nuxt/js/[name].js",
 		path: path.resolve(__base, "dist"),
+		publicPath: "/",
+		chunkFilename: "_nuxt/js/[name].js",
 		clean: true,
 	},
 
-	//Plugins to help and include additionals functionalities to webpack
+	// Optimizations
+	optimization: {
+		realContentHash: false,
+		splitChunks: {
+			cacheGroups: {
+				defaultVendors: {
+					name: "chunk-vendors",
+					test: /[\\/]node_modules[\\/]/,
+					priority: -10,
+					chunks: "initial",
+				},
+				common: {
+					name: "chunk-common",
+					minChunks: 2,
+					priority: -20,
+					chunks: "initial",
+					reuseExistingChunk: true,
+				},
+			},
+		},
+	},
+
+	// Plugins
 	plugins: [
-		new WebpackBar(),
+		new DefinePlugin({
+			__VUE_OPTIONS_API__: "true",
+			__VUE_PROD_DEVTOOLS__: "false",
+			__VUE_PROD_HYDRATION_MISMATCH_DETAILS__: "false",
+		}),
+
+		new ProgressPlugin(),
 
 		new VueLoaderPlugin(),
 		new VuetifyPlugin({ styles: { configFile: "src/styles/settings.scss" } }),
+
 		new NoncePlaceholderPlugin(),
 
 		new HtmlWebpackPlugin({
 			title: "Deine digitale Lernumgebung",
+			scriptLoading: "defer",
 			favicon: path.resolve(
 				__base,
 				"public",
@@ -46,12 +83,39 @@ module.exports = {
 
 			template: path.resolve(__base, "public", "index.html"),
 		}),
+
+		new CopyPlugin({
+			patterns: [
+				{
+					from: path.resolve(__base, "public"),
+					to: path.resolve(__base, "dist"),
+					toType: "dir",
+					noErrorOnMissing: true,
+					globOptions: {
+						ignore: [
+							"**/.DS_Store",
+							path.resolve(__base, "public/index.html"),
+							path.resolve(__base, "public/themes/**/*"),
+						],
+					},
+					info: {
+						minimized: true,
+					},
+				},
+			],
+		}),
+
+		new ESLintWebpackPlugin({
+			extensions: [".js", ".jsx", ".vue", ".ts", ".tsx"],
+			failOnWarning: false,
+			failOnError: true,
+		}),
 	],
 
 	resolve: {
 		alias: {
-			"@": getDir("src"),
-			"@data-board": getDir("src/modules/data/board"),
+			"@": path.resolve(__src),
+			"@data-board": path.resolve(__src, "modules/data/board"),
 			"@data-external-tool": getDir("src/modules/data/external-tool"),
 			"@data-group": getDir("src/modules/data/group"),
 			"@data-system": getDir("src/modules/data/system"),
@@ -111,24 +175,20 @@ module.exports = {
 			".vue",
 			".json",
 		],
-		// extensions: [".js", ".ts", ".vue", ".json"],
-		// plugins: [new ThemeResolverPlugin(__dirname, replacements)],
+		plugins: [new ThemeResolverPlugin(__base, replacements)],
 	},
 
 	//Webpack dosent know how to handler all type of files and what to do with them, so this section
 	//we can capture and configure a specific type of file and determine a loader plugin to process it
 	module: {
 		rules: [
-			// {
-			// 	test: /\.(js|jsx)$/,
-			// 	exclude: /node_modules/,
-			// 	use: ["babel-loader"],
-			// },
+			// Javascript
 			{
 				test: /\.m?jsx?$/,
 				exclude: /node_modules/,
 				use: ["babel-loader"],
 			},
+			// Typescript
 			{
 				test: /\.tsx?$/,
 				use: [
@@ -146,12 +206,55 @@ module.exports = {
 					},
 				],
 			},
-			//Vue loader. Says to webpack that files with .vue extension need to be processed by the vue-loader plugin
+			// I18n - TS
+			{
+				test: /\.ts$/,
+				loader: "vue-i18n-loader",
+				include: [path.resolve(__src, "/locales")],
+			},
+			// Vue
 			{
 				test: /\.vue$/,
 				loader: "vue-loader",
+				options: {
+					compilerOptions: {
+						isCustomElement: (tag) => tag.startsWith("h5p-"),
+					},
+				},
 			},
-			//CSS loaders. Make possible import css files as js modules
+			// SVG
+			{
+				test: /\.(svg)(\?.*)?$/,
+				type: "asset/resource",
+				generator: {
+					filename: "_nuxt/img/[name].[hash:8][ext]",
+				},
+			},
+			// Images
+			{
+				test: /\.(png|jpe?g|gif|webp|avif)(\?.*)?$/,
+				type: "asset",
+				generator: {
+					filename: "_nuxt/img/[name].[hash:8][ext]",
+				},
+			},
+			// Media
+			{
+				test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
+				type: "asset",
+				generator: {
+					filename: "_nuxt/media/[name].[hash:8][ext]",
+				},
+			},
+			// Fonts
+			{
+				test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
+				type: "asset",
+				generator: {
+					filename: "_nuxt/fonts/[name].[hash:8][ext]",
+				},
+			},
+			// CSS, SCSS
 			{
 				test: /\.css$/,
 				use: ["vue-style-loader", "css-loader"],
@@ -159,15 +262,6 @@ module.exports = {
 			{
 				test: /\.(s(a|c)ss)$/,
 				use: ["vue-style-loader", "css-loader", "sass-loader"],
-			},
-			{
-				test: /\.(svg)(\?.*)?$/,
-				type: "asset/resource",
-			},
-			//Indicates that png files are assets to be processed by webpack
-			{
-				test: /\.(png|jpe?g|gif|webp|avif)(\?.*)?$/,
-				type: "asset/resource",
 			},
 		],
 	},

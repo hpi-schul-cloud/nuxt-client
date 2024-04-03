@@ -47,6 +47,8 @@ const createDevServerConfig = () => {
 
 	const devServerConfig = {
 		port: 4000,
+		historyApiFallback: true,
+
 		setupMiddlewares: (middlewares, devServer) => {
 			if (!devServer) {
 				throw new Error("webpack-dev-server is not defined");
@@ -56,7 +58,6 @@ const createDevServerConfig = () => {
 				name: "dev-server-proxy",
 				middleware: (req, res, next) => {
 					const path = url.parse(req.originalUrl).pathname;
-					console.log("--- path", path);
 
 					if (isFileStorage(path)) {
 						fileStorageProxy(req, res, next);
@@ -65,10 +66,8 @@ const createDevServerConfig = () => {
 					} else if (isServer(path)) {
 						serverProxy(req, res, next);
 					} else if (isVueClient(path)) {
-						console.log("--- isVueClient");
 						next();
 					} else {
-						console.log("--- isLegacyCLient");
 						legacyClientProxy(req, res, next);
 					}
 				},
@@ -77,6 +76,14 @@ const createDevServerConfig = () => {
 			return middlewares;
 		},
 		allowedHosts: "all",
+
+		client: {
+			overlay: {
+				errors: true,
+				warnings: false,
+				runtimeErrors: true,
+			},
+		},
 	};
 
 	return devServerConfig;
