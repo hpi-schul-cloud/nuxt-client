@@ -585,10 +585,8 @@ export default {
 				cancelText: this.$t("common.actions.cancel"),
 				icon: "$mdiAlert",
 				iconColor: "rgba(var(--v-theme-error))",
-				actionDesign: "danger",
 				onConfirm,
 				onCancel,
-				invertedDesign: true,
 			});
 		},
 		barSearch: function (searchText) {
