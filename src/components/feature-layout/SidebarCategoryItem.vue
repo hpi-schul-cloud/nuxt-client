@@ -4,7 +4,7 @@
 			<SidebarItem v-bind="props" :item="item" />
 		</template>
 		<template v-for="child in item.children" :key="child.title">
-			<SidebarItem :item="child" />
+			<SidebarItem :item="child" type="child" />
 		</template>
 	</v-list-group>
 </template>
@@ -12,12 +12,12 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import { VListGroup } from "vuetify/components/VList";
-import { SidebarItemData } from "@/utils/sidebar-base-items";
+import { CategoryData } from "@/utils/sidebar-base-items";
 import SidebarItem from "./SidebarItem.vue";
 
 defineProps({
 	item: {
-		type: Object as PropType<SidebarItemData>,
+		type: Object as PropType<CategoryData>,
 		required: true,
 	},
 });

@@ -12,7 +12,7 @@
 			</template>
 		</v-app-bar>
 
-		<v-main id="main-content" class="content">
+		<v-main id="main-content">
 			<application-error-wrapper>
 				<snackbar />
 				<router-view />

@@ -3,7 +3,7 @@
 		<SidebarLogo />
 		<v-list open-strategy="multiple">
 			<template v-for="item in sidebarItems" :key="item.title">
-				<SidebarCategoryItem v-if="item.children" :item="item" />
+				<SidebarCategoryItem v-if="isSidebarCategoryItem(item)" :item="item" />
 				<SidebarItem v-else :item="item" />
 			</template>
 		</v-list>
@@ -20,12 +20,22 @@ import {
 import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
-import { getSidebarItemsNew } from "@/utils/sidebar-base-items";
+import {
+	CategoryData,
+	ItemData,
+	getSidebarItemsNew,
+} from "@/utils/sidebar-base-items";
 
 const SIDEBAR_WIDTH = 241;
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const authModule = injectStrict(AUTH_MODULE_KEY);
+
+const isSidebarCategoryItem = (
+	item: ItemData | CategoryData
+): item is CategoryData => {
+	return (item as CategoryData).children !== undefined;
+};
 
 const sidebarItems = computed(() => {
 	let sidebarItems = getSidebarItemsNew(
@@ -33,7 +43,7 @@ const sidebarItems = computed(() => {
 	);
 
 	sidebarItems = sidebarItems.filter((item) => {
-		if (item.children && item.children.length >= 1) {
+		if (isSidebarCategoryItem(item)) {
 			item.children = item.children.filter((child) => {
 				return (
 					!child.permission ||
