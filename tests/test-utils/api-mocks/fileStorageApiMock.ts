@@ -36,7 +36,9 @@ export const setupFileStorageApiMock = (props: Props = {}) => {
 		getFileRecord,
 	};
 
-	mockedFileStorageApi.mockReturnValue(mocks);
+	mockedFileStorageApi.mockReturnValue(
+		mocks as ReturnType<typeof useFileStorageApi>
+	);
 
 	return mocks;
 };

@@ -194,7 +194,7 @@ describe("RoomExternalToolOverview", () => {
 			jest.useRealTimers();
 		});
 		const setup = () => {
-			jest.useFakeTimers("legacy");
+			jest.useFakeTimers({ legacyFakeTimers: true });
 			const { contextExternalToolsModule, refreshTime } = getWrapper([]);
 
 			return {

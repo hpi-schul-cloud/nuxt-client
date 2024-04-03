@@ -6,7 +6,7 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
-import { ProvisioningOptions } from "./type";
+import { ProvisioningOptions } from "./type/ProvisioningOptions";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import NotifierModule from "@/store/notifier";

@@ -9,7 +9,7 @@ import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
-import { ProvisioningOptions } from "./type";
+import { ProvisioningOptions } from "./type/ProvisioningOptions";
 import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory/provisioningOptionsDataFactory";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";

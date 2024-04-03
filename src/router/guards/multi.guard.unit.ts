@@ -60,7 +60,6 @@ describe("Multiguard", () => {
 	describe("when a single guard is specified", () => {
 		const setup = () => {
 			const expected: RouteLocationRaw = {
-				name: "example.route.name",
 				path: "/path",
 			};
 			const to: RouteLocation = createRoute("to", "/to");
@@ -107,7 +106,6 @@ describe("Multiguard", () => {
 	describe("when the first guard has a non-undefined value", () => {
 		const setup = () => {
 			const expected: RouteLocationRaw = {
-				name: "example.route.name",
 				path: "/path",
 			};
 			const to: RouteLocation = createRoute("to", "/to");
@@ -134,7 +132,6 @@ describe("Multiguard", () => {
 	describe("when the first guard has a non-undefined value and should not call the second guard", () => {
 		const setup = () => {
 			const expected: RouteLocationRaw = {
-				name: "example.route.name",
 				path: "/path",
 			};
 			const to: RouteLocation = createRoute("to", "/to");

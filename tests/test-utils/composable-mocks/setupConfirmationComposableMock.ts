@@ -18,7 +18,9 @@ export default function setupConfirmationComposableMock(props: Props = {}) {
 		isDialogOpen,
 	};
 
-	confirmationMock.mockReturnValue(mocks);
+	confirmationMock.mockReturnValue(
+		mocks as ReturnType<typeof useConfirmationDialog>
+	);
 
 	return mocks;
 }

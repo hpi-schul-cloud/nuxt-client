@@ -20,7 +20,9 @@ export default function setupDeleteConfirmationComposableMock(
 		isDeleteDialogOpen,
 	};
 
-	deleteConfirmationMock.mockReturnValue(mocks);
+	deleteConfirmationMock.mockReturnValue(
+		mocks as ReturnType<typeof useDeleteConfirmationDialog>
+	);
 
 	return mocks;
 }

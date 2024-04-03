@@ -3,7 +3,7 @@ import {
 	SchulConneXProvisioningOptionsResponse,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { ProvisioningOptions } from "./type";
+import { ProvisioningOptions } from "./type/ProvisioningOptions";
 import { schoolsModule } from "@/store";
 import { AxiosResponse } from "axios";
 
