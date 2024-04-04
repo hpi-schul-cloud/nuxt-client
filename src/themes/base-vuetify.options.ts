@@ -16,7 +16,6 @@ const baseTheme: ThemeDefinition = {
 		"primary-darken-1": "#800416",
 		"primary-lighten": "#f5eaea",
 		accent: "#e98404",
-		black: "#1b1b1b",
 		white: "#ffffff",
 		info: "#0a7ac9",
 		"info-darken-1": "#0e8c71",

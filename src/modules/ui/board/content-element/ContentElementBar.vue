@@ -26,7 +26,7 @@
 					<slot name="logo" />
 				</div>
 
-				<v-icon v-if="icon" :icon="icon" color="black" size="20" class="mr-2" />
+				<v-icon v-if="icon" :icon="icon" size="20" class="mr-2" />
 
 				<LineClamp class="content-element-title">
 					<slot name="title" />

@@ -12,7 +12,7 @@
 				{{ $t("components.board.column.ghost.placeholder") }}
 			</VBtn>
 		</div>
-		<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
+		<VDivider aria-hidden="true" class="border-opacity-100" />
 	</div>
 </template>
 
