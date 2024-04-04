@@ -709,7 +709,7 @@ export default {
 	"global.sidebar.calendar": "Calendar",
 	"global.sidebar.classes": "Classes",
 	"global.sidebar.courses": "Courses",
-	"global.sidebar.files-old": "My Files",
+	"global.sidebar.files-old": "Files",
 	"global.sidebar.filesPersonal": "Personal Files",
 	"global.sidebar.filesShared": "Shared Files",
 	"global.sidebar.helpArea": "Help section",

@@ -721,7 +721,7 @@ export default {
 	"global.sidebar.calendar": "Календар",
 	"global.sidebar.classes": "Класи",
 	"global.sidebar.courses": "Курси",
-	"global.sidebar.files-old": "Мої файли",
+	"global.sidebar.files-old": "Файли",
 	"global.sidebar.filesPersonal": "Особисті файли",
 	"global.sidebar.filesShared": "Спільні файли",
 	"global.sidebar.helpArea": "Розділ довідки",
