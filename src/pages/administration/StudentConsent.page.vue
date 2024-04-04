@@ -260,7 +260,7 @@
 					</span>
 				</template>
 				<template #footerRight>
-					<v-btn color="error" variant="text" @click="cancel">
+					<v-btn variant="text" @click="cancel">
 						{{
 							$t("pages.administration.students.consent.cancel.modal.confirm")
 						}}
@@ -279,7 +279,7 @@
 					</v-btn>
 					<v-btn
 						v-else
-						color="error"
+						color="primary"
 						variant="flat"
 						@click="cancelWarning = false"
 					>
@@ -649,11 +649,6 @@ export default {
 	margin-bottom: var(--space-md);
 }
 
-.print-title {
-	color: rgba(var(--v-theme-primary));
-	border: none;
-}
-
 .warning {
 	color: rgba(var(--v-theme-error));
 }
@@ -665,7 +660,6 @@ export default {
 }
 
 :deep(.link) {
-	color: rgba(var(--v-theme-primary));
 	text-decoration: none;
 }
 

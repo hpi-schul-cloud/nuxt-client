@@ -20,10 +20,7 @@
 									:label="resource.title"
 									:label-hidden="true"
 									class="select"
-									style="
-										color: rgba(var(--v-theme-white));
-										margin: -1px 8px 4px -4px;
-									"
+									style="color: rgba(var(--v-theme-white)); margin-bottom: 0"
 								/>
 							</span>
 							<div class="content__img-background-gradient" />
@@ -181,7 +178,7 @@ export default {
 	right: 0;
 	margin-top: var(--space-xs);
 	margin-right: var(--space-xs);
-	background-color: rgba(var(--v-theme-secondary));
+	background-color: rgba(var(--v-theme-on-surface));
 	border-radius: var(--radius-round);
 	opacity: 0.7;
 	// stylelint-disable
@@ -242,7 +239,7 @@ export default {
 	&__title {
 		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
-		color: rgba(var(--v-on-surface));
+		color: rgba(var(--v-theme-on-surface));
 
 		@include excerpt(
 			$font-size: var(--heading-6),

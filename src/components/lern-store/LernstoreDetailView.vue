@@ -522,10 +522,6 @@ $tablet-portrait-width: 768px;
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
-
-			.content-link {
-				text-decoration: underline;
-			}
 		}
 
 		.description {
@@ -570,7 +566,6 @@ $tablet-portrait-width: 768px;
 
 				.link {
 					margin-right: var(--space-xs);
-					color: rgba(var(--v-theme-secondary));
 				}
 			}
 		}

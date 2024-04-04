@@ -237,7 +237,7 @@ export default defineComponent({
 
 .top {
 	width: 100%;
-	border-bottom: var(--border-width) solid rgba(var(--v-theme-black));
+	border-bottom: var(--border-width) solid rgba(var(--v-theme-on-background));
 
 	&:focus-within,
 	&:hover:not(.disabled) {
