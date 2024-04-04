@@ -1,5 +1,5 @@
 <template>
-	<v-list-group ref="fucker" :value="item.title">
+	<v-list-group :value="item.title">
 		<template v-slot:activator="{ props }">
 			<v-list-item
 				v-bind="props"
@@ -35,7 +35,7 @@ defineProps({
 });
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-icon {
 	opacity: 1 !important;
 }
