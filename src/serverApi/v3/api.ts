@@ -1987,7 +1987,8 @@ export enum CustomParameterResponseTypeEnum {
     AutoContextid = 'auto_contextid',
     AutoContextname = 'auto_contextname',
     AutoSchoolid = 'auto_schoolid',
-    AutoSchoolnumber = 'auto_schoolnumber'
+    AutoSchoolnumber = 'auto_schoolnumber',
+    AutoMediumid = 'auto_mediumid'
 }
 
 /**
@@ -2259,37 +2260,43 @@ export interface ExternalToolContentBody {
  */
 export interface ExternalToolCreateParams {
     /**
-     * 
+     * Name of the external tool
      * @type {string}
      * @memberof ExternalToolCreateParams
      */
     name: string;
     /**
-     * 
+     * Description of the external tool
+     * @type {string}
+     * @memberof ExternalToolCreateParams
+     */
+    description?: string;
+    /**
+     * URL of the external tool
      * @type {string}
      * @memberof ExternalToolCreateParams
      */
     url?: string;
     /**
-     * 
+     * URL of the logo of the external tool
      * @type {string}
      * @memberof ExternalToolCreateParams
      */
     logoUrl?: string;
     /**
-     * 
+     * Configuration of the external tool
      * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
      * @memberof ExternalToolCreateParams
      */
     config: BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams;
     /**
-     * 
+     * Custom parameters of the external tool
      * @type {Array<CustomParameterPostParams>}
      * @memberof ExternalToolCreateParams
      */
     parameters?: Array<CustomParameterPostParams>;
     /**
-     * 
+     * Tool can be hidden, those tools cant be added to e.g. school, course or board
      * @type {boolean}
      * @memberof ExternalToolCreateParams
      */
@@ -2301,17 +2308,23 @@ export interface ExternalToolCreateParams {
      */
     isDeactivated: boolean;
     /**
-     * 
+     * Tool should be opened in a new tab
      * @type {boolean}
      * @memberof ExternalToolCreateParams
      */
     openNewTab: boolean;
     /**
-     * 
+     * Restrict tools to specific contexts
      * @type {Array<ToolContextType>}
      * @memberof ExternalToolCreateParams
      */
     restrictToContexts?: Array<ToolContextType>;
+    /**
+     * Medium of the external tool
+     * @type {ExternalToolMediumParams}
+     * @memberof ExternalToolCreateParams
+     */
+    medium?: ExternalToolMediumParams;
 }
 /**
  * 
@@ -2379,6 +2392,44 @@ export interface ExternalToolElementResponse {
 /**
  * 
  * @export
+ * @interface ExternalToolMediumParams
+ */
+export interface ExternalToolMediumParams {
+    /**
+     * Id of the medium
+     * @type {string}
+     * @memberof ExternalToolMediumParams
+     */
+    mediumId: string;
+    /**
+     * Publisher of the medium
+     * @type {string}
+     * @memberof ExternalToolMediumParams
+     */
+    publisher?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolMediumResponse
+ */
+export interface ExternalToolMediumResponse {
+    /**
+     * Id of the medium
+     * @type {string}
+     * @memberof ExternalToolMediumResponse
+     */
+    mediumId: string;
+    /**
+     * Publisher of the medium
+     * @type {string}
+     * @memberof ExternalToolMediumResponse
+     */
+    publisher?: string;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolMetadataResponse
  */
 export interface ExternalToolMetadataResponse {
@@ -2402,71 +2453,83 @@ export interface ExternalToolMetadataResponse {
  */
 export interface ExternalToolResponse {
     /**
-     * 
+     * Id of the external tool
      * @type {string}
      * @memberof ExternalToolResponse
      */
     id: string;
     /**
-     * 
+     * Name of the external tool
      * @type {string}
      * @memberof ExternalToolResponse
      */
     name: string;
     /**
-     * 
+     * Description of the external tool
+     * @type {string}
+     * @memberof ExternalToolResponse
+     */
+    description?: string;
+    /**
+     * URL of the external tool
      * @type {string}
      * @memberof ExternalToolResponse
      */
     url?: string;
     /**
-     * 
+     * URL of the logo of the external tool
      * @type {string}
      * @memberof ExternalToolResponse
      */
     logoUrl?: string;
     /**
-     * 
-     * @type {object}
+     * Configuration of the external tool
+     * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
      * @memberof ExternalToolResponse
      */
-    config: object;
+    config: BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams;
     /**
-     * 
-     * @type {Array<string>}
+     * Custom parameters of the external tool
+     * @type {Array<CustomParameterResponse>}
      * @memberof ExternalToolResponse
      */
-    parameters: Array<string>;
+    parameters: Array<CustomParameterResponse>;
     /**
-     * 
+     * Is the external tool hidden
      * @type {boolean}
      * @memberof ExternalToolResponse
      */
     isHidden: boolean;
     /**
-     * 
+     * Is the external tool deactivated
      * @type {boolean}
      * @memberof ExternalToolResponse
      */
     isDeactivated: boolean;
     /**
-     * 
+     * Should the external tool be opened in a new tab
      * @type {boolean}
      * @memberof ExternalToolResponse
      */
     openNewTab: boolean;
     /**
-     * 
+     * Version of the external tool
      * @type {number}
      * @memberof ExternalToolResponse
      */
     version: number;
     /**
-     * 
+     * Contexts in which the external tool is restricted
      * @type {Array<ToolContextType>}
      * @memberof ExternalToolResponse
      */
     restrictToContexts?: Array<ToolContextType>;
+    /**
+     * Medium of the external tool
+     * @type {ExternalToolMediumResponse}
+     * @memberof ExternalToolResponse
+     */
+    medium?: ExternalToolMediumResponse;
 }
 /**
  * 
@@ -2506,7 +2569,7 @@ export interface ExternalToolSearchListResponse {
  */
 export interface ExternalToolUpdateParams {
     /**
-     * 
+     * ID of the external tool
      * @type {string}
      * @memberof ExternalToolUpdateParams
      */
@@ -2518,25 +2581,31 @@ export interface ExternalToolUpdateParams {
      */
     name: string;
     /**
-     * 
+     * Description of the external tool
+     * @type {string}
+     * @memberof ExternalToolUpdateParams
+     */
+    description?: string;
+    /**
+     * URL of the external tool
      * @type {string}
      * @memberof ExternalToolUpdateParams
      */
     url?: string;
     /**
-     * 
+     * URL of the logo of the external tool
      * @type {string}
      * @memberof ExternalToolUpdateParams
      */
     logoUrl?: string;
     /**
-     * 
+     * Configuration of the external tool
      * @type {BasicToolConfigParams | Lti11ToolConfigUpdateParams | Oauth2ToolConfigUpdateParams}
      * @memberof ExternalToolUpdateParams
      */
     config: BasicToolConfigParams | Lti11ToolConfigUpdateParams | Oauth2ToolConfigUpdateParams;
     /**
-     * 
+     * Custom parameters of the external tool
      * @type {Array<CustomParameterPostParams>}
      * @memberof ExternalToolUpdateParams
      */
@@ -2548,23 +2617,29 @@ export interface ExternalToolUpdateParams {
      */
     isHidden: boolean;
     /**
-     * 
+     * Tool can be deactivated, related tools can not be added to e.g. school, course or board anymore
      * @type {boolean}
      * @memberof ExternalToolUpdateParams
      */
     isDeactivated: boolean;
     /**
-     * 
+     * Open the tool in a new tab
      * @type {boolean}
      * @memberof ExternalToolUpdateParams
      */
     openNewTab: boolean;
     /**
-     * 
+     * Restrict the tool to certain contexts
      * @type {Array<ToolContextType>}
      * @memberof ExternalToolUpdateParams
      */
     restrictToContexts?: Array<ToolContextType>;
+    /**
+     * Medium of the external tool
+     * @type {ExternalToolMediumParams}
+     * @memberof ExternalToolUpdateParams
+     */
+    medium?: ExternalToolMediumParams;
 }
 /**
  * 
@@ -11510,6 +11585,44 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Get permissions for a user in a course.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerGetUserPermissions: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('courseControllerGetUserPermissions', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/userPermissions`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Imports a course from a Common Cartridge file.
          * @param {any} file The Common Cartridge file to import.
          * @param {*} [options] Override http request option.
@@ -11626,6 +11739,17 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get permissions for a user in a course.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerGetUserPermissions(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerGetUserPermissions(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Imports a course from a Common Cartridge file.
          * @param {any} file The Common Cartridge file to import.
          * @param {*} [options] Override http request option.
@@ -11679,6 +11803,16 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Get permissions for a user in a course.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerGetUserPermissions(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Imports a course from a Common Cartridge file.
          * @param {any} file The Common Cartridge file to import.
          * @param {*} [options] Override http request option.
@@ -11726,6 +11860,16 @@ export interface CoursesApiInterface {
      * @memberof CoursesApiInterface
      */
     courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse>;
+
+    /**
+     * 
+     * @summary Get permissions for a user in a course.
+     * @param {string} courseId The id of the course
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -11779,6 +11923,18 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerFindForUser(skip?: number, limit?: number, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerFindForUser(skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get permissions for a user in a course.
+     * @param {string} courseId The id of the course
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerGetUserPermissions(courseId: string, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerGetUserPermissions(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
