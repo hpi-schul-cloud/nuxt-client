@@ -1,7 +1,7 @@
 import { envConfigModule } from "@/store";
-import { SidebarItems, SidebarLinkItem } from "./types";
+import { SidebarItems, SidebarLinkItem, SidebarGroupItem } from "./types";
 
-export const getSidebarItems = (): SidebarItems => [
+export const pageLinks: SidebarItems = [
 	{
 		title: "global.sidebar.overview",
 		href: "/dashboard",
@@ -99,6 +99,9 @@ export const getSidebarItems = (): SidebarItems => [
 		testId: "Add-ons",
 		activeForUrls: ["^/addons($|/.*)"],
 	},
+];
+
+export const metaLinks: SidebarGroupItem[] = [
 	{
 		title: "global.sidebar.management",
 		icon: "$mdiCogOutline",

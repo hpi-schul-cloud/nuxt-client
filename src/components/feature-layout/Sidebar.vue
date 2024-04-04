@@ -2,14 +2,31 @@
 	<v-navigation-drawer :width="SIDEBAR_WIDTH">
 		<SidebarLogo />
 		<v-list open-strategy="multiple">
-			<template v-for="item in sidebarItems" :key="item.title">
-				<SidebarCategoryItem v-if="isSidebarCategoryItem(item)" :item="item" />
-				<SidebarItem v-else :item="item" />
-			</template>
-		</v-list>
-		<v-divider />
-		<v-list>
-			<SidebarItem v-for="link in legalLinks" :key="link.title" :item="link" />
+			<div class="pb-3">
+				<template v-for="item in sidebarItems" :key="item.title">
+					<SidebarCategoryItem
+						v-if="isSidebarCategoryItem(item)"
+						:item="item"
+					/>
+					<SidebarItem v-else :item="item" />
+				</template>
+			</div>
+			<v-divider />
+			<div class="py-3">
+				<SidebarCategoryItem
+					v-for="link in metaLinks"
+					:key="link.title"
+					:item="link"
+				/>
+			</div>
+			<v-divider />
+			<div class="py-3">
+				<SidebarItem
+					v-for="link in legalLinks"
+					:key="link.title"
+					:item="link"
+				/>
+			</div>
 		</v-list>
 	</v-navigation-drawer>
 </template>
@@ -21,7 +38,7 @@ import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarLinkItem } from "./types";
-import { getSidebarItems, legalLinks } from "./sidebar-items";
+import { pageLinks, metaLinks, legalLinks } from "./sidebar-items";
 
 const SIDEBAR_WIDTH = 241;
 
@@ -34,8 +51,6 @@ const isSidebarCategoryItem = (
 };
 
 const sidebarItems = computed(() => {
-	let sidebarItems = getSidebarItems();
-
 	const hasPermission = (
 		item: SidebarSingleItem | SidebarGroupItem | SidebarLinkItem
 	) => {
@@ -47,7 +62,7 @@ const sidebarItems = computed(() => {
 		);
 	};
 
-	sidebarItems = sidebarItems.filter((item) => {
+	const sidebarItems = pageLinks.filter((item) => {
 		if (isSidebarCategoryItem(item)) {
 			item.children = item.children.filter((child) => {
 				return hasPermission(child);
