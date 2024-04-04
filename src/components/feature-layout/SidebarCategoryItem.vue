@@ -40,7 +40,7 @@ defineProps({
 	opacity: 1 !important;
 }
 
-.v-list-group__items .v-list-item {
+:deep(.v-list-group__items .v-list-item) {
 	padding-inline-start: 56px !important;
 }
 </style>
