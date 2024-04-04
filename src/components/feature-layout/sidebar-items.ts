@@ -105,7 +105,7 @@ export const metaLinks: SidebarGroupItem[] = [
 	{
 		title: "global.sidebar.management",
 		icon: "$mdiCogOutline",
-		permissions: ["TEACHER_LIST"],
+		permissions: ["TEACHER_LIST", "ADMIN_VIEW"],
 		testId: "Verwaltung",
 		activeForUrls: ["^/administration($|/.*)"],
 		children: [
@@ -193,17 +193,17 @@ export const metaLinks: SidebarGroupItem[] = [
 				activeForUrls: ["^/help/contact($|/.*)"],
 			},
 			{
+				title: "global.topbar.actions.training",
+				href: "https://www.lernen.cloud/",
+				target: "_blank",
+				testId: "trainings",
+			},
+			{
 				title: "global.topbar.actions.releaseNotes",
 				href: "/help/releases",
 				target: "_self",
 				testId: "releases",
 				activeForUrls: ["^/help/releases($|/.*)"],
-			},
-			{
-				title: "global.topbar.actions.training",
-				href: "https://www.lernen.cloud/",
-				target: "_blank",
-				testId: "trainings",
 			},
 		],
 	},

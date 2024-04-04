@@ -3,7 +3,7 @@
 		<SidebarLogo />
 		<v-list open-strategy="multiple">
 			<div class="pb-3">
-				<template v-for="item in sidebarItems" :key="item.title">
+				<template v-for="item in pageItems" :key="item.title">
 					<SidebarCategoryItem
 						v-if="isSidebarCategoryItem(item)"
 						:item="item"
@@ -14,7 +14,7 @@
 			<v-divider />
 			<div class="py-3">
 				<SidebarCategoryItem
-					v-for="link in metaLinks"
+					v-for="link in metaItems"
 					:key="link.title"
 					:item="link"
 				/>
@@ -22,7 +22,7 @@
 			<v-divider />
 			<div class="py-3">
 				<SidebarItem
-					v-for="link in legalLinks"
+					v-for="link in legalItems"
 					:key="link.title"
 					:item="link"
 				/>
@@ -37,7 +37,12 @@ import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
-import { SidebarGroupItem, SidebarSingleItem, SidebarLinkItem } from "./types";
+import {
+	SidebarGroupItem,
+	SidebarSingleItem,
+	SidebarLinkItem,
+	SidebarItems,
+} from "./types";
 import { pageLinks, metaLinks, legalLinks } from "./sidebar-items";
 
 const SIDEBAR_WIDTH = 241;
@@ -45,24 +50,29 @@ const SIDEBAR_WIDTH = 241;
 const authModule = injectStrict(AUTH_MODULE_KEY);
 
 const isSidebarCategoryItem = (
-	item: SidebarSingleItem | SidebarGroupItem
+	item: SidebarSingleItem | SidebarGroupItem | SidebarLinkItem
 ): item is SidebarGroupItem => {
 	return (item as SidebarGroupItem).children !== undefined;
 };
 
-const sidebarItems = computed(() => {
-	const hasPermission = (
-		item: SidebarSingleItem | SidebarGroupItem | SidebarLinkItem
-	) => {
-		return (
-			!item.permissions ||
-			item.permissions.some((permission: string) => {
-				return authModule.getUserPermissions.includes(permission.toLowerCase());
-			})
-		);
-	};
+console.log(
+	authModule.getUserRoles,
+	authModule.getUserPermissions.includes("ADDONS_ENABLED".toLowerCase())
+);
 
-	const sidebarItems = pageLinks.filter((item) => {
+const hasPermission = (
+	item: SidebarSingleItem | SidebarGroupItem | SidebarLinkItem
+) => {
+	return (
+		!item.permissions ||
+		item.permissions.some((permission: string) => {
+			return authModule.getUserPermissions.includes(permission.toLowerCase());
+		})
+	);
+};
+
+const getFilteredItems = (items: SidebarItems | SidebarLinkItem[]) => {
+	const pageItems = items.filter((item) => {
 		if (isSidebarCategoryItem(item)) {
 			item.children = item.children.filter((child) => {
 				return hasPermission(child);
@@ -72,8 +82,16 @@ const sidebarItems = computed(() => {
 		return hasPermission(item);
 	});
 
-	return sidebarItems;
-});
+	return pageItems;
+};
+
+const pageItems = computed(() => getFilteredItems(pageLinks));
+const metaItems = computed(
+	() => getFilteredItems(metaLinks) as SidebarGroupItem[]
+);
+const legalItems = computed(
+	() => getFilteredItems(legalLinks) as SidebarLinkItem[]
+);
 </script>
 
 <style lang=""></style>
