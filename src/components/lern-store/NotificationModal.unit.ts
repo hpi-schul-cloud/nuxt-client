@@ -59,16 +59,9 @@ describe("@/components/molecules/NotificationModal", () => {
 	it("executes close action after close", async () => {
 		const wrapper = setup(false);
 
-		const button = wrapper.find(".btn-confirm");
-		button.trigger("click");
-		await wrapper.vm.$nextTick();
-		expect(
-			wrapper.findComponent(NotificationModal).emitted("close")
-		).toHaveLength(1);
-		expect(
-			wrapper
-				.findComponent(NotificationModal)
-				.emitted("update:show-notification-modal")
-		).toHaveLength(1);
+		const button = wrapper.get(".btn-confirm");
+		await button.trigger("click");
+		expect(wrapper.emitted("close")).toHaveLength(1);
+		expect(wrapper.emitted("update:show-notification-modal")).toHaveLength(1);
 	});
 });

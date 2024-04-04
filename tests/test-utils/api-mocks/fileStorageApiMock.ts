@@ -1,6 +1,6 @@
 import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { useFileStorageApi } from "@feature-board-file-element";
-import { jest } from "@jest/globals";
+import { Jest as jest } from "@jest/environment";
 import { ref } from "vue";
 
 interface Props {
@@ -36,9 +36,7 @@ export const setupFileStorageApiMock = (props: Props = {}) => {
 		getFileRecord,
 	};
 
-	mockedFileStorageApi.mockReturnValue(
-		mocks as ReturnType<typeof useFileStorageApi>
-	);
+	mockedFileStorageApi.mockReturnValue(mocks);
 
 	return mocks;
 };

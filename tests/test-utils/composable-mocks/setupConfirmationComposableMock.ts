@@ -1,9 +1,9 @@
-import { jest } from "@jest/globals";
+import { Jest as jest } from "@jest/environment";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { ref } from "vue";
 
 interface Props {
-	askConfirmationMock?: jest.Mock;
+	askConfirmationMock?: ReturnType<typeof jest.fn>;
 }
 
 export default function setupConfirmationComposableMock(props: Props = {}) {
@@ -18,9 +18,7 @@ export default function setupConfirmationComposableMock(props: Props = {}) {
 		isDialogOpen,
 	};
 
-	confirmationMock.mockReturnValue(
-		mocks as ReturnType<typeof useConfirmationDialog>
-	);
+	confirmationMock.mockReturnValue(mocks);
 
 	return mocks;
 }

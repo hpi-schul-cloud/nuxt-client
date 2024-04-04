@@ -1,5 +1,5 @@
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
-import { jest } from "@jest/globals";
+import { Jest as jest } from "@jest/environment";
 import { Ref, ref } from "vue";
 
 interface Props {
@@ -48,9 +48,7 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 		isFilePickerOpen: isFilePickerOpenMock,
 	};
 
-	mockedUseAddElementDialog.mockReturnValue(
-		mocks as ReturnType<typeof useAddElementDialog>
-	);
+	mockedUseAddElementDialog.mockReturnValue(mocks);
 
 	return mocks;
 };

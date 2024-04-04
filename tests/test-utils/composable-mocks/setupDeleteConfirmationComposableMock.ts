@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { Jest as jest } from "@jest/environment";
 import { ref } from "vue";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 
@@ -20,9 +20,7 @@ export default function setupDeleteConfirmationComposableMock(
 		isDeleteDialogOpen,
 	};
 
-	deleteConfirmationMock.mockReturnValue(
-		mocks as ReturnType<typeof useDeleteConfirmationDialog>
-	);
+	deleteConfirmationMock.mockReturnValue(mocks);
 
 	return mocks;
 }
