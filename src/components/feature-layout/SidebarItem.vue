@@ -4,14 +4,13 @@
 		:to="item.to"
 		color="primary"
 		base-color="secondary"
+		:density="density"
 		:data-testid="item.testId"
-		:height="ITEM_HEIGHT"
-		:min-height="ITEM_HEIGHT"
 	>
 		<template #prepend>
 			<v-icon
-				v-if="(item as ItemData).icon"
-				:icon="(item as ItemData).icon"
+				v-if="(item as SidebarSingleItem).icon"
+				:icon="(item as SidebarSingleItem).icon"
 				class="mr-2"
 			/>
 		</template>
@@ -23,18 +22,16 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { ItemData, ChildData } from "./types";
+import { SidebarSingleItem, SidebarLinkItem } from "./types";
 
 const props = defineProps({
 	item: {
-		type: Object as PropType<ItemData | ChildData>,
+		type: Object as PropType<SidebarSingleItem | SidebarLinkItem>,
 		required: true,
 	},
 });
 
-const ITEM_HEIGHT = (props.item as ItemData).icon
-	? "var(--sidebar-item-height-2)"
-	: "var(--sidebar-child-item-height)";
+const density = (props.item as SidebarSingleItem).icon ? "default" : "compact";
 </script>
 
 <style lang="scss">

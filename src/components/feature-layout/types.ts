@@ -1,49 +1,5 @@
 // TODO - better typing
 
-export type BaseData = {
-	title: string;
-	testId: string;
-	permission?: string;
-	activeForUrls?: string[];
-};
-
-export type ItemData = {
-	title: string;
-	icon: string;
-	testId: string;
-	permission?: string;
-	activeForUrls?: string[];
-} & (ExternalLink | RouterLink);
-
-export type CategoryData = {
-	title: string;
-	icon: string;
-	testId: string;
-	permission?: string;
-	activeForUrls?: string[];
-	children: ChildData[];
-};
-
-export type ChildData = {
-	title: string;
-	testId: string;
-	permission?: string;
-	activeForUrls?: string[];
-} & (ExternalLink | RouterLink);
-
-export type SidebarItems = (ItemData | CategoryData)[];
-
-// -------------
-
-// export type SidebarItemBaseData = {
-// 	title: string;
-// 	icon: string;
-// 	testId: string;
-// 	permission?: string;
-// 	activeForUrls?: string[];
-// 	children?: SidebarItemData[];
-// };
-
 export type ExternalLink = {
 	href: string;
 	to?: never;
@@ -56,6 +12,22 @@ export type RouterLink = {
 	target?: string;
 };
 
-// export type SidebarItemData = SidebarItemBaseData & (ExternalLink | RouterLink);
+export type SidebarItemBaseData = {
+	title: string;
+	testId: string;
+	permission?: string;
+	activeForUrls?: string[];
+};
 
-// TODO - is it better/cleaner to have a CategoryItem type?
+export type SidebarLinkItem = SidebarItemBaseData & (ExternalLink | RouterLink);
+
+export type SidebarCategoryItem = {
+	icon: string;
+	children: SidebarLinkItem[];
+} & SidebarItemBaseData;
+
+export type SidebarSingleItem = {
+	icon: string;
+} & SidebarLinkItem;
+
+export type SidebarItems = (SidebarSingleItem | SidebarCategoryItem)[];
