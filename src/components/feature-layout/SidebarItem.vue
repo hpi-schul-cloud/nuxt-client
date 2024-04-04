@@ -2,6 +2,7 @@
 	<v-list-item
 		:href="item.href"
 		:to="item.to"
+		:target="item.target"
 		color="primary"
 		base-color="secondary"
 		:density="density"
