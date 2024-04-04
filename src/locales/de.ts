@@ -722,6 +722,7 @@ export default {
 	"global.sidebar.overview": "Übersicht",
 	"global.sidebar.school": "Schule",
 	"global.sidebar.student": "Schüler:innen",
+	"global.sidebar.system": "System",
 	"global.sidebar.tasks": "Aufgaben",
 	"global.sidebar.teacher": "Lehrkräfte",
 	"global.sidebar.teams": "Teams",

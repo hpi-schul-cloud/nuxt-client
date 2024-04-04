@@ -43,7 +43,8 @@ import {
 	SidebarLinkItem,
 	SidebarItems,
 } from "./types";
-import { pageLinks, metaLinks, legalLinks } from "./sidebar-items";
+import { pageLinks, legalLinks } from "./sidebar-items";
+import { metaLinks } from "./meta-links";
 
 const SIDEBAR_WIDTH = 241;
 
@@ -54,11 +55,6 @@ const isSidebarCategoryItem = (
 ): item is SidebarGroupItem => {
 	return (item as SidebarGroupItem).children !== undefined;
 };
-
-console.log(
-	authModule.getUserRoles,
-	authModule.getUserPermissions.includes("ADDONS_ENABLED".toLowerCase())
-);
 
 const hasPermission = (
 	item: SidebarSingleItem | SidebarGroupItem | SidebarLinkItem

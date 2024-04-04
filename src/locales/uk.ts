@@ -730,6 +730,7 @@ export default {
 	"global.sidebar.overview": "Панель керування",
 	"global.sidebar.school": "Школа",
 	"global.sidebar.student": "Учні",
+	"global.sidebar.system": "Cистема",
 	"global.sidebar.tasks": "Завдання",
 	"global.sidebar.teacher": "Викладачі",
 	"global.sidebar.teams": "Команди",

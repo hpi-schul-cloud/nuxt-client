@@ -738,6 +738,7 @@ export default {
 	"global.sidebar.overview": "Panel",
 	"global.sidebar.school": "Escuela",
 	"global.sidebar.student": "Estudiantes",
+	"global.sidebar.system": "Sistema",
 	"global.sidebar.tasks": "Tareas",
 	"global.sidebar.teacher": "Profesores",
 	"global.sidebar.teams": "Equipos",
