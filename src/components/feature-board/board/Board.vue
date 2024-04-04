@@ -84,13 +84,13 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import { roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
+	ROOM_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import {
@@ -294,6 +294,7 @@ const onShareBoard = () => {
 	}
 };
 
+const roomModule = injectStrict(ROOM_MODULE_KEY);
 const openDeleteBoardDialog = async (id: string) => {
 	await roomModule.deleteBoard(id);
 
