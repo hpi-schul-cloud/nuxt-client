@@ -37,7 +37,7 @@ const props = defineProps({
 const density = (props.item as SidebarSingleItem).icon ? "default" : "compact";
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .v-icon {
 	opacity: 1 !important;
 }

@@ -87,5 +87,3 @@ const legalItems = computed(
 	() => getFilteredItems(legalLinks) as SidebarLinkItem[]
 );
 </script>
-
-<style lang=""></style>
