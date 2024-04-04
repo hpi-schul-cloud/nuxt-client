@@ -1,15 +1,15 @@
-// TODO - better typing
-
 export type ExternalLink = {
 	href: string;
 	to?: never;
 	target?: string;
+	rel?: string;
 };
 
 export type RouterLink = {
 	to: string;
 	href?: never;
 	target?: string;
+	rel?: never;
 };
 
 export type SidebarItemBaseData = {

@@ -1,9 +1,7 @@
 import { envConfigModule } from "@/store";
-import { SidebarItems } from "./types";
+import { SidebarItems, SidebarLinkItem } from "./types";
 
-const getSidebarItems = (
-	isNewSchoolAdminPageDefault: boolean
-): SidebarItems => [
+export const getSidebarItems = (): SidebarItems => [
 	{
 		title: "global.sidebar.overview",
 		href: "/dashboard",
@@ -148,7 +146,7 @@ const getSidebarItems = (
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
 			},
-			isNewSchoolAdminPageDefault
+			envConfigModule.getNewSchoolAdminPageAsDefault
 				? {
 						title: "global.sidebar.school",
 						to: "/administration/school-settings",
@@ -208,4 +206,24 @@ const getSidebarItems = (
 	},
 ];
 
-export default getSidebarItems;
+export const legalLinks: SidebarLinkItem[] = [
+	{
+		to: "/imprint",
+		title: "components.legacy.footer.imprint",
+		testId: "imprint",
+	},
+	{
+		href: "/termsofuse",
+		title: "components.legacy.footer.terms",
+		target: "_blank",
+		rel: "noopener",
+		testId: "terms-of-use",
+	},
+	{
+		href: "/privacypolicy",
+		title: "components.legacy.footer.privacy_policy",
+		target: "_blank",
+		rel: "noopener",
+		testId: "privacy-policy",
+	},
+];

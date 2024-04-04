@@ -3,6 +3,7 @@
 		:href="item.href"
 		:to="item.to"
 		:target="item.target"
+		:rel="item.rel"
 		color="primary"
 		base-color="secondary"
 		:density="density"

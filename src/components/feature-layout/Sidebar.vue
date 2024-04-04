@@ -7,25 +7,24 @@
 				<SidebarItem v-else :item="item" />
 			</template>
 		</v-list>
+		<v-divider />
+		<v-list>
+			<SidebarItem v-for="link in legalLinks" :key="link.title" :item="link" />
+		</v-list>
 	</v-navigation-drawer>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarLinkItem } from "./types";
-import getSidebarItems from "./sidebar-items";
+import { getSidebarItems, legalLinks } from "./sidebar-items";
 
 const SIDEBAR_WIDTH = 241;
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const authModule = injectStrict(AUTH_MODULE_KEY);
 
 const isSidebarCategoryItem = (
@@ -35,9 +34,7 @@ const isSidebarCategoryItem = (
 };
 
 const sidebarItems = computed(() => {
-	let sidebarItems = getSidebarItems(
-		envConfigModule.getNewSchoolAdminPageAsDefault
-	);
+	let sidebarItems = getSidebarItems();
 
 	const hasPermission = (
 		item: SidebarSingleItem | SidebarGroupItem | SidebarLinkItem
