@@ -717,6 +717,7 @@ export default {
 	"format.dateUTC": "JJJJ-MM-DD",
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
+	"global.sidebar.accessibility": "Доступність",
 	"global.sidebar.addons": "Додаткові компоненти",
 	"global.sidebar.calendar": "Календар",
 	"global.sidebar.classes": "Класи",

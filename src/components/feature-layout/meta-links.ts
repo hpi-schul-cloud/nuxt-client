@@ -1,4 +1,4 @@
-import { envConfigModule } from "@/store";
+import { envConfigModule, filePathsModule } from "@/store";
 import { SidebarGroupItem, SidebarLinkItem } from "./types";
 import { SchulcloudTheme } from "@/serverApi/v3";
 
@@ -26,6 +26,34 @@ if (envConfigModule.getTheme === SchulcloudTheme.Default) {
 		testId: "security",
 	});
 }
+
+// TODO - adjust language keys, when old components are removed
+const accessibilityGroup: SidebarGroupItem = {
+	title: "global.sidebar.accessibility",
+	icon: "$mdiHuman",
+	testId: "accessibility",
+	children: [],
+};
+if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL) {
+	accessibilityGroup.children.push({
+		href:
+			"mailto:" +
+			envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
+			"?subject=" +
+			"components.legacy.footer.accessibility.report",
+		title: "components.legacy.footer.accessibility.report",
+		testId: "report-accessibility",
+		target: "_blank",
+		rel: "noopener",
+	});
+}
+accessibilityGroup.children.push({
+	href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
+	title: "components.legacy.footer.accessibility.statement",
+	testId: "accessibility-statement",
+	target: "_blank",
+	rel: "noopener",
+});
 
 export const metaLinks: SidebarGroupItem[] = [
 	{
@@ -142,3 +170,7 @@ export const metaLinks: SidebarGroupItem[] = [
 		children: systemLinks,
 	},
 ];
+
+if (envConfigModule.getTheme !== SchulcloudTheme.Default) {
+	metaLinks.push(accessibilityGroup);
+}

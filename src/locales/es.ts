@@ -725,6 +725,7 @@ export default {
 	"format.dateUTC": "AAAA-MM-DD",
 	"format.dateYY": "DD/MM/YY",
 	"format.time": "HH:mm",
+	"global.sidebar.accessibility": "Accesibilidad",
 	"global.sidebar.addons": "Complementos",
 	"global.sidebar.calendar": "Calendario",
 	"global.sidebar.classes": "Clases",

@@ -705,6 +705,7 @@ export default {
 	"format.dateUTC": "YYYY-MM-DD",
 	"format.dateYY": "MM/DD/YY",
 	"format.time": "HH:mm",
+	"global.sidebar.accessibility": "Accessibility",
 	"global.sidebar.addons": "Add-ons",
 	"global.sidebar.calendar": "Calendar",
 	"global.sidebar.classes": "Classes",
