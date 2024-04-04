@@ -20,7 +20,7 @@ import {
 import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
-import { CategoryData, ItemData } from "./types";
+import { SidebarGroupItem, SidebarSingleItem } from "./types";
 import getSidebarItems from "./sidebar-items";
 
 const SIDEBAR_WIDTH = 241;
@@ -29,9 +29,9 @@ const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const authModule = injectStrict(AUTH_MODULE_KEY);
 
 const isSidebarCategoryItem = (
-	item: ItemData | CategoryData
-): item is CategoryData => {
-	return (item as CategoryData).children !== undefined;
+	item: SidebarSingleItem | SidebarGroupItem
+): item is SidebarGroupItem => {
+	return (item as SidebarGroupItem).children !== undefined;
 };
 
 const sidebarItems = computed(() => {

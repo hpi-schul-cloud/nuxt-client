@@ -21,7 +21,7 @@ export type SidebarItemBaseData = {
 
 export type SidebarLinkItem = SidebarItemBaseData & (ExternalLink | RouterLink);
 
-export type SidebarCategoryItem = {
+export type SidebarGroupItem = {
 	icon: string;
 	children: SidebarLinkItem[];
 } & SidebarItemBaseData;
@@ -30,4 +30,4 @@ export type SidebarSingleItem = {
 	icon: string;
 } & SidebarLinkItem;
 
-export type SidebarItems = (SidebarSingleItem | SidebarCategoryItem)[];
+export type SidebarItems = (SidebarSingleItem | SidebarGroupItem)[];

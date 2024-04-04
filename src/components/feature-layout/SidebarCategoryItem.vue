@@ -24,12 +24,12 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { SidebarCategoryItem } from "./types";
+import { SidebarGroupItem } from "./types";
 import SidebarItem from "./SidebarItem.vue";
 
 defineProps({
 	item: {
-		type: Object as PropType<SidebarCategoryItem>,
+		type: Object as PropType<SidebarGroupItem>,
 		required: true,
 	},
 });
