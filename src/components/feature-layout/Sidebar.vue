@@ -1,5 +1,5 @@
 <template>
-	<v-navigation-drawer :width="SIDEBAR_WIDTH">
+	<v-navigation-drawer>
 		<SidebarLogo />
 		<v-list open-strategy="multiple">
 			<div class="pb-3">
@@ -45,8 +45,6 @@ import {
 } from "./types";
 import { pageLinks, legalLinks } from "./sidebar-items";
 import { metaLinks } from "./meta-links";
-
-const SIDEBAR_WIDTH = 241;
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 
