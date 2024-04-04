@@ -508,7 +508,7 @@ describe("room module", () => {
 				});
 
 				expect(receivedRequests[0].path).toStrictEqual(
-					"/v3/courses/courseId/userPermissions"
+					"/v3/courses/courseId/user-permissions"
 				);
 				expect(fetchScopePermissionSpy.mock.calls[0][0]).toStrictEqual({
 					courseId: "courseId",

@@ -254,7 +254,7 @@ export default class RoomModule extends VuexModule {
 		courseId: string;
 		userId: string;
 	}): Promise<void> {
-		const requestUrl = `/v3/courses/${payload.courseId}/userPermissions`;
+		const requestUrl = `/v3/courses/${payload.courseId}/user-permissions`;
 		const ret_val = (await $axios.get(requestUrl)).data;
 		this.setPermissionData(ret_val[payload.userId]);
 	}
