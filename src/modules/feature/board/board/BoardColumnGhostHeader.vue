@@ -5,7 +5,7 @@
 				elevation="0"
 				variant="text"
 				class="mb-2"
-				:color="isColumnActive ? 'text-black' : 'text-grey-darken-2'"
+				:color="isColumnActive ? '' : 'grey-darken-2'"
 				@click="onAddColumn"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>
