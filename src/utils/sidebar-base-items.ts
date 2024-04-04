@@ -263,14 +263,6 @@ const getSidebarItems = (
 		testId: "Hilfebereich",
 		activeForUrls: ["^/help($|/.*)"],
 	},
-	{
-		title: "global.sidebar.myMaterial",
-		href: "/my-material/",
-		icon: "book",
-		permission: "BETA_FEATURES",
-		testId: "Meine Materialien",
-		activeForUrls: ["^/my-material($|/.*)"],
-	},
 ];
 
 export default getSidebarItems;

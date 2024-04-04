@@ -26,7 +26,7 @@ const getSidebarItems = (
 		title: "global.sidebar.teams",
 		href: "/teams",
 		icon: "$mdiAccountGroupOutline",
-		permission: "TEAMS_ENABLED",
+		permissions: ["TEAMS_ENABLED"],
 		testId: "Teams",
 		activeForUrls: ["^/teams($|/.*)"],
 	},
@@ -34,16 +34,7 @@ const getSidebarItems = (
 		title: "global.sidebar.tasks",
 		to: "/tasks",
 		icon: "$mdiFormatListChecks",
-		permission: "TASK_DASHBOARD_VIEW_V3",
-		testId: "Aufgaben",
-		activeForUrls: ["^/tasks($|/.*)"],
-	},
-	// TODO - merge these?
-	{
-		title: "global.sidebar.tasks",
-		to: "/tasks",
-		icon: "$mdiFormatListChecks",
-		permission: "TASK_DASHBOARD_TEACHER_VIEW_V3",
+		permissions: ["TASK_DASHBOARD_VIEW_V3", "TASK_DASHBOARD_TEACHER_VIEW_V3"],
 		testId: "Aufgaben",
 		activeForUrls: ["^/tasks($|/.*)"],
 	},
@@ -68,7 +59,7 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.teams",
 				href: "/files/teams/",
-				permission: "TEAMS_ENABLED",
+				permissions: ["TEAMS_ENABLED"],
 				testId: "Teams",
 				activeForUrls: ["^/files/teams($|/.*)"],
 			},
@@ -98,7 +89,7 @@ const getSidebarItems = (
 		title: "common.words.lernstore",
 		to: "/content",
 		icon: "$lernstore_outline",
-		permission: "LERNSTORE_VIEW",
+		permissions: ["LERNSTORE_VIEW"],
 		testId: "Lern-Store",
 		activeForUrls: ["^/content($|/.*)"],
 	},
@@ -106,21 +97,21 @@ const getSidebarItems = (
 		title: "global.sidebar.addons",
 		href: "/addons",
 		icon: "$mdiPuzzleOutline",
-		permission: "ADDONS_ENABLED",
+		permissions: ["ADDONS_ENABLED"],
 		testId: "Add-ons",
 		activeForUrls: ["^/addons($|/.*)"],
 	},
 	{
 		title: "global.sidebar.management",
 		icon: "$mdiCogOutline",
-		permission: "TEACHER_LIST",
+		permissions: ["TEACHER_LIST"],
 		testId: "Verwaltung",
 		activeForUrls: ["^/administration($|/.*)"],
 		children: [
 			{
 				title: "global.sidebar.student",
 				to: "/administration/students",
-				permission: "STUDENT_LIST",
+				permissions: ["STUDENT_LIST"],
 				testId: "Schüler:innen",
 				activeForUrls: ["^/administration/students($|/.*)"],
 			},
@@ -133,7 +124,7 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.courses",
 				href: "/administration/courses",
-				permission: "ADMIN_VIEW",
+				permissions: ["ADMIN_VIEW"],
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
 			},
@@ -153,7 +144,7 @@ const getSidebarItems = (
 			{
 				title: "global.sidebar.teams",
 				href: "/administration/teams",
-				permission: "ADMIN_VIEW",
+				permissions: ["ADMIN_VIEW"],
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
 			},
@@ -161,7 +152,7 @@ const getSidebarItems = (
 				? {
 						title: "global.sidebar.school",
 						to: "/administration/school-settings",
-						permission: "ADMIN_VIEW",
+						permissions: ["ADMIN_VIEW"],
 						testId: "Schule",
 						activeForUrls: [
 							"^/administration/school($|/.*)",
@@ -171,7 +162,7 @@ const getSidebarItems = (
 				: {
 						title: "global.sidebar.school",
 						href: "/administration/school",
-						permission: "ADMIN_VIEW",
+						permissions: ["ADMIN_VIEW"],
 						testId: "Schule",
 						activeForUrls: [
 							"^/administration/school($|/.*)",
@@ -214,14 +205,6 @@ const getSidebarItems = (
 				testId: "trainings",
 			},
 		],
-	},
-	{
-		title: "global.sidebar.myMaterial",
-		href: "/my-material/",
-		icon: "book",
-		permission: "BETA_FEATURES",
-		testId: "Meine Materialien",
-		activeForUrls: ["^/my-material($|/.*)"],
 	},
 ];
 

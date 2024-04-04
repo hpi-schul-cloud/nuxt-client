@@ -20,7 +20,7 @@ import {
 import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
-import { SidebarGroupItem, SidebarSingleItem } from "./types";
+import { SidebarGroupItem, SidebarSingleItem, SidebarLinkItem } from "./types";
 import getSidebarItems from "./sidebar-items";
 
 const SIDEBAR_WIDTH = 241;
@@ -39,21 +39,25 @@ const sidebarItems = computed(() => {
 		envConfigModule.getNewSchoolAdminPageAsDefault
 	);
 
+	const hasPermission = (
+		item: SidebarSingleItem | SidebarGroupItem | SidebarLinkItem
+	) => {
+		return (
+			!item.permissions ||
+			item.permissions.some((permission: string) => {
+				return authModule.getUserPermissions.includes(permission.toLowerCase());
+			})
+		);
+	};
+
 	sidebarItems = sidebarItems.filter((item) => {
 		if (isSidebarCategoryItem(item)) {
 			item.children = item.children.filter((child) => {
-				return (
-					!child.permission ||
-					authModule.getUserPermissions.includes(child.permission.toLowerCase())
-				);
+				return hasPermission(child);
 			});
 		}
 
-		const hasRequiredPermission = item.permission
-			? authModule.getUserPermissions.includes(item.permission.toLowerCase())
-			: false;
-
-		return !item.permission || hasRequiredPermission;
+		return hasPermission(item);
 	});
 
 	return sidebarItems;

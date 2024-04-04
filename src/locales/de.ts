@@ -719,7 +719,6 @@ export default {
 	"global.sidebar.helpArea": "Hilfebereich",
 	"global.sidebar.helpDesk": "Helpdesk",
 	"global.sidebar.management": "Verwaltung",
-	"global.sidebar.myMaterial": "Meine Materialien",
 	"global.sidebar.overview": "Übersicht",
 	"global.sidebar.school": "Schule",
 	"global.sidebar.student": "Schüler:innen",

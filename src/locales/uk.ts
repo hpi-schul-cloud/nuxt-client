@@ -727,7 +727,6 @@ export default {
 	"global.sidebar.helpArea": "Розділ довідки",
 	"global.sidebar.helpDesk": "Служба підтримки",
 	"global.sidebar.management": "Управління",
-	"global.sidebar.myMaterial": "Мої матеріали",
 	"global.sidebar.overview": "Панель керування",
 	"global.sidebar.school": "Школа",
 	"global.sidebar.student": "Учні",

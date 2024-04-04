@@ -15,7 +15,7 @@ export type RouterLink = {
 export type SidebarItemBaseData = {
 	title: string;
 	testId: string;
-	permission?: string;
+	permissions?: string[];
 	activeForUrls?: string[];
 };
 
