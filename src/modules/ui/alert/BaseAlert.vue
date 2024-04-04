@@ -32,7 +32,6 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-:deep(.v-btn__content .v-icon),
 .alert-text {
 	color: rgba(var(--v-theme-on-background)) !important;
 }
