@@ -718,7 +718,7 @@ export default {
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
 	"global.sidebar.addons": "Додаткові компоненти",
-	"global.sidebar.calendar": "календар",
+	"global.sidebar.calendar": "Календар",
 	"global.sidebar.classes": "Класи",
 	"global.sidebar.courses": "Курси",
 	"global.sidebar.files-old": "Мої файли",

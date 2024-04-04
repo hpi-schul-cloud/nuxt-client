@@ -706,7 +706,7 @@ export default {
 	"format.dateYY": "MM/DD/YY",
 	"format.time": "HH:mm",
 	"global.sidebar.addons": "Add-ons",
-	"global.sidebar.calendar": "calendar",
+	"global.sidebar.calendar": "Calendar",
 	"global.sidebar.classes": "Classes",
 	"global.sidebar.courses": "Courses",
 	"global.sidebar.files-old": "My Files",
