@@ -466,7 +466,7 @@
 	</DefaultWireframe>
 </template>
 <script setup lang="ts">
-import ImportUsers from "@/components/organisms/administration/ImportUsers";
+import ImportUsers from "@/components/organisms/administration/ImportUsers.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
@@ -493,7 +493,8 @@ const errorTimeout: Ref<number> = ref(7500);
 
 const isLoading: Ref<boolean> = ref(false);
 
-const checkTotal: Ref<NodeJS.Timeout | undefined> = ref(undefined);
+const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> =
+	ref(undefined);
 
 const isMigrationNotStarted = computed(() => {
 	return school.value.inUserMigration === undefined;
@@ -668,7 +669,7 @@ const endMaintenance = async () => {
 			message: schoolsModule.getError.message,
 		});
 	} else {
-		school.value.inMaintenance = isNbc.value ? undefined : false;
+		school.value.inMaintenance = isNbc.value;
 		migrationStep.value = 5;
 	}
 	isLoading.value = false;

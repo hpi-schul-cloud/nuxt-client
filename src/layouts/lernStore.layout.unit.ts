@@ -26,6 +26,7 @@ describe("lernStoreLayout", () => {
 				provide: {
 					contentModule: ContentModule,
 				},
+				stubs: ["router-view"],
 				...globalAttr,
 			},
 		});

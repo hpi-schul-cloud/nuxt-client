@@ -4,6 +4,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import NotificationModal from "./NotificationModal.vue";
+import { mdiAlertCircle, mdiCheckCircle } from "@/components/icons/material";
 
 const testProps = {
 	showNotificationModal: true,
@@ -15,7 +16,9 @@ const testProps = {
 describe("@/components/molecules/NotificationModal", () => {
 	const setup = (isSuccess: boolean) => {
 		return mount(NotificationModal, {
-			plugins: [createTestingVuetify(), createTestingI18n()],
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
 			props: {
 				...testProps,
 				isSuccess,
@@ -25,15 +28,19 @@ describe("@/components/molecules/NotificationModal", () => {
 	it("success case", async () => {
 		const wrapper = setup(true);
 
-		expect(wrapper.find(".modal-description").text()).toBe(
+		const dialogCard = wrapper
+			.findComponent({ name: "v-dialog" })
+			.findComponent({ name: "v-card" });
+
+		expect(dialogCard.find(".modal-description").text()).toBe(
 			testProps.description
 		);
-		expect(wrapper.find(".modal-title").text()).toBe(testProps.successMsg);
+		expect(dialogCard.find(".modal-title").text()).toBe(testProps.successMsg);
 		expect(
-			wrapper.find(".icon").element.innerHTML.includes("$mdiCheckCircle")
+			dialogCard.find(".icon").element.innerHTML.includes(mdiCheckCircle)
 		).toBe(true);
 		setTimeout(() => {
-			expect(wrapper.find(".footer-button").attributes("style")).toBe(
+			expect(dialogCard.find(".footer-button").attributes("style")).toBe(
 				"background-color:rgba(var(--v-theme-success))"
 			);
 		}, 200);
@@ -42,15 +49,19 @@ describe("@/components/molecules/NotificationModal", () => {
 	it("error case", async () => {
 		const wrapper = setup(false);
 
-		expect(wrapper.find(".modal-description").text()).toBe(
+		const dialogCard = wrapper
+			.findComponent({ name: "v-dialog" })
+			.findComponent({ name: "v-card" });
+
+		expect(dialogCard.find(".modal-description").text()).toBe(
 			testProps.description
 		);
-		expect(wrapper.find(".modal-title").text()).toBe(testProps.errorMsg);
+		expect(dialogCard.find(".modal-title").text()).toBe(testProps.errorMsg);
 		expect(
-			wrapper.find(".icon").element.innerHTML.includes("$mdiAlertCircle")
+			dialogCard.find(".icon").element.innerHTML.includes(mdiAlertCircle)
 		).toBe(true);
 		setTimeout(() => {
-			expect(wrapper.find(".footer-button").attributes("style")).toBe(
+			expect(dialogCard.find(".footer-button").attributes("style")).toBe(
 				"background-color: rgba(var(--v-theme-error))"
 			);
 		}, 200);
@@ -59,7 +70,11 @@ describe("@/components/molecules/NotificationModal", () => {
 	it("executes close action after close", async () => {
 		const wrapper = setup(false);
 
-		const button = wrapper.get(".btn-confirm");
+		const dialogCard = wrapper
+			.findComponent({ name: "v-dialog" })
+			.findComponent({ name: "v-card" });
+
+		const button = dialogCard.get(".btn-confirm");
 		await button.trigger("click");
 		expect(wrapper.emitted("close")).toHaveLength(1);
 		expect(wrapper.emitted("update:show-notification-modal")).toHaveLength(1);

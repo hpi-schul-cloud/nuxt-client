@@ -56,7 +56,7 @@ const config = {
 		"<rootDir>/src/composables/**/*.(js|ts)",
 		"<rootDir>/src/layouts/**/*.{js,ts,vue}",
 		// Exclude
-		"!<rootDir>/src/components/base/components.js",
+		"!<rootDir>/src/components/base/**/*",
 		"!<rootDir>/src/components/icons/**/*",
 		"!<rootDir>/src/pages/ActivationCode.page.vue",
 		"!<rootDir>/src/pages/Imprint.page.vue",
@@ -65,6 +65,8 @@ const config = {
 		"!<rootDir>/src/pages/NewsCreate.page.vue",
 		"!<rootDir>/src/pages/NewsEdit.page.vue",
 		"!<rootDir>/src/pages/ProxyError.page.vue",
+		"!<rootDir>/src/components/organisms/administration/ImportUsers.vue",
+		"!<rootDir>/src/pages/administration/Migration.page.vue",
 	],
 
 	globals: {
