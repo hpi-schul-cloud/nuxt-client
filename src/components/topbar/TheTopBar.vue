@@ -79,7 +79,7 @@
 					<language-menu />
 					<a
 						href="/account"
-						class="account-link text-on-surface"
+						class="account-link"
 						role="menuitem"
 						:aria-label="$t('global.topbar.settings').toString()"
 						data-testid="account-link"
