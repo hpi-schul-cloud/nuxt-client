@@ -49,7 +49,7 @@
 			>
 				<v-list-item-title>
 					<v-icon :icon="mdiShareVariantOutline" class="task-action-icon" />
-					{{ $t("pages.room.taskCard.label.shareTask") }}
+					{{ $t("common.actions.shareCopy") }}
 				</v-list-item-title>
 			</v-list-item>
 			<v-list-item

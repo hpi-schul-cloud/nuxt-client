@@ -23,12 +23,35 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 
 	const openResultModal = () => copyModule?.setResultModalOpen(true);
 
-	const showSuccess = () =>
-		notifierModule.show({
-			text: t("components.molecules.copyResult.successfullyCopied"),
-			status: "success",
-			timeout: 10000,
-		});
+	const showSuccess = (copyParams: CopyParams) => {
+		if (copyParams.type === CopyParamsTypeEnum.ColumnBoard) {
+			notifierModule.show({
+				text: t("components.molecules.copyResult.board.successfullyCopied"),
+				status: "success",
+			});
+		}
+
+		if (copyParams.type === CopyParamsTypeEnum.Course) {
+			notifierModule.show({
+				text: t("components.molecules.copyResult.successfullyCopied"),
+				status: "success",
+			});
+		}
+
+		if (copyParams.type === CopyParamsTypeEnum.Lesson) {
+			notifierModule.show({
+				text: t("components.molecules.copyResult.lesson.successfullyCopied"),
+				status: "success",
+			});
+		}
+
+		if (copyParams.type === CopyParamsTypeEnum.Task) {
+			notifierModule.show({
+				text: t("components.molecules.copyResult.task.successfullyCopied"),
+				status: "success",
+			});
+		}
+	};
 
 	const showFailure = () =>
 		notifierModule.show({
@@ -52,7 +75,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 				copyParams.type !== CopyParamsTypeEnum.Course &&
 				copyResult?.status === CopyApiResponseStatusEnum.Success
 			) {
-				showSuccess();
+				showSuccess(copyParams);
 			} else if (copyResult?.status === CopyApiResponseStatusEnum.Failure) {
 				showFailure();
 			} else {

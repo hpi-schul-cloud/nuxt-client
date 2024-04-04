@@ -318,7 +318,7 @@ export default {
 					roleBasedMoreActions[Roles.Teacher].push({
 						icon: this.icons.mdiShareVariantOutline,
 						action: () => this.$emit("share-task", this.task.id),
-						name: this.$t("pages.room.taskCard.label.shareTask"),
+						name: this.$t("common.actions.shareCopy"),
 						dataTestId: `room-task-card-menu-share-${this.taskCardIndex}`,
 					});
 				}

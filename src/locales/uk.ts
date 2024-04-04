@@ -20,8 +20,7 @@ export default {
 	"common.actions.save": "Зберегти",
 	"common.actions.scrollToTop": "Прокрутити вгору",
 	"common.actions.share": "Поділіться",
-	"common.actions.shareCourse": "Копія котирування акцій",
-	"common.actions.shareBoard": "Копія котирування дошки",
+	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.update": "Оновити",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
@@ -287,8 +286,7 @@ export default {
 	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
-	"components.board.alert.info.draft":
-		"Ця дошка більше не відображається для учасників курсу.",
+	"components.board.alert.info.draft": "Ця дошка невидима для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.board.column.ghost.placeholder": "Додати стовпець",
 	"components.board.menu.board": "Налаштування дошки",
@@ -462,6 +460,12 @@ export default {
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Усі елементи успішно скопійовано.",
+	"components.molecules.copyResult.board.successfullyCopied":
+		"Дошка успішно скопійована.",
+	"components.molecules.copyResult.task.successfullyCopied":
+		"Задачу успішно скопійовано.",
+	"components.molecules.copyResult.lesson.successfullyCopied":
+		"Тему успішно скопійовано.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Для великих файлів процес копіювання може зайняти більше часу. Вміст буде доступний найближчим часом.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -1388,7 +1392,6 @@ export default {
 		'Ви впевнені, що хочете видалити елемент " {itemTitle} "?',
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
-	"pages.room.lessonCard.label.shareLesson": "надіслати копію теми",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
 	"pages.room.student.emptyState":
 		"Тут з’являється навчальний вміст, наприклад теми чи завдання.",
@@ -1398,7 +1401,6 @@ export default {
 	"pages.room.taskCard.label.graded": "Оцінено",
 	"pages.room.taskCard.label.noDueDate": "Без дати подання",
 	"pages.room.taskCard.label.open": "Відкрити",
-	"pages.room.taskCard.label.shareTask": "Поділіться копією завдання",
 	"pages.room.taskCard.label.taskDone": "Завдання виконано",
 	"pages.room.taskCard.menu.ariaLabel": "Меню завдань",
 	"pages.room.taskCard.student.label.overdue": "Відсутня",

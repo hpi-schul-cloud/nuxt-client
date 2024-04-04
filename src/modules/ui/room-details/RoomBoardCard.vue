@@ -191,7 +191,7 @@ const actionsMenuItems = computed(() => {
 		actions.push({
 			icon: mdiShareVariantOutline,
 			action: () => emit("share-board"),
-			name: t("common.actions.shareBoard"),
+			name: t("common.actions.shareCopy"),
 			dataTestId: `board-card-menu-action-share-${
 				toRef(props, "boardCardIndex").value
 			}`,
