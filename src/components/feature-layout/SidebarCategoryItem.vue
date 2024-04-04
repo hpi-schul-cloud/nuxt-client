@@ -5,8 +5,8 @@
 				v-bind="props"
 				color="primary"
 				base-color="secondary"
+				tabindex="0"
 				:data-testid="item.testId"
-				height="var(--sidebar-item-height-2)"
 			>
 				<template #prepend>
 					<v-icon :icon="item.icon" class="mr-2" />

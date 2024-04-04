@@ -6,6 +6,7 @@
 		color="primary"
 		base-color="secondary"
 		:density="density"
+		tabindex="0"
 		:data-testid="item.testId"
 	>
 		<template #prepend>
