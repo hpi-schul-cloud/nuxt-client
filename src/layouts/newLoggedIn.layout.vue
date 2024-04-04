@@ -29,7 +29,7 @@
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 import SkipLinks from "@/components/molecules/SkipLinks.vue";
-import Sidebar from "@/components/feature-layout/Sidebar.vue";
+import { Sidebar } from "@ui-layout";
 import Snackbar from "@/components/molecules/Alert.vue";
 import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
