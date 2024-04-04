@@ -34,7 +34,7 @@ import Snackbar from "@/components/molecules/Alert.vue";
 import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
-import { mdiMenuClose, mdiMenuOpen } from "@/components/icons/material";
+import { mdiMenuClose, mdiMenu } from "@/components/icons/material";
 
 const { lgAndUp } = useDisplay();
 
@@ -44,7 +44,7 @@ const isDesktop = computed(() => {
 
 const sidebarExpanded = ref(isDesktop.value);
 const sidebarToggleIcon = computed(() => {
-	return sidebarExpanded.value ? mdiMenuOpen : mdiMenuClose;
+	return sidebarExpanded.value ? mdiMenu : mdiMenuClose;
 });
 
 const onToggleSidebar = () => {
