@@ -833,12 +833,6 @@ export interface ConfigResponse {
     FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: boolean;
     /**
      * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_NEST_SYSTEMS_API_ENABLED: boolean;
-    /**
-     * 
      * @type {string}
      * @memberof ConfigResponse
      */
