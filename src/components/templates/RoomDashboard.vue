@@ -395,9 +395,7 @@ export default {
 					translatedItemType = this.$t("common.words.topic");
 					break;
 				case this.cardTypes.ColumnBoard:
-					translatedItemType = this.$t(
-						"pages.room.boardCard.label.columnBoard"
-					);
+					translatedItemType = this.$t("components.board");
 					break;
 			}
 
