@@ -2,14 +2,14 @@ import { SidebarItems, SidebarLinkItem } from "./types";
 
 export const pageLinks: SidebarItems = [
 	{
-		title: "global.sidebar.overview",
+		title: "global.sidebar.item.overview",
 		href: "/dashboard",
 		icon: "$mdiViewGridOutline",
 		testId: "Übersicht",
 		activeForUrls: ["^/dashboard($|/.*)"],
 	},
 	{
-		title: "global.sidebar.courses",
+		title: "global.sidebar.item.courses",
 		to: "/rooms-overview",
 		icon: "$mdiSchoolOutline",
 		testId: "Course-Overview",
@@ -20,7 +20,7 @@ export const pageLinks: SidebarItems = [
 		],
 	},
 	{
-		title: "global.sidebar.teams",
+		title: "global.sidebar.item.teams",
 		href: "/teams",
 		icon: "$mdiAccountGroupOutline",
 		permissions: ["TEAMS_ENABLED"],
@@ -28,7 +28,7 @@ export const pageLinks: SidebarItems = [
 		activeForUrls: ["^/teams($|/.*)"],
 	},
 	{
-		title: "global.sidebar.tasks",
+		title: "global.sidebar.item.tasks",
 		to: "/tasks",
 		icon: "$mdiFormatListChecks",
 		permissions: ["TASK_DASHBOARD_VIEW_V3", "TASK_DASHBOARD_TEACHER_VIEW_V3"],
@@ -36,32 +36,32 @@ export const pageLinks: SidebarItems = [
 		activeForUrls: ["^/tasks($|/.*)"],
 	},
 	{
-		title: "global.sidebar.files-old",
+		title: "global.sidebar.item.files-old",
 		icon: "$mdiFolderOpenOutline",
 		testId: "Meine Dateien",
 		activeForUrls: ["^/files($|/.*)"],
 		children: [
 			{
-				title: "global.sidebar.filesPersonal",
+				title: "global.sidebar.item.filesPersonal",
 				href: "/files/my/",
 				testId: "persönliche Dateien",
 				activeForUrls: ["^/files/my($|/.*)"],
 			},
 			{
-				title: "global.sidebar.courses",
+				title: "global.sidebar.item.courses",
 				href: "/files/courses/",
 				testId: "Kurse",
 				activeForUrls: ["^/files/courses($|/.*)"],
 			},
 			{
-				title: "global.sidebar.teams",
+				title: "global.sidebar.item.teams",
 				href: "/files/teams/",
 				permissions: ["TEAMS_ENABLED"],
 				testId: "Teams",
 				activeForUrls: ["^/files/teams($|/.*)"],
 			},
 			{
-				title: "global.sidebar.filesShared",
+				title: "global.sidebar.item.filesShared",
 				href: "/files/shared/",
 				testId: "geteilte Dateien",
 				activeForUrls: ["^/files/shared($|/.*)"],
@@ -76,7 +76,7 @@ export const pageLinks: SidebarItems = [
 		activeForUrls: ["^/news($|/.*)"],
 	},
 	{
-		title: "global.sidebar.calendar",
+		title: "global.sidebar.item.calendar",
 		href: "/calendar",
 		icon: "$mdiCalendarOutline",
 		testId: "Termine",
@@ -91,7 +91,7 @@ export const pageLinks: SidebarItems = [
 		activeForUrls: ["^/content($|/.*)"],
 	},
 	{
-		title: "global.sidebar.addons",
+		title: "global.sidebar.item.addons",
 		href: "/addons",
 		icon: "$mdiPuzzleOutline",
 		permissions: ["ADDONS_ENABLED"],

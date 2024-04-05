@@ -2,6 +2,8 @@ import { envConfigModule, filePathsModule } from "@/store";
 import { SidebarGroupItem, SidebarLinkItem } from "./types";
 import { SchulcloudTheme } from "@/serverApi/v3";
 
+console.log(envConfigModule.getTheme);
+
 // TODO - adjust language keys, when old components are removed
 const systemLinks: SidebarLinkItem[] = [
 	{
@@ -29,7 +31,7 @@ if (envConfigModule.getTheme === SchulcloudTheme.Default) {
 
 // TODO - adjust language keys, when old components are removed
 const accessibilityGroup: SidebarGroupItem = {
-	title: "global.sidebar.accessibility",
+	title: "global.sidebar.item.accessibility",
 	icon: "$mdiHuman",
 	testId: "accessibility",
 	children: [],
@@ -57,27 +59,27 @@ accessibilityGroup.children.push({
 
 export const metaLinks: SidebarGroupItem[] = [
 	{
-		title: "global.sidebar.management",
+		title: "global.sidebar.item.management",
 		icon: "$mdiCogOutline",
 		permissions: ["TEACHER_LIST", "ADMIN_VIEW"],
 		testId: "Verwaltung",
 		activeForUrls: ["^/administration($|/.*)"],
 		children: [
 			{
-				title: "global.sidebar.student",
+				title: "global.sidebar.item.student",
 				to: "/administration/students",
 				permissions: ["STUDENT_LIST"],
 				testId: "Schüler:innen",
 				activeForUrls: ["^/administration/students($|/.*)"],
 			},
 			{
-				title: "global.sidebar.teacher",
+				title: "global.sidebar.item.teacher",
 				to: "/administration/teachers",
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
 			{
-				title: "global.sidebar.courses",
+				title: "global.sidebar.item.courses",
 				href: "/administration/courses",
 				permissions: ["ADMIN_VIEW"],
 				testId: "Kurse",
@@ -85,19 +87,19 @@ export const metaLinks: SidebarGroupItem[] = [
 			},
 			envConfigModule.getEnv.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED
 				? {
-						title: "global.sidebar.classes",
+						title: "global.sidebar.item.classes",
 						href: "/administration/groups/classes",
 						testId: "Klassen",
 						activeForUrls: ["^/administration/groups/classes($|/.*)"],
 					}
 				: {
-						title: "global.sidebar.classes",
+						title: "global.sidebar.item.classes",
 						href: "/administration/classes",
 						testId: "Klassen",
 						activeForUrls: ["^/administration/classes($|/.*)"],
 					},
 			{
-				title: "global.sidebar.teams",
+				title: "global.sidebar.item.teams",
 				href: "/administration/teams",
 				permissions: ["ADMIN_VIEW"],
 				testId: "Teams",
@@ -105,7 +107,7 @@ export const metaLinks: SidebarGroupItem[] = [
 			},
 			envConfigModule.getNewSchoolAdminPageAsDefault
 				? {
-						title: "global.sidebar.school",
+						title: "global.sidebar.item.school",
 						to: "/administration/school-settings",
 						permissions: ["ADMIN_VIEW"],
 						testId: "Schule",
@@ -115,7 +117,7 @@ export const metaLinks: SidebarGroupItem[] = [
 						],
 					}
 				: {
-						title: "global.sidebar.school",
+						title: "global.sidebar.item.school",
 						href: "/administration/school",
 						permissions: ["ADMIN_VIEW"],
 						testId: "Schule",
@@ -127,7 +129,7 @@ export const metaLinks: SidebarGroupItem[] = [
 		],
 	},
 	{
-		title: "global.sidebar.helpArea",
+		title: "global.sidebar.item.helpArea",
 		icon: "$mdiHelpCircleOutline",
 		testId: "Hilfebereich",
 		activeForUrls: ["^/help($|/.*)"],
@@ -163,7 +165,7 @@ export const metaLinks: SidebarGroupItem[] = [
 		],
 	},
 	{
-		title: "global.sidebar.system",
+		title: "global.sidebar.item.system",
 		icon: "$mdiApplicationBracketsOutline",
 		testId: "system",
 		activeForUrls: ["^/security($|/.*)"],
