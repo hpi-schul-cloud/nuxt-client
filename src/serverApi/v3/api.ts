@@ -11593,7 +11593,7 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         courseControllerGetUserPermissions: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'courseId' is not null or undefined
             assertParamExists('courseControllerGetUserPermissions', 'courseId', courseId)
-            const localVarPath = `/courses/{courseId}/userPermissions`
+            const localVarPath = `/courses/{courseId}/user-permissions`
                 .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
