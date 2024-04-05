@@ -13,21 +13,18 @@ export type RouterLink = {
 };
 
 export type SidebarItemBaseData = {
+	icon?: string;
 	title: string;
 	testId: string;
 	permissions?: string[];
 	activeForUrls?: string[];
 };
 
-export type SidebarLinkItem = SidebarItemBaseData & (ExternalLink | RouterLink);
+export type SidebarSingleItem = SidebarItemBaseData &
+	(ExternalLink | RouterLink);
 
 export type SidebarGroupItem = {
-	icon: string;
-	children: SidebarLinkItem[];
+	children: SidebarSingleItem[];
 } & SidebarItemBaseData;
-
-export type SidebarSingleItem = {
-	icon: string;
-} & SidebarLinkItem;
 
 export type SidebarItems = (SidebarSingleItem | SidebarGroupItem)[];

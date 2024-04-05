@@ -1,9 +1,9 @@
 import { envConfigModule, filePathsModule } from "@/store";
-import { SidebarGroupItem, SidebarLinkItem } from "./types";
+import { SidebarGroupItem, SidebarSingleItem } from "./types";
 import { SchulcloudTheme } from "@/serverApi/v3";
 
 // TODO - adjust language keys, when old components are removed
-const systemLinks: SidebarLinkItem[] = [
+const systemLinks: SidebarSingleItem[] = [
 	{
 		title: "components.legacy.footer.github",
 		href: "https://github.com/hpi-schul-cloud",

@@ -11,11 +11,7 @@
 		:data-testid="item.testId"
 	>
 		<template #prepend>
-			<v-icon
-				v-if="(item as SidebarSingleItem).icon"
-				:icon="(item as SidebarSingleItem).icon"
-				class="mr-2"
-			/>
+			<v-icon v-if="hasIcon(item)" :icon="item.icon" class="mr-2" />
 		</template>
 		<v-list-item-title>
 			{{ $t(item.title) }}
@@ -25,16 +21,20 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { SidebarSingleItem, SidebarLinkItem } from "./types";
+import { SidebarSingleItem } from "./types";
 
 const props = defineProps({
 	item: {
-		type: Object as PropType<SidebarSingleItem | SidebarLinkItem>,
+		type: Object as PropType<SidebarSingleItem>,
 		required: true,
 	},
 });
 
 const density = (props.item as SidebarSingleItem).icon ? "default" : "compact";
+
+const hasIcon = (item: SidebarSingleItem) => {
+	return item.icon !== undefined && item.icon !== "";
+};
 </script>
 
 <style lang="scss" scoped>

@@ -37,26 +37,19 @@ import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
-import {
-	SidebarGroupItem,
-	SidebarSingleItem,
-	SidebarLinkItem,
-	SidebarItems,
-} from "./types";
+import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "./types";
 import { pageLinks, legalLinks } from "./sidebar-items";
 import { metaLinks } from "./meta-links";
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 
 const isSidebarCategoryItem = (
-	item: SidebarSingleItem | SidebarGroupItem | SidebarLinkItem
+	item: SidebarSingleItem | SidebarGroupItem
 ): item is SidebarGroupItem => {
 	return (item as SidebarGroupItem).children !== undefined;
 };
 
-const hasPermission = (
-	item: SidebarSingleItem | SidebarGroupItem | SidebarLinkItem
-) => {
+const hasPermission = (item: SidebarSingleItem | SidebarGroupItem) => {
 	return (
 		!item.permissions ||
 		item.permissions.some((permission: string) => {
@@ -65,7 +58,7 @@ const hasPermission = (
 	);
 };
 
-const getFilteredItems = (items: SidebarItems | SidebarLinkItem[]) => {
+const getFilteredItems = (items: SidebarItems) => {
 	const pageItems = items.filter((item) => {
 		if (isSidebarCategoryItem(item)) {
 			item.children = item.children.filter((child) => {
@@ -84,6 +77,6 @@ const metaItems = computed(
 	() => getFilteredItems(metaLinks) as SidebarGroupItem[]
 );
 const legalItems = computed(
-	() => getFilteredItems(legalLinks) as SidebarLinkItem[]
+	() => getFilteredItems(legalLinks) as SidebarSingleItem[]
 );
 </script>
