@@ -38,6 +38,8 @@ export const ToolParamTypeMapping: Record<
 		ToolParameterType.AutoSchoolid,
 	[CustomParameterResponseTypeEnum.AutoSchoolnumber]:
 		ToolParameterType.AutoSchoolnumber,
+	[CustomParameterResponseTypeEnum.AutoMediumid]:
+		ToolParameterType.AutoMediumid,
 };
 
 export const ToolParamScopeMapping: Record<
