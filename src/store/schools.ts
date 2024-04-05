@@ -11,7 +11,7 @@ import {
 	UserImportApiFactory,
 	UserImportApiInterface,
 } from "@/serverApi/v3";
-import { authModule, envConfigModule } from "@/store";
+import { authModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
 import { AxiosError } from "axios";
@@ -247,21 +247,10 @@ export default class SchoolsModule extends VuexModule {
 	async deleteSystem(systemId: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			if (
-				"FEATURE_NEST_SYSTEMS_API_ENABLED" in envConfigModule.getEnv &&
-				envConfigModule.getEnv.FEATURE_NEST_SYSTEMS_API_ENABLED
-			) {
-				await this.systemsApi.systemControllerDeleteSystem(systemId);
-			} else {
-				await $axios.delete(`v1/systems/${systemId}`);
-			}
+			const { id } = this.school;
+			await this.schoolApi.schoolControllerRemoveSystemFromSchool(id, systemId);
+			await Promise.all([this.fetchSchool(), this.fetchSystems()]);
 
-			const updatedSystemsList = this.systems.filter(
-				(system) => system._id !== systemId
-			);
-			this.setSystems(updatedSystemsList);
-
-			await this.fetchSchool();
 			this.setLoading(false);
 		} catch (error: unknown) {
 			if (error instanceof AxiosError) {
