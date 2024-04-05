@@ -385,9 +385,25 @@ export default {
 			return isBoardCard && isVisibleToStudent;
 		},
 		deleteDialogTitle(itemType, itemTitle) {
+			let translatedItemType = "";
+
+			switch (itemType) {
+				case this.cardTypes.Task:
+					translatedItemType = this.$t("common.words.task");
+					break;
+				case this.cardTypes.Lesson:
+					translatedItemType = this.$t("common.words.topic");
+					break;
+				case this.cardTypes.ColumnBoard:
+					translatedItemType = this.$t(
+						"pages.room.boardCard.label.columnBoard"
+					);
+					break;
+			}
+
 			return this.$t("pages.room.itemDelete.text", {
+				itemType: translatedItemType,
 				itemTitle,
-				itemType: this.$t(`${itemType}`),
 			});
 		},
 	},
