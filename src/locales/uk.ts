@@ -1385,7 +1385,7 @@ export default {
 	"pages.room.copy.lesson.message.copied": "Тему успішно скопійовано.",
 	"pages.room.copy.task.message.copied": "Завдання успішно скопійовано.",
 	"pages.room.itemDelete.text":
-		"{itemTitle} {itemType} буде видалена. Ви впевнені, що хочете видалити?",
+		"{itemType} {itemTitle} буде видалена. Ви впевнені, що хочете видалити?",
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.label.shareLesson": "надіслати копію теми",
