@@ -2,14 +2,13 @@ import { envConfigModule, filePathsModule } from "@/store";
 import { SidebarGroupItem, SidebarLinkItem } from "./types";
 import { SchulcloudTheme } from "@/serverApi/v3";
 
-console.log(envConfigModule.getTheme);
-
 // TODO - adjust language keys, when old components are removed
 const systemLinks: SidebarLinkItem[] = [
 	{
 		title: "components.legacy.footer.github",
 		href: "https://github.com/hpi-schul-cloud",
 		testId: "github",
+		target: "_blank",
 	},
 ];
 if (envConfigModule.getEnv.ALERT_STATUS_URL) {

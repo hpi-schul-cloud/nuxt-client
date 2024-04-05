@@ -1,8 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
@@ -16,7 +13,7 @@ describe("SidebarLogo", () => {
 		});
 		const wrapper = shallowMount(SidebarLogo, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [createTestingI18n()],
 				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule },
 			},
 		});
@@ -26,9 +23,10 @@ describe("SidebarLogo", () => {
 		};
 	};
 
-	it("should pass correct color to filealert", () => {
+	it("should render correctly", () => {
 		const { wrapper } = setup();
 
 		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.find("img").exists()).toBe(true);
 	});
 });
