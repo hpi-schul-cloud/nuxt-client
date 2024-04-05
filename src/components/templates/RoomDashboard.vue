@@ -176,10 +176,10 @@
 			<template #title>
 				<h2 class="text-h4 my-2">
 					{{
-						$t("pages.room.itemDelete.text", {
-							itemTitle: itemDelete.itemData.name || itemDelete.itemData.title,
-							itemType: itemDelete.itemType,
-						})
+						deleteDialogTitle(
+							itemDelete.itemType,
+							itemDelete.itemData.name || itemDelete.itemData.title
+						)
 					}}
 				</h2>
 			</template>
@@ -383,6 +383,12 @@ export default {
 			const isBoardCard = card.type === this.cardTypes.ColumnBoard;
 			const isVisibleToStudent = card.content.published;
 			return isBoardCard && isVisibleToStudent;
+		},
+		deleteDialogTitle(itemType, itemTitle) {
+			return this.$t("pages.room.itemDelete.text", {
+				itemTitle,
+				itemType: this.$t(`${itemType}`),
+			});
 		},
 	},
 };
