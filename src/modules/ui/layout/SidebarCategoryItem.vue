@@ -35,7 +35,7 @@ defineProps({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .v-icon {
 	opacity: 1 !important;
 }
