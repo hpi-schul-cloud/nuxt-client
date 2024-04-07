@@ -49,7 +49,7 @@ const isSidebarCategoryItem = (
 	return (item as SidebarGroupItem).children !== undefined;
 };
 
-const hasPermission = (item: SidebarSingleItem | SidebarGroupItem) => {
+const userHasPermission = (item: SidebarSingleItem | SidebarGroupItem) => {
 	return (
 		!item.permissions ||
 		item.permissions.some((permission: string) => {
@@ -58,25 +58,25 @@ const hasPermission = (item: SidebarSingleItem | SidebarGroupItem) => {
 	);
 };
 
-const getFilteredItems = (items: SidebarItems) => {
+const getItemsForUser = (items: SidebarItems) => {
 	const pageItems = items.filter((item) => {
 		if (isSidebarCategoryItem(item)) {
 			item.children = item.children.filter((child) => {
-				return hasPermission(child);
+				return userHasPermission(child);
 			});
 		}
 
-		return hasPermission(item);
+		return userHasPermission(item);
 	});
 
 	return pageItems;
 };
 
-const pageItems = computed(() => getFilteredItems(pageLinks));
+const pageItems = computed(() => getItemsForUser(pageLinks));
 const metaItems = computed(
-	() => getFilteredItems(metaLinks) as SidebarGroupItem[]
+	() => getItemsForUser(metaLinks) as SidebarGroupItem[]
 );
 const legalItems = computed(
-	() => getFilteredItems(legalLinks) as SidebarSingleItem[]
+	() => getItemsForUser(legalLinks) as SidebarSingleItem[]
 );
 </script>
