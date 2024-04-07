@@ -1,4 +1,4 @@
-import { SidebarItems, SidebarLinkItem } from "./types";
+import { SidebarItems, SidebarSingleItem } from "./types";
 
 export const pageLinks: SidebarItems = [
 	{
@@ -100,7 +100,7 @@ export const pageLinks: SidebarItems = [
 	},
 ];
 
-export const legalLinks: SidebarLinkItem[] = [
+export const legalLinks: SidebarSingleItem[] = [
 	{
 		to: "/imprint",
 		title: "components.legacy.footer.imprint",
