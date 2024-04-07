@@ -6,4 +6,5 @@ export enum ToolParameterType {
 	AutoContextname = "auto_contextname",
 	AutoSchoolid = "auto_schoolid",
 	AutoSchoolnumber = "auto_schoolnumber",
+	AutoMediumid = "auto_mediumid",
 }

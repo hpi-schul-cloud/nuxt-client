@@ -13,13 +13,13 @@
  */
 
 
+import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from './configuration';
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
+import { DUMMY_BASE_URL, assertParamExists, createRequestFunction, serializeDataIfNeeded, setBearerAuthToObject, setSearchParams, toPathString } from './common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, BaseAPI, RequestArgs, RequiredError } from './base';
 
 /**
  * 
@@ -831,12 +831,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_ALLOW_INSECURE_LDAP_URL_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_NEST_SYSTEMS_API_ENABLED: boolean;
     /**
      * 
      * @type {string}
@@ -1987,7 +1981,8 @@ export enum CustomParameterResponseTypeEnum {
     AutoContextid = 'auto_contextid',
     AutoContextname = 'auto_contextname',
     AutoSchoolid = 'auto_schoolid',
-    AutoSchoolnumber = 'auto_schoolnumber'
+    AutoSchoolnumber = 'auto_schoolnumber',
+    AutoMediumid = 'auto_mediumid'
 }
 
 /**
@@ -2259,37 +2254,43 @@ export interface ExternalToolContentBody {
  */
 export interface ExternalToolCreateParams {
     /**
-     * 
+     * Name of the external tool
      * @type {string}
      * @memberof ExternalToolCreateParams
      */
     name: string;
     /**
-     * 
+     * Description of the external tool
+     * @type {string}
+     * @memberof ExternalToolCreateParams
+     */
+    description?: string;
+    /**
+     * URL of the external tool
      * @type {string}
      * @memberof ExternalToolCreateParams
      */
     url?: string;
     /**
-     * 
+     * URL of the logo of the external tool
      * @type {string}
      * @memberof ExternalToolCreateParams
      */
     logoUrl?: string;
     /**
-     * 
+     * Configuration of the external tool
      * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
      * @memberof ExternalToolCreateParams
      */
     config: BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams;
     /**
-     * 
+     * Custom parameters of the external tool
      * @type {Array<CustomParameterPostParams>}
      * @memberof ExternalToolCreateParams
      */
     parameters?: Array<CustomParameterPostParams>;
     /**
-     * 
+     * Tool can be hidden, those tools cant be added to e.g. school, course or board
      * @type {boolean}
      * @memberof ExternalToolCreateParams
      */
@@ -2301,17 +2302,23 @@ export interface ExternalToolCreateParams {
      */
     isDeactivated: boolean;
     /**
-     * 
+     * Tool should be opened in a new tab
      * @type {boolean}
      * @memberof ExternalToolCreateParams
      */
     openNewTab: boolean;
     /**
-     * 
+     * Restrict tools to specific contexts
      * @type {Array<ToolContextType>}
      * @memberof ExternalToolCreateParams
      */
     restrictToContexts?: Array<ToolContextType>;
+    /**
+     * Medium of the external tool
+     * @type {ExternalToolMediumParams}
+     * @memberof ExternalToolCreateParams
+     */
+    medium?: ExternalToolMediumParams;
 }
 /**
  * 
@@ -2379,6 +2386,44 @@ export interface ExternalToolElementResponse {
 /**
  * 
  * @export
+ * @interface ExternalToolMediumParams
+ */
+export interface ExternalToolMediumParams {
+    /**
+     * Id of the medium
+     * @type {string}
+     * @memberof ExternalToolMediumParams
+     */
+    mediumId: string;
+    /**
+     * Publisher of the medium
+     * @type {string}
+     * @memberof ExternalToolMediumParams
+     */
+    publisher?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolMediumResponse
+ */
+export interface ExternalToolMediumResponse {
+    /**
+     * Id of the medium
+     * @type {string}
+     * @memberof ExternalToolMediumResponse
+     */
+    mediumId: string;
+    /**
+     * Publisher of the medium
+     * @type {string}
+     * @memberof ExternalToolMediumResponse
+     */
+    publisher?: string;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolMetadataResponse
  */
 export interface ExternalToolMetadataResponse {
@@ -2402,71 +2447,83 @@ export interface ExternalToolMetadataResponse {
  */
 export interface ExternalToolResponse {
     /**
-     * 
+     * Id of the external tool
      * @type {string}
      * @memberof ExternalToolResponse
      */
     id: string;
     /**
-     * 
+     * Name of the external tool
      * @type {string}
      * @memberof ExternalToolResponse
      */
     name: string;
     /**
-     * 
+     * Description of the external tool
+     * @type {string}
+     * @memberof ExternalToolResponse
+     */
+    description?: string;
+    /**
+     * URL of the external tool
      * @type {string}
      * @memberof ExternalToolResponse
      */
     url?: string;
     /**
-     * 
+     * URL of the logo of the external tool
      * @type {string}
      * @memberof ExternalToolResponse
      */
     logoUrl?: string;
     /**
-     * 
-     * @type {object}
+     * Configuration of the external tool
+     * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
      * @memberof ExternalToolResponse
      */
-    config: object;
+    config: BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams;
     /**
-     * 
-     * @type {Array<string>}
+     * Custom parameters of the external tool
+     * @type {Array<CustomParameterResponse>}
      * @memberof ExternalToolResponse
      */
-    parameters: Array<string>;
+    parameters: Array<CustomParameterResponse>;
     /**
-     * 
+     * Is the external tool hidden
      * @type {boolean}
      * @memberof ExternalToolResponse
      */
     isHidden: boolean;
     /**
-     * 
+     * Is the external tool deactivated
      * @type {boolean}
      * @memberof ExternalToolResponse
      */
     isDeactivated: boolean;
     /**
-     * 
+     * Should the external tool be opened in a new tab
      * @type {boolean}
      * @memberof ExternalToolResponse
      */
     openNewTab: boolean;
     /**
-     * 
+     * Version of the external tool
      * @type {number}
      * @memberof ExternalToolResponse
      */
     version: number;
     /**
-     * 
+     * Contexts in which the external tool is restricted
      * @type {Array<ToolContextType>}
      * @memberof ExternalToolResponse
      */
     restrictToContexts?: Array<ToolContextType>;
+    /**
+     * Medium of the external tool
+     * @type {ExternalToolMediumResponse}
+     * @memberof ExternalToolResponse
+     */
+    medium?: ExternalToolMediumResponse;
 }
 /**
  * 
@@ -2506,7 +2563,7 @@ export interface ExternalToolSearchListResponse {
  */
 export interface ExternalToolUpdateParams {
     /**
-     * 
+     * ID of the external tool
      * @type {string}
      * @memberof ExternalToolUpdateParams
      */
@@ -2518,25 +2575,31 @@ export interface ExternalToolUpdateParams {
      */
     name: string;
     /**
-     * 
+     * Description of the external tool
+     * @type {string}
+     * @memberof ExternalToolUpdateParams
+     */
+    description?: string;
+    /**
+     * URL of the external tool
      * @type {string}
      * @memberof ExternalToolUpdateParams
      */
     url?: string;
     /**
-     * 
+     * URL of the logo of the external tool
      * @type {string}
      * @memberof ExternalToolUpdateParams
      */
     logoUrl?: string;
     /**
-     * 
+     * Configuration of the external tool
      * @type {BasicToolConfigParams | Lti11ToolConfigUpdateParams | Oauth2ToolConfigUpdateParams}
      * @memberof ExternalToolUpdateParams
      */
     config: BasicToolConfigParams | Lti11ToolConfigUpdateParams | Oauth2ToolConfigUpdateParams;
     /**
-     * 
+     * Custom parameters of the external tool
      * @type {Array<CustomParameterPostParams>}
      * @memberof ExternalToolUpdateParams
      */
@@ -2548,23 +2611,29 @@ export interface ExternalToolUpdateParams {
      */
     isHidden: boolean;
     /**
-     * 
+     * Tool can be deactivated, related tools can not be added to e.g. school, course or board anymore
      * @type {boolean}
      * @memberof ExternalToolUpdateParams
      */
     isDeactivated: boolean;
     /**
-     * 
+     * Open the tool in a new tab
      * @type {boolean}
      * @memberof ExternalToolUpdateParams
      */
     openNewTab: boolean;
     /**
-     * 
+     * Restrict the tool to certain contexts
      * @type {Array<ToolContextType>}
      * @memberof ExternalToolUpdateParams
      */
     restrictToContexts?: Array<ToolContextType>;
+    /**
+     * Medium of the external tool
+     * @type {ExternalToolMediumParams}
+     * @memberof ExternalToolUpdateParams
+     */
+    medium?: ExternalToolMediumParams;
 }
 /**
  * 
@@ -15767,6 +15836,47 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
+         * 
+         * @param {string} schoolId 
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerRemoveSystemFromSchool: async (schoolId: string, systemId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schoolId' is not null or undefined
+            assertParamExists('schoolControllerRemoveSystemFromSchool', 'schoolId', schoolId)
+            // verify required parameter 'systemId' is not null or undefined
+            assertParamExists('schoolControllerRemoveSystemFromSchool', 'systemId', systemId)
+            const localVarPath = `/school/{schoolId}/system/{systemId}/remove`
+                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
+                .replace(`{${"systemId"}}`, encodeURIComponent(String(systemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -15929,6 +16039,17 @@ export const SchoolApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @param {string} schoolId 
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerRemoveSystemFromSchool(schoolId, systemId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -16018,6 +16139,16 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.schoolControllerGetSchoolSystems(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @param {string} schoolId 
+         * @param {string} systemId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.schoolControllerRemoveSystemFromSchool(schoolId, systemId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Sets all provisioning options for a system at a school
          * @param {string} schoolId 
          * @param {string} systemId 
@@ -16102,6 +16233,16 @@ export interface SchoolApiInterface {
      * @memberof SchoolApiInterface
      */
     schoolControllerGetSchoolSystems(schoolId: string, options?: any): AxiosPromise<Array<SchoolSystemResponse>>;
+
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {string} systemId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApiInterface
+     */
+    schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any): AxiosPromise<void>;
 
     /**
      * Sets all provisioning options for a system at a school
@@ -16199,6 +16340,18 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerGetSchoolSystems(schoolId: string, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerGetSchoolSystems(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} schoolId 
+     * @param {string} systemId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolApi
+     */
+    public schoolControllerRemoveSystemFromSchool(schoolId: string, systemId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerRemoveSystemFromSchool(schoolId, systemId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -49,7 +49,7 @@
 					@delete:element="onDeleteElement"
 				/>
 				<DrawingContentElement
-					v-else-if="isDrawingElementResponse(element)"
+					v-else-if="showDrawingElement(element)"
 					:key="element.id"
 					:element="element"
 					:isEditMode="isEditMode"

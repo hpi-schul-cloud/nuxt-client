@@ -1590,15 +1590,15 @@ export default {
 	"pages.videoConference.info.notStarted":
 		"La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
-	"tldraw.error.403": "Tldraw está desactivado",
-	"tldraw.error.500": "Se ha producido un error al configurar tldraw",
+	"error.500":
+		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",
+	"error.4500":
+		"Error de conexión: No se ha podido establecer la sesión en tiempo real. Compruebe la conexión o vuelva a cargar la página.",
+	"error.4401":
+		"Lamentablemente, falta la autorización para ver este contenido.",
 	"tldraw.error.ws.4400":
 		"Falta el nombre de la sala en los parámetros de la URL",
-	"tldraw.error.ws.4401": "Usted no tiene permiso para este tablero tldraw",
-	"tldraw.error.ws.4404":
-		"No se ha encontrado el tablero Tldraw con este nombre",
-	"tldraw.error.ws.4500":
-		"Se ha producido un error en la conexión tldraw websocket",
+	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
