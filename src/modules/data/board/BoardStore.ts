@@ -337,5 +337,19 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board,
 		isLoading,
 		dispatch,
+		actions: {
+			createCard,
+			createColumn,
+			deleteCard,
+			deleteColumn,
+			fetchBoard,
+			moveCard,
+			moveColumn,
+			notifyWithTemplateAndReload,
+			reloadBoard,
+			updateBoardTitle,
+			updateBoardVisibility,
+			updateColumnTitle,
+		},
 	};
 });
