@@ -2822,6 +2822,37 @@ export interface GetMetaTagDataBody {
 /**
  * 
  * @export
+ * @interface GroupListResponse
+ */
+export interface GroupListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<GroupResponse>}
+     * @memberof GroupListResponse
+     */
+    data: Array<GroupResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof GroupListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof GroupListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof GroupListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
  * @interface GroupResponse
  */
 export interface GroupResponse {
@@ -2899,38 +2930,11 @@ export interface GroupUserResponse {
     lastName: string;
     /**
      * 
-     * @type {string}
+     * @type {RoleName}
      * @memberof GroupUserResponse
      */
-    role: GroupUserResponseRoleEnum;
+    role: RoleName;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum GroupUserResponseRoleEnum {
-    Administrator = 'administrator',
-    CourseAdministrator = 'courseAdministrator',
-    CourseStudent = 'courseStudent',
-    CourseSubstitutionTeacher = 'courseSubstitutionTeacher',
-    CourseTeacher = 'courseTeacher',
-    Demo = 'demo',
-    DemoStudent = 'demoStudent',
-    DemoTeacher = 'demoTeacher',
-    Expert = 'expert',
-    Helpdesk = 'helpdesk',
-    Student = 'student',
-    Superhero = 'superhero',
-    Teacher = 'teacher',
-    Teamadministrator = 'teamadministrator',
-    Teamexpert = 'teamexpert',
-    Teamleader = 'teamleader',
-    Teammember = 'teammember',
-    Teamowner = 'teamowner',
-    User = 'user'
-}
-
 /**
  * 
  * @export
@@ -5201,6 +5205,33 @@ export interface RichTextElementResponse {
      */
     timestamps: TimestampsResponse;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum RoleName {
+    Administrator = 'administrator',
+    CourseAdministrator = 'courseAdministrator',
+    CourseStudent = 'courseStudent',
+    CourseSubstitutionTeacher = 'courseSubstitutionTeacher',
+    CourseTeacher = 'courseTeacher',
+    Demo = 'demo',
+    DemoStudent = 'demoStudent',
+    DemoTeacher = 'demoTeacher',
+    Expert = 'expert',
+    Helpdesk = 'helpdesk',
+    Student = 'student',
+    Superhero = 'superhero',
+    Teacher = 'teacher',
+    Teamadministrator = 'teamadministrator',
+    Teamexpert = 'teamexpert',
+    Teamleader = 'teamleader',
+    Teammember = 'teammember',
+    Teamowner = 'teamowner',
+    User = 'user'
+}
+
 /**
  * 
  * @export
@@ -12533,6 +12564,60 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Get a list of all groups.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
+         * @param {string} [nameQuery] search string for firstnames or lastnames
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerGetAllGroups: async (skip?: number, limit?: number, availableGroupsForCourseSync?: boolean, nameQuery?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/groups`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (availableGroupsForCourseSync !== undefined) {
+                localVarQueryParameter['availableGroupsForCourseSync'] = availableGroupsForCourseSync;
+            }
+
+            if (nameQuery !== undefined) {
+                localVarQueryParameter['nameQuery'] = nameQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get a group by id.
          * @param {string} groupId 
          * @param {*} [options] Override http request option.
@@ -12597,6 +12682,20 @@ export const GroupApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a list of all groups.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
+         * @param {string} [nameQuery] search string for firstnames or lastnames
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async groupControllerGetAllGroups(skip?: number, limit?: number, availableGroupsForCourseSync?: boolean, nameQuery?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GroupListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetAllGroups(skip, limit, availableGroupsForCourseSync, nameQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get a group by id.
          * @param {string} groupId 
          * @param {*} [options] Override http request option.
@@ -12630,6 +12729,19 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          */
         groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
             return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a list of all groups.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
+         * @param {string} [nameQuery] search string for firstnames or lastnames
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerGetAllGroups(skip?: number, limit?: number, availableGroupsForCourseSync?: boolean, nameQuery?: string, options?: any): AxiosPromise<GroupListResponse> {
+            return localVarFp.groupControllerGetAllGroups(skip, limit, availableGroupsForCourseSync, nameQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12667,6 +12779,19 @@ export interface GroupApiInterface {
 
     /**
      * 
+     * @summary Get a list of all groups.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
+     * @param {string} [nameQuery] search string for firstnames or lastnames
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApiInterface
+     */
+    groupControllerGetAllGroups(skip?: number, limit?: number, availableGroupsForCourseSync?: boolean, nameQuery?: string, options?: any): AxiosPromise<GroupListResponse>;
+
+    /**
+     * 
      * @summary Get a group by id.
      * @param {string} groupId 
      * @param {*} [options] Override http request option.
@@ -12699,6 +12824,21 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      */
     public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any) {
         return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a list of all groups.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
+     * @param {string} [nameQuery] search string for firstnames or lastnames
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public groupControllerGetAllGroups(skip?: number, limit?: number, availableGroupsForCourseSync?: boolean, nameQuery?: string, options?: any) {
+        return GroupApiFp(this.configuration).groupControllerGetAllGroups(skip, limit, availableGroupsForCourseSync, nameQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
