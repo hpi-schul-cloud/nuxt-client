@@ -7191,7 +7191,7 @@ export interface UserResponse {
      * @type {string}
      * @memberof UserResponse
      */
-    lastSystemLoginChange: string;
+    lastLoginSystemChange: string;
 }
 /**
  * 
