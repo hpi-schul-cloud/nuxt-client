@@ -1,5 +1,4 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { CardResponse } from "@/serverApi/v3";
 import { Board, BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import { axiosErrorFactory } from "@@/tests/test-utils";
@@ -15,7 +14,7 @@ import { nextTick, ref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { useBoardStore } from "./BoardStore";
 import { useSharedEditMode } from "./EditMode.composable";
-import { setActivePinia, createPinia, storeToRefs } from "pinia";
+import { setActivePinia, createPinia } from "pinia";
 
 import { useI18n } from "vue-i18n";
 import { boardActions } from "@data-board";
@@ -46,7 +45,7 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	return errorResponse;
 };
 
-describe("BoardState.composable", () => {
+describe("BoardStore", () => {
 	beforeEach(() => {
 		setActivePinia(createPinia());
 	});
@@ -133,8 +132,7 @@ describe("BoardState.composable", () => {
 				);
 
 				boardStore.dispatch(boardActions.createCard({ columnId: column.id }));
-				await new Promise((resolve) => setTimeout(resolve, 50));
-				await nextTick();
+				await new Promise((resolve) => setTimeout(resolve, 5));
 
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 			});
@@ -179,8 +177,7 @@ describe("BoardState.composable", () => {
 				);
 
 				boardStore.dispatch(boardActions.createColumn({}));
-				await new Promise((resolve) => setTimeout(resolve, 50));
-				await nextTick();
+				await new Promise((resolve) => setTimeout(resolve, 5));
 
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 			});
@@ -217,8 +214,7 @@ describe("BoardState.composable", () => {
 				);
 
 				boardStore.dispatch(boardActions.deleteCard({ cardId: card.cardId }));
-				await new Promise((resolve) => setTimeout(resolve, 50));
-				await nextTick();
+				await new Promise((resolve) => setTimeout(resolve, 5));
 
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 			});
@@ -248,7 +244,6 @@ describe("BoardState.composable", () => {
 			const boardStore = setup(testBoard);
 
 			boardStore.dispatch(boardActions.deleteColumn({ columnId: column.id }));
-			await nextTick();
 
 			expect(mockedBoardApiCalls.deleteColumnCall).toHaveBeenCalledWith(
 				column.id
@@ -264,8 +259,7 @@ describe("BoardState.composable", () => {
 				);
 
 				boardStore.dispatch(boardActions.deleteColumn({ columnId: column.id }));
-				await new Promise((resolve) => setTimeout(resolve, 50));
-				await nextTick();
+				await new Promise((resolve) => setTimeout(resolve, 5));
 
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 			});
@@ -278,8 +272,7 @@ describe("BoardState.composable", () => {
 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
 
 			boardStore.dispatch(boardActions.fetchBoard({ id: testBoard.id }));
-			await new Promise((resolve) => setTimeout(resolve, 10));
-			await nextTick();
+			await new Promise((resolve) => setTimeout(resolve, 5));
 
 			expect(boardStore.board).toEqual(testBoard);
 		});
@@ -287,14 +280,14 @@ describe("BoardState.composable", () => {
 		it("should return isLoading which reflects pending api calls", async () => {
 			const boardStore = setup();
 			mockedBoardApiCalls.fetchBoardCall.mockImplementation(async () => {
-				await new Promise((resolve) => setTimeout(resolve, 10));
+				await new Promise((resolve) => setTimeout(resolve, 5));
 				return testBoard;
 			});
 
 			boardStore.dispatch(boardActions.fetchBoard({ id: testBoard.id }));
 			expect(boardStore.isLoading).toStrictEqual(true);
 
-			await new Promise((resolve) => setTimeout(resolve, 10));
+			await new Promise((resolve) => setTimeout(resolve, 5));
 			expect(boardStore.isLoading).toStrictEqual(false);
 
 			expect(boardStore.board).toEqual(testBoard);
@@ -308,8 +301,7 @@ describe("BoardState.composable", () => {
 				);
 
 				boardStore.dispatch(boardActions.fetchBoard({ id: testBoard.id }));
-				await new Promise((resolve) => setTimeout(resolve, 10));
-				await nextTick();
+				await new Promise((resolve) => setTimeout(resolve, 5));
 
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 			});
@@ -398,8 +390,7 @@ describe("BoardState.composable", () => {
 
 			const cardPayload = createCardPayload({ newIndex: 1 });
 			boardStore.dispatch(boardActions.moveCard(cardPayload));
-			await new Promise((resolve) => setTimeout(resolve, 10));
-			await nextTick();
+			await new Promise((resolve) => setTimeout(resolve, 5));
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
@@ -460,7 +451,7 @@ describe("BoardState.composable", () => {
 			boardStore.dispatch(
 				boardActions.moveColumn({ columnMove: payload, byKeyboard: false })
 			);
-			await new Promise((resolve) => setTimeout(resolve, 10));
+			await new Promise((resolve) => setTimeout(resolve, 5));
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
@@ -519,8 +510,7 @@ describe("BoardState.composable", () => {
 					newTitle: NEW_TITLE,
 				})
 			);
-			await new Promise((resolve) => setTimeout(resolve, 50));
-			await nextTick();
+			await new Promise((resolve) => setTimeout(resolve, 5));
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
@@ -572,9 +562,7 @@ describe("BoardState.composable", () => {
 			boardStore.dispatch(
 				boardActions.updateBoardTitle({ newTitle: NEW_TITLE })
 			);
-
-			await new Promise((resolve) => setTimeout(resolve, 50));
-			await nextTick();
+			await new Promise((resolve) => setTimeout(resolve, 5));
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
@@ -608,7 +596,7 @@ describe("BoardState.composable", () => {
 
 	// 			boardActions.notifyWithTemplateAndReload({ errorType: "notLoaded" });
 
-	// 			await new Promise((resolve) => setTimeout(resolve, 50));
+	// 			await new Promise((resolve) => setTimeout(resolve, 5));
 	// 			await nextTick();
 
 	// 			expect(mockedErrorHandlerCalls.notifyWithTemplate).toHaveBeenCalled();
@@ -635,7 +623,6 @@ describe("BoardState.composable", () => {
 
 		it("should handle error when api returns an error code", async () => {
 			const boardStore = setup(testBoard);
-
 			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue(
 				setupErrorResponse()
 			);
@@ -643,9 +630,7 @@ describe("BoardState.composable", () => {
 			boardStore.dispatch(
 				boardActions.updateBoardVisibility({ newVisibility: true })
 			);
-			await new Promise((resolve) => setTimeout(resolve, 50));
-
-			await nextTick();
+			await new Promise((resolve) => setTimeout(resolve, 5));
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
