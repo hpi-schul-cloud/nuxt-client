@@ -17,7 +17,6 @@ export type SidebarItemBaseData = {
 	title: string;
 	testId: string;
 	permissions?: string[];
-	activeForUrls?: string[];
 };
 
 export type SidebarSingleItem = SidebarItemBaseData &

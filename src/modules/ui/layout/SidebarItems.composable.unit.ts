@@ -69,7 +69,6 @@ describe("SidebarItems Composable", () => {
 					title: "global.sidebar.item.classes",
 					href: "/administration/groups/classes",
 					testId: "Klassen",
-					activeForUrls: ["^/administration/groups/classes($|/.*)"],
 				});
 			});
 		});
@@ -86,7 +85,6 @@ describe("SidebarItems Composable", () => {
 					title: "global.sidebar.item.classes",
 					href: "/administration/classes",
 					testId: "Klassen",
-					activeForUrls: ["^/administration/classes($|/.*)"],
 				});
 			});
 		});
@@ -104,10 +102,6 @@ describe("SidebarItems Composable", () => {
 					to: "/administration/school-settings",
 					permissions: ["ADMIN_VIEW"],
 					testId: "Schule",
-					activeForUrls: [
-						"^/administration/school($|/.*)",
-						"^/administration/school-settings($|/.*)",
-					],
 				});
 			});
 		});
@@ -125,10 +119,6 @@ describe("SidebarItems Composable", () => {
 					href: "/administration/school",
 					permissions: ["ADMIN_VIEW"],
 					testId: "Schule",
-					activeForUrls: [
-						"^/administration/school($|/.*)",
-						"^/administration/school-settings($|/.*)",
-					],
 				});
 			});
 		});

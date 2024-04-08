@@ -17,18 +17,12 @@ export const useSidebarItems = () => {
 			href: "/dashboard",
 			icon: "$mdiViewGridOutline",
 			testId: "Übersicht",
-			activeForUrls: ["^/dashboard($|/.*)"],
 		},
 		{
 			title: "global.sidebar.item.courses",
 			to: "/rooms-overview",
 			icon: "$mdiSchoolOutline",
 			testId: "Course-Overview",
-			activeForUrls: [
-				"^/rooms-overview($|/.*)",
-				"^/rooms($|/.*)",
-				"^/rooms-list($|/.*)",
-			],
 		},
 		{
 			title: "global.sidebar.item.teams",
@@ -36,7 +30,6 @@ export const useSidebarItems = () => {
 			icon: "$mdiAccountGroupOutline",
 			permissions: ["TEAMS_ENABLED"],
 			testId: "Teams",
-			activeForUrls: ["^/teams($|/.*)"],
 		},
 		{
 			title: "global.sidebar.item.tasks",
@@ -44,38 +37,32 @@ export const useSidebarItems = () => {
 			icon: "$mdiFormatListChecks",
 			permissions: ["TASK_DASHBOARD_VIEW_V3", "TASK_DASHBOARD_TEACHER_VIEW_V3"],
 			testId: "Aufgaben",
-			activeForUrls: ["^/tasks($|/.*)"],
 		},
 		{
 			title: "global.sidebar.item.files-old",
 			icon: "$mdiFolderOpenOutline",
 			testId: "Meine Dateien",
-			activeForUrls: ["^/files($|/.*)"],
 			children: [
 				{
 					title: "global.sidebar.item.filesPersonal",
 					href: "/files/my/",
 					testId: "persönliche Dateien",
-					activeForUrls: ["^/files/my($|/.*)"],
 				},
 				{
 					title: "global.sidebar.item.courses",
 					href: "/files/courses/",
 					testId: "Kurse",
-					activeForUrls: ["^/files/courses($|/.*)"],
 				},
 				{
 					title: "global.sidebar.item.teams",
 					href: "/files/teams/",
 					permissions: ["TEAMS_ENABLED"],
 					testId: "Teams",
-					activeForUrls: ["^/files/teams($|/.*)"],
 				},
 				{
 					title: "global.sidebar.item.filesShared",
 					href: "/files/shared/",
 					testId: "geteilte Dateien",
-					activeForUrls: ["^/files/shared($|/.*)"],
 				},
 			],
 		},
@@ -84,14 +71,12 @@ export const useSidebarItems = () => {
 			href: "/news",
 			icon: "$mdiNewspaperVariantOutline",
 			testId: "Neuigkeiten",
-			activeForUrls: ["^/news($|/.*)"],
 		},
 		{
 			title: "global.sidebar.item.calendar",
 			href: "/calendar",
 			icon: "$mdiCalendarOutline",
 			testId: "Termine",
-			activeForUrls: ["^/calendar($|/.*)"],
 		},
 		{
 			title: "common.words.lernstore",
@@ -99,7 +84,6 @@ export const useSidebarItems = () => {
 			icon: "$lernstore_outline",
 			permissions: ["LERNSTORE_VIEW"],
 			testId: "Lern-Store",
-			activeForUrls: ["^/content($|/.*)"],
 		},
 		{
 			title: "global.sidebar.item.addons",
@@ -107,7 +91,6 @@ export const useSidebarItems = () => {
 			icon: "$mdiPuzzleOutline",
 			permissions: ["ADDONS_ENABLED"],
 			testId: "Add-ons",
-			activeForUrls: ["^/addons($|/.*)"],
 		},
 	]);
 
@@ -192,47 +175,40 @@ export const useSidebarItems = () => {
 			icon: "$mdiCogOutline",
 			permissions: ["TEACHER_LIST", "ADMIN_VIEW"],
 			testId: "Verwaltung",
-			activeForUrls: ["^/administration($|/.*)"],
 			children: [
 				{
 					title: "global.sidebar.item.student",
 					to: "/administration/students",
 					permissions: ["STUDENT_LIST"],
 					testId: "Schüler:innen",
-					activeForUrls: ["^/administration/students($|/.*)"],
 				},
 				{
 					title: "global.sidebar.item.teacher",
 					to: "/administration/teachers",
 					testId: "Lehrkräfte",
-					activeForUrls: ["^/administration/teachers($|/.*)"],
 				},
 				{
 					title: "global.sidebar.item.courses",
 					href: "/administration/courses",
 					permissions: ["ADMIN_VIEW"],
 					testId: "Kurse",
-					activeForUrls: ["^/administration/courses($|/.*)"],
 				},
 				envConfigModule.getEnv.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED
 					? {
 							title: "global.sidebar.item.classes",
 							href: "/administration/groups/classes",
 							testId: "Klassen",
-							activeForUrls: ["^/administration/groups/classes($|/.*)"],
 						}
 					: {
 							title: "global.sidebar.item.classes",
 							href: "/administration/classes",
 							testId: "Klassen",
-							activeForUrls: ["^/administration/classes($|/.*)"],
 						},
 				{
 					title: "global.sidebar.item.teams",
 					href: "/administration/teams",
 					permissions: ["ADMIN_VIEW"],
 					testId: "Teams",
-					activeForUrls: ["^/administration/teams($|/.*)"],
 				},
 				envConfigModule.getNewSchoolAdminPageAsDefault
 					? {
@@ -240,20 +216,12 @@ export const useSidebarItems = () => {
 							to: "/administration/school-settings",
 							permissions: ["ADMIN_VIEW"],
 							testId: "Schule",
-							activeForUrls: [
-								"^/administration/school($|/.*)",
-								"^/administration/school-settings($|/.*)",
-							],
 						}
 					: {
 							title: "global.sidebar.item.school",
 							href: "/administration/school",
 							permissions: ["ADMIN_VIEW"],
 							testId: "Schule",
-							activeForUrls: [
-								"^/administration/school($|/.*)",
-								"^/administration/school-settings($|/.*)",
-							],
 						},
 			],
 		},
@@ -261,7 +229,6 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.helpArea",
 			icon: "$mdiHelpCircleOutline",
 			testId: "Hilfebereich",
-			activeForUrls: ["^/help($|/.*)"],
 			// TODO - adjust language keys, when old components are removed
 			children: [
 				{
@@ -269,14 +236,12 @@ export const useSidebarItems = () => {
 					href: "/help",
 					target: "_self",
 					testId: "help-articles",
-					activeForUrls: ["^/help($|/.*)"],
 				},
 				{
 					title: "global.topbar.actions.contactSupport",
 					href: "/help/contact",
 					target: "_self",
 					testId: "contact",
-					activeForUrls: ["^/help/contact($|/.*)"],
 				},
 				{
 					title: "global.topbar.actions.training",
@@ -289,7 +254,6 @@ export const useSidebarItems = () => {
 					href: "/help/releases",
 					target: "_self",
 					testId: "releases",
-					activeForUrls: ["^/help/releases($|/.*)"],
 				},
 			],
 		},
@@ -297,7 +261,6 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.system",
 			icon: "$mdiApplicationBracketsOutline",
 			testId: "system",
-			activeForUrls: ["^/security($|/.*)"],
 			children: systemLinks,
 		},
 	]);
