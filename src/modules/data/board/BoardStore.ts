@@ -71,7 +71,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const createCard = async (
 		action: ReturnType<typeof BoardActions.createCard>
-	): Promise<void> => {
+	) => {
 		if (board.value === undefined) return;
 
 		try {
