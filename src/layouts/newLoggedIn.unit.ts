@@ -58,9 +58,6 @@ const setup = () => {
 				"keep-alive": { template: "<div></div>" },
 				autoLogoutWarning: { template: "<div></div>" },
 			},
-			components: {
-				"router-view": RouterView,
-			},
 		},
 	});
 

@@ -1,14 +1,10 @@
 import { ENV_CONFIG_MODULE_KEY, FILE_PATHS_MODULE_KEY } from "@/utils/inject";
-import { mountComposable } from "@@/tests/test-utils";
+import { mountComposable, envsFactory } from "@@/tests/test-utils";
 import { useSidebarItems } from "./SidebarItems.composable";
-// import { SidebarGroupItem } from "./types";
-
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
-
-import { envsFactory } from "@@/tests/test-utils";
 
 const setup = (envs?: Partial<ConfigResponse>, theme = SchulcloudTheme.Brb) => {
 	const defaultEnvs = envsFactory.build({
