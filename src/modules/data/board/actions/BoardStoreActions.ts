@@ -28,7 +28,7 @@ const deleteColumn = createAction(
 
 const fetchBoard = createAction("fetch-board", props<{ id: string }>());
 
-const moveCard = createAction("move-card-abc", props<CardMove>());
+const moveCard = createAction("move-card", props<CardMove>());
 
 const moveColumn = createAction(
 	"move-column",

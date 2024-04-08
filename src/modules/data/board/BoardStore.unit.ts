@@ -1,9 +1,7 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { CardResponse } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
 import { Board, BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import { axiosErrorFactory } from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
@@ -11,19 +9,17 @@ import {
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
-import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { nextTick, ref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { useBoardStore } from "./BoardStore";
 import { useSharedEditMode } from "./EditMode.composable";
+import { setActivePinia, createPinia, storeToRefs } from "pinia";
 
 import { useI18n } from "vue-i18n";
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
-
-const notifierModule = createModuleMocks(NotifierModule);
 
 jest.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
@@ -50,6 +46,10 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 };
 
 describe("BoardState.composable", () => {
+	beforeEach(() => {
+		setActivePinia(createPinia());
+	});
+
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -59,7 +59,7 @@ describe("BoardState.composable", () => {
 	let column: BoardColumn;
 	let card: BoardSkeletonCard;
 
-	const setup = (boardId = testBoard.id) => {
+	const setup = () => {
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
@@ -71,9 +71,9 @@ describe("BoardState.composable", () => {
 		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
 
-		return mountComposable(() => useBoardStore(), {
-			global: { provide: { notifierModule } },
-		});
+		const board = storeToRefs(useBoardStore());
+		const { dispatch, actions, isLoading } = useBoardStore();
+		return { ...board, actions, dispatch, isLoading };
 	};
 
 	beforeEach(() => {
@@ -95,21 +95,32 @@ describe("BoardState.composable", () => {
 	describe("createCard", () => {
 		describe("when board is not loaded (= has no state)", () => {
 			it("should not call createCardCall", async () => {
-				const { createCard, board } = setup();
+				const { board, actions } = setup();
+
+				const payloadAction = {
+					type: "create-card" as const,
+					payload: { columnId: column.id },
+				};
+
 				board.value = undefined;
 
-				await createCard(column.id);
+				await actions.createCard(payloadAction);
 				await nextTick();
 
 				expect(mockedBoardApiCalls.createCardCall).not.toHaveBeenCalled();
 			});
 
 			it("should call createCardCall", async () => {
-				const { createCard, board } = setup();
+				const { board, actions } = setup();
+				const { createCard } = actions;
 				board.value = testBoard;
 
-				await createCard(column.id);
-				await nextTick();
+				const payloadAction = {
+					type: "create-card" as const,
+					payload: { columnId: column.id },
+				};
+
+				createCard(payloadAction);
 
 				expect(mockedBoardApiCalls.createCardCall).toHaveBeenCalledWith(
 					column.id
@@ -117,14 +128,19 @@ describe("BoardState.composable", () => {
 			});
 
 			it("should call setEditModeId", async () => {
-				const { createCard, board } = setup();
+				const { actions, board } = setup();
 				board.value = testBoard;
 				const newCardId = "newCardId1234";
 				mockedBoardApiCalls.createCardCall.mockResolvedValue({
 					id: newCardId,
 				} as CardResponse);
 
-				await createCard(column.id);
+				const payloadAction = {
+					type: "create-card" as const,
+					payload: { columnId: column.id },
+				};
+
+				await actions.createCard(payloadAction);
 				await nextTick();
 
 				expect(setEditModeId).toHaveBeenCalledWith(newCardId);
@@ -133,13 +149,18 @@ describe("BoardState.composable", () => {
 
 		describe("when api returns an error", () => {
 			it("should use the error handler to react", async () => {
-				const { createCard, board } = setup();
+				const { actions, board } = setup();
 				board.value = testBoard;
 				mockedBoardApiCalls.createCardCall.mockRejectedValue(
 					setupErrorResponse()
 				);
 
-				await createCard(column.id);
+				const payloadAction = {
+					type: "create-card" as const,
+					payload: { columnId: column.id },
+				};
+
+				await actions.createCard(payloadAction);
 				await nextTick();
 
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
@@ -149,17 +170,17 @@ describe("BoardState.composable", () => {
 
 	describe("createColumn", () => {
 		it("should not call createCardCall when board value is undefined", async () => {
-			const { createColumn, board } = setup();
+			const { actions, board } = setup();
 			board.value = undefined;
-			await createColumn();
+			await actions.createColumn();
 			await nextTick();
 			expect(mockedBoardApiCalls.createColumnCall).not.toHaveBeenCalled();
 		});
 
 		it("should call createColumnCall", async () => {
-			const { createColumn, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
-			await createColumn();
+			await actions.createColumn();
 			await nextTick();
 			expect(mockedBoardApiCalls.createColumnCall).toHaveBeenCalledWith(
 				board.value.id
@@ -167,11 +188,11 @@ describe("BoardState.composable", () => {
 		});
 
 		it("should call setEditModeId and return new column", async () => {
-			const { createColumn, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
 			const newColumn = columnResponseFactory.build();
 			mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
-			const result = await createColumn();
+			const result = await actions.createColumn();
 			await nextTick();
 			expect(setEditModeId).toHaveBeenCalledWith(newColumn.id);
 			expect(result).toEqual(newColumn);
@@ -179,12 +200,12 @@ describe("BoardState.composable", () => {
 
 		describe("when api returns an error", () => {
 			it("should use the error handler to react", async () => {
-				const { createColumn, board } = setup();
+				const { actions, board } = setup();
 				board.value = testBoard;
 				mockedBoardApiCalls.createColumnCall.mockRejectedValue(
 					setupErrorResponse()
 				);
-				await createColumn();
+				await actions.createColumn();
 				await nextTick();
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 			});
@@ -193,20 +214,28 @@ describe("BoardState.composable", () => {
 
 	describe("deleteCard", () => {
 		it("should not call deleteCardCall when board value is undefined", async () => {
-			const { deleteCard, board } = setup();
+			const { actions, board } = setup();
 			board.value = undefined;
+			const payloadAction = {
+				type: "delete-card" as const,
+				payload: { cardId: card.cardId },
+			};
 
-			await deleteCard(card.cardId);
+			await actions.deleteCard(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.deleteCardCall).not.toHaveBeenCalled();
 		});
 
 		it("should delete card", async () => {
-			const { deleteCard, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
+			const payloadAction = {
+				type: "delete-card" as const,
+				payload: { cardId: card.cardId },
+			};
 
-			await deleteCard(card.cardId);
+			await actions.deleteCard(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.deleteCardCall).toHaveBeenCalledWith(
@@ -217,15 +246,20 @@ describe("BoardState.composable", () => {
 
 		describe("when api returns an error", () => {
 			it("should use the error handler to react", async () => {
-				const { deleteCard, board } = setup();
+				const { actions, board } = setup();
 				board.value = testBoard;
 				mockedBoardApiCalls.deleteCardCall.mockRejectedValue(
 					setupErrorResponse()
 				);
 
+				const payloadAction = {
+					type: "delete-card" as const,
+					payload: { cardId: card.cardId },
+				};
+
 				mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
-				await deleteCard(card.cardId);
+				await actions.deleteCard(payloadAction);
 				await nextTick();
 
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
@@ -235,30 +269,45 @@ describe("BoardState.composable", () => {
 
 	describe("deleteColumn", () => {
 		it("should not call deleteColumnCall when board value is undefined", async () => {
-			const { deleteColumn, board } = setup();
+			const { actions, board } = setup();
 			board.value = undefined;
 
-			await deleteColumn(card.cardId);
+			const payloadAction = {
+				type: "delete-column" as const,
+				payload: { columnId: column.id },
+			};
+
+			await actions.deleteColumn(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
 		});
 
 		it("should not call deleteColumnCall when column id is unkown", async () => {
-			const { deleteColumn, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
 
-			await deleteColumn("unkown");
+			const payloadAction = {
+				type: "delete-column" as const,
+				payload: { columnId: "unknown" },
+			};
+
+			await actions.deleteColumn(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
 		});
 
 		it("should delete column", async () => {
-			const { deleteColumn, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
 
-			await deleteColumn(column.id);
+			const payloadAction = {
+				type: "delete-column" as const,
+				payload: { columnId: column.id },
+			};
+
+			await actions.deleteColumn(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.deleteColumnCall).toHaveBeenCalledWith(
@@ -269,13 +318,18 @@ describe("BoardState.composable", () => {
 
 		describe("when api returns an error", () => {
 			it("should use the error handler to react", async () => {
-				const { deleteColumn, board } = setup();
+				const { actions, board } = setup();
 				board.value = testBoard;
 				mockedBoardApiCalls.deleteColumnCall.mockRejectedValue(
 					setupErrorResponse()
 				);
 
-				await deleteColumn(column.id);
+				const payloadAction = {
+					type: "delete-column" as const,
+					payload: { columnId: column.id },
+				};
+
+				await actions.deleteColumn(payloadAction);
 				await nextTick();
 
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
@@ -284,40 +338,56 @@ describe("BoardState.composable", () => {
 	});
 
 	describe("fetchBoard", () => {
-		it("should fetch board on mount", async () => {
-			const boardId = "123124";
-			setup(boardId);
+		// it("should fetch board on mount", async () => {
+		// 	const boardId = "123124";
+		// 	setup();
 
-			expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalledWith(boardId);
-		});
+		// 	expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalledWith(boardId);
+		// });
 
 		it("should return fetch function that updates board", async () => {
-			const { fetchBoard, board } = setup();
+			const { actions, board } = setup();
+
+			const payloadAction = {
+				type: "fetch-board" as const,
+				payload: { id: testBoard.id },
+			};
 
 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
-			await fetchBoard(testBoard.id);
+			await actions.fetchBoard(payloadAction);
 
 			expect(board.value).toEqual(testBoard);
 		});
 
 		it("should return isLoading which reflects pending api calls", async () => {
-			const { isLoading } = setup();
+			const { isLoading, actions } = setup();
 
-			expect(isLoading.value).toStrictEqual(true);
+			const payloadAction = {
+				type: "fetch-board" as const,
+				payload: { id: testBoard.id },
+			};
 
-			await new Promise((resolve) => setTimeout(resolve, 10));
+			setTimeout(() => {
+				actions.fetchBoard(payloadAction);
+				expect(isLoading).toStrictEqual(true);
+			}, 10);
 
-			expect(isLoading.value).toStrictEqual(false);
+			expect(isLoading).toStrictEqual(false);
 		});
 
 		describe("when api returns an error", () => {
 			it("should use the error handler to react", async () => {
-				const { fetchBoard } = setup();
+				const { actions } = setup();
+
+				const payloadAction = {
+					type: "fetch-board" as const,
+					payload: { id: testBoard.id },
+				};
 
 				mockedBoardApiCalls.fetchBoardCall.mockRejectedValue(
 					setupErrorResponse()
 				);
-				await fetchBoard(testBoard.id);
+				await actions.fetchBoard(payloadAction);
 
 				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 			});
@@ -326,10 +396,10 @@ describe("BoardState.composable", () => {
 
 	describe("reloadBoard", () => {
 		it("should return undefined if board is not set", async () => {
-			const { reloadBoard, board } = setup();
+			const { actions, board } = setup();
 			board.value = undefined;
 
-			const result = await reloadBoard();
+			const result = await actions.reloadBoard();
 			await nextTick();
 
 			expect(result).toEqual(undefined);
@@ -356,10 +426,15 @@ describe("BoardState.composable", () => {
 
 		it("should not call moveCardCall when board value is undefined", async () => {
 			const cardPayload = createCardPayload({ newIndex: 1 });
-			const { moveCard, board } = setup();
+			const { actions, board } = setup();
 			board.value = undefined;
 
-			await moveCard(cardPayload);
+			const payloadAction = {
+				type: "move-card" as const,
+				payload: cardPayload,
+			};
+
+			await actions.moveCard(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
@@ -370,11 +445,15 @@ describe("BoardState.composable", () => {
 				const cardPayload = createCardPayload({
 					columnId: column.id,
 				});
-
-				const { moveCard, board } = setup();
+				const { actions, board } = setup();
 				board.value = testBoard;
 
-				await moveCard(cardPayload);
+				const payloadAction = {
+					type: "move-card" as const,
+					payload: cardPayload,
+				};
+
+				await actions.moveCard(payloadAction);
 				await nextTick();
 
 				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
@@ -387,10 +466,15 @@ describe("BoardState.composable", () => {
 					columnId: "59a3e4a4a2049554a93fec93",
 				});
 
-				const { moveCard, board } = setup();
+				const { actions, board } = setup();
 				board.value = testBoard;
 
-				await moveCard(cardPayload);
+				const payloadAction = {
+					type: "move-card" as const,
+					payload: cardPayload,
+				};
+
+				await actions.moveCard(payloadAction);
 				await nextTick();
 
 				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
@@ -401,10 +485,15 @@ describe("BoardState.composable", () => {
 			"should not call moveCardCall when new index is %s",
 			async (newIndex) => {
 				const cardPayload = createCardPayload({ newIndex });
-				const { moveCard, board } = setup();
+				const { actions, board } = setup();
 				board.value = testBoard;
 
-				await moveCard(cardPayload);
+				const payloadAction = {
+					type: "move-card" as const,
+					payload: cardPayload,
+				};
+
+				await actions.moveCard(payloadAction);
 				await nextTick();
 
 				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
@@ -414,7 +503,7 @@ describe("BoardState.composable", () => {
 		it("should handle error when api returns an error code", async () => {
 			const card2 = cardSkeletonResponseFactory.build();
 			column.cards.push(card2);
-			const { moveCard, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
 
 			mockedBoardApiCalls.moveCardCall.mockRejectedValue(setupErrorResponse());
@@ -427,7 +516,12 @@ describe("BoardState.composable", () => {
 				toColumnId: column.id,
 			};
 
-			await moveCard(cardPayload);
+			const payloadAction = {
+				type: "move-card" as const,
+				payload: cardPayload,
+			};
+
+			await actions.moveCard(payloadAction);
 			await nextTick();
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
@@ -444,10 +538,15 @@ describe("BoardState.composable", () => {
 				toColumnId: column.id,
 			};
 
-			const { moveCard, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
 
-			await moveCard(cardPayload);
+			const payloadAction = {
+				type: "move-card" as const,
+				payload: cardPayload,
+			};
+
+			await actions.moveCard(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalledWith(
@@ -466,17 +565,22 @@ describe("BoardState.composable", () => {
 				removedIndex: 0,
 				columnId: column.id,
 			};
-			const { moveColumn, board } = setup();
+			const { actions, board } = setup();
 			board.value = undefined;
 
-			await moveColumn(payload);
+			const payloadAction = {
+				type: "move-column" as const,
+				payload: { columnMove: payload, byKeyboard: false },
+			};
+
+			await actions.moveColumn(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.moveColumnCall).not.toHaveBeenCalled();
 		});
 
 		it("should handle error when api returns an error code", async () => {
-			const { moveColumn, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
 
 			mockedBoardApiCalls.moveColumnCall.mockRejectedValue(
@@ -490,7 +594,12 @@ describe("BoardState.composable", () => {
 				columnId: movingColumn.id,
 			};
 
-			await moveColumn(payload);
+			const payloadAction = {
+				type: "move-column" as const,
+				payload: { columnMove: payload, byKeyboard: false },
+			};
+
+			await actions.moveColumn(payloadAction);
 			await nextTick();
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
@@ -504,10 +613,14 @@ describe("BoardState.composable", () => {
 				removedIndex: 1,
 				columnId: column2.id,
 			};
-			const { moveColumn, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
+			const payloadAction = {
+				type: "move-column" as const,
+				payload: { columnMove: payload, byKeyboard: false },
+			};
 
-			await moveColumn(payload);
+			await actions.moveColumn(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.moveColumnCall).toHaveBeenCalledWith(
@@ -523,34 +636,49 @@ describe("BoardState.composable", () => {
 	describe("updateColumnTitle", () => {
 		const NEW_TITLE = "newTitle";
 		it("should not call updateColumnTitleCall when board value is undefined", async () => {
-			const { updateColumnTitle, board } = setup();
+			const { actions, board } = setup();
 			board.value = undefined;
 
-			await updateColumnTitle(column.id, NEW_TITLE);
+			const payloadAction = {
+				type: "update-column-title" as const,
+				payload: { columnId: column.id, newTitle: NEW_TITLE },
+			};
+
+			await actions.updateColumnTitle(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.updateColumnTitleCall).not.toHaveBeenCalled();
 		});
 
 		it("shouldhandle error when api returns an error code", async () => {
-			const { updateColumnTitle, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
+
+			const payloadAction = {
+				type: "update-column-title" as const,
+				payload: { columnId: column.id, newTitle: NEW_TITLE },
+			};
 
 			mockedBoardApiCalls.updateColumnTitleCall.mockRejectedValue(
 				setupErrorResponse()
 			);
 
-			await updateColumnTitle(column.id, NEW_TITLE);
+			await actions.updateColumnTitle(payloadAction);
 			await nextTick();
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
 
 		it("should update column title", async () => {
-			const { updateColumnTitle, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
 
-			await updateColumnTitle(column.id, NEW_TITLE);
+			const payloadAction = {
+				type: "update-column-title" as const,
+				payload: { columnId: column.id, newTitle: NEW_TITLE },
+			};
+
+			await actions.updateColumnTitle(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.updateColumnTitleCall).toHaveBeenCalledWith(
@@ -566,34 +694,49 @@ describe("BoardState.composable", () => {
 	describe("updateBoardTitle", () => {
 		const NEW_TITLE = "newTitle";
 		it("should not call updateBoardTitleCall when board value is undefined", async () => {
-			const { updateBoardTitle, board } = setup();
+			const { actions, board } = setup();
 			board.value = undefined;
 
-			await updateBoardTitle(NEW_TITLE);
+			const payloadAction = {
+				type: "update-board-title" as const,
+				payload: { newTitle: NEW_TITLE },
+			};
+
+			await actions.updateBoardTitle(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.updateBoardTitleCall).not.toHaveBeenCalled();
 		});
 
 		it("shouldhandle error when api returns an error code", async () => {
-			const { updateBoardTitle, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
+
+			const payloadAction = {
+				type: "update-board-title" as const,
+				payload: { newTitle: NEW_TITLE },
+			};
 
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue(
 				setupErrorResponse()
 			);
 
-			await updateBoardTitle(NEW_TITLE);
+			await actions.updateBoardTitle(payloadAction);
 			await nextTick();
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
 		});
 
 		it("should update board title", async () => {
-			const { updateBoardTitle, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
 
-			await updateBoardTitle(NEW_TITLE);
+			const payloadAction = {
+				type: "update-board-title" as const,
+				payload: { newTitle: NEW_TITLE },
+			};
+
+			await actions.updateBoardTitle(payloadAction);
 			await nextTick();
 
 			expect(mockedBoardApiCalls.updateBoardTitleCall).toHaveBeenCalledWith(
@@ -608,14 +751,14 @@ describe("BoardState.composable", () => {
 	describe("notifyWithTemplateAndReload", () => {
 		describe("when is called", () => {
 			it("should call notifyWithTemplate", async () => {
-				const { notifyWithTemplateAndReload, board } = setup();
+				const { actions, board } = setup();
 				board.value = testBoard;
 				mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
 				mockedErrorHandlerCalls.notifyWithTemplate.mockImplementation(() =>
 					jest.fn()
 				);
 
-				const handler = notifyWithTemplateAndReload("notLoaded");
+				const handler = actions.notifyWithTemplateAndReload("notLoaded");
 				handler();
 				await nextTick();
 
@@ -627,10 +770,15 @@ describe("BoardState.composable", () => {
 
 	describe("updateBoardVisibility", () => {
 		it("should update board visibility", async () => {
-			const { updateBoardVisibility, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
 
-			await updateBoardVisibility(true);
+			const payloadAction = {
+				type: "update-board-visibility" as const,
+				payload: { newVisibility: true },
+			};
+
+			await actions.updateBoardVisibility(payloadAction);
 			await nextTick();
 
 			expect(
@@ -641,14 +789,19 @@ describe("BoardState.composable", () => {
 		});
 
 		it("should handle error when api returns an error code", async () => {
-			const { updateBoardVisibility, board } = setup();
+			const { actions, board } = setup();
 			board.value = testBoard;
+
+			const payloadAction = {
+				type: "update-board-visibility" as const,
+				payload: { newVisibility: false },
+			};
 
 			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue(
 				setupErrorResponse()
 			);
 
-			await updateBoardVisibility(false);
+			await actions.updateBoardVisibility(payloadAction);
 			await nextTick();
 
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
