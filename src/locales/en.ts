@@ -1544,12 +1544,14 @@ export default {
 	"pages.videoConference.info.notStarted":
 		"The video conference hasn't started yet.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
-	"tldraw.error.403": "Tldraw is disabled",
-	"tldraw.error.500": "An error occured while setting up tldraw",
+	"error.500":
+		"There are problems in the system. We are working on fixing the issue. Please try again later.",
+	"error.4500":
+		"Connection error: The real-time session could not be established. Please check the connection or reload the page.",
+	"error.4401":
+		"Unfortunately, you do not have permission to view this content.",
 	"tldraw.error.ws.4400": "Room name is missing in URL params",
-	"tldraw.error.ws.4401": "You do not have permission to this tldraw board",
-	"tldraw.error.ws.4404": "Tldraw board with this name was not found",
-	"tldraw.error.ws.4500": "An error occured within tldraw websocket connection",
+	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
