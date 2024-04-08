@@ -636,10 +636,8 @@ export default {
 				cancelText: this.$t("common.actions.cancel"),
 				icon: "$mdiAlert",
 				iconColor: "rgba(var(--v-theme-error))",
-				actionDesign: "danger",
 				onConfirm,
 				onCancel,
-				invertedDesign: true,
 			});
 		},
 		barSearch: function (searchText) {
@@ -706,21 +704,6 @@ export default {
 
 :deep(.row-highlighted.theme--light.v-btn:hover::before) {
 	opacity: 0;
-}
-
-a.action-button {
-	&.row-highlighted:hover {
-		background-color: rgba(var(--v-theme-white));
-	}
-
-	&.row-selected {
-		color: rgba(var(--v-theme-white));
-
-		&:hover {
-			background-color: rgba(var(--v-theme-secondary-darken-1));
-			box-shadow: none;
-		}
-	}
 }
 
 .list {

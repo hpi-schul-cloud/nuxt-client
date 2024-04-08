@@ -5,14 +5,14 @@
 				elevation="0"
 				variant="text"
 				class="mb-2"
-				:color="isColumnActive ? 'text-black' : 'text-grey-darken-2'"
+				:color="isColumnActive ? '' : 'grey-darken-2'"
 				@click="onAddColumn"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>
 				{{ $t("components.board.column.ghost.placeholder") }}
 			</VBtn>
 		</div>
-		<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
+		<VDivider aria-hidden="true" class="border-opacity-100" />
 	</div>
 </template>
 

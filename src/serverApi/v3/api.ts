@@ -13,13 +13,13 @@
  */
 
 
-import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from './configuration';
+import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { DUMMY_BASE_URL, assertParamExists, createRequestFunction, serializeDataIfNeeded, setBearerAuthToObject, setSearchParams, toPathString } from './common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
 // @ts-ignore
-import { BASE_PATH, BaseAPI, RequestArgs, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
  * 
@@ -225,7 +225,8 @@ export enum BoardElementResponseTypeEnum {
  * @enum {string}
  */
 export enum BoardExternalReferenceType {
-    Course = 'course'
+    Course = 'course',
+    User = 'user'
 }
 
 /**
@@ -234,7 +235,8 @@ export enum BoardExternalReferenceType {
  * @enum {string}
  */
 export enum BoardParentType {
-    Course = 'course'
+    Course = 'course',
+    User = 'user'
 }
 
 /**
@@ -903,6 +905,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     SC_TITLE: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_MEDIA_SHELF_ENABLED: boolean;
 }
 /**
  * 
@@ -2822,6 +2830,37 @@ export interface GetMetaTagDataBody {
 /**
  * 
  * @export
+ * @interface GroupListResponse
+ */
+export interface GroupListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<GroupResponse>}
+     * @memberof GroupListResponse
+     */
+    data: Array<GroupResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof GroupListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof GroupListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof GroupListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
  * @interface GroupResponse
  */
 export interface GroupResponse {
@@ -2899,38 +2938,11 @@ export interface GroupUserResponse {
     lastName: string;
     /**
      * 
-     * @type {string}
+     * @type {RoleName}
      * @memberof GroupUserResponse
      */
-    role: GroupUserResponseRoleEnum;
+    role: RoleName;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum GroupUserResponseRoleEnum {
-    Administrator = 'administrator',
-    CourseAdministrator = 'courseAdministrator',
-    CourseStudent = 'courseStudent',
-    CourseSubstitutionTeacher = 'courseSubstitutionTeacher',
-    CourseTeacher = 'courseTeacher',
-    Demo = 'demo',
-    DemoStudent = 'demoStudent',
-    DemoTeacher = 'demoTeacher',
-    Expert = 'expert',
-    Helpdesk = 'helpdesk',
-    Student = 'student',
-    Superhero = 'superhero',
-    Teacher = 'teacher',
-    Teamadministrator = 'teamadministrator',
-    Teamexpert = 'teamexpert',
-    Teamleader = 'teamleader',
-    Teammember = 'teammember',
-    Teamowner = 'teamowner',
-    User = 'user'
-}
-
 /**
  * 
  * @export
@@ -3816,6 +3828,100 @@ export interface MeUserResponse {
 /**
  * 
  * @export
+ * @interface MediaBoardResponse
+ */
+export interface MediaBoardResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaBoardResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {Array<MediaLineResponse>}
+     * @memberof MediaBoardResponse
+     */
+    lines: Array<MediaLineResponse>;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof MediaBoardResponse
+     */
+    timestamps: TimestampsResponse;
+}
+/**
+ * 
+ * @export
+ * @interface MediaExternalToolElementContent
+ */
+export interface MediaExternalToolElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaExternalToolElementContent
+     */
+    contextExternalToolId: string;
+}
+/**
+ * 
+ * @export
+ * @interface MediaExternalToolElementResponse
+ */
+export interface MediaExternalToolElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaExternalToolElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {MediaExternalToolElementContent}
+     * @memberof MediaExternalToolElementResponse
+     */
+    content: MediaExternalToolElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof MediaExternalToolElementResponse
+     */
+    timestamps: TimestampsResponse;
+}
+/**
+ * 
+ * @export
+ * @interface MediaLineResponse
+ */
+export interface MediaLineResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaLineResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaLineResponse
+     */
+    title: string;
+    /**
+     * 
+     * @type {Array<MediaExternalToolElementResponse>}
+     * @memberof MediaLineResponse
+     */
+    elements: Array<MediaExternalToolElementResponse>;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof MediaLineResponse
+     */
+    timestamps: TimestampsResponse;
+}
+/**
+ * 
+ * @export
  * @interface MetaTagExtractorResponse
  */
 export interface MetaTagExtractorResponse {
@@ -3916,6 +4022,25 @@ export interface MoveContentElementBody {
      * 
      * @type {number}
      * @memberof MoveContentElementBody
+     */
+    toPosition: number;
+}
+/**
+ * 
+ * @export
+ * @interface MoveElementBodyParams
+ */
+export interface MoveElementBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof MoveElementBodyParams
+     */
+    toLineId: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof MoveElementBodyParams
      */
     toPosition: number;
 }
@@ -5201,6 +5326,33 @@ export interface RichTextElementResponse {
      */
     timestamps: TimestampsResponse;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum RoleName {
+    Administrator = 'administrator',
+    CourseAdministrator = 'courseAdministrator',
+    CourseStudent = 'courseStudent',
+    CourseSubstitutionTeacher = 'courseSubstitutionTeacher',
+    CourseTeacher = 'courseTeacher',
+    Demo = 'demo',
+    DemoStudent = 'demoStudent',
+    DemoTeacher = 'demoTeacher',
+    Expert = 'expert',
+    Helpdesk = 'helpdesk',
+    Student = 'student',
+    Superhero = 'superhero',
+    Teacher = 'teacher',
+    Teamadministrator = 'teamadministrator',
+    Teamexpert = 'teamexpert',
+    Teamleader = 'teamleader',
+    Teammember = 'teammember',
+    Teamowner = 'teamowner',
+    User = 'user'
+}
+
 /**
  * 
  * @export
@@ -7186,6 +7338,18 @@ export interface UserResponse {
      * @memberof UserResponse
      */
     importHash: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    lastLoginSystemChange: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UserResponse
+     */
+    outdatedSince: string;
 }
 /**
  * 
@@ -11579,6 +11743,44 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Get permissions for a user in a course.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerGetUserPermissions: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('courseControllerGetUserPermissions', 'courseId', courseId)
+            const localVarPath = `/courses/{courseId}/user-permissions`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Imports a course from a Common Cartridge file.
          * @param {any} file The Common Cartridge file to import.
          * @param {*} [options] Override http request option.
@@ -11695,6 +11897,17 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get permissions for a user in a course.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerGetUserPermissions(courseId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerGetUserPermissions(courseId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Imports a course from a Common Cartridge file.
          * @param {any} file The Common Cartridge file to import.
          * @param {*} [options] Override http request option.
@@ -11748,6 +11961,16 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Get permissions for a user in a course.
+         * @param {string} courseId The id of the course
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerGetUserPermissions(courseId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Imports a course from a Common Cartridge file.
          * @param {any} file The Common Cartridge file to import.
          * @param {*} [options] Override http request option.
@@ -11795,6 +12018,16 @@ export interface CoursesApiInterface {
      * @memberof CoursesApiInterface
      */
     courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse>;
+
+    /**
+     * 
+     * @summary Get permissions for a user in a course.
+     * @param {string} courseId The id of the course
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerGetUserPermissions(courseId: string, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -11848,6 +12081,18 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerFindForUser(skip?: number, limit?: number, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerFindForUser(skip, limit, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get permissions for a user in a course.
+     * @param {string} courseId The id of the course
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerGetUserPermissions(courseId: string, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerGetUserPermissions(courseId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -12440,6 +12685,60 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary Get a list of all groups.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
+         * @param {string} [nameQuery] search string for firstnames or lastnames
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerGetAllGroups: async (skip?: number, limit?: number, availableGroupsForCourseSync?: boolean, nameQuery?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/groups`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (availableGroupsForCourseSync !== undefined) {
+                localVarQueryParameter['availableGroupsForCourseSync'] = availableGroupsForCourseSync;
+            }
+
+            if (nameQuery !== undefined) {
+                localVarQueryParameter['nameQuery'] = nameQuery;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get a group by id.
          * @param {string} groupId 
          * @param {*} [options] Override http request option.
@@ -12504,6 +12803,20 @@ export const GroupApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a list of all groups.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
+         * @param {string} [nameQuery] search string for firstnames or lastnames
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async groupControllerGetAllGroups(skip?: number, limit?: number, availableGroupsForCourseSync?: boolean, nameQuery?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GroupListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerGetAllGroups(skip, limit, availableGroupsForCourseSync, nameQuery, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get a group by id.
          * @param {string} groupId 
          * @param {*} [options] Override http request option.
@@ -12537,6 +12850,19 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          */
         groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
             return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get a list of all groups.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
+         * @param {string} [nameQuery] search string for firstnames or lastnames
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        groupControllerGetAllGroups(skip?: number, limit?: number, availableGroupsForCourseSync?: boolean, nameQuery?: string, options?: any): AxiosPromise<GroupListResponse> {
+            return localVarFp.groupControllerGetAllGroups(skip, limit, availableGroupsForCourseSync, nameQuery, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -12574,6 +12900,19 @@ export interface GroupApiInterface {
 
     /**
      * 
+     * @summary Get a list of all groups.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
+     * @param {string} [nameQuery] search string for firstnames or lastnames
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApiInterface
+     */
+    groupControllerGetAllGroups(skip?: number, limit?: number, availableGroupsForCourseSync?: boolean, nameQuery?: string, options?: any): AxiosPromise<GroupListResponse>;
+
+    /**
+     * 
      * @summary Get a group by id.
      * @param {string} groupId 
      * @param {*} [options] Override http request option.
@@ -12606,6 +12945,21 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      */
     public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any) {
         return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a list of all groups.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
+     * @param {string} [nameQuery] search string for firstnames or lastnames
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupApi
+     */
+    public groupControllerGetAllGroups(skip?: number, limit?: number, availableGroupsForCourseSync?: boolean, nameQuery?: string, options?: any) {
+        return GroupApiFp(this.configuration).groupControllerGetAllGroups(skip, limit, availableGroupsForCourseSync, nameQuery, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13011,6 +13365,652 @@ export class MeApi extends BaseAPI implements MeApiInterface {
      */
     public meControllerMe(options?: any) {
         return MeApiFp(this.configuration).meControllerMe(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * MediaBoardApi - axios parameter creator
+ * @export
+ */
+export const MediaBoardApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create a new line on a media board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerCreateColumn: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('mediaBoardControllerCreateColumn', 'boardId', boardId)
+            const localVarPath = `/media-boards/{boardId}/media-lines`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get the media shelf of the user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerGetMediaBoardForUser: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/media-boards/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MediaBoardApi - functional programming interface
+ * @export
+ */
+export const MediaBoardApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MediaBoardApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new line on a media board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaBoardControllerCreateColumn(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaLineResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerCreateColumn(boardId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Get the media shelf of the user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaBoardControllerGetMediaBoardForUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaBoardResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerGetMediaBoardForUser(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MediaBoardApi - factory interface
+ * @export
+ */
+export const MediaBoardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MediaBoardApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new line on a media board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerCreateColumn(boardId: string, options?: any): AxiosPromise<MediaLineResponse> {
+            return localVarFp.mediaBoardControllerCreateColumn(boardId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get the media shelf of the user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerGetMediaBoardForUser(options?: any): AxiosPromise<MediaBoardResponse> {
+            return localVarFp.mediaBoardControllerGetMediaBoardForUser(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MediaBoardApi - interface
+ * @export
+ * @interface MediaBoardApi
+ */
+export interface MediaBoardApiInterface {
+    /**
+     * 
+     * @summary Create a new line on a media board.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApiInterface
+     */
+    mediaBoardControllerCreateColumn(boardId: string, options?: any): AxiosPromise<MediaLineResponse>;
+
+    /**
+     * 
+     * @summary Get the media shelf of the user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApiInterface
+     */
+    mediaBoardControllerGetMediaBoardForUser(options?: any): AxiosPromise<MediaBoardResponse>;
+
+}
+
+/**
+ * MediaBoardApi - object-oriented interface
+ * @export
+ * @class MediaBoardApi
+ * @extends {BaseAPI}
+ */
+export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
+    /**
+     * 
+     * @summary Create a new line on a media board.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApi
+     */
+    public mediaBoardControllerCreateColumn(boardId: string, options?: any) {
+        return MediaBoardApiFp(this.configuration).mediaBoardControllerCreateColumn(boardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get the media shelf of the user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApi
+     */
+    public mediaBoardControllerGetMediaBoardForUser(options?: any) {
+        return MediaBoardApiFp(this.configuration).mediaBoardControllerGetMediaBoardForUser(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * MediaElementApi - axios parameter creator
+ * @export
+ */
+export const MediaElementApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Move a single element.
+         * @param {string} elementId The id of the element.
+         * @param {MoveElementBodyParams} moveElementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaElementControllerMoveElement: async (elementId: string, moveElementBodyParams: MoveElementBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'elementId' is not null or undefined
+            assertParamExists('mediaElementControllerMoveElement', 'elementId', elementId)
+            // verify required parameter 'moveElementBodyParams' is not null or undefined
+            assertParamExists('mediaElementControllerMoveElement', 'moveElementBodyParams', moveElementBodyParams)
+            const localVarPath = `/media-elements/{elementId}/position`
+                .replace(`{${"elementId"}}`, encodeURIComponent(String(elementId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(moveElementBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MediaElementApi - functional programming interface
+ * @export
+ */
+export const MediaElementApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MediaElementApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Move a single element.
+         * @param {string} elementId The id of the element.
+         * @param {MoveElementBodyParams} moveElementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaElementControllerMoveElement(elementId, moveElementBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MediaElementApi - factory interface
+ * @export
+ */
+export const MediaElementApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MediaElementApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Move a single element.
+         * @param {string} elementId The id of the element.
+         * @param {MoveElementBodyParams} moveElementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaElementControllerMoveElement(elementId, moveElementBodyParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MediaElementApi - interface
+ * @export
+ * @interface MediaElementApi
+ */
+export interface MediaElementApiInterface {
+    /**
+     * 
+     * @summary Move a single element.
+     * @param {string} elementId The id of the element.
+     * @param {MoveElementBodyParams} moveElementBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaElementApiInterface
+     */
+    mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * MediaElementApi - object-oriented interface
+ * @export
+ * @class MediaElementApi
+ * @extends {BaseAPI}
+ */
+export class MediaElementApi extends BaseAPI implements MediaElementApiInterface {
+    /**
+     * 
+     * @summary Move a single element.
+     * @param {string} elementId The id of the element.
+     * @param {MoveElementBodyParams} moveElementBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaElementApi
+     */
+    public mediaElementControllerMoveElement(elementId: string, moveElementBodyParams: MoveElementBodyParams, options?: any) {
+        return MediaElementApiFp(this.configuration).mediaElementControllerMoveElement(elementId, moveElementBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * MediaLineApi - axios parameter creator
+ * @export
+ */
+export const MediaLineApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Delete a single line.
+         * @param {string} lineId The id of the line.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaLineControllerDeleteLine: async (lineId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lineId' is not null or undefined
+            assertParamExists('mediaLineControllerDeleteLine', 'lineId', lineId)
+            const localVarPath = `/media-lines/{lineId}`
+                .replace(`{${"lineId"}}`, encodeURIComponent(String(lineId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Move a single line.
+         * @param {string} lineId The id of the line.
+         * @param {MoveColumnBodyParams} moveColumnBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaLineControllerMoveLine: async (lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lineId' is not null or undefined
+            assertParamExists('mediaLineControllerMoveLine', 'lineId', lineId)
+            // verify required parameter 'moveColumnBodyParams' is not null or undefined
+            assertParamExists('mediaLineControllerMoveLine', 'moveColumnBodyParams', moveColumnBodyParams)
+            const localVarPath = `/media-lines/{lineId}/position`
+                .replace(`{${"lineId"}}`, encodeURIComponent(String(lineId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(moveColumnBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update the title of a single line.
+         * @param {string} lineId The id of the line.
+         * @param {RenameBodyParams} renameBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaLineControllerUpdateColumnTitle: async (lineId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lineId' is not null or undefined
+            assertParamExists('mediaLineControllerUpdateColumnTitle', 'lineId', lineId)
+            // verify required parameter 'renameBodyParams' is not null or undefined
+            assertParamExists('mediaLineControllerUpdateColumnTitle', 'renameBodyParams', renameBodyParams)
+            const localVarPath = `/media-lines/{lineId}/title`
+                .replace(`{${"lineId"}}`, encodeURIComponent(String(lineId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(renameBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MediaLineApi - functional programming interface
+ * @export
+ */
+export const MediaLineApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MediaLineApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Delete a single line.
+         * @param {string} lineId The id of the line.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaLineControllerDeleteLine(lineId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerDeleteLine(lineId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Move a single line.
+         * @param {string} lineId The id of the line.
+         * @param {MoveColumnBodyParams} moveColumnBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerMoveLine(lineId, moveColumnBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update the title of a single line.
+         * @param {string} lineId The id of the line.
+         * @param {RenameBodyParams} renameBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaLineControllerUpdateColumnTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerUpdateColumnTitle(lineId, renameBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MediaLineApi - factory interface
+ * @export
+ */
+export const MediaLineApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MediaLineApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Delete a single line.
+         * @param {string} lineId The id of the line.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaLineControllerDeleteLine(lineId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaLineControllerDeleteLine(lineId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Move a single line.
+         * @param {string} lineId The id of the line.
+         * @param {MoveColumnBodyParams} moveColumnBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaLineControllerMoveLine(lineId, moveColumnBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update the title of a single line.
+         * @param {string} lineId The id of the line.
+         * @param {RenameBodyParams} renameBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaLineControllerUpdateColumnTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaLineControllerUpdateColumnTitle(lineId, renameBodyParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MediaLineApi - interface
+ * @export
+ * @interface MediaLineApi
+ */
+export interface MediaLineApiInterface {
+    /**
+     * 
+     * @summary Delete a single line.
+     * @param {string} lineId The id of the line.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaLineApiInterface
+     */
+    mediaLineControllerDeleteLine(lineId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Move a single line.
+     * @param {string} lineId The id of the line.
+     * @param {MoveColumnBodyParams} moveColumnBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaLineApiInterface
+     */
+    mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Update the title of a single line.
+     * @param {string} lineId The id of the line.
+     * @param {RenameBodyParams} renameBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaLineApiInterface
+     */
+    mediaLineControllerUpdateColumnTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * MediaLineApi - object-oriented interface
+ * @export
+ * @class MediaLineApi
+ * @extends {BaseAPI}
+ */
+export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
+    /**
+     * 
+     * @summary Delete a single line.
+     * @param {string} lineId The id of the line.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaLineApi
+     */
+    public mediaLineControllerDeleteLine(lineId: string, options?: any) {
+        return MediaLineApiFp(this.configuration).mediaLineControllerDeleteLine(lineId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Move a single line.
+     * @param {string} lineId The id of the line.
+     * @param {MoveColumnBodyParams} moveColumnBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaLineApi
+     */
+    public mediaLineControllerMoveLine(lineId: string, moveColumnBodyParams: MoveColumnBodyParams, options?: any) {
+        return MediaLineApiFp(this.configuration).mediaLineControllerMoveLine(lineId, moveColumnBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update the title of a single line.
+     * @param {string} lineId The id of the line.
+     * @param {RenameBodyParams} renameBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaLineApi
+     */
+    public mediaLineControllerUpdateColumnTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any) {
+        return MediaLineApiFp(this.configuration).mediaLineControllerUpdateColumnTitle(lineId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
