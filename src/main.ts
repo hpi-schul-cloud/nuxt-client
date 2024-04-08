@@ -60,6 +60,7 @@ import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
+	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NEWS_MODULE_KEY,
@@ -155,6 +156,7 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide(ENV_CONFIG_MODULE_KEY.valueOf(), envConfigModule);
 	app.provide("filePathsModule", filePathsModule);
+	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
 	app.provide("finishedTasksModule", finishedTasksModule);
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);

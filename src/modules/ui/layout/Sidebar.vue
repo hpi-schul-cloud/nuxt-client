@@ -38,10 +38,11 @@ import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "./types";
-import { pageLinks, legalLinks } from "./sidebar-items";
-import { metaLinks } from "./meta-links";
+import { useSidebarItems } from "./SidebarItems.composable";
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
+
+const { pageLinks, legalLinks, metaLinks } = useSidebarItems();
 
 const isSidebarCategoryItem = (
 	item: SidebarSingleItem | SidebarGroupItem
