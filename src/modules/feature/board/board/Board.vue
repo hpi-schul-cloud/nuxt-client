@@ -113,8 +113,6 @@ import { useRouter } from "vue-router";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import ShareModal from "@/components/share/ShareModal.vue";
 
-const boardStore = useBoardStore();
-
 const props = defineProps({
 	boardId: { type: String, required: true },
 });
@@ -123,6 +121,8 @@ const { t } = useI18n();
 const { resetNotifier, showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
+
+const boardStore = useBoardStore();
 const board = computed(() => boardStore.board);
 
 const { createPageInformation } = useSharedBoardPageInformation();
