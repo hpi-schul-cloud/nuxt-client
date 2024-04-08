@@ -35,13 +35,8 @@
 							:no-styles="true"
 							:aria-label="$t(route.title)"
 						>
-							<v-icon
-								v-if="route.icon"
-								class="icon"
-								:color="getIconColor(route)"
-							>
-								{{ route.icon }}
-							</v-icon>
+							<v-icon v-if="route.icon" class="icon" :icon="route.icon" />
+
 							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
@@ -66,16 +61,7 @@
 								:no-styles="true"
 								:aria-label="$t(child.title)"
 							>
-								<v-icon
-									v-if="child.icon"
-									class="icon"
-									:color="
-										isActive(child.title)
-											? 'rgba(var(--v-theme-primary))'
-											: 'rgba(var(--v-theme-secondary))'
-									"
-									>{{ child.icon }}
-								</v-icon>
+								<v-icon v-if="child.icon" class="icon" :icon="child.icon" />
 								<span class="side-bar-title">{{ $t(child.title) }}</span>
 							</base-link>
 						</li>
@@ -150,12 +136,6 @@ export default defineComponent({
 			return title === activeParent.value;
 		};
 
-		const getIconColor = (route: SidebarItem | SidebarCategoryItem) => {
-			return isActive(route.title) || isChildActive(route.title)
-				? "rgba(var(--v-theme-primary))"
-				: "rgba(var(--v-theme-secondary))";
-		};
-
 		const hasChildren = (
 			route: SidebarItem | SidebarCategoryItem
 		): route is SidebarCategoryItem => {
@@ -181,7 +161,6 @@ export default defineComponent({
 		return {
 			isActive,
 			isChildActive,
-			getIconColor,
 			isExternalLink,
 			getRouteLocation,
 			hasChildren,
@@ -311,7 +290,7 @@ export default defineComponent({
 					padding: 0 16px;
 					font-size: 16px;
 					line-height: 100%;
-					color: rgba(var(--v-theme-secondary));
+					color: rgba(var(--v-theme-on-surface));
 					border-bottom: none;
 
 					.icon {

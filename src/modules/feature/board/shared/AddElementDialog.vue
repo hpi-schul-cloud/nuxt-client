@@ -21,7 +21,7 @@
 				<v-btn
 					v-for="(item, key) in elementTypeOptions"
 					:key="key"
-					variant="plain"
+					variant="text"
 					size="large"
 					:height="84"
 					:width="126"

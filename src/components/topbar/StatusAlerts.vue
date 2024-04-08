@@ -28,12 +28,12 @@
 			</v-list-item-title>
 			<v-list-item-subtitle
 				:data-testid="`alert-text-${index}`"
-				class="item-subtitle text-black ma-0 mt-1"
+				class="item-subtitle ma-0 mt-1"
 			>
 				{{ item.text }}
 			</v-list-item-subtitle>
 			<v-list-item-subtitle
-				class="text-left text-caption d-flex flex-row alert-date text-black mt-0 mt-2"
+				class="text-left text-caption d-flex flex-row alert-date mt-0 mt-2"
 				:data-testid="`alert-date-${index}`"
 			>
 				<template v-if="item.timestamp !== item.createdAt">

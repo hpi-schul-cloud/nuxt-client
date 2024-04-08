@@ -26,7 +26,7 @@
 					<slot name="logo" />
 				</div>
 
-				<v-icon v-if="icon" :icon="icon" color="black" size="20" class="mr-2" />
+				<v-icon v-if="icon" :icon="icon" size="20" class="mr-2" />
 
 				<LineClamp class="content-element-title">
 					<slot name="title" />
@@ -90,7 +90,6 @@ const props = defineProps({
 
 .content-element-bar {
 	position: relative;
-	color: rgba(var(--v-theme-black));
 }
 .content-element-bar:hover {
 	.content-element-title {
@@ -107,10 +106,6 @@ const props = defineProps({
 	right: 0.75rem;
 	top: 0.75rem;
 	z-index: 100;
-
-	.v-icon {
-		color: var(--v-black-base);
-	}
 }
 
 .logo-container {
