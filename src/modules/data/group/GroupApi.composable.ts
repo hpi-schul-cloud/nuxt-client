@@ -1,8 +1,13 @@
+import {
+	GroupApiFactory,
+	GroupListResponse,
+	GroupResponse,
+} from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { GroupApiFactory, GroupResponse } from "@/serverApi/v3";
+import { Group } from "@data-group";
 import { AxiosResponse } from "axios";
 import { GroupMapper } from "./GroupMapper";
-import { Group } from "@data-group";
+import { GroupListFilter, PaginationOptions } from "./types";
 
 export const useGroupApi = () => {
 	const groupApi = GroupApiFactory(undefined, "/v3", $axios);
@@ -16,7 +21,23 @@ export const useGroupApi = () => {
 		return group;
 	};
 
+	const getGroups = async (
+		pagination?: PaginationOptions,
+		filter?: GroupListFilter
+	): Promise<GroupListResponse> => {
+		const response: AxiosResponse<GroupListResponse> =
+			await groupApi.groupControllerGetAllGroups(
+				pagination?.skip,
+				pagination?.limit,
+				filter?.availableForSynchronization,
+				filter?.name
+			);
+
+		return response.data;
+	};
+
 	return {
 		getGroup,
+		getGroups,
 	};
 };

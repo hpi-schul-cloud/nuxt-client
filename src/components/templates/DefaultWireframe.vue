@@ -19,6 +19,7 @@
 						:orientation="'right'"
 						:icon="fabItems.icon"
 						:href="fabItems.href"
+						:aria-label="fabItems.ariaLabel"
 						:data-testid="fabItems.dataTestId"
 					>
 						{{ fabItems.title }}
@@ -32,9 +33,11 @@
 									:icon="action.icon"
 									:href="action.href"
 									:to="action.to"
+									:aria-label="action.ariaLabel"
 									@click="$emit('onFabItemClick', action.customEvent)"
-									>{{ action.label }}</speed-dial-menu-action
 								>
+									{{ action.label }}
+								</speed-dial-menu-action>
 							</template>
 						</template>
 					</speed-dial-menu>
@@ -62,6 +65,7 @@ import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
 import { defineComponent, PropType } from "vue";
+import { Fab } from "./default-wireframe.types";
 
 export default defineComponent({
 	inheritAttrs: false,
@@ -86,7 +90,7 @@ export default defineComponent({
 			required: true,
 		},
 		fabItems: {
-			type: Object,
+			type: Object as PropType<Fab>,
 			required: false,
 			default: null,
 		},

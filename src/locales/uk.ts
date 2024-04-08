@@ -710,6 +710,13 @@ export default {
 		"Чи дійсно слід завершити синхронізацію групи користувачів {groupName} у курсі {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Синхронізацію успішно завершено",
+	"feature-course-sync.GroupSelectionDialog.title":
+		"Виберіть групу користувачів",
+	"feature-course-sync.GroupSelectionDialog.text":
+		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
+	"feature-course-sync.GroupSelectionDialog.selection.label": "Вибір групи",
+	"feature-course-sync.GroupSelectionDialog.noTeacher":
+		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}:<li>Викладач</li><br/>Перевірте moin.schule і почніть створення курсу знову.",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1411,6 +1418,7 @@ export default {
 	"pages.rooms.allRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.fab.add.course": "Новий курс",
+	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.add.lesson": "Створити тему",
 	"pages.rooms.fab.add.board": "Нова дошка",
 	"pages.rooms.fab.add.task": "Створити завдання",

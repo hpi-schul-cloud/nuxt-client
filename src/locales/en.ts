@@ -698,6 +698,12 @@ export default {
 		"Should the synchronization of the user group {groupName} in the course {courseName} really be ended?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronization completed successfully",
+	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
+	"feature-course-sync.GroupSelectionDialog.text":
+		"In the next step, the selected user group will be synchronized with the newly created course.",
+	"feature-course-sync.GroupSelectionDialog.selection.label": "Group selection",
+	"feature-course-sync.GroupSelectionDialog.noTeacher":
+		"The following data for creating a new course is not available in the user group {groupName}:<li>Teacher</li><br/>Please check in moin.schule and start course creation again.",
 	"format.date": "MM/DD/YYYY",
 	"format.dateLong": "dddd, MMMM DD. YYYY",
 	"format.dateTime": "MM/DD/YYYY HH:mm",
@@ -1389,6 +1395,7 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title":
 		"Currently, there are no courses here.",
 	"pages.rooms.fab.add.course": "New course",
+	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
 	"pages.rooms.fab.add.lesson": "New topic",
 	"pages.rooms.fab.add.board": "New column board",
 	"pages.rooms.fab.add.task": "New task",
