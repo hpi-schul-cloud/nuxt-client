@@ -11,13 +11,11 @@ import {
 	FILE_PATHS_MODULE_KEY,
 } from "@/utils/inject";
 import Sidebar from "./Sidebar.vue";
-// import { SidebarGroupItem } from "./types";
 import AuthModule from "@/store/auth";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import { SchulcloudTheme } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
-
+import { createModuleMocks } from "@/utils/mock-store-module";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envsFactory } from "@@/tests/test-utils";
 
 const setup = (permissions?: string[]) => {

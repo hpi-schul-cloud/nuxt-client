@@ -1,7 +1,7 @@
 <template>
-	<v-navigation-drawer>
+	<VNavigationDrawer>
 		<SidebarLogo />
-		<v-list open-strategy="multiple">
+		<VList open-strategy="multiple">
 			<div class="pb-3">
 				<template v-for="item in pageItems" :key="item.title">
 					<SidebarCategoryItem
@@ -19,7 +19,7 @@
 					:item="link"
 				/>
 			</div>
-			<v-divider />
+			<VDivider />
 			<div class="py-3">
 				<SidebarItem
 					v-for="link in legalItems"
@@ -27,8 +27,8 @@
 					:item="link"
 				/>
 			</div>
-		</v-list>
-	</v-navigation-drawer>
+		</VList>
+	</VNavigationDrawer>
 </template>
 
 <script setup lang="ts">
