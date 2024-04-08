@@ -89,19 +89,17 @@ export default {
 @import "~vuetify/settings";
 
 .table__row {
-	background-color: rgba(var(--v-theme-white));
 	border-top: 1px solid rgba(var(--v-theme-white));
 	border-bottom: 1px solid rgba(var(--v-theme-white));
 
 	&.highlight {
-		background-color: map-get($grey, lighten-3);
+		background-color: map-get($grey, lighten-4);
 		border-top: 1px solid rgba(var(--v-theme-white));
 		border-bottom: 1px solid rgba(var(--v-theme-white));
 	}
 
 	&.selected {
-		color: rgba(var(--v-theme-white));
-		background-color: rgba(var(--v-theme-secondary-lighten-1));
+		background-color: rgba(var(--v-theme-primary), 0.12);
 		border-top: 1px solid rgba(var(--v-theme-white));
 		border-bottom: 1px solid rgba(var(--v-theme-white));
 	}
@@ -121,10 +119,6 @@ export default {
 		.select {
 			margin-bottom: 0;
 		}
-	}
-
-	a.is-text {
-		color: rgba(var(--v-theme-secondary));
 	}
 }
 </style>

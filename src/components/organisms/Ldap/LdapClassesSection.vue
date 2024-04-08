@@ -28,7 +28,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="classesActivatedColor">$mdiFileTreeOutline</v-icon>
+				<v-icon>$mdiFileTreeOutline</v-icon>
 			</template>
 		</base-input>
 		<p class="title-class">
@@ -49,9 +49,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="classesActivatedColor" class="custom-icon"
-					>$class</v-icon
-				>
+				<v-icon class="custom-icon">$class</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -72,7 +70,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="classesActivatedColor">$mdiAccountGroupOutline</v-icon>
+				<v-icon>$mdiAccountGroupOutline</v-icon>
 			</template>
 		</base-input>
 	</div>
@@ -102,7 +100,6 @@ export default defineComponent({
 	},
 	data() {
 		return {
-			classesActivatedColor: "currentColor",
 			checked: false,
 			classesValidationMessage: [
 				{ key: "required", message: this.$t("common.validation.required") },
@@ -136,10 +133,7 @@ export default defineComponent({
 		checked: function () {
 			this.$emit("update:errors", this.v$.$invalid, "classes");
 			if (this.checked === false) {
-				this.classesActivatedColor = "currentColor";
 				this.$emit("update:inputs");
-			} else {
-				this.classesActivatedColor = "rgba(var(--v-theme-black))";
 			}
 		},
 		classPathChanged: function () {

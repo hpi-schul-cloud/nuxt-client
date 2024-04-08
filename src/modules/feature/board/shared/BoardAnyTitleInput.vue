@@ -164,7 +164,6 @@ export default defineComponent({
 }
 
 :deep(textarea) {
-	color: rgba(var(--v-theme-secondary)) !important;
 	background: transparent !important;
 	opacity: 1;
 	font-size: var(--heading-5) !important;
@@ -175,18 +174,15 @@ export default defineComponent({
 }
 
 :deep(textarea)::placeholder {
-	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }
 
 :deep(input) {
 	font-size: var(--heading-3);
-	color: rgba(var(--v-black-base));
 	background: transparent !important;
 }
 
 :deep(input)::placeholder {
-	color: rgba(var(--v-theme-secondary)) !important;
 	opacity: 1;
 }
 </style>

@@ -16,8 +16,7 @@
 			</template>
 			<template #footerRight>
 				<v-btn
-					variant="flat"
-					:color="!invertedDesign ? 'secondary' : 'success'"
+					variant="text"
 					data-testid="btn-dialog-cancel"
 					@click="cancel"
 					class="mr-3"
@@ -25,8 +24,8 @@
 					{{ cancelText }}
 				</v-btn>
 				<v-btn
-					variant="text"
-					:color="invertedDesign ? 'secondary' : 'success'"
+					variant="flat"
+					color="primary"
 					data-testid="btn-dialog-confirm"
 					@click="confirm"
 				>
@@ -62,10 +61,6 @@ export default {
 			type: String,
 			default: undefined,
 		},
-		actionDesign: {
-			type: String,
-			default: "primary",
-		},
 		confirmText: {
 			type: String,
 			default: "Bestätigen",
@@ -86,18 +81,13 @@ export default {
 			type: Function,
 			default: () => ({}),
 		},
-		invertedDesign: {
-			type: Boolean,
-		},
 	},
 	data() {
 		return {};
 	},
 	computed: {
 		currentIconColor() {
-			return this.iconColor
-				? this.iconColor
-				: `rgba(var(--v-theme-${this.actionDesign}))`;
+			return this.iconColor ? this.iconColor : "rgba(var(--v-theme-primary))";
 		},
 		isActive: {
 			get() {

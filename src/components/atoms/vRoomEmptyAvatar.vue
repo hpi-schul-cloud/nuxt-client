@@ -57,12 +57,10 @@ export default {
 <style scoped>
 .outlined {
 	border: 2px dashed;
-	border-color: rgba(var(--v-theme-secondary));
 }
 
 .hovered-avatar {
 	border: 2px solid;
-	border-color: rgba(var(--v-theme-secondary));
 }
 
 .avatar-component-empty {

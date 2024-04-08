@@ -20,10 +20,7 @@
 									:label="resource.title"
 									:label-hidden="true"
 									class="select"
-									style="
-										color: rgba(var(--v-theme-white));
-										margin: -1px 8px 4px -4px;
-									"
+									style="color: rgba(var(--v-theme-white)); margin-bottom: 0"
 								/>
 							</span>
 							<div class="content__img-background-gradient" />
@@ -57,7 +54,6 @@
 								:resource="resource"
 								:client="provider()"
 								round
-								btn-color="secondary"
 								:multiple="false"
 							/>
 						</div>
@@ -156,7 +152,7 @@ export default {
 	padding: var(--space-xs);
 	margin: var(--space-sm);
 	font-size: var(--text-xs);
-	color: rgba(var(--v-theme-black));
+	color: rgba(var(--v-theme-on-surface));
 	background: rgba(var(--v-theme-white));
 	filter: drop-shadow(0 2px 4px black);
 	border-radius: var(--radius-xs);
@@ -173,7 +169,7 @@ export default {
 	position: relative;
 	height: 200px;
 	color: rgba(var(--v-theme-white));
-	background-color: rgba(var(--v-theme-black));
+	background-color: rgba(var(--v-theme-on-surface));
 	border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
@@ -182,7 +178,7 @@ export default {
 	right: 0;
 	margin-top: var(--space-xs);
 	margin-right: var(--space-xs);
-	background-color: rgba(var(--v-theme-secondary));
+	background-color: rgba(var(--v-theme-on-surface));
 	border-radius: var(--radius-round);
 	opacity: 0.7;
 	// stylelint-disable
@@ -243,7 +239,7 @@ export default {
 	&__title {
 		height: calc(var(--heading-6) * var(--line-height-sm) * 3);
 		margin: var(--space-xs) var(--space-sm);
-		color: rgba(var(--v-theme-secondary));
+		color: rgba(var(--v-theme-on-surface));
 
 		@include excerpt(
 			$font-size: var(--heading-6),
@@ -281,11 +277,6 @@ export default {
 		justify-content: space-between;
 		height: 100%;
 		padding: var(--space-xs-4) 0;
-
-		&-icon {
-			font-size: var(--text-lg);
-			color: rgba(var(--v-theme-secondary));
-		}
 	}
 
 	&_more {

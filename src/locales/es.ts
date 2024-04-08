@@ -718,6 +718,14 @@ export default {
 		"¿Debería realmente finalizarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Sincronización completada exitosamente",
+	"feature-course-sync.GroupSelectionDialog.title":
+		"Seleccionar grupo de usuarios",
+	"feature-course-sync.GroupSelectionDialog.text":
+		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
+	"feature-course-sync.GroupSelectionDialog.selection.label":
+		"Selección de grupo",
+	"feature-course-sync.GroupSelectionDialog.noTeacher":
+		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}:<li>Profesor</li><br/>Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",
@@ -1430,6 +1438,7 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title":
 		"Actualmente no hay cursos aquí.",
 	"pages.rooms.fab.add.course": "Nuevo curso",
+	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
 	"pages.rooms.fab.add.lesson": "Nuevo tema",
 	"pages.rooms.fab.add.board": "Nuevo tablero de columna",
 	"pages.rooms.fab.add.task": "Nuevo tarea",
