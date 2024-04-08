@@ -42,8 +42,7 @@ body.is-noscroll {
 }
 
 :focus {
-	outline: 2px solid rgba(var(--v-theme-secondary-lighten-1));
-	outline-offset: 3px;
+	outline-offset: 2px;
 }
 
 /* width */

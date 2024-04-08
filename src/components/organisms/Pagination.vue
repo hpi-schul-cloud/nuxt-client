@@ -30,8 +30,7 @@
 				<li v-if="currentPage > 1" class="pagination-link-wrapper">
 					<v-btn
 						min-width="35"
-						color="secondary"
-						variant="flat"
+						variant="outlined"
 						class="pagination-link"
 						aria-label="Go to previous page"
 						@click="previousPage"
@@ -42,8 +41,7 @@
 				<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
 					<v-btn
 						min-width="35"
-						color="secondary"
-						variant="flat"
+						variant="outlined"
 						class="pagination-link"
 						aria-label="Go to next page"
 						@click="nextPage"
@@ -152,10 +150,6 @@ export default {
 .pagination-link-wrapper .pagination-link {
 	padding: var(--space-xs);
 	margin-left: var(--space-sm);
-	color: rgba(var(--v-theme-white));
-	cursor: pointer;
-	background-color: rgba(var(--v-theme-secondary));
-	border-radius: var(--radius-sm);
 }
 
 .total {

@@ -161,7 +161,7 @@
 					<VStepperWindowItem :value="2" data-testid="migration_importUsers">
 						<ImportUsers />
 						<div class="text-right">
-							<VBtn color="secondary" @click="migrationStep = 1">
+							<VBtn @click="migrationStep = 1">
 								{{ t("pages.administration.migration.back") }}
 							</VBtn>
 							<VBtn
@@ -215,10 +215,7 @@
 										</VRow>
 									</VCardText>
 									<div class="text-right">
-										<VBtn
-											color="secondary"
-											:disabled="isLoading"
-											@click="migrationStep = 2"
+										<VBtn :disabled="isLoading" @click="migrationStep = 2"
 											>{{ t("pages.administration.migration.back") }}
 										</VBtn>
 

@@ -4,7 +4,7 @@
 			v-if="!playerInitialized"
 			class="d-flex position-fixed justify-center align-center min-height-screen"
 		>
-			<v-progress-circular indeterminate color="secondary" size="115" />
+			<v-progress-circular indeterminate size="115" />
 		</div>
 		<h5p-player
 			ref="h5pPlayerRef"

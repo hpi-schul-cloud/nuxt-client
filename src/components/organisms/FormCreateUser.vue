@@ -42,7 +42,6 @@
 		<v-btn
 			class="w-100 mt--lg"
 			variant="text"
-			color="secondary"
 			data-testid="button_create-user_abort"
 			@click.prevent="$router.go(-1)"
 		>
@@ -52,11 +51,10 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, unref } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { email, required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
-import { unref } from "vue";
 
 const emit = defineEmits(["create-user"]);
 const { t } = useI18n();

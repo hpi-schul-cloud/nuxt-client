@@ -16,10 +16,10 @@
 							<v-icon>{{ mdiClose }}</v-icon>
 						</v-btn>
 						<v-spacer />
-						<v-btn class="mr-4" color="secondary" @click="onToggleFullscreen">
+						<v-btn class="mr-4" @click="onToggleFullscreen">
 							toggle fullscreen (debug)
 						</v-btn>
-						<v-btn class="mr-4" color="secondary" @click="onToggleEdit">
+						<v-btn class="mr-4" @click="onToggleEdit">
 							{{
 								isEditMode
 									? $t("common.actions.edit") +

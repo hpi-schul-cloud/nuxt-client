@@ -65,7 +65,6 @@
 			<div class="buttons-container">
 				<v-btn
 					variant="text"
-					color="secondary"
 					data-testid="ldapResetInputsButton"
 					@click="clearInputsHandler"
 				>
