@@ -17,7 +17,6 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import newLoggedIn from "./newLoggedIn.layout.vue";
 import { mount } from "@vue/test-utils";
-import { RouterView } from "vue-router";
 
 const setup = () => {
 	const authModule = createModuleMocks(AuthModule, {
