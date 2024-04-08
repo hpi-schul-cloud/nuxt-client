@@ -2,7 +2,7 @@
 	<section :class="{ inline: isInline }">
 		<v-btn
 			v-if="isInline"
-			variant="plain"
+			variant="text"
 			:ripple="false"
 			design="none"
 			class="arrow__back"

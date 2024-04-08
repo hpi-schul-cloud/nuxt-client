@@ -116,9 +116,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style lang="scss" scoped>
-::v-deep .v-btn__content .v-icon,
-.alert-text {
-	color: rgba(var(--v-theme-black)) !important;
-}
-</style>

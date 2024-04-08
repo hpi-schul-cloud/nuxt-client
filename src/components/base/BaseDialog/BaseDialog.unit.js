@@ -25,27 +25,25 @@ describe("@/components/base/BaseDialog", () => {
 			expect(dialogCard.text()).toContain(testMessage);
 		});
 
-		it("iconColor Prop should override actionDesign", () => {
+		it("iconColor Prop should override default color", () => {
 			const testColor = "lime";
 			const wrapper = mountDialog({
 				props: {
 					active: true,
 					iconColor: testColor,
-					actionDesign: "danger",
 					icon: "warning",
 				},
 			});
 			expect(wrapper.vm.currentIconColor).toBe(testColor);
 		});
 
-		it("icon should have by default the actionDesign prop color", () => {
+		it("icon should have by default the primary color", () => {
 			const designs = ["success", "danger", "primary"];
 			// Make sure all expects get executed
 			expect.assertions(designs.length);
-			const testWithDesign = async (design) => {
+			const testWithDesign = async () => {
 				const wrapper = mountDialog({
 					props: {
-						actionDesign: design,
 						icon: "warning",
 					},
 				});
@@ -53,45 +51,10 @@ describe("@/components/base/BaseDialog", () => {
 				// the BaseIcon is not rendered (solvable)
 				// and css custom properties get ignored by vue-test-utils
 				expect(wrapper.vm.currentIconColor).toBe(
-					`rgba(var(--v-theme-${design}))`
+					"rgba(var(--v-theme-primary))"
 				);
 			};
 			designs.map(testWithDesign);
-		});
-
-		it("passes correct button designs", () => {
-			const wrapper = mountDialog({
-				props: {
-					active: true,
-					actionDesign: "success",
-				},
-			});
-			const confirmBtn = wrapper.findComponent(
-				`[data-testid="btn-dialog-confirm"]`
-			);
-			const cancelBtn = wrapper.findComponent(
-				`[data-testid="btn-dialog-cancel"]`
-			);
-			expect(confirmBtn.classes("text-success")).toBe(true);
-			expect(cancelBtn.classes("v-btn")).toBe(true);
-		});
-
-		it("invertedDesign: true switches the confirm and cancel button design", () => {
-			const wrapper = mountDialog({
-				props: {
-					active: true,
-					actionDesign: "success",
-					invertedDesign: true,
-				},
-			});
-			const confirmBtn = wrapper.findComponent(
-				`[data-testid="btn-dialog-confirm"]`
-			);
-			const cancelBtn = wrapper.findComponent(
-				`[data-testid="btn-dialog-cancel"]`
-			);
-			expect(confirmBtn.classes("v-btn")).toBe(true);
-			expect(cancelBtn.classes("bg-success")).toBe(true);
 		});
 	});
 
