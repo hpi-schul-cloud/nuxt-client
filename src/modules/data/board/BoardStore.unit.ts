@@ -489,133 +489,126 @@ describe("BoardState.composable", () => {
 		});
 	});
 
-	// describe("updateColumnTitle", () => {
-	// 	const NEW_TITLE = "newTitle";
-	// 	it("should not call updateColumnTitleCall when board value is undefined", async () => {
-	// 		const { actions, board } = setup();
-	// 		board.value = undefined;
+	describe("updateColumnTitle", () => {
+		const NEW_TITLE = "newTitle";
+		it("should not call updateColumnTitleCall when board value is undefined", async () => {
+			const boardStore = setup();
 
-	// 		const payloadAction = {
-	// 			type: "update-column-title" as const,
-	// 			payload: { columnId: column.id, newTitle: NEW_TITLE },
-	// 		};
+			boardStore.dispatch(
+				boardActions.updateColumnTitle({
+					columnId: column.id,
+					newTitle: NEW_TITLE,
+				})
+			);
 
-	// 		await actions.updateColumnTitle(payloadAction);
-	// 		await nextTick();
+			await nextTick();
 
-	// 		expect(mockedBoardApiCalls.updateColumnTitleCall).not.toHaveBeenCalled();
-	// 	});
+			expect(mockedBoardApiCalls.updateColumnTitleCall).not.toHaveBeenCalled();
+		});
 
-	// 	it("shouldhandle error when api returns an error code", async () => {
-	// 		const { actions, board } = setup();
-	// 		board.value = testBoard;
+		it("shouldhandle error when api returns an error code", async () => {
+			const boardStore = setup(testBoard);
 
-	// 		const payloadAction = {
-	// 			type: "update-column-title" as const,
-	// 			payload: { columnId: column.id, newTitle: NEW_TITLE },
-	// 		};
+			mockedBoardApiCalls.updateColumnTitleCall.mockRejectedValue(
+				setupErrorResponse()
+			);
 
-	// 		mockedBoardApiCalls.updateColumnTitleCall.mockRejectedValue(
-	// 			setupErrorResponse()
-	// 		);
+			boardStore.dispatch(
+				boardActions.updateColumnTitle({
+					columnId: column.id,
+					newTitle: NEW_TITLE,
+				})
+			);
+			await new Promise((resolve) => setTimeout(resolve, 50));
+			await nextTick();
 
-	// 		await actions.updateColumnTitle(payloadAction);
-	// 		await nextTick();
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+		});
 
-	// 		expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
-	// 	});
+		it("should update column title", async () => {
+			const boardStore = setup(testBoard);
 
-	// 	it("should update column title", async () => {
-	// 		const { actions, board } = setup();
-	// 		board.value = testBoard;
+			boardStore.dispatch(
+				boardActions.updateColumnTitle({
+					columnId: column.id,
+					newTitle: NEW_TITLE,
+				})
+			);
+			await nextTick();
 
-	// 		const payloadAction = {
-	// 			type: "update-column-title" as const,
-	// 			payload: { columnId: column.id, newTitle: NEW_TITLE },
-	// 		};
+			expect(mockedBoardApiCalls.updateColumnTitleCall).toHaveBeenCalledWith(
+				column.id,
+				NEW_TITLE
+			);
 
-	// 		await actions.updateColumnTitle(payloadAction);
-	// 		await nextTick();
+			const boardColumn = boardStore.board?.columns.find(
+				(c) => c.id === column.id
+			);
+			expect(boardColumn?.title).toStrictEqual(NEW_TITLE);
+		});
+	});
 
-	// 		expect(mockedBoardApiCalls.updateColumnTitleCall).toHaveBeenCalledWith(
-	// 			column.id,
-	// 			NEW_TITLE
-	// 		);
+	describe("updateBoardTitle", () => {
+		const NEW_TITLE = "newTitle";
+		it("should not call updateBoardTitleCall when board value is undefined", async () => {
+			const boardStore = setup();
 
-	// 		const boardColumn = board.value.columns.find((c) => c.id === column.id);
-	// 		expect(boardColumn?.title).toStrictEqual(NEW_TITLE);
-	// 	});
-	// });
+			boardStore.dispatch(
+				boardActions.updateBoardTitle({ newTitle: NEW_TITLE })
+			);
 
-	// describe("updateBoardTitle", () => {
-	// 	const NEW_TITLE = "newTitle";
-	// 	it("should not call updateBoardTitleCall when board value is undefined", async () => {
-	// 		const { actions, board } = setup();
-	// 		board.value = undefined;
+			await nextTick();
 
-	// 		const payloadAction = {
-	// 			type: "update-board-title" as const,
-	// 			payload: { newTitle: NEW_TITLE },
-	// 		};
+			expect(mockedBoardApiCalls.updateBoardTitleCall).not.toHaveBeenCalled();
+		});
 
-	// 		await actions.updateBoardTitle(payloadAction);
-	// 		await nextTick();
+		it("shouldhandle error when api returns an error code", async () => {
+			const boardStore = setup(testBoard);
 
-	// 		expect(mockedBoardApiCalls.updateBoardTitleCall).not.toHaveBeenCalled();
-	// 	});
+			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue(
+				setupErrorResponse()
+			);
 
-	// 	it("shouldhandle error when api returns an error code", async () => {
-	// 		const { actions, board } = setup();
-	// 		board.value = testBoard;
+			boardStore.dispatch(
+				boardActions.updateBoardTitle({ newTitle: NEW_TITLE })
+			);
 
-	// 		const payloadAction = {
-	// 			type: "update-board-title" as const,
-	// 			payload: { newTitle: NEW_TITLE },
-	// 		};
+			await new Promise((resolve) => setTimeout(resolve, 50));
+			await nextTick();
 
-	// 		mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue(
-	// 			setupErrorResponse()
-	// 		);
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+		});
 
-	// 		await actions.updateBoardTitle(payloadAction);
-	// 		await nextTick();
+		it("should update board title", async () => {
+			const boardStore = setup(testBoard);
 
-	// 		expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
-	// 	});
+			boardStore.dispatch(
+				boardActions.updateBoardTitle({ newTitle: NEW_TITLE })
+			);
+			await nextTick();
 
-	// 	it("should update board title", async () => {
-	// 		const { actions, board } = setup();
-	// 		board.value = testBoard;
+			expect(mockedBoardApiCalls.updateBoardTitleCall).toHaveBeenCalledWith(
+				boardStore.board?.id,
+				NEW_TITLE
+			);
 
-	// 		const payloadAction = {
-	// 			type: "update-board-title" as const,
-	// 			payload: { newTitle: NEW_TITLE },
-	// 		};
-
-	// 		await actions.updateBoardTitle(payloadAction);
-	// 		await nextTick();
-
-	// 		expect(mockedBoardApiCalls.updateBoardTitleCall).toHaveBeenCalledWith(
-	// 			board.value.id,
-	// 			NEW_TITLE
-	// 		);
-
-	// 		expect(board.value.title).toStrictEqual(NEW_TITLE);
-	// 	});
-	// });
+			expect(boardStore.board?.title).toStrictEqual(NEW_TITLE);
+		});
+	});
 
 	// describe("notifyWithTemplateAndReload", () => {
 	// 	describe("when is called", () => {
 	// 		it("should call notifyWithTemplate", async () => {
-	// 			const { actions, board } = setup();
-	// 			board.value = testBoard;
+	// 			const boardStore = setup(testBoard);
+
 	// 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
 	// 			mockedErrorHandlerCalls.notifyWithTemplate.mockImplementation(() =>
 	// 				jest.fn()
 	// 			);
 
-	// 			const handler = actions.notifyWithTemplateAndReload("notLoaded");
-	// 			handler();
+	// 			boardActions.notifyWithTemplateAndReload({ errorType: "notLoaded" });
+
+	// 			await new Promise((resolve) => setTimeout(resolve, 50));
 	// 			await nextTick();
 
 	// 			expect(mockedErrorHandlerCalls.notifyWithTemplate).toHaveBeenCalled();
@@ -624,42 +617,37 @@ describe("BoardState.composable", () => {
 	// 	});
 	// });
 
-	// describe("updateBoardVisibility", () => {
-	// 	it("should update board visibility", async () => {
-	// 		const { actions, board } = setup();
-	// 		board.value = testBoard;
+	describe("updateBoardVisibility", () => {
+		it("should update board visibility", async () => {
+			const boardStore = setup(testBoard);
 
-	// 		const payloadAction = {
-	// 			type: "update-board-visibility" as const,
-	// 			payload: { newVisibility: true },
-	// 		};
+			boardStore.dispatch(
+				boardActions.updateBoardVisibility({ newVisibility: true })
+			);
+			await nextTick();
 
-	// 		await actions.updateBoardVisibility(payloadAction);
-	// 		await nextTick();
+			expect(
+				mockedBoardApiCalls.updateBoardVisibilityCall
+			).toHaveBeenCalledWith(boardStore.board?.id, true);
 
-	// 		expect(
-	// 			mockedBoardApiCalls.updateBoardVisibilityCall
-	// 		).toHaveBeenCalledWith(board.value.id, true);
+			expect(boardStore.board?.isVisible).toStrictEqual(true);
+		});
 
-	// 		expect(board.value.isVisible).toStrictEqual(true);
-	// 	});
+		it("should handle error when api returns an error code", async () => {
+			const boardStore = setup(testBoard);
 
-	// 	it("should handle error when api returns an error code", async () => {
-	// 		const { actions, board } = setup();
-	// 		board.value = testBoard;
+			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue(
+				setupErrorResponse()
+			);
 
-	// 		const payloadAction = {
-	// 			type: "update-board-visibility" as const,
-	// 			payload: { newVisibility: false },
-	// 		};
+			boardStore.dispatch(
+				boardActions.updateBoardVisibility({ newVisibility: true })
+			);
+			await new Promise((resolve) => setTimeout(resolve, 50));
 
-	// 		mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue(
-	// 			setupErrorResponse()
-	// 		);
+			await nextTick();
 
-	// 		await actions.updateBoardVisibility(payloadAction);
-	// 		await nextTick();
-
-	// 		expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
-	// 	});
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+		});
+	});
 });
