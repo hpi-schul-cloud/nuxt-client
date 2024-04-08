@@ -3,7 +3,7 @@
 	<section :class="{ inline: isInline }">
 		<v-btn
 			v-if="isInline"
-			variant="plain"
+			variant="text"
 			:ripple="false"
 			design="none"
 			class="arrow__back"
@@ -33,19 +33,13 @@
 									v-if="searchQuery"
 									:icon="mdiClose"
 									:aria-label="$t('common.actions.delete')"
-									color="rgba(var(--v-theme-black))"
 									density="compact"
 									size="x-large"
 									variant="text"
 									:ripple="false"
 									@click="searchQuery = ''"
 								/>
-								<v-icon
-									v-else
-									:icon="mdiMagnify"
-									color="rgba(var(--v-theme-black))"
-									size="x-large"
-								/>
+								<v-icon v-else :icon="mdiMagnify" size="x-large" />
 							</template>
 						</v-text-field>
 					</div>
@@ -75,7 +69,6 @@
 								<template #loading>
 									<v-progress-circular
 										indeterminate
-										color="secondary"
 										size="115"
 										class="align-self-center mt-4"
 									/>
@@ -268,7 +261,6 @@ watchDebounced(
 	.arrow__back {
 		margin-top: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: rgba(var(--v-theme-secondary));
 		cursor: pointer;
 	}
 

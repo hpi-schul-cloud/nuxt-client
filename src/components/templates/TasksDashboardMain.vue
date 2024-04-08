@@ -392,10 +392,6 @@ export default {
 	margin-bottom: -2px;
 }
 
-:deep(.v-tab:not(.v-tab--selected)) {
-	color: rgba(0, 0, 0, 0.54);
-}
-
 // remove background color from expansion panel title
 :deep(
 		.v-expansion-panel-title--active > .v-expansion-panel-title__overlay,
@@ -406,7 +402,6 @@ export default {
 }
 
 :deep(.v-expansion-panel--disabled .v-expansion-panel-title) {
-	color: var(--v-theme-black);
 	.v-expansion-panel-title__overlay {
 		opacity: 0;
 	}
