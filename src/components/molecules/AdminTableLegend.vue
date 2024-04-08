@@ -29,10 +29,10 @@
 				</base-link>
 			</strong>
 		</span>
-		<p v-if="theme === 'thr'" class="text-grey mt-6">
+		<p v-if="theme === 'thr'" class="mt-6">
 			{{ $t("components.molecules.admintablelegend.thr") }}
 		</p>
-		<p v-else class="text-grey mt-6">
+		<p v-else class="mt-6">
 			{{
 				$t("components.molecules.admintablelegend.hint", {
 					institute_title: setInstituteTitle,
@@ -109,11 +109,6 @@ $vertically-center: auto 0;
 .wrapper {
 	display: flex;
 	justify-content: left;
-}
-
-.link-style {
-	color: rgba(var(--v-theme-black));
-	text-decoration: underline;
 }
 
 .external-sync-hint {

@@ -111,7 +111,7 @@
 										:color="
 											searchMatchedBy.includes(MatchedBy.None)
 												? 'primary'
-												: 'secondary'
+												: 'rgba(var(--v-theme-on-background))'
 										"
 									>
 										{{ mdiAccountPlus }}
@@ -130,7 +130,7 @@
 										:color="
 											searchMatchedBy.includes(MatchedBy.Admin)
 												? 'primary'
-												: 'secondary'
+												: 'rgba(var(--v-theme-on-background))'
 										"
 									>
 										{{ mdiAccountSwitch }}
@@ -149,7 +149,7 @@
 										:color="
 											searchMatchedBy.includes(MatchedBy.Auto)
 												? 'primary'
-												: 'secondary'
+												: 'rgba(var(--v-theme-on-background))'
 										"
 									>
 										{{ mdiAccountSwitchOutline }}
@@ -167,7 +167,13 @@
 									class="mx-auto"
 									data-testid="search-flagged"
 								>
-									<VIcon :color="searchFlagged ? 'primary' : 'secondary'">
+									<VIcon
+										:color="
+											searchFlagged
+												? 'primary'
+												: 'rgba(var(--v-theme-on-background))'
+										"
+									>
 										{{ searchFlagged ? mdiFlag : mdiFlagOutline }}
 									</VIcon>
 								</VBtn>
@@ -225,7 +231,7 @@
 			<p class="text-sm">
 				<b>{{ $t("components.organisms.importUsers.legend") }}</b>
 				<br />
-				<VIcon color="secondary">{{ mdiAccountPlus }}</VIcon>
+				<VIcon>{{ mdiAccountPlus }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
 						instance: $theme.name,
@@ -234,7 +240,7 @@
 				}}
 
 				<br />
-				<VIcon color="secondary">{{ mdiAccountSwitch }}</VIcon>
+				<VIcon>{{ mdiAccountSwitch }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
 						instance: $theme.name,
@@ -242,7 +248,7 @@
 					})
 				}}
 				<br />
-				<VIcon color="secondary">{{ mdiAccountSwitchOutline }}</VIcon>
+				<VIcon>{{ mdiAccountSwitchOutline }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
 						instance: $theme.name,
@@ -250,7 +256,7 @@
 					})
 				}}
 				<br />
-				<VIcon color="secondary">{{ mdiFlagOutline }}</VIcon>
+				<VIcon>{{ mdiFlagOutline }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
 						instance: $theme.name,
@@ -582,7 +588,7 @@ $rounded: 50%;
 
 tr.head td {
 	border-bottom: calc(2 * var(--border-width)) solid
-		rgba(var(--v-theme-secondary)) !important;
+		rgba(var(--v-theme-on-background)) !important;
 }
 
 .v-btn--round {
