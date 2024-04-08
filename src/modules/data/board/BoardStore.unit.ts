@@ -588,14 +588,12 @@ describe("BoardStore", () => {
 	// 	describe("when is called", () => {
 	// 		it("should call notifyWithTemplate", async () => {
 	// 			const boardStore = setup(testBoard);
-
 	// 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
 	// 			mockedErrorHandlerCalls.notifyWithTemplate.mockImplementation(() =>
 	// 				jest.fn()
 	// 			);
 
-	// 			boardActions.notifyWithTemplateAndReload({ errorType: "notLoaded" });
-
+	// 			boardStore.notifyWithTemplateAndReload("notLoaded");
 	// 			await new Promise((resolve) => setTimeout(resolve, 5));
 	// 			await nextTick();
 
