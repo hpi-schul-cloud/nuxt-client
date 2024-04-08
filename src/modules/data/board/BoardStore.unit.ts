@@ -226,355 +226,268 @@ describe("BoardState.composable", () => {
 	});
 
 	describe("deleteColumn", () => {
-		// it("should not call deleteColumnCall when board value is undefined", async () => {
-		// 	const { actions, board } = setup();
-		// 	board.value = undefined;
-		// 	const payloadAction = {
-		// 		type: "delete-column" as const,
-		// 		payload: { columnId: column.id },
-		// 	};
-		// 	await actions.deleteColumn(payloadAction);
-		// 	await nextTick();
-		// 	expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
-		// });
-		// 	it("should not call deleteColumnCall when column id is unkown", async () => {
-		// 		const { actions, board } = setup();
-		// 		board.value = testBoard;
-		// 		const payloadAction = {
-		// 			type: "delete-column" as const,
-		// 			payload: { columnId: "unknown" },
-		// 		};
-		// 		await actions.deleteColumn(payloadAction);
-		// 		await nextTick();
-		// 		expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
-		// 	});
-		// 	it("should delete column", async () => {
-		// 		const { actions, board } = setup();
-		// 		board.value = testBoard;
-		// 		const payloadAction = {
-		// 			type: "delete-column" as const,
-		// 			payload: { columnId: column.id },
-		// 		};
-		// 		await actions.deleteColumn(payloadAction);
-		// 		await nextTick();
-		// 		expect(mockedBoardApiCalls.deleteColumnCall).toHaveBeenCalledWith(
-		// 			column.id
-		// 		);
-		// 		expect(board.value.columns).toEqual([]);
-		// 	});
-		// 	describe("when api returns an error", () => {
-		// 		it("should use the error handler to react", async () => {
-		// 			const { actions, board } = setup();
-		// 			board.value = testBoard;
-		// 			mockedBoardApiCalls.deleteColumnCall.mockRejectedValue(
-		// 				setupErrorResponse()
-		// 			);
-		// 			const payloadAction = {
-		// 				type: "delete-column" as const,
-		// 				payload: { columnId: column.id },
-		// 			};
-		// 			await actions.deleteColumn(payloadAction);
-		// 			await nextTick();
-		// 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
-		// 		});
-		// 	});
+		it("should not call deleteColumnCall when board value is undefined", async () => {
+			const boardStore = setup();
+
+			boardStore.dispatch(boardActions.deleteColumn({ columnId: column.id }));
+			await nextTick();
+
+			expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
+		});
+
+		it("should not call deleteColumnCall when column id is unkown", async () => {
+			const boardStore = setup();
+
+			boardStore.dispatch(boardActions.deleteColumn({ columnId: "unknownId" }));
+			await nextTick();
+
+			expect(mockedBoardApiCalls.deleteColumnCall).not.toHaveBeenCalled();
+		});
+
+		it("should delete column", async () => {
+			const boardStore = setup(testBoard);
+
+			boardStore.dispatch(boardActions.deleteColumn({ columnId: column.id }));
+			await nextTick();
+
+			expect(mockedBoardApiCalls.deleteColumnCall).toHaveBeenCalledWith(
+				column.id
+			);
+			expect(boardStore.board?.columns).toEqual([]);
+		});
+
+		describe("when api returns an error", () => {
+			it("should use the error handler to react", async () => {
+				const boardStore = setup(testBoard);
+				mockedBoardApiCalls.deleteColumnCall.mockRejectedValue(
+					setupErrorResponse()
+				);
+
+				boardStore.dispatch(boardActions.deleteColumn({ columnId: column.id }));
+				await new Promise((resolve) => setTimeout(resolve, 50));
+				await nextTick();
+
+				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+			});
+		});
 	});
 
-	// describe("fetchBoard", () => {
-	// 	// it("should fetch board on mount", async () => {
-	// 	// 	const boardId = "123124";
-	// 	// 	setup();
+	describe("fetchBoard", () => {
+		it("should return fetch function that updates board", async () => {
+			const boardStore = setup();
+			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
 
-	// 	// 	expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalledWith(boardId);
-	// 	// });
+			boardStore.dispatch(boardActions.fetchBoard({ id: testBoard.id }));
+			await new Promise((resolve) => setTimeout(resolve, 10));
+			await nextTick();
 
-	// 	it("should return fetch function that updates board", async () => {
-	// 		const { actions, board } = setup();
+			expect(boardStore.board).toEqual(testBoard);
+		});
 
-	// 		const payloadAction = {
-	// 			type: "fetch-board" as const,
-	// 			payload: { id: testBoard.id },
-	// 		};
+		it("should return isLoading which reflects pending api calls", async () => {
+			const boardStore = setup();
+			mockedBoardApiCalls.fetchBoardCall.mockImplementation(async () => {
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				return testBoard;
+			});
 
-	// 		mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
-	// 		await actions.fetchBoard(payloadAction);
+			boardStore.dispatch(boardActions.fetchBoard({ id: testBoard.id }));
+			expect(boardStore.isLoading).toStrictEqual(true);
 
-	// 		expect(board.value).toEqual(testBoard);
-	// 	});
+			await new Promise((resolve) => setTimeout(resolve, 10));
+			expect(boardStore.isLoading).toStrictEqual(false);
 
-	// 	it("should return isLoading which reflects pending api calls", async () => {
-	// 		const { isLoading, actions } = setup();
+			expect(boardStore.board).toEqual(testBoard);
+		});
 
-	// 		const payloadAction = {
-	// 			type: "fetch-board" as const,
-	// 			payload: { id: testBoard.id },
-	// 		};
+		describe("when api returns an error", () => {
+			it("should use the error handler to react", async () => {
+				const boardStore = setup(testBoard);
+				mockedBoardApiCalls.fetchBoardCall.mockRejectedValue(
+					setupErrorResponse()
+				);
 
-	// 		setTimeout(() => {
-	// 			actions.fetchBoard(payloadAction);
-	// 			expect(isLoading).toStrictEqual(true);
-	// 		}, 10);
+				boardStore.dispatch(boardActions.fetchBoard({ id: testBoard.id }));
+				await new Promise((resolve) => setTimeout(resolve, 10));
+				await nextTick();
 
-	// 		expect(isLoading).toStrictEqual(false);
-	// 	});
+				expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+			});
+		});
+	});
 
-	// 	describe("when api returns an error", () => {
-	// 		it("should use the error handler to react", async () => {
-	// 			const { actions } = setup();
+	describe("reloadBoard", () => {
+		it("should return undefined if board is not set", async () => {
+			const boardStore = setup();
 
-	// 			const payloadAction = {
-	// 				type: "fetch-board" as const,
-	// 				payload: { id: testBoard.id },
-	// 			};
+			boardStore.dispatch(boardActions.reloadBoard({}));
+			await nextTick();
 
-	// 			mockedBoardApiCalls.fetchBoardCall.mockRejectedValue(
-	// 				setupErrorResponse()
-	// 			);
-	// 			await actions.fetchBoard(payloadAction);
+			expect(boardStore.board).toEqual(undefined);
+		});
+	});
 
-	// 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
-	// 		});
-	// 	});
-	// });
+	describe("moveCard", () => {
+		const createCardPayload = ({
+			newIndex,
+			columnId,
+		}: {
+			newIndex?: number;
+			columnId?: string;
+		}) => {
+			const cardPayload: CardMove = {
+				cardId: card.cardId,
+				oldIndex: 2,
+				newIndex: newIndex ?? 2,
+				fromColumnId: column.id,
+				toColumnId: columnId,
+			};
+			return cardPayload;
+		};
 
-	// describe("reloadBoard", () => {
-	// 	it("should return undefined if board is not set", async () => {
-	// 		const { actions, board } = setup();
-	// 		board.value = undefined;
+		it("should not call moveCardCall when board value is undefined", async () => {
+			const boardStore = setup();
 
-	// 		const result = await actions.reloadBoard();
-	// 		await nextTick();
+			const cardPayload = createCardPayload({ newIndex: 1 });
+			boardStore.dispatch(boardActions.moveCard(cardPayload));
+			await nextTick();
 
-	// 		expect(result).toEqual(undefined);
-	// 	});
-	// });
+			expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
+		});
 
-	// describe("moveCard", () => {
-	// 	const createCardPayload = ({
-	// 		newIndex,
-	// 		columnId,
-	// 	}: {
-	// 		newIndex?: number;
-	// 		columnId?: string;
-	// 	}) => {
-	// 		const cardPayload: CardMove = {
-	// 			cardId: card.cardId,
-	// 			oldIndex: 2,
-	// 			newIndex: newIndex ?? 2,
-	// 			fromColumnId: column.id,
-	// 			toColumnId: columnId,
-	// 		};
-	// 		return cardPayload;
-	// 	};
+		describe("when column id is same as the card's column id", () => {
+			it("should not call moveCardCall", async () => {
+				const boardStore = setup(testBoard);
 
-	// 	it("should not call moveCardCall when board value is undefined", async () => {
-	// 		const cardPayload = createCardPayload({ newIndex: 1 });
-	// 		const { actions, board } = setup();
-	// 		board.value = undefined;
+				const cardPayload = createCardPayload({ columnId: column.id });
+				boardStore.dispatch(boardActions.moveCard(cardPayload));
+				await nextTick();
 
-	// 		const payloadAction = {
-	// 			type: "move-card" as const,
-	// 			payload: cardPayload,
-	// 		};
+				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
+			});
+		});
 
-	// 		await actions.moveCard(payloadAction);
-	// 		await nextTick();
+		describe("when column id is unknown", () => {
+			it("should not call moveCardCall", async () => {
+				const boardStore = setup(testBoard);
 
-	// 		expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
-	// 	});
+				const cardPayload = createCardPayload({ columnId: "unknownId" });
+				boardStore.dispatch(boardActions.moveCard(cardPayload));
+				await nextTick();
 
-	// 	describe("when column id is same as the card's column id", () => {
-	// 		it("should not call moveCardCall", async () => {
-	// 			const cardPayload = createCardPayload({
-	// 				columnId: column.id,
-	// 			});
-	// 			const { actions, board } = setup();
-	// 			board.value = testBoard;
+				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
+			});
+		});
 
-	// 			const payloadAction = {
-	// 				type: "move-card" as const,
-	// 				payload: cardPayload,
-	// 			};
+		it.each([-1, 1])(
+			"should not call moveCardCall when new index is %s",
+			async (newIndex) => {
+				const boardStore = setup(testBoard);
 
-	// 			await actions.moveCard(payloadAction);
-	// 			await nextTick();
+				const cardPayload = createCardPayload({ newIndex });
+				boardStore.dispatch(boardActions.moveCard(cardPayload));
+				await nextTick();
 
-	// 			expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
-	// 		});
-	// 	});
+				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
+			}
+		);
 
-	// 	describe("when column id is unknown", () => {
-	// 		it("should not call moveCardCall", async () => {
-	// 			const cardPayload = createCardPayload({
-	// 				columnId: "59a3e4a4a2049554a93fec93",
-	// 			});
+		it("should handle error when api returns an error code", async () => {
+			const boardStore = setup(testBoard);
+			mockedBoardApiCalls.moveCardCall.mockRejectedValue(setupErrorResponse());
 
-	// 			const { actions, board } = setup();
-	// 			board.value = testBoard;
+			const cardPayload = createCardPayload({ newIndex: 1 });
+			boardStore.dispatch(boardActions.moveCard(cardPayload));
+			await new Promise((resolve) => setTimeout(resolve, 10));
+			await nextTick();
 
-	// 			const payloadAction = {
-	// 				type: "move-card" as const,
-	// 				payload: cardPayload,
-	// 			};
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+		});
 
-	// 			await actions.moveCard(payloadAction);
-	// 			await nextTick();
+		it("should move card", async () => {
+			const boardStore = setup(testBoard);
+			const card2 = cardSkeletonResponseFactory.build();
+			column.cards.push(card2);
+			const cardPayload: CardMove = {
+				cardId: card.cardId,
+				oldIndex: 0,
+				newIndex: 1,
+				fromColumnId: column.id,
+				toColumnId: column.id,
+			};
 
-	// 			expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
-	// 		});
-	// 	});
+			boardStore.dispatch(boardActions.moveCard(cardPayload));
+			await nextTick();
 
-	// 	it.each([-1, 1])(
-	// 		"should not call moveCardCall when new index is %s",
-	// 		async (newIndex) => {
-	// 			const cardPayload = createCardPayload({ newIndex });
-	// 			const { actions, board } = setup();
-	// 			board.value = testBoard;
+			expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalledWith(
+				card.cardId,
+				cardPayload.toColumnId,
+				cardPayload.newIndex
+			);
+			expect(boardStore.board?.columns[0].cards).toEqual([card2, card]);
+		});
+	});
 
-	// 			const payloadAction = {
-	// 				type: "move-card" as const,
-	// 				payload: cardPayload,
-	// 			};
+	describe("moveColumn", () => {
+		it("should not call moveColumnCall when board value is undefined", async () => {
+			const payload: ColumnMove = {
+				addedIndex: 0,
+				removedIndex: 0,
+				columnId: column.id,
+			};
+			const boardStore = setup();
 
-	// 			await actions.moveCard(payloadAction);
-	// 			await nextTick();
+			boardStore.dispatch(
+				boardActions.moveColumn({ columnMove: payload, byKeyboard: false })
+			);
+			await nextTick();
 
-	// 			expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
-	// 		}
-	// 	);
+			expect(mockedBoardApiCalls.moveColumnCall).not.toHaveBeenCalled();
+		});
 
-	// 	it("should handle error when api returns an error code", async () => {
-	// 		const card2 = cardSkeletonResponseFactory.build();
-	// 		column.cards.push(card2);
-	// 		const { actions, board } = setup();
-	// 		board.value = testBoard;
+		it("should handle error when api returns an error code", async () => {
+			const boardStore = setup(testBoard);
+			mockedBoardApiCalls.moveColumnCall.mockRejectedValue(
+				setupErrorResponse()
+			);
 
-	// 		mockedBoardApiCalls.moveCardCall.mockRejectedValue(setupErrorResponse());
+			const movingColumn = columnResponseFactory.build();
+			const payload: ColumnMove = {
+				addedIndex: 0,
+				removedIndex: 1,
+				columnId: movingColumn.id,
+			};
+			boardStore.dispatch(
+				boardActions.moveColumn({ columnMove: payload, byKeyboard: false })
+			);
+			await new Promise((resolve) => setTimeout(resolve, 10));
 
-	// 		const cardPayload: CardMove = {
-	// 			cardId: card.cardId,
-	// 			oldIndex: 0,
-	// 			newIndex: 1,
-	// 			fromColumnId: column.id,
-	// 			toColumnId: column.id,
-	// 		};
+			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
+		});
 
-	// 		const payloadAction = {
-	// 			type: "move-card" as const,
-	// 			payload: cardPayload,
-	// 		};
+		it("should move column", async () => {
+			const boardStore = setup(testBoard);
 
-	// 		await actions.moveCard(payloadAction);
-	// 		await nextTick();
+			const column2 = columnResponseFactory.build();
+			testBoard.columns.push(column2);
+			const payload: ColumnMove = {
+				addedIndex: 0,
+				removedIndex: 1,
+				columnId: column2.id,
+			};
+			boardStore.dispatch(
+				boardActions.moveColumn({ columnMove: payload, byKeyboard: false })
+			);
 
-	// 		expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
-	// 	});
+			expect(mockedBoardApiCalls.moveColumnCall).toHaveBeenCalledWith(
+				payload.columnId,
+				testBoard.id,
+				payload.addedIndex
+			);
 
-	// 	it("should move card", async () => {
-	// 		const card2 = cardSkeletonResponseFactory.build();
-	// 		column.cards.push(card2);
-	// 		const cardPayload: CardMove = {
-	// 			cardId: card.cardId,
-	// 			oldIndex: 0,
-	// 			newIndex: 1,
-	// 			fromColumnId: column.id,
-	// 			toColumnId: column.id,
-	// 		};
-
-	// 		const { actions, board } = setup();
-	// 		board.value = testBoard;
-
-	// 		const payloadAction = {
-	// 			type: "move-card" as const,
-	// 			payload: cardPayload,
-	// 		};
-
-	// 		await actions.moveCard(payloadAction);
-	// 		await nextTick();
-
-	// 		expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalledWith(
-	// 			card.cardId,
-	// 			cardPayload.toColumnId,
-	// 			cardPayload.newIndex
-	// 		);
-	// 		expect(board.value.columns[0].cards).toEqual([card2, card]);
-	// 	});
-	// });
-
-	// describe("moveColumn", () => {
-	// 	it("should not call moveColumnCall when board value is undefined", async () => {
-	// 		const payload: ColumnMove = {
-	// 			addedIndex: 0,
-	// 			removedIndex: 0,
-	// 			columnId: column.id,
-	// 		};
-	// 		const { actions, board } = setup();
-	// 		board.value = undefined;
-
-	// 		const payloadAction = {
-	// 			type: "move-column" as const,
-	// 			payload: { columnMove: payload, byKeyboard: false },
-	// 		};
-
-	// 		await actions.moveColumn(payloadAction);
-	// 		await nextTick();
-
-	// 		expect(mockedBoardApiCalls.moveColumnCall).not.toHaveBeenCalled();
-	// 	});
-
-	// 	it("should handle error when api returns an error code", async () => {
-	// 		const { actions, board } = setup();
-	// 		board.value = testBoard;
-
-	// 		mockedBoardApiCalls.moveColumnCall.mockRejectedValue(
-	// 			setupErrorResponse()
-	// 		);
-
-	// 		const movingColumn = columnResponseFactory.build();
-	// 		const payload: ColumnMove = {
-	// 			addedIndex: 0,
-	// 			removedIndex: 1,
-	// 			columnId: movingColumn.id,
-	// 		};
-
-	// 		const payloadAction = {
-	// 			type: "move-column" as const,
-	// 			payload: { columnMove: payload, byKeyboard: false },
-	// 		};
-
-	// 		await actions.moveColumn(payloadAction);
-	// 		await nextTick();
-
-	// 		expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
-	// 	});
-
-	// 	it("should move column", async () => {
-	// 		const column2 = columnResponseFactory.build();
-	// 		testBoard.columns.push(column2);
-	// 		const payload: ColumnMove = {
-	// 			addedIndex: 0,
-	// 			removedIndex: 1,
-	// 			columnId: column2.id,
-	// 		};
-	// 		const { actions, board } = setup();
-	// 		board.value = testBoard;
-	// 		const payloadAction = {
-	// 			type: "move-column" as const,
-	// 			payload: { columnMove: payload, byKeyboard: false },
-	// 		};
-
-	// 		await actions.moveColumn(payloadAction);
-	// 		await nextTick();
-
-	// 		expect(mockedBoardApiCalls.moveColumnCall).toHaveBeenCalledWith(
-	// 			payload.columnId,
-	// 			board.value.id,
-	// 			payload.addedIndex
-	// 		);
-
-	// 		expect(board.value.columns).toEqual([column2, column]);
-	// 	});
-	// });
+			expect(boardStore.board?.columns).toEqual([column2, column]);
+		});
+	});
 
 	// describe("updateColumnTitle", () => {
 	// 	const NEW_TITLE = "newTitle";
