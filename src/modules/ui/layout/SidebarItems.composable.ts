@@ -5,12 +5,13 @@ import {
 } from "@/utils/inject";
 import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "./types";
 import { SchulcloudTheme } from "@/serverApi/v3";
+import { ComputedRef, computed } from "vue";
 
 export const useSidebarItems = () => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const filePathsModule = injectStrict(FILE_PATHS_MODULE_KEY);
 
-	const pageLinks: SidebarItems = [
+	const pageLinks: ComputedRef<SidebarItems> = computed(() => [
 		{
 			title: "global.sidebar.item.overview",
 			href: "/dashboard",
@@ -108,9 +109,9 @@ export const useSidebarItems = () => {
 			testId: "Add-ons",
 			activeForUrls: ["^/addons($|/.*)"],
 		},
-	];
+	]);
 
-	const legalLinks: SidebarSingleItem[] = [
+	const legalLinks: ComputedRef<SidebarSingleItem[]> = computed(() => [
 		{
 			to: "/imprint",
 			title: "components.legacy.footer.imprint",
@@ -130,7 +131,7 @@ export const useSidebarItems = () => {
 			rel: "noopener",
 			testId: "privacy-policy",
 		},
-	];
+	]);
 
 	const systemLinks: SidebarSingleItem[] = [
 		{
@@ -185,7 +186,7 @@ export const useSidebarItems = () => {
 		rel: "noopener",
 	});
 
-	const metaLinks: SidebarGroupItem[] = [
+	const metaLinks: ComputedRef<SidebarGroupItem[]> = computed(() => [
 		{
 			title: "global.sidebar.item.management",
 			icon: "$mdiCogOutline",
@@ -299,10 +300,10 @@ export const useSidebarItems = () => {
 			activeForUrls: ["^/security($|/.*)"],
 			children: systemLinks,
 		},
-	];
+	]);
 
 	if (envConfigModule.getTheme !== SchulcloudTheme.Default) {
-		metaLinks.push(accessibilityGroup);
+		metaLinks.value.push(accessibilityGroup);
 	}
 
 	return { pageLinks, legalLinks, metaLinks };

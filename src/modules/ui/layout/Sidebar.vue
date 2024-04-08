@@ -73,11 +73,11 @@ const getItemsForUser = (items: SidebarItems) => {
 	return pageItems;
 };
 
-const pageItems = computed(() => getItemsForUser(pageLinks));
+const pageItems = computed(() => getItemsForUser(pageLinks.value));
 const metaItems = computed(
-	() => getItemsForUser(metaLinks) as SidebarGroupItem[]
+	() => getItemsForUser(metaLinks.value) as SidebarGroupItem[]
 );
 const legalItems = computed(
-	() => getItemsForUser(legalLinks) as SidebarSingleItem[]
+	() => getItemsForUser(legalLinks.value) as SidebarSingleItem[]
 );
 </script>
