@@ -4,13 +4,15 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import { Board } from "@/types/board/Board";
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
-import { nextTick, onMounted, ref } from "vue";
+import { nextTick, ref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
+import { defineStore } from "pinia";
+import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
+import * as BoardActions from "./actions/BoardStoreActions";
 
-export const useBoardState = (id: string) => {
+export const useBoardStore = defineStore("boardStore", () => {
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
@@ -26,6 +28,25 @@ export const useBoardState = (id: string) => {
 		updateBoardVisibilityCall,
 		createCardCall,
 	} = useBoardApi();
+
+	function dispatch(action: PermittedStoreActions<typeof BoardActions>) {
+		handle(
+			action,
+			on(BoardActions.fetchBoard, fetchBoard),
+			on(BoardActions.createCard, createCard),
+			on(BoardActions.createColumn, createColumn),
+			on(BoardActions.deleteCard, deleteCard),
+			on(BoardActions.deleteColumn, deleteColumn),
+			on(BoardActions.moveCard, moveCard),
+			on(BoardActions.moveColumn, moveColumn),
+			on(BoardActions.updateColumnTitle, updateColumnTitle),
+			on(BoardActions.updateBoardTitle, updateBoardTitle),
+			on(BoardActions.updateBoardVisibility, updateBoardVisibility),
+			on(BoardActions.updateBoardVisibility, updateBoardVisibility),
+			on(BoardActions.reloadBoard, reloadBoard)
+		);
+	}
+
 	const { setEditModeId } = useSharedEditMode();
 
 	const getColumnIndex = (columnId: string | undefined): number => {
@@ -48,17 +69,19 @@ export const useBoardState = (id: string) => {
 		return board.value.columns[columnIndex].id;
 	};
 
-	const createCard = async (columnId: string) => {
+	const createCard = async (
+		action: ReturnType<typeof BoardActions.createCard>
+	) => {
 		if (board.value === undefined) return;
 
 		try {
-			const newCard = await createCardCall(columnId);
+			const newCard = await createCardCall(action.payload.columnId);
 
 			const { setFocus } = useBoardFocusHandler();
 			setFocus(newCard.id);
 
 			const columnIndex = board.value.columns.findIndex(
-				(column) => column.id === columnId
+				(column) => column.id === action.payload.columnId
 			);
 			board.value.columns[columnIndex].cards.push({
 				cardId: newCard.id,
@@ -88,20 +111,23 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const deleteCard = async (id: string) => {
+	const deleteCard = async (
+		action: ReturnType<typeof BoardActions.deleteCard>
+	) => {
 		if (board.value === undefined) return;
+		const { cardId } = action.payload;
 
 		try {
 			const columnIndex = board.value.columns.findIndex(
-				(column) => column.cards.find((c) => c.cardId === id) !== undefined
+				(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
 			);
 			if (columnIndex !== -1) {
 				const cardIndex = board.value.columns[columnIndex].cards.findIndex(
-					(c) => c.cardId === id
+					(c) => c.cardId === cardId
 				);
 				board.value.columns[columnIndex].cards.splice(cardIndex, 1);
 			}
-			await deleteCardCall(id);
+			await deleteCardCall(cardId);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
@@ -109,8 +135,11 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const deleteColumn = async (columnId: string) => {
+	const deleteColumn = async (
+		action: ReturnType<typeof BoardActions.deleteColumn>
+	) => {
 		if (board.value === undefined) return;
+		const { columnId } = action.payload;
 
 		try {
 			const columnIndex = getColumnIndex(columnId);
@@ -126,11 +155,13 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const fetchBoard = async (id: string): Promise<void> => {
+	const fetchBoard = async (
+		action: ReturnType<typeof BoardActions.fetchBoard>
+	): Promise<void> => {
 		isLoading.value = true;
 
 		try {
-			board.value = await fetchBoardCall(id);
+			board.value = await fetchBoardCall(action.payload.id);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplate("notLoaded", "board"),
@@ -140,7 +171,9 @@ export const useBoardState = (id: string) => {
 		isLoading.value = false;
 	};
 
-	const moveCard = async (cardMove: CardMove): Promise<void> => {
+	const moveCard = async (
+		action: ReturnType<typeof BoardActions.moveCard>
+	): Promise<void> => {
 		if (board.value === undefined) return;
 
 		try {
@@ -152,7 +185,7 @@ export const useBoardState = (id: string) => {
 				fromColumnId,
 				columnDelta,
 				forceNextTick,
-			} = cardMove;
+			} = action.payload;
 
 			const fromColumnIndex = getColumnIndex(fromColumnId);
 			let newColumnId: string | undefined = toColumnId;
@@ -201,8 +234,11 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const moveColumn = async (columnMove: ColumnMove, byKeyboard = false) => {
+	const moveColumn = async (
+		action: ReturnType<typeof BoardActions.moveColumn>
+	) => {
 		if (board.value === undefined) return;
+		const { columnMove, byKeyboard } = action.payload;
 
 		try {
 			const { addedIndex, removedIndex, columnId } = columnMove;
@@ -227,8 +263,11 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const updateColumnTitle = async (columnId: string, newTitle: string) => {
+	const updateColumnTitle = async (
+		action: ReturnType<typeof BoardActions.updateColumnTitle>
+	) => {
 		if (board.value === undefined) return;
+		const { columnId, newTitle } = action.payload;
 
 		try {
 			await updateColumnTitleCall(columnId, newTitle);
@@ -243,8 +282,11 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const updateBoardTitle = async (newTitle: string) => {
+	const updateBoardTitle = async (
+		action: ReturnType<typeof BoardActions.updateBoardTitle>
+	) => {
 		if (board.value === undefined) return;
+		const { newTitle } = action.payload;
 
 		try {
 			await updateBoardTitleCall(board.value.id, newTitle);
@@ -256,8 +298,11 @@ export const useBoardState = (id: string) => {
 		}
 	};
 
-	const updateBoardVisibility = async (newVisibility: boolean) => {
+	const updateBoardVisibility = async (
+		action: ReturnType<typeof BoardActions.updateBoardVisibility>
+	) => {
 		if (board.value === undefined) return;
+		const { newVisibility } = action.payload;
 
 		try {
 			await updateBoardVisibilityCall(board.value.id, newVisibility);
@@ -285,29 +330,12 @@ export const useBoardState = (id: string) => {
 	const reloadBoard = async () => {
 		if (board.value === undefined) return;
 
-		await fetchBoard(board.value.id);
+		await fetchBoard({ type: "fetch-board", payload: { id: board.value.id } });
 	};
-
-	onMounted(() => {
-		fetchBoard(id).then(() => ({
-			// do nothing but celebrating sonarcloud
-		}));
-	});
 
 	return {
 		board,
 		isLoading,
-		createCard,
-		createColumn,
-		deleteCard,
-		deleteColumn,
-		fetchBoard,
-		moveCard,
-		moveColumn,
-		notifyWithTemplateAndReload,
-		reloadBoard,
-		updateBoardTitle,
-		updateBoardVisibility,
-		updateColumnTitle,
+		dispatch,
 	};
-};
+});
