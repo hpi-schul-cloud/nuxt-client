@@ -8,6 +8,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	ROOM_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -40,6 +41,7 @@ import {
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
+import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
 import { BoardCard } from "@/types/board/Card";
 import {
@@ -207,6 +209,10 @@ describe("Board", () => {
 
 	const shareModule = createModuleMocks(ShareModule);
 
+	const roomModule = createModuleMocks(RoomModule, {
+		getRoomId: "room1",
+	});
+
 	const setup = (options?: {
 		board?: Board;
 		isLoading?: boolean;
@@ -239,6 +245,7 @@ describe("Board", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					loadingStateModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
+					[ROOM_MODULE_KEY.valueOf()]: roomModule,
 				},
 			},
 			propsData: { boardId: options?.board?.id ?? boardWithOneColumn.id },
@@ -793,6 +800,44 @@ describe("Board", () => {
 					await boardHeader.vm.$emit("share:board");
 
 					expect(shareModule.startShareFlow).not.toHaveBeenCalled();
+				});
+			});
+		});
+
+		describe("when the 'delete' menu button is clicked", () => {
+			const openDeleteBoardDialogMock = jest.fn();
+
+			it("should call openDeleteBoardDialog method when board should be deleted", async () => {
+				const { wrapper } = setup({
+					permissions: { hasDeletePermission: true },
+				});
+
+				wrapper.vm.openDeleteBoardDialog = openDeleteBoardDialogMock;
+
+				const columnComponent = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				columnComponent.vm.$emit("delete:board");
+
+				expect(openDeleteBoardDialogMock).toHaveBeenCalled();
+				expect(openDeleteBoardDialogMock).toBeCalledWith("board1");
+			});
+
+			it("should call deleteBoard method to delete board and redirect to rooms board page", async () => {
+				const { wrapper } = setup({
+					permissions: { hasDeletePermission: true },
+				});
+
+				const columnComponent = wrapper.findComponent({
+					name: "BoardHeader",
+				});
+				await columnComponent.vm.$emit("delete:board");
+
+				expect(roomModule.deleteBoard).toBeCalledWith("board1");
+
+				expect(router.push).toHaveBeenCalledTimes(1);
+				expect(router.push).toHaveBeenCalledWith({
+					path: "/rooms/" + roomModule.getRoomId,
 				});
 			});
 		});

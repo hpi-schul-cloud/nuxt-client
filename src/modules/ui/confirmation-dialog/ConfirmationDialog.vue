@@ -2,7 +2,7 @@
 	<vCustomDialog
 		data-testid="delete-dialog-item"
 		:has-buttons="true"
-		confirm-btn-title-key="common.actions.remove"
+		confirm-btn-title-key="common.actions.delete"
 		@dialog-confirmed="onConfirmation"
 		:is-open="isDialogOpen"
 		@dialog-closed="onCloseDialog"
