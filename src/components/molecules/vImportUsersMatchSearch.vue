@@ -186,7 +186,6 @@
 					</VBtn>
 					<VBtn
 						variant="text"
-						:class="canDelete ? 'secondary' : ''"
 						class="m-2"
 						:disabled="!canDelete"
 						data-testid="delete-match-btn"

@@ -23,7 +23,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiFileTreeOutline</v-icon>
+				<v-icon>$mdiFileTreeOutline</v-icon>
 			</template>
 		</base-input>
 		<p class="path-hint">
@@ -60,7 +60,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
+				<v-icon>$mdiAccountCircleOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -77,7 +77,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiEmailOutline</v-icon>
+				<v-icon>$mdiEmailOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -95,7 +95,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiCardAccountDetailsOutline</v-icon>
+				<v-icon>$mdiCardAccountDetailsOutline</v-icon>
 			</template>
 		</base-input>
 		<base-input
@@ -113,7 +113,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiAccountBoxOutline</v-icon>
+				<v-icon>$mdiAccountBoxOutline</v-icon>
 			</template>
 		</base-input>
 	</div>
@@ -153,11 +153,6 @@ export default defineComponent({
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
 		};
-	},
-	computed: {
-		fillColor() {
-			return "rgba(var(--v-theme-black))";
-		},
 	},
 	watch: {
 		validate: function () {

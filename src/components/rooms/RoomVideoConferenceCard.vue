@@ -31,7 +31,6 @@
 						<v-btn
 							class="my-auto"
 							variant="outlined"
-							color="secondary"
 							:disabled="isRefreshing"
 							@click.stop="refreshVideoConferenceStatus"
 							data-testId="refresh-btn"

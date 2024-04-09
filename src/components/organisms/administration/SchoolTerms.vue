@@ -31,7 +31,7 @@
 				<template v-slot:prepend>
 					<v-icon>$file_pdf_outline</v-icon>
 				</template>
-				<v-list-item-title class="text-body-1 text-black mb-2">
+				<v-list-item-title class="text-body-1 mb-2">
 					{{ t("pages.administration.school.index.termsOfUse.fileName") }}
 				</v-list-item-title>
 				<v-list-item-subtitle class="text-body-2">
@@ -218,7 +218,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .alert-text {
-	color: rgba(var(--v-theme-black)) !important;
+	color: rgba(var(--v-theme-on-background)) !important;
 	line-height: var(--line-height-lg) !important;
 }
 

@@ -418,11 +418,6 @@ export default {
 	opacity: 0;
 }
 
-.share-info-text {
-	font-size: var(--space-md);
-	color: rgba(var(--v-theme-black));
-}
-
 .share-cancel-button {
 	text-align: right;
 }

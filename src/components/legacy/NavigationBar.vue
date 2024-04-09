@@ -103,7 +103,6 @@ export default {
 	justify-content: center;
 	width: 100%;
 	line-height: var(--line-height-lg);
-	color: rgba(var(--v-theme-black));
 	text-align: center;
 	background-color: rgba(var(--v-theme-white));
 	-webkit-backdrop-filter: blur(5px);
@@ -219,7 +218,6 @@ export default {
 	padding: var(--space-xs) var(--space-md);
 	font-family: var(--font-primary);
 	font-size: var(--text-md);
-	color: rgba(var(--v-theme-black));
 
 	@include breakpoint(tablet) {
 		display: flex;

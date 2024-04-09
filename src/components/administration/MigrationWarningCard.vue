@@ -27,11 +27,7 @@
 			/>
 		</v-card-text>
 		<v-card-actions>
-			<v-btn
-				data-testid="disagree-btn"
-				color="secondary"
-				@click="$emit(eventName)"
-			>
+			<v-btn data-testid="disagree-btn" @click="$emit(eventName)">
 				{{ $t(disagree) }}
 			</v-btn>
 			<v-btn
