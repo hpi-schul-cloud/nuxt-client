@@ -1386,7 +1386,7 @@ export default {
 		"Das Thema wurde erfolgreich kopiert.",
 	"pages.room.copy.task.message.copied":
 		"Die Aufgabe wurde erfolgreich kopiert.",
-	"pages.room.itemDelete.text": "{itemType} '{itemTitle}' wirklich löschen?",
+	"pages.room.itemDelete.text": '{itemType} "{itemTitle}" wirklich löschen?',
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.label.shareLesson": "Themenkopie teilen",

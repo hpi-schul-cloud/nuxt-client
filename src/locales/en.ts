@@ -1360,7 +1360,7 @@ export default {
 		"The course could not be copied completely.",
 	"pages.room.copy.lesson.message.copied": "Topic was successfully copied.",
 	"pages.room.copy.task.message.copied": "Task was successfully copied.",
-	"pages.room.itemDelete.text": "Delete {itemType} '{itemTitle}'?",
+	"pages.room.itemDelete.text": 'Delete {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.label.shareLesson": "Share topic copy",
