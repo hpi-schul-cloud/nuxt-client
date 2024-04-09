@@ -84,8 +84,7 @@ describe("BoardNotifications.composable", () => {
 			const { resetNotifier } = setup();
 			resetNotifier();
 
-			expect(notifierModule.setNotifier).toHaveBeenCalled();
-			expect(notifierModule.setNotifier).toHaveBeenCalledWith(undefined);
+			expect(notifierModule.reset).toHaveBeenCalled();
 		});
 	});
 });

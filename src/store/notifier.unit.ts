@@ -4,9 +4,9 @@ import { AlertPayload } from "@/store/types/alert-payload";
 describe("notifier store", () => {
 	describe("actions", () => {
 		describe("show", () => {
-			it("should call 'setNotifier' mutation", () => {
+			it("should call 'addNotifier' mutation", () => {
 				const notifierModule = new NotifierModule({});
-				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
+				const addNotifierMock = jest.spyOn(notifierModule, "addNotifier");
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
@@ -15,12 +15,12 @@ describe("notifier store", () => {
 				};
 				notifierModule.show(payload);
 
-				expect(setNotifierMock).toHaveBeenCalledWith(payload);
+				expect(addNotifierMock).toHaveBeenCalledWith(payload);
 			});
 
 			it("should add default values", () => {
 				const notifierModule = new NotifierModule({});
-				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
+				const addNotifierMock = jest.spyOn(notifierModule, "addNotifier");
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
@@ -35,12 +35,12 @@ describe("notifier store", () => {
 					timeout: 5000,
 				};
 
-				expect(setNotifierMock).toHaveBeenCalledWith(payloadWithDefaults);
+				expect(addNotifierMock).toHaveBeenCalledWith(payloadWithDefaults);
 			});
 
 			it("should pass payload if optional params are set", () => {
 				const notifierModule = new NotifierModule({});
-				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
+				const addNotifierMock = jest.spyOn(notifierModule, "addNotifier");
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
@@ -49,13 +49,14 @@ describe("notifier store", () => {
 				};
 				notifierModule.show(payload);
 
-				expect(setNotifierMock).toHaveBeenCalledWith(payload);
+				expect(addNotifierMock).toHaveBeenCalledWith(payload);
 			});
 
-			it("should call setNotifier when timeout reached", () => {
+			it("should call removeNotifier when timeout reached", () => {
 				jest.useFakeTimers();
 				const notifierModule = new NotifierModule({});
-				const setNotifierMock = jest.spyOn(notifierModule, "setNotifier");
+				const addNotifierMock = jest.spyOn(notifierModule, "addNotifier");
+				const removeNotifierMock = jest.spyOn(notifierModule, "removeNotifier");
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
@@ -64,15 +65,15 @@ describe("notifier store", () => {
 				};
 				notifierModule.show(payload);
 
-				expect(setNotifierMock).toHaveBeenCalledWith(payload);
+				expect(addNotifierMock).toHaveBeenCalledWith(payload);
 				jest.advanceTimersByTime(1000);
-				expect(setNotifierMock).toHaveBeenCalledWith(undefined);
+				expect(removeNotifierMock).toHaveBeenCalledWith(payload);
 			});
 		});
 	});
 
 	describe("mutations", () => {
-		describe("setNotifier", () => {
+		describe("addNotifier", () => {
 			it("should set the payload in state", () => {
 				const notifierModule = new NotifierModule({});
 				const payload: AlertPayload = {
@@ -81,8 +82,50 @@ describe("notifier store", () => {
 					autoClose: true,
 					timeout: 5000,
 				};
-				notifierModule.setNotifier(payload);
-				expect(notifierModule.notifier).toStrictEqual(payload);
+				notifierModule.addNotifier(payload);
+				expect(notifierModule.notifier).toStrictEqual([payload]);
+			});
+		});
+
+		describe("removeNotifier", () => {
+			it("should remove the payload in state", () => {
+				const notifierModule = new NotifierModule({});
+				const payload: AlertPayload = {
+					text: "hello world",
+					status: "success",
+					autoClose: true,
+					timeout: 5000,
+				};
+				const anotherPayload: AlertPayload = {
+					text: "hello another world",
+					status: "success",
+					autoClose: true,
+					timeout: 5000,
+				};
+				notifierModule.addNotifier(payload);
+				notifierModule.addNotifier(anotherPayload);
+				expect(notifierModule.notifier).toStrictEqual([
+					anotherPayload,
+					payload,
+				]);
+				notifierModule.removeNotifier(payload);
+				expect(notifierModule.notifier).toStrictEqual([anotherPayload]);
+			});
+		});
+
+		describe("reset", () => {
+			it("should reset the state", () => {
+				const notifierModule = new NotifierModule({});
+				const payload: AlertPayload = {
+					text: "hello world",
+					status: "success",
+					autoClose: true,
+					timeout: 5000,
+				};
+				notifierModule.addNotifier(payload);
+				expect(notifierModule.notifier).toStrictEqual([payload]);
+				notifierModule.removeNotifier(payload);
+				expect(notifierModule.notifier).toStrictEqual([]);
 			});
 		});
 	});

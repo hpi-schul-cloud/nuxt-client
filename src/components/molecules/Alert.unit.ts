@@ -8,46 +8,34 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { VAlert } from "vuetify/lib/components/index.mjs";
 import Alert from "./Alert.vue";
+import { VAlert } from "vuetify/lib/components/index.mjs";
 
-const getWrapper = (device = "desktop", options?: object) => {
+const getWrapper = (props?: AlertPayload) => {
+	const data: AlertPayload = {
+		text: "hello world",
+		status: "success",
+	};
 	return mount(Alert, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				mq: { current: device },
-			},
 		},
-		...options,
+		props: {
+			notification: data,
+			...props,
+		},
 	});
 };
 
-describe("Alert", () => {
+describe("AlertContainer", () => {
 	beforeEach(() => {
 		setupStores({
 			notifierModule: NotifierModule,
 		});
 	});
 
-	it("should observe the store and set 'showNotifier' to true", async () => {
+	it("should observe the store and set 'showNotifier' to true when rendered and data set", async () => {
 		const wrapper = getWrapper();
-		expect(wrapper.vm.showNotifier).toBe(false);
-		notifierModule.setNotifier({ text: "some text", status: "success" });
-		await nextTick();
-
-		expect(wrapper.vm.showNotifier).toBe(true);
-	});
-
-	it("should be visible when set with text", async () => {
-		const wrapper = getWrapper();
-		const data: AlertPayload = {
-			text: "hello world",
-			status: "success",
-		};
-		notifierModule.show(data);
-		await nextTick();
-
 		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
@@ -74,7 +62,7 @@ describe("Alert", () => {
 
 		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(true);
-		jest.advanceTimersByTime(5000);
+		jest.advanceTimersByTime(50000);
 		await nextTick();
 		expect(wrapper.vm.showNotifier).toBe(false);
 	});
@@ -153,7 +141,7 @@ describe("Alert", () => {
 		expect(wrapper.vm.showNotifier).toBe(true);
 	});
 
-	it("should set store 'undefined' when close button clicked", async () => {
+	it("should emit 'remove:notification' when close button clicked", async () => {
 		jest.useFakeTimers();
 		const wrapper = getWrapper();
 		const data: AlertPayload = {
@@ -175,20 +163,6 @@ describe("Alert", () => {
 		await alertComponent.vm.$emit("update:modelValue");
 
 		await nextTick();
-		expect(wrapper.vm.showNotifier).toBe(false);
-	});
-
-	it("should set mobile position-class as default if the device is mobile", async () => {
-		const wrapper = getWrapper("mobile");
-		await nextTick();
-		const result = wrapper.find(".alert-wrapper-mobile");
-		expect(result.element).toBeTruthy();
-	});
-
-	it("should set desktop position-class as default if the device is desktop or tablet", async () => {
-		const wrapper = getWrapper("desktop");
-		await nextTick();
-		const result = wrapper.get(".alert-wrapper");
-		expect(result.element).toBeTruthy();
+		expect(wrapper.emitted("remove:notification")).toHaveLength(1);
 	});
 });

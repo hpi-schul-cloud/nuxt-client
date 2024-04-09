@@ -91,7 +91,7 @@ import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, onUnmounted, toRef, watch } from "vue";
+import { computed, onMounted, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
@@ -117,7 +117,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { resetNotifier, showCustomNotifier } = useBoardNotifier();
+const { showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 const {
@@ -236,10 +236,6 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 onMounted(() => {
 	setAlert();
-});
-
-onUnmounted(() => {
-	resetNotifier();
 });
 
 const setAlert = useDebounceFn(() => {

@@ -40,7 +40,7 @@ export const useBoardNotifier = () => {
 	};
 
 	const resetNotifier = () => {
-		notifierModule.setNotifier(undefined);
+		notifierModule.reset();
 	};
 
 	return {
