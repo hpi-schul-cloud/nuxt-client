@@ -74,19 +74,19 @@
 </template>
 
 <script setup lang="ts">
-import {
-	mdiPencilOutline,
-	mdiUndoVariant,
-	mdiShareVariantOutline,
-	mdiTrashCanOutline,
-	mdiContentCopy,
-} from "@mdi/js";
-import { PropType, computed, toRef } from "vue";
-import { useI18n } from "vue-i18n";
-import { RoomDotMenu } from "@ui-room-details";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { RoomData } from "@/store/types/room";
+import {
+	mdiContentCopy,
+	mdiPencilOutline,
+	mdiShareVariantOutline,
+	mdiTrashCanOutline,
+	mdiUndoVariant,
+} from "@mdi/js";
+import { RoomDotMenu } from "@ui-room-details";
+import { computed, PropType, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 import { LessonData } from "./types";
 
 const props = defineProps({
@@ -191,7 +191,7 @@ const moreActionsMenuItems = computed(() => {
 	actions.push({
 		icon: mdiTrashCanOutline,
 		action: () => emit("delete-lesson"),
-		name: t("common.actions.remove"),
+		name: t("common.actions.delete"),
 		dataTestId: `lesson-card-menu-action-remove-${
 			toRef(props, "lessonCardIndex").value
 		}`,
