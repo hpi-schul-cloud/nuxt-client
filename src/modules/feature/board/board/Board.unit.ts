@@ -810,6 +810,7 @@ describe("Board", () => {
 			it("should call openDeleteBoardDialog method when board should be deleted", async () => {
 				const { wrapper } = setup({
 					permissions: { hasDeletePermission: true },
+					board: boardWithOneColumn,
 				});
 
 				wrapper.vm.openDeleteBoardDialog = openDeleteBoardDialogMock;
@@ -826,6 +827,7 @@ describe("Board", () => {
 			it("should call deleteBoard method to delete board and redirect to rooms board page", async () => {
 				const { wrapper } = setup({
 					permissions: { hasDeletePermission: true },
+					board: boardWithOneColumn,
 				});
 
 				const columnComponent = wrapper.findComponent({
