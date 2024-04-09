@@ -1402,7 +1402,7 @@ export default {
 	"pages.room.copy.lesson.message.copied":
 		"El tema se ha copiado correctamente.",
 	"pages.room.copy.task.message.copied": "La tarea se copió con éxito.",
-	"pages.room.itemDelete.text": "¿Eliminar {itemType} {itemTitle}?",
+	"pages.room.itemDelete.text": "¿Eliminar {itemType} '{itemTitle}'?",
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.label.shareLesson": "Compartir copia del tema",
