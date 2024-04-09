@@ -703,6 +703,12 @@ export default {
 		"Should the synchronization of the user group {groupName} in the course {courseName} really be ended?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronization completed successfully",
+	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
+	"feature-course-sync.GroupSelectionDialog.text":
+		"In the next step, the selected user group will be synchronized with the newly created course.",
+	"feature-course-sync.GroupSelectionDialog.selection.label": "Group selection",
+	"feature-course-sync.GroupSelectionDialog.noTeacher":
+		"The following data for creating a new course is not available in the user group {groupName}:<li>Teacher</li><br/>Please check in moin.schule and start course creation again.",
 	"format.date": "MM/DD/YYYY",
 	"format.dateLong": "dddd, MMMM DD. YYYY",
 	"format.dateTime": "MM/DD/YYYY HH:mm",
@@ -1365,8 +1371,7 @@ export default {
 		"The course could not be copied completely.",
 	"pages.room.copy.lesson.message.copied": "Topic was successfully copied.",
 	"pages.room.copy.task.message.copied": "Task was successfully copied.",
-	"pages.room.itemDelete.text":
-		'Are you sure, you want to delete item "{itemTitle}"?',
+	"pages.room.itemDelete.text": 'Delete {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
@@ -1392,6 +1397,7 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title":
 		"Currently, there are no courses here.",
 	"pages.rooms.fab.add.course": "New course",
+	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
 	"pages.rooms.fab.add.lesson": "New topic",
 	"pages.rooms.fab.add.board": "New column board",
 	"pages.rooms.fab.add.task": "New task",
@@ -1547,12 +1553,14 @@ export default {
 	"pages.videoConference.info.notStarted":
 		"The video conference hasn't started yet.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
-	"tldraw.error.403": "Tldraw is disabled",
-	"tldraw.error.500": "An error occured while setting up tldraw",
+	"error.500":
+		"There are problems in the system. We are working on fixing the issue. Please try again later.",
+	"error.4500":
+		"Connection error: The real-time session could not be established. Please check the connection or reload the page.",
+	"error.4401":
+		"Unfortunately, you do not have permission to view this content.",
 	"tldraw.error.ws.4400": "Room name is missing in URL params",
-	"tldraw.error.ws.4401": "You do not have permission to this tldraw board",
-	"tldraw.error.ws.4404": "Tldraw board with this name was not found",
-	"tldraw.error.ws.4500": "An error occured within tldraw websocket connection",
+	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",

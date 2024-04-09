@@ -723,6 +723,14 @@ export default {
 		"¿Debería realmente finalizarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Sincronización completada exitosamente",
+	"feature-course-sync.GroupSelectionDialog.title":
+		"Seleccionar grupo de usuarios",
+	"feature-course-sync.GroupSelectionDialog.text":
+		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
+	"feature-course-sync.GroupSelectionDialog.selection.label":
+		"Selección de grupo",
+	"feature-course-sync.GroupSelectionDialog.noTeacher":
+		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}:<li>Profesor</li><br/>Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",
@@ -1407,8 +1415,7 @@ export default {
 	"pages.room.copy.lesson.message.copied":
 		"El tema se ha copiado correctamente.",
 	"pages.room.copy.task.message.copied": "La tarea se copió con éxito.",
-	"pages.room.itemDelete.text":
-		'¿Estás seguro de que deseas eliminar el elemento "{itemTitle}"?',
+	"pages.room.itemDelete.text": '¿Eliminar {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
@@ -1433,6 +1440,7 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title":
 		"Actualmente no hay cursos aquí.",
 	"pages.rooms.fab.add.course": "Nuevo curso",
+	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
 	"pages.rooms.fab.add.lesson": "Nuevo tema",
 	"pages.rooms.fab.add.board": "Nuevo tablero de columna",
 	"pages.rooms.fab.add.task": "Nuevo tarea",
@@ -1591,15 +1599,15 @@ export default {
 	"pages.videoConference.info.notStarted":
 		"La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
-	"tldraw.error.403": "Tldraw está desactivado",
-	"tldraw.error.500": "Se ha producido un error al configurar tldraw",
+	"error.500":
+		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",
+	"error.4500":
+		"Error de conexión: No se ha podido establecer la sesión en tiempo real. Compruebe la conexión o vuelva a cargar la página.",
+	"error.4401":
+		"Lamentablemente, falta la autorización para ver este contenido.",
 	"tldraw.error.ws.4400":
 		"Falta el nombre de la sala en los parámetros de la URL",
-	"tldraw.error.ws.4401": "Usted no tiene permiso para este tablero tldraw",
-	"tldraw.error.ws.4404":
-		"No se ha encontrado el tablero Tldraw con este nombre",
-	"tldraw.error.ws.4500":
-		"Se ha producido un error en la conexión tldraw websocket",
+	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",

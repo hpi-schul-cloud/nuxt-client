@@ -1,4 +1,4 @@
-import { GroupUserRole } from "./GroupUserRole";
+import { GroupUserRole } from "./groupUserRole";
 
 export type GroupUser = {
 	id: string;

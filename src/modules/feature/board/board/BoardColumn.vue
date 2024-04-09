@@ -268,11 +268,7 @@ export default defineComponent({
 <style>
 .sortable-drag-ghost .v-card {
 	opacity: 0.6;
-	background-color: rgba(var(--v-theme-secondary-lighten-1));
 	width: 346px; /* size of the card - column has 400px width and some paddings and margins */
-}
-.sortable-drag-ghost .v-card .v-btn.v-btn--icon {
-	background-color: rgba(var(--v-theme-secondary-lighten-1)) !important;
 }
 </style>
 <style scoped>
@@ -310,12 +306,12 @@ export default defineComponent({
 	border-radius: 5px;
 }
 .column-drag-handle:hover .scrollable-column::-webkit-scrollbar-thumb {
-	background-color: rgba(var(--v-theme-secondary-lighten-1));
+	background-color: rgba(var(--v-theme-on-surface), 0.6);
 	border-radius: 5px;
 }
 
 /* Handle on hover */
 .scrollable-column::-webkit-scrollbar-thumb:hover {
-	background: rgba(var(--v-theme-secondary)) !important;
+	background: rgba(var(--v-theme-on-surface), 0.8) !important;
 }
 </style>

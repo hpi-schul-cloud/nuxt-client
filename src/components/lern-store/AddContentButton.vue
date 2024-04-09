@@ -74,7 +74,7 @@ export default {
 	},
 	props: {
 		round: { type: Boolean },
-		btnColor: { type: String, default: "primary" },
+		btnColor: { type: String },
 		btnLabel: { type: String, default: "" },
 		btnClass: { type: String, default: "" },
 		client: { type: String, default: "Schul-Cloud" },

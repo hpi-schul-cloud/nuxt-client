@@ -5,7 +5,6 @@
 		inactive
 	>
 		<v-icon
-			color="black"
 			size="18"
 			class="mr-2"
 			data-testid="board-submission-element-edit-icon"
@@ -13,7 +12,7 @@
 			$mdiLightbulbOnOutline
 		</v-icon>
 		<span
-			class="text-subtitle-1 d-inline-block text-truncate text-black font-weight-bold"
+			class="text-subtitle-1 d-inline-block text-truncate font-weight-bold"
 			data-testid="board-submission-element-edit-content"
 		>
 			{{ t("components.cardElement.submissionElement") }}

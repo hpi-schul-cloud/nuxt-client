@@ -714,6 +714,13 @@ export default {
 		"Чи дійсно слід завершити синхронізацію групи користувачів {groupName} у курсі {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Синхронізацію успішно завершено",
+	"feature-course-sync.GroupSelectionDialog.title":
+		"Виберіть групу користувачів",
+	"feature-course-sync.GroupSelectionDialog.text":
+		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
+	"feature-course-sync.GroupSelectionDialog.selection.label": "Вибір групи",
+	"feature-course-sync.GroupSelectionDialog.noTeacher":
+		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}:<li>Викладач</li><br/>Перевірте moin.schule і почніть створення курсу знову.",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1389,7 +1396,7 @@ export default {
 	"pages.room.copy.lesson.message.copied": "Тему успішно скопійовано.",
 	"pages.room.copy.task.message.copied": "Завдання успішно скопійовано.",
 	"pages.room.itemDelete.text":
-		'Ви впевнені, що хочете видалити елемент " {itemTitle} "?',
+		'{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
@@ -1413,6 +1420,7 @@ export default {
 	"pages.rooms.allRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.fab.add.course": "Новий курс",
+	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.add.lesson": "Створити тему",
 	"pages.rooms.fab.add.board": "Нова дошка",
 	"pages.rooms.fab.add.task": "Створити завдання",
@@ -1566,13 +1574,13 @@ export default {
 		"Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї.",
 	"pages.videoConference.info.notStarted": "Відеоконференція ще не почалася.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
-	"tldraw.error.403": "Tldraw вимкнено",
-	"tldraw.error.500": "Виникла помилка під час налаштування tldraw",
+	"error.500":
+		"Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",
+	"error.4500":
+		"Помилка з'єднання: Не вдалося встановити сеанс в режимі реального часу. Будь ласка, перевірте з'єднання або перезавантажте сторінку.",
+	"error.4401": "На жаль, у вас немає дозволу на перегляд цього контенту.",
 	"tldraw.error.ws.4400": "Назва кімнати відсутня в параметрах URL-адреси",
-	"tldraw.error.ws.4401": "Ви не маєте дозволу на цю дошку tldraw",
-	"tldraw.error.ws.4404": "Дошки Tldraw з такою назвою не знайдено",
-	"tldraw.error.ws.4500":
-		"Виникла помилка під час з'єднання з веб-сокетом tldraw",
+	"tldraw.error.ws.4404": "Дошки з такою назвою не знайдено",
 	"ui-confirmation-dialog.ask-delete":
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
 	"util-validators-invalid-url": "Esta URL no es válida.",

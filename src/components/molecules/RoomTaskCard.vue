@@ -92,22 +92,25 @@
 </template>
 
 <script>
-import { fromNow } from "@/plugins/datetime";
-import { RoomDotMenu } from "@ui-room-details";
-import {
-	mdiPencilOutline,
-	mdiFormatListChecks,
-	mdiUndoVariant,
-	mdiTrashCanOutline,
-	mdiContentCopy,
-	mdiTextBoxCheckOutline,
-	mdiShareVariantOutline,
-} from "@mdi/js";
-import { printDateFromStringUTC, fromNowToFuture } from "@/plugins/datetime";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import VCustomChipTimeRemaining from "@/components/atoms/VCustomChipTimeRemaining";
+import {
+	fromNow,
+	fromNowToFuture,
+	printDateFromStringUTC,
+} from "@/plugins/datetime";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { RenderHTML } from "@feature-render-html";
+import {
+	mdiContentCopy,
+	mdiFormatListChecks,
+	mdiPencilOutline,
+	mdiShareVariantOutline,
+	mdiTextBoxCheckOutline,
+	mdiTrashCanOutline,
+	mdiUndoVariant,
+} from "@mdi/js";
+import { RoomDotMenu } from "@ui-room-details";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
@@ -335,7 +338,7 @@ export default {
 				roleBasedMoreActions[Roles.Teacher].push({
 					icon: this.icons.mdiTrashCanOutline,
 					action: () => this.$emit("delete-task"),
-					name: this.$t("common.actions.remove"),
+					name: this.$t("common.actions.delete"),
 					dataTestId: `room-task-card-menu-remove-${this.taskCardIndex}`,
 				});
 			}

@@ -78,6 +78,6 @@ const text = computed(() => props.notification.text);
 
 :deep(.v-btn__content .v-icon),
 .alert_text {
-	color: rgba(var(--v-theme-black)) !important;
+	color: rgba(var(--v-theme-on-background)) !important;
 }
 </style>
