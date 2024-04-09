@@ -13,7 +13,7 @@ describe("@/components/base/BaseInputCheckbox", () => {
 					label: "Checkbox",
 					type,
 					modelValue: true,
-					color: `rgba(var(--v-theme-secondary))`,
+					color: `rgba(var(--v-theme-on-background))`,
 				},
 			});
 			expect(wrapper.find("input[type='checkbox']").exists()).toBe(true);

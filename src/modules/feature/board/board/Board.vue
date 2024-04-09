@@ -10,6 +10,7 @@
 				@update:title="onUpdateBoardTitle"
 				@copy:board="onCopyBoard"
 				@share:board="onShareBoard"
+				@delete:board="openDeleteBoardDialog(boardId)"
 			/>
 			<div class="d-flex flex-row flex-shrink-1">
 				<div>
@@ -78,7 +79,20 @@
 </template>
 
 <script setup lang="ts">
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
+import ShareModal from "@/components/share/ShareModal.vue";
+import { useCopy } from "@/composables/copy";
+import { useLoadingState } from "@/composables/loadingState";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { CopyParamsTypeEnum } from "@/store/copy";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
+import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	ROOM_MODULE_KEY,
+	SHARE_MODULE_KEY,
+} from "@/utils/inject";
 import {
 	useBoardPermissions,
 	useBoardState,
@@ -93,24 +107,12 @@ import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onMounted, onUnmounted, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import {
-	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	SHARE_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
-import { useCopy } from "@/composables/copy";
-import { useLoadingState } from "@/composables/loadingState";
-import { CopyParamsTypeEnum } from "@/store/copy";
-import { useRouter } from "vue-router";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import ShareModal from "@/components/share/ShareModal.vue";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -290,5 +292,12 @@ const onShareBoard = () => {
 			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
 		});
 	}
+};
+
+const roomModule = injectStrict(ROOM_MODULE_KEY);
+const openDeleteBoardDialog = async (id: string) => {
+	await roomModule.deleteBoard(id);
+
+	router.push({ path: "/rooms/" + roomModule.getRoomId });
 };
 </script>

@@ -35,7 +35,6 @@
 						:alt="$t('pages.content.preview_img.alt')"
 						role="img"
 					/>
-					<div class="preview-background-color" />
 				</div>
 			</div>
 		</div>
@@ -75,7 +74,6 @@
 					<v-btn
 						v-if="isMerlin"
 						variant="outlined"
-						color="secondary"
 						class="content-button"
 						data-testid="learningstore-to-content-link"
 						@click="
@@ -90,7 +88,6 @@
 					<v-btn
 						v-else
 						variant="outlined"
-						color="secondary"
 						:href="downloadUrl"
 						class="content-button"
 						target="_blank"
@@ -394,7 +391,6 @@ $tablet-portrait-width: 768px;
 		}
 
 		.close-transparent {
-			color: rgba(var(--v-theme-black));
 			background-color: rgba(var(--v-theme-white));
 		}
 	}
@@ -428,18 +424,6 @@ $tablet-portrait-width: 768px;
 				margin: auto;
 				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 				color: white;
-			}
-
-			.preview-background-color {
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				z-index: var(--layer-behind);
-				width: 100%;
-				height: 100%;
-				background-color: rgba(var(--v-theme-secondary));
 			}
 
 			.preview-background {
@@ -538,11 +522,6 @@ $tablet-portrait-width: 768px;
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
-
-			.content-link {
-				color: rgba(var(--v-theme-secondary));
-				text-decoration: underline;
-			}
 		}
 
 		.description {
@@ -587,16 +566,6 @@ $tablet-portrait-width: 768px;
 
 				.link {
 					margin-right: var(--space-xs);
-					color: rgba(var(--v-theme-secondary));
-				}
-
-				.tertiary-color {
-					color: rgba(var(--v-theme-black));
-					text-decoration: none;
-
-					:hover {
-						color: rgba(var(--v-theme-black));
-					}
 				}
 			}
 		}

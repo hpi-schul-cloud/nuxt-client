@@ -24,7 +24,7 @@ describe("@/components/topbar/PopupIconInitials", () => {
 			lastName: "Mustermann",
 			userRole: "teacher",
 		});
-		expect(wrapper.find(".icon").text()).toBe("MM");
+		expect(wrapper.findComponent({ name: "v-btn" }).text()).toBe("MM");
 	});
 
 	it("it pops up when it is clicked", async () => {

@@ -12,7 +12,7 @@
 				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
 			>
 				<v-btn
-					variant="plain"
+					variant="text"
 					size="large"
 					class="d-sm-none d-flex button-alignment-top mb-2"
 					:height="84"
@@ -29,7 +29,7 @@
 					</span>
 				</v-btn>
 				<v-btn
-					variant="plain"
+					variant="text"
 					size="large"
 					:height="84"
 					class="d-sm-flex d-none button-alignment-top"
@@ -49,7 +49,7 @@
 				</v-btn>
 
 				<v-btn
-					variant="plain"
+					variant="text"
 					size="large"
 					:height="84"
 					class="d-sm-flex d-none button-alignment-top"
@@ -69,7 +69,7 @@
 				</v-btn>
 
 				<v-btn
-					variant="plain"
+					variant="text"
 					size="large"
 					:height="84"
 					data-testid="qrCodeAction"

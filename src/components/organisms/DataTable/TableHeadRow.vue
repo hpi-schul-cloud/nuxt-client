@@ -9,7 +9,6 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
-					style="color: rgba(var(--v-theme-secondary))"
 				/>
 			</div>
 		</th>
@@ -31,7 +30,7 @@
 					<span class="info-slot">
 						<v-btn
 							icon
-							variant="plain"
+							variant="text"
 							color="info"
 							class="info-button"
 							:aria-label="
@@ -354,8 +353,7 @@ export default {
 	font-weight: var(--font-weight-bold);
 
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid
-			rgba(var(--v-theme-secondary));
+		border-bottom: calc(2 * var(--border-width)) solid;
 
 		&.is-current-sort {
 			opacity: 1;
@@ -369,11 +367,6 @@ export default {
 			padding: var(--space-xs);
 			font-size: var(--text-md);
 			font-weight: var(--font-weight-normal);
-
-			svg {
-				font-size: calc(1.5 * var(--text-lg));
-				color: rgba(var(--v-theme-secondary));
-			}
 		}
 
 		.select-wrap {

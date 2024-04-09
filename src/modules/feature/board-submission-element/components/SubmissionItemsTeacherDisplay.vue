@@ -71,7 +71,7 @@
 					<v-data-table :headers="headers" :items="filteredSubmissions" hover>
 						<template #[`item.status`]="{ item }">
 							<span data-testid="submission-item">
-								<v-icon color="black" size="small">
+								<v-icon size="small">
 									{{ getStatusIcon(item) }}
 								</v-icon>
 							</span>

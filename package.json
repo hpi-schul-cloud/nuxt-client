@@ -51,6 +51,7 @@
 		"@mdi/js": "^7.2.96",
 		"@openapitools/openapi-generator-cli": "^2.7.0",
 		"@types/jest": "^29.5.12",
+		"@types/lodash": "^4.17.0",
 		"@types/object-hash": "^2.2.1",
 		"@types/sortablejs": "^1.15.7",
 		"@typescript-eslint/eslint-plugin": "^7.4.0",

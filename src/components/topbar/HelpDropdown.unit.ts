@@ -4,6 +4,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { VListItem } from "vuetify/lib/components/index.mjs";
 
 describe("@/components/topbar/HelpDropdown", () => {
 	it("shows a list of menu items", () => {
@@ -13,6 +14,8 @@ describe("@/components/topbar/HelpDropdown", () => {
 			},
 		});
 
-		expect(wrapper.findAll(".link")).toHaveLength(4);
+		const allListItems = wrapper.findAllComponents(VListItem);
+
+		expect(allListItems).toHaveLength(4);
 	});
 });

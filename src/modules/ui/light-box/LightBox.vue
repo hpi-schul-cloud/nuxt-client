@@ -5,9 +5,7 @@
 				<v-icon>{{ mdiClose }}</v-icon>
 			</v-btn>
 
-			<v-icon color="black" size="20" class="mr-1">{{
-				mdiFileDocumentOutline
-			}}</v-icon>
+			<v-icon size="20" class="mr-1">{{ mdiFileDocumentOutline }}</v-icon>
 
 			<v-toolbar-title v-if="lightBoxOptions.name !== ''">
 				{{ lightBoxOptions.name }}
