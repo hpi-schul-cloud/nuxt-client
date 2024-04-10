@@ -4,7 +4,6 @@
 			<v-list-item
 				v-bind="props"
 				color="primary"
-				base-color="secondary"
 				tabindex="0"
 				:data-testid="item.testId"
 			>
