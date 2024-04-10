@@ -203,7 +203,7 @@ export default {
 						notifierModule.show({
 							text: this.$t("pages.administration.ldap.index.verified"),
 							status: "success",
-							timeout: 10000,
+							timeout: 5000,
 						});
 						if (systemId) {
 							this.$router.push({

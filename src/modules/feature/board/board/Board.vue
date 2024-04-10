@@ -245,9 +245,9 @@ const setAlert = useDebounceFn(() => {
 	if (!isTeacher) return;
 
 	if (!board.value?.isVisible) {
-		showCustomNotifier(t("components.board.alert.info.draft"), "info", 10000);
+		showCustomNotifier(t("components.board.alert.info.draft"), "info");
 	} else {
-		showCustomNotifier(t("components.board.alert.info.teacher"), "info", 10000);
+		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
 	}
 }, 100);
 

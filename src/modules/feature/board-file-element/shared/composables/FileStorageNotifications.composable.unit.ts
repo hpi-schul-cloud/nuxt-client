@@ -65,7 +65,7 @@ describe("FileStorageNotifier.composable", () => {
 			expect(notifierModule.show).toBeCalledWith({
 				status: "error",
 				text: i18nKey,
-				timeout: 10000,
+				timeout: 5000,
 			});
 		});
 	});
@@ -95,7 +95,7 @@ describe("FileStorageNotifier.composable", () => {
 			expect(notifierModule.show).toBeCalledWith({
 				status: "error",
 				text: i18nKey,
-				timeout: 10000,
+				timeout: 5000,
 			});
 		});
 	});
@@ -126,7 +126,7 @@ describe("FileStorageNotifier.composable", () => {
 			expect(notifierModule.show).toBeCalledWith({
 				status: "error",
 				text: i18nKey,
-				timeout: 10000,
+				timeout: 5000,
 			});
 		});
 	});
@@ -156,7 +156,7 @@ describe("FileStorageNotifier.composable", () => {
 			expect(notifierModule.show).toBeCalledWith({
 				status: "error",
 				text: i18nKey,
-				timeout: 10000,
+				timeout: 5000,
 			});
 		});
 	});
@@ -187,7 +187,7 @@ describe("FileStorageNotifier.composable", () => {
 			expect(notifierModule.show).toBeCalledWith({
 				status: "error",
 				text: i18nKey,
-				timeout: 10000,
+				timeout: 5000,
 			});
 		});
 	});
