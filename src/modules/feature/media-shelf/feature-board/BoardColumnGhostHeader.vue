@@ -1,15 +1,18 @@
 <template>
-	<div class="mb-4" ref="headerRef">
-		<div class="d-flex align-start justify-space-between pt-2">
+	<div class="mb-4 pt-2" ref="headerRef">
+		<div class="d-flex align-start justify-space-between pa-2">
 			<VBtn
 				elevation="0"
 				variant="text"
-				class="mb-2"
 				:color="isColumnActive ? 'text-black' : 'text-grey-darken-2'"
 				@click="onAddColumn"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>
-				{{ label }}
+				{{
+					boardType === "column-board"
+						? $t("components.board.column.ghost.placeholder")
+						: "Reihe hinzufügen"
+				}}
 			</VBtn>
 		</div>
 		<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
@@ -18,7 +21,7 @@
 
 <script lang="ts">
 import { mdiPlus } from "@mdi/js";
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 
 export default defineComponent({
 	name: "BoardColumnGhostHeader",
@@ -27,9 +30,9 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		label: {
-			type: String,
-			required: true,
+		boardType: {
+			type: String as PropType<"column-board" | "media-shelf">,
+			default: "column-board",
 		},
 	},
 	emits: ["add-column"],
