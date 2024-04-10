@@ -322,6 +322,8 @@ export default defineComponent({
 
 .school-logo {
 	max-height: 100%;
+	// Without max-width Firefox calculates the width of the surrounding flexbox wrongly for large images. Thus it must be set here.
+	max-width: 100%;
 	margin-left: 1rem;
 }
 </style>
