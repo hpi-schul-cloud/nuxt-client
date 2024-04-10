@@ -11,6 +11,8 @@ import { useSharedEditMode } from "./EditMode.composable";
 import { defineStore } from "pinia";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import * as BoardActions from "./actions/BoardStoreActions";
+import { CardResponse } from "@/serverApi/v3";
+import { useBoardSocketApi } from "@data-board";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const { handleError, notifyWithTemplate } = useErrorHandler();
@@ -29,11 +31,21 @@ export const useBoardStore = defineStore("boardStore", () => {
 		createCardCall,
 	} = useBoardApi();
 
+	const FEATURE_SOCKET_ENABLED = true;
+	const { emitOnSocket } = useBoardSocketApi(dispatch);
+
+	const eventDispatcher = (action: any) => {
+		if (FEATURE_SOCKET_ENABLED) {
+			return emitOnSocket;
+		}
+		return action;
+	};
+
 	function dispatch(action: PermittedStoreActions<typeof BoardActions>) {
 		handle(
 			action,
 			on(BoardActions.fetchBoard, fetchBoard),
-			on(BoardActions.createCard, createCard),
+			on(BoardActions.createCard, eventDispatcher(createCard)),
 			on(BoardActions.createColumn, createColumn),
 			on(BoardActions.deleteCard, deleteCard),
 			on(BoardActions.deleteColumn, deleteColumn),
@@ -77,22 +89,27 @@ export const useBoardStore = defineStore("boardStore", () => {
 		try {
 			const newCard = await createCardCall(action.payload.columnId);
 
-			const { setFocus } = useBoardFocusHandler();
-			setFocus(newCard.id);
-
-			const columnIndex = board.value.columns.findIndex(
-				(column) => column.id === action.payload.columnId
-			);
-			board.value.columns[columnIndex].cards.push({
-				cardId: newCard.id,
-				height: 120,
-			});
-			setEditModeId(newCard.id);
+			createCardSuccess(newCard, action.payload.columnId);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardCard"),
 			});
 		}
+	};
+
+	const createCardSuccess = (newCard: CardResponse, columnId: string) => {
+		const { setFocus } = useBoardFocusHandler();
+		setFocus(newCard.id);
+
+		const columnIndex = board.value?.columns.findIndex(
+			(column) => column.id === columnId
+		);
+		if (columnIndex === undefined) return;
+		board.value?.columns[columnIndex].cards.push({
+			cardId: newCard.id,
+			height: 120,
+		});
+		setEditModeId(newCard.id);
 	};
 
 	const createColumn = async () => {
