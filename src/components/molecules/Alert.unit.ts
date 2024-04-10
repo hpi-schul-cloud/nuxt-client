@@ -1,11 +1,8 @@
-import NotifierModule from "@/store/notifier";
 import { AlertPayload } from "@/store/types/alert-payload";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import { mount } from "@vue/test-utils";
 import Alert from "./Alert.vue";
 import { mdiCheckCircle } from "@/components/icons/material";
@@ -17,14 +14,9 @@ const getWrapper = (props?: AlertPayload) => {
 		status: "success",
 	};
 
-	const notifierModule = createModuleMocks(NotifierModule);
-
 	const wrapper = mount(Alert, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			},
 		},
 		props: {
 			notification: data,
