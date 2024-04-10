@@ -142,7 +142,6 @@
 		<div class="bottom-buttons">
 			<v-btn
 				variant="text"
-				color="secondary"
 				data-testid="ldapBackButton"
 				@click="backButtonHandler"
 			>

@@ -8,7 +8,7 @@
 		>
 			<v-card class="px-2 py-3">
 				<v-card-text class="pb-0">
-					<div class="mb-2 text-center text-black" data-testid="dialog-text">
+					<div class="mb-2 text-center" data-testid="dialog-text">
 						{{ loadingState.text }}
 					</div>
 					<v-progress-linear indeterminate color="primary" class="mb-2" />

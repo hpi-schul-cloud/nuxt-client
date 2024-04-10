@@ -702,6 +702,12 @@ export default {
 		"Soll die Synchronization der Nutzendengruppe {groupName} im Kurs {courseName} wirklich beendet werden?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronisation erfolgreich beendet",
+	"feature-course-sync.GroupSelectionDialog.title": "Nutzendengruppe auswählen",
+	"feature-course-sync.GroupSelectionDialog.text":
+		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
+	"feature-course-sync.GroupSelectionDialog.selection.label": "Gruppen-Auswahl",
+	"feature-course-sync.GroupSelectionDialog.noTeacher":
+		"Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe {groupName} nicht vorhanden:<li>Lehrkraft</li><br/>Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1386,8 +1392,7 @@ export default {
 		"Das Thema wurde erfolgreich kopiert.",
 	"pages.room.copy.task.message.copied":
 		"Die Aufgabe wurde erfolgreich kopiert.",
-	"pages.room.itemDelete.text":
-		'Bist du dir sicher, dass du das Element "{itemTitle}" löschen möchtest?',
+	"pages.room.itemDelete.text": '{itemType} "{itemTitle}" wirklich löschen?',
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
 	"pages.room.lessonCard.label.shareLesson": "Themenkopie teilen",
@@ -1415,6 +1420,7 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title":
 		"Aktuell gibt es hier noch keine Kurse.",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
+	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.add.lesson": "Neues Thema",
 	"pages.rooms.fab.add.board": "Neues Spalten-Board",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
