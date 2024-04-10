@@ -15,7 +15,7 @@ import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import NewLoggedIn from "./NewLoggedIn.layout.vue";
+import NewLoggedIn from "./newLoggedIn.layout.vue";
 import { mount } from "@vue/test-utils";
 
 const setup = () => {
