@@ -77,7 +77,7 @@ const getSidebarItems = (
 		title: "global.sidebar.item.files-old",
 		href: "/files",
 		icon: "$mdiFolderOpenOutline",
-		testId: "Meine Dateien",
+		testId: "Dateien",
 		activeForUrls: ["^/files($|/.*)"],
 		children: [
 			{

@@ -41,7 +41,7 @@ export const useSidebarItems = () => {
 		{
 			title: "global.sidebar.item.files-old",
 			icon: "$mdiFolderOpenOutline",
-			testId: "Meine Dateien",
+			testId: "Dateien",
 			children: [
 				{
 					title: "global.sidebar.item.filesPersonal",
