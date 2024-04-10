@@ -314,6 +314,7 @@ export default {
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.drawingElement": "Pizarra",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",

@@ -13,13 +13,13 @@
  */
 
 
-import globalAxios, { AxiosInstance, AxiosPromise } from 'axios';
 import { Configuration } from './configuration';
+import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import { assertParamExists, createRequestFunction, DUMMY_BASE_URL, serializeDataIfNeeded, setBearerAuthToObject, setSearchParams, toPathString } from './common';
+import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
 // @ts-ignore
-import { BaseAPI, BASE_PATH, RequestArgs } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
  * 
@@ -315,10 +315,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -508,6 +508,50 @@ export enum ClassSortBy {
     TeacherNames = 'teacherNames'
 }
 
+/**
+ * 
+ * @export
+ * @interface CollaborativeTextEditorElementContent
+ */
+export interface CollaborativeTextEditorElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof CollaborativeTextEditorElementContent
+     */
+    editorId: string;
+}
+/**
+ * 
+ * @export
+ * @interface CollaborativeTextEditorElementResponse
+ */
+export interface CollaborativeTextEditorElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {CollaborativeTextEditorElementContent}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    content: CollaborativeTextEditorElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    timestamps: TimestampsResponse;
+}
 /**
  * 
  * @export
@@ -748,6 +792,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: boolean;
     /**
      * 
@@ -762,12 +812,6 @@ export interface ConfigResponse {
      */
     FEATURE_COLUMN_BOARD_SHARE: boolean;
     /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: boolean;
-     /**
      * 
      * @type {boolean}
      * @memberof ConfigResponse

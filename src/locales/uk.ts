@@ -316,6 +316,7 @@ export default {
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.drawingElement": "Дошка",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",

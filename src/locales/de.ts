@@ -311,6 +311,7 @@ export default {
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.drawingElement": "Whiteboard",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
