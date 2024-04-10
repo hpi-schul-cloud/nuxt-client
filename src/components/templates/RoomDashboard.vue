@@ -170,29 +170,24 @@
 			data-testid="delete-dialog-item"
 			:size="375"
 			has-buttons
-			confirm-btn-title-key="common.actions.remove"
+			confirm-btn-title-key="common.actions.delete"
 			@dialog-confirmed="deleteItem"
 		>
 			<template #title>
 				<h2 class="text-h4 my-2">
-					{{ $t("pages.room.itemDelete.title") }}
-				</h2>
-			</template>
-			<template #content>
-				<p class="text-md mt-2">
 					{{
-						$t("pages.room.itemDelete.text", {
-							itemTitle: itemDelete.itemData.name || itemDelete.itemData.title,
-						})
+						deleteDialogTitle(
+							itemDelete.itemType,
+							itemDelete.itemData.name || itemDelete.itemData.title
+						)
 					}}
-				</p>
+				</h2>
 			</template>
 		</v-custom-dialog>
 	</div>
 </template>
 
 <script>
-import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
@@ -205,6 +200,7 @@ import {
 import { envConfigModule, roomModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
+import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";
 
 export default {
@@ -387,6 +383,26 @@ export default {
 			const isBoardCard = card.type === this.cardTypes.ColumnBoard;
 			const isVisibleToStudent = card.content.published;
 			return isBoardCard && isVisibleToStudent;
+		},
+		deleteDialogTitle(itemType, itemTitle) {
+			let translatedItemType = "";
+
+			switch (itemType) {
+				case this.cardTypes.Task:
+					translatedItemType = this.$t("common.words.task");
+					break;
+				case this.cardTypes.Lesson:
+					translatedItemType = this.$t("common.words.topic");
+					break;
+				case this.cardTypes.ColumnBoard:
+					translatedItemType = this.$t("components.board");
+					break;
+			}
+
+			return this.$t("pages.room.itemDelete.text", {
+				itemType: translatedItemType,
+				itemTitle,
+			});
 		},
 	},
 };

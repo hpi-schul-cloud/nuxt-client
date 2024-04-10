@@ -50,6 +50,7 @@ import store from "./plugins/store";
 import vuetify from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
+import { createPinia } from "pinia";
 
 import {
 	APPLICATION_ERROR_KEY,
@@ -80,6 +81,9 @@ import {
 } from "./utils/inject";
 
 export const app = createApp(App);
+
+const pinia = createPinia();
+app.use(pinia);
 
 mountBaseComponents(app);
 
