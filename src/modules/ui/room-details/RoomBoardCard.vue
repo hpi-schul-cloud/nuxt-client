@@ -62,19 +62,19 @@
 
 <script setup lang="ts">
 import {
+	mdiContentCopy,
 	mdiPencilOutline,
+	mdiShareVariantOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 	mdiViewDashboard,
-	mdiContentCopy,
-	mdiShareVariantOutline,
 } from "@/components/icons/material";
-import RoomDotMenu from "./RoomDotMenu.vue";
+import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import RoomDotMenu from "./RoomDotMenu.vue";
 
 const props = defineProps({
 	columnBoardItem: { type: Object, required: true },
@@ -212,7 +212,7 @@ const actionsMenuItems = computed(() => {
 	actions.push({
 		icon: mdiTrashCanOutline,
 		action: () => emit("delete-board"),
-		name: t("common.actions.remove"),
+		name: t("common.actions.delete"),
 		dataTestId: `board-card-menu-action-remove-${
 			toRef(props, "boardCardIndex").value
 		}`,

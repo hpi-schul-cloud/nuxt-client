@@ -254,14 +254,3 @@ export default defineComponent({
 	background: white;
 }
 </style>
-
-<style>
-.v-card:focus::before {
-	opacity: 0;
-}
-
-.v-card:focus {
-	outline: 2px solid rgba(var(--v-theme-secondary-lighten-1));
-	outline-offset: 0;
-}
-</style>

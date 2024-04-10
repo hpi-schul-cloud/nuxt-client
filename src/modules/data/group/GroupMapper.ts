@@ -2,7 +2,7 @@ import {
 	GroupResponse,
 	GroupResponseTypeEnum,
 	GroupUserResponse,
-	GroupUserResponseRoleEnum,
+	RoleName,
 } from "@/serverApi/v3";
 import { Group, GroupType, GroupUser, GroupUserRole } from "./types";
 
@@ -12,12 +12,10 @@ export const GroupTypeMapping: Record<GroupResponseTypeEnum, GroupType> = {
 	[GroupResponseTypeEnum.Other]: GroupType.Other,
 };
 
-export const GroupUserRoleMapping: Partial<
-	Record<GroupUserResponseRoleEnum, GroupUserRole>
-> = {
-	[GroupUserResponseRoleEnum.Administrator]: GroupUserRole.Administrator,
-	[GroupUserResponseRoleEnum.Student]: GroupUserRole.Student,
-	[GroupUserResponseRoleEnum.Teacher]: GroupUserRole.Teacher,
+export const GroupUserRoleMapping: Partial<Record<RoleName, GroupUserRole>> = {
+	[RoleName.Administrator]: GroupUserRole.Administrator,
+	[RoleName.Student]: GroupUserRole.Student,
+	[RoleName.Teacher]: GroupUserRole.Teacher,
 };
 
 export const GroupUserRoleNameTranslationMapping: Record<

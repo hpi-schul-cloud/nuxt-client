@@ -1,14 +1,14 @@
 <template>
 	<div v-if="item !== undefined">
-		<div class="d-flex flex-row align-items-center text-black">
+		<div class="d-flex flex-row align-items-center">
 			{{ elementTypeName }} &middot;&nbsp;
 			<a :href="item.url" target="_blank">{{ breadcrumbTitle }}</a>
 		</div>
 		<ul class="ml-4 mb-4 pl-1">
 			<li v-for="(e, index) of elements" :key="index" class="element-info">
-				<span class="text-black"
-					>{{ getElementType(e) }}&nbsp;·&nbsp;{{ getElementTitle(e) }}</span
-				>
+				<span>
+					{{ getElementType(e) }}&nbsp;·&nbsp;{{ getElementTitle(e) }}
+				</span>
 			</li>
 		</ul>
 	</div>

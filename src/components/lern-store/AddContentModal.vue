@@ -33,7 +33,7 @@
 			<template #footer>
 				<modal-footer>
 					<template #right>
-						<v-btn variant="text" color="secondary" @click="closeModal">
+						<v-btn variant="text" @click="closeModal">
 							{{ $t("common.actions.cancel") }}
 						</v-btn>
 						<v-btn
@@ -173,7 +173,6 @@ export default {
 .content-modal {
 	&__body {
 		min-height: 300px;
-		color: rgba(var(--v-theme-black)) !important;
 		&--select {
 			margin-top: var(--space-xl);
 		}
