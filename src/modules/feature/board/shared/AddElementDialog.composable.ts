@@ -85,7 +85,7 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 	}
 
 	if (
-		!envConfigModule.getEnv
+		envConfigModule.getEnv
 			.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
 	) {
 		options.push({
