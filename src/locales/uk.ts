@@ -369,6 +369,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Зовнішні інструменти",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Текстовий редактор",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Посилання",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Подання",

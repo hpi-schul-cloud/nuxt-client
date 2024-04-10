@@ -365,6 +365,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Texteditor",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",

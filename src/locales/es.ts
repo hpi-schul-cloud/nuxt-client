@@ -367,7 +367,10 @@ export default {
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
-	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
+	"components.elementTypeSelection.elements.fileElement.subtitle":
+		"Editor de texto",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Text Editor",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Envíos",
