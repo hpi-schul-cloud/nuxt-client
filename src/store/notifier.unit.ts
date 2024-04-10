@@ -45,7 +45,7 @@ describe("notifier store", () => {
 					text: "hello world",
 					status: "success",
 					autoClose: false,
-					timeout: 10000,
+					timeout: 5000,
 				};
 				notifierModule.show(payload);
 
@@ -83,7 +83,29 @@ describe("notifier store", () => {
 					timeout: 5000,
 				};
 				notifierModule.addNotifier(payload);
-				expect(notifierModule.notifier).toStrictEqual([payload]);
+				expect(notifierModule.notifierItems).toStrictEqual([payload]);
+			});
+
+			it("should place new alerts as first element", () => {
+				const notifierModule = new NotifierModule({});
+				const payloadOne: AlertPayload = {
+					text: "hello world",
+					status: "success",
+					autoClose: true,
+					timeout: 5000,
+				};
+				const payloadTwo: AlertPayload = {
+					text: "hello bar",
+					status: "success",
+					autoClose: true,
+					timeout: 5000,
+				};
+				notifierModule.addNotifier(payloadOne);
+				notifierModule.addNotifier(payloadTwo);
+				expect(notifierModule.notifierItems).toStrictEqual([
+					payloadTwo,
+					payloadOne,
+				]);
 			});
 		});
 
@@ -104,12 +126,12 @@ describe("notifier store", () => {
 				};
 				notifierModule.addNotifier(payload);
 				notifierModule.addNotifier(anotherPayload);
-				expect(notifierModule.notifier).toStrictEqual([
+				expect(notifierModule.notifierItems).toStrictEqual([
 					anotherPayload,
 					payload,
 				]);
 				notifierModule.removeNotifier(payload);
-				expect(notifierModule.notifier).toStrictEqual([anotherPayload]);
+				expect(notifierModule.notifierItems).toStrictEqual([anotherPayload]);
 			});
 		});
 
@@ -123,9 +145,9 @@ describe("notifier store", () => {
 					timeout: 5000,
 				};
 				notifierModule.addNotifier(payload);
-				expect(notifierModule.notifier).toStrictEqual([payload]);
+				expect(notifierModule.notifierItems).toStrictEqual([payload]);
 				notifierModule.removeNotifier(payload);
-				expect(notifierModule.notifier).toStrictEqual([]);
+				expect(notifierModule.notifierItems).toStrictEqual([]);
 			});
 		});
 	});

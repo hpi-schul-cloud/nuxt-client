@@ -11,38 +11,36 @@
 		border="start"
 		@update:modelValue="closeNotification"
 	>
-		<div v-if="messages" class="alert_text mr-2">
-			<div v-for="(message, index) in messages" :key="index" class="mb-1">
-				<b>{{ message.title }}</b>
-				<p class="mb-0">{{ message.text }}</p>
-			</div>
-		</div>
-		<div v-else class="alert_text mr-2">
+		<div class="alert-text mr-2">
 			{{ text }}
 		</div>
 	</v-alert>
 </template>
 
 <script setup lang="ts">
+import { AlertPayload } from "@/store/types/alert-payload";
 import {
 	mdiAlert,
 	mdiAlertCircle,
 	mdiCheckCircle,
 	mdiInformation,
-} from "@mdi/js";
-import { computed } from "vue";
+} from "@/components/icons/material";
+import { computed, onUnmounted, PropType, Ref, ref } from "vue";
 
 const props = defineProps({
 	notification: {
-		type: Object,
+		type: Object as PropType<AlertPayload>,
 		required: true,
 	},
 });
+
+const showNotifier: Ref<boolean> = ref(true);
 
 const emit = defineEmits(["remove:notification"]);
 
 const closeNotification = () => {
 	emit("remove:notification", props.notification);
+	showNotifier.value = false;
 };
 
 const icon = computed(() => {
@@ -53,20 +51,14 @@ const icon = computed(() => {
 	return undefined;
 });
 
-const messages = computed(() => props.notification.messages);
-
-const showNotifier = computed({
-	get() {
-		return props.notification !== undefined;
-	},
-	set() {
-		closeNotification();
-	},
-});
-
 const status = computed(() => props.notification.status);
 
 const text = computed(() => props.notification.text);
+
+onUnmounted(() => {
+	emit("remove:notification", props.notification);
+	showNotifier.value = false;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -77,7 +69,7 @@ const text = computed(() => props.notification.text);
 }
 
 :deep(.v-btn__content .v-icon),
-.alert_text {
+.alert-text {
 	color: rgba(var(--v-theme-on-background)) !important;
 }
 </style>

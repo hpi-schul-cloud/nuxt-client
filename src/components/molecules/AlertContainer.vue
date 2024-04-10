@@ -7,9 +7,9 @@
 	>
 		<transition-group :name="transition">
 			<Alert
-				v-for="notification in notifierData"
+				v-for="(notification, index) in notifierItems"
 				:notification="notification"
-				:key="notification"
+				:key="index"
 				@remove:notification="onRemoveNotification"
 			/>
 		</transition-group>
@@ -17,18 +17,23 @@
 </template>
 
 <script setup lang="ts">
-import { notifierModule } from "@/store";
 import Alert from "./Alert.vue";
 import { AlertPayload } from "@/store/types/alert-payload";
 import { computed, inject } from "vue";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+
+const mq: { current: string } | undefined = inject("mq");
+if (mq === undefined) {
+	throw new Error("mq is undefined");
+}
 
 const isMobile = computed(() => {
 	return mq.current === "mobile";
 });
 
-const mq = inject("mq");
-
-const notifierData: AlertPayload[] = notifierModule.getNotifier;
+const notifierItems: AlertPayload[] = notifierModule.getNotifierItems;
 
 const onRemoveNotification = (notification: AlertPayload) => {
 	notifierModule.removeNotifier(notification);

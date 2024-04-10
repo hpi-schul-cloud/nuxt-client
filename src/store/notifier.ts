@@ -7,11 +7,11 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 	stateFactory: true,
 })
 export default class NotifierModule extends VuexModule {
-	notifier: AlertPayload[] = [];
+	notifierItems: AlertPayload[] = [];
 	private defaultTimeout = 5000;
 
-	get getNotifier(): AlertPayload[] {
-		return this.notifier;
+	get getNotifierItems(): AlertPayload[] {
+		return this.notifierItems;
 	}
 
 	@Action
@@ -31,17 +31,12 @@ export default class NotifierModule extends VuexModule {
 
 	@Mutation
 	addNotifier(payload: AlertPayload): void {
-		this.notifier.unshift(payload);
+		this.notifierItems.unshift(payload);
 	}
 
 	@Mutation
 	removeNotifier(payload: AlertPayload): void {
-		const index = this.notifier.indexOf(payload);
-		this.notifier.splice(index, 1);
-	}
-
-	@Mutation
-	reset(): void {
-		this.notifier = [];
+		const index = this.notifierItems.indexOf(payload);
+		this.notifierItems.splice(index, 1);
 	}
 }

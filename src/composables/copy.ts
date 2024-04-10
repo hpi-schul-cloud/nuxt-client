@@ -1,5 +1,6 @@
 import { CopyApiResponseStatusEnum } from "@/serverApi/v3";
 import { CopyParams, CopyParamsTypeEnum } from "@/store/copy";
+import { AlertPayload } from "@/store/types/alert-payload";
 import { injectStrict } from "@/utils/inject";
 import {
 	COPY_MODULE_KEY,
@@ -24,33 +25,36 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 	const openResultModal = () => copyModule?.setResultModalOpen(true);
 
 	const showSuccess = (copyParams: CopyParams) => {
-		if (copyParams.type === CopyParamsTypeEnum.ColumnBoard) {
-			notifierModule.show({
-				text: t("components.molecules.copyResult.board.successfullyCopied"),
-				status: "success",
-			});
+		const notifierMessage = setNotifierMessage(copyParams.type);
+		notifierModule.show(notifierMessage);
+	};
+
+	const setNotifierMessage = (paramsType: CopyParamsTypeEnum) => {
+		const status = "success";
+		let text = "";
+
+		if (paramsType === CopyParamsTypeEnum.ColumnBoard) {
+			text = t("components.molecules.copyResult.board.successfullyCopied");
 		}
 
-		if (copyParams.type === CopyParamsTypeEnum.Course) {
-			notifierModule.show({
-				text: t("components.molecules.copyResult.successfullyCopied"),
-				status: "success",
-			});
+		if (paramsType === CopyParamsTypeEnum.Course) {
+			text = t("components.molecules.copyResult.successfullyCopied");
 		}
 
-		if (copyParams.type === CopyParamsTypeEnum.Lesson) {
-			notifierModule.show({
-				text: t("components.molecules.copyResult.lesson.successfullyCopied"),
-				status: "success",
-			});
+		if (paramsType === CopyParamsTypeEnum.Lesson) {
+			text = t("components.molecules.copyResult.lesson.successfullyCopied");
 		}
 
-		if (copyParams.type === CopyParamsTypeEnum.Task) {
-			notifierModule.show({
-				text: t("components.molecules.copyResult.task.successfullyCopied"),
-				status: "success",
-			});
+		if (paramsType === CopyParamsTypeEnum.Task) {
+			text = t("components.molecules.copyResult.task.successfullyCopied");
 		}
+
+		const notifierMessage: AlertPayload = {
+			text,
+			status,
+		};
+
+		return notifierMessage;
 	};
 
 	const showFailure = () =>
