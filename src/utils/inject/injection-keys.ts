@@ -22,9 +22,12 @@ import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { InjectionKey } from "vue";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import ShareModule from "@/store/share";
+import FilePathsModule from "@/store/filePaths";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
+export const FILE_PATHS_MODULE_KEY: InjectionKey<FilePathsModule> =
+	Symbol("filePathsModule");
 export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
 	Symbol("notifierModule");
 export const AUTH_MODULE_KEY: InjectionKey<AuthModule> = Symbol("authModule");
