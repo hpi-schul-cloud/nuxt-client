@@ -25,7 +25,7 @@ import {
 	mdiCheckCircle,
 	mdiInformation,
 } from "@/components/icons/material";
-import { computed, onUnmounted, PropType, Ref, ref } from "vue";
+import { computed, PropType, Ref, ref } from "vue";
 
 const props = defineProps({
 	notification: {
@@ -54,11 +54,6 @@ const icon = computed(() => {
 const status = computed(() => props.notification.status);
 
 const text = computed(() => props.notification.text);
-
-onUnmounted(() => {
-	emit("remove:notification", props.notification);
-	showNotifier.value = false;
-});
 </script>
 
 <style lang="scss" scoped>

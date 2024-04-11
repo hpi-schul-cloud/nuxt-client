@@ -45,13 +45,5 @@ describe("Alert", () => {
 
 			expect(wrapper.emitted("remove:notification")).toHaveLength(1);
 		});
-
-		it("should be emitted when unmounted", () => {
-			const { wrapper } = getWrapper();
-
-			wrapper.unmount();
-
-			expect(wrapper.emitted("remove:notification")).toHaveLength(1);
-		});
 	});
 });
