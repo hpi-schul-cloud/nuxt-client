@@ -34,18 +34,18 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const FEATURE_SOCKET_ENABLED = true;
 	const { emitOnSocket } = useBoardSocketApi(dispatch);
 
-	const eventDispatcher = (action: any) => {
+	const determineHandler = (handler: any) => {
 		if (FEATURE_SOCKET_ENABLED) {
 			return emitOnSocket;
 		}
-		return action;
+		return handler;
 	};
 
 	function dispatch(action: PermittedStoreActions<typeof BoardActions>) {
 		handle(
 			action,
 			on(BoardActions.fetchBoard, fetchBoard),
-			on(BoardActions.createCard, eventDispatcher(createCard)),
+			on(BoardActions.createCard, determineHandler(createCard)),
 			on(BoardActions.createColumn, createColumn),
 			on(BoardActions.deleteCard, deleteCard),
 			on(BoardActions.deleteColumn, deleteColumn),
@@ -53,7 +53,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.moveColumn, moveColumn),
 			on(BoardActions.updateColumnTitle, updateColumnTitle),
 			on(BoardActions.updateBoardTitle, updateBoardTitle),
-			on(BoardActions.updateBoardVisibility, updateBoardVisibility),
 			on(BoardActions.updateBoardVisibility, updateBoardVisibility),
 			on(BoardActions.reloadBoard, reloadBoard)
 		);
@@ -320,6 +319,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 	) => {
 		if (board.value === undefined) return;
 		const { newVisibility } = action.payload;
+
+		console.log("updateBoardVisibility", newVisibility);
 
 		try {
 			await updateBoardVisibilityCall(board.value.id, newVisibility);
