@@ -131,7 +131,7 @@ const onCopy = () => {
 	notifier.show({
 		text: t("common.words.copiedToClipboard"),
 		status: "success",
-		timeout: 10000,
+		timeout: 5000,
 	});
 };
 

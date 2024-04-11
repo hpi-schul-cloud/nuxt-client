@@ -7,7 +7,7 @@
 			/>
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
-				<h1 class="text-h3 pl-2" :data-testid="dataTestid">
+				<h1 v-if="headline" class="text-h3 pl-2" :data-testid="dataTestid">
 					{{ headline }}
 				</h1>
 			</slot>

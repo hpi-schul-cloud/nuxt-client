@@ -207,7 +207,7 @@ export default defineComponent({
 				notifierModule.show({
 					text: String(errors[0]),
 					status: "error",
-					timeout: 10000,
+					timeout: 5000,
 				});
 				return errors[0];
 			}

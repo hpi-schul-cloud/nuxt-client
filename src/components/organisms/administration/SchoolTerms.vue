@@ -190,7 +190,7 @@ export default defineComponent({
 			notifierModule.show({
 				text: t("pages.administration.school.index.termsOfUse.delete.success"),
 				status: "success",
-				timeout: 10000,
+				timeout: 5000,
 			});
 		};
 
