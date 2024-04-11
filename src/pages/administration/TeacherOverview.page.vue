@@ -499,13 +499,13 @@ export default {
 				notifierModule.show({
 					text: this.$t("pages.administration.sendMail.success", rowIds.length),
 					status: "success",
-					timeout: 10000,
+					timeout: 5000,
 				});
 			} catch (error) {
 				notifierModule.show({
 					text: this.$t("pages.administration.sendMail.error", rowIds.length),
 					status: "error",
-					timeout: 10000,
+					timeout: 5000,
 				});
 			}
 		},
@@ -522,14 +522,14 @@ export default {
 					notifierModule.show({
 						text: this.$t("pages.administration.printQr.emptyUser"),
 						status: "info",
-						timeout: 10000,
+						timeout: 5000,
 					});
 				}
 			} catch (error) {
 				notifierModule.show({
 					text: this.$t("pages.administration.printQr.error", rowIds.length),
 					status: "error",
-					timeout: 10000,
+					timeout: 5000,
 				});
 			}
 		},
@@ -543,14 +543,14 @@ export default {
 					notifierModule.show({
 						text: this.$t("pages.administration.remove.success"),
 						status: "success",
-						timeout: 10000,
+						timeout: 5000,
 					});
 					this.find();
 				} catch (error) {
 					notifierModule.show({
 						text: this.$t("pages.administration.remove.error"),
 						status: "error",
-						timeout: 10000,
+						timeout: 5000,
 					});
 				}
 			};

@@ -181,7 +181,7 @@ const moreActionsMenuItems = computed(() => {
 		actions.push({
 			icon: mdiShareVariantOutline,
 			action: () => emit("open-modal", props.lesson.id),
-			name: t("pages.room.lessonCard.label.shareLesson"),
+			name: t("common.actions.shareCopy"),
 			dataTestId: `lesson-card-menu-action-share-${
 				toRef(props, "lessonCardIndex").value
 			}`,
