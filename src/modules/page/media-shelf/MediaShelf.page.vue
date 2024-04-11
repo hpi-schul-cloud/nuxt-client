@@ -1,6 +1,11 @@
 <template>
 	<DefaultWireframe ref="main" :full-width="true">
-		<MediaBoard :board="mediaBoard" />
+		<div class="ml-1">
+			<h3 aria-level="1" class="mt-0">
+				{{ $t("feature.media-shelf.title") }}
+			</h3>
+		</div>
+		<MediaBoard v-if="mediaBoard" :board="mediaBoard" />
 	</DefaultWireframe>
 </template>
 

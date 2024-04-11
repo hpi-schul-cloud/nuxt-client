@@ -1587,7 +1587,8 @@ export default {
 	"utils.adminFilter.placeholder.complete.name": "Filter by full first name...",
 	"utils.adminFilter.placeholder.date.from": "Created between 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
-	"feature.media-board.title": "Media shelf",
-	"feature.media-board.createLine": "Add line",
-	"feature.media-board-line.title": "Line",
+	"feature.media-shelf.title": "Media shelf",
+	"feature.media-shelf.createLine": "Add line",
+	"feature.media-shelf.line.title": "Line",
+	"feature.media-shelf.availableLine.title": "Available media",
 };

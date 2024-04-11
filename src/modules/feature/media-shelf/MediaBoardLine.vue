@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="line line-drag-handle px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
+		class="line line-drag-handle mx-n4 px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
 	>
 		<BoardLineHeader
 			:title="line.title"
@@ -17,7 +17,7 @@
 				/>
 			</template>
 		</BoardLineHeader>
-		<VExpansionPanels v-model="openLines">
+		<VExpansionPanels v-model="openItems">
 			<VExpansionPanel
 				value="linePanel"
 				elevation="0"
@@ -60,26 +60,18 @@
 </template>
 
 <script setup lang="ts">
-import { CardMove } from "@/types/board/DragAndDrop";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import {
-	computed,
-	ComputedRef,
-	PropType,
-	Ref,
-	ref,
-	toRef,
-	WritableComputedRef,
-} from "vue";
+import { computed, ComputedRef, PropType, Ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardLineHeader from "./BoardLineHeader.vue";
+import { ElementMove, IMediaBoardLine } from "./data/types";
 import MediaBoardElement from "./MediaBoardElement.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { IMediaBoardLine } from "./types";
+import { useCollapsableState } from "./utils/collapsable.composable";
 
 const props = defineProps({
 	line: {
@@ -94,7 +86,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
 	(e: "update:line-title", newTitle: string): void;
-	(e: "update:element-position", value: CardMove): void;
+	(e: "update:element-position", value: ElementMove): void;
 	(e: "delete:line", lineId: string): void;
 }>();
 
@@ -102,18 +94,10 @@ const { t } = useI18n();
 
 const isMobile: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Mobile);
 
-const collapsed: Ref<boolean> = ref(false);
-const openLines: WritableComputedRef<string[]> = computed({
-	get() {
-		return collapsed.value ? [] : ["linePanel"];
-	},
-	set(value: string[]) {
-		collapsed.value = value.includes("linePanel");
-	},
-});
+const { collapsed, openItems } = useCollapsableState("linePanel");
 
 const titlePlaceholder: ComputedRef<string> = computed(
-	() => `${t("feature.media-board-line.title").toString()} ${props.index + 1}`
+	() => `${t("feature.media-shelf.line.title").toString()} ${props.index + 1}`
 );
 
 const line: Ref<IMediaBoardLine> = toRef(props, "line");
@@ -124,24 +108,30 @@ const onUpdateTitle = (newTitle: string) => {
 
 const onElementDragEnd = async (event: SortableEvent) => {
 	const { newIndex, oldIndex, to, from, item } = event;
-	const toColumnId = extractDataAttribute(to, "lineId");
-	const fromColumnId = extractDataAttribute(from, "lineId") as string;
-	const cardId = extractDataAttribute(event.item, "elementId") as string;
 
-	if (toColumnId !== fromColumnId) {
+	const fromLineId: string | undefined = extractDataAttribute(from, "lineId");
+	const toLineId: string | undefined = extractDataAttribute(to, "lineId");
+	const elementId: string | undefined = extractDataAttribute(item, "elementId");
+
+	if (toLineId !== fromLineId) {
 		item?.parentNode?.removeChild(item);
 	}
 
-	if (newIndex !== undefined && oldIndex !== undefined) {
-		const cardMove: CardMove = {
-			cardId,
-			newIndex,
-			oldIndex,
-			fromColumnId,
-			toColumnId,
+	if (
+		newIndex !== undefined &&
+		oldIndex !== undefined &&
+		fromLineId !== undefined &&
+		elementId !== undefined
+	) {
+		const elementMove: ElementMove = {
+			elementId,
+			oldElementIndex: oldIndex,
+			newElementIndex: newIndex,
+			fromLineId,
+			toLineId,
 		};
 
-		emit("update:element-position", cardMove);
+		emit("update:element-position", elementMove);
 	}
 };
 </script>
@@ -170,7 +160,7 @@ const onElementDragEnd = async (event: SortableEvent) => {
 
 /* Track */
 .scrollable-line::-webkit-scrollbar-track {
-	background: transparent;
+	background: white;
 	border: none;
 }
 
@@ -180,12 +170,12 @@ const onElementDragEnd = async (event: SortableEvent) => {
 	border-radius: 5px;
 }
 .line-drag-handle:hover .scrollable-line::-webkit-scrollbar-thumb {
-	background-color: rgba(var(--v-theme-secondary-lighten-1));
+	background-color: rgba(var(--v-theme-on-surface), 0.6);
 	border-radius: 5px;
 }
 
 /* Handle on hover */
 .scrollable-line::-webkit-scrollbar-thumb:hover {
-	background: rgba(var(--v-theme-secondary)) !important;
+	background: rgba(var(--v-theme-on-surface), 0.8) !important;
 }
 </style>

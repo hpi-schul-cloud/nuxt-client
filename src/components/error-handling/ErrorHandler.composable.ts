@@ -13,7 +13,10 @@ export type BoardObjectType =
 	| "board"
 	| "boardColumn"
 	| "boardCard"
-	| "boardElement";
+	| "boardElement"
+	| "mediaBoard"
+	| "mediaLine"
+	| "mediaElement";
 
 export type ApiErrorHandler = (
 	error?: ApiResponseError | ApiValidationError

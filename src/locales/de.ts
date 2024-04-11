@@ -1615,7 +1615,8 @@ export default {
 		"Nach vollständigem Vornamen filtern...",
 	"utils.adminFilter.placeholder.date.from": "Erstellt zwischen 02/02/2020",
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
-	"feature.media-board.title": "Medienregal",
-	"feature.media-board.createLine": "Zeile hinzufügen",
-	"feature.media-board-line.title": "Zeile",
+	"feature.media-shelf.title": "Medienregal",
+	"feature.media-shelf.createLine": "Zeile hinzufügen",
+	"feature.media-shelf.line.title": "Zeile",
+	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 };

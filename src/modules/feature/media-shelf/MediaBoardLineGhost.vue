@@ -1,8 +1,8 @@
 <template>
-	<div class="mr-4">
+	<div class="mx-n4 px-4">
 		<BoardColumnGhostHeader
 			:isColumnActive="false"
-			:label="$t('feature.media-board.createLine')"
+			:label="$t('feature.media-shelf.createLine')"
 			@add-column="$emit('create:line')"
 		/>
 		<Sortable

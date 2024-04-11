@@ -1637,7 +1637,8 @@ export default {
 		"Filtrar por nombre completo...",
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
-	"feature.media-board.title": "Estante multimedia",
-	"feature.media-board.createLine": "Añadir línea",
-	"feature.media-board-line.title": "Línea",
+	"feature.media-shelf.title": "Estante multimedia",
+	"feature.media-shelf.createLine": "Añadir línea",
+	"feature.media-shelf.line.title": "Línea",
+	"feature.media-shelf.availableLine.title": "Medios disponibles",
 };

@@ -1,11 +1,7 @@
 <template>
-	<div class="ml-1">
-		<h3 aria-level="1" class="mt-0">
-			{{ $t("feature.media-board.title") }}
-		</h3>
-	</div>
 	<div class="d-flex flex-column flex-shrink-1">
 		<div>
+			<MediaBoardAvailableLine />
 			<Sortable
 				:list="board.lines"
 				item-key="id"
@@ -25,7 +21,7 @@
 					forceFallback: true,
 					bubbleScroll: true,
 				}"
-				class="d-flex flex-column flex-shrink-1 ml-n4 ga-2"
+				class="d-flex flex-column flex-shrink-1 ga-2"
 				@end="onLineDragEnd"
 			>
 				<template #item="{ element, index }">
@@ -47,18 +43,18 @@
 
 <script setup lang="ts">
 // FIXME sortablejs-vue3 has a bug where the DOM is wrong when you modify the data array
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { PropType } from "vue";
+import { useSharedMediaBoardState } from "./data/mediaBoardState.composable";
+import { ElementMove, IMediaBoard, LineMove } from "./data/types";
 import { useSharedEditMode } from "./editMode.composable";
+import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
-import { useSharedMediaBoardState } from "./sharedState";
-import { IMediaBoard } from "./types";
 
 defineProps({
 	board: {
@@ -69,7 +65,7 @@ defineProps({
 
 const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
 
-const { updateLineTitle, addLine, moveLine, moveElement, deleteLine } =
+const { updateLineTitle, createLine, moveLine, moveElement, deleteLine } =
 	useSharedMediaBoardState();
 
 const { isInEditMode } = useSharedEditMode();
@@ -79,35 +75,34 @@ const onUpdateLineTitle = (lineId: string, newTitle: string) => {
 };
 
 const onCreateLine = async () => {
-	await addLine();
+	await createLine();
 };
 
 const onDeleteLine = (lineId: string) => {
 	deleteLine(lineId);
 };
 
-const onLineDragEnd = async (linePayload: SortableEvent) => {
-	const lineId: string | undefined = extractDataAttribute(
-		linePayload.item,
-		"lineId"
-	);
+const onLineDragEnd = async (event: SortableEvent) => {
+	const { newIndex, oldIndex, item } = event;
+
+	const lineId: string | undefined = extractDataAttribute(item, "lineId");
 
 	if (
-		lineId &&
-		linePayload.newIndex !== undefined &&
-		linePayload.oldIndex !== undefined
+		lineId !== undefined &&
+		newIndex !== undefined &&
+		oldIndex !== undefined
 	) {
-		const columnMove: ColumnMove = {
-			addedIndex: linePayload.newIndex,
-			removedIndex: linePayload.oldIndex,
-			columnId: lineId,
+		const columnMove: LineMove = {
+			newLineIndex: newIndex,
+			oldLineIndex: oldIndex,
+			lineId,
 		};
 
 		await moveLine(columnMove);
 	}
 };
 
-const onUpdateElementPosition = async (cardMove: CardMove) => {
+const onUpdateElementPosition = async (cardMove: ElementMove) => {
 	await moveElement(cardMove);
 };
 </script>
@@ -115,10 +110,9 @@ const onUpdateElementPosition = async (cardMove: CardMove) => {
 <style>
 .sortable-drag-ghost {
 	opacity: 0.6;
-	background-color: rgba(var(--v-theme-secondary-lighten-1)) !important;
 }
 
 .sortable-chosen {
-	background-color: rgba(var(--v-theme-secondary-lighten-1), 0.6) !important;
+	background-color: rgba(var(--v-theme-on-background), 0.6) !important;
 }
 </style>

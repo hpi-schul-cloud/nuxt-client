@@ -50,7 +50,7 @@ import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 import LineClamp from "@ui-board/LineClamp.vue";
 import { useElementHover } from "@vueuse/core";
 import { PropType, ref } from "vue";
-import { IMediaBoardElement } from "./types";
+import { IMediaBoardElement } from "./data/types";
 
 defineProps({
 	element: {
@@ -64,13 +64,14 @@ const isHovered = useElementHover(card);
 </script>
 
 <style scoped lang="scss">
-$card-size: 344px;
+$card-height: 366px;
+$card-width: 344px;
 
 .element {
-	min-width: $card-size;
-	max-width: $card-size;
-	min-height: $card-size;
-	max-height: $card-size;
+	min-width: $card-width;
+	max-width: $card-width;
+	min-height: $card-height;
+	max-height: $card-height;
 }
 
 .placeholder {
