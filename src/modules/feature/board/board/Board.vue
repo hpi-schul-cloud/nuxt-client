@@ -218,7 +218,7 @@ const onReloadBoard = async () => {
 const onUpdateBoardVisibility = async (newVisibility: boolean) => {
 	if (!hasEditPermission) return;
 
-	boardStore.dispatch(boardActions.updateBoardVisibility(newVisibility));
+	boardStore.dispatch(boardActions.updateBoardVisibility({ newVisibility }));
 	await setAlert();
 };
 
@@ -233,7 +233,7 @@ const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
 
 const onUpdateBoardTitle = async (newTitle: string) => {
 	if (hasEditPermission)
-		boardStore.dispatch(boardActions.updateBoardTitle(newTitle));
+		boardStore.dispatch(boardActions.updateBoardTitle({ newTitle }));
 };
 
 onMounted(() => {
