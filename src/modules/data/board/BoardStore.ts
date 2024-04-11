@@ -42,7 +42,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.updateColumnTitle, updateColumnTitle),
 			on(BoardActions.updateBoardTitle, updateBoardTitle),
 			on(BoardActions.updateBoardVisibility, updateBoardVisibility),
-			on(BoardActions.updateBoardVisibility, updateBoardVisibility),
 			on(BoardActions.reloadBoard, reloadBoard)
 		);
 	}
