@@ -146,11 +146,14 @@ const {
 
 const onCreateCard = async (columnId: string) => {
 	if (hasCreateCardPermission)
-		boardStore.dispatch(boardActions.createCard({ columnId }));
+		boardStore.dispatch(boardActions.createCardRequest({ columnId }));
 };
 
 const onCreateColumn = async () => {
-	if (hasCreateCardPermission) boardStore.dispatch(boardActions.createColumn());
+	// if (hasCreateCardPermission) boardStore.dispatch(boardActions.createColumn());
+
+	// TODO: check if this action is handled via on the dispatcher
+	boardStore.createColumn();
 };
 
 const onDeleteCard = async (cardId: string) => {

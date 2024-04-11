@@ -11,8 +11,8 @@ import { useSharedEditMode } from "./EditMode.composable";
 import { defineStore } from "pinia";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import * as BoardActions from "./actions/BoardStoreActions";
-import { CardResponse } from "@/serverApi/v3";
 import { useBoardSocketApi } from "@data-board";
+import { ColumnResponse } from "@/serverApi/v3";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const { handleError, notifyWithTemplate } = useErrorHandler();
@@ -34,19 +34,25 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const FEATURE_SOCKET_ENABLED = true;
 	const { emitOnSocket } = useBoardSocketApi(dispatch);
 
-	const determineHandler = (handler: any) => {
-		if (FEATURE_SOCKET_ENABLED) {
-			return emitOnSocket;
-		}
-		return handler;
+	type AnyBoardActionPayload = ReturnType<
+		(typeof BoardActions)[keyof typeof BoardActions]
+	>["payload"];
+
+	const emit = (
+		action: PermittedStoreActions<typeof BoardActions> | any,
+		payload: AnyBoardActionPayload
+	) => {
+		if (FEATURE_SOCKET_ENABLED) return emitOnSocket(action.type, payload);
 	};
 
-	function dispatch(action: PermittedStoreActions<typeof BoardActions>) {
+	async function dispatch(action: PermittedStoreActions<typeof BoardActions>) {
 		handle(
 			action,
 			on(BoardActions.fetchBoard, fetchBoard),
-			on(BoardActions.createCard, determineHandler(createCard)),
+			on(BoardActions.createCardRequest, createCard),
+			on(BoardActions.createCardSuccess, createCardSuccess),
 			on(BoardActions.createColumn, createColumn),
+			on(BoardActions.createColumnSuccess, createColumnSuccess),
 			on(BoardActions.deleteCard, deleteCard),
 			on(BoardActions.deleteColumn, deleteColumn),
 			on(BoardActions.moveCard, moveCard),
@@ -81,14 +87,22 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const createCard = async (
-		action: ReturnType<typeof BoardActions.createCard>
+		action: ReturnType<typeof BoardActions.createCardRequest>
 	) => {
 		if (board.value === undefined) return;
 
 		try {
 			const newCard = await createCardCall(action.payload.columnId);
 
-			createCardSuccess(newCard, action.payload.columnId);
+			const payload = {
+				newCard,
+				columnId: action.payload.columnId,
+				true: true,
+			};
+
+			dispatch(BoardActions.createCardSuccess(payload));
+
+			emit(action, payload);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardCard"),
@@ -96,8 +110,12 @@ export const useBoardStore = defineStore("boardStore", () => {
 		}
 	};
 
-	const createCardSuccess = (newCard: CardResponse, columnId: string) => {
+	const createCardSuccess = (
+		action: ReturnType<typeof BoardActions.createCardSuccess>
+	) => {
 		const { setFocus } = useBoardFocusHandler();
+
+		const { newCard, columnId } = action.payload;
 		setFocus(newCard.id);
 
 		const columnIndex = board.value?.columns.findIndex(
@@ -115,16 +133,30 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (board.value === undefined) return;
 
 		try {
-			const newColumn = await createColumnCall(board.value.id);
-			useBoardFocusHandler().setFocus(newColumn.id);
-			setEditModeId(newColumn.id);
-			board.value.columns.push(newColumn);
+			const newColumn: ColumnResponse = await createColumnCall(board.value.id);
+
+			const payload = {
+				type: "create-column",
+				payload: newColumn,
+			};
+
+			dispatch(BoardActions.createColumnSuccess({ newColumn }));
+			emit(payload, newColumn);
 			return newColumn;
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardColumn"),
 			});
 		}
+	};
+
+	const createColumnSuccess = (
+		action: ReturnType<typeof BoardActions.createColumnSuccess>
+	) => {
+		const { newColumn } = action.payload;
+		useBoardFocusHandler().setFocus(newColumn.id);
+		setEditModeId(newColumn.id);
+		board.value?.columns.push(newColumn);
 	};
 
 	const deleteCard = async (
@@ -320,8 +352,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (board.value === undefined) return;
 		const { newVisibility } = action.payload;
 
-		console.log("updateBoardVisibility", newVisibility);
-
 		try {
 			await updateBoardVisibilityCall(board.value.id, newVisibility);
 			board.value.isVisible = newVisibility;
@@ -355,5 +385,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board,
 		isLoading,
 		dispatch,
+		createColumn,
 	};
 });

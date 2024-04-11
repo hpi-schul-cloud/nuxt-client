@@ -2,6 +2,7 @@ import {
 	BoardObjectType,
 	ErrorType,
 } from "@/components/error-handling/ErrorHandler.composable";
+import { CardResponse, ColumnResponse } from "@/serverApi/v3";
 import { createAction, props } from "@/types/board/ActionFactory";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 
@@ -15,9 +16,21 @@ const getColumnId = createAction(
 	props<{ columnIndex: number }>()
 );
 
-const createCard = createAction("create-card", props<{ columnId: string }>());
+const createCardRequest = createAction(
+	"create-card",
+	props<{ columnId: string }>()
+);
+
+const createCardSuccess = createAction(
+	"create-card-success",
+	props<{ newCard: CardResponse; columnId: string }>()
+);
 
 const createColumn = createAction("create-column", props());
+const createColumnSuccess = createAction(
+	"create-column-success",
+	props<{ newColumn: ColumnResponse }>()
+);
 
 const deleteCard = createAction("delete-card", props<{ cardId: string }>());
 
@@ -60,8 +73,10 @@ const reloadBoard = createAction("reload-board", props());
 export {
 	getColumnIndex,
 	getColumnId,
-	createCard,
+	createCardRequest,
+	createCardSuccess,
 	createColumn,
+	createColumnSuccess,
 	deleteCard,
 	deleteColumn,
 	fetchBoard,
