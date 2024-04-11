@@ -33,15 +33,24 @@ const createColumnSuccess = createAction(
 );
 
 const deleteCard = createAction("delete-card", props<{ cardId: string }>());
+const deleteCardSuccess = createAction(
+	"delete-card-success",
+	props<{ cardId: string }>()
+);
 
 const deleteColumn = createAction(
 	"delete-column",
+	props<{ columnId: string }>()
+);
+const deleteColumnSuccess = createAction(
+	"delete-column-success",
 	props<{ columnId: string }>()
 );
 
 const fetchBoard = createAction("fetch-board", props<{ id: string }>());
 
 const moveCard = createAction("move-card", props<CardMove>());
+const moveCardSuccess = createAction("move-card-success", props<CardMove>());
 
 const moveColumn = createAction(
 	"move-column",
@@ -78,9 +87,12 @@ export {
 	createColumn,
 	createColumnSuccess,
 	deleteCard,
+	deleteCardSuccess,
 	deleteColumn,
+	deleteColumnSuccess,
 	fetchBoard,
 	moveCard,
+	moveCardSuccess,
 	moveColumn,
 	updateColumnTitle,
 	updateBoardTitle,
