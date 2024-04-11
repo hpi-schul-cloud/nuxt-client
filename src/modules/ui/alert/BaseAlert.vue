@@ -6,7 +6,7 @@
 		:closeIcon="showCloseIcon ? closeIcon : null"
 		class="mb-0"
 	>
-		<div class="text-black" v-if="$slots.default">
+		<div class="alert-text" v-if="$slots.default">
 			<slot />
 		</div>
 	</v-alert>
@@ -31,3 +31,8 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped lang="scss">
+.alert-text {
+	color: rgba(var(--v-theme-on-background)) !important;
+}
+</style>

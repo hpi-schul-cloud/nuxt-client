@@ -10,6 +10,7 @@
 				@update:title="onUpdateBoardTitle"
 				@copy:board="onCopyBoard"
 				@share:board="onShareBoard"
+				@delete:board="openDeleteBoardDialog(boardId)"
 			/>
 			<div class="d-flex flex-row flex-shrink-1">
 				<div>
@@ -78,12 +79,26 @@
 </template>
 
 <script setup lang="ts">
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
+import ShareModal from "@/components/share/ShareModal.vue";
+import { useCopy } from "@/composables/copy";
+import { useLoadingState } from "@/composables/loadingState";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { CopyParamsTypeEnum } from "@/store/copy";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import {
+	COPY_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	ROOM_MODULE_KEY,
+	SHARE_MODULE_KEY,
+} from "@/utils/inject";
+import {
 	useBoardPermissions,
-	useBoardState,
 	useSharedBoardPageInformation,
 	useSharedEditMode,
+	useBoardStore,
+	boardActions,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -91,26 +106,14 @@ import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, onUnmounted, toRef, watch } from "vue";
+import { computed, onMounted, onUnmounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
-import {
-	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	SHARE_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
-import { useCopy } from "@/composables/copy";
-import { useLoadingState } from "@/composables/loadingState";
-import { CopyParamsTypeEnum } from "@/store/copy";
-import { useRouter } from "vue-router";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import ShareModal from "@/components/share/ShareModal.vue";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -120,19 +123,9 @@ const { t } = useI18n();
 const { resetNotifier, showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
-const {
-	board,
-	createCard,
-	createColumn,
-	deleteCard,
-	deleteColumn,
-	moveCard,
-	moveColumn,
-	reloadBoard,
-	updateBoardTitle,
-	updateBoardVisibility,
-	updateColumnTitle,
-} = useBoardState(toRef(props, "boardId").value);
+
+const boardStore = useBoardStore();
+const board = computed(() => boardStore.board);
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
@@ -152,19 +145,22 @@ const {
 } = useBoardPermissions();
 
 const onCreateCard = async (columnId: string) => {
-	if (hasCreateCardPermission) await createCard(columnId);
+	if (hasCreateCardPermission)
+		boardStore.dispatch(boardActions.createCard({ columnId }));
 };
 
 const onCreateColumn = async () => {
-	if (hasCreateCardPermission) await createColumn();
+	if (hasCreateCardPermission) boardStore.dispatch(boardActions.createColumn());
 };
 
 const onDeleteCard = async (cardId: string) => {
-	if (hasCreateCardPermission) await deleteCard(cardId);
+	if (hasCreateCardPermission)
+		boardStore.dispatch(boardActions.deleteCard({ cardId }));
 };
 
 const onDeleteColumn = async (columnId: string) => {
-	if (hasDeletePermission) await deleteColumn(columnId);
+	if (hasDeletePermission)
+		boardStore.dispatch(boardActions.deleteColumn({ columnId }));
 };
 
 const onDropColumn = async (columnPayload: SortableEvent) => {
@@ -181,7 +177,7 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 			removedIndex: columnPayload.oldIndex,
 			columnId,
 		};
-		await moveColumn(columnMove);
+		boardStore.dispatch(boardActions.moveColumn({ columnMove }));
 	}
 };
 
@@ -195,7 +191,9 @@ const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
 		columnId,
 	};
 
-	await moveColumn(columnMove, true);
+	boardStore.dispatch(
+		boardActions.moveColumn({ columnMove, byKeyboard: true })
+	);
 };
 
 const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
@@ -208,34 +206,39 @@ const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
 		columnId,
 	};
 
-	await moveColumn(columnMove, true);
+	boardStore.dispatch(
+		boardActions.moveColumn({ columnMove, byKeyboard: true })
+	);
 };
 
 const onReloadBoard = async () => {
-	await reloadBoard();
+	boardStore.dispatch(boardActions.reloadBoard());
 };
 
 const onUpdateBoardVisibility = async (newVisibility: boolean) => {
 	if (!hasEditPermission) return;
 
-	await updateBoardVisibility(newVisibility);
+	boardStore.dispatch(boardActions.updateBoardVisibility({ newVisibility }));
 	await setAlert();
 };
 
 const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-	if (hasMovePermission) await moveCard(cardMove);
+	if (hasMovePermission) boardStore.dispatch(boardActions.moveCard(cardMove));
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
-	if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
+	if (hasEditPermission)
+		boardStore.dispatch(boardActions.updateColumnTitle({ columnId, newTitle }));
 };
 
 const onUpdateBoardTitle = async (newTitle: string) => {
-	if (hasEditPermission) await updateBoardTitle(newTitle);
+	if (hasEditPermission)
+		boardStore.dispatch(boardActions.updateBoardTitle({ newTitle }));
 };
 
 onMounted(() => {
 	setAlert();
+	boardStore.dispatch(boardActions.fetchBoard({ id: props.boardId }));
 });
 
 onUnmounted(() => {
@@ -290,5 +293,12 @@ const onShareBoard = () => {
 			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
 		});
 	}
+};
+
+const roomModule = injectStrict(ROOM_MODULE_KEY);
+const openDeleteBoardDialog = async (id: string) => {
+	await roomModule.deleteBoard(id);
+
+	router.push({ path: "/rooms/" + roomModule.getRoomId });
 };
 </script>

@@ -58,7 +58,6 @@
 			<v-btn
 				class="mr-2"
 				data-testid="provisioning-options-cancel-button"
-				color="secondary"
 				variant="outlined"
 				@click="onCancel"
 				>{{ t("common.actions.cancel") }}</v-btn

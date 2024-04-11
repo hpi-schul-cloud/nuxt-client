@@ -103,7 +103,6 @@
 					<v-progress-circular
 						v-show="loading"
 						indeterminate
-						color="secondary"
 						size="115"
 						class="spinner mt-16"
 					/>
@@ -303,14 +302,9 @@ $tablet-portrait-width: 768px;
 	.arrow__back {
 		margin-top: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: rgba(var(--v-theme-secondary));
 		text-decoration: none;
 		cursor: pointer;
 		border: none;
-
-		&:visited {
-			color: rgba(var(--v-theme-secondary));
-		}
 	}
 
 	.content {
@@ -383,11 +377,6 @@ $tablet-portrait-width: 768px;
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
-
-			.content-link {
-				color: rgba(var(--v-theme-secondary));
-				text-decoration: underline;
-			}
 		}
 
 		.description {
@@ -425,16 +414,6 @@ $tablet-portrait-width: 768px;
 
 			.link {
 				margin-right: var(--space-xs);
-				color: rgba(var(--v-theme-secondary));
-			}
-
-			.tertiary-color {
-				color: rgba(var(--v-theme-black));
-				text-decoration: none;
-
-				:hover {
-					color: rgba(var(--v-theme-black));
-				}
 			}
 		}
 	}

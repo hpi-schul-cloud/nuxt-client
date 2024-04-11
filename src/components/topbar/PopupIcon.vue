@@ -31,7 +31,6 @@ defineProps({
 	},
 	color: {
 		type: String,
-		default: "rgba(var(--v-theme-secondary-darken-1))",
 	},
 	centered: {
 		type: Boolean,
