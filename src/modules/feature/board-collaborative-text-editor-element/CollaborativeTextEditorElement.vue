@@ -10,11 +10,11 @@
 		@keydown.up.down="onKeydownArrow"
 		role="button"
 	>
-		<div class="drawing-element-content" @click="redirectToSanitizedUrl">
-			<InnerContent
-				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				:docName="element.id"
-			>
+		<div
+			class="collaborative-text-editor-element-content"
+			@click="redirectToSanitizedUrl"
+		>
+			<InnerContent :docName="element.id">
 				<template v-if="isEditMode">
 					<BoardMenu scope="element">
 						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { DrawingElementResponse } from "@/serverApi/v3";
+import { CollaborativeTextEditorElementResponse } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { sanitizeUrl } from "@braintree/sanitize-url";
@@ -54,7 +54,7 @@ export default defineComponent({
 	},
 	props: {
 		element: {
-			type: Object as PropType<DrawingElementResponse>,
+			type: Object as PropType<CollaborativeTextEditorElementResponse>,
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
@@ -66,7 +66,7 @@ export default defineComponent({
 		"move-keyboard:edit",
 	],
 	setup(props, { emit }) {
-		const drawingElement = ref<HTMLElement | null>(null);
+		const collaborativeTextEditorElement = ref<HTMLElement | null>(null);
 		const element = toRef(props, "element");
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 		const userRoles = ref(authModule.getUserRoles);
@@ -78,7 +78,7 @@ export default defineComponent({
 		const redirectToSanitizedUrl = () => {
 			window.open(sanitizedUrl.value, "_blank");
 		};
-		useBoardFocusHandler(element.value.id, drawingElement);
+		useBoardFocusHandler(element.value.id, collaborativeTextEditorElement);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -99,7 +99,7 @@ export default defineComponent({
 			return userRoles.value.includes("teacher");
 		});
 		return {
-			drawingElement,
+			collaborativeTextEditorElement,
 			redirectToSanitizedUrl,
 			onDeleteElement,
 			onKeydownArrow,
