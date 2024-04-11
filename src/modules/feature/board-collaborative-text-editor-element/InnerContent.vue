@@ -21,12 +21,6 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	name: "InnerContent",
 	components: { ContentElementBar },
-	props: {
-		lastUpdatedAt: {
-			type: String,
-			required: true,
-		},
-	},
 	setup() {
 		const imageSrc = image;
 
