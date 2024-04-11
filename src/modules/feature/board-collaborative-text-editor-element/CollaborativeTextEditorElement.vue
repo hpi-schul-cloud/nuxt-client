@@ -17,8 +17,12 @@
 			<InnerContent :docName="element.id">
 				<template v-if="isEditMode">
 					<BoardMenu scope="element">
-						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
-						<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
+						<BoardMenuActionMoveUp
+							@click="onMoveCollaborativeTextEditorElementEditUp"
+						/>
+						<BoardMenuActionMoveDown
+							@click="onMoveCollaborativeTextEditorElementEditDown"
+						/>
 						<BoardMenuActionDelete @click="onDeleteElement" />
 					</BoardMenu>
 				</template>
@@ -86,8 +90,10 @@ export default defineComponent({
 				emit("move-keyboard:edit", event);
 			}
 		};
-		const onMoveDrawingElementEditDown = () => emit("move-down:edit");
-		const onMoveDrawingElementEditUp = () => emit("move-up:edit");
+		const onMoveCollaborativeTextEditorElementEditDown = () =>
+			emit("move-down:edit");
+		const onMoveCollaborativeTextEditorElementEditUp = () =>
+			emit("move-up:edit");
 		const onDeleteElement = async (confirmation: Promise<boolean>) => {
 			const shouldDelete = await confirmation;
 			if (shouldDelete) {
@@ -103,8 +109,8 @@ export default defineComponent({
 			redirectToSanitizedUrl,
 			onDeleteElement,
 			onKeydownArrow,
-			onMoveDrawingElementEditDown,
-			onMoveDrawingElementEditUp,
+			onMoveCollaborativeTextEditorElementEditDown,
+			onMoveCollaborativeTextEditorElementEditUp,
 			isTeacher,
 			mdiClose,
 		};
