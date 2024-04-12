@@ -38,18 +38,21 @@ export const useBoardStore = defineStore("boardStore", () => {
 		(typeof BoardActions)[keyof typeof BoardActions]
 	>["payload"];
 
-	const emit = (
-		action: PermittedStoreActions<typeof BoardActions> | any,
-		payload: AnyBoardActionPayload
-	) => {
-		if (FEATURE_SOCKET_ENABLED) return emitOnSocket(action.type, payload);
+	const emitOnSocketWrapper = (action: {
+		type: string;
+		payload: AnyBoardActionPayload;
+	}) => {
+		if (FEATURE_SOCKET_ENABLED) {
+			emitOnSocket(action.type, action.payload);
+			return true;
+		}
 	};
 
 	async function dispatch(action: PermittedStoreActions<typeof BoardActions>) {
 		handle(
 			action,
 			on(BoardActions.fetchBoard, fetchBoard),
-			on(BoardActions.createCardRequest, createCard),
+			on(BoardActions.createCardRequest, emitOnSocketWrapper ?? createCard),
 			on(BoardActions.createCardSuccess, createCardSuccess),
 			on(BoardActions.createColumn, createColumn),
 			on(BoardActions.createColumnSuccess, createColumnSuccess),
@@ -101,16 +104,15 @@ export const useBoardStore = defineStore("boardStore", () => {
 			const payload = {
 				newCard,
 				columnId: action.payload.columnId,
-				true: true,
 			};
 
 			dispatch(BoardActions.createCardSuccess(payload));
-
-			emit(action, payload);
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notCreated", "boardCard"),
-			});
+			dispatch(
+				BoardActions.createCardFailure({
+					errorMessage: "unable to create card",
+				})
+			);
 		}
 	};
 
@@ -138,14 +140,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		try {
 			const newColumn: ColumnResponse = await createColumnCall(board.value.id);
-
-			const payload = {
-				type: "create-column",
-				payload: newColumn,
-			};
-
 			dispatch(BoardActions.createColumnSuccess({ newColumn }));
-			emit(payload, newColumn);
 			return newColumn;
 		} catch (error) {
 			handleError(error, {
@@ -172,7 +167,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		try {
 			await deleteCardCall(cardId);
 			dispatch(BoardActions.deleteCardSuccess({ cardId }));
-			emit(action, { cardId });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
@@ -206,7 +200,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 			await deleteColumnCall(columnId);
 
 			dispatch(BoardActions.deleteColumnSuccess({ columnId }));
-			emit(action, { columnId });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardColumn"),
@@ -315,7 +308,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 			await moveColumnCall(columnId, board.value.id, addedIndex);
 			dispatch(BoardActions.moveColumnSuccess(action.payload));
-			emit(action, action.payload);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
@@ -356,7 +348,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 			await updateColumnTitleCall(columnId, newTitle);
 
 			dispatch(BoardActions.updateColumnTitleSuccess(action.payload));
-			emit(action, action.payload);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),

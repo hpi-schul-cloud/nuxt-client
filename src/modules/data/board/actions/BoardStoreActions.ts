@@ -17,13 +17,18 @@ const getColumnId = createAction(
 );
 
 const createCardRequest = createAction(
-	"create-card",
+	"create-card-request",
 	props<{ columnId: string }>()
 );
 
 const createCardSuccess = createAction(
 	"create-card-success",
 	props<{ newCard: CardResponse; columnId: string }>()
+);
+
+const createCardFailure = createAction(
+	"create-card-failure",
+	props<{ errorMessage: string }>()
 );
 
 const createColumn = createAction("create-column", props());
@@ -94,9 +99,10 @@ export {
 	getColumnId,
 	createCardRequest,
 	createCardSuccess,
+	createCardFailure,
+	deleteCard,
 	createColumn,
 	createColumnSuccess,
-	deleteCard,
 	deleteCardSuccess,
 	deleteColumn,
 	deleteColumnSuccess,
