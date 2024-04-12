@@ -20,7 +20,7 @@
 			/>
 			<RenderHTML
 				data-testId="text-multiple-users-found"
-				v-if="multipleUsersFound"
+				v-else
 				:html="
 					$t('pages.userMigration.error.multipleUsersFound', {
 						targetSystem: getSystemName(),
