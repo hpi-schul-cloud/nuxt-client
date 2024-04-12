@@ -7,11 +7,11 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 	stateFactory: true,
 })
 export default class NotifierModule extends VuexModule {
-	notifier: AlertPayload | undefined = undefined;
+	notifierItems: AlertPayload[] = [];
 	private defaultTimeout = 5000;
 
-	get getNotifier(): AlertPayload | undefined {
-		return this.notifier;
+	get getNotifierItems(): AlertPayload[] {
+		return this.notifierItems;
 	}
 
 	@Action
@@ -21,16 +21,22 @@ export default class NotifierModule extends VuexModule {
 			autoClose: payload.autoClose === undefined || payload.autoClose,
 			timeout: payload.timeout || this.defaultTimeout,
 		};
-		this.setNotifier(alertData);
+		this.addNotifier(alertData);
 
 		if (!alertData.autoClose) return;
 		setTimeout(() => {
-			this.setNotifier(undefined);
+			this.removeNotifier(payload);
 		}, payload.timeout || this.defaultTimeout);
 	}
 
 	@Mutation
-	setNotifier(payload: AlertPayload | undefined): void {
-		this.notifier = payload;
+	addNotifier(payload: AlertPayload): void {
+		this.notifierItems.unshift(payload);
+	}
+
+	@Mutation
+	removeNotifier(payload: AlertPayload): void {
+		const index = this.notifierItems.indexOf(payload);
+		this.notifierItems.splice(index, 1);
 	}
 }
