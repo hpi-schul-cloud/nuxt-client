@@ -57,6 +57,11 @@ const moveColumn = createAction(
 	props<{ columnMove: ColumnMove; byKeyboard: boolean }>()
 );
 
+const moveColumnSuccess = createAction(
+	"move-column-success",
+	props<{ columnMove: ColumnMove; byKeyboard: boolean }>()
+);
+
 const updateColumnTitle = createAction(
 	"update-column-title",
 	props<{ columnId: string; newTitle: string }>()
@@ -94,6 +99,7 @@ export {
 	moveCard,
 	moveCardSuccess,
 	moveColumn,
+	moveColumnSuccess,
 	updateColumnTitle,
 	updateBoardTitle,
 	updateBoardVisibility,

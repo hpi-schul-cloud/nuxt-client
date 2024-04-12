@@ -59,6 +59,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.deleteColumnSuccess, deleteColumnSuccess),
 			on(BoardActions.moveCard, moveCard),
 			on(BoardActions.moveColumn, moveColumn),
+			on(BoardActions.moveColumnSuccess, moveColumnSuccess),
 			on(BoardActions.updateColumnTitle, updateColumnTitle),
 			on(BoardActions.updateBoardTitle, updateBoardTitle),
 			on(BoardActions.updateBoardVisibility, updateBoardVisibility),
@@ -306,29 +307,42 @@ export const useBoardStore = defineStore("boardStore", () => {
 		action: ReturnType<typeof BoardActions.moveColumn>
 	) => {
 		if (board.value === undefined) return;
-		const { columnMove, byKeyboard } = action.payload;
+		const { columnMove } = action.payload;
 
 		try {
-			const { addedIndex, removedIndex, columnId } = columnMove;
-			if (addedIndex < 0 || addedIndex > board.value.columns.length - 1) return;
-			if (removedIndex === null || removedIndex === undefined) return;
-
-			const item = board.value.columns.splice(removedIndex, 1)[0];
-			/**
-			 * refreshes the board to force rerendering in tracked v-for
-			 * to maintain focus when moving columns by keyboard
-			 */
-			if (byKeyboard === true) {
-				await nextTick();
-			}
-			board.value.columns.splice(addedIndex, 0, item);
+			const { addedIndex, columnId } = columnMove;
 
 			await moveColumnCall(columnId, board.value.id, addedIndex);
+			dispatch(BoardActions.moveColumnSuccess(action.payload));
+			emit(action, action.payload);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
 			});
 		}
+	};
+
+	const moveColumnSuccess = async (
+		action: ReturnType<typeof BoardActions.moveColumnSuccess>
+	) => {
+		const { columnMove, byKeyboard } = action.payload;
+		const { addedIndex, removedIndex } = columnMove;
+
+		if (board.value === undefined) return;
+
+		if (addedIndex < 0 || addedIndex > board.value?.columns.length - 1) return;
+		if (removedIndex === null || removedIndex === undefined) return;
+
+		const item = board.value?.columns.splice(removedIndex, 1)[0];
+		/**
+		 * refreshes the board to force rerendering in tracked v-for
+		 * to maintain focus when moving columns by keyboard
+		 */
+		if (byKeyboard === true) {
+			await nextTick();
+		}
+		if (!item) return;
+		board.value?.columns.splice(addedIndex, 0, item);
 	};
 
 	const updateColumnTitle = async (
