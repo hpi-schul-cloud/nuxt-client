@@ -67,6 +67,11 @@ const updateColumnTitle = createAction(
 	props<{ columnId: string; newTitle: string }>()
 );
 
+const updateColumnTitleSuccess = createAction(
+	"update-column-title-success",
+	props<{ columnId: string; newTitle: string }>()
+);
+
 const updateBoardTitle = createAction(
 	"update-board-title",
 	props<{ newTitle: string }>()
@@ -101,6 +106,7 @@ export {
 	moveColumn,
 	moveColumnSuccess,
 	updateColumnTitle,
+	updateColumnTitleSuccess,
 	updateBoardTitle,
 	updateBoardVisibility,
 	notifyWithTemplateAndReload,

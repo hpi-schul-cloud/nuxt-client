@@ -61,6 +61,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.moveColumn, moveColumn),
 			on(BoardActions.moveColumnSuccess, moveColumnSuccess),
 			on(BoardActions.updateColumnTitle, updateColumnTitle),
+			on(BoardActions.updateColumnTitleSuccess, updateColumnTitleSuccess),
 			on(BoardActions.updateBoardTitle, updateBoardTitle),
 			on(BoardActions.updateBoardVisibility, updateBoardVisibility),
 			on(BoardActions.reloadBoard, reloadBoard)
@@ -353,14 +354,26 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		try {
 			await updateColumnTitleCall(columnId, newTitle);
-			const columnIndex = getColumnIndex(columnId);
-			if (columnIndex > -1) {
-				board.value.columns[columnIndex].title = newTitle;
-			}
+
+			dispatch(BoardActions.updateColumnTitleSuccess(action.payload));
+			emit(action, action.payload);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
 			});
+		}
+	};
+
+	const updateColumnTitleSuccess = (
+		action: ReturnType<typeof BoardActions.updateColumnTitleSuccess>
+	) => {
+		if (board.value === undefined) return;
+
+		const { columnId, newTitle } = action.payload;
+		const columnIndex = getColumnIndex(columnId);
+
+		if (columnIndex > -1) {
+			board.value.columns[columnIndex].title = newTitle;
 		}
 	};
 
