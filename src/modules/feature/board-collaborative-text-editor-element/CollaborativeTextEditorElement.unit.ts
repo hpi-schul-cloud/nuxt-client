@@ -76,12 +76,54 @@ describe("CollaborativeTextEditorElement", () => {
 	};
 
 	describe("when component is mounted", () => {
-		it("renders correctly", () => {
+		it("should render the element corrrectly", () => {
+			const { wrapper } = setup({
+				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+				isEditMode: false,
+			});
+			expect(
+				wrapper.findComponent(CollaborativeTextEditorElement).isVisible()
+			).toBe(true);
+		});
+
+		it("should render the InnerContent element correctly", () => {
 			const { wrapper } = setup({
 				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 				isEditMode: false,
 			});
 			expect(wrapper.findComponent(InnerContent).exists()).toBe(true);
+		});
+
+		describe("when arrow key down is pressed", () => {
+			describe("when component is in edit-mode", () => {
+				it('should NOT emit "move-keyboard:edit"', async () => {
+					const { wrapper } = setup({
+						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+						isEditMode: true,
+					});
+
+					wrapper.findComponent(CollaborativeTextEditorElement).vm.$emit(
+						"keydown",
+						new KeyboardEvent("keydown", {
+							key: "ArrowDown",
+							keyCode: 40,
+						})
+					);
+
+					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
+				});
+
+				it("should hide the element", () => {
+					const { wrapper } = setup({
+						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+						isEditMode: true,
+					});
+
+					expect(
+						wrapper.findComponent(CollaborativeTextEditorElement).isVisible()
+					).toEqual(true);
+				});
+			});
 		});
 
 		describe("when arrow key up is pressed", () => {
@@ -113,6 +155,51 @@ describe("CollaborativeTextEditorElement", () => {
 						wrapper.findComponent(CollaborativeTextEditorElement).isVisible()
 					).toEqual(true);
 				});
+			});
+		});
+
+		describe("when move down Collaborative Text Editor is clicked", () => {
+			it('should emit "move-down" element', async () => {
+				const { wrapper } = setup({
+					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+					isEditMode: false,
+				});
+
+				wrapper
+					.findComponent(CollaborativeTextEditorElement)
+					.vm.$emit("move-down");
+
+				expect(wrapper.emitted("move-down")).toBeTruthy();
+			});
+		});
+
+		describe("when move up Collaborative Text Editor is clicked", () => {
+			it('should emit "move-up" element', async () => {
+				const { wrapper } = setup({
+					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+					isEditMode: false,
+				});
+
+				wrapper
+					.findComponent(CollaborativeTextEditorElement)
+					.vm.$emit("move-up");
+
+				expect(wrapper.emitted("move-up")).toBeTruthy();
+			});
+		});
+
+		describe("when delete Collaborative Text Editor is clicked", () => {
+			it('should emit "delete" element', async () => {
+				const { wrapper } = setup({
+					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+					isEditMode: false,
+				});
+
+				wrapper
+					.findComponent(CollaborativeTextEditorElement)
+					.vm.$emit("delete");
+
+				expect(wrapper.emitted("delete")).toBeTruthy();
 			});
 		});
 	});
