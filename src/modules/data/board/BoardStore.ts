@@ -54,7 +54,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.createColumn, createColumn),
 			on(BoardActions.createColumnSuccess, createColumnSuccess),
 			on(BoardActions.deleteCard, deleteCard),
+			on(BoardActions.deleteCardSuccess, deleteCardSuccess),
 			on(BoardActions.deleteColumn, deleteColumn),
+			on(BoardActions.deleteColumnSuccess, deleteColumnSuccess),
 			on(BoardActions.moveCard, moveCard),
 			on(BoardActions.moveColumn, moveColumn),
 			on(BoardActions.updateColumnTitle, updateColumnTitle),
@@ -166,21 +168,30 @@ export const useBoardStore = defineStore("boardStore", () => {
 		const { cardId } = action.payload;
 
 		try {
-			const columnIndex = board.value.columns.findIndex(
-				(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
-			);
-			if (columnIndex !== -1) {
-				const cardIndex = board.value.columns[columnIndex].cards.findIndex(
-					(c) => c.cardId === cardId
-				);
-				board.value.columns[columnIndex].cards.splice(cardIndex, 1);
-			}
 			await deleteCardCall(cardId);
+			dispatch(BoardActions.deleteCardSuccess({ cardId }));
+			emit(action, { cardId });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
 			});
 		}
+	};
+
+	const deleteCardSuccess = (
+		action: ReturnType<typeof BoardActions.deleteCardSuccess>
+	) => {
+		const { cardId } = action.payload;
+		const columnIndex = board.value?.columns.findIndex((column) =>
+			column.cards.find((c) => c.cardId === cardId)
+		);
+		if (columnIndex === undefined) return;
+		const cardIndex = board.value?.columns[columnIndex].cards.findIndex(
+			(c) => c.cardId === cardId
+		);
+		if (!cardIndex) return;
+
+		board.value?.columns[columnIndex].cards.splice(cardIndex, 1);
 	};
 
 	const deleteColumn = async (
@@ -190,17 +201,26 @@ export const useBoardStore = defineStore("boardStore", () => {
 		const { columnId } = action.payload;
 
 		try {
-			const columnIndex = getColumnIndex(columnId);
-			if (columnIndex < 0) {
-				return;
-			}
-			board.value.columns.splice(columnIndex, 1);
 			await deleteColumnCall(columnId);
+
+			dispatch(BoardActions.deleteColumnSuccess({ columnId }));
+			emit(action, { columnId });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardColumn"),
 			});
 		}
+	};
+
+	const deleteColumnSuccess = (
+		action: ReturnType<typeof BoardActions.deleteColumnSuccess>
+	) => {
+		const { columnId } = action.payload;
+		const columnIndex = getColumnIndex(columnId);
+		if (columnIndex < 0) {
+			return;
+		}
+		board.value?.columns.splice(columnIndex, 1);
 	};
 
 	const fetchBoard = async (
