@@ -1584,6 +1584,8 @@ export default {
 		'Desafortunadamente, la transferencia de su cuenta a {targetSystem} falló.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Por favor pasa esta información: {sourceSchoolNumber}, número de escuela en {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.multipleUsersFound":
+		'Dieser moin.schule-Personenkontext ist bereits mit einem Account in der Niedersächsischen Bildungscloud verbunden und kann nicht noch einmal für die Migration verwendet werden.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
 	"pages.userMigration.error.title": "Error al mover la cuenta",
 	"pages.userMigration.success.description":
 		"Se completó el movimiento de su cuenta a {targetSystem}.<br>Por favor, regístrese de nuevo ahora.",
