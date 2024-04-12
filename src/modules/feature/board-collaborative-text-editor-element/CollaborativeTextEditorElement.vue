@@ -15,7 +15,7 @@
 			@click="redirectToSanitizedUrl"
 		>
 			<InnerContent :docName="element.id">
-				<template v-if="isEditMode">
+				<template v-if="isEditMode && isTeacher">
 					<BoardMenu scope="element">
 						<BoardMenuActionMoveUp
 							@click="onMoveCollaborativeTextEditorElementEditUp"
@@ -31,89 +31,67 @@
 	</v-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { CollaborativeTextEditorElementResponse } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
-import { mdiClose } from "@mdi/js";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
-import { computed, defineComponent, PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
 import InnerContent from "./InnerContent.vue";
 
-export default defineComponent({
-	name: "CollaborativeTextEditorElement",
-	components: {
-		BoardMenu,
-		BoardMenuActionMoveUp,
-		BoardMenuActionMoveDown,
-		BoardMenuActionDelete,
-		InnerContent,
+const props = defineProps({
+	element: {
+		type: Object as PropType<CollaborativeTextEditorElementResponse>,
+		required: true,
 	},
-	props: {
-		element: {
-			type: Object as PropType<CollaborativeTextEditorElementResponse>,
-			required: true,
-		},
-		isEditMode: { type: Boolean, required: true },
-	},
-	emits: [
-		"delete:element",
-		"move-down:edit",
-		"move-up:edit",
-		"move-keyboard:edit",
-	],
-	setup(props, { emit }) {
-		const collaborativeTextEditorElement = ref<HTMLElement | null>(null);
-		const element = toRef(props, "element");
-		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-		const userRoles = ref(authModule.getUserRoles);
+	isEditMode: { type: Boolean, required: true },
+});
 
-		const sanitizedUrl = computed(() =>
-			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
-		);
+const emit = defineEmits([
+	"delete:element",
+	"move-down:edit",
+	"move-up:edit",
+	"move-keyboard:edit",
+]);
 
-		const redirectToSanitizedUrl = () => {
-			window.open(sanitizedUrl.value, "_blank");
-		};
-		useBoardFocusHandler(element.value.id, collaborativeTextEditorElement);
+const collaborativeTextEditorElement = ref<HTMLElement | null>(null);
+const element = toRef(props, "element");
+const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+const userRoles = ref(authModule.getUserRoles);
 
-		const onKeydownArrow = (event: KeyboardEvent) => {
-			if (props.isEditMode) {
-				event.preventDefault();
-				emit("move-keyboard:edit", event);
-			}
-		};
-		const onMoveCollaborativeTextEditorElementEditDown = () =>
-			emit("move-down:edit");
-		const onMoveCollaborativeTextEditorElementEditUp = () =>
-			emit("move-up:edit");
-		const onDeleteElement = async (confirmation: Promise<boolean>) => {
-			const shouldDelete = await confirmation;
-			if (shouldDelete) {
-				emit("delete:element", props.element.id);
-			}
-		};
+const sanitizedUrl = computed(() =>
+	sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
+);
 
-		const isTeacher = computed(() => {
-			return userRoles.value.includes("teacher");
-		});
-		return {
-			collaborativeTextEditorElement,
-			redirectToSanitizedUrl,
-			onDeleteElement,
-			onKeydownArrow,
-			onMoveCollaborativeTextEditorElementEditDown,
-			onMoveCollaborativeTextEditorElementEditUp,
-			isTeacher,
-			mdiClose,
-		};
-	},
+const redirectToSanitizedUrl = () => {
+	window.open(sanitizedUrl.value, "_blank");
+};
+useBoardFocusHandler(element.value.id, collaborativeTextEditorElement);
+
+const onKeydownArrow = (event: KeyboardEvent) => {
+	if (props.isEditMode) {
+		event.preventDefault();
+		emit("move-keyboard:edit", event);
+	}
+};
+const onMoveCollaborativeTextEditorElementEditDown = () =>
+	emit("move-down:edit");
+const onMoveCollaborativeTextEditorElementEditUp = () => emit("move-up:edit");
+const onDeleteElement = async (confirmation: Promise<boolean>) => {
+	const shouldDelete = await confirmation;
+	if (shouldDelete) {
+		emit("delete:element", props.element.id);
+	}
+};
+
+const isTeacher = computed(() => {
+	return userRoles.value.includes("teacher");
 });
 </script>
