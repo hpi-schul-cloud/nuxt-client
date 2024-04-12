@@ -20,8 +20,7 @@ export default {
 	"common.actions.save": "Guardar",
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.actions.share": "Compartir",
-	"common.actions.shareCourse": "Compartir copia de la cotización",
-	"common.actions.shareBoard": "Compartir copia de la tablón",
+	"common.actions.shareCopy": "Compartir copia",
 	"common.actions.update": "Actualizar",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
@@ -286,7 +285,7 @@ export default {
 	"components.board.alert.info.teacher":
 		"Este tablero es visible para todos los participantes en el curso.",
 	"components.board.alert.info.draft":
-		"Este tablero ya no es visible para los participantes en el curso.",
+		"Este tablón no es visible para los participantes en el curso.",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.placeholder": "Añadir columna",
 	"components.board.menu.board": "Configuración del tablero",
@@ -464,6 +463,12 @@ export default {
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Todos los elementos se copiaron con éxito.",
+	"components.molecules.copyResult.board.successfullyCopied":
+		"Tablero copiado con éxito.",
+	"components.molecules.copyResult.task.successfullyCopied":
+		"Tarea copiada con éxito.",
+	"components.molecules.copyResult.lesson.successfullyCopied":
+		"Tema copiado con éxito.",
 	"components.molecules.copyResult.timeoutCopy":
 		"El proceso de copia puede tardar más en el caso de archivos de gran tamaño. El contenido estará disponible en breve.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -1415,7 +1420,6 @@ export default {
 	"pages.room.itemDelete.text": '¿Eliminar {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
-	"pages.room.lessonCard.label.shareLesson": "Compartir copia del tema",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
 	"pages.room.student.emptyState":
 		"Aquí aparecen contenidos de aprendizaje como temas o tareas.",
@@ -1425,7 +1429,6 @@ export default {
 	"pages.room.taskCard.label.graded": "Calificado",
 	"pages.room.taskCard.label.noDueDate": "Sin fecha de entrega",
 	"pages.room.taskCard.label.open": "Abrir",
-	"pages.room.taskCard.label.shareTask": "Compartir copia de la tarea",
 	"pages.room.taskCard.label.taskDone": "Tarea completada",
 	"pages.room.taskCard.menu.ariaLabel": "Menú de tarea",
 	"pages.room.taskCard.student.label.overdue": "Falta",

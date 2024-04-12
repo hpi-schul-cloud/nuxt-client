@@ -102,7 +102,7 @@ export default {
 					this.notifierModule.show({
 						text: this.$t("components.organisms.AutoLogoutWarning.success"),
 						status: "success",
-						timeout: 10000,
+						timeout: 5000,
 					});
 					break;
 
@@ -110,7 +110,7 @@ export default {
 					this.notifierModule.show({
 						text: this.$t("components.organisms.AutoLogoutWarning.error.retry"),
 						status: "error",
-						timeout: 10000,
+						timeout: 5000,
 					});
 					break;
 
@@ -118,7 +118,7 @@ export default {
 					this.notifierModule.show({
 						text: this.$t("components.organisms.AutoLogoutWarning.error.401"),
 						status: "error",
-						timeout: 10000,
+						timeout: 5000,
 					});
 					break;
 

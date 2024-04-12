@@ -15,7 +15,7 @@ export const useFileStorageNotifier = () => {
 		notifierModule.show({
 			text,
 			status: "error",
-			timeout: 10000,
+			timeout: 5000,
 		});
 	};
 

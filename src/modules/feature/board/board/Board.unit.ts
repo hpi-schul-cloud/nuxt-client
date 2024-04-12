@@ -382,15 +382,6 @@ describe("Board", () => {
 		});
 	});
 
-	describe("when component is unMounted", () => {
-		it("should reset the notifier message", () => {
-			const { wrapper } = setup({ board: boardWithOneColumn });
-			wrapper.unmount();
-
-			expect(mockedBoardNotifierCalls.resetNotifier).toHaveBeenCalled();
-		});
-	});
-
 	describe("user permissions", () => {
 		beforeEach(() => {
 			jest.clearAllMocks();
