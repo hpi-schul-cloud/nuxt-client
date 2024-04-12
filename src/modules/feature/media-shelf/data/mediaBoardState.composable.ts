@@ -11,14 +11,19 @@ import {
 import { createSharedComposable } from "@vueuse/core";
 import { onMounted, ref, Ref } from "vue";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
-import { ElementMove, LineMove } from "./types";
+import {
+	ElementCreate,
+	ElementMove,
+	IMediaBoardElement,
+	LineMove,
+} from "./types";
 
 const useMediaBoardState = () => {
 	const api = useMediaBoardApi();
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 
 	const mediaBoard: Ref<MediaBoardResponse | undefined> = ref();
-	const availableMedia: Ref<MediaLineResponse | undefined> = ref();
+	const availableMedia: Ref<IMediaBoardElement[]> = ref([]);
 	const isLoading: Ref<boolean> = ref<boolean>(false);
 
 	// Utils
@@ -64,6 +69,24 @@ const useMediaBoardState = () => {
 		isLoading.value = false;
 	};
 
+	const fetchAvailableMedia = async (): Promise<void> => {
+		if (mediaBoard.value === undefined) {
+			return;
+		}
+
+		isLoading.value = true;
+
+		try {
+			availableMedia.value = await api.getAvailableMedia(mediaBoard.value.id);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notLoaded", "mediaBoard"),
+			});
+		}
+
+		isLoading.value = false;
+	};
+
 	// Media Line
 	const createLine = async (): Promise<MediaLineResponse | undefined> => {
 		if (mediaBoard.value === undefined) {
@@ -100,6 +123,8 @@ const useMediaBoardState = () => {
 			}
 
 			mediaBoard.value.lines.splice(lineIndex, 1);
+
+			await fetchAvailableMedia();
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "mediaLine"),
@@ -114,6 +139,11 @@ const useMediaBoardState = () => {
 
 		try {
 			const { lineId, newLineIndex, oldLineIndex } = lineMove;
+
+			// Same position
+			if (newLineIndex === oldLineIndex) {
+				return;
+			}
 
 			// Check bounds
 			if (
@@ -162,15 +192,25 @@ const useMediaBoardState = () => {
 
 	// Media Element
 	const createElement = async (
-		lineId: string
+		createOptions: ElementCreate
 	): Promise<MediaExternalToolElementResponse | undefined> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}
 
 		try {
+			let lineId: string | undefined = createOptions.toLineId;
+			if (lineId === undefined) {
+				const newLine: MediaLineResponse | undefined = await createLine();
+				if (!newLine) {
+					throw new Error("New line could not be created");
+				}
+
+				lineId = newLine.id;
+			}
+
 			const newElement: MediaExternalToolElementResponse =
-				await api.createElement(lineId);
+				await api.createElement(lineId, createOptions.newElementIndex);
 
 			const lineIndex: number = getLineIndex(lineId);
 
@@ -207,6 +247,8 @@ const useMediaBoardState = () => {
 			}
 
 			mediaBoard.value.lines[lineIndex].elements.splice(elementIndex, 1);
+
+			await fetchAvailableMedia();
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "mediaElement"),
@@ -214,15 +256,15 @@ const useMediaBoardState = () => {
 		}
 	};
 
-	const moveElement = async (cardMove: ElementMove): Promise<void> => {
+	const moveElement = async (elementMove: ElementMove): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}
 
 		try {
-			let { toLineId } = cardMove;
+			let { toLineId } = elementMove;
 			const { elementId, oldElementIndex, newElementIndex, fromLineId } =
-				cardMove;
+				elementMove;
 
 			// Same position
 			if (fromLineId === toLineId && oldElementIndex === newElementIndex) {
@@ -232,7 +274,7 @@ const useMediaBoardState = () => {
 			if (toLineId === undefined) {
 				const newLine: MediaLineResponse | undefined = await createLine();
 				if (!newLine) {
-					throw new Error();
+					throw new Error("New line could not be created");
 				}
 
 				toLineId = newLine.id;
@@ -246,8 +288,7 @@ const useMediaBoardState = () => {
 				fromLineIndex < 0 ||
 				toLineIndex < 0 ||
 				newElementIndex < 0 ||
-				newElementIndex >
-					mediaBoard.value.lines[toLineIndex].elements.length - 1
+				newElementIndex > mediaBoard.value.lines[toLineIndex].elements.length
 			) {
 				return;
 			}
@@ -265,7 +306,7 @@ const useMediaBoardState = () => {
 			);
 		} catch (error) {
 			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
+				404: notifyWithTemplateAndReload("notUpdated", "mediaElement"),
 			});
 		}
 	};
@@ -294,158 +335,8 @@ const useMediaBoardState = () => {
 
 	onMounted(async () => {
 		await fetchMediaBoardForUser();
+		await fetchAvailableMedia();
 	});
-
-	/*const addLine = async (): Promise<IMediaBoardLine | null> => {
-		if (mediaBoard.value === undefined) {
-			return null;
-		}
-
-		const line: IMediaBoardLine = {
-			id: getId(),
-			title: "",
-			elements: [],
-			isPrimary: false,
-		};
-
-		mediaBoard.value.lines.push(line);
-
-		return line;
-	};
-
-	// This is all the same as in the column board. Maybe an interface or base class would be good.
-	const getLineIndex = (lineId: string | undefined): number => {
-		if (lineId === undefined || mediaBoard.value === undefined) {
-			return -1;
-		}
-
-		const columnIndex: number = mediaBoard.value?.lines.findIndex(
-			(c: IMediaBoardLine): boolean => c.id === lineId
-		);
-		return columnIndex;
-	};
-
-	const updateLineTitle = (lineId: string, newTitle: string): void => {
-		if (mediaBoard.value === undefined) {
-			return;
-		}
-
-		// TODO: Call API with debounce
-		const lineIndex: number = getLineIndex(lineId);
-		if (lineIndex > -1) {
-			mediaBoard.value.lines[lineIndex].title = newTitle;
-		}
-	};
-
-	const moveLine = async (
-		columnMove: ColumnMove,
-		byKeyboard = false
-	): Promise<void> => {
-		const { addedIndex, removedIndex } = columnMove;
-		if (addedIndex < 0 || addedIndex > mediaBoard.value.lines.length - 1) {
-			return;
-		}
-		if (removedIndex === null || removedIndex === undefined) {
-			return;
-		}
-
-		const item: IMediaBoardLine = mediaBoard.value.lines.splice(
-			removedIndex,
-			1
-		)[0];
-
-		if (byKeyboard) {
-			await nextTick();
-		}
-
-		mediaBoard.value.lines.splice(addedIndex, 0, item);
-	};
-
-	const getLineId = (lineIndex: number): string | undefined => {
-		if (
-			mediaBoard.value === undefined ||
-			lineIndex === undefined ||
-			lineIndex < 0 ||
-			lineIndex > mediaBoard.value.lines.length - 1
-		) {
-			return;
-		}
-
-		const line: IMediaBoardLine | undefined = mediaBoard.value.lines[lineIndex];
-
-		if (line === undefined) {
-			return;
-		}
-
-		return line.id;
-	};
-
-	const moveElement = async (cardMove: CardMove): Promise<void> => {
-		const {
-			cardId,
-			newIndex,
-			oldIndex,
-			toColumnId,
-			fromColumnId,
-			columnDelta,
-			forceNextTick,
-		} = cardMove;
-
-		const fromColumnIndex = getLineIndex(fromColumnId);
-		let newColumnId: string | undefined = toColumnId;
-		let newColumnIndex = getLineIndex(toColumnId);
-
-		if (columnDelta !== undefined) {
-			newColumnIndex = fromColumnIndex + columnDelta;
-			newColumnId = getLineId(newColumnIndex);
-		}
-		if (newColumnId === undefined) {
-			// need to create a new column
-			const newColumn: IMediaBoardLine | null = await addLine();
-			if (newColumn) {
-				newColumnId = newColumn.id;
-				newColumnIndex = getLineIndex(newColumnId);
-			}
-		}
-
-		if (cardId === undefined || newColumnId === undefined) return; // ensure values are set
-
-		if (fromColumnIndex === newColumnIndex) {
-			if (newIndex === oldIndex && fromColumnIndex === newColumnIndex) return; // same position
-			if (newIndex < 0) return; // first card - can't move up
-			if (
-				newIndex >
-				mediaBoard.value.lines[fromColumnIndex].elements.length - 1
-			)
-				return; // last card - can't move down
-		}
-
-		const item = mediaBoard.value.lines[fromColumnIndex].elements.splice(
-			oldIndex,
-			1
-		)[0];
-		if (forceNextTick === true) {
-			await nextTick();
-		}
-		mediaBoard.value.lines[newColumnIndex].elements.splice(newIndex, 0, item);
-	};
-
-	const deleteLine = async (lineId: string): Promise<void> => {
-		if (mediaBoard.value === undefined) return;
-
-		const primaryLine: IMediaBoardLine | null = getPrimaryLine();
-		const lineIndex: number = getLineIndex(lineId);
-		if (lineIndex < 0 || !primaryLine || lineId === primaryLine.id) {
-			return;
-		}
-
-		const deletedLines: IMediaBoardLine[] = mediaBoard.value.lines.splice(
-			lineIndex,
-			1
-		);
-
-		primaryLine.elements.push(...deletedLines[0].elements);
-	};*/
 
 	return {
 		mediaBoard,
@@ -453,6 +344,7 @@ const useMediaBoardState = () => {
 		getLineIndex,
 		getLineIndexOfElement,
 		fetchMediaBoardForUser,
+		fetchAvailableMedia,
 		createLine,
 		deleteLine,
 		moveLine,

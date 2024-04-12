@@ -35,9 +35,9 @@
 						{{ element.title }}
 					</template>
 					<template #description>
-						<LineClamp :truncate="false" class="description">
+						<div class="description">
 							{{ element.description }}
-						</LineClamp>
+						</div>
 					</template>
 				</ContentElementBar>
 			</VCard>
@@ -47,7 +47,6 @@
 
 <script setup lang="ts">
 import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
-import LineClamp from "@ui-board/LineClamp.vue";
 import { useElementHover } from "@vueuse/core";
 import { PropType, ref } from "vue";
 import { IMediaBoardElement } from "./data/types";
@@ -80,5 +79,6 @@ $card-width: 344px;
 
 .description {
 	height: calc(3em * var(--line-height-md));
+	overflow: hidden;
 }
 </style>

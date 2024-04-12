@@ -17,6 +17,7 @@ export type BoardObjectType =
 	| "mediaBoard"
 	| "mediaLine"
 	| "mediaElement";
+// TODO transations
 
 export type ApiErrorHandler = (
 	error?: ApiResponseError | ApiValidationError

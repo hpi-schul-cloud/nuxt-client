@@ -1,6 +1,7 @@
 <template>
 	<div
 		class="line line-drag-handle mx-n4 px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
+		:data-line-id="availableMediaLineId"
 	>
 		<div class="line-header mb-4 rounded">
 			<div class="d-flex align-center py-2 px-2">
@@ -18,7 +19,7 @@
 			>
 				<VExpansionPanelText class="no-inner-padding">
 					<Sortable
-						:list="[]"
+						:list="availableMedia"
 						item-key="id"
 						tag="div"
 						:options="{
@@ -34,6 +35,7 @@
 							scroll: true,
 							forceFallback: true,
 							bubbleScroll: true,
+							sort: false,
 						}"
 						class="d-flex flex-grid flex-shrink-1 pa-2 ga-4 flex-1-1 scrollable-line"
 						@end="onElementDragEnd"
@@ -59,7 +61,8 @@ import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { Ref } from "vue";
-import { ElementCreate } from "./data/types";
+import { useSharedMediaBoardState } from "./data/mediaBoardState.composable";
+import { availableMediaLineId, ElementCreate } from "./data/types";
 import MediaBoardElement from "./MediaBoardElement.vue";
 import { useCollapsableState } from "./utils/collapsable.composable";
 
@@ -71,29 +74,33 @@ const isMobile: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Mobile);
 
 const { openItems } = useCollapsableState("availableLinePanel");
 
-const onElementDragEnd = async (event: SortableEvent) => {
-	const { newIndex, oldIndex, to, item } = event;
+const { availableMedia } = useSharedMediaBoardState();
 
+const onElementDragEnd = async (event: SortableEvent) => {
+	const { newIndex, oldIndex, to, from, item } = event;
+
+	const fromLineId: string | undefined = extractDataAttribute(from, "lineId");
 	const toLineId: string | undefined = extractDataAttribute(to, "lineId");
 	const elementId: string | undefined = extractDataAttribute(item, "elementId");
 
-	if (toLineId !== undefined) {
-		item?.parentNode?.removeChild(item);
-	}
-
 	if (
-		newIndex !== undefined &&
-		oldIndex !== undefined &&
-		elementId !== undefined
+		fromLineId === toLineId ||
+		newIndex === undefined ||
+		oldIndex === undefined ||
+		elementId === undefined
 	) {
-		const elementCreate: ElementCreate = {
-			toLineId,
-			oldElementIndex: oldIndex,
-			newElementIndex: newIndex,
-		};
-
-		emit("create:element", elementCreate);
+		return;
 	}
+
+	item?.parentNode?.removeChild(item);
+
+	const elementCreate: ElementCreate = {
+		toLineId,
+		oldElementIndex: oldIndex,
+		newElementIndex: newIndex,
+	};
+
+	emit("create:element", elementCreate);
 };
 </script>
 

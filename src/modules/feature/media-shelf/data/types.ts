@@ -43,3 +43,5 @@ export interface ElementCreate {
 	newElementIndex: number;
 	toLineId?: string;
 }
+
+export const availableMediaLineId = "available-media-line";

@@ -1,17 +1,14 @@
 <template>
-	<div
-		ref="textElement"
-		:class="{ 'line-clamp': truncate, 'overflow-hidden': !truncate }"
-	>
+	<div ref="textElement" class="line-clamp">
 		<v-tooltip
 			location="top"
 			origin="auto"
 			transition="fade"
 			:max-width="tooltipWidth"
-			v-if="isOverflowingLongText && displayTooltip"
+			v-if="isOverflowingLongText"
 		>
 			<template v-slot:activator="{ props }">
-				<div v-bind="props" :class="{ 'text-truncate': truncate }">
+				<div v-bind="props" class="text-truncate">
 					<slot />
 				</div>
 			</template>
@@ -26,36 +23,22 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, ref, watchEffect } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
 	name: "LineClamp",
-	props: {
-		truncate: {
-			type: Boolean,
-			default: true,
-		},
-		displayTooltip: {
-			type: Boolean,
-			default: true,
-		},
-	},
 	setup: () => {
 		const textElement = ref<HTMLDivElement | undefined>(undefined);
-		const isOverflowingLongText: ComputedRef<boolean> = computed(() => {
-			return (
-				!!textElement.value &&
-				(textElement.value.offsetWidth < textElement.value.scrollWidth ||
-					textElement.value.offsetHeight < textElement.value.scrollHeight)
-			);
-		});
+		const isOverflowingLongText = ref<boolean>(false);
 		let tooltipWidth = "320px";
 		const tooltipText = computed<string>(
 			() => textElement.value?.innerText ?? ""
 		);
 
-		watchEffect(() => {
+		onMounted(() => {
 			if (textElement.value) {
+				isOverflowingLongText.value =
+					textElement.value.offsetWidth < textElement.value.scrollWidth;
 				tooltipWidth = `${textElement.value.offsetWidth * 0.8}px`;
 			}
 		});

@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex flex-column flex-shrink-1">
 		<div>
-			<MediaBoardAvailableLine />
+			<MediaBoardAvailableLine @create:element="onCreateElement" />
 			<Sortable
 				:list="board.lines"
 				item-key="id"
@@ -33,6 +33,7 @@
 						@update:line-title="onUpdateLineTitle(element.id, $event)"
 						@update:element-position="onUpdateElementPosition"
 						@delete:line="onDeleteLine"
+						@delete:element="onDeleteElement"
 					/>
 				</template>
 			</Sortable>
@@ -42,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-// FIXME sortablejs-vue3 has a bug where the DOM is wrong when you modify the data array
+import { MediaBoardResponse } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
@@ -50,7 +51,7 @@ import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { PropType } from "vue";
 import { useSharedMediaBoardState } from "./data/mediaBoardState.composable";
-import { ElementMove, IMediaBoard, LineMove } from "./data/types";
+import { ElementCreate, ElementMove, LineMove } from "./data/types";
 import { useSharedEditMode } from "./editMode.composable";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
@@ -58,15 +59,22 @@ import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
 
 defineProps({
 	board: {
-		type: Object as PropType<IMediaBoard>,
+		type: Object as PropType<MediaBoardResponse>,
 		required: true,
 	},
 });
 
 const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
 
-const { updateLineTitle, createLine, moveLine, moveElement, deleteLine } =
-	useSharedMediaBoardState();
+const {
+	updateLineTitle,
+	createLine,
+	moveLine,
+	moveElement,
+	deleteLine,
+	deleteElement,
+	createElement,
+} = useSharedMediaBoardState();
 
 const { isInEditMode } = useSharedEditMode();
 
@@ -78,8 +86,16 @@ const onCreateLine = async () => {
 	await createLine();
 };
 
+const onCreateElement = async (createOptions: ElementCreate) => {
+	await createElement(createOptions);
+};
+
 const onDeleteLine = (lineId: string) => {
 	deleteLine(lineId);
+};
+
+const onDeleteElement = (elementId: string) => {
+	deleteElement(elementId);
 };
 
 const onLineDragEnd = async (event: SortableEvent) => {
@@ -92,13 +108,13 @@ const onLineDragEnd = async (event: SortableEvent) => {
 		newIndex !== undefined &&
 		oldIndex !== undefined
 	) {
-		const columnMove: LineMove = {
+		const lineMove: LineMove = {
 			newLineIndex: newIndex,
 			oldLineIndex: oldIndex,
 			lineId,
 		};
 
-		await moveLine(columnMove);
+		await moveLine(lineMove);
 	}
 };
 
