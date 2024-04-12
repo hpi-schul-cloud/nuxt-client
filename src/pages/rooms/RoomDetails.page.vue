@@ -379,7 +379,7 @@ export default defineComponent({
 				items.push({
 					icon: this.icons.mdiShareVariantOutline,
 					action: () => this.shareCourse(),
-					name: this.$t("common.actions.shareCourse"),
+					name: this.$t("common.actions.shareCopy"),
 					dataTestId: "room-menu-share",
 				});
 			}

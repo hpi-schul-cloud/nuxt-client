@@ -62,7 +62,7 @@ export default {
 					notifierModule.show({
 						text: this.$t("components.organisms.FormNews.success.create"),
 						status: "success",
-						timeout: 10000,
+						timeout: 5000,
 					});
 					await this.$router.push({
 						path: `/news/${this.createdNews.id}`,
@@ -72,7 +72,7 @@ export default {
 				notifierModule.show({
 					text: this.$t("components.organisms.FormNews.errors.create"),
 					status: "error",
-					timeout: 10000,
+					timeout: 5000,
 				});
 			}
 		},

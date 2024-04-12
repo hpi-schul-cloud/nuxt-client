@@ -198,7 +198,7 @@ export default defineComponent({
 					"pages.administration.school.index.schoolPolicy.delete.success"
 				),
 				status: "success",
-				timeout: 10000,
+				timeout: 5000,
 			});
 		};
 

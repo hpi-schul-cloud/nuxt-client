@@ -4,7 +4,7 @@
 		@click="onClick"
 		data-testid="board-menu-action-share"
 	>
-		{{ $t("common.actions.shareBoard") }}
+		{{ $t("common.actions.shareCopy") }}
 	</BoardMenuAction>
 </template>
 
