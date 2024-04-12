@@ -7,6 +7,7 @@
 		>
 			<div class="board-header" tabindex="0" ref="boardHeader">
 				<BoardAnyTitleInput
+					class="ml-n2"
 					ref="boardHeader"
 					scope="board"
 					:value="boardTitle"

@@ -147,7 +147,7 @@ export default defineComponent({
 				notifierModule.show({
 					text: t("pages.administration.school.index.schoolPolicy.success"),
 					status: "success",
-					timeout: 10000,
+					timeout: 5000,
 				});
 
 				resetForm();
