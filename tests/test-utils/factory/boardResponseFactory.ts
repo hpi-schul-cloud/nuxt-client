@@ -9,5 +9,6 @@ export const boardResponseFactory = Factory.define<BoardResponse>(
 		columns: [],
 		timestamps: timestampsResponseFactory.build(),
 		isVisible: false,
+		layout: "columns",
 	})
 );

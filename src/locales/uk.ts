@@ -1384,6 +1384,7 @@ export default {
 	"pages.news.title": "Новини",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
+	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",
 	"pages.room.boardCard.menu.ariaLabel": "Меню форуму",
 	"pages.room.cards.aria":
 		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
@@ -1423,6 +1424,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.add.lesson": "Створити тему",
 	"pages.rooms.fab.add.board": "Нова дошка",
+	"pages.rooms.fab.add.listBoard": "Нова дошка оголошень",
 	"pages.rooms.fab.add.task": "Створити завдання",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.fab.import.course": "Імпортувати курс",

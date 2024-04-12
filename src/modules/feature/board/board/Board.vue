@@ -12,11 +12,12 @@
 				@share:board="onShareBoard"
 				@delete:board="openDeleteBoardDialog(boardId)"
 			/>
-			<div class="d-flex flex-row flex-shrink-1">
+			<div :class="boardStyle">
 				<div>
 					<Sortable
 						:list="board.columns"
 						item-key="id"
+						:class="columnStyle"
 						tag="div"
 						:options="{
 							direction: 'horizontal',
@@ -35,7 +36,6 @@
 							forceFallback: true,
 							bubbleScroll: true,
 						}"
-						class="d-flex flex-row flex-shrink-1 ml-n4"
 						@end="onDropColumn"
 					>
 						<template #item="{ element, index }">
@@ -45,6 +45,7 @@
 								:index="index"
 								:key="element.id"
 								:columnCount="board.columns.length"
+								:class="isListBoard ? 'mx-auto my-0' : ''"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
@@ -57,7 +58,7 @@
 						</template>
 					</Sortable>
 				</div>
-				<div>
+				<div :class="isListBoard ? 'mx-auto mt-9' : ''">
 					<BoardColumnGhost
 						v-if="hasCreateColumnPermission"
 						@create:column="onCreateColumn"
@@ -265,11 +266,33 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 
 const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 
+const isListBoard = computed(() => board.value?.layout === "list");
+
 const copyResultModalItems = computed(
 	() => copyModule.getCopyResultFailedItems
 );
 
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
+
+const boardStyle = computed(() => {
+	const classes = ["d-flex", "flex-shrink-1"];
+	if (isListBoard.value) {
+		classes.push("flex-column");
+	} else {
+		classes.push("flex-row");
+	}
+	return classes;
+});
+
+const columnStyle = computed(() => {
+	const classes = ["d-flex", "flex-shrink-1", "ml-n4"];
+	if (isListBoard.value) {
+		classes.push("flex-column");
+	} else {
+		classes.push("flex-row");
+	}
+	return classes;
+});
 
 const onCopyResultModalClosed = () => {
 	copyModule.reset();

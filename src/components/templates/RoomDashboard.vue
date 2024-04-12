@@ -29,10 +29,10 @@
 								courseId: roomData.roomId,
 							}"
 							:aria-label="
-								$t('pages.room.cards.aria', {
-									itemType: $t('pages.room.boardCard.label.columnBoard'),
-									itemName: $t('pages.room.boardCard.label.courseBoard'),
-								})
+								$t(
+									'pages.room.cards.aria',
+									boardTypeAriaLabel(item.content.layout)
+								)
 							"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
@@ -305,6 +305,21 @@ export default {
 
 			await roomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`].$el.focus();
+		},
+		boardTypeAriaLabel(itemLayout) {
+			const columnBoardInfo = {
+				itemType: this.$t("pages.room.boardCard.label.columnBoard"),
+				itemName: this.$t("pages.room.boardCard.label.courseBoard"),
+			};
+			const listBoardInfo = {
+				itemType: this.$t("pages.room.boardCard.label.listBoard"),
+				itemName: this.$t("pages.room.boardCard.label.courseBoard"),
+			};
+			if (itemLayout === "list") {
+				return listBoardInfo;
+			} else {
+				return columnBoardInfo;
+			}
 		},
 		getSharedBoard(boardId) {
 			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {

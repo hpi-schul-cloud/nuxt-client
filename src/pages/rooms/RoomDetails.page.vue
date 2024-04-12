@@ -306,6 +306,19 @@ export default defineComponent({
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),
 				});
 			}
+			/* if (
+				this.authModule.getUserPermissions.includes(
+					"FEATURE_LISTBOARD_ENABLED".toLowerCase()
+				)
+			) { */
+			actions.push({
+				label: this.$t("pages.rooms.fab.add.listBoard"),
+				icon: "$mdi_custom_grid_outline",
+				customEvent: "list-board-create",
+				dataTestId: "fab_button_add_list_board",
+				ariaLabel: this.$t("pages.rooms.fab.add.listBoard"),
+			});
+			// }
 
 			if (actions.length === 0) {
 				return null;
@@ -435,6 +448,9 @@ export default defineComponent({
 			if (event === "board-create") {
 				this.onCreateBoard(this.roomData.roomId);
 			}
+			if (event === "list-board-create") {
+				this.onCreateBoard(this.roomData.roomId, "list");
+			}
 		},
 		setActiveTabIfPageCached(event) {
 			if (event.persisted) {
@@ -492,12 +508,15 @@ export default defineComponent({
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
 		},
-		async onCreateBoard(courseId) {
+		async onCreateBoard(courseId, layout) {
 			const params = {
 				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
 				parentType: BoardParentType.Course,
 				parentId: courseId,
 			};
+			if (layout === "list") {
+				params.layout = "list";
+			}
 			const board = await this.roomModule.createBoard(params);
 			await this.$router.push(`/rooms/${board.id}/board`);
 		},

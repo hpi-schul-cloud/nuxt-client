@@ -105,7 +105,9 @@ const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const cardTitle = computed(() => {
-	const titlePrefix = t("pages.room.boardCard.label.columnBoard");
+	const titlePrefix = isListBoard.value
+		? t("pages.room.boardCard.label.listBoard")
+		: t("pages.room.boardCard.label.columnBoard");
 
 	if (isDraft.value) {
 		const titleSuffix = ` - ${t("common.words.draft")}`;
@@ -117,6 +119,10 @@ const cardTitle = computed(() => {
 
 const isDraft = computed(() => {
 	return !props.columnBoardItem.published;
+});
+
+const isListBoard = computed(() => {
+	return props.columnBoardItem.layout === "list";
 });
 
 const onPublish = () => {

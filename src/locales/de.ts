@@ -1382,6 +1382,7 @@ export default {
 	"pages.news.title": "Neuigkeiten",
 	"pages.room.boardCard.label.columnBoard": "Spalten-Board",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Board",
+	"pages.room.boardCard.label.listBoard": "Listen-Board",
 	"pages.room.boardCard.menu.ariaLabel": "Board-Menü",
 	"pages.room.cards.aria":
 		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
@@ -1425,6 +1426,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.add.lesson": "Neues Thema",
 	"pages.rooms.fab.add.board": "Neues Spalten-Board",
+	"pages.rooms.fab.add.listBoard": "Neues Listen-Board",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.fab.import.course": "Kurs importieren",

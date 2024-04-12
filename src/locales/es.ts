@@ -1401,6 +1401,7 @@ export default {
 	"pages.news.title": "Noticias",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
+	"pages.room.boardCard.label.listBoard": "Tablero de listas",
 	"pages.room.boardCard.menu.ariaLabel": "Menú del tablero",
 	"pages.room.cards.aria":
 		"{itemType}, enlace, {itemName}, presione Intro para abrir",
@@ -1442,6 +1443,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
 	"pages.rooms.fab.add.lesson": "Nuevo tema",
 	"pages.rooms.fab.add.board": "Nuevo tablero de columna",
+	"pages.rooms.fab.add.listBoard": "Nuevo tablero de listas",
 	"pages.rooms.fab.add.task": "Nuevo tarea",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
 	"pages.rooms.fab.import.course": "Importar curso",

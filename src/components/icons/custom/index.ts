@@ -28,6 +28,7 @@ import langIconEn from "./lang-icon-en.vue";
 import langIconEs from "./lang-icon-es.vue";
 import langIconUk from "./lang-icon-uk.vue";
 import lernstoreOutline from "./lernstore_outline.vue";
+import mdiCustomGridOutline from "./mdi_custom_grid_outline.vue";
 import n21 from "./n21.vue";
 import schoolOutline from "./school_outline.vue";
 import taskDoneFilled from "./task-done-filled.vue";
@@ -71,6 +72,7 @@ const customAliases: Record<string, any> = {
 	langIconEs: langIconEs,
 	langIconUk: langIconUk,
 	lernstore_outline: lernstoreOutline,
+	mdi_custom_grid_outline: mdiCustomGridOutline,
 	n21: n21,
 	school_outline: schoolOutline,
 	taskDoneFilled: taskDoneFilled,
