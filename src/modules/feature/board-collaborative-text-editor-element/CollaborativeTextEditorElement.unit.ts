@@ -17,6 +17,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
 import CollaborativeTextEditorElement from "./CollaborativeTextEditorElement.vue";
 import InnerContent from "./InnerContent.vue";
@@ -92,6 +98,46 @@ describe("CollaborativeTextEditorElement", () => {
 				isEditMode: false,
 			});
 			expect(wrapper.findComponent(InnerContent).exists()).toBe(true);
+		});
+
+		it("should render BoardMenu element correctly", async () => {
+			const { wrapper } = setup({
+				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+				isEditMode: true,
+			});
+
+			const board = wrapper.findComponent(BoardMenu);
+			expect(board.exists()).toBe(true);
+		});
+
+		it("should render BoardMenuActionMoveUp element correctly", async () => {
+			const { wrapper } = setup({
+				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+				isEditMode: true,
+			});
+
+			const moveUp = wrapper.findComponent(BoardMenuActionMoveUp);
+			expect(moveUp.exists()).toBe(true);
+		});
+
+		it("should render BoardMenuActionMoveDown element correctly", async () => {
+			const { wrapper } = setup({
+				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+				isEditMode: true,
+			});
+
+			const moveDown = wrapper.findComponent(BoardMenuActionMoveDown);
+			expect(moveDown.exists()).toBe(true);
+		});
+
+		it("should render BoardMenuActionDelete element correctly", async () => {
+			const { wrapper } = setup({
+				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+				isEditMode: true,
+			});
+
+			const actionDelete = wrapper.findComponent(BoardMenuActionDelete);
+			expect(actionDelete.exists()).toBe(true);
 		});
 
 		describe("when arrow key down is pressed", () => {
