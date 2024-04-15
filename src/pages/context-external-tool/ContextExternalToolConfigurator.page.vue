@@ -161,6 +161,7 @@ const onSave = async (
 
 onMounted(async () => {
 	if (props.configId) {
+		// Loading order is important
 		await contextExternalToolsModule.loadConfigurationTemplateForContextExternalTool(
 			props.configId
 		);
