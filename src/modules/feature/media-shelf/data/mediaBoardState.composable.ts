@@ -4,6 +4,7 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
+	MediaAvailableLineResponse,
 	MediaBoardResponse,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
@@ -11,19 +12,14 @@ import {
 import { createSharedComposable } from "@vueuse/core";
 import { onMounted, ref, Ref } from "vue";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
-import {
-	ElementCreate,
-	ElementMove,
-	IMediaBoardElement,
-	LineMove,
-} from "./types";
+import { ElementCreate, ElementMove, LineMove } from "./types";
 
 const useMediaBoardState = () => {
 	const api = useMediaBoardApi();
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 
 	const mediaBoard: Ref<MediaBoardResponse | undefined> = ref();
-	const availableMedia: Ref<IMediaBoardElement[]> = ref([]);
+	const availableMedia: Ref<MediaAvailableLineResponse | undefined> = ref();
 	const isLoading: Ref<boolean> = ref<boolean>(false);
 
 	// Utils
@@ -77,7 +73,10 @@ const useMediaBoardState = () => {
 		isLoading.value = true;
 
 		try {
-			availableMedia.value = await api.getAvailableMedia(mediaBoard.value.id);
+			const availableList: MediaAvailableLineResponse =
+				await api.getAvailableMedia(mediaBoard.value.id);
+
+			availableMedia.value = availableList;
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notLoaded", "mediaBoard"),
@@ -210,7 +209,11 @@ const useMediaBoardState = () => {
 			}
 
 			const newElement: MediaExternalToolElementResponse =
-				await api.createElement(lineId, createOptions.newElementIndex);
+				await api.createElement(
+					lineId,
+					createOptions.newElementIndex,
+					createOptions.schoolExternalToolId
+				);
 
 			const lineIndex: number = getLineIndex(lineId);
 
@@ -248,6 +251,7 @@ const useMediaBoardState = () => {
 
 			mediaBoard.value.lines[lineIndex].elements.splice(elementIndex, 1);
 
+			await fetchAvailableMedia();
 			await fetchAvailableMedia();
 		} catch (error) {
 			handleError(error, {

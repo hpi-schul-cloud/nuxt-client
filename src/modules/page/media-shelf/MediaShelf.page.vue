@@ -14,8 +14,11 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
 import { useTitle } from "@vueuse/core";
+import { useI18n } from "vue-i18n";
 
-useTitle(buildPageTitle("Mein Medienregal"));
+const { t } = useI18n();
+
+useTitle(buildPageTitle(t("feature.media-shelf.title")));
 
 const { mediaBoard } = useSharedMediaBoardState();
 </script>

@@ -24,6 +24,8 @@ export const ToolContextMapping: Record<
 	[ContextExternalToolResponseContextTypeEnum.Course]: ToolContextType.Course,
 	[ContextExternalToolResponseContextTypeEnum.BoardElement]:
 		ToolContextType.BoardElement,
+	[ContextExternalToolResponseContextTypeEnum.MediaBoard]:
+		ToolContextType.MediaBoard,
 };
 
 export class ContextExternalToolMapper {

@@ -19,7 +19,7 @@
 			>
 				<VExpansionPanelText class="no-inner-padding">
 					<Sortable
-						:list="availableMedia"
+						:list="elements"
 						item-key="id"
 						tag="div"
 						:options="{
@@ -41,9 +41,8 @@
 						@end="onElementDragEnd"
 					>
 						<template #item="{ element }">
-							<MediaBoardElement
-								:data-element-id="element.id"
-								:key="element.id"
+							<MediaBoardAvailableElement
+								:key="uniqueId()"
 								:element="element"
 							/>
 						</template>
@@ -55,15 +54,17 @@
 </template>
 
 <script setup lang="ts">
+import { MediaAvailableLineElementResponse } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
+import { uniqueId } from "lodash";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { Ref } from "vue";
+import { computed, ComputedRef, Ref } from "vue";
 import { useSharedMediaBoardState } from "./data/mediaBoardState.composable";
 import { availableMediaLineId, ElementCreate } from "./data/types";
-import MediaBoardElement from "./MediaBoardElement.vue";
+import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import { useCollapsableState } from "./utils/collapsable.composable";
 
 const emit = defineEmits<{
@@ -76,21 +77,27 @@ const { openItems } = useCollapsableState("availableLinePanel");
 
 const { availableMedia } = useSharedMediaBoardState();
 
+const elements: ComputedRef<MediaAvailableLineElementResponse[]> = computed(
+	() => availableMedia.value?.elements ?? []
+);
+
 const onElementDragEnd = async (event: SortableEvent) => {
 	const { newIndex, oldIndex, to, from, item } = event;
 
 	const fromLineId: string | undefined = extractDataAttribute(from, "lineId");
 	const toLineId: string | undefined = extractDataAttribute(to, "lineId");
-	const elementId: string | undefined = extractDataAttribute(item, "elementId");
 
 	if (
 		fromLineId === toLineId ||
-		newIndex === undefined ||
 		oldIndex === undefined ||
-		elementId === undefined
+		newIndex === undefined ||
+		newIndex < 0 ||
+		newIndex > elements.value.length - 1
 	) {
 		return;
 	}
+
+	const media: MediaAvailableLineElementResponse = elements.value[oldIndex];
 
 	item?.parentNode?.removeChild(item);
 
@@ -98,6 +105,7 @@ const onElementDragEnd = async (event: SortableEvent) => {
 		toLineId,
 		oldElementIndex: oldIndex,
 		newElementIndex: newIndex,
+		schoolExternalToolId: media.schoolExternalToolId,
 	};
 
 	emit("create:element", elementCreate);

@@ -1,27 +1,9 @@
-export interface IMediaBoardElement {
-	id: string;
-
+export interface MediaElementDisplay {
 	title: string;
 
 	description?: string;
 
 	thumbnail?: string;
-}
-
-export interface IMediaBoardLine {
-	id: string;
-
-	title: string;
-
-	elements: IMediaBoardElement[];
-
-	isPrimary: boolean;
-}
-
-export interface IMediaBoard {
-	id: string;
-
-	lines: IMediaBoardLine[];
 }
 
 export interface LineMove {
@@ -42,6 +24,7 @@ export interface ElementCreate {
 	oldElementIndex: number;
 	newElementIndex: number;
 	toLineId?: string;
+	schoolExternalToolId: string;
 }
 
 export const availableMediaLineId = "available-media-line";

@@ -6,11 +6,11 @@
 			variant="outlined"
 			tabindex="0"
 			:elevation="isHovered ? 4 : 2"
-			:id="element.id"
 			:ripple="false"
 			:hover="isHovered"
 		>
 			<VCard
+				v-if="element"
 				class="element d-flex flex-column justify-end"
 				elevation="0"
 				variant="outlined"
@@ -41,6 +41,7 @@
 					</template>
 				</ContentElementBar>
 			</VCard>
+			<VSkeletonLoader v-else class="element border" type="image, article" />
 		</VCard>
 	</div>
 </template>
@@ -49,12 +50,11 @@
 import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 import { useElementHover } from "@vueuse/core";
 import { PropType, ref } from "vue";
-import { IMediaBoardElement } from "./data/types";
+import { MediaElementDisplay } from "./data/types";
 
 defineProps({
 	element: {
-		type: Object as PropType<IMediaBoardElement>,
-		required: true,
+		type: Object as PropType<MediaElementDisplay>,
 	},
 });
 

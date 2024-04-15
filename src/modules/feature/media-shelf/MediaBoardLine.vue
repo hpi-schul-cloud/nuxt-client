@@ -46,7 +46,7 @@
 						@end="onElementDragEnd"
 					>
 						<template #item="{ element }">
-							<MediaBoardElement
+							<MediaBoardExternalToolElement
 								:data-element-id="element.id"
 								:key="element.id"
 								:element="element"
@@ -70,7 +70,7 @@ import { computed, ComputedRef, PropType, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardLineHeader from "./BoardLineHeader.vue";
 import { availableMediaLineId, ElementMove } from "./data/types";
-import MediaBoardElement from "./MediaBoardElement.vue";
+import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { useCollapsableState } from "./utils/collapsable.composable";
 
