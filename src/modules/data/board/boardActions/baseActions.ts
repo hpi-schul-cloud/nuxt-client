@@ -6,16 +6,6 @@ import { CardResponse, ColumnResponse } from "@/serverApi/v3";
 import { createAction, props } from "@/types/board/ActionFactory";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 
-const getColumnIndex = createAction(
-	"get-column-index",
-	props<{ columnId: string }>()
-);
-
-const getColumnId = createAction(
-	"get-column-id",
-	props<{ columnIndex: number }>()
-);
-
 const createCardRequest = createAction(
 	"create-card-request",
 	props<{ columnId: string }>()
@@ -38,7 +28,7 @@ const createColumnSuccess = createAction(
 );
 
 const deleteCardRequest = createAction(
-	"delete-card",
+	"delete-card-request",
 	props<{ cardId: string }>()
 );
 const deleteCardSuccess = createAction(
@@ -47,7 +37,7 @@ const deleteCardSuccess = createAction(
 );
 
 const deleteColumnRequest = createAction(
-	"delete-column",
+	"delete-column-request",
 	props<{ columnId: string }>()
 );
 const deleteColumnSuccess = createAction(
@@ -55,13 +45,13 @@ const deleteColumnSuccess = createAction(
 	props<{ columnId: string }>()
 );
 
-const fetchBoard = createAction("fetch-board", props<{ id: string }>());
+const fetchBoard = createAction("fetch-board-request", props<{ id: string }>());
 
-const moveCardRequest = createAction("move-card", props<CardMove>());
+const moveCardRequest = createAction("move-card-request", props<CardMove>());
 const moveCardSuccess = createAction("move-card-success", props<CardMove>());
 
 const moveColumnRequest = createAction(
-	"move-column",
+	"move-column-request",
 	props<{ columnMove: ColumnMove; byKeyboard: boolean }>()
 );
 
@@ -71,7 +61,7 @@ const moveColumnSuccess = createAction(
 );
 
 const updateColumnTitleRequest = createAction(
-	"update-column-title",
+	"update-column-title-request",
 	props<{ columnId: string; newTitle: string }>()
 );
 
@@ -81,7 +71,7 @@ const updateColumnTitleSuccess = createAction(
 );
 
 const updateBoardTitleRequest = createAction(
-	"update-board-title",
+	"update-board-title-request",
 	props<{ newTitle: string }>()
 );
 
@@ -91,7 +81,7 @@ const updateBoardTitleSuccess = createAction(
 );
 
 const updateBoardVisibilityRequest = createAction(
-	"update-board-visibility",
+	"update-board-visibility-request",
 	props<{ newVisibility: boolean }>()
 );
 
@@ -101,15 +91,13 @@ const updateBoardVisibilitySuccess = createAction(
 );
 
 const notifyWithTemplateAndReload = createAction(
-	"notify-with-template-and-reload",
+	"notify-with-template-and-reload-request",
 	props<{ errorType: ErrorType; boardObjectType?: BoardObjectType }>()
 );
 
-const reloadBoard = createAction("reload-board", props());
+const reloadBoard = createAction("reload-board-request", props());
 
 export {
-	getColumnIndex,
-	getColumnId,
 	createCardRequest,
 	createCardSuccess,
 	createCardFailure,

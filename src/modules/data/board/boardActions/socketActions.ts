@@ -74,6 +74,30 @@ export const useSocketApi = () => {
 		emitOnSocket("delete-column-success", action.payload);
 	};
 
+	const moveCardRequest = async (
+		action: ReturnType<typeof BoardActions.moveCardRequest>
+	) => {
+		emitOnSocket("move-card-request", action.payload);
+	};
+
+	const moveCardSuccess = async (
+		action: ReturnType<typeof BoardActions.moveCardSuccess>
+	) => {
+		emitOnSocket("move-card-success", action.payload);
+	};
+
+	const moveColumnRequest = async (
+		action: ReturnType<typeof BoardActions.moveColumnRequest>
+	) => {
+		emitOnSocket("move-column-request", action.payload);
+	};
+
+	const moveColumnSuccess = async (
+		action: ReturnType<typeof BoardActions.moveColumnSuccess>
+	) => {
+		emitOnSocket("move-column-success", action.payload);
+	};
+
 	const updateColumnTitleRequest = (
 		action: ReturnType<typeof BoardActions.updateColumnTitleRequest>
 	) => {
@@ -119,6 +143,10 @@ export const useSocketApi = () => {
 		deleteCardSuccess,
 		deleteColumnRequest,
 		deleteColumnSuccess,
+		moveCardRequest,
+		moveCardSuccess,
+		moveColumnRequest,
+		moveColumnSuccess,
 		updateColumnTitleRequest,
 		updateColumnTitleSuccess,
 		updateBoardTitleRequest,

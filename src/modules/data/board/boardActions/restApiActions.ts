@@ -12,7 +12,6 @@ import { nextTick } from "vue";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
-	// const { board } = boardStore;
 
 	const { fetchBoardCall } = useBoardApi();
 	const { handleError, notifyWithTemplate } = useErrorHandler();
@@ -233,6 +232,10 @@ export const useBoardRestApi = () => {
 		}
 	};
 
+	const moveCardSuccess = (
+		action: ReturnType<typeof BoardActions.moveCardSuccess>
+	) => action.type;
+
 	const moveColumnRequest = async (
 		action: ReturnType<typeof BoardActions.moveColumnRequest>
 	) => {
@@ -262,6 +265,10 @@ export const useBoardRestApi = () => {
 			});
 		}
 	};
+
+	const moveColumnSuccess = (
+		action: ReturnType<typeof BoardActions.moveColumnSuccess>
+	) => action.type;
 
 	const updateColumnTitleRequest = async (
 		action: ReturnType<typeof BoardActions.updateColumnTitleRequest>
@@ -343,7 +350,7 @@ export const useBoardRestApi = () => {
 		if (boardStore.board === undefined) return;
 
 		await fetchBoard({
-			type: "fetch-board",
+			type: "fetch-board-request",
 			payload: { id: boardStore.board.id },
 		});
 	};
@@ -359,7 +366,9 @@ export const useBoardRestApi = () => {
 		deleteColumnRequest,
 		deleteColumnSuccess,
 		moveCardRequest,
+		moveCardSuccess,
 		moveColumnRequest,
+		moveColumnSuccess,
 		updateColumnTitleRequest,
 		updateColumnTitleSuccess,
 		updateBoardTitleRequest,
@@ -367,6 +376,5 @@ export const useBoardRestApi = () => {
 		updateBoardVisibilityRequest,
 		updateBoardVisibilitySuccess,
 		reloadBoard,
-		// notifyWithTemplateAndReload,
 	};
 };

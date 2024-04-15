@@ -3,7 +3,6 @@ import { ref } from "vue";
 import { defineStore } from "pinia";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import * as BoardActions from "./boardActions/baseActions";
-// import { useBoardSocketApi } from "@data-board";
 import { useBoardRestApi } from "./boardActions/restApiActions";
 import { useSocketApi } from "./boardActions/socketActions";
 
@@ -32,10 +31,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.deleteCardSuccess, socketOrRest.deleteCardSuccess),
 			on(BoardActions.deleteColumnRequest, socketOrRest.deleteColumnRequest),
 			on(BoardActions.deleteColumnSuccess, socketOrRest.deleteColumnSuccess),
-			on(BoardActions.moveCardRequest, restApi.moveCardRequest),
-			// on(BoardActions.moveCardSuccess, restApi.moveCardSuccess),
-			on(BoardActions.moveColumnRequest, restApi.moveColumnRequest),
-			// on(BoardActions.moveColumnSuccess, moveColumnSuccess),
+			on(BoardActions.moveCardRequest, socketOrRest.moveCardRequest),
+			on(BoardActions.moveCardSuccess, socketOrRest.moveCardSuccess),
+			on(BoardActions.moveColumnRequest, socketOrRest.moveColumnRequest),
+			on(BoardActions.moveColumnSuccess, socketOrRest.moveColumnSuccess),
 			on(
 				BoardActions.updateColumnTitleRequest,
 				socketOrRest.updateColumnTitleRequest
@@ -60,7 +59,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 				BoardActions.updateBoardVisibilitySuccess,
 				socketOrRest.updateBoardVisibilitySuccess
 			)
-			// on(BoardActions.reloadBoard, reloadBoard)
 		);
 	};
 
@@ -68,6 +66,5 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board,
 		isLoading,
 		dispatch,
-		fetchBoard: restApi.fetchBoard,
 	};
 });
