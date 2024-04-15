@@ -13872,7 +13872,7 @@ export const MediaElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaExternalToolElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaElementControllerCreateElement(createMediaElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -13916,7 +13916,7 @@ export const MediaElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): AxiosPromise<void> {
+        mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): AxiosPromise<MediaExternalToolElementResponse> {
             return localVarFp.mediaElementControllerCreateElement(createMediaElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -13957,7 +13957,7 @@ export interface MediaElementApiInterface {
      * @throws {RequiredError}
      * @memberof MediaElementApiInterface
      */
-    mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): AxiosPromise<void>;
+    mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): AxiosPromise<MediaExternalToolElementResponse>;
 
     /**
      * 
