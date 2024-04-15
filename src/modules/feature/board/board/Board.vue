@@ -150,9 +150,6 @@ const onCreateCard = async (columnId: string) => {
 };
 
 const onCreateColumn = async () => {
-	// if (hasCreateCardPermission) boardStore.dispatch(boardActions.createColumn());
-
-	// TODO: check if this action is handled via on the dispatcher
 	if (hasCreateCardPermission)
 		boardStore.dispatch(boardActions.createColumnRequest());
 };

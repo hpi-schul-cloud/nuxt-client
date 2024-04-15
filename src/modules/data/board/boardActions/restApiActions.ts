@@ -12,7 +12,7 @@ import { nextTick } from "vue";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
-	const { board } = boardStore;
+	// const { board } = boardStore;
 
 	const { fetchBoardCall } = useBoardApi();
 	const { handleError, notifyWithTemplate } = useErrorHandler();
@@ -55,17 +55,21 @@ export const useBoardRestApi = () => {
 		action: ReturnType<typeof BoardActions.createCardRequest>
 	) => {
 		if (boardStore.board === undefined) return;
-		console.log("createCardRequest");
 
 		try {
 			const newCard = await createCardCall(action.payload.columnId);
 
-			const payload = {
-				newCard,
-				columnId: action.payload.columnId,
-			};
+			const { setFocus } = useBoardFocusHandler();
+			setFocus(newCard.id);
 
-			createCardSuccess(BoardActions.createCardSuccess(payload));
+			const columnIndex = boardStore.board.columns.findIndex(
+				(column) => column.id === action.payload.columnId
+			);
+			boardStore.board.columns[columnIndex].cards.push({
+				cardId: newCard.id,
+				height: 120,
+			});
+			setEditModeId(newCard.id);
 		} catch (error) {
 			BoardActions.createCardFailure({
 				errorMessage: "unable to create card",
@@ -75,25 +79,7 @@ export const useBoardRestApi = () => {
 
 	const createCardSuccess = (
 		action: ReturnType<typeof BoardActions.createCardSuccess>
-	) => {
-		const { setFocus } = useBoardFocusHandler();
-
-		console.log("createCardSuccess", action);
-
-		const { newCard, columnId } = action.payload;
-		setFocus(newCard.id);
-
-		const columnIndex = board?.columns.findIndex(
-			(column) => column.id === columnId
-		);
-		if (columnIndex === undefined) return;
-		// TODO: check reactivity, board state should be updated
-		boardStore.board?.columns[columnIndex].cards.push({
-			cardId: newCard.id,
-			height: 120,
-		});
-		setEditModeId(newCard.id);
-	};
+	) => action.type;
 
 	const fetchBoard = async (
 		action: ReturnType<typeof BoardActions.fetchBoard>
@@ -127,16 +113,7 @@ export const useBoardRestApi = () => {
 
 	const createColumnSuccess = async (
 		action: ReturnType<typeof BoardActions.createColumnSuccess>
-	) => {
-		if (boardStore.board === undefined) return;
-
-		const newColumn = action.payload.newColumn;
-
-		useBoardFocusHandler().setFocus(newColumn.id);
-		setEditModeId(newColumn.id);
-		boardStore.board.columns.push(newColumn);
-		return newColumn;
-	};
+	) => action.type;
 
 	const deleteCardRequest = async (
 		action: ReturnType<typeof BoardActions.deleteCardRequest>
@@ -164,19 +141,7 @@ export const useBoardRestApi = () => {
 
 	const deleteCardSuccess = (
 		action: ReturnType<typeof BoardActions.deleteCardSuccess>
-	) => {
-		const { cardId } = action.payload;
-		const columnIndex = boardStore.board?.columns.findIndex((column) =>
-			column.cards.find((c) => c.cardId === cardId)
-		);
-		if (columnIndex === undefined) return;
-		const cardIndex = boardStore.board?.columns[columnIndex].cards.findIndex(
-			(c) => c.cardId === cardId
-		);
-		if (!cardIndex) return;
-
-		boardStore.board?.columns[columnIndex].cards.splice(cardIndex, 1);
-	};
+	) => action.type;
 
 	const deleteColumnRequest = async (
 		action: ReturnType<typeof BoardActions.deleteColumnRequest>
@@ -200,14 +165,7 @@ export const useBoardRestApi = () => {
 
 	const deleteColumnSuccess = (
 		action: ReturnType<typeof BoardActions.deleteColumnSuccess>
-	) => {
-		const { columnId } = action.payload;
-		const columnIndex = getColumnIndex(columnId);
-		if (columnIndex < 0) {
-			return;
-		}
-		boardStore.board?.columns.splice(columnIndex, 1);
-	};
+	) => action.type;
 
 	const moveCardRequest = async (
 		action: ReturnType<typeof BoardActions.moveCardRequest>

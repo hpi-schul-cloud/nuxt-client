@@ -14,7 +14,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const restApi = useBoardRestApi();
 	const socketApi = useSocketApi();
 
-	const FEATURE_SOCKET_ENABLED = true;
+	const FEATURE_SOCKET_ENABLED = false;
 
 	const socketOrRest = FEATURE_SOCKET_ENABLED ? socketApi : restApi;
 
