@@ -48,7 +48,16 @@ const deleteColumnSuccess = createAction(
 const fetchBoard = createAction("fetch-board-request", props<{ id: string }>());
 
 const moveCardRequest = createAction("move-card-request", props<CardMove>());
-const moveCardSuccess = createAction("move-card-success", props<CardMove>());
+const moveCardSuccess = createAction(
+	"move-card-success",
+	props<{
+		newColumnIndex: number;
+		oldIndex: number;
+		newIndex: number;
+		fromColumnIndex: number;
+		forceNextTick: boolean | undefined;
+	}>()
+);
 
 const moveColumnRequest = createAction(
 	"move-column-request",
