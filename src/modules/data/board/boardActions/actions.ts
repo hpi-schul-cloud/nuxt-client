@@ -3,6 +3,7 @@ import {
 	ErrorType,
 } from "@/components/error-handling/ErrorHandler.composable";
 import { CardResponse, ColumnResponse } from "@/serverApi/v3";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createAction, props } from "@/types/board/ActionFactory";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 
@@ -100,8 +101,21 @@ const updateBoardVisibilitySuccess = createAction(
 );
 
 const notifyWithTemplateAndReload = createAction(
-	"notify-with-template-and-reload-request",
-	props<{ errorType: ErrorType; boardObjectType?: BoardObjectType }>()
+	"notify-with-template-and-reload",
+	props<{
+		errorType: ErrorType;
+		httpStatus: HttpStatusCode;
+		boardObjectType?: BoardObjectType;
+	}>()
+);
+
+const notifyWithTemplate = createAction(
+	"notify-with-template",
+	props<{
+		errorType: ErrorType;
+		httpStatus: HttpStatusCode;
+		boardObjectType?: BoardObjectType;
+	}>()
 );
 
 const reloadBoard = createAction("reload-board-request", props());
@@ -127,6 +141,7 @@ export {
 	updateBoardTitleSuccess,
 	updateBoardVisibilityRequest,
 	updateBoardVisibilitySuccess,
+	notifyWithTemplate,
 	notifyWithTemplateAndReload,
 	reloadBoard,
 };

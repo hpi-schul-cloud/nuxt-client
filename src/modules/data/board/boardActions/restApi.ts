@@ -1,19 +1,14 @@
-import {
-	BoardObjectType,
-	ErrorType,
-	useErrorHandler,
-} from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardStore } from "./../BoardStore";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
 import * as BoardActions from "./actions";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 export const useBoardRestApi = () => {
-	const { board, dispatch, setLoading, setBoard } = useBoardStore();
+	const boardStore = useBoardStore();
 
 	const { fetchBoardCall } = useBoardApi();
-	const { handleError, notifyWithTemplate } = useErrorHandler();
 
 	const {
 		createCardCall,
@@ -31,31 +26,35 @@ export const useBoardRestApi = () => {
 
 	const getColumnIndex = (columnId: string | undefined): number => {
 		if (columnId === undefined) return -1;
-		if (board === undefined) return -1;
+		if (boardStore.board === undefined) return -1;
 
-		const columnIndex = board?.columns.findIndex((c) => c.id === columnId);
+		const columnIndex = boardStore.board?.columns.findIndex(
+			(c) => c.id === columnId
+		);
+
+		if (columnIndex === undefined) return -1;
 		return columnIndex;
 	};
 
 	const getColumnId = (columnIndex: number): string | undefined => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 		if (columnIndex === undefined) return;
 		if (columnIndex < 0) return;
-		if (columnIndex > board.columns.length - 1) return;
-		if (board.columns[columnIndex] === undefined) return;
+		if (columnIndex > boardStore.board.columns.length - 1) return;
+		if (boardStore.board.columns[columnIndex] === undefined) return;
 
-		return board.columns[columnIndex].id;
+		return boardStore.board.columns[columnIndex].id;
 	};
 
 	const createCardRequest = async (
 		action: ReturnType<typeof BoardActions.createCardRequest>
 	) => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 
 		try {
 			const newCard = await createCardCall(action.payload.columnId);
 
-			dispatch(
+			boardStore.dispatch(
 				BoardActions.createCardSuccess({
 					newCard,
 					columnId: action.payload.columnId,
@@ -71,72 +70,88 @@ export const useBoardRestApi = () => {
 	const fetchBoard = async (
 		action: ReturnType<typeof BoardActions.fetchBoard>
 	): Promise<void> => {
-		setLoading(true);
+		boardStore.setLoading(true);
 		try {
 			const board = await fetchBoardCall(action.payload.id);
-			setBoard(board);
+			boardStore.setBoard(board);
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplate("notLoaded", "board"),
-			});
+			boardStore.dispatch(
+				BoardActions.notifyWithTemplate({
+					errorType: "notLoaded",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "board",
+				})
+			);
 		}
-		setLoading(false);
+		boardStore.setLoading(false);
 	};
 
 	const createColumnRequest = async () => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 
 		try {
-			const newColumn = await createColumnCall(board.id);
+			const newColumn = await createColumnCall(boardStore.board?.id);
 			useBoardFocusHandler().setFocus(newColumn.id);
 			setEditModeId(newColumn.id);
 
-			dispatch(BoardActions.createColumnSuccess({ newColumn }));
+			boardStore.dispatch(BoardActions.createColumnSuccess({ newColumn }));
 			return newColumn;
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notCreated", "boardColumn"),
-			});
+			boardStore.dispatch(
+				BoardActions.notifyWithTemplateAndReload({
+					errorType: "notCreated",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "boardColumn",
+				})
+			);
 		}
 	};
 
 	const deleteCardRequest = async (
 		action: ReturnType<typeof BoardActions.deleteCardRequest>
 	) => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 		const { cardId } = action.payload;
 
 		try {
 			await deleteCardCall(cardId);
 
-			dispatch(BoardActions.deleteCardSuccess({ cardId }));
+			boardStore.dispatch(BoardActions.deleteCardSuccess({ cardId }));
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
-			});
+			boardStore.dispatch(
+				BoardActions.notifyWithTemplateAndReload({
+					errorType: "notDeleted",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "boardCard",
+				})
+			);
 		}
 	};
 
 	const deleteColumnRequest = async (
 		action: ReturnType<typeof BoardActions.deleteColumnRequest>
 	) => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 		const { columnId } = action.payload;
 
 		try {
 			await deleteColumnCall(columnId);
-			dispatch(BoardActions.deleteColumnSuccess({ columnId }));
+			boardStore.dispatch(BoardActions.deleteColumnSuccess({ columnId }));
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDeleted", "boardColumn"),
-			});
+			boardStore.dispatch(
+				BoardActions.notifyWithTemplateAndReload({
+					errorType: "notDeleted",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "boardColumn",
+				})
+			);
 		}
 	};
 
 	const moveCardRequest = async (
 		action: ReturnType<typeof BoardActions.moveCardRequest>
 	): Promise<void> => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 
 		try {
 			const {
@@ -171,7 +186,11 @@ export const useBoardRestApi = () => {
 			if (fromColumnIndex === newColumnIndex) {
 				if (newIndex === oldIndex && fromColumnIndex === newColumnIndex) return; // same position
 				if (newIndex < 0) return; // first card - can't move up
-				if (newIndex > board.columns[fromColumnIndex].cards.length - 1) return; // last card - can't move down
+				if (
+					newIndex >
+					boardStore.board.columns[fromColumnIndex].cards.length - 1
+				)
+					return; // last card - can't move down
 			}
 
 			/**
@@ -181,7 +200,7 @@ export const useBoardRestApi = () => {
 
 			await moveCardCall(cardId, newColumnId, newIndex);
 
-			dispatch({
+			boardStore.dispatch({
 				type: "move-card-success",
 				payload: {
 					newColumnIndex,
@@ -192,100 +211,112 @@ export const useBoardRestApi = () => {
 				},
 			});
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
-			});
+			boardStore.dispatch(
+				BoardActions.notifyWithTemplateAndReload({
+					errorType: "notUpdated",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "boardCard",
+				})
+			);
 		}
 	};
 
 	const moveColumnRequest = async (
 		action: ReturnType<typeof BoardActions.moveColumnRequest>
 	) => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 		const { columnMove } = action.payload;
 
 		try {
 			const { addedIndex, columnId } = columnMove;
 
-			await moveColumnCall(columnId, board.id, addedIndex);
-			dispatch(BoardActions.moveColumnSuccess(action.payload));
+			await moveColumnCall(columnId, boardStore.board.id, addedIndex);
+			boardStore.dispatch(BoardActions.moveColumnSuccess(action.payload));
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
-			});
+			boardStore.dispatch(
+				BoardActions.notifyWithTemplateAndReload({
+					errorType: "notUpdated",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "boardColumn",
+				})
+			);
 		}
 	};
 
 	const updateColumnTitleRequest = async (
 		action: ReturnType<typeof BoardActions.updateColumnTitleRequest>
 	) => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 		const { columnId, newTitle } = action.payload;
 
 		try {
 			await updateColumnTitleCall(columnId, newTitle);
 			const columnIndex = getColumnIndex(columnId);
 			if (columnIndex > -1) {
-				board.columns[columnIndex].title = newTitle;
+				boardStore.board.columns[columnIndex].title = newTitle;
 			}
+			boardStore.dispatch(
+				BoardActions.updateColumnTitleSuccess(action.payload)
+			);
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
-			});
+			boardStore.dispatch(
+				BoardActions.notifyWithTemplateAndReload({
+					errorType: "notUpdated",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "boardColumn",
+				})
+			);
 		}
 	};
 
 	const updateBoardTitleRequest = async (
 		action: ReturnType<typeof BoardActions.updateBoardTitleRequest>
 	) => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 		const { newTitle } = action.payload;
 
 		try {
-			await updateBoardTitleCall(board.id, newTitle);
-			dispatch(BoardActions.updateBoardTitleSuccess({ newTitle }));
+			await updateBoardTitleCall(boardStore.board.id, newTitle);
+			boardStore.dispatch(BoardActions.updateBoardTitleSuccess({ newTitle }));
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated", "board"),
-			});
+			boardStore.dispatch(
+				BoardActions.notifyWithTemplateAndReload({
+					errorType: "notUpdated",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "board",
+				})
+			);
 		}
 	};
 
 	const updateBoardVisibilityRequest = async (
 		action: ReturnType<typeof BoardActions.updateBoardVisibilityRequest>
 	) => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 		const { newVisibility } = action.payload;
 
 		try {
-			await updateBoardVisibilityCall(board.id, newVisibility);
-			dispatch(BoardActions.updateBoardVisibilitySuccess({ newVisibility }));
+			await updateBoardVisibilityCall(boardStore.board.id, newVisibility);
+			boardStore.dispatch(
+				BoardActions.updateBoardVisibilitySuccess({ newVisibility })
+			);
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated", "board"),
-			});
+			boardStore.dispatch(
+				BoardActions.notifyWithTemplateAndReload({
+					errorType: "notUpdated",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "board",
+				})
+			);
 		}
 	};
 
-	const notifyWithTemplateAndReload = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType
-	) => {
-		return () => {
-			if (board === undefined) return;
-
-			notifyWithTemplate(errorType, boardObjectType)();
-			reloadBoard();
-			setEditModeId(undefined);
-		};
-	};
-
 	const reloadBoard = async () => {
-		if (board === undefined) return;
+		if (boardStore.board === undefined) return;
 
 		await fetchBoard({
 			type: "fetch-board-request",
-			payload: { id: board.id },
+			payload: { id: boardStore.board.id },
 		});
 	};
 

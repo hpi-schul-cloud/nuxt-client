@@ -7,18 +7,20 @@ import { useBoardRestApi } from "./boardActions/restApi";
 import { useSocketApi } from "./boardActions/socketApi";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 
-	const FEATURE_SOCKET_ENABLED = false;
+	const FEATURE_SOCKET_ENABLED = true;
 
 	const restApi = useBoardRestApi();
 
 	const socketOrRest = FEATURE_SOCKET_ENABLED ? useSocketApi() : restApi;
 
 	const { setEditModeId } = useSharedEditMode();
+	const { handleError, notifyWithTemplate } = useErrorHandler();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions>
@@ -52,7 +54,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 				BoardActions.updateBoardVisibilityRequest,
 				socketOrRest.updateBoardVisibilityRequest
 			),
-			on(BoardActions.updateBoardVisibilitySuccess, updateBoardVisibility)
+			on(BoardActions.updateBoardVisibilitySuccess, updateBoardVisibility),
+			on(BoardActions.notifyWithTemplate, notifyWithTemplateRequest),
+			on(BoardActions.notifyWithTemplateAndReload, notifyWithTemplateAndReload)
 		);
 	};
 
@@ -195,6 +199,33 @@ export const useBoardStore = defineStore("boardStore", () => {
 		}
 
 		board.value.columns[newColumnIndex].cards.splice(newIndex, 0, item);
+	};
+
+	const notifyWithTemplateAndReload = (
+		action: ReturnType<typeof BoardActions.notifyWithTemplateAndReload>
+	) => {
+		return () => {
+			if (board.value === undefined) return;
+			const { errorType, httpStatus, boardObjectType } = action.payload;
+
+			notifyWithTemplate({ errorType, httpStatus, boardObjectType });
+			BoardActions.reloadBoard({});
+			setEditModeId(undefined);
+		};
+	};
+
+	const notifyWithTemplateRequest = (
+		action: ReturnType<typeof BoardActions.notifyWithTemplate>
+	) => {
+		return () => {
+			if (board.value === undefined) return;
+
+			const { errorType, httpStatus, boardObjectType } = action.payload;
+
+			handleError(httpStatus, {
+				[httpStatus]: notifyWithTemplate(errorType, boardObjectType),
+			});
+		};
 	};
 
 	return {
