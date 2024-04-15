@@ -76,7 +76,7 @@ export const actions = {
 			notifierModule.show({
 				text: String(error),
 				status: "error",
-				timeout: 10000,
+				timeout: 5000,
 			});
 		}
 	},
@@ -93,7 +93,7 @@ export const actions = {
 			notifierModule.show({
 				text: String(error),
 				status: "error",
-				timeout: 10000,
+				timeout: 5000,
 			});
 		}
 	},
@@ -113,7 +113,7 @@ export const actions = {
 			notifierModule.show({
 				text: String(error),
 				status: "error",
-				timeout: 10000,
+				timeout: 5000,
 			});
 		}
 	},
@@ -129,7 +129,7 @@ export const actions = {
 			notifierModule.show({
 				text: String(error),
 				status: "error",
-				timeout: 10000,
+				timeout: 5000,
 			});
 		}
 	},
@@ -145,7 +145,7 @@ export const actions = {
 			notifierModule.show({
 				text: String(error),
 				status: "error",
-				timeout: 10000,
+				timeout: 5000,
 			});
 		}
 	},
