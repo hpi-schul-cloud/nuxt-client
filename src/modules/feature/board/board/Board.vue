@@ -106,7 +106,7 @@ import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, onUnmounted, watch } from "vue";
+import { computed, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
@@ -120,7 +120,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { resetNotifier, showCustomNotifier } = useBoardNotifier();
+const { showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 
@@ -218,7 +218,7 @@ const onReloadBoard = async () => {
 const onUpdateBoardVisibility = async (newVisibility: boolean) => {
 	if (!hasEditPermission) return;
 
-	boardStore.dispatch(boardActions.updateBoardVisibility(newVisibility));
+	boardStore.dispatch(boardActions.updateBoardVisibility({ newVisibility }));
 	await setAlert();
 };
 
@@ -233,7 +233,7 @@ const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
 
 const onUpdateBoardTitle = async (newTitle: string) => {
 	if (hasEditPermission)
-		boardStore.dispatch(boardActions.updateBoardTitle(newTitle));
+		boardStore.dispatch(boardActions.updateBoardTitle({ newTitle }));
 };
 
 onMounted(() => {
@@ -241,17 +241,13 @@ onMounted(() => {
 	boardStore.dispatch(boardActions.fetchBoard({ id: props.boardId }));
 });
 
-onUnmounted(() => {
-	resetNotifier();
-});
-
 const setAlert = useDebounceFn(() => {
 	if (!isTeacher) return;
 
 	if (!board.value?.isVisible) {
-		showCustomNotifier(t("components.board.alert.info.draft"), "info", 10000);
+		showCustomNotifier(t("components.board.alert.info.draft"), "info");
 	} else {
-		showCustomNotifier(t("components.board.alert.info.teacher"), "info", 10000);
+		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
 	}
 }, 100);
 
