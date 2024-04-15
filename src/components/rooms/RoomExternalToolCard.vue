@@ -42,9 +42,7 @@
 <script lang="ts">
 import { RoomDotMenu } from "@ui-room-details";
 import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
-import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useExternalToolLaunchState } from "@data-external-tool";
 import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent, PropType, watch } from "vue";
@@ -67,9 +65,6 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const { t } = useI18n();
-		const envConfigModule: EnvConfigModule = injectStrict(
-			ENV_CONFIG_MODULE_KEY
-		);
 
 		const {
 			fetchLaunchRequest,
@@ -102,21 +97,18 @@ export default defineComponent({
 
 		const menuItems = [
 			{
+				icon: mdiPencilOutline,
+				action: handleEdit,
+				name: t("common.actions.edit"),
+				dataTestId: "tool-edit",
+			},
+			{
 				icon: mdiTrashCanOutline,
 				action: handleDelete,
 				name: t("common.actions.remove"),
 				dataTestId: "tool-delete",
 			},
 		];
-
-		if (envConfigModule.getCtlContextConfigurationEnabled) {
-			menuItems.unshift({
-				icon: mdiPencilOutline,
-				action: handleEdit,
-				name: t("common.actions.edit"),
-				dataTestId: "tool-edit",
-			});
-		}
 
 		const isToolOutdated: ComputedRef = computed(
 			() =>

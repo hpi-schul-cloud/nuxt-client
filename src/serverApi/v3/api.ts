@@ -589,12 +589,6 @@ export interface ConfigResponse {
     FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: boolean;
     /**
      * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: boolean;
-    /**
-     * 
      * @type {number}
      * @memberof ConfigResponse
      */
@@ -1418,6 +1412,9 @@ export enum CopyApiResponseTypeEnum {
     LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
     LinkElement = 'LINK_ELEMENT',
     LtitoolGroup = 'LTITOOL_GROUP',
+    MediaBoard = 'MEDIA_BOARD',
+    MediaLine = 'MEDIA_LINE',
+    MediaExternalToolElement = 'MEDIA_EXTERNAL_TOOL_ELEMENT',
     Metadata = 'METADATA',
     RichtextElement = 'RICHTEXT_ELEMENT',
     SubmissionContainerElement = 'SUBMISSION_CONTAINER_ELEMENT',
@@ -1470,6 +1467,9 @@ export enum CopyApiResponseElementsTypesEnum {
     LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
     LinkElement = 'LINK_ELEMENT',
     LtitoolGroup = 'LTITOOL_GROUP',
+    MediaBoard = 'MEDIA_BOARD',
+    MediaLine = 'MEDIA_LINE',
+    MediaExternalToolElement = 'MEDIA_EXTERNAL_TOOL_ELEMENT',
     Metadata = 'METADATA',
     RichtextElement = 'RICHTEXT_ELEMENT',
     SubmissionContainerElement = 'SUBMISSION_CONTAINER_ELEMENT',
@@ -12689,7 +12689,7 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
-         * @param {string} [nameQuery] search string for firstnames or lastnames
+         * @param {string} [nameQuery] search string for group names.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12807,7 +12807,7 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
-         * @param {string} [nameQuery] search string for firstnames or lastnames
+         * @param {string} [nameQuery] search string for group names.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12857,7 +12857,7 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
-         * @param {string} [nameQuery] search string for firstnames or lastnames
+         * @param {string} [nameQuery] search string for group names.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -12904,7 +12904,7 @@ export interface GroupApiInterface {
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
-     * @param {string} [nameQuery] search string for firstnames or lastnames
+     * @param {string} [nameQuery] search string for group names.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApiInterface
@@ -12953,7 +12953,7 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {boolean} [availableGroupsForCourseSync] if true only available groups for a course sync are returned.
-     * @param {string} [nameQuery] search string for firstnames or lastnames
+     * @param {string} [nameQuery] search string for group names.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
@@ -13382,9 +13382,9 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerCreateColumn: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+        mediaBoardControllerCreateLine: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
-            assertParamExists('mediaBoardControllerCreateColumn', 'boardId', boardId)
+            assertParamExists('mediaBoardControllerCreateLine', 'boardId', boardId)
             const localVarPath = `/media-boards/{boardId}/media-lines`
                 .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -13464,8 +13464,8 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaBoardControllerCreateColumn(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaLineResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerCreateColumn(boardId, options);
+        async mediaBoardControllerCreateLine(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaLineResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerCreateLine(boardId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -13495,8 +13495,8 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerCreateColumn(boardId: string, options?: any): AxiosPromise<MediaLineResponse> {
-            return localVarFp.mediaBoardControllerCreateColumn(boardId, options).then((request) => request(axios, basePath));
+        mediaBoardControllerCreateLine(boardId: string, options?: any): AxiosPromise<MediaLineResponse> {
+            return localVarFp.mediaBoardControllerCreateLine(boardId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13524,7 +13524,7 @@ export interface MediaBoardApiInterface {
      * @throws {RequiredError}
      * @memberof MediaBoardApiInterface
      */
-    mediaBoardControllerCreateColumn(boardId: string, options?: any): AxiosPromise<MediaLineResponse>;
+    mediaBoardControllerCreateLine(boardId: string, options?: any): AxiosPromise<MediaLineResponse>;
 
     /**
      * 
@@ -13552,8 +13552,8 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
      * @throws {RequiredError}
      * @memberof MediaBoardApi
      */
-    public mediaBoardControllerCreateColumn(boardId: string, options?: any) {
-        return MediaBoardApiFp(this.configuration).mediaBoardControllerCreateColumn(boardId, options).then((request) => request(this.axios, this.basePath));
+    public mediaBoardControllerCreateLine(boardId: string, options?: any) {
+        return MediaBoardApiFp(this.configuration).mediaBoardControllerCreateLine(boardId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -13802,11 +13802,11 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerUpdateColumnTitle: async (lineId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaLineControllerUpdateLineTitle: async (lineId: string, renameBodyParams: RenameBodyParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'lineId' is not null or undefined
-            assertParamExists('mediaLineControllerUpdateColumnTitle', 'lineId', lineId)
+            assertParamExists('mediaLineControllerUpdateLineTitle', 'lineId', lineId)
             // verify required parameter 'renameBodyParams' is not null or undefined
-            assertParamExists('mediaLineControllerUpdateColumnTitle', 'renameBodyParams', renameBodyParams)
+            assertParamExists('mediaLineControllerUpdateLineTitle', 'renameBodyParams', renameBodyParams)
             const localVarPath = `/media-lines/{lineId}/title`
                 .replace(`{${"lineId"}}`, encodeURIComponent(String(lineId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -13879,8 +13879,8 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaLineControllerUpdateColumnTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerUpdateColumnTitle(lineId, renameBodyParams, options);
+        async mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerUpdateLineTitle(lineId, renameBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -13922,8 +13922,8 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerUpdateColumnTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.mediaLineControllerUpdateColumnTitle(lineId, renameBodyParams, options).then((request) => request(axios, basePath));
+        mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaLineControllerUpdateLineTitle(lineId, renameBodyParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -13964,7 +13964,7 @@ export interface MediaLineApiInterface {
      * @throws {RequiredError}
      * @memberof MediaLineApiInterface
      */
-    mediaLineControllerUpdateColumnTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
+    mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -14009,8 +14009,8 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
      * @throws {RequiredError}
      * @memberof MediaLineApi
      */
-    public mediaLineControllerUpdateColumnTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any) {
-        return MediaLineApiFp(this.configuration).mediaLineControllerUpdateColumnTitle(lineId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public mediaLineControllerUpdateLineTitle(lineId: string, renameBodyParams: RenameBodyParams, options?: any) {
+        return MediaLineApiFp(this.configuration).mediaLineControllerUpdateLineTitle(lineId, renameBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
