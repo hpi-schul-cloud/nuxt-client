@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { useBoardStore } from "../BoardStore";
+import { onUnmounted } from "vue";
 
 export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 	const boardStore = useBoardStore();
@@ -18,6 +19,7 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 	socket.on("connect", function () {
 		console.log("connected");
 	});
+
 	socket.onAny((event, ...args) => {
 		console.log(event, args);
 		boardStore.dispatch({ type: event, payload: args[0] });
@@ -32,6 +34,10 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 		console.log("dispatching", dispatch);
 		console.log({ action, data });
 	};
+
+	onUnmounted(() => {
+		socket.disconnect();
+	});
 
 	return {
 		emitOnSocket,
