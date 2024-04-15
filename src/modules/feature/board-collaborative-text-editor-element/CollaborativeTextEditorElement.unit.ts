@@ -24,6 +24,7 @@ import {
 	BoardMenuActionMoveUp,
 } from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import CollaborativeTextEditorElement from "./CollaborativeTextEditorElement.vue";
 import InnerContent from "./InnerContent.vue";
 
@@ -60,6 +61,7 @@ describe("CollaborativeTextEditorElement", () => {
 	const setup = (props: {
 		element: CollaborativeTextEditorElementResponse;
 		isEditMode: boolean;
+		isTeacher?: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
@@ -78,7 +80,7 @@ describe("CollaborativeTextEditorElement", () => {
 			},
 			propsData: props,
 		});
-		return { wrapper };
+		return { wrapper, isEditMode: true, isTeacher: true };
 	};
 
 	describe("when component is mounted", () => {
@@ -140,112 +142,103 @@ describe("CollaborativeTextEditorElement", () => {
 			expect(actionDelete.exists()).toBe(true);
 		});
 
-		describe("when arrow key down is pressed", () => {
-			describe("when component is in edit-mode", () => {
-				it('should NOT emit "move-keyboard:edit"', async () => {
+		describe("when component is in edit-mode", () => {
+			describe("when move down is clicked", () => {
+				it('should emit "move-down" collaborative text editor', async () => {
 					const { wrapper } = setup({
 						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 						isEditMode: true,
 					});
 
-					wrapper.findComponent(CollaborativeTextEditorElement).vm.$emit(
-						"keydown",
-						new KeyboardEvent("keydown", {
-							key: "ArrowDown",
-							keyCode: 40,
-						})
-					);
+					wrapper.findComponent(BoardMenuActionMoveDown).vm.$emit("click");
 
-					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
+					expect(wrapper.emitted("move-down:edit")).toBeTruthy();
 				});
+			});
 
-				it("should hide the element", () => {
+			describe("when move up is clicked", () => {
+				it('should emit "move-up" collaborative text editor', async () => {
 					const { wrapper } = setup({
 						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 						isEditMode: true,
 					});
 
-					expect(
-						wrapper.findComponent(CollaborativeTextEditorElement).isVisible()
-					).toEqual(true);
+					wrapper.findComponent(BoardMenuActionMoveUp).vm.$emit("click");
+
+					expect(wrapper.emitted("move-up:edit")).toBeTruthy();
+				});
+			});
+
+			describe("when delete is clicked", () => {
+				it('should emit "delete" collaborative text editor', async () => {
+					const { wrapper } = setup({
+						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+						isEditMode: true,
+					});
+
+					wrapper
+						.findComponent(BoardMenuActionDelete)
+						.vm.$emit("click", Promise.resolve(true));
+					await nextTick();
+					expect(wrapper.emitted("delete:element")).toBeTruthy();
 				});
 			});
 		});
 
-		describe("when arrow key up is pressed", () => {
-			describe("when component is in edit-mode", () => {
-				it('should NOT emit "move-keyboard:edit"', async () => {
-					const { wrapper } = setup({
-						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-						isEditMode: true,
-					});
-
-					wrapper.findComponent(CollaborativeTextEditorElement).vm.$emit(
-						"keydown",
-						new KeyboardEvent("keydown", {
-							key: "ArrowUp",
-							keyCode: 38,
-						})
-					);
-
-					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
+		describe("when component is NOT in edit-mode", () => {
+			it('should NOT emit "move-down" collaborative text editor', async () => {
+				const { wrapper } = setup({
+					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+					isEditMode: false,
+					isTeacher: false,
 				});
 
-				it("should hide the element", () => {
-					const { wrapper } = setup({
-						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-						isEditMode: true,
-					});
+				expect(wrapper.findComponent(BoardMenuActionMoveDown).exists()).toBe(
+					false
+				);
+			});
 
-					expect(
-						wrapper.findComponent(CollaborativeTextEditorElement).isVisible()
-					).toEqual(true);
+			it('should NOT emit "move-up" collaborative text editor', async () => {
+				const { wrapper } = setup({
+					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+					isEditMode: false,
+					isTeacher: false,
 				});
+
+				expect(wrapper.findComponent(BoardMenuActionMoveUp).exists()).toBe(
+					false
+				);
+			});
+
+			it('should NOT emit "delete" collaborative text editor', async () => {
+				const { wrapper } = setup({
+					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+					isEditMode: false,
+					isTeacher: false,
+				});
+
+				expect(wrapper.findComponent(BoardMenuActionDelete).exists()).toBe(
+					false
+				);
 			});
 		});
 
-		describe("when move down Collaborative Text Editor is clicked", () => {
-			it('should emit "move-down" element', async () => {
+		describe("when element is clicked", () => {
+			it("should open collaborative text editor in new tab correctly", async () => {
 				const { wrapper } = setup({
 					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 					isEditMode: false,
 				});
+				const divElement = wrapper.find("div");
+				window.open = jest.fn();
 
-				wrapper
-					.findComponent(CollaborativeTextEditorElement)
-					.vm.$emit("move-down");
+				await divElement.trigger("click");
 
-				expect(wrapper.emitted("move-down")).toBeTruthy();
-			});
-		});
+				wrapper.vm.$nextTick(() =>
+					window.open(`/tldraw?roomName=test-id`, "_blank")
+				);
 
-		describe("when move up Collaborative Text Editor is clicked", () => {
-			it('should emit "move-up" element', async () => {
-				const { wrapper } = setup({
-					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-					isEditMode: false,
-				});
-
-				wrapper
-					.findComponent(CollaborativeTextEditorElement)
-					.vm.$emit("move-up");
-
-				expect(wrapper.emitted("move-up")).toBeTruthy();
-			});
-		});
-
-		describe("when delete Collaborative Text Editor is clicked", () => {
-			it('should emit "delete" element', async () => {
-				const { wrapper } = setup({
-					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-					isEditMode: false,
-				});
-
-				wrapper
-					.findComponent(CollaborativeTextEditorElement)
-					.vm.$emit("delete");
-
-				expect(wrapper.emitted("delete")).toBeTruthy();
+				expect(window.open).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
