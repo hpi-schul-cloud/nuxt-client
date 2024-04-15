@@ -306,6 +306,7 @@ export default {
 	"components.board": "Board",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
+	"components.boardRow": "Reihe",
 	"components.boardElement": "Element",
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",

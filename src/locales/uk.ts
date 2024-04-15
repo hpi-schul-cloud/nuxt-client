@@ -310,6 +310,7 @@ export default {
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
+	"components.boardRow": "рядок",
 	"components.boardElement": "Eлемент",
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",

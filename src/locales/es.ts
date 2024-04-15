@@ -309,6 +309,7 @@ export default {
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
+	"components.boardRow": "línea",
 	"components.boardElement": "elemento",
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",

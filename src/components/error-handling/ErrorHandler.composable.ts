@@ -12,12 +12,9 @@ export type ErrorType =
 export type BoardObjectType =
 	| "board"
 	| "boardColumn"
+	| "boardRow"
 	| "boardCard"
-	| "boardElement"
-	| "mediaBoard"
-	| "mediaLine"
-	| "mediaElement";
-// TODO transations
+	| "boardElement";
 
 export type ApiErrorHandler = (
 	error?: ApiResponseError | ApiValidationError
@@ -73,8 +70,15 @@ export const useErrorHandler = () => {
 		}
 	};
 
+	const handleAnyError = (error: unknown, handlerFunction: ApiErrorHandler) => {
+		const responseError = mapAxiosErrorToResponseError(error);
+
+		handlerFunction(responseError);
+	};
+
 	return {
 		handleError,
+		handleAnyError,
 		notifyWithTemplate,
 		generateErrorText,
 	};

@@ -14,11 +14,18 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
 import { useTitle } from "@vueuse/core";
+import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
 useTitle(buildPageTitle(t("feature.media-shelf.title")));
 
-const { mediaBoard } = useSharedMediaBoardState();
+const { mediaBoard, fetchMediaBoardForUser, fetchAvailableMedia } =
+	useSharedMediaBoardState();
+
+onMounted(async () => {
+	await fetchMediaBoardForUser();
+	await fetchAvailableMedia();
+});
 </script>

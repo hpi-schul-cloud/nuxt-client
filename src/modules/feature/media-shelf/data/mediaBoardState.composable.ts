@@ -10,13 +10,13 @@ import {
 	MediaLineResponse,
 } from "@/serverApi/v3";
 import { createSharedComposable } from "@vueuse/core";
-import { onMounted, ref, Ref } from "vue";
+import { ref, Ref } from "vue";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { ElementCreate, ElementMove, LineMove } from "./types";
 
 const useMediaBoardState = () => {
 	const api = useMediaBoardApi();
-	const { handleError, notifyWithTemplate } = useErrorHandler();
+	const { handleAnyError, notifyWithTemplate } = useErrorHandler();
 
 	const mediaBoard: Ref<MediaBoardResponse | undefined> = ref();
 	const availableMedia: Ref<MediaAvailableLineResponse | undefined> = ref();
@@ -57,9 +57,7 @@ const useMediaBoardState = () => {
 		try {
 			mediaBoard.value = await api.getMediaBoardForUser();
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplate("notLoaded", "mediaBoard"),
-			});
+			handleAnyError(error, notifyWithTemplate("notLoaded", "board"));
 		}
 
 		isLoading.value = false;
@@ -78,9 +76,7 @@ const useMediaBoardState = () => {
 
 			availableMedia.value = availableList;
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notLoaded", "mediaBoard"),
-			});
+			handleAnyError(error, notifyWithTemplateAndReload("notLoaded", "board"));
 		}
 
 		isLoading.value = false;
@@ -101,9 +97,10 @@ const useMediaBoardState = () => {
 
 			return newLine;
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notCreated", "mediaLine"),
-			});
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notCreated", "boardRow")
+			);
 		}
 	};
 
@@ -125,9 +122,10 @@ const useMediaBoardState = () => {
 
 			await fetchAvailableMedia();
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDeleted", "mediaLine"),
-			});
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notDeleted", "boardRow")
+			);
 		}
 	};
 
@@ -161,9 +159,10 @@ const useMediaBoardState = () => {
 
 			mediaBoard.value.lines.splice(newLineIndex, 0, line);
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated", "mediaLine"),
-			});
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notUpdated", "boardRow")
+			);
 		}
 	};
 
@@ -183,9 +182,10 @@ const useMediaBoardState = () => {
 
 			await api.updateLineTile(lineId, newTitle);
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated", "mediaLine"),
-			});
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notUpdated", "boardRow")
+			);
 		}
 	};
 
@@ -221,9 +221,10 @@ const useMediaBoardState = () => {
 
 			return newElement;
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notCreated", "mediaElement"),
-			});
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notCreated", "boardElement")
+			);
 		}
 	};
 
@@ -254,9 +255,10 @@ const useMediaBoardState = () => {
 			await fetchAvailableMedia();
 			await fetchAvailableMedia();
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDeleted", "mediaElement"),
-			});
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notDeleted", "boardElement")
+			);
 		}
 	};
 
@@ -309,9 +311,10 @@ const useMediaBoardState = () => {
 				element
 			);
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated", "mediaElement"),
-			});
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notUpdated", "boardElement")
+			);
 		}
 	};
 
@@ -336,11 +339,6 @@ const useMediaBoardState = () => {
 
 		await fetchMediaBoardForUser();
 	};
-
-	onMounted(async () => {
-		await fetchMediaBoardForUser();
-		await fetchAvailableMedia();
-	});
 
 	return {
 		mediaBoard,

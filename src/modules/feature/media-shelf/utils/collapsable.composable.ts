@@ -8,7 +8,7 @@ export const useCollapsableState = (expansionPanelValue: string) => {
 			return collapsed.value ? [] : [expansionPanelValue];
 		},
 		set(value: string[]): void {
-			collapsed.value = value.includes(expansionPanelValue);
+			collapsed.value = !value.includes(expansionPanelValue);
 		},
 	});
 

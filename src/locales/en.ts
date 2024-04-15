@@ -303,6 +303,7 @@ export default {
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
+	"components.boardRow": "row",
 	"components.boardElement": "element",
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
