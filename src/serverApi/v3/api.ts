@@ -806,6 +806,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_BOARD_LAYOUT_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_USER_MIGRATION_ENABLED: boolean;
     /**
      * 
@@ -1681,7 +1687,7 @@ export interface CreateBoardBodyParams {
      * @type {BoardLayout}
      * @memberof CreateBoardBodyParams
      */
-    layout?: BoardLayout;
+    layout: BoardLayout;
 }
 /**
  * 

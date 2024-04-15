@@ -306,19 +306,18 @@ export default defineComponent({
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),
 				});
 			}
-			/* if (
-				this.authModule.getUserPermissions.includes(
-					"FEATURE_LISTBOARD_ENABLED".toLowerCase()
-				)
-			) { */
-			actions.push({
-				label: this.$t("pages.rooms.fab.add.listBoard"),
-				icon: "$mdi_custom_grid_outline",
-				customEvent: "list-board-create",
-				dataTestId: "fab_button_add_list_board",
-				ariaLabel: this.$t("pages.rooms.fab.add.listBoard"),
-			});
-			// }
+			if (
+				envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
+				this.authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())
+			) {
+				actions.push({
+					label: this.$t("pages.rooms.fab.add.listBoard"),
+					icon: "$mdi_custom_grid_outline",
+					customEvent: "list-board-create",
+					dataTestId: "fab_button_add_list_board",
+					ariaLabel: this.$t("pages.rooms.fab.add.listBoard"),
+				});
+			}
 
 			if (actions.length === 0) {
 				return null;

@@ -262,7 +262,11 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 
 const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 
-const isListBoard = computed(() => board.value?.layout === "list");
+const isListBoard = computed(
+	() =>
+		envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
+		board.value?.layout === "list"
+);
 
 const copyResultModalItems = computed(
 	() => copyModule.getCopyResultFailedItems
