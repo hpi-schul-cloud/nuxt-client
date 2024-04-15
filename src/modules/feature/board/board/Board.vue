@@ -153,17 +153,18 @@ const onCreateColumn = async () => {
 	// if (hasCreateCardPermission) boardStore.dispatch(boardActions.createColumn());
 
 	// TODO: check if this action is handled via on the dispatcher
-	boardStore.createColumn();
+	if (hasCreateCardPermission)
+		boardStore.dispatch(boardActions.createColumnRequest());
 };
 
 const onDeleteCard = async (cardId: string) => {
 	if (hasCreateCardPermission)
-		boardStore.dispatch(boardActions.deleteCard({ cardId }));
+		boardStore.dispatch(boardActions.deleteCardRequest({ cardId }));
 };
 
 const onDeleteColumn = async (columnId: string) => {
 	if (hasDeletePermission)
-		boardStore.dispatch(boardActions.deleteColumn({ columnId }));
+		boardStore.dispatch(boardActions.deleteColumnRequest({ columnId }));
 };
 
 const onDropColumn = async (columnPayload: SortableEvent) => {
@@ -180,7 +181,7 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 			removedIndex: columnPayload.oldIndex,
 			columnId,
 		};
-		boardStore.dispatch(boardActions.moveColumn({ columnMove }));
+		boardStore.dispatch(boardActions.moveColumnRequest({ columnMove }));
 	}
 };
 
@@ -221,22 +222,27 @@ const onReloadBoard = async () => {
 const onUpdateBoardVisibility = async (newVisibility: boolean) => {
 	if (!hasEditPermission) return;
 
-	boardStore.dispatch(boardActions.updateBoardVisibility({ newVisibility }));
+	boardStore.dispatch(
+		boardActions.updateBoardVisibilityRequest({ newVisibility })
+	);
 	await setAlert();
 };
 
 const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-	if (hasMovePermission) boardStore.dispatch(boardActions.moveCard(cardMove));
+	if (hasMovePermission)
+		boardStore.dispatch(boardActions.moveCardRequest(cardMove));
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
 	if (hasEditPermission)
-		boardStore.dispatch(boardActions.updateColumnTitle({ columnId, newTitle }));
+		boardStore.dispatch(
+			boardActions.updateColumnTitleRequest({ columnId, newTitle })
+		);
 };
 
 const onUpdateBoardTitle = async (newTitle: string) => {
 	if (hasEditPermission)
-		boardStore.dispatch(boardActions.updateBoardTitle({ newTitle }));
+		boardStore.dispatch(boardActions.updateBoardTitleRequest({ newTitle }));
 };
 
 onMounted(() => {

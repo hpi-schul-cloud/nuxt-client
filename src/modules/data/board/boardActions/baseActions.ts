@@ -31,19 +31,22 @@ const createCardFailure = createAction(
 	props<{ errorMessage: string }>()
 );
 
-const createColumn = createAction("create-column", props());
+const createColumnRequest = createAction("create-column-request", props());
 const createColumnSuccess = createAction(
 	"create-column-success",
 	props<{ newColumn: ColumnResponse }>()
 );
 
-const deleteCard = createAction("delete-card", props<{ cardId: string }>());
+const deleteCardRequest = createAction(
+	"delete-card",
+	props<{ cardId: string }>()
+);
 const deleteCardSuccess = createAction(
 	"delete-card-success",
 	props<{ cardId: string }>()
 );
 
-const deleteColumn = createAction(
+const deleteColumnRequest = createAction(
 	"delete-column",
 	props<{ columnId: string }>()
 );
@@ -54,10 +57,10 @@ const deleteColumnSuccess = createAction(
 
 const fetchBoard = createAction("fetch-board", props<{ id: string }>());
 
-const moveCard = createAction("move-card", props<CardMove>());
+const moveCardRequest = createAction("move-card", props<CardMove>());
 const moveCardSuccess = createAction("move-card-success", props<CardMove>());
 
-const moveColumn = createAction(
+const moveColumnRequest = createAction(
 	"move-column",
 	props<{ columnMove: ColumnMove; byKeyboard: boolean }>()
 );
@@ -67,7 +70,7 @@ const moveColumnSuccess = createAction(
 	props<{ columnMove: ColumnMove; byKeyboard: boolean }>()
 );
 
-const updateColumnTitle = createAction(
+const updateColumnTitleRequest = createAction(
 	"update-column-title",
 	props<{ columnId: string; newTitle: string }>()
 );
@@ -77,13 +80,23 @@ const updateColumnTitleSuccess = createAction(
 	props<{ columnId: string; newTitle: string }>()
 );
 
-const updateBoardTitle = createAction(
+const updateBoardTitleRequest = createAction(
 	"update-board-title",
 	props<{ newTitle: string }>()
 );
 
-const updateBoardVisibility = createAction(
+const updateBoardTitleSuccess = createAction(
+	"update-board-title-success",
+	props<{ newTitle: string }>()
+);
+
+const updateBoardVisibilityRequest = createAction(
 	"update-board-visibility",
+	props<{ newVisibility: boolean }>()
+);
+
+const updateBoardVisibilitySuccess = createAction(
+	"update-board-visibility-success",
 	props<{ newVisibility: boolean }>()
 );
 
@@ -100,21 +113,23 @@ export {
 	createCardRequest,
 	createCardSuccess,
 	createCardFailure,
-	deleteCard,
-	createColumn,
-	createColumnSuccess,
+	deleteCardRequest,
 	deleteCardSuccess,
-	deleteColumn,
+	createColumnRequest,
+	createColumnSuccess,
+	deleteColumnRequest,
 	deleteColumnSuccess,
 	fetchBoard,
-	moveCard,
+	moveCardRequest,
 	moveCardSuccess,
-	moveColumn,
+	moveColumnRequest,
 	moveColumnSuccess,
-	updateColumnTitle,
+	updateColumnTitleRequest,
 	updateColumnTitleSuccess,
-	updateBoardTitle,
-	updateBoardVisibility,
+	updateBoardTitleRequest,
+	updateBoardTitleSuccess,
+	updateBoardVisibilityRequest,
+	updateBoardVisibilitySuccess,
 	notifyWithTemplateAndReload,
 	reloadBoard,
 };

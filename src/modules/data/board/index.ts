@@ -5,7 +5,7 @@ import { useSharedBoardPageInformation } from "./BoardPageInformation.composable
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useContentElementState } from "./ContentElementState.composable";
 import { useEditMode, useSharedEditMode } from "./EditMode.composable";
-import * as boardActions from "./actions/BoardStoreActions";
+import * as boardActions from "./boardActions/baseActions";
 import { useBoardSocketApi } from "./socket/socketApi";
 
 export {
