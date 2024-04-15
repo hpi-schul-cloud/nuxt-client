@@ -4,9 +4,8 @@ import { useBoardStore } from "../BoardStore";
 
 export const useSocketApi = () => {
 	const boardStore = useBoardStore();
-	const { dispatch } = boardStore;
 
-	const { emitOnSocket } = useBoardSocketApi(dispatch);
+	const { emitOnSocket } = useBoardSocketApi(boardStore.dispatch);
 
 	const createCardRequest = (
 		action: ReturnType<typeof BoardActions.createCardRequest>

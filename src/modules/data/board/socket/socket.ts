@@ -1,7 +1,9 @@
 import { io } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
+import { useBoardStore } from "../BoardStore";
 
 export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
+	const boardStore = useBoardStore();
 	// implement socket.io here
 	const socket = io(
 		// "https://bc-6683-poc-board-collaboration-server.dbc.dbildungscloud.dev",
@@ -17,7 +19,8 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 		console.log("connected");
 	});
 	socket.onAny((event, ...args) => {
-		dispatch({ type: event, payload: args[0] });
+		console.log(event, args);
+		boardStore.dispatch({ type: event, payload: args[0] });
 	});
 
 	socket.on("disconnect", () => {
@@ -25,6 +28,7 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 	});
 
 	const emitOnSocket = (action: string, data: any) => {
+		socket.emit(action, data);
 		console.log("dispatching", dispatch);
 		console.log({ action, data });
 	};
