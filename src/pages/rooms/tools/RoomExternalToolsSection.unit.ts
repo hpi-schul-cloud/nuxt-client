@@ -1,12 +1,10 @@
 import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool";
 import {
 	AUTH_MODULE_KEY,
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -14,7 +12,7 @@ import {
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
 import { createMock } from "@golevelup/ts-jest";
-import { MountingOptions, mount } from "@vue/test-utils";
+import { mount, MountingOptions } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
@@ -44,10 +42,6 @@ describe("RoomExternalToolsSection", () => {
 			getUserRoles: ["teacher"],
 		});
 
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getCtlContextConfigurationEnabled: true,
-		});
-
 		const wrapper = mount(
 			RoomExternalToolsSection as MountingOptions<
 				typeof RoomExternalToolsSection
@@ -63,7 +57,6 @@ describe("RoomExternalToolsSection", () => {
 						[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 							contextExternalToolsModule,
 						[AUTH_MODULE_KEY.valueOf()]: authModule,
-						[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					},
 				},
 				props: {

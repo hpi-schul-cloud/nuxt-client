@@ -1,7 +1,6 @@
 import { FilesStorageConfigResponse } from "@/fileStorageApi/v3";
 import * as fileStorageApi from "@/fileStorageApi/v3/api/file-api";
 import * as serverApi from "@/serverApi/v3/api";
-
 import {
 	ConfigResponse,
 	LanguageType,
@@ -351,18 +350,18 @@ describe("env-config module", () => {
 				});
 
 				/* it("should set application error", async () => {
-						const { setErrorMock } = setup();
-						const envConfigModule = new EnvConfigModule({});
+                        const { setErrorMock } = setup();
+                        const envConfigModule = new EnvConfigModule({});
 
-						await envConfigModule.loadConfiguration();
+                        await envConfigModule.loadConfiguration();
 
-						const applicationError = createApplicationError(
-							HttpStatusCode.GatewayTimeout
-						);
+                        const applicationError = createApplicationError(
+                            HttpStatusCode.GatewayTimeout
+                        );
 
-						expect(setErrorMock).toHaveBeenCalledTimes(1);
-						expect(setErrorMock).toHaveBeenCalledWith(applicationError);
-					}); */
+                        expect(setErrorMock).toHaveBeenCalledTimes(1);
+                        expect(setErrorMock).toHaveBeenCalledWith(applicationError);
+                    }); */
 
 				it("should call setStatus with error", async () => {
 					setup();
@@ -694,17 +693,6 @@ describe("env-config module", () => {
 
 			expect(envConfigModule.getEnableLdapSyncDuringMigration).toStrictEqual(
 				mockEnvs.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION
-			);
-		});
-
-		it("getCtlContextConfigurationEnabled should get FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED", () => {
-			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env = envsFactory.build({
-				FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: true,
-			});
-
-			expect(envConfigModule.getCtlContextConfigurationEnabled).toStrictEqual(
-				true
 			);
 		});
 

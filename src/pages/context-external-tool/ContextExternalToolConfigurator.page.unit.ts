@@ -1,13 +1,11 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import ContextExternalToolsModule from "@/store/context-external-tools";
-import EnvConfigModule from "@/store/env-config";
 import { ContextExternalToolSave } from "@/store/external-tool/context-external-tool";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
@@ -73,10 +71,6 @@ describe("ContextExternalToolConfigurator", () => {
 			},
 		});
 
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getCtlContextConfigurationEnabled: true,
-		});
-
 		const wrapper = mount(ContextExternalToolConfigurator, {
 			global: {
 				plugins: [
@@ -89,7 +83,6 @@ describe("ContextExternalToolConfigurator", () => {
 					[ROOM_MODULE_KEY.valueOf()]: roomModule,
 					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						contextExternalToolsModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
 			props: {
