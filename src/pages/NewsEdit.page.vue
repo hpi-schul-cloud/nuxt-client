@@ -118,7 +118,7 @@ const showNotifier = (type: AlertStatus, method: "remove" | "patch") => {
 	notifierModule.show({
 		text: t(`components.organisms.FormNews.${type}.${method}`),
 		status: type,
-		timeout: 10000,
+		timeout: 5000,
 	});
 };
 </script>

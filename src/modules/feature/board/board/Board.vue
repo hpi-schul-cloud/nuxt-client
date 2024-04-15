@@ -95,9 +95,10 @@ import {
 } from "@/utils/inject";
 import {
 	useBoardPermissions,
-	useBoardState,
 	useSharedBoardPageInformation,
 	useSharedEditMode,
+	useBoardStore,
+	boardActions,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -105,7 +106,7 @@ import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, onUnmounted, toRef, watch } from "vue";
+import { computed, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
@@ -119,22 +120,12 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { resetNotifier, showCustomNotifier } = useBoardNotifier();
+const { showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
-const {
-	board,
-	createCard,
-	createColumn,
-	deleteCard,
-	deleteColumn,
-	moveCard,
-	moveColumn,
-	reloadBoard,
-	updateBoardTitle,
-	updateBoardVisibility,
-	updateColumnTitle,
-} = useBoardState(toRef(props, "boardId").value);
+
+const boardStore = useBoardStore();
+const board = computed(() => boardStore.board);
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
@@ -154,19 +145,22 @@ const {
 } = useBoardPermissions();
 
 const onCreateCard = async (columnId: string) => {
-	if (hasCreateCardPermission) await createCard(columnId);
+	if (hasCreateCardPermission)
+		boardStore.dispatch(boardActions.createCard({ columnId }));
 };
 
 const onCreateColumn = async () => {
-	if (hasCreateCardPermission) await createColumn();
+	if (hasCreateCardPermission) boardStore.dispatch(boardActions.createColumn());
 };
 
 const onDeleteCard = async (cardId: string) => {
-	if (hasCreateCardPermission) await deleteCard(cardId);
+	if (hasCreateCardPermission)
+		boardStore.dispatch(boardActions.deleteCard({ cardId }));
 };
 
 const onDeleteColumn = async (columnId: string) => {
-	if (hasDeletePermission) await deleteColumn(columnId);
+	if (hasDeletePermission)
+		boardStore.dispatch(boardActions.deleteColumn({ columnId }));
 };
 
 const onDropColumn = async (columnPayload: SortableEvent) => {
@@ -183,7 +177,7 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 			removedIndex: columnPayload.oldIndex,
 			columnId,
 		};
-		await moveColumn(columnMove);
+		boardStore.dispatch(boardActions.moveColumn({ columnMove }));
 	}
 };
 
@@ -197,7 +191,9 @@ const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
 		columnId,
 	};
 
-	await moveColumn(columnMove, true);
+	boardStore.dispatch(
+		boardActions.moveColumn({ columnMove, byKeyboard: true })
+	);
 };
 
 const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
@@ -210,47 +206,48 @@ const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
 		columnId,
 	};
 
-	await moveColumn(columnMove, true);
+	boardStore.dispatch(
+		boardActions.moveColumn({ columnMove, byKeyboard: true })
+	);
 };
 
 const onReloadBoard = async () => {
-	await reloadBoard();
+	boardStore.dispatch(boardActions.reloadBoard());
 };
 
 const onUpdateBoardVisibility = async (newVisibility: boolean) => {
 	if (!hasEditPermission) return;
 
-	await updateBoardVisibility(newVisibility);
+	boardStore.dispatch(boardActions.updateBoardVisibility({ newVisibility }));
 	await setAlert();
 };
 
 const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-	if (hasMovePermission) await moveCard(cardMove);
+	if (hasMovePermission) boardStore.dispatch(boardActions.moveCard(cardMove));
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
-	if (hasEditPermission) await updateColumnTitle(columnId, newTitle);
+	if (hasEditPermission)
+		boardStore.dispatch(boardActions.updateColumnTitle({ columnId, newTitle }));
 };
 
 const onUpdateBoardTitle = async (newTitle: string) => {
-	if (hasEditPermission) await updateBoardTitle(newTitle);
+	if (hasEditPermission)
+		boardStore.dispatch(boardActions.updateBoardTitle({ newTitle }));
 };
 
 onMounted(() => {
 	setAlert();
-});
-
-onUnmounted(() => {
-	resetNotifier();
+	boardStore.dispatch(boardActions.fetchBoard({ id: props.boardId }));
 });
 
 const setAlert = useDebounceFn(() => {
 	if (!isTeacher) return;
 
 	if (!board.value?.isVisible) {
-		showCustomNotifier(t("components.board.alert.info.draft"), "info", 10000);
+		showCustomNotifier(t("components.board.alert.info.draft"), "info");
 	} else {
-		showCustomNotifier(t("components.board.alert.info.teacher"), "info", 10000);
+		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
 	}
 }, 100);
 

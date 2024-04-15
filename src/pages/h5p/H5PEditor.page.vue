@@ -81,7 +81,7 @@ export default defineComponent({
 					notifierModule.show({
 						text: t("pages.h5p.api.success.save"),
 						status: "success",
-						timeout: 10000,
+						timeout: 5000,
 					});
 
 					notifyParent(
@@ -97,7 +97,7 @@ export default defineComponent({
 					notifierModule.show({
 						text: t("common.validation.invalid"),
 						status: "error",
-						timeout: 10000,
+						timeout: 5000,
 					});
 				}
 			}

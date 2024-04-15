@@ -258,7 +258,7 @@ async function onExport(): Promise<void> {
 	notifier.show({
 		text: t("common.words.export"),
 		status: "success",
-		timeout: 10000,
+		timeout: 5000,
 	});
 
 	const topicIds: string[] = allTopics.value

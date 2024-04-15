@@ -51,6 +51,7 @@ import vuetify from "./plugins/vuetify";
 import "./styles/vuetify-settings.scss";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
+import { createPinia } from "pinia";
 
 import {
 	APPLICATION_ERROR_KEY,
@@ -61,6 +62,7 @@ import {
 	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
+	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NEWS_MODULE_KEY,
@@ -81,6 +83,9 @@ import {
 import { delay } from "./utils/helpers";
 
 export const app = createApp(App);
+
+const pinia = createPinia();
+app.use(pinia);
 
 mountBaseComponents(app);
 
@@ -157,6 +162,7 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide(ENV_CONFIG_MODULE_KEY.valueOf(), envConfigModule);
 	app.provide("filePathsModule", filePathsModule);
+	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
 	app.provide("finishedTasksModule", finishedTasksModule);
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);
