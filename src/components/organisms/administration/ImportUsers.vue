@@ -87,7 +87,7 @@
 								data-testid="search-role"
 							/>
 						</td>
-						<td v-if="!isNbc">
+						<td>
 							<v-text-field
 								v-model="searchClasses"
 								type="string"
@@ -389,10 +389,7 @@ export default {
 				},
 			];
 			if (this.isNbc) {
-				return tableHeaders.filter(
-					(header) =>
-						header.value !== "loginName" && header.value !== "classNames"
-				);
+				return tableHeaders.filter((header) => header.value !== "loginName");
 			}
 			return tableHeaders;
 		},
