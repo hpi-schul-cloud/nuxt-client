@@ -600,7 +600,7 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: boolean;
-     *
+    /**
      * @type {number}
      * @memberof ConfigResponse
      */
