@@ -31,7 +31,7 @@ const loadExternalToolDisplayData = async (
 		if (externalToolDisplayData) {
 			displayData.value = {
 				title: externalToolDisplayData.name,
-				description: externalToolDisplayData.description, //TODO
+				description: externalToolDisplayData.description,
 				thumbnail: undefined,
 			};
 		}

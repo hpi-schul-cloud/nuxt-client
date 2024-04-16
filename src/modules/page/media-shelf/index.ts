@@ -1,3 +1,3 @@
-import MediaShelf from "./MediaShelf.page.vue";
+import MediaShelfPage from "./MediaShelf.page.vue";
 
-export { MediaShelf };
+export { MediaShelfPage };

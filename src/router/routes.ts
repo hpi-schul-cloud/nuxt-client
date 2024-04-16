@@ -308,7 +308,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: `/media-shelf`,
-		component: async () => (await import("@page-media-shelf")).MediaShelf,
+		component: async () => (await import("@page-media-shelf")).MediaShelfPage,
 		name: "media-shelf",
 	},
 ];

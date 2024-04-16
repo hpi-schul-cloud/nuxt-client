@@ -22,6 +22,7 @@
 					class="flex-fill"
 					min-height="100px"
 					cover
+					data-testid="media-element-thumbnail"
 				/>
 				<v-img
 					v-else
@@ -29,6 +30,7 @@
 					class="flex-fill bg-white"
 					min-height="100px"
 					cover
+					data-testid="media-element-default-thumbnail"
 				/>
 				<ContentElementBar :has-grey-background="true">
 					<template #title>
