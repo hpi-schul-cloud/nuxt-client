@@ -13,7 +13,7 @@
 					delayOnTouchOnly: true,
 					disabled: isInEditMode,
 					ghostClass: 'sortable-drag-ghost',
-					chosenClass: isMobile ? 'sortable-chosen' : '',
+					chosenClass: isDesktop ? '' : 'sortable-chosen',
 					easing: 'cubic-bezier(1, 0, 0, 1)',
 					dragoverBubble: true,
 					animation: 250,
@@ -64,7 +64,7 @@ defineProps({
 	},
 });
 
-const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
+const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 const {
 	updateLineTitle,

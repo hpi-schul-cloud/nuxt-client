@@ -29,7 +29,7 @@
 							delayOnTouchOnly: true,
 							ghostClass: 'sortable-drag-ghost',
 							easing: 'cubic-bezier(1, 0, 0, 1)',
-							chosenClass: isMobile ? 'sortable-chosen' : '',
+							chosenClass: isDesktop ? '' : 'sortable-chosen',
 							dragoverBubble: true,
 							animation: 250,
 							scroll: true,
@@ -71,7 +71,7 @@ const emit = defineEmits<{
 	(e: "create:element", value: ElementCreate): void;
 }>();
 
-const isMobile: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Mobile);
+const isDesktop: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Desktop);
 
 const { openItems } = useCollapsableState("availableLinePanel");
 
