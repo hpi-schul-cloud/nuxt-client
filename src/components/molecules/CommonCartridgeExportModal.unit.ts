@@ -25,6 +25,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			getVersion: "1.1.0",
 			getTopics: ["topic"],
 			getTasks: ["task"],
+			getColumnBoards: ["columnBoards"],
 			startExport: jest.fn(),
 			resetExportFlow: jest.fn(),
 		});
@@ -163,6 +164,30 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			await allTasks.trigger("click");
 			expect(
 				allTasks
+					.findAll("input")
+					.some((input) => input.attributes("value") === "false")
+			).toBe(false);
+		});
+	});
+
+	describe("toggleAllColumnBoards", () => {
+		it("should start with true and change the value when click", async () => {
+			const wrapper = setup();
+			const nextBtn = wrapper.findComponent('[data-testid="dialog-next-btn"]');
+			await nextBtn.trigger("click");
+
+			const allColumnBoards = wrapper.findComponent(
+				'[data-testid="all-column-boards-checkbox"]'
+			);
+			expect(
+				allColumnBoards
+					.findAll("input")
+					.some((input) => input.attributes("value") === "true")
+			).toBe(true);
+
+			await allColumnBoards.trigger("click");
+			expect(
+				allColumnBoards
 					.findAll("input")
 					.some((input) => input.attributes("value") === "false")
 			).toBe(false);

@@ -50,6 +50,21 @@
 					<v-container class="pt-0">
 						<v-checkbox
 							class="check-options"
+							v-model="allTasksSelected"
+							data-testid="all-tasks-checkbox"
+							:indeterminate="someTasksSelected"
+							@click="toggleAllTasks"
+							:label="$t('pages.room.modal.course.export.options.tasks')"
+						/>
+						<v-checkbox
+							class="check-options ml-8"
+							v-for="item in allTasks"
+							v-model="item.isSelected"
+							:key="item.id"
+							:label="item.title"
+						/>
+						<v-checkbox
+							class="check-options"
 							v-model="allTopicsSelected"
 							data-testid="all-topics-checkbox"
 							:indeterminate="someTopicsSelected"
@@ -65,15 +80,15 @@
 						/>
 						<v-checkbox
 							class="check-options"
-							v-model="allTasksSelected"
-							data-testid="all-tasks-checkbox"
-							:indeterminate="someTasksSelected"
-							@click="toggleAllTasks"
-							:label="$t('pages.room.modal.course.export.options.tasks')"
+							v-model="allColumnBoardsSelected"
+							data-testid="all-column-boards-checkbox"
+							:indeterminate="someColumnBoardsSelected"
+							@click="toggleAllColumnBoards"
+							:label="$t('pages.room.modal.course.export.options.columnBoards')"
 						/>
 						<v-checkbox
 							class="check-options ml-8"
-							v-for="item in allTasks"
+							v-for="item in allColumnBoards"
 							v-model="item.isSelected"
 							:key="item.id"
 							:label="item.title"
@@ -190,6 +205,11 @@ const allTasksSelected = computed(() => {
 	return allTasks.value.every((topic) => topic.isSelected);
 });
 
+const allColumnBoards = ref<Array<Selection>>([]);
+const allColumnBoardsSelected = computed(() => {
+	return allColumnBoards.value.every((topic) => topic.isSelected);
+});
+
 watch(
 	() => roomModule.getRoomData.elements,
 	(newValue) => {
@@ -209,6 +229,14 @@ watch(
 				allTasks.value.push({
 					isSelected: true,
 					title: element.content.name,
+					id: element.content.id,
+				});
+			}
+
+			if (element.type === BoardElementResponseTypeEnum.ColumnBoard) {
+				allColumnBoards.value.push({
+					isSelected: true,
+					title: element.content.title,
 					id: element.content.id,
 				});
 			}
@@ -235,6 +263,13 @@ const someTasksSelected = computed(() => {
 	);
 });
 
+const someColumnBoardsSelected = computed(() => {
+	return (
+		allColumnBoards.value.some((columnBoard) => columnBoard.isSelected) &&
+		!allColumnBoardsSelected.value
+	);
+});
+
 function onCloseDialog(): void {
 	emit("dialog-closed", false);
 	commonCartridgeExportModule.resetExportFlow();
@@ -244,6 +279,9 @@ function onCloseDialog(): void {
 	});
 	allTopics.value.forEach((topic) => {
 		topic.isSelected = true;
+	});
+	allColumnBoards.value.forEach((columnBoard) => {
+		columnBoard.isSelected = true;
 	});
 }
 
@@ -267,9 +305,13 @@ async function onExport(): Promise<void> {
 	const taskIds = allTasks.value
 		.filter((task) => task.isSelected)
 		.map((task) => task.id);
+	const columnBoardIds = allColumnBoards.value
+		.filter((columnBoard) => columnBoard.isSelected)
+		.map((columnBoard) => columnBoard.id);
 
 	commonCartridgeExportModule.setTopics(topicIds);
 	commonCartridgeExportModule.setTasks(taskIds);
+	commonCartridgeExportModule.setColumnBoards(columnBoardIds);
 	await commonCartridgeExportModule.startExport();
 	onCloseDialog();
 }
@@ -282,6 +324,10 @@ function onBack(): void {
 	});
 	allTopics.value.forEach((topic) => {
 		topic.isSelected = true;
+	});
+	// AI next 3 lines
+	allColumnBoards.value.forEach((columnBoard) => {
+		columnBoard.isSelected = true;
 	});
 	commonCartridgeExportModule.setIsExportModalOpen(true);
 }
@@ -299,6 +345,15 @@ function toggleAllTasks(): void {
 
 	allTasks.value.forEach((task) => {
 		task.isSelected = newValue;
+	});
+}
+
+function toggleAllColumnBoards(): void {
+	// AI next 5 lines
+	const newValue = !allColumnBoardsSelected.value;
+
+	allColumnBoards.value.forEach((columnBoard) => {
+		columnBoard.isSelected = newValue;
 	});
 }
 </script>
