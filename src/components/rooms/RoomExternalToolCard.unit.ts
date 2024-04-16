@@ -1,8 +1,5 @@
 import { RoomDotMenu } from "@ui-room-details";
-import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
 import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
@@ -37,16 +34,9 @@ describe("RoomExternalToolCard", () => {
 	});
 
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getCtlContextConfigurationEnabled: true,
-		});
-
 		const wrapper = mount(RoomExternalToolCard, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-				},
 			},
 			props: {
 				tool,
