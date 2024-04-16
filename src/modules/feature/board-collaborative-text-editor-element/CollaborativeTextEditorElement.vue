@@ -14,25 +14,24 @@
 			class="collaborative-text-editor-element-content"
 			@click="redirectToSanitizedUrl"
 		>
-			<InnerContent :docName="element.id">
+			<CollaborativeTextEditor :docName="element.id">
 				<template v-if="isEditMode && isTeacher">
 					<BoardMenu scope="element">
-						<BoardMenuActionMoveUp
-							@click="onMoveCollaborativeTextEditorElementEditUp"
-						/>
-						<BoardMenuActionMoveDown
-							@click="onMoveCollaborativeTextEditorElementEditDown"
-						/>
-						<BoardMenuActionDelete @click="onDeleteElement" />
+						<BoardMenuActionMoveUp @click="onMoveUp" />
+						<BoardMenuActionMoveDown @click="onMoveDown" />
+						<BoardMenuActionDelete @click="onDelete" />
 					</BoardMenu>
 				</template>
-			</InnerContent>
+			</CollaborativeTextEditor>
 		</div>
 	</v-card>
 </template>
 
 <script setup lang="ts">
-import { CollaborativeTextEditorElementResponse } from "@/serverApi/v3";
+import {
+	CollaborativeTextEditorElementResponse,
+	CollaborativeTextEditorParentType,
+} from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { sanitizeUrl } from "@braintree/sanitize-url";
@@ -43,8 +42,9 @@ import {
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
-import { computed, PropType, ref, toRef } from "vue";
-import InnerContent from "./InnerContent.vue";
+import { PropType, Ref, computed, onMounted, ref, toRef } from "vue";
+import CollaborativeTextEditor from "./content/CollaborativeTextEditor.vue";
+import { useCollaborativeTextEditorApi } from "./shared/composables/CollaborativeTextEditorApi.composable";
 
 const props = defineProps({
 	element: {
@@ -63,17 +63,32 @@ const emit = defineEmits([
 
 const collaborativeTextEditorElement = ref<HTMLElement | null>(null);
 const element = toRef(props, "element");
+useBoardFocusHandler(element.value.id, collaborativeTextEditorElement);
+
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const userRoles = ref(authModule.getUserRoles);
 
-const sanitizedUrl = computed(() =>
-	sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
-);
+const { getUrl } = useCollaborativeTextEditorApi();
+
+const sanitizedUrl: Ref<string | undefined> = ref();
+
+const isTeacher = computed(() => {
+	return userRoles.value.includes("teacher");
+});
+
+onMounted(() => {
+	(async () => {
+		const url = await getUrl(
+			element.value.id,
+			CollaborativeTextEditorParentType.ContentElement
+		);
+		sanitizedUrl.value = sanitizeUrl(url);
+	})();
+});
 
 const redirectToSanitizedUrl = () => {
 	window.open(sanitizedUrl.value, "_blank");
 };
-useBoardFocusHandler(element.value.id, collaborativeTextEditorElement);
 
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (props.isEditMode) {
@@ -81,17 +96,13 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 		emit("move-keyboard:edit", event);
 	}
 };
-const onMoveCollaborativeTextEditorElementEditDown = () =>
-	emit("move-down:edit");
-const onMoveCollaborativeTextEditorElementEditUp = () => emit("move-up:edit");
-const onDeleteElement = async (confirmation: Promise<boolean>) => {
+const onDelete = async (confirmation: Promise<boolean>) => {
 	const shouldDelete = await confirmation;
 	if (shouldDelete) {
 		emit("delete:element", props.element.id);
 	}
 };
 
-const isTeacher = computed(() => {
-	return userRoles.value.includes("teacher");
-});
+const onMoveUp = () => emit("move-up:edit");
+const onMoveDown = () => emit("move-down:edit");
 </script>

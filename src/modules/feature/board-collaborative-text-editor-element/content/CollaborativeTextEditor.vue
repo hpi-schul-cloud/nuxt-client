@@ -19,7 +19,7 @@ import { ContentElementBar } from "@ui-board";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	name: "InnerContent",
+	name: "CollaborativeTextEditor",
 	components: { ContentElementBar },
 	setup() {
 		const imageSrc = image;
