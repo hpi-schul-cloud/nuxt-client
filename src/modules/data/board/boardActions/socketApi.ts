@@ -34,12 +34,14 @@ export const useSocketApi = () => {
 	const moveCardRequest = async (
 		action: ReturnType<typeof BoardActions.moveCardRequest>
 	) => {
+		boardStore.dispatch(BoardActions.moveCardSuccess(action.payload));
 		emitOnSocket("move-card-request", action.payload);
 	};
 
 	const moveColumnRequest = async (
 		action: ReturnType<typeof BoardActions.moveColumnRequest>
 	) => {
+		boardStore.dispatch(BoardActions.moveColumnSuccess(action.payload));
 		emitOnSocket("move-column-request", action.payload);
 	};
 

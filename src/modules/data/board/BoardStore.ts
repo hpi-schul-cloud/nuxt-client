@@ -13,7 +13,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 
-	const FEATURE_SOCKET_ENABLED = false;
+	const FEATURE_SOCKET_ENABLED = true;
 
 	const restApi = useBoardRestApi();
 
@@ -68,6 +68,16 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		const columnIndex = board.value.columns.findIndex((c) => c.id === columnId);
 		return columnIndex;
+	};
+
+	const getColumnId = (columnIndex: number): string | undefined => {
+		if (board.value === undefined) return;
+		if (columnIndex === undefined) return;
+		if (columnIndex < 0) return;
+		if (columnIndex > board.value.columns.length - 1) return;
+		if (board.value.columns[columnIndex] === undefined) return;
+
+		return board.value.columns[columnIndex].id;
 	};
 
 	const setBoard = (newBoard: Board) => {
@@ -194,17 +204,25 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 
 		const {
-			// cardId,
+			cardId,
 			newIndex,
 			oldIndex,
 			toColumnId,
 			fromColumnId,
-			// columnDelta,
+			columnDelta,
 			forceNextTick,
 		} = action.payload;
 
 		const fromColumnIndex = getColumnIndex(fromColumnId);
-		const newColumnIndex = getColumnIndex(toColumnId);
+		let newColumnId: string | undefined = toColumnId;
+		let newColumnIndex = getColumnIndex(toColumnId);
+
+		if (columnDelta !== undefined) {
+			newColumnIndex = fromColumnIndex + columnDelta;
+			newColumnId = getColumnId(newColumnIndex);
+		}
+
+		if (cardId === undefined || newColumnIndex === undefined) return; // ensure values are set
 
 		const item = board.value.columns[fromColumnIndex].cards.splice(
 			oldIndex,
