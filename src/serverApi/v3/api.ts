@@ -542,6 +542,28 @@ export interface CollaborativeTextEditorElementResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum CollaborativeTextEditorParentType {
+    ContentElement = 'content-element'
+}
+
+/**
+ * 
+ * @export
+ * @interface CollaborativeTextEditorResponse
+ */
+export interface CollaborativeTextEditorResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CollaborativeTextEditorResponse
+     */
+    url: string;
+}
+/**
+ * 
+ * @export
  * @interface ColumnResponse
  */
 export interface ColumnResponse {
@@ -11691,14 +11713,18 @@ export const CollaborativeTextEditorApiAxiosParamCreator = function (configurati
          * 
          * @summary Redirect to CollaborativeTextEditor
          * @param {string} parentId 
+         * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        collaborativeTextEditorControllerGetCollaborativeTextEditorForParent: async (parentId: string, options: any = {}): Promise<RequestArgs> => {
+        collaborativeTextEditorControllerGetCollaborativeTextEditorForParent: async (parentId: string, parentType: CollaborativeTextEditorParentType, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'parentId' is not null or undefined
             assertParamExists('collaborativeTextEditorControllerGetCollaborativeTextEditorForParent', 'parentId', parentId)
-            const localVarPath = `/collaborative-text-editor/parentId/{parentId}`
-                .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)));
+            // verify required parameter 'parentType' is not null or undefined
+            assertParamExists('collaborativeTextEditorControllerGetCollaborativeTextEditorForParent', 'parentType', parentType)
+            const localVarPath = `/collaborative-text-editor/{parentType}/{parentId}`
+                .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
+                .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -11739,11 +11765,12 @@ export const CollaborativeTextEditorApiFp = function(configuration?: Configurati
          * 
          * @summary Redirect to CollaborativeTextEditor
          * @param {string} parentId 
+         * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId, options);
+        async collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollaborativeTextEditorResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId, parentType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -11760,11 +11787,12 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
          * 
          * @summary Redirect to CollaborativeTextEditor
          * @param {string} parentId 
+         * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId, options).then((request) => request(axios, basePath));
+        collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): AxiosPromise<CollaborativeTextEditorResponse> {
+            return localVarFp.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId, parentType, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -11779,11 +11807,12 @@ export interface CollaborativeTextEditorApiInterface {
      * 
      * @summary Redirect to CollaborativeTextEditor
      * @param {string} parentId 
+     * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CollaborativeTextEditorApiInterface
      */
-    collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId: string, options?: any): AxiosPromise<void>;
+    collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): AxiosPromise<CollaborativeTextEditorResponse>;
 
 }
 
@@ -11798,12 +11827,13 @@ export class CollaborativeTextEditorApi extends BaseAPI implements Collaborative
      * 
      * @summary Redirect to CollaborativeTextEditor
      * @param {string} parentId 
+     * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CollaborativeTextEditorApi
      */
-    public collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId: string, options?: any) {
-        return CollaborativeTextEditorApiFp(this.configuration).collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId, options).then((request) => request(this.axios, this.basePath));
+    public collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any) {
+        return CollaborativeTextEditorApiFp(this.configuration).collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(parentId, parentType, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
