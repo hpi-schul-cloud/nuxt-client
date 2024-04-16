@@ -43,10 +43,6 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
-	canEdit: {
-		type: Boolean,
-		required: true,
-	},
 });
 
 const lineIdRef = toRef(props, "lineId");
@@ -65,12 +61,10 @@ const lineHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(lineIdRef.value, lineHeader);
 
 const onStartEditMode = () => {
-	if (!props.canEdit) return;
 	startEditMode();
 };
 
 const onEndEditMode = () => {
-	if (!props.canEdit) return;
 	stopEditMode();
 };
 

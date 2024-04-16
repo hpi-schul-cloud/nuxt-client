@@ -2,11 +2,10 @@
 	<div
 		class="line line-drag-handle mx-n4 px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
 	>
-		<BoardLineHeader
+		<MediaBoardLineHeader
 			:title="line.title"
 			:title-placeholder="titlePlaceholder"
 			:line-id="line.id"
-			:can-edit="true"
 			@update:title="$emit('update:line-title', $event)"
 		>
 			<template #menu>
@@ -16,7 +15,7 @@
 					@delete:line="$emit('delete:line', $event)"
 				/>
 			</template>
-		</BoardLineHeader>
+		</MediaBoardLineHeader>
 		<VExpansionPanels v-model="openItems">
 			<VExpansionPanel
 				value="linePanel"
@@ -68,9 +67,9 @@ import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, PropType, Ref } from "vue";
 import { useI18n } from "vue-i18n";
-import BoardLineHeader from "./BoardLineHeader.vue";
 import { availableMediaLineId, ElementMove } from "./data/types";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
+import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { useCollapsableState } from "./utils/collapsable.composable";
 

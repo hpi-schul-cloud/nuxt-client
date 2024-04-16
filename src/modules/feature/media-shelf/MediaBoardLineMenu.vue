@@ -7,6 +7,7 @@
 		size="small"
 		style="height: 36px; width: 36px"
 		@click="collapsed = !collapsed"
+		data-testid="collapse-line-btn"
 	/>
 	<VMenu location="bottom end" min-width="250">
 		<template v-slot:activator="{ props }">
@@ -28,15 +29,26 @@
 			</VBtn>
 		</template>
 		<VList>
-			<VListItem @click="$emit('delete:line', lineId)">
-				<VListItemTitle><span>Delete</span></VListItemTitle>
+			<VListItem
+				@click="$emit('delete:line', lineId)"
+				:prepend-icon="mdiTrashCanOutline"
+				data-testid="action-delete-line"
+			>
+				<VListItemTitle>
+					<span>{{ $t("common.actions.remove") }}</span>
+				</VListItemTitle>
 			</VListItem>
 		</VList>
 	</VMenu>
 </template>
 
 <script setup lang="ts">
-import { mdiChevronDown, mdiChevronUp, mdiDotsVertical } from "@mdi/js";
+import {
+	mdiChevronDown,
+	mdiChevronUp,
+	mdiDotsVertical,
+	mdiTrashCanOutline,
+} from "@mdi/js";
 import { ModelRef } from "vue";
 
 const collapsed: ModelRef<boolean> = defineModel("collapsed", {
