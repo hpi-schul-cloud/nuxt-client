@@ -990,6 +990,8 @@ export default {
 		"Bitte beachten Sie, dass es nach Beginn der Schulmigration bis zu 1 Stunde dauern kann, bis die Daten abgerufen sind. Danach können Sie mit dem nächsten Schritt fortfahren.",
 	"pages.administration.migration.waiting":
 		"Warten auf die Datensynchronisation...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"Die Migration kann nicht gestartet werden, weil das Ziel-Login-System und das aktuelle Login-System Ihrer Schule gleich sind!",
 	"pages.administration.or": "oder",
 	"pages.administration.printQr.emptyUser":
 		"Dieser Nutzer wurde bereits registriert",
