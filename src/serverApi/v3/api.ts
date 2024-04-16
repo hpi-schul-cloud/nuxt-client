@@ -605,12 +605,6 @@ export interface ConfigResponse {
     FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: boolean;
     /**
      * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: boolean;
-    /**
-     * 
      * @type {number}
      * @memberof ConfigResponse
      */
