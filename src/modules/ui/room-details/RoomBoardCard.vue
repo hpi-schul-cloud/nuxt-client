@@ -18,7 +18,7 @@
 		<VCardText class="pb-1">
 			<div class="top-row-container mb-0">
 				<div class="d-flex align-center mb-3 tagline">
-					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
+					<VIcon size="14" class="mr-1" :icon="titleIcon" />
 					<span
 						class="title-board-card"
 						:data-testid="`board-card-title-${boardCardIndex}`"
@@ -123,6 +123,13 @@ const isDraft = computed(() => {
 
 const isListBoard = computed(() => {
 	return props.columnBoardItem.layout === "list";
+});
+
+const titleIcon = computed(() => {
+	const icon = isListBoard.value
+		? "$mdi_custom_grid_outline"
+		: mdiViewDashboard;
+	return icon;
 });
 
 const onPublish = () => {
