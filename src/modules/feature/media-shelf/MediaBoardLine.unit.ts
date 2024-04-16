@@ -1,18 +1,31 @@
-import MediaBoardLine from "./MediaBoardLine.vue";
-import { mount } from "@vue/test-utils";
+import { ComponentProps } from "@/types/vue";
+import { mediaLineResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { MediaLineResponse } from "@/serverApi/v3";
-import { mediaLineResponseFactory } from "@@/tests/test-utils";
+import { mount } from "@vue/test-utils";
+import { useMediaQuery } from "@vueuse/core";
+import { nextTick, ref } from "vue";
+import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
+import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
+
+jest.mock("@vueuse/core", () => {
+	return {
+		...jest.requireActual("@vueuse/core"),
+		useMediaQuery: jest.fn(),
+	};
+});
+
+jest.mocked(useMediaQuery).mockReturnValue(ref(true));
 
 describe("MediaBoardLine", () => {
 	const getWrapper = (
-		line: MediaLineResponse = mediaLineResponseFactory.build(),
-		index = 0
+		props: ComponentProps<typeof MediaBoardLine> = {
+			line: mediaLineResponseFactory.build(),
+			index: 0,
+		}
 	) => {
 		const wrapper = mount(MediaBoardLine, {
 			global: {
@@ -21,15 +34,11 @@ describe("MediaBoardLine", () => {
 					MediaBoardLineMenu: true,
 				},
 			},
-			props: {
-				line,
-				index,
-			},
+			props,
 		});
 
 		return {
 			wrapper,
-			line,
 		};
 	};
 
@@ -69,7 +78,7 @@ describe("MediaBoardLine", () => {
 
 			const menu = wrapper.findComponent(MediaBoardLineMenu);
 
-			expect(menu.exists()).toEqual(true);
+			expect(menu.isVisible()).toEqual(true);
 		});
 	});
 
@@ -88,7 +97,8 @@ describe("MediaBoardLine", () => {
 			const { wrapper, newTitle } = setup();
 
 			const header = wrapper.findComponent(MediaBoardLineHeader);
-			await header.vm.$emit("update:title", newTitle);
+			header.vm.$emit("update:title", newTitle);
+			await nextTick();
 
 			expect(wrapper.emitted("update:line-title")).toEqual([[newTitle]]);
 		});
@@ -107,15 +117,20 @@ describe("MediaBoardLine", () => {
 			const { wrapper } = setup();
 
 			const menu = wrapper.findComponent(MediaBoardLineMenu);
-			await menu.vm.$emit("delete:line", "deleted");
+			menu.vm.$emit("delete:line", "lineId");
+			await nextTick();
 
-			expect(wrapper.emitted("delete:line")).toEqual([["deleted"]]);
+			expect(wrapper.emitted("delete:line")).toEqual([["lineId"]]);
 		});
 	});
 
 	describe("when dragging an element to another line", () => {
-		it("should emit the update:element-position event", () => {});
+		it("should emit the update:element-position event", () => {
+			// TODO
+		});
 	});
 
-	describe("when dragging an element to the available line", () => {});
+	describe("when dragging an element to the available line", () => {
+		// TODO
+	});
 });
