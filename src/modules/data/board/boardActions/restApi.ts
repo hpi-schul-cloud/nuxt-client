@@ -200,16 +200,17 @@ export const useBoardRestApi = () => {
 
 			await moveCardCall(cardId, newColumnId, newIndex);
 
-			boardStore.dispatch({
-				type: "move-card-success",
-				payload: {
-					newColumnIndex,
-					oldIndex,
+			boardStore.dispatch(
+				BoardActions.moveCardRequest({
+					cardId,
 					newIndex,
-					fromColumnIndex,
+					oldIndex,
+					toColumnId,
+					fromColumnId,
+					columnDelta,
 					forceNextTick,
-				},
-			});
+				})
+			);
 		} catch (error) {
 			boardStore.dispatch(
 				BoardActions.notifyWithTemplateAndReload({
@@ -250,8 +251,8 @@ export const useBoardRestApi = () => {
 		const { columnId, newTitle } = action.payload;
 
 		try {
-			await updateColumnTitleCall(columnId, newTitle);
 			const columnIndex = getColumnIndex(columnId);
+			await updateColumnTitleCall(columnId, newTitle);
 			if (columnIndex > -1) {
 				boardStore.board.columns[columnIndex].title = newTitle;
 			}

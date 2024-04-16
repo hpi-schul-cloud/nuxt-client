@@ -29,10 +29,13 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 		// TODO reconnect?
 	});
 
-	const emitOnSocket = (action: string, data: any) => {
-		socket.emit(action, data);
-		console.log("dispatching", dispatch);
-		console.log({ action, data });
+	const emitOnSocket = (action: string, data: unknown): Promise<void> => {
+		return new Promise<void>((resolve) => {
+			socket.emit(action, data);
+			resolve();
+			console.log("dispatching", dispatch);
+			console.log({ action, data });
+		});
 	};
 
 	onUnmounted(() => {

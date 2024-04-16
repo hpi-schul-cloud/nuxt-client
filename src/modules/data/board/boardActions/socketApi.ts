@@ -22,7 +22,7 @@ export const useSocketApi = () => {
 	const deleteCardRequest = async (
 		action: ReturnType<typeof BoardActions.deleteCardRequest>
 	) => {
-		emitOnSocket("delete-card-request", action.payload);
+		await emitOnSocket("delete-card-request", action.payload);
 	};
 
 	const deleteColumnRequest = async (
