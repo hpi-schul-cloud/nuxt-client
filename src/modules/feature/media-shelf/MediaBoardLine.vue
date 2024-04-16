@@ -7,6 +7,7 @@
 			:title-placeholder="titlePlaceholder"
 			:line-id="line.id"
 			@update:title="$emit('update:line-title', $event)"
+			data-testid="media-board-line-header"
 		>
 			<template #menu>
 				<MediaBoardLineMenu
