@@ -445,7 +445,7 @@ export default defineComponent({
 	methods: {
 		fabItemClickHandler(event) {
 			if (event === "board-create") {
-				this.onCreateBoard(this.roomData.roomId);
+				this.onCreateBoard(this.roomData.roomId, "columns");
 			}
 			if (event === "list-board-create") {
 				this.onCreateBoard(this.roomData.roomId, "list");
@@ -512,10 +512,8 @@ export default defineComponent({
 				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
 				parentType: BoardParentType.Course,
 				parentId: courseId,
+				layout,
 			};
-			if (layout === "list") {
-				params.layout = "list";
-			}
 			const board = await this.roomModule.createBoard(params);
 			await this.$router.push(`/rooms/${board.id}/board`);
 		},
