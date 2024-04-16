@@ -7,7 +7,7 @@ const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
 	],
 ]);
 
-export function useUserLoginMigrationMapping() {
+export function useUserLoginMigrationMappings() {
 	const getBusinessErrorTranslationKey = (
 		businessError: BusinessError | undefined
 	): undefined | string => {

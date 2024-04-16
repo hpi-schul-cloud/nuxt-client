@@ -1,9 +1,9 @@
-import { useUserLoginMigrationMapping } from "./user-login-migration-mappings.composable";
+import { useUserLoginMigrationMappings } from "./user-login-migration-mappings.composable";
 import { BusinessError } from "@/store/types/commons";
 
 describe("useUserLoginMigrationMapping", () => {
 	const setup = () => {
-		const { getBusinessErrorTranslationKey } = useUserLoginMigrationMapping();
+		const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
 
 		return {
 			getBusinessErrorTranslationKey,

@@ -72,11 +72,11 @@
 				v-if="error && error.message"
 				type="error"
 				:icon="mdiAlertCircle"
-				data-testid="api-error-alert"
+				data-testid="error-alert"
 			>
 				<div class="alert-text">
 					<RenderHTML
-						data-testid="migration-info-text"
+						data-testid="migration-error-text"
 						:html="$t(getBusinessErrorTranslationKey(error)!)"
 						component="span"
 					/>
@@ -223,7 +223,7 @@ import {
 import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
-import { useUserLoginMigrationMapping } from "@/composables/user-login-migration-mappings.composable";
+import { useUserLoginMigrationMappings } from "@/composables/user-login-migration-mappings.composable";
 import { BusinessError } from "@/store/types/commons";
 
 export default defineComponent({
@@ -263,7 +263,7 @@ export default defineComponent({
 				: undefined
 		);
 
-		const { getBusinessErrorTranslationKey } = useUserLoginMigrationMapping();
+		const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
 
 		const onStartMigration = () => {
 			if (userLoginMigration.value) {
