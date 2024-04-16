@@ -160,10 +160,6 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION;
 	}
 
-	get getCtlContextConfigurationEnabled(): boolean {
-		return this.env.FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED;
-	}
-
 	get getLtiToolsTabEnabled(): boolean {
 		return this.env.FEATURE_LTI_TOOLS_TAB_ENABLED;
 	}
