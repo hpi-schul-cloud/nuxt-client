@@ -89,10 +89,10 @@ const onElementDragEnd = async (event: SortableEvent) => {
 
 	if (
 		fromLineId === toLineId ||
-		oldIndex === undefined ||
 		newIndex === undefined ||
-		newIndex < 0 ||
-		newIndex > elements.value.length - 1
+		oldIndex === undefined ||
+		oldIndex < 0 ||
+		oldIndex > elements.value.length - 1
 	) {
 		return;
 	}

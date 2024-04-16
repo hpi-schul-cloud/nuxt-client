@@ -110,8 +110,6 @@ const useMediaBoardState = () => {
 		}
 
 		try {
-			await api.deleteLine(lineId);
-
 			const lineIndex: number = getLineIndex(lineId);
 
 			if (lineIndex < 0) {
@@ -119,6 +117,8 @@ const useMediaBoardState = () => {
 			}
 
 			mediaBoard.value.lines.splice(lineIndex, 1);
+
+			await api.deleteLine(lineId);
 
 			await fetchAvailableMedia();
 		} catch (error) {
@@ -150,14 +150,14 @@ const useMediaBoardState = () => {
 				return;
 			}
 
-			await api.moveLine(lineId, mediaBoard.value.id, newLineIndex);
-
 			const line: MediaLineResponse = mediaBoard.value.lines.splice(
 				oldLineIndex,
 				1
 			)[0];
 
 			mediaBoard.value.lines.splice(newLineIndex, 0, line);
+
+			await api.moveLine(lineId, mediaBoard.value.id, newLineIndex);
 		} catch (error) {
 			handleAnyError(
 				error,
@@ -193,29 +193,34 @@ const useMediaBoardState = () => {
 	const createElement = async (
 		createOptions: ElementCreate
 	): Promise<MediaExternalToolElementResponse | undefined> => {
-		if (mediaBoard.value === undefined) {
+		if (mediaBoard.value === undefined || availableMedia.value === undefined) {
 			return;
 		}
 
 		try {
-			let lineId: string | undefined = createOptions.toLineId;
-			if (lineId === undefined) {
+			let { toLineId } = createOptions;
+			const { oldElementIndex, newElementIndex, schoolExternalToolId } =
+				createOptions;
+
+			if (toLineId === undefined) {
 				const newLine: MediaLineResponse | undefined = await createLine();
 				if (!newLine) {
 					throw new Error("New line could not be created");
 				}
 
-				lineId = newLine.id;
+				toLineId = newLine.id;
 			}
+
+			availableMedia.value?.elements.splice(oldElementIndex, 1);
 
 			const newElement: MediaExternalToolElementResponse =
 				await api.createElement(
-					lineId,
-					createOptions.newElementIndex,
-					createOptions.schoolExternalToolId
+					toLineId,
+					newElementIndex,
+					schoolExternalToolId
 				);
 
-			const lineIndex: number = getLineIndex(lineId);
+			const lineIndex: number = getLineIndex(toLineId);
 
 			mediaBoard.value.lines[lineIndex].elements.push(newElement);
 
@@ -234,8 +239,6 @@ const useMediaBoardState = () => {
 		}
 
 		try {
-			await api.deleteElement(elementId);
-
 			const lineIndex: number = getLineIndexOfElement(elementId);
 
 			if (lineIndex < 0) {
@@ -252,7 +255,8 @@ const useMediaBoardState = () => {
 
 			mediaBoard.value.lines[lineIndex].elements.splice(elementIndex, 1);
 
-			await fetchAvailableMedia();
+			await api.deleteElement(elementId);
+
 			await fetchAvailableMedia();
 		} catch (error) {
 			handleAnyError(

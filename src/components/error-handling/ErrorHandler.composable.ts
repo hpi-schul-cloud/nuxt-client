@@ -35,7 +35,9 @@ export const useErrorHandler = () => {
 		boardObjectType?: BoardObjectType
 	) => {
 		let errorKey = `components.board.notifications.errors.${errorType}`;
-		if (!te(errorKey)) errorKey = "error.generic";
+		if (!te(errorKey)) {
+			errorKey = "error.generic";
+		}
 
 		const type = boardObjectType ? t(`components.${boardObjectType}`) : "";
 
