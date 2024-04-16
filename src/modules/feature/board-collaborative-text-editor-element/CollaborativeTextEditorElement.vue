@@ -42,7 +42,7 @@ import {
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
-import { PropType, Ref, computed, onMounted, ref, toRef } from "vue";
+import { PropType, computed, ref, toRef } from "vue";
 import CollaborativeTextEditor from "./content/CollaborativeTextEditor.vue";
 import { useCollaborativeTextEditorApi } from "./shared/composables/CollaborativeTextEditorApi.composable";
 
@@ -70,24 +70,18 @@ const userRoles = ref(authModule.getUserRoles);
 
 const { getUrl } = useCollaborativeTextEditorApi();
 
-const sanitizedUrl: Ref<string | undefined> = ref();
-
 const isTeacher = computed(() => {
 	return userRoles.value.includes("teacher");
 });
 
-onMounted(() => {
-	(async () => {
-		const url = await getUrl(
-			element.value.id,
-			CollaborativeTextEditorParentType.ContentElement
-		);
-		sanitizedUrl.value = sanitizeUrl(url);
-	})();
-});
+const redirectToSanitizedUrl = async () => {
+	const url = await getUrl(
+		element.value.id,
+		CollaborativeTextEditorParentType.ContentElement
+	);
+	const sanitizedUrl = sanitizeUrl(url);
 
-const redirectToSanitizedUrl = () => {
-	window.open(sanitizedUrl.value, "_blank");
+	window.open(sanitizedUrl, "_blank");
 };
 
 const onKeydownArrow = (event: KeyboardEvent) => {
