@@ -30,10 +30,12 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.fetchBoard, restApi.fetchBoard),
 			on(BoardActions.createCardRequest, socketOrRest.createCardRequest),
 			on(BoardActions.createCardSuccess, createCard),
+			on(BoardActions.createCardFailure, createCardFailure),
 			on(BoardActions.createColumnRequest, socketOrRest.createColumnRequest),
 			on(BoardActions.createColumnSuccess, createColumn),
 			on(BoardActions.deleteCardRequest, socketOrRest.deleteCardRequest),
 			on(BoardActions.deleteCardSuccess, deleteCard),
+
 			on(BoardActions.deleteColumnRequest, socketOrRest.deleteColumnRequest),
 			on(BoardActions.deleteColumnSuccess, deleteColumn),
 			on(BoardActions.moveCardRequest, socketOrRest.moveCardRequest),
@@ -100,6 +102,15 @@ export const useBoardStore = defineStore("boardStore", () => {
 			height: 120,
 		});
 		setEditModeId(newCard.id);
+	};
+
+	const createCardFailure = (
+		action: ReturnType<typeof BoardActions.createCardFailure>
+	) => {
+		console.log("createCardFailure", action);
+		handleError(404, {
+			404: notifyWithTemplate("notLoaded", "board"),
+		});
 	};
 
 	const deleteCard = (
@@ -211,31 +222,27 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns[newColumnIndex].cards.splice(newIndex, 0, item);
 	};
 
+	// TODO: consider how should be error messages via socket
 	const notifyWithTemplateAndReload = (
 		action: ReturnType<typeof BoardActions.notifyWithTemplateAndReload>
 	) => {
-		return () => {
-			if (board.value === undefined) return;
-			const { errorType, httpStatus, boardObjectType } = action.payload;
+		if (board.value === undefined) return;
 
-			notifyWithTemplate({ errorType, httpStatus, boardObjectType });
-			BoardActions.reloadBoard({});
-			setEditModeId(undefined);
-		};
+		dispatch(BoardActions.notifyWithTemplate(action.payload));
+		dispatch(BoardActions.reloadBoard({}));
+		setEditModeId(undefined);
 	};
 
 	const notifyWithTemplateRequest = (
 		action: ReturnType<typeof BoardActions.notifyWithTemplate>
 	) => {
-		return () => {
-			if (board.value === undefined) return;
+		if (board.value === undefined) return;
 
-			const { errorType, httpStatus, boardObjectType } = action.payload;
+		const { errorType, httpStatus, boardObjectType, error } = action.payload;
 
-			handleError(httpStatus, {
-				[httpStatus]: notifyWithTemplate(errorType, boardObjectType),
-			});
-		};
+		handleError(error, {
+			[httpStatus]: notifyWithTemplate(errorType, boardObjectType),
+		});
 	};
 
 	return {

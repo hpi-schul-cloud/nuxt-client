@@ -61,9 +61,12 @@ export const useBoardRestApi = () => {
 				})
 			);
 		} catch (error) {
-			BoardActions.createCardFailure({
-				errorMessage: "unable to create card",
-			});
+			boardStore.dispatch(
+				BoardActions.createCardFailure({
+					errorMessage: "unable to create card", // TODO: decide and internationalize the error message
+					errorData: { columnId: action.payload.columnId },
+				})
+			);
 		}
 	};
 
@@ -77,6 +80,7 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			boardStore.dispatch(
 				BoardActions.notifyWithTemplate({
+					error: error as Error,
 					errorType: "notLoaded",
 					httpStatus: HttpStatusCode.NotFound,
 					boardObjectType: "board",
@@ -99,6 +103,7 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			boardStore.dispatch(
 				BoardActions.notifyWithTemplateAndReload({
+					error: error as Error,
 					errorType: "notCreated",
 					httpStatus: HttpStatusCode.NotFound,
 					boardObjectType: "boardColumn",
@@ -120,6 +125,7 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			boardStore.dispatch(
 				BoardActions.notifyWithTemplateAndReload({
+					error: error as Error,
 					errorType: "notDeleted",
 					httpStatus: HttpStatusCode.NotFound,
 					boardObjectType: "boardCard",
@@ -140,6 +146,7 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			boardStore.dispatch(
 				BoardActions.notifyWithTemplateAndReload({
+					error: error as Error,
 					errorType: "notDeleted",
 					httpStatus: HttpStatusCode.NotFound,
 					boardObjectType: "boardColumn",
@@ -210,6 +217,7 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			boardStore.dispatch(
 				BoardActions.notifyWithTemplateAndReload({
+					error: error as Error,
 					errorType: "notUpdated",
 					httpStatus: HttpStatusCode.NotFound,
 					boardObjectType: "boardCard",
@@ -232,6 +240,7 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			boardStore.dispatch(
 				BoardActions.notifyWithTemplateAndReload({
+					error: error as Error,
 					errorType: "notUpdated",
 					httpStatus: HttpStatusCode.NotFound,
 					boardObjectType: "boardColumn",
@@ -258,6 +267,7 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			boardStore.dispatch(
 				BoardActions.notifyWithTemplateAndReload({
+					error: error as Error,
 					errorType: "notUpdated",
 					httpStatus: HttpStatusCode.NotFound,
 					boardObjectType: "boardColumn",
@@ -278,6 +288,7 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			boardStore.dispatch(
 				BoardActions.notifyWithTemplateAndReload({
+					error: error as Error,
 					errorType: "notUpdated",
 					httpStatus: HttpStatusCode.NotFound,
 					boardObjectType: "board",
@@ -300,6 +311,7 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			boardStore.dispatch(
 				BoardActions.notifyWithTemplateAndReload({
+					error: error as Error,
 					errorType: "notUpdated",
 					httpStatus: HttpStatusCode.NotFound,
 					boardObjectType: "board",
