@@ -2,9 +2,9 @@
 	<v-card data-testid="migration-warning-card">
 		<v-card-title
 			data-testid="migration-warning-card-title"
-			class="card-title"
-			>{{ $t(title) }}</v-card-title
-		>
+			class="card-title text-wrap"
+			>{{ $t(title) }}
+		</v-card-title>
 		<v-card-text>
 			<RenderHTML
 				data-testid="migration-warning-card-info-text"
@@ -27,13 +27,18 @@
 			/>
 		</v-card-text>
 		<v-card-actions>
-			<v-btn data-testid="disagree-btn" @click="$emit(eventName)">
+			<v-btn
+				data-testid="disagree-btn"
+				variant="flat"
+				@click="$emit(eventName)"
+			>
 				{{ $t(disagree) }}
 			</v-btn>
 			<v-btn
 				color="primary"
 				data-testid="agree-btn"
 				:disabled="!!check && !isConfirmed"
+				variant="flat"
 				@click="
 					$emit('set');
 					$emit(eventName);
@@ -47,7 +52,7 @@
 <script lang="ts">
 import { RenderHTML } from "@feature-render-html";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { ComputedRef, Ref, computed, defineComponent, ref, toRef } from "vue";
+import { computed, ComputedRef, defineComponent, Ref, ref, toRef } from "vue";
 
 export enum MigrationWarningCardTypeEnum {
 	START = "start",
