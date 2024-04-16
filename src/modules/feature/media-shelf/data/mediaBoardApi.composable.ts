@@ -64,7 +64,7 @@ export const useMediaBoardApi = () => {
 		});
 	};
 
-	const updateLineTile = async (
+	const updateLineTitle = async (
 		lineId: string,
 		title: string
 	): Promise<void> => {
@@ -110,7 +110,7 @@ export const useMediaBoardApi = () => {
 		getAvailableMedia,
 		createLine,
 		moveLine,
-		updateLineTile,
+		updateLineTitle: updateLineTitle,
 		deleteLine,
 		createElement,
 		moveElement,

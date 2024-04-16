@@ -163,7 +163,7 @@ describe("mediaBoardApi.composable", () => {
 		});
 	});
 
-	describe("updateLineTile", () => {
+	describe("updateLineTitle", () => {
 		const setup = () => {
 			const lineId = "lineId";
 			const newTitle = "newTitle";
@@ -177,7 +177,7 @@ describe("mediaBoardApi.composable", () => {
 		it("should call the api to update a line title", async () => {
 			const { lineId, newTitle } = setup();
 
-			await useMediaBoardApi().updateLineTile(lineId, newTitle);
+			await useMediaBoardApi().updateLineTitle(lineId, newTitle);
 
 			expect(
 				mediaLineApi.mediaLineControllerUpdateLineTitle

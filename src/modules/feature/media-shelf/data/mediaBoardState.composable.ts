@@ -9,10 +9,10 @@ import {
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
 } from "@/serverApi/v3";
-import { createSharedComposable } from "@vueuse/core";
 import { ref, Ref } from "vue";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { ElementCreate, ElementMove, LineMove } from "./types";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
 const useMediaBoardState = () => {
 	const api = useMediaBoardApi();
@@ -180,7 +180,7 @@ const useMediaBoardState = () => {
 
 			mediaBoard.value.lines[lineIndex].title = newTitle;
 
-			await api.updateLineTile(lineId, newTitle);
+			await api.updateLineTitle(lineId, newTitle);
 		} catch (error) {
 			handleAnyError(
 				error,
@@ -265,7 +265,7 @@ const useMediaBoardState = () => {
 		} catch (error) {
 			handleAnyError(
 				error,
-				notifyWithTemplateAndReload("notDeleted", "boardElement")
+				notifyWithTemplateAndReload("notCreated", "boardElement")
 			);
 		}
 	};
@@ -362,8 +362,9 @@ const useMediaBoardState = () => {
 		createElement,
 		deleteElement,
 		moveElement,
+		isLoading,
 	};
 };
 
 export const useSharedMediaBoardState =
-	createSharedComposable(useMediaBoardState);
+	createTestableSharedComposable(useMediaBoardState);
