@@ -67,7 +67,7 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
@@ -79,122 +79,81 @@ import {
 	injectStrict,
 } from "@/utils/inject";
 import { RenderHTML } from "@feature-render-html";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	PropType,
-	ref,
-	Ref,
-} from "vue";
+import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import RoomExternalToolsErrorDialog from "@/pages/rooms/tools/RoomExternalToolsErrorDialog.vue";
 
-export default defineComponent({
-	name: "RoomExternalToolsSection",
-	components: {
-		RoomExternalToolsErrorDialog,
-		RoomExternalToolCard,
-		RenderHTML,
+const props = defineProps({
+	tools: {
+		type: Array as PropType<ExternalToolDisplayData[]>,
+		required: true,
 	},
-	props: {
-		tools: {
-			type: Array as PropType<ExternalToolDisplayData[]>,
-			required: true,
-		},
-		roomId: {
-			type: String,
-			required: true,
-		},
-	},
-	setup(props) {
-		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
-			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
-		);
-
-		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-
-		const router = useRouter();
-
-		const { t } = useI18n();
-
-		const isDeleteDialogOpen: Ref<boolean> = ref(false);
-
-		const isErrorDialogOpen: Ref<boolean> = ref(false);
-
-		const selectedItem: Ref<ExternalToolDisplayData | undefined> = ref();
-
-		const selectedItemName: ComputedRef<string> = computed(
-			() => selectedItem.value?.name || "???"
-		);
-
-		const canEdit: ComputedRef<boolean> = computed(() =>
-			authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
-		);
-
-		const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {
-			selectedItem.value = tool;
-			isDeleteDialogOpen.value = true;
-		};
-
-		const onCloseDeleteDialog = () => {
-			selectedItem.value = undefined;
-			isDeleteDialogOpen.value = false;
-		};
-
-		const onDeleteTool = async () => {
-			if (selectedItem.value) {
-				await contextExternalToolsModule.deleteContextExternalTool(
-					selectedItem.value.contextExternalToolId
-				);
-			}
-
-			onCloseDeleteDialog();
-		};
-
-		const onCloseErrorDialog = () => {
-			isErrorDialogOpen.value = false;
-		};
-
-		const onEditTool = (tool: ExternalToolDisplayData) => {
-			router.push({
-				name: "context-external-tool-configuration-edit",
-				params: { configId: tool.contextExternalToolId },
-				query: {
-					contextId: props.roomId,
-					contextType: ToolContextType.Course,
-				},
-			});
-		};
-
-		const onError = (displayData: ExternalToolDisplayData): void => {
-			showErrorDialog(displayData);
-		};
-
-		const showErrorDialog = (
-			displayData: ExternalToolDisplayData | undefined
-		) => {
-			selectedItem.value = displayData;
-			isErrorDialogOpen.value = true;
-		};
-
-		return {
-			t,
-			canEdit,
-			selectedItem,
-			selectedItemName,
-			isDeleteDialogOpen,
-			onOpenDeleteDialog,
-			onCloseDeleteDialog,
-			onDeleteTool,
-			onEditTool,
-			isErrorDialogOpen,
-			onCloseErrorDialog,
-			onError,
-		};
+	roomId: {
+		type: String,
+		required: true,
 	},
 });
+
+const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
+	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
+);
+const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+const router = useRouter();
+const { t } = useI18n();
+
+const isDeleteDialogOpen = ref(false);
+const isErrorDialogOpen = ref(false);
+const selectedItem = ref<ExternalToolDisplayData | undefined>();
+
+const selectedItemName = computed(() => selectedItem.value?.name || "???");
+const canEdit = computed(() =>
+	authModule.getUserPermissions.includes("CONTEXT_TOOL_ADMIN".toLowerCase())
+);
+
+const onOpenDeleteDialog = (tool: ExternalToolDisplayData) => {
+	selectedItem.value = tool;
+	isDeleteDialogOpen.value = true;
+};
+
+const onCloseDeleteDialog = () => {
+	selectedItem.value = undefined;
+	isDeleteDialogOpen.value = false;
+};
+
+const onDeleteTool = async () => {
+	if (selectedItem.value) {
+		await contextExternalToolsModule.deleteContextExternalTool(
+			selectedItem.value.contextExternalToolId
+		);
+	}
+
+	onCloseDeleteDialog();
+};
+
+const onCloseErrorDialog = () => {
+	isErrorDialogOpen.value = false;
+};
+
+const onEditTool = (tool: ExternalToolDisplayData) => {
+	router.push({
+		name: "context-external-tool-configuration-edit",
+		params: { configId: tool.contextExternalToolId },
+		query: {
+			contextId: props.roomId,
+			contextType: ToolContextType.Course,
+		},
+	});
+};
+
+const onError = (displayData: ExternalToolDisplayData): void => {
+	showErrorDialog(displayData);
+};
+
+const showErrorDialog = (displayData: ExternalToolDisplayData | undefined) => {
+	selectedItem.value = displayData;
+	isErrorDialogOpen.value = true;
+};
 </script>
 
 <style lang="scss" scoped>
