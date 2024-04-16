@@ -8,13 +8,12 @@ import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
 
-	const { fetchBoardCall } = useBoardApi();
-
 	const {
 		createCardCall,
 		createColumnCall,
 		deleteCardCall,
 		deleteColumnCall,
+		fetchBoardCall,
 		moveCardCall,
 		moveColumnCall,
 		updateColumnTitleCall,
