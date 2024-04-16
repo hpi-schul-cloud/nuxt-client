@@ -148,6 +148,7 @@ export const useBoardRestApi = () => {
 		}
 	};
 
+	// TODO: investigate if move card with creating new column should be separated
 	const moveCardRequest = async (
 		action: ReturnType<typeof BoardActions.moveCardRequest>
 	): Promise<void> => {
@@ -192,11 +193,6 @@ export const useBoardRestApi = () => {
 				)
 					return; // last card - can't move down
 			}
-
-			/**
-			 * refreshes the board to force rerendering in tracked v-for
-			 * to maintain focus when moving columns by keyboard
-			 */
 
 			await moveCardCall(cardId, newColumnId, newIndex);
 

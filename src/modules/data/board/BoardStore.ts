@@ -176,24 +176,34 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns.splice(addedIndex, 0, item);
 	};
 
+	// TODO: refactor or create a new function for moving cards with creating column
 	const moveCard = async (
 		action: ReturnType<typeof BoardActions.moveCardSuccess>
 	) => {
 		if (!board.value) return;
 
 		const {
-			oldIndex,
+			// cardId,
 			newIndex,
-			fromColumnIndex,
-			newColumnIndex,
+			oldIndex,
+			toColumnId,
+			fromColumnId,
+			// columnDelta,
 			forceNextTick,
 		} = action.payload;
+
+		const fromColumnIndex = getColumnIndex(fromColumnId);
+		const newColumnIndex = getColumnIndex(toColumnId);
 
 		const item = board.value.columns[fromColumnIndex].cards.splice(
 			oldIndex,
 			1
 		)[0];
 
+		/**
+		 * refreshes the board to force rerendering in tracked v-for
+		 * to maintain focus when moving columns by keyboard
+		 */
 		if (forceNextTick === true) {
 			await nextTick();
 		}
