@@ -36,7 +36,7 @@
 					ghostClass: 'sortable-drag-ghost',
 					scroll: true,
 				}"
-				:class="{ 'expanded-column': isDragging }"
+				:class="{ 'expanded-column': isDragging && !isListBoard }"
 				class="scrollable-column"
 				@start="onDragStart"
 				@end="onDragEnd"
@@ -111,6 +111,7 @@ export default defineComponent({
 			required: true,
 		},
 		index: { type: Number, required: true },
+		isListBoard: { type: Boolean, required: true },
 	},
 	emits: [
 		"create:card",

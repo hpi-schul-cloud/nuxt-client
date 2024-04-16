@@ -46,6 +46,7 @@
 								:key="element.id"
 								:columnCount="board.columns.length"
 								:class="isListBoard ? 'mx-auto my-0' : ''"
+								:isListBoard="isListBoard"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
