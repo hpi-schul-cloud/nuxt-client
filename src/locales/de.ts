@@ -1571,7 +1571,7 @@ export default {
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Gib diese Informationen bitte weiter:<br><b>Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.</b>",
 	"pages.userMigration.error.multipleUsersFound":
-		'Dieser moin.schule-Personenkontext ist bereits mit einem Account in der Niedersächsischen Bildungscloud verbunden und kann nicht noch einmal für die Migration verwendet werden.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
+		'Dieser moin.schule-Account ist bereits mit einem Account in der Niedersächsischen Bildungscloud verbunden und kann nicht noch einmal für die Migration verwendet werden.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
 	"pages.userMigration.error.title": "Umzug des Accounts fehlgeschlagen",
 	"pages.userMigration.success.description":
 		"Der Umzug Deines Accounts zu {targetSystem} ist fertig.<br>Melde Dich jetzt bitte neu an.",

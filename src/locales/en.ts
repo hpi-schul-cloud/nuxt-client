@@ -1543,7 +1543,7 @@ export default {
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Please pass on this information:<br><b>School number in {instance}: {sourceSchoolNumber}, school number in {targetSystem}: {targetSchoolNumber}</b>.",
 	"pages.userMigration.error.multipleUsersFound":
-		'This moin.schule personal context is already linked to an account in the Niedersächsische Bildungscloud and cannot be used again for the migration.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
+		'This moin.schule account is already linked to an account in the Niedersächsische Bildungscloud and cannot be used again for the migration.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
 	"pages.userMigration.error.title": "Account move failed",
 	"pages.userMigration.success.description":
 		"The move of your account to {targetSystem} is complete.<br>Please register again now.",

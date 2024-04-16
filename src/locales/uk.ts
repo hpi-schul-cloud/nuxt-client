@@ -1564,7 +1564,7 @@ export default {
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Будь ласка, Передайте цю інформацію:<br><b>Номер школи в {instance}: {sourceSchoolNumber}, номер школи в {targetSystem}: {targetSchoolNumber}.</b>",
 	"pages.userMigration.error.multipleUsersFound":
-		'Цей особистий контекст moin.schule вже пов\'язаний з обліковим записом у Niedersächsische Bildungscloud і не може бути використаний повторно для міграції.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
+		'Цей обліковий запис moin.schule вже пов\'язаний з обліковим записом у Niedersächsische Bildungscloud і не може бути використаний повторно для міграції.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
 	"pages.userMigration.error.title": "Не вдалося перемістити обліковий запис",
 	"pages.userMigration.success.description":
 		"Переміщення вашого облікового запису до {targetSystem} завершено.<br>Зареєструйтеся знову.",
