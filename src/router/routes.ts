@@ -12,7 +12,7 @@ import {
 	REGEX_UUID,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
-import { RouteRecordRaw, RouteLocationNormalized } from "vue-router";
+import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 // routes configuration sorted in alphabetical order
@@ -195,6 +195,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		props: (to: RouteLocationNormalized) => ({
 			sourceSchoolNumber: to.query.sourceSchoolNumber,
 			targetSchoolNumber: to.query.targetSchoolNumber,
+			multipleUsersFound: to.query.multipleUsersFound,
 		}),
 		meta: {
 			isPublic: true,
