@@ -6,6 +6,8 @@ server {
 
     set $h5pcsp "default-src 'self'; base-uri 'self'; script-src ${H5P_SCRIPT_SRC_URLS} 'unsafe-inline' https:; object-src 'none'; font-src 'self' data:; img-src 'self' ${H5P_IMG_SRC_URLS} data:; style-src 'self' 'unsafe-inline'; frame-src 'self' ${H5P_FRAME_SRC_URLS}";
 
+    set $h5pcsp "default-src 'self'; base-uri 'self'; script-src  'nonce-$request_id' ${H5P_SCRIPT_SRC_URLS} 'unsafe-inline' https:; object-src 'none'; font-src 'self' data:; img-src 'self' ${H5P_IMG_SRC_URLS} data:; style-src 'self' 'unsafe-inline'; frame-src 'self' ${H5P_FRAME_SRC_URLS}";
+
     location /status {
         stub_status;
     }
