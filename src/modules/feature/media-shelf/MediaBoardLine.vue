@@ -138,12 +138,6 @@ const onElementDragEnd = async (event: SortableEvent) => {
 };
 </script>
 
-<style>
-.no-inner-padding > * {
-	padding: 0;
-}
-</style>
-
 <style scoped>
 .line {
 	position: relative;

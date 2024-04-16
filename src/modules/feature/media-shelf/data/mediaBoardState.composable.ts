@@ -222,7 +222,11 @@ const useMediaBoardState = () => {
 
 			const lineIndex: number = getLineIndex(toLineId);
 
-			mediaBoard.value.lines[lineIndex].elements.push(newElement);
+			mediaBoard.value.lines[lineIndex].elements.splice(
+				newElementIndex,
+				0,
+				newElement
+			);
 
 			return newElement;
 		} catch (error) {

@@ -124,6 +124,10 @@ const onUpdateElementPosition = async (cardMove: ElementMove) => {
 </script>
 
 <style>
+.no-inner-padding > * {
+	padding: 0;
+}
+
 .sortable-drag-ghost {
 	opacity: 0.6;
 }
