@@ -17,7 +17,7 @@
 					<Sortable
 						:list="board.columns"
 						item-key="id"
-						:class="columnStyle"
+						:class="boardColumnStyle"
 						tag="div"
 						:options="{
 							direction: 'horizontal',
@@ -285,7 +285,7 @@ const boardStyle = computed(() => {
 	return classes;
 });
 
-const columnStyle = computed(() => {
+const boardColumnStyle = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1", "ml-n4"];
 	if (isListBoard.value) {
 		classes.push("flex-column");

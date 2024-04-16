@@ -36,8 +36,7 @@
 					ghostClass: 'sortable-drag-ghost',
 					scroll: true,
 				}"
-				:class="{ 'expanded-column': isDragging && !isListBoard }"
-				class="scrollable-column"
+				:class="columnStyle"
 				@start="onDragStart"
 				@end="onDragEnd"
 			>
@@ -240,8 +239,20 @@ export default defineComponent({
 			() => `${t("components.boardColumn").toString()} ${props.index + 1}`
 		);
 
+		const columnStyle = computed(() => {
+			const classes = [];
+			if (!props.isListBoard) {
+				classes.push("scrollable-column");
+				if (isDragging.value) {
+					classes.push("expanded-column");
+				}
+			}
+			return classes;
+		});
+
 		return {
 			cardDropPlaceholderOptions,
+			columnStyle,
 			colWidth,
 			hasCreateColumnPermission,
 			hasMovePermission,
