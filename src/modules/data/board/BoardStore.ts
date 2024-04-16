@@ -13,7 +13,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 
-	const FEATURE_SOCKET_ENABLED = true;
+	const FEATURE_SOCKET_ENABLED = false;
 
 	const restApi = useBoardRestApi();
 

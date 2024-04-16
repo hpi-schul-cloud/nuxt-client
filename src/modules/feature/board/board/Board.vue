@@ -193,7 +193,7 @@ const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
 	};
 
 	boardStore.dispatch(
-		boardActions.moveColumn({ columnMove, byKeyboard: true })
+		boardActions.moveColumnRequest({ columnMove, byKeyboard: true })
 	);
 };
 
@@ -208,7 +208,7 @@ const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
 	};
 
 	boardStore.dispatch(
-		boardActions.moveColumn({ columnMove, byKeyboard: true })
+		boardActions.moveColumnRequest({ columnMove, byKeyboard: true })
 	);
 };
 
