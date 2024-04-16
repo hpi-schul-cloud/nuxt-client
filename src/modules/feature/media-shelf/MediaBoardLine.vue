@@ -149,35 +149,4 @@ const onElementDragEnd = async (event: SortableEvent) => {
 	position: relative;
 	background-color: white;
 }
-
-.scrollable-line {
-	overflow: auto hidden;
-}
-
-/* Custom Scroll Bar*/
-/* height */
-.scrollable-line::-webkit-scrollbar {
-	height: 8px;
-}
-
-/* Track */
-.scrollable-line::-webkit-scrollbar-track {
-	background: white;
-	border: none;
-}
-
-/* Handle */
-.scrollable-line::-webkit-scrollbar-thumb {
-	background-color: transparent;
-	border-radius: 5px;
-}
-.line-drag-handle:hover .scrollable-line::-webkit-scrollbar-thumb {
-	background-color: rgba(var(--v-theme-on-surface), 0.6);
-	border-radius: 5px;
-}
-
-/* Handle on hover */
-.scrollable-line::-webkit-scrollbar-thumb:hover {
-	background: rgba(var(--v-theme-on-surface), 0.8) !important;
-}
 </style>

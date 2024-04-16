@@ -589,12 +589,6 @@ export interface ConfigResponse {
     FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: boolean;
     /**
      * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_CTL_CONTEXT_CONFIGURATION_ENABLED: boolean;
-    /**
-     * 
      * @type {number}
      * @memberof ConfigResponse
      */
@@ -6924,6 +6918,12 @@ export interface ToolReferenceResponse {
      * @memberof ToolReferenceResponse
      */
     contextToolId: string;
+    /**
+     * The description of the tool
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    description?: string;
     /**
      * The url of the logo which is stored in the db
      * @type {string}

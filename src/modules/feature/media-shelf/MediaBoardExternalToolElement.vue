@@ -25,18 +25,17 @@ const loadExternalToolDisplayData = async (
 	element: MediaExternalToolElementResponse
 ): Promise<void> => {
 	try {
-		const contextExternalTool: ExternalToolDisplayData =
+		const externalToolDisplayData: ExternalToolDisplayData =
 			await fetchDisplayDataCall(element.content.contextExternalToolId);
 
-		if (contextExternalTool) {
+		if (externalToolDisplayData) {
 			displayData.value = {
-				title: contextExternalTool.name,
-				description: undefined, //TODO
+				title: externalToolDisplayData.name,
+				description: externalToolDisplayData.description, //TODO
 				thumbnail: undefined,
 			};
 		}
 	} catch (error) {
-		// TODO
 		console.error(error);
 	}
 };
