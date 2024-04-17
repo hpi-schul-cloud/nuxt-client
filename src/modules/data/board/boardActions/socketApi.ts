@@ -28,6 +28,7 @@ export const useSocketApi = () => {
 	const deleteColumnRequest = async (
 		action: ReturnType<typeof BoardActions.deleteColumnRequest>
 	) => {
+		boardStore.dispatch(BoardActions.deleteColumnSuccess(action.payload));
 		emitOnSocket("delete-column-request", action.payload);
 	};
 
@@ -45,21 +46,26 @@ export const useSocketApi = () => {
 		emitOnSocket("move-column-request", action.payload);
 	};
 
-	const updateColumnTitleRequest = (
+	const updateColumnTitleRequest = async (
 		action: ReturnType<typeof BoardActions.updateColumnTitleRequest>
 	) => {
-		emitOnSocket("update-column-title-request", action.payload);
+		await emitOnSocket("update-column-title-request", action.payload);
+		boardStore.dispatch(BoardActions.updateColumnTitleSuccess(action.payload));
 	};
 
 	const updateBoardTitleRequest = (
 		action: ReturnType<typeof BoardActions.updateBoardTitleRequest>
 	) => {
+		boardStore.dispatch(BoardActions.updateBoardTitleSuccess(action.payload));
 		emitOnSocket("update-board-title-request", action.payload);
 	};
 
 	const updateBoardVisibilityRequest = (
 		action: ReturnType<typeof BoardActions.updateBoardVisibilityRequest>
 	) => {
+		boardStore.dispatch(
+			BoardActions.updateBoardVisibilitySuccess(action.payload)
+		);
 		emitOnSocket("update-board-visibility-request", action.payload);
 	};
 

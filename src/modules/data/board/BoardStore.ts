@@ -75,6 +75,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (columnIndex === undefined) return;
 		if (columnIndex < 0) return;
 		if (columnIndex > board.value.columns.length - 1) return;
+
 		if (board.value.columns[columnIndex] === undefined) return;
 
 		return board.value.columns[columnIndex].id;
@@ -100,7 +101,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	) => {
 		if (!board.value) return;
 
-		const newCard = action.payload.newCard;
+		const { newCard } = action.payload;
 		const { setFocus } = useBoardFocusHandler();
 		setFocus(newCard.id);
 
@@ -174,6 +175,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		action: ReturnType<typeof BoardActions.updateBoardVisibilitySuccess>
 	) => {
 		if (!board.value) return;
+
 		board.value.isVisible = action.payload.newVisibility;
 	};
 
@@ -222,7 +224,23 @@ export const useBoardStore = defineStore("boardStore", () => {
 			newColumnId = getColumnId(newColumnIndex);
 		}
 
+		if (newColumnId === undefined) {
+			// need to create a new column
+			const newColumn = await restApi.createColumnRequest();
+			if (newColumn) {
+				newColumnId = newColumn?.id;
+				newColumnIndex = getColumnIndex(newColumnId);
+			}
+		}
+
 		if (cardId === undefined || newColumnIndex === undefined) return; // ensure values are set
+
+		if (fromColumnIndex === newColumnIndex) {
+			if (newIndex === oldIndex && fromColumnIndex === newColumnIndex) return; // same position
+			if (newIndex < 0) return; // first card - can't move up
+			if (newIndex > board.value.columns[fromColumnIndex].cards.length - 1)
+				return; // last card - can't move down
+		}
 
 		const item = board.value.columns[fromColumnIndex].cards.splice(
 			oldIndex,
