@@ -1,6 +1,7 @@
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
 	isEnum,
@@ -13,7 +14,6 @@ import {
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
-import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 // routes configuration sorted in alphabetical order
 export const routes: Readonly<RouteRecordRaw[]> = [
@@ -306,5 +306,10 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 			parentId: to.query.parentId,
 			parentType: to.query.parentType,
 		}),
+	},
+	{
+		path: `/media-shelf`,
+		component: async () => (await import("@page-media-shelf")).MediaShelfPage,
+		name: "media-shelf",
 	},
 ];
