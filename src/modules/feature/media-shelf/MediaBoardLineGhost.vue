@@ -34,5 +34,3 @@ import { Sortable } from "sortablejs-vue3";
 
 defineEmits<{ (e: "create:line"): void }>();
 </script>
-
-<style scoped lang="scss"></style>

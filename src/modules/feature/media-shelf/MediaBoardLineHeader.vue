@@ -80,6 +80,7 @@ const onUpdateTitle = (newTitle: string) => {
 	emit("update:title", newTitle);
 };
 </script>
+
 <style scoped>
 .line-header:focus {
 	outline: none;

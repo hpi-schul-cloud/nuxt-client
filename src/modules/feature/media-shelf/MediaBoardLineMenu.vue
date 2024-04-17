@@ -67,5 +67,3 @@ defineEmits<{
 	(e: "delete:line", lineId: string): void;
 }>();
 </script>
-
-<style scoped lang="scss"></style>
