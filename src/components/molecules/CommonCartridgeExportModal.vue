@@ -215,6 +215,7 @@ watch(
 	(newValue) => {
 		allTopics.value = [];
 		allTasks.value = [];
+		allColumnBoards.value = [];
 
 		newValue.forEach((element: any) => {
 			if (element.type === BoardElementResponseTypeEnum.Lesson) {
