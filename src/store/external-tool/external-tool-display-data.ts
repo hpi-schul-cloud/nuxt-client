@@ -5,6 +5,8 @@ export type ExternalToolDisplayData = {
 
 	name: string;
 
+	description?: string;
+
 	logoUrl?: string;
 
 	openInNewTab: boolean;
