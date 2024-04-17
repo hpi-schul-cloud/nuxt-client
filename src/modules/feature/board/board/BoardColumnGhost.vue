@@ -2,6 +2,7 @@
 	<div ref="ghostColumnRef" class="pl-2">
 		<BoardColumnGhostHeader
 			:isColumnActive="isColumnHovered"
+			:isListBoard="props.isListBoard"
 			@add-column="onAddColumn"
 			data-testid="add-column"
 		/>

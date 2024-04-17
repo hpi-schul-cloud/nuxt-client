@@ -281,7 +281,8 @@ export default {
 	"components.board.alert.info.draft":
 		"This board is not visible to course participants.",
 	"components.board.column.defaultTitle": "New column",
-	"components.board.column.ghost.placeholder": "Add column",
+	"components.board.column.ghost.column.placeholder": "Add column",
+	"components.board.column.ghost.list.placeholder": "Add section",
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
@@ -304,6 +305,7 @@ export default {
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
 	"components.boardElement": "element",
+	"components.boardSection": "section",
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.drawingElement": "Whiteboard",

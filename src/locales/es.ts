@@ -287,7 +287,8 @@ export default {
 	"components.board.alert.info.draft":
 		"Este tablón no es visible para los participantes en el curso.",
 	"components.board.column.defaultTitle": "Nueva columna",
-	"components.board.column.ghost.placeholder": "Añadir columna",
+	"components.board.column.ghost.column.placeholder": "Añadir columna",
+	"components.board.column.ghost.list.placeholder": "Añadir sección",
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
@@ -310,6 +311,7 @@ export default {
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
 	"components.boardElement": "elemento",
+	"components.boardSection": "sección",
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.drawingElement": "Pizarra",

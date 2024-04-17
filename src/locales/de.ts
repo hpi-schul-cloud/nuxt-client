@@ -284,7 +284,8 @@ export default {
 	"components.board.alert.info.draft":
 		"Dieses Board ist nicht für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neue Spalte",
-	"components.board.column.ghost.placeholder": "Spalte hinzufügen",
+	"components.board.column.ghost.column.placeholder": "Spalte hinzufügen",
+	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.menu.board": "Board-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Spalten-Einstellungen",
@@ -307,6 +308,7 @@ export default {
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
 	"components.boardElement": "Element",
+	"components.boardSection": "Abschnitt",
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.drawingElement": "Whiteboard",
