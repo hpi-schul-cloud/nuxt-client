@@ -49,6 +49,7 @@ const vueRoutes = [
 	`^/tools/context/tool-configuration/?$`,
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
 	`^/vendor/edu-sharing/`,
+	`^/media-shelf/?$`,
 ];
 
 const isVueClient = (path) => {
