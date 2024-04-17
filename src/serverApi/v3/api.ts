@@ -1315,7 +1315,8 @@ export interface ContextExternalToolResponse {
     */
 export enum ContextExternalToolResponseContextTypeEnum {
     Course = 'course',
-    BoardElement = 'board-element'
+    BoardElement = 'board-element',
+    MediaBoard = 'media-board'
 }
 
 /**
@@ -1719,6 +1720,31 @@ export interface CreateContentElementBodyParams {
      * @memberof CreateContentElementBodyParams
      */
     toPosition?: number;
+}
+/**
+ * 
+ * @export
+ * @interface CreateMediaElementBodyParams
+ */
+export interface CreateMediaElementBodyParams {
+    /**
+     * The id of the line where the element is created
+     * @type {string}
+     * @memberof CreateMediaElementBodyParams
+     */
+    lineId: string;
+    /**
+     * The position where the element is created
+     * @type {number}
+     * @memberof CreateMediaElementBodyParams
+     */
+    position: number;
+    /**
+     * The id of the school external tool
+     * @type {string}
+     * @memberof CreateMediaElementBodyParams
+     */
+    schoolExternalToolId: string;
 }
 /**
  * 
@@ -3834,23 +3860,67 @@ export interface MeUserResponse {
 /**
  * 
  * @export
+ * @interface MediaAvailableLineElementResponse
+ */
+export interface MediaAvailableLineElementResponse {
+    /**
+     * School External tool id of the media available line element
+     * @type {string}
+     * @memberof MediaAvailableLineElementResponse
+     */
+    schoolExternalToolId: string;
+    /**
+     * Name of the media available line element
+     * @type {string}
+     * @memberof MediaAvailableLineElementResponse
+     */
+    name: string;
+    /**
+     * Description of the media available line element
+     * @type {string}
+     * @memberof MediaAvailableLineElementResponse
+     */
+    description?: string;
+    /**
+     * Logo url of the media available line element
+     * @type {string}
+     * @memberof MediaAvailableLineElementResponse
+     */
+    logoUrl?: string;
+}
+/**
+ * 
+ * @export
+ * @interface MediaAvailableLineResponse
+ */
+export interface MediaAvailableLineResponse {
+    /**
+     * Available media elements in the line
+     * @type {Array<MediaAvailableLineElementResponse>}
+     * @memberof MediaAvailableLineResponse
+     */
+    elements: Array<MediaAvailableLineElementResponse>;
+}
+/**
+ * 
+ * @export
  * @interface MediaBoardResponse
  */
 export interface MediaBoardResponse {
     /**
-     * 
+     * The id of the media board
      * @type {string}
      * @memberof MediaBoardResponse
      */
     id: string;
     /**
-     * 
+     * The lines of the media board
      * @type {Array<MediaLineResponse>}
      * @memberof MediaBoardResponse
      */
     lines: Array<MediaLineResponse>;
     /**
-     * 
+     * The timestamps of the media board
      * @type {TimestampsResponse}
      * @memberof MediaBoardResponse
      */
@@ -3863,7 +3933,7 @@ export interface MediaBoardResponse {
  */
 export interface MediaExternalToolElementContent {
     /**
-     * 
+     * The id of the context external tool
      * @type {string}
      * @memberof MediaExternalToolElementContent
      */
@@ -3876,19 +3946,19 @@ export interface MediaExternalToolElementContent {
  */
 export interface MediaExternalToolElementResponse {
     /**
-     * 
+     * The id of the media external tool element
      * @type {string}
      * @memberof MediaExternalToolElementResponse
      */
     id: string;
     /**
-     * 
+     * The content of the media external tool element
      * @type {MediaExternalToolElementContent}
      * @memberof MediaExternalToolElementResponse
      */
     content: MediaExternalToolElementContent;
     /**
-     * 
+     * The timestamps of the media external tool element
      * @type {TimestampsResponse}
      * @memberof MediaExternalToolElementResponse
      */
@@ -3901,25 +3971,25 @@ export interface MediaExternalToolElementResponse {
  */
 export interface MediaLineResponse {
     /**
-     * 
+     * The id of the media line
      * @type {string}
      * @memberof MediaLineResponse
      */
     id: string;
     /**
-     * 
+     * The title of the media line
      * @type {string}
      * @memberof MediaLineResponse
      */
     title: string;
     /**
-     * 
+     * The elements of the media line
      * @type {Array<MediaExternalToolElementResponse>}
      * @memberof MediaLineResponse
      */
     elements: Array<MediaExternalToolElementResponse>;
     /**
-     * 
+     * The timestamps of the media line
      * @type {TimestampsResponse}
      * @memberof MediaLineResponse
      */
@@ -4038,13 +4108,13 @@ export interface MoveContentElementBody {
  */
 export interface MoveElementBodyParams {
     /**
-     * 
+     * The id of the line where the element is moved to
      * @type {string}
      * @memberof MoveElementBodyParams
      */
     toLineId: string;
     /**
-     * 
+     * The position where the element is moved to
      * @type {number}
      * @memberof MoveElementBodyParams
      */
@@ -6771,7 +6841,8 @@ export enum Timezone {
  */
 export enum ToolContextType {
     Course = 'course',
-    BoardElement = 'board-element'
+    BoardElement = 'board-element',
+    MediaBoard = 'media-board'
 }
 
 /**
@@ -6853,6 +6924,12 @@ export interface ToolReferenceResponse {
      * @memberof ToolReferenceResponse
      */
     contextToolId: string;
+    /**
+     * The description of the tool
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    description?: string;
     /**
      * The url of the logo which is stored in the db
      * @type {string}
@@ -13421,6 +13498,44 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @summary Get the media available line for the board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerGetMediaAvailableLine: async (boardId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('mediaBoardControllerGetMediaAvailableLine', 'boardId', boardId)
+            const localVarPath = `/media-boards/{boardId}/media-available-line`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get the media shelf of the user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13476,6 +13591,17 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get the media available line for the board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaAvailableLineResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerGetMediaAvailableLine(boardId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get the media shelf of the user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13506,6 +13632,16 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @summary Get the media available line for the board.
+         * @param {string} boardId The id of the board.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: any): AxiosPromise<MediaAvailableLineResponse> {
+            return localVarFp.mediaBoardControllerGetMediaAvailableLine(boardId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get the media shelf of the user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13531,6 +13667,16 @@ export interface MediaBoardApiInterface {
      * @memberof MediaBoardApiInterface
      */
     mediaBoardControllerCreateLine(boardId: string, options?: any): AxiosPromise<MediaLineResponse>;
+
+    /**
+     * 
+     * @summary Get the media available line for the board.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApiInterface
+     */
+    mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: any): AxiosPromise<MediaAvailableLineResponse>;
 
     /**
      * 
@@ -13564,6 +13710,18 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
 
     /**
      * 
+     * @summary Get the media available line for the board.
+     * @param {string} boardId The id of the board.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApi
+     */
+    public mediaBoardControllerGetMediaAvailableLine(boardId: string, options?: any) {
+        return MediaBoardApiFp(this.configuration).mediaBoardControllerGetMediaAvailableLine(boardId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Get the media shelf of the user.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13583,8 +13741,86 @@ export const MediaElementApiAxiosParamCreator = function (configuration?: Config
     return {
         /**
          * 
+         * @summary Create a new element.
+         * @param {CreateMediaElementBodyParams} createMediaElementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaElementControllerCreateElement: async (createMediaElementBodyParams: CreateMediaElementBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createMediaElementBodyParams' is not null or undefined
+            assertParamExists('mediaElementControllerCreateElement', 'createMediaElementBodyParams', createMediaElementBodyParams)
+            const localVarPath = `/media-elements`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createMediaElementBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete a single element.
+         * @param {string} elementId The id of the element
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaElementControllerDeleteElement: async (elementId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'elementId' is not null or undefined
+            assertParamExists('mediaElementControllerDeleteElement', 'elementId', elementId)
+            const localVarPath = `/media-elements/{elementId}`
+                .replace(`{${"elementId"}}`, encodeURIComponent(String(elementId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Move a single element.
-         * @param {string} elementId The id of the element.
+         * @param {string} elementId The id of the element
          * @param {MoveElementBodyParams} moveElementBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13637,8 +13873,30 @@ export const MediaElementApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Create a new element.
+         * @param {CreateMediaElementBodyParams} createMediaElementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaExternalToolElementResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaElementControllerCreateElement(createMediaElementBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Delete a single element.
+         * @param {string} elementId The id of the element
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaElementControllerDeleteElement(elementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaElementControllerDeleteElement(elementId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Move a single element.
-         * @param {string} elementId The id of the element.
+         * @param {string} elementId The id of the element
          * @param {MoveElementBodyParams} moveElementBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13659,8 +13917,28 @@ export const MediaElementApiFactory = function (configuration?: Configuration, b
     return {
         /**
          * 
+         * @summary Create a new element.
+         * @param {CreateMediaElementBodyParams} createMediaElementBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): AxiosPromise<MediaExternalToolElementResponse> {
+            return localVarFp.mediaElementControllerCreateElement(createMediaElementBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete a single element.
+         * @param {string} elementId The id of the element
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaElementControllerDeleteElement(elementId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaElementControllerDeleteElement(elementId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Move a single element.
-         * @param {string} elementId The id of the element.
+         * @param {string} elementId The id of the element
          * @param {MoveElementBodyParams} moveElementBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13679,8 +13957,28 @@ export const MediaElementApiFactory = function (configuration?: Configuration, b
 export interface MediaElementApiInterface {
     /**
      * 
+     * @summary Create a new element.
+     * @param {CreateMediaElementBodyParams} createMediaElementBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaElementApiInterface
+     */
+    mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any): AxiosPromise<MediaExternalToolElementResponse>;
+
+    /**
+     * 
+     * @summary Delete a single element.
+     * @param {string} elementId The id of the element
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaElementApiInterface
+     */
+    mediaElementControllerDeleteElement(elementId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @summary Move a single element.
-     * @param {string} elementId The id of the element.
+     * @param {string} elementId The id of the element
      * @param {MoveElementBodyParams} moveElementBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13699,8 +13997,32 @@ export interface MediaElementApiInterface {
 export class MediaElementApi extends BaseAPI implements MediaElementApiInterface {
     /**
      * 
+     * @summary Create a new element.
+     * @param {CreateMediaElementBodyParams} createMediaElementBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaElementApi
+     */
+    public mediaElementControllerCreateElement(createMediaElementBodyParams: CreateMediaElementBodyParams, options?: any) {
+        return MediaElementApiFp(this.configuration).mediaElementControllerCreateElement(createMediaElementBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete a single element.
+     * @param {string} elementId The id of the element
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaElementApi
+     */
+    public mediaElementControllerDeleteElement(elementId: string, options?: any) {
+        return MediaElementApiFp(this.configuration).mediaElementControllerDeleteElement(elementId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Move a single element.
-     * @param {string} elementId The id of the element.
+     * @param {string} elementId The id of the element
      * @param {MoveElementBodyParams} moveElementBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13721,7 +14043,7 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary Delete a single line.
-         * @param {string} lineId The id of the line.
+         * @param {string} lineId The id of the line
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13759,7 +14081,7 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary Move a single line.
-         * @param {string} lineId The id of the line.
+         * @param {string} lineId The id of the line
          * @param {MoveColumnBodyParams} moveColumnBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13803,7 +14125,7 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary Update the title of a single line.
-         * @param {string} lineId The id of the line.
+         * @param {string} lineId The id of the line
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13857,7 +14179,7 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Delete a single line.
-         * @param {string} lineId The id of the line.
+         * @param {string} lineId The id of the line
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13868,7 +14190,7 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Move a single line.
-         * @param {string} lineId The id of the line.
+         * @param {string} lineId The id of the line
          * @param {MoveColumnBodyParams} moveColumnBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13880,7 +14202,7 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Update the title of a single line.
-         * @param {string} lineId The id of the line.
+         * @param {string} lineId The id of the line
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13902,7 +14224,7 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary Delete a single line.
-         * @param {string} lineId The id of the line.
+         * @param {string} lineId The id of the line
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -13912,7 +14234,7 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary Move a single line.
-         * @param {string} lineId The id of the line.
+         * @param {string} lineId The id of the line
          * @param {MoveColumnBodyParams} moveColumnBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13923,7 +14245,7 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary Update the title of a single line.
-         * @param {string} lineId The id of the line.
+         * @param {string} lineId The id of the line
          * @param {RenameBodyParams} renameBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -13943,7 +14265,7 @@ export interface MediaLineApiInterface {
     /**
      * 
      * @summary Delete a single line.
-     * @param {string} lineId The id of the line.
+     * @param {string} lineId The id of the line
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MediaLineApiInterface
@@ -13953,7 +14275,7 @@ export interface MediaLineApiInterface {
     /**
      * 
      * @summary Move a single line.
-     * @param {string} lineId The id of the line.
+     * @param {string} lineId The id of the line
      * @param {MoveColumnBodyParams} moveColumnBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13964,7 +14286,7 @@ export interface MediaLineApiInterface {
     /**
      * 
      * @summary Update the title of a single line.
-     * @param {string} lineId The id of the line.
+     * @param {string} lineId The id of the line
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -13984,7 +14306,7 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
     /**
      * 
      * @summary Delete a single line.
-     * @param {string} lineId The id of the line.
+     * @param {string} lineId The id of the line
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MediaLineApi
@@ -13996,7 +14318,7 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
     /**
      * 
      * @summary Move a single line.
-     * @param {string} lineId The id of the line.
+     * @param {string} lineId The id of the line
      * @param {MoveColumnBodyParams} moveColumnBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -14009,7 +14331,7 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
     /**
      * 
      * @summary Update the title of a single line.
-     * @param {string} lineId The id of the line.
+     * @param {string} lineId The id of the line
      * @param {RenameBodyParams} renameBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
