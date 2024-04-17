@@ -20,8 +20,7 @@ export default {
 	"common.actions.save": "Зберегти",
 	"common.actions.scrollToTop": "Прокрутити вгору",
 	"common.actions.share": "Поділіться",
-	"common.actions.shareCourse": "Копія котирування акцій",
-	"common.actions.shareBoard": "Копія котирування дошки",
+	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.update": "Оновити",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
@@ -287,8 +286,7 @@ export default {
 	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
-	"components.board.alert.info.draft":
-		"Ця дошка більше не відображається для учасників курсу.",
+	"components.board.alert.info.draft": "Ця дошка невидима для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.board.column.ghost.placeholder": "Додати стовпець",
 	"components.board.menu.board": "Налаштування дошки",
@@ -312,6 +310,7 @@ export default {
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
+	"components.boardRow": "рядок",
 	"components.boardElement": "Eлемент",
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
@@ -462,6 +461,12 @@ export default {
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Усі елементи успішно скопійовано.",
+	"components.molecules.copyResult.board.successfullyCopied":
+		"Дошка успішно скопійована.",
+	"components.molecules.copyResult.task.successfullyCopied":
+		"Задачу успішно скопійовано.",
+	"components.molecules.copyResult.lesson.successfullyCopied":
+		"Тему успішно скопійовано.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Для великих файлів процес копіювання може зайняти більше часу. Вміст буде доступний найближчим часом.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -1397,7 +1402,6 @@ export default {
 		'{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
-	"pages.room.lessonCard.label.shareLesson": "надіслати копію теми",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
 	"pages.room.student.emptyState":
 		"Тут з’являється навчальний вміст, наприклад теми чи завдання.",
@@ -1407,7 +1411,6 @@ export default {
 	"pages.room.taskCard.label.graded": "Оцінено",
 	"pages.room.taskCard.label.noDueDate": "Без дати подання",
 	"pages.room.taskCard.label.open": "Відкрити",
-	"pages.room.taskCard.label.shareTask": "Поділіться копією завдання",
 	"pages.room.taskCard.label.taskDone": "Завдання виконано",
 	"pages.room.taskCard.menu.ariaLabel": "Меню завдань",
 	"pages.room.taskCard.student.label.overdue": "Відсутня",
@@ -1561,6 +1564,8 @@ export default {
 		'На жаль, не вдалося перемістити ваш обліковий запис до {targetSystem}.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Будь ласка, Передайте цю інформацію:<br><b>Номер школи в {instance}: {sourceSchoolNumber}, номер школи в {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.multipleUsersFound":
+		'Цей обліковий запис moin.schule вже пов\'язаний з обліковим записом у Niedersächsische Bildungscloud і не може бути використаний повторно для міграції.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
 	"pages.userMigration.error.title": "Не вдалося перемістити обліковий запис",
 	"pages.userMigration.success.description":
 		"Переміщення вашого облікового запису до {targetSystem} завершено.<br>Зареєструйтеся знову.",
@@ -1609,4 +1614,8 @@ export default {
 		"Фільтрувати за повним іменем...",
 	"utils.adminFilter.placeholder.date.from": "Створено між 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
+	"feature.media-shelf.title": "Полиця для медіа",
+	"feature.media-shelf.createLine": "Додайте лінію",
+	"feature.media-shelf.line.title": "лінія",
+	"feature.media-shelf.availableLine.title": "Доступні медіа",
 };

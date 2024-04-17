@@ -20,8 +20,7 @@ export default {
 	"common.actions.scrollToTop": "Nach oben scrollen",
 	"common.actions.share": "Teilen",
 	"common.actions.export": "Exportieren",
-	"common.actions.shareCourse": "Kurskopie teilen",
-	"common.actions.shareBoard": "Boardkopie teilen",
+	"common.actions.shareCopy": "Kopie teilen",
 	"common.actions.update": "Aktualisieren",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
@@ -283,7 +282,7 @@ export default {
 	"components.board.alert.info.teacher":
 		"Dieses Board ist sichtbar für alle Kursteilnehmenden.",
 	"components.board.alert.info.draft":
-		"Dieses Board ist nicht mehr für die Kursteilnehmenden sichtbar.",
+		"Dieses Board ist nicht für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neue Spalte",
 	"components.board.column.ghost.placeholder": "Spalte hinzufügen",
 	"components.board.menu.board": "Board-Einstellungen",
@@ -307,6 +306,7 @@ export default {
 	"components.board": "Board",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
+	"components.boardRow": "Abschnitt",
 	"components.boardElement": "Element",
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
@@ -458,6 +458,12 @@ export default {
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
+	"components.molecules.copyResult.board.successfullyCopied":
+		"Board erfolgreich kopiert.",
+	"components.molecules.copyResult.task.successfullyCopied":
+		"Aufgabe erfolgreich kopiert.",
+	"components.molecules.copyResult.lesson.successfullyCopied":
+		"Thema erfolgreich kopiert.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Der Kopiervorgang kann bei großen Dateien länger dauern. Die Inhalte werden in Kürze verfügbar sein.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -1397,7 +1403,6 @@ export default {
 	"pages.room.itemDelete.text": '{itemType} "{itemTitle}" wirklich löschen?',
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
-	"pages.room.lessonCard.label.shareLesson": "Themenkopie teilen",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
 	"pages.room.student.emptyState":
 		"Hier erscheinen Lerninhalte wie Themen oder Aufgaben.",
@@ -1407,7 +1412,6 @@ export default {
 	"pages.room.taskCard.label.graded": "Bewertet",
 	"pages.room.taskCard.label.noDueDate": "Kein Abgabedatum",
 	"pages.room.taskCard.label.open": "Offen",
-	"pages.room.taskCard.label.shareTask": "Aufgabenkopie teilen",
 	"pages.room.taskCard.label.taskDone": "Aufgabe abgeschlossen",
 	"pages.room.taskCard.menu.ariaLabel": "Aufgabenmenü",
 	"pages.room.taskCard.student.label.overdue": "Fehlt",
@@ -1567,6 +1571,8 @@ export default {
 		'Der Umzug Deines Accounts zu {targetSystem} ist leider fehlegeschlagen.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Gib diese Informationen bitte weiter:<br><b>Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.multipleUsersFound":
+		'Dieser moin.schule-Account ist bereits mit einem Account in der Niedersächsischen Bildungscloud verbunden und kann nicht noch einmal für die Migration verwendet werden.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
 	"pages.userMigration.error.title": "Umzug des Accounts fehlgeschlagen",
 	"pages.userMigration.success.description":
 		"Der Umzug Deines Accounts zu {targetSystem} ist fertig.<br>Melde Dich jetzt bitte neu an.",
@@ -1615,4 +1621,8 @@ export default {
 		"Nach vollständigem Vornamen filtern...",
 	"utils.adminFilter.placeholder.date.from": "Erstellt zwischen 02/02/2020",
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
+	"feature.media-shelf.title": "Medienregal",
+	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
+	"feature.media-shelf.line.title": "Abschnitt",
+	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 };

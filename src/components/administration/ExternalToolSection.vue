@@ -12,6 +12,7 @@
 			:loading="isLoading"
 			:loading-text="t('common.loading.text')"
 			:no-data-text="t('common.nodata')"
+			:items-per-page="-1"
 		>
 			<template #[`item.name`]="{ item }">
 				<span>
@@ -114,12 +115,14 @@ import { RequestArgs } from "@/serverApi/v3/base";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { DataTableHeader } from "@/store/types/data-table-header";
 import {
 	AUTH_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { RenderHTML } from "@feature-render-html";
 import { mdiAlert, mdiCheckCircle } from "@mdi/js";
 import {
@@ -131,12 +134,10 @@ import {
 	ref,
 } from "vue";
 import { useI18n } from "vue-i18n";
-import { DataTableHeader } from "@/store/types/data-table-header";
+import { useRouter } from "vue-router";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { useRouter } from "vue-router";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
 
 export default defineComponent({
 	name: "ExternalToolSection",
