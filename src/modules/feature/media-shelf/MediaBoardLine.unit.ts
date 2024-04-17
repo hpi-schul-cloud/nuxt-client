@@ -4,9 +4,13 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { useMediaQuery } from "@vueuse/core";
+import { SortableEvent } from "sortablejs";
+import { Sortable } from "sortablejs-vue3";
 import { nextTick, ref } from "vue";
+import { availableMediaLineId, ElementMove } from "./data/types";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
@@ -125,12 +129,151 @@ describe("MediaBoardLine", () => {
 	});
 
 	describe("when dragging an element to another line", () => {
-		it("should emit the update:element-position event", () => {
-			// TODO
+		const setup = () => {
+			const { wrapper } = getWrapper();
+
+			const fromLineId = "fromLineId";
+			const toLineId = "toLineId";
+			const elementId = "elementId";
+			const fromLine = createMock<HTMLElement>({
+				dataset: {
+					lineId: fromLineId,
+				},
+			});
+			const toLine = createMock<HTMLElement>({
+				dataset: {
+					lineId: toLineId,
+				},
+			});
+			const element = createMock<HTMLElement>({
+				parentNode: createMock(),
+				dataset: {
+					elementId,
+				},
+			});
+			const sortableEvent: Partial<SortableEvent> = {
+				oldIndex: 0,
+				newIndex: 1,
+				from: fromLine,
+				to: toLine,
+				item: element,
+			};
+
+			return {
+				wrapper,
+				sortableEvent,
+				fromLineId,
+				toLineId,
+				elementId,
+			};
+		};
+
+		it("should emit the update:element-position event", async () => {
+			const { wrapper, sortableEvent, fromLineId, toLineId, elementId } =
+				setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			sortable.vm.$emit("end", sortableEvent);
+			await nextTick();
+
+			expect(wrapper.emitted("update:element-position")).toEqual<
+				[ElementMove][]
+			>([
+				[
+					{
+						oldElementIndex: 0,
+						newElementIndex: 1,
+						fromLineId,
+						toLineId,
+						elementId,
+					},
+				],
+			]);
 		});
 	});
 
 	describe("when dragging an element to the available line", () => {
-		// TODO
+		const setup = () => {
+			const { wrapper } = getWrapper({
+				line: mediaLineResponseFactory.build(),
+				index: 0,
+			});
+
+			const fromLineId = "fromLineId";
+			const elementId = "elementId";
+			const fromLine = createMock<HTMLElement>({
+				dataset: {
+					lineId: fromLineId,
+				},
+			});
+			const toLine = createMock<HTMLElement>({
+				dataset: {
+					lineId: availableMediaLineId,
+				},
+			});
+			const element = createMock<HTMLElement>({
+				parentNode: createMock(),
+				dataset: {
+					elementId,
+				},
+			});
+			const sortableEvent: Partial<SortableEvent> = {
+				oldIndex: 0,
+				newIndex: 1,
+				from: fromLine,
+				to: toLine,
+				item: element,
+			};
+
+			return {
+				wrapper,
+				sortableEvent,
+				elementId,
+			};
+		};
+
+		it("should emit the delete:element event", async () => {
+			const { wrapper, sortableEvent, elementId } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			sortable.vm.$emit("end", sortableEvent);
+			await nextTick();
+
+			expect(wrapper.emitted("delete:element")).toEqual([[elementId]]);
+		});
+	});
+
+	describe("when dragging an element to an undefined position", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper();
+
+			const fromLine = createMock<HTMLElement>();
+			const toLine = createMock<HTMLElement>();
+			const element = createMock<HTMLElement>();
+			const sortableEvent: Partial<SortableEvent> = {
+				from: fromLine,
+				to: toLine,
+				item: element,
+			};
+
+			return {
+				wrapper,
+				sortableEvent,
+			};
+		};
+
+		it("should not emit an event", async () => {
+			const { wrapper, sortableEvent } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			sortable.vm.$emit("end", sortableEvent);
+			await nextTick();
+
+			expect(wrapper.emitted("update:element-position")).toBeUndefined();
+			expect(wrapper.emitted("delete:element")).toBeUndefined();
+		});
 	});
 });

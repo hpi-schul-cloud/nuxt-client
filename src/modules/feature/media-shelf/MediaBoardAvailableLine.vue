@@ -2,6 +2,7 @@
 	<div
 		class="line line-drag-handle mx-n4 px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
 		:data-line-id="availableMediaLineId"
+		data-testid="available-line"
 	>
 		<div class="line-header mb-4 rounded">
 			<div class="d-flex align-center py-2 px-2">
