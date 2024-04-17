@@ -104,6 +104,7 @@ import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
+	BoardLayout,
 	BoardParentType,
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
@@ -445,10 +446,10 @@ export default defineComponent({
 	methods: {
 		fabItemClickHandler(event) {
 			if (event === "board-create") {
-				this.onCreateBoard(this.roomData.roomId, "columns");
+				this.onCreateBoard(this.roomData.roomId, BoardLayout.Columns);
 			}
 			if (event === "list-board-create") {
-				this.onCreateBoard(this.roomData.roomId, "list");
+				this.onCreateBoard(this.roomData.roomId, BoardLayout.List);
 			}
 		},
 		setActiveTabIfPageCached(event) {

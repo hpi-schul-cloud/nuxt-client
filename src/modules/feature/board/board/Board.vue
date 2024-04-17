@@ -63,6 +63,7 @@
 					<BoardColumnGhost
 						v-if="hasCreateColumnPermission"
 						@create:column="onCreateColumn"
+						:isListBoard="isListBoard"
 					/>
 				</div>
 			</div>
@@ -85,7 +86,10 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue"
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import {
+	BoardLayout,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import {
@@ -266,7 +270,7 @@ const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 const isListBoard = computed(
 	() =>
 		envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
-		board.value?.layout === "list"
+		board.value?.layout === BoardLayout.List
 );
 
 const copyResultModalItems = computed(

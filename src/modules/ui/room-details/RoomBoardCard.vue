@@ -69,7 +69,10 @@ import {
 	mdiUndoVariant,
 	mdiViewDashboard,
 } from "@/components/icons/material";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import {
+	BoardLayout,
+	ImportUserResponseRoleNamesEnum as Roles,
+} from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -122,7 +125,7 @@ const isDraft = computed(() => {
 });
 
 const isListBoard = computed(() => {
-	return props.columnBoardItem.layout === "list";
+	return props.columnBoardItem.layout === BoardLayout.List;
 });
 
 const titleIcon = computed(() => {
