@@ -11,9 +11,11 @@ import {
 	ContextExternalTool,
 	ContextExternalToolSave,
 } from "../context-external-tool";
-import { ContextExternalToolConfigurationTemplate } from "../tool-configuration-template";
+import {
+	ContextExternalToolConfigurationTemplate,
+	ToolParameterEntry,
+} from "@/store/external-tool";
 import { ToolParameter } from "../tool-parameter";
-import { ToolParameterEntry } from "../tool-parameter-entry";
 import { CommonToolMapper } from "./common-tool.mapper";
 import { ExternalToolMapper } from "./external-tool.mapper";
 
