@@ -52,7 +52,7 @@
 import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 import { useElementHover } from "@vueuse/core";
 import { PropType, ref } from "vue";
-import { MediaElementDisplay } from "./data/types";
+import { MediaElementDisplay } from "./data";
 
 defineProps({
 	element: {

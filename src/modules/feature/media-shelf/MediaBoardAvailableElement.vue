@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { MediaAvailableLineElementResponse } from "@/serverApi/v3";
 import { computed, ComputedRef, PropType } from "vue";
-import { MediaElementDisplay } from "./data/types";
+import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 
 const props = defineProps({

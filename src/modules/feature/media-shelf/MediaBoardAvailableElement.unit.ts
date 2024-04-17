@@ -1,7 +1,7 @@
 import { ComponentProps } from "@/types/vue";
 import { mediaAvailableLineElementResponseFactory } from "@@/tests/test-utils";
 import { shallowMount } from "@vue/test-utils";
-import { MediaElementDisplay } from "./data/types";
+import { MediaElementDisplay } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 

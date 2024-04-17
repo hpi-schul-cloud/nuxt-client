@@ -7,7 +7,7 @@ import {
 import { useContextExternalToolApi } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, shallowMount } from "@vue/test-utils";
-import { MediaElementDisplay } from "./data/types";
+import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 

@@ -68,7 +68,7 @@ import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, PropType, Ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { availableMediaLineId, ElementMove } from "./data/types";
+import { availableMediaLineId, ElementMove } from "./data";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";

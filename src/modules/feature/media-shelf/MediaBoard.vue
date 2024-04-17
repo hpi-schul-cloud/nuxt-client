@@ -37,7 +37,10 @@
 					/>
 				</template>
 			</Sortable>
-			<MediaBoardLineGhost @create:line="onCreateLine" />
+			<MediaBoardLineGhost
+				v-if="board.lines.length < lineLimit"
+				@create:line="onCreateLine"
+			/>
 		</div>
 	</div>
 </template>
@@ -50,8 +53,13 @@ import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { PropType } from "vue";
-import { useSharedMediaBoardState } from "./data/mediaBoardState.composable";
-import { ElementCreate, ElementMove, LineMove } from "./data/types";
+import {
+	ElementCreate,
+	ElementMove,
+	lineLimit,
+	LineMove,
+	useSharedMediaBoardState,
+} from "./data";
 import { useSharedEditMode } from "./editMode.composable";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";

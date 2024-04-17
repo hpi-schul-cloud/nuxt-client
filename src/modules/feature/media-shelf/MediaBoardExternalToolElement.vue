@@ -7,7 +7,7 @@ import { MediaExternalToolElementResponse } from "@/serverApi/v3";
 import { ExternalToolDisplayData } from "@/store/external-tool";
 import { useContextExternalToolApi } from "@data-external-tool";
 import { PropType, Ref, ref, watch } from "vue";
-import { MediaElementDisplay } from "./data/types";
+import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 
 const props = defineProps({

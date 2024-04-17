@@ -10,7 +10,7 @@ import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, ref } from "vue";
-import { availableMediaLineId, ElementMove } from "./data/types";
+import { availableMediaLineId, ElementMove } from "./data";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";

@@ -12,8 +12,11 @@ import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, ref } from "vue";
-import { useSharedMediaBoardState } from "./data/mediaBoardState.composable";
-import { availableMediaLineId, ElementCreate } from "./data/types";
+import {
+	availableMediaLineId,
+	ElementCreate,
+	useSharedMediaBoardState,
+} from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 
 jest.mock("./data/mediaBoardState.composable");

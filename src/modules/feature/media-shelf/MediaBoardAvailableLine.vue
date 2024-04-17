@@ -63,8 +63,11 @@ import { uniqueId } from "lodash";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, Ref } from "vue";
-import { useSharedMediaBoardState } from "./data/mediaBoardState.composable";
-import { availableMediaLineId, ElementCreate } from "./data/types";
+import {
+	availableMediaLineId,
+	ElementCreate,
+	useSharedMediaBoardState,
+} from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import { useCollapsableState } from "./utils/collapsable.composable";
 

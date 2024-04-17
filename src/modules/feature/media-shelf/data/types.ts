@@ -26,5 +26,3 @@ export interface ElementCreate {
 	toLineId?: string;
 	schoolExternalToolId: string;
 }
-
-export const availableMediaLineId = "available-media-line";
