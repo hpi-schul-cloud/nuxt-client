@@ -470,6 +470,25 @@ describe("mediaBoardState.composable", () => {
 			});
 		});
 
+		describe("when the line is not found", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+				composable.mediaBoard.value = mediaBoardResponseFactory.build();
+
+				return {
+					composable,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable } = setup();
+
+				await composable.deleteLine("notExistingLineId");
+
+				expect(mediaBoardApiMock.deleteLine).not.toHaveBeenCalled();
+			});
+		});
+
 		describe("when error occurs", () => {
 			const setup = () => {
 				const composable = useMediaBoardState();
@@ -921,6 +940,53 @@ describe("mediaBoardState.composable", () => {
 				});
 			});
 
+			describe("when new line creation fails", () => {
+				const setup = () => {
+					const composable = useMediaBoardState();
+					composable.mediaBoard.value = mediaBoardResponseFactory.build({
+						lines: [],
+					});
+					composable.availableMedia.value =
+						mediaAvailableLineResponseFactory.build();
+
+					mediaBoardApiMock.createLine.mockRejectedValueOnce("error");
+					useErrorHandlerMock.handleAnyError.mockImplementationOnce(
+						(_error, handler) => handler()
+					);
+					useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
+						Promise.resolve();
+					});
+
+					return {
+						composable,
+					};
+				};
+
+				it("should call handleAnyError", async () => {
+					const { composable } = setup();
+
+					await composable.createElement({
+						oldElementIndex: 0,
+						newElementIndex: 1,
+						schoolExternalToolId: "schoolExternalToolId",
+					});
+
+					expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
+				});
+
+				it("should reload board", async () => {
+					const { composable } = setup();
+
+					await composable.createElement({
+						oldElementIndex: 0,
+						newElementIndex: 1,
+						schoolExternalToolId: "schoolExternalToolId",
+					});
+
+					expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
+				});
+			});
+
 			describe("when the element is created", () => {
 				const setup = () => {
 					const composable = useMediaBoardState();
@@ -1038,6 +1104,135 @@ describe("mediaBoardState.composable", () => {
 		});
 	});
 
+	describe("deleteElement", () => {
+		describe("when media board is not set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+				composable.mediaBoard.value = undefined;
+
+				return {
+					composable,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable } = setup();
+
+				await composable.deleteElement("elementId");
+
+				expect(mediaBoardApiMock.deleteElement).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when media board is set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const element = mediaExternalToolElementResponseFactory.build();
+				const line = mediaLineResponseFactory.build({ elements: [element] });
+				composable.mediaBoard.value = mediaBoardResponseFactory.build({
+					lines: [line],
+				});
+
+				mediaBoardApiMock.deleteElement.mockResolvedValueOnce();
+
+				return {
+					composable,
+					lineId: line.id,
+					elementId: element.id,
+				};
+			};
+
+			it("should remove the element from the media board", async () => {
+				const { composable, elementId } = setup();
+
+				await composable.deleteElement(elementId);
+
+				expect(
+					composable.mediaBoard.value?.lines[0].elements
+				).not.toContainEqual(expect.objectContaining({ id: elementId }));
+			});
+
+			it("should call the api to delete the element", async () => {
+				const { composable, elementId } = setup();
+
+				await composable.deleteElement(elementId);
+
+				expect(mediaBoardApiMock.deleteElement).toHaveBeenCalledWith(elementId);
+			});
+
+			it("should call fetchAvailableMedia", async () => {
+				const { composable, elementId } = setup();
+
+				await composable.deleteElement(elementId);
+
+				expect(mediaBoardApiMock.getAvailableMedia).toHaveBeenCalledWith(
+					composable.mediaBoard.value?.id
+				);
+			});
+		});
+
+		describe("when the line is not found", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+				composable.mediaBoard.value = mediaBoardResponseFactory.build();
+
+				return {
+					composable,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable } = setup();
+
+				await composable.deleteElement("notExistingElementId");
+
+				expect(mediaBoardApiMock.deleteElement).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when error occurs", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const element = mediaExternalToolElementResponseFactory.build();
+				const line = mediaLineResponseFactory.build({ elements: [element] });
+				composable.mediaBoard.value = mediaBoardResponseFactory.build({
+					lines: [line],
+				});
+
+				mediaBoardApiMock.deleteElement.mockRejectedValueOnce("error");
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
+					(_error, handler) => handler()
+				);
+				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
+					Promise.resolve();
+				});
+
+				return {
+					composable,
+					elementId: element.id,
+				};
+			};
+
+			it("should call handleAnyError", async () => {
+				const { composable, elementId } = setup();
+
+				await composable.deleteElement(elementId);
+
+				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
+			});
+
+			it("should reload board", async () => {
+				const { composable, elementId } = setup();
+
+				await composable.deleteElement(elementId);
+
+				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
+			});
+		});
+	});
+
 	describe("moveElement", () => {
 		describe("when media board is not set", () => {
 			const setup = () => {
@@ -1117,6 +1312,145 @@ describe("mediaBoardState.composable", () => {
 				});
 
 				expect(composable.mediaBoard.value?.lines[0].elements).toHaveLength(0);
+			});
+		});
+
+		describe("when element is moved to the same position", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const element = mediaExternalToolElementResponseFactory.build();
+				const line = mediaLineResponseFactory.build({ elements: [element] });
+				composable.mediaBoard.value = mediaBoardResponseFactory.build({
+					lines: [line],
+				});
+
+				return {
+					composable,
+					lineId: line.id,
+					elementId: element.id,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable, lineId, elementId } = setup();
+
+				await composable.moveElement({
+					elementId,
+					oldElementIndex: 0,
+					newElementIndex: 0,
+					fromLineId: lineId,
+					toLineId: lineId,
+				});
+
+				expect(mediaBoardApiMock.moveElement).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when moving element to new line", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const element = mediaExternalToolElementResponseFactory.build();
+				const line1 = mediaLineResponseFactory.build({ elements: [element] });
+				const line2 = mediaLineResponseFactory.build({
+					elements: [mediaExternalToolElementResponseFactory.build()],
+				});
+				composable.mediaBoard.value = mediaBoardResponseFactory.build({
+					lines: [line1, line2],
+				});
+
+				mediaBoardApiMock.moveElement.mockResolvedValueOnce();
+
+				return {
+					composable,
+					line1,
+					line2,
+					element,
+				};
+			};
+
+			it("should call the api to create the new line", async () => {
+				const { composable, line1, element } = setup();
+
+				await composable.moveElement({
+					elementId: element.id,
+					oldElementIndex: 0,
+					newElementIndex: 1,
+					fromLineId: line1.id,
+					toLineId: undefined,
+				});
+
+				expect(mediaBoardApiMock.createLine).toHaveBeenCalled();
+			});
+
+			it("should update the elements in the media board", async () => {
+				const { composable, line1, line2, element } = setup();
+
+				await composable.moveElement({
+					elementId: element.id,
+					oldElementIndex: 0,
+					newElementIndex: 1,
+					fromLineId: line1.id,
+					toLineId: line2.id,
+				});
+
+				expect(composable.mediaBoard.value?.lines[0].elements).toHaveLength(0);
+				expect(composable.mediaBoard.value?.lines[1].elements).toHaveLength(2);
+			});
+		});
+
+		describe("when moving element to new line fails", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const element = mediaExternalToolElementResponseFactory.build();
+				const line1 = mediaLineResponseFactory.build({ elements: [element] });
+				composable.mediaBoard.value = mediaBoardResponseFactory.build({
+					lines: [line1],
+				});
+
+				mediaBoardApiMock.createLine.mockRejectedValueOnce("error");
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
+					(_error, handler) => handler()
+				);
+				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
+					Promise.resolve();
+				});
+
+				return {
+					composable,
+					line1,
+					element,
+				};
+			};
+
+			it("should call handleAnyError", async () => {
+				const { composable, line1, element } = setup();
+
+				await composable.moveElement({
+					elementId: element.id,
+					oldElementIndex: 0,
+					newElementIndex: 1,
+					fromLineId: line1.id,
+					toLineId: undefined,
+				});
+
+				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
+			});
+
+			it("should reload board", async () => {
+				const { composable, line1, element } = setup();
+
+				await composable.moveElement({
+					elementId: element.id,
+					oldElementIndex: 0,
+					newElementIndex: 1,
+					fromLineId: line1.id,
+					toLineId: undefined,
+				});
+
+				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
 			});
 		});
 

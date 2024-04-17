@@ -245,6 +245,7 @@ const useMediaBoardState = () => {
 		try {
 			const lineIndex: number = getLineIndexOfElement(elementId);
 
+			// Element or line not found
 			if (lineIndex < 0) {
 				return;
 			}
@@ -252,10 +253,6 @@ const useMediaBoardState = () => {
 			const elementIndex: number = mediaBoard.value.lines[
 				lineIndex
 			].elements.findIndex((element) => element.id === elementId);
-
-			if (elementIndex < 0) {
-				return;
-			}
 
 			mediaBoard.value.lines[lineIndex].elements.splice(elementIndex, 1);
 
@@ -331,21 +328,9 @@ const useMediaBoardState = () => {
 		boardObjectType?: BoardObjectType
 	) => {
 		return () => {
-			if (mediaBoard.value === undefined) {
-				return;
-			}
-
 			notifyWithTemplate(errorType, boardObjectType)();
-			reloadBoard();
+			fetchMediaBoardForUser();
 		};
-	};
-
-	const reloadBoard = async () => {
-		if (mediaBoard.value === undefined) {
-			return;
-		}
-
-		await fetchMediaBoardForUser();
 	};
 
 	return {

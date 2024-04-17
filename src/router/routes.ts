@@ -195,6 +195,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		props: (to: RouteLocationNormalized) => ({
 			sourceSchoolNumber: to.query.sourceSchoolNumber,
 			targetSchoolNumber: to.query.targetSchoolNumber,
+			multipleUsersFound: to.query.multipleUsersFound,
 		}),
 		meta: {
 			isPublic: true,
