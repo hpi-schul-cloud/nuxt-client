@@ -117,8 +117,28 @@ const updateBoardVisibilityFailure = createAction(
 	props<{ errorMessage: string; errorData: object }>()
 );
 
+const notifyWithTemplateAndReloadRequest = createAction(
+	"notify-with-template-and-reload-request",
+	props<{
+		error: Error;
+		errorType: ErrorType;
+		httpStatus: HttpStatusCode;
+		boardObjectType?: BoardObjectType;
+	}>()
+);
+
 const notifyWithTemplateAndReload = createAction(
-	"notify-with-template-and-reload",
+	"notify-with-template-and-reload-success",
+	props<{
+		error: Error;
+		errorType: ErrorType;
+		httpStatus: HttpStatusCode;
+		boardObjectType?: BoardObjectType;
+	}>()
+);
+
+const notifyWithTemplateRequest = createAction(
+	"notify-with-template-request",
 	props<{
 		error: Error;
 		errorType: ErrorType;
@@ -128,7 +148,7 @@ const notifyWithTemplateAndReload = createAction(
 );
 
 const notifyWithTemplate = createAction(
-	"notify-with-template",
+	"notify-with-template-success",
 	props<{
 		error: Error;
 		errorType: ErrorType;
@@ -137,7 +157,11 @@ const notifyWithTemplate = createAction(
 	}>()
 );
 
-const reloadBoard = createAction("reload-board-request", props());
+const reloadBoard = createAction(
+	"reload-board-request",
+	props<{ id: string }>()
+);
+const reloadBoardSuccess = createAction("reload-board-success", props());
 
 const deleteBoardRequest = createAction(
 	"delete-board-request",
@@ -184,7 +208,10 @@ export {
 	updateBoardVisibilityRequest,
 	updateBoardVisibilitySuccess,
 	updateBoardVisibilityFailure,
+	notifyWithTemplateRequest,
 	notifyWithTemplate,
+	notifyWithTemplateAndReloadRequest,
 	notifyWithTemplateAndReload,
 	reloadBoard,
+	reloadBoardSuccess,
 };

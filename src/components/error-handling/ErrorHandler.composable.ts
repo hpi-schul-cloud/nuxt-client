@@ -7,7 +7,11 @@ export type ErrorType =
 	| "notCreated"
 	| "notLoaded"
 	| "notUpdated"
-	| "notDeleted";
+	| "notDeleted"
+	| "notCreatedViaSocket"
+	| "notUpdatedViaSocket"
+	| "notDeletedViaSocket"
+	| "notLoadedViaSocket";
 
 export type BoardObjectType =
 	| "board"

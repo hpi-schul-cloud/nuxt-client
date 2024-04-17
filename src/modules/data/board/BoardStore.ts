@@ -18,8 +18,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const FEATURE_SOCKET_ENABLED = true;
 
 	const restApi = useBoardRestApi();
+	const socketApi = useSocketApi();
 
-	const socketOrRest = FEATURE_SOCKET_ENABLED ? useSocketApi() : restApi;
+	const socketOrRest = FEATURE_SOCKET_ENABLED ? socketApi : restApi;
 
 	const { setEditModeId } = useSharedEditMode();
 	const { handleError, notifyWithTemplate } = useErrorHandler();
@@ -32,35 +33,54 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.fetchBoard, restApi.fetchBoard),
 			on(BoardActions.createCardRequest, socketOrRest.createCardRequest),
 			on(BoardActions.createCardSuccess, createCard),
-			on(BoardActions.createCardFailure, createCardFailure),
+			on(BoardActions.createCardFailure, socketApi.createCardFailure),
 			on(BoardActions.createColumnRequest, socketOrRest.createColumnRequest),
 			on(BoardActions.createColumnSuccess, createColumn),
+			on(BoardActions.createColumnFailure, socketApi.createColumnFailure),
 			on(BoardActions.deleteCardRequest, socketOrRest.deleteCardRequest),
 			on(BoardActions.deleteCardSuccess, deleteCard),
-
+			on(BoardActions.deleteCardFailure, socketApi.deleteCardFailure),
 			on(BoardActions.deleteColumnRequest, socketOrRest.deleteColumnRequest),
 			on(BoardActions.deleteColumnSuccess, deleteColumn),
+			on(BoardActions.deleteColumnFailure, socketApi.deleteColumnFailure),
 			on(BoardActions.moveCardRequest, socketOrRest.moveCardRequest),
 			on(BoardActions.moveCardSuccess, moveCard),
+			on(BoardActions.moveCardFailure, socketApi.moveCardFailure),
 			on(BoardActions.moveColumnRequest, socketOrRest.moveColumnRequest),
 			on(BoardActions.moveColumnSuccess, moveColumn),
+			on(BoardActions.moveColumnFailure, socketApi.moveColumnFailure),
 			on(
 				BoardActions.updateColumnTitleRequest,
 				socketOrRest.updateColumnTitleRequest
 			),
 			on(BoardActions.updateColumnTitleSuccess, updateColumnTitle),
 			on(
+				BoardActions.updateColumnTitleFailure,
+				socketApi.updateColumnTitleFailure
+			),
+			on(
 				BoardActions.updateBoardTitleRequest,
 				socketOrRest.updateBoardTitleRequest
 			),
 			on(BoardActions.updateBoardTitleSuccess, updateBoardTitle),
 			on(
+				BoardActions.updateBoardTitleFailure,
+				socketApi.updateBoardTitleFailure
+			),
+			on(
 				BoardActions.updateBoardVisibilityRequest,
 				socketOrRest.updateBoardVisibilityRequest
 			),
 			on(BoardActions.updateBoardVisibilitySuccess, updateBoardVisibility),
-			on(BoardActions.notifyWithTemplate, notifyWithTemplateRequest),
-			on(BoardActions.notifyWithTemplateAndReload, notifyWithTemplateAndReload)
+			on(BoardActions.notifyWithTemplateRequest, notifyWithTemplateRequest),
+			on(BoardActions.notifyWithTemplate, notifyWithTemplate),
+			on(
+				BoardActions.notifyWithTemplateAndReloadRequest,
+				socketApi.notifyWithTemplateAndReloadRequest
+			),
+			on(BoardActions.notifyWithTemplateAndReload, notifyWithTemplateAndReload),
+			on(BoardActions.reloadBoard, socketApi.reloadBoardRequest),
+			on(BoardActions.reloadBoardSuccess, socketApi.reloadBoardSuccess)
 		);
 	};
 
@@ -115,15 +135,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 			height: 120,
 		});
 		setEditModeId(newCard.id);
-	};
-
-	const createCardFailure = (
-		action: ReturnType<typeof BoardActions.createCardFailure>
-	) => {
-		console.log("createCardFailure", action);
-		handleError(404, {
-			404: notifyWithTemplate("notLoaded", "board"),
-		});
 	};
 
 	const deleteCard = (
@@ -295,19 +306,18 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns[targetColumnIndex].cards.splice(newIndex, 0, item);
 	};
 
-	// TODO: consider how should be error messages via socket
 	const notifyWithTemplateAndReload = (
 		action: ReturnType<typeof BoardActions.notifyWithTemplateAndReload>
 	) => {
 		if (board.value === undefined) return;
 
 		dispatch(BoardActions.notifyWithTemplate(action.payload));
-		dispatch(BoardActions.reloadBoard({}));
+		dispatch(BoardActions.reloadBoard({ id: board.value.id }));
 		setEditModeId(undefined);
 	};
 
 	const notifyWithTemplateRequest = (
-		action: ReturnType<typeof BoardActions.notifyWithTemplate>
+		action: ReturnType<typeof BoardActions.notifyWithTemplateRequest>
 	) => {
 		if (board.value === undefined) return;
 

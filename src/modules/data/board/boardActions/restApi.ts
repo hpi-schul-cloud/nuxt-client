@@ -275,8 +275,8 @@ export const useBoardRestApi = () => {
 
 		try {
 			const { addedIndex, columnId } = columnMove;
-
 			await moveColumnCall(columnId, boardStore.board.id, addedIndex);
+
 			boardStore.dispatch(BoardActions.moveColumnSuccess(action.payload));
 		} catch (error) {
 			boardStore.dispatch(
@@ -297,11 +297,8 @@ export const useBoardRestApi = () => {
 		const { columnId, newTitle } = action.payload;
 
 		try {
-			const columnIndex = getColumnIndex(columnId);
 			await updateColumnTitleCall(columnId, newTitle);
-			if (columnIndex > -1) {
-				boardStore.board.columns[columnIndex].title = newTitle;
-			}
+
 			boardStore.dispatch(
 				BoardActions.updateColumnTitleSuccess(action.payload)
 			);
@@ -325,6 +322,7 @@ export const useBoardRestApi = () => {
 
 		try {
 			await updateBoardTitleCall(boardStore.board.id, newTitle);
+
 			boardStore.dispatch(BoardActions.updateBoardTitleSuccess({ newTitle }));
 		} catch (error) {
 			boardStore.dispatch(
@@ -351,7 +349,7 @@ export const useBoardRestApi = () => {
 			);
 		} catch (error) {
 			boardStore.dispatch(
-				BoardActions.notifyWithTemplateAndReload({
+				BoardActions.notifyWithTemplateAndReloadRequest({
 					error: error as Error,
 					errorType: "notUpdated",
 					httpStatus: HttpStatusCode.NotFound,

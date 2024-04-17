@@ -303,6 +303,14 @@ export default {
 		"{type} konnte nicht geladen werden.",
 	"components.board.notifications.errors.notUpdated":
 		"Die Änderungen konnten nicht gespeichert werden.",
+	"components.board.notifications.errors.notCreatedViaSocket":
+		"{type} that is created by another user is not shown correctly, please reload the page to get updated data.",
+	"components.board.notifications.errors.notDeletedViaSocket":
+		"{type} that is deleted by another user is not shown correctly, please reload the page to get updated data.",
+	"components.board.notifications.errors.notLoadedViaSocket":
+		"{type} that is created by another user is not shown correctly, please reload the page to get updated data.",
+	"components.board.notifications.errors.notUpdatedViaSocket":
+		"Your changes could not be saved.",
 	"components.board": "Board",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
