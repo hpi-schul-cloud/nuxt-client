@@ -1,9 +1,13 @@
 import { BusinessError } from "@/store/types/commons";
 
-const BusinessErrorMessageTranslationKeyMap = new Map<string, string>([
+const ErrorTypeTranslationKeyMap = new Map<string, string>([
 	[
-		"identical_user_login_migration_system",
+		"IDENTICAL_USER_LOGIN_MIGRATION_SYSTEM",
 		"pages.administration.migration.identical_user_login_migration_system",
+	],
+	[
+		"MOIN_SCHULE_SYSTEM_NOT_FOUND",
+		"pages.administration.migration.moin_schule_system_not_found",
 	],
 ]);
 
@@ -15,13 +19,16 @@ export function useUserLoginMigrationMappings() {
 			return undefined;
 		}
 
-		const translationKey = Array.from(
-			BusinessErrorMessageTranslationKeyMap.entries()
-		).find(([key]) => businessError.message.startsWith(key))?.[1];
+		if (businessError.error && "type" in businessError.error) {
+			const translationKey = ErrorTypeTranslationKeyMap.get(
+				businessError.error.type
+			);
 
-		if (translationKey) {
-			return translationKey;
+			if (translationKey) {
+				return translationKey;
+			}
 		}
+
 		return businessError.message;
 	};
 
