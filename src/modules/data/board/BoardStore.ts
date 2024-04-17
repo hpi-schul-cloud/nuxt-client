@@ -8,6 +8,8 @@ import { useSocketApi } from "./boardActions/socketApi";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { CardMove } from "@/types/board/DragAndDrop";
+import { ColumnResponse } from "@/serverApi/v3";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
@@ -199,6 +201,42 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns.splice(addedIndex, 0, item);
 	};
 
+	const getColumnIndices = (
+		fromColumnId: string | undefined,
+		toColumnId: string | undefined,
+		columnDelta: number | undefined
+	) => {
+		const fromColumnIndex = getColumnIndex(fromColumnId);
+		const newColumnId: string | undefined =
+			columnDelta === undefined
+				? toColumnId
+				: getColumnId(fromColumnIndex + columnDelta);
+
+		return { fromColumnIndex, toColumnIndex: getColumnIndex(newColumnId) };
+	};
+
+	const isMoveValid = (
+		payload: CardMove,
+		columns: Array<ColumnResponse>,
+		targetColumnIndex: number,
+		fromColumnIndex: number
+	) => {
+		const { cardId, newIndex, oldIndex } = payload;
+		if (cardId === undefined || targetColumnIndex === undefined) return false; // ensure values are set
+
+		const movedInsideColumn = fromColumnIndex === targetColumnIndex;
+		if (movedInsideColumn) {
+			if (
+				(newIndex === oldIndex && fromColumnIndex === targetColumnIndex) || // same position
+				newIndex < 0 || // first card - can't move up
+				newIndex > columns[fromColumnIndex].cards.length - 1 // last card - can't move down
+			)
+				return false;
+		}
+
+		return true;
+	};
+
 	// TODO: refactor or create a new function for moving cards with creating column
 	const moveCard = async (
 		action: ReturnType<typeof BoardActions.moveCardSuccess>
@@ -206,7 +244,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 
 		const {
-			cardId,
 			newIndex,
 			oldIndex,
 			toColumnId,
@@ -215,31 +252,31 @@ export const useBoardStore = defineStore("boardStore", () => {
 			forceNextTick,
 		} = action.payload;
 
-		const fromColumnIndex = getColumnIndex(fromColumnId);
-		let newColumnId: string | undefined = toColumnId;
-		let newColumnIndex = getColumnIndex(toColumnId);
+		const { fromColumnIndex, toColumnIndex } = getColumnIndices(
+			fromColumnId,
+			toColumnId,
+			columnDelta
+		);
 
-		if (columnDelta !== undefined) {
-			newColumnIndex = fromColumnIndex + columnDelta;
-			newColumnId = getColumnId(newColumnIndex);
-		}
+		let targetColumnIndex = toColumnIndex;
 
-		if (newColumnId === undefined) {
+		if (toColumnIndex === -1) {
 			// need to create a new column
 			const newColumn = await restApi.createColumnRequest();
 			if (newColumn) {
-				newColumnId = newColumn?.id;
-				newColumnIndex = getColumnIndex(newColumnId);
+				targetColumnIndex = getColumnIndex(newColumn?.id);
 			}
 		}
 
-		if (cardId === undefined || newColumnIndex === undefined) return; // ensure values are set
-
-		if (fromColumnIndex === newColumnIndex) {
-			if (newIndex === oldIndex && fromColumnIndex === newColumnIndex) return; // same position
-			if (newIndex < 0) return; // first card - can't move up
-			if (newIndex > board.value.columns[fromColumnIndex].cards.length - 1)
-				return; // last card - can't move down
+		if (
+			!isMoveValid(
+				action.payload,
+				board.value.columns,
+				targetColumnIndex,
+				fromColumnIndex
+			)
+		) {
+			return;
 		}
 
 		const item = board.value.columns[fromColumnIndex].cards.splice(
@@ -255,7 +292,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			await nextTick();
 		}
 
-		board.value.columns[newColumnIndex].cards.splice(newIndex, 0, item);
+		board.value.columns[targetColumnIndex].cards.splice(newIndex, 0, item);
 	};
 
 	// TODO: consider how should be error messages via socket
