@@ -177,9 +177,7 @@ export const useBoardRestApi = () => {
 		targetColumnIndex: number,
 		fromColumnIndex: number
 	) => {
-		const { cardId, newIndex, oldIndex } = payload;
-
-		if (cardId === undefined) return false; // ensure values are set
+		const { newIndex, oldIndex } = payload;
 
 		const movedInsideColumn = fromColumnIndex === targetColumnIndex;
 		if (movedInsideColumn) {
@@ -194,7 +192,6 @@ export const useBoardRestApi = () => {
 		return true;
 	};
 
-	// TODO: investigate if move card with creating new column should be separated
 	const moveCardRequest = async (
 		action: ReturnType<typeof BoardActions.moveCardRequest>
 	): Promise<void> => {
