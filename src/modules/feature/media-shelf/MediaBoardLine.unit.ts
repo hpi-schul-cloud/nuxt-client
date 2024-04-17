@@ -165,8 +165,20 @@ describe("MediaBoardLine", () => {
 				fromLineId,
 				toLineId,
 				elementId,
+				element,
 			};
 		};
+
+		it("should remove the element from the line", async () => {
+			const { wrapper, sortableEvent, element } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			sortable.vm.$emit("end", sortableEvent);
+			await nextTick();
+
+			expect(element.parentNode?.removeChild).toHaveBeenCalled();
+		});
 
 		it("should emit the update:element-position event", async () => {
 			const { wrapper, sortableEvent, fromLineId, toLineId, elementId } =
@@ -186,6 +198,80 @@ describe("MediaBoardLine", () => {
 						newElementIndex: 1,
 						fromLineId,
 						toLineId,
+						elementId,
+					},
+				],
+			]);
+		});
+	});
+
+	describe("when dragging an element in the same line", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper();
+
+			const lineId = "lineId";
+			const elementId = "elementId";
+			const fromLine = createMock<HTMLElement>({
+				dataset: {
+					lineId,
+				},
+			});
+			const toLine = createMock<HTMLElement>({
+				dataset: {
+					lineId,
+				},
+			});
+			const element = createMock<HTMLElement>({
+				parentNode: createMock(),
+				dataset: {
+					elementId,
+				},
+			});
+			const sortableEvent: Partial<SortableEvent> = {
+				oldIndex: 0,
+				newIndex: 1,
+				from: fromLine,
+				to: toLine,
+				item: element,
+			};
+
+			return {
+				wrapper,
+				sortableEvent,
+				lineId,
+				elementId,
+				element,
+			};
+		};
+
+		it("should not remove the element from the line", async () => {
+			const { wrapper, sortableEvent, element } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			sortable.vm.$emit("end", sortableEvent);
+			await nextTick();
+
+			expect(element.parentNode?.removeChild).not.toHaveBeenCalled();
+		});
+
+		it("should emit the update:element-position event", async () => {
+			const { wrapper, sortableEvent, lineId, elementId } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			sortable.vm.$emit("end", sortableEvent);
+			await nextTick();
+
+			expect(wrapper.emitted("update:element-position")).toEqual<
+				[ElementMove][]
+			>([
+				[
+					{
+						oldElementIndex: 0,
+						newElementIndex: 1,
+						fromLineId: lineId,
+						toLineId: lineId,
 						elementId,
 					},
 				],
@@ -230,8 +316,20 @@ describe("MediaBoardLine", () => {
 				wrapper,
 				sortableEvent,
 				elementId,
+				element,
 			};
 		};
+
+		it("should remove the element from the line", async () => {
+			const { wrapper, sortableEvent, element } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			sortable.vm.$emit("end", sortableEvent);
+			await nextTick();
+
+			expect(element.parentNode?.removeChild).toHaveBeenCalled();
+		});
 
 		it("should emit the delete:element event", async () => {
 			const { wrapper, sortableEvent, elementId } = setup();

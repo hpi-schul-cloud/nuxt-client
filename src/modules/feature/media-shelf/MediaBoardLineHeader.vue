@@ -3,7 +3,6 @@
 		:isEditMode="isEditMode"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
-		@move:column-keyboard="onMoveLineKeyboard"
 	>
 		<div class="line-header mb-4 rounded" tabindex="0" ref="lineHeader">
 			<div class="d-flex align-center py-2 px-2">
@@ -66,14 +65,6 @@ const onStartEditMode = () => {
 
 const onEndEditMode = () => {
 	stopEditMode();
-};
-
-const onMoveLineKeyboard = (event: KeyboardEvent) => {
-	if (event.code === "ArrowLeft") {
-		emit("move:line-left");
-	} else if (event.code === "ArrowRight") {
-		emit("move:line-right");
-	}
 };
 
 const onUpdateTitle = (newTitle: string) => {

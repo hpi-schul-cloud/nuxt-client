@@ -89,6 +89,7 @@ describe("MediaBoardAvailableLine", () => {
 			const element = createMock<HTMLElement>({
 				parentNode: createMock(),
 			});
+
 			const sortableEvent: Partial<SortableEvent> = {
 				oldIndex: 0,
 				newIndex: 1,
@@ -102,8 +103,20 @@ describe("MediaBoardAvailableLine", () => {
 				sortableEvent,
 				toLineId,
 				availableMedium,
+				element,
 			};
 		};
+
+		it("should remove the element from the line", async () => {
+			const { wrapper, sortableEvent, element } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			sortable.vm.$emit("end", sortableEvent);
+			await nextTick();
+
+			expect(element.parentNode?.removeChild).toHaveBeenCalled();
+		});
 
 		it("should emit the create:element event", async () => {
 			const { wrapper, sortableEvent, toLineId, availableMedium } = setup();

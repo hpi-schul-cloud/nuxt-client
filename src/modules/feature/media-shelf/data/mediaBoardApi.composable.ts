@@ -110,7 +110,7 @@ export const useMediaBoardApi = () => {
 		getAvailableMedia,
 		createLine,
 		moveLine,
-		updateLineTitle: updateLineTitle,
+		updateLineTitle,
 		deleteLine,
 		createElement,
 		moveElement,
