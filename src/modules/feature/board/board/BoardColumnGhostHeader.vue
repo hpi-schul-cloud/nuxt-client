@@ -9,7 +9,7 @@
 				@click="onAddColumn"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon>
-				{{ $t("components.board.column.ghost.placeholder") }}
+				{{ label }}
 			</VBtn>
 		</div>
 		<VDivider aria-hidden="true" class="border-opacity-100" />
@@ -25,6 +25,10 @@ export default defineComponent({
 	props: {
 		isColumnActive: {
 			type: Boolean,
+			required: true,
+		},
+		label: {
+			type: String,
 			required: true,
 		},
 	},

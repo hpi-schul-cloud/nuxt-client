@@ -38,6 +38,7 @@ import { authModule, envConfigModule } from "@/store";
 import getSidebarItems, {
 	SidebarCategoryItem,
 	SidebarItem,
+	SidebarItemBase,
 } from "@/utils/sidebar-base-items";
 import { computed, defineComponent, ref } from "vue";
 import { useRoute } from "vue-router";
@@ -88,10 +89,17 @@ export default defineComponent({
 			return !!route.query.inline;
 		});
 
-		const sidebarItems = computed(() => {
-			let sidebarItems = getSidebarItems(
-				envConfigModule.getNewSchoolAdminPageAsDefault
+		const hasFeatureEnabled = (item: SidebarItemBase) => {
+			if (!item.feature) {
+				return true;
+			}
+
+			return (
+				envConfigModule.getEnv[item.feature] === (item.featureValue ?? true)
 			);
+		};
+		const sidebarItems = computed(() => {
+			let sidebarItems = getSidebarItems();
 
 			const isSidebarCategoryItem = (
 				item: SidebarItem | SidebarCategoryItem
@@ -106,8 +114,7 @@ export default defineComponent({
 					if (sidebarCategoryItem.children.length >= 1) {
 						sidebarCategoryItem.children = sidebarCategoryItem.children.filter(
 							(child) => {
-								const hasFeature =
-									!!child.feature && !!envConfigModule.getEnv[child.feature];
+								const hasFeature = hasFeatureEnabled(child);
 
 								return (
 									(!child.permission ||
