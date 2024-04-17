@@ -552,7 +552,7 @@ describe("Board", () => {
 			});
 		});
 
-		describe("@onMoveColumnLeft", () => {
+		describe("@onMoveColumnBeforePosition", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
 					const { wrapper } = setup({ board: boardWithTwoColumns });
@@ -576,14 +576,14 @@ describe("Board", () => {
 					const boardColumnComponent = wrapper.findAllComponents({
 						name: "BoardColumn",
 					});
-					boardColumnComponent[1].vm.$emit("move:column-left");
+					boardColumnComponent[1].vm.$emit("move:column-up");
 
 					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
 				});
 			});
 		});
 
-		describe("@onMoveColumnRight", () => {
+		describe("@onMoveColumnNextPosition", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
 					const { wrapper } = setup({ board: boardWithTwoColumns });
@@ -607,7 +607,7 @@ describe("Board", () => {
 					const boardColumnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
-					boardColumnComponent.vm.$emit("move:column-right");
+					boardColumnComponent.vm.$emit("move:column-down");
 
 					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
 				});

@@ -53,8 +53,12 @@
 								@delete:column="onDeleteColumn"
 								@update:card-position="onUpdateCardPosition(index, $event)"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
-								@move:column-left="onMoveColumnLeft(index, element.id)"
-								@move:column-right="onMoveColumnRight(index, element.id)"
+								@move:column-down="onMoveColumnNextPosition(index, element.id)"
+								@move:column-left="
+									onMoveColumnBeforePosition(index, element.id)
+								"
+								@move:column-right="onMoveColumnNextPosition(index, element.id)"
+								@move:column-up="onMoveColumnBeforePosition(index, element.id)"
 							/>
 						</template>
 					</Sortable>
@@ -187,7 +191,10 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 	}
 };
 
-const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
+const onMoveColumnBeforePosition = async (
+	columnIndex: number,
+	columnId: string
+) => {
 	if (!hasMovePermission) return;
 	if (columnIndex === 0) return;
 
@@ -202,7 +209,10 @@ const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
 	);
 };
 
-const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
+const onMoveColumnNextPosition = async (
+	columnIndex: number,
+	columnId: string
+) => {
 	if (!hasMovePermission) return;
 	if (board.value && columnIndex === board.value.columns.length - 1) return;
 

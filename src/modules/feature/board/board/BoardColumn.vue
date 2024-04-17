@@ -8,9 +8,12 @@
 			:title="column.title"
 			:titlePlaceholder="titlePlaceholder"
 			:index="index"
+			:isListBoard="isListBoard"
 			@delete:column="onColumnDelete"
+			@move:column-down="onMoveColumnDown"
 			@move:column-left="onMoveColumnLeft"
 			@move:column-right="onMoveColumnRight"
+			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
 			class="pl-2"
 		/>
@@ -116,8 +119,10 @@ export default defineComponent({
 		"create:card",
 		"delete:card",
 		"delete:column",
+		"move:column-down",
 		"move:column-left",
 		"move:column-right",
+		"move:column-up",
 		"reload:board",
 		"update:card-position",
 		"update:column-title",
@@ -215,12 +220,24 @@ export default defineComponent({
 			emit("update:card-position", cardMove);
 		};
 
+		const onMoveColumnDown = () => {
+			if (!props.isListBoard) return;
+			emit("move:column-down");
+		};
+
 		const onMoveColumnLeft = () => {
+			if (props.isListBoard) return;
 			emit("move:column-left");
 		};
 
 		const onMoveColumnRight = () => {
+			if (props.isListBoard) return;
 			emit("move:column-right");
+		};
+
+		const onMoveColumnUp = () => {
+			if (!props.isListBoard) return;
+			emit("move:column-up");
 		};
 
 		const onReloadBoard = () => {
@@ -235,9 +252,13 @@ export default defineComponent({
 			return props.column.cards[index];
 		};
 
-		const titlePlaceholder = computed(
-			() => `${t("components.boardColumn").toString()} ${props.index + 1}`
-		);
+		const titlePlaceholder = computed(() => {
+			const type = props.isListBoard
+				? t("components.boardSection")
+				: t("components.boardColumn");
+
+			return `${type} ${props.index + 1}`;
+		});
 
 		const columnStyle = computed(() => {
 			const classes = [];
@@ -265,8 +286,10 @@ export default defineComponent({
 			onDragStart,
 			onDragEnd,
 			onMoveCardKeyboard,
+			onMoveColumnDown,
 			onMoveColumnLeft,
 			onMoveColumnRight,
+			onMoveColumnUp,
 			onReloadBoard,
 			onUpdateTitle,
 			getChildPayload,
