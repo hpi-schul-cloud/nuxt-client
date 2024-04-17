@@ -14,7 +14,6 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { BoardResponse, CardResponse } from "@/serverApi/v3";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
@@ -30,18 +29,14 @@ describe("restApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let setEditModeId: jest.Mock;
-	let mockNewCard: CardResponse;
 
 	beforeEach(() => {
-		mockNewCard = cardResponseFactory.build();
 		setActivePinia(createTestingPinia());
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
-		mockedBoardApiCalls.createCardCall.mockResolvedValue(mockNewCard);
-
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
 		setEditModeId = jest.fn();
@@ -51,54 +46,60 @@ describe("restApi", () => {
 		});
 	});
 
+	const setup = (createBoard = true) => {
+		const boardStore = useBoardStore();
+		if (createBoard) {
+			const card = cardSkeletonResponseFactory.build();
+			const column = columnResponseFactory.build({ cards: [card] });
+			const testBoard = boardResponseFactory.build({ columns: [column] });
+			boardStore.board = testBoard;
+		}
+		return { boardStore };
+	};
+
 	describe("createCardRequest", () => {
 		it("should return if board is undefined", async () => {
-			const boardStore = useBoardStore();
+			const { boardStore } = setup(false);
 			boardStore.board = undefined;
 
 			expect(boardStore.dispatch).not.toHaveBeenCalled();
 		});
 
 		it("should dispatch createCardSuccess action if the API call is successful", async () => {
-			const boardStore = useBoardStore();
+			const { boardStore } = setup();
 			const { createCardRequest } = useBoardRestApi();
+			const columnId = boardStore.board!.columns[0].id;
 
-			const card = cardSkeletonResponseFactory.build();
-			const column = columnResponseFactory.build({ cards: [card] });
-			const testBoard = boardResponseFactory.build({ columns: [column] });
-			boardStore.board = testBoard;
+			const newCard = cardResponseFactory.build();
+			mockedBoardApiCalls.createCardCall.mockResolvedValue(newCard);
 
 			await createCardRequest(
-				BoardActions.createCardRequest({ columnId: column.id })
+				BoardActions.createCardRequest({ columnId: columnId })
 			);
 
 			expect(boardStore.dispatch).toHaveBeenCalledWith(
 				BoardActions.createCardSuccess({
-					newCard: mockNewCard,
-					columnId: column.id,
+					newCard: newCard,
+					columnId: columnId,
 				})
 			);
 		});
 
 		it("should dispatch createCardFailure action if the API call fails", async () => {
-			const boardStore = useBoardStore();
+			const { boardStore } = setup();
 			const { createCardRequest } = useBoardRestApi();
-
-			const card = cardSkeletonResponseFactory.build();
-			const column = columnResponseFactory.build({ cards: [card] });
-			const testBoard = boardResponseFactory.build({ columns: [column] });
-			boardStore.board = testBoard;
+			const columnId = boardStore.board!.columns[0].id;
 
 			mockedBoardApiCalls.createCardCall.mockRejectedValue({});
 
 			await createCardRequest(
-				BoardActions.createCardRequest({ columnId: column.id })
+				BoardActions.createCardRequest({ columnId: columnId })
 			);
 
 			expect(boardStore.dispatch).toHaveBeenCalledWith(
 				BoardActions.createCardFailure({
 					errorMessage: "unable to create card",
-					errorData: { columnId: column.id },
+					errorData: { columnId: columnId },
 				})
 			);
 		});
@@ -106,54 +107,42 @@ describe("restApi", () => {
 
 	describe("fetchBoard", () => {
 		it("should fetch and set the board", async () => {
-			const boardStore = useBoardStore();
+			const { boardStore } = setup();
 			const { fetchBoard } = useBoardRestApi();
 
 			const mockfetchBoard = boardResponseFactory.build();
 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(mockfetchBoard);
 
-			const card = cardSkeletonResponseFactory.build();
-			const column = columnResponseFactory.build({ cards: [card] });
-			const testBoard = boardResponseFactory.build({ columns: [column] });
-			boardStore.board = testBoard;
-
-			await fetchBoard(BoardActions.fetchBoard({ id: testBoard.id }));
+			await fetchBoard(BoardActions.fetchBoard({ id: boardStore.board!.id }));
 
 			expect(boardStore.setBoard).toHaveBeenCalledWith(mockfetchBoard);
 		});
 
 		it("should set loading state correct", async () => {
-			const boardStore = useBoardStore();
+			const { boardStore } = setup();
 			const { fetchBoard } = useBoardRestApi();
 
-			const card = cardSkeletonResponseFactory.build();
-			const column = columnResponseFactory.build({ cards: [card] });
-			const testBoard = boardResponseFactory.build({ columns: [column] });
-			boardStore.board = testBoard;
+			const board = boardStore.board!;
 
-			const promise = new Promise<BoardResponse>((resolve) => {
-				resolve(testBoard);
-			});
-			mockedBoardApiCalls.fetchBoardCall.mockReturnValue(promise);
+			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(board);
 
-			await fetchBoard(BoardActions.fetchBoard({ id: testBoard.id }));
+			const fetchPromise = fetchBoard(
+				BoardActions.fetchBoard({ id: board.id })
+			);
 
-			expect(boardStore.setLoading).toHaveBeenCalledWith(true);
+			expect(boardStore.setLoading).toHaveBeenLastCalledWith(true);
+			await fetchPromise;
+			expect(boardStore.setLoading).toHaveBeenLastCalledWith(false);
 		});
 
 		it("should dispatch an error if the fetch fails", async () => {
-			const boardStore = useBoardStore();
+			const { boardStore } = setup();
 			const { fetchBoard } = useBoardRestApi();
-
-			const card = cardSkeletonResponseFactory.build();
-			const column = columnResponseFactory.build({ cards: [card] });
-			const testBoard = boardResponseFactory.build({ columns: [column] });
-			boardStore.board = testBoard;
 
 			const expectedError = new Error("fetchBoard error");
 			mockedBoardApiCalls.fetchBoardCall.mockRejectedValue(expectedError);
 
-			await fetchBoard(BoardActions.fetchBoard({ id: testBoard.id }));
+			await fetchBoard(BoardActions.fetchBoard({ id: boardStore.board!.id }));
 
 			expect(boardStore.dispatch).toHaveBeenCalledWith(
 				BoardActions.notifyWithTemplate({
