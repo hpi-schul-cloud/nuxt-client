@@ -245,7 +245,7 @@ export const useBoardRestApi = () => {
 			await moveCardCall(cardId, targetColumnId, newIndex);
 
 			boardStore.dispatch(
-				BoardActions.moveCardRequest({
+				BoardActions.moveCardSuccess({
 					cardId,
 					newIndex,
 					oldIndex,
