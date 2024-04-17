@@ -304,6 +304,7 @@ export default {
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
+	"components.boardRow": "row",
 	"components.boardElement": "element",
 	"components.boardSection": "section",
 	"components.cardElement.deleteElement": "Delete element",
@@ -1546,6 +1547,8 @@ export default {
 		'Unfortunately, the move of your account to {targetSystem} failed.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Please pass on this information:<br><b>School number in {instance}: {sourceSchoolNumber}, school number in {targetSystem}: {targetSchoolNumber}</b>.",
+	"pages.userMigration.error.multipleUsersFound":
+		'This moin.schule account is already linked to an account in the Niedersächsische Bildungscloud and cannot be used again for the migration.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
 	"pages.userMigration.error.title": "Account move failed",
 	"pages.userMigration.success.description":
 		"The move of your account to {targetSystem} is complete.<br>Please register again now.",
@@ -1594,4 +1597,8 @@ export default {
 	"utils.adminFilter.placeholder.complete.name": "Filter by full first name...",
 	"utils.adminFilter.placeholder.date.from": "Created between 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
+	"feature.media-shelf.title": "Media shelf",
+	"feature.media-shelf.createLine": "Add line",
+	"feature.media-shelf.line.title": "Line",
+	"feature.media-shelf.availableLine.title": "Available media",
 };

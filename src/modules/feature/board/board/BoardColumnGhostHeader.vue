@@ -8,8 +8,7 @@
 				:color="isColumnActive ? '' : 'grey-darken-2'"
 				@click="onAddColumn"
 			>
-				<VIcon>{{ mdiPlus }}</VIcon>
-				{{ title }}
+				<VIcon>{{ mdiPlus }}</VIcon> {{ title }}
 			</VBtn>
 		</div>
 		<VDivider aria-hidden="true" class="border-opacity-100" />

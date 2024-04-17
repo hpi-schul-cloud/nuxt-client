@@ -36,10 +36,10 @@
 </template>
 <script setup lang="ts">
 import { useElementHover } from "@vueuse/core";
-import { computed, ref } from "vue";
-import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 import { Sortable } from "sortablejs-vue3";
+import { computed, ref } from "vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
+import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 
 const ghostColumnRef = ref<HTMLDivElement | undefined>();
 
