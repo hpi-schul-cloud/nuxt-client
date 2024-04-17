@@ -28,7 +28,7 @@
 					forceFallback: true,
 					bubbleScroll: true,
 				}"
-				class="d-flex flex-row flex-shrink-1 ml-n4 pl-2 sortable-container vertical"
+				:class="ghostColumnStyle"
 			/>
 		</div>
 	</div>
@@ -42,6 +42,10 @@ import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 
 const ghostColumnRef = ref<HTMLDivElement | undefined>();
 
+const props = defineProps({
+	isListBoard: { type: Boolean, required: true },
+});
+
 const emit = defineEmits(["create:column", "update:card-position"]);
 
 const isColumnHovered = useElementHover(ghostColumnRef);
@@ -51,6 +55,16 @@ const colWidth = computed<number>(() =>
 );
 
 const onAddColumn = () => emit("create:column");
+
+const ghostColumnStyle = computed(() => {
+	const classes = ["d-flex", "flex-row", "flex-shrink-1", "ml-n4", "pl-2"];
+	if (!props.isListBoard) {
+		classes.push("column-container");
+	} else {
+		classes.push("list-container");
+	}
+	return classes;
+});
 </script>
 
 <style scoped>
@@ -62,8 +76,14 @@ const onAddColumn = () => emit("create:column");
  * This rule extends the droppable area of columns.
  * Without this rule cards have to be placed closely below the last card in a column to be added.
 */
-.sortable-container.vertical {
+.column-container {
 	min-height: 70vh;
+	height: 100%;
+	padding-bottom: 50px;
+}
+
+.list-container {
+	min-height: 8rem;
 	height: 100%;
 	padding-bottom: 50px;
 }
