@@ -987,6 +987,8 @@ export default {
 	"pages.administration.migration.waiting": "Waiting for data sync...",
 	"pages.administration.migration.identical_user_login_migration_system":
 		"The migration can't be started because the target login system and your current school's login system are the same!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Cannot find moin.schule system!",
 	"pages.administration.or": "or",
 	"pages.administration.printQr.emptyUser":
 		"The selected user(s) have already been registered",

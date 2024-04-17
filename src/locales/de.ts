@@ -992,6 +992,8 @@ export default {
 		"Warten auf die Datensynchronisation...",
 	"pages.administration.migration.identical_user_login_migration_system":
 		"Die Migration kann nicht gestartet werden, weil das Ziel-Login-System und das aktuelle Login-System Ihrer Schule gleich sind!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Das moin.schule System kann nicht gefunden werden!",
 	"pages.administration.or": "oder",
 	"pages.administration.printQr.emptyUser":
 		"Dieser Nutzer wurde bereits registriert",

@@ -1017,6 +1017,8 @@ export default {
 		"Esperando la sincronización de datos...",
 	"pages.administration.migration.identical_user_login_migration_system":
 		"¡La migración no se puede iniciar porque el sistema de inicio de sesión de destino y el sistema de inicio de sesión de su escuela actual son el mismo!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"¡No puedo encontrar el sistema moin.schule!",
 	"pages.administration.or": "o",
 	"pages.administration.printQr.emptyUser":
 		"L{'@'}s usuari{'@'}s seleccionad{'@'}s ya han sido registrad{'@'}s",

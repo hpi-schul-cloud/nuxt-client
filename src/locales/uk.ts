@@ -1001,6 +1001,8 @@ export default {
 	"pages.administration.migration.waiting": "Очікування синхронізації даних...",
 	"pages.administration.migration.identical_user_login_migration_system":
 		"Неможливо розпочати міграцію, оскільки цільова система входу та система входу вашої поточної школи однакові!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Не вдається знайти систему moin.schule!",
 	"pages.administration.or": "або",
 	"pages.administration.printQr.emptyUser":
 		"Вибраний користувач(-і) вже зареєстрований(-і)",
