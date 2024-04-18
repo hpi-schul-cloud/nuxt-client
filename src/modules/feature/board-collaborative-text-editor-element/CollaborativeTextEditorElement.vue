@@ -23,7 +23,7 @@
 			<template #title>
 				{{ $t("components.cardElement.collaborativeTextEditorElement") }}
 			</template>
-			<template #menu v-if="isEditMode && isTeacher">
+			<template #menu v-if="isEditMode">
 				<BoardMenu scope="element">
 					<BoardMenuActionMoveUp @click="onMoveUp" />
 					<BoardMenuActionMoveDown @click="onMoveDown" />
@@ -41,8 +41,6 @@ import {
 	CollaborativeTextEditorElementResponse,
 	CollaborativeTextEditorParentType,
 } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler } from "@data-board";
 import {
 	BoardMenu,
@@ -51,7 +49,7 @@ import {
 	BoardMenuActionMoveUp,
 	ContentElementBar,
 } from "@ui-board";
-import { PropType, computed, ref, toRef } from "vue";
+import { PropType, ref, toRef } from "vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 
 const props = defineProps({
@@ -73,14 +71,7 @@ const collaborativeTextEditorElement = ref<HTMLElement | null>(null);
 const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, collaborativeTextEditorElement);
 
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const userRoles = ref(authModule.getUserRoles);
-
 const { getUrl } = useCollaborativeTextEditorApi();
-
-const isTeacher = computed(() => {
-	return userRoles.value.includes("teacher");
-});
 
 const redirectToEditorUrl = async () => {
 	const url = await getUrl(
