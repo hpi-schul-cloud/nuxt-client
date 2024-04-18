@@ -1,32 +1,17 @@
-import {
-	CollaborativeTextEditorElementResponse,
-	ContentElementType,
-} from "@/serverApi/v3";
-import { ConfigResponse } from "@/serverApi/v3/api";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { collaborativeTextEditorElementResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
-import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-} from "@ui-board";
-import { shallowMount } from "@vue/test-utils";
+import { ContentElementBar } from "@ui-board";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import CollaborativeTextEditorElement from "./CollaborativeTextEditorElement.vue";
-import InnerContent from "./InnerContent.vue";
+import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 
 // Mocks
 jest.mock("@data-board", () => ({
@@ -36,57 +21,36 @@ jest.mock("@data-board", () => ({
 }));
 jest.mock("@feature-board");
 
-const COLLABORATIVE_TEXTEDITOR_ELEMENT: CollaborativeTextEditorElementResponse =
-	{
-		id: "test-id",
-		type: ContentElementType.CollaborativeTextEditor,
-		content: {
-			editorId: "editor-id",
-		},
-		timestamps: {
-			createdAt: new Date().toISOString(),
-			lastUpdatedAt: new Date().toISOString(),
-		},
-	};
-
-const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<ConfigResponse>({
-		FEATURE_TLDRAW_ENABLED: true,
-	}),
-});
-
 describe("CollaborativeTextEditorElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 
-	const setup = (props: {
-		element: CollaborativeTextEditorElementResponse;
-		isEditMode: boolean;
-		isTeacher?: boolean;
-	}) => {
+	const setup = (props: { isEditMode: boolean }) => {
 		document.body.setAttribute("data-app", "true");
 
-		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: ["teacher"],
-		});
+		const COLLABORATIVE_TEXTEDITOR_ELEMENT =
+			collaborativeTextEditorElementResponseFactory.build();
 
-		const wrapper = shallowMount(CollaborativeTextEditorElement, {
+		const wrapper = mount(CollaborativeTextEditorElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
-			propsData: props,
+			propsData: { ...props, element: COLLABORATIVE_TEXTEDITOR_ELEMENT },
+			attachTo: document.body,
 		});
-		return { wrapper, isEditMode: true, isTeacher: true };
+
+		return { wrapper, isEditMode: true };
 	};
 
-	describe("when component is mounted", () => {
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
+
+	describe("when component is not in edit-mode", () => {
 		it("should render the element corrrectly", () => {
 			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 				isEditMode: false,
 			});
 			expect(
@@ -94,151 +58,103 @@ describe("CollaborativeTextEditorElement", () => {
 			).toBe(true);
 		});
 
-		it("should render the InnerContent element correctly", () => {
+		it("should render the ContentElementBar", () => {
 			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 				isEditMode: false,
 			});
-			expect(wrapper.findComponent(InnerContent).exists()).toBe(true);
+			expect(wrapper.findComponent(ContentElementBar).exists()).toBe(true);
 		});
 
-		it("should render BoardMenu element correctly", async () => {
+		it("should not render the BoardMenu", () => {
 			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-				isEditMode: true,
+				isEditMode: false,
 			});
 
-			const board = wrapper.findComponent(BoardMenu);
-			expect(board.exists()).toBe(true);
-		});
+			const boardMenu = wrapper.findComponent(
+				CollaborativeTextEditorElementMenu
+			);
 
-		it("should render BoardMenuActionMoveUp element correctly", async () => {
-			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-				isEditMode: true,
-			});
-
-			const moveUp = wrapper.findComponent(BoardMenuActionMoveUp);
-			expect(moveUp.exists()).toBe(true);
-		});
-
-		it("should render BoardMenuActionMoveDown element correctly", async () => {
-			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-				isEditMode: true,
-			});
-
-			const moveDown = wrapper.findComponent(BoardMenuActionMoveDown);
-			expect(moveDown.exists()).toBe(true);
-		});
-
-		it("should render BoardMenuActionDelete element correctly", async () => {
-			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-				isEditMode: true,
-			});
-
-			const actionDelete = wrapper.findComponent(BoardMenuActionDelete);
-			expect(actionDelete.exists()).toBe(true);
-		});
-
-		describe("when component is in edit-mode", () => {
-			describe("when move down is clicked", () => {
-				it('should emit "move-down" collaborative text editor', async () => {
-					const { wrapper } = setup({
-						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-						isEditMode: true,
-					});
-
-					wrapper.findComponent(BoardMenuActionMoveDown).vm.$emit("click");
-
-					expect(wrapper.emitted("move-down:edit")).toBeTruthy();
-				});
-			});
-
-			describe("when move up is clicked", () => {
-				it('should emit "move-up" collaborative text editor', async () => {
-					const { wrapper } = setup({
-						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-						isEditMode: true,
-					});
-
-					wrapper.findComponent(BoardMenuActionMoveUp).vm.$emit("click");
-
-					expect(wrapper.emitted("move-up:edit")).toBeTruthy();
-				});
-			});
-
-			describe("when delete is clicked", () => {
-				it('should emit "delete" collaborative text editor', async () => {
-					const { wrapper } = setup({
-						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-						isEditMode: true,
-					});
-
-					wrapper
-						.findComponent(BoardMenuActionDelete)
-						.vm.$emit("click", Promise.resolve(true));
-					await nextTick();
-					expect(wrapper.emitted("delete:element")).toBeTruthy();
-				});
-			});
-		});
-
-		describe("when component is NOT in edit-mode", () => {
-			it('should NOT emit "move-down" collaborative text editor', async () => {
-				const { wrapper } = setup({
-					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-					isEditMode: false,
-					isTeacher: false,
-				});
-
-				expect(wrapper.findComponent(BoardMenuActionMoveDown).exists()).toBe(
-					false
-				);
-			});
-
-			it('should NOT emit "move-up" collaborative text editor', async () => {
-				const { wrapper } = setup({
-					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-					isEditMode: false,
-					isTeacher: false,
-				});
-
-				expect(wrapper.findComponent(BoardMenuActionMoveUp).exists()).toBe(
-					false
-				);
-			});
-
-			it('should NOT emit "delete" collaborative text editor', async () => {
-				const { wrapper } = setup({
-					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
-					isEditMode: false,
-					isTeacher: false,
-				});
-
-				expect(wrapper.findComponent(BoardMenuActionDelete).exists()).toBe(
-					false
-				);
-			});
+			expect(boardMenu.exists()).toBe(false);
 		});
 
 		describe("when element is clicked", () => {
 			it("should open collaborative text editor in new tab correctly", async () => {
 				const { wrapper } = setup({
-					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 					isEditMode: false,
 				});
-				const divElement = wrapper.find("div");
-				window.open = jest.fn();
 
-				await divElement.trigger("click");
+				const windowMock = createMock<Window>();
+				const spy = jest
+					.spyOn(window, "open")
+					.mockImplementation(() => windowMock);
 
-				wrapper.vm.$nextTick(() =>
-					window.open(`/tldraw?roomName=test-id`, "_blank")
+				const card = wrapper.find(
+					"[data-testId=collaborative-text-editor-element]"
 				);
 
-				expect(window.open).toHaveBeenCalledTimes(1);
+				card.trigger("click");
+				await nextTick();
+
+				expect(spy).toHaveBeenCalledTimes(1);
+			});
+		});
+	});
+
+	describe("when component is in edit-mode", () => {
+		it("should render BoardMenu element", async () => {
+			const { wrapper } = setup({
+				isEditMode: true,
+			});
+
+			const boardMenu = wrapper.findComponent(
+				CollaborativeTextEditorElementMenu
+			);
+			expect(boardMenu.exists()).toBe(true);
+		});
+
+		describe("when move down is emitted by CollaborativeTextEditorElementMenu", () => {
+			it('should emit "move-down:edit" collaborative text editor', async () => {
+				const { wrapper } = setup({
+					isEditMode: true,
+				});
+
+				const boardMenu = wrapper.findComponent(
+					CollaborativeTextEditorElementMenu
+				);
+				boardMenu.vm.$emit("move-down:element");
+
+				expect(wrapper.emitted("move-down:edit")).toBeTruthy();
+			});
+		});
+
+		describe("when move up is clicked", () => {
+			it('should emit "move-up" collaborative text editor', async () => {
+				const { wrapper } = setup({
+					isEditMode: true,
+				});
+
+				const boardMenu = wrapper.findComponent(
+					CollaborativeTextEditorElementMenu
+				);
+				boardMenu.vm.$emit("move-up:element");
+
+				expect(wrapper.emitted("move-up:edit")).toBeTruthy();
+			});
+		});
+
+		describe("when delete is clicked", () => {
+			it('should emit "delete" collaborative text editor', async () => {
+				const { wrapper } = setup({
+					isEditMode: true,
+				});
+
+				const boardMenu = wrapper.findComponent(
+					CollaborativeTextEditorElementMenu
+				);
+				boardMenu.vm.$emit("delete:element", Promise.resolve(true));
+				await nextTick();
+
+				expect(wrapper.emitted("delete:element")).toBeTruthy();
 			});
 		});
 	});

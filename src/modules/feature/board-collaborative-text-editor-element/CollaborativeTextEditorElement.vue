@@ -9,42 +9,44 @@
 		elevation="0"
 		@keydown.up.down="onKeydownArrow"
 		role="button"
+		@click="redirectToEditorUrl"
 	>
-		<div
-			class="collaborative-text-editor-element-content"
-			@click="redirectToSanitizedUrl"
-		>
-			<CollaborativeTextEditor :docName="element.id">
-				<template v-if="isEditMode && isTeacher">
-					<BoardMenu scope="element">
-						<BoardMenuActionMoveUp @click="onMoveUp" />
-						<BoardMenuActionMoveDown @click="onMoveDown" />
-						<BoardMenuActionDelete @click="onDelete" />
-					</BoardMenu>
-				</template>
-			</CollaborativeTextEditor>
-		</div>
+		<ContentElementBar :hasGreyBackground="true" :icon="mdiTextBoxEditOutline">
+			<template #display>
+				<v-img
+					:src="image"
+					:alt="$t('components.cardElement.collaborativeTextEditorElement')"
+					cover
+					class="rounded-t"
+				/>
+			</template>
+			<template #title>
+				{{ $t("components.cardElement.collaborativeTextEditorElement") }}
+			</template>
+			<template #menu>
+				<CollaborativeTextEditorElementMenu
+					v-if="isEditMode"
+					@move-down:element="onMoveDown"
+					@move-up:element="onMoveUp"
+					@delete:element="onDelete"
+				/>
+			</template>
+		</ContentElementBar>
 	</v-card>
 </template>
 
 <script setup lang="ts">
+import image from "@/assets/img/collaborativeEditor.svg";
+import { mdiTextBoxEditOutline } from "@mdi/js";
 import {
 	CollaborativeTextEditorElementResponse,
 	CollaborativeTextEditorParentType,
 } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
-import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-} from "@ui-board";
-import { PropType, computed, ref, toRef } from "vue";
-import CollaborativeTextEditor from "./content/CollaborativeTextEditor.vue";
-import { useCollaborativeTextEditorApi } from "./shared/composables/CollaborativeTextEditorApi.composable";
+import { ContentElementBar } from "@ui-board";
+import { PropType, ref, toRef } from "vue";
+import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
+import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 
 const props = defineProps({
 	element: {
@@ -65,23 +67,17 @@ const collaborativeTextEditorElement = ref<HTMLElement | null>(null);
 const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, collaborativeTextEditorElement);
 
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const userRoles = ref(authModule.getUserRoles);
-
 const { getUrl } = useCollaborativeTextEditorApi();
 
-const isTeacher = computed(() => {
-	return userRoles.value.includes("teacher");
-});
-
-const redirectToSanitizedUrl = async () => {
+const redirectToEditorUrl = async () => {
 	const url = await getUrl(
 		element.value.id,
 		CollaborativeTextEditorParentType.ContentElement
 	);
-	const sanitizedUrl = sanitizeUrl(url);
 
-	window.open(sanitizedUrl, "_blank");
+	if (url) {
+		window.open(url, "_blank");
+	}
 };
 
 const onKeydownArrow = (event: KeyboardEvent) => {

@@ -1,4 +1,4 @@
-import { NOTIFIER_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useI18n } from "vue-i18n";
 
 export const useCollaborativeTextEditorNotifier = () => {
@@ -26,9 +26,9 @@ export const useCollaborativeTextEditorNotifier = () => {
 	};
 
 	const showInternalServerError = () => {
-		const message = t(
-			"components.board.notifications.errors.fileServiceNotAvailable"
-		);
+		const message = t("components.board.notifications.errors.notCreated", {
+			type: t("components.cardElement.collaborativeTextEditorElement"),
+		});
 
 		showFailure(message);
 	};
