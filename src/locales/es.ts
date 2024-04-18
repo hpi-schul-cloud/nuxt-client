@@ -309,6 +309,7 @@ export default {
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
+	"components.boardRow": "línea",
 	"components.boardElement": "elemento",
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
@@ -1646,4 +1647,8 @@ export default {
 		"Filtrar por nombre completo...",
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
+	"feature.media-shelf.title": "Estante multimedia",
+	"feature.media-shelf.createLine": "Añadir línea",
+	"feature.media-shelf.line.title": "Línea",
+	"feature.media-shelf.availableLine.title": "Medios disponibles",
 };

@@ -43,6 +43,7 @@
 			"@feature-editor": ["src/modules/feature/editor"],
 			"@feature-render-html": ["src/modules/feature/render-html"],
 			"@feature-news-form": ["src/modules/feature/news-form"],
+			"@feature-media-shelf": ["src/modules/feature/media-shelf"],
 			"@ui-alert": ["src/modules/ui/alert"],
 			"@ui-board": ["src/modules/ui/board"],
 			"@ui-confirmation-dialog": ["src/modules/ui/confirmation-dialog"],
@@ -59,6 +60,7 @@
 			"@util-device-detection": ["src/modules/util/device-detection"],
 			"@page-board": ["src/modules/page/board"],
 			"@page-class-members": ["src/modules/page/class-members"],
+			"@page-media-shelf": ["src/modules/page/media-shelf"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},
