@@ -8,12 +8,6 @@
 
 <script lang="ts">
 import {
-	mdiArrowCollapseDown,
-	mdiArrowCollapseUp,
-	mdiCogOutline,
-	mdiTrashCanOutline,
-} from "@mdi/js";
-import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
@@ -28,15 +22,8 @@ export default defineComponent({
 		BoardMenuActionMoveUp,
 		BoardMenuActionMoveDown,
 	},
-	emits: [
-		"edit:element",
-		"delete:element",
-		"move-down:element",
-		"move-up:element",
-	],
+	emits: ["delete:element", "move-down:element", "move-up:element"],
 	setup(_, { emit }) {
-		const onEdit = () => emit("edit:element");
-
 		const onDelete = async (confirmation: Promise<boolean>) => {
 			const shouldDelete = await confirmation;
 			if (shouldDelete) {
@@ -49,11 +36,6 @@ export default defineComponent({
 		const onMoveUp = () => emit("move-up:element");
 
 		return {
-			mdiArrowCollapseUp,
-			mdiArrowCollapseDown,
-			mdiTrashCanOutline,
-			mdiCogOutline,
-			onEdit,
 			onDelete,
 			onMoveDown,
 			onMoveUp,
