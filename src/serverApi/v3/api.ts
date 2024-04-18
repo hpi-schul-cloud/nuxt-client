@@ -905,6 +905,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_MEDIA_SHELF_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_MIGRATION_WIZARD_WITH_USER_LOGIN_MIGRATION: boolean;
 }
 /**
  * 
