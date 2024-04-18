@@ -15,7 +15,7 @@ import {
 import { createTestingPinia } from "@pinia/testing";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { CardMove } from "@/types/board/DragAndDrop";
+import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -62,7 +62,7 @@ describe("restApi", () => {
 	};
 
 	describe("createCardRequest", () => {
-		it("should return if board is undefined", async () => {
+		it("should not dispatch when board is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { createCardRequest } = useBoardRestApi();
 			boardStore.board = undefined;
@@ -165,7 +165,7 @@ describe("restApi", () => {
 	});
 
 	describe("createColumnRequest", () => {
-		it("should return if board is undefined", async () => {
+		it("should not dispatch when board is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { createColumnRequest } = useBoardRestApi();
 
@@ -212,7 +212,7 @@ describe("restApi", () => {
 	});
 
 	describe("deleteCardRequest", () => {
-		it("should return if board is undefined", async () => {
+		it("should not dispatch when board is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { deleteCardRequest } = useBoardRestApi();
 
@@ -461,7 +461,7 @@ describe("restApi", () => {
 				);
 			});
 
-			it("should dispatch moveCardSuccess if card is moved to another columm the API call is successful", async () => {
+			it("should dispatch moveCardSuccess if card is moved to another columm and the API call is successful", async () => {
 				const { boardStore } = setup();
 				const { moveCardRequest } = useBoardRestApi();
 
@@ -512,6 +512,251 @@ describe("restApi", () => {
 					})
 				);
 			});
+		});
+	});
+
+	describe("moveColumnRequest", () => {
+		it("should not dispatch when board value is undefined", async () => {
+			const { boardStore } = setup(false);
+			const { moveColumnRequest } = useBoardRestApi();
+
+			const columnMove = { addedIndex: 1, columnId: "columnId" };
+			await moveColumnRequest(
+				boardActions.moveColumnRequest({ columnMove, byKeyboard: false })
+			);
+
+			expect(boardStore.dispatch).not.toHaveBeenCalled();
+		});
+
+		it("should dispatch moveColumnSuccess if the API call is successful", async () => {
+			const { boardStore } = setup();
+			const { moveColumnRequest } = useBoardRestApi();
+
+			const firstColumn = boardStore.board!.columns[0];
+
+			const columnMove: ColumnMove = {
+				removedIndex: 0,
+				addedIndex: 1,
+				columnId: firstColumn.id,
+			};
+
+			await moveColumnRequest(
+				boardActions.moveColumnRequest({ columnMove, byKeyboard: false })
+			);
+
+			expect(boardStore.dispatch).toHaveBeenCalledWith(
+				BoardActions.moveColumnSuccess({ columnMove, byKeyboard: false })
+			);
+		});
+
+		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+			const { boardStore } = setup();
+			const { moveColumnRequest } = useBoardRestApi();
+
+			const firstColumn = boardStore.board!.columns[0];
+
+			const columnMove: ColumnMove = {
+				removedIndex: 0,
+				addedIndex: 1,
+				columnId: firstColumn.id,
+			};
+			const expectedError = new Error("moveColumnCall error");
+			mockedBoardApiCalls.moveColumnCall.mockRejectedValue(expectedError);
+
+			await moveColumnRequest(
+				boardActions.moveColumnRequest({ columnMove, byKeyboard: false })
+			);
+
+			expect(boardStore.dispatch).toHaveBeenCalledWith(
+				BoardActions.notifyWithTemplateAndReload({
+					error: expectedError,
+					errorType: "notUpdated",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "boardColumn",
+				})
+			);
+		});
+	});
+
+	describe("updateColumnTitleRequest", () => {
+		it("should not dispatch when board value is undefined", async () => {
+			const { boardStore } = setup(false);
+			const { updateColumnTitleRequest } = useBoardRestApi();
+
+			await updateColumnTitleRequest(
+				boardActions.updateColumnTitleRequest({
+					columnId: "columnId",
+					newTitle: "newTitle",
+				})
+			);
+
+			expect(boardStore.dispatch).not.toHaveBeenCalled();
+		});
+
+		it("should dispatch updateColumnTitleSuccess if the API call is successful", async () => {
+			const { boardStore } = setup();
+			const { updateColumnTitleRequest } = useBoardRestApi();
+
+			const firstColumn = boardStore.board!.columns[0];
+			const payload = { columnId: firstColumn.id, newTitle: "newTitle" };
+
+			await updateColumnTitleRequest(
+				boardActions.updateColumnTitleRequest(payload)
+			);
+
+			expect(boardStore.dispatch).toHaveBeenCalledWith(
+				BoardActions.updateColumnTitleSuccess(payload)
+			);
+		});
+
+		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+			const { boardStore } = setup();
+			const { updateColumnTitleRequest } = useBoardRestApi();
+
+			const firstColumn = boardStore.board!.columns[0];
+			const payload = { columnId: firstColumn.id, newTitle: "newTitle" };
+
+			const expectedError = new Error("updateColumnTitleCall error");
+			mockedBoardApiCalls.updateColumnTitleCall.mockRejectedValue(
+				expectedError
+			);
+
+			await updateColumnTitleRequest(
+				boardActions.updateColumnTitleRequest(payload)
+			);
+
+			expect(boardStore.dispatch).toHaveBeenCalledWith(
+				BoardActions.notifyWithTemplateAndReload({
+					error: expectedError,
+					errorType: "notUpdated",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "boardColumn",
+				})
+			);
+		});
+	});
+
+	describe("updateBoardTitleRequest", () => {
+		it("should not dispatch when board value is undefined", async () => {
+			const { boardStore } = setup(false);
+			const { updateBoardTitleRequest } = useBoardRestApi();
+
+			await updateBoardTitleRequest(
+				boardActions.updateBoardTitleRequest({ newTitle: "newTitle" })
+			);
+
+			expect(boardStore.dispatch).not.toHaveBeenCalled();
+		});
+
+		it("should dispatch updateBoardTitleSuccess if the API call is successful", async () => {
+			const { boardStore } = setup();
+			const { updateBoardTitleRequest } = useBoardRestApi();
+
+			const newTitle = "newTitle";
+
+			await updateBoardTitleRequest(
+				boardActions.updateBoardTitleRequest({ newTitle })
+			);
+
+			expect(boardStore.dispatch).toHaveBeenCalledWith(
+				BoardActions.updateBoardTitleSuccess({ newTitle })
+			);
+		});
+
+		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+			const { boardStore } = setup();
+			const { updateBoardTitleRequest } = useBoardRestApi();
+
+			const newTitle = "newTitle";
+
+			const expectedError = new Error("updateBoardTitleCall error");
+			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue(expectedError);
+
+			await updateBoardTitleRequest(
+				boardActions.updateBoardTitleRequest({ newTitle })
+			);
+
+			expect(boardStore.dispatch).toHaveBeenCalledWith(
+				BoardActions.notifyWithTemplateAndReload({
+					error: expectedError,
+					errorType: "notUpdated",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "board",
+				})
+			);
+		});
+	});
+
+	describe("updateBoardVisibilityRequest", () => {
+		it("should not dispatch when board value is undefined", async () => {
+			const { boardStore } = setup(false);
+			const { updateBoardVisibilityRequest } = useBoardRestApi();
+
+			await updateBoardVisibilityRequest(
+				boardActions.updateBoardVisibilityRequest({ newVisibility: true })
+			);
+
+			expect(boardStore.dispatch).not.toHaveBeenCalled();
+		});
+
+		it("should dispatch updateBoardVisibilitySuccess if the API call is successful", async () => {
+			const { boardStore } = setup();
+			const { updateBoardVisibilityRequest } = useBoardRestApi();
+
+			const newVisibility = true;
+
+			await updateBoardVisibilityRequest(
+				boardActions.updateBoardVisibilityRequest({ newVisibility })
+			);
+
+			expect(boardStore.dispatch).toHaveBeenCalledWith(
+				BoardActions.updateBoardVisibilitySuccess({ newVisibility })
+			);
+		});
+
+		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+			const { boardStore } = setup();
+			const { updateBoardVisibilityRequest } = useBoardRestApi();
+
+			const expectedError = new Error("updateBoardVisibilityCall error");
+			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue(
+				expectedError
+			);
+
+			await updateBoardVisibilityRequest(
+				boardActions.updateBoardVisibilityRequest({ newVisibility: true })
+			);
+
+			expect(boardStore.dispatch).toHaveBeenCalledWith(
+				BoardActions.notifyWithTemplateAndReloadRequest({
+					error: expectedError,
+					errorType: "notUpdated",
+					httpStatus: HttpStatusCode.NotFound,
+					boardObjectType: "board",
+				})
+			);
+		});
+	});
+
+	describe("reloadBoard", () => {
+		it("should not fetch when board value is undefined", async () => {
+			setup(false);
+			const { reloadBoard } = useBoardRestApi();
+
+			await reloadBoard();
+
+			expect(mockedBoardApiCalls.fetchBoardCall).not.toHaveBeenCalled();
+		});
+
+		it("should fetch the board", async () => {
+			const { boardStore } = setup();
+			const { reloadBoard } = useBoardRestApi();
+
+			await reloadBoard();
+
+			expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalledWith(
+				boardStore.board!.id
+			);
 		});
 	});
 });
