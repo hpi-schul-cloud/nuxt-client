@@ -13,7 +13,12 @@
 	>
 		<ContentElementBar :hasGreyBackground="true" :icon="mdiTextBoxEditOutline">
 			<template #display>
-				<v-img :src="image" height="185px" alt="" cover class="rounded-t" />
+				<v-img
+					:src="image"
+					:alt="$t('components.cardElement.collaborativeTextEditorElement')"
+					cover
+					class="rounded-t"
+				/>
 			</template>
 			<template #title>
 				{{ $t("components.cardElement.collaborativeTextEditorElement") }}
