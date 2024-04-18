@@ -50,9 +50,12 @@ describe("restApi", () => {
 	const setup = (createBoard = true) => {
 		const boardStore = useBoardStore();
 		if (createBoard) {
-			const card = cardSkeletonResponseFactory.build();
-			const column = columnResponseFactory.build({ cards: [card] });
-			const testBoard = boardResponseFactory.build({ columns: [column] });
+			const cards = cardSkeletonResponseFactory.buildList(3);
+			const firstColumn = columnResponseFactory.build({ cards });
+			const secondColumn = columnResponseFactory.build({});
+			const testBoard = boardResponseFactory.build({
+				columns: [firstColumn, secondColumn],
+			});
 			boardStore.board = testBoard;
 		}
 		return { boardStore };
@@ -61,7 +64,12 @@ describe("restApi", () => {
 	describe("createCardRequest", () => {
 		it("should return if board is undefined", async () => {
 			const { boardStore } = setup(false);
+			const { createCardRequest } = useBoardRestApi();
 			boardStore.board = undefined;
+
+			await createCardRequest(
+				BoardActions.createCardRequest({ columnId: "columnId" })
+			);
 
 			expect(boardStore.dispatch).not.toHaveBeenCalled();
 		});
@@ -294,38 +302,216 @@ describe("restApi", () => {
 	});
 
 	describe("moveCardRequest", () => {
-		test.todo("should return if board is undefined");
-		test.todo(
-			"should dispatch moveCardSuccess action if the API call is successful"
-		);
-		test.todo(
-			"should dispatch notifyWithTemplateAndReload action if the API call fails"
-		);
-		describe("move is invalid", () => {
+		const createCardPayload = ({
+			cardId,
+			oldIndex,
+			newIndex,
+			fromColumnId,
+			toColumnId,
+			columnDelta,
+		}: {
+			cardId: string;
+			oldIndex?: number;
+			newIndex?: number;
+			fromColumnId: string;
+			toColumnId?: string;
+			columnDelta?: number;
+		}) => {
+			const cardPayload: CardMove = {
+				cardId,
+				oldIndex: oldIndex ?? 0,
+				newIndex: newIndex ?? 0,
+				fromColumnId,
+				toColumnId,
+				columnDelta,
+			};
+			return cardPayload;
+		};
+		it("should not dispatch when board value is undefined", async () => {
+			const { boardStore } = setup(false);
+			const { moveCardRequest } = useBoardRestApi();
+
+			const cardPayload = createCardPayload({
+				cardId: "cardId",
+				fromColumnId: "columnId",
+			});
+
+			await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+
+			expect(boardStore.dispatch).not.toHaveBeenCalled();
+		});
+
+		describe("when move is invalid", () => {
 			it("should not call moveCardCall if card is moved to the same position", async () => {
 				const { boardStore } = setup();
 				const { moveCardRequest } = useBoardRestApi();
-				const card = boardStore.board!.columns[0].cards[0];
 
-				const cardMove: CardMove = {
-					cardId: card.cardId,
-					oldIndex: 1,
-					newIndex: 1,
-					fromColumnId: boardStore.board!.columns[0].id,
-					toColumnId: boardStore.board!.columns[0].id,
-				};
+				const firstColumn = boardStore.board!.columns[0];
+				const movingCard = firstColumn.cards[0];
 
-				await moveCardRequest(boardActions.moveCardRequest(cardMove));
+				const cardPayload = createCardPayload({
+					cardId: movingCard.cardId,
+					fromColumnId: firstColumn.id,
+					toColumnId: firstColumn.id,
+				});
+
+				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
 
 				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
 			});
 
-			test.todo(
-				"should not call moveCardCall if first card is moved to the first position"
-			);
-			test.todo(
-				"should not call moveCardCall if last card is moved to the last position"
-			);
+			it("should not call moveCardCall if first card is moved to the first position", async () => {
+				const { boardStore } = setup();
+				const { moveCardRequest } = useBoardRestApi();
+
+				const firstColumn = boardStore.board!.columns[0];
+				const firstCard = firstColumn.cards[0];
+
+				const cardPayload = createCardPayload({
+					cardId: firstCard.cardId,
+					newIndex: -1,
+					fromColumnId: firstColumn.id,
+					toColumnId: firstColumn.id,
+				});
+
+				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+
+				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
+			});
+
+			it("should not call moveCardCall if last card is moved to the last position", async () => {
+				const { boardStore } = setup();
+				const { moveCardRequest } = useBoardRestApi();
+
+				const column1 = boardStore.board!.columns[0];
+				const lastCard = column1.cards[2];
+
+				const cardPayload = createCardPayload({
+					cardId: lastCard.cardId,
+					oldIndex: 2,
+					newIndex: 3,
+					fromColumnId: column1.id,
+					toColumnId: column1.id,
+				});
+
+				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+
+				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when move is valid", () => {
+			it("should dispatch moveCardSuccess if card is moved inside same column and Api call is successful", async () => {
+				const { boardStore } = setup();
+				const { moveCardRequest } = useBoardRestApi();
+
+				const firstColumn = boardStore.board!.columns[0];
+				const movingCard = firstColumn.cards[0];
+
+				const cardPayload = createCardPayload({
+					cardId: movingCard.cardId,
+					oldIndex: 0,
+					newIndex: 2,
+					fromColumnId: firstColumn.id,
+					toColumnId: firstColumn.id,
+				});
+
+				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+
+				expect(boardStore.dispatch).toHaveBeenCalledWith(
+					boardActions.moveCardSuccess(cardPayload)
+				);
+			});
+
+			it("should dispatch moveCardSuccess if card is moved beyond last column and the API call is successful", async () => {
+				const { boardStore } = setup();
+				const { moveCardRequest } = useBoardRestApi();
+
+				const firstColumn = boardStore.board!.columns[0];
+				const movingCard = firstColumn.cards[0];
+
+				const cardPayload = createCardPayload({
+					cardId: movingCard.cardId,
+					fromColumnId: firstColumn.id,
+					columnDelta: 2,
+				});
+
+				const newColumn = columnResponseFactory.build();
+
+				mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
+
+				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+
+				expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalledWith(
+					movingCard.cardId,
+					newColumn.id,
+					0
+				);
+
+				expect(boardStore.dispatch).toHaveBeenCalledWith(
+					boardActions.moveCardSuccess({
+						cardId: movingCard.cardId,
+						oldIndex: 0,
+						newIndex: 0,
+						fromColumnId: firstColumn.id,
+						toColumnId: newColumn.id,
+						columnDelta: 2,
+						forceNextTick: undefined,
+					})
+				);
+			});
+
+			it("should dispatch moveCardSuccess if card is moved to another columm the API call is successful", async () => {
+				const { boardStore } = setup();
+				const { moveCardRequest } = useBoardRestApi();
+
+				const firstColumn = boardStore.board!.columns[0];
+				const secondColumn = boardStore.board!.columns[1];
+				const movingCard = firstColumn.cards[1];
+
+				const cardPayload = createCardPayload({
+					cardId: movingCard.cardId,
+					oldIndex: 1,
+					newIndex: 0,
+					fromColumnId: firstColumn.id,
+					toColumnId: secondColumn.id,
+				});
+
+				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+
+				expect(boardStore.dispatch).toHaveBeenCalledWith(
+					boardActions.moveCardSuccess(cardPayload)
+				);
+			});
+			it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+				const { boardStore } = setup();
+				const { moveCardRequest } = useBoardRestApi();
+
+				const firstColumn = boardStore.board!.columns[0];
+				const movingCard = firstColumn.cards[0];
+
+				const cardPayload = createCardPayload({
+					cardId: movingCard.cardId,
+					oldIndex: 0,
+					newIndex: 2,
+					fromColumnId: firstColumn.id,
+					toColumnId: firstColumn.id,
+				});
+
+				const expectedError = new Error("moveCardCall error");
+				mockedBoardApiCalls.moveCardCall.mockRejectedValue(expectedError);
+
+				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+
+				expect(boardStore.dispatch).toHaveBeenCalledWith(
+					BoardActions.notifyWithTemplateAndReload({
+						error: expectedError,
+						errorType: "notUpdated",
+						httpStatus: HttpStatusCode.NotFound,
+						boardObjectType: "boardCard",
+					})
+				);
+			});
 		});
 	});
 });
