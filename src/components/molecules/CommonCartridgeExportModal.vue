@@ -55,6 +55,7 @@
 							:indeterminate="someTasksSelected"
 							@click="toggleAllTasks"
 							:label="$t('pages.room.modal.course.export.options.tasks')"
+							density="compact"
 						/>
 						<v-checkbox
 							class="check-options ml-8"
@@ -62,6 +63,7 @@
 							v-model="item.isSelected"
 							:key="item.id"
 							:label="item.title"
+							density="compact"
 						/>
 						<v-checkbox
 							class="check-options"
@@ -70,6 +72,7 @@
 							:indeterminate="someTopicsSelected"
 							@click="toggleAllTopics"
 							:label="$t('pages.room.modal.course.export.options.topics')"
+							density="compact"
 						/>
 						<v-checkbox
 							class="check-options ml-8"
@@ -77,6 +80,7 @@
 							v-model="item.isSelected"
 							:key="item.id"
 							:label="item.title"
+							density="compact"
 						/>
 						<v-checkbox
 							class="check-options"
@@ -85,6 +89,7 @@
 							:indeterminate="someColumnBoardsSelected"
 							@click="toggleAllColumnBoards"
 							:label="$t('pages.room.modal.course.export.options.columnBoards')"
+							density="compact"
 						/>
 						<v-checkbox
 							class="check-options ml-8"
@@ -92,6 +97,7 @@
 							v-model="item.isSelected"
 							:key="item.id"
 							:label="item.title"
+							density="compact"
 						/>
 					</v-container>
 				</div>
