@@ -3,12 +3,17 @@ import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
 import * as BoardActions from "./actions";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { ColumnResponse } from "@/serverApi/v3";
+import {
+	BoardObjectType,
+	ErrorType,
+	useErrorHandler,
+} from "@/components/error-handling/ErrorHandler.composable";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
+	const { handleError, notifyWithTemplate } = useErrorHandler();
 
 	const {
 		createCardCall,
@@ -62,12 +67,9 @@ export const useBoardRestApi = () => {
 				})
 			);
 		} catch (error) {
-			boardStore.dispatch(
-				BoardActions.createCardFailure({
-					errorMessage: "unable to create card", // TODO: decide and internationalize the error message
-					errorData: { columnId: action.payload.columnId },
-				})
-			);
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notCreated", "boardCard"),
+			});
 		}
 	};
 
@@ -79,15 +81,11 @@ export const useBoardRestApi = () => {
 			const board = await fetchBoardCall(action.payload.id);
 			boardStore.setBoard(board);
 		} catch (error) {
-			boardStore.dispatch(
-				BoardActions.notifyWithTemplate({
-					error: error as Error,
-					errorType: "notLoaded",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "board",
-				})
-			);
+			handleError(error, {
+				404: notifyWithTemplate("notLoaded", "board"),
+			});
 		}
+		console.log("fetchBoard", action);
 		boardStore.setLoading(false);
 	};
 
@@ -102,14 +100,9 @@ export const useBoardRestApi = () => {
 			boardStore.dispatch(BoardActions.createColumnSuccess({ newColumn }));
 			return newColumn;
 		} catch (error) {
-			boardStore.dispatch(
-				BoardActions.notifyWithTemplateAndReload({
-					error: error as Error,
-					errorType: "notCreated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardColumn",
-				})
-			);
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notCreated", "boardColumn"),
+			});
 		}
 	};
 
@@ -124,14 +117,9 @@ export const useBoardRestApi = () => {
 
 			boardStore.dispatch(BoardActions.deleteCardSuccess({ cardId }));
 		} catch (error) {
-			boardStore.dispatch(
-				BoardActions.notifyWithTemplateAndReload({
-					error: error as Error,
-					errorType: "notDeleted",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardCard",
-				})
-			);
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
+			});
 		}
 	};
 
@@ -145,14 +133,9 @@ export const useBoardRestApi = () => {
 			await deleteColumnCall(columnId);
 			boardStore.dispatch(BoardActions.deleteColumnSuccess({ columnId }));
 		} catch (error) {
-			boardStore.dispatch(
-				BoardActions.notifyWithTemplateAndReload({
-					error: error as Error,
-					errorType: "notDeleted",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardColumn",
-				})
-			);
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDeleted", "boardColumn"),
+			});
 		}
 	};
 
@@ -253,14 +236,9 @@ export const useBoardRestApi = () => {
 				})
 			);
 		} catch (error) {
-			boardStore.dispatch(
-				BoardActions.notifyWithTemplateAndReload({
-					error: error as Error,
-					errorType: "notUpdated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardCard",
-				})
-			);
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
+			});
 		}
 	};
 
@@ -276,14 +254,9 @@ export const useBoardRestApi = () => {
 
 			boardStore.dispatch(BoardActions.moveColumnSuccess(action.payload));
 		} catch (error) {
-			boardStore.dispatch(
-				BoardActions.notifyWithTemplateAndReload({
-					error: error as Error,
-					errorType: "notUpdated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardColumn",
-				})
-			);
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
+			});
 		}
 	};
 
@@ -300,14 +273,9 @@ export const useBoardRestApi = () => {
 				BoardActions.updateColumnTitleSuccess(action.payload)
 			);
 		} catch (error) {
-			boardStore.dispatch(
-				BoardActions.notifyWithTemplateAndReload({
-					error: error as Error,
-					errorType: "notUpdated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardColumn",
-				})
-			);
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
+			});
 		}
 	};
 
@@ -322,14 +290,9 @@ export const useBoardRestApi = () => {
 
 			boardStore.dispatch(BoardActions.updateBoardTitleSuccess({ newTitle }));
 		} catch (error) {
-			boardStore.dispatch(
-				BoardActions.notifyWithTemplateAndReload({
-					error: error as Error,
-					errorType: "notUpdated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "board",
-				})
-			);
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "board"),
+			});
 		}
 	};
 
@@ -345,15 +308,23 @@ export const useBoardRestApi = () => {
 				BoardActions.updateBoardVisibilitySuccess({ newVisibility })
 			);
 		} catch (error) {
-			boardStore.dispatch(
-				BoardActions.notifyWithTemplateAndReloadRequest({
-					error: error as Error,
-					errorType: "notUpdated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "board",
-				})
-			);
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "board"),
+			});
 		}
+	};
+
+	const notifyWithTemplateAndReload = (
+		errorType: ErrorType,
+		boardObjectType?: BoardObjectType
+	) => {
+		return () => {
+			if (boardStore.board === undefined) return;
+
+			notifyWithTemplate(errorType, boardObjectType)();
+			reloadBoard();
+			setEditModeId(undefined);
+		};
 	};
 
 	const reloadBoard = async () => {

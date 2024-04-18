@@ -31,56 +31,63 @@ export const useBoardStore = defineStore("boardStore", () => {
 		handle(
 			action,
 			on(BoardActions.fetchBoard, restApi.fetchBoard),
+
+			// request actions
 			on(BoardActions.createCardRequest, socketOrRest.createCardRequest),
-			on(BoardActions.createCardSuccess, createCard),
-			on(BoardActions.createCardFailure, socketApi.createCardFailure),
 			on(BoardActions.createColumnRequest, socketOrRest.createColumnRequest),
-			on(BoardActions.createColumnSuccess, createColumn),
-			on(BoardActions.createColumnFailure, socketApi.createColumnFailure),
 			on(BoardActions.deleteCardRequest, socketOrRest.deleteCardRequest),
-			on(BoardActions.deleteCardSuccess, deleteCard),
-			on(BoardActions.deleteCardFailure, socketApi.deleteCardFailure),
 			on(BoardActions.deleteColumnRequest, socketOrRest.deleteColumnRequest),
-			on(BoardActions.deleteColumnSuccess, deleteColumn),
-			on(BoardActions.deleteColumnFailure, socketApi.deleteColumnFailure),
 			on(BoardActions.moveCardRequest, socketOrRest.moveCardRequest),
-			on(BoardActions.moveCardSuccess, moveCard),
-			on(BoardActions.moveCardFailure, socketApi.moveCardFailure),
 			on(BoardActions.moveColumnRequest, socketOrRest.moveColumnRequest),
-			on(BoardActions.moveColumnSuccess, moveColumn),
-			on(BoardActions.moveColumnFailure, socketApi.moveColumnFailure),
 			on(
 				BoardActions.updateColumnTitleRequest,
 				socketOrRest.updateColumnTitleRequest
-			),
-			on(BoardActions.updateColumnTitleSuccess, updateColumnTitle),
-			on(
-				BoardActions.updateColumnTitleFailure,
-				socketApi.updateColumnTitleFailure
 			),
 			on(
 				BoardActions.updateBoardTitleRequest,
 				socketOrRest.updateBoardTitleRequest
 			),
+			on(
+				BoardActions.updateBoardVisibilityRequest,
+				socketOrRest.updateBoardVisibilityRequest
+			),
+			on(BoardActions.reloadBoard, socketApi.reloadBoardRequest),
+
+			// success actions
+			on(BoardActions.createCardSuccess, createCard),
+			on(BoardActions.createColumnSuccess, createColumn),
+			on(BoardActions.deleteCardSuccess, deleteCard),
+			on(BoardActions.deleteColumnSuccess, deleteColumn),
+			on(BoardActions.moveCardSuccess, moveCard),
+			on(BoardActions.moveColumnSuccess, moveColumn),
+			on(BoardActions.updateColumnTitleSuccess, updateColumnTitle),
 			on(BoardActions.updateBoardTitleSuccess, updateBoardTitle),
+			on(BoardActions.updateBoardVisibilitySuccess, updateBoardVisibility),
+			on(BoardActions.reloadBoardSuccess, socketApi.reloadBoardSuccess),
+
+			// failure actions
+			on(BoardActions.createCardFailure, socketApi.createCardFailure),
+			on(BoardActions.createColumnFailure, socketApi.createColumnFailure),
+			on(BoardActions.deleteCardFailure, socketApi.deleteCardFailure),
+			on(BoardActions.deleteColumnFailure, socketApi.deleteColumnFailure),
+			on(BoardActions.moveCardFailure, socketApi.moveCardFailure),
+			on(BoardActions.moveColumnFailure, socketApi.moveColumnFailure),
+			on(
+				BoardActions.updateColumnTitleFailure,
+				socketApi.updateColumnTitleFailure
+			),
 			on(
 				BoardActions.updateBoardTitleFailure,
 				socketApi.updateBoardTitleFailure
 			),
 			on(
-				BoardActions.updateBoardVisibilityRequest,
-				socketOrRest.updateBoardVisibilityRequest
+				BoardActions.updateBoardVisibilityFailure,
+				socketApi.updateBoardVisibilityFailure
 			),
-			on(BoardActions.updateBoardVisibilitySuccess, updateBoardVisibility),
-			on(BoardActions.notifyWithTemplateRequest, notifyWithTemplateRequest),
-			on(BoardActions.notifyWithTemplate, notifyWithTemplate),
-			on(
-				BoardActions.notifyWithTemplateAndReloadRequest,
-				socketApi.notifyWithTemplateAndReloadRequest
-			),
-			on(BoardActions.notifyWithTemplateAndReload, notifyWithTemplateAndReload),
-			on(BoardActions.reloadBoard, socketApi.reloadBoardRequest),
-			on(BoardActions.reloadBoardSuccess, socketApi.reloadBoardSuccess)
+
+			// notify actions
+			// on(BoardActions.notifyWithTemplate, notifyWithTemplate),
+			on(BoardActions.notifyWithTemplateAndReload, notifyWithTemplateAndReload)
 		);
 	};
 
@@ -311,22 +318,24 @@ export const useBoardStore = defineStore("boardStore", () => {
 	) => {
 		if (board.value === undefined) return;
 
-		dispatch(BoardActions.notifyWithTemplate(action.payload));
+		const { error, errorType, httpStatus, boardObjectType } = action.payload;
+
+		handleError(error, {
+			[httpStatus]: notifyWithTemplate(errorType, boardObjectType || "board"),
+		});
 		dispatch(BoardActions.reloadBoard({ id: board.value.id }));
 		setEditModeId(undefined);
 	};
 
-	const notifyWithTemplateRequest = (
-		action: ReturnType<typeof BoardActions.notifyWithTemplateRequest>
-	) => {
-		if (board.value === undefined) return;
+	// const notify = (action: any) => {
+	// 	if (board.value === undefined) return;
 
-		const { errorType, httpStatus, boardObjectType, error } = action.payload;
+	// 	// const { errorType, boardObjectType } = action.payload;
 
-		handleError(error, {
-			[httpStatus]: notifyWithTemplate(errorType, boardObjectType),
-		});
-	};
+	// 	handleError(action, {
+	// 		404: notifyWithTemplate("notCreatedViaSocket", "boardCard"),
+	// 	});
+	// };
 
 	return {
 		board,

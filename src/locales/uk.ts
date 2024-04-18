@@ -314,7 +314,7 @@ export default {
 	"components.board.notifications.errors.notLoadedViaSocket":
 		"{type} that is created by another user is not shown correctly, please reload the page to get updated data.",
 	"components.board.notifications.errors.notUpdatedViaSocket":
-		"Your changes could not be saved.",
+		"Some changes that were processed by another user could not be saved.",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",

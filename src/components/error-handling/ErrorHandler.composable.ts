@@ -29,7 +29,7 @@ export type ApiErrorHandlerFactory = (...args: any[]) => ApiErrorHandler;
 export type ErrorMap = Record<number, ApiErrorHandler>;
 
 export const useErrorHandler = () => {
-	const { t, te } = useI18n();
+	const { t } = useI18n();
 
 	const { showCustomNotifier } = useBoardNotifier();
 
@@ -38,7 +38,7 @@ export const useErrorHandler = () => {
 		boardObjectType?: BoardObjectType
 	) => {
 		let errorKey = `components.board.notifications.errors.${errorType}`;
-		if (!te(errorKey)) errorKey = "error.generic";
+		if (!t(errorKey)) errorKey = "error.generic";
 
 		const type = boardObjectType ? t(`components.${boardObjectType}`) : "";
 

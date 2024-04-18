@@ -1,8 +1,8 @@
+import { ErrorType } from "@/components/error-handling/ErrorHandler.composable";
 import * as BoardActions from "./actions";
-import { useBoardSocketApi } from "@data-board";
+import { boardActions, useBoardSocketApi } from "@data-board";
 import { useBoardStore } from "../BoardStore";
-import { notifierModule } from "@/store";
-import { AlertPayload } from "@/store/types/alert-payload";
+import { HttpStatusCode } from "axios";
 
 export const useSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -15,12 +15,19 @@ export const useSocketApi = () => {
 		emitOnSocket("create-card-request", action.payload);
 	};
 
-	const createCardFailure = () => {
-		const failureNotification: AlertPayload = {
-			text: "A user tried to create a card and an error occurred. Please reload the page to get updated board data.",
-			status: "warning",
+	const createCardFailure = (
+		action: ReturnType<typeof BoardActions.createCardFailure>
+	) => {
+		const { error } = action.payload;
+		const failureActionPayload = {
+			error,
+			errorType: "notUpdatedViaSocket" as ErrorType,
+			httpStatus: Number(HttpStatusCode.NotFound),
+			BoardObjectType: "boardCard",
 		};
-		handleFailureAction(failureNotification);
+		boardStore.dispatch(
+			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
+		);
 	};
 
 	const createColumnRequest = (
@@ -29,12 +36,19 @@ export const useSocketApi = () => {
 		emitOnSocket("create-column-request", action.payload);
 	};
 
-	const createColumnFailure = () => {
-		const failureNotification: AlertPayload = {
-			text: "A user tried to create a column and an error occurred. Please reload the page to get updated board data.",
-			status: "warning",
+	const createColumnFailure = (
+		action: ReturnType<typeof BoardActions.createColumnFailure>
+	) => {
+		const { error } = action.payload;
+		const failureActionPayload = {
+			error,
+			errorType: "notUpdatedViaSocket" as ErrorType,
+			httpStatus: Number(HttpStatusCode.NotFound),
+			BoardObjectType: "boardColumn",
 		};
-		handleFailureAction(failureNotification);
+		boardStore.dispatch(
+			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
+		);
 	};
 
 	const deleteCardRequest = async (
@@ -43,12 +57,19 @@ export const useSocketApi = () => {
 		await emitOnSocket("delete-card-request", action.payload);
 	};
 
-	const deleteCardFailure = () => {
-		const failureNotification: AlertPayload = {
-			text: "A user tried to delete a card and an error occurred. Please reload the page to get updated board data.",
-			status: "warning",
+	const deleteCardFailure = (
+		action: ReturnType<typeof BoardActions.deleteCardFailure>
+	) => {
+		const { error } = action.payload;
+		const failureActionPayload = {
+			error,
+			errorType: "notUpdatedViaSocket" as ErrorType,
+			httpStatus: Number(HttpStatusCode.NotFound),
+			BoardObjectType: "boardCard",
 		};
-		handleFailureAction(failureNotification);
+		boardStore.dispatch(
+			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
+		);
 	};
 
 	const deleteColumnRequest = async (
@@ -58,12 +79,19 @@ export const useSocketApi = () => {
 		emitOnSocket("delete-column-request", action.payload);
 	};
 
-	const deleteColumnFailure = () => {
-		const failureNotification: AlertPayload = {
-			text: "A user tried to delete a column and an error occurred. Please reload the page to get updated board data.",
-			status: "warning",
+	const deleteColumnFailure = (
+		action: ReturnType<typeof BoardActions.deleteColumnFailure>
+	) => {
+		const { error } = action.payload;
+		const failureActionPayload = {
+			error,
+			errorType: "notUpdatedViaSocket" as ErrorType,
+			httpStatus: Number(HttpStatusCode.NotFound),
+			BoardObjectType: "boardColumn",
 		};
-		handleFailureAction(failureNotification);
+		boardStore.dispatch(
+			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
+		);
 	};
 
 	const moveCardRequest = async (
@@ -73,12 +101,19 @@ export const useSocketApi = () => {
 		emitOnSocket("move-card-request", action.payload);
 	};
 
-	const moveCardFailure = () => {
-		const failureNotification: AlertPayload = {
-			text: "A user tried to move a card and an error occurred. Please reload the page to get updated board data.",
-			status: "warning",
+	const moveCardFailure = (
+		action: ReturnType<typeof BoardActions.moveCardFailure>
+	) => {
+		const { error } = action.payload;
+		const failureActionPayload = {
+			error,
+			errorType: "notUpdatedViaSocket" as ErrorType,
+			httpStatus: Number(HttpStatusCode.NotFound),
+			BoardObjectType: "boardCard",
 		};
-		handleFailureAction(failureNotification);
+		boardStore.dispatch(
+			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
+		);
 	};
 
 	const moveColumnRequest = async (
@@ -88,12 +123,19 @@ export const useSocketApi = () => {
 		emitOnSocket("move-column-request", action.payload);
 	};
 
-	const moveColumnFailure = () => {
-		const failureNotification: AlertPayload = {
-			text: "A user tried to move a column and an error occurred. Please reload the page to get updated board data.",
-			status: "warning",
+	const moveColumnFailure = (
+		action: ReturnType<typeof BoardActions.moveColumnFailure>
+	) => {
+		const { error } = action.payload;
+		const failureActionPayload = {
+			error,
+			errorType: "notUpdatedViaSocket" as ErrorType,
+			httpStatus: Number(HttpStatusCode.NotFound),
+			BoardObjectType: "boardColumn",
 		};
-		handleFailureAction(failureNotification);
+		boardStore.dispatch(
+			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
+		);
 	};
 
 	const updateColumnTitleRequest = async (
@@ -103,12 +145,19 @@ export const useSocketApi = () => {
 		boardStore.dispatch(BoardActions.updateColumnTitleSuccess(action.payload));
 	};
 
-	const updateBoardTitleFailure = () => {
-		const failureNotification: AlertPayload = {
-			text: "A user tried to update board title and an error occurred. Please reload the page to get updated board data.",
-			status: "warning",
+	const updateBoardTitleFailure = (
+		action: ReturnType<typeof BoardActions.updateBoardTitleFailure>
+	) => {
+		const { error } = action.payload;
+		const failureActionPayload = {
+			error,
+			errorType: "notUpdatedViaSocket" as ErrorType,
+			httpStatus: Number(HttpStatusCode.NotFound),
+			BoardObjectType: "board",
 		};
-		handleFailureAction(failureNotification);
+		boardStore.dispatch(
+			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
+		);
 	};
 
 	const updateBoardTitleRequest = (
@@ -118,12 +167,19 @@ export const useSocketApi = () => {
 		emitOnSocket("update-board-title-request", action.payload);
 	};
 
-	const updateColumnTitleFailure = () => {
-		const failureNotification: AlertPayload = {
-			text: "A user tried to update column title and an error occurred. Please reload the page to get updated board data.",
-			status: "warning",
+	const updateColumnTitleFailure = (
+		action: ReturnType<typeof BoardActions.updateColumnTitleFailure>
+	) => {
+		const { error } = action.payload;
+		const failureActionPayload = {
+			error,
+			errorType: "notUpdatedViaSocket" as ErrorType,
+			httpStatus: Number(HttpStatusCode.NotFound),
+			BoardObjectType: "boardColumn",
 		};
-		handleFailureAction(failureNotification);
+		boardStore.dispatch(
+			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
+		);
 	};
 
 	const updateBoardVisibilityRequest = (
@@ -135,6 +191,21 @@ export const useSocketApi = () => {
 		emitOnSocket("update-board-visibility-request", action.payload);
 	};
 
+	const updateBoardVisibilityFailure = (
+		action: ReturnType<typeof BoardActions.updateBoardVisibilityFailure>
+	) => {
+		const { error } = action.payload;
+		const failureActionPayload = {
+			error,
+			errorType: "notUpdatedViaSocket" as ErrorType,
+			httpStatus: Number(HttpStatusCode.NotFound),
+			BoardObjectType: "board",
+		};
+		boardStore.dispatch(
+			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
+		);
+	};
+
 	const reloadBoardRequest = (
 		action: ReturnType<typeof BoardActions.reloadBoard>
 	) => {
@@ -144,38 +215,7 @@ export const useSocketApi = () => {
 	const reloadBoardSuccess = (
 		action: ReturnType<typeof BoardActions.reloadBoardSuccess>
 	) => {
-		const { id } = action.payload;
-		handleFailureAction({
-			text: "Board reloaded successfully",
-			status: "success",
-		});
-		boardStore.dispatch(BoardActions.fetchBoard({ id }));
-	};
-
-	const notifyWithTemplateRequest = (
-		action: ReturnType<typeof BoardActions.notifyWithTemplate>
-	) => {
-		emitOnSocket("notify-with-template-request", action.payload);
-	};
-
-	const notifyWithTemplateSuccess = (
-		action: ReturnType<typeof BoardActions.notifyWithTemplate>
-	) => {
-		boardStore.dispatch(BoardActions.notifyWithTemplate(action.payload));
-	};
-
-	const notifyWithTemplateAndReloadRequest = (
-		action: ReturnType<typeof BoardActions.notifyWithTemplateAndReloadRequest>
-	) => {
-		emitOnSocket("notify-with-template-and-reload-request", action.payload);
-	};
-
-	const notifyWithTemplateAndReloadSuccess = (
-		action: ReturnType<typeof BoardActions.notifyWithTemplateAndReload>
-	) => {
-		boardStore.dispatch(
-			BoardActions.notifyWithTemplateAndReload(action.payload)
-		);
+		boardStore.dispatch(boardActions.fetchBoard(action.payload));
 	};
 
 	return {
@@ -191,10 +231,6 @@ export const useSocketApi = () => {
 		moveCardFailure,
 		moveColumnRequest,
 		moveColumnFailure,
-		notifyWithTemplateRequest,
-		notifyWithTemplateSuccess,
-		notifyWithTemplateAndReloadRequest,
-		notifyWithTemplateAndReloadSuccess,
 		reloadBoardRequest,
 		reloadBoardSuccess,
 		updateColumnTitleRequest,
@@ -202,5 +238,6 @@ export const useSocketApi = () => {
 		updateBoardTitleRequest,
 		updateBoardTitleFailure,
 		updateBoardVisibilityRequest,
+		updateBoardVisibilityFailure,
 	};
 };
