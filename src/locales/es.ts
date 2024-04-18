@@ -309,6 +309,7 @@ export default {
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
+	"components.boardRow": "línea",
 	"components.boardElement": "elemento",
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
@@ -1591,6 +1592,8 @@ export default {
 		'Desafortunadamente, la transferencia de su cuenta a {targetSystem} falló.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Por favor pasa esta información: {sourceSchoolNumber}, número de escuela en {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.multipleUsersFound":
+		'Este Cuenta de moin.schule ya está vinculado a una cuenta en la Niedersächsische Bildungscloud y no se puede volver a utilizar para la migración.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
 	"pages.userMigration.error.title": "Error al mover la cuenta",
 	"pages.userMigration.success.description":
 		"Se completó el movimiento de su cuenta a {targetSystem}.<br>Por favor, regístrese de nuevo ahora.",
@@ -1644,4 +1647,8 @@ export default {
 		"Filtrar por nombre completo...",
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
+	"feature.media-shelf.title": "Estante multimedia",
+	"feature.media-shelf.createLine": "Añadir línea",
+	"feature.media-shelf.line.title": "Línea",
+	"feature.media-shelf.availableLine.title": "Medios disponibles",
 };

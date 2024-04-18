@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, computed } from "vue";
+import { computed, defineComponent, onMounted, ref } from "vue";
 
 export default defineComponent({
 	name: "LineClamp",
