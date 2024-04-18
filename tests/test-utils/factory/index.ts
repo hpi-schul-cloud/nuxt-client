@@ -54,3 +54,4 @@ export * from "./videoConferenceInfoFactory";
 export * from "./videoConferenceInfoResponseFactory";
 export * from "./videoConferenceJoinResponseFactory";
 export * from "./envsFactory";
+export * from "./media-board";
