@@ -1,7 +1,3 @@
-import {
-	CollaborativeTextEditorElementResponse,
-	ContentElementType,
-} from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
@@ -12,6 +8,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { collaborativeTextEditorElementResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -26,7 +23,7 @@ import {
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import CollaborativeTextEditorElement from "./CollaborativeTextEditorElement.vue";
-import InnerContent from "./InnerContent.vue";
+import CollaborativeTextEditor from "./content/CollaborativeTextEditor.vue";
 
 // Mocks
 jest.mock("@data-board", () => ({
@@ -35,19 +32,6 @@ jest.mock("@data-board", () => ({
 	useDeleteConfirmationDialog: jest.fn(),
 }));
 jest.mock("@feature-board");
-
-const COLLABORATIVE_TEXTEDITOR_ELEMENT: CollaborativeTextEditorElementResponse =
-	{
-		id: "test-id",
-		type: ContentElementType.CollaborativeTextEditor,
-		content: {
-			editorId: "editor-id",
-		},
-		timestamps: {
-			createdAt: new Date().toISOString(),
-			lastUpdatedAt: new Date().toISOString(),
-		},
-	};
 
 const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
 	getEnv: createMock<ConfigResponse>({
@@ -58,16 +42,15 @@ const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
 describe("CollaborativeTextEditorElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 
-	const setup = (props: {
-		element: CollaborativeTextEditorElementResponse;
-		isEditMode: boolean;
-		isTeacher?: boolean;
-	}) => {
+	const setup = (props: { isEditMode: boolean; isTeacher?: boolean }) => {
 		document.body.setAttribute("data-app", "true");
 
 		const authModule = createModuleMocks(AuthModule, {
 			getUserRoles: ["teacher"],
 		});
+
+		const COLLABORATIVE_TEXTEDITOR_ELEMENT =
+			collaborativeTextEditorElementResponseFactory.build();
 
 		const wrapper = shallowMount(CollaborativeTextEditorElement, {
 			global: {
@@ -78,7 +61,7 @@ describe("CollaborativeTextEditorElement", () => {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
-			propsData: props,
+			propsData: { ...props, element: COLLABORATIVE_TEXTEDITOR_ELEMENT },
 		});
 		return { wrapper, isEditMode: true, isTeacher: true };
 	};
@@ -86,7 +69,6 @@ describe("CollaborativeTextEditorElement", () => {
 	describe("when component is mounted", () => {
 		it("should render the element corrrectly", () => {
 			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 				isEditMode: false,
 			});
 			expect(
@@ -96,15 +78,15 @@ describe("CollaborativeTextEditorElement", () => {
 
 		it("should render the InnerContent element correctly", () => {
 			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 				isEditMode: false,
 			});
-			expect(wrapper.findComponent(InnerContent).exists()).toBe(true);
+			expect(wrapper.findComponent(CollaborativeTextEditor).exists()).toBe(
+				true
+			);
 		});
 
 		it("should render BoardMenu element correctly", async () => {
 			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 				isEditMode: true,
 			});
 
@@ -114,7 +96,6 @@ describe("CollaborativeTextEditorElement", () => {
 
 		it("should render BoardMenuActionMoveUp element correctly", async () => {
 			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 				isEditMode: true,
 			});
 
@@ -124,7 +105,6 @@ describe("CollaborativeTextEditorElement", () => {
 
 		it("should render BoardMenuActionMoveDown element correctly", async () => {
 			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 				isEditMode: true,
 			});
 
@@ -134,7 +114,6 @@ describe("CollaborativeTextEditorElement", () => {
 
 		it("should render BoardMenuActionDelete element correctly", async () => {
 			const { wrapper } = setup({
-				element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 				isEditMode: true,
 			});
 
@@ -146,7 +125,6 @@ describe("CollaborativeTextEditorElement", () => {
 			describe("when move down is clicked", () => {
 				it('should emit "move-down" collaborative text editor', async () => {
 					const { wrapper } = setup({
-						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 						isEditMode: true,
 					});
 
@@ -159,7 +137,6 @@ describe("CollaborativeTextEditorElement", () => {
 			describe("when move up is clicked", () => {
 				it('should emit "move-up" collaborative text editor', async () => {
 					const { wrapper } = setup({
-						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 						isEditMode: true,
 					});
 
@@ -172,7 +149,6 @@ describe("CollaborativeTextEditorElement", () => {
 			describe("when delete is clicked", () => {
 				it('should emit "delete" collaborative text editor', async () => {
 					const { wrapper } = setup({
-						element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 						isEditMode: true,
 					});
 
@@ -188,7 +164,6 @@ describe("CollaborativeTextEditorElement", () => {
 		describe("when component is NOT in edit-mode", () => {
 			it('should NOT emit "move-down" collaborative text editor', async () => {
 				const { wrapper } = setup({
-					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 					isEditMode: false,
 					isTeacher: false,
 				});
@@ -200,7 +175,6 @@ describe("CollaborativeTextEditorElement", () => {
 
 			it('should NOT emit "move-up" collaborative text editor', async () => {
 				const { wrapper } = setup({
-					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 					isEditMode: false,
 					isTeacher: false,
 				});
@@ -212,7 +186,6 @@ describe("CollaborativeTextEditorElement", () => {
 
 			it('should NOT emit "delete" collaborative text editor', async () => {
 				const { wrapper } = setup({
-					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 					isEditMode: false,
 					isTeacher: false,
 				});
@@ -226,7 +199,6 @@ describe("CollaborativeTextEditorElement", () => {
 		describe("when element is clicked", () => {
 			it("should open collaborative text editor in new tab correctly", async () => {
 				const { wrapper } = setup({
-					element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
 					isEditMode: false,
 				});
 				const divElement = wrapper.find("div");
