@@ -9,30 +9,23 @@
 		elevation="0"
 		@keydown.up.down="onKeydownArrow"
 		role="button"
+		@click="redirectToEditorUrl"
 	>
-		<div
-			class="collaborative-text-editor-element-content"
-			@click="redirectToSanitizedUrl"
-		>
-			<ContentElementBar
-				:hasGreyBackground="true"
-				:icon="mdiTextBoxEditOutline"
-			>
-				<template #display>
-					<v-img :src="image" height="185px" alt="" cover class="rounded-t" />
-				</template>
-				<template #title>
-					{{ $t("components.cardElement.collaborativeTextEditorElement") }}
-				</template>
-				<template #menu v-if="isEditMode && isTeacher">
-					<BoardMenu scope="element">
-						<BoardMenuActionMoveUp @click="onMoveUp" />
-						<BoardMenuActionMoveDown @click="onMoveDown" />
-						<BoardMenuActionDelete @click="onDelete" />
-					</BoardMenu>
-				</template>
-			</ContentElementBar>
-		</div>
+		<ContentElementBar :hasGreyBackground="true" :icon="mdiTextBoxEditOutline">
+			<template #display>
+				<v-img :src="image" height="185px" alt="" cover class="rounded-t" />
+			</template>
+			<template #title>
+				{{ $t("components.cardElement.collaborativeTextEditorElement") }}
+			</template>
+			<template #menu v-if="isEditMode && isTeacher">
+				<BoardMenu scope="element">
+					<BoardMenuActionMoveUp @click="onMoveUp" />
+					<BoardMenuActionMoveDown @click="onMoveDown" />
+					<BoardMenuActionDelete @click="onDelete" />
+				</BoardMenu>
+			</template>
+		</ContentElementBar>
 	</v-card>
 </template>
 
@@ -45,7 +38,6 @@ import {
 } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
 import {
 	BoardMenu,
@@ -85,14 +77,13 @@ const isTeacher = computed(() => {
 	return userRoles.value.includes("teacher");
 });
 
-const redirectToSanitizedUrl = async () => {
+const redirectToEditorUrl = async () => {
 	const url = await getUrl(
 		element.value.id,
 		CollaborativeTextEditorParentType.ContentElement
 	);
-	const sanitizedUrl = sanitizeUrl(url);
 
-	window.open(sanitizedUrl, "_blank");
+	window.open(url, "_blank");
 };
 
 const onKeydownArrow = (event: KeyboardEvent) => {
