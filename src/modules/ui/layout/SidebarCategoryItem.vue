@@ -10,7 +10,7 @@
 				<template #prepend>
 					<v-icon :icon="item.icon" class="mr-2" />
 				</template>
-				<v-list-item-title>
+				<v-list-item-title :title="$t(item.title)">
 					{{ $t(item.title) }}
 				</v-list-item-title>
 			</v-list-item>
