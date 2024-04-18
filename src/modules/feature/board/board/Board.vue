@@ -12,12 +12,12 @@
 				@share:board="onShareBoard"
 				@delete:board="openDeleteBoardDialog(boardId)"
 			/>
-			<div :class="boardStyle">
+			<div :class="boardClass" :style="boardStyle">
 				<div>
 					<Sortable
 						:list="board.columns"
 						item-key="id"
-						:class="boardColumnStyle"
+						:class="boardColumnClass"
 						tag="div"
 						:options="{
 							direction: 'horizontal',
@@ -45,7 +45,7 @@
 								:index="index"
 								:key="element.id"
 								:columnCount="board.columns.length"
-								:class="isListBoard ? 'mx-auto my-0' : ''"
+								:class="isListBoard ? 'my-0 ' : ''"
 								:isListBoard="isListBoard"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
@@ -289,17 +289,25 @@ const copyResultModalItems = computed(
 
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
-const boardStyle = computed(() => {
+const boardClass = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1"];
 	if (isListBoard.value) {
-		classes.push("flex-column");
+		classes.push("flex-column", "mx-auto", "my-0");
 	} else {
 		classes.push("flex-row");
 	}
 	return classes;
 });
 
-const boardColumnStyle = computed(() => {
+const boardStyle = computed(() => {
+	if (!isListBoard.value) {
+		return;
+	}
+	const style = { maxWidth: "80ch" };
+	return style;
+});
+
+const boardColumnClass = computed(() => {
 	const classes = ["d-flex", "flex-shrink-1", "ml-n4"];
 	if (isListBoard.value) {
 		classes.push("flex-column");

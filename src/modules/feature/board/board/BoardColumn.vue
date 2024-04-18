@@ -1,8 +1,5 @@
 <template>
-	<div
-		:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
-		class="column-drag-handle bg-white px-4"
-	>
+	<div :style="columnStyle" :class="columnClasses">
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
@@ -39,7 +36,7 @@
 					ghostClass: 'sortable-drag-ghost',
 					scroll: true,
 				}"
-				:class="columnStyle"
+				:class="sortableClasses"
 				@start="onDragStart"
 				@end="onDragEnd"
 			>
@@ -133,6 +130,25 @@ export default defineComponent({
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
+
+		const columnClasses = computed(() => {
+			const classes = ["column-drag-handle", "bg-white", "px-4"];
+			if (props.isListBoard) {
+				classes.push("d-flex", "flex-column", "align-stretch");
+			}
+			return classes;
+		});
+
+		const columnStyle = computed(() => {
+			if (props.isListBoard) {
+				return;
+			}
+			const columnLayout = {
+				"min-width": `${colWidth.value}px`,
+				"max-width": `${colWidth.value}px`,
+			};
+			return columnLayout;
+		});
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 		const showAddButton = computed(
@@ -258,7 +274,7 @@ export default defineComponent({
 			return `${type} ${props.index + 1}`;
 		});
 
-		const columnStyle = computed(() => {
+		const sortableClasses = computed(() => {
 			const classes = [];
 			if (!props.isListBoard) {
 				classes.push("scrollable-column");
@@ -271,12 +287,14 @@ export default defineComponent({
 
 		return {
 			cardDropPlaceholderOptions,
+			columnClasses,
 			columnStyle,
 			colWidth,
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
 			isDesktop,
+			sortableClasses,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
