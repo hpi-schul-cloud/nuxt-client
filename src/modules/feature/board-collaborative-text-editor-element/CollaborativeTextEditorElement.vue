@@ -88,7 +88,9 @@ const redirectToEditorUrl = async () => {
 		CollaborativeTextEditorParentType.ContentElement
 	);
 
-	window.open(url, "_blank");
+	if (url) {
+		window.open(url, "_blank");
+	}
 };
 
 const onKeydownArrow = (event: KeyboardEvent) => {

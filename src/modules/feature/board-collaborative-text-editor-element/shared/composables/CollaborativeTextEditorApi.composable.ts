@@ -22,7 +22,7 @@ const collaborativeTextEditorApi = () => {
 	const getUrl = async (
 		parentId: string,
 		parentType: CollaborativeTextEditorParentType
-	): Promise<string> => {
+	): Promise<string | undefined> => {
 		try {
 			const response =
 				await collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(
@@ -33,7 +33,6 @@ const collaborativeTextEditorApi = () => {
 			return response.data.url;
 		} catch (error) {
 			showError(error);
-			throw error;
 		}
 	};
 
