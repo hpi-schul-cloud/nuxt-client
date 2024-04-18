@@ -1,7 +1,7 @@
 <template>
 	<legacy-logged-in v-if="legacyLayout">
 		<v-main id="main-content" class="content">
-			<snackbar />
+			<alert-container />
 			<router-view />
 		</v-main>
 		<loading-state-dialog />
@@ -12,7 +12,7 @@
 
 <script>
 import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
-import Snackbar from "@/components/molecules/Alert";
+import AlertContainer from "@/components/molecules/AlertContainer.vue";
 import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
 import { contentModule } from "@/store";
 
@@ -21,7 +21,7 @@ export default {
 	components: {
 		LoadingStateDialog,
 		LegacyLoggedIn,
-		Snackbar,
+		AlertContainer,
 	},
 	computed: {
 		legacyLayout() {
