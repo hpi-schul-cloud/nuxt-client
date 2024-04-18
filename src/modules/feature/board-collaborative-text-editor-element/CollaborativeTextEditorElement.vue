@@ -14,20 +14,31 @@
 			class="collaborative-text-editor-element-content"
 			@click="redirectToSanitizedUrl"
 		>
-			<CollaborativeTextEditor :docName="element.id">
-				<template v-if="isEditMode && isTeacher">
+			<ContentElementBar
+				:hasGreyBackground="true"
+				:icon="mdiTextBoxEditOutline"
+			>
+				<template #display>
+					<v-img :src="image" height="185px" alt="" cover class="rounded-t" />
+				</template>
+				<template #title>
+					{{ $t("components.cardElement.collaborativeTextEditorElement") }}
+				</template>
+				<template #menu v-if="isEditMode && isTeacher">
 					<BoardMenu scope="element">
 						<BoardMenuActionMoveUp @click="onMoveUp" />
 						<BoardMenuActionMoveDown @click="onMoveDown" />
 						<BoardMenuActionDelete @click="onDelete" />
 					</BoardMenu>
 				</template>
-			</CollaborativeTextEditor>
+			</ContentElementBar>
 		</div>
 	</v-card>
 </template>
 
 <script setup lang="ts">
+import image from "@/assets/img/collaborativeEditor.svg";
+import { mdiTextBoxEditOutline } from "@mdi/js";
 import {
 	CollaborativeTextEditorElementResponse,
 	CollaborativeTextEditorParentType,
@@ -41,9 +52,9 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	ContentElementBar,
 } from "@ui-board";
 import { PropType, computed, ref, toRef } from "vue";
-import CollaborativeTextEditor from "./content/CollaborativeTextEditor.vue";
 import { useCollaborativeTextEditorApi } from "./shared/composables/CollaborativeTextEditorApi.composable";
 
 const props = defineProps({
