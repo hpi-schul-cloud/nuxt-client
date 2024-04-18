@@ -23,12 +23,13 @@
 			<template #title>
 				{{ $t("components.cardElement.collaborativeTextEditorElement") }}
 			</template>
-			<template #menu v-if="isEditMode">
-				<BoardMenu scope="element">
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
-					<BoardMenuActionDelete @click="onDelete" />
-				</BoardMenu>
+			<template #menu>
+				<CollaborativeTextEditorElementMenu
+					v-if="isEditMode"
+					@move-down:element="onMoveDown"
+					@move-up:element="onMoveUp"
+					@delete:element="onDelete"
+				/>
 			</template>
 		</ContentElementBar>
 	</v-card>
@@ -42,15 +43,10 @@ import {
 	CollaborativeTextEditorParentType,
 } from "@/serverApi/v3";
 import { useBoardFocusHandler } from "@data-board";
-import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	ContentElementBar,
-} from "@ui-board";
+import { ContentElementBar } from "@ui-board";
 import { PropType, ref, toRef } from "vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
+import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 
 const props = defineProps({
 	element: {
