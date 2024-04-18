@@ -297,7 +297,10 @@ export default defineComponent({
 				});
 			}
 			if (
-				this.authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())
+				this.authModule.getUserPermissions.includes(
+					"COURSE_EDIT".toLowerCase()
+				) &&
+				this.authModule.getUserRoles.includes(Roles.Teacher)
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
@@ -309,7 +312,10 @@ export default defineComponent({
 			}
 			if (
 				envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
-				this.authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())
+				this.authModule.getUserPermissions.includes(
+					"COURSE_EDIT".toLowerCase()
+				) &&
+				this.authModule.getUserRoles.includes(Roles.Teacher)
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.listBoard"),
