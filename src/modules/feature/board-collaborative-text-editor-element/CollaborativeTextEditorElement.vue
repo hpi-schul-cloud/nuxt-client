@@ -37,16 +37,16 @@
 
 <script setup lang="ts">
 import image from "@/assets/img/collaborativeEditor.svg";
-import { mdiTextBoxEditOutline } from "@mdi/js";
 import {
 	CollaborativeTextEditorElementResponse,
 	CollaborativeTextEditorParentType,
 } from "@/serverApi/v3";
 import { useBoardFocusHandler } from "@data-board";
+import { mdiTextBoxEditOutline } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
 import { PropType, ref, toRef } from "vue";
-import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
+import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 
 const props = defineProps({
 	element: {
