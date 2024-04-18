@@ -14,7 +14,7 @@
 
 		<v-main id="main-content">
 			<application-error-wrapper>
-				<snackbar />
+				<AlertContainer />
 				<router-view />
 			</application-error-wrapper>
 		</v-main>
@@ -30,7 +30,7 @@ import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
 import SkipLinks from "@/components/molecules/SkipLinks.vue";
 import { Sidebar } from "@ui-layout";
-import Snackbar from "@/components/molecules/Alert.vue";
+import AlertContainer from "@/components/molecules/AlertContainer.vue";
 import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
