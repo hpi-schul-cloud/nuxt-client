@@ -1,9 +1,9 @@
-import { shallowMount } from "@vue/test-utils";
-import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
+import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 
 describe("BoardColumnGhostHeader", () => {
 	const setup = () => {
@@ -15,6 +15,7 @@ describe("BoardColumnGhostHeader", () => {
 			},
 			propsData: {
 				isColumnActive: true,
+				label: "Add column",
 			},
 		});
 

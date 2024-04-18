@@ -310,6 +310,7 @@ export default {
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
+	"components.boardRow": "рядок",
 	"components.boardElement": "Eлемент",
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
@@ -1563,6 +1564,8 @@ export default {
 		'На жаль, не вдалося перемістити ваш обліковий запис до {targetSystem}.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Будь ласка, Передайте цю інформацію:<br><b>Номер школи в {instance}: {sourceSchoolNumber}, номер школи в {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.multipleUsersFound":
+		'Цей обліковий запис moin.schule вже пов\'язаний з обліковим записом у Niedersächsische Bildungscloud і не може бути використаний повторно для міграції.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
 	"pages.userMigration.error.title": "Не вдалося перемістити обліковий запис",
 	"pages.userMigration.success.description":
 		"Переміщення вашого облікового запису до {targetSystem} завершено.<br>Зареєструйтеся знову.",
@@ -1611,4 +1614,8 @@ export default {
 		"Фільтрувати за повним іменем...",
 	"utils.adminFilter.placeholder.date.from": "Створено між 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
+	"feature.media-shelf.title": "Полиця для медіа",
+	"feature.media-shelf.createLine": "Додайте лінію",
+	"feature.media-shelf.line.title": "лінія",
+	"feature.media-shelf.availableLine.title": "Доступні медіа",
 };

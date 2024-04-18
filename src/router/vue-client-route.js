@@ -48,6 +48,7 @@ const vueRoutes = [
 	`^/migration/error/?$`,
 	`^/tools/context/tool-configuration/?$`,
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
+	`^/media-shelf/?$`,
 ];
 
 const isVueClient = (path) => {
