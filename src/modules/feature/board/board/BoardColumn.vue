@@ -226,12 +226,10 @@ export default defineComponent({
 		};
 
 		const onMoveColumnLeft = () => {
-			if (props.isListBoard) return;
 			emit("move:column-left");
 		};
 
 		const onMoveColumnRight = () => {
-			if (props.isListBoard) return;
 			emit("move:column-right");
 		};
 
