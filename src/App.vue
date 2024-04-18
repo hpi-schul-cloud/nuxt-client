@@ -21,9 +21,7 @@ export default {
 			if (this.$route.meta?.layout) {
 				layout = this.$route.meta?.layout;
 			} else {
-				layout = authModule.isLoggedIn
-					? Layouts.LOGGED_IN
-					: Layouts.LOGGED_OUT;
+				layout = authModule.isLoggedIn ? Layouts.LOGGED_IN : Layouts.LOGGED_OUT;
 			}
 
 			return defineAsyncComponent(
