@@ -52,7 +52,7 @@ import {
 	ContentElementBar,
 } from "@ui-board";
 import { PropType, computed, ref, toRef } from "vue";
-import { useCollaborativeTextEditorApi } from "./shared/composables/CollaborativeTextEditorApi.composable";
+import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 
 const props = defineProps({
 	element: {
