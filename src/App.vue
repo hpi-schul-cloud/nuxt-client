@@ -22,7 +22,7 @@ export default {
 				layout = this.$route.meta?.layout;
 			} else {
 				layout = authModule.isLoggedIn
-					? Layouts.NEW_LOGGED_IN
+					? Layouts.LOGGED_IN
 					: Layouts.LOGGED_OUT;
 			}
 
