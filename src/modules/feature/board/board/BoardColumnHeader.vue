@@ -8,7 +8,7 @@
 		<div class="column-header mb-4 rounded" tabindex="0" ref="columnHeader">
 			<div class="d-flex align-center py-2 px-2">
 				<BoardAnyTitleInput
-					:value="title"
+					:value="title.trim()"
 					:data-testid="`column-title-${index}`"
 					scope="column"
 					:isEditMode="isEditMode"
