@@ -987,7 +987,7 @@ export default {
 		"Please note, once the school migration process starts, it can take up to 1 hour to fetch the data. After this, you will be able to continue to the next step.",
 	"pages.administration.migration.waiting": "Waiting for data sync...",
 	"pages.administration.migration.identical_user_login_migration_system":
-		"The migration can't be started because the target login system and your current school's login system are the same!",
+		"The migration cannot start because the target login system and your school's current login system are the same!",
 	"pages.administration.migration.moin_schule_system_not_found":
 		"Cannot find moin.schule system!",
 	"pages.administration.or": "or",
