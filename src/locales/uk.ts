@@ -1003,6 +1003,10 @@ export default {
 	"pages.administration.migration.tutorialWait":
 		"Зауважте, що після початку переміщення школи для отримання даних може знадобитися до 1 години. Після цього можна переходити до наступного кроку.",
 	"pages.administration.migration.waiting": "Очікування синхронізації даних...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"Неможливо розпочати міграцію, оскільки цільова система входу та поточна система входу у вашій школі збігаються!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Не вдається знайти систему moin.schule!",
 	"pages.administration.or": "або",
 	"pages.administration.printQr.emptyUser":
 		"Вибраний користувач(-і) вже зареєстрований(-і)",
