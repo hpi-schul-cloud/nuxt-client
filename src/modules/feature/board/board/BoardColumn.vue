@@ -268,7 +268,7 @@ export default defineComponent({
 
 		const titlePlaceholder = computed(() => {
 			const type = props.isListBoard
-				? t("components.boardSection")
+				? t("components.boardRow")
 				: t("components.boardColumn");
 
 			return `${type} ${props.index + 1}`;

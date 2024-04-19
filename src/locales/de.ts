@@ -309,7 +309,6 @@ export default {
 	"components.boardColumn": "Spalte",
 	"components.boardRow": "Abschnitt",
 	"components.boardElement": "Element",
-	"components.boardSection": "Abschnitt",
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.drawingElement": "Whiteboard",
@@ -1393,7 +1392,7 @@ export default {
 	"pages.room.boardCard.label.listBoard": "Listen-Board",
 	"pages.room.boardCard.menu.ariaLabel": "Board-Menü",
 	"pages.room.cards.aria":
-		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
+		"{itemType}, Link, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.copy.course.message.copied":
 		"Der Kurs wurde erfolgreich kopiert.",

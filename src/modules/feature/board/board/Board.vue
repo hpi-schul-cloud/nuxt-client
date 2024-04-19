@@ -45,7 +45,7 @@
 								:index="index"
 								:key="element.id"
 								:columnCount="board.columns.length"
-								:class="isListBoard ? 'my-0 ' : ''"
+								:class="{ 'my-0': isListBoard }"
 								:isListBoard="isListBoard"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
@@ -53,12 +53,10 @@
 								@delete:column="onDeleteColumn"
 								@update:card-position="onUpdateCardPosition(index, $event)"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
-								@move:column-down="onMoveColumnNextPosition(index, element.id)"
-								@move:column-left="
-									onMoveColumnBeforePosition(index, element.id)
-								"
-								@move:column-right="onMoveColumnNextPosition(index, element.id)"
-								@move:column-up="onMoveColumnBeforePosition(index, element.id)"
+								@move:column-down="onMoveColumnForward(index, element.id)"
+								@move:column-left="onMoveColumnBackward(index, element.id)"
+								@move:column-right="onMoveColumnForward(index, element.id)"
+								@move:column-up="onMoveColumnBackward(index, element.id)"
 							/>
 						</template>
 					</Sortable>
@@ -191,10 +189,7 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 	}
 };
 
-const onMoveColumnBeforePosition = async (
-	columnIndex: number,
-	columnId: string
-) => {
+const onMoveColumnBackward = async (columnIndex: number, columnId: string) => {
 	if (!hasMovePermission) return;
 	if (columnIndex === 0) return;
 
@@ -209,10 +204,7 @@ const onMoveColumnBeforePosition = async (
 	);
 };
 
-const onMoveColumnNextPosition = async (
-	columnIndex: number,
-	columnId: string
-) => {
+const onMoveColumnForward = async (columnIndex: number, columnId: string) => {
 	if (!hasMovePermission) return;
 	if (board.value && columnIndex === board.value.columns.length - 1) return;
 

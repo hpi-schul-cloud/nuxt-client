@@ -83,23 +83,14 @@ describe("BoardColumnHeader", () => {
 		});
 	});
 
-	describe("when the board is list board", () => {
-		describe("when the column should be moved to the left", () => {
-			it("should not be possible", async () => {
-				const wrapper = setup({ isListBoard: true });
+	describe("when the board is of type list", () => {
+		it("should not show options to move left and right", async () => {
+			const wrapper = setup({ isListBoard: true });
 
-				const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
-				expect(moveLeftButton.exists()).toBe(false);
-			});
-		});
-
-		describe("when the column should be moved to the right", () => {
-			it("should not be possible", async () => {
-				const wrapper = setup({ isListBoard: true });
-
-				const moveRightButton = wrapper.findComponent(BoardMenuActionMoveRight);
-				expect(moveRightButton.exists()).toBe(false);
-			});
+			const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
+			const moveRightButton = wrapper.findComponent(BoardMenuActionMoveRight);
+			expect(moveLeftButton.exists()).toBe(false);
+			expect(moveRightButton.exists()).toBe(false);
 		});
 
 		describe("when the column should be moved down", () => {
@@ -129,7 +120,18 @@ describe("BoardColumnHeader", () => {
 		});
 	});
 
-	describe("when the board is column board", () => {
+	describe("when the board is of type column", () => {
+		it("should not show options to move up and down", async () => {
+			const wrapper = setup({ isListBoard: false });
+
+			const moveDownButton = wrapper.findComponent(
+				BoardMenuActionMoveColumnDown
+			);
+			const moveUpButton = wrapper.findComponent(BoardMenuActionMoveColumnUp);
+			expect(moveDownButton.exists()).toBe(false);
+			expect(moveUpButton.exists()).toBe(false);
+		});
+
 		describe("when the column should be moved to the left", () => {
 			it("should emit move:column-left", async () => {
 				const wrapper = setup({ isListBoard: false });
@@ -151,26 +153,6 @@ describe("BoardColumnHeader", () => {
 
 				const emitted = wrapper.emitted();
 				expect(emitted["move:column-right"]).toBeDefined();
-			});
-		});
-
-		describe("when the column should be moved down", () => {
-			it("should not be possible", async () => {
-				const wrapper = setup({ isListBoard: false });
-
-				const moveDownButton = wrapper.findComponent(
-					BoardMenuActionMoveColumnDown
-				);
-				expect(moveDownButton.exists()).toBe(false);
-			});
-		});
-
-		describe("when the column should be moved up", () => {
-			it("should not be possible", async () => {
-				const wrapper = setup({ isListBoard: false });
-
-				const moveUpButton = wrapper.findComponent(BoardMenuActionMoveColumnUp);
-				expect(moveUpButton.exists()).toBe(false);
 			});
 		});
 	});

@@ -26,7 +26,7 @@ type BoardData = {
 	createdAt: string;
 	updatedAt: string;
 	columnBoardId: string;
-	layout: string;
+	layout: BoardLayout;
 };
 
 const mockDraftBoardData = {

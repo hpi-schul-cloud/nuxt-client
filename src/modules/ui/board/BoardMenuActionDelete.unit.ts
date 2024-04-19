@@ -45,7 +45,7 @@ describe("BoardMenuActionMoveDown Component", () => {
 		it("should render", () => {
 			const wrapper = setup({ scope: "board" });
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeTruthy();
+			expect(action.exists()).toBe(true);
 		});
 
 		it("should open askConfirmationDialog on click", () => {
@@ -61,7 +61,7 @@ describe("BoardMenuActionMoveDown Component", () => {
 			const action = wrapper.findComponent(BoardMenuAction);
 			await action.vm.$emit("click");
 			await nextTick();
-			expect(wrapper.emitted("click")).toBeTruthy();
+			expect(wrapper.emitted("click")).toBe(true);
 		});
 
 		it("should emit click on taskConfirmationDialog cancel, too (its a Promise)", async () => {
@@ -70,7 +70,7 @@ describe("BoardMenuActionMoveDown Component", () => {
 			const action = wrapper.findComponent(BoardMenuAction);
 			await action.vm.$emit("click");
 			await nextTick();
-			expect(wrapper.emitted()).toBeTruthy();
+			expect(wrapper.emitted()).toBe(true);
 		});
 	});
 });

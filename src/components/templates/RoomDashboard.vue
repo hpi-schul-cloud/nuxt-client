@@ -194,6 +194,7 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import {
 	BoardElementResponseTypeEnum,
+	BoardLayout,
 	ImportUserResponseRoleNamesEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
@@ -309,13 +310,11 @@ export default {
 		boardTypeAriaLabel(itemLayout) {
 			const columnBoardInfo = {
 				itemType: this.$t("pages.room.boardCard.label.columnBoard"),
-				itemName: this.$t("pages.room.boardCard.label.courseBoard"),
 			};
 			const listBoardInfo = {
 				itemType: this.$t("pages.room.boardCard.label.listBoard"),
-				itemName: this.$t("pages.room.boardCard.label.courseBoard"),
 			};
-			if (itemLayout === "list") {
+			if (itemLayout === BoardLayout.List) {
 				return listBoardInfo;
 			} else {
 				return columnBoardInfo;

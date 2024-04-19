@@ -313,7 +313,6 @@ export default {
 	"components.boardColumn": "Колонка",
 	"components.boardRow": "рядок",
 	"components.boardElement": "Eлемент",
-	"components.boardSection": "розділ",
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.drawingElement": "Дошка",
@@ -1394,7 +1393,7 @@ export default {
 	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",
 	"pages.room.boardCard.menu.ariaLabel": "Меню форуму",
 	"pages.room.cards.aria":
-		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
+		"{itemType}, посилання, натисніть Enter, щоб відкрити",
 	"pages.room.cards.label.revert": "Повернути до стану чернетки",
 	"pages.room.copy.course.message.copied": "Курс успішно скопійовано.",
 	"pages.room.copy.course.message.partiallyCopied":

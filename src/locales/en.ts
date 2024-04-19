@@ -306,7 +306,6 @@ export default {
 	"components.boardColumn": "column",
 	"components.boardRow": "row",
 	"components.boardElement": "element",
-	"components.boardSection": "section",
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.drawingElement": "Whiteboard",
@@ -1370,7 +1369,7 @@ export default {
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.label.listBoard": "List Board",
 	"pages.room.boardCard.menu.ariaLabel": "Board menu",
-	"pages.room.cards.aria": "{itemType}, link, {itemName}, press enter to open",
+	"pages.room.cards.aria": "{itemType}, link, press enter to open",
 	"pages.room.cards.label.revert": "Revert to draft",
 	"pages.room.copy.course.message.copied": "Course was successfully copied.",
 	"pages.room.copy.course.message.partiallyCopied":

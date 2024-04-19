@@ -312,7 +312,6 @@ export default {
 	"components.boardColumn": "columna",
 	"components.boardRow": "línea",
 	"components.boardElement": "elemento",
-	"components.boardSection": "sección",
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.drawingElement": "Pizarra",
@@ -1411,8 +1410,7 @@ export default {
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
 	"pages.room.boardCard.label.listBoard": "Tablero de listas",
 	"pages.room.boardCard.menu.ariaLabel": "Menú del tablero",
-	"pages.room.cards.aria":
-		"{itemType}, enlace, {itemName}, presione Intro para abrir",
+	"pages.room.cards.aria": "{itemType}, enlace, presione Intro para abrir",
 	"pages.room.cards.label.revert": "Volver al borrador",
 	"pages.room.copy.course.message.copied":
 		"El curso se ha copiado correctamente.",

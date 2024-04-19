@@ -552,7 +552,7 @@ describe("Board", () => {
 			});
 		});
 
-		describe("@onMoveColumnBeforePosition", () => {
+		describe("@onMoveColumnBackward", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
 					const { wrapper } = setup({ board: boardWithTwoColumns });
@@ -583,7 +583,7 @@ describe("Board", () => {
 			});
 		});
 
-		describe("@onMoveColumnNextPosition", () => {
+		describe("@onMoveColumnForward", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
 					const { wrapper } = setup({ board: boardWithTwoColumns });

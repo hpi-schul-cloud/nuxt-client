@@ -32,7 +32,7 @@ describe("BoardMenuActionMoveColumnUp Component", () => {
 				hasMultipleColumns: true,
 			});
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeTruthy();
+			expect(action.exists()).toBe(true);
 		});
 
 		it("should not be rendered if element is in first position and a list of columns exists", () => {
@@ -41,7 +41,7 @@ describe("BoardMenuActionMoveColumnUp Component", () => {
 				hasMultipleColumns: true,
 			});
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeFalsy();
+			expect(action.exists()).toBe(false);
 		});
 		it("should not be rendered if element is the only column", () => {
 			const wrapper = setup({
@@ -49,7 +49,7 @@ describe("BoardMenuActionMoveColumnUp Component", () => {
 				hasMultipleColumns: false,
 			});
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeFalsy();
+			expect(action.exists()).toBe(false);
 		});
 
 		it("should emit if is clicked", () => {
