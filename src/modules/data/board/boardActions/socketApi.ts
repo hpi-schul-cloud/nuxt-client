@@ -2,7 +2,6 @@ import { ErrorType } from "@/components/error-handling/ErrorHandler.composable";
 import * as BoardActions from "./actions";
 import { boardActions, useBoardSocketApi } from "@data-board";
 import { useBoardStore } from "../BoardStore";
-import { HttpStatusCode } from "axios";
 
 export const useSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -18,16 +17,13 @@ export const useSocketApi = () => {
 	const createCardFailure = (
 		action: ReturnType<typeof BoardActions.createCardFailure>
 	) => {
-		const { error } = action.payload;
+		console.log("createCardFailure", action.payload);
+
 		const failureActionPayload = {
-			error,
 			errorType: "notUpdatedViaSocket" as ErrorType,
-			httpStatus: Number(HttpStatusCode.NotFound),
 			BoardObjectType: "boardCard",
 		};
-		boardStore.dispatch(
-			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
-		);
+		boardStore.dispatch(BoardActions.notifyError(failureActionPayload));
 	};
 
 	const createColumnRequest = (
