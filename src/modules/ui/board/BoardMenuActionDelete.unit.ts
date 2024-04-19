@@ -61,7 +61,7 @@ describe("BoardMenuActionMoveDown Component", () => {
 			const action = wrapper.findComponent(BoardMenuAction);
 			await action.vm.$emit("click");
 			await nextTick();
-			expect(wrapper.emitted("click")).toBe(true);
+			expect(wrapper.emitted("click")).toBeTruthy();
 		});
 
 		it("should emit click on taskConfirmationDialog cancel, too (its a Promise)", async () => {
@@ -70,7 +70,7 @@ describe("BoardMenuActionMoveDown Component", () => {
 			const action = wrapper.findComponent(BoardMenuAction);
 			await action.vm.$emit("click");
 			await nextTick();
-			expect(wrapper.emitted()).toBe(true);
+			expect(wrapper.emitted()).toBeTruthy();
 		});
 	});
 });

@@ -237,7 +237,6 @@ export default defineComponent({
 		};
 
 		const onMoveColumnDown = () => {
-			if (!props.isListBoard) return;
 			emit("move:column-down");
 		};
 
@@ -250,7 +249,6 @@ export default defineComponent({
 		};
 
 		const onMoveColumnUp = () => {
-			if (!props.isListBoard) return;
 			emit("move:column-up");
 		};
 

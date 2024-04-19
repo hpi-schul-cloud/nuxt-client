@@ -29,12 +29,9 @@ describe("BoardColumn", () => {
 		cards,
 	});
 
-	const setup = (
-		props?: object,
-		options?: {
-			permissions?: Partial<BoardPermissionChecks>;
-		}
-	) => {
+	const setup = (options?: {
+		permissions?: Partial<BoardPermissionChecks>;
+	}) => {
 		document.body.setAttribute("data-app", "true");
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
@@ -54,7 +51,6 @@ describe("BoardColumn", () => {
 				index: 1,
 				columnCount: 1,
 				isListBoard: false,
-				...props,
 			},
 		});
 
@@ -187,127 +183,63 @@ describe("BoardColumn", () => {
 	});
 
 	describe("when move was triggered by column header", () => {
-		describe("when board is list board", () => {
-			describe("when move:column-left was triggered by column header via keyboard", () => {
-				it("should emit move:column-left", async () => {
-					const { wrapper } = setup({ isListBoard: true });
+		describe("when move:column-left was triggered by column header", () => {
+			it("should emit move:column-left", async () => {
+				const { wrapper } = setup();
 
-					const columnHeader = wrapper.findComponent({
-						name: "BoardColumnHeader",
-					});
-					columnHeader.vm.$emit("move:column-left");
-					await nextTick();
-
-					const emitted = wrapper.emitted("move:column-left");
-					expect(emitted).toHaveLength(1);
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
 				});
-			});
+				columnHeader.vm.$emit("move:column-left");
+				await nextTick();
 
-			describe("when move:column-right was triggered by column header via keyboard", () => {
-				it("should emit move:column-right", async () => {
-					const { wrapper } = setup({ isListBoard: true });
-
-					const columnHeader = wrapper.findComponent({
-						name: "BoardColumnHeader",
-					});
-					columnHeader.vm.$emit("move:column-right");
-					await nextTick();
-
-					const emitted = wrapper.emitted("move:column-right");
-					expect(emitted).toHaveLength(1);
-				});
-			});
-
-			describe("when move:column-down was triggered by column header via menu", () => {
-				it("should emit move:column-down", async () => {
-					const { wrapper } = setup({ isListBoard: true });
-
-					const columnHeader = wrapper.findComponent({
-						name: "BoardColumnHeader",
-					});
-					columnHeader.vm.$emit("move:column-down");
-					await nextTick();
-
-					const emitted = wrapper.emitted("move:column-down");
-					expect(emitted).toHaveLength(1);
-				});
-			});
-
-			describe("when move:column-up was triggered by column header via menu", () => {
-				it("should emit move:column-up", async () => {
-					const { wrapper } = setup({ isListBoard: true });
-
-					const columnHeader = wrapper.findComponent({
-						name: "BoardColumnHeader",
-					});
-					columnHeader.vm.$emit("move:column-up");
-					await nextTick();
-
-					const emitted = wrapper.emitted("move:column-up");
-					expect(emitted).toHaveLength(1);
-				});
+				const emitted = wrapper.emitted("move:column-left");
+				expect(emitted).toHaveLength(1);
 			});
 		});
 
-		describe("when board is column board", () => {
-			describe("when move:column-left was triggered by column header", () => {
-				it("should emit move:column-left", async () => {
-					const { wrapper } = setup({ isListBoard: false });
+		describe("when move:column-right was triggered by column header", () => {
+			it("should emit move:column-right", async () => {
+				const { wrapper } = setup();
 
-					const columnHeader = wrapper.findComponent({
-						name: "BoardColumnHeader",
-					});
-					columnHeader.vm.$emit("move:column-left");
-					await nextTick();
-
-					const emitted = wrapper.emitted("move:column-left");
-					expect(emitted).toHaveLength(1);
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
 				});
+				columnHeader.vm.$emit("move:column-right");
+				await nextTick();
+
+				const emitted = wrapper.emitted("move:column-right");
+				expect(emitted).toHaveLength(1);
 			});
+		});
 
-			describe("when move:column-right was triggered by column header", () => {
-				it("should emit move:column-right", async () => {
-					const { wrapper } = setup({ isListBoard: false });
+		describe("when move:column-down was triggered by column header", () => {
+			it("should emit move:column-down", async () => {
+				const { wrapper } = setup();
 
-					const columnHeader = wrapper.findComponent({
-						name: "BoardColumnHeader",
-					});
-					columnHeader.vm.$emit("move:column-right");
-					await nextTick();
-
-					const emitted = wrapper.emitted("move:column-right");
-					expect(emitted).toHaveLength(1);
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
 				});
+				columnHeader.vm.$emit("move:column-down");
+				await nextTick();
+
+				const emitted = wrapper.emitted("move:column-down");
+				expect(emitted).toHaveLength(1);
 			});
+		});
 
-			describe("when move:column-down was triggered by column header", () => {
-				it("should not emit move:column-down", async () => {
-					const { wrapper } = setup({ isListBoard: false });
+		describe("when move:column-up was triggered by column header", () => {
+			it("should emit move:column-up", async () => {
+				const { wrapper } = setup();
 
-					const columnHeader = wrapper.findComponent({
-						name: "BoardColumnHeader",
-					});
-					columnHeader.vm.$emit("move:column-down");
-					await nextTick();
-
-					const emitted = wrapper.emitted("move:column-down");
-					expect(emitted).toBeUndefined;
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
 				});
-			});
+				columnHeader.vm.$emit("move:column-up");
+				await nextTick();
 
-			describe("when move:column-up was triggered by column header", () => {
-				it("should not emit move:column-up", async () => {
-					const { wrapper } = setup({ isListBoard: false });
-
-					const columnHeader = wrapper.findComponent({
-						name: "BoardColumnHeader",
-					});
-					columnHeader.vm.$emit("move:column-up");
-					await nextTick();
-
-					const emitted = wrapper.emitted("move:column-up");
-					expect(emitted).toBeUndefined();
-				});
+				const emitted = wrapper.emitted("move:column-up");
+				expect(emitted).toHaveLength(1);
 			});
 		});
 	});
