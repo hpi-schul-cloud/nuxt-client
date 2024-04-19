@@ -124,7 +124,8 @@ describe("RoomBoardCard", () => {
 			it("should have correct board title", () => {
 				const { wrapper } = setup({ boardData: mockDraftBoardData, userRole });
 				const expectedBoardTitle = mockDraftBoardData.title;
-				const boardTitle = wrapper.find(".board-title").element.textContent;
+				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element
+					.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
@@ -137,7 +138,8 @@ describe("RoomBoardCard", () => {
 					userRole,
 				});
 				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
-				const boardTitle = wrapper.find(".board-title").element.textContent;
+				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element
+					.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
@@ -150,7 +152,8 @@ describe("RoomBoardCard", () => {
 					userRole,
 				});
 				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
-				const boardTitle = wrapper.find(".board-title").element.textContent;
+				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element
+					.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
@@ -289,8 +292,9 @@ describe("RoomBoardCard", () => {
 							boardData: mockDraftBoardData,
 							userRole,
 						});
-						const boardCardTitle =
-							wrapper.find(".title-board-card").element.textContent;
+						const boardCardTitle = wrapper.find(
+							`[data-testid="board-card-title-0"]`
+						).element.textContent;
 
 						expect(boardCardTitle).toContain(
 							"pages.room.boardCard.label.columnBoard - common.words.draft"
@@ -304,8 +308,9 @@ describe("RoomBoardCard", () => {
 							boardData: mockDraftListBoardData,
 							userRole,
 						});
-						const boardCardTitle =
-							wrapper.find(".title-board-card").element.textContent;
+						const boardCardTitle = wrapper.find(
+							`[data-testid="board-card-title-0"]`
+						).element.textContent;
 
 						expect(boardCardTitle).toContain(
 							"pages.room.boardCard.label.listBoard - common.words.draft"
@@ -363,8 +368,9 @@ describe("RoomBoardCard", () => {
 							boardData: mockPublishedBoardData,
 							userRole,
 						});
-						const boardCardTitle =
-							wrapper.find(".title-board-card").element.textContent;
+						const boardCardTitle = wrapper.find(
+							`[data-testid="board-card-title-0"]`
+						).element.textContent;
 
 						expect(boardCardTitle).toContain(
 							"pages.room.boardCard.label.columnBoard"
@@ -378,8 +384,9 @@ describe("RoomBoardCard", () => {
 							boardData: mockPublishedListBoardData,
 							userRole,
 						});
-						const boardCardTitle =
-							wrapper.find(".title-board-card").element.textContent;
+						const boardCardTitle = wrapper.find(
+							`[data-testid="board-card-title-0"]`
+						).element.textContent;
 
 						expect(boardCardTitle).toContain(
 							"pages.room.boardCard.label.listBoard"
