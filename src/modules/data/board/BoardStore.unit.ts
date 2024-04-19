@@ -18,6 +18,7 @@ import { setActivePinia, createPinia } from "pinia";
 
 import { useI18n } from "vue-i18n";
 import { boardActions } from "@data-board";
+import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
@@ -73,7 +74,7 @@ describe("BoardStore", () => {
 
 		const boardStore = useBoardStore();
 		boardStore.board = board;
-		return boardStore;
+		return { boardStore };
 	};
 
 	beforeEach(() => {
@@ -94,39 +95,52 @@ describe("BoardStore", () => {
 
 	describe("createCard", () => {
 		describe("when board is not loaded (= has no state)", () => {
-			it("should not call createCardCall", async () => {
-				const boardStore = setup();
+			it("should not create a card", async () => {
+				const { boardStore } = setup();
 
-				boardStore.dispatch(boardActions.createCard({ columnId: column.id }));
-				await nextTick();
+				const newCard = cardResponseFactory.build();
 
-				expect(mockedBoardApiCalls.createCardCall).not.toHaveBeenCalled();
-			});
-
-			it("should call createCardCall", async () => {
-				const boardStore = setup(testBoard);
-
-				boardStore.dispatch(boardActions.createCard({ columnId: column.id }));
-				await nextTick();
-
-				expect(mockedBoardApiCalls.createCardCall).toHaveBeenCalledWith(
-					column.id
+				boardStore.dispatch(
+					boardActions.createCardSuccess({ newCard, columnId: column.id })
 				);
-			});
-
-			it("should call setEditModeId", async () => {
-				const boardStore = setup(testBoard);
-
-				boardStore.dispatch(boardActions.createCard({ columnId: column.id }));
 				await nextTick();
 
-				expect(setEditModeId).toHaveBeenCalled();
+				expect(boardStore.board).toBe(undefined);
 			});
+		});
+
+		it("should create a card", async () => {
+			const { boardStore } = setup(testBoard);
+
+			const newCard = cardResponseFactory.build();
+
+			boardStore.dispatch(
+				boardActions.createCardSuccess({ newCard, columnId: column.id })
+			);
+			await nextTick();
+
+			expect(boardStore.board?.columns[0].cards[1]).toEqual({
+				cardId: newCard.id,
+				height: newCard.height,
+			});
+		});
+
+		it("should call setEditModeId", async () => {
+			const { boardStore } = setup();
+
+			const newCard = cardResponseFactory.build();
+
+			boardStore.dispatch(
+				boardActions.createCardSuccess({ newCard, columnId: column.id })
+			);
+			await nextTick();
+
+			expect(setEditModeId).toHaveBeenCalled();
 		});
 
 		describe("when api returns an error", () => {
 			it("should use the error handler to react", async () => {
-				const boardStore = setup(testBoard);
+				const { boardStore } = setup();
 				mockedBoardApiCalls.createCardCall.mockRejectedValue(
 					setupErrorResponse()
 				);
@@ -141,7 +155,7 @@ describe("BoardStore", () => {
 
 	describe("createColumn", () => {
 		it("should not call createCardCall when board value is undefined", async () => {
-			const boardStore = setup();
+			const { boardStore } = setup();
 
 			boardStore.dispatch(boardActions.createColumn({}));
 			await nextTick();
@@ -150,7 +164,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should call createColumnCall", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 
 			boardStore.dispatch(boardActions.createColumn({}));
 			await nextTick();
@@ -161,7 +175,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should call setEditModeId and return new column", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 
 			boardStore.dispatch(boardActions.createColumn({}));
 			await nextTick();
@@ -171,7 +185,7 @@ describe("BoardStore", () => {
 
 		describe("when api returns an error", () => {
 			it("should use the error handler to react", async () => {
-				const boardStore = setup(testBoard);
+				const { boardStore } = setup();
 				mockedBoardApiCalls.createColumnCall.mockRejectedValue(
 					setupErrorResponse()
 				);
@@ -186,7 +200,7 @@ describe("BoardStore", () => {
 
 	describe("deleteCard", () => {
 		it("should not call deleteCardCall when board value is undefined", async () => {
-			const boardStore = setup();
+			const { boardStore } = setup();
 
 			boardStore.dispatch(boardActions.deleteCard({ cardId: card.cardId }));
 			await nextTick();
@@ -195,7 +209,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should delete card", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 
 			boardStore.dispatch(boardActions.deleteCard({ cardId: card.cardId }));
 			await nextTick();
@@ -208,7 +222,7 @@ describe("BoardStore", () => {
 
 		describe("when api returns an error", () => {
 			it("should use the error handler to react", async () => {
-				const boardStore = setup(testBoard);
+				const { boardStore } = setup();
 				mockedBoardApiCalls.deleteCardCall.mockRejectedValue(
 					setupErrorResponse()
 				);
@@ -223,7 +237,7 @@ describe("BoardStore", () => {
 
 	describe("deleteColumn", () => {
 		it("should not call deleteColumnCall when board value is undefined", async () => {
-			const boardStore = setup();
+			const { boardStore } = setup();
 
 			boardStore.dispatch(boardActions.deleteColumn({ columnId: column.id }));
 			await nextTick();
@@ -232,7 +246,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should not call deleteColumnCall when column id is unkown", async () => {
-			const boardStore = setup();
+			const { boardStore } = setup();
 
 			boardStore.dispatch(boardActions.deleteColumn({ columnId: "unknownId" }));
 			await nextTick();
@@ -241,7 +255,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should delete column", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 
 			boardStore.dispatch(boardActions.deleteColumn({ columnId: column.id }));
 
@@ -253,7 +267,7 @@ describe("BoardStore", () => {
 
 		describe("when api returns an error", () => {
 			it("should use the error handler to react", async () => {
-				const boardStore = setup(testBoard);
+				const { boardStore } = setup();
 				mockedBoardApiCalls.deleteColumnCall.mockRejectedValue(
 					setupErrorResponse()
 				);
@@ -268,7 +282,7 @@ describe("BoardStore", () => {
 
 	describe("fetchBoard", () => {
 		it("should return fetch function that updates board", async () => {
-			const boardStore = setup();
+			const { boardStore } = setup();
 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
 
 			boardStore.dispatch(boardActions.fetchBoard({ id: testBoard.id }));
@@ -278,7 +292,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should return isLoading which reflects pending api calls", async () => {
-			const boardStore = setup();
+			const { boardStore } = setup();
 			mockedBoardApiCalls.fetchBoardCall.mockImplementation(async () => {
 				await new Promise((resolve) => setTimeout(resolve, 5));
 				return testBoard;
@@ -295,7 +309,7 @@ describe("BoardStore", () => {
 
 		describe("when api returns an error", () => {
 			it("should use the error handler to react", async () => {
-				const boardStore = setup(testBoard);
+				const { boardStore } = setup();
 				mockedBoardApiCalls.fetchBoardCall.mockRejectedValue(
 					setupErrorResponse()
 				);
@@ -310,7 +324,7 @@ describe("BoardStore", () => {
 
 	describe("reloadBoard", () => {
 		it("should return undefined if board is not set", async () => {
-			const boardStore = setup();
+			const { boardStore } = setup();
 
 			boardStore.dispatch(boardActions.reloadBoard({}));
 			await nextTick();
@@ -338,7 +352,7 @@ describe("BoardStore", () => {
 		};
 
 		it("should not call moveCardCall when board value is undefined", async () => {
-			const boardStore = setup();
+			const { boardStore } = setup();
 
 			const cardPayload = createCardPayload({ newIndex: 1 });
 			boardStore.dispatch(boardActions.moveCard(cardPayload));
@@ -349,7 +363,7 @@ describe("BoardStore", () => {
 
 		describe("when column id is same as the card's column id", () => {
 			it("should not call moveCardCall", async () => {
-				const boardStore = setup(testBoard);
+				const { boardStore } = setup();
 
 				const cardPayload = createCardPayload({ columnId: column.id });
 				boardStore.dispatch(boardActions.moveCard(cardPayload));
@@ -361,7 +375,7 @@ describe("BoardStore", () => {
 
 		describe("when column id is unknown", () => {
 			it("should not call moveCardCall", async () => {
-				const boardStore = setup(testBoard);
+				const { boardStore } = setup();
 
 				const cardPayload = createCardPayload({ columnId: "unknownId" });
 				boardStore.dispatch(boardActions.moveCard(cardPayload));
@@ -374,7 +388,7 @@ describe("BoardStore", () => {
 		it.each([-1, 1])(
 			"should not call moveCardCall when new index is %s",
 			async (newIndex) => {
-				const boardStore = setup(testBoard);
+				const { boardStore } = setup();
 
 				const cardPayload = createCardPayload({ newIndex });
 				boardStore.dispatch(boardActions.moveCard(cardPayload));
@@ -385,7 +399,7 @@ describe("BoardStore", () => {
 		);
 
 		it("should handle error when api returns an error code", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 			mockedBoardApiCalls.moveCardCall.mockRejectedValue(setupErrorResponse());
 
 			const cardPayload = createCardPayload({ newIndex: 1 });
@@ -396,7 +410,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should move card", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 			const card2 = cardSkeletonResponseFactory.build();
 			column.cards.push(card2);
 			const cardPayload: CardMove = {
@@ -426,7 +440,7 @@ describe("BoardStore", () => {
 				removedIndex: 0,
 				columnId: column.id,
 			};
-			const boardStore = setup();
+			const { boardStore } = setup();
 
 			boardStore.dispatch(
 				boardActions.moveColumn({ columnMove: payload, byKeyboard: false })
@@ -437,7 +451,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should handle error when api returns an error code", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 			mockedBoardApiCalls.moveColumnCall.mockRejectedValue(
 				setupErrorResponse()
 			);
@@ -457,7 +471,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should move column", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 
 			const column2 = columnResponseFactory.build();
 			testBoard.columns.push(column2);
@@ -483,7 +497,7 @@ describe("BoardStore", () => {
 	describe("updateColumnTitle", () => {
 		const NEW_TITLE = "newTitle";
 		it("should not call updateColumnTitleCall when board value is undefined", async () => {
-			const boardStore = setup();
+			const { boardStore } = setup();
 
 			boardStore.dispatch(
 				boardActions.updateColumnTitle({
@@ -498,7 +512,7 @@ describe("BoardStore", () => {
 		});
 
 		it("shouldhandle error when api returns an error code", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 
 			mockedBoardApiCalls.updateColumnTitleCall.mockRejectedValue(
 				setupErrorResponse()
@@ -516,7 +530,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should update column title", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 
 			boardStore.dispatch(
 				boardActions.updateColumnTitle({
@@ -541,7 +555,7 @@ describe("BoardStore", () => {
 	describe("updateBoardTitle", () => {
 		const NEW_TITLE = "newTitle";
 		it("should not call updateBoardTitleCall when board value is undefined", async () => {
-			const boardStore = setup();
+			const { boardStore } = setup();
 
 			boardStore.dispatch(
 				boardActions.updateBoardTitle({ newTitle: NEW_TITLE })
@@ -553,7 +567,7 @@ describe("BoardStore", () => {
 		});
 
 		it("shouldhandle error when api returns an error code", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue(
 				setupErrorResponse()
@@ -568,7 +582,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should update board title", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 
 			boardStore.dispatch(
 				boardActions.updateBoardTitle({ newTitle: NEW_TITLE })
@@ -587,7 +601,7 @@ describe("BoardStore", () => {
 	// describe("notifyWithTemplateAndReload", () => {
 	// 	describe("when is called", () => {
 	// 		it("should call notifyWithTemplate", async () => {
-	// 			const boardStore = setup(testBoard);
+	// 			const {boardStore} = setup();
 	// 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
 	// 			mockedErrorHandlerCalls.notifyWithTemplate.mockImplementation(() =>
 	// 				jest.fn()
@@ -605,7 +619,7 @@ describe("BoardStore", () => {
 
 	describe("updateBoardVisibility", () => {
 		it("should update board visibility", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 
 			boardStore.dispatch(
 				boardActions.updateBoardVisibility({ newVisibility: true })
@@ -620,7 +634,7 @@ describe("BoardStore", () => {
 		});
 
 		it("should handle error when api returns an error code", async () => {
-			const boardStore = setup(testBoard);
+			const { boardStore } = setup();
 			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue(
 				setupErrorResponse()
 			);
