@@ -9,17 +9,19 @@
 			<h1 class="text-h3 pl-2">
 				{{ t("pages.administration.classes.index.title") }}
 			</h1>
-			<v-tabs class="tabs-max-width mb-5" grow v-model="activeTab">
-				<v-tab value="next" data-testid="admin-class-next-year-tab">
-					<span>{{ nextYear }}</span>
-				</v-tab>
-				<v-tab value="current" data-testid="admin-class-current-year-tab">
-					<span>{{ currentYear }}</span>
-				</v-tab>
-				<v-tab value="archive" data-testid="admin-class-previous-years-tab">
-					<span>{{ t("pages.administration.classes.label.archive") }}</span>
-				</v-tab>
-			</v-tabs>
+			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
+				<v-tabs class="tabs-max-width mb-5" grow v-model="activeTab">
+					<v-tab value="next" data-testid="admin-class-next-year-tab">
+						<span>{{ nextYear }}</span>
+					</v-tab>
+					<v-tab value="current" data-testid="admin-class-current-year-tab">
+						<span>{{ currentYear }}</span>
+					</v-tab>
+					<v-tab value="archive" data-testid="admin-class-previous-years-tab">
+						<span>{{ t("pages.administration.classes.label.archive") }}</span>
+					</v-tab>
+				</v-tabs>
+			</div>
 		</template>
 		<v-data-table-server
 			:headers="headers"
