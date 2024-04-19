@@ -42,7 +42,7 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	};
 };
 
-describe("FileStorageApi Composable", () => {
+describe("CollaborativeTextEditorApi Composable", () => {
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
