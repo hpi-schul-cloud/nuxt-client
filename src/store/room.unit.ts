@@ -364,6 +364,7 @@ describe("room module", () => {
 						version: "1.1.0",
 						topics: [],
 						tasks: [],
+						columnBoards: [],
 					})
 				).resolves.not.toBeDefined();
 
@@ -385,6 +386,7 @@ describe("room module", () => {
 					version: "1.1.0",
 					topics: [],
 					tasks: [],
+					columnBoards: [],
 				});
 
 				expect(roomModule.businessError).toStrictEqual(error);
