@@ -48,7 +48,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 	});
 
 	describe("getUrl", () => {
-		describe("when collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent returns successful", () => {
+		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns successful", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType =
@@ -65,7 +65,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 				jest
 					.spyOn(serverApi, "CollaborativeTextEditorApiFactory")
 					.mockReturnValue(collaborativeTextEditorApi);
-				collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent.mockResolvedValueOnce(
+				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockResolvedValueOnce(
 					response
 				);
 
@@ -79,17 +79,17 @@ describe("CollaborativeTextEditorApi Composable", () => {
 				};
 			};
 
-			it("should call collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent", async () => {
+			it("should call collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent", async () => {
 				const { parentId, parentType, collaborativeTextEditorApi } = setup();
 				const { getUrl } = useCollaborativeTextEditorApi();
 
 				await getUrl(parentId, parentType);
 
 				expect(
-					collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent
+					collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent
 				).toHaveBeenCalledTimes(1);
 				expect(
-					collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent
+					collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent
 				).toHaveBeenCalledWith(parentId, parentType);
 			});
 
@@ -103,7 +103,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 			});
 		});
 
-		describe("when collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent returns error", () => {
+		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns error", () => {
 			const setup = (message?: string) => {
 				const parentId = ObjectIdMock();
 				const parentType =
@@ -117,7 +117,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 				jest
 					.spyOn(serverApi, "CollaborativeTextEditorApiFactory")
 					.mockReturnValue(collaborativeTextEditorApi);
-				collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent.mockRejectedValue(
+				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockRejectedValue(
 					responseError
 				);
 

@@ -25,7 +25,7 @@ const collaborativeTextEditorApi = () => {
 	): Promise<string | undefined> => {
 		try {
 			const response =
-				await collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(
+				await collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(
 					parentId,
 					parentType
 				);
