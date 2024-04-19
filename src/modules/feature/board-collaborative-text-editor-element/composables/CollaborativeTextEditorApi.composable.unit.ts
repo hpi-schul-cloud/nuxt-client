@@ -48,7 +48,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 	});
 
 	describe("getUrl", () => {
-		describe("when collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent returns successfully", () => {
+		describe("when collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent returns successful", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType =
