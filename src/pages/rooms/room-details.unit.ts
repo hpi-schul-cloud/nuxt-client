@@ -136,6 +136,7 @@ const getWrapper = (
 		getVersion: "",
 		getTopics: [],
 		getTasks: [],
+		getColumnBoards: [],
 		startExportFlow: jest.fn(),
 	});
 	shareModule = createModuleMocks(ShareModule, {

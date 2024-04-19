@@ -36,6 +36,7 @@ describe("MediaBoardLine", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
 					MediaBoardLineMenu: true,
+					MediaBoardExternalToolElement: true,
 				},
 			},
 			props,

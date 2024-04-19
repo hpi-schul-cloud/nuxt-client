@@ -1553,6 +1553,12 @@ export interface CourseExportBodyParams {
      * @memberof CourseExportBodyParams
      */
     tasks: Array<string>;
+    /**
+     * The list of ids of column boards which should be exported. If empty no column boards are exported.
+     * @type {Array<string>}
+     * @memberof CourseExportBodyParams
+     */
+    columnBoards: Array<string>;
 }
 /**
  * 
