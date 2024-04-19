@@ -466,3 +466,9 @@ const getInstituteTitle: ComputedRef<string> = computed(() => {
 	}
 });
 </script>
+
+<style scoped>
+.v-tabs {
+	margin-bottom: -2px;
+}
+</style>
