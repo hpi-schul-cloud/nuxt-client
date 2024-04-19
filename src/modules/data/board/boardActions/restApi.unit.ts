@@ -655,10 +655,48 @@ describe("restApi", () => {
 	});
 
 	describe("notifyWithTemplateAndReload", () => {
-		test.todo("should not notify when board value is undefined");
-		test.todo("call notify template");
-		test.todo("reload board");
-		test.todo("set edit mode id to undefined");
+		/**
+		 * Simulates actually calling the error handling function for a 404 error.
+		 * (otherwise the handler function would not be called on the mock)
+		 */
+		const executeErrorHandler = () => {
+			mockedErrorHandler.handleError.mock.calls[0]?.[1]?.[404]?.();
+		};
+
+		it("should not notify when board value is undefined", async () => {
+			setup(false);
+			const { updateBoardTitleRequest } = useBoardRestApi();
+
+			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
+			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
+
+			await updateBoardTitleRequest(
+				boardActions.updateBoardTitleRequest({ newTitle: "newTitlte" })
+			);
+
+			executeErrorHandler();
+			expect(mockedErrorHandler.notifyWithTemplate).not.toHaveBeenCalled();
+		});
+
+		it("should notify with template", async () => {
+			setup();
+			const { updateBoardTitleRequest } = useBoardRestApi();
+
+			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
+			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
+
+			await updateBoardTitleRequest(
+				boardActions.updateBoardTitleRequest({ newTitle: "newTitlte" })
+			);
+
+			executeErrorHandler();
+			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith(
+				"notUpdated",
+				"board"
+			);
+
+			expect(setEditModeId).toHaveBeenCalledWith(undefined);
+		});
 	});
 
 	describe("reloadBoard", () => {
