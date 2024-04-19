@@ -194,21 +194,16 @@ export const useSocketApi = () => {
 	const updateBoardVisibilityFailure = (
 		action: ReturnType<typeof BoardActions.updateBoardVisibilityFailure>
 	) => {
-		const { error } = action.payload;
+		console.log("updateBoardVisibilityFailure", action.payload);
+
 		const failureActionPayload = {
-			error,
 			errorType: "notUpdatedViaSocket" as ErrorType,
-			httpStatus: Number(HttpStatusCode.NotFound),
 			BoardObjectType: "board",
 		};
-		boardStore.dispatch(
-			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
-		);
+		boardStore.dispatch(BoardActions.notifyError(failureActionPayload));
 	};
 
-	const reloadBoardRequest = (
-		action: ReturnType<typeof BoardActions.reloadBoard>
-	) => {
+	const reloadBoard = (action: ReturnType<typeof BoardActions.reloadBoard>) => {
 		emitOnSocket("reload-board-request", action.payload);
 	};
 
@@ -231,7 +226,7 @@ export const useSocketApi = () => {
 		moveCardFailure,
 		moveColumnRequest,
 		moveColumnFailure,
-		reloadBoardRequest,
+		reloadBoard,
 		reloadBoardSuccess,
 		updateColumnTitleRequest,
 		updateColumnTitleFailure,

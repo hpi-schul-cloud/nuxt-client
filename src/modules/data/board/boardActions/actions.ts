@@ -157,6 +157,14 @@ const notifyWithTemplateAndReload = createAction(
 	}>()
 );
 
+const notifyError = createAction(
+	"notify-error",
+	props<{
+		errorType: ErrorType;
+		boardObjectType?: BoardObjectType;
+	}>()
+);
+
 export {
 	fetchBoard,
 	reloadBoard,
@@ -196,6 +204,6 @@ export {
 	updateBoardVisibilityFailure,
 
 	// notify actions
-	// notifyWithTemplate,
 	notifyWithTemplateAndReload,
+	notifyError,
 };
