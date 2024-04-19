@@ -46,7 +46,7 @@ describe("CollaborativeTextEditorNotifications.composable", () => {
 			return { i18nKey };
 		};
 
-		it("should call i18n.t with correctly props", () => {
+		it("should call i18n.t with correct props", () => {
 			const { showForbiddenError } = setupMountComposable();
 			const { i18nKey } = setup();
 
@@ -55,7 +55,7 @@ describe("CollaborativeTextEditorNotifications.composable", () => {
 			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
 		});
 
-		it("should call showFailure with correctly props", () => {
+		it("should call showFailure with correct props", () => {
 			const { showForbiddenError } = setupMountComposable();
 			const { i18nKey } = setup();
 
@@ -76,7 +76,7 @@ describe("CollaborativeTextEditorNotifications.composable", () => {
 			return { i18nKey };
 		};
 
-		it("should call i18n.t with correctly props", () => {
+		it("should call i18n.t with correct props", () => {
 			const { showUnauthorizedError } = setupMountComposable();
 			const { i18nKey } = setup();
 
@@ -85,7 +85,7 @@ describe("CollaborativeTextEditorNotifications.composable", () => {
 			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
 		});
 
-		it("should call showFailure with correctly props", () => {
+		it("should call showFailure with correct props", () => {
 			const { showUnauthorizedError } = setupMountComposable();
 			const { i18nKey } = setup();
 
@@ -107,7 +107,7 @@ describe("CollaborativeTextEditorNotifications.composable", () => {
 			return { i18nKey, type };
 		};
 
-		it("should call i18n.t with correctly props", () => {
+		it("should call i18n.t with correct props", () => {
 			const { showInternalServerError } = setupMountComposable();
 			const { i18nKey, type } = setup();
 
@@ -116,7 +116,7 @@ describe("CollaborativeTextEditorNotifications.composable", () => {
 			expect(mockI18nModule.t).toBeCalledWith(i18nKey, { type });
 		});
 
-		it("should call showFailure with correctly props", () => {
+		it("should call showFailure with correct props", () => {
 			const { showInternalServerError } = setupMountComposable();
 			const { i18nKey, type } = setup();
 

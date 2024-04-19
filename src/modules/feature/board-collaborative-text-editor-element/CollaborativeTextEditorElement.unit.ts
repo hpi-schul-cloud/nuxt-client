@@ -115,7 +115,7 @@ describe("CollaborativeTextEditorElement", () => {
 					);
 				});
 
-				it("should open collaborative text editor in new tab correctly", async () => {
+				it("should open collaborative text editor in new tab", async () => {
 					const { wrapper, element } = setup({
 						isEditMode: false,
 					});
