@@ -1016,6 +1016,10 @@ export default {
 		"Tenga en cuenta que, una vez que se inicie el proceso de migración de la escuela, puede tardar hasta 1 hora en obtener los datos. Después de esto, podrá continuar con el siguiente paso.",
 	"pages.administration.migration.waiting":
 		"Esperando la sincronización de datos...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"¡La migración no puede comenzar porque el sistema de inicio de sesión de destino y el sistema de inicio de sesión actual de su escuela son el mismo!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"¡No puedo encontrar el sistema moin.schule!",
 	"pages.administration.or": "o",
 	"pages.administration.printQr.emptyUser":
 		"L{'@'}s usuari{'@'}s seleccionad{'@'}s ya han sido registrad{'@'}s",
