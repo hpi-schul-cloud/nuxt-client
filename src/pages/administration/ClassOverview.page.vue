@@ -10,7 +10,7 @@
 				{{ t("pages.administration.classes.index.title") }}
 			</h1>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs class="tabs-max-width mb-5" grow v-model="activeTab">
+				<v-tabs class="tabs-max-width" grow v-model="activeTab">
 					<v-tab value="next" data-testid="admin-class-next-year-tab">
 						<span>{{ nextYear }}</span>
 					</v-tab>
