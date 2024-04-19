@@ -19,7 +19,7 @@
 					direction: 'vertical',
 					delay: 300, // isDesktop ? 0 : 300
 					delayOnTouchOnly: true,
-					ghostClass: 'sortable-drag-ghost',
+					ghostClass: sortableGhostClasses,
 					easing: 'cubic-bezier(1, 0, 0, 1)',
 					dragClass: 'sortable-drag-board-card',
 					dragoverBubble: false,
@@ -66,6 +66,14 @@ const ghostColumnStyle = computed(() => {
 	}
 	return classes;
 });
+
+const sortableGhostClasses = computed(() => {
+	const classes = ["sortable-drag-ghost"];
+	if (!props.isListBoard) {
+		classes.push("column-layout");
+	}
+	return classes;
+});
 </script>
 
 <style scoped>
@@ -95,7 +103,7 @@ const ghostColumnStyle = computed(() => {
 </style>
 
 <style>
-.sortable-drag-ghost {
+.column-layout {
 	width: 350px !important;
 }
 </style>

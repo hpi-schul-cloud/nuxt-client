@@ -33,7 +33,7 @@
 					filter: '.v-input, v-btn',
 					preventOnFilter: false,
 					forceFallback: true,
-					ghostClass: 'sortable-drag-ghost',
+					ghostClass: sortableGhostClasses,
 					scroll: true,
 				}"
 				:class="sortableClasses"
@@ -283,6 +283,14 @@ export default defineComponent({
 			return classes;
 		});
 
+		const sortableGhostClasses = computed(() => {
+			const classes = ["sortable-drag-ghost"];
+			if (!props.isListBoard) {
+				classes.push("column-layout");
+			}
+			return classes;
+		});
+
 		return {
 			cardDropPlaceholderOptions,
 			columnClasses,
@@ -309,6 +317,7 @@ export default defineComponent({
 			getChildPayload,
 			reactiveIndex,
 			showAddButton,
+			sortableGhostClasses,
 		};
 	},
 });
@@ -317,6 +326,8 @@ export default defineComponent({
 <style>
 .sortable-drag-ghost .v-card {
 	opacity: 0.6;
+}
+.column-layout {
 	width: 346px; /* size of the card - column has 400px width and some paddings and margins */
 }
 </style>
