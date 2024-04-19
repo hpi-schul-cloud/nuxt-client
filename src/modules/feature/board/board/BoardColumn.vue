@@ -12,7 +12,7 @@
 			@move:column-right="onMoveColumnRight"
 			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
-			class="pl-2"
+			:class="{ 'pl-2': !isListBoard }"
 		/>
 		<div>
 			<Sortable

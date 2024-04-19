@@ -61,7 +61,7 @@
 						</template>
 					</Sortable>
 				</div>
-				<div :class="isListBoard ? 'mx-auto mt-9' : ''">
+				<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
 					<BoardColumnGhost
 						v-if="hasCreateColumnPermission"
 						@create:column="onCreateColumn"
@@ -300,11 +300,11 @@ const boardStyle = computed(() => {
 });
 
 const boardColumnClass = computed(() => {
-	const classes = ["d-flex", "flex-shrink-1", "ml-n4"];
+	const classes = ["d-flex", "flex-shrink-1"];
 	if (isListBoard.value) {
 		classes.push("flex-column");
 	} else {
-		classes.push("flex-row");
+		classes.push("flex-row", "ml-n4");
 	}
 	return classes;
 });

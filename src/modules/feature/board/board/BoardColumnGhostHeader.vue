@@ -1,6 +1,9 @@
 <template>
 	<div class="mb-4" ref="headerRef">
-		<div class="d-flex align-start justify-space-between pt-2">
+		<div
+			class="d-flex flex-column justify-space-between pt-2"
+			:class="isListBoard ? 'center' : 'align-start'"
+		>
 			<VBtn
 				elevation="0"
 				variant="text"

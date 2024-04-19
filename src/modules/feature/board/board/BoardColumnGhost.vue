@@ -1,10 +1,11 @@
 <template>
-	<div ref="ghostColumnRef" class="pl-2">
+	<div ref="ghostColumnRef" :class="{ 'pl-2': !isListBoard }">
 		<BoardColumnGhostHeader
 			:isColumnActive="isColumnHovered"
 			:isListBoard="isListBoard"
 			@add-column="onAddColumn"
 			data-testid="add-column"
+			:class="{ 'px-4': isListBoard }"
 		/>
 		<div
 			:style="{ 'min-width': colWidth + 'px' }"
