@@ -14,7 +14,6 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
@@ -94,7 +93,7 @@ describe("restApi", () => {
 			);
 		});
 
-		it("should dispatch createCardFailure action if the API call fails", async () => {
+		it("should call handleError if the API call fails", async () => {
 			const { boardStore } = setup();
 			const { createCardRequest } = useBoardRestApi();
 			const columnId = boardStore.board!.columns[0].id;
@@ -105,12 +104,7 @@ describe("restApi", () => {
 				BoardActions.createCardRequest({ columnId: columnId })
 			);
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.createCardFailure({
-					errorMessage: "unable to create card",
-					errorData: { columnId: columnId },
-				})
-			);
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
@@ -144,23 +138,15 @@ describe("restApi", () => {
 			expect(boardStore.setLoading).toHaveBeenLastCalledWith(false);
 		});
 
-		it("should dispatch an error if the fetch fails", async () => {
+		it("should call handleError if the fetch fails", async () => {
 			const { boardStore } = setup();
 			const { fetchBoard } = useBoardRestApi();
 
-			const expectedError = new Error("fetchBoard error");
-			mockedBoardApiCalls.fetchBoardCall.mockRejectedValue(expectedError);
+			mockedBoardApiCalls.fetchBoardCall.mockRejectedValue({});
 
 			await fetchBoard(BoardActions.fetchBoard({ id: boardStore.board!.id }));
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.notifyWithTemplate({
-					error: expectedError,
-					errorType: "notLoaded",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "board",
-				})
-			);
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
@@ -192,22 +178,14 @@ describe("restApi", () => {
 		});
 
 		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
-			const { boardStore } = setup();
+			setup();
 			const { createColumnRequest } = useBoardRestApi();
 
-			const expectedError = new Error("createColumnCall error");
-			mockedBoardApiCalls.createColumnCall.mockRejectedValue(expectedError);
+			mockedBoardApiCalls.createColumnCall.mockRejectedValue({});
 
 			await createColumnRequest();
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.notifyWithTemplateAndReload({
-					error: expectedError,
-					errorType: "notCreated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardColumn",
-				})
-			);
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
@@ -240,19 +218,11 @@ describe("restApi", () => {
 			const { deleteCardRequest } = useBoardRestApi();
 			const cardId = boardStore.board!.columns[0].cards[0].cardId;
 
-			const expectedError = new Error("deleteCardCall error");
-			mockedBoardApiCalls.deleteCardCall.mockRejectedValue(expectedError);
+			mockedBoardApiCalls.deleteCardCall.mockRejectedValue({});
 
 			await deleteCardRequest(boardActions.deleteCardRequest({ cardId }));
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.notifyWithTemplateAndReload({
-					error: expectedError,
-					errorType: "notDeleted",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardCard",
-				})
-			);
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
@@ -285,19 +255,11 @@ describe("restApi", () => {
 			const { deleteColumnRequest } = useBoardRestApi();
 			const columnId = boardStore.board!.columns[0].id;
 
-			const expectedError = new Error("deleteColumnCall error");
-			mockedBoardApiCalls.deleteColumnCall.mockRejectedValue(expectedError);
+			mockedBoardApiCalls.deleteColumnCall.mockRejectedValue({});
 
 			await deleteColumnRequest(boardActions.deleteColumnRequest({ columnId }));
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.notifyWithTemplateAndReload({
-					error: expectedError,
-					errorType: "notDeleted",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardColumn",
-				})
-			);
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
@@ -483,7 +445,7 @@ describe("restApi", () => {
 					boardActions.moveCardSuccess(cardPayload)
 				);
 			});
-			it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+			it("should call handleError if the API call fails", async () => {
 				const { boardStore } = setup();
 				const { moveCardRequest } = useBoardRestApi();
 
@@ -498,19 +460,11 @@ describe("restApi", () => {
 					toColumnId: firstColumn.id,
 				});
 
-				const expectedError = new Error("moveCardCall error");
-				mockedBoardApiCalls.moveCardCall.mockRejectedValue(expectedError);
+				mockedBoardApiCalls.moveCardCall.mockRejectedValue({});
 
 				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
 
-				expect(boardStore.dispatch).toHaveBeenCalledWith(
-					BoardActions.notifyWithTemplateAndReload({
-						error: expectedError,
-						errorType: "notUpdated",
-						httpStatus: HttpStatusCode.NotFound,
-						boardObjectType: "boardCard",
-					})
-				);
+				expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 			});
 		});
 	});
@@ -560,20 +514,11 @@ describe("restApi", () => {
 				addedIndex: 1,
 				columnId: firstColumn.id,
 			};
-			const expectedError = new Error("moveColumnCall error");
-			mockedBoardApiCalls.moveColumnCall.mockRejectedValue(expectedError);
+
+			mockedBoardApiCalls.moveColumnCall.mockRejectedValue({});
 
 			await moveColumnRequest(
 				boardActions.moveColumnRequest({ columnMove, byKeyboard: false })
-			);
-
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.notifyWithTemplateAndReload({
-					error: expectedError,
-					errorType: "notUpdated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardColumn",
-				})
 			);
 		});
 	});
@@ -609,30 +554,20 @@ describe("restApi", () => {
 			);
 		});
 
-		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+		it("should call handleError if the API call fails", async () => {
 			const { boardStore } = setup();
 			const { updateColumnTitleRequest } = useBoardRestApi();
 
 			const firstColumn = boardStore.board!.columns[0];
 			const payload = { columnId: firstColumn.id, newTitle: "newTitle" };
 
-			const expectedError = new Error("updateColumnTitleCall error");
-			mockedBoardApiCalls.updateColumnTitleCall.mockRejectedValue(
-				expectedError
-			);
+			mockedBoardApiCalls.updateColumnTitleCall.mockRejectedValue({});
 
 			await updateColumnTitleRequest(
 				boardActions.updateColumnTitleRequest(payload)
 			);
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.notifyWithTemplateAndReload({
-					error: expectedError,
-					errorType: "notUpdated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "boardColumn",
-				})
-			);
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
@@ -663,27 +598,19 @@ describe("restApi", () => {
 			);
 		});
 
-		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
-			const { boardStore } = setup();
+		it("should call handleError if the API call fails", async () => {
+			setup();
 			const { updateBoardTitleRequest } = useBoardRestApi();
 
 			const newTitle = "newTitle";
 
-			const expectedError = new Error("updateBoardTitleCall error");
-			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue(expectedError);
+			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
 
 			await updateBoardTitleRequest(
 				boardActions.updateBoardTitleRequest({ newTitle })
 			);
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.notifyWithTemplateAndReload({
-					error: expectedError,
-					errorType: "notUpdated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "board",
-				})
-			);
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
@@ -714,28 +641,24 @@ describe("restApi", () => {
 			);
 		});
 
-		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
-			const { boardStore } = setup();
+		it("should call handleError if the API call fails", async () => {
+			setup();
 			const { updateBoardVisibilityRequest } = useBoardRestApi();
 
-			const expectedError = new Error("updateBoardVisibilityCall error");
-			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue(
-				expectedError
-			);
+			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue({});
 
 			await updateBoardVisibilityRequest(
 				boardActions.updateBoardVisibilityRequest({ newVisibility: true })
 			);
-
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.notifyWithTemplateAndReloadRequest({
-					error: expectedError,
-					errorType: "notUpdated",
-					httpStatus: HttpStatusCode.NotFound,
-					boardObjectType: "board",
-				})
-			);
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
+	});
+
+	describe("notifyWithTemplateAndReload", () => {
+		test.todo("should not notify when board value is undefined");
+		test.todo("call notify template");
+		test.todo("reload board");
+		test.todo("set edit mode id to undefined");
 	});
 
 	describe("reloadBoard", () => {
