@@ -17,11 +17,23 @@ import {
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import * as useUserLoginMigrationMappingsComposable from "@/composables/user-login-migration-mappings.composable";
+import { businessErrorFactory } from "@@/tests/test-utils";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
 	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
+
+	jest
+		.spyOn(
+			useUserLoginMigrationMappingsComposable,
+			"useUserLoginMigrationMappings"
+		)
+		.mockReturnValue({
+			...useUserLoginMigrationMappingsComposable.useUserLoginMigrationMappings(),
+			getBusinessErrorTranslationKey: () => "",
+		});
 
 	const setup = (
 		schoolGetters: Partial<SchoolsModule> = {},
@@ -39,6 +51,7 @@ describe("AdminMigrationSection", () => {
 				finishedAt: new Date(2000, 1, 1, 0, 0),
 				mandatorySince: undefined,
 			},
+			getBusinessError: businessErrorFactory.build({ message: undefined }),
 			...userLoginMigrationGetters,
 		});
 
@@ -359,6 +372,26 @@ describe("AdminMigrationSection", () => {
 
 			expect(buttonComponent.exists()).toBe(false);
 			expect(switchComponent.isVisible()).toBe(false);
+		});
+
+		describe("when an error occurs during migration start", () => {
+			it("should display an alert", async () => {
+				const { wrapper } = setup(
+					{
+						getSchool: { ...mockSchool, officialSchoolNumber: "12345" },
+					},
+					{
+						getUserLoginMigration: undefined,
+						getBusinessError: businessErrorFactory.build({
+							error: new Error(),
+						}),
+					}
+				);
+
+				const alert = wrapper.find("[data-testid=error-alert]");
+
+				expect(alert.exists()).toEqual(true);
+			});
 		});
 	});
 
