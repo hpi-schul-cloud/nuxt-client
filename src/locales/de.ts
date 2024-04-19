@@ -994,7 +994,7 @@ export default {
 	"pages.administration.migration.identical_user_login_migration_system":
 		"Die Migration kann nicht gestartet werden, da das Ziel-Login-System und das derzeitige Login-System Ihrer Schule identisch sind!",
 	"pages.administration.migration.moin_schule_system_not_found":
-		"Das moin.schule System kann nicht gefunden werden!",
+		"Das moin.schule-System kann nicht gefunden werden!",
 	"pages.administration.or": "oder",
 	"pages.administration.printQr.emptyUser":
 		"Dieser Nutzer wurde bereits registriert",
