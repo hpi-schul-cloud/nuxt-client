@@ -2,7 +2,6 @@ import { BusinessError } from "@/store/types/commons";
 
 const ErrorTypeTranslationKeyMap = new Map<string, string>([
 	["TOOL_PARAMETER_DUPLICATE", "pages.tool.apiError.tool_param_duplicate"],
-	// ["tool_version_mismatch", "pages.tool.apiError.tool_version_mismatch"],
 	["TOOL_PARAMETER_REQUIRED", "pages.tool.apiError.tool_param_required"],
 	[
 		"TOOL_PARAMETER_TYPE_MISMATCH",
