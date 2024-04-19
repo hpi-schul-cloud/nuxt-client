@@ -34,7 +34,6 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 			socket.emit(action, data);
 			resolve();
 			console.log("dispatching", dispatch);
-			console.log({ action, data });
 		});
 	};
 
