@@ -30,10 +30,10 @@ describe("BoardColumnHeader", () => {
 	const mockedUseEditMode = jest.mocked(useEditMode);
 
 	const setup = (
-		props?: object,
 		options?: {
 			permissions?: Partial<BoardPermissionChecks>;
-		}
+		},
+		props?: object
 	) => {
 		const isEditMode = computed(() => true);
 		mockedUseEditMode.mockReturnValue({
@@ -57,7 +57,6 @@ describe("BoardColumnHeader", () => {
 				title: "title-text",
 				titlePlaceholder: "Spalte 1",
 				columnId: "abc123",
-				isListBoard: false,
 				...props,
 			},
 		});
@@ -85,7 +84,7 @@ describe("BoardColumnHeader", () => {
 
 	describe("when the board is of type list", () => {
 		it("should not show options to move left and right", async () => {
-			const wrapper = setup({ isListBoard: true });
+			const wrapper = setup({}, { isListBoard: true });
 
 			const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
 			const moveRightButton = wrapper.findComponent(BoardMenuActionMoveRight);
@@ -95,7 +94,7 @@ describe("BoardColumnHeader", () => {
 
 		describe("when the column should be moved down", () => {
 			it("should emit move:column-down", async () => {
-				const wrapper = setup({ isListBoard: true });
+				const wrapper = setup({}, { isListBoard: true });
 
 				const moveDownButton = wrapper.findComponent(
 					BoardMenuActionMoveColumnDown
@@ -109,7 +108,7 @@ describe("BoardColumnHeader", () => {
 
 		describe("when the column should be moved up", () => {
 			it("should emit move:column-up", async () => {
-				const wrapper = setup({ isListBoard: true });
+				const wrapper = setup({}, { isListBoard: true });
 
 				const moveUpButton = wrapper.findComponent(BoardMenuActionMoveColumnUp);
 				moveUpButton.vm.$emit("click");
@@ -122,7 +121,7 @@ describe("BoardColumnHeader", () => {
 
 	describe("when the board is of type column", () => {
 		it("should not show options to move up and down", async () => {
-			const wrapper = setup({ isListBoard: false });
+			const wrapper = setup({}, { isListBoard: false });
 
 			const moveDownButton = wrapper.findComponent(
 				BoardMenuActionMoveColumnDown
@@ -134,7 +133,7 @@ describe("BoardColumnHeader", () => {
 
 		describe("when the column should be moved to the left", () => {
 			it("should emit move:column-left", async () => {
-				const wrapper = setup({ isListBoard: false });
+				const wrapper = setup({}, { isListBoard: false });
 
 				const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
 				moveLeftButton.vm.$emit("click");
@@ -146,7 +145,7 @@ describe("BoardColumnHeader", () => {
 
 		describe("when the column should be moved to the right", () => {
 			it("should emit move:column-right", async () => {
-				const wrapper = setup({ isListBoard: false });
+				const wrapper = setup({}, { isListBoard: false });
 
 				const moveRightButton = wrapper.findComponent(BoardMenuActionMoveRight);
 				moveRightButton.vm.$emit("click");
