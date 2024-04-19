@@ -39,16 +39,13 @@ export const useSocketApi = () => {
 	const createColumnFailure = (
 		action: ReturnType<typeof BoardActions.createColumnFailure>
 	) => {
-		const { error } = action.payload;
+		console.log("createColumnFailure", action.payload);
+
 		const failureActionPayload = {
-			error,
 			errorType: "notUpdatedViaSocket" as ErrorType,
-			httpStatus: Number(HttpStatusCode.NotFound),
 			BoardObjectType: "boardColumn",
 		};
-		boardStore.dispatch(
-			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
-		);
+		boardStore.dispatch(BoardActions.notifyError(failureActionPayload));
 	};
 
 	const deleteCardRequest = async (
@@ -60,16 +57,13 @@ export const useSocketApi = () => {
 	const deleteCardFailure = (
 		action: ReturnType<typeof BoardActions.deleteCardFailure>
 	) => {
-		const { error } = action.payload;
+		console.log("deleteCardFailure", action.payload);
+
 		const failureActionPayload = {
-			error,
 			errorType: "notUpdatedViaSocket" as ErrorType,
-			httpStatus: Number(HttpStatusCode.NotFound),
 			BoardObjectType: "boardCard",
 		};
-		boardStore.dispatch(
-			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
-		);
+		boardStore.dispatch(BoardActions.notifyError(failureActionPayload));
 	};
 
 	const deleteColumnRequest = async (
@@ -82,16 +76,13 @@ export const useSocketApi = () => {
 	const deleteColumnFailure = (
 		action: ReturnType<typeof BoardActions.deleteColumnFailure>
 	) => {
-		const { error } = action.payload;
+		console.log("deleteColumnFailure", action.payload);
+
 		const failureActionPayload = {
-			error,
 			errorType: "notUpdatedViaSocket" as ErrorType,
-			httpStatus: Number(HttpStatusCode.NotFound),
 			BoardObjectType: "boardColumn",
 		};
-		boardStore.dispatch(
-			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
-		);
+		boardStore.dispatch(BoardActions.notifyError(failureActionPayload));
 	};
 
 	const moveCardRequest = async (
@@ -104,16 +95,13 @@ export const useSocketApi = () => {
 	const moveCardFailure = (
 		action: ReturnType<typeof BoardActions.moveCardFailure>
 	) => {
-		const { error } = action.payload;
+		console.log("moveCardFailure", action.payload);
+
 		const failureActionPayload = {
-			error,
 			errorType: "notUpdatedViaSocket" as ErrorType,
-			httpStatus: Number(HttpStatusCode.NotFound),
 			BoardObjectType: "boardCard",
 		};
-		boardStore.dispatch(
-			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
-		);
+		boardStore.dispatch(BoardActions.notifyError(failureActionPayload));
 	};
 
 	const moveColumnRequest = async (
@@ -126,16 +114,13 @@ export const useSocketApi = () => {
 	const moveColumnFailure = (
 		action: ReturnType<typeof BoardActions.moveColumnFailure>
 	) => {
-		const { error } = action.payload;
+		console.log("moveColumnFailure", action.payload);
+
 		const failureActionPayload = {
-			error,
 			errorType: "notUpdatedViaSocket" as ErrorType,
-			httpStatus: Number(HttpStatusCode.NotFound),
 			BoardObjectType: "boardColumn",
 		};
-		boardStore.dispatch(
-			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
-		);
+		boardStore.dispatch(BoardActions.notifyError(failureActionPayload));
 	};
 
 	const updateColumnTitleRequest = async (
@@ -148,16 +133,13 @@ export const useSocketApi = () => {
 	const updateBoardTitleFailure = (
 		action: ReturnType<typeof BoardActions.updateBoardTitleFailure>
 	) => {
-		const { error } = action.payload;
+		console.log("updateBoardTitleFailure", action.payload);
+
 		const failureActionPayload = {
-			error,
 			errorType: "notUpdatedViaSocket" as ErrorType,
-			httpStatus: Number(HttpStatusCode.NotFound),
 			BoardObjectType: "board",
 		};
-		boardStore.dispatch(
-			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
-		);
+		boardStore.dispatch(BoardActions.notifyError(failureActionPayload));
 	};
 
 	const updateBoardTitleRequest = (
@@ -170,16 +152,13 @@ export const useSocketApi = () => {
 	const updateColumnTitleFailure = (
 		action: ReturnType<typeof BoardActions.updateColumnTitleFailure>
 	) => {
-		const { error } = action.payload;
+		console.log("updateColumnTitleFailure", action.payload);
+
 		const failureActionPayload = {
-			error,
 			errorType: "notUpdatedViaSocket" as ErrorType,
-			httpStatus: Number(HttpStatusCode.NotFound),
 			BoardObjectType: "boardColumn",
 		};
-		boardStore.dispatch(
-			BoardActions.notifyWithTemplateAndReload(failureActionPayload)
-		);
+		boardStore.dispatch(BoardActions.notifyError(failureActionPayload));
 	};
 
 	const updateBoardVisibilityRequest = (
