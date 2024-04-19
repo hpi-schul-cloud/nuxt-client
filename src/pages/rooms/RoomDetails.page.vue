@@ -125,7 +125,7 @@ import {
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
 	mdiSyncOff,
-	mdiViewDashboard,
+	mdiViewDashboardOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
@@ -304,7 +304,7 @@ export default defineComponent({
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
-					icon: mdiViewDashboard,
+					icon: mdiViewDashboardOutline,
 					customEvent: "board-create",
 					dataTestId: "fab_button_add_board",
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),

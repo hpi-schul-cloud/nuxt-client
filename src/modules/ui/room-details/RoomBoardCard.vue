@@ -67,7 +67,7 @@ import {
 	mdiShareVariantOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
-	mdiViewDashboard,
+	mdiViewDashboardOutline,
 } from "@/components/icons/material";
 import {
 	BoardLayout,
@@ -131,7 +131,7 @@ const isListBoard = computed(() => {
 const titleIcon = computed(() => {
 	const icon = isListBoard.value
 		? "$mdi_custom_grid_outline"
-		: mdiViewDashboard;
+		: mdiViewDashboardOutline;
 	return icon;
 });
 
