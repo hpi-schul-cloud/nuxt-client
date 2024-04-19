@@ -62,6 +62,16 @@ export const useErrorHandler = () => {
 		500: notifyWithTemplate("notLoaded"),
 	};
 
+	const notifySocketError = (
+		errorType: ErrorType,
+		boardObjectType?: BoardObjectType,
+		status: "success" | "error" | "warning" | "info" = "error",
+		timeout?: number
+	): void => {
+		const text = generateErrorText(errorType, boardObjectType);
+		showCustomNotifier(text, status, timeout);
+	};
+
 	const handleError = (error: unknown, errorMap?: Partial<ErrorMap>) => {
 		const responseError = mapAxiosErrorToResponseError(error);
 		const mergedErrorMap = { ...defaultErrorMap, ...errorMap };
@@ -75,7 +85,8 @@ export const useErrorHandler = () => {
 
 	return {
 		handleError,
-		notifyWithTemplate,
 		generateErrorText,
+		notifySocketError,
+		notifyWithTemplate,
 	};
 };

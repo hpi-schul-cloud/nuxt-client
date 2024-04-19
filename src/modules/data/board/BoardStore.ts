@@ -23,7 +23,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const socketOrRest = FEATURE_SOCKET_ENABLED ? socketApi : restApi;
 
 	const { setEditModeId } = useSharedEditMode();
-	const { handleError, notifyWithTemplate } = useErrorHandler();
+	const { notifySocketError } = useErrorHandler();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions>
@@ -51,7 +51,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 				BoardActions.updateBoardVisibilityRequest,
 				socketOrRest.updateBoardVisibilityRequest
 			),
-			on(BoardActions.reloadBoard, socketApi.reloadBoardRequest),
+			on(BoardActions.reloadBoard, socketOrRest.reloadBoard),
 
 			// success actions
 			on(BoardActions.createCardSuccess, createCard),
@@ -86,8 +86,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			),
 
 			// notify actions
-			// on(BoardActions.notifyWithTemplate, notifyWithTemplate),
-			on(BoardActions.notifyWithTemplateAndReload, notifyWithTemplateAndReload)
+			on(BoardActions.notifyError, notifyError)
 		);
 	};
 
@@ -313,29 +312,14 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns[targetColumnIndex].cards.splice(newIndex, 0, item);
 	};
 
-	const notifyWithTemplateAndReload = (
-		action: ReturnType<typeof BoardActions.notifyWithTemplateAndReload>
-	) => {
+	const notifyError = (action: ReturnType<typeof BoardActions.notifyError>) => {
 		if (board.value === undefined) return;
 
-		const { error, errorType, httpStatus, boardObjectType } = action.payload;
+		const { errorType, boardObjectType } = action.payload;
 
-		handleError(error, {
-			[httpStatus]: notifyWithTemplate(errorType, boardObjectType || "board"),
-		});
-		dispatch(BoardActions.reloadBoard({ id: board.value.id }));
+		notifySocketError(errorType, boardObjectType);
 		setEditModeId(undefined);
 	};
-
-	// const notify = (action: any) => {
-	// 	if (board.value === undefined) return;
-
-	// 	// const { errorType, boardObjectType } = action.payload;
-
-	// 	handleError(action, {
-	// 		404: notifyWithTemplate("notCreatedViaSocket", "boardCard"),
-	// 	});
-	// };
 
 	return {
 		board,

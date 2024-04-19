@@ -151,7 +151,7 @@ const onCreateCard = async (columnId: string) => {
 
 const onCreateColumn = async () => {
 	if (hasCreateCardPermission)
-		boardStore.dispatch(boardActions.createColumnRequest());
+		boardStore.dispatch(boardActions.createColumnRequest({}));
 };
 
 const onDeleteCard = async (cardId: string) => {
@@ -178,7 +178,9 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 			removedIndex: columnPayload.oldIndex,
 			columnId,
 		};
-		boardStore.dispatch(boardActions.moveColumnRequest({ columnMove }));
+		boardStore.dispatch(
+			boardActions.moveColumnRequest({ columnMove, byKeyboard: false })
+		);
 	}
 };
 
@@ -213,7 +215,7 @@ const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
 };
 
 const onReloadBoard = async () => {
-	boardStore.dispatch(boardActions.reloadBoard());
+	boardStore.dispatch(boardActions.reloadBoard({ id: props.boardId }));
 };
 
 const onUpdateBoardVisibility = async (newVisibility: boolean) => {

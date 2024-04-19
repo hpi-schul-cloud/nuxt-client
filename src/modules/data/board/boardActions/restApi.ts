@@ -85,7 +85,6 @@ export const useBoardRestApi = () => {
 				404: notifyWithTemplate("notLoaded", "board"),
 			});
 		}
-		console.log("fetchBoard", action);
 		boardStore.setLoading(false);
 	};
 

@@ -161,3 +161,11 @@ export const notifyWithTemplateAndReload = createAction(
 		boardObjectType?: BoardObjectType;
 	}>()
 );
+
+export const notifyError = createAction(
+	"notify-error",
+	props<{
+		errorType: ErrorType;
+		boardObjectType?: BoardObjectType;
+	}>()
+);
