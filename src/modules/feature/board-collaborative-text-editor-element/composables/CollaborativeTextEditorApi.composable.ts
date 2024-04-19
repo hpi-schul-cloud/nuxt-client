@@ -33,7 +33,6 @@ const collaborativeTextEditorApi = () => {
 			return response.data.url;
 		} catch (error) {
 			showError(error);
-			throw error;
 		}
 	};
 
