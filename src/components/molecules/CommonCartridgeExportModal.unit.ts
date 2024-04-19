@@ -131,6 +131,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			const allTopics = wrapper.findComponent(
 				'[data-testid="all-topics-checkbox"]'
 			);
+
 			expect(
 				allTopics
 					.findAll("input")
@@ -138,6 +139,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			).toBe(true);
 
 			await allTopics.trigger("click");
+
 			expect(
 				allTopics
 					.findAll("input")
@@ -155,6 +157,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			const allTasks = wrapper.findComponent(
 				'[data-testid="all-tasks-checkbox"]'
 			);
+
 			expect(
 				allTasks
 					.findAll("input")
@@ -162,6 +165,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			).toBe(true);
 
 			await allTasks.trigger("click");
+
 			expect(
 				allTasks
 					.findAll("input")
@@ -179,6 +183,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			const allColumnBoards = wrapper.findComponent(
 				'[data-testid="all-column-boards-checkbox"]'
 			);
+
 			expect(
 				allColumnBoards
 					.findAll("input")
@@ -186,6 +191,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			).toBe(true);
 
 			await allColumnBoards.trigger("click");
+
 			expect(
 				allColumnBoards
 					.findAll("input")

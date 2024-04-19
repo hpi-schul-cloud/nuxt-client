@@ -208,12 +208,12 @@ const allTopicsSelected = computed(() => {
 
 const allTasks = ref<Array<Selection>>([]);
 const allTasksSelected = computed(() => {
-	return allTasks.value.every((topic) => topic.isSelected);
+	return allTasks.value.every((task) => task.isSelected);
 });
 
 const allColumnBoards = ref<Array<Selection>>([]);
 const allColumnBoardsSelected = computed(() => {
-	return allColumnBoards.value.every((topic) => topic.isSelected);
+	return allColumnBoards.value.every((columnBoard) => columnBoard.isSelected);
 });
 
 watch(
