@@ -319,7 +319,7 @@ export default defineComponent({
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.listBoard"),
-					icon: "$mdi_custom_grid_outline",
+					icon: "$mdiCustomGridOutline",
 					customEvent: "list-board-create",
 					dataTestId: "fab_button_add_list_board",
 					ariaLabel: this.$t("pages.rooms.fab.add.listBoard"),

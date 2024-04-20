@@ -72,7 +72,7 @@ const customAliases: Record<string, any> = {
 	langIconEs: langIconEs,
 	langIconUk: langIconUk,
 	lernstore_outline: lernstoreOutline,
-	mdi_custom_grid_outline: mdiCustomGridOutline,
+	mdiCustomGridOutline: mdiCustomGridOutline,
 	n21: n21,
 	school_outline: schoolOutline,
 	taskDoneFilled: taskDoneFilled,

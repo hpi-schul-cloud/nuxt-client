@@ -10,7 +10,6 @@ import {
 } from "@/types/board/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { nextTick } from "vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -46,7 +45,7 @@ describe("BoardColumn", () => {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
-			propsData: {
+			props: {
 				column,
 				index: 1,
 				columnCount: 1,
@@ -190,8 +189,7 @@ describe("BoardColumn", () => {
 				const columnHeader = wrapper.findComponent({
 					name: "BoardColumnHeader",
 				});
-				columnHeader.vm.$emit("move:column-left");
-				await nextTick();
+				await columnHeader.vm.$emit("move:column-left");
 
 				const emitted = wrapper.emitted("move:column-left");
 				expect(emitted).toHaveLength(1);
@@ -205,8 +203,7 @@ describe("BoardColumn", () => {
 				const columnHeader = wrapper.findComponent({
 					name: "BoardColumnHeader",
 				});
-				columnHeader.vm.$emit("move:column-right");
-				await nextTick();
+				await columnHeader.vm.$emit("move:column-right");
 
 				const emitted = wrapper.emitted("move:column-right");
 				expect(emitted).toHaveLength(1);
@@ -220,8 +217,7 @@ describe("BoardColumn", () => {
 				const columnHeader = wrapper.findComponent({
 					name: "BoardColumnHeader",
 				});
-				columnHeader.vm.$emit("move:column-down");
-				await nextTick();
+				await columnHeader.vm.$emit("move:column-down");
 
 				const emitted = wrapper.emitted("move:column-down");
 				expect(emitted).toHaveLength(1);
@@ -235,8 +231,7 @@ describe("BoardColumn", () => {
 				const columnHeader = wrapper.findComponent({
 					name: "BoardColumnHeader",
 				});
-				columnHeader.vm.$emit("move:column-up");
-				await nextTick();
+				await columnHeader.vm.$emit("move:column-up");
 
 				const emitted = wrapper.emitted("move:column-up");
 				expect(emitted).toHaveLength(1);
