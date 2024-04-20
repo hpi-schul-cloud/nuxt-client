@@ -303,6 +303,7 @@ export default {
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
+	"components.boardRow": "row",
 	"components.boardElement": "element",
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
@@ -985,6 +986,10 @@ export default {
 	"pages.administration.migration.tutorialWait":
 		"Please note, once the school migration process starts, it can take up to 1 hour to fetch the data. After this, you will be able to continue to the next step.",
 	"pages.administration.migration.waiting": "Waiting for data sync...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"The migration cannot start because the target login system and your school's current login system are the same!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Cannot find moin.schule system!",
 	"pages.administration.or": "or",
 	"pages.administration.printQr.emptyUser":
 		"The selected user(s) have already been registered",
@@ -1467,6 +1472,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Export settings",
 	"pages.room.modal.course.export.options.topics": "Topics",
 	"pages.room.modal.course.export.options.tasks": "Tasks without Topic",
+	"pages.room.modal.course.export.options.columnBoards": "Column boards",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
@@ -1542,6 +1548,8 @@ export default {
 		'Unfortunately, the move of your account to {targetSystem} failed.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Please pass on this information:<br><b>School number in {instance}: {sourceSchoolNumber}, school number in {targetSystem}: {targetSchoolNumber}</b>.",
+	"pages.userMigration.error.multipleUsersFound":
+		'This moin.schule account is already linked to an account in the Niedersächsische Bildungscloud and cannot be used again for the migration.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
 	"pages.userMigration.error.title": "Account move failed",
 	"pages.userMigration.success.description":
 		"The move of your account to {targetSystem} is complete.<br>Please register again now.",
@@ -1590,4 +1598,8 @@ export default {
 	"utils.adminFilter.placeholder.complete.name": "Filter by full first name...",
 	"utils.adminFilter.placeholder.date.from": "Created between 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
+	"feature.media-shelf.title": "Media shelf",
+	"feature.media-shelf.createLine": "Add line",
+	"feature.media-shelf.line.title": "Line",
+	"feature.media-shelf.availableLine.title": "Available media",
 };

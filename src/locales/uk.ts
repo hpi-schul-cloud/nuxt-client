@@ -310,6 +310,7 @@ export default {
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
+	"components.boardRow": "рядок",
 	"components.boardElement": "Eлемент",
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
@@ -999,6 +1000,10 @@ export default {
 	"pages.administration.migration.tutorialWait":
 		"Зауважте, що після початку переміщення школи для отримання даних може знадобитися до 1 години. Після цього можна переходити до наступного кроку.",
 	"pages.administration.migration.waiting": "Очікування синхронізації даних...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"Неможливо розпочати міграцію, оскільки цільова система входу та поточна система входу у вашій школі збігаються!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Не вдається знайти систему moin.schule!",
 	"pages.administration.or": "або",
 	"pages.administration.printQr.emptyUser":
 		"Вибраний користувач(-і) вже зареєстрований(-і)",
@@ -1489,6 +1494,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
 	"pages.room.modal.course.export.options.topics": "Теми",
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
+	"pages.room.modal.course.export.options.columnBoards": "Дошки для колонн",
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
@@ -1563,6 +1569,8 @@ export default {
 		'На жаль, не вдалося перемістити ваш обліковий запис до {targetSystem}.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Будь ласка, Передайте цю інформацію:<br><b>Номер школи в {instance}: {sourceSchoolNumber}, номер школи в {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.multipleUsersFound":
+		'Цей обліковий запис moin.schule вже пов\'язаний з обліковим записом у Niedersächsische Bildungscloud і не може бути використаний повторно для міграції.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
 	"pages.userMigration.error.title": "Не вдалося перемістити обліковий запис",
 	"pages.userMigration.success.description":
 		"Переміщення вашого облікового запису до {targetSystem} завершено.<br>Зареєструйтеся знову.",
@@ -1611,4 +1619,8 @@ export default {
 		"Фільтрувати за повним іменем...",
 	"utils.adminFilter.placeholder.date.from": "Створено між 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
+	"feature.media-shelf.title": "Полиця для медіа",
+	"feature.media-shelf.createLine": "Додайте лінію",
+	"feature.media-shelf.line.title": "лінія",
+	"feature.media-shelf.availableLine.title": "Доступні медіа",
 };

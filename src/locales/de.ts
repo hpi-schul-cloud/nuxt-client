@@ -306,6 +306,7 @@ export default {
 	"components.board": "Board",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
+	"components.boardRow": "Abschnitt",
 	"components.boardElement": "Element",
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
@@ -990,6 +991,10 @@ export default {
 		"Bitte beachten Sie, dass es nach Beginn der Schulmigration bis zu 1 Stunde dauern kann, bis die Daten abgerufen sind. Danach können Sie mit dem nächsten Schritt fortfahren.",
 	"pages.administration.migration.waiting":
 		"Warten auf die Datensynchronisation...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"Die Migration kann nicht gestartet werden, da das Ziel-Login-System und das derzeitige Login-System Ihrer Schule identisch sind!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Das moin.schule-System kann nicht gefunden werden!",
 	"pages.administration.or": "oder",
 	"pages.administration.printQr.emptyUser":
 		"Dieser Nutzer wurde bereits registriert",
@@ -1493,6 +1498,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
 	"pages.room.modal.course.export.options.topics": "Themen",
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
+	"pages.room.modal.course.export.options.columnBoards": "Spalten-Boards",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
@@ -1570,6 +1576,8 @@ export default {
 		'Der Umzug Deines Accounts zu {targetSystem} ist leider fehlegeschlagen.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Gib diese Informationen bitte weiter:<br><b>Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.multipleUsersFound":
+		'Dieser moin.schule-Account ist bereits mit einem Account in der Niedersächsischen Bildungscloud verbunden und kann nicht noch einmal für die Migration verwendet werden.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
 	"pages.userMigration.error.title": "Umzug des Accounts fehlgeschlagen",
 	"pages.userMigration.success.description":
 		"Der Umzug Deines Accounts zu {targetSystem} ist fertig.<br>Melde Dich jetzt bitte neu an.",
@@ -1618,4 +1626,8 @@ export default {
 		"Nach vollständigem Vornamen filtern...",
 	"utils.adminFilter.placeholder.date.from": "Erstellt zwischen 02/02/2020",
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
+	"feature.media-shelf.title": "Medienregal",
+	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
+	"feature.media-shelf.line.title": "Abschnitt",
+	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 };

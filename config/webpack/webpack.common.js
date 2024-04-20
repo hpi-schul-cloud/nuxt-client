@@ -146,6 +146,7 @@ module.exports = {
 			"@feature-editor": getDir("src/modules/feature/editor"),
 			"@feature-render-html": getDir("src/modules/feature/render-html"),
 			"@feature-news-form": getDir("src/modules/feature/news-form"),
+			"@feature-media-shelf": getDir("src/modules/feature/media-shelf"),
 			"@ui-alert": getDir("src/modules/ui/alert"),
 			"@ui-board": getDir("src/modules/ui/board"),
 			"@ui-confirmation-dialog": getDir("src/modules/ui/confirmation-dialog"),
@@ -162,6 +163,7 @@ module.exports = {
 			"@util-device-detection": getDir("src/modules/util/device-detection"),
 			"@page-board": getDir("src/modules/page/board"),
 			"@page-class-members": getDir("src/modules/page/class-members"),
+			"@page-media-shelf": getDir("src/modules/page/media-shelf"),
 		},
 		extensions: [
 			".tsx",

@@ -29,6 +29,7 @@ describe("UserLoginMigrationError", () => {
 	const setup = (props: {
 		sourceSchoolNumber?: string;
 		targetSchoolNumber?: string;
+		multipleUsersFound?: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 		const systemsMock: System[] = [
@@ -113,6 +114,21 @@ describe("UserLoginMigrationError", () => {
 
 				expect(schoolNumberMismatchText).toEqual(
 					'pages.userMigration.error.schoolNumberMismatch {"targetSystem":"targetSystem","targetSchoolNumber":"22222","sourceSchoolNumber":"11111"}'
+				);
+			});
+		});
+		describe("when mutliple users are found", () => {
+			it("should show the multipleUsersFound text", () => {
+				const { wrapper } = setup({
+					multipleUsersFound: true,
+				});
+
+				const multipleUsersFoundText = wrapper
+					.findComponent("[data-testId=text-multiple-users-found]")
+					.attributes("html");
+
+				expect(multipleUsersFoundText).toEqual(
+					'pages.userMigration.error.multipleUsersFound {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
 				);
 			});
 		});

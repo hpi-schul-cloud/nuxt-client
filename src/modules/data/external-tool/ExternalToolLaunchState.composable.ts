@@ -60,14 +60,19 @@ export const useExternalToolLaunchState = () => {
 	};
 
 	const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
-		if (toolLaunch.openNewTab) {
-			window.open(toolLaunch.url, "_blank");
-			return;
-		}
-		window.location.href = toolLaunch.url;
+		const target = toolLaunch.openNewTab ? "_blank" : "_self";
+
+		window.open(toolLaunch.url, target);
 	};
 
 	const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
+		const existingForm: HTMLElement | null =
+			document.getElementById("launch-form");
+
+		if (existingForm) {
+			document.body.removeChild(existingForm);
+		}
+
 		const form: HTMLFormElement = document.createElement("form");
 		form.method = "POST";
 		form.action = toolLaunch.url;
@@ -77,8 +82,8 @@ export const useExternalToolLaunchState = () => {
 		const payload = JSON.parse(toolLaunch.payload || "{}");
 
 		for (const key in payload) {
-			if (Object.prototype.hasOwnProperty.call(payload, key)) {
-				const hiddenField = document.createElement("input");
+			if (Object.hasOwn(payload, key)) {
+				const hiddenField: HTMLInputElement = document.createElement("input");
 				hiddenField.type = "hidden";
 				hiddenField.name = key;
 				hiddenField.value = payload[key];
@@ -88,6 +93,7 @@ export const useExternalToolLaunchState = () => {
 		}
 
 		document.body.appendChild(form);
+
 		form.submit();
 	};
 
