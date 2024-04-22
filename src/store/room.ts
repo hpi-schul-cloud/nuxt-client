@@ -194,6 +194,7 @@ export default class RoomModule extends VuexModule {
 		version: "1.1.0" | "1.3.0";
 		topics: string[];
 		tasks: string[];
+		columnBoards: string[];
 	}): Promise<void> {
 		this.resetBusinessError();
 		try {
@@ -207,6 +208,7 @@ export default class RoomModule extends VuexModule {
 				{
 					topics: exportSettings.topics,
 					tasks: exportSettings.tasks,
+					columnBoards: exportSettings.columnBoards,
 				},
 				{
 					responseType: "blob",

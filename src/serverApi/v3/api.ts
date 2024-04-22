@@ -1544,6 +1544,12 @@ export interface CourseExportBodyParams {
      * @memberof CourseExportBodyParams
      */
     tasks: Array<string>;
+    /**
+     * The list of ids of column boards which should be exported. If empty no column boards are exported.
+     * @type {Array<string>}
+     * @memberof CourseExportBodyParams
+     */
+    columnBoards: Array<string>;
 }
 /**
  * 
@@ -3569,10 +3575,10 @@ export interface LoginResponse {
 export interface Lti11ToolConfigCreateParams {
     /**
      * 
-     * @type {string}
+     * @type {ToolConfigType}
      * @memberof Lti11ToolConfigCreateParams
      */
-    type: string;
+    type: ToolConfigType;
     /**
      * 
      * @type {string}
@@ -3593,16 +3599,16 @@ export interface Lti11ToolConfigCreateParams {
     secret: string;
     /**
      * 
-     * @type {string}
+     * @type {LtiMessageType}
      * @memberof Lti11ToolConfigCreateParams
      */
-    lti_message_type: string;
+    lti_message_type: LtiMessageType;
     /**
      * 
-     * @type {string}
+     * @type {LtiPrivacyPermission}
      * @memberof Lti11ToolConfigCreateParams
      */
-    privacy_permission: string;
+    privacy_permission: LtiPrivacyPermission;
     /**
      * 
      * @type {string}
@@ -3618,10 +3624,10 @@ export interface Lti11ToolConfigCreateParams {
 export interface Lti11ToolConfigUpdateParams {
     /**
      * 
-     * @type {string}
+     * @type {ToolConfigType}
      * @memberof Lti11ToolConfigUpdateParams
      */
-    type: string;
+    type: ToolConfigType;
     /**
      * 
      * @type {string}
@@ -3642,16 +3648,16 @@ export interface Lti11ToolConfigUpdateParams {
     secret?: string;
     /**
      * 
-     * @type {string}
+     * @type {LtiMessageType}
      * @memberof Lti11ToolConfigUpdateParams
      */
-    lti_message_type: string;
+    lti_message_type: LtiMessageType;
     /**
      * 
-     * @type {string}
+     * @type {LtiPrivacyPermission}
      * @memberof Lti11ToolConfigUpdateParams
      */
-    privacy_permission: string;
+    privacy_permission: LtiPrivacyPermission;
     /**
      * 
      * @type {string}
@@ -3659,6 +3665,28 @@ export interface Lti11ToolConfigUpdateParams {
      */
     launch_presentation_locale: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum LtiMessageType {
+    BasicLtiLaunchRequest = 'basic-lti-launch-request'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum LtiPrivacyPermission {
+    Anonymous = 'anonymous',
+    EMail = 'e-mail',
+    Name = 'name',
+    Public = 'public',
+    Pseudonymous = 'pseudonymous'
+}
+
 /**
  * 
  * @export
@@ -6907,6 +6935,17 @@ export interface TimestampsResponse {
  */
 export enum Timezone {
     EuropeBerlin = 'Europe/Berlin'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum ToolConfigType {
+    Basic = 'basic',
+    Oauth2 = 'oauth2',
+    Lti11 = 'lti11'
 }
 
 /**
