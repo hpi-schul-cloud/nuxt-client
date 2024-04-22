@@ -2,17 +2,17 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { BoardMenuActionMoveRight } from "@ui-board";
+import { BoardMenuActionMoveColumnDown } from "@ui-board";
 import { BOARD_HAS_MULTIPLE_COLUMNS, BOARD_IS_LAST_COLUMN } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import BoardMenuAction from "./BoardMenuAction.vue";
 
-describe("BoardMenuActionMoveLeft Component", () => {
+describe("BoardMenuActionMoveColumnDown Component", () => {
 	const setup = (options: {
 		isLastColumn: boolean;
 		hasMultipleColumns: boolean;
 	}) => {
-		const wrapper = shallowMount(BoardMenuActionMoveRight, {
+		const wrapper = shallowMount(BoardMenuActionMoveColumnDown, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -38,7 +38,7 @@ describe("BoardMenuActionMoveLeft Component", () => {
 			expect(action.exists()).toBe(false);
 		});
 
-		it("should not be rendered if element is the only element", () => {
+		it("should not be rendered if element is the only column", () => {
 			const wrapper = setup({ isLastColumn: true, hasMultipleColumns: false });
 			const action = wrapper.findComponent(BoardMenuAction);
 			expect(action.exists()).toBe(false);

@@ -265,7 +265,7 @@ describe("room module", () => {
 		});
 
 		describe("createBoard", () => {
-			it("should call api to create a board", async () => {
+			it("should call api to create a column board", async () => {
 				const mockApi = {
 					boardControllerCreateBoard: jest.fn(),
 				};
@@ -278,6 +278,30 @@ describe("room module", () => {
 					title: "title",
 					parentId: "parentId",
 					parentType: BoardParentType.Course,
+					layout: serverApi.BoardLayout.Columns,
+				};
+				await roomModule.createBoard(params);
+
+				expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
+				expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledWith(params);
+
+				spy.mockRestore();
+			});
+
+			it("should call api to create a list board", async () => {
+				const mockApi = {
+					boardControllerCreateBoard: jest.fn(),
+				};
+				const spy = jest
+					.spyOn(serverApi, "BoardApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+
+				const roomModule = new RoomModule({});
+				const params = {
+					title: "title",
+					parentId: "parentId",
+					parentType: BoardParentType.Course,
+					layout: serverApi.BoardLayout.List,
 				};
 				await roomModule.createBoard(params);
 
@@ -302,6 +326,7 @@ describe("room module", () => {
 					title: "title",
 					parentId: "parentId",
 					parentType: BoardParentType.Course,
+					layout: serverApi.BoardLayout.Columns,
 				};
 				await roomModule.createBoard(params);
 

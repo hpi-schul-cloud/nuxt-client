@@ -29,10 +29,10 @@
 								courseId: roomData.roomId,
 							}"
 							:aria-label="
-								$t('pages.room.cards.aria', {
-									itemType: $t('pages.room.boardCard.label.columnBoard'),
-									itemName: $t('pages.room.boardCard.label.courseBoard'),
-								})
+								$t(
+									'pages.room.cards.aria',
+									boardTypeAriaLabel(item.content.layout)
+								)
 							"
 							@move-element="moveByKeyboard"
 							@on-drag="isDragging = !isDragging"
@@ -194,6 +194,7 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import {
 	BoardElementResponseTypeEnum,
+	BoardLayout,
 	ImportUserResponseRoleNamesEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
@@ -305,6 +306,19 @@ export default {
 
 			await roomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`].$el.focus();
+		},
+		boardTypeAriaLabel(itemLayout) {
+			const columnBoardInfo = {
+				itemType: this.$t("pages.room.boardCard.label.columnBoard"),
+			};
+			const listBoardInfo = {
+				itemType: this.$t("pages.room.boardCard.label.listBoard"),
+			};
+			if (itemLayout === BoardLayout.List) {
+				return listBoardInfo;
+			} else {
+				return columnBoardInfo;
+			}
 		},
 		getSharedBoard(boardId) {
 			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE) {

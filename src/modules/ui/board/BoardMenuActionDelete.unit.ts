@@ -45,7 +45,7 @@ describe("BoardMenuActionMoveDown Component", () => {
 		it("should render", () => {
 			const wrapper = setup({ scope: "board" });
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeTruthy();
+			expect(action.exists()).toBe(true);
 		});
 
 		it("should open askConfirmationDialog on click", () => {

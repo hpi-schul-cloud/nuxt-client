@@ -140,7 +140,6 @@ export default defineComponent({
 		});
 
 		const onEnter = ($event: KeyboardEvent) => {
-			if (props.scope !== "card") return;
 			$event.preventDefault();
 			emit("enter");
 		};

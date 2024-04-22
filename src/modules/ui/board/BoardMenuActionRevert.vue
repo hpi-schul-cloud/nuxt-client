@@ -1,8 +1,8 @@
 <template>
 	<BoardMenuAction
 		:icon="mdiRestore"
-		@click="onClick"
 		data-testid="board-menu-action-revert"
+		@click="onClick"
 	>
 		{{ t("pages.room.cards.label.revert") }}
 	</BoardMenuAction>
