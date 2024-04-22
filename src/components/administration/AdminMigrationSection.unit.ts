@@ -1,7 +1,8 @@
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
+import * as useUserLoginMigrationMappingsComposable from "@/composables/user-login-migration-mappings.composable";
+import { ConfigResponse } from "@/serverApi/v3/api";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { ConfigResponse } from "@/serverApi/v3/api";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -9,6 +10,7 @@ import {
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { businessErrorFactory } from "@@/tests/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
@@ -17,8 +19,6 @@ import {
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import * as useUserLoginMigrationMappingsComposable from "@/composables/user-login-migration-mappings.composable";
-import { businessErrorFactory } from "@@/tests/test-utils";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
@@ -1043,6 +1043,32 @@ describe("AdminMigrationSection", () => {
 
 					const buttons = wrapper.findAllComponents({ name: "v-btn" });
 					expect(buttons[1].props("disabled")).toBeTruthy();
+				});
+			});
+
+			describe("when the migration has been finished", () => {
+				it("should not be visible", () => {
+					const { wrapper } = setup(
+						{},
+						{
+							getUserLoginMigration: {
+								sourceSystemId: "sourceSystemId",
+								targetSystemId: "targetSystemId",
+								startedAt: new Date(2023, 1, 1),
+								closedAt: new Date(2023, 1, 2),
+								finishedAt: new Date(2023, 1, 3),
+								mandatorySince: undefined,
+							},
+						},
+						{
+							getEnv: { FEATURE_SHOW_MIGRATION_WIZARD: true } as ConfigResponse,
+						}
+					);
+
+					const migrationWizardButton = wrapper.find(
+						'[data-testid="migration-wizard-button]'
+					);
+					expect(migrationWizardButton.exists()).toBeFalsy();
 				});
 			});
 

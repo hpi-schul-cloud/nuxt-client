@@ -272,6 +272,63 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				"/courses/123/topics/add?returnUrl=rooms/123"
 			);
 		});
+
+		it("'add column board' button should be rendered", async () => {
+			const wrapper = getWrapper(["course_edit"]);
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
+
+			// open menu
+			await fabComponent.findComponent(VBtn).trigger("click");
+			const btnDataTestIds = wrapper
+				.findAllComponents(SpeedDialMenuAction)
+				.map((btn) => btn.props("dataTestId"));
+
+			expect(btnDataTestIds.includes("fab_button_add_board")).toBe(true);
+		});
+
+		describe("'add list board' button", () => {
+			describe("when feature is enabled", () => {
+				it("should render the button", async () => {
+					const envs = envsFactory.build({
+						FEATURE_BOARD_LAYOUT_ENABLED: true,
+					});
+					envConfigModule.setEnvs(envs);
+					const wrapper = getWrapper(["course_edit"]);
+					const fabComponent = wrapper.findComponent(SpeedDialMenu);
+
+					// open menu
+					await fabComponent.findComponent(VBtn).trigger("click");
+					const btnDataTestIds = wrapper
+						.findAllComponents(SpeedDialMenuAction)
+						.map((btn) => btn.props("dataTestId"));
+
+					expect(btnDataTestIds.includes("fab_button_add_list_board")).toBe(
+						true
+					);
+				});
+			});
+
+			describe("when user doesn't have course edit permission", () => {
+				it("should not render the button", async () => {
+					const envs = envsFactory.build({
+						FEATURE_BOARD_LAYOUT_ENABLED: false,
+					});
+					envConfigModule.setEnvs(envs);
+					const wrapper = getWrapper(["course_edit"]);
+					const fabComponent = wrapper.findComponent(SpeedDialMenu);
+
+					// open menu
+					await fabComponent.findComponent(VBtn).trigger("click");
+					const btnDataTestIds = wrapper
+						.findAllComponents(SpeedDialMenuAction)
+						.map((btn) => btn.props("dataTestId"));
+
+					expect(btnDataTestIds.includes("fab_button_add_list_board")).toBe(
+						false
+					);
+				});
+			});
+		});
 	});
 
 	describe("headline menus", () => {

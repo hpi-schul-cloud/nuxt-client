@@ -1,9 +1,9 @@
 <template>
 	<BoardMenuAction
-		:icon="mdiArrowLeft"
-		@click="onClick"
 		v-if="isVisible"
+		:icon="mdiArrowLeft"
 		data-testid="board-menu-action-move-left"
+		@click="onClick"
 	>
 		{{ $t("components.board.action.moveLeft") }}
 	</BoardMenuAction>
