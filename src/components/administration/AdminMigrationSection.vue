@@ -150,7 +150,7 @@
 			@update:model-value="setSchoolFeatures"
 		/>
 
-		<template v-if="showMigrationWizard">
+		<template v-if="showMigrationWizard && !isMigrationFinished">
 			<v-btn
 				:disabled="!isMigrationActive || !isSchoolMigrated"
 				class="my-4"
@@ -201,7 +201,9 @@
 </template>
 
 <script lang="ts">
-import { mdiCheck, mdiAlertCircle } from "@/components/icons/material";
+import { mdiAlertCircle, mdiCheck } from "@/components/icons/material";
+import { useUserLoginMigrationMappings } from "@/composables/user-login-migration-mappings.composable";
+import { BusinessError } from "@/store/types/commons";
 import { School } from "@/store/types/schools";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import {
@@ -210,6 +212,7 @@ import {
 	SCHOOLS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
+import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { RenderHTML } from "@feature-render-html";
 import dayjs from "dayjs";
 import {
@@ -222,9 +225,6 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
-import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
-import { useUserLoginMigrationMappings } from "@/composables/user-login-migration-mappings.composable";
-import { BusinessError } from "@/store/types/commons";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -375,6 +375,10 @@ export default defineComponent({
 			() => !!envConfigModule.getEnv.FEATURE_SHOW_MIGRATION_WIZARD
 		);
 
+		const isMigrationFinished: ComputedRef<boolean> = computed(
+			() => !!userLoginMigration.value?.finishedAt
+		);
+
 		const setSchoolFeatures = async () => {
 			await schoolsModule.update({
 				id: school.value.id,
@@ -410,6 +414,7 @@ export default defineComponent({
 			isMigrationMandatory,
 			mdiCheck,
 			showMigrationWizard,
+			isMigrationFinished,
 			isSchoolMigrated,
 			error,
 			getBusinessErrorTranslationKey,
