@@ -1,18 +1,18 @@
 <template>
-	<div
-		:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
-		class="column-drag-handle bg-white px-4"
-	>
+	<div :style="columnStyle" :class="columnClasses">
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
 			:titlePlaceholder="titlePlaceholder"
 			:index="index"
+			:isListBoard="isListBoard"
 			@delete:column="onColumnDelete"
+			@move:column-down="onMoveColumnDown"
 			@move:column-left="onMoveColumnLeft"
 			@move:column-right="onMoveColumnRight"
+			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
-			class="pl-2"
+			:class="{ 'pl-2': !isListBoard }"
 		/>
 		<div>
 			<Sortable
@@ -33,11 +33,10 @@
 					filter: '.v-input, v-btn',
 					preventOnFilter: false,
 					forceFallback: true,
-					ghostClass: 'sortable-drag-ghost',
+					ghostClass: sortableGhostClasses,
 					scroll: true,
 				}"
-				:class="{ 'expanded-column': isDragging }"
-				class="scrollable-column"
+				:class="sortableClasses"
 				@start="onDragStart"
 				@end="onDragEnd"
 			>
@@ -111,13 +110,16 @@ export default defineComponent({
 			required: true,
 		},
 		index: { type: Number, required: true },
+		isListBoard: { type: Boolean, required: true },
 	},
 	emits: [
 		"create:card",
 		"delete:card",
 		"delete:column",
+		"move:column-down",
 		"move:column-left",
 		"move:column-right",
+		"move:column-up",
 		"reload:board",
 		"update:card-position",
 		"update:column-title",
@@ -128,6 +130,25 @@ export default defineComponent({
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
+
+		const columnClasses = computed(() => {
+			const classes = ["column-drag-handle", "bg-white", "px-4"];
+			if (props.isListBoard) {
+				classes.push("d-flex", "flex-column", "align-stretch");
+			}
+			return classes;
+		});
+
+		const columnStyle = computed(() => {
+			if (props.isListBoard) {
+				return;
+			}
+			const columnLayout = {
+				"min-width": `${colWidth.value}px`,
+				"max-width": `${colWidth.value}px`,
+			};
+			return columnLayout;
+		});
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 		const showAddButton = computed(
@@ -215,12 +236,20 @@ export default defineComponent({
 			emit("update:card-position", cardMove);
 		};
 
+		const onMoveColumnDown = () => {
+			emit("move:column-down");
+		};
+
 		const onMoveColumnLeft = () => {
 			emit("move:column-left");
 		};
 
 		const onMoveColumnRight = () => {
 			emit("move:column-right");
+		};
+
+		const onMoveColumnUp = () => {
+			emit("move:column-up");
 		};
 
 		const onReloadBoard = () => {
@@ -235,17 +264,43 @@ export default defineComponent({
 			return props.column.cards[index];
 		};
 
-		const titlePlaceholder = computed(
-			() => `${t("components.boardColumn").toString()} ${props.index + 1}`
-		);
+		const titlePlaceholder = computed(() => {
+			const type = props.isListBoard
+				? t("components.boardSection")
+				: t("components.boardColumn");
+
+			return `${type} ${props.index + 1}`;
+		});
+
+		const sortableClasses = computed(() => {
+			const classes = [];
+			if (!props.isListBoard) {
+				classes.push("scrollable-column");
+				if (isDragging.value) {
+					classes.push("expanded-column");
+				}
+			}
+			return classes;
+		});
+
+		const sortableGhostClasses = computed(() => {
+			const classes = ["sortable-drag-ghost"];
+			if (!props.isListBoard) {
+				classes.push("column-layout");
+			}
+			return classes;
+		});
 
 		return {
 			cardDropPlaceholderOptions,
+			columnClasses,
+			columnStyle,
 			colWidth,
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
 			isDesktop,
+			sortableClasses,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
@@ -253,13 +308,16 @@ export default defineComponent({
 			onDragStart,
 			onDragEnd,
 			onMoveCardKeyboard,
+			onMoveColumnDown,
 			onMoveColumnLeft,
 			onMoveColumnRight,
+			onMoveColumnUp,
 			onReloadBoard,
 			onUpdateTitle,
 			getChildPayload,
 			reactiveIndex,
 			showAddButton,
+			sortableGhostClasses,
 		};
 	},
 });
@@ -268,6 +326,8 @@ export default defineComponent({
 <style>
 .sortable-drag-ghost .v-card {
 	opacity: 0.6;
+}
+.column-layout {
 	width: 346px; /* size of the card - column has 400px width and some paddings and margins */
 }
 </style>
