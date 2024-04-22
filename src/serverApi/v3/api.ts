@@ -344,10 +344,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -537,6 +537,59 @@ export enum ClassSortBy {
     TeacherNames = 'teacherNames'
 }
 
+/**
+ * 
+ * @export
+ * @interface CollaborativeTextEditorElementResponse
+ */
+export interface CollaborativeTextEditorElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    timestamps: TimestampsResponse;
+    /**
+     * 
+     * @type {object}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    content: object;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum CollaborativeTextEditorParentType {
+    ContentElement = 'content-element'
+}
+
+/**
+ * 
+ * @export
+ * @interface CollaborativeTextEditorResponse
+ */
+export interface CollaborativeTextEditorResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CollaborativeTextEditorResponse
+     */
+    url: string;
+}
 /**
  * 
  * @export
@@ -766,6 +819,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -1136,7 +1195,8 @@ export enum ContentElementType {
     Link = 'link',
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
-    ExternalTool = 'externalTool'
+    ExternalTool = 'externalTool',
+    CollaborativeTextEditor = 'collaborativeTextEditor'
 }
 
 /**
@@ -1740,7 +1800,8 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     Link = 'link',
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
-    ExternalTool = 'externalTool'
+    ExternalTool = 'externalTool',
+    CollaborativeTextEditor = 'collaborativeTextEditor'
 }
 
 /**
@@ -11978,6 +12039,141 @@ export class CollaborativeStorageApi extends BaseAPI implements CollaborativeSto
      */
     public collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: any) {
         return CollaborativeStorageApiFp(this.configuration).collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId, roleId, teamPermissionsBody, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CollaborativeTextEditorApi - axios parameter creator
+ * @export
+ */
+export const CollaborativeTextEditorApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Redirect to CollaborativeTextEditor
+         * @param {string} parentId 
+         * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent: async (parentId: string, parentType: CollaborativeTextEditorParentType, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'parentId' is not null or undefined
+            assertParamExists('collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent', 'parentId', parentId)
+            // verify required parameter 'parentType' is not null or undefined
+            assertParamExists('collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent', 'parentType', parentType)
+            const localVarPath = `/collaborative-text-editor/{parentType}/{parentId}`
+                .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
+                .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CollaborativeTextEditorApi - functional programming interface
+ * @export
+ */
+export const CollaborativeTextEditorApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CollaborativeTextEditorApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Redirect to CollaborativeTextEditor
+         * @param {string} parentId 
+         * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollaborativeTextEditorResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId, parentType, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CollaborativeTextEditorApi - factory interface
+ * @export
+ */
+export const CollaborativeTextEditorApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CollaborativeTextEditorApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Redirect to CollaborativeTextEditor
+         * @param {string} parentId 
+         * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): AxiosPromise<CollaborativeTextEditorResponse> {
+            return localVarFp.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId, parentType, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CollaborativeTextEditorApi - interface
+ * @export
+ * @interface CollaborativeTextEditorApi
+ */
+export interface CollaborativeTextEditorApiInterface {
+    /**
+     * 
+     * @summary Redirect to CollaborativeTextEditor
+     * @param {string} parentId 
+     * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CollaborativeTextEditorApiInterface
+     */
+    collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): AxiosPromise<CollaborativeTextEditorResponse>;
+
+}
+
+/**
+ * CollaborativeTextEditorApi - object-oriented interface
+ * @export
+ * @class CollaborativeTextEditorApi
+ * @extends {BaseAPI}
+ */
+export class CollaborativeTextEditorApi extends BaseAPI implements CollaborativeTextEditorApiInterface {
+    /**
+     * 
+     * @summary Redirect to CollaborativeTextEditor
+     * @param {string} parentId 
+     * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CollaborativeTextEditorApi
+     */
+    public collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any) {
+        return CollaborativeTextEditorApiFp(this.configuration).collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId, parentType, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

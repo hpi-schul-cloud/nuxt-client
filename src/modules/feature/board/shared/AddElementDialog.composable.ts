@@ -2,11 +2,12 @@ import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
-	mdiPresentation,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
 	mdiLink,
+	mdiPresentation,
 	mdiPuzzleOutline,
+	mdiTextBoxEditOutline,
 	mdiTrayArrowUp,
 } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
@@ -80,6 +81,19 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			label: "components.cardElement.drawingElement",
 			action: () => onElementClick(ContentElementType.Drawing),
 			testId: "create-element-drawing-element",
+		});
+	}
+
+	if (
+		envConfigModule.getEnv
+			.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
+	) {
+		options.push({
+			icon: mdiTextBoxEditOutline,
+			label:
+				"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle",
+			action: () => onElementClick(ContentElementType.CollaborativeTextEditor),
+			testId: "create-element-collaborative-text-editor",
 		});
 	}
 
