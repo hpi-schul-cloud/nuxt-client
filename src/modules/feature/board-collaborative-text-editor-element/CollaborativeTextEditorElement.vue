@@ -86,13 +86,8 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 		emit("move-keyboard:edit", event);
 	}
 };
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
-	if (shouldDelete) {
-		emit("delete:element", props.element.id);
-	}
-};
 
+const onDelete = () => emit("delete:element", props.element.id);
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
 </script>

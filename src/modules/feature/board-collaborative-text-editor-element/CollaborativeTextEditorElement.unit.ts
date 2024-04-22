@@ -57,7 +57,7 @@ describe("CollaborativeTextEditorElement", () => {
 		return {
 			wrapper,
 			isEditMode: true,
-			element: element,
+			element,
 			getUrl,
 		};
 	};
@@ -204,7 +204,7 @@ describe("CollaborativeTextEditorElement", () => {
 				const boardMenu = wrapper.findComponent(
 					CollaborativeTextEditorElementMenu
 				);
-				boardMenu.vm.$emit("delete:element", Promise.resolve(true));
+				boardMenu.vm.$emit("delete:element");
 				await nextTick();
 
 				expect(wrapper.emitted("delete:element")).toBeTruthy();
