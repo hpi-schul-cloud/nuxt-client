@@ -247,6 +247,16 @@ export enum BoardExternalReferenceType {
  * @export
  * @enum {string}
  */
+export enum BoardLayout {
+    Columns = 'columns',
+    List = 'list'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 export enum BoardParentType {
     Course = 'course',
     User = 'user'
@@ -288,6 +298,12 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     isVisible: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardResponse
+     */
+    layout: string;
 }
 /**
  * 
@@ -792,6 +808,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_TASK_SHARE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_BOARD_LAYOUT_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -1674,6 +1696,12 @@ export interface CreateBoardBodyParams {
      * @memberof CreateBoardBodyParams
      */
     parentType: BoardParentType;
+    /**
+     * 
+     * @type {BoardLayout}
+     * @memberof CreateBoardBodyParams
+     */
+    layout: BoardLayout;
 }
 /**
  * 
