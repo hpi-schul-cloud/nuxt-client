@@ -6,6 +6,7 @@ import { mount, VueWrapper } from "@vue/test-utils";
 import RoomBoardCard from "./RoomBoardCard.vue";
 
 import {
+	BoardLayout,
 	ConfigResponse,
 	ImportUserResponseRoleNamesEnum,
 } from "@/serverApi/v3";
@@ -25,6 +26,7 @@ type BoardData = {
 	createdAt: string;
 	updatedAt: string;
 	columnBoardId: string;
+	layout: BoardLayout;
 };
 
 const mockDraftBoardData = {
@@ -34,6 +36,7 @@ const mockDraftBoardData = {
 	createdAt: "2023-05-31T15:34:59.276Z",
 	updatedAt: "2023-05-31T15:34:59.276Z",
 	columnBoardId: "column-board-id",
+	layout: BoardLayout.Columns,
 };
 
 const mockPublishedBoardData = {
@@ -43,6 +46,27 @@ const mockPublishedBoardData = {
 	createdAt: "2023-05-31T15:34:59.276Z",
 	updatedAt: "2023-05-31T15:34:59.276Z",
 	columnBoardId: "column-board-id-2",
+	layout: BoardLayout.Columns,
+};
+
+const mockDraftListBoardData = {
+	id: "test-id-3",
+	title: "title-3",
+	published: false,
+	createdAt: "2023-05-31T15:34:59.276Z",
+	updatedAt: "2023-05-31T15:34:59.276Z",
+	columnBoardId: "list-board-id",
+	layout: BoardLayout.List,
+};
+
+const mockPublishedListBoardData = {
+	id: "test-id-4",
+	title: "title-4",
+	published: true,
+	createdAt: "2023-05-31T15:34:59.276Z",
+	updatedAt: "2023-05-31T15:34:59.276Z",
+	columnBoardId: "list-board-id-2",
+	layout: BoardLayout.List,
 };
 
 const mockCourseData = {
@@ -100,7 +124,8 @@ describe("RoomBoardCard", () => {
 			it("should have correct board title", () => {
 				const { wrapper } = setup({ boardData: mockDraftBoardData, userRole });
 				const expectedBoardTitle = mockDraftBoardData.title;
-				const boardTitle = wrapper.find(".board-title").element.textContent;
+				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element
+					.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
@@ -113,7 +138,8 @@ describe("RoomBoardCard", () => {
 					userRole,
 				});
 				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
-				const boardTitle = wrapper.find(".board-title").element.textContent;
+				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element
+					.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
@@ -126,7 +152,8 @@ describe("RoomBoardCard", () => {
 					userRole,
 				});
 				const expectedBoardTitle = "pages.room.boardCard.label.courseBoard";
-				const boardTitle = wrapper.find(".board-title").element.textContent;
+				const boardTitle = wrapper.find(`[data-testid="board-title-0"]`).element
+					.textContent;
 
 				expect(boardTitle).toContain(expectedBoardTitle);
 			});
@@ -259,17 +286,36 @@ describe("RoomBoardCard", () => {
 			});
 
 			describe("when board is a draft", () => {
-				it("should have correct combined card title", () => {
-					const { wrapper } = setup({
-						boardData: mockDraftBoardData,
-						userRole,
-					});
-					const boardCardTitle =
-						wrapper.find(".title-board-card").element.textContent;
+				describe("when board is a column board", () => {
+					it("should have correct combined card title", () => {
+						const { wrapper } = setup({
+							boardData: mockDraftBoardData,
+							userRole,
+						});
+						const boardCardTitle = wrapper.find(
+							`[data-testid="board-card-title-0"]`
+						).element.textContent;
 
-					expect(boardCardTitle).toContain(
-						"pages.room.boardCard.label.columnBoard - common.words.draft"
-					);
+						expect(boardCardTitle).toContain(
+							"pages.room.boardCard.label.columnBoard - common.words.draft"
+						);
+					});
+				});
+
+				describe("when board is a list board", () => {
+					it("should have correct combined card title", () => {
+						const { wrapper } = setup({
+							boardData: mockDraftListBoardData,
+							userRole,
+						});
+						const boardCardTitle = wrapper.find(
+							`[data-testid="board-card-title-0"]`
+						).element.textContent;
+
+						expect(boardCardTitle).toContain(
+							"pages.room.boardCard.label.listBoard - common.words.draft"
+						);
+					});
 				});
 
 				it("should use hidden UI", () => {
@@ -316,6 +362,38 @@ describe("RoomBoardCard", () => {
 			});
 
 			describe("when board is published", () => {
+				describe("when board is a column board", () => {
+					it("should have correct combined card title", () => {
+						const { wrapper } = setup({
+							boardData: mockPublishedBoardData,
+							userRole,
+						});
+						const boardCardTitle = wrapper.find(
+							`[data-testid="board-card-title-0"]`
+						).element.textContent;
+
+						expect(boardCardTitle).toContain(
+							"pages.room.boardCard.label.columnBoard"
+						);
+					});
+				});
+
+				describe("when board is a list board", () => {
+					it("should have correct combined card title", () => {
+						const { wrapper } = setup({
+							boardData: mockPublishedListBoardData,
+							userRole,
+						});
+						const boardCardTitle = wrapper.find(
+							`[data-testid="board-card-title-0"]`
+						).element.textContent;
+
+						expect(boardCardTitle).toContain(
+							"pages.room.boardCard.label.listBoard"
+						);
+					});
+				});
+
 				it("should show unpublish button in menu", async () => {
 					const { wrapper: wrapperPublished } = setup({
 						boardData: mockPublishedBoardData,
