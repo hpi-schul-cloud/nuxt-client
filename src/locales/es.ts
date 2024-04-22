@@ -1520,6 +1520,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Exportar configuración",
 	"pages.room.modal.course.export.options.topics": "Temas",
 	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",
+	"pages.room.modal.course.export.options.columnBoards": "Tableros de columna",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",

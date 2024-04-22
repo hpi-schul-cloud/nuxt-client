@@ -1497,6 +1497,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
 	"pages.room.modal.course.export.options.topics": "Теми",
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
+	"pages.room.modal.course.export.options.columnBoards": "Дошки для колонн",
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
