@@ -316,6 +316,7 @@ export default {
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.drawingElement": "Pizarra",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
@@ -369,7 +370,10 @@ export default {
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
-	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
+	"components.elementTypeSelection.elements.fileElement.subtitle":
+		"Editor de texto",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Text Editor",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Envíos",
