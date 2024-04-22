@@ -1,10 +1,10 @@
 import { ContentElementType } from "@/serverApi/v3";
-import NotifierModule from "@/store/notifier";
 import { ConfigResponse } from "@/serverApi/v3/api";
+import NotifierModule from "@/store/notifier";
 import { injectStrict } from "@/utils/inject";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
-import setupStores from "@@/tests/test-utils/setupStores";
 
 setupStores({ notifierModule: NotifierModule });
 
@@ -20,6 +20,7 @@ mockedInjectStrict.mockImplementation(() => {
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: false,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: false,
 			FEATURE_TLDRAW_ENABLED: false,
+			FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: false,
 		},
 	};
 });
@@ -99,6 +100,7 @@ describe("ElementTypeSelection Composable", () => {
 				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 				FEATURE_TLDRAW_ENABLED: true,
+				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
 			}
 		) => {
 			const addElementMock = jest.fn();
@@ -234,6 +236,34 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(addElementMock).toBeCalledTimes(1);
 				expect(addElementMock).toBeCalledWith(ContentElementType.Drawing);
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock);
+
+				askType();
+
+				const action = elementTypeOptions.value[4].action;
+				action();
+
+				expect(closeDialogMock).toBeCalledTimes(1);
+			});
+		});
+		describe("when the CollaborativeTextEditorElement action is called", () => {
+			it("should call collaborative text editor element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock } = setup();
+				const { askType } = useAddElementDialog(addElementMock);
+
+				askType();
+
+				const action = elementTypeOptions.value[5].action;
+				action();
+
+				expect(addElementMock).toBeCalledTimes(1);
+				expect(addElementMock).toBeCalledWith(
+					ContentElementType.CollaborativeTextEditor
+				);
 			});
 
 			it("should set isDialogOpen to false", async () => {

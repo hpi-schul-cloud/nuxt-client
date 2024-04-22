@@ -1,9 +1,14 @@
 import { ContentElementType } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
 import { ConfigResponse } from "@/serverApi/v3/api";
+import EnvConfigModule from "@/store/env-config";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
@@ -13,10 +18,6 @@ import { RichTextContentElement } from "@feature-board-text-element";
 import { createMock } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
 import ContentElementList from "./ContentElementList.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 
 describe("ContentElementList", () => {
 	const setup = (props: {
@@ -82,6 +83,10 @@ describe("ContentElementList", () => {
 			{
 				elementType: ContentElementType.Drawing,
 				component: DrawingContentElement,
+			},
+			{
+				elementType: ContentElementType.CollaborativeTextEditor,
+				component: CollaborativeTextEditorElement,
 			},
 		];
 
