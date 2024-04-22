@@ -1569,8 +1569,6 @@ export default {
 		"Se produjo un error al transferir un valor de parámetro. Por favor contacte al soporte.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"El valor de un parámetro no sigue las reglas dadas. Por favor, ajuste el valor en consecuencia.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"La versión de esta Herramienta utilizada está desactualizada. Actualice la versión.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ya se ha asignado una herramienta con el mismo nombre a este curso. Los nombres de las herramientas deben ser únicos dentro de un curso.",
 	"pages.tool.context.description":
