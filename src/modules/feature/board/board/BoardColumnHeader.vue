@@ -8,7 +8,7 @@
 		<div class="column-header mb-4 rounded" tabindex="0" ref="columnHeader">
 			<div class="d-flex align-center py-2 px-2">
 				<BoardAnyTitleInput
-					:value="title"
+					:value="title.trim()"
 					:data-testid="`column-title-${index}`"
 					scope="column"
 					:isEditMode="isEditMode"
@@ -23,8 +23,22 @@
 					:data-testid="`column-menu-btn-${index}`"
 				>
 					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
-					<BoardMenuActionMoveLeft @click="onMoveColumnLeft" />
-					<BoardMenuActionMoveRight @click="onMoveColumnRight" />
+					<BoardMenuActionMoveLeft
+						v-if="!isListBoard"
+						@click="onMoveColumnLeft"
+					/>
+					<BoardMenuActionMoveRight
+						v-if="!isListBoard"
+						@click="onMoveColumnRight"
+					/>
+					<BoardMenuActionMoveColumnUp
+						v-if="isListBoard"
+						@click="onMoveColumnUp"
+					/>
+					<BoardMenuActionMoveColumnDown
+						v-if="isListBoard"
+						@click="onMoveColumnDown"
+					/>
 					<BoardMenuActionDelete :name="title" @click="onDelete" />
 				</BoardMenu>
 			</div>
@@ -44,6 +58,8 @@ import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
+	BoardMenuActionMoveColumnUp,
+	BoardMenuActionMoveColumnDown,
 	BoardMenuActionMoveLeft,
 	BoardMenuActionMoveRight,
 } from "@ui-board";
@@ -59,12 +75,21 @@ export default defineComponent({
 		BoardMenuActionEdit,
 		BoardColumnInteractionHandler,
 		BoardMenuActionDelete,
+		BoardMenuActionMoveColumnUp,
+		BoardMenuActionMoveColumnDown,
 		BoardMenuActionMoveLeft,
 		BoardMenuActionMoveRight,
 	},
 	props: {
 		columnId: {
 			type: String,
+			required: true,
+		},
+		index: {
+			type: Number,
+		},
+		isListBoard: {
+			type: Boolean,
 			required: true,
 		},
 		title: {
@@ -75,14 +100,13 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-		index: {
-			type: Number,
-		},
 	},
 	emits: [
 		"delete:column",
+		"move:column-down",
 		"move:column-left",
 		"move:column-right",
+		"move:column-up",
 		"update:title",
 	],
 	setup(props, { emit }) {
@@ -127,12 +151,24 @@ export default defineComponent({
 			}
 		};
 
+		const onMoveColumnDown = () => {
+			if (!props.isListBoard) return;
+			emit("move:column-down");
+		};
+
 		const onMoveColumnLeft = () => {
+			if (props.isListBoard) return;
 			emit("move:column-left");
 		};
 
 		const onMoveColumnRight = () => {
+			if (props.isListBoard) return;
 			emit("move:column-right");
+		};
+
+		const onMoveColumnUp = () => {
+			if (!props.isListBoard) return;
+			emit("move:column-up");
 		};
 
 		const onUpdateTitle = (newTitle: string) => {
@@ -150,9 +186,11 @@ export default defineComponent({
 			onStartEditMode,
 			onEndEditMode,
 			onDelete,
+			onMoveColumnDown,
 			onMoveColumnKeyboard,
 			onMoveColumnLeft,
 			onMoveColumnRight,
+			onMoveColumnUp,
 			onUpdateTitle,
 			isFocusedById,
 		};

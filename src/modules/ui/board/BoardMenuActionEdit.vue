@@ -1,8 +1,8 @@
 <template>
 	<BoardMenuAction
 		:icon="mdiPencilOutline"
-		@click="onClick"
 		data-testid="board-menu-action-edit"
+		@click="onClick"
 	>
 		{{ $t("common.actions.edit") }}
 	</BoardMenuAction>
