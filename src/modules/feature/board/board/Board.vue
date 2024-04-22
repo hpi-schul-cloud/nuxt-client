@@ -12,11 +12,12 @@
 				@share:board="onShareBoard"
 				@delete:board="openDeleteBoardDialog(boardId)"
 			/>
-			<div class="d-flex flex-row flex-shrink-1">
+			<div :class="boardClass" :style="boardStyle">
 				<div>
 					<Sortable
 						:list="board.columns"
 						item-key="id"
+						:class="boardColumnClass"
 						tag="div"
 						:options="{
 							direction: 'horizontal',
@@ -35,7 +36,6 @@
 							forceFallback: true,
 							bubbleScroll: true,
 						}"
-						class="d-flex flex-row flex-shrink-1 ml-n4"
 						@end="onDropColumn"
 					>
 						<template #item="{ element, index }">
@@ -45,22 +45,27 @@
 								:index="index"
 								:key="element.id"
 								:columnCount="board.columns.length"
+								:class="{ 'my-0': isListBoard }"
+								:isListBoard="isListBoard"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
 								@delete:column="onDeleteColumn"
 								@update:card-position="onUpdateCardPosition(index, $event)"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
-								@move:column-left="onMoveColumnLeft(index, element.id)"
-								@move:column-right="onMoveColumnRight(index, element.id)"
+								@move:column-down="onMoveColumnForward(index, element.id)"
+								@move:column-left="onMoveColumnBackward(index, element.id)"
+								@move:column-right="onMoveColumnForward(index, element.id)"
+								@move:column-up="onMoveColumnBackward(index, element.id)"
 							/>
 						</template>
 					</Sortable>
 				</div>
-				<div>
+				<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
 					<BoardColumnGhost
 						v-if="hasCreateColumnPermission"
 						@create:column="onCreateColumn"
+						:isListBoard="isListBoard"
 					/>
 				</div>
 			</div>
@@ -83,7 +88,10 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue"
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import {
+	BoardLayout,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import {
@@ -181,7 +189,7 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 	}
 };
 
-const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
+const onMoveColumnBackward = async (columnIndex: number, columnId: string) => {
 	if (!hasMovePermission) return;
 	if (columnIndex === 0) return;
 
@@ -196,7 +204,7 @@ const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
 	);
 };
 
-const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
+const onMoveColumnForward = async (columnIndex: number, columnId: string) => {
 	if (!hasMovePermission) return;
 	if (board.value && columnIndex === board.value.columns.length - 1) return;
 
@@ -261,11 +269,45 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 
 const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 
+const isListBoard = computed(
+	() =>
+		envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
+		board.value?.layout === BoardLayout.List
+);
+
 const copyResultModalItems = computed(
 	() => copyModule.getCopyResultFailedItems
 );
 
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
+
+const boardClass = computed(() => {
+	const classes = ["d-flex", "flex-shrink-1"];
+	if (isListBoard.value) {
+		classes.push("flex-column", "mx-auto", "my-0");
+	} else {
+		classes.push("flex-row");
+	}
+	return classes;
+});
+
+const boardStyle = computed(() => {
+	if (!isListBoard.value) {
+		return;
+	}
+	const style = { maxWidth: "80ch" };
+	return style;
+});
+
+const boardColumnClass = computed(() => {
+	const classes = ["d-flex", "flex-shrink-1"];
+	if (isListBoard.value) {
+		classes.push("flex-column");
+	} else {
+		classes.push("flex-row", "ml-n4");
+	}
+	return classes;
+});
 
 const onCopyResultModalClosed = () => {
 	copyModule.reset();

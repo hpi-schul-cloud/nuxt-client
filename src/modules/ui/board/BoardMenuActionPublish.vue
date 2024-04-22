@@ -1,8 +1,8 @@
 <template>
 	<BoardMenuAction
 		:icon="mdiEyeOutline"
-		@click="onClick"
 		data-testid="board-menu-action-publish"
+		@click="onClick"
 	>
 		{{ t("common.action.publish") }}
 	</BoardMenuAction>
