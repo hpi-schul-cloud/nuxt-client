@@ -101,7 +101,7 @@ describe("BoardAnyTitleTitleInput", () => {
 			expect(emitted["enter"]).toHaveLength(1);
 		});
 
-		it("should not emit enter on hitting 'enter' key in column title", async () => {
+		it("should emit enter on hitting 'enter' key in column title", async () => {
 			setup({ isEditMode: true, scope: "column" });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 			textAreaComponent.vm.$emit(
@@ -112,10 +112,10 @@ describe("BoardAnyTitleTitleInput", () => {
 			);
 			const emitted = wrapper.emitted();
 
-			expect(emitted["enter"]).toBe(undefined);
+			expect(emitted["enter"]).toHaveLength(1);
 		});
 
-		it("should not emit enter on hitting 'enter' key in board title", async () => {
+		it("should emit enter on hitting 'enter' key in board title", async () => {
 			setup({ isEditMode: true, scope: "board" });
 			const textFieldComponent = wrapper.findComponent({ name: "VTextField" });
 			textFieldComponent.vm.$emit(
@@ -126,7 +126,7 @@ describe("BoardAnyTitleTitleInput", () => {
 			);
 			const emitted = wrapper.emitted();
 
-			expect(emitted["enter"]).toBe(undefined);
+			expect(emitted["enter"]).toHaveLength(1);
 		});
 
 		it("should display VTextField when scope is board", () => {

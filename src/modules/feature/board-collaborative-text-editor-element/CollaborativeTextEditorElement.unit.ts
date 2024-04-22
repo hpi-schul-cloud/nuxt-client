@@ -57,8 +57,9 @@ describe("CollaborativeTextEditorElement", () => {
 		return {
 			wrapper,
 			isEditMode: true,
-			element,
+			element: element,
 			getUrl,
+			windowMock,
 		};
 	};
 
@@ -116,7 +117,7 @@ describe("CollaborativeTextEditorElement", () => {
 				});
 
 				it("should open collaborative text editor in new tab", async () => {
-					const { wrapper, element } = setup({
+					const { wrapper, element, windowMock } = setup({
 						isEditMode: false,
 					});
 
@@ -127,16 +128,15 @@ describe("CollaborativeTextEditorElement", () => {
 					await card.trigger("click");
 
 					expect(window.open).toHaveBeenCalledTimes(1);
-					expect(window.open).toHaveBeenCalledWith(
-						`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`,
-						"_blank"
+					expect(windowMock.location).toBe(
+						`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`
 					);
 				});
 			});
 
 			describe("when getUrl returns undefined", () => {
 				it("should not open new tab", async () => {
-					const { wrapper } = setup({
+					const { wrapper, windowMock, element } = setup({
 						isEditMode: false,
 						getUrlHasError: true,
 					});
@@ -147,7 +147,10 @@ describe("CollaborativeTextEditorElement", () => {
 
 					await card.trigger("click");
 
-					expect(window.open).toHaveBeenCalledTimes(0);
+					expect(window.open).toHaveBeenCalledTimes(1);
+					expect(windowMock.location).not.toBe(
+						`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`
+					);
 				});
 			});
 		});

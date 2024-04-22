@@ -70,14 +70,16 @@ useBoardFocusHandler(element.value.id, collaborativeTextEditorElement);
 const { getUrl } = useCollaborativeTextEditorApi();
 
 const redirectToEditorUrl = async () => {
-	const url = await getUrl(
+	const windowReference = window.open();
+
+	getUrl(
 		element.value.id,
 		CollaborativeTextEditorParentType.ContentElement
-	);
-
-	if (url) {
-		window.open(url, "_blank");
-	}
+	).then((url) => {
+		if (url && windowReference) {
+			windowReference.location = url;
+		}
+	});
 };
 
 const onKeydownArrow = (event: KeyboardEvent) => {
