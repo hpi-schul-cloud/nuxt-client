@@ -27,19 +27,15 @@ jest.mock("./composables/CollaborativeTextEditorApi.composable");
 describe("CollaborativeTextEditorElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 
-	const setup = (props: { isEditMode: boolean }) => {
+	const setup = (props: { isEditMode: boolean; getUrlHasError?: boolean }) => {
 		document.body.setAttribute("data-app", "true");
 
-		const COLLABORATIVE_TEXTEDITOR_ELEMENT =
-			collaborativeTextEditorElementResponseFactory.build();
+		const element = collaborativeTextEditorElementResponseFactory.build();
 
-		const getUrlMock = jest
-			.fn()
-			.mockImplementation(
-				(parentId: string, parentType: CollaborativeTextEditorParentType) => {
-					return `${parentType}/${parentId}`;
-				}
-			);
+		const resolvedValue = props.getUrlHasError
+			? undefined
+			: `${CollaborativeTextEditorParentType.ContentElement}/${element.id}`;
+		const getUrlMock = jest.fn().mockResolvedValueOnce(resolvedValue);
 
 		const { getUrl } = setupCollaborativeTextEditorApiMock({
 			getUrlMock,
@@ -52,7 +48,7 @@ describe("CollaborativeTextEditorElement", () => {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
-			propsData: { ...props, element: COLLABORATIVE_TEXTEDITOR_ELEMENT },
+			propsData: { ...props, element: element },
 		});
 
 		const windowMock = createMock<Window>();
@@ -61,7 +57,7 @@ describe("CollaborativeTextEditorElement", () => {
 		return {
 			wrapper,
 			isEditMode: true,
-			element: COLLABORATIVE_TEXTEDITOR_ELEMENT,
+			element: element,
 			getUrl,
 		};
 	};
@@ -100,40 +96,59 @@ describe("CollaborativeTextEditorElement", () => {
 		});
 
 		describe("when element is clicked", () => {
-			it("should call getUrl", async () => {
-				const { wrapper, element, getUrl } = setup({
-					isEditMode: false,
+			describe("when getUrl returns successful", () => {
+				it("should call getUrl", async () => {
+					const { wrapper, element, getUrl } = setup({
+						isEditMode: false,
+					});
+
+					const card = wrapper.findComponent({
+						ref: "collaborativetextEditorElement",
+					});
+
+					await card.trigger("click");
+
+					expect(getUrl).toHaveBeenCalledTimes(1);
+					expect(getUrl).toHaveBeenCalledWith(
+						element.id,
+						CollaborativeTextEditorParentType.ContentElement
+					);
 				});
 
-				const card = wrapper.findComponent({
-					ref: "collaborativetextEditorElement",
+				it("should open collaborative text editor in new tab", async () => {
+					const { wrapper, element } = setup({
+						isEditMode: false,
+					});
+
+					const card = wrapper.findComponent({
+						ref: "collaborativetextEditorElement",
+					});
+
+					await card.trigger("click");
+
+					expect(window.open).toHaveBeenCalledTimes(1);
+					expect(window.open).toHaveBeenCalledWith(
+						`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`,
+						"_blank"
+					);
 				});
-
-				await card.trigger("click");
-
-				expect(getUrl).toHaveBeenCalledTimes(1);
-				expect(getUrl).toHaveBeenCalledWith(
-					element.id,
-					CollaborativeTextEditorParentType.ContentElement
-				);
 			});
 
-			it("should open collaborative text editor in new tab correctly", async () => {
-				const { wrapper, element } = setup({
-					isEditMode: false,
+			describe("when getUrl returns undefined", () => {
+				it("should not open new tab", async () => {
+					const { wrapper } = setup({
+						isEditMode: false,
+						getUrlHasError: true,
+					});
+
+					const card = wrapper.findComponent({
+						ref: "collaborativetextEditorElement",
+					});
+
+					await card.trigger("click");
+
+					expect(window.open).toHaveBeenCalledTimes(0);
 				});
-
-				const card = wrapper.findComponent({
-					ref: "collaborativetextEditorElement",
-				});
-
-				await card.trigger("click");
-
-				expect(window.open).toHaveBeenCalledTimes(1);
-				expect(window.open).toHaveBeenCalledWith(
-					`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`,
-					"_blank"
-				);
 			});
 		});
 	});
@@ -193,44 +208,6 @@ describe("CollaborativeTextEditorElement", () => {
 				await nextTick();
 
 				expect(wrapper.emitted("delete:element")).toBeTruthy();
-			});
-		});
-
-		describe("when element is clicked", () => {
-			it("should call getUrl", async () => {
-				const { wrapper, element, getUrl } = setup({
-					isEditMode: true,
-				});
-
-				const card = wrapper.findComponent({
-					ref: "collaborativetextEditorElement",
-				});
-
-				await card.trigger("click");
-
-				expect(getUrl).toHaveBeenCalledTimes(1);
-				expect(getUrl).toHaveBeenCalledWith(
-					element.id,
-					CollaborativeTextEditorParentType.ContentElement
-				);
-			});
-
-			it("should open collaborative text editor in new tab correctly", async () => {
-				const { wrapper, element } = setup({
-					isEditMode: true,
-				});
-
-				const card = wrapper.findComponent({
-					ref: "collaborativetextEditorElement",
-				});
-
-				await card.trigger("click");
-
-				expect(window.open).toHaveBeenCalledTimes(1);
-				expect(window.open).toHaveBeenCalledWith(
-					`${CollaborativeTextEditorParentType.ContentElement}/${element.id}`,
-					"_blank"
-				);
 			});
 		});
 	});

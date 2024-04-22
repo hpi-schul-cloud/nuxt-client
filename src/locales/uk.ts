@@ -1003,6 +1003,10 @@ export default {
 	"pages.administration.migration.tutorialWait":
 		"Зауважте, що після початку переміщення школи для отримання даних може знадобитися до 1 години. Після цього можна переходити до наступного кроку.",
 	"pages.administration.migration.waiting": "Очікування синхронізації даних...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"Неможливо розпочати міграцію, оскільки цільова система входу та поточна система входу у вашій школі збігаються!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Не вдається знайти систему moin.schule!",
 	"pages.administration.or": "або",
 	"pages.administration.printQr.emptyUser":
 		"Вибраний користувач(-і) вже зареєстрований(-і)",
@@ -1493,6 +1497,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
 	"pages.room.modal.course.export.options.topics": "Теми",
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
+	"pages.room.modal.course.export.options.columnBoards": "Дошки для колонн",
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",

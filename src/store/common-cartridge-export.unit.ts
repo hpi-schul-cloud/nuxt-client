@@ -19,6 +19,7 @@ describe("commonCartridgeExportModule", () => {
 				commonCartridgeExportModule.setVersion("1.1.0");
 				commonCartridgeExportModule.setTopics(["topic"]);
 				commonCartridgeExportModule.setTasks(["task"]);
+				commonCartridgeExportModule.setColumnBoards(["columnBoard"]);
 
 				commonCartridgeExportModule.startExport();
 
@@ -26,6 +27,7 @@ describe("commonCartridgeExportModule", () => {
 					version: "1.1.0",
 					topics: ["topic"],
 					tasks: ["task"],
+					columnBoards: ["columnBoard"],
 				});
 			});
 		});
@@ -37,11 +39,13 @@ describe("commonCartridgeExportModule", () => {
 				commonCartridgeExportModule.setVersion("1.1.0");
 				commonCartridgeExportModule.setTopics(["topic"]);
 				commonCartridgeExportModule.setTasks(["task"]);
+				commonCartridgeExportModule.setColumnBoards(["columnBoard"]);
 				commonCartridgeExportModule.startExportFlow();
 
 				expect(commonCartridgeExportModule.getVersion).toBe("");
 				expect(commonCartridgeExportModule.getTopics).toEqual([]);
 				expect(commonCartridgeExportModule.getTasks).toEqual([]);
+				expect(commonCartridgeExportModule.getColumnBoards).toEqual([]);
 				expect(commonCartridgeExportModule.getIsExportModalOpen).toBe(true);
 			});
 		});
@@ -53,11 +57,13 @@ describe("commonCartridgeExportModule", () => {
 				commonCartridgeExportModule.setVersion("1.1.0");
 				commonCartridgeExportModule.setTopics(["topic"]);
 				commonCartridgeExportModule.setTasks(["task"]);
+				commonCartridgeExportModule.setColumnBoards(["columnBoard"]);
 				commonCartridgeExportModule.resetExportFlow();
 
 				expect(commonCartridgeExportModule.getVersion).toBe("");
 				expect(commonCartridgeExportModule.getTopics).toEqual([]);
 				expect(commonCartridgeExportModule.getTasks).toEqual([]);
+				expect(commonCartridgeExportModule.getColumnBoards).toEqual([]);
 				expect(commonCartridgeExportModule.getIsExportModalOpen).toBe(false);
 			});
 		});
@@ -103,6 +109,19 @@ describe("commonCartridgeExportModule", () => {
 				commonCartridgeExportModule.setTasks(["task"]);
 
 				expect(commonCartridgeExportModule.getTasks).toEqual(["task"]);
+			});
+		});
+
+		// AI next 11 lines
+		describe("setColumnBoards", () => {
+			it("should set columnBoards to the given value", () => {
+				const commonCartridgeExportModule = new CommonCartridgeExportModule({});
+
+				commonCartridgeExportModule.setColumnBoards(["columnBoard"]);
+
+				expect(commonCartridgeExportModule.getColumnBoards).toEqual([
+					"columnBoard",
+				]);
 			});
 		});
 	});

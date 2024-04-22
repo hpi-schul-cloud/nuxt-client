@@ -25,7 +25,7 @@ const collaborativeTextEditorApi = () => {
 	): Promise<string | undefined> => {
 		try {
 			const response =
-				await collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent(
+				await collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(
 					parentId,
 					parentType
 				);
@@ -33,7 +33,6 @@ const collaborativeTextEditorApi = () => {
 			return response.data.url;
 		} catch (error) {
 			showError(error);
-			throw error;
 		}
 	};
 

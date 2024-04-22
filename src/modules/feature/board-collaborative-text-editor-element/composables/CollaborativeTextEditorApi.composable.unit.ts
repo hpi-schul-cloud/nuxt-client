@@ -48,7 +48,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 	});
 
 	describe("getUrl", () => {
-		describe("when collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent returns successfully", () => {
+		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns successful", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType =
@@ -65,7 +65,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 				jest
 					.spyOn(serverApi, "CollaborativeTextEditorApiFactory")
 					.mockReturnValue(collaborativeTextEditorApi);
-				collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent.mockResolvedValueOnce(
+				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockResolvedValueOnce(
 					response
 				);
 
@@ -79,17 +79,17 @@ describe("CollaborativeTextEditorApi Composable", () => {
 				};
 			};
 
-			it("should call collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent", async () => {
+			it("should call collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent", async () => {
 				const { parentId, parentType, collaborativeTextEditorApi } = setup();
 				const { getUrl } = useCollaborativeTextEditorApi();
 
 				await getUrl(parentId, parentType);
 
 				expect(
-					collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent
+					collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent
 				).toHaveBeenCalledTimes(1);
 				expect(
-					collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent
+					collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent
 				).toHaveBeenCalledWith(parentId, parentType);
 			});
 
@@ -103,7 +103,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 			});
 		});
 
-		describe("when collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent returns error", () => {
+		describe("when collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent returns error", () => {
 			const setup = (message?: string) => {
 				const parentId = ObjectIdMock();
 				const parentType =
@@ -117,7 +117,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 				jest
 					.spyOn(serverApi, "CollaborativeTextEditorApiFactory")
 					.mockReturnValue(collaborativeTextEditorApi);
-				collaborativeTextEditorApi.collaborativeTextEditorControllerGetCollaborativeTextEditorForParent.mockRejectedValue(
+				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockRejectedValue(
 					responseError
 				);
 
@@ -130,7 +130,6 @@ describe("CollaborativeTextEditorApi Composable", () => {
 				return {
 					parentId,
 					parentType,
-					responseError,
 					showInternalServerError,
 					showUnauthorizedError,
 					showForbiddenError,
@@ -138,32 +137,39 @@ describe("CollaborativeTextEditorApi Composable", () => {
 			};
 
 			it("should call showUnauthorizedError and pass error", async () => {
-				const { parentId, parentType, showUnauthorizedError, responseError } =
-					setup(ErrorType.Unauthorized);
+				const { parentId, parentType, showUnauthorizedError } = setup(
+					ErrorType.Unauthorized
+				);
 
 				const { getUrl } = useCollaborativeTextEditorApi();
 
-				await expect(getUrl(parentId, parentType)).rejects.toBe(responseError);
+				const result = await getUrl(parentId, parentType);
+
+				expect(result).toBeUndefined();
 				expect(showUnauthorizedError).toBeCalledTimes(1);
 			});
 
 			it("should call showForbiddenError and pass error", async () => {
-				const { parentId, parentType, showForbiddenError, responseError } =
-					setup(ErrorType.Forbidden);
+				const { parentId, parentType, showForbiddenError } = setup(
+					ErrorType.Forbidden
+				);
 
 				const { getUrl } = useCollaborativeTextEditorApi();
 
-				await expect(getUrl(parentId, parentType)).rejects.toBe(responseError);
+				const result = await getUrl(parentId, parentType);
+
+				expect(result).toBeUndefined();
 				expect(showForbiddenError).toBeCalledTimes(1);
 			});
 
 			it("should call showInternalServerError and pass error", async () => {
-				const { parentId, parentType, showInternalServerError, responseError } =
-					setup();
+				const { parentId, parentType, showInternalServerError } = setup();
 
 				const { getUrl } = useCollaborativeTextEditorApi();
 
-				await expect(getUrl(parentId, parentType)).rejects.toBe(responseError);
+				const result = await getUrl(parentId, parentType);
+
+				expect(result).toBeUndefined();
 				expect(showInternalServerError).toBeCalledTimes(1);
 			});
 		});
