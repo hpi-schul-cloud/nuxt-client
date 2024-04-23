@@ -1,13 +1,13 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { Board, BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
-import { axiosErrorFactory } from "@@/tests/test-utils";
+// import { axiosErrorFactory } from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 } from "@@/tests/test-utils/factory";
-import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
+// import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { nextTick, ref } from "vue";
@@ -37,17 +37,20 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 jest.mock("@data-board/socket/socket");
 const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
 
-const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
-	const expectedPayload = apiResponseErrorFactory.build({
-		message,
-		code,
-	});
-	const errorResponse = axiosErrorFactory.build({
-		response: { data: expectedPayload },
-	});
+jest.mock("@data-board/socket/socket");
+const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
 
-	return errorResponse;
-};
+// const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
+// 	const expectedPayload = apiResponseErrorFactory.build({
+// 		message,
+// 		code,
+// 	});
+// 	const errorResponse = axiosErrorFactory.build({
+// 		response: { data: expectedPayload },
+// 	});
+
+// 	return errorResponse;
+// };
 
 describe("BoardStore", () => {
 	beforeEach(() => {
