@@ -29,19 +29,19 @@ describe("BoardMenuActionMoveLeft Component", () => {
 		it("should render if element not in last position and several columns exist", () => {
 			const wrapper = setup({ isLastColumn: false, hasMultipleColumns: true });
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeTruthy();
+			expect(action.exists()).toBe(true);
 		});
 
 		it("should not be rendered if element is in last position and several columns exists", () => {
 			const wrapper = setup({ isLastColumn: true, hasMultipleColumns: true });
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeFalsy();
+			expect(action.exists()).toBe(false);
 		});
 
 		it("should not be rendered if element is the only element", () => {
 			const wrapper = setup({ isLastColumn: true, hasMultipleColumns: false });
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeFalsy();
+			expect(action.exists()).toBe(false);
 		});
 
 		it("should emit if is clicked", () => {

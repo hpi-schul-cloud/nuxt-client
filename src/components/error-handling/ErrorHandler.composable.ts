@@ -16,6 +16,7 @@ export type ErrorType =
 export type BoardObjectType =
 	| "board"
 	| "boardColumn"
+	| "boardRow"
 	| "boardCard"
 	| "boardElement";
 
@@ -37,9 +38,9 @@ export const useErrorHandler = () => {
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
 	) => {
-		const errorKey = `components.board.notifications.errors.${errorType}`;
+		let errorKey = `components.board.notifications.errors.${errorType}`;
 		if (!t(errorKey)) {
-			return t("error.generic");
+			errorKey = "error.generic";
 		}
 
 		const type = boardObjectType ? t(`components.${boardObjectType}`) : "";
@@ -85,8 +86,15 @@ export const useErrorHandler = () => {
 		}
 	};
 
+	const handleAnyError = (error: unknown, handlerFunction: ApiErrorHandler) => {
+		const responseError = mapAxiosErrorToResponseError(error);
+
+		handlerFunction(responseError);
+	};
+
 	return {
 		handleError,
+		handleAnyError,
 		generateErrorText,
 		notifySocketError,
 		notifyWithTemplate,

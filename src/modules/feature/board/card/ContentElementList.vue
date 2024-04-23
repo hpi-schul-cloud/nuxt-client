@@ -61,6 +61,18 @@
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
+				<CollaborativeTextEditorElement
+					v-else-if="showCollaborativeTextEditorElement(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					:isFirstElement="firstElementId === element.id"
+					:isLastElement="lastElementId === element.id"
+					:hasMultipleElements="hasMultipleElements"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
 			</ContentElement>
 		</template>
 	</VCardText>
@@ -68,23 +80,25 @@
 
 <script lang="ts">
 import {
+	CollaborativeTextEditorElementResponse,
 	ContentElementType,
+	DrawingElementResponse,
 	ExternalToolElementResponse,
 	FileElementResponse,
+	LinkElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
-	DrawingElementResponse,
-	LinkElementResponse,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
+import { DrawingContentElement } from "@feature-board-drawing-element";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
 import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
-import { DrawingContentElement } from "@feature-board-drawing-element";
 import { computed, defineComponent, PropType } from "vue";
 import ContentElement from "./ContentElement.vue";
 
@@ -98,6 +112,7 @@ export default defineComponent({
 		SubmissionContentElement,
 		LinkContentElement,
 		DrawingContentElement,
+		CollaborativeTextEditorElement,
 	},
 	props: {
 		elements: {
@@ -198,6 +213,22 @@ export default defineComponent({
 			);
 		};
 
+		const isCollaborativeTextEditorResponse = (
+			element: AnyContentElement
+		): element is CollaborativeTextEditorElementResponse => {
+			return element.type === ContentElementType.CollaborativeTextEditor;
+		};
+
+		const showCollaborativeTextEditorElement = (
+			element: AnyContentElement
+		): element is CollaborativeTextEditorElementResponse => {
+			return (
+				!!envConfigModule.getEnv
+					.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED &&
+				isCollaborativeTextEditorResponse(element)
+			);
+		};
+
 		const onMoveElementDown = (
 			elementIndex: number,
 			element: AnyContentElement
@@ -256,7 +287,9 @@ export default defineComponent({
 			isExternalToolElementResponse,
 			showExternalToolElement,
 			showDrawingElement,
+			showCollaborativeTextEditorElement,
 			isDrawingElementResponse,
+			isCollaborativeTextEditorResponse,
 			showLinkElement,
 			lastElementId,
 			onDeleteElement,
