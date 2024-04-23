@@ -31,6 +31,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		handle(
 			action,
 			on(BoardActions.fetchBoard, restApi.fetchBoard),
+			on(BoardActions.disconnectSocket, socketApi.disconnectSocketRequest),
 
 			// request actions
 			on(BoardActions.createCardRequest, socketOrRest.createCardRequest),

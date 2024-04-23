@@ -12,6 +12,11 @@ export const fetchBoard = createAction(
 	props<{ id: string }>()
 );
 
+export const disconnectSocket = createAction(
+	"disconnect-socket",
+	props<{ id: string }>()
+);
+
 export const createCardRequest = createAction(
 	"create-card-request",
 	props<{ columnId: string }>()

@@ -106,7 +106,7 @@ import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
@@ -247,6 +247,10 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 onMounted(() => {
 	setAlert();
 	boardStore.dispatch(boardActions.fetchBoard({ id: props.boardId }));
+});
+
+onUnmounted(() => {
+	boardStore.dispatch(boardActions.disconnectSocket({}));
 });
 
 const setAlert = useDebounceFn(() => {

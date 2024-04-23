@@ -6,12 +6,21 @@ import { useBoardStore } from "../BoardStore";
 export const useSocketApi = () => {
 	const boardStore = useBoardStore();
 
-	const { emitOnSocket } = useBoardSocketApi(boardStore.dispatch);
+	const { emitOnSocket, disconnectSocket } = useBoardSocketApi(
+		boardStore.dispatch
+	);
 
 	const createCardRequest = (
 		action: ReturnType<typeof BoardActions.createCardRequest>
 	) => {
 		emitOnSocket("create-card-request", action.payload);
+	};
+
+	const disconnectSocketRequest = (
+		action: ReturnType<typeof BoardActions.disconnectSocket>
+	) => {
+		console.log("disconnectSocketRequest", action.payload);
+		disconnectSocket();
 	};
 
 	const createCardFailure = (
@@ -193,6 +202,7 @@ export const useSocketApi = () => {
 		createCardFailure,
 		createColumnRequest,
 		createColumnFailure,
+		disconnectSocketRequest,
 		deleteCardRequest,
 		deleteCardFailure,
 		deleteColumnRequest,
