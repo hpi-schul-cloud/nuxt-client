@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { boardActions, useBoardStore } from "@data-board";
+import { boardActions, useBoardSocketApi, useBoardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { setActivePinia } from "pinia";
 import { useBoardRestApi } from "./restApi";
@@ -25,13 +25,20 @@ const mockedUseBoardApi = jest.mocked(useBoardApi);
 jest.mock("../EditMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
+jest.mock("../socket/socket");
+const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
+
 describe("restApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
+	let mockedSocketApiHandler: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
 	let setEditModeId: jest.Mock;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+
+		mockedSocketApiHandler = createMock<ReturnType<typeof useBoardSocketApi>>();
+		mockedUseSocketApi.mockReturnValue(mockedSocketApiHandler);
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
