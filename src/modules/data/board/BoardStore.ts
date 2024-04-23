@@ -7,7 +7,11 @@ import { useBoardRestApi } from "./boardActions/restApi";
 import { useSocketApi } from "./boardActions/socketApi";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import {
+	useErrorHandler,
+	BoardObjectType,
+	ErrorType,
+} from "@/components/error-handling/ErrorHandler.composable";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { ColumnResponse } from "@/serverApi/v3";
 
@@ -67,24 +71,15 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.reloadBoardSuccess, socketApi.reloadBoardSuccess),
 
 			// failure actions
-			on(BoardActions.createCardFailure, socketApi.createCardFailure),
-			on(BoardActions.createColumnFailure, socketApi.createColumnFailure),
-			on(BoardActions.deleteCardFailure, socketApi.deleteCardFailure),
-			on(BoardActions.deleteColumnFailure, socketApi.deleteColumnFailure),
-			on(BoardActions.moveCardFailure, socketApi.moveCardFailure),
-			on(BoardActions.moveColumnFailure, socketApi.moveColumnFailure),
-			on(
-				BoardActions.updateColumnTitleFailure,
-				socketApi.updateColumnTitleFailure
-			),
-			on(
-				BoardActions.updateBoardTitleFailure,
-				socketApi.updateBoardTitleFailure
-			),
-			on(
-				BoardActions.updateBoardVisibilityFailure,
-				socketApi.updateBoardVisibilityFailure
-			),
+			on(BoardActions.createCardFailure, onFailure),
+			on(BoardActions.createColumnFailure, onFailure),
+			on(BoardActions.deleteCardFailure, onFailure),
+			on(BoardActions.deleteColumnFailure, onFailure),
+			on(BoardActions.moveCardFailure, onFailure),
+			on(BoardActions.moveColumnFailure, onFailure),
+			on(BoardActions.updateColumnTitleFailure, onFailure),
+			on(BoardActions.updateBoardTitleFailure, onFailure),
+			on(BoardActions.updateBoardVisibilityFailure, onFailure),
 
 			// notify actions
 			on(BoardActions.notifyError, notifyError)
@@ -313,10 +308,25 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns[targetColumnIndex].cards.splice(newIndex, 0, item);
 	};
 
+	const onFailure = (action: PermittedStoreActions<typeof BoardActions>) => {
+		console.log("onFailure", action);
+		notifyErrorMessage("notUpdatedViaSocket", "boardCard");
+	};
+
 	const notifyError = (action: ReturnType<typeof BoardActions.notifyError>) => {
 		if (board.value === undefined) return;
 
 		const { errorType, boardObjectType } = action.payload;
+
+		notifySocketError(errorType, boardObjectType);
+		setEditModeId(undefined);
+	};
+
+	const notifyErrorMessage = (
+		errorType: ErrorType,
+		boardObjectType: BoardObjectType
+	) => {
+		if (board.value === undefined) return;
 
 		notifySocketError(errorType, boardObjectType);
 		setEditModeId(undefined);
