@@ -34,7 +34,7 @@ export default defineComponent({
 		alt: { type: String, required: true },
 		src: { type: String, required: true },
 		cover: { type: Boolean, required: false, default: false },
-		aspectRatio: { type: Number, required: false },
+		aspectRatio: { type: Number, required: false, default: 16 / 9 },
 		position: { type: String, required: false },
 	},
 	components: { WarningAlert },
