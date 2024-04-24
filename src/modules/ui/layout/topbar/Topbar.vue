@@ -37,7 +37,7 @@
 			ref="image"
 			alt=""
 		/>
-		<!-- <UserMenu v-if="user" :user="user" :role-names="roleNames" /> -->
+		<UserMenu v-if="user" :user="user" :role-names="roleNames" />
 	</VAppBar>
 </template>
 
@@ -58,7 +58,7 @@ import {
 import TopbarItem from "./TopbarItem.vue";
 import PageShare from "./PageShare.vue";
 import StatusAlerts from "./StatusAlerts.vue";
-// import UserMenu from "./UserMenu.vue";
+import UserMenu from "./UserMenu.vue";
 import { StatusAlert } from "@/store/types/status-alert";
 
 const props = defineProps({
@@ -129,17 +129,17 @@ const statusAlertColor = computed(() => {
 	return statusAlertsIncludeDanger ? "error" : "info";
 });
 
-// const user = computed(() => {
-// 	return authModule.getUser;
-// });
+const user = computed(() => {
+	return authModule.getUser;
+});
 
 const school = computed(() => {
 	return authModule.getSchool;
 });
 
-// const roleNames = computed(() => {
-// 	return authModule.getUserRoles;
-// });
+const roleNames = computed(() => {
+	return authModule.getUserRoles;
+});
 
 const hasLogo = computed(() => {
 	return !!school.value?.logo?.url;
