@@ -27,7 +27,7 @@
 		>
 			<PageShare />
 		</TopbarItem>
-		<div v-if="school" class="mx-1">
+		<div v-if="school && isTabletOrBigger" class="mx-1">
 			{{ school.name }}
 		</div>
 		<img
@@ -71,10 +71,14 @@ const props = defineProps({
 const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
 const authModule = injectStrict(AUTH_MODULE_KEY);
 
-const { lgAndUp } = useDisplay();
+const { lgAndUp, mdAndUp } = useDisplay();
 
 const isDesktop = computed(() => {
 	return lgAndUp.value;
+});
+
+const isTabletOrBigger = computed(() => {
+	return mdAndUp.value;
 });
 
 const sidebarToggleIcon = computed(() => {
