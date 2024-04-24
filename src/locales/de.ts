@@ -313,6 +313,7 @@ export default {
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.drawingElement": "Whiteboard",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -367,6 +368,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Texteditor",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",
@@ -1553,8 +1556,6 @@ export default {
 		"Bei der Übertragung eines Parameterwerts ist ein Fehler ausgetreten. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"Die benutzte Version dieses Tools ist nicht mehr aktuell. Bitte die Version aktualisieren.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ein Tool mit gleichem Namen wurde bereits dem Kurs zugeordnet. Die einem Kurs zugeordneten Tools müssen eindeutige Namen haben.",
 	"pages.tool.context.description":

@@ -317,6 +317,7 @@ export default {
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.drawingElement": "Дошка",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
@@ -370,6 +371,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Зовнішні інструменти",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Текстовий редактор",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Посилання",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Подання",
@@ -1546,8 +1549,6 @@ export default {
 		"Під час передачі значення параметра сталася помилка. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Значення параметра не відповідає наведеним правилам. Відкоригуйте значення відповідно.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"Використана версія цього інструменту застаріла. Будь ласка, оновіть версію.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Інструмент із такою ж назвою вже призначено цьому курсу. Назви інструментів мають бути унікальними в межах курсу.",
 	"pages.tool.context.description":

@@ -316,6 +316,7 @@ export default {
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.drawingElement": "Pizarra",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
@@ -369,7 +370,10 @@ export default {
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
-	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
+	"components.elementTypeSelection.elements.fileElement.subtitle":
+		"Editor de texto",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Text Editor",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Envíos",
@@ -1569,8 +1573,6 @@ export default {
 		"Se produjo un error al transferir un valor de parámetro. Por favor contacte al soporte.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"El valor de un parámetro no sigue las reglas dadas. Por favor, ajuste el valor en consecuencia.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"La versión de esta Herramienta utilizada está desactualizada. Actualice la versión.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ya se ha asignado una herramienta con el mismo nombre a este curso. Los nombres de las herramientas deben ser únicos dentro de un curso.",
 	"pages.tool.context.description":
