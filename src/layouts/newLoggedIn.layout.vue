@@ -7,7 +7,6 @@
 			:sidebar-expanded="sidebarExpanded"
 			@sidebar-toggled="onToggleSidebar"
 		/>
-
 		<v-main id="main-content">
 			<application-error-wrapper>
 				<AlertContainer />
