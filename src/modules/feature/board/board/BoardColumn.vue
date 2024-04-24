@@ -43,8 +43,11 @@
 				<template #item="{ element, index }">
 					<CardHost
 						:data-card-id="element.cardId"
-						class="draggable my-3 mx-2"
-						:class="hasMovePermission ? '' : 'drag-disabled'"
+						class="draggable my-3"
+						:class="{
+							'drag-disabled': !hasMovePermission,
+							'mx-2': !isListBoard,
+						}"
 						:card-id="element.cardId"
 						:height="element.height"
 						@move:card-keyboard="
@@ -132,9 +135,11 @@ export default defineComponent({
 			useBoardPermissions();
 
 		const columnClasses = computed(() => {
-			const classes = ["column-drag-handle", "bg-white", "px-4"];
+			const classes = ["column-drag-handle", "bg-white"];
 			if (props.isListBoard) {
 				classes.push("d-flex", "flex-column", "align-stretch");
+			} else {
+				classes.push("px-4");
 			}
 			return classes;
 		});
