@@ -284,7 +284,8 @@ export default {
 	"components.board.alert.info.draft":
 		"Dieses Board ist nicht für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neue Spalte",
-	"components.board.column.ghost.placeholder": "Spalte hinzufügen",
+	"components.board.column.ghost.column.placeholder": "Spalte hinzufügen",
+	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.menu.board": "Board-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Spalten-Einstellungen",
@@ -306,11 +307,13 @@ export default {
 	"components.board": "Board",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
-	"components.boardRow": "Abschnitt",
 	"components.boardElement": "Element",
+	"components.boardRow": "Abschnitt",
+	"components.boardSection": "Abschnitt",
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.drawingElement": "Whiteboard",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -365,6 +368,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Texteditor",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",
@@ -991,6 +996,10 @@ export default {
 		"Bitte beachten Sie, dass es nach Beginn der Schulmigration bis zu 1 Stunde dauern kann, bis die Daten abgerufen sind. Danach können Sie mit dem nächsten Schritt fortfahren.",
 	"pages.administration.migration.waiting":
 		"Warten auf die Datensynchronisation...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"Die Migration kann nicht gestartet werden, da das Ziel-Login-System und das derzeitige Login-System Ihrer Schule identisch sind!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Das moin.schule-System kann nicht gefunden werden!",
 	"pages.administration.or": "oder",
 	"pages.administration.printQr.emptyUser":
 		"Dieser Nutzer wurde bereits registriert",
@@ -1388,9 +1397,10 @@ export default {
 	"pages.news.title": "Neuigkeiten",
 	"pages.room.boardCard.label.columnBoard": "Spalten-Board",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Board",
+	"pages.room.boardCard.label.listBoard": "Listen-Board",
 	"pages.room.boardCard.menu.ariaLabel": "Board-Menü",
 	"pages.room.cards.aria":
-		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
+		"{itemType}, Link, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.copy.course.message.copied":
 		"Der Kurs wurde erfolgreich kopiert.",
@@ -1429,6 +1439,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.add.lesson": "Neues Thema",
 	"pages.rooms.fab.add.board": "Neues Spalten-Board",
+	"pages.rooms.fab.add.listBoard": "Neues Listen-Board",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.fab.import.course": "Kurs importieren",
@@ -1494,6 +1505,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
 	"pages.room.modal.course.export.options.topics": "Themen",
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
+	"pages.room.modal.course.export.options.columnBoards": "Spalten-Boards",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
@@ -1544,8 +1556,6 @@ export default {
 		"Bei der Übertragung eines Parameterwerts ist ein Fehler ausgetreten. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"Die benutzte Version dieses Tools ist nicht mehr aktuell. Bitte die Version aktualisieren.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ein Tool mit gleichem Namen wurde bereits dem Kurs zugeordnet. Die einem Kurs zugeordneten Tools müssen eindeutige Namen haben.",
 	"pages.tool.context.description":

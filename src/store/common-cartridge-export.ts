@@ -11,6 +11,7 @@ export default class CommonCartridgeExportModule extends VuexModule {
 	private version = "";
 	private topics: string[] = [];
 	private tasks: string[] = [];
+	private columnBoards: string[] = [];
 
 	@Action
 	async startExport(): Promise<void> {
@@ -22,6 +23,7 @@ export default class CommonCartridgeExportModule extends VuexModule {
 			version: this.getVersion,
 			topics: this.getTopics,
 			tasks: this.getTasks,
+			columnBoards: this.getColumnBoards,
 		});
 	}
 
@@ -30,6 +32,7 @@ export default class CommonCartridgeExportModule extends VuexModule {
 		this.setVersion("");
 		this.setTopics([]);
 		this.setTasks([]);
+		this.setColumnBoards([]);
 		this.setIsExportModalOpen(true);
 	}
 
@@ -38,6 +41,7 @@ export default class CommonCartridgeExportModule extends VuexModule {
 		this.setVersion("");
 		this.setTopics([]);
 		this.setTasks([]);
+		this.setColumnBoards([]);
 		this.setIsExportModalOpen(false);
 	}
 
@@ -54,6 +58,11 @@ export default class CommonCartridgeExportModule extends VuexModule {
 	@Mutation
 	setTasks(taskIds: string[]) {
 		this.tasks = taskIds;
+	}
+
+	@Mutation
+	setColumnBoards(columnBoardIds: string[]) {
+		this.columnBoards = columnBoardIds;
 	}
 
 	@Mutation
@@ -75,5 +84,9 @@ export default class CommonCartridgeExportModule extends VuexModule {
 
 	get getTasks(): string[] {
 		return this.tasks;
+	}
+
+	get getColumnBoards(): string[] {
+		return this.columnBoards;
 	}
 }

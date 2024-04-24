@@ -288,7 +288,8 @@ export default {
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
 	"components.board.alert.info.draft": "Ця дошка невидима для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
-	"components.board.column.ghost.placeholder": "Додати стовпець",
+	"components.board.column.ghost.column.placeholder": "Додати стовпець",
+	"components.board.column.ghost.list.placeholder": "Додати розділ",
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
@@ -310,11 +311,13 @@ export default {
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
-	"components.boardRow": "рядок",
 	"components.boardElement": "Eлемент",
+	"components.boardRow": "рядок",
+	"components.boardSection": "розділ",
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.drawingElement": "Дошка",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
@@ -368,6 +371,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Зовнішні інструменти",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Текстовий редактор",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Посилання",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Подання",
@@ -1000,6 +1005,10 @@ export default {
 	"pages.administration.migration.tutorialWait":
 		"Зауважте, що після початку переміщення школи для отримання даних може знадобитися до 1 години. Після цього можна переходити до наступного кроку.",
 	"pages.administration.migration.waiting": "Очікування синхронізації даних...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"Неможливо розпочати міграцію, оскільки цільова система входу та поточна система входу у вашій школі збігаються!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Не вдається знайти систему moin.schule!",
 	"pages.administration.or": "або",
 	"pages.administration.printQr.emptyUser":
 		"Вибраний користувач(-і) вже зареєстрований(-і)",
@@ -1389,9 +1398,10 @@ export default {
 	"pages.news.title": "Новини",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
+	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",
 	"pages.room.boardCard.menu.ariaLabel": "Меню форуму",
 	"pages.room.cards.aria":
-		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
+		"{itemType}, посилання, натисніть Enter, щоб відкрити",
 	"pages.room.cards.label.revert": "Повернути до стану чернетки",
 	"pages.room.copy.course.message.copied": "Курс успішно скопійовано.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1426,6 +1436,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.add.lesson": "Створити тему",
 	"pages.rooms.fab.add.board": "Нова дошка",
+	"pages.rooms.fab.add.listBoard": "Нова дошка оголошень",
 	"pages.rooms.fab.add.task": "Створити завдання",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.fab.import.course": "Імпортувати курс",
@@ -1490,6 +1501,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
 	"pages.room.modal.course.export.options.topics": "Теми",
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
+	"pages.room.modal.course.export.options.columnBoards": "Дошки для колонн",
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
@@ -1537,8 +1549,6 @@ export default {
 		"Під час передачі значення параметра сталася помилка. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Значення параметра не відповідає наведеним правилам. Відкоригуйте значення відповідно.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"Використана версія цього інструменту застаріла. Будь ласка, оновіть версію.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Інструмент із такою ж назвою вже призначено цьому курсу. Назви інструментів мають бути унікальними в межах курсу.",
 	"pages.tool.context.description":
