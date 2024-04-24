@@ -56,9 +56,9 @@
 				</template>
 			</Sortable>
 			<BoardAddCardButton
-				v-if="showAddButton"
 				@add-card="onCreateCard"
 				:data-testid="`column-${index}-add-card-btn`"
+				:style="{ visibility: !showAddButton ? 'hidden' : 'visible' }"
 			/>
 		</div>
 	</div>
