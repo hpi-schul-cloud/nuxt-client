@@ -10,12 +10,11 @@ import { useSharedEditMode } from "./EditMode.composable";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { ColumnResponse } from "@/serverApi/v3";
+import { envConfigModule } from "@/store";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
-
-	const FEATURE_SOCKET_ENABLED = true;
 
 	type ErrorActions =
 		| ReturnType<typeof BoardActions.createCardFailure>
@@ -30,8 +29,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 		| ReturnType<typeof BoardActions.updateBoardVisibilityFailure>;
 
 	const restApi = useBoardRestApi();
+	const isSocketEnabled = envConfigModule.getFeatureSocketEnabled;
 
-	const socketOrRest = FEATURE_SOCKET_ENABLED ? useSocketApi() : restApi;
+	const socketOrRest = isSocketEnabled ? useSocketApi() : restApi;
 
 	const { setEditModeId } = useSharedEditMode();
 	const { notifySocketError } = useErrorHandler();
