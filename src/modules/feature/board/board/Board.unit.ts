@@ -26,7 +26,7 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { mount } from "@vue/test-utils";
-import { computed, Ref, ref } from "vue";
+import { computed, nextTick, Ref, ref } from "vue";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
@@ -55,6 +55,7 @@ import {
 } from "@data-board";
 import { Router, useRouter } from "vue-router";
 import { createTestingPinia } from "@pinia/testing";
+import { set } from "lodash";
 
 jest.mock("@data-board");
 const mockeduseBoardStore = jest.mocked(useBoardStore);
@@ -230,6 +231,7 @@ describe("Board", () => {
 							boardStore: {
 								board: options?.board,
 								isLoading: false,
+								setBoard: jest.fn(),
 							},
 						},
 					}),
@@ -282,6 +284,15 @@ describe("Board", () => {
 				expect(boardHeaderComponent.props("title")).toBe(
 					boardWithOneColumn.title
 				);
+			});
+		});
+
+		describe("when component is unMounted", () => {
+			it("should set board to undefined when component is unmounted", async () => {
+				const { wrapper } = setup({ board: boardWithOneColumn });
+				wrapper.unmount();
+				await nextTick();
+				expect(mockedBoardStateCalls.setBoard).toHaveBeenCalledWith(undefined);
 			});
 		});
 
