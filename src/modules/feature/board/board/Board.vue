@@ -303,7 +303,7 @@ const boardStyle = computed(() => {
 	if (!isListBoard.value) {
 		return;
 	}
-	const style = { maxWidth: "80ch" };
+	const style = { maxWidth: "80ch", minWidth: "20rem" };
 	return style;
 });
 
