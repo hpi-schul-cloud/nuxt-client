@@ -1,6 +1,6 @@
-import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import { jest } from "@jest/globals";
 import { Ref, ref } from "vue";
+import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 
 interface Props {
 	askTypeMock?: jest.Mock;
@@ -46,6 +46,8 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 		onFileElementClick: jest.fn(),
 		onFileSelect: onFileSelectMock,
 		isFilePickerOpen: isFilePickerOpenMock,
+		showCollaborativeTextEditorNotification: jest.fn(),
+		showCustomNotifier: jest.fn(),
 	};
 
 	mockedUseAddElementDialog.mockReturnValue(mocks);

@@ -13,6 +13,30 @@ jest.mock("./SharedElementTypeSelection.composable");
 jest.mock("@/utils/inject");
 const mockedInjectStrict = jest.mocked(injectStrict);
 
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({
+			t: jest
+				.fn()
+				.mockImplementation(
+					(key: string, dynamic?: object): string =>
+						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
+				),
+			n: jest.fn().mockImplementation((key: string) => key),
+		}),
+	};
+});
+
+jest.mock("@util-board", () => {
+	return {
+		...jest.requireActual("@util-board"),
+		useBoardNotifier: jest.fn().mockReturnValue({
+			showCustomNotifier: jest.fn(),
+		}),
+	};
+});
+
 // simple mock, as we only need to provide the env-config-module (the concrete value is even irrelevant for the currently implemented tests)
 mockedInjectStrict.mockImplementation(() => {
 	return {
@@ -62,6 +86,47 @@ describe("ElementTypeSelection Composable", () => {
 				await onElementClick(elementType);
 
 				expect(isDialogOpen.value).toBe(false);
+			});
+
+			it("should show Notification when elementType is CollaborativeTextEditor", async () => {
+				const { addElementMock } = setup();
+				const element = ContentElementType.CollaborativeTextEditor;
+
+				const {
+					isDialogOpen,
+					onElementClick,
+					showCollaborativeTextEditorNotification,
+					showCustomNotifier,
+				} = useAddElementDialog(addElementMock);
+
+				await onElementClick(element);
+				const i18nKey =
+					"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
+
+				showCollaborativeTextEditorNotification(
+					ContentElementType.CollaborativeTextEditor
+				);
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toBeCalledWith(element);
+				expect(isDialogOpen.value).toBe(false);
+
+				expect(showCustomNotifier).toHaveBeenCalledWith(i18nKey, "info");
+			});
+
+			it("should NOT show Notification when elementType is NOT CollaborativeTextEditor", async () => {
+				const { addElementMock, elementType } = setup();
+
+				const { onElementClick, showCustomNotifier } =
+					useAddElementDialog(addElementMock);
+
+				await onElementClick(elementType);
+
+				const { showCollaborativeTextEditorNotification } =
+					useAddElementDialog(addElementMock);
+
+				showCollaborativeTextEditorNotification(ContentElementType.RichText);
+
+				expect(showCustomNotifier).toBeCalledTimes(0);
 			});
 		});
 		describe("when addElement returns error", () => {
