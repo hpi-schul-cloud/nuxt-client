@@ -307,14 +307,6 @@ export default {
 		"{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notUpdated":
 		"Зберегти зміни не вдалося.",
-	"components.board.notifications.errors.notCreatedViaSocket":
-		"{type} that is created by another user is not shown correctly, please reload the page to get updated data.",
-	"components.board.notifications.errors.notDeletedViaSocket":
-		"{type} that is deleted by another user is not shown correctly, please reload the page to get updated data.",
-	"components.board.notifications.errors.notLoadedViaSocket":
-		"{type} that is created by another user is not shown correctly, please reload the page to get updated data.",
-	"components.board.notifications.errors.notUpdatedViaSocket":
-		"Some changes that were processed by another user could not be saved.",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",

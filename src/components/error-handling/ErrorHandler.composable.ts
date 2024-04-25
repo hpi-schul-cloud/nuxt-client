@@ -7,17 +7,15 @@ export type ErrorType =
 	| "notCreated"
 	| "notLoaded"
 	| "notUpdated"
-	| "notDeleted"
-	| "notCreatedViaSocket"
-	| "notUpdatedViaSocket"
-	| "notDeletedViaSocket"
-	| "notLoadedViaSocket";
+	| "notDeleted";
 
 export type BoardObjectType =
 	| "board"
 	| "boardColumn"
 	| "boardCard"
 	| "boardElement";
+
+type ErrorStatus = "success" | "error" | "warning" | "info";
 
 export type ApiErrorHandler = (
 	error?: ApiResponseError | ApiValidationError
@@ -50,7 +48,7 @@ export const useErrorHandler = () => {
 	const notifyWithTemplate: ApiErrorHandlerFactory = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType,
-		status: "success" | "error" | "warning" | "info" = "error",
+		status: ErrorStatus = "error",
 		timeout?: number
 	): ApiErrorHandler => {
 		return () => {
@@ -67,7 +65,7 @@ export const useErrorHandler = () => {
 	const notifySocketError = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType,
-		status: "success" | "error" | "warning" | "info" = "error",
+		status: ErrorStatus = "error",
 		timeout?: number
 	): void => {
 		const text = generateErrorText(errorType, boardObjectType);
