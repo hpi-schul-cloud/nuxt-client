@@ -7,11 +7,7 @@ import { useBoardRestApi } from "./boardActions/restApi";
 import { useSocketApi } from "./boardActions/socketApi";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
-import {
-	useErrorHandler,
-	BoardObjectType,
-	ErrorType,
-} from "@/components/error-handling/ErrorHandler.composable";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { ColumnResponse } from "@/serverApi/v3";
 
@@ -21,10 +17,21 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const FEATURE_SOCKET_ENABLED = true;
 
-	const restApi = useBoardRestApi();
-	const socketApi = useSocketApi();
+	type ErrorActions =
+		| ReturnType<typeof BoardActions.createCardFailure>
+		| ReturnType<typeof BoardActions.createColumnFailure>
+		| ReturnType<typeof BoardActions.deleteBoardFailure>
+		| ReturnType<typeof BoardActions.deleteCardFailure>
+		| ReturnType<typeof BoardActions.deleteColumnFailure>
+		| ReturnType<typeof BoardActions.moveCardFailure>
+		| ReturnType<typeof BoardActions.moveColumnFailure>
+		| ReturnType<typeof BoardActions.updateColumnTitleFailure>
+		| ReturnType<typeof BoardActions.updateBoardTitleFailure>
+		| ReturnType<typeof BoardActions.updateBoardVisibilityFailure>;
 
-	const socketOrRest = FEATURE_SOCKET_ENABLED ? socketApi : restApi;
+	const restApi = useBoardRestApi();
+
+	const socketOrRest = FEATURE_SOCKET_ENABLED ? useSocketApi() : restApi;
 
 	const { setEditModeId } = useSharedEditMode();
 	const { notifySocketError } = useErrorHandler();
@@ -35,7 +42,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		handle(
 			action,
 			on(BoardActions.fetchBoard, restApi.fetchBoard),
-			on(BoardActions.disconnectSocket, socketApi.disconnectSocketRequest),
+			on(BoardActions.disconnectSocket, socketOrRest.disconnectSocketRequest),
 
 			// request actions
 			on(BoardActions.createCardRequest, socketOrRest.createCardRequest),
@@ -68,7 +75,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.updateColumnTitleSuccess, updateColumnTitle),
 			on(BoardActions.updateBoardTitleSuccess, updateBoardTitle),
 			on(BoardActions.updateBoardVisibilitySuccess, updateBoardVisibility),
-			on(BoardActions.reloadBoardSuccess, socketApi.reloadBoardSuccess),
+			on(BoardActions.reloadBoardSuccess, socketOrRest.reloadBoardSuccess),
 
 			// failure actions
 			on(BoardActions.createCardFailure, onFailure),
@@ -79,10 +86,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			on(BoardActions.moveColumnFailure, onFailure),
 			on(BoardActions.updateColumnTitleFailure, onFailure),
 			on(BoardActions.updateBoardTitleFailure, onFailure),
-			on(BoardActions.updateBoardVisibilityFailure, onFailure),
-
-			// notify actions
-			on(BoardActions.notifyError, notifyError)
+			on(BoardActions.updateBoardVisibilityFailure, onFailure)
 		);
 	};
 
@@ -308,28 +312,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns[targetColumnIndex].cards.splice(newIndex, 0, item);
 	};
 
-	const onFailure = (action: PermittedStoreActions<typeof BoardActions>) => {
-		console.log("onFailure", action);
-		notifyErrorMessage("notUpdatedViaSocket", "boardCard");
-	};
-
-	const notifyError = (action: ReturnType<typeof BoardActions.notifyError>) => {
-		if (board.value === undefined) return;
-
-		const { errorType, boardObjectType } = action.payload;
-
+	const onFailure = (action: ErrorActions) => {
+		const { errorType = "notUpdated", boardObjectType = "board" } =
+			action.payload;
 		notifySocketError(errorType, boardObjectType);
-		setEditModeId(undefined);
-	};
-
-	const notifyErrorMessage = (
-		errorType: ErrorType,
-		boardObjectType: BoardObjectType
-	) => {
-		if (board.value === undefined) return;
-
-		notifySocketError(errorType, boardObjectType);
-		setEditModeId(undefined);
 	};
 
 	return {

@@ -335,6 +335,20 @@ export const useBoardRestApi = () => {
 		});
 	};
 
+	// this unused function is added to make sure that the same name is used in both socketApi and restApi
+	const reloadBoardSuccess = (
+		action: ReturnType<typeof BoardActions.reloadBoardSuccess>
+	) => {
+		return action;
+	};
+
+	// this unused function is added to make sure that the same name is used in both socketApi and restApi
+	const disconnectSocketRequest = (
+		action: ReturnType<typeof BoardActions.disconnectSocket>
+	) => {
+		return action;
+	};
+
 	return {
 		fetchBoard,
 		createCardRequest,
@@ -347,5 +361,7 @@ export const useBoardRestApi = () => {
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,
 		reloadBoard,
+		reloadBoardSuccess,
+		disconnectSocketRequest,
 	};
 };

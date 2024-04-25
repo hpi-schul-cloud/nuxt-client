@@ -3,7 +3,6 @@ import {
 	ErrorType,
 } from "@/components/error-handling/ErrorHandler.composable";
 import { CardResponse, ColumnResponse } from "@/serverApi/v3";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createAction, props } from "@/types/board/ActionFactory";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 
@@ -27,7 +26,7 @@ export const createCardSuccess = createAction(
 );
 export const createCardFailure = createAction(
 	"create-card-failure",
-	props<{ error: Error }>()
+	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
 );
 
 export const createColumnRequest = createAction(
@@ -40,7 +39,7 @@ export const createColumnSuccess = createAction(
 );
 export const createColumnFailure = createAction(
 	"create-column-failure",
-	props<{ error: Error }>()
+	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
 );
 
 export const deleteBoardRequest = createAction(
@@ -53,7 +52,7 @@ export const deleteBoardSuccess = createAction(
 );
 export const deleteBoardFailure = createAction(
 	"delete-board-failure",
-	props<{ error: Error }>()
+	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
 );
 
 export const deleteCardRequest = createAction(
@@ -62,8 +61,9 @@ export const deleteCardRequest = createAction(
 );
 export const deleteCardFailure = createAction(
 	"delete-card-failure",
-	props<{ error: Error }>()
+	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
 );
+
 export const deleteCardSuccess = createAction(
 	"delete-card-success",
 	props<{ cardId: string }>()
@@ -79,7 +79,7 @@ export const deleteColumnSuccess = createAction(
 );
 export const deleteColumnFailure = createAction(
 	"delete-column-failure",
-	props<{ error: Error }>()
+	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
 );
 
 export const moveCardRequest = createAction(
@@ -92,7 +92,7 @@ export const moveCardSuccess = createAction(
 );
 export const moveCardFailure = createAction(
 	"move-card-failure",
-	props<{ error: Error }>()
+	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
 );
 
 export const moveColumnRequest = createAction(
@@ -105,7 +105,7 @@ export const moveColumnSuccess = createAction(
 );
 export const moveColumnFailure = createAction(
 	"move-column-failure",
-	props<{ error: Error }>()
+	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
 );
 
 export const reloadBoard = createAction(
@@ -128,7 +128,7 @@ export const updateBoardTitleSuccess = createAction(
 );
 export const updateBoardTitleFailure = createAction(
 	"update-board-title-failure",
-	props<{ error: Error }>()
+	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
 );
 
 export const updateBoardVisibilityRequest = createAction(
@@ -141,7 +141,7 @@ export const updateBoardVisibilitySuccess = createAction(
 );
 export const updateBoardVisibilityFailure = createAction(
 	"update-board-visibility-failure",
-	props<{ error: Error }>()
+	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
 );
 
 export const updateColumnTitleRequest = createAction(
@@ -154,17 +154,7 @@ export const updateColumnTitleSuccess = createAction(
 );
 export const updateColumnTitleFailure = createAction(
 	"update-column-title-failure",
-	props<{ error: Error }>()
-);
-
-export const notifyWithTemplateAndReload = createAction(
-	"notify-with-template-and-reload",
-	props<{
-		error: Error;
-		errorType: ErrorType;
-		httpStatus: HttpStatusCode;
-		boardObjectType?: BoardObjectType;
-	}>()
+	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
 );
 
 export const notifyError = createAction(
