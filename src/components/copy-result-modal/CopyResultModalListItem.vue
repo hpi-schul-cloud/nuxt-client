@@ -113,6 +113,12 @@ export default {
 			}
 		},
 	},
+
+	mounted() {
+		console.log("Elements:", this.elements);
+		console.log("Breadcrumb Title:", this.breadcrumbTitle);
+		console.log("Element Type Name:", this.elementTypeName);
+	},
 };
 </script>
 
