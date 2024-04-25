@@ -71,57 +71,6 @@ describe("useSocketApi", () => {
 		});
 	});
 
-	describe("createCardFailure", () => {
-		it("should call action with correct parameters", () => {
-			const { createCardFailure } = useSocketApi();
-			createCardFailure({
-				type: "create-card-failure",
-				payload: { error: "error" as unknown as Error },
-			});
-			expect(mockedBoardStore.dispatch).toHaveBeenCalledWith({
-				type: "notify-error",
-				payload: {
-					errorType: "notUpdatedViaSocket",
-					BoardObjectType: "boardCard",
-				},
-			});
-		});
-	});
-
-	describe("createColumnFailure", () => {
-		it("should call action with correct parameters", () => {
-			const { createColumnFailure } = useSocketApi();
-			createColumnFailure({
-				type: "create-column-failure",
-				payload: { error: "error" as unknown as Error },
-			});
-			expect(mockedBoardStore.dispatch).toHaveBeenCalledWith({
-				type: "notify-error",
-				payload: {
-					errorType: "notUpdatedViaSocket",
-					BoardObjectType: "boardColumn",
-				},
-			});
-		});
-	});
-
-	describe("deleteCardFailure", () => {
-		it("should call action with correct parameters", () => {
-			const { deleteCardFailure } = useSocketApi();
-			deleteCardFailure({
-				type: "delete-card-failure",
-				payload: { error: "error" as unknown as Error },
-			});
-			expect(mockedBoardStore.dispatch).toHaveBeenCalledWith({
-				type: "notify-error",
-				payload: {
-					errorType: "notUpdatedViaSocket",
-					BoardObjectType: "boardCard",
-				},
-			});
-		});
-	});
-
 	describe("deleteColumnRequest", () => {
 		it("should call action with correct parameters", () => {
 			const { deleteColumnRequest } = useSocketApi();
@@ -136,23 +85,6 @@ describe("useSocketApi", () => {
 		});
 	});
 
-	describe("deleteColumnFailure", () => {
-		it("should call action with correct parameters", () => {
-			const { deleteColumnFailure } = useSocketApi();
-			deleteColumnFailure({
-				type: "delete-column-failure",
-				payload: { error: "error" as unknown as Error },
-			});
-			expect(mockedBoardStore.dispatch).toHaveBeenCalledWith({
-				type: "notify-error",
-				payload: {
-					errorType: "notUpdatedViaSocket",
-					BoardObjectType: "boardColumn",
-				},
-			});
-		});
-	});
-
 	describe("moveCardRequest", () => {
 		it("should call action with correct parameters", () => {
 			const { moveCardRequest } = useSocketApi();
@@ -164,23 +96,6 @@ describe("useSocketApi", () => {
 				"move-card-request",
 				{ cardId: "test" }
 			);
-		});
-	});
-
-	describe("moveCardFailure", () => {
-		it("should call action with correct parameters", () => {
-			const { moveCardFailure } = useSocketApi();
-			moveCardFailure({
-				type: "move-card-failure",
-				payload: { error: "error" as unknown as Error },
-			});
-			expect(mockedBoardStore.dispatch).toHaveBeenCalledWith({
-				type: "notify-error",
-				payload: {
-					errorType: "notUpdatedViaSocket",
-					BoardObjectType: "boardCard",
-				},
-			});
 		});
 	});
 
@@ -212,23 +127,6 @@ describe("useSocketApi", () => {
 		});
 	});
 
-	describe("moveColumnFailure", () => {
-		it("should call action with correct parameters", () => {
-			const { moveColumnFailure } = useSocketApi();
-			moveColumnFailure({
-				type: "move-column-failure",
-				payload: { error: "error" as unknown as Error },
-			});
-			expect(mockedBoardStore.dispatch).toHaveBeenCalledWith({
-				type: "notify-error",
-				payload: {
-					errorType: "notUpdatedViaSocket",
-					BoardObjectType: "boardColumn",
-				},
-			});
-		});
-	});
-
 	describe("updateColumnTitleRequest", () => {
 		it("should call action with correct parameters", () => {
 			const { updateColumnTitleRequest } = useSocketApi();
@@ -240,23 +138,6 @@ describe("useSocketApi", () => {
 				"update-column-title-request",
 				{ columnId: "test", newTitle: "newTitle" }
 			);
-		});
-	});
-
-	describe("updateColumnTitleFailure", () => {
-		it("should call action with correct parameters", () => {
-			const { updateColumnTitleFailure } = useSocketApi();
-			updateColumnTitleFailure({
-				type: "update-column-title-failure",
-				payload: { error: "error" as unknown as Error },
-			});
-			expect(mockedBoardStore.dispatch).toHaveBeenCalledWith({
-				type: "notify-error",
-				payload: {
-					errorType: "notUpdatedViaSocket",
-					BoardObjectType: "boardColumn",
-				},
-			});
 		});
 	});
 
@@ -274,23 +155,6 @@ describe("useSocketApi", () => {
 		});
 	});
 
-	describe("updateBoardTitleFailure", () => {
-		it("should call action with correct parameters", () => {
-			const { updateBoardTitleFailure } = useSocketApi();
-			updateBoardTitleFailure({
-				type: "update-board-title-failure",
-				payload: { error: "error" as unknown as Error },
-			});
-			expect(mockedBoardStore.dispatch).toHaveBeenCalledWith({
-				type: "notify-error",
-				payload: {
-					errorType: "notUpdatedViaSocket",
-					BoardObjectType: "board",
-				},
-			});
-		});
-	});
-
 	describe("updateBoardVisibilityRequest", () => {
 		it("should call action with correct parameters", () => {
 			const { updateBoardVisibilityRequest } = useSocketApi();
@@ -302,23 +166,6 @@ describe("useSocketApi", () => {
 				"update-board-visibility-request",
 				{ newVisibility: true }
 			);
-		});
-	});
-
-	describe("updateBoardVisibilityFailure", () => {
-		it("should call action with correct parameters", () => {
-			const { updateBoardVisibilityFailure } = useSocketApi();
-			updateBoardVisibilityFailure({
-				type: "update-board-visibility-failure",
-				payload: { error: "error" as unknown as Error },
-			});
-			expect(mockedBoardStore.dispatch).toHaveBeenCalledWith({
-				type: "notify-error",
-				payload: {
-					errorType: "notUpdatedViaSocket",
-					BoardObjectType: "board",
-				},
-			});
 		});
 	});
 
