@@ -1,6 +1,5 @@
 import { mount } from "@vue/test-utils";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -14,7 +13,7 @@ describe("@/components/share/ShareModalResult", () => {
 		const wrapper = mount(ShareModalResult, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: ["base-qr-code"],
+				stubs: ["QRCode"],
 			},
 			props: {
 				type: "courses",
@@ -34,12 +33,12 @@ describe("@/components/share/ShareModalResult", () => {
 	it("should render QR-Code if onShowQrCode is called", async () => {
 		const { wrapper, shareUrl } = setup();
 
-		expect(wrapper.findAllComponents(BaseQrCode)).toHaveLength(0);
+		expect(wrapper.findAllComponents({ name: "QRCode" })).toHaveLength(0);
 
 		const actionButton = wrapper.find("[data-testid=qrCodeAction]");
 		await actionButton.trigger("click");
 
-		const qrCodeComponent = wrapper.findAllComponents(BaseQrCode);
+		const qrCodeComponent = wrapper.findAllComponents({ name: "QRCode" });
 		expect(qrCodeComponent).toHaveLength(1);
 		expect(qrCodeComponent[0].props("url")).toStrictEqual(shareUrl);
 	});
@@ -52,7 +51,7 @@ describe("@/components/share/ShareModalResult", () => {
 		const actionButton = wrapper.find("[data-testid=qrCodeAction]");
 		await actionButton.trigger("click");
 
-		const qrCodeComponents = wrapper.findAllComponents(BaseQrCode);
+		const qrCodeComponents = wrapper.findAllComponents({ name: "QRCode" });
 
 		expect(qrCodeComponents).toHaveLength(1);
 		expect(qrCodeComponents[0].props("url")).toStrictEqual(shareUrl);

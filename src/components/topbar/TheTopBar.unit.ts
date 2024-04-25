@@ -10,7 +10,6 @@ import {
 } from "@/utils/inject";
 import TheTopBar from "./TheTopBar.vue";
 import { StatusAlert } from "@/store/types/status-alert";
-import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -38,9 +37,6 @@ const getWrapper = (props?: object, statusAlerts: StatusAlert[] = []) => {
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-			},
-			components: {
-				"base-qr-code": BaseQrCode,
 			},
 		},
 		props,

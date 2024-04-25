@@ -1,6 +1,6 @@
 <template>
 	<div class="pa-4">
-		<BaseQrCode ref="qrCode" :url="url" />
+		<QRCode ref="qrCode" :url="url" />
 		<div class="pb-2">
 			{{ $t("global.topbar.MenuQrCode.qrHintText") }}
 		</div>
@@ -12,7 +12,8 @@
 
 <script setup lang="ts">
 import { ComponentPublicInstance, ref } from "vue";
-import { mdiPrinter } from "@mdi/js";
+import { mdiPrinter } from "@/components/icons/material";
+import { QRCode } from "@ui-qr-code";
 
 defineProps({
 	url: {
