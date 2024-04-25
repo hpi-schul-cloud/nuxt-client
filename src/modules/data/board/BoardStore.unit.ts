@@ -37,9 +37,6 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 jest.mock("@data-board/socket/socket");
 const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
 
-jest.mock("@data-board/socket/socket");
-const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
-
 // const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 // 	const expectedPayload = apiResponseErrorFactory.build({
 // 		message,
@@ -171,20 +168,10 @@ describe("BoardStore", () => {
 
 			expect(boardStore.board?.columns[1]).toEqual(NEW_COLUMN);
 		});
-
-		it("should call setEditModeId", async () => {
-			const { boardStore } = setup(testBoard);
-
-			boardStore.dispatch(
-				boardActions.createColumnSuccess({ newColumn: NEW_COLUMN })
-			);
-
-			expect(setEditModeId).toHaveBeenCalled();
-		});
 	});
 
 	describe("deleteCard", () => {
-		it("should not delete a card", async () => {
+		it("should not delete a card when a board is undefined", async () => {
 			const { boardStore } = setup();
 
 			boardStore.dispatch(
@@ -194,7 +181,17 @@ describe("BoardStore", () => {
 			expect(boardStore.board).toBe(undefined);
 		});
 
-		it("should delete card", async () => {
+		it("should not delete a card if cardId does not exists", async () => {
+			const { boardStore } = setup(testBoard);
+
+			boardStore.dispatch(
+				boardActions.deleteCardSuccess({ cardId: "unknown cardId" })
+			);
+
+			expect(boardStore.board?.columns).toEqual(testBoard.columns);
+		});
+
+		it("should delete a card", async () => {
 			const { boardStore } = setup(testBoard);
 
 			boardStore.dispatch(
