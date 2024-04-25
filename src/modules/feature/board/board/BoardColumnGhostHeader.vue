@@ -2,7 +2,7 @@
 	<div class="mb-4" ref="headerRef">
 		<div
 			class="d-flex flex-column justify-space-between pt-2"
-			:class="isListBoard ? 'center' : 'align-start'"
+			:class="centred ? 'center' : 'align-start'"
 		>
 			<VBtn
 				elevation="0"
@@ -26,11 +26,11 @@ defineProps({
 		type: Boolean,
 		required: true,
 	},
-	isListBoard: { type: Boolean, required: true },
 	label: {
 		type: String,
 		required: true,
 	},
+	centred: { type: Boolean },
 });
 
 const emit = defineEmits(["add-column"]);

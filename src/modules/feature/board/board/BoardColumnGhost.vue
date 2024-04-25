@@ -3,7 +3,7 @@
 		<BoardColumnGhostHeader
 			:label="title"
 			:isColumnActive="isColumnHovered"
-			:isListBoard="isListBoard"
+			:centred="isListBoard"
 			@add-column="onAddColumn"
 			data-testid="add-column"
 			:class="{ 'px-4': isListBoard }"
