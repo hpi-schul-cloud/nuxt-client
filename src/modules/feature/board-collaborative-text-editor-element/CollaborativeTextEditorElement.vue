@@ -44,10 +44,7 @@ import {
 import { useBoardFocusHandler } from "@data-board";
 import { mdiTextBoxEditOutline } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
-import { useBoardNotifier } from "@util-board";
-import { useDebounceFn } from "@vueuse/core";
 import { PropType, ref, toRef } from "vue";
-import { useI18n } from "vue-i18n";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 
@@ -100,20 +97,4 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
-
-const { showCustomNotifier } = useBoardNotifier();
-const { t } = useI18n();
-const setAlert = useDebounceFn(() => {
-	showCustomNotifier(
-		t(
-			"components.cardElement.collaborativeTextEditorElement.alert.info.visible"
-		),
-		"info"
-	);
-}, 100);
-
-const tenSeconsAgo = Date.now() - 10 * 1000;
-if (new Date(element.value.timestamps.createdAt).getTime() > tenSeconsAgo) {
-	setAlert();
-}
 </script>

@@ -10,7 +10,8 @@ import {
 	mdiTextBoxEditOutline,
 	mdiTrayArrowUp,
 } from "@mdi/js";
-import { useSharedLastCreatedElement } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 type AddCardElement = (
@@ -20,6 +21,8 @@ type AddCardElement = (
 export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
+	const { showCustomNotifier } = useBoardNotifier();
+	const { t } = useI18n();
 
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
@@ -29,6 +32,20 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 
 		const elementData = await addElementFunction(elementType);
 		lastCreatedElementId.value = elementData?.id;
+		showCollaborativeTextEditorNotification(elementType);
+	};
+
+	const showCollaborativeTextEditorNotification = (
+		elementType: ContentElementType
+	) => {
+		if (elementType === ContentElementType.CollaborativeTextEditor) {
+			showCustomNotifier(
+				t(
+					"components.cardElement.collaborativeTextEditorElement.alert.info.visible"
+				),
+				"info"
+			);
+		}
 	};
 
 	const options = [
