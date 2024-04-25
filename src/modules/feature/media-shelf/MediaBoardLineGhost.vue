@@ -2,6 +2,7 @@
 	<div class="mx-n4 px-4">
 		<BoardColumnGhostHeader
 			:isColumnActive="false"
+			:is-list-board="false"
 			:label="$t('feature.media-shelf.createLine')"
 			@add-column="$emit('create:line')"
 		/>

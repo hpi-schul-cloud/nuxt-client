@@ -1,6 +1,7 @@
 <template>
 	<div ref="ghostColumnRef" :class="{ 'pl-2': !isListBoard }">
 		<BoardColumnGhostHeader
+			:label="title"
 			:isColumnActive="isColumnHovered"
 			:isListBoard="isListBoard"
 			@add-column="onAddColumn"
@@ -39,6 +40,7 @@
 import { useElementHover } from "@vueuse/core";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 
@@ -75,6 +77,14 @@ const sortableGhostClasses = computed(() => {
 	}
 	return classes;
 });
+
+const { t } = useI18n();
+
+const title = computed(() =>
+	props.isListBoard
+		? t("components.board.column.ghost.list.placeholder")
+		: t("components.board.column.ghost.column.placeholder")
+);
 </script>
 
 <style scoped>

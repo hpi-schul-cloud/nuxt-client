@@ -13,6 +13,9 @@ describe("BoardColumnGhost", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
+			props: {
+				isListBoard: false,
+			},
 		});
 
 		return { wrapper };

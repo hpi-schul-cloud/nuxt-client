@@ -11,7 +11,7 @@
 				:color="isColumnActive ? '' : 'grey-darken-2'"
 				@click="onAddColumn"
 			>
-				<VIcon>{{ mdiPlus }}</VIcon> {{ title }}
+				<VIcon>{{ mdiPlus }}</VIcon> {{ label }}
 			</VBtn>
 		</div>
 		<VDivider aria-hidden="true" class="border-opacity-100" />
@@ -20,30 +20,24 @@
 
 <script setup lang="ts">
 import { mdiPlus } from "@mdi/js";
-import { computed } from "vue";
-import { useI18n } from "vue-i18n";
 
-const props = defineProps({
+defineProps({
 	isColumnActive: {
 		type: Boolean,
 		required: true,
 	},
 	isListBoard: { type: Boolean, required: true },
+	label: {
+		type: String,
+		required: true,
+	},
 });
 
 const emit = defineEmits(["add-column"]);
 
-const { t } = useI18n();
-
 const onAddColumn = () => {
 	emit("add-column");
 };
-
-const title = computed(() =>
-	props.isListBoard
-		? t("components.board.column.ghost.list.placeholder")
-		: t("components.board.column.ghost.column.placeholder")
-);
 </script>
 
 <style scoped>
