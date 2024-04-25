@@ -156,6 +156,12 @@ export default {
 				CopyApiResponseTypeEnum.LessonContentNexboard
 			);
 		},
+		hasWhiteboardElement() {
+			return this.hasElementOfType(
+				this.items,
+				CopyApiResponseTypeEnum.DrawingElement
+			);
+		},
 		hasDrawingElement() {
 			return this.isCourse && copyModule.getHasDrawingChild;
 		},
