@@ -259,6 +259,7 @@ onMounted(() => {
 
 onUnmounted(() => {
 	boardStore.dispatch(boardActions.disconnectSocket({}));
+	boardStore.setBoard(undefined);
 });
 
 const setAlert = useDebounceFn(() => {
