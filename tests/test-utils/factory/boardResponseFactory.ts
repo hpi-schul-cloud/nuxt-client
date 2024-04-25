@@ -1,5 +1,5 @@
 import { Factory } from "fishery";
-import { BoardResponse } from "@/serverApi/v3";
+import { BoardResponse, BoardLayout } from "@/serverApi/v3";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
 
 export const boardResponseFactory = Factory.define<BoardResponse>(
@@ -9,5 +9,6 @@ export const boardResponseFactory = Factory.define<BoardResponse>(
 		columns: [],
 		timestamps: timestampsResponseFactory.build(),
 		isVisible: false,
+		layout: BoardLayout.Columns,
 	})
 );

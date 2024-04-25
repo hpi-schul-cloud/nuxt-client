@@ -1,6 +1,9 @@
 <template>
 	<div class="mb-4" ref="headerRef">
-		<div class="d-flex align-start justify-space-between pt-2">
+		<div
+			class="d-flex flex-column justify-space-between pt-2"
+			:class="isListBoard ? 'center' : 'align-start'"
+		>
 			<VBtn
 				elevation="0"
 				variant="text"
@@ -8,34 +11,39 @@
 				:color="isColumnActive ? '' : 'grey-darken-2'"
 				@click="onAddColumn"
 			>
-				<VIcon>{{ mdiPlus }}</VIcon>
-				{{ $t("components.board.column.ghost.placeholder") }}
+				<VIcon>{{ mdiPlus }}</VIcon> {{ title }}
 			</VBtn>
 		</div>
 		<VDivider aria-hidden="true" class="border-opacity-100" />
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiPlus } from "@mdi/js";
-import { defineComponent } from "vue";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "BoardColumnGhostHeader",
-	props: {
-		isColumnActive: {
-			type: Boolean,
-			required: true,
-		},
+const props = defineProps({
+	isColumnActive: {
+		type: Boolean,
+		required: true,
 	},
-	emits: ["add-column"],
-	setup(props, { emit }) {
-		const onAddColumn = () => {
-			emit("add-column");
-		};
-		return { onAddColumn, mdiPlus };
-	},
+	isListBoard: { type: Boolean, required: true },
 });
+
+const emit = defineEmits(["add-column"]);
+
+const { t } = useI18n();
+
+const onAddColumn = () => {
+	emit("add-column");
+};
+
+const title = computed(() =>
+	props.isListBoard
+		? t("components.board.column.ghost.list.placeholder")
+		: t("components.board.column.ghost.column.placeholder")
+);
 </script>
 
 <style scoped>

@@ -1,5 +1,5 @@
 import { ConfigResponse } from "@/serverApi/v3/api";
-import { envConfigModule } from "@/store";
+import { mdiBookshelf } from "@mdi/js";
 
 export type SidebarItemBase = {
 	title: string;
@@ -9,6 +9,7 @@ export type SidebarItemBase = {
 	excludedPermission?: string;
 	activeForUrls: string[];
 	feature?: keyof ConfigResponse;
+	featureValue?: string | number | boolean;
 };
 
 export type SidebarItemExternalLink = {
@@ -28,9 +29,7 @@ export type SidebarCategoryItem = SidebarItem & {
 
 export type SidebarItemList = (SidebarItem | SidebarCategoryItem)[];
 
-const getSidebarItems = (
-	isNewSchoolAdminPageDefault: boolean
-): SidebarItemList => [
+const getSidebarItems = (): SidebarItemList => [
 	{
 		title: "global.sidebar.item.overview",
 		href: "/dashboard",
@@ -134,6 +133,14 @@ const getSidebarItems = (
 		activeForUrls: ["^/content($|/.*)"],
 	},
 	{
+		title: "feature.media-shelf.title",
+		href: "/media-shelf",
+		icon: mdiBookshelf,
+		testId: "Media-shelf",
+		activeForUrls: ["^/media-shelf($|/.*)"],
+		feature: "FEATURE_MEDIA_SHELF_ENABLED",
+	},
+	{
 		title: "global.sidebar.item.addons",
 		href: "/addons",
 		icon: "$mdiPuzzleOutline",
@@ -165,21 +172,23 @@ const getSidebarItems = (
 				testId: "Lehrkräfte",
 				activeForUrls: ["^/administration/teachers($|/.*)"],
 			},
-			envConfigModule.getEnv.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED
-				? {
-						title: "global.sidebar.item.classes",
-						icon: "$class",
-						href: "/administration/groups/classes",
-						testId: "Klassen",
-						activeForUrls: ["^/administration/groups/classes($|/.*)"],
-					}
-				: {
-						title: "global.sidebar.item.classes",
-						icon: "$class",
-						href: "/administration/classes",
-						testId: "Klassen",
-						activeForUrls: ["^/administration/classes($|/.*)"],
-					},
+			{
+				title: "global.sidebar.item.classes",
+				icon: "$class",
+				href: "/administration/groups/classes",
+				testId: "Klassen",
+				activeForUrls: ["^/administration/groups/classes($|/.*)"],
+				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
+			},
+			{
+				title: "global.sidebar.item.classes",
+				icon: "$class",
+				href: "/administration/classes",
+				testId: "Klassen",
+				activeForUrls: ["^/administration/classes($|/.*)"],
+				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
+				featureValue: false,
+			},
 		],
 	},
 	{
@@ -211,21 +220,23 @@ const getSidebarItems = (
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
 			},
-			envConfigModule.getEnv.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED
-				? {
-						title: "global.sidebar.item.classes",
-						icon: "$class",
-						href: "/administration/groups/classes",
-						testId: "Klassen",
-						activeForUrls: ["^/administration/groups/classes($|/.*)"],
-					}
-				: {
-						title: "global.sidebar.item.classes",
-						icon: "$class",
-						href: "/administration/classes",
-						testId: "Klassen",
-						activeForUrls: ["^/administration/classes($|/.*)"],
-					},
+			{
+				title: "global.sidebar.item.classes",
+				icon: "$class",
+				href: "/administration/groups/classes",
+				testId: "Klassen",
+				activeForUrls: ["^/administration/groups/classes($|/.*)"],
+				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
+			},
+			{
+				title: "global.sidebar.item.classes",
+				icon: "$class",
+				href: "/administration/classes",
+				testId: "Klassen",
+				activeForUrls: ["^/administration/classes($|/.*)"],
+				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
+				featureValue: false,
+			},
 			{
 				title: "global.sidebar.item.teams",
 				icon: "$mdiAccountGroupOutline",
@@ -233,27 +244,29 @@ const getSidebarItems = (
 				testId: "Teams",
 				activeForUrls: ["^/administration/teams($|/.*)"],
 			},
-			isNewSchoolAdminPageDefault
-				? {
-						title: "global.sidebar.item.school",
-						icon: "$school_outline",
-						to: "/administration/school-settings",
-						testId: "Schule",
-						activeForUrls: [
-							"^/administration/school($|/.*)",
-							"^/administration/school-settings($|/.*)",
-						],
-					}
-				: {
-						title: "global.sidebar.item.school",
-						icon: "$school_outline",
-						href: "/administration/school",
-						testId: "Schule",
-						activeForUrls: [
-							"^/administration/school($|/.*)",
-							"^/administration/school-settings($|/.*)",
-						],
-					},
+			{
+				title: "global.sidebar.item.school",
+				icon: "$school_outline",
+				to: "/administration/school-settings",
+				testId: "Schule",
+				activeForUrls: [
+					"^/administration/school($|/.*)",
+					"^/administration/school-settings($|/.*)",
+				],
+				feature: "FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED",
+			},
+			{
+				title: "global.sidebar.item.school",
+				icon: "$school_outline",
+				href: "/administration/school",
+				testId: "Schule",
+				activeForUrls: [
+					"^/administration/school($|/.*)",
+					"^/administration/school-settings($|/.*)",
+				],
+				feature: "FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED",
+				featureValue: false,
+			},
 		],
 	},
 	{

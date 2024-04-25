@@ -60,7 +60,6 @@
 								class="school-login-link"
 								:color="getCopyStatus(system.id) ? 'success' : 'primary'"
 								readonly
-								density="compact"
 								@blur="linkCopyFinished"
 							>
 								<template #append>
@@ -74,11 +73,13 @@
 											)
 										"
 									>
-										<v-icon>{{
-											getCopyStatus(system.id)
-												? iconMdiCheckCircle
-												: iconMdiContentCopy
-										}}</v-icon>
+										<v-icon
+											>{{
+												getCopyStatus(system.id)
+													? iconMdiCheckCircle
+													: iconMdiContentCopy
+											}}
+										</v-icon>
 									</v-btn>
 								</template>
 							</v-text-field>
@@ -266,3 +267,9 @@ export default {
 	},
 };
 </script>
+
+<style scoped lang="scss">
+.school-login-link {
+	align-items: center;
+}
+</style>

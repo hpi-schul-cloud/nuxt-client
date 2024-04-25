@@ -287,7 +287,8 @@ export default {
 	"components.board.alert.info.draft":
 		"Este tablón no es visible para los participantes en el curso.",
 	"components.board.column.defaultTitle": "Nueva columna",
-	"components.board.column.ghost.placeholder": "Añadir columna",
+	"components.board.column.ghost.column.placeholder": "Añadir columna",
+	"components.board.column.ghost.list.placeholder": "Añadir sección",
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
@@ -310,9 +311,12 @@ export default {
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
 	"components.boardElement": "elemento",
+	"components.boardRow": "línea",
+	"components.boardSection": "sección",
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.drawingElement": "Pizarra",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
@@ -366,7 +370,10 @@ export default {
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
-	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
+	"components.elementTypeSelection.elements.fileElement.subtitle":
+		"Editor de texto",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Text Editor",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Envíos",
@@ -1015,6 +1022,10 @@ export default {
 		"Tenga en cuenta que, una vez que se inicie el proceso de migración de la escuela, puede tardar hasta 1 hora en obtener los datos. Después de esto, podrá continuar con el siguiente paso.",
 	"pages.administration.migration.waiting":
 		"Esperando la sincronización de datos...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"¡La migración no puede comenzar porque el sistema de inicio de sesión de destino y el sistema de inicio de sesión actual de su escuela son el mismo!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"¡No puedo encontrar el sistema moin.schule!",
 	"pages.administration.or": "o",
 	"pages.administration.printQr.emptyUser":
 		"L{'@'}s usuari{'@'}s seleccionad{'@'}s ya han sido registrad{'@'}s",
@@ -1406,9 +1417,9 @@ export default {
 	"pages.news.title": "Noticias",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
+	"pages.room.boardCard.label.listBoard": "Tablero de listas",
 	"pages.room.boardCard.menu.ariaLabel": "Menú del tablero",
-	"pages.room.cards.aria":
-		"{itemType}, enlace, {itemName}, presione Intro para abrir",
+	"pages.room.cards.aria": "{itemType}, enlace, presione Intro para abrir",
 	"pages.room.cards.label.revert": "Volver al borrador",
 	"pages.room.copy.course.message.copied":
 		"El curso se ha copiado correctamente.",
@@ -1445,6 +1456,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
 	"pages.rooms.fab.add.lesson": "Nuevo tema",
 	"pages.rooms.fab.add.board": "Nuevo tablero de columna",
+	"pages.rooms.fab.add.listBoard": "Nuevo tablero de listas",
 	"pages.rooms.fab.add.task": "Nuevo tarea",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
 	"pages.rooms.fab.import.course": "Importar curso",
@@ -1511,6 +1523,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Exportar configuración",
 	"pages.room.modal.course.export.options.topics": "Temas",
 	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",
+	"pages.room.modal.course.export.options.columnBoards": "Tableros de columna",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
@@ -1587,6 +1600,8 @@ export default {
 		'Desafortunadamente, la transferencia de su cuenta a {targetSystem} falló.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Por favor pasa esta información: {sourceSchoolNumber}, número de escuela en {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.multipleUsersFound":
+		'Este Cuenta de moin.schule ya está vinculado a una cuenta en la Niedersächsische Bildungscloud y no se puede volver a utilizar para la migración.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
 	"pages.userMigration.error.title": "Error al mover la cuenta",
 	"pages.userMigration.success.description":
 		"Se completó el movimiento de su cuenta a {targetSystem}.<br>Por favor, regístrese de nuevo ahora.",
@@ -1640,4 +1655,8 @@ export default {
 		"Filtrar por nombre completo...",
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
+	"feature.media-shelf.title": "Estante multimedia",
+	"feature.media-shelf.createLine": "Añadir línea",
+	"feature.media-shelf.line.title": "Línea",
+	"feature.media-shelf.availableLine.title": "Medios disponibles",
 };

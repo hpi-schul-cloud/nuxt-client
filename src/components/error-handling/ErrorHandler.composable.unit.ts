@@ -1,10 +1,9 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useBoardNotifier } from "@util-board";
-import { nextTick } from "vue";
-
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardNotifier } from "@util-board";
 import { isAxiosError } from "axios";
+import { nextTick } from "vue";
 
 import { ErrorType, useErrorHandler } from "./ErrorHandler.composable";
 import { mountComposable } from "@@/tests/test-utils";
@@ -108,6 +107,23 @@ describe("ErrorHandler.Composable", () => {
 				expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
 
 				consoleErrorSpy.mockRestore();
+			});
+		});
+	});
+
+	describe("handleAnyError", () => {
+		describe("when an error is handled", () => {
+			it("should execute the callback for any error", async () => {
+				const { handleAnyError } = setup();
+
+				mockedIsAxiosError.mockReturnValueOnce(true);
+				const errorResponse = mockErrorResponse();
+
+				const handleCallbackMock = jest.fn();
+
+				handleAnyError(errorResponse, handleCallbackMock);
+
+				expect(handleCallbackMock).toHaveBeenCalledTimes(1);
 			});
 		});
 	});

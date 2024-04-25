@@ -105,6 +105,7 @@ import {
 	mdiUndo,
 	mdiUndoVariant,
 	mdiViewDashboard,
+	mdiViewDashboardOutline,
 	mdiViewGridOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
@@ -216,6 +217,7 @@ export {
 	mdiUndo,
 	mdiUndoVariant,
 	mdiViewDashboard,
+	mdiViewDashboardOutline,
 	mdiViewGridOutline,
 	mdiViewListOutline,
 };
