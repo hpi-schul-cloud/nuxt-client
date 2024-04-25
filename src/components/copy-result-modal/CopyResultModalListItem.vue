@@ -106,6 +106,8 @@ export default {
 					return this.$t("components.molecules.copyResult.label.timeGroup");
 				case CopyApiResponseTypeEnum.UserGroup:
 					return this.$t("components.molecules.copyResult.label.userGroup");
+				case CopyApiResponseTypeEnum.DrawingElement:
+					return this.$t("components.molecules.copyResult.label.tldraw");
 				default:
 					return this.$t("components.molecules.copyResult.label.unknown");
 			}
