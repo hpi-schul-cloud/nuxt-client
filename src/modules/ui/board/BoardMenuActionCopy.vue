@@ -1,8 +1,8 @@
 <template>
 	<BoardMenuAction
 		:icon="mdiContentCopy"
-		@click="onClick"
 		data-testid="board-menu-action-copy"
+		@click="onClick"
 	>
 		{{ $t("common.actions.copy") }}
 	</BoardMenuAction>

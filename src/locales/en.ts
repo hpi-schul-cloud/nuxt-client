@@ -281,7 +281,8 @@ export default {
 	"components.board.alert.info.draft":
 		"This board is not visible to course participants.",
 	"components.board.column.defaultTitle": "New column",
-	"components.board.column.ghost.placeholder": "Add column",
+	"components.board.column.ghost.column.placeholder": "Add column",
+	"components.board.column.ghost.list.placeholder": "Add section",
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
@@ -303,11 +304,13 @@ export default {
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
-	"components.boardRow": "row",
 	"components.boardElement": "element",
+	"components.boardRow": "row",
+	"components.boardSection": "section",
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.drawingElement": "Whiteboard",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
@@ -361,6 +364,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"External tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "File",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Texteditor",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Submission",
@@ -1370,8 +1375,9 @@ export default {
 	"pages.news.title": "News",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
+	"pages.room.boardCard.label.listBoard": "List Board",
 	"pages.room.boardCard.menu.ariaLabel": "Board menu",
-	"pages.room.cards.aria": "{itemType}, link, {itemName}, press enter to open",
+	"pages.room.cards.aria": "{itemType}, link, press enter to open",
 	"pages.room.cards.label.revert": "Revert to draft",
 	"pages.room.copy.course.message.copied": "Course was successfully copied.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1407,6 +1413,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
 	"pages.rooms.fab.add.lesson": "New topic",
 	"pages.rooms.fab.add.board": "New column board",
+	"pages.rooms.fab.add.listBoard": "New list board",
 	"pages.rooms.fab.add.task": "New task",
 	"pages.rooms.fab.ariaLabel": "Create new course",
 	"pages.rooms.fab.import.course": "Import course",
@@ -1521,8 +1528,6 @@ export default {
 		"An error occurred while transferring a parameter value. Please contact support.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"The value of a parameter does not follow the given rules. Please adjust the value accordingly.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"The version of this Tool used is out of date. Please update the version.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"A tool with the same name is already assigned to this course. Tool names must be unique within a course.",
 	"pages.tool.context.description":

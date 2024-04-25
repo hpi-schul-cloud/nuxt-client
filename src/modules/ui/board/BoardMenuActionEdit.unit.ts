@@ -21,7 +21,7 @@ describe("BoardMenuActionEdit Component", () => {
 		it("should render", () => {
 			const wrapper = setup();
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeTruthy();
+			expect(action.exists()).toBe(true);
 		});
 	});
 });
