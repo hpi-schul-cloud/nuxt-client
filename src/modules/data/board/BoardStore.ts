@@ -171,7 +171,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const moveColumnRequest = async (payload: MoveColumnRequestPayload) => {
-		await socketOrRest.moveColumnRequest(payload);
+		await socketOrRest.moveColumnRequest({
+			targetBoardId: board.value?.id,
+			...payload,
+		});
 	};
 
 	const moveColumnSuccess = async (payload: MoveColumnSuccessPayload) => {
@@ -181,7 +184,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (addedIndex < 0 || addedIndex > board.value.columns.length - 1) return;
 		if (removedIndex === null || removedIndex === undefined) return;
 
-		const item = board.value.columns.splice(removedIndex, 1)[0];
+		const column = board.value.columns.splice(removedIndex, 1)[0];
 		/**
 		 * refreshes the board to force rerendering in tracked v-for
 		 * to maintain focus when moving columns by keyboard
@@ -189,7 +192,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (byKeyboard === true) {
 			await nextTick();
 		}
-		board.value.columns.splice(addedIndex, 0, item);
+		board.value.columns.splice(addedIndex, 0, column);
 	};
 
 	const getColumnIndices = (

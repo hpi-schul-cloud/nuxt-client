@@ -19,7 +19,7 @@ export type CreateColumnRequestPayload = {
 };
 
 export type FetchBoardRequestPayload = {
-	id: string;
+	boardId: string;
 };
 
 export type FetchBoardSuccessPayload = {
@@ -67,6 +67,7 @@ export type MoveCardSuccessPayload = {
 
 export type MoveColumnRequestPayload = {
 	columnMove: ColumnMove;
+	targetBoardId?: string;
 	byKeyboard: boolean;
 };
 

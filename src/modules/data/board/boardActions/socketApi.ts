@@ -47,6 +47,7 @@ export const useSocketApi = () => {
 			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
 			on(BoardActions.moveCardSuccess, boardStore.moveCardSuccess),
 			on(BoardActions.moveColumnSuccess, boardStore.moveColumnSuccess),
+			on(BoardActions.fetchBoardSuccess, boardStore.fetchBoardSuccess),
 			on(
 				BoardActions.updateColumnTitleSuccess,
 				boardStore.updateColumnTitleSuccess

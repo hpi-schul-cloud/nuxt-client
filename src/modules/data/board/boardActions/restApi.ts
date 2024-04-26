@@ -85,7 +85,7 @@ export const useBoardRestApi = () => {
 	): Promise<void> => {
 		boardStore.setLoading(true);
 		try {
-			const board = await fetchBoardCall(payload.id);
+			const board = await fetchBoardCall(payload.boardId);
 			boardStore.fetchBoardSuccess({ board });
 		} catch (error) {
 			handleError(error, {
@@ -324,7 +324,7 @@ export const useBoardRestApi = () => {
 	const reloadBoard = async () => {
 		if (boardStore.board === undefined) return;
 
-		await fetchBoardRequest({ id: boardStore.board.id });
+		await fetchBoardRequest({ boardId: boardStore.board.id });
 	};
 
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
