@@ -106,7 +106,6 @@ import {
 	useSharedBoardPageInformation,
 	useSharedEditMode,
 	useBoardStore,
-	boardActions,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -153,23 +152,20 @@ const {
 } = useBoardPermissions();
 
 const onCreateCard = async (columnId: string) => {
-	if (hasCreateCardPermission)
-		boardStore.dispatch(boardActions.createCardRequest({ columnId }));
+	if (hasCreateCardPermission) boardStore.createCardRequest({ columnId });
 };
 
 const onCreateColumn = async () => {
 	if (hasCreateCardPermission)
-		boardStore.dispatch(boardActions.createColumnRequest({}));
+		boardStore.createColumnRequest({ boardId: props.boardId });
 };
 
 const onDeleteCard = async (cardId: string) => {
-	if (hasCreateCardPermission)
-		boardStore.dispatch(boardActions.deleteCardRequest({ cardId }));
+	if (hasCreateCardPermission) boardStore.deleteCardRequest({ cardId });
 };
 
 const onDeleteColumn = async (columnId: string) => {
-	if (hasDeletePermission)
-		boardStore.dispatch(boardActions.deleteColumnRequest({ columnId }));
+	if (hasDeletePermission) boardStore.deleteColumnRequest({ columnId });
 };
 
 const onDropColumn = async (columnPayload: SortableEvent) => {
@@ -186,9 +182,7 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 			removedIndex: columnPayload.oldIndex,
 			columnId,
 		};
-		boardStore.dispatch(
-			boardActions.moveColumnRequest({ columnMove, byKeyboard: false })
-		);
+		boardStore.moveColumnRequest({ columnMove, byKeyboard: false });
 	}
 };
 
@@ -202,9 +196,7 @@ const onMoveColumnBackward = async (columnIndex: number, columnId: string) => {
 		columnId,
 	};
 
-	boardStore.dispatch(
-		boardActions.moveColumnRequest({ columnMove, byKeyboard: true })
-	);
+	boardStore.moveColumnRequest({ columnMove, byKeyboard: true });
 };
 
 const onMoveColumnForward = async (columnIndex: number, columnId: string) => {
@@ -217,48 +209,40 @@ const onMoveColumnForward = async (columnIndex: number, columnId: string) => {
 		columnId,
 	};
 
-	boardStore.dispatch(
-		boardActions.moveColumnRequest({ columnMove, byKeyboard: true })
-	);
+	boardStore.moveColumnRequest({ columnMove, byKeyboard: true });
 };
 
 const onReloadBoard = async () => {
-	boardStore.dispatch(boardActions.reloadBoard({ id: props.boardId }));
+	boardStore.reloadBoard({ id: props.boardId });
 };
 
 const onUpdateBoardVisibility = async (newVisibility: boolean) => {
 	if (!hasEditPermission) return;
 
-	boardStore.dispatch(
-		boardActions.updateBoardVisibilityRequest({ newVisibility })
-	);
+	boardStore.updateBoardVisibilityRequest({ newVisibility });
 	await setAlert();
 };
 
 const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-	if (hasMovePermission)
-		boardStore.dispatch(boardActions.moveCardRequest(cardMove));
+	if (hasMovePermission) boardStore.moveCardRequest(cardMove);
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
 	if (hasEditPermission)
-		boardStore.dispatch(
-			boardActions.updateColumnTitleRequest({ columnId, newTitle })
-		);
+		boardStore.updateColumnTitleRequest({ columnId, newTitle });
 };
 
 const onUpdateBoardTitle = async (newTitle: string) => {
-	if (hasEditPermission)
-		boardStore.dispatch(boardActions.updateBoardTitleRequest({ newTitle }));
+	if (hasEditPermission) boardStore.updateBoardTitleRequest({ newTitle });
 };
 
 onMounted(() => {
 	setAlert();
-	boardStore.dispatch(boardActions.fetchBoard({ id: props.boardId }));
+	boardStore.fetchBoard({ id: props.boardId });
 });
 
 onUnmounted(() => {
-	boardStore.dispatch(boardActions.disconnectSocket({}));
+	boardStore.disconnectSocketRequest({});
 	boardStore.setBoard(undefined);
 });
 

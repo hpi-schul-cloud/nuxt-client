@@ -1,94 +1,138 @@
 import * as BoardActions from "./actions";
-import { boardActions, useBoardSocketApi } from "@data-board";
+import { useBoardSocketApi } from "@data-board";
 import { useBoardStore } from "../BoardStore";
+import {
+	createCardRequestPayload,
+	createColumnRequestPayload,
+	deleteCardRequestPayload,
+	deleteColumnRequestPayload,
+	disconnectSocketRequestPayload,
+	moveCardRequestPayload,
+	moveColumnRequestPayload,
+	updateBoardTitleRequestPayload,
+	updateBoardVisibilityRequestPayload,
+	updateColumnTitleRequestPayload,
+} from "@/modules/data/board/boardActions/boardActionPayload";
+import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+
+type ErrorActions =
+	| ReturnType<typeof BoardActions.createCardFailure>
+	| ReturnType<typeof BoardActions.createColumnFailure>
+	| ReturnType<typeof BoardActions.deleteBoardFailure>
+	| ReturnType<typeof BoardActions.deleteCardFailure>
+	| ReturnType<typeof BoardActions.deleteColumnFailure>
+	| ReturnType<typeof BoardActions.moveCardFailure>
+	| ReturnType<typeof BoardActions.moveColumnFailure>
+	| ReturnType<typeof BoardActions.updateColumnTitleFailure>
+	| ReturnType<typeof BoardActions.updateBoardTitleFailure>
+	| ReturnType<typeof BoardActions.updateBoardVisibilityFailure>;
 
 export const useSocketApi = () => {
 	const boardStore = useBoardStore();
+	const { notifySocketError } = useErrorHandler();
 
-	const { emitOnSocket, disconnectSocket } = useBoardSocketApi(
-		boardStore.dispatch
-	);
-
-	const createCardRequest = (
-		action: ReturnType<typeof BoardActions.createCardRequest>
+	const dispatch = async (
+		action: PermittedStoreActions<typeof BoardActions>
 	) => {
-		emitOnSocket("create-card-request", action.payload);
+		handle(
+			action,
+			on(BoardActions.disconnectSocket, disconnectSocketRequest),
+
+			// success actions
+			on(BoardActions.createCardSuccess, boardStore.createCardSuccess),
+			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
+			on(BoardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
+			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
+			on(BoardActions.moveCardSuccess, boardStore.moveCardSuccess),
+			on(BoardActions.moveColumnSuccess, boardStore.moveColumnSuccess),
+			on(
+				BoardActions.updateColumnTitleSuccess,
+				boardStore.updateColumnTitleSuccess
+			),
+			on(
+				BoardActions.updateBoardTitleSuccess,
+				boardStore.updateBoardTitleSuccess
+			),
+			on(
+				BoardActions.updateBoardVisibilitySuccess,
+				boardStore.updateBoardVisibilitySuccess
+			),
+
+			// failure actions
+			on(BoardActions.createCardFailure, onFailure),
+			on(BoardActions.createColumnFailure, onFailure),
+			on(BoardActions.deleteCardFailure, onFailure),
+			on(BoardActions.deleteColumnFailure, onFailure),
+			on(BoardActions.moveCardFailure, onFailure),
+			on(BoardActions.moveColumnFailure, onFailure),
+			on(BoardActions.updateColumnTitleFailure, onFailure),
+			on(BoardActions.updateBoardTitleFailure, onFailure),
+			on(BoardActions.updateBoardVisibilityFailure, onFailure)
+		);
 	};
 
-	const disconnectSocketRequest = (
-		action: ReturnType<typeof BoardActions.disconnectSocket>
-	) => {
-		console.log("disconnectSocketRequest", action.payload);
+	const { emitOnSocket, disconnectSocket } = useBoardSocketApi(dispatch);
+
+	const createCardRequest = async (payload: createCardRequestPayload) => {
+		emitOnSocket("create-card-request", payload);
+	};
+
+	const disconnectSocketRequest = (payload: disconnectSocketRequestPayload) => {
+		// TODO: Kebab-Case
+		console.log("disconnectSocketRequest", payload);
 		disconnectSocket();
 	};
 
-	const createColumnRequest = (
-		action: ReturnType<typeof BoardActions.createColumnRequest>
-	) => {
-		emitOnSocket("create-column-request", action.payload);
+	const createColumnRequest = (payload: createColumnRequestPayload) => {
+		emitOnSocket("create-column-request", payload);
 	};
 
-	const deleteCardRequest = async (
-		action: ReturnType<typeof BoardActions.deleteCardRequest>
-	) => {
-		await emitOnSocket("delete-card-request", action.payload);
+	const deleteCardRequest = async (payload: deleteCardRequestPayload) => {
+		await emitOnSocket("delete-card-request", payload);
 	};
 
-	const deleteColumnRequest = async (
-		action: ReturnType<typeof BoardActions.deleteColumnRequest>
-	) => {
-		boardStore.dispatch(BoardActions.deleteColumnSuccess(action.payload));
-		emitOnSocket("delete-column-request", action.payload);
+	const deleteColumnRequest = async (payload: deleteColumnRequestPayload) => {
+		dispatch(BoardActions.deleteColumnSuccess(payload));
+		emitOnSocket("delete-column-request", payload);
 	};
 
-	const moveCardRequest = async (
-		action: ReturnType<typeof BoardActions.moveCardRequest>
-	) => {
-		boardStore.dispatch(BoardActions.moveCardSuccess(action.payload));
-		emitOnSocket("move-card-request", action.payload);
+	const moveCardRequest = async (payload: moveCardRequestPayload) => {
+		dispatch(BoardActions.moveCardSuccess(payload));
+		emitOnSocket("move-card-request", payload);
 	};
 
-	const moveColumnRequest = async (
-		action: ReturnType<typeof BoardActions.moveColumnRequest>
-	) => {
-		boardStore.dispatch(BoardActions.moveColumnSuccess(action.payload));
-		emitOnSocket("move-column-request", action.payload);
+	const moveColumnRequest = async (payload: moveColumnRequestPayload) => {
+		dispatch(BoardActions.moveColumnSuccess(payload));
+		emitOnSocket("move-column-request", payload);
 	};
 
 	const updateColumnTitleRequest = async (
-		action: ReturnType<typeof BoardActions.updateColumnTitleRequest>
+		payload: updateColumnTitleRequestPayload
 	) => {
-		await emitOnSocket("update-column-title-request", action.payload);
-		boardStore.dispatch(BoardActions.updateColumnTitleSuccess(action.payload));
+		await emitOnSocket("update-column-title-request", payload);
+		dispatch(BoardActions.updateColumnTitleSuccess(payload));
 	};
 
-	const updateBoardTitleRequest = (
-		action: ReturnType<typeof BoardActions.updateBoardTitleRequest>
-	) => {
-		boardStore.dispatch(BoardActions.updateBoardTitleSuccess(action.payload));
-		emitOnSocket("update-board-title-request", action.payload);
+	const updateBoardTitleRequest = (payload: updateBoardTitleRequestPayload) => {
+		dispatch(BoardActions.updateBoardTitleSuccess(payload));
+		emitOnSocket("update-board-title-request", payload);
 	};
 
 	const updateBoardVisibilityRequest = (
-		action: ReturnType<typeof BoardActions.updateBoardVisibilityRequest>
+		payload: updateBoardVisibilityRequestPayload
 	) => {
-		boardStore.dispatch(
-			BoardActions.updateBoardVisibilitySuccess(action.payload)
-		);
-		emitOnSocket("update-board-visibility-request", action.payload);
+		dispatch(BoardActions.updateBoardVisibilitySuccess(payload));
+		emitOnSocket("update-board-visibility-request", payload);
 	};
 
-	const reloadBoard = (action: ReturnType<typeof BoardActions.reloadBoard>) => {
-		emitOnSocket("reload-board-request", action.payload);
-	};
-
-	const reloadBoardSuccess = (
-		action: ReturnType<typeof BoardActions.reloadBoardSuccess>
-	) => {
-		boardStore.dispatch(boardActions.fetchBoard(action.payload));
+	const onFailure = (payload: ErrorActions["payload"]) => {
+		const { errorType = "notUpdated", boardObjectType = "board" } = payload;
+		notifySocketError(errorType, boardObjectType);
 	};
 
 	return {
+		dispatch,
 		createCardRequest,
 		createColumnRequest,
 		disconnectSocketRequest,
@@ -96,8 +140,6 @@ export const useSocketApi = () => {
 		deleteColumnRequest,
 		moveCardRequest,
 		moveColumnRequest,
-		reloadBoard,
-		reloadBoardSuccess,
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,

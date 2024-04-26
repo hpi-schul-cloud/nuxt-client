@@ -1,32 +1,55 @@
 import {
-	BoardObjectType,
-	ErrorType,
-} from "@/components/error-handling/ErrorHandler.composable";
-import { CardResponse, ColumnResponse } from "@/serverApi/v3";
+	createCardFailurePayload,
+	createCardRequestPayload,
+	createCardSuccessPayload,
+	createColumnFailurePayload,
+	createColumnSucccessPayload,
+	deleteBoardFailurePayload,
+	deleteBoardRequestPayload,
+	deleteBoardSuccessPayload,
+	deleteCardFailurePayload,
+	deleteCardRequestPayload,
+	deleteCardSuccessPayload,
+	deleteColumnFailurePayload,
+	deleteColumnRequestPayload,
+	deleteColumnSuccessPayload,
+	disconnectSocketRequestPayload,
+	moveCardFailurePayload,
+	moveColumnFailurePayload,
+	moveColumnRequestPayload,
+	moveColumnSuccessPayload,
+	notifyErrorPayload,
+	reloadBoardPayload,
+	reloadBoardSuccessPayload,
+	updateBoardTitleFailurePayload,
+	updateBoardTitleRequestPayload,
+	updateBoardTitleSuccessPayload,
+	updateBoardVisibilityFailurePayload,
+	updateBoardVisibilityRequestPayload,
+	updateBoardVisibilitySuccessPayload,
+	updateColumnTitleFailurePayload,
+	updateColumnTitleRequestPayload,
+	updateColumnTitleSuccessPayload,
+} from "./boardActionPayload";
 import { createAction, props } from "@/types/board/ActionFactory";
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
-
-export const fetchBoard = createAction(
-	"fetch-board-request",
-	props<{ id: string }>()
-);
+import { CardMove } from "@/types/board/DragAndDrop";
 
 export const disconnectSocket = createAction(
 	"disconnect-socket",
-	props<{ id: string }>()
+	props<disconnectSocketRequestPayload>()
 );
 
 export const createCardRequest = createAction(
 	"create-card-request",
-	props<{ columnId: string }>()
+	props<createCardRequestPayload>()
 );
 export const createCardSuccess = createAction(
 	"create-card-success",
-	props<{ newCard: CardResponse; columnId: string }>()
+	props<createCardSuccessPayload>()
 );
 export const createCardFailure = createAction(
 	"create-card-failure",
-	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
+	props<createCardFailurePayload>()
 );
 
 export const createColumnRequest = createAction(
@@ -35,51 +58,50 @@ export const createColumnRequest = createAction(
 );
 export const createColumnSuccess = createAction(
 	"create-column-success",
-	props<{ newColumn: ColumnResponse }>()
+	props<createColumnSucccessPayload>()
 );
 export const createColumnFailure = createAction(
 	"create-column-failure",
-	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
+	props<createColumnFailurePayload>()
 );
 
 export const deleteBoardRequest = createAction(
 	"delete-board-request",
-	props<{ id: string }>()
+	props<deleteBoardRequestPayload>()
 );
 export const deleteBoardSuccess = createAction(
 	"delete-board-success",
-	props<{ id: string }>()
+	props<deleteBoardSuccessPayload>()
 );
 export const deleteBoardFailure = createAction(
 	"delete-board-failure",
-	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
+	props<deleteBoardFailurePayload>()
 );
 
 export const deleteCardRequest = createAction(
 	"delete-card-request",
-	props<{ cardId: string }>()
+	props<deleteCardRequestPayload>()
+);
+export const deleteCardSuccess = createAction(
+	"delete-card-success",
+	props<deleteCardSuccessPayload>()
 );
 export const deleteCardFailure = createAction(
 	"delete-card-failure",
-	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
-);
-
-export const deleteCardSuccess = createAction(
-	"delete-card-success",
-	props<{ cardId: string }>()
+	props<deleteCardFailurePayload>()
 );
 
 export const deleteColumnRequest = createAction(
 	"delete-column-request",
-	props<{ columnId: string }>()
+	props<deleteColumnRequestPayload>()
 );
 export const deleteColumnSuccess = createAction(
 	"delete-column-success",
-	props<{ columnId: string }>()
+	props<deleteColumnSuccessPayload>()
 );
 export const deleteColumnFailure = createAction(
 	"delete-column-failure",
-	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
+	props<deleteColumnFailurePayload>()
 );
 
 export const moveCardRequest = createAction(
@@ -92,75 +114,77 @@ export const moveCardSuccess = createAction(
 );
 export const moveCardFailure = createAction(
 	"move-card-failure",
-	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
+	props<moveCardFailurePayload>()
 );
 
 export const moveColumnRequest = createAction(
 	"move-column-request",
-	props<{ columnMove: ColumnMove; byKeyboard: boolean }>()
+	props<moveColumnRequestPayload>()
 );
 export const moveColumnSuccess = createAction(
 	"move-column-success",
-	props<{ columnMove: ColumnMove; byKeyboard: boolean }>()
+	props<moveColumnSuccessPayload>()
 );
 export const moveColumnFailure = createAction(
 	"move-column-failure",
-	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
+	props<moveColumnFailurePayload>()
 );
 
 export const reloadBoard = createAction(
 	"reload-board-request",
-	props<{ id: string }>()
+	props<reloadBoardPayload>()
 );
+
 export const reloadBoardSuccess = createAction(
 	"reload-board-success",
-	props<{ id: string }>()
+	props<reloadBoardSuccessPayload>()
 );
+
 // WIP: reloadBoardFailure?
 
 export const updateBoardTitleRequest = createAction(
 	"update-board-title-request",
-	props<{ newTitle: string }>()
+	props<updateBoardTitleRequestPayload>()
 );
+
 export const updateBoardTitleSuccess = createAction(
 	"update-board-title-success",
-	props<{ newTitle: string }>()
+	props<updateBoardTitleSuccessPayload>()
 );
 export const updateBoardTitleFailure = createAction(
 	"update-board-title-failure",
-	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
+	props<updateBoardTitleFailurePayload>()
 );
 
 export const updateBoardVisibilityRequest = createAction(
 	"update-board-visibility-request",
-	props<{ newVisibility: boolean }>()
+	props<updateBoardVisibilityRequestPayload>()
 );
+
 export const updateBoardVisibilitySuccess = createAction(
 	"update-board-visibility-success",
-	props<{ newVisibility: boolean }>()
+	props<updateBoardVisibilitySuccessPayload>()
 );
+
 export const updateBoardVisibilityFailure = createAction(
 	"update-board-visibility-failure",
-	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
+	props<updateBoardVisibilityFailurePayload>()
 );
 
 export const updateColumnTitleRequest = createAction(
 	"update-column-title-request",
-	props<{ columnId: string; newTitle: string }>()
+	props<updateColumnTitleRequestPayload>()
 );
 export const updateColumnTitleSuccess = createAction(
 	"update-column-title-success",
-	props<{ columnId: string; newTitle: string }>()
+	props<updateColumnTitleSuccessPayload>()
 );
 export const updateColumnTitleFailure = createAction(
 	"update-column-title-failure",
-	props<{ errorType: ErrorType; boardObjectType: BoardObjectType }>()
+	props<updateColumnTitleFailurePayload>()
 );
 
 export const notifyError = createAction(
 	"notify-error",
-	props<{
-		errorType: ErrorType;
-		boardObjectType?: BoardObjectType;
-	}>()
+	props<notifyErrorPayload>()
 );

@@ -1,32 +1,39 @@
 import { Board } from "@/types/board/Board";
 import { nextTick, ref } from "vue";
 import { defineStore } from "pinia";
-import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
-import * as BoardActions from "./boardActions/actions";
 import { useBoardRestApi } from "./boardActions/restApi";
 import { useSocketApi } from "./boardActions/socketApi";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { ColumnResponse } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
+import {
+	createCardRequestPayload,
+	createCardSuccessPayload,
+	createColumnRequestPayload,
+	createColumnSucccessPayload,
+	deleteCardRequestPayload,
+	deleteCardSuccessPayload,
+	deleteColumnRequestPayload,
+	deleteColumnSuccessPayload,
+	disconnectSocketRequestPayload,
+	fetchBoardPayload,
+	moveCardRequestPayload,
+	moveCardSuccessPayload,
+	moveColumnRequestPayload,
+	moveColumnSuccessPayload,
+	updateBoardTitleRequestPayload,
+	updateBoardTitleSuccessPayload,
+	updateBoardVisibilityRequestPayload,
+	updateBoardVisibilitySuccessPayload,
+	updateColumnTitleRequestPayload,
+	updateColumnTitleSuccessPayload,
+} from "./boardActions/boardActionPayload";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
-
-	type ErrorActions =
-		| ReturnType<typeof BoardActions.createCardFailure>
-		| ReturnType<typeof BoardActions.createColumnFailure>
-		| ReturnType<typeof BoardActions.deleteBoardFailure>
-		| ReturnType<typeof BoardActions.deleteCardFailure>
-		| ReturnType<typeof BoardActions.deleteColumnFailure>
-		| ReturnType<typeof BoardActions.moveCardFailure>
-		| ReturnType<typeof BoardActions.moveColumnFailure>
-		| ReturnType<typeof BoardActions.updateColumnTitleFailure>
-		| ReturnType<typeof BoardActions.updateBoardTitleFailure>
-		| ReturnType<typeof BoardActions.updateBoardVisibilityFailure>;
 
 	const restApi = useBoardRestApi();
 	const isSocketEnabled = envConfigModule.getFeatureSocketEnabled;
@@ -34,61 +41,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const socketOrRest = isSocketEnabled ? useSocketApi() : restApi;
 
 	const { setEditModeId } = useSharedEditMode();
-	const { notifySocketError } = useErrorHandler();
-
-	const dispatch = async (
-		action: PermittedStoreActions<typeof BoardActions>
-	) => {
-		handle(
-			action,
-			on(BoardActions.fetchBoard, restApi.fetchBoard),
-			on(BoardActions.disconnectSocket, socketOrRest.disconnectSocketRequest),
-
-			// request actions
-			on(BoardActions.createCardRequest, socketOrRest.createCardRequest),
-			on(BoardActions.createColumnRequest, socketOrRest.createColumnRequest),
-			on(BoardActions.deleteCardRequest, socketOrRest.deleteCardRequest),
-			on(BoardActions.deleteColumnRequest, socketOrRest.deleteColumnRequest),
-			on(BoardActions.moveCardRequest, socketOrRest.moveCardRequest),
-			on(BoardActions.moveColumnRequest, socketOrRest.moveColumnRequest),
-			on(
-				BoardActions.updateColumnTitleRequest,
-				socketOrRest.updateColumnTitleRequest
-			),
-			on(
-				BoardActions.updateBoardTitleRequest,
-				socketOrRest.updateBoardTitleRequest
-			),
-			on(
-				BoardActions.updateBoardVisibilityRequest,
-				socketOrRest.updateBoardVisibilityRequest
-			),
-			on(BoardActions.reloadBoard, socketOrRest.reloadBoard),
-
-			// success actions
-			on(BoardActions.createCardSuccess, createCard),
-			on(BoardActions.createColumnSuccess, createColumn),
-			on(BoardActions.deleteCardSuccess, deleteCard),
-			on(BoardActions.deleteColumnSuccess, deleteColumn),
-			on(BoardActions.moveCardSuccess, moveCard),
-			on(BoardActions.moveColumnSuccess, moveColumn),
-			on(BoardActions.updateColumnTitleSuccess, updateColumnTitle),
-			on(BoardActions.updateBoardTitleSuccess, updateBoardTitle),
-			on(BoardActions.updateBoardVisibilitySuccess, updateBoardVisibility),
-			on(BoardActions.reloadBoardSuccess, socketOrRest.reloadBoardSuccess),
-
-			// failure actions
-			on(BoardActions.createCardFailure, onFailure),
-			on(BoardActions.createColumnFailure, onFailure),
-			on(BoardActions.deleteCardFailure, onFailure),
-			on(BoardActions.deleteColumnFailure, onFailure),
-			on(BoardActions.moveCardFailure, onFailure),
-			on(BoardActions.moveColumnFailure, onFailure),
-			on(BoardActions.updateColumnTitleFailure, onFailure),
-			on(BoardActions.updateBoardTitleFailure, onFailure),
-			on(BoardActions.updateBoardVisibilityFailure, onFailure)
-		);
-	};
 
 	const getColumnIndex = (columnId: string | undefined): number => {
 		if (columnId === undefined) return -1;
@@ -109,7 +61,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		return board.value.columns[columnIndex].id;
 	};
 
-	const setBoard = (newBoard: Board) => {
+	const setBoard = (newBoard: Board | undefined) => {
 		board.value = newBoard;
 	};
 
@@ -117,24 +69,19 @@ export const useBoardStore = defineStore("boardStore", () => {
 		isLoading.value = loading;
 	};
 
-	const createColumn = (
-		action: ReturnType<typeof BoardActions.createColumnSuccess>
-	) => {
-		if (!board.value) return;
-		board.value.columns.push(action.payload.newColumn);
+	const createCardRequest = (payload: createCardRequestPayload) => {
+		socketOrRest.createCardRequest(payload);
 	};
 
-	const createCard = (
-		action: ReturnType<typeof BoardActions.createCardSuccess>
-	) => {
+	const createCardSuccess = (payload: createCardSuccessPayload) => {
 		if (!board.value) return;
 
-		const { newCard } = action.payload;
+		const { newCard } = payload;
 		const { setFocus } = useBoardFocusHandler();
 		setFocus(newCard.id);
 
 		const columnIndex = board.value.columns.findIndex(
-			(column) => column.id === action.payload.columnId
+			(column) => column.id === payload.columnId
 		);
 		board.value.columns[columnIndex].cards.push({
 			cardId: newCard.id,
@@ -143,11 +90,22 @@ export const useBoardStore = defineStore("boardStore", () => {
 		setEditModeId(newCard.id);
 	};
 
-	const deleteCard = (
-		action: ReturnType<typeof BoardActions.deleteCardSuccess>
-	) => {
+	const createColumnRequest = async (payload: createColumnRequestPayload) => {
+		socketOrRest.createColumnRequest(payload);
+	};
+
+	const createColumnSuccess = (payload: createColumnSucccessPayload) => {
 		if (!board.value) return;
-		const cardId = action.payload.cardId;
+		board.value.columns.push(payload.newColumn);
+	};
+
+	const deleteCardRequest = async (payload: deleteCardRequestPayload) => {
+		await socketOrRest.deleteCardRequest(payload);
+	};
+
+	const deleteCardSuccess = (payload: deleteCardSuccessPayload) => {
+		if (!board.value) return;
+		const cardId = payload.cardId;
 		const columnIndex = board.value.columns.findIndex(
 			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
 		);
@@ -159,11 +117,13 @@ export const useBoardStore = defineStore("boardStore", () => {
 		}
 	};
 
-	const deleteColumn = (
-		action: ReturnType<typeof BoardActions.deleteColumnSuccess>
-	) => {
+	const deleteColumnRequest = async (payload: deleteColumnRequestPayload) => {
+		await socketOrRest.deleteColumnRequest(payload);
+	};
+
+	const deleteColumnSuccess = (payload: deleteColumnSuccessPayload) => {
 		if (!board.value) return;
-		const columnId = action.payload.columnId;
+		const columnId = payload.columnId;
 		const columnIndex = getColumnIndex(columnId);
 		if (columnIndex < 0) {
 			return;
@@ -171,38 +131,50 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns.splice(columnIndex, 1);
 	};
 
-	const updateBoardTitle = (
-		action: ReturnType<typeof BoardActions.updateBoardTitleSuccess>
+	const updateBoardTitleRequest = async (
+		payload: updateBoardTitleRequestPayload
 	) => {
-		if (!board.value) return;
-
-		board.value.title = action.payload.newTitle;
+		await socketOrRest.updateBoardTitleRequest(payload);
 	};
 
-	const updateColumnTitle = (
-		action: ReturnType<typeof BoardActions.updateColumnTitleSuccess>
+	const updateBoardTitleSuccess = (payload: updateBoardTitleSuccessPayload) => {
+		if (!board.value) return;
+
+		board.value.title = payload.newTitle;
+	};
+
+	const updateColumnTitleRequest = async (
+		payload: updateColumnTitleRequestPayload
+	) => {
+		await socketOrRest.deleteColumnRequest(payload);
+	};
+
+	const updateColumnTitleSuccess = (
+		payload: updateColumnTitleSuccessPayload
 	) => {
 		if (!board.value) return;
-		const { columnId, newTitle } = action.payload;
+		const { columnId, newTitle } = payload;
 		const columnIndex = getColumnIndex(columnId);
 		if (columnIndex > -1) {
 			board.value.columns[columnIndex].title = newTitle;
 		}
 	};
 
-	const updateBoardVisibility = (
-		action: ReturnType<typeof BoardActions.updateBoardVisibilitySuccess>
+	const updateBoardVisibilitySuccess = (
+		payload: updateBoardVisibilitySuccessPayload
 	) => {
 		if (!board.value) return;
 
-		board.value.isVisible = action.payload.newVisibility;
+		board.value.isVisible = payload.newVisibility;
 	};
 
-	const moveColumn = async (
-		action: ReturnType<typeof BoardActions.moveColumnSuccess>
-	) => {
+	const moveColumnRequest = async (payload: moveColumnRequestPayload) => {
+		await socketOrRest.moveColumnRequest(payload);
+	};
+
+	const moveColumnSuccess = async (payload: moveColumnSuccessPayload) => {
 		if (!board.value) return;
-		const { columnMove, byKeyboard } = action.payload;
+		const { columnMove, byKeyboard } = payload;
 		const { addedIndex, removedIndex } = columnMove;
 		if (addedIndex < 0 || addedIndex > board.value.columns.length - 1) return;
 		if (removedIndex === null || removedIndex === undefined) return;
@@ -254,10 +226,17 @@ export const useBoardStore = defineStore("boardStore", () => {
 		return true;
 	};
 
-	// TODO: refactor or create a new function for moving cards with creating column
-	const moveCard = async (
-		action: ReturnType<typeof BoardActions.moveCardSuccess>
+	const moveCardRequest = async (payload: moveCardRequestPayload) => {
+		await socketOrRest.moveCardRequest(payload);
+	};
+	const updateBoardVisibilityRequest = async (
+		payload: updateBoardVisibilityRequestPayload
 	) => {
+		await socketOrRest.updateBoardVisibilityRequest(payload);
+	};
+
+	// TODO: refactor or create a new function for moving cards with creating column
+	const moveCardSuccess = async (payload: moveCardSuccessPayload) => {
 		if (!board.value) return;
 
 		const {
@@ -267,7 +246,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			fromColumnId,
 			columnDelta,
 			forceNextTick,
-		} = action.payload;
+		} = payload;
 
 		const { fromColumnIndex, toColumnIndex } = getColumnIndices(
 			fromColumnId,
@@ -275,19 +254,20 @@ export const useBoardStore = defineStore("boardStore", () => {
 			columnDelta
 		);
 
-		let targetColumnIndex = toColumnIndex;
+		const targetColumnIndex = toColumnIndex;
 
-		if (toColumnIndex === -1) {
-			// need to create a new column
-			const newColumn = await restApi.createColumnRequest();
-			if (newColumn) {
-				targetColumnIndex = getColumnIndex(newColumn?.id);
-			}
-		}
+		// TODO: solve column creation on the backend
+		// if (toColumnIndex === -1) {
+		// 	// need to create a new column
+		// 	const newColumn = await createColumnRequest();
+		// 	if (newColumn) {
+		// 		targetColumnIndex = getColumnIndex(newColumn?.id);
+		// 	}
+		// }
 
 		if (
 			!isMoveValid(
-				action.payload,
+				payload,
 				board.value.columns,
 				targetColumnIndex,
 				fromColumnIndex
@@ -312,17 +292,45 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns[targetColumnIndex].cards.splice(newIndex, 0, item);
 	};
 
-	const onFailure = (action: ErrorActions) => {
-		const { errorType = "notUpdated", boardObjectType = "board" } =
-			action.payload;
-		notifySocketError(errorType, boardObjectType);
+	const disconnectSocketRequest = async (
+		payload: disconnectSocketRequestPayload
+	) => {
+		await socketOrRest.disconnectSocketRequest(payload);
+	};
+
+	const fetchBoard = async (payload: fetchBoardPayload) => {
+		await restApi.fetchBoard(payload);
+	};
+
+	const reloadBoard = async () => {
+		await restApi.reloadBoard();
 	};
 
 	return {
 		board,
 		isLoading,
-		dispatch,
 		setBoard,
 		setLoading,
+		createCardRequest,
+		createCardSuccess,
+		createColumnRequest,
+		createColumnSuccess,
+		deleteCardRequest,
+		deleteCardSuccess,
+		deleteColumnRequest,
+		deleteColumnSuccess,
+		disconnectSocketRequest,
+		moveCardRequest,
+		moveCardSuccess,
+		moveColumnRequest,
+		moveColumnSuccess,
+		updateColumnTitleRequest,
+		updateColumnTitleSuccess,
+		updateBoardTitleRequest,
+		updateBoardTitleSuccess,
+		updateBoardVisibilityRequest,
+		updateBoardVisibilitySuccess,
+		fetchBoard,
+		reloadBoard,
 	};
 });

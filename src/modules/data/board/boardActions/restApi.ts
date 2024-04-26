@@ -10,6 +10,17 @@ import {
 	ErrorType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
+import {
+	createCardRequestPayload,
+	deleteCardRequestPayload,
+	deleteColumnRequestPayload,
+	fetchBoardPayload,
+	moveCardRequestPayload,
+	moveColumnRequestPayload,
+	updateBoardTitleRequestPayload,
+	updateBoardVisibilityRequestPayload,
+	updateColumnTitleRequestPayload,
+} from "./boardActionPayload";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -52,20 +63,16 @@ export const useBoardRestApi = () => {
 		return boardStore.board.columns[columnIndex].id;
 	};
 
-	const createCardRequest = async (
-		action: ReturnType<typeof BoardActions.createCardRequest>
-	) => {
+	const createCardRequest = async (payload: createCardRequestPayload) => {
 		if (boardStore.board === undefined) return;
 
 		try {
-			const newCard = await createCardCall(action.payload.columnId);
+			const newCard = await createCardCall(payload.columnId);
 
-			boardStore.dispatch(
-				BoardActions.createCardSuccess({
-					newCard,
-					columnId: action.payload.columnId,
-				})
-			);
+			boardStore.createCardSuccess({
+				newCard,
+				columnId: payload.columnId,
+			});
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardCard"),
@@ -73,12 +80,10 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const fetchBoard = async (
-		action: ReturnType<typeof BoardActions.fetchBoard>
-	): Promise<void> => {
+	const fetchBoard = async (payload: fetchBoardPayload): Promise<void> => {
 		boardStore.setLoading(true);
 		try {
-			const board = await fetchBoardCall(action.payload.id);
+			const board = await fetchBoardCall(payload.id);
 			boardStore.setBoard(board);
 		} catch (error) {
 			handleError(error, {
@@ -96,7 +101,7 @@ export const useBoardRestApi = () => {
 			useBoardFocusHandler().setFocus(newColumn.id);
 			setEditModeId(newColumn.id);
 
-			boardStore.dispatch(BoardActions.createColumnSuccess({ newColumn }));
+			boardStore.createColumnSuccess({ newColumn });
 			return newColumn;
 		} catch (error) {
 			handleError(error, {
@@ -105,16 +110,14 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const deleteCardRequest = async (
-		action: ReturnType<typeof BoardActions.deleteCardRequest>
-	) => {
+	const deleteCardRequest = async (payload: deleteCardRequestPayload) => {
 		if (boardStore.board === undefined) return;
-		const { cardId } = action.payload;
+		const { cardId } = payload;
 
 		try {
 			await deleteCardCall(cardId);
 
-			boardStore.dispatch(BoardActions.deleteCardSuccess({ cardId }));
+			boardStore.deleteCardSuccess({ cardId });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
@@ -122,15 +125,13 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const deleteColumnRequest = async (
-		action: ReturnType<typeof BoardActions.deleteColumnRequest>
-	) => {
+	const deleteColumnRequest = async (payload: deleteColumnRequestPayload) => {
 		if (boardStore.board === undefined) return;
-		const { columnId } = action.payload;
+		const { columnId } = payload;
 
 		try {
 			await deleteColumnCall(columnId);
-			boardStore.dispatch(BoardActions.deleteColumnSuccess({ columnId }));
+			boardStore.deleteColumnSuccess({ columnId });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardColumn"),
@@ -175,7 +176,7 @@ export const useBoardRestApi = () => {
 	};
 
 	const moveCardRequest = async (
-		action: ReturnType<typeof BoardActions.moveCardRequest>
+		payload: moveCardRequestPayload
 	): Promise<void> => {
 		if (boardStore.board === undefined) return;
 
@@ -188,7 +189,7 @@ export const useBoardRestApi = () => {
 				fromColumnId,
 				columnDelta,
 				forceNextTick,
-			} = action.payload;
+			} = payload;
 
 			const { fromColumnIndex, toColumnIndex } = getColumnIndices(
 				fromColumnId,
@@ -212,7 +213,7 @@ export const useBoardRestApi = () => {
 
 			if (
 				!isMoveValid(
-					action.payload,
+					payload,
 					boardStore.board.columns,
 					targetColumnIndex,
 					fromColumnIndex
@@ -223,17 +224,15 @@ export const useBoardRestApi = () => {
 
 			await moveCardCall(cardId, targetColumnId, newIndex);
 
-			boardStore.dispatch(
-				BoardActions.moveCardSuccess({
-					cardId,
-					newIndex,
-					oldIndex,
-					toColumnId: targetColumnId,
-					fromColumnId,
-					columnDelta,
-					forceNextTick,
-				})
-			);
+			boardStore.moveCardSuccess({
+				cardId,
+				newIndex,
+				oldIndex,
+				toColumnId: targetColumnId,
+				fromColumnId,
+				columnDelta,
+				forceNextTick,
+			});
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
@@ -241,17 +240,15 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const moveColumnRequest = async (
-		action: ReturnType<typeof BoardActions.moveColumnRequest>
-	) => {
+	const moveColumnRequest = async (payload: moveColumnRequestPayload) => {
 		if (boardStore.board === undefined) return;
-		const { columnMove } = action.payload;
+		const { columnMove } = payload;
 
 		try {
 			const { addedIndex, columnId } = columnMove;
 			await moveColumnCall(columnId, boardStore.board.id, addedIndex);
 
-			boardStore.dispatch(BoardActions.moveColumnSuccess(action.payload));
+			boardStore.moveColumnSuccess(payload);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
@@ -260,17 +257,15 @@ export const useBoardRestApi = () => {
 	};
 
 	const updateColumnTitleRequest = async (
-		action: ReturnType<typeof BoardActions.updateColumnTitleRequest>
+		payload: updateColumnTitleRequestPayload
 	) => {
 		if (boardStore.board === undefined) return;
-		const { columnId, newTitle } = action.payload;
+		const { columnId, newTitle } = payload;
 
 		try {
 			await updateColumnTitleCall(columnId, newTitle);
 
-			boardStore.dispatch(
-				BoardActions.updateColumnTitleSuccess(action.payload)
-			);
+			boardStore.updateColumnTitleSuccess(payload);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
@@ -279,15 +274,15 @@ export const useBoardRestApi = () => {
 	};
 
 	const updateBoardTitleRequest = async (
-		action: ReturnType<typeof BoardActions.updateBoardTitleRequest>
+		payload: updateBoardTitleRequestPayload
 	) => {
 		if (boardStore.board === undefined) return;
-		const { newTitle } = action.payload;
+		const { newTitle } = payload;
 
 		try {
 			await updateBoardTitleCall(boardStore.board.id, newTitle);
 
-			boardStore.dispatch(BoardActions.updateBoardTitleSuccess({ newTitle }));
+			boardStore.updateBoardTitleSuccess({ newTitle });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "board"),
@@ -296,16 +291,14 @@ export const useBoardRestApi = () => {
 	};
 
 	const updateBoardVisibilityRequest = async (
-		action: ReturnType<typeof BoardActions.updateBoardVisibilityRequest>
+		payload: updateBoardVisibilityRequestPayload
 	) => {
 		if (boardStore.board === undefined) return;
-		const { newVisibility } = action.payload;
+		const { newVisibility } = payload;
 
 		try {
 			await updateBoardVisibilityCall(boardStore.board.id, newVisibility);
-			boardStore.dispatch(
-				BoardActions.updateBoardVisibilitySuccess({ newVisibility })
-			);
+			boardStore.updateBoardVisibilitySuccess({ newVisibility });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "board"),
@@ -329,10 +322,7 @@ export const useBoardRestApi = () => {
 	const reloadBoard = async () => {
 		if (boardStore.board === undefined) return;
 
-		await fetchBoard({
-			type: "fetch-board-request",
-			payload: { id: boardStore.board.id },
-		});
+		await fetchBoard({ id: boardStore.board.id });
 	};
 
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
@@ -343,11 +333,8 @@ export const useBoardRestApi = () => {
 	};
 
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
-	const disconnectSocketRequest = (
-		action: ReturnType<typeof BoardActions.disconnectSocket>
-	) => {
-		return action;
-	};
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	const disconnectSocketRequest = (): void => {};
 
 	return {
 		fetchBoard,
