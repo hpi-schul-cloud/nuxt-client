@@ -4,6 +4,7 @@
 			<VAppBarNavIcon
 				:icon="sidebarToggleIcon"
 				@click="() => $emit('sidebar-toggled')"
+				size="small"
 			/>
 		</template>
 		<VSpacer />
@@ -97,6 +98,102 @@ const statusAlerts: ComputedRef<StatusAlert[]> = computed(() => {
 			title: "Currently, there are no courses here.",
 			text: "Currently, there are no courses here.",
 			status: "info",
+			origin: {
+				page: "string",
+				message_id: 2,
+			},
+			timestamp: "string",
+			url: "string",
+			createdAt: "string",
+		},
+		{
+			title: "Currently, there are no courses here.",
+			text: "Currently, there are no courses here.",
+			status: "danger",
+			origin: {
+				page: "string",
+				message_id: 2,
+			},
+			timestamp: "string",
+			url: "string",
+			createdAt: "string",
+		},
+		{
+			title: "Currently, there are no courses here.",
+			text: "Currently, there are no courses here.",
+			status: "danger",
+			origin: {
+				page: "string",
+				message_id: 2,
+			},
+			timestamp: "string",
+			url: "string",
+			createdAt: "string",
+		},
+		{
+			title: "Currently, there are no courses here.",
+			text: "Currently, there are no courses here.",
+			status: "danger",
+			origin: {
+				page: "string",
+				message_id: 2,
+			},
+			timestamp: "string",
+			url: "string",
+			createdAt: "string",
+		},
+		{
+			title: "Currently, there are no courses here.",
+			text: "Currently, there are no courses here.",
+			status: "danger",
+			origin: {
+				page: "string",
+				message_id: 2,
+			},
+			timestamp: "string",
+			url: "string",
+			createdAt: "string",
+		},
+		{
+			title: "Currently, there are no courses here.",
+			text: "Currently, there are no courses here.",
+			status: "danger",
+			origin: {
+				page: "string",
+				message_id: 2,
+			},
+			timestamp: "string",
+			url: "string",
+			createdAt: "string",
+		},
+		{
+			title: "Currently, there are no courses here.",
+			text: "Currently, there are no courses here.",
+			status: "danger",
+			origin: {
+				page: "string",
+				message_id: 2,
+			},
+			timestamp: "string",
+			url: "string",
+			createdAt: "string",
+		},
+		{
+			title: "Currently, there are no courses here.",
+			text: "Currently, there are no courses here.",
+			status: "danger",
+			origin: {
+				page: "string",
+				message_id: 2,
+			},
+			timestamp: "string",
+			url: "string",
+			createdAt: "string",
+		},
+		{
+			title: "Currently, there are no courses here.",
+			text: "Currently, there are no courses here.",
+			status: "danger",
 			origin: {
 				page: "string",
 				message_id: 2,

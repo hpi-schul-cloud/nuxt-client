@@ -1,21 +1,36 @@
 <template>
-	<div class="pa-4">
-		<QRCode ref="qrCode" :url="url" />
+	<div class="pa-4 d-flex flex-column align-items-center max-width">
 		<div class="pb-2">
 			{{ $t("global.topbar.MenuQrCode.qrHintText") }}
 		</div>
-		<VBtn variant="outlined" :prepend-icon="mdiPrinter" @click="openPrintMenu">
-			{{ $t("global.topbar.MenuQrCode.print") }}
-		</VBtn>
+		<QRCode ref="qrCode" :url="url" />
+
+		<div>
+			<VBtn
+				variant="outlined"
+				:prepend-icon="mdiPrinter"
+				@click="openPrintMenu"
+			>
+				{{ $t("global.topbar.MenuQrCode.print") }}
+			</VBtn>
+			<VBtn
+				variant="outlined"
+				:prepend-icon="mdiContentCopy"
+				class="ml-2"
+				@click="onCopy"
+			>
+				{{ $t("ui-layout.topbar.pageShare.copyLink") }}
+			</VBtn>
+		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { ComponentPublicInstance, ref } from "vue";
-import { mdiPrinter } from "@/components/icons/material";
+import { mdiPrinter, mdiContentCopy } from "@/components/icons/material";
 import { QRCode } from "@ui-qr-code";
 
-defineProps({
+const props = defineProps({
 	url: {
 		type: String,
 		default: window.location.href,
@@ -32,4 +47,12 @@ const openPrintMenu = () => {
 		win?.close();
 	}
 };
+
+const onCopy = () => navigator.clipboard.writeText(props.url);
 </script>
+
+<style scoped>
+.max-width {
+	max-width: 300px;
+}
+</style>

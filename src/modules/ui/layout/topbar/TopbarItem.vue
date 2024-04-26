@@ -7,6 +7,7 @@
 				:icon="icon"
 				:color="color"
 				:data-testid="dataTestId"
+				size="small"
 			/>
 		</template>
 		<VCard>

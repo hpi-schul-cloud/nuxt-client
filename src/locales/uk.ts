@@ -1598,6 +1598,7 @@ export default {
 	"tldraw.error.ws.4404": "Дошки з такою назвою не знайдено",
 	"ui-confirmation-dialog.ask-delete":
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
+	"ui-layout.topbar.pageShare.copyLink": "Скопіювати посилання",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",
