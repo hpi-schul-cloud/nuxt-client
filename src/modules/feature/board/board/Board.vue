@@ -227,7 +227,6 @@ const onUpdateBoardVisibility = async (newVisibility: boolean) => {
 	if (!hasEditPermission) return;
 
 	boardStore.dispatch(boardActions.updateBoardVisibility({ newVisibility }));
-	await setAlert();
 };
 
 const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
@@ -258,6 +257,8 @@ const setAlert = useDebounceFn(() => {
 		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
 	}
 }, 100);
+
+watch(() => board.value?.isVisible, setAlert);
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")
