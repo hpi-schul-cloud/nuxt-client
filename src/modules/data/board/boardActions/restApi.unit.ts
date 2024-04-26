@@ -1,20 +1,24 @@
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { boardActions, useBoardSocketApi, useBoardStore } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { setActivePinia } from "pinia";
-import { useBoardRestApi } from "./restApi";
-import * as BoardActions from "./actions";
-import { useBoardApi } from "../BoardApi.composable";
-import { useSharedEditMode } from "../EditMode.composable";
+import { createTestingPinia } from "@pinia/testing";
 import { ref } from "vue";
+import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
+	envsFactory,
 } from "@@/tests/test-utils";
-import { createTestingPinia } from "@pinia/testing";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useBoardSocketApi, useBoardStore } from "@data-board";
+import { useBoardRestApi } from "./restApi";
+import { useBoardApi } from "../BoardApi.composable";
+import { useSharedEditMode } from "../EditMode.composable";
+import { ColumnMove } from "@/types/board/DragAndDrop";
+import { moveCardRequestPayload } from "./boardActionPayload";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -36,6 +40,11 @@ describe("restApi", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+		setupStores({ envConfigModule: EnvConfigModule });
+		const envs = envsFactory.build({
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
+		});
+		envConfigModule.setEnvs(envs);
 
 		mockedSocketApiHandler = createMock<ReturnType<typeof useBoardSocketApi>>();
 		mockedUseSocketApi.mockReturnValue(mockedSocketApiHandler);
@@ -68,19 +77,17 @@ describe("restApi", () => {
 	};
 
 	describe("createCardRequest", () => {
-		it("should not dispatch when board is undefined", async () => {
+		it("should not call createCardSuccess action when board is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { createCardRequest } = useBoardRestApi();
 			boardStore.board = undefined;
 
-			await createCardRequest(
-				BoardActions.createCardRequest({ columnId: "columnId" })
-			);
+			await createCardRequest({ columnId: "columnId" });
 
-			expect(boardStore.dispatch).not.toHaveBeenCalled();
+			expect(boardStore.createCardSuccess).not.toHaveBeenCalled();
 		});
 
-		it("should dispatch createCardSuccess action if the API call is successful", async () => {
+		it("should call createCardSuccess action if the API call is successful", async () => {
 			const { boardStore } = setup();
 			const { createCardRequest } = useBoardRestApi();
 			const columnId = boardStore.board!.columns[0].id;
@@ -88,16 +95,12 @@ describe("restApi", () => {
 			const newCard = cardResponseFactory.build();
 			mockedBoardApiCalls.createCardCall.mockResolvedValue(newCard);
 
-			await createCardRequest(
-				BoardActions.createCardRequest({ columnId: columnId })
-			);
+			await createCardRequest({ columnId: columnId });
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.createCardSuccess({
-					newCard: newCard,
-					columnId: columnId,
-				})
-			);
+			expect(boardStore.createCardSuccess).toHaveBeenCalledWith({
+				newCard: newCard,
+				columnId: columnId,
+			});
 		});
 
 		it("should call handleError if the API call fails", async () => {
@@ -107,9 +110,7 @@ describe("restApi", () => {
 
 			mockedBoardApiCalls.createCardCall.mockRejectedValue({});
 
-			await createCardRequest(
-				BoardActions.createCardRequest({ columnId: columnId })
-			);
+			await createCardRequest({ columnId: columnId });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
@@ -123,7 +124,7 @@ describe("restApi", () => {
 			const mockfetchBoard = boardResponseFactory.build();
 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(mockfetchBoard);
 
-			await fetchBoard(BoardActions.fetchBoard({ id: boardStore.board!.id }));
+			await fetchBoard({ id: boardStore.board!.id });
 
 			expect(boardStore.setBoard).toHaveBeenCalledWith(mockfetchBoard);
 		});
@@ -136,9 +137,7 @@ describe("restApi", () => {
 
 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(board);
 
-			const fetchPromise = fetchBoard(
-				BoardActions.fetchBoard({ id: board.id })
-			);
+			const fetchPromise = fetchBoard({ id: board.id });
 
 			expect(boardStore.setLoading).toHaveBeenLastCalledWith(true);
 			await fetchPromise;
@@ -151,23 +150,23 @@ describe("restApi", () => {
 
 			mockedBoardApiCalls.fetchBoardCall.mockRejectedValue({});
 
-			await fetchBoard(BoardActions.fetchBoard({ id: boardStore.board!.id }));
+			await fetchBoard({ id: boardStore.board!.id });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
 	describe("createColumnRequest", () => {
-		it("should not dispatch when board is undefined", async () => {
+		it("should not call createColumnSuccess action when board is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { createColumnRequest } = useBoardRestApi();
 
 			await createColumnRequest();
 
-			expect(boardStore.dispatch).not.toHaveBeenCalled();
+			expect(boardStore.createColumnSuccess).not.toHaveBeenCalled();
 		});
 
-		it("should dispatch createColumnSuccess action if the API call is successful", async () => {
+		it("should call createColumnSuccess action if the API call is successful", async () => {
 			const { boardStore } = setup();
 			const { createColumnRequest } = useBoardRestApi();
 			const { setEditModeId } = useSharedEditMode();
@@ -178,13 +177,13 @@ describe("restApi", () => {
 			const result = await createColumnRequest();
 
 			expect(setEditModeId).toHaveBeenCalledWith(newColumn.id);
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.createColumnSuccess({ newColumn })
-			);
+			expect(boardStore.createColumnSuccess).toHaveBeenCalledWith({
+				newColumn,
+			});
 			expect(result).toEqual(newColumn);
 		});
 
-		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+		it("should call handleError if the API call fails", async () => {
 			setup();
 			const { createColumnRequest } = useBoardRestApi();
 
@@ -197,74 +196,66 @@ describe("restApi", () => {
 	});
 
 	describe("deleteCardRequest", () => {
-		it("should not dispatch when board is undefined", async () => {
+		it("should not call deleteCardSuccess action when board is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { deleteCardRequest } = useBoardRestApi();
 
-			await deleteCardRequest(
-				boardActions.deleteCardRequest({ cardId: "cardId" })
-			);
+			await deleteCardRequest({ cardId: "cardId" });
 
-			expect(boardStore.dispatch).not.toHaveBeenCalled();
+			expect(boardStore.deleteCardSuccess).not.toHaveBeenCalled();
 		});
 
-		it("should dispatch deleteCardSuccess action if the API call is successful", async () => {
+		it("should call deleteCardSuccess action if the API call is successful", async () => {
 			const { boardStore } = setup();
 			const { deleteCardRequest } = useBoardRestApi();
 			const cardId = boardStore.board!.columns[0].cards[0].cardId;
 
-			await deleteCardRequest(boardActions.deleteCardRequest({ cardId }));
+			await deleteCardRequest({ cardId });
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.deleteCardSuccess({ cardId })
-			);
+			expect(boardStore.deleteCardSuccess).toHaveBeenCalledWith({ cardId });
 		});
 
-		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+		it("should call handleError if the API call fails", async () => {
 			const { boardStore } = setup();
 			const { deleteCardRequest } = useBoardRestApi();
 			const cardId = boardStore.board!.columns[0].cards[0].cardId;
 
 			mockedBoardApiCalls.deleteCardCall.mockRejectedValue({});
 
-			await deleteCardRequest(boardActions.deleteCardRequest({ cardId }));
+			await deleteCardRequest({ cardId });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
 	describe("deleteColumnRequest", () => {
-		it("should return if board is undefined", async () => {
+		it("should not call deleteColumnSuccess return if board is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { deleteColumnRequest } = useBoardRestApi();
 
-			await deleteColumnRequest(
-				boardActions.deleteColumnRequest({ columnId: "columnId" })
-			);
+			await deleteColumnRequest({ columnId: "columnId" });
 
-			expect(boardStore.dispatch).not.toHaveBeenCalled();
+			expect(boardStore.deleteColumnSuccess).not.toHaveBeenCalled();
 		});
 
-		it("should dispatch deleteColumnSuccess action if the API call is successful", async () => {
+		it("should call deleteColumnSuccess action if the API call is successful", async () => {
 			const { boardStore } = setup();
 			const { deleteColumnRequest } = useBoardRestApi();
 			const columnId = boardStore.board!.columns[0].id;
 
-			await deleteColumnRequest(boardActions.deleteColumnRequest({ columnId }));
+			await deleteColumnRequest({ columnId });
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.deleteColumnSuccess({ columnId })
-			);
+			expect(boardStore.deleteColumnSuccess).toHaveBeenCalledWith({ columnId });
 		});
 
-		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+		it("should call handleError if the API call fails", async () => {
 			const { boardStore } = setup();
 			const { deleteColumnRequest } = useBoardRestApi();
 			const columnId = boardStore.board!.columns[0].id;
 
 			mockedBoardApiCalls.deleteColumnCall.mockRejectedValue({});
 
-			await deleteColumnRequest(boardActions.deleteColumnRequest({ columnId }));
+			await deleteColumnRequest({ columnId });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
@@ -286,7 +277,7 @@ describe("restApi", () => {
 			toColumnId?: string;
 			columnDelta?: number;
 		}) => {
-			const cardPayload: CardMove = {
+			const cardPayload: moveCardRequestPayload = {
 				cardId,
 				oldIndex: oldIndex ?? 0,
 				newIndex: newIndex ?? 0,
@@ -296,7 +287,7 @@ describe("restApi", () => {
 			};
 			return cardPayload;
 		};
-		it("should not dispatch when board value is undefined", async () => {
+		it("should not call moveCardSuccess when board value is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { moveCardRequest } = useBoardRestApi();
 
@@ -305,9 +296,9 @@ describe("restApi", () => {
 				fromColumnId: "columnId",
 			});
 
-			await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+			await moveCardRequest(cardPayload);
 
-			expect(boardStore.dispatch).not.toHaveBeenCalled();
+			expect(boardStore.moveCardSuccess).not.toHaveBeenCalled();
 		});
 
 		describe("when move is invalid", () => {
@@ -324,7 +315,7 @@ describe("restApi", () => {
 					toColumnId: firstColumn.id,
 				});
 
-				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+				await moveCardRequest(cardPayload);
 
 				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
 			});
@@ -343,7 +334,7 @@ describe("restApi", () => {
 					toColumnId: firstColumn.id,
 				});
 
-				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+				await moveCardRequest(cardPayload);
 
 				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
 			});
@@ -363,14 +354,14 @@ describe("restApi", () => {
 					toColumnId: column1.id,
 				});
 
-				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+				await moveCardRequest(cardPayload);
 
 				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
 			});
 		});
 
 		describe("when move is valid", () => {
-			it("should dispatch moveCardSuccess if card is moved inside same column and Api call is successful", async () => {
+			it("should call moveCardSuccess action if card is moved inside same column and Api call is successful", async () => {
 				const { boardStore } = setup();
 				const { moveCardRequest } = useBoardRestApi();
 
@@ -385,14 +376,12 @@ describe("restApi", () => {
 					toColumnId: firstColumn.id,
 				});
 
-				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+				await moveCardRequest(cardPayload);
 
-				expect(boardStore.dispatch).toHaveBeenCalledWith(
-					boardActions.moveCardSuccess(cardPayload)
-				);
+				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith(cardPayload);
 			});
 
-			it("should dispatch moveCardSuccess if card is moved beyond last column and the API call is successful", async () => {
+			it("should call moveCardSuccess action if card is moved beyond last column and the API call is successful", async () => {
 				const { boardStore } = setup();
 				const { moveCardRequest } = useBoardRestApi();
 
@@ -409,7 +398,7 @@ describe("restApi", () => {
 
 				mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
 
-				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+				await moveCardRequest(cardPayload);
 
 				expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalledWith(
 					movingCard.cardId,
@@ -417,20 +406,18 @@ describe("restApi", () => {
 					0
 				);
 
-				expect(boardStore.dispatch).toHaveBeenCalledWith(
-					boardActions.moveCardSuccess({
-						cardId: movingCard.cardId,
-						oldIndex: 0,
-						newIndex: 0,
-						fromColumnId: firstColumn.id,
-						toColumnId: newColumn.id,
-						columnDelta: 2,
-						forceNextTick: undefined,
-					})
-				);
+				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith({
+					cardId: movingCard.cardId,
+					oldIndex: 0,
+					newIndex: 0,
+					fromColumnId: firstColumn.id,
+					toColumnId: newColumn.id,
+					columnDelta: 2,
+					forceNextTick: undefined,
+				});
 			});
 
-			it("should dispatch moveCardSuccess if card is moved to another columm and the API call is successful", async () => {
+			it("should call moveCardSuccess action if card is moved to another columm and the API call is successful", async () => {
 				const { boardStore } = setup();
 				const { moveCardRequest } = useBoardRestApi();
 
@@ -446,11 +433,9 @@ describe("restApi", () => {
 					toColumnId: secondColumn.id,
 				});
 
-				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+				await moveCardRequest(cardPayload);
 
-				expect(boardStore.dispatch).toHaveBeenCalledWith(
-					boardActions.moveCardSuccess(cardPayload)
-				);
+				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith(cardPayload);
 			});
 			it("should call handleError if the API call fails", async () => {
 				const { boardStore } = setup();
@@ -469,7 +454,7 @@ describe("restApi", () => {
 
 				mockedBoardApiCalls.moveCardCall.mockRejectedValue({});
 
-				await moveCardRequest(boardActions.moveCardRequest(cardPayload));
+				await moveCardRequest(cardPayload);
 
 				expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 			});
@@ -477,19 +462,17 @@ describe("restApi", () => {
 	});
 
 	describe("moveColumnRequest", () => {
-		it("should not dispatch when board value is undefined", async () => {
+		it("should not call moveColumnSuccess action when board value is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { moveColumnRequest } = useBoardRestApi();
 
-			const columnMove = { addedIndex: 1, columnId: "columnId" };
-			await moveColumnRequest(
-				boardActions.moveColumnRequest({ columnMove, byKeyboard: false })
-			);
+			const columnMove: ColumnMove = { addedIndex: 1, columnId: "columnId" };
+			await moveColumnRequest({ columnMove, byKeyboard: false });
 
-			expect(boardStore.dispatch).not.toHaveBeenCalled();
+			expect(boardStore.moveColumnSuccess).not.toHaveBeenCalled();
 		});
 
-		it("should dispatch moveColumnSuccess if the API call is successful", async () => {
+		it("should call moveColumnSuccess action if the API call is successful", async () => {
 			const { boardStore } = setup();
 			const { moveColumnRequest } = useBoardRestApi();
 
@@ -501,16 +484,15 @@ describe("restApi", () => {
 				columnId: firstColumn.id,
 			};
 
-			await moveColumnRequest(
-				boardActions.moveColumnRequest({ columnMove, byKeyboard: false })
-			);
+			await moveColumnRequest({ columnMove, byKeyboard: false });
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.moveColumnSuccess({ columnMove, byKeyboard: false })
-			);
+			expect(boardStore.moveColumnSuccess).toHaveBeenCalledWith({
+				columnMove,
+				byKeyboard: false,
+			});
 		});
 
-		it("should dispatch notifyWithTemplateAndReload action if the API call fails", async () => {
+		it("should call handleError if the API call fails", async () => {
 			const { boardStore } = setup();
 			const { moveColumnRequest } = useBoardRestApi();
 
@@ -524,41 +506,35 @@ describe("restApi", () => {
 
 			mockedBoardApiCalls.moveColumnCall.mockRejectedValue({});
 
-			await moveColumnRequest(
-				boardActions.moveColumnRequest({ columnMove, byKeyboard: false })
-			);
+			await moveColumnRequest({ columnMove, byKeyboard: false });
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
 	describe("updateColumnTitleRequest", () => {
-		it("should not dispatch when board value is undefined", async () => {
+		it("should not call updateColumnTitleSuccess action when board value is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { updateColumnTitleRequest } = useBoardRestApi();
 
-			await updateColumnTitleRequest(
-				boardActions.updateColumnTitleRequest({
-					columnId: "columnId",
-					newTitle: "newTitle",
-				})
-			);
+			await updateColumnTitleRequest({
+				columnId: "columnId",
+				newTitle: "newTitle",
+			});
 
-			expect(boardStore.dispatch).not.toHaveBeenCalled();
+			expect(boardStore.updateColumnTitleSuccess).not.toHaveBeenCalled();
 		});
 
-		it("should dispatch updateColumnTitleSuccess if the API call is successful", async () => {
+		it("should call updateColumnTitleSuccess action if the API call is successful", async () => {
 			const { boardStore } = setup();
 			const { updateColumnTitleRequest } = useBoardRestApi();
 
 			const firstColumn = boardStore.board!.columns[0];
 			const payload = { columnId: firstColumn.id, newTitle: "newTitle" };
 
-			await updateColumnTitleRequest(
-				boardActions.updateColumnTitleRequest(payload)
-			);
+			await updateColumnTitleRequest(payload);
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.updateColumnTitleSuccess(payload)
-			);
+			expect(boardStore.updateColumnTitleSuccess).toHaveBeenCalledWith(payload);
 		});
 
 		it("should call handleError if the API call fails", async () => {
@@ -570,39 +546,33 @@ describe("restApi", () => {
 
 			mockedBoardApiCalls.updateColumnTitleCall.mockRejectedValue({});
 
-			await updateColumnTitleRequest(
-				boardActions.updateColumnTitleRequest(payload)
-			);
+			await updateColumnTitleRequest(payload);
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
 	describe("updateBoardTitleRequest", () => {
-		it("should not dispatch when board value is undefined", async () => {
+		it("should not call success updateBoardTitleSuccess action when board value is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { updateBoardTitleRequest } = useBoardRestApi();
 
-			await updateBoardTitleRequest(
-				boardActions.updateBoardTitleRequest({ newTitle: "newTitle" })
-			);
+			await updateBoardTitleRequest({ newTitle: "newTitle" });
 
-			expect(boardStore.dispatch).not.toHaveBeenCalled();
+			expect(boardStore.updateBoardTitleSuccess).not.toHaveBeenCalled();
 		});
 
-		it("should dispatch updateBoardTitleSuccess if the API call is successful", async () => {
+		it("should call updateBoardTitleSuccess action if the API call is successful", async () => {
 			const { boardStore } = setup();
 			const { updateBoardTitleRequest } = useBoardRestApi();
 
 			const newTitle = "newTitle";
 
-			await updateBoardTitleRequest(
-				boardActions.updateBoardTitleRequest({ newTitle })
-			);
+			await updateBoardTitleRequest({ newTitle });
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.updateBoardTitleSuccess({ newTitle })
-			);
+			expect(boardStore.updateBoardTitleSuccess).toHaveBeenCalledWith({
+				newTitle,
+			});
 		});
 
 		it("should call handleError if the API call fails", async () => {
@@ -613,39 +583,33 @@ describe("restApi", () => {
 
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
 
-			await updateBoardTitleRequest(
-				boardActions.updateBoardTitleRequest({ newTitle })
-			);
+			await updateBoardTitleRequest({ newTitle });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
 	describe("updateBoardVisibilityRequest", () => {
-		it("should not dispatch when board value is undefined", async () => {
+		it("should not call updateBoardVisibilitySuccess action when board value is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { updateBoardVisibilityRequest } = useBoardRestApi();
 
-			await updateBoardVisibilityRequest(
-				boardActions.updateBoardVisibilityRequest({ newVisibility: true })
-			);
+			await updateBoardVisibilityRequest({ newVisibility: true });
 
-			expect(boardStore.dispatch).not.toHaveBeenCalled();
+			expect(boardStore.updateBoardVisibilitySuccess).not.toHaveBeenCalled();
 		});
 
-		it("should dispatch updateBoardVisibilitySuccess if the API call is successful", async () => {
+		it("should call updateBoardVisibilitySuccess action if the API call is successful", async () => {
 			const { boardStore } = setup();
 			const { updateBoardVisibilityRequest } = useBoardRestApi();
 
 			const newVisibility = true;
 
-			await updateBoardVisibilityRequest(
-				boardActions.updateBoardVisibilityRequest({ newVisibility })
-			);
+			await updateBoardVisibilityRequest({ newVisibility });
 
-			expect(boardStore.dispatch).toHaveBeenCalledWith(
-				BoardActions.updateBoardVisibilitySuccess({ newVisibility })
-			);
+			expect(boardStore.updateBoardVisibilitySuccess).toHaveBeenCalledWith({
+				newVisibility,
+			});
 		});
 
 		it("should call handleError if the API call fails", async () => {
@@ -654,9 +618,8 @@ describe("restApi", () => {
 
 			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue({});
 
-			await updateBoardVisibilityRequest(
-				boardActions.updateBoardVisibilityRequest({ newVisibility: true })
-			);
+			await updateBoardVisibilityRequest({ newVisibility: true });
+
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
@@ -677,9 +640,7 @@ describe("restApi", () => {
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
 			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
 
-			await updateBoardTitleRequest(
-				boardActions.updateBoardTitleRequest({ newTitle: "newTitlte" })
-			);
+			await updateBoardTitleRequest({ newTitle: "newTitlte" });
 
 			executeErrorHandler();
 			expect(mockedErrorHandler.notifyWithTemplate).not.toHaveBeenCalled();
@@ -692,9 +653,7 @@ describe("restApi", () => {
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
 			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
 
-			await updateBoardTitleRequest(
-				boardActions.updateBoardTitleRequest({ newTitle: "newTitlte" })
-			);
+			await updateBoardTitleRequest({ newTitle: "newTitlte" });
 
 			executeErrorHandler();
 			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith(
