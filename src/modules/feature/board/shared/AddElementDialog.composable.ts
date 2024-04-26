@@ -32,12 +32,10 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 
 		const elementData = await addElementFunction(elementType);
 		lastCreatedElementId.value = elementData?.id;
-		showCollaborativeTextEditorNotification(elementType);
+		showNotificationByElementType(elementType);
 	};
 
-	const showCollaborativeTextEditorNotification = (
-		elementType: ContentElementType
-	) => {
+	const showNotificationByElementType = (elementType: ContentElementType) => {
 		if (elementType === ContentElementType.CollaborativeTextEditor) {
 			showCustomNotifier(
 				t(
@@ -124,7 +122,7 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 		isDialogOpen,
 		elementTypeOptions,
 		onElementClick,
-		showCollaborativeTextEditorNotification,
+		showNotificationByElementType,
 		showCustomNotifier,
 	};
 };
