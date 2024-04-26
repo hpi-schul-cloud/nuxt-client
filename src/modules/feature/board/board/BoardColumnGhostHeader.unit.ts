@@ -15,6 +15,7 @@ describe("BoardColumnGhostHeader", () => {
 			},
 			propsData: {
 				isColumnActive: true,
+				isListBoard: false,
 				label: "Add column",
 			},
 		});
