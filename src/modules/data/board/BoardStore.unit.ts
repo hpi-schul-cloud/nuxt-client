@@ -1,13 +1,11 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
-// import { axiosErrorFactory } from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 	envsFactory,
 } from "@@/tests/test-utils/factory";
-// import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { ref } from "vue";
@@ -23,6 +21,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { envConfigModule } from "@/store";
 import { MoveCardRequestPayload } from "@/modules/data/board/boardActions/boardActionPayload";
+
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
@@ -302,12 +301,57 @@ describe("BoardStore", () => {
 	});
 
 	describe("updateBoardVisibilitySuccess", () => {
+		it("should not update board title when board value is undefined", async () => {
+			const { boardStore } = setup(false);
+
+			boardStore.updateBoardVisibilitySuccess({ newVisibility: true });
+			expect(boardStore.board).toBe(undefined);
+		});
 		it("should update board visibility", async () => {
 			const { boardStore } = setup();
 
 			boardStore.updateBoardVisibilitySuccess({ newVisibility: true });
 
 			expect(boardStore.board?.isVisible).toStrictEqual(true);
+		});
+	});
+
+	describe("moveColumnRequest", () => {
+		it.todo("should call moveColumnRequest");
+	});
+
+	describe("moveColumnSuccess", () => {
+		it("should not move a column when board value is undefined", async () => {
+			const { boardStore, firstColumn } = setup(false);
+
+			const columnMove: ColumnMove = {
+				addedIndex: 0,
+				removedIndex: 0,
+				columnId: firstColumn.id,
+			};
+
+			boardStore.moveColumnSuccess({
+				columnMove,
+				byKeyboard: false,
+			});
+
+			expect(boardStore.board).toBe(undefined);
+		});
+
+		it("should move a column", async () => {
+			const { boardStore, firstColumn, secondColumn } = setup();
+
+			const columnMove: ColumnMove = {
+				addedIndex: 0,
+				removedIndex: 1,
+				columnId: secondColumn.id,
+			};
+			boardStore.moveColumnSuccess({
+				columnMove,
+				byKeyboard: false,
+			});
+
+			expect(boardStore.board?.columns).toEqual([secondColumn, firstColumn]);
 		});
 	});
 
@@ -462,7 +506,7 @@ describe("BoardStore", () => {
 				);
 			});
 
-			// TODO , fix text
+			// TODO , fix test
 			it.skip("should not move a card when when column id is unknown", async () => {
 				const { boardStore, cards, firstColumn } = setup();
 
@@ -540,66 +584,4 @@ describe("BoardStore", () => {
 			});
 		});
 	});
-
-	describe("moveColumnSuccess", () => {
-		it("should not move a column when board value is undefined", async () => {
-			const { boardStore, firstColumn } = setup();
-
-			const payload: ColumnMove = {
-				addedIndex: 0,
-				removedIndex: 0,
-				columnId: firstColumn.id,
-			};
-
-			boardStore.moveColumnSuccess({
-				columnMove: payload,
-				byKeyboard: false,
-			});
-
-			expect(boardStore.board).toBe(undefined);
-		});
-
-		it("should move a column", async () => {
-			const { boardStore, board, firstColumn } = setup();
-
-			const column2 = columnResponseFactory.build();
-			board.columns.push(column2);
-			const payload: ColumnMove = {
-				addedIndex: 0,
-				removedIndex: 1,
-				columnId: column2.id,
-			};
-			boardStore.moveColumnSuccess({
-				columnMove: payload,
-				byKeyboard: false,
-			});
-
-			expect(mockedBoardApiCalls.moveColumnCall).toHaveBeenCalledWith(
-				payload.columnId,
-				board.id,
-				payload.addedIndex
-			);
-
-			expect(boardStore.board?.columns).toEqual([column2, firstColumn]);
-		});
-	});
-
-	// describe("notifyWithTemplateAndReload", () => {
-	// 	describe("when is called", () => {
-	// 		it("should call notifyWithTemplate", async () => {
-	// 			const { boardStore } = setup(testBoard);
-	// 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(testBoard);
-	// 			mockedErrorHandlerCalls.notifyWithTemplate.mockImplementation(() =>
-	// 				jest.fn()
-	// 			);
-
-	// 			boardStore.notifyWithTemplateAndReload("notLoaded");
-	// 			await new Promise((resolve) => setTimeout(resolve, 5));
-	// 			await nextTick();
-
-	// 			expect(mockedErrorHandlerCalls.notifyWithTemplate).toHaveBeenCalled();
-	// 			expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalled();
-	// 		});
-	// 	});
-	// });
 });
