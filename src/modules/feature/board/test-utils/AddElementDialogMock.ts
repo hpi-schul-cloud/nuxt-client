@@ -46,8 +46,6 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 		onFileElementClick: jest.fn(),
 		onFileSelect: onFileSelectMock,
 		isFilePickerOpen: isFilePickerOpenMock,
-		showCollaborativeTextEditorNotification: jest.fn(),
-		showCustomNotifier: jest.fn(),
 	};
 
 	mockedUseAddElementDialog.mockReturnValue(mocks);
