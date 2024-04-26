@@ -9,26 +9,26 @@ import { CardMove } from "@/types/board/DragAndDrop";
 import { ColumnResponse } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import {
-	createCardRequestPayload,
-	createCardSuccessPayload,
-	createColumnRequestPayload,
-	createColumnSucccessPayload,
-	deleteCardRequestPayload,
-	deleteCardSuccessPayload,
-	deleteColumnRequestPayload,
-	deleteColumnSuccessPayload,
-	disconnectSocketRequestPayload,
-	fetchBoardPayload,
-	moveCardRequestPayload,
-	moveCardSuccessPayload,
-	moveColumnRequestPayload,
-	moveColumnSuccessPayload,
-	updateBoardTitleRequestPayload,
-	updateBoardTitleSuccessPayload,
-	updateBoardVisibilityRequestPayload,
-	updateBoardVisibilitySuccessPayload,
-	updateColumnTitleRequestPayload,
-	updateColumnTitleSuccessPayload,
+	CreateCardRequestPayload,
+	CreateCardSuccessPayload,
+	CreateColumnRequestPayload,
+	CreateColumnSucccessPayload,
+	DeleteCardRequestPayload,
+	DeleteCardSuccessPayload,
+	DeleteColumnRequestPayload,
+	DeleteColumnSuccessPayload,
+	DisconnectSocketRequestPayload,
+	FetchBoardPayload,
+	MoveCardRequestPayload,
+	MoveCardSuccessPayload,
+	MoveColumnRequestPayload,
+	MoveColumnSuccessPayload,
+	UpdateBoardTitleRequestPayload,
+	UpdateBoardTitleSuccessPayload,
+	UpdateBoardVisibilityRequestPayload,
+	UpdateBoardVisibilitySuccessPayload,
+	UpdateColumnTitleRequestPayload,
+	UpdateColumnTitleSuccessPayload,
 } from "./boardActions/boardActionPayload";
 
 export const useBoardStore = defineStore("boardStore", () => {
@@ -70,11 +70,11 @@ export const useBoardStore = defineStore("boardStore", () => {
 		isLoading.value = loading;
 	};
 
-	const createCardRequest = (payload: createCardRequestPayload) => {
+	const createCardRequest = (payload: CreateCardRequestPayload) => {
 		socketOrRest.createCardRequest(payload);
 	};
 
-	const createCardSuccess = (payload: createCardSuccessPayload) => {
+	const createCardSuccess = (payload: CreateCardSuccessPayload) => {
 		if (!board.value) return;
 
 		const { newCard } = payload;
@@ -91,20 +91,20 @@ export const useBoardStore = defineStore("boardStore", () => {
 		setEditModeId(newCard.id);
 	};
 
-	const createColumnRequest = async (payload: createColumnRequestPayload) => {
+	const createColumnRequest = async (payload: CreateColumnRequestPayload) => {
 		socketOrRest.createColumnRequest(payload);
 	};
 
-	const createColumnSuccess = (payload: createColumnSucccessPayload) => {
+	const createColumnSuccess = (payload: CreateColumnSucccessPayload) => {
 		if (!board.value) return;
 		board.value.columns.push(payload.newColumn);
 	};
 
-	const deleteCardRequest = async (payload: deleteCardRequestPayload) => {
+	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
 		await socketOrRest.deleteCardRequest(payload);
 	};
 
-	const deleteCardSuccess = (payload: deleteCardSuccessPayload) => {
+	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
 		if (!board.value) return;
 		const cardId = payload.cardId;
 		const columnIndex = board.value.columns.findIndex(
@@ -118,11 +118,11 @@ export const useBoardStore = defineStore("boardStore", () => {
 		}
 	};
 
-	const deleteColumnRequest = async (payload: deleteColumnRequestPayload) => {
+	const deleteColumnRequest = async (payload: DeleteColumnRequestPayload) => {
 		await socketOrRest.deleteColumnRequest(payload);
 	};
 
-	const deleteColumnSuccess = (payload: deleteColumnSuccessPayload) => {
+	const deleteColumnSuccess = (payload: DeleteColumnSuccessPayload) => {
 		if (!board.value) return;
 		const columnId = payload.columnId;
 		const columnIndex = getColumnIndex(columnId);
@@ -133,25 +133,25 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const updateBoardTitleRequest = async (
-		payload: updateBoardTitleRequestPayload
+		payload: UpdateBoardTitleRequestPayload
 	) => {
 		await socketOrRest.updateBoardTitleRequest(payload);
 	};
 
-	const updateBoardTitleSuccess = (payload: updateBoardTitleSuccessPayload) => {
+	const updateBoardTitleSuccess = (payload: UpdateBoardTitleSuccessPayload) => {
 		if (!board.value) return;
 
 		board.value.title = payload.newTitle;
 	};
 
 	const updateColumnTitleRequest = async (
-		payload: updateColumnTitleRequestPayload
+		payload: UpdateColumnTitleRequestPayload
 	) => {
 		await socketOrRest.updateColumnTitleRequest(payload);
 	};
 
 	const updateColumnTitleSuccess = (
-		payload: updateColumnTitleSuccessPayload
+		payload: UpdateColumnTitleSuccessPayload
 	) => {
 		if (!board.value) return;
 		const { columnId, newTitle } = payload;
@@ -162,18 +162,18 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const updateBoardVisibilitySuccess = (
-		payload: updateBoardVisibilitySuccessPayload
+		payload: UpdateBoardVisibilitySuccessPayload
 	) => {
 		if (!board.value) return;
 
 		board.value.isVisible = payload.newVisibility;
 	};
 
-	const moveColumnRequest = async (payload: moveColumnRequestPayload) => {
+	const moveColumnRequest = async (payload: MoveColumnRequestPayload) => {
 		await socketOrRest.moveColumnRequest(payload);
 	};
 
-	const moveColumnSuccess = async (payload: moveColumnSuccessPayload) => {
+	const moveColumnSuccess = async (payload: MoveColumnSuccessPayload) => {
 		if (!board.value) return;
 		const { columnMove, byKeyboard } = payload;
 		const { addedIndex, removedIndex } = columnMove;
@@ -227,17 +227,17 @@ export const useBoardStore = defineStore("boardStore", () => {
 		return true;
 	};
 
-	const moveCardRequest = async (payload: moveCardRequestPayload) => {
+	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
 		await socketOrRest.moveCardRequest(payload);
 	};
 	const updateBoardVisibilityRequest = async (
-		payload: updateBoardVisibilityRequestPayload
+		payload: UpdateBoardVisibilityRequestPayload
 	) => {
 		await socketOrRest.updateBoardVisibilityRequest(payload);
 	};
 
 	// TODO: refactor or create a new function for moving cards with creating column
-	const moveCardSuccess = async (payload: moveCardSuccessPayload) => {
+	const moveCardSuccess = async (payload: MoveCardSuccessPayload) => {
 		if (!board.value) return;
 
 		const {
@@ -294,12 +294,12 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const disconnectSocketRequest = async (
-		payload: disconnectSocketRequestPayload
+		payload: DisconnectSocketRequestPayload
 	) => {
 		await socketOrRest.disconnectSocketRequest(payload);
 	};
 
-	const fetchBoard = async (payload: fetchBoardPayload) => {
+	const fetchBoard = async (payload: FetchBoardPayload) => {
 		await restApi.fetchBoard(payload);
 	};
 

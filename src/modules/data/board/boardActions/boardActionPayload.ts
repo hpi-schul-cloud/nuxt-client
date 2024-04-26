@@ -5,53 +5,44 @@ import {
 	ErrorType,
 } from "@/components/error-handling/ErrorHandler.composable";
 
-export type createCardRequestPayload = {
+export type CreateCardRequestPayload = {
 	columnId: string;
 };
 
-export type createCardSuccessPayload = {
+export type CreateCardSuccessPayload = {
 	newCard: CardResponse;
 	columnId: string;
 };
 
-export type createColumnRequestPayload = {
+export type CreateColumnRequestPayload = {
 	boardId: string;
 };
 
-export type fetchBoardPayload = {
+export type FetchBoardPayload = {
 	id: string;
 };
 
-export type createColumnSucccessPayload = {
+export type CreateColumnSucccessPayload = {
 	newColumn: ColumnResponse;
 };
 
-export type deleteCardRequestPayload = {
+export type DeleteCardRequestPayload = {
 	cardId: string;
 };
 
-export type deleteCardSuccessPayload = {
+export type DeleteCardSuccessPayload = {
 	cardId: string;
 };
 
-export type deleteColumnRequestPayload = {
+export type DeleteColumnRequestPayload = {
 	columnId: string;
 };
 
-export type deleteColumnSuccessPayload = {
+export type DeleteColumnSuccessPayload = {
 	columnId: string;
 };
 
-export type moveCardRequestPayload = {
-	cardId: string;
-	oldIndex: number;
-	newIndex: number;
-	fromColumnId: string;
-	toColumnId?: string;
-	columnDelta?: number;
-	forceNextTick?: boolean;
-};
-export type moveCardSuccessPayload = {
+export type MoveCardRequestPayload = {
 	cardId: string;
 	oldIndex: number;
 	newIndex: number;
@@ -60,94 +51,103 @@ export type moveCardSuccessPayload = {
 	columnDelta?: number;
 	forceNextTick?: boolean;
 };
+export type MoveCardSuccessPayload = {
+	cardId: string;
+	oldIndex: number;
+	newIndex: number;
+	fromColumnId: string;
+	toColumnId?: string;
+	columnDelta?: number;
+	forceNextTick?: boolean;
+};
 
-export type moveColumnRequestPayload = {
+export type MoveColumnRequestPayload = {
 	columnMove: ColumnMove;
 	byKeyboard: boolean;
 };
 
-export type moveColumnSuccessPayload = {
+export type MoveColumnSuccessPayload = {
 	columnMove: ColumnMove;
 	byKeyboard: boolean;
 };
 
-export type updateColumnTitleRequestPayload = {
+export type UpdateColumnTitleRequestPayload = {
 	columnId: string;
 	newTitle: string;
 };
 
-export type updateColumnTitleSuccessPayload = {
+export type UpdateColumnTitleSuccessPayload = {
 	columnId: string;
 	newTitle: string;
 };
 
-export type updateBoardTitleSuccessPayload = {
+export type UpdateBoardTitleSuccessPayload = {
 	newTitle: string;
 };
 
-export type disconnectSocketRequestPayload = Record<string, never>;
-export type createCardFailurePayload = {
+export type DisconnectSocketRequestPayload = Record<string, never>;
+export type CreateCardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type createColumnFailurePayload = {
+export type CreateColumnFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type deleteBoardRequestPayload = {
+export type DeleteBoardRequestPayload = {
 	id: string;
 };
-export type deleteBoardSuccessPayload = {
+export type DeleteBoardSuccessPayload = {
 	id: string;
 };
-export type deleteBoardFailurePayload = {
+export type DeleteBoardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type deleteCardFailurePayload = {
+export type DeleteCardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type deleteColumnFailurePayload = {
+export type DeleteColumnFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type moveCardFailurePayload = {
+export type MoveCardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type moveColumnFailurePayload = {
+export type MoveColumnFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type reloadBoardPayload = {
+export type ReloadBoardPayload = {
 	id: string;
 };
-export type reloadBoardSuccessPayload = {
+export type ReloadBoardSuccessPayload = {
 	id: string;
 };
-export type updateBoardTitleRequestPayload = {
+export type UpdateBoardTitleRequestPayload = {
 	newTitle: string;
 };
-export type updateBoardTitleFailurePayload = {
+export type UpdateBoardTitleFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type updateBoardVisibilityRequestPayload = {
+export type UpdateBoardVisibilityRequestPayload = {
 	newVisibility: boolean;
 };
-export type updateBoardVisibilitySuccessPayload = {
+export type UpdateBoardVisibilitySuccessPayload = {
 	newVisibility: boolean;
 };
-export type updateBoardVisibilityFailurePayload = {
+export type UpdateBoardVisibilityFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type updateColumnTitleFailurePayload = {
+export type UpdateColumnTitleFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type notifyErrorPayload = {
+export type NotifyErrorPayload = {
 	errorType: ErrorType;
 	boardObjectType?: BoardObjectType;
 };

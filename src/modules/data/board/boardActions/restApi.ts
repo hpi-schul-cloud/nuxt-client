@@ -11,15 +11,15 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
-	createCardRequestPayload,
-	deleteCardRequestPayload,
-	deleteColumnRequestPayload,
-	fetchBoardPayload,
-	moveCardRequestPayload,
-	moveColumnRequestPayload,
-	updateBoardTitleRequestPayload,
-	updateBoardVisibilityRequestPayload,
-	updateColumnTitleRequestPayload,
+	CreateCardRequestPayload,
+	DeleteCardRequestPayload,
+	DeleteColumnRequestPayload,
+	FetchBoardPayload,
+	MoveCardRequestPayload,
+	MoveColumnRequestPayload,
+	UpdateBoardTitleRequestPayload,
+	UpdateBoardVisibilityRequestPayload,
+	UpdateColumnTitleRequestPayload,
 } from "./boardActionPayload";
 
 export const useBoardRestApi = () => {
@@ -63,7 +63,7 @@ export const useBoardRestApi = () => {
 		return boardStore.board.columns[columnIndex].id;
 	};
 
-	const createCardRequest = async (payload: createCardRequestPayload) => {
+	const createCardRequest = async (payload: CreateCardRequestPayload) => {
 		if (boardStore.board === undefined) return;
 
 		try {
@@ -80,7 +80,7 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const fetchBoard = async (payload: fetchBoardPayload): Promise<void> => {
+	const fetchBoard = async (payload: FetchBoardPayload): Promise<void> => {
 		boardStore.setLoading(true);
 		try {
 			const board = await fetchBoardCall(payload.id);
@@ -110,7 +110,7 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const deleteCardRequest = async (payload: deleteCardRequestPayload) => {
+	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
 		if (boardStore.board === undefined) return;
 		const { cardId } = payload;
 
@@ -125,7 +125,7 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const deleteColumnRequest = async (payload: deleteColumnRequestPayload) => {
+	const deleteColumnRequest = async (payload: DeleteColumnRequestPayload) => {
 		if (boardStore.board === undefined) return;
 		const { columnId } = payload;
 
@@ -176,7 +176,7 @@ export const useBoardRestApi = () => {
 	};
 
 	const moveCardRequest = async (
-		payload: moveCardRequestPayload
+		payload: MoveCardRequestPayload
 	): Promise<void> => {
 		if (boardStore.board === undefined) return;
 
@@ -240,7 +240,7 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const moveColumnRequest = async (payload: moveColumnRequestPayload) => {
+	const moveColumnRequest = async (payload: MoveColumnRequestPayload) => {
 		if (boardStore.board === undefined) return;
 		const { columnMove } = payload;
 
@@ -257,7 +257,7 @@ export const useBoardRestApi = () => {
 	};
 
 	const updateColumnTitleRequest = async (
-		payload: updateColumnTitleRequestPayload
+		payload: UpdateColumnTitleRequestPayload
 	) => {
 		if (boardStore.board === undefined) return;
 		const { columnId, newTitle } = payload;
@@ -274,7 +274,7 @@ export const useBoardRestApi = () => {
 	};
 
 	const updateBoardTitleRequest = async (
-		payload: updateBoardTitleRequestPayload
+		payload: UpdateBoardTitleRequestPayload
 	) => {
 		if (boardStore.board === undefined) return;
 		const { newTitle } = payload;
@@ -291,7 +291,7 @@ export const useBoardRestApi = () => {
 	};
 
 	const updateBoardVisibilityRequest = async (
-		payload: updateBoardVisibilityRequestPayload
+		payload: UpdateBoardVisibilityRequestPayload
 	) => {
 		if (boardStore.board === undefined) return;
 		const { newVisibility } = payload;

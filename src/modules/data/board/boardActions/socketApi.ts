@@ -2,16 +2,16 @@ import * as BoardActions from "./actions";
 import { useBoardSocketApi } from "@data-board";
 import { useBoardStore } from "../BoardStore";
 import {
-	createCardRequestPayload,
-	createColumnRequestPayload,
-	deleteCardRequestPayload,
-	deleteColumnRequestPayload,
-	disconnectSocketRequestPayload,
-	moveCardRequestPayload,
-	moveColumnRequestPayload,
-	updateBoardTitleRequestPayload,
-	updateBoardVisibilityRequestPayload,
-	updateColumnTitleRequestPayload,
+	CreateCardRequestPayload,
+	CreateColumnRequestPayload,
+	DeleteCardRequestPayload,
+	DeleteColumnRequestPayload,
+	DisconnectSocketRequestPayload,
+	MoveCardRequestPayload,
+	MoveColumnRequestPayload,
+	UpdateBoardTitleRequestPayload,
+	UpdateBoardVisibilityRequestPayload,
+	UpdateColumnTitleRequestPayload,
 } from "@/modules/data/board/boardActions/boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
@@ -74,53 +74,53 @@ export const useSocketApi = () => {
 
 	const { emitOnSocket, disconnectSocket } = useBoardSocketApi(dispatch);
 
-	const createCardRequest = async (payload: createCardRequestPayload) => {
+	const createCardRequest = async (payload: CreateCardRequestPayload) => {
 		emitOnSocket("create-card-request", payload);
 	};
 
-	const disconnectSocketRequest = (payload: disconnectSocketRequestPayload) => {
+	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
 		// TODO: Kebab-Case
 		console.log("disconnectSocketRequest", payload);
 		disconnectSocket();
 	};
 
-	const createColumnRequest = (payload: createColumnRequestPayload) => {
+	const createColumnRequest = (payload: CreateColumnRequestPayload) => {
 		emitOnSocket("create-column-request", payload);
 	};
 
-	const deleteCardRequest = async (payload: deleteCardRequestPayload) => {
+	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
 		await emitOnSocket("delete-card-request", payload);
 	};
 
-	const deleteColumnRequest = async (payload: deleteColumnRequestPayload) => {
+	const deleteColumnRequest = async (payload: DeleteColumnRequestPayload) => {
 		dispatch(BoardActions.deleteColumnSuccess(payload));
 		emitOnSocket("delete-column-request", payload);
 	};
 
-	const moveCardRequest = async (payload: moveCardRequestPayload) => {
+	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
 		dispatch(BoardActions.moveCardSuccess(payload));
 		emitOnSocket("move-card-request", payload);
 	};
 
-	const moveColumnRequest = async (payload: moveColumnRequestPayload) => {
+	const moveColumnRequest = async (payload: MoveColumnRequestPayload) => {
 		dispatch(BoardActions.moveColumnSuccess(payload));
 		emitOnSocket("move-column-request", payload);
 	};
 
 	const updateColumnTitleRequest = async (
-		payload: updateColumnTitleRequestPayload
+		payload: UpdateColumnTitleRequestPayload
 	) => {
 		await emitOnSocket("update-column-title-request", payload);
 		dispatch(BoardActions.updateColumnTitleSuccess(payload));
 	};
 
-	const updateBoardTitleRequest = (payload: updateBoardTitleRequestPayload) => {
+	const updateBoardTitleRequest = (payload: UpdateBoardTitleRequestPayload) => {
 		dispatch(BoardActions.updateBoardTitleSuccess(payload));
 		emitOnSocket("update-board-title-request", payload);
 	};
 
 	const updateBoardVisibilityRequest = (
-		payload: updateBoardVisibilityRequestPayload
+		payload: UpdateBoardVisibilityRequestPayload
 	) => {
 		dispatch(BoardActions.updateBoardVisibilitySuccess(payload));
 		emitOnSocket("update-board-visibility-request", payload);
