@@ -122,7 +122,5 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 		isDialogOpen,
 		elementTypeOptions,
 		onElementClick,
-		showNotificationByElementType,
-		showCustomNotifier,
 	};
 };
