@@ -3,6 +3,9 @@ import { ConfigResponse } from "@/serverApi/v3/api";
 import NotifierModule from "@/store/notifier";
 import { injectStrict } from "@/utils/inject";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createMock } from "@golevelup/ts-jest";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { ref } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 
@@ -29,12 +32,12 @@ jest.mock("vue-i18n", () => {
 	};
 });
 
-jest.mock("@util-board", () => {
+jest.mock("@util-board");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+jest.mocked(useSharedLastCreatedElement).mockImplementation(() => {
 	return {
-		...jest.requireActual("@util-board"),
-		useBoardNotifier: jest.fn().mockReturnValue({
-			showCustomNotifier: jest.fn(),
-		}),
+		lastCreatedElementId: ref(undefined),
+		resetLastCreatedElementId: jest.fn(),
 	};
 });
 
@@ -96,20 +99,29 @@ describe("ElementTypeSelection Composable", () => {
 					const addElementMock = jest.fn();
 					const elementType = ContentElementType.CollaborativeTextEditor;
 
+					const showCustomNotifierMock = jest.fn();
+					const mockedBoardNotifierCalls = createMock<
+						ReturnType<typeof useBoardNotifier>
+					>({
+						showCustomNotifier: showCustomNotifierMock,
+					});
+					mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
 					return {
 						addElementMock,
 						elementType,
+						showCustomNotifierMock,
 					};
 				};
 				it("should show Notification", async () => {
-					const { addElementMock, elementType } = setup();
+					const { addElementMock, elementType, showCustomNotifierMock } =
+						setup();
 
-					const { onElementClick, showCustomNotifier } =
-						useAddElementDialog(addElementMock);
+					const { onElementClick } = useAddElementDialog(addElementMock);
 
 					await onElementClick(elementType);
 
-					expect(showCustomNotifier).toHaveBeenCalledWith(i18nKey, "info");
+					expect(showCustomNotifierMock).toHaveBeenCalledWith(i18nKey, "info");
 				});
 			});
 
