@@ -176,11 +176,6 @@ export default class EnvConfigModule extends VuexModule {
 		return this.envFile.MAX_FILE_SIZE;
 	}
 
-	get getFeatureSocketEnabled(): boolean {
-		// return this.env.FEATURE_SOCKET_ENABLED;
-		return false; // TODO: remove this line and return SOCKET_ENABLED flag after the feature is implemented in the backend
-	}
-
 	public get getShowNewClassViewEnabled(): boolean {
 		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED;
 	}
