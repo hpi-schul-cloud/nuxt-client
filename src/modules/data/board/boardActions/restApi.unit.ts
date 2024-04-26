@@ -18,7 +18,7 @@ import { useBoardRestApi } from "./restApi";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
 import { ColumnMove } from "@/types/board/DragAndDrop";
-import { moveCardRequestPayload } from "./boardActionPayload";
+import { MoveCardRequestPayload } from "./boardActionPayload";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -42,7 +42,7 @@ describe("restApi", () => {
 		setActivePinia(createTestingPinia());
 		setupStores({ envConfigModule: EnvConfigModule });
 		const envs = envsFactory.build({
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
 		});
 		envConfigModule.setEnvs(envs);
 
@@ -277,7 +277,7 @@ describe("restApi", () => {
 			toColumnId?: string;
 			columnDelta?: number;
 		}) => {
-			const cardPayload: moveCardRequestPayload = {
+			const cardPayload: MoveCardRequestPayload = {
 				cardId,
 				oldIndex: oldIndex ?? 0,
 				newIndex: newIndex ?? 0,
