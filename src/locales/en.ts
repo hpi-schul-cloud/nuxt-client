@@ -1529,8 +1529,6 @@ export default {
 		"An error occurred while transferring a parameter value. Please contact support.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"The value of a parameter does not follow the given rules. Please adjust the value accordingly.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"The version of this Tool used is out of date. Please update the version.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"A tool with the same name is already assigned to this course. Tool names must be unique within a course.",
 	"pages.tool.context.description":

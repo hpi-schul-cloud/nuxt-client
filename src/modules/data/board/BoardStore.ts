@@ -36,7 +36,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const isLoading = ref<boolean>(false);
 
 	const restApi = useBoardRestApi();
-	const isSocketEnabled = envConfigModule.getFeatureSocketEnabled;
+	const isSocketEnabled =
+		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useSocketApi() : restApi;
 
