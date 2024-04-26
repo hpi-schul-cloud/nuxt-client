@@ -62,9 +62,18 @@ describe("ElementTypeSelection Composable", () => {
 				const addElementMock = jest.fn();
 				const elementType = ContentElementType.RichText;
 
+				const showCustomNotifierMock = jest.fn();
+				const mockedBoardNotifierCalls = createMock<
+					ReturnType<typeof useBoardNotifier>
+				>({
+					showCustomNotifier: showCustomNotifierMock,
+				});
+				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
 				return {
 					addElementMock,
 					elementType,
+					showCustomNotifierMock,
 				};
 			};
 
