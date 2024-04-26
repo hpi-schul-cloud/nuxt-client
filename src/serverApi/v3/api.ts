@@ -1205,11 +1205,17 @@ export interface ContextExternalToolConfigurationStatusResponse {
      */
     isOutdatedOnScopeContext: boolean;
     /**
-     * True, if a configured parameter on the context external tool is missing a value
+     * True, if a mandatory parameter on the context external tool is missing a value
      * @type {boolean}
      * @memberof ContextExternalToolConfigurationStatusResponse
      */
     isIncompleteOnScopeContext: boolean;
+    /**
+     * True, if a optional parameter on the context external tool is missing a value
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isIncompleteOperationalOnScopeContext: boolean;
     /**
      * Is the tool deactivated, because of superhero or school administrator
      * @type {boolean}
@@ -11855,7 +11861,7 @@ export const CollaborativeTextEditorApiAxiosParamCreator = function (configurati
     return {
         /**
          * 
-         * @summary Redirect to CollaborativeTextEditor
+         * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
@@ -11907,7 +11913,7 @@ export const CollaborativeTextEditorApiFp = function(configuration?: Configurati
     return {
         /**
          * 
-         * @summary Redirect to CollaborativeTextEditor
+         * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
@@ -11929,7 +11935,7 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
     return {
         /**
          * 
-         * @summary Redirect to CollaborativeTextEditor
+         * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
@@ -11949,7 +11955,7 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
 export interface CollaborativeTextEditorApiInterface {
     /**
      * 
-     * @summary Redirect to CollaborativeTextEditor
+     * @summary Get or create CollaborativeTextEditor for parent
      * @param {string} parentId 
      * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
      * @param {*} [options] Override http request option.
@@ -11969,7 +11975,7 @@ export interface CollaborativeTextEditorApiInterface {
 export class CollaborativeTextEditorApi extends BaseAPI implements CollaborativeTextEditorApiInterface {
     /**
      * 
-     * @summary Redirect to CollaborativeTextEditor
+     * @summary Get or create CollaborativeTextEditor for parent
      * @param {string} parentId 
      * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
      * @param {*} [options] Override http request option.
