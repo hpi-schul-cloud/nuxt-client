@@ -20,6 +20,7 @@
 			<StatusAlerts :status-alerts="statusAlerts" />
 		</TopbarItem>
 		<TopbarItem
+			v-if="isTabletOrBigger"
 			class="mx-1"
 			:icon="mdiQrcode"
 			:aria-label="$t('global.topbar.actions.qrCode')"
