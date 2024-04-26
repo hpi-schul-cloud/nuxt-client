@@ -132,20 +132,29 @@ describe("ElementTypeSelection Composable", () => {
 					const addElementMock = jest.fn();
 					const elementType = ContentElementType.RichText;
 
+					const showCustomNotifierMock = jest.fn();
+					const mockedBoardNotifierCalls = createMock<
+						ReturnType<typeof useBoardNotifier>
+					>({
+						showCustomNotifier: showCustomNotifierMock,
+					});
+					mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
 					return {
 						addElementMock,
 						elementType,
+						showCustomNotifierMock,
 					};
 				};
 				it("should NOT show Notification", async () => {
-					const { addElementMock, elementType } = setup();
+					const { addElementMock, elementType, showCustomNotifierMock } =
+						setup();
 
-					const { onElementClick, showCustomNotifier } =
-						useAddElementDialog(addElementMock);
+					const { onElementClick } = useAddElementDialog(addElementMock);
 
 					await onElementClick(elementType);
 
-					expect(showCustomNotifier).toBeCalledTimes(0);
+					expect(showCustomNotifierMock).toBeCalledTimes(0);
 				});
 			});
 		});
