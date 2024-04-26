@@ -162,6 +162,12 @@ export const useBoardStore = defineStore("boardStore", () => {
 		}
 	};
 
+	const updateBoardVisibilityRequest = async (
+		payload: UpdateBoardVisibilityRequestPayload
+	) => {
+		await socketOrRest.updateBoardVisibilityRequest(payload);
+	};
+
 	const updateBoardVisibilitySuccess = (
 		payload: UpdateBoardVisibilitySuccessPayload
 	) => {
@@ -230,11 +236,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
 		await socketOrRest.moveCardRequest(payload);
-	};
-	const updateBoardVisibilityRequest = async (
-		payload: UpdateBoardVisibilityRequestPayload
-	) => {
-		await socketOrRest.updateBoardVisibilityRequest(payload);
 	};
 
 	// TODO: refactor or create a new function for moving cards with creating column
