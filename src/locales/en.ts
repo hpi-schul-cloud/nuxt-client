@@ -1524,7 +1524,7 @@ export default {
 		"The type of a parameter does not match the requested type. Please contact support.",
 	"pages.tool.apiError.tool_param_unknown":
 		"The configuration of this tool contains an unknown parameter. Please contact support.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"An error occurred while transferring a parameter value. Please contact support.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"The value of a parameter does not follow the given rules. Please adjust the value accordingly.",

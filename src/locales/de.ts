@@ -1552,7 +1552,7 @@ export default {
 		"Der Typ eines Parameters stimmt nicht mit dem geforderten Typ überein. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_unknown":
 		"Die Konfiguration dieses Tools enthält einen unbekannten Parameter. Bitte an den Support wenden.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"Bei der Übertragung eines Parameterwerts ist ein Fehler ausgetreten. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",

@@ -1545,7 +1545,7 @@ export default {
 		"Тип параметра не відповідає запитуваному типу. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_param_unknown":
 		"Конфігурація цього інструменту містить невідомий параметр. Зверніться до служби підтримки.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"Під час передачі значення параметра сталася помилка. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Значення параметра не відповідає наведеним правилам. Відкоригуйте значення відповідно.",
