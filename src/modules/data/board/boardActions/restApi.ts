@@ -14,7 +14,7 @@ import {
 	CreateCardRequestPayload,
 	DeleteCardRequestPayload,
 	DeleteColumnRequestPayload,
-	FetchBoardPayload,
+	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveColumnRequestPayload,
 	UpdateBoardTitleRequestPayload,
@@ -80,11 +80,13 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const fetchBoard = async (payload: FetchBoardPayload): Promise<void> => {
+	const fetchBoardRequest = async (
+		payload: FetchBoardRequestPayload
+	): Promise<void> => {
 		boardStore.setLoading(true);
 		try {
 			const board = await fetchBoardCall(payload.id);
-			boardStore.setBoard(board);
+			boardStore.fetchBoardSuccess({ board });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplate("notLoaded", "board"),
@@ -322,7 +324,7 @@ export const useBoardRestApi = () => {
 	const reloadBoard = async () => {
 		if (boardStore.board === undefined) return;
 
-		await fetchBoard({ id: boardStore.board.id });
+		await fetchBoardRequest({ id: boardStore.board.id });
 	};
 
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
@@ -337,7 +339,7 @@ export const useBoardRestApi = () => {
 	const disconnectSocketRequest = (): void => {};
 
 	return {
-		fetchBoard,
+		fetchBoardRequest,
 		createCardRequest,
 		createColumnRequest,
 		deleteCardRequest,

@@ -1,4 +1,4 @@
-import { CardResponse, ColumnResponse } from "@/serverApi/v3";
+import { BoardResponse, CardResponse, ColumnResponse } from "@/serverApi/v3";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	BoardObjectType,
@@ -18,8 +18,12 @@ export type CreateColumnRequestPayload = {
 	boardId: string;
 };
 
-export type FetchBoardPayload = {
+export type FetchBoardRequestPayload = {
 	id: string;
+};
+
+export type FetchBoardSuccessPayload = {
+	board: BoardResponse;
 };
 
 export type CreateColumnSucccessPayload = {

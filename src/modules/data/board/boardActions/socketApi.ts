@@ -7,6 +7,7 @@ import {
 	DeleteCardRequestPayload,
 	DeleteColumnRequestPayload,
 	DisconnectSocketRequestPayload,
+	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveColumnRequestPayload,
 	UpdateBoardTitleRequestPayload,
@@ -78,6 +79,13 @@ export const useSocketApi = () => {
 		emitOnSocket("create-card-request", payload);
 	};
 
+	const fetchBoardRequest = async (
+		payload: FetchBoardRequestPayload
+	): Promise<void> => {
+		boardStore.setLoading(true);
+		emitOnSocket("fetch-board-request", payload);
+	};
+
 	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
 		// TODO: Kebab-Case
 		console.log("disconnectSocketRequest", payload);
@@ -88,41 +96,35 @@ export const useSocketApi = () => {
 		emitOnSocket("create-column-request", payload);
 	};
 
-	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
-		await emitOnSocket("delete-card-request", payload);
+	const deleteCardRequest = (payload: DeleteCardRequestPayload) => {
+		emitOnSocket("delete-card-request", payload);
 	};
 
-	const deleteColumnRequest = async (payload: DeleteColumnRequestPayload) => {
-		dispatch(BoardActions.deleteColumnSuccess(payload));
+	const deleteColumnRequest = (payload: DeleteColumnRequestPayload) => {
 		emitOnSocket("delete-column-request", payload);
 	};
 
-	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
-		dispatch(BoardActions.moveCardSuccess(payload));
+	const moveCardRequest = (payload: MoveCardRequestPayload) => {
 		emitOnSocket("move-card-request", payload);
 	};
 
-	const moveColumnRequest = async (payload: MoveColumnRequestPayload) => {
-		dispatch(BoardActions.moveColumnSuccess(payload));
+	const moveColumnRequest = (payload: MoveColumnRequestPayload) => {
 		emitOnSocket("move-column-request", payload);
 	};
 
-	const updateColumnTitleRequest = async (
+	const updateColumnTitleRequest = (
 		payload: UpdateColumnTitleRequestPayload
 	) => {
-		await emitOnSocket("update-column-title-request", payload);
-		dispatch(BoardActions.updateColumnTitleSuccess(payload));
+		emitOnSocket("update-column-title-request", payload);
 	};
 
 	const updateBoardTitleRequest = (payload: UpdateBoardTitleRequestPayload) => {
-		dispatch(BoardActions.updateBoardTitleSuccess(payload));
 		emitOnSocket("update-board-title-request", payload);
 	};
 
 	const updateBoardVisibilityRequest = (
 		payload: UpdateBoardVisibilityRequestPayload
 	) => {
-		dispatch(BoardActions.updateBoardVisibilitySuccess(payload));
 		emitOnSocket("update-board-visibility-request", payload);
 	};
 
@@ -138,6 +140,7 @@ export const useSocketApi = () => {
 		disconnectSocketRequest,
 		deleteCardRequest,
 		deleteColumnRequest,
+		fetchBoardRequest,
 		moveCardRequest,
 		moveColumnRequest,
 		updateColumnTitleRequest,

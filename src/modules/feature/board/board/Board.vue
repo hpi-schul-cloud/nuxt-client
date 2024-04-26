@@ -213,7 +213,7 @@ const onMoveColumnForward = async (columnIndex: number, columnId: string) => {
 };
 
 const onReloadBoard = async () => {
-	boardStore.reloadBoard({ id: props.boardId });
+	boardStore.reloadBoard();
 };
 
 const onUpdateBoardVisibility = async (newVisibility: boolean) => {
@@ -238,7 +238,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 onMounted(() => {
 	setAlert();
-	boardStore.fetchBoard({ id: props.boardId });
+	boardStore.fetchBoardRequest({ id: props.boardId });
 });
 
 onUnmounted(() => {

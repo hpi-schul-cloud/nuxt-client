@@ -7,7 +7,7 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { ColumnResponse } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+// import { envConfigModule } from "@/store";
 import {
 	CreateCardRequestPayload,
 	CreateCardSuccessPayload,
@@ -18,7 +18,8 @@ import {
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
 	DisconnectSocketRequestPayload,
-	FetchBoardPayload,
+	FetchBoardRequestPayload,
+	FetchBoardSuccessPayload,
 	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
 	MoveColumnRequestPayload,
@@ -36,8 +37,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const isLoading = ref<boolean>(false);
 
 	const restApi = useBoardRestApi();
-	const isSocketEnabled =
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+	const isSocketEnabled = true;
+	// envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useSocketApi() : restApi;
 
@@ -240,6 +241,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const moveCardSuccess = async (payload: MoveCardSuccessPayload) => {
 		if (!board.value) return;
 
+		console.log("payload", payload);
 		const {
 			newIndex,
 			oldIndex,
@@ -299,8 +301,12 @@ export const useBoardStore = defineStore("boardStore", () => {
 		await socketOrRest.disconnectSocketRequest(payload);
 	};
 
-	const fetchBoard = async (payload: FetchBoardPayload) => {
-		await restApi.fetchBoard(payload);
+	const fetchBoardRequest = async (payload: FetchBoardRequestPayload) => {
+		await socketOrRest.fetchBoardRequest(payload);
+	};
+
+	const fetchBoardSuccess = (payload: FetchBoardSuccessPayload) => {
+		setBoard(payload.board);
 	};
 
 	const reloadBoard = async () => {
@@ -331,7 +337,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		updateBoardTitleSuccess,
 		updateBoardVisibilityRequest,
 		updateBoardVisibilitySuccess,
-		fetchBoard,
+		fetchBoardRequest,
+		fetchBoardSuccess,
 		reloadBoard,
 	};
 });
