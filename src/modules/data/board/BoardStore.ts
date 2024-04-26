@@ -147,7 +147,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const updateColumnTitleRequest = async (
 		payload: updateColumnTitleRequestPayload
 	) => {
-		await socketOrRest.deleteColumnRequest(payload);
+		await socketOrRest.updateColumnTitleRequest(payload);
 	};
 
 	const updateColumnTitleSuccess = (
