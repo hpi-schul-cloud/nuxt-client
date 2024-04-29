@@ -15,7 +15,7 @@ import {
 	UpdateColumnTitleRequestPayload,
 } from "./boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
-import { BoardObjectType, useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 type ErrorActions =
 	| ReturnType<typeof BoardActions.createCardFailure>
@@ -142,7 +142,7 @@ export const useSocketApi = () => {
 	};
 
 	const onFailure = (payload: ErrorActions["payload"]) => {
-		const { errorType = "notUpdated", boardObjectType =  } = payload;
+		const { errorType = "notUpdated", boardObjectType = "board" } = payload;
 		notifySocketError(errorType, boardObjectType);
 	};
 
