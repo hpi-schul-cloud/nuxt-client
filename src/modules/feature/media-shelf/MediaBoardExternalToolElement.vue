@@ -52,7 +52,7 @@ const elementDisplayData: Ref<MediaElementDisplay | undefined> = computed(() =>
 		? {
 				title: displayData.value.name,
 				description: displayData.value.description,
-				thumbnail: undefined,
+				thumbnail: displayData.value.logoUrl,
 			}
 		: undefined
 );
