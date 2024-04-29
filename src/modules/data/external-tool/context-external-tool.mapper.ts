@@ -7,17 +7,14 @@ import {
 	CustomParameterEntryParam,
 	ToolContextType,
 } from "@/serverApi/v3";
+import { ToolParameter, ToolParameterEntry } from "@/store/external-tool";
+import { ExternalToolMapper } from "@/store/external-tool/mapper";
+import { CommonToolMapper } from "@/store/external-tool/mapper/common-tool.mapper";
 import {
 	ContextExternalTool,
-	ContextExternalToolSave,
-} from "../context-external-tool";
-import {
 	ContextExternalToolConfigurationTemplate,
-	ToolParameterEntry,
-} from "@/store/external-tool";
-import { ToolParameter } from "../tool-parameter";
-import { CommonToolMapper } from "./common-tool.mapper";
-import { ExternalToolMapper } from "./external-tool.mapper";
+	ContextExternalToolSave,
+} from "./types";
 
 export const ToolContextMapping: Record<
 	ContextExternalToolResponseContextTypeEnum,

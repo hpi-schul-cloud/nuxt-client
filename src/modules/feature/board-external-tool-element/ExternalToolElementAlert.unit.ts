@@ -1,19 +1,21 @@
+import AuthModule from "@/store/auth";
 import { BusinessError } from "@/store/types/commons";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useBoardPermissions } from "@data-board";
+import {
+	ContextExternalToolConfigurationStatus,
+	useContextExternalToolConfigurationStatus,
+} from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
-import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
-import AuthModule from "@/store/auth";
-import { createModuleMocks } from "@/utils/mock-store-module";
 
 jest.mock("@data-board");
 
