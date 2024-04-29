@@ -13,76 +13,54 @@
 			:data-testid="`external-tool-card-${index}`"
 		/>
 
-		<template v-if="selectedItem">
-			<RoomExternalToolsErrorDialog
-				:selected-item="selectedItem"
-				:is-open="isErrorDialogOpen"
-				@closed="onCloseErrorDialog"
-			/>
-		</template>
+		<RoomExternalToolsErrorDialog
+			v-if="selectedItem"
+			:selected-item="selectedItem"
+			:is-open="isErrorDialogOpen"
+			@closed="onCloseErrorDialog"
+		/>
 
-		<v-dialog
-			v-model="isDeleteDialogOpen"
+		<v-custom-dialog
+			:is-open="isDeleteDialogOpen"
+			:has-buttons="true"
+			:buttons="['cancel', 'confirm']"
 			max-width="360"
 			data-testId="delete-dialog"
+			@dialog-confirmed="onDeleteTool"
+			@dialog-canceled="onCloseDeleteDialog"
 		>
-			<v-card :ripple="false">
-				<v-card-title>
-					<h2 class="text-h4 my-2">
-						{{ t("pages.rooms.tools.deleteDialog.title") }}
-					</h2>
-				</v-card-title>
-				<v-card-text class="text--primary">
-					<RenderHTML
-						class="text-md mt-2"
-						:html="
-							t('pages.rooms.tools.deleteDialog.content', {
-								itemName: selectedItemName,
-							})
-						"
-						component="p"
-					/>
-				</v-card-text>
-				<v-card-actions>
-					<v-spacer />
-					<v-btn
-						data-testId="dialog-cancel"
-						variant="text"
-						@click="onCloseDeleteDialog"
-					>
-						{{ t("common.actions.cancel") }}
-					</v-btn>
-					<v-btn
-						data-testId="dialog-confirm"
-						class="px-6"
-						color="primary"
-						variant="flat"
-						@click="onDeleteTool"
-					>
-						{{ t("common.actions.confirm") }}
-					</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog>
+			<template #title>
+				<h2 class="text-h4 my-2">
+					{{ t("pages.rooms.tools.deleteDialog.title") }}
+				</h2>
+			</template>
+			<template #content>
+				<RenderHTML
+					class="text-md mt-2"
+					:html="
+						t('pages.rooms.tools.deleteDialog.content', {
+							itemName: selectedItemName,
+						})
+					"
+					component="p"
+				/>
+			</template>
+		</v-custom-dialog>
 	</div>
 </template>
 
 <script setup lang="ts">
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import RoomExternalToolCard from "@/components/rooms/RoomExternalToolCard.vue";
+import RoomExternalToolsErrorDialog from "@/pages/rooms/tools/RoomExternalToolsErrorDialog.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import ContextExternalToolsModule from "@/store/context-external-tools";
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import {
-	AUTH_MODULE_KEY,
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ExternalToolDisplayData } from "@data-external-tool";
 import { RenderHTML } from "@feature-render-html";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import RoomExternalToolsErrorDialog from "@/pages/rooms/tools/RoomExternalToolsErrorDialog.vue";
 
 const props = defineProps({
 	tools: {
@@ -95,9 +73,10 @@ const props = defineProps({
 	},
 });
 
-const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
-);
+const emit = defineEmits<{
+	(e: "delete", value: ExternalToolDisplayData): void;
+}>();
+
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const router = useRouter();
 const { t } = useI18n();
@@ -123,9 +102,7 @@ const onCloseDeleteDialog = () => {
 
 const onDeleteTool = async () => {
 	if (selectedItem.value) {
-		await contextExternalToolsModule.deleteContextExternalTool(
-			selectedItem.value.contextExternalToolId
-		);
+		emit("delete", selectedItem.value);
 	}
 
 	onCloseDeleteDialog();

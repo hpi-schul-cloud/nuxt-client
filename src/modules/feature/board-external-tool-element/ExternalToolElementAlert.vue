@@ -23,13 +23,15 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "vue-i18n";
 import { BusinessError } from "@/store/types/commons";
 import { useBoardPermissions } from "@data-board";
+import {
+	ContextExternalToolConfigurationStatus,
+	useContextExternalToolConfigurationStatus,
+} from "@data-external-tool";
 import { WarningAlert } from "@ui-alert";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
-import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {

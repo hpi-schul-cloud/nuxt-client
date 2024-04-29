@@ -23,10 +23,12 @@
 </template>
 <script lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import {
+	ExternalToolDisplayData,
+	useContextExternalToolConfigurationStatus,
+} from "@data-external-tool";
 import { RenderHTML } from "@feature-render-html";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
-import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
-import { ExternalToolDisplayData } from "@/store/external-tool";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
