@@ -86,7 +86,7 @@ export const useBoardRestApi = () => {
 		boardStore.setLoading(true);
 		try {
 			const board = await fetchBoardCall(payload.boardId);
-			boardStore.fetchBoardSuccess({ board });
+			boardStore.fetchBoardSuccess(board);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplate("notLoaded", "board"),

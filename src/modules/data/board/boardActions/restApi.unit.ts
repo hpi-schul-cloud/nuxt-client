@@ -126,9 +126,7 @@ describe("restApi", () => {
 
 			await fetchBoardRequest({ boardId: boardStore.board!.id });
 
-			expect(boardStore.fetchBoardSuccess).toHaveBeenCalledWith({
-				board: mockfetchBoard,
-			});
+			expect(boardStore.fetchBoardSuccess).toHaveBeenCalledWith(mockfetchBoard);
 		});
 
 		it("should set loading state correct", async () => {
