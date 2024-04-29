@@ -182,7 +182,7 @@ describe("BoardStore", () => {
 
 	describe("deleteCardSuccess", () => {
 		it("should not delete a card when a board is undefined", async () => {
-			const { boardStore, cards } = setup();
+			const { boardStore, cards } = setup(false);
 
 			boardStore.deleteCardSuccess({ cardId: cards[0].cardId });
 
