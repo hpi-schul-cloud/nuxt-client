@@ -91,6 +91,7 @@ describe("MediaBoardExternalToolElement", () => {
 				const displayDataResponse = externalToolDisplayDataFactory.build({
 					name: "name",
 					description: "description",
+					logoUrl: "logoUrl",
 				});
 
 				useContextExternalToolApiMock.fetchDisplayDataCall.mockResolvedValue(
@@ -140,7 +141,7 @@ describe("MediaBoardExternalToolElement", () => {
 				expect(displayComponent.props().element).toEqual<MediaElementDisplay>({
 					title: displayDataResponse.name,
 					description: displayDataResponse.description,
-					thumbnail: undefined,
+					thumbnail: displayDataResponse.logoUrl,
 				});
 			});
 		});

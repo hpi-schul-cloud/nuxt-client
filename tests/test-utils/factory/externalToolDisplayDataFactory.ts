@@ -8,4 +8,5 @@ export const externalToolDisplayDataFactory =
 		name: `name${sequence}`,
 		openInNewTab: false,
 		status: ContextExternalToolConfigurationStatusFactory.build(),
+		logoUrl: "https://example.com/logo.png",
 	}));
