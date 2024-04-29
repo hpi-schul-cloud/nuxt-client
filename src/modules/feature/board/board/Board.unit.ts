@@ -55,7 +55,6 @@ import {
 } from "@data-board";
 import { Router, useRouter } from "vue-router";
 import { createTestingPinia } from "@pinia/testing";
-import { set } from "lodash";
 
 jest.mock("@data-board");
 const mockeduseBoardStore = jest.mocked(useBoardStore);
