@@ -7,7 +7,7 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { ColumnResponse } from "@/serverApi/v3";
-// import { envConfigModule } from "@/store";
+import { envConfigModule } from "@/store";
 import {
 	CreateCardRequestPayload,
 	CreateCardSuccessPayload,
@@ -37,8 +37,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const isLoading = ref<boolean>(false);
 
 	const restApi = useBoardRestApi();
-	const isSocketEnabled = true;
-	// envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+	const isSocketEnabled =
+		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useSocketApi() : restApi;
 
@@ -245,7 +245,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const moveCardSuccess = async (payload: MoveCardSuccessPayload) => {
 		if (!board.value) return;
 
-		console.log("payload", payload);
 		const {
 			newIndex,
 			oldIndex,
@@ -261,16 +260,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			columnDelta
 		);
 
-		const targetColumnIndex = toColumnIndex;
-
-		// TODO: solve column creation on the backend
-		// if (toColumnIndex === -1) {
-		// 	// need to create a new column
-		// 	const newColumn = await createColumnRequest();
-		// 	if (newColumn) {
-		// 		targetColumnIndex = getColumnIndex(newColumn?.id);
-		// 	}
-		// }
+		const targetColumnIndex = toColumnIndex ?? board.value.columns.length - 1;
 
 		if (
 			!isMoveValid(
@@ -296,6 +286,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 			await nextTick();
 		}
 
+		board.value.columns[targetColumnIndex].cards =
+			board.value.columns[targetColumnIndex].cards ?? [];
 		board.value.columns[targetColumnIndex].cards.splice(newIndex, 0, item);
 	};
 

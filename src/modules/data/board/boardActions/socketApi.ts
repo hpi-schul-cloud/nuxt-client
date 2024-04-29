@@ -13,9 +13,9 @@ import {
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
-} from "@/modules/data/board/boardActions/boardActionPayload";
+} from "./boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { BoardObjectType, useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
 type ErrorActions =
 	| ReturnType<typeof BoardActions.createCardFailure>
@@ -74,7 +74,8 @@ export const useSocketApi = () => {
 		);
 	};
 
-	const { emitOnSocket, disconnectSocket } = useBoardSocketApi(dispatch);
+	const { emitOnSocket, emitWithAck, disconnectSocket } =
+		useBoardSocketApi(dispatch);
 
 	const createCardRequest = async (payload: CreateCardRequestPayload) => {
 		emitOnSocket("create-card-request", payload);
@@ -105,8 +106,19 @@ export const useSocketApi = () => {
 		emitOnSocket("delete-column-request", payload);
 	};
 
-	const moveCardRequest = (payload: MoveCardRequestPayload) => {
-		emitOnSocket("move-card-request", payload);
+	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
+		try {
+			if (payload.toColumnId === undefined && boardStore.board) {
+				const response = await emitWithAck("create-column-request", {
+					boardId: boardStore.board.id,
+				});
+				boardStore.createColumnSuccess(response);
+				payload.toColumnId = response.newColumn.id;
+			}
+			emitOnSocket("move-card-request", payload);
+		} catch (err) {
+			onFailure({ errorType: "notUpdated", boardObjectType: "boardCard" });
+		}
 	};
 
 	const moveColumnRequest = (payload: MoveColumnRequestPayload) => {
@@ -130,7 +142,7 @@ export const useSocketApi = () => {
 	};
 
 	const onFailure = (payload: ErrorActions["payload"]) => {
-		const { errorType = "notUpdated", boardObjectType = "board" } = payload;
+		const { errorType = "notUpdated", boardObjectType =  } = payload;
 		notifySocketError(errorType, boardObjectType);
 	};
 

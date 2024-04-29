@@ -29,12 +29,17 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 		socket.emit(action, data);
 	};
 
+	const emitWithAck = (action: string, data: unknown) => {
+		return socket.timeout(30000).emitWithAck(action, data);
+	};
+
 	const disconnectSocket = () => {
 		socket.disconnect();
 	};
 
 	return {
 		emitOnSocket,
+		emitWithAck,
 		disconnectSocket,
 	};
 };
