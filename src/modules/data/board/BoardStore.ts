@@ -291,10 +291,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns[targetColumnIndex].cards.splice(newIndex, 0, item);
 	};
 
-	const disconnectSocketRequest = async (
-		payload: DisconnectSocketRequestPayload
-	) => {
-		await socketOrRest.disconnectSocketRequest(payload);
+	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
+		socketOrRest.disconnectSocketRequest(payload);
 	};
 
 	const fetchBoardRequest = async (payload: FetchBoardRequestPayload) => {
@@ -302,7 +300,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const fetchBoardSuccess = (payload: FetchBoardSuccessPayload) => {
-		setBoard(payload.board);
+		setBoard(payload);
 	};
 
 	const reloadBoard = async () => {
