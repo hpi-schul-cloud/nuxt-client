@@ -23,7 +23,10 @@ import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.vue";
 
-jest.mock("@data-external-tool");
+jest.mock(
+	"@data-external-tool/contextExternalToolConfigurationState.composable"
+);
+jest.mock("@data-external-tool/contextExternalToolState.composable");
 
 describe("CourseContextExternalToolConfigurator", () => {
 	let useContextExternalToolConfigurationStateMock: DeepMocked<
