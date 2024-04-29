@@ -75,7 +75,7 @@ $card-width: 288px;
 }
 
 .description {
-	height: calc(3.5em * var(--line-height-md));
+	height: 3.75rem;
 	overflow: hidden;
 }
 </style>
