@@ -1,8 +1,5 @@
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
-import {
-	ExternalToolConfigurationTemplate,
-	SchoolExternalTool,
-} from "@/store/external-tool";
+import { SchoolExternalTool } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import {
 	schoolExternalToolConfigurationTemplateFactory,
@@ -12,9 +9,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import {
+	ContextExternalTool,
+	ExternalToolConfigurationTemplate,
+} from "@data-external-tool";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { VBtn } from "vuetify/lib/components/index.mjs";
-import { ContextExternalTool } from "../../../modules/data/external-tool/types/context-external-tool";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 
 describe("ExternalToolConfigurator", () => {

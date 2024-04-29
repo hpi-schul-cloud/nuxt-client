@@ -14,13 +14,13 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import {
+	ContextExternalToolSave,
 	useContextExternalToolConfigurationState,
 	useContextExternalToolState,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import { ContextExternalToolSave } from "../../../modules/data/external-tool/types/context-external-tool";
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.vue";
 
 jest.mock("@data-external-tool");

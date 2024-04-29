@@ -1,5 +1,5 @@
-import { ContextExternalTool } from "@/modules/data/external-tool/types/context-external-tool";
 import { ToolContextType } from "@/serverApi/v3";
+import { ContextExternalTool } from "@data-external-tool";
 import { Factory } from "fishery";
 
 export const contextExternalToolFactory = Factory.define<ContextExternalTool>(

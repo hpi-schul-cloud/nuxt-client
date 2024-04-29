@@ -5,12 +5,14 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { useExternalToolLaunchState } from "@data-external-tool";
+import {
+	ExternalToolDisplayData,
+	useExternalToolLaunchState,
+} from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { RoomDotMenu } from "@ui-room-details";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import { ExternalToolDisplayData } from "../../modules/data/external-tool/types/external-tool-display-data";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 
 jest.mock("@data-external-tool");

@@ -4,7 +4,6 @@ import {
 	ExternalToolElementResponse,
 } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
-import { ExternalToolDisplayData } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -21,6 +20,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
+	ContextExternalTool,
+	ExternalToolDisplayData,
 	useContextExternalToolConfigurationStatus,
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
@@ -30,7 +31,6 @@ import { mdiPuzzleOutline } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import { ContextExternalTool } from "../../data/external-tool/types/context-external-tool";
 import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";

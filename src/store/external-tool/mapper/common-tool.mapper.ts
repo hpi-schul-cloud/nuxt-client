@@ -8,7 +8,7 @@ import {
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
 import { ToolLaunchRequestMethodEnum } from "@/store/external-tool";
-import { ContextExternalToolConfigurationStatus } from "../../../modules/data/external-tool/types/context-external-tool-configuration-status";
+import { ContextExternalToolConfigurationStatus } from "@data-external-tool";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { ToolParameterLocation } from "../tool-parameter-location.enum";
 import { ToolParameterScope } from "../tool-parameter-scope.enum";

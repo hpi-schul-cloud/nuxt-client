@@ -8,7 +8,7 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
-import { SchoolExternalToolConfigurationTemplate } from "../../../modules/data/external-tool/types/tool-configuration-template";
+import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolSave,
