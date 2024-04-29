@@ -119,25 +119,27 @@ describe("restApi", () => {
 	describe("fetchBoard", () => {
 		it("should fetch and set the board", async () => {
 			const { boardStore } = setup();
-			const { fetchBoard } = useBoardRestApi();
+			const { fetchBoardRequest } = useBoardRestApi();
 
 			const mockfetchBoard = boardResponseFactory.build();
 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(mockfetchBoard);
 
-			await fetchBoard({ id: boardStore.board!.id });
+			await fetchBoardRequest({ boardId: boardStore.board!.id });
 
-			expect(boardStore.setBoard).toHaveBeenCalledWith(mockfetchBoard);
+			expect(boardStore.fetchBoardSuccess).toHaveBeenCalledWith({
+				board: mockfetchBoard,
+			});
 		});
 
 		it("should set loading state correct", async () => {
 			const { boardStore } = setup();
-			const { fetchBoard } = useBoardRestApi();
+			const { fetchBoardRequest } = useBoardRestApi();
 
 			const board = boardStore.board!;
 
 			mockedBoardApiCalls.fetchBoardCall.mockResolvedValue(board);
 
-			const fetchPromise = fetchBoard({ id: board.id });
+			const fetchPromise = fetchBoardRequest({ boardId: board.id });
 
 			expect(boardStore.setLoading).toHaveBeenLastCalledWith(true);
 			await fetchPromise;
@@ -146,11 +148,11 @@ describe("restApi", () => {
 
 		it("should call handleError if the fetch fails", async () => {
 			const { boardStore } = setup();
-			const { fetchBoard } = useBoardRestApi();
+			const { fetchBoardRequest } = useBoardRestApi();
 
 			mockedBoardApiCalls.fetchBoardCall.mockRejectedValue({});
 
-			await fetchBoard({ id: boardStore.board!.id });
+			await fetchBoardRequest({ boardId: boardStore.board!.id });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});

@@ -20,10 +20,6 @@ const keys = [
 	"components.board.notifications.errors.notLoaded",
 	"components.board.notifications.errors.notUpdated",
 	"components.board.notifications.errors.notDeleted",
-	"components.board.notifications.errors.notCreatedViaSocket",
-	"components.board.notifications.errors.notUpdatedViaSocket",
-	"components.board.notifications.errors.notDeletedViaSocket",
-	"components.board.notifications.errors.notLoadedViaSocket",
 ];
 const translationMap: Record<string, string> = {};
 
@@ -202,26 +198,26 @@ describe("ErrorHandler.Composable", () => {
 		it("should show a notification", async () => {
 			const { notifySocketError } = setup();
 
-			notifySocketError("notCreatedViaSocket", "board", "error", 5000);
+			notifySocketError("notCreated", "board", "error", 5000);
 			await nextTick();
 
 			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
 		});
 
-		it.each([
-			"notCreatedViaSocket",
-			"notUpdatedViaSocket",
-			"notDeletedViaSocket",
-			"notLoadedViaSocket",
-		])("should return i18n keys of %s", (key) => {
-			const { notifySocketError } = setup();
-			notifySocketError(key as ErrorType, "board");
+		it.each(["notCreated", "notUpdated", "notDeleted", "notLoaded"])(
+			"should return i18n keys of %s",
+			(key) => {
+				const { notifySocketError } = setup();
+				notifySocketError(key as ErrorType, "board");
 
-			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalledWith(
-				`components.board.notifications.errors.${key}`,
-				"error",
-				undefined
-			);
-		});
+				expect(
+					mockedBoardNotifierCalls.showCustomNotifier
+				).toHaveBeenCalledWith(
+					`components.board.notifications.errors.${key}`,
+					"error",
+					undefined
+				);
+			}
+		);
 	});
 });

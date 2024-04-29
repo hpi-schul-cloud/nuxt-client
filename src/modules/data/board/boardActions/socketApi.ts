@@ -122,6 +122,8 @@ export const useSocketApi = () => {
 	};
 
 	const moveColumnRequest = (payload: MoveColumnRequestPayload) => {
+		const { addedIndex, removedIndex } = payload.columnMove;
+		if (addedIndex === removedIndex) return;
 		emitOnSocket("move-column-request", payload);
 	};
 
