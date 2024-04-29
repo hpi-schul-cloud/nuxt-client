@@ -22,9 +22,7 @@ export type FetchBoardRequestPayload = {
 	boardId: string;
 };
 
-export type FetchBoardSuccessPayload = {
-	board: BoardResponse;
-};
+export type FetchBoardSuccessPayload = BoardResponse;
 
 export type CreateColumnSucccessPayload = {
 	newColumn: ColumnResponse;
