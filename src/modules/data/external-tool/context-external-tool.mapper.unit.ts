@@ -1,7 +1,7 @@
 import { ToolContextType } from "@/serverApi/v3";
 import { contextExternalToolConfigurationTemplateFactory } from "@@/tests/test-utils";
-import { ContextExternalToolSave } from "../context-external-tool";
 import { ContextExternalToolMapper } from "./context-external-tool.mapper";
+import { ContextExternalToolSave } from "./types";
 
 describe("ContextExternalToolMapper", () => {
 	describe("mapTemplateToContextExternalToolSave", () => {

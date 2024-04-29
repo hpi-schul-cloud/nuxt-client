@@ -1,14 +1,14 @@
-import { mount } from "@vue/test-utils";
 import RoomExternalToolsErrorDialog from "@/pages/rooms/tools/RoomExternalToolsErrorDialog.vue";
-import { ExternalToolDisplayData } from "@/store/external-tool";
-import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import AuthModule from "@/store/auth";
+import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { ExternalToolDisplayData } from "@data-external-tool";
+import { mount } from "@vue/test-utils";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("RoomExternalToolsErrorDialog", () => {

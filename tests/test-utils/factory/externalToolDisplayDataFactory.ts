@@ -1,4 +1,4 @@
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
+import { ExternalToolDisplayData } from "@data-external-tool";
 import { Factory } from "fishery";
 import { ContextExternalToolConfigurationStatusFactory } from "./contextExternalToolConfigurationStatusFactory";
 
