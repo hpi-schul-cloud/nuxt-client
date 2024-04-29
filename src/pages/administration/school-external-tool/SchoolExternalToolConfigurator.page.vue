@@ -33,11 +33,9 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useI18n } from "vue-i18n";
 import AuthModule from "@/store/auth";
 import {
 	SchoolExternalTool,
-	SchoolExternalToolConfigurationTemplate,
 	SchoolExternalToolSave,
 	ToolParameterEntry,
 } from "@/store/external-tool";
@@ -52,6 +50,7 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { RenderHTML } from "@feature-render-html";
 import { useTitle } from "@vueuse/core";
 import {
@@ -62,6 +61,7 @@ import {
 	Ref,
 	ref,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
 export default defineComponent({

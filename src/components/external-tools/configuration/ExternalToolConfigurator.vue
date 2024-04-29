@@ -79,15 +79,18 @@
 
 <script lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
+import { mdiAlertCircle } from "@/components/icons/material";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import {
-	ExternalToolConfigurationTemplate,
 	SchoolExternalTool,
 	ToolParameter,
 	ToolParameterEntry,
 } from "@/store/external-tool";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
+import {
+	ContextExternalTool,
+	ExternalToolConfigurationTemplate,
+} from "@data-external-tool";
 import {
 	computed,
 	ComputedRef,
@@ -100,7 +103,6 @@ import {
 	watch,
 } from "vue";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import { mdiAlertCircle } from "@/components/icons/material";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 

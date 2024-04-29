@@ -5,7 +5,6 @@ import { ComponentProps } from "@/types/vue";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
-	axiosErrorFactory,
 	businessErrorFactory,
 	envsFactory,
 	externalToolDisplayDataFactory,
@@ -13,7 +12,7 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import {
-	useContextExternalToolApi,
+	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -26,8 +25,8 @@ import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 jest.mock("@data-external-tool");
 
 describe("MediaBoardExternalToolElement", () => {
-	let useContextExternalToolApiMock: DeepMocked<
-		ReturnType<typeof useContextExternalToolApi>
+	let useExternalToolDisplayStateMock: DeepMocked<
+		ReturnType<typeof useExternalToolDisplayState>
 	>;
 	let useExternalToolLaunchStateMock: DeepMocked<
 		ReturnType<typeof useExternalToolLaunchState>
@@ -61,8 +60,11 @@ describe("MediaBoardExternalToolElement", () => {
 	};
 
 	beforeEach(() => {
-		useContextExternalToolApiMock =
-			createMock<ReturnType<typeof useContextExternalToolApi>>();
+		useExternalToolDisplayStateMock = createMock<
+			ReturnType<typeof useExternalToolDisplayState>
+		>({
+			displayData: ref(),
+		});
 		useExternalToolLaunchStateMock = createMock<
 			ReturnType<typeof useExternalToolLaunchState>
 		>({
@@ -70,8 +72,8 @@ describe("MediaBoardExternalToolElement", () => {
 		});
 
 		jest
-			.mocked(useContextExternalToolApi)
-			.mockReturnValue(useContextExternalToolApiMock);
+			.mocked(useExternalToolDisplayState)
+			.mockReturnValue(useExternalToolDisplayStateMock);
 		jest
 			.mocked(useExternalToolLaunchState)
 			.mockReturnValue(useExternalToolLaunchStateMock);
@@ -93,9 +95,7 @@ describe("MediaBoardExternalToolElement", () => {
 					description: "description",
 				});
 
-				useContextExternalToolApiMock.fetchDisplayDataCall.mockResolvedValue(
-					displayDataResponse
-				);
+				useExternalToolDisplayStateMock.displayData.value = displayDataResponse;
 
 				const { wrapper } = getWrapper({
 					element: externalToolElement,
@@ -114,7 +114,7 @@ describe("MediaBoardExternalToolElement", () => {
 				const { externalToolElement } = await setup();
 
 				expect(
-					useContextExternalToolApiMock.fetchDisplayDataCall
+					useExternalToolDisplayStateMock.fetchDisplayData
 				).toHaveBeenCalledWith(
 					externalToolElement.content.contextExternalToolId
 				);
@@ -142,38 +142,6 @@ describe("MediaBoardExternalToolElement", () => {
 					description: displayDataResponse.description,
 					thumbnail: undefined,
 				});
-			});
-		});
-
-		describe("when the display data api returns an error", () => {
-			const setup = async () => {
-				const externalToolElement =
-					mediaExternalToolElementResponseFactory.build();
-				const error = axiosErrorFactory.build();
-
-				useContextExternalToolApiMock.fetchDisplayDataCall.mockRejectedValue(
-					error
-				);
-
-				const logger = jest.spyOn(console, "error").mockImplementation();
-
-				const { wrapper } = getWrapper({
-					element: externalToolElement,
-				});
-
-				await flushPromises();
-
-				return {
-					wrapper,
-					logger,
-					error,
-				};
-			};
-
-			it("should log the error", async () => {
-				const { logger, error } = await setup();
-
-				expect(logger).toHaveBeenCalledWith(error);
 			});
 		});
 	});

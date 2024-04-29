@@ -5,7 +5,6 @@ import {
 } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import { ExternalToolDisplayData } from "@/store/external-tool";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -23,7 +22,7 @@ import {
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
 	useContextExternalToolConfigurationStatus,
-	useExternalToolElementDisplayState,
+	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -31,6 +30,7 @@ import { mdiPuzzleOutline } from "@mdi/js";
 import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import { ContextExternalTool } from "../../data/external-tool/types/context-external-tool";
 import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
@@ -56,7 +56,7 @@ describe("ExternalToolElement", () => {
 		ReturnType<typeof useBoardFocusHandler>
 	>;
 	let useExternalToolElementDisplayStateMock: DeepMocked<
-		ReturnType<typeof useExternalToolElementDisplayState>
+		ReturnType<typeof useExternalToolDisplayState>
 	>;
 	let useExternalToolLaunchStateMock: DeepMocked<
 		ReturnType<typeof useExternalToolLaunchState>
@@ -75,7 +75,7 @@ describe("ExternalToolElement", () => {
 		useBoardFocusHandlerMock =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
 		useExternalToolElementDisplayStateMock =
-			createMock<ReturnType<typeof useExternalToolElementDisplayState>>();
+			createMock<ReturnType<typeof useExternalToolDisplayState>>();
 		useExternalToolLaunchStateMock =
 			createMock<ReturnType<typeof useExternalToolLaunchState>>();
 		useSharedLastCreatedElementMock =
@@ -90,7 +90,7 @@ describe("ExternalToolElement", () => {
 			.mockReturnValue(useContentElementStateMock);
 		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 		jest
-			.mocked(useExternalToolElementDisplayState)
+			.mocked(useExternalToolDisplayState)
 			.mockReturnValue(useExternalToolElementDisplayStateMock);
 		jest
 			.mocked(useExternalToolLaunchState)

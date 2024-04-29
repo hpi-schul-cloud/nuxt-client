@@ -262,7 +262,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		path: `/tools/context/tool-configuration`,
 		component: () =>
 			import(
-				"@/pages/context-external-tool/ContextExternalToolConfigurator.page.vue"
+				"@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"
 			),
 		name: "context-external-tool-configuration",
 		beforeEnter: Multiguard([
@@ -278,7 +278,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 				name: "context-external-tool-configuration-edit",
 				component: () =>
 					import(
-						"@/pages/context-external-tool/ContextExternalToolConfigurator.page.vue"
+						"@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"
 					),
 			},
 		],
