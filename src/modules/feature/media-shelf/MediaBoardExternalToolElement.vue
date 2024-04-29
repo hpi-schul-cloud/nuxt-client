@@ -53,7 +53,7 @@ const loadExternalToolData = async (
 		displayData.value = {
 			title: externalToolDisplayData.name,
 			description: externalToolDisplayData.description,
-			thumbnail: undefined,
+			thumbnail: externalToolDisplayData.logoUrl,
 		};
 
 		await fetchLaunchRequest(element.content.contextExternalToolId);
