@@ -19,17 +19,15 @@
 				<v-img
 					v-if="element.thumbnail"
 					:src="element.thumbnail"
-					class="flex-fill"
-					min-height="100px"
-					cover
+					:aspect-ratio="16 / 9"
+					width="100%"
 					data-testid="media-element-thumbnail"
 				/>
 				<v-img
 					v-else
+					:aspect-ratio="16 / 9"
+					width="100%"
 					src="@/assets/img/media-board/default_img_media_shelf.png"
-					class="flex-fill bg-white"
-					min-height="100px"
-					cover
 					data-testid="media-element-default-thumbnail"
 				/>
 				<ContentElementBar :has-grey-background="true">
@@ -37,7 +35,7 @@
 						{{ element.title }}
 					</template>
 					<template #description>
-						<div class="description">
+						<div class="description text-body-2">
 							{{ element.description }}
 						</div>
 					</template>
@@ -65,14 +63,11 @@ const isHovered = useElementHover(card);
 </script>
 
 <style scoped lang="scss">
-$card-height: 366px;
-$card-width: 344px;
+$card-width: 288px;
 
 .element {
 	min-width: $card-width;
 	max-width: $card-width;
-	min-height: $card-height;
-	max-height: $card-height;
 }
 
 .placeholder {
