@@ -114,7 +114,7 @@ import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
@@ -128,7 +128,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { showCustomNotifier } = useBoardNotifier();
+const { resetNotifierModule, showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 
@@ -227,7 +227,6 @@ const onUpdateBoardVisibility = async (newVisibility: boolean) => {
 	if (!hasEditPermission) return;
 
 	boardStore.dispatch(boardActions.updateBoardVisibility({ newVisibility }));
-	await setAlert();
 };
 
 const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
@@ -245,19 +244,28 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 };
 
 onMounted(() => {
-	setAlert();
 	boardStore.dispatch(boardActions.fetchBoard({ id: props.boardId }));
+});
+
+onUnmounted(() => {
+	resetNotifierModule();
 });
 
 const setAlert = useDebounceFn(() => {
 	if (!isTeacher) return;
 
-	if (!board.value?.isVisible) {
+	if (!board.value) {
+		return;
+	}
+
+	if (!board.value.isVisible) {
 		showCustomNotifier(t("components.board.alert.info.draft"), "info");
 	} else {
 		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
 	}
-}, 100);
+}, 150);
+
+watch(() => board.value?.isVisible, setAlert, { immediate: true });
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")
@@ -295,7 +303,7 @@ const boardStyle = computed(() => {
 	if (!isListBoard.value) {
 		return;
 	}
-	const style = { maxWidth: "80ch" };
+	const style = { maxWidth: "80ch", minWidth: "20rem" };
 	return style;
 });
 
