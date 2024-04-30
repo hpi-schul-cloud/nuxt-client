@@ -112,7 +112,6 @@ export const useSocketApi = () => {
 				const response = await emitWithAck("create-column-request", {
 					boardId: boardStore.board.id,
 				});
-				boardStore.createColumnSuccess(response);
 				payload.toColumnId = response.newColumn.id;
 			}
 			emitOnSocket("move-card-request", payload);
