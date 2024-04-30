@@ -17,7 +17,6 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 	});
 
 	socket.onAny((event, ...args) => {
-		console.log(event, args);
 		dispatch({ type: event, payload: args[0] });
 	});
 
@@ -26,6 +25,9 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 	});
 
 	const emitOnSocket = (action: string, data: unknown) => {
+		if (!socket.connected) {
+			socket.connect();
+		}
 		socket.emit(action, data);
 	};
 
