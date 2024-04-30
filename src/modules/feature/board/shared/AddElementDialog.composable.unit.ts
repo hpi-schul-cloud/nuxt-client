@@ -3,6 +3,9 @@ import { ConfigResponse } from "@/serverApi/v3/api";
 import NotifierModule from "@/store/notifier";
 import { injectStrict } from "@/utils/inject";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { createMock } from "@golevelup/ts-jest";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { ref } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
 
@@ -12,6 +15,31 @@ jest.mock("./SharedElementTypeSelection.composable");
 
 jest.mock("@/utils/inject");
 const mockedInjectStrict = jest.mocked(injectStrict);
+
+const i18nKey =
+	"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
+
+const translationMap: Record<string, string> = {};
+
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({
+			t: (key: string) => key,
+			tc: (key: string) => key,
+			te: (key: string) => translationMap[key] !== undefined,
+		}),
+	};
+});
+
+jest.mock("@util-board");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+jest.mocked(useSharedLastCreatedElement).mockImplementation(() => {
+	return {
+		lastCreatedElementId: ref(undefined),
+		resetLastCreatedElementId: jest.fn(),
+	};
+});
 
 // simple mock, as we only need to provide the env-config-module (the concrete value is even irrelevant for the currently implemented tests)
 mockedInjectStrict.mockImplementation(() => {
@@ -34,9 +62,18 @@ describe("ElementTypeSelection Composable", () => {
 				const addElementMock = jest.fn();
 				const elementType = ContentElementType.RichText;
 
+				const showCustomNotifierMock = jest.fn();
+				const mockedBoardNotifierCalls = createMock<
+					ReturnType<typeof useBoardNotifier>
+				>({
+					showCustomNotifier: showCustomNotifierMock,
+				});
+				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
 				return {
 					addElementMock,
 					elementType,
+					showCustomNotifierMock,
 				};
 			};
 
@@ -62,6 +99,72 @@ describe("ElementTypeSelection Composable", () => {
 				await onElementClick(elementType);
 
 				expect(isDialogOpen.value).toBe(false);
+			});
+
+			describe("when element type is CollaborativeTextEditor", () => {
+				const setup = () => {
+					setupSharedElementTypeSelectionMock();
+
+					const addElementMock = jest.fn();
+					const elementType = ContentElementType.CollaborativeTextEditor;
+
+					const showCustomNotifierMock = jest.fn();
+					const mockedBoardNotifierCalls = createMock<
+						ReturnType<typeof useBoardNotifier>
+					>({
+						showCustomNotifier: showCustomNotifierMock,
+					});
+					mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+					return {
+						addElementMock,
+						elementType,
+						showCustomNotifierMock,
+					};
+				};
+				it("should show Notification", async () => {
+					const { addElementMock, elementType, showCustomNotifierMock } =
+						setup();
+
+					const { onElementClick } = useAddElementDialog(addElementMock);
+
+					await onElementClick(elementType);
+
+					expect(showCustomNotifierMock).toHaveBeenCalledWith(i18nKey, "info");
+				});
+			});
+
+			describe("when element type is NOT CollaborativeTextEditor", () => {
+				const setup = () => {
+					setupSharedElementTypeSelectionMock();
+
+					const addElementMock = jest.fn();
+					const elementType = ContentElementType.RichText;
+
+					const showCustomNotifierMock = jest.fn();
+					const mockedBoardNotifierCalls = createMock<
+						ReturnType<typeof useBoardNotifier>
+					>({
+						showCustomNotifier: showCustomNotifierMock,
+					});
+					mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+					return {
+						addElementMock,
+						elementType,
+						showCustomNotifierMock,
+					};
+				};
+				it("should NOT show Notification", async () => {
+					const { addElementMock, elementType, showCustomNotifierMock } =
+						setup();
+
+					const { onElementClick } = useAddElementDialog(addElementMock);
+
+					await onElementClick(elementType);
+
+					expect(showCustomNotifierMock).toBeCalledTimes(0);
+				});
 			});
 		});
 		describe("when addElement returns error", () => {
