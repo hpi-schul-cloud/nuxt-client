@@ -245,7 +245,10 @@ describe("BoardStore", () => {
 		it("should not update board title when board value is undefined", async () => {
 			const { boardStore } = setup(false);
 
-			boardStore.updateBoardTitleSuccess({ newTitle: NEW_TITLE });
+			boardStore.updateBoardTitleSuccess({
+				boardId: "boardId",
+				newTitle: NEW_TITLE,
+			});
 
 			expect(boardStore.board).toBe(undefined);
 		});
@@ -253,7 +256,10 @@ describe("BoardStore", () => {
 		it("should update board title", async () => {
 			const { boardStore } = setup();
 
-			boardStore.updateBoardTitleSuccess({ newTitle: NEW_TITLE });
+			boardStore.updateBoardTitleSuccess({
+				boardId: "boardId",
+				newTitle: NEW_TITLE,
+			});
 
 			expect(boardStore.board?.title).toStrictEqual(NEW_TITLE);
 		});
@@ -288,13 +294,19 @@ describe("BoardStore", () => {
 		it("should not update board title when board value is undefined", async () => {
 			const { boardStore } = setup(false);
 
-			boardStore.updateBoardVisibilitySuccess({ newVisibility: true });
+			boardStore.updateBoardVisibilitySuccess({
+				boardId: "boardId",
+				isVisible: true,
+			});
 			expect(boardStore.board).toBe(undefined);
 		});
 		it("should update board visibility", async () => {
 			const { boardStore } = setup();
 
-			boardStore.updateBoardVisibilitySuccess({ newVisibility: true });
+			boardStore.updateBoardVisibilitySuccess({
+				boardId: "boardId",
+				isVisible: true,
+			});
 
 			expect(boardStore.board?.isVisible).toStrictEqual(true);
 		});
@@ -574,7 +586,7 @@ describe("BoardStore", () => {
 		});
 
 		describe("@updateBoardTitleRequest", () => {
-			const payload = { newTitle: "newTitle" };
+			const payload = { boardId: "boardId", newTitle: "newTitle" };
 
 			it("should call socketApi.updateBoardTitleRequest when feature flag is set true", () => {
 				const { boardStore } = setup(true, true);
@@ -616,7 +628,7 @@ describe("BoardStore", () => {
 		});
 
 		describe("@updateBoardVisibilityRequest", () => {
-			const payload = { newVisibility: true };
+			const payload = { boardId: "boardId", isVisible: true };
 
 			it("should call socketApi.updateBoardVisibilityRequest when feature flag is set true", () => {
 				const { boardStore } = setup(true, true);
@@ -631,7 +643,7 @@ describe("BoardStore", () => {
 				boardStore.updateBoardVisibilityRequest(payload);
 				expect(
 					mockedBoardApiCalls.updateBoardVisibilityCall.mock.calls[0][1]
-				).toStrictEqual(payload.newVisibility);
+				).toStrictEqual(payload.isVisible);
 			});
 		});
 

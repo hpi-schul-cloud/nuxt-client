@@ -149,10 +149,10 @@ describe("useSocketApi", () => {
 	describe("updateBoardTitleRequest", () => {
 		it("should call action with correct parameters", () => {
 			const { updateBoardTitleRequest } = setup();
-			updateBoardTitleRequest({ newTitle: "newTitle" });
+			updateBoardTitleRequest({ boardId: "boardId", newTitle: "newTitle" });
 			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
 				"update-board-title-request",
-				{ newTitle: "newTitle" }
+				{ boardId: "boardId", newTitle: "newTitle" }
 			);
 		});
 	});
@@ -160,10 +160,10 @@ describe("useSocketApi", () => {
 	describe("updateBoardVisibilityRequest", () => {
 		it("should call action with correct parameters", () => {
 			const { updateBoardVisibilityRequest } = setup();
-			updateBoardVisibilityRequest({ newVisibility: true });
+			updateBoardVisibilityRequest({ boardId: "boardId", isVisible: true });
 			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
 				"update-board-visibility-request",
-				{ newVisibility: true }
+				{ boardId: "boardId", isVisible: true }
 			);
 		});
 	});
