@@ -216,10 +216,13 @@ const onReloadBoard = async () => {
 	boardStore.reloadBoard();
 };
 
-const onUpdateBoardVisibility = async (newVisibility: boolean) => {
+const onUpdateBoardVisibility = async (isVisible: boolean) => {
 	if (!hasEditPermission) return;
 
-	boardStore.updateBoardVisibilityRequest({ newVisibility });
+	boardStore.updateBoardVisibilityRequest({
+		boardId: props.boardId,
+		isVisible,
+	});
 	await setAlert();
 };
 
@@ -233,7 +236,8 @@ const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
 };
 
 const onUpdateBoardTitle = async (newTitle: string) => {
-	if (hasEditPermission) boardStore.updateBoardTitleRequest({ newTitle });
+	if (hasEditPermission)
+		boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
 };
 
 onMounted(() => {

@@ -84,10 +84,6 @@ export type UpdateColumnTitleSuccessPayload = {
 	newTitle: string;
 };
 
-export type UpdateBoardTitleSuccessPayload = {
-	newTitle: string;
-};
-
 export type DisconnectSocketRequestPayload = Record<string, never>;
 export type CreateCardFailurePayload = {
 	errorType: ErrorType;
@@ -130,6 +126,11 @@ export type ReloadBoardSuccessPayload = {
 	id: string;
 };
 export type UpdateBoardTitleRequestPayload = {
+	boardId: string;
+	newTitle: string;
+};
+export type UpdateBoardTitleSuccessPayload = {
+	boardId: string;
 	newTitle: string;
 };
 export type UpdateBoardTitleFailurePayload = {
@@ -137,10 +138,12 @@ export type UpdateBoardTitleFailurePayload = {
 	boardObjectType: BoardObjectType;
 };
 export type UpdateBoardVisibilityRequestPayload = {
-	newVisibility: boolean;
+	boardId: string;
+	isVisible: boolean;
 };
 export type UpdateBoardVisibilitySuccessPayload = {
-	newVisibility: boolean;
+	boardId: string;
+	isVisible: boolean;
 };
 export type UpdateBoardVisibilityFailurePayload = {
 	errorType: ErrorType;

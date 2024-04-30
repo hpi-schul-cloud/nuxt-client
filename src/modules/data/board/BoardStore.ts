@@ -173,7 +173,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	) => {
 		if (!board.value) return;
 
-		board.value.isVisible = payload.newVisibility;
+		board.value.isVisible = payload.isVisible;
 	};
 
 	const moveColumnRequest = async (payload: MoveColumnRequestPayload) => {

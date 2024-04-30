@@ -279,12 +279,12 @@ export const useBoardRestApi = () => {
 		payload: UpdateBoardTitleRequestPayload
 	) => {
 		if (boardStore.board === undefined) return;
-		const { newTitle } = payload;
+		const { boardId, newTitle } = payload;
 
 		try {
-			await updateBoardTitleCall(boardStore.board.id, newTitle);
+			await updateBoardTitleCall(boardId, newTitle);
 
-			boardStore.updateBoardTitleSuccess({ newTitle });
+			boardStore.updateBoardTitleSuccess({ boardId, newTitle });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "board"),
@@ -296,11 +296,11 @@ export const useBoardRestApi = () => {
 		payload: UpdateBoardVisibilityRequestPayload
 	) => {
 		if (boardStore.board === undefined) return;
-		const { newVisibility } = payload;
+		const { boardId, isVisible } = payload;
 
 		try {
-			await updateBoardVisibilityCall(boardStore.board.id, newVisibility);
-			boardStore.updateBoardVisibilitySuccess({ newVisibility });
+			await updateBoardVisibilityCall(boardId, isVisible);
+			boardStore.updateBoardVisibilitySuccess({ boardId, isVisible });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "board"),
