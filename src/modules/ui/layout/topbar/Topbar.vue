@@ -37,7 +37,7 @@
 			:src="school!.logo.url"
 			alt=""
 			max-height="40"
-			max-width="300"
+			max-width="160"
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mx-4" />
 	</VAppBar>
