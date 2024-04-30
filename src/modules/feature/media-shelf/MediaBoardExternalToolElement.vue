@@ -17,6 +17,7 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
+import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
 import { useErrorNotification } from "@util-error-notification";
 import { computed, onUnmounted, PropType, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -84,6 +85,8 @@ onUnmounted(() => {
 	clearInterval(timer);
 });
 
+const { isDragging } = useDragAndDrop();
+
 const onClick = async () => {
 	// Loading has failed before
 	if (launchError.value) {
@@ -92,6 +95,10 @@ const onClick = async () => {
 			text: t("error.generic"),
 		});
 
+		return;
+	}
+
+	if (isDragging.value) {
 		return;
 	}
 
