@@ -144,9 +144,19 @@ describe("notifier store", () => {
 					autoClose: true,
 					timeout: 5000,
 				};
+				const anotherPayload: AlertPayload = {
+					text: "hello another world",
+					status: "success",
+					autoClose: true,
+					timeout: 5000,
+				};
 				notifierModule.addNotifier(payload);
-				expect(notifierModule.notifierItems).toStrictEqual([payload]);
-				notifierModule.removeNotifier(payload);
+				notifierModule.addNotifier(anotherPayload);
+				expect(notifierModule.notifierItems).toStrictEqual([
+					anotherPayload,
+					payload,
+				]);
+				notifierModule.reset();
 				expect(notifierModule.notifierItems).toStrictEqual([]);
 			});
 		});
