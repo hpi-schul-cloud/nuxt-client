@@ -127,7 +127,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { showCustomNotifier } = useBoardNotifier();
+const { resetNotifierModule, showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 
@@ -246,15 +246,25 @@ onUnmounted(() => {
 	boardStore.setBoard(undefined);
 });
 
+onUnmounted(() => {
+	resetNotifierModule();
+});
+
 const setAlert = useDebounceFn(() => {
 	if (!isTeacher) return;
 
-	if (!board.value?.isVisible) {
+	if (!board.value) {
+		return;
+	}
+
+	if (!board.value.isVisible) {
 		showCustomNotifier(t("components.board.alert.info.draft"), "info");
 	} else {
 		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
 	}
-}, 100);
+}, 150);
+
+watch(() => board.value?.isVisible, setAlert, { immediate: true });
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")
@@ -292,7 +302,7 @@ const boardStyle = computed(() => {
 	if (!isListBoard.value) {
 		return;
 	}
-	const style = { maxWidth: "80ch" };
+	const style = { maxWidth: "80ch", minWidth: "20rem" };
 	return style;
 });
 
