@@ -1,5 +1,5 @@
 <template>
-	<v-list-group value="language" density="compact">
+	<v-list-group value="languages" density="compact" role="menuitem">
 		<template v-slot:activator="{ props }">
 			<v-list-item
 				v-bind="props"
@@ -7,9 +7,8 @@
 				role="menu"
 				:prepend-icon="selectedLanguage.icon"
 				:data-testid="`selected-language-${selectedLanguage.language}`"
-				:aria-label="`${$t('global.topbar.language.select')} ${$t(
-					'global.topbar.language.selectedLanguage'
-				)} ${selectedLanguage.translatedName}`"
+				:aria-label="ariaLabel"
+				@click.stop
 			>
 				<v-list-item-title>{{ selectedLanguage.longName }}</v-list-item-title>
 			</v-list-item>
@@ -87,6 +86,12 @@ const selectedLanguage = computed(() => {
 	);
 
 	return language;
+});
+
+const ariaLabel = computed(() => {
+	return `${t("global.topbar.language.select")} ${t(
+		"global.topbar.language.selectedLanguage"
+	)} ${selectedLanguage.value.translatedName}`;
 });
 </script>
 

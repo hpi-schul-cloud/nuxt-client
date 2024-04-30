@@ -15,7 +15,7 @@
 					{{ user.firstName }} {{ user.lastName }} ({{ userRole }})
 				</VListItem>
 				<VDivider />
-				<language-menu />
+				<LanguageMenu />
 				<VListItem href="/account" data-testid="account-link">
 					{{ $t("global.topbar.settings") }}
 				</VListItem>
