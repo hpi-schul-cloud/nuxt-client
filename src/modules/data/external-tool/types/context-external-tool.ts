@@ -1,5 +1,5 @@
 import { ToolContextType } from "@/serverApi/v3";
-import { ToolParameterEntry } from "./tool-parameter-entry";
+import { ToolParameterEntry } from "@/store/external-tool";
 
 export interface ContextExternalToolSave {
 	schoolToolId: string;

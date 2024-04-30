@@ -1,5 +1,5 @@
+import { ContextExternalToolConfigurationTemplate } from "@data-external-tool";
 import { Factory } from "fishery";
-import { ContextExternalToolConfigurationTemplate } from "@/store/external-tool";
 
 export const contextExternalToolConfigurationTemplateFactory =
 	Factory.define<ContextExternalToolConfigurationTemplate>(({ sequence }) => ({

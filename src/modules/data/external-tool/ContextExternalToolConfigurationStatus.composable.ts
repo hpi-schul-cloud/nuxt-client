@@ -1,5 +1,5 @@
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { ContextExternalToolConfigurationStatus } from "./types";
 
 export const useContextExternalToolConfigurationStatus = () => {
 	const authModule = injectStrict(AUTH_MODULE_KEY);

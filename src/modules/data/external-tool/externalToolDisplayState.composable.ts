@@ -1,11 +1,12 @@
-import { ExternalToolDisplayData } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { ref, Ref } from "vue";
-import { useContextExternalToolApi } from "./index";
+import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
+import { ExternalToolDisplayData } from "./types";
 
-export const useExternalToolElementDisplayState = () => {
-	const { fetchDisplayDataCall } = useContextExternalToolApi();
+export const useExternalToolDisplayState = () => {
+	const { fetchDisplayDataCall } = useExternalToolReferenceApi();
+
 	const displayData: Ref<ExternalToolDisplayData | undefined> = ref();
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref(undefined);
