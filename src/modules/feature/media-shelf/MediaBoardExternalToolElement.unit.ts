@@ -18,6 +18,7 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
@@ -209,6 +210,33 @@ describe("MediaBoardExternalToolElement", () => {
 				).toHaveBeenCalledWith(
 					externalToolElement.content.contextExternalToolId
 				);
+			});
+		});
+
+		describe("when dragging", () => {
+			const setup = () => {
+				const externalToolElement =
+					mediaExternalToolElementResponseFactory.build();
+				const { wrapper } = getWrapper({
+					element: externalToolElement,
+				});
+
+				useDragAndDrop().dragStart();
+
+				return {
+					wrapper,
+					externalToolElement,
+				};
+			};
+
+			it("should not launch the tool", async () => {
+				const { wrapper } = setup();
+
+				await wrapper.trigger("click");
+
+				expect(
+					useExternalToolLaunchStateMock.launchTool
+				).not.toHaveBeenCalled();
 			});
 		});
 
