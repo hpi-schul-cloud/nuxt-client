@@ -24,6 +24,7 @@
 				:data="fieldData"
 				:selected="selected"
 				:highlighted="isHighlighted"
+				:isEditable="isEditable"
 				:rowindex="rowindex"
 			>
 				<div class="text-content">
@@ -45,6 +46,7 @@ export default {
 		},
 		selectable: Boolean,
 		selected: Boolean,
+		isEditable: Boolean,
 		columnKeys: {
 			type: Array,
 			default: () => [],

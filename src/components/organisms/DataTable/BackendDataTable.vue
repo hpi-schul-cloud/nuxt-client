@@ -39,6 +39,7 @@
 							v-for="(row, rowindex) in data"
 							:key="getValueByPath(row, trackBy)"
 							:selectable="rowsSelectable"
+							:isEditable="row.isEditable"
 							:rowindex="rowindex"
 							:selected="isRowSelected(row)"
 							:column-keys="columnKeys"

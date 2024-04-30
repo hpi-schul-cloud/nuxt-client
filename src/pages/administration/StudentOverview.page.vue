@@ -99,7 +99,7 @@
 						>
 					</span>
 				</template>
-				<template #datacolumn-_id="{ data, selected, highlighted }">
+				<template #datacolumn-_id="{ data, selected, highlighted, isEditable }">
 					<v-btn
 						icon
 						variant="text"
@@ -114,7 +114,7 @@
 						"
 						data-testid="edit_student_button"
 					>
-						<v-icon size="20">$mdiPencilOutline</v-icon>
+						<v-icon v-if="isEditable" size="20">$mdiPencilOutline</v-icon>
 					</v-btn>
 				</template>
 			</backend-data-table>
