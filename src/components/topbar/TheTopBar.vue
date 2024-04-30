@@ -114,7 +114,8 @@
 
 <script lang="ts">
 import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
-import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import LanguageMenu from "@/modules/ui/layout/topbar/LanguageMenu.vue";
 import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import PopupIcon from "@/components/topbar/PopupIcon.vue";
 import PopupIconInitials from "@/components/topbar/PopupIconInitials.vue";

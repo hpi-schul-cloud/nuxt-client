@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
+import LanguageMenu from "./LanguageMenu.vue";
 import { MeUserResponse } from "@/serverApi/v3";
 
 const props = defineProps({
