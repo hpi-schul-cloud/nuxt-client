@@ -18,6 +18,6 @@ const props = defineProps({
 const displayData: ComputedRef<MediaElementDisplay> = computed(() => ({
 	title: props.element.name,
 	description: props.element.description,
-	thumbnail: undefined,
+	thumbnail: props.element?.logoUrl,
 }));
 </script>

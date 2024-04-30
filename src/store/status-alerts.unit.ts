@@ -1,22 +1,26 @@
 import StatusAlertsModule from "./status-alerts";
 import { StatusAlert } from "./types/status-alert";
-import { initializeAxios } from "../utils/api";
-import { AxiosInstance } from "axios";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
+import * as serverApi from "@/serverApi/v3/api";
 
 describe("status alerts module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
-			initializeAxios({
-				get: async (path) => {
-					if (path === "/v1/alert") return { data: mockStatusAlerts };
-				},
-			} as AxiosInstance);
 			setupStores();
 		});
 		describe("fetchStatusAlerts", () => {
 			it("should call api and set the alerts corectly", async () => {
+				const mockApi = {
+					alertControllerFind: jest.fn(() => ({
+						data: {
+							data: mockStatusAlerts,
+						},
+					})),
+				};
+				jest
+					.spyOn(serverApi, "AlertApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.AlertApiInterface);
 				const statusAlertsModule = new StatusAlertsModule({});
 				const setStatusAlertsSpy = jest.spyOn(
 					statusAlertsModule,
@@ -35,12 +39,13 @@ describe("status alerts module", () => {
 				expect(setStatusAlertsSpy).toHaveBeenCalledWith(mockStatusAlerts);
 			});
 			it("should handle exception", async () => {
-				initializeAxios({
-					get: async (path: string) => {
-						throw new Error(path);
-						return;
-					},
-				} as AxiosInstance);
+				const error = { status: 418, statusText: "I'm a teapot" };
+				const mockApi = {
+					alertControllerFind: jest.fn(() => Promise.reject({ ...error })),
+				};
+				jest
+					.spyOn(serverApi, "AlertApiFactory")
+					.mockReturnValue(mockApi as unknown as serverApi.AlertApiInterface);
 				const statusAlertsModule = new StatusAlertsModule({});
 				const setBusinessErrorSpy = jest.spyOn(
 					statusAlertsModule,

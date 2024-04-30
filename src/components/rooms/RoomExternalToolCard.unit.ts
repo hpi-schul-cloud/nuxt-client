@@ -1,5 +1,3 @@
-import { RoomDotMenu } from "@ui-room-details";
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
@@ -7,8 +5,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { useExternalToolLaunchState } from "@data-external-tool";
+import {
+	ExternalToolDisplayData,
+	useExternalToolLaunchState,
+} from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { RoomDotMenu } from "@ui-room-details";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";

@@ -1558,8 +1558,6 @@ export default {
 		"Bei der Übertragung eines Parameterwerts ist ein Fehler ausgetreten. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"Die benutzte Version dieses Tools ist nicht mehr aktuell. Bitte die Version aktualisieren.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ein Tool mit gleichem Namen wurde bereits dem Kurs zugeordnet. Die einem Kurs zugeordneten Tools müssen eindeutige Namen haben.",
 	"pages.tool.context.description":
