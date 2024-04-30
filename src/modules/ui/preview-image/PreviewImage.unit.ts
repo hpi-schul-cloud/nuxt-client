@@ -17,6 +17,7 @@ describe("PreviewImage", () => {
 			"aspect-ratio": 1.77777,
 			position: "top",
 			cover: true,
+			"max-height": 336,
 		};
 		const wrapper = shallowMount(PreviewImage, {
 			propsData,
@@ -37,6 +38,7 @@ describe("PreviewImage", () => {
 			"aspect-ratio": 1.77777,
 			position: "top",
 			cover: true,
+			"max-height": 336,
 		};
 		const wrapper = mount(PreviewImage, {
 			attachTo: document.body,
@@ -60,6 +62,7 @@ describe("PreviewImage", () => {
 		expect(image.attributes("alt")).toBe(alt);
 		expect(image.attributes("aspectratio")).toBe("1.77777");
 		expect(image.attributes("cover")).toBe("true");
+		expect(image.attributes("maxheight")).toBe("336");
 	});
 
 	it("should set max-width with correct value", async () => {

@@ -117,8 +117,6 @@ describe("Board", () => {
 			isLoading: ref(options?.isLoading ?? false),
 			notifyWithTemplateAndReload: jest.fn(),
 		});
-		document.body.setAttribute("data-app", "true");
-
 		mockedBoardStateCalls = createMock<ReturnType<typeof useBoardStore>>();
 
 		mockedBoardStateCalls.board = ref<Board | undefined>(options?.board).value;
@@ -188,6 +186,10 @@ describe("Board", () => {
 	const oneColumn = columnResponseFactory.build({ cards });
 	const boardWithOneColumn = boardResponseFactory.build({
 		columns: [oneColumn],
+	});
+	const boardWithOneColumnVisible = boardResponseFactory.build({
+		columns: [oneColumn],
+		isVisible: true,
 	});
 
 	const twoColumns = columnResponseFactory.buildList(2, { cards });
@@ -339,7 +341,7 @@ describe("Board", () => {
 				jest.clearAllMocks();
 			});
 
-			it("should call the board notifier when the user is teacher", async () => {
+			it("should call the board notifier when the user is teacher", () => {
 				jest.useFakeTimers();
 
 				setup({ board: boardWithOneColumn });
@@ -348,7 +350,57 @@ describe("Board", () => {
 				expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
 			});
 
-			it("should not call the board notifier when the user is not a teacher", async () => {
+			it("should call the board notifier with draft info when board is not visible", () => {
+				jest.useFakeTimers();
+
+				setup({ board: boardWithOneColumn });
+				jest.runAllTimers();
+
+				expect(
+					mockedBoardNotifierCalls.showCustomNotifier
+				).toHaveBeenCalledWith("components.board.alert.info.draft", "info");
+			});
+
+			it("should call the board notifier with published info when board is visible", () => {
+				jest.useFakeTimers();
+
+				setup({ board: boardWithOneColumnVisible });
+				jest.runAllTimers();
+
+				expect(
+					mockedBoardNotifierCalls.showCustomNotifier
+				).toHaveBeenCalledWith("components.board.alert.info.teacher", "info");
+			});
+
+			it("should call the board notifier with published info when board becomes visible", () => {
+				jest.useFakeTimers();
+
+				setup({ board: boardWithOneColumn });
+
+				mockedBoardStateCalls.board!.isVisible = true;
+
+				jest.runAllTimers();
+
+				expect(
+					mockedBoardNotifierCalls.showCustomNotifier
+				).toHaveBeenCalledWith("components.board.alert.info.teacher", "info");
+			});
+
+			it("should call the board notifier with draft info when board should not be visible anymore", () => {
+				jest.useFakeTimers();
+
+				setup({ board: boardWithOneColumnVisible });
+
+				mockedBoardStateCalls.board!.isVisible = false;
+
+				jest.runAllTimers();
+
+				expect(
+					mockedBoardNotifierCalls.showCustomNotifier
+				).toHaveBeenCalledWith("components.board.alert.info.draft", "info");
+			});
+
+			it("should not call the board notifier when the user is not a teacher", () => {
 				defaultPermissions.isTeacher = false;
 				setup();
 				expect(
@@ -389,6 +441,15 @@ describe("Board", () => {
 				const { wrapper } = setup({ board: boardWithOneColumn });
 				expect(wrapper.findComponent(CopyResultModal).exists()).toBe(true);
 			});
+		});
+	});
+
+	describe("when component is unmounted", () => {
+		it("should call reset board notifier", () => {
+			const { wrapper } = setup({ board: boardWithOneColumn });
+			wrapper.unmount();
+
+			expect(mockedBoardNotifierCalls.resetNotifierModule).toHaveBeenCalled();
 		});
 	});
 
