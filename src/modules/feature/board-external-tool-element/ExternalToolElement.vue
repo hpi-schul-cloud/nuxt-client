@@ -53,14 +53,13 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "vue-i18n";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
-	useExternalToolElementDisplayState,
+	ContextExternalTool,
+	ContextExternalToolConfigurationStatus,
+	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
@@ -78,6 +77,7 @@ import {
 	toRef,
 	watch,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
@@ -113,7 +113,7 @@ export default defineComponent({
 			displayData,
 			isLoading: isDisplayDataLoading,
 			error,
-		} = useExternalToolElementDisplayState();
+		} = useExternalToolDisplayState();
 
 		const { launchTool, fetchLaunchRequest } = useExternalToolLaunchState();
 

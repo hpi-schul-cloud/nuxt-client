@@ -40,11 +40,13 @@
 </template>
 
 <script lang="ts">
-import { RoomDotMenu } from "@ui-room-details";
 import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { useExternalToolLaunchState } from "@data-external-tool";
+import {
+	ExternalToolDisplayData,
+	useExternalToolLaunchState,
+} from "@data-external-tool";
 import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, defineComponent, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomBaseCard from "./RoomBaseCard.vue";

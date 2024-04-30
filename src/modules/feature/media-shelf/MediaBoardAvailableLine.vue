@@ -38,7 +38,7 @@
 							bubbleScroll: true,
 							sort: false,
 						}"
-						class="d-flex flex-grid flex-shrink-1 pa-2 ga-4 flex-1-1 scrollable-line"
+						class="d-flex flex-grid flex-shrink-1 pa-2 ga-6 flex-1-1 scrollable-line"
 						@end="onElementDragEnd"
 					>
 						<template #item="{ element }">

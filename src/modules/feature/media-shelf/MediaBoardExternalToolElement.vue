@@ -1,6 +1,6 @@
 <template>
 	<MediaBoardElementDisplay
-		:element="displayData"
+		:element="elementDisplayData"
 		@click="onClick"
 		@keyup.enter="onClick"
 	/>
@@ -8,17 +8,17 @@
 
 <script setup lang="ts">
 import { MediaExternalToolElementResponse } from "@/serverApi/v3";
-import { ExternalToolDisplayData } from "@/store/external-tool";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import {
-	useContextExternalToolApi,
+	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { onUnmounted, PropType, Ref, ref, watch } from "vue";
+import { useErrorNotification } from "@util-error-notification";
+import { computed, onUnmounted, PropType, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
@@ -34,32 +34,34 @@ const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-const { fetchDisplayDataCall } = useContextExternalToolApi();
+const {
+	fetchDisplayData,
+	displayData,
+	error: displayError,
+} = useExternalToolDisplayState();
 const {
 	launchTool,
 	fetchLaunchRequest,
 	error: launchError,
 } = useExternalToolLaunchState();
 
-const displayData: Ref<MediaElementDisplay | undefined> = ref();
+useErrorNotification(displayError);
+
+const elementDisplayData: Ref<MediaElementDisplay | undefined> = computed(() =>
+	displayData.value
+		? {
+				title: displayData.value.name,
+				description: displayData.value.description,
+				thumbnail: displayData.value.logoUrl,
+			}
+		: undefined
+);
 
 const loadExternalToolData = async (
 	element: MediaExternalToolElementResponse
 ): Promise<void> => {
-	try {
-		const externalToolDisplayData: ExternalToolDisplayData =
-			await fetchDisplayDataCall(element.content.contextExternalToolId);
-
-		displayData.value = {
-			title: externalToolDisplayData.name,
-			description: externalToolDisplayData.description,
-			thumbnail: undefined,
-		};
-
-		await fetchLaunchRequest(element.content.contextExternalToolId);
-	} catch (error) {
-		console.error(error);
-	}
+	await fetchDisplayData(element.content.contextExternalToolId);
+	await fetchLaunchRequest(element.content.contextExternalToolId);
 };
 
 watch(
