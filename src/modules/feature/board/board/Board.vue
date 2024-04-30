@@ -23,8 +23,7 @@
 							direction: 'horizontal',
 							disabled: isEditMode || !hasMovePermission,
 							group: 'columns',
-							delay: 300, // isDesktop ? 0 : 300
-							delayOnTouchOnly: true,
+							delay: isTouchDetected ? 300 : 0,
 							ghostClass: 'sortable-drag-ghost',
 							easing: 'cubic-bezier(1, 0, 0, 1)',
 							dragClass: 'sortable-drag-board-card',
@@ -116,6 +115,7 @@ import { Sortable } from "sortablejs-vue3";
 import { computed, onMounted, onUnmounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useTouchDetection } from "@util-device-detection";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
@@ -141,6 +141,7 @@ watch(board, async () => {
 });
 
 useBodyScrolling();
+const { isTouchDetected } = useTouchDetection();
 
 const {
 	hasMovePermission,
