@@ -1,114 +1,93 @@
 <template>
-	<v-list role="menuitem" density="compact">
-		<v-list-item
-			role="menu"
-			:data-testid="`selected-language-${selectedItem.language}`"
-			:aria-label="`${$t('global.topbar.language.select')} ${$t(
-				'global.topbar.language.selectedLanguage'
-			)} ${selectedItem.translatedName}`"
-			@click.stop.prevent="toggleMenu"
-		>
-			<template v-slot:prepend>
-				<v-icon :icon="selectedItem.icon" />
-			</template>
-			<v-list-item-title>{{ selectedItem.longName }}</v-list-item-title>
-			<template v-slot:append>
-				<v-icon :icon="mdiMenuDown" />
-			</template>
-		</v-list-item>
-		<template v-if="menuVisible">
+	<v-list-group value="language" density="compact">
+		<template v-slot:activator="{ props }">
 			<v-list-item
-				v-for="item in availableItems"
-				:key="item.language"
-				role="menuitem"
-				:data-testid="`available-language-${item.language}`"
-				:aria-label="item.translatedName"
-				@click="changeLanguage(item)"
-				:prepend-icon="item.icon"
+				v-bind="props"
+				class="pl-6"
+				role="menu"
+				:prepend-icon="selectedLanguage.icon"
+				:data-testid="`selected-language-${selectedLanguage.language}`"
+				:aria-label="`${$t('global.topbar.language.select')} ${$t(
+					'global.topbar.language.selectedLanguage'
+				)} ${selectedLanguage.translatedName}`"
 			>
-				<template v-slot:prepend>
-					<v-icon :icon="item.icon" />
-				</template>
-				<v-list-item-title>{{ item.longName }}</v-list-item-title>
+				<v-list-item-title>{{ selectedLanguage.longName }}</v-list-item-title>
 			</v-list-item>
 		</template>
-	</v-list>
+		<v-list-item
+			v-for="item in availableLanguages"
+			role="menuitem"
+			:key="item.language"
+			:prepend-icon="item.icon"
+			:data-testid="`available-language-${item.language}`"
+			:aria-label="item.translatedName"
+			@click="changeLanguage(item)"
+		>
+			<template v-slot:prepend>
+				<v-icon :icon="item.icon" />
+			</template>
+			<v-list-item-title>{{ item.longName }}</v-list-item-title>
+		</v-list-item>
+	</v-list-group>
 </template>
 
-<script>
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { mdiMenuDown, mdiMenuUp } from "@mdi/js";
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { LanguageType } from "@/serverApi/v3";
+import {
+	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	data() {
-		return {
-			mdiMenuDown,
-			mdiMenuUp,
-			menuVisible: false,
-		};
-	},
-	inject: {
-		authModule: { from: AUTH_MODULE_KEY },
-		envConfigModule: { from: ENV_CONFIG_MODULE_KEY },
-	},
-	computed: {
-		availableItems: {
-			get() {
-				const languages = this.envConfigModule.getAvailableLanguages
-					.map((language) => this.buildLanguageItem(language))
-					.filter((language) => {
-						return language.language !== this.selectedItem.language;
-					});
-				return languages;
-			},
-			set() {
-				return;
-			},
-		},
-		selectedItem: {
-			get() {
-				const language = this.buildLanguageItem(
-					this.authModule.getLocale || this.envConfigModule.getFallbackLanguage
-				);
-				return language;
-			},
-			set() {
-				return;
-			},
-		},
-	},
-	methods: {
-		toggleMenu() {
-			this.menuVisible = !this.menuVisible;
-		},
-		async changeLanguage(item) {
-			await this.authModule.updateUserLanguage(item.language);
-			window.location.reload();
-		},
-		buildLanguageItem(language) {
-			const longName = this.$t(`global.topbar.language.longName.${language}`);
-			const translatedName = this.$t(`common.words.languages.${language}`);
-			const icon =
-				"$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
-			return { language, longName, translatedName, icon };
-		},
-	},
+type LanguageItem = {
+	language: LanguageType;
+	longName: string;
+	translatedName: string;
+	icon: string;
+};
+
+const authModule = injectStrict(AUTH_MODULE_KEY);
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const { t } = useI18n();
+
+const changeLanguage = async (item: LanguageItem) => {
+	await authModule.updateUserLanguage(item.language);
+	window.location.reload();
+};
+
+const buildLanguageItem = (lang: LanguageType | string): LanguageItem => {
+	const language = lang as LanguageType;
+	const longName = t(`global.topbar.language.longName.${language}`);
+	const translatedName = t(`common.words.languages.${language}`);
+	const icon =
+		"$langIcon" + language.charAt(0).toUpperCase() + language.slice(1);
+
+	return { language, longName, translatedName, icon };
+};
+
+const availableLanguages = computed(() => {
+	const languages = envConfigModule.getAvailableLanguages
+		.map((language) => buildLanguageItem(language))
+		.filter((language) => {
+			return language.language !== selectedLanguage.value.language;
+		});
+
+	return languages;
+});
+
+const selectedLanguage = computed(() => {
+	const language = buildLanguageItem(
+		authModule.getLocale || envConfigModule.getFallbackLanguage
+	);
+
+	return language;
 });
 </script>
 
-<style lang="scss" scoped>
-.v-list-item__icon {
-	margin-right: var(--space-xs) !important;
-	margin-left: var(--space-xs);
-}
-
-.v-list-item__prepend > .v-icon {
-	opacity: 1;
-	margin-left: var(--space-xs);
-}
-
-.v-list-item:focus {
-	outline: none;
+<style scoped>
+:deep(.v-list-group__items .v-list-item) {
+	padding-inline-start: 24px !important;
 }
 </style>
