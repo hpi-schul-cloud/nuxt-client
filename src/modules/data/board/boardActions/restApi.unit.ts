@@ -557,7 +557,10 @@ describe("restApi", () => {
 			const { boardStore } = setup(false);
 			const { updateBoardTitleRequest } = useBoardRestApi();
 
-			await updateBoardTitleRequest({ newTitle: "newTitle" });
+			await updateBoardTitleRequest({
+				boardId: "boardId",
+				newTitle: "newTitle",
+			});
 
 			expect(boardStore.updateBoardTitleSuccess).not.toHaveBeenCalled();
 		});
@@ -568,9 +571,10 @@ describe("restApi", () => {
 
 			const newTitle = "newTitle";
 
-			await updateBoardTitleRequest({ newTitle });
+			await updateBoardTitleRequest({ boardId: "boardId", newTitle });
 
 			expect(boardStore.updateBoardTitleSuccess).toHaveBeenCalledWith({
+				boardId: "boardId",
 				newTitle,
 			});
 		});
@@ -583,7 +587,7 @@ describe("restApi", () => {
 
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
 
-			await updateBoardTitleRequest({ newTitle });
+			await updateBoardTitleRequest({ boardId: "boardId", newTitle });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
@@ -594,7 +598,10 @@ describe("restApi", () => {
 			const { boardStore } = setup(false);
 			const { updateBoardVisibilityRequest } = useBoardRestApi();
 
-			await updateBoardVisibilityRequest({ newVisibility: true });
+			await updateBoardVisibilityRequest({
+				boardId: "boardId",
+				isVisible: true,
+			});
 
 			expect(boardStore.updateBoardVisibilitySuccess).not.toHaveBeenCalled();
 		});
@@ -603,12 +610,13 @@ describe("restApi", () => {
 			const { boardStore } = setup();
 			const { updateBoardVisibilityRequest } = useBoardRestApi();
 
-			const newVisibility = true;
+			const isVisible = true;
 
-			await updateBoardVisibilityRequest({ newVisibility });
+			await updateBoardVisibilityRequest({ boardId: "boardId", isVisible });
 
 			expect(boardStore.updateBoardVisibilitySuccess).toHaveBeenCalledWith({
-				newVisibility,
+				boardId: "boardId",
+				isVisible,
 			});
 		});
 
@@ -618,7 +626,10 @@ describe("restApi", () => {
 
 			mockedBoardApiCalls.updateBoardVisibilityCall.mockRejectedValue({});
 
-			await updateBoardVisibilityRequest({ newVisibility: true });
+			await updateBoardVisibilityRequest({
+				boardId: "boardId",
+				isVisible: true,
+			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
@@ -640,7 +651,10 @@ describe("restApi", () => {
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
 			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
 
-			await updateBoardTitleRequest({ newTitle: "newTitlte" });
+			await updateBoardTitleRequest({
+				boardId: "boardId",
+				newTitle: "newTitlte",
+			});
 
 			executeErrorHandler();
 			expect(mockedErrorHandler.notifyWithTemplate).not.toHaveBeenCalled();
@@ -653,7 +667,10 @@ describe("restApi", () => {
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
 			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
 
-			await updateBoardTitleRequest({ newTitle: "newTitlte" });
+			await updateBoardTitleRequest({
+				boardId: "boardId",
+				newTitle: "newTitlte",
+			});
 
 			executeErrorHandler();
 			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith(
