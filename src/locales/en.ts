@@ -312,6 +312,8 @@ export default {
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.drawingElement": "Whiteboard",
 	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
+		"This collaborative text editor is visible and editable for all course participants.",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
