@@ -77,7 +77,7 @@
 					data-testid="item"
 				>
 					<v-list class="my-0 py-0" density="compact">
-						<language-menu />
+						<language-menu class="pl-6" />
 						<v-list-item
 							href="/account"
 							role="menuitem"

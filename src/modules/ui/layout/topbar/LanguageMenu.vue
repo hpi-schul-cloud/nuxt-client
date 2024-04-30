@@ -3,7 +3,7 @@
 		<template v-slot:activator="{ props }">
 			<v-list-item
 				v-bind="props"
-				class="pl-6"
+				v-bind.attr="$attrs"
 				role="menu"
 				:prepend-icon="selectedLanguage.icon"
 				:data-testid="`selected-language-${selectedLanguage.language}`"
@@ -40,6 +40,10 @@ import {
 } from "@/utils/inject";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+
+defineOptions({
+	inheritAttrs: false,
+});
 
 type LanguageItem = {
 	language: LanguageType;
