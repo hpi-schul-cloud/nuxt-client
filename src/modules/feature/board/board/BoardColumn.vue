@@ -24,7 +24,7 @@
 					animation: 250,
 					bubbleScroll: true,
 					direction: 'vertical',
-					delay: isDesktop ? 2 : 300,
+					delay: isTouchDetected ? 300 : 2,
 					disabled: !hasMovePermission,
 					dragClass: 'elevation-10',
 					dragoverBubble: false,
@@ -68,12 +68,12 @@
 </template>
 
 <script lang="ts">
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useDebounceFn, useMediaQuery } from "@vueuse/core";
+import { useDebounceFn } from "@vueuse/core";
 import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 import { useBoardPermissions } from "@data-board";
+import { useTouchDetection } from "@util-device-detection";
 import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
 	CardMove,
@@ -156,6 +156,7 @@ export default defineComponent({
 		});
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
+		const { isTouchDetected } = useTouchDetection();
 		const showAddButton = computed(
 			() => hasCreateColumnPermission && isDragging.value === false
 		);
@@ -182,7 +183,6 @@ export default defineComponent({
 		const onDeleteCard = (cardId: string): void => {
 			emit("delete:card", cardId);
 		};
-		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 		const onDragStart = (): void => {
 			dragStart();
@@ -304,7 +304,7 @@ export default defineComponent({
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
-			isDesktop,
+			isTouchDetected,
 			sortableClasses,
 			titlePlaceholder,
 			onCreateCard,
