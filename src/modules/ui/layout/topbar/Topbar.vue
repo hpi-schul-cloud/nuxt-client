@@ -29,17 +29,17 @@
 		>
 			<PageShare />
 		</TopbarItem>
-		<div v-if="school && isTabletOrBigger" class="mx-1">
+		<div v-if="school && isTabletOrBigger" class="ml-1 mr-4">
 			{{ school.name }}
 		</div>
-		<img
+		<VImg
 			v-if="hasLogo && isDesktop"
-			class="school-logo"
 			:src="school!.logo.url"
-			ref="image"
 			alt=""
+			max-height="40"
+			max-width="300"
 		/>
-		<UserMenu v-if="user" :user="user" :role-names="roleNames" />
+		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mx-4" />
 	</VAppBar>
 </template>
 

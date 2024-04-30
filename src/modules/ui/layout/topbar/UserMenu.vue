@@ -1,17 +1,13 @@
 <template>
 	<VMenu>
 		<template v-slot:activator="{ props }">
-			<VBtn
+			<VAvatar
 				v-bind="props"
 				v-bind.attr="$attrs"
-				data-testid="user-menu-icon"
-				class="bg-accent ml-4 mr-5"
-				icon=""
-				color="white"
-				size="small"
+				class="cursor-pointer avatar-background text-white"
 			>
-				{{ initials }}
-			</VBtn>
+				<span class="text-h6">{{ initials }}</span>
+			</VAvatar>
 		</template>
 		<VCard>
 			<VList>
@@ -37,7 +33,6 @@
 <script setup lang="ts">
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-// import TopbarItem from "./TopbarItem.vue";
 import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
 import { MeUserResponse } from "@/serverApi/v3";
 
@@ -62,3 +57,9 @@ const initials = computed(() => {
 	return props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1);
 });
 </script>
+
+<style scoped>
+.avatar-background {
+	background-color: rgba(var(--v-theme-on-background));
+}
+</style>
