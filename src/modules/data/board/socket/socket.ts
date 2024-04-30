@@ -32,6 +32,9 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 	};
 
 	const emitWithAck = (action: string, data: unknown) => {
+		if (!socket.connected) {
+			socket.connect();
+		}
 		return socket.timeout(30000).emitWithAck(action, data);
 	};
 
