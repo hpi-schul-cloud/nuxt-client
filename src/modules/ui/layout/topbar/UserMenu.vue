@@ -4,7 +4,8 @@
 			<VAvatar
 				v-bind="props"
 				v-bind.attr="$attrs"
-				class="cursor-pointer avatar-background text-white"
+				color="surface-variant"
+				class="cursor-pointer"
 			>
 				<span class="text-h6">{{ initials }}</span>
 			</VAvatar>
@@ -57,9 +58,3 @@ const initials = computed(() => {
 	return props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1);
 });
 </script>
-
-<style scoped>
-.avatar-background {
-	background-color: rgba(var(--v-theme-on-background));
-}
-</style>
