@@ -20,10 +20,7 @@
 				<VListItem href="/account" data-testid="account-link">
 					{{ $t("global.topbar.settings") }}
 				</VListItem>
-				<VListItem
-					data-testid="logout"
-					@click="() => $emit('action', 'logout')"
-				>
+				<VListItem data-testid="logout" @click="logout">
 					{{ $t("common.labels.logout") }}
 				</VListItem>
 			</VList>
@@ -36,6 +33,7 @@ import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import LanguageMenu from "./LanguageMenu.vue";
 import { MeUserResponse } from "@/serverApi/v3";
+import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
 
 const props = defineProps({
 	user: {
@@ -49,6 +47,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const authModule = injectStrict(AUTH_MODULE_KEY);
 
 const userRole = computed(() => {
 	return t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString();
@@ -57,4 +56,8 @@ const userRole = computed(() => {
 const initials = computed(() => {
 	return props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1);
 });
+
+const logout = () => {
+	authModule.logout();
+};
 </script>
