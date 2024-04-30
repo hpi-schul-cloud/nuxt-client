@@ -26,7 +26,7 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { mount } from "@vue/test-utils";
-import { computed, Ref, ref } from "vue";
+import { computed, nextTick, Ref, ref } from "vue";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
@@ -232,6 +232,7 @@ describe("Board", () => {
 							boardStore: {
 								board: options?.board,
 								isLoading: false,
+								setBoard: jest.fn(),
 							},
 						},
 					}),
@@ -284,6 +285,15 @@ describe("Board", () => {
 				expect(boardHeaderComponent.props("title")).toBe(
 					boardWithOneColumn.title
 				);
+			});
+		});
+
+		describe("when component is unMounted", () => {
+			it("should set board to undefined when component is unmounted", async () => {
+				const { wrapper } = setup({ board: boardWithOneColumn });
+				wrapper.unmount();
+				await nextTick();
+				expect(mockedBoardStateCalls.setBoard).toHaveBeenCalledWith(undefined);
 			});
 		});
 
@@ -467,10 +477,9 @@ describe("Board", () => {
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					columnComponent.vm.$emit("create:card");
 
-					expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.createCardRequest).toHaveBeenCalled();
 				});
 			});
 
@@ -480,14 +489,15 @@ describe("Board", () => {
 						board: boardWithOneColumn,
 						permissions: { hasCreateCardPermission: false },
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
 
 					columnComponent.vm.$emit("create:card");
 
-					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.createCardRequest
+					).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -499,14 +509,13 @@ describe("Board", () => {
 						board: boardWithOneColumn,
 						permissions: { hasCreateColumnPermission: true },
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 
 					const ghostColumnComponent = wrapper.findComponent({
 						name: "BoardColumnGhost",
 					});
 					ghostColumnComponent.vm.$emit("create:column");
 
-					expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.createColumnRequest).toHaveBeenCalled();
 				});
 			});
 		});
@@ -518,11 +527,10 @@ describe("Board", () => {
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 
 					columnComponent.vm.$emit("delete:card");
 
-					expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.deleteCardRequest).toHaveBeenCalled();
 				});
 			});
 
@@ -532,13 +540,14 @@ describe("Board", () => {
 						board: boardWithOneColumn,
 						permissions: { hasCreateCardPermission: false },
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
 					columnComponent.vm.$emit("delete:card");
 
-					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.deleteCardRequest
+					).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -550,10 +559,9 @@ describe("Board", () => {
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					columnComponent.vm.$emit("delete:column");
 
-					expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.deleteColumnRequest).toHaveBeenCalled();
 				});
 			});
 
@@ -563,14 +571,15 @@ describe("Board", () => {
 						board: boardWithOneColumn,
 						permissions: { hasDeletePermission: false },
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
 					columnComponent.vm.$emit("delete:column");
 
-					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.deleteColumnRequest
+					).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -582,7 +591,6 @@ describe("Board", () => {
 					const containerComponent = wrapper.findAllComponents({
 						name: "Sortable",
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 
 					const payload = {
 						item: document.createElement("div"),
@@ -592,7 +600,7 @@ describe("Board", () => {
 
 					containerComponent[0].vm.$emit("end", payload);
 
-					expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.moveColumnRequest).toHaveBeenCalled();
 				});
 			});
 
@@ -602,13 +610,14 @@ describe("Board", () => {
 						permissions: { hasMovePermission: false },
 						board: boardWithTwoColumns,
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					const containerComponent = wrapper.findAllComponents({
 						name: "Sortable",
 					});
 					containerComponent[0].vm.$emit("move");
 
-					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.moveColumnRequest
+					).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -620,10 +629,9 @@ describe("Board", () => {
 					const boardColumnComponent = wrapper.findAllComponents({
 						name: "BoardColumn",
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					boardColumnComponent[1].vm.$emit("move:column-left");
 
-					expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.moveColumnRequest).toHaveBeenCalled();
 				});
 			});
 
@@ -633,13 +641,14 @@ describe("Board", () => {
 						permissions: { hasMovePermission: false },
 						board: boardWithTwoColumns,
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					const boardColumnComponent = wrapper.findAllComponents({
 						name: "BoardColumn",
 					});
 					boardColumnComponent[1].vm.$emit("move:column-up");
 
-					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.moveColumnRequest
+					).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -651,10 +660,9 @@ describe("Board", () => {
 					const boardColumnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					boardColumnComponent.vm.$emit("move:column-right");
 
-					expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.moveColumnRequest).toHaveBeenCalled();
 				});
 			});
 
@@ -664,13 +672,14 @@ describe("Board", () => {
 						permissions: { hasMovePermission: false },
 						board: boardWithTwoColumns,
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					const boardColumnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
 					boardColumnComponent.vm.$emit("move:column-down");
 
-					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.moveColumnRequest
+					).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -682,10 +691,11 @@ describe("Board", () => {
 					const headearComponent = wrapper.findComponent({
 						name: "BoardHeader",
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					headearComponent.vm.$emit("update:title");
 
-					expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.updateBoardTitleRequest
+					).toHaveBeenCalled();
 				});
 			});
 
@@ -695,14 +705,15 @@ describe("Board", () => {
 						permissions: { hasEditPermission: false },
 						board: boardWithOneColumn,
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 
 					const headearComponent = wrapper.findComponent({
 						name: "BoardHeader",
 					});
 					headearComponent.vm.$emit("update:title");
 
-					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.updateBoardTitleSuccess
+					).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -714,10 +725,9 @@ describe("Board", () => {
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					columnComponent.vm.$emit("update:card-position");
 
-					expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+					expect(mockedBoardStateCalls.moveCardRequest).toHaveBeenCalled();
 				});
 			});
 
@@ -727,13 +737,12 @@ describe("Board", () => {
 						permissions: { hasMovePermission: false },
 						board: boardWithOneColumn,
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
 					columnComponent.vm.$emit("update:card-position");
 
-					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
+					expect(mockedBoardStateCalls.moveCardRequest).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -745,10 +754,11 @@ describe("Board", () => {
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					columnComponent.vm.$emit("update:column-title");
 
-					expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.updateColumnTitleRequest
+					).toHaveBeenCalled();
 				});
 			});
 
@@ -758,13 +768,14 @@ describe("Board", () => {
 						permissions: { hasEditPermission: false },
 						board: boardWithOneColumn,
 					});
-					mockedBoardStateCalls.dispatch.mockClear();
 					const columnComponent = wrapper.findComponent({
 						name: "BoardColumn",
 					});
 					columnComponent.vm.$emit("update:column-title");
 
-					expect(mockedBoardStateCalls.dispatch).not.toHaveBeenCalled();
+					expect(
+						mockedBoardStateCalls.updateColumnTitleRequest
+					).not.toHaveBeenCalled();
 				});
 			});
 		});
@@ -772,26 +783,26 @@ describe("Board", () => {
 		describe("@onReloadBoard", () => {
 			it("should reload the board", async () => {
 				const { wrapper } = setup({ board: boardWithOneColumn });
-				mockedBoardStateCalls.dispatch.mockClear();
 				const boardColumnComponents = wrapper.findAllComponents({
 					name: "BoardColumn",
 				});
 				await boardColumnComponents.at(0)?.vm.$emit("reload:board");
 
-				expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+				expect(mockedBoardStateCalls.reloadBoard).toHaveBeenCalled();
 			});
 		});
 
 		describe("@onUpdateBoardVisibility", () => {
 			it("should update board visibility", async () => {
 				const { wrapper } = setup({ board: boardWithOneColumn });
-				mockedBoardStateCalls.dispatch.mockClear();
 				const boardHeader = wrapper.findComponent({
 					name: "BoardHeader",
 				});
 				await boardHeader.vm.$emit("update:visibility");
 
-				expect(mockedBoardStateCalls.dispatch).toHaveBeenCalled();
+				expect(
+					mockedBoardStateCalls.updateBoardVisibilityRequest
+				).toHaveBeenCalled();
 			});
 		});
 
