@@ -10,6 +10,7 @@ import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, ref } from "vue";
+import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
 import { availableMediaLineId, ElementMove } from "./data";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
@@ -373,6 +374,50 @@ describe("MediaBoardLine", () => {
 
 			expect(wrapper.emitted("update:element-position")).toBeUndefined();
 			expect(wrapper.emitted("delete:element")).toBeUndefined();
+		});
+	});
+
+	describe("when dragging is started", () => {
+		it("should set the dragging state to true", async () => {
+			const { wrapper } = getWrapper();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			sortable.vm.$emit("start");
+			await nextTick();
+
+			expect(useDragAndDrop().isDragging.value).toEqual(true);
+		});
+	});
+
+	describe("when dragging is stopped", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper();
+
+			const fromLine = createMock<HTMLElement>();
+			const toLine = createMock<HTMLElement>();
+			const element = createMock<HTMLElement>();
+			const sortableEvent: Partial<SortableEvent> = {
+				from: fromLine,
+				to: toLine,
+				item: element,
+			};
+
+			return {
+				wrapper,
+				sortableEvent,
+			};
+		};
+
+		it("should set the dragging state to false", async () => {
+			const { wrapper, sortableEvent } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			sortable.vm.$emit("end", sortableEvent);
+			await nextTick();
+
+			expect(useDragAndDrop().isDragging.value).toEqual(false);
 		});
 	});
 });

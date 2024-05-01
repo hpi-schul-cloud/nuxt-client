@@ -317,6 +317,8 @@ export default {
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.drawingElement": "Pizarra",
 	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
+		"Esta editor de texto es visible y editable para todos los participantes en el curso.",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",

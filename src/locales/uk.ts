@@ -318,6 +318,8 @@ export default {
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.drawingElement": "Дошка",
 	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
+		"Цей текстовий редактор є видимою і доступною для редагування для всіх учасників курсу.",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",

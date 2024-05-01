@@ -1,6 +1,6 @@
-import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import { jest } from "@jest/globals";
 import { Ref, ref } from "vue";
+import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 
 interface Props {
 	askTypeMock?: jest.Mock;
