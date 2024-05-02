@@ -848,6 +848,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_COLUMN_BOARD_SOCKET_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_COURSE_SHARE: boolean;
     /**
      * 
@@ -12051,7 +12057,7 @@ export const CollaborativeTextEditorApiAxiosParamCreator = function (configurati
     return {
         /**
          * 
-         * @summary Redirect to CollaborativeTextEditor
+         * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
@@ -12103,7 +12109,7 @@ export const CollaborativeTextEditorApiFp = function(configuration?: Configurati
     return {
         /**
          * 
-         * @summary Redirect to CollaborativeTextEditor
+         * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
@@ -12125,7 +12131,7 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
     return {
         /**
          * 
-         * @summary Redirect to CollaborativeTextEditor
+         * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
@@ -12145,7 +12151,7 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
 export interface CollaborativeTextEditorApiInterface {
     /**
      * 
-     * @summary Redirect to CollaborativeTextEditor
+     * @summary Get or create CollaborativeTextEditor for parent
      * @param {string} parentId 
      * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
      * @param {*} [options] Override http request option.
@@ -12165,7 +12171,7 @@ export interface CollaborativeTextEditorApiInterface {
 export class CollaborativeTextEditorApi extends BaseAPI implements CollaborativeTextEditorApiInterface {
     /**
      * 
-     * @summary Redirect to CollaborativeTextEditor
+     * @summary Get or create CollaborativeTextEditor for parent
      * @param {string} parentId 
      * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
      * @param {*} [options] Override http request option.
