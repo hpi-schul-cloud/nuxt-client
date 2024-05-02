@@ -51,7 +51,7 @@ describe("ExternalToolElementAlert", () => {
 		},
 		userRoles?: string[]
 	) => {
-		useToolConfigurationStatusMock.determineOutdatedTranslationKey.mockReturnValue(
+		useToolConfigurationStatusMock.determineToolStatusTranslationKey.mockReturnValue(
 			"translated"
 		);
 
@@ -154,8 +154,6 @@ describe("ExternalToolElementAlert", () => {
 					{
 						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
-							isOutdatedOnScopeContext: false,
-							isDeactivated: false,
 						}),
 					},
 					["teacher"]
@@ -186,7 +184,6 @@ describe("ExternalToolElementAlert", () => {
 					{
 						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
-							isOutdatedOnScopeContext: false,
 						}),
 					},
 					["student"]
@@ -204,7 +201,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdated.student"
+					"common.tool.information.outdatedOrIncomplete.student"
 				);
 			});
 		});
@@ -218,7 +215,6 @@ describe("ExternalToolElementAlert", () => {
 				const { wrapper } = getWrapper(
 					{
 						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: false,
 							isOutdatedOnScopeContext: true,
 						}),
 					},
@@ -237,7 +233,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdatedOnContext.teacher"
+					"common.tool.information.outdated.teacher"
 				);
 			});
 		});
@@ -249,7 +245,6 @@ describe("ExternalToolElementAlert", () => {
 				const { wrapper } = getWrapper(
 					{
 						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: false,
 							isOutdatedOnScopeContext: true,
 						}),
 					},
@@ -268,7 +263,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdated.student"
+					"common.tool.information.outdatedOrIncomplete.student"
 				);
 			});
 		});
@@ -301,7 +296,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdatedOnSchoolAndContext.teacher"
+					"common.tool.information.incomplete.outdated.schoolAndContext.teacher"
 				);
 			});
 		});
@@ -332,7 +327,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdated.student"
+					"common.tool.information.outdatedOrIncomplete.student"
 				);
 			});
 		});
@@ -355,7 +350,7 @@ describe("ExternalToolElementAlert", () => {
 
 			expect(alerts).toHaveLength(1);
 			expect(alerts[0].text()).toEqual(
-				'common.tool.information.deactivated {"toolDisplayName":"Tool name"}'
+				"common.tool.information.deactivated.teacher"
 			);
 		});
 	});
@@ -386,7 +381,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.incompleteOnContext.teacher"
+					"common.tool.information.outdated.teacher"
 				);
 			});
 		});
@@ -416,7 +411,69 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.incomplete.student"
+					"common.tool.information.outdatedOrIncomplete.student"
+				);
+			});
+		});
+	});
+
+	describe("when the tool is incomplete operational", () => {
+		describe("when the user is a teacher", () => {
+			const setup = () => {
+				useBoardPermissionsMock.isTeacher = true;
+
+				const { wrapper } = getWrapper(
+					{
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOperationalOnScopeContext: true,
+						}),
+					},
+					["teacher"]
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should display a teacher friendly message", () => {
+				const { wrapper } = setup();
+
+				const alerts = wrapper.findAllComponents(WarningAlert);
+
+				expect(alerts).toHaveLength(1);
+				expect(alerts[0].text()).toEqual(
+					"common.tool.information.outdated.teacher"
+				);
+			});
+		});
+
+		describe("when the user is a student", () => {
+			const setup = () => {
+				useBoardPermissionsMock.isTeacher = false;
+
+				const { wrapper } = getWrapper(
+					{
+						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOperationalOnScopeContext: true,
+						}),
+					},
+					["student"]
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should display a student friendly message", () => {
+				const { wrapper } = setup();
+
+				const alerts = wrapper.findAllComponents(WarningAlert);
+
+				expect(alerts).toHaveLength(1);
+				expect(alerts[0].text()).toEqual(
+					"common.tool.information.outdatedOrIncomplete.student"
 				);
 			});
 		});
