@@ -158,6 +158,10 @@ export default defineComponent({
 			() => !!displayData.value?.status.isIncompleteOnScopeContext
 		);
 
+		const isToolIncompleteOperational: ComputedRef<boolean> = computed(
+			() => !!displayData.value?.status.isIncompleteOperationalOnScopeContext
+		);
+
 		const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatus> =
 			computed(() => {
 				return (
@@ -165,6 +169,7 @@ export default defineComponent({
 						isOutdatedOnScopeSchool: false,
 						isOutdatedOnScopeContext: false,
 						isIncompleteOnScopeContext: false,
+						isIncompleteOperationalOnScopeContext: false,
 						isDeactivated: false,
 					}
 				);
@@ -258,6 +263,7 @@ export default defineComponent({
 			isLoading,
 			isToolOutdated,
 			isToolIncomplete,
+			isToolIncompleteOperational,
 			isConfigurationDialogOpen,
 			toolConfigurationStatus,
 			mdiPuzzleOutline,

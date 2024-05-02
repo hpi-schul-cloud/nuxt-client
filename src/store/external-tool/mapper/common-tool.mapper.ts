@@ -89,6 +89,8 @@ export class CommonToolMapper {
 			isOutdatedOnScopeSchool: status.isOutdatedOnScopeSchool,
 			isOutdatedOnScopeContext: status.isOutdatedOnScopeContext,
 			isIncompleteOnScopeContext: status.isIncompleteOnScopeContext,
+			isIncompleteOperationalOnScopeContext:
+				status.isIncompleteOperationalOnScopeContext,
 			isDeactivated: status.isDeactivated,
 		};
 
