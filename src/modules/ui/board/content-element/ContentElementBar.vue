@@ -1,10 +1,18 @@
 <template>
-	<div tabindex="-1" class="content-element-bar">
+	<div
+		tabindex="-1"
+		class="content-element-bar"
+		:class="getRowContainerClasses()"
+	>
 		<div v-if="$slots.menu" class="three-dot-menu">
 			<slot name="menu" />
 		</div>
 
-		<div v-if="$slots.display" class="content-element-display">
+		<div
+			v-if="$slots.display"
+			class="content-element-display"
+			:class="{ 'flex-sm-grow-1': hasListLayout }"
+		>
 			<slot name="display" />
 		</div>
 
@@ -12,7 +20,10 @@
 			v-if="
 				$slots.title || $slots.element || $slots.subtitle || $slots.description
 			"
-			:class="{ 'bg-grey-lighten-4': props.hasGreyBackground === true }"
+			:class="{
+				'bg-grey-lighten-4': props.hasGreyBackground === true,
+				'flex-sm-grow-1': hasListLayout,
+			}"
 			class="content-element-bar-texts rounded-b py-4"
 		>
 			<div
@@ -53,10 +64,12 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
+import { PropType, ref } from "vue";
 import LineClamp from "../LineClamp.vue";
 import { IconProps } from "vuetify";
 import { hasSlotContent } from "@util-vue";
+import { BOARD_HAS_LIST_LAYOUT } from "@util-board";
+import { injectStrict } from "@/utils/inject";
 
 const props = defineProps({
 	hasGreyBackground: {
@@ -68,6 +81,15 @@ const props = defineProps({
 		required: false,
 	},
 });
+
+const hasListLayout = ref(injectStrict(BOARD_HAS_LIST_LAYOUT));
+
+const getRowContainerClasses = () => {
+	return {
+		"d-sm-flex": hasListLayout,
+		"flex-sm-row": hasListLayout,
+	};
+};
 </script>
 
 <style scoped lang="scss">
