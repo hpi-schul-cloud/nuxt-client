@@ -1,5 +1,5 @@
 <template>
-	<div ref="QRCode" class="qrcode" tabindex="0" />
+	<div ref="QRCode" class="qrcode pt-2 pb-4" tabindex="0" />
 </template>
 
 <script setup lang="ts">
@@ -20,7 +20,6 @@ const QRCode = ref();
 const createQrCode = () => {
 	const image = kjua({ text: props.url, render: "image" });
 
-	// TODO - better alt text
 	image.alt = props.url;
 	const qrbox = QRCode.value;
 	qrbox.append(image);
@@ -35,9 +34,5 @@ onMounted(() => {
 .qrcode {
 	min-width: 200px;
 	min-height: 200px;
-
-	img {
-		max-width: none;
-	}
 }
 </style>
