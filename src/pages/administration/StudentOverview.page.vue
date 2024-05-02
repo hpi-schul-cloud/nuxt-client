@@ -101,6 +101,7 @@
 				</template>
 				<template #datacolumn-_id="{ data, selected, highlighted, isEditable }">
 					<v-btn
+						v-if="isEditable"
 						icon
 						variant="text"
 						:class="{
@@ -114,8 +115,10 @@
 						"
 						data-testid="edit_student_button"
 					>
-						<v-icon v-if="isEditable" size="20">$mdiPencilOutline</v-icon>
+						<v-icon size="20">$mdiPencilOutline</v-icon>
 					</v-btn>
+					<!-- The below div is necessary (in this unnecessary complex structure) because the fallback content of the slot is rendered otherwise. -->
+					<div v-else />
 				</template>
 			</backend-data-table>
 			<admin-table-legend
