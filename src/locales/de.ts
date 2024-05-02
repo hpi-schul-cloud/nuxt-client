@@ -107,24 +107,18 @@ export default {
 	"common.roleName.student": "Schüler:in",
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Lehrkraft",
-	"common.tool.information.deactivated":
-		"Das Tool {toolName} ist deaktiviert und kann daher nicht gestartet werden.",
-	"common.tool.information.incomplete.student":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte an die Lehrkraft oder Kursleiter:in wenden.",
-	"common.tool.information.incompleteOnContext.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration vervollständigen.",
-	"common.tool.information.incompleteOnSchool.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte an die Schuladministrator:in wenden.",
-	"common.tool.information.incompleteOnSchoolAndContext.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration vervollständigen und an die Schuladministrator:in wenden.",
-	"common.tool.information.outdated.student":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Zum Aktualisieren bitte an die Lehrkraft oder Kursleiter:in wenden.",
-	"common.tool.information.outdatedOnContext.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration aktualisieren.",
+	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
+		"Konfiguration des Tools {tool} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen und an Schuladministrator:in wenden.",
+	"common.tool.information.outdatedOrIncomplete.student":
+		"Konfiguration des Tools {tool} nicht aktuell oder unvollständig. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.deactivated.student":
+		"Tool {tool} ist deaktiviert. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.deactivated.teacher":
+		"Tool {tool} ist deaktiviert. Bitte an Schuladministrator:in wenden.",
+	"common.tool.information.outdated.teacher":
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Zum Aktualisieren bitte an die Schuladministrator:in wenden.",
-	"common.tool.information.outdatedOnSchoolAndContext.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration aktualisieren und an die Schuladministrator:in wenden.",
+		"Konfiguration des Tools {tool} nicht aktuell oder unvollständig. Bitte an Schuladministrator:in wenden.",
 	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
@@ -1491,7 +1485,7 @@ export default {
 		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.rooms.tools.configureVideoconferenceDialog.title":
 		"Videokonferenz {roomName} erstellen",
-	"pages.rooms.tools.deactivated": "Tool deaktiviert",
+	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '<i>{itemName}</i>' aus dem Kurs entfernen?",
@@ -1501,7 +1495,7 @@ export default {
 	"pages.rooms.tools.incompleteDialog.title": "Konfiguration unvollständig",
 	"pages.rooms.tools.logo": "Tool-Logo",
 	"pages.rooms.tools.menu.ariaLabel": "Tool Menü",
-	"pages.rooms.tools.outdated": "Tool veraltet",
+	"pages.rooms.tools.outdated": "Konfiguration unvollständig",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ veraltet",
 	"pages.room.modal.course.export.header": "Export-Format",
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",

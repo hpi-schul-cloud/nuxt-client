@@ -109,24 +109,18 @@ export default {
 	"common.roleName.student": "Estudiante",
 	"common.roleName.superhero": "Administrador de Schul-Cloud",
 	"common.roleName.teacher": "Profesor",
-	"common.tool.information.deactivated":
-		"La herramienta {toolDisplayName} está desactivada y por lo tanto no se puede iniciar.",
-	"common.tool.information.incomplete.student":
-		"La configuración de la herramienta está incompleta, por lo que no se puede iniciar la herramienta. Comuníquese con el maestro o el líder del curso.",
-	"common.tool.information.incompleteOnContext.teacher":
-		"La configuración de la herramienta está incompleta, por lo que no se puede iniciar la herramienta. Complete la configuración de la herramienta.",
-	"common.tool.information.incompleteOnSchool.teacher":
-		"La configuración de la herramienta está incompleta, por lo que no se puede iniciar la herramienta. Por favor comuníquese con el administrador de la escuela.",
-	"common.tool.information.incompleteOnSchoolAndContext.teacher":
-		"La configuración de la herramienta está incompleta, por lo que no se puede iniciar la herramienta. Complete la configuración de la herramienta y comuníquese con el administrador de la escuela.",
-	"common.tool.information.outdated.student":
-		"La configuración de la herramienta está desactualizada, por lo que no se puede iniciar la herramienta. Para actualizar, comuníquese con el maestro o instructor del curso.",
-	"common.tool.information.outdatedOnContext.teacher":
-		"La configuración de la herramienta está desactualizada, por lo que no se puede iniciar la herramienta. Actualice la configuración de la herramienta.",
+	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
+		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor verifique la configuración.",
+	"common.tool.information.outdatedOrIncomplete.student":
+		"La configuración de la herramienta {tool} no está actualizada o está incompleta. Por favor contacta a tu profesor o instructor del curso.",
+	"common.tool.information.deactivated.student":
+		"La herramienta {tool} está deshabilitada. Por favor contacta a tu profesor o instructor del curso.",
+	"common.tool.information.deactivated.teacher":
+		"La herramienta {tool} está deshabilitada. Por favor comuníquese con el administrador de la escuela.",
+	"common.tool.information.outdated.teacher":
+		"La configuración de la herramienta {tool} no está actualizada o está incompleta. Verifique la configuración y comuníquese con el administrador de su escuela.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"La configuración de la herramienta está desactualizada, por lo que no se puede iniciar la herramienta. Para actualizar, comuníquese con el administrador de la escuela.",
-	"common.tool.information.outdatedOnSchoolAndContext.teacher":
-		"La configuración de la herramienta está desactualizada, por lo que no se puede iniciar la herramienta. Actualice la configuración de la herramienta y comuníquese con el administrador de la escuela.",
+		"La configuración de la herramienta {tool} no está actualizada o está incompleta. Por favor comuníquese con el administrador de la escuela.",
 	"common.validation.email":
 		"Por favor, introduzca una dirección de correo electrónico válida",
 	"common.validation.invalid": "Los datos introducidos no son válidos",
@@ -1519,7 +1513,7 @@ export default {
 	"pages.rooms.tools.incompleteDialog.title": "Configuración incomplet",
 	"pages.rooms.tools.logo": "Logotipo de la herramienta",
 	"pages.rooms.tools.menu.ariaLabel": "Menú de herramienta",
-	"pages.rooms.tools.outdated": "Herramienta obsoleta",
+	"pages.rooms.tools.outdated": "Configuración incompleta",
 	"pages.rooms.tools.outdatedDialog.title": "Herramienta „{toolName}“ obsoleta",
 	"pages.room.modal.course.export.header": "Formato de exportación",
 	"pages.room.modal.course.export.options.header": "Exportar configuración",
