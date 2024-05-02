@@ -25,7 +25,7 @@ import { nextTick } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
-import { useCardState } from "./CardState.composable";
+import { useCardState } from "./CardState.store";
 
 const notifierModule = createModuleMocks(NotifierModule);
 

@@ -1,6 +1,6 @@
 import { useBoardPermissions } from "./BoardPermissions.composable";
 import { useBoardStore } from "./Board.store";
-import { useCardState } from "./CardState.composable";
+import { useCardState } from "./CardState.store";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useContentElementState } from "./ContentElementState.composable";

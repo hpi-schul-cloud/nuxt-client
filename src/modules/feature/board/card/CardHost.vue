@@ -98,6 +98,7 @@ import {
 } from "@ui-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, ref, toRef } from "vue";
+import { storeToRefs } from "pinia";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
@@ -134,17 +135,20 @@ export default defineComponent({
 
 		const isHovered = useElementHover(cardHost);
 		const isDetailView = ref(false);
+
+		const cardStore = useCardState(cardId.value, emit)();
+
 		const {
-			isLoading,
-			card,
-			updateTitle,
-			updateCardHeight,
 			addElement,
+			addTextAfterTitle,
+			card,
+			deleteElement,
+			isLoading,
 			moveElementDown,
 			moveElementUp,
-			deleteElement,
-			addTextAfterTitle,
-		} = useCardState(cardId.value, emit);
+			updateCardHeight,
+			updateTitle,
+		} = storeToRefs(cardStore);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
