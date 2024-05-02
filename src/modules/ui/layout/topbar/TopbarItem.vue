@@ -33,8 +33,7 @@ defineProps({
 	},
 	dataTestId: {
 		type: String,
-		required: true,
+		default: "topbar-item",
 	},
 });
 </script>
-<style lang=""></style>
