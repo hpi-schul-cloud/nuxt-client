@@ -1,14 +1,11 @@
 <template>
 	<VMenu>
 		<template v-slot:activator="{ props }">
-			<VAvatar
-				v-bind="props"
-				v-bind.attr="$attrs"
-				color="surface-variant"
-				class="cursor-pointer"
-			>
-				<span class="text-h6">{{ initials }}</span>
-			</VAvatar>
+			<VBtn v-bind="props" v-bind.attr="$attrs" icon>
+				<VAvatar color="surface-variant">
+					<span class="text-h6">{{ initials }}</span>
+				</VAvatar>
+			</VBtn>
 		</template>
 		<VCard>
 			<VList>
