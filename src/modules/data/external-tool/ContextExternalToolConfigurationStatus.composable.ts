@@ -11,7 +11,11 @@ export const useContextExternalToolConfigurationStatus = () => {
 		if (userRoles.includes("student")) {
 			if (toolConfigStatus.isDeactivated) {
 				return "pages.rooms.tools.deactivated";
-			} else if (toolConfigStatus.isOutdatedOnScopeContext) {
+			} else if (
+				toolConfigStatus.isOutdatedOnScopeContext ||
+				toolConfigStatus.isIncompleteOnScopeContext ||
+				toolConfigStatus.isOutdatedOnScopeSchool
+			) {
 				return "pages.rooms.tools.outdated";
 			}
 		}
