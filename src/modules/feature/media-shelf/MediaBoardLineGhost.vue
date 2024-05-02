@@ -23,7 +23,7 @@
 				forceFallback: true,
 				bubbleScroll: true,
 			}"
-			class="d-flex flex-grid flex-shrink-1 pa-2 ga-4 flex-1-1"
+			class="d-flex flex-grid flex-shrink-1 pa-2 ga-6 flex-1-1"
 		/>
 	</div>
 </template>

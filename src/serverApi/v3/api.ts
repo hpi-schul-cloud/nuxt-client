@@ -117,6 +117,19 @@ export interface AccountSearchListResponse {
 /**
  * 
  * @export
+ * @interface AlertResponse
+ */
+export interface AlertResponse {
+    /**
+     * 
+     * @type {Array<Message>}
+     * @memberof AlertResponse
+     */
+    data: Array<Message>;
+}
+/**
+ * 
+ * @export
  * @interface ApiValidationError
  */
 export interface ApiValidationError {
@@ -830,6 +843,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_COLUMN_BOARD_SHARE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COLUMN_BOARD_SOCKET_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -4105,6 +4124,74 @@ export interface MediaLineResponse {
      * @memberof MediaLineResponse
      */
     timestamps: TimestampsResponse;
+}
+/**
+ * 
+ * @export
+ * @interface Message
+ */
+export interface Message {
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    text: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    timestamp: string;
+    /**
+     * 
+     * @type {MessageOrigin}
+     * @memberof Message
+     */
+    origin: MessageOrigin;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    url: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    status: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    createdAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface MessageOrigin
+ */
+export interface MessageOrigin {
+    /**
+     * 
+     * @type {number}
+     * @memberof MessageOrigin
+     */
+    message_id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MessageOrigin
+     */
+    page: string;
 }
 /**
  * 
@@ -8865,6 +8952,121 @@ export class AdminTeachersApi extends BaseAPI implements AdminTeachersApiInterfa
 
 
 /**
+ * AlertApi - axios parameter creator
+ * @export
+ */
+export const AlertApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get allerts
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        alertControllerFind: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/alert`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AlertApi - functional programming interface
+ * @export
+ */
+export const AlertApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AlertApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get allerts
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async alertControllerFind(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AlertResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.alertControllerFind(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * AlertApi - factory interface
+ * @export
+ */
+export const AlertApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AlertApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get allerts
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        alertControllerFind(options?: any): AxiosPromise<AlertResponse> {
+            return localVarFp.alertControllerFind(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AlertApi - interface
+ * @export
+ * @interface AlertApi
+ */
+export interface AlertApiInterface {
+    /**
+     * 
+     * @summary Get allerts
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AlertApiInterface
+     */
+    alertControllerFind(options?: any): AxiosPromise<AlertResponse>;
+
+}
+
+/**
+ * AlertApi - object-oriented interface
+ * @export
+ * @class AlertApi
+ * @extends {BaseAPI}
+ */
+export class AlertApi extends BaseAPI implements AlertApiInterface {
+    /**
+     * 
+     * @summary Get allerts
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AlertApi
+     */
+    public alertControllerFind(options?: any) {
+        return AlertApiFp(this.configuration).alertControllerFind(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * AuthenticationApi - axios parameter creator
  * @export
  */
@@ -11855,7 +12057,7 @@ export const CollaborativeTextEditorApiAxiosParamCreator = function (configurati
     return {
         /**
          * 
-         * @summary Redirect to CollaborativeTextEditor
+         * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
@@ -11907,7 +12109,7 @@ export const CollaborativeTextEditorApiFp = function(configuration?: Configurati
     return {
         /**
          * 
-         * @summary Redirect to CollaborativeTextEditor
+         * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
@@ -11929,7 +12131,7 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
     return {
         /**
          * 
-         * @summary Redirect to CollaborativeTextEditor
+         * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
          * @param {*} [options] Override http request option.
@@ -11949,7 +12151,7 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
 export interface CollaborativeTextEditorApiInterface {
     /**
      * 
-     * @summary Redirect to CollaborativeTextEditor
+     * @summary Get or create CollaborativeTextEditor for parent
      * @param {string} parentId 
      * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
      * @param {*} [options] Override http request option.
@@ -11969,7 +12171,7 @@ export interface CollaborativeTextEditorApiInterface {
 export class CollaborativeTextEditorApi extends BaseAPI implements CollaborativeTextEditorApiInterface {
     /**
      * 
-     * @summary Redirect to CollaborativeTextEditor
+     * @summary Get or create CollaborativeTextEditor for parent
      * @param {string} parentId 
      * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
      * @param {*} [options] Override http request option.

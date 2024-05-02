@@ -39,4 +39,9 @@ export default class NotifierModule extends VuexModule {
 		const index = this.notifierItems.indexOf(payload);
 		this.notifierItems.splice(index, 1);
 	}
+
+	@Mutation
+	reset(): void {
+		this.notifierItems = [];
+	}
 }

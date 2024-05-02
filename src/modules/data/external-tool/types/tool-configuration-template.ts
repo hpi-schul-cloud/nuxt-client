@@ -1,4 +1,4 @@
-import { ToolParameter } from "./tool-parameter";
+import { ToolParameter } from "@/store/external-tool";
 
 export interface ExternalToolConfigurationTemplate {
 	externalToolId: string;

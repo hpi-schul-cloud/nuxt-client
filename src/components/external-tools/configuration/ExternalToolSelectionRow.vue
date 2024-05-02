@@ -15,8 +15,8 @@
 </template>
 
 <script lang="ts">
+import { ExternalToolConfigurationTemplate } from "@data-external-tool";
 import { PropType } from "vue";
-import { ExternalToolConfigurationTemplate } from "@/store/external-tool";
 
 export default {
 	name: "ExternalToolSelectionRow",

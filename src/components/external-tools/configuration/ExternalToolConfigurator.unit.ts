@@ -1,21 +1,21 @@
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
-import { VueWrapper, mount } from "@vue/test-utils";
+import { SchoolExternalTool } from "@/store/external-tool";
+import { BusinessError } from "@/store/types/commons";
 import {
 	schoolExternalToolConfigurationTemplateFactory,
 	schoolExternalToolFactory,
 } from "@@/tests/test-utils/factory";
 import {
-	ExternalToolConfigurationTemplate,
-	SchoolExternalTool,
-} from "@/store/external-tool";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
-import { BusinessError } from "@/store/types/commons";
-import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
-import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import {
+	ContextExternalTool,
+	ExternalToolConfigurationTemplate,
+} from "@data-external-tool";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { VBtn } from "vuetify/lib/components/index.mjs";
+import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 
 describe("ExternalToolConfigurator", () => {
 	jest

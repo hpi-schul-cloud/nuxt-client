@@ -1,9 +1,11 @@
 import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
+import CommonCartridgeExportModule from "@/store/common-cartridge-export";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
-import ContextExternalToolsModule from "@/store/context-external-tools";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
+import FilePathsModule from "@/store/filePaths";
 import GroupModule from "@/store/group";
 import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
@@ -13,16 +15,13 @@ import RoomModule from "@/store/room";
 import RoomsModule from "@/store/rooms";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
+import ShareModule from "@/store/share";
 import StatusAlertsModule from "@/store/status-alerts";
 import SystemsModule from "@/store/systems";
 import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { InjectionKey } from "vue";
-import CommonCartridgeExportModule from "@/store/common-cartridge-export";
-import ShareModule from "@/store/share";
-import FilePathsModule from "@/store/filePaths";
 
 export const ENV_CONFIG_MODULE_KEY: InjectionKey<EnvConfigModule> =
 	Symbol("envConfigModule");
@@ -33,8 +32,6 @@ export const NOTIFIER_MODULE_KEY: InjectionKey<NotifierModule> =
 export const AUTH_MODULE_KEY: InjectionKey<AuthModule> = Symbol("authModule");
 export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsModule> =
 	Symbol("schoolExternalToolsModule");
-export const CONTEXT_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<ContextExternalToolsModule> =
-	Symbol("contextExternalToolsModule");
 export const APPLICATION_ERROR_KEY: InjectionKey<ApplicationErrorModule> =
 	Symbol("applicationError");
 export const ROOM_MODULE_KEY: InjectionKey<RoomModule> = Symbol("roomModule");
