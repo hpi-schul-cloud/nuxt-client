@@ -6,18 +6,18 @@
 
 		<WarningAlert v-if="toolStatus && toolStatus.isDeactivated">
 			{{
-				$t("common.tool.information.deactivated", {
-					toolDisplayName,
+				t(toolDeactivatedMessage, {
+					tool: toolDisplayName,
 				})
 			}}
 		</WarningAlert>
 
-		<WarningAlert v-if="isToolIncomplete">
-			{{ incompleteMessage }}
+		<WarningAlert v-if="isToolIncompleteOperational" color="info">
+			{{ t(toolStatusMessage, { tool: toolDisplayName }) }}
 		</WarningAlert>
 
-		<WarningAlert v-if="isToolOutdated">
-			{{ outdatedMessage }}
+		<WarningAlert v-if="isToolNotLaunchable">
+			{{ t(toolStatusMessage, { tool: toolDisplayName }) }}
 		</WarningAlert>
 	</div>
 </template>
@@ -53,21 +53,20 @@ export default defineComponent({
 	setup(props) {
 		const { t } = useI18n();
 
-		const {
-			determineOutdatedTranslationKey,
-			determineIncompleteTranslationKey,
-		} = useContextExternalToolConfigurationStatus();
+		const { determineToolStatusTranslationKey, determineDeactivatedMessage } =
+			useContextExternalToolConfigurationStatus();
 
 		const { isTeacher } = useBoardPermissions();
 
-		const isToolOutdated: ComputedRef<boolean> = computed(
+		const isToolNotLaunchable: ComputedRef<boolean> = computed(
 			() =>
 				!!props.toolStatus?.isOutdatedOnScopeSchool ||
-				!!props.toolStatus?.isOutdatedOnScopeContext
+				!!props.toolStatus?.isOutdatedOnScopeContext ||
+				!!props.toolStatus?.isIncompleteOnScopeContext
 		);
 
-		const isToolIncomplete: ComputedRef<boolean> = computed(
-			() => !!props.toolStatus?.isIncompleteOnScopeContext
+		const isToolIncompleteOperational: ComputedRef<boolean> = computed(
+			() => props.toolStatus.isIncompleteOperationalOnScopeContext
 		);
 
 		const errorMessage: ComputedRef<string> = computed(() =>
@@ -76,24 +75,27 @@ export default defineComponent({
 				: "feature-board-external-tool-element.alert.error.student"
 		);
 
-		const outdatedMessage: ComputedRef<string> = computed(() => {
-			const translationKey = determineOutdatedTranslationKey(props.toolStatus);
+		const toolStatusMessage: ComputedRef<string> = computed(() => {
+			const translationKey = determineToolStatusTranslationKey(
+				props.toolStatus
+			);
 
-			return t(translationKey);
+			return translationKey;
 		});
 
-		const incompleteMessage: ComputedRef<string | undefined> = computed(() => {
-			const translationKey = determineIncompleteTranslationKey();
+		const toolDeactivatedMessage: ComputedRef<string> = computed(() => {
+			const translationKey = determineDeactivatedMessage();
 
-			return t(translationKey);
+			return translationKey;
 		});
 
 		return {
 			errorMessage,
-			outdatedMessage,
-			incompleteMessage,
-			isToolOutdated,
-			isToolIncomplete,
+			toolStatusMessage,
+			isToolNotLaunchable,
+			isToolIncompleteOperational,
+			toolDeactivatedMessage,
+			t,
 		};
 	},
 });

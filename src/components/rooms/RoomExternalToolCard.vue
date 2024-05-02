@@ -15,15 +15,18 @@
 					{{ t("pages.rooms.tools.deactivated") }}
 				</room-card-chip>
 				<room-card-chip
-					v-if="isToolIncomplete"
-					data-testId="tool-card-status-incomplete"
-					>{{ t("pages.rooms.tools.incomplete") }}
+					color="info"
+					variant="tonal"
+					v-if="isToolIncompleteOperational"
+					data-testId="tool-card-status-incompleteOperational"
+					>{{ t(toolChipTitle) }}
 				</room-card-chip>
+
 				<room-card-chip
-					v-if="isToolOutdated"
-					data-testId="tool-card-status-outdated"
+					v-if="isToolOutdated || isToolIncomplete"
+					data-testId="tool-card-status"
 				>
-					{{ t("pages.rooms.tools.outdated") }}
+					{{ t(toolChipTitle) }}
 				</room-card-chip>
 			</div>
 		</template>
@@ -43,6 +46,7 @@
 import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
 import {
 	ExternalToolDisplayData,
+	useContextExternalToolConfigurationStatus,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
@@ -73,6 +77,9 @@ export default defineComponent({
 			launchTool,
 			error: launchError,
 		} = useExternalToolLaunchState();
+
+		const { determineChipStatusTitle } =
+			useContextExternalToolConfigurationStatus();
 
 		const handleClick = async () => {
 			if (!isToolLaunchable.value) {
@@ -122,6 +129,10 @@ export default defineComponent({
 			() => props.tool.status.isIncompleteOnScopeContext
 		);
 
+		const isToolIncompleteOperational: ComputedRef = computed(
+			() => props.tool.status.isIncompleteOperationalOnScopeContext
+		);
+
 		const isToolDeactivated: ComputedRef = computed(
 			() => props.tool.status.isDeactivated
 		);
@@ -132,6 +143,10 @@ export default defineComponent({
 				!isToolDeactivated.value &&
 				!isToolIncomplete.value
 			);
+		});
+
+		const toolChipTitle: ComputedRef<string | undefined> = computed(() => {
+			return determineChipStatusTitle(props.tool.status);
 		});
 
 		const loadLaunchRequest = async () => {
@@ -153,6 +168,8 @@ export default defineComponent({
 			isToolOutdated,
 			isToolDeactivated,
 			isToolIncomplete,
+			isToolIncompleteOperational,
+			toolChipTitle,
 		};
 	},
 });
