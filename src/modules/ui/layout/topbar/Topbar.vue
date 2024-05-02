@@ -10,7 +10,7 @@
 		<VSpacer />
 		<TopbarItem
 			v-if="showStatusAlertIcon"
-			class="mx-1"
+			class="mr-2"
 			:icon="mdiAlert"
 			:color="statusAlertColor"
 			:aria-label="$t('global.topbar.actions.alerts')"
@@ -21,7 +21,7 @@
 		</TopbarItem>
 		<TopbarItem
 			v-if="isTabletOrBigger"
-			class="mx-1"
+			class="mr-2"
 			:icon="mdiQrcode"
 			:aria-label="$t('global.topbar.actions.qrCode')"
 			:title="$t('global.topbar.actions.qrCode')"
@@ -29,7 +29,7 @@
 		>
 			<PageShare />
 		</TopbarItem>
-		<div v-if="school && isTabletOrBigger" class="ml-1 mr-4">
+		<div v-if="school && isTabletOrBigger" class="mr-3 mr-lg-4">
 			{{ school.name }}
 		</div>
 		<VImg
@@ -38,8 +38,9 @@
 			alt=""
 			max-height="40"
 			max-width="160"
+			class="mr-3"
 		/>
-		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mx-4" />
+		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
 	</VAppBar>
 </template>
 
