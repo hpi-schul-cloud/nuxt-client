@@ -1,6 +1,6 @@
 import * as BoardActions from "./actions";
 import { useBoardSocketApi } from "@data-board";
-import { useBoardStore } from "../BoardStore";
+import { useBoardStore } from "../Board.store";
 import {
 	CreateCardRequestPayload,
 	CreateColumnRequestPayload,

@@ -1,4 +1,4 @@
-import { useBoardStore } from "./../BoardStore";
+import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
 import * as BoardActions from "./actions";

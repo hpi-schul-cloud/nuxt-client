@@ -10,7 +10,7 @@ import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { ref } from "vue";
 import { useBoardApi } from "./BoardApi.composable";
-import { useBoardStore } from "./BoardStore";
+import { useBoardStore } from "./Board.store";
 import { useSharedEditMode } from "./EditMode.composable";
 import { setActivePinia, createPinia } from "pinia";
 
@@ -21,7 +21,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { envConfigModule } from "@/store";
 import { MoveCardRequestPayload } from "@/modules/data/board/boardActions/boardActionPayload";
-import { useSocketApi } from "./boardActions/socketApi";
+import { useSocketApi } from "./boardActions/socketApi.composable";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -29,7 +29,7 @@ jest.mock("vue-i18n");
 jest.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
-jest.mock("./boardActions/socketApi");
+jest.mock("./boardActions/socketApi.composable");
 const mockedUseSocketApiActions = jest.mocked(useSocketApi);
 
 jest.mock("./EditMode.composable");

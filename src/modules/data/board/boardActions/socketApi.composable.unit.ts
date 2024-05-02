@@ -1,16 +1,16 @@
-import { useSocketApi } from "./socketApi";
+import { useSocketApi } from "./socketApi.composable";
 import { useBoardSocketApi, useBoardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { CardMove } from "@/types/board/DragAndDrop";
-import { useBoardRestApi } from "./restApi";
+import { useBoardRestApi } from "./restApi.composable";
 import { useBoardNotifier } from "@util-board";
 
-jest.mock("../BoardStore");
+jest.mock("../Board.store");
 const mockedUseBoardStore = jest.mocked(useBoardStore);
 
 jest.mock("../socket/socket");
 const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
-jest.mock("./restApi");
+jest.mock("./restApi.composable");
 const mockedUseRestApi = jest.mocked(useBoardRestApi);
 
 jest.mock("vue-i18n", () => {
