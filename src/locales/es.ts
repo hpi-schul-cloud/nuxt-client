@@ -1625,6 +1625,7 @@ export default {
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"ui-layout.topbar.pageShare.copyLink": "Copiar enlace",
+	"ui-layout.topbar.pageShare.printQRCode": "Imprimir código QR",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",

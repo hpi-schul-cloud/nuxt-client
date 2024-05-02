@@ -4,11 +4,12 @@
 			{{ $t("global.topbar.MenuQrCode.qrHintText") }}
 		</div>
 		<QRCode ref="qrCode" :url="url" />
-
 		<div>
 			<VBtn
 				variant="outlined"
 				:prepend-icon="mdiPrinter"
+				data-testid="qr-code-print"
+				:aria-label="$t('ui-layout.topbar.pageShare.printQRCode')"
 				@click="openPrintMenu"
 			>
 				{{ $t("global.topbar.MenuQrCode.print") }}
@@ -17,6 +18,7 @@
 				variant="outlined"
 				:prepend-icon="mdiContentCopy"
 				class="ml-2"
+				data-testid="qr-code-copy"
 				@click="onCopy"
 			>
 				{{ $t("ui-layout.topbar.pageShare.copyLink") }}
