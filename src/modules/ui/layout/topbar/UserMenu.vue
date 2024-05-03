@@ -1,27 +1,30 @@
 <template>
 	<VMenu>
 		<template v-slot:activator="{ props }">
-			<VBtn v-bind="props" v-bind.attr="$attrs" icon>
+			<VBtn
+				v-bind="props"
+				v-bind.attr="$attrs"
+				icon
+				data-testid="user-menu-btn"
+			>
 				<VAvatar color="surface-variant">
 					<span class="text-h6">{{ initials }}</span>
 				</VAvatar>
 			</VBtn>
 		</template>
-		<VCard>
-			<VList>
-				<VListItem class="username">
-					{{ user.firstName }} {{ user.lastName }} ({{ userRole }})
-				</VListItem>
-				<VDivider />
-				<LanguageMenu />
-				<VListItem href="/account" data-testid="account-link">
-					{{ $t("global.topbar.settings") }}
-				</VListItem>
-				<VListItem data-testid="logout" @click="logout">
-					{{ $t("common.labels.logout") }}
-				</VListItem>
-			</VList>
-		</VCard>
+		<VList>
+			<VListItem data-testid="active-user">
+				{{ user.firstName }} {{ user.lastName }} ({{ userRole }})
+			</VListItem>
+			<VDivider />
+			<LanguageMenu />
+			<VListItem href="/account" data-testid="account-link">
+				{{ $t("global.topbar.settings") }}
+			</VListItem>
+			<VListItem data-testid="logout" @click="logout">
+				{{ $t("common.labels.logout") }}
+			</VListItem>
+		</VList>
 	</VMenu>
 </template>
 
