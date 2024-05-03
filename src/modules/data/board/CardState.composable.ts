@@ -92,10 +92,8 @@ export const useCardState = (
 
 	const addElement = async (
 		type: ContentElementType,
-		atFirstPosition?: boolean,
-		cardId?: string
+		atFirstPosition?: boolean
 	) => {
-		console.log("add element", cardId);
 		if (cardState.card === undefined) return;
 
 		try {
