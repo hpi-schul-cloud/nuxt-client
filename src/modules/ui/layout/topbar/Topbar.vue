@@ -29,7 +29,11 @@
 		>
 			<PageShare />
 		</TopbarItem>
-		<div v-if="school && isTabletOrBigger" class="mr-3 mr-lg-4">
+		<div
+			v-if="school && isTabletOrBigger"
+			class="mr-3 mr-lg-4"
+			data-testid="school-name"
+		>
 			{{ school.name }}
 		</div>
 		<VImg
@@ -39,6 +43,7 @@
 			max-height="40"
 			max-width="160"
 			class="mr-3"
+			data-testid="school-logo"
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
 	</VAppBar>
@@ -95,129 +100,7 @@ onMounted(() => {
 });
 
 const statusAlerts: ComputedRef<StatusAlert[]> = computed(() => {
-	return [
-		{
-			title: "Currently, there are no courses here.",
-			text: "Currently, there are no courses here.",
-			status: "info",
-			origin: {
-				page: "string",
-				message_id: 2,
-			},
-			timestamp: "string",
-			url: "string",
-			createdAt: "string",
-		},
-		{
-			title: "Currently, there are no courses here.",
-			text: "Currently, there are no courses here.",
-			status: "danger",
-			origin: {
-				page: "string",
-				message_id: 2,
-			},
-			timestamp: "string",
-			url: "string",
-			createdAt: "string",
-		},
-		{
-			title: "Currently, there are no courses here.",
-			text: "Currently, there are no courses here.",
-			status: "danger",
-			origin: {
-				page: "string",
-				message_id: 2,
-			},
-			timestamp: "string",
-			url: "string",
-			createdAt: "string",
-		},
-		{
-			title: "Currently, there are no courses here.",
-			text: "Currently, there are no courses here.",
-			status: "danger",
-			origin: {
-				page: "string",
-				message_id: 2,
-			},
-			timestamp: "string",
-			url: "string",
-			createdAt: "string",
-		},
-		{
-			title: "Currently, there are no courses here.",
-			text: "Currently, there are no courses here.",
-			status: "danger",
-			origin: {
-				page: "string",
-				message_id: 2,
-			},
-			timestamp: "string",
-			url: "string",
-			createdAt: "string",
-		},
-		{
-			title: "Currently, there are no courses here.",
-			text: "Currently, there are no courses here.",
-			status: "danger",
-			origin: {
-				page: "string",
-				message_id: 2,
-			},
-			timestamp: "string",
-			url: "string",
-			createdAt: "string",
-		},
-		{
-			title: "Currently, there are no courses here.",
-			text: "Currently, there are no courses here.",
-			status: "danger",
-			origin: {
-				page: "string",
-				message_id: 2,
-			},
-			timestamp: "string",
-			url: "string",
-			createdAt: "string",
-		},
-		{
-			title: "Currently, there are no courses here.",
-			text: "Currently, there are no courses here.",
-			status: "danger",
-			origin: {
-				page: "string",
-				message_id: 2,
-			},
-			timestamp: "string",
-			url: "string",
-			createdAt: "string",
-		},
-		{
-			title: "Currently, there are no courses here.",
-			text: "Currently, there are no courses here.",
-			status: "danger",
-			origin: {
-				page: "string",
-				message_id: 2,
-			},
-			timestamp: "string",
-			url: "string",
-			createdAt: "string",
-		},
-		{
-			title: "Currently, there are no courses here.",
-			text: "Currently, there are no courses here.",
-			status: "danger",
-			origin: {
-				page: "string",
-				message_id: 2,
-			},
-			timestamp: "string",
-			url: "string",
-			createdAt: "string",
-		},
-	];
-	// return statusAlertsModule.getStatusAlerts;
+	return statusAlertsModule.getStatusAlerts;
 });
 
 const showStatusAlertIcon = computed(() => {
