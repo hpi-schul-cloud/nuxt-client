@@ -9,8 +9,8 @@ import AccountsModule from "@/store/accounts";
 import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
-import ContextExternalToolsModule from "@/store/context-external-tools";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FilePaths from "@/store/filePaths";
@@ -32,7 +32,6 @@ import TasksModule from "@/store/tasks";
 import TermsOfUseModule from "@/store/terms-of-use";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
-import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
 import CommonCartridgeExportModule from "./common-cartridge-export";
@@ -45,7 +44,6 @@ export let applicationErrorModule: ApplicationErrorModule;
 export let authModule: AuthModule;
 export let autoLogoutModule: AutoLogoutModule;
 export let contentModule: ContentModule;
-export let contextExternalToolsModule: ContextExternalToolsModule;
 export let copyModule: CopyModule;
 export let envConfigModule: EnvConfigModule;
 export let filePathsModule: FilePaths;
@@ -77,7 +75,6 @@ export function initializeStores(store: Store<any>): void {
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
 	contentModule = getModule(ContentModule, store);
-	contextExternalToolsModule = getModule(ContextExternalToolsModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
 	filePathsModule = getModule(FilePaths, store);
@@ -112,7 +109,6 @@ export const modules = {
 	authModule: AuthModule,
 	autoLogoutModule: AutoLogoutModule,
 	contentModule: ContentModule,
-	contextExternalToolsModule: ContextExternalToolsModule,
 	copyModule: CopyModule,
 	envConfigModule: EnvConfigModule,
 	filePathsModule: FilePaths,

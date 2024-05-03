@@ -17,7 +17,12 @@
 				>
 					{{ roomData.title }}
 				</div>
-				<VChip v-if="roomData.isSynchronized" size="small" class="mt-1 ml-2">
+				<VChip
+					v-if="roomData.isSynchronized"
+					size="small"
+					class="mt-1 ml-2"
+					data-testid="synced-course-chip"
+				>
 					{{ $t("pages.rooms.headerSection.synchronized") }}
 				</VChip>
 				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">

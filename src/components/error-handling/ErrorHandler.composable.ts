@@ -16,6 +16,8 @@ export type BoardObjectType =
 	| "boardCard"
 	| "boardElement";
 
+type ErrorStatus = "success" | "error" | "warning" | "info";
+
 export type ApiErrorHandler = (
 	error?: ApiResponseError | ApiValidationError
 ) => Promise<void> | void;
@@ -26,7 +28,7 @@ export type ApiErrorHandlerFactory = (...args: any[]) => ApiErrorHandler;
 export type ErrorMap = Record<number, ApiErrorHandler>;
 
 export const useErrorHandler = () => {
-	const { t, te } = useI18n();
+	const { t } = useI18n();
 
 	const { showCustomNotifier } = useBoardNotifier();
 
@@ -35,7 +37,7 @@ export const useErrorHandler = () => {
 		boardObjectType?: BoardObjectType
 	) => {
 		let errorKey = `components.board.notifications.errors.${errorType}`;
-		if (!te(errorKey)) {
+		if (!t(errorKey)) {
 			errorKey = "error.generic";
 		}
 
@@ -47,7 +49,7 @@ export const useErrorHandler = () => {
 	const notifyWithTemplate: ApiErrorHandlerFactory = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType,
-		status: "success" | "error" | "warning" | "info" = "error",
+		status: ErrorStatus = "error",
 		timeout?: number
 	): ApiErrorHandler => {
 		return () => {
@@ -59,6 +61,16 @@ export const useErrorHandler = () => {
 	const defaultErrorMap: ErrorMap = {
 		404: notifyWithTemplate("notLoaded"),
 		500: notifyWithTemplate("notLoaded"),
+	};
+
+	const notifySocketError = (
+		errorType: ErrorType,
+		boardObjectType?: BoardObjectType,
+		status: ErrorStatus = "error",
+		timeout?: number
+	): void => {
+		const text = generateErrorText(errorType, boardObjectType);
+		showCustomNotifier(text, status, timeout);
 	};
 
 	const handleError = (error: unknown, errorMap?: Partial<ErrorMap>) => {
@@ -81,7 +93,8 @@ export const useErrorHandler = () => {
 	return {
 		handleError,
 		handleAnyError,
-		notifyWithTemplate,
 		generateErrorText,
+		notifySocketError,
+		notifyWithTemplate,
 	};
 };
