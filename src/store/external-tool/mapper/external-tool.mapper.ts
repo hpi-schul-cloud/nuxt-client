@@ -4,7 +4,7 @@ import {
 	ToolReferenceListResponse,
 	ToolReferenceResponse,
 } from "@/serverApi/v3";
-import { ExternalToolDisplayData } from "../external-tool-display-data";
+import { ExternalToolDisplayData } from "@data-external-tool";
 import { ToolLaunchRequest } from "../tool-launch-request";
 import { ToolParameter } from "../tool-parameter";
 import {

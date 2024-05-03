@@ -42,7 +42,7 @@
 					<BoardMenuActionDelete :name="title" @click="onDelete" />
 				</BoardMenu>
 			</div>
-			<VDivider aria-hidden="true" class="border-opacity-100" />
+			<VDivider aria-hidden="true" class="border-opacity-75" />
 		</div>
 	</BoardColumnInteractionHandler>
 </template>

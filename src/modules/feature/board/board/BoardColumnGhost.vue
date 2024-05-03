@@ -1,15 +1,15 @@
 <template>
 	<div ref="ghostColumnRef" :class="{ 'pl-2': !isListBoard }">
 		<BoardColumnGhostHeader
+			:label="title"
 			:isColumnActive="isColumnHovered"
-			:isListBoard="isListBoard"
 			@add-column="onAddColumn"
 			data-testid="add-column"
-			:class="{ 'px-4': isListBoard }"
 		/>
 		<div
 			:style="{ 'min-width': colWidth + 'px' }"
-			class="column-drag-handle grow-transition mr-4"
+			class="column-drag-handle grow-transition"
+			:class="{ 'mr-4': !isListBoard }"
 		>
 			<Sortable
 				:list="[]"
@@ -20,7 +20,7 @@
 					direction: 'vertical',
 					delay: 300, // isDesktop ? 0 : 300
 					delayOnTouchOnly: true,
-					ghostClass: sortableGhostClasses,
+					ghostClass: isListBoard ? 'list-layout' : 'column-layout',
 					easing: 'cubic-bezier(1, 0, 0, 1)',
 					dragClass: 'sortable-drag-board-card',
 					dragoverBubble: false,
@@ -39,6 +39,7 @@
 import { useElementHover } from "@vueuse/core";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 
@@ -59,22 +60,22 @@ const colWidth = computed<number>(() =>
 const onAddColumn = () => emit("create:column");
 
 const ghostColumnStyle = computed(() => {
-	const classes = ["d-flex", "flex-row", "flex-shrink-1", "ml-n4", "pl-2"];
+	const classes = ["d-flex", "flex-row", "flex-shrink-1"];
 	if (!props.isListBoard) {
-		classes.push("column-container");
+		classes.push("column-container", "ml-n4", "pl-2");
 	} else {
 		classes.push("list-container");
 	}
 	return classes;
 });
 
-const sortableGhostClasses = computed(() => {
-	const classes = ["sortable-drag-ghost"];
-	if (!props.isListBoard) {
-		classes.push("column-layout");
-	}
-	return classes;
-});
+const { t } = useI18n();
+
+const title = computed(() =>
+	props.isListBoard
+		? t("components.board.column.ghost.list.placeholder")
+		: t("components.board.column.ghost.column.placeholder")
+);
 </script>
 
 <style scoped>
@@ -106,5 +107,9 @@ const sortableGhostClasses = computed(() => {
 <style>
 .column-layout {
 	width: 350px !important;
+}
+
+.list-layout {
+	width: 80ch !important;
 }
 </style>

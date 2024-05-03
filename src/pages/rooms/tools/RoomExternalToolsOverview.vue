@@ -14,11 +14,11 @@
 			/>
 		</div>
 		<v-alert
-			v-if="apiError && apiError.message"
+			v-if="error && error.message"
 			type="error"
 			data-testId="context-tool-error"
 			:icon="mdiAlertCircle"
-			:text="apiError.message"
+			:text="error.message"
 		/>
 
 		<v-progress-linear
@@ -37,111 +37,81 @@
 			:tools="tools"
 			:room-id="roomId"
 			data-testid="room-external-tool-section"
+			@delete="onDeleteTool"
 		/>
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiAlertCircle } from "@/components/icons/material";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/serverApi/v3";
-import ContextExternalToolsModule from "@/store/context-external-tools";
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import RoomModule from "@/store/room";
-import { BusinessError } from "@/store/types/commons";
 import { Course, CourseFeatures } from "@/store/types/room";
 import {
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	ROOM_MODULE_KEY,
 } from "@/utils/inject";
 import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	onUnmounted,
-	ref,
-	Ref,
-} from "vue";
+	ExternalToolDisplayData,
+	useExternalToolDisplayListState,
+} from "@data-external-tool";
+import { computed, ComputedRef, onMounted, onUnmounted, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 
-export default defineComponent({
-	components: {
-		RoomExternalToolsSection,
-		RoomVideoConferenceSection,
-		VCustomEmptyState,
-	},
-	props: {
-		roomId: {
-			type: String,
-			required: true,
-		},
-	},
-	setup(props) {
-		const contextExternalToolsModule: ContextExternalToolsModule = injectStrict(
-			CONTEXT_EXTERNAL_TOOLS_MODULE_KEY
-		);
-		const { t } = useI18n();
-		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-
-		const course: Ref<Course | null> = ref(null);
-
-		const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
-			return (
-				course.value?.features?.includes(CourseFeatures.VIDEOCONFERENCE) ??
-				false
-			);
-		});
-
-		const tools: ComputedRef<ExternalToolDisplayData[]> = computed(
-			() => contextExternalToolsModule.getExternalToolDisplayDataList
-		);
-
-		onMounted(async () => {
-			await contextExternalToolsModule.loadExternalToolDisplayData({
-				contextId: props.roomId,
-				contextType: ToolContextType.Course,
-			});
-
-			course.value = await roomModule.fetchCourse(props.roomId);
-		});
-
-		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
-
-		const timer = setInterval(async () => {
-			await contextExternalToolsModule.loadExternalToolDisplayData({
-				contextId: props.roomId,
-				contextType: ToolContextType.Course,
-			});
-		}, refreshTimeInMs);
-
-		const apiError: ComputedRef<BusinessError> = computed(
-			() => contextExternalToolsModule.getBusinessError
-		);
-
-		const loading: ComputedRef<boolean> = computed(
-			() => contextExternalToolsModule.getLoading || roomModule.getLoading
-		);
-
-		onUnmounted(() => {
-			clearInterval(timer);
-		});
-
-		return {
-			loading,
-			t,
-			tools,
-			apiError,
-			isVideoConferenceAvailable,
-			mdiAlertCircle,
-		};
+const props = defineProps({
+	roomId: {
+		type: String,
+		required: true,
 	},
 });
+
+const { t } = useI18n();
+const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
+const {
+	fetchDisplayData,
+	deleteContextExternalTool,
+	displayData: tools,
+	error,
+	isLoading: isDisplayDataLoading,
+} = useExternalToolDisplayListState();
+
+const course: Ref<Course | null> = ref(null);
+
+const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
+	return (
+		course.value?.features?.includes(CourseFeatures.VIDEOCONFERENCE) ?? false
+	);
+});
+
+onMounted(async () => {
+	await fetchDisplayData(props.roomId, ToolContextType.Course);
+
+	course.value = await roomModule.fetchCourse(props.roomId);
+});
+
+const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
+
+const timer = setInterval(async () => {
+	await fetchDisplayData(props.roomId, ToolContextType.Course);
+}, refreshTimeInMs);
+
+onUnmounted(() => {
+	clearInterval(timer);
+});
+
+const loading: ComputedRef<boolean> = computed(
+	() => isDisplayDataLoading.value || roomModule.getLoading
+);
+
+const onDeleteTool = async (displayData: ExternalToolDisplayData) => {
+	await deleteContextExternalTool(displayData.contextExternalToolId);
+};
 </script>
 
 <style lang="scss" scoped>

@@ -38,7 +38,8 @@
 							bubbleScroll: true,
 							sort: false,
 						}"
-						class="d-flex flex-grid flex-shrink-1 pa-2 ga-4 flex-1-1 scrollable-line"
+						class="d-flex flex-grid flex-shrink-1 pa-2 ga-6 flex-1-1 scrollable-line"
+						@start="dragStart"
 						@end="onElementDragEnd"
 					>
 						<template #item="{ element }">
@@ -57,6 +58,7 @@
 <script setup lang="ts">
 import { MediaAvailableLineElementResponse } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
 import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { uniqueId } from "lodash";
@@ -79,6 +81,8 @@ const isDesktop: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Desktop);
 
 const { openItems } = useCollapsableState("availableLinePanel");
 
+const { dragStart, dragEnd } = useDragAndDrop();
+
 const { availableMedia } = useSharedMediaBoardState();
 
 const elements: ComputedRef<MediaAvailableLineElementResponse[]> = computed(
@@ -86,6 +90,8 @@ const elements: ComputedRef<MediaAvailableLineElementResponse[]> = computed(
 );
 
 const onElementDragEnd = async (event: SortableEvent) => {
+	dragEnd();
+
 	const { newIndex, oldIndex, to, from, item } = event;
 
 	const fromLineId: string | undefined = extractDataAttribute(from, "lineId");
