@@ -8,7 +8,7 @@
 		>
 			<VCard
 				ref="cardHost"
-				:height="isLoading ? height : 'auto'"
+				:height="isLoadingCard ? height : 'auto'"
 				class="card-host"
 				:class="{ 'drag-disabled': isEditMode }"
 				variant="outlined"
@@ -19,10 +19,10 @@
 				:ripple="false"
 				:hover="isHovered"
 			>
-				<template v-if="isLoading">
+				<template v-if="isLoadingCard">
 					<CardSkeleton :height="height" />
 				</template>
-				<template v-if="!isLoading && card">
+				<template v-if="!isLoadingCard && card">
 					<CardTitle
 						:isEditMode="isEditMode"
 						:value="card.title"
@@ -152,7 +152,8 @@ export default defineComponent({
 			deleteElement,
 			fetchCard,
 			getCard,
-			isLoading,
+			isCardLoadingState,
+			// isLoading,
 			updateCardHeight,
 			updateTitle,
 			moveElementDown,
@@ -160,6 +161,7 @@ export default defineComponent({
 		} = useCardStore();
 
 		const card = ref<BoardCard | undefined>(undefined);
+		const isLoadingCard = computed(() => isCardLoadingState(cardId.value));
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
@@ -232,9 +234,10 @@ export default defineComponent({
 
 		return {
 			boardMenuClasses,
-			isLoading,
+			// isLoading,
 			card,
 			hasDeletePermission,
+			isLoadingCard,
 			isHovered,
 			isFocusedById,
 			onMoveCardKeyboard,

@@ -133,6 +133,7 @@ const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 
 const boardStore = useBoardStore();
+const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
 
 const { createPageInformation } = useSharedBoardPageInformation();
@@ -163,7 +164,10 @@ const onCreateColumn = async () => {
 };
 
 const onDeleteCard = async (cardId: string) => {
-	if (hasCreateCardPermission) boardStore.deleteCardRequest({ cardId });
+	if (hasCreateCardPermission) {
+		boardStore.deleteCardRequest({ cardId });
+		cardStore.deleteCard(cardId);
+	}
 };
 
 const onDeleteColumn = async (columnId: string) => {
@@ -254,7 +258,7 @@ onUnmounted(() => {
 
 onUnmounted(() => {
 	resetNotifierModule();
-	useCardStore().resetState();
+	cardStore.resetState();
 });
 
 const setAlert = useDebounceFn(() => {

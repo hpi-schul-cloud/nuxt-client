@@ -12,7 +12,7 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-
+import { useSharedEditMode } from "@data-board";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import {
 	ContentElementType,
@@ -21,13 +21,16 @@ import {
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<BoardCard[]>([]);
-	const isLoading = ref<boolean>(false);
+	// const isLoading = ref<boolean>(false);
 
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const { setFocus } = useBoardFocusHandler();
+	const { setEditModeId } = useSharedEditMode();
+
 	const {
 		createElementCall,
+		// deleteCardCall,
 		deleteElementCall,
 		updateCardTitle,
 		updateCardHeightCall,
@@ -38,7 +41,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		await delay(100);
 		try {
 			const card = await fetchCardFromApi(id);
-			isLoading.value = true;
 
 			addCardToState(card);
 		} catch (error) {
@@ -46,7 +48,7 @@ export const useCardStore = defineStore("cardStore", () => {
 				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),
 			});
 		} finally {
-			isLoading.value = false;
+			// isLoading.value = false;
 		}
 	};
 
@@ -90,6 +92,13 @@ export const useCardStore = defineStore("cardStore", () => {
 		} catch (error) {
 			handleError(error, {});
 		}
+	};
+
+	const deleteCard = async (cardId: string) => {
+		const card = getCard(cardId);
+		if (card === undefined) return;
+
+		cards.value = cards.value.filter((c) => c.id !== cardId);
 	};
 
 	const addElement = async (
@@ -211,14 +220,21 @@ export const useCardStore = defineStore("cardStore", () => {
 		}
 	};
 
+	const isCardLoadingState = (cardId: string) => {
+		const card = getCard(cardId);
+		if (card === undefined) return true;
+		return false;
+	};
+
 	const notifyWithTemplateAndReload: ApiErrorHandlerFactory = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
 	) => {
 		return () => {
 			notifyWithTemplate(errorType, boardObjectType)();
-			// emit("reload:board");
-			// setEditModeId(undefined);
+			// TODO: find a way to trigger reload of the board in the board store
+			//  emit("reload:board");
+			setEditModeId(undefined);
 		};
 	};
 
@@ -227,10 +243,12 @@ export const useCardStore = defineStore("cardStore", () => {
 		addTextAfterTitle,
 		addCardToState,
 		cards,
+		deleteCard,
 		deleteElement,
 		fetchCard,
 		getCard,
-		isLoading,
+		isCardLoadingState,
+		// isLoading,
 		moveElementDown,
 		moveElementUp,
 		resetState,

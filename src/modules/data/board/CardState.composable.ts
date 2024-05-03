@@ -33,7 +33,7 @@ export const useCardState = (
 	const {
 		createElementCall,
 		deleteElementCall,
-		// deleteCardCall,
+		deleteCardCall,
 		moveElementCall,
 		updateCardHeightCall,
 		updateCardTitle,
@@ -67,17 +67,17 @@ export const useCardState = (
 		}
 	};
 
-	// const deleteCard = async () => {
-	// 	if (cardState.card === undefined) return;
+	const deleteCard = async () => {
+		if (cardState.card === undefined) return;
 
-	// 	try {
-	// 		await deleteCardCall(cardState.card.id);
-	// 	} catch (error) {
-	// 		handleError(error, {
-	// 			404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
-	// 		});
-	// 	}
-	// };
+		try {
+			await deleteCardCall(cardState.card.id);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
+			});
+		}
+	};
 
 	const updateCardHeight = async (newHeight: number) => {
 		if (cardState.card === undefined) return;
@@ -223,7 +223,7 @@ export const useCardState = (
 		moveElementDown,
 		moveElementUp,
 		notifyWithTemplateAndReload,
-		// deleteCard,
+		deleteCard,
 		fetchCard,
 		updateCardHeight,
 		updateTitle,
