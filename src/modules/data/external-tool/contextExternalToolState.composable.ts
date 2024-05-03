@@ -41,6 +41,8 @@ export const useContextExternalToolState = () => {
 	const createContextExternalTool = async (
 		contextExternalTool: ContextExternalToolSave
 	): Promise<ContextExternalTool | undefined> => {
+		error.value = undefined;
+
 		try {
 			const savedContextExternalTool =
 				await createContextExternalToolCall(contextExternalTool);
@@ -61,6 +63,8 @@ export const useContextExternalToolState = () => {
 		contextExternalToolId: string,
 		contextExternalTool: ContextExternalToolSave
 	): Promise<ContextExternalTool | undefined> => {
+		error.value = undefined;
+
 		try {
 			const savedContextExternalTool = await updateContextExternalToolCall(
 				contextExternalToolId,
@@ -82,6 +86,8 @@ export const useContextExternalToolState = () => {
 	const deleteContextExternalTool = async (
 		contextExternalToolId: string
 	): Promise<void> => {
+		error.value = undefined;
+
 		try {
 			await deleteContextExternalToolCall(contextExternalToolId);
 		} catch (errorResponse) {
