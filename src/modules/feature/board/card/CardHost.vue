@@ -27,7 +27,7 @@
 						:isEditMode="isEditMode"
 						:value="card.title"
 						scope="card"
-						@update:value="onUpdateCardTitle"
+						@update:value="onUpdateCardTitle($event, cardId)"
 						:isFocused="isFocusedById"
 						@enter="addTextAfterTitle"
 					/>
@@ -89,6 +89,7 @@ import {
 	useBoardPermissions,
 	useCardState,
 	useEditMode,
+	useCardStore,
 } from "@data-board";
 import { mdiArrowExpand } from "@mdi/js";
 import {
@@ -97,8 +98,7 @@ import {
 	BoardMenuActionEdit,
 } from "@ui-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
-import { computed, defineComponent, ref, toRef } from "vue";
-import { storeToRefs } from "pinia";
+import { computed, defineComponent, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
@@ -106,6 +106,7 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
+import { BoardCard } from "@/types/board/Card";
 
 export default defineComponent({
 	name: "CardHost",
@@ -135,20 +136,21 @@ export default defineComponent({
 
 		const isHovered = useElementHover(cardHost);
 		const isDetailView = ref(false);
-
-		const cardStore = useCardState(cardId.value, emit)();
-
 		const {
+			// card,
+			// updateTitle,
+			// updateCardHeight,
 			addElement,
-			addTextAfterTitle,
-			card,
-			deleteElement,
-			isLoading,
 			moveElementDown,
 			moveElementUp,
-			updateCardHeight,
-			updateTitle,
-		} = storeToRefs(cardStore);
+			deleteElement,
+			addTextAfterTitle,
+		} = useCardState(cardId.value, emit);
+
+		const { getCard, fetchCard, isLoading, updateCardHeight, updateTitle } =
+			useCardStore();
+
+		const card = ref<BoardCard | undefined>(undefined);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
@@ -180,7 +182,7 @@ export default defineComponent({
 		const onEndEditMode = async () => {
 			stopEditMode();
 			await delay(300);
-			updateCardHeight(cardHostHeight.value);
+			updateCardHeight(cardId.value, cardHostHeight.value);
 		};
 
 		const onOpenDetailView = () => (isDetailView.value = true);
@@ -211,6 +213,11 @@ export default defineComponent({
 				return "";
 			}
 			return "hidden";
+		});
+
+		onMounted(async () => {
+			await fetchCard(cardId.value);
+			card.value = getCard(cardId.value);
 		});
 
 		return {

@@ -105,6 +105,7 @@ import {
 	useSharedBoardPageInformation,
 	useSharedEditMode,
 	useBoardStore,
+	useCardStore,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -253,6 +254,7 @@ onUnmounted(() => {
 
 onUnmounted(() => {
 	resetNotifierModule();
+	useCardStore().resetState();
 });
 
 const setAlert = useDebounceFn(() => {
