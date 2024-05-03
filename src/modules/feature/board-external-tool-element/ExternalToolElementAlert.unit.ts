@@ -13,7 +13,7 @@ import {
 	useContextExternalToolConfigurationStatus,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { WarningAlert } from "@ui-alert";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 
@@ -171,7 +171,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdatedOnSchool.teacher"
+					'common.tool.information.outdatedOnSchool.teacher {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -201,7 +201,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdatedOrIncomplete.student"
+					'common.tool.information.outdatedOrIncomplete.student {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -233,7 +233,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdated.teacher"
+					'common.tool.information.outdated.teacher {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -263,7 +263,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdatedOrIncomplete.student"
+					'common.tool.information.outdatedOrIncomplete.student {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -296,7 +296,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.incomplete.outdated.schoolAndContext.teacher"
+					'common.tool.information.incomplete.outdated.schoolAndContext.teacher {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -327,7 +327,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdatedOrIncomplete.student"
+					'common.tool.information.outdatedOrIncomplete.student {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -350,7 +350,7 @@ describe("ExternalToolElementAlert", () => {
 
 			expect(alerts).toHaveLength(1);
 			expect(alerts[0].text()).toEqual(
-				"common.tool.information.deactivated.teacher"
+				'common.tool.information.deactivated.teacher {"toolName":"Tool name"}'
 			);
 		});
 	});
@@ -381,7 +381,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdated.teacher"
+					'common.tool.information.outdated.teacher {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -411,7 +411,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdatedOrIncomplete.student"
+					'common.tool.information.outdatedOrIncomplete.student {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -439,11 +439,11 @@ describe("ExternalToolElementAlert", () => {
 			it("should display a teacher friendly message", () => {
 				const { wrapper } = setup();
 
-				const alerts = wrapper.findAllComponents(WarningAlert);
+				const alerts = wrapper.findAllComponents(InfoAlert);
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdated.teacher"
+					'common.tool.information.outdated.teacher {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -469,11 +469,11 @@ describe("ExternalToolElementAlert", () => {
 			it("should display a student friendly message", () => {
 				const { wrapper } = setup();
 
-				const alerts = wrapper.findAllComponents(WarningAlert);
+				const alerts = wrapper.findAllComponents(InfoAlert);
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					"common.tool.information.outdatedOrIncomplete.student"
+					'common.tool.information.outdatedOrIncomplete.student {"toolName":"Tool name"}'
 				);
 			});
 		});
