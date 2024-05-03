@@ -141,14 +141,22 @@ export default defineComponent({
 			// updateTitle,
 			// updateCardHeight,
 			addElement,
-			moveElementDown,
-			moveElementUp,
-			deleteElement,
+			// moveElementDown,
+			// moveElementUp,
+			// deleteElement,
 			addTextAfterTitle,
 		} = useCardState(cardId.value, emit);
 
-		const { getCard, fetchCard, isLoading, updateCardHeight, updateTitle } =
-			useCardStore();
+		const {
+			deleteElement,
+			fetchCard,
+			getCard,
+			isLoading,
+			updateCardHeight,
+			updateTitle,
+			moveElementDown,
+			moveElementUp,
+		} = useCardStore();
 
 		const card = ref<BoardCard | undefined>(undefined);
 
@@ -175,7 +183,8 @@ export default defineComponent({
 
 		const onAddElement = () => askType();
 
-		const onDeleteElement = (elementId: string) => deleteElement(elementId);
+		const onDeleteElement = (elementId: string) =>
+			deleteElement(cardId.value, elementId);
 
 		const onStartEditMode = () => startEditMode();
 
@@ -189,10 +198,10 @@ export default defineComponent({
 		const onCloseDetailView = () => (isDetailView.value = false);
 
 		const onMoveContentElementDown = async (payload: ElementMove) =>
-			await moveElementDown(payload);
+			await moveElementDown(cardId.value, payload);
 
 		const onMoveContentElementUp = async (payload: ElementMove) =>
-			await moveElementUp(payload);
+			await moveElementUp(cardId.value, payload);
 
 		const onMoveContentElementKeyboard = async (
 			payload: ElementMove,
@@ -202,9 +211,9 @@ export default defineComponent({
 				return;
 			}
 			if (keyString === "ArrowUp") {
-				await moveElementUp(payload);
+				await moveElementUp(cardId.value, payload);
 			} else if (keyString === "ArrowDown") {
-				await moveElementDown(payload);
+				await moveElementDown(cardId.value, payload);
 			}
 		};
 

@@ -1,6 +1,6 @@
 import { BoardCard } from "@/types/board/Card";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { delay } from "@/utils/helpers";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 import { useBoardApi } from "./BoardApi.composable";
@@ -11,6 +11,7 @@ import {
 	BoardObjectType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
+import { ElementMove } from "@/types/board/DragAndDrop";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<BoardCard[]>([]);
@@ -18,7 +19,12 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
-	const { updateCardTitle, updateCardHeightCall } = useBoardApi();
+	const {
+		deleteElementCall,
+		updateCardTitle,
+		updateCardHeightCall,
+		moveElementCall,
+	} = useBoardApi();
 
 	const fetchCard = async (id: string): Promise<void> => {
 		await delay(100);
@@ -78,6 +84,87 @@ export const useCardStore = defineStore("cardStore", () => {
 		}
 	};
 
+	const moveElementDown = async (
+		cardId: string,
+		elementPayload: ElementMove
+	) => {
+		const card = getCard(cardId);
+		if (card === undefined) return;
+		try {
+			const { elementIndex, payload: elementId } = elementPayload;
+			if (elementIndex === card.elements.length - 1 || elementIndex === -1) {
+				return;
+			}
+			await moveElement(card, elementIndex, elementId, "down");
+			await moveElementCall(elementId, cardId, elementIndex + 1);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated"),
+			});
+		}
+	};
+
+	const moveElementUp = async (cardId: string, elementPayload: ElementMove) => {
+		const card = getCard(cardId);
+		if (card === undefined) return;
+
+		try {
+			const { elementIndex, payload: elementId } = elementPayload;
+			if (elementIndex <= 0) return;
+
+			await moveElement(card, elementIndex, elementId, "up");
+			await moveElementCall(elementId, cardId, elementIndex - 1);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated"),
+			});
+		}
+	};
+
+	const moveElement = async (
+		card: BoardCard,
+		elementIndex: number,
+		elementId: string,
+		direction: "up" | "down"
+	) => {
+		if (card === undefined) return;
+
+		const element = card.elements.filter(
+			(element) => element.id === elementId
+		)[0];
+
+		const delta = direction === "up" ? -1 : 1;
+
+		card.elements.splice(elementIndex, 1);
+		await nextTick();
+		card.elements.splice(elementIndex + delta, 0, element);
+	};
+
+	const deleteElement = async (
+		cardId: string,
+		elementId: string
+	): Promise<void> => {
+		const card = getCard(cardId);
+		if (card === undefined) return;
+
+		try {
+			await deleteElementCall(elementId);
+			extractElement(card, elementId);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated"),
+			});
+		}
+	};
+
+	const extractElement = (card: BoardCard, elementId: string): void => {
+		const index = card.elements.findIndex((e) => e.id === elementId);
+
+		if (index !== undefined && index > -1) {
+			card.elements.splice(index, 1);
+		}
+	};
+
 	const notifyWithTemplateAndReload: ApiErrorHandlerFactory = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
@@ -92,9 +179,12 @@ export const useCardStore = defineStore("cardStore", () => {
 	return {
 		addCardToState,
 		cards,
+		deleteElement,
 		fetchCard,
 		getCard,
 		isLoading,
+		moveElementDown,
+		moveElementUp,
 		resetState,
 		updateCardHeight,
 		updateTitle,
