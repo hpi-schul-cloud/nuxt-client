@@ -87,7 +87,7 @@ import { delay } from "@/utils/helpers";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
-	useCardState,
+	// useCardState,
 	useEditMode,
 	useCardStore,
 } from "@data-board";
@@ -136,19 +136,19 @@ export default defineComponent({
 
 		const isHovered = useElementHover(cardHost);
 		const isDetailView = ref(false);
-		const {
-			// card,
-			// updateTitle,
-			// updateCardHeight,
-			// addElement,
-			// moveElementDown,
-			// moveElementUp,
-			// deleteElement,
-			addTextAfterTitle,
-		} = useCardState(cardId.value, emit);
+		// const {
+		// 	// card,
+		// 	// updateTitle,
+		// 	// updateCardHeight,
+		// 	// addElement,
+		// 	// moveElementDown,
+		// 	// moveElementUp,
+		// 	// deleteElement,
+		// } = useCardState(cardId.value, emit);
 
 		const {
 			addElement,
+			addTextAfterTitle,
 			deleteElement,
 			fetchCard,
 			getCard,

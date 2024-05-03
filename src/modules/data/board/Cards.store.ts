@@ -123,6 +123,13 @@ export const useCardStore = defineStore("cardStore", () => {
 		}
 	};
 
+	const addTextAfterTitle = async (cardId: string) => {
+		const card = getCard(cardId);
+		if (card === undefined) return;
+
+		return await addElement(ContentElementType.RichText, card.id, true);
+	};
+
 	const moveElementDown = async (
 		cardId: string,
 		elementPayload: ElementMove
@@ -217,6 +224,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	return {
 		addElement,
+		addTextAfterTitle,
 		addCardToState,
 		cards,
 		deleteElement,
