@@ -4,7 +4,11 @@
 		ref="linkContentElementDisplay"
 		tabindex="-1"
 	>
-		<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
+		<ContentElementBar
+			:hasGreyBackground="true"
+			:icon="mdiLink"
+			:hasRowStyle="hasListLayout"
+		>
 			<template #display v-if="imageUrl">
 				<v-img :src="imageUrl" alt="" class="rounded-t" />
 			</template>
@@ -25,6 +29,8 @@
 import { ComputedRef, computed, defineComponent, ref } from "vue";
 import { mdiLink } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
+import { BOARD_HAS_LIST_LAYOUT } from "@util-board";
+import { injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	name: "LinkContentElementDisplay",
@@ -54,12 +60,15 @@ export default defineComponent({
 			}
 		});
 
+		const hasListLayout = ref(injectStrict(BOARD_HAS_LIST_LAYOUT));
+
 		const linkContentElementDisplay = ref(null);
 
 		return {
-			mdiLink,
+			hasListLayout,
 			hostname,
 			linkContentElementDisplay,
+			mdiLink,
 		};
 	},
 });

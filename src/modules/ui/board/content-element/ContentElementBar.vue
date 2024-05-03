@@ -11,7 +11,7 @@
 		<div
 			v-if="$slots.display"
 			class="content-element-display"
-			:class="{ 'flex-sm-grow-1': hasListLayout }"
+			:class="{ 'flex-sm-grow-1': props.hasRowStyle }"
 		>
 			<slot name="display" />
 		</div>
@@ -22,7 +22,7 @@
 			"
 			:class="{
 				'bg-grey-lighten-4': props.hasGreyBackground === true,
-				'flex-sm-grow-1': hasListLayout,
+				'flex-sm-grow-1': props.hasRowStyle,
 			}"
 			class="content-element-bar-texts rounded-b py-4"
 		>
@@ -64,12 +64,10 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from "vue";
+import { PropType } from "vue";
 import LineClamp from "../LineClamp.vue";
 import { IconProps } from "vuetify";
 import { hasSlotContent } from "@util-vue";
-import { BOARD_HAS_LIST_LAYOUT } from "@util-board";
-import { injectStrict } from "@/utils/inject";
 
 const props = defineProps({
 	hasGreyBackground: {
@@ -80,14 +78,16 @@ const props = defineProps({
 		type: String as PropType<IconProps["icon"]>,
 		required: false,
 	},
+	hasRowStyle: {
+		type: Boolean,
+		required: false,
+	},
 });
-
-const hasListLayout = ref(injectStrict(BOARD_HAS_LIST_LAYOUT));
 
 const getRowContainerClasses = () => {
 	return {
-		"d-sm-flex": hasListLayout,
-		"flex-sm-row": hasListLayout,
+		"d-sm-flex": props.hasRowStyle,
+		"flex-sm-row": props.hasRowStyle,
 	};
 };
 </script>

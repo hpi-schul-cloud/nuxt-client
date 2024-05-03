@@ -4,6 +4,7 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
+import { BOARD_HAS_LIST_LAYOUT } from "@util-board";
 
 type Props = {
 	url?: string;
@@ -15,7 +16,12 @@ type Props = {
 describe(LinkContentElementDisplay.name, () => {
 	const setup = (props: Props) => {
 		const wrapper = mount(LinkContentElementDisplay, {
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[BOARD_HAS_LIST_LAYOUT as symbol]: false,
+				},
+			},
 			props: {
 				url: "",
 				title: "",
