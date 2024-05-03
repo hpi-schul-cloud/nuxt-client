@@ -8,29 +8,19 @@ export const useContextExternalToolConfigurationStatus = () => {
 		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string | undefined => {
 		const userRoles = authModule.getUserRoles;
-		if (userRoles.includes("student")) {
-			if (toolConfigStatus.isDeactivated) {
-				return "pages.rooms.tools.deactivated";
-			} else if (
-				toolConfigStatus.isOutdatedOnScopeContext ||
-				toolConfigStatus.isIncompleteOnScopeContext ||
-				toolConfigStatus.isOutdatedOnScopeSchool
-			) {
-				return "pages.rooms.tools.outdated";
-			}
+		if (
+			toolConfigStatus.isOutdatedOnScopeContext ||
+			toolConfigStatus.isIncompleteOnScopeContext ||
+			toolConfigStatus.isOutdatedOnScopeSchool
+		) {
+			return "pages.rooms.tools.outdated";
 		}
 
-		if (userRoles.includes("teacher")) {
-			if (toolConfigStatus.isDeactivated) {
-				return "pages.rooms.tools.deactivated";
-			} else if (
-				toolConfigStatus.isOutdatedOnScopeSchool ||
-				toolConfigStatus.isOutdatedOnScopeContext ||
-				toolConfigStatus.isIncompleteOnScopeContext ||
-				toolConfigStatus.isIncompleteOperationalOnScopeContext
-			) {
-				return "pages.rooms.tools.outdated";
-			}
+		if (
+			userRoles.includes("teacher") &&
+			toolConfigStatus.isIncompleteOperationalOnScopeContext
+		) {
+			return "pages.rooms.tools.outdated";
 		}
 	};
 
