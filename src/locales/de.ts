@@ -108,17 +108,17 @@ export default {
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Lehrkraft",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
-		"Konfiguration des Tools {tool} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen und an Schuladministrator:in wenden.",
-	"common.tool.information.outdatedOrIncomplete.student":
-		"Konfiguration des Tools {tool} nicht aktuell oder unvollständig. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen und an Schuladministrator:in wenden.",
+	"common.tool.information.outdated.student":
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte an Lehrkraft oder Kursleiter:in wenden.",
 	"common.tool.information.deactivated.student":
-		"Tool {tool} ist deaktiviert. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+		"Tool {toolName} ist deaktiviert. Bitte an Lehrkraft oder Kursleiter:in wenden.",
 	"common.tool.information.deactivated.teacher":
-		"Tool {tool} ist deaktiviert. Bitte an Schuladministrator:in wenden.",
+		"Tool {toolName} ist deaktiviert. Bitte an Schuladministrator:in wenden.",
 	"common.tool.information.outdated.teacher":
 		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"Konfiguration des Tools {tool} nicht aktuell oder unvollständig. Bitte an Schuladministrator:in wenden.",
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte an Schuladministrator:in wenden.",
 	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",

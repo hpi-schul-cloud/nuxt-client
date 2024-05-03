@@ -154,10 +154,6 @@ export default defineComponent({
 				!!displayData.value?.status.isOutdatedOnScopeContext
 		);
 
-		const isToolIncomplete: ComputedRef<boolean> = computed(
-			() => !!displayData.value?.status.isIncompleteOnScopeContext
-		);
-
 		const isToolIncompleteOperational: ComputedRef<boolean> = computed(
 			() => !!displayData.value?.status.isIncompleteOperationalOnScopeContext
 		);
@@ -209,7 +205,7 @@ export default defineComponent({
 
 				if (
 					!isToolOutdated.value &&
-					!isToolIncomplete.value &&
+					!displayData.value?.status?.isIncompleteOperationalOnScopeContext &&
 					modelValue.value.contextExternalToolId
 				) {
 					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
@@ -235,7 +231,10 @@ export default defineComponent({
 			if (modelValue.value.contextExternalToolId) {
 				await fetchDisplayData(modelValue.value.contextExternalToolId);
 
-				if (!isToolOutdated.value && !isToolIncomplete.value) {
+				if (
+					!isToolOutdated.value &&
+					!displayData.value?.status.isIncompleteOnScopeContext
+				) {
 					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
 				}
 			}
@@ -262,7 +261,6 @@ export default defineComponent({
 			error,
 			isLoading,
 			isToolOutdated,
-			isToolIncomplete,
 			isToolIncompleteOperational,
 			isConfigurationDialogOpen,
 			toolConfigurationStatus,

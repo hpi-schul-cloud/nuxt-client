@@ -6,18 +6,18 @@
 
 		<WarningAlert v-if="toolStatus && toolStatus.isDeactivated">
 			{{
-				t(toolDeactivatedMessage, {
-					tool: toolDisplayName,
+				$t(toolDeactivatedMessage, {
+					toolName: toolDisplayName,
 				})
 			}}
 		</WarningAlert>
 
-		<WarningAlert v-if="isToolIncompleteOperational" color="info">
-			{{ t(toolStatusMessage, { tool: toolDisplayName }) }}
-		</WarningAlert>
+		<InfoAlert v-if="isToolIncompleteOperational">
+			{{ $t(toolStatusMessage, { toolName: toolDisplayName }) }}
+		</InfoAlert>
 
 		<WarningAlert v-if="isToolNotLaunchable">
-			{{ t(toolStatusMessage, { tool: toolDisplayName }) }}
+			{{ $t(toolStatusMessage, { toolName: toolDisplayName }) }}
 		</WarningAlert>
 	</div>
 </template>
@@ -29,12 +29,12 @@ import {
 	ContextExternalToolConfigurationStatus,
 	useContextExternalToolConfigurationStatus,
 } from "@data-external-tool";
-import { WarningAlert } from "@ui-alert";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {
+		InfoAlert,
 		WarningAlert,
 	},
 	props: {
@@ -51,8 +51,6 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const { t } = useI18n();
-
 		const { determineToolStatusTranslationKey, determineDeactivatedMessage } =
 			useContextExternalToolConfigurationStatus();
 
@@ -60,9 +58,9 @@ export default defineComponent({
 
 		const isToolNotLaunchable: ComputedRef<boolean> = computed(
 			() =>
-				!!props.toolStatus?.isOutdatedOnScopeSchool ||
-				!!props.toolStatus?.isOutdatedOnScopeContext ||
-				!!props.toolStatus?.isIncompleteOnScopeContext
+				props.toolStatus.isOutdatedOnScopeSchool ||
+				props.toolStatus.isOutdatedOnScopeContext ||
+				props.toolStatus.isIncompleteOnScopeContext
 		);
 
 		const isToolIncompleteOperational: ComputedRef<boolean> = computed(
@@ -95,7 +93,6 @@ export default defineComponent({
 			isToolNotLaunchable,
 			isToolIncompleteOperational,
 			toolDeactivatedMessage,
-			t,
 		};
 	},
 });

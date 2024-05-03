@@ -201,7 +201,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdatedOrIncomplete.student {"toolName":"Tool name"}'
+					'common.tool.information.outdated.student {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -263,7 +263,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdatedOrIncomplete.student {"toolName":"Tool name"}'
+					'common.tool.information.outdated.student {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -327,7 +327,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdatedOrIncomplete.student {"toolName":"Tool name"}'
+					'common.tool.information.outdated.student {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -411,7 +411,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdatedOrIncomplete.student {"toolName":"Tool name"}'
+					'common.tool.information.outdated.student {"toolName":"Tool name"}'
 				);
 			});
 		});
@@ -473,7 +473,7 @@ describe("ExternalToolElementAlert", () => {
 
 				expect(alerts).toHaveLength(1);
 				expect(alerts[0].text()).toEqual(
-					'common.tool.information.outdatedOrIncomplete.student {"toolName":"Tool name"}'
+					'common.tool.information.outdated.student {"toolName":"Tool name"}'
 				);
 			});
 		});

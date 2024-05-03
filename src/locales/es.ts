@@ -111,7 +111,7 @@ export default {
 	"common.roleName.teacher": "Profesor",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor verifique la configuración.",
-	"common.tool.information.outdatedOrIncomplete.student":
+	"common.tool.information.outdated.student":
 		"La configuración de la herramienta {tool} no está actualizada o está incompleta. Por favor contacta a tu profesor o instructor del curso.",
 	"common.tool.information.deactivated.student":
 		"La herramienta {tool} está deshabilitada. Por favor contacta a tu profesor o instructor del curso.",

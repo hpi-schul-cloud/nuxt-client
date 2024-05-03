@@ -47,7 +47,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 				return "";
 			}
 		} else {
-			return "common.tool.information.outdatedOrIncomplete.student";
+			return "common.tool.information.outdated.student";
 		}
 	};
 

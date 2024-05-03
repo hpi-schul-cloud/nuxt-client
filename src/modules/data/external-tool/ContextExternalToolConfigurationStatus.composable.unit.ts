@@ -253,9 +253,7 @@ describe("ToolConfigurationStatus.composable", () => {
 					toolConfigurationStatus
 				);
 
-				expect(result).toEqual(
-					"common.tool.information.outdatedOrIncomplete.student"
-				);
+				expect(result).toEqual("common.tool.information.outdated.student");
 			});
 		});
 	});

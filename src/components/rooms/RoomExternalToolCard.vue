@@ -19,14 +19,14 @@
 					variant="tonal"
 					v-if="isToolIncompleteOperational"
 					data-testId="tool-card-status-incompleteOperational"
-					>{{ t(toolChipTitle) }}
+					>{{ $t(toolChipTitle) }}
 				</room-card-chip>
 
 				<room-card-chip
 					v-if="isToolOutdated || isToolIncomplete"
 					data-testId="tool-card-status"
 				>
-					{{ t(toolChipTitle) }}
+					{{ $t(toolChipTitle) }}
 				</room-card-chip>
 			</div>
 		</template>

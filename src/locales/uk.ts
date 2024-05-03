@@ -112,7 +112,7 @@ export default {
 	"common.roleName.teacher": "Викладач",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"Конфігурація інструмента {toolName} неоновлена або неповна. Перевірте налаштування.",
-	"common.tool.information.outdatedOrIncomplete.student":
+	"common.tool.information.outdated.student":
 		"Конфігурація інструмента {tool} неоновлена або неповна. Будь ласка, зверніться до свого вчителя або викладача курсу.",
 	"common.tool.information.deactivated.student":
 		"Інструмент {tool} вимкнено. Будь ласка, зверніться до свого вчителя або викладача курсу.",
