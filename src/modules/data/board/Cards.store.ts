@@ -11,7 +11,13 @@ import {
 	BoardObjectType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
+
 import { ElementMove } from "@/types/board/DragAndDrop";
+import {
+	ContentElementType,
+	CreateContentElementBodyParams,
+} from "@/serverApi/v3";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<BoardCard[]>([]);
@@ -19,7 +25,9 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
+	const { setFocus } = useBoardFocusHandler();
 	const {
+		createElementCall,
 		deleteElementCall,
 		updateCardTitle,
 		updateCardHeightCall,
@@ -81,6 +89,37 @@ export const useCardStore = defineStore("cardStore", () => {
 			card.height = newHeight;
 		} catch (error) {
 			handleError(error, {});
+		}
+	};
+
+	const addElement = async (
+		type: ContentElementType,
+		cardId: string,
+		atFirstPosition?: boolean
+	) => {
+		const card = getCard(cardId);
+		if (card === undefined) return;
+
+		try {
+			const params: CreateContentElementBodyParams = { type };
+			if (atFirstPosition) {
+				params.toPosition = 0;
+			}
+			const response = await createElementCall(card.id, params);
+
+			if (atFirstPosition) {
+				card.elements.splice(0, 0, response.data);
+			} else {
+				card.elements.push(response.data);
+			}
+
+			setFocus(response.data.id);
+			return response.data;
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
+				400: notifyWithTemplate("notCreated", "boardElement"),
+			});
 		}
 	};
 
@@ -177,6 +216,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	return {
+		addElement,
 		addCardToState,
 		cards,
 		deleteElement,

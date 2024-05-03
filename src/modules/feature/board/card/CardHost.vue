@@ -140,7 +140,7 @@ export default defineComponent({
 			// card,
 			// updateTitle,
 			// updateCardHeight,
-			addElement,
+			// addElement,
 			// moveElementDown,
 			// moveElementUp,
 			// deleteElement,
@@ -148,6 +148,7 @@ export default defineComponent({
 		} = useCardState(cardId.value, emit);
 
 		const {
+			addElement,
 			deleteElement,
 			fetchCard,
 			getCard,
@@ -166,7 +167,7 @@ export default defineComponent({
 		);
 		const { hasDeletePermission } = useBoardPermissions();
 
-		const { askType } = useAddElementDialog(addElement);
+		const { askType } = useAddElementDialog(addElement, cardId.value);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) =>
 			emit("move:card-keyboard", event.code);

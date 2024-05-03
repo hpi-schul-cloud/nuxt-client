@@ -92,8 +92,10 @@ export const useCardState = (
 
 	const addElement = async (
 		type: ContentElementType,
+		cardId: string,
 		atFirstPosition?: boolean
 	) => {
+		console.log(cardId);
 		if (cardState.card === undefined) return;
 
 		try {
@@ -120,7 +122,7 @@ export const useCardState = (
 	};
 
 	const addTextAfterTitle = async () => {
-		return await addElement(ContentElementType.RichText, true);
+		return await addElement(ContentElementType.RichText, "todoCardId", true); //TODO: replace 'todoCardId' with actual cardId
 	};
 
 	const moveElementDown = async (elementPayload: ElementMove) => {
