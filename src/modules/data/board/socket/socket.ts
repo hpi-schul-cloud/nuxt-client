@@ -4,10 +4,10 @@ import { Action } from "@/types/board/ActionFactory";
 export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 	// implement socket.io here
 	const socket = io(
-		// "https://bc-6683-poc-board-collaboration-server.dbc.dbildungscloud.dev",
-		"ws://localhost:4450",
+		// "ws://BC-7101-collaboration-service-deployment.dbc.dbildungscloud.dev",
+		":4450",
 		{
-			path: "/collaboration",
+			path: "/board-collaboration",
 			withCredentials: true,
 		}
 		// { path: "/collaboration", transports: ["polling"] }
