@@ -17,7 +17,7 @@
 			:title="$t('global.topbar.actions.alerts')"
 			data-test-id="status-alerts-icon"
 		>
-			<StatusAlerts :status-alerts="statusAlerts" />
+			<CloudStatusMessages :status-alerts="statusAlerts" />
 		</TopbarItem>
 		<TopbarItem
 			v-if="isTabletOrBigger"
@@ -65,7 +65,7 @@ import {
 } from "@/components/icons/material";
 import TopbarItem from "./TopbarItem.vue";
 import PageShare from "./PageShare.vue";
-import StatusAlerts from "./StatusAlerts.vue";
+import CloudStatusMessages from "./CloudStatusMessages.vue";
 import UserMenu from "./UserMenu.vue";
 import { StatusAlert } from "@/store/types/status-alert";
 

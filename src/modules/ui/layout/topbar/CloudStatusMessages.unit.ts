@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import StatusAlerts from "./StatusAlerts.vue";
+import CloudStatusMessages from "./CloudStatusMessages.vue";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
 import {
 	createTestingI18n,
@@ -10,9 +10,9 @@ const testProps = {
 	statusAlerts: mockStatusAlerts,
 };
 
-describe("@ui-layout/StatusAlerts", () => {
+describe("@ui-layout/CloudStatusMessages", () => {
 	const setup = () => {
-		const wrapper = mount(StatusAlerts, {
+		const wrapper = mount(CloudStatusMessages, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
