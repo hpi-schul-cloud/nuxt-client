@@ -3,7 +3,7 @@ import {
 	FILE_PATHS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
-import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "./types";
+import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { ComputedRef, computed } from "vue";
 

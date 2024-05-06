@@ -1005,6 +1005,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_MEDIA_SHELF_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_NEW_LAYOUT_ENABLED: boolean;
 }
 /**
  * 

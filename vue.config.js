@@ -70,6 +70,7 @@ module.exports = defineConfig({
 				"@ui-preview-image": getDir("src/modules/ui/preview-image"),
 				"@ui-room-details": getDir("src/modules/ui/room-details"),
 				"@ui-speed-dial-menu": getDir("src/modules/ui/speed-dial-menu"),
+				"@ui-qr-code": getDir("src/modules/ui/qr-code"),
 				"@util-board": getDir("src/modules/util/board"),
 				"@util-validators": getDir("src/modules/util/validators"),
 				"@util-vue": getDir("src/modules/util/vue"),

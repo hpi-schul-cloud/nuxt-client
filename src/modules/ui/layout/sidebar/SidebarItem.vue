@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { SidebarSingleItem } from "./types";
+import { SidebarSingleItem } from "../types";
 
 const props = defineProps({
 	item: {
