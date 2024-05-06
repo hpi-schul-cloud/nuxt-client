@@ -1,5 +1,5 @@
 <template>
-	<VMenu>
+	<VMenu max-width="215">
 		<template v-slot:activator="{ props }">
 			<VBtn
 				v-bind="props"
