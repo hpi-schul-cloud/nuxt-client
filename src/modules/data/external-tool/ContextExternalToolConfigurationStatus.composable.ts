@@ -6,7 +6,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 
 	const determineChipStatusTitle = (
 		toolConfigStatus: ContextExternalToolConfigurationStatus
-	): string => {
+	): string | undefined => {
 		const userRoles = authModule.getUserRoles;
 		if (
 			toolConfigStatus.isOutdatedOnScopeContext ||
@@ -22,8 +22,6 @@ export const useContextExternalToolConfigurationStatus = () => {
 		) {
 			return "pages.rooms.tools.outdated";
 		}
-
-		return "";
 	};
 
 	const determineToolStatusTranslationKey = (
