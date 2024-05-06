@@ -15,7 +15,7 @@
 					{{ $t("pages.rooms.tools.deactivated") }}
 				</WarningChip>
 				<InfoChip
-					v-if="isToolIncompleteOperational"
+					v-if="showAsIncompleteOperational"
 					data-testId="tool-card-status-incompleteOperational"
 					>{{ $t("pages.rooms.tools.outdated") }}
 				</InfoChip>
@@ -77,8 +77,7 @@ export default defineComponent({
 			error: launchError,
 		} = useExternalToolLaunchState();
 
-		const { determineChipStatusTitle, isTeacher } =
-			useContextExternalToolConfigurationStatus();
+		const { isTeacher } = useContextExternalToolConfigurationStatus();
 
 		const handleClick = async () => {
 			if (!isToolLaunchable.value) {
@@ -144,7 +143,6 @@ export default defineComponent({
 			);
 		});
 
-
 		const loadLaunchRequest = async () => {
 			if (!isToolLaunchable.value) {
 				return;
@@ -164,8 +162,7 @@ export default defineComponent({
 			isToolOutdated,
 			isToolDeactivated,
 			isToolIncomplete,
-			isToolIncompleteOperational,
-			toolChipTitle,
+			showAsIncompleteOperational,
 		};
 	},
 });

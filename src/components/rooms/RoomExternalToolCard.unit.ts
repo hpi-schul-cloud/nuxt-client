@@ -43,12 +43,6 @@ describe("RoomExternalToolCard", () => {
 		jest
 			.mocked(useContextExternalToolConfigurationStatus)
 			.mockReturnValue(useContextExternalToolConfigurationStatusMock);
-
-		jest
-			.mocked(
-				useContextExternalToolConfigurationStatusMock.determineChipStatusTitle
-			)
-			.mockReturnValue("pages.rooms.tools.outdated");
 	});
 
 	afterEach(() => {

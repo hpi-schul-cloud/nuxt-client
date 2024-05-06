@@ -4,7 +4,6 @@ import { ContextExternalToolConfigurationStatus } from "./types";
 export const useContextExternalToolConfigurationStatus = () => {
 	const authModule = injectStrict(AUTH_MODULE_KEY);
 
-
 	const determineToolStatusTranslationKey = (
 		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string => {
@@ -46,7 +45,6 @@ export const useContextExternalToolConfigurationStatus = () => {
 	};
 
 	return {
-		determineChipStatusTitle,
 		determineToolStatusTranslationKey,
 		determineDeactivatedMessage,
 		isTeacher,
