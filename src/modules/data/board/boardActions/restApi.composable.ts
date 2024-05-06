@@ -1,7 +1,7 @@
 import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
-import * as BoardActions from "./actions";
+import * as BoardActions from "./boardActions";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { ColumnResponse } from "@/serverApi/v3";

@@ -7,9 +7,6 @@ import {
 	DeleteBoardFailurePayload,
 	DeleteBoardRequestPayload,
 	DeleteBoardSuccessPayload,
-	DeleteCardFailurePayload,
-	DeleteCardRequestPayload,
-	DeleteCardSuccessPayload,
 	DeleteColumnFailurePayload,
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
@@ -80,19 +77,6 @@ export const deleteBoardFailure = createAction(
 	props<DeleteBoardFailurePayload>()
 );
 
-export const deleteCardRequest = createAction(
-	"delete-card-request",
-	props<DeleteCardRequestPayload>()
-);
-export const deleteCardSuccess = createAction(
-	"delete-card-success",
-	props<DeleteCardSuccessPayload>()
-);
-export const deleteCardFailure = createAction(
-	"delete-card-failure",
-	props<DeleteCardFailurePayload>()
-);
-
 export const deleteColumnRequest = createAction(
 	"delete-column-request",
 	props<DeleteColumnRequestPayload>()
@@ -158,7 +142,6 @@ export const updateBoardTitleRequest = createAction(
 	"update-board-title-request",
 	props<UpdateBoardTitleRequestPayload>()
 );
-
 export const updateBoardTitleSuccess = createAction(
 	"update-board-title-success",
 	props<UpdateBoardTitleSuccessPayload>()

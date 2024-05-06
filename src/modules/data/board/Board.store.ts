@@ -13,8 +13,6 @@ import {
 	CreateCardSuccessPayload,
 	CreateColumnRequestPayload,
 	CreateColumnSucccessPayload,
-	DeleteCardRequestPayload,
-	DeleteCardSuccessPayload,
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
 	DisconnectSocketRequestPayload,
@@ -31,6 +29,7 @@ import {
 	UpdateColumnTitleRequestPayload,
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActions/boardActionPayload";
+import { DeleteCardSuccessPayload } from "@/modules/data/board/cardActions/cardActionPayload";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
@@ -99,10 +98,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const createColumnSuccess = (payload: CreateColumnSucccessPayload) => {
 		if (!board.value) return;
 		board.value.columns.push(payload.newColumn);
-	};
-
-	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
-		await socketOrRest.deleteCardRequest(payload);
 	};
 
 	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
@@ -316,7 +311,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		createCardSuccess,
 		createColumnRequest,
 		createColumnSuccess,
-		deleteCardRequest,
 		deleteCardSuccess,
 		deleteColumnRequest,
 		deleteColumnSuccess,

@@ -7,7 +7,7 @@ export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 		// "https://bc-6683-poc-board-collaboration-server.dbc.dbildungscloud.dev",
 		"ws://localhost:4450",
 		{
-			path: "/collaboration",
+			path: "/board-collaboration",
 			withCredentials: true,
 		}
 		// { path: "/collaboration", transports: ["polling"] }

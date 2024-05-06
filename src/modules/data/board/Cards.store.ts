@@ -4,6 +4,7 @@ import { nextTick, ref } from "vue";
 import { delay } from "@/utils/helpers";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 import { useBoardApi } from "./BoardApi.composable";
+import { envConfigModule } from "@/store";
 
 import {
 	ApiErrorHandlerFactory,
@@ -12,16 +13,33 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { useSharedEditMode } from "@data-board";
+import { useBoardStore, useSharedEditMode } from "@data-board";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import {
 	ContentElementType,
 	CreateContentElementBodyParams,
 } from "@/serverApi/v3";
+import {
+	DeleteCardRequestPayload,
+	DeleteCardSuccessPayload,
+	UpdateCardHeightRequestPayload,
+	UpdateCardHeightSuccessPayload,
+	UpdateCardTitleRequestPayload,
+	UpdateCardTitleSuccessPayload,
+} from "./cardActions/cardActionPayload";
+import { useCardRestApi } from "./cardActions/restApi.composable";
+import { useSocketApi } from "./cardActions/socketApi.composable";
 
 export const useCardStore = defineStore("cardStore", () => {
+	const boardStore = useBoardStore();
 	const cards = ref<BoardCard[]>([]);
 	// const isLoading = ref<boolean>(false);
+
+	const restApi = useCardRestApi();
+	const isSocketEnabled =
+		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+
+	const socketOrRest = isSocketEnabled ? useSocketApi() : restApi;
 
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
@@ -32,8 +50,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		createElementCall,
 		// deleteCardCall,
 		deleteElementCall,
-		updateCardTitle,
-		updateCardHeightCall,
 		moveElementCall,
 	} = useBoardApi();
 
@@ -65,40 +81,48 @@ export const useCardStore = defineStore("cardStore", () => {
 		return cards.value.find((c) => c.id === cardId);
 	};
 
-	const updateTitle = async (
-		newTitle: string,
-		cardId: string
+	const updateCardTitleRequest = async (
+		payload: UpdateCardTitleRequestPayload
 	): Promise<void> => {
-		const card = getCard(cardId);
-		if (card === undefined) return;
-
-		try {
-			card.title = newTitle;
-			await updateCardTitle(cardId, newTitle);
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
-		}
+		socketOrRest.updateCardTitleRequest(payload);
 	};
 
-	const updateCardHeight = async (cardId: string, newHeight: number) => {
-		const card = getCard(cardId);
+	const updateCardTitleSuccess = async (
+		payload: UpdateCardTitleSuccessPayload
+	) => {
+		const card = getCard(payload.id);
 		if (card === undefined) return;
 
-		try {
-			await updateCardHeightCall(cardId, newHeight);
-			card.height = newHeight;
-		} catch (error) {
-			handleError(error, {});
-		}
+		card.title = payload.title;
 	};
 
-	const deleteCard = async (cardId: string) => {
-		const card = getCard(cardId);
+	const updateCardHeightRequest = async (
+		payload: UpdateCardHeightRequestPayload
+	): Promise<void> => {
+		socketOrRest.updateCardHeightRequest(payload);
+	};
+
+	const updateCardHeightSuccess = async (
+		payload: UpdateCardHeightSuccessPayload
+	) => {
+		const card = getCard(payload.id);
 		if (card === undefined) return;
 
-		cards.value = cards.value.filter((c) => c.id !== cardId);
+		card.height = payload.height;
+	};
+
+	const deleteCardRequest = async (
+		payload: DeleteCardRequestPayload
+	): Promise<void> => {
+		socketOrRest.deleteCardRequest(payload);
+	};
+
+	const deleteCardSuccess = async (payload: DeleteCardSuccessPayload) => {
+		const card = getCard(payload.cardId);
+		if (card === undefined) return;
+
+		cards.value = cards.value.filter((c) => c.id !== payload.cardId);
+		boardStore.deleteCardSuccess(payload);
 	};
 
 	const addElement = async (
@@ -243,7 +267,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		addTextAfterTitle,
 		addCardToState,
 		cards,
-		deleteCard,
+		deleteCardRequest,
+		deleteCardSuccess,
 		deleteElement,
 		fetchCard,
 		getCard,
@@ -252,7 +277,9 @@ export const useCardStore = defineStore("cardStore", () => {
 		moveElementDown,
 		moveElementUp,
 		resetState,
-		updateCardHeight,
-		updateTitle,
+		updateCardHeightRequest,
+		updateCardHeightSuccess,
+		updateCardTitleRequest,
+		updateCardTitleSuccess,
 	};
 });

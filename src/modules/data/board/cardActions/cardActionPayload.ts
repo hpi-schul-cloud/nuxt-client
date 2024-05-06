@@ -4,6 +4,11 @@ import {
 	CreateContentElementBodyParams,
 } from "@/serverApi/v3";
 
+import {
+	BoardObjectType,
+	ErrorType,
+} from "@/components/error-handling/ErrorHandler.composable";
+
 export type FetchCardRequestPayload = {
 	id: string;
 };
@@ -16,28 +21,25 @@ export type UpdateCardTitleRequestPayload = {
 	id: string;
 	title: string;
 };
-
 export type UpdateCardTitleSuccessPayload = {
 	id: string;
 	title: string;
 };
-
-export type DeleteCardRequestPayload = {
-	id: string;
+export type UpdateCardTitleFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
 };
-
-export type DeleteCardSuccessPayload = {
-	id: string;
-};
-
 export type UpdateCardHeightRequestPayload = {
 	id: string;
 	height: number;
 };
-
 export type UpdateCardHeightSuccessPayload = {
 	id: string;
 	height: number;
+};
+export type UpdateCardHeightFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
 };
 
 export type AddElementRequestPayload = {
@@ -60,3 +62,16 @@ export type DeleteElementSuccessPayload = {
 	cardId: string;
 	elementId: string;
 };
+
+export type DeleteCardRequestPayload = {
+	cardId: string;
+};
+export type DeleteCardSuccessPayload = {
+	cardId: string;
+};
+export type DeleteCardFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
+};
+
+export type DisconnectSocketRequestPayload = Record<string, never>;
