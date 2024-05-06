@@ -23,11 +23,11 @@ export const useCardRestApi = () => {
 	const { setEditModeId } = useSharedEditMode();
 
 	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
-		const card = cardStore.getCard(payload.id);
+		const card = cardStore.getCard(payload.cardId);
 		if (card === undefined) return;
 
 		try {
-			await deleteCardCall(payload.id);
+			await deleteCardCall(payload.cardId);
 			cardStore.deleteCardSuccess(payload);
 		} catch (error) {
 			handleError(error, {
