@@ -1,17 +1,21 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { mdiAlert } from "@mdi/js";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import WarningChip from "./WarningChip.vue";
+import { VChip, VIcon } from "vuetify/lib/components/index.mjs";
 
 describe("WarningChip", () => {
 	const getWrapper = () => {
 		const slotContent = "Slot Content";
-		const wrapper = shallowMount(WarningChip, {
+		const wrapper = mount(WarningChip, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					VIcon: true,
+				},
 			},
 			slots: { default: slotContent },
 		});
@@ -26,7 +30,7 @@ describe("WarningChip", () => {
 		it("should render the warning chip", () => {
 			const { wrapper } = getWrapper();
 
-			const chip = wrapper.find("v-chip-stub");
+			const chip = wrapper.findComponent(VChip);
 
 			expect(chip.exists()).toBeTruthy();
 		});
@@ -34,10 +38,10 @@ describe("WarningChip", () => {
 		it("should contain an mdiAlert icon", () => {
 			const { wrapper } = getWrapper();
 
-			const icon = wrapper.find("v-icon-stub");
+			const icon = wrapper.findComponent(VIcon);
 
 			expect(icon.exists()).toBeTruthy();
-			expect(icon.attributes("color")).toBe("warning");
+			expect(icon.props("color")).toBe("warning");
 			expect(icon.text()).toBe(mdiAlert);
 		});
 
