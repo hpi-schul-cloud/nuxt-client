@@ -112,15 +112,15 @@ export default {
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor verifique la configuración.",
 	"common.tool.information.outdated.student":
-		"La configuración de la herramienta {tool} no está actualizada o está incompleta. Por favor contacta a tu profesor o instructor del curso.",
+		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor contacta a tu profesor o instructor del curso.",
 	"common.tool.information.deactivated.student":
-		"La herramienta {tool} está deshabilitada. Por favor contacta a tu profesor o instructor del curso.",
+		"La herramienta {toolName} está deshabilitada. Por favor contacta a tu profesor o instructor del curso.",
 	"common.tool.information.deactivated.teacher":
-		"La herramienta {tool} está deshabilitada. Por favor comuníquese con el administrador de la escuela.",
+		"La herramienta {toolName} está deshabilitada. Por favor comuníquese con el administrador de la escuela.",
 	"common.tool.information.outdated.teacher":
-		"La configuración de la herramienta {tool} no está actualizada o está incompleta. Verifique la configuración y comuníquese con el administrador de su escuela.",
+		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Verifique la configuración y comuníquese con el administrador de su escuela.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"La configuración de la herramienta {tool} no está actualizada o está incompleta. Por favor comuníquese con el administrador de la escuela.",
+		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor comuníquese con el administrador de la escuela.",
 	"common.validation.email":
 		"Por favor, introduzca una dirección de correo electrónico válida",
 	"common.validation.invalid": "Los datos introducidos no son válidos",

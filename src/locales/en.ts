@@ -110,15 +110,15 @@ export default {
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings.",
 	"common.tool.information.outdated.student":
-		"Configuration of the tool {tool} is not up to date or incomplete. Please contact your teacher or course instructor.",
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please contact your teacher or course instructor.",
 	"common.tool.information.deactivated.student":
-		"Tool {tool} is disabled. Please contact your teacher or course instructor.",
+		"Tool {toolName} is disabled. Please contact your teacher or course instructor.",
 	"common.tool.information.deactivated.teacher":
-		"Tool {tool} is disabled. Please contact the school administrator.",
+		"Tool {toolName} is disabled. Please contact the school administrator.",
 	"common.tool.information.outdated.teacher":
-		"Configuration of the tool {tool} is not up to date or incomplete. Please check settings and contact your school administrator.",
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings and contact your school administrator.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"Configuration of the tool {tool} is not up to date or incomplete. Please contact the school administrator.",
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please contact the school administrator.",
 	"common.validation.email": "Please enter a valid e-mail address",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
