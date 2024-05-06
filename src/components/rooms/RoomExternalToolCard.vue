@@ -24,7 +24,7 @@
 					v-if="isToolOutdated || isToolIncomplete"
 					data-testId="tool-card-status"
 				>
-					{{ $t(toolChipTitle) }}
+					{{ $t("pages.rooms.tools.outdated") }}
 				</WarningChip>
 			</div>
 		</template>
