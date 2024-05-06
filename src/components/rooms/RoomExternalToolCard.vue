@@ -15,7 +15,7 @@
 					{{ $t("pages.rooms.tools.deactivated") }}
 				</WarningChip>
 				<InfoChip
-					v-if="isToolIncompleteOperational && toolChipTitle"
+					v-if="isToolIncompleteOperational"
 					data-testId="tool-card-status-incompleteOperational"
 					>{{ $t(toolChipTitle) }}
 				</InfoChip>
@@ -57,6 +57,7 @@ export default defineComponent({
 	name: "RoomExternalToolCard",
 	components: { InfoChip, WarningChip, RoomBaseCard, RoomDotMenu },
 	emits: ["edit", "delete", "error"],
+
 	props: {
 		tool: {
 			type: Object as PropType<ExternalToolDisplayData>,
@@ -76,7 +77,7 @@ export default defineComponent({
 			error: launchError,
 		} = useExternalToolLaunchState();
 
-		const { determineChipStatusTitle } =
+		const { determineChipStatusTitle, isTeacher } =
 			useContextExternalToolConfigurationStatus();
 
 		const handleClick = async () => {
@@ -128,7 +129,7 @@ export default defineComponent({
 		);
 
 		const isToolIncompleteOperational: ComputedRef = computed(
-			() => props.tool.status.isIncompleteOperationalOnScopeContext
+			() => props.tool.status.isIncompleteOperationalOnScopeContext && isTeacher
 		);
 
 		const isToolDeactivated: ComputedRef = computed(
@@ -143,7 +144,7 @@ export default defineComponent({
 			);
 		});
 
-		const toolChipTitle: ComputedRef<string | undefined> = computed(() => {
+		const toolChipTitle: ComputedRef<string> = computed(() => {
 			return determineChipStatusTitle(props.tool.status);
 		});
 

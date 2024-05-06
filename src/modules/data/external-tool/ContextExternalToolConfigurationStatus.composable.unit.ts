@@ -555,4 +555,68 @@ describe("ToolConfigurationStatus.composable", () => {
 			});
 		});
 	});
+
+	describe("isTeacher", () => {
+		describe("when user is teacher", () => {
+			const setup = () => {
+				const authModule = createModuleMocks(AuthModule, {
+					getUserRoles: ["teacher"],
+				});
+
+				const composable = mountComposable(
+					() => useContextExternalToolConfigurationStatus(),
+					{
+						global: {
+							provide: {
+								[AUTH_MODULE_KEY.valueOf()]: authModule,
+							},
+						},
+					}
+				);
+
+				return {
+					...composable,
+				};
+			};
+
+			it("should return true ", () => {
+				const { isTeacher } = setup();
+
+				const result = isTeacher();
+
+				expect(result).toBe(true);
+			});
+		});
+
+		describe("when user is not teacher", () => {
+			const setup = () => {
+				const authModule = createModuleMocks(AuthModule, {
+					getUserRoles: ["student"],
+				});
+
+				const composable = mountComposable(
+					() => useContextExternalToolConfigurationStatus(),
+					{
+						global: {
+							provide: {
+								[AUTH_MODULE_KEY.valueOf()]: authModule,
+							},
+						},
+					}
+				);
+
+				return {
+					...composable,
+				};
+			};
+
+			it("should return true ", () => {
+				const { isTeacher } = setup();
+
+				const result = isTeacher();
+
+				expect(result).toBe(false);
+			});
+		});
+	});
 });

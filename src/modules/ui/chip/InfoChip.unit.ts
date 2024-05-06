@@ -1,17 +1,21 @@
-import { shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { mdiInformation } from "@mdi/js";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import InfoChip from "./InfoChip.vue";
+import { VChip, VIcon } from "vuetify/lib/components/index.mjs";
 
 describe("InfoChip", () => {
 	const getWrapper = () => {
 		const slotContent = "Slot Content";
-		const wrapper = shallowMount(InfoChip, {
+		const wrapper = mount(InfoChip, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					VIcon: true,
+				},
 			},
 			slots: { default: slotContent },
 		});
@@ -26,7 +30,7 @@ describe("InfoChip", () => {
 		it("should render the info chip", () => {
 			const { wrapper } = getWrapper();
 
-			const chip = wrapper.find("v-chip-stub");
+			const chip = wrapper.findComponent(VChip);
 
 			expect(chip.exists()).toBeTruthy();
 		});
@@ -34,7 +38,7 @@ describe("InfoChip", () => {
 		it("should contain an mdiInformation icon", () => {
 			const { wrapper } = getWrapper();
 
-			const icon = wrapper.find("v-icon-stub");
+			const icon = wrapper.findComponent(VIcon);
 
 			expect(icon.exists()).toBeTruthy();
 			expect(icon.attributes("color")).toBe("info");

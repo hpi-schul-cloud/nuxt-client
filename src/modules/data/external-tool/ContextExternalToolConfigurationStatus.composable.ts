@@ -6,22 +6,17 @@ export const useContextExternalToolConfigurationStatus = () => {
 
 	const determineChipStatusTitle = (
 		toolConfigStatus: ContextExternalToolConfigurationStatus
-	): string | undefined => {
-		const userRoles = authModule.getUserRoles;
+	): string => {
 		if (
 			toolConfigStatus.isOutdatedOnScopeContext ||
 			toolConfigStatus.isIncompleteOnScopeContext ||
-			toolConfigStatus.isOutdatedOnScopeSchool
-		) {
-			return "pages.rooms.tools.outdated";
-		}
-
-		if (
-			userRoles.includes("teacher") &&
+			toolConfigStatus.isOutdatedOnScopeSchool ||
 			toolConfigStatus.isIncompleteOperationalOnScopeContext
 		) {
 			return "pages.rooms.tools.outdated";
 		}
+
+		return "";
 	};
 
 	const determineToolStatusTranslationKey = (
@@ -60,9 +55,14 @@ export const useContextExternalToolConfigurationStatus = () => {
 		}
 	};
 
+	const isTeacher = (): boolean => {
+		return authModule.getUserRoles.includes("teacher");
+	};
+
 	return {
 		determineChipStatusTitle,
 		determineToolStatusTranslationKey,
 		determineDeactivatedMessage,
+		isTeacher,
 	};
 };
