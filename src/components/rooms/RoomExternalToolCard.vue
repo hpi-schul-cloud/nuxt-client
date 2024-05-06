@@ -8,26 +8,25 @@
 	>
 		<template #under-title>
 			<div class="d-flex g-1">
-				<room-card-chip
+				<warning-chip
 					v-if="isToolDeactivated"
 					data-testId="tool-card-status-deactivated"
 				>
-					{{ t("pages.rooms.tools.deactivated") }}
-				</room-card-chip>
-				<room-card-chip
-					color="info"
-					variant="tonal"
+					{{ $t("pages.rooms.tools.deactivated") }}
+				</warning-chip>
+				<info-chip
 					v-if="isToolIncompleteOperational"
+					:isInfo="isToolIncompleteOperational"
 					data-testId="tool-card-status-incompleteOperational"
 					>{{ $t(toolChipTitle) }}
-				</room-card-chip>
+				</info-chip>
 
-				<room-card-chip
+				<warning-chip
 					v-if="isToolOutdated || isToolIncomplete"
 					data-testId="tool-card-status"
 				>
 					{{ $t(toolChipTitle) }}
-				</room-card-chip>
+				</warning-chip>
 			</div>
 		</template>
 		<template #right>
@@ -43,7 +42,6 @@
 </template>
 
 <script lang="ts">
-import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
 import {
 	ExternalToolDisplayData,
 	useContextExternalToolConfigurationStatus,
@@ -54,10 +52,11 @@ import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, defineComponent, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomBaseCard from "./RoomBaseCard.vue";
+import { InfoChip, WarningChip } from "../../modules/ui/chip";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
-	components: { RoomCardChip, RoomBaseCard, RoomDotMenu },
+	components: { InfoChip, WarningChip, RoomBaseCard, RoomDotMenu },
 	emits: ["edit", "delete", "error"],
 	props: {
 		tool: {

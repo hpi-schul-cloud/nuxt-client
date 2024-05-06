@@ -1,15 +1,15 @@
 import { shallowMount } from "@vue/test-utils";
-import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
 import { mdiAlert } from "@mdi/js";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import WarningChip from "./WarningChip.vue";
 
-describe("RoomCardChip", () => {
+describe("WarningChip", () => {
 	const getWrapper = () => {
 		const slotContent = "Slot Content";
-		const wrapper = shallowMount(RoomCardChip, {
+		const wrapper = shallowMount(WarningChip, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -22,8 +22,8 @@ describe("RoomCardChip", () => {
 		};
 	};
 
-	describe("when room card chips is used", () => {
-		it("should render the room card chip", () => {
+	describe("when warning chip is used", () => {
+		it("should render the warning chip", () => {
 			const { wrapper } = getWrapper();
 
 			const chip = wrapper.find("v-chip-stub");
