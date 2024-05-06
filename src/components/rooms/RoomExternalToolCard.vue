@@ -144,9 +144,6 @@ export default defineComponent({
 			);
 		});
 
-		const toolChipTitle: ComputedRef<string> = computed(() => {
-			return determineChipStatusTitle(props.tool.status);
-		});
 
 		const loadLaunchRequest = async () => {
 			if (!isToolLaunchable.value) {
