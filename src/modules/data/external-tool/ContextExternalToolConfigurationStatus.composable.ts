@@ -4,21 +4,6 @@ import { ContextExternalToolConfigurationStatus } from "./types";
 export const useContextExternalToolConfigurationStatus = () => {
 	const authModule = injectStrict(AUTH_MODULE_KEY);
 
-	const determineChipStatusTitle = (
-		toolConfigStatus: ContextExternalToolConfigurationStatus
-	): string => {
-		if (
-			toolConfigStatus.isOutdatedOnScopeContext ||
-			toolConfigStatus.isIncompleteOnScopeContext ||
-			toolConfigStatus.isOutdatedOnScopeSchool ||
-			toolConfigStatus.isIncompleteOperationalOnScopeContext
-		) {
-			return "pages.rooms.tools.outdated";
-		}
-
-		return "";
-	};
-
 	const determineToolStatusTranslationKey = (
 		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string => {
@@ -60,7 +45,6 @@ export const useContextExternalToolConfigurationStatus = () => {
 	};
 
 	return {
-		determineChipStatusTitle,
 		determineToolStatusTranslationKey,
 		determineDeactivatedMessage,
 		isTeacher,

@@ -150,9 +150,9 @@ export default defineComponent({
 
 		const isToolLaunchable: ComputedRef<boolean> = computed(
 			() =>
-				!displayData.value?.status.isOutdatedOnScopeSchool ||
-				!displayData.value?.status.isOutdatedOnScopeContext ||
-				!displayData.value?.status?.isIncompleteOnScopeContext
+				!displayData.value?.status.isOutdatedOnScopeSchool &&
+				!displayData.value?.status.isOutdatedOnScopeContext &&
+				!displayData.value?.status.isIncompleteOnScopeContext
 		);
 
 		const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatus> =

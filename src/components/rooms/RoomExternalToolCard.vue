@@ -15,16 +15,16 @@
 					{{ $t("pages.rooms.tools.deactivated") }}
 				</WarningChip>
 				<InfoChip
-					v-if="isToolIncompleteOperational"
+					v-if="showAsIncompleteOperational"
 					data-testId="tool-card-status-incompleteOperational"
-					>{{ $t(toolChipTitle) }}
+					>{{ $t("pages.rooms.tools.outdated") }}
 				</InfoChip>
 
 				<WarningChip
 					v-if="isToolOutdated || isToolIncomplete"
 					data-testId="tool-card-status"
 				>
-					{{ $t(toolChipTitle) }}
+					{{ $t("pages.rooms.tools.outdated") }}
 				</WarningChip>
 			</div>
 		</template>
@@ -77,8 +77,7 @@ export default defineComponent({
 			error: launchError,
 		} = useExternalToolLaunchState();
 
-		const { determineChipStatusTitle, isTeacher } =
-			useContextExternalToolConfigurationStatus();
+		const { isTeacher } = useContextExternalToolConfigurationStatus();
 
 		const handleClick = async () => {
 			if (!isToolLaunchable.value) {
@@ -128,7 +127,7 @@ export default defineComponent({
 			() => props.tool.status.isIncompleteOnScopeContext
 		);
 
-		const isToolIncompleteOperational: ComputedRef = computed(
+		const showAsIncompleteOperational: ComputedRef = computed(
 			() => props.tool.status.isIncompleteOperationalOnScopeContext && isTeacher
 		);
 
@@ -142,10 +141,6 @@ export default defineComponent({
 				!isToolDeactivated.value &&
 				!isToolIncomplete.value
 			);
-		});
-
-		const toolChipTitle: ComputedRef<string> = computed(() => {
-			return determineChipStatusTitle(props.tool.status);
 		});
 
 		const loadLaunchRequest = async () => {
@@ -167,8 +162,7 @@ export default defineComponent({
 			isToolOutdated,
 			isToolDeactivated,
 			isToolIncomplete,
-			isToolIncompleteOperational,
-			toolChipTitle,
+			showAsIncompleteOperational,
 		};
 	},
 });
