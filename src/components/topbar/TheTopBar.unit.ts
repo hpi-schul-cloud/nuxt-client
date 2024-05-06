@@ -15,6 +15,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import EnvConfigModule from "@/store/env-config";
+import { LanguageType } from "@/serverApi/v3";
 
 const getWrapper = (props?: object, statusAlerts: StatusAlert[] = []) => {
 	const authModule = createModuleMocks(AuthModule, {
@@ -28,7 +29,9 @@ const getWrapper = (props?: object, statusAlerts: StatusAlert[] = []) => {
 		getStatusAlerts: statusAlerts,
 	});
 
-	const envConfigModule = createModuleMocks(EnvConfigModule, {});
+	const envConfigModule = createModuleMocks(EnvConfigModule, {
+		getAvailableLanguages: [LanguageType.De, LanguageType.En],
+	});
 
 	const wrapper = mount(TheTopBar, {
 		global: {
