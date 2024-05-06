@@ -4,41 +4,40 @@
 		min-width="250"
 		max-height="400"
 		class="alerts pa-0 rounded"
+		lines="three"
 	>
-		<VListItem
-			v-for="(item, index) in statusAlerts"
-			:key="index"
-			:data-test-id="`alert-item-${index}`"
-			class="alert-item py-2"
-		>
-			<template v-slot:prepend>
-				<VIcon :color="getIcon(item.status).color" class="item-icon">
-					{{ getIcon(item.status).icon }}
-				</VIcon>
-			</template>
-			<VListItemTitle
-				:data-testid="`alert-title-${index}`"
-				class="item-title ma-0"
-			>
-				{{ item.title }}
-			</VListItemTitle>
-			<VListItemSubtitle
-				:data-testid="`alert-text-${index}`"
-				class="item-subtitle ma-0 mt-1"
-			>
-				{{ item.text }}
-			</VListItemSubtitle>
-			<VListItemSubtitle
-				class="text-left text-caption d-flex flex-row alert-date mt-0 mt-2"
-				:data-testid="`alert-date-${index}`"
-			>
-				<template v-if="item.timestamp !== item.createdAt">
-					{{ $t("common.labels.updateAt") }}
-					{{ formatDate(item.timestamp) }} |
+		<template v-for="(item, index) in statusAlerts" :key="index">
+			<VListItem :data-test-id="`alert-item-${index}`" class="alert-item">
+				<template v-slot:prepend>
+					<VIcon :color="getIcon(item.status).color" class="item-icon">
+						{{ getIcon(item.status).icon }}
+					</VIcon>
 				</template>
-				{{ $t("common.labels.createAt") }} {{ formatDate(item.createdAt) }}
-			</VListItemSubtitle>
-		</VListItem>
+				<VListItemTitle
+					:data-testid="`alert-title-${index}`"
+					class="item-title ma-0"
+				>
+					{{ item.title }}
+				</VListItemTitle>
+				<VListItemSubtitle
+					:data-testid="`alert-text-${index}`"
+					class="item-subtitle ma-0 mt-1"
+				>
+					{{ item.text }}
+				</VListItemSubtitle>
+				<VListItemSubtitle
+					class="text-left text-caption d-flex flex-row alert-date mt-0 mt-2"
+					:data-testid="`alert-date-${index}`"
+				>
+					<template v-if="item.timestamp !== item.createdAt">
+						{{ $t("common.labels.updateAt") }}
+						{{ formatDate(item.timestamp) }} |
+					</template>
+					{{ $t("common.labels.createAt") }} {{ formatDate(item.createdAt) }}
+				</VListItemSubtitle>
+			</VListItem>
+			<VDivider />
+		</template>
 	</VList>
 </template>
 
@@ -82,13 +81,9 @@ const formatDate = (dateTime: string) => {
 	}
 
 	.alert-item {
-		border-top: 1px solid map-get($grey, lighten-2);
-		&:first-child {
-			border-top: none;
-		}
-
 		:deep(.v-list-item__prepend) {
 			align-self: start;
+			padding-top: 0;
 		}
 	}
 
