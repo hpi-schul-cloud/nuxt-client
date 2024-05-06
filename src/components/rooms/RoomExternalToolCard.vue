@@ -15,7 +15,7 @@
 					{{ $t("pages.rooms.tools.deactivated") }}
 				</WarningChip>
 				<InfoChip
-					v-if="isToolIncompleteOperational"
+					v-if="isToolIncompleteOperational && toolChipTitle"
 					data-testId="tool-card-status-incompleteOperational"
 					>{{ $t(toolChipTitle) }}
 				</InfoChip>
@@ -143,7 +143,7 @@ export default defineComponent({
 			);
 		});
 
-		const toolChipTitle: ComputedRef<string> = computed(() => {
+		const toolChipTitle: ComputedRef<string | undefined> = computed(() => {
 			return determineChipStatusTitle(props.tool.status);
 		});
 
