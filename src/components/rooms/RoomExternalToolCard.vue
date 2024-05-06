@@ -17,7 +17,7 @@
 				<InfoChip
 					v-if="isToolIncompleteOperational"
 					data-testId="tool-card-status-incompleteOperational"
-					>{{ $t(toolChipTitle) }}
+					>{{ $t("pages.rooms.tools.outdated") }}
 				</InfoChip>
 
 				<WarningChip
