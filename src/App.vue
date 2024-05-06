@@ -26,12 +26,10 @@ const defaultLayout = shouldUseNewLayout
 	: Layouts.LOGGED_IN;
 
 const layout = computed(() => {
-	let layout = defaultLayout;
+	let layout = (route.meta.layout as Layouts) || defaultLayout;
 
-	if (route.meta.layout) {
-		layout = route.meta.layout as Layouts;
-	} else {
-		layout = authModule.isLoggedIn ? layout : Layouts.LOGGED_OUT;
+	if (!authModule.isLoggedIn) {
+		layout = Layouts.LOGGED_OUT;
 	}
 
 	return defineAsyncComponent(() => import(`@/layouts/${layout}.layout.vue`));
