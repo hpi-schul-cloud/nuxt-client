@@ -1005,6 +1005,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_MEDIA_SHELF_ENABLED: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    BOARD_COLLABORATION_URI: string;
 }
 /**
  * 
@@ -1490,6 +1496,7 @@ export interface CopyApiResponse {
 export enum CopyApiResponseTypeEnum {
     Board = 'BOARD',
     Card = 'CARD',
+    CollaborativeTextEditorElement = 'COLLABORATIVE_TEXT_EDITOR_ELEMENT',
     Column = 'COLUMN',
     Columnboard = 'COLUMNBOARD',
     Content = 'CONTENT',
@@ -1545,6 +1552,7 @@ export enum CopyApiResponseStatusEnum {
 export enum CopyApiResponseElementsTypesEnum {
     Board = 'BOARD',
     Card = 'CARD',
+    CollaborativeTextEditorElement = 'COLLABORATIVE_TEXT_EDITOR_ELEMENT',
     Column = 'COLUMN',
     Columnboard = 'COLUMNBOARD',
     Content = 'CONTENT',

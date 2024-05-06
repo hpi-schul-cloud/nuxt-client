@@ -1,21 +1,13 @@
 import { io } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
-// import { envConfigModule } from "@/store";
-
-// const host = envConfigModule.getEnv.API_URL;
+import { envConfigModule } from "@/store";
 
 export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
-	// implement socket.io here
-	const socket = io(
-		// "https://bc-7101-collaboration-service-deployment.dbc.dbildungscloud.dev",
-		// "ws://localhost:4450",
-		// ":4450",
-		{
-			path: "/board-collaboration",
-			withCredentials: true,
-		}
-		// { path: "/collaboration", transports: ["polling"] }
-	);
+	const socket = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
+		path: "/board-collaboration",
+		withCredentials: true,
+	});
+
 	socket.on("connect", function () {
 		console.log("connected");
 	});
