@@ -205,7 +205,7 @@ export default defineComponent({
 
 				if (
 					!isToolOutdated.value &&
-					!displayData.value?.status?.isIncompleteOperationalOnScopeContext &&
+					!displayData.value?.status?.isIncompleteOnScopeContext &&
 					modelValue.value.contextExternalToolId
 				) {
 					await fetchLaunchRequest(modelValue.value.contextExternalToolId);

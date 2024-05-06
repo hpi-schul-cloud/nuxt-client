@@ -63,6 +63,7 @@ module.exports = defineConfig({
 				"@feature-media-shelf": getDir("src/modules/feature/media-shelf"),
 				"@ui-alert": getDir("src/modules/ui/alert"),
 				"@ui-board": getDir("src/modules/ui/board"),
+				"@ui-chip": getDir("src/modules/ui/chip"),
 				"@ui-confirmation-dialog": getDir("src/modules/ui/confirmation-dialog"),
 				"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
 				"@ui-layout": getDir("src/modules/ui/layout"),

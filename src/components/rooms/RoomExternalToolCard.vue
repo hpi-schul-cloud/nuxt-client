@@ -8,25 +8,24 @@
 	>
 		<template #under-title>
 			<div class="d-flex g-1">
-				<warning-chip
+				<WarningChip
 					v-if="isToolDeactivated"
 					data-testId="tool-card-status-deactivated"
 				>
 					{{ $t("pages.rooms.tools.deactivated") }}
-				</warning-chip>
-				<info-chip
+				</WarningChip>
+				<InfoChip
 					v-if="isToolIncompleteOperational"
-					:isInfo="isToolIncompleteOperational"
 					data-testId="tool-card-status-incompleteOperational"
 					>{{ $t(toolChipTitle) }}
-				</info-chip>
+				</InfoChip>
 
-				<warning-chip
+				<WarningChip
 					v-if="isToolOutdated || isToolIncomplete"
 					data-testId="tool-card-status"
 				>
 					{{ $t(toolChipTitle) }}
-				</warning-chip>
+				</WarningChip>
 			</div>
 		</template>
 		<template #right>
@@ -52,7 +51,7 @@ import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, defineComponent, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomBaseCard from "./RoomBaseCard.vue";
-import { InfoChip, WarningChip } from "../../modules/ui/chip";
+import { InfoChip, WarningChip } from "@ui-chip";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
@@ -144,7 +143,7 @@ export default defineComponent({
 			);
 		});
 
-		const toolChipTitle: ComputedRef<string | undefined> = computed(() => {
+		const toolChipTitle: ComputedRef<string> = computed(() => {
 			return determineChipStatusTitle(props.tool.status);
 		});
 
