@@ -1,11 +1,15 @@
 import { io } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
+// import { envConfigModule } from "@/store";
+
+// const host = envConfigModule.getEnv.API_URL;
 
 export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 	// implement socket.io here
 	const socket = io(
-		// "ws://BC-7101-collaboration-service-deployment.dbc.dbildungscloud.dev",
-		":4450",
+		// "https://bc-7101-collaboration-service-deployment.dbc.dbildungscloud.dev",
+		// "ws://localhost:4450",
+		// ":4450",
 		{
 			path: "/board-collaboration",
 			withCredentials: true,
