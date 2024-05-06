@@ -357,7 +357,7 @@ describe("ToolConfigurationStatus.composable", () => {
 
 					const result = determineChipStatusTitle(toolConfigurationStatus);
 
-					expect(result).toEqual(undefined);
+					expect(result).toEqual("pages.rooms.tools.outdated");
 				});
 			});
 
