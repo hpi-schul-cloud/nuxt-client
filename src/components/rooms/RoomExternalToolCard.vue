@@ -128,7 +128,7 @@ export default defineComponent({
 			() => props.tool.status.isIncompleteOnScopeContext
 		);
 
-		const isToolIncompleteOperational: ComputedRef = computed(
+		const showAsIncompleteOperational: ComputedRef = computed(
 			() => props.tool.status.isIncompleteOperationalOnScopeContext && isTeacher
 		);
 
