@@ -5,6 +5,7 @@ import { ContextExternalToolConfigurationStatusFactory } from "./contextExternal
 export const externalToolDisplayDataFactory =
 	Factory.define<ExternalToolDisplayData>(({ sequence }) => ({
 		contextExternalToolId: `schoolExternalTool${sequence}`,
+		title: "title",
 		name: `name${sequence}`,
 		openInNewTab: false,
 		status: ContextExternalToolConfigurationStatusFactory.build(),

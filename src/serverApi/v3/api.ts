@@ -1236,11 +1236,17 @@ export interface ContextExternalToolConfigurationStatusResponse {
      */
     isOutdatedOnScopeContext: boolean;
     /**
-     * True, if a configured parameter on the context external tool is missing a value
+     * True, if a mandatory parameter on the context external tool is missing a value
      * @type {boolean}
      * @memberof ContextExternalToolConfigurationStatusResponse
      */
     isIncompleteOnScopeContext: boolean;
+    /**
+     * True, if a optional parameter on the context external tool is missing a value
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isIncompleteOperationalOnScopeContext: boolean;
     /**
      * Is the tool deactivated, because of superhero or school administrator
      * @type {boolean}
