@@ -10,7 +10,7 @@ import {
 import { mount } from "@vue/test-utils";
 import LanguageMenu from "./LanguageMenu.vue";
 
-describe("@/components/topbar/LanguageMenu", () => {
+describe("@ui-layout/LanguageMenu", () => {
 	const setup = (attrs = {}) => {
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			getAvailableLanguages: [LanguageType.De, LanguageType.En],
@@ -42,34 +42,12 @@ describe("@/components/topbar/LanguageMenu", () => {
 	});
 
 	describe("with available languages", () => {
-		it("should provide available language items", () => {
-			const { wrapper } = setup();
-
-			expect(wrapper.vm.availableItems).toStrictEqual([
-				{
-					language: LanguageType.En,
-					longName: "global.topbar.language.longName.en",
-					translatedName: "common.words.languages.en",
-					icon: "$langIconEn",
-				},
-			]);
-		});
-
-		it("should provide selected language item", () => {
-			const { wrapper } = setup();
-
-			expect(wrapper.vm.selectedItem).toStrictEqual({
-				language: LanguageType.De,
-				longName: "global.topbar.language.longName.de",
-				translatedName: "common.words.languages.de",
-				icon: "$langIconDe",
-			});
-		});
-
 		it("should render the selected language item", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.findAll(".v-list-item")).toHaveLength(1);
+			expect(wrapper.find("[data-testid=selected-language-de]").exists()).toBe(
+				true
+			);
 		});
 
 		it("should render the available language items", async () => {

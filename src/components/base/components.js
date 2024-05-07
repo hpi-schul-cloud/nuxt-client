@@ -4,7 +4,6 @@ import BaseInputCheckbox from "@/components/base/BaseInput/BaseInputCheckbox.vue
 import BaseInputDefault from "@/components/base/BaseInput/BaseInputDefault.vue";
 import BaseLink from "@/components/base/BaseLink.vue";
 import BaseModal from "@/components/base/BaseModal.vue";
-import BaseQrCode from "@/components/base/BaseQrCode.vue";
 
 export const mountBaseComponents = (app) => {
 	app.component("BaseDialog", BaseDialog);
@@ -13,5 +12,4 @@ export const mountBaseComponents = (app) => {
 	app.component("BaseInputDefault", BaseInputDefault);
 	app.component("BaseLink", BaseLink);
 	app.component("BaseModal", BaseModal);
-	app.component("BaseQrCode", BaseQrCode);
 };

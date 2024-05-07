@@ -69,4 +69,5 @@ export const defaultConfigEnvs: ConfigResponse = {
 	CTL_TOOLS_RELOAD_TIME_MS: 299000,
 	FEATURE_MEDIA_SHELF_ENABLED: false,
 	BOARD_COLLABORATION_URI: "",
+	FEATURE_NEW_LAYOUT_ENABLED: true,
 };

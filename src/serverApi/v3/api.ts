@@ -1011,6 +1011,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     BOARD_COLLABORATION_URI: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_NEW_LAYOUT_ENABLED: boolean;
 }
 /**
  * 
