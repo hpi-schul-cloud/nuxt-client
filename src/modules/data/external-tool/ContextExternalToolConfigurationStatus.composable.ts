@@ -4,39 +4,49 @@ import { ContextExternalToolConfigurationStatus } from "./types";
 export const useContextExternalToolConfigurationStatus = () => {
 	const authModule = injectStrict(AUTH_MODULE_KEY);
 
-	const determineOutdatedTranslationKey = (
+	const determineToolStatusTranslationKey = (
 		toolConfigStatus: ContextExternalToolConfigurationStatus
 	): string => {
 		const userRoles = authModule.getUserRoles;
 
 		if (userRoles.includes("teacher")) {
 			if (
-				toolConfigStatus.isOutdatedOnScopeContext &&
-				toolConfigStatus.isOutdatedOnScopeSchool
+				toolConfigStatus.isOutdatedOnScopeSchool &&
+				toolConfigStatus.isOutdatedOnScopeContext
 			) {
-				return "common.tool.information.outdatedOnSchoolAndContext.teacher";
-			} else if (toolConfigStatus?.isOutdatedOnScopeSchool) {
+				return "common.tool.information.incomplete.outdated.schoolAndContext.teacher";
+			} else if (toolConfigStatus.isOutdatedOnScopeSchool) {
 				return "common.tool.information.outdatedOnSchool.teacher";
+			} else if (
+				toolConfigStatus.isOutdatedOnScopeContext ||
+				toolConfigStatus.isIncompleteOperationalOnScopeContext ||
+				toolConfigStatus.isIncompleteOnScopeContext
+			) {
+				return "common.tool.information.outdated.teacher";
 			} else {
-				return "common.tool.information.outdatedOnContext.teacher";
+				return "";
 			}
 		} else {
 			return "common.tool.information.outdated.student";
 		}
 	};
 
-	const determineIncompleteTranslationKey = (): string => {
+	const determineDeactivatedMessage = (): string => {
 		const userRoles = authModule.getUserRoles;
-
-		if (userRoles.includes("teacher")) {
-			return "common.tool.information.incompleteOnContext.teacher";
+		if (userRoles.includes("student")) {
+			return "common.tool.information.deactivated.student";
 		} else {
-			return "common.tool.information.incomplete.student";
+			return "common.tool.information.deactivated.teacher";
 		}
 	};
 
+	const isTeacher = (): boolean => {
+		return authModule.getUserRoles.includes("teacher");
+	};
+
 	return {
-		determineOutdatedTranslationKey,
-		determineIncompleteTranslationKey,
+		determineToolStatusTranslationKey,
+		determineDeactivatedMessage,
+		isTeacher,
 	};
 };

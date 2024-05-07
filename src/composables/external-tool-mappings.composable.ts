@@ -14,8 +14,8 @@ const ErrorTypeTranslationKeyMap = new Map<string, string>([
 	],
 	["TOOL_PARAMETER_UNKNOWN", "pages.tool.apiError.tool_param_unknown"],
 	[
-		"TOOL_PARAMETER_VALUE_MISSING",
-		"pages.tool.apiError.tool_param_value_missing",
+		"TOOL_PARAMETER_MANDATORY_VALUE_MISSING",
+		"pages.tool.apiError.tool_param_mandatory_value_missing",
 	],
 ]);
 

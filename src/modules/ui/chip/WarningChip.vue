@@ -1,7 +1,7 @@
 <template>
 	<v-chip
 		size="small"
-		class="room-card-chip py-1"
+		class="warning-chip py-1"
 		color="warning-lighten-1"
 		variant="flat"
 	>
@@ -15,17 +15,16 @@ import { defineComponent } from "vue";
 import { mdiAlert } from "@mdi/js";
 
 export default defineComponent({
-	name: "RoomCardChip",
+	name: "WarningChip",
+
 	setup() {
-		return {
-			mdiAlert,
-		};
+		return { mdiAlert };
 	},
 });
 </script>
 
 <style scoped>
-.room-card-chip {
+.warning-chip {
 	width: fit-content;
 }
 </style>
