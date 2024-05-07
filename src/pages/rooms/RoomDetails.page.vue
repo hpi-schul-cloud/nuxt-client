@@ -98,7 +98,6 @@
 </template>
 
 <script>
-import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import { RoomDotMenu } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
@@ -164,7 +163,6 @@ export default defineComponent({
 	components: {
 		EndCourseSyncDialog,
 		vCustomDialog,
-		BaseQrCode,
 		DefaultWireframe,
 		RoomDashboard,
 		RoomDotMenu,

@@ -93,13 +93,13 @@
 			v-if="isShowQrCode"
 			class="d-flex justify-content-center overflow-hidden"
 		>
-			<base-qr-code :url="shareUrl" data-testid="qrCode" />
+			<QRCode :url="shareUrl" data-testid="qrCode" />
 		</div>
 	</div>
 </template>
 
 <script setup>
-import BaseQrCode from "@/components/base/BaseQrCode";
+import { QRCode } from "@ui-qr-code";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
 	mdiContentCopy,

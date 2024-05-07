@@ -54,6 +54,7 @@
 			"@ui-preview-image": ["src/modules/ui/preview-image"],
 			"@ui-room-details": ["src/modules/ui/room-details"],
 			"@ui-speed-dial-menu": ["src/modules/ui/speed-dial-menu"],
+			"@ui-qr-code": ["src/modules/ui/qr-code"],
 			"@util-board": ["src/modules/util/board"],
 			"@util-validators": ["src/modules/util/validators"],
 			"@util-vue": ["src/modules/util/vue"],

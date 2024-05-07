@@ -1574,6 +1574,8 @@ export default {
 	"tldraw.error.ws.4400": "Room name is missing in URL params",
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
+	"ui-layout.topbar.pageShare.copyLink": "Copy link",
+	"ui-layout.topbar.pageShare.printQRCode": "Print QR Code",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",
