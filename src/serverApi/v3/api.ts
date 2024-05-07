@@ -1007,6 +1007,12 @@ export interface ConfigResponse {
     FEATURE_MEDIA_SHELF_ENABLED: boolean;
     /**
      * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    BOARD_COLLABORATION_URI: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof ConfigResponse
      */
