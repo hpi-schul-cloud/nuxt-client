@@ -1,8 +1,9 @@
 import { io } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
-import { envConfigModule } from "@/store";
 
-const BOARD_COLLABORATION_URI = envConfigModule.getEnv.BOARD_COLLABORATION_URI;
+const BOARD_COLLABORATION_URI = process.env.KUBERNETES_SERVICE_PORT
+	? "" // pointing to the same host for websocket-requests
+	: "ws://localhost:4450"; // default for local development
 
 export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
 	const socket = io(BOARD_COLLABORATION_URI, {
