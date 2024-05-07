@@ -13,6 +13,7 @@ import {
 	VBtn,
 	VListItem,
 } from "vuetify/lib/components/index.mjs";
+import { THEME_KEY } from "../../utils/inject";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 
 const testProps = {
@@ -33,14 +34,13 @@ const getWrapper = (props: object, options?: object) => {
 	return mount(vImportUsersMatchSearch, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			mocks: {
-				$theme: {
+			provide: {
+				[THEME_KEY.valueOf()]: {
 					name: "nbc",
 				},
 			},
 		},
 		props,
-
 		...options,
 	});
 };
