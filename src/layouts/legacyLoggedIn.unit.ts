@@ -72,13 +72,7 @@ describe("legacyLoggedIn", () => {
 						name: "instance name",
 					},
 				},
-				stubs: [
-					"base-input",
-					"base-modal",
-					"base-link",
-					"base-qr-code",
-					"router-link",
-				],
+				stubs: ["base-input", "base-modal", "base-link", "router-link"],
 			},
 		});
 

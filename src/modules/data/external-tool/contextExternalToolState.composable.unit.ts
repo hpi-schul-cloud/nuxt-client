@@ -139,6 +139,14 @@ describe("contextExternalToolState.composable", () => {
 				};
 			};
 
+			it("should reset the error", async () => {
+				const { composable, contextExternalTool } = setup();
+
+				await composable.createContextExternalTool(contextExternalTool);
+
+				expect(composable.error.value).toBeUndefined();
+			});
+
 			it("should call the api to create context external tools", async () => {
 				const { composable, contextExternalTool } = setup();
 
@@ -220,6 +228,17 @@ describe("contextExternalToolState.composable", () => {
 					contextExternalTool,
 				};
 			};
+
+			it("should reset the error", async () => {
+				const { composable, contextExternalTool } = setup();
+
+				await composable.updateContextExternalTool(
+					contextExternalTool.id,
+					contextExternalTool
+				);
+
+				expect(composable.error.value).toBeUndefined();
+			});
 
 			it("should call the api to update context external tools", async () => {
 				const { composable, contextExternalTool } = setup();
@@ -304,6 +323,14 @@ describe("contextExternalToolState.composable", () => {
 					composable,
 				};
 			};
+
+			it("should reset the error", async () => {
+				const { composable } = setup();
+
+				await composable.deleteContextExternalTool("contextExternalToolId");
+
+				expect(composable.error.value).toBeUndefined();
+			});
 
 			it("should call the api to delete context external tools", async () => {
 				const { composable } = setup();
