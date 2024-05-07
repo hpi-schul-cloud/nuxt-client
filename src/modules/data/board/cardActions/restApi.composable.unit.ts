@@ -3,7 +3,7 @@ import { ref } from "vue";
 import {
 	boardCardFactory,
 	envsFactory,
-	mockedStore,
+	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
@@ -59,7 +59,7 @@ describe("useCardRestApi", () => {
 	});
 
 	const setup = () => {
-		const cardStore = mockedStore(useCardStore);
+		const cardStore = mockedPiniaStoreTyping(useCardStore);
 		const cards = boardCardFactory.buildList(3);
 		cardStore.cards = cards;
 
@@ -152,6 +152,88 @@ describe("useCardRestApi", () => {
 			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
+	describe("updateCardHeightRequest", () => {
+		it("should not call updateCardHeightSuccess action when card is undefined", async () => {
+			const { cardStore } = setup();
+			const { updateCardHeightRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(undefined);
+
+			await updateCardHeightRequest({
+				id: "cardId",
+				height: 100,
+			});
+
+			expect(cardStore.updateCardHeightSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call updateCardHeightSuccess action if the API call is successful", async () => {
+			const { cardStore } = setup();
+			const { updateCardHeightRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(cardStore.cards[0]);
+
+			const requestPayload = {
+				id: cardStore.cards[0].id,
+				height: 100,
+			};
+
+			await updateCardHeightRequest(requestPayload);
+
+			expect(cardStore.updateCardHeightSuccess).toHaveBeenCalledWith(
+				requestPayload
+			);
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { cardStore } = setup();
+			const { updateCardHeightRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(cardStore.cards[0]);
+			mockedBoardApiCalls.updateCardHeightCall.mockRejectedValue({});
+
+			await updateCardHeightRequest({
+				id: cardStore.cards[0].id,
+				height: 100,
+			});
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
+	describe("notifyWithTemplateAndReload", () => {
+		/**
+		 * Simulates actually calling the error handling function for a 404 error.
+		 * (otherwise the handler function would not be called on the mock)
+		 */
+		const executeErrorHandler = () => {
+			mockedErrorHandler.handleError.mock.calls[0]?.[1]?.[404]?.();
+		};
+
+		it("should notify with template", async () => {
+			const { cardStore } = setup();
+			const { updateCardTitleRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(cardStore.cards[0]);
+
+			mockedBoardApiCalls.updateCardTitle.mockRejectedValue({});
+			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
+
+			await updateCardTitleRequest({
+				cardId: cardStore.cards[0].id,
+				newTitle: "newTitlte",
+			});
+
+			executeErrorHandler();
+			expect(mockedErrorHandler.notifyWithTemplate).toHaveBeenCalledWith(
+				"notUpdated",
+				undefined
+			);
+
+			expect(setEditModeId).toHaveBeenCalledWith(undefined);
 		});
 	});
 });

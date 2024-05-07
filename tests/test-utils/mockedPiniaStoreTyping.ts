@@ -6,7 +6,7 @@ See Pinia's documentation: https://pinia.vuejs.org/cookbook/testing.html#Mocking
 import type { Store, StoreDefinition } from "pinia";
 import { jest } from "@jest/globals";
 
-export function mockedStore<TStoreDef extends () => unknown>(
+export function mockedPiniaStoreTyping<TStoreDef extends () => unknown>(
 	useStore: TStoreDef
 ): TStoreDef extends StoreDefinition<
 	infer Id,
