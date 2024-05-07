@@ -56,6 +56,7 @@ const setup = () => {
 				"loading-state-dialog": { template: "<div></div>" },
 				"keep-alive": { template: "<div></div>" },
 				autoLogoutWarning: { template: "<div></div>" },
+				topbar: { template: "<div></div>" },
 			},
 		},
 	});

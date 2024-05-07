@@ -23,8 +23,7 @@
 							direction: 'horizontal',
 							disabled: isEditMode || !hasMovePermission,
 							group: 'columns',
-							delay: 300, // isDesktop ? 0 : 300
-							delayOnTouchOnly: true,
+							delay: isTouchDetected ? 300 : 0,
 							ghostClass: 'sortable-drag-ghost',
 							easing: 'cubic-bezier(1, 0, 0, 1)',
 							dragClass: 'sortable-drag-board-card',
@@ -106,7 +105,6 @@ import {
 	useSharedBoardPageInformation,
 	useSharedEditMode,
 	useBoardStore,
-	boardActions,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -114,9 +112,10 @@ import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useTouchDetection } from "@util-device-detection";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
@@ -128,7 +127,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { showCustomNotifier } = useBoardNotifier();
+const { resetNotifierModule, showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 
@@ -142,6 +141,7 @@ watch(board, async () => {
 });
 
 useBodyScrolling();
+const { isTouchDetected } = useTouchDetection();
 
 const {
 	hasMovePermission,
@@ -153,22 +153,20 @@ const {
 } = useBoardPermissions();
 
 const onCreateCard = async (columnId: string) => {
-	if (hasCreateCardPermission)
-		boardStore.dispatch(boardActions.createCard({ columnId }));
+	if (hasCreateCardPermission) boardStore.createCardRequest({ columnId });
 };
 
 const onCreateColumn = async () => {
-	if (hasCreateCardPermission) boardStore.dispatch(boardActions.createColumn());
+	if (hasCreateCardPermission)
+		boardStore.createColumnRequest({ boardId: props.boardId });
 };
 
 const onDeleteCard = async (cardId: string) => {
-	if (hasCreateCardPermission)
-		boardStore.dispatch(boardActions.deleteCard({ cardId }));
+	if (hasCreateCardPermission) boardStore.deleteCardRequest({ cardId });
 };
 
 const onDeleteColumn = async (columnId: string) => {
-	if (hasDeletePermission)
-		boardStore.dispatch(boardActions.deleteColumn({ columnId }));
+	if (hasDeletePermission) boardStore.deleteColumnRequest({ columnId });
 };
 
 const onDropColumn = async (columnPayload: SortableEvent) => {
@@ -185,7 +183,7 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 			removedIndex: columnPayload.oldIndex,
 			columnId,
 		};
-		boardStore.dispatch(boardActions.moveColumn({ columnMove }));
+		boardStore.moveColumnRequest({ columnMove, byKeyboard: false });
 	}
 };
 
@@ -199,9 +197,7 @@ const onMoveColumnBackward = async (columnIndex: number, columnId: string) => {
 		columnId,
 	};
 
-	boardStore.dispatch(
-		boardActions.moveColumn({ columnMove, byKeyboard: true })
-	);
+	boardStore.moveColumnRequest({ columnMove, byKeyboard: true });
 };
 
 const onMoveColumnForward = async (columnIndex: number, columnId: string) => {
@@ -214,50 +210,66 @@ const onMoveColumnForward = async (columnIndex: number, columnId: string) => {
 		columnId,
 	};
 
-	boardStore.dispatch(
-		boardActions.moveColumn({ columnMove, byKeyboard: true })
-	);
+	boardStore.moveColumnRequest({ columnMove, byKeyboard: true });
 };
 
 const onReloadBoard = async () => {
-	boardStore.dispatch(boardActions.reloadBoard());
+	boardStore.reloadBoard();
 };
 
-const onUpdateBoardVisibility = async (newVisibility: boolean) => {
+const onUpdateBoardVisibility = async (isVisible: boolean) => {
 	if (!hasEditPermission) return;
 
-	boardStore.dispatch(boardActions.updateBoardVisibility({ newVisibility }));
+	boardStore.updateBoardVisibilityRequest({
+		boardId: props.boardId,
+		isVisible,
+	});
 	await setAlert();
 };
 
 const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-	if (hasMovePermission) boardStore.dispatch(boardActions.moveCard(cardMove));
+	if (hasMovePermission) boardStore.moveCardRequest(cardMove);
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
 	if (hasEditPermission)
-		boardStore.dispatch(boardActions.updateColumnTitle({ columnId, newTitle }));
+		boardStore.updateColumnTitleRequest({ columnId, newTitle });
 };
 
 const onUpdateBoardTitle = async (newTitle: string) => {
 	if (hasEditPermission)
-		boardStore.dispatch(boardActions.updateBoardTitle({ newTitle }));
+		boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
 };
 
 onMounted(() => {
 	setAlert();
-	boardStore.dispatch(boardActions.fetchBoard({ id: props.boardId }));
+	boardStore.fetchBoardRequest({ boardId: props.boardId });
+});
+
+onUnmounted(() => {
+	boardStore.disconnectSocketRequest({});
+	boardStore.setBoard(undefined);
+});
+
+onUnmounted(() => {
+	resetNotifierModule();
 });
 
 const setAlert = useDebounceFn(() => {
 	if (!isTeacher) return;
 
-	if (!board.value?.isVisible) {
+	if (!board.value) {
+		return;
+	}
+
+	if (!board.value.isVisible) {
 		showCustomNotifier(t("components.board.alert.info.draft"), "info");
 	} else {
 		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
 	}
-}, 100);
+}, 150);
+
+watch(() => board.value?.isVisible, setAlert, { immediate: true });
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")
@@ -295,7 +307,7 @@ const boardStyle = computed(() => {
 	if (!isListBoard.value) {
 		return;
 	}
-	const style = { maxWidth: "80ch" };
+	const style = { maxWidth: "80ch", minWidth: "20rem" };
 	return style;
 });
 

@@ -24,7 +24,7 @@
 					animation: 250,
 					bubbleScroll: true,
 					direction: 'vertical',
-					delay: isDesktop ? 2 : 300,
+					delay: isTouchDetected ? 300 : 2,
 					disabled: !hasMovePermission,
 					dragClass: 'elevation-10',
 					dragoverBubble: false,
@@ -43,8 +43,11 @@
 				<template #item="{ element, index }">
 					<CardHost
 						:data-card-id="element.cardId"
-						class="draggable my-3 mx-2"
-						:class="hasMovePermission ? '' : 'drag-disabled'"
+						class="draggable my-3"
+						:class="{
+							'drag-disabled': !hasMovePermission,
+							'mx-2': !isListBoard,
+						}"
 						:card-id="element.cardId"
 						:height="element.height"
 						@move:card-keyboard="
@@ -56,21 +59,21 @@
 				</template>
 			</Sortable>
 			<BoardAddCardButton
-				v-if="showAddButton"
 				@add-card="onCreateCard"
 				:data-testid="`column-${index}-add-card-btn`"
+				:style="{ visibility: !showAddButton ? 'hidden' : 'visible' }"
 			/>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useDebounceFn, useMediaQuery } from "@vueuse/core";
+import { useDebounceFn } from "@vueuse/core";
 import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 import { useBoardPermissions } from "@data-board";
+import { useTouchDetection } from "@util-device-detection";
 import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
 	CardMove,
@@ -132,9 +135,11 @@ export default defineComponent({
 			useBoardPermissions();
 
 		const columnClasses = computed(() => {
-			const classes = ["column-drag-handle", "bg-white", "px-4"];
+			const classes = ["column-drag-handle", "bg-white"];
 			if (props.isListBoard) {
 				classes.push("d-flex", "flex-column", "align-stretch");
+			} else {
+				classes.push("px-4");
 			}
 			return classes;
 		});
@@ -151,6 +156,7 @@ export default defineComponent({
 		});
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
+		const { isTouchDetected } = useTouchDetection();
 		const showAddButton = computed(
 			() => hasCreateColumnPermission && isDragging.value === false
 		);
@@ -177,7 +183,6 @@ export default defineComponent({
 		const onDeleteCard = (cardId: string): void => {
 			emit("delete:card", cardId);
 		};
-		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 		const onDragStart = (): void => {
 			dragStart();
@@ -299,7 +304,7 @@ export default defineComponent({
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
-			isDesktop,
+			isTouchDetected,
 			sortableClasses,
 			titlePlaceholder,
 			onCreateCard,

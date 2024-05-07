@@ -167,16 +167,18 @@ describe("BoardColumn", () => {
 		});
 
 		describe("when user is not permitted to create a card", () => {
-			it("should addCardComponent not be rendered on DOM", () => {
+			it("addCardComponent should not be visible", () => {
 				const { wrapper } = setup({
 					permissions: { hasCreateColumnPermission: false },
 				});
 
-				const addCardComponent = wrapper.findAllComponents({
+				const addCardComponent = wrapper.findComponent({
 					name: "BoardAddCardButton",
 				});
 
-				expect(addCardComponent.length).toStrictEqual(0);
+				expect(addCardComponent.attributes("style")).toStrictEqual(
+					"visibility: hidden;"
+				);
 			});
 		});
 	});

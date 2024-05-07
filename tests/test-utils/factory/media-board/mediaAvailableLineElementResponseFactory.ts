@@ -6,4 +6,5 @@ export const mediaAvailableLineElementResponseFactory =
 		name: `tool-${sequence}`,
 		schoolExternalToolId: `school-external-tool-${sequence}`,
 		description: "description",
+		logoUrl: "https://logourl.de",
 	}));

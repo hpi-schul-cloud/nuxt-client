@@ -23,10 +23,12 @@
 </template>
 <script lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import {
+	ExternalToolDisplayData,
+	useContextExternalToolConfigurationStatus,
+} from "@data-external-tool";
 import { RenderHTML } from "@feature-render-html";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
-import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
-import { ExternalToolDisplayData } from "@/store/external-tool";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -44,10 +46,8 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const {
-			determineOutdatedTranslationKey,
-			determineIncompleteTranslationKey,
-		} = useContextExternalToolConfigurationStatus();
+		const { determineDeactivatedMessage, determineToolStatusTranslationKey } =
+			useContextExternalToolConfigurationStatus();
 
 		const { t } = useI18n();
 
@@ -86,13 +86,9 @@ export default defineComponent({
 			}
 
 			if (props.selectedItem.status.isDeactivated) {
-				return "common.tool.information.deactivated";
-			}
-
-			if (isToolOutdated.value && !isToolIncomplete.value) {
-				return determineOutdatedTranslationKey(props.selectedItem.status);
+				return determineDeactivatedMessage();
 			} else {
-				return determineIncompleteTranslationKey();
+				return determineToolStatusTranslationKey(props.selectedItem.status);
 			}
 		});
 

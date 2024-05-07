@@ -107,24 +107,18 @@ export default {
 	"common.roleName.student": "Schüler:in",
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Lehrkraft",
-	"common.tool.information.deactivated":
-		"Das Tool {toolName} ist deaktiviert und kann daher nicht gestartet werden.",
-	"common.tool.information.incomplete.student":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte an die Lehrkraft oder Kursleiter:in wenden.",
-	"common.tool.information.incompleteOnContext.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration vervollständigen.",
-	"common.tool.information.incompleteOnSchool.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte an die Schuladministrator:in wenden.",
-	"common.tool.information.incompleteOnSchoolAndContext.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration vervollständigen und an die Schuladministrator:in wenden.",
+	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen und an Schuladministrator:in wenden.",
 	"common.tool.information.outdated.student":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Zum Aktualisieren bitte an die Lehrkraft oder Kursleiter:in wenden.",
-	"common.tool.information.outdatedOnContext.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration aktualisieren.",
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.deactivated.student":
+		"Tool {toolName} ist deaktiviert. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.deactivated.teacher":
+		"Tool {toolName} ist deaktiviert. Bitte an Schuladministrator:in wenden.",
+	"common.tool.information.outdated.teacher":
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Zum Aktualisieren bitte an die Schuladministrator:in wenden.",
-	"common.tool.information.outdatedOnSchoolAndContext.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration aktualisieren und an die Schuladministrator:in wenden.",
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte an Schuladministrator:in wenden.",
 	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
@@ -314,6 +308,8 @@ export default {
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.drawingElement": "Whiteboard",
 	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
+		"Der Texteditor ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -1489,7 +1485,7 @@ export default {
 		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.rooms.tools.configureVideoconferenceDialog.title":
 		"Videokonferenz {roomName} erstellen",
-	"pages.rooms.tools.deactivated": "Tool deaktiviert",
+	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '<i>{itemName}</i>' aus dem Kurs entfernen?",
@@ -1499,7 +1495,7 @@ export default {
 	"pages.rooms.tools.incompleteDialog.title": "Konfiguration unvollständig",
 	"pages.rooms.tools.logo": "Tool-Logo",
 	"pages.rooms.tools.menu.ariaLabel": "Tool Menü",
-	"pages.rooms.tools.outdated": "Tool veraltet",
+	"pages.rooms.tools.outdated": "Konfiguration unvollständig",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ veraltet",
 	"pages.room.modal.course.export.header": "Export-Format",
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
@@ -1552,7 +1548,7 @@ export default {
 		"Der Typ eines Parameters stimmt nicht mit dem geforderten Typ überein. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_unknown":
 		"Die Konfiguration dieses Tools enthält einen unbekannten Parameter. Bitte an den Support wenden.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"Bei der Übertragung eines Parameterwerts ist ein Fehler ausgetreten. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",
@@ -1604,6 +1600,8 @@ export default {
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
+	"ui-layout.topbar.pageShare.copyLink": "Link kopieren",
+	"ui-layout.topbar.pageShare.printQRCode": "QR-Code drucken",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

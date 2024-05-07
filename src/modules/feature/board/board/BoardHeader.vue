@@ -109,9 +109,7 @@ const { hasEditPermission } = useBoardPermissions();
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref(0);
 
-onMounted(() => {
-	calculateWidth();
-});
+onMounted(() => setTimeout(calculateWidth, 100));
 
 const boardTitle = ref("");
 

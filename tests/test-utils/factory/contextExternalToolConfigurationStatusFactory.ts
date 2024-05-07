@@ -1,5 +1,5 @@
+import { ContextExternalToolConfigurationStatus } from "@data-external-tool";
 import { Factory } from "fishery";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 
 export const ContextExternalToolConfigurationStatusFactory =
 	Factory.define<ContextExternalToolConfigurationStatus>(() => {
@@ -7,6 +7,7 @@ export const ContextExternalToolConfigurationStatusFactory =
 			isOutdatedOnScopeContext: false,
 			isOutdatedOnScopeSchool: false,
 			isIncompleteOnScopeContext: false,
+			isIncompleteOperationalOnScopeContext: false,
 			isDeactivated: false,
 		};
 	});

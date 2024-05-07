@@ -23,6 +23,7 @@ describe("MediaBoardAvailableElement", () => {
 			{
 				name: "title",
 				description: "description",
+				logoUrl: "logoUrl",
 			}
 		);
 
@@ -44,7 +45,7 @@ describe("MediaBoardAvailableElement", () => {
 		expect(displayComponent.props().element).toEqual<MediaElementDisplay>({
 			title: availableLineElement.name,
 			description: availableLineElement.description,
-			thumbnail: undefined,
+			thumbnail: availableLineElement.logoUrl,
 		});
 	});
 });

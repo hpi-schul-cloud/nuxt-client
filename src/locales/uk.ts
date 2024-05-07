@@ -110,24 +110,18 @@ export default {
 	"common.roleName.student": "Учень",
 	"common.roleName.superhero": "Адміністратор Schul-Cloud",
 	"common.roleName.teacher": "Викладач",
-	"common.tool.information.deactivated":
-		"Інструмент {toolDisplayName} вимкнено, тому його неможливо запустити.",
-	"common.tool.information.incomplete.student":
-		"Конфігурація інструменту неповна, тому інструмент не можна запустити. Будь ласка, зв'яжіться з викладачем або керівником курсу.",
-	"common.tool.information.incompleteOnContext.teacher":
-		"Конфігурація інструменту неповна, тому інструмент не можна запустити. Завершіть налаштування інструменту.",
-	"common.tool.information.incompleteOnSchool.teacher":
-		"Конфігурація інструменту неповна, тому інструмент не можна запустити. Будь ласка, зверніться до адміністратора школи.",
-	"common.tool.information.incompleteOnSchoolAndContext.teacher":
-		"Конфігурація інструменту неповна, тому інструмент не можна запустити. Будь ласка, завершіть налаштування інструменту та зверніться до адміністратора школи.",
+	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
+		"Конфігурація інструмента {toolName} неоновлена або неповна. Перевірте налаштування.",
 	"common.tool.information.outdated.student":
-		"Конфігурація інструменту застаріла, тому інструмент не можна запустити. Для оновлення зверніться до вчителя або викладача курсу.",
-	"common.tool.information.outdatedOnContext.teacher":
-		"Конфігурація інструменту застаріла, тому інструмент не можна запустити. Оновіть конфігурацію інструмента.",
+		"Конфігурація інструмента {toolName} неоновлена або неповна. Будь ласка, зверніться до свого вчителя або викладача курсу.",
+	"common.tool.information.deactivated.student":
+		"Інструмент {toolName} вимкнено. Будь ласка, зверніться до свого вчителя або викладача курсу.",
+	"common.tool.information.deactivated.teacher":
+		"Інструмент {toolName} вимкнено. Будь ласка, зверніться до адміністратора школи.",
+	"common.tool.information.outdated.teacher":
+		"Конфігурація інструменту {toolName} застаріла або неповна. Перевірте налаштування та зверніться до адміністратора школи.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"Конфігурація інструменту застаріла, тому інструмент не можна запустити. Для оновлення зверніться до адміністратора школи.",
-	"common.tool.information.outdatedOnSchoolAndContext.teacher":
-		"Конфігурація інструменту застаріла, тому інструмент не можна запустити. Оновіть конфігурацію інструменту та зверніться до адміністратора школи.",
+		"Конфігурація інструмента {toolName} неоновлена або неповна. Будь ласка, зверніться до адміністратора школи.",
 	"common.validation.email": "Введіть дійсну адресу електронної пошти",
 	"common.validation.invalid": "Введені вами дані недійсні",
 	"common.validation.number": "Потрібно ввести ціле число.",
@@ -318,6 +312,8 @@ export default {
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.drawingElement": "Дошка",
 	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
+		"Цей текстовий редактор є видимою і доступною для редагування для всіх учасників курсу.",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
@@ -1495,7 +1491,7 @@ export default {
 	"pages.rooms.tools.incompleteDialog.title": "Конфігурація не завершена",
 	"pages.rooms.tools.logo": "Інструмент-логотип",
 	"pages.rooms.tools.menu.ariaLabel": "Меню інструментів",
-	"pages.rooms.tools.outdated": "Інструмент застарів",
+	"pages.rooms.tools.outdated": "Конфігурація не завершена",
 	"pages.rooms.tools.outdatedDialog.title": "Інструмент „{toolName}“ застарів",
 	"pages.room.modal.course.export.header": "Формат експорту",
 	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
@@ -1545,7 +1541,7 @@ export default {
 		"Тип параметра не відповідає запитуваному типу. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_param_unknown":
 		"Конфігурація цього інструменту містить невідомий параметр. Зверніться до служби підтримки.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"Під час передачі значення параметра сталася помилка. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Значення параметра не відповідає наведеним правилам. Відкоригуйте значення відповідно.",
@@ -1598,6 +1594,8 @@ export default {
 	"tldraw.error.ws.4404": "Дошки з такою назвою не знайдено",
 	"ui-confirmation-dialog.ask-delete":
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
+	"ui-layout.topbar.pageShare.copyLink": "Скопіювати посилання",
+	"ui-layout.topbar.pageShare.printQRCode": "Роздрукуйте QR-код",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",

@@ -39,7 +39,12 @@ export const useBoardNotifier = () => {
 		});
 	};
 
+	const resetNotifierModule = () => {
+		notifierModule.reset();
+	};
+
 	return {
+		resetNotifierModule,
 		showCustomNotifier,
 		showFailure,
 		showInfo,

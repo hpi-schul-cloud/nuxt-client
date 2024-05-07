@@ -8,7 +8,7 @@ import {
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
 import { ToolLaunchRequestMethodEnum } from "@/store/external-tool";
-import { ContextExternalToolConfigurationStatus } from "../context-external-tool-configuration-status";
+import { ContextExternalToolConfigurationStatus } from "@data-external-tool";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { ToolParameterLocation } from "../tool-parameter-location.enum";
 import { ToolParameterScope } from "../tool-parameter-scope.enum";
@@ -89,6 +89,8 @@ export class CommonToolMapper {
 			isOutdatedOnScopeSchool: status.isOutdatedOnScopeSchool,
 			isOutdatedOnScopeContext: status.isOutdatedOnScopeContext,
 			isIncompleteOnScopeContext: status.isIncompleteOnScopeContext,
+			isIncompleteOperationalOnScopeContext:
+				status.isIncompleteOperationalOnScopeContext,
 			isDeactivated: status.isDeactivated,
 		};
 
