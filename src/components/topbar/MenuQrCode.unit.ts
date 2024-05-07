@@ -1,6 +1,5 @@
 import { mount } from "@vue/test-utils";
 import MenuQrCode from "./MenuQrCode.vue";
-import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -12,14 +11,11 @@ describe("@/components/topbar/MenuQrCode", () => {
 		const wrapper = mount(MenuQrCode, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				components: {
-					"base-qr-code": BaseQrCode,
-				},
 			},
 			props: { url: "testUrl" },
 		});
 
-		const qrCode = wrapper.findComponent({ name: "base-qr-code" });
+		const qrCode = wrapper.findComponent({ name: "QRCode" });
 		expect(qrCode.exists()).toBe(true);
 		expect(qrCode.props("url")).toBe("testUrl");
 
@@ -35,9 +31,6 @@ describe("@/components/topbar/MenuQrCode", () => {
 		const wrapper = mount(MenuQrCode, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-			components: {
-				"base-qr-code": BaseQrCode,
 			},
 		});
 

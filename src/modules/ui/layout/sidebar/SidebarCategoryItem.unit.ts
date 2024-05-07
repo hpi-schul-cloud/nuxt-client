@@ -4,7 +4,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
-import { SidebarGroupItem } from "./types";
+import { SidebarGroupItem } from "../types";
 
 const groupItem: SidebarGroupItem = {
 	icon: "mdiOpen",

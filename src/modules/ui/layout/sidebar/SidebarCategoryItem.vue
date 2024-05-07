@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { SidebarGroupItem } from "./types";
+import { SidebarGroupItem } from "../types";
 import SidebarItem from "./SidebarItem.vue";
 
 defineProps({
