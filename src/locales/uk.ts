@@ -432,6 +432,7 @@ export default {
 		"Ідентифікатори матеріалів не копіюються з технічних причин і повинні бути додані знову.",
 	"components.molecules.copyResult.information":
 		"В подальшому за допомогою швидких посилань можна доповнити відсутню інформацію. Посилання відкриваються в окремій вкладці.",
+	"components.molecules.copyResult.label.columnBoard": "Колонна дошка",
 	"components.molecules.copyResult.label.content": "Вміст",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "Зовнішні інструменти",

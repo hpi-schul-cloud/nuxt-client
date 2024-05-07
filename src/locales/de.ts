@@ -430,6 +430,7 @@ export default {
 		"Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.information":
 		"Nachfolgend können die fehlenden Inhalte mit Hilfe der Quick-Links ergänzt werden. Die Links öffnen sich in einem separatem Tab.",
+	"components.molecules.copyResult.label.columnBoard": "Spalten-Board",
 	"components.molecules.copyResult.label.content": "Inhalt",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "Externe Tools",

@@ -196,6 +196,7 @@ export default class CopyModule extends VuexModule {
 			if (type === CopyApiResponseTypeEnum.Lesson) return true;
 			if (type === CopyApiResponseTypeEnum.Task) return true;
 			if (type === CopyApiResponseTypeEnum.LernstoreMaterialGroup) return true;
+			if (type === CopyApiResponseTypeEnum.Columnboard) return true;
 			return false;
 		};
 
@@ -223,6 +224,8 @@ export default class CopyModule extends VuexModule {
 					return `/courses/${element.destinationCourseId}/topics/${element.id}/edit?returnUrl=rooms/${element.destinationCourseId}`;
 				case CopyApiResponseTypeEnum.Course:
 					return `/courses/${element.id}/edit`;
+				case CopyApiResponseTypeEnum.Columnboard:
+					return `/rooms/${element.id}/board`;
 			}
 			return undefined;
 		};

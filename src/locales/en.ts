@@ -426,6 +426,7 @@ export default {
 		"Material IDs are not copied for technical reasons and must be added again.",
 	"components.molecules.copyResult.information":
 		"In the following, the missing contents can be added with the help of the quick links. The links open in a separate tab.",
+	"components.molecules.copyResult.label.columnBoard": "Column board",
 	"components.molecules.copyResult.label.content": "Content",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "External tools",

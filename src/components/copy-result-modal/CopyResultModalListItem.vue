@@ -37,7 +37,7 @@ export default {
 			return this.item?.elements || [];
 		},
 		breadcrumbTitle() {
-			return this.item.title ?? "";
+			return this.item.title || "Link";
 		},
 		elementTypeName() {
 			return this.getElementTypeName(this.item.type);
@@ -106,18 +106,19 @@ export default {
 					return this.$t("components.molecules.copyResult.label.timeGroup");
 				case CopyApiResponseTypeEnum.UserGroup:
 					return this.$t("components.molecules.copyResult.label.userGroup");
+				case CopyApiResponseTypeEnum.Columnboard:
+					return this.$t("components.molecules.copyResult.label.columnBoard");
 				case CopyApiResponseTypeEnum.DrawingElement:
 					return this.$t("components.molecules.copyResult.label.tldraw");
 				default:
 					return this.$t("components.molecules.copyResult.label.unknown");
 			}
 		},
-	},
 
-	mounted() {
-		console.log("Elements:", this.elements);
-		console.log("Breadcrumb Title:", this.breadcrumbTitle);
-		console.log("Element Type Name:", this.elementTypeName);
+		isAllElementsSameType() {
+			const firstType = this.elements[0].type;
+			return this.elements.every((e) => e.type === firstType);
+		},
 	},
 };
 </script>
