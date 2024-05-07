@@ -1,9 +1,8 @@
 import { io } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
-import { envConfigModule } from "@/store";
 
 export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
-	const socket = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
+	const socket = io({
 		path: "/board-collaboration",
 		withCredentials: true,
 	});
