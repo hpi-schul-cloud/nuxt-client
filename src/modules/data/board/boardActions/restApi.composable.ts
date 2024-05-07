@@ -12,7 +12,6 @@ import {
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	CreateCardRequestPayload,
-	DeleteCardRequestPayload,
 	DeleteColumnRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
@@ -21,6 +20,7 @@ import {
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
 } from "./boardActionPayload";
+import { DeleteCardRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();

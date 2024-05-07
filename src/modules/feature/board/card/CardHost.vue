@@ -155,7 +155,7 @@ export default defineComponent({
 			isCardLoadingState,
 			// isLoading,
 			updateCardHeight,
-			updateTitle,
+			updateCardTitle,
 			moveElementDown,
 			moveElementUp,
 		} = useCardStore();
@@ -174,7 +174,7 @@ export default defineComponent({
 		const onMoveCardKeyboard = (event: KeyboardEvent) =>
 			emit("move:card-keyboard", event.code);
 
-		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
+		const onUpdateCardTitle = useDebounceFn(updateCardTitle, 300);
 
 		const onDeleteCard = async (confirmation: Promise<boolean>) => {
 			stopEditMode();

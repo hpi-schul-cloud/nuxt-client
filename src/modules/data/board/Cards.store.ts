@@ -22,9 +22,7 @@ import {
 import {
 	DeleteCardRequestPayload,
 	DeleteCardSuccessPayload,
-	UpdateCardHeightRequestPayload,
 	UpdateCardHeightSuccessPayload,
-	UpdateCardTitleRequestPayload,
 	UpdateCardTitleSuccessPayload,
 } from "./cardActions/cardActionPayload";
 import { useCardRestApi } from "./cardActions/restApi.composable";
@@ -81,25 +79,27 @@ export const useCardStore = defineStore("cardStore", () => {
 		return cards.value.find((c) => c.id === cardId);
 	};
 
-	const updateCardTitleRequest = async (
-		payload: UpdateCardTitleRequestPayload
+	const updateCardTitle = async (
+		newTitle: string,
+		cardId: string
 	): Promise<void> => {
-		socketOrRest.updateCardTitleRequest(payload);
+		socketOrRest.updateCardTitleRequest({ cardId, newTitle });
 	};
 
 	const updateCardTitleSuccess = async (
 		payload: UpdateCardTitleSuccessPayload
 	) => {
-		const card = getCard(payload.id);
+		const card = getCard(payload.cardId);
 		if (card === undefined) return;
 
-		card.title = payload.title;
+		card.title = payload.newTitle;
 	};
 
-	const updateCardHeightRequest = async (
-		payload: UpdateCardHeightRequestPayload
+	const updateCardHeight = async (
+		id: string,
+		height: number
 	): Promise<void> => {
-		socketOrRest.updateCardHeightRequest(payload);
+		socketOrRest.updateCardHeightRequest({ id, height });
 	};
 
 	const updateCardHeightSuccess = async (
@@ -277,9 +277,9 @@ export const useCardStore = defineStore("cardStore", () => {
 		moveElementDown,
 		moveElementUp,
 		resetState,
-		updateCardHeightRequest,
+		updateCardHeight,
 		updateCardHeightSuccess,
-		updateCardTitleRequest,
+		updateCardTitle,
 		updateCardTitleSuccess,
 	};
 });

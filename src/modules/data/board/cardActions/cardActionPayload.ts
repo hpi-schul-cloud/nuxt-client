@@ -18,12 +18,12 @@ export type FetchCardSuccessPayload = {
 };
 
 export type UpdateCardTitleRequestPayload = {
-	id: string;
-	title: string;
+	cardId: string;
+	newTitle: string;
 };
 export type UpdateCardTitleSuccessPayload = {
-	id: string;
-	title: string;
+	cardId: string;
+	newTitle: string;
 };
 export type UpdateCardTitleFailurePayload = {
 	errorType: ErrorType;
