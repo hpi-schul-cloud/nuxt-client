@@ -1,6 +1,6 @@
 /*
-If we are using createTestingPinia() actions are automatically mocked but type-wise, they are still the regular actions.
-In order to get the correct type, we must implement a custom type-wrapper that is applies the Mock type to each action.
+If we are using createTestingPinia() actions are automatically mocked, but type-wise they are still the regular actions.
+In order to get the correct type, we must implement a custom type-wrapper that applies the Mock type to each action.
 See Pinia's documentation: https://pinia.vuejs.org/cookbook/testing.html#Mocking-the-returned-value-of-an-action;
 */
 import type { Store, StoreDefinition } from "pinia";
