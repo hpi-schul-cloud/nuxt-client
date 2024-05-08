@@ -9,6 +9,7 @@ import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 	envsFactory,
+	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -66,7 +67,7 @@ describe("boardRestApi", () => {
 	});
 
 	const setup = (createBoard = true) => {
-		const boardStore = useBoardStore();
+		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		if (createBoard) {
 			const cards = cardSkeletonResponseFactory.buildList(3);
 			const firstColumn = columnResponseFactory.build({ cards });

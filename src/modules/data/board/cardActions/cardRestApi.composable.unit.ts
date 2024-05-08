@@ -15,6 +15,10 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { envConfigModule } from "@/store";
 import { createTestingPinia } from "@pinia/testing";
+import {
+	UpdateCardHeightRequestPayload,
+	UpdateCardTitleRequestPayload,
+} from "./cardActionPayload";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -130,7 +134,7 @@ describe("useCardRestApi", () => {
 
 			cardStore.getCard.mockReturnValue(cardStore.cards[0]);
 
-			const requestPayload = {
+			const requestPayload: UpdateCardTitleRequestPayload = {
 				cardId: cardStore.cards[0].id,
 				newTitle: "newTitle",
 			};
@@ -166,8 +170,8 @@ describe("useCardRestApi", () => {
 			cardStore.getCard.mockReturnValue(undefined);
 
 			await updateCardHeightRequest({
-				id: "cardId",
-				height: 100,
+				cardId: "cardId",
+				newHeight: 100,
 			});
 
 			expect(cardStore.updateCardHeightSuccess).not.toHaveBeenCalled();
@@ -179,9 +183,9 @@ describe("useCardRestApi", () => {
 
 			cardStore.getCard.mockReturnValue(cardStore.cards[0]);
 
-			const requestPayload = {
-				id: cardStore.cards[0].id,
-				height: 100,
+			const requestPayload: UpdateCardHeightRequestPayload = {
+				cardId: cardStore.cards[0].id,
+				newHeight: 100,
 			};
 
 			await updateCardHeightRequest(requestPayload);
@@ -199,8 +203,8 @@ describe("useCardRestApi", () => {
 			mockedBoardApiCalls.updateCardHeightCall.mockRejectedValue({});
 
 			await updateCardHeightRequest({
-				id: cardStore.cards[0].id,
-				height: 100,
+				cardId: cardStore.cards[0].id,
+				newHeight: 100,
 			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
