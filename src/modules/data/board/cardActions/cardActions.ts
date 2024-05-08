@@ -39,7 +39,7 @@ export const updateCardTitleSuccess = createAction(
 	props<UpdateCardTitleSuccessPayload>()
 );
 export const updateCardTitleFailure = createAction(
-	"update-cardrd-title-failure",
+	"update-card-title-failure",
 	props<UpdateCardTitleFailurePayload>()
 );
 
@@ -52,6 +52,6 @@ export const updateCardHeightSuccess = createAction(
 	props<UpdateCardHeightSuccessPayload>()
 );
 export const updateCardHeightFailure = createAction(
-	"update-cardrd-height-failure",
+	"update-card-height-failure",
 	props<UpdateCardHeightFailurePayload>()
 );

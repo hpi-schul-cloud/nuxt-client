@@ -1,10 +1,19 @@
+import * as CardActions from "./cardActions";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useCardSocketApi } from "./cardSocketApi.composable";
 import { useSocketConnection, useCardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
-import { DeleteCardRequestPayload } from "./cardActionPayload";
+import {
+	DeleteCardRequestPayload,
+	DisconnectSocketRequestPayload,
+	UpdateCardHeightFailurePayload,
+	UpdateCardTitleFailurePayload,
+} from "./cardActionPayload";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -45,8 +54,91 @@ describe("useCardSocketApi", () => {
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 	});
 
+	describe("dispatch", () => {
+		beforeEach(() => {
+			setActivePinia(createTestingPinia({}));
+		});
+
+		it("should call disconnectSocket for corresponding action", () => {
+			const { dispatch } = useCardSocketApi();
+
+			dispatch(CardActions.disconnectSocket({}));
+
+			expect(mockedSocketConnectionHandler.disconnectSocket).toHaveBeenCalled();
+		});
+
+		it("should call updateCardTitleSuccess for corresponding action", () => {
+			const cardStore = mockedPiniaStoreTyping(useCardStore);
+			const { dispatch } = useCardSocketApi();
+
+			const payload = {
+				cardId: "cardId",
+				newTitle: "newTitle",
+			};
+			dispatch(CardActions.updateCardTitleSuccess(payload));
+
+			expect(cardStore.updateCardTitleSuccess).toHaveBeenCalledWith(payload);
+		});
+
+		it("should call updateCardHeightSuccess for corresponding action", () => {
+			const cardStore = mockedPiniaStoreTyping(useCardStore);
+			const { dispatch } = useCardSocketApi();
+
+			const payload = {
+				cardId: "cardId",
+				newHeight: 100,
+			};
+			dispatch(CardActions.updateCardHeightSuccess(payload));
+
+			expect(cardStore.updateCardHeightSuccess).toHaveBeenCalledWith(payload);
+		});
+
+		it("should call notifySocketError for updateCardTitleFailure action", () => {
+			const { dispatch } = useCardSocketApi();
+
+			const payload: UpdateCardTitleFailurePayload = {
+				errorType: "notUpdated",
+				boardObjectType: "boardCard",
+			};
+			dispatch(CardActions.updateCardTitleFailure(payload));
+
+			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+				payload.errorType,
+				payload.boardObjectType
+			);
+		});
+
+		it("should call notifySocketError for updateCardHeightFailure action", () => {
+			const { dispatch } = useCardSocketApi();
+
+			const payload: UpdateCardHeightFailurePayload = {
+				errorType: "notUpdated",
+				boardObjectType: "boardCard",
+			};
+			dispatch(CardActions.updateCardHeightFailure(payload));
+
+			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+				payload.errorType,
+				payload.boardObjectType
+			);
+		});
+	});
+
+	describe("disconnectSocketRequest", () => {
+		const payload: DisconnectSocketRequestPayload = {};
+
+		it("should call disconnectSocket", () => {
+			const { disconnectSocketRequest } = useCardSocketApi();
+
+			disconnectSocketRequest(payload);
+
+			expect(mockedSocketConnectionHandler.disconnectSocket).toHaveBeenCalled();
+		});
+	});
+
 	describe("deleteCardRequest", () => {
 		const payload: DeleteCardRequestPayload = { cardId: "cardId" };
+
 		it("should call emitOnSocket with correct parameters", () => {
 			const { deleteCardRequest } = useCardSocketApi();
 
@@ -54,6 +146,42 @@ describe("useCardSocketApi", () => {
 
 			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"delete-card-request",
+				payload
+			);
+		});
+	});
+
+	describe("updateCardTitleRequest", () => {
+		const payload = {
+			cardId: "cardId",
+			newTitle: "newTitle",
+		};
+
+		it("should call emitOnSocket with correct parameters", () => {
+			const { updateCardTitleRequest } = useCardSocketApi();
+
+			updateCardTitleRequest(payload);
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"update-card-title-request",
+				payload
+			);
+		});
+	});
+
+	describe("updateCardHeightRequest", () => {
+		const payload = {
+			cardId: "cardId",
+			newHeight: 100,
+		};
+
+		it("should call emitOnSocket with correct parameters", () => {
+			const { updateCardHeightRequest } = useCardSocketApi();
+
+			updateCardHeightRequest(payload);
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"update-card-height-request",
 				payload
 			);
 		});

@@ -30,7 +30,6 @@ export const useCardSocketApi = () => {
 				CardActions.updateCardHeightSuccess,
 				cardStore.updateCardHeightSuccess
 			),
-			// on(CardActions.deleteCardSuccess, cardStore.deleteCardSuccess),
 
 			// failure actions
 			on(CardActions.updateCardTitleFailure, onFailure),
