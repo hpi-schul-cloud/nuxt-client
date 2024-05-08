@@ -5,9 +5,16 @@
 			<a :href="item.url" target="_blank">{{ breadcrumbTitle }}</a>
 		</div>
 		<ul class="ml-4 mb-4 pl-1">
-			<li v-for="(e, index) of elements" :key="index" class="element-info">
+			<li
+				v-for="element in aggregatedElements()"
+				:key="element.type"
+				class="element-info"
+			>
 				<span>
-					{{ getElementType(e) }}&nbsp;·&nbsp;{{ getElementTitle(e) }}
+					{{ element.count }} {{ element.type }}
+					<template v-if="element.count === 1 && element.title">
+						&middot;&nbsp;{{ element.title }}</template
+					>
 				</span>
 			</li>
 		</ul>
@@ -114,10 +121,24 @@ export default {
 					return this.$t("components.molecules.copyResult.label.unknown");
 			}
 		},
-
-		isAllElementsSameType() {
-			const firstType = this.elements[0].type;
-			return this.elements.every((e) => e.type === firstType);
+		aggregatedElements() {
+			const elementMap = new Map();
+			for (const element of this.elements) {
+				const typeName = this.getElementType(element);
+				if (elementMap.has(typeName)) {
+					const data = elementMap.get(typeName);
+					data.count++;
+					data.title = "";
+					elementMap.set(typeName, data);
+				} else {
+					elementMap.set(typeName, { count: 1, title: element.title });
+				}
+			}
+			return Array.from(elementMap).map(([type, { count, title }]) => ({
+				type,
+				count,
+				title,
+			}));
 		},
 	},
 };
