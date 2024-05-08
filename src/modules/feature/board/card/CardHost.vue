@@ -154,8 +154,8 @@ export default defineComponent({
 			getCard,
 			isCardLoadingState,
 			// isLoading,
-			updateCardHeight,
-			updateCardTitle,
+			updateCardHeightRequest,
+			updateCardTitleRequest,
 			moveElementDown,
 			moveElementUp,
 		} = useCardStore();
@@ -174,7 +174,11 @@ export default defineComponent({
 		const onMoveCardKeyboard = (event: KeyboardEvent) =>
 			emit("move:card-keyboard", event.code);
 
-		const onUpdateCardTitle = useDebounceFn(updateCardTitle, 300);
+		const onUpdateCardTitle = useDebounceFn(
+			(title: string, cardId: string) =>
+				updateCardTitleRequest({ newTitle: title, cardId }),
+			300
+		);
 
 		const onDeleteCard = async (confirmation: Promise<boolean>) => {
 			stopEditMode();
@@ -194,7 +198,10 @@ export default defineComponent({
 		const onEndEditMode = async () => {
 			stopEditMode();
 			await delay(300);
-			updateCardHeight(cardId.value, cardHostHeight.value);
+			updateCardHeightRequest({
+				cardId: cardId.value,
+				newHeight: cardHostHeight.value,
+			});
 		};
 
 		const onOpenDetailView = () => (isDetailView.value = true);

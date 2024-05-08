@@ -55,11 +55,11 @@ export const useCardRestApi = () => {
 	const updateCardHeightRequest = async (
 		payload: UpdateCardHeightRequestPayload
 	) => {
-		const card = cardStore.getCard(payload.id);
+		const card = cardStore.getCard(payload.cardId);
 		if (card === undefined) return;
 
 		try {
-			await updateCardHeightCall(payload.id, payload.height);
+			await updateCardHeightCall(payload.cardId, payload.newHeight);
 			cardStore.updateCardHeightSuccess(payload);
 		} catch (error) {
 			handleError(error, {});

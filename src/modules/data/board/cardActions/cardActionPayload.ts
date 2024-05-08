@@ -30,12 +30,12 @@ export type UpdateCardTitleFailurePayload = {
 	boardObjectType: BoardObjectType;
 };
 export type UpdateCardHeightRequestPayload = {
-	id: string;
-	height: number;
+	cardId: string;
+	newHeight: number;
 };
 export type UpdateCardHeightSuccessPayload = {
-	id: string;
-	height: number;
+	cardId: string;
+	newHeight: number;
 };
 export type UpdateCardHeightFailurePayload = {
 	errorType: ErrorType;

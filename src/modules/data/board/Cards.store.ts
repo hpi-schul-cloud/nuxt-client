@@ -20,7 +20,6 @@ import {
 	CreateContentElementBodyParams,
 } from "@/serverApi/v3";
 import {
-	DeleteCardRequestPayload,
 	DeleteCardSuccessPayload,
 	UpdateCardHeightSuccessPayload,
 	UpdateCardTitleSuccessPayload,
@@ -79,12 +78,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		return cards.value.find((c) => c.id === cardId);
 	};
 
-	const updateCardTitle = async (
-		newTitle: string,
-		cardId: string
-	): Promise<void> => {
-		socketOrRest.updateCardTitleRequest({ cardId, newTitle });
-	};
+	const updateCardTitleRequest = socketOrRest.updateCardTitleRequest;
 
 	const updateCardTitleSuccess = async (
 		payload: UpdateCardTitleSuccessPayload
@@ -95,27 +89,18 @@ export const useCardStore = defineStore("cardStore", () => {
 		card.title = payload.newTitle;
 	};
 
-	const updateCardHeight = async (
-		id: string,
-		height: number
-	): Promise<void> => {
-		socketOrRest.updateCardHeightRequest({ id, height });
-	};
+	const updateCardHeightRequest = socketOrRest.updateCardHeightRequest;
 
 	const updateCardHeightSuccess = async (
 		payload: UpdateCardHeightSuccessPayload
 	) => {
-		const card = getCard(payload.id);
+		const card = getCard(payload.cardId);
 		if (card === undefined) return;
 
-		card.height = payload.height;
+		card.height = payload.newHeight;
 	};
 
-	const deleteCardRequest = async (
-		payload: DeleteCardRequestPayload
-	): Promise<void> => {
-		socketOrRest.deleteCardRequest(payload);
-	};
+	const deleteCardRequest = socketOrRest.deleteCardRequest;
 
 	const deleteCardSuccess = async (payload: DeleteCardSuccessPayload) => {
 		const card = getCard(payload.cardId);
@@ -277,9 +262,9 @@ export const useCardStore = defineStore("cardStore", () => {
 		moveElementDown,
 		moveElementUp,
 		resetState,
-		updateCardHeight,
+		updateCardHeightRequest,
 		updateCardHeightSuccess,
-		updateCardTitle,
+		updateCardTitleRequest,
 		updateCardTitleSuccess,
 	};
 });
