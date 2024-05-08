@@ -12,8 +12,8 @@
 			>
 				<span>
 					{{ element.count }} {{ element.type }}
-					<template v-if="element.count === 1 && element.title">
-						&middot;&nbsp;{{ element.title }}</template
+					<span v-if="element.count === 1 && element.title">
+						&middot;&nbsp;{{ element.title }}</span
 					>
 				</span>
 			</li>
