@@ -12,7 +12,7 @@ import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPaylo
 
 type ErrorActions = ReturnType<typeof CardActions.updateCardTitleFailure>;
 
-export const useSocketApi = () => {
+export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
 
 	const { notifySocketError } = useErrorHandler();

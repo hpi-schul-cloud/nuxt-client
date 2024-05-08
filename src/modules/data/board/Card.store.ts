@@ -24,8 +24,8 @@ import {
 	UpdateCardHeightSuccessPayload,
 	UpdateCardTitleSuccessPayload,
 } from "./cardActions/cardActionPayload";
-import { useCardRestApi } from "./cardActions/restApi.composable";
-import { useSocketApi } from "./cardActions/socketApi.composable";
+import { useCardRestApi } from "./cardActions/cardRestApi.composable";
+import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const boardStore = useBoardStore();
@@ -36,7 +36,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const isSocketEnabled =
 		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
-	const socketOrRest = isSocketEnabled ? useSocketApi() : restApi;
+	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
