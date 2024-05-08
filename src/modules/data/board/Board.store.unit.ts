@@ -21,7 +21,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { envConfigModule } from "@/store";
 import { MoveCardRequestPayload } from "@/modules/data/board/boardActions/boardActionPayload";
-import { useSocketApi } from "./boardActions/socketApi.composable";
+import { useSocketApi } from "./boardActions/boardSocketApi.composable";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });

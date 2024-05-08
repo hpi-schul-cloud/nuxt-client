@@ -1,8 +1,8 @@
 import { Board } from "@/types/board/Board";
 import { nextTick, ref } from "vue";
 import { defineStore } from "pinia";
-import { useBoardRestApi } from "./boardActions/restApi.composable";
-import { useSocketApi } from "./boardActions/socketApi.composable";
+import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
+import { useSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { CardMove } from "@/types/board/DragAndDrop";

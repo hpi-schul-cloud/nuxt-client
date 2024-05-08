@@ -14,7 +14,7 @@ import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFac
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardSocketApi, useBoardStore } from "@data-board";
-import { useBoardRestApi } from "./restApi.composable";
+import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
 import { ColumnMove } from "@/types/board/DragAndDrop";

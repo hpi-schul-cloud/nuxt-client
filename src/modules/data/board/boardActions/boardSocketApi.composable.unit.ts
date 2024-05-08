@@ -1,34 +1,29 @@
-import { useSocketApi } from "./socketApi.composable";
+import { useSocketApi } from "./boardSocketApi.composable";
 import { useBoardSocketApi, useBoardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { CardMove } from "@/types/board/DragAndDrop";
-import { useBoardRestApi } from "./restApi.composable";
+import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardNotifier } from "@util-board";
+import { useI18n } from "vue-i18n";
 
 jest.mock("../Board.store");
 const mockedUseBoardStore = jest.mocked(useBoardStore);
 
 jest.mock("../socket/socket");
 const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
-jest.mock("./restApi.composable");
-const mockedUseRestApi = jest.mocked(useBoardRestApi);
 
-jest.mock("vue-i18n", () => {
-	return {
-		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
-			t: (key: string) => key,
-			tc: (key: string) => key,
-			te: (key: string) => key,
-		}),
-	};
-});
+jest.mock("./boardRestApi.composable");
+const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
+
+jest.mock("vue-i18n");
+(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
-describe("useSocketApi", () => {
+describe("useBoardSocketApi", () => {
 	let mockedSocketApiHandler: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
-	let mockedRestApiHandler: DeepMocked<ReturnType<typeof useBoardRestApi>>;
+	let mockedBoardRestApiHandler: DeepMocked<ReturnType<typeof useBoardRestApi>>;
 	let mockedBoardStore: DeepMocked<ReturnType<typeof useBoardStore>>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
@@ -36,8 +31,9 @@ describe("useSocketApi", () => {
 		mockedSocketApiHandler = createMock<ReturnType<typeof useBoardSocketApi>>();
 		mockedUseSocketApi.mockReturnValue(mockedSocketApiHandler);
 
-		mockedRestApiHandler = createMock<ReturnType<typeof useBoardRestApi>>();
-		mockedUseRestApi.mockReturnValue(mockedRestApiHandler);
+		mockedBoardRestApiHandler =
+			createMock<ReturnType<typeof useBoardRestApi>>();
+		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiHandler);
 
 		mockedBoardStore = createMock<ReturnType<typeof useBoardStore>>();
 		mockedUseBoardStore.mockReturnValue(mockedBoardStore);
@@ -73,19 +69,6 @@ describe("useSocketApi", () => {
 			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
 				"create-column-request",
 				{ boardId: "test" }
-			);
-		});
-	});
-
-	describe("deleteCardRequest", () => {
-		it("should call action with correct parameters", async () => {
-			const { deleteCardRequest } = useSocketApi();
-
-			await deleteCardRequest({ cardId: "test" });
-
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
-				"delete-card-request",
-				{ cardId: "test" }
 			);
 		});
 	});
