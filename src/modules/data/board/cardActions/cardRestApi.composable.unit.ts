@@ -8,7 +8,7 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardSocketApi, useCardStore } from "@data-board";
-import { useCardRestApi } from "./restApi.composable";
+import { useCardRestApi } from "./cardRestApi.composable";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
 import setupStores from "@@/tests/test-utils/setupStores";

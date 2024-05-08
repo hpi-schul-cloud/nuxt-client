@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { useSocketApi } from "./socketApi.composable";
+import { useCardSocketApi } from "./cardSocketApi.composable";
 import { useBoardSocketApi, useCardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
@@ -12,7 +12,7 @@ jest.mock("vue-i18n");
 jest.mock("@data-board/socket/socket");
 const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
 
-jest.mock("@data-board/Cards.store");
+jest.mock("@data-board/Card.store");
 const mockedUseCardStore = jest.mocked(useCardStore);
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
@@ -21,7 +21,7 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
-describe("useSocketApi", () => {
+describe("useCardSocketApi", () => {
 	let mockedSocketApiHandler: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
 	let mockedCardStore: DeepMocked<ReturnType<typeof useCardStore>>;
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -45,7 +45,7 @@ describe("useSocketApi", () => {
 	describe("deleteCardRequest", () => {
 		const payload: DeleteCardRequestPayload = { cardId: "cardId" };
 		it("should call emitOnSocket with correct parameters", () => {
-			const { deleteCardRequest } = useSocketApi();
+			const { deleteCardRequest } = useCardSocketApi();
 
 			deleteCardRequest(payload);
 

@@ -1,6 +1,6 @@
 import * as CardActions from "./cardActions";
 import { useBoardSocketApi } from "@data-board";
-import { useCardStore } from "../Cards.store";
+import { useCardStore } from "../Card.store";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
@@ -12,7 +12,7 @@ import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPaylo
 
 type ErrorActions = ReturnType<typeof CardActions.updateCardTitleFailure>;
 
-export const useSocketApi = () => {
+export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
 
 	const { notifySocketError } = useErrorHandler();
