@@ -7,7 +7,7 @@ import { useContentElementState } from "./ContentElementState.composable";
 import { useEditMode, useSharedEditMode } from "./EditMode.composable";
 import * as boardActions from "./boardActions/boardActions";
 import { useBoardSocketApi } from "./socket/socket";
-import { useCardStore } from "./Cards.store";
+import { useCardStore } from "./Card.store";
 
 export {
 	useBoardStore,

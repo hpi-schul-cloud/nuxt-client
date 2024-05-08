@@ -12,7 +12,7 @@ jest.mock("vue-i18n");
 jest.mock("@data-board/socket/socket");
 const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
 
-jest.mock("@data-board/Cards.store");
+jest.mock("@data-board/Card.store");
 const mockedUseCardStore = jest.mocked(useCardStore);
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");

@@ -11,7 +11,7 @@ import {
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 } from "./cardActionPayload";
-import { useCardStore } from "../Cards.store";
+import { useCardStore } from "../Card.store";
 
 export const useCardRestApi = () => {
 	const cardStore = useCardStore();
