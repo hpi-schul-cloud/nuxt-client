@@ -299,7 +299,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const reloadBoard = async () => {
-		await restApi.reloadBoard();
+		if (!board.value) return;
+
+		await socketOrRest.fetchBoardRequest({ boardId: board.value.id });
 	};
 
 	return {

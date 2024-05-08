@@ -241,8 +241,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	) => {
 		return () => {
 			notifyWithTemplate(errorType, boardObjectType)();
-			// TODO: find a way to trigger reload of the board in the board store
-			//  emit("reload:board");
+			boardStore.reloadBoard();
 			setEditModeId(undefined);
 		};
 	};
