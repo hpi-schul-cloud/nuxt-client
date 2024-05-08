@@ -29,7 +29,7 @@ import {
 	UpdateColumnTitleRequestPayload,
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActions/boardActionPayload";
-import { DeleteCardSuccessPayload } from "@/modules/data/board/cardActions/cardActionPayload";
+import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);

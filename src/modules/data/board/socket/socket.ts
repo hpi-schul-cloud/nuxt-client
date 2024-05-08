@@ -1,13 +1,18 @@
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { envConfigModule } from "@/store";
-import { createSharedComposable } from "@vueuse/core";
 
-export const _useBoardSocketApi = (dispatch: (action: Action) => void) => {
-	const socket = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
-		path: "/board-collaboration",
-		withCredentials: true,
-	});
+let instance: Socket | null = null;
+
+export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
+	if (instance === null) {
+		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
+			path: "/board-collaboration",
+			withCredentials: true,
+		});
+	}
+
+	const socket = instance;
 
 	socket.on("connect", function () {
 		console.log("connected");
@@ -45,5 +50,3 @@ export const _useBoardSocketApi = (dispatch: (action: Action) => void) => {
 		disconnectSocket,
 	};
 };
-
-export const useBoardSocketApi = createSharedComposable(_useBoardSocketApi);

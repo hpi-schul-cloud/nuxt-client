@@ -174,11 +174,11 @@ export default defineComponent({
 		const onMoveCardKeyboard = (event: KeyboardEvent) =>
 			emit("move:card-keyboard", event.code);
 
-		const onUpdateCardTitle = useDebounceFn(
-			(title: string, cardId: string) =>
-				updateCardTitleRequest({ newTitle: title, cardId }),
-			300
-		);
+		const _updateCardTitle = (newTitle: string, cardId: string) => {
+			updateCardTitleRequest({ newTitle, cardId });
+		};
+
+		const onUpdateCardTitle = useDebounceFn(_updateCardTitle, 600);
 
 		const onDeleteCard = async (confirmation: Promise<boolean>) => {
 			stopEditMode();
