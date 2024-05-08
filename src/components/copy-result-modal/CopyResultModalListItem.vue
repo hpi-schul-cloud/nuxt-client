@@ -44,7 +44,9 @@ export default {
 			return this.item?.elements || [];
 		},
 		breadcrumbTitle() {
-			return this.item.title || "Link";
+			return (
+				this.item.title || this.$t("components.molecules.copyResult.label.link")
+			);
 		},
 		elementTypeName() {
 			return this.getElementTypeName(this.item.type);

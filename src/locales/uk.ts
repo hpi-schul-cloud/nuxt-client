@@ -451,6 +451,7 @@ export default {
 	"components.molecules.copyResult.label.submissions": "підпорядкування",
 	"components.molecules.copyResult.label.text": "Текст",
 	"components.molecules.copyResult.label.tldraw": "Дошка",
+	"components.molecules.copyResult.label.link": "Посилання",
 	"components.molecules.copyResult.label.timeGroup": "Група часу",
 	"components.molecules.copyResult.label.unknown": "Невідомий",
 	"components.molecules.copyResult.label.userGroup": "Група користувачів",
