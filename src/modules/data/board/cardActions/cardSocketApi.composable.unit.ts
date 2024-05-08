@@ -1,6 +1,6 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useCardSocketApi } from "./cardSocketApi.composable";
-import { useBoardSocketApi, useCardStore } from "@data-board";
+import { useSocketConnection, useCardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
@@ -10,7 +10,7 @@ jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
 jest.mock("@data-board/socket/socket");
-const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
+const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
 jest.mock("@data-board/Card.store");
 const mockedUseCardStore = jest.mocked(useCardStore);
@@ -22,14 +22,17 @@ jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("useCardSocketApi", () => {
-	let mockedSocketApiHandler: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
+	let mockedSocketConnectionHandler: DeepMocked<
+		ReturnType<typeof useSocketConnection>
+	>;
 	let mockedCardStore: DeepMocked<ReturnType<typeof useCardStore>>;
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
-		mockedSocketApiHandler = createMock<ReturnType<typeof useBoardSocketApi>>();
-		mockedUseSocketApi.mockReturnValue(mockedSocketApiHandler);
+		mockedSocketConnectionHandler =
+			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 		mockedCardStore = createMock<ReturnType<typeof useCardStore>>();
 		mockedUseCardStore.mockReturnValue(mockedCardStore);
@@ -49,7 +52,7 @@ describe("useCardSocketApi", () => {
 
 			deleteCardRequest(payload);
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"delete-card-request",
 				payload
 			);

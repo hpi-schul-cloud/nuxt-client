@@ -15,13 +15,13 @@ import { useSharedEditMode } from "./EditMode.composable";
 import { setActivePinia, createPinia } from "pinia";
 
 import { useI18n } from "vue-i18n";
-import { useBoardSocketApi } from "@data-board";
+import { useSocketConnection } from "@data-board";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { envConfigModule } from "@/store";
-import { MoveCardRequestPayload } from "@/modules/data/board/boardActions/boardActionPayload";
-import { useSocketApi } from "./boardActions/boardSocketApi.composable";
+import { MoveCardRequestPayload } from "./boardActions/boardActionPayload";
+import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -29,8 +29,8 @@ jest.mock("vue-i18n");
 jest.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
-jest.mock("./boardActions/socketApi.composable");
-const mockedUseSocketApiActions = jest.mocked(useSocketApi);
+jest.mock("./boardActions/boardSocketApi.composable");
+const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
 
 jest.mock("./EditMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
@@ -42,19 +42,7 @@ jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
 jest.mock("@data-board/socket/socket");
-const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
-
-// const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
-// 	const expectedPayload = apiResponseErrorFactory.build({
-// 		message,
-// 		code,
-// 	});
-// 	const errorResponse = axiosErrorFactory.build({
-// 		response: { data: expectedPayload },
-// 	});
-
-// 	return errorResponse;
-// };
+const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
 describe("BoardStore", () => {
 	beforeEach(() => {
@@ -65,8 +53,10 @@ describe("BoardStore", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedSocketApiHandler: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
-	let mocketSocketApiActions: DeepMocked<ReturnType<typeof useSocketApi>>;
+	let mockedSocketConnectionHandler: DeepMocked<
+		ReturnType<typeof useSocketConnection>
+	>;
+	let mockedSocketApiActions: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
 	let setEditModeId: jest.Mock;
 
 	beforeEach(() => {
@@ -80,11 +70,12 @@ describe("BoardStore", () => {
 		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
 
-		mockedSocketApiHandler = createMock<ReturnType<typeof useBoardSocketApi>>();
-		mockedUseSocketApi.mockReturnValue(mockedSocketApiHandler);
+		mockedSocketConnectionHandler =
+			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
-		mocketSocketApiActions = createMock<ReturnType<typeof useSocketApi>>();
-		mockedUseSocketApiActions.mockReturnValue(mocketSocketApiActions);
+		mockedSocketApiActions = createMock<ReturnType<typeof useBoardSocketApi>>();
+		mockedUseBoardSocketApi.mockReturnValue(mockedSocketApiActions);
 
 		setEditModeId = jest.fn();
 		mockedSharedEditMode.mockReturnValue({
@@ -512,7 +503,7 @@ describe("BoardStore", () => {
 			it("should call socketApi.createCardRequest when feature flag is set true", () => {
 				const { boardStore } = setup(true, true);
 				boardStore.createCardRequest(payload);
-				expect(mocketSocketApiActions.createCardRequest).toHaveBeenCalledWith(
+				expect(mockedSocketApiActions.createCardRequest).toHaveBeenCalledWith(
 					payload
 				);
 			});
@@ -531,7 +522,7 @@ describe("BoardStore", () => {
 				const { boardStore } = setup(true, true);
 				const payload = { boardId: "testBoardId" };
 				boardStore.createColumnRequest(payload);
-				expect(mocketSocketApiActions.createColumnRequest).toHaveBeenCalledWith(
+				expect(mockedSocketApiActions.createColumnRequest).toHaveBeenCalledWith(
 					payload
 				);
 			});
@@ -551,7 +542,7 @@ describe("BoardStore", () => {
 			it("should call socketApi.deleteCardRequest when feature flag is set true", () => {
 				const { boardStore } = setup(true, true);
 				boardStore.deleteCardRequest(payload);
-				expect(mocketSocketApiActions.deleteCardRequest).toHaveBeenCalledWith(
+				expect(mockedSocketApiActions.deleteCardRequest).toHaveBeenCalledWith(
 					payload
 				);
 			});
@@ -571,7 +562,7 @@ describe("BoardStore", () => {
 			it("should call socketApi.deleteColumnRequest when feature flag is set true", () => {
 				const { boardStore } = setup(true, true);
 				boardStore.deleteColumnRequest(payload);
-				expect(mocketSocketApiActions.deleteColumnRequest).toHaveBeenCalledWith(
+				expect(mockedSocketApiActions.deleteColumnRequest).toHaveBeenCalledWith(
 					payload
 				);
 			});
@@ -592,7 +583,7 @@ describe("BoardStore", () => {
 				const { boardStore } = setup(true, true);
 				boardStore.updateBoardTitleRequest(payload);
 				expect(
-					mocketSocketApiActions.updateBoardTitleRequest
+					mockedSocketApiActions.updateBoardTitleRequest
 				).toHaveBeenCalledWith(payload);
 			});
 
@@ -613,7 +604,7 @@ describe("BoardStore", () => {
 				const { boardStore } = setup(true, true);
 				boardStore.updateColumnTitleRequest(payload);
 				expect(
-					mocketSocketApiActions.updateColumnTitleRequest
+					mockedSocketApiActions.updateColumnTitleRequest
 				).toHaveBeenCalledWith(payload);
 			});
 
@@ -634,7 +625,7 @@ describe("BoardStore", () => {
 				const { boardStore } = setup(true, true);
 				boardStore.updateBoardVisibilityRequest(payload);
 				expect(
-					mocketSocketApiActions.updateBoardVisibilityRequest
+					mockedSocketApiActions.updateBoardVisibilityRequest
 				).toHaveBeenCalledWith(payload);
 			});
 
@@ -661,7 +652,7 @@ describe("BoardStore", () => {
 			it("should call socketApi.moveColumnRequest when feature flag is set true", () => {
 				const { boardStore } = setup(true, true);
 				boardStore.moveColumnRequest(payload);
-				expect(mocketSocketApiActions.moveColumnRequest).toHaveBeenCalledWith(
+				expect(mockedSocketApiActions.moveColumnRequest).toHaveBeenCalledWith(
 					payload
 				);
 			});
@@ -687,7 +678,7 @@ describe("BoardStore", () => {
 					forceNextTick: false,
 				};
 				boardStore.moveCardRequest(payload);
-				expect(mocketSocketApiActions.moveCardRequest).toHaveBeenCalled();
+				expect(mockedSocketApiActions.moveCardRequest).toHaveBeenCalled();
 			});
 
 			it("should call restApi.moveCardCall when feature flag is set false", () => {
@@ -712,7 +703,7 @@ describe("BoardStore", () => {
 				const { boardStore } = setup(true, true);
 
 				boardStore.fetchBoardRequest(payload);
-				expect(mocketSocketApiActions.fetchBoardRequest).toHaveBeenCalled();
+				expect(mockedSocketApiActions.fetchBoardRequest).toHaveBeenCalled();
 			});
 
 			it("should call restApi.fetchBoardRequest when feature flag is set false", () => {
@@ -729,7 +720,7 @@ describe("BoardStore", () => {
 
 				boardStore.disconnectSocketRequest({});
 				expect(
-					mocketSocketApiActions.disconnectSocketRequest
+					mockedSocketApiActions.disconnectSocketRequest
 				).toHaveBeenCalled();
 			});
 		});

@@ -3,7 +3,7 @@ import { useBoardNotifier } from "@util-board";
 import { useBoardApi } from "./BoardApi.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { useI18n } from "vue-i18n";
-import { useBoardSocketApi, useCardStore } from "@data-board";
+import { useSocketConnection, useCardStore } from "@data-board";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { DeepMocked, createMock } from "@golevelup/ts-jest";
@@ -24,7 +24,7 @@ jest.mock("./cardActions/cardSocketApi.composable");
 const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
 
 jest.mock("./cardActions/cardRestApi.composable");
-const mockedUseCardRestApiActions = jest.mocked(useCardRestApi);
+const mockedUseCardRestApi = jest.mocked(useCardRestApi);
 
 jest.mock("./EditMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
@@ -36,14 +36,18 @@ jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
 jest.mock("@data-board/socket/socket");
-const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
+const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
 describe("CardStore", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
-	let mockedSocketApiHandler: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
-	let mockedCardSocketApi: DeepMocked<ReturnType<typeof useCardSocketApi>>;
+	let mockedSocketApiHandler: DeepMocked<
+		ReturnType<typeof useSocketConnection>
+	>;
+	let mockedCardSocketApiActions: DeepMocked<
+		ReturnType<typeof useCardSocketApi>
+	>;
 	let mockedCardRestApiActions: DeepMocked<ReturnType<typeof useCardRestApi>>;
 	let setEditModeId: jest.Mock;
 
@@ -60,14 +64,16 @@ describe("CardStore", () => {
 		mockedErrorHandlerCalls = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandlerCalls);
 
-		mockedSocketApiHandler = createMock<ReturnType<typeof useBoardSocketApi>>();
-		mockedUseSocketApi.mockReturnValue(mockedSocketApiHandler);
+		mockedSocketApiHandler =
+			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedUseSocketConnection.mockReturnValue(mockedSocketApiHandler);
 
-		mockedCardSocketApi = createMock<ReturnType<typeof useCardSocketApi>>();
-		mockedUseCardSocketApi.mockReturnValue(mockedCardSocketApi);
+		mockedCardSocketApiActions =
+			createMock<ReturnType<typeof useCardSocketApi>>();
+		mockedUseCardSocketApi.mockReturnValue(mockedCardSocketApiActions);
 
 		mockedCardRestApiActions = createMock<ReturnType<typeof useCardRestApi>>();
-		mockedUseCardRestApiActions.mockReturnValue(mockedCardRestApiActions);
+		mockedUseCardRestApi.mockReturnValue(mockedCardRestApiActions);
 
 		setEditModeId = jest.fn();
 		mockedSharedEditMode.mockReturnValue({
@@ -103,7 +109,9 @@ describe("CardStore", () => {
 				newTitle: "newTitle",
 			});
 
-			expect(mockedCardSocketApi.updateCardTitleRequest).toHaveBeenCalledWith({
+			expect(
+				mockedCardSocketApiActions.updateCardTitleRequest
+			).toHaveBeenCalledWith({
 				cardId: cardStore.cards[0].id,
 				newTitle: "newTitle",
 			});
@@ -162,7 +170,9 @@ describe("CardStore", () => {
 				newHeight: 100,
 			});
 
-			expect(mockedCardSocketApi.updateCardHeightRequest).toHaveBeenCalledWith({
+			expect(
+				mockedCardSocketApiActions.updateCardHeightRequest
+			).toHaveBeenCalledWith({
 				cardId: cardStore.cards[0].id,
 				newHeight: 100,
 			});

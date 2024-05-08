@@ -1,5 +1,5 @@
-import { useSocketApi } from "./boardSocketApi.composable";
-import { useBoardSocketApi, useBoardStore } from "@data-board";
+import { useBoardSocketApi } from "./boardSocketApi.composable";
+import { useSocketConnection, useBoardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { useBoardRestApi } from "./boardRestApi.composable";
@@ -10,7 +10,7 @@ jest.mock("../Board.store");
 const mockedUseBoardStore = jest.mocked(useBoardStore);
 
 jest.mock("../socket/socket");
-const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
+const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
 jest.mock("./boardRestApi.composable");
 const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
@@ -22,14 +22,17 @@ jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("useBoardSocketApi", () => {
-	let mockedSocketApiHandler: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
+	let mockedSocketConnectionHandler: DeepMocked<
+		ReturnType<typeof useSocketConnection>
+	>;
 	let mockedBoardRestApiHandler: DeepMocked<ReturnType<typeof useBoardRestApi>>;
 	let mockedBoardStore: DeepMocked<ReturnType<typeof useBoardStore>>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
-		mockedSocketApiHandler = createMock<ReturnType<typeof useBoardSocketApi>>();
-		mockedUseSocketApi.mockReturnValue(mockedSocketApiHandler);
+		mockedSocketConnectionHandler =
+			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 		mockedBoardRestApiHandler =
 			createMock<ReturnType<typeof useBoardRestApi>>();
@@ -44,16 +47,16 @@ describe("useBoardSocketApi", () => {
 	});
 
 	it("should be defined", () => {
-		expect(useSocketApi).toBeDefined();
+		expect(useBoardSocketApi).toBeDefined();
 	});
 
 	describe("createCardRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { createCardRequest } = useSocketApi();
+			const { createCardRequest } = useBoardSocketApi();
 
 			createCardRequest({ columnId: "test" });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"create-card-request",
 				{ columnId: "test" }
 			);
@@ -62,11 +65,11 @@ describe("useBoardSocketApi", () => {
 
 	describe("createColumnRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { createColumnRequest } = useSocketApi();
+			const { createColumnRequest } = useBoardSocketApi();
 
 			createColumnRequest({ boardId: "test" });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"create-column-request",
 				{ boardId: "test" }
 			);
@@ -75,11 +78,11 @@ describe("useBoardSocketApi", () => {
 
 	describe("deleteColumnRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { deleteColumnRequest } = useSocketApi();
+			const { deleteColumnRequest } = useBoardSocketApi();
 
 			deleteColumnRequest({ columnId: "test" });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"delete-column-request",
 				{ columnId: "test" }
 			);
@@ -88,14 +91,14 @@ describe("useBoardSocketApi", () => {
 
 	describe("moveCardRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { moveCardRequest } = useSocketApi();
+			const { moveCardRequest } = useBoardSocketApi();
 
 			moveCardRequest({
 				cardId: "test",
 				toColumnId: "testColumnId",
 			} as CardMove);
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"move-card-request",
 				{ cardId: "test", toColumnId: "testColumnId" }
 			);
@@ -104,7 +107,7 @@ describe("useBoardSocketApi", () => {
 
 	describe("moveColumnRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { moveColumnRequest } = useSocketApi();
+			const { moveColumnRequest } = useBoardSocketApi();
 
 			moveColumnRequest({
 				columnMove: {
@@ -115,7 +118,7 @@ describe("useBoardSocketApi", () => {
 				byKeyboard: false,
 			});
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"move-column-request",
 				{
 					columnMove: {
@@ -131,11 +134,11 @@ describe("useBoardSocketApi", () => {
 
 	describe("updateColumnTitleRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { updateColumnTitleRequest } = useSocketApi();
+			const { updateColumnTitleRequest } = useBoardSocketApi();
 
 			updateColumnTitleRequest({ columnId: "test", newTitle: "newTitle" });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"update-column-title-request",
 				{ columnId: "test", newTitle: "newTitle" }
 			);
@@ -144,11 +147,11 @@ describe("useBoardSocketApi", () => {
 
 	describe("updateBoardTitleRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { updateBoardTitleRequest } = useSocketApi();
+			const { updateBoardTitleRequest } = useBoardSocketApi();
 
 			updateBoardTitleRequest({ boardId: "boardId", newTitle: "newTitle" });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"update-board-title-request",
 				{ boardId: "boardId", newTitle: "newTitle" }
 			);
@@ -157,11 +160,11 @@ describe("useBoardSocketApi", () => {
 
 	describe("updateBoardVisibilityRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { updateBoardVisibilityRequest } = useSocketApi();
+			const { updateBoardVisibilityRequest } = useBoardSocketApi();
 
 			updateBoardVisibilityRequest({ boardId: "boardId", isVisible: true });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"update-board-visibility-request",
 				{ boardId: "boardId", isVisible: true }
 			);
