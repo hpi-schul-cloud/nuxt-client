@@ -537,25 +537,6 @@ describe("BoardStore", () => {
 			});
 		});
 
-		describe("@deleteCardRequest", () => {
-			const payload = { cardId: "testId" };
-			it("should call socketApi.deleteCardRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
-				boardStore.deleteCardRequest(payload);
-				expect(mockedSocketApiActions.deleteCardRequest).toHaveBeenCalledWith(
-					payload
-				);
-			});
-
-			it("should call restApi.deleteCardCall when feature flag is set false", () => {
-				const { boardStore } = setup(true, false);
-				boardStore.deleteCardRequest(payload);
-				expect(mockedBoardApiCalls.deleteCardCall).toHaveBeenCalledWith(
-					payload.cardId
-				);
-			});
-		});
-
 		describe("@deleteColumnRequest", () => {
 			const payload = { columnId: "testId" };
 
