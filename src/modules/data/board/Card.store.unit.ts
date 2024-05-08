@@ -20,10 +20,10 @@ jest.mock("vue-i18n");
 jest.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
-jest.mock("./cardActions/socketApi.composable");
+jest.mock("./cardActions/cardSocketApi.composable");
 const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
 
-jest.mock("./cardActions/restApi.composable");
+jest.mock("./cardActions/cardRestApi.composable");
 const mockedUseCardRestApiActions = jest.mocked(useCardRestApi);
 
 jest.mock("./EditMode.composable");
@@ -99,13 +99,13 @@ describe("CardStore", () => {
 			const { cardStore } = setup(true);
 
 			cardStore.updateCardTitleRequest({
-				id: cardStore.cards[0].id,
-				title: "newTitle",
+				cardId: cardStore.cards[0].id,
+				newTitle: "newTitle",
 			});
 
 			expect(mockedCardSocketApi.updateCardTitleRequest).toHaveBeenCalledWith({
-				id: cardStore.cards[0].id,
-				title: "newTitle",
+				cardId: cardStore.cards[0].id,
+				newTitle: "newTitle",
 			});
 		});
 
@@ -113,15 +113,15 @@ describe("CardStore", () => {
 			const { cardStore } = setup();
 
 			cardStore.updateCardTitleRequest({
-				id: cardStore.cards[0].id,
-				title: "newTitle",
+				cardId: cardStore.cards[0].id,
+				newTitle: "newTitle",
 			});
 
 			expect(
 				mockedCardRestApiActions.updateCardTitleRequest
 			).toHaveBeenCalledWith({
-				id: cardStore.cards[0].id,
-				title: "newTitle",
+				cardId: cardStore.cards[0].id,
+				newTitle: "newTitle",
 			});
 		});
 	});
@@ -134,8 +134,8 @@ describe("CardStore", () => {
 			const cardTitles = cardStore.cards.map((card) => card.title);
 
 			cardStore.updateCardTitleSuccess({
-				id: "unkownId",
-				title: NEW_TITLE,
+				cardId: "unkownId",
+				newTitle: NEW_TITLE,
 			});
 
 			expect(cardStore.cards.map((card) => card.title)).toEqual(cardTitles);
@@ -145,8 +145,8 @@ describe("CardStore", () => {
 			const { cardStore } = setup();
 
 			cardStore.updateCardTitleSuccess({
-				id: cardStore.cards[0].id,
-				title: NEW_TITLE,
+				cardId: cardStore.cards[0].id,
+				newTitle: NEW_TITLE,
 			});
 
 			expect(cardStore.cards[0].title).toEqual(NEW_TITLE);
@@ -158,13 +158,13 @@ describe("CardStore", () => {
 			const { cardStore } = setup(true);
 
 			cardStore.updateCardHeightRequest({
-				id: cardStore.cards[0].id,
-				height: 100,
+				cardId: cardStore.cards[0].id,
+				newHeight: 100,
 			});
 
 			expect(mockedCardSocketApi.updateCardHeightRequest).toHaveBeenCalledWith({
-				id: cardStore.cards[0].id,
-				height: 100,
+				cardId: cardStore.cards[0].id,
+				newHeight: 100,
 			});
 		});
 
@@ -172,15 +172,15 @@ describe("CardStore", () => {
 			const { cardStore } = setup();
 
 			cardStore.updateCardHeightRequest({
-				id: cardStore.cards[0].id,
-				height: 100,
+				cardId: cardStore.cards[0].id,
+				newHeight: 100,
 			});
 
 			expect(
 				mockedCardRestApiActions.updateCardHeightRequest
 			).toHaveBeenCalledWith({
-				id: cardStore.cards[0].id,
-				height: 100,
+				cardId: cardStore.cards[0].id,
+				newHeight: 100,
 			});
 		});
 	});
@@ -193,8 +193,8 @@ describe("CardStore", () => {
 			const cardHeights = cardStore.cards.map((card) => card.height);
 
 			cardStore.updateCardHeightSuccess({
-				id: "unkownId",
-				height: NEW_HEIGHT,
+				cardId: "unkownId",
+				newHeight: NEW_HEIGHT,
 			});
 
 			expect(cardStore.cards.map((card) => card.height)).toEqual(cardHeights);
@@ -204,8 +204,8 @@ describe("CardStore", () => {
 			const { cardStore } = setup();
 
 			cardStore.updateCardHeightSuccess({
-				id: cardStore.cards[0].id,
-				height: NEW_HEIGHT,
+				cardId: cardStore.cards[0].id,
+				newHeight: NEW_HEIGHT,
 			});
 
 			expect(cardStore.cards[0].height).toEqual(NEW_HEIGHT);
