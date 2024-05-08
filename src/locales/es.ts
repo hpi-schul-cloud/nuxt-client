@@ -434,6 +434,7 @@ export default {
 		"Los ID de material no se copian por razones técnicas y deben agregarse nuevamente.",
 	"components.molecules.copyResult.information":
 		"A continuación, se pueden añadir los contenidos que faltan con la ayuda de los enlaces rápidos. Los enlaces se abren en otra pestaña.",
+	"components.molecules.copyResult.label.columnBoard": "Tablero de columna",
 	"components.molecules.copyResult.label.content": "Contenido",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools":
@@ -454,6 +455,7 @@ export default {
 	"components.molecules.copyResult.label.submissions": "Envíos",
 	"components.molecules.copyResult.label.text": "Texto",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
+	"components.molecules.copyResult.label.link": "Enlace",
 	"components.molecules.copyResult.label.timeGroup": "Grupo de tiempo",
 	"components.molecules.copyResult.label.unknown": "Desconocido",
 	"components.molecules.copyResult.label.userGroup": "Grupo de usuario",

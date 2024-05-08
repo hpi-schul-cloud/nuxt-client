@@ -439,6 +439,46 @@ describe("copy module", () => {
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
 
+			describe("setCopyResultFailedItems", () => {
+				it("should set filteredResult for failed columnBoard copy", () => {
+					const serverData = {
+						title: "ColumnBoard",
+						type: CopyApiResponseTypeEnum.Columnboard,
+						destinationCourseId: "testCourseId",
+						status: CopyApiResponseStatusEnum.Failure,
+						id: "123",
+						elements: [
+							{
+								type: CopyApiResponseTypeEnum.DrawingElement,
+								status: CopyApiResponseStatusEnum.Failure,
+							},
+						],
+					};
+					const expectedData = [
+						{
+							title: "ColumnBoard",
+							type: CopyApiResponseTypeEnum.Columnboard,
+							elementId: "123",
+							url: "/rooms/123/board",
+							elements: [
+								{
+									type: CopyApiResponseTypeEnum.DrawingElement,
+									title: "",
+								},
+							],
+						},
+					];
+					const copyModule = new CopyModule({});
+					copyModule.reset();
+					copyModule.setCopyResultFailedItems({
+						payload: serverData,
+					});
+					expect(copyModule.getCopyResultFailedItems).toStrictEqual(
+						expectedData
+					);
+				});
+			});
+
 			it("should set filteredResult for failed lesson copy", () => {
 				const serverData = {
 					title: "Thema",
