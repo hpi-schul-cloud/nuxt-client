@@ -5,9 +5,16 @@
 			<a :href="item.url" target="_blank">{{ breadcrumbTitle }}</a>
 		</div>
 		<ul class="ml-4 mb-4 pl-1">
-			<li v-for="(e, index) of elements" :key="index" class="element-info">
+			<li
+				v-for="element in aggregatedElements()"
+				:key="element.type"
+				class="element-info"
+			>
 				<span>
-					{{ getElementType(e) }}&nbsp;·&nbsp;{{ getElementTitle(e) }}
+					{{ element.count }} {{ element.type }}
+					<span v-if="element.count === 1 && element.title">
+						&middot;&nbsp;{{ element.title }}</span
+					>
 				</span>
 			</li>
 		</ul>
@@ -37,7 +44,9 @@ export default {
 			return this.item?.elements || [];
 		},
 		breadcrumbTitle() {
-			return this.item.title ?? "";
+			return (
+				this.item.title || this.$t("components.molecules.copyResult.label.link")
+			);
 		},
 		elementTypeName() {
 			return this.getElementTypeName(this.item.type);
@@ -106,9 +115,32 @@ export default {
 					return this.$t("components.molecules.copyResult.label.timeGroup");
 				case CopyApiResponseTypeEnum.UserGroup:
 					return this.$t("components.molecules.copyResult.label.userGroup");
+				case CopyApiResponseTypeEnum.Columnboard:
+					return this.$t("components.molecules.copyResult.label.columnBoard");
+				case CopyApiResponseTypeEnum.DrawingElement:
+					return this.$t("components.molecules.copyResult.label.tldraw");
 				default:
 					return this.$t("components.molecules.copyResult.label.unknown");
 			}
+		},
+		aggregatedElements() {
+			const elementMap = new Map();
+			for (const element of this.elements) {
+				const typeName = this.getElementType(element);
+				if (elementMap.has(typeName)) {
+					const data = elementMap.get(typeName);
+					data.count++;
+					data.title = "";
+					elementMap.set(typeName, data);
+				} else {
+					elementMap.set(typeName, { count: 1, title: element.title });
+				}
+			}
+			return Array.from(elementMap).map(([type, { count, title }]) => ({
+				type,
+				count,
+				title,
+			}));
 		},
 	},
 };
