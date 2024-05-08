@@ -1,5 +1,7 @@
 import { importUsersModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
+import { ComponentProps } from "@/types/vue";
+import { THEME_KEY } from "@/utils/inject";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -13,7 +15,6 @@ import {
 	VBtn,
 	VListItem,
 } from "vuetify/lib/components/index.mjs";
-import { THEME_KEY } from "../../utils/inject";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 
 const testProps = {
@@ -30,7 +31,10 @@ const testProps = {
 	ldapSource: "LDAP",
 };
 
-const getWrapper = (props: object, options?: object) => {
+const getWrapper = (
+	props: ComponentProps<typeof vImportUsersMatchSearch>,
+	options?: object
+) => {
 	return mount(vImportUsersMatchSearch, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
