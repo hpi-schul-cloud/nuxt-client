@@ -5,7 +5,7 @@
 				<VToolbarTitle>
 					{{
 						$t("components.molecules.importUsersMatch.title", {
-							instance: $theme.name,
+							instance: theme.name,
 							source: ldapSource,
 						})
 					}}
@@ -27,7 +27,7 @@
 							? "components.molecules.importUsersMatch.subtitle.nbc"
 							: "components.molecules.importUsersMatch.subtitle",
 						{
-							instance: $theme.name,
+							instance: theme.name,
 							source: ldapSource,
 						}
 					)
@@ -67,7 +67,7 @@
 						</VListItem>
 					</VCol>
 					<VCol class="md-6">
-						<VCardTitle>{{ $theme.name }}</VCardTitle>
+						<VCardTitle>{{ theme.name }}</VCardTitle>
 						<VListItem>
 							<div v-if="selectedItem">
 								<VListItemTitle>
@@ -116,8 +116,8 @@
 							v-model="selectedItem"
 							class="px-4 mt-2"
 							item-value="userId"
-							item-title="text"
-							:items="items"
+							:item-title="(user) => `${user.firstName} ${user.lastName}`"
+							:items="entries"
 							:loading="loading"
 							v-model:search="searchUser"
 							hide-no-data
@@ -199,7 +199,10 @@
 		</VCard>
 	</div>
 </template>
-<script>
+<script setup lang="ts">
+import { UserMatchResponse } from "@/serverApi/v3";
+import { importUsersModule } from "@/store";
+import { injectStrict, THEME_KEY } from "@/utils/inject";
 import {
 	mdiAccountSearch,
 	mdiClose,
@@ -208,206 +211,215 @@ import {
 	mdiFlag,
 	mdiFlagOutline,
 } from "@mdi/js";
-import { importUsersModule } from "@/store";
+import { useDebounceFn } from "@vueuse/core";
+import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
-	components: {},
-	props: {
-		isDialog: {
-			type: Boolean,
-		},
-		ldapSource: {
-			type: String,
-			required: true,
-		},
-		editedItem: {
-			type: Object,
-			default: () => ({
-				firstName: "",
-				lastName: "",
-				loginName: "",
-				roleNames: [],
-				classNames: [],
-				match: {},
-				flagged: false,
-			}),
-			firstName: {
-				type: String,
-			},
-			lastName: {
-				type: String,
-			},
-			loginName: {
-				type: String,
-			},
-			roleNames: {
-				type: Array,
-			},
-			classNames: {
-				type: Array,
-				default: [],
-			},
-			match: {
-				type: Object,
-			},
-			flagged: {
-				type: Boolean,
-			},
-		},
-		isNbc: {
-			type: Boolean,
-			default: false,
-		},
+const props = defineProps({
+	isDialog: {
+		type: Boolean,
 	},
-	data() {
-		return {
-			mdiAccountSearch,
-			mdiClose,
-			mdiContentSave,
-			mdiDelete,
-			mdiFlag,
-			mdiFlagOutline,
-			entries: [],
-			loading: false,
+	ldapSource: {
+		type: String,
+		required: true,
+	},
+	editedItem: {
+		type: Object,
+		default: () => ({
+			firstName: "",
+			lastName: "",
+			loginName: "",
+			roleNames: [],
+			classNames: [],
+			match: {},
 			flagged: false,
-			searchUser: null,
-			selectedItem: null,
-			total: 0,
-			limit: 10,
-			skip: 0,
-		};
-	},
-	computed: {
-		items() {
-			return this.entries.map((user) => {
-				user.text = `${user.firstName} ${user.lastName}`;
-				return user;
-			});
+		}),
+		firstName: {
+			type: String,
 		},
-		canSave() {
-			if (this.selectedItem === null) {
-				return false;
-			}
-			if (
-				this.editedItem.match &&
-				this.editedItem.match.userId === this.selectedItem.userId
-			) {
-				return false;
-			}
-			return true;
+		lastName: {
+			type: String,
 		},
-		canDelete() {
-			return this.editedItem.match && this.selectedItem === null;
+		loginName: {
+			type: String,
+		},
+		roleNames: {
+			type: Array,
+		},
+		classNames: {
+			type: Array,
+			default: [],
+		},
+		match: {
+			type: Object,
+		},
+		flagged: {
+			type: Boolean,
 		},
 	},
-	watch: {
-		async searchUser() {
-			this.skip = 0;
-			await this.getDataFromApi();
-		},
+	isNbc: {
+		type: Boolean,
+		default: false,
 	},
-	created() {
-		this.flagged = this.editedItem.flagged;
-		this.getDataFromApi();
-	},
-	methods: {
-		async endIntersect(entries, observer, isIntersecting) {
-			if (isIntersecting) {
-				if (this.total > this.items.length) {
-					this.skip += this.limit;
-					await this.getDataFromApi();
-				}
-			}
-		},
-		async getDataFromApi() {
-			this.loading = true;
-			importUsersModule.setUsersLimit(this.limit);
-			importUsersModule.setUsersSkip(this.skip);
-			if (this.searchUser !== importUsersModule.getUserSearch) {
-				this.entries = [];
-				importUsersModule.setUserSearch(this.searchUser);
-			}
-			importUsersModule.fetchAllUsers().then(() => {
-				this.total = importUsersModule.getUserList.total;
+});
 
-				this.entries = [...this.entries, ...importUsersModule.getUserList.data];
-				this.loading = false;
-			});
-		},
-		closeEdit() {
-			this.selectedItem = null;
-			this.$emit("close");
-		},
-		async saveMatch() {
-			if (!this.selectedItem) {
-				return false;
-			}
-			const importUser = await importUsersModule.saveMatch({
-				importUserId: this.editedItem.importUserId,
-				userId: this.selectedItem.userId,
-			});
-			if (
-				!importUsersModule.getBusinessError &&
-				importUser.match &&
-				importUser.match.userId === this.selectedItem.userId
-			) {
-				this.$emit("saved-match");
-				this.closeEdit();
-			}
-		},
-		async deleteMatch() {
-			if (!this.editedItem.match || !this.editedItem.match.userId) {
-				return false;
-			}
-			const importUser = await importUsersModule.deleteMatch(
-				this.editedItem.importUserId
-			);
-			if (
-				!importUsersModule.getBusinessError &&
-				importUser.match === undefined
-			) {
-				this.$emit("deleted-match");
-				this.closeEdit();
-			}
-		},
-		async saveFlag() {
-			const importUser = await importUsersModule.saveFlag({
-				importUserId: this.editedItem.importUserId,
-				flagged: !this.flagged,
-			});
-			if (
-				!importUsersModule.getBusinessError &&
-				importUser.flagged === !this.flagged
-			) {
-				this.flagged = !this.flagged;
-				this.$emit("saved-flag");
-			}
-		},
-		mapRoleNames(roleNames) {
-			if (!roleNames) {
-				return "";
-			}
-			return roleNames
-				.map((role) => {
-					switch (role) {
-						case "student":
-							return this.$t("common.roleName.student");
-						case "teacher":
-							return this.$t("common.roleName.teacher");
-						case "admin":
-							return this.$t("common.roleName.administrator");
-						case "expert":
-							return this.$t("common.roleName.expert");
-						case "superhero":
-							return this.$t("common.roleName.superhero");
-						default:
-							return role;
-					}
-				})
-				.join(", ");
-		},
-	},
+const emit = defineEmits<{
+	(e: "close"): void;
+	(e: "saved-match"): void;
+	(e: "saved-flag"): void;
+	(e: "deleted-match"): void;
+}>();
+
+const { t } = useI18n();
+
+const theme = injectStrict(THEME_KEY);
+
+const entries: Ref<UserMatchResponse[]> = ref([]);
+const loading: Ref<boolean> = ref(false);
+const flagged = ref(false);
+const searchUser: Ref<string | undefined> = ref();
+const selectedItem: Ref<UserMatchResponse | null> = ref(null);
+const total: Ref<number> = ref(0);
+const limit: Ref<number> = ref(10);
+const skip: Ref<number> = ref(0);
+
+const canSave: ComputedRef<boolean> = computed(() => {
+	if (selectedItem.value === null) {
+		return false;
+	}
+
+	if (
+		props.editedItem.match &&
+		props.editedItem.match.userId === selectedItem.value?.userId
+	) {
+		return false;
+	}
+
+	return true;
+});
+
+const canDelete = computed(() => {
+	return props.editedItem.match && selectedItem.value === null;
+});
+
+const getDataFromApi = async () => {
+	loading.value = true;
+
+	importUsersModule.setUsersLimit(limit.value);
+	importUsersModule.setUsersSkip(skip.value);
+	if (searchUser.value !== importUsersModule.getUserSearch) {
+		entries.value = [];
+		importUsersModule.setUserSearch(searchUser.value || "");
+	}
+	await importUsersModule.fetchAllUsers();
+
+	total.value = importUsersModule.getUserList.total;
+
+	entries.value.push(...importUsersModule.getUserList.data);
+
+	loading.value = false;
 };
+
+const getDataFromApiThrottled = useDebounceFn(() => getDataFromApi(), 1000, {
+	maxWait: 1000,
+});
+
+watch(searchUser, () => {
+	skip.value = 0;
+
+	getDataFromApiThrottled();
+});
+
+const endIntersect = async (isIntersecting: boolean) => {
+	if (isIntersecting) {
+		if (total.value > entries.value.length) {
+			skip.value += limit.value;
+
+			await getDataFromApi();
+		}
+	}
+};
+
+const closeEdit = () => {
+	selectedItem.value = null;
+	emit("close");
+};
+
+const saveMatch = async () => {
+	if (!selectedItem.value) {
+		return false;
+	}
+	const importUser = await importUsersModule.saveMatch({
+		importUserId: props.editedItem.importUserId,
+		userId: selectedItem.value.userId,
+	});
+	if (
+		!importUsersModule.getBusinessError &&
+		importUser?.match &&
+		importUser.match.userId === selectedItem.value.userId
+	) {
+		emit("saved-match");
+		closeEdit();
+	}
+};
+
+const deleteMatch = async () => {
+	if (!props.editedItem.match || !props.editedItem.match.userId) {
+		return false;
+	}
+	const importUser = await importUsersModule.deleteMatch(
+		props.editedItem.importUserId
+	);
+	if (!importUsersModule.getBusinessError && importUser?.match === undefined) {
+		emit("deleted-match");
+		closeEdit();
+	}
+};
+
+const saveFlag = async () => {
+	const importUser = await importUsersModule.saveFlag({
+		importUserId: props.editedItem.importUserId,
+		flagged: !flagged.value,
+	});
+
+	if (
+		!importUsersModule.getBusinessError &&
+		importUser?.flagged === !flagged.value
+	) {
+		flagged.value = !flagged.value;
+		emit("saved-flag");
+	}
+};
+
+const mapRoleNames = (roleNames: unknown[]) => {
+	if (!roleNames) {
+		return "";
+	}
+	return roleNames
+		.map((role) => {
+			switch (role) {
+				case "student":
+					return t("common.roleName.student");
+				case "teacher":
+					return t("common.roleName.teacher");
+				case "admin":
+					return t("common.roleName.administrator");
+				case "expert":
+					return t("common.roleName.expert");
+				case "superhero":
+					return t("common.roleName.superhero");
+				default:
+					return role;
+			}
+		})
+		.join(", ");
+};
+
+onMounted(async () => {
+	flagged.value = props.editedItem.flagged;
+
+	await getDataFromApi();
+});
 </script>
 <style scoped>
 .v-dialog--active {

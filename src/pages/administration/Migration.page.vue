@@ -463,7 +463,7 @@
 	</DefaultWireframe>
 </template>
 <script setup lang="ts">
-import ImportUsers from "@/components/organisms/administration/ImportUsers";
+import ImportUsers from "@/components/organisms/administration/ImportUsers.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { SchulcloudTheme } from "@/serverApi/v3";
@@ -474,7 +474,15 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
 import { mdiClose } from "@mdi/js";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import {
+	computed,
+	ComputedRef,
+	onMounted,
+	onUnmounted,
+	Ref,
+	ref,
+	watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -578,13 +586,13 @@ useTitle(
 );
 
 const isAllowed = async () => {
-	if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true) {
+	if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED) {
 		return true;
 	}
 	if (school.value.id === "") {
 		await schoolsModule.fetchSchool();
 	}
-	return school.value.features.ldapUniventionMigrationSchool;
+	return school.value.featureObject.ldapUniventionMigrationSchool;
 };
 
 const summary = async () => {
@@ -718,6 +726,12 @@ onMounted(async () => {
 	}
 	await summary();
 	checkTotalInterval();
+});
+
+onUnmounted(() => {
+	if (checkTotal.value) {
+		clearInterval(checkTotal.value);
+	}
 });
 </script>
 
