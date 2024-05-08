@@ -6,13 +6,13 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useContentElementState } from "./ContentElementState.composable";
 import { useEditMode, useSharedEditMode } from "./EditMode.composable";
 import * as boardActions from "./boardActions/boardActions";
-import { useBoardSocketApi } from "./socket/socket";
+import { useSocketConnection } from "./socket/socket";
 import { useCardStore } from "./Card.store";
 
 export {
 	useBoardStore,
 	useCardStore,
-	useBoardSocketApi,
+	useSocketConnection,
 	useCardState,
 	useContentElementState,
 	useEditMode,

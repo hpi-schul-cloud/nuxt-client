@@ -1,5 +1,5 @@
 import * as CardActions from "./cardActions";
-import { useBoardSocketApi } from "@data-board";
+import { useSocketConnection } from "@data-board";
 import { useCardStore } from "../Card.store";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
@@ -38,7 +38,7 @@ export const useCardSocketApi = () => {
 		);
 	};
 
-	const { emitOnSocket, disconnectSocket } = useBoardSocketApi(dispatch);
+	const { emitOnSocket, disconnectSocket } = useSocketConnection(dispatch);
 
 	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
 		// TODO: Kebab-Case

@@ -1,5 +1,5 @@
 import { useSocketApi } from "./boardSocketApi.composable";
-import { useBoardSocketApi, useBoardStore } from "@data-board";
+import { useSocketConnection, useBoardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { useBoardRestApi } from "./boardRestApi.composable";
@@ -10,7 +10,7 @@ jest.mock("../Board.store");
 const mockedUseBoardStore = jest.mocked(useBoardStore);
 
 jest.mock("../socket/socket");
-const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
+const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
 jest.mock("./boardRestApi.composable");
 const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
@@ -22,14 +22,17 @@ jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("useBoardSocketApi", () => {
-	let mockedSocketApiHandler: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
+	let mockedSocketConnectionHandler: DeepMocked<
+		ReturnType<typeof useSocketConnection>
+	>;
 	let mockedBoardRestApiHandler: DeepMocked<ReturnType<typeof useBoardRestApi>>;
 	let mockedBoardStore: DeepMocked<ReturnType<typeof useBoardStore>>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
-		mockedSocketApiHandler = createMock<ReturnType<typeof useBoardSocketApi>>();
-		mockedUseSocketApi.mockReturnValue(mockedSocketApiHandler);
+		mockedSocketConnectionHandler =
+			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 		mockedBoardRestApiHandler =
 			createMock<ReturnType<typeof useBoardRestApi>>();
@@ -53,7 +56,7 @@ describe("useBoardSocketApi", () => {
 
 			createCardRequest({ columnId: "test" });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"create-card-request",
 				{ columnId: "test" }
 			);
@@ -66,7 +69,7 @@ describe("useBoardSocketApi", () => {
 
 			createColumnRequest({ boardId: "test" });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"create-column-request",
 				{ boardId: "test" }
 			);
@@ -79,7 +82,7 @@ describe("useBoardSocketApi", () => {
 
 			deleteColumnRequest({ columnId: "test" });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"delete-column-request",
 				{ columnId: "test" }
 			);
@@ -95,7 +98,7 @@ describe("useBoardSocketApi", () => {
 				toColumnId: "testColumnId",
 			} as CardMove);
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"move-card-request",
 				{ cardId: "test", toColumnId: "testColumnId" }
 			);
@@ -115,7 +118,7 @@ describe("useBoardSocketApi", () => {
 				byKeyboard: false,
 			});
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"move-column-request",
 				{
 					columnMove: {
@@ -135,7 +138,7 @@ describe("useBoardSocketApi", () => {
 
 			updateColumnTitleRequest({ columnId: "test", newTitle: "newTitle" });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"update-column-title-request",
 				{ columnId: "test", newTitle: "newTitle" }
 			);
@@ -148,7 +151,7 @@ describe("useBoardSocketApi", () => {
 
 			updateBoardTitleRequest({ boardId: "boardId", newTitle: "newTitle" });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"update-board-title-request",
 				{ boardId: "boardId", newTitle: "newTitle" }
 			);
@@ -161,7 +164,7 @@ describe("useBoardSocketApi", () => {
 
 			updateBoardVisibilityRequest({ boardId: "boardId", isVisible: true });
 
-			expect(mockedSocketApiHandler.emitOnSocket).toHaveBeenCalledWith(
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"update-board-visibility-request",
 				{ boardId: "boardId", isVisible: true }
 			);

@@ -1,6 +1,6 @@
 import * as BoardActions from "./boardActions";
 import * as CardActions from "../cardActions/cardActions";
-import { useBoardSocketApi } from "@data-board";
+import { useSocketConnection } from "@data-board";
 import { useBoardStore } from "../Board.store";
 import {
 	CreateCardRequestPayload,
@@ -74,7 +74,7 @@ export const useSocketApi = () => {
 	};
 
 	const { emitOnSocket, emitWithAck, disconnectSocket } =
-		useBoardSocketApi(dispatch);
+		useSocketConnection(dispatch);
 
 	const createCardRequest = async (payload: CreateCardRequestPayload) => {
 		emitOnSocket("create-card-request", payload);

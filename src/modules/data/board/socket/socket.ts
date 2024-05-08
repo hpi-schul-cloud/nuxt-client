@@ -4,7 +4,7 @@ import { envConfigModule } from "@/store";
 
 let instance: Socket | null = null;
 
-export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
+export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	if (instance === null) {
 		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
 			path: "/board-collaboration",
