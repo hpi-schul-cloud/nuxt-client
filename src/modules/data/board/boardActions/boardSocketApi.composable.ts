@@ -29,7 +29,7 @@ type ErrorActions =
 	| ReturnType<typeof BoardActions.updateBoardTitleFailure>
 	| ReturnType<typeof BoardActions.updateBoardVisibilityFailure>;
 
-export const useSocketApi = () => {
+export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
 	const { notifySocketError } = useErrorHandler();
 

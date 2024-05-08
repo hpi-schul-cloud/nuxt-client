@@ -2,7 +2,7 @@ import { Board } from "@/types/board/Board";
 import { nextTick, ref } from "vue";
 import { defineStore } from "pinia";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
-import { useSocketApi } from "./boardActions/boardSocketApi.composable";
+import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { CardMove } from "@/types/board/DragAndDrop";
@@ -39,7 +39,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const isSocketEnabled =
 		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
-	const socketOrRest = isSocketEnabled ? useSocketApi() : restApi;
+	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
 
 	const { setEditModeId } = useSharedEditMode();
 

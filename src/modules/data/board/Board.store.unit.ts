@@ -21,7 +21,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { envConfigModule } from "@/store";
 import { MoveCardRequestPayload } from "./boardActions/boardActionPayload";
-import { useSocketApi } from "./boardActions/boardSocketApi.composable";
+import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -29,8 +29,8 @@ jest.mock("vue-i18n");
 jest.mock("@data-board/BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
-jest.mock("./boardActions/socketApi.composable");
-const mockedUseSocketApi = jest.mocked(useSocketApi);
+jest.mock("./boardActions/boardSocketApi.composable");
+const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
 
 jest.mock("./EditMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
@@ -44,18 +44,6 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 jest.mock("@data-board/socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
-// const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
-// 	const expectedPayload = apiResponseErrorFactory.build({
-// 		message,
-// 		code,
-// 	});
-// 	const errorResponse = axiosErrorFactory.build({
-// 		response: { data: expectedPayload },
-// 	});
-
-// 	return errorResponse;
-// };
-
 describe("BoardStore", () => {
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -68,7 +56,7 @@ describe("BoardStore", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
 	>;
-	let mockedSocketApiActions: DeepMocked<ReturnType<typeof useSocketApi>>;
+	let mockedSocketApiActions: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
 	let setEditModeId: jest.Mock;
 
 	beforeEach(() => {
@@ -86,8 +74,8 @@ describe("BoardStore", () => {
 			createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
-		mockedSocketApiActions = createMock<ReturnType<typeof useSocketApi>>();
-		mockedUseSocketApi.mockReturnValue(mockedSocketApiActions);
+		mockedSocketApiActions = createMock<ReturnType<typeof useBoardSocketApi>>();
+		mockedUseBoardSocketApi.mockReturnValue(mockedSocketApiActions);
 
 		setEditModeId = jest.fn();
 		mockedSharedEditMode.mockReturnValue({

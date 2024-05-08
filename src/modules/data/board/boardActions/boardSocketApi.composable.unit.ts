@@ -1,4 +1,4 @@
-import { useSocketApi } from "./boardSocketApi.composable";
+import { useBoardSocketApi } from "./boardSocketApi.composable";
 import { useSocketConnection, useBoardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { CardMove } from "@/types/board/DragAndDrop";
@@ -47,12 +47,12 @@ describe("useBoardSocketApi", () => {
 	});
 
 	it("should be defined", () => {
-		expect(useSocketApi).toBeDefined();
+		expect(useBoardSocketApi).toBeDefined();
 	});
 
 	describe("createCardRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { createCardRequest } = useSocketApi();
+			const { createCardRequest } = useBoardSocketApi();
 
 			createCardRequest({ columnId: "test" });
 
@@ -65,7 +65,7 @@ describe("useBoardSocketApi", () => {
 
 	describe("createColumnRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { createColumnRequest } = useSocketApi();
+			const { createColumnRequest } = useBoardSocketApi();
 
 			createColumnRequest({ boardId: "test" });
 
@@ -78,7 +78,7 @@ describe("useBoardSocketApi", () => {
 
 	describe("deleteColumnRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { deleteColumnRequest } = useSocketApi();
+			const { deleteColumnRequest } = useBoardSocketApi();
 
 			deleteColumnRequest({ columnId: "test" });
 
@@ -91,7 +91,7 @@ describe("useBoardSocketApi", () => {
 
 	describe("moveCardRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { moveCardRequest } = useSocketApi();
+			const { moveCardRequest } = useBoardSocketApi();
 
 			moveCardRequest({
 				cardId: "test",
@@ -107,7 +107,7 @@ describe("useBoardSocketApi", () => {
 
 	describe("moveColumnRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { moveColumnRequest } = useSocketApi();
+			const { moveColumnRequest } = useBoardSocketApi();
 
 			moveColumnRequest({
 				columnMove: {
@@ -134,7 +134,7 @@ describe("useBoardSocketApi", () => {
 
 	describe("updateColumnTitleRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { updateColumnTitleRequest } = useSocketApi();
+			const { updateColumnTitleRequest } = useBoardSocketApi();
 
 			updateColumnTitleRequest({ columnId: "test", newTitle: "newTitle" });
 
@@ -147,7 +147,7 @@ describe("useBoardSocketApi", () => {
 
 	describe("updateBoardTitleRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { updateBoardTitleRequest } = useSocketApi();
+			const { updateBoardTitleRequest } = useBoardSocketApi();
 
 			updateBoardTitleRequest({ boardId: "boardId", newTitle: "newTitle" });
 
@@ -160,7 +160,7 @@ describe("useBoardSocketApi", () => {
 
 	describe("updateBoardVisibilityRequest", () => {
 		it("should call action with correct parameters", () => {
-			const { updateBoardVisibilityRequest } = useSocketApi();
+			const { updateBoardVisibilityRequest } = useBoardSocketApi();
 
 			updateBoardVisibilityRequest({ boardId: "boardId", isVisible: true });
 
