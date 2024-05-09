@@ -321,8 +321,4 @@ export default class CopyModule extends VuexModule {
 	get getIsResultModalOpen(): boolean {
 		return this.isResultModalOpen;
 	}
-
-	get getHasDrawingChild(): boolean {
-		return this.hasDrawingChild;
-	}
 }
