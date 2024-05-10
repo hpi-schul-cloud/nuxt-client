@@ -10,11 +10,14 @@ import {
 } from "@/components/error-handling/ErrorHandler.composable";
 
 export type FetchCardRequestPayload = {
-	id: string;
+	cardIds: string[];
 };
-
 export type FetchCardSuccessPayload = {
-	card: CardResponse;
+	cards: CardResponse[];
+};
+export type FetchCardFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
 };
 
 export type UpdateCardTitleRequestPayload = {

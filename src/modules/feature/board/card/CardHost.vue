@@ -8,7 +8,7 @@
 		>
 			<VCard
 				ref="cardHost"
-				:height="isLoadingCard ? height : 'auto'"
+				:height="height ?? 'auto'"
 				class="card-host"
 				:class="{ 'drag-disabled': isEditMode }"
 				variant="outlined"
@@ -22,7 +22,7 @@
 				<template v-if="isLoadingCard">
 					<CardSkeleton :height="height" />
 				</template>
-				<template v-if="!isLoadingCard && card">
+				<template v-if="card">
 					<CardTitle
 						:isEditMode="isEditMode"
 						:value="card.title"
@@ -106,7 +106,6 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
-import { BoardCard } from "@/types/board/Card";
 
 export default defineComponent({
 	name: "CardHost",
@@ -136,32 +135,12 @@ export default defineComponent({
 
 		const isHovered = useElementHover(cardHost);
 		const isDetailView = ref(false);
-		// const {
-		// 	// card,
-		// 	// updateTitle,
-		// 	// updateCardHeight,
-		// 	// addElement,
-		// 	// moveElementDown,
-		// 	// moveElementUp,
-		// 	// deleteElement,
-		// } = useCardState(cardId.value, emit);
 
-		const {
-			addElement,
-			addTextAfterTitle,
-			deleteElement,
-			fetchCard,
-			getCard,
-			isCardLoadingState,
-			// isLoading,
-			updateCardHeightRequest,
-			updateCardTitleRequest,
-			moveElementDown,
-			moveElementUp,
-		} = useCardStore();
+		const cardStore = useCardStore();
 
-		const card = ref<BoardCard | undefined>(undefined);
-		const isLoadingCard = computed(() => isCardLoadingState(cardId.value));
+		// const card = ref<CardResponse | undefined>(undefined);
+		const card = computed(() => cardStore.getCard(cardId.value));
+		const isLoadingCard = computed(() => card.value === undefined);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
@@ -169,13 +148,13 @@ export default defineComponent({
 		);
 		const { hasDeletePermission } = useBoardPermissions();
 
-		const { askType } = useAddElementDialog(addElement, cardId.value);
+		const { askType } = useAddElementDialog(cardStore.addElement, cardId.value);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) =>
 			emit("move:card-keyboard", event.code);
 
 		const _updateCardTitle = (newTitle: string, cardId: string) => {
-			updateCardTitleRequest({ newTitle, cardId });
+			cardStore.updateCardTitleRequest({ newTitle, cardId });
 		};
 
 		const onUpdateCardTitle = useDebounceFn(_updateCardTitle, 600);
@@ -191,14 +170,14 @@ export default defineComponent({
 		const onAddElement = () => askType();
 
 		const onDeleteElement = (elementId: string) =>
-			deleteElement(cardId.value, elementId);
+			cardStore.deleteElement(cardId.value, elementId);
 
 		const onStartEditMode = () => startEditMode();
 
 		const onEndEditMode = async () => {
 			stopEditMode();
 			await delay(300);
-			updateCardHeightRequest({
+			cardStore.updateCardHeightRequest({
 				cardId: cardId.value,
 				newHeight: cardHostHeight.value,
 			});
@@ -208,10 +187,10 @@ export default defineComponent({
 		const onCloseDetailView = () => (isDetailView.value = false);
 
 		const onMoveContentElementDown = async (payload: ElementMove) =>
-			await moveElementDown(cardId.value, payload);
+			await cardStore.moveElementDown(cardId.value, payload);
 
 		const onMoveContentElementUp = async (payload: ElementMove) =>
-			await moveElementUp(cardId.value, payload);
+			await cardStore.moveElementUp(cardId.value, payload);
 
 		const onMoveContentElementKeyboard = async (
 			payload: ElementMove,
@@ -221,9 +200,9 @@ export default defineComponent({
 				return;
 			}
 			if (keyString === "ArrowUp") {
-				await moveElementUp(cardId.value, payload);
+				await cardStore.moveElementUp(cardId.value, payload);
 			} else if (keyString === "ArrowDown") {
-				await moveElementDown(cardId.value, payload);
+				await cardStore.moveElementDown(cardId.value, payload);
 			}
 		};
 
@@ -235,13 +214,11 @@ export default defineComponent({
 		});
 
 		onMounted(async () => {
-			await fetchCard(cardId.value);
-			card.value = getCard(cardId.value);
+			await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
 		});
 
 		return {
 			boardMenuClasses,
-			// isLoading,
 			card,
 			hasDeletePermission,
 			isLoadingCard,
@@ -252,7 +229,7 @@ export default defineComponent({
 			onDeleteCard,
 			onAddElement,
 			onDeleteElement,
-			deleteElement,
+			deleteElement: cardStore.deleteElement,
 			onStartEditMode,
 			onEndEditMode,
 			onMoveContentElementDown,
@@ -260,7 +237,7 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
-			addTextAfterTitle,
+			addTextAfterTitle: cardStore.addTextAfterTitle,
 			onOpenDetailView,
 			onCloseDetailView,
 			isDetailView,

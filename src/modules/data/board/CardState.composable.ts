@@ -5,10 +5,10 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
+	CardResponse,
 	ContentElementType,
 	CreateContentElementBodyParams,
 } from "@/serverApi/v3";
-import { BoardCard } from "@/types/board/Card";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import { useSharedEditMode } from "@data-board";
@@ -19,11 +19,11 @@ import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 
 declare type CardState = {
 	isLoading: boolean;
-	card: BoardCard | undefined;
+	card: CardResponse | undefined;
 };
 
 export const useCardState = (
-	id: BoardCard["id"],
+	id: CardResponse["id"],
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	emit: (...args: any[]) => void
 ) => {

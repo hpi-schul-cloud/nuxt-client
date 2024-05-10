@@ -1,8 +1,5 @@
-import { BoardCard } from "@/types/board/Card";
 import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
-import { delay } from "@/utils/helpers";
-import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 import { useBoardApi } from "./BoardApi.composable";
 import { envConfigModule } from "@/store";
 
@@ -16,11 +13,13 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useBoardStore, useSharedEditMode } from "@data-board";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import {
+	CardResponse,
 	ContentElementType,
 	CreateContentElementBodyParams,
 } from "@/serverApi/v3";
 import {
 	DeleteCardSuccessPayload,
+	FetchCardSuccessPayload,
 	UpdateCardHeightSuccessPayload,
 	UpdateCardTitleSuccessPayload,
 } from "./cardActions/cardActionPayload";
@@ -29,8 +28,7 @@ import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const boardStore = useBoardStore();
-	const cards = ref<BoardCard[]>([]);
-	// const isLoading = ref<boolean>(false);
+	const cards = ref<Record<string, CardResponse>>({});
 
 	const restApi = useCardRestApi();
 	const isSocketEnabled =
@@ -39,7 +37,6 @@ export const useCardStore = defineStore("cardStore", () => {
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
 	const { handleError, notifyWithTemplate } = useErrorHandler();
-	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const { setFocus } = useBoardFocusHandler();
 	const { setEditModeId } = useSharedEditMode();
 
@@ -50,32 +47,23 @@ export const useCardStore = defineStore("cardStore", () => {
 		moveElementCall,
 	} = useBoardApi();
 
-	const fetchCard = async (id: string): Promise<void> => {
-		await delay(100);
-		try {
-			const card = await fetchCardFromApi(id);
+	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
-			addCardToState(card);
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),
-			});
-		} finally {
-			// isLoading.value = false;
+	const fetchCardSuccess = (payload: FetchCardSuccessPayload) => {
+		for (const card of payload.cards) {
+			if (cards.value[card.id] !== undefined) {
+				// TODO: decide what to do with this
+			}
+			cards.value[card.id] = card;
 		}
 	};
 
-	const addCardToState = (card: BoardCard) => {
-		if (cards.value.find((c) => c.id === card.id) !== undefined) return;
-		cards.value.push(card);
-	};
-
 	const resetState = () => {
-		cards.value = [];
+		cards.value = {};
 	};
 
 	const getCard = (cardId: string) => {
-		return cards.value.find((c) => c.id === cardId);
+		return cards.value[cardId];
 	};
 
 	const updateCardTitleRequest = socketOrRest.updateCardTitleRequest;
@@ -83,7 +71,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const updateCardTitleSuccess = async (
 		payload: UpdateCardTitleSuccessPayload
 	) => {
-		const card = getCard(payload.cardId);
+		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
 		card.title = payload.newTitle;
@@ -94,7 +82,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const updateCardHeightSuccess = async (
 		payload: UpdateCardHeightSuccessPayload
 	) => {
-		const card = getCard(payload.cardId);
+		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
 		card.height = payload.newHeight;
@@ -103,10 +91,10 @@ export const useCardStore = defineStore("cardStore", () => {
 	const deleteCardRequest = socketOrRest.deleteCardRequest;
 
 	const deleteCardSuccess = async (payload: DeleteCardSuccessPayload) => {
-		const card = getCard(payload.cardId);
+		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
-		cards.value = cards.value.filter((c) => c.id !== payload.cardId);
+		delete cards.value[payload.cardId];
 		boardStore.deleteCardSuccess(payload);
 	};
 
@@ -115,7 +103,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		cardId: string,
 		atFirstPosition?: boolean
 	) => {
-		const card = getCard(cardId);
+		const card = cards.value[cardId];
 		if (card === undefined) return;
 
 		try {
@@ -142,7 +130,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	const addTextAfterTitle = async (cardId: string) => {
-		const card = getCard(cardId);
+		const card = cards.value[cardId];
 		if (card === undefined) return;
 
 		return await addElement(ContentElementType.RichText, card.id, true);
@@ -152,7 +140,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		cardId: string,
 		elementPayload: ElementMove
 	) => {
-		const card = getCard(cardId);
+		const card = cards.value[cardId];
 		if (card === undefined) return;
 		try {
 			const { elementIndex, payload: elementId } = elementPayload;
@@ -169,7 +157,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	const moveElementUp = async (cardId: string, elementPayload: ElementMove) => {
-		const card = getCard(cardId);
+		const card = cards.value[cardId];
 		if (card === undefined) return;
 
 		try {
@@ -186,7 +174,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	const moveElement = async (
-		card: BoardCard,
+		card: CardResponse,
 		elementIndex: number,
 		elementId: string,
 		direction: "up" | "down"
@@ -208,7 +196,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		cardId: string,
 		elementId: string
 	): Promise<void> => {
-		const card = getCard(cardId);
+		const card = cards.value[cardId];
 		if (card === undefined) return;
 
 		try {
@@ -221,7 +209,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		}
 	};
 
-	const extractElement = (card: BoardCard, elementId: string): void => {
+	const extractElement = (card: CardResponse, elementId: string): void => {
 		const index = card.elements.findIndex((e) => e.id === elementId);
 
 		if (index !== undefined && index > -1) {
@@ -230,7 +218,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	const isCardLoadingState = (cardId: string) => {
-		const card = getCard(cardId);
+		const card = cards.value[cardId];
 		if (card === undefined) return true;
 		return false;
 	};
@@ -249,12 +237,12 @@ export const useCardStore = defineStore("cardStore", () => {
 	return {
 		addElement,
 		addTextAfterTitle,
-		addCardToState,
+		fetchCardRequest,
+		fetchCardSuccess,
 		cards,
 		deleteCardRequest,
 		deleteCardSuccess,
 		deleteElement,
-		fetchCard,
 		getCard,
 		isCardLoadingState,
 		// isLoading,

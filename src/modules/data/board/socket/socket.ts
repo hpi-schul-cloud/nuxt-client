@@ -10,20 +10,20 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 			path: "/board-collaboration",
 			withCredentials: true,
 		});
+
+		instance.on("connect", function () {
+			console.log("connected");
+		});
+
+		instance.on("disconnect", () => {
+			// ... anything to do?
+		});
 	}
 
 	const socket = instance;
 
-	socket.on("connect", function () {
-		console.log("connected");
-	});
-
 	socket.onAny((event, ...args) => {
 		dispatch({ type: event, payload: args[0] });
-	});
-
-	socket.on("disconnect", () => {
-		// TODO reconnect?
 	});
 
 	const emitOnSocket = (action: string, data: unknown) => {

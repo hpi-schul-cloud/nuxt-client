@@ -3,6 +3,9 @@ import {
 	DeleteCardRequestPayload,
 	DeleteCardSuccessPayload,
 	DisconnectSocketRequestPayload,
+	FetchCardFailurePayload,
+	FetchCardRequestPayload,
+	FetchCardSuccessPayload,
 	UpdateCardHeightFailurePayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardHeightSuccessPayload,
@@ -28,6 +31,19 @@ export const deleteCardSuccess = createAction(
 export const deleteCardFailure = createAction(
 	"delete-card-failure",
 	props<DeleteCardFailurePayload>()
+);
+
+export const fetchCardRequest = createAction(
+	"fetch-card-request",
+	props<FetchCardRequestPayload>()
+);
+export const fetchCardSuccess = createAction(
+	"fetch-card-success",
+	props<FetchCardSuccessPayload>()
+);
+export const fetchCardFailure = createAction(
+	"fetch-card-failure",
+	props<FetchCardFailurePayload>()
 );
 
 export const updateCardTitleRequest = createAction(

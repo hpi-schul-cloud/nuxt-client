@@ -12,7 +12,8 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 import { ref } from "vue";
 import { envConfigModule } from "@/store";
-import { boardCardFactory, envsFactory } from "@@/tests/test-utils";
+import { envsFactory } from "@@/tests/test-utils";
+import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -91,44 +92,77 @@ describe("CardStore", () => {
 		}
 
 		const cardStore = useCardStore();
-		cardStore.cards = boardCardFactory.buildList(3);
+		const cards = cardResponseFactory.buildList(3);
+		cardStore.fetchCardSuccess({ cards });
 
-		return { cardStore };
+		return { cardStore, cardId: cards[0].id };
 	};
 
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
 
+	describe("fetchCardTitleRequest", () => {
+		it("should call socket Api if feature flag is enabled", async () => {
+			const { cardStore } = setup(true);
+			const cardIds = ["id1", "id2aewr", "id3423"];
+
+			await cardStore.fetchCardRequest({ cardIds });
+			expect(mockedCardSocketApiActions.fetchCardRequest).toHaveBeenCalledWith({
+				cardIds,
+			});
+		});
+		it("should call rest Api if feature flag is disabled", async () => {
+			const { cardStore } = setup(false);
+			const cardIds = ["id1", "id2aewr", "id3423"];
+
+			await cardStore.fetchCardRequest({ cardIds });
+			expect(mockedCardRestApiActions.fetchCardRequest).toHaveBeenCalledWith({
+				cardIds,
+			});
+		});
+	});
+
+	describe("fetchCardSuccess", () => {
+		it("should add cards to store", () => {
+			const { cardStore } = setup();
+			const cards = cardResponseFactory.buildList(3);
+
+			cardStore.fetchCardSuccess({ cards });
+
+			expect(cardStore.getCard(cards[0].id)).toEqual(cards[0]);
+		});
+	});
+
 	describe("updateCardTitleRequest", () => {
 		it("should call socket Api if feature flag is enabled", () => {
-			const { cardStore } = setup(true);
+			const { cardStore, cardId } = setup(true);
 
 			cardStore.updateCardTitleRequest({
-				cardId: cardStore.cards[0].id,
+				cardId,
 				newTitle: "newTitle",
 			});
 
 			expect(
 				mockedCardSocketApiActions.updateCardTitleRequest
 			).toHaveBeenCalledWith({
-				cardId: cardStore.cards[0].id,
+				cardId,
 				newTitle: "newTitle",
 			});
 		});
 
 		it("should call rest Api if feature flag is enabled", () => {
-			const { cardStore } = setup();
+			const { cardStore, cardId } = setup();
 
 			cardStore.updateCardTitleRequest({
-				cardId: cardStore.cards[0].id,
+				cardId,
 				newTitle: "newTitle",
 			});
 
 			expect(
 				mockedCardRestApiActions.updateCardTitleRequest
 			).toHaveBeenCalledWith({
-				cardId: cardStore.cards[0].id,
+				cardId,
 				newTitle: "newTitle",
 			});
 		});
@@ -139,57 +173,61 @@ describe("CardStore", () => {
 		it("should not update card title when card is undefined", async () => {
 			const { cardStore } = setup();
 
-			const cardTitles = cardStore.cards.map((card) => card.title);
+			const cardTitles = Object.values(cardStore.cards).map(
+				(card) => card.title
+			);
 
 			cardStore.updateCardTitleSuccess({
 				cardId: "unkownId",
 				newTitle: NEW_TITLE,
 			});
 
-			expect(cardStore.cards.map((card) => card.title)).toEqual(cardTitles);
+			expect(Object.values(cardStore.cards).map((card) => card.title)).toEqual(
+				cardTitles
+			);
 		});
 
 		it("should update card title", async () => {
-			const { cardStore } = setup();
+			const { cardStore, cardId } = setup();
 
 			cardStore.updateCardTitleSuccess({
-				cardId: cardStore.cards[0].id,
+				cardId,
 				newTitle: NEW_TITLE,
 			});
 
-			expect(cardStore.cards[0].title).toEqual(NEW_TITLE);
+			expect(cardStore.cards[cardId].title).toEqual(NEW_TITLE);
 		});
 	});
 
 	describe("updateCardHeightRequest", () => {
 		it("should call socket Api if feature flag is enabled", () => {
-			const { cardStore } = setup(true);
+			const { cardStore, cardId } = setup(true);
 
 			cardStore.updateCardHeightRequest({
-				cardId: cardStore.cards[0].id,
+				cardId,
 				newHeight: 100,
 			});
 
 			expect(
 				mockedCardSocketApiActions.updateCardHeightRequest
 			).toHaveBeenCalledWith({
-				cardId: cardStore.cards[0].id,
+				cardId,
 				newHeight: 100,
 			});
 		});
 
 		it("should call rest Api if feature flag is enabled", () => {
-			const { cardStore } = setup();
+			const { cardStore, cardId } = setup();
 
 			cardStore.updateCardHeightRequest({
-				cardId: cardStore.cards[0].id,
+				cardId,
 				newHeight: 100,
 			});
 
 			expect(
 				mockedCardRestApiActions.updateCardHeightRequest
 			).toHaveBeenCalledWith({
-				cardId: cardStore.cards[0].id,
+				cardId,
 				newHeight: 100,
 			});
 		});
@@ -200,25 +238,29 @@ describe("CardStore", () => {
 		it("should not update card height when card is undefined", async () => {
 			const { cardStore } = setup();
 
-			const cardHeights = cardStore.cards.map((card) => card.height);
+			const cardHeights = Object.values(cardStore.cards).map(
+				(card) => card.height
+			);
 
 			cardStore.updateCardHeightSuccess({
 				cardId: "unkownId",
 				newHeight: NEW_HEIGHT,
 			});
 
-			expect(cardStore.cards.map((card) => card.height)).toEqual(cardHeights);
+			expect(Object.values(cardStore.cards).map((card) => card.height)).toEqual(
+				cardHeights
+			);
 		});
 
 		it("should update card height", async () => {
-			const { cardStore } = setup();
+			const { cardStore, cardId } = setup();
 
 			cardStore.updateCardHeightSuccess({
-				cardId: cardStore.cards[0].id,
+				cardId,
 				newHeight: NEW_HEIGHT,
 			});
 
-			expect(cardStore.cards[0].height).toEqual(NEW_HEIGHT);
+			expect(cardStore.cards[cardId].height).toEqual(NEW_HEIGHT);
 		});
 	});
 });

@@ -8,13 +8,17 @@ import {
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	DeleteCardRequestPayload,
+	FetchCardRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 } from "./cardActionPayload";
 import { useCardStore } from "../Card.store";
+import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 
 export const useCardRestApi = () => {
 	const cardStore = useCardStore();
+
+	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 
 	const { deleteCardCall, updateCardTitle, updateCardHeightCall } =
@@ -33,6 +37,22 @@ export const useCardRestApi = () => {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
 			});
+		}
+	};
+
+	const fetchCardRequest = async (
+		payload: FetchCardRequestPayload
+	): Promise<void> => {
+		// await delay(100);
+		try {
+			const response = await fetchCardFromApi(payload.cardIds[0]); // <==== wrong!!!!!!!!
+			cardStore.fetchCardSuccess({ cards: [response] });
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),
+			});
+		} finally {
+			// isLoading.value = false;
 		}
 	};
 
@@ -83,6 +103,7 @@ export const useCardRestApi = () => {
 
 	return {
 		deleteCardRequest,
+		fetchCardRequest,
 		updateCardTitleRequest,
 		updateCardHeightRequest,
 		disconnectSocketRequest,
