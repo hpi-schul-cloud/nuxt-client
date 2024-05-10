@@ -183,5 +183,8 @@ export default class AuthModule extends VuexModule {
 		localStorage.clear();
 		delete $axios.defaults.headers.common["Authorization"];
 		window.location.replace(redirectUrl);
+		// Delete etherpad client cookie
+		document.cookie =
+			"sessionID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 	}
 }
