@@ -1,19 +1,19 @@
-import { BoardCardSkeleton } from "@/types/board/Card";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import {
-	cardResponseFactory,
+	envsFactory,
 	fileElementResponseFactory,
+	cardResponseFactory,
 } from "@@/tests/test-utils/factory";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
-	useCardState,
 	useCardStore,
 	useEditMode,
+	useSharedEditMode,
 } from "@data-board";
 import { BoardMenuActionDelete } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
@@ -27,87 +27,73 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createTestingPinia } from "@pinia/testing";
-import {} from "@@/tests/test-utils/factory/cardResponseFactory";
-import { CardResponse } from "@/serverApi/v3";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardNotifier } from "@util-board";
+import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { CardResponse } from "@/serverApi/v3";
+
+jest.mock("@util-board");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 jest.mock("@data-board/BoardFocusHandler.composable");
+const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
+
 jest.mock("@data-board/BoardPermissions.composable");
+const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
+
+jest.mock("@data-board/EditMode.composable");
+const mockedEditMode = jest.mocked(useEditMode);
+
+jest.mock("@data-board/EditMode.composable");
+const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
+
 jest.mock("../shared/AddElementDialog.composable");
 jest.mock("@ui-confirmation-dialog");
-jest.mock("@data-board");
-
-const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
-const mockedUserPermissions = jest.mocked(useBoardPermissions);
-const mockedEditMode = jest.mocked(useEditMode);
-const mockedUseCardState = jest.mocked(useCardState);
-
 const mockedUseDeleteConfirmationDialog = jest.mocked(
 	useDeleteConfirmationDialog
 );
 
-const CARD_SKELETON: BoardCardSkeleton = {
-	height: 200,
-	cardId: "0123456789abcdef00067000",
-};
-
-const CARD_WITHOUT_ELEMENTS: CardResponse = cardResponseFactory.build();
-
-const CARD_WITH_FILE_ELEMENT: CardResponse = cardResponseFactory.build({
-	elements: [fileElementResponseFactory.build()],
-});
-
 describe("CardHost", () => {
-	const setup = (options?: {
-		card: CardResponse;
-		isLoading?: boolean;
-		permissions?: Partial<BoardPermissionChecks>;
-	}) => {
-		const { card, isLoading } = options ?? {};
-		document.body.setAttribute("data-app", "true");
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let mockedBoardPermissionsHandler: DeepMocked<
+		ReturnType<typeof useBoardPermissions>
+	>;
+	let mockedBoardPermissions: BoardPermissionChecks;
 
-		const isFocusContainedMock = computed(() => true);
+	beforeEach(() => {
+		setupStores({ envConfigModule: EnvConfigModule });
+		const envs = envsFactory.build({
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
+		});
+		envConfigModule.setEnvs(envs);
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+		mockedUseSharedEditMode.mockReturnValue({
+			editModeId: ref(undefined),
+			setEditModeId: jest.fn(),
+		});
+
 		mockedBoardFocusHandler.mockReturnValue({
-			isFocusContained: isFocusContainedMock,
+			isFocusContained: computed(() => true),
 			isFocused: computed(() => true),
 			isFocusWithin: computed(() => true),
 			isFocusedById: computed(() => true),
 		});
 
-		mockedUserPermissions.mockReturnValue({
-			...defaultPermissions,
-			...options?.permissions,
-		});
-
-		const isEditModeMock = computed(() => true);
-		const startEditModeMock = jest.fn();
-		const stopEditModeMock = jest.fn();
 		mockedEditMode.mockReturnValue({
-			isEditMode: isEditModeMock,
-			startEditMode: startEditModeMock,
-			stopEditMode: stopEditModeMock,
+			isEditMode: computed(() => true),
+			startEditMode: jest.fn(),
+			stopEditMode: jest.fn(),
 		});
 
 		setupAddElementDialogMock();
-
-		const deleteElementMock = jest.fn();
-		mockedUseCardState.mockReturnValue({
-			fetchCard: jest.fn(),
-			updateTitle: jest.fn(),
-			deleteCard: jest.fn(),
-			updateCardHeight: jest.fn(),
-			addElement: jest.fn(),
-			addTextAfterTitle: jest.fn(),
-			moveElementDown: jest.fn(),
-			moveElementUp: jest.fn(),
-			deleteElement: deleteElementMock as () => Promise<void>,
-			card: ref(card),
-			isLoading: ref(isLoading ?? false),
-			notifyWithTemplateAndReload: jest.fn(),
-		});
-
 		const askDeleteConfirmationMock = async () => await Promise.resolve(true);
-
 		setupDeleteConfirmationComposableMock({
 			askDeleteConfirmationMock,
 		});
@@ -117,45 +103,76 @@ describe("CardHost", () => {
 			isDeleteDialogOpen: ref(false),
 		});
 
+		mockedBoardPermissionsHandler =
+			createMock<ReturnType<typeof useBoardPermissions>>();
+		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissionsHandler);
+
+		mockedBoardPermissions = { ...defaultPermissions };
+		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
+	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
+	const setup = (options?: { hasCard?: boolean; hasElement?: boolean }) => {
+		const { hasElement, hasCard } = {
+			hasCard: true,
+			hasElement: false,
+			...options,
+		};
+
+		let card: CardResponse | null = null;
+		if (hasCard) {
+			card = cardResponseFactory.build({
+				elements: hasElement ? [fileElementResponseFactory.build()] : [],
+			});
+		}
+
 		const wrapper = shallowMount(CardHost, {
 			global: {
 				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
 					createTestingPinia({
 						initialState: {
-							cardStore: {},
+							cardStore: {
+								cards: card ? { [card.id]: card } : {},
+							},
 						},
+						stubActions: false,
 					}),
+					createTestingVuetify(),
+					createTestingI18n(),
 				],
 			},
-			propsData: CARD_SKELETON,
+			propsData: {
+				cardId: card?.id ?? "cardId",
+				height: card?.height ?? 0,
+			},
 		});
 
-		const cardStore = mockedPiniaStoreTyping(useCardStore);
+		mockedPiniaStoreTyping(useCardStore);
 
-		return { deleteElementMock, wrapper, cardStore };
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			const { wrapper } = setup({ card: CARD_WITHOUT_ELEMENTS });
+			const { wrapper } = setup();
+
 			expect(wrapper.findComponent(CardHost).exists()).toBe(true);
 		});
 
 		describe("'CardSkeleton' component", () => {
-			it("should be rendered if loading is set 'true'", () => {
-				const { wrapper } = setup({
-					card: CARD_WITHOUT_ELEMENTS,
-					isLoading: true,
-				});
+			it("should be rendered if card is not loaded", () => {
+				const { wrapper } = setup({ hasCard: false });
+
 				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
 					true
 				);
 			});
 
-			it("should not be rendered if loading is set 'false'", () => {
-				const { wrapper } = setup({ card: CARD_WITHOUT_ELEMENTS });
+			it("should not be rendered if card is loaded", () => {
+				const { wrapper } = setup();
 				expect(wrapper.findComponent({ name: "CardSkeleton" }).exists()).toBe(
 					false
 				);
@@ -164,7 +181,7 @@ describe("CardHost", () => {
 
 		describe("'ContentElementList' component", () => {
 			it("should be found in dom", () => {
-				const { wrapper } = setup({ card: CARD_WITH_FILE_ELEMENT });
+				const { wrapper } = setup({});
 
 				const contentElementList = wrapper.findComponent(ContentElementList);
 
@@ -176,10 +193,8 @@ describe("CardHost", () => {
 	describe("user permissions", () => {
 		describe("when user is not permitted to delete", () => {
 			it("should not be rendered on DOM", () => {
-				const { wrapper } = setup({
-					card: CARD_WITHOUT_ELEMENTS,
-					permissions: { hasDeletePermission: false },
-				});
+				mockedBoardPermissions.hasDeletePermission = false;
+				const { wrapper } = setup();
 
 				const boardMenuComponent = wrapper.findAllComponents({
 					name: "BoardMenu",
@@ -193,7 +208,8 @@ describe("CardHost", () => {
 	describe("card menus", () => {
 		describe("when users click delete menu", () => {
 			it("should emit 'delete:card'", async () => {
-				const { wrapper } = setup({ card: CARD_WITHOUT_ELEMENTS });
+				mockedBoardPermissions.hasDeletePermission = true;
+				const { wrapper } = setup();
 
 				const deleteButton = wrapper.findComponent(BoardMenuActionDelete);
 

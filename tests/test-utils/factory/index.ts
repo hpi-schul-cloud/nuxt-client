@@ -4,6 +4,7 @@ export * from "./axiosErrorFactory";
 export * from "./boardCardFactory";
 export * from "./boardResponseFactory";
 export * from "./businessErrorFactory";
+export * from "./cardResponseFactory";
 export * from "./cardSkeletonResponseFactory";
 export * from "./cardResponseFactory";
 export * from "./classInfoFactory";
