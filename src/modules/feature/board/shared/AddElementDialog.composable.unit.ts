@@ -57,6 +57,8 @@ describe("ElementTypeSelection Composable", () => {
 	describe("onElementClick", () => {
 		describe("when element is created successfully", () => {
 			const setup = () => {
+				const cardId = "cardId";
+
 				setupSharedElementTypeSelectionMock();
 
 				const addElementMock = jest.fn();
@@ -74,27 +76,32 @@ describe("ElementTypeSelection Composable", () => {
 					addElementMock,
 					elementType,
 					showCustomNotifierMock,
+					cardId,
 				};
 			};
 
 			it("should call add Element", async () => {
-				const { addElementMock, elementType } = setup();
+				const { addElementMock, elementType, cardId } = setup();
 
-				const { isDialogOpen, onElementClick } =
-					useAddElementDialog(addElementMock);
+				const { isDialogOpen, onElementClick } = useAddElementDialog(
+					addElementMock,
+					cardId
+				);
 
 				await onElementClick(elementType);
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(elementType);
+				expect(addElementMock).toBeCalledWith(elementType, cardId);
 				expect(isDialogOpen.value).toBe(false);
 			});
 
 			it("should close dialog", async () => {
-				const { addElementMock, elementType } = setup();
+				const { addElementMock, elementType, cardId } = setup();
 
-				const { isDialogOpen, onElementClick } =
-					useAddElementDialog(addElementMock);
+				const { isDialogOpen, onElementClick } = useAddElementDialog(
+					addElementMock,
+					cardId
+				);
 
 				await onElementClick(elementType);
 
@@ -104,6 +111,8 @@ describe("ElementTypeSelection Composable", () => {
 			describe("when element type is CollaborativeTextEditor", () => {
 				const setup = () => {
 					setupSharedElementTypeSelectionMock();
+
+					const cardId = "cardId";
 
 					const addElementMock = jest.fn();
 					const elementType = ContentElementType.CollaborativeTextEditor;
@@ -120,13 +129,21 @@ describe("ElementTypeSelection Composable", () => {
 						addElementMock,
 						elementType,
 						showCustomNotifierMock,
+						cardId,
 					};
 				};
 				it("should show Notification", async () => {
-					const { addElementMock, elementType, showCustomNotifierMock } =
-						setup();
+					const {
+						addElementMock,
+						elementType,
+						showCustomNotifierMock,
+						cardId,
+					} = setup();
 
-					const { onElementClick } = useAddElementDialog(addElementMock);
+					const { onElementClick } = useAddElementDialog(
+						addElementMock,
+						cardId
+					);
 
 					await onElementClick(elementType);
 
@@ -137,6 +154,8 @@ describe("ElementTypeSelection Composable", () => {
 			describe("when element type is NOT CollaborativeTextEditor", () => {
 				const setup = () => {
 					setupSharedElementTypeSelectionMock();
+
+					const cardId = "cardId";
 
 					const addElementMock = jest.fn();
 					const elementType = ContentElementType.RichText;
@@ -153,13 +172,21 @@ describe("ElementTypeSelection Composable", () => {
 						addElementMock,
 						elementType,
 						showCustomNotifierMock,
+						cardId,
 					};
 				};
 				it("should NOT show Notification", async () => {
-					const { addElementMock, elementType, showCustomNotifierMock } =
-						setup();
+					const {
+						addElementMock,
+						elementType,
+						showCustomNotifierMock,
+						cardId,
+					} = setup();
 
-					const { onElementClick } = useAddElementDialog(addElementMock);
+					const { onElementClick } = useAddElementDialog(
+						addElementMock,
+						cardId
+					);
 
 					await onElementClick(elementType);
 
@@ -179,7 +206,10 @@ describe("ElementTypeSelection Composable", () => {
 			it("should return error", async () => {
 				const { addElementMock, elementType, error } = setup();
 
-				const { onElementClick } = useAddElementDialog(addElementMock);
+				const { onElementClick } = useAddElementDialog(
+					addElementMock,
+					"cardId"
+				);
 
 				await expect(onElementClick(elementType)).rejects.toThrowError(error);
 			});
@@ -190,7 +220,7 @@ describe("ElementTypeSelection Composable", () => {
 		it("should set isDialogOpen to true", () => {
 			const addElementMock = jest.fn();
 			const { isDialogOpen } = setupSharedElementTypeSelectionMock();
-			const { askType } = useAddElementDialog(addElementMock);
+			const { askType } = useAddElementDialog(addElementMock, "cardId");
 
 			askType();
 			expect(isDialogOpen.value).toBe(true);
@@ -206,6 +236,7 @@ describe("ElementTypeSelection Composable", () => {
 				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
 			}
 		) => {
+			const cardId = "cardId";
 			const addElementMock = jest.fn();
 			const closeDialogMock = jest.fn();
 			const { elementTypeOptions } = setupSharedElementTypeSelectionMock({
@@ -218,13 +249,13 @@ describe("ElementTypeSelection Composable", () => {
 				};
 			});
 
-			return { elementTypeOptions, addElementMock, closeDialogMock };
+			return { elementTypeOptions, addElementMock, closeDialogMock, cardId };
 		};
 
 		describe("when the RichTextElement action is called", () => {
 			it("should call add element function with right argument", async () => {
-				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
@@ -232,12 +263,16 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(ContentElementType.RichText);
+				expect(addElementMock).toBeCalledWith(
+					ContentElementType.RichText,
+					cardId
+				);
 			});
 
 			it("should set isDialogOpen to false", async () => {
-				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 				askType();
 
 				const action = elementTypeOptions.value[0].action;
@@ -249,8 +284,8 @@ describe("ElementTypeSelection Composable", () => {
 
 		describe("when the FileElement action is called", () => {
 			it("should call add element function with right argument", async () => {
-				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
@@ -258,12 +293,13 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(ContentElementType.File);
+				expect(addElementMock).toBeCalledWith(ContentElementType.File, cardId);
 			});
 
 			it("should set isDialogOpen to false", async () => {
-				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
@@ -276,8 +312,8 @@ describe("ElementTypeSelection Composable", () => {
 
 		describe("when the SubmissionElement action is called", () => {
 			it("should call add element function with right argument", async () => {
-				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 				askType();
 
 				const action = elementTypeOptions.value[2].action;
@@ -285,13 +321,15 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(addElementMock).toBeCalledTimes(1);
 				expect(addElementMock).toBeCalledWith(
-					ContentElementType.SubmissionContainer
+					ContentElementType.SubmissionContainer,
+					cardId
 				);
 			});
 
 			it("should set isDialogOpen to false", async () => {
-				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 				askType();
 
 				const action = elementTypeOptions.value[2].action;
@@ -303,8 +341,8 @@ describe("ElementTypeSelection Composable", () => {
 
 		describe("when the ExternalTool action is called", () => {
 			it("should call add element function with right argument", async () => {
-				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
@@ -312,12 +350,16 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(ContentElementType.ExternalTool);
+				expect(addElementMock).toBeCalledWith(
+					ContentElementType.ExternalTool,
+					cardId
+				);
 			});
 
 			it("should set isDialogOpen to false", async () => {
-				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
@@ -329,8 +371,8 @@ describe("ElementTypeSelection Composable", () => {
 		});
 		describe("when the DrawingElement action is called", () => {
 			it("should call drawing element function with right argument", async () => {
-				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
@@ -338,12 +380,16 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(ContentElementType.Drawing);
+				expect(addElementMock).toBeCalledWith(
+					ContentElementType.Drawing,
+					cardId
+				);
 			});
 
 			it("should set isDialogOpen to false", async () => {
-				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
@@ -355,8 +401,8 @@ describe("ElementTypeSelection Composable", () => {
 		});
 		describe("when the CollaborativeTextEditorElement action is called", () => {
 			it("should call collaborative text editor element function with right argument", async () => {
-				const { elementTypeOptions, addElementMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
@@ -365,13 +411,15 @@ describe("ElementTypeSelection Composable", () => {
 
 				expect(addElementMock).toBeCalledTimes(1);
 				expect(addElementMock).toBeCalledWith(
-					ContentElementType.CollaborativeTextEditor
+					ContentElementType.CollaborativeTextEditor,
+					cardId
 				);
 			});
 
 			it("should set isDialogOpen to false", async () => {
-				const { elementTypeOptions, addElementMock, closeDialogMock } = setup();
-				const { askType } = useAddElementDialog(addElementMock);
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
 
