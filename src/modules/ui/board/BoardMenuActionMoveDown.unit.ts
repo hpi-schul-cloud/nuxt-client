@@ -36,13 +36,13 @@ describe("BoardMenuActionMoveDown Component", () => {
 				hasMultipleElements: true,
 			});
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeTruthy();
+			expect(action.exists()).toBe(true);
 		});
 
 		it("should not be rendered if element is in last position and a list of elements exists", () => {
 			const wrapper = setup({ isLastElement: true, hasMultipleElements: true });
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeFalsy();
+			expect(action.exists()).toBe(false);
 		});
 
 		it("should not be rendered if element is the only element", () => {
@@ -51,7 +51,7 @@ describe("BoardMenuActionMoveDown Component", () => {
 				hasMultipleElements: false,
 			});
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeFalsy();
+			expect(action.exists()).toBe(false);
 		});
 
 		it("should emit if is clicked", () => {

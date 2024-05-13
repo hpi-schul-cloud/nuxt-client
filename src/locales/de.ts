@@ -107,24 +107,18 @@ export default {
 	"common.roleName.student": "Schüler:in",
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Lehrkraft",
-	"common.tool.information.deactivated":
-		"Das Tool {toolName} ist deaktiviert und kann daher nicht gestartet werden.",
-	"common.tool.information.incomplete.student":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte an die Lehrkraft oder Kursleiter:in wenden.",
-	"common.tool.information.incompleteOnContext.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration vervollständigen.",
-	"common.tool.information.incompleteOnSchool.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte an die Schuladministrator:in wenden.",
-	"common.tool.information.incompleteOnSchoolAndContext.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration vervollständigen und an die Schuladministrator:in wenden.",
+	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen und an Schuladministrator:in wenden.",
 	"common.tool.information.outdated.student":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Zum Aktualisieren bitte an die Lehrkraft oder Kursleiter:in wenden.",
-	"common.tool.information.outdatedOnContext.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration aktualisieren.",
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.deactivated.student":
+		"Tool {toolName} ist deaktiviert. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.deactivated.teacher":
+		"Tool {toolName} ist deaktiviert. Bitte an Schuladministrator:in wenden.",
+	"common.tool.information.outdated.teacher":
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Zum Aktualisieren bitte an die Schuladministrator:in wenden.",
-	"common.tool.information.outdatedOnSchoolAndContext.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration aktualisieren und an die Schuladministrator:in wenden.",
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte an Schuladministrator:in wenden.",
 	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
@@ -284,7 +278,8 @@ export default {
 	"components.board.alert.info.draft":
 		"Dieses Board ist nicht für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neue Spalte",
-	"components.board.column.ghost.placeholder": "Spalte hinzufügen",
+	"components.board.column.ghost.column.placeholder": "Spalte hinzufügen",
+	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.menu.board": "Board-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Spalten-Einstellungen",
@@ -306,11 +301,15 @@ export default {
 	"components.board": "Board",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
-	"components.boardRow": "Abschnitt",
 	"components.boardElement": "Element",
+	"components.boardRow": "Abschnitt",
+	"components.boardSection": "Abschnitt",
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.drawingElement": "Whiteboard",
+	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
+		"Der Texteditor ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -365,6 +364,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Texteditor",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",
@@ -429,6 +430,7 @@ export default {
 		"Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.information":
 		"Nachfolgend können die fehlenden Inhalte mit Hilfe der Quick-Links ergänzt werden. Die Links öffnen sich in einem separatem Tab.",
+	"components.molecules.copyResult.label.columnBoard": "Spalten-Board",
 	"components.molecules.copyResult.label.content": "Inhalt",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "Externe Tools",
@@ -446,6 +448,7 @@ export default {
 	"components.molecules.copyResult.label.submissions": "Abgaben",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
+	"components.molecules.copyResult.label.link": "Link",
 	"components.molecules.copyResult.label.timeGroup": "Zeitgruppe",
 	"components.molecules.copyResult.label.unknown": "Unbekannt",
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
@@ -1392,9 +1395,10 @@ export default {
 	"pages.news.title": "Neuigkeiten",
 	"pages.room.boardCard.label.columnBoard": "Spalten-Board",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Board",
+	"pages.room.boardCard.label.listBoard": "Listen-Board",
 	"pages.room.boardCard.menu.ariaLabel": "Board-Menü",
 	"pages.room.cards.aria":
-		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
+		"{itemType}, Link, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.copy.course.message.copied":
 		"Der Kurs wurde erfolgreich kopiert.",
@@ -1433,6 +1437,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.add.lesson": "Neues Thema",
 	"pages.rooms.fab.add.board": "Neues Spalten-Board",
+	"pages.rooms.fab.add.listBoard": "Neues Listen-Board",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.fab.import.course": "Kurs importieren",
@@ -1482,7 +1487,7 @@ export default {
 		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.rooms.tools.configureVideoconferenceDialog.title":
 		"Videokonferenz {roomName} erstellen",
-	"pages.rooms.tools.deactivated": "Tool deaktiviert",
+	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '<i>{itemName}</i>' aus dem Kurs entfernen?",
@@ -1492,7 +1497,7 @@ export default {
 	"pages.rooms.tools.incompleteDialog.title": "Konfiguration unvollständig",
 	"pages.rooms.tools.logo": "Tool-Logo",
 	"pages.rooms.tools.menu.ariaLabel": "Tool Menü",
-	"pages.rooms.tools.outdated": "Tool veraltet",
+	"pages.rooms.tools.outdated": "Konfiguration unvollständig",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ veraltet",
 	"pages.room.modal.course.export.header": "Export-Format",
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
@@ -1545,12 +1550,10 @@ export default {
 		"Der Typ eines Parameters stimmt nicht mit dem geforderten Typ überein. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_unknown":
 		"Die Konfiguration dieses Tools enthält einen unbekannten Parameter. Bitte an den Support wenden.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"Bei der Übertragung eines Parameterwerts ist ein Fehler ausgetreten. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"Die benutzte Version dieses Tools ist nicht mehr aktuell. Bitte die Version aktualisieren.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ein Tool mit gleichem Namen wurde bereits dem Kurs zugeordnet. Die einem Kurs zugeordneten Tools müssen eindeutige Namen haben.",
 	"pages.tool.context.description":
@@ -1599,6 +1602,8 @@ export default {
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
+	"ui-layout.topbar.pageShare.copyLink": "Link kopieren",
+	"ui-layout.topbar.pageShare.printQRCode": "QR-Code drucken",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",

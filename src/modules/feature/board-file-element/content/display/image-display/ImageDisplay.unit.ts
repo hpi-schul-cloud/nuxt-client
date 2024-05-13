@@ -72,11 +72,12 @@ describe("ImageDisplay", () => {
 			const image = wrapper.find(imageSelektor);
 
 			expect(image.exists()).toBe(true);
-			expect(image.attributes("cover")).toBe("true");
+			expect(image.attributes("cover")).toBe("false");
 			expect(image.attributes("src")).toBe(previewSrc);
 			expect(image.attributes("alt")).toBe(
 				"components.cardElement.fileElement.emptyAlt " + nameProp
 			);
+			expect(image.attributes("maxheight")).toBe("336");
 		});
 
 		describe("when alternative text is defined", () => {

@@ -1,7 +1,8 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError, Status } from "./types/commons";
 import { StatusAlert } from "./types/status-alert";
-import { $axios } from "../utils/api";
+import { $axios } from "@/utils/api";
+import { AlertApiFactory } from "@/serverApi/v3";
 
 @Module({
 	name: "statusAlertsModule",
@@ -43,13 +44,17 @@ export default class StatusAlertsModule extends VuexModule {
 		return this.statusAlerts;
 	}
 
+	private get alertApi() {
+		return AlertApiFactory(undefined, "v3", $axios);
+	}
+
 	@Action
 	async fetchStatusAlerts(): Promise<void> {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const response = (await $axios.get("/v1/alert")).data;
-			this.setStatusAlerts(response as StatusAlert[]);
+			const response = await this.alertApi.alertControllerFind();
+			this.setStatusAlerts(response.data?.data as StatusAlert[]);
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);

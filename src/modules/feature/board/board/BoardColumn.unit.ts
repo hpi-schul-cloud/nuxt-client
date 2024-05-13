@@ -10,7 +10,6 @@ import {
 } from "@/types/board/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { nextTick } from "vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -46,7 +45,12 @@ describe("BoardColumn", () => {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
-			propsData: { column, index: 1, columnCount: 1 },
+			props: {
+				column,
+				index: 1,
+				columnCount: 1,
+				isListBoard: false,
+			},
 		});
 
 		return { wrapper };
@@ -161,17 +165,20 @@ describe("BoardColumn", () => {
 				expect(dndContainer.vm.options.disabled).toBe(true);
 			});
 		});
+
 		describe("when user is not permitted to create a card", () => {
-			it("should addCardComponent not be rendered on DOM", () => {
+			it("addCardComponent should not be visible", () => {
 				const { wrapper } = setup({
 					permissions: { hasCreateColumnPermission: false },
 				});
 
-				const addCardComponent = wrapper.findAllComponents({
+				const addCardComponent = wrapper.findComponent({
 					name: "BoardAddCardButton",
 				});
 
-				expect(addCardComponent.length).toStrictEqual(0);
+				expect(addCardComponent.attributes("style")).toStrictEqual(
+					"visibility: hidden;"
+				);
 			});
 		});
 	});
@@ -184,13 +191,13 @@ describe("BoardColumn", () => {
 				const columnHeader = wrapper.findComponent({
 					name: "BoardColumnHeader",
 				});
-				columnHeader.vm.$emit("move:column-left");
-				await nextTick();
+				await columnHeader.vm.$emit("move:column-left");
 
 				const emitted = wrapper.emitted("move:column-left");
 				expect(emitted).toHaveLength(1);
 			});
 		});
+
 		describe("when move:column-right was triggered by column header", () => {
 			it("should emit move:column-right", async () => {
 				const { wrapper } = setup();
@@ -198,10 +205,37 @@ describe("BoardColumn", () => {
 				const columnHeader = wrapper.findComponent({
 					name: "BoardColumnHeader",
 				});
-				columnHeader.vm.$emit("move:column-right");
-				await nextTick();
+				await columnHeader.vm.$emit("move:column-right");
 
 				const emitted = wrapper.emitted("move:column-right");
+				expect(emitted).toHaveLength(1);
+			});
+		});
+
+		describe("when move:column-down was triggered by column header", () => {
+			it("should emit move:column-down", async () => {
+				const { wrapper } = setup();
+
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
+				});
+				await columnHeader.vm.$emit("move:column-down");
+
+				const emitted = wrapper.emitted("move:column-down");
+				expect(emitted).toHaveLength(1);
+			});
+		});
+
+		describe("when move:column-up was triggered by column header", () => {
+			it("should emit move:column-up", async () => {
+				const { wrapper } = setup();
+
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
+				});
+				await columnHeader.vm.$emit("move:column-up");
+
+				const emitted = wrapper.emitted("move:column-up");
 				expect(emitted).toHaveLength(1);
 			});
 		});

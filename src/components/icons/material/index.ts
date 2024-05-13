@@ -87,6 +87,7 @@ import {
 	mdiPlus,
 	mdiPlusCircleOutline,
 	mdiPresentation,
+	mdiPrinter,
 	mdiPound,
 	mdiPuzzleOutline,
 	mdiQrcode,
@@ -105,6 +106,7 @@ import {
 	mdiUndo,
 	mdiUndoVariant,
 	mdiViewDashboard,
+	mdiViewDashboardOutline,
 	mdiViewGridOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
@@ -198,6 +200,7 @@ export {
 	mdiPlus,
 	mdiPlusCircleOutline,
 	mdiPresentation,
+	mdiPrinter,
 	mdiPound,
 	mdiPuzzleOutline,
 	mdiQrcode,
@@ -216,6 +219,7 @@ export {
 	mdiUndo,
 	mdiUndoVariant,
 	mdiViewDashboard,
+	mdiViewDashboardOutline,
 	mdiViewGridOutline,
 	mdiViewListOutline,
 };

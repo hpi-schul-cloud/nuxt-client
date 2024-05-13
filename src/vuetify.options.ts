@@ -10,6 +10,8 @@ const defaultTheme: ThemeDefinition = {
 		"primary-lighten": "#f5eaea",
 		accent: "#e98404",
 		"on-surface": "#3a424b",
+		"surface-variant": "#4E555D",
+		"on-surface-variant": "#F7F7F8",
 		"on-background": "#3a424b",
 		"on-white": "#3a424b",
 	},

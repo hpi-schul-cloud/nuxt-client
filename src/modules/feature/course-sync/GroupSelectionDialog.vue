@@ -14,7 +14,7 @@
 		</template>
 
 		<template #content>
-			<p class="text-md mt-2">
+			<p class="text-md mt-2" data-testid="group-dialog-info-text">
 				{{ $t("feature-course-sync.GroupSelectionDialog.text") }}
 			</p>
 			<VAutocomplete
@@ -30,9 +30,13 @@
 				hide-selected
 				clearable
 				variant="underlined"
+				data-testid="group-selection"
 			>
 				<template #append-item>
-					<div v-intersect="onGroupListIntersect" />
+					<div
+						v-intersect="onGroupListIntersect"
+						data-testid="group-selection-item"
+					/>
 				</template>
 			</VAutocomplete>
 			<WarningAlert
@@ -46,6 +50,7 @@
 							groupName: selectedGroup.name,
 						})
 					"
+					data-testid="no-teacher-warning-text"
 				/>
 			</WarningAlert>
 		</template>

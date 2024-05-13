@@ -141,6 +141,9 @@ module.exports = {
 			"@feature-board-drawing-element": getDir(
 				"src/modules/feature/board-drawing-element"
 			),
+			"@feature-board-collaborative-text-editor-element": getDir(
+				"src/modules/feature/board-collaborative-text-editor-element"
+			),
 			"@feature-course-sync": getDir("src/modules/feature/course-sync"),
 			"@feature-board": getDir("src/modules/feature/board"),
 			"@feature-editor": getDir("src/modules/feature/editor"),
@@ -149,6 +152,7 @@ module.exports = {
 			"@feature-media-shelf": getDir("src/modules/feature/media-shelf"),
 			"@ui-alert": getDir("src/modules/ui/alert"),
 			"@ui-board": getDir("src/modules/ui/board"),
+			"@ui-chip": getDir("src/modules/ui/chip"),
 			"@ui-confirmation-dialog": getDir("src/modules/ui/confirmation-dialog"),
 			"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
 			"@ui-layout": getDir("src/modules/ui/layout"),
@@ -156,11 +160,13 @@ module.exports = {
 			"@ui-preview-image": getDir("src/modules/ui/preview-image"),
 			"@ui-room-details": getDir("src/modules/ui/room-details"),
 			"@ui-speed-dial-menu": getDir("src/modules/ui/speed-dial-menu"),
+			"@ui-qr-code": getDir("src/modules/ui/qr-code"),
 			"@util-board": getDir("src/modules/util/board"),
 			"@util-validators": getDir("src/modules/util/validators"),
 			"@util-vue": getDir("src/modules/util/vue"),
 			"@util-input-masks": getDir("src/modules/util/input-masks"),
 			"@util-device-detection": getDir("src/modules/util/device-detection"),
+			"@util-error-notification": getDir("src/modules/util/error-notification"),
 			"@page-board": getDir("src/modules/page/board"),
 			"@page-class-members": getDir("src/modules/page/class-members"),
 			"@page-media-shelf": getDir("src/modules/page/media-shelf"),

@@ -8,13 +8,13 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
+import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import {
 	SchoolExternalTool,
 	SchoolExternalToolSave,
 } from "../school-external-tool";
 import { SchoolExternalToolConfigurationStatus } from "../school-external-tool-configuration-status";
 import { SchoolExternalToolMetadata } from "../school-external-tool-metadata";
-import { SchoolExternalToolConfigurationTemplate } from "../tool-configuration-template";
 import { ToolParameter } from "../tool-parameter";
 import { ToolParameterEntry } from "../tool-parameter-entry";
 import { CommonToolMapper } from "./common-tool.mapper";

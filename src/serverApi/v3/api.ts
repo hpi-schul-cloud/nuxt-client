@@ -117,6 +117,19 @@ export interface AccountSearchListResponse {
 /**
  * 
  * @export
+ * @interface AlertResponse
+ */
+export interface AlertResponse {
+    /**
+     * 
+     * @type {Array<Message>}
+     * @memberof AlertResponse
+     */
+    data: Array<Message>;
+}
+/**
+ * 
+ * @export
  * @interface ApiValidationError
  */
 export interface ApiValidationError {
@@ -234,6 +247,16 @@ export enum BoardExternalReferenceType {
  * @export
  * @enum {string}
  */
+export enum BoardLayout {
+    Columns = 'columns',
+    List = 'list'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 export enum BoardParentType {
     Course = 'course',
     User = 'user'
@@ -275,6 +298,12 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     isVisible: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardResponse
+     */
+    layout: string;
 }
 /**
  * 
@@ -315,10 +344,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -508,6 +537,59 @@ export enum ClassSortBy {
     TeacherNames = 'teacherNames'
 }
 
+/**
+ * 
+ * @export
+ * @interface CollaborativeTextEditorElementResponse
+ */
+export interface CollaborativeTextEditorElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    timestamps: TimestampsResponse;
+    /**
+     * 
+     * @type {object}
+     * @memberof CollaborativeTextEditorElementResponse
+     */
+    content: object;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum CollaborativeTextEditorParentType {
+    ContentElement = 'content-element'
+}
+
+/**
+ * 
+ * @export
+ * @interface CollaborativeTextEditorResponse
+ */
+export interface CollaborativeTextEditorResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CollaborativeTextEditorResponse
+     */
+    url: string;
+}
 /**
  * 
  * @export
@@ -742,6 +824,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: boolean;
     /**
      * 
@@ -755,6 +843,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_COLUMN_BOARD_SHARE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COLUMN_BOARD_SOCKET_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -779,6 +873,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_TASK_SHARE: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_BOARD_LAYOUT_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -905,6 +1005,18 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_MEDIA_SHELF_ENABLED: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    BOARD_COLLABORATION_URI: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_NEW_LAYOUT_ENABLED: boolean;
 }
 /**
  * 
@@ -1101,7 +1213,8 @@ export enum ContentElementType {
     Link = 'link',
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
-    ExternalTool = 'externalTool'
+    ExternalTool = 'externalTool',
+    CollaborativeTextEditor = 'collaborativeTextEditor'
 }
 
 /**
@@ -1123,11 +1236,17 @@ export interface ContextExternalToolConfigurationStatusResponse {
      */
     isOutdatedOnScopeContext: boolean;
     /**
-     * True, if a configured parameter on the context external tool is missing a value
+     * True, if a mandatory parameter on the context external tool is missing a value
      * @type {boolean}
      * @memberof ContextExternalToolConfigurationStatusResponse
      */
     isIncompleteOnScopeContext: boolean;
+    /**
+     * True, if a optional parameter on the context external tool is missing a value. This is happening, when course is copied.
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isIncompleteOperationalOnScopeContext: boolean;
     /**
      * Is the tool deactivated, because of superhero or school administrator
      * @type {boolean}
@@ -1374,12 +1493,6 @@ export interface CopyApiResponse {
      * @memberof CopyApiResponse
      */
     elements?: Array<CopyApiResponse>;
-    /**
-     * Array with listed types of all sub elements
-     * @type {Array<string>}
-     * @memberof CopyApiResponse
-     */
-    elementsTypes?: Array<CopyApiResponseElementsTypesEnum>;
 }
 
 /**
@@ -1389,6 +1502,7 @@ export interface CopyApiResponse {
 export enum CopyApiResponseTypeEnum {
     Board = 'BOARD',
     Card = 'CARD',
+    CollaborativeTextEditorElement = 'COLLABORATIVE_TEXT_EDITOR_ELEMENT',
     Column = 'COLUMN',
     Columnboard = 'COLUMNBOARD',
     Content = 'CONTENT',
@@ -1436,50 +1550,6 @@ export enum CopyApiResponseStatusEnum {
     NotDoing = 'not-doing',
     NotImplemented = 'not-implemented',
     Partial = 'partial'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CopyApiResponseElementsTypesEnum {
-    Board = 'BOARD',
-    Card = 'CARD',
-    Column = 'COLUMN',
-    Columnboard = 'COLUMNBOARD',
-    Content = 'CONTENT',
-    Course = 'COURSE',
-    CoursegroupGroup = 'COURSEGROUP_GROUP',
-    ExternalTool = 'EXTERNAL_TOOL',
-    ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
-    File = 'FILE',
-    FileElement = 'FILE_ELEMENT',
-    DrawingElement = 'DRAWING_ELEMENT',
-    FileGroup = 'FILE_GROUP',
-    Leaf = 'LEAF',
-    Lesson = 'LESSON',
-    LessonContentEtherpad = 'LESSON_CONTENT_ETHERPAD',
-    LessonContentGeogebra = 'LESSON_CONTENT_GEOGEBRA',
-    LessonContentGroup = 'LESSON_CONTENT_GROUP',
-    LessonContentLernstore = 'LESSON_CONTENT_LERNSTORE',
-    LessonContentNexboard = 'LESSON_CONTENT_NEXBOARD',
-    LessonContentTask = 'LESSON_CONTENT_TASK',
-    LessonContentText = 'LESSON_CONTENT_TEXT',
-    LernstoreMaterial = 'LERNSTORE_MATERIAL',
-    LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
-    LinkElement = 'LINK_ELEMENT',
-    LtitoolGroup = 'LTITOOL_GROUP',
-    MediaBoard = 'MEDIA_BOARD',
-    MediaLine = 'MEDIA_LINE',
-    MediaExternalToolElement = 'MEDIA_EXTERNAL_TOOL_ELEMENT',
-    Metadata = 'METADATA',
-    RichtextElement = 'RICHTEXT_ELEMENT',
-    SubmissionContainerElement = 'SUBMISSION_CONTAINER_ELEMENT',
-    SubmissionItem = 'SUBMISSION_ITEM',
-    SubmissionGroup = 'SUBMISSION_GROUP',
-    Task = 'TASK',
-    TaskGroup = 'TASK_GROUP',
-    TimeGroup = 'TIME_GROUP',
-    UserGroup = 'USER_GROUP'
 }
 
 /**
@@ -1661,6 +1731,12 @@ export interface CreateBoardBodyParams {
      * @memberof CreateBoardBodyParams
      */
     parentType: BoardParentType;
+    /**
+     * 
+     * @type {BoardLayout}
+     * @memberof CreateBoardBodyParams
+     */
+    layout: BoardLayout;
 }
 /**
  * 
@@ -1699,7 +1775,8 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     Link = 'link',
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
-    ExternalTool = 'externalTool'
+    ExternalTool = 'externalTool',
+    CollaborativeTextEditor = 'collaborativeTextEditor'
 }
 
 /**
@@ -4016,6 +4093,74 @@ export interface MediaLineResponse {
      * @memberof MediaLineResponse
      */
     timestamps: TimestampsResponse;
+}
+/**
+ * 
+ * @export
+ * @interface Message
+ */
+export interface Message {
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    title: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    text: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    timestamp: string;
+    /**
+     * 
+     * @type {MessageOrigin}
+     * @memberof Message
+     */
+    origin: MessageOrigin;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    url: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    status: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Message
+     */
+    createdAt: string;
+}
+/**
+ * 
+ * @export
+ * @interface MessageOrigin
+ */
+export interface MessageOrigin {
+    /**
+     * 
+     * @type {number}
+     * @memberof MessageOrigin
+     */
+    message_id: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof MessageOrigin
+     */
+    page: string;
 }
 /**
  * 
@@ -8776,6 +8921,121 @@ export class AdminTeachersApi extends BaseAPI implements AdminTeachersApiInterfa
 
 
 /**
+ * AlertApi - axios parameter creator
+ * @export
+ */
+export const AlertApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get allerts
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        alertControllerFind: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/alert`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * AlertApi - functional programming interface
+ * @export
+ */
+export const AlertApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = AlertApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get allerts
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async alertControllerFind(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AlertResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.alertControllerFind(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * AlertApi - factory interface
+ * @export
+ */
+export const AlertApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = AlertApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get allerts
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        alertControllerFind(options?: any): AxiosPromise<AlertResponse> {
+            return localVarFp.alertControllerFind(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * AlertApi - interface
+ * @export
+ * @interface AlertApi
+ */
+export interface AlertApiInterface {
+    /**
+     * 
+     * @summary Get allerts
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AlertApiInterface
+     */
+    alertControllerFind(options?: any): AxiosPromise<AlertResponse>;
+
+}
+
+/**
+ * AlertApi - object-oriented interface
+ * @export
+ * @class AlertApi
+ * @extends {BaseAPI}
+ */
+export class AlertApi extends BaseAPI implements AlertApiInterface {
+    /**
+     * 
+     * @summary Get allerts
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AlertApi
+     */
+    public alertControllerFind(options?: any) {
+        return AlertApiFp(this.configuration).alertControllerFind(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * AuthenticationApi - axios parameter creator
  * @export
  */
@@ -11754,6 +12014,141 @@ export class CollaborativeStorageApi extends BaseAPI implements CollaborativeSto
      */
     public collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId: string, roleId: string, teamPermissionsBody: TeamPermissionsBody, options?: any) {
         return CollaborativeStorageApiFp(this.configuration).collaborativeStorageControllerUpdateTeamPermissionsForRole(teamId, roleId, teamPermissionsBody, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * CollaborativeTextEditorApi - axios parameter creator
+ * @export
+ */
+export const CollaborativeTextEditorApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get or create CollaborativeTextEditor for parent
+         * @param {string} parentId 
+         * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent: async (parentId: string, parentType: CollaborativeTextEditorParentType, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'parentId' is not null or undefined
+            assertParamExists('collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent', 'parentId', parentId)
+            // verify required parameter 'parentType' is not null or undefined
+            assertParamExists('collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent', 'parentType', parentType)
+            const localVarPath = `/collaborative-text-editor/{parentType}/{parentId}`
+                .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
+                .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CollaborativeTextEditorApi - functional programming interface
+ * @export
+ */
+export const CollaborativeTextEditorApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CollaborativeTextEditorApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get or create CollaborativeTextEditor for parent
+         * @param {string} parentId 
+         * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CollaborativeTextEditorResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId, parentType, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CollaborativeTextEditorApi - factory interface
+ * @export
+ */
+export const CollaborativeTextEditorApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CollaborativeTextEditorApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get or create CollaborativeTextEditor for parent
+         * @param {string} parentId 
+         * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): AxiosPromise<CollaborativeTextEditorResponse> {
+            return localVarFp.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId, parentType, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CollaborativeTextEditorApi - interface
+ * @export
+ * @interface CollaborativeTextEditorApi
+ */
+export interface CollaborativeTextEditorApiInterface {
+    /**
+     * 
+     * @summary Get or create CollaborativeTextEditor for parent
+     * @param {string} parentId 
+     * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CollaborativeTextEditorApiInterface
+     */
+    collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any): AxiosPromise<CollaborativeTextEditorResponse>;
+
+}
+
+/**
+ * CollaborativeTextEditorApi - object-oriented interface
+ * @export
+ * @class CollaborativeTextEditorApi
+ * @extends {BaseAPI}
+ */
+export class CollaborativeTextEditorApi extends BaseAPI implements CollaborativeTextEditorApiInterface {
+    /**
+     * 
+     * @summary Get or create CollaborativeTextEditor for parent
+     * @param {string} parentId 
+     * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CollaborativeTextEditorApi
+     */
+    public collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId: string, parentType: CollaborativeTextEditorParentType, options?: any) {
+        return CollaborativeTextEditorApiFp(this.configuration).collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent(parentId, parentType, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -23071,6 +23466,133 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      */
     public userLoginMigrationControllerStartMigration(options?: any) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerStartMigration(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * UserLoginMigrationRollbackApi - axios parameter creator
+ * @export
+ */
+export const UserLoginMigrationRollbackApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Rollback a user from a user login migration
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationRollbackControllerMigrateUserLogin: async (userId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'userId' is not null or undefined
+            assertParamExists('userLoginMigrationRollbackControllerMigrateUserLogin', 'userId', userId)
+            const localVarPath = `/user-login-migrations/users/{userId}/rollback-migration`
+                .replace(`{${"userId"}}`, encodeURIComponent(String(userId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * UserLoginMigrationRollbackApi - functional programming interface
+ * @export
+ */
+export const UserLoginMigrationRollbackApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = UserLoginMigrationRollbackApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Rollback a user from a user login migration
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationRollbackControllerMigrateUserLogin(userId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * UserLoginMigrationRollbackApi - factory interface
+ * @export
+ */
+export const UserLoginMigrationRollbackApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = UserLoginMigrationRollbackApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Rollback a user from a user login migration
+         * @param {string} userId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.userLoginMigrationRollbackControllerMigrateUserLogin(userId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * UserLoginMigrationRollbackApi - interface
+ * @export
+ * @interface UserLoginMigrationRollbackApi
+ */
+export interface UserLoginMigrationRollbackApiInterface {
+    /**
+     * 
+     * @summary Rollback a user from a user login migration
+     * @param {string} userId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationRollbackApiInterface
+     */
+    userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * UserLoginMigrationRollbackApi - object-oriented interface
+ * @export
+ * @class UserLoginMigrationRollbackApi
+ * @extends {BaseAPI}
+ */
+export class UserLoginMigrationRollbackApi extends BaseAPI implements UserLoginMigrationRollbackApiInterface {
+    /**
+     * 
+     * @summary Rollback a user from a user login migration
+     * @param {string} userId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationRollbackApi
+     */
+    public userLoginMigrationRollbackControllerMigrateUserLogin(userId: string, options?: any) {
+        return UserLoginMigrationRollbackApiFp(this.configuration).userLoginMigrationRollbackControllerMigrateUserLogin(userId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

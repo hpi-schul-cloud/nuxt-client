@@ -1,3 +1,4 @@
+export type EmptyPayload = Record<string, never>;
 export type PermittedStoreActions<
 	T extends { [k: string]: GenericActionFactory },
 > = {
@@ -35,9 +36,9 @@ export function handle(action: Action, ...ons: ReturnType<typeof on>[]) {
 
 export function on<T extends GenericActionFactory, P extends ReturnType<T>>(
 	action: T,
-	callback: (action: P) => void
+	callback: (payload: P["payload"]) => void
 ) {
 	const permittedAction = action({}).type;
 	return (a: ReturnType<T>) =>
-		permittedAction === a.type ? callback(a as P) : null;
+		permittedAction === a.type ? callback(a.payload as P["payload"]) : null;
 }

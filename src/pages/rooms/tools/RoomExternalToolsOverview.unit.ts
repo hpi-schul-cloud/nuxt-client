@@ -1,14 +1,8 @@
 import { ConfigResponse } from "@/serverApi/v3";
-import ContextExternalToolsModule from "@/store/context-external-tools";
 import EnvConfigModule from "@/store/env-config";
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
 import RoomModule from "@/store/room";
 import { CourseFeatures } from "@/store/types/room";
-import {
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	ROOM_MODULE_KEY,
-} from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	businessErrorFactory,
@@ -19,30 +13,24 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import {
+	ExternalToolDisplayData,
+	useExternalToolDisplayListState,
+} from "@data-external-tool";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, shallowMount } from "@vue/test-utils";
+import { ref } from "vue";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
+import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
+
+jest.mock("@data-external-tool");
 
 describe("RoomExternalToolOverview", () => {
-	let el: HTMLDivElement;
+	let useExternalToolDisplayListStateMock: DeepMocked<
+		ReturnType<typeof useExternalToolDisplayListState>
+	>;
 
-	const getWrapper = (
-		tools: ExternalToolDisplayData[],
-		contextExternalToolsModuleGetter?: Partial<ContextExternalToolsModule>
-	) => {
-		el = document.createElement("div");
-		el.setAttribute("data-app", "true");
-		document.body.appendChild(el);
-
-		const contextExternalToolsModule = createModuleMocks(
-			ContextExternalToolsModule,
-			{
-				getExternalToolDisplayDataList: tools,
-				getBusinessError: businessErrorFactory.build(),
-				getLoading: false,
-				...contextExternalToolsModuleGetter,
-			}
-		);
-
+	const getWrapper = () => {
 		const roomModule = createModuleMocks(RoomModule, {
 			getLoading: false,
 		});
@@ -59,8 +47,6 @@ describe("RoomExternalToolOverview", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
-						contextExternalToolsModule,
 					[ROOM_MODULE_KEY.valueOf()]: roomModule,
 				},
 			},
@@ -71,19 +57,32 @@ describe("RoomExternalToolOverview", () => {
 
 		return {
 			wrapper,
-			contextExternalToolsModule,
 			roomModule,
 			refreshTime,
 		};
 	};
 
+	beforeEach(() => {
+		useExternalToolDisplayListStateMock = createMock<
+			ReturnType<typeof useExternalToolDisplayListState>
+		>({
+			error: ref(),
+			isLoading: ref(),
+			displayData: ref([]),
+		});
+
+		jest
+			.mocked(useExternalToolDisplayListState)
+			.mockReturnValue(useExternalToolDisplayListStateMock);
+	});
+
 	afterEach(() => {
-		jest.resetAllMocks();
+		jest.clearAllMocks();
 	});
 
 	describe("when no tools or no videoconference is in the list", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper([]);
+			const { wrapper } = getWrapper();
 
 			return {
 				wrapper,
@@ -101,9 +100,9 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when the tools are loading", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper([], {
-				getLoading: true,
-			});
+			useExternalToolDisplayListStateMock.isLoading.value = true;
+
+			const { wrapper } = getWrapper();
 
 			return {
 				wrapper,
@@ -121,16 +120,13 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when an error occurred", () => {
 		const setup = () => {
-			const tool: ExternalToolDisplayData =
-				externalToolDisplayDataFactory.build();
+			useExternalToolDisplayListStateMock.error.value =
+				businessErrorFactory.build();
 
-			const { wrapper } = getWrapper([tool], {
-				getBusinessError: businessErrorFactory.build({ error: new Error() }),
-			});
+			const { wrapper } = getWrapper();
 
 			return {
 				wrapper,
-				tool,
 			};
 		};
 
@@ -145,7 +141,7 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when video conferences are enabled", () => {
 		const setup = async () => {
-			const { wrapper, roomModule } = getWrapper([]);
+			const { wrapper, roomModule } = getWrapper();
 
 			roomModule.fetchCourse.mockResolvedValue(
 				courseFactory.build({ features: [CourseFeatures.VIDEOCONFERENCE] })
@@ -171,7 +167,7 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when video conferences are disabled", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper([]);
+			const { wrapper } = getWrapper();
 
 			return {
 				wrapper,
@@ -195,26 +191,50 @@ describe("RoomExternalToolOverview", () => {
 		});
 		const setup = () => {
 			jest.useFakeTimers({ legacyFakeTimers: true });
-			const { contextExternalToolsModule, refreshTime } = getWrapper([]);
+			const { refreshTime } = getWrapper();
 
 			return {
-				contextExternalToolsModule,
 				refreshTime,
 			};
 		};
 
 		it("should call tool reference endpoint again", () => {
-			const { contextExternalToolsModule, refreshTime } = setup();
+			const { refreshTime } = setup();
 
 			expect(
-				contextExternalToolsModule.loadExternalToolDisplayData
+				useExternalToolDisplayListStateMock.fetchDisplayData
 			).toHaveBeenCalledTimes(1);
 
 			jest.advanceTimersByTime(refreshTime + 1000);
 
 			expect(
-				contextExternalToolsModule.loadExternalToolDisplayData
+				useExternalToolDisplayListStateMock.fetchDisplayData
 			).toHaveBeenCalledTimes(2);
+		});
+	});
+
+	describe("when deleting a tool", () => {
+		const setup = () => {
+			const displayData: ExternalToolDisplayData =
+				externalToolDisplayDataFactory.build();
+
+			const { wrapper } = getWrapper();
+
+			return {
+				wrapper,
+				displayData,
+			};
+		};
+
+		it("should call tool reference endpoint again", () => {
+			const { wrapper, displayData } = setup();
+
+			const section = wrapper.findComponent(RoomExternalToolsSection);
+			section.vm.$emit("delete", displayData);
+
+			expect(
+				useExternalToolDisplayListStateMock.deleteContextExternalTool
+			).toHaveBeenCalledWith(displayData.contextExternalToolId);
 		});
 	});
 });

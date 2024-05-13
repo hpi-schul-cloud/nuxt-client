@@ -2,14 +2,16 @@ import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
-	mdiPresentation,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
 	mdiLink,
+	mdiPresentation,
 	mdiPuzzleOutline,
+	mdiTextBoxEditOutline,
 	mdiTrayArrowUp,
 } from "@mdi/js";
-import { useSharedLastCreatedElement } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 type AddCardElement = (
@@ -19,6 +21,8 @@ type AddCardElement = (
 export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
+	const { showCustomNotifier } = useBoardNotifier();
+	const { t } = useI18n();
 
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
@@ -28,6 +32,18 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 
 		const elementData = await addElementFunction(elementType);
 		lastCreatedElementId.value = elementData?.id;
+		showNotificationByElementType(elementType);
+	};
+
+	const showNotificationByElementType = (elementType: ContentElementType) => {
+		if (elementType === ContentElementType.CollaborativeTextEditor) {
+			showCustomNotifier(
+				t(
+					"components.cardElement.collaborativeTextEditorElement.alert.info.visible"
+				),
+				"info"
+			);
+		}
 	};
 
 	const options = [
@@ -80,6 +96,19 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 			label: "components.cardElement.drawingElement",
 			action: () => onElementClick(ContentElementType.Drawing),
 			testId: "create-element-drawing-element",
+		});
+	}
+
+	if (
+		envConfigModule.getEnv
+			.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
+	) {
+		options.push({
+			icon: mdiTextBoxEditOutline,
+			label:
+				"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle",
+			action: () => onElementClick(ContentElementType.CollaborativeTextEditor),
+			testId: "create-element-collaborative-text-editor",
 		});
 	}
 

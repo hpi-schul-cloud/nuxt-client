@@ -1,45 +1,39 @@
 <template>
 	<div class="mb-4" ref="headerRef">
-		<div class="d-flex align-start justify-space-between pt-2">
+		<div class="d-flex flex-column justify-space-between align-stretch pt-2">
 			<VBtn
 				elevation="0"
 				variant="text"
-				class="mb-2"
+				class="d-flex flex-row justify-start mb-2"
 				:color="isColumnActive ? '' : 'grey-darken-2'"
 				@click="onAddColumn"
 			>
-				<VIcon>{{ mdiPlus }}</VIcon>
-				{{ label }}
+				<VIcon>{{ mdiPlus }}</VIcon> {{ label }}
 			</VBtn>
 		</div>
-		<VDivider aria-hidden="true" class="border-opacity-100" />
+		<VDivider aria-hidden="true" class="border-opacity-25" />
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { mdiPlus } from "@mdi/js";
-import { defineComponent } from "vue";
 
-export default defineComponent({
-	name: "BoardColumnGhostHeader",
-	props: {
-		isColumnActive: {
-			type: Boolean,
-			required: true,
-		},
-		label: {
-			type: String,
-			required: true,
-		},
+defineProps({
+	isColumnActive: {
+		type: Boolean,
+		required: true,
 	},
-	emits: ["add-column"],
-	setup(props, { emit }) {
-		const onAddColumn = () => {
-			emit("add-column");
-		};
-		return { onAddColumn, mdiPlus };
+	label: {
+		type: String,
+		required: true,
 	},
 });
+
+const emit = defineEmits(["add-column"]);
+
+const onAddColumn = () => {
+	emit("add-column");
+};
 </script>
 
 <style scoped>

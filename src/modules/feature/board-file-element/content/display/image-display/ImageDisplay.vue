@@ -10,8 +10,9 @@
 					<PreviewImage
 						:src="previewSrc"
 						:alt="alternativeText"
-						:cover="true"
+						:cover="false"
 						@error="onImageError"
+						:maxHeight="336"
 					/>
 				</div>
 			</div>

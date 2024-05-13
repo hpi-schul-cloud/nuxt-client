@@ -12,18 +12,18 @@
 				@share:board="onShareBoard"
 				@delete:board="openDeleteBoardDialog(boardId)"
 			/>
-			<div class="d-flex flex-row flex-shrink-1">
+			<div :class="boardClass" :style="boardStyle">
 				<div>
 					<Sortable
 						:list="board.columns"
 						item-key="id"
+						:class="boardColumnClass"
 						tag="div"
 						:options="{
 							direction: 'horizontal',
 							disabled: isEditMode || !hasMovePermission,
 							group: 'columns',
-							delay: 300, // isDesktop ? 0 : 300
-							delayOnTouchOnly: true,
+							delay: isTouchDetected ? 300 : 0,
 							ghostClass: 'sortable-drag-ghost',
 							easing: 'cubic-bezier(1, 0, 0, 1)',
 							dragClass: 'sortable-drag-board-card',
@@ -35,7 +35,6 @@
 							forceFallback: true,
 							bubbleScroll: true,
 						}"
-						class="d-flex flex-row flex-shrink-1 ml-n4"
 						@end="onDropColumn"
 					>
 						<template #item="{ element, index }">
@@ -45,22 +44,27 @@
 								:index="index"
 								:key="element.id"
 								:columnCount="board.columns.length"
+								:class="{ 'my-0': isListBoard }"
+								:isListBoard="isListBoard"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
 								@delete:column="onDeleteColumn"
 								@update:card-position="onUpdateCardPosition(index, $event)"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
-								@move:column-left="onMoveColumnLeft(index, element.id)"
-								@move:column-right="onMoveColumnRight(index, element.id)"
+								@move:column-down="onMoveColumnForward(index, element.id)"
+								@move:column-left="onMoveColumnBackward(index, element.id)"
+								@move:column-right="onMoveColumnForward(index, element.id)"
+								@move:column-up="onMoveColumnBackward(index, element.id)"
 							/>
 						</template>
 					</Sortable>
 				</div>
-				<div>
+				<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
 					<BoardColumnGhost
 						v-if="hasCreateColumnPermission"
 						@create:column="onCreateColumn"
+						:isListBoard="isListBoard"
 					/>
 				</div>
 			</div>
@@ -83,7 +87,10 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue"
 import ShareModal from "@/components/share/ShareModal.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import {
+	BoardLayout,
+	ShareTokenBodyParamsParentTypeEnum,
+} from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
 import {
@@ -98,7 +105,6 @@ import {
 	useSharedBoardPageInformation,
 	useSharedEditMode,
 	useBoardStore,
-	boardActions,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -106,9 +112,10 @@ import { extractDataAttribute, useBoardNotifier } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useTouchDetection } from "@util-device-detection";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
@@ -120,7 +127,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { showCustomNotifier } = useBoardNotifier();
+const { resetNotifierModule, showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 
@@ -134,6 +141,7 @@ watch(board, async () => {
 });
 
 useBodyScrolling();
+const { isTouchDetected } = useTouchDetection();
 
 const {
 	hasMovePermission,
@@ -145,22 +153,20 @@ const {
 } = useBoardPermissions();
 
 const onCreateCard = async (columnId: string) => {
-	if (hasCreateCardPermission)
-		boardStore.dispatch(boardActions.createCard({ columnId }));
+	if (hasCreateCardPermission) boardStore.createCardRequest({ columnId });
 };
 
 const onCreateColumn = async () => {
-	if (hasCreateCardPermission) boardStore.dispatch(boardActions.createColumn());
+	if (hasCreateCardPermission)
+		boardStore.createColumnRequest({ boardId: props.boardId });
 };
 
 const onDeleteCard = async (cardId: string) => {
-	if (hasCreateCardPermission)
-		boardStore.dispatch(boardActions.deleteCard({ cardId }));
+	if (hasCreateCardPermission) boardStore.deleteCardRequest({ cardId });
 };
 
 const onDeleteColumn = async (columnId: string) => {
-	if (hasDeletePermission)
-		boardStore.dispatch(boardActions.deleteColumn({ columnId }));
+	if (hasDeletePermission) boardStore.deleteColumnRequest({ columnId });
 };
 
 const onDropColumn = async (columnPayload: SortableEvent) => {
@@ -177,11 +183,11 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 			removedIndex: columnPayload.oldIndex,
 			columnId,
 		};
-		boardStore.dispatch(boardActions.moveColumn({ columnMove }));
+		boardStore.moveColumnRequest({ columnMove, byKeyboard: false });
 	}
 };
 
-const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
+const onMoveColumnBackward = async (columnIndex: number, columnId: string) => {
 	if (!hasMovePermission) return;
 	if (columnIndex === 0) return;
 
@@ -191,12 +197,10 @@ const onMoveColumnLeft = async (columnIndex: number, columnId: string) => {
 		columnId,
 	};
 
-	boardStore.dispatch(
-		boardActions.moveColumn({ columnMove, byKeyboard: true })
-	);
+	boardStore.moveColumnRequest({ columnMove, byKeyboard: true });
 };
 
-const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
+const onMoveColumnForward = async (columnIndex: number, columnId: string) => {
 	if (!hasMovePermission) return;
 	if (board.value && columnIndex === board.value.columns.length - 1) return;
 
@@ -206,50 +210,66 @@ const onMoveColumnRight = async (columnIndex: number, columnId: string) => {
 		columnId,
 	};
 
-	boardStore.dispatch(
-		boardActions.moveColumn({ columnMove, byKeyboard: true })
-	);
+	boardStore.moveColumnRequest({ columnMove, byKeyboard: true });
 };
 
 const onReloadBoard = async () => {
-	boardStore.dispatch(boardActions.reloadBoard());
+	boardStore.reloadBoard();
 };
 
-const onUpdateBoardVisibility = async (newVisibility: boolean) => {
+const onUpdateBoardVisibility = async (isVisible: boolean) => {
 	if (!hasEditPermission) return;
 
-	boardStore.dispatch(boardActions.updateBoardVisibility({ newVisibility }));
+	boardStore.updateBoardVisibilityRequest({
+		boardId: props.boardId,
+		isVisible,
+	});
 	await setAlert();
 };
 
 const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-	if (hasMovePermission) boardStore.dispatch(boardActions.moveCard(cardMove));
+	if (hasMovePermission) boardStore.moveCardRequest(cardMove);
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
 	if (hasEditPermission)
-		boardStore.dispatch(boardActions.updateColumnTitle({ columnId, newTitle }));
+		boardStore.updateColumnTitleRequest({ columnId, newTitle });
 };
 
 const onUpdateBoardTitle = async (newTitle: string) => {
 	if (hasEditPermission)
-		boardStore.dispatch(boardActions.updateBoardTitle({ newTitle }));
+		boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
 };
 
 onMounted(() => {
 	setAlert();
-	boardStore.dispatch(boardActions.fetchBoard({ id: props.boardId }));
+	boardStore.fetchBoardRequest({ boardId: props.boardId });
+});
+
+onUnmounted(() => {
+	boardStore.disconnectSocketRequest({});
+	boardStore.setBoard(undefined);
+});
+
+onUnmounted(() => {
+	resetNotifierModule();
 });
 
 const setAlert = useDebounceFn(() => {
 	if (!isTeacher) return;
 
-	if (!board.value?.isVisible) {
+	if (!board.value) {
+		return;
+	}
+
+	if (!board.value.isVisible) {
 		showCustomNotifier(t("components.board.alert.info.draft"), "info");
 	} else {
 		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
 	}
-}, 100);
+}, 150);
+
+watch(() => board.value?.isVisible, setAlert, { immediate: true });
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")
@@ -261,11 +281,45 @@ const copyModule = injectStrict(COPY_MODULE_KEY);
 
 const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
 
+const isListBoard = computed(
+	() =>
+		envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
+		board.value?.layout === BoardLayout.List
+);
+
 const copyResultModalItems = computed(
 	() => copyModule.getCopyResultFailedItems
 );
 
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
+
+const boardClass = computed(() => {
+	const classes = ["d-flex", "flex-shrink-1"];
+	if (isListBoard.value) {
+		classes.push("flex-column", "mx-auto", "my-0");
+	} else {
+		classes.push("flex-row");
+	}
+	return classes;
+});
+
+const boardStyle = computed(() => {
+	if (!isListBoard.value) {
+		return;
+	}
+	const style = { maxWidth: "80ch", minWidth: "20rem" };
+	return style;
+});
+
+const boardColumnClass = computed(() => {
+	const classes = ["d-flex", "flex-shrink-1"];
+	if (isListBoard.value) {
+		classes.push("flex-column");
+	} else {
+		classes.push("flex-row", "ml-n4");
+	}
+	return classes;
+});
 
 const onCopyResultModalClosed = () => {
 	copyModule.reset();

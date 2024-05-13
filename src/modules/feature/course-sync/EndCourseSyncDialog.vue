@@ -14,10 +14,13 @@
 			</h2>
 		</template>
 		<template #content>
-			<WarningAlert class="mb-4">
+			<WarningAlert
+				class="mb-4"
+				data-testid="end-course-sync-dialog-warning-text"
+			>
 				{{ $t("feature-course-sync.EndCourseSyncDialog.alert") }}
 			</WarningAlert>
-			<p>
+			<p data-testid="end-course-sync-dialog-info-text">
 				{{
 					$t("feature-course-sync.EndCourseSyncDialog.description", {
 						courseName: courseName,
