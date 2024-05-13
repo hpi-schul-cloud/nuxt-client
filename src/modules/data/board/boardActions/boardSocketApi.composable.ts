@@ -64,6 +64,7 @@ export const useBoardSocketApi = () => {
 			// failure actions
 			on(BoardActions.createCardFailure, onFailure),
 			on(BoardActions.createColumnFailure, onFailure),
+			on(CardActions.deleteCardFailure, onFailure),
 			on(BoardActions.deleteColumnFailure, onFailure),
 			on(BoardActions.moveCardFailure, onFailure),
 			on(BoardActions.moveColumnFailure, onFailure),
@@ -88,7 +89,6 @@ export const useBoardSocketApi = () => {
 	};
 
 	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
-		// TODO: Kebab-Case
 		console.log("disconnectSocketRequest", payload);
 		disconnectSocket();
 	};

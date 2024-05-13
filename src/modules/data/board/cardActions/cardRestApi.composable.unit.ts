@@ -3,7 +3,7 @@ import { ref } from "vue";
 import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { useSocketConnection, useCardStore } from "@data-board";
+import { useSocketConnection, useCardStore, useBoardStore } from "@data-board";
 import { useCardRestApi } from "./cardRestApi.composable";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
@@ -76,11 +76,12 @@ describe("useCardRestApi", () => {
 	});
 
 	const setup = () => {
+		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		const cardStore = mockedPiniaStoreTyping(useCardStore);
 		const cards = cardResponseFactory.buildList(3);
 		cardStore.fetchCardSuccess({ cards: cards });
 
-		return { cardStore, cards };
+		return { boardStore, cardStore, cards };
 	};
 
 	describe("deleteCardRequest", () => {
@@ -256,7 +257,7 @@ describe("useCardRestApi", () => {
 		};
 
 		it("should notify with template", async () => {
-			const { cardStore, cards } = setup();
+			const { boardStore, cardStore, cards } = setup();
 			const { updateCardTitleRequest } = useCardRestApi();
 
 			cardStore.getCard.mockReturnValue(cards[0]);
@@ -275,6 +276,7 @@ describe("useCardRestApi", () => {
 				undefined
 			);
 
+			expect(boardStore.reloadBoard).toHaveBeenCalled();
 			expect(setEditModeId).toHaveBeenCalledWith(undefined);
 		});
 	});

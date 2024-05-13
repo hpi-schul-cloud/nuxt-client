@@ -165,7 +165,6 @@ const onCreateColumn = async () => {
 
 const onDeleteCard = async (cardId: string) => {
 	if (hasCreateCardPermission) {
-		// boardStore.deleteCardRequest({ cardId });
 		cardStore.deleteCardRequest({ cardId });
 	}
 };

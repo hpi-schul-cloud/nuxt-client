@@ -31,6 +31,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.disconnectSocket, disconnectSocketRequest),
 
 			// success actions
+			on(CardActions.deleteCardSuccess, cardStore.deleteCardSuccess),
 			on(CardActions.fetchCardSuccess, cardStore.fetchCardSuccess),
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
 			on(
@@ -39,6 +40,8 @@ export const useCardSocketApi = () => {
 			),
 
 			// failure actions
+			on(CardActions.deleteCardFailure, onFailure),
+			on(CardActions.fetchCardFailure, onFailure),
 			on(CardActions.updateCardTitleFailure, onFailure),
 			on(CardActions.updateCardHeightFailure, onFailure)
 		);
@@ -47,7 +50,6 @@ export const useCardSocketApi = () => {
 	const { emitOnSocket, disconnectSocket } = useSocketConnection(dispatch);
 
 	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
-		// TODO: Kebab-Case
 		console.log("disconnectSocketRequest", payload);
 		disconnectSocket();
 	};

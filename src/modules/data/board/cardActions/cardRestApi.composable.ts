@@ -14,8 +14,11 @@ import {
 } from "./cardActionPayload";
 import { useCardStore } from "../Card.store";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { delay } from "@/utils/helpers";
+import { useBoardStore } from "@data-board";
 
 export const useCardRestApi = () => {
+	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
 
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
@@ -32,6 +35,7 @@ export const useCardRestApi = () => {
 
 		try {
 			await deleteCardCall(payload.cardId);
+			boardStore.deleteCardSuccess(payload);
 			cardStore.deleteCardSuccess(payload);
 		} catch (error) {
 			handleError(error, {
@@ -43,7 +47,7 @@ export const useCardRestApi = () => {
 	const fetchCardRequest = async (
 		payload: FetchCardRequestPayload
 	): Promise<void> => {
-		// await delay(100);
+		await delay(100);
 		try {
 			const promises = payload.cardIds.map(fetchCardFromApi);
 			const cards = await Promise.all(promises);
@@ -52,8 +56,6 @@ export const useCardRestApi = () => {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),
 			});
-		} finally {
-			// isLoading.value = false;
 		}
 	};
 
@@ -93,7 +95,7 @@ export const useCardRestApi = () => {
 	) => {
 		return () => {
 			notifyWithTemplate(errorType, boardObjectType)();
-			// emit("reload:board"); // TODO: Solve reload of board
+			boardStore.reloadBoard();
 			setEditModeId(undefined);
 		};
 	};

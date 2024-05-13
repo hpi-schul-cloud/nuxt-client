@@ -29,7 +29,6 @@ export const useBoardRestApi = () => {
 	const {
 		createCardCall,
 		createColumnCall,
-		deleteCardCall,
 		deleteColumnCall,
 		fetchBoardCall,
 		moveCardCall,
@@ -108,21 +107,6 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardColumn"),
-			});
-		}
-	};
-
-	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
-		if (boardStore.board === undefined) return;
-		const { cardId } = payload;
-
-		try {
-			await deleteCardCall(cardId);
-
-			boardStore.deleteCardSuccess({ cardId });
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
 			});
 		}
 	};

@@ -236,7 +236,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		await socketOrRest.moveCardRequest(payload);
 	};
 
-	// TODO: refactor or create a new function for moving cards with creating column
 	const moveCardSuccess = async (payload: MoveCardSuccessPayload) => {
 		if (!board.value) return;
 

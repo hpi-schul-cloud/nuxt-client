@@ -51,10 +51,6 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const fetchCardSuccess = (payload: FetchCardSuccessPayload) => {
 		for (const card of payload.cards) {
-			if (cards.value[card.id] !== undefined) {
-				// TODO: decide what to do if there already is a card in the store
-				// TODO: does that need special handling?
-			}
 			cards.value[card.id] = card;
 		}
 	};
@@ -96,7 +92,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (card === undefined) return;
 
 		delete cards.value[payload.cardId];
-		boardStore.deleteCardSuccess(payload);
 	};
 
 	const addElement = async (
