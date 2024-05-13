@@ -52,6 +52,12 @@ describe("useCardSocketApi", () => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+		jest.useFakeTimers();
+	});
+
+	afterEach(() => {
+		jest.runOnlyPendingTimers();
+		jest.useRealTimers();
 	});
 
 	describe("dispatch", () => {
@@ -182,6 +188,23 @@ describe("useCardSocketApi", () => {
 
 			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"update-card-height-request",
+				payload
+			);
+		});
+	});
+
+	describe("fetchCardRequest", () => {
+		const payload = {
+			cardIds: ["fake-card-id-234"],
+		};
+
+		it("should call emitOnSocket with correct parameters", () => {
+			const { fetchCardRequest } = useCardSocketApi();
+			fetchCardRequest(payload);
+
+			jest.advanceTimersByTime(1000);
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"fetch-card-request",
 				payload
 			);
 		});

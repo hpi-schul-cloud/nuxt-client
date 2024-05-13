@@ -54,10 +54,10 @@ export const useCardSocketApi = () => {
 
 	const fetchCardRequest = async (payload: FetchCardRequestPayload) => {
 		cardIdsToFetch = cardIdsToFetch.concat(payload.cardIds);
-		_debouncedFetchCardsEmit();
+		_debouncedFetchCardEmit();
 	};
 
-	const _debouncedFetchCardsEmit = useDebounceFn(
+	const _debouncedFetchCardEmit = useDebounceFn(
 		() => {
 			emitOnSocket("fetch-card-request", { cardIds: cardIdsToFetch });
 			cardIdsToFetch = [];
