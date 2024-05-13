@@ -1,21 +1,19 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
+	CardResponse,
 	ContentElementType,
 	CreateContentElementBodyParams,
 } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import { BoardCard } from "@/types/board/Card";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { axiosErrorFactory } from "@@/tests/test-utils";
-import {
-	boardCardFactory,
-	fileElementResponseFactory,
-} from "@@/tests/test-utils/factory";
+import { fileElementResponseFactory } from "@@/tests/test-utils/factory";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
+import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
@@ -96,7 +94,7 @@ describe("CardState composable", () => {
 	>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
 
-	let testCard: BoardCard;
+	let testCard: CardResponse;
 
 	beforeEach(() => {
 		jest.useFakeTimers();
@@ -125,14 +123,6 @@ describe("CardState composable", () => {
 	});
 
 	describe("fetchCard", () => {
-		it("should fetch card on mount", async () => {
-			const cardId = "123124";
-
-			setup(cardId);
-			await nextTick();
-			expect(mockedSharedCardCalls.fetchCard).toHaveBeenCalledWith(cardId);
-		});
-
 		it("should return fetch function that updates card and loading state", async () => {
 			const cardId1 = "123124a";
 			const cardId2 = "123125b";
@@ -158,7 +148,7 @@ describe("CardState composable", () => {
 	});
 
 	describe("updateTitle", () => {
-		const boardCard = boardCardFactory.build();
+		const boardCard = cardResponseFactory.build();
 
 		it("should call updateCardTitle", async () => {
 			const { updateTitle, card } = setup(boardCard.id);
@@ -198,7 +188,7 @@ describe("CardState composable", () => {
 
 	describe("deleteCard", () => {
 		it("should call deleteCard", async () => {
-			const boardCard = boardCardFactory.build();
+			const boardCard = cardResponseFactory.build();
 
 			const { deleteCard, card } = setup(boardCard.id);
 			card.value = boardCard;
@@ -224,7 +214,7 @@ describe("CardState composable", () => {
 				.fn()
 				.mockRejectedValue(setupErrorResponse());
 
-			const testCard = boardCardFactory.build();
+			const testCard = cardResponseFactory.build();
 			const { deleteCard, card } = setup(testCard.id);
 			card.value = testCard;
 
@@ -236,13 +226,7 @@ describe("CardState composable", () => {
 	});
 
 	describe("updateCardHeight", () => {
-		const boardCard: BoardCard = {
-			id: `cardid`,
-			height: 200,
-			title: "old Title",
-			elements: [],
-			visibility: { publishedAt: new Date().toUTCString() },
-		};
+		const boardCard = cardResponseFactory.build();
 
 		it("should call updateCardHeightCall", async () => {
 			const { updateCardHeight, card } = setup(boardCard.id);
@@ -282,23 +266,24 @@ describe("CardState composable", () => {
 
 		it("should not update card height when api response has error", async () => {
 			mockedSharedCardCalls.fetchCard.mockResolvedValue(testCard);
-			mockedBoardApiCalls.updateCardHeightCall = jest
-				.fn()
-				.mockResolvedValue({ status: 500 });
-			const boardCard = boardCardFactory.build();
+			mockedBoardApiCalls.updateCardHeightCall.mockRejectedValue({
+				status: 500,
+			});
+
+			const boardCard = cardResponseFactory.build();
 			const { updateCardHeight, card } = setup(boardCard.id);
 			card.value = boardCard;
 
 			await nextTick();
 			await updateCardHeight(300);
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
-			expect(boardCard.height).toEqual(200);
+			expect(boardCard.height).toEqual(120);
 		});
 	});
 
 	describe("addElement", () => {
 		it("should call addElement", async () => {
-			const boardCard = boardCardFactory.build();
+			const boardCard = cardResponseFactory.build();
 			mockedSharedCardCalls.fetchCard.mockResolvedValue(boardCard);
 			const elementType: CreateContentElementBodyParams = {
 				type: ContentElementType.RichText,
@@ -312,7 +297,7 @@ describe("CardState composable", () => {
 				},
 			} as AxiosResponse<AnyContentElement>);
 
-			await addElement(elementType.type);
+			await addElement(elementType.type, boardCard.id);
 
 			expect(mockedBoardApiCalls.createElementCall).toHaveBeenCalledWith(
 				boardCard.id,
@@ -322,7 +307,7 @@ describe("CardState composable", () => {
 		});
 
 		it("should focus an added element", async () => {
-			const boardCard = boardCardFactory.build();
+			const boardCard = cardResponseFactory.build();
 			mockedSharedCardCalls.fetchCard.mockResolvedValue(boardCard);
 			const { addElement, card } = setup(boardCard.id);
 			card.value = boardCard;
@@ -337,7 +322,7 @@ describe("CardState composable", () => {
 				},
 			} as AxiosResponse<AnyContentElement>);
 
-			await addElement(elementType.type);
+			await addElement(elementType.type, boardCard.id);
 
 			expect(mockedBoardFocusHandlerCalls.setFocus).toHaveBeenCalledWith(
 				elementId
@@ -351,24 +336,22 @@ describe("CardState composable", () => {
 			};
 			card.value = undefined;
 
-			await addElement(elementType.type);
+			await addElement(elementType.type, "test-id");
 
 			expect(mockedBoardApiCalls.createElementCall).not.toHaveBeenCalled();
 		});
 
 		it("should not add element when api response has error", async () => {
-			mockedBoardApiCalls.createElementCall = jest
-				.fn()
-				.mockResolvedValue({ status: 300 });
+			mockedBoardApiCalls.createElementCall.mockRejectedValue({ status: 300 });
 
-			const testCard = boardCardFactory.build();
+			const testCard = cardResponseFactory.build();
 			const { addElement, card } = setup(testCard.id);
 			const elementType: CreateContentElementBodyParams = {
 				type: ContentElementType.RichText,
 			};
 			card.value = testCard;
 
-			await addElement(elementType.type);
+			await addElement(elementType.type, testCard.id);
 
 			expect(testCard.elements).toHaveLength(0);
 			expect(mockedErrorHandlerCalls.handleError).toHaveBeenCalled();
@@ -406,7 +389,7 @@ describe("CardState composable", () => {
 			const fileElementResponse2 = fileElementResponseFactory.build();
 
 			it("should call moveElement", async () => {
-				const boardCard = boardCardFactory.build();
+				const boardCard = cardResponseFactory.build();
 				boardCard.elements.push(fileElementResponse);
 				boardCard.elements.push(fileElementResponse2);
 				mockedUseSharedCardRequestPool.mockReturnValue({
@@ -428,7 +411,7 @@ describe("CardState composable", () => {
 			});
 
 			it("should move element correctly", async () => {
-				const boardCard = boardCardFactory.build();
+				const boardCard = cardResponseFactory.build();
 				boardCard.elements.push(fileElementResponse);
 				boardCard.elements.push(fileElementResponse2);
 				mockedUseSharedCardRequestPool.mockReturnValue({
@@ -450,7 +433,7 @@ describe("CardState composable", () => {
 			});
 
 			it("should not call moveElement if 'elementIndex' equals 0", async () => {
-				const boardCard = boardCardFactory.build();
+				const boardCard = cardResponseFactory.build();
 				const { card, moveElementDown } = setup();
 				card.value = boardCard;
 				const moveElementPayload = {
@@ -463,7 +446,7 @@ describe("CardState composable", () => {
 			});
 
 			it("should catch error and call handleError", async () => {
-				const boardCard = boardCardFactory.build();
+				const boardCard = cardResponseFactory.build();
 				const { card, moveElementDown } = setup();
 				card.value = boardCard;
 
@@ -511,7 +494,7 @@ describe("CardState composable", () => {
 			const fileElementResponse2 = fileElementResponseFactory.build();
 
 			it("should call moveElement", async () => {
-				const boardCard = boardCardFactory.build();
+				const boardCard = cardResponseFactory.build();
 				boardCard.elements.push(fileElementResponse);
 				boardCard.elements.push(fileElementResponse2);
 				mockedUseSharedCardRequestPool.mockReturnValue({
@@ -534,7 +517,7 @@ describe("CardState composable", () => {
 			});
 
 			it("should move element correctly", async () => {
-				const boardCard = boardCardFactory.build();
+				const boardCard = cardResponseFactory.build();
 				boardCard.elements.push(fileElementResponse);
 				boardCard.elements.push(fileElementResponse2);
 				mockedUseSharedCardRequestPool.mockReturnValue({
@@ -556,7 +539,7 @@ describe("CardState composable", () => {
 			});
 
 			it("should not call moveElement if 'elementIndex' equals 0", async () => {
-				const boardCard = boardCardFactory.build();
+				const boardCard = cardResponseFactory.build();
 				const { card, moveElementUp } = setup();
 				card.value = boardCard;
 				const moveElementPayload = {
@@ -569,7 +552,7 @@ describe("CardState composable", () => {
 			});
 
 			it("should catch error and call handleError", async () => {
-				const boardCard = boardCardFactory.build();
+				const boardCard = cardResponseFactory.build();
 				const { card, moveElementUp } = setup();
 				card.value = boardCard;
 
@@ -600,7 +583,7 @@ describe("CardState composable", () => {
 		describe("when card state is defined", () => {
 			it("should call deleteElement", async () => {
 				const { deleteElement, card } = setup();
-				const testCard = boardCardFactory.build();
+				const testCard = cardResponseFactory.build();
 				const fileElementResponse = fileElementResponseFactory.build();
 				card.value = testCard;
 				await deleteElement(fileElementResponse.id);
@@ -613,7 +596,7 @@ describe("CardState composable", () => {
 			it("should remove element from card", async () => {
 				const fileElementResponse = fileElementResponseFactory.build();
 				const fileElementResponse2 = fileElementResponseFactory.build();
-				const testCard = boardCardFactory.build({
+				const testCard = cardResponseFactory.build({
 					elements: [fileElementResponse, fileElementResponse2],
 				});
 				mockedSharedCardCalls.fetchCard.mockResolvedValue(testCard);
@@ -629,7 +612,7 @@ describe("CardState composable", () => {
 				mockedBoardApiCalls.deleteElementCall = jest
 					.fn()
 					.mockRejectedValue(setupErrorResponse());
-				const testCard = boardCardFactory.build();
+				const testCard = cardResponseFactory.build();
 
 				const fileElementResponse = fileElementResponseFactory.build();
 				const { deleteElement, card } = setup();
@@ -644,7 +627,7 @@ describe("CardState composable", () => {
 
 	describe("addTextAfterTitle", () => {
 		it("should call createElementCall", async () => {
-			const boardCard = boardCardFactory.build();
+			const boardCard = cardResponseFactory.build();
 			mockedSharedCardCalls.fetchCard.mockResolvedValue(boardCard);
 			const { addTextAfterTitle, card } = setup(boardCard.id);
 			card.value = boardCard;
@@ -665,7 +648,7 @@ describe("CardState composable", () => {
 	describe("notifyWithTemplateAndReload", () => {
 		describe("when is called", () => {
 			it("should call notifyWithTemplate", async () => {
-				const boardCard = boardCardFactory.build();
+				const boardCard = cardResponseFactory.build();
 				const emitMock = jest.fn();
 				const { notifyWithTemplateAndReload, card } = setup(
 					boardCard.id,

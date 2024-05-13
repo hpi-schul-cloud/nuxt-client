@@ -95,7 +95,6 @@ export const useCardState = (
 		cardId: string,
 		atFirstPosition?: boolean
 	) => {
-		console.log(cardId);
 		if (cardState.card === undefined) return;
 
 		try {
