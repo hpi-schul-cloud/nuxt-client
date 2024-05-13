@@ -20,7 +20,6 @@ import {
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
 } from "./boardActionPayload";
-import { DeleteCardRequestPayload } from "../cardActions/cardActionPayload";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -326,7 +325,6 @@ export const useBoardRestApi = () => {
 		fetchBoardRequest,
 		createCardRequest,
 		createColumnRequest,
-		deleteCardRequest,
 		deleteColumnRequest,
 		moveCardRequest,
 		moveColumnRequest,
