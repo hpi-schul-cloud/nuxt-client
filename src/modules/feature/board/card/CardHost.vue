@@ -8,7 +8,7 @@
 		>
 			<VCard
 				ref="cardHost"
-				:height="height ?? 'auto'"
+				:height="isLoadingCard ? height : 'auto'"
 				class="card-host"
 				:class="{ 'drag-disabled': isEditMode }"
 				variant="outlined"

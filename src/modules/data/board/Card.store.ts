@@ -52,7 +52,8 @@ export const useCardStore = defineStore("cardStore", () => {
 	const fetchCardSuccess = (payload: FetchCardSuccessPayload) => {
 		for (const card of payload.cards) {
 			if (cards.value[card.id] !== undefined) {
-				// TODO: decide what to do with this
+				// TODO: decide what to do if there already is a card in the store
+				// TODO: does that need special handling?
 			}
 			cards.value[card.id] = card;
 		}
@@ -62,7 +63,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		cards.value = {};
 	};
 
-	const getCard = (cardId: string) => {
+	const getCard = (cardId: string): CardResponse | undefined => {
 		return cards.value[cardId];
 	};
 

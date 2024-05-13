@@ -45,8 +45,9 @@ export const useCardRestApi = () => {
 	): Promise<void> => {
 		// await delay(100);
 		try {
-			const response = await fetchCardFromApi(payload.cardIds[0]); // <==== wrong!!!!!!!!
-			cardStore.fetchCardSuccess({ cards: [response] });
+			const promises = payload.cardIds.map(fetchCardFromApi);
+			const cards = await Promise.all(promises);
+			cardStore.fetchCardSuccess({ cards });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),
