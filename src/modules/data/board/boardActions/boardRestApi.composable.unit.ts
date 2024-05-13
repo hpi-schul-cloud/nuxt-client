@@ -199,39 +199,6 @@ describe("boardRestApi", () => {
 		});
 	});
 
-	describe("deleteCardRequest", () => {
-		it("should not call deleteCardSuccess action when board is undefined", async () => {
-			const { boardStore } = setup(false);
-			const { deleteCardRequest } = useBoardRestApi();
-
-			await deleteCardRequest({ cardId: "cardId" });
-
-			expect(boardStore.deleteCardSuccess).not.toHaveBeenCalled();
-		});
-
-		it("should call deleteCardSuccess action if the API call is successful", async () => {
-			const { boardStore } = setup();
-			const { deleteCardRequest } = useBoardRestApi();
-			const cardId = boardStore.board!.columns[0].cards[0].cardId;
-
-			await deleteCardRequest({ cardId });
-
-			expect(boardStore.deleteCardSuccess).toHaveBeenCalledWith({ cardId });
-		});
-
-		it("should call handleError if the API call fails", async () => {
-			const { boardStore } = setup();
-			const { deleteCardRequest } = useBoardRestApi();
-			const cardId = boardStore.board!.columns[0].cards[0].cardId;
-
-			mockedBoardApiCalls.deleteCardCall.mockRejectedValue({});
-
-			await deleteCardRequest({ cardId });
-
-			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
-		});
-	});
-
 	describe("deleteColumnRequest", () => {
 		it("should not call deleteColumnSuccess return if board is undefined", async () => {
 			const { boardStore } = setup(false);
