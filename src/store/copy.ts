@@ -5,7 +5,6 @@ import {
 	BoardApiFactory,
 	BoardApiInterface,
 	CopyApiResponse,
-	CopyApiResponseElementsTypesEnum,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 	RoomsApiFactory,
@@ -92,8 +91,8 @@ export default class CopyModule extends VuexModule {
 				.roomsControllerCopyCourse(id)
 				.then((response) => response.data);
 
-			if (copyResult && copyResult.elementsTypes) {
-				this.checkDrawingChildren(copyResult.elementsTypes);
+			if (copyResult && copyResult.elements) {
+				this.checkDrawingChildren(copyResult.elements);
 			}
 		}
 
@@ -115,14 +114,15 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Action
-	checkDrawingChildren(
-		copyResultElementsTypes: CopyApiResponseElementsTypesEnum[]
-	): void {
-		const elementIndex = copyResultElementsTypes.indexOf(
-			CopyApiResponseElementsTypesEnum.DrawingElement
-		);
-		if (elementIndex !== -1) {
-			this.setHasDrawingChild(true);
+	checkDrawingChildren(copyResultElementsTypes: CopyApiResponse[]): void {
+		for (const element of copyResultElementsTypes) {
+			if (element.type === CopyApiResponseTypeEnum.DrawingElement) {
+				this.setHasDrawingChild(true);
+				return;
+			}
+			if (element.elements) {
+				this.checkDrawingChildren(element.elements);
+			}
 		}
 	}
 
@@ -161,6 +161,10 @@ export default class CopyModule extends VuexModule {
 					destinationCourseId,
 				})
 				.then((response) => response.data);
+		}
+
+		if (copyResult && copyResult.elements) {
+			this.checkDrawingChildren(copyResult.elements);
 		}
 
 		if (copyResult === undefined) {
@@ -316,9 +320,5 @@ export default class CopyModule extends VuexModule {
 
 	get getIsResultModalOpen(): boolean {
 		return this.isResultModalOpen;
-	}
-
-	get getHasDrawingChild(): boolean {
-		return this.hasDrawingChild;
 	}
 }
