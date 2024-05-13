@@ -87,7 +87,6 @@ import { delay } from "@/utils/helpers";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
-	// useCardState,
 	useEditMode,
 	useCardStore,
 } from "@data-board";
@@ -138,7 +137,6 @@ export default defineComponent({
 
 		const cardStore = useCardStore();
 
-		// const card = ref<CardResponse | undefined>(undefined);
 		const card = computed(() => cardStore.getCard(cardId.value));
 		const isLoadingCard = computed(() => card.value === undefined);
 
