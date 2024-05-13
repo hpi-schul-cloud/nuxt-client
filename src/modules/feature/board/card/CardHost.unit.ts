@@ -1,17 +1,18 @@
-import { BoardCard, BoardCardSkeleton } from "@/types/board/Card";
+import { BoardCardSkeleton } from "@/types/board/Card";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import {
-	boardCardFactory,
+	cardResponseFactory,
 	fileElementResponseFactory,
 } from "@@/tests/test-utils/factory";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useCardState,
+	useCardStore,
 	useEditMode,
 } from "@data-board";
 import { BoardMenuActionDelete } from "@ui-board";
@@ -25,6 +26,10 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import {} from "@@/tests/test-utils/factory/cardResponseFactory";
+import { CardResponse } from "@/serverApi/v3";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@data-board/BoardPermissions.composable");
@@ -46,15 +51,15 @@ const CARD_SKELETON: BoardCardSkeleton = {
 	cardId: "0123456789abcdef00067000",
 };
 
-const CARD_WITHOUT_ELEMENTS: BoardCard = boardCardFactory.build();
+const CARD_WITHOUT_ELEMENTS: CardResponse = cardResponseFactory.build();
 
-const CARD_WITH_FILE_ELEMENT: BoardCard = boardCardFactory.build({
+const CARD_WITH_FILE_ELEMENT: CardResponse = cardResponseFactory.build({
 	elements: [fileElementResponseFactory.build()],
 });
 
 describe("CardHost", () => {
 	const setup = (options?: {
-		card: BoardCard;
+		card: CardResponse;
 		isLoading?: boolean;
 		permissions?: Partial<BoardPermissionChecks>;
 	}) => {
@@ -114,12 +119,22 @@ describe("CardHost", () => {
 
 		const wrapper = shallowMount(CardHost, {
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					createTestingPinia({
+						initialState: {
+							cardStore: {},
+						},
+					}),
+				],
 			},
 			propsData: CARD_SKELETON,
 		});
 
-		return { deleteElementMock, wrapper };
+		const cardStore = mockedPiniaStoreTyping(useCardStore);
+
+		return { deleteElementMock, wrapper, cardStore };
 	};
 
 	describe("when component is mounted", () => {

@@ -134,6 +134,62 @@ describe("CardStore", () => {
 		});
 	});
 
+	describe("deleteCardRequest", () => {
+		it("should call socket Api if feature flag is enabled", () => {
+			const { cardStore, cardId } = setup(true);
+
+			cardStore.deleteCardRequest({
+				cardId,
+			});
+
+			expect(mockedCardSocketApiActions.deleteCardRequest).toHaveBeenCalledWith(
+				{
+					cardId,
+				}
+			);
+		});
+
+		it("should call rest Api if feature flag is enabled", () => {
+			const { cardStore, cardId } = setup();
+
+			cardStore.deleteCardRequest({
+				cardId,
+			});
+
+			expect(mockedCardRestApiActions.deleteCardRequest).toHaveBeenCalledWith({
+				cardId,
+			});
+		});
+	});
+
+	describe("deleteCardSuccess", () => {
+		it("should not delete any card when card is undefined", async () => {
+			const { cardStore } = setup();
+
+			const cardTitles = Object.values(cardStore.cards).map(
+				(card) => card.title
+			);
+
+			cardStore.deleteCardSuccess({
+				cardId: "unkownId",
+			});
+
+			expect(Object.values(cardStore.cards).map((card) => card.title)).toEqual(
+				cardTitles
+			);
+		});
+
+		it("should delete card", async () => {
+			const { cardStore, cardId } = setup();
+
+			cardStore.deleteCardSuccess({
+				cardId,
+			});
+
+			expect(cardStore.getCard(cardId)).toBeUndefined();
+		});
+	});
+
 	describe("updateCardTitleRequest", () => {
 		it("should call socket Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup(true);

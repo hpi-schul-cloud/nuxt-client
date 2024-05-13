@@ -5,6 +5,7 @@ export * from "./boardCardFactory";
 export * from "./boardResponseFactory";
 export * from "./businessErrorFactory";
 export * from "./cardSkeletonResponseFactory";
+export * from "./cardResponseFactory";
 export * from "./classInfoFactory";
 export * from "./classInfoResponseFactory";
 export * from "./classInfoSearchListResponseFactory";
