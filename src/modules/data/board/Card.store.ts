@@ -10,7 +10,11 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { useBoardStore, useSharedEditMode } from "@data-board";
+import {
+	useBoardStore,
+	useSharedEditMode,
+	useContentElementStore,
+} from "@data-board";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import {
 	CardResponse,
@@ -49,9 +53,16 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
+	const elementStore = useContentElementStore();
+
 	const fetchCardSuccess = (payload: FetchCardSuccessPayload) => {
 		for (const card of payload.cards) {
 			cards.value[card.id] = card;
+			if (card.elements.length > 0) {
+				card.elements.forEach((element) => {
+					elementStore.addElement(element);
+				});
+			}
 		}
 	};
 
@@ -113,6 +124,7 @@ export const useCardStore = defineStore("cardStore", () => {
 				card.elements.splice(0, 0, response.data);
 			} else {
 				card.elements.push(response.data);
+				elementStore.addElement(response.data);
 			}
 
 			setFocus(response.data.id);
@@ -198,6 +210,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		try {
 			await deleteElementCall(elementId);
 			extractElement(card, elementId);
+			elementStore.removeElement(elementId);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated"),
