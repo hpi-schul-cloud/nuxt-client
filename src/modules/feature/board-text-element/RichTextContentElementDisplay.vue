@@ -8,9 +8,8 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from "vue";
-import renderMathInElement from "katex/dist/contrib/auto-render.js";
 import { RenderHTML } from "@feature-render-html";
+import { defineComponent, onMounted } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementDisplay",
