@@ -28,11 +28,7 @@ import {
 } from "@@/tests/test-utils";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
-import {
-	DeleteCardFailurePayload,
-	DeleteCardRequestPayload,
-	DeleteCardSuccessPayload,
-} from "../cardActions/cardActionPayload";
+import { DeleteCardFailurePayload } from "../cardActions/cardActionPayload";
 
 jest.mock("../Board.store");
 const mockedUseBoardStore = jest.mocked(useBoardStore);
