@@ -30,6 +30,9 @@
 						:index="index"
 						:key="element.id"
 						:line="element"
+						@update:line-background-color="
+							onUpdateLineBackgroundColor(element.id, $event)
+						"
 						@update:line-title="onUpdateLineTitle(element.id, $event)"
 						@update:element-position="onUpdateElementPosition"
 						@delete:line="onDeleteLine"
@@ -76,6 +79,7 @@ const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 const {
 	updateLineTitle,
+	updateLineBackgroundColor,
 	createLine,
 	moveLine,
 	moveElement,
@@ -88,6 +92,13 @@ const { isInEditMode } = useSharedEditMode();
 
 const onUpdateLineTitle = (lineId: string, newTitle: string) => {
 	updateLineTitle(lineId, newTitle);
+};
+
+const onUpdateLineBackgroundColor = (
+	lineId: string,
+	backgroundcolor: string
+) => {
+	updateLineBackgroundColor(lineId, backgroundcolor);
 };
 
 const onCreateLine = async () => {

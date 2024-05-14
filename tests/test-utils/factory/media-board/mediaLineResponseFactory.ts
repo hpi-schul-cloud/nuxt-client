@@ -9,5 +9,6 @@ export const mediaLineResponseFactory = Factory.define<MediaLineResponse>(
 		timestamps: timestampsResponseFactory.build(),
 		title: `line ${sequence}`,
 		elements: mediaExternalToolElementResponseFactory.buildList(1),
+		backgroundColor: "#FFFFFF",
 	})
 );

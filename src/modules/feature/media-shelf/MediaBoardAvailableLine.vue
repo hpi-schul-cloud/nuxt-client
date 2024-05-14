@@ -1,6 +1,7 @@
 <template>
 	<div
 		class="line line-drag-handle mx-n4 px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
+		:style="{ backgroundColor: lineBackgroundColor }"
 		:data-line-id="availableMediaLineId"
 		data-testid="available-line"
 	>
@@ -9,6 +10,10 @@
 				<span class="w-100 title">
 					{{ $t("feature.media-shelf.availableLine.title") }}
 				</span>
+				<MediaBoardLineMenu
+					v-model:collapsed="collapsed"
+					v-model:color="lineBackgroundColor"
+				/>
 			</div>
 			<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
 		</div>
@@ -64,7 +69,7 @@ import { useMediaQuery } from "@vueuse/core";
 import { uniqueId } from "lodash";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, ComputedRef, Ref } from "vue";
+import { computed, ComputedRef, ref, Ref } from "vue";
 import {
 	availableMediaLineId,
 	ElementCreate,
@@ -72,6 +77,7 @@ import {
 } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import { useCollapsableState } from "./utils/collapsable.composable";
+import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
 const emit = defineEmits<{
 	(e: "create:element", value: ElementCreate): void;
@@ -79,7 +85,7 @@ const emit = defineEmits<{
 
 const isDesktop: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Desktop);
 
-const { openItems } = useCollapsableState("availableLinePanel");
+const { openItems, collapsed } = useCollapsableState("availableLinePanel");
 
 const { dragStart, dragEnd } = useDragAndDrop();
 
@@ -88,6 +94,8 @@ const { availableMedia } = useSharedMediaBoardState();
 const elements: ComputedRef<MediaAvailableLineElementResponse[]> = computed(
 	() => availableMedia.value?.elements ?? []
 );
+
+const lineBackgroundColor: Ref<string> = ref("0000AA");
 
 const onElementDragEnd = async (event: SortableEvent) => {
 	dragEnd();
@@ -125,7 +133,7 @@ const onElementDragEnd = async (event: SortableEvent) => {
 <style scoped>
 .line {
 	position: relative;
-	background-color: white;
+	margin-bottom: 16px;
 }
 
 .title {

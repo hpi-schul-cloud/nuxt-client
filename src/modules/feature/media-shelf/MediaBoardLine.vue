@@ -1,6 +1,7 @@
 <template>
 	<div
 		class="line line-drag-handle mx-n4 px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
+		:style="{ backgroundColor: line.backgroundColor }"
 	>
 		<MediaBoardLineHeader
 			:title="line.title"
@@ -14,6 +15,9 @@
 					:line-id="line.id"
 					v-model:collapsed="collapsed"
 					@delete:line="$emit('delete:line', $event)"
+					@update:line-background-color="
+						$emit('update:line-background-color', $event)
+					"
 				/>
 			</template>
 		</MediaBoardLineHeader>
@@ -89,6 +93,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
 	(e: "update:line-title", newTitle: string): void;
+	(e: "update:line-background-color", color: string): void;
 	(e: "update:element-position", value: ElementMove): void;
 	(e: "delete:line", lineId: string): void;
 	(e: "delete:element", elementId: string): void;
@@ -148,5 +153,6 @@ const onElementDragEnd = async (event: SortableEvent) => {
 .line {
 	position: relative;
 	background-color: white;
+	margin-bottom: 16px;
 }
 </style>

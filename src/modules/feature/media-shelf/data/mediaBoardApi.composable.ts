@@ -71,6 +71,15 @@ export const useMediaBoardApi = () => {
 		await mediaLineApi.mediaLineControllerUpdateLineTitle(lineId, { title });
 	};
 
+	const updateLineColor = async (
+		lineId: string,
+		backgroundColor: string
+	): Promise<void> => {
+		await mediaLineApi.mediaLineControllerUpdateBackgroundColor(lineId, {
+			backgroundColor,
+		});
+	};
+
 	const deleteLine = async (lineId: string): Promise<void> => {
 		await mediaLineApi.mediaLineControllerDeleteLine(lineId);
 	};
@@ -111,6 +120,7 @@ export const useMediaBoardApi = () => {
 		createLine,
 		moveLine,
 		updateLineTitle,
+		updateLineColor,
 		deleteLine,
 		createElement,
 		moveElement,
