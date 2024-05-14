@@ -19,6 +19,7 @@ import {
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 import * as BoardActions from "./boardActions";
+import * as CardActions from "../cardActions/cardActions";
 import {
 	boardResponseFactory,
 	cardResponseFactory,
@@ -30,6 +31,7 @@ import { useErrorHandler } from "@/components/error-handling/ErrorHandler.compos
 import {
 	DeleteCardFailurePayload,
 	DeleteCardRequestPayload,
+	DeleteCardSuccessPayload,
 } from "../cardActions/cardActionPayload";
 
 jest.mock("../Board.store");
@@ -121,15 +123,15 @@ describe("useBoardSocketApi", () => {
 			expect(boardStore.createColumnSuccess).toHaveBeenCalledWith(payload);
 		});
 
-		it.skip("should call deleteCardSuccess for corresponding action", () => {
+		it("should call deleteCardSuccess for corresponding action", () => {
 			const boardStore = mockedPiniaStoreTyping(useBoardStore);
 			const { dispatch } = useBoardSocketApi();
 
-			const payload: DeleteCardRequestPayload = {
+			const payload = {
 				cardId: "cardId",
 			};
 
-			// dispatch(CardActions.deleteCardSuccess(payload));
+			dispatch(CardActions.deleteCardSuccess(payload));
 
 			expect(boardStore.deleteCardSuccess).toHaveBeenCalledWith(payload);
 		});
@@ -258,14 +260,14 @@ describe("useBoardSocketApi", () => {
 			);
 		});
 
-		it.skip("should call notifySocketError for deleteCardFailure action", () => {
+		it("should call notifySocketError for deleteCardFailure action", () => {
 			const { dispatch } = useBoardSocketApi();
 
 			const payload: DeleteCardFailurePayload = {
 				errorType: "notUpdated",
 				boardObjectType: "boardCard",
 			};
-			// dispatch(CardActions.deleteCardFailure(payload));
+			dispatch(CardActions.deleteCardFailure(payload));
 
 			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
 				payload.errorType,
