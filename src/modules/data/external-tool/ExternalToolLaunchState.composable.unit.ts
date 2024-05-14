@@ -27,12 +27,14 @@ describe("ExternalToolLaunchState.composable", () => {
 		jest.clearAllMocks();
 	});
 
-	describe("fetchLaunchRequest", () => {
+	describe("fetchContextLaunchRequest", () => {
 		describe("when fetching a tool", () => {
 			const setup = () => {
 				const response = toolLaunchRequestFactory.build();
 
-				useExternalToolApiMock.fetchLaunchDataCall.mockResolvedValue(response);
+				useExternalToolApiMock.fetchContextLaunchDataCall.mockResolvedValue(
+					response
+				);
 
 				return {
 					...useExternalToolLaunchState(),
@@ -41,19 +43,20 @@ describe("ExternalToolLaunchState.composable", () => {
 			};
 
 			it("should load the launch data from the store", async () => {
-				const { fetchLaunchRequest } = setup();
+				const { fetchContextLaunchRequest } = setup();
 
-				await fetchLaunchRequest("contextExternalToolId");
+				await fetchContextLaunchRequest("contextExternalToolId");
 
-				expect(useExternalToolApiMock.fetchLaunchDataCall).toHaveBeenCalledWith(
-					"contextExternalToolId"
-				);
+				expect(
+					useExternalToolApiMock.fetchContextLaunchDataCall
+				).toHaveBeenCalledWith("contextExternalToolId");
 			});
 
 			it("should save the loaded request in a state", async () => {
-				const { fetchLaunchRequest, toolLaunchRequest, response } = setup();
+				const { fetchContextLaunchRequest, toolLaunchRequest, response } =
+					setup();
 
-				await fetchLaunchRequest("contextExternalToolId");
+				await fetchContextLaunchRequest("contextExternalToolId");
 
 				expect(toolLaunchRequest.value).toEqual<ToolLaunchRequest>({
 					method: ToolLaunchRequestMethodEnum.Get,
@@ -64,9 +67,9 @@ describe("ExternalToolLaunchState.composable", () => {
 			});
 
 			it("should not have an error", async () => {
-				const { fetchLaunchRequest, error } = setup();
+				const { fetchContextLaunchRequest, error } = setup();
 
-				await fetchLaunchRequest("contextExternalToolId");
+				await fetchContextLaunchRequest("contextExternalToolId");
 
 				expect(error.value).toBeUndefined();
 			});
@@ -77,7 +80,7 @@ describe("ExternalToolLaunchState.composable", () => {
 				const axiosError = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(axiosError);
 
-				useExternalToolApiMock.fetchLaunchDataCall.mockRejectedValue(
+				useExternalToolApiMock.fetchContextLaunchDataCall.mockRejectedValue(
 					axiosError
 				);
 
@@ -88,9 +91,9 @@ describe("ExternalToolLaunchState.composable", () => {
 			};
 
 			it("should load the launch data from the store", async () => {
-				const { fetchLaunchRequest, error, apiError } = setup();
+				const { fetchContextLaunchRequest, error, apiError } = setup();
 
-				await fetchLaunchRequest("contextExternalToolId");
+				await fetchContextLaunchRequest("contextExternalToolId");
 
 				expect(error.value).toEqual<BusinessError>({
 					message: apiError.message,
@@ -99,6 +102,8 @@ describe("ExternalToolLaunchState.composable", () => {
 				});
 			});
 		});
+
+		// TODO N21-1889 Create test for fetchSchoolLaunchRequest
 	});
 
 	describe("launchTool", () => {

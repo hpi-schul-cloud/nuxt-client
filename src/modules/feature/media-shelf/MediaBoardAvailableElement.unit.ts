@@ -48,4 +48,6 @@ describe("MediaBoardAvailableElement", () => {
 			thumbnail: availableLineElement.logoUrl,
 		});
 	});
+
+	// TODO N21-1889 Add tests for launching, see MediaBoardExternalToolElement.spec
 });
