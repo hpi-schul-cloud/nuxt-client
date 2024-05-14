@@ -24,12 +24,12 @@ describe("ExternalToolApi.composable", () => {
 		jest.clearAllMocks();
 	});
 
-	describe("fetchLaunchDataCall", () => {
+	describe("fetchContextLaunchDataCall", () => {
 		const setup = () => {
 			const launchRequest: ToolLaunchRequestResponse =
 				toolLaunchRequestResponseFactory.build();
 
-			toolApi.toolLaunchControllerGetToolLaunchRequest.mockResolvedValue(
+			toolApi.toolLaunchControllerGetContextExternalToolLaunchRequest.mockResolvedValue(
 				mockApiResponse({ data: launchRequest })
 			);
 
@@ -41,10 +41,12 @@ describe("ExternalToolApi.composable", () => {
 		it("should call the api for a tool launch request", async () => {
 			setup();
 
-			await useExternalToolApi().fetchLaunchDataCall("contextExternalToolId");
+			await useExternalToolApi().fetchContextLaunchDataCall(
+				"contextExternalToolId"
+			);
 
 			expect(
-				toolApi.toolLaunchControllerGetToolLaunchRequest
+				toolApi.toolLaunchControllerGetContextExternalToolLaunchRequest
 			).toHaveBeenCalledWith("contextExternalToolId");
 		});
 
@@ -52,7 +54,9 @@ describe("ExternalToolApi.composable", () => {
 			const { launchRequest } = setup();
 
 			const result: ToolLaunchRequest =
-				await useExternalToolApi().fetchLaunchDataCall("contextExternalToolId");
+				await useExternalToolApi().fetchContextLaunchDataCall(
+					"contextExternalToolId"
+				);
 
 			expect(result).toEqual<ToolLaunchRequest>({
 				url: launchRequest.url,
@@ -62,4 +66,6 @@ describe("ExternalToolApi.composable", () => {
 			});
 		});
 	});
+
+	// TODO N21-1889 Create test for fetchSchoolLaunchDataCall
 });

@@ -78,7 +78,7 @@ describe("RoomExternalToolCard", () => {
 			await nextTick();
 
 			expect(
-				useExternalToolLaunchStateMock.fetchLaunchRequest
+				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalled();
 		});
 	});
@@ -469,7 +469,7 @@ describe("RoomExternalToolCard", () => {
 				await wrapper.trigger("click");
 
 				expect(
-					useExternalToolLaunchStateMock.fetchLaunchRequest
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
 				).toHaveBeenCalled();
 			});
 		});
