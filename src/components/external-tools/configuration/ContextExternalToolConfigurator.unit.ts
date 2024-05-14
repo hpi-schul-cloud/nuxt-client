@@ -199,7 +199,6 @@ describe("CourseContextExternalToolConfigurator", () => {
 					contextType,
 					displayName: template.name,
 					schoolToolId: template.schoolExternalToolId,
-					toolVersion: template.version,
 					parameters: [
 						{
 							name: template.parameters[0].name,
@@ -272,7 +271,6 @@ describe("CourseContextExternalToolConfigurator", () => {
 						contextType,
 						displayName: template.name,
 						parameters: [],
-						toolVersion: template.version,
 						schoolToolId: template.schoolExternalToolId,
 					}
 				);
