@@ -52,8 +52,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const getColumnId = (columnIndex: number): string | undefined => {
-		if (board.value === undefined) return;
-		if (columnIndex === undefined) return;
+		if (board.value === undefined) return; // shouldn't happen because board presence is checked by callers
+		if (columnIndex === undefined) return; // shouldn't happen because columnIndex is always set by type definition
 		if (columnIndex < 0) return;
 		if (columnIndex > board.value.columns.length - 1) return;
 
@@ -217,7 +217,13 @@ export const useBoardStore = defineStore("boardStore", () => {
 		fromColumnIndex: number
 	) => {
 		const { cardId, newIndex, oldIndex } = payload;
-		if (cardId === undefined || targetColumnIndex === undefined) return false; // ensure values are set
+		if (
+			cardId === undefined ||
+			targetColumnIndex === undefined ||
+			targetColumnIndex < 0
+		) {
+			return false;
+		} // ensure values are set or in valid range
 
 		const movedInsideColumn = fromColumnIndex === targetColumnIndex;
 		if (movedInsideColumn) {

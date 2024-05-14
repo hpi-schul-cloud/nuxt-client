@@ -258,6 +258,7 @@ describe("boardRestApi", () => {
 			};
 			return cardPayload;
 		};
+
 		it("should not call moveCardSuccess when board value is undefined", async () => {
 			const { boardStore } = setup(false);
 			const { moveCardRequest } = useBoardRestApi();
@@ -273,6 +274,24 @@ describe("boardRestApi", () => {
 		});
 
 		describe("when move is invalid", () => {
+			it("should not call moveCardCall if first card is moved to the left with columnDelta", async () => {
+				const { boardStore } = setup();
+				const { moveCardRequest } = useBoardRestApi();
+
+				const firstColumn = boardStore.board!.columns[0];
+				const movingCard = firstColumn.cards[0];
+
+				const cardPayload = createCardPayload({
+					cardId: movingCard.cardId,
+					fromColumnId: firstColumn.id,
+					columnDelta: -1,
+				});
+
+				await moveCardRequest(cardPayload);
+
+				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
+			});
+
 			it("should not call moveCardCall if card is moved to the same position", async () => {
 				const { boardStore } = setup();
 				const { moveCardRequest } = useBoardRestApi();
@@ -408,6 +427,36 @@ describe("boardRestApi", () => {
 
 				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith(cardPayload);
 			});
+
+			it("should call moveCardSuccess action if card is moved to another columm with columnDelta and the API call is successful", async () => {
+				const { boardStore } = setup();
+				const { moveCardRequest } = useBoardRestApi();
+
+				const firstColumn = boardStore.board!.columns[0];
+				const secondColumn = boardStore.board!.columns[1];
+				const movingCard = firstColumn.cards[1];
+
+				const cardPayload = createCardPayload({
+					cardId: movingCard.cardId,
+					oldIndex: 0,
+					newIndex: 0,
+					fromColumnId: firstColumn.id,
+					columnDelta: 1,
+				});
+
+				await moveCardRequest(cardPayload);
+
+				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith({
+					cardId: movingCard.cardId,
+					oldIndex: 0,
+					newIndex: 0,
+					fromColumnId: firstColumn.id,
+					toColumnId: secondColumn.id,
+					columnDelta: 1,
+					forceNextTick: undefined,
+				});
+			});
+
 			it("should call handleError if the API call fails", async () => {
 				const { boardStore } = setup();
 				const { moveCardRequest } = useBoardRestApi();
