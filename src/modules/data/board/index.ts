@@ -1,17 +1,17 @@
 import { useBoardPermissions } from "./BoardPermissions.composable";
-import { useBoardStore } from "./BoardStore";
-import { useCardState } from "./CardState.composable";
+import { useBoardStore } from "./Board.store";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useContentElementState } from "./ContentElementState.composable";
 import { useEditMode, useSharedEditMode } from "./EditMode.composable";
-import * as boardActions from "./boardActions/actions";
-import { useBoardSocketApi } from "./socket/socket";
+import * as boardActions from "./boardActions/boardActions";
+import { useSocketConnection } from "./socket/socket";
+import { useCardStore } from "./Card.store";
 
 export {
 	useBoardStore,
-	useBoardSocketApi,
-	useCardState,
+	useCardStore,
+	useSocketConnection,
 	useContentElementState,
 	useEditMode,
 	useSharedEditMode,

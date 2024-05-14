@@ -15,10 +15,14 @@ import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 type AddCardElement = (
-	type: ContentElementType
+	type: ContentElementType,
+	cardId: string
 ) => Promise<AnyContentElement | undefined>;
 
-export const useAddElementDialog = (addElementFunction: AddCardElement) => {
+export const useAddElementDialog = (
+	addElementFunction: AddCardElement,
+	cardId: string
+) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 	const { showCustomNotifier } = useBoardNotifier();
@@ -30,7 +34,7 @@ export const useAddElementDialog = (addElementFunction: AddCardElement) => {
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
 
-		const elementData = await addElementFunction(elementType);
+		const elementData = await addElementFunction(elementType, cardId);
 		lastCreatedElementId.value = elementData?.id;
 		showNotificationByElementType(elementType);
 	};

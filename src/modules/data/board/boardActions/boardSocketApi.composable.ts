@@ -1,10 +1,10 @@
-import * as BoardActions from "./actions";
-import { useBoardSocketApi } from "@data-board";
-import { useBoardStore } from "../BoardStore";
+import * as BoardActions from "./boardActions";
+import * as CardActions from "../cardActions/cardActions";
+import { useSocketConnection } from "@data-board";
+import { useBoardStore } from "../Board.store";
 import {
 	CreateCardRequestPayload,
 	CreateColumnRequestPayload,
-	DeleteCardRequestPayload,
 	DeleteColumnRequestPayload,
 	DisconnectSocketRequestPayload,
 	FetchBoardRequestPayload,
@@ -21,7 +21,7 @@ type ErrorActions =
 	| ReturnType<typeof BoardActions.createCardFailure>
 	| ReturnType<typeof BoardActions.createColumnFailure>
 	| ReturnType<typeof BoardActions.deleteBoardFailure>
-	| ReturnType<typeof BoardActions.deleteCardFailure>
+	| ReturnType<typeof CardActions.deleteCardFailure>
 	| ReturnType<typeof BoardActions.deleteColumnFailure>
 	| ReturnType<typeof BoardActions.moveCardFailure>
 	| ReturnType<typeof BoardActions.moveColumnFailure>
@@ -29,12 +29,12 @@ type ErrorActions =
 	| ReturnType<typeof BoardActions.updateBoardTitleFailure>
 	| ReturnType<typeof BoardActions.updateBoardVisibilityFailure>;
 
-export const useSocketApi = () => {
+export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
 	const { notifySocketError } = useErrorHandler();
 
 	const dispatch = async (
-		action: PermittedStoreActions<typeof BoardActions>
+		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
 	) => {
 		handle(
 			action,
@@ -43,7 +43,7 @@ export const useSocketApi = () => {
 			// success actions
 			on(BoardActions.createCardSuccess, boardStore.createCardSuccess),
 			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
-			on(BoardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
+			on(CardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
 			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
 			on(BoardActions.moveCardSuccess, boardStore.moveCardSuccess),
 			on(BoardActions.moveColumnSuccess, boardStore.moveColumnSuccess),
@@ -64,7 +64,7 @@ export const useSocketApi = () => {
 			// failure actions
 			on(BoardActions.createCardFailure, onFailure),
 			on(BoardActions.createColumnFailure, onFailure),
-			on(BoardActions.deleteCardFailure, onFailure),
+			on(CardActions.deleteCardFailure, onFailure),
 			on(BoardActions.deleteColumnFailure, onFailure),
 			on(BoardActions.moveCardFailure, onFailure),
 			on(BoardActions.moveColumnFailure, onFailure),
@@ -75,7 +75,7 @@ export const useSocketApi = () => {
 	};
 
 	const { emitOnSocket, emitWithAck, disconnectSocket } =
-		useBoardSocketApi(dispatch);
+		useSocketConnection(dispatch);
 
 	const createCardRequest = async (payload: CreateCardRequestPayload) => {
 		emitOnSocket("create-card-request", payload);
@@ -89,17 +89,12 @@ export const useSocketApi = () => {
 	};
 
 	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
-		// TODO: Kebab-Case
 		console.log("disconnectSocketRequest", payload);
 		disconnectSocket();
 	};
 
 	const createColumnRequest = (payload: CreateColumnRequestPayload) => {
 		emitOnSocket("create-column-request", payload);
-	};
-
-	const deleteCardRequest = (payload: DeleteCardRequestPayload) => {
-		emitOnSocket("delete-card-request", payload);
 	};
 
 	const deleteColumnRequest = (payload: DeleteColumnRequestPayload) => {
@@ -152,7 +147,6 @@ export const useSocketApi = () => {
 		createCardRequest,
 		createColumnRequest,
 		disconnectSocketRequest,
-		deleteCardRequest,
 		deleteColumnRequest,
 		fetchBoardRequest,
 		moveCardRequest,
