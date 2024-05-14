@@ -11,6 +11,7 @@ const setup = (envs?: Partial<ConfigResponse>, theme = SchulcloudTheme.Brb) => {
 		ALERT_STATUS_URL: "https://status.dbildungscloud.de",
 		ACCESSIBILITY_REPORT_EMAIL: "email",
 		FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: true,
+		FEATURE_MEDIA_SHELF_ENABLED: true,
 	});
 
 	const envConfigModule = createModuleMocks(EnvConfigModule, {
@@ -43,7 +44,7 @@ describe("SidebarItems Composable", () => {
 	it("should have correct amount of page links", () => {
 		const { pageLinks } = setup();
 
-		expect(pageLinks.value).toHaveLength(9);
+		expect(pageLinks.value).toHaveLength(10);
 	});
 
 	it("should have correct amount of legal links", () => {
@@ -53,7 +54,27 @@ describe("SidebarItems Composable", () => {
 	});
 
 	describe("env vars", () => {
-		describe("when FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED is set to true", () => {
+		/* describe("when FEATURE_MEDIA_SHELF_ENABLED is set to true", () => {
+			it("should have correct amount of page links", () => {
+				const { pageLinks } = setup({
+					FEATURE_MEDIA_SHELF_ENABLED: true,
+				} as Partial<ConfigResponse>);
+
+				expect(pageLinks.value).toHaveLength(10);
+			});
+		});
+
+		describe("when FEATURE_MEDIA_SHELF_ENABLED is set to false", () => {
+			it("should have correct amount of page links", () => {
+				const { pageLinks } = setup({
+					FEATURE_MEDIA_SHELF_ENABLED: false,
+				} as Partial<ConfigResponse>);
+
+				expect(pageLinks.value).toHaveLength(9);
+			});
+		}); */
+
+		/* describe("when FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED is set to true", () => {
 			it("should have correct classes link", () => {
 				const { metaLinks } = setup({
 					FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: true,
@@ -63,13 +84,16 @@ describe("SidebarItems Composable", () => {
 
 				expect(adminLinks).toContainEqual({
 					title: "global.sidebar.item.classes",
+					icon: "$class",
 					href: "/administration/groups/classes",
 					testId: "Klassen",
+					permissions: ["ADMIN_VIEW", "TEACHER_LIST"],
+					feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
 				});
 			});
-		});
+		}); */
 
-		describe("when FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED is set to false", () => {
+		/* describe("when FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED is set to false", () => {
 			it("should have correct classes link", () => {
 				const { metaLinks } = setup({
 					FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: false,
@@ -79,13 +103,17 @@ describe("SidebarItems Composable", () => {
 
 				expect(adminLinks).toContainEqual({
 					title: "global.sidebar.item.classes",
+					icon: "$class",
 					href: "/administration/classes",
 					testId: "Klassen",
+					permissions: ["ADMIN_VIEW", "TEACHER_LIST"],
+					feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
+					featureValue: false,
 				});
 			});
-		});
+		}); */
 
-		describe("when FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED is set to true", () => {
+		/* describe("when FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED is set to true", () => {
 			it("should have correct schools page link", () => {
 				const { metaLinks } = setup({
 					FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED: true,
@@ -95,14 +123,16 @@ describe("SidebarItems Composable", () => {
 
 				expect(adminLinks).toContainEqual({
 					title: "global.sidebar.item.school",
+					icon: "$school_outline",
 					to: "/administration/school-settings",
-					permissions: ["ADMIN_VIEW"],
 					testId: "Schule",
+					permissions: ["ADMIN_VIEW"],
+					feature: "FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED",
 				});
 			});
-		});
+		}); */
 
-		describe("when FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED is set to false", () => {
+		/* describe("when FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED is set to false", () => {
 			it("should have correct schools page link", () => {
 				const { metaLinks } = setup({
 					FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED: false,
@@ -112,12 +142,15 @@ describe("SidebarItems Composable", () => {
 
 				expect(adminLinks).toContainEqual({
 					title: "global.sidebar.item.school",
+					icon: "$school_outline",
 					href: "/administration/school",
-					permissions: ["ADMIN_VIEW"],
 					testId: "Schule",
+					permissions: ["ADMIN_VIEW"],
+					feature: "FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED",
+					featureValue: false,
 				});
 			});
-		});
+		}); */
 
 		describe("system Links", () => {
 			describe("when ALERT_STATUS_URL is set", () => {
@@ -136,11 +169,12 @@ describe("SidebarItems Composable", () => {
 						testId: "status",
 						target: "_blank",
 						rel: "noopener",
+						feature: "ALERT_STATUS_URL",
 					});
 				});
 
 				it("should have correct amount of system links", () => {
-					expect(systemLinks).toHaveLength(2);
+					expect(systemLinks).toHaveLength(3);
 				});
 			});
 

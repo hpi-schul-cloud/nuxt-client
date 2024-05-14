@@ -1,5 +1,5 @@
 <template>
-	<legacy-logged-in>
+	<new-logged-in-layout>
 		<v-main id="main-content" class="content">
 			<application-error-wrapper>
 				<alert-container />
@@ -7,21 +7,23 @@
 			</application-error-wrapper>
 		</v-main>
 		<loading-state-dialog />
-	</legacy-logged-in>
+	</new-logged-in-layout>
 </template>
 
 <script>
-import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
+// import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
 import AlertContainer from "@/components/molecules/AlertContainer.vue";
 import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper";
+import NewLoggedInLayout from "./newLoggedIn.layout.vue";
 
 export default {
 	name: "LoggedInLayout",
 
 	components: {
 		LoadingStateDialog,
-		LegacyLoggedIn,
+		// LegacyLoggedIn,
+		NewLoggedInLayout,
 		AlertContainer,
 		ApplicationErrorWrapper,
 	},
