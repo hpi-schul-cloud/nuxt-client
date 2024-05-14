@@ -14,6 +14,8 @@ import {
 	FetchBoardRequestPayload,
 	FetchBoardSuccessPayload,
 	MoveCardFailurePayload,
+	MoveCardRequestPayload,
+	MoveCardSuccessPayload,
 	MoveColumnFailurePayload,
 	MoveColumnRequestPayload,
 	MoveColumnSuccessPayload,
@@ -31,7 +33,6 @@ import {
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActionPayload";
 import { createAction, props } from "@/types/board/ActionFactory";
-import { CardMove } from "@/types/board/DragAndDrop";
 
 export const disconnectSocket = createAction(
 	"disconnect-socket",
@@ -92,11 +93,11 @@ export const deleteColumnFailure = createAction(
 
 export const moveCardRequest = createAction(
 	"move-card-request",
-	props<CardMove>()
+	props<MoveCardRequestPayload>()
 );
 export const moveCardSuccess = createAction(
 	"move-card-success",
-	props<CardMove>()
+	props<MoveCardSuccessPayload>()
 );
 export const moveCardFailure = createAction(
 	"move-card-failure",

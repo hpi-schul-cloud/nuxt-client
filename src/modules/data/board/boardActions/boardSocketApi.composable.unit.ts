@@ -1,37 +1,37 @@
-import { useBoardSocketApi } from "./boardSocketApi.composable";
-import { useSocketConnection, useBoardStore } from "@data-board";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
+import {
+	boardResponseFactory,
+	cardResponseFactory,
+	columnResponseFactory,
+	envsFactory,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { useBoardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { CardMove } from "@/types/board/DragAndDrop";
-import { useBoardRestApi } from "./boardRestApi.composable";
+import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
+import { setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
+import { DeleteCardFailurePayload } from "../cardActions/cardActionPayload";
+import * as CardActions from "../cardActions/cardActions";
 import {
 	CreateCardFailurePayload,
 	CreateColumnFailurePayload,
 	DeleteColumnFailurePayload,
 	DisconnectSocketRequestPayload,
 	MoveCardFailurePayload,
+	MoveCardRequestPayload,
 	MoveColumnFailurePayload,
 	UpdateBoardTitleFailurePayload,
 	UpdateBoardVisibilityFailurePayload,
 	UpdateColumnTitleFailurePayload,
 } from "./boardActionPayload";
-import { setActivePinia } from "pinia";
-import { createTestingPinia } from "@pinia/testing";
 import * as BoardActions from "./boardActions";
-import * as CardActions from "../cardActions/cardActions";
-import {
-	boardResponseFactory,
-	cardResponseFactory,
-	columnResponseFactory,
-	mockedPiniaStoreTyping,
-} from "@@/tests/test-utils";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-
-import { DeleteCardFailurePayload } from "../cardActions/cardActionPayload";
-
-jest.mock("../Board.store");
-const mockedUseBoardStore = jest.mocked(useBoardStore);
+import { useBoardRestApi } from "./boardRestApi.composable";
+import { useBoardSocketApi } from "./boardSocketApi.composable";
 
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
@@ -53,11 +53,18 @@ describe("useBoardSocketApi", () => {
 		ReturnType<typeof useSocketConnection>
 	>;
 	let mockedBoardRestApiHandler: DeepMocked<ReturnType<typeof useBoardRestApi>>;
-	let mockedBoardStore: DeepMocked<ReturnType<typeof useBoardStore>>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		setupStores({ envConfigModule: EnvConfigModule });
+
+		const envs = envsFactory.build({
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
+		});
+		envConfigModule.setEnvs(envs);
+
 		mockedSocketConnectionHandler =
 			createMock<ReturnType<typeof useSocketConnection>>();
 		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
@@ -65,9 +72,6 @@ describe("useBoardSocketApi", () => {
 		mockedBoardRestApiHandler =
 			createMock<ReturnType<typeof useBoardRestApi>>();
 		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiHandler);
-
-		mockedBoardStore = createMock<ReturnType<typeof useBoardStore>>();
-		mockedUseBoardStore.mockReturnValue(mockedBoardStore);
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
@@ -82,10 +86,6 @@ describe("useBoardSocketApi", () => {
 	});
 
 	describe("dispatch", () => {
-		beforeEach(() => {
-			setActivePinia(createTestingPinia({}));
-		});
-
 		it("should call disconnectSocket for corresponding action", () => {
 			const { dispatch } = useBoardSocketApi();
 
@@ -393,15 +393,31 @@ describe("useBoardSocketApi", () => {
 		});
 	});
 
+	describe("fetchBoardRequest", () => {
+		it("should call action with correct parameters and call setLoading with true", () => {
+			const boardStore = mockedPiniaStoreTyping(useBoardStore);
+			const { fetchBoardRequest } = useBoardSocketApi();
+
+			fetchBoardRequest({ boardId: "boardId" });
+
+			expect(boardStore.setLoading).toHaveBeenCalledWith(true);
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"fetch-board-request",
+				{ boardId: "boardId" }
+			);
+		});
+	});
+
 	describe("createColumnRequest", () => {
 		it("should call action with correct parameters", () => {
 			const { createColumnRequest } = useBoardSocketApi();
 
-			createColumnRequest({ boardId: "test" });
+			createColumnRequest({ boardId: "boardId" });
 
 			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"create-column-request",
-				{ boardId: "test" }
+				{ boardId: "boardId" }
 			);
 		});
 	});
@@ -426,16 +442,78 @@ describe("useBoardSocketApi", () => {
 			moveCardRequest({
 				cardId: "test",
 				toColumnId: "testColumnId",
-			} as CardMove);
+			} as MoveCardRequestPayload);
 
 			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"move-card-request",
 				{ cardId: "test", toColumnId: "testColumnId" }
 			);
 		});
+
+		it("should call action with correct parameters when toColumnId is undefined", async () => {
+			const boardStore = mockedPiniaStoreTyping(useBoardStore);
+			const board = boardResponseFactory.build();
+			boardStore.board = board;
+
+			const { moveCardRequest } = useBoardSocketApi();
+
+			const newColumn = columnResponseFactory.build();
+			mockedSocketConnectionHandler.emitWithAck.mockResolvedValue({
+				newColumn,
+			});
+
+			await moveCardRequest({
+				cardId: "cardId",
+				toColumnId: undefined,
+			} as MoveCardRequestPayload);
+
+			expect(mockedSocketConnectionHandler.emitWithAck).toHaveBeenCalledWith(
+				"create-column-request",
+				{ boardId: board.id }
+			);
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"move-card-request",
+				{ cardId: "cardId", toColumnId: newColumn.id }
+			);
+		});
+
+		it("should call onFailure when moved to a new column which cannot be created", async () => {
+			const boardStore = mockedPiniaStoreTyping(useBoardStore);
+			const board = boardResponseFactory.build();
+			boardStore.board = board;
+
+			const { moveCardRequest } = useBoardSocketApi();
+
+			mockedSocketConnectionHandler.emitWithAck.mockRejectedValue({});
+
+			await moveCardRequest({
+				cardId: "cardId",
+				toColumnId: undefined,
+			} as MoveCardRequestPayload);
+
+			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+				"notUpdated",
+				"boardCard"
+			);
+		});
 	});
 
 	describe("moveColumnRequest", () => {
+		it("should not call action when addedIndex is equal to removedIndex", () => {
+			const { moveColumnRequest } = useBoardSocketApi();
+
+			moveColumnRequest({
+				columnMove: {
+					addedIndex: 1,
+					removedIndex: 1,
+					columnId: "testColumnId",
+				},
+				byKeyboard: false,
+			});
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).not.toHaveBeenCalled();
+		});
+
 		it("should call action with correct parameters", () => {
 			const { moveColumnRequest } = useBoardSocketApi();
 
