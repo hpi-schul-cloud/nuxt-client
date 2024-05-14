@@ -1303,12 +1303,6 @@ export interface ContextExternalToolConfigurationTemplateResponse {
      * @memberof ContextExternalToolConfigurationTemplateResponse
      */
     parameters: Array<CustomParameterResponse>;
-    /**
-     * 
-     * @type {number}
-     * @memberof ContextExternalToolConfigurationTemplateResponse
-     */
-    version: number;
 }
 /**
  * 
@@ -1365,12 +1359,6 @@ export interface ContextExternalToolPostParams {
      * @memberof ContextExternalToolPostParams
      */
     parameters?: Array<CustomParameterEntryParam>;
-    /**
-     * 
-     * @type {number}
-     * @memberof ContextExternalToolPostParams
-     */
-    toolVersion: number;
 }
 /**
  * 
@@ -1414,12 +1402,6 @@ export interface ContextExternalToolResponse {
      * @memberof ContextExternalToolResponse
      */
     parameters: Array<CustomParameterEntryResponse>;
-    /**
-     * 
-     * @type {number}
-     * @memberof ContextExternalToolResponse
-     */
-    toolVersion: number;
     /**
      * 
      * @type {string}
@@ -2623,12 +2605,6 @@ export interface ExternalToolResponse {
      * @memberof ExternalToolResponse
      */
     openNewTab: boolean;
-    /**
-     * Version of the external tool
-     * @type {number}
-     * @memberof ExternalToolResponse
-     */
-    version: number;
     /**
      * Contexts in which the external tool is restricted
      * @type {Array<ToolContextType>}
@@ -5671,12 +5647,6 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
      * @memberof SchoolExternalToolConfigurationTemplateResponse
      */
     parameters: Array<CustomParameterResponse>;
-    /**
-     * 
-     * @type {number}
-     * @memberof SchoolExternalToolConfigurationTemplateResponse
-     */
-    version: number;
 }
 /**
  * 
@@ -5721,12 +5691,6 @@ export interface SchoolExternalToolPostParams {
      * @memberof SchoolExternalToolPostParams
      */
     isDeactivated: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof SchoolExternalToolPostParams
-     */
-    version: number;
 }
 /**
  * 
@@ -5764,12 +5728,6 @@ export interface SchoolExternalToolResponse {
      * @memberof SchoolExternalToolResponse
      */
     parameters: Array<CustomParameterEntryResponse>;
-    /**
-     * 
-     * @type {number}
-     * @memberof SchoolExternalToolResponse
-     */
-    toolVersion: number;
     /**
      * 
      * @type {SchoolExternalToolConfigurationStatusResponse}
