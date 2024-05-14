@@ -34,28 +34,36 @@
 				@click="$emit('update:line-title', lineId)"
 				:prepend-icon="mdiRenameOutline"
 				data-testid="action-update-line-title"
-				><VListItemTitle>
-					<span>{{ $t("common.actions.rename") }}</span>
-				</VListItemTitle></VListItem
 			>
-			<VListItem :prepend-icon="mdiPalette">
 				<VListItemTitle>
-					<span>{{ $t("common.actions.pickColor") }}</span>
-				</VListItemTitle></VListItem
-			>
-			<div>
-				<v-color-picker
+					<span>{{ $t("common.actions.rename") }}</span>
+				</VListItemTitle>
+			</VListItem>
+			<VListGroup>
+				<template v-slot:activator="{ props }">
+					<VListItem
+						v-bind="props"
+						:prepend-icon="mdiPalette"
+						@click.stop.prevent="() => {}"
+					>
+						<VListItemTitle>
+							<span>{{ $t("common.actions.pickColor") }}</span>
+						</VListItemTitle>
+					</VListItem>
+				</template>
+
+				<VColorPicker
 					hide-sliders
 					hide-inputs
 					hide-canvas
-					v-model="color"
+					elevation="0"
+					:model-value="colorValue"
 					:swatches="swatches"
 					class="ma-2"
+					@update:model-value="onUpdateColor"
 					show-swatches
-					@update:modelValue="color = $event"
-					@click="onUpdateColor(color)"
 				/>
-			</div>
+			</VListGroup>
 			<VListItem
 				v-if="lineId"
 				@click="$emit('delete:line', lineId)"
@@ -79,12 +87,12 @@ import {
 	mdiRenameOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import { ModelRef } from "vue";
-
-const collapsed: ModelRef<boolean> = defineModel("collapsed", {
-	type: Boolean,
-	default: false,
-});
+import { computed, ComputedRef, ModelRef, PropType } from "vue";
+import { MediaBoardColors } from "./data/mediaBoardColors";
+import {
+	ColorShade,
+	MediaBoardColorMapper,
+} from "./utils/mediaBoardColorMapper";
 
 defineProps({
 	lineId: {
@@ -93,32 +101,44 @@ defineProps({
 	},
 });
 
-const swatches = [
-	["#FBE9E7", "#FFEBEE", "#FCE4EC", "#F3E5F5"],
-	["#EDE7F6", "#E8EAF6", "#E3F2FD", "#E1F5FE"],
-	["#E0F7FA", "#E0F2F1", "#E8F5E9", "#F1F8E9"],
-	["#F9FBE7", "#FFFDE7", "#FFF8E1", "#FFF3E0"],
-	["#FAFAFA", "#EFEBE9", "#ECEFF1", "#000000"],
-];
-
-const color: ModelRef<string> = defineModel("color", {
-	type: String,
-	default: "0000AA",
+const collapsed: ModelRef<boolean> = defineModel("collapsed", {
+	type: Boolean,
+	default: false,
 });
 
-// const state: Ref<boolean> = ref(false);
+const color: ModelRef<MediaBoardColors> = defineModel("color", {
+	type: String as PropType<MediaBoardColors>,
+	default: MediaBoardColors.TRANSPARENT,
+});
 
-//const showColorPicker = () => {
-//	state.value = !state.value;
-// };
+const swatchShade: ColorShade = "lighten5";
 
-const emit = defineEmits<{
+const colorValue: ComputedRef<string> = computed(() => {
+	return MediaBoardColorMapper.mapColorToHex(color.value, swatchShade);
+});
+
+const onUpdateColor = (value: string) => {
+	color.value =
+		MediaBoardColorMapper.mapHexToColor(value) ?? MediaBoardColors.TRANSPARENT;
+};
+
+const swatchColors = Object.values(MediaBoardColors).map(
+	(colorName: MediaBoardColors) =>
+		MediaBoardColorMapper.mapColorToHex(colorName, swatchShade)
+);
+
+const swatches: ComputedRef<string[][]> = computed(() => {
+	const swatchRows = [];
+
+	for (let i = 0; i < swatchColors.length; i += 4) {
+		swatchRows.push(swatchColors.slice(i, i + 4));
+	}
+
+	return swatchRows;
+});
+
+defineEmits<{
 	(e: "delete:line", lineId: string): void;
 	(e: "update:line-title", lineId: string): void;
-	(e: "update:line-background-color", color: string): void;
 }>();
-
-const onUpdateColor = (color: string) => {
-	emit("update:line-background-color", color);
-};
 </script>

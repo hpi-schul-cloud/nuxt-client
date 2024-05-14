@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="line line-drag-handle mx-n4 px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
+		class="position-relative line-drag-handle d-flex flex-column flex-shrink-1 rounded"
 		:style="{ backgroundColor: line.backgroundColor }"
 	>
 		<MediaBoardLineHeader
@@ -15,9 +15,7 @@
 					:line-id="line.id"
 					v-model:collapsed="collapsed"
 					@delete:line="$emit('delete:line', $event)"
-					@update:line-background-color="
-						$emit('update:line-background-color', $event)
-					"
+					@update:color="$emit('update:line-background-color', $event)"
 				/>
 			</template>
 		</MediaBoardLineHeader>
@@ -46,7 +44,7 @@
 							forceFallback: true,
 							bubbleScroll: true,
 						}"
-						class="d-flex flex-grid flex-shrink-1 pa-2 ga-6 flex-1-1 scrollable-line"
+						class="d-flex flex-grid flex-shrink-1 py-4 px-6 ga-6 flex-1-1 scrollable-line"
 						@start="dragStart"
 						@end="onElementDragEnd"
 					>
@@ -148,11 +146,3 @@ const onElementDragEnd = async (event: SortableEvent) => {
 	}
 };
 </script>
-
-<style scoped>
-.line {
-	position: relative;
-	background-color: white;
-	margin-bottom: 16px;
-}
-</style>

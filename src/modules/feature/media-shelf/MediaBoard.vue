@@ -21,7 +21,7 @@
 					forceFallback: true,
 					bubbleScroll: true,
 				}"
-				class="d-flex flex-column flex-shrink-1 ga-2"
+				class="d-flex flex-column flex-shrink-1 ga-4 mb-4"
 				@end="onLineDragEnd"
 			>
 				<template #item="{ element, index }">
@@ -167,7 +167,7 @@ const onUpdateElementPosition = async (cardMove: ElementMove) => {
 
 /* Track */
 .scrollable-line::-webkit-scrollbar-track {
-	background: white;
+	background: transparent;
 	border: none;
 }
 
@@ -176,6 +176,7 @@ const onUpdateElementPosition = async (cardMove: ElementMove) => {
 	background-color: transparent;
 	border-radius: 5px;
 }
+
 .line-drag-handle:hover .scrollable-line::-webkit-scrollbar-thumb {
 	background-color: rgba(var(--v-theme-on-surface), 0.6);
 	border-radius: 5px;

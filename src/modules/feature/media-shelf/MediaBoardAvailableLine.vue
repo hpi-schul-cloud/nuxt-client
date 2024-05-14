@@ -1,18 +1,23 @@
 <template>
 	<div
-		class="line line-drag-handle mx-n4 px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
-		:style="{ backgroundColor: lineBackgroundColor }"
+		class="position-relative line-drag-handle d-flex flex-column flex-shrink-1 rounded mb-4"
+		:style="{ backgroundColor: lineBackgroundColor2 }"
 		:data-line-id="availableMediaLineId"
 		data-testid="available-line"
 	>
-		<div class="line-header mb-4 rounded">
-			<div class="d-flex align-center py-2 px-2">
+		<div class="line-header rounded">
+			<div class="d-flex align-center py-2 px-4">
 				<span class="w-100 title">
 					{{ $t("feature.media-shelf.availableLine.title") }}
 				</span>
 				<MediaBoardLineMenu
 					v-model:collapsed="collapsed"
 					v-model:color="lineBackgroundColor"
+					@update:color="
+						() => {
+							/* TODO emit event*/
+						}
+					"
 				/>
 			</div>
 			<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
@@ -43,7 +48,7 @@
 							bubbleScroll: true,
 							sort: false,
 						}"
-						class="d-flex flex-grid flex-shrink-1 pa-2 ga-6 flex-1-1 scrollable-line"
+						class="d-flex flex-grid flex-shrink-1 py-4 px-6 ga-6 flex-1-1 scrollable-line"
 						@start="dragStart"
 						@end="onElementDragEnd"
 					>
@@ -75,9 +80,11 @@ import {
 	ElementCreate,
 	useSharedMediaBoardState,
 } from "./data";
+import { MediaBoardColors } from "./data/mediaBoardColors";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
-import { useCollapsableState } from "./utils/collapsable.composable";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
+import { useCollapsableState } from "./utils/collapsable.composable";
+import { MediaBoardColorMapper } from "./utils/mediaBoardColorMapper";
 
 const emit = defineEmits<{
 	(e: "create:element", value: ElementCreate): void;
@@ -95,7 +102,13 @@ const elements: ComputedRef<MediaAvailableLineElementResponse[]> = computed(
 	() => availableMedia.value?.elements ?? []
 );
 
-const lineBackgroundColor: Ref<string> = ref("0000AA");
+const lineBackgroundColor: Ref<MediaBoardColors> = ref(
+	MediaBoardColors.TRANSPARENT
+);
+
+const lineBackgroundColor2: Ref<string> = computed(() =>
+	MediaBoardColorMapper.mapColorToHex(lineBackgroundColor.value, "lighten5")
+);
 
 const onElementDragEnd = async (event: SortableEvent) => {
 	dragEnd();
@@ -131,11 +144,6 @@ const onElementDragEnd = async (event: SortableEvent) => {
 </script>
 
 <style scoped>
-.line {
-	position: relative;
-	margin-bottom: 16px;
-}
-
 .title {
 	font-size: var(--heading-5) !important;
 	font-family: var(--font-accent);
