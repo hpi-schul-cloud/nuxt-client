@@ -15,3 +15,4 @@ export * from "./mockStatusAlerts";
 export * from "./mountComposable";
 export * from "./pageStubs";
 export * from "./setupStores";
+export * from "./mockedPiniaStoreTyping";

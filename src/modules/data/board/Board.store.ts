@@ -1,8 +1,8 @@
 import { Board } from "@/types/board/Board";
 import { nextTick, ref } from "vue";
 import { defineStore } from "pinia";
-import { useBoardRestApi } from "./boardActions/restApi";
-import { useSocketApi } from "./boardActions/socketApi";
+import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
+import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { CardMove } from "@/types/board/DragAndDrop";
@@ -13,8 +13,6 @@ import {
 	CreateCardSuccessPayload,
 	CreateColumnRequestPayload,
 	CreateColumnSucccessPayload,
-	DeleteCardRequestPayload,
-	DeleteCardSuccessPayload,
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
 	DisconnectSocketRequestPayload,
@@ -31,6 +29,7 @@ import {
 	UpdateColumnTitleRequestPayload,
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActions/boardActionPayload";
+import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
@@ -40,7 +39,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const isSocketEnabled =
 		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
-	const socketOrRest = isSocketEnabled ? useSocketApi() : restApi;
+	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
 
 	const { setEditModeId } = useSharedEditMode();
 
@@ -99,10 +98,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const createColumnSuccess = (payload: CreateColumnSucccessPayload) => {
 		if (!board.value) return;
 		board.value.columns.push(payload.newColumn);
-	};
-
-	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
-		await socketOrRest.deleteCardRequest(payload);
 	};
 
 	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
@@ -241,7 +236,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		await socketOrRest.moveCardRequest(payload);
 	};
 
-	// TODO: refactor or create a new function for moving cards with creating column
 	const moveCardSuccess = async (payload: MoveCardSuccessPayload) => {
 		if (!board.value) return;
 
@@ -304,7 +298,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const reloadBoard = async () => {
-		await restApi.reloadBoard();
+		if (!board.value) return;
+
+		await socketOrRest.fetchBoardRequest({ boardId: board.value.id });
 	};
 
 	return {
@@ -316,7 +312,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		createCardSuccess,
 		createColumnRequest,
 		createColumnSuccess,
-		deleteCardRequest,
 		deleteCardSuccess,
 		deleteColumnRequest,
 		deleteColumnSuccess,

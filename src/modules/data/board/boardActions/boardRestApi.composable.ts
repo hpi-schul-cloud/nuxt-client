@@ -1,7 +1,7 @@
-import { useBoardStore } from "./../BoardStore";
+import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
-import * as BoardActions from "./actions";
+import * as BoardActions from "./boardActions";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
 import { CardMove } from "@/types/board/DragAndDrop";
 import { ColumnResponse } from "@/serverApi/v3";
@@ -12,7 +12,6 @@ import {
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	CreateCardRequestPayload,
-	DeleteCardRequestPayload,
 	DeleteColumnRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
@@ -29,7 +28,6 @@ export const useBoardRestApi = () => {
 	const {
 		createCardCall,
 		createColumnCall,
-		deleteCardCall,
 		deleteColumnCall,
 		fetchBoardCall,
 		moveCardCall,
@@ -108,21 +106,6 @@ export const useBoardRestApi = () => {
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardColumn"),
-			});
-		}
-	};
-
-	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
-		if (boardStore.board === undefined) return;
-		const { cardId } = payload;
-
-		try {
-			await deleteCardCall(cardId);
-
-			boardStore.deleteCardSuccess({ cardId });
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
 			});
 		}
 	};
@@ -342,7 +325,6 @@ export const useBoardRestApi = () => {
 		fetchBoardRequest,
 		createCardRequest,
 		createColumnRequest,
-		deleteCardRequest,
 		deleteColumnRequest,
 		moveCardRequest,
 		moveColumnRequest,
