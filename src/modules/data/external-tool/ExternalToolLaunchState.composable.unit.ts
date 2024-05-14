@@ -1,3 +1,4 @@
+import { ContextExternalToolBodyParams, ToolContextType } from "@/serverApi/v3";
 import {
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
@@ -102,8 +103,100 @@ describe("ExternalToolLaunchState.composable", () => {
 				});
 			});
 		});
+	});
 
-		// TODO N21-1889 Create test for fetchSchoolLaunchRequest
+	describe("fetchSchoolLaunchRequest", () => {
+		describe("when fetching a tool", () => {
+			const setup = () => {
+				const response = toolLaunchRequestFactory.build();
+
+				const bodyParams: ContextExternalToolBodyParams = {
+					contextId: "contextId",
+					contextType: ToolContextType.MediaBoard,
+				};
+
+				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockResolvedValue(
+					response
+				);
+
+				return {
+					...useExternalToolLaunchState(),
+					response,
+					bodyParams,
+				};
+			};
+
+			it("should load the launch data from the store", async () => {
+				const { fetchSchoolLaunchRequest, bodyParams } = setup();
+
+				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
+
+				expect(
+					useExternalToolApiMock.fetchSchoolLaunchDataCall
+				).toHaveBeenCalledWith("schoolExternalToolId", bodyParams);
+			});
+
+			it("should save the loaded request in a state", async () => {
+				const {
+					fetchSchoolLaunchRequest,
+					toolLaunchRequest,
+					response,
+					bodyParams,
+				} = setup();
+
+				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
+
+				expect(toolLaunchRequest.value).toEqual<ToolLaunchRequest>({
+					method: ToolLaunchRequestMethodEnum.Get,
+					url: response.url,
+					payload: response.payload,
+					openNewTab: response.openNewTab,
+				});
+			});
+
+			it("should not have an error", async () => {
+				const { fetchSchoolLaunchRequest, error, bodyParams } = setup();
+
+				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
+
+				expect(error.value).toBeUndefined();
+			});
+		});
+
+		describe("when an error occurs", () => {
+			const setup = () => {
+				const axiosError = axiosErrorFactory.build();
+				const apiError = mapAxiosErrorToResponseError(axiosError);
+
+				const bodyParams: ContextExternalToolBodyParams = {
+					contextId: "contextId",
+					contextType: ToolContextType.MediaBoard,
+				};
+
+				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockRejectedValue(
+					axiosError
+				);
+
+				return {
+					...useExternalToolLaunchState(),
+					apiError,
+					bodyParams,
+				};
+			};
+
+			it("should load the launch data from the store", async () => {
+				const { fetchSchoolLaunchRequest, error, apiError, bodyParams } =
+					setup();
+
+				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
+
+				expect(error.value).toEqual<BusinessError>({
+					message: apiError.message,
+					statusCode: apiError.code,
+					error: apiError,
+				});
+			});
+		});
 	});
 
 	describe("launchTool", () => {
