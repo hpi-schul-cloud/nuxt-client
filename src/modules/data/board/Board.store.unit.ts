@@ -6,31 +6,30 @@ import {
 	columnResponseFactory,
 	envsFactory,
 } from "@@/tests/test-utils/factory";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
+import { createPinia, setActivePinia } from "pinia";
 import { ref } from "vue";
-import { useBoardApi } from "./BoardApi.composable";
 import { useBoardStore } from "./Board.store";
 import { useSharedEditMode } from "./EditMode.composable";
-import { setActivePinia, createPinia } from "pinia";
-
-import { useI18n } from "vue-i18n";
-import { useSocketConnection } from "@data-board";
+import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import EnvConfigModule from "@/store/env-config";
-import { envConfigModule } from "@/store";
+import { useSocketConnection } from "@data-board";
+import { useI18n } from "vue-i18n";
 import { MoveCardRequestPayload } from "./boardActions/boardActionPayload";
+import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("@data-board/BoardApi.composable");
-const mockedUseBoardApi = jest.mocked(useBoardApi);
-
 jest.mock("./boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
+
+jest.mock("./boardActions/boardRestApi.composable");
+const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
 
 jest.mock("./EditMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
@@ -45,23 +44,18 @@ jest.mock("@data-board/socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
 describe("BoardStore", () => {
-	beforeEach(() => {
-		setActivePinia(createPinia());
-		setupStores({ envConfigModule: EnvConfigModule });
-	});
-
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedSocketConnectionHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
 	>;
 	let mockedSocketApiActions: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
+	let mockedBoardRestApiActions: DeepMocked<ReturnType<typeof useBoardRestApi>>;
 	let setEditModeId: jest.Mock;
 
 	beforeEach(() => {
-		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
-		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
+		setActivePinia(createPinia());
+		setupStores({ envConfigModule: EnvConfigModule });
 
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
@@ -77,6 +71,10 @@ describe("BoardStore", () => {
 		mockedSocketApiActions = createMock<ReturnType<typeof useBoardSocketApi>>();
 		mockedUseBoardSocketApi.mockReturnValue(mockedSocketApiActions);
 
+		mockedBoardRestApiActions =
+			createMock<ReturnType<typeof useBoardRestApi>>();
+		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiActions);
+
 		setEditModeId = jest.fn();
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
@@ -84,7 +82,13 @@ describe("BoardStore", () => {
 		});
 	});
 
-	const setup = (createBoard = true, socketFlag = false) => {
+	const setup = (options?: { createBoard?: boolean; socketFlag?: boolean }) => {
+		const { createBoard, socketFlag } = {
+			createBoard: true,
+			socketFlag: false,
+			...options,
+		};
+
 		const cards = cardSkeletonResponseFactory.buildList(3);
 		const firstColumn = columnResponseFactory.build({ cards });
 		const secondColumn = columnResponseFactory.build({});
@@ -111,11 +115,33 @@ describe("BoardStore", () => {
 		jest.resetAllMocks();
 	});
 
+	describe("setBoard", () => {
+		it("should set board", () => {
+			const { boardStore } = setup();
+
+			const newBoard = boardResponseFactory.build();
+
+			boardStore.setBoard(newBoard);
+
+			expect(boardStore.board).toEqual(newBoard);
+		});
+	});
+
+	describe("setLoading", () => {
+		it("should set loading", () => {
+			const { boardStore } = setup();
+
+			boardStore.setLoading(true);
+
+			expect(boardStore.isLoading).toBe(true);
+		});
+	});
+
 	describe("createCardSuccess", () => {
 		const NEW_CARD = cardResponseFactory.build();
 
-		it("should not create a card when board is not loaded (= has no state)", async () => {
-			const { boardStore, firstColumn } = setup(false);
+		it("should not create a card when board is not loaded (= has no state)", () => {
+			const { boardStore, firstColumn } = setup({ createBoard: false });
 
 			boardStore.createCardSuccess({
 				newCard: NEW_CARD,
@@ -125,7 +151,7 @@ describe("BoardStore", () => {
 			expect(boardStore.board).toBe(undefined);
 		});
 
-		it("should create a card", async () => {
+		it("should create a card", () => {
 			const { boardStore, firstColumn } = setup();
 
 			boardStore.createCardSuccess({
@@ -139,7 +165,7 @@ describe("BoardStore", () => {
 			});
 		});
 
-		it("should call setEditModeId", async () => {
+		it("should call setEditModeId", () => {
 			const { boardStore, firstColumn } = setup();
 
 			boardStore.createCardSuccess({
@@ -153,15 +179,15 @@ describe("BoardStore", () => {
 
 	describe("createColumnSuccess", () => {
 		const NEW_COLUMN = columnResponseFactory.build();
-		it("should not create Column when board value is undefined", async () => {
-			const { boardStore } = setup(false);
+		it("should not create Column when board value is undefined", () => {
+			const { boardStore } = setup({ createBoard: false });
 
 			boardStore.createColumnSuccess({ newColumn: NEW_COLUMN });
 
 			expect(boardStore.board).toBe(undefined);
 		});
 
-		it("should create a column", async () => {
+		it("should create a column", () => {
 			const { boardStore } = setup();
 
 			boardStore.createColumnSuccess({ newColumn: NEW_COLUMN });
@@ -171,15 +197,15 @@ describe("BoardStore", () => {
 	});
 
 	describe("deleteCardSuccess", () => {
-		it("should not delete a card when a board is undefined", async () => {
-			const { boardStore, cards } = setup(false);
+		it("should not delete a card when a board is undefined", () => {
+			const { boardStore, cards } = setup({ createBoard: false });
 
 			boardStore.deleteCardSuccess({ cardId: cards[0].cardId });
 
 			expect(boardStore.board).toBe(undefined);
 		});
 
-		it("should not delete a card if cardId does not exists", async () => {
+		it("should not delete a card if cardId does not exists", () => {
 			const { boardStore } = setup();
 
 			boardStore.deleteCardSuccess({ cardId: "unknown cardId" });
@@ -187,7 +213,7 @@ describe("BoardStore", () => {
 			expect(boardStore.board?.columns[0].cards.length).toEqual(3);
 		});
 
-		it("should delete a card", async () => {
+		it("should delete a card", () => {
 			const { boardStore, cards } = setup();
 
 			const firstCardId = cards[0].cardId;
@@ -204,15 +230,15 @@ describe("BoardStore", () => {
 	});
 
 	describe("deleteColumnSuccess", () => {
-		it("should not delete a column when board value is undefined", async () => {
-			const { boardStore, firstColumn } = setup(false);
+		it("should not delete a column when board value is undefined", () => {
+			const { boardStore, firstColumn } = setup({ createBoard: false });
 
 			boardStore.deleteColumnSuccess({ columnId: firstColumn.id });
 
 			expect(boardStore.board).toBe(undefined);
 		});
 
-		it("should not delete a column when column id is unkown", async () => {
+		it("should not delete a column when column id is unkown", () => {
 			const { boardStore } = setup();
 
 			boardStore.deleteColumnSuccess({ columnId: "unknownId" });
@@ -220,7 +246,7 @@ describe("BoardStore", () => {
 			expect(boardStore.board?.columns.length).toEqual(2);
 		});
 
-		it("should delete a column", async () => {
+		it("should delete a column", () => {
 			const { boardStore, firstColumn, secondColumn } = setup();
 
 			boardStore.deleteColumnSuccess({ columnId: firstColumn.id });
@@ -233,8 +259,8 @@ describe("BoardStore", () => {
 
 	describe("updateBoardTitleSuccess", () => {
 		const NEW_TITLE = "newTitle";
-		it("should not update board title when board value is undefined", async () => {
-			const { boardStore } = setup(false);
+		it("should not update board title when board value is undefined", () => {
+			const { boardStore } = setup({ createBoard: false });
 
 			boardStore.updateBoardTitleSuccess({
 				boardId: "boardId",
@@ -244,7 +270,7 @@ describe("BoardStore", () => {
 			expect(boardStore.board).toBe(undefined);
 		});
 
-		it("should update board title", async () => {
+		it("should update board title", () => {
 			const { boardStore } = setup();
 
 			boardStore.updateBoardTitleSuccess({
@@ -258,8 +284,8 @@ describe("BoardStore", () => {
 
 	describe("updateColumnTitleSuccess", () => {
 		const NEW_TITLE = "newTitle";
-		it("should not update column title when board value is undefined", async () => {
-			const { boardStore, firstColumn } = setup(false);
+		it("should not update column title when board value is undefined", () => {
+			const { boardStore, firstColumn } = setup({ createBoard: false });
 
 			boardStore.updateColumnTitleSuccess({
 				columnId: firstColumn.id,
@@ -269,7 +295,7 @@ describe("BoardStore", () => {
 			expect(boardStore.board).toBe(undefined);
 		});
 
-		it("should update column title", async () => {
+		it("should update column title", () => {
 			const { boardStore, firstColumn } = setup();
 
 			boardStore.updateColumnTitleSuccess({
@@ -282,8 +308,8 @@ describe("BoardStore", () => {
 	});
 
 	describe("updateBoardVisibilitySuccess", () => {
-		it("should not update board title when board value is undefined", async () => {
-			const { boardStore } = setup(false);
+		it("should not update board title when board value is undefined", () => {
+			const { boardStore } = setup({ createBoard: false });
 
 			boardStore.updateBoardVisibilitySuccess({
 				boardId: "boardId",
@@ -291,7 +317,7 @@ describe("BoardStore", () => {
 			});
 			expect(boardStore.board).toBe(undefined);
 		});
-		it("should update board visibility", async () => {
+		it("should update board visibility", () => {
 			const { boardStore } = setup();
 
 			boardStore.updateBoardVisibilitySuccess({
@@ -305,7 +331,7 @@ describe("BoardStore", () => {
 
 	describe("moveColumnSuccess", () => {
 		it("should not move a column when board value is undefined", async () => {
-			const { boardStore, firstColumn } = setup(false);
+			const { boardStore, firstColumn } = setup({ createBoard: false });
 
 			const columnMove: ColumnMove = {
 				addedIndex: 0,
@@ -313,7 +339,7 @@ describe("BoardStore", () => {
 				columnId: firstColumn.id,
 			};
 
-			boardStore.moveColumnSuccess({
+			await boardStore.moveColumnSuccess({
 				columnMove,
 				byKeyboard: false,
 			});
@@ -329,9 +355,27 @@ describe("BoardStore", () => {
 				removedIndex: 1,
 				columnId: secondColumn.id,
 			};
-			boardStore.moveColumnSuccess({
+
+			await boardStore.moveColumnSuccess({
 				columnMove,
 				byKeyboard: false,
+			});
+
+			expect(boardStore.board?.columns).toEqual([secondColumn, firstColumn]);
+		});
+
+		it("should move a column by Keyboard", async () => {
+			const { boardStore, firstColumn, secondColumn } = setup();
+
+			const columnMove: ColumnMove = {
+				addedIndex: 0,
+				removedIndex: 1,
+				columnId: secondColumn.id,
+			};
+
+			await boardStore.moveColumnSuccess({
+				columnMove,
+				byKeyboard: true,
 			});
 
 			expect(boardStore.board?.columns).toEqual([secondColumn, firstColumn]);
@@ -346,6 +390,7 @@ describe("BoardStore", () => {
 			fromColumnId,
 			toColumnId,
 			columnDelta,
+			forceNextTick,
 		}: {
 			cardId: string;
 			oldIndex?: number;
@@ -353,6 +398,7 @@ describe("BoardStore", () => {
 			fromColumnId: string;
 			toColumnId?: string;
 			columnDelta?: number;
+			forceNextTick?: boolean;
 		}) => {
 			const cardPayload: MoveCardRequestPayload = {
 				cardId,
@@ -361,19 +407,20 @@ describe("BoardStore", () => {
 				fromColumnId,
 				toColumnId,
 				columnDelta,
+				forceNextTick,
 			};
 			return cardPayload;
 		};
 
 		it("should not move Card when board value is undefined", async () => {
-			const { boardStore } = setup(false);
+			const { boardStore } = setup({ createBoard: false });
 
 			const cardPayload = createCardPayload({
 				cardId: "cardId",
 				fromColumnId: "columnId",
 			});
 
-			boardStore.moveCardSuccess(cardPayload);
+			await boardStore.moveCardSuccess(cardPayload);
 
 			expect(boardStore.board).toBe(undefined);
 		});
@@ -390,7 +437,8 @@ describe("BoardStore", () => {
 					fromColumnId: firstColumnId,
 					toColumnId: firstColumnId,
 				});
-				boardStore.moveCardSuccess(cardPayload);
+
+				await boardStore.moveCardSuccess(cardPayload);
 
 				expect(boardStore.board?.columns[0].cards[1].cardId).toEqual(
 					movingCardId
@@ -409,7 +457,8 @@ describe("BoardStore", () => {
 					fromColumnId: firstColumnId,
 					toColumnId: firstColumnId,
 				});
-				boardStore.moveCardSuccess(cardPayload);
+
+				await boardStore.moveCardSuccess(cardPayload);
 
 				expect(boardStore.board?.columns[0].cards[0].cardId).toEqual(
 					firstCardId
@@ -429,7 +478,8 @@ describe("BoardStore", () => {
 					fromColumnId: firstColumnId,
 					toColumnId: firstColumnId,
 				});
-				boardStore.moveCardSuccess(cardPayload);
+
+				await boardStore.moveCardSuccess(cardPayload);
 
 				expect(boardStore.board?.columns[0].cards[2].cardId).toEqual(
 					lastCardId
@@ -454,7 +504,35 @@ describe("BoardStore", () => {
 					toColumnId: firstColumnId,
 				});
 
-				boardStore.moveCardSuccess(cardPayload);
+				await boardStore.moveCardSuccess(cardPayload);
+
+				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
+
+				expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+					secondCardId,
+					firstCardId,
+					thirdCardId,
+				]);
+			});
+
+			it("should move a card in the same column when forceNextTick is true", async () => {
+				const { boardStore, firstColumn, cards } = setup();
+
+				const [firstCardId, secondCardId, thirdCardId] = cards.map(
+					(card) => card.cardId
+				);
+				const firstColumnId = firstColumn.id;
+
+				const cardPayload = createCardPayload({
+					cardId: firstCardId,
+					oldIndex: 0,
+					newIndex: 1,
+					fromColumnId: firstColumnId,
+					toColumnId: firstColumnId,
+					forceNextTick: true,
+				});
+
+				await boardStore.moveCardSuccess(cardPayload);
 
 				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
 
@@ -480,7 +558,7 @@ describe("BoardStore", () => {
 					toColumnId: secondColumn.id,
 				};
 
-				boardStore.moveCardSuccess(cardPayload);
+				await boardStore.moveCardSuccess(cardPayload);
 
 				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
 				const secondColumnCardsAfterMove = boardStore.board?.columns[1].cards;
@@ -496,126 +574,160 @@ describe("BoardStore", () => {
 			});
 		});
 	});
+
+	describe("fetchBoardSuccess", () => {
+		it("should fetch board", () => {
+			const { boardStore } = setup();
+
+			const newBoard = boardResponseFactory.build();
+			boardStore.fetchBoardSuccess(newBoard);
+
+			expect(boardStore.board).toEqual(newBoard);
+		});
+	});
+
 	describe("@FEATURE_COLUMN_BOARD_SOCKET_ENABLED", () => {
 		describe("@createCardRequest", () => {
 			const payload = { columnId: "testColumnId" };
 
-			it("should call socketApi.createCardRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
-				boardStore.createCardRequest(payload);
+			it("should call socketApi.createCardRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.createCardRequest(payload);
+
 				expect(mockedSocketApiActions.createCardRequest).toHaveBeenCalledWith(
 					payload
 				);
 			});
 
-			it("should call restApi.createCardCall when feature flag is set false", () => {
-				const { boardStore } = setup(true, false);
-				boardStore.createCardRequest(payload);
-				expect(mockedBoardApiCalls.createCardCall).toHaveBeenCalledWith(
-					"testColumnId"
-				);
+			it("should call restApi.createCardRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.createCardRequest(payload);
+
+				expect(
+					mockedBoardRestApiActions.createCardRequest
+				).toHaveBeenCalledWith(payload);
 			});
 		});
 
 		describe("@createColumnRequest", () => {
-			it("should call socketApi.createColumnRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
+			it("should call socketApi.createColumnRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
 				const payload = { boardId: "testBoardId" };
-				boardStore.createColumnRequest(payload);
+
+				await boardStore.createColumnRequest(payload);
+
 				expect(mockedSocketApiActions.createColumnRequest).toHaveBeenCalledWith(
 					payload
 				);
 			});
 
-			it("should call restApi.createColumnCall when feature flag is set false", () => {
-				const { boardStore } = setup(true, false);
+			it("should call restApi.createColumnRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
 				const payload = { boardId: boardStore.board?.id ?? "boardId" };
-				boardStore.createColumnRequest(payload);
-				expect(mockedBoardApiCalls.createColumnCall).toHaveBeenCalledWith(
-					payload.boardId
-				);
+
+				await boardStore.createColumnRequest(payload);
+
+				expect(
+					mockedBoardRestApiActions.createColumnRequest
+				).toHaveBeenCalledWith(payload);
 			});
 		});
 
 		describe("@deleteColumnRequest", () => {
 			const payload = { columnId: "testId" };
 
-			it("should call socketApi.deleteColumnRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
-				boardStore.deleteColumnRequest(payload);
+			it("should call socketApi.deleteColumnRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.deleteColumnRequest(payload);
+
 				expect(mockedSocketApiActions.deleteColumnRequest).toHaveBeenCalledWith(
 					payload
 				);
 			});
 
-			it("should call restApi.deleteColumnCall when feature flag is set false", () => {
-				const { boardStore } = setup(true, false);
-				boardStore.deleteColumnRequest(payload);
-				expect(mockedBoardApiCalls.deleteColumnCall).toHaveBeenCalledWith(
-					payload.columnId
-				);
+			it("should call restApi.deleteColumnRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.deleteColumnRequest(payload);
+
+				expect(
+					mockedBoardRestApiActions.deleteColumnRequest
+				).toHaveBeenCalledWith(payload);
 			});
 		});
 
 		describe("@updateBoardTitleRequest", () => {
 			const payload = { boardId: "boardId", newTitle: "newTitle" };
 
-			it("should call socketApi.updateBoardTitleRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
-				boardStore.updateBoardTitleRequest(payload);
+			it("should call socketApi.updateBoardTitleRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.updateBoardTitleRequest(payload);
+
 				expect(
 					mockedSocketApiActions.updateBoardTitleRequest
 				).toHaveBeenCalledWith(payload);
 			});
 
-			it("should call restApi.updateBoardTitleCall when feature flag is set false", () => {
-				const { boardStore } = setup(true, false);
-				boardStore.updateBoardTitleRequest(payload);
+			it("should call restApi.updateColumnTitleRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.updateBoardTitleRequest(payload);
 
 				expect(
-					mockedBoardApiCalls.updateBoardTitleCall.mock.calls[0][1]
-				).toStrictEqual(payload.newTitle);
+					mockedBoardRestApiActions.updateBoardTitleRequest
+				).toHaveBeenCalledWith(payload);
 			});
 		});
 
 		describe("@updateColumnTitleRequest", () => {
 			const payload = { columnId: "columnId", newTitle: "newTitle" };
 
-			it("should call socketApi.updateColumnTitleRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
-				boardStore.updateColumnTitleRequest(payload);
+			it("should call socketApi.updateColumnTitleRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.updateColumnTitleRequest(payload);
+
 				expect(
 					mockedSocketApiActions.updateColumnTitleRequest
 				).toHaveBeenCalledWith(payload);
 			});
 
-			it("should call restApi.updateColumnTitleRequest when feature flag is set false", () => {
-				const { boardStore } = setup(true, false);
-				boardStore.updateColumnTitleRequest(payload);
+			it("should call restApi.updateColumnTitleRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.updateColumnTitleRequest(payload);
 
 				expect(
-					mockedBoardApiCalls.updateColumnTitleCall.mock.calls[0][1]
-				).toStrictEqual(payload.newTitle);
+					mockedBoardRestApiActions.updateColumnTitleRequest
+				).toHaveBeenCalledWith(payload);
 			});
 		});
 
 		describe("@updateBoardVisibilityRequest", () => {
 			const payload = { boardId: "boardId", isVisible: true };
 
-			it("should call socketApi.updateBoardVisibilityRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
-				boardStore.updateBoardVisibilityRequest(payload);
+			it("should call socketApi.updateBoardVisibilityRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.updateBoardVisibilityRequest(payload);
+
 				expect(
 					mockedSocketApiActions.updateBoardVisibilityRequest
 				).toHaveBeenCalledWith(payload);
 			});
 
-			it("should call restApi.updateBoardVisibilityCall when feature flag is set false", () => {
-				const { boardStore } = setup(true, false);
-				boardStore.updateBoardVisibilityRequest(payload);
+			it("should call restApi.updateBoardVisibilityRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.updateBoardVisibilityRequest(payload);
+
 				expect(
-					mockedBoardApiCalls.updateBoardVisibilityCall.mock.calls[0][1]
-				).toStrictEqual(payload.isVisible);
+					mockedBoardRestApiActions.updateBoardVisibilityRequest
+				).toHaveBeenCalledWith(payload);
 			});
 		});
 
@@ -630,24 +742,30 @@ describe("BoardStore", () => {
 				byKeyboard: false,
 			};
 
-			it("should call socketApi.moveColumnRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
-				boardStore.moveColumnRequest(payload);
+			it("should call socketApi.moveColumnRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.moveColumnRequest(payload);
+
 				expect(mockedSocketApiActions.moveColumnRequest).toHaveBeenCalledWith(
 					payload
 				);
 			});
 
-			it("should call restApi.moveColumnCall when feature flag is set false", () => {
-				const { boardStore } = setup(true, false);
-				boardStore.moveColumnRequest(payload);
-				expect(mockedBoardApiCalls.moveColumnCall).toHaveBeenCalled();
+			it("should call restApi.moveColumnRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.moveColumnRequest(payload);
+
+				expect(
+					mockedBoardRestApiActions.moveColumnRequest
+				).toHaveBeenCalledWith(payload);
 			});
 		});
 
 		describe("@moveCardRequest", () => {
-			it("should call socketApi.moveCardRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
+			it("should call socketApi.moveCardRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
 
 				const payload = {
 					cardId: boardStore.board?.columns[0].cards[0].cardId ?? "cardId",
@@ -658,12 +776,16 @@ describe("BoardStore", () => {
 					columnDelta: 0,
 					forceNextTick: false,
 				};
-				boardStore.moveCardRequest(payload);
-				expect(mockedSocketApiActions.moveCardRequest).toHaveBeenCalled();
+
+				await boardStore.moveCardRequest(payload);
+
+				expect(mockedSocketApiActions.moveCardRequest).toHaveBeenCalledWith(
+					payload
+				);
 			});
 
-			it("should call restApi.moveCardCall when feature flag is set false", () => {
-				const { boardStore } = setup(true, false);
+			it("should call restApi.moveCardRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
 				const payload = {
 					cardId: boardStore.board?.columns[0].cards[0].cardId ?? "cardId",
 					oldIndex: 0,
@@ -673,36 +795,96 @@ describe("BoardStore", () => {
 					columnDelta: 0,
 					forceNextTick: false,
 				};
-				boardStore.moveCardRequest(payload);
-				expect(mockedBoardApiCalls.moveCardCall).toHaveBeenCalled();
+
+				await boardStore.moveCardRequest(payload);
+
+				expect(mockedBoardRestApiActions.moveCardRequest).toHaveBeenCalledWith(
+					payload
+				);
 			});
 		});
 
 		describe("@fetchBoardRequest", () => {
 			const payload = { boardId: "boardId" };
-			it("should call socketApi.fetchBoardRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
+			it("should call socketApi.fetchBoardRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
 
-				boardStore.fetchBoardRequest(payload);
-				expect(mockedSocketApiActions.fetchBoardRequest).toHaveBeenCalled();
+				await boardStore.fetchBoardRequest(payload);
+				expect(mockedSocketApiActions.fetchBoardRequest).toHaveBeenCalledWith(
+					payload
+				);
 			});
 
-			it("should call restApi.fetchBoardRequest when feature flag is set false", () => {
-				const { boardStore } = setup(true, false);
+			it("should call restApi.fetchBoardRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
 
-				boardStore.fetchBoardRequest(payload);
-				expect(mockedBoardApiCalls.fetchBoardCall).toHaveBeenCalled();
+				await boardStore.fetchBoardRequest(payload);
+				expect(
+					mockedBoardRestApiActions.fetchBoardRequest
+				).toHaveBeenCalledWith(payload);
 			});
 		});
 
 		describe("@disconnectSocketRequest", () => {
 			it("should call socketApi.disconnectSocketRequest when feature flag is set true", () => {
-				const { boardStore } = setup(true, true);
+				const { boardStore } = setup({ socketFlag: true });
 
 				boardStore.disconnectSocketRequest({});
+
 				expect(
 					mockedSocketApiActions.disconnectSocketRequest
 				).toHaveBeenCalled();
+			});
+
+			it("should call restApi.disconnectSocketRequest when feature flag is set false", () => {
+				const { boardStore } = setup();
+
+				boardStore.disconnectSocketRequest({});
+
+				expect(
+					mockedBoardRestApiActions.disconnectSocketRequest
+				).toHaveBeenCalled();
+			});
+		});
+
+		describe("@reloadBoard", () => {
+			it.each([true, false])(
+				"should not reload board when board value is undefined and socketFlag is %s",
+				async (socketFlag) => {
+					const { boardStore } = setup({ createBoard: false, socketFlag });
+
+					await boardStore.reloadBoard();
+
+					if (socketFlag) {
+						expect(
+							mockedSocketApiActions.fetchBoardRequest
+						).not.toHaveBeenCalled();
+					} else {
+						expect(
+							mockedBoardRestApiActions.fetchBoardRequest
+						).not.toHaveBeenCalled();
+					}
+				}
+			);
+
+			it("should call socketApi.fetchBoardRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.reloadBoard();
+
+				expect(mockedSocketApiActions.fetchBoardRequest).toHaveBeenCalledWith({
+					boardId: boardStore.board?.id,
+				});
+			});
+
+			it("should call restApi.fetchBoardRequest when feature flag is set true", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.reloadBoard();
+
+				expect(
+					mockedBoardRestApiActions.fetchBoardRequest
+				).toHaveBeenCalledWith({ boardId: boardStore.board?.id });
 			});
 		});
 	});
