@@ -10,10 +10,12 @@ import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { createPinia, setActivePinia } from "pinia";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { envConfigModule } from "@/store";
 import { envsFactory } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
+import { ContentElementType } from "@/serverApi/v3";
+import { AnyContentElement } from "@/types/board/ContentElement";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -93,6 +95,7 @@ describe("CardStore", () => {
 
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
+
 		cardStore.fetchCardSuccess({ cards });
 
 		return { cardStore, cardId: cards[0].id };
@@ -317,6 +320,179 @@ describe("CardStore", () => {
 			});
 
 			expect(cardStore.cards[cardId].height).toEqual(NEW_HEIGHT);
+		});
+	});
+
+	describe("resetState", () => {
+		it("should reset cards", () => {
+			const { cardStore } = setup();
+
+			cardStore.resetState();
+
+			expect(cardStore.cards).toEqual({});
+		});
+	});
+
+	describe("getCard", () => {
+		it("should return card", () => {
+			const { cardStore, cardId } = setup();
+
+			expect(cardStore.getCard(cardId)).toEqual(cardStore.cards[cardId]);
+		});
+	});
+
+	describe("addElement", () => {
+		it("should not add element when card is undefined", async () => {
+			const { cardStore } = setup();
+
+			const cardHeights = Object.values(cardStore.cards).map(
+				(card) => card.height
+			);
+
+			await cardStore.addElement(ContentElementType.Link, "unknownId");
+
+			expect(Object.values(cardStore.cards).map((card) => card.height)).toEqual(
+				cardHeights
+			);
+		});
+
+		it("should add element", async () => {
+			const { cardStore, cardId } = setup();
+
+			expect(cardStore.cards[cardId].elements.length).toEqual(0);
+			await cardStore.addElement(ContentElementType.Drawing, cardId);
+
+			expect(cardStore.cards[cardId].elements.length).toEqual(1);
+		});
+	});
+
+	describe("moveElement", () => {
+		let elements: AnyContentElement[] = [];
+
+		beforeEach(() => {
+			elements = [];
+			elements.push({
+				id: "link-1",
+				content: {
+					url: "https://www.google.com/",
+					title: "Google",
+					description: "",
+					imageUrl: "",
+				},
+				timestamps: {
+					lastUpdatedAt: "2024-05-13T14:59:46.909Z",
+					createdAt: "2024-05-13T14:59:46.909Z",
+				},
+				type: ContentElementType.Link,
+			});
+
+			elements.push({
+				id: "link-2",
+				content: {
+					url: "https://www.google.com/",
+					title: "Google",
+					description: "",
+					imageUrl: "",
+				},
+				timestamps: {
+					lastUpdatedAt: "2024-05-13T14:59:46.909Z",
+					createdAt: "2024-05-13T14:59:46.909Z",
+				},
+				type: ContentElementType.Link,
+			});
+		});
+
+		describe("moveElementDown", () => {
+			it("should move element down", async () => {
+				const { cardStore, cardId } = setup();
+				cardStore.cards[cardId].elements.push(...elements);
+
+				cardStore.moveElementDown(cardId, {
+					elementIndex: 0,
+					payload: elements[0].id,
+				});
+
+				expect(cardStore.cards[cardId].elements[0].id).toEqual(elements[1].id);
+			});
+
+			it("should not move element down when elementIndex is last", async () => {
+				const { cardStore, cardId } = setup();
+				cardStore.cards[cardId].elements.push(...elements);
+
+				cardStore.moveElementDown(cardId, {
+					elementIndex: 1,
+					payload: elements[1].id,
+				});
+
+				expect(cardStore.cards[cardId].elements[1].id).toEqual(elements[1].id);
+			});
+		});
+
+		describe("moveElementUp", () => {
+			it("should move element up", async () => {
+				const { cardStore, cardId } = setup();
+				cardStore.cards[cardId].elements.push(...elements);
+
+				const currentCardElements = [...cardStore.cards[cardId].elements];
+
+				cardStore.moveElementUp(cardId, {
+					elementIndex: 1,
+					payload: currentCardElements[1].id,
+				});
+
+				await nextTick();
+
+				expect(cardStore.cards[cardId].elements[0].id).toEqual(
+					currentCardElements[1].id
+				);
+			});
+
+			it("should not move element up when elementIndex is 0", async () => {
+				const { cardStore, cardId } = setup();
+				cardStore.cards[cardId].elements.push(...elements);
+
+				cardStore.moveElementUp(cardId, {
+					elementIndex: 0,
+					payload: elements[0].id,
+				});
+
+				expect(cardStore.cards[cardId].elements[0].id).toEqual(elements[0].id);
+			});
+		});
+	});
+
+	describe("deleteElement", () => {
+		it("should delete element", async () => {
+			const { cardStore, cardId } = setup();
+			const elementId = "elementId";
+			cardStore.cards[cardId].elements.push({
+				id: elementId,
+				content: {
+					url: "https://www.google.com/",
+					title: "Google",
+					description: "",
+					imageUrl: "",
+				},
+				timestamps: {
+					lastUpdatedAt: "2024-05-13T14:59:46.909Z",
+					createdAt: "2024-05-13T14:59:46.909Z",
+				},
+				type: ContentElementType.Link,
+			});
+
+			await cardStore.deleteElement(cardId, elementId);
+
+			expect(cardStore.cards[cardId].elements.length).toEqual(0);
+		});
+	});
+
+	describe("addTextAfterTitle", () => {
+		it("should add text after title", async () => {
+			const { cardStore, cardId } = setup();
+
+			await cardStore.addTextAfterTitle(cardId);
+
+			expect(cardStore.cards[cardId].elements.length).toEqual(1);
 		});
 	});
 });

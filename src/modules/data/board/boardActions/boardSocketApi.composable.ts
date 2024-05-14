@@ -34,7 +34,7 @@ export const useBoardSocketApi = () => {
 	const { notifySocketError } = useErrorHandler();
 
 	const dispatch = async (
-		action: PermittedStoreActions<typeof BoardActions>
+		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
 	) => {
 		handle(
 			action,

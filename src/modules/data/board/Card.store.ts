@@ -213,12 +213,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		}
 	};
 
-	const isCardLoadingState = (cardId: string) => {
-		const card = cards.value[cardId];
-		if (card === undefined) return true;
-		return false;
-	};
-
 	const notifyWithTemplateAndReload: ApiErrorHandlerFactory = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
@@ -240,8 +234,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		deleteCardSuccess,
 		deleteElement,
 		getCard,
-		isCardLoadingState,
-		// isLoading,
 		moveElementDown,
 		moveElementUp,
 		resetState,
