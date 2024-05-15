@@ -4012,6 +4012,12 @@ export interface MediaAvailableLineResponse {
      * @memberof MediaAvailableLineResponse
      */
     elements: Array<MediaAvailableLineElementResponse>;
+    /**
+     * Background color of available media line
+     * @type {string}
+     * @memberof MediaAvailableLineResponse
+     */
+    backgroundColor: string;
 }
 /**
  * 
