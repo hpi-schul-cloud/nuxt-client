@@ -1,7 +1,7 @@
 <template>
 	<div
-		class="position-relative line-drag-handle d-flex flex-column flex-shrink-1 rounded mb-4"
-		:style="{ backgroundColor: lineBackgroundColor2 }"
+		class="line-drag-handle d-flex flex-column flex-shrink-1 rounded mb-4"
+		:style="{ backgroundColor: lineBackgroundColorHex }"
 		:data-line-id="availableMediaLineId"
 		data-testid="available-line"
 	>
@@ -11,9 +11,10 @@
 					{{ $t("feature.media-shelf.availableLine.title") }}
 				</span>
 				<MediaBoardLineMenu
-					v-model:collapsed="collapsed"
-					v-model:color="lineBackgroundColor"
+					:collapsed="line.collapsed"
+					:color="line.backgroundColor"
 					@update:color="$emit('update:line-background-color', $event)"
+					@update:collapsed="onUpdateCollapsed"
 				/>
 			</div>
 			<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
@@ -45,6 +46,7 @@
 							sort: false,
 						}"
 						class="d-flex flex-grid flex-shrink-1 py-4 px-6 ga-6 flex-1-1 scrollable-line"
+						:class="{ 'flex-wrap': !isList }"
 						@start="dragStart"
 						@end="onElementDragEnd"
 					>
@@ -62,7 +64,11 @@
 </template>
 
 <script setup lang="ts">
-import { MediaAvailableLineElementResponse } from "@/serverApi/v3";
+import {
+	MediaAvailableLineElementResponse,
+	MediaAvailableLineResponse,
+	MediaBoardLayoutType,
+} from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
 import { extractDataAttribute } from "@util-board";
@@ -70,28 +76,27 @@ import { useMediaQuery } from "@vueuse/core";
 import { uniqueId } from "lodash";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, ComputedRef, ref, Ref } from "vue";
-import {
-	availableMediaLineId,
-	ElementCreate,
-	useSharedMediaBoardState,
-} from "./data";
-import { MediaBoardColors } from "./data/mediaBoardColors";
+import { computed, ComputedRef, PropType, Ref } from "vue";
+import { availableMediaLineId, ElementCreate, MediaBoardColors } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { useCollapsableState } from "./utils/collapsable.composable";
-import { MediaBoardColorMapper } from "./utils/mediaBoardColorMapper";
+import { MediaBoardColorMapper, useCollapsableState } from "./utils";
 
-defineProps({
-	backgorundColor: {
-		type: String,
-		required: false,
+const props = defineProps({
+	line: {
+		type: Object as PropType<MediaAvailableLineResponse>,
+		required: true,
+	},
+	layout: {
+		type: String as PropType<MediaBoardLayoutType>,
+		required: true,
 	},
 });
 
 const emit = defineEmits<{
 	(e: "create:element", value: ElementCreate): void;
-	(e: "update:line-background-color", color: string): void;
+	(e: "update:line-background-color", value: MediaBoardColors): void;
+	(e: "update:line-collapsed", value: boolean): void;
 }>();
 
 const isDesktop: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Desktop);
@@ -100,19 +105,28 @@ const { openItems, collapsed } = useCollapsableState("availableLinePanel");
 
 const { dragStart, dragEnd } = useDragAndDrop();
 
-const { availableMedia } = useSharedMediaBoardState();
-
 const elements: ComputedRef<MediaAvailableLineElementResponse[]> = computed(
-	() => availableMedia.value?.elements ?? []
+	() => props.line.elements ?? []
 );
 
-const lineBackgroundColor: Ref<MediaBoardColors> = ref(
-	MediaBoardColors.TRANSPARENT
+const isList: Ref<boolean> = computed(
+	() => props.layout === MediaBoardLayoutType.List
 );
 
-const lineBackgroundColor2: Ref<string> = computed(() =>
-	MediaBoardColorMapper.mapColorToHex(lineBackgroundColor.value, "lighten5")
+// TODO remove as
+const lineBackgroundColorHex: Ref<string> = computed(() =>
+	MediaBoardColorMapper.mapColorToHex(
+		(props.line.backgroundColor as MediaBoardColors) ??
+			MediaBoardColors.TRANSPARENT,
+		"lighten5"
+	)
 );
+
+const onUpdateCollapsed = (value: boolean) => {
+	collapsed.value = value;
+
+	emit("update:line-collapsed", value);
+};
 
 const onElementDragEnd = async (event: SortableEvent) => {
 	dragEnd();

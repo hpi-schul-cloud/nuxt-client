@@ -63,6 +63,11 @@ export class MediaBoardColorMapper {
 
 		const colorSet = colors[colorName];
 
+		if (!colorSet) {
+			console.log(colorName);
+			return colors.shades.white;
+		}
+
 		return colorSet[shade];
 	}
 

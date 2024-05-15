@@ -1,13 +1,13 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
 	mediaExternalToolElementResponseFactory,
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
-import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
+import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
 
 jest.mock("./mediaBoardApi.composable");
 jest.mock("@/components/error-handling/ErrorHandler.composable");
@@ -262,7 +262,9 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.fetchAvailableMedia();
 
-				expect(composable.availableMedia.value).toEqual(availableLineResponse);
+				expect(composable.availableMediaLine.value).toEqual(
+					availableLineResponse
+				);
 			});
 		});
 
@@ -865,7 +867,7 @@ describe("mediaBoardState.composable", () => {
 			const setup = () => {
 				const composable = useMediaBoardState();
 				composable.mediaBoard.value = mediaBoardResponseFactory.build();
-				composable.availableMedia.value = undefined;
+				composable.availableMediaLine.value = undefined;
 
 				return {
 					composable,
@@ -891,7 +893,7 @@ describe("mediaBoardState.composable", () => {
 				const setup = () => {
 					const composable = useMediaBoardState();
 					composable.mediaBoard.value = mediaBoardResponseFactory.build();
-					composable.availableMedia.value =
+					composable.availableMediaLine.value =
 						mediaAvailableLineResponseFactory.build();
 
 					return {
@@ -918,7 +920,7 @@ describe("mediaBoardState.composable", () => {
 				const setup = () => {
 					const composable = useMediaBoardState();
 					composable.mediaBoard.value = mediaBoardResponseFactory.build();
-					composable.availableMedia.value =
+					composable.availableMediaLine.value =
 						mediaAvailableLineResponseFactory.build();
 
 					return {
@@ -946,7 +948,7 @@ describe("mediaBoardState.composable", () => {
 					composable.mediaBoard.value = mediaBoardResponseFactory.build({
 						lines: [],
 					});
-					composable.availableMedia.value =
+					composable.availableMediaLine.value =
 						mediaAvailableLineResponseFactory.build();
 
 					mediaBoardApiMock.createLine.mockRejectedValueOnce("error");
@@ -993,7 +995,7 @@ describe("mediaBoardState.composable", () => {
 					composable.mediaBoard.value = mediaBoardResponseFactory.build({
 						lines: [],
 					});
-					composable.availableMedia.value =
+					composable.availableMediaLine.value =
 						mediaAvailableLineResponseFactory.build();
 
 					const newElementResponse =
@@ -1061,7 +1063,7 @@ describe("mediaBoardState.composable", () => {
 					composable.mediaBoard.value = mediaBoardResponseFactory.build({
 						lines: [],
 					});
-					composable.availableMedia.value =
+					composable.availableMediaLine.value =
 						mediaAvailableLineResponseFactory.build();
 
 					mediaBoardApiMock.createElement.mockRejectedValueOnce("error");

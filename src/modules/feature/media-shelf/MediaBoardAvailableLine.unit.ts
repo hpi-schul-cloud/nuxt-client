@@ -75,7 +75,7 @@ describe("MediaBoardAvailableLine", () => {
 				elements: [availableMedium],
 			});
 
-			useSharedMediaBoardStateMock.availableMedia = ref(availableMedia);
+			useSharedMediaBoardStateMock.availableMediaLine = ref(availableMedia);
 
 			const { wrapper } = getWrapper();
 

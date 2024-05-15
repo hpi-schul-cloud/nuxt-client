@@ -5,21 +5,23 @@ import {
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	MediaAvailableLineResponse,
+	MediaBoardLayoutType,
 	MediaBoardResponse,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
 } from "@/serverApi/v3";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { ref, Ref } from "vue";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
+import { MediaBoardColors } from "./mediaBoardColors";
 import { ElementCreate, ElementMove, LineMove } from "./types";
-import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
 const useMediaBoardState = () => {
 	const api = useMediaBoardApi();
 	const { handleAnyError, notifyWithTemplate } = useErrorHandler();
 
 	const mediaBoard: Ref<MediaBoardResponse | undefined> = ref();
-	const availableMedia: Ref<MediaAvailableLineResponse | undefined> = ref();
+	const availableMediaLine: Ref<MediaAvailableLineResponse | undefined> = ref();
 	const isLoading: Ref<boolean> = ref<boolean>(false);
 
 	// Utils
@@ -63,6 +65,25 @@ const useMediaBoardState = () => {
 		isLoading.value = false;
 	};
 
+	const updateMediaBoardLayout = async (
+		layout: MediaBoardLayoutType
+	): Promise<void> => {
+		if (mediaBoard.value === undefined) {
+			return;
+		}
+
+		try {
+			mediaBoard.value.layout = layout;
+
+			await api.updateBoardLayout(mediaBoard.value.id, layout);
+		} catch (error) {
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notUpdated", "boardRow")
+			);
+		}
+	};
+
 	const fetchAvailableMedia = async (): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
@@ -74,7 +95,7 @@ const useMediaBoardState = () => {
 			const availableList: MediaAvailableLineResponse =
 				await api.getAvailableMedia(mediaBoard.value.id);
 
-			availableMedia.value = availableList;
+			availableMediaLine.value = availableList;
 		} catch (error) {
 			handleAnyError(error, notifyWithTemplateAndReload("notLoaded", "board"));
 		}
@@ -104,7 +125,7 @@ const useMediaBoardState = () => {
 		}
 	};
 
-	const deleteLine = async (lineId: string) => {
+	const deleteLine = async (lineId: string): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}
@@ -129,7 +150,7 @@ const useMediaBoardState = () => {
 		}
 	};
 
-	const moveLine = async (lineMove: LineMove) => {
+	const moveLine = async (lineMove: LineMove): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}
@@ -166,7 +187,10 @@ const useMediaBoardState = () => {
 		}
 	};
 
-	const updateLineTitle = async (lineId: string, newTitle: string) => {
+	const updateLineTitle = async (
+		lineId: string,
+		newTitle: string
+	): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}
@@ -189,8 +213,11 @@ const useMediaBoardState = () => {
 		}
 	};
 
-	const updateLineBackgroundColor = async (lineId: string, color: string) => {
-		if (mediaBoard.value === undefined || availableMedia.value === undefined) {
+	const updateLineBackgroundColor = async (
+		lineId: string,
+		color: MediaBoardColors
+	): Promise<void> => {
+		if (mediaBoard.value === undefined) {
 			return;
 		}
 
@@ -212,17 +239,68 @@ const useMediaBoardState = () => {
 		}
 	};
 
-	const updateAvailableLineBackgroundColor = async (color: string) => {
-		if (mediaBoard.value === undefined || availableMedia.value === undefined) {
+	const updateAvailableLineBackgroundColor = async (
+		color: MediaBoardColors
+	): Promise<void> => {
+		if (
+			mediaBoard.value === undefined ||
+			availableMediaLine.value === undefined
+		) {
 			return;
 		}
 
 		try {
-			mediaBoard.value.mediaAvailableLineBackgroundColor = {
-				backgroundColor: color,
-			};
+			availableMediaLine.value.backgroundColor = color;
 
-			await api.updateAvailableLineColor(mediaBoard.value?.id, color);
+			await api.updateAvailableLineColor(mediaBoard.value.id, color);
+		} catch (error) {
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notUpdated", "boardRow")
+			);
+		}
+	};
+
+	const updateLineCollapsed = async (
+		lineId: string,
+		value: boolean
+	): Promise<void> => {
+		if (mediaBoard.value === undefined) {
+			return;
+		}
+
+		try {
+			const lineIndex: number = getLineIndex(lineId);
+
+			if (lineIndex < 0) {
+				return;
+			}
+
+			mediaBoard.value.lines[lineIndex].collapsed = value;
+
+			await api.updateLineCollapsed(lineId, value);
+		} catch (error) {
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notUpdated", "boardRow")
+			);
+		}
+	};
+
+	const updateAvailableLineCollapsed = async (
+		value: boolean
+	): Promise<void> => {
+		if (
+			mediaBoard.value === undefined ||
+			availableMediaLine.value === undefined
+		) {
+			return;
+		}
+
+		try {
+			availableMediaLine.value.collapsed = value;
+
+			await api.updateAvailableLineCollapsed(mediaBoard.value.id, value);
 		} catch (error) {
 			handleAnyError(
 				error,
@@ -235,7 +313,10 @@ const useMediaBoardState = () => {
 	const createElement = async (
 		createOptions: ElementCreate
 	): Promise<MediaExternalToolElementResponse | undefined> => {
-		if (mediaBoard.value === undefined || availableMedia.value === undefined) {
+		if (
+			mediaBoard.value === undefined ||
+			availableMediaLine.value === undefined
+		) {
 			return;
 		}
 
@@ -253,7 +334,7 @@ const useMediaBoardState = () => {
 				toLineId = newLine.id;
 			}
 
-			availableMedia.value?.elements.splice(oldElementIndex, 1);
+			availableMediaLine.value?.elements.splice(oldElementIndex, 1);
 
 			const newElement: MediaExternalToolElementResponse =
 				await api.createElement(
@@ -279,7 +360,7 @@ const useMediaBoardState = () => {
 		}
 	};
 
-	const deleteElement = async (elementId: string) => {
+	const deleteElement = async (elementId: string): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}
@@ -377,7 +458,8 @@ const useMediaBoardState = () => {
 
 	return {
 		mediaBoard,
-		availableMedia,
+		availableMediaLine,
+		updateMediaBoardLayout,
 		getLineIndex,
 		getLineIndexOfElement,
 		fetchMediaBoardForUser,
@@ -387,7 +469,9 @@ const useMediaBoardState = () => {
 		moveLine,
 		updateLineTitle,
 		updateLineBackgroundColor,
+		updateLineCollapsed,
 		updateAvailableLineBackgroundColor,
+		updateAvailableLineCollapsed,
 		createElement,
 		deleteElement,
 		moveElement,

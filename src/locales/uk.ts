@@ -1630,4 +1630,6 @@ export default {
 	"feature.media-shelf.createLine": "Додайте лінію",
 	"feature.media-shelf.line.title": "лінія",
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
+	"feature.media-shelf.layout.list": "лінії",
+	"feature.media-shelf.layout.grid": "сітка",
 };

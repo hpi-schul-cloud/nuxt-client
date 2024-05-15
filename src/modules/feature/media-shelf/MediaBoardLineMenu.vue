@@ -31,7 +31,7 @@
 		<VList>
 			<VListItem
 				v-if="lineId"
-				@click="$emit('update:line-title', lineId)"
+				@click="$emit('rename-title', lineId)"
 				:prepend-icon="mdiRenameOutline"
 				data-testid="action-update-line-title"
 			>
@@ -88,11 +88,8 @@ import {
 	mdiTrashCanOutline,
 } from "@mdi/js";
 import { computed, ComputedRef, ModelRef, PropType } from "vue";
-import { MediaBoardColors } from "./data/mediaBoardColors";
-import {
-	ColorShade,
-	MediaBoardColorMapper,
-} from "./utils/mediaBoardColorMapper";
+import { MediaBoardColors } from "./data";
+import { ColorShade, MediaBoardColorMapper } from "./utils";
 
 defineProps({
 	lineId: {
@@ -111,11 +108,11 @@ const color: ModelRef<MediaBoardColors> = defineModel("color", {
 	default: MediaBoardColors.TRANSPARENT,
 });
 
-const swatchShade: ColorShade = "lighten5";
+const swatchShade: ColorShade = "lighten4";
 
-const colorValue: ComputedRef<string> = computed(() => {
-	return MediaBoardColorMapper.mapColorToHex(color.value, swatchShade);
-});
+const colorValue: ComputedRef<string> = computed(() =>
+	MediaBoardColorMapper.mapColorToHex(color.value, swatchShade)
+);
 
 const onUpdateColor = (value: string) => {
 	color.value =
@@ -128,10 +125,11 @@ const swatchColors = Object.values(MediaBoardColors).map(
 );
 
 const swatches: ComputedRef<string[][]> = computed(() => {
+	const swatchesPerLine = 4;
 	const swatchRows = [];
 
-	for (let i = 0; i < swatchColors.length; i += 4) {
-		swatchRows.push(swatchColors.slice(i, i + 4));
+	for (let i = 0; i < swatchColors.length; i += swatchesPerLine) {
+		swatchRows.push(swatchColors.slice(i, i + swatchesPerLine));
 	}
 
 	return swatchRows;
@@ -139,6 +137,6 @@ const swatches: ComputedRef<string[][]> = computed(() => {
 
 defineEmits<{
 	(e: "delete:line", lineId: string): void;
-	(e: "update:line-title", lineId: string): void;
+	(e: "rename-title", lineId: string): void;
 }>();
 </script>

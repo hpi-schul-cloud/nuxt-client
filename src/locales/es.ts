@@ -1659,4 +1659,6 @@ export default {
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
+	"feature.media-shelf.layout.list": "Líneas",
+	"feature.media-shelf.layout.grid": "Red",
 };

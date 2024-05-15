@@ -1637,4 +1637,6 @@ export default {
 	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
 	"feature.media-shelf.line.title": "Abschnitt",
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
+	"feature.media-shelf.layout.list": "Zeilen",
+	"feature.media-shelf.layout.grid": "Raster",
 };

@@ -2,6 +2,7 @@ import {
 	MediaAvailableLineResponse,
 	MediaBoardApiFactory,
 	MediaBoardApiInterface,
+	MediaBoardLayoutType,
 	MediaBoardResponse,
 	MediaElementApiFactory,
 	MediaElementApiInterface,
@@ -12,6 +13,7 @@ import {
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
+import { MediaBoardColors } from "./mediaBoardColors";
 
 export const useMediaBoardApi = () => {
 	const mediaBoardApi: MediaBoardApiInterface = MediaBoardApiFactory(
@@ -35,6 +37,15 @@ export const useMediaBoardApi = () => {
 			await mediaBoardApi.mediaBoardControllerGetMediaBoardForUser();
 
 		return response.data;
+	};
+
+	const updateBoardLayout = async (
+		boardId: string,
+		layout: MediaBoardLayoutType
+	): Promise<void> => {
+		await mediaBoardApi.mediaBoardControllerSetMediaBoardLayout(boardId, {
+			layout,
+		});
 	};
 
 	const getAvailableMedia = async (
@@ -73,7 +84,7 @@ export const useMediaBoardApi = () => {
 
 	const updateLineColor = async (
 		lineId: string,
-		backgroundColor: string
+		backgroundColor: MediaBoardColors
 	): Promise<void> => {
 		await mediaLineApi.mediaLineControllerUpdateBackgroundColor(lineId, {
 			backgroundColor,
@@ -82,7 +93,7 @@ export const useMediaBoardApi = () => {
 
 	const updateAvailableLineColor = async (
 		boardId: string,
-		backgroundColor: string
+		backgroundColor: MediaBoardColors
 	): Promise<void> => {
 		await mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor(
 			boardId,
@@ -90,6 +101,24 @@ export const useMediaBoardApi = () => {
 				backgroundColor,
 			}
 		);
+	};
+
+	const updateLineCollapsed = async (
+		lineId: string,
+		value: boolean
+	): Promise<void> => {
+		await mediaLineApi.mediaLineControllerCollapseMediaLine(lineId, {
+			collapsed: value,
+		});
+	};
+
+	const updateAvailableLineCollapsed = async (
+		boardId: string,
+		value: boolean
+	): Promise<void> => {
+		await mediaBoardApi.mediaBoardControllerCollapsMediaAvailableLine(boardId, {
+			collapsed: value,
+		});
 	};
 
 	const deleteLine = async (lineId: string): Promise<void> => {
@@ -128,12 +157,15 @@ export const useMediaBoardApi = () => {
 
 	return {
 		getMediaBoardForUser,
+		updateBoardLayout,
 		getAvailableMedia,
 		createLine,
 		moveLine,
 		updateLineTitle,
 		updateLineColor,
+		updateLineCollapsed,
 		updateAvailableLineColor,
+		updateAvailableLineCollapsed,
 		deleteLine,
 		createElement,
 		moveElement,

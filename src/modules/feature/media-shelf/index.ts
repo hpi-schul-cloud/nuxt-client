@@ -1,4 +1,4 @@
-import { useSharedMediaBoardState } from "./data/mediaBoardState.composable";
+import { MediaBoardColors, useSharedMediaBoardState } from "./data";
 import MediaBoard from "./MediaBoard.vue";
 
-export { MediaBoard, useSharedMediaBoardState };
+export { MediaBoard, useSharedMediaBoardState, MediaBoardColors };

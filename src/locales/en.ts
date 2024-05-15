@@ -1610,4 +1610,6 @@ export default {
 	"feature.media-shelf.createLine": "Add line",
 	"feature.media-shelf.line.title": "Line",
 	"feature.media-shelf.availableLine.title": "Available media",
+	"feature.media-shelf.layout.list": "Lines",
+	"feature.media-shelf.layout.grid": "Grid",
 };
