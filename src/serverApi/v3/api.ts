@@ -3215,8 +3215,8 @@ export interface LayoutBodyParams {
     * @enum {string}
     */
 export enum LayoutBodyParamsTypeEnum {
-    File = 'file',
-    Drawing = 'drawing'
+    Grid = 'grid',
+    List = 'list'
 }
 
 /**
@@ -4064,6 +4064,16 @@ export interface MediaAvailableLineResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum MediaBoardLayoutType {
+    Grid = 'grid',
+    List = 'list'
+}
+
+/**
+ * 
+ * @export
  * @interface MediaBoardResponse
  */
 export interface MediaBoardResponse {
@@ -4086,22 +4096,12 @@ export interface MediaBoardResponse {
      */
     timestamps: TimestampsResponse;
     /**
-     * Layout of media board
-     * @type {string}
+     * 
+     * @type {MediaBoardLayoutType}
      * @memberof MediaBoardResponse
      */
-    layout: MediaBoardResponseLayoutEnum;
+    layout: MediaBoardLayoutType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum MediaBoardResponseLayoutEnum {
-    File = 'file',
-    Drawing = 'drawing'
-}
-
 /**
  * 
  * @export
