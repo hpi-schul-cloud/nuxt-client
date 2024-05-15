@@ -1,13 +1,10 @@
-import {
-	CardResponse,
-	ContentElementType,
-	CreateContentElementBodyParams,
-} from "@/serverApi/v3";
+import { CardResponse, ContentElementType } from "@/serverApi/v3";
 
 import {
 	BoardObjectType,
 	ErrorType,
 } from "@/components/error-handling/ErrorHandler.composable";
+import { AnyContentElement } from "@/types/board/ContentElement";
 
 export type FetchCardRequestPayload = {
 	cardIds: string[];
@@ -32,6 +29,7 @@ export type UpdateCardTitleFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
+
 export type UpdateCardHeightRequestPayload = {
 	cardId: string;
 	newHeight: number;
@@ -45,25 +43,33 @@ export type UpdateCardHeightFailurePayload = {
 	boardObjectType: BoardObjectType;
 };
 
-export type AddElementRequestPayload = {
+export type CreateElementRequestPayload = {
 	cardId: string;
 	type: ContentElementType;
-	atFirstPosition?: boolean;
+	toPosition?: number;
 };
-
-export type AddElementSuccessPayload = {
+export type CreateElementSuccessPayload = {
 	cardId: string;
-	params: CreateContentElementBodyParams;
+	type: ContentElementType;
+	toPosition?: number;
+	newElement: AnyContentElement;
+};
+export type CreateElementFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
 };
 
 export type DeleteElementRequestPayload = {
 	cardId: string;
 	elementId: string;
 };
-
 export type DeleteElementSuccessPayload = {
 	cardId: string;
 	elementId: string;
+};
+export type DeleteElementFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
 };
 
 export type DeleteCardRequestPayload = {

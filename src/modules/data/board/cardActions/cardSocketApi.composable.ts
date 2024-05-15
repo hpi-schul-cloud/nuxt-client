@@ -4,6 +4,7 @@ import { useCardStore } from "../Card.store";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
+	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
 	FetchCardRequestPayload,
 	UpdateCardHeightRequestPayload,
@@ -31,6 +32,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.disconnectSocket, disconnectSocketRequest),
 
 			// success actions
+			on(CardActions.createElementSuccess, cardStore.createElementSuccess),
 			on(CardActions.deleteCardSuccess, cardStore.deleteCardSuccess),
 			on(CardActions.fetchCardSuccess, cardStore.fetchCardSuccess),
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
@@ -68,6 +70,10 @@ export const useCardSocketApi = () => {
 		{ maxWait: MAX_WAIT_BEFORE_FIRST_CALL_IN_MS }
 	);
 
+	const createElementRequest = async (payload: CreateElementRequestPayload) => {
+		emitOnSocket("create-element-request", payload);
+	};
+
 	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
 		emitOnSocket("delete-card-request", payload);
 	};
@@ -88,6 +94,7 @@ export const useCardSocketApi = () => {
 	return {
 		dispatch,
 		disconnectSocketRequest,
+		createElementRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,

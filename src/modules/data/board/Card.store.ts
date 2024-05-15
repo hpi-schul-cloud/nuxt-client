@@ -10,18 +10,11 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import {
-	useBoardStore,
-	useSharedEditMode,
-	useContentElementStore,
-} from "@data-board";
+import { useBoardStore, useSharedEditMode } from "@data-board";
 import { ElementMove } from "@/types/board/DragAndDrop";
+import { CardResponse, ContentElementType } from "@/serverApi/v3";
 import {
-	CardResponse,
-	ContentElementType,
-	CreateContentElementBodyParams,
-} from "@/serverApi/v3";
-import {
+	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	FetchCardSuccessPayload,
 	UpdateCardHeightSuccessPayload,
@@ -45,7 +38,6 @@ export const useCardStore = defineStore("cardStore", () => {
 	const { setEditModeId } = useSharedEditMode();
 
 	const {
-		createElementCall,
 		// deleteCardCall,
 		deleteElementCall,
 		moveElementCall,
@@ -53,16 +45,9 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
-	const elementStore = useContentElementStore();
-
 	const fetchCardSuccess = (payload: FetchCardSuccessPayload) => {
 		for (const card of payload.cards) {
 			cards.value[card.id] = card;
-			if (card.elements.length > 0) {
-				card.elements.forEach((element) => {
-					elementStore.addElement(element);
-				});
-			}
 		}
 	};
 
@@ -105,30 +90,26 @@ export const useCardStore = defineStore("cardStore", () => {
 		delete cards.value[payload.cardId];
 	};
 
-	const addElement = async (
-		type: ContentElementType,
-		cardId: string,
-		atFirstPosition?: boolean
-	) => {
-		const card = cards.value[cardId];
+	const createElementRequest = socketOrRest.createElementRequest;
+
+	const createElementSuccess = async (payload: CreateElementSuccessPayload) => {
+		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
 		try {
-			const params: CreateContentElementBodyParams = { type };
-			if (atFirstPosition) {
-				params.toPosition = 0;
-			}
-			const response = await createElementCall(card.id, params);
-
-			if (atFirstPosition) {
-				card.elements.splice(0, 0, response.data);
+			const { toPosition } = payload;
+			if (
+				toPosition !== undefined &&
+				toPosition >= 0 &&
+				toPosition <= card.elements.length
+			) {
+				card.elements.splice(toPosition, 0, payload.newElement);
 			} else {
-				card.elements.push(response.data);
-				elementStore.addElement(response.data);
+				card.elements.push(payload.newElement);
 			}
 
-			setFocus(response.data.id);
-			return response.data;
+			setFocus(payload.newElement.id);
+			return payload.newElement;
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
@@ -141,7 +122,11 @@ export const useCardStore = defineStore("cardStore", () => {
 		const card = cards.value[cardId];
 		if (card === undefined) return;
 
-		return await addElement(ContentElementType.RichText, card.id, true);
+		return await createElementRequest({
+			type: ContentElementType.RichText,
+			cardId: card.id,
+			toPosition: 0,
+		});
 	};
 
 	const moveElementDown = async (
@@ -210,7 +195,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		try {
 			await deleteElementCall(elementId);
 			extractElement(card, elementId);
-			elementStore.removeElement(elementId);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated"),
@@ -238,7 +222,8 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	return {
-		addElement,
+		createElementRequest,
+		createElementSuccess,
 		addTextAfterTitle,
 		fetchCardRequest,
 		fetchCardSuccess,

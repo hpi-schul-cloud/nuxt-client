@@ -7,6 +7,7 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
+	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
 	FetchCardRequestPayload,
 	UpdateCardHeightRequestPayload,
@@ -24,10 +25,35 @@ export const useCardRestApi = () => {
 	const { fetchCard: fetchCardFromApi } = useSharedCardRequestPool();
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 
-	const { deleteCardCall, updateCardTitle, updateCardHeightCall } =
-		useBoardApi();
+	const {
+		createElementCall,
+		deleteCardCall,
+		updateCardTitle,
+		updateCardHeightCall,
+	} = useBoardApi();
 
 	const { setEditModeId } = useSharedEditMode();
+
+	const createElementRequest = async (payload: CreateElementRequestPayload) => {
+		const card = cardStore.getCard(payload.cardId);
+		if (card === undefined) return;
+
+		try {
+			const params = {
+				type: payload.type,
+				toPosition: payload.toPosition,
+			};
+			const newElement = await createElementCall(payload.cardId, params);
+			cardStore.createElementSuccess({
+				...payload,
+				newElement: newElement.data,
+			});
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
+			});
+		}
+	};
 
 	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
 		const card = cardStore.getCard(payload.cardId);
@@ -105,6 +131,7 @@ export const useCardRestApi = () => {
 	const disconnectSocketRequest = (): void => {};
 
 	return {
+		createElementRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,

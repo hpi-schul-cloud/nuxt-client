@@ -1,4 +1,7 @@
 import {
+	CreateElementFailurePayload,
+	CreateElementRequestPayload,
+	CreateElementSuccessPayload,
 	DeleteCardFailurePayload,
 	DeleteCardRequestPayload,
 	DeleteCardSuccessPayload,
@@ -18,6 +21,19 @@ import { createAction, props } from "@/types/board/ActionFactory";
 export const disconnectSocket = createAction(
 	"disconnect-socket",
 	props<DisconnectSocketRequestPayload>()
+);
+
+export const createElementRequest = createAction(
+	"create-element-request",
+	props<CreateElementRequestPayload>()
+);
+export const createElementSuccess = createAction(
+	"create-element-success",
+	props<CreateElementSuccessPayload>()
+);
+export const createElementFailure = createAction(
+	"create-element-failure",
+	props<CreateElementFailurePayload>()
 );
 
 export const deleteCardRequest = createAction(

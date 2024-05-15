@@ -14,10 +14,10 @@ import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
-type AddCardElement = (
-	type: ContentElementType,
-	cardId: string
-) => Promise<AnyContentElement | undefined>;
+type AddCardElement = (payload: {
+	cardId: string;
+	type: ContentElementType;
+}) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (
 	addElementFunction: AddCardElement,
@@ -34,7 +34,7 @@ export const useAddElementDialog = (
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
 
-		const elementData = await addElementFunction(elementType, cardId);
+		const elementData = await addElementFunction({ type: elementType, cardId });
 		lastCreatedElementId.value = elementData?.id;
 		showNotificationByElementType(elementType);
 	};
