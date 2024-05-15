@@ -1,7 +1,9 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { ContentElementType } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -10,6 +12,7 @@ import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 import {
+	CreateElementSuccessPayload,
 	DeleteCardRequestPayload,
 	DisconnectSocketRequestPayload,
 	UpdateCardHeightFailurePayload,
@@ -71,6 +74,34 @@ describe("useCardSocketApi", () => {
 			dispatch(CardActions.disconnectSocket({}));
 
 			expect(mockedSocketConnectionHandler.disconnectSocket).toHaveBeenCalled();
+		});
+
+		it("should call createElementSuccess for corresponding action", () => {
+			const cardStore = mockedPiniaStoreTyping(useCardStore);
+			const { dispatch } = useCardSocketApi();
+
+			const payload: CreateElementSuccessPayload = {
+				cardId: "cardId",
+				type: ContentElementType.RichText,
+				toPosition: 0,
+				newElement: richTextElementResponseFactory.build(),
+			};
+			dispatch(CardActions.createElementSuccess(payload));
+
+			expect(cardStore.createElementSuccess).toHaveBeenCalledWith(payload);
+		});
+
+		it("should call deleteElementSuccess for corresponding action", () => {
+			const cardStore = mockedPiniaStoreTyping(useCardStore);
+			const { dispatch } = useCardSocketApi();
+
+			const payload = {
+				cardId: "cardId",
+				elementId: "elementId",
+			};
+			dispatch(CardActions.deleteElementSuccess(payload));
+
+			expect(cardStore.deleteElementSuccess).toHaveBeenCalledWith(payload);
 		});
 
 		it("should call updateCardTitleSuccess for corresponding action", () => {
@@ -142,6 +173,42 @@ describe("useCardSocketApi", () => {
 		});
 	});
 
+	describe("createElementRequest", () => {
+		it("should call emitOnSocket with correct parameters", () => {
+			const { createElementRequest } = useCardSocketApi();
+
+			const payload = {
+				cardId: "cardId",
+				type: ContentElementType.RichText,
+			};
+
+			createElementRequest(payload);
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"create-element-request",
+				payload
+			);
+		});
+	});
+
+	describe("deleteElementRequest", () => {
+		it("should call emitOnSocket with correct parameters", () => {
+			const { deleteElementRequest } = useCardSocketApi();
+
+			const payload = {
+				cardId: "cardId",
+				elementId: "elementId",
+			};
+
+			deleteElementRequest(payload);
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"delete-element-request",
+				payload
+			);
+		});
+	});
+
 	describe("deleteCardRequest", () => {
 		const payload: DeleteCardRequestPayload = { cardId: "cardId" };
 
@@ -192,7 +259,6 @@ describe("useCardSocketApi", () => {
 			);
 		});
 	});
-
 	describe("fetchCardRequest", () => {
 		const payload = {
 			cardIds: ["fake-card-id-234"],
