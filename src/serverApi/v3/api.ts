@@ -593,6 +593,19 @@ export interface CollaborativeTextEditorResponse {
 /**
  * 
  * @export
+ * @interface CollapsableBodyParams
+ */
+export interface CollapsableBodyParams {
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CollapsableBodyParams
+     */
+    collapsed: boolean;
+}
+/**
+ * 
+ * @export
  * @interface ColorBodyParams
  */
 export interface ColorBodyParams {
@@ -3186,6 +3199,29 @@ export enum LanguageType {
 /**
  * 
  * @export
+ * @interface LayoutBodyParams
+ */
+export interface LayoutBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof LayoutBodyParams
+     */
+    type: LayoutBodyParamsTypeEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum LayoutBodyParamsTypeEnum {
+    File = 'file',
+    Drawing = 'drawing'
+}
+
+/**
+ * 
+ * @export
  * @interface LdapAuthorizationBodyParams
  */
 export interface LdapAuthorizationBodyParams {
@@ -4018,6 +4054,12 @@ export interface MediaAvailableLineResponse {
      * @memberof MediaAvailableLineResponse
      */
     backgroundColor: string;
+    /**
+     * Collapse available media line
+     * @type {boolean}
+     * @memberof MediaAvailableLineResponse
+     */
+    collapsed: boolean;
 }
 /**
  * 
@@ -4044,11 +4086,11 @@ export interface MediaBoardResponse {
      */
     timestamps: TimestampsResponse;
     /**
-     * Configuration of media available line
-     * @type {object}
+     * Layout of media board
+     * @type {string}
      * @memberof MediaBoardResponse
      */
-    mediaAvailableLineBackgroundColor: object;
+    layout: string;
 }
 /**
  * 
@@ -13919,6 +13961,50 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
     return {
         /**
          * 
+         * @summary Collaps available line in media board.
+         * @param {string} boardId The id of the board.
+         * @param {CollapsableBodyParams} collapsableBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerCollapsMediaAvailableLine: async (boardId: string, collapsableBodyParams: CollapsableBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('mediaBoardControllerCollapsMediaAvailableLine', 'boardId', boardId)
+            // verify required parameter 'collapsableBodyParams' is not null or undefined
+            assertParamExists('mediaBoardControllerCollapsMediaAvailableLine', 'collapsableBodyParams', collapsableBodyParams)
+            const localVarPath = `/media-boards/{boardId}/media-available-line/collaps`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(collapsableBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new line on a media board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -14029,6 +14115,50 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
         },
         /**
          * 
+         * @summary Set layout for media board.
+         * @param {string} boardId The id of the board.
+         * @param {LayoutBodyParams} layoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerSetMediaBoardLayout: async (boardId: string, layoutBodyParams: LayoutBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('mediaBoardControllerSetMediaBoardLayout', 'boardId', boardId)
+            // verify required parameter 'layoutBodyParams' is not null or undefined
+            assertParamExists('mediaBoardControllerSetMediaBoardLayout', 'layoutBodyParams', layoutBodyParams)
+            const localVarPath = `/media-boards/{boardId}/layout`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(layoutBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Update the color of available line in media board.
          * @param {string} boardId The id of the board.
          * @param {ColorBodyParams} colorBodyParams 
@@ -14040,7 +14170,7 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
             assertParamExists('mediaBoardControllerUpdateMediaAvailableLineColor', 'boardId', boardId)
             // verify required parameter 'colorBodyParams' is not null or undefined
             assertParamExists('mediaBoardControllerUpdateMediaAvailableLineColor', 'colorBodyParams', colorBodyParams)
-            const localVarPath = `/media-boards/{boardId}/media-available-line/configuration`
+            const localVarPath = `/media-boards/{boardId}/media-available-line/color`
                 .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -14083,6 +14213,18 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Collaps available line in media board.
+         * @param {string} boardId The id of the board.
+         * @param {CollapsableBodyParams} collapsableBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaBoardControllerCollapsMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerCollapsMediaAvailableLine(boardId, collapsableBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Create a new line on a media board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -14115,6 +14257,18 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Set layout for media board.
+         * @param {string} boardId The id of the board.
+         * @param {LayoutBodyParams} layoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerSetMediaBoardLayout(boardId, layoutBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Update the color of available line in media board.
          * @param {string} boardId The id of the board.
          * @param {ColorBodyParams} colorBodyParams 
@@ -14135,6 +14289,17 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
 export const MediaBoardApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = MediaBoardApiFp(configuration)
     return {
+        /**
+         * 
+         * @summary Collaps available line in media board.
+         * @param {string} boardId The id of the board.
+         * @param {CollapsableBodyParams} collapsableBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerCollapsMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaBoardControllerCollapsMediaAvailableLine(boardId, collapsableBodyParams, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @summary Create a new line on a media board.
@@ -14166,6 +14331,17 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
         },
         /**
          * 
+         * @summary Set layout for media board.
+         * @param {string} boardId The id of the board.
+         * @param {LayoutBodyParams} layoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaBoardControllerSetMediaBoardLayout(boardId, layoutBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update the color of available line in media board.
          * @param {string} boardId The id of the board.
          * @param {ColorBodyParams} colorBodyParams 
@@ -14184,6 +14360,17 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
  * @interface MediaBoardApi
  */
 export interface MediaBoardApiInterface {
+    /**
+     * 
+     * @summary Collaps available line in media board.
+     * @param {string} boardId The id of the board.
+     * @param {CollapsableBodyParams} collapsableBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApiInterface
+     */
+    mediaBoardControllerCollapsMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void>;
+
     /**
      * 
      * @summary Create a new line on a media board.
@@ -14215,6 +14402,17 @@ export interface MediaBoardApiInterface {
 
     /**
      * 
+     * @summary Set layout for media board.
+     * @param {string} boardId The id of the board.
+     * @param {LayoutBodyParams} layoutBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApiInterface
+     */
+    mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @summary Update the color of available line in media board.
      * @param {string} boardId The id of the board.
      * @param {ColorBodyParams} colorBodyParams 
@@ -14233,6 +14431,19 @@ export interface MediaBoardApiInterface {
  * @extends {BaseAPI}
  */
 export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
+    /**
+     * 
+     * @summary Collaps available line in media board.
+     * @param {string} boardId The id of the board.
+     * @param {CollapsableBodyParams} collapsableBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApi
+     */
+    public mediaBoardControllerCollapsMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any) {
+        return MediaBoardApiFp(this.configuration).mediaBoardControllerCollapsMediaAvailableLine(boardId, collapsableBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Create a new line on a media board.
@@ -14266,6 +14477,19 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
      */
     public mediaBoardControllerGetMediaBoardForUser(options?: any) {
         return MediaBoardApiFp(this.configuration).mediaBoardControllerGetMediaBoardForUser(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Set layout for media board.
+     * @param {string} boardId The id of the board.
+     * @param {LayoutBodyParams} layoutBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApi
+     */
+    public mediaBoardControllerSetMediaBoardLayout(boardId: string, layoutBodyParams: LayoutBodyParams, options?: any) {
+        return MediaBoardApiFp(this.configuration).mediaBoardControllerSetMediaBoardLayout(boardId, layoutBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -14592,6 +14816,50 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
+         * @summary Collapse available line in media board.
+         * @param {string} boardId The id of the board.
+         * @param {CollapsableBodyParams} collapsableBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaLineControllerCollapsMediaLine: async (boardId: string, collapsableBodyParams: CollapsableBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('mediaLineControllerCollapsMediaLine', 'boardId', boardId)
+            // verify required parameter 'collapsableBodyParams' is not null or undefined
+            assertParamExists('mediaLineControllerCollapsMediaLine', 'collapsableBodyParams', collapsableBodyParams)
+            const localVarPath = `/media-lines/{lineId}/collapse`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(collapsableBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Delete a single line.
          * @param {string} lineId The id of the line
          * @param {*} [options] Override http request option.
@@ -14772,6 +15040,18 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Collapse available line in media board.
+         * @param {string} boardId The id of the board.
+         * @param {CollapsableBodyParams} collapsableBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaLineControllerCollapsMediaLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerCollapsMediaLine(boardId, collapsableBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Delete a single line.
          * @param {string} lineId The id of the line
          * @param {*} [options] Override http request option.
@@ -14829,6 +15109,17 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
+         * @summary Collapse available line in media board.
+         * @param {string} boardId The id of the board.
+         * @param {CollapsableBodyParams} collapsableBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaLineControllerCollapsMediaLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaLineControllerCollapsMediaLine(boardId, collapsableBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Delete a single line.
          * @param {string} lineId The id of the line
          * @param {*} [options] Override http request option.
@@ -14881,6 +15172,17 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
 export interface MediaLineApiInterface {
     /**
      * 
+     * @summary Collapse available line in media board.
+     * @param {string} boardId The id of the board.
+     * @param {CollapsableBodyParams} collapsableBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaLineApiInterface
+     */
+    mediaLineControllerCollapsMediaLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @summary Delete a single line.
      * @param {string} lineId The id of the line
      * @param {*} [options] Override http request option.
@@ -14931,6 +15233,19 @@ export interface MediaLineApiInterface {
  * @extends {BaseAPI}
  */
 export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
+    /**
+     * 
+     * @summary Collapse available line in media board.
+     * @param {string} boardId The id of the board.
+     * @param {CollapsableBodyParams} collapsableBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaLineApi
+     */
+    public mediaLineControllerCollapsMediaLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any) {
+        return MediaLineApiFp(this.configuration).mediaLineControllerCollapsMediaLine(boardId, collapsableBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Delete a single line.
