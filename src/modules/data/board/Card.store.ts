@@ -16,6 +16,7 @@ import { CardResponse, ContentElementType } from "@/serverApi/v3";
 import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
+	DeleteElementSuccessPayload,
 	FetchCardSuccessPayload,
 	UpdateCardHeightSuccessPayload,
 	UpdateCardTitleSuccessPayload,
@@ -37,11 +38,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const { setFocus } = useBoardFocusHandler();
 	const { setEditModeId } = useSharedEditMode();
 
-	const {
-		// deleteCardCall,
-		deleteElementCall,
-		moveElementCall,
-	} = useBoardApi();
+	const { moveElementCall } = useBoardApi();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -185,16 +182,16 @@ export const useCardStore = defineStore("cardStore", () => {
 		card.elements.splice(elementIndex + delta, 0, element);
 	};
 
-	const deleteElement = async (
-		cardId: string,
-		elementId: string
+	const deleteElementRequest = socketOrRest.deleteElementRequest;
+
+	const deleteElementSuccess = async (
+		payload: DeleteElementSuccessPayload
 	): Promise<void> => {
-		const card = cards.value[cardId];
+		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
 		try {
-			await deleteElementCall(elementId);
-			extractElement(card, elementId);
+			extractElement(card, payload.elementId);
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated"),
@@ -224,13 +221,14 @@ export const useCardStore = defineStore("cardStore", () => {
 	return {
 		createElementRequest,
 		createElementSuccess,
+		deleteElementRequest,
+		deleteElementSuccess,
 		addTextAfterTitle,
 		fetchCardRequest,
 		fetchCardSuccess,
 		cards,
 		deleteCardRequest,
 		deleteCardSuccess,
-		deleteElement,
 		getCard,
 		moveElementDown,
 		moveElementUp,

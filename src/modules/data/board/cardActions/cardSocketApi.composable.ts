@@ -6,6 +6,7 @@ import { useErrorHandler } from "@/components/error-handling/ErrorHandler.compos
 import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
+	DeleteElementRequestPayload,
 	FetchCardRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
@@ -33,6 +34,7 @@ export const useCardSocketApi = () => {
 
 			// success actions
 			on(CardActions.createElementSuccess, cardStore.createElementSuccess),
+			on(CardActions.deleteElementSuccess, cardStore.deleteElementSuccess),
 			on(CardActions.deleteCardSuccess, cardStore.deleteCardSuccess),
 			on(CardActions.fetchCardSuccess, cardStore.fetchCardSuccess),
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
@@ -74,6 +76,10 @@ export const useCardSocketApi = () => {
 		emitOnSocket("create-element-request", payload);
 	};
 
+	const deleteElementRequest = async (payload: DeleteElementRequestPayload) => {
+		emitOnSocket("delete-element-request", payload);
+	};
+
 	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
 		emitOnSocket("delete-card-request", payload);
 	};
@@ -95,6 +101,7 @@ export const useCardSocketApi = () => {
 		dispatch,
 		disconnectSocketRequest,
 		createElementRequest,
+		deleteElementRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,

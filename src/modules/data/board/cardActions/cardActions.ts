@@ -5,6 +5,9 @@ import {
 	DeleteCardFailurePayload,
 	DeleteCardRequestPayload,
 	DeleteCardSuccessPayload,
+	DeleteElementFailurePayload,
+	DeleteElementRequestPayload,
+	DeleteElementSuccessPayload,
 	DisconnectSocketRequestPayload,
 	FetchCardFailurePayload,
 	FetchCardRequestPayload,
@@ -34,6 +37,19 @@ export const createElementSuccess = createAction(
 export const createElementFailure = createAction(
 	"create-element-failure",
 	props<CreateElementFailurePayload>()
+);
+
+export const deleteElementRequest = createAction(
+	"delete-element-request",
+	props<DeleteElementRequestPayload>()
+);
+export const deleteElementSuccess = createAction(
+	"delete-element-success",
+	props<DeleteElementSuccessPayload>()
+);
+export const deleteElementFailure = createAction(
+	"delete-element-failure",
+	props<DeleteElementFailurePayload>()
 );
 
 export const deleteCardRequest = createAction(

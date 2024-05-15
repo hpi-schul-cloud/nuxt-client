@@ -9,6 +9,7 @@ import {
 import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
+	DeleteElementRequestPayload,
 	FetchCardRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
@@ -27,6 +28,7 @@ export const useCardRestApi = () => {
 
 	const {
 		createElementCall,
+		deleteElementCall,
 		deleteCardCall,
 		updateCardTitle,
 		updateCardHeightCall,
@@ -51,6 +53,20 @@ export const useCardRestApi = () => {
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
+			});
+		}
+	};
+
+	const deleteElementRequest = async (payload: DeleteElementRequestPayload) => {
+		const card = cardStore.getCard(payload.cardId);
+		if (card === undefined) return;
+
+		try {
+			await deleteElementCall(payload.elementId);
+			cardStore.deleteElementSuccess(payload);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDeleted", "boardElement"),
 			});
 		}
 	};
@@ -132,6 +148,7 @@ export const useCardRestApi = () => {
 
 	return {
 		createElementRequest,
+		deleteElementRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,
