@@ -13,11 +13,7 @@
 				<MediaBoardLineMenu
 					v-model:collapsed="collapsed"
 					v-model:color="lineBackgroundColor"
-					@update:color="
-						() => {
-							/* TODO emit event*/
-						}
-					"
+					@update:color="$emit('update:line-background-color', $event)"
 				/>
 			</div>
 			<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
@@ -86,8 +82,16 @@ import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { useCollapsableState } from "./utils/collapsable.composable";
 import { MediaBoardColorMapper } from "./utils/mediaBoardColorMapper";
 
+defineProps({
+	backgorundColor: {
+		type: String,
+		required: false,
+	},
+});
+
 const emit = defineEmits<{
 	(e: "create:element", value: ElementCreate): void;
+	(e: "update:line-background-color", color: string): void;
 }>();
 
 const isDesktop: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Desktop);

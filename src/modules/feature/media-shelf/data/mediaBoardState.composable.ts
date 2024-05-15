@@ -212,6 +212,25 @@ const useMediaBoardState = () => {
 		}
 	};
 
+	const updateAvailableLineBackgroundColor = async (color: string) => {
+		if (mediaBoard.value === undefined || availableMedia.value === undefined) {
+			return;
+		}
+
+		try {
+			mediaBoard.value.mediaAvailableLineBackgroundColor = {
+				backgroundColor: color,
+			};
+
+			await api.updateAvailableLineColor(mediaBoard.value?.id, color);
+		} catch (error) {
+			handleAnyError(
+				error,
+				notifyWithTemplateAndReload("notUpdated", "boardRow")
+			);
+		}
+	};
+
 	// Media Element
 	const createElement = async (
 		createOptions: ElementCreate
@@ -368,6 +387,7 @@ const useMediaBoardState = () => {
 		moveLine,
 		updateLineTitle,
 		updateLineBackgroundColor,
+		updateAvailableLineBackgroundColor,
 		createElement,
 		deleteElement,
 		moveElement,

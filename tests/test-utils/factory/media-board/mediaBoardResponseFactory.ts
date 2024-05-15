@@ -8,5 +8,6 @@ export const mediaBoardResponseFactory = Factory.define<MediaBoardResponse>(
 		id: `media-board-${sequence}`,
 		timestamps: timestampsResponseFactory.build(),
 		lines: mediaLineResponseFactory.buildList(1),
+		mediaAvailableLineBackgroundColor: new String(""),
 	})
 );

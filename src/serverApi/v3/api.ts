@@ -4012,12 +4012,6 @@ export interface MediaAvailableLineResponse {
      * @memberof MediaAvailableLineResponse
      */
     elements: Array<MediaAvailableLineElementResponse>;
-    /**
-     * Background color of available media line
-     * @type {string}
-     * @memberof MediaAvailableLineResponse
-     */
-    backgroundColor: string;
 }
 /**
  * 
@@ -4043,6 +4037,12 @@ export interface MediaBoardResponse {
      * @memberof MediaBoardResponse
      */
     timestamps: TimestampsResponse;
+    /**
+     * Configuration of media available line
+     * @type {object}
+     * @memberof MediaBoardResponse
+     */
+    mediaAvailableLineBackgroundColor: object;
 }
 /**
  * 
@@ -14021,6 +14021,50 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Update the color of available line in media board.
+         * @param {string} boardId The id of the board.
+         * @param {ColorBodyParams} colorBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerUpdateMediaAvailableLineColor: async (boardId: string, colorBodyParams: ColorBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'boardId' is not null or undefined
+            assertParamExists('mediaBoardControllerUpdateMediaAvailableLineColor', 'boardId', boardId)
+            // verify required parameter 'colorBodyParams' is not null or undefined
+            assertParamExists('mediaBoardControllerUpdateMediaAvailableLineColor', 'colorBodyParams', colorBodyParams)
+            const localVarPath = `/media-boards/{boardId}/media-available-line/configuration`
+                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(colorBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -14063,6 +14107,18 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerGetMediaBoardForUser(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Update the color of available line in media board.
+         * @param {string} boardId The id of the board.
+         * @param {ColorBodyParams} colorBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerUpdateMediaAvailableLineColor(boardId, colorBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -14102,6 +14158,17 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
         mediaBoardControllerGetMediaBoardForUser(options?: any): AxiosPromise<MediaBoardResponse> {
             return localVarFp.mediaBoardControllerGetMediaBoardForUser(options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Update the color of available line in media board.
+         * @param {string} boardId The id of the board.
+         * @param {ColorBodyParams} colorBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaBoardControllerUpdateMediaAvailableLineColor(boardId, colorBodyParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -14139,6 +14206,17 @@ export interface MediaBoardApiInterface {
      * @memberof MediaBoardApiInterface
      */
     mediaBoardControllerGetMediaBoardForUser(options?: any): AxiosPromise<MediaBoardResponse>;
+
+    /**
+     * 
+     * @summary Update the color of available line in media board.
+     * @param {string} boardId The id of the board.
+     * @param {ColorBodyParams} colorBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApiInterface
+     */
+    mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -14182,6 +14260,19 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
      */
     public mediaBoardControllerGetMediaBoardForUser(options?: any) {
         return MediaBoardApiFp(this.configuration).mediaBoardControllerGetMediaBoardForUser(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update the color of available line in media board.
+     * @param {string} boardId The id of the board.
+     * @param {ColorBodyParams} colorBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaBoardApi
+     */
+    public mediaBoardControllerUpdateMediaAvailableLineColor(boardId: string, colorBodyParams: ColorBodyParams, options?: any) {
+        return MediaBoardApiFp(this.configuration).mediaBoardControllerUpdateMediaAvailableLineColor(boardId, colorBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

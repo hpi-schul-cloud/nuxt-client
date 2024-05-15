@@ -1,7 +1,13 @@
 <template>
 	<div class="d-flex flex-column flex-shrink-1">
 		<div>
-			<MediaBoardAvailableLine @create:element="onCreateElement" />
+			<MediaBoardAvailableLine
+				:backgroundColor="board.mediaAvailableLineBackgroundColor"
+				@create:element="onCreateElement"
+				@update:line-background-color="
+					onUpdateAvailableLineBackgroundColor($event)
+				"
+			/>
 			<Sortable
 				:list="board.lines"
 				item-key="id"
@@ -80,6 +86,7 @@ const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 const {
 	updateLineTitle,
 	updateLineBackgroundColor,
+	updateAvailableLineBackgroundColor,
 	createLine,
 	moveLine,
 	moveElement,
@@ -99,6 +106,10 @@ const onUpdateLineBackgroundColor = (
 	backgroundcolor: string
 ) => {
 	updateLineBackgroundColor(lineId, backgroundcolor);
+};
+
+const onUpdateAvailableLineBackgroundColor = (backgroundcolor: string) => {
+	updateAvailableLineBackgroundColor(backgroundcolor);
 };
 
 const onCreateLine = async () => {

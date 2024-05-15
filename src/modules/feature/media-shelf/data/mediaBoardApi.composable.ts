@@ -80,6 +80,18 @@ export const useMediaBoardApi = () => {
 		});
 	};
 
+	const updateAvailableLineColor = async (
+		boardId: string,
+		backgroundColor: string
+	): Promise<void> => {
+		await mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor(
+			boardId,
+			{
+				backgroundColor,
+			}
+		);
+	};
+
 	const deleteLine = async (lineId: string): Promise<void> => {
 		await mediaLineApi.mediaLineControllerDeleteLine(lineId);
 	};
@@ -121,6 +133,7 @@ export const useMediaBoardApi = () => {
 		moveLine,
 		updateLineTitle,
 		updateLineColor,
+		updateAvailableLineColor,
 		deleteLine,
 		createElement,
 		moveElement,
