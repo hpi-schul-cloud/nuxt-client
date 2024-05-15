@@ -1,3 +1,4 @@
+import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
@@ -15,7 +16,7 @@ import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 type AddCardElement = (
-	payload: unknown
+	payload: CreateElementRequestPayload
 ) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (
