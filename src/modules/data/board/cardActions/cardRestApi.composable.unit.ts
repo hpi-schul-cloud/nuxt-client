@@ -1,6 +1,10 @@
 import { setActivePinia } from "pinia";
 import { ref } from "vue";
-import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	envsFactory,
+	mockedPiniaStoreTyping,
+	richTextElementResponseFactory,
+} from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useSocketConnection, useCardStore, useBoardStore } from "@data-board";
@@ -17,6 +21,8 @@ import {
 } from "./cardActionPayload";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import { AxiosResponse } from "axios";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -78,11 +84,118 @@ describe("useCardRestApi", () => {
 	const setup = () => {
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		const cardStore = mockedPiniaStoreTyping(useCardStore);
-		const cards = cardResponseFactory.buildList(3);
-		cardStore.fetchCardSuccess({ cards: cards });
+		const card = cardResponseFactory.build();
 
-		return { boardStore, cardStore, cards };
+		return { boardStore, cardStore, card };
 	};
+
+	describe("createElementRequest", () => {
+		it("should not call createElementSuccess action when card is undefined", async () => {
+			const { cardStore } = setup();
+			const { createElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(undefined);
+
+			await createElementRequest({
+				cardId: "cardId",
+				type: ContentElementType.RichText,
+				toPosition: 0,
+			});
+
+			expect(cardStore.createElementSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call createElementSuccess action if the API call is successful", async () => {
+			const { cardStore, card } = setup();
+			const { createElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(card);
+
+			const newElementResponse = createMock<
+				AxiosResponse<RichTextElementResponse, any>
+			>({
+				data: richTextElementResponseFactory.build(),
+			});
+			mockedBoardApiCalls.createElementCall.mockResolvedValue(
+				newElementResponse
+			);
+
+			const payload = {
+				cardId: card.id,
+				type: ContentElementType.RichText,
+				toPosition: 0,
+			};
+
+			await createElementRequest(payload);
+
+			expect(cardStore.createElementSuccess).toHaveBeenCalledWith({
+				...payload,
+				newElement: newElementResponse.data,
+			});
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { cardStore, card } = setup();
+			const { createElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(card);
+			mockedBoardApiCalls.createElementCall.mockRejectedValue({});
+
+			await createElementRequest({
+				cardId: card.id,
+				type: ContentElementType.RichText,
+			});
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
+	describe("deleteElementRequest", () => {
+		it("should not call deleteElementSuccess action when card is undefined", async () => {
+			const { cardStore } = setup();
+			const { deleteElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(undefined);
+
+			await deleteElementRequest({
+				cardId: "cardId",
+				elementId: "elementId",
+			});
+
+			expect(cardStore.deleteElementSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call deleteElementSuccess action if the API call is successful", async () => {
+			const { cardStore, card } = setup();
+			const { deleteElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(card);
+
+			const payload = {
+				cardId: card.id,
+				elementId: "elementId",
+			};
+
+			await deleteElementRequest(payload);
+
+			expect(cardStore.deleteElementSuccess).toHaveBeenCalledWith(payload);
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { cardStore, card } = setup();
+			const { deleteElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(card);
+			mockedBoardApiCalls.deleteElementCall.mockRejectedValue({});
+
+			await deleteElementRequest({
+				cardId: card.id,
+				elementId: "elementId",
+			});
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
 
 	describe("deleteCardRequest", () => {
 		it("should not call deleteCardSuccess action when card is undefined", async () => {
@@ -97,11 +210,11 @@ describe("useCardRestApi", () => {
 		});
 
 		it("should call deleteCardSuccess action if the API call is successful", async () => {
-			const { cardStore, cards } = setup();
+			const { cardStore, card } = setup();
 			const { deleteCardRequest } = useCardRestApi();
-			const cardId = cards[0].id;
+			const cardId = card.id;
 
-			cardStore.getCard.mockReturnValue(cards[0]);
+			cardStore.getCard.mockReturnValue(card);
 
 			await deleteCardRequest({ cardId });
 
@@ -111,11 +224,11 @@ describe("useCardRestApi", () => {
 		});
 
 		it("should call handleError if the API call fails", async () => {
-			const { cardStore, cards } = setup();
+			const { cardStore, card } = setup();
 			const { deleteCardRequest } = useCardRestApi();
-			const cardId = cards[0].id;
+			const cardId = card.id;
 
-			cardStore.getCard.mockReturnValue(cards[0]);
+			cardStore.getCard.mockReturnValue(card);
 			mockedBoardApiCalls.deleteCardCall.mockRejectedValue({});
 
 			await deleteCardRequest({ cardId });
@@ -126,8 +239,10 @@ describe("useCardRestApi", () => {
 
 	describe("fetchCardRequest", () => {
 		it("should call fetchCardSuccess action if the API call is successful", async () => {
-			const { cardStore, cards } = setup();
+			const { cardStore } = setup();
 			const { fetchCardRequest } = useCardRestApi();
+
+			const cards = cardResponseFactory.buildList(3);
 
 			mockedSharedCardRequestPoolCalls.fetchCard.mockResolvedValue(cards[0]);
 			const cardIds = cards.map((card) => card.id);
@@ -165,13 +280,13 @@ describe("useCardRestApi", () => {
 		});
 
 		it("should call updateCardTitleSuccess action if the API call is successful", async () => {
-			const { cardStore, cards } = setup();
+			const { cardStore, card } = setup();
 			const { updateCardTitleRequest } = useCardRestApi();
 
-			cardStore.getCard.mockReturnValue(cards[0]);
+			cardStore.getCard.mockReturnValue(card);
 
 			const requestPayload: UpdateCardTitleRequestPayload = {
-				cardId: cards[0].id,
+				cardId: card.id,
 				newTitle: "newTitle",
 			};
 
@@ -183,14 +298,14 @@ describe("useCardRestApi", () => {
 		});
 
 		it("should call handleError if the API call fails", async () => {
-			const { cardStore, cards } = setup();
+			const { cardStore, card } = setup();
 			const { updateCardTitleRequest } = useCardRestApi();
 
-			cardStore.getCard.mockReturnValue(cards[0]);
+			cardStore.getCard.mockReturnValue(card);
 			mockedBoardApiCalls.updateCardTitle.mockRejectedValue({});
 
 			await updateCardTitleRequest({
-				cardId: cards[0].id,
+				cardId: card.id,
 				newTitle: "newTitle",
 			});
 
@@ -214,13 +329,13 @@ describe("useCardRestApi", () => {
 		});
 
 		it("should call updateCardHeightSuccess action if the API call is successful", async () => {
-			const { cardStore, cards } = setup();
+			const { cardStore, card } = setup();
 			const { updateCardHeightRequest } = useCardRestApi();
 
-			cardStore.getCard.mockReturnValue(cards[0]);
+			cardStore.getCard.mockReturnValue(card);
 
 			const requestPayload: UpdateCardHeightRequestPayload = {
-				cardId: cards[0].id,
+				cardId: card.id,
 				newHeight: 100,
 			};
 
@@ -232,14 +347,14 @@ describe("useCardRestApi", () => {
 		});
 
 		it("should call handleError if the API call fails", async () => {
-			const { cardStore, cards } = setup();
+			const { cardStore, card } = setup();
 			const { updateCardHeightRequest } = useCardRestApi();
 
-			cardStore.getCard.mockReturnValue(cards[0]);
+			cardStore.getCard.mockReturnValue(card);
 			mockedBoardApiCalls.updateCardHeightCall.mockRejectedValue({});
 
 			await updateCardHeightRequest({
-				cardId: cards[0].id,
+				cardId: card.id,
 				newHeight: 100,
 			});
 
@@ -257,16 +372,16 @@ describe("useCardRestApi", () => {
 		};
 
 		it("should notify with template", async () => {
-			const { boardStore, cardStore, cards } = setup();
+			const { boardStore, cardStore, card } = setup();
 			const { updateCardTitleRequest } = useCardRestApi();
 
-			cardStore.getCard.mockReturnValue(cards[0]);
+			cardStore.getCard.mockReturnValue(card);
 
 			mockedBoardApiCalls.updateCardTitle.mockRejectedValue({});
 			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
 
 			await updateCardTitleRequest({
-				cardId: cards[0].id,
+				cardId: card.id,
 				newTitle: "newTitle",
 			});
 
