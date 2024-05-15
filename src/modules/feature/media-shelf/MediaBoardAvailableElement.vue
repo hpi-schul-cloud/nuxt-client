@@ -7,6 +7,7 @@
 </template>
 
 <script setup lang="ts">
+import { useDragAndDrop } from "@/modules/feature/board/shared/DragAndDrop.composable";
 import {
 	MediaAvailableLineElementResponse,
 	ToolContextType,
@@ -20,7 +21,7 @@ import { useExternalToolLaunchState } from "@data-external-tool";
 import { useErrorNotification } from "@util-error-notification";
 import { computed, ComputedRef, onUnmounted, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { MediaElementDisplay, useMediaBoardApi } from "./data";
+import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 
 const props = defineProps({
@@ -40,7 +41,7 @@ const {
 	error: launchError,
 } = useExternalToolLaunchState();
 
-const { getMediaBoardForUser } = useMediaBoardApi();
+const { mediaBoard } = useSharedMediaBoardState();
 
 useErrorNotification(launchError);
 
@@ -50,25 +51,23 @@ const displayData: ComputedRef<MediaElementDisplay> = computed(() => ({
 	thumbnail: props.element?.logoUrl,
 }));
 
-const getMediaBoardId = async (): Promise<string> => {
-	const mediaBoard = await getMediaBoardForUser();
-	return mediaBoard.id;
-};
-
-const loadExternalToolData = async (
+const loadAvailableLineElementData = async (
 	element: MediaAvailableLineElementResponse
 ): Promise<void> => {
-	await fetchSchoolLaunchRequest(element.schoolExternalToolId, {
-		contextId: await getMediaBoardId(),
-		contextType: ToolContextType.MediaBoard,
-	});
+	const contextId: string | undefined = mediaBoard.value?.id;
+	if (contextId) {
+		await fetchSchoolLaunchRequest(element.schoolExternalToolId, {
+			contextId,
+			contextType: ToolContextType.MediaBoard,
+		});
+	}
 };
 
 watch(
 	() => props.element,
 	async (newValue, oldValue) => {
 		if (newValue && newValue !== oldValue) {
-			await loadExternalToolData(newValue);
+			await loadAvailableLineElementData(newValue);
 		}
 	},
 	{ immediate: true }
@@ -77,15 +76,14 @@ watch(
 const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
 const timer = setInterval(async () => {
-	await fetchSchoolLaunchRequest(props.element.schoolExternalToolId, {
-		contextId: await getMediaBoardId(),
-		contextType: ToolContextType.MediaBoard,
-	});
+	await loadAvailableLineElementData(props.element);
 }, refreshTimeInMs);
 
 onUnmounted(() => {
 	clearInterval(timer);
 });
+
+const { isDragging } = useDragAndDrop();
 
 const onClick = async () => {
 	// Loading has failed before
@@ -98,11 +96,12 @@ const onClick = async () => {
 		return;
 	}
 
+	if (isDragging.value) {
+		return;
+	}
+
 	launchTool();
 
-	await fetchSchoolLaunchRequest(props.element.schoolExternalToolId, {
-		contextId: await getMediaBoardId(),
-		contextType: ToolContextType.MediaBoard,
-	});
+	await loadAvailableLineElementData(props.element);
 };
 </script>
