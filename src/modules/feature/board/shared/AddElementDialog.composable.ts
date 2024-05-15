@@ -14,10 +14,9 @@ import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
-type AddCardElement = (payload: {
-	cardId: string;
-	type: ContentElementType;
-}) => Promise<AnyContentElement | undefined>;
+type AddCardElement = (
+	payload: unknown
+) => Promise<AnyContentElement | undefined>;
 
 export const useAddElementDialog = (
 	addElementFunction: AddCardElement,

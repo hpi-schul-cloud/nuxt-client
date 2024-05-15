@@ -171,7 +171,7 @@ export default defineComponent({
 		const onAddElement = () => askType();
 
 		const onDeleteElement = (elementId: string) =>
-			cardStore.deleteElement(cardId.value, elementId);
+			cardStore.deleteElementRequest({ cardId: cardId.value, elementId });
 
 		const onStartEditMode = () => startEditMode();
 
@@ -192,6 +192,11 @@ export default defineComponent({
 
 		const onMoveContentElementUp = async (payload: ElementMove) =>
 			await cardStore.moveElementUp(cardId.value, payload);
+		// await cardStore.moveElementUp(
+		// 	cardId.value,
+		// 	payload.elementId,
+		// 	payload.elementIndex - 1
+		// );
 
 		const onMoveContentElementKeyboard = async (
 			payload: ElementMove,
@@ -230,7 +235,6 @@ export default defineComponent({
 			onDeleteCard,
 			onAddElement,
 			onDeleteElement,
-			deleteElement: cardStore.deleteElement,
 			onStartEditMode,
 			onEndEditMode,
 			onMoveContentElementDown,
