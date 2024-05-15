@@ -98,4 +98,19 @@ export type MoveElementFailurePayload = {
 	boardObjectType: BoardObjectType;
 };
 
+export type UpdateElementRequestPayload = {
+	element: AnyContentElement;
+};
+export type UpdateElementSuccessPayload = {
+	elementId: string;
+	data: {
+		type: ContentElementType;
+		content: AnyContentElement["content"];
+	};
+};
+export type UpdateElementFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
+};
+
 export type DisconnectSocketRequestPayload = Record<string, never>;

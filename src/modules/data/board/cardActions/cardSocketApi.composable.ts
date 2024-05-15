@@ -11,6 +11,7 @@ import {
 	MoveElementRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
+	UpdateElementRequestPayload,
 } from "./cardActionPayload";
 import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPayload";
 import { useDebounceFn } from "@vueuse/core";
@@ -37,6 +38,7 @@ export const useCardSocketApi = () => {
 			on(CardActions.createElementSuccess, cardStore.createElementSuccess),
 			on(CardActions.deleteElementSuccess, cardStore.deleteElementSuccess),
 			on(CardActions.moveElementSuccess, cardStore.moveElementSuccess),
+			on(CardActions.updateElementSuccess, cardStore.updateElementSuccess),
 			on(CardActions.deleteCardSuccess, cardStore.deleteCardSuccess),
 			on(CardActions.fetchCardSuccess, cardStore.fetchCardSuccess),
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
@@ -46,6 +48,10 @@ export const useCardSocketApi = () => {
 			),
 
 			// failure actions
+			on(CardActions.createElementFailure, onFailure),
+			on(CardActions.deleteElementFailure, onFailure),
+			on(CardActions.moveElementFailure, onFailure),
+			on(CardActions.updateElementFailure, onFailure),
 			on(CardActions.deleteCardFailure, onFailure),
 			on(CardActions.fetchCardFailure, onFailure),
 			on(CardActions.updateCardTitleFailure, onFailure),
@@ -86,6 +92,18 @@ export const useCardSocketApi = () => {
 		emitOnSocket("move-element-request", payload);
 	};
 
+	const updateElementRequest = async ({
+		element,
+	}: UpdateElementRequestPayload) => {
+		emitOnSocket("update-element-request", {
+			elementId: element.id,
+			data: {
+				type: element.type,
+				content: element.content,
+			},
+		});
+	};
+
 	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
 		emitOnSocket("delete-card-request", payload);
 	};
@@ -109,6 +127,7 @@ export const useCardSocketApi = () => {
 		createElementRequest,
 		deleteElementRequest,
 		moveElementRequest,
+		updateElementRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,

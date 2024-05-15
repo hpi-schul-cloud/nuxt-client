@@ -14,6 +14,7 @@ import {
 	MoveElementRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
+	UpdateElementRequestPayload,
 } from "./cardActionPayload";
 import { useCardStore } from "../Card.store";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
@@ -31,6 +32,7 @@ export const useCardRestApi = () => {
 		createElementCall,
 		deleteElementCall,
 		deleteCardCall,
+		updateElementCall,
 		moveElementCall,
 		updateCardTitle,
 		updateCardHeightCall,
@@ -87,6 +89,23 @@ export const useCardRestApi = () => {
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notMoved", "boardElement"),
+			});
+		}
+	};
+
+	const updateElementRequest = async (payload: UpdateElementRequestPayload) => {
+		try {
+			const success = await updateElementCall(payload.element);
+			cardStore.updateElementSuccess({
+				elementId: success.data.id,
+				data: {
+					type: success.data.type,
+					content: success.data.content,
+				},
+			});
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplate("notUpdated", "boardElement"),
 			});
 		}
 	};
@@ -170,6 +189,7 @@ export const useCardRestApi = () => {
 		createElementRequest,
 		deleteElementRequest,
 		moveElementRequest,
+		updateElementRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,

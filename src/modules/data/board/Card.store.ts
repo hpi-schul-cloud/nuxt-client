@@ -2,14 +2,7 @@ import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
 import { envConfigModule } from "@/store";
 
-import {
-	ApiErrorHandlerFactory,
-	ErrorType,
-	BoardObjectType,
-	useErrorHandler,
-} from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { useBoardStore, useSharedEditMode } from "@data-board";
 import { CardResponse, ContentElementType } from "@/serverApi/v3";
 import {
 	CreateElementSuccessPayload,
@@ -19,13 +12,13 @@ import {
 	MoveElementSuccessPayload,
 	UpdateCardHeightSuccessPayload,
 	UpdateCardTitleSuccessPayload,
+	UpdateElementSuccessPayload,
 } from "./cardActions/cardActionPayload";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useSharedLastCreatedElement } from "@util-board";
 
 export const useCardStore = defineStore("cardStore", () => {
-	const boardStore = useBoardStore();
 	const cards = ref<Record<string, CardResponse>>({});
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
@@ -35,9 +28,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
-	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const { setFocus } = useBoardFocusHandler();
-	const { setEditModeId } = useSharedEditMode();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -92,27 +83,20 @@ export const useCardStore = defineStore("cardStore", () => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
-		try {
-			const { toPosition } = payload;
-			if (
-				toPosition !== undefined &&
-				toPosition >= 0 &&
-				toPosition <= card.elements.length
-			) {
-				card.elements.splice(toPosition, 0, payload.newElement);
-			} else {
-				card.elements.push(payload.newElement);
-			}
-
-			lastCreatedElementId.value = payload.newElement.id;
-			setFocus(payload.newElement.id);
-			return payload.newElement;
-		} catch (error) {
-			handleError(error, {
-				// 404: notifyWithTemplateAndReload("notCreated", "boardElement"),
-				400: notifyWithTemplate("notCreated", "boardElement"),
-			});
+		const { toPosition } = payload;
+		if (
+			toPosition !== undefined &&
+			toPosition >= 0 &&
+			toPosition <= card.elements.length
+		) {
+			card.elements.splice(toPosition, 0, payload.newElement);
+		} else {
+			card.elements.push(payload.newElement);
 		}
+
+		lastCreatedElementId.value = payload.newElement.id;
+		setFocus(payload.newElement.id);
+		return payload.newElement;
 	};
 
 	const addTextAfterTitle = async (cardId: string) => {
@@ -168,32 +152,30 @@ export const useCardStore = defineStore("cardStore", () => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
-		try {
-			extractElement(card, payload.elementId);
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
-		}
-	};
-
-	const extractElement = (card: CardResponse, elementId: string): void => {
-		const index = card.elements.findIndex((e) => e.id === elementId);
+		const index = card.elements.findIndex((e) => e.id === payload.elementId);
 
 		if (index !== undefined && index > -1) {
 			card.elements.splice(index, 1);
 		}
 	};
 
-	const notifyWithTemplateAndReload: ApiErrorHandlerFactory = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType
-	) => {
-		return () => {
-			notifyWithTemplate(errorType, boardObjectType)();
-			boardStore.reloadBoard();
-			setEditModeId(undefined);
-		};
+	const updateElementRequest = socketOrRest.updateElementRequest;
+
+	const updateElementSuccess = async (payload: UpdateElementSuccessPayload) => {
+		const _card = Object.values(cards.value).find((c) => {
+			if (c.elements.length === 0) return false;
+			const element = c.elements.find((e) => e.id === payload.elementId);
+			return element !== undefined;
+		});
+		if (_card === undefined) return;
+		const cardId = _card.id;
+
+		if (cardId) {
+			const elementIndex = _card.elements.findIndex(
+				(e) => e.id === payload.elementId
+			);
+			cards.value[cardId].elements[elementIndex].content = payload.data.content;
+		}
 	};
 
 	return {
@@ -201,6 +183,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		createElementSuccess,
 		deleteElementRequest,
 		deleteElementSuccess,
+		updateElementRequest,
+		updateElementSuccess,
 		addTextAfterTitle,
 		fetchCardRequest,
 		fetchCardSuccess,

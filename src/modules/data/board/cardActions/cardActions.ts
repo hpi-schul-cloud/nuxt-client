@@ -21,6 +21,9 @@ import {
 	UpdateCardTitleFailurePayload,
 	UpdateCardTitleRequestPayload,
 	UpdateCardTitleSuccessPayload,
+	UpdateElementRequestPayload,
+	UpdateElementSuccessPayload,
+	UpdateElementFailurePayload,
 } from "./cardActionPayload";
 import { createAction, props } from "@/types/board/ActionFactory";
 
@@ -66,6 +69,19 @@ export const moveElementSuccess = createAction(
 export const moveElementFailure = createAction(
 	"move-element-failure",
 	props<MoveElementFailurePayload>()
+);
+
+export const updateElementRequest = createAction(
+	"update-element-request",
+	props<UpdateElementRequestPayload>()
+);
+export const updateElementSuccess = createAction(
+	"update-element-success",
+	props<UpdateElementSuccessPayload>()
+);
+export const updateElementFailure = createAction(
+	"update-element-failure",
+	props<UpdateElementFailurePayload>()
 );
 
 export const deleteCardRequest = createAction(
