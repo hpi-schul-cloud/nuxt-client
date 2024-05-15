@@ -136,7 +136,11 @@ export const useBoardRestApi = () => {
 				? toColumnId
 				: getColumnId(fromColumnIndex + columnDelta);
 
-		return { fromColumnIndex, toColumnIndex: getColumnIndex(newColumnId) };
+		return {
+			fromColumnIndex,
+			toColumnIndex: getColumnIndex(newColumnId),
+			newColumnId,
+		};
 	};
 
 	const isMoveValid = (
@@ -146,6 +150,14 @@ export const useBoardRestApi = () => {
 		fromColumnIndex: number
 	) => {
 		const { newIndex, oldIndex } = payload;
+
+		if (
+			targetColumnIndex === -1 &&
+			payload.columnDelta &&
+			payload.columnDelta <= 0
+		) {
+			return false;
+		}
 
 		const movedInsideColumn = fromColumnIndex === targetColumnIndex;
 		if (movedInsideColumn) {
@@ -176,25 +188,14 @@ export const useBoardRestApi = () => {
 				forceNextTick,
 			} = payload;
 
-			const { fromColumnIndex, toColumnIndex } = getColumnIndices(
+			const { fromColumnIndex, toColumnIndex, newColumnId } = getColumnIndices(
 				fromColumnId,
 				toColumnId,
 				columnDelta
 			);
 
 			let targetColumnIndex = toColumnIndex;
-			let targetColumnId = toColumnId;
-
-			if (targetColumnIndex === -1) {
-				// need to create a new column
-				const newColumn = await createColumnRequest();
-				if (newColumn) {
-					targetColumnId = newColumn.id;
-					targetColumnIndex = getColumnIndex(targetColumnId);
-				}
-			}
-
-			if (targetColumnId === undefined) return; // shouldn't happen because its either existing or newly created
+			let targetColumnId = newColumnId;
 
 			if (
 				!isMoveValid(
@@ -206,6 +207,17 @@ export const useBoardRestApi = () => {
 			) {
 				return;
 			}
+
+			if (targetColumnIndex === -1) {
+				// need to create a new column
+				const newColumn = await createColumnRequest();
+				if (newColumn) {
+					targetColumnId = newColumn.id;
+					targetColumnIndex = getColumnIndex(targetColumnId);
+				}
+			}
+
+			if (targetColumnId === undefined) return; // shouldn't happen because its either existing or newly created
 
 			await moveCardCall(cardId, targetColumnId, newIndex);
 

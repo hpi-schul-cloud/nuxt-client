@@ -426,6 +426,23 @@ describe("BoardStore", () => {
 		});
 
 		describe("when move is invalid", () => {
+			it("should not move first card to left with columnDelta", async () => {
+				const { boardStore, cards, firstColumn } = setup();
+
+				const movingCardId = cards[0].cardId;
+
+				const cardPayload = createCardPayload({
+					cardId: movingCardId,
+					fromColumnId: firstColumn.id,
+					columnDelta: -1,
+				});
+
+				await boardStore.moveCardSuccess(cardPayload);
+
+				expect(boardStore.board?.columns[0].cards[0].cardId).toEqual(
+					movingCardId
+				);
+			});
 			it("should not move card if card is moved to the same position", async () => {
 				const { boardStore, firstColumn, cards } = setup();
 
@@ -556,6 +573,36 @@ describe("BoardStore", () => {
 					newIndex: 0,
 					fromColumnId: firstColumn.id,
 					toColumnId: secondColumn.id,
+				};
+
+				await boardStore.moveCardSuccess(cardPayload);
+
+				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
+				const secondColumnCardsAfterMove = boardStore.board?.columns[1].cards;
+
+				expect(secondColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+					secondCardId,
+				]);
+
+				expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+					firstCardId,
+					thirdCardId,
+				]);
+			});
+
+			it("should move a card to another column with columnDelta", async () => {
+				const { boardStore, firstColumn, cards } = setup();
+
+				const [firstCardId, secondCardId, thirdCardId] = cards.map(
+					(card) => card.cardId
+				);
+
+				const cardPayload: CardMove = {
+					cardId: secondCardId,
+					oldIndex: 1,
+					newIndex: 0,
+					fromColumnId: firstColumn.id,
+					columnDelta: 1,
 				};
 
 				await boardStore.moveCardSuccess(cardPayload);
