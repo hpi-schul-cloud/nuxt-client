@@ -7,7 +7,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
@@ -36,7 +36,7 @@ describe("MediaBoardAvailableLine", () => {
 	>;
 
 	const getWrapper = () => {
-		const wrapper = mount(MediaBoardAvailableLine, {
+		const wrapper = shallowMount(MediaBoardAvailableLine, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
