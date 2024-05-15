@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
-import { useBoardApi } from "./BoardApi.composable";
 import { envConfigModule } from "@/store";
 
 import {
@@ -11,22 +10,24 @@ import {
 } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useBoardStore, useSharedEditMode } from "@data-board";
-import { ElementMove } from "@/types/board/DragAndDrop";
 import { CardResponse, ContentElementType } from "@/serverApi/v3";
 import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	DeleteElementSuccessPayload,
 	FetchCardSuccessPayload,
+	MoveElementSuccessPayload,
 	UpdateCardHeightSuccessPayload,
 	UpdateCardTitleSuccessPayload,
 } from "./cardActions/cardActionPayload";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useSharedLastCreatedElement } from "@util-board";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const boardStore = useBoardStore();
 	const cards = ref<Record<string, CardResponse>>({});
+	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const restApi = useCardRestApi();
 	const isSocketEnabled =
@@ -37,8 +38,6 @@ export const useCardStore = defineStore("cardStore", () => {
 	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const { setFocus } = useBoardFocusHandler();
 	const { setEditModeId } = useSharedEditMode();
-
-	const { moveElementCall } = useBoardApi();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -105,11 +104,12 @@ export const useCardStore = defineStore("cardStore", () => {
 				card.elements.push(payload.newElement);
 			}
 
+			lastCreatedElementId.value = payload.newElement.id;
 			setFocus(payload.newElement.id);
 			return payload.newElement;
 		} catch (error) {
 			handleError(error, {
-				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
+				// 404: notifyWithTemplateAndReload("notCreated", "boardElement"),
 				400: notifyWithTemplate("notCreated", "boardElement"),
 			});
 		}
@@ -126,60 +126,38 @@ export const useCardStore = defineStore("cardStore", () => {
 		});
 	};
 
-	const moveElementDown = async (
+	const moveElementRequest = async (
 		cardId: string,
-		elementPayload: ElementMove
-	) => {
-		const card = cards.value[cardId];
-		if (card === undefined) return;
-		try {
-			const { elementIndex, payload: elementId } = elementPayload;
-			if (elementIndex === card.elements.length - 1 || elementIndex === -1) {
-				return;
-			}
-			await moveElement(card, elementIndex, elementId, "down");
-			await moveElementCall(elementId, cardId, elementIndex + 1);
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
-		}
-	};
-
-	const moveElementUp = async (cardId: string, elementPayload: ElementMove) => {
-		const card = cards.value[cardId];
-		if (card === undefined) return;
-
-		try {
-			const { elementIndex, payload: elementId } = elementPayload;
-			if (elementIndex <= 0) return;
-
-			await moveElement(card, elementIndex, elementId, "up");
-			await moveElementCall(elementId, cardId, elementIndex - 1);
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
-		}
-	};
-
-	const moveElement = async (
-		card: CardResponse,
-		elementIndex: number,
 		elementId: string,
-		direction: "up" | "down"
+		elementIndex: number,
+		delta: 1 | -1
 	) => {
+		const card = cards.value[cardId];
 		if (card === undefined) return;
 
-		const element = card.elements.filter(
-			(element) => element.id === elementId
-		)[0];
+		const toPosition = elementIndex + delta;
+		if (toPosition < 0) return;
+		if (toPosition >= card.elements.length) return;
 
-		const delta = direction === "up" ? -1 : 1;
+		socketOrRest.moveElementRequest({
+			elementId,
+			toCardId: cardId,
+			toPosition,
+		});
+	};
 
-		card.elements.splice(elementIndex, 1);
-		await nextTick();
-		card.elements.splice(elementIndex + delta, 0, element);
+	const moveElementSuccess = async (payload: MoveElementSuccessPayload) => {
+		const card = cards.value[payload.toCardId];
+		if (card === undefined) return;
+
+		const element = card.elements.find((e) => e.id === payload.elementId);
+
+		if (element) {
+			card.elements.splice(card.elements.indexOf(element), 1);
+			await nextTick();
+			const toPosition = Math.min(payload.toPosition, card.elements.length);
+			card.elements.splice(toPosition, 0, element);
+		}
 	};
 
 	const deleteElementRequest = socketOrRest.deleteElementRequest;
@@ -230,8 +208,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		deleteCardRequest,
 		deleteCardSuccess,
 		getCard,
-		moveElementDown,
-		moveElementUp,
+		moveElementRequest,
+		moveElementSuccess,
 		resetState,
 		updateCardHeightRequest,
 		updateCardHeightSuccess,

@@ -11,6 +11,7 @@ import {
 	DeleteCardRequestPayload,
 	DeleteElementRequestPayload,
 	FetchCardRequestPayload,
+	MoveElementRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 } from "./cardActionPayload";
@@ -30,6 +31,7 @@ export const useCardRestApi = () => {
 		createElementCall,
 		deleteElementCall,
 		deleteCardCall,
+		moveElementCall,
 		updateCardTitle,
 		updateCardHeightCall,
 	} = useBoardApi();
@@ -67,6 +69,24 @@ export const useCardRestApi = () => {
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardElement"),
+			});
+		}
+	};
+
+	const moveElementRequest = async (payload: MoveElementRequestPayload) => {
+		const card = cardStore.getCard(payload.toCardId);
+		if (card === undefined) return;
+
+		try {
+			await moveElementCall(
+				payload.elementId,
+				payload.toCardId,
+				payload.toPosition
+			);
+			cardStore.moveElementSuccess(payload);
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notMoved", "boardElement"),
 			});
 		}
 	};
@@ -149,6 +169,7 @@ export const useCardRestApi = () => {
 	return {
 		createElementRequest,
 		deleteElementRequest,
+		moveElementRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,

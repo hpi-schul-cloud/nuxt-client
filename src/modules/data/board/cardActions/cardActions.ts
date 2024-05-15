@@ -12,6 +12,9 @@ import {
 	FetchCardFailurePayload,
 	FetchCardRequestPayload,
 	FetchCardSuccessPayload,
+	MoveElementRequestPayload,
+	MoveElementSuccessPayload,
+	MoveElementFailurePayload,
 	UpdateCardHeightFailurePayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardHeightSuccessPayload,
@@ -50,6 +53,19 @@ export const deleteElementSuccess = createAction(
 export const deleteElementFailure = createAction(
 	"delete-element-failure",
 	props<DeleteElementFailurePayload>()
+);
+
+export const moveElementRequest = createAction(
+	"move-element-request",
+	props<MoveElementRequestPayload>()
+);
+export const moveElementSuccess = createAction(
+	"move-element-success",
+	props<MoveElementSuccessPayload>()
+);
+export const moveElementFailure = createAction(
+	"move-element-failure",
+	props<MoveElementFailurePayload>()
 );
 
 export const deleteCardRequest = createAction(

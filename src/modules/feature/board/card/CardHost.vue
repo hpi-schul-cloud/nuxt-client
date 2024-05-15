@@ -180,36 +180,39 @@ export default defineComponent({
 			await delay(300);
 			cardStore.updateCardHeightRequest({
 				cardId: cardId.value,
-				newHeight: cardHostHeight.value,
+				newHeight: Math.round(cardHostHeight.value),
 			});
 		};
 
 		const onOpenDetailView = () => (isDetailView.value = true);
 		const onCloseDetailView = () => (isDetailView.value = false);
 
-		const onMoveContentElementDown = async (payload: ElementMove) =>
-			await cardStore.moveElementDown(cardId.value, payload);
+		const onMoveContentElementDown = async ({
+			payload: elementId,
+			elementIndex,
+		}: ElementMove) =>
+			cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
 
-		const onMoveContentElementUp = async (payload: ElementMove) =>
-			await cardStore.moveElementUp(cardId.value, payload);
-		// await cardStore.moveElementUp(
-		// 	cardId.value,
-		// 	payload.elementId,
-		// 	payload.elementIndex - 1
-		// );
+		const onMoveContentElementUp = async ({
+			payload: elementId,
+			elementIndex,
+		}: ElementMove) =>
+			cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
 
 		const onMoveContentElementKeyboard = async (
-			payload: ElementMove,
+			{ payload: elementId, elementIndex }: ElementMove,
 			keyString: DragAndDropKey
 		) => {
-			if (!verticalCursorKeys.includes(keyString)) {
-				return;
-			}
-			if (keyString === "ArrowUp") {
-				await cardStore.moveElementUp(cardId.value, payload);
-			} else if (keyString === "ArrowDown") {
-				await cardStore.moveElementDown(cardId.value, payload);
-			}
+			if (!verticalCursorKeys.includes(keyString)) return;
+
+			const delta = keyString === "ArrowUp" ? -1 : 1;
+
+			cardStore.moveElementRequest(
+				props.cardId,
+				elementId,
+				elementIndex,
+				delta
+			);
 		};
 
 		const boardMenuClasses = computed(() => {

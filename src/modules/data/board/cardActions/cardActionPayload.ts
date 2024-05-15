@@ -83,4 +83,19 @@ export type DeleteCardFailurePayload = {
 	boardObjectType: BoardObjectType;
 };
 
+export type MoveElementRequestPayload = {
+	elementId: string;
+	toCardId: string;
+	toPosition: number;
+};
+export type MoveElementSuccessPayload = {
+	elementId: string;
+	toCardId: string;
+	toPosition: number;
+};
+export type MoveElementFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
+};
+
 export type DisconnectSocketRequestPayload = Record<string, never>;

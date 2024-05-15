@@ -8,6 +8,7 @@ import {
 	DeleteCardRequestPayload,
 	DeleteElementRequestPayload,
 	FetchCardRequestPayload,
+	MoveElementRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 } from "./cardActionPayload";
@@ -35,6 +36,7 @@ export const useCardSocketApi = () => {
 			// success actions
 			on(CardActions.createElementSuccess, cardStore.createElementSuccess),
 			on(CardActions.deleteElementSuccess, cardStore.deleteElementSuccess),
+			on(CardActions.moveElementSuccess, cardStore.moveElementSuccess),
 			on(CardActions.deleteCardSuccess, cardStore.deleteCardSuccess),
 			on(CardActions.fetchCardSuccess, cardStore.fetchCardSuccess),
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
@@ -80,6 +82,10 @@ export const useCardSocketApi = () => {
 		emitOnSocket("delete-element-request", payload);
 	};
 
+	const moveElementRequest = async (payload: MoveElementRequestPayload) => {
+		emitOnSocket("move-element-request", payload);
+	};
+
 	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
 		emitOnSocket("delete-card-request", payload);
 	};
@@ -102,6 +108,7 @@ export const useCardSocketApi = () => {
 		disconnectSocketRequest,
 		createElementRequest,
 		deleteElementRequest,
+		moveElementRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,
