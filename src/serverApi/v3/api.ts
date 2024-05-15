@@ -3204,21 +3204,11 @@ export enum LanguageType {
 export interface LayoutBodyParams {
     /**
      * 
-     * @type {string}
+     * @type {MediaBoardLayoutType}
      * @memberof LayoutBodyParams
      */
-    type: LayoutBodyParamsTypeEnum;
+    layout: MediaBoardLayoutType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum LayoutBodyParamsTypeEnum {
-    Grid = 'grid',
-    List = 'list'
-}
-
 /**
  * 
  * @export
