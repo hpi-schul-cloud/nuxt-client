@@ -112,7 +112,7 @@ describe("useCardRestApi", () => {
 			cardStore.getCard.mockReturnValue(card);
 
 			const newElementResponse = createMock<
-				AxiosResponse<RichTextElementResponse, any>
+				AxiosResponse<RichTextElementResponse, unknown>
 			>({
 				data: richTextElementResponseFactory.build(),
 			});
@@ -255,7 +255,7 @@ describe("useCardRestApi", () => {
 			const element = richTextElementResponseFactory.build();
 
 			const updateElementResponse = createMock<
-				AxiosResponse<RichTextElementResponse, any>
+				AxiosResponse<RichTextElementResponse, unknown>
 			>({
 				data: { id: element.id, content: element.content, type: element.type },
 			});
