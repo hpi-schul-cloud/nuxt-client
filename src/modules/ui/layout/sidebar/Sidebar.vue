@@ -28,7 +28,7 @@
 				/>
 			</div>
 		</VList>
-		<div data-testid="instanz-sidebar" class="ml-4" style="color: #c6c6c6">
+		<div data-testid="instanz-sidebar" class="ml-4 text-disabled">
 			&#169; {{ currentYear }} {{ theme.name }}
 		</div>
 	</VNavigationDrawer>
