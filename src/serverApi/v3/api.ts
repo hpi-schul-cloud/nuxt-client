@@ -20331,7 +20331,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Get tool launch request for a context external tool id
+         * @summary Get tool launch request for a school external tool
          * @param {string} schoolExternalToolId The id of the school external tool
          * @param {ContextExternalToolBodyParams} contextExternalToolBodyParams 
          * @param {*} [options] Override http request option.
@@ -20921,7 +20921,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get tool launch request for a context external tool id
+         * @summary Get tool launch request for a school external tool
          * @param {string} schoolExternalToolId The id of the school external tool
          * @param {ContextExternalToolBodyParams} contextExternalToolBodyParams 
          * @param {*} [options] Override http request option.
@@ -21231,7 +21231,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Get tool launch request for a context external tool id
+         * @summary Get tool launch request for a school external tool
          * @param {string} schoolExternalToolId The id of the school external tool
          * @param {ContextExternalToolBodyParams} contextExternalToolBodyParams 
          * @param {*} [options] Override http request option.
@@ -21531,7 +21531,7 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @summary Get tool launch request for a context external tool id
+     * @summary Get tool launch request for a school external tool
      * @param {string} schoolExternalToolId The id of the school external tool
      * @param {ContextExternalToolBodyParams} contextExternalToolBodyParams 
      * @param {*} [options] Override http request option.
@@ -21869,7 +21869,7 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @summary Get tool launch request for a context external tool id
+     * @summary Get tool launch request for a school external tool
      * @param {string} schoolExternalToolId The id of the school external tool
      * @param {ContextExternalToolBodyParams} contextExternalToolBodyParams 
      * @param {*} [options] Override http request option.
