@@ -70,7 +70,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 		isLoading.value = loading;
 	};
 
+	let allowToSwitchEditMode = false;
+
 	const createCardRequest = (payload: CreateCardRequestPayload) => {
+		allowToSwitchEditMode = true;
 		socketOrRest.createCardRequest(payload);
 	};
 
@@ -88,7 +91,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 			cardId: newCard.id,
 			height: 120,
 		});
+		if (allowToSwitchEditMode === false) return;
 		setEditModeId(newCard.id);
+		allowToSwitchEditMode = false;
 	};
 
 	const createColumnRequest = async (payload: CreateColumnRequestPayload) => {
