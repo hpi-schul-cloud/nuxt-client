@@ -1,12 +1,11 @@
-import { BoardCardApiFactory } from "@/serverApi/v3";
+import { BoardCardApiFactory, CardResponse } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useDebounceFn } from "@vueuse/core";
-import { BoardCard } from "@/types/board/Card";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
 type CardRequest = {
 	id: string;
-	resolve: (value: BoardCard | PromiseLike<BoardCard>) => void;
+	resolve: (value: CardResponse | PromiseLike<CardResponse>) => void;
 	reject: (error: Error) => void;
 };
 
@@ -18,7 +17,7 @@ const useCardRequestPool = () => {
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 	const requestPool: CardRequest[] = [];
 
-	const fetchCard = async (cardId: string): Promise<BoardCard> => {
+	const fetchCard = async (cardId: string): Promise<CardResponse> => {
 		return new Promise((resolve, reject) => {
 			requestPool.push({ id: cardId, resolve, reject });
 			debouncedFetchCards();
@@ -58,7 +57,7 @@ const useCardRequestPool = () => {
 	const fetchCards = async (cardRequests: CardRequest[]) => {
 		const cardIds = cardRequests.map(({ id }) => id);
 		const response = await cardsApi.cardControllerGetCards(cardIds);
-		const cards = response.data.data as unknown as BoardCard[];
+		const cards = response.data.data as unknown as CardResponse[];
 
 		if (cards) {
 			for (const card of cards) {

@@ -115,7 +115,8 @@ export default defineComponent({
 			error,
 		} = useExternalToolDisplayState();
 
-		const { launchTool, fetchLaunchRequest } = useExternalToolLaunchState();
+		const { launchTool, fetchContextLaunchRequest } =
+			useExternalToolLaunchState();
 
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
@@ -201,7 +202,9 @@ export default defineComponent({
 				launchTool();
 
 				if (isToolLaunchable.value && modelValue.value.contextExternalToolId) {
-					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
+					await fetchContextLaunchRequest(
+						modelValue.value.contextExternalToolId
+					);
 				}
 			}
 
@@ -225,7 +228,9 @@ export default defineComponent({
 				await fetchDisplayData(modelValue.value.contextExternalToolId);
 
 				if (isToolLaunchable.value) {
-					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
+					await fetchContextLaunchRequest(
+						modelValue.value.contextExternalToolId
+					);
 				}
 			}
 		};

@@ -1,23 +1,29 @@
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { envConfigModule } from "@/store";
 
-export const useBoardSocketApi = (dispatch: (action: Action) => void) => {
-	const socket = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
-		path: "/board-collaboration",
-		withCredentials: true,
-	});
+let instance: Socket | null = null;
 
-	socket.on("connect", function () {
-		console.log("connected");
-	});
+export const useSocketConnection = (dispatch: (action: Action) => void) => {
+	if (instance === null) {
+		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
+			path: "/board-collaboration",
+			withCredentials: true,
+		});
+
+		instance.on("connect", function () {
+			console.log("connected");
+		});
+
+		instance.on("disconnect", () => {
+			// ... anything to do?
+		});
+	}
+
+	const socket = instance;
 
 	socket.onAny((event, ...args) => {
 		dispatch({ type: event, payload: args[0] });
-	});
-
-	socket.on("disconnect", () => {
-		// TODO reconnect?
 	});
 
 	const emitOnSocket = (action: string, data: unknown) => {

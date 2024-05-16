@@ -8,40 +8,40 @@ import {
 export type CreateCardRequestPayload = {
 	columnId: string;
 };
-
 export type CreateCardSuccessPayload = {
 	newCard: CardResponse;
 	columnId: string;
+};
+export type CreateCardFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
 };
 
 export type CreateColumnRequestPayload = {
 	boardId: string;
 };
+export type CreateColumnSucccessPayload = {
+	newColumn: ColumnResponse;
+};
+export type CreateColumnFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
+};
 
 export type FetchBoardRequestPayload = {
 	boardId: string;
 };
-
 export type FetchBoardSuccessPayload = BoardResponse;
-
-export type CreateColumnSucccessPayload = {
-	newColumn: ColumnResponse;
-};
-
-export type DeleteCardRequestPayload = {
-	cardId: string;
-};
-
-export type DeleteCardSuccessPayload = {
-	cardId: string;
-};
 
 export type DeleteColumnRequestPayload = {
 	columnId: string;
 };
-
 export type DeleteColumnSuccessPayload = {
 	columnId: string;
+};
+export type DeleteColumnFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
 };
 
 export type MoveCardRequestPayload = {
@@ -62,37 +62,38 @@ export type MoveCardSuccessPayload = {
 	columnDelta?: number;
 	forceNextTick?: boolean;
 };
+export type MoveCardFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
+};
 
 export type MoveColumnRequestPayload = {
 	columnMove: ColumnMove;
 	targetBoardId?: string;
 	byKeyboard: boolean;
 };
-
 export type MoveColumnSuccessPayload = {
 	columnMove: ColumnMove;
 	byKeyboard: boolean;
+};
+export type MoveColumnFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
 };
 
 export type UpdateColumnTitleRequestPayload = {
 	columnId: string;
 	newTitle: string;
 };
-
 export type UpdateColumnTitleSuccessPayload = {
 	columnId: string;
 	newTitle: string;
 };
+export type UpdateColumnTitleFailurePayload = {
+	errorType: ErrorType;
+	boardObjectType: BoardObjectType;
+};
 
-export type DisconnectSocketRequestPayload = Record<string, never>;
-export type CreateCardFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-};
-export type CreateColumnFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-};
 export type DeleteBoardRequestPayload = {
 	id: string;
 };
@@ -103,28 +104,14 @@ export type DeleteBoardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type DeleteCardFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-};
-export type DeleteColumnFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-};
-export type MoveCardFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-};
-export type MoveColumnFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-};
+
 export type ReloadBoardPayload = {
 	id: string;
 };
 export type ReloadBoardSuccessPayload = {
 	id: string;
 };
+
 export type UpdateBoardTitleRequestPayload = {
 	boardId: string;
 	newTitle: string;
@@ -137,6 +124,7 @@ export type UpdateBoardTitleFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
+
 export type UpdateBoardVisibilityRequestPayload = {
 	boardId: string;
 	isVisible: boolean;
@@ -149,10 +137,9 @@ export type UpdateBoardVisibilityFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
 };
-export type UpdateColumnTitleFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-};
+
+export type DisconnectSocketRequestPayload = Record<string, never>;
+
 export type NotifyErrorPayload = {
 	errorType: ErrorType;
 	boardObjectType?: BoardObjectType;
