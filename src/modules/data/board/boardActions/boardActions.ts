@@ -7,9 +7,6 @@ import {
 	DeleteBoardFailurePayload,
 	DeleteBoardRequestPayload,
 	DeleteBoardSuccessPayload,
-	DeleteCardFailurePayload,
-	DeleteCardRequestPayload,
-	DeleteCardSuccessPayload,
 	DeleteColumnFailurePayload,
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
@@ -17,6 +14,8 @@ import {
 	FetchBoardRequestPayload,
 	FetchBoardSuccessPayload,
 	MoveCardFailurePayload,
+	MoveCardRequestPayload,
+	MoveCardSuccessPayload,
 	MoveColumnFailurePayload,
 	MoveColumnRequestPayload,
 	MoveColumnSuccessPayload,
@@ -34,7 +33,6 @@ import {
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActionPayload";
 import { createAction, props } from "@/types/board/ActionFactory";
-import { CardMove } from "@/types/board/DragAndDrop";
 
 export const disconnectSocket = createAction(
 	"disconnect-socket",
@@ -80,19 +78,6 @@ export const deleteBoardFailure = createAction(
 	props<DeleteBoardFailurePayload>()
 );
 
-export const deleteCardRequest = createAction(
-	"delete-card-request",
-	props<DeleteCardRequestPayload>()
-);
-export const deleteCardSuccess = createAction(
-	"delete-card-success",
-	props<DeleteCardSuccessPayload>()
-);
-export const deleteCardFailure = createAction(
-	"delete-card-failure",
-	props<DeleteCardFailurePayload>()
-);
-
 export const deleteColumnRequest = createAction(
 	"delete-column-request",
 	props<DeleteColumnRequestPayload>()
@@ -108,11 +93,11 @@ export const deleteColumnFailure = createAction(
 
 export const moveCardRequest = createAction(
 	"move-card-request",
-	props<CardMove>()
+	props<MoveCardRequestPayload>()
 );
 export const moveCardSuccess = createAction(
 	"move-card-success",
-	props<CardMove>()
+	props<MoveCardSuccessPayload>()
 );
 export const moveCardFailure = createAction(
 	"move-card-failure",
@@ -158,7 +143,6 @@ export const updateBoardTitleRequest = createAction(
 	"update-board-title-request",
 	props<UpdateBoardTitleRequestPayload>()
 );
-
 export const updateBoardTitleSuccess = createAction(
 	"update-board-title-success",
 	props<UpdateBoardTitleSuccessPayload>()
