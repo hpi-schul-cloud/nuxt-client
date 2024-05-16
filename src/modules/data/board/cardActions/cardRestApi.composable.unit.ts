@@ -3,6 +3,7 @@ import { ref } from "vue";
 import {
 	envsFactory,
 	mockedPiniaStoreTyping,
+	richTextElementContentFactory,
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -197,6 +198,49 @@ describe("useCardRestApi", () => {
 		});
 	});
 
+	describe("updateElementRequest", () => {
+		it("should call updateElementSuccess action if the API call is successful", async () => {
+			const { cardStore } = setup();
+			const { updateElementRequest } = useCardRestApi();
+
+			const element = richTextElementResponseFactory.build();
+
+			const updateElementResponse = createMock<
+				AxiosResponse<RichTextElementResponse, any>
+			>({
+				data: { id: element.id, content: element.content, type: element.type },
+			});
+			mockedBoardApiCalls.updateElementCall.mockResolvedValue(
+				updateElementResponse
+			);
+
+			await updateElementRequest({
+				element,
+			});
+
+			expect(cardStore.updateElementSuccess).toHaveBeenCalledWith({
+				elementId: updateElementResponse.data.id,
+				data: {
+					type: updateElementResponse.data.type,
+					content: updateElementResponse.data.content,
+				},
+			});
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			setup();
+			const { updateElementRequest } = useCardRestApi();
+
+			mockedBoardApiCalls.updateElementCall.mockRejectedValue({});
+
+			await updateElementRequest({
+				element: richTextElementResponseFactory.build(),
+			});
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
 	describe("deleteCardRequest", () => {
 		it("should not call deleteCardSuccess action when card is undefined", async () => {
 			const { cardStore } = setup();
@@ -244,12 +288,15 @@ describe("useCardRestApi", () => {
 
 			const cards = cardResponseFactory.buildList(3);
 
-			mockedSharedCardRequestPoolCalls.fetchCard.mockResolvedValue(cards[0]);
+			mockedSharedCardRequestPoolCalls.fetchCard
+				.mockResolvedValueOnce(cards[0])
+				.mockResolvedValueOnce(cards[1])
+				.mockResolvedValueOnce(cards[2]);
 			const cardIds = cards.map((card) => card.id);
 
 			await fetchCardRequest({ cardIds });
 
-			expect(cardStore.fetchCardSuccess).toHaveBeenCalled();
+			expect(cardStore.fetchCardSuccess).toHaveBeenCalledWith({ cards });
 		});
 
 		it("should call handleError if the API call fails", async () => {
