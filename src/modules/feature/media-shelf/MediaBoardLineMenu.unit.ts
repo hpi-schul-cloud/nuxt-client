@@ -3,7 +3,10 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { VListItem } from "vuetify/lib/components/index.mjs";
+import { nextTick } from "vue";
+import { VColorPicker, VListItem } from "vuetify/lib/components/index.mjs";
+import colors from "vuetify/lib/util/colors.mjs";
+import { MediaBoardColors } from "./data";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
 describe("MediaBoardLineMenu", () => {
@@ -15,6 +18,7 @@ describe("MediaBoardLineMenu", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				stubs: {
 					VMenu: true,
+					VColorPicker: true,
 				},
 			},
 			props: {
@@ -51,16 +55,8 @@ describe("MediaBoardLineMenu", () => {
 	});
 
 	describe("when deleting a line", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper();
-
-			return {
-				wrapper,
-			};
-		};
-
 		it("should emit the delete:line event", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper();
 
 			const deleteListItem = wrapper.findComponent(
 				"[data-testid=action-delete-line]"
@@ -68,6 +64,49 @@ describe("MediaBoardLineMenu", () => {
 			await deleteListItem.trigger("click");
 
 			expect(wrapper.emitted("delete:line")).toEqual([[lineId]]);
+		});
+	});
+
+	describe("when renaming a line", () => {
+		it("should emit the rename-title event", async () => {
+			const { wrapper } = getWrapper();
+
+			const renameListItem = wrapper.findComponent(
+				"[data-testid=action-update-line-title]"
+			);
+			await renameListItem.trigger("click");
+
+			expect(wrapper.emitted("rename-title")).toEqual([[lineId]]);
+		});
+	});
+
+	describe("when changing the color of a line", () => {
+		it("should emit the update event for the color-model", async () => {
+			const { wrapper } = getWrapper();
+
+			const colorListItem = wrapper.findComponent(
+				"[data-testid=action-update-line-title]"
+			);
+			await colorListItem.trigger("click");
+
+			const colorPicker = wrapper.getComponent(VColorPicker);
+			colorPicker.vm.$emit("update:model-value", colors.red.lighten4);
+			await nextTick();
+
+			expect(wrapper.emitted("update:color")).toEqual([[MediaBoardColors.RED]]);
+		});
+	});
+
+	describe("when collapsing a line", () => {
+		it("should emit the update event for the collapsed-model", async () => {
+			const { wrapper } = getWrapper();
+
+			const colorListItem = wrapper.findComponent(
+				"[data-testid=collapse-line-btn]"
+			);
+			await colorListItem.trigger("click");
+
+			expect(wrapper.emitted("update:collapsed")).toEqual([[true]]);
 		});
 	});
 });

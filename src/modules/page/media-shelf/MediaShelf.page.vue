@@ -20,6 +20,7 @@
 					width="48px"
 					:value="MediaBoardLayoutType.List"
 					:aria-label="$t('feature.media-shelf.layout.list')"
+					data-testid="media-board-layout-list"
 				/>
 				<VBtn
 					:icon="mdiViewGridOutline"
@@ -27,6 +28,7 @@
 					width="48px"
 					:value="MediaBoardLayoutType.Grid"
 					:aria-label="$t('feature.media-shelf.layout.grid')"
+					data-testid="media-board-layout-grid"
 				/>
 			</VBtnToggle>
 		</div>
@@ -34,7 +36,6 @@
 			v-if="mediaBoard && availableMediaLine"
 			:board="mediaBoard"
 			:available-media-line="availableMediaLine"
-			:layout="mediaBoard.layout"
 		/>
 	</DefaultWireframe>
 </template>

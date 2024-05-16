@@ -1,5 +1,5 @@
-import colors from "vuetify/util/colors";
-import { MediaBoardColors } from "../data/mediaBoardColors";
+import colors from "vuetify/lib/util/colors.mjs";
+import { MediaBoardColors } from "../data";
 
 export const isMediaBoardColor = (
 	colorName: string
@@ -62,11 +62,6 @@ export class MediaBoardColorMapper {
 		}
 
 		const colorSet = colors[colorName];
-
-		if (!colorSet) {
-			console.log(colorName);
-			return colors.shades.white;
-		}
 
 		return colorSet[shade];
 	}

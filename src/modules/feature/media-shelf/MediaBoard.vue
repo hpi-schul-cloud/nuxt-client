@@ -3,7 +3,7 @@
 		<div>
 			<MediaBoardAvailableLine
 				:line="availableMediaLine"
-				:layout="layout"
+				:layout="board.layout"
 				@create:element="createElement"
 				@update:line-background-color="updateAvailableLineBackgroundColor"
 				@update:line-collapsed="updateAvailableLineCollapsed"
@@ -36,7 +36,7 @@
 						:index="index"
 						:key="element.id"
 						:line="element"
-						:layout="layout"
+						:layout="board.layout"
 						@update:line-background-color="
 							updateLineBackgroundColor(element.id, $event)
 						"
@@ -57,11 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-	MediaAvailableLineResponse,
-	MediaBoardLayoutType,
-	MediaBoardResponse,
-} from "@/serverApi/v3";
+import { MediaAvailableLineResponse, MediaBoardResponse } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
@@ -81,10 +77,6 @@ defineProps({
 	},
 	availableMediaLine: {
 		type: Object as PropType<MediaAvailableLineResponse>,
-		required: true,
-	},
-	layout: {
-		type: String as PropType<MediaBoardLayoutType>,
 		required: true,
 	},
 });

@@ -1,6 +1,11 @@
+import { MediaBoardColors } from "@/modules/feature/media-shelf/data";
 import * as serverApi from "@/serverApi/v3/api";
 import {
+	CollapsableBodyParams,
+	ColorBodyParams,
 	CreateMediaElementBodyParams,
+	LayoutBodyParams,
+	MediaBoardLayoutType,
 	MoveColumnBodyParams,
 	MoveElementBodyParams,
 	RenameBodyParams,
@@ -67,6 +72,21 @@ describe("mediaBoardApi.composable", () => {
 			const result = await useMediaBoardApi().getMediaBoardForUser();
 
 			expect(result).toEqual(mediaBoard);
+		});
+	});
+
+	describe("updateBoardLayout", () => {
+		it("should call the api to update the media board layout", async () => {
+			await useMediaBoardApi().updateBoardLayout(
+				"boardId",
+				MediaBoardLayoutType.List
+			);
+
+			expect(
+				mediaBoardApi.mediaBoardControllerSetMediaBoardLayout
+			).toHaveBeenCalledWith<[string, LayoutBodyParams]>("boardId", {
+				layout: MediaBoardLayoutType.List,
+			});
 		});
 	});
 
@@ -183,6 +203,57 @@ describe("mediaBoardApi.composable", () => {
 				mediaLineApi.mediaLineControllerUpdateLineTitle
 			).toHaveBeenCalledWith<[string, RenameBodyParams]>(lineId, {
 				title: newTitle,
+			});
+		});
+	});
+
+	describe("updateLineColor", () => {
+		it("should call the api to update the line color", async () => {
+			await useMediaBoardApi().updateLineColor("lineId", MediaBoardColors.RED);
+
+			expect(
+				mediaLineApi.mediaLineControllerUpdateBackgroundColor
+			).toHaveBeenCalledWith<[string, ColorBodyParams]>("lineId", {
+				backgroundColor: MediaBoardColors.RED,
+			});
+		});
+	});
+
+	describe("updateAvailableLineColor", () => {
+		it("should call the api to update the line color", async () => {
+			await useMediaBoardApi().updateAvailableLineColor(
+				"boardId",
+				MediaBoardColors.RED
+			);
+
+			expect(
+				mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor
+			).toHaveBeenCalledWith<[string, ColorBodyParams]>("boardId", {
+				backgroundColor: MediaBoardColors.RED,
+			});
+		});
+	});
+
+	describe("updateLineCollapsed", () => {
+		it("should call the api to update the line visibility", async () => {
+			await useMediaBoardApi().updateLineCollapsed("lineId", true);
+
+			expect(
+				mediaLineApi.mediaLineControllerCollapseMediaLine
+			).toHaveBeenCalledWith<[string, CollapsableBodyParams]>("lineId", {
+				collapsed: true,
+			});
+		});
+	});
+
+	describe("updateAvailableLineCollapsed", () => {
+		it("should call the api to update the line visibility", async () => {
+			await useMediaBoardApi().updateAvailableLineCollapsed("boardId", true);
+
+			expect(
+				mediaBoardApi.mediaBoardControllerCollapsMediaAvailableLine
+			).toHaveBeenCalledWith<[string, CollapsableBodyParams]>("boardId", {
+				collapsed: true,
 			});
 		});
 	});

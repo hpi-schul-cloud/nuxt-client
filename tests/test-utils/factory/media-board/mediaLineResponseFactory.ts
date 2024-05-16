@@ -1,5 +1,5 @@
+import { MediaBoardColors } from "@/modules/feature/media-shelf/data";
 import { MediaLineResponse } from "@/serverApi/v3";
-import { MediaBoardColors } from "@feature-media-shelf";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "../timestampsResponseFactory";
 import { mediaExternalToolElementResponseFactory } from "./mediaExternalToolElementResponseFactory";

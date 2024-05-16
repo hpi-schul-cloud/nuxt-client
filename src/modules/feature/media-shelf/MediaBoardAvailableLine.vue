@@ -116,8 +116,7 @@ const isList: Ref<boolean> = computed(
 // TODO remove as
 const lineBackgroundColorHex: Ref<string> = computed(() =>
 	MediaBoardColorMapper.mapColorToHex(
-		(props.line.backgroundColor as MediaBoardColors) ??
-			MediaBoardColors.TRANSPARENT,
+		props.line.backgroundColor as MediaBoardColors,
 		"lighten5"
 	)
 );

@@ -1,4 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { MediaBoardColors } from "@/modules/feature/media-shelf/data";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
@@ -6,6 +7,7 @@ import {
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { MediaBoardLayoutType } from "../../../../serverApi/v3";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
 import { useSharedMediaBoardState as useMediaBoardState } from "./mediaBoardState.composable";
 
@@ -191,6 +193,93 @@ describe("mediaBoardState.composable", () => {
 				const { composable } = setup();
 
 				await composable.fetchMediaBoardForUser();
+
+				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalledWith(
+					"error",
+					useErrorHandlerMock.notifyWithTemplate("notLoaded", "board")
+				);
+			});
+		});
+	});
+
+	describe("updateMediaBoardLayout", () => {
+		describe("when media board is not set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+				composable.mediaBoard.value = undefined;
+
+				return {
+					composable,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable } = setup();
+
+				await composable.updateMediaBoardLayout(MediaBoardLayoutType.Grid);
+
+				expect(mediaBoardApiMock.updateBoardLayout).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when media board layout is changed", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const mediaBoardResponse = mediaBoardResponseFactory.build({
+					layout: MediaBoardLayoutType.List,
+				});
+				composable.mediaBoard.value = mediaBoardResponse;
+
+				return {
+					composable,
+					mediaBoardResponse,
+				};
+			};
+
+			it("should call the api to change the layout", async () => {
+				const { composable, mediaBoardResponse } = setup();
+
+				await composable.updateMediaBoardLayout(MediaBoardLayoutType.Grid);
+
+				expect(mediaBoardApiMock.updateBoardLayout).toHaveBeenCalledWith(
+					mediaBoardResponse.id,
+					MediaBoardLayoutType.Grid
+				);
+			});
+
+			it("should set the layout", async () => {
+				const { composable } = setup();
+
+				await composable.updateMediaBoardLayout(MediaBoardLayoutType.Grid);
+
+				expect(composable.mediaBoard.value?.layout).toEqual(
+					MediaBoardLayoutType.Grid
+				);
+			});
+		});
+
+		describe("when error occurs", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const mediaBoardResponse = mediaBoardResponseFactory.build({
+					layout: MediaBoardLayoutType.List,
+				});
+				composable.mediaBoard.value = mediaBoardResponse;
+
+				mediaBoardApiMock.updateBoardLayout.mockRejectedValueOnce("error");
+
+				return {
+					composable,
+					mediaBoardResponse,
+				};
+			};
+
+			it("should call handleAnyError", async () => {
+				const { composable } = setup();
+
+				await composable.updateMediaBoardLayout(MediaBoardLayoutType.List);
 
 				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalledWith(
 					"error",
@@ -738,22 +827,6 @@ describe("mediaBoardState.composable", () => {
 		});
 
 		describe("when media board is set", () => {
-			const setup = () => {
-				const composable = useMediaBoardState();
-
-				const line = mediaLineResponseFactory.build();
-				composable.mediaBoard.value = mediaBoardResponseFactory.build({
-					lines: [line],
-				});
-
-				mediaBoardApiMock.updateLineTitle.mockResolvedValueOnce();
-
-				return {
-					composable,
-					line,
-				};
-			};
-
 			describe("when the line is not found", () => {
 				const setup = () => {
 					const composable = useMediaBoardState();
@@ -774,6 +847,22 @@ describe("mediaBoardState.composable", () => {
 			});
 
 			describe("when the line is found", () => {
+				const setup = () => {
+					const composable = useMediaBoardState();
+
+					const line = mediaLineResponseFactory.build();
+					composable.mediaBoard.value = mediaBoardResponseFactory.build({
+						lines: [line],
+					});
+
+					mediaBoardApiMock.updateLineTitle.mockResolvedValueOnce();
+
+					return {
+						composable,
+						line,
+					};
+				};
+
 				it("should update the title of the line", async () => {
 					const { composable, line } = setup();
 
@@ -832,6 +921,545 @@ describe("mediaBoardState.composable", () => {
 				const { composable, lineId } = setup();
 
 				await composable.updateLineTitle(lineId, "newTitle");
+
+				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("updateLineBackgroundColor", () => {
+		describe("when media board is not set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+				composable.mediaBoard.value = undefined;
+
+				return {
+					composable,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable } = setup();
+
+				await composable.updateLineBackgroundColor(
+					"lineId",
+					MediaBoardColors.BLUE
+				);
+
+				expect(mediaBoardApiMock.updateLineColor).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when media board is set", () => {
+			describe("when the line is not found", () => {
+				const setup = () => {
+					const composable = useMediaBoardState();
+					composable.mediaBoard.value = mediaBoardResponseFactory.build();
+
+					return {
+						composable,
+					};
+				};
+
+				it("should not call the api", async () => {
+					const { composable } = setup();
+
+					await composable.updateLineBackgroundColor(
+						"lineId",
+						MediaBoardColors.BLUE
+					);
+
+					expect(mediaBoardApiMock.updateLineColor).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when the line is found", () => {
+				const setup = () => {
+					const composable = useMediaBoardState();
+
+					const line = mediaLineResponseFactory.build({
+						backgroundColor: MediaBoardColors.RED,
+					});
+					composable.mediaBoard.value = mediaBoardResponseFactory.build({
+						lines: [line],
+					});
+
+					return {
+						composable,
+						line,
+					};
+				};
+
+				it("should update the color of the line", async () => {
+					const { composable, line } = setup();
+
+					await composable.updateLineBackgroundColor(
+						line.id,
+						MediaBoardColors.BLUE
+					);
+
+					expect(composable.mediaBoard.value?.lines).toContainEqual(
+						expect.objectContaining({
+							id: line.id,
+							backgroundColor: MediaBoardColors.BLUE,
+						})
+					);
+				});
+
+				it("should call the api to update the color of the line", async () => {
+					const { composable, line } = setup();
+
+					await composable.updateLineBackgroundColor(
+						line.id,
+						MediaBoardColors.BLUE
+					);
+
+					expect(mediaBoardApiMock.updateLineColor).toHaveBeenCalledWith(
+						line.id,
+						MediaBoardColors.BLUE
+					);
+				});
+			});
+		});
+
+		describe("when error occurs", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const line = mediaLineResponseFactory.build({
+					backgroundColor: MediaBoardColors.RED,
+				});
+				composable.mediaBoard.value = mediaBoardResponseFactory.build({
+					lines: [line],
+				});
+
+				mediaBoardApiMock.updateLineColor.mockRejectedValueOnce("error");
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
+					(_error, handler) => handler()
+				);
+				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
+					Promise.resolve();
+				});
+
+				return {
+					composable,
+					lineId: line.id,
+				};
+			};
+
+			it("should call handleAnyError", async () => {
+				const { composable, lineId } = setup();
+
+				await composable.updateLineBackgroundColor(
+					lineId,
+					MediaBoardColors.BLUE
+				);
+
+				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
+			});
+
+			it("should reload board", async () => {
+				const { composable, lineId } = setup();
+
+				await composable.updateLineBackgroundColor(
+					lineId,
+					MediaBoardColors.BLUE
+				);
+
+				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("updateAvailableLineBackgroundColor", () => {
+		describe("when media board is not set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+				composable.mediaBoard.value = undefined;
+				composable.availableMediaLine.value =
+					mediaAvailableLineResponseFactory.build();
+
+				return {
+					composable,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable } = setup();
+
+				await composable.updateAvailableLineBackgroundColor(
+					MediaBoardColors.BLUE
+				);
+
+				expect(
+					mediaBoardApiMock.updateAvailableLineColor
+				).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when available line is not set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+				composable.mediaBoard.value = mediaBoardResponseFactory.build();
+				composable.availableMediaLine.value = undefined;
+
+				return {
+					composable,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable } = setup();
+
+				await composable.updateAvailableLineBackgroundColor(
+					MediaBoardColors.BLUE
+				);
+
+				expect(
+					mediaBoardApiMock.updateAvailableLineColor
+				).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when media board and available line are set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const availableLine = mediaAvailableLineResponseFactory.build({
+					backgroundColor: MediaBoardColors.RED,
+				});
+				const mediaBoard = mediaBoardResponseFactory.build();
+				composable.availableMediaLine.value = availableLine;
+				composable.mediaBoard.value = mediaBoard;
+
+				return {
+					composable,
+					availableLine,
+					mediaBoard,
+				};
+			};
+
+			it("should update the color of the line", async () => {
+				const { composable } = setup();
+
+				await composable.updateAvailableLineBackgroundColor(
+					MediaBoardColors.BLUE
+				);
+
+				expect(composable.availableMediaLine.value?.backgroundColor).toEqual(
+					MediaBoardColors.BLUE
+				);
+			});
+
+			it("should call the api to update the color of the line", async () => {
+				const { composable, mediaBoard } = setup();
+
+				await composable.updateAvailableLineBackgroundColor(
+					MediaBoardColors.BLUE
+				);
+
+				expect(mediaBoardApiMock.updateAvailableLineColor).toHaveBeenCalledWith(
+					mediaBoard.id,
+					MediaBoardColors.BLUE
+				);
+			});
+		});
+
+		describe("when error occurs", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const availableLine = mediaAvailableLineResponseFactory.build({
+					backgroundColor: MediaBoardColors.RED,
+				});
+				const mediaBoard = mediaBoardResponseFactory.build();
+				composable.availableMediaLine.value = availableLine;
+				composable.mediaBoard.value = mediaBoard;
+
+				mediaBoardApiMock.updateAvailableLineColor.mockRejectedValueOnce(
+					"error"
+				);
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
+					(_error, handler) => handler()
+				);
+				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
+					Promise.resolve();
+				});
+
+				return {
+					composable,
+				};
+			};
+
+			it("should call handleAnyError", async () => {
+				const { composable } = setup();
+
+				await composable.updateAvailableLineBackgroundColor(
+					MediaBoardColors.BLUE
+				);
+
+				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
+			});
+
+			it("should reload board", async () => {
+				const { composable } = setup();
+
+				await composable.updateAvailableLineBackgroundColor(
+					MediaBoardColors.BLUE
+				);
+
+				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("updateLineCollapsed", () => {
+		describe("when media board is not set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+				composable.mediaBoard.value = undefined;
+
+				return {
+					composable,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable } = setup();
+
+				await composable.updateLineCollapsed("lineId", true);
+
+				expect(mediaBoardApiMock.updateLineCollapsed).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when media board is set", () => {
+			describe("when the line is not found", () => {
+				const setup = () => {
+					const composable = useMediaBoardState();
+					composable.mediaBoard.value = mediaBoardResponseFactory.build();
+
+					return {
+						composable,
+					};
+				};
+
+				it("should not call the api", async () => {
+					const { composable } = setup();
+
+					await composable.updateLineCollapsed("lineId", true);
+
+					expect(mediaBoardApiMock.updateLineCollapsed).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when the line is found", () => {
+				const setup = () => {
+					const composable = useMediaBoardState();
+
+					const line = mediaLineResponseFactory.build({
+						collapsed: false,
+					});
+					composable.mediaBoard.value = mediaBoardResponseFactory.build({
+						lines: [line],
+					});
+
+					return {
+						composable,
+						line,
+					};
+				};
+
+				it("should update the visibility of the line", async () => {
+					const { composable, line } = setup();
+
+					await composable.updateLineCollapsed(line.id, true);
+
+					expect(composable.mediaBoard.value?.lines).toContainEqual(
+						expect.objectContaining({
+							id: line.id,
+							collapsed: true,
+						})
+					);
+				});
+
+				it("should call the api to update the visibility of the line", async () => {
+					const { composable, line } = setup();
+
+					await composable.updateLineCollapsed(line.id, true);
+
+					expect(mediaBoardApiMock.updateLineCollapsed).toHaveBeenCalledWith(
+						line.id,
+						true
+					);
+				});
+			});
+		});
+
+		describe("when error occurs", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const line = mediaLineResponseFactory.build({
+					collapsed: false,
+				});
+				composable.mediaBoard.value = mediaBoardResponseFactory.build({
+					lines: [line],
+				});
+
+				mediaBoardApiMock.updateLineCollapsed.mockRejectedValueOnce("error");
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
+					(_error, handler) => handler()
+				);
+				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
+					Promise.resolve();
+				});
+
+				return {
+					composable,
+					lineId: line.id,
+				};
+			};
+
+			it("should call handleAnyError", async () => {
+				const { composable, lineId } = setup();
+
+				await composable.updateLineCollapsed(lineId, true);
+
+				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
+			});
+
+			it("should reload board", async () => {
+				const { composable, lineId } = setup();
+
+				await composable.updateLineCollapsed(lineId, true);
+
+				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("updateAvailableLineCollapsed", () => {
+		describe("when media board is not set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+				composable.mediaBoard.value = undefined;
+				composable.availableMediaLine.value =
+					mediaAvailableLineResponseFactory.build();
+
+				return {
+					composable,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable } = setup();
+
+				await composable.updateAvailableLineCollapsed(true);
+
+				expect(
+					mediaBoardApiMock.updateAvailableLineCollapsed
+				).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when available line is not set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+				composable.mediaBoard.value = mediaBoardResponseFactory.build();
+				composable.availableMediaLine.value = undefined;
+
+				return {
+					composable,
+				};
+			};
+
+			it("should not call the api", async () => {
+				const { composable } = setup();
+
+				await composable.updateAvailableLineCollapsed(true);
+
+				expect(
+					mediaBoardApiMock.updateAvailableLineCollapsed
+				).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when media board and available line are set", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const availableLine = mediaAvailableLineResponseFactory.build({
+					collapsed: false,
+				});
+				const mediaBoard = mediaBoardResponseFactory.build();
+				composable.availableMediaLine.value = availableLine;
+				composable.mediaBoard.value = mediaBoard;
+
+				return {
+					composable,
+					availableLine,
+					mediaBoard,
+				};
+			};
+
+			it("should update the color of the line", async () => {
+				const { composable } = setup();
+
+				await composable.updateAvailableLineCollapsed(true);
+
+				expect(composable.availableMediaLine.value?.collapsed).toEqual(true);
+			});
+
+			it("should call the api to update the color of the line", async () => {
+				const { composable, mediaBoard } = setup();
+
+				await composable.updateAvailableLineCollapsed(true);
+
+				expect(
+					mediaBoardApiMock.updateAvailableLineCollapsed
+				).toHaveBeenCalledWith(mediaBoard.id, true);
+			});
+		});
+
+		describe("when error occurs", () => {
+			const setup = () => {
+				const composable = useMediaBoardState();
+
+				const availableLine = mediaAvailableLineResponseFactory.build({
+					collapsed: false,
+				});
+				const mediaBoard = mediaBoardResponseFactory.build();
+				composable.availableMediaLine.value = availableLine;
+				composable.mediaBoard.value = mediaBoard;
+
+				mediaBoardApiMock.updateAvailableLineCollapsed.mockRejectedValueOnce(
+					"error"
+				);
+				useErrorHandlerMock.handleAnyError.mockImplementationOnce(
+					(_error, handler) => handler()
+				);
+				useErrorHandlerMock.notifyWithTemplate.mockReturnValue(() => {
+					Promise.resolve();
+				});
+
+				return {
+					composable,
+				};
+			};
+
+			it("should call handleAnyError", async () => {
+				const { composable } = setup();
+
+				await composable.updateAvailableLineCollapsed(true);
+
+				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
+			});
+
+			it("should reload board", async () => {
+				const { composable } = setup();
+
+				await composable.updateAvailableLineCollapsed(true);
 
 				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
 			});

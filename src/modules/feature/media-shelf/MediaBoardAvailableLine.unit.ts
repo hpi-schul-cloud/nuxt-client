@@ -1,3 +1,5 @@
+import { MediaBoardLayoutType } from "@/serverApi/v3";
+import { ComponentProps } from "@/types/vue";
 import {
 	mediaAvailableLineElementResponseFactory,
 	mediaAvailableLineResponseFactory,
@@ -6,21 +8,17 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, ref } from "vue";
 import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
-import {
-	availableMediaLineId,
-	ElementCreate,
-	useSharedMediaBoardState,
-} from "./data";
+import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
+import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
-jest.mock("./data/mediaBoardState.composable");
 jest.mock("@vueuse/core", () => {
 	return {
 		...jest.requireActual("@vueuse/core"),
@@ -31,15 +29,17 @@ jest.mock("@vueuse/core", () => {
 jest.mocked(useMediaQuery).mockReturnValue(ref(true));
 
 describe("MediaBoardAvailableLine", () => {
-	let useSharedMediaBoardStateMock: DeepMocked<
-		ReturnType<typeof useSharedMediaBoardState>
-	>;
-
-	const getWrapper = () => {
+	const getWrapper = (
+		props: ComponentProps<typeof MediaBoardAvailableLine> = {
+			line: mediaAvailableLineResponseFactory.build(),
+			layout: MediaBoardLayoutType.List,
+		}
+	) => {
 		const wrapper = mount(MediaBoardAvailableLine, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
+			props,
 		});
 
 		return {
@@ -47,17 +47,26 @@ describe("MediaBoardAvailableLine", () => {
 		};
 	};
 
-	beforeEach(() => {
-		useSharedMediaBoardStateMock =
-			createMock<ReturnType<typeof useSharedMediaBoardState>>();
-
-		jest
-			.mocked(useSharedMediaBoardState)
-			.mockReturnValue(useSharedMediaBoardStateMock);
-	});
-
 	afterEach(() => {
 		jest.resetAllMocks();
+	});
+
+	describe("when opening the menu", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper();
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should have a menu", async () => {
+			const { wrapper } = setup();
+
+			const menu = wrapper.findComponent(MediaBoardLineMenu);
+
+			expect(menu.isVisible()).toEqual(true);
+		});
 	});
 
 	it("should have the availableMediaLineId as data-line-id", async () => {
@@ -75,9 +84,10 @@ describe("MediaBoardAvailableLine", () => {
 				elements: [availableMedium],
 			});
 
-			useSharedMediaBoardStateMock.availableMediaLine = ref(availableMedia);
-
-			const { wrapper } = getWrapper();
+			const { wrapper } = getWrapper({
+				line: availableMedia,
+				layout: MediaBoardLayoutType.List,
+			});
 
 			const toLineId = "toLineId";
 			const fromLine = createMock<HTMLElement>({
@@ -215,6 +225,48 @@ describe("MediaBoardAvailableLine", () => {
 			await nextTick();
 
 			expect(useDragAndDrop().isDragging.value).toEqual(false);
+		});
+	});
+
+	describe("when the line is in grid layout", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper({
+				line: mediaAvailableLineResponseFactory.build(),
+				layout: MediaBoardLayoutType.Grid,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should have the flex-wrap class", () => {
+			const { wrapper } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			expect(sortable.classes()).toContain("flex-wrap");
+		});
+	});
+
+	describe("when the line is in list layout", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper({
+				line: mediaAvailableLineResponseFactory.build(),
+				layout: MediaBoardLayoutType.List,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should not have the flex-wrap class", () => {
+			const { wrapper } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			expect(sortable.classes()).not.toContain("flex-wrap");
 		});
 	});
 });
