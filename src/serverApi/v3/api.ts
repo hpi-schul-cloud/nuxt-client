@@ -13973,12 +13973,12 @@ export const MediaBoardApiAxiosParamCreator = function (configuration?: Configur
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerCollapsMediaAvailableLine: async (boardId: string, collapsableBodyParams: CollapsableBodyParams, options: any = {}): Promise<RequestArgs> => {
+        mediaBoardControllerCollapseMediaAvailableLine: async (boardId: string, collapsableBodyParams: CollapsableBodyParams, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'boardId' is not null or undefined
-            assertParamExists('mediaBoardControllerCollapsMediaAvailableLine', 'boardId', boardId)
+            assertParamExists('mediaBoardControllerCollapseMediaAvailableLine', 'boardId', boardId)
             // verify required parameter 'collapsableBodyParams' is not null or undefined
-            assertParamExists('mediaBoardControllerCollapsMediaAvailableLine', 'collapsableBodyParams', collapsableBodyParams)
-            const localVarPath = `/media-boards/{boardId}/media-available-line/collaps`
+            assertParamExists('mediaBoardControllerCollapseMediaAvailableLine', 'collapsableBodyParams', collapsableBodyParams)
+            const localVarPath = `/media-boards/{boardId}/media-available-line/collapse`
                 .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -14225,8 +14225,8 @@ export const MediaBoardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaBoardControllerCollapsMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerCollapsMediaAvailableLine(boardId, collapsableBodyParams, options);
+        async mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaBoardControllerCollapseMediaAvailableLine(boardId, collapsableBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14303,8 +14303,8 @@ export const MediaBoardApiFactory = function (configuration?: Configuration, bas
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaBoardControllerCollapsMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.mediaBoardControllerCollapsMediaAvailableLine(boardId, collapsableBodyParams, options).then((request) => request(axios, basePath));
+        mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaBoardControllerCollapseMediaAvailableLine(boardId, collapsableBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14375,7 +14375,7 @@ export interface MediaBoardApiInterface {
      * @throws {RequiredError}
      * @memberof MediaBoardApiInterface
      */
-    mediaBoardControllerCollapsMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void>;
+    mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -14446,8 +14446,8 @@ export class MediaBoardApi extends BaseAPI implements MediaBoardApiInterface {
      * @throws {RequiredError}
      * @memberof MediaBoardApi
      */
-    public mediaBoardControllerCollapsMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any) {
-        return MediaBoardApiFp(this.configuration).mediaBoardControllerCollapsMediaAvailableLine(boardId, collapsableBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public mediaBoardControllerCollapseMediaAvailableLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any) {
+        return MediaBoardApiFp(this.configuration).mediaBoardControllerCollapseMediaAvailableLine(boardId, collapsableBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
