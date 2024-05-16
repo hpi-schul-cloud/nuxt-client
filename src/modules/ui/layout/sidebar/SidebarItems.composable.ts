@@ -7,10 +7,12 @@ import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { ComputedRef, computed } from "vue";
 import { mdiBookshelf } from "@mdi/js";
+import { useI18n } from "vue-i18n";
 
 export const useSidebarItems = () => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const filePathsModule = injectStrict(FILE_PATHS_MODULE_KEY);
+	const { t } = useI18n();
 
 	const pageLinks: ComputedRef<SidebarItems> = computed(() => [
 		{
@@ -104,6 +106,19 @@ export const useSidebarItems = () => {
 
 	const legalLinks: ComputedRef<SidebarSingleItem[]> = computed(() => [
 		{
+			href:
+				"mailto:" +
+				envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
+				"?subject=" +
+				t("components.legacy.footer.accessibility.report"),
+			title: "components.legacy.footer.accessibility.report",
+			testId: "report-accessibility",
+			target: "_blank",
+			rel: "noopener",
+			feature: "ACCESSIBILITY_REPORT_EMAIL",
+			featureValue: `${envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL}`,
+		},
+		{
 			to: "/imprint",
 			title: "components.legacy.footer.imprint",
 			testId: "imprint",
@@ -117,7 +132,7 @@ export const useSidebarItems = () => {
 		},
 		{
 			href: "/privacypolicy",
-			title: "components.legacy.footer.privacy_policy",
+			title: "components.legacy.footer.privacy_policy_thr",
 			target: "_blank",
 			rel: "noopener",
 			testId: "privacy-policy",
@@ -132,24 +147,13 @@ export const useSidebarItems = () => {
 			target: "_blank",
 			rel: "noopener",
 			feature: "ALERT_STATUS_URL",
+			featureValue: `${envConfigModule.getEnv.ALERT_STATUS_URL}`,
 		},
 		{
 			title: "global.topbar.actions.releaseNotes",
 			href: "/help/releases",
 			target: "_self",
 			testId: "releases",
-		},
-		{
-			href:
-				"mailto:" +
-				envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
-				"?subject=" +
-				"components.legacy.footer.accessibility.report",
-			title: "components.legacy.footer.accessibility.report",
-			testId: "report-accessibility",
-			target: "_blank",
-			rel: "noopener",
-			feature: "ACCESSIBILITY_REPORT_EMAIL",
 		},
 		{
 			href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
@@ -175,44 +179,6 @@ export const useSidebarItems = () => {
 			featureValue: SchulcloudTheme.Default,
 		},
 	];
-	/* if (envConfigModule.getEnv.ALERT_STATUS_URL) {
-		systemLinks.push({
-			href: envConfigModule.getEnv.ALERT_STATUS_URL,
-			title: "components.legacy.footer.status",
-			testId: "status",
-			target: "_blank",
-			rel: "noopener",
-		});
-	} */
-	/* if (envConfigModule.getTheme === SchulcloudTheme.Default) {
-		systemLinks.push({
-			href: "/security",
-			title: "components.legacy.footer.security",
-			testId: "security",
-		});
-	} */
-
-	// if (envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL)
-	/* {
-		accessibilityGroup.children.push({
-			href:
-				"mailto:" +
-				envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
-				"?subject=" +
-				"components.legacy.footer.accessibility.report",
-			title: "components.legacy.footer.accessibility.report",
-			testId: "report-accessibility",
-			target: "_blank",
-			rel: "noopener",
-		});
-	}
-	accessibilityGroup.children.push({
-		href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
-		title: "components.legacy.footer.accessibility.statement",
-		testId: "accessibility-statement",
-		target: "_blank",
-		rel: "noopener",
-	});*/
 
 	const metaLinks: ComputedRef<SidebarGroupItem[]> = computed(() => [
 		{
@@ -296,12 +262,6 @@ export const useSidebarItems = () => {
 					target: "_self",
 					testId: "contact",
 				},
-				{
-					title: "global.topbar.actions.training",
-					href: "https://www.lernen.cloud/",
-					target: "_blank",
-					testId: "trainings",
-				},
 			],
 		},
 		{
@@ -310,42 +270,7 @@ export const useSidebarItems = () => {
 			testId: "system",
 			children: systemLinks,
 		},
-		// TODO - adjust language keys, when old components are removed
-		/* {
-			title: "global.sidebar.item.accessibility",
-			icon: "$mdiHuman",
-			testId: "accessibility",
-			feature: "SC_THEME",
-			featureValue:
-				SchulcloudTheme.Brb || SchulcloudTheme.N21 || SchulcloudTheme.Thr,
-			children: [
-				{
-					href:
-						"mailto:" +
-						envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL +
-						"?subject=" +
-						"components.legacy.footer.accessibility.report",
-					title: "components.legacy.footer.accessibility.report",
-					testId: "report-accessibility",
-					target: "_blank",
-					rel: "noopener",
-					feature: "ACCESSIBILITY_REPORT_EMAIL",
-				},
-				{
-					href: filePathsModule.getSpecificFiles
-						.accessibilityStatement as string,
-					title: "components.legacy.footer.accessibility.statement",
-					testId: "accessibility-statement",
-					target: "_blank",
-					rel: "noopener",
-				},
-			],
-		}, */
 	]);
-
-	/* if (envConfigModule.getTheme !== SchulcloudTheme.Default) {
-		metaLinks.value.push(accessibilityGroup);
-	} */
 
 	return { pageLinks, legalLinks, metaLinks };
 };
