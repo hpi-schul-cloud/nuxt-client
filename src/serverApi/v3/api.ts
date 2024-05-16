@@ -611,10 +611,10 @@ export interface CollapsableBodyParams {
 export interface ColorBodyParams {
     /**
      * 
-     * @type {string}
+     * @type {MediaBoardColors}
      * @memberof ColorBodyParams
      */
-    backgroundColor: string;
+    backgroundColor: MediaBoardColors;
 }
 /**
  * 
@@ -4051,6 +4051,34 @@ export interface MediaAvailableLineResponse {
      */
     collapsed: boolean;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum MediaBoardColors {
+    Transparent = 'transparent',
+    Red = 'red',
+    Pink = 'pink',
+    Purple = 'purple',
+    DeepPurple = 'deepPurple',
+    Indigo = 'indigo',
+    Blue = 'blue',
+    LightBlue = 'lightBlue',
+    Cyan = 'cyan',
+    Teal = 'teal',
+    Green = 'green',
+    LightGreen = 'lightGreen',
+    Lime = 'lime',
+    Yellow = 'yellow',
+    Amber = 'amber',
+    Orange = 'orange',
+    DeepOrange = 'deepOrange',
+    Brown = 'brown',
+    Grey = 'grey',
+    BlueGrey = 'blueGrey'
+}
+
 /**
  * 
  * @export
