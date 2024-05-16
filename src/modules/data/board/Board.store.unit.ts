@@ -168,6 +168,7 @@ describe("BoardStore", () => {
 		it("should call setEditModeId", () => {
 			const { boardStore, firstColumn } = setup();
 
+			boardStore.createCardRequest({ columnId: firstColumn.id });
 			boardStore.createCardSuccess({
 				newCard: NEW_CARD,
 				columnId: firstColumn.id,
