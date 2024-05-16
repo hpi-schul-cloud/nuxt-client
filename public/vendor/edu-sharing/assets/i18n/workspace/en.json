@@ -57,10 +57,10 @@
       "UNKNOWN": "Error while transfering data",
       "FORMAT": "Unknown file format",
       "QUOTA": "Upload quota reached",
-      "VIRUS":"Virus detected. File was deleted.",
-      "VIRUS_SCAN_FAILED":"Error verifying the file. Please try again.",
-      "MIMETYPE_VERIFICATION":"File content was not allowed or could not be verified. File was deleted.",
-      "FILETYPE_VERIFICATION":"File extension could not be verified. File was deleted."
+      "VIRUS": "Virus detected. File was deleted.",
+      "VIRUS_SCAN_FAILED": "Error verifying the file. Please try again.",
+      "MIMETYPE_VERIFICATION": "File content was not allowed or could not be verified. File was deleted.",
+      "FILETYPE_VERIFICATION": "File extension could not be verified. File was deleted."
     },
     "UPLOAD_EXISTS": {
       "TITLE": "Existing elements",
@@ -285,6 +285,14 @@
         "BULK_MIGRATION": "Migration step for converting oai imports to etl/bulk imports",
         "REMOTE_OBJECT_INIT": "Object imported from federated search source",
         "IMPORT_BLOCKED": "Changed status of import-blocking"
+      }
+    },
+    "LTI_V13_PLATFORM": {
+      "NODE": {
+        "CREATE": {
+          "TITLE": "Create new file",
+          "NAME": "Tool: {{ltitool}}"
+        }
       }
     },
     "EDITOR": {

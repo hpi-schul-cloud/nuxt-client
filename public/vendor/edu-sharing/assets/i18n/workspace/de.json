@@ -57,11 +57,11 @@
       "UNKNOWN": "Fehler bei der Datenübertragung",
       "FORMAT": "Nicht identifizierbares Dateiformat",
       "QUOTA": "Speicherplatz-Quota wurde überschritten",
-      "VIRUS":"Virus erkannt. Datei wurde gelöscht.",
-      "VIRUS_SCAN_FAILED":"Fehler bei der Dateiprüfung. Bitte versuchen Sie es erneut.",
-      "MIMETYPE_VERIFICATION":"Dateiinhalt ist nicht zulässig oder konnte nicht verifiziert werden. Die Datei wurde gelöscht. Wenden Sie sich bei Fragen bitte an den Support.",
-      "FILETYPE_VERIFICATION":"Dateiendung konnte nicht verifiziert werden. Die Datei wurde gelöscht. Wenden Sie sich bei Fragen bitte an den Support.",
-      "FILE_SIZE_EXCEEDED":"Maximal zulässige Dateigröße überschritten (Dateigröße: {{actualSize}}, maximal zulässig: {{maxSize}})"
+      "VIRUS": "Virus erkannt. Datei wurde gelöscht.",
+      "VIRUS_SCAN_FAILED": "Fehler bei der Dateiprüfung. Bitte versuchen Sie es erneut.",
+      "MIMETYPE_VERIFICATION": "Dateiinhalt ist nicht zulässig oder konnte nicht verifiziert werden. Die Datei wurde gelöscht. Wenden Sie sich bei Fragen bitte an den Support.",
+      "FILETYPE_VERIFICATION": "Dateiendung konnte nicht verifiziert werden. Die Datei wurde gelöscht. Wenden Sie sich bei Fragen bitte an den Support.",
+      "FILE_SIZE_EXCEEDED": "Maximal zulässige Dateigröße überschritten (Dateigröße: {{actualSize}}, maximal zulässig: {{maxSize}})"
     },
     "UPLOAD_EXISTS": {
       "TITLE": "Vorhandene Elemente",
@@ -306,7 +306,7 @@
     "LTI_V13_PLATFORM": {
       "NODE": {
         "CREATE": {
-          "TITLE": "Neues LTI Tool Object erstellen/einbinden",
+          "TITLE": "Neue Datei erstellen/einbinden",
           "NAME": "Tool: {{ltitool}}"
         }
       }

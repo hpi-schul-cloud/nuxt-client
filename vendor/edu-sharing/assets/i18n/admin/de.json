@@ -481,6 +481,7 @@
         "authority_organization": "Organisation",
         "authority_organization_id": "Organisations-ID",
         "authority_mediacenter": "Medienzentrum",
+        "license": "Lizenzen",
         "date": "Datum"
       },
       "ACTIONS": {

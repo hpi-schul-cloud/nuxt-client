@@ -468,6 +468,7 @@
         "authority_organization": "Organisation",
         "authority_organization_id": "Organisation-Id",
         "authority_mediacenter": "Media Center",
+        "license": "License",
         "date": "Date"
       },
       "ACTIONS": {

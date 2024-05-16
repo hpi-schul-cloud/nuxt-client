@@ -133,7 +133,7 @@ class ApplyToLmsPageComponent {
     if (reurl == 'IFRAME' || reurl == 'WINDOW') {
       node.objectUrl = ccrepUrl;
       node.nodeId = wrapper.remote.ref.id;
-      this.nodeHelper.appendImageData(node).subscribe(data => {
+      this.nodeHelper.appendImageData(node).then(data => {
         this.events.broadcastEvent(_core_module_core_module__WEBPACK_IMPORTED_MODULE_0__.FrameEventsService.EVENT_APPLY_NODE, data);
         window.history.back();
       }, error => {

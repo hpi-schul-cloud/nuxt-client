@@ -90,12 +90,15 @@ class SendFeedbackDialogComponent {
       _this.dialogRef.patchState({
         isLoading: true
       });
-      yield _this.feedbackService.addFeedback({
-        repository: _core_module_core_module__WEBPACK_IMPORTED_MODULE_1__.RestConstants.HOME_REPOSITORY,
-        node: _this.data.node.ref.id,
-        body: values
-      }).toPromise();
-      _this.toast.toast('FEEDBACK.TOAST');
+      try {
+        yield _this.feedbackService.addFeedback({
+          repository: _core_module_core_module__WEBPACK_IMPORTED_MODULE_1__.RestConstants.HOME_REPOSITORY,
+          node: _this.data.node.ref.id,
+          body: values
+        }).toPromise();
+      } catch (e) {
+        _this.toast.error(e);
+      }
       _this.dialogRef.close();
       const queryParams = yield _this.route.queryParams.toPromise();
       if (queryParams.feedbackClose) {

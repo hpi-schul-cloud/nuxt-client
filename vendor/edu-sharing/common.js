@@ -34,7 +34,7 @@ class CsvHelper {
           line.push(d[h]);
         }
       }
-      csv += line.map(l => '"' + (l ? (l + '').replace(/"/g, '""') : '') + '"').join(';');
+      csv += line.map(l => '"' + (l !== null ? (l + '').replace(/"/g, '""') : '') + '"').join(';');
     }
     return csv;
   }

@@ -48,7 +48,7 @@ const vueRoutes = [
 	`^/migration/error/?$`,
 	`^/tools/context/tool-configuration/?$`,
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
-	`^/vendor/edu-sharing/`,
+	`^/vendor/edu-sharing/?$`,
 	`^/media-shelf/?$`,
 ];
 

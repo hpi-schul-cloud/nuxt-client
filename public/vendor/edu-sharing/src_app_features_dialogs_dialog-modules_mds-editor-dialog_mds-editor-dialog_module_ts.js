@@ -156,23 +156,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   MdsEditorDialogComponent: () => (/* binding */ MdsEditorDialogComponent)
 /* harmony export */ });
 /* harmony import */ var _home_bergatco_Repositories_ITs_JOINTLY_edu_sharing_community_repository_Frontend_node_modules_babel_runtime_helpers_esm_asyncToGenerator_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js */ 71670);
-/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs */ 64555);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! rxjs/operators */ 17627);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ 55617);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs/operators */ 47422);
-/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! rxjs/operators */ 85046);
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! rxjs */ 64555);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! rxjs/operators */ 17627);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! rxjs/operators */ 55617);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! rxjs/operators */ 47422);
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! rxjs/operators */ 85046);
 /* harmony import */ var _core_module_core_module__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../../core-module/core.module */ 71083);
 /* harmony import */ var _services_jump_marks_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../services/jump-marks.service */ 18965);
 /* harmony import */ var _mds_mds_editor_mds_editor_core_mds_editor_core_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../mds/mds-editor/mds-editor-core/mds-editor-core.component */ 42068);
 /* harmony import */ var _mds_mds_editor_mds_editor_instance_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../mds/mds-editor/mds-editor-instance.service */ 27201);
-/* harmony import */ var _card_dialog_card_dialog_config__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../card-dialog/card-dialog-config */ 53461);
-/* harmony import */ var _card_dialog_card_dialog_container_jump_marks_handler_directive__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../card-dialog/card-dialog-container/jump-marks-handler.directive */ 1739);
-/* harmony import */ var _mds_editor_dialog_data__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mds-editor-dialog-data */ 42534);
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/core */ 61699);
-/* harmony import */ var _card_dialog_card_dialog_ref__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../card-dialog/card-dialog-ref */ 91486);
-/* harmony import */ var ngx_edu_sharing_ui__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ngx-edu-sharing-ui */ 924);
-/* harmony import */ var _services_toast__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../../services/toast */ 93366);
-/* harmony import */ var _input_fill_progress_input_fill_progress_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./input-fill-progress/input-fill-progress.component */ 84036);
+/* harmony import */ var _mds_types_types__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../mds/types/types */ 97801);
+/* harmony import */ var _card_dialog_card_dialog_config__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../card-dialog/card-dialog-config */ 53461);
+/* harmony import */ var _card_dialog_card_dialog_container_jump_marks_handler_directive__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../card-dialog/card-dialog-container/jump-marks-handler.directive */ 1739);
+/* harmony import */ var _mds_editor_dialog_data__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./mds-editor-dialog-data */ 42534);
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @angular/core */ 61699);
+/* harmony import */ var _card_dialog_card_dialog_ref__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../card-dialog/card-dialog-ref */ 91486);
+/* harmony import */ var ngx_edu_sharing_ui__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ngx-edu-sharing-ui */ 924);
+/* harmony import */ var _services_toast__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../services/toast */ 93366);
+/* harmony import */ var _input_fill_progress_input_fill_progress_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./input-fill-progress/input-fill-progress.component */ 84036);
+
 
 
 
@@ -193,18 +195,18 @@ __webpack_require__.r(__webpack_exports__);
 const _c0 = ["customBottomBarContent"];
 function MdsEditorDialogComponent_ng_template_1_Template(rf, ctx) {
   if (rf & 1) {
-    const _r3 = _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵgetCurrentView"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵelementStart"](0, "es-input-fill-progress", 1);
-    _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵlistener"]("showMissing", function MdsEditorDialogComponent_ng_template_1_Template_es_input_fill_progress_showMissing_0_listener() {
-      _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵrestoreView"](_r3);
-      const ctx_r2 = _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵnextContext"]();
-      return _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵresetView"](ctx_r2.onShowMissing());
+    const _r3 = _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵgetCurrentView"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵelementStart"](0, "es-input-fill-progress", 1);
+    _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵlistener"]("showMissing", function MdsEditorDialogComponent_ng_template_1_Template_es_input_fill_progress_showMissing_0_listener() {
+      _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵrestoreView"](_r3);
+      const ctx_r2 = _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵnextContext"]();
+      return _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵresetView"](ctx_r2.onShowMissing());
     });
-    _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵelementEnd"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵelementEnd"]();
   }
   if (rf & 2) {
-    const ctx_r1 = _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵnextContext"]();
-    _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵproperty"]("current", ctx_r1.completedProperties)("maximum", ctx_r1.totalProperties);
+    const ctx_r1 = _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵnextContext"]();
+    _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵproperty"]("current", ctx_r1.completedProperties)("maximum", ctx_r1.totalProperties);
   }
 }
 class MdsEditorDialogComponent {
@@ -226,7 +228,7 @@ class MdsEditorDialogComponent {
       _this.registerProgressIndicator();
       // `SendFeedbackDialog` works similar to this component. Please update accordingly when
       // making changes here.
-      _this.mdsEditorInstance.mdsInflated.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_12__.first)(), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.delay)(0)).subscribe(() => {
+      _this.mdsEditorInstance.mdsInflated.pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_13__.first)(), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_14__.delay)(0)).subscribe(() => {
         _this.dialogRef.patchState({
           isLoading: false
         });
@@ -259,13 +261,13 @@ class MdsEditorDialogComponent {
               },
           );
       } else */
-      if ((0,_mds_editor_dialog_data__WEBPACK_IMPORTED_MODULE_7__.hasNodes)(_this2.data)) {
+      if ((0,_mds_editor_dialog_data__WEBPACK_IMPORTED_MODULE_8__.hasNodes)(_this2.data)) {
         editorType = yield _this2.mdsEditorInstance.initWithNodes(_this2.data.nodes, {
           groupId: _this2.data.groupId,
           bulkBehavior: _this2.data.bulkBehavior,
           editorMode: 'nodes'
         });
-      } else if ((0,_mds_editor_dialog_data__WEBPACK_IMPORTED_MODULE_7__.hasValues)(_this2.data)) {
+      } else if ((0,_mds_editor_dialog_data__WEBPACK_IMPORTED_MODULE_8__.hasValues)(_this2.data)) {
         editorType = yield _this2.mdsEditorInstance.initWithoutNodes(_this2.data.groupId, _this2.data.setId, _this2.data.repository, _this2.data.editorMode, _this2.data.values);
       }
       if (editorType !== 'angular') {
@@ -277,21 +279,21 @@ class MdsEditorDialogComponent {
     this.dialogRef.patchConfig({
       buttons: [new _core_module_core_module__WEBPACK_IMPORTED_MODULE_1__.DialogButton('CANCEL', {
         color: 'standard'
-      }, () => this.dialogRef.close(null)), new _core_module_core_module__WEBPACK_IMPORTED_MODULE_1__.DialogButton('SAVE', {
+      }, () => this.dialogRef.close('CANCEL')), new _core_module_core_module__WEBPACK_IMPORTED_MODULE_1__.DialogButton('SAVE', {
         color: 'primary'
       }, () => this.save())]
     });
     this.mdsEditorInstance.observeHasUserChanges().subscribe(hasUserChanges => this.dialogRef.patchConfig({
-      closable: hasUserChanges ? _card_dialog_card_dialog_config__WEBPACK_IMPORTED_MODULE_5__.Closable.Confirm : _card_dialog_card_dialog_config__WEBPACK_IMPORTED_MODULE_5__.Closable.Standard
+      closable: hasUserChanges ? _card_dialog_card_dialog_config__WEBPACK_IMPORTED_MODULE_6__.Closable.Confirm : _card_dialog_card_dialog_config__WEBPACK_IMPORTED_MODULE_6__.Closable.Standard
     }));
   }
   registerJumpMarks() {
-    rxjs__WEBPACK_IMPORTED_MODULE_14__.combineLatest([this.mdsEditorInstance.activeViews, this.mdsEditorInstance.shouldShowExtendedWidgets$]).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_15__.map)(([activeViews]) => activeViews.map(view => this.mdsEditorCore.viewRef?.find(v => v.view.id === view.id))), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_15__.map)(viewRef => viewRef.filter(v => v && !v.isInHiddenState() && v.view.caption).map(v => new _services_jump_marks_service__WEBPACK_IMPORTED_MODULE_2__.JumpMark(v.view.id + _card_dialog_card_dialog_container_jump_marks_handler_directive__WEBPACK_IMPORTED_MODULE_6__.JUMP_MARK_POSTFIX, v.view.caption, v.view.icon)))).subscribe(jumpMarks => this.dialogRef.patchConfig({
+    rxjs__WEBPACK_IMPORTED_MODULE_15__.combineLatest([this.mdsEditorInstance.activeViews, this.mdsEditorInstance.shouldShowExtendedWidgets$]).pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_16__.map)(([activeViews]) => activeViews.map(view => this.mdsEditorCore.viewRef?.find(v => v.view.id === view.id))), (0,rxjs_operators__WEBPACK_IMPORTED_MODULE_16__.map)(viewRef => viewRef.filter(v => v && !v.isInHiddenState() && v.view.caption).map(v => new _services_jump_marks_service__WEBPACK_IMPORTED_MODULE_2__.JumpMark(v.view.id + _card_dialog_card_dialog_container_jump_marks_handler_directive__WEBPACK_IMPORTED_MODULE_7__.JUMP_MARK_POSTFIX, v.view.caption, v.view.icon)))).subscribe(jumpMarks => this.dialogRef.patchConfig({
       jumpMarks
     }));
   }
   registerProgressIndicator() {
-    this.mdsEditorInstance.observeCompletionStatus().pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_16__.filter)(completionStatus => !!completionStatus)).subscribe(completionStatus => {
+    this.mdsEditorInstance.observeCompletionStatus().pipe((0,rxjs_operators__WEBPACK_IMPORTED_MODULE_17__.filter)(completionStatus => !!completionStatus)).subscribe(completionStatus => {
       this.completedProperties = mapDict(completionStatus, entry => entry.completed);
       this.totalProperties = mapDict(completionStatus, entry => entry.total);
     });
@@ -303,50 +305,65 @@ class MdsEditorDialogComponent {
         _this3.dialogRef.patchState({
           isLoading: true
         });
-        const updatedNodesOrValues = yield _this3.mdsEditorInstance.save();
-        _this3.toast.toast('WORKSPACE.EDITOR.UPDATED');
-        _this3.dialogRef.close(updatedNodesOrValues);
-        if ((0,_mds_editor_dialog_data__WEBPACK_IMPORTED_MODULE_7__.hasNodes)(_this3.data)) {
-          _this3.localEvents.nodesChanged.emit(updatedNodesOrValues);
+        try {
+          const updatedNodesOrValues = yield _this3.mdsEditorInstance.save();
+          _this3.toast.toast('WORKSPACE.EDITOR.UPDATED');
+          _this3.dialogRef.close(updatedNodesOrValues);
+          if ((0,_mds_editor_dialog_data__WEBPACK_IMPORTED_MODULE_8__.hasNodes)(_this3.data)) {
+            _this3.localEvents.nodesChanged.emit(updatedNodesOrValues);
+          }
+        } catch (e) {
+          _this3.handleError(e);
+          _this3.dialogRef.patchState({
+            isLoading: false
+          });
         }
       } else {
         // No changes, behave like close.
         if (_this3.mdsEditorInstance.getIsValid()) {
-          _this3.dialogRef.close(null);
+          _this3.dialogRef.close('NO-CHANGES');
         } else {
           _this3.mdsEditorInstance.showMissingRequiredWidgets();
         }
       }
     })();
   }
+  handleError(error) {
+    console.error(error);
+    if (error instanceof _mds_types_types__WEBPACK_IMPORTED_MODULE_5__.UserPresentableError) {
+      this.toast.error(null, error.message);
+    } else {
+      this.toast.error(error);
+    }
+  }
   static #_ = this.ɵfac = function MdsEditorDialogComponent_Factory(t) {
-    return new (t || MdsEditorDialogComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵdirectiveInject"](_card_dialog_card_dialog_config__WEBPACK_IMPORTED_MODULE_5__.CARD_DIALOG_DATA), _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵdirectiveInject"](_card_dialog_card_dialog_ref__WEBPACK_IMPORTED_MODULE_8__.CardDialogRef), _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵdirectiveInject"](_mds_mds_editor_mds_editor_instance_service__WEBPACK_IMPORTED_MODULE_4__.MdsEditorInstanceService), _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵdirectiveInject"](ngx_edu_sharing_ui__WEBPACK_IMPORTED_MODULE_17__.LocalEventsService), _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵdirectiveInject"](_services_toast__WEBPACK_IMPORTED_MODULE_9__.Toast));
+    return new (t || MdsEditorDialogComponent)(_angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵdirectiveInject"](_card_dialog_card_dialog_config__WEBPACK_IMPORTED_MODULE_6__.CARD_DIALOG_DATA), _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵdirectiveInject"](_card_dialog_card_dialog_ref__WEBPACK_IMPORTED_MODULE_9__.CardDialogRef), _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵdirectiveInject"](_mds_mds_editor_mds_editor_instance_service__WEBPACK_IMPORTED_MODULE_4__.MdsEditorInstanceService), _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵdirectiveInject"](ngx_edu_sharing_ui__WEBPACK_IMPORTED_MODULE_18__.LocalEventsService), _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵdirectiveInject"](_services_toast__WEBPACK_IMPORTED_MODULE_10__.Toast));
   };
-  static #_2 = this.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵdefineComponent"]({
+  static #_2 = this.ɵcmp = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵdefineComponent"]({
     type: MdsEditorDialogComponent,
     selectors: [["es-mds-editor-dialog"]],
     viewQuery: function MdsEditorDialogComponent_Query(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵviewQuery"](_c0, 5);
-        _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵviewQuery"](_mds_mds_editor_mds_editor_core_mds_editor_core_component__WEBPACK_IMPORTED_MODULE_3__.MdsEditorCoreComponent, 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵviewQuery"](_c0, 5);
+        _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵviewQuery"](_mds_mds_editor_mds_editor_core_mds_editor_core_component__WEBPACK_IMPORTED_MODULE_3__.MdsEditorCoreComponent, 5);
       }
       if (rf & 2) {
         let _t;
-        _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵloadQuery"]()) && (ctx.customBottomBarContent = _t.first);
-        _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵloadQuery"]()) && (ctx.mdsEditorCore = _t.first);
+        _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵloadQuery"]()) && (ctx.customBottomBarContent = _t.first);
+        _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵqueryRefresh"](_t = _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵloadQuery"]()) && (ctx.mdsEditorCore = _t.first);
       }
     },
-    features: [_angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵProvidersFeature"]([_mds_mds_editor_mds_editor_instance_service__WEBPACK_IMPORTED_MODULE_4__.MdsEditorInstanceService])],
+    features: [_angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵProvidersFeature"]([_mds_mds_editor_mds_editor_instance_service__WEBPACK_IMPORTED_MODULE_4__.MdsEditorInstanceService])],
     decls: 3,
     vars: 0,
     consts: [["customBottomBarContent", ""], [3, "current", "maximum", "showMissing"]],
     template: function MdsEditorDialogComponent_Template(rf, ctx) {
       if (rf & 1) {
-        _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵelement"](0, "es-mds-editor-core");
-        _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵtemplate"](1, MdsEditorDialogComponent_ng_template_1_Template, 1, 2, "ng-template", null, 0, _angular_core__WEBPACK_IMPORTED_MODULE_11__["ɵɵtemplateRefExtractor"]);
+        _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵelement"](0, "es-mds-editor-core");
+        _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵtemplate"](1, MdsEditorDialogComponent_ng_template_1_Template, 1, 2, "ng-template", null, 0, _angular_core__WEBPACK_IMPORTED_MODULE_12__["ɵɵtemplateRefExtractor"]);
       }
     },
-    dependencies: [_mds_mds_editor_mds_editor_core_mds_editor_core_component__WEBPACK_IMPORTED_MODULE_3__.MdsEditorCoreComponent, _input_fill_progress_input_fill_progress_component__WEBPACK_IMPORTED_MODULE_10__.InputFillProgressComponent],
+    dependencies: [_mds_mds_editor_mds_editor_core_mds_editor_core_component__WEBPACK_IMPORTED_MODULE_3__.MdsEditorCoreComponent, _input_fill_progress_input_fill_progress_component__WEBPACK_IMPORTED_MODULE_11__.InputFillProgressComponent],
     styles: ["\n\nes-input-fill-progress[_ngcontent-%COMP%] {\n  display: flex;\n  min-width: 200px;\n  height: 36px;\n}\n\n[_nghost-%COMP%]     es-mds-editor-core {\n  --mds-content-padding: 25px;\n}\n[_nghost-%COMP%]     es-mds-editor-core .extended-toggle-container {\n  position: sticky;\n  top: 0;\n  width: 100%;\n  display: flex;\n  justify-content: flex-end;\n  background-color: #f7f7f7;\n}\n@media only screen and (min-width: 400px) {\n  [_nghost-%COMP%]     es-mds-editor-core .extended-toggle-container {\n    z-index: 11;\n    background-color: unset;\n  }\n}\n[_nghost-%COMP%]     es-mds-editor-core .extended-toggle-container .extended-toggle {\n  display: flex;\n  padding: 0 10px 0 25px;\n  height: 39px;\n  background: linear-gradient(to right, rgba(247, 247, 247, 0.0001) 0, #f7f7f7 15px);\n}\n[_nghost-%COMP%]     es-mds-editor-core .heading-container {\n  position: sticky;\n  top: 0;\n  z-index: 10;\n}\n[_nghost-%COMP%]     es-mds-editor-core .heading {\n  margin: 0;\n  border-bottom: 1px solid #eee;\n  font-size: 130%;\n  font-weight: normal;\n}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL3NyYy9hcHAvY29yZS11aS1tb2R1bGUvc3R5bGVzL3ZhcmlhYmxlcy5zY3NzIiwid2VicGFjazovLy4vc3JjL2FwcC9mZWF0dXJlcy9kaWFsb2dzL2RpYWxvZy1tb2R1bGVzL21kcy1lZGl0b3ItZGlhbG9nL21kcy1lZGl0b3ItZGlhbG9nLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUtBLGdFQUFBO0FDREE7RUFDSSxhQUFBO0VBQ0EsZ0JBQUE7RUFDQSxZQUFBO0FBRko7O0FBS0E7RUFDSSwyQkFBQTtBQUZKO0FBR0k7RUFDSSxnQkFBQTtFQUNBLE1BQUE7RUFDQSxXQUFBO0VBQ0EsYUFBQTtFQUNBLHlCQUFBO0VBQ0EseUJBQUE7QUFEUjtBQUVRO0VBUEo7SUFRUSxXQUFBO0lBQ0EsdUJBQUE7RUFDVjtBQUNGO0FBQVE7RUFDSSxhQUFBO0VBQ0Esc0JBQUE7RUFDQSxZQUFBO0VBQ0Esa0ZBQUE7QUFFWjtBQVdJO0VBQ0ksZ0JBQUE7RUFDQSxNQUFBO0VBQ0EsV0FBQTtBQVRSO0FBV0k7RUFDSSxTQUFBO0VBQ0EsNkJBQUE7RUFDQSxlQUFBO0VBQ0EsbUJBQUE7QUFUUiIsInNvdXJjZXNDb250ZW50IjpbIkB1c2UgJ3Nhc3M6bWFwJztcbkB1c2UgJ3Nhc3M6Y29sb3InO1xuQGltcG9ydCAnYnJhbmRpbmcnO1xuXG4vLyBBbGwgdmFyaWFibGVzIGNhbiBiZSBvdmVycmlkZGVuIGluIGBicmFuZGluZy5zY3NzYC5cbi8qIHJlcGxhY2UgdmFyaWFibGVzIHdoaWNoIGFyZSBtYXkgbm90IGRlZmluZWQgaW4gdGhlIGJyYW5kaW5nICovXG4kcHJpbWFyeVZlcnlMaWdodDogdmFyKC0tcGFsZXR0ZS1wcmltYXJ5LTUwKSAhZGVmYXVsdDtcbiRwcmltYXJ5TWVkaXVtRGFyazogdmFyKC0tcGFsZXR0ZS1wcmltYXJ5LTcwMCkgIWRlZmF1bHQ7XG5cbiR0YWJDb2xvcjogdmFyKC0tcHJpbWFyeSkgIWRlZmF1bHQ7XG4kdGFiQ29sb3JEYXJrOiB2YXIoLS1wcmltYXJ5KSAhZGVmYXVsdDtcbiR0YWJDb2xvckxpZ2h0OiAkcHJpbWFyeU1lZGl1bUxpZ2h0ICFkZWZhdWx0O1xuJHdhcm5pbmc6ICNjZDI0NTcgIWRlZmF1bHQ7XG4kd2FybmluZ01lZGl1bTogI2U5OGMxYiAhZGVmYXVsdDtcbiR0b2FzdExlZnRFcnJvcjogI2MxNWQ1ZCAhZGVmYXVsdDtcbiR0b2FzdFByaW1hcnk6ICMzMzMzMzMgIWRlZmF1bHQ7XG4kdGV4dExpZ2h0OiB2YXIoLS10ZXh0TGlnaHQpICFkZWZhdWx0O1xuJHRleHRNZWRpdW1MaWdodDogdmFyKC0tdGV4dE1lZGl1bUxpZ2h0KSAhZGVmYXVsdDtcbiR0ZXh0VmVyeUxpZ2h0OiAjYWFhICFkZWZhdWx0O1xuLy8gcHJlZmVyIHVzaW5nIHZhcigtLXRleHRNYWluKVxuJHRleHRNYWluOiAjMzgzODM4ICFkZWZhdWx0O1xuJHRleHRSZW5kZXJpbmdMYWJlbHM6ICM2ZjZmNmYgIWRlZmF1bHQ7XG4kZm9udFNpemVYTGFyZ2U6IDEyMCUgIWRlZmF1bHQ7XG4kZm9udFNpemVMYXJnZTogMTEwJSAhZGVmYXVsdDtcbiRmb250U2l6ZVNtYWxsOiA5MCUgIWRlZmF1bHQ7XG4kZm9udFNpemVYU21hbGw6IHZhcigtLWZvbnRTaXplWFNtYWxsKSAhZGVmYXVsdDtcbiRiYWNrZ3JvdW5kQ29sb3I6ICNmZmYgIWRlZmF1bHQ7XG4kd29ya3NwYWNlU2lkZWJhcldpZHRoOiAzMDBweCAhZGVmYXVsdDtcbiR3b3Jrc3BhY2VJbmhlcml0Q29sb3I6ICM0MmNhOGQgIWRlZmF1bHQ7XG4kZWRpdG9yaWFsQ29sbGVjdGlvbnNCYWNrZ3JvdW5kOiAjZjVlYzE5ICFkZWZhdWx0O1xuJGl0ZW1TZWxlY3RlZEJhY2tncm91bmQ6ICRwcmltYXJ5VmVyeUxpZ2h0ICFkZWZhdWx0O1xuJGl0ZW1TZWxlY3RlZFRleHRDb2xvcjogJHByaW1hcnlNZWRpdW1EYXJrICFkZWZhdWx0O1xuJGJ1dHRvbkhvdmVyQmFja2dyb3VuZDogcmdiYSh2YXIoLS1wYWxldHRlLXByaW1hcnktNTAwLW5vLXJnYiksIDAuMDgpICFkZWZhdWx0O1xuJHdvcmtzcGFjZU5ld0JhY2tncm91bmQ6ICRpdGVtU2VsZWN0ZWRCYWNrZ3JvdW5kICFkZWZhdWx0O1xuLy8gdGhlIHdoaXRlIGJhciBoZWlnaHQgaW4gc2VhcmNoIGFuZCBlcy13b3Jrc3BhY2VcbiRzZWNvbmRhcnlCYXJIZWlnaHQ6IDY1cHggIWRlZmF1bHQ7XG4kbGlzdEl0ZW1TZWxlY3RlZEJhY2tncm91bmQ6IHZhcigtLXBhbGV0dGUtcHJpbWFyeS01MCkgIWRlZmF1bHQ7XG4kd29ya3NwYWNlU2VsZWN0ZWRCYWNrZ3JvdW5kRWZmZWN0OiBsaW5lYXItZ3JhZGllbnQoXG4gICAgICAgIHRvIHJpZ2h0LFxuICAgICAgICB2YXIoLS1wcmltYXJ5KSAwLFxuICAgICAgICB2YXIoLS1wcmltYXJ5KSA1cHgsXG4gICAgICAgIHJnYmEoMCwgMCwgMCwgMCkgNXB4LFxuICAgICAgICByZ2JhKDAsIDAsIDAsIDApIDVweFxuICAgIClcbiAgICBuby1yZXBlYXQgIWRlZmF1bHQ7XG4kd29ya3NwYWNlVHJlZUJhY2tncm91bmQ6ICNmN2Y3ZjcgIWRlZmF1bHQ7XG4kd29ya3NwYWNlVG9wQmFyU2FmZUJhY2tncm91bmQ6ICM5NjNhM2E7XG4kZGlhbG9nUmlnaHRXaWR0aDogMzIwcHggIWRlZmF1bHQ7XG4kd29ya3NwYWNlVHJlZVNlbGVjdGVkQmFja2dyb3VuZDogI2ZmZiAhZGVmYXVsdDtcbiR3b3Jrc3BhY2VUcmVlV2lkdGg6IDMwMHB4ICFkZWZhdWx0O1xuJHdvcmtzcGFjZUJyZWFkY3J1bWJzSGVpZ2h0OiAkc2Vjb25kYXJ5QmFySGVpZ2h0ICFkZWZhdWx0O1xuJHdvcmtzcGFjZVRyZWVTZWxlY3RlZEJhY2tncm91bmRFZmZlY3Q6IGxpbmVhci1ncmFkaWVudChcbiAgICB0byByaWdodCxcbiAgICB2YXIoLS1wcmltYXJ5KSAwLFxuICAgIHZhcigtLXByaW1hcnkpIDVweCxcbiAgICByZ2JhKDAsIDAsIDAsIDApIDVweCxcbiAgICByZ2JhKDAsIDAsIDAsIDApIDVweFxuKSAhZGVmYXVsdDtcbiR3b3Jrc3BhY2VNZXRhZGF0YUJhY2tncm91bmQ6ICNmN2Y3ZjcgIWRlZmF1bHQ7XG4kYnV0dG9uQm9yZGVyUmFkaXVzOiAycHggIWRlZmF1bHQ7XG4kY29udGV4dE1lbnVXaWR0aDogMjQwcHggIWRlZmF1bHQ7XG4kdGFibGVJY29uU2l6ZTogMzhweCAhZGVmYXVsdDtcbiRhY3Rpb25EaWFsb2dCYWNrZ3JvdW5kOiAjZWVlICFkZWZhdWx0O1xuJGNhcmRMaWdodEJhY2tncm91bmQ6ICNmOWY5ZjkgIWRlZmF1bHQ7XG4kc2VhcmNoSW5wdXRCb3JkZXJDb2xvcjogI2NjYyAhZGVmYXVsdDtcbiRjYXJkU2VwYXJhdG9yTGluZUNvbG9yOiAjY2NjICFkZWZhdWx0O1xuJGdlbmVyaWNTZXBlcmF0b3JMaW5lQ29sb3I6ICNlY2VjZWMgIWRlZmF1bHQ7XG4kaW5wdXRCb3JkZXJDb2xvcjogIzllOWU5ZSAhZGVmYXVsdDtcbiRjb21tZW50c0FjdGlvbnNTZXBlcmF0b3JMaW5lQ29sb3I6ICRiYWNrZ3JvdW5kQ29sb3IgIWRlZmF1bHQ7XG4kbm9SZXN1bHRzQ29sb3I6IHJnYmEoYmxhY2ssIDAuNTQpICFkZWZhdWx0O1xuJGRhcmtlbkNvbG9yOiByZ2JhKDAsIDAsIDAsIDAuNzUpICFkZWZhdWx0O1xuJGRhcmtlbkxpZ2h0Q29sb3I6IHJnYmEoMCwgMCwgMCwgMC4yNSkgIWRlZmF1bHQ7XG4vLyBwcmVmZXIgdXNpbmcgdmFyKC0tJGNvbG9yU3RhdHVzUG9zaXRpdmUpXG4kY29sb3JTdGF0dXNQb3NpdGl2ZTogIzQwYmY4ZSAhZGVmYXVsdDtcbi8vIHByZWZlciB1c2luZyB2YXIoLS1jb2xvclN0YXR1c05lZ2F0aXZlKVxuJGNvbG9yU3RhdHVzTmVnYXRpdmU6ICNjZDI0NTcgIWRlZmF1bHQ7XG4kY29sb3JTdGF0dXNXYXJuaW5nOiAkd2FybmluZ01lZGl1bSAhZGVmYXVsdDtcbiRjb2xvclN0YXR1c1JlY29tbWVuZGVkOiAjYWNkMzMxICFkZWZhdWx0O1xuJGNvbG9yU3RhdHVzTmV1dHJhbDogIzc3NyAhZGVmYXVsdDtcbiRjb2xvclN0YXJBY3RpdmU6IHZhcigtLWNvbG9yU3RhckFjdGl2ZSkgIWRlZmF1bHQ7XG4kZm9jdXNDb2xvcjogdmFyKC0tcGFsZXR0ZS1wcmltYXJ5LTMwMCkgIWRlZmF1bHQ7XG4kcGxhY2Vob2xkZXJDb2xvcjogIzc2NzY3NiAhZGVmYXVsdDtcbiRmb2N1c1dpZHRoOiAycHggIWRlZmF1bHQ7XG4kY2FyZFdpZHRoOiB2YXIoLS1jYXJkV2lkdGgpICFkZWZhdWx0O1xuJGNhcmRIZWlnaHQ6IDMwMHB4ICFkZWZhdWx0O1xuJGxpc3RJdGVtSGVpZ2h0OiA3MHB4ICFkZWZhdWx0O1xuJGxpc3RDYXJkU21hbGxIZWlnaHQ6IDEwMHB4ICFkZWZhdWx0O1xuJGxpc3RIZWFkaW5nSGVpZ2h0OiAzNnB4ICFkZWZhdWx0O1xuJGNhcmRQYWRkaW5nOiAyNXB4ICFkZWZhdWx0O1xuJHRyYW5zaXRpb25Ob3JtYWw6IHZhcigtLXRyYW5zaXRpb25Ob3JtYWwpICFkZWZhdWx0O1xuLy8gcHJlZmVyIHVzaW5nIHZhcigtLW1vYmlsZVdpZHRoKVxuJG1vYmlsZVdpZHRoOiA3MDBweCAhZGVmYXVsdDtcbi8vIHByZWZlciB1c2luZyB2YXIoLS1tb2JpbGVTdGFnZSlcbiRtb2JpbGVTdGFnZTogMTAwcHggIWRlZmF1bHQ7XG4kbW9iaWxlSGVpZ2h0OiA3NTBweCAhZGVmYXVsdDtcbiRtb2JpbGVIZWlnaHRXaXRoS2V5Ym9hcmQ6IDU1MHB4ICFkZWZhdWx0O1xuJG1vYmlsZUhlaWdodExhbmRzY2FwZTogNDAwcHggIWRlZmF1bHQ7XG4kbW9iaWxlV2lkdGhQb3J0cmFpdDogNDAwcHggIWRlZmF1bHQ7XG4vLyB0aGlzIGZhY3RvciBzaG91bGQgYmUgbXVsdGlwbGllZCBieSBhIG5hdHVyYWwgbnVtYmVyLCBlLmcuICozIG1lYW5zIHN0YWdlIDMgKHJlbGF0aXZlbHkgZWFybHkpXG4kZGlhbG9nWkluZGV4OiAxMzAgIWRlZmF1bHQ7XG4vLyBiZWZvcmUgdGhlIHRvcCBiYXIgb24gbW9iaWxlLCBidXQgYmVoaW5kIHRoZSBtb2JpbGUgdGFicyBhbmQgdGhlIHRvcCBiYXIgb24gZGVza3RvcFxuJGRpYWxvZ05vbk1vZGFsWkluZGV4OiA5MCAhZGVmYXVsdDsgLy8gYmVmb3JlIHRoZSB0b3AgYmFyIG9uIG1vYmlsZSwgYnV0IGJlaGluZCB0aGUgbW9iaWxlIHRhYnMgYW5kIHRoZSB0b3AgYmFyIG9uIGRlc2t0b3BcbiR0b3BCYXJaSW5kZXg6IDk4ICFkZWZhdWx0O1xuJHRvcEJhck1vYmlsZVpJbmRleDogODAgIWRlZmF1bHQ7XG4kd29ya3NwYWNlVG9wQmFySW5wdXRCYWNrZ3JvdW5kOiAjZWVlICFkZWZhdWx0O1xuJHdvcmtzcGFjZVRvcEJhcklucHV0VGV4dDogJHRleHRNYWluICFkZWZhdWx0O1xuJG1vYmlsZVRhYnNaSW5kZXg6IDExMCAhZGVmYXVsdDtcbiRtb2JpbGVUYWJTd2l0Y2hXaWR0aDogJG1vYmlsZVdpZHRoICsgJG1vYmlsZVN0YWdlICogMiAhZGVmYXVsdDtcbiRtb2JpbGVUYWJOYXZIZWlnaHQ6IDYycHggIWRlZmF1bHQ7XG4kcHJpbWFyeUZvbnRGYW1pbHk6ICdvcGVuX3NhbnNyZWd1bGFyJyAhZGVmYXVsdDtcbiRwcmltYXJ5Rm9udFNpemU6IDEwcHQgIWRlZmF1bHQ7XG5cbiRkZWZhdWx0LWNoaXAtY29sb3JzOiAoXG4gICAgJ2NjbG9tX2dlbmVyYWxfa2V5d29yZCc6IHJnYigxNjYsIDIxNCwgMjA4KSxcbiAgICAnY2NtX2VkdWNhdGlvbmFsY29udGV4dCc6IHJnYigyMTQsIDE2NiwgMTY2KSxcbiAgICAnY2NtX2VkdWNhdGlvbmFsbGVhcm5pbmdyZXNvdXJjZXR5cGUnOiByZ2IoMjE0LCAxOTMsIDE2NiksXG4gICAgJ2NjbV9vYmplY3R0eXBlJzogcmdiKDE2NiwgMTkyLCAyMTQpLFxuICAgICdjY21fdGF4b25pZCc6IHJnYigxNjYsIDIxNCwgMTc0KSxcbiAgICAnY2NtX2VkdWNhdGlvbmFsaW50ZW5kZWRlbmR1c2Vycm9sZSc6IHJnYigyMTEsIDIxNCwgMTY2KSxcbik7XG4kY3VzdG9tLWNoaXAtY29sb3JzOiAoKSAhZGVmYXVsdDtcbiRjaGlwLWNvbG9yczogbWFwLm1lcmdlKCRkZWZhdWx0LWNoaXAtY29sb3JzLCAkY3VzdG9tLWNoaXAtY29sb3JzKTtcblxuQGltcG9ydCAnbWl4aW5zJztcbiIsIkBpbXBvcnQgJy4uLy4uLy4uLy4uL2NvcmUtdWktbW9kdWxlL3N0eWxlcy92YXJpYWJsZXMnO1xuXG4kZXhwYW5kVG9nZ2xlV2lkdGhUaHJlc2hvbGQ6IDQwMHB4O1xuXG5lcy1pbnB1dC1maWxsLXByb2dyZXNzIHtcbiAgICBkaXNwbGF5OiBmbGV4O1xuICAgIG1pbi13aWR0aDogMjAwcHg7XG4gICAgaGVpZ2h0OiAzNnB4O1xufVxuXG46aG9zdCA6Om5nLWRlZXAgZXMtbWRzLWVkaXRvci1jb3JlIHtcbiAgICAtLW1kcy1jb250ZW50LXBhZGRpbmc6IDI1cHg7XG4gICAgLmV4dGVuZGVkLXRvZ2dsZS1jb250YWluZXIge1xuICAgICAgICBwb3NpdGlvbjogc3RpY2t5O1xuICAgICAgICB0b3A6IDA7XG4gICAgICAgIHdpZHRoOiAxMDAlO1xuICAgICAgICBkaXNwbGF5OiBmbGV4O1xuICAgICAgICBqdXN0aWZ5LWNvbnRlbnQ6IGZsZXgtZW5kO1xuICAgICAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjZjdmN2Y3O1xuICAgICAgICBAbWVkaWEgb25seSBzY3JlZW4gYW5kIChtaW4td2lkdGg6ICRleHBhbmRUb2dnbGVXaWR0aFRocmVzaG9sZCkge1xuICAgICAgICAgICAgei1pbmRleDogMTE7XG4gICAgICAgICAgICBiYWNrZ3JvdW5kLWNvbG9yOiB1bnNldDtcbiAgICAgICAgfVxuICAgICAgICAuZXh0ZW5kZWQtdG9nZ2xlIHtcbiAgICAgICAgICAgIGRpc3BsYXk6IGZsZXg7XG4gICAgICAgICAgICBwYWRkaW5nOiAwIDEwcHggMCAyNXB4O1xuICAgICAgICAgICAgaGVpZ2h0OiAzOXB4O1xuICAgICAgICAgICAgYmFja2dyb3VuZDogbGluZWFyLWdyYWRpZW50KFxuICAgICAgICAgICAgICAgIHRvIHJpZ2h0LFxuICAgICAgICAgICAgICAgIHJnYmEoXG4gICAgICAgICAgICAgICAgICAgICAgICByZWQoJHdvcmtzcGFjZU1ldGFkYXRhQmFja2dyb3VuZCksXG4gICAgICAgICAgICAgICAgICAgICAgICBncmVlbigkd29ya3NwYWNlTWV0YWRhdGFCYWNrZ3JvdW5kKSxcbiAgICAgICAgICAgICAgICAgICAgICAgIGJsdWUoJHdvcmtzcGFjZU1ldGFkYXRhQmFja2dyb3VuZCksXG4gICAgICAgICAgICAgICAgICAgICAgICAwLjAwMDFcbiAgICAgICAgICAgICAgICAgICAgKVxuICAgICAgICAgICAgICAgICAgICAwLFxuICAgICAgICAgICAgICAgICR3b3Jrc3BhY2VNZXRhZGF0YUJhY2tncm91bmQgMTVweFxuICAgICAgICAgICAgKTtcbiAgICAgICAgfVxuICAgIH1cbiAgICAuaGVhZGluZy1jb250YWluZXIge1xuICAgICAgICBwb3NpdGlvbjogc3RpY2t5O1xuICAgICAgICB0b3A6IDA7XG4gICAgICAgIHotaW5kZXg6IDEwO1xuICAgIH1cbiAgICAuaGVhZGluZyB7XG4gICAgICAgIG1hcmdpbjogMDtcbiAgICAgICAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkICNlZWU7XG4gICAgICAgIGZvbnQtc2l6ZTogMTMwJTtcbiAgICAgICAgZm9udC13ZWlnaHQ6IG5vcm1hbDtcbiAgICB9XG59XG4iXSwic291cmNlUm9vdCI6IiJ9 */"]
   });
 }

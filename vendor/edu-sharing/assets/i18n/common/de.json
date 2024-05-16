@@ -162,7 +162,7 @@
     "TOOLPERMISSION_MEDIACENTER_MANAGE": "Ändern der Basisdaten (Anschrift, Kataloge) von Medienzentren, bei welchen die nutzende Person Verwaltungsrechte hat",
     "TOOLPERMISSION_VIDEO_AUDIO_CUT": "Video- & Audiodateien dürfen in Sammlungen beliebig zugeschnitten gespeichert werden",
     "TOOLPERMISSION_COLLECTION_CHANGE_OWNER": "Erlaubnis zum Ändern des Ersteller-Namens einer Sammlung",
-    "TOOLPERMISSION_RATE_READ": "Die Berechtigung zum ansehen von Bewertungen von Materialien",
+    "TOOLPERMISSION_RATE_READ": "Die Berechtigung zum Ansehen von Bewertungen von Materialien",
     "TOOLPERMISSION_RATE_WRITE": "Die Berechtigung zum Bewerten von Materialien (benötigt TOOLPERMISSION_RATE_READ)",
     "TOOLPERMISSION_CONNECTOR": "Editor \"{{connector}}\" darf benutzt werden",
     "TOOLPERMISSION_CONNECTOR_SAFE": "Editor \"{{connector}}\" darf im gesicherten Bereich benutzt werden",

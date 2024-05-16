@@ -1,0 +1,38 @@
+{
+  "RECYCLE": {
+    "SELECT_DIRECTORY": "Selezionare una cartella.",
+    "CHOOSE_DIRECTORY": "Selezionare un luogo di stoccaggio.",
+    "NO_RESULTS_TITLE": "nessun risultato trovato",
+    "NO_RESULTS_MESSAGE": "Non ci sono elementi corrispondenti al termine di ricerca nel cestino.",
+    "ENTER_NEW_TEXT": "Inserire un nuovo termine di ricerca.",
+    "ARCHIVE_EMPTY": "Non ci sono oggetti nel cestino.",
+    "DELETE": {
+      "CONFIRM_TITLE": "Cancellare l'oggetto in modo permanente?",
+      "CONFIRM_MESSAGE": "Se si eliminano definitivamente gli oggetti, non è possibile ripristinarli in seguito.",
+      "NOT_ASK_AGAIN": "Non chiedete di nuovo questa sessione.",
+      "YES": "Sì, eliminare",
+      "CANCEL": "annullare"
+    },
+    "RESTORE": {
+      "NEW_LOCATION_TITLE": "ripristino terminato",
+      "NEW_LOCATION_SUBTITLE": "Informazioni sugli elementi restaurati",
+      "LIST_DUPLICATE_NAMES": "Il titolo è già in uso:",
+      "LIST_PARENT_FOLDER_MISSING": "La posizione di memorizzazione originale non è disponibile:",
+      "UNDERSTAND": "okey dokey",
+      "FALLBACK_PARENT_NOT_EXISTS": "è stato spostato nella cartella dei documenti.",
+      "FALLBACK_PARENT_NO_PERMISSION": "è stato spostato nella cartella dei documenti.",
+      "DUPLICATENAME": "è stato rinominato",
+      "FINE": "Ok"
+    },
+    "OPTION": {
+      "RESTORE_SINGLE": "ripristinare",
+      "DELETE_SINGLE": "cancellare"
+    },
+    "TOAST": {
+      "RESTORE_FINISHED": "Gli Oggetti sono stati ripristinati.",
+      "RESTORE_FINISHED_SINGLE": "L'Oggetto è stato ripristinato.",
+      "DELETE_FINISHED": "Oggetti eliminati."
+    },
+    "SEARCH_ARCHIVE": "ricerca nel cestino"
+  }
+}
