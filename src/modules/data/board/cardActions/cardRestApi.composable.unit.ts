@@ -3,7 +3,6 @@ import { ref } from "vue";
 import {
 	envsFactory,
 	mockedPiniaStoreTyping,
-	richTextElementContentFactory,
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -192,6 +191,56 @@ describe("useCardRestApi", () => {
 			await deleteElementRequest({
 				cardId: card.id,
 				elementId: "elementId",
+			});
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
+	describe("moveElementRequest", () => {
+		it("should not call moveElementSuccess action when card is undefined", async () => {
+			const { cardStore } = setup();
+			const { moveElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(undefined);
+
+			await moveElementRequest({
+				elementId: "elementId",
+				toCardId: "toCardId",
+				toPosition: 0,
+			});
+
+			expect(cardStore.moveElementSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call moveElementSuccess action if the API call is successful", async () => {
+			const { cardStore, card } = setup();
+			const { moveElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(card);
+
+			const payload = {
+				elementId: "elementId",
+				toCardId: "toCardId",
+				toPosition: 0,
+			};
+
+			await moveElementRequest(payload);
+
+			expect(cardStore.moveElementSuccess).toHaveBeenCalledWith(payload);
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { cardStore, card } = setup();
+			const { moveElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(card);
+			mockedBoardApiCalls.moveElementCall.mockRejectedValue({});
+
+			await moveElementRequest({
+				elementId: "elementId",
+				toCardId: "toCardId",
+				toPosition: 0,
 			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
