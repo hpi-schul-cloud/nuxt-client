@@ -13,11 +13,10 @@
 			<template #menu>
 				<MediaBoardLineMenu
 					:line-id="line.id"
-					:collapsed="line.collapsed"
 					:color="line.backgroundColor"
+					v-model:collapsed="collapsed"
 					@delete:line="$emit('delete:line', $event)"
 					@update:color="$emit('update:line-background-color', $event)"
-					@update:collapsed="onUpdateCollapsed"
 					@rename-title="onRenameTitle"
 				/>
 			</template>
@@ -78,7 +77,14 @@ import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, ComputedRef, PropType, Ref, toRef } from "vue";
+import {
+	computed,
+	ComputedRef,
+	PropType,
+	Ref,
+	toRef,
+	WritableComputedRef,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { availableMediaLineId, ElementMove } from "./data";
 import { useEditMode } from "./editMode.composable";
@@ -115,7 +121,16 @@ const { t } = useI18n();
 
 const isDesktop: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Desktop);
 
-const { collapsed, openItems } = useCollapsableState("linePanel");
+const collapsed: WritableComputedRef<boolean> = computed({
+	get() {
+		return props.line?.collapsed;
+	},
+	set(value: boolean) {
+		emit("update:line-collapsed", value);
+	},
+});
+
+const { openItems } = useCollapsableState("linePanel", collapsed);
 
 const { dragStart, dragEnd } = useDragAndDrop();
 
@@ -129,19 +144,9 @@ const isList: Ref<boolean> = computed(
 	() => props.layout === MediaBoardLayoutType.List
 );
 
-// TODO remove as
 const lineBackgroundColorHex: Ref<string> = computed(() =>
-	MediaBoardColorMapper.mapColorToHex(
-		props.line.backgroundColor as MediaBoardColors,
-		"lighten5"
-	)
+	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")
 );
-
-const onUpdateCollapsed = (value: boolean) => {
-	collapsed.value = value;
-
-	emit("update:line-collapsed", value);
-};
 
 const onRenameTitle = () => {
 	startEditMode();

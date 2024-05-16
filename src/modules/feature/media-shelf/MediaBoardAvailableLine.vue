@@ -11,8 +11,8 @@
 					{{ $t("feature.media-shelf.availableLine.title") }}
 				</span>
 				<MediaBoardLineMenu
-					:collapsed="line.collapsed"
 					:color="line.backgroundColor"
+					v-model:collapsed="collapsed"
 					@update:color="$emit('update:line-background-color', $event)"
 					@update:collapsed="onUpdateCollapsed"
 				/>
@@ -77,7 +77,7 @@ import { useMediaQuery } from "@vueuse/core";
 import { uniqueId } from "lodash";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, ComputedRef, PropType, Ref } from "vue";
+import { computed, ComputedRef, PropType, Ref, WritableComputedRef } from "vue";
 import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
@@ -102,7 +102,16 @@ const emit = defineEmits<{
 
 const isDesktop: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Desktop);
 
-const { openItems, collapsed } = useCollapsableState("availableLinePanel");
+const collapsed: WritableComputedRef<boolean> = computed({
+	get() {
+		return props.line?.collapsed;
+	},
+	set(value: boolean) {
+		emit("update:line-collapsed", value);
+	},
+});
+
+const { openItems } = useCollapsableState("availableLinePanel", collapsed);
 
 const { dragStart, dragEnd } = useDragAndDrop();
 
@@ -114,12 +123,8 @@ const isList: Ref<boolean> = computed(
 	() => props.layout === MediaBoardLayoutType.List
 );
 
-// TODO remove as
 const lineBackgroundColorHex: Ref<string> = computed(() =>
-	MediaBoardColorMapper.mapColorToHex(
-		props.line.backgroundColor as MediaBoardColors,
-		"lighten5"
-	)
+	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")
 );
 
 const onUpdateCollapsed = (value: boolean) => {
