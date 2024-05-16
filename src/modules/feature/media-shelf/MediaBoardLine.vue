@@ -67,7 +67,11 @@
 </template>
 
 <script setup lang="ts">
-import { MediaBoardLayoutType, MediaLineResponse } from "@/serverApi/v3";
+import {
+	MediaBoardColors,
+	MediaBoardLayoutType,
+	MediaLineResponse,
+} from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
 import { extractDataAttribute } from "@util-board";
@@ -76,7 +80,7 @@ import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, PropType, Ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { availableMediaLineId, ElementMove, MediaBoardColors } from "./data";
+import { availableMediaLineId, ElementMove } from "./data";
 import { useEditMode } from "./editMode.composable";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";

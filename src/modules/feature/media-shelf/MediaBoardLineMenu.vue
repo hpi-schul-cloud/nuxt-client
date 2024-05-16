@@ -79,6 +79,7 @@
 </template>
 
 <script setup lang="ts">
+import { MediaBoardColors } from "@/serverApi/v3";
 import {
 	mdiChevronDown,
 	mdiChevronUp,
@@ -88,7 +89,6 @@ import {
 	mdiTrashCanOutline,
 } from "@mdi/js";
 import { computed, ComputedRef, ModelRef, PropType } from "vue";
-import { MediaBoardColors } from "./data";
 import { ColorShade, MediaBoardColorMapper } from "./utils";
 
 defineProps({
@@ -105,7 +105,7 @@ const collapsed: ModelRef<boolean> = defineModel("collapsed", {
 
 const color: ModelRef<MediaBoardColors> = defineModel("color", {
 	type: String as PropType<MediaBoardColors>,
-	default: MediaBoardColors.TRANSPARENT,
+	default: MediaBoardColors.Transparent,
 });
 
 const swatchShade: ColorShade = "lighten4";
@@ -116,7 +116,7 @@ const colorValue: ComputedRef<string> = computed(() =>
 
 const onUpdateColor = (value: string) => {
 	color.value =
-		MediaBoardColorMapper.mapHexToColor(value) ?? MediaBoardColors.TRANSPARENT;
+		MediaBoardColorMapper.mapHexToColor(value) ?? MediaBoardColors.Transparent;
 };
 
 const swatchColors = Object.values(MediaBoardColors).map(
@@ -140,3 +140,9 @@ defineEmits<{
 	(e: "rename-title", lineId: string): void;
 }>();
 </script>
+
+<style scoped>
+:deep(.v-color-picker-swatches__color) {
+	border: 1px solid lightgray;
+}
+</style>

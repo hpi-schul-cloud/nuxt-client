@@ -1,3 +1,4 @@
+import { MediaBoardColors } from "@/serverApi/v3";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -6,7 +7,6 @@ import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { VColorPicker, VListItem } from "vuetify/lib/components/index.mjs";
 import colors from "vuetify/lib/util/colors.mjs";
-import { MediaBoardColors } from "./data";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
 describe("MediaBoardLineMenu", () => {
@@ -93,7 +93,7 @@ describe("MediaBoardLineMenu", () => {
 			colorPicker.vm.$emit("update:model-value", colors.red.lighten4);
 			await nextTick();
 
-			expect(wrapper.emitted("update:color")).toEqual([[MediaBoardColors.RED]]);
+			expect(wrapper.emitted("update:color")).toEqual([[MediaBoardColors.Red]]);
 		});
 	});
 

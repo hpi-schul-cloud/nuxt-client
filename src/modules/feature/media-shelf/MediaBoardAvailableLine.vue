@@ -67,6 +67,7 @@
 import {
 	MediaAvailableLineElementResponse,
 	MediaAvailableLineResponse,
+	MediaBoardColors,
 	MediaBoardLayoutType,
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
@@ -77,7 +78,7 @@ import { uniqueId } from "lodash";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ComputedRef, PropType, Ref } from "vue";
-import { availableMediaLineId, ElementCreate, MediaBoardColors } from "./data";
+import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { MediaBoardColorMapper, useCollapsableState } from "./utils";

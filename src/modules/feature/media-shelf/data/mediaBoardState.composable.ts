@@ -5,6 +5,7 @@ import {
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	MediaAvailableLineResponse,
+	MediaBoardColors,
 	MediaBoardLayoutType,
 	MediaBoardResponse,
 	MediaExternalToolElementResponse,
@@ -13,7 +14,6 @@ import {
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { ref, Ref } from "vue";
 import { useMediaBoardApi } from "./mediaBoardApi.composable";
-import { MediaBoardColors } from "./mediaBoardColors";
 import { ElementCreate, ElementMove, LineMove } from "./types";
 
 const useMediaBoardState = () => {

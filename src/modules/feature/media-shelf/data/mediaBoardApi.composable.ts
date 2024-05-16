@@ -2,6 +2,7 @@ import {
 	MediaAvailableLineResponse,
 	MediaBoardApiFactory,
 	MediaBoardApiInterface,
+	MediaBoardColors,
 	MediaBoardLayoutType,
 	MediaBoardResponse,
 	MediaElementApiFactory,
@@ -13,7 +14,6 @@ import {
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
-import { MediaBoardColors } from "./mediaBoardColors";
 
 export const useMediaBoardApi = () => {
 	const mediaBoardApi: MediaBoardApiInterface = MediaBoardApiFactory(
@@ -116,9 +116,12 @@ export const useMediaBoardApi = () => {
 		boardId: string,
 		value: boolean
 	): Promise<void> => {
-		await mediaBoardApi.mediaBoardControllerCollapsMediaAvailableLine(boardId, {
-			collapsed: value,
-		});
+		await mediaBoardApi.mediaBoardControllerCollapseMediaAvailableLine(
+			boardId,
+			{
+				collapsed: value,
+			}
+		);
 	};
 
 	const deleteLine = async (lineId: string): Promise<void> => {

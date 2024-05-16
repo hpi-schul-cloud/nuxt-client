@@ -1,10 +1,10 @@
-import { MediaBoardColors } from "@/modules/feature/media-shelf/data";
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	CollapsableBodyParams,
 	ColorBodyParams,
 	CreateMediaElementBodyParams,
 	LayoutBodyParams,
+	MediaBoardColors,
 	MediaBoardLayoutType,
 	MoveColumnBodyParams,
 	MoveElementBodyParams,
@@ -209,12 +209,12 @@ describe("mediaBoardApi.composable", () => {
 
 	describe("updateLineColor", () => {
 		it("should call the api to update the line color", async () => {
-			await useMediaBoardApi().updateLineColor("lineId", MediaBoardColors.RED);
+			await useMediaBoardApi().updateLineColor("lineId", MediaBoardColors.Red);
 
 			expect(
 				mediaLineApi.mediaLineControllerUpdateBackgroundColor
 			).toHaveBeenCalledWith<[string, ColorBodyParams]>("lineId", {
-				backgroundColor: MediaBoardColors.RED,
+				backgroundColor: MediaBoardColors.Red,
 			});
 		});
 	});
@@ -223,13 +223,13 @@ describe("mediaBoardApi.composable", () => {
 		it("should call the api to update the line color", async () => {
 			await useMediaBoardApi().updateAvailableLineColor(
 				"boardId",
-				MediaBoardColors.RED
+				MediaBoardColors.Red
 			);
 
 			expect(
 				mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor
 			).toHaveBeenCalledWith<[string, ColorBodyParams]>("boardId", {
-				backgroundColor: MediaBoardColors.RED,
+				backgroundColor: MediaBoardColors.Red,
 			});
 		});
 	});
@@ -251,7 +251,7 @@ describe("mediaBoardApi.composable", () => {
 			await useMediaBoardApi().updateAvailableLineCollapsed("boardId", true);
 
 			expect(
-				mediaBoardApi.mediaBoardControllerCollapsMediaAvailableLine
+				mediaBoardApi.mediaBoardControllerCollapseMediaAvailableLine
 			).toHaveBeenCalledWith<[string, CollapsableBodyParams]>("boardId", {
 				collapsed: true,
 			});
