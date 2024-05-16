@@ -14823,18 +14823,18 @@ export const MediaLineApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary Collapse available line in media board.
-         * @param {string} boardId The id of the board.
+         * @param {string} lineId The id of the line
          * @param {CollapsableBodyParams} collapsableBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerCollapseMediaLine: async (boardId: string, collapsableBodyParams: CollapsableBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'boardId' is not null or undefined
-            assertParamExists('mediaLineControllerCollapseMediaLine', 'boardId', boardId)
+        mediaLineControllerCollapseMediaLine: async (lineId: string, collapsableBodyParams: CollapsableBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lineId' is not null or undefined
+            assertParamExists('mediaLineControllerCollapseMediaLine', 'lineId', lineId)
             // verify required parameter 'collapsableBodyParams' is not null or undefined
             assertParamExists('mediaLineControllerCollapseMediaLine', 'collapsableBodyParams', collapsableBodyParams)
             const localVarPath = `/media-lines/{lineId}/collapse`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
+                .replace(`{${"lineId"}}`, encodeURIComponent(String(lineId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -15047,13 +15047,13 @@ export const MediaLineApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Collapse available line in media board.
-         * @param {string} boardId The id of the board.
+         * @param {string} lineId The id of the line
          * @param {CollapsableBodyParams} collapsableBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaLineControllerCollapseMediaLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerCollapseMediaLine(boardId, collapsableBodyParams, options);
+        async mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaLineControllerCollapseMediaLine(lineId, collapsableBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -15116,13 +15116,13 @@ export const MediaLineApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary Collapse available line in media board.
-         * @param {string} boardId The id of the board.
+         * @param {string} lineId The id of the line
          * @param {CollapsableBodyParams} collapsableBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaLineControllerCollapseMediaLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.mediaLineControllerCollapseMediaLine(boardId, collapsableBodyParams, options).then((request) => request(axios, basePath));
+        mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.mediaLineControllerCollapseMediaLine(lineId, collapsableBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -15179,13 +15179,13 @@ export interface MediaLineApiInterface {
     /**
      * 
      * @summary Collapse available line in media board.
-     * @param {string} boardId The id of the board.
+     * @param {string} lineId The id of the line
      * @param {CollapsableBodyParams} collapsableBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MediaLineApiInterface
      */
-    mediaLineControllerCollapseMediaLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void>;
+    mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -15242,14 +15242,14 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
     /**
      * 
      * @summary Collapse available line in media board.
-     * @param {string} boardId The id of the board.
+     * @param {string} lineId The id of the line
      * @param {CollapsableBodyParams} collapsableBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof MediaLineApi
      */
-    public mediaLineControllerCollapseMediaLine(boardId: string, collapsableBodyParams: CollapsableBodyParams, options?: any) {
-        return MediaLineApiFp(this.configuration).mediaLineControllerCollapseMediaLine(boardId, collapsableBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public mediaLineControllerCollapseMediaLine(lineId: string, collapsableBodyParams: CollapsableBodyParams, options?: any) {
+        return MediaLineApiFp(this.configuration).mediaLineControllerCollapseMediaLine(lineId, collapsableBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
