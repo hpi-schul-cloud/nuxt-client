@@ -9,12 +9,13 @@ import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 	envsFactory,
+	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { useBoardSocketApi, useBoardStore } from "@data-board";
-import { useBoardRestApi } from "./restApi";
+import { useSocketConnection, useBoardStore } from "@data-board";
+import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
 import { ColumnMove } from "@/types/board/DragAndDrop";
@@ -30,12 +31,14 @@ jest.mock("../EditMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("../socket/socket");
-const mockedUseSocketApi = jest.mocked(useBoardSocketApi);
+const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
-describe("restApi", () => {
+describe("boardRestApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
-	let mockedSocketApiHandler: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
+	let mockedSocketConnectionHandler: DeepMocked<
+		ReturnType<typeof useSocketConnection>
+	>;
 	let setEditModeId: jest.Mock;
 
 	beforeEach(() => {
@@ -46,8 +49,9 @@ describe("restApi", () => {
 		});
 		envConfigModule.setEnvs(envs);
 
-		mockedSocketApiHandler = createMock<ReturnType<typeof useBoardSocketApi>>();
-		mockedUseSocketApi.mockReturnValue(mockedSocketApiHandler);
+		mockedSocketConnectionHandler =
+			createMock<ReturnType<typeof useSocketConnection>>();
+		mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
 		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
@@ -63,7 +67,7 @@ describe("restApi", () => {
 	});
 
 	const setup = (createBoard = true) => {
-		const boardStore = useBoardStore();
+		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		if (createBoard) {
 			const cards = cardSkeletonResponseFactory.buildList(3);
 			const firstColumn = columnResponseFactory.build({ cards });
@@ -190,39 +194,6 @@ describe("restApi", () => {
 			mockedBoardApiCalls.createColumnCall.mockRejectedValue({});
 
 			await createColumnRequest();
-
-			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
-		});
-	});
-
-	describe("deleteCardRequest", () => {
-		it("should not call deleteCardSuccess action when board is undefined", async () => {
-			const { boardStore } = setup(false);
-			const { deleteCardRequest } = useBoardRestApi();
-
-			await deleteCardRequest({ cardId: "cardId" });
-
-			expect(boardStore.deleteCardSuccess).not.toHaveBeenCalled();
-		});
-
-		it("should call deleteCardSuccess action if the API call is successful", async () => {
-			const { boardStore } = setup();
-			const { deleteCardRequest } = useBoardRestApi();
-			const cardId = boardStore.board!.columns[0].cards[0].cardId;
-
-			await deleteCardRequest({ cardId });
-
-			expect(boardStore.deleteCardSuccess).toHaveBeenCalledWith({ cardId });
-		});
-
-		it("should call handleError if the API call fails", async () => {
-			const { boardStore } = setup();
-			const { deleteCardRequest } = useBoardRestApi();
-			const cardId = boardStore.board!.columns[0].cards[0].cardId;
-
-			mockedBoardApiCalls.deleteCardCall.mockRejectedValue({});
-
-			await deleteCardRequest({ cardId });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});

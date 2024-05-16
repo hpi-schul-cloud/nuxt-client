@@ -1,7 +1,6 @@
 import * as serverApi from "../serverApi/v3/api";
 import {
 	CopyApiResponse,
-	CopyApiResponseElementsTypesEnum,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 } from "../serverApi/v3/api";
@@ -145,38 +144,6 @@ describe("copy module", () => {
 						roomCopyMockApi.roomsControllerCopyCourse
 					).toHaveBeenCalledWith("courseId-value");
 				});
-
-				it("should call checkDrawingChildren", async () => {
-					const elementsTypes: CopyApiResponseElementsTypesEnum[] = [
-						CopyApiResponseElementsTypesEnum.Board,
-					];
-					const roomCopyMockApi = {
-						roomsControllerCopyCourse: jest.fn(async () => ({
-							data: { elementsTypes },
-						})),
-					};
-					jest
-						.spyOn(serverApi, "RoomsApiFactory")
-						.mockReturnValue(
-							roomCopyMockApi as unknown as serverApi.RoomsApiInterface
-						);
-
-					const copyModule = new CopyModule({});
-					const checkDrawingChildrenSpy = jest.spyOn(
-						copyModule,
-						"checkDrawingChildren"
-					);
-
-					const payload: CopyParams = {
-						id: "courseId-value",
-						type: CopyParamsTypeEnum.Course,
-						courseId: "courseId-value",
-					};
-
-					await copyModule.copy(payload);
-
-					expect(checkDrawingChildrenSpy).toHaveBeenCalledWith(elementsTypes);
-				});
 			});
 
 			describe("copy a lesson", () => {
@@ -220,37 +187,6 @@ describe("copy module", () => {
 					expect(
 						boardCopyMockApi.boardControllerCopyBoard
 					).toHaveBeenCalledWith("testBoardId");
-				});
-			});
-		});
-
-		describe("checkDrawingChildren", () => {
-			describe("when drawing element is not among types in passed property", () => {
-				it("should not change hasDrawingChild property to true", () => {
-					const copyModule = new CopyModule({});
-					const payload: CopyApiResponseElementsTypesEnum[] = [
-						CopyApiResponseElementsTypesEnum.Board,
-						CopyApiResponseElementsTypesEnum.Card,
-						CopyApiResponseElementsTypesEnum.Column,
-					];
-
-					copyModule.checkDrawingChildren(payload);
-					expect(copyModule.getHasDrawingChild).toBe(false);
-				});
-			});
-
-			describe("when drawing element is among types in passed property", () => {
-				it("should change hasDrawingChild property to true", () => {
-					const copyModule = new CopyModule({});
-					const payload: CopyApiResponseElementsTypesEnum[] = [
-						CopyApiResponseElementsTypesEnum.Board,
-						CopyApiResponseElementsTypesEnum.Card,
-						CopyApiResponseElementsTypesEnum.Column,
-						CopyApiResponseElementsTypesEnum.DrawingElement,
-					];
-
-					copyModule.checkDrawingChildren(payload);
-					expect(copyModule.getHasDrawingChild).toBe(true);
 				});
 			});
 		});
@@ -439,6 +375,46 @@ describe("copy module", () => {
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
 
+			describe("setCopyResultFailedItems", () => {
+				it("should set filteredResult for failed columnBoard copy", () => {
+					const serverData = {
+						title: "ColumnBoard",
+						type: CopyApiResponseTypeEnum.Columnboard,
+						destinationCourseId: "testCourseId",
+						status: CopyApiResponseStatusEnum.Failure,
+						id: "123",
+						elements: [
+							{
+								type: CopyApiResponseTypeEnum.DrawingElement,
+								status: CopyApiResponseStatusEnum.Failure,
+							},
+						],
+					};
+					const expectedData = [
+						{
+							title: "ColumnBoard",
+							type: CopyApiResponseTypeEnum.Columnboard,
+							elementId: "123",
+							url: "/rooms/123/board",
+							elements: [
+								{
+									type: CopyApiResponseTypeEnum.DrawingElement,
+									title: "",
+								},
+							],
+						},
+					];
+					const copyModule = new CopyModule({});
+					copyModule.reset();
+					copyModule.setCopyResultFailedItems({
+						payload: serverData,
+					});
+					expect(copyModule.getCopyResultFailedItems).toStrictEqual(
+						expectedData
+					);
+				});
+			});
+
 			it("should set filteredResult for failed lesson copy", () => {
 				const serverData = {
 					title: "Thema",
@@ -590,22 +566,6 @@ describe("copy module", () => {
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
 		});
-
-		describe("setHasDrawingChild", () => {
-			const setup = () => {
-				const roomModule = new CopyModule({});
-				const payload = true;
-
-				return { roomModule, payload };
-			};
-
-			it("should set the state", () => {
-				const { roomModule, payload } = setup();
-
-				roomModule.setHasDrawingChild(payload);
-				expect(roomModule.getHasDrawingChild).toStrictEqual(payload);
-			});
-		});
 	});
 
 	describe("getters", () => {
@@ -617,7 +577,6 @@ describe("copy module", () => {
 			expect(copyModule.getId).toBe("123");
 			expect(copyModule.getTitle).toBe("Aufgabe");
 			expect(copyModule.getIsResultModalOpen).toBe(true);
-			expect(copyModule.getHasDrawingChild).toBe(true);
 		});
 	});
 });

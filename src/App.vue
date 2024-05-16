@@ -6,31 +6,32 @@
 	</v-app>
 </template>
 
-<script>
-import { authModule } from "@/store";
+<script setup lang="ts">
 import { Layouts } from "@/layouts/types";
-import { defineAsyncComponent } from "vue";
+import { computed, defineAsyncComponent } from "vue";
+import {
+	injectStrict,
+	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+} from "@/utils/inject";
+import { useRoute } from "vue-router";
 
-const defaultLayout = Layouts.LOGGED_IN;
+const authModule = injectStrict(AUTH_MODULE_KEY);
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const route = useRoute();
 
-export default {
-	computed: {
-		layout() {
-			let layout = defaultLayout;
+const shouldUseNewLayout = envConfigModule.getEnv.FEATURE_NEW_LAYOUT_ENABLED;
+const defaultLayout = shouldUseNewLayout
+	? Layouts.NEW_LOGGED_IN
+	: Layouts.LOGGED_IN;
 
-			if (this.$route.meta?.layout) {
-				layout = this.$route.meta?.layout;
-			} else {
-				layout = authModule.isLoggedIn ? Layouts.LOGGED_IN : Layouts.LOGGED_OUT;
-			}
+const layout = computed(() => {
+	let layout = (route.meta.layout as Layouts) || defaultLayout;
 
-			return defineAsyncComponent(
-				() => import(`@/layouts/${layout}.layout.vue`)
-			);
-		},
-		isLoggedIn() {
-			return authModule.isLoggedIn;
-		},
-	},
-};
+	if (!authModule.isLoggedIn) {
+		layout = Layouts.LOGGED_OUT;
+	}
+
+	return defineAsyncComponent(() => import(`@/layouts/${layout}.layout.vue`));
+});
 </script>

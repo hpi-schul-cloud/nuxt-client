@@ -105,6 +105,7 @@ import {
 	useSharedBoardPageInformation,
 	useSharedEditMode,
 	useBoardStore,
+	useCardStore,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -132,6 +133,7 @@ const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 
 const boardStore = useBoardStore();
+const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
 
 const { createPageInformation } = useSharedBoardPageInformation();
@@ -162,7 +164,9 @@ const onCreateColumn = async () => {
 };
 
 const onDeleteCard = async (cardId: string) => {
-	if (hasCreateCardPermission) boardStore.deleteCardRequest({ cardId });
+	if (hasCreateCardPermission) {
+		cardStore.deleteCardRequest({ cardId });
+	}
 };
 
 const onDeleteColumn = async (columnId: string) => {
@@ -253,6 +257,7 @@ onUnmounted(() => {
 
 onUnmounted(() => {
 	resetNotifierModule();
+	cardStore.resetState();
 });
 
 const setAlert = useDebounceFn(() => {

@@ -109,24 +109,18 @@ export default {
 	"common.roleName.student": "Estudiante",
 	"common.roleName.superhero": "Administrador de Schul-Cloud",
 	"common.roleName.teacher": "Profesor",
-	"common.tool.information.deactivated":
-		"La herramienta {toolDisplayName} está desactivada y por lo tanto no se puede iniciar.",
-	"common.tool.information.incomplete.student":
-		"La configuración de la herramienta está incompleta, por lo que no se puede iniciar la herramienta. Comuníquese con el maestro o el líder del curso.",
-	"common.tool.information.incompleteOnContext.teacher":
-		"La configuración de la herramienta está incompleta, por lo que no se puede iniciar la herramienta. Complete la configuración de la herramienta.",
-	"common.tool.information.incompleteOnSchool.teacher":
-		"La configuración de la herramienta está incompleta, por lo que no se puede iniciar la herramienta. Por favor comuníquese con el administrador de la escuela.",
-	"common.tool.information.incompleteOnSchoolAndContext.teacher":
-		"La configuración de la herramienta está incompleta, por lo que no se puede iniciar la herramienta. Complete la configuración de la herramienta y comuníquese con el administrador de la escuela.",
+	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
+		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor verifique la configuración.",
 	"common.tool.information.outdated.student":
-		"La configuración de la herramienta está desactualizada, por lo que no se puede iniciar la herramienta. Para actualizar, comuníquese con el maestro o instructor del curso.",
-	"common.tool.information.outdatedOnContext.teacher":
-		"La configuración de la herramienta está desactualizada, por lo que no se puede iniciar la herramienta. Actualice la configuración de la herramienta.",
+		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor contacta a tu profesor o instructor del curso.",
+	"common.tool.information.deactivated.student":
+		"La herramienta {toolName} está deshabilitada. Por favor contacta a tu profesor o instructor del curso.",
+	"common.tool.information.deactivated.teacher":
+		"La herramienta {toolName} está deshabilitada. Por favor comuníquese con el administrador de la escuela.",
+	"common.tool.information.outdated.teacher":
+		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Verifique la configuración y comuníquese con el administrador de su escuela.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"La configuración de la herramienta está desactualizada, por lo que no se puede iniciar la herramienta. Para actualizar, comuníquese con el administrador de la escuela.",
-	"common.tool.information.outdatedOnSchoolAndContext.teacher":
-		"La configuración de la herramienta está desactualizada, por lo que no se puede iniciar la herramienta. Actualice la configuración de la herramienta y comuníquese con el administrador de la escuela.",
+		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor comuníquese con el administrador de la escuela.",
 	"common.validation.email":
 		"Por favor, introduzca una dirección de correo electrónico válida",
 	"common.validation.invalid": "Los datos introducidos no son válidos",
@@ -440,6 +434,7 @@ export default {
 		"Los ID de material no se copian por razones técnicas y deben agregarse nuevamente.",
 	"components.molecules.copyResult.information":
 		"A continuación, se pueden añadir los contenidos que faltan con la ayuda de los enlaces rápidos. Los enlaces se abren en otra pestaña.",
+	"components.molecules.copyResult.label.columnBoard": "Tablero de columna",
 	"components.molecules.copyResult.label.content": "Contenido",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools":
@@ -460,6 +455,7 @@ export default {
 	"components.molecules.copyResult.label.submissions": "Envíos",
 	"components.molecules.copyResult.label.text": "Texto",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
+	"components.molecules.copyResult.label.link": "Enlace",
 	"components.molecules.copyResult.label.timeGroup": "Grupo de tiempo",
 	"components.molecules.copyResult.label.unknown": "Desconocido",
 	"components.molecules.copyResult.label.userGroup": "Grupo de usuario",
@@ -1519,7 +1515,7 @@ export default {
 	"pages.rooms.tools.incompleteDialog.title": "Configuración incomplet",
 	"pages.rooms.tools.logo": "Logotipo de la herramienta",
 	"pages.rooms.tools.menu.ariaLabel": "Menú de herramienta",
-	"pages.rooms.tools.outdated": "Herramienta obsoleta",
+	"pages.rooms.tools.outdated": "Configuración incompleta",
 	"pages.rooms.tools.outdatedDialog.title": "Herramienta „{toolName}“ obsoleta",
 	"pages.room.modal.course.export.header": "Formato de exportación",
 	"pages.room.modal.course.export.options.header": "Exportar configuración",
@@ -1571,7 +1567,7 @@ export default {
 		"El tipo de un parámetro no coincide con el tipo solicitado. Póngase en contacto con el soporte.",
 	"pages.tool.apiError.tool_param_unknown":
 		"La configuración de esta herramienta contiene un parámetro desconocido. Por favor contacte al soporte.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"Se produjo un error al transferir un valor de parámetro. Por favor contacte al soporte.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"El valor de un parámetro no sigue las reglas dadas. Por favor, ajuste el valor en consecuencia.",
@@ -1626,6 +1622,8 @@ export default {
 		"Falta el nombre de la sala en los parámetros de la URL",
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
+	"ui-layout.topbar.pageShare.copyLink": "Copiar enlace",
+	"ui-layout.topbar.pageShare.printQRCode": "Imprimir código QR",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",

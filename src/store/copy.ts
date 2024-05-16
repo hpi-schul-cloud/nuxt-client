@@ -5,7 +5,6 @@ import {
 	BoardApiFactory,
 	BoardApiInterface,
 	CopyApiResponse,
-	CopyApiResponseElementsTypesEnum,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
 	RoomsApiFactory,
@@ -92,8 +91,8 @@ export default class CopyModule extends VuexModule {
 				.roomsControllerCopyCourse(id)
 				.then((response) => response.data);
 
-			if (copyResult && copyResult.elementsTypes) {
-				this.checkDrawingChildren(copyResult.elementsTypes);
+			if (copyResult && copyResult.elements) {
+				this.checkDrawingChildren(copyResult.elements);
 			}
 		}
 
@@ -115,14 +114,15 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Action
-	checkDrawingChildren(
-		copyResultElementsTypes: CopyApiResponseElementsTypesEnum[]
-	): void {
-		const elementIndex = copyResultElementsTypes.indexOf(
-			CopyApiResponseElementsTypesEnum.DrawingElement
-		);
-		if (elementIndex !== -1) {
-			this.setHasDrawingChild(true);
+	checkDrawingChildren(copyResultElementsTypes: CopyApiResponse[]): void {
+		for (const element of copyResultElementsTypes) {
+			if (element.type === CopyApiResponseTypeEnum.DrawingElement) {
+				this.setHasDrawingChild(true);
+				return;
+			}
+			if (element.elements) {
+				this.checkDrawingChildren(element.elements);
+			}
 		}
 	}
 
@@ -163,6 +163,10 @@ export default class CopyModule extends VuexModule {
 				.then((response) => response.data);
 		}
 
+		if (copyResult && copyResult.elements) {
+			this.checkDrawingChildren(copyResult.elements);
+		}
+
 		if (copyResult === undefined) {
 			throw new Error("CopyProcess unknown type: " + type);
 		}
@@ -196,6 +200,7 @@ export default class CopyModule extends VuexModule {
 			if (type === CopyApiResponseTypeEnum.Lesson) return true;
 			if (type === CopyApiResponseTypeEnum.Task) return true;
 			if (type === CopyApiResponseTypeEnum.LernstoreMaterialGroup) return true;
+			if (type === CopyApiResponseTypeEnum.Columnboard) return true;
 			return false;
 		};
 
@@ -211,6 +216,7 @@ export default class CopyModule extends VuexModule {
 			if (type === CopyApiResponseTypeEnum.LernstoreMaterial) return true;
 			if (type === CopyApiResponseTypeEnum.File) return true;
 			if (type === CopyApiResponseTypeEnum.CoursegroupGroup) return true;
+			if (type === CopyApiResponseTypeEnum.DrawingElement) return true;
 			return false;
 		};
 
@@ -222,6 +228,8 @@ export default class CopyModule extends VuexModule {
 					return `/courses/${element.destinationCourseId}/topics/${element.id}/edit?returnUrl=rooms/${element.destinationCourseId}`;
 				case CopyApiResponseTypeEnum.Course:
 					return `/courses/${element.id}/edit`;
+				case CopyApiResponseTypeEnum.Columnboard:
+					return `/rooms/${element.id}/board`;
 			}
 			return undefined;
 		};
@@ -312,9 +320,5 @@ export default class CopyModule extends VuexModule {
 
 	get getIsResultModalOpen(): boolean {
 		return this.isResultModalOpen;
-	}
-
-	get getHasDrawingChild(): boolean {
-		return this.hasDrawingChild;
 	}
 }

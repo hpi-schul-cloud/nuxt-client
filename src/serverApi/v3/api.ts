@@ -1005,6 +1005,18 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_MEDIA_SHELF_ENABLED: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    BOARD_COLLABORATION_URI: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_NEW_LAYOUT_ENABLED: boolean;
 }
 /**
  * 
@@ -1224,11 +1236,17 @@ export interface ContextExternalToolConfigurationStatusResponse {
      */
     isOutdatedOnScopeContext: boolean;
     /**
-     * True, if a configured parameter on the context external tool is missing a value
+     * True, if a mandatory parameter on the context external tool is missing a value
      * @type {boolean}
      * @memberof ContextExternalToolConfigurationStatusResponse
      */
     isIncompleteOnScopeContext: boolean;
+    /**
+     * True, if a optional parameter on the context external tool is missing a value. This is happening, when course is copied.
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isIncompleteOperationalOnScopeContext: boolean;
     /**
      * Is the tool deactivated, because of superhero or school administrator
      * @type {boolean}
@@ -1475,12 +1493,6 @@ export interface CopyApiResponse {
      * @memberof CopyApiResponse
      */
     elements?: Array<CopyApiResponse>;
-    /**
-     * Array with listed types of all sub elements
-     * @type {Array<string>}
-     * @memberof CopyApiResponse
-     */
-    elementsTypes?: Array<CopyApiResponseElementsTypesEnum>;
 }
 
 /**
@@ -1538,51 +1550,6 @@ export enum CopyApiResponseStatusEnum {
     NotDoing = 'not-doing',
     NotImplemented = 'not-implemented',
     Partial = 'partial'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CopyApiResponseElementsTypesEnum {
-    Board = 'BOARD',
-    Card = 'CARD',
-    CollaborativeTextEditorElement = 'COLLABORATIVE_TEXT_EDITOR_ELEMENT',
-    Column = 'COLUMN',
-    Columnboard = 'COLUMNBOARD',
-    Content = 'CONTENT',
-    Course = 'COURSE',
-    CoursegroupGroup = 'COURSEGROUP_GROUP',
-    ExternalTool = 'EXTERNAL_TOOL',
-    ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
-    File = 'FILE',
-    FileElement = 'FILE_ELEMENT',
-    DrawingElement = 'DRAWING_ELEMENT',
-    FileGroup = 'FILE_GROUP',
-    Leaf = 'LEAF',
-    Lesson = 'LESSON',
-    LessonContentEtherpad = 'LESSON_CONTENT_ETHERPAD',
-    LessonContentGeogebra = 'LESSON_CONTENT_GEOGEBRA',
-    LessonContentGroup = 'LESSON_CONTENT_GROUP',
-    LessonContentLernstore = 'LESSON_CONTENT_LERNSTORE',
-    LessonContentNexboard = 'LESSON_CONTENT_NEXBOARD',
-    LessonContentTask = 'LESSON_CONTENT_TASK',
-    LessonContentText = 'LESSON_CONTENT_TEXT',
-    LernstoreMaterial = 'LERNSTORE_MATERIAL',
-    LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
-    LinkElement = 'LINK_ELEMENT',
-    LtitoolGroup = 'LTITOOL_GROUP',
-    MediaBoard = 'MEDIA_BOARD',
-    MediaLine = 'MEDIA_LINE',
-    MediaExternalToolElement = 'MEDIA_EXTERNAL_TOOL_ELEMENT',
-    Metadata = 'METADATA',
-    RichtextElement = 'RICHTEXT_ELEMENT',
-    SubmissionContainerElement = 'SUBMISSION_CONTAINER_ELEMENT',
-    SubmissionItem = 'SUBMISSION_ITEM',
-    SubmissionGroup = 'SUBMISSION_GROUP',
-    Task = 'TASK',
-    TaskGroup = 'TASK_GROUP',
-    TimeGroup = 'TIME_GROUP',
-    UserGroup = 'USER_GROUP'
 }
 
 /**
@@ -23511,6 +23478,7 @@ export const UserLoginMigrationRollbackApiAxiosParamCreator = function (configur
     return {
         /**
          * 
+         * @summary Rollback a user from a user login migration
          * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -23558,6 +23526,7 @@ export const UserLoginMigrationRollbackApiFp = function(configuration?: Configur
     return {
         /**
          * 
+         * @summary Rollback a user from a user login migration
          * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -23578,6 +23547,7 @@ export const UserLoginMigrationRollbackApiFactory = function (configuration?: Co
     return {
         /**
          * 
+         * @summary Rollback a user from a user login migration
          * @param {string} userId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -23596,6 +23566,7 @@ export const UserLoginMigrationRollbackApiFactory = function (configuration?: Co
 export interface UserLoginMigrationRollbackApiInterface {
     /**
      * 
+     * @summary Rollback a user from a user login migration
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -23614,6 +23585,7 @@ export interface UserLoginMigrationRollbackApiInterface {
 export class UserLoginMigrationRollbackApi extends BaseAPI implements UserLoginMigrationRollbackApiInterface {
     /**
      * 
+     * @summary Rollback a user from a user login migration
      * @param {string} userId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

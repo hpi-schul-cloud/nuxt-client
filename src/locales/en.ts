@@ -107,24 +107,18 @@ export default {
 	"common.roleName.student": "Student",
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Teacher",
-	"common.tool.information.deactivated":
-		"The {toolDisplayName} tool is deactivated and therefore cannot be started.",
-	"common.tool.information.incomplete.student":
-		"The tool configuration is incomplete, so the tool cannot be started. Please contact the teacher or course leader.",
-	"common.tool.information.incompleteOnContext.teacher":
-		"The tool configuration is incomplete, so the tool cannot be started. Please complete tool configuration.",
-	"common.tool.information.incompleteOnSchool.teacher":
-		"The tool configuration is incomplete, so the tool cannot be started. Please contact the school administrator.",
-	"common.tool.information.incompleteOnSchoolAndContext.teacher":
-		"The tool configuration is incomplete, so the tool cannot be started. Please complete the tool configuration and contact the school administrator.",
+	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings.",
 	"common.tool.information.outdated.student":
-		"The tool configuration is out of date, so the tool cannot be started. To update, please contact the teacher or course instructor.",
-	"common.tool.information.outdatedOnContext.teacher":
-		"The tool configuration is out of date, so the tool cannot be started. Please update tool configuration.",
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please contact your teacher or course instructor.",
+	"common.tool.information.deactivated.student":
+		"Tool {toolName} is disabled. Please contact your teacher or course instructor.",
+	"common.tool.information.deactivated.teacher":
+		"Tool {toolName} is disabled. Please contact the school administrator.",
+	"common.tool.information.outdated.teacher":
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings and contact your school administrator.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"The tool configuration is out of date, so the tool cannot be started. To update, please contact the school administrator.",
-	"common.tool.information.outdatedOnSchoolAndContext.teacher":
-		"The tool configuration is out of date, so the tool cannot be started. Please update the tool configuration and contact the school administrator.",
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please contact the school administrator.",
 	"common.validation.email": "Please enter a valid e-mail address",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
@@ -432,6 +426,7 @@ export default {
 		"Material IDs are not copied for technical reasons and must be added again.",
 	"components.molecules.copyResult.information":
 		"In the following, the missing contents can be added with the help of the quick links. The links open in a separate tab.",
+	"components.molecules.copyResult.label.columnBoard": "Column board",
 	"components.molecules.copyResult.label.content": "Content",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "External tools",
@@ -449,6 +444,7 @@ export default {
 	"components.molecules.copyResult.label.submissions": "Submissions",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
+	"components.molecules.copyResult.label.link": "Link",
 	"components.molecules.copyResult.label.timeGroup": "Time Group",
 	"components.molecules.copyResult.label.unknown": "Unkown",
 	"components.molecules.copyResult.label.userGroup": "User Group",
@@ -1476,7 +1472,7 @@ export default {
 	"pages.rooms.tools.incompleteDialog.title": "Configuration incomplete",
 	"pages.rooms.tools.logo": "Tool-Logo",
 	"pages.rooms.tools.menu.ariaLabel": "Tool menu",
-	"pages.rooms.tools.outdated": "Tool outdated",
+	"pages.rooms.tools.outdated": "Configuration incomplete",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ outdated",
 	"pages.room.modal.course.export.header": "Export Format",
 	"pages.room.modal.course.export.options.header": "Export settings",
@@ -1527,7 +1523,7 @@ export default {
 		"The type of a parameter does not match the requested type. Please contact support.",
 	"pages.tool.apiError.tool_param_unknown":
 		"The configuration of this tool contains an unknown parameter. Please contact support.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"An error occurred while transferring a parameter value. Please contact support.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"The value of a parameter does not follow the given rules. Please adjust the value accordingly.",
@@ -1580,6 +1576,8 @@ export default {
 	"tldraw.error.ws.4400": "Room name is missing in URL params",
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
+	"ui-layout.topbar.pageShare.copyLink": "Copy link",
+	"ui-layout.topbar.pageShare.printQRCode": "Print QR Code",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",

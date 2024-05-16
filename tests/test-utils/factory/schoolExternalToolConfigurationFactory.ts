@@ -6,6 +6,7 @@ export const schoolToolConfigurationStatusFactory =
 		return {
 			isOutdatedOnScopeContext: false,
 			isOutdatedOnScopeSchool: false,
+			isIncompleteOperationalOnScopeContext: false,
 			isIncompleteOnScopeContext: false,
 			isDeactivated: false,
 		};
