@@ -115,6 +115,7 @@ const boardTitle = ref("");
 
 watchEffect(() => {
 	boardTitle.value = props.title;
+	setTimeout(calculateWidth, 100);
 });
 
 const onStartEditMode = () => {
