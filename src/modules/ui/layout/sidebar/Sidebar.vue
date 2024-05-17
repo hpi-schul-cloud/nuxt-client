@@ -28,7 +28,7 @@
 				/>
 			</div>
 		</VList>
-		<div data-testid="instanz-sidebar" class="ml-4 pb-3 text-disabled">
+		<div data-testid="sidebar-instance-name" class="ml-4 pb-3 text-disabled">
 			&#169; {{ currentYear }} {{ theme.name }}
 		</div>
 	</VNavigationDrawer>
@@ -83,13 +83,13 @@ const getItemsForUser = (items: SidebarItems) => {
 			item.children = item.children.filter((child) => {
 				const childHasFeature = hasFeatureEnabled(child);
 
-				return userHasPermission(child) && (!child.feature || childHasFeature);
+				return userHasPermission(child) && childHasFeature;
 			});
 		}
 
 		const categoryHasFeature = hasFeatureEnabled(item);
 
-		return userHasPermission(item) && (!item.feature || categoryHasFeature);
+		return userHasPermission(item) && categoryHasFeature;
 	});
 
 	return pageItems;
