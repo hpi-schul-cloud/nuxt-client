@@ -47,11 +47,11 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import { InfoChip, WarningChip } from "@ui-chip";
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, defineComponent, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomBaseCard from "./RoomBaseCard.vue";
-import { InfoChip, WarningChip } from "@ui-chip";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
@@ -72,7 +72,7 @@ export default defineComponent({
 		const { t } = useI18n();
 
 		const {
-			fetchLaunchRequest,
+			fetchContextLaunchRequest,
 			launchTool,
 			error: launchError,
 		} = useExternalToolLaunchState();
@@ -87,7 +87,7 @@ export default defineComponent({
 
 			launchTool();
 
-			await fetchLaunchRequest(props.tool.contextExternalToolId);
+			await fetchContextLaunchRequest(props.tool.contextExternalToolId);
 
 			if (launchError.value) {
 				emit("error", props.tool);
@@ -148,7 +148,7 @@ export default defineComponent({
 				return;
 			}
 
-			await fetchLaunchRequest(props.tool.contextExternalToolId);
+			await fetchContextLaunchRequest(props.tool.contextExternalToolId);
 		};
 
 		watch(() => props.tool, loadLaunchRequest, { immediate: true });

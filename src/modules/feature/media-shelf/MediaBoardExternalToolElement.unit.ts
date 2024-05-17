@@ -126,7 +126,7 @@ describe("MediaBoardExternalToolElement", () => {
 				const { externalToolElement } = await setup();
 
 				expect(
-					useExternalToolLaunchStateMock.fetchLaunchRequest
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
 				).toHaveBeenCalledWith(
 					externalToolElement.content.contextExternalToolId
 				);
@@ -165,14 +165,14 @@ describe("MediaBoardExternalToolElement", () => {
 			await nextTick();
 
 			expect(
-				useExternalToolLaunchStateMock.fetchLaunchRequest
+				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalledTimes(1);
 
 			jest.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
 			expect(
-				useExternalToolLaunchStateMock.fetchLaunchRequest
+				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalledTimes(2);
 		});
 	});
@@ -206,7 +206,7 @@ describe("MediaBoardExternalToolElement", () => {
 				await wrapper.trigger("click");
 
 				expect(
-					useExternalToolLaunchStateMock.fetchLaunchRequest
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
 				).toHaveBeenCalledWith(
 					externalToolElement.content.contextExternalToolId
 				);

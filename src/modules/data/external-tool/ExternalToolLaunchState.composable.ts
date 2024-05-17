@@ -1,3 +1,4 @@
+import { ContextExternalToolBodyParams } from "@/serverApi/v3";
 import {
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
@@ -9,21 +10,47 @@ import { ref, Ref } from "vue";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 
 export const useExternalToolLaunchState = () => {
-	const { fetchLaunchDataCall } = useExternalToolApi();
+	const { fetchContextLaunchDataCall, fetchSchoolLaunchDataCall } =
+		useExternalToolApi();
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 	const toolLaunchRequest: Ref<ToolLaunchRequest | undefined> = ref();
 
-	const fetchLaunchRequest = async (
+	const fetchContextLaunchRequest = async (
 		contextExternalToolId: string
 	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 
 		try {
-			toolLaunchRequest.value = await fetchLaunchDataCall(
+			toolLaunchRequest.value = await fetchContextLaunchDataCall(
 				contextExternalToolId
+			);
+		} catch (axiosError: unknown) {
+			const apiError = mapAxiosErrorToResponseError(axiosError);
+
+			error.value = {
+				error: apiError,
+				message: apiError.message,
+				statusCode: apiError.code,
+			};
+		}
+
+		isLoading.value = false;
+	};
+
+	const fetchSchoolLaunchRequest = async (
+		schoolExternalToolId: string,
+		contextExternalToolBodyParams: ContextExternalToolBodyParams
+	): Promise<void> => {
+		isLoading.value = true;
+		error.value = undefined;
+
+		try {
+			toolLaunchRequest.value = await fetchSchoolLaunchDataCall(
+				schoolExternalToolId,
+				contextExternalToolBodyParams
 			);
 		} catch (axiosError: unknown) {
 			const apiError = mapAxiosErrorToResponseError(axiosError);
@@ -101,7 +128,8 @@ export const useExternalToolLaunchState = () => {
 		toolLaunchRequest,
 		error,
 		isLoading,
-		fetchLaunchRequest,
+		fetchContextLaunchRequest,
+		fetchSchoolLaunchRequest,
 		launchTool,
 	};
 };
