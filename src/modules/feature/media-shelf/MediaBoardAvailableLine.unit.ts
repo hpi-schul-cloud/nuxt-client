@@ -38,6 +38,9 @@ describe("MediaBoardAvailableLine", () => {
 		const wrapper = mount(MediaBoardAvailableLine, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					MediaBoardAvailableElement: true,
+				},
 			},
 			props,
 		});
