@@ -113,11 +113,6 @@ onMounted(() => setTimeout(calculateWidth, 100));
 
 const boardTitle = ref("");
 
-watchEffect(() => {
-	boardTitle.value = props.title;
-	setTimeout(calculateWidth, 100);
-});
-
 const onStartEditMode = () => {
 	if (!hasEditPermission) return;
 	startEditMode();
@@ -187,6 +182,11 @@ const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const isShareEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
 );
+
+watchEffect(() => {
+	boardTitle.value = props.title;
+	setTimeout(calculateWidth, 100);
+});
 </script>
 
 <style lang="scss" scoped>
