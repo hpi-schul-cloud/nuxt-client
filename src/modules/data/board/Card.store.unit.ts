@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { useBoardNotifier } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { useBoardApi } from "./BoardApi.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { useI18n } from "vue-i18n";
@@ -10,12 +10,16 @@ import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { createPinia, setActivePinia } from "pinia";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
-import { nextTick, ref } from "vue";
+import { ref } from "vue";
 import { envConfigModule } from "@/store";
-import { envsFactory } from "@@/tests/test-utils";
+import {
+	envsFactory,
+	richTextElementResponseFactory,
+} from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { drawingContentElementResponseFactory } from "@@/tests/test-utils/factory/drawingContentElementResponseFactory";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -34,6 +38,7 @@ const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -52,6 +57,9 @@ describe("CardStore", () => {
 		ReturnType<typeof useCardSocketApi>
 	>;
 	let mockedCardRestApiActions: DeepMocked<ReturnType<typeof useCardRestApi>>;
+	let mockedSharedLastCreatedElementActions: DeepMocked<
+		ReturnType<typeof useSharedLastCreatedElement>
+	>;
 	let setEditModeId: jest.Mock;
 
 	beforeEach(() => {
@@ -78,6 +86,12 @@ describe("CardStore", () => {
 		mockedCardRestApiActions = createMock<ReturnType<typeof useCardRestApi>>();
 		mockedUseCardRestApi.mockReturnValue(mockedCardRestApiActions);
 
+		mockedSharedLastCreatedElementActions =
+			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		mockedSharedLastCreatedElement.mockReturnValue(
+			mockedSharedLastCreatedElementActions
+		);
+
 		setEditModeId = jest.fn();
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
@@ -95,10 +109,13 @@ describe("CardStore", () => {
 
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
-
+		const elements = richTextElementResponseFactory.buildList(3);
+		cards[0].elements.push(elements[0]);
+		cards[0].elements.push(elements[1]);
+		cards[0].elements.push(elements[2]);
 		cardStore.fetchCardSuccess({ cards });
 
-		return { cardStore, cardId: cards[0].id };
+		return { cardStore, cardId: cards[0].id, elements };
 	};
 
 	afterEach(() => {
@@ -341,7 +358,7 @@ describe("CardStore", () => {
 		});
 	});
 
-	describe("addElement", () => {
+	describe("createElementRequest", () => {
 		it("should not add element when card is undefined", async () => {
 			const { cardStore } = setup();
 
@@ -349,7 +366,10 @@ describe("CardStore", () => {
 				(card) => card.height
 			);
 
-			await cardStore.addElement(ContentElementType.Link, "unknownId");
+			await cardStore.createElementRequest({
+				type: ContentElementType.Link,
+				cardId: "unknownId",
+			});
 
 			expect(Object.values(cardStore.cards).map((card) => card.height)).toEqual(
 				cardHeights
@@ -358,9 +378,14 @@ describe("CardStore", () => {
 
 		it("should add element", async () => {
 			const { cardStore, cardId } = setup();
+			const newElement = drawingContentElementResponseFactory.build();
 
 			expect(cardStore.cards[cardId].elements.length).toEqual(0);
-			await cardStore.addElement(ContentElementType.Drawing, cardId);
+			await cardStore.createElementSuccess({
+				type: ContentElementType.Drawing,
+				cardId,
+				newElement,
+			});
 
 			expect(cardStore.cards[cardId].elements.length).toEqual(1);
 		});
@@ -402,87 +427,75 @@ describe("CardStore", () => {
 			});
 		});
 
-		describe("moveElementDown", () => {
+		describe("moveElement down", () => {
 			it("should move element down", async () => {
 				const { cardStore, cardId } = setup();
 				cardStore.cards[cardId].elements.push(...elements);
 
-				cardStore.moveElementDown(cardId, {
-					elementIndex: 0,
-					payload: elements[0].id,
+				cardStore.moveElementSuccess({
+					elementId: elements[0].id,
+					toCardId: cardId,
+					toPosition: 1,
 				});
 
 				expect(cardStore.cards[cardId].elements[0].id).toEqual(elements[1].id);
 			});
 
 			it("should not move element down when elementIndex is last", async () => {
-				const { cardStore, cardId } = setup();
+				const { cardStore, cardId, elements } = setup();
 				cardStore.cards[cardId].elements.push(...elements);
 
-				cardStore.moveElementDown(cardId, {
-					elementIndex: 1,
-					payload: elements[1].id,
+				const elementId = elements[0].id;
+				const toPosition = 1;
+				await cardStore.moveElementSuccess({
+					elementId,
+					toCardId: cardId,
+					toPosition,
 				});
 
-				expect(cardStore.cards[cardId].elements[1].id).toEqual(elements[1].id);
+				expect(cardStore.cards[cardId].elements[toPosition].id).toEqual(
+					elementId
+				);
 			});
 		});
 
-		describe("moveElementUp", () => {
+		describe("moveElement up", () => {
 			it("should move element up", async () => {
-				const { cardStore, cardId } = setup();
+				const { cardStore, cardId, elements } = setup();
 				cardStore.cards[cardId].elements.push(...elements);
 
-				const currentCardElements = [...cardStore.cards[cardId].elements];
-
-				cardStore.moveElementUp(cardId, {
-					elementIndex: 1,
-					payload: currentCardElements[1].id,
+				const elementId = elements[2].id;
+				const toPosition = 1;
+				await cardStore.moveElementSuccess({
+					elementId,
+					toCardId: cardId,
+					toPosition,
 				});
 
-				await nextTick();
-
-				expect(cardStore.cards[cardId].elements[0].id).toEqual(
-					currentCardElements[1].id
-				);
+				expect(cardStore.cards[cardId].elements[1].id).toEqual(elementId);
 			});
 
 			it("should not move element up when elementIndex is 0", async () => {
-				const { cardStore, cardId } = setup();
+				const { cardStore, cardId, elements } = setup();
 				cardStore.cards[cardId].elements.push(...elements);
 
-				cardStore.moveElementUp(cardId, {
-					elementIndex: 0,
-					payload: elements[0].id,
-				});
+				const elementId = elements[0].id;
+				await cardStore.moveElementRequest(cardId, elementId, 0, -1);
 
-				expect(cardStore.cards[cardId].elements[0].id).toEqual(elements[0].id);
+				expect(cardStore.cards[cardId].elements[0].id).toEqual(elementId);
 			});
 		});
 	});
 
 	describe("deleteElement", () => {
 		it("should delete element", async () => {
-			const { cardStore, cardId } = setup();
-			const elementId = "elementId";
-			cardStore.cards[cardId].elements.push({
-				id: elementId,
-				content: {
-					url: "https://www.google.com/",
-					title: "Google",
-					description: "",
-					imageUrl: "",
-				},
-				timestamps: {
-					lastUpdatedAt: "2024-05-13T14:59:46.909Z",
-					createdAt: "2024-05-13T14:59:46.909Z",
-				},
-				type: ContentElementType.Link,
-			});
+			const { cardStore, cardId, elements } = setup();
 
-			await cardStore.deleteElement(cardId, elementId);
+			const length = cardStore.cards[cardId].elements.length;
+			const elementId = elements[0].id;
+			await cardStore.deleteElementSuccess({ cardId, elementId });
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(0);
+			expect(cardStore.cards[cardId].elements.length).toEqual(length - 1);
 		});
 	});
 
@@ -490,9 +503,10 @@ describe("CardStore", () => {
 		it("should add text after title", async () => {
 			const { cardStore, cardId } = setup();
 
+			const length = cardStore.cards[cardId].elements.length;
 			await cardStore.addTextAfterTitle(cardId);
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(1);
+			expect(cardStore.cards[cardId].elements.length).toEqual(length + 1);
 		});
 	});
 });
