@@ -227,7 +227,6 @@ export const useSidebarItems = () => {
 				},
 				{
 					title: "global.sidebar.item.school",
-					icon: "$school_outline",
 					to: "/administration/school-settings",
 					testId: "Schule",
 					permissions: ["ADMIN_VIEW"],
@@ -235,7 +234,6 @@ export const useSidebarItems = () => {
 				},
 				{
 					title: "global.sidebar.item.school",
-					icon: "$school_outline",
 					href: "/administration/school",
 					testId: "Schule",
 					permissions: ["ADMIN_VIEW"],
