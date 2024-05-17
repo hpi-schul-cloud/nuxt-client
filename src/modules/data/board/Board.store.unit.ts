@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
+import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
@@ -18,7 +18,6 @@ import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFac
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useSocketConnection } from "@data-board";
 import { useI18n } from "vue-i18n";
-import { MoveCardRequestPayload } from "./boardActions/boardActionPayload";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 
@@ -384,242 +383,112 @@ describe("BoardStore", () => {
 	});
 
 	describe("moveCardSuccess", () => {
-		const createCardPayload = ({
-			cardId,
-			oldIndex,
-			newIndex,
-			fromColumnId,
-			toColumnId,
-			columnDelta,
-			forceNextTick,
-		}: {
-			cardId: string;
-			oldIndex?: number;
-			newIndex?: number;
-			fromColumnId: string;
-			toColumnId?: string;
-			columnDelta?: number;
-			forceNextTick?: boolean;
-		}) => {
-			const cardPayload: MoveCardRequestPayload = {
-				cardId,
-				oldIndex: oldIndex ?? 0,
-				newIndex: newIndex ?? 0,
-				fromColumnId,
-				toColumnId,
-				columnDelta,
-				forceNextTick,
-			};
-			return cardPayload;
-		};
-
 		it("should not move Card when board value is undefined", async () => {
 			const { boardStore } = setup({ createBoard: false });
 
-			const cardPayload = createCardPayload({
+			const cardPayload = {
 				cardId: "cardId",
+				oldIndex: 0,
+				newIndex: 1,
 				fromColumnId: "columnId",
-			});
+				fromColumnIndex: 0,
+				toColumnId: "columnId",
+				toColumnIndex: 0,
+			};
 
 			await boardStore.moveCardSuccess(cardPayload);
 
 			expect(boardStore.board).toBe(undefined);
 		});
 
-		describe("when move is invalid", () => {
-			it("should not move first card to left with columnDelta", async () => {
-				const { boardStore, cards, firstColumn } = setup();
+		it("should move a card in the same column", async () => {
+			const { boardStore, firstColumn, cards } = setup();
 
-				const movingCardId = cards[0].cardId;
+			const [firstCardId, secondCardId, thirdCardId] = cards.map(
+				(card) => card.cardId
+			);
+			const firstColumnId = firstColumn.id;
 
-				const cardPayload = createCardPayload({
-					cardId: movingCardId,
-					fromColumnId: firstColumn.id,
-					columnDelta: -1,
-				});
+			const cardPayload = {
+				cardId: firstCardId,
+				oldIndex: 0,
+				newIndex: 1,
+				fromColumnId: firstColumnId,
+				fromColumnIndex: 0,
+				toColumnId: firstColumnId,
+				toColumnIndex: 0,
+			};
 
-				await boardStore.moveCardSuccess(cardPayload);
+			await boardStore.moveCardSuccess(cardPayload);
 
-				expect(boardStore.board?.columns[0].cards[0].cardId).toEqual(
-					movingCardId
-				);
-			});
-			it("should not move card if card is moved to the same position", async () => {
-				const { boardStore, firstColumn, cards } = setup();
+			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
 
-				const firstColumnId = firstColumn.id;
-				const movingCardId = cards[1].cardId;
-
-				const cardPayload = createCardPayload({
-					cardId: movingCardId,
-					fromColumnId: firstColumnId,
-					toColumnId: firstColumnId,
-				});
-
-				await boardStore.moveCardSuccess(cardPayload);
-
-				expect(boardStore.board?.columns[0].cards[1].cardId).toEqual(
-					movingCardId
-				);
-			});
-
-			it("should not move card if first card is moved to the first position", async () => {
-				const { boardStore, firstColumn, cards } = setup();
-
-				const firstColumnId = firstColumn.id;
-				const firstCardId = cards[0].cardId;
-
-				const cardPayload = createCardPayload({
-					cardId: firstCardId,
-					newIndex: -1,
-					fromColumnId: firstColumnId,
-					toColumnId: firstColumnId,
-				});
-
-				await boardStore.moveCardSuccess(cardPayload);
-
-				expect(boardStore.board?.columns[0].cards[0].cardId).toEqual(
-					firstCardId
-				);
-			});
-
-			it("should not move card if if last card is moved to the last position", async () => {
-				const { boardStore, firstColumn, cards } = setup();
-
-				const firstColumnId = firstColumn.id;
-				const lastCardId = cards[2].cardId;
-
-				const cardPayload = createCardPayload({
-					cardId: lastCardId,
-					oldIndex: 2,
-					newIndex: 3,
-					fromColumnId: firstColumnId,
-					toColumnId: firstColumnId,
-				});
-
-				await boardStore.moveCardSuccess(cardPayload);
-
-				expect(boardStore.board?.columns[0].cards[2].cardId).toEqual(
-					lastCardId
-				);
-			});
+			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+				secondCardId,
+				firstCardId,
+				thirdCardId,
+			]);
 		});
 
-		describe("when move is valid", () => {
-			it("should move a card in the same column", async () => {
-				const { boardStore, firstColumn, cards } = setup();
+		it("should move a card in the same column when forceNextTick is true", async () => {
+			const { boardStore, firstColumn, cards } = setup();
 
-				const [firstCardId, secondCardId, thirdCardId] = cards.map(
-					(card) => card.cardId
-				);
-				const firstColumnId = firstColumn.id;
+			const [firstCardId, secondCardId, thirdCardId] = cards.map(
+				(card) => card.cardId
+			);
+			const firstColumnId = firstColumn.id;
 
-				const cardPayload = createCardPayload({
-					cardId: firstCardId,
-					oldIndex: 0,
-					newIndex: 1,
-					fromColumnId: firstColumnId,
-					toColumnId: firstColumnId,
-				});
+			const cardPayload = {
+				cardId: firstCardId,
+				oldIndex: 0,
+				newIndex: 1,
+				fromColumnId: firstColumnId,
+				fromColumnIndex: 0,
+				toColumnId: firstColumnId,
+				toColumnIndex: 0,
+			};
 
-				await boardStore.moveCardSuccess(cardPayload);
+			await boardStore.moveCardSuccess(cardPayload);
 
-				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
+			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
 
-				expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
-					secondCardId,
-					firstCardId,
-					thirdCardId,
-				]);
-			});
+			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+				secondCardId,
+				firstCardId,
+				thirdCardId,
+			]);
+		});
 
-			it("should move a card in the same column when forceNextTick is true", async () => {
-				const { boardStore, firstColumn, cards } = setup();
+		it("should move a card to another column", async () => {
+			const { boardStore, firstColumn, secondColumn, cards } = setup();
 
-				const [firstCardId, secondCardId, thirdCardId] = cards.map(
-					(card) => card.cardId
-				);
-				const firstColumnId = firstColumn.id;
+			const [firstCardId, secondCardId, thirdCardId] = cards.map(
+				(card) => card.cardId
+			);
 
-				const cardPayload = createCardPayload({
-					cardId: firstCardId,
-					oldIndex: 0,
-					newIndex: 1,
-					fromColumnId: firstColumnId,
-					toColumnId: firstColumnId,
-					forceNextTick: true,
-				});
+			const cardPayload = {
+				cardId: secondCardId,
+				oldIndex: 1,
+				newIndex: 0,
+				fromColumnId: firstColumn.id,
+				fromColumnIndex: 0,
+				toColumnId: secondColumn.id,
+				toColumnIndex: 1,
+			};
 
-				await boardStore.moveCardSuccess(cardPayload);
+			await boardStore.moveCardSuccess(cardPayload);
 
-				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
+			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
+			const secondColumnCardsAfterMove = boardStore.board?.columns[1].cards;
 
-				expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
-					secondCardId,
-					firstCardId,
-					thirdCardId,
-				]);
-			});
+			expect(secondColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+				secondCardId,
+			]);
 
-			it("should move a card to another column", async () => {
-				const { boardStore, firstColumn, secondColumn, cards } = setup();
-
-				const [firstCardId, secondCardId, thirdCardId] = cards.map(
-					(card) => card.cardId
-				);
-
-				const cardPayload: CardMove = {
-					cardId: secondCardId,
-					oldIndex: 1,
-					newIndex: 0,
-					fromColumnId: firstColumn.id,
-					toColumnId: secondColumn.id,
-				};
-
-				await boardStore.moveCardSuccess(cardPayload);
-
-				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
-				const secondColumnCardsAfterMove = boardStore.board?.columns[1].cards;
-
-				expect(secondColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
-					secondCardId,
-				]);
-
-				expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
-					firstCardId,
-					thirdCardId,
-				]);
-			});
-
-			it("should move a card to another column with columnDelta", async () => {
-				const { boardStore, firstColumn, cards } = setup();
-
-				const [firstCardId, secondCardId, thirdCardId] = cards.map(
-					(card) => card.cardId
-				);
-
-				const cardPayload: CardMove = {
-					cardId: secondCardId,
-					oldIndex: 1,
-					newIndex: 0,
-					fromColumnId: firstColumn.id,
-					columnDelta: 1,
-				};
-
-				await boardStore.moveCardSuccess(cardPayload);
-
-				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
-				const secondColumnCardsAfterMove = boardStore.board?.columns[1].cards;
-
-				expect(secondColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
-					secondCardId,
-				]);
-
-				expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
-					firstCardId,
-					thirdCardId,
-				]);
-			});
+			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+				firstCardId,
+				thirdCardId,
+			]);
 		});
 	});
 
@@ -820,8 +689,9 @@ describe("BoardStore", () => {
 					oldIndex: 0,
 					newIndex: 1,
 					fromColumnId: boardStore.board?.columns[0].id ?? "columnId",
+					fromColumnIndex: 0,
 					toColumnId: boardStore.board?.columns[0].id ?? "columnId",
-					columnDelta: 0,
+					toColumnIndex: 0,
 					forceNextTick: false,
 				};
 
@@ -839,7 +709,9 @@ describe("BoardStore", () => {
 					oldIndex: 0,
 					newIndex: 1,
 					fromColumnId: boardStore.board?.columns[0].id ?? "columnId",
+					fromColumnIndex: 0,
 					toColumnId: boardStore.board?.columns[0].id ?? "columnId",
+					toColumnIndex: 0,
 					columnDelta: 0,
 					forceNextTick: false,
 				};
