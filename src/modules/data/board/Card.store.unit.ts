@@ -110,9 +110,6 @@ describe("CardStore", () => {
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
 		const elements = richTextElementResponseFactory.buildList(3);
-		// cards[0].elements.push(elements[0]);
-		// cards[0].elements.push(elements[1]);
-		// cards[0].elements.push(elements[2]);
 		cardStore.fetchCardSuccess({ cards });
 
 		return { cardStore, cardId: cards[0].id, elements };
