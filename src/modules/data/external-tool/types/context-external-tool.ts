@@ -10,8 +10,6 @@ export interface ContextExternalToolSave {
 
 	parameters: ToolParameterEntry[];
 
-	toolVersion: number;
-
 	displayName?: string;
 }
 

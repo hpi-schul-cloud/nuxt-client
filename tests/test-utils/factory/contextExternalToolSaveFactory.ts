@@ -8,6 +8,5 @@ export const contextExternalToolSaveFactory =
 		contextType: ToolContextType.Course,
 		schoolToolId: `school-external-tool-${sequence}`,
 		displayName: `Tool ${sequence}`,
-		toolVersion: 1,
 		parameters: [],
 	}));

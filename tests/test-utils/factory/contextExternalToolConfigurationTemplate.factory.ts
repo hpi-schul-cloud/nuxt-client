@@ -7,5 +7,4 @@ export const contextExternalToolConfigurationTemplateFactory =
 		schoolExternalToolId: `schoolExternalTool${sequence}`,
 		name: "Template Name",
 		parameters: [],
-		version: 1,
 	}));

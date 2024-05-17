@@ -10,5 +10,4 @@ export const schoolExternalToolResponseFactory =
 		name: `SchoolExternalTool${sequence}`,
 		status: schoolExternalToolConfigurationStatusResponseFactory.build(),
 		parameters: [],
-		toolVersion: 1,
 	}));

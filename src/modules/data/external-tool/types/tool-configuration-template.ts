@@ -8,8 +8,6 @@ export interface ExternalToolConfigurationTemplate {
 	logoUrl?: string;
 
 	parameters: ToolParameter[];
-
-	version: number;
 }
 
 export interface SchoolExternalToolConfigurationTemplate
