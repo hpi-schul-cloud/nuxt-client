@@ -32,7 +32,6 @@ export class SchoolExternalToolMapper {
 				(parameter): ToolParameter =>
 					ExternalToolMapper.mapToToolParameter(parameter)
 			),
-			version: response.version,
 			isDeactivated: false,
 		};
 
@@ -61,7 +60,6 @@ export class SchoolExternalToolMapper {
 				(parameter): CustomParameterEntryParam =>
 					CommonToolMapper.mapToCustomParameterEntryParam(parameter)
 			),
-			version: schoolExternalTool.version,
 			isDeactivated: schoolExternalTool.isDeactivated,
 		};
 
@@ -76,7 +74,6 @@ export class SchoolExternalToolMapper {
 			name: response.name,
 			schoolId: response.schoolId,
 			toolId: response.toolId,
-			version: response.toolVersion,
 			status: this.mapSchoolToolConfigurationStatus(response.status),
 			parameters: response.parameters.map(
 				(parameter): ToolParameterEntry =>
@@ -97,7 +94,6 @@ export class SchoolExternalToolMapper {
 		const mapped: SchoolExternalToolSave = {
 			schoolId: schoolId,
 			toolId: template.externalToolId,
-			version: template.version,
 			parameters: parameterConfiguration,
 			isDeactivated,
 		};

@@ -20,7 +20,7 @@
 				/>
 			</div>
 			<VDivider />
-			<div class="py-3">
+			<div class="pt-3">
 				<SidebarItem
 					v-for="link in legalItems"
 					:key="link.title"
@@ -28,12 +28,20 @@
 				/>
 			</div>
 		</VList>
+		<div data-testid="sidebar-instance-name" class="ml-4 pb-3 text-disabled">
+			&#169; {{ currentYear }} {{ theme.name }}
+		</div>
 	</VNavigationDrawer>
 </template>
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	THEME_KEY,
+} from "@/utils/inject";
 import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
@@ -41,6 +49,8 @@ import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const theme = injectStrict(THEME_KEY);
 
 const { pageLinks, legalLinks, metaLinks } = useSidebarItems();
 
@@ -59,15 +69,27 @@ const userHasPermission = (item: SidebarSingleItem | SidebarGroupItem) => {
 	);
 };
 
+const hasFeatureEnabled = (item: SidebarSingleItem | SidebarGroupItem) => {
+	if (!item.feature) {
+		return true;
+	}
+
+	return envConfigModule.getEnv[item.feature] === (item.featureValue ?? true);
+};
+
 const getItemsForUser = (items: SidebarItems) => {
 	const pageItems = items.filter((item) => {
 		if (isSidebarCategoryItem(item)) {
 			item.children = item.children.filter((child) => {
-				return userHasPermission(child);
+				const childHasFeature = hasFeatureEnabled(child);
+
+				return userHasPermission(child) && childHasFeature;
 			});
 		}
 
-		return userHasPermission(item);
+		const categoryHasFeature = hasFeatureEnabled(item);
+
+		return userHasPermission(item) && categoryHasFeature;
 	});
 
 	return pageItems;
@@ -80,4 +102,6 @@ const metaItems = computed(
 const legalItems = computed(
 	() => getItemsForUser(legalLinks.value) as SidebarSingleItem[]
 );
+
+const currentYear = computed(() => new Date().getFullYear());
 </script>
