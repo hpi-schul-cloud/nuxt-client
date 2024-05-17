@@ -1,4 +1,5 @@
 import { MediaBoardColors } from "@/serverApi/v3";
+import { ComponentProps } from "@/types/vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -10,9 +11,11 @@ import colors from "vuetify/lib/util/colors.mjs";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
 describe("MediaBoardLineMenu", () => {
-	const lineId = "lineId";
-
-	const getWrapper = () => {
+	const getWrapper = (
+		props: ComponentProps<typeof MediaBoardLineMenu> = {
+			lineId: "lineId",
+		}
+	) => {
 		const wrapper = mount(MediaBoardLineMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -21,9 +24,7 @@ describe("MediaBoardLineMenu", () => {
 					VColorPicker: true,
 				},
 			},
-			props: {
-				lineId,
-			},
+			props,
 		});
 
 		return {
@@ -35,7 +36,7 @@ describe("MediaBoardLineMenu", () => {
 		jest.resetAllMocks();
 	});
 
-	describe("when opening the menu", () => {
+	describe("when opening the menu for a line", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper();
 
@@ -49,8 +50,29 @@ describe("MediaBoardLineMenu", () => {
 
 			const menuItems = wrapper.findAllComponents(VListItem);
 
+			expect(menuItems.length).toEqual(3);
+			expect(menuItems[0].text()).toEqual("common.actions.rename");
+			expect(menuItems[1].text()).toEqual("common.actions.pickColor");
+			expect(menuItems[2].text()).toEqual("common.actions.remove");
+		});
+	});
+
+	describe("when opening the menu for the available line", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper({ lineId: undefined });
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should have all menu points", async () => {
+			const { wrapper } = setup();
+
+			const menuItems = wrapper.findAllComponents(VListItem);
+
 			expect(menuItems.length).toEqual(1);
-			expect(menuItems[0].text()).toEqual("common.actions.remove");
+			expect(menuItems[0].text()).toEqual("common.actions.pickColor");
 		});
 	});
 
@@ -63,7 +85,7 @@ describe("MediaBoardLineMenu", () => {
 			);
 			await deleteListItem.trigger("click");
 
-			expect(wrapper.emitted("delete:line")).toEqual([[lineId]]);
+			expect(wrapper.emitted("delete:line")).toEqual([["lineId"]]);
 		});
 	});
 
@@ -76,7 +98,7 @@ describe("MediaBoardLineMenu", () => {
 			);
 			await renameListItem.trigger("click");
 
-			expect(wrapper.emitted("rename-title")).toEqual([[lineId]]);
+			expect(wrapper.emitted("rename-title")).toEqual([["lineId"]]);
 		});
 	});
 
