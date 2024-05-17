@@ -14,7 +14,6 @@
 					:color="line.backgroundColor"
 					v-model:collapsed="collapsed"
 					@update:color="$emit('update:line-background-color', $event)"
-					@update:collapsed="onUpdateCollapsed"
 				/>
 			</div>
 			<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
@@ -126,12 +125,6 @@ const isList: Ref<boolean> = computed(
 const lineBackgroundColorHex: Ref<string> = computed(() =>
 	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")
 );
-
-const onUpdateCollapsed = (value: boolean) => {
-	collapsed.value = value;
-
-	emit("update:line-collapsed", value);
-};
 
 const onElementDragEnd = async (event: SortableEvent) => {
 	dragEnd();
