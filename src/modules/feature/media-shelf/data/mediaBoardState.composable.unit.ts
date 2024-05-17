@@ -942,7 +942,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.updateLineBackgroundColor(
 					"lineId",
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 
 				expect(mediaBoardApiMock.updateLineColor).not.toHaveBeenCalled();
@@ -965,7 +965,7 @@ describe("mediaBoardState.composable", () => {
 
 					await composable.updateLineBackgroundColor(
 						"lineId",
-						MediaBoardColors.BLUE
+						MediaBoardColors.Blue
 					);
 
 					expect(mediaBoardApiMock.updateLineColor).not.toHaveBeenCalled();
@@ -977,7 +977,7 @@ describe("mediaBoardState.composable", () => {
 					const composable = useMediaBoardState();
 
 					const line = mediaLineResponseFactory.build({
-						backgroundColor: MediaBoardColors.RED,
+						backgroundColor: MediaBoardColors.Red,
 					});
 					composable.mediaBoard.value = mediaBoardResponseFactory.build({
 						lines: [line],
@@ -994,13 +994,13 @@ describe("mediaBoardState.composable", () => {
 
 					await composable.updateLineBackgroundColor(
 						line.id,
-						MediaBoardColors.BLUE
+						MediaBoardColors.Blue
 					);
 
 					expect(composable.mediaBoard.value?.lines).toContainEqual(
 						expect.objectContaining({
 							id: line.id,
-							backgroundColor: MediaBoardColors.BLUE,
+							backgroundColor: MediaBoardColors.Blue,
 						})
 					);
 				});
@@ -1010,12 +1010,12 @@ describe("mediaBoardState.composable", () => {
 
 					await composable.updateLineBackgroundColor(
 						line.id,
-						MediaBoardColors.BLUE
+						MediaBoardColors.Blue
 					);
 
 					expect(mediaBoardApiMock.updateLineColor).toHaveBeenCalledWith(
 						line.id,
-						MediaBoardColors.BLUE
+						MediaBoardColors.Blue
 					);
 				});
 			});
@@ -1026,7 +1026,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const line = mediaLineResponseFactory.build({
-					backgroundColor: MediaBoardColors.RED,
+					backgroundColor: MediaBoardColors.Red,
 				});
 				composable.mediaBoard.value = mediaBoardResponseFactory.build({
 					lines: [line],
@@ -1051,7 +1051,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.updateLineBackgroundColor(
 					lineId,
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 
 				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
@@ -1062,7 +1062,7 @@ describe("mediaBoardState.composable", () => {
 
 				await composable.updateLineBackgroundColor(
 					lineId,
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 
 				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
@@ -1087,7 +1087,7 @@ describe("mediaBoardState.composable", () => {
 				const { composable } = setup();
 
 				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 
 				expect(
@@ -1111,7 +1111,7 @@ describe("mediaBoardState.composable", () => {
 				const { composable } = setup();
 
 				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 
 				expect(
@@ -1125,7 +1125,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const availableLine = mediaAvailableLineResponseFactory.build({
-					backgroundColor: MediaBoardColors.RED,
+					backgroundColor: MediaBoardColors.Red,
 				});
 				const mediaBoard = mediaBoardResponseFactory.build();
 				composable.availableMediaLine.value = availableLine;
@@ -1142,11 +1142,11 @@ describe("mediaBoardState.composable", () => {
 				const { composable } = setup();
 
 				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 
 				expect(composable.availableMediaLine.value?.backgroundColor).toEqual(
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 			});
 
@@ -1154,12 +1154,12 @@ describe("mediaBoardState.composable", () => {
 				const { composable, mediaBoard } = setup();
 
 				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 
 				expect(mediaBoardApiMock.updateAvailableLineColor).toHaveBeenCalledWith(
 					mediaBoard.id,
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 			});
 		});
@@ -1169,7 +1169,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const availableLine = mediaAvailableLineResponseFactory.build({
-					backgroundColor: MediaBoardColors.RED,
+					backgroundColor: MediaBoardColors.Red,
 				});
 				const mediaBoard = mediaBoardResponseFactory.build();
 				composable.availableMediaLine.value = availableLine;
@@ -1194,7 +1194,7 @@ describe("mediaBoardState.composable", () => {
 				const { composable } = setup();
 
 				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 
 				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalled();
@@ -1204,7 +1204,7 @@ describe("mediaBoardState.composable", () => {
 				const { composable } = setup();
 
 				await composable.updateAvailableLineBackgroundColor(
-					MediaBoardColors.BLUE
+					MediaBoardColors.Blue
 				);
 
 				expect(mediaBoardApiMock.getMediaBoardForUser).toHaveBeenCalled();
