@@ -49,8 +49,9 @@ export type MoveCardRequestPayload = {
 	oldIndex: number;
 	newIndex: number;
 	fromColumnId: string;
+	fromColumnIndex: number;
 	toColumnId?: string;
-	columnDelta?: number;
+	toColumnIndex?: number;
 	forceNextTick?: boolean;
 };
 export type MoveCardSuccessPayload = {
@@ -58,8 +59,9 @@ export type MoveCardSuccessPayload = {
 	oldIndex: number;
 	newIndex: number;
 	fromColumnId: string;
-	toColumnId?: string;
-	columnDelta?: number;
+	fromColumnIndex: number;
+	toColumnId: string;
+	toColumnIndex: number;
 	forceNextTick?: boolean;
 };
 export type MoveCardFailurePayload = {

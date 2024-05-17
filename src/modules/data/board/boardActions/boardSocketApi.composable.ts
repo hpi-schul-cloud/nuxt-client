@@ -108,6 +108,7 @@ export const useBoardSocketApi = () => {
 					boardId: boardStore.board.id,
 				});
 				payload.toColumnId = response.newColumn.id;
+				payload.toColumnIndex = boardStore.getColumnIndex(payload.toColumnId);
 			}
 			emitOnSocket("move-card-request", payload);
 		} catch (err) {

@@ -3,8 +3,6 @@ import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
 import * as BoardActions from "./boardActions";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
-import { CardMove } from "@/types/board/DragAndDrop";
-import { ColumnResponse } from "@/serverApi/v3";
 import {
 	BoardObjectType,
 	ErrorType,
@@ -38,28 +36,6 @@ export const useBoardRestApi = () => {
 	} = useBoardApi();
 
 	const { setEditModeId } = useSharedEditMode();
-
-	const getColumnIndex = (columnId: string | undefined): number => {
-		if (columnId === undefined) return -1;
-		if (boardStore.board === undefined) return -1;
-
-		const columnIndex = boardStore.board?.columns.findIndex(
-			(c) => c.id === columnId
-		);
-
-		if (columnIndex === undefined) return -1;
-		return columnIndex;
-	};
-
-	const getColumnId = (columnIndex: number): string | undefined => {
-		if (boardStore.board === undefined) return;
-		if (columnIndex === undefined) return;
-		if (columnIndex < 0) return;
-		if (columnIndex > boardStore.board.columns.length - 1) return;
-		if (boardStore.board.columns[columnIndex] === undefined) return;
-
-		return boardStore.board.columns[columnIndex].id;
-	};
 
 	const createCardRequest = async (payload: CreateCardRequestPayload) => {
 		if (boardStore.board === undefined) return;
@@ -124,111 +100,32 @@ export const useBoardRestApi = () => {
 		}
 	};
 
-	const getColumnIndices = (
-		fromColumnId: string | undefined,
-		toColumnId: string | undefined,
-		columnDelta: number | undefined
-	) => {
-		const fromColumnIndex = getColumnIndex(fromColumnId);
-
-		const newColumnId: string | undefined =
-			columnDelta === undefined
-				? toColumnId
-				: getColumnId(fromColumnIndex + columnDelta);
-
-		return {
-			fromColumnIndex,
-			toColumnIndex: getColumnIndex(newColumnId),
-			newColumnId,
-		};
-	};
-
-	const isMoveValid = (
-		payload: CardMove,
-		columns: Array<ColumnResponse>,
-		targetColumnIndex: number,
-		fromColumnIndex: number
-	) => {
-		const { newIndex, oldIndex } = payload;
-
-		if (
-			targetColumnIndex === -1 &&
-			payload.columnDelta &&
-			payload.columnDelta <= 0
-		) {
-			return false;
-		}
-
-		const movedInsideColumn = fromColumnIndex === targetColumnIndex;
-		if (movedInsideColumn) {
-			if (
-				(newIndex === oldIndex && fromColumnIndex === targetColumnIndex) || // same position
-				newIndex < 0 || // first card - can't move up
-				newIndex > columns[fromColumnIndex].cards.length - 1 // last card - can't move down
-			)
-				return false;
-		}
-
-		return true;
-	};
-
 	const moveCardRequest = async (
 		payload: MoveCardRequestPayload
 	): Promise<void> => {
 		if (boardStore.board === undefined) return;
 
 		try {
-			const {
-				cardId,
-				newIndex,
-				oldIndex,
-				toColumnId,
-				fromColumnId,
-				columnDelta,
-				forceNextTick,
-			} = payload;
+			const { cardId, newIndex } = payload;
+			let { toColumnId, toColumnIndex } = payload;
 
-			const { fromColumnIndex, toColumnIndex, newColumnId } = getColumnIndices(
-				fromColumnId,
-				toColumnId,
-				columnDelta
-			);
-
-			let targetColumnIndex = toColumnIndex;
-			let targetColumnId = newColumnId;
-
-			if (
-				!isMoveValid(
-					payload,
-					boardStore.board.columns,
-					targetColumnIndex,
-					fromColumnIndex
-				)
-			) {
-				return;
-			}
-
-			if (targetColumnIndex === -1) {
+			if (toColumnId === undefined && toColumnIndex === undefined) {
 				// need to create a new column
 				const newColumn = await createColumnRequest();
 				if (newColumn) {
-					targetColumnId = newColumn.id;
-					targetColumnIndex = getColumnIndex(targetColumnId);
+					toColumnId = newColumn.id;
+					toColumnIndex = boardStore.getLastColumnIndex() + 1;
 				}
 			}
 
-			if (targetColumnId === undefined) return; // shouldn't happen because its either existing or newly created
+			if (toColumnId === undefined || toColumnIndex === undefined) return; // shouldn't happen because its either existing or newly created
 
-			await moveCardCall(cardId, targetColumnId, newIndex);
+			await moveCardCall(cardId, toColumnId, newIndex);
 
 			boardStore.moveCardSuccess({
-				cardId,
-				newIndex,
-				oldIndex,
-				toColumnId: targetColumnId,
-				fromColumnId,
-				columnDelta,
-				forceNextTick,
+				...payload,
+				toColumnId,
+				toColumnIndex,
 			});
 		} catch (error) {
 			handleError(error, {

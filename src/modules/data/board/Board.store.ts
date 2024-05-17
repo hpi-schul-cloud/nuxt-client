@@ -5,8 +5,6 @@ import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
-import { CardMove } from "@/types/board/DragAndDrop";
-import { ColumnResponse } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import {
 	CreateCardRequestPayload,
@@ -18,7 +16,6 @@ import {
 	DisconnectSocketRequestPayload,
 	FetchBoardRequestPayload,
 	FetchBoardSuccessPayload,
-	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
 	MoveColumnRequestPayload,
 	MoveColumnSuccessPayload,
@@ -43,6 +40,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const { setEditModeId } = useSharedEditMode();
 
+	const getLastColumnIndex = () => board.value!.columns.length - 1;
+
 	const getColumnIndex = (columnId: string | undefined): number => {
 		if (columnId === undefined) return -1;
 		if (board.value === undefined) return -1;
@@ -60,6 +59,20 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (board.value.columns[columnIndex] === undefined) return;
 
 		return board.value.columns[columnIndex].id;
+	};
+
+	const getCardLocation = (cardId: string) => {
+		if (!board.value) return;
+
+		const columnIndex = board.value.columns.findIndex(
+			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
+		);
+		if (columnIndex === -1) return undefined;
+
+		const column = columnIndex ? board.value?.columns[columnIndex] : undefined;
+		const columnId = column?.id;
+		const cardIndex = column?.cards.findIndex((c) => c.cardId === cardId);
+		return { columnIndex, columnId: columnId!, cardIndex: cardIndex! };
 	};
 
 	const setBoard = (newBoard: Board | undefined) => {
@@ -127,10 +140,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 		const columnId = payload.columnId;
 		const columnIndex = getColumnIndex(columnId);
-		if (columnIndex < 0) {
-			return;
+		if (columnIndex !== -1) {
+			board.value.columns.splice(columnIndex, 1);
 		}
-		board.value.columns.splice(columnIndex, 1);
 	};
 
 	const updateBoardTitleRequest = async (
@@ -157,7 +169,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 		const { columnId, newTitle } = payload;
 		const columnIndex = getColumnIndex(columnId);
-		if (columnIndex > -1) {
+		if (columnIndex !== -1) {
 			board.value.columns[columnIndex].title = newTitle;
 		}
 	};
@@ -201,51 +213,26 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns.splice(addedIndex, 0, column);
 	};
 
-	const getColumnIndices = (
-		fromColumnId: string | undefined,
-		toColumnId: string | undefined,
-		columnDelta: number | undefined
-	) => {
-		const fromColumnIndex = getColumnIndex(fromColumnId);
-		const newColumnId: string | undefined =
-			columnDelta === undefined
-				? toColumnId
-				: getColumnId(fromColumnIndex + columnDelta);
+	const moveCardToNewColumn = async (cardId: string) => {
+		const cardLocation = getCardLocation(cardId);
+		if (cardLocation === undefined) return;
 
-		return { fromColumnIndex, toColumnIndex: getColumnIndex(newColumnId) };
+		const {
+			columnIndex: fromColumnIndex,
+			columnId: fromColumnId,
+			cardIndex: oldIndex,
+		} = cardLocation;
+
+		await socketOrRest.moveCardRequest({
+			cardId,
+			fromColumnId,
+			fromColumnIndex,
+			oldIndex,
+			newIndex: 0,
+		});
 	};
 
-	const isMoveValid = (
-		payload: CardMove,
-		columns: Array<ColumnResponse>,
-		targetColumnIndex: number,
-		fromColumnIndex: number
-	) => {
-		const { cardId, newIndex, oldIndex } = payload;
-		if (
-			cardId === undefined ||
-			targetColumnIndex === undefined ||
-			targetColumnIndex < 0
-		) {
-			return false;
-		} // ensure values are set or in valid range
-
-		const movedInsideColumn = fromColumnIndex === targetColumnIndex;
-		if (movedInsideColumn) {
-			if (
-				(newIndex === oldIndex && fromColumnIndex === targetColumnIndex) || // same position
-				newIndex < 0 || // first card - can't move up
-				newIndex > columns[fromColumnIndex].cards.length - 1 // last card - can't move down
-			)
-				return false;
-		}
-
-		return true;
-	};
-
-	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
-		await socketOrRest.moveCardRequest(payload);
-	};
+	const moveCardRequest = socketOrRest.moveCardRequest;
 
 	const moveCardSuccess = async (payload: MoveCardSuccessPayload) => {
 		if (!board.value) return;
@@ -253,30 +240,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 		const {
 			newIndex,
 			oldIndex,
-			toColumnId,
-			fromColumnId,
-			columnDelta,
 			forceNextTick,
+			fromColumnIndex,
+			toColumnIndex,
 		} = payload;
-
-		const { fromColumnIndex, toColumnIndex } = getColumnIndices(
-			fromColumnId,
-			toColumnId,
-			columnDelta
-		);
-
-		const targetColumnIndex = toColumnIndex ?? board.value.columns.length - 1;
-
-		if (
-			!isMoveValid(
-				payload,
-				board.value.columns,
-				targetColumnIndex,
-				fromColumnIndex
-			)
-		) {
-			return;
-		}
 
 		const item = board.value.columns[fromColumnIndex].cards.splice(
 			oldIndex,
@@ -291,9 +258,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 			await nextTick();
 		}
 
-		board.value.columns[targetColumnIndex].cards =
-			board.value.columns[targetColumnIndex].cards ?? [];
-		board.value.columns[targetColumnIndex].cards.splice(newIndex, 0, item);
+		board.value.columns[toColumnIndex].cards =
+			board.value.columns[toColumnIndex].cards ?? [];
+		board.value.columns[toColumnIndex].cards.splice(newIndex, 0, item);
 	};
 
 	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
@@ -317,6 +284,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 	return {
 		board,
 		isLoading,
+		getColumnIndex,
+		getColumnId,
+		getLastColumnIndex,
 		setBoard,
 		setLoading,
 		createCardRequest,
@@ -327,6 +297,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		deleteColumnRequest,
 		deleteColumnSuccess,
 		disconnectSocketRequest,
+		moveCardToNewColumn,
 		moveCardRequest,
 		moveCardSuccess,
 		moveColumnRequest,
