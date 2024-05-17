@@ -15,7 +15,9 @@ export default {
 	"common.actions.invite": "Kurslink versenden",
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
+	"common.actions.pickColor": "Hintergrundfarbe auswählen",
 	"common.actions.remove": "Löschen",
+	"common.actions.rename": "Umbenennen",
 	"common.actions.save": "Speichern",
 	"common.actions.scrollToTop": "Nach oben scrollen",
 	"common.actions.share": "Teilen",
@@ -1635,4 +1637,6 @@ export default {
 	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
 	"feature.media-shelf.line.title": "Abschnitt",
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
+	"feature.media-shelf.layout.list": "Zeilen",
+	"feature.media-shelf.layout.grid": "Raster",
 };

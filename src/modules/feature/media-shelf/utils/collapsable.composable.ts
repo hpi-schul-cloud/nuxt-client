@@ -1,8 +1,9 @@
-import { computed, ref, Ref, WritableComputedRef } from "vue";
+import { computed, Ref, WritableComputedRef } from "vue";
 
-export const useCollapsableState = (expansionPanelValue: string) => {
-	const collapsed: Ref<boolean> = ref(false);
-
+export const useCollapsableState = (
+	expansionPanelValue: string,
+	collapsed: Ref<boolean>
+) => {
 	const openItems: WritableComputedRef<string[]> = computed({
 		get(): string[] {
 			return collapsed.value ? [] : [expansionPanelValue];
@@ -13,7 +14,6 @@ export const useCollapsableState = (expansionPanelValue: string) => {
 	});
 
 	return {
-		collapsed,
 		openItems,
 	};
 };

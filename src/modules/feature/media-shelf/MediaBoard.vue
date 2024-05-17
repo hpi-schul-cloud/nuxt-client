@@ -1,7 +1,13 @@
 <template>
 	<div class="d-flex flex-column flex-shrink-1">
 		<div>
-			<MediaBoardAvailableLine @create:element="onCreateElement" />
+			<MediaBoardAvailableLine
+				:line="availableMediaLine"
+				:layout="board.layout"
+				@create:element="createElement"
+				@update:line-background-color="updateAvailableLineBackgroundColor"
+				@update:line-collapsed="updateAvailableLineCollapsed"
+			/>
 			<Sortable
 				:list="board.lines"
 				item-key="id"
@@ -21,7 +27,7 @@
 					forceFallback: true,
 					bubbleScroll: true,
 				}"
-				class="d-flex flex-column flex-shrink-1 ga-2"
+				class="d-flex flex-column flex-shrink-1 ga-4 mb-4"
 				@end="onLineDragEnd"
 			>
 				<template #item="{ element, index }">
@@ -30,36 +36,35 @@
 						:index="index"
 						:key="element.id"
 						:line="element"
-						@update:line-title="onUpdateLineTitle(element.id, $event)"
-						@update:element-position="onUpdateElementPosition"
-						@delete:line="onDeleteLine"
-						@delete:element="onDeleteElement"
+						:layout="board.layout"
+						@update:line-background-color="
+							updateLineBackgroundColor(element.id, $event)
+						"
+						@update:line-collapsed="updateLineCollapsed(element.id, $event)"
+						@update:line-title="updateLineTitle(element.id, $event)"
+						@update:element-position="moveElement"
+						@delete:line="deleteLine"
+						@delete:element="deleteElement"
 					/>
 				</template>
 			</Sortable>
 			<MediaBoardLineGhost
 				v-if="board.lines.length < lineLimit"
-				@create:line="onCreateLine"
+				@create:line="createLine"
 			/>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { MediaBoardResponse } from "@/serverApi/v3";
+import { MediaAvailableLineResponse, MediaBoardResponse } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { PropType } from "vue";
-import {
-	ElementCreate,
-	ElementMove,
-	lineLimit,
-	LineMove,
-	useSharedMediaBoardState,
-} from "./data";
+import { lineLimit, LineMove, useSharedMediaBoardState } from "./data";
 import { useSharedEditMode } from "./editMode.composable";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
@@ -70,12 +75,20 @@ defineProps({
 		type: Object as PropType<MediaBoardResponse>,
 		required: true,
 	},
+	availableMediaLine: {
+		type: Object as PropType<MediaAvailableLineResponse>,
+		required: true,
+	},
 });
 
 const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 const {
 	updateLineTitle,
+	updateLineBackgroundColor,
+	updateAvailableLineBackgroundColor,
+	updateLineCollapsed,
+	updateAvailableLineCollapsed,
 	createLine,
 	moveLine,
 	moveElement,
@@ -85,26 +98,6 @@ const {
 } = useSharedMediaBoardState();
 
 const { isInEditMode } = useSharedEditMode();
-
-const onUpdateLineTitle = (lineId: string, newTitle: string) => {
-	updateLineTitle(lineId, newTitle);
-};
-
-const onCreateLine = async () => {
-	await createLine();
-};
-
-const onCreateElement = async (createOptions: ElementCreate) => {
-	await createElement(createOptions);
-};
-
-const onDeleteLine = (lineId: string) => {
-	deleteLine(lineId);
-};
-
-const onDeleteElement = (elementId: string) => {
-	deleteElement(elementId);
-};
 
 const onLineDragEnd = async (event: SortableEvent) => {
 	const { newIndex, oldIndex, item } = event;
@@ -124,10 +117,6 @@ const onLineDragEnd = async (event: SortableEvent) => {
 
 		await moveLine(lineMove);
 	}
-};
-
-const onUpdateElementPosition = async (cardMove: ElementMove) => {
-	await moveElement(cardMove);
 };
 </script>
 
@@ -156,7 +145,7 @@ const onUpdateElementPosition = async (cardMove: ElementMove) => {
 
 /* Track */
 .scrollable-line::-webkit-scrollbar-track {
-	background: white;
+	background: transparent;
 	border: none;
 }
 
@@ -165,6 +154,7 @@ const onUpdateElementPosition = async (cardMove: ElementMove) => {
 	background-color: transparent;
 	border-radius: 5px;
 }
+
 .line-drag-handle:hover .scrollable-line::-webkit-scrollbar-thumb {
 	background-color: rgba(var(--v-theme-on-surface), 0.6);
 	border-radius: 5px;
