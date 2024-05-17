@@ -134,7 +134,6 @@ describe("ExternalToolSection", () => {
 				parameters: [],
 				name: firstToolName,
 				status: schoolToolConfigurationStatusFactory.build(),
-				version: 1,
 				isDeactivated: false,
 			});
 
@@ -150,7 +149,6 @@ describe("ExternalToolSection", () => {
 						status: schoolToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 						}),
-						version: 1,
 						isDeactivated: false,
 					},
 					{
@@ -162,7 +160,6 @@ describe("ExternalToolSection", () => {
 						status: schoolToolConfigurationStatusFactory.build({
 							isDeactivated: true,
 						}),
-						version: 1,
 						isDeactivated: true,
 					},
 				],
@@ -319,7 +316,6 @@ describe("ExternalToolSection", () => {
 									parameters: [],
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
-									version: 1,
 									isDeactivated: false,
 								},
 							],
@@ -352,7 +348,6 @@ describe("ExternalToolSection", () => {
 									parameters: [],
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
-									version: 1,
 									isDeactivated: false,
 								},
 							],
@@ -387,7 +382,8 @@ describe("ExternalToolSection", () => {
 				wrapper.vm.itemToDelete = {
 					id: "id",
 					name: expectedName,
-					statusText: schoolToolConfigurationStatusFactory.build(),
+					externalToolId: "externalToolId",
+					statusText: "statusText",
 					isOutdated: false,
 					isDeactivated: false,
 				};
