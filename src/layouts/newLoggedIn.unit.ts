@@ -49,7 +49,7 @@ const setup = () => {
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
 				[THEME_KEY.valueOf()]: {
-					name: "nbc",
+					name: SchulcloudTheme.N21,
 				},
 			},
 			stubs: {

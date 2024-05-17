@@ -47,7 +47,7 @@ const setup = (permissions?: string[]) => {
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
 				[THEME_KEY.valueOf()]: {
-					name: "default",
+					name: SchulcloudTheme.Default,
 				},
 			},
 		},
