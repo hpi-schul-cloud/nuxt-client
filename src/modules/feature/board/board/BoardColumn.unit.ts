@@ -1,9 +1,10 @@
 import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
+	envsFactory,
 } from "@@/tests/test-utils/factory";
 import { shallowMount } from "@vue/test-utils";
-import { useBoardPermissions } from "@data-board";
+import { useBoardPermissions, useBoardStore } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
@@ -16,13 +17,36 @@ import {
 } from "@@/tests/test-utils/setup";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { envConfigModule, notifierModule } from "@/store";
+import { createTestingPinia } from "@pinia/testing";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardNotifier } from "@util-board";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
 
 const { isDragging, dragEnd } = useDragAndDrop();
 
-jest.mock("@data-board");
+jest.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
+jest.mock("@util-board");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
 describe("BoardColumn", () => {
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
+	beforeEach(() => {
+		setupStores({ envConfigModule: EnvConfigModule });
+		const envs = envsFactory.build({
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
+		});
+		envConfigModule.setEnvs(envs);
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+	});
+
 	const cards = cardSkeletonResponseFactory.buildList(3);
 	const column = columnResponseFactory.build({
 		cards,
@@ -39,7 +63,11 @@ describe("BoardColumn", () => {
 
 		const wrapper = shallowMount(BoardColumnVue, {
 			global: {
-				plugins: [createTestingI18n(), createTestingVuetify()],
+				plugins: [
+					createTestingI18n(),
+					createTestingVuetify(),
+					createTestingPinia(),
+				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
@@ -52,6 +80,8 @@ describe("BoardColumn", () => {
 				isListBoard: false,
 			},
 		});
+
+		mockedPiniaStoreTyping(useBoardStore);
 
 		return { wrapper };
 	};
