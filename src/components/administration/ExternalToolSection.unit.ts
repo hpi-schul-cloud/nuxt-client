@@ -382,7 +382,8 @@ describe("ExternalToolSection", () => {
 				wrapper.vm.itemToDelete = {
 					id: "id",
 					name: expectedName,
-					statusText: schoolToolConfigurationStatusFactory.build(),
+					externalToolId: "externalToolId",
+					statusText: "statusText",
 					isOutdated: false,
 					isDeactivated: false,
 				};
