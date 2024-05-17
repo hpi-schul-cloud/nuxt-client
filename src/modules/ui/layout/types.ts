@@ -1,3 +1,5 @@
+import { ConfigResponse } from "@/serverApi/v3";
+
 export type ExternalLink = {
 	href: string;
 	to?: never;
@@ -17,6 +19,8 @@ export type SidebarItemBaseData = {
 	title: string;
 	testId: string;
 	permissions?: string[];
+	feature?: keyof ConfigResponse;
+	featureValue?: string | number | boolean;
 };
 
 export type SidebarSingleItem = SidebarItemBaseData &
