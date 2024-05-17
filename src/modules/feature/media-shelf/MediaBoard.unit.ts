@@ -115,13 +115,13 @@ describe("MediaBoard", () => {
 
 			availableLine.vm.$emit(
 				"update:line-background-color",
-				MediaBoardColors.RED
+				MediaBoardColors.Red
 			);
 			await nextTick();
 
 			expect(
 				useSharedMediaBoardStateMock.updateAvailableLineBackgroundColor
-			).toHaveBeenCalledWith(MediaBoardColors.RED);
+			).toHaveBeenCalledWith(MediaBoardColors.Red);
 		});
 	});
 
@@ -191,12 +191,12 @@ describe("MediaBoard", () => {
 
 			const mediaLine = wrapper.findComponent(MediaBoardLine);
 
-			mediaLine.vm.$emit("update:line-background-color", MediaBoardColors.RED);
+			mediaLine.vm.$emit("update:line-background-color", MediaBoardColors.Red);
 			await nextTick();
 
 			expect(
 				useSharedMediaBoardStateMock.updateLineBackgroundColor
-			).toHaveBeenCalledWith(expect.any(String), MediaBoardColors.RED);
+			).toHaveBeenCalledWith(expect.any(String), MediaBoardColors.Red);
 		});
 	});
 
