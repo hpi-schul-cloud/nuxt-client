@@ -1,9 +1,9 @@
-import { mount } from "@vue/test-utils";
-import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 
 describe("ExternalToolSelectionRow", () => {
 	const setup = (maxHeight?: number, maxWidth?: number) => {
@@ -16,7 +16,6 @@ describe("ExternalToolSelectionRow", () => {
 					logoUrl: "expectedLogoUrl",
 					name: "expectedName",
 					externalToolId: "expectedExternalToolId",
-					version: 1,
 					parameters: [],
 				},
 				maxHeight: maxHeight,

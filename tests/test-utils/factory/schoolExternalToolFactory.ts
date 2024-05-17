@@ -1,5 +1,5 @@
-import { Factory } from "fishery";
 import { SchoolExternalTool } from "@/store/external-tool";
+import { Factory } from "fishery";
 import { schoolToolConfigurationStatusFactory } from "./schoolExternalToolConfigurationFactory";
 
 export const schoolExternalToolFactory = Factory.define<SchoolExternalTool>(
@@ -10,7 +10,6 @@ export const schoolExternalToolFactory = Factory.define<SchoolExternalTool>(
 		name: "name",
 		parameters: [],
 		status: schoolToolConfigurationStatusFactory.build(),
-		version: 1,
 		isDeactivated: false,
 	})
 );
