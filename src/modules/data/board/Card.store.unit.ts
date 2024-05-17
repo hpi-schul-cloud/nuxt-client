@@ -17,7 +17,7 @@ import {
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { ContentElementType } from "@/serverApi/v3";
+import { ContentElementType, RichTextElementContent } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { drawingContentElementResponseFactory } from "@@/tests/test-utils/factory/drawingContentElementResponseFactory";
 
@@ -110,9 +110,9 @@ describe("CardStore", () => {
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
 		const elements = richTextElementResponseFactory.buildList(3);
-		cards[0].elements.push(elements[0]);
-		cards[0].elements.push(elements[1]);
-		cards[0].elements.push(elements[2]);
+		// cards[0].elements.push(elements[0]);
+		// cards[0].elements.push(elements[1]);
+		// cards[0].elements.push(elements[2]);
 		cardStore.fetchCardSuccess({ cards });
 
 		return { cardStore, cardId: cards[0].id, elements };
@@ -491,6 +491,8 @@ describe("CardStore", () => {
 		it("should delete element", async () => {
 			const { cardStore, cardId, elements } = setup();
 
+			cardStore.cards[cardId].elements.push(...elements);
+
 			const length = cardStore.cards[cardId].elements.length;
 			const elementId = elements[0].id;
 			await cardStore.deleteElementSuccess({ cardId, elementId });
@@ -501,12 +503,45 @@ describe("CardStore", () => {
 
 	describe("addTextAfterTitle", () => {
 		it("should add text after title", async () => {
-			const { cardStore, cardId } = setup();
-
-			const length = cardStore.cards[cardId].elements.length;
+			const { cardStore, cardId, elements } = setup();
+			cardStore.cards[cardId].elements.push(...elements);
 			await cardStore.addTextAfterTitle(cardId);
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(length + 1);
+			const expectedCall = {
+				type: cardStore.cards[cardId].elements[0].type,
+				cardId,
+				toPosition: 0,
+			};
+
+			expect(
+				mockedCardRestApiActions.createElementRequest
+			).toHaveBeenCalledWith(expectedCall);
+		});
+	});
+
+	describe("updateElementSuccess", () => {
+		it("should update element", async () => {
+			const { cardStore, cardId, elements } = setup();
+			cardStore.cards[cardId].elements.push(...elements);
+
+			const newElement = {
+				id: elements[0].id,
+				content: {
+					...elements[0].content,
+				},
+			};
+
+			await cardStore.updateElementSuccess({
+				elementId: "newElementId",
+				data: {
+					type: elements[0].type,
+					content: newElement.content as RichTextElementContent,
+				},
+			});
+
+			expect(cardStore.cards[cardId].elements[0].content).toEqual(
+				newElement.content
+			);
 		});
 	});
 });
