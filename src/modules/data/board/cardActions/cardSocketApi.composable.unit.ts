@@ -8,8 +8,9 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	CreateElementSuccessPayload,
@@ -32,6 +33,9 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = jest.mocked(
+	useSharedLastCreatedElement
+);
 
 describe("useCardSocketApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
@@ -60,6 +64,11 @@ describe("useCardSocketApi", () => {
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 		jest.useFakeTimers();
+
+		mockUseSharedLastCreatedElement.mockReturnValue({
+			lastCreatedElementId: computed(() => "element-id"),
+			resetLastCreatedElementId: jest.fn(),
+		});
 	});
 
 	afterEach(() => {
@@ -205,6 +214,46 @@ describe("useCardSocketApi", () => {
 			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"delete-element-request",
 				payload
+			);
+		});
+	});
+
+	describe("moveElementRequest", () => {
+		it("should call emitOnSocket with correct parameters", () => {
+			const { moveElementRequest } = useCardSocketApi();
+
+			const payload = {
+				elementId: "elementId",
+				toCardId: "toCardId",
+				toPosition: 0,
+			};
+
+			moveElementRequest(payload);
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"move-element-request",
+				payload
+			);
+		});
+	});
+
+	describe("updateElementRequest", () => {
+		it("should call emitOnSocket with correct parameters", () => {
+			const { updateElementRequest } = useCardSocketApi();
+
+			const element = richTextElementResponseFactory.build();
+
+			updateElementRequest({ element });
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"update-element-request",
+				{
+					elementId: element.id,
+					data: {
+						type: element.type,
+						content: element.content,
+					},
+				}
 			);
 		});
 	});

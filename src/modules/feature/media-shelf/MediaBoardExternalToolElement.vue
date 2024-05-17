@@ -42,7 +42,7 @@ const {
 } = useExternalToolDisplayState();
 const {
 	launchTool,
-	fetchLaunchRequest,
+	fetchContextLaunchRequest,
 	error: launchError,
 } = useExternalToolLaunchState();
 
@@ -62,7 +62,7 @@ const loadExternalToolData = async (
 	element: MediaExternalToolElementResponse
 ): Promise<void> => {
 	await fetchDisplayData(element.content.contextExternalToolId);
-	await fetchLaunchRequest(element.content.contextExternalToolId);
+	await fetchContextLaunchRequest(element.content.contextExternalToolId);
 };
 
 watch(
@@ -104,6 +104,6 @@ const onClick = async () => {
 
 	launchTool();
 
-	await fetchLaunchRequest(props.element.content.contextExternalToolId);
+	await fetchContextLaunchRequest(props.element.content.contextExternalToolId);
 };
 </script>

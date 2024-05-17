@@ -3,7 +3,6 @@ import { ref } from "vue";
 import {
 	envsFactory,
 	mockedPiniaStoreTyping,
-	richTextElementContentFactory,
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -113,7 +112,7 @@ describe("useCardRestApi", () => {
 			cardStore.getCard.mockReturnValue(card);
 
 			const newElementResponse = createMock<
-				AxiosResponse<RichTextElementResponse, any>
+				AxiosResponse<RichTextElementResponse, unknown>
 			>({
 				data: richTextElementResponseFactory.build(),
 			});
@@ -198,6 +197,56 @@ describe("useCardRestApi", () => {
 		});
 	});
 
+	describe("moveElementRequest", () => {
+		it("should not call moveElementSuccess action when card is undefined", async () => {
+			const { cardStore } = setup();
+			const { moveElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(undefined);
+
+			await moveElementRequest({
+				elementId: "elementId",
+				toCardId: "toCardId",
+				toPosition: 0,
+			});
+
+			expect(cardStore.moveElementSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call moveElementSuccess action if the API call is successful", async () => {
+			const { cardStore, card } = setup();
+			const { moveElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(card);
+
+			const payload = {
+				elementId: "elementId",
+				toCardId: "toCardId",
+				toPosition: 0,
+			};
+
+			await moveElementRequest(payload);
+
+			expect(cardStore.moveElementSuccess).toHaveBeenCalledWith(payload);
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			const { cardStore, card } = setup();
+			const { moveElementRequest } = useCardRestApi();
+
+			cardStore.getCard.mockReturnValue(card);
+			mockedBoardApiCalls.moveElementCall.mockRejectedValue({});
+
+			await moveElementRequest({
+				elementId: "elementId",
+				toCardId: "toCardId",
+				toPosition: 0,
+			});
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
 	describe("updateElementRequest", () => {
 		it("should call updateElementSuccess action if the API call is successful", async () => {
 			const { cardStore } = setup();
@@ -206,7 +255,7 @@ describe("useCardRestApi", () => {
 			const element = richTextElementResponseFactory.build();
 
 			const updateElementResponse = createMock<
-				AxiosResponse<RichTextElementResponse, any>
+				AxiosResponse<RichTextElementResponse, unknown>
 			>({
 				data: { id: element.id, content: element.content, type: element.type },
 			});

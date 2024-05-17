@@ -29,7 +29,7 @@ import {
 import { createTestingPinia } from "@pinia/testing";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useBoardNotifier } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -37,6 +37,7 @@ import { CardResponse } from "@/serverApi/v3";
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
@@ -62,6 +63,9 @@ describe("CardHost", () => {
 		ReturnType<typeof useBoardPermissions>
 	>;
 	let mockedBoardPermissions: BoardPermissionChecks;
+	let mockedSharedLastCreatedElementCalls: DeepMocked<
+		ReturnType<typeof useSharedLastCreatedElement>
+	>;
 
 	beforeEach(() => {
 		setupStores({ envConfigModule: EnvConfigModule });
@@ -109,6 +113,11 @@ describe("CardHost", () => {
 
 		mockedBoardPermissions = { ...defaultPermissions };
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
+		mockedSharedLastCreatedElementCalls =
+			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		mockedSharedLastCreatedElement.mockReturnValue(
+			mockedSharedLastCreatedElementCalls
+		);
 	});
 
 	afterEach(() => {
