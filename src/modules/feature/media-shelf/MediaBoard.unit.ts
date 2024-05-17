@@ -1,3 +1,4 @@
+import { MediaBoardColors } from "@/serverApi/v3";
 import { ComponentProps } from "@/types/vue";
 import {
 	mediaAvailableLineResponseFactory,
@@ -19,7 +20,6 @@ import {
 	ElementMove,
 	lineLimit,
 	LineMove,
-	MediaBoardColors,
 	useSharedMediaBoardState,
 } from "./data";
 import MediaBoard from "./MediaBoard.vue";
