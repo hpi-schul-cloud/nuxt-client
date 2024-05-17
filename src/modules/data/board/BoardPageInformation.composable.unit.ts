@@ -39,11 +39,10 @@ describe("BoardPageInformation.composable", () => {
 				name: "Course #1",
 			});
 
-			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(
-				() => useSharedBoardPageInformation()
-			);
+			const { createPageInformation, breadcrumbs, pageTitle, roomId } =
+				mountComposable(() => useSharedBoardPageInformation());
 
-			return { createPageInformation, breadcrumbs, pageTitle };
+			return { createPageInformation, breadcrumbs, pageTitle, roomId };
 		};
 
 		it("should return two breadcrumbs: 1. course page and and 2. course-overview page", async () => {
@@ -64,6 +63,16 @@ describe("BoardPageInformation.composable", () => {
 			await createPageInformation(fakeId);
 
 			expect(pageTitle.value).toContain("Course #1");
+		});
+
+		it("should set room id", async () => {
+			const { createPageInformation, roomId } = setup();
+
+			const fakeId = "abc123-2";
+
+			await createPageInformation(fakeId);
+
+			expect(roomId.value).toEqual("courseId");
 		});
 	});
 
