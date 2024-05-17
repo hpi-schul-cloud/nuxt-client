@@ -749,7 +749,7 @@ export default {
 	"global.topbar.actions.alerts": "Status-Warnung",
 	"global.topbar.actions.contactSupport": "Kontakt",
 	"global.topbar.actions.fullscreen": "Vollbildmodus",
-	"global.topbar.actions.helpSection": "Hilfebereich",
+	"global.topbar.actions.helpSection": "Hilfeartikel",
 	"global.topbar.actions.qrCode": "Seitenlink per QR-Code teilen",
 	"global.topbar.actions.releaseNotes": "Was ist neu?",
 	"global.topbar.actions.training": "Fortbildungen",
