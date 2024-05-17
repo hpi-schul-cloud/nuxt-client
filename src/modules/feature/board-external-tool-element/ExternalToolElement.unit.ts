@@ -188,7 +188,7 @@ describe("ExternalToolElement", () => {
 				await nextTick();
 
 				expect(
-					useExternalToolLaunchStateMock.fetchLaunchRequest
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
 				).toHaveBeenCalledWith("contextExternalToolId");
 			});
 		});
@@ -214,7 +214,7 @@ describe("ExternalToolElement", () => {
 				await nextTick();
 
 				expect(
-					useExternalToolLaunchStateMock.fetchLaunchRequest
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
 				).not.toHaveBeenCalled();
 			});
 		});
@@ -239,7 +239,7 @@ describe("ExternalToolElement", () => {
 				await nextTick();
 
 				expect(
-					useExternalToolLaunchStateMock.fetchLaunchRequest
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
 				).not.toHaveBeenCalled();
 			});
 		});
@@ -285,7 +285,7 @@ describe("ExternalToolElement", () => {
 				await nextTick();
 
 				expect(
-					useExternalToolLaunchStateMock.fetchLaunchRequest
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
 				).not.toHaveBeenCalled();
 			});
 		});
@@ -588,7 +588,7 @@ describe("ExternalToolElement", () => {
 				await nextTick();
 
 				expect(
-					useExternalToolLaunchStateMock.fetchLaunchRequest
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
 				).toHaveBeenCalled();
 			});
 		});
@@ -704,14 +704,14 @@ describe("ExternalToolElement", () => {
 			await nextTick();
 
 			expect(
-				useExternalToolLaunchStateMock.fetchLaunchRequest
+				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalledTimes(1);
 
 			jest.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
 			expect(
-				useExternalToolLaunchStateMock.fetchLaunchRequest
+				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalledTimes(2);
 		});
 	});
