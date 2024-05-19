@@ -153,6 +153,9 @@ describe("useBoardSocketApi", () => {
 				oldIndex: 0,
 				newIndex: 0,
 				fromColumnId: "fromColumnId",
+				fromColumnIndex: 0,
+				toColumnId: "toColumnId",
+				toColumnIndex: 0,
 			};
 
 			dispatch(BoardActions.moveCardSuccess(payload));

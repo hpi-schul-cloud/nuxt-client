@@ -1,3 +1,4 @@
+import { moveCardRequest } from "./../../../data/board/boardActions/boardActions";
 import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
@@ -81,9 +82,9 @@ describe("BoardColumn", () => {
 			},
 		});
 
-		mockedPiniaStoreTyping(useBoardStore);
+		const store = mockedPiniaStoreTyping(useBoardStore);
 
-		return { wrapper };
+		return { wrapper, store };
 	};
 
 	describe("when component is mounted", () => {
@@ -94,8 +95,8 @@ describe("BoardColumn", () => {
 	});
 
 	describe("when a card moved ", () => {
-		it("should emit 'card-position-change'", async () => {
-			const { wrapper } = setup();
+		it("should call 'moveCardRequest' method", async () => {
+			const { wrapper, store } = setup();
 
 			const emitObject = {
 				oldIndex: 0,
@@ -117,35 +118,10 @@ describe("BoardColumn", () => {
 				},
 			};
 
-			const expectedEmitObject = {
-				oldIndex: 0,
-				newIndex: 1,
-				cardId: "card-id",
-				fromColumnId: "from-column-id",
-				toColumnId: "to-column-id",
-			};
-
 			const containerComponent = wrapper.findComponent({ name: "Sortable" });
 			containerComponent.vm.$emit("end", emitObject);
 
-			const emitted = wrapper.emitted("update:card-position") || [[]];
-
-			expect(emitted[0][0]).toStrictEqual(expectedEmitObject);
-		});
-
-		it("should not emit 'card-position-change'", async () => {
-			const { wrapper } = setup();
-			const emitObject = {
-				removedIndex: null,
-				addedIndex: null,
-				payload: column.cards[0],
-			};
-			const containerComponent = wrapper.findComponent({ name: "Sortable" });
-			containerComponent.vm.$emit("drop", emitObject);
-
-			const emitted = wrapper.emitted("update:card-position");
-
-			expect(emitted).toBeUndefined();
+			expect(store.moveCardRequest).toHaveBeenCalled();
 		});
 	});
 
