@@ -106,8 +106,13 @@ export const useBoardRestApi = () => {
 		if (boardStore.board === undefined) return;
 
 		try {
-			const { cardId, newIndex } = payload;
+			const { cardId, newIndex, oldIndex, fromColumnId } = payload;
 			let { toColumnId, toColumnIndex } = payload;
+
+			if (newIndex === oldIndex && toColumnId == fromColumnId) return;
+			if (toColumnId === fromColumnId) {
+				if (newIndex === -1 && oldIndex === 0) return;
+			}
 
 			if (toColumnId === undefined && toColumnIndex === undefined) {
 				// need to create a new column

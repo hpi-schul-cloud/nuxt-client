@@ -32,7 +32,6 @@ import {
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
-import { toRef } from "vue";
 
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
@@ -153,10 +152,10 @@ describe("useBoardSocketApi", () => {
 				cardId: "cardId",
 				oldIndex: 0,
 				newIndex: 0,
-				fromColumnId: "someFromColumnId",
+				fromColumnId: "fromColumnId",
 				fromColumnIndex: 0,
-				toColumnId: "someToColumnId",
-				toColumnIndex: 1,
+				toColumnId: "toColumnId",
+				toColumnIndex: 0,
 			};
 
 			dispatch(BoardActions.moveCardSuccess(payload));
