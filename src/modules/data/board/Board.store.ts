@@ -70,9 +70,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (columnIndex === -1) return undefined;
 
 		const column = board.value.columns[columnIndex];
-		const columnId = column?.id;
-		const cardIndex = column?.cards.findIndex((c) => c.cardId === cardId);
-		return { columnIndex, columnId: columnId!, cardIndex: cardIndex! };
+		const columnId = column.id;
+		const cardIndex = column.cards.findIndex((c) => c.cardId === cardId);
+		return { columnIndex, columnId, cardIndex };
 	};
 
 	const setBoard = (newBoard: Board | undefined) => {
