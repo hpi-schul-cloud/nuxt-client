@@ -114,6 +114,85 @@ describe("BoardStore", () => {
 		jest.resetAllMocks();
 	});
 
+	describe("getLastColumnIndex", () => {
+		it("should return last column index", () => {
+			const { boardStore } = setup();
+
+			const lastColumnIndex = boardStore.getLastColumnIndex();
+
+			expect(lastColumnIndex).toEqual(1);
+		});
+	});
+
+	describe("getColumnIndex", () => {
+		it("should return -1 when columnId is undefined", () => {
+			const { boardStore } = setup();
+
+			const columnIndex = boardStore.getColumnIndex(undefined);
+
+			expect(columnIndex).toEqual(-1);
+		});
+
+		it("should return -1 when board is undefined", () => {
+			const { boardStore } = setup({ createBoard: false });
+
+			const columnIndex = boardStore.getColumnIndex("columnId");
+
+			expect(columnIndex).toEqual(-1);
+		});
+
+		it("should return column index of first column", () => {
+			const { boardStore, firstColumn } = setup();
+
+			const columnIndex = boardStore.getColumnIndex(firstColumn.id);
+
+			expect(columnIndex).toEqual(0);
+		});
+	});
+
+	describe("getColumnId", () => {
+		it("should return undefined when board is undefined", () => {
+			const { boardStore } = setup({ createBoard: false });
+
+			const columnId = boardStore.getColumnId(0);
+
+			expect(columnId).toBeUndefined();
+		});
+
+		it("should return undefined when columnIndex is undefined", () => {
+			const { boardStore } = setup();
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const columnId = boardStore.getColumnId(undefined as any);
+
+			expect(columnId).toBeUndefined();
+		});
+
+		it("should return undefined when columnIndex is negative", () => {
+			const { boardStore } = setup();
+
+			const columnId = boardStore.getColumnId(-1);
+
+			expect(columnId).toBeUndefined();
+		});
+
+		it("should return undefined when columnIndex is greater than columns length", () => {
+			const { boardStore } = setup();
+
+			const columnId = boardStore.getColumnId(2);
+
+			expect(columnId).toBeUndefined();
+		});
+
+		it("should return column id of first column", () => {
+			const { boardStore, firstColumn } = setup();
+
+			const columnId = boardStore.getColumnId(0);
+
+			expect(columnId).toEqual(firstColumn.id);
+		});
+	});
+
 	describe("setBoard", () => {
 		it("should set board", () => {
 			const { boardStore } = setup();
@@ -382,6 +461,56 @@ describe("BoardStore", () => {
 		});
 	});
 
+	describe("moveCardToNewColumn", () => {
+		it("should not call moveCardRequest when board value is undefined", async () => {
+			const { boardStore } = setup({ createBoard: false });
+
+			await boardStore.moveCardToNewColumn("cardId");
+
+			expect(mockedBoardRestApiActions.moveCardRequest).not.toHaveBeenCalled();
+		});
+
+		it("should not call moveCardRequest when card ID is undefined", async () => {
+			const { boardStore } = setup();
+
+			await boardStore.moveCardToNewColumn("cardId");
+
+			expect(mockedBoardRestApiActions.moveCardRequest).not.toHaveBeenCalled();
+		});
+
+		it("should call moveCardRequest from rest api if feature flag is disabled", async () => {
+			const { boardStore, firstColumn } = setup({ socketFlag: false });
+
+			const cardId = firstColumn.cards[0].cardId;
+
+			await boardStore.moveCardToNewColumn(cardId);
+
+			expect(mockedBoardRestApiActions.moveCardRequest).toHaveBeenCalledWith({
+				cardId,
+				fromColumnId: firstColumn.id,
+				fromColumnIndex: 0,
+				oldIndex: 0,
+				newIndex: 0,
+			});
+		});
+
+		it("should call moveCardRequest from socket api if feature flag is enabled", async () => {
+			const { boardStore, firstColumn } = setup({ socketFlag: true });
+
+			const cardId = firstColumn.cards[0].cardId;
+
+			await boardStore.moveCardToNewColumn(cardId);
+
+			expect(mockedSocketApiActions.moveCardRequest).toHaveBeenCalledWith({
+				cardId,
+				fromColumnId: firstColumn.id,
+				fromColumnIndex: 0,
+				oldIndex: 0,
+				newIndex: 0,
+			});
+		});
+	});
+
 	describe("moveCardSuccess", () => {
 		it("should not move Card when board value is undefined", async () => {
 			const { boardStore } = setup({ createBoard: false });
@@ -446,6 +575,7 @@ describe("BoardStore", () => {
 				fromColumnIndex: 0,
 				toColumnId: firstColumnId,
 				toColumnIndex: 0,
+				forceNextTick: true,
 			};
 
 			await boardStore.moveCardSuccess(cardPayload);
