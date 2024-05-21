@@ -69,7 +69,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		);
 		if (columnIndex === -1) return undefined;
 
-		const column = columnIndex ? board.value?.columns[columnIndex] : undefined;
+		const column = board.value.columns[columnIndex];
 		const columnId = column?.id;
 		const cardIndex = column?.cards.findIndex((c) => c.cardId === cardId);
 		return { columnIndex, columnId: columnId!, cardIndex: cardIndex! };
@@ -258,9 +258,12 @@ export const useBoardStore = defineStore("boardStore", () => {
 			await nextTick();
 		}
 
-		board.value.columns[toColumnIndex].cards =
-			board.value.columns[toColumnIndex].cards ?? [];
-		board.value.columns[toColumnIndex].cards.splice(newIndex, 0, item);
+		const toColumn = board.value.columns[toColumnIndex];
+		if (!toColumn.cards) {
+			toColumn.cards = [];
+		}
+
+		toColumn.cards.splice(newIndex, 0, item);
 	};
 
 	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
