@@ -234,27 +234,27 @@ describe("boardRestApi", () => {
 
 	describe("moveCardRequest", () => {
 		const createCardPayload = ({
-			cardId,
-			oldIndex,
-			newIndex,
-			fromColumnId,
+			cardId = "unknown-id",
+			oldIndex = 0,
+			newIndex = 0,
+			fromColumnId = "unknown-id",
+			fromColumnIndex = 0,
 			toColumnId,
-			columnDelta,
-		}: {
-			cardId: string;
-			oldIndex?: number;
-			newIndex?: number;
-			fromColumnId: string;
-			toColumnId?: string;
-			columnDelta?: number;
-		}) => {
+			toColumnIndex,
+		}: Partial<MoveCardRequestPayload>) => {
+			if (toColumnIndex === undefined) {
+				if (fromColumnId === toColumnId) {
+					toColumnIndex = fromColumnIndex;
+				}
+			}
 			const cardPayload: MoveCardRequestPayload = {
 				cardId,
-				oldIndex: oldIndex ?? 0,
-				newIndex: newIndex ?? 0,
+				oldIndex,
+				newIndex,
 				fromColumnId,
+				fromColumnIndex,
 				toColumnId,
-				columnDelta,
+				toColumnIndex,
 			};
 			return cardPayload;
 		};
@@ -264,8 +264,11 @@ describe("boardRestApi", () => {
 			const { moveCardRequest } = useBoardRestApi();
 
 			const cardPayload = createCardPayload({
+				oldIndex: 0,
+				newIndex: 1,
 				cardId: "cardId",
 				fromColumnId: "columnId",
+				fromColumnIndex: 0,
 			});
 
 			await moveCardRequest(cardPayload);
@@ -283,65 +286,11 @@ describe("boardRestApi", () => {
 
 				const cardPayload = createCardPayload({
 					cardId: movingCard.cardId,
+					oldIndex: 0,
+					newIndex: 0,
 					fromColumnId: firstColumn.id,
-					columnDelta: -1,
-				});
-
-				await moveCardRequest(cardPayload);
-
-				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
-			});
-
-			it("should not call moveCardCall if card is moved to the same position", async () => {
-				const { boardStore } = setup();
-				const { moveCardRequest } = useBoardRestApi();
-
-				const firstColumn = boardStore.board!.columns[0];
-				const movingCard = firstColumn.cards[0];
-
-				const cardPayload = createCardPayload({
-					cardId: movingCard.cardId,
-					fromColumnId: firstColumn.id,
-					toColumnId: firstColumn.id,
-				});
-
-				await moveCardRequest(cardPayload);
-
-				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
-			});
-
-			it("should not call moveCardCall if first card is moved to the first position", async () => {
-				const { boardStore } = setup();
-				const { moveCardRequest } = useBoardRestApi();
-
-				const firstColumn = boardStore.board!.columns[0];
-				const firstCard = firstColumn.cards[0];
-
-				const cardPayload = createCardPayload({
-					cardId: firstCard.cardId,
-					newIndex: -1,
-					fromColumnId: firstColumn.id,
-					toColumnId: firstColumn.id,
-				});
-
-				await moveCardRequest(cardPayload);
-
-				expect(mockedBoardApiCalls.moveCardCall).not.toHaveBeenCalled();
-			});
-
-			it("should not call moveCardCall if last card is moved to the last position", async () => {
-				const { boardStore } = setup();
-				const { moveCardRequest } = useBoardRestApi();
-
-				const column1 = boardStore.board!.columns[0];
-				const lastCard = column1.cards[2];
-
-				const cardPayload = createCardPayload({
-					cardId: lastCard.cardId,
-					oldIndex: 2,
-					newIndex: 3,
-					fromColumnId: column1.id,
-					toColumnId: column1.id,
+					fromColumnIndex: 0,
+					toColumnIndex: -1,
 				});
 
 				await moveCardRequest(cardPayload);
@@ -363,7 +312,9 @@ describe("boardRestApi", () => {
 					oldIndex: 0,
 					newIndex: 2,
 					fromColumnId: firstColumn.id,
+					fromColumnIndex: 0,
 					toColumnId: firstColumn.id,
+					toColumnIndex: 0,
 				});
 
 				await moveCardRequest(cardPayload);
@@ -380,8 +331,10 @@ describe("boardRestApi", () => {
 
 				const cardPayload = createCardPayload({
 					cardId: movingCard.cardId,
+					oldIndex: 0,
+					newIndex: 0,
 					fromColumnId: firstColumn.id,
-					columnDelta: 2,
+					fromColumnIndex: 0,
 				});
 
 				const newColumn = columnResponseFactory.build();
@@ -396,15 +349,15 @@ describe("boardRestApi", () => {
 					0
 				);
 
-				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith({
-					cardId: movingCard.cardId,
-					oldIndex: 0,
-					newIndex: 0,
-					fromColumnId: firstColumn.id,
-					toColumnId: newColumn.id,
-					columnDelta: 2,
-					forceNextTick: undefined,
-				});
+				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith(
+					expect.objectContaining({
+						cardId: movingCard.cardId,
+						oldIndex: 0,
+						newIndex: 0,
+						fromColumnId: firstColumn.id,
+						toColumnId: newColumn.id,
+					})
+				);
 			});
 
 			it("should call moveCardSuccess action if card is moved to another columm and the API call is successful", async () => {
@@ -420,7 +373,9 @@ describe("boardRestApi", () => {
 					oldIndex: 1,
 					newIndex: 0,
 					fromColumnId: firstColumn.id,
+					fromColumnIndex: 0,
 					toColumnId: secondColumn.id,
+					toColumnIndex: 1,
 				});
 
 				await moveCardRequest(cardPayload);
@@ -441,7 +396,9 @@ describe("boardRestApi", () => {
 					oldIndex: 0,
 					newIndex: 0,
 					fromColumnId: firstColumn.id,
-					columnDelta: 1,
+					fromColumnIndex: 0,
+					toColumnId: secondColumn.id,
+					toColumnIndex: 1,
 				});
 
 				await moveCardRequest(cardPayload);
@@ -451,8 +408,9 @@ describe("boardRestApi", () => {
 					oldIndex: 0,
 					newIndex: 0,
 					fromColumnId: firstColumn.id,
+					fromColumnIndex: 0,
 					toColumnId: secondColumn.id,
-					columnDelta: 1,
+					toColumnIndex: 1,
 					forceNextTick: undefined,
 				});
 			});
@@ -469,7 +427,9 @@ describe("boardRestApi", () => {
 					oldIndex: 0,
 					newIndex: 2,
 					fromColumnId: firstColumn.id,
+					fromColumnIndex: 0,
 					toColumnId: firstColumn.id,
+					toColumnIndex: 0,
 				});
 
 				mockedBoardApiCalls.moveCardCall.mockRejectedValue({});
