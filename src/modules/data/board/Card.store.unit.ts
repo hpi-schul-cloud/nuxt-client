@@ -110,9 +110,14 @@ describe("CardStore", () => {
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
 		const elements = richTextElementResponseFactory.buildList(3);
+
+		const cardId = cards[0].id;
+		const card = cards[0];
+		card.elements = elements;
+		cardStore.cards[cardId] = card;
 		cardStore.fetchCardSuccess({ cards });
 
-		return { cardStore, cardId: cards[0].id, elements };
+		return { cardStore, cardId, elements };
 	};
 
 	afterEach(() => {
@@ -372,19 +377,56 @@ describe("CardStore", () => {
 				cardHeights
 			);
 		});
+	});
 
-		it("should add element", async () => {
-			const { cardStore, cardId } = setup();
-			const newElement = drawingContentElementResponseFactory.build();
+	describe("createElementSuccess", () => {
+		describe("when element is provided", () => {
+			it("should add element", async () => {
+				const { cardStore, cardId } = setup();
+				const newElement = drawingContentElementResponseFactory.build();
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(0);
-			await cardStore.createElementSuccess({
-				type: ContentElementType.Drawing,
-				cardId,
-				newElement,
+				expect(cardStore.cards[cardId].elements.length).toEqual(3);
+				await cardStore.createElementSuccess({
+					type: ContentElementType.Drawing,
+					cardId,
+					newElement,
+				});
+
+				expect(cardStore.cards[cardId].elements.length).toEqual(4);
 			});
+		});
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(1);
+		describe("when cardId is invalid", () => {
+			it("should not add element", async () => {
+				const { cardStore } = setup();
+				const newElement = drawingContentElementResponseFactory.build();
+
+				expect(Object.keys(cardStore.cards).length).toEqual(3);
+				await cardStore.createElementSuccess({
+					type: ContentElementType.Drawing,
+					cardId: "invalidId",
+					newElement,
+				});
+
+				expect(Object.keys(cardStore.cards).length).toEqual(3);
+			});
+		});
+
+		describe("when new position is invalid", () => {
+			it("should not add element", async () => {
+				const { cardStore, cardId } = setup();
+				const newElement = drawingContentElementResponseFactory.build();
+
+				expect(Object.keys(cardStore.cards).length).toEqual(3);
+				await cardStore.createElementSuccess({
+					type: ContentElementType.Drawing,
+					cardId,
+					newElement,
+					toPosition: 100,
+				});
+
+				expect(Object.keys(cardStore.cards).length).toEqual(3);
+			});
 		});
 	});
 
@@ -428,14 +470,18 @@ describe("CardStore", () => {
 			it("should move element down", async () => {
 				const { cardStore, cardId } = setup();
 				cardStore.cards[cardId].elements.push(...elements);
+				const elementId = elements[0].id;
+				const toPosition = 1;
 
 				cardStore.moveElementSuccess({
-					elementId: elements[0].id,
+					elementId,
 					toCardId: cardId,
-					toPosition: 1,
+					toPosition,
 				});
 
-				expect(cardStore.cards[cardId].elements[0].id).toEqual(elements[1].id);
+				expect(cardStore.cards[cardId].elements[toPosition].id).toEqual(
+					elementId
+				);
 			});
 
 			it("should not move element down when elementIndex is last", async () => {
@@ -480,6 +526,18 @@ describe("CardStore", () => {
 				await cardStore.moveElementRequest(cardId, elementId, 0, -1);
 
 				expect(cardStore.cards[cardId].elements[0].id).toEqual(elementId);
+			});
+
+			it("should not move element down when element is at last position", async () => {
+				const { cardStore, cardId, elements } = setup();
+				const lastIndex = elements.length - 1;
+
+				const elementId = elements[0].id;
+				await cardStore.moveElementRequest(cardId, elementId, lastIndex, 1);
+
+				const card = cardStore.cards[cardId];
+				const elem = card.elements[lastIndex];
+				expect(elem?.id).toEqual(elementId);
 			});
 		});
 	});
