@@ -9,5 +9,6 @@ export const ContextExternalToolConfigurationStatusFactory =
 			isIncompleteOnScopeContext: false,
 			isIncompleteOperationalOnScopeContext: false,
 			isDeactivated: false,
+			isNotLicensed: false,
 		};
 	});
