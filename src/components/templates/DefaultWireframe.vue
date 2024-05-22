@@ -99,6 +99,9 @@ export default defineComponent({
 			required: false,
 			default: false,
 		},
+		hideBorder: {
+			type: Boolean,
+		},
 		dataTestid: {
 			type: String as PropType<string | null>,
 			default: null,
@@ -109,7 +112,7 @@ export default defineComponent({
 	},
 	computed: {
 		showBorder(): boolean {
-			return !!(this.headline || this.$slots.header);
+			return !this.hideBorder && !!(this.headline || this.$slots.header);
 		},
 	},
 	setup() {
@@ -139,8 +142,11 @@ export default defineComponent({
 }
 
 .wireframe-container {
-	padding: 0 var(--space-lg);
 	height: calc(100vh - 64px);
+}
+
+.wireframe-header {
+	padding: 0 var(--space-lg);
 }
 
 :deep(.v-application__wrap) {
@@ -148,8 +154,7 @@ export default defineComponent({
 }
 
 .main-content {
-	padding: 0;
-	padding-top: var(--space-xl);
+	padding: 0 var(--space-lg);
 }
 .overflow-x {
 	overflow-x: auto;
@@ -167,6 +172,7 @@ export default defineComponent({
 .border {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-left: calc(-1 * var(--space-lg));
+	margin-bottom: var(--space-xl);
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
