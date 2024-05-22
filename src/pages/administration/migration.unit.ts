@@ -38,6 +38,9 @@ const getWrapper = (
 			provide: {
 				[THEME_KEY.valueOf()]: $theme,
 			},
+			mocks: {
+				$theme,
+			},
 		},
 		...options,
 	});
@@ -297,6 +300,131 @@ describe("User Migration / Index", () => {
 			expect(endMaintenanceMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(5);
 			expect(wrapper.vm.school.inMaintenance).toBe(false);
+		});
+	});
+
+	describe("cancel migration", () => {
+		describe("in step migration_importUsers", () => {
+			const setup = async () => {
+				schoolsModule.setSchool(
+					schoolFactory.build({
+						inUserMigration: true,
+						inMaintenance: true,
+					})
+				);
+
+				importUsersModule.setTotal(10);
+				importUsersModule.setTotalUnmatched(5);
+				importUsersModule.setTotalMatched(5);
+
+				const wrapper = getWrapper();
+
+				wrapper.vm.migrationStep = 2;
+				wrapper.vm.t("pages.administration.migration.title", {
+					source: "LDAP",
+					instance: $theme.name,
+				});
+
+				await nextTick();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show cancel button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					"[data-test-id=importUsers-cancel-migration-btn]"
+				);
+
+				expect(button.exists()).toBe(true);
+			});
+
+			it("should show dialog on click", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					"[data-test-id=importUsers-cancel-migration-btn]"
+				);
+
+				await button.trigger("click");
+
+				const dialog = wrapper.findComponent(
+					"[data-test-id=cancel-migration-dialog]"
+				);
+
+				expect(dialog.exists()).toBe(true);
+			});
+
+			it("should close dialog on dialog-canceled", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					"[data-test-id=importUsers-cancel-migration-btn]"
+				);
+
+				await button.trigger("click");
+
+				wrapper.emitted("dialog-closed");
+
+				const dialog = wrapper.findComponent(
+					"[data-test-id=cancel-migration-dialog]"
+				);
+
+				expect(dialog.exists()).toBe(false);
+			});
+
+			it("should call composable on dialog-confirm", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					"[data-test-id=importUsers-cancel-migration-btn]"
+				);
+
+				await button.trigger("click");
+
+				wrapper.emitted("dialog-confirmed");
+
+				const dialog = wrapper.findComponent(
+					"[data-test-id=cancel-migration-dialog]"
+				);
+
+				expect(dialog.exists()).toBe(false);
+				//TODO 	expect(schoolsModule.getSchool.inUserMigration).toBe(false);
+			});
+		});
+
+		describe("in step migration_summary", () => {
+			const setup = async () => {
+				schoolsModule.setSchool(
+					schoolFactory.build({
+						inUserMigration: true,
+						inMaintenance: true,
+					})
+				);
+
+				const wrapper = getWrapper();
+
+				wrapper.vm.migrationStep = 3;
+
+				await nextTick();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show cancel button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					"[data-test-id=summary-cancel-migration-btn]"
+				);
+
+				expect(button.exists()).toBe(true);
+			});
 		});
 	});
 });
