@@ -53,6 +53,21 @@
 				)
 			}}
 		</p>
+		<!-- possible check for feature flag-->
+		<v-checkbox
+			:label="t('components.administration.provisioningOptions.ctlTool.label')"
+			:loading="isLoading"
+			v-model="provisioningOptions.ctltool"
+			data-testid="checkbox-option-ctlTool"
+			class="ml-1"
+		/>
+		<p>
+			{{
+				t("components.administration.provisioningOptions.ctlTool.description", {
+					instance: themeName,
+				})
+			}}
+		</p>
 
 		<v-row class="justify-end mt-10">
 			<v-btn
@@ -144,6 +159,7 @@ const provisioningOptionTranslations = {
 	[ProvisioningOptionsEnum.COURSE]: "common.words.courses",
 	[ProvisioningOptionsEnum.CLASS]: "common.words.classes",
 	[ProvisioningOptionsEnum.OTHERS]: "common.words.otherGroups",
+	[ProvisioningOptionsEnum.CTLTOOL]: "common.words.ctlTool",
 };
 
 export default defineComponent({

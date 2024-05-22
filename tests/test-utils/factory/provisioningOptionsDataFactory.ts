@@ -6,4 +6,5 @@ export const provisioningOptionsDataFactory =
 		class: true,
 		course: false,
 		others: false,
+		ctltool: false,
 	}));

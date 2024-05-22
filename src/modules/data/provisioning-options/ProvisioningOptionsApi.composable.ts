@@ -23,6 +23,7 @@ export const useProvisioningOptionsApi = () => {
 			class: response.data.groupProvisioningClassesEnabled,
 			course: response.data.groupProvisioningCoursesEnabled,
 			others: response.data.groupProvisioningOtherEnabled,
+			ctltool: response.data.ctlToolProvisioningEnabled,
 		};
 
 		return provisioningOptions;
@@ -40,6 +41,7 @@ export const useProvisioningOptionsApi = () => {
 					groupProvisioningClassesEnabled: provisioningOptions.class,
 					groupProvisioningCoursesEnabled: provisioningOptions.course,
 					groupProvisioningOtherEnabled: provisioningOptions.others,
+					ctlToolProvisioningEnabled: provisioningOptions.ctltool,
 				}
 			);
 
@@ -47,6 +49,7 @@ export const useProvisioningOptionsApi = () => {
 			class: response.data.groupProvisioningClassesEnabled,
 			course: response.data.groupProvisioningCoursesEnabled,
 			others: response.data.groupProvisioningOtherEnabled,
+			ctltool: response.data.ctlToolProvisioningEnabled,
 		};
 
 		return savedOptions;

@@ -17,11 +17,13 @@ export const useProvisioningOptionsState = () => {
 		class: true,
 		course: false,
 		others: false,
+		ctltool: false,
 	});
 	const provisioningOptionsDefaultValues: ProvisioningOptions = {
 		class: true,
 		course: false,
 		others: false,
+		ctltool: false,
 	};
 
 	const fetchProvisioningOptionsData = async (
