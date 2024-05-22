@@ -74,6 +74,16 @@
 						{{ t("pages.administration.migration.step5") }}
 					</VStepperItem>
 				</VStepperHeader>
+				<vCustomDialog
+					:is-open="isCancelDialogOpen"
+					has-buttons
+					@dialog-canceled="isCancelDialogOpen = !isCancelDialogOpen"
+					@dialog-confirmed="confirmCancelMigration"
+					data-test-id="cancel-migration-dialog"
+				>
+					<template #title> ASDFewre</template>
+					<template #content>fdgdfgfdg</template>
+				</vCustomDialog>
 			</VStepper>
 		</template>
 
@@ -160,19 +170,29 @@
 
 					<VStepperWindowItem :value="2" data-testid="migration_importUsers">
 						<ImportUsers />
-						<div class="text-right">
-							<VBtn @click="migrationStep = 1">
-								{{ t("pages.administration.migration.back") }}
-							</VBtn>
-							<VBtn
-								class="ml-2"
-								id="migration_importUsers_next"
-								color="primary"
-								:disabled="!canPerformMigration"
-								@click="migrationStep = 3"
-							>
-								{{ t("pages.administration.migration.next") }}
-							</VBtn>
+						<div>
+							<div class="float-left">
+								<VBtn
+									@click="cancelMigration"
+									data-test-id="importUsers-cancel-migration-btn"
+								>
+									{{ t("common.actions.cancel") }}
+								</VBtn>
+							</div>
+							<div class="float-right">
+								<VBtn @click="migrationStep = 1">
+									{{ t("pages.administration.migration.back") }}
+								</VBtn>
+								<VBtn
+									class="ml-2"
+									id="migration_importUsers_next"
+									color="primary"
+									:disabled="!canPerformMigration"
+									@click="migrationStep = 3"
+								>
+									{{ t("pages.administration.migration.next") }}
+								</VBtn>
+							</div>
 						</div>
 					</VStepperWindowItem>
 
@@ -214,7 +234,15 @@
 											/>
 										</VRow>
 									</VCardText>
-									<div class="text-right">
+									<div class="float-left">
+										<VBtn
+											@click="cancelMigration"
+											data-test-id="summary-cancel-migration-btn"
+										>
+											{{ t("common.actions.cancel") }}
+										</VBtn>
+									</div>
+									<div class="float-right">
 										<VBtn :disabled="isLoading" @click="migrationStep = 2"
 											>{{ t("pages.administration.migration.back") }}
 										</VBtn>
@@ -485,6 +513,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import VCustomDialog from "../../components/organisms/vCustomDialog.vue";
 
 const { t } = useI18n();
 
@@ -499,6 +528,8 @@ const errorTimeout: Ref<number> = ref(7500);
 const isLoading: Ref<boolean> = ref(false);
 
 const checkTotal: Ref<NodeJS.Timeout | undefined> = ref(undefined);
+
+const isCancelDialogOpen: Ref<boolean> = ref(false);
 
 const isMigrationNotStarted = computed(() => {
 	return school.value.inUserMigration === undefined;
@@ -701,6 +732,14 @@ const nextStep = () => {
 	}
 
 	migrationStep.value = nextStep;
+};
+
+const cancelMigration = () => {
+	isCancelDialogOpen.value = true;
+};
+
+const confirmCancelMigration = () => {
+	return console.log("CONFIRMED");
 };
 
 watch(migrationStep, async (val) => {
