@@ -17,6 +17,7 @@ import {
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedEditMode } from "@data-board";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<Record<string, CardResponse>>({});
@@ -29,6 +30,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
 	const { setFocus } = useBoardFocusHandler();
+	const { setEditModeId, editModeId } = useSharedEditMode();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -74,6 +76,9 @@ export const useCardStore = defineStore("cardStore", () => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
+		if (payload.cardId === editModeId.value) {
+			setEditModeId(undefined);
+		}
 		delete cards.value[payload.cardId];
 	};
 
