@@ -1,6 +1,6 @@
 <template>
-	<v-container fluid class="wireframe-container">
-		<div class="wireframe-header sticky">
+	<div class="wireframe-container">
+		<div ref="wireframeHeader" class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -46,25 +46,25 @@
 			<div v-if="showBorder" class="border" />
 		</div>
 		<v-container
+			fluid
+			class="main-content"
 			:class="{
-				'main-content': true,
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
 				'overflow-x': allowOverflowX,
 			}"
+			:style="calcHeight"
 		>
-			<div style="padding: 0 var(--space-lg)">
-				<slot />
-			</div>
+			<slot />
 		</v-container>
-	</v-container>
+	</div>
 </template>
 
 <script lang="ts">
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, onMounted, ref } from "vue";
 import { Fab } from "./default-wireframe.types";
 
 export default defineComponent({
@@ -114,8 +114,19 @@ export default defineComponent({
 	},
 	setup() {
 		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+
+		const wireframeHeader = ref();
+		const calcHeight = ref();
+
+		onMounted(() => {
+			const headerHeight = wireframeHeader.value.clientHeight;
+			calcHeight.value = { height: `calc(100% - ${headerHeight}px)` };
+		});
+
 		return {
 			isMobile,
+			calcHeight,
+			wireframeHeader,
 		};
 	},
 });
@@ -127,11 +138,9 @@ export default defineComponent({
 	margin-bottom: var(--space-md);
 }
 
-.wireframe-header {
-	padding: 0 var(--space-lg);
-}
 .wireframe-container {
-	padding: 0;
+	padding: 0 var(--space-lg);
+	height: calc(100vh - 64px);
 }
 
 :deep(.v-application__wrap) {
@@ -140,6 +149,7 @@ export default defineComponent({
 
 .main-content {
 	padding: 0;
+	padding-top: var(--space-xl);
 }
 .overflow-x {
 	overflow-x: auto;
@@ -156,7 +166,6 @@ export default defineComponent({
 
 .border {
 	margin-right: calc(-1 * var(--space-lg));
-	margin-bottom: var(--space-xl);
 	margin-left: calc(-1 * var(--space-lg));
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
