@@ -125,7 +125,7 @@ describe("CardStore", () => {
 		jest.resetAllMocks();
 	});
 
-	describe("fetchCardTitleRequest", () => {
+	describe("fetchCardRequest", () => {
 		it("should call socket Api if feature flag is enabled", async () => {
 			const { cardStore } = setup(true);
 			const cardIds = ["id1", "id2aewr", "id3423"];
@@ -189,61 +189,47 @@ describe("CardStore", () => {
 		it("should not delete any card when card is undefined", async () => {
 			const { cardStore } = setup();
 
-			const cardTitles = Object.values(cardStore.cards).map(
-				(card) => card.title
-			);
+			const oldCards = cloneDeep(cardStore.cards);
 
 			cardStore.deleteCardSuccess({
 				cardId: "unkownId",
 			});
 
-			expect(Object.values(cardStore.cards).map((card) => card.title)).toEqual(
-				cardTitles
-			);
+			expect(cardStore.cards).toEqual(oldCards);
 		});
 
-		it("should delete card", async () => {
+		it("should delete a card", async () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.deleteCardSuccess({
 				cardId,
 			});
 
-			expect(cardStore.getCard(cardId)).toBeUndefined();
+			expect(cardStore.cards[cardId]).toBeUndefined();
 		});
 	});
 
 	describe("updateCardTitleRequest", () => {
 		it("should call socket Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup(true);
+			const payload = { cardId, newTitle: "newTitle" };
 
-			cardStore.updateCardTitleRequest({
-				cardId,
-				newTitle: "newTitle",
-			});
+			cardStore.updateCardTitleRequest(payload);
 
 			expect(
 				mockedCardSocketApiActions.updateCardTitleRequest
-			).toHaveBeenCalledWith({
-				cardId,
-				newTitle: "newTitle",
-			});
+			).toHaveBeenCalledWith(payload);
 		});
 
 		it("should call rest Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup();
+			const payload = { cardId, newTitle: "newTitle" };
 
-			cardStore.updateCardTitleRequest({
-				cardId,
-				newTitle: "newTitle",
-			});
+			cardStore.updateCardTitleRequest(payload);
 
 			expect(
 				mockedCardRestApiActions.updateCardTitleRequest
-			).toHaveBeenCalledWith({
-				cardId,
-				newTitle: "newTitle",
-			});
+			).toHaveBeenCalledWith(payload);
 		});
 	});
 
@@ -281,34 +267,24 @@ describe("CardStore", () => {
 	describe("updateCardHeightRequest", () => {
 		it("should call socket Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup(true);
+			const payload = { cardId, newHeight: 100 };
 
-			cardStore.updateCardHeightRequest({
-				cardId,
-				newHeight: 100,
-			});
+			cardStore.updateCardHeightRequest(payload);
 
 			expect(
 				mockedCardSocketApiActions.updateCardHeightRequest
-			).toHaveBeenCalledWith({
-				cardId,
-				newHeight: 100,
-			});
+			).toHaveBeenCalledWith(payload);
 		});
 
 		it("should call rest Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup();
+			const payload = { cardId, newHeight: 100 };
 
-			cardStore.updateCardHeightRequest({
-				cardId,
-				newHeight: 100,
-			});
+			cardStore.updateCardHeightRequest(payload);
 
 			expect(
 				mockedCardRestApiActions.updateCardHeightRequest
-			).toHaveBeenCalledWith({
-				cardId,
-				newHeight: 100,
-			});
+			).toHaveBeenCalledWith(payload);
 		});
 	});
 
@@ -362,26 +338,56 @@ describe("CardStore", () => {
 	});
 
 	describe("createElementRequest", () => {
-		it("should not add element when card is undefined", async () => {
-			const { cardStore } = setup();
+		it("should call socket Api if feature flag is enabled", async () => {
+			const { cardStore, cardId } = setup(true);
 
-			const cardHeights = Object.values(cardStore.cards).map(
-				(card) => card.height
-			);
-
-			await cardStore.createElementRequest({
+			const payload = {
 				type: ContentElementType.Link,
-				cardId: "unknownId",
-			});
+				cardId,
+			};
 
-			expect(Object.values(cardStore.cards).map((card) => card.height)).toEqual(
-				cardHeights
-			);
+			await cardStore.createElementRequest(payload);
+
+			expect(
+				mockedCardSocketApiActions.createElementRequest
+			).toHaveBeenCalledWith(payload);
+		});
+
+		it("should call rest Api if feature flag is disabled", async () => {
+			const { cardStore, cardId } = setup();
+
+			const payload = {
+				type: ContentElementType.Link,
+				cardId,
+			};
+
+			await cardStore.createElementRequest(payload);
+
+			expect(
+				mockedCardRestApiActions.createElementRequest
+			).toHaveBeenCalledWith(payload);
 		});
 	});
 
 	describe("createElementSuccess", () => {
 		describe("when element is provided", () => {
+			it("should add element to specified position", async () => {
+				const { cardStore, cardId } = setup();
+				const newElement = drawingContentElementResponseFactory.build();
+				const toPosition = 1;
+
+				await cardStore.createElementSuccess({
+					type: ContentElementType.Drawing,
+					cardId,
+					newElement,
+					toPosition,
+				});
+
+				expect(cardStore.cards[cardId].elements.length).toEqual(4);
+				expect(cardStore.cards[cardId].elements[toPosition]).toEqual(
+					newElement
+				);
+			});
 			it("should add element to last position if toPosition is undefined", async () => {
 				const { cardStore, cardId } = setup();
 				const newElement = drawingContentElementResponseFactory.build();
@@ -581,6 +587,7 @@ describe("CardStore", () => {
 				mockedCardRestApiActions.createElementRequest
 			).not.toHaveBeenCalled();
 		});
+
 		it("should add text after title", async () => {
 			const { cardStore, cardId, elements } = setup();
 
