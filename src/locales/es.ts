@@ -198,6 +198,10 @@ export default {
 		"Abre una herramienta que se utiliza para migrar cuentas de usuario a moin.schule sin la participación del usuario. Esta herramienta estará disponible una vez que el primer usuario de esta escuela haya migrado exitosamente a moin.schule.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Abrir asistente de migración",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"Si cancela ahora la ejecución del asistente de migración, se restablecerán los vínculos de cuenta realizados en la sesión actual. ¿Realmente desea cancelar el asistente ahora?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"¿Estás seguro de que quieres cancelar la migración?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"La migración de la cuenta se completó el {date} a las {time}.<br>¡El periodo de espera tras la finalización de la migración termina finalmente el {finishDate} a las {finishTime}!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":

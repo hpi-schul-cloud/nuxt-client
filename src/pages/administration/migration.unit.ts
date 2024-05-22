@@ -336,7 +336,7 @@ describe("User Migration / Index", () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
-					"[data-test-id=importUsers-cancel-migration-btn]"
+					"[data-testid=importUsers-cancel-migration-btn]"
 				);
 
 				expect(button.exists()).toBe(true);
@@ -346,52 +346,45 @@ describe("User Migration / Index", () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
-					"[data-test-id=importUsers-cancel-migration-btn]"
+					"[data-testid=importUsers-cancel-migration-btn]"
 				);
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent(
-					"[data-test-id=cancel-migration-dialog]"
-				);
-
-				expect(dialog.exists()).toBe(true);
+				expect(wrapper.vm.isCancelDialogOpen).toBe(true);
 			});
 
-			it("should close dialog on dialog-canceled", async () => {
+			it("should change isCancelDialogOpen on isOpen", async () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
-					"[data-test-id=importUsers-cancel-migration-btn]"
+					"[data-testid=importUsers-cancel-migration-btn]"
 				);
 
 				await button.trigger("click");
 
-				wrapper.emitted("dialog-closed");
+				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 
-				const dialog = wrapper.findComponent(
-					"[data-test-id=cancel-migration-dialog]"
-				);
+				dialog.vm.$emit("update:isOpen", false);
+				await nextTick();
 
-				expect(dialog.exists()).toBe(false);
+				expect(wrapper.vm.isCancelDialogOpen).toEqual(false);
 			});
 
 			it("should call composable on dialog-confirm", async () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
-					"[data-test-id=importUsers-cancel-migration-btn]"
+					"[data-testid=importUsers-cancel-migration-btn]"
 				);
 
 				await button.trigger("click");
 
-				wrapper.emitted("dialog-confirmed");
+				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
 
-				const dialog = wrapper.findComponent(
-					"[data-test-id=cancel-migration-dialog]"
-				);
+				dialog.vm.$emit("dialog-confirmed");
+				await nextTick();
 
-				expect(dialog.exists()).toBe(false);
 				//TODO 	expect(schoolsModule.getSchool.inUserMigration).toBe(false);
 			});
 		});
@@ -420,7 +413,7 @@ describe("User Migration / Index", () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
-					"[data-test-id=summary-cancel-migration-btn]"
+					"[data-testid=summary-cancel-migration-btn]"
 				);
 
 				expect(button.exists()).toBe(true);

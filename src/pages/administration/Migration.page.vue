@@ -77,12 +77,24 @@
 				<vCustomDialog
 					:is-open="isCancelDialogOpen"
 					has-buttons
-					@dialog-canceled="isCancelDialogOpen = !isCancelDialogOpen"
-					@dialog-confirmed="confirmCancelMigration"
-					data-test-id="cancel-migration-dialog"
+					@dialog-confirmed="confirmCancelMigration()"
+					@update:is-open="isCancelDialogOpen = $event"
+					data-testid="cancel-migration-dialog"
 				>
-					<template #title> ASDFewre</template>
-					<template #content>fdgdfgfdg</template>
+					<template #title>
+						{{
+							t(
+								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
+							)
+						}}</template
+					>
+					<template #content>
+						{{
+							t(
+								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
+							)
+						}}</template
+					>
 				</vCustomDialog>
 			</VStepper>
 		</template>
@@ -173,8 +185,8 @@
 						<div>
 							<div class="float-left">
 								<VBtn
-									@click="cancelMigration"
-									data-test-id="importUsers-cancel-migration-btn"
+									@click="cancelMigration()"
+									data-testid="importUsers-cancel-migration-btn"
 								>
 									{{ t("common.actions.cancel") }}
 								</VBtn>
@@ -237,7 +249,7 @@
 									<div class="float-left">
 										<VBtn
 											@click="cancelMigration"
-											data-test-id="summary-cancel-migration-btn"
+											data-testid="summary-cancel-migration-btn"
 										>
 											{{ t("common.actions.cancel") }}
 										</VBtn>

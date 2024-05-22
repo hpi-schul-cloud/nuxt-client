@@ -195,6 +195,10 @@ export default {
 		"Opens a tool that is used to migrate user accounts to moin.schule without user involvement. This tool is available once the first user of this school has been successfully migrated to moin.schule.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Open migration wizard",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"If you cancel the execution of the migration wizard now, the account links made in the current session will be reset. Do you really want to cancel the wizard now?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"Are you sure you want to cancel the migration?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"The account migration was completed on {date} at {time}.<br>The waiting period after completion of the migration finally ends on {finishDate} at {finishTime}!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
