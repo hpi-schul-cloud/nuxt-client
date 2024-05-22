@@ -1,16 +1,8 @@
 <template>
-	<DefaultWireframe
-		ref="main"
-		:full-width="true"
-		:breadcrumbs="breadcrumbs"
-		:allow-overflow-x="true"
-	>
-		<Board :board-id="boardId" />
-	</DefaultWireframe>
+	<Board :board-id="boardId" :breadcrumbs="breadcrumbs" />
 </template>
 
 <script lang="ts">
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useSharedBoardPageInformation } from "@data-board";
 import { Board } from "@feature-board";
 import { useTitle } from "@vueuse/core";
@@ -18,7 +10,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "ColumnBoardPage",
-	components: { Board, DefaultWireframe },
+	components: { Board },
 	props: {
 		boardId: {
 			type: String,
