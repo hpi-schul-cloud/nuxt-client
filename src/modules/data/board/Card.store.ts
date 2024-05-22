@@ -162,16 +162,14 @@ export const useCardStore = defineStore("cardStore", () => {
 	const updateElementRequest = socketOrRest.updateElementRequest;
 
 	const updateElementSuccess = async (payload: UpdateElementSuccessPayload) => {
-		const _card = Object.values(cards.value).find((c) => {
-			if (c.elements.length === 0) return false;
-			const element = c.elements.find((e) => e.id === payload.elementId);
-			return element !== undefined;
-		});
-		if (_card === undefined) return;
-		const cardId = _card.id;
+		const cardToUpdate = Object.values(cards.value).find((c) =>
+			c.elements.some((e) => e.id === payload.elementId)
+		);
+		if (cardToUpdate === undefined) return;
+		const cardId = cardToUpdate.id;
 
 		if (cardId) {
-			const elementIndex = _card.elements.findIndex(
+			const elementIndex = cardToUpdate.elements.findIndex(
 				(e) => e.id === payload.elementId
 			);
 			cards.value[cardId].elements[elementIndex].content = payload.data.content;

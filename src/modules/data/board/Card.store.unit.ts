@@ -14,11 +14,13 @@ import { ref } from "vue";
 import { envConfigModule } from "@/store";
 import {
 	envsFactory,
+	richTextElementContentFactory,
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { ContentElementType, RichTextElementContent } from "@/serverApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
 import { drawingContentElementResponseFactory } from "@@/tests/test-utils/factory/drawingContentElementResponseFactory";
+import { cloneDeep } from "lodash";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -586,27 +588,37 @@ describe("CardStore", () => {
 	});
 
 	describe("updateElementSuccess", () => {
-		it("should update element", async () => {
-			const { cardStore, cardId, elements } = setup();
+		it("should not update element if element id does not belong to a card ", async () => {
+			const { cardStore, cardId } = setup();
 
-			const newElement = {
-				id: elements[0].id,
-				content: {
-					...elements[0].content,
-				},
-			};
+			const oldElements = cloneDeep(cardStore.cards[cardId].elements);
 
 			await cardStore.updateElementSuccess({
-				elementId: "newElementId",
+				elementId: "non existing id",
 				data: {
-					type: elements[0].type,
-					content: newElement.content as RichTextElementContent,
+					type: ContentElementType.RichText,
+					content: richTextElementContentFactory.build(),
 				},
 			});
 
-			expect(cardStore.cards[cardId].elements[0].content).toEqual(
-				newElement.content
-			);
+			expect(cardStore.cards[cardId].elements).toEqual(oldElements);
+		});
+
+		it("should update element", async () => {
+			const { cardStore, cardId, elements } = setup();
+
+			const elementToUpdate = elements[0];
+			const newContent = richTextElementContentFactory.build();
+
+			await cardStore.updateElementSuccess({
+				elementId: elementToUpdate.id,
+				data: {
+					type: elementToUpdate.type,
+					content: newContent,
+				},
+			});
+
+			expect(cardStore.cards[cardId].elements[0].content).toEqual(newContent);
 		});
 	});
 });
