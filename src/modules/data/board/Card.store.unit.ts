@@ -382,7 +382,7 @@ describe("CardStore", () => {
 
 	describe("createElementSuccess", () => {
 		describe("when element is provided", () => {
-			it("should add element if toPosition is undefined", async () => {
+			it("should add element to last position if toPosition is undefined", async () => {
 				const { cardStore, cardId } = setup();
 				const newElement = drawingContentElementResponseFactory.build();
 
@@ -548,15 +548,26 @@ describe("CardStore", () => {
 		});
 	});
 
-	describe("deleteElement", () => {
+	describe("deleteElementSuccess", () => {
+		it("should not delete element if card is undefined", async () => {
+			const { cardStore, cardId, elements } = setup();
+			const numberOfElements = cardStore.cards[cardId].elements.length;
+			const elementId = elements[0].id;
+
+			await cardStore.deleteElementSuccess({ cardId: "unkown", elementId });
+
+			expect(cardStore.cards[cardId].elements.length).toEqual(numberOfElements);
+		});
 		it("should delete element", async () => {
 			const { cardStore, cardId, elements } = setup();
-			const length = cardStore.cards[cardId].elements.length;
+			const numberOfElements = cardStore.cards[cardId].elements.length;
 			const elementId = elements[0].id;
 
 			await cardStore.deleteElementSuccess({ cardId, elementId });
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(length - 1);
+			expect(cardStore.cards[cardId].elements.length).toEqual(
+				numberOfElements - 1
+			);
 		});
 	});
 
