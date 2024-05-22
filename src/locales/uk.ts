@@ -149,6 +149,9 @@ export default {
 	"common.words.no": "Немає",
 	"common.words.noChoice": "Немає вибору",
 	"common.words.otherGroups": "інші групи",
+
+	"common.words.ctlTool": "ctltool",
+
 	"common.words.planned": "запланований",
 	"common.words.privacyPolicy": "Політика конфіденційності",
 	"common.words.published": "опубліковано",
@@ -255,6 +258,12 @@ export default {
 		"Активуйте цю опцію, якщо інші групи потрібно синхронізувати з {instance}.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Синхронізація інших груп",
+
+	"components.administration.provisioningOptions.ctlTool.description":
+		"Aktivieren Sie diese Option, wenn Medien (CTL-Tools) in Ihrer Schule automatisch freigeschaltet werden soll, für den Fall, das Nutzende Ihrer Schule über eine Freischaltung für diese Medien in moin.schule verfügen.",
+	"components.administration.provisioningOptions.ctlTool.label":
+		"Freischaltung von Medien (CTL-Tools)",
+
 	"components.administration.provisioningOptions.page.title":
 		"Параметри синхронізації даних",
 	"components.administration.provisioningOptions.warning.consequence":

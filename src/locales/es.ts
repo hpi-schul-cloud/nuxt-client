@@ -149,6 +149,9 @@ export default {
 	"common.words.no": "No",
 	"common.words.noChoice": "Sin elección",
 	"common.words.otherGroups": "otros grupos",
+
+	"common.words.ctlTool": "ctltool",
+
 	"common.words.planned": "previsto",
 	"common.words.privacyPolicy": "Política de Privacidad",
 	"common.words.published": "publicado",
@@ -254,6 +257,12 @@ export default {
 		"Active esta opción si otros grupos deben sincronizarse en la {instance}.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Sincronización de otros grupos.",
+
+	"components.administration.provisioningOptions.ctlTool.description":
+		"Aktivieren Sie diese Option, wenn Medien (CTL-Tools) in Ihrer Schule automatisch freigeschaltet werden soll, für den Fall, das Nutzende Ihrer Schule über eine Freischaltung für diese Medien in moin.schule verfügen.",
+	"components.administration.provisioningOptions.ctlTool.label":
+		"Freischaltung von Medien (CTL-Tools)",
+
 	"components.administration.provisioningOptions.page.title":
 		"Opciones de sincronización de datos",
 	"components.administration.provisioningOptions.warning.consequence":
