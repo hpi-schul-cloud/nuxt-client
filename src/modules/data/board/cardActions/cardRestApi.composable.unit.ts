@@ -131,6 +131,7 @@ describe("useCardRestApi", () => {
 			expect(cardStore.createElementSuccess).toHaveBeenCalledWith({
 				...payload,
 				newElement: newElementResponse.data,
+				isOwnAction: true,
 			});
 		});
 
@@ -178,7 +179,10 @@ describe("useCardRestApi", () => {
 
 			await deleteElementRequest(payload);
 
-			expect(cardStore.deleteElementSuccess).toHaveBeenCalledWith(payload);
+			expect(cardStore.deleteElementSuccess).toHaveBeenCalledWith({
+				...payload,
+				isOwnAction: true,
+			});
 		});
 
 		it("should call handleError if the API call fails", async () => {
@@ -227,7 +231,10 @@ describe("useCardRestApi", () => {
 
 			await moveElementRequest(payload);
 
-			expect(cardStore.moveElementSuccess).toHaveBeenCalledWith(payload);
+			expect(cardStore.moveElementSuccess).toHaveBeenCalledWith({
+				...payload,
+				isOwnAction: true,
+			});
 		});
 
 		it("should call handleError if the API call fails", async () => {
@@ -273,6 +280,7 @@ describe("useCardRestApi", () => {
 					type: updateElementResponse.data.type,
 					content: updateElementResponse.data.content,
 				},
+				isOwnAction: true,
 			});
 		});
 
@@ -313,6 +321,7 @@ describe("useCardRestApi", () => {
 
 			expect(cardStore.deleteCardSuccess).toHaveBeenCalledWith({
 				cardId,
+				isOwnAction: true,
 			});
 		});
 
@@ -345,7 +354,10 @@ describe("useCardRestApi", () => {
 
 			await fetchCardRequest({ cardIds });
 
-			expect(cardStore.fetchCardSuccess).toHaveBeenCalledWith({ cards });
+			expect(cardStore.fetchCardSuccess).toHaveBeenCalledWith({
+				cards,
+				isOwnAction: true,
+			});
 		});
 
 		it("should call handleError if the API call fails", async () => {
@@ -388,9 +400,10 @@ describe("useCardRestApi", () => {
 
 			await updateCardTitleRequest(requestPayload);
 
-			expect(cardStore.updateCardTitleSuccess).toHaveBeenCalledWith(
-				requestPayload
-			);
+			expect(cardStore.updateCardTitleSuccess).toHaveBeenCalledWith({
+				...requestPayload,
+				isOwnAction: true,
+			});
 		});
 
 		it("should call handleError if the API call fails", async () => {
@@ -437,9 +450,10 @@ describe("useCardRestApi", () => {
 
 			await updateCardHeightRequest(requestPayload);
 
-			expect(cardStore.updateCardHeightSuccess).toHaveBeenCalledWith(
-				requestPayload
-			);
+			expect(cardStore.updateCardHeightSuccess).toHaveBeenCalledWith({
+				...requestPayload,
+				isOwnAction: true,
+			});
 		});
 
 		it("should call handleError if the API call fails", async () => {
