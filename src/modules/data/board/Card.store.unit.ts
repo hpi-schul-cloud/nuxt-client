@@ -10,7 +10,7 @@ import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { createPinia, setActivePinia } from "pinia";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 import { envConfigModule } from "@/store";
 import {
 	envsFactory,
@@ -62,6 +62,7 @@ describe("CardStore", () => {
 		ReturnType<typeof useSharedLastCreatedElement>
 	>;
 	let setEditModeId: jest.Mock;
+	let editModeId: Ref<string | undefined>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -94,9 +95,10 @@ describe("CardStore", () => {
 		);
 
 		setEditModeId = jest.fn();
+		editModeId = ref(undefined);
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
-			editModeId: ref(undefined),
+			editModeId,
 		});
 	});
 
@@ -199,6 +201,19 @@ describe("CardStore", () => {
 			});
 
 			expect(cardStore.cards).toEqual(oldCards);
+		});
+
+		it("set editModeId to undefined if cardId is equal to editModeId", async () => {
+			const { cardStore, cardId } = setup();
+
+			editModeId.value = cardId;
+
+			cardStore.deleteCardSuccess({
+				cardId,
+				isOwnAction: true,
+			});
+
+			expect(setEditModeId).toHaveBeenCalledWith(undefined);
 		});
 
 		it("should delete a card", async () => {
