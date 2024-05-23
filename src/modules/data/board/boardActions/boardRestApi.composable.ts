@@ -115,18 +115,15 @@ export const useBoardRestApi = () => {
 			if (isInSameColumn && newIndex === -1 && oldIndex === 0) {
 				return;
 			}
-
 			if (toColumnId === undefined && toColumnIndex === undefined) {
 				// need to create a new column
 				const newColumn = await createColumnRequest();
 				if (newColumn) {
 					toColumnId = newColumn.id;
-					toColumnIndex = boardStore.getLastColumnIndex() + 1;
+					toColumnIndex = boardStore.getLastColumnIndex();
 				}
 			}
-
 			if (toColumnId === undefined || toColumnIndex === undefined) return; // shouldn't happen because its either existing or newly created
-
 			await moveCardCall(cardId, toColumnId, newIndex);
 
 			boardStore.moveCardSuccess({
