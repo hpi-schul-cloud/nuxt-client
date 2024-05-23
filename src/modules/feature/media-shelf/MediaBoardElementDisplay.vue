@@ -16,20 +16,24 @@
 				variant="outlined"
 				:ripple="false"
 			>
-				<v-img
-					v-if="element.thumbnail"
-					:src="element.thumbnail"
-					:aspect-ratio="16 / 9"
-					width="100%"
-					data-testid="media-element-thumbnail"
-				/>
-				<v-img
-					v-else
-					:aspect-ratio="16 / 9"
-					width="100%"
-					src="@/assets/img/media-board/default_img_media_shelf.png"
-					data-testid="media-element-default-thumbnail"
-				/>
+				<div>
+					<v-img
+						v-if="element.thumbnail"
+						:src="element.thumbnail"
+						:aspect-ratio="16 / 9"
+						width="100%"
+						data-testid="media-element-thumbnail"
+					/>
+					<v-img
+						v-else
+						:aspect-ratio="16 / 9"
+						width="100%"
+						src="@/assets/img/media-board/default_img_media_shelf.png"
+						data-testid="media-element-default-thumbnail"
+					/>
+					<!-- div around slot and position via css -->
+					<slot name="imageOverlay" />
+				</div>
 				<ContentElementBar :has-grey-background="true">
 					<template #title>
 						{{ element.title }}

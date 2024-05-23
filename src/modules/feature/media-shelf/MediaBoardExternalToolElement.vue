@@ -3,10 +3,23 @@
 		:element="elementDisplayData"
 		@click="onClick"
 		@keyup.enter="onClick"
-	/>
+	>
+		<template #imageOverlay>
+			<WarningChip v-if="isToolIncomplete">{{
+				$t("common.medium.chip.incomplete")
+			}}</WarningChip>
+			<WarningChip v-if="isToolDeactivated">{{
+				$t("common.medium.chip.deactivated")
+			}}</WarningChip>
+			<WarningChip v-if="isToolNotLicensed">{{
+				$t("common.medium.chip.notLicensed")
+			}}</WarningChip>
+		</template>
+	</MediaBoardElementDisplay>
 </template>
 
 <script setup lang="ts">
+import WarningChip from "@/modules/ui/chip/WarningChip.vue";
 import { MediaExternalToolElementResponse } from "@/serverApi/v3";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -14,6 +27,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import {
+	useContextExternalToolConfigurationStatus,
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
@@ -21,6 +35,7 @@ import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
 import { useErrorNotification } from "@util-error-notification";
 import { computed, onUnmounted, PropType, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { ComputedRef } from "vue/dist/vue";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 
@@ -45,6 +60,8 @@ const {
 	fetchContextLaunchRequest,
 	error: launchError,
 } = useExternalToolLaunchState();
+const { determineMediaBoardElementStatusMessage, isOperational } =
+	useContextExternalToolConfigurationStatus();
 
 useErrorNotification(displayError);
 
@@ -62,7 +79,10 @@ const loadExternalToolData = async (
 	element: MediaExternalToolElementResponse
 ): Promise<void> => {
 	await fetchDisplayData(element.content.contextExternalToolId);
-	await fetchContextLaunchRequest(element.content.contextExternalToolId);
+
+	if (displayData.value && isOperational(displayData.value.status)) {
+		await fetchContextLaunchRequest(element.content.contextExternalToolId);
+	}
 };
 
 watch(
@@ -73,6 +93,23 @@ watch(
 		}
 	},
 	{ immediate: true }
+);
+
+const isToolIncomplete: ComputedRef = computed(
+	() =>
+		displayData.value?.status.isOutdatedOnScopeContext ||
+		displayData.value?.status.isOutdatedOnScopeSchool ||
+		displayData.value?.status.isIncompleteOnScopeContext
+);
+
+const isToolDeactivated: ComputedRef = computed(
+	() => displayData.value?.status.isDeactivated
+);
+
+const isToolNotLicensed: ComputedRef = computed(
+	() =>
+		displayData.value?.status.isNotLicensed &&
+		!displayData.value?.status.isDeactivated
 );
 
 const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
@@ -90,10 +127,19 @@ const { isDragging } = useDragAndDrop();
 const onClick = async () => {
 	// Loading has failed before
 	if (launchError.value) {
-		notifierModule.show({
-			status: "error",
-			text: t("error.generic"),
-		});
+		if (displayData.value?.status) {
+			notifierModule.show({
+				status: "warning",
+				text: determineMediaBoardElementStatusMessage(
+					displayData.value?.status
+				),
+			});
+		} else {
+			notifierModule.show({
+				status: "error",
+				text: t("error.generic"),
+			});
+		}
 
 		return;
 	}

@@ -89,6 +89,17 @@ export default {
 	"common.labels.visibility": "Visibilidad",
 	"common.labels.visible": "Visible",
 	"common.loading.text": "Los datos se están cargando...",
+	"common.medium.alert.deactivated": "Los medios están deshabilitados.",
+	"common.medium.alert.notLicensed": "El medio no está activado.",
+	"common.medium.alert.incomplete":
+		"La configuración del medio no actual o incompleta.",
+	"common.medium.chip.deactivated": "Desactivado",
+	"common.medium.chip.notLicensed": "No esta activado",
+	"common.medium.chip.incomplete": "Configuración incompleta",
+	"common.medium.information.admin": "Por favor verifique la configuración.",
+	"common.medium.information.student": "Por favor contacte a un maestro.",
+	"common.medium.information.teacher":
+		"Por favor comuníquese con el administrador de la escuela.",
 	"common.nodata": "Datos no disponibles",
 	"common.notification.error": "Se ha producido un error.",
 	"common.placeholder.birthdate": "20.2.2002",
