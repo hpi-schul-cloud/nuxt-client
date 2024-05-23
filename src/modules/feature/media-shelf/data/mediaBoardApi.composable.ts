@@ -2,6 +2,8 @@ import {
 	MediaAvailableLineResponse,
 	MediaBoardApiFactory,
 	MediaBoardApiInterface,
+	MediaBoardColors,
+	MediaBoardLayoutType,
 	MediaBoardResponse,
 	MediaElementApiFactory,
 	MediaElementApiInterface,
@@ -37,6 +39,15 @@ export const useMediaBoardApi = () => {
 		return response.data;
 	};
 
+	const updateBoardLayout = async (
+		boardId: string,
+		layout: MediaBoardLayoutType
+	): Promise<void> => {
+		await mediaBoardApi.mediaBoardControllerSetMediaBoardLayout(boardId, {
+			layout,
+		});
+	};
+
 	const getAvailableMedia = async (
 		boardId: string
 	): Promise<MediaAvailableLineResponse> => {
@@ -69,6 +80,48 @@ export const useMediaBoardApi = () => {
 		title: string
 	): Promise<void> => {
 		await mediaLineApi.mediaLineControllerUpdateLineTitle(lineId, { title });
+	};
+
+	const updateLineColor = async (
+		lineId: string,
+		backgroundColor: MediaBoardColors
+	): Promise<void> => {
+		await mediaLineApi.mediaLineControllerUpdateBackgroundColor(lineId, {
+			backgroundColor,
+		});
+	};
+
+	const updateAvailableLineColor = async (
+		boardId: string,
+		backgroundColor: MediaBoardColors
+	): Promise<void> => {
+		await mediaBoardApi.mediaBoardControllerUpdateMediaAvailableLineColor(
+			boardId,
+			{
+				backgroundColor,
+			}
+		);
+	};
+
+	const updateLineCollapsed = async (
+		lineId: string,
+		value: boolean
+	): Promise<void> => {
+		await mediaLineApi.mediaLineControllerCollapseMediaLine(lineId, {
+			collapsed: value,
+		});
+	};
+
+	const updateAvailableLineCollapsed = async (
+		boardId: string,
+		value: boolean
+	): Promise<void> => {
+		await mediaBoardApi.mediaBoardControllerCollapseMediaAvailableLine(
+			boardId,
+			{
+				collapsed: value,
+			}
+		);
 	};
 
 	const deleteLine = async (lineId: string): Promise<void> => {
@@ -107,10 +160,15 @@ export const useMediaBoardApi = () => {
 
 	return {
 		getMediaBoardForUser,
+		updateBoardLayout,
 		getAvailableMedia,
 		createLine,
 		moveLine,
 		updateLineTitle,
+		updateLineColor,
+		updateLineCollapsed,
+		updateAvailableLineColor,
+		updateAvailableLineCollapsed,
 		deleteLine,
 		createElement,
 		moveElement,

@@ -26,7 +26,6 @@
 		"@vueuse/core": "^10.4.1",
 		"axios": "^1.6.2",
 		"dayjs": "^1.11.10",
-		"katex": "^0.12.0",
 		"kjua": "^0.9.0",
 		"maska": "^2.1.10",
 		"mobile-drag-drop": "^3.0.0-rc.0",

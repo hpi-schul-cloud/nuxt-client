@@ -1,3 +1,4 @@
+import { ref } from "vue";
 import { useCollapsableState } from "./collapsable.composable";
 
 describe("collapsable.composable", () => {
@@ -6,12 +7,13 @@ describe("collapsable.composable", () => {
 	describe("openItems", () => {
 		describe("when the panel is open", () => {
 			const setup = () => {
-				const composable = useCollapsableState(panelName);
+				const collapsed = ref(false);
 
-				composable.collapsed.value = false;
+				const composable = useCollapsableState(panelName, collapsed);
 
 				return {
 					composable,
+					collapsed,
 				};
 			};
 
@@ -24,9 +26,9 @@ describe("collapsable.composable", () => {
 
 		describe("when the panel is collapsed", () => {
 			const setup = () => {
-				const composable = useCollapsableState(panelName);
+				const collapsed = ref(true);
 
-				composable.collapsed.value = true;
+				const composable = useCollapsableState(panelName, collapsed);
 
 				return {
 					composable,
@@ -44,37 +46,43 @@ describe("collapsable.composable", () => {
 	describe("collapsed", () => {
 		describe("when the panel is open", () => {
 			const setup = () => {
-				const composable = useCollapsableState(panelName);
+				const collapsed = ref(false);
+
+				const composable = useCollapsableState(panelName, collapsed);
 
 				composable.openItems.value = [panelName];
 
 				return {
 					composable,
+					collapsed,
 				};
 			};
 
 			it("should be false", async () => {
-				const { composable } = setup();
+				const { collapsed } = setup();
 
-				expect(composable.collapsed.value).toEqual(false);
+				expect(collapsed.value).toEqual(false);
 			});
 		});
 
 		describe("when the panel is collapsed", () => {
 			const setup = () => {
-				const composable = useCollapsableState(panelName);
+				const collapsed = ref(false);
+
+				const composable = useCollapsableState(panelName, collapsed);
 
 				composable.openItems.value = [];
 
 				return {
 					composable,
+					collapsed,
 				};
 			};
 
 			it("should be true", async () => {
-				const { composable } = setup();
+				const { collapsed } = setup();
 
-				expect(composable.collapsed.value).toEqual(true);
+				expect(collapsed.value).toEqual(true);
 			});
 		});
 	});

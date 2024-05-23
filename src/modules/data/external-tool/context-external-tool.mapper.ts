@@ -40,7 +40,6 @@ export class ContextExternalToolMapper {
 				(parameter): ToolParameter =>
 					ExternalToolMapper.mapToToolParameter(parameter)
 			),
-			version: response.version,
 		};
 
 		return mapped;
@@ -62,7 +61,6 @@ export class ContextExternalToolMapper {
 		const mapped: ContextExternalToolPostParams = {
 			contextId: contextExternalTool.contextId,
 			contextType: contextExternalTool.contextType,
-			toolVersion: contextExternalTool.toolVersion,
 			schoolToolId: contextExternalTool.schoolToolId,
 			displayName: contextExternalTool.displayName,
 			parameters: contextExternalTool.parameters.map(
@@ -86,7 +84,6 @@ export class ContextExternalToolMapper {
 			contextType,
 			displayName: displayName ? displayName : template.name,
 			schoolToolId: template.schoolExternalToolId,
-			toolVersion: template.version,
 			parameters: parameterConfiguration,
 		};
 
@@ -102,7 +99,6 @@ export class ContextExternalToolMapper {
 			contextType: ToolContextMapping[response.contextType],
 			displayName: response.displayName,
 			schoolToolId: response.schoolToolId,
-			toolVersion: response.toolVersion,
 			parameters: response.parameters.map(
 				(parameter): ToolParameterEntry => ({
 					name: parameter.name,

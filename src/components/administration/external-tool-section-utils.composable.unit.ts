@@ -16,7 +16,6 @@ const schoolExternalToolsModuleMock =
 				{
 					id: "id",
 					name: "toolName",
-					version: 1,
 					isDeactivated: false,
 					toolId: "toolId",
 					schoolId: "schoolId",
@@ -45,7 +44,6 @@ describe("useSchoolExternalToolUtils", () => {
 			id: "id",
 			name: "toolName",
 			toolId: "toolId",
-			toolVersion: 1,
 			schoolId: "schoolId",
 			parameters: [
 				{

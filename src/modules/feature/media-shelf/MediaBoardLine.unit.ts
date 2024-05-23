@@ -1,3 +1,4 @@
+import { MediaBoardLayoutType } from "@/serverApi/v3";
 import { ComponentProps } from "@/types/vue";
 import { mediaLineResponseFactory } from "@@/tests/test-utils";
 import {
@@ -12,6 +13,7 @@ import { Sortable } from "sortablejs-vue3";
 import { nextTick, ref } from "vue";
 import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
 import { availableMediaLineId, ElementMove } from "./data";
+import { useEditMode } from "./editMode.composable";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
@@ -29,6 +31,7 @@ describe("MediaBoardLine", () => {
 	const getWrapper = (
 		props: ComponentProps<typeof MediaBoardLine> = {
 			line: mediaLineResponseFactory.build(),
+			layout: MediaBoardLayoutType.List,
 			index: 0,
 		}
 	) => {
@@ -85,6 +88,32 @@ describe("MediaBoardLine", () => {
 			const menu = wrapper.findComponent(MediaBoardLineMenu);
 
 			expect(menu.isVisible()).toEqual(true);
+		});
+	});
+
+	describe("when renaming from the menu", () => {
+		const setup = () => {
+			const line = mediaLineResponseFactory.build();
+
+			const { wrapper } = getWrapper({
+				line,
+				layout: MediaBoardLayoutType.List,
+				index: 0,
+			});
+
+			return {
+				wrapper,
+				line,
+			};
+		};
+
+		it("should start the edit mode for the title", async () => {
+			const { wrapper, line } = setup();
+
+			const menu = wrapper.findComponent(MediaBoardLineMenu);
+			menu.vm.$emit("rename-title");
+
+			expect(useEditMode(line.id).isEditMode.value).toEqual(true);
 		});
 	});
 
@@ -285,6 +314,7 @@ describe("MediaBoardLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaLineResponseFactory.build(),
+				layout: MediaBoardLayoutType.List,
 				index: 0,
 			});
 
@@ -418,6 +448,50 @@ describe("MediaBoardLine", () => {
 			await nextTick();
 
 			expect(useDragAndDrop().isDragging.value).toEqual(false);
+		});
+	});
+
+	describe("when the line is in grid layout", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper({
+				line: mediaLineResponseFactory.build(),
+				layout: MediaBoardLayoutType.Grid,
+				index: 0,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should have the flex-wrap class", () => {
+			const { wrapper } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			expect(sortable.classes()).toContain("flex-wrap");
+		});
+	});
+
+	describe("when the line is in list layout", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper({
+				line: mediaLineResponseFactory.build(),
+				layout: MediaBoardLayoutType.List,
+				index: 0,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should not have the flex-wrap class", () => {
+			const { wrapper } = setup();
+
+			const sortable = wrapper.findComponent(Sortable);
+
+			expect(sortable.classes()).not.toContain("flex-wrap");
 		});
 	});
 });

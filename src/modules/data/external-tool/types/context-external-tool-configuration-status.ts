@@ -5,5 +5,7 @@ export interface ContextExternalToolConfigurationStatus {
 
 	isIncompleteOnScopeContext: boolean;
 
+	isIncompleteOperationalOnScopeContext: boolean;
+
 	isDeactivated: boolean;
 }

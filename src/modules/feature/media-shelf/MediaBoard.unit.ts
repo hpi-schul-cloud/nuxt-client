@@ -1,5 +1,7 @@
+import { MediaBoardColors } from "@/serverApi/v3";
 import { ComponentProps } from "@/types/vue";
 import {
+	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
 	mediaLineResponseFactory,
 } from "@@/tests/test-utils";
@@ -40,7 +42,12 @@ describe("MediaBoard", () => {
 		ReturnType<typeof useSharedMediaBoardState>
 	>;
 
-	const getWrapper = (props: ComponentProps<typeof MediaBoard>) => {
+	const getWrapper = (
+		props: ComponentProps<typeof MediaBoard> = {
+			board: mediaBoardResponseFactory.build(),
+			availableMediaLine: mediaAvailableLineResponseFactory.build(),
+		}
+	) => {
 		const wrapper = shallowMount(MediaBoard, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -71,9 +78,7 @@ describe("MediaBoard", () => {
 
 	describe("when the available line creates a new element on the board", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper({
-				board: mediaBoardResponseFactory.build(),
-			});
+			const { wrapper } = getWrapper();
 
 			const createOptions: ElementCreate = {
 				schoolExternalToolId: "schoolExternalToolId",
@@ -102,11 +107,42 @@ describe("MediaBoard", () => {
 		});
 	});
 
+	describe("when a available line updates its color", () => {
+		it("should update the line color in the board state", async () => {
+			const { wrapper } = getWrapper();
+
+			const availableLine = wrapper.findComponent(MediaBoardAvailableLine);
+
+			availableLine.vm.$emit(
+				"update:line-background-color",
+				MediaBoardColors.Red
+			);
+			await nextTick();
+
+			expect(
+				useSharedMediaBoardStateMock.updateAvailableLineBackgroundColor
+			).toHaveBeenCalledWith(MediaBoardColors.Red);
+		});
+	});
+
+	describe("when a available line updates its visibility", () => {
+		it("should update the line visibility in the board state", async () => {
+			const { wrapper } = getWrapper();
+
+			const availableLine = wrapper.findComponent(MediaBoardAvailableLine);
+
+			availableLine.vm.$emit("update:line-collapsed", true);
+			await nextTick();
+
+			expect(
+				useSharedMediaBoardStateMock.updateAvailableLineCollapsed
+			).toHaveBeenCalledWith(true);
+		});
+	});
+
 	describe("when the ghost line creates a new line on the board", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper({
-				board: mediaBoardResponseFactory.build(),
-			});
+			const { wrapper } = getWrapper();
 
 			return {
 				wrapper,
@@ -127,9 +163,7 @@ describe("MediaBoard", () => {
 
 	describe("when a media line updates its title", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper({
-				board: mediaBoardResponseFactory.build(),
-			});
+			const { wrapper } = getWrapper();
 
 			return {
 				wrapper,
@@ -151,11 +185,39 @@ describe("MediaBoard", () => {
 		});
 	});
 
+	describe("when a media line updates its color", () => {
+		it("should update the line color in the board state", async () => {
+			const { wrapper } = getWrapper();
+
+			const mediaLine = wrapper.findComponent(MediaBoardLine);
+
+			mediaLine.vm.$emit("update:line-background-color", MediaBoardColors.Red);
+			await nextTick();
+
+			expect(
+				useSharedMediaBoardStateMock.updateLineBackgroundColor
+			).toHaveBeenCalledWith(expect.any(String), MediaBoardColors.Red);
+		});
+	});
+
+	describe("when a media line updates its visibility", () => {
+		it("should update the line visibility in the board state", async () => {
+			const { wrapper } = getWrapper();
+
+			const mediaLine = wrapper.findComponent(MediaBoardLine);
+
+			mediaLine.vm.$emit("update:line-collapsed", true);
+			await nextTick();
+
+			expect(
+				useSharedMediaBoardStateMock.updateLineCollapsed
+			).toHaveBeenCalledWith(expect.any(String), true);
+		});
+	});
+
 	describe("when a media line updates the position of a contained element", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper({
-				board: mediaBoardResponseFactory.build(),
-			});
+			const { wrapper } = getWrapper();
 
 			const moveOptions: ElementMove = {
 				fromLineId: "lineId1",
@@ -187,9 +249,7 @@ describe("MediaBoard", () => {
 
 	describe("when a media line gets deleted", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper({
-				board: mediaBoardResponseFactory.build(),
-			});
+			const { wrapper } = getWrapper();
 
 			return {
 				wrapper,
@@ -212,9 +272,7 @@ describe("MediaBoard", () => {
 
 	describe("when a media element gets deleted", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper({
-				board: mediaBoardResponseFactory.build(),
-			});
+			const { wrapper } = getWrapper();
 
 			return {
 				wrapper,
@@ -237,9 +295,7 @@ describe("MediaBoard", () => {
 
 	describe("when a media line was dragged", () => {
 		const setup = () => {
-			const { wrapper } = getWrapper({
-				board: mediaBoardResponseFactory.build(),
-			});
+			const { wrapper } = getWrapper();
 
 			const lineId = "lineId";
 			const sortableEvent: Partial<SortableEvent> = {
@@ -283,6 +339,7 @@ describe("MediaBoard", () => {
 				board: mediaBoardResponseFactory.build({
 					lines: mediaLineResponseFactory.buildList(lineLimit),
 				}),
+				availableMediaLine: mediaAvailableLineResponseFactory.build(),
 			});
 
 			return {

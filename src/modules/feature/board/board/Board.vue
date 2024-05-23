@@ -102,20 +102,21 @@ import {
 } from "@/utils/inject";
 import {
 	useBoardPermissions,
+	useBoardStore,
+	useCardStore,
 	useSharedBoardPageInformation,
 	useSharedEditMode,
-	useBoardStore,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { extractDataAttribute, useBoardNotifier } from "@util-board";
+import { useTouchDetection } from "@util-device-detection";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onMounted, onUnmounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useTouchDetection } from "@util-device-detection";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
@@ -132,9 +133,10 @@ const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 
 const boardStore = useBoardStore();
+const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
 
-const { createPageInformation } = useSharedBoardPageInformation();
+const { createPageInformation, roomId } = useSharedBoardPageInformation();
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -162,7 +164,9 @@ const onCreateColumn = async () => {
 };
 
 const onDeleteCard = async (cardId: string) => {
-	if (hasCreateCardPermission) boardStore.deleteCardRequest({ cardId });
+	if (hasCreateCardPermission) {
+		cardStore.deleteCardRequest({ cardId });
+	}
 };
 
 const onDeleteColumn = async (columnId: string) => {
@@ -253,6 +257,7 @@ onUnmounted(() => {
 
 onUnmounted(() => {
 	resetNotifierModule();
+	cardStore.resetState();
 });
 
 const setAlert = useDebounceFn(() => {
@@ -348,7 +353,6 @@ const onShareBoard = () => {
 const roomModule = injectStrict(ROOM_MODULE_KEY);
 const openDeleteBoardDialog = async (id: string) => {
 	await roomModule.deleteBoard(id);
-
-	router.push({ path: "/rooms/" + roomModule.getRoomId });
+	router.push({ path: "/rooms/" + roomId.value });
 };
 </script>

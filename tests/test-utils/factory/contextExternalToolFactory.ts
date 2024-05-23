@@ -9,6 +9,5 @@ export const contextExternalToolFactory = Factory.define<ContextExternalTool>(
 		contextId: "contextId",
 		contextType: ToolContextType.Course,
 		parameters: [],
-		toolVersion: 1,
 	})
 );

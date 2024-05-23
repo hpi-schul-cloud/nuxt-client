@@ -4,8 +4,8 @@
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 	>
-		<div class="line-header mb-4 rounded" tabindex="0" ref="lineHeader">
-			<div class="d-flex align-center py-2 px-2">
+		<div class="line-header rounded" tabindex="0" ref="lineHeader">
+			<div class="d-flex align-center py-2 px-4">
 				<BoardAnyTitleInput
 					:value="title"
 					scope="column"

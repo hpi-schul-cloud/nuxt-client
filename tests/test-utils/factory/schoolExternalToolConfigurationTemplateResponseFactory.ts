@@ -7,6 +7,5 @@ export const schoolExternalToolConfigurationTemplateResponseFactory =
 			externalToolId: `tool-${sequence}`,
 			name: `SchoolExternalTool${sequence}`,
 			parameters: [],
-			version: 1,
 		})
 	);

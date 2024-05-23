@@ -11,5 +11,4 @@ export const contextExternalToolResponseFactory =
 		contextType: ContextExternalToolResponseContextTypeEnum.Course,
 		schoolToolId: `school-external-tool-${sequence}`,
 		parameters: [],
-		toolVersion: 1,
 	}));

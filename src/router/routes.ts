@@ -4,13 +4,13 @@ import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
-	isEnum,
-	isMongoId,
-	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
+	isEnum,
+	isMongoId,
+	isOfficialSchoolNumber,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
@@ -234,6 +234,11 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		path: `/rooms/:id(${REGEX_ID})`,
 		component: () => import("@/pages/rooms/RoomDetails.page.vue"),
 		name: "rooms-id",
+	},
+	{
+		path: `/rooms`,
+		redirect: { name: "rooms-overview" },
+		name: "rooms",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
