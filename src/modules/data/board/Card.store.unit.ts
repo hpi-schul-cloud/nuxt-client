@@ -115,8 +115,10 @@ describe("CardStore", () => {
 		const cardId = cards[0].id;
 		const card = cards[0];
 		card.elements = elements;
-		cardStore.cards[cardId] = card;
-		cardStore.fetchCardSuccess({ cards });
+
+		for (const card of cards) {
+			cardStore.cards[card.id] = card;
+		}
 
 		return { cardStore, cardId, elements };
 	};
@@ -151,7 +153,7 @@ describe("CardStore", () => {
 			const { cardStore } = setup();
 			const cards = cardResponseFactory.buildList(3);
 
-			cardStore.fetchCardSuccess({ cards });
+			cardStore.fetchCardSuccess({ cards, isOwnAction: true });
 
 			expect(cardStore.getCard(cards[0].id)).toEqual(cards[0]);
 		});
@@ -193,6 +195,7 @@ describe("CardStore", () => {
 
 			cardStore.deleteCardSuccess({
 				cardId: "unkownId",
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards).toEqual(oldCards);
@@ -203,6 +206,7 @@ describe("CardStore", () => {
 
 			cardStore.deleteCardSuccess({
 				cardId,
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards[cardId]).toBeUndefined();
@@ -245,6 +249,7 @@ describe("CardStore", () => {
 			cardStore.updateCardTitleSuccess({
 				cardId: "unkownId",
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(Object.values(cardStore.cards).map((card) => card.title)).toEqual(
@@ -258,6 +263,7 @@ describe("CardStore", () => {
 			cardStore.updateCardTitleSuccess({
 				cardId,
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards[cardId].title).toEqual(NEW_TITLE);
@@ -300,6 +306,7 @@ describe("CardStore", () => {
 			cardStore.updateCardHeightSuccess({
 				cardId: "unkownId",
 				newHeight: NEW_HEIGHT,
+				isOwnAction: true,
 			});
 
 			expect(Object.values(cardStore.cards).map((card) => card.height)).toEqual(
@@ -313,6 +320,7 @@ describe("CardStore", () => {
 			cardStore.updateCardHeightSuccess({
 				cardId,
 				newHeight: NEW_HEIGHT,
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards[cardId].height).toEqual(NEW_HEIGHT);
@@ -381,6 +389,7 @@ describe("CardStore", () => {
 					cardId,
 					newElement,
 					toPosition,
+					isOwnAction: true,
 				});
 
 				expect(cardStore.cards[cardId].elements.length).toEqual(4);
@@ -397,6 +406,7 @@ describe("CardStore", () => {
 					type: ContentElementType.Drawing,
 					cardId,
 					newElement,
+					isOwnAction: true,
 				});
 
 				expect(cardStore.cards[cardId].elements.length).toEqual(4);
@@ -414,6 +424,7 @@ describe("CardStore", () => {
 					type: ContentElementType.Drawing,
 					cardId: "invalidId",
 					newElement,
+					isOwnAction: true,
 				});
 
 				expect(Object.keys(cardStore.cards).length).toEqual(3);
@@ -431,6 +442,7 @@ describe("CardStore", () => {
 					cardId,
 					newElement,
 					toPosition: 100,
+					isOwnAction: true,
 				});
 
 				expect(Object.keys(cardStore.cards).length).toEqual(3);
@@ -518,6 +530,7 @@ describe("CardStore", () => {
 				elementId: elements[0].id,
 				toCardId: "unknownId",
 				toPosition: 1,
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards[cardId].elements[0].id).toEqual(elementId);
@@ -532,6 +545,7 @@ describe("CardStore", () => {
 				elementId,
 				toCardId: cardId,
 				toPosition,
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards[cardId].elements[toPosition].id).toEqual(
@@ -548,6 +562,7 @@ describe("CardStore", () => {
 				elementId,
 				toCardId: cardId,
 				toPosition,
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards[cardId].elements[1].id).toEqual(elementId);
@@ -560,7 +575,11 @@ describe("CardStore", () => {
 			const numberOfElements = cardStore.cards[cardId].elements.length;
 			const elementId = elements[0].id;
 
-			await cardStore.deleteElementSuccess({ cardId: "unkown", elementId });
+			await cardStore.deleteElementSuccess({
+				cardId: "unkown",
+				elementId,
+				isOwnAction: true,
+			});
 
 			expect(cardStore.cards[cardId].elements.length).toEqual(numberOfElements);
 		});
@@ -569,7 +588,11 @@ describe("CardStore", () => {
 			const numberOfElements = cardStore.cards[cardId].elements.length;
 			const elementId = elements[0].id;
 
-			await cardStore.deleteElementSuccess({ cardId, elementId });
+			await cardStore.deleteElementSuccess({
+				cardId,
+				elementId,
+				isOwnAction: true,
+			});
 
 			expect(cardStore.cards[cardId].elements.length).toEqual(
 				numberOfElements - 1
@@ -617,6 +640,7 @@ describe("CardStore", () => {
 					type: ContentElementType.RichText,
 					content: richTextElementContentFactory.build(),
 				},
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards[cardId].elements).toEqual(oldElements);
@@ -634,6 +658,7 @@ describe("CardStore", () => {
 					type: elementToUpdate.type,
 					content: newContent,
 				},
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards[cardId].elements[0].content).toEqual(newContent);
