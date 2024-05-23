@@ -371,7 +371,7 @@ describe("User Migration / Index", () => {
 				expect(wrapper.vm.isCancelDialogOpen).toEqual(false);
 			});
 
-			it("should call composable on dialog-confirm", async () => {
+			it("should call store on dialog-confirm", async () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(

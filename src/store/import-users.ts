@@ -92,6 +92,7 @@ export default class ImportUsersModule extends VuexModule {
 	setMatch(match: Array<MatchedBy>): void {
 		this.match = match;
 	}
+
 	@Mutation
 	deleteMatchMutation(importUserId: string): void {
 		const editedUser = this.importUserList.data.find(
@@ -406,6 +407,21 @@ export default class ImportUsersModule extends VuexModule {
 	async populateImportUsersFromExternalSystem(): Promise<void> {
 		try {
 			await this.importUserApi.importUserControllerPopulateImportUsers();
+		} catch (error: unknown) {
+			const apiError: ApiResponseError | ApiValidationError =
+				mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				statusCode: apiError.code,
+				message: apiError.message,
+			});
+		}
+	}
+
+	@Action
+	async cancelMigration(): Promise<void> {
+		try {
+			await this.importUserApi.importUserControllerCancelMigration();
 		} catch (error: unknown) {
 			const apiError: ApiResponseError | ApiValidationError =
 				mapAxiosErrorToResponseError(error);

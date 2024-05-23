@@ -86,15 +86,15 @@
 							t(
 								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
 							)
-						}}</template
-					>
+						}}
+					</template>
 					<template #content>
 						{{
 							t(
 								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
 							)
-						}}</template
-					>
+						}}
+					</template>
 				</vCustomDialog>
 			</VStepper>
 		</template>
@@ -750,8 +750,12 @@ const cancelMigration = () => {
 	isCancelDialogOpen.value = true;
 };
 
-const confirmCancelMigration = () => {
-	return console.log("CONFIRMED");
+const confirmCancelMigration = async () => {
+	isLoading.value = true;
+
+	await importUsersModule.cancelMigration();
+
+	isLoading.value = false;
 };
 
 watch(migrationStep, async (val) => {
