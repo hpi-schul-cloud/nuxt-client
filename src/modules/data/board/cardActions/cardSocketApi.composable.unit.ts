@@ -94,6 +94,7 @@ describe("useCardSocketApi", () => {
 				type: ContentElementType.RichText,
 				toPosition: 0,
 				newElement: richTextElementResponseFactory.build(),
+				isOwnAction: true,
 			};
 			dispatch(CardActions.createElementSuccess(payload));
 
@@ -107,6 +108,7 @@ describe("useCardSocketApi", () => {
 			const payload = {
 				cardId: "cardId",
 				elementId: "elementId",
+				isOwnAction: true,
 			};
 			dispatch(CardActions.deleteElementSuccess(payload));
 
@@ -120,6 +122,7 @@ describe("useCardSocketApi", () => {
 			const payload = {
 				cardId: "cardId",
 				newTitle: "newTitle",
+				isOwnAction: true,
 			};
 			dispatch(CardActions.updateCardTitleSuccess(payload));
 
@@ -133,6 +136,7 @@ describe("useCardSocketApi", () => {
 			const payload = {
 				cardId: "cardId",
 				newHeight: 100,
+				isOwnAction: true,
 			};
 			dispatch(CardActions.updateCardHeightSuccess(payload));
 
