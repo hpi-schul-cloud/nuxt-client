@@ -42,6 +42,7 @@
 			>
 				<template #item="{ element, index }">
 					<CardHost
+						v-if="element"
 						:data-card-id="element.cardId"
 						class="draggable my-3"
 						:class="{
@@ -72,15 +73,12 @@ import { useDebounceFn } from "@vueuse/core";
 import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { useBoardPermissions } from "@data-board";
+import { useBoardPermissions, useBoardStore } from "@data-board";
 import { useTouchDetection } from "@util-device-detection";
 import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
-	CardMove,
 	DragAndDropKey,
 	cardDropPlaceholderOptions,
-	horizontalCursorKeys,
-	verticalCursorKeys,
 } from "@/types/board/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
@@ -124,11 +122,11 @@ export default defineComponent({
 		"move:column-right",
 		"move:column-up",
 		"reload:board",
-		"update:card-position",
 		"update:column-title",
 	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
+		const boardStore = useBoardStore();
 		const reactiveIndex = toRef(props, "index");
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
@@ -191,54 +189,78 @@ export default defineComponent({
 		const onDragEnd = async (event: SortableEvent) => {
 			dragEnd();
 			const { newIndex, oldIndex, to, from, item } = event;
-			const toColumnId = extractDataAttribute(to, "columnId");
+			const cardId = extractDataAttribute(item, "cardId") as string;
 			const fromColumnId = extractDataAttribute(from, "columnId") as string;
-			const cardId = extractDataAttribute(event.item, "cardId") as string;
+			const toColumnId = extractDataAttribute(to, "columnId");
+			const toColumnIndex = toColumnId
+				? boardStore.getColumnIndex(toColumnId)
+				: undefined;
 
 			if (toColumnId !== fromColumnId) {
 				item?.parentNode?.removeChild(item);
 			}
 
-			if (newIndex !== undefined && oldIndex !== undefined) {
-				const cardMove: CardMove = {
-					cardId,
-					newIndex,
-					oldIndex,
-					fromColumnId,
-					toColumnId,
-				};
-
-				emit("update:card-position", cardMove);
-			}
+			boardStore.moveCardRequest({
+				cardId,
+				oldIndex: oldIndex!,
+				newIndex: newIndex!,
+				fromColumnId,
+				fromColumnIndex: boardStore.getColumnIndex(fromColumnId),
+				toColumnId,
+				toColumnIndex,
+			});
 		};
 
 		const onMoveCardKeyboard = (
 			cardIndex: number,
-			cardId: string,
+			cardId: string | undefined,
 			keyString: DragAndDropKey
 		) => {
-			const cardMove: CardMove = {
-				oldIndex: cardIndex,
-				newIndex: -1,
+			if (cardId === undefined) return;
+
+			const fromColumnId = props.column.id;
+			const fromColumnIndex = boardStore.getColumnIndex(fromColumnId);
+
+			if (
+				keyString === "ArrowRight" &&
+				fromColumnIndex === boardStore.getLastColumnIndex()
+			) {
+				boardStore.moveCardToNewColumn(cardId);
+				return;
+			}
+
+			const oldIndex = cardIndex;
+			let toColumnId: string | undefined = fromColumnId;
+			let toColumnIndex = fromColumnIndex;
+			let newIndex = 0;
+			let forceNextTick = false;
+
+			if (keyString === "ArrowUp") {
+				if (cardIndex === 0) return;
+				forceNextTick = true;
+				newIndex = oldIndex - 1;
+			} else if (keyString === "ArrowDown") {
+				if (cardIndex === props.column.cards.length - 1) return;
+				newIndex = oldIndex + 1;
+			} else if (keyString === "ArrowLeft") {
+				if (fromColumnIndex === 0) return;
+				toColumnIndex = fromColumnIndex - 1;
+				toColumnId = boardStore.getColumnId(toColumnIndex);
+			} else if (keyString === "ArrowRight") {
+				toColumnIndex = fromColumnIndex + 1;
+				toColumnId = boardStore.getColumnId(toColumnIndex);
+			}
+
+			boardStore.moveCardRequest({
 				cardId,
-				fromColumnId: props.column.id,
-				toColumnId: props.column.id,
-			};
-
-			if (verticalCursorKeys.includes(keyString)) {
-				const change = keyString === "ArrowUp" ? -1 : +1;
-				if (change === 1 && cardIndex === props.column.cards.length - 1) return;
-				if (change === -1 && cardIndex === 0) return;
-				if (keyString === "ArrowUp") cardMove.forceNextTick = true;
-				cardMove.newIndex = cardIndex + change;
-			}
-
-			if (horizontalCursorKeys.includes(keyString)) {
-				cardMove.columnDelta = keyString === "ArrowLeft" ? -1 : +1;
-				cardMove.newIndex = 0;
-			}
-
-			emit("update:card-position", cardMove);
+				oldIndex,
+				newIndex,
+				fromColumnId,
+				fromColumnIndex,
+				toColumnId,
+				toColumnIndex,
+				forceNextTick,
+			});
 		};
 
 		const onMoveColumnDown = () => {

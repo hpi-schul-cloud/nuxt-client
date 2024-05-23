@@ -101,6 +101,7 @@ describe("useBoardSocketApi", () => {
 			const payload = {
 				newCard: cardResponseFactory.build(),
 				columnId: "columnId",
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.createCardSuccess(payload));
 
@@ -113,6 +114,7 @@ describe("useBoardSocketApi", () => {
 
 			const payload = {
 				newColumn: columnResponseFactory.build(),
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.createColumnSuccess(payload));
 
@@ -125,6 +127,7 @@ describe("useBoardSocketApi", () => {
 
 			const payload = {
 				cardId: "cardId",
+				isOwnAction: true,
 			};
 
 			dispatch(CardActions.deleteCardSuccess(payload));
@@ -138,6 +141,7 @@ describe("useBoardSocketApi", () => {
 
 			const payload = {
 				columnId: "columnId",
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.deleteColumnSuccess(payload));
 
@@ -153,6 +157,10 @@ describe("useBoardSocketApi", () => {
 				oldIndex: 0,
 				newIndex: 0,
 				fromColumnId: "fromColumnId",
+				fromColumnIndex: 0,
+				toColumnId: "toColumnId",
+				toColumnIndex: 0,
+				isOwnAction: true,
 			};
 
 			dispatch(BoardActions.moveCardSuccess(payload));
@@ -167,6 +175,7 @@ describe("useBoardSocketApi", () => {
 			const payload = {
 				columnMove: { addedIndex: 1, columnId: "testColumnId" },
 				byKeyboard: false,
+				isOwnAction: true,
 			};
 
 			dispatch(BoardActions.moveColumnSuccess(payload));
@@ -192,6 +201,7 @@ describe("useBoardSocketApi", () => {
 			const payload = {
 				columnId: "cardId",
 				newTitle: "newTitle",
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.updateColumnTitleSuccess(payload));
 
@@ -205,6 +215,7 @@ describe("useBoardSocketApi", () => {
 			const payload = {
 				boardId: "cardId",
 				newTitle: "newTitle",
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.updateBoardTitleSuccess(payload));
 
@@ -218,6 +229,7 @@ describe("useBoardSocketApi", () => {
 			const payload = {
 				boardId: "cardId",
 				isVisible: true,
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.updateBoardVisibilitySuccess(payload));
 

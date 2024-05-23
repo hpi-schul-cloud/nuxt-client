@@ -5,20 +5,17 @@ import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
-import { CardMove } from "@/types/board/DragAndDrop";
-import { ColumnResponse } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import {
 	CreateCardRequestPayload,
 	CreateCardSuccessPayload,
 	CreateColumnRequestPayload,
-	CreateColumnSucccessPayload,
+	CreateColumnSuccessPayload,
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
 	DisconnectSocketRequestPayload,
 	FetchBoardRequestPayload,
 	FetchBoardSuccessPayload,
-	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
 	MoveColumnRequestPayload,
 	MoveColumnSuccessPayload,
@@ -34,6 +31,7 @@ import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
 export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
+	const { setFocus } = useBoardFocusHandler();
 
 	const restApi = useBoardRestApi();
 	const isSocketEnabled =
@@ -42,6 +40,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
 
 	const { setEditModeId } = useSharedEditMode();
+
+	const getLastColumnIndex = () => board.value!.columns.length - 1;
 
 	const getColumnIndex = (columnId: string | undefined): number => {
 		if (columnId === undefined) return -1;
@@ -52,14 +52,28 @@ export const useBoardStore = defineStore("boardStore", () => {
 	};
 
 	const getColumnId = (columnIndex: number): string | undefined => {
-		if (board.value === undefined) return;
-		if (columnIndex === undefined) return;
+		if (board.value === undefined) return; // shouldn't happen because board presence is checked by callers
+		if (columnIndex === undefined) return; // shouldn't happen because columnIndex is always set by type definition
 		if (columnIndex < 0) return;
 		if (columnIndex > board.value.columns.length - 1) return;
 
 		if (board.value.columns[columnIndex] === undefined) return;
 
 		return board.value.columns[columnIndex].id;
+	};
+
+	const getCardLocation = (cardId: string) => {
+		if (!board.value) return;
+
+		const columnIndex = board.value.columns.findIndex(
+			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
+		);
+		if (columnIndex === -1) return undefined;
+
+		const column = board.value.columns[columnIndex];
+		const columnId = column.id;
+		const cardIndex = column.cards.findIndex((c) => c.cardId === cardId);
+		return { columnIndex, columnId, cardIndex };
 	};
 
 	const setBoard = (newBoard: Board | undefined) => {
@@ -78,8 +92,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 
 		const { newCard } = payload;
-		const { setFocus } = useBoardFocusHandler();
-		setFocus(newCard.id);
 
 		const columnIndex = board.value.columns.findIndex(
 			(column) => column.id === payload.columnId
@@ -88,14 +100,17 @@ export const useBoardStore = defineStore("boardStore", () => {
 			cardId: newCard.id,
 			height: 120,
 		});
-		setEditModeId(newCard.id);
+		if (payload.isOwnAction === true) {
+			setFocus(newCard.id);
+			setEditModeId(newCard.id);
+		}
 	};
 
 	const createColumnRequest = async (payload: CreateColumnRequestPayload) => {
 		socketOrRest.createColumnRequest(payload);
 	};
 
-	const createColumnSuccess = (payload: CreateColumnSucccessPayload) => {
+	const createColumnSuccess = (payload: CreateColumnSuccessPayload) => {
 		if (!board.value) return;
 		board.value.columns.push(payload.newColumn);
 	};
@@ -122,10 +137,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 		const columnId = payload.columnId;
 		const columnIndex = getColumnIndex(columnId);
-		if (columnIndex < 0) {
-			return;
+		if (columnIndex !== -1) {
+			board.value.columns.splice(columnIndex, 1);
 		}
-		board.value.columns.splice(columnIndex, 1);
 	};
 
 	const updateBoardTitleRequest = async (
@@ -152,7 +166,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 		const { columnId, newTitle } = payload;
 		const columnIndex = getColumnIndex(columnId);
-		if (columnIndex > -1) {
+		if (columnIndex !== -1) {
 			board.value.columns[columnIndex].title = newTitle;
 		}
 	};
@@ -196,45 +210,26 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.columns.splice(addedIndex, 0, column);
 	};
 
-	const getColumnIndices = (
-		fromColumnId: string | undefined,
-		toColumnId: string | undefined,
-		columnDelta: number | undefined
-	) => {
-		const fromColumnIndex = getColumnIndex(fromColumnId);
-		const newColumnId: string | undefined =
-			columnDelta === undefined
-				? toColumnId
-				: getColumnId(fromColumnIndex + columnDelta);
+	const moveCardToNewColumn = async (cardId: string) => {
+		const cardLocation = getCardLocation(cardId);
+		if (cardLocation === undefined) return;
 
-		return { fromColumnIndex, toColumnIndex: getColumnIndex(newColumnId) };
+		const {
+			columnIndex: fromColumnIndex,
+			columnId: fromColumnId,
+			cardIndex: oldIndex,
+		} = cardLocation;
+
+		await socketOrRest.moveCardRequest({
+			cardId,
+			fromColumnId,
+			fromColumnIndex,
+			oldIndex,
+			newIndex: 0,
+		});
 	};
 
-	const isMoveValid = (
-		payload: CardMove,
-		columns: Array<ColumnResponse>,
-		targetColumnIndex: number,
-		fromColumnIndex: number
-	) => {
-		const { cardId, newIndex, oldIndex } = payload;
-		if (cardId === undefined || targetColumnIndex === undefined) return false; // ensure values are set
-
-		const movedInsideColumn = fromColumnIndex === targetColumnIndex;
-		if (movedInsideColumn) {
-			if (
-				(newIndex === oldIndex && fromColumnIndex === targetColumnIndex) || // same position
-				newIndex < 0 || // first card - can't move up
-				newIndex > columns[fromColumnIndex].cards.length - 1 // last card - can't move down
-			)
-				return false;
-		}
-
-		return true;
-	};
-
-	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
-		await socketOrRest.moveCardRequest(payload);
-	};
+	const moveCardRequest = socketOrRest.moveCardRequest;
 
 	const moveCardSuccess = async (payload: MoveCardSuccessPayload) => {
 		if (!board.value) return;
@@ -242,30 +237,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 		const {
 			newIndex,
 			oldIndex,
-			toColumnId,
-			fromColumnId,
-			columnDelta,
 			forceNextTick,
+			fromColumnIndex,
+			toColumnIndex,
 		} = payload;
-
-		const { fromColumnIndex, toColumnIndex } = getColumnIndices(
-			fromColumnId,
-			toColumnId,
-			columnDelta
-		);
-
-		const targetColumnIndex = toColumnIndex ?? board.value.columns.length - 1;
-
-		if (
-			!isMoveValid(
-				payload,
-				board.value.columns,
-				targetColumnIndex,
-				fromColumnIndex
-			)
-		) {
-			return;
-		}
 
 		const item = board.value.columns[fromColumnIndex].cards.splice(
 			oldIndex,
@@ -280,9 +255,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 			await nextTick();
 		}
 
-		board.value.columns[targetColumnIndex].cards =
-			board.value.columns[targetColumnIndex].cards ?? [];
-		board.value.columns[targetColumnIndex].cards.splice(newIndex, 0, item);
+		const toColumn = board.value.columns[toColumnIndex];
+		toColumn.cards.splice(newIndex, 0, item);
 	};
 
 	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
@@ -306,6 +280,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 	return {
 		board,
 		isLoading,
+		getColumnIndex,
+		getColumnId,
+		getLastColumnIndex,
 		setBoard,
 		setLoading,
 		createCardRequest,
@@ -316,6 +293,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		deleteColumnRequest,
 		deleteColumnSuccess,
 		disconnectSocketRequest,
+		moveCardToNewColumn,
 		moveCardRequest,
 		moveCardSuccess,
 		moveColumnRequest,
