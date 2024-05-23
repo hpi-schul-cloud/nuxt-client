@@ -63,6 +63,7 @@ import {
 	PropType,
 	ref,
 	toRef,
+	watch,
 } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
@@ -142,12 +143,15 @@ export default defineComponent({
 			return isUploadingInViewMode || isEditMode;
 		});
 
-		onMounted(() => {
-			(async () => {
-				await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+		watch(element.value, async () => {
+			isLoadingFileRecord.value = true;
+			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			isLoadingFileRecord.value = false;
+		});
 
-				isLoadingFileRecord.value = false;
-			})();
+		onMounted(async () => {
+			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			isLoadingFileRecord.value = false;
 		});
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
@@ -160,6 +164,7 @@ export default defineComponent({
 		const onUploadFile = async (file: File): Promise<void> => {
 			try {
 				await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
+				element.value.content.caption = " ";
 			} catch (error) {
 				emit("delete:element", element.value.id);
 			}

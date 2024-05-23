@@ -4,10 +4,14 @@ import { useCardStore } from "../Card.store";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
+	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
+	DeleteElementRequestPayload,
 	FetchCardRequestPayload,
+	MoveElementRequestPayload,
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
+	UpdateElementRequestPayload,
 } from "./cardActionPayload";
 import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPayload";
 import { useDebounceFn } from "@vueuse/core";
@@ -31,6 +35,10 @@ export const useCardSocketApi = () => {
 			on(CardActions.disconnectSocket, disconnectSocketRequest),
 
 			// success actions
+			on(CardActions.createElementSuccess, cardStore.createElementSuccess),
+			on(CardActions.deleteElementSuccess, cardStore.deleteElementSuccess),
+			on(CardActions.moveElementSuccess, cardStore.moveElementSuccess),
+			on(CardActions.updateElementSuccess, cardStore.updateElementSuccess),
 			on(CardActions.deleteCardSuccess, cardStore.deleteCardSuccess),
 			on(CardActions.fetchCardSuccess, cardStore.fetchCardSuccess),
 			on(CardActions.updateCardTitleSuccess, cardStore.updateCardTitleSuccess),
@@ -40,6 +48,10 @@ export const useCardSocketApi = () => {
 			),
 
 			// failure actions
+			on(CardActions.createElementFailure, onFailure),
+			on(CardActions.deleteElementFailure, onFailure),
+			on(CardActions.moveElementFailure, onFailure),
+			on(CardActions.updateElementFailure, onFailure),
 			on(CardActions.deleteCardFailure, onFailure),
 			on(CardActions.fetchCardFailure, onFailure),
 			on(CardActions.updateCardTitleFailure, onFailure),
@@ -68,6 +80,30 @@ export const useCardSocketApi = () => {
 		{ maxWait: MAX_WAIT_BEFORE_FIRST_CALL_IN_MS }
 	);
 
+	const createElementRequest = async (payload: CreateElementRequestPayload) => {
+		emitOnSocket("create-element-request", payload);
+	};
+
+	const deleteElementRequest = async (payload: DeleteElementRequestPayload) => {
+		emitOnSocket("delete-element-request", payload);
+	};
+
+	const moveElementRequest = async (payload: MoveElementRequestPayload) => {
+		emitOnSocket("move-element-request", payload);
+	};
+
+	const updateElementRequest = async ({
+		element,
+	}: UpdateElementRequestPayload) => {
+		emitOnSocket("update-element-request", {
+			elementId: element.id,
+			data: {
+				type: element.type,
+				content: element.content,
+			},
+		});
+	};
+
 	const deleteCardRequest = async (payload: DeleteCardRequestPayload) => {
 		emitOnSocket("delete-card-request", payload);
 	};
@@ -88,6 +124,10 @@ export const useCardSocketApi = () => {
 	return {
 		dispatch,
 		disconnectSocketRequest,
+		createElementRequest,
+		deleteElementRequest,
+		moveElementRequest,
+		updateElementRequest,
 		deleteCardRequest,
 		fetchCardRequest,
 		updateCardTitleRequest,

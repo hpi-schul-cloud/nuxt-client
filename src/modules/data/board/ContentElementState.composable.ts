@@ -1,8 +1,7 @@
 import { watchDebounced } from "@vueuse/core";
-import { computed, ComputedRef, Ref, ref, toRef, unref, UnwrapRef } from "vue";
-import { useBoardApi } from "./BoardApi.composable";
+import { computed, ComputedRef, Ref, ref, toRef, unref } from "vue";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useCardStore } from "./Card.store";
 
 export const useContentElementState = <T extends AnyContentElement>(
 	props: {
@@ -11,47 +10,27 @@ export const useContentElementState = <T extends AnyContentElement>(
 	},
 	options: { autoSaveDebounce?: number } = { autoSaveDebounce: 300 }
 ) => {
+	const cardStore = useCardStore();
 	const _elementRef: Ref<T> = toRef(props, "element");
-	const _responseValue = ref<T>(unref<T>(_elementRef));
-
-	const { handleError, notifyWithTemplate } = useErrorHandler();
-	const { updateElementCall } = useBoardApi();
 
 	const modelValue = ref<T["content"]>(unref<T>(_elementRef).content);
 
-	const computedElement: ComputedRef<T> = computed(() => ({
-		..._elementRef.value,
-		..._responseValue.value,
-	}));
+	const computedElement: ComputedRef<T> = computed(() => _elementRef.value);
 
 	const isLoading = ref<boolean>(false);
 
 	watchDebounced<T["content"]>(
 		modelValue.value,
 		async (modelValue) => {
-			await updateElement(modelValue);
+			cardStore.updateElementRequest({
+				element: {
+					..._elementRef.value,
+					content: modelValue,
+				},
+			});
 		},
 		{ debounce: options.autoSaveDebounce, maxWait: 2500 }
 	);
-
-	// TODO: refactor this to be properly typed
-	const updateElement = async (content: T["content"]) => {
-		isLoading.value = true;
-		const payload = {
-			...computedElement.value,
-			content: { ...content },
-		};
-		try {
-			const response = await updateElementCall(payload);
-			_responseValue.value = response.data as UnwrapRef<T>;
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplate("notUpdated", "boardElement"),
-			});
-		} finally {
-			isLoading.value = false;
-		}
-	};
 
 	return {
 		/**

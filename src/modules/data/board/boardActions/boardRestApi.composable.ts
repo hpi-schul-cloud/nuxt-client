@@ -3,8 +3,6 @@ import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
 import * as BoardActions from "./boardActions";
 import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
-import { CardMove } from "@/types/board/DragAndDrop";
-import { ColumnResponse } from "@/serverApi/v3";
 import {
 	BoardObjectType,
 	ErrorType,
@@ -39,28 +37,6 @@ export const useBoardRestApi = () => {
 
 	const { setEditModeId } = useSharedEditMode();
 
-	const getColumnIndex = (columnId: string | undefined): number => {
-		if (columnId === undefined) return -1;
-		if (boardStore.board === undefined) return -1;
-
-		const columnIndex = boardStore.board?.columns.findIndex(
-			(c) => c.id === columnId
-		);
-
-		if (columnIndex === undefined) return -1;
-		return columnIndex;
-	};
-
-	const getColumnId = (columnIndex: number): string | undefined => {
-		if (boardStore.board === undefined) return;
-		if (columnIndex === undefined) return;
-		if (columnIndex < 0) return;
-		if (columnIndex > boardStore.board.columns.length - 1) return;
-		if (boardStore.board.columns[columnIndex] === undefined) return;
-
-		return boardStore.board.columns[columnIndex].id;
-	};
-
 	const createCardRequest = async (payload: CreateCardRequestPayload) => {
 		if (boardStore.board === undefined) return;
 
@@ -70,6 +46,7 @@ export const useBoardRestApi = () => {
 			boardStore.createCardSuccess({
 				newCard,
 				columnId: payload.columnId,
+				isOwnAction: true,
 			});
 		} catch (error) {
 			handleError(error, {
@@ -101,7 +78,7 @@ export const useBoardRestApi = () => {
 			useBoardFocusHandler().setFocus(newColumn.id);
 			setEditModeId(newColumn.id);
 
-			boardStore.createColumnSuccess({ newColumn });
+			boardStore.createColumnSuccess({ newColumn, isOwnAction: true });
 			return newColumn;
 		} catch (error) {
 			handleError(error, {
@@ -116,48 +93,12 @@ export const useBoardRestApi = () => {
 
 		try {
 			await deleteColumnCall(columnId);
-			boardStore.deleteColumnSuccess({ columnId });
+			boardStore.deleteColumnSuccess({ columnId, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardColumn"),
 			});
 		}
-	};
-
-	const getColumnIndices = (
-		fromColumnId: string | undefined,
-		toColumnId: string | undefined,
-		columnDelta: number | undefined
-	) => {
-		const fromColumnIndex = getColumnIndex(fromColumnId);
-
-		const newColumnId: string | undefined =
-			columnDelta === undefined
-				? toColumnId
-				: getColumnId(fromColumnIndex + columnDelta);
-
-		return { fromColumnIndex, toColumnIndex: getColumnIndex(newColumnId) };
-	};
-
-	const isMoveValid = (
-		payload: CardMove,
-		columns: Array<ColumnResponse>,
-		targetColumnIndex: number,
-		fromColumnIndex: number
-	) => {
-		const { newIndex, oldIndex } = payload;
-
-		const movedInsideColumn = fromColumnIndex === targetColumnIndex;
-		if (movedInsideColumn) {
-			if (
-				(newIndex === oldIndex && fromColumnIndex === targetColumnIndex) || // same position
-				newIndex < 0 || // first card - can't move up
-				newIndex > columns[fromColumnIndex].cards.length - 1 // last card - can't move down
-			)
-				return false;
-		}
-
-		return true;
 	};
 
 	const moveCardRequest = async (
@@ -166,57 +107,31 @@ export const useBoardRestApi = () => {
 		if (boardStore.board === undefined) return;
 
 		try {
-			const {
-				cardId,
-				newIndex,
-				oldIndex,
-				toColumnId,
-				fromColumnId,
-				columnDelta,
-				forceNextTick,
-			} = payload;
+			const { cardId, newIndex, oldIndex, fromColumnId } = payload;
+			let { toColumnId, toColumnIndex } = payload;
 
-			const { fromColumnIndex, toColumnIndex } = getColumnIndices(
-				fromColumnId,
-				toColumnId,
-				columnDelta
-			);
+			const isInSameColumn = toColumnId === fromColumnId;
 
-			let targetColumnIndex = toColumnIndex;
-			let targetColumnId = toColumnId;
-
-			if (targetColumnIndex === -1) {
+			if (newIndex === oldIndex && isInSameColumn) return;
+			if (isInSameColumn && newIndex === -1 && oldIndex === 0) {
+				return;
+			}
+			if (toColumnId === undefined && toColumnIndex === undefined) {
 				// need to create a new column
 				const newColumn = await createColumnRequest();
 				if (newColumn) {
-					targetColumnId = newColumn.id;
-					targetColumnIndex = getColumnIndex(targetColumnId);
+					toColumnId = newColumn.id;
+					toColumnIndex = boardStore.getLastColumnIndex();
 				}
 			}
-
-			if (targetColumnId === undefined) return; // shouldn't happen because its either existing or newly created
-
-			if (
-				!isMoveValid(
-					payload,
-					boardStore.board.columns,
-					targetColumnIndex,
-					fromColumnIndex
-				)
-			) {
-				return;
-			}
-
-			await moveCardCall(cardId, targetColumnId, newIndex);
+			if (toColumnId === undefined || toColumnIndex === undefined) return; // shouldn't happen because its either existing or newly created
+			await moveCardCall(cardId, toColumnId, newIndex);
 
 			boardStore.moveCardSuccess({
-				cardId,
-				newIndex,
-				oldIndex,
-				toColumnId: targetColumnId,
-				fromColumnId,
-				columnDelta,
-				forceNextTick,
+				...payload,
+				toColumnId,
+				toColumnIndex,
+				isOwnAction: true,
 			});
 		} catch (error) {
 			handleError(error, {
@@ -233,7 +148,7 @@ export const useBoardRestApi = () => {
 			const { addedIndex, columnId } = columnMove;
 			await moveColumnCall(columnId, boardStore.board.id, addedIndex);
 
-			boardStore.moveColumnSuccess(payload);
+			boardStore.moveColumnSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
@@ -250,7 +165,7 @@ export const useBoardRestApi = () => {
 		try {
 			await updateColumnTitleCall(columnId, newTitle);
 
-			boardStore.updateColumnTitleSuccess(payload);
+			boardStore.updateColumnTitleSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
@@ -267,7 +182,11 @@ export const useBoardRestApi = () => {
 		try {
 			await updateBoardTitleCall(boardId, newTitle);
 
-			boardStore.updateBoardTitleSuccess({ boardId, newTitle });
+			boardStore.updateBoardTitleSuccess({
+				boardId,
+				newTitle,
+				isOwnAction: true,
+			});
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "board"),
@@ -283,7 +202,11 @@ export const useBoardRestApi = () => {
 
 		try {
 			await updateBoardVisibilityCall(boardId, isVisible);
-			boardStore.updateBoardVisibilitySuccess({ boardId, isVisible });
+			boardStore.updateBoardVisibilitySuccess({
+				boardId,
+				isVisible,
+				isOwnAction: true,
+			});
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "board"),

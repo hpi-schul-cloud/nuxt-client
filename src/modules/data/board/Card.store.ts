@@ -1,34 +1,27 @@
 import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
-import { useBoardApi } from "./BoardApi.composable";
 import { envConfigModule } from "@/store";
 
-import {
-	ApiErrorHandlerFactory,
-	ErrorType,
-	BoardObjectType,
-	useErrorHandler,
-} from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { useBoardStore, useSharedEditMode } from "@data-board";
-import { ElementMove } from "@/types/board/DragAndDrop";
+import { CardResponse, ContentElementType } from "@/serverApi/v3";
 import {
-	CardResponse,
-	ContentElementType,
-	CreateContentElementBodyParams,
-} from "@/serverApi/v3";
-import {
+	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
+	DeleteElementSuccessPayload,
 	FetchCardSuccessPayload,
+	MoveElementSuccessPayload,
 	UpdateCardHeightSuccessPayload,
 	UpdateCardTitleSuccessPayload,
+	UpdateElementSuccessPayload,
 } from "./cardActions/cardActionPayload";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedEditMode } from "@data-board";
 
 export const useCardStore = defineStore("cardStore", () => {
-	const boardStore = useBoardStore();
 	const cards = ref<Record<string, CardResponse>>({});
+	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const restApi = useCardRestApi();
 	const isSocketEnabled =
@@ -36,16 +29,8 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
-	const { handleError, notifyWithTemplate } = useErrorHandler();
 	const { setFocus } = useBoardFocusHandler();
-	const { setEditModeId } = useSharedEditMode();
-
-	const {
-		createElementCall,
-		// deleteCardCall,
-		deleteElementCall,
-		moveElementCall,
-	} = useBoardApi();
+	const { setEditModeId, editModeId } = useSharedEditMode();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -91,151 +76,129 @@ export const useCardStore = defineStore("cardStore", () => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
+		if (payload.cardId === editModeId.value) {
+			setEditModeId(undefined);
+		}
 		delete cards.value[payload.cardId];
 	};
 
-	const addElement = async (
-		type: ContentElementType,
-		cardId: string,
-		atFirstPosition?: boolean
-	) => {
-		const card = cards.value[cardId];
+	const createElementRequest = socketOrRest.createElementRequest;
+
+	const createElementSuccess = async (payload: CreateElementSuccessPayload) => {
+		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
-		try {
-			const params: CreateContentElementBodyParams = { type };
-			if (atFirstPosition) {
-				params.toPosition = 0;
-			}
-			const response = await createElementCall(card.id, params);
-
-			if (atFirstPosition) {
-				card.elements.splice(0, 0, response.data);
-			} else {
-				card.elements.push(response.data);
-			}
-
-			setFocus(response.data.id);
-			return response.data;
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
-				400: notifyWithTemplate("notCreated", "boardElement"),
-			});
+		const { toPosition } = payload;
+		if (
+			toPosition !== undefined &&
+			toPosition >= 0 &&
+			toPosition <= card.elements.length
+		) {
+			card.elements.splice(toPosition, 0, payload.newElement);
+		} else {
+			card.elements.push(payload.newElement);
 		}
+
+		lastCreatedElementId.value = payload.newElement.id;
+		if (payload.isOwnAction === true) {
+			setFocus(payload.newElement.id);
+		}
+		return payload.newElement;
 	};
 
 	const addTextAfterTitle = async (cardId: string) => {
 		const card = cards.value[cardId];
 		if (card === undefined) return;
 
-		return await addElement(ContentElementType.RichText, card.id, true);
+		return await createElementRequest({
+			type: ContentElementType.RichText,
+			cardId: card.id,
+			toPosition: 0,
+		});
 	};
 
-	const moveElementDown = async (
+	const moveElementRequest = async (
 		cardId: string,
-		elementPayload: ElementMove
-	) => {
-		const card = cards.value[cardId];
-		if (card === undefined) return;
-		try {
-			const { elementIndex, payload: elementId } = elementPayload;
-			if (elementIndex === card.elements.length - 1 || elementIndex === -1) {
-				return;
-			}
-			await moveElement(card, elementIndex, elementId, "down");
-			await moveElementCall(elementId, cardId, elementIndex + 1);
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
-		}
-	};
-
-	const moveElementUp = async (cardId: string, elementPayload: ElementMove) => {
-		const card = cards.value[cardId];
-		if (card === undefined) return;
-
-		try {
-			const { elementIndex, payload: elementId } = elementPayload;
-			if (elementIndex <= 0) return;
-
-			await moveElement(card, elementIndex, elementId, "up");
-			await moveElementCall(elementId, cardId, elementIndex - 1);
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
-		}
-	};
-
-	const moveElement = async (
-		card: CardResponse,
-		elementIndex: number,
 		elementId: string,
-		direction: "up" | "down"
+		elementIndex: number,
+		delta: 1 | -1
 	) => {
-		if (card === undefined) return;
-
-		const element = card.elements.filter(
-			(element) => element.id === elementId
-		)[0];
-
-		const delta = direction === "up" ? -1 : 1;
-
-		card.elements.splice(elementIndex, 1);
-		await nextTick();
-		card.elements.splice(elementIndex + delta, 0, element);
-	};
-
-	const deleteElement = async (
-		cardId: string,
-		elementId: string
-	): Promise<void> => {
 		const card = cards.value[cardId];
 		if (card === undefined) return;
 
-		try {
-			await deleteElementCall(elementId);
-			extractElement(card, elementId);
-		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplateAndReload("notUpdated"),
-			});
+		const toPosition = elementIndex + delta;
+		if (toPosition < 0) return;
+		if (toPosition >= card.elements.length) return;
+
+		socketOrRest.moveElementRequest({
+			elementId,
+			toCardId: cardId,
+			toPosition,
+		});
+	};
+
+	const moveElementSuccess = async (payload: MoveElementSuccessPayload) => {
+		const card = cards.value[payload.toCardId];
+		if (card === undefined) return;
+
+		const element = card.elements.find((e) => e.id === payload.elementId);
+
+		if (element) {
+			card.elements.splice(card.elements.indexOf(element), 1);
+			await nextTick();
+			const toPosition = Math.min(payload.toPosition, card.elements.length);
+			card.elements.splice(toPosition, 0, element);
 		}
 	};
 
-	const extractElement = (card: CardResponse, elementId: string): void => {
-		const index = card.elements.findIndex((e) => e.id === elementId);
+	const deleteElementRequest = socketOrRest.deleteElementRequest;
+
+	const deleteElementSuccess = async (
+		payload: DeleteElementSuccessPayload
+	): Promise<void> => {
+		const card = cards.value[payload.cardId];
+		if (card === undefined) return;
+
+		const index = card.elements.findIndex((e) => e.id === payload.elementId);
 
 		if (index !== undefined && index > -1) {
 			card.elements.splice(index, 1);
 		}
 	};
 
-	const notifyWithTemplateAndReload: ApiErrorHandlerFactory = (
-		errorType: ErrorType,
-		boardObjectType?: BoardObjectType
-	) => {
-		return () => {
-			notifyWithTemplate(errorType, boardObjectType)();
-			boardStore.reloadBoard();
-			setEditModeId(undefined);
-		};
+	const updateElementRequest = socketOrRest.updateElementRequest;
+
+	const updateElementSuccess = async (payload: UpdateElementSuccessPayload) => {
+		const cardToUpdate = Object.values(cards.value).find((c) =>
+			c.elements.some((e) => e.id === payload.elementId)
+		);
+		if (cardToUpdate === undefined) return;
+		const cardId = cardToUpdate.id;
+
+		if (cardId) {
+			const elementIndex = cardToUpdate.elements.findIndex(
+				(e) => e.id === payload.elementId
+			);
+			cards.value[cardId].elements[elementIndex].content = payload.data.content;
+		}
 	};
 
 	return {
-		addElement,
+		createElementRequest,
+		createElementSuccess,
+		deleteElementRequest,
+		deleteElementSuccess,
+		updateElementRequest,
+		updateElementSuccess,
 		addTextAfterTitle,
 		fetchCardRequest,
 		fetchCardSuccess,
 		cards,
 		deleteCardRequest,
 		deleteCardSuccess,
-		deleteElement,
 		getCard,
-		moveElementDown,
-		moveElementUp,
+		moveElementRequest,
+		moveElementSuccess,
 		resetState,
 		updateCardHeightRequest,
 		updateCardHeightSuccess,

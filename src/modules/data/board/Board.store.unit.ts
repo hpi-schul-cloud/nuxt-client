@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
+import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
@@ -18,7 +18,6 @@ import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFac
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useSocketConnection } from "@data-board";
 import { useI18n } from "vue-i18n";
-import { MoveCardRequestPayload } from "./boardActions/boardActionPayload";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 
@@ -115,6 +114,85 @@ describe("BoardStore", () => {
 		jest.resetAllMocks();
 	});
 
+	describe("getLastColumnIndex", () => {
+		it("should return last column index", () => {
+			const { boardStore } = setup();
+
+			const lastColumnIndex = boardStore.getLastColumnIndex();
+
+			expect(lastColumnIndex).toEqual(1);
+		});
+	});
+
+	describe("getColumnIndex", () => {
+		it("should return -1 when columnId is undefined", () => {
+			const { boardStore } = setup();
+
+			const columnIndex = boardStore.getColumnIndex(undefined);
+
+			expect(columnIndex).toEqual(-1);
+		});
+
+		it("should return -1 when board is undefined", () => {
+			const { boardStore } = setup({ createBoard: false });
+
+			const columnIndex = boardStore.getColumnIndex("columnId");
+
+			expect(columnIndex).toEqual(-1);
+		});
+
+		it("should return column index of first column", () => {
+			const { boardStore, firstColumn } = setup();
+
+			const columnIndex = boardStore.getColumnIndex(firstColumn.id);
+
+			expect(columnIndex).toEqual(0);
+		});
+	});
+
+	describe("getColumnId", () => {
+		it("should return undefined when board is undefined", () => {
+			const { boardStore } = setup({ createBoard: false });
+
+			const columnId = boardStore.getColumnId(0);
+
+			expect(columnId).toBeUndefined();
+		});
+
+		it("should return undefined when columnIndex is undefined", () => {
+			const { boardStore } = setup();
+
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			const columnId = boardStore.getColumnId(undefined as any);
+
+			expect(columnId).toBeUndefined();
+		});
+
+		it("should return undefined when columnIndex is negative", () => {
+			const { boardStore } = setup();
+
+			const columnId = boardStore.getColumnId(-1);
+
+			expect(columnId).toBeUndefined();
+		});
+
+		it("should return undefined when columnIndex is greater than columns length", () => {
+			const { boardStore } = setup();
+
+			const columnId = boardStore.getColumnId(2);
+
+			expect(columnId).toBeUndefined();
+		});
+
+		it("should return column id of first column", () => {
+			const { boardStore, firstColumn } = setup();
+
+			const columnId = boardStore.getColumnId(0);
+
+			expect(columnId).toEqual(firstColumn.id);
+		});
+	});
+
 	describe("setBoard", () => {
 		it("should set board", () => {
 			const { boardStore } = setup();
@@ -146,6 +224,7 @@ describe("BoardStore", () => {
 			boardStore.createCardSuccess({
 				newCard: NEW_CARD,
 				columnId: firstColumn.id,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board).toBe(undefined);
@@ -157,6 +236,7 @@ describe("BoardStore", () => {
 			boardStore.createCardSuccess({
 				newCard: NEW_CARD,
 				columnId: firstColumn.id,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.columns[0].cards[3]).toEqual({
@@ -168,9 +248,11 @@ describe("BoardStore", () => {
 		it("should call setEditModeId", () => {
 			const { boardStore, firstColumn } = setup();
 
+			boardStore.createCardRequest({ columnId: firstColumn.id });
 			boardStore.createCardSuccess({
 				newCard: NEW_CARD,
 				columnId: firstColumn.id,
+				isOwnAction: true,
 			});
 
 			expect(setEditModeId).toHaveBeenCalled();
@@ -182,7 +264,10 @@ describe("BoardStore", () => {
 		it("should not create Column when board value is undefined", () => {
 			const { boardStore } = setup({ createBoard: false });
 
-			boardStore.createColumnSuccess({ newColumn: NEW_COLUMN });
+			boardStore.createColumnSuccess({
+				newColumn: NEW_COLUMN,
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board).toBe(undefined);
 		});
@@ -190,7 +275,10 @@ describe("BoardStore", () => {
 		it("should create a column", () => {
 			const { boardStore } = setup();
 
-			boardStore.createColumnSuccess({ newColumn: NEW_COLUMN });
+			boardStore.createColumnSuccess({
+				newColumn: NEW_COLUMN,
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board?.columns[2]).toEqual(NEW_COLUMN);
 		});
@@ -200,7 +288,10 @@ describe("BoardStore", () => {
 		it("should not delete a card when a board is undefined", () => {
 			const { boardStore, cards } = setup({ createBoard: false });
 
-			boardStore.deleteCardSuccess({ cardId: cards[0].cardId });
+			boardStore.deleteCardSuccess({
+				cardId: cards[0].cardId,
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board).toBe(undefined);
 		});
@@ -208,7 +299,10 @@ describe("BoardStore", () => {
 		it("should not delete a card if cardId does not exists", () => {
 			const { boardStore } = setup();
 
-			boardStore.deleteCardSuccess({ cardId: "unknown cardId" });
+			boardStore.deleteCardSuccess({
+				cardId: "unknown cardId",
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board?.columns[0].cards.length).toEqual(3);
 		});
@@ -219,7 +313,7 @@ describe("BoardStore", () => {
 			const firstCardId = cards[0].cardId;
 			const secondCardId = cards[1].cardId;
 
-			boardStore.deleteCardSuccess({ cardId: firstCardId });
+			boardStore.deleteCardSuccess({ cardId: firstCardId, isOwnAction: true });
 
 			const firstCardIdAfterDeletion =
 				boardStore.board?.columns[0].cards[0].cardId;
@@ -233,7 +327,10 @@ describe("BoardStore", () => {
 		it("should not delete a column when board value is undefined", () => {
 			const { boardStore, firstColumn } = setup({ createBoard: false });
 
-			boardStore.deleteColumnSuccess({ columnId: firstColumn.id });
+			boardStore.deleteColumnSuccess({
+				columnId: firstColumn.id,
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board).toBe(undefined);
 		});
@@ -241,7 +338,10 @@ describe("BoardStore", () => {
 		it("should not delete a column when column id is unkown", () => {
 			const { boardStore } = setup();
 
-			boardStore.deleteColumnSuccess({ columnId: "unknownId" });
+			boardStore.deleteColumnSuccess({
+				columnId: "unknownId",
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board?.columns.length).toEqual(2);
 		});
@@ -249,7 +349,10 @@ describe("BoardStore", () => {
 		it("should delete a column", () => {
 			const { boardStore, firstColumn, secondColumn } = setup();
 
-			boardStore.deleteColumnSuccess({ columnId: firstColumn.id });
+			boardStore.deleteColumnSuccess({
+				columnId: firstColumn.id,
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board?.columns[0]).not.toEqual(firstColumn);
 			expect(boardStore.board?.columns[0]).toEqual(secondColumn);
@@ -265,6 +368,7 @@ describe("BoardStore", () => {
 			boardStore.updateBoardTitleSuccess({
 				boardId: "boardId",
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board).toBe(undefined);
@@ -276,6 +380,7 @@ describe("BoardStore", () => {
 			boardStore.updateBoardTitleSuccess({
 				boardId: "boardId",
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.title).toStrictEqual(NEW_TITLE);
@@ -290,6 +395,7 @@ describe("BoardStore", () => {
 			boardStore.updateColumnTitleSuccess({
 				columnId: firstColumn.id,
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board).toBe(undefined);
@@ -301,6 +407,7 @@ describe("BoardStore", () => {
 			boardStore.updateColumnTitleSuccess({
 				columnId: firstColumn.id,
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.columns[0].title).toStrictEqual(NEW_TITLE);
@@ -314,6 +421,7 @@ describe("BoardStore", () => {
 			boardStore.updateBoardVisibilitySuccess({
 				boardId: "boardId",
 				isVisible: true,
+				isOwnAction: true,
 			});
 			expect(boardStore.board).toBe(undefined);
 		});
@@ -323,6 +431,7 @@ describe("BoardStore", () => {
 			boardStore.updateBoardVisibilitySuccess({
 				boardId: "boardId",
 				isVisible: true,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.isVisible).toStrictEqual(true);
@@ -342,6 +451,7 @@ describe("BoardStore", () => {
 			await boardStore.moveColumnSuccess({
 				columnMove,
 				byKeyboard: false,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board).toBe(undefined);
@@ -359,6 +469,7 @@ describe("BoardStore", () => {
 			await boardStore.moveColumnSuccess({
 				columnMove,
 				byKeyboard: false,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.columns).toEqual([secondColumn, firstColumn]);
@@ -376,202 +487,174 @@ describe("BoardStore", () => {
 			await boardStore.moveColumnSuccess({
 				columnMove,
 				byKeyboard: true,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.columns).toEqual([secondColumn, firstColumn]);
 		});
 	});
 
-	describe("moveCardSuccess", () => {
-		const createCardPayload = ({
-			cardId,
-			oldIndex,
-			newIndex,
-			fromColumnId,
-			toColumnId,
-			columnDelta,
-			forceNextTick,
-		}: {
-			cardId: string;
-			oldIndex?: number;
-			newIndex?: number;
-			fromColumnId: string;
-			toColumnId?: string;
-			columnDelta?: number;
-			forceNextTick?: boolean;
-		}) => {
-			const cardPayload: MoveCardRequestPayload = {
-				cardId,
-				oldIndex: oldIndex ?? 0,
-				newIndex: newIndex ?? 0,
-				fromColumnId,
-				toColumnId,
-				columnDelta,
-				forceNextTick,
-			};
-			return cardPayload;
-		};
+	describe("moveCardToNewColumn", () => {
+		it("should not call moveCardRequest when board value is undefined", async () => {
+			const { boardStore } = setup({ createBoard: false });
 
+			await boardStore.moveCardToNewColumn("cardId");
+
+			expect(mockedBoardRestApiActions.moveCardRequest).not.toHaveBeenCalled();
+		});
+
+		it("should not call moveCardRequest when card ID is undefined", async () => {
+			const { boardStore } = setup();
+
+			await boardStore.moveCardToNewColumn("cardId");
+
+			expect(mockedBoardRestApiActions.moveCardRequest).not.toHaveBeenCalled();
+		});
+
+		it("should call moveCardRequest from rest api if feature flag is disabled", async () => {
+			const { boardStore, firstColumn } = setup({ socketFlag: false });
+
+			const cardId = firstColumn.cards[0].cardId;
+
+			await boardStore.moveCardToNewColumn(cardId);
+
+			expect(mockedBoardRestApiActions.moveCardRequest).toHaveBeenCalledWith({
+				cardId,
+				fromColumnId: firstColumn.id,
+				fromColumnIndex: 0,
+				oldIndex: 0,
+				newIndex: 0,
+			});
+		});
+
+		it("should call moveCardRequest from socket api if feature flag is enabled", async () => {
+			const { boardStore, firstColumn } = setup({ socketFlag: true });
+
+			const cardId = firstColumn.cards[0].cardId;
+
+			await boardStore.moveCardToNewColumn(cardId);
+
+			expect(mockedSocketApiActions.moveCardRequest).toHaveBeenCalledWith({
+				cardId,
+				fromColumnId: firstColumn.id,
+				fromColumnIndex: 0,
+				oldIndex: 0,
+				newIndex: 0,
+			});
+		});
+	});
+
+	describe("moveCardSuccess", () => {
 		it("should not move Card when board value is undefined", async () => {
 			const { boardStore } = setup({ createBoard: false });
 
-			const cardPayload = createCardPayload({
+			const cardPayload = {
 				cardId: "cardId",
+				oldIndex: 0,
+				newIndex: 1,
 				fromColumnId: "columnId",
-			});
+				fromColumnIndex: 0,
+				toColumnId: "columnId",
+				toColumnIndex: 0,
+				isOwnAction: true,
+			};
 
 			await boardStore.moveCardSuccess(cardPayload);
 
 			expect(boardStore.board).toBe(undefined);
 		});
 
-		describe("when move is invalid", () => {
-			it("should not move card if card is moved to the same position", async () => {
-				const { boardStore, firstColumn, cards } = setup();
+		it("should move a card in the same column", async () => {
+			const { boardStore, firstColumn, cards } = setup();
 
-				const firstColumnId = firstColumn.id;
-				const movingCardId = cards[1].cardId;
+			const [firstCardId, secondCardId, thirdCardId] = cards.map(
+				(card) => card.cardId
+			);
+			const firstColumnId = firstColumn.id;
 
-				const cardPayload = createCardPayload({
-					cardId: movingCardId,
-					fromColumnId: firstColumnId,
-					toColumnId: firstColumnId,
-				});
+			const cardPayload = {
+				cardId: firstCardId,
+				oldIndex: 0,
+				newIndex: 1,
+				fromColumnId: firstColumnId,
+				fromColumnIndex: 0,
+				toColumnId: firstColumnId,
+				toColumnIndex: 0,
+				isOwnAction: true,
+			};
 
-				await boardStore.moveCardSuccess(cardPayload);
+			await boardStore.moveCardSuccess(cardPayload);
 
-				expect(boardStore.board?.columns[0].cards[1].cardId).toEqual(
-					movingCardId
-				);
-			});
+			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
 
-			it("should not move card if first card is moved to the first position", async () => {
-				const { boardStore, firstColumn, cards } = setup();
-
-				const firstColumnId = firstColumn.id;
-				const firstCardId = cards[0].cardId;
-
-				const cardPayload = createCardPayload({
-					cardId: firstCardId,
-					newIndex: -1,
-					fromColumnId: firstColumnId,
-					toColumnId: firstColumnId,
-				});
-
-				await boardStore.moveCardSuccess(cardPayload);
-
-				expect(boardStore.board?.columns[0].cards[0].cardId).toEqual(
-					firstCardId
-				);
-			});
-
-			it("should not move card if if last card is moved to the last position", async () => {
-				const { boardStore, firstColumn, cards } = setup();
-
-				const firstColumnId = firstColumn.id;
-				const lastCardId = cards[2].cardId;
-
-				const cardPayload = createCardPayload({
-					cardId: lastCardId,
-					oldIndex: 2,
-					newIndex: 3,
-					fromColumnId: firstColumnId,
-					toColumnId: firstColumnId,
-				});
-
-				await boardStore.moveCardSuccess(cardPayload);
-
-				expect(boardStore.board?.columns[0].cards[2].cardId).toEqual(
-					lastCardId
-				);
-			});
+			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+				secondCardId,
+				firstCardId,
+				thirdCardId,
+			]);
 		});
 
-		describe("when move is valid", () => {
-			it("should move a card in the same column", async () => {
-				const { boardStore, firstColumn, cards } = setup();
+		it("should move a card in the same column when forceNextTick is true", async () => {
+			const { boardStore, firstColumn, cards } = setup();
 
-				const [firstCardId, secondCardId, thirdCardId] = cards.map(
-					(card) => card.cardId
-				);
-				const firstColumnId = firstColumn.id;
+			const [firstCardId, secondCardId, thirdCardId] = cards.map(
+				(card) => card.cardId
+			);
+			const firstColumnId = firstColumn.id;
 
-				const cardPayload = createCardPayload({
-					cardId: firstCardId,
-					oldIndex: 0,
-					newIndex: 1,
-					fromColumnId: firstColumnId,
-					toColumnId: firstColumnId,
-				});
+			const cardPayload = {
+				cardId: firstCardId,
+				oldIndex: 0,
+				newIndex: 1,
+				fromColumnId: firstColumnId,
+				fromColumnIndex: 0,
+				toColumnId: firstColumnId,
+				toColumnIndex: 0,
+				forceNextTick: true,
+				isOwnAction: true,
+			};
 
-				await boardStore.moveCardSuccess(cardPayload);
+			await boardStore.moveCardSuccess(cardPayload);
 
-				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
+			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
 
-				expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
-					secondCardId,
-					firstCardId,
-					thirdCardId,
-				]);
-			});
+			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+				secondCardId,
+				firstCardId,
+				thirdCardId,
+			]);
+		});
 
-			it("should move a card in the same column when forceNextTick is true", async () => {
-				const { boardStore, firstColumn, cards } = setup();
+		it("should move a card to another column", async () => {
+			const { boardStore, firstColumn, secondColumn, cards } = setup();
 
-				const [firstCardId, secondCardId, thirdCardId] = cards.map(
-					(card) => card.cardId
-				);
-				const firstColumnId = firstColumn.id;
+			const [firstCardId, secondCardId, thirdCardId] = cards.map(
+				(card) => card.cardId
+			);
 
-				const cardPayload = createCardPayload({
-					cardId: firstCardId,
-					oldIndex: 0,
-					newIndex: 1,
-					fromColumnId: firstColumnId,
-					toColumnId: firstColumnId,
-					forceNextTick: true,
-				});
+			const cardPayload = {
+				cardId: secondCardId,
+				oldIndex: 1,
+				newIndex: 0,
+				fromColumnId: firstColumn.id,
+				fromColumnIndex: 0,
+				toColumnId: secondColumn.id,
+				toColumnIndex: 1,
+			};
 
-				await boardStore.moveCardSuccess(cardPayload);
+			await boardStore.moveCardSuccess({ ...cardPayload, isOwnAction: true });
 
-				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
+			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
+			const secondColumnCardsAfterMove = boardStore.board?.columns[1].cards;
 
-				expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
-					secondCardId,
-					firstCardId,
-					thirdCardId,
-				]);
-			});
+			expect(secondColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+				secondCardId,
+			]);
 
-			it("should move a card to another column", async () => {
-				const { boardStore, firstColumn, secondColumn, cards } = setup();
-
-				const [firstCardId, secondCardId, thirdCardId] = cards.map(
-					(card) => card.cardId
-				);
-
-				const cardPayload: CardMove = {
-					cardId: secondCardId,
-					oldIndex: 1,
-					newIndex: 0,
-					fromColumnId: firstColumn.id,
-					toColumnId: secondColumn.id,
-				};
-
-				await boardStore.moveCardSuccess(cardPayload);
-
-				const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
-				const secondColumnCardsAfterMove = boardStore.board?.columns[1].cards;
-
-				expect(secondColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
-					secondCardId,
-				]);
-
-				expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
-					firstCardId,
-					thirdCardId,
-				]);
-			});
+			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
+				firstCardId,
+				thirdCardId,
+			]);
 		});
 	});
 
@@ -772,8 +855,9 @@ describe("BoardStore", () => {
 					oldIndex: 0,
 					newIndex: 1,
 					fromColumnId: boardStore.board?.columns[0].id ?? "columnId",
+					fromColumnIndex: 0,
 					toColumnId: boardStore.board?.columns[0].id ?? "columnId",
-					columnDelta: 0,
+					toColumnIndex: 0,
 					forceNextTick: false,
 				};
 
@@ -791,7 +875,9 @@ describe("BoardStore", () => {
 					oldIndex: 0,
 					newIndex: 1,
 					fromColumnId: boardStore.board?.columns[0].id ?? "columnId",
+					fromColumnIndex: 0,
 					toColumnId: boardStore.board?.columns[0].id ?? "columnId",
+					toColumnIndex: 0,
 					columnDelta: 0,
 					forceNextTick: false,
 				};

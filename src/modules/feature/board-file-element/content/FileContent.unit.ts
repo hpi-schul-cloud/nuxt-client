@@ -10,6 +10,15 @@ import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import FileInputs from "./inputs/FileInputs.vue";
 
 describe("FileContent", () => {
+	beforeEach(() => {
+		jest.useFakeTimers();
+	});
+
+	afterEach(() => {
+		jest.runOnlyPendingTimers();
+		jest.useRealTimers();
+	});
+
 	describe("When EditMode is true", () => {
 		describe("When PreviewUrl is defined", () => {
 			const setup = () => {
@@ -92,6 +101,7 @@ describe("FileContent", () => {
 					const fileInputs = wrapper.findComponent(FileInputs);
 
 					fileInputs.vm.$emit("update:alternativeText");
+					jest.runAllTimers();
 
 					expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 				});
@@ -104,6 +114,7 @@ describe("FileContent", () => {
 					const fileInputs = wrapper.findComponent(FileInputs);
 
 					fileInputs.vm.$emit("update:caption");
+					jest.runAllTimers();
 
 					expect(wrapper.emitted("update:caption")).toHaveLength(1);
 				});
