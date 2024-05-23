@@ -16,7 +16,9 @@ export default {
 	"common.actions.invite": "Send course link",
 	"common.actions.logout": "Logout",
 	"common.actions.ok": "OK",
+	"common.actions.pickColor": "Select background colour",
 	"common.actions.remove": "Remove",
+	"common.actions.rename": "Rename",
 	"common.actions.save": "Save",
 	"common.actions.scrollToTop": "Scroll up",
 	"common.actions.share": "Share",
@@ -1608,4 +1610,6 @@ export default {
 	"feature.media-shelf.createLine": "Add line",
 	"feature.media-shelf.line.title": "Line",
 	"feature.media-shelf.availableLine.title": "Available media",
+	"feature.media-shelf.layout.list": "Lines",
+	"feature.media-shelf.layout.grid": "Grid",
 };

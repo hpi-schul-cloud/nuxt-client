@@ -16,7 +16,9 @@ export default {
 	"common.actions.invite": "Надіслати посилання на курс",
 	"common.actions.logout": "Вийти з аккаунта",
 	"common.actions.ok": "ОК",
+	"common.actions.pickColor": "Вибрати колір тла",
 	"common.actions.remove": "Вилучити",
+	"common.actions.rename": "перейменувати",
 	"common.actions.save": "Зберегти",
 	"common.actions.scrollToTop": "Прокрутити вгору",
 	"common.actions.share": "Поділіться",
@@ -1628,4 +1630,6 @@ export default {
 	"feature.media-shelf.createLine": "Додайте лінію",
 	"feature.media-shelf.line.title": "лінія",
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
+	"feature.media-shelf.layout.list": "лінії",
+	"feature.media-shelf.layout.grid": "сітка",
 };

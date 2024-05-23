@@ -1,14 +1,20 @@
 <template>
 	<div
-		class="line line-drag-handle mx-n4 px-4 py-2 ga-2 d-flex flex-column flex-shrink-1 rounded"
+		class="line-drag-handle d-flex flex-column flex-shrink-1 rounded mb-4"
+		:style="{ backgroundColor: lineBackgroundColorHex }"
 		:data-line-id="availableMediaLineId"
 		data-testid="available-line"
 	>
-		<div class="line-header mb-4 rounded">
-			<div class="d-flex align-center py-2 px-2">
+		<div class="line-header rounded">
+			<div class="d-flex align-center py-2 px-4">
 				<span class="w-100 title">
 					{{ $t("feature.media-shelf.availableLine.title") }}
 				</span>
+				<MediaBoardLineMenu
+					:color="line.backgroundColor"
+					v-model:collapsed="collapsed"
+					@update:color="$emit('update:line-background-color', $event)"
+				/>
 			</div>
 			<VDivider aria-hidden="true" class="border-opacity-100" color="black" />
 		</div>
@@ -38,7 +44,8 @@
 							bubbleScroll: true,
 							sort: false,
 						}"
-						class="d-flex flex-grid flex-shrink-1 pa-2 ga-6 flex-1-1 scrollable-line"
+						class="d-flex flex-grid flex-shrink-1 py-4 px-6 ga-6 flex-1-1 scrollable-line"
+						:class="{ 'flex-wrap': !isList }"
 						@start="dragStart"
 						@end="onElementDragEnd"
 					>
@@ -56,7 +63,12 @@
 </template>
 
 <script setup lang="ts">
-import { MediaAvailableLineElementResponse } from "@/serverApi/v3";
+import {
+	MediaAvailableLineElementResponse,
+	MediaAvailableLineResponse,
+	MediaBoardColors,
+	MediaBoardLayoutType,
+} from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
 import { extractDataAttribute } from "@util-board";
@@ -64,29 +76,54 @@ import { useMediaQuery } from "@vueuse/core";
 import { uniqueId } from "lodash";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, ComputedRef, Ref } from "vue";
-import {
-	availableMediaLineId,
-	ElementCreate,
-	useSharedMediaBoardState,
-} from "./data";
+import { computed, ComputedRef, PropType, Ref, WritableComputedRef } from "vue";
+import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
-import { useCollapsableState } from "./utils/collapsable.composable";
+import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
+import { MediaBoardColorMapper, useCollapsableState } from "./utils";
+
+const props = defineProps({
+	line: {
+		type: Object as PropType<MediaAvailableLineResponse>,
+		required: true,
+	},
+	layout: {
+		type: String as PropType<MediaBoardLayoutType>,
+		required: true,
+	},
+});
 
 const emit = defineEmits<{
 	(e: "create:element", value: ElementCreate): void;
+	(e: "update:line-background-color", value: MediaBoardColors): void;
+	(e: "update:line-collapsed", value: boolean): void;
 }>();
 
 const isDesktop: Ref<boolean> = useMediaQuery(DeviceMediaQuery.Desktop);
 
-const { openItems } = useCollapsableState("availableLinePanel");
+const collapsed: WritableComputedRef<boolean> = computed({
+	get() {
+		return props.line?.collapsed;
+	},
+	set(value: boolean) {
+		emit("update:line-collapsed", value);
+	},
+});
+
+const { openItems } = useCollapsableState("availableLinePanel", collapsed);
 
 const { dragStart, dragEnd } = useDragAndDrop();
 
-const { availableMedia } = useSharedMediaBoardState();
-
 const elements: ComputedRef<MediaAvailableLineElementResponse[]> = computed(
-	() => availableMedia.value?.elements ?? []
+	() => props.line.elements ?? []
+);
+
+const isList: Ref<boolean> = computed(
+	() => props.layout === MediaBoardLayoutType.List
+);
+
+const lineBackgroundColorHex: Ref<string> = computed(() =>
+	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")
 );
 
 const onElementDragEnd = async (event: SortableEvent) => {
@@ -123,11 +160,6 @@ const onElementDragEnd = async (event: SortableEvent) => {
 </script>
 
 <style scoped>
-.line {
-	position: relative;
-	background-color: white;
-}
-
 .title {
 	font-size: var(--heading-5) !important;
 	font-family: var(--font-accent);

@@ -77,7 +77,6 @@ describe("contextExternalToolApi.composable", () => {
 				contextType: ToolContextMapping[contextExternalTool.contextType],
 				parameters: contextExternalTool.parameters,
 				schoolToolId: contextExternalTool.schoolToolId,
-				toolVersion: contextExternalTool.toolVersion,
 			});
 		});
 	});
@@ -129,7 +128,6 @@ describe("contextExternalToolApi.composable", () => {
 					ToolContextMapping[contextExternalToolResponse.contextType],
 				parameters: contextExternalToolResponse.parameters,
 				schoolToolId: contextExternalToolResponse.schoolToolId,
-				toolVersion: contextExternalToolResponse.toolVersion,
 			});
 		});
 	});
@@ -184,7 +182,6 @@ describe("contextExternalToolApi.composable", () => {
 					ToolContextMapping[contextExternalToolResponse.contextType],
 				parameters: contextExternalToolResponse.parameters,
 				schoolToolId: contextExternalToolResponse.schoolToolId,
-				toolVersion: contextExternalToolResponse.toolVersion,
 			});
 		});
 	});

@@ -16,7 +16,9 @@ export default {
 	"common.actions.invite": "Enviar el enlace del curso",
 	"common.actions.logout": "Desconectar",
 	"common.actions.ok": "Aceptar",
+	"common.actions.pickColor": "Seleccione el color de fondo",
 	"common.actions.remove": "Eliminar",
+	"common.actions.rename": "Renombrar",
 	"common.actions.save": "Guardar",
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.actions.share": "Compartir",
@@ -1657,4 +1659,6 @@ export default {
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
+	"feature.media-shelf.layout.list": "Líneas",
+	"feature.media-shelf.layout.grid": "Red",
 };

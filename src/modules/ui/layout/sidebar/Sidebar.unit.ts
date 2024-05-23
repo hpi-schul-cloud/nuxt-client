@@ -9,6 +9,7 @@ import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
+	THEME_KEY,
 } from "@/utils/inject";
 import Sidebar from "./Sidebar.vue";
 import AuthModule from "@/store/auth";
@@ -45,6 +46,9 @@ const setup = (permissions?: string[]) => {
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
+				[THEME_KEY.valueOf()]: {
+					name: SchulcloudTheme.Default,
+				},
 			},
 		},
 		slots: {

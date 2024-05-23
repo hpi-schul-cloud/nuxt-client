@@ -1,4 +1,5 @@
 import {
+	ContextExternalToolBodyParams,
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolLaunchRequestResponse,
@@ -11,11 +12,11 @@ import { AxiosResponse } from "axios";
 export const useExternalToolApi = () => {
 	const toolApi: ToolApiInterface = ToolApiFactory(undefined, "/v3", $axios);
 
-	const fetchLaunchDataCall = async (
+	const fetchContextLaunchDataCall = async (
 		contextExternalToolId: string
 	): Promise<ToolLaunchRequest> => {
 		const response: AxiosResponse<ToolLaunchRequestResponse> =
-			await toolApi.toolLaunchControllerGetToolLaunchRequest(
+			await toolApi.toolLaunchControllerGetContextExternalToolLaunchRequest(
 				contextExternalToolId
 			);
 
@@ -26,7 +27,25 @@ export const useExternalToolApi = () => {
 		return mapped;
 	};
 
+	const fetchSchoolLaunchDataCall = async (
+		schoolExternalToolId: string,
+		contextExternalToolBodyParams: ContextExternalToolBodyParams
+	): Promise<ToolLaunchRequest> => {
+		const response: AxiosResponse<ToolLaunchRequestResponse> =
+			await toolApi.toolLaunchControllerGetSchoolExternalToolLaunchRequest(
+				schoolExternalToolId,
+				contextExternalToolBodyParams
+			);
+
+		const mapped: ToolLaunchRequest = ExternalToolMapper.mapToToolLaunchRequest(
+			response.data
+		);
+
+		return mapped;
+	};
+
 	return {
-		fetchLaunchDataCall,
+		fetchContextLaunchDataCall,
+		fetchSchoolLaunchDataCall,
 	};
 };
