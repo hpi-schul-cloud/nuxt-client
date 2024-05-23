@@ -64,6 +64,7 @@ import { useGroupListState } from "@data-group";
 import { RenderHTML } from "@feature-render-html";
 import { WarningAlert } from "@ui-alert";
 import { ModelRef, Ref, ref, watch } from "vue";
+import { useDebounceFn } from "@vueuse/core";
 
 const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 	type: Boolean,
@@ -112,16 +113,20 @@ const loadGroups = async (options?: { append: boolean }) => {
 	);
 };
 
+const loadGroupsThrottled = useDebounceFn(() => loadGroups(), 1000, {
+	maxWait: 1000,
+});
+
 watch(isOpen, async (newValue: boolean, oldValue: boolean) => {
 	if (newValue !== oldValue && newValue) {
 		await loadGroups();
 	}
 });
 
-watch(searchGroupName, async (newValue: string, oldValue: string) => {
+watch(searchGroupName, (newValue: string, oldValue: string) => {
 	if (newValue !== oldValue) {
 		skip.value = 0;
-		await loadGroups();
+		loadGroupsThrottled();
 	}
 });
 </script>
