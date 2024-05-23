@@ -12110,6 +12110,40 @@ export const CollaborativeTextEditorApiAxiosParamCreator = function (configurati
     return {
         /**
          * 
+         * @summary Delete all etherpad sessions for user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        collaborativeTextEditorControllerDeleteSessionsByUser: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/collaborative-text-editor/delete-sessions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
@@ -12162,6 +12196,16 @@ export const CollaborativeTextEditorApiFp = function(configuration?: Configurati
     return {
         /**
          * 
+         * @summary Delete all etherpad sessions for user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async collaborativeTextEditorControllerDeleteSessionsByUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.collaborativeTextEditorControllerDeleteSessionsByUser(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
@@ -12184,6 +12228,15 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
     return {
         /**
          * 
+         * @summary Delete all etherpad sessions for user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        collaborativeTextEditorControllerDeleteSessionsByUser(options?: any): AxiosPromise<void> {
+            return localVarFp.collaborativeTextEditorControllerDeleteSessionsByUser(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get or create CollaborativeTextEditor for parent
          * @param {string} parentId 
          * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
@@ -12204,6 +12257,15 @@ export const CollaborativeTextEditorApiFactory = function (configuration?: Confi
 export interface CollaborativeTextEditorApiInterface {
     /**
      * 
+     * @summary Delete all etherpad sessions for user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CollaborativeTextEditorApiInterface
+     */
+    collaborativeTextEditorControllerDeleteSessionsByUser(options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @summary Get or create CollaborativeTextEditor for parent
      * @param {string} parentId 
      * @param {CollaborativeTextEditorParentType} parentType Parent type of the collaborative text editor.
@@ -12222,6 +12284,17 @@ export interface CollaborativeTextEditorApiInterface {
  * @extends {BaseAPI}
  */
 export class CollaborativeTextEditorApi extends BaseAPI implements CollaborativeTextEditorApiInterface {
+    /**
+     * 
+     * @summary Delete all etherpad sessions for user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CollaborativeTextEditorApi
+     */
+    public collaborativeTextEditorControllerDeleteSessionsByUser(options?: any) {
+        return CollaborativeTextEditorApiFp(this.configuration).collaborativeTextEditorControllerDeleteSessionsByUser(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Get or create CollaborativeTextEditor for parent
@@ -22699,6 +22772,40 @@ export class UserApi extends BaseAPI implements UserApiInterface {
 export const UserImportApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Cancel current migration process
+         * @summary Cancel migration wizard
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerCancelMigration: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/cancel`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -23108,6 +23215,16 @@ export const UserImportApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = UserImportApiAxiosParamCreator(configuration)
     return {
         /**
+         * Cancel current migration process
+         * @summary Cancel migration wizard
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerCancelMigration(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerCancelMigration(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -23220,6 +23337,15 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
     const localVarFp = UserImportApiFp(configuration)
     return {
         /**
+         * Cancel current migration process
+         * @summary Cancel migration wizard
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerCancelMigration(options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerCancelMigration(options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -23322,6 +23448,15 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
  */
 export interface UserImportApiInterface {
     /**
+     * Cancel current migration process
+     * @summary Cancel migration wizard
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApiInterface
+     */
+    importUserControllerCancelMigration(options?: any): AxiosPromise<void>;
+
+    /**
      * 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -23423,6 +23558,17 @@ export interface UserImportApiInterface {
  * @extends {BaseAPI}
  */
 export class UserImportApi extends BaseAPI implements UserImportApiInterface {
+    /**
+     * Cancel current migration process
+     * @summary Cancel migration wizard
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApi
+     */
+    public importUserControllerCancelMigration(options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerCancelMigration(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
