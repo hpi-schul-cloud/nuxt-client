@@ -104,6 +104,7 @@ describe("boardRestApi", () => {
 			expect(boardStore.createCardSuccess).toHaveBeenCalledWith({
 				newCard: newCard,
 				columnId: columnId,
+				isOwnAction: true,
 			});
 		});
 
@@ -183,6 +184,7 @@ describe("boardRestApi", () => {
 			expect(setEditModeId).toHaveBeenCalledWith(newColumn.id);
 			expect(boardStore.createColumnSuccess).toHaveBeenCalledWith({
 				newColumn,
+				isOwnAction: true,
 			});
 			expect(result).toEqual(newColumn);
 		});
@@ -216,7 +218,10 @@ describe("boardRestApi", () => {
 
 			await deleteColumnRequest({ columnId });
 
-			expect(boardStore.deleteColumnSuccess).toHaveBeenCalledWith({ columnId });
+			expect(boardStore.deleteColumnSuccess).toHaveBeenCalledWith({
+				columnId,
+				isOwnAction: true,
+			});
 		});
 
 		it("should call handleError if the API call fails", async () => {
@@ -357,7 +362,10 @@ describe("boardRestApi", () => {
 
 				await moveCardRequest(cardPayload);
 
-				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith(cardPayload);
+				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith({
+					...cardPayload,
+					isOwnAction: true,
+				});
 			});
 
 			it("should call moveCardSuccess action if card is moved to another columm and the API call is successful", async () => {
@@ -380,7 +388,10 @@ describe("boardRestApi", () => {
 
 				await moveCardRequest(cardPayload);
 
-				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith(cardPayload);
+				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith({
+					...cardPayload,
+					isOwnAction: true,
+				});
 			});
 
 			it("should call moveCardSuccess action if card is moved to a new column and the API call is successful", async () => {
@@ -409,6 +420,7 @@ describe("boardRestApi", () => {
 					...cardPayload,
 					toColumnId: newColumn.id,
 					toColumnIndex: 1,
+					isOwnAction: true,
 				});
 			});
 
@@ -466,6 +478,7 @@ describe("boardRestApi", () => {
 			expect(boardStore.moveColumnSuccess).toHaveBeenCalledWith({
 				columnMove,
 				byKeyboard: false,
+				isOwnAction: true,
 			});
 		});
 
@@ -511,7 +524,10 @@ describe("boardRestApi", () => {
 
 			await updateColumnTitleRequest(payload);
 
-			expect(boardStore.updateColumnTitleSuccess).toHaveBeenCalledWith(payload);
+			expect(boardStore.updateColumnTitleSuccess).toHaveBeenCalledWith({
+				...payload,
+				isOwnAction: true,
+			});
 		});
 
 		it("should call handleError if the API call fails", async () => {
@@ -553,6 +569,7 @@ describe("boardRestApi", () => {
 			expect(boardStore.updateBoardTitleSuccess).toHaveBeenCalledWith({
 				boardId: "boardId",
 				newTitle,
+				isOwnAction: true,
 			});
 		});
 
@@ -594,6 +611,7 @@ describe("boardRestApi", () => {
 			expect(boardStore.updateBoardVisibilitySuccess).toHaveBeenCalledWith({
 				boardId: "boardId",
 				isVisible,
+				isOwnAction: true,
 			});
 		});
 
