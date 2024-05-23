@@ -408,7 +408,7 @@ describe("boardRestApi", () => {
 				expect(boardStore.moveCardSuccess).toHaveBeenCalledWith({
 					...cardPayload,
 					toColumnId: newColumn.id,
-					toColumnIndex: 2,
+					toColumnIndex: 1,
 				});
 			});
 
