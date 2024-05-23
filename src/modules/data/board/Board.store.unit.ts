@@ -224,6 +224,7 @@ describe("BoardStore", () => {
 			boardStore.createCardSuccess({
 				newCard: NEW_CARD,
 				columnId: firstColumn.id,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board).toBe(undefined);
@@ -235,6 +236,7 @@ describe("BoardStore", () => {
 			boardStore.createCardSuccess({
 				newCard: NEW_CARD,
 				columnId: firstColumn.id,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.columns[0].cards[3]).toEqual({
@@ -250,6 +252,7 @@ describe("BoardStore", () => {
 			boardStore.createCardSuccess({
 				newCard: NEW_CARD,
 				columnId: firstColumn.id,
+				isOwnAction: true,
 			});
 
 			expect(setEditModeId).toHaveBeenCalled();
@@ -261,7 +264,10 @@ describe("BoardStore", () => {
 		it("should not create Column when board value is undefined", () => {
 			const { boardStore } = setup({ createBoard: false });
 
-			boardStore.createColumnSuccess({ newColumn: NEW_COLUMN });
+			boardStore.createColumnSuccess({
+				newColumn: NEW_COLUMN,
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board).toBe(undefined);
 		});
@@ -269,7 +275,10 @@ describe("BoardStore", () => {
 		it("should create a column", () => {
 			const { boardStore } = setup();
 
-			boardStore.createColumnSuccess({ newColumn: NEW_COLUMN });
+			boardStore.createColumnSuccess({
+				newColumn: NEW_COLUMN,
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board?.columns[2]).toEqual(NEW_COLUMN);
 		});
@@ -279,7 +288,10 @@ describe("BoardStore", () => {
 		it("should not delete a card when a board is undefined", () => {
 			const { boardStore, cards } = setup({ createBoard: false });
 
-			boardStore.deleteCardSuccess({ cardId: cards[0].cardId });
+			boardStore.deleteCardSuccess({
+				cardId: cards[0].cardId,
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board).toBe(undefined);
 		});
@@ -287,7 +299,10 @@ describe("BoardStore", () => {
 		it("should not delete a card if cardId does not exists", () => {
 			const { boardStore } = setup();
 
-			boardStore.deleteCardSuccess({ cardId: "unknown cardId" });
+			boardStore.deleteCardSuccess({
+				cardId: "unknown cardId",
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board?.columns[0].cards.length).toEqual(3);
 		});
@@ -298,7 +313,7 @@ describe("BoardStore", () => {
 			const firstCardId = cards[0].cardId;
 			const secondCardId = cards[1].cardId;
 
-			boardStore.deleteCardSuccess({ cardId: firstCardId });
+			boardStore.deleteCardSuccess({ cardId: firstCardId, isOwnAction: true });
 
 			const firstCardIdAfterDeletion =
 				boardStore.board?.columns[0].cards[0].cardId;
@@ -312,7 +327,10 @@ describe("BoardStore", () => {
 		it("should not delete a column when board value is undefined", () => {
 			const { boardStore, firstColumn } = setup({ createBoard: false });
 
-			boardStore.deleteColumnSuccess({ columnId: firstColumn.id });
+			boardStore.deleteColumnSuccess({
+				columnId: firstColumn.id,
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board).toBe(undefined);
 		});
@@ -320,7 +338,10 @@ describe("BoardStore", () => {
 		it("should not delete a column when column id is unkown", () => {
 			const { boardStore } = setup();
 
-			boardStore.deleteColumnSuccess({ columnId: "unknownId" });
+			boardStore.deleteColumnSuccess({
+				columnId: "unknownId",
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board?.columns.length).toEqual(2);
 		});
@@ -328,7 +349,10 @@ describe("BoardStore", () => {
 		it("should delete a column", () => {
 			const { boardStore, firstColumn, secondColumn } = setup();
 
-			boardStore.deleteColumnSuccess({ columnId: firstColumn.id });
+			boardStore.deleteColumnSuccess({
+				columnId: firstColumn.id,
+				isOwnAction: true,
+			});
 
 			expect(boardStore.board?.columns[0]).not.toEqual(firstColumn);
 			expect(boardStore.board?.columns[0]).toEqual(secondColumn);
@@ -344,6 +368,7 @@ describe("BoardStore", () => {
 			boardStore.updateBoardTitleSuccess({
 				boardId: "boardId",
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board).toBe(undefined);
@@ -355,6 +380,7 @@ describe("BoardStore", () => {
 			boardStore.updateBoardTitleSuccess({
 				boardId: "boardId",
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.title).toStrictEqual(NEW_TITLE);
@@ -369,6 +395,7 @@ describe("BoardStore", () => {
 			boardStore.updateColumnTitleSuccess({
 				columnId: firstColumn.id,
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board).toBe(undefined);
@@ -380,6 +407,7 @@ describe("BoardStore", () => {
 			boardStore.updateColumnTitleSuccess({
 				columnId: firstColumn.id,
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.columns[0].title).toStrictEqual(NEW_TITLE);
@@ -393,6 +421,7 @@ describe("BoardStore", () => {
 			boardStore.updateBoardVisibilitySuccess({
 				boardId: "boardId",
 				isVisible: true,
+				isOwnAction: true,
 			});
 			expect(boardStore.board).toBe(undefined);
 		});
@@ -402,6 +431,7 @@ describe("BoardStore", () => {
 			boardStore.updateBoardVisibilitySuccess({
 				boardId: "boardId",
 				isVisible: true,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.isVisible).toStrictEqual(true);
@@ -421,6 +451,7 @@ describe("BoardStore", () => {
 			await boardStore.moveColumnSuccess({
 				columnMove,
 				byKeyboard: false,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board).toBe(undefined);
@@ -438,6 +469,7 @@ describe("BoardStore", () => {
 			await boardStore.moveColumnSuccess({
 				columnMove,
 				byKeyboard: false,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.columns).toEqual([secondColumn, firstColumn]);
@@ -455,6 +487,7 @@ describe("BoardStore", () => {
 			await boardStore.moveColumnSuccess({
 				columnMove,
 				byKeyboard: true,
+				isOwnAction: true,
 			});
 
 			expect(boardStore.board?.columns).toEqual([secondColumn, firstColumn]);
@@ -523,6 +556,7 @@ describe("BoardStore", () => {
 				fromColumnIndex: 0,
 				toColumnId: "columnId",
 				toColumnIndex: 0,
+				isOwnAction: true,
 			};
 
 			await boardStore.moveCardSuccess(cardPayload);
@@ -546,6 +580,7 @@ describe("BoardStore", () => {
 				fromColumnIndex: 0,
 				toColumnId: firstColumnId,
 				toColumnIndex: 0,
+				isOwnAction: true,
 			};
 
 			await boardStore.moveCardSuccess(cardPayload);
@@ -576,6 +611,7 @@ describe("BoardStore", () => {
 				toColumnId: firstColumnId,
 				toColumnIndex: 0,
 				forceNextTick: true,
+				isOwnAction: true,
 			};
 
 			await boardStore.moveCardSuccess(cardPayload);
@@ -606,7 +642,7 @@ describe("BoardStore", () => {
 				toColumnIndex: 1,
 			};
 
-			await boardStore.moveCardSuccess(cardPayload);
+			await boardStore.moveCardSuccess({ ...cardPayload, isOwnAction: true });
 
 			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
 			const secondColumnCardsAfterMove = boardStore.board?.columns[1].cards;
