@@ -92,7 +92,7 @@ export const useBoardRestApi = () => {
 
 		try {
 			await deleteColumnCall(columnId);
-			boardStore.deleteColumnSuccess({ columnId });
+			boardStore.deleteColumnSuccess({ columnId, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardColumn"),
@@ -130,6 +130,7 @@ export const useBoardRestApi = () => {
 				...payload,
 				toColumnId,
 				toColumnIndex,
+				isOwnAction: true,
 			});
 		} catch (error) {
 			handleError(error, {
@@ -146,7 +147,7 @@ export const useBoardRestApi = () => {
 			const { addedIndex, columnId } = columnMove;
 			await moveColumnCall(columnId, boardStore.board.id, addedIndex);
 
-			boardStore.moveColumnSuccess(payload);
+			boardStore.moveColumnSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
@@ -163,7 +164,7 @@ export const useBoardRestApi = () => {
 		try {
 			await updateColumnTitleCall(columnId, newTitle);
 
-			boardStore.updateColumnTitleSuccess(payload);
+			boardStore.updateColumnTitleSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "boardColumn"),
@@ -180,7 +181,11 @@ export const useBoardRestApi = () => {
 		try {
 			await updateBoardTitleCall(boardId, newTitle);
 
-			boardStore.updateBoardTitleSuccess({ boardId, newTitle });
+			boardStore.updateBoardTitleSuccess({
+				boardId,
+				newTitle,
+				isOwnAction: true,
+			});
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "board"),
@@ -196,7 +201,11 @@ export const useBoardRestApi = () => {
 
 		try {
 			await updateBoardVisibilityCall(boardId, isVisible);
-			boardStore.updateBoardVisibilitySuccess({ boardId, isVisible });
+			boardStore.updateBoardVisibilitySuccess({
+				boardId,
+				isVisible,
+				isOwnAction: true,
+			});
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated", "board"),

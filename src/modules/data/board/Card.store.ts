@@ -100,7 +100,9 @@ export const useCardStore = defineStore("cardStore", () => {
 		}
 
 		lastCreatedElementId.value = payload.newElement.id;
-		setFocus(payload.newElement.id);
+		if (payload.isOwnAction === true) {
+			setFocus(payload.newElement.id);
+		}
 		return payload.newElement;
 	};
 

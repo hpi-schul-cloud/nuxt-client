@@ -53,6 +53,7 @@ export const useCardRestApi = () => {
 			cardStore.createElementSuccess({
 				...payload,
 				newElement: newElement.data,
+				isOwnAction: true,
 			});
 		} catch (error) {
 			handleError(error, {
@@ -67,7 +68,7 @@ export const useCardRestApi = () => {
 
 		try {
 			await deleteElementCall(payload.elementId);
-			cardStore.deleteElementSuccess(payload);
+			cardStore.deleteElementSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardElement"),
@@ -85,7 +86,7 @@ export const useCardRestApi = () => {
 				payload.toCardId,
 				payload.toPosition
 			);
-			cardStore.moveElementSuccess(payload);
+			cardStore.moveElementSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notMoved", "boardElement"),
@@ -102,6 +103,7 @@ export const useCardRestApi = () => {
 					type: success.data.type,
 					content: success.data.content,
 				},
+				isOwnAction: true,
 			});
 		} catch (error) {
 			handleError(error, {
@@ -116,8 +118,8 @@ export const useCardRestApi = () => {
 
 		try {
 			await deleteCardCall(payload.cardId);
-			boardStore.deleteCardSuccess(payload);
-			cardStore.deleteCardSuccess(payload);
+			boardStore.deleteCardSuccess({ ...payload, isOwnAction: true });
+			cardStore.deleteCardSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
@@ -132,7 +134,7 @@ export const useCardRestApi = () => {
 		try {
 			const promises = payload.cardIds.map(fetchCardFromApi);
 			const cards = await Promise.all(promises);
-			cardStore.fetchCardSuccess({ cards });
+			cardStore.fetchCardSuccess({ cards, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notLoaded", "boardCard"),
@@ -148,7 +150,7 @@ export const useCardRestApi = () => {
 
 		try {
 			await updateCardTitle(payload.cardId, payload.newTitle);
-			cardStore.updateCardTitleSuccess(payload);
+			cardStore.updateCardTitleSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notUpdated"),
@@ -164,7 +166,7 @@ export const useCardRestApi = () => {
 
 		try {
 			await updateCardHeightCall(payload.cardId, payload.newHeight);
-			cardStore.updateCardHeightSuccess(payload);
+			cardStore.updateCardHeightSuccess({ ...payload, isOwnAction: true });
 		} catch (error) {
 			handleError(error, {});
 		}

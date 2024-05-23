@@ -11,6 +11,7 @@ export type FetchCardRequestPayload = {
 };
 export type FetchCardSuccessPayload = {
 	cards: CardResponse[];
+	isOwnAction: boolean;
 };
 export type FetchCardFailurePayload = {
 	errorType: ErrorType;
@@ -24,6 +25,7 @@ export type UpdateCardTitleRequestPayload = {
 export type UpdateCardTitleSuccessPayload = {
 	cardId: string;
 	newTitle: string;
+	isOwnAction: boolean;
 };
 export type UpdateCardTitleFailurePayload = {
 	errorType: ErrorType;
@@ -37,6 +39,7 @@ export type UpdateCardHeightRequestPayload = {
 export type UpdateCardHeightSuccessPayload = {
 	cardId: string;
 	newHeight: number;
+	isOwnAction: boolean;
 };
 export type UpdateCardHeightFailurePayload = {
 	errorType: ErrorType;
@@ -53,6 +56,7 @@ export type CreateElementSuccessPayload = {
 	type: ContentElementType;
 	toPosition?: number;
 	newElement: AnyContentElement;
+	isOwnAction: boolean;
 };
 export type CreateElementFailurePayload = {
 	errorType: ErrorType;
@@ -66,6 +70,7 @@ export type DeleteElementRequestPayload = {
 export type DeleteElementSuccessPayload = {
 	cardId: string;
 	elementId: string;
+	isOwnAction: boolean;
 };
 export type DeleteElementFailurePayload = {
 	errorType: ErrorType;
@@ -77,6 +82,7 @@ export type DeleteCardRequestPayload = {
 };
 export type DeleteCardSuccessPayload = {
 	cardId: string;
+	isOwnAction: boolean;
 };
 export type DeleteCardFailurePayload = {
 	errorType: ErrorType;
@@ -92,6 +98,7 @@ export type MoveElementSuccessPayload = {
 	elementId: string;
 	toCardId: string;
 	toPosition: number;
+	isOwnAction: boolean;
 };
 export type MoveElementFailurePayload = {
 	errorType: ErrorType;
@@ -107,6 +114,7 @@ export type UpdateElementSuccessPayload = {
 		type: ContentElementType;
 		content: AnyContentElement["content"];
 	};
+	isOwnAction: boolean;
 };
 export type UpdateElementFailurePayload = {
 	errorType: ErrorType;

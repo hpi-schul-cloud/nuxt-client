@@ -38,6 +38,7 @@ export type DeleteColumnRequestPayload = {
 };
 export type DeleteColumnSuccessPayload = {
 	columnId: string;
+	isOwnAction: boolean;
 };
 export type DeleteColumnFailurePayload = {
 	errorType: ErrorType;
@@ -63,6 +64,7 @@ export type MoveCardSuccessPayload = {
 	toColumnId: string;
 	toColumnIndex: number;
 	forceNextTick?: boolean;
+	isOwnAction: boolean;
 };
 export type MoveCardFailurePayload = {
 	errorType: ErrorType;
@@ -77,6 +79,7 @@ export type MoveColumnRequestPayload = {
 export type MoveColumnSuccessPayload = {
 	columnMove: ColumnMove;
 	byKeyboard: boolean;
+	isOwnAction: boolean;
 };
 export type MoveColumnFailurePayload = {
 	errorType: ErrorType;
@@ -90,6 +93,7 @@ export type UpdateColumnTitleRequestPayload = {
 export type UpdateColumnTitleSuccessPayload = {
 	columnId: string;
 	newTitle: string;
+	isOwnAction: boolean;
 };
 export type UpdateColumnTitleFailurePayload = {
 	errorType: ErrorType;
@@ -101,6 +105,7 @@ export type DeleteBoardRequestPayload = {
 };
 export type DeleteBoardSuccessPayload = {
 	id: string;
+	isOwnAction: boolean;
 };
 export type DeleteBoardFailurePayload = {
 	errorType: ErrorType;
@@ -112,6 +117,7 @@ export type ReloadBoardPayload = {
 };
 export type ReloadBoardSuccessPayload = {
 	id: string;
+	isOwnAction: boolean;
 };
 
 export type UpdateBoardTitleRequestPayload = {
@@ -121,6 +127,7 @@ export type UpdateBoardTitleRequestPayload = {
 export type UpdateBoardTitleSuccessPayload = {
 	boardId: string;
 	newTitle: string;
+	isOwnAction: boolean;
 };
 export type UpdateBoardTitleFailurePayload = {
 	errorType: ErrorType;
@@ -134,6 +141,7 @@ export type UpdateBoardVisibilityRequestPayload = {
 export type UpdateBoardVisibilitySuccessPayload = {
 	boardId: string;
 	isVisible: boolean;
+	isOwnAction: boolean;
 };
 export type UpdateBoardVisibilityFailurePayload = {
 	errorType: ErrorType;
