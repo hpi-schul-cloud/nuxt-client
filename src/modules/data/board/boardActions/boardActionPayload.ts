@@ -11,6 +11,7 @@ export type CreateCardRequestPayload = {
 export type CreateCardSuccessPayload = {
 	newCard: CardResponse;
 	columnId: string;
+	isOwnAction: boolean;
 };
 export type CreateCardFailurePayload = {
 	errorType: ErrorType;
@@ -20,8 +21,9 @@ export type CreateCardFailurePayload = {
 export type CreateColumnRequestPayload = {
 	boardId: string;
 };
-export type CreateColumnSucccessPayload = {
+export type CreateColumnSuccessPayload = {
 	newColumn: ColumnResponse;
+	isOwnAction: boolean;
 };
 export type CreateColumnFailurePayload = {
 	errorType: ErrorType;

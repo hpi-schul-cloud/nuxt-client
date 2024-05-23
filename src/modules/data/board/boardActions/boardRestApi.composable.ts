@@ -46,6 +46,7 @@ export const useBoardRestApi = () => {
 			boardStore.createCardSuccess({
 				newCard,
 				columnId: payload.columnId,
+				isOwnAction: true,
 			});
 		} catch (error) {
 			handleError(error, {
@@ -77,7 +78,7 @@ export const useBoardRestApi = () => {
 			useBoardFocusHandler().setFocus(newColumn.id);
 			setEditModeId(newColumn.id);
 
-			boardStore.createColumnSuccess({ newColumn });
+			boardStore.createColumnSuccess({ newColumn, isOwnAction: true });
 			return newColumn;
 		} catch (error) {
 			handleError(error, {

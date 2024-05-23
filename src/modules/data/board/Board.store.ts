@@ -10,7 +10,7 @@ import {
 	CreateCardRequestPayload,
 	CreateCardSuccessPayload,
 	CreateColumnRequestPayload,
-	CreateColumnSucccessPayload,
+	CreateColumnSuccessPayload,
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
 	DisconnectSocketRequestPayload,
@@ -31,6 +31,7 @@ import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
 export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
+	const { setFocus } = useBoardFocusHandler();
 
 	const restApi = useBoardRestApi();
 	const isSocketEnabled =
@@ -83,10 +84,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		isLoading.value = loading;
 	};
 
-	let allowToSwitchEditMode = false;
-
 	const createCardRequest = (payload: CreateCardRequestPayload) => {
-		allowToSwitchEditMode = true;
 		socketOrRest.createCardRequest(payload);
 	};
 
@@ -94,8 +92,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 
 		const { newCard } = payload;
-		const { setFocus } = useBoardFocusHandler();
-		setFocus(newCard.id);
 
 		const columnIndex = board.value.columns.findIndex(
 			(column) => column.id === payload.columnId
@@ -104,16 +100,17 @@ export const useBoardStore = defineStore("boardStore", () => {
 			cardId: newCard.id,
 			height: 120,
 		});
-		if (allowToSwitchEditMode === false) return;
-		setEditModeId(newCard.id);
-		allowToSwitchEditMode = false;
+		if (payload.isOwnAction === true) {
+			setFocus(newCard.id);
+			setEditModeId(newCard.id);
+		}
 	};
 
 	const createColumnRequest = async (payload: CreateColumnRequestPayload) => {
 		socketOrRest.createColumnRequest(payload);
 	};
 
-	const createColumnSuccess = (payload: CreateColumnSucccessPayload) => {
+	const createColumnSuccess = (payload: CreateColumnSuccessPayload) => {
 		if (!board.value) return;
 		board.value.columns.push(payload.newColumn);
 	};
@@ -259,10 +256,6 @@ export const useBoardStore = defineStore("boardStore", () => {
 		}
 
 		const toColumn = board.value.columns[toColumnIndex];
-		if (!toColumn.cards) {
-			toColumn.cards = [];
-		}
-
 		toColumn.cards.splice(newIndex, 0, item);
 	};
 
