@@ -65,29 +65,37 @@ const userHasPermission = (item: SidebarSingleItem | SidebarGroupItem) => {
 };
 
 const hasFeatureEnabled = (item: SidebarSingleItem | SidebarGroupItem) => {
-	if (!item.feature) {
-		return true;
-	}
+	if (!item.feature) return true;
 
 	return envConfigModule.getEnv[item.feature] === (item.featureValue ?? true);
 };
 
+const isEnabledForTheme = (item: SidebarSingleItem | SidebarGroupItem) => {
+	if (!item.theme) return true;
+
+	return item.theme.includes(envConfigModule.getEnv.SC_THEME);
+};
+
 const getItemsForUser = (items: SidebarItems) => {
-	const pageItems = items.filter((item) => {
+	const sidebarItems = items.filter((item) => {
 		if (isSidebarCategoryItem(item)) {
 			item.children = item.children.filter((child) => {
-				const childHasFeature = hasFeatureEnabled(child);
-
-				return userHasPermission(child) && childHasFeature;
+				return (
+					userHasPermission(child) &&
+					hasFeatureEnabled(child) &&
+					isEnabledForTheme(child)
+				);
 			});
 		}
 
-		const categoryHasFeature = hasFeatureEnabled(item);
-
-		return userHasPermission(item) && categoryHasFeature;
+		return (
+			userHasPermission(item) &&
+			hasFeatureEnabled(item) &&
+			isEnabledForTheme(item)
+		);
 	});
 
-	return pageItems;
+	return sidebarItems;
 };
 
 const pageItems = computed(() => getItemsForUser(pageLinks.value));
