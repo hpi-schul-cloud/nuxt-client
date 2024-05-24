@@ -59,7 +59,6 @@
 									@create:card="onCreateCard"
 									@delete:card="onDeleteCard"
 									@delete:column="onDeleteColumn"
-									@update:card-position="onUpdateCardPosition(index, $event)"
 									@update:column-title="onUpdateColumnTitle(element.id, $event)"
 									@move:column-down="onMoveColumnForward(index, element.id)"
 									@move:column-left="onMoveColumnBackward(index, element.id)"
@@ -102,7 +101,7 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
+import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -241,10 +240,6 @@ const onUpdateBoardVisibility = async (isVisible: boolean) => {
 		isVisible,
 	});
 	await setAlert();
-};
-
-const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-	if (hasMovePermission) boardStore.moveCardRequest(cardMove);
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {

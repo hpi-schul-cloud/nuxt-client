@@ -1,15 +1,19 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { ContentElementType } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { richTextElementResponseFactory } from "@@/tests/test-utils/factory/richTextElementResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import {
+	CreateElementSuccessPayload,
 	DeleteCardRequestPayload,
 	DisconnectSocketRequestPayload,
 	UpdateCardHeightFailurePayload,
@@ -29,6 +33,9 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = jest.mocked(
+	useSharedLastCreatedElement
+);
 
 describe("useCardSocketApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
@@ -57,6 +64,11 @@ describe("useCardSocketApi", () => {
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 		jest.useFakeTimers();
+
+		mockUseSharedLastCreatedElement.mockReturnValue({
+			lastCreatedElementId: computed(() => "element-id"),
+			resetLastCreatedElementId: jest.fn(),
+		});
 	});
 
 	afterEach(() => {
@@ -73,6 +85,36 @@ describe("useCardSocketApi", () => {
 			expect(mockedSocketConnectionHandler.disconnectSocket).toHaveBeenCalled();
 		});
 
+		it("should call createElementSuccess for corresponding action", () => {
+			const cardStore = mockedPiniaStoreTyping(useCardStore);
+			const { dispatch } = useCardSocketApi();
+
+			const payload: CreateElementSuccessPayload = {
+				cardId: "cardId",
+				type: ContentElementType.RichText,
+				toPosition: 0,
+				newElement: richTextElementResponseFactory.build(),
+				isOwnAction: true,
+			};
+			dispatch(CardActions.createElementSuccess(payload));
+
+			expect(cardStore.createElementSuccess).toHaveBeenCalledWith(payload);
+		});
+
+		it("should call deleteElementSuccess for corresponding action", () => {
+			const cardStore = mockedPiniaStoreTyping(useCardStore);
+			const { dispatch } = useCardSocketApi();
+
+			const payload = {
+				cardId: "cardId",
+				elementId: "elementId",
+				isOwnAction: true,
+			};
+			dispatch(CardActions.deleteElementSuccess(payload));
+
+			expect(cardStore.deleteElementSuccess).toHaveBeenCalledWith(payload);
+		});
+
 		it("should call updateCardTitleSuccess for corresponding action", () => {
 			const cardStore = mockedPiniaStoreTyping(useCardStore);
 			const { dispatch } = useCardSocketApi();
@@ -80,6 +122,7 @@ describe("useCardSocketApi", () => {
 			const payload = {
 				cardId: "cardId",
 				newTitle: "newTitle",
+				isOwnAction: true,
 			};
 			dispatch(CardActions.updateCardTitleSuccess(payload));
 
@@ -93,6 +136,7 @@ describe("useCardSocketApi", () => {
 			const payload = {
 				cardId: "cardId",
 				newHeight: 100,
+				isOwnAction: true,
 			};
 			dispatch(CardActions.updateCardHeightSuccess(payload));
 
@@ -139,6 +183,82 @@ describe("useCardSocketApi", () => {
 			disconnectSocketRequest(payload);
 
 			expect(mockedSocketConnectionHandler.disconnectSocket).toHaveBeenCalled();
+		});
+	});
+
+	describe("createElementRequest", () => {
+		it("should call emitOnSocket with correct parameters", () => {
+			const { createElementRequest } = useCardSocketApi();
+
+			const payload = {
+				cardId: "cardId",
+				type: ContentElementType.RichText,
+			};
+
+			createElementRequest(payload);
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"create-element-request",
+				payload
+			);
+		});
+	});
+
+	describe("deleteElementRequest", () => {
+		it("should call emitOnSocket with correct parameters", () => {
+			const { deleteElementRequest } = useCardSocketApi();
+
+			const payload = {
+				cardId: "cardId",
+				elementId: "elementId",
+			};
+
+			deleteElementRequest(payload);
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"delete-element-request",
+				payload
+			);
+		});
+	});
+
+	describe("moveElementRequest", () => {
+		it("should call emitOnSocket with correct parameters", () => {
+			const { moveElementRequest } = useCardSocketApi();
+
+			const payload = {
+				elementId: "elementId",
+				toCardId: "toCardId",
+				toPosition: 0,
+			};
+
+			moveElementRequest(payload);
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"move-element-request",
+				payload
+			);
+		});
+	});
+
+	describe("updateElementRequest", () => {
+		it("should call emitOnSocket with correct parameters", () => {
+			const { updateElementRequest } = useCardSocketApi();
+
+			const element = richTextElementResponseFactory.build();
+
+			updateElementRequest({ element });
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"update-element-request",
+				{
+					elementId: element.id,
+					data: {
+						type: element.type,
+						content: element.content,
+					},
+				}
+			);
 		});
 	});
 
@@ -192,7 +312,6 @@ describe("useCardSocketApi", () => {
 			);
 		});
 	});
-
 	describe("fetchCardRequest", () => {
 		const payload = {
 			cardIds: ["fake-card-id-234"],

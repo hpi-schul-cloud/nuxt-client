@@ -733,36 +733,6 @@ describe("Board", () => {
 			});
 		});
 
-		describe("@onUpdateCardPosition", () => {
-			describe("when user is permitted to move a card", () => {
-				it("should call moveCardMock method", () => {
-					mockedBoardPermissions.hasMovePermission = true;
-					const { wrapper, boardStore } = setup();
-
-					const columnComponent = wrapper.findComponent({
-						name: "BoardColumn",
-					});
-					columnComponent.vm.$emit("update:card-position");
-
-					expect(boardStore.moveCardRequest).toHaveBeenCalled();
-				});
-			});
-
-			describe("when user is not permitted to move a card", () => {
-				it("should not call moveCardMock method", () => {
-					mockedBoardPermissions.hasMovePermission = false;
-					const { wrapper, boardStore } = setup();
-
-					const columnComponent = wrapper.findComponent({
-						name: "BoardColumn",
-					});
-					columnComponent.vm.$emit("update:card-position");
-
-					expect(boardStore.moveCardRequest).not.toHaveBeenCalled();
-				});
-			});
-		});
-
 		describe("@onUpdateColumnTitle", () => {
 			describe("when user is permitted to edit", () => {
 				it("should call updateColumnTitle method", () => {

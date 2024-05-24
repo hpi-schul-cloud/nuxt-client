@@ -201,7 +201,4 @@ export default defineComponent({
 .column-header {
 	align-items: top;
 }
-.column-header:focus {
-	outline: none;
-}
 </style>
