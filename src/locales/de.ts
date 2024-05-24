@@ -148,7 +148,7 @@ export default {
 	"common.words.noChoice": "Keine Auswahl",
 	"common.words.otherGroups": "sonstige Gruppen",
 
-	"common.words.ctlTool": "ctltool",
+	"common.words.ctlTool": "externe Tools",
 
 	"common.words.planned": "geplant",
 	"common.words.privacyPolicy": "Datenschutzerklärung",
@@ -256,9 +256,9 @@ export default {
 		"Synchronisation von sonstigen Gruppen",
 
 	"components.administration.provisioningOptions.ctlTool.description":
-		"Aktivieren Sie diese Option, wenn Medien (CTL-Tools) in Ihrer Schule automatisch freigeschaltet werden soll, für den Fall, das Nutzende Ihrer Schule über eine Freischaltung für diese Medien in moin.schule verfügen.",
+		"Wenn diese Option aktiviert ist, werden Freischaltungen von externen Tools automatisch aus moin.schule übernommen.",
 	"components.administration.provisioningOptions.ctlTool.label":
-		"Freischaltung von Medien (CTL-Tools)",
+		"Freischaltung von externen Tools",
 
 	"components.administration.provisioningOptions.page.title":
 		"Optionen für Datensynchronisation",
