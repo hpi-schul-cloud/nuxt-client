@@ -28,9 +28,6 @@
 				/>
 			</div>
 		</VList>
-		<div data-testid="sidebar-instance-name" class="ml-4 pb-3 text-disabled">
-			&#169; {{ currentYear }} {{ theme.name }}
-		</div>
 	</VNavigationDrawer>
 </template>
 
@@ -40,7 +37,6 @@ import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
-	THEME_KEY,
 } from "@/utils/inject";
 import SidebarLogo from "./SidebarLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
@@ -50,7 +46,6 @@ import { useSidebarItems } from "./SidebarItems.composable";
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-const theme = injectStrict(THEME_KEY);
 
 const { pageLinks, legalLinks, metaLinks } = useSidebarItems();
 
@@ -102,6 +97,4 @@ const metaItems = computed(
 const legalItems = computed(
 	() => getItemsForUser(legalLinks.value) as SidebarSingleItem[]
 );
-
-const currentYear = computed(() => new Date().getFullYear());
 </script>
