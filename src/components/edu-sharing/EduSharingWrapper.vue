@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import { envConfigModule } from "@/store";
 import { useEduSharingApi } from "../../composables/edu-sharing-api.composable";
 
 export default {
@@ -21,7 +22,7 @@ export default {
 	mounted() {
 		// Provide the backend URL for edu-sharing to the web component.
 		window.__env = {
-			EDU_SHARING_API_URL: process.env.EDU_SHARING__API_URL,
+			EDU_SHARING_API_URL: envConfigModule.getEnv.EDU_SHARING__API_URL,
 		};
 
 		const runtime = document.createElement("script");
