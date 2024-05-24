@@ -80,6 +80,6 @@
 		"node_modules",
 		"./src/components/base/components.js",
 		"vendor",
-		"public/vendor"
+		"public/content/vendor"
 	]
 }

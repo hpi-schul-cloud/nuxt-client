@@ -25,34 +25,34 @@ export default {
 		};
 
 		const runtime = document.createElement("script");
-		runtime.setAttribute("src", "vendor/edu-sharing/runtime.js");
+		runtime.setAttribute("src", "/content/vendor/edu-sharing/runtime.js");
 		runtime.setAttribute("type", "module");
 		document.body.appendChild(runtime);
 
 		const polyfills = document.createElement("script");
-		polyfills.setAttribute("src", "vendor/edu-sharing/polyfills.js");
+		polyfills.setAttribute("src", "/content/vendor/edu-sharing/polyfills.js");
 		polyfills.setAttribute("type", "module");
 		document.body.appendChild(polyfills);
 
 		// <!-- Alternatively to loading `scripts.js`, provide your own versions of jQuery.  -->
 		const scripts = document.createElement("script");
-		scripts.setAttribute("src", "vendor/edu-sharing/scripts.js");
+		scripts.setAttribute("src", "/content/vendor/edu-sharing/scripts.js");
 		scripts.setAttribute("defer", "");
 		document.body.appendChild(scripts);
 
 		const main = document.createElement("script");
-		main.setAttribute("src", "vendor/edu-sharing/main.js");
+		main.setAttribute("src", "/content/vendor/edu-sharing/main.js");
 		main.setAttribute("type", "module");
 		document.body.appendChild(main);
 
 		//   <!-- Only for dev builds. Could also set `vendorChunk: false` in `angular.json` to omit altogether. -->
 		const vendor = document.createElement("script");
-		vendor.setAttribute("src", "vendor/edu-sharing/vendor.js");
+		vendor.setAttribute("src", "/content/vendor/edu-sharing/vendor.js");
 		vendor.setAttribute("type", "module");
 		document.body.appendChild(vendor);
 
 		const styles = document.createElement("link");
-		styles.setAttribute("href", "vendor/edu-sharing/styles.css");
+		styles.setAttribute("href", "/content/vendor/edu-sharing/styles.css");
 		styles.setAttribute("rel", "stylesheet");
 		document.body.appendChild(styles);
 
