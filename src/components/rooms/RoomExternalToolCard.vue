@@ -7,6 +7,7 @@
 		@click="handleClick"
 	>
 		<template #under-title>
+			<p v-if="tool.ltiDeepLink">Inhalt: {{ tool.ltiDeepLink.title }}</p>
 			<div class="d-flex g-1">
 				<WarningChip
 					v-if="isToolDeactivated"
@@ -56,8 +57,7 @@ import RoomBaseCard from "./RoomBaseCard.vue";
 export default defineComponent({
 	name: "RoomExternalToolCard",
 	components: { InfoChip, WarningChip, RoomBaseCard, RoomDotMenu },
-	emits: ["edit", "delete", "error"],
-
+	emits: ["edit", "delete", "error", "refresh"],
 	props: {
 		tool: {
 			type: Object as PropType<ExternalToolDisplayData>,
@@ -75,7 +75,7 @@ export default defineComponent({
 			fetchContextLaunchRequest,
 			launchTool,
 			error: launchError,
-		} = useExternalToolLaunchState();
+		} = useExternalToolLaunchState(() => emit("refresh"));
 
 		const { isTeacher } = useContextExternalToolConfigurationStatus();
 

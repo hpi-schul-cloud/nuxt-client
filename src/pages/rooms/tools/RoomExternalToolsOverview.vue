@@ -38,6 +38,7 @@
 			:room-id="roomId"
 			data-testid="room-external-tool-section"
 			@delete="onDeleteTool"
+			@refresh="() => fetchDisplayData(props.roomId, ToolContextType.Course)"
 		/>
 	</div>
 </template>

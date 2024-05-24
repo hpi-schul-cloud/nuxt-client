@@ -57,6 +57,7 @@ export class ExternalToolMapper {
 			),
 			logoUrl: response.logoUrl,
 			openInNewTab: response.openInNewTab,
+			ltiDeepLink: response.ltiDeepLink,
 		};
 
 		return mapped;
@@ -70,6 +71,7 @@ export class ExternalToolMapper {
 			url: response.url,
 			payload: response.payload,
 			openNewTab: response.openNewTab,
+			isDeepLink: response.isDeepLink,
 		};
 
 		return mapped;

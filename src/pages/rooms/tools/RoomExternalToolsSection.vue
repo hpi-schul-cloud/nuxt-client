@@ -10,6 +10,7 @@
 			@delete="onOpenDeleteDialog"
 			@edit="onEditTool"
 			@error="onError"
+			@refresh="$emit('refresh')"
 			:data-testid="`external-tool-card-${index}`"
 		/>
 
@@ -75,6 +76,7 @@ const props = defineProps({
 
 const emit = defineEmits<{
 	(e: "delete", value: ExternalToolDisplayData): void;
+	(e: "refresh"): void;
 }>();
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);

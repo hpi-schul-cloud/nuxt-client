@@ -34,6 +34,11 @@
 					@edit:element="onEditElement"
 				/>
 			</template>
+			<template #description v-if="displayData?.ltiDeepLink">
+				<div class="description text-body-2">
+					{{ displayData.ltiDeepLink.title }}
+				</div>
+			</template>
 		</ContentElementBar>
 		<ExternalToolElementAlert
 			:toolDisplayName="toolDisplayName"
@@ -116,7 +121,7 @@ export default defineComponent({
 		} = useExternalToolDisplayState();
 
 		const { launchTool, fetchContextLaunchRequest } =
-			useExternalToolLaunchState();
+			useExternalToolLaunchState(() => loadCardData());
 
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
