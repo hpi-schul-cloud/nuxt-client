@@ -87,6 +87,7 @@ export type DeleteCardSuccessPayload = {
 export type DeleteCardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: DeleteCardRequestPayload;
 };
 
 export type MoveElementRequestPayload = {
