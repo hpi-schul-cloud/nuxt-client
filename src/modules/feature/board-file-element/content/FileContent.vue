@@ -26,6 +26,7 @@ import { FileProperties } from "../shared/types/file-properties";
 import FileInputs from "././inputs/FileInputs.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import { FileAlert } from "../shared/types/FileAlert.enum";
+import { useDebounceFn } from "@vueuse/core";
 
 export default defineComponent({
 	components: {
@@ -52,11 +53,13 @@ export default defineComponent({
 		const onFetchFile = () => {
 			emit("fetch:file");
 		};
-		const onUpdateCaption = (value: string) => {
+		const onUpdateCaption = useDebounceFn((value: string) => {
 			emit("update:caption", value);
-		};
-		const onUpdateText = (value: string) =>
+		}, 600);
+
+		const onUpdateText = useDebounceFn((value: string) => {
 			emit("update:alternativeText", value);
+		}, 600);
 
 		const onAddAlert = (alert: FileAlert) => {
 			emit("add:alert", alert);
