@@ -31,8 +31,9 @@
 						src="@/assets/img/media-board/default_img_media_shelf.png"
 						data-testid="media-element-default-thumbnail"
 					/>
-					<!-- div around slot and position via css -->
-					<slot name="imageOverlay" />
+					<div class="chip-position">
+						<slot name="imageOverlay" />
+					</div>
 				</div>
 				<ContentElementBar :has-grey-background="true">
 					<template #title>
@@ -81,5 +82,11 @@ $card-width: 288px;
 .description {
 	height: 3.75rem;
 	overflow: hidden;
+}
+
+.chip-position {
+	position: absolute;
+	bottom: 128px;
+	left: 8px;
 }
 </style>

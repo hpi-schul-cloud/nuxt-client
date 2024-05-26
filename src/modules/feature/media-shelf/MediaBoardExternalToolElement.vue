@@ -5,15 +5,19 @@
 		@keyup.enter="onClick"
 	>
 		<template #imageOverlay>
-			<WarningChip v-if="isToolIncomplete">{{
-				$t("common.medium.chip.incomplete")
-			}}</WarningChip>
-			<WarningChip v-if="isToolDeactivated">{{
-				$t("common.medium.chip.deactivated")
-			}}</WarningChip>
-			<WarningChip v-if="isToolNotLicensed">{{
-				$t("common.medium.chip.notLicensed")
-			}}</WarningChip>
+			<div class="pb-1">
+				<WarningChip v-if="isToolDeactivated">{{
+					$t("common.medium.chip.deactivated")
+				}}</WarningChip>
+				<WarningChip v-if="isToolNotLicensed">{{
+					$t("common.medium.chip.notLicensed")
+				}}</WarningChip>
+			</div>
+			<div>
+				<WarningChip v-if="isToolIncomplete">{{
+					$t("common.medium.chip.incomplete")
+				}}</WarningChip>
+			</div>
 		</template>
 	</MediaBoardElementDisplay>
 </template>
