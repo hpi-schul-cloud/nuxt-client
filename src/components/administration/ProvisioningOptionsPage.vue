@@ -230,6 +230,9 @@ export default defineComponent({
 			});
 
 		const translateProvisioningOption = (option: ProvisioningOptionsEnum) => {
+			if (option === ProvisioningOptionsEnum.CTLTOOL) {
+				return;
+			}
 			return t(provisioningOptionTranslations[option]);
 		};
 
@@ -244,6 +247,13 @@ export default defineComponent({
 
 		const onSaveButtonClick = async () => {
 			if (newlyTurnedOffOptions.value.length) {
+				if (
+					newlyTurnedOffOptions.value.length === 1 &&
+					newlyTurnedOffOptions.value[0] === ProvisioningOptionsEnum.CTLTOOL
+				) {
+					await saveOptions();
+				}
+
 				isWarningDialogOpen.value = true;
 			} else {
 				await saveOptions();

@@ -263,7 +263,6 @@ export default {
 	"components.administration.provisioningOptions.ctlTool.label":
 		"Activación de herramientas externas",
 
-
 	"components.administration.provisioningOptions.page.title":
 		"Opciones de sincronización de datos",
 	"components.administration.provisioningOptions.warning.consequence":
