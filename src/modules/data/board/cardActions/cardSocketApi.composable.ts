@@ -16,7 +16,15 @@ import {
 import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPayload";
 import { useDebounceFn } from "@vueuse/core";
 
-type ErrorActions = ReturnType<typeof CardActions.updateCardTitleFailure>;
+type ErrorActions =
+	| ReturnType<typeof CardActions.createElementFailure>
+	| ReturnType<typeof CardActions.deleteCardFailure>
+	| ReturnType<typeof CardActions.deleteElementFailure>
+	| ReturnType<typeof CardActions.fetchCardFailure>
+	| ReturnType<typeof CardActions.moveElementFailure>
+	| ReturnType<typeof CardActions.updateCardHeightFailure>
+	| ReturnType<typeof CardActions.updateCardTitleFailure>
+	| ReturnType<typeof CardActions.updateElementFailure>;
 
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
