@@ -34,7 +34,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		jest.clearAllMocks();
 	});
 
-	describe("composable.composable.determineToolStatusTranslationKey for teacher", () => {
+	describe("determineToolStatusTranslationKey", () => {
 		describe("when user is teacher and tool is outdated on scope school and context", () => {
 			const setup = () => {
 				const toolConfigurationStatus =
