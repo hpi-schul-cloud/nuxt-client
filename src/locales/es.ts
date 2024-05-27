@@ -312,9 +312,9 @@ export default {
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.drawingElement": "Pizarra",
-	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
-		"Esta editor de texto es visible y editable para todos los participantes en el curso.",
+		"Este Etherpad es visible y editable para todos los participantes en el curso.",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
@@ -371,7 +371,7 @@ export default {
 	"components.elementTypeSelection.elements.fileElement.subtitle":
 		"Editor de texto",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
-		"Text Editor",
+		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Envíos",
