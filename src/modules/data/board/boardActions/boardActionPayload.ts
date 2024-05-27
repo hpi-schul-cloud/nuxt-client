@@ -16,6 +16,7 @@ export type CreateCardSuccessPayload = {
 export type CreateCardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: CreateCardRequestPayload;
 };
 
 export type CreateColumnRequestPayload = {
@@ -28,6 +29,7 @@ export type CreateColumnSuccessPayload = {
 export type CreateColumnFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: CreateColumnRequestPayload;
 };
 
 export type FetchBoardRequestPayload = {
@@ -45,6 +47,7 @@ export type DeleteColumnSuccessPayload = {
 export type DeleteColumnFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: DeleteColumnRequestPayload;
 };
 
 export type MoveCardRequestPayload = {
@@ -71,6 +74,7 @@ export type MoveCardSuccessPayload = {
 export type MoveCardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: MoveCardRequestPayload;
 };
 
 export type MoveColumnRequestPayload = {
@@ -86,6 +90,7 @@ export type MoveColumnSuccessPayload = {
 export type MoveColumnFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: MoveColumnRequestPayload;
 };
 
 export type UpdateColumnTitleRequestPayload = {
@@ -100,6 +105,7 @@ export type UpdateColumnTitleSuccessPayload = {
 export type UpdateColumnTitleFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: UpdateColumnTitleRequestPayload;
 };
 
 export type DeleteBoardRequestPayload = {
@@ -112,6 +118,7 @@ export type DeleteBoardSuccessPayload = {
 export type DeleteBoardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: DeleteBoardRequestPayload;
 };
 
 export type ReloadBoardPayload = {
@@ -134,6 +141,7 @@ export type UpdateBoardTitleSuccessPayload = {
 export type UpdateBoardTitleFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: UpdateBoardTitleRequestPayload;
 };
 
 export type UpdateBoardVisibilityRequestPayload = {
@@ -148,6 +156,7 @@ export type UpdateBoardVisibilitySuccessPayload = {
 export type UpdateBoardVisibilityFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: UpdateBoardVisibilityRequestPayload;
 };
 
 export type DisconnectSocketRequestPayload = Record<string, never>;

@@ -313,9 +313,9 @@ export default {
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.drawingElement": "Дошка",
-	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
-		"Цей текстовий редактор є видимою і доступною для редагування для всіх учасників курсу.",
+		"Цей Etherpad є видимою і доступною для редагування для всіх учасників курсу.",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
@@ -370,7 +370,7 @@ export default {
 		"Зовнішні інструменти",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
-		"Текстовий редактор",
+		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Посилання",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Подання",
