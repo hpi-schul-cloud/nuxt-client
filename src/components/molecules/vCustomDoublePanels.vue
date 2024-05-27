@@ -18,7 +18,7 @@
 					<template #actions
 						>{{ panelOneCount }}
 						<v-icon class="ml-3" data-testid="upperTaskSectionIcon">
-							{{ expanded ? "$collapse" : "$expand" }}
+							{{ expanded ? "$expand" : "$collapse" }}
 						</v-icon>
 					</template>
 				</v-expansion-panel-title>
