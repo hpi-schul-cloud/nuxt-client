@@ -112,7 +112,11 @@ export const useBoardSocketApi = () => {
 			}
 			emitOnSocket("move-card-request", payload);
 		} catch (err) {
-			onFailure({ errorType: "notUpdated", boardObjectType: "boardCard" });
+			onFailure({
+				errorType: "notUpdated",
+				boardObjectType: "boardCard",
+				requestPayload: payload,
+			});
 		}
 	};
 
