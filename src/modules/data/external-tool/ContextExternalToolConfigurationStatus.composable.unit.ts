@@ -1,50 +1,60 @@
+import { RoleName } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	ContextExternalToolConfigurationStatusFactory,
 	mountComposable,
 } from "@@/tests/test-utils";
 import { useContextExternalToolConfigurationStatus } from "./ContextExternalToolConfigurationStatus.composable";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import AuthModule from "@/store/auth";
-import { createModuleMocks } from "@/utils/mock-store-module";
 
 describe("ToolConfigurationStatus.composable", () => {
+	const getComposable = (userRole: string = RoleName.Teacher) => {
+		const authModule = createModuleMocks(AuthModule, {
+			getUserRoles: [userRole],
+		});
+
+		const composable = mountComposable(
+			() => useContextExternalToolConfigurationStatus(),
+			{
+				global: {
+					provide: {
+						[AUTH_MODULE_KEY.valueOf()]: authModule,
+					},
+				},
+			}
+		);
+
+		return {
+			composable,
+		};
+	};
+
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
 
-	describe("determineToolStatusTranslationKey for teacher", () => {
+	describe("composable.composable.determineToolStatusTranslationKey for teacher", () => {
 		describe("when user is teacher and tool is outdated on scope school and context", () => {
 			const setup = () => {
-				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
-				});
-
 				const toolConfigurationStatus =
 					ContextExternalToolConfigurationStatusFactory.build({
 						isOutdatedOnScopeSchool: true,
 						isOutdatedOnScopeContext: true,
 					});
 
-				const composable = mountComposable(
-					() => useContextExternalToolConfigurationStatus(),
-					{
-						global: {
-							provide: { [AUTH_MODULE_KEY.valueOf()]: authModule },
-						},
-					}
-				);
+				const { composable } = getComposable(RoleName.Teacher);
 
 				return {
 					toolConfigurationStatus,
-					...composable,
+					composable,
 				};
 			};
 
-			it("should return translationkey for outdated on scope school and context ", () => {
-				const { determineToolStatusTranslationKey, toolConfigurationStatus } =
-					setup();
+			it("should return translation key for outdated on scope school and context ", () => {
+				const { composable, toolConfigurationStatus } = setup();
 
-				const result = determineToolStatusTranslationKey(
+				const result = composable.determineToolStatusTranslationKey(
 					toolConfigurationStatus
 				);
 
@@ -56,37 +66,23 @@ describe("ToolConfigurationStatus.composable", () => {
 
 		describe("when user is teacher and tool is outdated on scope school", () => {
 			const setup = () => {
-				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
-				});
-
 				const toolConfigurationStatus =
 					ContextExternalToolConfigurationStatusFactory.build({
 						isOutdatedOnScopeSchool: true,
 					});
 
-				const composable = mountComposable(
-					() => useContextExternalToolConfigurationStatus(),
-					{
-						global: {
-							provide: {
-								[AUTH_MODULE_KEY.valueOf()]: authModule,
-							},
-						},
-					}
-				);
+				const { composable } = getComposable(RoleName.Teacher);
 
 				return {
 					toolConfigurationStatus,
-					...composable,
+					composable,
 				};
 			};
 
-			it("should return translationkey for outdated on scope school ", () => {
-				const { determineToolStatusTranslationKey, toolConfigurationStatus } =
-					setup();
+			it("should return translation key for outdated on scope school ", () => {
+				const { composable, toolConfigurationStatus } = setup();
 
-				const result = determineToolStatusTranslationKey(
+				const result = composable.determineToolStatusTranslationKey(
 					toolConfigurationStatus
 				);
 
@@ -98,37 +94,23 @@ describe("ToolConfigurationStatus.composable", () => {
 
 		describe("when user is teacher and tool is outdated on scope context", () => {
 			const setup = () => {
-				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
-				});
-
 				const toolConfigurationStatus =
 					ContextExternalToolConfigurationStatusFactory.build({
 						isOutdatedOnScopeContext: true,
 					});
 
-				const composable = mountComposable(
-					() => useContextExternalToolConfigurationStatus(),
-					{
-						global: {
-							provide: {
-								[AUTH_MODULE_KEY.valueOf()]: authModule,
-							},
-						},
-					}
-				);
+				const { composable } = getComposable(RoleName.Teacher);
 
 				return {
 					toolConfigurationStatus,
-					...composable,
+					composable,
 				};
 			};
 
-			it("should return translationkey for outdated tool on scope context ", () => {
-				const { determineToolStatusTranslationKey, toolConfigurationStatus } =
-					setup();
+			it("should return translation key for outdated tool on scope context ", () => {
+				const { composable, toolConfigurationStatus } = setup();
 
-				const result = determineToolStatusTranslationKey(
+				const result = composable.determineToolStatusTranslationKey(
 					toolConfigurationStatus
 				);
 
@@ -138,37 +120,23 @@ describe("ToolConfigurationStatus.composable", () => {
 
 		describe("when user is teacher and tool is incomplete", () => {
 			const setup = () => {
-				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
-				});
-
 				const toolConfigurationStatus =
 					ContextExternalToolConfigurationStatusFactory.build({
 						isIncompleteOnScopeContext: true,
 					});
 
-				const composable = mountComposable(
-					() => useContextExternalToolConfigurationStatus(),
-					{
-						global: {
-							provide: {
-								[AUTH_MODULE_KEY.valueOf()]: authModule,
-							},
-						},
-					}
-				);
+				const { composable } = getComposable(RoleName.Teacher);
 
 				return {
 					toolConfigurationStatus,
-					...composable,
+					composable,
 				};
 			};
 
-			it("should return translationkey for outdated", () => {
-				const { determineToolStatusTranslationKey, toolConfigurationStatus } =
-					setup();
+			it("should return translation key for outdated", () => {
+				const { composable, toolConfigurationStatus } = setup();
 
-				const result = determineToolStatusTranslationKey(
+				const result = composable.determineToolStatusTranslationKey(
 					toolConfigurationStatus
 				);
 
@@ -178,37 +146,23 @@ describe("ToolConfigurationStatus.composable", () => {
 
 		describe("when user is teacher and tool is incomplete operational", () => {
 			const setup = () => {
-				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
-				});
-
 				const toolConfigurationStatus =
 					ContextExternalToolConfigurationStatusFactory.build({
 						isIncompleteOperationalOnScopeContext: true,
 					});
 
-				const composable = mountComposable(
-					() => useContextExternalToolConfigurationStatus(),
-					{
-						global: {
-							provide: {
-								[AUTH_MODULE_KEY.valueOf()]: authModule,
-							},
-						},
-					}
-				);
+				const { composable } = getComposable(RoleName.Teacher);
 
 				return {
 					toolConfigurationStatus,
-					...composable,
+					composable,
 				};
 			};
 
-			it("should return translationkey for outdated ", () => {
-				const { determineToolStatusTranslationKey, toolConfigurationStatus } =
-					setup();
+			it("should return translation key for outdated ", () => {
+				const { composable, toolConfigurationStatus } = setup();
 
-				const result = determineToolStatusTranslationKey(
+				const result = composable.determineToolStatusTranslationKey(
 					toolConfigurationStatus
 				);
 
@@ -216,40 +170,50 @@ describe("ToolConfigurationStatus.composable", () => {
 			});
 		});
 
+		describe("when user is teacher and the tool has an unknown status", () => {
+			const setup = () => {
+				const toolConfigurationStatus =
+					ContextExternalToolConfigurationStatusFactory.build();
+
+				const { composable } = getComposable(RoleName.Teacher);
+
+				return {
+					toolConfigurationStatus,
+					composable,
+				};
+			};
+
+			it("should return a generic translation key", () => {
+				const { composable, toolConfigurationStatus } = setup();
+
+				const result = composable.determineToolStatusTranslationKey(
+					toolConfigurationStatus
+				);
+
+				expect(result).toEqual("error.generic");
+			});
+		});
+
 		describe("when user is student and tool is outdated on scope school and context", () => {
 			const setup = () => {
-				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["student"],
-				});
-
 				const toolConfigurationStatus =
 					ContextExternalToolConfigurationStatusFactory.build({
 						isOutdatedOnScopeSchool: true,
 						isOutdatedOnScopeContext: true,
 					});
 
-				const composable = mountComposable(
-					() => useContextExternalToolConfigurationStatus(),
-					{
-						global: {
-							provide: {
-								[AUTH_MODULE_KEY.valueOf()]: authModule,
-							},
-						},
-					}
-				);
+				const { composable } = getComposable(RoleName.Student);
 
 				return {
 					toolConfigurationStatus,
-					...composable,
+					composable,
 				};
 			};
 
-			it("should return translationkey for outdated", () => {
-				const { determineToolStatusTranslationKey, toolConfigurationStatus } =
-					setup();
+			it("should return translation key for outdated", () => {
+				const { composable, toolConfigurationStatus } = setup();
 
-				const result = determineToolStatusTranslationKey(
+				const result = composable.determineToolStatusTranslationKey(
 					toolConfigurationStatus
 				);
 
@@ -260,62 +224,20 @@ describe("ToolConfigurationStatus.composable", () => {
 
 	describe("determineDeactivatedTranslationKey", () => {
 		describe("when user is student and tool is deactivated", () => {
-			const setup = () => {
-				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["student"],
-				});
+			it("should return translation key for deactivated tool ", () => {
+				const { composable } = getComposable(RoleName.Student);
 
-				const composable = mountComposable(
-					() => useContextExternalToolConfigurationStatus(),
-					{
-						global: {
-							provide: {
-								[AUTH_MODULE_KEY.valueOf()]: authModule,
-							},
-						},
-					}
-				);
-
-				return {
-					...composable,
-				};
-			};
-
-			it("should return translationkey for deactivated tool ", () => {
-				const { determineDeactivatedMessage } = setup();
-
-				const result = determineDeactivatedMessage();
+				const result = composable.determineDeactivatedMessage();
 
 				expect(result).toEqual("common.tool.information.deactivated.student");
 			});
 		});
 
 		describe("when user is teacher and tool is deactivated", () => {
-			const setup = () => {
-				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
-				});
+			it("should return translation key for deactivated tool ", () => {
+				const { composable } = getComposable(RoleName.Teacher);
 
-				const composable = mountComposable(
-					() => useContextExternalToolConfigurationStatus(),
-					{
-						global: {
-							provide: {
-								[AUTH_MODULE_KEY.valueOf()]: authModule,
-							},
-						},
-					}
-				);
-
-				return {
-					...composable,
-				};
-			};
-
-			it("should return translationkey for deactivated tool ", () => {
-				const { determineDeactivatedMessage } = setup();
-
-				const result = determineDeactivatedMessage();
+				const result = composable.determineDeactivatedMessage();
 
 				expect(result).toEqual("common.tool.information.deactivated.teacher");
 			});
@@ -324,62 +246,20 @@ describe("ToolConfigurationStatus.composable", () => {
 
 	describe("isTeacher", () => {
 		describe("when user is teacher", () => {
-			const setup = () => {
-				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["teacher"],
-				});
-
-				const composable = mountComposable(
-					() => useContextExternalToolConfigurationStatus(),
-					{
-						global: {
-							provide: {
-								[AUTH_MODULE_KEY.valueOf()]: authModule,
-							},
-						},
-					}
-				);
-
-				return {
-					...composable,
-				};
-			};
-
 			it("should return true ", () => {
-				const { isTeacher } = setup();
+				const { composable } = getComposable(RoleName.Teacher);
 
-				const result = isTeacher();
+				const result = composable.isTeacher();
 
 				expect(result).toBe(true);
 			});
 		});
 
 		describe("when user is not teacher", () => {
-			const setup = () => {
-				const authModule = createModuleMocks(AuthModule, {
-					getUserRoles: ["student"],
-				});
-
-				const composable = mountComposable(
-					() => useContextExternalToolConfigurationStatus(),
-					{
-						global: {
-							provide: {
-								[AUTH_MODULE_KEY.valueOf()]: authModule,
-							},
-						},
-					}
-				);
-
-				return {
-					...composable,
-				};
-			};
-
 			it("should return true ", () => {
-				const { isTeacher } = setup();
+				const { composable } = getComposable(RoleName.Student);
 
-				const result = isTeacher();
+				const result = composable.isTeacher();
 
 				expect(result).toBe(false);
 			});
