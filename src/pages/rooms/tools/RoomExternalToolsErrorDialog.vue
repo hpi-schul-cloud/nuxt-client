@@ -79,7 +79,7 @@ const getTitle: ComputedRef<string> = computed(() => {
 
 const getText: ComputedRef<string> = computed(() => {
 	if (!props.selectedItem) {
-		return "";
+		return "error.generic";
 	}
 
 	if (props.selectedItem.status.isDeactivated) {
