@@ -16,7 +16,7 @@
 				variant="outlined"
 				:ripple="false"
 			>
-				<div>
+				<div class="position-relative">
 					<v-img
 						v-if="element.thumbnail"
 						:src="element.thumbnail"
@@ -86,7 +86,7 @@ $card-width: 288px;
 
 .chip-position {
 	position: absolute;
-	bottom: 128px;
-	left: 8px;
+	bottom: 0;
+	left: 0;
 }
 </style>

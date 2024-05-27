@@ -5,18 +5,25 @@
 		@keyup.enter="onClick"
 	>
 		<template #imageOverlay>
-			<div class="pb-1">
-				<WarningChip v-if="isToolDeactivated">{{
-					$t("common.medium.chip.deactivated")
-				}}</WarningChip>
-				<WarningChip v-if="isToolNotLicensed">{{
-					$t("common.medium.chip.notLicensed")
-				}}</WarningChip>
-			</div>
-			<div>
-				<WarningChip v-if="isToolIncomplete">{{
-					$t("common.medium.chip.incomplete")
-				}}</WarningChip>
+			<div class="d-flex ga-1 flex-column pa-3">
+				<WarningChip
+					v-if="isToolDeactivated"
+					data-testid="warning-chip-deactivated"
+				>
+					{{ $t("common.medium.chip.deactivated") }}
+				</WarningChip>
+				<WarningChip
+					v-if="isToolNotLicensed"
+					data-testid="warning-chip-not-licensed"
+				>
+					{{ $t("common.medium.chip.notLicensed") }}
+				</WarningChip>
+				<WarningChip
+					v-if="isToolIncomplete"
+					data-testid="warning-chip-incomplete"
+				>
+					{{ $t("common.medium.chip.incomplete") }}
+				</WarningChip>
 			</div>
 		</template>
 	</MediaBoardElementDisplay>
