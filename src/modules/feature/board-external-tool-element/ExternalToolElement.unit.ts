@@ -246,13 +246,13 @@ describe("ExternalToolElement", () => {
 
 		describe("when the element does not have a tool attached", () => {
 			it("should open the configuration dialog immediately", async () => {
+				useSharedLastCreatedElementMock.lastCreatedElementId.value =
+					EMPTY_TEST_ELEMENT.id;
+
 				const { wrapper } = getWrapper({
 					element: EMPTY_TEST_ELEMENT,
 					isEditMode: true,
 				});
-
-				useSharedLastCreatedElementMock.lastCreatedElementId.value =
-					EMPTY_TEST_ELEMENT.id;
 
 				await nextTick();
 
