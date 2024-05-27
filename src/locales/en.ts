@@ -318,9 +318,9 @@ export default {
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.drawingElement": "Whiteboard",
-	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
-		"This collaborative text editor is visible and editable for all course participants.",
+		"This Etherpad is visible and editable for all course participants.",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
@@ -375,7 +375,7 @@ export default {
 		"External tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "File",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
-		"Texteditor",
+		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Submission",
