@@ -3,7 +3,7 @@ import {
 	CreateCardRequestPayload,
 	CreateCardSuccessPayload,
 	CreateColumnFailurePayload,
-	CreateColumnSucccessPayload,
+	CreateColumnSuccessPayload,
 	DeleteBoardFailurePayload,
 	DeleteBoardRequestPayload,
 	DeleteBoardSuccessPayload,
@@ -58,7 +58,7 @@ export const createColumnRequest = createAction(
 );
 export const createColumnSuccess = createAction(
 	"create-column-success",
-	props<CreateColumnSucccessPayload>()
+	props<CreateColumnSuccessPayload>()
 );
 export const createColumnFailure = createAction(
 	"create-column-failure",

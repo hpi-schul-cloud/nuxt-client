@@ -4,6 +4,12 @@ import { useContentElementState } from "./ContentElementState.composable";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
+import { envConfigModule } from "@/store";
+import { envsFactory } from "@@/tests/test-utils";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
 
 jest.mock("@feature-board/shared/InlineEditInteractionHandler.composable");
 
@@ -29,6 +35,14 @@ jest.mock("vue-i18n", () => {
 });
 
 describe("useContentElementState composable", () => {
+	beforeEach(() => {
+		setupStores({ envConfigModule: EnvConfigModule });
+		const envs = envsFactory.build({
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
+		});
+		envConfigModule.setEnvs(envs);
+		setActivePinia(createTestingPinia());
+	});
 	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
 		return mountComposable(() => useContentElementState(options), {
 			global: {

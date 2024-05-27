@@ -1,5 +1,5 @@
+import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
 import { ContentElementType } from "@/serverApi/v3";
-import { AnyContentElement } from "@/types/board/ContentElement";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiFormatText,
@@ -10,21 +10,17 @@ import {
 	mdiTextBoxEditOutline,
 	mdiTrayArrowUp,
 } from "@mdi/js";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
-type AddCardElement = (
-	type: ContentElementType,
-	cardId: string
-) => Promise<AnyContentElement | undefined>;
+type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
 export const useAddElementDialog = (
-	addElementFunction: AddCardElement,
+	createElementRequestFn: CreateElementRequestFn,
 	cardId: string
 ) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-	const { lastCreatedElementId } = useSharedLastCreatedElement();
 	const { showCustomNotifier } = useBoardNotifier();
 	const { t } = useI18n();
 
@@ -34,8 +30,7 @@ export const useAddElementDialog = (
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
 
-		const elementData = await addElementFunction(elementType, cardId);
-		lastCreatedElementId.value = elementData?.id;
+		await createElementRequestFn({ type: elementType, cardId });
 		showNotificationByElementType(elementType);
 	};
 
