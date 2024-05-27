@@ -16,6 +16,7 @@ export type FetchCardSuccessPayload = {
 export type FetchCardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: FetchCardRequestPayload;
 };
 
 export type UpdateCardTitleRequestPayload = {
@@ -30,6 +31,7 @@ export type UpdateCardTitleSuccessPayload = {
 export type UpdateCardTitleFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: UpdateCardTitleRequestPayload;
 };
 
 export type UpdateCardHeightRequestPayload = {
@@ -44,6 +46,7 @@ export type UpdateCardHeightSuccessPayload = {
 export type UpdateCardHeightFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: UpdateCardHeightRequestPayload;
 };
 
 export type CreateElementRequestPayload = {
@@ -61,6 +64,7 @@ export type CreateElementSuccessPayload = {
 export type CreateElementFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: CreateElementRequestPayload;
 };
 
 export type DeleteElementRequestPayload = {
@@ -75,6 +79,7 @@ export type DeleteElementSuccessPayload = {
 export type DeleteElementFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: DeleteElementRequestPayload;
 };
 
 export type DeleteCardRequestPayload = {
@@ -87,6 +92,7 @@ export type DeleteCardSuccessPayload = {
 export type DeleteCardFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: DeleteCardRequestPayload;
 };
 
 export type MoveElementRequestPayload = {
@@ -103,6 +109,7 @@ export type MoveElementSuccessPayload = {
 export type MoveElementFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: MoveElementRequestPayload;
 };
 
 export type UpdateElementRequestPayload = {
@@ -119,6 +126,7 @@ export type UpdateElementSuccessPayload = {
 export type UpdateElementFailurePayload = {
 	errorType: ErrorType;
 	boardObjectType: BoardObjectType;
+	requestPayload: UpdateElementRequestPayload;
 };
 
 export type DisconnectSocketRequestPayload = Record<string, never>;

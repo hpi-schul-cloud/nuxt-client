@@ -309,9 +309,9 @@ export default {
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.drawingElement": "Whiteboard",
-	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
-		"Der Texteditor ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
+		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -367,7 +367,7 @@ export default {
 		"Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
-		"Texteditor",
+		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",
