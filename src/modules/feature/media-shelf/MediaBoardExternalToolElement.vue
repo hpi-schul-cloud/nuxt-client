@@ -30,7 +30,6 @@
 </template>
 
 <script setup lang="ts">
-import WarningChip from "@/modules/ui/chip/WarningChip.vue";
 import { MediaExternalToolElementResponse } from "@/serverApi/v3";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -43,10 +42,10 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
+import { WarningChip } from "@ui-chip";
 import { useErrorNotification } from "@util-error-notification";
-import { computed, onUnmounted, PropType, Ref, watch } from "vue";
+import { computed, ComputedRef, onUnmounted, PropType, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { ComputedRef } from "vue/dist/vue";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 
