@@ -5,6 +5,7 @@ import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useContentElementState } from "./ContentElementState.composable";
 import { useEditMode, useSharedEditMode } from "./EditMode.composable";
 import * as boardActions from "./boardActions/boardActions";
+import * as cardActions from "./cardActions/cardActions";
 import { useSocketConnection } from "./socket/socket";
 import { useCardStore } from "./Card.store";
 
@@ -19,4 +20,5 @@ export {
 	useBoardPermissions,
 	useSharedBoardPageInformation,
 	boardActions,
+	cardActions,
 };
