@@ -135,30 +135,47 @@ onUnmounted(() => {
 const { isDragging } = useDragAndDrop();
 
 const onClick = async () => {
-	// Loading has failed before
+	// Loading the launch request has failed
 	if (launchError.value) {
-		if (displayData.value?.status) {
-			notifierModule.show({
-				status: "warning",
-				text: determineMediaBoardElementStatusMessage(
-					displayData.value?.status
-				),
-			});
-		} else {
-			notifierModule.show({
-				status: "error",
-				text: t("error.generic"),
-			});
-		}
+		notifierModule.show({
+			status: "error",
+			text: t("error.loading"),
+		});
 
 		return;
 	}
 
+	// Don't launch tools with unknown status/name (most likely an unintended click)
+	if (!displayData.value) {
+		return;
+	}
+
+	// Display warning, if the tool cannot be launch due to its status
+	if (!isOperational(displayData.value.status)) {
+		notifierModule.show({
+			status: "warning",
+			text: determineMediaBoardElementStatusMessage(displayData.value.status),
+		});
+
+		return;
+	}
+
+	// Don't launch tools while they are being dragged
 	if (isDragging.value) {
 		return;
 	}
 
 	launchTool();
+
+	// Launching the tool has failed
+	if (launchError.value) {
+		notifierModule.show({
+			status: "error",
+			text: t("error.generic"),
+		});
+
+		return;
+	}
 
 	await fetchContextLaunchRequest(props.element.content.contextExternalToolId);
 };

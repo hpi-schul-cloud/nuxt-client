@@ -207,6 +207,9 @@ describe("MediaBoardExternalToolElement", () => {
 					element: externalToolElement,
 				});
 
+				useExternalToolDisplayStateMock.displayData.value =
+					externalToolDisplayDataFactory.build();
+
 				return {
 					wrapper,
 					externalToolElement,
@@ -288,8 +291,18 @@ describe("MediaBoardExternalToolElement", () => {
 
 				expect(notifierModule.show).toHaveBeenCalledWith<[AlertPayload]>({
 					status: "error",
-					text: "error.generic",
+					text: "error.loading",
 				});
+			});
+
+			it("should not launch the tool", async () => {
+				const { wrapper } = setup();
+
+				await wrapper.trigger("click");
+
+				expect(
+					useExternalToolLaunchStateMock.launchTool
+				).not.toHaveBeenCalled();
 			});
 		});
 
@@ -301,8 +314,9 @@ describe("MediaBoardExternalToolElement", () => {
 					element: externalToolElement,
 				});
 
-				useExternalToolLaunchStateMock.error.value =
-					businessErrorFactory.build();
+				useContextExternalToolConfigurationStatusMock.isOperational.mockReturnValue(
+					false
+				);
 
 				const statusMock = contextExternalToolConfigurationStatusFactory.build({
 					isDeactivated: true,
@@ -329,6 +343,16 @@ describe("MediaBoardExternalToolElement", () => {
 				expect(
 					useContextExternalToolConfigurationStatusMock.determineMediaBoardElementStatusMessage
 				).toHaveBeenCalledWith(statusMock);
+			});
+
+			it("should not launch the tool", async () => {
+				const { wrapper } = setup();
+
+				await wrapper.trigger("click");
+
+				expect(
+					useExternalToolLaunchStateMock.launchTool
+				).not.toHaveBeenCalled();
 			});
 		});
 	});
