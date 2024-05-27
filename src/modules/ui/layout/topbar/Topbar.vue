@@ -31,7 +31,7 @@
 		</TopbarItem>
 		<div
 			v-if="school && isTabletOrBigger"
-			class="mr-3 mr-lg-4"
+			class="mr-3 mr-lg-4 school-name"
 			data-testid="school-name"
 		>
 			{{ school.name }}
@@ -131,6 +131,13 @@ const hasLogo = computed(() => {
 </script>
 
 <style scoped>
+.school-name {
+	max-width: 280px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
 .school-logo {
 	max-height: 40px;
 	max-width: 160px;
