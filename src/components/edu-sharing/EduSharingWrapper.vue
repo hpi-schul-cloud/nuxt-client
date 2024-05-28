@@ -22,7 +22,8 @@ export default {
 	mounted() {
 		// Provide the backend URL for edu-sharing to the web component.
 		window.__env = {
-			EDU_SHARING_API_URL: envConfigModule.getEnv.EDU_SHARING__API_URL,
+			EDU_SHARING_API_URL:
+				envConfigModule.getEnv.EDU_SHARING__API_URL + "/rest",
 		};
 
 		const runtime = document.createElement("script");
