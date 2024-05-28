@@ -8,4 +8,6 @@ export interface ContextExternalToolConfigurationStatus {
 	isIncompleteOperationalOnScopeContext: boolean;
 
 	isDeactivated: boolean;
+
+	isNotLicensed: boolean;
 }

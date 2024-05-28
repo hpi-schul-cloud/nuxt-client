@@ -1,13 +1,42 @@
+import { RoleName } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
-	ContextExternalToolConfigurationStatusFactory,
+	contextExternalToolConfigurationStatusFactory,
 	mountComposable,
 } from "@@/tests/test-utils";
 import { useContextExternalToolConfigurationStatus } from "./ContextExternalToolConfigurationStatus.composable";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import AuthModule from "@/store/auth";
-import { createModuleMocks } from "@/utils/mock-store-module";
+
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+	};
+});
 
 describe("ToolConfigurationStatus.composable", () => {
+	const getComposable = (userRole: string = RoleName.Teacher) => {
+		const authModule = createModuleMocks(AuthModule, {
+			getUserRoles: [userRole],
+		});
+
+		const composable = mountComposable(
+			() => useContextExternalToolConfigurationStatus(),
+			{
+				global: {
+					provide: {
+						[AUTH_MODULE_KEY.valueOf()]: authModule,
+					},
+				},
+			}
+		);
+
+		return {
+			composable,
+		};
+	};
+
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
@@ -20,7 +49,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				});
 
 				const toolConfigurationStatus =
-					ContextExternalToolConfigurationStatusFactory.build({
+					contextExternalToolConfigurationStatusFactory.build({
 						isOutdatedOnScopeSchool: true,
 						isOutdatedOnScopeContext: true,
 					});
@@ -61,7 +90,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				});
 
 				const toolConfigurationStatus =
-					ContextExternalToolConfigurationStatusFactory.build({
+					contextExternalToolConfigurationStatusFactory.build({
 						isOutdatedOnScopeSchool: true,
 					});
 
@@ -103,7 +132,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				});
 
 				const toolConfigurationStatus =
-					ContextExternalToolConfigurationStatusFactory.build({
+					contextExternalToolConfigurationStatusFactory.build({
 						isOutdatedOnScopeContext: true,
 					});
 
@@ -143,7 +172,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				});
 
 				const toolConfigurationStatus =
-					ContextExternalToolConfigurationStatusFactory.build({
+					contextExternalToolConfigurationStatusFactory.build({
 						isIncompleteOnScopeContext: true,
 					});
 
@@ -183,7 +212,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				});
 
 				const toolConfigurationStatus =
-					ContextExternalToolConfigurationStatusFactory.build({
+					contextExternalToolConfigurationStatusFactory.build({
 						isIncompleteOperationalOnScopeContext: true,
 					});
 
@@ -223,7 +252,7 @@ describe("ToolConfigurationStatus.composable", () => {
 				});
 
 				const toolConfigurationStatus =
-					ContextExternalToolConfigurationStatusFactory.build({
+					contextExternalToolConfigurationStatusFactory.build({
 						isOutdatedOnScopeSchool: true,
 						isOutdatedOnScopeContext: true,
 					});
@@ -254,6 +283,266 @@ describe("ToolConfigurationStatus.composable", () => {
 				);
 
 				expect(result).toEqual("common.tool.information.outdated.student");
+			});
+		});
+	});
+
+	describe("determineMediaBoardElementStatusMessage", () => {
+		describe("when user is admin", () => {
+			describe("when tool is deactivated", () => {
+				const setup = () => {
+					const toolConfigurationStatus =
+						contextExternalToolConfigurationStatusFactory.build({
+							isDeactivated: true,
+						});
+
+					const { composable } = getComposable(RoleName.Administrator);
+
+					return {
+						composable,
+						toolConfigurationStatus,
+					};
+				};
+
+				it("should return translation for status-role-pair", () => {
+					const { composable, toolConfigurationStatus } = setup();
+
+					const result = composable.determineMediaBoardElementStatusMessage(
+						toolConfigurationStatus
+					);
+
+					expect(result).toEqual(
+						"common.medium.alert.deactivated common.medium.information.admin"
+					);
+				});
+			});
+
+			describe("when tool is not licensed", () => {
+				const setup = () => {
+					const toolConfigurationStatus =
+						contextExternalToolConfigurationStatusFactory.build({
+							isNotLicensed: true,
+						});
+
+					const { composable } = getComposable(RoleName.Administrator);
+
+					return {
+						composable,
+						toolConfigurationStatus,
+					};
+				};
+
+				it("should return translation for status-role-pair", () => {
+					const { composable, toolConfigurationStatus } = setup();
+
+					const result = composable.determineMediaBoardElementStatusMessage(
+						toolConfigurationStatus
+					);
+
+					expect(result).toEqual(
+						"common.medium.alert.notLicensed common.medium.information.admin"
+					);
+				});
+			});
+
+			describe("when tool is outdated / incomplete", () => {
+				const setup = () => {
+					const toolConfigurationStatus =
+						contextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOnScopeContext: true,
+						});
+
+					const { composable } = getComposable(RoleName.Administrator);
+
+					return {
+						composable,
+						toolConfigurationStatus,
+					};
+				};
+
+				it("should return translation for status-role-pair", () => {
+					const { composable, toolConfigurationStatus } = setup();
+
+					const result = composable.determineMediaBoardElementStatusMessage(
+						toolConfigurationStatus
+					);
+
+					expect(result).toEqual(
+						"common.medium.alert.incomplete common.medium.information.admin"
+					);
+				});
+			});
+		});
+
+		describe("when user is teacher", () => {
+			describe("when tool is deactivated", () => {
+				const setup = () => {
+					const toolConfigurationStatus =
+						contextExternalToolConfigurationStatusFactory.build({
+							isDeactivated: true,
+						});
+
+					const { composable } = getComposable(RoleName.Teacher);
+
+					return {
+						composable,
+						toolConfigurationStatus,
+					};
+				};
+
+				it("should return translation for status-role-pair", () => {
+					const { composable, toolConfigurationStatus } = setup();
+
+					const result = composable.determineMediaBoardElementStatusMessage(
+						toolConfigurationStatus
+					);
+
+					expect(result).toEqual(
+						"common.medium.alert.deactivated common.medium.information.teacher"
+					);
+				});
+			});
+
+			describe("when tool is not licensed", () => {
+				const setup = () => {
+					const toolConfigurationStatus =
+						contextExternalToolConfigurationStatusFactory.build({
+							isNotLicensed: true,
+						});
+
+					const { composable } = getComposable(RoleName.Teacher);
+
+					return {
+						composable,
+						toolConfigurationStatus,
+					};
+				};
+
+				it("should return translation for status-role-pair", () => {
+					const { composable, toolConfigurationStatus } = setup();
+
+					const result = composable.determineMediaBoardElementStatusMessage(
+						toolConfigurationStatus
+					);
+
+					expect(result).toEqual(
+						"common.medium.alert.notLicensed common.medium.information.teacher"
+					);
+				});
+			});
+
+			describe("when tool is outdated / incomplete", () => {
+				const setup = () => {
+					const toolConfigurationStatus =
+						contextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeContext: true,
+						});
+
+					const { composable } = getComposable(RoleName.Teacher);
+
+					return {
+						composable,
+						toolConfigurationStatus,
+					};
+				};
+
+				it("should return translation for status-role-pair", () => {
+					const { composable, toolConfigurationStatus } = setup();
+
+					const result = composable.determineMediaBoardElementStatusMessage(
+						toolConfigurationStatus
+					);
+
+					expect(result).toEqual(
+						"common.medium.alert.incomplete common.medium.information.teacher"
+					);
+				});
+			});
+		});
+
+		describe("when user is student", () => {
+			describe("when tool is deactivated", () => {
+				const setup = () => {
+					const toolConfigurationStatus =
+						contextExternalToolConfigurationStatusFactory.build({
+							isDeactivated: true,
+						});
+
+					const { composable } = getComposable(RoleName.Student);
+
+					return {
+						composable,
+						toolConfigurationStatus,
+					};
+				};
+
+				it("should return translation for status-role-pair", () => {
+					const { composable, toolConfigurationStatus } = setup();
+
+					const result = composable.determineMediaBoardElementStatusMessage(
+						toolConfigurationStatus
+					);
+
+					expect(result).toEqual(
+						"common.medium.alert.deactivated common.medium.information.student"
+					);
+				});
+			});
+
+			describe("when tool is not licensed", () => {
+				const setup = () => {
+					const toolConfigurationStatus =
+						contextExternalToolConfigurationStatusFactory.build({
+							isNotLicensed: true,
+						});
+
+					const { composable } = getComposable(RoleName.Student);
+
+					return {
+						composable,
+						toolConfigurationStatus,
+					};
+				};
+
+				it("should return translation for status-role-pair", () => {
+					const { composable, toolConfigurationStatus } = setup();
+
+					const result = composable.determineMediaBoardElementStatusMessage(
+						toolConfigurationStatus
+					);
+
+					expect(result).toEqual(
+						"common.medium.alert.notLicensed common.medium.information.student"
+					);
+				});
+			});
+
+			describe("when tool is outdated / incomplete", () => {
+				const setup = () => {
+					const toolConfigurationStatus =
+						contextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeSchool: true,
+						});
+
+					const { composable } = getComposable(RoleName.Student);
+
+					return {
+						composable,
+						toolConfigurationStatus,
+					};
+				};
+
+				it("should return translation for status-role-pair", () => {
+					const { composable, toolConfigurationStatus } = setup();
+
+					const result = composable.determineMediaBoardElementStatusMessage(
+						toolConfigurationStatus
+					);
+
+					expect(result).toEqual(
+						"common.medium.alert.incomplete common.medium.information.student"
+					);
+				});
 			});
 		});
 	});
@@ -318,6 +607,54 @@ describe("ToolConfigurationStatus.composable", () => {
 				const result = determineDeactivatedMessage();
 
 				expect(result).toEqual("common.tool.information.deactivated.teacher");
+			});
+		});
+	});
+
+	describe("isOperational", () => {
+		describe("when tool is operational", () => {
+			const setup = () => {
+				const toolConfigurationStatus =
+					contextExternalToolConfigurationStatusFactory.build();
+
+				const { composable } = getComposable(RoleName.Student);
+
+				return {
+					composable,
+					toolConfigurationStatus,
+				};
+			};
+
+			it("should return true", () => {
+				const { composable, toolConfigurationStatus } = setup();
+
+				const result = composable.isOperational(toolConfigurationStatus);
+
+				expect(result).toEqual(true);
+			});
+		});
+
+		describe("when tool is not operational", () => {
+			const setup = () => {
+				const toolConfigurationStatus =
+					contextExternalToolConfigurationStatusFactory.build({
+						isOutdatedOnScopeContext: true,
+					});
+
+				const { composable } = getComposable(RoleName.Student);
+
+				return {
+					composable,
+					toolConfigurationStatus,
+				};
+			};
+
+			it("should return false", () => {
+				const { composable, toolConfigurationStatus } = setup();
+
+				const result = composable.isOperational(toolConfigurationStatus);
+
+				expect(result).toEqual(false);
 			});
 		});
 	});
