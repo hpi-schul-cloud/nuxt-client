@@ -7,7 +7,7 @@ import { $axios } from "@/utils/api";
 export const useEduSharingApi = () => {
 	const eduSharingApi: EduSharingApiInterface = EduSharingApiFactory(
 		undefined,
-		undefined,
+		"/v3",
 		$axios
 	);
 
