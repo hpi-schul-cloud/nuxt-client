@@ -1298,6 +1298,12 @@ export interface ContextExternalToolConfigurationStatusResponse {
      * @memberof ContextExternalToolConfigurationStatusResponse
      */
     isDeactivated: boolean;
+    /**
+     * True if the tool is not licensed for user
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isNotLicensed: boolean;
 }
 /**
  * 
@@ -2381,6 +2387,19 @@ export interface ExternalSourceResponse {
 /**
  * 
  * @export
+ * @interface ExternalToolBulkCreateParams
+ */
+export interface ExternalToolBulkCreateParams {
+    /**
+     * List of external tools
+     * @type {Array<ExternalToolCreateParams>}
+     * @memberof ExternalToolBulkCreateParams
+     */
+    data: Array<ExternalToolCreateParams>;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolContentBody
  */
 export interface ExternalToolContentBody {
@@ -2545,6 +2564,12 @@ export interface ExternalToolMediumParams {
      * @memberof ExternalToolMediumParams
      */
     publisher?: string;
+    /**
+     * The id of the media source
+     * @type {string}
+     * @memberof ExternalToolMediumParams
+     */
+    mediaSourceId?: string;
 }
 /**
  * 
@@ -2564,6 +2589,12 @@ export interface ExternalToolMediumResponse {
      * @memberof ExternalToolMediumResponse
      */
     publisher?: string;
+    /**
+     * The id of the media source
+     * @type {string}
+     * @memberof ExternalToolMediumResponse
+     */
+    mediaSourceId?: string;
 }
 /**
  * 
@@ -20854,6 +20885,46 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Creates multiple ExternalTools at the same time.
+         * @param {ExternalToolBulkCreateParams} externalToolBulkCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerImportExternalTools: async (externalToolBulkCreateParams: ExternalToolBulkCreateParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'externalToolBulkCreateParams' is not null or undefined
+            assertParamExists('toolControllerImportExternalTools', 'externalToolBulkCreateParams', externalToolBulkCreateParams)
+            const localVarPath = `/tools/external-tools/import`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(externalToolBulkCreateParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Updates an ExternalTool
          * @param {string} externalToolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -21503,6 +21574,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Creates multiple ExternalTools at the same time.
+         * @param {ExternalToolBulkCreateParams} externalToolBulkCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerImportExternalTools(externalToolBulkCreateParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Updates an ExternalTool
          * @param {string} externalToolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -21815,6 +21897,16 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Creates multiple ExternalTools at the same time.
+         * @param {ExternalToolBulkCreateParams} externalToolBulkCreateParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolResponse> {
+            return localVarFp.toolControllerImportExternalTools(externalToolBulkCreateParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Updates an ExternalTool
          * @param {string} externalToolId 
          * @param {ExternalToolUpdateParams} externalToolUpdateParams 
@@ -22112,6 +22204,16 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolMetadataResponse>;
+
+    /**
+     * 
+     * @summary Creates multiple ExternalTools at the same time.
+     * @param {ExternalToolBulkCreateParams} externalToolBulkCreateParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolResponse>;
 
     /**
      * 
@@ -22445,6 +22547,18 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any) {
         return ToolApiFp(this.configuration).toolControllerGetMetaDataForExternalTool(externalToolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Creates multiple ExternalTools at the same time.
+     * @param {ExternalToolBulkCreateParams} externalToolBulkCreateParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerImportExternalTools(externalToolBulkCreateParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

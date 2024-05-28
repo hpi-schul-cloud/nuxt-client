@@ -16,20 +16,25 @@
 				variant="outlined"
 				:ripple="false"
 			>
-				<v-img
-					v-if="element.thumbnail"
-					:src="element.thumbnail"
-					:aspect-ratio="16 / 9"
-					width="100%"
-					data-testid="media-element-thumbnail"
-				/>
-				<v-img
-					v-else
-					:aspect-ratio="16 / 9"
-					width="100%"
-					src="@/assets/img/media-board/default_img_media_shelf.png"
-					data-testid="media-element-default-thumbnail"
-				/>
+				<div class="position-relative">
+					<v-img
+						v-if="element.thumbnail"
+						:src="element.thumbnail"
+						:aspect-ratio="16 / 9"
+						width="100%"
+						data-testid="media-element-thumbnail"
+					/>
+					<v-img
+						v-else
+						:aspect-ratio="16 / 9"
+						width="100%"
+						src="@/assets/img/media-board/default_img_media_shelf.png"
+						data-testid="media-element-default-thumbnail"
+					/>
+					<div class="chip-position">
+						<slot name="imageOverlay" />
+					</div>
+				</div>
 				<ContentElementBar :has-grey-background="true">
 					<template #title>
 						{{ element.title }}
@@ -77,5 +82,11 @@ $card-width: 288px;
 .description {
 	height: 3.75rem;
 	overflow: hidden;
+}
+
+.chip-position {
+	position: absolute;
+	bottom: 0;
+	left: 0;
 }
 </style>

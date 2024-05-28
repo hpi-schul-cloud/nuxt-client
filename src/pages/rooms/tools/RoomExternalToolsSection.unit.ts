@@ -3,7 +3,7 @@ import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
-	ContextExternalToolConfigurationStatusFactory,
+	contextExternalToolConfigurationStatusFactory,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
 import {
@@ -231,7 +231,7 @@ describe("RoomExternalToolsSection", () => {
 		const setup = async () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build({
-					status: ContextExternalToolConfigurationStatusFactory.build(),
+					status: contextExternalToolConfigurationStatusFactory.build(),
 				});
 
 			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });

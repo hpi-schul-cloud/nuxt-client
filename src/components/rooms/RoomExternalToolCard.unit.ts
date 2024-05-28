@@ -1,4 +1,4 @@
-import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import {
@@ -70,7 +70,7 @@ describe("RoomExternalToolCard", () => {
 		it("should load the launch request", async () => {
 			getWrapper(
 				externalToolDisplayDataFactory.build({
-					status: ContextExternalToolConfigurationStatusFactory.build(),
+					status: contextExternalToolConfigurationStatusFactory.build(),
 				}),
 				false
 			);
@@ -88,7 +88,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isDeactivated: true,
 						}),
 					});
@@ -116,7 +116,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build(),
+						status: contextExternalToolConfigurationStatusFactory.build(),
 					});
 
 				const { wrapper } = getWrapper(tool, false);
@@ -142,7 +142,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeContext: true,
 						}),
 					});
@@ -168,7 +168,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 						}),
 					});
@@ -194,7 +194,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 							isOutdatedOnScopeContext: true,
 						}),
@@ -221,7 +221,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build(),
+						status: contextExternalToolConfigurationStatusFactory.build(),
 					});
 
 				const { wrapper } = getWrapper(tool, false);
@@ -247,7 +247,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOnScopeContext: true,
 						}),
 					});
@@ -273,7 +273,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build(),
+						status: contextExternalToolConfigurationStatusFactory.build(),
 					});
 
 				const { wrapper } = getWrapper(tool, false);
@@ -299,7 +299,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOperationalOnScopeContext: true,
 						}),
 					});
@@ -328,7 +328,7 @@ describe("RoomExternalToolCard", () => {
 				const setup = async () => {
 					const toolDisplayData: ExternalToolDisplayData =
 						externalToolDisplayDataFactory.build({
-							status: ContextExternalToolConfigurationStatusFactory.build({
+							status: contextExternalToolConfigurationStatusFactory.build({
 								isOutdatedOnScopeSchool: true,
 							}),
 						});
@@ -356,7 +356,7 @@ describe("RoomExternalToolCard", () => {
 				const setup = async () => {
 					const toolDisplayData: ExternalToolDisplayData =
 						externalToolDisplayDataFactory.build({
-							status: ContextExternalToolConfigurationStatusFactory.build({
+							status: contextExternalToolConfigurationStatusFactory.build({
 								isOutdatedOnScopeContext: true,
 							}),
 						});
@@ -384,7 +384,7 @@ describe("RoomExternalToolCard", () => {
 				const setup = async () => {
 					const toolDisplayData: ExternalToolDisplayData =
 						externalToolDisplayDataFactory.build({
-							status: ContextExternalToolConfigurationStatusFactory.build({
+							status: contextExternalToolConfigurationStatusFactory.build({
 								isOutdatedOnScopeSchool: true,
 								isOutdatedOnScopeContext: true,
 							}),
@@ -413,7 +413,7 @@ describe("RoomExternalToolCard", () => {
 				const setup = async () => {
 					const toolDisplayData: ExternalToolDisplayData =
 						externalToolDisplayDataFactory.build({
-							status: ContextExternalToolConfigurationStatusFactory.build({
+							status: contextExternalToolConfigurationStatusFactory.build({
 								isIncompleteOnScopeContext: true,
 							}),
 						});
