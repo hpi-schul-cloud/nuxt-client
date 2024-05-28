@@ -2,7 +2,7 @@ import AuthModule from "@/store/auth";
 import { BusinessError } from "@/store/types/commons";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -72,7 +72,7 @@ describe("ExternalToolElementAlert", () => {
 			},
 			props: {
 				toolDisplayName: "Tool name",
-				toolStatus: ContextExternalToolConfigurationStatusFactory.build(),
+				toolStatus: contextExternalToolConfigurationStatusFactory.build(),
 				...propsData,
 			},
 		});
@@ -152,7 +152,7 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 						}),
 					},
@@ -182,7 +182,7 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 						}),
 					},
@@ -214,7 +214,7 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeContext: true,
 						}),
 					},
@@ -244,7 +244,7 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeContext: true,
 						}),
 					},
@@ -276,7 +276,7 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 							isOutdatedOnScopeContext: true,
 						}),
@@ -307,7 +307,7 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 							isOutdatedOnScopeContext: true,
 						}),
@@ -339,7 +339,7 @@ describe("ExternalToolElementAlert", () => {
 
 			const { wrapper } = getWrapper(
 				{
-					toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+					toolStatus: contextExternalToolConfigurationStatusFactory.build({
 						isDeactivated: true,
 					}),
 				},
@@ -362,7 +362,7 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOnScopeContext: true,
 						}),
 					},
@@ -392,7 +392,7 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOnScopeContext: true,
 						}),
 					},
@@ -424,7 +424,7 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOperationalOnScopeContext: true,
 						}),
 					},
@@ -454,7 +454,7 @@ describe("ExternalToolElementAlert", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						toolStatus: ContextExternalToolConfigurationStatusFactory.build({
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOperationalOnScopeContext: true,
 						}),
 					},

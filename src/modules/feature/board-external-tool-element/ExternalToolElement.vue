@@ -157,6 +157,7 @@ export default defineComponent({
 						isIncompleteOnScopeContext: false,
 						isIncompleteOperationalOnScopeContext: false,
 						isDeactivated: false,
+						isNotLicensed: false,
 					}
 				);
 			});

@@ -1,7 +1,7 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { ToolContextType, ToolReferenceResponse } from "@/serverApi/v3/api";
 import {
-	ContextExternalToolConfigurationStatusFactory,
+	contextExternalToolConfigurationStatusFactory,
 	mockApiResponse,
 	toolReferenceResponseFactory,
 } from "@@/tests/test-utils";
@@ -60,7 +60,7 @@ describe("externalToolReferenceApi.composable", () => {
 				contextExternalToolId: displayData.contextToolId,
 				name: displayData.displayName,
 				logoUrl: displayData.logoUrl,
-				status: ContextExternalToolConfigurationStatusFactory.build(),
+				status: contextExternalToolConfigurationStatusFactory.build(),
 				openInNewTab: displayData.openInNewTab,
 			});
 		});
@@ -107,7 +107,7 @@ describe("externalToolReferenceApi.composable", () => {
 					contextExternalToolId: displayData.contextToolId,
 					name: displayData.displayName,
 					logoUrl: displayData.logoUrl,
-					status: ContextExternalToolConfigurationStatusFactory.build(),
+					status: contextExternalToolConfigurationStatusFactory.build(),
 					openInNewTab: displayData.openInNewTab,
 				},
 			]);
