@@ -147,7 +147,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
-				expect(title.text()).toEqual('{"toolName":"Test Tool"}');
+				expect(title.text()).toEqual('error.generic {"toolName":"Test Tool"}');
 			});
 
 			it("should render the correct content text", () => {
