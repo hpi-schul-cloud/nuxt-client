@@ -14,6 +14,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { ComponentMountingOptions, mount, shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import Router from "../../router";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -74,6 +75,7 @@ describe("User Migration / Index", () => {
 			envConfigModule: EnvConfigModule,
 			importUsersModule: ImportUsersModule,
 			schoolsModule: SchoolsModule,
+			router: Router,
 		});
 
 		envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
@@ -325,10 +327,16 @@ describe("User Migration / Index", () => {
 					instance: $theme.name,
 				});
 
+				const redirect = {
+					path: "/administration/school-settings",
+					query: { openPanels: "authentication" },
+				};
+
 				await nextTick();
 
 				return {
 					wrapper,
+					redirect,
 				};
 			};
 
@@ -374,6 +382,19 @@ describe("User Migration / Index", () => {
 			it("should call store on dialog-confirm", async () => {
 				const { wrapper } = await setup();
 
+				const cancelMigrationMock = jest.spyOn(
+					importUsersModule,
+					"cancelMigration"
+				);
+				cancelMigrationMock.mockImplementationOnce(async () => {
+					schoolsModule.setSchool({
+						...schoolsModule.getSchool,
+						inUserMigration: false,
+						inMaintenance: false,
+					});
+					return Promise.resolve();
+				});
+
 				const button = wrapper.findComponent(
 					"[data-testid=importUsers-cancel-migration-btn]"
 				);
@@ -385,7 +406,7 @@ describe("User Migration / Index", () => {
 				dialog.vm.$emit("dialog-confirmed");
 				await nextTick();
 
-				//TODO 	expect(schoolsModule.getSchool.inUserMigration).toBe(false);
+				expect(importUsersModule.cancelMigration).toHaveBeenCalled();
 			});
 		});
 

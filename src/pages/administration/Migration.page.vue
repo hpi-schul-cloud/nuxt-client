@@ -526,6 +526,7 @@ import {
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import VCustomDialog from "../../components/organisms/vCustomDialog.vue";
+import router from "../../router";
 
 const { t } = useI18n();
 
@@ -600,6 +601,11 @@ const sourceSystemName = computed(() => {
 		return t("pages.administration.migration.ldapSource");
 	}
 });
+
+const schoolSettingsPage: Breadcrumb = {
+	title: t("pages.administration.school.index.title"),
+	to: "/administration/school-settings",
+};
 
 const breadcrumbs: Ref<Breadcrumb[]> = ref([
 	{
@@ -755,7 +761,16 @@ const confirmCancelMigration = async () => {
 
 	await importUsersModule.cancelMigration();
 
+	await redirectToAdminPage();
+
 	isLoading.value = false;
+};
+
+const redirectToAdminPage = async () => {
+	await router.push({
+		path: schoolSettingsPage.to,
+		query: { openPanels: "migration" },
+	});
 };
 
 watch(migrationStep, async (val) => {
