@@ -1,4 +1,17 @@
-import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { ConfigResponse } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
+import { ComponentProps } from "@/types/vue";
+import { ENV_CONFIG_MODULE_KEY, THEME_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import {
+	envsFactory,
+	provisioningOptionsDataFactory,
+} from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import {
 	ProvisioningOptions,
 	useProvisioningOptionsState,
@@ -8,11 +21,6 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import VCustomDialog from "../organisms/vCustomDialog.vue";
 
 jest.mock("@data-provisioning-options");
 
@@ -22,10 +30,6 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
-
-const $theme = {
-	name: "instance name",
-};
 
 jest
 	.spyOn(window, "scrollTo")
@@ -38,20 +42,27 @@ describe("ProvisioningOptionsPage", () => {
 	const router = createMock<Router>();
 
 	const getWrapper = (
-		props: { systemId: string } = { systemId: "systemId" },
-		provisioningOptions: ProvisioningOptions = provisioningOptionsDataFactory.build()
+		props: ComponentProps<typeof ProvisioningOptionsPage> = {
+			systemId: "systemId",
+		},
+		envConfig: ConfigResponse = envsFactory.build({
+			FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
+		})
 	) => {
-		useProvisioningOptionsStateMock.isLoading = ref(false);
-		useProvisioningOptionsStateMock.provisioningOptionsData =
-			ref(provisioningOptions);
-
 		useRouterMock.mockReturnValue(router);
+
+		const envConfigModule = createModuleMocks(EnvConfigModule, {
+			getEnv: envConfig,
+		});
 
 		const wrapper = mount(ProvisioningOptionsPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				mocks: {
-					$theme,
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[THEME_KEY.valueOf()]: {
+						name: "instance name",
+					},
 				},
 			},
 			props: {
@@ -61,12 +72,18 @@ describe("ProvisioningOptionsPage", () => {
 
 		return {
 			wrapper,
+			envConfigModule,
 		};
 	};
 
 	beforeEach(() => {
-		useProvisioningOptionsStateMock =
-			createMock<ReturnType<typeof useProvisioningOptionsState>>();
+		useProvisioningOptionsStateMock = createMock<
+			ReturnType<typeof useProvisioningOptionsState>
+		>({
+			isLoading: ref(false),
+			provisioningOptionsData: ref(provisioningOptionsDataFactory.build()),
+			error: ref(),
+		});
 
 		jest
 			.mocked(useProvisioningOptionsState)
@@ -120,32 +137,98 @@ describe("ProvisioningOptionsPage", () => {
 	});
 
 	describe("checkboxes", () => {
-		it("should render 3 checkboxes", () => {
-			const provisioningOptions = provisioningOptionsDataFactory.build();
-			const { wrapper } = getWrapper(
-				{
-					systemId: "systemId",
-				},
-				provisioningOptions
-			);
+		describe("when the licensing is disabled", () => {
+			const setup = () => {
+				const provisioningOptions = provisioningOptionsDataFactory.build();
 
-			const checkboxes = wrapper.findAllComponents({
-				name: "v-checkbox",
+				useProvisioningOptionsStateMock.provisioningOptionsData.value =
+					provisioningOptions;
+
+				const { wrapper } = getWrapper(
+					{ systemId: "systemId" },
+					envsFactory.build({
+						FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
+					})
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render 3 checkboxes", () => {
+				const { wrapper } = setup();
+
+				const classCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-class]"
+				);
+				const courseCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-course]"
+				);
+				const othersCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-others]"
+				);
+				const schoolExternalToolCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-school-external-tools]"
+				);
+
+				expect(classCheckbox.isVisible()).toEqual(true);
+				expect(courseCheckbox.isVisible()).toEqual(true);
+				expect(othersCheckbox.isVisible()).toEqual(true);
+				expect(schoolExternalToolCheckbox.isVisible()).toEqual(false);
 			});
+		});
 
-			expect(checkboxes.length).toEqual(3);
+		describe("when the licensing is enabled", () => {
+			const setup = () => {
+				const provisioningOptions = provisioningOptionsDataFactory.build();
+
+				useProvisioningOptionsStateMock.provisioningOptionsData.value =
+					provisioningOptions;
+
+				const { wrapper } = getWrapper(
+					{ systemId: "systemId" },
+					envsFactory.build({
+						FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true,
+					})
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render 4 checkboxes", () => {
+				const { wrapper } = setup();
+
+				const classCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-class]"
+				);
+				const courseCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-course]"
+				);
+				const othersCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-others]"
+				);
+				const schoolExternalToolCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-school-external-tools]"
+				);
+
+				expect(classCheckbox.isVisible()).toEqual(true);
+				expect(courseCheckbox.isVisible()).toEqual(true);
+				expect(othersCheckbox.isVisible()).toEqual(true);
+				expect(schoolExternalToolCheckbox.isVisible()).toEqual(true);
+			});
 		});
 	});
 
 	describe("buttons", () => {
 		describe("when clicking the cancel button", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						systemId: "systemId",
-					},
-					provisioningOptionsDataFactory.build()
-				);
+				useProvisioningOptionsStateMock.provisioningOptionsData.value =
+					provisioningOptionsDataFactory.build();
+
+				const { wrapper } = getWrapper();
 
 				const cancelButton = wrapper.find(
 					'[data-testid="provisioning-options-cancel-button"]'
@@ -184,12 +267,10 @@ describe("ProvisioningOptionsPage", () => {
 		describe("when clicking the save", () => {
 			describe("when enabling options", () => {
 				const setup = () => {
-					const { wrapper } = getWrapper(
-						{
-							systemId: "systemId",
-						},
-						provisioningOptionsDataFactory.build()
-					);
+					useProvisioningOptionsStateMock.provisioningOptionsData.value =
+						provisioningOptionsDataFactory.build();
+
+					const { wrapper } = getWrapper();
 
 					const saveButton = wrapper.find(
 						'[data-testid="provisioning-options-save-button"]'
@@ -213,10 +294,11 @@ describe("ProvisioningOptionsPage", () => {
 
 					expect(
 						useProvisioningOptionsStateMock.updateProvisioningOptionsData
-					).toHaveBeenCalledWith("systemId", {
+					).toHaveBeenCalledWith<[string, ProvisioningOptions]>("systemId", {
 						class: true,
 						course: false,
 						others: false,
+						schoolExternalTools: false,
 					});
 				});
 
@@ -235,14 +317,12 @@ describe("ProvisioningOptionsPage", () => {
 					jest.clearAllMocks();
 				});
 				const setup = async () => {
-					const { wrapper } = getWrapper(
-						{
-							systemId: "systemId",
-						},
+					useProvisioningOptionsStateMock.provisioningOptionsData.value =
 						provisioningOptionsDataFactory.build({
 							class: true,
-						})
-					);
+						});
+
+					const { wrapper } = getWrapper();
 
 					const saveButton = wrapper.find(
 						'[data-testid="provisioning-options-save-button"]'
@@ -284,12 +364,10 @@ describe("ProvisioningOptionsPage", () => {
 
 			describe("when an error occurs", () => {
 				const setup = () => {
-					const { wrapper } = getWrapper(
-						{
-							systemId: "systemId",
-						},
-						provisioningOptionsDataFactory.build()
-					);
+					useProvisioningOptionsStateMock.provisioningOptionsData.value =
+						provisioningOptionsDataFactory.build();
+
+					const { wrapper } = getWrapper();
 
 					const saveButton = wrapper.find(
 						'[data-testid="provisioning-options-save-button"]'
@@ -314,10 +392,11 @@ describe("ProvisioningOptionsPage", () => {
 
 					expect(
 						useProvisioningOptionsStateMock.updateProvisioningOptionsData
-					).toHaveBeenCalledWith("systemId", {
+					).toHaveBeenCalledWith<[string, ProvisioningOptions]>("systemId", {
 						class: true,
 						course: false,
 						others: false,
+						schoolExternalTools: false,
 					});
 				});
 

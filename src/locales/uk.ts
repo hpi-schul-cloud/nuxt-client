@@ -160,9 +160,7 @@ export default {
 	"common.words.no": "Немає",
 	"common.words.noChoice": "Немає вибору",
 	"common.words.otherGroups": "інші групи",
-
-	"common.words.ctlTool": "зовнішні засоби",
-
+	"common.words.externalTools": "зовнішні засоби",
 	"common.words.planned": "запланований",
 	"common.words.privacyPolicy": "Політика конфіденційності",
 	"common.words.published": "опубліковано",
@@ -270,9 +268,9 @@ export default {
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Синхронізація інших груп",
 
-	"components.administration.provisioningOptions.ctlTool.description":
+	"components.administration.provisioningOptions.schoolExternalTools.description":
 		"Якщо цю опцію активовано, активації із зовнішніх інструментів автоматично переймаються з moin.schule.",
-	"components.administration.provisioningOptions.ctlTool.label":
+	"components.administration.provisioningOptions.schoolExternalTools.label":
 		"Активація зовнішніх інструментів",
 
 	"components.administration.provisioningOptions.page.title":

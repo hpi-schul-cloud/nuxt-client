@@ -160,9 +160,7 @@ export default {
 	"common.words.no": "No",
 	"common.words.noChoice": "Sin elección",
 	"common.words.otherGroups": "otros grupos",
-
-	"common.words.ctlTool": "herramientas externas",
-
+	"common.words.externalTools": "herramientas externas",
 	"common.words.planned": "previsto",
 	"common.words.privacyPolicy": "Política de Privacidad",
 	"common.words.published": "publicado",
@@ -269,9 +267,9 @@ export default {
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Sincronización de otros grupos.",
 
-	"components.administration.provisioningOptions.ctlTool.description":
+	"components.administration.provisioningOptions.schoolExternalTools.description":
 		"Si esta opción está activada, las activaciones de herramientas externas se realizan automáticamente desde moin.schule.",
-	"components.administration.provisioningOptions.ctlTool.label":
+	"components.administration.provisioningOptions.schoolExternalTools.label":
 		"Activación de herramientas externas",
 
 	"components.administration.provisioningOptions.page.title":

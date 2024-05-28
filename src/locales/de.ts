@@ -157,9 +157,7 @@ export default {
 	"common.words.no": "Nein",
 	"common.words.noChoice": "Keine Auswahl",
 	"common.words.otherGroups": "sonstige Gruppen",
-
-	"common.words.ctlTool": "externe Tools",
-
+	"common.words.externalTools": "externe Tools",
 	"common.words.planned": "geplant",
 	"common.words.privacyPolicy": "Datenschutzerklärung",
 	"common.words.published": "veröffentlicht",
@@ -265,9 +263,9 @@ export default {
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Synchronisation von sonstigen Gruppen",
 
-	"components.administration.provisioningOptions.ctlTool.description":
+	"components.administration.provisioningOptions.schoolExternalTools.description":
 		"Wenn diese Option aktiviert ist, werden Freischaltungen von externen Tools automatisch aus moin.schule übernommen.",
-	"components.administration.provisioningOptions.ctlTool.label":
+	"components.administration.provisioningOptions.schoolExternalTools.label":
 		"Freischaltung von externen Tools",
 
 	"components.administration.provisioningOptions.page.title":

@@ -2,10 +2,10 @@ import {
 	SchoolApiFactory,
 	SchulConneXProvisioningOptionsResponse,
 } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
-import { ProvisioningOptions } from "./type";
 import { schoolsModule } from "@/store";
+import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
+import { ProvisioningOptions } from "./type";
 
 export const useProvisioningOptionsApi = () => {
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
@@ -23,7 +23,7 @@ export const useProvisioningOptionsApi = () => {
 			class: response.data.groupProvisioningClassesEnabled,
 			course: response.data.groupProvisioningCoursesEnabled,
 			others: response.data.groupProvisioningOtherEnabled,
-			ctltool: response.data.ctlToolProvisioningEnabled,
+			schoolExternalTools: response.data.schoolExternalToolProvisioningEnabled,
 		};
 
 		return provisioningOptions;
@@ -41,7 +41,8 @@ export const useProvisioningOptionsApi = () => {
 					groupProvisioningClassesEnabled: provisioningOptions.class,
 					groupProvisioningCoursesEnabled: provisioningOptions.course,
 					groupProvisioningOtherEnabled: provisioningOptions.others,
-					ctlToolProvisioningEnabled: provisioningOptions.ctltool,
+					schoolExternalToolProvisioningEnabled:
+						provisioningOptions.schoolExternalTools,
 				}
 			);
 
@@ -49,7 +50,7 @@ export const useProvisioningOptionsApi = () => {
 			class: response.data.groupProvisioningClassesEnabled,
 			course: response.data.groupProvisioningCoursesEnabled,
 			others: response.data.groupProvisioningOtherEnabled,
-			ctltool: response.data.ctlToolProvisioningEnabled,
+			schoolExternalTools: response.data.schoolExternalToolProvisioningEnabled,
 		};
 
 		return savedOptions;
