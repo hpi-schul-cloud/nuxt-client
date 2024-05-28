@@ -180,7 +180,7 @@ describe("ToolConfigurationStatus.composable", () => {
 		describe("when user is teacher and the tool has an unknown status", () => {
 			const setup = () => {
 				const toolConfigurationStatus =
-					ContextExternalToolConfigurationStatusFactory.build();
+					contextExternalToolConfigurationStatusFactory.build();
 
 				const { composable } = getComposable(RoleName.Teacher);
 
