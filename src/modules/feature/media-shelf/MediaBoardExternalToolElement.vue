@@ -139,7 +139,7 @@ const onClick = async () => {
 	if (launchError.value) {
 		notifierModule.show({
 			status: "error",
-			text: t("error.loading"),
+			text: t("error.load"),
 		});
 
 		return;

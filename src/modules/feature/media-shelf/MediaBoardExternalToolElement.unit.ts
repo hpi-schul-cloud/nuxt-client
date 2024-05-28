@@ -291,7 +291,7 @@ describe("MediaBoardExternalToolElement", () => {
 
 				expect(notifierModule.show).toHaveBeenCalledWith<[AlertPayload]>({
 					status: "error",
-					text: "error.loading",
+					text: "error.load",
 				});
 			});
 
