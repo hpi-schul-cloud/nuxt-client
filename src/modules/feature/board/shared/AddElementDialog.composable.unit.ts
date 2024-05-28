@@ -91,7 +91,7 @@ describe("ElementTypeSelection Composable", () => {
 				await onElementClick(elementType);
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(elementType, cardId);
+				expect(addElementMock).toBeCalledWith({ type: elementType, cardId });
 				expect(isDialogOpen.value).toBe(false);
 			});
 
@@ -132,6 +132,7 @@ describe("ElementTypeSelection Composable", () => {
 						cardId,
 					};
 				};
+
 				it("should show Notification", async () => {
 					const {
 						addElementMock,
@@ -175,6 +176,7 @@ describe("ElementTypeSelection Composable", () => {
 						cardId,
 					};
 				};
+
 				it("should NOT show Notification", async () => {
 					const {
 						addElementMock,
@@ -198,6 +200,17 @@ describe("ElementTypeSelection Composable", () => {
 			const setup = () => {
 				const error = new Error("Test error");
 				const addElementMock = jest.fn().mockRejectedValueOnce(error);
+
+				const showCustomNotifierMock = jest.fn();
+				const mockedBoardNotifierCalls = createMock<
+					ReturnType<typeof useBoardNotifier>
+				>({
+					showCustomNotifier: showCustomNotifierMock,
+				});
+				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+				setupSharedElementTypeSelectionMock();
+
 				const elementType = ContentElementType.RichText;
 
 				return { addElementMock, error, elementType };
@@ -243,6 +256,14 @@ describe("ElementTypeSelection Composable", () => {
 				closeDialogMock,
 			});
 
+			const showCustomNotifierMock = jest.fn();
+			const mockedBoardNotifierCalls = createMock<
+				ReturnType<typeof useBoardNotifier>
+			>({
+				showCustomNotifier: showCustomNotifierMock,
+			});
+			mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
 			mockedInjectStrict.mockImplementation(() => {
 				return {
 					getEnv: env,
@@ -263,10 +284,10 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(
-					ContentElementType.RichText,
-					cardId
-				);
+				expect(addElementMock).toBeCalledWith({
+					type: ContentElementType.RichText,
+					cardId,
+				});
 			});
 
 			it("should set isDialogOpen to false", async () => {
@@ -293,7 +314,10 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(ContentElementType.File, cardId);
+				expect(addElementMock).toBeCalledWith({
+					type: ContentElementType.File,
+					cardId,
+				});
 			});
 
 			it("should set isDialogOpen to false", async () => {
@@ -320,10 +344,10 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(
-					ContentElementType.SubmissionContainer,
-					cardId
-				);
+				expect(addElementMock).toBeCalledWith({
+					type: ContentElementType.SubmissionContainer,
+					cardId,
+				});
 			});
 
 			it("should set isDialogOpen to false", async () => {
@@ -350,10 +374,10 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(
-					ContentElementType.ExternalTool,
-					cardId
-				);
+				expect(addElementMock).toBeCalledWith({
+					type: ContentElementType.ExternalTool,
+					cardId,
+				});
 			});
 
 			it("should set isDialogOpen to false", async () => {
@@ -380,10 +404,10 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(
-					ContentElementType.Drawing,
-					cardId
-				);
+				expect(addElementMock).toBeCalledWith({
+					type: ContentElementType.Drawing,
+					cardId,
+				});
 			});
 
 			it("should set isDialogOpen to false", async () => {
@@ -410,10 +434,10 @@ describe("ElementTypeSelection Composable", () => {
 				action();
 
 				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith(
-					ContentElementType.CollaborativeTextEditor,
-					cardId
-				);
+				expect(addElementMock).toBeCalledWith({
+					type: ContentElementType.CollaborativeTextEditor,
+					cardId,
+				});
 			});
 
 			it("should set isDialogOpen to false", async () => {

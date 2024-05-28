@@ -92,6 +92,7 @@ export class CommonToolMapper {
 			isIncompleteOperationalOnScopeContext:
 				status.isIncompleteOperationalOnScopeContext,
 			isDeactivated: status.isDeactivated,
+			isNotLicensed: status.isNotLicensed,
 		};
 
 		return mapped;

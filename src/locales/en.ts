@@ -89,6 +89,17 @@ export default {
 	"common.labels.visibility": "Visibility",
 	"common.labels.visible": "Visible",
 	"common.loading.text": "Data is loading...",
+	"common.medium.alert.deactivated": "Media is disabled.",
+	"common.medium.alert.notLicensed": "Medium is not activated.",
+	"common.medium.alert.incomplete":
+		"Configuration of medium not current or incomplete.",
+	"common.medium.chip.deactivated": "Disabled",
+	"common.medium.chip.notLicensed": "Not activated",
+	"common.medium.chip.incomplete": "Configuration incomplete",
+	"common.medium.information.admin": "Please check settings.",
+	"common.medium.information.student": "Please contact a teacher.",
+	"common.medium.information.teacher":
+		"Please contact the school administrator.",
 	"common.nodata": "No data available",
 	"common.notification.error": "An error has occurred.",
 	"common.placeholder.birthdate": "20.2.2002",
@@ -307,9 +318,9 @@ export default {
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.drawingElement": "Whiteboard",
-	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
-		"This collaborative text editor is visible and editable for all course participants.",
+		"This Etherpad is visible and editable for all course participants.",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
@@ -364,7 +375,7 @@ export default {
 		"External tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "File",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
-		"Texteditor",
+		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Submission",
