@@ -74,12 +74,12 @@ const getTitle: ComputedRef<string> = computed(() => {
 		return "pages.rooms.tools.incompleteDialog.title";
 	}
 
-	return "";
+	return "error.generic";
 });
 
 const getText: ComputedRef<string> = computed(() => {
 	if (!props.selectedItem) {
-		return "error.generic";
+		return "";
 	}
 
 	if (props.selectedItem.status.isDeactivated) {

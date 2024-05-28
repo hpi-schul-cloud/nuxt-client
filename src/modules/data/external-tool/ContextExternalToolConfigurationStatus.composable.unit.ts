@@ -183,14 +183,14 @@ describe("ToolConfigurationStatus.composable", () => {
 				};
 			};
 
-			it("should return a generic translation key", () => {
+			it("should not return a translation key", () => {
 				const { composable, toolConfigurationStatus } = setup();
 
 				const result = composable.determineToolStatusTranslationKey(
 					toolConfigurationStatus
 				);
 
-				expect(result).toEqual("error.generic");
+				expect(result).toEqual("");
 			});
 		});
 

@@ -24,7 +24,7 @@ export const useContextExternalToolConfigurationStatus = () => {
 			) {
 				return "common.tool.information.outdated.teacher";
 			} else {
-				return "error.generic";
+				return "";
 			}
 		} else {
 			return "common.tool.information.outdated.student";
