@@ -7,7 +7,10 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { ExternalToolDisplayData } from "@data-external-tool";
+import {
+	ContextExternalToolConfigurationStatus,
+	ExternalToolDisplayData,
+} from "@data-external-tool";
 import { mount } from "@vue/test-utils";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
@@ -48,18 +51,10 @@ describe("RoomExternalToolsErrorDialog", () => {
 	};
 
 	const createSelectedItem = (
-		deactivated: boolean,
-		outdated = false,
-		incomplete?: boolean,
-		incompleteOperational?: boolean
+		status: ContextExternalToolConfigurationStatus
 	): ExternalToolDisplayData => {
 		return {
-			status: contextExternalToolConfigurationStatusFactory.build({
-				isDeactivated: deactivated,
-				isOutdatedOnScopeSchool: outdated,
-				isIncompleteOnScopeContext: incomplete,
-				isIncompleteOperationalOnScopeContext: incompleteOperational,
-			}),
+			status,
 			name: "Test Tool",
 			openInNewTab: false,
 			contextExternalToolId: "contextExternalToolId",
@@ -70,7 +65,11 @@ describe("RoomExternalToolsErrorDialog", () => {
 		describe("when status is outdated", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					selectedItem: createSelectedItem(false, true),
+					selectedItem: createSelectedItem(
+						contextExternalToolConfigurationStatusFactory.build({
+							isOutdatedOnScopeContext: true,
+						})
+					),
 				});
 
 				return {
@@ -102,7 +101,11 @@ describe("RoomExternalToolsErrorDialog", () => {
 		describe("when status is incomplete", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					selectedItem: createSelectedItem(false, false, true, false),
+					selectedItem: createSelectedItem(
+						contextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOnScopeContext: true,
+						})
+					),
 				});
 
 				return {
@@ -134,7 +137,11 @@ describe("RoomExternalToolsErrorDialog", () => {
 		describe("when status is incomplete operational", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					selectedItem: createSelectedItem(false, false, false, true),
+					selectedItem: createSelectedItem(
+						contextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOperationalOnScopeContext: true,
+						})
+					),
 				});
 
 				return {
@@ -164,7 +171,11 @@ describe("RoomExternalToolsErrorDialog", () => {
 		describe("when status is deactivated", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					selectedItem: createSelectedItem(true),
+					selectedItem: createSelectedItem(
+						contextExternalToolConfigurationStatusFactory.build({
+							isDeactivated: true,
+						})
+					),
 				});
 
 				return {
@@ -189,6 +200,42 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				expect(content.text()).toEqual(
 					'common.tool.information.deactivated.teacher {"toolName":"Test Tool"}'
+				);
+			});
+		});
+
+		describe("when status is not licensed", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					selectedItem: createSelectedItem(
+						contextExternalToolConfigurationStatusFactory.build({
+							isNotLicensed: true,
+						})
+					),
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render the correct title", () => {
+				const { wrapper } = setup();
+
+				const title = wrapper.findComponent('[data-testid="dialog-title"]');
+
+				expect(title.text()).toEqual(
+					'pages.rooms.tools.notLicensedDialog.title {"toolName":"Test Tool"}'
+				);
+			});
+
+			it("should render the correct content text", () => {
+				const { wrapper } = setup();
+
+				const content = wrapper.findComponent(".v-card-text");
+
+				expect(content.text()).toEqual(
+					'common.tool.information.notLicensed.teacher {"toolName":"Test Tool"}'
 				);
 			});
 		});
