@@ -101,6 +101,7 @@ describe("useBoardSocketApi", () => {
 			const payload = {
 				newCard: cardResponseFactory.build(),
 				columnId: "columnId",
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.createCardSuccess(payload));
 
@@ -113,6 +114,7 @@ describe("useBoardSocketApi", () => {
 
 			const payload = {
 				newColumn: columnResponseFactory.build(),
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.createColumnSuccess(payload));
 
@@ -125,6 +127,7 @@ describe("useBoardSocketApi", () => {
 
 			const payload = {
 				cardId: "cardId",
+				isOwnAction: true,
 			};
 
 			dispatch(CardActions.deleteCardSuccess(payload));
@@ -138,6 +141,7 @@ describe("useBoardSocketApi", () => {
 
 			const payload = {
 				columnId: "columnId",
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.deleteColumnSuccess(payload));
 
@@ -153,6 +157,10 @@ describe("useBoardSocketApi", () => {
 				oldIndex: 0,
 				newIndex: 0,
 				fromColumnId: "fromColumnId",
+				fromColumnIndex: 0,
+				toColumnId: "toColumnId",
+				toColumnIndex: 0,
+				isOwnAction: true,
 			};
 
 			dispatch(BoardActions.moveCardSuccess(payload));
@@ -167,6 +175,7 @@ describe("useBoardSocketApi", () => {
 			const payload = {
 				columnMove: { addedIndex: 1, columnId: "testColumnId" },
 				byKeyboard: false,
+				isOwnAction: true,
 			};
 
 			dispatch(BoardActions.moveColumnSuccess(payload));
@@ -192,6 +201,7 @@ describe("useBoardSocketApi", () => {
 			const payload = {
 				columnId: "cardId",
 				newTitle: "newTitle",
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.updateColumnTitleSuccess(payload));
 
@@ -205,6 +215,7 @@ describe("useBoardSocketApi", () => {
 			const payload = {
 				boardId: "cardId",
 				newTitle: "newTitle",
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.updateBoardTitleSuccess(payload));
 
@@ -218,6 +229,7 @@ describe("useBoardSocketApi", () => {
 			const payload = {
 				boardId: "cardId",
 				isVisible: true,
+				isOwnAction: true,
 			};
 			dispatch(BoardActions.updateBoardVisibilitySuccess(payload));
 
@@ -226,145 +238,167 @@ describe("useBoardSocketApi", () => {
 			);
 		});
 
-		it("should call notifySocketError for createCard action", () => {
-			const { dispatch } = useBoardSocketApi();
+		describe("failure actions", () => {
+			it("should call notifySocketError for createCardFailure action", () => {
+				const { dispatch } = useBoardSocketApi();
 
-			const payload: CreateCardFailurePayload = {
-				errorType: "notUpdated",
-				boardObjectType: "boardCard",
-			};
-			dispatch(BoardActions.createCardFailure(payload));
+				const payload: CreateCardFailurePayload = {
+					errorType: "notUpdated",
+					boardObjectType: "boardCard",
+					requestPayload: { columnId: "test" },
+				};
+				dispatch(BoardActions.createCardFailure(payload));
 
-			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-				payload.errorType,
-				payload.boardObjectType
-			);
-		});
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+					payload.errorType,
+					payload.boardObjectType
+				);
+			});
 
-		it("should call notifySocketError for createColumnFailure action", () => {
-			const { dispatch } = useBoardSocketApi();
+			it("should call notifySocketError for createColumnFailure action", () => {
+				const { dispatch } = useBoardSocketApi();
 
-			const payload: CreateColumnFailurePayload = {
-				errorType: "notUpdated",
-				boardObjectType: "boardColumn",
-			};
-			dispatch(BoardActions.createColumnFailure(payload));
+				const payload: CreateColumnFailurePayload = {
+					errorType: "notUpdated",
+					boardObjectType: "boardColumn",
+					requestPayload: { boardId: "test" },
+				};
+				dispatch(BoardActions.createColumnFailure(payload));
 
-			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-				payload.errorType,
-				payload.boardObjectType
-			);
-		});
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+					payload.errorType,
+					payload.boardObjectType
+				);
+			});
 
-		it("should call notifySocketError for deleteCardFailure action", () => {
-			const { dispatch } = useBoardSocketApi();
+			it("should call notifySocketError for deleteCardFailure action", () => {
+				const { dispatch } = useBoardSocketApi();
 
-			const payload: DeleteCardFailurePayload = {
-				errorType: "notUpdated",
-				boardObjectType: "boardCard",
-			};
-			dispatch(CardActions.deleteCardFailure(payload));
+				const payload: DeleteCardFailurePayload = {
+					errorType: "notUpdated",
+					boardObjectType: "boardCard",
+					requestPayload: { cardId: "test" },
+				};
+				dispatch(CardActions.deleteCardFailure(payload));
 
-			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-				payload.errorType,
-				payload.boardObjectType
-			);
-		});
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+					payload.errorType,
+					payload.boardObjectType
+				);
+			});
 
-		it("should call notifySocketError for deleteColumnFailure action", () => {
-			const { dispatch } = useBoardSocketApi();
+			it("should call notifySocketError for deleteColumnFailure action", () => {
+				const { dispatch } = useBoardSocketApi();
 
-			const payload: DeleteColumnFailurePayload = {
-				errorType: "notUpdated",
-				boardObjectType: "boardColumn",
-			};
+				const payload: DeleteColumnFailurePayload = {
+					errorType: "notUpdated",
+					boardObjectType: "boardColumn",
+					requestPayload: { columnId: "test" },
+				};
 
-			dispatch(BoardActions.deleteColumnFailure(payload));
+				dispatch(BoardActions.deleteColumnFailure(payload));
 
-			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-				payload.errorType,
-				payload.boardObjectType
-			);
-		});
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+					payload.errorType,
+					payload.boardObjectType
+				);
+			});
 
-		it("should call notifySocketError for moveCardFailure action", () => {
-			const { dispatch } = useBoardSocketApi();
+			it("should call notifySocketError for moveCardFailure action", () => {
+				const { dispatch } = useBoardSocketApi();
 
-			const payload: MoveCardFailurePayload = {
-				errorType: "notUpdated",
-				boardObjectType: "boardCard",
-			};
+				const payload: MoveCardFailurePayload = {
+					errorType: "notUpdated",
+					boardObjectType: "boardCard",
+					requestPayload: {
+						cardId: "test",
+						oldIndex: 0,
+						newIndex: 0,
+						fromColumnId: "fromColumnId",
+						fromColumnIndex: 0,
+						toColumnId: "toColumnId",
+						toColumnIndex: 0,
+					},
+				};
 
-			dispatch(BoardActions.moveCardFailure(payload));
+				dispatch(BoardActions.moveCardFailure(payload));
 
-			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-				payload.errorType,
-				payload.boardObjectType
-			);
-		});
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+					payload.errorType,
+					payload.boardObjectType
+				);
+			});
 
-		it("should call notifySocketError for moveColumnFailure action", () => {
-			const { dispatch } = useBoardSocketApi();
+			it("should call notifySocketError for moveColumnFailure action", () => {
+				const { dispatch } = useBoardSocketApi();
 
-			const payload: MoveColumnFailurePayload = {
-				errorType: "notUpdated",
-				boardObjectType: "boardColumn",
-			};
+				const payload: MoveColumnFailurePayload = {
+					errorType: "notUpdated",
+					boardObjectType: "boardColumn",
+					requestPayload: {
+						columnMove: { addedIndex: 1, columnId: "testColumnId" },
+						byKeyboard: false,
+					},
+				};
 
-			dispatch(BoardActions.moveColumnFailure(payload));
+				dispatch(BoardActions.moveColumnFailure(payload));
 
-			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-				payload.errorType,
-				payload.boardObjectType
-			);
-		});
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+					payload.errorType,
+					payload.boardObjectType
+				);
+			});
 
-		it("should call notifySocketError for updateColumnTitleFailure action", () => {
-			const { dispatch } = useBoardSocketApi();
+			it("should call notifySocketError for updateColumnTitleFailure action", () => {
+				const { dispatch } = useBoardSocketApi();
 
-			const payload: UpdateColumnTitleFailurePayload = {
-				errorType: "notUpdated",
-				boardObjectType: "boardColumn",
-			};
+				const payload: UpdateColumnTitleFailurePayload = {
+					errorType: "notUpdated",
+					boardObjectType: "boardColumn",
+					requestPayload: { columnId: "test", newTitle: "newTitle" },
+				};
 
-			dispatch(BoardActions.updateColumnTitleFailure(payload));
+				dispatch(BoardActions.updateColumnTitleFailure(payload));
 
-			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-				payload.errorType,
-				payload.boardObjectType
-			);
-		});
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+					payload.errorType,
+					payload.boardObjectType
+				);
+			});
 
-		it("should call notifySocketError for updateBoardTitleFailure action", () => {
-			const { dispatch } = useBoardSocketApi();
+			it("should call notifySocketError for updateBoardTitleFailure action", () => {
+				const { dispatch } = useBoardSocketApi();
 
-			const payload: UpdateBoardTitleFailurePayload = {
-				errorType: "notUpdated",
-				boardObjectType: "boardColumn",
-			};
+				const payload: UpdateBoardTitleFailurePayload = {
+					errorType: "notUpdated",
+					boardObjectType: "boardColumn",
+					requestPayload: { boardId: "test", newTitle: "newTitle" },
+				};
 
-			dispatch(BoardActions.updateBoardTitleFailure(payload));
+				dispatch(BoardActions.updateBoardTitleFailure(payload));
 
-			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-				payload.errorType,
-				payload.boardObjectType
-			);
-		});
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+					payload.errorType,
+					payload.boardObjectType
+				);
+			});
 
-		it("should call notifySocketError for updateBoardVisibilityFailure action", () => {
-			const { dispatch } = useBoardSocketApi();
+			it("should call notifySocketError for updateBoardVisibilityFailure action", () => {
+				const { dispatch } = useBoardSocketApi();
 
-			const payload: UpdateBoardVisibilityFailurePayload = {
-				errorType: "notUpdated",
-				boardObjectType: "board",
-			};
+				const payload: UpdateBoardVisibilityFailurePayload = {
+					errorType: "notUpdated",
+					boardObjectType: "board",
+					requestPayload: { boardId: "test", isVisible: true },
+				};
 
-			dispatch(BoardActions.updateBoardVisibilityFailure(payload));
+				dispatch(BoardActions.updateBoardVisibilityFailure(payload));
 
-			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-				payload.errorType,
-				payload.boardObjectType
-			);
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+					payload.errorType,
+					payload.boardObjectType
+				);
+			});
 		});
 	});
 

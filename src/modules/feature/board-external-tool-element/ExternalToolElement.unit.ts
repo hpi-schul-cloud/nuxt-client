@@ -8,7 +8,7 @@ import { BusinessError } from "@/store/types/commons";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
-	ContextExternalToolConfigurationStatusFactory,
+	contextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,
 	externalToolDisplayDataFactory,
 	schoolToolConfigurationStatusFactory,
@@ -204,7 +204,7 @@ describe("ExternalToolElement", () => {
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeContext: true,
 							isOutdatedOnScopeSchool: true,
 						}),
@@ -230,7 +230,7 @@ describe("ExternalToolElement", () => {
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOnScopeContext: true,
 						}),
 					})
@@ -246,13 +246,13 @@ describe("ExternalToolElement", () => {
 
 		describe("when the element does not have a tool attached", () => {
 			it("should open the configuration dialog immediately", async () => {
+				useSharedLastCreatedElementMock.lastCreatedElementId.value =
+					EMPTY_TEST_ELEMENT.id;
+
 				const { wrapper } = getWrapper({
 					element: EMPTY_TEST_ELEMENT,
 					isEditMode: true,
 				});
-
-				useSharedLastCreatedElementMock.lastCreatedElementId.value =
-					EMPTY_TEST_ELEMENT.id;
 
 				await nextTick();
 
@@ -602,9 +602,10 @@ describe("ExternalToolElement", () => {
 					message: "Loading error",
 				};
 
-				const toolOutdatedStatus = schoolToolConfigurationStatusFactory.build({
-					isOutdatedOnScopeSchool: true,
-				});
+				const toolOutdatedStatus =
+					contextExternalToolConfigurationStatusFactory.build({
+						isOutdatedOnScopeSchool: true,
+					});
 
 				const { wrapper } = getWrapper(
 					{
@@ -647,7 +648,7 @@ describe("ExternalToolElement", () => {
 		describe("when the tool is incomplete", () => {
 			const setup = () => {
 				const toolIncompleteStatus =
-					ContextExternalToolConfigurationStatusFactory.build({
+					contextExternalToolConfigurationStatusFactory.build({
 						isIncompleteOnScopeContext: true,
 					});
 

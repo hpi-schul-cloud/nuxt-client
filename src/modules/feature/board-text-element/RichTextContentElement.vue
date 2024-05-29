@@ -1,9 +1,9 @@
 <template>
-	<div class="pb-2">
+	<div>
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			class="rich_text"
-			:value="modelValue.text"
+			:value="element.content.text"
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"

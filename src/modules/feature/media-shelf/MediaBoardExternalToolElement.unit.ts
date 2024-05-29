@@ -6,17 +6,22 @@ import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	businessErrorFactory,
+	contextExternalToolConfigurationStatusFactory,
 	envsFactory,
 	externalToolDisplayDataFactory,
 	mediaExternalToolElementResponseFactory,
 } from "@@/tests/test-utils";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
 import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import {
+	useContextExternalToolConfigurationStatus,
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { flushPromises, shallowMount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
 import { MediaElementDisplay } from "./data";
@@ -32,6 +37,9 @@ describe("MediaBoardExternalToolElement", () => {
 	let useExternalToolLaunchStateMock: DeepMocked<
 		ReturnType<typeof useExternalToolLaunchState>
 	>;
+	let useContextExternalToolConfigurationStatusMock: DeepMocked<
+		ReturnType<typeof useContextExternalToolConfigurationStatus>
+	>;
 
 	const getWrapper = (
 		props: ComponentProps<typeof MediaBoardExternalToolElement>
@@ -42,9 +50,9 @@ describe("MediaBoardExternalToolElement", () => {
 		});
 		const notifierModule = createModuleMocks(NotifierModule);
 
-		const wrapper = shallowMount(MediaBoardExternalToolElement, {
+		const wrapper = mount(MediaBoardExternalToolElement, {
 			global: {
-				plugins: [createTestingI18n()],
+				plugins: [createTestingI18n(), createTestingVuetify()],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
@@ -71,6 +79,10 @@ describe("MediaBoardExternalToolElement", () => {
 		>({
 			error: ref(),
 		});
+		useContextExternalToolConfigurationStatusMock =
+			createMock<
+				ReturnType<typeof useContextExternalToolConfigurationStatus>
+			>();
 
 		jest
 			.mocked(useExternalToolDisplayState)
@@ -78,6 +90,9 @@ describe("MediaBoardExternalToolElement", () => {
 		jest
 			.mocked(useExternalToolLaunchState)
 			.mockReturnValue(useExternalToolLaunchStateMock);
+		jest
+			.mocked(useContextExternalToolConfigurationStatus)
+			.mockReturnValue(useContextExternalToolConfigurationStatusMock);
 
 		jest.useFakeTimers("legacy");
 	});
@@ -154,6 +169,12 @@ describe("MediaBoardExternalToolElement", () => {
 				element: mediaExternalToolElementResponseFactory.build(),
 			});
 
+			useContextExternalToolConfigurationStatusMock.isOperational.mockReturnValue(
+				true
+			);
+			useExternalToolDisplayStateMock.displayData.value =
+				externalToolDisplayDataFactory.build();
+
 			return {
 				wrapper,
 				refreshTime,
@@ -185,6 +206,9 @@ describe("MediaBoardExternalToolElement", () => {
 				const { wrapper } = getWrapper({
 					element: externalToolElement,
 				});
+
+				useExternalToolDisplayStateMock.displayData.value =
+					externalToolDisplayDataFactory.build();
 
 				return {
 					wrapper,
@@ -240,7 +264,7 @@ describe("MediaBoardExternalToolElement", () => {
 			});
 		});
 
-		describe("when loading the launch request failed", () => {
+		describe("when loading the launch request failed without status information", () => {
 			const setup = () => {
 				const externalToolElement =
 					mediaExternalToolElementResponseFactory.build();
@@ -251,6 +275,8 @@ describe("MediaBoardExternalToolElement", () => {
 				useExternalToolLaunchStateMock.error.value =
 					businessErrorFactory.build();
 
+				useExternalToolDisplayStateMock.displayData.value = undefined;
+
 				return {
 					wrapper,
 					externalToolElement,
@@ -258,15 +284,239 @@ describe("MediaBoardExternalToolElement", () => {
 				};
 			};
 
-			it("should show an error notification", async () => {
+			it("should show a general error notification", async () => {
 				const { wrapper, notifierModule } = setup();
 
 				await wrapper.trigger("click");
 
 				expect(notifierModule.show).toHaveBeenCalledWith<[AlertPayload]>({
 					status: "error",
-					text: "error.generic",
+					text: "error.load",
 				});
+			});
+
+			it("should not launch the tool", async () => {
+				const { wrapper } = setup();
+
+				await wrapper.trigger("click");
+
+				expect(
+					useExternalToolLaunchStateMock.launchTool
+				).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when loading the launch request failed with status information", () => {
+			const setup = () => {
+				const externalToolElement =
+					mediaExternalToolElementResponseFactory.build();
+				const { wrapper, notifierModule } = getWrapper({
+					element: externalToolElement,
+				});
+
+				useContextExternalToolConfigurationStatusMock.isOperational.mockReturnValue(
+					false
+				);
+
+				const statusMock = contextExternalToolConfigurationStatusFactory.build({
+					isDeactivated: true,
+				});
+				useExternalToolDisplayStateMock.displayData.value =
+					externalToolDisplayDataFactory.build({
+						status: statusMock,
+					});
+
+				return {
+					wrapper,
+					externalToolElement,
+					notifierModule,
+					statusMock,
+				};
+			};
+
+			it("should call composable to determine error message", async () => {
+				const { wrapper, notifierModule, statusMock } = setup();
+
+				await wrapper.trigger("click");
+
+				expect(notifierModule.show).toHaveBeenCalled();
+				expect(
+					useContextExternalToolConfigurationStatusMock.determineMediaBoardElementStatusMessage
+				).toHaveBeenCalledWith(statusMock);
+			});
+
+			it("should not launch the tool", async () => {
+				const { wrapper } = setup();
+
+				await wrapper.trigger("click");
+
+				expect(
+					useExternalToolLaunchStateMock.launchTool
+				).not.toHaveBeenCalled();
+			});
+		});
+	});
+
+	describe("status chips", () => {
+		describe("when medium is deactivated and not licensed", () => {
+			const setup = () => {
+				const externalToolElement =
+					mediaExternalToolElementResponseFactory.build();
+
+				useExternalToolDisplayStateMock.displayData.value =
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
+							isDeactivated: true,
+							isNotLicensed: true,
+						}),
+					});
+
+				const { wrapper } = getWrapper({
+					element: externalToolElement,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show only the deactivated warning chip", () => {
+				const { wrapper } = setup();
+
+				const deactivatedChip = wrapper.find(
+					'[data-testid="warning-chip-deactivated"]'
+				);
+				const notLicenseChip = wrapper.find(
+					'[data-testid="warning-chip-not-licensed"]'
+				);
+				const incompleteChip = wrapper.find(
+					'[data-testid="warning-chip-incomplete"]'
+				);
+
+				expect(deactivatedChip.exists()).toEqual(true);
+				expect(notLicenseChip.exists()).toEqual(false);
+				expect(incompleteChip.exists()).toEqual(false);
+			});
+		});
+
+		describe("when medium is not licensed", () => {
+			const setup = () => {
+				const externalToolElement =
+					mediaExternalToolElementResponseFactory.build();
+
+				useExternalToolDisplayStateMock.displayData.value =
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
+							isNotLicensed: true,
+						}),
+					});
+
+				const { wrapper } = getWrapper({
+					element: externalToolElement,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show only the not licensed warning chip", () => {
+				const { wrapper } = setup();
+
+				const deactivatedChip = wrapper.find(
+					'[data-testid="warning-chip-deactivated"]'
+				);
+				const notLicenseChip = wrapper.find(
+					'[data-testid="warning-chip-not-licensed"]'
+				);
+				const incompleteChip = wrapper.find(
+					'[data-testid="warning-chip-incomplete"]'
+				);
+
+				expect(deactivatedChip.exists()).toEqual(false);
+				expect(notLicenseChip.exists()).toEqual(true);
+				expect(incompleteChip.exists()).toEqual(false);
+			});
+		});
+
+		describe("when medium is incomplete", () => {
+			const setup = () => {
+				const externalToolElement =
+					mediaExternalToolElementResponseFactory.build();
+
+				useExternalToolDisplayStateMock.displayData.value =
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOnScopeContext: true,
+						}),
+					});
+
+				const { wrapper } = getWrapper({
+					element: externalToolElement,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show only the incomplete warning chip", () => {
+				const { wrapper } = setup();
+
+				const deactivatedChip = wrapper.find(
+					'[data-testid="warning-chip-deactivated"]'
+				);
+				const notLicenseChip = wrapper.find(
+					'[data-testid="warning-chip-not-licensed"]'
+				);
+				const incompleteChip = wrapper.find(
+					'[data-testid="warning-chip-incomplete"]'
+				);
+
+				expect(deactivatedChip.exists()).toEqual(false);
+				expect(notLicenseChip.exists()).toEqual(false);
+				expect(incompleteChip.exists()).toEqual(true);
+			});
+		});
+
+		describe("when medium is incomplete and deactivated", () => {
+			const setup = () => {
+				const externalToolElement =
+					mediaExternalToolElementResponseFactory.build();
+
+				useExternalToolDisplayStateMock.displayData.value =
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
+							isDeactivated: true,
+							isOutdatedOnScopeContext: true,
+						}),
+					});
+
+				const { wrapper } = getWrapper({
+					element: externalToolElement,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show the deactivated and the incomplete warning chip", () => {
+				const { wrapper } = setup();
+
+				const deactivatedChip = wrapper.find(
+					'[data-testid="warning-chip-deactivated"]'
+				);
+				const notLicenseChip = wrapper.find(
+					'[data-testid="warning-chip-not-licensed"]'
+				);
+				const incompleteChip = wrapper.find(
+					'[data-testid="warning-chip-incomplete"]'
+				);
+
+				expect(deactivatedChip.exists()).toEqual(true);
+				expect(notLicenseChip.exists()).toEqual(false);
+				expect(incompleteChip.exists()).toEqual(true);
 			});
 		});
 	});

@@ -31,6 +31,8 @@ export * from "./groupFactory";
 export * from "./groupResponseFactory";
 export * from "./meResponseFactory";
 export * from "./provisioningOptionsDataFactory";
+export * from "./richTextElementResponseFactory";
+export * from "./richTextElementContentFactory";
 export * from "./schoolExternalToolConfigurationFactory";
 export * from "./schoolExternalToolConfigurationStatusResponseFactory";
 export * from "./schoolExternalToolConfigurationTemplate.factory";

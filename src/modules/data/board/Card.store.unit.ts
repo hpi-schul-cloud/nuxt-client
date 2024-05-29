@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { useBoardNotifier } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { useBoardApi } from "./BoardApi.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { useI18n } from "vue-i18n";
@@ -10,12 +10,17 @@ import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { createPinia, setActivePinia } from "pinia";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
-import { nextTick, ref } from "vue";
+import { Ref, ref } from "vue";
 import { envConfigModule } from "@/store";
-import { envsFactory } from "@@/tests/test-utils";
+import {
+	envsFactory,
+	richTextElementContentFactory,
+	richTextElementResponseFactory,
+} from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { ContentElementType } from "@/serverApi/v3";
-import { AnyContentElement } from "@/types/board/ContentElement";
+import { drawingContentElementResponseFactory } from "@@/tests/test-utils/factory/drawingContentElementResponseFactory";
+import { cloneDeep } from "lodash";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -34,6 +39,7 @@ const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -52,7 +58,11 @@ describe("CardStore", () => {
 		ReturnType<typeof useCardSocketApi>
 	>;
 	let mockedCardRestApiActions: DeepMocked<ReturnType<typeof useCardRestApi>>;
+	let mockedSharedLastCreatedElementActions: DeepMocked<
+		ReturnType<typeof useSharedLastCreatedElement>
+	>;
 	let setEditModeId: jest.Mock;
+	let editModeId: Ref<string | undefined>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -78,10 +88,17 @@ describe("CardStore", () => {
 		mockedCardRestApiActions = createMock<ReturnType<typeof useCardRestApi>>();
 		mockedUseCardRestApi.mockReturnValue(mockedCardRestApiActions);
 
+		mockedSharedLastCreatedElementActions =
+			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		mockedSharedLastCreatedElement.mockReturnValue(
+			mockedSharedLastCreatedElementActions
+		);
+
 		setEditModeId = jest.fn();
+		editModeId = ref(undefined);
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
-			editModeId: ref(undefined),
+			editModeId,
 		});
 	});
 
@@ -95,17 +112,24 @@ describe("CardStore", () => {
 
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
+		const elements = richTextElementResponseFactory.buildList(3);
 
-		cardStore.fetchCardSuccess({ cards });
+		const cardId = cards[0].id;
+		const card = cards[0];
+		card.elements = elements;
 
-		return { cardStore, cardId: cards[0].id };
+		for (const card of cards) {
+			cardStore.cards[card.id] = card;
+		}
+
+		return { cardStore, cardId, elements };
 	};
 
 	afterEach(() => {
 		jest.resetAllMocks();
 	});
 
-	describe("fetchCardTitleRequest", () => {
+	describe("fetchCardRequest", () => {
 		it("should call socket Api if feature flag is enabled", async () => {
 			const { cardStore } = setup(true);
 			const cardIds = ["id1", "id2aewr", "id3423"];
@@ -131,7 +155,7 @@ describe("CardStore", () => {
 			const { cardStore } = setup();
 			const cards = cardResponseFactory.buildList(3);
 
-			cardStore.fetchCardSuccess({ cards });
+			cardStore.fetchCardSuccess({ cards, isOwnAction: true });
 
 			expect(cardStore.getCard(cards[0].id)).toEqual(cards[0]);
 		});
@@ -169,61 +193,62 @@ describe("CardStore", () => {
 		it("should not delete any card when card is undefined", async () => {
 			const { cardStore } = setup();
 
-			const cardTitles = Object.values(cardStore.cards).map(
-				(card) => card.title
-			);
+			const oldCards = cloneDeep(cardStore.cards);
 
 			cardStore.deleteCardSuccess({
 				cardId: "unkownId",
+				isOwnAction: true,
 			});
 
-			expect(Object.values(cardStore.cards).map((card) => card.title)).toEqual(
-				cardTitles
-			);
+			expect(cardStore.cards).toEqual(oldCards);
 		});
 
-		it("should delete card", async () => {
+		it("set editModeId to undefined if cardId is equal to editModeId", async () => {
+			const { cardStore, cardId } = setup();
+
+			editModeId.value = cardId;
+
+			cardStore.deleteCardSuccess({
+				cardId,
+				isOwnAction: true,
+			});
+
+			expect(setEditModeId).toHaveBeenCalledWith(undefined);
+		});
+
+		it("should delete a card", async () => {
 			const { cardStore, cardId } = setup();
 
 			cardStore.deleteCardSuccess({
 				cardId,
+				isOwnAction: true,
 			});
 
-			expect(cardStore.getCard(cardId)).toBeUndefined();
+			expect(cardStore.cards[cardId]).toBeUndefined();
 		});
 	});
 
 	describe("updateCardTitleRequest", () => {
 		it("should call socket Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup(true);
+			const payload = { cardId, newTitle: "newTitle" };
 
-			cardStore.updateCardTitleRequest({
-				cardId,
-				newTitle: "newTitle",
-			});
+			cardStore.updateCardTitleRequest(payload);
 
 			expect(
 				mockedCardSocketApiActions.updateCardTitleRequest
-			).toHaveBeenCalledWith({
-				cardId,
-				newTitle: "newTitle",
-			});
+			).toHaveBeenCalledWith(payload);
 		});
 
 		it("should call rest Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup();
+			const payload = { cardId, newTitle: "newTitle" };
 
-			cardStore.updateCardTitleRequest({
-				cardId,
-				newTitle: "newTitle",
-			});
+			cardStore.updateCardTitleRequest(payload);
 
 			expect(
 				mockedCardRestApiActions.updateCardTitleRequest
-			).toHaveBeenCalledWith({
-				cardId,
-				newTitle: "newTitle",
-			});
+			).toHaveBeenCalledWith(payload);
 		});
 	});
 
@@ -239,6 +264,7 @@ describe("CardStore", () => {
 			cardStore.updateCardTitleSuccess({
 				cardId: "unkownId",
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(Object.values(cardStore.cards).map((card) => card.title)).toEqual(
@@ -252,6 +278,7 @@ describe("CardStore", () => {
 			cardStore.updateCardTitleSuccess({
 				cardId,
 				newTitle: NEW_TITLE,
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards[cardId].title).toEqual(NEW_TITLE);
@@ -261,34 +288,24 @@ describe("CardStore", () => {
 	describe("updateCardHeightRequest", () => {
 		it("should call socket Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup(true);
+			const payload = { cardId, newHeight: 100 };
 
-			cardStore.updateCardHeightRequest({
-				cardId,
-				newHeight: 100,
-			});
+			cardStore.updateCardHeightRequest(payload);
 
 			expect(
 				mockedCardSocketApiActions.updateCardHeightRequest
-			).toHaveBeenCalledWith({
-				cardId,
-				newHeight: 100,
-			});
+			).toHaveBeenCalledWith(payload);
 		});
 
 		it("should call rest Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup();
+			const payload = { cardId, newHeight: 100 };
 
-			cardStore.updateCardHeightRequest({
-				cardId,
-				newHeight: 100,
-			});
+			cardStore.updateCardHeightRequest(payload);
 
 			expect(
 				mockedCardRestApiActions.updateCardHeightRequest
-			).toHaveBeenCalledWith({
-				cardId,
-				newHeight: 100,
-			});
+			).toHaveBeenCalledWith(payload);
 		});
 	});
 
@@ -304,6 +321,7 @@ describe("CardStore", () => {
 			cardStore.updateCardHeightSuccess({
 				cardId: "unkownId",
 				newHeight: NEW_HEIGHT,
+				isOwnAction: true,
 			});
 
 			expect(Object.values(cardStore.cards).map((card) => card.height)).toEqual(
@@ -317,6 +335,7 @@ describe("CardStore", () => {
 			cardStore.updateCardHeightSuccess({
 				cardId,
 				newHeight: NEW_HEIGHT,
+				isOwnAction: true,
 			});
 
 			expect(cardStore.cards[cardId].height).toEqual(NEW_HEIGHT);
@@ -341,158 +360,323 @@ describe("CardStore", () => {
 		});
 	});
 
-	describe("addElement", () => {
-		it("should not add element when card is undefined", async () => {
-			const { cardStore } = setup();
+	describe("createElementRequest", () => {
+		it("should call socket Api if feature flag is enabled", async () => {
+			const { cardStore, cardId } = setup(true);
 
-			const cardHeights = Object.values(cardStore.cards).map(
-				(card) => card.height
-			);
+			const payload = {
+				type: ContentElementType.Link,
+				cardId,
+			};
 
-			await cardStore.addElement(ContentElementType.Link, "unknownId");
+			await cardStore.createElementRequest(payload);
 
-			expect(Object.values(cardStore.cards).map((card) => card.height)).toEqual(
-				cardHeights
-			);
+			expect(
+				mockedCardSocketApiActions.createElementRequest
+			).toHaveBeenCalledWith(payload);
 		});
 
-		it("should add element", async () => {
+		it("should call rest Api if feature flag is disabled", async () => {
 			const { cardStore, cardId } = setup();
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(0);
-			await cardStore.addElement(ContentElementType.Drawing, cardId);
+			const payload = {
+				type: ContentElementType.Link,
+				cardId,
+			};
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(1);
+			await cardStore.createElementRequest(payload);
+
+			expect(
+				mockedCardRestApiActions.createElementRequest
+			).toHaveBeenCalledWith(payload);
 		});
 	});
 
-	describe("moveElement", () => {
-		let elements: AnyContentElement[] = [];
-
-		beforeEach(() => {
-			elements = [];
-			elements.push({
-				id: "link-1",
-				content: {
-					url: "https://www.google.com/",
-					title: "Google",
-					description: "",
-					imageUrl: "",
-				},
-				timestamps: {
-					lastUpdatedAt: "2024-05-13T14:59:46.909Z",
-					createdAt: "2024-05-13T14:59:46.909Z",
-				},
-				type: ContentElementType.Link,
-			});
-
-			elements.push({
-				id: "link-2",
-				content: {
-					url: "https://www.google.com/",
-					title: "Google",
-					description: "",
-					imageUrl: "",
-				},
-				timestamps: {
-					lastUpdatedAt: "2024-05-13T14:59:46.909Z",
-					createdAt: "2024-05-13T14:59:46.909Z",
-				},
-				type: ContentElementType.Link,
-			});
-		});
-
-		describe("moveElementDown", () => {
-			it("should move element down", async () => {
+	describe("createElementSuccess", () => {
+		describe("when element is provided", () => {
+			it("should add element to specified position", async () => {
 				const { cardStore, cardId } = setup();
-				cardStore.cards[cardId].elements.push(...elements);
+				const newElement = drawingContentElementResponseFactory.build();
+				const toPosition = 1;
 
-				cardStore.moveElementDown(cardId, {
-					elementIndex: 0,
-					payload: elements[0].id,
+				await cardStore.createElementSuccess({
+					type: ContentElementType.Drawing,
+					cardId,
+					newElement,
+					toPosition,
+					isOwnAction: true,
 				});
 
-				expect(cardStore.cards[cardId].elements[0].id).toEqual(elements[1].id);
-			});
-
-			it("should not move element down when elementIndex is last", async () => {
-				const { cardStore, cardId } = setup();
-				cardStore.cards[cardId].elements.push(...elements);
-
-				cardStore.moveElementDown(cardId, {
-					elementIndex: 1,
-					payload: elements[1].id,
-				});
-
-				expect(cardStore.cards[cardId].elements[1].id).toEqual(elements[1].id);
-			});
-		});
-
-		describe("moveElementUp", () => {
-			it("should move element up", async () => {
-				const { cardStore, cardId } = setup();
-				cardStore.cards[cardId].elements.push(...elements);
-
-				const currentCardElements = [...cardStore.cards[cardId].elements];
-
-				cardStore.moveElementUp(cardId, {
-					elementIndex: 1,
-					payload: currentCardElements[1].id,
-				});
-
-				await nextTick();
-
-				expect(cardStore.cards[cardId].elements[0].id).toEqual(
-					currentCardElements[1].id
+				expect(cardStore.cards[cardId].elements.length).toEqual(4);
+				expect(cardStore.cards[cardId].elements[toPosition]).toEqual(
+					newElement
 				);
 			});
-
-			it("should not move element up when elementIndex is 0", async () => {
+			it("should add element to last position if toPosition is undefined", async () => {
 				const { cardStore, cardId } = setup();
-				cardStore.cards[cardId].elements.push(...elements);
+				const newElement = drawingContentElementResponseFactory.build();
 
-				cardStore.moveElementUp(cardId, {
-					elementIndex: 0,
-					payload: elements[0].id,
+				expect(cardStore.cards[cardId].elements.length).toEqual(3);
+				await cardStore.createElementSuccess({
+					type: ContentElementType.Drawing,
+					cardId,
+					newElement,
+					isOwnAction: true,
 				});
 
-				expect(cardStore.cards[cardId].elements[0].id).toEqual(elements[0].id);
+				expect(cardStore.cards[cardId].elements.length).toEqual(4);
+				expect(cardStore.cards[cardId].elements[3]).toEqual(newElement);
+			});
+		});
+
+		describe("when cardId is invalid", () => {
+			it("should not add element", async () => {
+				const { cardStore } = setup();
+				const newElement = drawingContentElementResponseFactory.build();
+
+				expect(Object.keys(cardStore.cards).length).toEqual(3);
+				await cardStore.createElementSuccess({
+					type: ContentElementType.Drawing,
+					cardId: "invalidId",
+					newElement,
+					isOwnAction: true,
+				});
+
+				expect(Object.keys(cardStore.cards).length).toEqual(3);
+			});
+		});
+
+		describe("when new position is invalid", () => {
+			it("should not add element", async () => {
+				const { cardStore, cardId } = setup();
+				const newElement = drawingContentElementResponseFactory.build();
+
+				expect(Object.keys(cardStore.cards).length).toEqual(3);
+				await cardStore.createElementSuccess({
+					type: ContentElementType.Drawing,
+					cardId,
+					newElement,
+					toPosition: 100,
+					isOwnAction: true,
+				});
+
+				expect(Object.keys(cardStore.cards).length).toEqual(3);
 			});
 		});
 	});
 
-	describe("deleteElement", () => {
-		it("should delete element", async () => {
-			const { cardStore, cardId } = setup();
-			const elementId = "elementId";
-			cardStore.cards[cardId].elements.push({
-				id: elementId,
-				content: {
-					url: "https://www.google.com/",
-					title: "Google",
-					description: "",
-					imageUrl: "",
-				},
-				timestamps: {
-					lastUpdatedAt: "2024-05-13T14:59:46.909Z",
-					createdAt: "2024-05-13T14:59:46.909Z",
-				},
-				type: ContentElementType.Link,
+	describe("moveElementRequest", () => {
+		const MOVE_UP = -1;
+		const MOVE_DOWN = 1;
+		it("should not move element when card is undefined", async () => {
+			const { cardStore } = setup();
+
+			await cardStore.moveElementRequest(
+				"unknownId",
+				" elementId",
+				-1,
+				MOVE_DOWN
+			);
+
+			expect(
+				mockedCardRestApiActions.moveElementRequest
+			).not.toHaveBeenCalled();
+		});
+
+		it("should not move element up if first element is moved", async () => {
+			const { cardStore, cardId, elements } = setup();
+
+			const elementId = elements[0].id;
+			await cardStore.moveElementRequest(cardId, elementId, 0, MOVE_UP);
+
+			expect(cardStore.cards[cardId].elements[0].id).toEqual(elementId);
+		});
+
+		it("should not move element down if last element is moved", async () => {
+			const { cardStore, cardId, elements } = setup();
+			const lastIndex = elements.length - 1;
+			const elementId = elements[lastIndex].id;
+
+			await cardStore.moveElementRequest(
+				cardId,
+				elementId,
+				lastIndex,
+				MOVE_DOWN
+			);
+
+			expect(cardStore.cards[cardId].elements[2].id).toEqual(elementId);
+		});
+
+		it("should call socket Api if feature flag is enabled", async () => {
+			const { cardStore, cardId, elements } = setup(true);
+			const elementId = elements[0].id;
+
+			await cardStore.moveElementRequest(cardId, elementId, 0, MOVE_DOWN);
+
+			expect(
+				mockedCardSocketApiActions.moveElementRequest
+			).toHaveBeenCalledWith({
+				elementId,
+				toCardId: cardId,
+				toPosition: 1,
+			});
+		});
+
+		it("should call rest Api if feature flag is disabled", async () => {
+			const { cardStore, cardId, elements } = setup();
+			const elementId = elements[0].id;
+
+			await cardStore.moveElementRequest(cardId, elementId, 0, MOVE_DOWN);
+
+			expect(mockedCardRestApiActions.moveElementRequest).toHaveBeenCalledWith({
+				elementId,
+				toCardId: cardId,
+				toPosition: 1,
+			});
+		});
+	});
+
+	describe("moveElementSuccess", () => {
+		it("should not move element when card is undefined", async () => {
+			const { cardStore, cardId, elements } = setup();
+			const elementId = elements[0].id;
+
+			await cardStore.moveElementSuccess({
+				elementId: elements[0].id,
+				toCardId: "unknownId",
+				toPosition: 1,
+				isOwnAction: true,
 			});
 
-			await cardStore.deleteElement(cardId, elementId);
+			expect(cardStore.cards[cardId].elements[0].id).toEqual(elementId);
+		});
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(0);
+		it("should move element down", async () => {
+			const { cardStore, cardId, elements } = setup();
+			const elementId = elements[0].id;
+			const toPosition = 1;
+
+			await cardStore.moveElementSuccess({
+				elementId,
+				toCardId: cardId,
+				toPosition,
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards[cardId].elements[toPosition].id).toEqual(
+				elementId
+			);
+		});
+
+		it("should move element up", async () => {
+			const { cardStore, cardId, elements } = setup();
+
+			const elementId = elements[2].id;
+			const toPosition = 1;
+			await cardStore.moveElementSuccess({
+				elementId,
+				toCardId: cardId,
+				toPosition,
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards[cardId].elements[1].id).toEqual(elementId);
+		});
+	});
+
+	describe("deleteElementSuccess", () => {
+		it("should not delete element if card is undefined", async () => {
+			const { cardStore, cardId, elements } = setup();
+			const numberOfElements = cardStore.cards[cardId].elements.length;
+			const elementId = elements[0].id;
+
+			await cardStore.deleteElementSuccess({
+				cardId: "unkown",
+				elementId,
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards[cardId].elements.length).toEqual(numberOfElements);
+		});
+		it("should delete element", async () => {
+			const { cardStore, cardId, elements } = setup();
+			const numberOfElements = cardStore.cards[cardId].elements.length;
+			const elementId = elements[0].id;
+
+			await cardStore.deleteElementSuccess({
+				cardId,
+				elementId,
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards[cardId].elements.length).toEqual(
+				numberOfElements - 1
+			);
 		});
 	});
 
 	describe("addTextAfterTitle", () => {
+		it("should not add text after title when card is undefined", async () => {
+			const { cardStore } = setup();
+
+			await cardStore.addTextAfterTitle("unknownId");
+
+			expect(
+				mockedCardRestApiActions.createElementRequest
+			).not.toHaveBeenCalled();
+		});
+
 		it("should add text after title", async () => {
-			const { cardStore, cardId } = setup();
+			const { cardStore, cardId, elements } = setup();
 
 			await cardStore.addTextAfterTitle(cardId);
 
-			expect(cardStore.cards[cardId].elements.length).toEqual(1);
+			const expectedCall = {
+				type: elements[0].type,
+				cardId,
+				toPosition: 0,
+			};
+
+			expect(
+				mockedCardRestApiActions.createElementRequest
+			).toHaveBeenCalledWith(expectedCall);
+		});
+	});
+
+	describe("updateElementSuccess", () => {
+		it("should not update element if element id does not belong to a card ", async () => {
+			const { cardStore, cardId } = setup();
+
+			const oldElements = cloneDeep(cardStore.cards[cardId].elements);
+
+			await cardStore.updateElementSuccess({
+				elementId: "non existing id",
+				data: {
+					type: ContentElementType.RichText,
+					content: richTextElementContentFactory.build(),
+				},
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards[cardId].elements).toEqual(oldElements);
+		});
+
+		it("should update element", async () => {
+			const { cardStore, cardId, elements } = setup();
+
+			const elementToUpdate = elements[0];
+			const newContent = richTextElementContentFactory.build();
+
+			await cardStore.updateElementSuccess({
+				elementId: elementToUpdate.id,
+				data: {
+					type: elementToUpdate.type,
+					content: newContent,
+				},
+				isOwnAction: true,
+			});
+
+			expect(cardStore.cards[cardId].elements[0].content).toEqual(newContent);
 		});
 	});
 });
