@@ -1,12 +1,12 @@
-import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
-import { DataTableHeader } from "@/store/types/data-table-header";
-import { schoolExternalToolsModule } from "@/store";
 import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
-import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { schoolExternalToolsModule } from "@/store";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { DataTableHeader } from "@/store/types/data-table-header";
+import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 
 const schoolExternalToolsModuleMock =
@@ -51,7 +51,7 @@ describe("useSchoolExternalToolUtils", () => {
 					value: "value",
 				},
 			],
-			status: ContextExternalToolConfigurationStatusFactory.build({
+			status: contextExternalToolConfigurationStatusFactory.build({
 				isOutdatedOnScopeSchool: false,
 				isDeactivated: false,
 			}),

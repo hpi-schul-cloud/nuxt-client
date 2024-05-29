@@ -1298,6 +1298,12 @@ export interface ContextExternalToolConfigurationStatusResponse {
      * @memberof ContextExternalToolConfigurationStatusResponse
      */
     isDeactivated: boolean;
+    /**
+     * True if the tool is not licensed for user
+     * @type {boolean}
+     * @memberof ContextExternalToolConfigurationStatusResponse
+     */
+    isNotLicensed: boolean;
 }
 /**
  * 

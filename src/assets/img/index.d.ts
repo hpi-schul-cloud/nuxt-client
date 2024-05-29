@@ -1,4 +1,4 @@
-declare module "@/assets/img/tldraw.png" {
+declare module "@/assets/img/tldraw.svg" {
 	const value: string;
 	export default value;
 }

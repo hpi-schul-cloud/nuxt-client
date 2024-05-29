@@ -75,7 +75,6 @@ import {
 	Ref,
 	ref,
 	toRef,
-	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
@@ -134,13 +133,6 @@ export default defineComponent({
 		const { lastCreatedElementId, resetLastCreatedElementId } =
 			useSharedLastCreatedElement();
 
-		watch(lastCreatedElementId, (newValue) => {
-			if (newValue !== undefined && newValue === props.element.id) {
-				isConfigurationDialogOpen.value = true;
-				resetLastCreatedElementId();
-			}
-		});
-
 		const hasLinkedTool: ComputedRef<boolean> = computed(
 			() => !!modelValue.value.contextExternalToolId
 		);
@@ -165,6 +157,7 @@ export default defineComponent({
 						isIncompleteOnScopeContext: false,
 						isIncompleteOperationalOnScopeContext: false,
 						isDeactivated: false,
+						isNotLicensed: false,
 					}
 				);
 			});
@@ -235,7 +228,13 @@ export default defineComponent({
 			}
 		};
 
-		onMounted(loadCardData);
+		onMounted(() => {
+			loadCardData();
+			if (lastCreatedElementId.value === props.element.id) {
+				isConfigurationDialogOpen.value = true;
+				resetLastCreatedElementId();
+			}
+		});
 
 		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
