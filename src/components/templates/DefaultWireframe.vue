@@ -184,7 +184,7 @@ export default defineComponent({
 
 .sticky {
 	position: sticky;
-	top: 0;
+	top: 64px;
 	z-index: var(--layer-sticky-header);
 	background-color: rgb(var(--v-theme-white));
 }
