@@ -53,28 +53,29 @@
 				)
 			}}
 		</p>
-		<v-checkbox
-			v-show="isMediaLicensingEnabled"
-			:label="
-				t(
-					'components.administration.provisioningOptions.schoolExternalTools.label'
-				)
-			"
-			:loading="isLoading"
-			v-model="provisioningOptions.schoolExternalTools"
-			data-testid="checkbox-option-school-external-tools"
-			class="ml-1"
-		/>
-		<p>
-			{{
-				t(
-					"components.administration.provisioningOptions.schoolExternalTools.description",
-					{
-						instance: theme.name,
-					}
-				)
-			}}
-		</p>
+		<div v-if="isMediaLicensingEnabled">
+			<v-checkbox
+				:label="
+					t(
+						'components.administration.provisioningOptions.schoolExternalTools.label'
+					)
+				"
+				:loading="isLoading"
+				v-model="provisioningOptions.schoolExternalTools"
+				data-testid="checkbox-option-school-external-tools"
+				class="ml-1"
+			/>
+			<p>
+				{{
+					t(
+						"components.administration.provisioningOptions.schoolExternalTools.description",
+						{
+							instance: theme.name,
+						}
+					)
+				}}
+			</p>
+		</div>
 
 		<v-row class="justify-end mt-10">
 			<v-btn
