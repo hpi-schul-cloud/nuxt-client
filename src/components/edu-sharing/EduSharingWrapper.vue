@@ -60,9 +60,8 @@ export default {
 
 		// retrieve the valid session ticket
 		(async () => {
-			const userName = "admin";
 			const { getTicketForUser } = useEduSharingApi();
-			const ticket = await getTicketForUser(userName);
+			const ticket = await getTicketForUser();
 			const eduSharingApp = document.getElementsByTagName("edu-sharing-app")[0];
 			eduSharingApp.setAttribute("ticket", ticket);
 		})();

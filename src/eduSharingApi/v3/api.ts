@@ -103,11 +103,10 @@ export const EduSharingApiAxiosParamCreator = function (configuration?: Configur
         /**
          * 
          * @summary Fetches the edu-sharing ticket for a given user name.
-         * @param {string} [userName] The name of the user the ticket shall be retrieved for.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTicketForUser: async (userName?: string, options: any = {}): Promise<RequestArgs> => {
+        getTicketForUser: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/edu-sharing`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -123,10 +122,6 @@ export const EduSharingApiAxiosParamCreator = function (configuration?: Configur
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (userName !== undefined) {
-                localVarQueryParameter['userName'] = userName;
-            }
 
 
     
@@ -173,12 +168,11 @@ export const EduSharingApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Fetches the edu-sharing ticket for a given user name.
-         * @param {string} [userName] The name of the user the ticket shall be retrieved for.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getTicketForUser(userName?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.getTicketForUser(userName, options);
+        async getTicketForUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getTicketForUser(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -213,12 +207,11 @@ export const EduSharingApiFactory = function (configuration?: Configuration, bas
         /**
          * 
          * @summary Fetches the edu-sharing ticket for a given user name.
-         * @param {string} [userName] The name of the user the ticket shall be retrieved for.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getTicketForUser(userName?: string, options?: any): AxiosPromise<string> {
-            return localVarFp.getTicketForUser(userName, options).then((request) => request(axios, basePath));
+        getTicketForUser(options?: any): AxiosPromise<string> {
+            return localVarFp.getTicketForUser(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -251,12 +244,11 @@ export interface EduSharingApiInterface {
     /**
      * 
      * @summary Fetches the edu-sharing ticket for a given user name.
-     * @param {string} [userName] The name of the user the ticket shall be retrieved for.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EduSharingApiInterface
      */
-    getTicketForUser(userName?: string, options?: any): AxiosPromise<string>;
+    getTicketForUser(options?: any): AxiosPromise<string>;
 
 }
 
@@ -293,13 +285,12 @@ export class EduSharingApi extends BaseAPI implements EduSharingApiInterface {
     /**
      * 
      * @summary Fetches the edu-sharing ticket for a given user name.
-     * @param {string} [userName] The name of the user the ticket shall be retrieved for.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof EduSharingApi
      */
-    public getTicketForUser(userName?: string, options?: any) {
-        return EduSharingApiFp(this.configuration).getTicketForUser(userName, options).then((request) => request(this.axios, this.basePath));
+    public getTicketForUser(options?: any) {
+        return EduSharingApiFp(this.configuration).getTicketForUser(options).then((request) => request(this.axios, this.basePath));
     }
 }
 

@@ -23,8 +23,8 @@ export const useEduSharingApi = () => {
 		return response.data;
 	};
 
-	const getTicketForUser = async (userName?: string): Promise<string> => {
-		const response = await eduSharingApi.getTicketForUser(userName);
+	const getTicketForUser = async (): Promise<string> => {
+		const response = await eduSharingApi.getTicketForUser();
 		return response.data;
 	};
 
