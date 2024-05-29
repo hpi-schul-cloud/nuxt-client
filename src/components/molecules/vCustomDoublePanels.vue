@@ -15,11 +15,6 @@
 					@click="toggle"
 				>
 					{{ panelOneTitle }} ({{ panelOneCount }})
-					<template #actions>
-						<v-icon data-testid="upperTaskSectionIcon">
-							{{ expanded ? "$expand" : "$collapse" }}
-						</v-icon>
-					</template>
 				</v-expansion-panel-title>
 				<v-expansion-panel-text>
 					<slot name="panelOne" />
@@ -38,11 +33,6 @@
 					data-testid="lowerTaskSection"
 					@click="toggle"
 					>{{ panelTwoTitle }} ({{ panelTwoCount }})
-					<template #actions>
-						<v-icon data-testid="lowerTaskSectionIcon">
-							{{ expanded ? "$collapse" : "$expand" }}
-						</v-icon>
-					</template>
 				</v-expansion-panel-title>
 				<v-expansion-panel-text>
 					<slot name="panelTwo" />
