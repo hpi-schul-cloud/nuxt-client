@@ -76,7 +76,6 @@
 				</VStepperHeader>
 				<vCustomDialog
 					v-model:is-open="isCancelDialogOpen"
-					:max-width="500"
 					has-buttons
 					:buttons="['cancel', 'confirm']"
 					@dialog-confirmed="confirmCancelMigration()"
@@ -183,19 +182,18 @@
 
 					<VStepperWindowItem :value="2" data-testid="migration_importUsers">
 						<ImportUsers />
-						<div class="flex-container">
-							<div class="">
-								<VBtn
-									@click="cancelMigration()"
-									data-testid="import-users-cancel-migration-btn"
-								>
-									{{ t("common.actions.cancel") }}
-								</VBtn>
-							</div>
-							<div class="">
+						<div class="d-flex justify-space-between">
+							<VBtn
+								@click="cancelMigration()"
+								data-testid="import-users-cancel-migration-btn"
+							>
+								{{ t("common.actions.cancel") }}
+							</VBtn>
+							<div>
 								<VBtn @click="migrationStep = 1">
 									{{ t("pages.administration.migration.back") }}
 								</VBtn>
+
 								<VBtn
 									class="ml-2"
 									id="migration_importUsers_next"
@@ -247,37 +245,39 @@
 											/>
 										</VRow>
 									</VCardText>
-									<div class="float-left">
-										<VBtn
-											@click="cancelMigration"
-											data-testid="summary-cancel-migration-btn"
-										>
-											{{ t("common.actions.cancel") }}
-										</VBtn>
-									</div>
-									<div class="float-right">
-										<VBtn :disabled="isLoading" @click="migrationStep = 2"
-											>{{ t("pages.administration.migration.back") }}
-										</VBtn>
+									<div class="d-flex justify-space-between">
+										<div>
+											<VBtn
+												@click="cancelMigration()"
+												data-testid="summary-cancel-migration-btn"
+											>
+												{{ t("common.actions.cancel") }}
+											</VBtn>
+										</div>
+										<div>
+											<VBtn :disabled="isLoading" @click="migrationStep = 2"
+												>{{ t("pages.administration.migration.back") }}
+											</VBtn>
 
-										<VBtn
-											class="ml-2"
-											color="primary"
-											:disabled="!isMigrationConfirm || isLoading"
-											data-testid="migration_performMigration"
-											@click="performMigration"
-										>
-											<VProgressCircular
-												v-if="isLoading"
-												:size="20"
-												indeterminate
-											/>
-											{{
-												isNbc
-													? t("pages.administration.migration.nbc.migrate")
-													: t("pages.administration.migration.migrate")
-											}}
-										</VBtn>
+											<VBtn
+												class="ml-2"
+												color="primary"
+												:disabled="!isMigrationConfirm || isLoading"
+												data-testid="migration_performMigration"
+												@click="performMigration"
+											>
+												<VProgressCircular
+													v-if="isLoading"
+													:size="20"
+													indeterminate
+												/>
+												{{
+													isNbc
+														? t("pages.administration.migration.nbc.migrate")
+														: t("pages.administration.migration.migrate")
+												}}
+											</VBtn>
+										</div>
 									</div>
 								</div>
 								<div v-else>
@@ -758,9 +758,9 @@ const confirmCancelMigration = async () => {
 
 	await importUsersModule.cancelMigration();
 
-	await redirectToAdminPage();
-
 	isLoading.value = false;
+
+	await redirectToAdminPage();
 };
 
 const redirectToAdminPage = async () => {
@@ -787,7 +787,6 @@ watch(totalImportUsers, (val) => {
 onMounted(async () => {
 	const allowed = await isAllowed();
 	if (!allowed) {
-		const router = useRouter();
 		await router.push("/");
 		return;
 	}
@@ -816,10 +815,5 @@ iframe.full {
 	min-height: 800px;
 	overflow: scroll;
 	border: none;
-}
-
-.flex-container {
-	display: flex;
-	justify-content: space-between;
 }
 </style>

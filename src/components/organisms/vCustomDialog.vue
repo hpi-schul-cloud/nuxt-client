@@ -1,7 +1,7 @@
 <template>
 	<v-dialog
 		ref="vDialog"
-		:model-value="isOpen"
+		v-model="isDialogOpen"
 		:max-width="size"
 		@click:outside="closeDialog"
 		@keydown.esc="closeDialog"
@@ -81,10 +81,13 @@
 </template>
 
 <script setup lang="ts">
-import { ModelRef, PropType } from "vue";
-import { size } from "lodash";
+import { computed, ModelRef, PropType } from "vue";
 
 const props = defineProps({
+	size: {
+		type: Number,
+		default: 480,
+	},
 	hasButtons: {
 		type: Boolean,
 	},
@@ -125,6 +128,11 @@ const emit = defineEmits([
 const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 	type: Boolean,
 	required: true,
+});
+
+const isDialogOpen = computed({
+	get: () => isOpen.value,
+	set: (value) => (isOpen.value = value),
 });
 
 const confirmDialog = () => {
