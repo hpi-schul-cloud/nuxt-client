@@ -78,6 +78,7 @@
 					v-model:is-open="isCancelDialogOpen"
 					:max-width="500"
 					has-buttons
+					:buttons="['cancel', 'confirm']"
 					@dialog-confirmed="confirmCancelMigration()"
 					data-testid="cancel-migration-dialog"
 				>
