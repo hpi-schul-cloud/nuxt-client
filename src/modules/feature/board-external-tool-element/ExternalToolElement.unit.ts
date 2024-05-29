@@ -74,12 +74,15 @@ describe("ExternalToolElement", () => {
 			createMock<ReturnType<typeof useContentElementState>>();
 		useBoardFocusHandlerMock =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
-		useExternalToolElementDisplayStateMock =
-			createMock<ReturnType<typeof useExternalToolDisplayState>>();
-		useExternalToolLaunchStateMock =
-			createMock<ReturnType<typeof useExternalToolLaunchState>>();
-		useSharedLastCreatedElementMock =
-			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		useExternalToolElementDisplayStateMock = createMock<
+			ReturnType<typeof useExternalToolDisplayState>
+		>({ error: ref(), displayData: ref(), isLoading: ref(false) });
+		useExternalToolLaunchStateMock = createMock<
+			ReturnType<typeof useExternalToolLaunchState>
+		>({ error: ref(), toolLaunchRequest: ref(), isLoading: ref(false) });
+		useSharedLastCreatedElementMock = createMock<
+			ReturnType<typeof useSharedLastCreatedElement>
+		>({ lastCreatedElementId: ref() });
 		useToolConfigurationStatusMock =
 			createMock<
 				ReturnType<typeof useContextExternalToolConfigurationStatus>
@@ -115,9 +118,7 @@ describe("ExternalToolElement", () => {
 		displayData?: ExternalToolDisplayData
 	) => {
 		useContentElementStateMock.modelValue = ref(propsData.element.content);
-		useExternalToolElementDisplayStateMock.displayData = ref(displayData);
-		useExternalToolElementDisplayStateMock.error = ref(undefined);
-		useSharedLastCreatedElementMock.lastCreatedElementId = ref(undefined);
+		useExternalToolElementDisplayStateMock.displayData.value = displayData;
 
 		const refreshTime = 299000;
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
@@ -633,6 +634,40 @@ describe("ExternalToolElement", () => {
 
 				expect(alert.props("toolStatus")).toEqual(toolOutdatedStatus);
 			});
+
+			it("should display an error alert", async () => {
+				const { wrapper, error } = setup();
+
+				await nextTick();
+
+				const alert = wrapper.findComponent(ExternalToolElementAlert);
+
+				expect(alert.props("error")).toEqual(error);
+			});
+		});
+
+		describe("when there is a launch error", () => {
+			const setup = () => {
+				const error: BusinessError = {
+					statusCode: 418,
+					message: "Loading error",
+				};
+
+				const { wrapper } = getWrapper(
+					{
+						element: EMPTY_TEST_ELEMENT,
+						isEditMode: true,
+					},
+					externalToolDisplayDataFactory.build()
+				);
+
+				useExternalToolLaunchStateMock.error.value = error;
+
+				return {
+					wrapper,
+					error,
+				};
+			};
 
 			it("should display an error alert", async () => {
 				const { wrapper, error } = setup();
