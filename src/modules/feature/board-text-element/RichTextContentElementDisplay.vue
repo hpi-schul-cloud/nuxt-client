@@ -1,6 +1,6 @@
 <template>
 	<RenderHTML
-		class="ck-content"
+		class="ck-content pb-2"
 		:html="value"
 		config="ck5"
 		v-if="value !== undefined && value !== ''"
