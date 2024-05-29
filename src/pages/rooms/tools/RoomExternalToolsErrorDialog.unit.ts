@@ -2,7 +2,7 @@ import RoomExternalToolsErrorDialog from "@/pages/rooms/tools/RoomExternalToolsE
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -54,7 +54,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 		incompleteOperational?: boolean
 	): ExternalToolDisplayData => {
 		return {
-			status: ContextExternalToolConfigurationStatusFactory.build({
+			status: contextExternalToolConfigurationStatusFactory.build({
 				isDeactivated: deactivated,
 				isOutdatedOnScopeSchool: outdated,
 				isIncompleteOnScopeContext: incomplete,
@@ -147,7 +147,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
-				expect(title.text()).toEqual('{"toolName":"Test Tool"}');
+				expect(title.text()).toEqual('error.generic {"toolName":"Test Tool"}');
 			});
 
 			it("should render the correct content text", () => {

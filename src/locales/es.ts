@@ -16,7 +16,9 @@ export default {
 	"common.actions.invite": "Enviar el enlace del curso",
 	"common.actions.logout": "Desconectar",
 	"common.actions.ok": "Aceptar",
+	"common.actions.pickColor": "Seleccione el color de fondo",
 	"common.actions.remove": "Eliminar",
+	"common.actions.rename": "Renombrar",
 	"common.actions.save": "Guardar",
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.actions.share": "Compartir",
@@ -87,6 +89,17 @@ export default {
 	"common.labels.visibility": "Visibilidad",
 	"common.labels.visible": "Visible",
 	"common.loading.text": "Los datos se están cargando...",
+	"common.medium.alert.deactivated": "Los medios están deshabilitados.",
+	"common.medium.alert.notLicensed": "El medio no está activado.",
+	"common.medium.alert.incomplete":
+		"La configuración del medio no actual o incompleta.",
+	"common.medium.chip.deactivated": "Desactivado",
+	"common.medium.chip.notLicensed": "No esta activado",
+	"common.medium.chip.incomplete": "Configuración incompleta",
+	"common.medium.information.admin": "Por favor verifique la configuración.",
+	"common.medium.information.student": "Por favor contacte a un maestro.",
+	"common.medium.information.teacher":
+		"Por favor comuníquese con el administrador de la escuela.",
 	"common.nodata": "Datos no disponibles",
 	"common.notification.error": "Se ha producido un error.",
 	"common.placeholder.birthdate": "20.2.2002",
@@ -310,9 +323,9 @@ export default {
 	"components.cardElement.deleteElement": "Suprimir elemento",
 	"components.cardElement.dragElement": "Mover elemento",
 	"components.cardElement.drawingElement": "Pizarra",
-	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
-		"Esta editor de texto es visible y editable para todos los participantes en el curso.",
+		"Este Etherpad es visible y editable para todos los participantes en el curso.",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
@@ -369,7 +382,7 @@ export default {
 	"components.elementTypeSelection.elements.fileElement.subtitle":
 		"Editor de texto",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
-		"Text Editor",
+		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Envíos",
@@ -1657,4 +1670,6 @@ export default {
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
+	"feature.media-shelf.layout.list": "Líneas",
+	"feature.media-shelf.layout.grid": "Red",
 };

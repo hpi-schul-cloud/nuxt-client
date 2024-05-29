@@ -10,6 +10,7 @@ import { envConfigModule } from "@/store";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
+import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
 import ShareModule from "@/store/share";
 import { Board } from "@/types/board/Board";
@@ -58,7 +59,6 @@ import { Router, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
-import NotifierModule from "@/store/notifier";
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -121,6 +121,7 @@ describe("Board", () => {
 			createPageInformation: jest.fn(),
 			breadcrumbs: ref([]),
 			pageTitle: ref("page-title"),
+			roomId: ref("room-id"),
 		});
 
 		mockedUseEditMode.mockReturnValue({
@@ -732,36 +733,6 @@ describe("Board", () => {
 			});
 		});
 
-		describe("@onUpdateCardPosition", () => {
-			describe("when user is permitted to move a card", () => {
-				it("should call moveCardMock method", () => {
-					mockedBoardPermissions.hasMovePermission = true;
-					const { wrapper, boardStore } = setup();
-
-					const columnComponent = wrapper.findComponent({
-						name: "BoardColumn",
-					});
-					columnComponent.vm.$emit("update:card-position");
-
-					expect(boardStore.moveCardRequest).toHaveBeenCalled();
-				});
-			});
-
-			describe("when user is not permitted to move a card", () => {
-				it("should not call moveCardMock method", () => {
-					mockedBoardPermissions.hasMovePermission = false;
-					const { wrapper, boardStore } = setup();
-
-					const columnComponent = wrapper.findComponent({
-						name: "BoardColumn",
-					});
-					columnComponent.vm.$emit("update:card-position");
-
-					expect(boardStore.moveCardRequest).not.toHaveBeenCalled();
-				});
-			});
-		});
-
 		describe("@onUpdateColumnTitle", () => {
 			describe("when user is permitted to edit", () => {
 				it("should call updateColumnTitle method", () => {
@@ -901,6 +872,8 @@ describe("Board", () => {
 
 			it("should call deleteBoard method to delete board and redirect to rooms board page", async () => {
 				mockedBoardPermissions.hasDeletePermission = true;
+				const mockRoomId = mockedUseSharedBoardPageInformation().roomId.value;
+
 				const { wrapper, roomModule, board } = setup();
 
 				const columnComponent = wrapper.findComponent({
@@ -912,7 +885,7 @@ describe("Board", () => {
 
 				expect(router.push).toHaveBeenCalledTimes(1);
 				expect(router.push).toHaveBeenCalledWith({
-					path: "/rooms/" + roomModule.getRoomId,
+					path: "/rooms/" + mockRoomId,
 				});
 			});
 		});

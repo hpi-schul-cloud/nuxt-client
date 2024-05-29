@@ -50,7 +50,6 @@
 								@create:card="onCreateCard"
 								@delete:card="onDeleteCard"
 								@delete:column="onDeleteColumn"
-								@update:card-position="onUpdateCardPosition(index, $event)"
 								@update:column-title="onUpdateColumnTitle(element.id, $event)"
 								@move:column-down="onMoveColumnForward(index, element.id)"
 								@move:column-left="onMoveColumnBackward(index, element.id)"
@@ -92,7 +91,7 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
-import { CardMove, ColumnMove } from "@/types/board/DragAndDrop";
+import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -102,21 +101,21 @@ import {
 } from "@/utils/inject";
 import {
 	useBoardPermissions,
-	useSharedBoardPageInformation,
-	useSharedEditMode,
 	useBoardStore,
 	useCardStore,
+	useSharedBoardPageInformation,
+	useSharedEditMode,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import { extractDataAttribute, useBoardNotifier } from "@util-board";
+import { useTouchDetection } from "@util-device-detection";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onMounted, onUnmounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import { useTouchDetection } from "@util-device-detection";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
@@ -136,7 +135,7 @@ const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
 
-const { createPageInformation } = useSharedBoardPageInformation();
+const { createPageInformation, roomId } = useSharedBoardPageInformation();
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -229,10 +228,6 @@ const onUpdateBoardVisibility = async (isVisible: boolean) => {
 		isVisible,
 	});
 	await setAlert();
-};
-
-const onUpdateCardPosition = async (_: unknown, cardMove: CardMove) => {
-	if (hasMovePermission) boardStore.moveCardRequest(cardMove);
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
@@ -353,7 +348,6 @@ const onShareBoard = () => {
 const roomModule = injectStrict(ROOM_MODULE_KEY);
 const openDeleteBoardDialog = async (id: string) => {
 	await roomModule.deleteBoard(id);
-
-	router.push({ path: "/rooms/" + roomModule.getRoomId });
+	router.push({ path: "/rooms/" + roomId.value });
 };
 </script>

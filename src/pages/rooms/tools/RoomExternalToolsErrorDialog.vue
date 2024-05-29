@@ -74,7 +74,7 @@ const getTitle: ComputedRef<string> = computed(() => {
 		return "pages.rooms.tools.incompleteDialog.title";
 	}
 
-	return "";
+	return "error.generic";
 });
 
 const getText: ComputedRef<string> = computed(() => {

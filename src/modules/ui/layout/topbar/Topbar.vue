@@ -36,13 +36,11 @@
 		>
 			{{ school.name }}
 		</div>
-		<VImg
+		<img
 			v-if="hasLogo && isDesktop"
 			:src="school!.logo.url"
 			alt=""
-			max-height="40"
-			max-width="160"
-			class="mr-3"
+			class="school-logo mr-3"
 			data-testid="school-logo"
 		/>
 		<UserMenu v-if="user" :user="user" :role-names="roleNames" class="mr-3" />
@@ -131,3 +129,10 @@ const hasLogo = computed(() => {
 	return !!school.value?.logo?.url;
 });
 </script>
+
+<style scoped>
+.school-logo {
+	max-height: 40px;
+	max-width: 160px;
+}
+</style>

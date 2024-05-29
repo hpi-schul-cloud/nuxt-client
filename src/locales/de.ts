@@ -15,7 +15,9 @@ export default {
 	"common.actions.invite": "Kurslink versenden",
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
+	"common.actions.pickColor": "Hintergrundfarbe auswählen",
 	"common.actions.remove": "Löschen",
+	"common.actions.rename": "Umbenennen",
 	"common.actions.save": "Speichern",
 	"common.actions.scrollToTop": "Nach oben scrollen",
 	"common.actions.share": "Teilen",
@@ -87,6 +89,16 @@ export default {
 	"common.labels.visibility": "Sichtbarkeit",
 	"common.labels.visible": "Sichtbar",
 	"common.loading.text": "Daten werden geladen...",
+	"common.medium.alert.deactivated": "Medium ist deaktiviert.",
+	"common.medium.alert.notLicensed": "Medium ist nicht freigeschaltet.",
+	"common.medium.alert.incomplete":
+		"Konfiguration des Mediums nicht aktuell oder unvollständig.",
+	"common.medium.chip.deactivated": "Deaktiviert",
+	"common.medium.chip.notLicensed": "Nicht freigeschaltet",
+	"common.medium.chip.incomplete": "Konfiguration unvollständig",
+	"common.medium.information.admin": "Bitte Einstellungen überprüfen.",
+	"common.medium.information.student": "Bitte an eine Lehrkraft wenden.",
+	"common.medium.information.teacher": "Bitte an Schuladministrator:in wenden.",
 	"common.nodata": "Keine Daten vorhanden",
 	"common.notification.error": "Es ist ein Fehler aufgetreten.",
 	"common.placeholder.birthdate": "20.2.2002",
@@ -307,9 +319,9 @@ export default {
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.drawingElement": "Whiteboard",
-	"components.cardElement.collaborativeTextEditorElement": "Texteditor",
+	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
-		"Der Texteditor ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
+		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -365,7 +377,7 @@ export default {
 		"Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
-		"Texteditor",
+		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",
@@ -747,7 +759,7 @@ export default {
 	"global.topbar.actions.alerts": "Status-Warnung",
 	"global.topbar.actions.contactSupport": "Kontakt",
 	"global.topbar.actions.fullscreen": "Vollbildmodus",
-	"global.topbar.actions.helpSection": "Hilfebereich",
+	"global.topbar.actions.helpSection": "Hilfeartikel",
 	"global.topbar.actions.qrCode": "Seitenlink per QR-Code teilen",
 	"global.topbar.actions.releaseNotes": "Was ist neu?",
 	"global.topbar.actions.training": "Fortbildungen",
@@ -1635,4 +1647,6 @@ export default {
 	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
 	"feature.media-shelf.line.title": "Abschnitt",
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
+	"feature.media-shelf.layout.list": "Zeilen",
+	"feature.media-shelf.layout.grid": "Raster",
 };

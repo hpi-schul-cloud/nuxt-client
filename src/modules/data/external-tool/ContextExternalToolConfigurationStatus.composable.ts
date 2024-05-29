@@ -1,8 +1,10 @@
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useI18n } from "vue-i18n";
 import { ContextExternalToolConfigurationStatus } from "./types";
 
 export const useContextExternalToolConfigurationStatus = () => {
 	const authModule = injectStrict(AUTH_MODULE_KEY);
+	const { t } = useI18n();
 
 	const determineToolStatusTranslationKey = (
 		toolConfigStatus: ContextExternalToolConfigurationStatus
@@ -31,6 +33,29 @@ export const useContextExternalToolConfigurationStatus = () => {
 		}
 	};
 
+	const determineMediaBoardElementStatusMessage = (
+		toolConfigStatus: ContextExternalToolConfigurationStatus
+	): string => {
+		let statusString: string;
+		const userRoles = authModule.getUserRoles;
+
+		if (toolConfigStatus.isDeactivated) {
+			statusString = t("common.medium.alert.deactivated") + " ";
+		} else if (toolConfigStatus.isNotLicensed) {
+			statusString = t("common.medium.alert.notLicensed") + " ";
+		} else {
+			statusString = t("common.medium.alert.incomplete") + " ";
+		}
+
+		if (userRoles.includes("administrator")) {
+			return statusString + t("common.medium.information.admin");
+		} else if (userRoles.includes("teacher")) {
+			return statusString + t("common.medium.information.teacher");
+		} else {
+			return statusString + t("common.medium.information.student");
+		}
+	};
+
 	const determineDeactivatedMessage = (): string => {
 		const userRoles = authModule.getUserRoles;
 		if (userRoles.includes("student")) {
@@ -40,13 +65,30 @@ export const useContextExternalToolConfigurationStatus = () => {
 		}
 	};
 
+	const isOperational = (
+		toolConfigStatus: ContextExternalToolConfigurationStatus
+	): boolean => {
+		if (
+			toolConfigStatus.isIncompleteOnScopeContext ||
+			toolConfigStatus.isOutdatedOnScopeContext ||
+			toolConfigStatus.isOutdatedOnScopeSchool ||
+			toolConfigStatus.isDeactivated ||
+			toolConfigStatus.isNotLicensed
+		) {
+			return false;
+		}
+		return true;
+	};
+
 	const isTeacher = (): boolean => {
 		return authModule.getUserRoles.includes("teacher");
 	};
 
 	return {
 		determineToolStatusTranslationKey,
+		determineMediaBoardElementStatusMessage,
 		determineDeactivatedMessage,
 		isTeacher,
+		isOperational,
 	};
 };

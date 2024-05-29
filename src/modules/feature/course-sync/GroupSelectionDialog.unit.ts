@@ -89,10 +89,12 @@ describe("GroupSelectionDialog", () => {
 
 	describe("when searching for a specific group name", () => {
 		it("should load only groups with that name", async () => {
+			jest.useFakeTimers();
 			const { wrapper } = getWrapper();
 
 			const autocomplete = wrapper.findComponent(VAutocomplete);
 			await autocomplete.setValue("testGroup", "search");
+			jest.runAllTimers();
 
 			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<
 				[GroupListFilter, { append: boolean }?]
