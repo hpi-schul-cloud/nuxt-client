@@ -14,11 +14,17 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { ComponentMountingOptions, mount, shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import Router from "../../router";
+import { Router, useRouter } from "vue-router";
+import { createMock } from "@golevelup/ts-jest";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
+
+const router = createMock<Router>();
 
 const $theme = {
 	name: "instance name",
@@ -28,6 +34,8 @@ const getWrapper = (
 	options: ComponentMountingOptions<typeof MigrationWizard> = {}
 ) => {
 	document.body.setAttribute("data-app", "true");
+
+	useRouterMock.mockReturnValue(router);
 
 	return mount(MigrationWizard, {
 		global: {
@@ -39,8 +47,8 @@ const getWrapper = (
 			provide: {
 				[THEME_KEY.valueOf()]: $theme,
 			},
-			mocks: {
-				$theme,
+			stubs: {
+				ImportUsers: true,
 			},
 		},
 		...options,
@@ -75,7 +83,6 @@ describe("User Migration / Index", () => {
 			envConfigModule: EnvConfigModule,
 			importUsersModule: ImportUsersModule,
 			schoolsModule: SchoolsModule,
-			router: Router,
 		});
 
 		envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED = true;
@@ -344,7 +351,7 @@ describe("User Migration / Index", () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
-					"[data-testid=importUsers-cancel-migration-btn]"
+					"[data-testid=import-users-cancel-migration-btn]"
 				);
 
 				expect(button.exists()).toBe(true);
@@ -354,7 +361,7 @@ describe("User Migration / Index", () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
-					"[data-testid=importUsers-cancel-migration-btn]"
+					"[data-testid=import-users-cancel-migration-btn]"
 				);
 
 				await button.trigger("click");
@@ -366,7 +373,7 @@ describe("User Migration / Index", () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
-					"[data-testid=importUsers-cancel-migration-btn]"
+					"[data-testid=import-users-cancel-migration-btn]"
 				);
 
 				await button.trigger("click");
@@ -396,7 +403,7 @@ describe("User Migration / Index", () => {
 				});
 
 				const button = wrapper.findComponent(
-					"[data-testid=importUsers-cancel-migration-btn]"
+					"[data-testid=import-users-cancel-migration-btn]"
 				);
 
 				await button.trigger("click");

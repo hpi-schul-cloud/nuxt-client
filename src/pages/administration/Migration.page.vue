@@ -75,10 +75,10 @@
 					</VStepperItem>
 				</VStepperHeader>
 				<vCustomDialog
-					:is-open="isCancelDialogOpen"
+					v-model:is-open="isCancelDialogOpen"
+					:max-width="500"
 					has-buttons
 					@dialog-confirmed="confirmCancelMigration()"
-					@update:is-open="isCancelDialogOpen = $event"
 					data-testid="cancel-migration-dialog"
 				>
 					<template #title>
@@ -182,16 +182,16 @@
 
 					<VStepperWindowItem :value="2" data-testid="migration_importUsers">
 						<ImportUsers />
-						<div>
-							<div class="float-left">
+						<div class="flex-container">
+							<div class="">
 								<VBtn
 									@click="cancelMigration()"
-									data-testid="importUsers-cancel-migration-btn"
+									data-testid="import-users-cancel-migration-btn"
 								>
 									{{ t("common.actions.cancel") }}
 								</VBtn>
 							</div>
-							<div class="float-right">
+							<div class="">
 								<VBtn @click="migrationStep = 1">
 									{{ t("pages.administration.migration.back") }}
 								</VBtn>
@@ -525,10 +525,11 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import VCustomDialog from "../../components/organisms/vCustomDialog.vue";
-import router from "../../router";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 const { t } = useI18n();
+
+const router = useRouter();
 
 const theme = injectStrict(THEME_KEY);
 
@@ -601,11 +602,6 @@ const sourceSystemName = computed(() => {
 		return t("pages.administration.migration.ldapSource");
 	}
 });
-
-const schoolSettingsPage: Breadcrumb = {
-	title: t("pages.administration.school.index.title"),
-	to: "/administration/school-settings",
-};
 
 const breadcrumbs: Ref<Breadcrumb[]> = ref([
 	{
@@ -768,7 +764,7 @@ const confirmCancelMigration = async () => {
 
 const redirectToAdminPage = async () => {
 	await router.push({
-		path: schoolSettingsPage.to,
+		path: "/administration/school-settings",
 		query: { openPanels: "migration" },
 	});
 };
@@ -819,5 +815,10 @@ iframe.full {
 	min-height: 800px;
 	overflow: scroll;
 	border: none;
+}
+
+.flex-container {
+	display: flex;
+	justify-content: space-between;
 }
 </style>
