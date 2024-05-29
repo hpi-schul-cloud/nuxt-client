@@ -11,12 +11,11 @@
 				<v-expansion-panel-title
 					v-else-if="!isEmpty"
 					data-testid="upperTaskSection"
-					class="text-h6 font-weight-bold pa-0"
+					class="text-h6 font-weight-bold"
 					@click="toggle"
 				>
-					{{ panelOneTitle }}
-					<template #actions
-						>{{ panelOneCount }}
+					{{ panelOneTitle }} ({{ panelOneCount }})
+					<template #actions>
 						<v-icon data-testid="upperTaskSectionIcon">
 							{{ expanded ? "$expand" : "$collapse" }}
 						</v-icon>
@@ -35,13 +34,11 @@
 				</v-expansion-panel-title>
 				<v-expansion-panel-title
 					v-else-if="!isEmpty"
-					class="text-h6 font-weight-bold pa-0"
+					class="text-h6 font-weight-bold"
 					data-testid="lowerTaskSection"
 					@click="toggle"
-				>
-					{{ panelTwoTitle }}
+					>{{ panelTwoTitle }} ({{ panelTwoCount }})
 					<template #actions>
-						{{ panelTwoCount }}
 						<v-icon data-testid="lowerTaskSectionIcon">
 							{{ expanded ? "$collapse" : "$expand" }}
 						</v-icon>
