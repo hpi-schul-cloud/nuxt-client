@@ -12,6 +12,14 @@
 			}}
 		</WarningAlert>
 
+		<WarningAlert v-else-if="toolStatus && toolStatus.isNotLicensed">
+			{{
+				$t(toolNotLicensedMessage, {
+					toolName: toolDisplayName,
+				})
+			}}
+		</WarningAlert>
+
 		<InfoAlert v-if="isToolIncompleteOperational">
 			{{ $t(toolStatusMessage, { toolName: toolDisplayName }) }}
 		</InfoAlert>
@@ -51,8 +59,11 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const { determineToolStatusTranslationKey, determineDeactivatedMessage } =
-			useContextExternalToolConfigurationStatus();
+		const {
+			determineToolStatusTranslationKey,
+			determineDeactivatedTranslationKey,
+			determineNotLicensedTranslationKey,
+		} = useContextExternalToolConfigurationStatus();
 
 		const { isTeacher } = useBoardPermissions();
 
@@ -82,7 +93,13 @@ export default defineComponent({
 		});
 
 		const toolDeactivatedMessage: ComputedRef<string> = computed(() => {
-			const translationKey = determineDeactivatedMessage();
+			const translationKey = determineDeactivatedTranslationKey();
+
+			return translationKey;
+		});
+
+		const toolNotLicensedMessage: ComputedRef<string> = computed(() => {
+			const translationKey = determineNotLicensedTranslationKey();
 
 			return translationKey;
 		});
@@ -93,6 +110,7 @@ export default defineComponent({
 			isToolNotLaunchable,
 			isToolIncompleteOperational,
 			toolDeactivatedMessage,
+			toolNotLicensedMessage,
 		};
 	},
 });

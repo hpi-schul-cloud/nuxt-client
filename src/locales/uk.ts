@@ -131,6 +131,10 @@ export default {
 		"Інструмент {toolName} вимкнено. Будь ласка, зверніться до свого вчителя або викладача курсу.",
 	"common.tool.information.deactivated.teacher":
 		"Інструмент {toolName} вимкнено. Будь ласка, зверніться до адміністратора школи.",
+	"common.tool.information.notLicensed.student":
+		"Інструмент {toolName} не активовано. Будь ласка, зверніться до свого вчителя або викладача курсу.",
+	"common.tool.information.notLicensed.teacher":
+		"Інструмент {toolName} не активовано. Будь ласка, зверніться до адміністратора школи.",
 	"common.tool.information.outdated.teacher":
 		"Конфігурація інструменту {toolName} застаріла або неповна. Перевірте налаштування та зверніться до адміністратора школи.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -1498,6 +1502,8 @@ export default {
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Інструмент „{toolName}“ вимкнено",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Інструмент “{toolName}” не активовано",
 	"pages.rooms.tools.deleteDialog.content":
 		"Ви впевнені, що хочете видалити інструмент '<i>{itemName}</i>' із курсу?",
 	"pages.rooms.tools.deleteDialog.title": "видалити інструменти?",
