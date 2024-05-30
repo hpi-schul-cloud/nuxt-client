@@ -47,12 +47,6 @@ export default {
 		main.setAttribute("type", "module");
 		document.body.appendChild(main);
 
-		//   <!-- Only for dev builds. Could also set `vendorChunk: false` in `angular.json` to omit altogether. -->
-		const vendor = document.createElement("script");
-		vendor.setAttribute("src", "/content/vendor/edu-sharing/vendor.js");
-		vendor.setAttribute("type", "module");
-		document.body.appendChild(vendor);
-
 		const styles = document.createElement("link");
 		styles.setAttribute("href", "/content/vendor/edu-sharing/styles.css");
 		styles.setAttribute("rel", "stylesheet");
