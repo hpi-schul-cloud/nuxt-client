@@ -89,6 +89,17 @@ export default {
 	"common.labels.visibility": "Видимість",
 	"common.labels.visible": "Видимий",
 	"common.loading.text": "Дані завантажуються...",
+	"common.medium.alert.deactivated": "Медіа вимкнено.",
+	"common.medium.alert.notLicensed": "Медіа не активовано.",
+	"common.medium.alert.incomplete":
+		"Конфігурація носія не актуальна або не завершена.",
+	"common.medium.chip.deactivated": "Вимкнено",
+	"common.medium.chip.notLicensed": "Не активовано",
+	"common.medium.chip.incomplete": "Конфігурація не завершена",
+	"common.medium.information.admin": "Перевірте налаштування.",
+	"common.medium.information.student": "Будь ласка, зверніться до вчителя.",
+	"common.medium.information.teacher":
+		"Будь ласка, зверніться до адміністратора школи.",
 	"common.nodata": "Немає даних",
 	"common.notification.error": "Сталася помилка.",
 	"common.placeholder.birthdate": "20.02.2002",
