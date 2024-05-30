@@ -37,7 +37,7 @@
 		</ContentElementBar>
 		<ExternalToolElementAlert
 			:toolDisplayName="toolDisplayName"
-			:error="error"
+			:error="displayError || launchError"
 			:tool-status="toolConfigurationStatus"
 			data-testid="board-external-tool-element-alert"
 		/>
@@ -111,11 +111,14 @@ export default defineComponent({
 			fetchDisplayData,
 			displayData,
 			isLoading: isDisplayDataLoading,
-			error,
+			error: displayError,
 		} = useExternalToolDisplayState();
 
-		const { launchTool, fetchContextLaunchRequest } =
-			useExternalToolLaunchState();
+		const {
+			launchTool,
+			fetchContextLaunchRequest,
+			error: launchError,
+		} = useExternalToolLaunchState();
 
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
@@ -254,7 +257,8 @@ export default defineComponent({
 			hasLinkedTool,
 			toolDisplayName,
 			displayData,
-			error,
+			displayError,
+			launchError,
 			isLoading,
 			isConfigurationDialogOpen,
 			toolConfigurationStatus,

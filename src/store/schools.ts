@@ -6,12 +6,13 @@ import {
 	SchoolSystemResponse,
 	SchoolUpdateBodyParams,
 	SchoolYearResponse,
+	SchulcloudTheme,
 	SystemsApiFactory,
 	SystemsApiInterface,
 	UserImportApiFactory,
 	UserImportApiInterface,
 } from "@/serverApi/v3";
-import { authModule } from "@/store";
+import { authModule, envConfigModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { mapFeaturesToFeaturesObject } from "@/utils/school-features";
 import { AxiosError } from "axios";
@@ -146,7 +147,10 @@ export default class SchoolsModule extends VuexModule {
 	}
 
 	get schoolIsExternallyManaged(): boolean {
-		return this.school.isExternal;
+		const isThr = envConfigModule.getTheme === SchulcloudTheme.Thr;
+		const result = this.school.isExternal || isThr;
+
+		return result;
 	}
 
 	get schoolIsSynced(): boolean {
