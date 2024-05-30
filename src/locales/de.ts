@@ -127,6 +127,10 @@ export default {
 		"Tool {toolName} ist deaktiviert. Bitte an Lehrkraft oder Kursleiter:in wenden.",
 	"common.tool.information.deactivated.teacher":
 		"Tool {toolName} ist deaktiviert. Bitte an Schuladministrator:in wenden.",
+	"common.tool.information.notLicensed.student":
+		"Tool {toolName} ist nicht freigeschaltet. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.notLicensed.teacher":
+		"Tool {toolName} ist nicht freigeschaltet. Bitte an Schuladministrator:in wenden.",
 	"common.tool.information.outdated.teacher":
 		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -1508,6 +1512,8 @@ export default {
 		"Videokonferenz {roomName} erstellen",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Tool „{toolName}“ nicht freigeschaltet",
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '<i>{itemName}</i>' aus dem Kurs entfernen?",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",

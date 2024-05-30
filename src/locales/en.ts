@@ -128,6 +128,10 @@ export default {
 		"Tool {toolName} is disabled. Please contact your teacher or course instructor.",
 	"common.tool.information.deactivated.teacher":
 		"Tool {toolName} is disabled. Please contact the school administrator.",
+	"common.tool.information.notLicensed.student":
+		"Tool {toolName} is not activated. Please contact your teacher or course instructor.",
+	"common.tool.information.notLicensed.teacher":
+		"Tool {toolName} is not activated. Please contact the school administrator.",
 	"common.tool.information.outdated.teacher":
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings and contact your school administrator.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -1484,6 +1488,8 @@ export default {
 		"Create video conference {roomName}",
 	"pages.rooms.tools.deactivated": "Tool deactivated",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deactivated",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Tool “{toolName}” not activated",
 	"pages.rooms.tools.deleteDialog.content":
 		"Are you sure you want to remove the tool '<i>{itemName}</i>' from the course?",
 	"pages.rooms.tools.deleteDialog.title": "Remove tool?",

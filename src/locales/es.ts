@@ -130,6 +130,10 @@ export default {
 		"La herramienta {toolName} está deshabilitada. Por favor contacta a tu profesor o instructor del curso.",
 	"common.tool.information.deactivated.teacher":
 		"La herramienta {toolName} está deshabilitada. Por favor comuníquese con el administrador de la escuela.",
+	"common.tool.information.notLicensed.student":
+		"La herramienta {toolName} no está activada. Por favor contacta a tu profesor o instructor del curso.",
+	"common.tool.information.notLicensed.teacher":
+		"La herramienta {toolName} no está activada. Por favor comuníquese con el administrador de la escuela.",
 	"common.tool.information.outdated.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Verifique la configuración y comuníquese con el administrador de su escuela.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -1527,6 +1531,8 @@ export default {
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Herramienta {toolName}“ desactivada",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Herramienta “{toolName}” no activada",
 	"pages.rooms.tools.deleteDialog.content":
 		"¿Está seguro de que desea eliminar la herramienta '<i>{itemName}</i>' del curso?",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",

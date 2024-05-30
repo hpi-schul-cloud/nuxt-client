@@ -355,6 +355,28 @@ describe("ExternalToolElementAlert", () => {
 		});
 	});
 
+	describe("when the tool is not licensed", () => {
+		it("should display a user friendly message", () => {
+			useBoardPermissionsMock.isTeacher = true;
+
+			const { wrapper } = getWrapper(
+				{
+					toolStatus: contextExternalToolConfigurationStatusFactory.build({
+						isNotLicensed: true,
+					}),
+				},
+				["teacher"]
+			);
+
+			const alerts = wrapper.findAllComponents(WarningAlert);
+
+			expect(alerts).toHaveLength(1);
+			expect(alerts[0].text()).toEqual(
+				'common.tool.information.notLicensed.teacher {"toolName":"Tool name"}'
+			);
+		});
+	});
+
 	describe("when the tool is incomplete on scope context", () => {
 		describe("when the user is a teacher", () => {
 			const setup = () => {
