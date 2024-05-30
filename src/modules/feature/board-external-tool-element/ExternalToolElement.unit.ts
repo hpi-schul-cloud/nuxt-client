@@ -596,53 +596,35 @@ describe("ExternalToolElement", () => {
 	});
 
 	describe("Alert", () => {
-		describe("when there is an error or the tool is outdated", () => {
+		describe("when there is a display error", () => {
 			const setup = () => {
 				const error: BusinessError = {
 					statusCode: 418,
 					message: "Loading error",
 				};
 
-				const toolOutdatedStatus =
-					contextExternalToolConfigurationStatusFactory.build({
-						isOutdatedOnScopeSchool: true,
-					});
+				useExternalToolElementDisplayStateMock.error.value = error;
 
 				const { wrapper } = getWrapper(
 					{
 						element: EMPTY_TEST_ELEMENT,
 						isEditMode: true,
 					},
-					externalToolDisplayDataFactory.build({
-						status: toolOutdatedStatus,
-					})
+					externalToolDisplayDataFactory.build()
 				);
-
-				useExternalToolElementDisplayStateMock.error.value = error;
 
 				return {
 					wrapper,
 					error,
-					toolOutdatedStatus,
 				};
 			};
-
-			it("should display an outdated alert", async () => {
-				const { wrapper, toolOutdatedStatus } = setup();
-
-				const alert = wrapper.findComponent(ExternalToolElementAlert);
-
-				expect(alert.props("toolStatus")).toEqual(toolOutdatedStatus);
-			});
 
 			it("should display an error alert", async () => {
 				const { wrapper, error } = setup();
 
-				await nextTick();
-
 				const alert = wrapper.findComponent(ExternalToolElementAlert);
 
-				expect(alert.props("error")).toEqual(error);
+				expect(alert.props().error).toEqual(error);
 			});
 		});
 
@@ -653,6 +635,8 @@ describe("ExternalToolElement", () => {
 					message: "Loading error",
 				};
 
+				useExternalToolLaunchStateMock.error.value = error;
+
 				const { wrapper } = getWrapper(
 					{
 						element: EMPTY_TEST_ELEMENT,
@@ -660,8 +644,6 @@ describe("ExternalToolElement", () => {
 					},
 					externalToolDisplayDataFactory.build()
 				);
-
-				useExternalToolLaunchStateMock.error.value = error;
 
 				return {
 					wrapper,
@@ -672,20 +654,17 @@ describe("ExternalToolElement", () => {
 			it("should display an error alert", async () => {
 				const { wrapper, error } = setup();
 
-				await nextTick();
-
 				const alert = wrapper.findComponent(ExternalToolElementAlert);
 
-				expect(alert.props("error")).toEqual(error);
+				expect(alert.props().error).toEqual(error);
 			});
 		});
 
-		describe("when the tool is incomplete", () => {
+		describe("when the tool has a status", () => {
 			const setup = () => {
-				const toolIncompleteStatus =
-					contextExternalToolConfigurationStatusFactory.build({
-						isIncompleteOnScopeContext: true,
-					});
+				const status = contextExternalToolConfigurationStatusFactory.build({
+					isIncompleteOnScopeContext: true,
+				});
 
 				const { wrapper } = getWrapper(
 					{
@@ -693,22 +672,22 @@ describe("ExternalToolElement", () => {
 						isEditMode: true,
 					},
 					externalToolDisplayDataFactory.build({
-						status: toolIncompleteStatus,
+						status,
 					})
 				);
 
 				return {
 					wrapper,
-					toolIncompleteStatus,
+					status,
 				};
 			};
 
-			it("should display an incomplete alert", async () => {
-				const { wrapper, toolIncompleteStatus } = setup();
+			it("should display a status alert", async () => {
+				const { wrapper, status } = setup();
 
 				const alert = wrapper.findComponent(ExternalToolElementAlert);
 
-				expect(alert.props("toolStatus")).toEqual(toolIncompleteStatus);
+				expect(alert.props().toolStatus).toEqual(status);
 			});
 		});
 	});
