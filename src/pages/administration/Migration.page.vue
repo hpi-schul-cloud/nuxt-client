@@ -182,7 +182,7 @@
 
 					<VStepperWindowItem :value="2" data-testid="migration_importUsers">
 						<ImportUsers />
-						<div class="d-flex justify-space-between">
+						<div class="d-flex justify-space-between pa-3">
 							<VBtn
 								@click="cancelMigration()"
 								data-testid="import-users-cancel-migration-btn"
@@ -764,7 +764,7 @@ const confirmCancelMigration = async () => {
 };
 
 const redirectToAdminPage = async () => {
-	await router.push({
+	await router.go({
 		path: "/administration/school-settings",
 		query: { openPanels: "migration" },
 	});
