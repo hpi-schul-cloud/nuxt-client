@@ -211,6 +211,10 @@ export default {
 		"Öffnet ein Tool, mit dem Benutzerkonten ohne Benutzereingriff zu moin.schule migriert werden können. Dieses Tool ist verfügbar, sobald der erste Benutzer dieser Schule erfolgreich zu moin.schule migriert wurde.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Migrationsassistenten öffnen",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"Wenn Sie die Ausführung des Migrationsassistenten jetzt abbrechen, werden die in der aktuellen Sitzung durchgeführten Konten-Verknüpfungen zurückgesetzt. Möchten Sie die Ausführung des Assistenten jetzt wirklich abbrechen?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"Sind Sie sich sicher, dass sie die Migration abbrechen wollen?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"Die Account-Migration wurde am {date} um {time} Uhr abgeschlossen.<br>Die Wartefrist nach Abschluss der Migration endet endgültig am {finishDate} um {finishTime} Uhr!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":

@@ -623,7 +623,7 @@ describe("import-users store actions", () => {
 			});
 		});
 
-		describe("populateImportUsersFromExternalSystem", function () {
+		describe("populateImportUsersFromExternalSystem", () => {
 			describe("when fetching the data", () => {
 				const setup = () => {
 					mockApi = {
@@ -670,6 +670,62 @@ describe("import-users store actions", () => {
 					const { apiError } = setup();
 
 					await importUserModule.populateImportUsersFromExternalSystem();
+
+					expect(importUserModule.getBusinessError).toEqual<BusinessError>({
+						statusCode: apiError.code,
+						message: apiError.message,
+					});
+				});
+			});
+		});
+
+		describe("cancelMigration", () => {
+			describe("when action is called", () => {
+				const setup = () => {
+					mockApi = {
+						importUserControllerCancelMigration: jest.fn(),
+					};
+
+					spy.mockReturnValue(
+						mockApi as unknown as serverApi.UserImportApiInterface
+					);
+				};
+
+				it("should call the api", async () => {
+					setup();
+
+					await importUserModule.cancelMigration();
+
+					expect(
+						mockApi.importUserControllerCancelMigration
+					).toHaveBeenCalledWith();
+				});
+			});
+
+			describe("when an error occurs", () => {
+				const setup = () => {
+					const error = axiosErrorFactory.build();
+					const apiError = mapAxiosErrorToResponseError(error);
+					mockApi = {
+						importUserControllerCancelMigration: jest.fn(() =>
+							Promise.reject(error)
+						),
+					};
+
+					spy.mockReturnValue(
+						mockApi as unknown as serverApi.UserImportApiInterface
+					);
+
+					return {
+						error,
+						apiError,
+					};
+				};
+
+				it("should set a business error", async () => {
+					const { apiError } = setup();
+
+					await importUserModule.cancelMigration();
 
 					expect(importUserModule.getBusinessError).toEqual<BusinessError>({
 						statusCode: apiError.code,

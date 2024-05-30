@@ -215,6 +215,10 @@ export default {
 		"Відкриває інструмент, який використовується для перенесення облікових записів користувачів на moin.schule без участі користувача. Цей інструмент стане доступним після успішного переходу першого користувача цієї школи на moin.schule.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Відкрийте помічник з міграції",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"Якщо ви скасуєте запуск майстра міграції зараз, зв'язки облікових записів, зроблені в поточному сеансі, будуть скинуті. Ви дійсно хочете скасувати майстер зараз?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"Ви впевнені, що хочете скасувати міграцію?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"Перенесення облікового запису завершено {date} о {time}.<br>Період очікування після завершення міграції нарешті закінчується {finishDate} о {finishTime}!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":

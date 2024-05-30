@@ -14,10 +14,17 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { ComponentMountingOptions, mount, shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRouter } from "vue-router";
+import { createMock } from "@golevelup/ts-jest";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
+
+const router = createMock<Router>();
 
 const $theme = {
 	name: "instance name",
@@ -28,6 +35,8 @@ const getWrapper = (
 ) => {
 	document.body.setAttribute("data-app", "true");
 
+	useRouterMock.mockReturnValue(router);
+
 	return mount(MigrationWizard, {
 		global: {
 			plugins: [
@@ -37,6 +46,9 @@ const getWrapper = (
 			],
 			provide: {
 				[THEME_KEY.valueOf()]: $theme,
+			},
+			stubs: {
+				ImportUsers: true,
 			},
 		},
 		...options,
@@ -297,6 +309,182 @@ describe("User Migration / Index", () => {
 			expect(endMaintenanceMock).toHaveBeenCalledTimes(1);
 			expect(wrapper.vm.migrationStep).toBe(5);
 			expect(wrapper.vm.school.inMaintenance).toBe(false);
+		});
+	});
+
+	describe("cancel migration", () => {
+		describe("in step migration_importUsers", () => {
+			const setup = async () => {
+				schoolsModule.setSchool(
+					schoolFactory.build({
+						inUserMigration: true,
+						inMaintenance: true,
+					})
+				);
+
+				importUsersModule.setTotal(10);
+				importUsersModule.setTotalUnmatched(5);
+				importUsersModule.setTotalMatched(5);
+
+				const wrapper = getWrapper();
+
+				wrapper.vm.migrationStep = 2;
+				wrapper.vm.t("pages.administration.migration.title", {
+					source: "LDAP",
+					instance: $theme.name,
+				});
+
+				const redirect = {
+					path: "/administration/school-settings",
+					query: { openPanels: "authentication" },
+				};
+
+				await nextTick();
+
+				return {
+					wrapper,
+					redirect,
+				};
+			};
+
+			it("should show cancel button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					"[data-testid=import-users-cancel-migration-btn]"
+				);
+
+				expect(button.exists()).toBe(true);
+			});
+
+			it("should show dialog on click", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					"[data-testid=import-users-cancel-migration-btn]"
+				);
+
+				await button.trigger("click");
+
+				expect(wrapper.vm.isCancelDialogOpen).toBe(true);
+			});
+
+			it("should change isCancelDialogOpen on isOpen", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					"[data-testid=import-users-cancel-migration-btn]"
+				);
+
+				await button.trigger("click");
+
+				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+
+				dialog.vm.$emit("update:isOpen", false);
+				await nextTick();
+
+				expect(wrapper.vm.isCancelDialogOpen).toEqual(false);
+			});
+
+			it("should call stores on dialog-confirm", async () => {
+				const { wrapper } = await setup();
+
+				const cancelMigrationMock = jest.spyOn(
+					importUsersModule,
+					"cancelMigration"
+				);
+
+				cancelMigrationMock.mockImplementationOnce(async () => {
+					schoolsModule.setSchool({
+						...schoolsModule.getSchool,
+						inUserMigration: false,
+						inMaintenance: false,
+					});
+				});
+
+				jest
+					.spyOn(schoolsModule, "fetchSchool")
+					.mockResolvedValueOnce(Promise.resolve());
+
+				const button = wrapper.findComponent(
+					"[data-testid=import-users-cancel-migration-btn]"
+				);
+
+				await button.trigger("click");
+
+				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+
+				dialog.vm.$emit("dialog-confirmed");
+
+				await nextTick();
+
+				expect(importUsersModule.cancelMigration).toHaveBeenCalled();
+				expect(schoolsModule.fetchSchool).toHaveBeenCalled();
+			});
+
+			it("should redirect to school settings migration section", async () => {
+				const { wrapper } = await setup();
+
+				const cancelMigrationMock = jest.spyOn(
+					importUsersModule,
+					"cancelMigration"
+				);
+				cancelMigrationMock.mockImplementationOnce(async () => {
+					schoolsModule.setSchool({
+						...schoolsModule.getSchool,
+						inUserMigration: false,
+						inMaintenance: false,
+					});
+					return Promise.resolve();
+				});
+
+				const button = wrapper.findComponent(
+					"[data-testid=import-users-cancel-migration-btn]"
+				);
+
+				await button.trigger("click");
+
+				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+
+				dialog.vm.$emit("dialog-confirmed");
+				await nextTick();
+
+				expect(router.push).toHaveBeenCalledWith({
+					path: "/administration/school-settings",
+					query: { openPanels: "migration" },
+				});
+			});
+		});
+
+		describe("in step migration_summary", () => {
+			const setup = async () => {
+				schoolsModule.setSchool(
+					schoolFactory.build({
+						inUserMigration: true,
+						inMaintenance: true,
+					})
+				);
+
+				const wrapper = getWrapper();
+
+				wrapper.vm.migrationStep = 3;
+
+				await nextTick();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show cancel button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					"[data-testid=summary-cancel-migration-btn]"
+				);
+
+				expect(button.exists()).toBe(true);
+			});
 		});
 	});
 });
