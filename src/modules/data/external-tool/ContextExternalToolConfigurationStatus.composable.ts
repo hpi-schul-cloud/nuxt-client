@@ -56,12 +56,21 @@ export const useContextExternalToolConfigurationStatus = () => {
 		}
 	};
 
-	const determineDeactivatedMessage = (): string => {
+	const determineDeactivatedTranslationKey = (): string => {
 		const userRoles = authModule.getUserRoles;
 		if (userRoles.includes("student")) {
 			return "common.tool.information.deactivated.student";
 		} else {
 			return "common.tool.information.deactivated.teacher";
+		}
+	};
+
+	const determineNotLicensedTranslationKey = (): string => {
+		const userRoles = authModule.getUserRoles;
+		if (userRoles.includes("student")) {
+			return "common.tool.information.notLicensed.student";
+		} else {
+			return "common.tool.information.notLicensed.teacher";
 		}
 	};
 
@@ -87,7 +96,8 @@ export const useContextExternalToolConfigurationStatus = () => {
 	return {
 		determineToolStatusTranslationKey,
 		determineMediaBoardElementStatusMessage,
-		determineDeactivatedMessage,
+		determineDeactivatedTranslationKey,
+		determineNotLicensedTranslationKey,
 		isTeacher,
 		isOperational,
 	};

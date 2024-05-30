@@ -130,6 +130,10 @@ export default {
 		"La herramienta {toolName} está deshabilitada. Por favor contacta a tu profesor o instructor del curso.",
 	"common.tool.information.deactivated.teacher":
 		"La herramienta {toolName} está deshabilitada. Por favor comuníquese con el administrador de la escuela.",
+	"common.tool.information.notLicensed.student":
+		"La herramienta {toolName} no está activada. Por favor contacta a tu profesor o instructor del curso.",
+	"common.tool.information.notLicensed.teacher":
+		"La herramienta {toolName} no está activada. Por favor comuníquese con el administrador de la escuela.",
 	"common.tool.information.outdated.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Verifique la configuración y comuníquese con el administrador de su escuela.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -160,6 +164,7 @@ export default {
 	"common.words.no": "No",
 	"common.words.noChoice": "Sin elección",
 	"common.words.otherGroups": "otros grupos",
+	"common.words.externalTools": "herramientas externas",
 	"common.words.planned": "previsto",
 	"common.words.privacyPolicy": "Política de Privacidad",
 	"common.words.published": "publicado",
@@ -269,6 +274,12 @@ export default {
 		"Active esta opción si otros grupos deben sincronizarse en la {instance}.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Sincronización de otros grupos.",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"Si esta opción está activada, las activaciones de herramientas externas se realizan automáticamente desde moin.schule.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Activación de herramientas externas",
+
 	"components.administration.provisioningOptions.page.title":
 		"Opciones de sincronización de datos",
 	"components.administration.provisioningOptions.warning.consequence":
@@ -1524,6 +1535,8 @@ export default {
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Herramienta {toolName}“ desactivada",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Herramienta “{toolName}” no activada",
 	"pages.rooms.tools.deleteDialog.content":
 		"¿Está seguro de que desea eliminar la herramienta '<i>{itemName}</i>' del curso?",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",

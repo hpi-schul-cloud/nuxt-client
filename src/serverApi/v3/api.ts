@@ -1043,6 +1043,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_NEW_LAYOUT_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: boolean;
 }
 /**
  * 
@@ -6347,6 +6353,12 @@ export interface SchulConneXProvisioningOptionsParams {
      * @memberof SchulConneXProvisioningOptionsParams
      */
     groupProvisioningOtherEnabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsParams
+     */
+    schoolExternalToolProvisioningEnabled: boolean;
 }
 /**
  * 
@@ -6372,6 +6384,12 @@ export interface SchulConneXProvisioningOptionsResponse {
      * @memberof SchulConneXProvisioningOptionsResponse
      */
     groupProvisioningOtherEnabled: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SchulConneXProvisioningOptionsResponse
+     */
+    schoolExternalToolProvisioningEnabled: boolean;
 }
 /**
  * 

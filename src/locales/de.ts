@@ -127,6 +127,10 @@ export default {
 		"Tool {toolName} ist deaktiviert. Bitte an Lehrkraft oder Kursleiter:in wenden.",
 	"common.tool.information.deactivated.teacher":
 		"Tool {toolName} ist deaktiviert. Bitte an Schuladministrator:in wenden.",
+	"common.tool.information.notLicensed.student":
+		"Tool {toolName} ist nicht freigeschaltet. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.notLicensed.teacher":
+		"Tool {toolName} ist nicht freigeschaltet. Bitte an Schuladministrator:in wenden.",
 	"common.tool.information.outdated.teacher":
 		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -157,6 +161,7 @@ export default {
 	"common.words.no": "Nein",
 	"common.words.noChoice": "Keine Auswahl",
 	"common.words.otherGroups": "sonstige Gruppen",
+	"common.words.externalTools": "externe Tools",
 	"common.words.planned": "geplant",
 	"common.words.privacyPolicy": "Datenschutzerklärung",
 	"common.words.published": "veröffentlicht",
@@ -265,6 +270,12 @@ export default {
 		"Aktivieren sie diese Option, wenn sonstige Gruppen in die {instance} synchronisiert werden sollen.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Synchronisation von sonstigen Gruppen",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"Wenn diese Option aktiviert ist, werden Freischaltungen von externen Tools automatisch aus moin.schule übernommen.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Freischaltung von externen Tools",
+
 	"components.administration.provisioningOptions.page.title":
 		"Optionen für Datensynchronisation",
 	"components.administration.provisioningOptions.warning.consequence":
@@ -1505,6 +1516,8 @@ export default {
 		"Videokonferenz {roomName} erstellen",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Tool „{toolName}“ nicht freigeschaltet",
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '<i>{itemName}</i>' aus dem Kurs entfernen?",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
