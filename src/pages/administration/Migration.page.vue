@@ -764,7 +764,7 @@ const confirmCancelMigration = async () => {
 };
 
 const redirectToAdminPage = async () => {
-	await router.push({
+	await router.go({
 		path: "/administration/school-settings",
 		query: { openPanels: "migration" },
 	});
