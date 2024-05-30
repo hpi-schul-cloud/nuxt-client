@@ -175,7 +175,7 @@ describe("ProvisioningOptionsPage", () => {
 				expect(classCheckbox.isVisible()).toEqual(true);
 				expect(courseCheckbox.isVisible()).toEqual(true);
 				expect(othersCheckbox.isVisible()).toEqual(true);
-				expect(schoolExternalToolCheckbox.isVisible()).toEqual(false);
+				expect(schoolExternalToolCheckbox.exists()).toEqual(false);
 			});
 		});
 
