@@ -758,13 +758,17 @@ const confirmCancelMigration = async () => {
 
 	await importUsersModule.cancelMigration();
 
+	migrationStep.value = 0;
+
+	await schoolsModule.fetchSchool();
+
 	isLoading.value = false;
 
 	await redirectToAdminPage();
 };
 
 const redirectToAdminPage = async () => {
-	await router.go({
+	await router.push({
 		path: "/administration/school-settings",
 		query: { openPanels: "migration" },
 	});

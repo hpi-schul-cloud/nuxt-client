@@ -386,7 +386,43 @@ describe("User Migration / Index", () => {
 				expect(wrapper.vm.isCancelDialogOpen).toEqual(false);
 			});
 
-			it("should call store on dialog-confirm", async () => {
+			it("should call stores on dialog-confirm", async () => {
+				const { wrapper } = await setup();
+
+				const cancelMigrationMock = jest.spyOn(
+					importUsersModule,
+					"cancelMigration"
+				);
+
+				cancelMigrationMock.mockImplementationOnce(async () => {
+					schoolsModule.setSchool({
+						...schoolsModule.getSchool,
+						inUserMigration: false,
+						inMaintenance: false,
+					});
+				});
+
+				jest
+					.spyOn(schoolsModule, "fetchSchool")
+					.mockResolvedValueOnce(Promise.resolve());
+
+				const button = wrapper.findComponent(
+					"[data-testid=import-users-cancel-migration-btn]"
+				);
+
+				await button.trigger("click");
+
+				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+
+				dialog.vm.$emit("dialog-confirmed");
+
+				await nextTick();
+
+				expect(importUsersModule.cancelMigration).toHaveBeenCalled();
+				expect(schoolsModule.fetchSchool).toHaveBeenCalled();
+			});
+
+			it("should redirect to school settings migration section", async () => {
 				const { wrapper } = await setup();
 
 				const cancelMigrationMock = jest.spyOn(
@@ -413,7 +449,10 @@ describe("User Migration / Index", () => {
 				dialog.vm.$emit("dialog-confirmed");
 				await nextTick();
 
-				expect(importUsersModule.cancelMigration).toHaveBeenCalled();
+				expect(router.push).toHaveBeenCalledWith({
+					path: "/administration/school-settings",
+					query: { openPanels: "migration" },
+				});
 			});
 		});
 
