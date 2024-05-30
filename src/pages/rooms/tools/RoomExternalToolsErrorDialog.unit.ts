@@ -67,7 +67,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 				const { wrapper } = getWrapper({
 					selectedItem: createSelectedItem(
 						contextExternalToolConfigurationStatusFactory.build({
-							isOutdatedOnScopeContext: true,
+							isOutdatedOnScopeSchool: true,
 						})
 					),
 				});
