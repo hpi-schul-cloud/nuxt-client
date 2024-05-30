@@ -164,6 +164,7 @@ export default {
 	"common.words.no": "Немає",
 	"common.words.noChoice": "Немає вибору",
 	"common.words.otherGroups": "інші групи",
+	"common.words.externalTools": "зовнішні засоби",
 	"common.words.planned": "запланований",
 	"common.words.privacyPolicy": "Політика конфіденційності",
 	"common.words.published": "опубліковано",
@@ -270,6 +271,12 @@ export default {
 		"Активуйте цю опцію, якщо інші групи потрібно синхронізувати з {instance}.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Синхронізація інших груп",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"Якщо цю опцію активовано, активації із зовнішніх інструментів автоматично переймаються з moin.schule.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Активація зовнішніх інструментів",
+
 	"components.administration.provisioningOptions.page.title":
 		"Параметри синхронізації даних",
 	"components.administration.provisioningOptions.warning.consequence":

@@ -164,6 +164,7 @@ export default {
 	"common.words.no": "No",
 	"common.words.noChoice": "Sin elección",
 	"common.words.otherGroups": "otros grupos",
+	"common.words.externalTools": "herramientas externas",
 	"common.words.planned": "previsto",
 	"common.words.privacyPolicy": "Política de Privacidad",
 	"common.words.published": "publicado",
@@ -269,6 +270,12 @@ export default {
 		"Active esta opción si otros grupos deben sincronizarse en la {instance}.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Sincronización de otros grupos.",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"Si esta opción está activada, las activaciones de herramientas externas se realizan automáticamente desde moin.schule.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Activación de herramientas externas",
+
 	"components.administration.provisioningOptions.page.title":
 		"Opciones de sincronización de datos",
 	"components.administration.provisioningOptions.warning.consequence":
