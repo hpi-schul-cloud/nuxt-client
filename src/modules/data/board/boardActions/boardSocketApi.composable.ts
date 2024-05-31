@@ -17,18 +17,6 @@ import {
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
-type ErrorActions =
-	| ReturnType<typeof BoardActions.createCardFailure>
-	| ReturnType<typeof BoardActions.createColumnFailure>
-	| ReturnType<typeof BoardActions.deleteBoardFailure>
-	| ReturnType<typeof CardActions.deleteCardFailure>
-	| ReturnType<typeof BoardActions.deleteColumnFailure>
-	| ReturnType<typeof BoardActions.moveCardFailure>
-	| ReturnType<typeof BoardActions.moveColumnFailure>
-	| ReturnType<typeof BoardActions.updateColumnTitleFailure>
-	| ReturnType<typeof BoardActions.updateBoardTitleFailure>
-	| ReturnType<typeof BoardActions.updateBoardVisibilityFailure>;
-
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
 	const { notifySocketError } = useErrorHandler();
@@ -62,15 +50,19 @@ export const useBoardSocketApi = () => {
 			),
 
 			// failure actions
-			on(BoardActions.createCardFailure, onFailure),
-			on(BoardActions.createColumnFailure, onFailure),
-			on(CardActions.deleteCardFailure, onFailure),
-			on(BoardActions.deleteColumnFailure, onFailure),
-			on(BoardActions.moveCardFailure, onFailure),
-			on(BoardActions.moveColumnFailure, onFailure),
-			on(BoardActions.updateColumnTitleFailure, onFailure),
-			on(BoardActions.updateBoardTitleFailure, onFailure),
-			on(BoardActions.updateBoardVisibilityFailure, onFailure)
+			on(BoardActions.createCardFailure, createCardFailure),
+			on(BoardActions.createColumnFailure, createColumnFailure),
+			on(CardActions.deleteCardFailure, deleteCardFailure),
+			on(BoardActions.deleteColumnFailure, deleteColumnFailure),
+			on(BoardActions.fetchBoardFailure, fetchBoardFailure),
+			on(BoardActions.moveCardFailure, moveCardFailure),
+			on(BoardActions.moveColumnFailure, moveColumnFailure),
+			on(BoardActions.updateColumnTitleFailure, updateColumnTitleFailure),
+			on(BoardActions.updateBoardTitleFailure, updateBoardTitleFailure),
+			on(
+				BoardActions.updateBoardVisibilityFailure,
+				updateBoardVisibilityFailure
+			)
 		);
 	};
 
@@ -112,11 +104,7 @@ export const useBoardSocketApi = () => {
 			}
 			emitOnSocket("move-card-request", payload);
 		} catch (err) {
-			onFailure({
-				errorType: "notUpdated",
-				boardObjectType: "boardCard",
-				requestPayload: payload,
-			});
+			moveCardFailure();
 		}
 	};
 
@@ -142,10 +130,22 @@ export const useBoardSocketApi = () => {
 		emitOnSocket("update-board-visibility-request", payload);
 	};
 
-	const onFailure = (payload: ErrorActions["payload"]) => {
-		const { errorType = "notUpdated", boardObjectType = "board" } = payload;
-		notifySocketError(errorType, boardObjectType);
-	};
+	const createCardFailure = () => notifySocketError("notCreated", "boardCard");
+	const createColumnFailure = () =>
+		notifySocketError("notCreated", "boardColumn");
+	const deleteCardFailure = () => notifySocketError("notDeleted", "boardCard");
+	const deleteColumnFailure = () =>
+		notifySocketError("notDeleted", "boardColumn");
+	const fetchBoardFailure = () => notifySocketError("notLoaded", "board");
+	const moveCardFailure = () => notifySocketError("notUpdated", "boardCard");
+	const moveColumnFailure = () =>
+		notifySocketError("notUpdated", "boardColumn");
+	const updateColumnTitleFailure = () =>
+		notifySocketError("notUpdated", "boardColumn");
+	const updateBoardTitleFailure = () =>
+		notifySocketError("notUpdated", "board");
+	const updateBoardVisibilityFailure = () =>
+		notifySocketError("notUpdated", "board");
 
 	return {
 		dispatch,

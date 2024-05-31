@@ -242,65 +242,49 @@ describe("useBoardSocketApi", () => {
 			it("should call notifySocketError for createCardFailure action", () => {
 				const { dispatch } = useBoardSocketApi();
 
-				const payload: CreateCardFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardCard",
-					requestPayload: { columnId: "test" },
-				};
+				const payload: CreateCardFailurePayload = { columnId: "test" };
 				dispatch(BoardActions.createCardFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notCreated",
+					"boardCard"
 				);
 			});
 
 			it("should call notifySocketError for createColumnFailure action", () => {
 				const { dispatch } = useBoardSocketApi();
 
-				const payload: CreateColumnFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardColumn",
-					requestPayload: { boardId: "test" },
-				};
+				const payload: CreateColumnFailurePayload = { boardId: "test" };
 				dispatch(BoardActions.createColumnFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notCreated",
+					"boardColumn"
 				);
 			});
 
 			it("should call notifySocketError for deleteCardFailure action", () => {
 				const { dispatch } = useBoardSocketApi();
 
-				const payload: DeleteCardFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardCard",
-					requestPayload: { cardId: "test" },
-				};
+				const payload: DeleteCardFailurePayload = { cardId: "test" };
 				dispatch(CardActions.deleteCardFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notDeleted",
+					"boardCard"
 				);
 			});
 
 			it("should call notifySocketError for deleteColumnFailure action", () => {
 				const { dispatch } = useBoardSocketApi();
 
-				const payload: DeleteColumnFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardColumn",
-					requestPayload: { columnId: "test" },
-				};
+				const payload: DeleteColumnFailurePayload = { columnId: "test" };
 
 				dispatch(BoardActions.deleteColumnFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notDeleted",
+					"boardColumn"
 				);
 			});
 
@@ -308,24 +292,20 @@ describe("useBoardSocketApi", () => {
 				const { dispatch } = useBoardSocketApi();
 
 				const payload: MoveCardFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardCard",
-					requestPayload: {
-						cardId: "test",
-						oldIndex: 0,
-						newIndex: 0,
-						fromColumnId: "fromColumnId",
-						fromColumnIndex: 0,
-						toColumnId: "toColumnId",
-						toColumnIndex: 0,
-					},
+					cardId: "test",
+					oldIndex: 0,
+					newIndex: 0,
+					fromColumnId: "fromColumnId",
+					fromColumnIndex: 0,
+					toColumnId: "toColumnId",
+					toColumnIndex: 0,
 				};
 
 				dispatch(BoardActions.moveCardFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notUpdated",
+					"boardCard"
 				);
 			});
 
@@ -333,19 +313,15 @@ describe("useBoardSocketApi", () => {
 				const { dispatch } = useBoardSocketApi();
 
 				const payload: MoveColumnFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardColumn",
-					requestPayload: {
-						columnMove: { addedIndex: 1, columnId: "testColumnId" },
-						byKeyboard: false,
-					},
+					columnMove: { addedIndex: 1, columnId: "testColumnId" },
+					byKeyboard: false,
 				};
 
 				dispatch(BoardActions.moveColumnFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notUpdated",
+					"boardColumn"
 				);
 			});
 
@@ -353,16 +329,15 @@ describe("useBoardSocketApi", () => {
 				const { dispatch } = useBoardSocketApi();
 
 				const payload: UpdateColumnTitleFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardColumn",
-					requestPayload: { columnId: "test", newTitle: "newTitle" },
+					columnId: "test",
+					newTitle: "newTitle",
 				};
 
 				dispatch(BoardActions.updateColumnTitleFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notUpdated",
+					"boardColumn"
 				);
 			});
 
@@ -370,16 +345,15 @@ describe("useBoardSocketApi", () => {
 				const { dispatch } = useBoardSocketApi();
 
 				const payload: UpdateBoardTitleFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardColumn",
-					requestPayload: { boardId: "test", newTitle: "newTitle" },
+					boardId: "test",
+					newTitle: "newTitle",
 				};
 
 				dispatch(BoardActions.updateBoardTitleFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notUpdated",
+					"board"
 				);
 			});
 
@@ -387,16 +361,15 @@ describe("useBoardSocketApi", () => {
 				const { dispatch } = useBoardSocketApi();
 
 				const payload: UpdateBoardVisibilityFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "board",
-					requestPayload: { boardId: "test", isVisible: true },
+					boardId: "test",
+					isVisible: true,
 				};
 
 				dispatch(BoardActions.updateBoardVisibilityFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notUpdated",
+					"board"
 				);
 			});
 		});
@@ -518,7 +491,9 @@ describe("useBoardSocketApi", () => {
 
 			const { moveCardRequest } = useBoardSocketApi();
 
-			mockedSocketConnectionHandler.emitWithAck.mockRejectedValue({});
+			mockedSocketConnectionHandler.emitWithAck.mockRejectedValue({
+				type: "move-card-failure",
+			});
 
 			await moveCardRequest({
 				cardId: "cardId",
