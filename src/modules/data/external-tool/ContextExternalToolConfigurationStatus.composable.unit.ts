@@ -494,7 +494,7 @@ describe("ToolConfigurationStatus.composable", () => {
 			it("should return translation key for deactivated tool ", () => {
 				const { composable } = getComposable(RoleName.Student);
 
-				const result = composable.determineDeactivatedMessage();
+				const result = composable.determineDeactivatedTranslationKey();
 
 				expect(result).toEqual("common.tool.information.deactivated.student");
 			});
@@ -504,9 +504,31 @@ describe("ToolConfigurationStatus.composable", () => {
 			it("should return translation key for deactivated tool ", () => {
 				const { composable } = getComposable(RoleName.Teacher);
 
-				const result = composable.determineDeactivatedMessage();
+				const result = composable.determineDeactivatedTranslationKey();
 
 				expect(result).toEqual("common.tool.information.deactivated.teacher");
+			});
+		});
+	});
+
+	describe("determineNotLicensedTranslationKey", () => {
+		describe("when user is student and tool is not licensed", () => {
+			it("should return translation key for not licensed tool ", () => {
+				const { composable } = getComposable(RoleName.Student);
+
+				const result = composable.determineNotLicensedTranslationKey();
+
+				expect(result).toEqual("common.tool.information.notLicensed.student");
+			});
+		});
+
+		describe("when user is teacher and tool is not licensed", () => {
+			it("should return translation key for not licensed tool ", () => {
+				const { composable } = getComposable(RoleName.Teacher);
+
+				const result = composable.determineNotLicensedTranslationKey();
+
+				expect(result).toEqual("common.tool.information.notLicensed.teacher");
 			});
 		});
 	});

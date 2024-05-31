@@ -245,6 +245,56 @@ describe("ExternalToolElement", () => {
 			});
 		});
 
+		describe("when the element has a tool attached, but it is deactivated", () => {
+			it("should not load the launch request", async () => {
+				getWrapper(
+					{
+						element: {
+							...EMPTY_TEST_ELEMENT,
+							content: { contextExternalToolId: "contextExternalToolId" },
+						},
+						isEditMode: false,
+					},
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
+							isDeactivated: true,
+						}),
+					})
+				);
+
+				await nextTick();
+
+				expect(
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
+				).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when the element has a tool attached, but it is not licensed", () => {
+			it("should not load the launch request", async () => {
+				getWrapper(
+					{
+						element: {
+							...EMPTY_TEST_ELEMENT,
+							content: { contextExternalToolId: "contextExternalToolId" },
+						},
+						isEditMode: false,
+					},
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
+							isNotLicensed: true,
+						}),
+					})
+				);
+
+				await nextTick();
+
+				expect(
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
+				).not.toHaveBeenCalled();
+			});
+		});
+
 		describe("when the element does not have a tool attached", () => {
 			it("should open the configuration dialog immediately", async () => {
 				useSharedLastCreatedElementMock.lastCreatedElementId.value =

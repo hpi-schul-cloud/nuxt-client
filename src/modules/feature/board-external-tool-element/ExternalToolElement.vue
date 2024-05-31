@@ -148,7 +148,9 @@ export default defineComponent({
 			() =>
 				!displayData.value?.status.isOutdatedOnScopeSchool &&
 				!displayData.value?.status.isOutdatedOnScopeContext &&
-				!displayData.value?.status.isIncompleteOnScopeContext
+				!displayData.value?.status.isIncompleteOnScopeContext &&
+				!displayData.value?.status.isDeactivated &&
+				!displayData.value?.status.isNotLicensed
 		);
 
 		const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatus> =

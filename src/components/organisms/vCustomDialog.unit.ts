@@ -31,7 +31,10 @@ describe("@/components/vCustomDialog", () => {
 
 	it("should open the dialog", () => {
 		const wrapper = mountComponent({ props: mockProps });
-		expect(wrapper.findComponent(".dialog-closed").exists()).toBe(true);
+		const dialog = wrapper.findComponent({
+			ref: "vDialog",
+		});
+		expect(dialog.props("modelValue")).toBe(true);
 	});
 
 	it("should not open the dialog", () => {

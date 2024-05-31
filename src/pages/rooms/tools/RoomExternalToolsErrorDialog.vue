@@ -45,8 +45,11 @@ const emit = defineEmits<{
 	(e: "closed"): void;
 }>();
 
-const { determineDeactivatedMessage, determineToolStatusTranslationKey } =
-	useContextExternalToolConfigurationStatus();
+const {
+	determineDeactivatedTranslationKey,
+	determineToolStatusTranslationKey,
+	determineNotLicensedTranslationKey,
+} = useContextExternalToolConfigurationStatus();
 
 const onCloseCustomDialog = () => {
 	emit("closed");
@@ -68,10 +71,16 @@ const getTitle: ComputedRef<string> = computed(() => {
 		return "pages.rooms.tools.deactivatedDialog.title";
 	}
 
-	if (isToolOutdated.value && !isToolIncomplete.value) {
-		return "pages.rooms.tools.outdatedDialog.title";
-	} else if (isToolIncomplete.value) {
+	if (props.selectedItem.status.isNotLicensed) {
+		return "pages.rooms.tools.notLicensedDialog.title";
+	}
+
+	if (isToolIncomplete.value) {
 		return "pages.rooms.tools.incompleteDialog.title";
+	}
+
+	if (isToolOutdated.value) {
+		return "pages.rooms.tools.outdatedDialog.title";
 	}
 
 	return "error.generic";
@@ -83,7 +92,9 @@ const getText: ComputedRef<string> = computed(() => {
 	}
 
 	if (props.selectedItem.status.isDeactivated) {
-		return determineDeactivatedMessage();
+		return determineDeactivatedTranslationKey();
+	} else if (props.selectedItem.status.isNotLicensed) {
+		return determineNotLicensedTranslationKey();
 	} else {
 		return determineToolStatusTranslationKey(props.selectedItem.status);
 	}

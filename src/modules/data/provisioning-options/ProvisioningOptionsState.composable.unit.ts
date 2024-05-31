@@ -1,20 +1,20 @@
+import NotifierModule from "@/store/notifier";
+import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
 	i18nMock,
 	mountComposable,
+	provisioningOptionsDataFactory,
 } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { BusinessError } from "@/store/types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
 import { ProvisioningOptions } from "./type";
-import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory/provisioningOptionsDataFactory";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 jest.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
 
@@ -61,10 +61,13 @@ describe("ProvisioningOptionsState.composable", () => {
 			it("should have default values", async () => {
 				const { composable } = setup();
 
-				expect(composable.provisioningOptionsData.value).toEqual({
+				expect(
+					composable.provisioningOptionsData.value
+				).toEqual<ProvisioningOptions>({
 					class: true,
 					course: false,
 					others: false,
+					schoolExternalTools: false,
 				});
 			});
 		});

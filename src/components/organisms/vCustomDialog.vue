@@ -1,7 +1,7 @@
 <template>
 	<v-dialog
 		ref="vDialog"
-		v-model="isDialogOpen"
+		v-model="isOpen"
 		:max-width="size"
 		@click:outside="closeDialog"
 		@keydown.esc="closeDialog"
@@ -81,10 +81,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType } from "vue";
+import { ModelRef, PropType } from "vue";
 
 const props = defineProps({
-	isOpen: { type: Boolean, required: true },
 	size: {
 		type: Number,
 		default: 480,
@@ -118,7 +117,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
-	"update:isOpen",
 	"dialog-closed",
 	"dialog-confirmed",
 	"dialog-canceled",
@@ -127,13 +125,9 @@ const emit = defineEmits([
 	"dialog-edit",
 ]);
 
-const isDialogOpen = computed({
-	get() {
-		return props.isOpen;
-	},
-	set(value) {
-		emit("update:isOpen", value);
-	},
+const isOpen: ModelRef<boolean> = defineModel("isOpen", {
+	type: Boolean,
+	required: true,
 });
 
 const confirmDialog = () => {
@@ -147,7 +141,7 @@ const cancelDialog = () => {
 };
 
 const closeDialog = () => {
-	isDialogOpen.value = false;
+	isOpen.value = false;
 	emit("dialog-closed");
 };
 
