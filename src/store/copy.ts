@@ -217,6 +217,8 @@ export default class CopyModule extends VuexModule {
 			if (type === CopyApiResponseTypeEnum.File) return true;
 			if (type === CopyApiResponseTypeEnum.CoursegroupGroup) return true;
 			if (type === CopyApiResponseTypeEnum.DrawingElement) return true;
+			if (type === CopyApiResponseTypeEnum.CollaborativeTextEditorElement)
+				return true;
 			return false;
 		};
 
