@@ -15,7 +15,7 @@
 	>
 		<ContentElementBar :has-grey-background="true" :icon="getIcon">
 			<template #logo v-if="displayData && displayData.logoUrl">
-				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" cover />
+				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" />
 			</template>
 			<template #title>
 				{{
