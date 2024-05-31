@@ -1,11 +1,13 @@
 <template>
 	<VAppBar flat>
-		<TopbarLogo />
+		<TopbarLogo v-if="!sidebarExpanded" class="mt-2" />
 		<template v-slot:prepend>
 			<VAppBarNavIcon
 				:icon="sidebarToggleIcon"
 				@click="() => $emit('sidebar-toggled')"
 				size="small"
+				v-if="!sidebarExpanded"
+				class="ml-1 mr-2"
 			/>
 		</template>
 		<VSpacer />

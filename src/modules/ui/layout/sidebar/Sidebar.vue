@@ -1,7 +1,15 @@
 <template>
 	<VNavigationDrawer>
-		<SidebarLogo />
 		<VList open-strategy="multiple">
+			<div class="d-flex align-center">
+				<VBtn
+					:icon="mdiMenuOpen"
+					@click="() => $emit('update:modelValue', false)"
+					size="large"
+					flat
+				/>
+				<SidebarLogo class="mt-1" />
+			</div>
 			<div class="pb-3">
 				<template v-for="item in pageItems" :key="item.title">
 					<SidebarCategoryItem
@@ -47,6 +55,7 @@ import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
+import { mdiMenuOpen } from "@mdi/js";
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -95,13 +104,13 @@ const getItemsForUser = (items: SidebarItems) => {
 	return pageItems;
 };
 
-const pageItems = computed(() => getItemsForUser(pageLinks.value));
-const metaItems = computed(
-	() => getItemsForUser(metaLinks.value) as SidebarGroupItem[]
-);
+const currentYear = computed(() => new Date().getFullYear());
+
 const legalItems = computed(
 	() => getItemsForUser(legalLinks.value) as SidebarSingleItem[]
 );
-
-const currentYear = computed(() => new Date().getFullYear());
+const metaItems = computed(
+	() => getItemsForUser(metaLinks.value) as SidebarGroupItem[]
+);
+const pageItems = computed(() => getItemsForUser(pageLinks.value));
 </script>
