@@ -11,18 +11,12 @@
 				<v-expansion-panel-title
 					v-else-if="!isEmpty"
 					data-testid="upperTaskSection"
-					class="text-h6 font-weight-bold pa-0"
+					class="text-h6 font-weight-bold"
 					@click="toggle"
 				>
-					{{ panelOneTitle }}
-					<template #actions
-						>{{ panelOneCount }}
-						<v-icon class="ml-3" data-testid="upperTaskSectionIcon">
-							$expand
-						</v-icon>
-					</template>
+					{{ panelOneTitle }} ({{ panelOneCount }})
 				</v-expansion-panel-title>
-				<v-expansion-panel-text class="pa-0">
+				<v-expansion-panel-text>
 					<slot name="panelOne" />
 				</v-expansion-panel-text>
 			</v-expansion-panel>
@@ -35,19 +29,12 @@
 				</v-expansion-panel-title>
 				<v-expansion-panel-title
 					v-else-if="!isEmpty"
-					class="text-h6 font-weight-bold pa-0"
+					class="text-h6 font-weight-bold"
 					data-testid="lowerTaskSection"
 					@click="toggle"
-				>
-					{{ panelTwoTitle }}
-					<template #actions>
-						{{ panelTwoCount }}
-						<v-icon class="ml-3" data-testid="lowerTaskSectionIcon">
-							$expand
-						</v-icon>
-					</template>
+					>{{ panelTwoTitle }} ({{ panelTwoCount }})
 				</v-expansion-panel-title>
-				<v-expansion-panel-text class="pa-0">
+				<v-expansion-panel-text>
 					<slot name="panelTwo" />
 				</v-expansion-panel-text>
 			</v-expansion-panel>
