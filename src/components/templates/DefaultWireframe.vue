@@ -1,6 +1,10 @@
 <template>
 	<v-container fluid class="wireframe-container">
-		<div aria-live="assertive" id="aria-zone" class="visually-hidden" />
+		<div
+			aria-live="assertive"
+			id="notify-on-screen-reader"
+			class="visually-hidden"
+		/>
 		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
