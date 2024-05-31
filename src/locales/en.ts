@@ -161,6 +161,7 @@ export default {
 	"common.words.no": "No",
 	"common.words.noChoice": "No choice",
 	"common.words.otherGroups": "other groups",
+	"common.words.externalTools": "external tools",
 	"common.words.planned": "planned",
 	"common.words.privacyPolicy": "Privacy Policy",
 	"common.words.published": "published",
@@ -210,6 +211,10 @@ export default {
 		"Opens a tool that is used to migrate user accounts to moin.schule without user involvement. This tool is available once the first user of this school has been successfully migrated to moin.schule.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Open migration wizard",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"If you cancel the execution of the migration wizard now, the account links made in the current session will be reset. Do you really want to cancel the wizard now?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"Are you sure you want to cancel the migration?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"The account migration was completed on {date} at {time}.<br>The waiting period after completion of the migration finally ends on {finishDate} at {finishTime}!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
@@ -263,6 +268,12 @@ export default {
 		"Activate this option if other groups should be synchronized into the {instance}.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Synchronization of other groups",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"If this option is activated, activations from external tools are automatically taken over from moin.schule.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Activation of external tools",
+
 	"components.administration.provisioningOptions.page.title":
 		"Data synchronization options",
 	"components.administration.provisioningOptions.warning.consequence":
@@ -1497,7 +1508,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Export settings",
 	"pages.room.modal.course.export.options.topics": "Topics",
 	"pages.room.modal.course.export.options.tasks": "Tasks without Topic",
-	"pages.room.modal.course.export.options.columnBoards": "Column boards",
+	"pages.room.modal.course.export.options.columnBoards": "Boards",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
