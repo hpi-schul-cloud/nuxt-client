@@ -131,7 +131,61 @@ describe("RoomExternalToolCard", () => {
 				const { wrapper } = setup();
 
 				const statusChip = wrapper.find(
-					'[data-testId="tool-card-status-text"]'
+					'[data-testId="tool-card-status-deactivated"]'
+				);
+
+				expect(statusChip.exists()).toEqual(false);
+			});
+		});
+
+		describe("when tool status is not licensed", () => {
+			const setup = () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
+							isNotLicensed: true,
+						}),
+					});
+
+				const { wrapper } = getWrapper(tool, false);
+
+				return {
+					wrapper,
+					tool,
+				};
+			};
+
+			it("should display not licensed chip", () => {
+				const { wrapper } = setup();
+
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-not-licensed"]'
+				);
+
+				expect(statusChip.text()).toEqual("common.medium.chip.notLicensed");
+			});
+		});
+
+		describe("when tool status is licensed", () => {
+			const setup = () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build(),
+					});
+
+				const { wrapper } = getWrapper(tool, false);
+
+				return {
+					wrapper,
+					tool,
+				};
+			};
+
+			it("should display no chip", () => {
+				const { wrapper } = setup();
+
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-not-licensed"]'
 				);
 
 				expect(statusChip.exists()).toEqual(false);
@@ -235,9 +289,7 @@ describe("RoomExternalToolCard", () => {
 			it("should display no chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find(
-					'[data-testId="tool-card-status-text"]'
-				);
+				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
 
 				expect(statusChip.exists()).toEqual(false);
 			});
@@ -287,9 +339,7 @@ describe("RoomExternalToolCard", () => {
 			it("should display no chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find(
-					'[data-testId="tool-card-status-text"]'
-				);
+				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
 
 				expect(statusChip.exists()).toEqual(false);
 			});
