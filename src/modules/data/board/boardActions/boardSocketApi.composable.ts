@@ -16,6 +16,7 @@ import {
 } from "./boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useAriaLive } from "@/composables/aria-live.composable";
 
 type ErrorActions =
 	| ReturnType<typeof BoardActions.createCardFailure>
@@ -33,9 +34,12 @@ export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
 	const { notifySocketError } = useErrorHandler();
 
+	const { setAriaLive } = useAriaLive();
+
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
 	) => {
+		setAriaLive(action.type);
 		handle(
 			action,
 			on(BoardActions.disconnectSocket, disconnectSocketRequest),
