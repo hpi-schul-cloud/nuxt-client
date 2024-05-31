@@ -1,5 +1,6 @@
 <template>
 	<VAppBar flat>
+		<TopbarLogo />
 		<template v-slot:prepend>
 			<VAppBarNavIcon
 				:icon="sidebarToggleIcon"
@@ -66,6 +67,7 @@ import PageShare from "./PageShare.vue";
 import CloudStatusMessages from "./CloudStatusMessages.vue";
 import UserMenu from "./UserMenu.vue";
 import { StatusAlert } from "@/store/types/status-alert";
+import TopbarLogo from "./TopbarLogo.vue";
 
 const props = defineProps({
 	sidebarExpanded: {

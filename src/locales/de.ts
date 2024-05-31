@@ -772,6 +772,7 @@ export default {
 	"global.topbar.loggedOut.actions.blog": "Blog",
 	"global.topbar.loggedOut.actions.faq": "FAQ",
 	"global.topbar.loggedOut.actions.steps": "Erste Schritte",
+	"global.topbar.logo": "Logo",
 	"global.topbar.MenuQrCode.print": "Drucken",
 	"global.topbar.MenuQrCode.qrHintText":
 		"Lotse mit dem QR-Code andere Nutzer:innen auf diese Seite",

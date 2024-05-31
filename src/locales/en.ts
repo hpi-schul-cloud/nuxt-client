@@ -770,6 +770,7 @@ export default {
 	"global.topbar.loggedOut.actions.blog": "Blog",
 	"global.topbar.loggedOut.actions.faq": "FAQ",
 	"global.topbar.loggedOut.actions.steps": "First steps",
+	"global.topbar.logo": "Logo",
 	"global.topbar.MenuQrCode.print": "Print",
 	"global.topbar.MenuQrCode.qrHintText": "Navigate other users to this site",
 	"global.topbar.mobileMenu.ariaLabel": "Page navigation",

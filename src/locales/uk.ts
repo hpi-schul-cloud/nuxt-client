@@ -781,6 +781,7 @@ export default {
 	"global.topbar.loggedOut.actions.blog": "Блог",
 	"global.topbar.loggedOut.actions.faq": "Запитання й відповіді",
 	"global.topbar.loggedOut.actions.steps": "Перші кроки",
+	"global.topbar.logo": "Логотип",
 	"global.topbar.MenuQrCode.print": "Роздрукувати",
 	"global.topbar.MenuQrCode.qrHintText":
 		"Переспрямовувати інших користувачів на цей сайт",
