@@ -219,18 +219,14 @@ describe("useCardSocketApi", () => {
 				const { dispatch } = useCardSocketApi();
 
 				const payload: CreateElementFailurePayload = {
-					errorType: "notCreated",
-					boardObjectType: "boardElement",
-					requestPayload: {
-						cardId: "cardId",
-						type: ContentElementType.RichText,
-					},
+					cardId: "cardId",
+					type: ContentElementType.RichText,
 				};
 				dispatch(CardActions.createElementFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notCreated",
+					"boardElement"
 				);
 			});
 
@@ -238,18 +234,14 @@ describe("useCardSocketApi", () => {
 				const { dispatch } = useCardSocketApi();
 
 				const payload: DeleteElementFailurePayload = {
-					errorType: "notDeleted",
-					boardObjectType: "boardElement",
-					requestPayload: {
-						cardId: "cardId",
-						elementId: "elementId",
-					},
+					cardId: "cardId",
+					elementId: "elementId",
 				};
 				dispatch(CardActions.deleteElementFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notDeleted",
+					"boardElement"
 				);
 			});
 
@@ -257,19 +249,15 @@ describe("useCardSocketApi", () => {
 				const { dispatch } = useCardSocketApi();
 
 				const payload: MoveElementFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardElement",
-					requestPayload: {
-						elementId: "elementId",
-						toCardId: "toCardId",
-						toPosition: 0,
-					},
+					elementId: "elementId",
+					toCardId: "toCardId",
+					toPosition: 0,
 				};
 				dispatch(CardActions.moveElementFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notUpdated",
+					"boardElement"
 				);
 			});
 
@@ -277,17 +265,13 @@ describe("useCardSocketApi", () => {
 				const { dispatch } = useCardSocketApi();
 
 				const payload: UpdateElementFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardElement",
-					requestPayload: {
-						element: richTextElementResponseFactory.build(),
-					},
+					element: richTextElementResponseFactory.build(),
 				};
 				dispatch(CardActions.updateElementFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notUpdated",
+					"boardElement"
 				);
 			});
 
@@ -295,11 +279,7 @@ describe("useCardSocketApi", () => {
 				const { dispatch } = useCardSocketApi();
 
 				const payload: DeleteCardFailurePayload = {
-					errorType: "notDeleted",
-					boardObjectType: "boardCard",
-					requestPayload: {
-						cardId: "cardId",
-					},
+					cardId: "cardId",
 				};
 				dispatch(CardActions.deleteCardFailure(payload));
 
@@ -313,17 +293,13 @@ describe("useCardSocketApi", () => {
 				const { dispatch } = useCardSocketApi();
 
 				const payload: FetchCardFailurePayload = {
-					errorType: "notLoaded",
-					boardObjectType: "boardCard",
-					requestPayload: {
-						cardIds: ["cardId"],
-					},
+					cardIds: ["cardId"],
 				};
 				dispatch(CardActions.fetchCardFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notLoaded",
+					"boardCard"
 				);
 			});
 
@@ -331,18 +307,14 @@ describe("useCardSocketApi", () => {
 				const { dispatch } = useCardSocketApi();
 
 				const payload: UpdateCardTitleFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardCard",
-					requestPayload: {
-						cardId: "cardId",
-						newTitle: "newTitle",
-					},
+					cardId: "cardId",
+					newTitle: "newTitle",
 				};
 				dispatch(CardActions.updateCardTitleFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notUpdated",
+					"boardCard"
 				);
 			});
 
@@ -350,18 +322,14 @@ describe("useCardSocketApi", () => {
 				const { dispatch } = useCardSocketApi();
 
 				const payload: UpdateCardHeightFailurePayload = {
-					errorType: "notUpdated",
-					boardObjectType: "boardCard",
-					requestPayload: {
-						cardId: "cardId",
-						newHeight: 100,
-					},
+					cardId: "cardId",
+					newHeight: 100,
 				};
 				dispatch(CardActions.updateCardHeightFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
-					payload.errorType,
-					payload.boardObjectType
+					"notUpdated",
+					"boardCard"
 				);
 			});
 		});
