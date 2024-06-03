@@ -28,6 +28,7 @@
 					:label="$t('pages.rooms.index.search.label')"
 					:append-inner-icon="mdiMagnify"
 					:aria-label="$t('pages.rooms.index.search.label')"
+					data-testid="search-field-course"
 				/>
 			</v-row>
 			<v-row>

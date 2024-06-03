@@ -43,7 +43,7 @@
 						:label="$t('pages.rooms.index.search.label')"
 						:append-inner-icon="mdiMagnify"
 						:aria-label="$t('pages.rooms.index.search.label')"
-						data-testid="search-field"
+						data-testid="search-field-course"
 					/>
 					<div
 						v-for="(row, rowIndex) in dimensions.rowCount"
