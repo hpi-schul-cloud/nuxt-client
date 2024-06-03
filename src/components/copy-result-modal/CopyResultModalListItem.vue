@@ -89,6 +89,8 @@ export default {
 					return this.$t("components.molecules.copyResult.label.geogebra");
 				case CopyApiResponseTypeEnum.LessonContentEtherpad:
 					return this.$t("components.molecules.copyResult.label.etherpad");
+				case CopyApiResponseTypeEnum.CollaborativeTextEditorElement:
+					return this.$t("components.molecules.copyResult.label.etherpad");
 				case CopyApiResponseTypeEnum.LessonContentText:
 					return this.$t("components.molecules.copyResult.label.text");
 				case CopyApiResponseTypeEnum.LessonContentNexboard:
