@@ -1,9 +1,5 @@
 import { CardResponse, ContentElementType } from "@/serverApi/v3";
 
-import {
-	BoardObjectType,
-	ErrorType,
-} from "@/components/error-handling/ErrorHandler.composable";
 import { AnyContentElement } from "@/types/board/ContentElement";
 
 export type FetchCardRequestPayload = {
@@ -13,11 +9,7 @@ export type FetchCardSuccessPayload = {
 	cards: CardResponse[];
 	isOwnAction: boolean;
 };
-export type FetchCardFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-	requestPayload: FetchCardRequestPayload;
-};
+export type FetchCardFailurePayload = FetchCardRequestPayload;
 
 export type UpdateCardTitleRequestPayload = {
 	cardId: string;
@@ -28,11 +20,7 @@ export type UpdateCardTitleSuccessPayload = {
 	newTitle: string;
 	isOwnAction: boolean;
 };
-export type UpdateCardTitleFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-	requestPayload: UpdateCardTitleRequestPayload;
-};
+export type UpdateCardTitleFailurePayload = UpdateCardTitleRequestPayload;
 
 export type UpdateCardHeightRequestPayload = {
 	cardId: string;
@@ -43,11 +31,7 @@ export type UpdateCardHeightSuccessPayload = {
 	newHeight: number;
 	isOwnAction: boolean;
 };
-export type UpdateCardHeightFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-	requestPayload: UpdateCardHeightRequestPayload;
-};
+export type UpdateCardHeightFailurePayload = UpdateCardHeightRequestPayload;
 
 export type CreateElementRequestPayload = {
 	cardId: string;
@@ -61,11 +45,7 @@ export type CreateElementSuccessPayload = {
 	newElement: AnyContentElement;
 	isOwnAction: boolean;
 };
-export type CreateElementFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-	requestPayload: CreateElementRequestPayload;
-};
+export type CreateElementFailurePayload = CreateElementRequestPayload;
 
 export type DeleteElementRequestPayload = {
 	cardId: string;
@@ -76,11 +56,7 @@ export type DeleteElementSuccessPayload = {
 	elementId: string;
 	isOwnAction: boolean;
 };
-export type DeleteElementFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-	requestPayload: DeleteElementRequestPayload;
-};
+export type DeleteElementFailurePayload = DeleteElementRequestPayload;
 
 export type DeleteCardRequestPayload = {
 	cardId: string;
@@ -89,11 +65,7 @@ export type DeleteCardSuccessPayload = {
 	cardId: string;
 	isOwnAction: boolean;
 };
-export type DeleteCardFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-	requestPayload: DeleteCardRequestPayload;
-};
+export type DeleteCardFailurePayload = DeleteCardRequestPayload;
 
 export type MoveElementRequestPayload = {
 	elementId: string;
@@ -106,11 +78,7 @@ export type MoveElementSuccessPayload = {
 	toPosition: number;
 	isOwnAction: boolean;
 };
-export type MoveElementFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-	requestPayload: MoveElementRequestPayload;
-};
+export type MoveElementFailurePayload = MoveElementRequestPayload;
 
 export type UpdateElementRequestPayload = {
 	element: AnyContentElement;
@@ -123,10 +91,6 @@ export type UpdateElementSuccessPayload = {
 	};
 	isOwnAction: boolean;
 };
-export type UpdateElementFailurePayload = {
-	errorType: ErrorType;
-	boardObjectType: BoardObjectType;
-	requestPayload: UpdateElementRequestPayload;
-};
+export type UpdateElementFailurePayload = UpdateElementRequestPayload;
 
 export type DisconnectSocketRequestPayload = Record<string, never>;
