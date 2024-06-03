@@ -105,6 +105,7 @@ export default defineComponent({
 				heading: headings[props.mode],
 				link: {
 					defaultProtocol: "//",
+					addTargetToExternalLinks: true,
 				},
 				highlight: {
 					options: [
