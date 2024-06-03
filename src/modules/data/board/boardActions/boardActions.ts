@@ -11,6 +11,7 @@ import {
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
 	DisconnectSocketRequestPayload,
+	FetchBoardFailurePayload,
 	FetchBoardRequestPayload,
 	FetchBoardSuccessPayload,
 	MoveCardFailurePayload,
@@ -19,7 +20,6 @@ import {
 	MoveColumnFailurePayload,
 	MoveColumnRequestPayload,
 	MoveColumnSuccessPayload,
-	NotifyErrorPayload,
 	ReloadBoardPayload,
 	ReloadBoardSuccessPayload,
 	UpdateBoardTitleFailurePayload,
@@ -121,10 +121,13 @@ export const fetchBoardRequest = createAction(
 	"fetch-board-request",
 	props<FetchBoardRequestPayload>()
 );
-
 export const fetchBoardSuccess = createAction(
 	"fetch-board-success",
 	props<FetchBoardSuccessPayload>()
+);
+export const fetchBoardFailure = createAction(
+	"fetch-board-failure",
+	props<FetchBoardFailurePayload>()
 );
 
 export const reloadBoard = createAction(
@@ -178,9 +181,4 @@ export const updateColumnTitleSuccess = createAction(
 export const updateColumnTitleFailure = createAction(
 	"update-column-title-failure",
 	props<UpdateColumnTitleFailurePayload>()
-);
-
-export const notifyError = createAction(
-	"notify-error",
-	props<NotifyErrorPayload>()
 );
