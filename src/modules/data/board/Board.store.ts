@@ -112,11 +112,13 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const createColumnSuccess = (payload: CreateColumnSuccessPayload) => {
 		if (!board.value) return;
+
 		const { newColumn, isOwnAction } = payload;
+
 		board.value.columns.push(newColumn);
 
 		if (isOwnAction === true) {
-			useBoardFocusHandler().setFocus(newColumn.id);
+			setFocus(newColumn.id);
 			setEditModeId(newColumn.id);
 		}
 	};
