@@ -1,8 +1,8 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { SystemsApiInterface } from "@/serverApi/v3/api";
-import { authModule } from "@/store";
+import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
-import { meResponseFactory } from "@@/tests/test-utils";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
 import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
@@ -41,6 +41,8 @@ describe("schools module", () => {
 
 		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);
+
+		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 	});
 
 	afterEach(() => {
@@ -59,7 +61,6 @@ describe("schools module", () => {
 					return getRequestReturn;
 				},
 			} as AxiosInstance);
-			setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 		});
 
 		describe("fetchSchool", () => {
@@ -654,6 +655,79 @@ describe("schools module", () => {
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
+			});
+		});
+
+		describe("schoolIsExternallyManaged", () => {
+			describe("when theme is thr", () => {
+				const setup = () => {
+					const envs = envsFactory.build({
+						SC_THEME: serverApi.SchulcloudTheme.Thr,
+					});
+					envConfigModule.setEnvs(envs);
+				};
+
+				it("should return true", () => {
+					setup();
+					const schoolsModule = new SchoolsModule({});
+
+					const result = schoolsModule.schoolIsExternallyManaged;
+
+					expect(result).toBe(true);
+				});
+			});
+
+			describe("when theme is not thr", () => {
+				const setupTheme = () => {
+					const envs = envsFactory.build({
+						SC_THEME: serverApi.SchulcloudTheme.Default,
+					});
+					envConfigModule.setEnvs(envs);
+				};
+
+				describe("when school is external", () => {
+					const setup = () => {
+						setupTheme();
+
+						const schoolsModule = new SchoolsModule({});
+						schoolsModule.setSchool({
+							...mockSchool,
+							isExternal: true,
+						});
+
+						return { schoolsModule };
+					};
+
+					it("should return true", () => {
+						const { schoolsModule } = setup();
+
+						const result = schoolsModule.schoolIsExternallyManaged;
+
+						expect(result).toBe(true);
+					});
+				});
+
+				describe("when school is not external", () => {
+					const setup = () => {
+						setupTheme();
+
+						const schoolsModule = new SchoolsModule({});
+						schoolsModule.setSchool({
+							...mockSchool,
+							isExternal: false,
+						});
+
+						return { schoolsModule };
+					};
+
+					it("should return false", () => {
+						const { schoolsModule } = setup();
+
+						const result = schoolsModule.schoolIsExternallyManaged;
+
+						expect(result).toBe(false);
+					});
+				});
 			});
 		});
 	});

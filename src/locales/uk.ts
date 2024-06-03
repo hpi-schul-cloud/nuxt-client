@@ -131,6 +131,10 @@ export default {
 		"Інструмент {toolName} вимкнено. Будь ласка, зверніться до свого вчителя або викладача курсу.",
 	"common.tool.information.deactivated.teacher":
 		"Інструмент {toolName} вимкнено. Будь ласка, зверніться до адміністратора школи.",
+	"common.tool.information.notLicensed.student":
+		"Інструмент {toolName} не активовано. Будь ласка, зверніться до свого вчителя або викладача курсу.",
+	"common.tool.information.notLicensed.teacher":
+		"Інструмент {toolName} не активовано. Будь ласка, зверніться до адміністратора школи.",
 	"common.tool.information.outdated.teacher":
 		"Конфігурація інструменту {toolName} застаріла або неповна. Перевірте налаштування та зверніться до адміністратора школи.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -160,6 +164,7 @@ export default {
 	"common.words.no": "Немає",
 	"common.words.noChoice": "Немає вибору",
 	"common.words.otherGroups": "інші групи",
+	"common.words.externalTools": "зовнішні засоби",
 	"common.words.planned": "запланований",
 	"common.words.privacyPolicy": "Політика конфіденційності",
 	"common.words.published": "опубліковано",
@@ -210,6 +215,10 @@ export default {
 		"Відкриває інструмент, який використовується для перенесення облікових записів користувачів на moin.schule без участі користувача. Цей інструмент стане доступним після успішного переходу першого користувача цієї школи на moin.schule.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Відкрийте помічник з міграції",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"Якщо ви скасуєте запуск майстра міграції зараз, зв'язки облікових записів, зроблені в поточному сеансі, будуть скинуті. Ви дійсно хочете скасувати майстер зараз?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"Ви впевнені, що хочете скасувати міграцію?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"Перенесення облікового запису завершено {date} о {time}.<br>Період очікування після завершення міграції нарешті закінчується {finishDate} о {finishTime}!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
@@ -266,6 +275,12 @@ export default {
 		"Активуйте цю опцію, якщо інші групи потрібно синхронізувати з {instance}.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Синхронізація інших груп",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"Якщо цю опцію активовано, активації із зовнішніх інструментів автоматично переймаються з moin.schule.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Активація зовнішніх інструментів",
+
 	"components.administration.provisioningOptions.page.title":
 		"Параметри синхронізації даних",
 	"components.administration.provisioningOptions.warning.consequence":
@@ -1498,6 +1513,8 @@ export default {
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Інструмент „{toolName}“ вимкнено",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Інструмент “{toolName}” не активовано",
 	"pages.rooms.tools.deleteDialog.content":
 		"Ви впевнені, що хочете видалити інструмент '<i>{itemName}</i>' із курсу?",
 	"pages.rooms.tools.deleteDialog.title": "видалити інструменти?",
@@ -1512,7 +1529,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
 	"pages.room.modal.course.export.options.topics": "Теми",
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
-	"pages.room.modal.course.export.options.columnBoards": "Дошки для колонн",
+	"pages.room.modal.course.export.options.columnBoards": "Дошки",
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",

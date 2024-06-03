@@ -15,7 +15,7 @@
 	>
 		<ContentElementBar :has-grey-background="true" :icon="getIcon">
 			<template #logo v-if="displayData && displayData.logoUrl">
-				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" cover />
+				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" />
 			</template>
 			<template #title>
 				{{
@@ -37,7 +37,7 @@
 		</ContentElementBar>
 		<ExternalToolElementAlert
 			:toolDisplayName="toolDisplayName"
-			:error="error"
+			:error="displayError || launchError"
 			:tool-status="toolConfigurationStatus"
 			data-testid="board-external-tool-element-alert"
 		/>
@@ -75,7 +75,6 @@ import {
 	Ref,
 	ref,
 	toRef,
-	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
@@ -112,11 +111,14 @@ export default defineComponent({
 			fetchDisplayData,
 			displayData,
 			isLoading: isDisplayDataLoading,
-			error,
+			error: displayError,
 		} = useExternalToolDisplayState();
 
-		const { launchTool, fetchContextLaunchRequest } =
-			useExternalToolLaunchState();
+		const {
+			launchTool,
+			fetchContextLaunchRequest,
+			error: launchError,
+		} = useExternalToolLaunchState();
 
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
@@ -134,13 +136,6 @@ export default defineComponent({
 		const { lastCreatedElementId, resetLastCreatedElementId } =
 			useSharedLastCreatedElement();
 
-		watch(lastCreatedElementId, (newValue) => {
-			if (newValue !== undefined && newValue === props.element.id) {
-				isConfigurationDialogOpen.value = true;
-				resetLastCreatedElementId();
-			}
-		});
-
 		const hasLinkedTool: ComputedRef<boolean> = computed(
 			() => !!modelValue.value.contextExternalToolId
 		);
@@ -153,7 +148,9 @@ export default defineComponent({
 			() =>
 				!displayData.value?.status.isOutdatedOnScopeSchool &&
 				!displayData.value?.status.isOutdatedOnScopeContext &&
-				!displayData.value?.status.isIncompleteOnScopeContext
+				!displayData.value?.status.isIncompleteOnScopeContext &&
+				!displayData.value?.status.isDeactivated &&
+				!displayData.value?.status.isNotLicensed
 		);
 
 		const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatus> =
@@ -236,7 +233,13 @@ export default defineComponent({
 			}
 		};
 
-		onMounted(loadCardData);
+		onMounted(() => {
+			loadCardData();
+			if (lastCreatedElementId.value === props.element.id) {
+				isConfigurationDialogOpen.value = true;
+				resetLastCreatedElementId();
+			}
+		});
 
 		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
@@ -254,7 +257,8 @@ export default defineComponent({
 			hasLinkedTool,
 			toolDisplayName,
 			displayData,
-			error,
+			displayError,
+			launchError,
 			isLoading,
 			isConfigurationDialogOpen,
 			toolConfigurationStatus,

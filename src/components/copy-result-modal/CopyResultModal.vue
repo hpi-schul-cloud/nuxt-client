@@ -145,9 +145,15 @@ export default {
 			);
 		},
 		hasEtherpadElement() {
-			return this.hasElementOfType(
-				this.items,
-				CopyApiResponseTypeEnum.LessonContentEtherpad
+			return (
+				this.hasElementOfType(
+					this.items,
+					CopyApiResponseTypeEnum.CollaborativeTextEditorElement
+				) ||
+				this.hasElementOfType(
+					this.items,
+					CopyApiResponseTypeEnum.LessonContentEtherpad
+				)
 			);
 		},
 		hasNexboardElement() {
