@@ -112,7 +112,13 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const createColumnSuccess = (payload: CreateColumnSuccessPayload) => {
 		if (!board.value) return;
-		board.value.columns.push(payload.newColumn);
+		const { newColumn, isOwnAction } = payload;
+		board.value.columns.push(newColumn);
+
+		if (isOwnAction === true) {
+			useBoardFocusHandler().setFocus(newColumn.id);
+			setEditModeId(newColumn.id);
+		}
 	};
 
 	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
