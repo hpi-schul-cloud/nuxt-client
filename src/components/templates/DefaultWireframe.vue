@@ -1,5 +1,10 @@
 <template>
 	<v-container fluid class="wireframe-container">
+		<div
+			aria-live="assertive"
+			id="notify-on-screen-reader"
+			class="visually-hidden"
+		/>
 		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
@@ -204,5 +209,18 @@ $fab-wrapper-height: 80px;
 	* {
 		pointer-events: auto;
 	}
+}
+
+// Visually hidden element for screen readers
+// can be found at https://a11yproject.com/posts/how-to-hide-content/
+
+.visually-hidden {
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	overflow: hidden;
+	position: absolute;
+	white-space: nowrap;
+	width: 1px;
 }
 </style>

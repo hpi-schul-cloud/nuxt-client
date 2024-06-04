@@ -16,14 +16,57 @@ import {
 } from "./boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useAriaLive } from "@/composables/aria-live";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
 	const { notifySocketError } = useErrorHandler();
+	const { notifyOnScreenReader } = useAriaLive();
+
+	// ariaMessageMap should be in a separate file
+	const ariaMessageMap: Record<
+		string,
+		{ message: string; importance: "off" | "polite" | "assertive" | "rude" }
+	> = {
+		// list of action types that should be announced to the screen reader
+		"create-card-success": {
+			message: "A card was created successfully",
+			importance: "assertive",
+		},
+		"create-column-success": {
+			message: "A column was created successfully",
+			importance: "polite",
+		},
+		"delete-card-success": {
+			message: "A card was deleted successfully",
+			importance: "polite",
+		},
+		"delete-card-failure": {
+			message: "Failed to delete a card",
+			importance: "assertive",
+		},
+		"delete-column-success": {
+			message: "A column was deleted successfully",
+			importance: "polite",
+		},
+		"delete-column-failure": {
+			message: "Failed to delete a column",
+			importance: "assertive",
+		},
+		// and so on...
+	};
+
+	const actionToAriaMessage = (actionType: string) => {
+		const action = ariaMessageMap[actionType];
+		if (!action) return;
+
+		notifyOnScreenReader(action.message, action.importance);
+	};
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
 	) => {
+		actionToAriaMessage(action.type);
 		handle(
 			action,
 			on(BoardActions.disconnectSocket, disconnectSocketRequest),
