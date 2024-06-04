@@ -1,11 +1,11 @@
-import { ExternalToolConfigurationTemplate } from "@/store/external-tool";
 import {
 	schoolExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { ExternalToolConfigurationTemplate } from "@data-external-tool";
 import { shallowMount } from "@vue/test-utils";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
 
 describe("ExternalToolConfigSettings", () => {
 	const getWrapper = (

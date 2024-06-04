@@ -8,8 +8,21 @@
 			<RenderHTML
 				class="pa-4"
 				data-testId="text-description"
+				v-if="!multipleUsersFound"
 				:html="
 					$t('pages.userMigration.error.description', {
+						targetSystem: getSystemName(),
+						instance: this.$theme.name,
+						supportLink,
+					})
+				"
+				component="p"
+			/>
+			<RenderHTML
+				data-testId="text-multiple-users-found"
+				v-else
+				:html="
+					$t('pages.userMigration.error.multipleUsersFound', {
 						targetSystem: getSystemName(),
 						instance: this.$theme.name,
 						supportLink,
@@ -76,6 +89,10 @@ export default defineComponent({
 		},
 		sourceSchoolNumber: {
 			type: String,
+			required: false,
+		},
+		multipleUsersFound: {
+			type: Boolean,
 			required: false,
 		},
 	},

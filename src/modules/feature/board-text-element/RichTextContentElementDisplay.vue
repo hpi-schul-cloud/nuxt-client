@@ -1,6 +1,6 @@
 <template>
 	<RenderHTML
-		class="ck-content"
+		class="ck-content pb-2"
 		:html="value"
 		config="ck5"
 		v-if="value !== undefined && value !== ''"
@@ -8,9 +8,8 @@
 </template>
 
 <script>
-import { defineComponent, onMounted } from "vue";
-import renderMathInElement from "katex/dist/contrib/auto-render.js";
 import { RenderHTML } from "@feature-render-html";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementDisplay",
@@ -20,14 +19,6 @@ export default defineComponent({
 			type: String,
 			required: true,
 		},
-	},
-	setup() {
-		onMounted(() => {
-			const mathElements = document.getElementsByClassName("math-tex");
-			for (const element of mathElements) {
-				renderMathInElement(element);
-			}
-		});
 	},
 });
 </script>

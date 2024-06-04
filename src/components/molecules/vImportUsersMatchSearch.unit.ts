@@ -1,5 +1,7 @@
 import { importUsersModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
+import { ComponentProps } from "@/types/vue";
+import { THEME_KEY } from "@/utils/inject";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -29,18 +31,20 @@ const testProps = {
 	ldapSource: "LDAP",
 };
 
-const getWrapper = (props: object, options?: object) => {
+const getWrapper = (
+	props: ComponentProps<typeof vImportUsersMatchSearch>,
+	options?: object
+) => {
 	return mount(vImportUsersMatchSearch, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			mocks: {
-				$theme: {
+			provide: {
+				[THEME_KEY.valueOf()]: {
 					name: "nbc",
 				},
 			},
 		},
 		props,
-
 		...options,
 	});
 };

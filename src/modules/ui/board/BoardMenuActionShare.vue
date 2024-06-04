@@ -1,10 +1,10 @@
 <template>
 	<BoardMenuAction
 		:icon="mdiShareVariantOutline"
-		@click="onClick"
 		data-testid="board-menu-action-share"
+		@click="onClick"
 	>
-		{{ $t("common.actions.shareBoard") }}
+		{{ $t("common.actions.shareCopy") }}
 	</BoardMenuAction>
 </template>
 

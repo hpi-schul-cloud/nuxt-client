@@ -1,25 +1,18 @@
+import { ContextExternalToolBodyParams, ToolContextType } from "@/serverApi/v3";
 import {
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
 } from "@/store/external-tool";
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { axiosErrorFactory } from "@@/tests/test-utils";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { axiosErrorFactory } from "@@/tests/test-utils";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
 
 jest.mock("@data-external-tool/ExternalToolApi.composable");
-
-Object.defineProperty(window, "location", {
-	configurable: true,
-	writable: false,
-	value: {
-		href: "",
-	},
-});
 
 describe("ExternalToolLaunchState.composable", () => {
 	let useExternalToolApiMock: DeepMocked<ReturnType<typeof useExternalToolApi>>;
@@ -33,16 +26,16 @@ describe("ExternalToolLaunchState.composable", () => {
 
 	afterEach(() => {
 		jest.clearAllMocks();
-
-		window.location.href = "";
 	});
 
-	describe("fetchLaunchRequest", () => {
+	describe("fetchContextLaunchRequest", () => {
 		describe("when fetching a tool", () => {
 			const setup = () => {
 				const response = toolLaunchRequestFactory.build();
 
-				useExternalToolApiMock.fetchLaunchDataCall.mockResolvedValue(response);
+				useExternalToolApiMock.fetchContextLaunchDataCall.mockResolvedValue(
+					response
+				);
 
 				return {
 					...useExternalToolLaunchState(),
@@ -51,19 +44,20 @@ describe("ExternalToolLaunchState.composable", () => {
 			};
 
 			it("should load the launch data from the store", async () => {
-				const { fetchLaunchRequest } = setup();
+				const { fetchContextLaunchRequest } = setup();
 
-				await fetchLaunchRequest("contextExternalToolId");
+				await fetchContextLaunchRequest("contextExternalToolId");
 
-				expect(useExternalToolApiMock.fetchLaunchDataCall).toHaveBeenCalledWith(
-					"contextExternalToolId"
-				);
+				expect(
+					useExternalToolApiMock.fetchContextLaunchDataCall
+				).toHaveBeenCalledWith("contextExternalToolId");
 			});
 
 			it("should save the loaded request in a state", async () => {
-				const { fetchLaunchRequest, toolLaunchRequest, response } = setup();
+				const { fetchContextLaunchRequest, toolLaunchRequest, response } =
+					setup();
 
-				await fetchLaunchRequest("contextExternalToolId");
+				await fetchContextLaunchRequest("contextExternalToolId");
 
 				expect(toolLaunchRequest.value).toEqual<ToolLaunchRequest>({
 					method: ToolLaunchRequestMethodEnum.Get,
@@ -74,9 +68,9 @@ describe("ExternalToolLaunchState.composable", () => {
 			});
 
 			it("should not have an error", async () => {
-				const { fetchLaunchRequest, error } = setup();
+				const { fetchContextLaunchRequest, error } = setup();
 
-				await fetchLaunchRequest("contextExternalToolId");
+				await fetchContextLaunchRequest("contextExternalToolId");
 
 				expect(error.value).toBeUndefined();
 			});
@@ -87,7 +81,7 @@ describe("ExternalToolLaunchState.composable", () => {
 				const axiosError = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(axiosError);
 
-				useExternalToolApiMock.fetchLaunchDataCall.mockRejectedValue(
+				useExternalToolApiMock.fetchContextLaunchDataCall.mockRejectedValue(
 					axiosError
 				);
 
@@ -98,9 +92,103 @@ describe("ExternalToolLaunchState.composable", () => {
 			};
 
 			it("should load the launch data from the store", async () => {
-				const { fetchLaunchRequest, error, apiError } = setup();
+				const { fetchContextLaunchRequest, error, apiError } = setup();
 
-				await fetchLaunchRequest("contextExternalToolId");
+				await fetchContextLaunchRequest("contextExternalToolId");
+
+				expect(error.value).toEqual<BusinessError>({
+					message: apiError.message,
+					statusCode: apiError.code,
+					error: apiError,
+				});
+			});
+		});
+	});
+
+	describe("fetchSchoolLaunchRequest", () => {
+		describe("when fetching a tool", () => {
+			const setup = () => {
+				const response = toolLaunchRequestFactory.build();
+
+				const bodyParams: ContextExternalToolBodyParams = {
+					contextId: "contextId",
+					contextType: ToolContextType.MediaBoard,
+				};
+
+				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockResolvedValue(
+					response
+				);
+
+				return {
+					...useExternalToolLaunchState(),
+					response,
+					bodyParams,
+				};
+			};
+
+			it("should load the launch data from the store", async () => {
+				const { fetchSchoolLaunchRequest, bodyParams } = setup();
+
+				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
+
+				expect(
+					useExternalToolApiMock.fetchSchoolLaunchDataCall
+				).toHaveBeenCalledWith("schoolExternalToolId", bodyParams);
+			});
+
+			it("should save the loaded request in a state", async () => {
+				const {
+					fetchSchoolLaunchRequest,
+					toolLaunchRequest,
+					response,
+					bodyParams,
+				} = setup();
+
+				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
+
+				expect(toolLaunchRequest.value).toEqual<ToolLaunchRequest>({
+					method: ToolLaunchRequestMethodEnum.Get,
+					url: response.url,
+					payload: response.payload,
+					openNewTab: response.openNewTab,
+				});
+			});
+
+			it("should not have an error", async () => {
+				const { fetchSchoolLaunchRequest, error, bodyParams } = setup();
+
+				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
+
+				expect(error.value).toBeUndefined();
+			});
+		});
+
+		describe("when an error occurs", () => {
+			const setup = () => {
+				const axiosError = axiosErrorFactory.build();
+				const apiError = mapAxiosErrorToResponseError(axiosError);
+
+				const bodyParams: ContextExternalToolBodyParams = {
+					contextId: "contextId",
+					contextType: ToolContextType.MediaBoard,
+				};
+
+				useExternalToolApiMock.fetchSchoolLaunchDataCall.mockRejectedValue(
+					axiosError
+				);
+
+				return {
+					...useExternalToolLaunchState(),
+					apiError,
+					bodyParams,
+				};
+			};
+
+			it("should load the launch data from the store", async () => {
+				const { fetchSchoolLaunchRequest, error, apiError, bodyParams } =
+					setup();
+
+				await fetchSchoolLaunchRequest("schoolExternalToolId", bodyParams);
 
 				expect(error.value).toEqual<BusinessError>({
 					message: apiError.message,
@@ -113,12 +201,22 @@ describe("ExternalToolLaunchState.composable", () => {
 
 	describe("launchTool", () => {
 		describe("when launching without loading", () => {
+			const setup = () => {
+				const composable = useExternalToolLaunchState();
+
+				jest.spyOn(window, "open");
+
+				return {
+					...composable,
+				};
+			};
+
 			it("should do nothing", () => {
-				const { launchTool } = useExternalToolLaunchState();
+				const { launchTool } = setup();
 
 				launchTool();
 
-				expect(window.location.href).toEqual("");
+				expect(window.open).not.toHaveBeenCalled();
 			});
 		});
 
@@ -133,6 +231,8 @@ describe("ExternalToolLaunchState.composable", () => {
 					const composable = useExternalToolLaunchState();
 					composable.toolLaunchRequest.value = launchRequest;
 
+					jest.spyOn(window, "open");
+
 					return {
 						...composable,
 						launchRequest,
@@ -144,13 +244,12 @@ describe("ExternalToolLaunchState.composable", () => {
 
 					launchTool();
 
-					expect(window.location.href).toEqual(launchRequest.url);
+					expect(window.open).toHaveBeenCalledWith(launchRequest.url, "_self");
 				});
 			});
 
 			describe("when opening in a new tab", () => {
 				const setup = () => {
-					jest.spyOn(window, "open");
 					const launchRequest = toolLaunchRequestFactory.build({
 						method: ToolLaunchRequestMethodEnum.Get,
 						openNewTab: true,
@@ -158,6 +257,8 @@ describe("ExternalToolLaunchState.composable", () => {
 
 					const composable = useExternalToolLaunchState();
 					composable.toolLaunchRequest.value = launchRequest;
+
+					jest.spyOn(window, "open");
 
 					return {
 						...composable,
@@ -176,10 +277,6 @@ describe("ExternalToolLaunchState.composable", () => {
 		});
 
 		describe("when launching a tool with post method", () => {
-			afterEach(() => {
-				document.getElementById("launch-form")?.remove();
-			});
-
 			describe("when opening in the same tab", () => {
 				const setup = () => {
 					const launchRequest = toolLaunchRequestFactory.build({
@@ -238,6 +335,34 @@ describe("ExternalToolLaunchState.composable", () => {
 					);
 				});
 			});
+
+			describe("when opening a tool multiple times", () => {
+				const setup = () => {
+					const launchRequest = toolLaunchRequestFactory.build({
+						method: ToolLaunchRequestMethodEnum.Post,
+						openNewTab: false,
+					});
+
+					const composable = useExternalToolLaunchState();
+					composable.toolLaunchRequest.value = launchRequest;
+
+					return {
+						...composable,
+						launchRequest,
+					};
+				};
+
+				it("should only leave one form in the DOM", () => {
+					const { launchTool } = setup();
+
+					launchTool();
+					launchTool();
+
+					const formList = document.querySelectorAll("#launch-form");
+
+					expect(formList).toHaveLength(1);
+				});
+			});
 		});
 
 		describe("when the launch method is unknown", () => {
@@ -248,6 +373,8 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				const composable = useExternalToolLaunchState();
 				composable.toolLaunchRequest.value = launchRequest;
+
+				jest.spyOn(window, "open");
 
 				return {
 					...composable,
@@ -271,7 +398,7 @@ describe("ExternalToolLaunchState.composable", () => {
 
 				launchTool();
 
-				expect(window.location.href).toEqual("");
+				expect(window.open).not.toHaveBeenCalled();
 			});
 		});
 	});

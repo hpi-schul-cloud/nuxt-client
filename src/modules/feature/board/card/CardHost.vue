@@ -8,7 +8,7 @@
 		>
 			<VCard
 				ref="cardHost"
-				:height="isLoading ? height : 'auto'"
+				:height="isLoadingCard ? height : 'auto'"
 				class="card-host"
 				:class="{ 'drag-disabled': isEditMode }"
 				variant="outlined"
@@ -19,15 +19,15 @@
 				:ripple="false"
 				:hover="isHovered"
 			>
-				<template v-if="isLoading">
+				<template v-if="isLoadingCard">
 					<CardSkeleton :height="height" />
 				</template>
-				<template v-if="!isLoading && card">
+				<template v-if="card">
 					<CardTitle
 						:isEditMode="isEditMode"
 						:value="card.title"
 						scope="card"
-						@update:value="onUpdateCardTitle"
+						@update:value="onUpdateCardTitle($event, cardId)"
 						:isFocused="isFocusedById"
 						@enter="addTextAfterTitle"
 					/>
@@ -87,8 +87,8 @@ import { delay } from "@/utils/helpers";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
-	useCardState,
 	useEditMode,
+	useCardStore,
 } from "@data-board";
 import { mdiArrowExpand } from "@mdi/js";
 import {
@@ -97,7 +97,7 @@ import {
 	BoardMenuActionEdit,
 } from "@ui-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
-import { computed, defineComponent, ref, toRef } from "vue";
+import { computed, defineComponent, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
@@ -134,17 +134,11 @@ export default defineComponent({
 
 		const isHovered = useElementHover(cardHost);
 		const isDetailView = ref(false);
-		const {
-			isLoading,
-			card,
-			updateTitle,
-			updateCardHeight,
-			addElement,
-			moveElementDown,
-			moveElementUp,
-			deleteElement,
-			addTextAfterTitle,
-		} = useCardState(cardId.value, emit);
+
+		const cardStore = useCardStore();
+
+		const card = computed(() => cardStore.getCard(cardId.value));
+		const isLoadingCard = computed(() => card.value === undefined);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
@@ -152,12 +146,19 @@ export default defineComponent({
 		);
 		const { hasDeletePermission } = useBoardPermissions();
 
-		const { askType } = useAddElementDialog(addElement);
+		const { askType } = useAddElementDialog(
+			cardStore.createElementRequest,
+			cardId.value
+		);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) =>
 			emit("move:card-keyboard", event.code);
 
-		const onUpdateCardTitle = useDebounceFn(updateTitle, 300);
+		const _updateCardTitle = (newTitle: string, cardId: string) => {
+			cardStore.updateCardTitleRequest({ newTitle, cardId });
+		};
+
+		const onUpdateCardTitle = useDebounceFn(_updateCardTitle, 600);
 
 		const onDeleteCard = async (confirmation: Promise<boolean>) => {
 			stopEditMode();
@@ -169,37 +170,49 @@ export default defineComponent({
 
 		const onAddElement = () => askType();
 
-		const onDeleteElement = (elementId: string) => deleteElement(elementId);
+		const onDeleteElement = (elementId: string) =>
+			cardStore.deleteElementRequest({ cardId: cardId.value, elementId });
 
 		const onStartEditMode = () => startEditMode();
 
 		const onEndEditMode = async () => {
 			stopEditMode();
 			await delay(300);
-			updateCardHeight(cardHostHeight.value);
+			cardStore.updateCardHeightRequest({
+				cardId: cardId.value,
+				newHeight: Math.round(cardHostHeight.value),
+			});
 		};
 
 		const onOpenDetailView = () => (isDetailView.value = true);
 		const onCloseDetailView = () => (isDetailView.value = false);
 
-		const onMoveContentElementDown = async (payload: ElementMove) =>
-			await moveElementDown(payload);
+		const onMoveContentElementDown = async ({
+			payload: elementId,
+			elementIndex,
+		}: ElementMove) =>
+			cardStore.moveElementRequest(props.cardId, elementId, elementIndex, +1);
 
-		const onMoveContentElementUp = async (payload: ElementMove) =>
-			await moveElementUp(payload);
+		const onMoveContentElementUp = async ({
+			payload: elementId,
+			elementIndex,
+		}: ElementMove) =>
+			cardStore.moveElementRequest(props.cardId, elementId, elementIndex, -1);
 
 		const onMoveContentElementKeyboard = async (
-			payload: ElementMove,
+			{ payload: elementId, elementIndex }: ElementMove,
 			keyString: DragAndDropKey
 		) => {
-			if (!verticalCursorKeys.includes(keyString)) {
-				return;
-			}
-			if (keyString === "ArrowUp") {
-				await moveElementUp(payload);
-			} else if (keyString === "ArrowDown") {
-				await moveElementDown(payload);
-			}
+			if (!verticalCursorKeys.includes(keyString)) return;
+
+			const delta = keyString === "ArrowUp" ? -1 : 1;
+
+			cardStore.moveElementRequest(
+				props.cardId,
+				elementId,
+				elementIndex,
+				delta
+			);
 		};
 
 		const boardMenuClasses = computed(() => {
@@ -209,11 +222,15 @@ export default defineComponent({
 			return "hidden";
 		});
 
+		onMounted(async () => {
+			await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
+		});
+
 		return {
 			boardMenuClasses,
-			isLoading,
 			card,
 			hasDeletePermission,
+			isLoadingCard,
 			isHovered,
 			isFocusedById,
 			onMoveCardKeyboard,
@@ -221,7 +238,6 @@ export default defineComponent({
 			onDeleteCard,
 			onAddElement,
 			onDeleteElement,
-			deleteElement,
 			onStartEditMode,
 			onEndEditMode,
 			onMoveContentElementDown,
@@ -229,7 +245,7 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
-			addTextAfterTitle,
+			addTextAfterTitle: cardStore.addTextAfterTitle,
 			onOpenDetailView,
 			onCloseDetailView,
 			isDetailView,

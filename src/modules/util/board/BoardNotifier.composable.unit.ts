@@ -40,7 +40,7 @@ describe("BoardNotifications.composable", () => {
 			const expectedCallObject = {
 				text: "test-text",
 				status: "error",
-				timeout: 10000,
+				timeout: 5000,
 			};
 			showFailure(expectedCallObject.text);
 
@@ -76,16 +76,6 @@ describe("BoardNotifications.composable", () => {
 
 			expect(notifierModule.show).toHaveBeenCalled();
 			expect(notifierModule.show).toHaveBeenCalledWith(expectedCallObject);
-		});
-	});
-
-	describe("@resetNotifier method", () => {
-		it("should call the notifier module", () => {
-			const { resetNotifier } = setup();
-			resetNotifier();
-
-			expect(notifierModule.setNotifier).toHaveBeenCalled();
-			expect(notifierModule.setNotifier).toHaveBeenCalledWith(undefined);
 		});
 	});
 });

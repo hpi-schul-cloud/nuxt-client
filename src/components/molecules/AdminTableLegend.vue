@@ -13,32 +13,33 @@
 				</li>
 			</ul>
 		</span>
-
-		<span v-if="showExternalSyncHint" class="wrapper">
-			<strong class="external-sync-hint">
-				{{ $t("components.molecules.admintablelegend.externalSync") }}
-				<base-link
-					class="link-style"
-					to="/"
-					href="https://docs.dbildungscloud.de/x/PgBVAw"
-					target="_blank"
-					:no-styles="true"
-					traget="_blank"
-				>
-					{{ $t("components.molecules.admintablelegend.help") }}.
-				</base-link>
-			</strong>
-		</span>
-		<p v-if="theme === 'thr'" class="mt-6">
+		<p v-if="isThr" class="mt-6">
 			{{ $t("components.molecules.admintablelegend.thr") }}
 		</p>
-		<p v-else class="mt-6">
-			{{
-				$t("components.molecules.admintablelegend.hint", {
-					institute_title: setInstituteTitle,
-				})
-			}}
-		</p>
+		<template v-else>
+			<span v-if="showExternalSyncHint" class="wrapper">
+				<strong class="external-sync-hint">
+					{{ $t("components.molecules.admintablelegend.externalSync") }}
+					<base-link
+						class="link-style"
+						to="/"
+						href="https://docs.dbildungscloud.de/x/PgBVAw"
+						target="_blank"
+						:no-styles="true"
+						traget="_blank"
+					>
+						{{ $t("components.molecules.admintablelegend.help") }}.
+					</base-link>
+				</strong>
+			</span>
+			<p class="mt-6">
+				{{
+					$t("components.molecules.admintablelegend.hint", {
+						institute_title: setInstituteTitle,
+					})
+				}}
+			</p>
+		</template>
 	</div>
 </template>
 
@@ -75,6 +76,9 @@ export default {
 				default:
 					return "Dataport";
 			}
+		},
+		isThr() {
+			return this.theme === SchulcloudTheme.Thr;
 		},
 	},
 };

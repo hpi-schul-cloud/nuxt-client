@@ -7,24 +7,33 @@
 		@click="handleClick"
 	>
 		<template #under-title>
-			<div class="d-flex g-1">
-				<room-card-chip
+			<div class="d-flex ga-1">
+				<WarningChip
 					v-if="isToolDeactivated"
 					data-testId="tool-card-status-deactivated"
 				>
-					{{ t("pages.rooms.tools.deactivated") }}
-				</room-card-chip>
-				<room-card-chip
-					v-if="isToolIncomplete"
-					data-testId="tool-card-status-incomplete"
-					>{{ t("pages.rooms.tools.incomplete") }}
-				</room-card-chip>
-				<room-card-chip
-					v-if="isToolOutdated"
-					data-testId="tool-card-status-outdated"
+					{{ $t("pages.rooms.tools.deactivated") }}
+				</WarningChip>
+
+				<WarningChip
+					v-if="isToolNotLicensed"
+					data-testId="tool-card-status-not-licensed"
 				>
-					{{ t("pages.rooms.tools.outdated") }}
-				</room-card-chip>
+					{{ $t("common.medium.chip.notLicensed") }}
+				</WarningChip>
+
+				<InfoChip
+					v-if="showAsIncompleteOperational"
+					data-testId="tool-card-status-incompleteOperational"
+					>{{ $t("pages.rooms.tools.outdated") }}
+				</InfoChip>
+
+				<WarningChip
+					v-if="isToolOutdated || isToolIncomplete"
+					data-testId="tool-card-status"
+				>
+					{{ $t("pages.rooms.tools.outdated") }}
+				</WarningChip>
 			</div>
 		</template>
 		<template #right>
@@ -40,21 +49,23 @@
 </template>
 
 <script lang="ts">
-import { RoomDotMenu } from "@ui-room-details";
-import RoomCardChip from "@/components/rooms/RoomCardChip.vue";
-import EnvConfigModule from "@/store/env-config";
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { useExternalToolLaunchState } from "@data-external-tool";
+import {
+	ExternalToolDisplayData,
+	useContextExternalToolConfigurationStatus,
+	useExternalToolLaunchState,
+} from "@data-external-tool";
 import { mdiAlert, mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import { InfoChip, WarningChip } from "@ui-chip";
+import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, defineComponent, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomBaseCard from "./RoomBaseCard.vue";
 
 export default defineComponent({
 	name: "RoomExternalToolCard",
-	components: { RoomCardChip, RoomBaseCard, RoomDotMenu },
+	components: { InfoChip, WarningChip, RoomBaseCard, RoomDotMenu },
 	emits: ["edit", "delete", "error"],
+
 	props: {
 		tool: {
 			type: Object as PropType<ExternalToolDisplayData>,
@@ -67,15 +78,14 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const { t } = useI18n();
-		const envConfigModule: EnvConfigModule = injectStrict(
-			ENV_CONFIG_MODULE_KEY
-		);
 
 		const {
-			fetchLaunchRequest,
+			fetchContextLaunchRequest,
 			launchTool,
 			error: launchError,
 		} = useExternalToolLaunchState();
+
+		const { isTeacher } = useContextExternalToolConfigurationStatus();
 
 		const handleClick = async () => {
 			if (!isToolLaunchable.value) {
@@ -85,7 +95,7 @@ export default defineComponent({
 
 			launchTool();
 
-			await fetchLaunchRequest(props.tool.contextExternalToolId);
+			await fetchContextLaunchRequest(props.tool.contextExternalToolId);
 
 			if (launchError.value) {
 				emit("error", props.tool);
@@ -102,21 +112,18 @@ export default defineComponent({
 
 		const menuItems = [
 			{
+				icon: mdiPencilOutline,
+				action: handleEdit,
+				name: t("common.actions.edit"),
+				dataTestId: "tool-edit",
+			},
+			{
 				icon: mdiTrashCanOutline,
 				action: handleDelete,
 				name: t("common.actions.remove"),
 				dataTestId: "tool-delete",
 			},
 		];
-
-		if (envConfigModule.getCtlContextConfigurationEnabled) {
-			menuItems.unshift({
-				icon: mdiPencilOutline,
-				action: handleEdit,
-				name: t("common.actions.edit"),
-				dataTestId: "tool-edit",
-			});
-		}
 
 		const isToolOutdated: ComputedRef = computed(
 			() =>
@@ -128,15 +135,24 @@ export default defineComponent({
 			() => props.tool.status.isIncompleteOnScopeContext
 		);
 
+		const showAsIncompleteOperational: ComputedRef = computed(
+			() => props.tool.status.isIncompleteOperationalOnScopeContext && isTeacher
+		);
+
 		const isToolDeactivated: ComputedRef = computed(
 			() => props.tool.status.isDeactivated
+		);
+
+		const isToolNotLicensed: ComputedRef = computed(
+			() => props.tool.status.isNotLicensed
 		);
 
 		const isToolLaunchable = computed(() => {
 			return (
 				!isToolOutdated.value &&
 				!isToolDeactivated.value &&
-				!isToolIncomplete.value
+				!isToolIncomplete.value &&
+				!isToolNotLicensed.value
 			);
 		});
 
@@ -145,7 +161,7 @@ export default defineComponent({
 				return;
 			}
 
-			await fetchLaunchRequest(props.tool.contextExternalToolId);
+			await fetchContextLaunchRequest(props.tool.contextExternalToolId);
 		};
 
 		watch(() => props.tool, loadLaunchRequest, { immediate: true });
@@ -159,13 +175,9 @@ export default defineComponent({
 			isToolOutdated,
 			isToolDeactivated,
 			isToolIncomplete,
+			isToolNotLicensed,
+			showAsIncompleteOperational,
 		};
 	},
 });
 </script>
-
-<style scoped>
-.g-1 {
-	gap: 4px;
-}
-</style>

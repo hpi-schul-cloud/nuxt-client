@@ -17,7 +17,12 @@
 				>
 					{{ roomData.title }}
 				</div>
-				<VChip v-if="roomData.isSynchronized" size="small" class="mt-1 ml-2">
+				<VChip
+					v-if="roomData.isSynchronized"
+					size="small"
+					class="mt-1 ml-2"
+					data-testid="synced-course-chip"
+				>
 					{{ $t("pages.rooms.headerSection.synchronized") }}
 				</VChip>
 				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">
@@ -93,7 +98,6 @@
 </template>
 
 <script>
-import BaseQrCode from "@/components/base/BaseQrCode.vue";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import { RoomDotMenu } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
@@ -104,6 +108,7 @@ import RoomDashboard from "@/components/templates/RoomDashboard";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
+	BoardLayout,
 	BoardParentType,
 	ImportUserResponseRoleNamesEnum as Roles,
 	ShareTokenBodyParamsParentTypeEnum,
@@ -124,7 +129,7 @@ import {
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
 	mdiSyncOff,
-	mdiViewDashboard,
+	mdiViewDashboardOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
 import { defineComponent } from "vue";
@@ -158,7 +163,6 @@ export default defineComponent({
 	components: {
 		EndCourseSyncDialog,
 		vCustomDialog,
-		BaseQrCode,
 		DefaultWireframe,
 		RoomDashboard,
 		RoomDotMenu,
@@ -296,14 +300,32 @@ export default defineComponent({
 				});
 			}
 			if (
-				this.authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())
+				this.authModule.getUserPermissions.includes(
+					"COURSE_EDIT".toLowerCase()
+				) &&
+				this.authModule.getUserRoles.includes(Roles.Teacher)
 			) {
 				actions.push({
 					label: this.$t("pages.rooms.fab.add.board"),
-					icon: mdiViewDashboard,
+					icon: mdiViewDashboardOutline,
 					customEvent: "board-create",
 					dataTestId: "fab_button_add_board",
 					ariaLabel: this.$t("pages.rooms.fab.add.board"),
+				});
+			}
+			if (
+				envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
+				this.authModule.getUserPermissions.includes(
+					"COURSE_EDIT".toLowerCase()
+				) &&
+				this.authModule.getUserRoles.includes(Roles.Teacher)
+			) {
+				actions.push({
+					label: this.$t("pages.rooms.fab.add.listBoard"),
+					icon: "$mdiCustomGridOutline",
+					customEvent: "list-board-create",
+					dataTestId: "fab_button_add_list_board",
+					ariaLabel: this.$t("pages.rooms.fab.add.listBoard"),
 				});
 			}
 
@@ -366,7 +388,7 @@ export default defineComponent({
 				items.push({
 					icon: this.icons.mdiShareVariantOutline,
 					action: () => this.shareCourse(),
-					name: this.$t("common.actions.shareCourse"),
+					name: this.$t("common.actions.shareCopy"),
 					dataTestId: "room-menu-share",
 				});
 			}
@@ -433,7 +455,10 @@ export default defineComponent({
 	methods: {
 		fabItemClickHandler(event) {
 			if (event === "board-create") {
-				this.onCreateBoard(this.roomData.roomId);
+				this.onCreateBoard(this.roomData.roomId, BoardLayout.Columns);
+			}
+			if (event === "list-board-create") {
+				this.onCreateBoard(this.roomData.roomId, BoardLayout.List);
 			}
 		},
 		setActiveTabIfPageCached(event) {
@@ -492,11 +517,12 @@ export default defineComponent({
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
 		},
-		async onCreateBoard(courseId) {
+		async onCreateBoard(courseId, layout) {
 			const params = {
 				title: this.$t("pages.room.boardCard.label.courseBoard").toString(),
 				parentType: BoardParentType.Course,
 				parentId: courseId,
+				layout,
 			};
 			const board = await this.roomModule.createBoard(params);
 			await this.$router.push(`/rooms/${board.id}/board`);

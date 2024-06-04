@@ -76,25 +76,27 @@
 					class="item"
 					data-testid="item"
 				>
-					<language-menu />
-					<a
-						href="/account"
-						class="account-link"
-						role="menuitem"
-						:aria-label="$t('global.topbar.settings').toString()"
-						data-testid="account-link"
-					>
-						{{ $t("global.topbar.settings") }}
-					</a>
-					<button
-						class="logout-button"
-						data-testid="logout"
-						role="menuitem"
-						:aria-label="$t('common.labels.logout').toString()"
-						@click="sendEvent('logout')"
-					>
-						{{ $t("common.labels.logout") }}
-					</button>
+					<v-list class="my-0 py-0" density="compact">
+						<language-menu class="pl-6" />
+						<v-list-item
+							href="/account"
+							role="menuitem"
+							class="account-link pl-6"
+							:aria-label="$t('global.topbar.settings').toString()"
+							data-testid="account-link"
+						>
+							{{ $t("global.topbar.settings") }}
+						</v-list-item>
+						<v-list-item
+							class="logout-button pl-6"
+							role="menuitem"
+							data-testid="logout"
+							:aria-label="$t('common.labels.logout').toString()"
+							@click="sendEvent('logout')"
+						>
+							{{ $t("common.labels.logout") }}
+						</v-list-item>
+					</v-list>
 				</popup-icon-initials>
 			</div>
 		</div>
@@ -112,7 +114,8 @@
 
 <script lang="ts">
 import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
-import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import LanguageMenu from "@/modules/ui/layout/topbar/LanguageMenu.vue";
 import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import PopupIcon from "@/components/topbar/PopupIcon.vue";
 import PopupIconInitials from "@/components/topbar/PopupIconInitials.vue";
@@ -299,8 +302,6 @@ export default defineComponent({
 
 .logout-button,
 .account-link {
-	--hover-color: #f5f5f5;
-
 	width: 100%;
 	padding: 8px 27px;
 	text-align: left;
@@ -309,11 +310,6 @@ export default defineComponent({
 	background-color: transparent;
 	border-color: transparent;
 	outline: none;
-
-	&:hover,
-	&:focus {
-		background-color: var(--hover-color);
-	}
 }
 
 .account-link {
@@ -322,6 +318,8 @@ export default defineComponent({
 
 .school-logo {
 	max-height: 100%;
+	// Without max-width Firefox calculates the width of the surrounding flexbox wrongly for large images. Thus it must be set here.
+	max-width: 100%;
 	margin-left: 1rem;
 }
 </style>

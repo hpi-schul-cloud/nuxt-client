@@ -1,19 +1,19 @@
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
-	isEnum,
-	isMongoId,
-	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
+	isEnum,
+	isMongoId,
+	isOfficialSchoolNumber,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
-import { RouteRecordRaw, RouteLocationNormalized } from "vue-router";
-import { H5PContentParentType } from "@/h5pEditorApi/v3";
+import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 // routes configuration sorted in alphabetical order
 export const routes: Readonly<RouteRecordRaw[]> = [
@@ -195,6 +195,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		props: (to: RouteLocationNormalized) => ({
 			sourceSchoolNumber: to.query.sourceSchoolNumber,
 			targetSchoolNumber: to.query.targetSchoolNumber,
+			multipleUsersFound: to.query.multipleUsersFound,
 		}),
 		meta: {
 			isPublic: true,
@@ -235,6 +236,11 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		name: "rooms-id",
 	},
 	{
+		path: `/rooms`,
+		redirect: { name: "rooms-overview" },
+		name: "rooms",
+	},
+	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
 		component: async () => (await import("@page-board")).ColumnBoardPage,
 		name: "rooms-board",
@@ -261,7 +267,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		path: `/tools/context/tool-configuration`,
 		component: () =>
 			import(
-				"@/pages/context-external-tool/ContextExternalToolConfigurator.page.vue"
+				"@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"
 			),
 		name: "context-external-tool-configuration",
 		beforeEnter: Multiguard([
@@ -277,7 +283,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 				name: "context-external-tool-configuration-edit",
 				component: () =>
 					import(
-						"@/pages/context-external-tool/ContextExternalToolConfigurator.page.vue"
+						"@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"
 					),
 			},
 		],
@@ -305,5 +311,10 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 			parentId: to.query.parentId,
 			parentType: to.query.parentType,
 		}),
+	},
+	{
+		path: `/media-shelf`,
+		component: async () => (await import("@page-media-shelf")).MediaShelfPage,
+		name: "media-shelf",
 	},
 ];

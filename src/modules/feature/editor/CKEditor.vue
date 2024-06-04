@@ -13,26 +13,24 @@
 </template>
 
 <script>
-import {
-	boardToolbarSimple,
-	boardToolbarRegular,
-	newsToolbar,
-	boardPlugins,
-	newsPlugins,
-	boardHeadings,
-	newsHeadings,
-} from "./config";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useMediaQuery, useVModel } from "@vueuse/core";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
-import { defineComponent, computed, ref } from "vue";
+import { useMediaQuery, useVModel } from "@vueuse/core";
+import { computed, defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
-
-window.katex = require("katex");
+import {
+	boardHeadings,
+	boardPlugins,
+	boardToolbarRegular,
+	boardToolbarSimple,
+	newsHeadings,
+	newsPlugins,
+	newsToolbar,
+} from "./config";
 
 export default defineComponent({
 	name: "CkEditor",
@@ -107,6 +105,7 @@ export default defineComponent({
 				heading: headings[props.mode],
 				link: {
 					defaultProtocol: "//",
+					addTargetToExternalLinks: true,
 				},
 				highlight: {
 					options: [
@@ -227,7 +226,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-@import "katex/dist/katex.min.css";
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
 :root {

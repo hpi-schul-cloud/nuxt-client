@@ -50,26 +50,13 @@
 					<v-container class="pt-0">
 						<v-checkbox
 							class="check-options"
-							v-model="allTopicsSelected"
-							data-testid="all-topics-checkbox"
-							:indeterminate="someTopicsSelected"
-							@click="toggleAllTopics"
-							:label="$t('pages.room.modal.course.export.options.topics')"
-						/>
-						<v-checkbox
-							class="check-options ml-8"
-							v-for="item in allTopics"
-							v-model="item.isSelected"
-							:key="item.id"
-							:label="item.title"
-						/>
-						<v-checkbox
-							class="check-options"
 							v-model="allTasksSelected"
 							data-testid="all-tasks-checkbox"
 							:indeterminate="someTasksSelected"
+							:disabled="allTasks.length === 0"
 							@click="toggleAllTasks"
 							:label="$t('pages.room.modal.course.export.options.tasks')"
+							density="compact"
 						/>
 						<v-checkbox
 							class="check-options ml-8"
@@ -77,6 +64,43 @@
 							v-model="item.isSelected"
 							:key="item.id"
 							:label="item.title"
+							density="compact"
+						/>
+						<v-checkbox
+							class="check-options"
+							v-model="allTopicsSelected"
+							data-testid="all-topics-checkbox"
+							:indeterminate="someTopicsSelected"
+							:disabled="allTopics.length === 0"
+							@click="toggleAllTopics"
+							:label="$t('pages.room.modal.course.export.options.topics')"
+							density="compact"
+						/>
+						<v-checkbox
+							class="check-options ml-8"
+							v-for="item in allTopics"
+							v-model="item.isSelected"
+							:key="item.id"
+							:label="item.title"
+							density="compact"
+						/>
+						<v-checkbox
+							class="check-options"
+							v-model="allColumnBoardsSelected"
+							data-testid="all-column-boards-checkbox"
+							:indeterminate="someColumnBoardsSelected"
+							:disabled="allColumnBoards.length === 0"
+							@click="toggleAllColumnBoards"
+							:label="$t('pages.room.modal.course.export.options.columnBoards')"
+							density="compact"
+						/>
+						<v-checkbox
+							class="check-options ml-8"
+							v-for="item in allColumnBoards"
+							v-model="item.isSelected"
+							:key="item.id"
+							:label="item.title"
+							density="compact"
 						/>
 					</v-container>
 				</div>
@@ -187,7 +211,12 @@ const allTopicsSelected = computed(() => {
 
 const allTasks = ref<Array<Selection>>([]);
 const allTasksSelected = computed(() => {
-	return allTasks.value.every((topic) => topic.isSelected);
+	return allTasks.value.every((task) => task.isSelected);
+});
+
+const allColumnBoards = ref<Array<Selection>>([]);
+const allColumnBoardsSelected = computed(() => {
+	return allColumnBoards.value.every((columnBoard) => columnBoard.isSelected);
 });
 
 watch(
@@ -195,6 +224,7 @@ watch(
 	(newValue) => {
 		allTopics.value = [];
 		allTasks.value = [];
+		allColumnBoards.value = [];
 
 		newValue.forEach((element: any) => {
 			if (element.type === BoardElementResponseTypeEnum.Lesson) {
@@ -209,6 +239,14 @@ watch(
 				allTasks.value.push({
 					isSelected: true,
 					title: element.content.name,
+					id: element.content.id,
+				});
+			}
+
+			if (element.type === BoardElementResponseTypeEnum.ColumnBoard) {
+				allColumnBoards.value.push({
+					isSelected: true,
+					title: element.content.title,
 					id: element.content.id,
 				});
 			}
@@ -235,6 +273,13 @@ const someTasksSelected = computed(() => {
 	);
 });
 
+const someColumnBoardsSelected = computed(() => {
+	return (
+		allColumnBoards.value.some((columnBoard) => columnBoard.isSelected) &&
+		!allColumnBoardsSelected.value
+	);
+});
+
 function onCloseDialog(): void {
 	emit("dialog-closed", false);
 	commonCartridgeExportModule.resetExportFlow();
@@ -244,6 +289,9 @@ function onCloseDialog(): void {
 	});
 	allTopics.value.forEach((topic) => {
 		topic.isSelected = true;
+	});
+	allColumnBoards.value.forEach((columnBoard) => {
+		columnBoard.isSelected = true;
 	});
 }
 
@@ -258,7 +306,7 @@ async function onExport(): Promise<void> {
 	notifier.show({
 		text: t("common.words.export"),
 		status: "success",
-		timeout: 10000,
+		timeout: 5000,
 	});
 
 	const topicIds: string[] = allTopics.value
@@ -267,9 +315,13 @@ async function onExport(): Promise<void> {
 	const taskIds = allTasks.value
 		.filter((task) => task.isSelected)
 		.map((task) => task.id);
+	const columnBoardIds = allColumnBoards.value
+		.filter((columnBoard) => columnBoard.isSelected)
+		.map((columnBoard) => columnBoard.id);
 
 	commonCartridgeExportModule.setTopics(topicIds);
 	commonCartridgeExportModule.setTasks(taskIds);
+	commonCartridgeExportModule.setColumnBoards(columnBoardIds);
 	await commonCartridgeExportModule.startExport();
 	onCloseDialog();
 }
@@ -282,6 +334,10 @@ function onBack(): void {
 	});
 	allTopics.value.forEach((topic) => {
 		topic.isSelected = true;
+	});
+	// AI next 3 lines
+	allColumnBoards.value.forEach((columnBoard) => {
+		columnBoard.isSelected = true;
 	});
 	commonCartridgeExportModule.setIsExportModalOpen(true);
 }
@@ -299,6 +355,15 @@ function toggleAllTasks(): void {
 
 	allTasks.value.forEach((task) => {
 		task.isSelected = newValue;
+	});
+}
+
+function toggleAllColumnBoards(): void {
+	// AI next 5 lines
+	const newValue = !allColumnBoardsSelected.value;
+
+	allColumnBoards.value.forEach((columnBoard) => {
+		columnBoard.isSelected = newValue;
 	});
 }
 </script>

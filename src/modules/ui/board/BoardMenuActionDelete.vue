@@ -1,8 +1,8 @@
 <template>
 	<BoardMenuAction
 		:icon="mdiTrashCanOutline"
-		@click="onClick"
 		data-testid="board-menu-action-delete"
+		@click="onClick"
 	>
 		{{ $t("components.board.action.delete") }}
 	</BoardMenuAction>

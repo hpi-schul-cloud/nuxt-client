@@ -1,18 +1,18 @@
 <template>
-	<div
-		:style="{ 'min-width': colWidth + 'px', 'max-width': colWidth + 'px' }"
-		class="column-drag-handle bg-white px-4"
-	>
+	<div :style="columnStyle" :class="columnClasses">
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
 			:titlePlaceholder="titlePlaceholder"
 			:index="index"
+			:isListBoard="isListBoard"
 			@delete:column="onColumnDelete"
+			@move:column-down="onMoveColumnDown"
 			@move:column-left="onMoveColumnLeft"
 			@move:column-right="onMoveColumnRight"
+			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
-			class="pl-2"
+			:class="{ 'pl-2': !isListBoard }"
 		/>
 		<div>
 			<Sortable
@@ -24,7 +24,7 @@
 					animation: 250,
 					bubbleScroll: true,
 					direction: 'vertical',
-					delay: isDesktop ? 2 : 300,
+					delay: isTouchDetected ? 300 : 2,
 					disabled: !hasMovePermission,
 					dragClass: 'elevation-10',
 					dragoverBubble: false,
@@ -33,19 +33,22 @@
 					filter: '.v-input, v-btn',
 					preventOnFilter: false,
 					forceFallback: true,
-					ghostClass: 'sortable-drag-ghost',
+					ghostClass: sortableGhostClasses,
 					scroll: true,
 				}"
-				:class="{ 'expanded-column': isDragging }"
-				class="scrollable-column"
+				:class="sortableClasses"
 				@start="onDragStart"
 				@end="onDragEnd"
 			>
 				<template #item="{ element, index }">
 					<CardHost
+						v-if="element"
 						:data-card-id="element.cardId"
-						class="draggable my-3 mx-2"
-						:class="hasMovePermission ? '' : 'drag-disabled'"
+						class="draggable my-3"
+						:class="{
+							'drag-disabled': !hasMovePermission,
+							'mx-2': !isListBoard,
+						}"
 						:card-id="element.cardId"
 						:height="element.height"
 						@move:card-keyboard="
@@ -57,28 +60,25 @@
 				</template>
 			</Sortable>
 			<BoardAddCardButton
-				v-if="showAddButton"
 				@add-card="onCreateCard"
 				:data-testid="`column-${index}-add-card-btn`"
+				:style="{ visibility: !showAddButton ? 'hidden' : 'visible' }"
 			/>
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useDebounceFn, useMediaQuery } from "@vueuse/core";
+import { useDebounceFn } from "@vueuse/core";
 import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { useBoardPermissions } from "@data-board";
+import { useBoardPermissions, useBoardStore } from "@data-board";
+import { useTouchDetection } from "@util-device-detection";
 import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
-	CardMove,
 	DragAndDropKey,
 	cardDropPlaceholderOptions,
-	horizontalCursorKeys,
-	verticalCursorKeys,
 } from "@/types/board/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
@@ -111,25 +111,50 @@ export default defineComponent({
 			required: true,
 		},
 		index: { type: Number, required: true },
+		isListBoard: { type: Boolean, required: true },
 	},
 	emits: [
 		"create:card",
 		"delete:card",
 		"delete:column",
+		"move:column-down",
 		"move:column-left",
 		"move:column-right",
+		"move:column-up",
 		"reload:board",
-		"update:card-position",
 		"update:column-title",
 	],
 	setup(props, { emit }) {
 		const { t } = useI18n();
+		const boardStore = useBoardStore();
 		const reactiveIndex = toRef(props, "index");
 		const colWidth = ref<number>(400);
 		const { hasMovePermission, hasCreateColumnPermission } =
 			useBoardPermissions();
 
+		const columnClasses = computed(() => {
+			const classes = ["column-drag-handle", "bg-white"];
+			if (props.isListBoard) {
+				classes.push("d-flex", "flex-column", "align-stretch");
+			} else {
+				classes.push("px-4");
+			}
+			return classes;
+		});
+
+		const columnStyle = computed(() => {
+			if (props.isListBoard) {
+				return;
+			}
+			const columnLayout = {
+				"min-width": `${colWidth.value}px`,
+				"max-width": `${colWidth.value}px`,
+			};
+			return columnLayout;
+		});
+
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
+		const { isTouchDetected } = useTouchDetection();
 		const showAddButton = computed(
 			() => hasCreateColumnPermission && isDragging.value === false
 		);
@@ -156,7 +181,6 @@ export default defineComponent({
 		const onDeleteCard = (cardId: string): void => {
 			emit("delete:card", cardId);
 		};
-		const isDesktop = useMediaQuery(DeviceMediaQuery.Desktop);
 
 		const onDragStart = (): void => {
 			dragStart();
@@ -165,54 +189,82 @@ export default defineComponent({
 		const onDragEnd = async (event: SortableEvent) => {
 			dragEnd();
 			const { newIndex, oldIndex, to, from, item } = event;
-			const toColumnId = extractDataAttribute(to, "columnId");
+			const cardId = extractDataAttribute(item, "cardId") as string;
 			const fromColumnId = extractDataAttribute(from, "columnId") as string;
-			const cardId = extractDataAttribute(event.item, "cardId") as string;
+			const toColumnId = extractDataAttribute(to, "columnId");
+			const toColumnIndex = toColumnId
+				? boardStore.getColumnIndex(toColumnId)
+				: undefined;
 
 			if (toColumnId !== fromColumnId) {
 				item?.parentNode?.removeChild(item);
 			}
 
-			if (newIndex !== undefined && oldIndex !== undefined) {
-				const cardMove: CardMove = {
-					cardId,
-					newIndex,
-					oldIndex,
-					fromColumnId,
-					toColumnId,
-				};
-
-				emit("update:card-position", cardMove);
-			}
+			boardStore.moveCardRequest({
+				cardId,
+				oldIndex: oldIndex!,
+				newIndex: newIndex!,
+				fromColumnId,
+				fromColumnIndex: boardStore.getColumnIndex(fromColumnId),
+				toColumnId,
+				toColumnIndex,
+			});
 		};
 
 		const onMoveCardKeyboard = (
 			cardIndex: number,
-			cardId: string,
+			cardId: string | undefined,
 			keyString: DragAndDropKey
 		) => {
-			const cardMove: CardMove = {
-				oldIndex: cardIndex,
-				newIndex: -1,
+			if (cardId === undefined) return;
+
+			const fromColumnId = props.column.id;
+			const fromColumnIndex = boardStore.getColumnIndex(fromColumnId);
+
+			if (
+				keyString === "ArrowRight" &&
+				fromColumnIndex === boardStore.getLastColumnIndex()
+			) {
+				boardStore.moveCardToNewColumn(cardId);
+				return;
+			}
+
+			const oldIndex = cardIndex;
+			let toColumnId: string | undefined = fromColumnId;
+			let toColumnIndex = fromColumnIndex;
+			let newIndex = 0;
+			let forceNextTick = false;
+
+			if (keyString === "ArrowUp") {
+				if (cardIndex === 0) return;
+				forceNextTick = true;
+				newIndex = oldIndex - 1;
+			} else if (keyString === "ArrowDown") {
+				if (cardIndex === props.column.cards.length - 1) return;
+				newIndex = oldIndex + 1;
+			} else if (keyString === "ArrowLeft") {
+				if (fromColumnIndex === 0) return;
+				toColumnIndex = fromColumnIndex - 1;
+				toColumnId = boardStore.getColumnId(toColumnIndex);
+			} else if (keyString === "ArrowRight") {
+				toColumnIndex = fromColumnIndex + 1;
+				toColumnId = boardStore.getColumnId(toColumnIndex);
+			}
+
+			boardStore.moveCardRequest({
 				cardId,
-				fromColumnId: props.column.id,
-				toColumnId: props.column.id,
-			};
+				oldIndex,
+				newIndex,
+				fromColumnId,
+				fromColumnIndex,
+				toColumnId,
+				toColumnIndex,
+				forceNextTick,
+			});
+		};
 
-			if (verticalCursorKeys.includes(keyString)) {
-				const change = keyString === "ArrowUp" ? -1 : +1;
-				if (change === 1 && cardIndex === props.column.cards.length - 1) return;
-				if (change === -1 && cardIndex === 0) return;
-				if (keyString === "ArrowUp") cardMove.forceNextTick = true;
-				cardMove.newIndex = cardIndex + change;
-			}
-
-			if (horizontalCursorKeys.includes(keyString)) {
-				cardMove.columnDelta = keyString === "ArrowLeft" ? -1 : +1;
-				cardMove.newIndex = 0;
-			}
-
-			emit("update:card-position", cardMove);
+		const onMoveColumnDown = () => {
+			emit("move:column-down");
 		};
 
 		const onMoveColumnLeft = () => {
@@ -221,6 +273,10 @@ export default defineComponent({
 
 		const onMoveColumnRight = () => {
 			emit("move:column-right");
+		};
+
+		const onMoveColumnUp = () => {
+			emit("move:column-up");
 		};
 
 		const onReloadBoard = () => {
@@ -235,17 +291,43 @@ export default defineComponent({
 			return props.column.cards[index];
 		};
 
-		const titlePlaceholder = computed(
-			() => `${t("components.boardColumn").toString()} ${props.index + 1}`
-		);
+		const titlePlaceholder = computed(() => {
+			const type = props.isListBoard
+				? t("components.boardSection")
+				: t("components.boardColumn");
+
+			return `${type} ${props.index + 1}`;
+		});
+
+		const sortableClasses = computed(() => {
+			const classes = [];
+			if (!props.isListBoard) {
+				classes.push("scrollable-column");
+				if (isDragging.value) {
+					classes.push("expanded-column");
+				}
+			}
+			return classes;
+		});
+
+		const sortableGhostClasses = computed(() => {
+			const classes = ["sortable-drag-ghost"];
+			if (!props.isListBoard) {
+				classes.push("column-layout");
+			}
+			return classes;
+		});
 
 		return {
 			cardDropPlaceholderOptions,
+			columnClasses,
+			columnStyle,
 			colWidth,
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
-			isDesktop,
+			isTouchDetected,
+			sortableClasses,
 			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
@@ -253,13 +335,16 @@ export default defineComponent({
 			onDragStart,
 			onDragEnd,
 			onMoveCardKeyboard,
+			onMoveColumnDown,
 			onMoveColumnLeft,
 			onMoveColumnRight,
+			onMoveColumnUp,
 			onReloadBoard,
 			onUpdateTitle,
 			getChildPayload,
 			reactiveIndex,
 			showAddButton,
+			sortableGhostClasses,
 		};
 	},
 });
@@ -268,6 +353,8 @@ export default defineComponent({
 <style>
 .sortable-drag-ghost .v-card {
 	opacity: 0.6;
+}
+.column-layout {
 	width: 346px; /* size of the card - column has 400px width and some paddings and margins */
 }
 </style>

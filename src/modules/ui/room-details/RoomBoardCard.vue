@@ -18,7 +18,7 @@
 		<VCardText class="pb-1">
 			<div class="top-row-container mb-0">
 				<div class="d-flex align-center mb-3 tagline">
-					<VIcon size="14" class="mr-1" :icon="mdiViewDashboard" />
+					<VIcon size="14" class="mr-1" :icon="titleIcon" />
 					<span
 						class="title-board-card"
 						:data-testid="`board-card-title-${boardCardIndex}`"
@@ -67,9 +67,12 @@ import {
 	mdiShareVariantOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
-	mdiViewDashboard,
+	mdiViewDashboardOutline,
 } from "@/components/icons/material";
-import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
+import {
+	BoardLayout,
+	ImportUserResponseRoleNamesEnum as Roles,
+} from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -105,7 +108,9 @@ const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const cardTitle = computed(() => {
-	const titlePrefix = t("pages.room.boardCard.label.columnBoard");
+	const titlePrefix = isListBoard.value
+		? t("pages.room.boardCard.label.listBoard")
+		: t("pages.room.boardCard.label.columnBoard");
 
 	if (isDraft.value) {
 		const titleSuffix = ` - ${t("common.words.draft")}`;
@@ -117,6 +122,17 @@ const cardTitle = computed(() => {
 
 const isDraft = computed(() => {
 	return !props.columnBoardItem.published;
+});
+
+const isListBoard = computed(() => {
+	return props.columnBoardItem.layout === BoardLayout.List;
+});
+
+const titleIcon = computed(() => {
+	const icon = isListBoard.value
+		? "$mdiCustomGridOutline"
+		: mdiViewDashboardOutline;
+	return icon;
 });
 
 const onPublish = () => {
@@ -191,7 +207,7 @@ const actionsMenuItems = computed(() => {
 		actions.push({
 			icon: mdiShareVariantOutline,
 			action: () => emit("share-board"),
-			name: t("common.actions.shareBoard"),
+			name: t("common.actions.shareCopy"),
 			dataTestId: `board-card-menu-action-share-${
 				toRef(props, "boardCardIndex").value
 			}`,

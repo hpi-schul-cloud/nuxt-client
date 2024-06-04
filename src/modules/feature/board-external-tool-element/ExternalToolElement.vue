@@ -15,7 +15,7 @@
 	>
 		<ContentElementBar :has-grey-background="true" :icon="getIcon">
 			<template #logo v-if="displayData && displayData.logoUrl">
-				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" cover />
+				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" />
 			</template>
 			<template #title>
 				{{
@@ -37,7 +37,7 @@
 		</ContentElementBar>
 		<ExternalToolElementAlert
 			:toolDisplayName="toolDisplayName"
-			:error="error"
+			:error="displayError || launchError"
 			:tool-status="toolConfigurationStatus"
 			data-testid="board-external-tool-element-alert"
 		/>
@@ -53,14 +53,13 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "vue-i18n";
 import { ExternalToolElementResponse } from "@/serverApi/v3";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import {
-	useExternalToolElementDisplayState,
+	ContextExternalTool,
+	ContextExternalToolConfigurationStatus,
+	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { mdiPuzzleOutline } from "@mdi/js";
@@ -76,8 +75,8 @@ import {
 	Ref,
 	ref,
 	toRef,
-	watch,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
@@ -112,10 +111,14 @@ export default defineComponent({
 			fetchDisplayData,
 			displayData,
 			isLoading: isDisplayDataLoading,
-			error,
-		} = useExternalToolElementDisplayState();
+			error: displayError,
+		} = useExternalToolDisplayState();
 
-		const { launchTool, fetchLaunchRequest } = useExternalToolLaunchState();
+		const {
+			launchTool,
+			fetchContextLaunchRequest,
+			error: launchError,
+		} = useExternalToolLaunchState();
 
 		const autofocus: Ref<boolean> = ref(false);
 		const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
@@ -133,13 +136,6 @@ export default defineComponent({
 		const { lastCreatedElementId, resetLastCreatedElementId } =
 			useSharedLastCreatedElement();
 
-		watch(lastCreatedElementId, (newValue) => {
-			if (newValue !== undefined && newValue === props.element.id) {
-				isConfigurationDialogOpen.value = true;
-				resetLastCreatedElementId();
-			}
-		});
-
 		const hasLinkedTool: ComputedRef<boolean> = computed(
 			() => !!modelValue.value.contextExternalToolId
 		);
@@ -148,14 +144,13 @@ export default defineComponent({
 			() => displayData.value?.name ?? "..."
 		);
 
-		const isToolOutdated: ComputedRef<boolean> = computed(
+		const isToolLaunchable: ComputedRef<boolean> = computed(
 			() =>
-				!!displayData.value?.status.isOutdatedOnScopeSchool ||
-				!!displayData.value?.status.isOutdatedOnScopeContext
-		);
-
-		const isToolIncomplete: ComputedRef<boolean> = computed(
-			() => !!displayData.value?.status.isIncompleteOnScopeContext
+				!displayData.value?.status.isOutdatedOnScopeSchool &&
+				!displayData.value?.status.isOutdatedOnScopeContext &&
+				!displayData.value?.status.isIncompleteOnScopeContext &&
+				!displayData.value?.status.isDeactivated &&
+				!displayData.value?.status.isNotLicensed
 		);
 
 		const toolConfigurationStatus: ComputedRef<ContextExternalToolConfigurationStatus> =
@@ -165,7 +160,9 @@ export default defineComponent({
 						isOutdatedOnScopeSchool: false,
 						isOutdatedOnScopeContext: false,
 						isIncompleteOnScopeContext: false,
+						isIncompleteOperationalOnScopeContext: false,
 						isDeactivated: false,
+						isNotLicensed: false,
 					}
 				);
 			});
@@ -202,12 +199,10 @@ export default defineComponent({
 			if (hasLinkedTool.value && !props.isEditMode) {
 				launchTool();
 
-				if (
-					!isToolOutdated.value &&
-					!isToolIncomplete.value &&
-					modelValue.value.contextExternalToolId
-				) {
-					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
+				if (isToolLaunchable.value && modelValue.value.contextExternalToolId) {
+					await fetchContextLaunchRequest(
+						modelValue.value.contextExternalToolId
+					);
 				}
 			}
 
@@ -230,13 +225,21 @@ export default defineComponent({
 			if (modelValue.value.contextExternalToolId) {
 				await fetchDisplayData(modelValue.value.contextExternalToolId);
 
-				if (!isToolOutdated.value && !isToolIncomplete.value) {
-					await fetchLaunchRequest(modelValue.value.contextExternalToolId);
+				if (isToolLaunchable.value) {
+					await fetchContextLaunchRequest(
+						modelValue.value.contextExternalToolId
+					);
 				}
 			}
 		};
 
-		onMounted(loadCardData);
+		onMounted(() => {
+			loadCardData();
+			if (lastCreatedElementId.value === props.element.id) {
+				isConfigurationDialogOpen.value = true;
+				resetLastCreatedElementId();
+			}
+		});
 
 		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
@@ -254,10 +257,9 @@ export default defineComponent({
 			hasLinkedTool,
 			toolDisplayName,
 			displayData,
-			error,
+			displayError,
+			launchError,
 			isLoading,
-			isToolOutdated,
-			isToolIncomplete,
 			isConfigurationDialogOpen,
 			toolConfigurationStatus,
 			mdiPuzzleOutline,

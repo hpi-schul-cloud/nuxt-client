@@ -6,33 +6,43 @@
 
 		<WarningAlert v-if="toolStatus && toolStatus.isDeactivated">
 			{{
-				$t("common.tool.information.deactivated", {
-					toolDisplayName,
+				$t(toolDeactivatedMessage, {
+					toolName: toolDisplayName,
 				})
 			}}
 		</WarningAlert>
 
-		<WarningAlert v-if="isToolIncomplete">
-			{{ incompleteMessage }}
+		<WarningAlert v-else-if="toolStatus && toolStatus.isNotLicensed">
+			{{
+				$t(toolNotLicensedMessage, {
+					toolName: toolDisplayName,
+				})
+			}}
 		</WarningAlert>
 
-		<WarningAlert v-if="isToolOutdated">
-			{{ outdatedMessage }}
+		<InfoAlert v-if="isToolIncompleteOperational">
+			{{ $t(toolStatusMessage, { toolName: toolDisplayName }) }}
+		</InfoAlert>
+
+		<WarningAlert v-if="isToolNotLaunchable">
+			{{ $t(toolStatusMessage, { toolName: toolDisplayName }) }}
 		</WarningAlert>
 	</div>
 </template>
 
 <script lang="ts">
-import { useI18n } from "vue-i18n";
 import { BusinessError } from "@/store/types/commons";
 import { useBoardPermissions } from "@data-board";
-import { WarningAlert } from "@ui-alert";
+import {
+	ContextExternalToolConfigurationStatus,
+	useContextExternalToolConfigurationStatus,
+} from "@data-external-tool";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { computed, ComputedRef, defineComponent, PropType } from "vue";
-import { useContextExternalToolConfigurationStatus } from "@data-external-tool";
-import { ContextExternalToolConfigurationStatus } from "@/store/external-tool";
 
 export default defineComponent({
 	components: {
+		InfoAlert,
 		WarningAlert,
 	},
 	props: {
@@ -49,23 +59,23 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
-		const { t } = useI18n();
-
 		const {
-			determineOutdatedTranslationKey,
-			determineIncompleteTranslationKey,
+			determineToolStatusTranslationKey,
+			determineDeactivatedTranslationKey,
+			determineNotLicensedTranslationKey,
 		} = useContextExternalToolConfigurationStatus();
 
 		const { isTeacher } = useBoardPermissions();
 
-		const isToolOutdated: ComputedRef<boolean> = computed(
+		const isToolNotLaunchable: ComputedRef<boolean> = computed(
 			() =>
-				!!props.toolStatus?.isOutdatedOnScopeSchool ||
-				!!props.toolStatus?.isOutdatedOnScopeContext
+				props.toolStatus.isOutdatedOnScopeSchool ||
+				props.toolStatus.isOutdatedOnScopeContext ||
+				props.toolStatus.isIncompleteOnScopeContext
 		);
 
-		const isToolIncomplete: ComputedRef<boolean> = computed(
-			() => !!props.toolStatus?.isIncompleteOnScopeContext
+		const isToolIncompleteOperational: ComputedRef<boolean> = computed(
+			() => props.toolStatus.isIncompleteOperationalOnScopeContext
 		);
 
 		const errorMessage: ComputedRef<string> = computed(() =>
@@ -74,24 +84,33 @@ export default defineComponent({
 				: "feature-board-external-tool-element.alert.error.student"
 		);
 
-		const outdatedMessage: ComputedRef<string> = computed(() => {
-			const translationKey = determineOutdatedTranslationKey(props.toolStatus);
+		const toolStatusMessage: ComputedRef<string> = computed(() => {
+			const translationKey = determineToolStatusTranslationKey(
+				props.toolStatus
+			);
 
-			return t(translationKey);
+			return translationKey;
 		});
 
-		const incompleteMessage: ComputedRef<string | undefined> = computed(() => {
-			const translationKey = determineIncompleteTranslationKey();
+		const toolDeactivatedMessage: ComputedRef<string> = computed(() => {
+			const translationKey = determineDeactivatedTranslationKey();
 
-			return t(translationKey);
+			return translationKey;
+		});
+
+		const toolNotLicensedMessage: ComputedRef<string> = computed(() => {
+			const translationKey = determineNotLicensedTranslationKey();
+
+			return translationKey;
 		});
 
 		return {
 			errorMessage,
-			outdatedMessage,
-			incompleteMessage,
-			isToolOutdated,
-			isToolIncomplete,
+			toolStatusMessage,
+			isToolNotLaunchable,
+			isToolIncompleteOperational,
+			toolDeactivatedMessage,
+			toolNotLicensedMessage,
 		};
 	},
 });

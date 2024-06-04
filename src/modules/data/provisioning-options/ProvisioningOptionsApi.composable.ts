@@ -2,10 +2,10 @@ import {
 	SchoolApiFactory,
 	SchulConneXProvisioningOptionsResponse,
 } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
-import { ProvisioningOptions } from "./type/ProvisioningOptions";
 import { schoolsModule } from "@/store";
+import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
+import { ProvisioningOptions } from "./type/ProvisioningOptions";
 
 export const useProvisioningOptionsApi = () => {
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
@@ -23,6 +23,7 @@ export const useProvisioningOptionsApi = () => {
 			class: response.data.groupProvisioningClassesEnabled,
 			course: response.data.groupProvisioningCoursesEnabled,
 			others: response.data.groupProvisioningOtherEnabled,
+			schoolExternalTools: response.data.schoolExternalToolProvisioningEnabled,
 		};
 
 		return provisioningOptions;
@@ -40,6 +41,8 @@ export const useProvisioningOptionsApi = () => {
 					groupProvisioningClassesEnabled: provisioningOptions.class,
 					groupProvisioningCoursesEnabled: provisioningOptions.course,
 					groupProvisioningOtherEnabled: provisioningOptions.others,
+					schoolExternalToolProvisioningEnabled:
+						provisioningOptions.schoolExternalTools,
 				}
 			);
 
@@ -47,6 +50,7 @@ export const useProvisioningOptionsApi = () => {
 			class: response.data.groupProvisioningClassesEnabled,
 			course: response.data.groupProvisioningCoursesEnabled,
 			others: response.data.groupProvisioningOtherEnabled,
+			schoolExternalTools: response.data.schoolExternalToolProvisioningEnabled,
 		};
 
 		return savedOptions;

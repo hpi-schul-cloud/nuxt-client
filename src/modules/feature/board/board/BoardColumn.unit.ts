@@ -1,29 +1,52 @@
 import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
+	envsFactory,
 } from "@@/tests/test-utils/factory";
 import { shallowMount } from "@vue/test-utils";
-import { useBoardPermissions } from "@data-board";
+import { useBoardPermissions, useBoardStore } from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { nextTick } from "vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { envConfigModule, notifierModule } from "@/store";
+import { createTestingPinia } from "@pinia/testing";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardNotifier } from "@util-board";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
 
 const { isDragging, dragEnd } = useDragAndDrop();
 
-jest.mock("@data-board");
+jest.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
+jest.mock("@util-board");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
 describe("BoardColumn", () => {
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
+	beforeEach(() => {
+		setupStores({ envConfigModule: EnvConfigModule });
+		const envs = envsFactory.build({
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
+		});
+		envConfigModule.setEnvs(envs);
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+	});
+
 	const cards = cardSkeletonResponseFactory.buildList(3);
 	const column = columnResponseFactory.build({
 		cards,
@@ -40,16 +63,27 @@ describe("BoardColumn", () => {
 
 		const wrapper = shallowMount(BoardColumnVue, {
 			global: {
-				plugins: [createTestingI18n(), createTestingVuetify()],
+				plugins: [
+					createTestingI18n(),
+					createTestingVuetify(),
+					createTestingPinia(),
+				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
-			propsData: { column, index: 1, columnCount: 1 },
+			props: {
+				column,
+				index: 1,
+				columnCount: 1,
+				isListBoard: false,
+			},
 		});
 
-		return { wrapper };
+		const store = mockedPiniaStoreTyping(useBoardStore);
+
+		return { wrapper, store };
 	};
 
 	describe("when component is mounted", () => {
@@ -60,8 +94,8 @@ describe("BoardColumn", () => {
 	});
 
 	describe("when a card moved ", () => {
-		it("should emit 'card-position-change'", async () => {
-			const { wrapper } = setup();
+		it("should call 'moveCardRequest' method", async () => {
+			const { wrapper, store } = setup();
 
 			const emitObject = {
 				oldIndex: 0,
@@ -83,35 +117,10 @@ describe("BoardColumn", () => {
 				},
 			};
 
-			const expectedEmitObject = {
-				oldIndex: 0,
-				newIndex: 1,
-				cardId: "card-id",
-				fromColumnId: "from-column-id",
-				toColumnId: "to-column-id",
-			};
-
 			const containerComponent = wrapper.findComponent({ name: "Sortable" });
 			containerComponent.vm.$emit("end", emitObject);
 
-			const emitted = wrapper.emitted("update:card-position") || [[]];
-
-			expect(emitted[0][0]).toStrictEqual(expectedEmitObject);
-		});
-
-		it("should not emit 'card-position-change'", async () => {
-			const { wrapper } = setup();
-			const emitObject = {
-				removedIndex: null,
-				addedIndex: null,
-				payload: column.cards[0],
-			};
-			const containerComponent = wrapper.findComponent({ name: "Sortable" });
-			containerComponent.vm.$emit("drop", emitObject);
-
-			const emitted = wrapper.emitted("update:card-position");
-
-			expect(emitted).toBeUndefined();
+			expect(store.moveCardRequest).toHaveBeenCalled();
 		});
 	});
 
@@ -161,17 +170,20 @@ describe("BoardColumn", () => {
 				expect(dndContainer.vm.options.disabled).toBe(true);
 			});
 		});
+
 		describe("when user is not permitted to create a card", () => {
-			it("should addCardComponent not be rendered on DOM", () => {
+			it("addCardComponent should not be visible", () => {
 				const { wrapper } = setup({
 					permissions: { hasCreateColumnPermission: false },
 				});
 
-				const addCardComponent = wrapper.findAllComponents({
+				const addCardComponent = wrapper.findComponent({
 					name: "BoardAddCardButton",
 				});
 
-				expect(addCardComponent.length).toStrictEqual(0);
+				expect(addCardComponent.attributes("style")).toStrictEqual(
+					"visibility: hidden;"
+				);
 			});
 		});
 	});
@@ -184,13 +196,13 @@ describe("BoardColumn", () => {
 				const columnHeader = wrapper.findComponent({
 					name: "BoardColumnHeader",
 				});
-				columnHeader.vm.$emit("move:column-left");
-				await nextTick();
+				await columnHeader.vm.$emit("move:column-left");
 
 				const emitted = wrapper.emitted("move:column-left");
 				expect(emitted).toHaveLength(1);
 			});
 		});
+
 		describe("when move:column-right was triggered by column header", () => {
 			it("should emit move:column-right", async () => {
 				const { wrapper } = setup();
@@ -198,10 +210,37 @@ describe("BoardColumn", () => {
 				const columnHeader = wrapper.findComponent({
 					name: "BoardColumnHeader",
 				});
-				columnHeader.vm.$emit("move:column-right");
-				await nextTick();
+				await columnHeader.vm.$emit("move:column-right");
 
 				const emitted = wrapper.emitted("move:column-right");
+				expect(emitted).toHaveLength(1);
+			});
+		});
+
+		describe("when move:column-down was triggered by column header", () => {
+			it("should emit move:column-down", async () => {
+				const { wrapper } = setup();
+
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
+				});
+				await columnHeader.vm.$emit("move:column-down");
+
+				const emitted = wrapper.emitted("move:column-down");
+				expect(emitted).toHaveLength(1);
+			});
+		});
+
+		describe("when move:column-up was triggered by column header", () => {
+			it("should emit move:column-up", async () => {
+				const { wrapper } = setup();
+
+				const columnHeader = wrapper.findComponent({
+					name: "BoardColumnHeader",
+				});
+				await columnHeader.vm.$emit("move:column-up");
+
+				const emitted = wrapper.emitted("move:column-up");
 				expect(emitted).toHaveLength(1);
 			});
 		});

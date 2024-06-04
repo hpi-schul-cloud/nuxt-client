@@ -36,7 +36,7 @@ describe("BoardMenuActionMoveUp Component", () => {
 				hasMultipleElements: true,
 			});
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeTruthy();
+			expect(action.exists()).toBe(true);
 		});
 
 		it("should not be rendered if element is in first position and a list of elements exists", () => {
@@ -45,7 +45,7 @@ describe("BoardMenuActionMoveUp Component", () => {
 				hasMultipleElements: true,
 			});
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeFalsy();
+			expect(action.exists()).toBe(false);
 		});
 		it("should not be rendered if element is the only element", () => {
 			const wrapper = setup({
@@ -53,7 +53,7 @@ describe("BoardMenuActionMoveUp Component", () => {
 				hasMultipleElements: false,
 			});
 			const action = wrapper.findComponent(BoardMenuAction);
-			expect(action.exists()).toBeFalsy();
+			expect(action.exists()).toBe(false);
 		});
 
 		it("should emit if is clicked", () => {

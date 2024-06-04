@@ -7,12 +7,6 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { mdiAlert, mdiCheckCircle } from "@mdi/js";
-import { mount } from "@vue/test-utils";
-import { nextTick, ref } from "vue";
-import ExternalToolSection from "./ExternalToolSection.vue";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
 import {
 	meResponseFactory,
 	schoolExternalToolFactory,
@@ -23,8 +17,14 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { mdiAlert, mdiCheckCircle } from "@mdi/js";
+import { mount } from "@vue/test-utils";
+import { nextTick, ref } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
+import ExternalToolSection from "./ExternalToolSection.vue";
 
 jest.mock("@data-external-tool");
 
@@ -134,7 +134,6 @@ describe("ExternalToolSection", () => {
 				parameters: [],
 				name: firstToolName,
 				status: schoolToolConfigurationStatusFactory.build(),
-				version: 1,
 				isDeactivated: false,
 			});
 
@@ -150,7 +149,6 @@ describe("ExternalToolSection", () => {
 						status: schoolToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 						}),
-						version: 1,
 						isDeactivated: false,
 					},
 					{
@@ -162,7 +160,6 @@ describe("ExternalToolSection", () => {
 						status: schoolToolConfigurationStatusFactory.build({
 							isDeactivated: true,
 						}),
-						version: 1,
 						isDeactivated: true,
 					},
 				],
@@ -319,7 +316,6 @@ describe("ExternalToolSection", () => {
 									parameters: [],
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
-									version: 1,
 									isDeactivated: false,
 								},
 							],
@@ -352,7 +348,6 @@ describe("ExternalToolSection", () => {
 									parameters: [],
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
-									version: 1,
 									isDeactivated: false,
 								},
 							],
@@ -387,7 +382,8 @@ describe("ExternalToolSection", () => {
 				wrapper.vm.itemToDelete = {
 					id: "id",
 					name: expectedName,
-					statusText: schoolToolConfigurationStatusFactory.build(),
+					externalToolId: "externalToolId",
+					statusText: "statusText",
 					isOutdated: false,
 					isDeactivated: false,
 				};

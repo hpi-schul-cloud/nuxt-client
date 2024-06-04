@@ -16,12 +16,13 @@ export default {
 	"common.actions.invite": "Надіслати посилання на курс",
 	"common.actions.logout": "Вийти з аккаунта",
 	"common.actions.ok": "ОК",
+	"common.actions.pickColor": "Вибрати колір тла",
 	"common.actions.remove": "Вилучити",
+	"common.actions.rename": "перейменувати",
 	"common.actions.save": "Зберегти",
 	"common.actions.scrollToTop": "Прокрутити вгору",
 	"common.actions.share": "Поділіться",
-	"common.actions.shareCourse": "Копія котирування акцій",
-	"common.actions.shareBoard": "Копія котирування дошки",
+	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.update": "Оновити",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
@@ -88,6 +89,17 @@ export default {
 	"common.labels.visibility": "Видимість",
 	"common.labels.visible": "Видимий",
 	"common.loading.text": "Дані завантажуються...",
+	"common.medium.alert.deactivated": "Медіа вимкнено.",
+	"common.medium.alert.notLicensed": "Медіа не активовано.",
+	"common.medium.alert.incomplete":
+		"Конфігурація носія не актуальна або не завершена.",
+	"common.medium.chip.deactivated": "Вимкнено",
+	"common.medium.chip.notLicensed": "Не активовано",
+	"common.medium.chip.incomplete": "Конфігурація не завершена",
+	"common.medium.information.admin": "Перевірте налаштування.",
+	"common.medium.information.student": "Будь ласка, зверніться до вчителя.",
+	"common.medium.information.teacher":
+		"Будь ласка, зверніться до адміністратора школи.",
 	"common.nodata": "Немає даних",
 	"common.notification.error": "Сталася помилка.",
 	"common.placeholder.birthdate": "20.02.2002",
@@ -111,24 +123,22 @@ export default {
 	"common.roleName.student": "Учень",
 	"common.roleName.superhero": "Адміністратор Schul-Cloud",
 	"common.roleName.teacher": "Викладач",
-	"common.tool.information.deactivated":
-		"Інструмент {toolDisplayName} вимкнено, тому його неможливо запустити.",
-	"common.tool.information.incomplete.student":
-		"Конфігурація інструменту неповна, тому інструмент не можна запустити. Будь ласка, зв'яжіться з викладачем або керівником курсу.",
-	"common.tool.information.incompleteOnContext.teacher":
-		"Конфігурація інструменту неповна, тому інструмент не можна запустити. Завершіть налаштування інструменту.",
-	"common.tool.information.incompleteOnSchool.teacher":
-		"Конфігурація інструменту неповна, тому інструмент не можна запустити. Будь ласка, зверніться до адміністратора школи.",
-	"common.tool.information.incompleteOnSchoolAndContext.teacher":
-		"Конфігурація інструменту неповна, тому інструмент не можна запустити. Будь ласка, завершіть налаштування інструменту та зверніться до адміністратора школи.",
+	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
+		"Конфігурація інструмента {toolName} неоновлена або неповна. Перевірте налаштування.",
 	"common.tool.information.outdated.student":
-		"Конфігурація інструменту застаріла, тому інструмент не можна запустити. Для оновлення зверніться до вчителя або викладача курсу.",
-	"common.tool.information.outdatedOnContext.teacher":
-		"Конфігурація інструменту застаріла, тому інструмент не можна запустити. Оновіть конфігурацію інструмента.",
+		"Конфігурація інструмента {toolName} неоновлена або неповна. Будь ласка, зверніться до свого вчителя або викладача курсу.",
+	"common.tool.information.deactivated.student":
+		"Інструмент {toolName} вимкнено. Будь ласка, зверніться до свого вчителя або викладача курсу.",
+	"common.tool.information.deactivated.teacher":
+		"Інструмент {toolName} вимкнено. Будь ласка, зверніться до адміністратора школи.",
+	"common.tool.information.notLicensed.student":
+		"Інструмент {toolName} не активовано. Будь ласка, зверніться до свого вчителя або викладача курсу.",
+	"common.tool.information.notLicensed.teacher":
+		"Інструмент {toolName} не активовано. Будь ласка, зверніться до адміністратора школи.",
+	"common.tool.information.outdated.teacher":
+		"Конфігурація інструменту {toolName} застаріла або неповна. Перевірте налаштування та зверніться до адміністратора школи.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"Конфігурація інструменту застаріла, тому інструмент не можна запустити. Для оновлення зверніться до адміністратора школи.",
-	"common.tool.information.outdatedOnSchoolAndContext.teacher":
-		"Конфігурація інструменту застаріла, тому інструмент не можна запустити. Оновіть конфігурацію інструменту та зверніться до адміністратора школи.",
+		"Конфігурація інструмента {toolName} неоновлена або неповна. Будь ласка, зверніться до адміністратора школи.",
 	"common.validation.email": "Введіть дійсну адресу електронної пошти",
 	"common.validation.invalid": "Введені вами дані недійсні",
 	"common.validation.number": "Потрібно ввести ціле число.",
@@ -154,6 +164,7 @@ export default {
 	"common.words.no": "Немає",
 	"common.words.noChoice": "Немає вибору",
 	"common.words.otherGroups": "інші групи",
+	"common.words.externalTools": "зовнішні засоби",
 	"common.words.planned": "запланований",
 	"common.words.privacyPolicy": "Політика конфіденційності",
 	"common.words.published": "опубліковано",
@@ -204,6 +215,10 @@ export default {
 		"Відкриває інструмент, який використовується для перенесення облікових записів користувачів на moin.schule без участі користувача. Цей інструмент стане доступним після успішного переходу першого користувача цієї школи на moin.schule.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Відкрийте помічник з міграції",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"Якщо ви скасуєте запуск майстра міграції зараз, зв'язки облікових записів, зроблені в поточному сеансі, будуть скинуті. Ви дійсно хочете скасувати майстер зараз?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"Ви впевнені, що хочете скасувати міграцію?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"Перенесення облікового запису завершено {date} о {time}.<br>Період очікування після завершення міграції нарешті закінчується {finishDate} о {finishTime}!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
@@ -260,6 +275,12 @@ export default {
 		"Активуйте цю опцію, якщо інші групи потрібно синхронізувати з {instance}.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Синхронізація інших груп",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"Якщо цю опцію активовано, активації із зовнішніх інструментів автоматично переймаються з moin.schule.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Активація зовнішніх інструментів",
+
 	"components.administration.provisioningOptions.page.title":
 		"Параметри синхронізації даних",
 	"components.administration.provisioningOptions.warning.consequence":
@@ -287,10 +308,10 @@ export default {
 	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
-	"components.board.alert.info.draft":
-		"Ця дошка більше не відображається для учасників курсу.",
+	"components.board.alert.info.draft": "Ця дошка невидима для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
-	"components.board.column.ghost.placeholder": "Додати стовпець",
+	"components.board.column.ghost.column.placeholder": "Додати стовпець",
+	"components.board.column.ghost.list.placeholder": "Додати розділ",
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
@@ -313,9 +334,14 @@ export default {
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
 	"components.boardElement": "Eлемент",
+	"components.boardRow": "рядок",
+	"components.boardSection": "розділ",
 	"components.cardElement.deleteElement": "Видалити елемент",
 	"components.cardElement.dragElement": "Перемістити елемент",
 	"components.cardElement.drawingElement": "Дошка",
+	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
+	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
+		"Цей Etherpad є видимою і доступною для редагування для всіх учасників курсу.",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
@@ -369,6 +395,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Зовнішні інструменти",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Посилання",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Подання",
@@ -432,6 +460,7 @@ export default {
 		"Ідентифікатори матеріалів не копіюються з технічних причин і повинні бути додані знову.",
 	"components.molecules.copyResult.information":
 		"В подальшому за допомогою швидких посилань можна доповнити відсутню інформацію. Посилання відкриваються в окремій вкладці.",
+	"components.molecules.copyResult.label.columnBoard": "Колонна дошка",
 	"components.molecules.copyResult.label.content": "Вміст",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "Зовнішні інструменти",
@@ -450,6 +479,7 @@ export default {
 	"components.molecules.copyResult.label.submissions": "підпорядкування",
 	"components.molecules.copyResult.label.text": "Текст",
 	"components.molecules.copyResult.label.tldraw": "Дошка",
+	"components.molecules.copyResult.label.link": "Посилання",
 	"components.molecules.copyResult.label.timeGroup": "Група часу",
 	"components.molecules.copyResult.label.unknown": "Невідомий",
 	"components.molecules.copyResult.label.userGroup": "Група користувачів",
@@ -462,6 +492,12 @@ export default {
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Усі елементи успішно скопійовано.",
+	"components.molecules.copyResult.board.successfullyCopied":
+		"Дошка успішно скопійована.",
+	"components.molecules.copyResult.task.successfullyCopied":
+		"Задачу успішно скопійовано.",
+	"components.molecules.copyResult.lesson.successfullyCopied":
+		"Тему успішно скопійовано.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Для великих файлів процес копіювання може зайняти більше часу. Вміст буде доступний найближчим часом.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -724,23 +760,25 @@ export default {
 	"format.dateUTC": "JJJJ-MM-DD",
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
-	"global.sidebar.addons": "Додаткові компоненти",
-	"global.sidebar.calendar": "календар",
-	"global.sidebar.classes": "Класи",
-	"global.sidebar.courses": "Курси",
-	"global.sidebar.files-old": "Мої файли",
-	"global.sidebar.filesPersonal": "особисті файли",
-	"global.sidebar.filesShared": "спільні файли",
-	"global.sidebar.helpArea": "Розділ довідки",
-	"global.sidebar.helpDesk": "Служба підтримки",
-	"global.sidebar.management": "Управління",
-	"global.sidebar.myMaterial": "Мої матеріали",
-	"global.sidebar.overview": "Панель керування",
-	"global.sidebar.school": "Школа",
-	"global.sidebar.student": "Учні",
-	"global.sidebar.tasks": "Завдання",
-	"global.sidebar.teacher": "Викладачі",
-	"global.sidebar.teams": "Команди",
+	"global.sidebar.item.accessibility": "Доступність",
+	"global.sidebar.item.addons": "Додаткові компоненти",
+	"global.sidebar.item.calendar": "Календар",
+	"global.sidebar.item.classes": "Класи",
+	"global.sidebar.item.courses": "Курси",
+	"global.sidebar.item.files-old": "Файли",
+	"global.sidebar.item.filesPersonal": "Особисті файли",
+	"global.sidebar.item.filesShared": "Спільні файли",
+	"global.sidebar.item.helpArea": "Розділ довідки",
+	"global.sidebar.item.helpDesk": "Служба підтримки",
+	"global.sidebar.item.management": "Управління",
+	"global.sidebar.item.overview": "Панель керування",
+	"global.sidebar.item.school": "Школа",
+	"global.sidebar.item.student": "Учні",
+	"global.sidebar.item.system": "Cистема",
+	"global.sidebar.item.tasks": "Завдання",
+	"global.sidebar.item.teacher": "Викладачі",
+	"global.sidebar.item.teams": "Команди",
+	"global.sidebar.logo": "Логотип",
 	"global.skipLink.mainContent": "Перейти до основного вмісту",
 	"global.topbar.actions.alerts": "Сповіщення про стан",
 	"global.topbar.actions.contactSupport": "Зв'язатися",
@@ -993,6 +1031,10 @@ export default {
 	"pages.administration.migration.tutorialWait":
 		"Зауважте, що після початку переміщення школи для отримання даних може знадобитися до 1 години. Після цього можна переходити до наступного кроку.",
 	"pages.administration.migration.waiting": "Очікування синхронізації даних...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"Неможливо розпочати міграцію, оскільки цільова система входу та поточна система входу у вашій школі збігаються!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Не вдається знайти систему moin.schule!",
 	"pages.administration.or": "або",
 	"pages.administration.printQr.emptyUser":
 		"Вибраний користувач(-і) вже зареєстрований(-і)",
@@ -1382,9 +1424,10 @@ export default {
 	"pages.news.title": "Новини",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
+	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",
 	"pages.room.boardCard.menu.ariaLabel": "Меню форуму",
 	"pages.room.cards.aria":
-		"{itemType}, посилання, {itemName}, натисніть Enter, щоб відкрити",
+		"{itemType}, посилання, натисніть Enter, щоб відкрити",
 	"pages.room.cards.label.revert": "Повернути до стану чернетки",
 	"pages.room.copy.course.message.copied": "Курс успішно скопійовано.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1395,7 +1438,6 @@ export default {
 		'{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
-	"pages.room.lessonCard.label.shareLesson": "надіслати копію теми",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
 	"pages.room.student.emptyState":
 		"Тут з’являється навчальний вміст, наприклад теми чи завдання.",
@@ -1405,7 +1447,6 @@ export default {
 	"pages.room.taskCard.label.graded": "Оцінено",
 	"pages.room.taskCard.label.noDueDate": "Без дати подання",
 	"pages.room.taskCard.label.open": "Відкрити",
-	"pages.room.taskCard.label.shareTask": "Поділіться копією завдання",
 	"pages.room.taskCard.label.taskDone": "Завдання виконано",
 	"pages.room.taskCard.menu.ariaLabel": "Меню завдань",
 	"pages.room.taskCard.student.label.overdue": "Відсутня",
@@ -1421,6 +1462,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.add.lesson": "Створити тему",
 	"pages.rooms.fab.add.board": "Нова дошка",
+	"pages.rooms.fab.add.listBoard": "Нова дошка оголошень",
 	"pages.rooms.fab.add.task": "Створити завдання",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.fab.import.course": "Імпортувати курс",
@@ -1471,6 +1513,8 @@ export default {
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Інструмент „{toolName}“ вимкнено",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Інструмент “{toolName}” не активовано",
 	"pages.rooms.tools.deleteDialog.content":
 		"Ви впевнені, що хочете видалити інструмент '<i>{itemName}</i>' із курсу?",
 	"pages.rooms.tools.deleteDialog.title": "видалити інструменти?",
@@ -1479,12 +1523,13 @@ export default {
 	"pages.rooms.tools.incompleteDialog.title": "Конфігурація не завершена",
 	"pages.rooms.tools.logo": "Інструмент-логотип",
 	"pages.rooms.tools.menu.ariaLabel": "Меню інструментів",
-	"pages.rooms.tools.outdated": "Інструмент застарів",
+	"pages.rooms.tools.outdated": "Конфігурація не завершена",
 	"pages.rooms.tools.outdatedDialog.title": "Інструмент „{toolName}“ застарів",
 	"pages.room.modal.course.export.header": "Формат експорту",
 	"pages.room.modal.course.export.options.header": "Експорт налаштувань",
 	"pages.room.modal.course.export.options.topics": "Теми",
 	"pages.room.modal.course.export.options.tasks": "Завдання без теми",
+	"pages.room.modal.course.export.options.columnBoards": "Дошки",
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
@@ -1528,12 +1573,10 @@ export default {
 		"Тип параметра не відповідає запитуваному типу. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_param_unknown":
 		"Конфігурація цього інструменту містить невідомий параметр. Зверніться до служби підтримки.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"Під час передачі значення параметра сталася помилка. Зверніться до служби підтримки.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Значення параметра не відповідає наведеним правилам. Відкоригуйте значення відповідно.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"Використана версія цього інструменту застаріла. Будь ласка, оновіть версію.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Інструмент із такою ж назвою вже призначено цьому курсу. Назви інструментів мають бути унікальними в межах курсу.",
 	"pages.tool.context.description":
@@ -1559,6 +1602,8 @@ export default {
 		'На жаль, не вдалося перемістити ваш обліковий запис до {targetSystem}.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Будь ласка, Передайте цю інформацію:<br><b>Номер школи в {instance}: {sourceSchoolNumber}, номер школи в {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.multipleUsersFound":
+		'Цей обліковий запис moin.schule вже пов\'язаний з обліковим записом у Niedersächsische Bildungscloud і не може бути використаний повторно для міграції.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
 	"pages.userMigration.error.title": "Не вдалося перемістити обліковий запис",
 	"pages.userMigration.success.description":
 		"Переміщення вашого облікового запису до {targetSystem} завершено.<br>Зареєструйтеся знову.",
@@ -1581,6 +1626,8 @@ export default {
 	"tldraw.error.ws.4404": "Дошки з такою назвою не знайдено",
 	"ui-confirmation-dialog.ask-delete":
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
+	"ui-layout.topbar.pageShare.copyLink": "Скопіювати посилання",
+	"ui-layout.topbar.pageShare.printQRCode": "Роздрукуйте QR-код",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",
@@ -1607,4 +1654,10 @@ export default {
 		"Фільтрувати за повним іменем...",
 	"utils.adminFilter.placeholder.date.from": "Створено між 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
+	"feature.media-shelf.title": "Полиця для медіа",
+	"feature.media-shelf.createLine": "Додайте лінію",
+	"feature.media-shelf.line.title": "лінія",
+	"feature.media-shelf.availableLine.title": "Доступні медіа",
+	"feature.media-shelf.layout.list": "лінії",
+	"feature.media-shelf.layout.grid": "сітка",
 };

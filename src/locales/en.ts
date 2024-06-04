@@ -16,12 +16,13 @@ export default {
 	"common.actions.invite": "Send course link",
 	"common.actions.logout": "Logout",
 	"common.actions.ok": "OK",
+	"common.actions.pickColor": "Select background colour",
 	"common.actions.remove": "Remove",
+	"common.actions.rename": "Rename",
 	"common.actions.save": "Save",
 	"common.actions.scrollToTop": "Scroll up",
 	"common.actions.share": "Share",
-	"common.actions.shareCourse": "Share course copy",
-	"common.actions.shareBoard": "Share board copy",
+	"common.actions.shareCopy": "Share copy",
 	"common.actions.update": "Update",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
@@ -88,6 +89,17 @@ export default {
 	"common.labels.visibility": "Visibility",
 	"common.labels.visible": "Visible",
 	"common.loading.text": "Data is loading...",
+	"common.medium.alert.deactivated": "Media is disabled.",
+	"common.medium.alert.notLicensed": "Medium is not activated.",
+	"common.medium.alert.incomplete":
+		"Configuration of medium not current or incomplete.",
+	"common.medium.chip.deactivated": "Disabled",
+	"common.medium.chip.notLicensed": "Not activated",
+	"common.medium.chip.incomplete": "Configuration incomplete",
+	"common.medium.information.admin": "Please check settings.",
+	"common.medium.information.student": "Please contact a teacher.",
+	"common.medium.information.teacher":
+		"Please contact the school administrator.",
 	"common.nodata": "No data available",
 	"common.notification.error": "An error has occurred.",
 	"common.placeholder.birthdate": "20.2.2002",
@@ -108,24 +120,22 @@ export default {
 	"common.roleName.student": "Student",
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Teacher",
-	"common.tool.information.deactivated":
-		"The {toolDisplayName} tool is deactivated and therefore cannot be started.",
-	"common.tool.information.incomplete.student":
-		"The tool configuration is incomplete, so the tool cannot be started. Please contact the teacher or course leader.",
-	"common.tool.information.incompleteOnContext.teacher":
-		"The tool configuration is incomplete, so the tool cannot be started. Please complete tool configuration.",
-	"common.tool.information.incompleteOnSchool.teacher":
-		"The tool configuration is incomplete, so the tool cannot be started. Please contact the school administrator.",
-	"common.tool.information.incompleteOnSchoolAndContext.teacher":
-		"The tool configuration is incomplete, so the tool cannot be started. Please complete the tool configuration and contact the school administrator.",
+	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings.",
 	"common.tool.information.outdated.student":
-		"The tool configuration is out of date, so the tool cannot be started. To update, please contact the teacher or course instructor.",
-	"common.tool.information.outdatedOnContext.teacher":
-		"The tool configuration is out of date, so the tool cannot be started. Please update tool configuration.",
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please contact your teacher or course instructor.",
+	"common.tool.information.deactivated.student":
+		"Tool {toolName} is disabled. Please contact your teacher or course instructor.",
+	"common.tool.information.deactivated.teacher":
+		"Tool {toolName} is disabled. Please contact the school administrator.",
+	"common.tool.information.notLicensed.student":
+		"Tool {toolName} is not activated. Please contact your teacher or course instructor.",
+	"common.tool.information.notLicensed.teacher":
+		"Tool {toolName} is not activated. Please contact the school administrator.",
+	"common.tool.information.outdated.teacher":
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings and contact your school administrator.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"The tool configuration is out of date, so the tool cannot be started. To update, please contact the school administrator.",
-	"common.tool.information.outdatedOnSchoolAndContext.teacher":
-		"The tool configuration is out of date, so the tool cannot be started. Please update the tool configuration and contact the school administrator.",
+		"Configuration of the tool {toolName} is not up to date or incomplete. Please contact the school administrator.",
 	"common.validation.email": "Please enter a valid e-mail address",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
@@ -151,6 +161,7 @@ export default {
 	"common.words.no": "No",
 	"common.words.noChoice": "No choice",
 	"common.words.otherGroups": "other groups",
+	"common.words.externalTools": "external tools",
 	"common.words.planned": "planned",
 	"common.words.privacyPolicy": "Privacy Policy",
 	"common.words.published": "published",
@@ -200,6 +211,10 @@ export default {
 		"Opens a tool that is used to migrate user accounts to moin.schule without user involvement. This tool is available once the first user of this school has been successfully migrated to moin.schule.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Open migration wizard",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"If you cancel the execution of the migration wizard now, the account links made in the current session will be reset. Do you really want to cancel the wizard now?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"Are you sure you want to cancel the migration?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"The account migration was completed on {date} at {time}.<br>The waiting period after completion of the migration finally ends on {finishDate} at {finishTime}!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
@@ -253,6 +268,12 @@ export default {
 		"Activate this option if other groups should be synchronized into the {instance}.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Synchronization of other groups",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"If this option is activated, activations from external tools are automatically taken over from moin.schule.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Activation of external tools",
+
 	"components.administration.provisioningOptions.page.title":
 		"Data synchronization options",
 	"components.administration.provisioningOptions.warning.consequence":
@@ -280,9 +301,10 @@ export default {
 	"components.board.alert.info.teacher":
 		"This board is visible to all course participants.",
 	"components.board.alert.info.draft":
-		"This board is no longer visible to course participants.",
+		"This board is not visible to course participants.",
 	"components.board.column.defaultTitle": "New column",
-	"components.board.column.ghost.placeholder": "Add column",
+	"components.board.column.ghost.column.placeholder": "Add column",
+	"components.board.column.ghost.list.placeholder": "Add section",
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
@@ -301,13 +323,19 @@ export default {
 		"{type} could not be loaded.",
 	"components.board.notifications.errors.notUpdated":
 		"Your changes could not be saved.",
+
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
 	"components.boardElement": "element",
+	"components.boardRow": "row",
+	"components.boardSection": "section",
 	"components.cardElement.deleteElement": "Delete element",
 	"components.cardElement.dragElement": "Move element",
 	"components.cardElement.drawingElement": "Whiteboard",
+	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
+	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
+		"This Etherpad is visible and editable for all course participants.",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
@@ -361,6 +389,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"External tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "File",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Submission",
@@ -424,6 +454,7 @@ export default {
 		"Material IDs are not copied for technical reasons and must be added again.",
 	"components.molecules.copyResult.information":
 		"In the following, the missing contents can be added with the help of the quick links. The links open in a separate tab.",
+	"components.molecules.copyResult.label.columnBoard": "Column board",
 	"components.molecules.copyResult.label.content": "Content",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "External tools",
@@ -441,6 +472,7 @@ export default {
 	"components.molecules.copyResult.label.submissions": "Submissions",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
+	"components.molecules.copyResult.label.link": "Link",
 	"components.molecules.copyResult.label.timeGroup": "Time Group",
 	"components.molecules.copyResult.label.unknown": "Unkown",
 	"components.molecules.copyResult.label.userGroup": "User Group",
@@ -453,6 +485,12 @@ export default {
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.successfullyCopied":
 		"All elements were successfully copied.",
+	"components.molecules.copyResult.board.successfullyCopied":
+		"Board successfully copied.",
+	"components.molecules.copyResult.task.successfullyCopied":
+		"Task successfully copied.",
+	"components.molecules.copyResult.lesson.successfullyCopied":
+		"Lesson successfully copied.",
 	"components.molecules.copyResult.timeoutCopy":
 		"The copy process may take longer for large files. The content will be available shortly.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -711,23 +749,25 @@ export default {
 	"format.dateUTC": "YYYY-MM-DD",
 	"format.dateYY": "MM/DD/YY",
 	"format.time": "HH:mm",
-	"global.sidebar.addons": "Add-ons",
-	"global.sidebar.calendar": "calendar",
-	"global.sidebar.classes": "Classes",
-	"global.sidebar.courses": "Courses",
-	"global.sidebar.files-old": "My Files",
-	"global.sidebar.filesPersonal": "personal files",
-	"global.sidebar.filesShared": "shared files",
-	"global.sidebar.helpArea": "Help section",
-	"global.sidebar.helpDesk": "Help desk",
-	"global.sidebar.management": "Management",
-	"global.sidebar.myMaterial": "My materials",
-	"global.sidebar.overview": "Dashboard",
-	"global.sidebar.school": "School",
-	"global.sidebar.student": "Students",
-	"global.sidebar.tasks": "Tasks",
-	"global.sidebar.teacher": "Teachers",
-	"global.sidebar.teams": "Teams",
+	"global.sidebar.item.accessibility": "Accessibility",
+	"global.sidebar.item.addons": "Add-ons",
+	"global.sidebar.item.calendar": "Calendar",
+	"global.sidebar.item.classes": "Classes",
+	"global.sidebar.item.courses": "Courses",
+	"global.sidebar.item.files-old": "Files",
+	"global.sidebar.item.filesPersonal": "Personal Files",
+	"global.sidebar.item.filesShared": "Shared Files",
+	"global.sidebar.item.helpArea": "Help section",
+	"global.sidebar.item.helpDesk": "Help desk",
+	"global.sidebar.item.management": "Management",
+	"global.sidebar.item.overview": "Dashboard",
+	"global.sidebar.item.school": "School",
+	"global.sidebar.item.student": "Students",
+	"global.sidebar.item.system": "System",
+	"global.sidebar.item.tasks": "Tasks",
+	"global.sidebar.item.teacher": "Teachers",
+	"global.sidebar.item.teams": "Teams",
+	"global.sidebar.logo": "Logo",
 	"global.skipLink.mainContent": "Skip to main content",
 	"global.topbar.actions.alerts": "Status alert",
 	"global.topbar.actions.contactSupport": "Contact",
@@ -978,6 +1018,10 @@ export default {
 	"pages.administration.migration.tutorialWait":
 		"Please note, once the school migration process starts, it can take up to 1 hour to fetch the data. After this, you will be able to continue to the next step.",
 	"pages.administration.migration.waiting": "Waiting for data sync...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"The migration cannot start because the target login system and your school's current login system are the same!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Cannot find moin.schule system!",
 	"pages.administration.or": "or",
 	"pages.administration.printQr.emptyUser":
 		"The selected user(s) have already been registered",
@@ -1358,8 +1402,9 @@ export default {
 	"pages.news.title": "News",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
+	"pages.room.boardCard.label.listBoard": "List Board",
 	"pages.room.boardCard.menu.ariaLabel": "Board menu",
-	"pages.room.cards.aria": "{itemType}, link, {itemName}, press enter to open",
+	"pages.room.cards.aria": "{itemType}, link, press enter to open",
 	"pages.room.cards.label.revert": "Revert to draft",
 	"pages.room.copy.course.message.copied": "Course was successfully copied.",
 	"pages.room.copy.course.message.partiallyCopied":
@@ -1369,7 +1414,6 @@ export default {
 	"pages.room.itemDelete.text": 'Delete {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
-	"pages.room.lessonCard.label.shareLesson": "Share topic copy",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
 	"pages.room.student.emptyState":
 		"Learning content such as topics or tasks appear here.",
@@ -1379,7 +1423,6 @@ export default {
 	"pages.room.taskCard.label.graded": "Graded",
 	"pages.room.taskCard.label.noDueDate": "No submission date",
 	"pages.room.taskCard.label.open": "Open",
-	"pages.room.taskCard.label.shareTask": "Share task copy",
 	"pages.room.taskCard.label.taskDone": "Task completed",
 	"pages.room.taskCard.menu.ariaLabel": "Task menu",
 	"pages.room.taskCard.student.label.overdue": "Missing",
@@ -1397,6 +1440,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
 	"pages.rooms.fab.add.lesson": "New topic",
 	"pages.rooms.fab.add.board": "New column board",
+	"pages.rooms.fab.add.listBoard": "New list board",
 	"pages.rooms.fab.add.task": "New task",
 	"pages.rooms.fab.ariaLabel": "Create new course",
 	"pages.rooms.fab.import.course": "Import course",
@@ -1448,6 +1492,8 @@ export default {
 		"Create video conference {roomName}",
 	"pages.rooms.tools.deactivated": "Tool deactivated",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deactivated",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Tool “{toolName}” not activated",
 	"pages.rooms.tools.deleteDialog.content":
 		"Are you sure you want to remove the tool '<i>{itemName}</i>' from the course?",
 	"pages.rooms.tools.deleteDialog.title": "Remove tool?",
@@ -1456,12 +1502,13 @@ export default {
 	"pages.rooms.tools.incompleteDialog.title": "Configuration incomplete",
 	"pages.rooms.tools.logo": "Tool-Logo",
 	"pages.rooms.tools.menu.ariaLabel": "Tool menu",
-	"pages.rooms.tools.outdated": "Tool outdated",
+	"pages.rooms.tools.outdated": "Configuration incomplete",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ outdated",
 	"pages.room.modal.course.export.header": "Export Format",
 	"pages.room.modal.course.export.options.header": "Export settings",
 	"pages.room.modal.course.export.options.topics": "Topics",
 	"pages.room.modal.course.export.options.tasks": "Tasks without Topic",
+	"pages.room.modal.course.export.options.columnBoards": "Boards",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
@@ -1506,12 +1553,10 @@ export default {
 		"The type of a parameter does not match the requested type. Please contact support.",
 	"pages.tool.apiError.tool_param_unknown":
 		"The configuration of this tool contains an unknown parameter. Please contact support.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"An error occurred while transferring a parameter value. Please contact support.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"The value of a parameter does not follow the given rules. Please adjust the value accordingly.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"The version of this Tool used is out of date. Please update the version.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"A tool with the same name is already assigned to this course. Tool names must be unique within a course.",
 	"pages.tool.context.description":
@@ -1537,6 +1582,8 @@ export default {
 		'Unfortunately, the move of your account to {targetSystem} failed.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Please pass on this information:<br><b>School number in {instance}: {sourceSchoolNumber}, school number in {targetSystem}: {targetSchoolNumber}</b>.",
+	"pages.userMigration.error.multipleUsersFound":
+		'This moin.schule account is already linked to an account in the Niedersächsische Bildungscloud and cannot be used again for the migration.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
 	"pages.userMigration.error.title": "Account move failed",
 	"pages.userMigration.success.description":
 		"The move of your account to {targetSystem} is complete.<br>Please register again now.",
@@ -1559,6 +1606,8 @@ export default {
 	"tldraw.error.ws.4400": "Room name is missing in URL params",
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
+	"ui-layout.topbar.pageShare.copyLink": "Copy link",
+	"ui-layout.topbar.pageShare.printQRCode": "Print QR Code",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",
@@ -1585,4 +1634,10 @@ export default {
 	"utils.adminFilter.placeholder.complete.name": "Filter by full first name...",
 	"utils.adminFilter.placeholder.date.from": "Created between 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
+	"feature.media-shelf.title": "Media shelf",
+	"feature.media-shelf.createLine": "Add line",
+	"feature.media-shelf.line.title": "Line",
+	"feature.media-shelf.availableLine.title": "Available media",
+	"feature.media-shelf.layout.list": "Lines",
+	"feature.media-shelf.layout.grid": "Grid",
 };

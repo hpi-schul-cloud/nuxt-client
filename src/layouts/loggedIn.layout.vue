@@ -2,7 +2,7 @@
 	<legacy-logged-in>
 		<v-main id="main-content" class="content">
 			<application-error-wrapper>
-				<snackbar />
+				<alert-container />
 				<router-view />
 			</application-error-wrapper>
 		</v-main>
@@ -12,7 +12,7 @@
 
 <script>
 import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
-import Snackbar from "@/components/molecules/Alert";
+import AlertContainer from "@/components/molecules/AlertContainer.vue";
 import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper";
 
@@ -22,7 +22,7 @@ export default {
 	components: {
 		LoadingStateDialog,
 		LegacyLoggedIn,
-		Snackbar,
+		AlertContainer,
 		ApplicationErrorWrapper,
 	},
 };

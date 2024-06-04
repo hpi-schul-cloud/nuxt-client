@@ -8,7 +8,6 @@ import {
 	commonCartridgeExportModule,
 	commonCartridgeImportModule,
 	contentModule,
-	contextExternalToolsModule,
 	copyModule,
 	envConfigModule,
 	filePathsModule,
@@ -34,6 +33,7 @@ import {
 import themeConfig from "@/theme.config";
 import { htmlConfig } from "@feature-render-html";
 import axios from "axios";
+import { createPinia } from "pinia";
 import Cookies from "universal-cookie";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
@@ -58,29 +58,32 @@ import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	CONTENT_MODULE_KEY,
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
+	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NEWS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
-	ROOMS_MODULE_KEY,
 	ROOM_MODULE_KEY,
-	SCHOOLS_MODULE_KEY,
+	ROOMS_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
+	SCHOOLS_MODULE_KEY,
+	SHARE_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 	THEME_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
-	SHARE_MODULE_KEY,
 } from "./utils/inject";
 import { delay } from "./utils/helpers";
 
 export const app = createApp(App);
+
+const pinia = createPinia();
+app.use(pinia);
 
 mountBaseComponents(app);
 
@@ -150,13 +153,10 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
 	app.provide("autoLogoutModule", autoLogoutModule);
 	app.provide(CONTENT_MODULE_KEY, contentModule);
-	app.provide(
-		CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),
-		contextExternalToolsModule
-	);
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide(ENV_CONFIG_MODULE_KEY.valueOf(), envConfigModule);
 	app.provide("filePathsModule", filePathsModule);
+	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
 	app.provide("finishedTasksModule", finishedTasksModule);
 	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
 	app.provide("importUsersModule", importUsersModule);

@@ -15,13 +15,14 @@ export default {
 	"common.actions.invite": "Kurslink versenden",
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
+	"common.actions.pickColor": "Hintergrundfarbe auswählen",
 	"common.actions.remove": "Löschen",
+	"common.actions.rename": "Umbenennen",
 	"common.actions.save": "Speichern",
 	"common.actions.scrollToTop": "Nach oben scrollen",
 	"common.actions.share": "Teilen",
 	"common.actions.export": "Exportieren",
-	"common.actions.shareCourse": "Kurskopie teilen",
-	"common.actions.shareBoard": "Boardkopie teilen",
+	"common.actions.shareCopy": "Kopie teilen",
 	"common.actions.update": "Aktualisieren",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
@@ -88,6 +89,16 @@ export default {
 	"common.labels.visibility": "Sichtbarkeit",
 	"common.labels.visible": "Sichtbar",
 	"common.loading.text": "Daten werden geladen...",
+	"common.medium.alert.deactivated": "Medium ist deaktiviert.",
+	"common.medium.alert.notLicensed": "Medium ist nicht freigeschaltet.",
+	"common.medium.alert.incomplete":
+		"Konfiguration des Mediums nicht aktuell oder unvollständig.",
+	"common.medium.chip.deactivated": "Deaktiviert",
+	"common.medium.chip.notLicensed": "Nicht freigeschaltet",
+	"common.medium.chip.incomplete": "Konfiguration unvollständig",
+	"common.medium.information.admin": "Bitte Einstellungen überprüfen.",
+	"common.medium.information.student": "Bitte an eine Lehrkraft wenden.",
+	"common.medium.information.teacher": "Bitte an Schuladministrator:in wenden.",
 	"common.nodata": "Keine Daten vorhanden",
 	"common.notification.error": "Es ist ein Fehler aufgetreten.",
 	"common.placeholder.birthdate": "20.2.2002",
@@ -108,24 +119,22 @@ export default {
 	"common.roleName.student": "Schüler:in",
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Lehrkraft",
-	"common.tool.information.deactivated":
-		"Das Tool {toolName} ist deaktiviert und kann daher nicht gestartet werden.",
-	"common.tool.information.incomplete.student":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte an die Lehrkraft oder Kursleiter:in wenden.",
-	"common.tool.information.incompleteOnContext.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration vervollständigen.",
-	"common.tool.information.incompleteOnSchool.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte an die Schuladministrator:in wenden.",
-	"common.tool.information.incompleteOnSchoolAndContext.teacher":
-		"Die Tool-Konfiguration ist unvollständig, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration vervollständigen und an die Schuladministrator:in wenden.",
+	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen und an Schuladministrator:in wenden.",
 	"common.tool.information.outdated.student":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Zum Aktualisieren bitte an die Lehrkraft oder Kursleiter:in wenden.",
-	"common.tool.information.outdatedOnContext.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration aktualisieren.",
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.deactivated.student":
+		"Tool {toolName} ist deaktiviert. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.deactivated.teacher":
+		"Tool {toolName} ist deaktiviert. Bitte an Schuladministrator:in wenden.",
+	"common.tool.information.notLicensed.student":
+		"Tool {toolName} ist nicht freigeschaltet. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.notLicensed.teacher":
+		"Tool {toolName} ist nicht freigeschaltet. Bitte an Schuladministrator:in wenden.",
+	"common.tool.information.outdated.teacher":
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Zum Aktualisieren bitte an die Schuladministrator:in wenden.",
-	"common.tool.information.outdatedOnSchoolAndContext.teacher":
-		"Die Tool-Konfiguration ist veraltet, daher kann das Tool nicht gestartet werden. Bitte Tool-Konfiguration aktualisieren und an die Schuladministrator:in wenden.",
+		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte an Schuladministrator:in wenden.",
 	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
@@ -152,6 +161,7 @@ export default {
 	"common.words.no": "Nein",
 	"common.words.noChoice": "Keine Auswahl",
 	"common.words.otherGroups": "sonstige Gruppen",
+	"common.words.externalTools": "externe Tools",
 	"common.words.planned": "geplant",
 	"common.words.privacyPolicy": "Datenschutzerklärung",
 	"common.words.published": "veröffentlicht",
@@ -201,6 +211,10 @@ export default {
 		"Öffnet ein Tool, mit dem Benutzerkonten ohne Benutzereingriff zu moin.schule migriert werden können. Dieses Tool ist verfügbar, sobald der erste Benutzer dieser Schule erfolgreich zu moin.schule migriert wurde.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Migrationsassistenten öffnen",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"Wenn Sie die Ausführung des Migrationsassistenten jetzt abbrechen, werden die in der aktuellen Sitzung durchgeführten Konten-Verknüpfungen zurückgesetzt. Möchten Sie die Ausführung des Assistenten jetzt wirklich abbrechen?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"Sind Sie sich sicher, dass sie die Migration abbrechen wollen?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"Die Account-Migration wurde am {date} um {time} Uhr abgeschlossen.<br>Die Wartefrist nach Abschluss der Migration endet endgültig am {finishDate} um {finishTime} Uhr!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
@@ -256,6 +270,12 @@ export default {
 		"Aktivieren sie diese Option, wenn sonstige Gruppen in die {instance} synchronisiert werden sollen.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Synchronisation von sonstigen Gruppen",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"Wenn diese Option aktiviert ist, werden Freischaltungen von externen Tools automatisch aus moin.schule übernommen.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Freischaltung von externen Tools",
+
 	"components.administration.provisioningOptions.page.title":
 		"Optionen für Datensynchronisation",
 	"components.administration.provisioningOptions.warning.consequence":
@@ -283,9 +303,10 @@ export default {
 	"components.board.alert.info.teacher":
 		"Dieses Board ist sichtbar für alle Kursteilnehmenden.",
 	"components.board.alert.info.draft":
-		"Dieses Board ist nicht mehr für die Kursteilnehmenden sichtbar.",
+		"Dieses Board ist nicht für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neue Spalte",
-	"components.board.column.ghost.placeholder": "Spalte hinzufügen",
+	"components.board.column.ghost.column.placeholder": "Spalte hinzufügen",
+	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.menu.board": "Board-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Spalten-Einstellungen",
@@ -308,9 +329,14 @@ export default {
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
 	"components.boardElement": "Element",
+	"components.boardRow": "Abschnitt",
+	"components.boardSection": "Abschnitt",
 	"components.cardElement.deleteElement": "löschen",
 	"components.cardElement.dragElement": "verschieben",
 	"components.cardElement.drawingElement": "Whiteboard",
+	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
+	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
+		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -365,6 +391,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
+	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
+		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",
@@ -429,6 +457,7 @@ export default {
 		"Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.information":
 		"Nachfolgend können die fehlenden Inhalte mit Hilfe der Quick-Links ergänzt werden. Die Links öffnen sich in einem separatem Tab.",
+	"components.molecules.copyResult.label.columnBoard": "Spalten-Board",
 	"components.molecules.copyResult.label.content": "Inhalt",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "Externe Tools",
@@ -446,6 +475,7 @@ export default {
 	"components.molecules.copyResult.label.submissions": "Abgaben",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
+	"components.molecules.copyResult.label.link": "Link",
 	"components.molecules.copyResult.label.timeGroup": "Zeitgruppe",
 	"components.molecules.copyResult.label.unknown": "Unbekannt",
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
@@ -458,6 +488,12 @@ export default {
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
+	"components.molecules.copyResult.board.successfullyCopied":
+		"Board erfolgreich kopiert.",
+	"components.molecules.copyResult.task.successfullyCopied":
+		"Aufgabe erfolgreich kopiert.",
+	"components.molecules.copyResult.lesson.successfullyCopied":
+		"Thema erfolgreich kopiert.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Der Kopiervorgang kann bei großen Dateien länger dauern. Die Inhalte werden in Kürze verfügbar sein.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -715,28 +751,30 @@ export default {
 	"format.dateUTC": "JJJJ-MM-DD",
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
-	"global.sidebar.addons": "Add-ons",
-	"global.sidebar.calendar": "Termine",
-	"global.sidebar.classes": "Klassen",
-	"global.sidebar.courses": "Kurse",
-	"global.sidebar.files-old": "Meine Dateien",
-	"global.sidebar.filesPersonal": "persönliche Dateien",
-	"global.sidebar.filesShared": "geteilte Dateien",
-	"global.sidebar.helpArea": "Hilfebereich",
-	"global.sidebar.helpDesk": "Helpdesk",
-	"global.sidebar.management": "Verwaltung",
-	"global.sidebar.myMaterial": "Meine Materialien",
-	"global.sidebar.overview": "Übersicht",
-	"global.sidebar.school": "Schule",
-	"global.sidebar.student": "Schüler:innen",
-	"global.sidebar.tasks": "Aufgaben",
-	"global.sidebar.teacher": "Lehrkräfte",
-	"global.sidebar.teams": "Teams",
+	"global.sidebar.item.accessibility": "Barrierefreiheit",
+	"global.sidebar.item.addons": "Add-ons",
+	"global.sidebar.item.calendar": "Termine",
+	"global.sidebar.item.classes": "Klassen",
+	"global.sidebar.item.courses": "Kurse",
+	"global.sidebar.item.files-old": "Dateien",
+	"global.sidebar.item.filesPersonal": "Persönliche Dateien",
+	"global.sidebar.item.filesShared": "Geteilte Dateien",
+	"global.sidebar.item.helpArea": "Hilfebereich",
+	"global.sidebar.item.helpDesk": "Helpdesk",
+	"global.sidebar.item.management": "Verwaltung",
+	"global.sidebar.item.overview": "Übersicht",
+	"global.sidebar.item.school": "Schule",
+	"global.sidebar.item.student": "Schüler:innen",
+	"global.sidebar.item.system": "System",
+	"global.sidebar.item.tasks": "Aufgaben",
+	"global.sidebar.item.teacher": "Lehrkräfte",
+	"global.sidebar.item.teams": "Teams",
+	"global.sidebar.logo": "Logo",
 	"global.skipLink.mainContent": "Zum Hauptinhalt wechseln",
 	"global.topbar.actions.alerts": "Status-Warnung",
 	"global.topbar.actions.contactSupport": "Kontakt",
 	"global.topbar.actions.fullscreen": "Vollbildmodus",
-	"global.topbar.actions.helpSection": "Hilfebereich",
+	"global.topbar.actions.helpSection": "Hilfeartikel",
 	"global.topbar.actions.qrCode": "Seitenlink per QR-Code teilen",
 	"global.topbar.actions.releaseNotes": "Was ist neu?",
 	"global.topbar.actions.training": "Fortbildungen",
@@ -983,6 +1021,10 @@ export default {
 		"Bitte beachten Sie, dass es nach Beginn der Schulmigration bis zu 1 Stunde dauern kann, bis die Daten abgerufen sind. Danach können Sie mit dem nächsten Schritt fortfahren.",
 	"pages.administration.migration.waiting":
 		"Warten auf die Datensynchronisation...",
+	"pages.administration.migration.identical_user_login_migration_system":
+		"Die Migration kann nicht gestartet werden, da das Ziel-Login-System und das derzeitige Login-System Ihrer Schule identisch sind!",
+	"pages.administration.migration.moin_schule_system_not_found":
+		"Das moin.schule-System kann nicht gefunden werden!",
 	"pages.administration.or": "oder",
 	"pages.administration.printQr.emptyUser":
 		"Dieser Nutzer wurde bereits registriert",
@@ -1380,9 +1422,10 @@ export default {
 	"pages.news.title": "Neuigkeiten",
 	"pages.room.boardCard.label.columnBoard": "Spalten-Board",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Board",
+	"pages.room.boardCard.label.listBoard": "Listen-Board",
 	"pages.room.boardCard.menu.ariaLabel": "Board-Menü",
 	"pages.room.cards.aria":
-		"{itemType}, Link, {itemName}, zum Öffnen die Eingabetaste drücken",
+		"{itemType}, Link, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
 	"pages.room.copy.course.message.copied":
 		"Der Kurs wurde erfolgreich kopiert.",
@@ -1395,7 +1438,6 @@ export default {
 	"pages.room.itemDelete.text": '{itemType} "{itemTitle}" wirklich löschen?',
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
-	"pages.room.lessonCard.label.shareLesson": "Themenkopie teilen",
 	"pages.room.lessonCard.menu.ariaLabel": "Themenmenü",
 	"pages.room.student.emptyState":
 		"Hier erscheinen Lerninhalte wie Themen oder Aufgaben.",
@@ -1405,7 +1447,6 @@ export default {
 	"pages.room.taskCard.label.graded": "Bewertet",
 	"pages.room.taskCard.label.noDueDate": "Kein Abgabedatum",
 	"pages.room.taskCard.label.open": "Offen",
-	"pages.room.taskCard.label.shareTask": "Aufgabenkopie teilen",
 	"pages.room.taskCard.label.taskDone": "Aufgabe abgeschlossen",
 	"pages.room.taskCard.menu.ariaLabel": "Aufgabenmenü",
 	"pages.room.taskCard.student.label.overdue": "Fehlt",
@@ -1423,6 +1464,7 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.add.lesson": "Neues Thema",
 	"pages.rooms.fab.add.board": "Neues Spalten-Board",
+	"pages.rooms.fab.add.listBoard": "Neues Listen-Board",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.fab.import.course": "Kurs importieren",
@@ -1472,8 +1514,10 @@ export default {
 		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.rooms.tools.configureVideoconferenceDialog.title":
 		"Videokonferenz {roomName} erstellen",
-	"pages.rooms.tools.deactivated": "Tool deaktiviert",
+	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Tool „{toolName}“ nicht freigeschaltet",
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '<i>{itemName}</i>' aus dem Kurs entfernen?",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
@@ -1482,12 +1526,13 @@ export default {
 	"pages.rooms.tools.incompleteDialog.title": "Konfiguration unvollständig",
 	"pages.rooms.tools.logo": "Tool-Logo",
 	"pages.rooms.tools.menu.ariaLabel": "Tool Menü",
-	"pages.rooms.tools.outdated": "Tool veraltet",
+	"pages.rooms.tools.outdated": "Konfiguration unvollständig",
 	"pages.rooms.tools.outdatedDialog.title": "Tool „{toolName}“ veraltet",
 	"pages.room.modal.course.export.header": "Export-Format",
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
 	"pages.room.modal.course.export.options.topics": "Themen",
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
+	"pages.room.modal.course.export.options.columnBoards": "Boards",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
@@ -1534,12 +1579,10 @@ export default {
 		"Der Typ eines Parameters stimmt nicht mit dem geforderten Typ überein. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_unknown":
 		"Die Konfiguration dieses Tools enthält einen unbekannten Parameter. Bitte an den Support wenden.",
-	"pages.tool.apiError.tool_param_value_missing":
+	"pages.tool.apiError.tool_param_mandatory_value_missing":
 		"Bei der Übertragung eines Parameterwerts ist ein Fehler ausgetreten. Bitte an den Support wenden.",
 	"pages.tool.apiError.tool_param_value_regex":
 		"Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",
-	"pages.tool.apiError.tool_version_mismatch":
-		"Die benutzte Version dieses Tools ist nicht mehr aktuell. Bitte die Version aktualisieren.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ein Tool mit gleichem Namen wurde bereits dem Kurs zugeordnet. Die einem Kurs zugeordneten Tools müssen eindeutige Namen haben.",
 	"pages.tool.context.description":
@@ -1565,6 +1608,8 @@ export default {
 		'Der Umzug Deines Accounts zu {targetSystem} ist leider fehlegeschlagen.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Gib diese Informationen bitte weiter:<br><b>Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.multipleUsersFound":
+		'Dieser moin.schule-Account ist bereits mit einem Account in der Niedersächsischen Bildungscloud verbunden und kann nicht noch einmal für die Migration verwendet werden.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
 	"pages.userMigration.error.title": "Umzug des Accounts fehlgeschlagen",
 	"pages.userMigration.success.description":
 		"Der Umzug Deines Accounts zu {targetSystem} ist fertig.<br>Melde Dich jetzt bitte neu an.",
@@ -1586,6 +1631,8 @@ export default {
 	"tldraw.error.ws.4400": "Der Raumname fehlt in den URL-Parametern",
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
+	"ui-layout.topbar.pageShare.copyLink": "Link kopieren",
+	"ui-layout.topbar.pageShare.printQRCode": "QR-Code drucken",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",
@@ -1613,4 +1660,10 @@ export default {
 		"Nach vollständigem Vornamen filtern...",
 	"utils.adminFilter.placeholder.date.from": "Erstellt zwischen 02/02/2020",
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
+	"feature.media-shelf.title": "Medienregal",
+	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
+	"feature.media-shelf.line.title": "Abschnitt",
+	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
+	"feature.media-shelf.layout.list": "Zeilen",
+	"feature.media-shelf.layout.grid": "Raster",
 };

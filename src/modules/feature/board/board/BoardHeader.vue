@@ -7,6 +7,7 @@
 		>
 			<div class="board-header" tabindex="0" ref="boardHeader">
 				<BoardAnyTitleInput
+					class="ml-n2"
 					ref="boardHeader"
 					scope="board"
 					:value="boardTitle"
@@ -108,15 +109,9 @@ const { hasEditPermission } = useBoardPermissions();
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref(0);
 
-onMounted(() => {
-	calculateWidth();
-});
+onMounted(() => setTimeout(calculateWidth, 100));
 
 const boardTitle = ref("");
-
-watchEffect(() => {
-	boardTitle.value = props.title;
-});
 
 const onStartEditMode = () => {
 	if (!hasEditPermission) return;
@@ -187,6 +182,11 @@ const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const isShareEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SHARE
 );
+
+watchEffect(() => {
+	boardTitle.value = props.title;
+	setTimeout(calculateWidth, 100);
+});
 </script>
 
 <style lang="scss" scoped>

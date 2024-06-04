@@ -74,6 +74,28 @@
 						{{ t("pages.administration.migration.step5") }}
 					</VStepperItem>
 				</VStepperHeader>
+				<vCustomDialog
+					v-model:is-open="isCancelDialogOpen"
+					has-buttons
+					:buttons="['cancel', 'confirm']"
+					@dialog-confirmed="confirmCancelMigration()"
+					data-testid="cancel-migration-dialog"
+				>
+					<template #title>
+						{{
+							t(
+								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
+							)
+						}}
+					</template>
+					<template #content>
+						{{
+							t(
+								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
+							)
+						}}
+					</template>
+				</vCustomDialog>
 			</VStepper>
 		</template>
 
@@ -160,19 +182,28 @@
 
 					<VStepperWindowItem :value="2" data-testid="migration_importUsers">
 						<ImportUsers />
-						<div class="text-right">
-							<VBtn @click="migrationStep = 1">
-								{{ t("pages.administration.migration.back") }}
-							</VBtn>
+						<div class="d-flex justify-space-between pa-3">
 							<VBtn
-								class="ml-2"
-								id="migration_importUsers_next"
-								color="primary"
-								:disabled="!canPerformMigration"
-								@click="migrationStep = 3"
+								@click="cancelMigration()"
+								data-testid="import-users-cancel-migration-btn"
 							>
-								{{ t("pages.administration.migration.next") }}
+								{{ t("common.actions.cancel") }}
 							</VBtn>
+							<div>
+								<VBtn @click="migrationStep = 1">
+									{{ t("pages.administration.migration.back") }}
+								</VBtn>
+
+								<VBtn
+									class="ml-2"
+									id="migration_importUsers_next"
+									color="primary"
+									:disabled="!canPerformMigration"
+									@click="migrationStep = 3"
+								>
+									{{ t("pages.administration.migration.next") }}
+								</VBtn>
+							</div>
 						</div>
 					</VStepperWindowItem>
 
@@ -214,29 +245,39 @@
 											/>
 										</VRow>
 									</VCardText>
-									<div class="text-right">
-										<VBtn :disabled="isLoading" @click="migrationStep = 2"
-											>{{ t("pages.administration.migration.back") }}
-										</VBtn>
+									<div class="d-flex justify-space-between">
+										<div>
+											<VBtn
+												@click="cancelMigration()"
+												data-testid="summary-cancel-migration-btn"
+											>
+												{{ t("common.actions.cancel") }}
+											</VBtn>
+										</div>
+										<div>
+											<VBtn :disabled="isLoading" @click="migrationStep = 2"
+												>{{ t("pages.administration.migration.back") }}
+											</VBtn>
 
-										<VBtn
-											class="ml-2"
-											color="primary"
-											:disabled="!isMigrationConfirm || isLoading"
-											data-testid="migration_performMigration"
-											@click="performMigration"
-										>
-											<VProgressCircular
-												v-if="isLoading"
-												:size="20"
-												indeterminate
-											/>
-											{{
-												isNbc
-													? t("pages.administration.migration.nbc.migrate")
-													: t("pages.administration.migration.migrate")
-											}}
-										</VBtn>
+											<VBtn
+												class="ml-2"
+												color="primary"
+												:disabled="!isMigrationConfirm || isLoading"
+												data-testid="migration_performMigration"
+												@click="performMigration"
+											>
+												<VProgressCircular
+													v-if="isLoading"
+													:size="20"
+													indeterminate
+												/>
+												{{
+													isNbc
+														? t("pages.administration.migration.nbc.migrate")
+														: t("pages.administration.migration.migrate")
+												}}
+											</VBtn>
+										</div>
 									</div>
 								</div>
 								<div v-else>
@@ -474,11 +515,22 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
 import { mdiClose } from "@mdi/js";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import {
+	computed,
+	ComputedRef,
+	onMounted,
+	onUnmounted,
+	Ref,
+	ref,
+	watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 
 const { t } = useI18n();
+
+const router = useRouter();
 
 const theme = injectStrict(THEME_KEY);
 
@@ -492,6 +544,8 @@ const isLoading: Ref<boolean> = ref(false);
 
 const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> =
 	ref(undefined);
+
+const isCancelDialogOpen: Ref<boolean> = ref(false);
 
 const isMigrationNotStarted = computed(() => {
 	return school.value.inUserMigration === undefined;
@@ -579,13 +633,13 @@ useTitle(
 );
 
 const isAllowed = async () => {
-	if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED === true) {
+	if (envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED) {
 		return true;
 	}
 	if (school.value.id === "") {
 		await schoolsModule.fetchSchool();
 	}
-	return school.value.features.ldapUniventionMigrationSchool;
+	return school.value.featureObject.ldapUniventionMigrationSchool;
 };
 
 const summary = async () => {
@@ -696,6 +750,31 @@ const nextStep = () => {
 	migrationStep.value = nextStep;
 };
 
+const cancelMigration = () => {
+	isCancelDialogOpen.value = true;
+};
+
+const confirmCancelMigration = async () => {
+	isLoading.value = true;
+
+	await importUsersModule.cancelMigration();
+
+	migrationStep.value = 0;
+
+	await schoolsModule.fetchSchool();
+
+	isLoading.value = false;
+
+	await redirectToAdminPage();
+};
+
+const redirectToAdminPage = async () => {
+	await router.push({
+		path: "/administration/school-settings",
+		query: { openPanels: "migration" },
+	});
+};
+
 watch(migrationStep, async (val) => {
 	if (val === 1 || val === 3) {
 		await summary();
@@ -713,12 +792,17 @@ watch(totalImportUsers, (val) => {
 onMounted(async () => {
 	const allowed = await isAllowed();
 	if (!allowed) {
-		const router = useRouter();
 		await router.push("/");
 		return;
 	}
 	await summary();
 	checkTotalInterval();
+});
+
+onUnmounted(() => {
+	if (checkTotal.value) {
+		clearInterval(checkTotal.value);
+	}
 });
 </script>
 

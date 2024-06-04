@@ -1,6 +1,9 @@
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("BoardColumnGhost", () => {
 	const setup = () => {
@@ -8,7 +11,10 @@ describe("BoardColumnGhost", () => {
 
 		const wrapper = shallowMount(BoardColumnGhost, {
 			global: {
-				plugins: [createTestingVuetify()],
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				isListBoard: false,
 			},
 		});
 

@@ -1,11 +1,11 @@
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalListItem from "@/components/copy-result-modal/CopyResultModalListItem.vue";
 import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultItem";
-import { mount } from "@vue/test-utils";
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 const mockItem: CopyResultItem = {
 	type: CopyApiResponseTypeEnum.Lesson,
@@ -156,6 +156,10 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 			[
 				"some-string-that-is-not-an-existing-type",
 				"components.molecules.copyResult.label.unknown",
+			],
+			[
+				CopyApiResponseTypeEnum.CollaborativeTextEditorElement,
+				"components.molecules.copyResult.label.etherpad",
 			],
 		];
 

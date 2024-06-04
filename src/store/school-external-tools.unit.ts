@@ -17,10 +17,10 @@ import {
 	schoolExternalToolSaveFactory,
 	toolParameterEntryFactory,
 } from "@@/tests/test-utils";
+import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import {
 	SchoolExternalTool,
-	SchoolExternalToolConfigurationTemplate,
 	ToolParameterLocation,
 	ToolParameterScope,
 	ToolParameterType,
@@ -114,7 +114,6 @@ describe("SchoolExternalToolsModule", () => {
 							],
 							status:
 								schoolExternalToolConfigurationStatusResponseFactory.build(),
-							version: schoolExternalToolResponse.toolVersion,
 							isDeactivated: false,
 						},
 					]);
@@ -184,7 +183,6 @@ describe("SchoolExternalToolsModule", () => {
 						id: schoolExternalTool.id,
 						toolId: schoolExternalTool.toolId,
 						schoolId: schoolExternalTool.schoolId,
-						version: schoolExternalTool.toolVersion,
 						parameters: [],
 						status:
 							schoolExternalToolConfigurationStatusResponseFactory.build(),
@@ -351,7 +349,6 @@ describe("SchoolExternalToolsModule", () => {
 										toolConfigurationTemplate.parameters[0].regexComment,
 								},
 							],
-							version: toolConfigurationTemplate.version,
 							logoUrl: toolConfigurationTemplate.logoUrl,
 							isDeactivated: false,
 						},
@@ -456,7 +453,6 @@ describe("SchoolExternalToolsModule", () => {
 										toolConfigurationTemplate.parameters[0].regexComment,
 								},
 							],
-							version: toolConfigurationTemplate.version,
 							logoUrl: toolConfigurationTemplate.logoUrl,
 							isDeactivated: false,
 						},
@@ -516,7 +512,6 @@ describe("SchoolExternalToolsModule", () => {
 					).toHaveBeenCalledWith<[SchoolExternalToolPostParams]>({
 						toolId: schoolExternalTool.toolId,
 						schoolId: schoolExternalTool.schoolId,
-						version: schoolExternalTool.version,
 						parameters: [
 							{
 								name: schoolExternalTool.parameters[0].name,
@@ -583,7 +578,6 @@ describe("SchoolExternalToolsModule", () => {
 						{
 							toolId: schoolExternalTool.toolId,
 							schoolId: schoolExternalTool.schoolId,
-							version: schoolExternalTool.version,
 							parameters: [],
 							isDeactivated: false,
 						}

@@ -35,11 +35,12 @@
 					</div>
 				</div>
 			</div>
-
-			<div v-if="hasErrors">
-				<p>{{ $t("components.molecules.copyResult.information") }}</p>
-			</div>
-			<copy-result-modal-list :items="filteredItems" />
+			<template v-if="hasErrors && isCourse">
+				<div>
+					<p>{{ $t("components.molecules.copyResult.information") }}</p>
+				</div>
+				<copy-result-modal-list :items="filteredItems" />
+			</template>
 		</template>
 	</v-custom-dialog>
 </template>
@@ -48,7 +49,7 @@
 import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import { envConfigModule, copyModule } from "@/store";
+import { envConfigModule } from "@/store";
 import {
 	mdiAlert,
 	mdiCheckCircle,
@@ -145,9 +146,15 @@ export default {
 			);
 		},
 		hasEtherpadElement() {
-			return this.hasElementOfType(
-				this.items,
-				CopyApiResponseTypeEnum.LessonContentEtherpad
+			return (
+				this.hasElementOfType(
+					this.items,
+					CopyApiResponseTypeEnum.CollaborativeTextEditorElement
+				) ||
+				this.hasElementOfType(
+					this.items,
+					CopyApiResponseTypeEnum.LessonContentEtherpad
+				)
 			);
 		},
 		hasNexboardElement() {
@@ -157,7 +164,10 @@ export default {
 			);
 		},
 		hasDrawingElement() {
-			return this.isCourse && copyModule.getHasDrawingChild;
+			return this.hasElementOfType(
+				this.items,
+				CopyApiResponseTypeEnum.DrawingElement
+			);
 		},
 		hasFileElement() {
 			return this.hasElementOfType(this.items, CopyApiResponseTypeEnum.File);

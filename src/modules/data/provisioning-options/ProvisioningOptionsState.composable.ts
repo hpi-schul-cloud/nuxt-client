@@ -1,10 +1,10 @@
 import { BusinessError } from "@/store/types/commons";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { ref, Ref } from "vue";
-import { ProvisioningOptions, useProvisioningOptionsApi } from "./index";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { useI18n } from "vue-i18n";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { ProvisioningOptions, useProvisioningOptionsApi } from "./index";
 
 export const useProvisioningOptionsState = () => {
 	const { getProvisioningOptions, saveProvisioningOptions } =
@@ -17,11 +17,13 @@ export const useProvisioningOptionsState = () => {
 		class: true,
 		course: false,
 		others: false,
+		schoolExternalTools: false,
 	});
 	const provisioningOptionsDefaultValues: ProvisioningOptions = {
 		class: true,
 		course: false,
 		others: false,
+		schoolExternalTools: false,
 	};
 
 	const fetchProvisioningOptionsData = async (

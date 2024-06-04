@@ -40,6 +40,7 @@ const vueRoutes = [
 	`^/h5p/editor/?$`,
 	`^/h5p/editor/${h5pId}/?$`,
 	`^/rooms/${mongoId}/?$`,
+	`^/rooms/?$`,
 	`^/rooms/${mongoId}/board?$`,
 	`^/tasks/?$`,
 	`^/error/?$`,
@@ -48,6 +49,7 @@ const vueRoutes = [
 	`^/migration/error/?$`,
 	`^/tools/context/tool-configuration/?$`,
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
+	`^/media-shelf/?$`,
 ];
 
 const isVueClient = (path) => {

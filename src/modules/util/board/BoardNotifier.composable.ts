@@ -15,7 +15,7 @@ export const useBoardNotifier = () => {
 		notifierModule.show({
 			text,
 			status: "error",
-			timeout: 10000,
+			timeout: 5000,
 		});
 	};
 
@@ -39,12 +39,12 @@ export const useBoardNotifier = () => {
 		});
 	};
 
-	const resetNotifier = () => {
-		notifierModule.setNotifier(undefined);
+	const resetNotifierModule = () => {
+		notifierModule.reset();
 	};
 
 	return {
-		resetNotifier,
+		resetNotifierModule,
 		showCustomNotifier,
 		showFailure,
 		showInfo,

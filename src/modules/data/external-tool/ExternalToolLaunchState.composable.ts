@@ -1,3 +1,4 @@
+import { ContextExternalToolBodyParams } from "@/serverApi/v3";
 import {
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
@@ -9,21 +10,47 @@ import { ref, Ref } from "vue";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 
 export const useExternalToolLaunchState = () => {
-	const { fetchLaunchDataCall } = useExternalToolApi();
+	const { fetchContextLaunchDataCall, fetchSchoolLaunchDataCall } =
+		useExternalToolApi();
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 	const toolLaunchRequest: Ref<ToolLaunchRequest | undefined> = ref();
 
-	const fetchLaunchRequest = async (
+	const fetchContextLaunchRequest = async (
 		contextExternalToolId: string
 	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 
 		try {
-			toolLaunchRequest.value = await fetchLaunchDataCall(
+			toolLaunchRequest.value = await fetchContextLaunchDataCall(
 				contextExternalToolId
+			);
+		} catch (axiosError: unknown) {
+			const apiError = mapAxiosErrorToResponseError(axiosError);
+
+			error.value = {
+				error: apiError,
+				message: apiError.message,
+				statusCode: apiError.code,
+			};
+		}
+
+		isLoading.value = false;
+	};
+
+	const fetchSchoolLaunchRequest = async (
+		schoolExternalToolId: string,
+		contextExternalToolBodyParams: ContextExternalToolBodyParams
+	): Promise<void> => {
+		isLoading.value = true;
+		error.value = undefined;
+
+		try {
+			toolLaunchRequest.value = await fetchSchoolLaunchDataCall(
+				schoolExternalToolId,
+				contextExternalToolBodyParams
 			);
 		} catch (axiosError: unknown) {
 			const apiError = mapAxiosErrorToResponseError(axiosError);
@@ -60,14 +87,19 @@ export const useExternalToolLaunchState = () => {
 	};
 
 	const handleGetLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
-		if (toolLaunch.openNewTab) {
-			window.open(toolLaunch.url, "_blank");
-			return;
-		}
-		window.location.href = toolLaunch.url;
+		const target = toolLaunch.openNewTab ? "_blank" : "_self";
+
+		window.open(toolLaunch.url, target);
 	};
 
 	const handlePostLaunchRequest = (toolLaunch: ToolLaunchRequest) => {
+		const existingForm: HTMLElement | null =
+			document.getElementById("launch-form");
+
+		if (existingForm) {
+			document.body.removeChild(existingForm);
+		}
+
 		const form: HTMLFormElement = document.createElement("form");
 		form.method = "POST";
 		form.action = toolLaunch.url;
@@ -77,8 +109,8 @@ export const useExternalToolLaunchState = () => {
 		const payload = JSON.parse(toolLaunch.payload || "{}");
 
 		for (const key in payload) {
-			if (Object.prototype.hasOwnProperty.call(payload, key)) {
-				const hiddenField = document.createElement("input");
+			if (Object.hasOwn(payload, key)) {
+				const hiddenField: HTMLInputElement = document.createElement("input");
 				hiddenField.type = "hidden";
 				hiddenField.name = key;
 				hiddenField.value = payload[key];
@@ -88,6 +120,7 @@ export const useExternalToolLaunchState = () => {
 		}
 
 		document.body.appendChild(form);
+
 		form.submit();
 	};
 
@@ -95,7 +128,8 @@ export const useExternalToolLaunchState = () => {
 		toolLaunchRequest,
 		error,
 		isLoading,
-		fetchLaunchRequest,
+		fetchContextLaunchRequest,
+		fetchSchoolLaunchRequest,
 		launchTool,
 	};
 };
