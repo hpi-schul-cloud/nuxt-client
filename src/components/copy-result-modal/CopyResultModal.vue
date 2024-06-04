@@ -35,11 +35,12 @@
 					</div>
 				</div>
 			</div>
-
-			<div v-if="hasErrors">
-				<p>{{ $t("components.molecules.copyResult.information") }}</p>
-			</div>
-			<copy-result-modal-list :items="filteredItems" />
+			<template v-if="hasErrors && isCourse">
+				<div>
+					<p>{{ $t("components.molecules.copyResult.information") }}</p>
+				</div>
+				<copy-result-modal-list :items="filteredItems" />
+			</template>
 		</template>
 	</v-custom-dialog>
 </template>

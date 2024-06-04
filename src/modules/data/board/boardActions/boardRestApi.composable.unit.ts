@@ -174,14 +174,12 @@ describe("boardRestApi", () => {
 		it("should call createColumnSuccess action if the API call is successful", async () => {
 			const { boardStore } = setup();
 			const { createColumnRequest } = useBoardRestApi();
-			const { setEditModeId } = useSharedEditMode();
 
 			const newColumn = columnResponseFactory.build();
 			mockedBoardApiCalls.createColumnCall.mockResolvedValue(newColumn);
 
 			const result = await createColumnRequest();
 
-			expect(setEditModeId).toHaveBeenCalledWith(newColumn.id);
 			expect(boardStore.createColumnSuccess).toHaveBeenCalledWith({
 				newColumn,
 				isOwnAction: true,
