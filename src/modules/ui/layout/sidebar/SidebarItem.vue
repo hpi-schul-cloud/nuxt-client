@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
+import { computed, PropType } from "vue";
 import { SidebarSingleItem } from "../types";
 
 const props = defineProps({
@@ -29,7 +29,9 @@ const props = defineProps({
 	},
 });
 
-const density = (props.item as SidebarSingleItem).icon ? "default" : "compact";
+const density = computed(() => {
+	return (props.item as SidebarSingleItem).icon ? "default" : "compact";
+});
 
 const hasIcon = (item: SidebarSingleItem) => {
 	return item.icon !== undefined && item.icon !== "";
