@@ -329,6 +329,8 @@ export default {
 		"{type} no se ha podido cargar.",
 	"components.board.notifications.errors.notUpdated":
 		"No se han podido guardar los cambios.",
+	"components.board.aria.notification.cardCreated":
+		"Una tarjeta fue creada exitosamente",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",

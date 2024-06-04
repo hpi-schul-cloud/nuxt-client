@@ -330,6 +330,7 @@ export default {
 		"{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notUpdated":
 		"Зберегти зміни не вдалося.",
+	"components.board.aria.notification.cardCreated": "Картку створено успішно",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",

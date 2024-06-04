@@ -323,7 +323,8 @@ export default {
 		"{type} could not be loaded.",
 	"components.board.notifications.errors.notUpdated":
 		"Your changes could not be saved.",
-
+	"components.board.aria.notification.cardCreated":
+		"A card was created successfully",
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",

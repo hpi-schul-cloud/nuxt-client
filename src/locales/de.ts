@@ -325,6 +325,8 @@ export default {
 		"{type} konnte nicht geladen werden.",
 	"components.board.notifications.errors.notUpdated":
 		"Die Änderungen konnten nicht gespeichert werden.",
+	"components.board.aria.notification.cardCreated":
+		"Eine Karte wurde erfolgreich erstellt",
 	"components.board": "Board",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
