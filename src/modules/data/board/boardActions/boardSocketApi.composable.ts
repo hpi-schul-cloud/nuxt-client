@@ -16,11 +16,12 @@ import {
 } from "./boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { actionToAriaMessage } from "./ariaNotificationHandler";
+import { useBoardAriaNotification } from "./ariaNotificationHandler";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
 	const { notifySocketError } = useErrorHandler();
+	const { actionToAriaMessage } = useBoardAriaNotification();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
