@@ -1,13 +1,10 @@
 export const useAriaLive = () => {
 	const notifyOnScreenReader = (
 		message: string,
-		importance: "off" | "polite" | "assertive" | "rude"
+		importance: "off" | "polite" | "assertive"
 	) => {
-		// const action = actionTypeMap[actionType as keyof typeof actionTypeMap];
-		// if (!action) return;
-
 		// should be a div with aria-live="polite | assertive" attribute
-		// and should be appended to the root of the application or the main layout
+		// and should be appended to the upper level of the DOM tree
 		// the aria-live attribute should be set polite or assertive based on the importance of the message
 		const element = document.getElementById("notify-on-screen-reader");
 		if (!element) return;
@@ -16,10 +13,10 @@ export const useAriaLive = () => {
 		element.innerHTML = message;
 
 		// should have a setTimeout to remove the message after a few seconds
-		// that is because to avoid repeating messages
-		// and also if the same message is repeated, the screen reader will not read it again
+		// that is because if the same message is repeated, the screen reader will not reread it.
 		setTimeout(() => {
 			element.innerHTML = "";
+			element.setAttribute("aria-live", "off");
 		}, 5000);
 	};
 
