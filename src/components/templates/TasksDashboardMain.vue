@@ -394,7 +394,6 @@ export default {
 
 // remove background color from expansion panel title
 :deep(
-		.v-expansion-panel-title--active > .v-expansion-panel-title__overlay,
 		.v-expansion-panel-title[aria-haspopup="menu"][aria-expanded="true"]
 			> .v-expansion-panel-title__overlay
 	) {

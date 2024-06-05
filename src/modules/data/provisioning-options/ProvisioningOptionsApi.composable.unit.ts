@@ -3,15 +3,15 @@ import {
 	SchoolApiInterface,
 	SchulConneXProvisioningOptionsResponse,
 } from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
-import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
-import { ProvisioningOptions } from "./type";
-import setupStores from "@@/tests/test-utils/setupStores";
-import SchoolsModule from "@/store/schools";
 import NotifierModule from "@/store/notifier";
+import SchoolsModule from "@/store/schools";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
+import { ProvisioningOptions } from "./type";
 
 describe("ProvisioningOptionsApi.composable", () => {
 	let schoolApi: DeepMocked<SchoolApiInterface>;
@@ -37,6 +37,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 				groupProvisioningClassesEnabled: true,
 				groupProvisioningCoursesEnabled: true,
 				groupProvisioningOtherEnabled: true,
+				schoolExternalToolProvisioningEnabled: true,
 			};
 
 			const composable = mountComposable(() => useProvisioningOptionsApi(), {
@@ -75,6 +76,8 @@ describe("ProvisioningOptionsApi.composable", () => {
 					class: provisioningOptions.groupProvisioningClassesEnabled,
 					course: provisioningOptions.groupProvisioningCoursesEnabled,
 					others: provisioningOptions.groupProvisioningOtherEnabled,
+					schoolExternalTools:
+						provisioningOptions.schoolExternalToolProvisioningEnabled,
 				});
 			});
 		});
@@ -114,11 +117,13 @@ describe("ProvisioningOptionsApi.composable", () => {
 				groupProvisioningClassesEnabled: true,
 				groupProvisioningCoursesEnabled: true,
 				groupProvisioningOtherEnabled: true,
+				schoolExternalToolProvisioningEnabled: true,
 			};
 			const provisioningOptionsEntry: ProvisioningOptions = {
 				class: true,
 				course: true,
 				others: true,
+				schoolExternalTools: true,
 			};
 
 			const composable = mountComposable(() => useProvisioningOptionsApi(), {
@@ -161,10 +166,11 @@ describe("ProvisioningOptionsApi.composable", () => {
 					provisioningOptionsEntry
 				);
 
-				expect(result).toEqual({
+				expect(result).toEqual<ProvisioningOptions>({
 					class: true,
 					course: true,
 					others: true,
+					schoolExternalTools: true,
 				});
 			});
 		});
@@ -186,6 +192,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 					class: true,
 					course: true,
 					others: true,
+					schoolExternalTools: true,
 				};
 
 				return {

@@ -1,7 +1,7 @@
 <template>
 	<ContentElementBar :hasGreyBackground="true" :icon="mdiPresentation">
 		<template #display>
-			<v-img :src="imageSrc" height="185px" alt="" cover class="rounded-t" />
+			<v-img :src="imageSrc" alt="" cover class="rounded-t" />
 		</template>
 		<template #title>
 			{{ $t("components.cardElement.drawingElement") }}
@@ -17,11 +17,11 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import image from "@/assets/img/tldraw.svg";
 import { mdiPresentation } from "@mdi/js";
-import image from "@/assets/img/tldraw.png";
 import { ContentElementBar } from "@ui-board";
 import dayjs from "dayjs";
+import { computed, defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({

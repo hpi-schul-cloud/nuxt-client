@@ -16,8 +16,6 @@ import {
 import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPayload";
 import { useDebounceFn } from "@vueuse/core";
 
-type ErrorActions = ReturnType<typeof CardActions.updateCardTitleFailure>;
-
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
 
@@ -48,14 +46,14 @@ export const useCardSocketApi = () => {
 			),
 
 			// failure actions
-			on(CardActions.createElementFailure, onFailure),
-			on(CardActions.deleteElementFailure, onFailure),
-			on(CardActions.moveElementFailure, onFailure),
-			on(CardActions.updateElementFailure, onFailure),
-			on(CardActions.deleteCardFailure, onFailure),
-			on(CardActions.fetchCardFailure, onFailure),
-			on(CardActions.updateCardTitleFailure, onFailure),
-			on(CardActions.updateCardHeightFailure, onFailure)
+			on(CardActions.createElementFailure, createElementFailure),
+			on(CardActions.deleteElementFailure, deleteElementFailure),
+			on(CardActions.moveElementFailure, moveElementFailure),
+			on(CardActions.updateElementFailure, updateElementFailure),
+			on(CardActions.deleteCardFailure, deleteCardFailure),
+			on(CardActions.fetchCardFailure, fetchCardFailure),
+			on(CardActions.updateCardTitleFailure, updateCardTitleFailure),
+			on(CardActions.updateCardHeightFailure, updateCardHeightFailure)
 		);
 	};
 
@@ -116,10 +114,27 @@ export const useCardSocketApi = () => {
 		emitOnSocket("update-card-height-request", payload);
 	};
 
-	const onFailure = (payload: ErrorActions["payload"]) => {
-		const { errorType = "notUpdated", boardObjectType = "boardCard" } = payload;
-		notifySocketError(errorType, boardObjectType);
-	};
+	const createElementFailure = () =>
+		notifySocketError("notCreated", "boardElement");
+
+	const deleteElementFailure = () =>
+		notifySocketError("notDeleted", "boardElement");
+
+	const moveElementFailure = () =>
+		notifySocketError("notUpdated", "boardElement");
+
+	const updateElementFailure = () =>
+		notifySocketError("notUpdated", "boardElement");
+
+	const deleteCardFailure = () => notifySocketError("notDeleted", "boardCard");
+
+	const fetchCardFailure = () => notifySocketError("notLoaded", "boardCard");
+
+	const updateCardTitleFailure = () =>
+		notifySocketError("notUpdated", "boardCard");
+
+	const updateCardHeightFailure = () =>
+		notifySocketError("notUpdated", "boardCard");
 
 	return {
 		dispatch,
