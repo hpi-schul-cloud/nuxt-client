@@ -95,6 +95,18 @@ export interface FileRecordResponse {
      * @memberof FileRecordResponse
      */
     deletedSince?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileRecordResponse
+     */
+    createdAt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileRecordResponse
+     */
+    updatedAt?: string;
 }
 
 

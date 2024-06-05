@@ -1,6 +1,6 @@
 import {
-	FileApiFactory,
-	FileApiInterface,
+	FileConfigApiFactory,
+	FileConfigApiInterface,
 	FilesStorageConfigResponse,
 } from "@/fileStorageApi/v3";
 import {
@@ -186,15 +186,15 @@ export default class EnvConfigModule extends VuexModule {
 		return serverApi;
 	}
 
-	private get fileApi(): FileApiInterface {
-		const fileApi = FileApiFactory(undefined, "/v3", $axios);
+	private get fileConfigApi(): FileConfigApiInterface {
+		const fileConfigApi = FileConfigApiFactory(undefined, "/v3", $axios);
 
-		return fileApi;
+		return fileConfigApi;
 	}
 
 	@Action
 	async loadFileConfig(): Promise<void> {
-		const fileConfig = await this.fileApi.publicConfig();
+		const fileConfig = await this.fileConfigApi.publicConfig();
 		this.setFileEnvs(fileConfig.data);
 	}
 
