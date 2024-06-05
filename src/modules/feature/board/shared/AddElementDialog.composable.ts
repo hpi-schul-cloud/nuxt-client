@@ -43,6 +43,12 @@ export const useAddElementDialog = (
 				"info"
 			);
 		}
+		if (elementType === ContentElementType.Drawing) {
+			showCustomNotifier(
+				t("components.cardElement.notification.visibleAndEditable"),
+				"info"
+			);
+		}
 	};
 
 	const options = [

@@ -24,28 +24,24 @@
 				</template>
 			</InnerContent>
 		</div>
-		<InfoAlert v-if="isTeacher" :showCloseIcon="true">
-			{{ $t("components.cardElement.notification.visibleAndEditable") }}
-		</InfoAlert>
 	</v-card>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, PropType, ref, toRef } from "vue";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 import { DrawingElementResponse } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
-import InnerContent from "./InnerContent.vue";
+import { mdiClose } from "@mdi/js";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
-import { InfoAlert } from "@ui-alert";
-import AuthModule from "@/store/auth";
-import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
-import { mdiClose } from "@mdi/js";
+import { computed, defineComponent, PropType, ref, toRef } from "vue";
+import InnerContent from "./InnerContent.vue";
 
 export default defineComponent({
 	name: "DrawingContentElement",
@@ -55,7 +51,6 @@ export default defineComponent({
 		BoardMenuActionMoveDown,
 		BoardMenuActionDelete,
 		InnerContent,
-		InfoAlert,
 	},
 	props: {
 		element: {
