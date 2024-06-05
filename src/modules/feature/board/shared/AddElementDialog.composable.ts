@@ -35,12 +35,10 @@ export const useAddElementDialog = (
 	};
 
 	const showNotificationByElementType = (elementType: ContentElementType) => {
-		const translationKeyCollaborativeTextEditor = t(
-			"components.cardElement.collaborativeTextEditorElement.alert.info.visible"
-		);
-		const translationKeyDrawing = t(
-			"components.cardElement.notification.visibleAndEditable"
-		);
+		const translationKeyCollaborativeTextEditor =
+			"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
+		const translationKeyDrawing =
+			"components.cardElement.notification.visibleAndEditable";
 		let translationKey = "";
 
 		if (elementType === ContentElementType.CollaborativeTextEditor) {
