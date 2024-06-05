@@ -44,8 +44,8 @@ describe("@ui-layout/UserMenu", () => {
 	it("should render with correct user initials", async () => {
 		const { wrapper } = setup();
 
-		const avatar = wrapper.findComponent({ name: "VAvatar" });
-		expect(avatar.html()).toMatch("AD");
+		const initials = wrapper.findComponent("[data-testid=user-menu-btn]");
+		expect(initials.text()).toMatch("AD");
 	});
 
 	it("should render correct active user name with role", async () => {
