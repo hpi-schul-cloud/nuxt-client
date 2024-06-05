@@ -35,20 +35,18 @@ export const useAddElementDialog = (
 	};
 
 	const showNotificationByElementType = (elementType: ContentElementType) => {
+		let translationKey = "";
 		if (elementType === ContentElementType.CollaborativeTextEditor) {
-			showCustomNotifier(
-				t(
-					"components.cardElement.collaborativeTextEditorElement.alert.info.visible"
-				),
-				"info"
+			translationKey = t(
+				"components.cardElement.collaborativeTextEditorElement.alert.info.visible"
 			);
 		}
 		if (elementType === ContentElementType.Drawing) {
-			showCustomNotifier(
-				t("components.cardElement.notification.visibleAndEditable"),
-				"info"
+			translationKey = t(
+				"components.cardElement.notification.visibleAndEditable"
 			);
 		}
+		showCustomNotifier(translationKey, "info");
 	};
 
 	const options = [

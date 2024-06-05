@@ -16,12 +16,6 @@ jest.mock("./SharedElementTypeSelection.composable");
 jest.mock("@/utils/inject");
 const mockedInjectStrict = jest.mocked(injectStrict);
 
-const i18nKeyCollaborativeTextEditor =
-	"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
-
-const i18nKeyWhiteboard =
-	"components.cardElement.notification.visibleAndEditable";
-
 const translationMap: Record<string, string> = {};
 
 jest.mock("vue-i18n", () => {
@@ -137,6 +131,9 @@ describe("ElementTypeSelection Composable", () => {
 				};
 
 				it("should show Notification", async () => {
+					const i18nKeyCollaborativeTextEditor =
+						"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
+
 					const {
 						addElementMock,
 						elementType,
@@ -204,6 +201,8 @@ describe("ElementTypeSelection Composable", () => {
 
 			describe("when element type is Whiteboard", () => {
 				it("should show Notification", async () => {
+					const i18nKeyWhiteboard =
+						"components.cardElement.notification.visibleAndEditable";
 					const addElementMock = jest.fn();
 					const elementType = ContentElementType.Drawing;
 					const { showCustomNotifierMock, cardId } = setup();
