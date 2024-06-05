@@ -15,6 +15,7 @@ import {
 } from "./cardActionPayload";
 import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPayload";
 import { useDebounceFn } from "@vueuse/core";
+import { useBoardAriaNotification } from "../ariaNotification/ariaNotificationHandler";
 
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
@@ -24,10 +25,12 @@ export const useCardSocketApi = () => {
 	let cardIdsToFetch: string[] = [];
 
 	const { notifySocketError } = useErrorHandler();
+	const { actionToAriaMessage } = useBoardAriaNotification();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof CardActions>
 	) => {
+		actionToAriaMessage(action);
 		handle(
 			action,
 			on(CardActions.disconnectSocket, disconnectSocketRequest),

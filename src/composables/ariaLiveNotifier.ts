@@ -17,7 +17,7 @@ export const useAriaLive = () => {
 		setTimeout(() => {
 			element.innerHTML = "";
 			element.setAttribute("aria-live", "off");
-		}, 5000);
+		}, 10000);
 	};
 
 	return {

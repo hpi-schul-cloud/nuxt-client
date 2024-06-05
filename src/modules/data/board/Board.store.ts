@@ -288,6 +288,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	return {
 		board,
 		isLoading,
+		getCardLocation,
 		getColumnIndex,
 		getColumnId,
 		getLastColumnIndex,
