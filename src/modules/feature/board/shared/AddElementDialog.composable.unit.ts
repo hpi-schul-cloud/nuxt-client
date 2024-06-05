@@ -158,7 +158,7 @@ describe("ElementTypeSelection Composable", () => {
 				});
 			});
 
-			describe("when element type is NOT CollaborativeTextEditor", () => {
+			describe("when element type is NOT CollaborativeTextEditor or Whiteboard", () => {
 				const setup = () => {
 					setupSharedElementTypeSelectionMock();
 
