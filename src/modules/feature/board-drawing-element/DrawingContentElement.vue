@@ -33,7 +33,6 @@ import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
-import { mdiClose } from "@mdi/js";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
@@ -106,7 +105,6 @@ export default defineComponent({
 			onMoveDrawingElementEditDown,
 			onMoveDrawingElementEditUp,
 			isTeacher,
-			mdiClose,
 		};
 	},
 });
