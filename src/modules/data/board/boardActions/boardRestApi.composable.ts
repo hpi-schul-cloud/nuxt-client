@@ -2,7 +2,6 @@ import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedEditMode } from "../EditMode.composable";
 import * as BoardActions from "./boardActions";
-import { useBoardFocusHandler } from "../BoardFocusHandler.composable";
 import {
 	BoardObjectType,
 	ErrorType,
@@ -75,9 +74,6 @@ export const useBoardRestApi = () => {
 
 		try {
 			const newColumn = await createColumnCall(boardStore.board?.id);
-			useBoardFocusHandler().setFocus(newColumn.id);
-			setEditModeId(newColumn.id);
-
 			boardStore.createColumnSuccess({ newColumn, isOwnAction: true });
 			return newColumn;
 		} catch (error) {

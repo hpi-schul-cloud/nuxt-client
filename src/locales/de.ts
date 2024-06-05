@@ -127,6 +127,10 @@ export default {
 		"Tool {toolName} ist deaktiviert. Bitte an Lehrkraft oder Kursleiter:in wenden.",
 	"common.tool.information.deactivated.teacher":
 		"Tool {toolName} ist deaktiviert. Bitte an Schuladministrator:in wenden.",
+	"common.tool.information.notLicensed.student":
+		"Tool {toolName} ist nicht freigeschaltet. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+	"common.tool.information.notLicensed.teacher":
+		"Tool {toolName} ist nicht freigeschaltet. Bitte an Schuladministrator:in wenden.",
 	"common.tool.information.outdated.teacher":
 		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -157,6 +161,7 @@ export default {
 	"common.words.no": "Nein",
 	"common.words.noChoice": "Keine Auswahl",
 	"common.words.otherGroups": "sonstige Gruppen",
+	"common.words.externalTools": "externe Tools",
 	"common.words.planned": "geplant",
 	"common.words.privacyPolicy": "Datenschutzerklärung",
 	"common.words.published": "veröffentlicht",
@@ -206,6 +211,10 @@ export default {
 		"Öffnet ein Tool, mit dem Benutzerkonten ohne Benutzereingriff zu moin.schule migriert werden können. Dieses Tool ist verfügbar, sobald der erste Benutzer dieser Schule erfolgreich zu moin.schule migriert wurde.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Migrationsassistenten öffnen",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"Wenn Sie die Ausführung des Migrationsassistenten jetzt abbrechen, werden die in der aktuellen Sitzung durchgeführten Konten-Verknüpfungen zurückgesetzt. Möchten Sie die Ausführung des Assistenten jetzt wirklich abbrechen?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"Sind Sie sich sicher, dass sie die Migration abbrechen wollen?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"Die Account-Migration wurde am {date} um {time} Uhr abgeschlossen.<br>Die Wartefrist nach Abschluss der Migration endet endgültig am {finishDate} um {finishTime} Uhr!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
@@ -261,6 +270,12 @@ export default {
 		"Aktivieren sie diese Option, wenn sonstige Gruppen in die {instance} synchronisiert werden sollen.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Synchronisation von sonstigen Gruppen",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"Wenn diese Option aktiviert ist, werden Freischaltungen von externen Tools automatisch aus moin.schule übernommen.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Freischaltung von externen Tools",
+
 	"components.administration.provisioningOptions.page.title":
 		"Optionen für Datensynchronisation",
 	"components.administration.provisioningOptions.warning.consequence":
@@ -1502,6 +1517,8 @@ export default {
 		"Videokonferenz {roomName} erstellen",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Tool „{toolName}“ nicht freigeschaltet",
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '<i>{itemName}</i>' aus dem Kurs entfernen?",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
@@ -1516,7 +1533,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
 	"pages.room.modal.course.export.options.topics": "Themen",
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
-	"pages.room.modal.course.export.options.columnBoards": "Spalten-Boards",
+	"pages.room.modal.course.export.options.columnBoards": "Boards",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",

@@ -130,6 +130,10 @@ export default {
 		"La herramienta {toolName} está deshabilitada. Por favor contacta a tu profesor o instructor del curso.",
 	"common.tool.information.deactivated.teacher":
 		"La herramienta {toolName} está deshabilitada. Por favor comuníquese con el administrador de la escuela.",
+	"common.tool.information.notLicensed.student":
+		"La herramienta {toolName} no está activada. Por favor contacta a tu profesor o instructor del curso.",
+	"common.tool.information.notLicensed.teacher":
+		"La herramienta {toolName} no está activada. Por favor comuníquese con el administrador de la escuela.",
 	"common.tool.information.outdated.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Verifique la configuración y comuníquese con el administrador de su escuela.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -160,6 +164,7 @@ export default {
 	"common.words.no": "No",
 	"common.words.noChoice": "Sin elección",
 	"common.words.otherGroups": "otros grupos",
+	"common.words.externalTools": "herramientas externas",
 	"common.words.planned": "previsto",
 	"common.words.privacyPolicy": "Política de Privacidad",
 	"common.words.published": "publicado",
@@ -209,6 +214,10 @@ export default {
 		"Abre una herramienta que se utiliza para migrar cuentas de usuario a moin.schule sin la participación del usuario. Esta herramienta estará disponible una vez que el primer usuario de esta escuela haya migrado exitosamente a moin.schule.",
 	"components.administration.adminMigrationSection.migrationWizardButton.label":
 		"Abrir asistente de migración",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
+		"Si cancela ahora la ejecución del asistente de migración, se restablecerán los vínculos de cuenta realizados en la sesión actual. ¿Realmente desea cancelar el asistente ahora?",
+	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
+		"¿Estás seguro de que quieres cancelar la migración?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"La migración de la cuenta se completó el {date} a las {time}.<br>¡El periodo de espera tras la finalización de la migración termina finalmente el {finishDate} a las {finishTime}!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
@@ -265,6 +274,12 @@ export default {
 		"Active esta opción si otros grupos deben sincronizarse en la {instance}.",
 	"components.administration.provisioningOptions.otherGroups.label":
 		"Sincronización de otros grupos.",
+
+	"components.administration.provisioningOptions.schoolExternalTools.description":
+		"Si esta opción está activada, las activaciones de herramientas externas se realizan automáticamente desde moin.schule.",
+	"components.administration.provisioningOptions.schoolExternalTools.label":
+		"Activación de herramientas externas",
+
 	"components.administration.provisioningOptions.page.title":
 		"Opciones de sincronización de datos",
 	"components.administration.provisioningOptions.warning.consequence":
@@ -1521,6 +1536,8 @@ export default {
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Herramienta {toolName}“ desactivada",
+	"pages.rooms.tools.notLicensedDialog.title":
+		"Herramienta “{toolName}” no activada",
 	"pages.rooms.tools.deleteDialog.content":
 		"¿Está seguro de que desea eliminar la herramienta '<i>{itemName}</i>' del curso?",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",
@@ -1535,7 +1552,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Exportar configuración",
 	"pages.room.modal.course.export.options.topics": "Temas",
 	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",
-	"pages.room.modal.course.export.options.columnBoards": "Tableros de columna",
+	"pages.room.modal.course.export.options.columnBoards": "Tableros",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",

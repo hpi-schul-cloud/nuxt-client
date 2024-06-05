@@ -7,13 +7,21 @@
 		@click="handleClick"
 	>
 		<template #under-title>
-			<div class="d-flex g-1">
+			<div class="d-flex ga-1">
 				<WarningChip
 					v-if="isToolDeactivated"
 					data-testId="tool-card-status-deactivated"
 				>
 					{{ $t("pages.rooms.tools.deactivated") }}
 				</WarningChip>
+
+				<WarningChip
+					v-if="isToolNotLicensed"
+					data-testId="tool-card-status-not-licensed"
+				>
+					{{ $t("common.medium.chip.notLicensed") }}
+				</WarningChip>
+
 				<InfoChip
 					v-if="showAsIncompleteOperational"
 					data-testId="tool-card-status-incompleteOperational"
@@ -135,11 +143,16 @@ export default defineComponent({
 			() => props.tool.status.isDeactivated
 		);
 
+		const isToolNotLicensed: ComputedRef = computed(
+			() => props.tool.status.isNotLicensed
+		);
+
 		const isToolLaunchable = computed(() => {
 			return (
 				!isToolOutdated.value &&
 				!isToolDeactivated.value &&
-				!isToolIncomplete.value
+				!isToolIncomplete.value &&
+				!isToolNotLicensed.value
 			);
 		});
 
@@ -162,14 +175,9 @@ export default defineComponent({
 			isToolOutdated,
 			isToolDeactivated,
 			isToolIncomplete,
+			isToolNotLicensed,
 			showAsIncompleteOperational,
 		};
 	},
 });
 </script>
-
-<style scoped>
-.g-1 {
-	gap: 4px;
-}
-</style>
