@@ -286,17 +286,3 @@ export const useBoardAriaNotification = () => {
 
 	return { actionToAriaMessage };
 };
-
-// the card I am already working on was deleted ??? => should be assertive
-
-// delete-element-success && update-element-success => a card was updated by someone
-
-// update-card-title-success => card title was updated to "new title" by another user // or the title was deleted
-// same for column title and board title
-
-// draft mode for the board
-
-// move-card-success => a card was moved from column 'index' to another column 'index' column by another user
-// if the card inside the same column => "a card was moved to another position in the same column"
-
-// and so on...
