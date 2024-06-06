@@ -1,6 +1,6 @@
 <template>
 	<div class="wireframe-container">
-		<div ref="wireframeHeader" class="wireframe-header sticky">
+		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -53,7 +53,6 @@
 				'container-full-width': fullWidth,
 				'overflow-x': allowOverflowX,
 			}"
-			:style="calcHeight"
 		>
 			<slot />
 		</v-container>
@@ -64,7 +63,7 @@
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { defineComponent, PropType, onMounted, ref } from "vue";
+import { defineComponent, PropType } from "vue";
 import { Fab } from "./default-wireframe.types";
 
 export default defineComponent({
@@ -118,18 +117,8 @@ export default defineComponent({
 	setup() {
 		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
 
-		const wireframeHeader = ref();
-		const calcHeight = ref();
-
-		onMounted(() => {
-			const headerHeight = wireframeHeader.value.clientHeight;
-			calcHeight.value = { height: `calc(100% - ${headerHeight}px)` };
-		});
-
 		return {
 			isMobile,
-			calcHeight,
-			wireframeHeader,
 		};
 	},
 });
