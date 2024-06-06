@@ -1,13 +1,31 @@
-import { useAriaLive } from "@/composables/ariaLiveNotifier";
-import { PermittedStoreActions } from "@/types/board/ActionFactory";
+import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 // import { useI18n } from "vue-i18n";
 import * as BoardActions from "../boardActions/boardActions";
 import * as CardActions from "../cardActions/cardActions";
 import { useBoardStore } from "../Board.store";
 
 import { useCardStore } from "../Card.store";
+import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
+import {
+	CreateCardSuccessPayload,
+	CreateColumnSuccessPayload,
+	DeleteColumnSuccessPayload,
+	MoveCardSuccessPayload,
+	MoveColumnSuccessPayload,
+	UpdateBoardTitleSuccessPayload,
+	UpdateBoardVisibilitySuccessPayload,
+	UpdateColumnTitleSuccessPayload,
+} from "../boardActions/boardActionPayload";
 
-const { notifyOnScreenReader } = useAriaLive();
+import {
+	DeleteCardSuccessPayload,
+	DeleteElementSuccessPayload,
+	MoveElementSuccessPayload,
+	UpdateCardTitleSuccessPayload,
+	UpdateElementSuccessPayload,
+} from "../cardActions/cardActionPayload";
+
+const { notifyOnScreenReader } = useAriaLiveNotifier();
 
 enum ARIA_IMPORTANCE {
 	OFF = "off",
@@ -25,186 +43,247 @@ export const useBoardAriaNotification = () => {
 		if (!cards) return;
 
 		const card = Object.values(cards).find((c) => {
-			return c.elements.find((e) => e.id === elementId);
+			return c.elements.find((element) => element.id === elementId);
 		});
 		if (!card) return;
 
 		return card.id;
 	};
 
-	const generateAriaMessage = (
-		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
-	): string | undefined => {
-		switch (action.type) {
-			//#region board actions
-			case "create-card-success": {
-				const { columnId, isOwnAction } = action.payload;
-				if (isOwnAction) return;
-				const columnIndex = boardStore.getColumnIndex(columnId);
-				if (columnIndex === undefined) return;
-
-				return `A card was created by another user in column position ${
-					columnIndex + 1
-				}`;
-			}
-
-			case "create-column-success": {
-				const { isOwnAction } = action.payload;
-				if (isOwnAction) return;
-				return "A column was created by another user";
-			}
-
-			case "delete-card-success": {
-				const { isOwnAction } = action.payload;
-				if (isOwnAction) return;
-				return "A card was deleted by another user";
-			}
-
-			case "delete-column-success": {
-				const { isOwnAction } = action.payload;
-				if (isOwnAction) return;
-				return "A column was deleted by another user";
-			}
-
-			case "move-card-success": {
-				const { newIndex, toColumnIndex, fromColumnIndex, isOwnAction } =
-					action.payload;
-				if (isOwnAction) return;
-
-				if (fromColumnIndex === toColumnIndex) {
-					return `A card was moved position number ${
-						newIndex + 1
-					} in the same column`;
-				}
-
-				if (fromColumnIndex !== toColumnIndex) {
-					return `A card was moved from column position number ${
-						fromColumnIndex + 1
-					} to column position number ${toColumnIndex + 1}`;
-				}
-				break;
-			}
-
-			case "move-column-success": {
-				const { addedIndex, removedIndex } = action.payload.columnMove;
-				const { isOwnAction } = action.payload;
-				if (isOwnAction) return;
-
-				if (addedIndex == undefined || removedIndex == undefined) return;
-				return `A column was moved from position number ${
-					removedIndex + 1
-				} to position number ${addedIndex + 1}`;
-			}
-
-			case "update-column-title-success": {
-				const { newTitle, isOwnAction, columnId } = action.payload;
-				if (isOwnAction) return;
-
-				const columnIndex = boardStore.getColumnIndex(columnId);
-				return `The column title was changed to ${newTitle} in column position number ${
-					columnIndex + 1
-				} by another user`;
-			}
-
-			case "update-board-title-success": {
-				const { newTitle, isOwnAction } = action.payload;
-				if (isOwnAction) return;
-				return `The board title was changed to ${newTitle} by another user`;
-			}
-
-			case "update-board-visibility-success": {
-				const { isVisible, isOwnAction } = action.payload;
-				if (isOwnAction) return;
-				return isVisible
-					? `The board is published by another user`
-					: `The board is reverted to draft by another user`;
-			}
-
-			//#endregion
-
-			//#region card actions
-			case "update-card-title-success": {
-				const { newTitle, isOwnAction, cardId } = action.payload;
-				if (isOwnAction) return;
-				const { columnIndex, cardIndex } = boardStore.getCardLocation(
-					cardId
-				) as {
-					columnIndex: number;
-					cardIndex: number;
-				};
-				return `The card title in position ${cardIndex + 1} in column ${
-					columnIndex + 1
-				} was changed to ${newTitle} by another user`;
-			}
-
-			case "update-element-success": {
-				const { elementId, isOwnAction } = action.payload;
-				if (isOwnAction) return;
-
-				const cardId = getElementOwner(elementId);
-				if (!cardId) return;
-
-				const { columnIndex, cardIndex } = boardStore.getCardLocation(
-					cardId
-				) as {
-					columnIndex: number;
-					cardIndex: number;
-				};
-
-				return `The card in position ${cardIndex + 1} in column ${
-					columnIndex + 1
-				} was updated by another user`;
-			}
-
-			case "delete-element-success": {
-				const { elementId, isOwnAction } = action.payload;
-				if (isOwnAction) return;
-
-				const cardId = getElementOwner(elementId);
-				if (!cardId) return;
-
-				const { columnIndex, cardIndex } = boardStore.getCardLocation(
-					cardId
-				) as {
-					columnIndex: number;
-					cardIndex: number;
-				};
-
-				return `The card in position ${cardIndex + 1} in column ${
-					columnIndex + 1
-				} was updated by another user`;
-			}
-
-			case "move-element-success": {
-				const { toCardId, isOwnAction } = action.payload;
-				if (isOwnAction) return;
-
-				const { columnIndex, cardIndex } = boardStore.getCardLocation(
-					toCardId
-				) as {
-					columnIndex: number;
-					cardIndex: number;
-				};
-
-				return `The card in position ${cardIndex + 1} in column ${
-					columnIndex + 1
-				} was updated by another user`;
-			}
-
-			//#endregion
-			default:
-				return undefined;
-		}
-	};
-
 	const actionToAriaMessage = (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
 	) => {
-		const message = generateAriaMessage(action);
-		if (!message) return;
+		handle(
+			action,
+			// board success actions
+			on(BoardActions.createCardSuccess, notifyOnCreateCardSuccess),
+			on(BoardActions.createColumnSuccess, notifyOnCreateColumnSuccess),
+			on(CardActions.deleteCardSuccess, notifyOnDeleteCardSuccess),
+			on(BoardActions.deleteColumnSuccess, notifyOnDeleteColumnSuccess),
+			on(BoardActions.moveCardSuccess, notifyOnMoveCardSuccess),
+			on(BoardActions.moveColumnSuccess, notifyOnMoveColumnSuccess),
+			on(
+				BoardActions.updateColumnTitleSuccess,
+				notifyOnUpdateColumnTitleSuccess
+			),
+			on(BoardActions.updateBoardTitleSuccess, notifyOnUpdateBoardTitleSuccess),
+			on(
+				BoardActions.updateBoardVisibilitySuccess,
+				notifyOnUpdateBoardVisibilitySuccess
+			),
 
-		notifyOnScreenReader(message, ARIA_IMPORTANCE.POLITE);
+			// card success actions
+			on(CardActions.deleteElementSuccess, notifyOnDeleteElementSuccess),
+			on(CardActions.moveElementSuccess, notifyOnMoveElementSuccess),
+			on(CardActions.updateElementSuccess, notifyOnUpdateElementSuccess),
+			on(CardActions.updateCardTitleSuccess, notifyOnUpdateCardTitleSuccess)
+		);
 	};
+
+	const notifyOnCreateCardSuccess = (action: CreateCardSuccessPayload) => {
+		const { columnId, isOwnAction } = action;
+		if (isOwnAction) return;
+
+		const columnIndex = boardStore.getColumnIndex(columnId);
+		if (columnIndex === undefined) return;
+
+		notifyOnScreenReader(
+			`A card was created by another user in column position ${
+				columnIndex + 1
+			}`,
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnCreateColumnSuccess = (action: CreateColumnSuccessPayload) => {
+		const { isOwnAction } = action;
+		if (isOwnAction) return;
+
+		notifyOnScreenReader(
+			"A column was created by another user",
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnDeleteCardSuccess = (action: DeleteCardSuccessPayload) => {
+		const { isOwnAction } = action;
+		if (isOwnAction) return;
+
+		notifyOnScreenReader(
+			"A card was deleted by another user",
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnDeleteColumnSuccess = (action: DeleteColumnSuccessPayload) => {
+		const { isOwnAction } = action;
+		if (isOwnAction) return;
+
+		notifyOnScreenReader(
+			"A column was deleted by another user",
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnMoveCardSuccess = (action: MoveCardSuccessPayload) => {
+		const { newIndex, toColumnIndex, fromColumnIndex, isOwnAction } = action;
+		if (isOwnAction) return;
+
+		if (fromColumnIndex === toColumnIndex) {
+			notifyOnScreenReader(
+				`A card was moved position number ${newIndex + 1} in the same column`,
+				ARIA_IMPORTANCE.POLITE
+			);
+		}
+
+		if (fromColumnIndex !== toColumnIndex) {
+			notifyOnScreenReader(
+				`A card was moved from column position number ${
+					fromColumnIndex + 1
+				} to column position number ${toColumnIndex + 1}`,
+				ARIA_IMPORTANCE.POLITE
+			);
+		}
+	};
+
+	const notifyOnMoveColumnSuccess = (action: MoveColumnSuccessPayload) => {
+		const { addedIndex, removedIndex } = action.columnMove;
+		const { isOwnAction } = action;
+		if (isOwnAction) return;
+
+		if (addedIndex == undefined || removedIndex == undefined) return;
+
+		notifyOnScreenReader(
+			`A column was moved from position number ${
+				removedIndex + 1
+			} to position number ${addedIndex + 1}`,
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnUpdateBoardTitleSuccess = (
+		action: UpdateBoardTitleSuccessPayload
+	) => {
+		const { newTitle, isOwnAction } = action;
+		if (isOwnAction) return;
+
+		notifyOnScreenReader(
+			`The board title was changed to ${newTitle} by another user`,
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnUpdateBoardVisibilitySuccess = (
+		action: UpdateBoardVisibilitySuccessPayload
+	) => {
+		const { isVisible, isOwnAction } = action;
+		if (isOwnAction) return;
+
+		notifyOnScreenReader(
+			isVisible
+				? "The board is published by another user"
+				: "The board is reverted to draft by another user",
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnUpdateColumnTitleSuccess = (
+		action: UpdateColumnTitleSuccessPayload
+	) => {
+		const { newTitle, isOwnAction, columnId } = action;
+		if (isOwnAction) return;
+
+		const columnIndex = boardStore.getColumnIndex(columnId);
+		notifyOnScreenReader(
+			`The column title was changed to ${newTitle} in column position number ${
+				columnIndex + 1
+			} by another user`,
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnUpdateCardTitleSuccess = (
+		action: UpdateCardTitleSuccessPayload
+	) => {
+		const { newTitle, isOwnAction, cardId } = action;
+		if (isOwnAction) return;
+
+		const { columnIndex, cardIndex } = boardStore.getCardLocation(cardId) as {
+			columnIndex: number;
+			cardIndex: number;
+		};
+
+		notifyOnScreenReader(
+			`The card title in position number ${
+				cardIndex + 1
+			} in column position number ${
+				columnIndex + 1
+			} was changed to ${newTitle} by another user`,
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnUpdateElementSuccess = (
+		action: UpdateElementSuccessPayload
+	) => {
+		const { elementId, isOwnAction } = action;
+		if (isOwnAction) return;
+
+		const cardId = getElementOwner(elementId);
+		if (!cardId) return;
+
+		const { columnIndex, cardIndex } = boardStore.getCardLocation(cardId) as {
+			columnIndex: number;
+			cardIndex: number;
+		};
+
+		notifyOnScreenReader(
+			`The card in position number ${cardIndex + 1} in column position number ${
+				columnIndex + 1
+			} was updated by another user`,
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnDeleteElementSuccess = (
+		action: DeleteElementSuccessPayload
+	) => {
+		const { elementId, isOwnAction } = action;
+		if (isOwnAction) return;
+
+		const cardId = getElementOwner(elementId);
+		if (!cardId) return;
+
+		const { columnIndex, cardIndex } = boardStore.getCardLocation(cardId) as {
+			columnIndex: number;
+			cardIndex: number;
+		};
+
+		notifyOnScreenReader(
+			`The card in position number ${cardIndex + 1} in column position number ${
+				columnIndex + 1
+			} was updated by another user`,
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
+	const notifyOnMoveElementSuccess = (action: MoveElementSuccessPayload) => {
+		const { toCardId, isOwnAction } = action;
+		if (isOwnAction) return;
+
+		const { columnIndex, cardIndex } = boardStore.getCardLocation(toCardId) as {
+			columnIndex: number;
+			cardIndex: number;
+		};
+
+		notifyOnScreenReader(
+			`The card in position number ${cardIndex + 1} in column position number ${
+				columnIndex + 1
+			} was updated by another user`,
+			ARIA_IMPORTANCE.POLITE
+		);
+	};
+
 	return { actionToAriaMessage };
 };
 
