@@ -330,7 +330,32 @@ export default {
 		"{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notUpdated":
 		"Зберегти зміни не вдалося.",
-	"components.board.aria.notification.cardCreated": "Картку створено успішно",
+	"components.board.screenReader.notification.cardCreated.success":
+		"A card was created by another user in column position {columnIndex}",
+	"components.board.screenReader.notification.columnCreated.success":
+		"A column was created by another user",
+	"components.board.screenReader.notification.cardDeleted.success":
+		"A card was deleted by another user",
+	"components.board.screenReader.notification.columnDeleted.success":
+		"A column was deleted by another user",
+	"components.board.screenReader.notification.cardMoved.success":
+		"A card was moved position number {newIndex} in the same column",
+	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
+		"A card was moved from column position number {fromColumnIndex} to column position number {toColumnIndex}",
+	"components.board.screenReader.notification.columnMoved.success":
+		"A column was moved from position number {removedIndex} to position number {addedIndex}",
+	"components.board.screenReader.notification.boardTitleUpdated.success":
+		"The board title was changed to {newTitle} by another user",
+	"components.board.screenReader.notification.boardVisibilityUpdated.published":
+		"The board is published by another user",
+	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
+		"The board is reverted to draft by another user",
+	"components.board.screenReader.notification.columnTitleUpdated.success":
+		"The column title was changed to {newTitle} in column position number {columnIndex} by another user",
+	"components.board.screenReader.notification.cardTitleUpdated.success":
+		"The card title in position number {cardIndex} in column position number {columnIndex} was changed to {newTitle} by another user",
+	"components.board.screenReader.notification.elementUpdated.success":
+		"The card in position number {cardIndex} in column position number {columnIndex} was updated by another user",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",

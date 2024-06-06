@@ -1,5 +1,5 @@
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
-// import { useI18n } from "vue-i18n";
+import { useI18n } from "vue-i18n";
 import * as BoardActions from "../boardActions/boardActions";
 import * as CardActions from "../cardActions/cardActions";
 import { useBoardStore } from "../Board.store";
@@ -34,7 +34,7 @@ enum ARIA_IMPORTANCE {
 }
 
 export const useBoardAriaNotification = () => {
-	// const { t } = useI18n();
+	const { t } = useI18n();
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
 	const { cards } = cardStore;
@@ -88,9 +88,9 @@ export const useBoardAriaNotification = () => {
 		if (columnIndex === undefined) return;
 
 		notifyOnScreenReader(
-			`A card was created by another user in column position ${
-				columnIndex + 1
-			}`,
+			t("components.board.screenReader.notification.cardCreated.success", {
+				columnIndex: columnIndex + 1,
+			}),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -100,7 +100,7 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		notifyOnScreenReader(
-			"A column was created by another user",
+			t("components.board.screenReader.notification.columnCreated.success"),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -110,7 +110,7 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		notifyOnScreenReader(
-			"A card was deleted by another user",
+			t("components.board.screenReader.notification.cardDeleted.success"),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -120,7 +120,7 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		notifyOnScreenReader(
-			"A column was deleted by another user",
+			t("components.board.screenReader.notification.columnDeleted.success"),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -131,16 +131,22 @@ export const useBoardAriaNotification = () => {
 
 		if (fromColumnIndex === toColumnIndex) {
 			notifyOnScreenReader(
-				`A card was moved position number ${newIndex + 1} in the same column`,
+				t("components.board.screenReader.notification.cardMoved.success", {
+					newIndex: newIndex + 1,
+				}),
 				ARIA_IMPORTANCE.POLITE
 			);
 		}
 
 		if (fromColumnIndex !== toColumnIndex) {
 			notifyOnScreenReader(
-				`A card was moved from column position number ${
-					fromColumnIndex + 1
-				} to column position number ${toColumnIndex + 1}`,
+				t(
+					"components.board.screenReader.notification.cardMovedToAnotherColumn.success",
+					{
+						fromColumnIndex: fromColumnIndex + 1,
+						toColumnIndex: toColumnIndex + 1,
+					}
+				),
 				ARIA_IMPORTANCE.POLITE
 			);
 		}
@@ -154,9 +160,10 @@ export const useBoardAriaNotification = () => {
 		if (addedIndex == undefined || removedIndex == undefined) return;
 
 		notifyOnScreenReader(
-			`A column was moved from position number ${
-				removedIndex + 1
-			} to position number ${addedIndex + 1}`,
+			t("components.board.screenReader.notification.columnMoved.success", {
+				removedIndex: removedIndex + 1,
+				addedIndex: addedIndex + 1,
+			}),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -168,7 +175,12 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		notifyOnScreenReader(
-			`The board title was changed to ${newTitle} by another user`,
+			t(
+				"components.board.screenReader.notification.boardTitleUpdated.success",
+				{
+					newTitle,
+				}
+			),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -181,8 +193,12 @@ export const useBoardAriaNotification = () => {
 
 		notifyOnScreenReader(
 			isVisible
-				? "The board is published by another user"
-				: "The board is reverted to draft by another user",
+				? t(
+						"components.board.screenReader.notification.boardVisibilityUpdated.published"
+					)
+				: t(
+						"components.board.screenReader.notification.boardVisibilityUpdated.draft"
+					),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -195,9 +211,13 @@ export const useBoardAriaNotification = () => {
 
 		const columnIndex = boardStore.getColumnIndex(columnId);
 		notifyOnScreenReader(
-			`The column title was changed to ${newTitle} in column position number ${
-				columnIndex + 1
-			} by another user`,
+			t(
+				"components.board.screenReader.notification.columnTitleUpdated.success",
+				{
+					newTitle,
+					columnIndex: columnIndex + 1,
+				}
+			),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -214,11 +234,11 @@ export const useBoardAriaNotification = () => {
 		};
 
 		notifyOnScreenReader(
-			`The card title in position number ${
-				cardIndex + 1
-			} in column position number ${
-				columnIndex + 1
-			} was changed to ${newTitle} by another user`,
+			t("components.board.screenReader.notification.cardTitleUpdated.success", {
+				cardIndex: cardIndex + 1,
+				columnIndex: columnIndex + 1,
+				newTitle,
+			}),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -238,9 +258,10 @@ export const useBoardAriaNotification = () => {
 		};
 
 		notifyOnScreenReader(
-			`The card in position number ${cardIndex + 1} in column position number ${
-				columnIndex + 1
-			} was updated by another user`,
+			t("components.board.screenReader.notification.elementUpdated.success", {
+				cardIndex: cardIndex + 1,
+				columnIndex: columnIndex + 1,
+			}),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -260,9 +281,10 @@ export const useBoardAriaNotification = () => {
 		};
 
 		notifyOnScreenReader(
-			`The card in position number ${cardIndex + 1} in column position number ${
-				columnIndex + 1
-			} was updated by another user`,
+			t("components.board.screenReader.notification.elementUpdated.success", {
+				cardIndex: cardIndex + 1,
+				columnIndex: columnIndex + 1,
+			}),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -277,9 +299,10 @@ export const useBoardAriaNotification = () => {
 		};
 
 		notifyOnScreenReader(
-			`The card in position number ${cardIndex + 1} in column position number ${
-				columnIndex + 1
-			} was updated by another user`,
+			t("components.board.screenReader.notification.elementUpdated.success", {
+				cardIndex: cardIndex + 1,
+				columnIndex: columnIndex + 1,
+			}),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
