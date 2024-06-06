@@ -16,9 +16,6 @@ jest.mock("./SharedElementTypeSelection.composable");
 jest.mock("@/utils/inject");
 const mockedInjectStrict = jest.mocked(injectStrict);
 
-const i18nKey =
-	"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
-
 const translationMap: Record<string, string> = {};
 
 jest.mock("vue-i18n", () => {
@@ -134,6 +131,9 @@ describe("ElementTypeSelection Composable", () => {
 				};
 
 				it("should show Notification", async () => {
+					const i18nKeyCollaborativeTextEditor =
+						"components.cardElement.collaborativeTextEditorElement.alert.info.visible";
+
 					const {
 						addElementMock,
 						elementType,
@@ -148,11 +148,14 @@ describe("ElementTypeSelection Composable", () => {
 
 					await onElementClick(elementType);
 
-					expect(showCustomNotifierMock).toHaveBeenCalledWith(i18nKey, "info");
+					expect(showCustomNotifierMock).toHaveBeenCalledWith(
+						i18nKeyCollaborativeTextEditor,
+						"info"
+					);
 				});
 			});
 
-			describe("when element type is NOT CollaborativeTextEditor", () => {
+			describe("when element type is NOT CollaborativeTextEditor or Whiteboard", () => {
 				const setup = () => {
 					setupSharedElementTypeSelectionMock();
 
@@ -193,6 +196,28 @@ describe("ElementTypeSelection Composable", () => {
 					await onElementClick(elementType);
 
 					expect(showCustomNotifierMock).toBeCalledTimes(0);
+				});
+			});
+
+			describe("when element type is Whiteboard", () => {
+				it("should show Notification", async () => {
+					const i18nKeyWhiteboard =
+						"components.cardElement.notification.visibleAndEditable";
+					const addElementMock = jest.fn();
+					const elementType = ContentElementType.Drawing;
+					const { showCustomNotifierMock, cardId } = setup();
+
+					const { onElementClick } = useAddElementDialog(
+						addElementMock,
+						cardId
+					);
+
+					await onElementClick(elementType);
+
+					expect(showCustomNotifierMock).toHaveBeenCalledWith(
+						i18nKeyWhiteboard,
+						"info"
+					);
 				});
 			});
 		});
