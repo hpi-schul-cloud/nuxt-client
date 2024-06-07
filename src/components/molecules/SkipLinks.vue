@@ -1,4 +1,7 @@
 <template>
+	<!-- Since there is a bug in firefox that causes the tabindex in links 
+		not to be taken into account at all, the cumbersome way via the 
+		further span element was chosen. -->
 	<a
 		id="skip-link"
 		class="skip-link"
