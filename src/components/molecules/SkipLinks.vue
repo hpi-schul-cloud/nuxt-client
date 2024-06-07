@@ -1,11 +1,32 @@
 <template>
-	<a id="skip-link" tabindex="0" class="skip-link" href="#main-content">
-		{{ $t("global.skipLink.mainContent") }}
+	<a
+		id="skip-link"
+		class="skip-link"
+		:class="{ 'is-visible': isVisible }"
+		href="#main-content"
+	>
+		<span
+			id="span-skip-link"
+			tabindex="0"
+			@focus="showSkiplink(true)"
+			@blur="showSkiplink(false)"
+			>{{ $t("global.skipLink.mainContent") }}</span
+		>
 	</a>
 </template>
 
 <script>
 export default {
+	data() {
+		return {
+			isVisible: false,
+		};
+	},
+	methods: {
+		showSkiplink(value = true) {
+			this.isVisible = value;
+		},
+	},
 	mounted() {
 		const section = this.$route.hash.replace("#", "");
 		if (section)
@@ -19,7 +40,6 @@ export default {
 <style lang="scss" scoped>
 .skip-link {
 	position: absolute;
-	top: -100px;
 	left: 50%;
 	padding: var(--space-xs);
 	color: rgba(var(--v-theme-primary));
@@ -27,9 +47,10 @@ export default {
 	border: 1px solid #555;
 	border-radius: var(--radius-xs);
 	transform: translate(-50%, 0);
-}
-
-.skip-link:focus {
-	top: 10px;
+	opacity: 0;
+	transition: opacity 0.2s ease-in-out;
+	&.is-visible {
+		opacity: 1;
+	}
 }
 </style>
