@@ -7,6 +7,7 @@
 				icon
 				data-testid="user-menu-btn"
 				class="bg-surface-variant"
+				size="small"
 			>
 				<span class="text-h6">{{ initials }}</span>
 			</VBtn>
