@@ -273,7 +273,7 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		const cardId = getElementOwner(elementId);
-		if (!cardId) return;
+		if (cardId == undefined) return;
 
 		const { columnIndex, cardIndex } = boardStore.getCardLocation(cardId) as {
 			columnIndex: number;
