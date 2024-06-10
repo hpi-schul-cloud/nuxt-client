@@ -4,8 +4,8 @@
 		further span element was chosen. -->
 	<a
 		id="skip-link"
-		class="skip-link d-sr-only-focusable"
-		:class="{ 'is-visible': isVisible }"
+		class="skip-link"
+		:class="{ 'is-visible': linkIsVisible }"
 		href="#main-content"
 	>
 		<span
@@ -22,12 +22,12 @@
 export default {
 	data() {
 		return {
-			isVisible: false,
+			linkIsVisible: false,
 		};
 	},
 	methods: {
-		showSkiplink(value = true) {
-			this.isVisible = value;
+		showSkiplink(value) {
+			this.linkIsVisible = value;
 		},
 	},
 	mounted() {
