@@ -48,6 +48,15 @@
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
+				<PlaceholderElement
+					v-else-if="isPlaceholderElementResponse(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
 				<DrawingContentElement
 					v-else-if="showDrawingElement(element)"
 					:key="element.id"
@@ -86,6 +95,7 @@ import {
 	ExternalToolElementResponse,
 	FileElementResponse,
 	LinkElementResponse,
+	PlaceholderElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
 } from "@/serverApi/v3";
@@ -100,11 +110,13 @@ import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { computed, defineComponent, PropType } from "vue";
+import PlaceholderElement from "../../board-placeholder-element/PlaceholderElement.vue";
 import ContentElement from "./ContentElement.vue";
 
 export default defineComponent({
 	name: "ContentElementList",
 	components: {
+		PlaceholderElement,
 		ContentElement,
 		ExternalToolElement,
 		FileContentElement,
@@ -145,6 +157,12 @@ export default defineComponent({
 			element: AnyContentElement
 		): element is RichTextElementResponse => {
 			return element.type === ContentElementType.RichText;
+		};
+
+		const isPlaceholderElementResponse = (
+			element: AnyContentElement
+		): element is PlaceholderElementResponse => {
+			return element.type === ContentElementType.Placeholder;
 		};
 
 		const isFileElementResponse = (
@@ -296,6 +314,7 @@ export default defineComponent({
 			onMoveElementDown,
 			onMoveElementUp,
 			onMoveElementKeyboard,
+			isPlaceholderElementResponse,
 		};
 	},
 });

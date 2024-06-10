@@ -4,6 +4,7 @@ import {
 	ExternalToolElementResponse,
 	FileElementResponse,
 	LinkElementResponse,
+	PlaceholderElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
 } from "@/serverApi/v3";
@@ -15,4 +16,5 @@ export type AnyContentElement =
 	| SubmissionContainerElementResponse
 	| ExternalToolElementResponse
 	| DrawingElementResponse
-	| CollaborativeTextEditorElementResponse;
+	| CollaborativeTextEditorElementResponse
+	| PlaceholderElementResponse;

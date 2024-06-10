@@ -436,10 +436,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | PlaceholderElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | PlaceholderElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -1338,7 +1338,8 @@ export enum ContentElementType {
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
     ExternalTool = 'externalTool',
-    CollaborativeTextEditor = 'collaborativeTextEditor'
+    CollaborativeTextEditor = 'collaborativeTextEditor',
+    Placeholder = 'placeholder'
 }
 
 /**
@@ -1907,7 +1908,8 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
     ExternalTool = 'externalTool',
-    CollaborativeTextEditor = 'collaborativeTextEditor'
+    CollaborativeTextEditor = 'collaborativeTextEditor',
+    Placeholder = 'placeholder'
 }
 
 /**
@@ -5678,6 +5680,56 @@ export enum Permission {
     YearsEdit = 'YEARS_EDIT'
 }
 
+/**
+ * 
+ * @export
+ * @interface PlaceholderElementContent
+ */
+export interface PlaceholderElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaceholderElementContent
+     */
+    title: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof PlaceholderElementContent
+     */
+    deletedType: ContentElementType;
+}
+/**
+ * 
+ * @export
+ * @interface PlaceholderElementResponse
+ */
+export interface PlaceholderElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof PlaceholderElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof PlaceholderElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {PlaceholderElementContent}
+     * @memberof PlaceholderElementResponse
+     */
+    content: PlaceholderElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof PlaceholderElementResponse
+     */
+    timestamps: TimestampsResponse;
+}
 /**
  * 
  * @export
