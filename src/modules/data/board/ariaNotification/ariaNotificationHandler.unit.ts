@@ -11,35 +11,7 @@ import {
 } from "../boardActions/boardActionPayload";
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-
-const I18N_KEYS_MAP = {
-	CARD_CREATED_SUCCESS:
-		"components.board.screenReader.notification.cardCreated.success",
-	COLUMN_CREATED_SUCCESS:
-		"components.board.screenReader.notification.columnCreated.success",
-	CARD_DELETED_SUCCESS:
-		"components.board.screenReader.notification.cardDeleted.success",
-	COLUMN_DELETED_SUCCESS:
-		"components.board.screenReader.notification.columnDeleted.success",
-	CARD_MOVED_SUCCESS:
-		"components.board.screenReader.notification.cardMoved.success",
-	CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS:
-		"components.board.screenReader.notification.cardMovedToAnotherColumn.success",
-	COLUMN_MOVED_SUCCESS:
-		"components.board.screenReader.notification.columnMoved.success",
-	BOARD_TITLE_UPDATED_SUCCESS:
-		"components.board.screenReader.notification.boardTitleUpdated.success",
-	BOARD_PUBLISHED_SUCCESS:
-		"components.board.screenReader.notification.boardVisibilityUpdated.published",
-	BOARD_UNPUBLISHED_SUCCESS:
-		"components.board.screenReader.notification.boardVisibilityUpdated.draft",
-	COLUMN_TITTLE_UPDATED_SUCCESS:
-		"components.board.screenReader.notification.columnTitleUpdated.success",
-	CARD_TITLE_UPDATED_SUCCESS:
-		"components.board.screenReader.notification.cardTitleUpdated.success",
-	ELEMENT_UPDATED_SUCCESS:
-		"components.board.screenReader.notification.elementUpdated.success",
-};
+import { SR_I18N_KEYS_MAP } from "./srNotificationsI18nKeys";
 
 const card = {
 	elements: [
@@ -102,7 +74,7 @@ describe("useBoardAriaNotification", () => {
 		actionToAriaMessage(BoardActions.createCardSuccess(payload));
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.CARD_CREATED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_CREATED_SUCCESS);
 	});
 
 	it("should notify on columnCreate", () => {
@@ -116,7 +88,7 @@ describe("useBoardAriaNotification", () => {
 		actionToAriaMessage(BoardActions.createColumnSuccess(payload));
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS);
 	});
 
 	it("should notify on cardDelete", () => {
@@ -128,7 +100,7 @@ describe("useBoardAriaNotification", () => {
 		);
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.CARD_DELETED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS);
 	});
 
 	it("should notify on columnDelete", () => {
@@ -143,7 +115,7 @@ describe("useBoardAriaNotification", () => {
 		);
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS);
 	});
 
 	it("should notify on cardMove", () => {
@@ -164,7 +136,7 @@ describe("useBoardAriaNotification", () => {
 		);
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.CARD_MOVED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_MOVED_SUCCESS);
 	});
 
 	it("should notify on cardMove to another column", () => {
@@ -186,7 +158,7 @@ describe("useBoardAriaNotification", () => {
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
 		expect(element?.innerHTML).toBe(
-			I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS
+			SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS
 		);
 	});
 
@@ -207,7 +179,7 @@ describe("useBoardAriaNotification", () => {
 		);
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS);
 	});
 
 	it("should notify on boardTitleUpdate", () => {
@@ -223,7 +195,9 @@ describe("useBoardAriaNotification", () => {
 		);
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toBe(
+			SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS
+		);
 	});
 
 	describe("should notify on boardVisibilityUpdate", () => {
@@ -239,7 +213,7 @@ describe("useBoardAriaNotification", () => {
 			);
 			jest.advanceTimersByTime(3000);
 			expect(element?.getAttribute("aria-live")).toBe("polite");
-			expect(element?.innerHTML).toBe(I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS);
+			expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS);
 		});
 
 		it("should notify on boardUnpublished", () => {
@@ -254,7 +228,9 @@ describe("useBoardAriaNotification", () => {
 			);
 			jest.advanceTimersByTime(3000);
 			expect(element?.getAttribute("aria-live")).toBe("polite");
-			expect(element?.innerHTML).toBe(I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS);
+			expect(element?.innerHTML).toBe(
+				SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS
+			);
 		});
 	});
 
@@ -272,7 +248,7 @@ describe("useBoardAriaNotification", () => {
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
 		expect(element?.innerHTML).toBe(
-			I18N_KEYS_MAP.COLUMN_TITTLE_UPDATED_SUCCESS
+			SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS
 		);
 	});
 
@@ -289,7 +265,9 @@ describe("useBoardAriaNotification", () => {
 		);
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toBe(
+			SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS
+		);
 	});
 
 	it("should notify on elementUpdate", () => {
@@ -308,7 +286,7 @@ describe("useBoardAriaNotification", () => {
 		);
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementDelete", () => {
@@ -324,7 +302,7 @@ describe("useBoardAriaNotification", () => {
 		);
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementMove", () => {
@@ -341,7 +319,7 @@ describe("useBoardAriaNotification", () => {
 		);
 		jest.advanceTimersByTime(3000);
 		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
 	});
 
 	describe("should not notify if the action is own", () => {

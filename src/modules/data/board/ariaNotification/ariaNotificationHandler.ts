@@ -24,6 +24,7 @@ import {
 	UpdateCardTitleSuccessPayload,
 	UpdateElementSuccessPayload,
 } from "../cardActions/cardActionPayload";
+import { SR_I18N_KEYS_MAP } from "./srNotificationsI18nKeys";
 
 const { notifyOnScreenReader } = useAriaLiveNotifier();
 
@@ -88,7 +89,7 @@ export const useBoardAriaNotification = () => {
 		if (columnIndex === undefined) return;
 
 		notifyOnScreenReader(
-			t("components.board.screenReader.notification.cardCreated.success", {
+			t(SR_I18N_KEYS_MAP.CARD_CREATED_SUCCESS, {
 				columnIndex: columnIndex + 1,
 			}),
 			ARIA_IMPORTANCE.POLITE
@@ -100,7 +101,7 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		notifyOnScreenReader(
-			t("components.board.screenReader.notification.columnCreated.success"),
+			t(SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -110,7 +111,7 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		notifyOnScreenReader(
-			t("components.board.screenReader.notification.cardDeleted.success"),
+			t(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -120,7 +121,7 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		notifyOnScreenReader(
-			t("components.board.screenReader.notification.columnDeleted.success"),
+			t(SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -131,7 +132,7 @@ export const useBoardAriaNotification = () => {
 
 		if (fromColumnIndex === toColumnIndex) {
 			notifyOnScreenReader(
-				t("components.board.screenReader.notification.cardMoved.success", {
+				t(SR_I18N_KEYS_MAP.CARD_MOVED_SUCCESS, {
 					newIndex: newIndex + 1,
 				}),
 				ARIA_IMPORTANCE.POLITE
@@ -140,13 +141,10 @@ export const useBoardAriaNotification = () => {
 
 		if (fromColumnIndex !== toColumnIndex) {
 			notifyOnScreenReader(
-				t(
-					"components.board.screenReader.notification.cardMovedToAnotherColumn.success",
-					{
-						fromColumnIndex: fromColumnIndex + 1,
-						toColumnIndex: toColumnIndex + 1,
-					}
-				),
+				t(SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS, {
+					fromColumnIndex: fromColumnIndex + 1,
+					toColumnIndex: toColumnIndex + 1,
+				}),
 				ARIA_IMPORTANCE.POLITE
 			);
 		}
@@ -160,7 +158,7 @@ export const useBoardAriaNotification = () => {
 		if (addedIndex == undefined || removedIndex == undefined) return;
 
 		notifyOnScreenReader(
-			t("components.board.screenReader.notification.columnMoved.success", {
+			t(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS, {
 				removedIndex: removedIndex + 1,
 				addedIndex: addedIndex + 1,
 			}),
@@ -175,12 +173,9 @@ export const useBoardAriaNotification = () => {
 		if (isOwnAction) return;
 
 		notifyOnScreenReader(
-			t(
-				"components.board.screenReader.notification.boardTitleUpdated.success",
-				{
-					newTitle,
-				}
-			),
+			t(SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS, {
+				newTitle,
+			}),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -193,12 +188,8 @@ export const useBoardAriaNotification = () => {
 
 		notifyOnScreenReader(
 			isVisible
-				? t(
-						"components.board.screenReader.notification.boardVisibilityUpdated.published"
-					)
-				: t(
-						"components.board.screenReader.notification.boardVisibilityUpdated.draft"
-					),
+				? t(SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS)
+				: t(SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -211,13 +202,10 @@ export const useBoardAriaNotification = () => {
 
 		const columnIndex = boardStore.getColumnIndex(columnId);
 		notifyOnScreenReader(
-			t(
-				"components.board.screenReader.notification.columnTitleUpdated.success",
-				{
-					newTitle,
-					columnIndex: columnIndex + 1,
-				}
-			),
+			t(SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS, {
+				newTitle,
+				columnIndex: columnIndex + 1,
+			}),
 			ARIA_IMPORTANCE.POLITE
 		);
 	};
@@ -234,7 +222,7 @@ export const useBoardAriaNotification = () => {
 		};
 
 		notifyOnScreenReader(
-			t("components.board.screenReader.notification.cardTitleUpdated.success", {
+			t(SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS, {
 				cardIndex: cardIndex + 1,
 				columnIndex: columnIndex + 1,
 				newTitle,
@@ -258,7 +246,7 @@ export const useBoardAriaNotification = () => {
 		};
 
 		notifyOnScreenReader(
-			t("components.board.screenReader.notification.elementUpdated.success", {
+			t(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS, {
 				cardIndex: cardIndex + 1,
 				columnIndex: columnIndex + 1,
 			}),
@@ -281,7 +269,7 @@ export const useBoardAriaNotification = () => {
 		};
 
 		notifyOnScreenReader(
-			t("components.board.screenReader.notification.elementUpdated.success", {
+			t(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS, {
 				cardIndex: cardIndex + 1,
 				columnIndex: columnIndex + 1,
 			}),
@@ -299,7 +287,7 @@ export const useBoardAriaNotification = () => {
 		};
 
 		notifyOnScreenReader(
-			t("components.board.screenReader.notification.elementUpdated.success", {
+			t(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS, {
 				cardIndex: cardIndex + 1,
 				columnIndex: columnIndex + 1,
 			}),
