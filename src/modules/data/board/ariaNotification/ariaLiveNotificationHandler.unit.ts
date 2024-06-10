@@ -1,4 +1,4 @@
-import { useBoardAriaNotification } from "./ariaNotificationHandler";
+import { useBoardAriaNotification } from "./ariaLiveNotificationHandler";
 import * as BoardActions from "../boardActions/boardActions";
 import * as CardActions from "../cardActions/cardActions";
 import {
@@ -11,7 +11,7 @@ import {
 } from "../boardActions/boardActionPayload";
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { SR_I18N_KEYS_MAP } from "./srNotificationsI18nKeys";
+import { SR_I18N_KEYS_MAP } from "./ariaLiveNotificationKeys";
 
 const card = {
 	elements: [

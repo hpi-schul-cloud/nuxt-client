@@ -24,7 +24,7 @@ import {
 	UpdateCardTitleSuccessPayload,
 	UpdateElementSuccessPayload,
 } from "../cardActions/cardActionPayload";
-import { SR_I18N_KEYS_MAP } from "./srNotificationsI18nKeys";
+import { SR_I18N_KEYS_MAP } from "./ariaLiveNotificationKeys";
 
 const { notifyOnScreenReader } = useAriaLiveNotifier();
 

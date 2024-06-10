@@ -16,7 +16,7 @@ import {
 } from "./boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { useBoardAriaNotification } from "../ariaNotification/ariaNotificationHandler";
+import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();

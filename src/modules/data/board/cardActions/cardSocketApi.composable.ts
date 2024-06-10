@@ -15,7 +15,7 @@ import {
 } from "./cardActionPayload";
 import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPayload";
 import { useDebounceFn } from "@vueuse/core";
-import { useBoardAriaNotification } from "../ariaNotification/ariaNotificationHandler";
+import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
