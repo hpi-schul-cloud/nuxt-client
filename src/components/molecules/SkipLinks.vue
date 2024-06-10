@@ -4,7 +4,7 @@
 		further span element was chosen. -->
 	<a
 		id="skip-link"
-		class="skip-link"
+		class="skip-link d-sr-only-focusable"
 		:class="{ 'is-visible': isVisible }"
 		href="#main-content"
 	>
