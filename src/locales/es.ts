@@ -330,31 +330,31 @@ export default {
 	"components.board.notifications.errors.notUpdated":
 		"No se han podido guardar los cambios.",
 	"components.board.screenReader.notification.cardCreated.success":
-		"A card was created by another user in column position {columnIndex}",
+		"Otro usuario creó una tarjeta en la posición de la columna {columnIndex}",
 	"components.board.screenReader.notification.columnCreated.success":
-		"A column was created by another user",
+		"Una columna fue creada por otro usuario",
 	"components.board.screenReader.notification.cardDeleted.success":
-		"A card was deleted by another user",
+		"Una tarjeta fue eliminada por otro usuario",
 	"components.board.screenReader.notification.columnDeleted.success":
-		"A column was deleted by another user",
+		"Una columna fue eliminada por otro usuario",
 	"components.board.screenReader.notification.cardMoved.success":
-		"A card was moved position number {newIndex} in the same column",
+		"Se movió una tarjeta a la posición número {newIndex} en la misma columna",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
-		"A card was moved from column position number {fromColumnIndex} to column position number {toColumnIndex}",
+		"Se movió una tarjeta de la posición de columna número {fromColumnIndex} a la posición de columna número {toColumnIndex}",
 	"components.board.screenReader.notification.columnMoved.success":
-		"A column was moved from position number {removedIndex} to position number {addedIndex}",
+		"Se movió una columna de la posición número {removedIndex} a la posición número {addedIndex}",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
-		"The board title was changed to {newTitle} by another user",
+		"Otro usuario cambió el título del tablero a {newTitle}",
 	"components.board.screenReader.notification.boardVisibilityUpdated.published":
-		"The board is published by another user",
+		"El tablero es publicado por otro usuario",
 	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
-		"The board is reverted to draft by another user",
+		"Otro usuario vuelve el tablero a borrador",
 	"components.board.screenReader.notification.columnTitleUpdated.success":
-		"The column title was changed to {newTitle} in column position number {columnIndex} by another user",
+		"Otro usuario cambió el título de la columna a {newTitle} en la posición de la columna número {columnIndex}",
 	"components.board.screenReader.notification.cardTitleUpdated.success":
-		"The card title in position number {cardIndex} in column position number {columnIndex} was changed to {newTitle} by another user",
+		"Otro usuario cambió el título de la tarjeta en la posición número {cardIndex} en la posición de la columna número {columnIndex} a {newTitle}",
 	"components.board.screenReader.notification.elementUpdated.success":
-		"The card in position number {cardIndex} in column position number {columnIndex} was updated by another user",
+		"Otro usuario actualizó la tarjeta en la posición número {cardIndex} en la posición de la columna número {columnIndex}",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",

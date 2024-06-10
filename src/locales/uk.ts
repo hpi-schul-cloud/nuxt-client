@@ -331,31 +331,31 @@ export default {
 	"components.board.notifications.errors.notUpdated":
 		"Зберегти зміни не вдалося.",
 	"components.board.screenReader.notification.cardCreated.success":
-		"A card was created by another user in column position {columnIndex}",
+		"Картку створив інший користувач у позиції стовпця {columnIndex}",
 	"components.board.screenReader.notification.columnCreated.success":
-		"A column was created by another user",
+		"Колонку створив інший користувач",
 	"components.board.screenReader.notification.cardDeleted.success":
-		"A card was deleted by another user",
+		"Картка була видалена іншим користувачем",
 	"components.board.screenReader.notification.columnDeleted.success":
-		"A column was deleted by another user",
+		"Стовпець був видалений іншим користувачем",
 	"components.board.screenReader.notification.cardMoved.success":
-		"A card was moved position number {newIndex} in the same column",
+		"Картку було переміщено на позицію {newIndex} у тому ж стовпці",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
-		"A card was moved from column position number {fromColumnIndex} to column position number {toColumnIndex}",
+		"Картку переміщено з позиції стовпця {fromColumnIndex} на позицію стовпця {toColumnIndex}",
 	"components.board.screenReader.notification.columnMoved.success":
-		"A column was moved from position number {removedIndex} to position number {addedIndex}",
+		"Стовпець переміщено з позиції номер {removedIndex} на позицію номер {addedIndex}",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
-		"The board title was changed to {newTitle} by another user",
+		"Інший користувач змінив назву дошки на {newTitle}",
 	"components.board.screenReader.notification.boardVisibilityUpdated.published":
-		"The board is published by another user",
+		"Дошку публікує інший користувач",
 	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
-		"The board is reverted to draft by another user",
+		"Дошку повернуто до чернетки іншим користувачем",
 	"components.board.screenReader.notification.columnTitleUpdated.success":
-		"The column title was changed to {newTitle} in column position number {columnIndex} by another user",
+		"Інший користувач змінив назву стовпця на {newTitle} у позиції стовпця {columnIndex}",
 	"components.board.screenReader.notification.cardTitleUpdated.success":
-		"The card title in position number {cardIndex} in column position number {columnIndex} was changed to {newTitle} by another user",
+		"Інший користувач змінив назву картки в позиції номер {cardIndex} у позиції стовпця {columnIndex} на {newTitle}",
 	"components.board.screenReader.notification.elementUpdated.success":
-		"The card in position number {cardIndex} in column position number {columnIndex} was updated by another user",
+		"Картку з номером {cardIndex} у стовпці з номером {columnIndex} оновив інший користувач",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
