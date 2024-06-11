@@ -5,34 +5,30 @@
 			:has-import-token="!!importToken"
 		>
 			<template #header>
-				<h1 class="text-h3 pt-2">
+				<h1 class="text-h3 py-2 mb-4">
 					{{ $t("pages.rooms.index.courses.active") }}
 				</h1>
-				<div class="mb-5 header-div">
-					<div class="btn">
-						<v-btn
-							variant="outlined"
-							size="small"
-							to="/rooms-list"
-							data-testid="go-to-all-courses"
-						>
-							{{ $t("pages.rooms.index.courses.all") }}
-						</v-btn>
-					</div>
-					<div class="toggle-div">
-						<v-switch
-							v-if="isTouchDevice"
-							v-model="allowDragging"
-							class="enable-disable"
-							:label="$t('pages.rooms.index.courses.arrangeCourses')"
-							:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
-							:true-icon="mdiCheck"
-						/>
-					</div>
+				<div class="mb-5 d-flex align-center w-100 justify-space-between">
+					<v-btn
+						variant="outlined"
+						size="small"
+						to="/rooms-list"
+						data-testid="go-to-all-courses"
+					>
+						{{ $t("pages.rooms.index.courses.all") }}
+					</v-btn>
+					<v-switch
+						v-model="allowDragging"
+						class="enable-disable"
+						:label="$t('pages.rooms.index.courses.arrangeCourses')"
+						:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
+						:true-icon="mdiCheck"
+						hide-details
+					/>
 				</div>
 			</template>
 			<template #page-content>
-				<div class="rooms-container">
+				<div>
 					<v-text-field
 						ref="search"
 						v-model="searchText"
@@ -445,29 +441,9 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.rooms-container {
-	max-width: 600px;
-	margin: 0 auto;
-}
-
 .room-overview-row {
 	display: flex;
 	justify-content: space-between;
-}
-
-.header-div {
-	display: flex;
-	align-items: center;
-	width: 100%;
-
-	.btn {
-		display: inline-block;
-		flex: 1;
-	}
-
-	.toggle-div {
-		display: inline-block;
-	}
 }
 
 :deep(.v-messages) {

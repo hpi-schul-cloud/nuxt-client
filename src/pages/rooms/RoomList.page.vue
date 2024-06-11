@@ -1,19 +1,18 @@
 <template>
 	<room-wrapper :has-rooms="hasRooms">
 		<template #header>
-			<h1 class="text-h3 pt-2">
+			<h1 class="text-h3 py-2 mb-4">
 				{{ $t("pages.rooms.index.courses.all") }}
 			</h1>
-			<div class="mb-5 header-div">
-				<div class="btn">
-					<v-btn
-						variant="outlined"
-						size="small"
-						to="/rooms-overview"
-						data-testid="go-to-active-courses"
-						>{{ $t("pages.rooms.index.courses.active") }}
-					</v-btn>
-				</div>
+			<div class="header-btn-section mb-5">
+				<v-btn
+					variant="outlined"
+					size="small"
+					to="/rooms-overview"
+					data-testid="go-to-active-courses"
+				>
+					{{ $t("pages.rooms.index.courses.active") }}
+				</v-btn>
 			</div>
 		</template>
 		<template #page-content>
@@ -106,5 +105,11 @@ export default defineComponent({
 	flex-wrap: nowrap;
 	max-width: 600px;
 	margin: 0 auto;
+}
+
+.header-btn-section {
+	height: 56px;
+	display: flex;
+	align-items: center;
 }
 </style>
