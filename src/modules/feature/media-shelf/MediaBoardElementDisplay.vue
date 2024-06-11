@@ -5,6 +5,7 @@
 			class="pa-4"
 			variant="outlined"
 			tabindex="0"
+			:data-testid="'media-element-' + element?.title"
 			:elevation="isHovered ? 4 : 2"
 			:ripple="false"
 			:hover="isHovered"
@@ -37,10 +38,15 @@
 				</div>
 				<ContentElementBar :has-grey-background="true">
 					<template #title>
-						{{ element.title }}
+						<div data-testid="media-element-title">
+							{{ element.title }}
+						</div>
 					</template>
 					<template #description>
-						<div class="description text-body-2">
+						<div
+							class="description text-body-2"
+							data-testid="media-element-description"
+						>
 							{{ element.description }}
 						</div>
 					</template>
