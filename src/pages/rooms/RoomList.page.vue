@@ -4,7 +4,7 @@
 			<h1 class="text-h3 py-2 mb-4">
 				{{ $t("pages.rooms.index.courses.all") }}
 			</h1>
-			<div class="header-btn-section mb-5">
+			<div class="header-actions-section mb-5">
 				<v-btn
 					variant="outlined"
 					size="small"
@@ -35,7 +35,7 @@
 					<v-row>
 						<v-col
 							v-for="room in rooms"
-							:key="room.name"
+							:key="room.title"
 							class="d-flex justify-center cols-12 xs-6 sm-6 lg-4 xl-2"
 							cols="4"
 							xl="2"
@@ -100,14 +100,14 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .search {
 	flex-wrap: nowrap;
 	max-width: 600px;
 	margin: 0 auto;
 }
 
-.header-btn-section {
+.header-actions-section {
 	height: 56px;
 	display: flex;
 	align-items: center;

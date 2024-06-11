@@ -8,7 +8,7 @@
 				<h1 class="text-h3 py-2 mb-4">
 					{{ $t("pages.rooms.index.courses.active") }}
 				</h1>
-				<div class="mb-5 d-flex align-center w-100 justify-space-between">
+				<div class="mb-5 header-actions-section">
 					<v-btn
 						variant="outlined"
 						size="small"
@@ -18,6 +18,7 @@
 						{{ $t("pages.rooms.index.courses.all") }}
 					</v-btn>
 					<v-switch
+						v-if="isTouchDevice"
 						v-model="allowDragging"
 						class="enable-disable"
 						:label="$t('pages.rooms.index.courses.arrangeCourses')"
@@ -440,7 +441,15 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.header-actions-section {
+	width: 100%;
+	height: 56px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
 .room-overview-row {
 	display: flex;
 	justify-content: space-between;
@@ -451,7 +460,6 @@ export default defineComponent({
 }
 
 :deep(.v-input) {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin-top: 0 !important;
 }
 </style>
