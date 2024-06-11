@@ -86,7 +86,6 @@ export default defineComponent({
 		},
 		fullWidth: {
 			type: Boolean,
-			required: true,
 		},
 		fabItems: {
 			type: Object as PropType<Fab>,
