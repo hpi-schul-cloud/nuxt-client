@@ -51,7 +51,7 @@
 			:class="{
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
-				'overflow-x': allowOverflowX,
+				'overflow-x-auto': allowOverflowX,
 			}"
 		>
 			<slot />
@@ -144,9 +144,6 @@ export default defineComponent({
 
 .main-content {
 	padding: 0 var(--space-lg);
-}
-.overflow-x {
-	overflow-x: auto;
 }
 
 .container-max-width {

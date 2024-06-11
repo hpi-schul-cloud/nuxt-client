@@ -5,7 +5,6 @@
 				ref="main"
 				:breadcrumbs="breadcrumbs"
 				full-width
-				allow-overflow-x
 				hide-border
 			>
 				<template #header>
