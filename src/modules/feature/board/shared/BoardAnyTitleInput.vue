@@ -37,7 +37,11 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
-	/>
+	>
+		<template v-slot:append-inner>
+			<slot />
+		</template>
+	</VTextarea>
 </template>
 
 <script lang="ts">

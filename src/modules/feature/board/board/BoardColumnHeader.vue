@@ -16,31 +16,32 @@
 					class="w-100"
 					:isFocused="isFocusedById"
 					@update:value="onUpdateTitle"
-				/>
-				<BoardMenu
-					v-if="hasDeletePermission"
-					scope="column"
-					:data-testid="`column-menu-btn-${index}`"
 				>
-					<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
-					<BoardMenuActionMoveLeft
-						v-if="!isListBoard"
-						@click="onMoveColumnLeft"
-					/>
-					<BoardMenuActionMoveRight
-						v-if="!isListBoard"
-						@click="onMoveColumnRight"
-					/>
-					<BoardMenuActionMoveColumnUp
-						v-if="isListBoard"
-						@click="onMoveColumnUp"
-					/>
-					<BoardMenuActionMoveColumnDown
-						v-if="isListBoard"
-						@click="onMoveColumnDown"
-					/>
-					<BoardMenuActionDelete :name="title" @click="onDelete" />
-				</BoardMenu>
+					<BoardMenu
+						v-if="hasDeletePermission"
+						scope="column"
+						:data-testid="`column-menu-btn-${index}`"
+					>
+						<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
+						<BoardMenuActionMoveLeft
+							v-if="!isListBoard"
+							@click="onMoveColumnLeft"
+						/>
+						<BoardMenuActionMoveRight
+							v-if="!isListBoard"
+							@click="onMoveColumnRight"
+						/>
+						<BoardMenuActionMoveColumnUp
+							v-if="isListBoard"
+							@click="onMoveColumnUp"
+						/>
+						<BoardMenuActionMoveColumnDown
+							v-if="isListBoard"
+							@click="onMoveColumnDown"
+						/>
+						<BoardMenuActionDelete :name="title" @click="onDelete" />
+					</BoardMenu>
+				</BoardAnyTitleInput>
 			</div>
 			<VDivider aria-hidden="true" class="border-opacity-75" />
 		</div>
