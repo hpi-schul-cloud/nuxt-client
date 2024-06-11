@@ -1,7 +1,6 @@
 <template>
 	<default-wireframe
 		ref="main"
-		:full-width="true"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
 		@onFabItemClick="fabItemClickHandler"
