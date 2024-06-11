@@ -1,5 +1,10 @@
 <template>
-	<a id="skip-link" tabindex="0" class="skip-link" href="#main-content">
+	<a
+		id="skip-link"
+		tabindex="0"
+		class="skip-link d-sr-only-focusable"
+		href="#main-content"
+	>
 		{{ $t("global.skipLink.mainContent") }}
 	</a>
 </template>
@@ -19,7 +24,7 @@ export default {
 <style lang="scss" scoped>
 .skip-link {
 	position: absolute;
-	top: -100px;
+	top: 10px;
 	left: 50%;
 	padding: var(--space-xs);
 	color: rgba(var(--v-theme-primary));
@@ -27,9 +32,6 @@ export default {
 	border: 1px solid #555;
 	border-radius: var(--radius-xs);
 	transform: translate(-50%, 0);
-}
-
-.skip-link:focus {
-	top: 10px;
+	z-index: 10000;
 }
 </style>
