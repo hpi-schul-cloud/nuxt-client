@@ -1,11 +1,7 @@
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 import { useI18n } from "vue-i18n";
-import * as BoardActions from "../boardActions/boardActions";
-import * as CardActions from "../cardActions/cardActions";
 import { useBoardStore } from "../Board.store";
-
 import { useCardStore } from "../Card.store";
-import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import {
 	CreateCardSuccessPayload,
 	CreateColumnSuccessPayload,
@@ -24,15 +20,37 @@ import {
 	UpdateCardTitleSuccessPayload,
 	UpdateElementSuccessPayload,
 } from "../cardActions/cardActionPayload";
-import { SR_I18N_KEYS_MAP } from "./ariaLiveNotificationKeys";
 
 const { notifyOnScreenReader } = useAriaLiveNotifier();
 
-enum ARIA_IMPORTANCE {
-	OFF = "off",
-	POLITE = "polite",
-	ASSERTIVE = "assertive",
-}
+export const SR_I18N_KEYS_MAP = {
+	CARD_CREATED_SUCCESS:
+		"components.board.screenReader.notification.cardCreated.success",
+	COLUMN_CREATED_SUCCESS:
+		"components.board.screenReader.notification.columnCreated.success",
+	CARD_DELETED_SUCCESS:
+		"components.board.screenReader.notification.cardDeleted.success",
+	COLUMN_DELETED_SUCCESS:
+		"components.board.screenReader.notification.columnDeleted.success",
+	CARD_MOVED_SUCCESS:
+		"components.board.screenReader.notification.cardMoved.success",
+	CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS:
+		"components.board.screenReader.notification.cardMovedToAnotherColumn.success",
+	COLUMN_MOVED_SUCCESS:
+		"components.board.screenReader.notification.columnMoved.success",
+	BOARD_TITLE_UPDATED_SUCCESS:
+		"components.board.screenReader.notification.boardTitleUpdated.success",
+	BOARD_PUBLISHED_SUCCESS:
+		"components.board.screenReader.notification.boardVisibilityUpdated.published",
+	BOARD_UNPUBLISHED_SUCCESS:
+		"components.board.screenReader.notification.boardVisibilityUpdated.draft",
+	COLUMN_TITLE_UPDATED_SUCCESS:
+		"components.board.screenReader.notification.columnTitleUpdated.success",
+	CARD_TITLE_UPDATED_SUCCESS:
+		"components.board.screenReader.notification.cardTitleUpdated.success",
+	ELEMENT_UPDATED_SUCCESS:
+		"components.board.screenReader.notification.elementUpdated.success",
+};
 
 export const useBoardAriaNotification = () => {
 	const { t } = useI18n();
@@ -51,37 +69,7 @@ export const useBoardAriaNotification = () => {
 		return card.id;
 	};
 
-	const actionToAriaMessage = (
-		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
-	) => {
-		handle(
-			action,
-			// board success actions
-			on(BoardActions.createCardSuccess, notifyOnCreateCardSuccess),
-			on(BoardActions.createColumnSuccess, notifyOnCreateColumnSuccess),
-			on(CardActions.deleteCardSuccess, notifyOnDeleteCardSuccess),
-			on(BoardActions.deleteColumnSuccess, notifyOnDeleteColumnSuccess),
-			on(BoardActions.moveCardSuccess, notifyOnMoveCardSuccess),
-			on(BoardActions.moveColumnSuccess, notifyOnMoveColumnSuccess),
-			on(
-				BoardActions.updateColumnTitleSuccess,
-				notifyOnUpdateColumnTitleSuccess
-			),
-			on(BoardActions.updateBoardTitleSuccess, notifyOnUpdateBoardTitleSuccess),
-			on(
-				BoardActions.updateBoardVisibilitySuccess,
-				notifyOnUpdateBoardVisibilitySuccess
-			),
-
-			// card success actions
-			on(CardActions.deleteElementSuccess, notifyOnDeleteElementSuccess),
-			on(CardActions.moveElementSuccess, notifyOnMoveElementSuccess),
-			on(CardActions.updateElementSuccess, notifyOnUpdateElementSuccess),
-			on(CardActions.updateCardTitleSuccess, notifyOnUpdateCardTitleSuccess)
-		);
-	};
-
-	const notifyOnCreateCardSuccess = (action: CreateCardSuccessPayload) => {
+	const notifyCreateCardSuccess = (action: CreateCardSuccessPayload) => {
 		const { columnId, isOwnAction } = action;
 		if (isOwnAction) return;
 
@@ -91,42 +79,32 @@ export const useBoardAriaNotification = () => {
 		notifyOnScreenReader(
 			t(SR_I18N_KEYS_MAP.CARD_CREATED_SUCCESS, {
 				columnIndex: columnIndex + 1,
-			}),
-			ARIA_IMPORTANCE.POLITE
+			})
 		);
 	};
 
-	const notifyOnCreateColumnSuccess = (action: CreateColumnSuccessPayload) => {
+	const notifyCreateColumnSuccess = (action: CreateColumnSuccessPayload) => {
 		const { isOwnAction } = action;
 		if (isOwnAction) return;
 
-		notifyOnScreenReader(
-			t(SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS),
-			ARIA_IMPORTANCE.POLITE
-		);
+		notifyOnScreenReader(t(SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS));
 	};
 
-	const notifyOnDeleteCardSuccess = (action: DeleteCardSuccessPayload) => {
+	const notifyDeleteCardSuccess = (action: DeleteCardSuccessPayload) => {
 		const { isOwnAction } = action;
 		if (isOwnAction) return;
 
-		notifyOnScreenReader(
-			t(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS),
-			ARIA_IMPORTANCE.POLITE
-		);
+		notifyOnScreenReader(t(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS));
 	};
 
-	const notifyOnDeleteColumnSuccess = (action: DeleteColumnSuccessPayload) => {
+	const notifyDeleteColumnSuccess = (action: DeleteColumnSuccessPayload) => {
 		const { isOwnAction } = action;
 		if (isOwnAction) return;
 
-		notifyOnScreenReader(
-			t(SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS),
-			ARIA_IMPORTANCE.POLITE
-		);
+		notifyOnScreenReader(t(SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS));
 	};
 
-	const notifyOnMoveCardSuccess = (action: MoveCardSuccessPayload) => {
+	const notifyMoveCardSuccess = (action: MoveCardSuccessPayload) => {
 		const { newIndex, toColumnIndex, fromColumnIndex, isOwnAction } = action;
 		if (isOwnAction) return;
 
@@ -134,8 +112,7 @@ export const useBoardAriaNotification = () => {
 			notifyOnScreenReader(
 				t(SR_I18N_KEYS_MAP.CARD_MOVED_SUCCESS, {
 					newIndex: newIndex + 1,
-				}),
-				ARIA_IMPORTANCE.POLITE
+				})
 			);
 		}
 
@@ -144,13 +121,12 @@ export const useBoardAriaNotification = () => {
 				t(SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS, {
 					fromColumnIndex: fromColumnIndex + 1,
 					toColumnIndex: toColumnIndex + 1,
-				}),
-				ARIA_IMPORTANCE.POLITE
+				})
 			);
 		}
 	};
 
-	const notifyOnMoveColumnSuccess = (action: MoveColumnSuccessPayload) => {
+	const notifyMoveColumnSuccess = (action: MoveColumnSuccessPayload) => {
 		const { addedIndex, removedIndex } = action.columnMove;
 		const { isOwnAction } = action;
 		if (isOwnAction) return;
@@ -161,12 +137,11 @@ export const useBoardAriaNotification = () => {
 			t(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS, {
 				removedIndex: removedIndex + 1,
 				addedIndex: addedIndex + 1,
-			}),
-			ARIA_IMPORTANCE.POLITE
+			})
 		);
 	};
 
-	const notifyOnUpdateBoardTitleSuccess = (
+	const notifyUpdateBoardTitleSuccess = (
 		action: UpdateBoardTitleSuccessPayload
 	) => {
 		const { newTitle, isOwnAction } = action;
@@ -175,12 +150,11 @@ export const useBoardAriaNotification = () => {
 		notifyOnScreenReader(
 			t(SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS, {
 				newTitle,
-			}),
-			ARIA_IMPORTANCE.POLITE
+			})
 		);
 	};
 
-	const notifyOnUpdateBoardVisibilitySuccess = (
+	const notifyUpdateBoardVisibilitySuccess = (
 		action: UpdateBoardVisibilitySuccessPayload
 	) => {
 		const { isVisible, isOwnAction } = action;
@@ -189,12 +163,11 @@ export const useBoardAriaNotification = () => {
 		notifyOnScreenReader(
 			isVisible
 				? t(SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS)
-				: t(SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS),
-			ARIA_IMPORTANCE.POLITE
+				: t(SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS)
 		);
 	};
 
-	const notifyOnUpdateColumnTitleSuccess = (
+	const notifyUpdateColumnTitleSuccess = (
 		action: UpdateColumnTitleSuccessPayload
 	) => {
 		const { newTitle, isOwnAction, columnId } = action;
@@ -205,12 +178,11 @@ export const useBoardAriaNotification = () => {
 			t(SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS, {
 				newTitle,
 				columnIndex: columnIndex + 1,
-			}),
-			ARIA_IMPORTANCE.POLITE
+			})
 		);
 	};
 
-	const notifyOnUpdateCardTitleSuccess = (
+	const notifyUpdateCardTitleSuccess = (
 		action: UpdateCardTitleSuccessPayload
 	) => {
 		const { newTitle, isOwnAction, cardId } = action;
@@ -226,14 +198,11 @@ export const useBoardAriaNotification = () => {
 				cardIndex: cardIndex + 1,
 				columnIndex: columnIndex + 1,
 				newTitle,
-			}),
-			ARIA_IMPORTANCE.POLITE
+			})
 		);
 	};
 
-	const notifyOnUpdateElementSuccess = (
-		action: UpdateElementSuccessPayload
-	) => {
+	const notifyUpdateElementSuccess = (action: UpdateElementSuccessPayload) => {
 		const { elementId, isOwnAction } = action;
 		if (isOwnAction) return;
 
@@ -249,14 +218,11 @@ export const useBoardAriaNotification = () => {
 			t(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS, {
 				cardIndex: cardIndex + 1,
 				columnIndex: columnIndex + 1,
-			}),
-			ARIA_IMPORTANCE.POLITE
+			})
 		);
 	};
 
-	const notifyOnDeleteElementSuccess = (
-		action: DeleteElementSuccessPayload
-	) => {
+	const notifyDeleteElementSuccess = (action: DeleteElementSuccessPayload) => {
 		const { elementId, isOwnAction } = action;
 		if (isOwnAction) return;
 
@@ -272,12 +238,11 @@ export const useBoardAriaNotification = () => {
 			t(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS, {
 				cardIndex: cardIndex + 1,
 				columnIndex: columnIndex + 1,
-			}),
-			ARIA_IMPORTANCE.POLITE
+			})
 		);
 	};
 
-	const notifyOnMoveElementSuccess = (action: MoveElementSuccessPayload) => {
+	const notifyMoveElementSuccess = (action: MoveElementSuccessPayload) => {
 		const { toCardId, isOwnAction } = action;
 		if (isOwnAction) return;
 
@@ -290,10 +255,23 @@ export const useBoardAriaNotification = () => {
 			t(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS, {
 				cardIndex: cardIndex + 1,
 				columnIndex: columnIndex + 1,
-			}),
-			ARIA_IMPORTANCE.POLITE
+			})
 		);
 	};
 
-	return { actionToAriaMessage };
+	return {
+		notifyCreateCardSuccess,
+		notifyCreateColumnSuccess,
+		notifyDeleteCardSuccess,
+		notifyDeleteColumnSuccess,
+		notifyMoveCardSuccess,
+		notifyMoveColumnSuccess,
+		notifyUpdateBoardTitleSuccess,
+		notifyUpdateBoardVisibilitySuccess,
+		notifyUpdateColumnTitleSuccess,
+		notifyUpdateCardTitleSuccess,
+		notifyUpdateElementSuccess,
+		notifyDeleteElementSuccess,
+		notifyMoveElementSuccess,
+	};
 };

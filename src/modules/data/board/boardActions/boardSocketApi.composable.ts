@@ -16,22 +16,32 @@ import {
 } from "./boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
 	const { notifySocketError } = useErrorHandler();
-	const { actionToAriaMessage } = useBoardAriaNotification();
+	const {
+		notifyCreateCardSuccess,
+		notifyCreateColumnSuccess,
+		notifyDeleteCardSuccess,
+		notifyDeleteColumnSuccess,
+		notifyMoveCardSuccess,
+		notifyMoveColumnSuccess,
+		notifyUpdateBoardTitleSuccess,
+		notifyUpdateBoardVisibilitySuccess,
+		notifyUpdateColumnTitleSuccess,
+		notifyUpdateCardTitleSuccess,
+		notifyUpdateElementSuccess,
+		notifyDeleteElementSuccess,
+		notifyMoveElementSuccess,
+	} = useBoardAriaNotification();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
 	) => {
-		actionToAriaMessage(action);
-		handle(
-			action,
-			on(BoardActions.disconnectSocket, disconnectSocketRequest),
-
-			// success actions
+		const successActions = [
 			on(BoardActions.createCardSuccess, boardStore.createCardSuccess),
 			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
 			on(CardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
@@ -51,8 +61,9 @@ export const useBoardSocketApi = () => {
 				BoardActions.updateBoardVisibilitySuccess,
 				boardStore.updateBoardVisibilitySuccess
 			),
+		];
 
-			// failure actions
+		const failureActions = [
 			on(BoardActions.createCardFailure, createCardFailure),
 			on(BoardActions.createColumnFailure, createColumnFailure),
 			on(CardActions.deleteCardFailure, deleteCardFailure),
@@ -65,7 +76,34 @@ export const useBoardSocketApi = () => {
 			on(
 				BoardActions.updateBoardVisibilityFailure,
 				updateBoardVisibilityFailure
-			)
+			),
+		];
+
+		const ariaLiveNotification = [
+			on(BoardActions.createCardSuccess, notifyCreateCardSuccess),
+			on(CardActions.deleteCardSuccess, notifyDeleteCardSuccess),
+			on(BoardActions.createColumnSuccess, notifyCreateColumnSuccess),
+			on(BoardActions.deleteColumnSuccess, notifyDeleteColumnSuccess),
+			on(BoardActions.moveCardSuccess, notifyMoveCardSuccess),
+			on(BoardActions.moveColumnSuccess, notifyMoveColumnSuccess),
+			on(BoardActions.updateBoardTitleSuccess, notifyUpdateBoardTitleSuccess),
+			on(
+				BoardActions.updateBoardVisibilitySuccess,
+				notifyUpdateBoardVisibilitySuccess
+			),
+			on(BoardActions.updateColumnTitleSuccess, notifyUpdateColumnTitleSuccess),
+			on(CardActions.updateCardTitleSuccess, notifyUpdateCardTitleSuccess),
+			on(CardActions.updateElementSuccess, notifyUpdateElementSuccess),
+			on(CardActions.deleteElementSuccess, notifyDeleteElementSuccess),
+			on(CardActions.moveElementSuccess, notifyMoveElementSuccess),
+		];
+
+		handle(
+			action,
+			...successActions,
+			...failureActions,
+			...ariaLiveNotification,
+			on(BoardActions.disconnectSocket, disconnectSocketRequest)
 		);
 	};
 

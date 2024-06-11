@@ -15,7 +15,12 @@ export const useAriaLiveNotifier = () => {
 					: "notify-screen-reader-assertive"
 			);
 
-			if (!element) return;
+			if (!element) {
+				console.error(
+					`Element with id 'notify-screen-reader-${importance}' not found`
+				);
+				return;
+			}
 
 			element.innerHTML = "";
 			element.innerHTML = message;
