@@ -10,11 +10,15 @@
 </template>
 
 <script setup>
-const section = this.$route.hash.replace("#", "");
-if (section)
-	this.$nextTick(() =>
-		window.document.getElementById(section).scrollIntoView()
-	);
+import { onMounted } from "vue";
+
+onMounted(() => {
+	const section = this.$route.hash.replace("#", "");
+	if (section)
+		this.$nextTick(() =>
+			window.document.getElementById(section).scrollIntoView()
+		);
+});
 </script>
 
 <style lang="scss" scoped>
