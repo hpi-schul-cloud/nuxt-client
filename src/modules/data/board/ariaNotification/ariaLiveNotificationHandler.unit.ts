@@ -126,7 +126,9 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_MOVED_SUCCESS);
+		expect(element?.innerHTML).toBe(
+			SR_I18N_KEYS_MAP.CARD_MOVED_IN_SAME_COLUMN_SUCCESS
+		);
 	});
 
 	it("should notify on cardMove to another column", () => {
@@ -260,7 +262,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementDelete", () => {
@@ -274,7 +276,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementMove", () => {
@@ -289,7 +291,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
 	describe("should not notify if the action is own", () => {
