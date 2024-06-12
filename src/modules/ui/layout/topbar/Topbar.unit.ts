@@ -109,7 +109,7 @@ describe("@ui-layout/Topbar", () => {
 		it("should show logo", () => {
 			const { wrapper } = setup(1300, false);
 
-			const topbarLogo = wrapper.findComponent({ name: "TopbarLogo" });
+			const topbarLogo = wrapper.findComponent({ name: "CloudLogo" });
 
 			expect(topbarLogo.exists()).toEqual(true);
 		});
