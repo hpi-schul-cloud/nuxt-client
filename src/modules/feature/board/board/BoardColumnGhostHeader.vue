@@ -1,6 +1,6 @@
 <template>
 	<div class="mb-4" ref="headerRef">
-		<div class="d-flex flex-column justify-space-between align-stretch pt-2">
+		<div class="d-flex flex-column justify-space-between align-stretch pt-5">
 			<VBtn
 				elevation="0"
 				variant="text"
