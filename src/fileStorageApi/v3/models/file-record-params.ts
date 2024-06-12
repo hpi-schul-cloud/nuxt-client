@@ -14,6 +14,7 @@
 
 
 import { FileRecordParentType } from './file-record-parent-type';
+import { StorageLocation } from './storage-location';
 
 /**
  * 
@@ -26,7 +27,13 @@ export interface FileRecordParams {
      * @type {string}
      * @memberof FileRecordParams
      */
-    schoolId: string;
+    storageLocationId: string;
+    /**
+     * 
+     * @type {StorageLocation}
+     * @memberof FileRecordParams
+     */
+    storageLocation: StorageLocation;
     /**
      * 
      * @type {string}
