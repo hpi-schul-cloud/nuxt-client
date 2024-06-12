@@ -760,6 +760,7 @@ export default {
 	"format.dateUTC": "JJJJ-MM-DD",
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
+	"global.cloudlogo": "Логотип",
 	"global.sidebar.item.accessibility": "Доступність",
 	"global.sidebar.item.addons": "Додаткові компоненти",
 	"global.sidebar.item.calendar": "Календар",
@@ -778,7 +779,6 @@ export default {
 	"global.sidebar.item.tasks": "Завдання",
 	"global.sidebar.item.teacher": "Викладачі",
 	"global.sidebar.item.teams": "Команди",
-	"global.sidebar.logo": "Логотип",
 	"global.skipLink.mainContent": "Перейти до основного вмісту",
 	"global.topbar.actions.alerts": "Сповіщення про стан",
 	"global.topbar.actions.contactSupport": "Зв'язатися",
@@ -796,7 +796,6 @@ export default {
 	"global.topbar.loggedOut.actions.blog": "Блог",
 	"global.topbar.loggedOut.actions.faq": "Запитання й відповіді",
 	"global.topbar.loggedOut.actions.steps": "Перші кроки",
-	"global.topbar.logo": "Логотип",
 	"global.topbar.MenuQrCode.print": "Роздрукувати",
 	"global.topbar.MenuQrCode.qrHintText":
 		"Переспрямовувати інших користувачів на цей сайт",

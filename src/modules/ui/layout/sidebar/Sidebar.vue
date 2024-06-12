@@ -3,12 +3,13 @@
 		<VList open-strategy="multiple">
 			<div class="d-flex align-center">
 				<VBtn
+					class="ml-1"
 					:icon="mdiMenuOpen"
 					@click="() => $emit('update:modelValue', false)"
-					size="large"
+					size="default"
 					flat
 				/>
-				<SidebarLogo class="mt-1" />
+				<CloudLogo class="mt-1" />
 			</div>
 			<div class="pb-3">
 				<template v-for="item in pageItems" :key="item.title">
@@ -50,7 +51,7 @@ import {
 	injectStrict,
 	THEME_KEY,
 } from "@/utils/inject";
-import SidebarLogo from "./SidebarLogo.vue";
+import CloudLogo from "../CloudLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";

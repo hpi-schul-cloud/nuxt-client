@@ -1,13 +1,12 @@
 <template>
-	<VAppBar flat>
-		<TopbarLogo v-if="!sidebarExpanded" class="mt-2" />
+	<VAppBar flat class="border-b">
+		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template v-slot:prepend>
 			<VAppBarNavIcon
 				:icon="mdiMenu"
 				@click="() => $emit('sidebar-toggled')"
-				size="small"
+				size="default"
 				v-if="!sidebarExpanded"
-				class="ml-1 mr-2"
 			/>
 		</template>
 		<VSpacer />
@@ -64,7 +63,7 @@ import PageShare from "./PageShare.vue";
 import CloudStatusMessages from "./CloudStatusMessages.vue";
 import UserMenu from "./UserMenu.vue";
 import { StatusAlert } from "@/store/types/status-alert";
-import TopbarLogo from "./TopbarLogo.vue";
+import CloudLogo from "../CloudLogo.vue";
 
 defineProps({
 	sidebarExpanded: {
