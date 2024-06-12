@@ -749,7 +749,7 @@ export default {
 	"format.dateUTC": "YYYY-MM-DD",
 	"format.dateYY": "MM/DD/YY",
 	"format.time": "HH:mm",
-	"global.cloudlogo": "Logo",
+	"global.cloudLogo": "Logo",
 	"global.sidebar.item.accessibility": "Accessibility",
 	"global.sidebar.item.addons": "Add-ons",
 	"global.sidebar.item.calendar": "Calendar",

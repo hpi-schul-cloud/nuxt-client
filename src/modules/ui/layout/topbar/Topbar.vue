@@ -3,10 +3,10 @@
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template v-slot:prepend>
 			<VAppBarNavIcon
+				v-if="!sidebarExpanded"
 				:icon="mdiMenu"
 				@click="() => $emit('sidebar-toggled')"
 				size="default"
-				v-if="!sidebarExpanded"
 			/>
 		</template>
 		<VSpacer />

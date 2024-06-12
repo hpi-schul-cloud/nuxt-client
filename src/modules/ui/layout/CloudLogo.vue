@@ -11,5 +11,5 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
-const altText = envConfigModule.getEnv.SC_TITLE + " " + t("global.cloudlogo");
+const altText = envConfigModule.getEnv.SC_TITLE + " " + t("global.cloudLogo");
 </script>

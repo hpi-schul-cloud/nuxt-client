@@ -760,7 +760,7 @@ export default {
 	"format.dateUTC": "JJJJ-MM-DD",
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
-	"global.cloudlogo": "Логотип",
+	"global.cloudLogo": "Логотип",
 	"global.sidebar.item.accessibility": "Доступність",
 	"global.sidebar.item.addons": "Додаткові компоненти",
 	"global.sidebar.item.calendar": "Календар",
