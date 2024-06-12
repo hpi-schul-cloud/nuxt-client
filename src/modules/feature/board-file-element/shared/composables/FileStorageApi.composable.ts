@@ -5,6 +5,7 @@ import {
 	FileRecordResponse,
 	FileUrlParams,
 	RenameFileParams,
+	StorageLocation,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
@@ -53,7 +54,12 @@ const fileStorageApi = () => {
 	): Promise<void> => {
 		try {
 			const schoolId = authModule.getSchool?.id as string;
-			const response = await fileApi.list(schoolId, parentId, parentType);
+			const response = await fileApi.list(
+				schoolId,
+				StorageLocation.SCHOOL,
+				parentId,
+				parentType
+			);
 
 			updateOrAddFileRecord(parentId, response.data.data[0]);
 		} catch (error) {
@@ -71,6 +77,7 @@ const fileStorageApi = () => {
 			const schoolId = authModule.getSchool?.id as string;
 			const response = await fileApi.upload(
 				schoolId,
+				StorageLocation.SCHOOL,
 				parentId,
 				parentType,
 				file
@@ -99,6 +106,7 @@ const fileStorageApi = () => {
 			};
 			const response = await fileApi.uploadFromUrl(
 				schoolId,
+				StorageLocation.SCHOOL,
 				parentId,
 				parentType,
 				fileUrlParams
