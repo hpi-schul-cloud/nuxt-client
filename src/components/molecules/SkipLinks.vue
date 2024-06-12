@@ -24,11 +24,11 @@ onMounted(() => {
 <style lang="scss" scoped>
 .skip-link {
 	position: absolute;
-	top: 10px;
+	top: 0px;
 	left: 50%;
-	padding: var(--space-xs);
+	padding: 0.5rem;
 	color: rgba(var(--v-theme-primary));
-	background-color: rgba(var(--v-theme-white));
+	background-color: white;
 	border: 1px solid #555;
 	border-radius: var(--radius-xs);
 	transform: translate(-50%, 0);
