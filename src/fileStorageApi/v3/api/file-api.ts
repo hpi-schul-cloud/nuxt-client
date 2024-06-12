@@ -242,15 +242,19 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @summary Streamable download of a binary file.
          * @param {string} fileRecordId 
+         * @param {string} fileName 
          * @param {string} [range] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        download: async (fileRecordId: string, range?: string, options: any = {}): Promise<RequestArgs> => {
+        download: async (fileRecordId: string, fileName: string, range?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'fileRecordId' is not null or undefined
             assertParamExists('download', 'fileRecordId', fileRecordId)
-            const localVarPath = `/file/download/{fileRecordId}`
-                .replace(`{${"fileRecordId"}}`, encodeURIComponent(String(fileRecordId)));
+            // verify required parameter 'fileName' is not null or undefined
+            assertParamExists('download', 'fileName', fileName)
+            const localVarPath = `/file/download/{fileRecordId}/{fileName}`
+                .replace(`{${"fileRecordId"}}`, encodeURIComponent(String(fileRecordId)))
+                .replace(`{${"fileName"}}`, encodeURIComponent(String(fileName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -285,6 +289,7 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @summary Streamable download of a preview file.
          * @param {string} fileRecordId 
+         * @param {string} fileName 
          * @param {PreviewOutputMimeTypes} [outputFormat] 
          * @param {PreviewWidth} [width] 
          * @param {boolean} [forceUpdate] If true, the preview will be generated again.
@@ -293,11 +298,14 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadPreview: async (fileRecordId: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options: any = {}): Promise<RequestArgs> => {
+        downloadPreview: async (fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'fileRecordId' is not null or undefined
             assertParamExists('downloadPreview', 'fileRecordId', fileRecordId)
-            const localVarPath = `/file/preview/{fileRecordId}`
-                .replace(`{${"fileRecordId"}}`, encodeURIComponent(String(fileRecordId)));
+            // verify required parameter 'fileName' is not null or undefined
+            assertParamExists('downloadPreview', 'fileName', fileName)
+            const localVarPath = `/file/preview/{fileRecordId}/{fileName}`
+                .replace(`{${"fileRecordId"}}`, encodeURIComponent(String(fileRecordId)))
+                .replace(`{${"fileName"}}`, encodeURIComponent(String(fileName)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -719,18 +727,20 @@ export const FileApiFp = function(configuration?: Configuration) {
          * 
          * @summary Streamable download of a binary file.
          * @param {string} fileRecordId 
+         * @param {string} fileName 
          * @param {string} [range] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async download(fileRecordId: string, range?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.download(fileRecordId, range, options);
+        async download(fileRecordId: string, fileName: string, range?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.download(fileRecordId, fileName, range, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Streamable download of a preview file.
          * @param {string} fileRecordId 
+         * @param {string} fileName 
          * @param {PreviewOutputMimeTypes} [outputFormat] 
          * @param {PreviewWidth} [width] 
          * @param {boolean} [forceUpdate] If true, the preview will be generated again.
@@ -739,8 +749,8 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async downloadPreview(fileRecordId: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadPreview(fileRecordId, outputFormat, width, forceUpdate, range, ifNoneMatch, options);
+        async downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.downloadPreview(fileRecordId, fileName, outputFormat, width, forceUpdate, range, ifNoneMatch, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -888,17 +898,19 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * 
          * @summary Streamable download of a binary file.
          * @param {string} fileRecordId 
+         * @param {string} fileName 
          * @param {string} [range] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        download(fileRecordId: string, range?: string, options?: any): AxiosPromise<object> {
-            return localVarFp.download(fileRecordId, range, options).then((request) => request(axios, basePath));
+        download(fileRecordId: string, fileName: string, range?: string, options?: any): AxiosPromise<object> {
+            return localVarFp.download(fileRecordId, fileName, range, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Streamable download of a preview file.
          * @param {string} fileRecordId 
+         * @param {string} fileName 
          * @param {PreviewOutputMimeTypes} [outputFormat] 
          * @param {PreviewWidth} [width] 
          * @param {boolean} [forceUpdate] If true, the preview will be generated again.
@@ -907,8 +919,8 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        downloadPreview(fileRecordId: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any): AxiosPromise<object> {
-            return localVarFp.downloadPreview(fileRecordId, outputFormat, width, forceUpdate, range, ifNoneMatch, options).then((request) => request(axios, basePath));
+        downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any): AxiosPromise<object> {
+            return localVarFp.downloadPreview(fileRecordId, fileName, outputFormat, width, forceUpdate, range, ifNoneMatch, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1048,17 +1060,19 @@ export interface FileApiInterface {
      * 
      * @summary Streamable download of a binary file.
      * @param {string} fileRecordId 
+     * @param {string} fileName 
      * @param {string} [range] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    download(fileRecordId: string, range?: string, options?: any): AxiosPromise<object>;
+    download(fileRecordId: string, fileName: string, range?: string, options?: any): AxiosPromise<object>;
 
     /**
      * 
      * @summary Streamable download of a preview file.
      * @param {string} fileRecordId 
+     * @param {string} fileName 
      * @param {PreviewOutputMimeTypes} [outputFormat] 
      * @param {PreviewWidth} [width] 
      * @param {boolean} [forceUpdate] If true, the preview will be generated again.
@@ -1068,7 +1082,7 @@ export interface FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    downloadPreview(fileRecordId: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any): AxiosPromise<object>;
+    downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any): AxiosPromise<object>;
 
     /**
      * 
@@ -1216,19 +1230,21 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * 
      * @summary Streamable download of a binary file.
      * @param {string} fileRecordId 
+     * @param {string} fileName 
      * @param {string} [range] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public download(fileRecordId: string, range?: string, options?: any) {
-        return FileApiFp(this.configuration).download(fileRecordId, range, options).then((request) => request(this.axios, this.basePath));
+    public download(fileRecordId: string, fileName: string, range?: string, options?: any) {
+        return FileApiFp(this.configuration).download(fileRecordId, fileName, range, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Streamable download of a preview file.
      * @param {string} fileRecordId 
+     * @param {string} fileName 
      * @param {PreviewOutputMimeTypes} [outputFormat] 
      * @param {PreviewWidth} [width] 
      * @param {boolean} [forceUpdate] If true, the preview will be generated again.
@@ -1238,8 +1254,8 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public downloadPreview(fileRecordId: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any) {
-        return FileApiFp(this.configuration).downloadPreview(fileRecordId, outputFormat, width, forceUpdate, range, ifNoneMatch, options).then((request) => request(this.axios, this.basePath));
+    public downloadPreview(fileRecordId: string, fileName: string, outputFormat?: PreviewOutputMimeTypes, width?: PreviewWidth, forceUpdate?: boolean, range?: string, ifNoneMatch?: string, options?: any) {
+        return FileApiFp(this.configuration).downloadPreview(fileRecordId, fileName, outputFormat, width, forceUpdate, range, ifNoneMatch, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
