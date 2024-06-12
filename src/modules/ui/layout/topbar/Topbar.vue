@@ -1,5 +1,5 @@
 <template>
-	<VAppBar flat class="border-b">
+	<VAppBar flat>
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template v-slot:prepend>
 			<VAppBarNavIcon
