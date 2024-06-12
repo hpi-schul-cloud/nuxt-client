@@ -9,16 +9,12 @@
 	</a>
 </template>
 
-<script>
-export default {
-	mounted() {
-		const section = this.$route.hash.replace("#", "");
-		if (section)
-			this.$nextTick(() =>
-				window.document.getElementById(section).scrollIntoView()
-			);
-	},
-};
+<script setup>
+const section = this.$route.hash.replace("#", "");
+if (section)
+	this.$nextTick(() =>
+		window.document.getElementById(section).scrollIntoView()
+	);
 </script>
 
 <style lang="scss" scoped>
