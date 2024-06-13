@@ -135,8 +135,11 @@ export const useBoardSocketApi = () => {
 	};
 
 	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
+		const { newIndex, oldIndex, fromColumnId, toColumnId } = payload;
+		if (newIndex === oldIndex && fromColumnId === toColumnId) return;
+
 		try {
-			if (payload.toColumnId === undefined && boardStore.board) {
+			if (toColumnId === undefined && boardStore.board) {
 				const response = await emitWithAck("create-column-request", {
 					boardId: boardStore.board.id,
 				});
