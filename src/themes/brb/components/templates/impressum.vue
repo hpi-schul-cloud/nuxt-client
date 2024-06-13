@@ -109,12 +109,10 @@
 				hingewiesen wird, dass ein konkretes Angebot, zu dem der Anbieter einen
 				Link bereitgestellt hat, eine zivil- oder strafrechtliche
 				Verantwortlichkeit auslöst, wird der Verweis auf dieses Angebot
-				aufgehoben, soweit dies technisch möglich und zumutbar ist. Die
-				technische Möglichkeit und Zumutbarkeit wird nicht dadurch beeinflusst,
-				dass auch nach der Unterbindung des Zugriffs von der Website von anderen
-				Servern aus auf das rechtswidrige oder strafbare Angebot zugegriffen
-				werden kann. Dies gilt insbesondere auch für Proxy- Server bzw.
-				Suchmaschinen mit mirror-Funktion.
+				aufgehoben. Die Aufhebung des Verweises hindert nicht, dass auch nach
+				der Unterbindung des Zugriffs von der Website gegebenenfalls von anderen
+				Servern aus auf das möglicherweise rechtswidrige oder strafbare Angebot
+				zugegriffen werden kann.
 			</p>
 
 			<h3 class="h6">3. Urheber- und Kennzeichenrecht, Copyright</h3>
@@ -205,7 +203,7 @@
 </template>
 
 <script>
-import { mdiEmailOutline, mdiPhone, mdiChat } from "@mdi/js";
+import { mdiChat, mdiEmailOutline, mdiPhone } from "@mdi/js";
 import { defineComponent } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export
