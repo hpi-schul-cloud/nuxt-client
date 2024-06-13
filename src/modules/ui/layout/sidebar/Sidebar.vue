@@ -20,7 +20,7 @@
 					<SidebarItem v-else :item="item" />
 				</template>
 			</div>
-			<v-divider />
+			<VDivider aria-hidden="true" />
 			<div class="py-3">
 				<SidebarCategoryItem
 					v-for="link in metaItems"
@@ -28,7 +28,7 @@
 					:item="link"
 				/>
 			</div>
-			<VDivider />
+			<VDivider aria-hidden="true" />
 			<div class="pt-3">
 				<SidebarItem
 					v-for="link in legalItems"
