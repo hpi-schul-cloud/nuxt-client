@@ -215,7 +215,8 @@ export enum AuthorizationBodyParamsReferenceTypeEnum {
     Submissions = 'submissions',
     SchoolExternalTools = 'school-external-tools',
     Boardnodes = 'boardnodes',
-    ContextExternalTools = 'context-external-tools'
+    ContextExternalTools = 'context-external-tools',
+    ExternalTools = 'external-tools'
 }
 
 /**
