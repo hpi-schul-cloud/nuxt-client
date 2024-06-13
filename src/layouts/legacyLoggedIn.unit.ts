@@ -45,7 +45,10 @@ const envs = envsFactory.build({
 });
 envConfigModule.setEnvs(envs);
 
-jest.mock("vue-router");
+jest.mock("vue-router", () => ({
+	useRoute: jest.fn().mockReturnValue({ hash: "#test" }),
+}));
+
 const useRouteMock = <jest.Mock>useRoute;
 
 describe("legacyLoggedIn", () => {
@@ -67,7 +70,6 @@ describe("legacyLoggedIn", () => {
 					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 				},
 				mocks: {
-					$route: { hash: "" },
 					$theme: {
 						name: "instance name",
 					},

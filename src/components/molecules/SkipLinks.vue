@@ -15,7 +15,7 @@ import { useRoute } from "vue-router";
 
 onMounted(() => {
 	const route = useRoute();
-	const section = route.hash.replace("#", "");
+	const section = route.hash ? route.hash.replace("#", "") : "";
 	if (section)
 		nextTick(() => window.document.getElementById(section)?.scrollIntoView());
 });
