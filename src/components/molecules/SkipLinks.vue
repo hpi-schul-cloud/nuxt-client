@@ -10,14 +10,14 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, nextTick } from "vue";
+import { useRoute } from "vue-router";
 
 onMounted(() => {
-	const section = this.$route.hash.replace("#", "");
+	const route = useRoute();
+	const section = route.hash.replace("#", "");
 	if (section)
-		this.$nextTick(() =>
-			window.document.getElementById(section).scrollIntoView()
-		);
+		nextTick(() => window.document.getElementById(section)?.scrollIntoView());
 });
 </script>
 
