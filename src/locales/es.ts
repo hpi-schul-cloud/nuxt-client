@@ -330,31 +330,31 @@ export default {
 	"components.board.notifications.errors.notUpdated":
 		"No se han podido guardar los cambios.",
 	"components.board.screenReader.notification.cardCreated.success":
-		"Otro usuario creó una tarjeta en la posición de la columna {columnIndex}",
+		"Otro usuario ha creado una tarjeta en la columna {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success":
-		"Una columna fue creada por otro usuario",
+		"Una columna fue creada por otro usuario.",
 	"components.board.screenReader.notification.cardDeleted.success":
-		"Una tarjeta fue eliminada por otro usuario",
+		"Una tarjeta fue eliminada por otro usuario.",
 	"components.board.screenReader.notification.columnDeleted.success":
-		"Una columna fue eliminada por otro usuario",
-	"components.board.screenReader.notification.cardMoved.success":
-		"Se movió una tarjeta a la posición número {newIndex} en la misma columna",
+		"Una columna fue eliminada por otro usuario.",
+	"components.board.screenReader.notification.cardMovedInSameColumn.success":
+		"En la columna {columnPosition}, se ha movido una carta a la posición {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
-		"Se movió una tarjeta de la posición de columna número {fromColumnIndex} a la posición de columna número {toColumnIndex}",
+		"Se ha movido una tarjeta de la columna {fromColumnPosition} a la columna {toColumnPosition}.",
 	"components.board.screenReader.notification.columnMoved.success":
-		"Se movió una columna de la posición número {removedIndex} a la posición número {addedIndex}",
+		"Se ha movido una columna de la posición {oldPosition} a la posición {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
-		"Otro usuario cambió el título del tablero a {newTitle}",
+		"El título del tablero fue cambiado a {newTitle} por otro usuario.",
 	"components.board.screenReader.notification.boardVisibilityUpdated.published":
-		"El tablero es publicado por otro usuario",
+		"El tablero fue publicado por otro usuario.",
 	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
-		"Otro usuario vuelve el tablero a borrador",
+		"El tablero fue revertido a borrador por otro usuario.",
 	"components.board.screenReader.notification.columnTitleUpdated.success":
-		"Otro usuario cambió el título de la columna a {newTitle} en la posición de la columna número {columnIndex}",
+		"El título de la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
 	"components.board.screenReader.notification.cardTitleUpdated.success":
-		"Otro usuario cambió el título de la tarjeta en la posición número {cardIndex} en la posición de la columna número {columnIndex} a {newTitle}",
-	"components.board.screenReader.notification.elementUpdated.success":
-		"Otro usuario actualizó la tarjeta en la posición número {cardIndex} en la posición de la columna número {columnIndex}",
+		"El título de la tarjeta {cardPosition} en la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
+	"components.board.screenReader.notification.cardUpdated.success":
+		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
@@ -797,6 +797,7 @@ export default {
 	"format.dateUTC": "AAAA-MM-DD",
 	"format.dateYY": "DD/MM/YY",
 	"format.time": "HH:mm",
+	"global.cloudLogo": "Logo",
 	"global.sidebar.item.accessibility": "Accesibilidad",
 	"global.sidebar.item.addons": "Complementos",
 	"global.sidebar.item.calendar": "Calendario",
@@ -815,7 +816,6 @@ export default {
 	"global.sidebar.item.tasks": "Tareas",
 	"global.sidebar.item.teacher": "Profesores",
 	"global.sidebar.item.teams": "Equipos",
-	"global.sidebar.logo": "Logo",
 	"global.skipLink.mainContent": "Saltar al contenido principal",
 	"global.topbar.actions.alerts": "Alerta de estado",
 	"global.topbar.actions.contactSupport": "Contacto",

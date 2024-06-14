@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * HPI Schul-Cloud Server API
- * This is v3 of HPI Schul-Cloud Server. Checkout /docs for v1.
+ * Schulcloud-Verbund-Software Server API
+ * This is v3 of Schulcloud-Verbund-Software Server. Checkout /docs for v1.
  *
  * The version of the OpenAPI document: 3.0
  * 
@@ -215,7 +215,7 @@ export enum AuthorizationBodyParamsReferenceTypeEnum {
     Submissions = 'submissions',
     SchoolExternalTools = 'school-external-tools',
     Boardnodes = 'boardnodes',
-    ContextExternalTools = 'context-external-tools'
+    ContextExternalTools = 'context-external-tools',
 }
 
 /**
@@ -341,7 +341,8 @@ export enum BoardExternalReferenceType {
  */
 export enum BoardLayout {
     Columns = 'columns',
-    List = 'list'
+    List = 'list',
+    Grid = 'grid'
 }
 
 /**
@@ -4209,8 +4210,9 @@ export enum MediaBoardColors {
  * @enum {string}
  */
 export enum MediaBoardLayoutType {
-    Grid = 'grid',
-    List = 'list'
+    Columns = 'columns',
+    List = 'list',
+    Grid = 'grid'
 }
 
 /**

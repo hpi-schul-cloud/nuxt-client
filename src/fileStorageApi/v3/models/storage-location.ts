@@ -19,16 +19,9 @@
  * @export
  * @enum {string}
  */
-export enum FileRecordParentType {
-    USERS = 'users',
-    SCHOOLS = 'schools',
-    COURSES = 'courses',
-    TASKS = 'tasks',
-    LESSONS = 'lessons',
-    SUBMISSIONS = 'submissions',
-    GRADINGS = 'gradings',
-    BOARDNODES = 'boardnodes',
-    EXTERNALTOOLS = 'externaltools'
+export enum StorageLocation {
+    SCHOOL = 'school',
+    INSTANCE = 'instance'
 }
 
 

@@ -1,6 +1,15 @@
 <template>
 	<v-container fluid class="wireframe-container">
-		<div aria-live="off" id="notify-on-screen-reader" class="d-sr-only" />
+		<div
+			aria-live="polite"
+			id="notify-screen-reader-polite"
+			class="d-sr-only"
+		/>
+		<div
+			aria-live="assertive"
+			id="notify-screen-reader-assertive"
+			class="d-sr-only"
+		/>
 		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"

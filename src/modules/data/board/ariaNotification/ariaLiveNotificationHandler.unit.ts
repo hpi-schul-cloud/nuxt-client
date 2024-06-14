@@ -1,6 +1,7 @@
-import { useBoardAriaNotification } from "./ariaLiveNotificationHandler";
-import * as BoardActions from "../boardActions/boardActions";
-import * as CardActions from "../cardActions/cardActions";
+import {
+	useBoardAriaNotification,
+	SR_I18N_KEYS_MAP,
+} from "./ariaLiveNotificationHandler";
 import {
 	cardResponseFactory,
 	columnResponseFactory,
@@ -11,7 +12,6 @@ import {
 } from "../boardActions/boardActionPayload";
 import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
-import { SR_I18N_KEYS_MAP } from "./ariaLiveNotificationKeys";
 
 const card = {
 	elements: [
@@ -45,11 +45,6 @@ jest.mock("../Card.store", () => ({
 	}),
 }));
 
-jest.mock("./ariaNotificationHandler", () => ({
-	...jest.requireActual("./ariaNotificationHandler"),
-	getElementOwner: () => jest.fn().mockReturnValue("cardId"),
-}));
-
 describe("useBoardAriaNotification", () => {
 	jest.useFakeTimers();
 
@@ -59,282 +54,264 @@ describe("useBoardAriaNotification", () => {
 	}));
 
 	beforeEach(() => {
-		document.body.innerHTML = '<div id="notify-on-screen-reader"></div>';
+		document.body.innerHTML = `
+				<div>
+					<div id="notify-screen-reader-polite"></div>
+					<div id="notify-screen-reader-assertive"></div>
+				</div>`;
 	});
 
-	it("should notify on cardCreate", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
+	it("should notify on cardCreate", async () => {
+		const { notifyCreateCardSuccess } = useBoardAriaNotification();
 		const payload: CreateCardSuccessPayload = {
 			newCard: cardResponseFactory.build(),
 			columnId: "columnId",
 			isOwnAction: false,
 		};
-		const element = document.getElementById("notify-on-screen-reader");
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(BoardActions.createCardSuccess(payload));
+		notifyCreateCardSuccess(payload);
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_CREATED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_CREATED_SUCCESS);
 	});
 
 	it("should notify on columnCreate", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
+		const { notifyCreateColumnSuccess } = useBoardAriaNotification();
 		const payload: CreateColumnSuccessPayload = {
 			newColumn: columnResponseFactory.build(),
 			isOwnAction: false,
 		};
-		const element = document.getElementById("notify-on-screen-reader");
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(BoardActions.createColumnSuccess(payload));
+		notifyCreateColumnSuccess(payload);
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS);
+		expect(element?.innerHTML).toContain(
+			SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS
+		);
 	});
 
 	it("should notify on cardDelete", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyDeleteCardSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			CardActions.deleteCardSuccess({ cardId: "cardId", isOwnAction: false })
-		);
+		notifyDeleteCardSuccess({ cardId: "cardId", isOwnAction: false });
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS);
 	});
 
 	it("should notify on columnDelete", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyDeleteColumnSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			BoardActions.deleteColumnSuccess({
-				columnId: "columnId",
-				isOwnAction: false,
-			})
-		);
+		notifyDeleteColumnSuccess({
+			columnId: "columnId",
+			isOwnAction: false,
+		});
+
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS);
+		expect(element?.innerHTML).toContain(
+			SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS
+		);
 	});
 
 	it("should notify on cardMove", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyMoveCardSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			BoardActions.moveCardSuccess({
-				cardId: "cardId",
-				isOwnAction: false,
-				oldIndex: 0,
-				newIndex: 1,
-				fromColumnId: "columnId",
-				fromColumnIndex: 0,
-				toColumnId: "columnId",
-				toColumnIndex: 0,
-			})
-		);
+		notifyMoveCardSuccess({
+			cardId: "cardId",
+			isOwnAction: false,
+			oldIndex: 0,
+			newIndex: 1,
+			fromColumnId: "columnId",
+			fromColumnIndex: 0,
+			toColumnId: "columnId",
+			toColumnIndex: 0,
+		});
+
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_MOVED_SUCCESS);
+		expect(element?.innerHTML).toContain(
+			SR_I18N_KEYS_MAP.CARD_MOVED_IN_SAME_COLUMN_SUCCESS
+		);
 	});
 
 	it("should notify on cardMove to another column", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyMoveCardSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			BoardActions.moveCardSuccess({
-				cardId: "cardId",
-				isOwnAction: false,
-				oldIndex: 0,
-				newIndex: 1,
-				fromColumnId: "columnId",
-				fromColumnIndex: 0,
-				toColumnId: "anotherColumnId",
-				toColumnIndex: 1,
-			})
-		);
+		notifyMoveCardSuccess({
+			cardId: "cardId",
+			isOwnAction: false,
+			oldIndex: 0,
+			newIndex: 1,
+			fromColumnId: "columnId",
+			fromColumnIndex: 0,
+			toColumnId: "anotherColumnId",
+			toColumnIndex: 1,
+		});
+
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(
+		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS
 		);
 	});
 
 	it("should notify on columnMove", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyMoveColumnSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			BoardActions.moveColumnSuccess({
-				columnMove: {
-					addedIndex: 0,
-					removedIndex: 1,
-					columnId: "columnId",
-				},
-				byKeyboard: false,
-				isOwnAction: false,
-			})
-		);
+		notifyMoveColumnSuccess({
+			columnMove: {
+				addedIndex: 0,
+				removedIndex: 1,
+				columnId: "columnId",
+			},
+			byKeyboard: false,
+			isOwnAction: false,
+		});
+
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS);
 	});
 
 	it("should notify on boardTitleUpdate", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyUpdateBoardTitleSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			BoardActions.updateBoardTitleSuccess({
-				boardId: "boardId",
-				newTitle: "newTitle",
-				isOwnAction: false,
-			})
-		);
+		notifyUpdateBoardTitleSuccess({
+			boardId: "boardId",
+			newTitle: "newTitle",
+			isOwnAction: false,
+		});
+
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(
+		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS
 		);
 	});
 
 	describe("should notify on boardVisibilityUpdate", () => {
 		it("should notify on boardPublished", () => {
-			const { actionToAriaMessage } = useBoardAriaNotification();
-			const element = document.getElementById("notify-on-screen-reader");
-			actionToAriaMessage(
-				BoardActions.updateBoardVisibilitySuccess({
-					boardId: "boardId",
-					isVisible: true,
-					isOwnAction: false,
-				})
-			);
+			const { notifyUpdateBoardVisibilitySuccess } = useBoardAriaNotification();
+			const element = document.getElementById("notify-screen-reader-polite");
+			notifyUpdateBoardVisibilitySuccess({
+				boardId: "boardId",
+				isVisible: true,
+				isOwnAction: false,
+			});
+
 			jest.advanceTimersByTime(3000);
-			expect(element?.getAttribute("aria-live")).toBe("polite");
-			expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS);
+			expect(element?.innerHTML).toContain(
+				SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS
+			);
 		});
 
 		it("should notify on boardUnpublished", () => {
-			const { actionToAriaMessage } = useBoardAriaNotification();
-			const element = document.getElementById("notify-on-screen-reader");
-			actionToAriaMessage(
-				BoardActions.updateBoardVisibilitySuccess({
-					boardId: "boardId",
-					isVisible: false,
-					isOwnAction: false,
-				})
-			);
+			const { notifyUpdateBoardVisibilitySuccess } = useBoardAriaNotification();
+			const element = document.getElementById("notify-screen-reader-polite");
+			notifyUpdateBoardVisibilitySuccess({
+				boardId: "boardId",
+				isVisible: false,
+				isOwnAction: false,
+			});
+
 			jest.advanceTimersByTime(3000);
-			expect(element?.getAttribute("aria-live")).toBe("polite");
-			expect(element?.innerHTML).toBe(
+			expect(element?.innerHTML).toContain(
 				SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS
 			);
 		});
 	});
 
 	it("should notify on columnTitleUpdate", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyUpdateColumnTitleSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			BoardActions.updateColumnTitleSuccess({
-				columnId: "columnId",
-				newTitle: "newTitle",
-				isOwnAction: false,
-			})
-		);
+		notifyUpdateColumnTitleSuccess({
+			columnId: "columnId",
+			newTitle: "newTitle",
+			isOwnAction: false,
+		});
+
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(
+		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS
 		);
 	});
 
 	it("should notify on cardTitleUpdate", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyUpdateCardTitleSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			CardActions.updateCardTitleSuccess({
-				cardId: "cardId",
-				newTitle: "newTitle",
-				isOwnAction: false,
-			})
-		);
+		notifyUpdateCardTitleSuccess({
+			cardId: "cardId",
+			newTitle: "newTitle",
+			isOwnAction: false,
+		});
+
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(
+		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS
 		);
 	});
 
 	it("should notify on elementUpdate", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyUpdateElementSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			CardActions.updateElementSuccess({
-				elementId: "elementId",
-				data: {
-					type: "type" as unknown as ContentElementType,
-					content: "content" as unknown as AnyContentElement,
-				},
-				isOwnAction: false,
-			})
-		);
+		notifyUpdateElementSuccess({
+			elementId: "elementId",
+			data: {
+				type: "type" as unknown as ContentElementType,
+				content: "content" as unknown as AnyContentElement,
+			},
+			isOwnAction: false,
+		});
+
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementDelete", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyDeleteElementSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			CardActions.deleteElementSuccess({
-				cardId: "cardId",
-				elementId: "elementId",
-				isOwnAction: false,
-			})
-		);
+		notifyDeleteElementSuccess({
+			cardId: "cardId",
+			elementId: "elementId",
+			isOwnAction: false,
+		});
+
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementMove", () => {
-		const { actionToAriaMessage } = useBoardAriaNotification();
-		const element = document.getElementById("notify-on-screen-reader");
+		const { notifyMoveElementSuccess } = useBoardAriaNotification();
+		const element = document.getElementById("notify-screen-reader-polite");
 
-		actionToAriaMessage(
-			CardActions.moveElementSuccess({
-				elementId: "elementId",
-				toCardId: "cardId",
-				toPosition: 1,
-				isOwnAction: false,
-			})
-		);
+		notifyMoveElementSuccess({
+			elementId: "elementId",
+			toCardId: "cardId",
+			toPosition: 1,
+			isOwnAction: false,
+		});
+
 		jest.advanceTimersByTime(3000);
-		expect(element?.getAttribute("aria-live")).toBe("polite");
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.ELEMENT_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
 	describe("should not notify if the action is own", () => {
 		it("should not notify on cardCreate", () => {
-			const { actionToAriaMessage } = useBoardAriaNotification();
+			const { notifyCreateCardSuccess } = useBoardAriaNotification();
 			const payload: CreateCardSuccessPayload = {
 				newCard: cardResponseFactory.build(),
 				columnId: "columnId",
 				isOwnAction: true,
 			};
-			const element = document.getElementById("notify-on-screen-reader");
+			const element = document.getElementById("notify-screen-reader-polite");
 
-			actionToAriaMessage(BoardActions.createCardSuccess(payload));
+			notifyCreateCardSuccess(payload);
 			jest.advanceTimersByTime(3000);
-			expect(element?.getAttribute("aria-live")).toBe(null);
 			expect(element?.innerHTML).toBe("");
 		});
 	});

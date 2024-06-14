@@ -331,31 +331,31 @@ export default {
 	"components.board.notifications.errors.notUpdated":
 		"Зберегти зміни не вдалося.",
 	"components.board.screenReader.notification.cardCreated.success":
-		"Картку створив інший користувач у позиції стовпця {columnIndex}",
+		"Картку було створено іншим користувачем у колонці {columnPosition}.",
 	"components.board.screenReader.notification.columnCreated.success":
-		"Колонку створив інший користувач",
+		"Колонку створив інший користувач.",
 	"components.board.screenReader.notification.cardDeleted.success":
-		"Картка була видалена іншим користувачем",
+		"Картка була видалена іншим користувачем.",
 	"components.board.screenReader.notification.columnDeleted.success":
-		"Стовпець був видалений іншим користувачем",
-	"components.board.screenReader.notification.cardMoved.success":
-		"Картку було переміщено на позицію {newIndex} у тому ж стовпці",
+		"Стовпець був видалений іншим користувачем.",
+	"components.board.screenReader.notification.cardMovedInSameColumn.success":
+		"У колонці {columnPosition} картку було переміщено на позицію {newPosition}.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
-		"Картку переміщено з позиції стовпця {fromColumnIndex} на позицію стовпця {toColumnIndex}",
+		"Картку було переміщено зі стовпчика {fromColumnPosition} до стовпчика {toColumnPosition}.",
 	"components.board.screenReader.notification.columnMoved.success":
-		"Стовпець переміщено з позиції номер {removedIndex} на позицію номер {addedIndex}",
+		"Стовпець було переміщено з позиції {oldPosition} в позицію {newPosition}.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
-		"Інший користувач змінив назву дошки на {newTitle}",
+		"Назву дошки було змінено на {newTitle} іншим користувачем.",
 	"components.board.screenReader.notification.boardVisibilityUpdated.published":
-		"Дошку публікує інший користувач",
+		"Дошку опублікував інший користувач.",
 	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
-		"Дошку повернуто до чернетки іншим користувачем",
+		"Дошка була повернута до чернетки іншим користувачем.",
 	"components.board.screenReader.notification.columnTitleUpdated.success":
-		"Інший користувач змінив назву стовпця на {newTitle} у позиції стовпця {columnIndex}",
+		"Заголовок стовпчика {columnPosition} було змінено на {newTitle} іншим користувачем.",
 	"components.board.screenReader.notification.cardTitleUpdated.success":
-		"Інший користувач змінив назву картки в позиції номер {cardIndex} у позиції стовпця {columnIndex} на {newTitle}",
-	"components.board.screenReader.notification.elementUpdated.success":
-		"Картку з номером {cardIndex} у стовпці з номером {columnIndex} оновив інший користувач",
+		"Заголовок картки {cardPosition} у колонці {columnPosition} було змінено на {newTitle} іншим користувачем.",
+	"components.board.screenReader.notification.cardUpdated.success":
+		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
@@ -786,6 +786,7 @@ export default {
 	"format.dateUTC": "JJJJ-MM-DD",
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
+	"global.cloudLogo": "Логотип",
 	"global.sidebar.item.accessibility": "Доступність",
 	"global.sidebar.item.addons": "Додаткові компоненти",
 	"global.sidebar.item.calendar": "Календар",
@@ -804,7 +805,6 @@ export default {
 	"global.sidebar.item.tasks": "Завдання",
 	"global.sidebar.item.teacher": "Викладачі",
 	"global.sidebar.item.teams": "Команди",
-	"global.sidebar.logo": "Логотип",
 	"global.skipLink.mainContent": "Перейти до основного вмісту",
 	"global.topbar.actions.alerts": "Сповіщення про стан",
 	"global.topbar.actions.contactSupport": "Зв'язатися",
