@@ -16,7 +16,6 @@ import {
 } from "./boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 
 export const useBoardSocketApi = () => {
@@ -32,10 +31,6 @@ export const useBoardSocketApi = () => {
 		notifyUpdateBoardTitleSuccess,
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
-		notifyUpdateCardTitleSuccess,
-		notifyUpdateElementSuccess,
-		notifyDeleteElementSuccess,
-		notifyMoveElementSuccess,
 	} = useBoardAriaNotification();
 
 	const dispatch = async (
@@ -92,10 +87,6 @@ export const useBoardSocketApi = () => {
 				notifyUpdateBoardVisibilitySuccess
 			),
 			on(BoardActions.updateColumnTitleSuccess, notifyUpdateColumnTitleSuccess),
-			on(CardActions.updateCardTitleSuccess, notifyUpdateCardTitleSuccess),
-			on(CardActions.updateElementSuccess, notifyUpdateElementSuccess),
-			on(CardActions.deleteElementSuccess, notifyDeleteElementSuccess),
-			on(CardActions.moveElementSuccess, notifyMoveElementSuccess),
 		];
 
 		handle(
