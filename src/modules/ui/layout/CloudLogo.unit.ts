@@ -3,15 +3,15 @@ import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import SidebarLogo from "./SidebarLogo.vue";
+import CloudLogo from "./CloudLogo.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 
-describe("SidebarLogo", () => {
+describe("CloudLogo", () => {
 	const setup = () => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: { SC_TITLE: "dBildungscloud" } as ConfigResponse,
 		});
-		const wrapper = shallowMount(SidebarLogo, {
+		const wrapper = shallowMount(CloudLogo, {
 			global: {
 				plugins: [createTestingI18n()],
 				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule },
