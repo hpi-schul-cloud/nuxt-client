@@ -16,7 +16,7 @@ describe("useAriaLiveNotifier", () => {
 		notifyOnScreenReader(message, "assertive");
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(message);
+		expect(element?.innerHTML).toBe(`<span>${message}</span>`);
 	});
 
 	it("should notify on screen reader on 'aria-live=polite' mode", () => {
@@ -27,6 +27,6 @@ describe("useAriaLiveNotifier", () => {
 		notifyOnScreenReader(message, "polite");
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(message);
+		expect(element?.innerHTML).toBe(`<span>${message}</span>`);
 	});
 });
