@@ -1,7 +1,16 @@
 <template>
 	<VNavigationDrawer>
-		<SidebarLogo />
 		<VList open-strategy="multiple">
+			<div class="d-flex align-center">
+				<VBtn
+					class="ml-1"
+					:icon="mdiMenuOpen"
+					@click="() => $emit('update:modelValue', false)"
+					size="default"
+					flat
+				/>
+				<CloudLogo class="mt-1" />
+			</div>
 			<div class="pb-3">
 				<template v-for="item in pageItems" :key="item.title">
 					<SidebarCategoryItem
@@ -11,7 +20,7 @@
 					<SidebarItem v-else :item="item" />
 				</template>
 			</div>
-			<v-divider />
+			<VDivider aria-hidden="true" />
 			<div class="py-3">
 				<SidebarCategoryItem
 					v-for="link in metaItems"
@@ -19,7 +28,7 @@
 					:item="link"
 				/>
 			</div>
-			<VDivider />
+			<VDivider aria-hidden="true" />
 			<div class="pt-3">
 				<SidebarItem
 					v-for="link in legalItems"
@@ -42,11 +51,12 @@ import {
 	injectStrict,
 	THEME_KEY,
 } from "@/utils/inject";
-import SidebarLogo from "./SidebarLogo.vue";
+import CloudLogo from "../CloudLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
+import { mdiMenuOpen } from "@mdi/js";
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -95,13 +105,13 @@ const getItemsForUser = (items: SidebarItems) => {
 	return pageItems;
 };
 
-const pageItems = computed(() => getItemsForUser(pageLinks.value));
-const metaItems = computed(
-	() => getItemsForUser(metaLinks.value) as SidebarGroupItem[]
-);
+const currentYear = computed(() => new Date().getFullYear());
+
 const legalItems = computed(
 	() => getItemsForUser(legalLinks.value) as SidebarSingleItem[]
 );
-
-const currentYear = computed(() => new Date().getFullYear());
+const metaItems = computed(
+	() => getItemsForUser(metaLinks.value) as SidebarGroupItem[]
+);
+const pageItems = computed(() => getItemsForUser(pageLinks.value));
 </script>

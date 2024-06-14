@@ -2,14 +2,15 @@ import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import SkipLinks from "./SkipLinks.vue";
 
+jest.mock("vue-router", () => ({
+	useRoute: () => ({ hash: "#" }),
+}));
+
 describe("@/components/molecules/SkipLinks", () => {
 	const setup = () => {
 		const wrapper = mount(SkipLinks, {
 			global: {
 				plugins: [createTestingI18n()],
-				mocks: {
-					$route: { hash: "" },
-				},
 			},
 		});
 

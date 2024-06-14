@@ -1,10 +1,12 @@
 <template>
 	<VAppBar flat>
+		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template v-slot:prepend>
 			<VAppBarNavIcon
-				:icon="sidebarToggleIcon"
+				v-if="!sidebarExpanded"
+				:icon="mdiMenu"
 				@click="() => $emit('sidebar-toggled')"
-				size="small"
+				size="default"
 			/>
 		</template>
 		<VSpacer />
@@ -48,26 +50,22 @@
 </template>
 
 <script setup lang="ts">
-import { ComputedRef, computed, onMounted, toRef } from "vue";
+import { ComputedRef, computed, onMounted } from "vue";
 import { useDisplay } from "vuetify";
 import {
 	AUTH_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
-import {
-	mdiMenuOpen,
-	mdiMenu,
-	mdiAlert,
-	mdiQrcode,
-} from "@/components/icons/material";
+import { mdiMenu, mdiAlert, mdiQrcode } from "@/components/icons/material";
 import TopbarItem from "./TopbarItem.vue";
 import PageShare from "./PageShare.vue";
 import CloudStatusMessages from "./CloudStatusMessages.vue";
 import UserMenu from "./UserMenu.vue";
 import { StatusAlert } from "@/store/types/status-alert";
+import CloudLogo from "../CloudLogo.vue";
 
-const props = defineProps({
+defineProps({
 	sidebarExpanded: {
 		type: Boolean,
 		required: true,
@@ -85,10 +83,6 @@ const isDesktop = computed(() => {
 
 const isTabletOrBigger = computed(() => {
 	return mdAndUp.value;
-});
-
-const sidebarToggleIcon = computed(() => {
-	return toRef(props.sidebarExpanded).value ? mdiMenuOpen : mdiMenu;
 });
 
 onMounted(() => {
