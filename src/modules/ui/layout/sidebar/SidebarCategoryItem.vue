@@ -16,7 +16,7 @@
 			</v-list-item>
 		</template>
 		<template v-for="child in item.children" :key="child.title">
-			<SidebarItem :item="child" />
+			<SidebarItem :item="child" :draggable="false" />
 		</template>
 	</v-list-group>
 </template>

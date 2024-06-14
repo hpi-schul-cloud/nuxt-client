@@ -17,7 +17,7 @@
 						v-if="isSidebarCategoryItem(item)"
 						:item="item"
 					/>
-					<SidebarItem v-else :item="item" />
+					<SidebarItem v-else :item="item" :draggable="false" />
 				</template>
 			</div>
 			<VDivider aria-hidden="true" />
@@ -34,6 +34,7 @@
 					v-for="link in legalItems"
 					:key="link.title"
 					:item="link"
+					:draggable="false"
 				/>
 			</div>
 		</VList>
