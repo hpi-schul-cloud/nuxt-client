@@ -1,35 +1,37 @@
 <template>
-	<a id="skip-link" tabindex="0" class="skip-link" href="#main-content">
+	<a
+		id="skip-link"
+		tabindex="0"
+		class="skip-link d-sr-only-focusable"
+		href="#main-content"
+	>
 		{{ $t("global.skipLink.mainContent") }}
 	</a>
 </template>
 
-<script>
-export default {
-	mounted() {
-		const section = this.$route.hash.replace("#", "");
-		if (section)
-			this.$nextTick(() =>
-				window.document.getElementById(section).scrollIntoView()
-			);
-	},
-};
+<script setup lang="ts">
+import { onMounted, nextTick } from "vue";
+import { useRoute } from "vue-router";
+
+onMounted(() => {
+	const route = useRoute();
+	const section = route.hash ? route.hash.replace("#", "") : "";
+	if (section)
+		nextTick(() => window.document.getElementById(section)?.scrollIntoView());
+});
 </script>
 
 <style lang="scss" scoped>
 .skip-link {
 	position: absolute;
-	top: -100px;
+	top: 0px;
 	left: 50%;
-	padding: var(--space-xs);
+	padding: 0.5rem;
 	color: rgba(var(--v-theme-primary));
-	background-color: rgba(var(--v-theme-white));
+	background-color: white;
 	border: 1px solid #555;
 	border-radius: var(--radius-xs);
 	transform: translate(-50%, 0);
-}
-
-.skip-link:focus {
-	top: 10px;
+	z-index: 1005;
 }
 </style>
