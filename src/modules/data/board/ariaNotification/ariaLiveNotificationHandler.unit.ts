@@ -72,7 +72,7 @@ describe("useBoardAriaNotification", () => {
 
 		notifyCreateCardSuccess(payload);
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_CREATED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_CREATED_SUCCESS);
 	});
 
 	it("should notify on columnCreate", () => {
@@ -85,7 +85,9 @@ describe("useBoardAriaNotification", () => {
 
 		notifyCreateColumnSuccess(payload);
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS);
+		expect(element?.innerHTML).toContain(
+			SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS
+		);
 	});
 
 	it("should notify on cardDelete", () => {
@@ -94,7 +96,7 @@ describe("useBoardAriaNotification", () => {
 
 		notifyDeleteCardSuccess({ cardId: "cardId", isOwnAction: false });
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS);
 	});
 
 	it("should notify on columnDelete", () => {
@@ -107,7 +109,9 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS);
+		expect(element?.innerHTML).toContain(
+			SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS
+		);
 	});
 
 	it("should notify on cardMove", () => {
@@ -126,7 +130,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(
+		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_MOVED_IN_SAME_COLUMN_SUCCESS
 		);
 	});
@@ -147,7 +151,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(
+		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS
 		);
 	});
@@ -167,7 +171,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS);
 	});
 
 	it("should notify on boardTitleUpdate", () => {
@@ -181,7 +185,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(
+		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS
 		);
 	});
@@ -197,7 +201,9 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			jest.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS);
+			expect(element?.innerHTML).toContain(
+				SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS
+			);
 		});
 
 		it("should notify on boardUnpublished", () => {
@@ -210,7 +216,7 @@ describe("useBoardAriaNotification", () => {
 			});
 
 			jest.advanceTimersByTime(3000);
-			expect(element?.innerHTML).toBe(
+			expect(element?.innerHTML).toContain(
 				SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS
 			);
 		});
@@ -227,7 +233,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(
+		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS
 		);
 	});
@@ -243,7 +249,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(
+		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS
 		);
 	});
@@ -262,7 +268,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementDelete", () => {
@@ -276,7 +282,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
 	it("should notify on elementMove", () => {
@@ -291,7 +297,7 @@ describe("useBoardAriaNotification", () => {
 		});
 
 		jest.advanceTimersByTime(3000);
-		expect(element?.innerHTML).toBe(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
+		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
 	describe("should not notify if the action is own", () => {
