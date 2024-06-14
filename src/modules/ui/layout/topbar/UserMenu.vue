@@ -6,10 +6,10 @@
 				v-bind.attr="$attrs"
 				icon
 				data-testid="user-menu-btn"
+				class="bg-surface-variant"
+				size="small"
 			>
-				<VAvatar color="surface-variant">
-					<span class="text-h6">{{ initials }}</span>
-				</VAvatar>
+				<span class="text-h6">{{ initials }}</span>
 			</VBtn>
 		</template>
 		<VList>
