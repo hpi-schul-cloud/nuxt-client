@@ -7,7 +7,10 @@
 			:sidebar-expanded="sidebarExpanded"
 			@sidebar-toggled="onToggleSidebar"
 		/>
-		<v-main id="main-content">
+		<v-main
+			id="main-content"
+			:class="{ 'fixed-position': isMobile && sidebarExpanded }"
+		>
 			<application-error-wrapper>
 				<AlertContainer />
 				<router-view />
@@ -30,10 +33,14 @@ import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
 
-const { lgAndUp } = useDisplay();
+const { lgAndUp, mdAndDown } = useDisplay();
 
 const isDesktop = computed(() => {
 	return lgAndUp.value;
+});
+
+const isMobile = computed(() => {
+	return mdAndDown.value;
 });
 
 const sidebarExpanded = ref(isDesktop.value);
@@ -42,3 +49,9 @@ const onToggleSidebar = () => {
 	sidebarExpanded.value = !sidebarExpanded.value;
 };
 </script>
+<style lang="scss" scoped>
+.fixed-position {
+	position: fixed;
+	width: 100%;
+}
+</style>
