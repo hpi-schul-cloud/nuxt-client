@@ -14,6 +14,7 @@ import {
 } from "../boardActions/boardActionPayload";
 
 import {
+	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	DeleteElementSuccessPayload,
 	MoveElementSuccessPayload,
@@ -201,6 +202,23 @@ export const useBoardAriaNotification = () => {
 		);
 	};
 
+	const notifyCreateElementSuccess = (action: CreateElementSuccessPayload) => {
+		const { cardId, isOwnAction } = action;
+		if (isOwnAction) return;
+
+		const { columnIndex, cardIndex } = boardStore.getCardLocation(cardId) as {
+			columnIndex: number;
+			cardIndex: number;
+		};
+
+		notifyOnScreenReader(
+			t(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS, {
+				cardPosition: cardIndex + 1,
+				columnPosition: columnIndex + 1,
+			})
+		);
+	};
+
 	const notifyUpdateElementSuccess = (action: UpdateElementSuccessPayload) => {
 		const { elementId, isOwnAction } = action;
 		if (isOwnAction) return;
@@ -269,6 +287,7 @@ export const useBoardAriaNotification = () => {
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
 		notifyUpdateCardTitleSuccess,
+		notifyCreateElementSuccess,
 		notifyUpdateElementSuccess,
 		notifyDeleteElementSuccess,
 		notifyMoveElementSuccess,
