@@ -7,6 +7,7 @@
 		<div class="line-header rounded" tabindex="0" ref="lineHeader">
 			<div class="d-flex align-center py-2 px-4">
 				<BoardAnyTitleInput
+					data-testid="media-line-title"
 					:value="title"
 					scope="column"
 					:isEditMode="isEditMode"
