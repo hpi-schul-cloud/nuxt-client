@@ -9,7 +9,7 @@
 		/>
 		<v-main
 			id="main-content"
-			:class="{ 'fixed-position': isMobile && sidebarExpanded }"
+			:class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }"
 		>
 			<application-error-wrapper>
 				<AlertContainer />
@@ -33,14 +33,10 @@ import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
 
-const { lgAndUp, mdAndDown } = useDisplay();
+const { lgAndUp } = useDisplay();
 
 const isDesktop = computed(() => {
 	return lgAndUp.value;
-});
-
-const isMobile = computed(() => {
-	return mdAndDown.value;
 });
 
 const sidebarExpanded = ref(isDesktop.value);
@@ -49,9 +45,3 @@ const onToggleSidebar = () => {
 	sidebarExpanded.value = !sidebarExpanded.value;
 };
 </script>
-<style lang="scss" scoped>
-.fixed-position {
-	position: fixed;
-	width: 100%;
-}
-</style>
