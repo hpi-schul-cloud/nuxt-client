@@ -1,5 +1,5 @@
 <template>
-	<VMenu max-width="215">
+	<VMenu width="215">
 		<template v-slot:activator="{ props }">
 			<VBtn
 				v-bind="props"
@@ -61,3 +61,9 @@ const logout = () => {
 	authModule.logout();
 };
 </script>
+
+<style scoped>
+:deep(.v-list-group__items .v-list-item) {
+	padding-inline-start: 16px !important;
+}
+</style>

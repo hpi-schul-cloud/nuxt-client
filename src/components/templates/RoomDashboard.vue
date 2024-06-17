@@ -1,5 +1,5 @@
 <template>
-	<div class="rooms-container">
+	<div>
 		<div v-if="role === Roles.Teacher">
 			<draggable
 				v-model="roomData.elements"
@@ -8,7 +8,7 @@
 				:delay="touchDelay"
 				:sort="sortable"
 				:force-fallback="true"
-				ghost-class="ghost"
+				ghost-class="opacity-0"
 				class="elements"
 				@update:modelValue="onSort"
 				@start="dragInProgress = true"
@@ -421,18 +421,3 @@ export default {
 	},
 };
 </script>
-
-<style lang="scss" scoped>
-.rooms-container {
-	max-width: var(--size-content-width-max);
-	margin: 0 auto;
-}
-
-.ghost {
-	opacity: 0;
-}
-
-.share-cancel-button {
-	text-align: right;
-}
-</style>

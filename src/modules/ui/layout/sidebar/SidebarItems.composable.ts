@@ -117,6 +117,7 @@ export const useSidebarItems = () => {
 			rel: "noopener",
 			feature: "ACCESSIBILITY_REPORT_EMAIL",
 			featureValue: `${envConfigModule.getEnv.ACCESSIBILITY_REPORT_EMAIL}`,
+			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
 		},
 		{
 			to: "/imprint",
@@ -161,9 +162,7 @@ export const useSidebarItems = () => {
 			testId: "accessibility-statement",
 			target: "_blank",
 			rel: "noopener",
-			feature: "SC_THEME",
-			featureValue:
-				SchulcloudTheme.Brb || SchulcloudTheme.N21 || SchulcloudTheme.Thr,
+			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
 		},
 		{
 			title: "components.legacy.footer.github",
@@ -175,8 +174,7 @@ export const useSidebarItems = () => {
 			href: "/security",
 			title: "components.legacy.footer.security",
 			testId: "security",
-			feature: "SC_THEME",
-			featureValue: SchulcloudTheme.Default,
+			theme: [SchulcloudTheme.Default],
 		},
 	];
 
