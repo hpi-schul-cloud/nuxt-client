@@ -1,8 +1,7 @@
 <template>
 	<DefaultWireframe
 		ref="main"
-		headline=""
-		:full-width="true"
+		:full-width="false"
 		:fab-items="fabItems"
 		@onFabItemClick="fabItemClickHandler"
 	>
@@ -70,7 +69,7 @@ const props = defineProps({
 
 const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 
-const fabItems: ComputedRef<Fab | null> = computed(() => {
+const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 	if (authModule.getUserPermissions.includes("COURSE_CREATE".toLowerCase())) {
 		const actions: FabAction[] = [
 			{
@@ -118,7 +117,7 @@ const fabItems: ComputedRef<Fab | null> = computed(() => {
 		return fab;
 	}
 
-	return null;
+	return undefined;
 });
 
 const isLoading: ComputedRef<boolean> = computed(() => {
