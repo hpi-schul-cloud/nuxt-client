@@ -45,6 +45,7 @@
 							sort: false,
 						}"
 						class="d-flex flex-grid flex-shrink-1 py-4 px-6 ga-6 flex-1-1 scrollable-line"
+						data-testid="available-media-line-space"
 						:class="{ 'flex-wrap': !isList }"
 						@start="dragStart"
 						@end="onElementDragEnd"

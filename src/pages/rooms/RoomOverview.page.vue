@@ -5,34 +5,31 @@
 			:has-import-token="!!importToken"
 		>
 			<template #header>
-				<h1 class="text-h3 pt-2">
+				<h1 class="text-h3 py-2 mb-4">
 					{{ $t("pages.rooms.index.courses.active") }}
 				</h1>
-				<div class="mb-5 header-div">
-					<div class="btn">
-						<v-btn
-							variant="outlined"
-							size="small"
-							to="/rooms-list"
-							data-testid="go-to-all-courses"
-						>
-							{{ $t("pages.rooms.index.courses.all") }}
-						</v-btn>
-					</div>
-					<div class="toggle-div">
-						<v-switch
-							v-if="isTouchDevice"
-							v-model="allowDragging"
-							class="enable-disable"
-							:label="$t('pages.rooms.index.courses.arrangeCourses')"
-							:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
-							:true-icon="mdiCheck"
-						/>
-					</div>
+				<div class="mb-5 header-actions-section">
+					<v-btn
+						variant="outlined"
+						size="small"
+						to="/rooms-list"
+						data-testid="go-to-all-courses"
+					>
+						{{ $t("pages.rooms.index.courses.all") }}
+					</v-btn>
+					<v-switch
+						v-if="isTouchDevice"
+						v-model="allowDragging"
+						class="enable-disable"
+						:label="$t('pages.rooms.index.courses.arrangeCourses')"
+						:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
+						:true-icon="mdiCheck"
+						hide-details
+					/>
 				</div>
 			</template>
 			<template #page-content>
-				<div class="rooms-container">
+				<div>
 					<v-text-field
 						ref="search"
 						v-model="searchText"
@@ -43,7 +40,7 @@
 						:label="$t('pages.rooms.index.search.label')"
 						:append-inner-icon="mdiMagnify"
 						:aria-label="$t('pages.rooms.index.search.label')"
-						data-testid="search-field"
+						data-testid="search-field-course"
 					/>
 					<div
 						v-for="(row, rowIndex) in dimensions.rowCount"
@@ -444,10 +441,13 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-.rooms-container {
-	max-width: 600px;
-	margin: 0 auto;
+<style scoped>
+.header-actions-section {
+	width: 100%;
+	height: 56px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .room-overview-row {
@@ -455,27 +455,11 @@ export default defineComponent({
 	justify-content: space-between;
 }
 
-.header-div {
-	display: flex;
-	align-items: center;
-	width: 100%;
-
-	.btn {
-		display: inline-block;
-		flex: 1;
-	}
-
-	.toggle-div {
-		display: inline-block;
-	}
-}
-
 :deep(.v-messages) {
 	display: none;
 }
 
 :deep(.v-input) {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	margin-top: 0 !important;
 }
 </style>

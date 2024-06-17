@@ -1,5 +1,5 @@
 <template>
-	<div ref="ghostColumnRef" :class="{ 'pl-2': !isListBoard }">
+	<div ref="ghostColumnRef" :class="{ 'pl-4 pr-6': !isListBoard }">
 		<BoardColumnGhostHeader
 			:label="title"
 			:isColumnActive="isColumnHovered"
