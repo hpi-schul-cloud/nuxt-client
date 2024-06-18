@@ -1,6 +1,9 @@
 <template>
 	<div class="wireframe-container">
-		<div class="wireframe-header sticky">
+		<div
+			class="wireframe-header sticky"
+			:class="{ 'old-layout': oldLayoutEnabled }"
+		>
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -63,8 +66,9 @@
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { defineComponent, PropType } from "vue";
+import { defineComponent, PropType, computed } from "vue";
 import { Fab } from "./default-wireframe.types";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 export default defineComponent({
 	inheritAttrs: false,
@@ -114,14 +118,22 @@ export default defineComponent({
 		},
 	},
 	setup() {
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
 		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+
+		const oldLayoutEnabled = computed(() => {
+			return !envConfigModule.getEnv.FEATURE_NEW_LAYOUT_ENABLED;
+		});
 
 		return {
 			isMobile,
+			oldLayoutEnabled,
 		};
 	},
 });
 </script>
+
 <style lang="scss" scoped>
 @import "~vuetify/settings";
 
@@ -172,6 +184,10 @@ export default defineComponent({
 	top: 64px;
 	z-index: var(--layer-sticky-header);
 	background-color: rgb(var(--v-theme-white));
+}
+
+.old-layout {
+	top: 0;
 }
 
 @media #{map-get($display-breakpoints, 'lg-and-up')} {
