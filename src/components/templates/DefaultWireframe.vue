@@ -62,75 +62,66 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { defineComponent, PropType, computed } from "vue";
+import { PropType, computed, useSlots } from "vue";
 import { Fab } from "./default-wireframe.types";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
-export default defineComponent({
+const props = defineProps({
+	breadcrumbs: {
+		type: Array,
+		required: false,
+		default: () => [],
+	},
+	headline: {
+		type: String,
+		required: false,
+		default: null,
+	},
+	fullWidth: {
+		type: Boolean,
+	},
+	fabItems: {
+		type: Object as PropType<Fab>,
+		required: false,
+		default: null,
+	},
+	allowOverflowX: {
+		type: Boolean,
+		required: false,
+		default: false,
+	},
+	hideBorder: {
+		type: Boolean,
+	},
+	dataTestid: {
+		type: String as PropType<string | null>,
+		default: null,
+	},
+});
+
+defineEmits({
+	onFabItemClick: (event: string) => (event ? true : false),
+});
+
+defineOptions({
 	inheritAttrs: false,
-	components: {
-		vCustomBreadcrumbs,
-		SpeedDialMenu,
-		SpeedDialMenuAction,
-	},
-	props: {
-		breadcrumbs: {
-			type: Array,
-			required: false,
-			default: () => [],
-		},
-		headline: {
-			type: String,
-			required: false,
-			default: null,
-		},
-		fullWidth: {
-			type: Boolean,
-		},
-		fabItems: {
-			type: Object as PropType<Fab>,
-			required: false,
-			default: null,
-		},
-		allowOverflowX: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-		hideBorder: {
-			type: Boolean,
-		},
-		dataTestid: {
-			type: String as PropType<string | null>,
-			default: null,
-		},
-	},
-	emits: {
-		onFabItemClick: (event: string) => (event ? true : false),
-	},
-	computed: {
-		showBorder(): boolean {
-			return !this.hideBorder && !!(this.headline || this.$slots.header);
-		},
-	},
-	setup() {
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+});
+const slots = useSlots();
 
-		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
-		const oldLayoutEnabled = computed(() => {
-			return !envConfigModule.getEnv.FEATURE_NEW_LAYOUT_ENABLED;
-		});
+const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
 
-		return {
-			isMobile,
-			oldLayoutEnabled,
-		};
-	},
+const oldLayoutEnabled = computed(() => {
+	return !envConfigModule.getEnv.FEATURE_NEW_LAYOUT_ENABLED;
+});
+
+const showBorder = computed(() => {
+	return !props.hideBorder && !!(props.headline || slots.header);
 });
 </script>
 
