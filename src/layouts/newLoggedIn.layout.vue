@@ -7,7 +7,10 @@
 			:sidebar-expanded="sidebarExpanded"
 			@sidebar-toggled="onToggleSidebar"
 		/>
-		<v-main id="main-content">
+		<v-main
+			id="main-content"
+			:class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }"
+		>
 			<application-error-wrapper>
 				<AlertContainer />
 				<router-view />
