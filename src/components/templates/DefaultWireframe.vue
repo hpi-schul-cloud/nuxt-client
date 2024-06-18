@@ -68,7 +68,7 @@ import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
 import { PropType, computed, useSlots } from "vue";
 import { Fab } from "./default-wireframe.types";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import EnvConfigModule from "@/store/env-config";
 
 const props = defineProps({
 	breadcrumbs: {
@@ -101,6 +101,10 @@ const props = defineProps({
 		type: String as PropType<string | null>,
 		default: null,
 	},
+	// TODO - remove this when new layout is released
+	envConfigModule: {
+		type: EnvConfigModule,
+	},
 });
 
 defineEmits({
@@ -112,12 +116,10 @@ defineOptions({
 });
 const slots = useSlots();
 
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-
 const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
 
 const oldLayoutEnabled = computed(() => {
-	return !envConfigModule.getEnv.FEATURE_NEW_LAYOUT_ENABLED;
+	return !props.envConfigModule?.getEnv.FEATURE_NEW_LAYOUT_ENABLED;
 });
 
 const showBorder = computed(() => {
