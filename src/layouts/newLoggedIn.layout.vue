@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<!-- TODO - Skip Links not visible -->
 		<SkipLinks />
 		<Sidebar v-model="sidebarExpanded" />
 		<Topbar
