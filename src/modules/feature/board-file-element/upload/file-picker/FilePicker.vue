@@ -42,8 +42,12 @@ export default defineComponent({
 			}
 		);
 
-		const onFileChange = (files: File[]) => {
-			emit("update:file", files[0]);
+		const onFileChange = (files: File[] | File) => {
+			if (Array.isArray(files)) {
+				emit("update:file", files[0]);
+			} else {
+				emit("update:file", files);
+			}
 		};
 
 		return {
