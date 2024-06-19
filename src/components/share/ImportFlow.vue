@@ -19,7 +19,7 @@
 			:is-open="isCopyResultModalOpen"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
-			@dialog-closed="onCopyResultModalClosed"
+			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
 	</div>
 </template>

@@ -129,7 +129,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			dialog.vm.$emit("dialog-closed");
 
-			expect(wrapper.emitted("dialog-closed")).toHaveLength(1);
+			expect(wrapper.emitted("copy-dialog-closed")).toHaveLength(1);
 		});
 	});
 
