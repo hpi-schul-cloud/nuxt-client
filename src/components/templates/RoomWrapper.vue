@@ -3,6 +3,7 @@
 		ref="main"
 		:full-width="false"
 		:fab-items="fabItems"
+		:env-config-module="envConfigModule"
 		@onFabItemClick="fabItemClickHandler"
 	>
 		<template #header>

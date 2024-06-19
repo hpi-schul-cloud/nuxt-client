@@ -1,6 +1,6 @@
 <template>
 	<a href="/">
-		<img src="@/assets/img/logo/logo-image-mono.svg" :alt="altText" />
+		<img src="@/assets/img/logo/nav-cloud-logo.svg" :alt="altText" />
 	</a>
 </template>
 
