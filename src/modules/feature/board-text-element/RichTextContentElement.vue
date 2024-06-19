@@ -41,10 +41,8 @@ export default defineComponent({
 	emits: ["delete:element"],
 	setup(props, { emit }) {
 		const { modelValue } = useContentElementState(props);
-		const {
-			queueScreenReaderNotifications,
-			processQueuedScreenReaderNotifications,
-		} = useAriaLiveNotifier();
+		const { queueScreenReaderNotifications, outputScreenReaderNotifications } =
+			useAriaLiveNotifier();
 
 		const autofocus = ref(false);
 		const element = toRef(props, "element");
@@ -63,7 +61,7 @@ export default defineComponent({
 
 		const onBlur = () => {
 			autofocus.value = false;
-			processQueuedScreenReaderNotifications();
+			outputScreenReaderNotifications();
 		};
 
 		return {
