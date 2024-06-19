@@ -1,27 +1,46 @@
-import { mount } from "@vue/test-utils";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import EnvConfigModule from "@/store/env-config";
+import { ConfigResponse } from "@/serverApi/v3";
 
 describe("DefaultWireframe", () => {
-	it("shows title", () => {
+	const setup = (
+		options: ComponentMountingOptions<typeof DefaultWireframe> = {}
+	) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {} as ConfigResponse,
+		});
+
 		const wrapper = mount(DefaultWireframe, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
 			},
+			...options,
+		});
+
+		return wrapper;
+	};
+
+	it("shows title", () => {
+		const wrapper = setup({
 			props: { fullWidth: true, headline: "dummy title" },
 		});
 
 		const h1 = wrapper.find("h1");
 		expect(h1.text()).toBe("dummy title");
 	});
+
 	it("shows breadcrumbs", () => {
-		const wrapper = mount(DefaultWireframe, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
+		const wrapper = setup({
 			props: {
 				fullWidth: true,
 				headline: "dummy title",
@@ -47,11 +66,8 @@ describe("DefaultWireframe", () => {
 	});
 
 	it("has full width", () => {
-		const wrapper = mount(DefaultWireframe, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-			props: { headline: "dummy title", fullWidth: true },
+		const wrapper = setup({
+			props: { fullWidth: true, headline: "dummy title" },
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
@@ -60,11 +76,8 @@ describe("DefaultWireframe", () => {
 	});
 
 	it("has small width", () => {
-		const wrapper = mount(DefaultWireframe, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-			props: { headline: "dummy title", fullWidth: false },
+		const wrapper = setup({
+			props: { headline: "dummy title" },
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
@@ -73,24 +86,19 @@ describe("DefaultWireframe", () => {
 	});
 
 	it("displays content in slot", () => {
-		const wrapper = mount(DefaultWireframe, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-			props: { headline: "dummy title", fullWidth: false },
+		const wrapper = setup({
+			props: { fullWidth: true, headline: "dummy title" },
 			slots: {
 				default: ["<p>some stuff</p>", "text"],
 			},
 		});
+
 		const contentWrapper = wrapper.find(".main-content");
 		expect(contentWrapper.text()).toBe("some stufftext");
 	});
 
 	it("displays headline in slot", () => {
-		const wrapper = mount(DefaultWireframe, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
+		const wrapper = setup({
 			props: { headline: "property title", fullWidth: false },
 			slots: {
 				header: [
@@ -99,6 +107,7 @@ describe("DefaultWireframe", () => {
 				],
 			},
 		});
+
 		const h1 = wrapper.find("h1");
 		expect(h1.text()).toBe("slot title");
 		const menu = wrapper.find(".menu");
