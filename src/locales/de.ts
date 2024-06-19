@@ -325,6 +325,32 @@ export default {
 		"{type} konnte nicht geladen werden.",
 	"components.board.notifications.errors.notUpdated":
 		"Die Änderungen konnten nicht gespeichert werden.",
+	"components.board.screenReader.notification.cardCreated.success":
+		"Eine Karte wurde von einem anderen Benutzer in Spalte {columnPosition} erstellt.",
+	"components.board.screenReader.notification.columnCreated.success":
+		"Eine Spalte wurde von einem anderen Benutzer erstellt.",
+	"components.board.screenReader.notification.cardDeleted.success":
+		"Eine Karte wurde von einem anderen Benutzer gelöscht.",
+	"components.board.screenReader.notification.columnDeleted.success":
+		"Eine Spalte wurde von einem anderen Benutzer gelöscht.",
+	"components.board.screenReader.notification.cardMovedInSameColumn.success":
+		"In Spalte {columnPosition} wurde eine Karte an Position {newPosition} verschoben.",
+	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
+		"Eine Karte wurde von Spalte {fromColumnPosition} in Spalte {toColumnPosition} verschoben.",
+	"components.board.screenReader.notification.columnMoved.success":
+		"Eine Spalte wurde von Position {oldPosition} an Position {newPosition} verschoben.",
+	"components.board.screenReader.notification.boardTitleUpdated.success":
+		"Der Boardtitel wurde von einem anderen Benutzer in {newTitle} geändert",
+	"components.board.screenReader.notification.boardVisibilityUpdated.published":
+		"Das Board wurde von einem anderen Benutzer veröffentlicht",
+	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
+		"Das Board wurde von einem anderen Benutzer auf den Entwurfsstatus zurückgesetzt.",
+	"components.board.screenReader.notification.columnTitleUpdated.success":
+		"Titel von Spalte {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
+	"components.board.screenReader.notification.cardTitleUpdated.success":
+		"Titel von Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
+	"components.board.screenReader.notification.cardUpdated.success":
+		"Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
 	"components.board": "Board",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",

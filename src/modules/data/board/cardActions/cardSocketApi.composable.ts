@@ -15,6 +15,7 @@ import {
 } from "./cardActionPayload";
 import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPayload";
 import { useDebounceFn } from "@vueuse/core";
+import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
@@ -24,15 +25,18 @@ export const useCardSocketApi = () => {
 	let cardIdsToFetch: string[] = [];
 
 	const { notifySocketError } = useErrorHandler();
+	const {
+		notifyUpdateCardTitleSuccess,
+		notifyCreateElementSuccess,
+		notifyDeleteElementSuccess,
+		notifyMoveElementSuccess,
+		notifyUpdateElementSuccess,
+	} = useBoardAriaNotification();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof CardActions>
 	) => {
-		handle(
-			action,
-			on(CardActions.disconnectSocket, disconnectSocketRequest),
-
-			// success actions
+		const successActions = [
 			on(CardActions.createElementSuccess, cardStore.createElementSuccess),
 			on(CardActions.deleteElementSuccess, cardStore.deleteElementSuccess),
 			on(CardActions.moveElementSuccess, cardStore.moveElementSuccess),
@@ -44,8 +48,9 @@ export const useCardSocketApi = () => {
 				CardActions.updateCardHeightSuccess,
 				cardStore.updateCardHeightSuccess
 			),
+		];
 
-			// failure actions
+		const failureActions = [
 			on(CardActions.createElementFailure, createElementFailure),
 			on(CardActions.deleteElementFailure, deleteElementFailure),
 			on(CardActions.moveElementFailure, moveElementFailure),
@@ -53,7 +58,23 @@ export const useCardSocketApi = () => {
 			on(CardActions.deleteCardFailure, deleteCardFailure),
 			on(CardActions.fetchCardFailure, fetchCardFailure),
 			on(CardActions.updateCardTitleFailure, updateCardTitleFailure),
-			on(CardActions.updateCardHeightFailure, updateCardHeightFailure)
+			on(CardActions.updateCardHeightFailure, updateCardHeightFailure),
+		];
+
+		const ariaLiveNotification = [
+			on(CardActions.updateCardTitleSuccess, notifyUpdateCardTitleSuccess),
+			on(CardActions.createElementSuccess, notifyCreateElementSuccess),
+			on(CardActions.deleteElementSuccess, notifyDeleteElementSuccess),
+			on(CardActions.moveElementSuccess, notifyMoveElementSuccess),
+			on(CardActions.updateElementSuccess, notifyUpdateElementSuccess),
+		];
+
+		handle(
+			action,
+			...successActions,
+			...failureActions,
+			...ariaLiveNotification,
+			on(CardActions.disconnectSocket, disconnectSocketRequest)
 		);
 	};
 
