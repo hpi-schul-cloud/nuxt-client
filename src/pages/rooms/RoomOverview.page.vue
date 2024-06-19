@@ -423,7 +423,6 @@ export default defineComponent({
 		},
 	},
 	mounted() {
-		console.log("Room Overview mounted");
 		document.title = buildPageTitle(
 			this.$t("pages.rooms.index.courses.active")
 		);
