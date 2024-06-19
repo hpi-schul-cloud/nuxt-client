@@ -56,18 +56,17 @@
 			<div v-if="showBorder" class="border" />
 		</div>
 		<v-container
+			fluid
+			class="main-content"
 			:class="{
-				'main-content': true,
 				'container-max-width': !fullWidth,
 				'container-full-width': fullWidth,
-				'overflow-x': allowOverflowX,
+				'overflow-x-auto': allowOverflowX,
 			}"
 		>
-			<div style="padding: 0 var(--space-lg)">
-				<slot />
-			</div>
+			<slot />
 		</v-container>
-	</v-container>
+	</div>
 </template>
 
 <script lang="ts">
@@ -97,7 +96,6 @@ export default defineComponent({
 		},
 		fullWidth: {
 			type: Boolean,
-			required: true,
 		},
 		fabItems: {
 			type: Object as PropType<Fab>,
@@ -109,6 +107,9 @@ export default defineComponent({
 			required: false,
 			default: false,
 		},
+		hideBorder: {
+			type: Boolean,
+		},
 		dataTestid: {
 			type: String as PropType<string | null>,
 			default: null,
@@ -119,11 +120,12 @@ export default defineComponent({
 	},
 	computed: {
 		showBorder(): boolean {
-			return !!(this.headline || this.$slots.header);
+			return !this.hideBorder && !!(this.headline || this.$slots.header);
 		},
 	},
 	setup() {
 		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+
 		return {
 			isMobile,
 		};
@@ -137,11 +139,12 @@ export default defineComponent({
 	margin-bottom: var(--space-md);
 }
 
+.wireframe-container {
+	height: calc(100vh - 64px);
+}
+
 .wireframe-header {
 	padding: 0 var(--space-lg);
-}
-.wireframe-container {
-	padding: 0;
 }
 
 :deep(.v-application__wrap) {
@@ -149,10 +152,7 @@ export default defineComponent({
 }
 
 .main-content {
-	padding: 0;
-}
-.overflow-x {
-	overflow-x: auto;
+	padding: 0 var(--space-lg);
 }
 
 .container-max-width {
@@ -166,8 +166,8 @@ export default defineComponent({
 
 .border {
 	margin-right: calc(-1 * var(--space-lg));
-	margin-bottom: var(--space-xl);
 	margin-left: calc(-1 * var(--space-lg));
+	margin-bottom: var(--space-xl);
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
@@ -179,7 +179,7 @@ export default defineComponent({
 
 .sticky {
 	position: sticky;
-	top: 0;
+	top: 64px;
 	z-index: var(--layer-sticky-header);
 	background-color: rgb(var(--v-theme-white));
 }

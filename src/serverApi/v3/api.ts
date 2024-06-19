@@ -216,6 +216,8 @@ export enum AuthorizationBodyParamsReferenceTypeEnum {
     SchoolExternalTools = 'school-external-tools',
     Boardnodes = 'boardnodes',
     ContextExternalTools = 'context-external-tools',
+    ExternalTools = 'external-tools',
+    Instances = 'instances'
 }
 
 /**
@@ -5589,6 +5591,7 @@ export enum Permission {
     ImportUserMigrate = 'IMPORT_USER_MIGRATE',
     ImportUserUpdate = 'IMPORT_USER_UPDATE',
     ImportUserView = 'IMPORT_USER_VIEW',
+    InstanceView = 'INSTANCE_VIEW',
     InviteAdministrators = 'INVITE_ADMINISTRATORS',
     InviteExperts = 'INVITE_EXPERTS',
     JoinMeeting = 'JOIN_MEETING',

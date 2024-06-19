@@ -8,7 +8,7 @@
 			:title-placeholder="titlePlaceholder"
 			:line-id="line.id"
 			@update:title="$emit('update:line-title', $event)"
-			data-testid="media-board-line-header"
+			:data-testid="'media-board-line-header-' + index"
 		>
 			<template #menu>
 				<MediaBoardLineMenu
@@ -47,6 +47,7 @@
 							bubbleScroll: true,
 						}"
 						class="d-flex flex-grid flex-shrink-1 py-4 px-6 ga-6 flex-1-1 scrollable-line"
+						:data-testid="'media-line-space-' + index"
 						:class="{ 'flex-wrap': !isList }"
 						@start="dragStart"
 						@end="onElementDragEnd"
