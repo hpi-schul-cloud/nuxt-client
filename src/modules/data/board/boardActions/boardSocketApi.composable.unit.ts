@@ -12,7 +12,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 import { DeleteCardFailurePayload } from "../cardActions/cardActionPayload";
@@ -44,6 +44,7 @@ jest.mock("vue-i18n");
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -55,6 +56,9 @@ describe("useBoardSocketApi", () => {
 	let mockedBoardRestApiHandler: DeepMocked<ReturnType<typeof useBoardRestApi>>;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
+	let mockedSharedLastCreatedElementActions: DeepMocked<
+		ReturnType<typeof useSharedLastCreatedElement>
+	>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -79,6 +83,12 @@ describe("useBoardSocketApi", () => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+		mockedSharedLastCreatedElementActions =
+			createMock<ReturnType<typeof useSharedLastCreatedElement>>();
+		mockedSharedLastCreatedElement.mockReturnValue(
+			mockedSharedLastCreatedElementActions
+		);
 	});
 
 	it("should be defined", () => {
@@ -443,6 +453,20 @@ describe("useBoardSocketApi", () => {
 	});
 
 	describe("moveCardRequest", () => {
+		it("should not call action when card is in the same position and same column", () => {
+			const { moveCardRequest } = useBoardSocketApi();
+
+			moveCardRequest({
+				cardId: "test",
+				toColumnId: "fromColumnId",
+				oldIndex: 1,
+				newIndex: 1,
+				fromColumnId: "fromColumnId",
+				fromColumnIndex: 1,
+			});
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).not.toHaveBeenCalled();
+		});
 		it("should call action with correct parameters", () => {
 			const { moveCardRequest } = useBoardSocketApi();
 
@@ -469,10 +493,16 @@ describe("useBoardSocketApi", () => {
 				newColumn,
 			});
 
-			await moveCardRequest({
+			const moveCardPayload = {
 				cardId: "cardId",
 				toColumnId: undefined,
-			} as MoveCardRequestPayload);
+				oldIndex: 0,
+				newIndex: 0,
+				fromColumnId: "ColumnId",
+				fromColumnIndex: 1,
+			};
+
+			await moveCardRequest(moveCardPayload);
 
 			expect(mockedSocketConnectionHandler.emitWithAck).toHaveBeenCalledWith(
 				"create-column-request",
@@ -480,7 +510,7 @@ describe("useBoardSocketApi", () => {
 			);
 			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"move-card-request",
-				{ cardId: "cardId", toColumnId: newColumn.id }
+				{ ...moveCardPayload, toColumnId: newColumn.id }
 			);
 		});
 
@@ -498,7 +528,11 @@ describe("useBoardSocketApi", () => {
 			await moveCardRequest({
 				cardId: "cardId",
 				toColumnId: undefined,
-			} as MoveCardRequestPayload);
+				oldIndex: 0,
+				newIndex: 0,
+				fromColumnId: "ColumnId",
+				fromColumnIndex: 1,
+			});
 
 			expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
 				"notUpdated",

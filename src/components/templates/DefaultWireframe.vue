@@ -1,6 +1,19 @@
 <template>
 	<div class="wireframe-container">
-		<div class="wireframe-header sticky">
+		<div
+			aria-live="polite"
+			id="notify-screen-reader-polite"
+			class="d-sr-only"
+		/>
+		<div
+			aria-live="assertive"
+			id="notify-screen-reader-assertive"
+			class="d-sr-only"
+		/>
+		<div
+			class="wireframe-header sticky"
+			:class="{ 'old-layout': oldLayoutEnabled }"
+		>
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -59,69 +72,71 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { defineComponent, PropType } from "vue";
+import { PropType, computed, useSlots } from "vue";
 import { Fab } from "./default-wireframe.types";
+import EnvConfigModule from "@/store/env-config";
 
-export default defineComponent({
-	inheritAttrs: false,
-	components: {
-		vCustomBreadcrumbs,
-		SpeedDialMenu,
-		SpeedDialMenuAction,
+const props = defineProps({
+	breadcrumbs: {
+		type: Array,
+		required: false,
+		default: () => [],
 	},
-	props: {
-		breadcrumbs: {
-			type: Array,
-			required: false,
-			default: () => [],
-		},
-		headline: {
-			type: String,
-			required: false,
-			default: null,
-		},
-		fullWidth: {
-			type: Boolean,
-		},
-		fabItems: {
-			type: Object as PropType<Fab>,
-			required: false,
-			default: null,
-		},
-		allowOverflowX: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-		hideBorder: {
-			type: Boolean,
-		},
-		dataTestid: {
-			type: String as PropType<string | null>,
-			default: null,
-		},
+	headline: {
+		type: String,
+		required: false,
+		default: null,
 	},
-	emits: {
-		onFabItemClick: (event: string) => (event ? true : false),
+	fullWidth: {
+		type: Boolean,
 	},
-	computed: {
-		showBorder(): boolean {
-			return !this.hideBorder && !!(this.headline || this.$slots.header);
-		},
+	fabItems: {
+		type: Object as PropType<Fab>,
+		required: false,
+		default: null,
 	},
-	setup() {
-		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
-
-		return {
-			isMobile,
-		};
+	allowOverflowX: {
+		type: Boolean,
+		required: false,
+		default: false,
+	},
+	hideBorder: {
+		type: Boolean,
+	},
+	dataTestid: {
+		type: String as PropType<string | null>,
+		default: null,
+	},
+	// TODO - remove this when new layout is released
+	envConfigModule: {
+		type: EnvConfigModule,
 	},
 });
+
+defineEmits({
+	onFabItemClick: (event: string) => (event ? true : false),
+});
+
+defineOptions({
+	inheritAttrs: false,
+});
+const slots = useSlots();
+
+const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+
+const oldLayoutEnabled = computed(() => {
+	return !props.envConfigModule?.getEnv.FEATURE_NEW_LAYOUT_ENABLED;
+});
+
+const showBorder = computed(() => {
+	return !props.hideBorder && !!(props.headline || slots.header);
+});
 </script>
+
 <style lang="scss" scoped>
 @import "~vuetify/settings";
 
@@ -172,6 +187,10 @@ export default defineComponent({
 	top: 64px;
 	z-index: var(--layer-sticky-header);
 	background-color: rgb(var(--v-theme-white));
+}
+
+.old-layout {
+	top: 0;
 }
 
 @media #{map-get($display-breakpoints, 'lg-and-up')} {

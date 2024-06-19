@@ -258,6 +258,12 @@ export const useSidebarItems = () => {
 					target: "_self",
 					testId: "contact",
 				},
+				{
+					title: "global.topbar.actions.training",
+					href: "https://www.lernen.cloud/",
+					target: "_blank",
+					testId: "training",
+				},
 			],
 		},
 		{
