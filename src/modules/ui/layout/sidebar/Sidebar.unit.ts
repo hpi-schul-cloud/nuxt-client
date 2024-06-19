@@ -19,6 +19,10 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envsFactory } from "@@/tests/test-utils";
 
+jest.mock("vue-router", () => ({
+	useRoute: () => ({ path: "rooms-list" }),
+}));
+
 const setup = (permissions?: string[]) => {
 	const authModule = createModuleMocks(AuthModule, {
 		getUserPermissions: permissions,
