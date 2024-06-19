@@ -1,136 +1,125 @@
 <template>
-	<div>
-		<room-wrapper
-			:has-rooms="hasCurrentRooms"
-			:has-import-token="!!importToken"
-		>
-			<template #header>
-				<h1 class="text-h3 py-2 mb-4">
-					{{ $t("pages.rooms.index.courses.active") }}
-				</h1>
-				<div class="mb-5 header-actions-section">
-					<v-btn
-						variant="outlined"
-						size="small"
-						to="/rooms-list"
-						data-testid="go-to-all-courses"
-					>
-						{{ $t("pages.rooms.index.courses.all") }}
-					</v-btn>
-					<v-switch
-						v-if="isTouchDevice"
-						v-model="allowDragging"
-						class="enable-disable"
-						:label="$t('pages.rooms.index.courses.arrangeCourses')"
-						:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
-						:true-icon="mdiCheck"
-						hide-details
-					/>
-				</div>
-			</template>
-			<template #page-content>
-				<div>
-					<v-text-field
-						ref="search"
-						v-model="searchText"
-						class="room-search px-1"
-						variant="solo"
-						rounded
-						single-line
-						:label="$t('pages.rooms.index.search.label')"
-						:append-inner-icon="mdiMagnify"
-						:aria-label="$t('pages.rooms.index.search.label')"
-						data-testid="search-field-course"
-					/>
+	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
+		<template #header>
+			<h1 class="text-h3 py-2 mb-4">
+				{{ $t("pages.rooms.index.courses.active") }}
+			</h1>
+			<div class="mb-5 header-actions-section">
+				<v-btn
+					variant="outlined"
+					size="small"
+					to="/rooms-list"
+					data-testid="go-to-all-courses"
+				>
+					{{ $t("pages.rooms.index.courses.all") }}
+				</v-btn>
+				<v-switch
+					v-if="isTouchDevice"
+					v-model="allowDragging"
+					class="enable-disable"
+					:label="$t('pages.rooms.index.courses.arrangeCourses')"
+					:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
+					:true-icon="mdiCheck"
+					hide-details
+				/>
+			</div>
+		</template>
+		<template #page-content>
+			<div>
+				<v-text-field
+					ref="search"
+					v-model="searchText"
+					class="room-search px-1"
+					variant="solo"
+					rounded
+					single-line
+					:label="$t('pages.rooms.index.search.label')"
+					:append-inner-icon="mdiMagnify"
+					:aria-label="$t('pages.rooms.index.search.label')"
+					data-testid="search-field-course"
+				/>
+				<div
+					v-for="(row, rowIndex) in dimensions.rowCount"
+					:key="rowIndex"
+					class="room-overview-row"
+				>
 					<div
-						v-for="(row, rowIndex) in dimensions.rowCount"
-						:key="rowIndex"
-						class="room-overview-row"
+						v-for="(col, colIndex) in dimensions.colCount"
+						:key="colIndex"
+						class="room-overview-col"
+						:style="{ width: dimensions.cellWidth }"
 					>
-						<div
-							v-for="(col, colIndex) in dimensions.colCount"
-							:key="colIndex"
-							class="room-overview-col"
-							:style="{ width: dimensions.cellWidth }"
-						>
-							<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
-								<vRoomEmptyAvatar
-									v-if="isEmptyGroup(rowIndex, colIndex)"
-									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-									:size="dimensions.cellWidth"
-									@dropEmptyAvatar="
-										setDropElement({ x: colIndex, y: rowIndex })
-									"
-									data-avatar-type="vRoomEmptyAvatar"
-									:data-test-position="`${rowIndex}-${colIndex}`"
-								/>
-								<vRoomGroupAvatar
-									v-else-if="hasGroup(rowIndex, colIndex)"
-									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-									class="room-group-avatar"
-									:data="getDataObject(rowIndex, colIndex)"
-									:size="dimensions.cellWidth"
-									:device="device"
-									:draggable="allowDragging"
-									@clicked="
-										openDialog(getDataObject(rowIndex, colIndex).groupId)
-									"
-									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-									@dragendGroupAvatar="onDragend"
-									@dropGroupAvatar="
-										addGroupElements({ x: colIndex, y: rowIndex })
-									"
-									data-avatar-type="vRoomGroupAvatar"
-									:data-test-position="`${rowIndex}-${colIndex}`"
-								/>
-								<vRoomAvatar
-									v-else
-									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-									class="room-avatar"
-									:item="getDataObject(rowIndex, colIndex)"
-									:size="dimensions.cellWidth"
-									:show-badge="true"
-									:draggable="allowDragging"
-									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-									@dragendAvatar="onDragend"
-									@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
-									data-avatar-type="vRoomAvatar"
-									:data-test-position="`${rowIndex}-${colIndex}`"
-								/>
-							</template>
-							<template v-else>
-								<vRoomEmptyAvatar
-									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-									:size="dimensions.cellWidth"
-									:show-outline="dragging"
-									@dropEmptyAvatar="
-										setDropElement({ x: colIndex, y: rowIndex })
-									"
-									data-avatar-type="vRoomEmptyAvatar"
-									:data-test-position="`${rowIndex}-${colIndex}`"
-								/>
-							</template>
-						</div>
+						<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
+							<vRoomEmptyAvatar
+								v-if="isEmptyGroup(rowIndex, colIndex)"
+								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
+								:size="dimensions.cellWidth"
+								@dropEmptyAvatar="setDropElement({ x: colIndex, y: rowIndex })"
+								data-avatar-type="vRoomEmptyAvatar"
+								:data-test-position="`${rowIndex}-${colIndex}`"
+							/>
+							<vRoomGroupAvatar
+								v-else-if="hasGroup(rowIndex, colIndex)"
+								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
+								class="room-group-avatar"
+								:data="getDataObject(rowIndex, colIndex)"
+								:size="dimensions.cellWidth"
+								:device="device"
+								:draggable="allowDragging"
+								@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
+								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+								@dragendGroupAvatar="onDragend"
+								@dropGroupAvatar="
+									addGroupElements({ x: colIndex, y: rowIndex })
+								"
+								data-avatar-type="vRoomGroupAvatar"
+								:data-test-position="`${rowIndex}-${colIndex}`"
+							/>
+							<vRoomAvatar
+								v-else
+								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
+								class="room-avatar"
+								:item="getDataObject(rowIndex, colIndex)"
+								:size="dimensions.cellWidth"
+								:show-badge="true"
+								:draggable="allowDragging"
+								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+								@dragendAvatar="onDragend"
+								@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
+								data-avatar-type="vRoomAvatar"
+								:data-test-position="`${rowIndex}-${colIndex}`"
+							/>
+						</template>
+						<template v-else>
+							<vRoomEmptyAvatar
+								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
+								:size="dimensions.cellWidth"
+								:show-outline="dragging"
+								@dropEmptyAvatar="setDropElement({ x: colIndex, y: rowIndex })"
+								data-avatar-type="vRoomEmptyAvatar"
+								:data-test-position="`${rowIndex}-${colIndex}`"
+							/>
+						</template>
 					</div>
 				</div>
-				<import-flow
-					:is-active="isImportMode"
-					:token="importToken"
-					:courses="courses"
-					@success="onImportSuccess"
-				/>
-			</template>
-		</room-wrapper>
-		<room-modal
-			v-model:isOpen="groupDialog.isOpen"
-			aria-describedby="folder open"
-			:group-data="groupDialog.groupData"
-			:avatar-size="dimensions.cellWidth"
-			:draggable="allowDragging"
-			tabindex="0"
-			@drag-from-group="dragFromGroup"
-		/>
-	</div>
+			</div>
+		</template>
+	</room-wrapper>
+	<room-modal
+		v-model:isOpen="groupDialog.isOpen"
+		aria-describedby="folder open"
+		:group-data="groupDialog.groupData"
+		:avatar-size="dimensions.cellWidth"
+		:draggable="allowDragging"
+		tabindex="0"
+		@drag-from-group="dragFromGroup"
+	/>
+	<import-flow
+		:is-active="isImportMode"
+		:token="importToken"
+		:courses="courses"
+		@success="onImportSuccess"
+	/>
 </template>
 
 <script>
@@ -434,6 +423,7 @@ export default defineComponent({
 		},
 	},
 	mounted() {
+		console.log("Room Overview mounted");
 		document.title = buildPageTitle(
 			this.$t("pages.rooms.index.courses.active")
 		);
