@@ -1,6 +1,6 @@
 <template>
 	<div class="wireframe-container">
-    <div
+		<div
 			aria-live="polite"
 			id="notify-screen-reader-polite"
 			class="d-sr-only"
