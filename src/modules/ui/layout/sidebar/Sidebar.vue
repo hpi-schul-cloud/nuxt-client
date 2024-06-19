@@ -1,17 +1,26 @@
 <template>
 	<VNavigationDrawer>
-		<SidebarLogo />
 		<VList open-strategy="multiple">
+			<div class="d-flex align-center">
+				<VBtn
+					class="ml-1"
+					:icon="mdiMenuOpen"
+					@click="() => $emit('update:modelValue', false)"
+					size="default"
+					flat
+				/>
+				<CloudLogo class="mt-1" />
+			</div>
 			<div class="pb-3">
 				<template v-for="item in pageItems" :key="item.title">
 					<SidebarCategoryItem
 						v-if="isSidebarCategoryItem(item)"
 						:item="item"
 					/>
-					<SidebarItem v-else :item="item" />
+					<SidebarItem v-else :item="item" :draggable="false" />
 				</template>
 			</div>
-			<v-divider />
+			<VDivider aria-hidden="true" />
 			<div class="py-3">
 				<SidebarCategoryItem
 					v-for="link in metaItems"
@@ -19,18 +28,16 @@
 					:item="link"
 				/>
 			</div>
-			<VDivider />
+			<VDivider aria-hidden="true" />
 			<div class="pt-3">
 				<SidebarItem
 					v-for="link in legalItems"
 					:key="link.title"
 					:item="link"
+					:draggable="false"
 				/>
 			</div>
 		</VList>
-		<div data-testid="sidebar-instance-name" class="ml-4 pb-3 text-disabled">
-			&#169; {{ currentYear }} {{ theme.name }}
-		</div>
 	</VNavigationDrawer>
 </template>
 
@@ -40,17 +47,16 @@ import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
-	THEME_KEY,
 } from "@/utils/inject";
-import SidebarLogo from "./SidebarLogo.vue";
+import CloudLogo from "../CloudLogo.vue";
 import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
+import { mdiMenuOpen } from "@mdi/js";
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-const theme = injectStrict(THEME_KEY);
 
 const { pageLinks, legalLinks, metaLinks } = useSidebarItems();
 
@@ -70,38 +76,44 @@ const userHasPermission = (item: SidebarSingleItem | SidebarGroupItem) => {
 };
 
 const hasFeatureEnabled = (item: SidebarSingleItem | SidebarGroupItem) => {
-	if (!item.feature) {
-		return true;
-	}
+	if (!item.feature) return true;
 
 	return envConfigModule.getEnv[item.feature] === (item.featureValue ?? true);
 };
 
+const isEnabledForTheme = (item: SidebarSingleItem | SidebarGroupItem) => {
+	if (!item.theme) return true;
+
+	return item.theme.includes(envConfigModule.getEnv.SC_THEME);
+};
+
 const getItemsForUser = (items: SidebarItems) => {
-	const pageItems = items.filter((item) => {
+	const sidebarItems = items.filter((item) => {
 		if (isSidebarCategoryItem(item)) {
 			item.children = item.children.filter((child) => {
-				const childHasFeature = hasFeatureEnabled(child);
-
-				return userHasPermission(child) && childHasFeature;
+				return (
+					userHasPermission(child) &&
+					hasFeatureEnabled(child) &&
+					isEnabledForTheme(child)
+				);
 			});
 		}
 
-		const categoryHasFeature = hasFeatureEnabled(item);
-
-		return userHasPermission(item) && categoryHasFeature;
+		return (
+			userHasPermission(item) &&
+			hasFeatureEnabled(item) &&
+			isEnabledForTheme(item)
+		);
 	});
 
-	return pageItems;
+	return sidebarItems;
 };
 
-const pageItems = computed(() => getItemsForUser(pageLinks.value));
-const metaItems = computed(
-	() => getItemsForUser(metaLinks.value) as SidebarGroupItem[]
-);
 const legalItems = computed(
 	() => getItemsForUser(legalLinks.value) as SidebarSingleItem[]
 );
-
-const currentYear = computed(() => new Date().getFullYear());
+const metaItems = computed(
+	() => getItemsForUser(metaLinks.value) as SidebarGroupItem[]
+);
+const pageItems = computed(() => getItemsForUser(pageLinks.value));
 </script>

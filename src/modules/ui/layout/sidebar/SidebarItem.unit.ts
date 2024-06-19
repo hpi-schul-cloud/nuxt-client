@@ -19,7 +19,11 @@ const childItem: SidebarSingleItem = {
 	to: "/link",
 };
 
-describe("SidebarItem", () => {
+jest.mock("vue-router", () => ({
+	useRoute: () => ({ path: "rooms-list" }),
+}));
+
+describe("@ui-layout/SidebarItem", () => {
 	const setup = (sidebarItem: SidebarSingleItem) => {
 		const wrapper = mount(SidebarItem, {
 			global: {
@@ -45,5 +49,16 @@ describe("SidebarItem", () => {
 		const { wrapper } = setup(childItem);
 
 		expect(wrapper.findComponent(".v-icon").exists()).toBe(false);
+	});
+
+	it("should highlight correct sidebar item", () => {
+		const { wrapper } = setup({
+			icon: "mdiOpen",
+			title: "title",
+			testId: "testId",
+			to: "/rooms-overview",
+		});
+
+		expect(wrapper.classes()).toContain("v-list-item--active");
 	});
 });

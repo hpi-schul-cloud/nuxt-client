@@ -29,7 +29,11 @@ const groupItem: SidebarGroupItem = {
 	],
 };
 
-describe("SidebarCategoryItem", () => {
+jest.mock("vue-router", () => ({
+	useRoute: () => ({ path: "rooms-list" }),
+}));
+
+describe("@ui-layout/SidebarCategoryItem", () => {
 	const setup = (sidebarItem: SidebarGroupItem) => {
 		const wrapper = mount(SidebarCategoryItem, {
 			global: {

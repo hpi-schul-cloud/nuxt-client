@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * HPI Schul-Cloud Server API
- * This is v3 of HPI Schul-Cloud Server. Checkout /docs for v1.
+ * Schulcloud-Verbund-Software Server API
+ * This is v3 of Schulcloud-Verbund-Software Server. Checkout /docs for v1.
  *
  * The version of the OpenAPI document: 3.0
  * 
@@ -26,7 +26,9 @@ export enum FileRecordParentType {
     TASKS = 'tasks',
     LESSONS = 'lessons',
     SUBMISSIONS = 'submissions',
-    BOARDNODES = 'boardnodes'
+    GRADINGS = 'gradings',
+    BOARDNODES = 'boardnodes',
+    EXTERNALTOOLS = 'externaltools'
 }
 
 
