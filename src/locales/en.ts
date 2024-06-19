@@ -323,7 +323,32 @@ export default {
 		"{type} could not be loaded.",
 	"components.board.notifications.errors.notUpdated":
 		"Your changes could not be saved.",
-
+	"components.board.screenReader.notification.cardCreated.success":
+		"A card was created by another user in column {columnPosition}.",
+	"components.board.screenReader.notification.columnCreated.success":
+		"A column was created by another user.",
+	"components.board.screenReader.notification.cardDeleted.success":
+		"A card was deleted by another user.",
+	"components.board.screenReader.notification.columnDeleted.success":
+		"A column was deleted by another user.",
+	"components.board.screenReader.notification.cardMovedInSameColumn.success":
+		"In column {columnPosition}, a card was moved to position {newPosition}.",
+	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
+		"A card was moved from column {fromColumnPosition} to column {toColumnPosition}.",
+	"components.board.screenReader.notification.columnMoved.success":
+		"A column was moved from position {oldPosition} to position {newPosition}.",
+	"components.board.screenReader.notification.boardTitleUpdated.success":
+		"The board title was changed to {newTitle} by another user.",
+	"components.board.screenReader.notification.boardVisibilityUpdated.published":
+		"The board was published by another user.",
+	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
+		"The board was reverted to draft by another user.",
+	"components.board.screenReader.notification.columnTitleUpdated.success":
+		"Title of column {columnPosition} was changed to {newTitle} by another user.",
+	"components.board.screenReader.notification.cardTitleUpdated.success":
+		"Title of card {cardPosition} in column {columnPosition} was changed to {newTitle} by another user.",
+	"components.board.screenReader.notification.cardUpdated.success":
+		"Card {cardPosition} in column {columnPosition} was updated by another user.",
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",

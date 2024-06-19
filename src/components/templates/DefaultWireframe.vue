@@ -1,6 +1,16 @@
 <template>
 	<div class="wireframe-container">
 		<div
+			aria-live="polite"
+			id="notify-screen-reader-polite"
+			class="d-sr-only"
+		/>
+		<div
+			aria-live="assertive"
+			id="notify-screen-reader-assertive"
+			class="d-sr-only"
+		/>
+		<div
 			class="wireframe-header sticky"
 			:class="{ 'old-layout': oldLayoutEnabled }"
 		>
