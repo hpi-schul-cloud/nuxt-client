@@ -82,7 +82,7 @@
 					:is-open="isCopyModalOpen"
 					:copy-result-items="copyResultModalItems"
 					:copy-result-root-item-type="copyResultRootItemType"
-					@dialog-closed="onCopyResultModalClosed"
+					@copy-dialog-closed="onCopyResultModalClosed"
 				/>
 				<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
 			</DefaultWireframe>
