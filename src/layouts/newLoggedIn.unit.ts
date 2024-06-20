@@ -19,6 +19,10 @@ import { SchulcloudTheme } from "@/serverApi/v3";
 import NewLoggedIn from "./newLoggedIn.layout.vue";
 import { mount } from "@vue/test-utils";
 
+jest.mock("vue-router", () => ({
+	useRoute: () => ({ path: "rooms-list" }),
+}));
+
 const setup = () => {
 	const authModule = createModuleMocks(AuthModule, {
 		getUserPermissions: [],
