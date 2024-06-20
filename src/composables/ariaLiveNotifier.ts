@@ -1,71 +1,79 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
-const silentMode = ref(false);
-let intervalHandle: NodeJS.Timeout | null = null;
+const queueingMode = ref(false);
+let handle: NodeJS.Timeout | null = null;
 
 export const useAriaLiveNotifier = () => {
-	const messagesPolite = ref<string[]>([]);
-	const messagesAssertive = ref<string[]>([]);
+	const messages = ref({
+		polite: <string[]>[],
+		assertive: <string[]>[],
+	});
+
+	const numberOfMessages = computed(
+		() => messages.value["polite"].length + messages.value["assertive"].length
+	);
+
 	const notifyOnScreenReader = (
 		message: string,
-		importance: "off" | "polite" | "assertive" = "polite"
+		importance: "polite" | "assertive" = "polite"
 	) => {
-		if (importance === "polite") {
-			messagesPolite.value.push(message);
-		}
-
-		if (importance === "assertive") {
-			messagesAssertive.value.push(message);
-		}
-
-		checkMessage();
+		messages.value[importance].push(message);
+		handleMessageOutput();
 	};
 
-	const checkMessage = () => {
-		if (messagesPolite.value.length > 0 || messagesAssertive.value.length > 0) {
-			if (silentMode.value === true) {
-				if (!intervalHandle) {
-					intervalHandle = setInterval(checkMessage, 1000);
-				}
-			} else {
-				writeMessages();
-				if (intervalHandle) {
-					clearInterval(intervalHandle);
-				}
+	const handleMessageOutput = () => {
+		if (numberOfMessages.value > 0) {
+			if (queueingMode.value === true) {
+				ensurePeriodicRetry();
+				return;
 			}
+			writeAllMessages();
+			stopPeriodicRetry();
 		}
 	};
 
-	const writeMessages = () => {
-		const elementPolite = document.getElementById(
-			"notify-screen-reader-polite"
+	const ensurePeriodicRetry = () => {
+		if (handle === undefined) {
+			handle = setInterval(handleMessageOutput, 1000);
+		}
+	};
+
+	const stopPeriodicRetry = () => {
+		if (handle) {
+			clearInterval(handle);
+		}
+	};
+
+	const writeAllMessages = () => {
+		writeMessages("polite");
+		writeMessages("assertive");
+	};
+
+	const writeMessages = (importance: "polite" | "assertive") => {
+		const element = document.getElementById(
+			`notify-screen-reader-${importance}`
 		);
-		const elementAssertive = document.getElementById(
-			"notify-screen-reader-assertive"
-		);
-		if (!(elementPolite && elementAssertive)) {
-			console.error(`Element with id notify-screen-reader not found`);
+
+		if (!element) {
+			console.error(
+				`Element with id notify-screen-reader-${importance} not found`
+			);
 			return;
 		}
 
-		elementPolite.innerHTML = messagesPolite.value
+		element.innerHTML = messages.value[importance]
 			.map((m) => `<span>${m}</span>`)
 			.join("");
 
-		elementAssertive.innerHTML = messagesAssertive.value
-			.map((m) => `<span>${m}</span>`)
-			.join("");
-
-		messagesPolite.value = [];
-		messagesAssertive.value = [];
+		messages.value[importance] = [];
 	};
 
 	const queueScreenReaderNotifications = () => {
-		silentMode.value = true;
+		queueingMode.value = true;
 	};
 
 	const outputScreenReaderNotifications = () => {
-		silentMode.value = false;
+		queueingMode.value = false;
 	};
 
 	// setTimeout(() => {
