@@ -25,6 +25,7 @@
 				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
 			</BoardMenu>
 		</FileContent>
+		<ImageDisplay v-else-if="hasError === true" :is-edit-mode="false" />
 		<FileUpload
 			v-else
 			:elementId="element.id"
@@ -66,6 +67,7 @@ import {
 	watch,
 } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
+import undefined from "./content/display/image-display/ImageDisplay.vue";
 import FileContent from "./content/FileContent.vue";
 import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
@@ -95,12 +97,13 @@ export default defineComponent({
 		const fileContentElement = ref(null);
 		const isLoadingFileRecord = ref(true);
 		const element = toRef(props, "element");
+		const hasError = ref(false);
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
-		const { fetchFile, upload, getFileRecord } = useFileStorageApi();
+		const { fetchFile, upload, getFileRecordRef } = useFileStorageApi();
 
-		const fileRecord = getFileRecord(element.value.id);
+		const fileRecord = getFileRecordRef(element.value.id);
 
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
 
@@ -144,15 +147,27 @@ export default defineComponent({
 		});
 
 		watch(element.value, async () => {
-			isLoadingFileRecord.value = true;
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
-			isLoadingFileRecord.value = false;
+			handleFetchFile();
 		});
 
 		onMounted(async () => {
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
-			isLoadingFileRecord.value = false;
+			handleFetchFile();
 		});
+
+		const handleFetchFile = async (): Promise<void> => {
+			isLoadingFileRecord.value = true;
+			await tryFetchFile();
+			isLoadingFileRecord.value = false;
+		};
+
+		const tryFetchFile = async () => {
+			try {
+				await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+				hasError.value = false;
+			} catch (error) {
+				hasError.value = true;
+			}
+		};
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
@@ -168,10 +183,6 @@ export default defineComponent({
 			} catch (error) {
 				emit("delete:element", element.value.id);
 			}
-		};
-
-		const onFetchFile = async (): Promise<void> => {
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
 		};
 
 		const onUpdateAlternativeText = (value: string) => {
@@ -207,7 +218,7 @@ export default defineComponent({
 			isUploading,
 			onKeydownArrow,
 			onUploadFile,
-			onFetchFile,
+			onFetchFile: handleFetchFile,
 			onUpdateAlternativeText,
 			onUpdateCaption,
 			onAddAlert,
