@@ -13,6 +13,7 @@
 			@update:value="onUpdateElement"
 			@delete:element="onDeleteElement"
 			@blur="onBlur"
+			@input="onInput"
 		/>
 	</div>
 </template>
@@ -24,6 +25,7 @@ import { defineComponent, PropType, ref, toRef } from "vue";
 import RichTextContentElementDisplay from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
+import { useDebounceFn } from "@vueuse/core";
 
 export default defineComponent({
 	name: "RichTextContentElement",
@@ -55,20 +57,30 @@ export default defineComponent({
 		};
 
 		const onUpdateElement = (text: string) => {
-			queueAriaLiveNotifications();
 			modelValue.value.text = text;
 		};
 
 		const onBlur = () => {
 			autofocus.value = false;
-			outputAriaLiveNotifications();
 		};
+
+		const onInput = () => {
+			queueAriaLiveNotifications();
+			processNotificationsDebounced();
+		};
+
+		const processNotificationsDebounced = useDebounceFn(
+			outputAriaLiveNotifications,
+			1000,
+			{ maxWait: 30000 }
+		);
 
 		return {
 			autofocus,
 			modelValue,
 			onBlur,
 			onDeleteElement,
+			onInput,
 			onUpdateElement,
 		};
 	},
