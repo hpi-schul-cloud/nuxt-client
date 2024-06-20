@@ -1,82 +1,91 @@
 <template>
 	<div>
 		<template v-if="board">
-			<BoardHeader
-				:boardId="board.id"
-				:title="board.title"
-				:titlePlaceholder="t('pages.room.boardCard.label.courseBoard')"
-				:isDraft="!board.isVisible"
-				@update:visibility="onUpdateBoardVisibility"
-				@update:title="onUpdateBoardTitle"
-				@copy:board="onCopyBoard"
-				@share:board="onShareBoard"
-				@delete:board="openDeleteBoardDialog(boardId)"
-			/>
-			<div :class="boardClass" :style="boardStyle">
-				<div>
-					<Sortable
-						:list="board.columns"
-						item-key="id"
-						:class="boardColumnClass"
-						tag="div"
-						:options="{
-							direction: 'horizontal',
-							disabled: isEditMode || !hasMovePermission,
-							group: 'columns',
-							delay: isTouchDetected ? 300 : 0,
-							ghostClass: 'sortable-drag-ghost',
-							easing: 'cubic-bezier(1, 0, 0, 1)',
-							dragClass: 'sortable-drag-board-card',
-							dragoverBubble: true,
-							animation: 250,
-							scroll: true,
-							filter: '.v-card',
-							preventOnFilter: false,
-							forceFallback: true,
-							bubbleScroll: true,
-						}"
-						@end="onDropColumn"
-					>
-						<template #item="{ element, index }">
-							<BoardColumn
-								:data-column-id="element.id"
-								:column="element"
-								:index="index"
-								:key="element.id"
-								:columnCount="board.columns.length"
-								:class="{ 'my-0': isListBoard }"
-								:isListBoard="isListBoard"
-								@reload:board="onReloadBoard"
-								@create:card="onCreateCard"
-								@delete:card="onDeleteCard"
-								@delete:column="onDeleteColumn"
-								@update:column-title="onUpdateColumnTitle(element.id, $event)"
-								@move:column-down="onMoveColumnForward(index, element.id)"
-								@move:column-left="onMoveColumnBackward(index, element.id)"
-								@move:column-right="onMoveColumnForward(index, element.id)"
-								@move:column-up="onMoveColumnBackward(index, element.id)"
-							/>
-						</template>
-					</Sortable>
-				</div>
-				<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
-					<BoardColumnGhost
-						v-if="hasCreateColumnPermission"
-						@create:column="onCreateColumn"
-						:isListBoard="isListBoard"
+			<DefaultWireframe
+				ref="main"
+				:breadcrumbs="breadcrumbs"
+				full-width
+				hide-border
+			>
+				<template #header>
+					<BoardHeader
+						:boardId="board.id"
+						:title="board.title"
+						:titlePlaceholder="t('pages.room.boardCard.label.courseBoard')"
+						:isDraft="!board.isVisible"
+						@update:visibility="onUpdateBoardVisibility"
+						@update:title="onUpdateBoardTitle"
+						@copy:board="onCopyBoard"
+						@share:board="onShareBoard"
+						@delete:board="openDeleteBoardDialog(boardId)"
 					/>
+				</template>
+				<div :class="boardClass" :style="boardStyle">
+					<div>
+						<Sortable
+							:list="board.columns"
+							item-key="id"
+							:class="boardColumnClass"
+							tag="div"
+							:options="{
+								direction: 'horizontal',
+								disabled: isEditMode || !hasMovePermission,
+								group: 'columns',
+								delay: isTouchDetected ? 300 : 0,
+								ghostClass: 'sortable-drag-ghost',
+								easing: 'cubic-bezier(1, 0, 0, 1)',
+								dragClass: 'sortable-drag-board-card',
+								dragoverBubble: true,
+								animation: 250,
+								scroll: true,
+								filter: '.v-card',
+								preventOnFilter: false,
+								forceFallback: true,
+								bubbleScroll: true,
+							}"
+							@end="onDropColumn"
+						>
+							<template #item="{ element, index }">
+								<BoardColumn
+									:data-column-id="element.id"
+									:column="element"
+									:index="index"
+									:key="element.id"
+									:columnCount="board.columns.length"
+									:class="{ 'my-0': isListBoard }"
+									:isListBoard="isListBoard"
+									@reload:board="onReloadBoard"
+									@create:card="onCreateCard"
+									@delete:card="onDeleteCard"
+									@delete:column="onDeleteColumn"
+									@update:column-title="onUpdateColumnTitle(element.id, $event)"
+									@move:column-down="onMoveColumnForward(index, element.id)"
+									@move:column-left="onMoveColumnBackward(index, element.id)"
+									@move:column-right="onMoveColumnForward(index, element.id)"
+									@move:column-up="onMoveColumnBackward(index, element.id)"
+								/>
+							</template>
+						</Sortable>
+					</div>
+					<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
+						<BoardColumnGhost
+							v-if="hasCreateColumnPermission"
+							@create:column="onCreateColumn"
+							:isListBoard="isListBoard"
+						/>
+					</div>
 				</div>
-			</div>
-			<ConfirmationDialog />
-			<AddElementDialog />
-			<LightBox />
-			<CopyResultModal
-				:is-open="isCopyModalOpen"
-				:copy-result-items="copyResultModalItems"
-				:copy-result-root-item-type="copyResultRootItemType"
-				@dialog-closed="onCopyResultModalClosed"
-			/>
-			<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
+				<ConfirmationDialog />
+				<AddElementDialog />
+				<LightBox />
+				<CopyResultModal
+					:is-open="isCopyModalOpen"
+					:copy-result-items="copyResultModalItems"
+					:copy-result-root-item-type="copyResultRootItemType"
+					@copy-dialog-closed="onCopyResultModalClosed"
+				/>
+				<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
+			</DefaultWireframe>
 		</template>
 	</div>
 </template>
@@ -121,9 +130,11 @@ import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
+	breadcrumbs: { type: Array, default: () => [] },
 });
 
 const { t } = useI18n();

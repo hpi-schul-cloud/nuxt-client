@@ -25,6 +25,8 @@ const baseTheme: ThemeDefinition = {
 		"warning-lighten-1": "#fff0e2",
 		error: "#ff1134",
 		"error-darken-1": "#bf0d26",
+		"surface-variant": "#4E555D",
+		"on-surface-variant": "#F7F7F8",
 	},
 	variables: {
 		"high-emphasis-opacity": 1,

@@ -32,6 +32,7 @@
 			>
 				<template #item="{ element, index }">
 					<MediaBoardLine
+						:data-testid="'media-board-line-' + index"
 						:data-line-id="element.id"
 						:index="index"
 						:key="element.id"

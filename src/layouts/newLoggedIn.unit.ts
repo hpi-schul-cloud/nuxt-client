@@ -1,4 +1,4 @@
-import { h } from "vue";
+import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
 import {
 	createTestingI18n,
@@ -18,6 +18,10 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import NewLoggedIn from "./newLoggedIn.layout.vue";
 import { mount } from "@vue/test-utils";
+
+jest.mock("vue-router", () => ({
+	useRoute: () => ({ path: "rooms-list" }),
+}));
 
 const setup = () => {
 	const authModule = createModuleMocks(AuthModule, {
@@ -80,25 +84,31 @@ const defineWindowWidth = (width: number) => {
 };
 
 describe("newLoggedIn", () => {
-	it("should render correctly", () => {
+	it("should render correctly", async () => {
 		const { wrapper } = setup();
+		await nextTick();
+		await nextTick();
 
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should show sidebar on Desktop as default", () => {
+	it("should show sidebar on Desktop as default", async () => {
 		defineWindowWidth(1564);
 
 		const { wrapper } = setup();
+		await nextTick();
+		await nextTick();
 		const sidebar = wrapper.find("nav");
 
 		expect(sidebar.classes()).toContain("v-navigation-drawer--active");
 	});
 
-	it("should not show sidebar on table and smaller as default", () => {
+	it("should not show sidebar on table and smaller as default", async () => {
 		defineWindowWidth(564);
 
 		const { wrapper } = setup();
+		await nextTick();
+		await nextTick();
 		const sidebar = wrapper.find("nav");
 
 		expect(sidebar.classes()).not.toContain("v-navigation-drawer--active");

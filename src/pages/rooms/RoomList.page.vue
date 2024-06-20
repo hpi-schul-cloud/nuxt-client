@@ -1,19 +1,18 @@
 <template>
 	<room-wrapper :has-rooms="hasRooms">
 		<template #header>
-			<h1 class="text-h3 pt-2">
+			<h1 class="text-h3 py-2 mb-4">
 				{{ $t("pages.rooms.index.courses.all") }}
 			</h1>
-			<div class="mb-5 header-div">
-				<div class="btn">
-					<v-btn
-						variant="outlined"
-						size="small"
-						to="/rooms-overview"
-						data-testid="go-to-active-courses"
-						>{{ $t("pages.rooms.index.courses.active") }}
-					</v-btn>
-				</div>
+			<div class="header-actions-section mb-5">
+				<v-btn
+					variant="outlined"
+					size="small"
+					to="/rooms-overview"
+					data-testid="go-to-active-courses"
+				>
+					{{ $t("pages.rooms.index.courses.active") }}
+				</v-btn>
 			</div>
 		</template>
 		<template #page-content>
@@ -28,6 +27,7 @@
 					:label="$t('pages.rooms.index.search.label')"
 					:append-inner-icon="mdiMagnify"
 					:aria-label="$t('pages.rooms.index.search.label')"
+					data-testid="search-field-course"
 				/>
 			</v-row>
 			<v-row>
@@ -35,7 +35,7 @@
 					<v-row>
 						<v-col
 							v-for="room in rooms"
-							:key="room.name"
+							:key="room.title"
 							class="d-flex justify-center cols-12 xs-6 sm-6 lg-4 xl-2"
 							cols="4"
 							xl="2"
@@ -100,10 +100,16 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .search {
 	flex-wrap: nowrap;
 	max-width: 600px;
 	margin: 0 auto;
+}
+
+.header-actions-section {
+	height: 56px;
+	display: flex;
+	align-items: center;
 }
 </style>

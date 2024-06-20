@@ -219,7 +219,7 @@ export default {
 			return found;
 		},
 		onDialogClosed() {
-			this.$emit("dialog-closed");
+			this.$emit("copy-dialog-closed");
 		},
 	},
 };
