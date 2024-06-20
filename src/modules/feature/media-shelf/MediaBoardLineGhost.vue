@@ -1,6 +1,7 @@
 <template>
 	<div class="mx-n4 px-4">
 		<BoardColumnGhostHeader
+			data-testid="create-line-button"
 			:isColumnActive="false"
 			:label="$t('feature.media-shelf.createLine')"
 			@add-column="$emit('create:line')"
@@ -24,6 +25,7 @@
 				bubbleScroll: true,
 			}"
 			class="d-flex flex-grid flex-shrink-1 pa-2 ga-6 flex-1-1"
+			data-testid="ghost-line-space"
 		/>
 	</div>
 </template>

@@ -20,6 +20,7 @@
 				class="task-action"
 				data-testId="task-edit"
 				role="menuitem"
+				:draggable="false"
 			>
 				<v-list-item-title>
 					<v-icon :icon="mdiPencilOutline" class="task-action-icon" />

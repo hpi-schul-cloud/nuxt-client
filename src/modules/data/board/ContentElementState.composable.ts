@@ -20,7 +20,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	const isLoading = ref<boolean>(false);
 
 	watchDebounced<T["content"]>(
-		modelValue.value,
+		modelValue,
 		async (modelValue) => {
 			cardStore.updateElementRequest({
 				element: {

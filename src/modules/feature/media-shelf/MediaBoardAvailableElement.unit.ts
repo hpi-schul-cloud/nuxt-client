@@ -85,7 +85,7 @@ describe("MediaBoardAvailableElement", () => {
 			.mocked(useSharedMediaBoardState)
 			.mockReturnValue(useSharedMediaBoardStateMock);
 
-		jest.useFakeTimers("legacy");
+		jest.useFakeTimers({ legacyFakeTimers: true });
 	});
 
 	afterEach(() => {

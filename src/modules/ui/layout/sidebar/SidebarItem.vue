@@ -7,6 +7,7 @@
 		color="primary"
 		:density="density"
 		tabindex="0"
+		:active="isActive"
 		:data-testid="item.testId"
 	>
 		<template #prepend>
@@ -21,6 +22,7 @@
 <script setup lang="ts">
 import { computed, PropType } from "vue";
 import { SidebarSingleItem } from "../types";
+import { useRoute } from "vue-router";
 
 const props = defineProps({
 	item: {
@@ -29,8 +31,24 @@ const props = defineProps({
 	},
 });
 
+const route = useRoute();
+
+const isActive = computed(() => {
+	const anyCoursePageIsActive =
+		route.path.includes("room") && props.item.to === "/rooms-overview";
+
+	if (anyCoursePageIsActive) {
+		return true;
+	}
+
+	return (
+		route.path.includes(props.item.to as string) ||
+		route.path.includes(props.item.href as string)
+	);
+});
+
 const density = computed(() => {
-	return (props.item as SidebarSingleItem).icon ? "default" : "compact";
+	return props.item.icon ? "default" : "compact";
 });
 
 const hasIcon = (item: SidebarSingleItem) => {

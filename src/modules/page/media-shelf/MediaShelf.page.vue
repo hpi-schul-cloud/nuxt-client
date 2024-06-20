@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe ref="main" :full-width="true">
 		<div class="ml-1 d-flex">
-			<h3 aria-level="1" class="mt-0 me-auto">
+			<h3 aria-level="1" class="mt-0 me-auto" data-testid="page-title">
 				{{ $t("feature.media-shelf.title") }}
 			</h3>
 			<VBtnToggle
