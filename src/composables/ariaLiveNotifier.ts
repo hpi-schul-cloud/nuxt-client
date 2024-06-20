@@ -1,5 +1,6 @@
 import { computed, ref } from "vue";
 
+type Importance = "polite" | "assertive";
 const queueingMode = ref(false);
 let handle: NodeJS.Timeout | null = null;
 
@@ -15,7 +16,7 @@ export const useAriaLiveNotifier = () => {
 
 	const notifyOnScreenReader = (
 		message: string,
-		importance: "polite" | "assertive" = "polite"
+		importance: Importance = "polite"
 	) => {
 		messages.value[importance].push(message);
 		handleMessageOutput();
@@ -49,16 +50,15 @@ export const useAriaLiveNotifier = () => {
 		writeMessages("assertive");
 	};
 
-	const writeMessages = (importance: "polite" | "assertive") => {
+	const writeMessages = (importance: Importance) => {
 		const element = document.getElementById(
 			`notify-screen-reader-${importance}`
 		);
 
 		if (!element) {
-			console.error(
-				`Element with id notify-screen-reader-${importance} not found`
+			throw new Error(
+				`useAriaLiveNotifier: Element with id >notify-screen-reader-${importance}< not found`
 			);
-			return;
 		}
 
 		element.innerHTML = messages.value[importance]
@@ -68,33 +68,17 @@ export const useAriaLiveNotifier = () => {
 		messages.value[importance] = [];
 	};
 
-	const queueScreenReaderNotifications = () => {
+	const queueAriaLiveNotifications = () => {
 		queueingMode.value = true;
 	};
 
-	const outputScreenReaderNotifications = () => {
+	const outputAriaLiveNotifications = () => {
 		queueingMode.value = false;
 	};
 
-	// setTimeout(() => {
-	// 	notifyOnScreenReader("one");
-	// }, 10000);
-
-	// setTimeout(() => {
-	// 	notifyOnScreenReader("Two");
-	// }, 12000);
-
-	// setTimeout(() => {
-	// 	notifyOnScreenReader("three");
-	// }, 13000);
-
-	// setTimeout(() => {
-	// 	notifyOnScreenReader("four");
-	// }, 14000);
-
 	return {
 		notifyOnScreenReader,
-		queueScreenReaderNotifications,
-		outputScreenReaderNotifications,
+		queueAriaLiveNotifications,
+		outputAriaLiveNotifications,
 	};
 };
