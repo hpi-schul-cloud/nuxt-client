@@ -43,7 +43,7 @@ export default defineComponent({
 	emits: ["delete:element"],
 	setup(props, { emit }) {
 		const { modelValue } = useContentElementState(props);
-		const { queueAriaLiveNotifications, outputAriaLiveNotifications } =
+		const { queueAriaLiveNotifications, writeAllNotifications } =
 			useAriaLiveNotifier();
 
 		const autofocus = ref(false);
@@ -70,7 +70,7 @@ export default defineComponent({
 		};
 
 		const processNotificationsDebounced = useDebounceFn(
-			outputAriaLiveNotifications,
+			writeAllNotifications,
 			1000,
 			{ maxWait: 30000 }
 		);
