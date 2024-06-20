@@ -9,6 +9,7 @@
 		@blur="handleBlur"
 		@focus="handleFocus"
 		@ready="handleReady"
+		@input="handleInput"
 	/>
 </template>
 
@@ -37,7 +38,14 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["ready", "focus", "update:value", "blur", "keyboard:delete"],
+	emits: [
+		"ready",
+		"focus",
+		"update:value",
+		"blur",
+		"keyboard",
+		"keyboard:delete",
+	],
 	props: {
 		value: {
 			type: String,
@@ -204,6 +212,8 @@ export default defineComponent({
 			});
 		};
 
+		const handleInput = (event) => emit(event, "keyboard");
+
 		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
 		const showFullToolbar = computed(() => {
 			return props.mode === "simple" && !isMobile.value;
@@ -219,6 +229,7 @@ export default defineComponent({
 			handleBlur,
 			handleFocus,
 			handleDelete,
+			handleInput,
 			handleReady,
 		};
 	},
