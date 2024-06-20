@@ -35,14 +35,14 @@ describe("useAriaLiveNotifier", () => {
 		describe("when queueing is activated", () => {
 			it("should not output messages", () => {
 				jest.useFakeTimers();
-				const { notifyOnScreenReader, queueScreenReaderNotifications } =
+				const { notifyOnScreenReader, queueAriaLiveNotifications } =
 					useAriaLiveNotifier();
 				const element = document.getElementById(
 					"notify-screen-reader-assertive"
 				);
 				const message1 = "Assertive screen reader message 1";
 
-				queueScreenReaderNotifications();
+				queueAriaLiveNotifications();
 				notifyOnScreenReader(message1, "assertive");
 
 				jest.advanceTimersByTime(3000);
@@ -55,20 +55,20 @@ describe("useAriaLiveNotifier", () => {
 				jest.useFakeTimers();
 				const {
 					notifyOnScreenReader,
-					queueScreenReaderNotifications,
-					outputScreenReaderNotifications,
+					queueAriaLiveNotifications,
+					writeAllNotifications,
 				} = useAriaLiveNotifier();
 				const element = document.getElementById("notify-screen-reader-polite");
 				const message1 = "Polite screen reader message 1";
 				const message2 = "Polite screen reader message 2";
 
-				queueScreenReaderNotifications();
+				queueAriaLiveNotifications();
 				notifyOnScreenReader(message1, "polite");
 				notifyOnScreenReader(message2, "polite");
 
 				expect(element?.innerHTML).toBe("");
 
-				outputScreenReaderNotifications();
+				writeAllNotifications();
 				jest.advanceTimersByTime(3000);
 
 				expect(element?.innerHTML).toBe(
