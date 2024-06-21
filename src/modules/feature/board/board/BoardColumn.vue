@@ -189,15 +189,7 @@ export default defineComponent({
 		const onDragEnd = async (event: SortableEvent) => {
 			dragEnd();
 			// console.log("drag end", event);
-			const {
-				newIndex,
-				oldIndex,
-				to,
-				from,
-				item,
-				oldDraggableIndex,
-				newDraggableIndex,
-			} = event;
+			const { newIndex, oldIndex, to, from, item } = event;
 			const cardId = extractDataAttribute(item, "cardId") as string;
 			const fromColumnId = extractDataAttribute(from, "columnId") as string;
 			const toColumnId = extractDataAttribute(to, "columnId");
@@ -208,17 +200,6 @@ export default defineComponent({
 			if (toColumnId !== fromColumnId) {
 				item?.parentNode?.removeChild(item);
 			}
-
-			console.log({
-				cardId,
-				oldIndex,
-				newIndex,
-				fromColumnId,
-				toColumnId,
-				toColumnIndex,
-				oldDraggableIndex,
-				newDraggableIndex,
-			});
 
 			boardStore.moveCardRequest({
 				cardId,
