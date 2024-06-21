@@ -7,10 +7,11 @@ describe("useAriaLiveNotifier", () => {
 					<div id="notify-screen-reader-polite"></div>
 					<div id="notify-screen-reader-assertive"></div>
 				</div>`;
+
+		jest.useFakeTimers();
 	});
 
 	it("should notify on screen reader on 'aria-live=assertive' mode", () => {
-		jest.useFakeTimers();
 		const { notifyOnScreenReader } = useAriaLiveNotifier();
 		const element = document.getElementById("notify-screen-reader-assertive");
 		const message = "Assertive screen reader message";
@@ -21,7 +22,6 @@ describe("useAriaLiveNotifier", () => {
 	});
 
 	it("should notify on screen reader on 'aria-live=polite' mode", () => {
-		jest.useFakeTimers();
 		const { notifyOnScreenReader } = useAriaLiveNotifier();
 		const element = document.getElementById("notify-screen-reader-polite");
 		const message = "Polite screen reader message";
@@ -34,7 +34,6 @@ describe("useAriaLiveNotifier", () => {
 	describe("ensurePoliteNotifications", () => {
 		describe("when politeNotifications are ensured", () => {
 			it("should notify all collected messages after some time without user interaction", () => {
-				jest.useFakeTimers();
 				const { notifyOnScreenReader, ensurePoliteNotifications } =
 					useAriaLiveNotifier();
 				const element = document.getElementById("notify-screen-reader-polite");
@@ -53,6 +52,20 @@ describe("useAriaLiveNotifier", () => {
 					`<span>${message1}</span><span>${message2}</span>`
 				);
 			});
+		});
+	});
+
+	describe("when aria-live element is not found", () => {
+		it("should throw an error", () => {
+			document.body.innerHTML = `<div></div>`;
+
+			const { notifyOnScreenReader } = useAriaLiveNotifier();
+
+			expect(() => {
+				notifyOnScreenReader("some message", "polite");
+			}).toThrowError(
+				"useAriaLiveNotifier: Element with id >notify-screen-reader-polite< not found"
+			);
 		});
 	});
 });
