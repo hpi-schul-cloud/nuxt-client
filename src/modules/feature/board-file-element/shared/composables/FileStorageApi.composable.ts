@@ -35,7 +35,7 @@ const fileStorageApi = () => {
 		showFileExistsError,
 	} = useFileStorageNotifier();
 
-	const getFileRecordRef = (id: string) => {
+	const getFileRecord = (id: string) => {
 		const existingFileRecord = fileRecords.get(id);
 		const skeletonFileRecord = ref(undefined);
 
@@ -178,7 +178,7 @@ const fileStorageApi = () => {
 		rename,
 		upload,
 		uploadFromUrl,
-		getFileRecordRef,
+		getFileRecord,
 	};
 };
 

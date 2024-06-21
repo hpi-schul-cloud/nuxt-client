@@ -25,7 +25,14 @@
 				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
 			</BoardMenu>
 		</FileContent>
-		<ImageDisplay v-else-if="hasError === true" :is-edit-mode="false" />
+		<ImageDisplay
+			v-else-if="hasError"
+			src="error-src"
+			previewSrc="error-preview-src"
+			:name="t('components.cardElement.fileElement.previewError')"
+			:element="element"
+			:is-edit-mode="false"
+		/>
 		<FileUpload
 			v-else
 			:elementId="element.id"
@@ -66,8 +73,9 @@ import {
 	toRef,
 	watch,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
-import undefined from "./content/display/image-display/ImageDisplay.vue";
+import ImageDisplay from "./content/display/image-display/ImageDisplay.vue";
 import FileContent from "./content/FileContent.vue";
 import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
@@ -82,6 +90,7 @@ export default defineComponent({
 		BoardMenuActionMoveUp,
 		BoardMenuActionMoveDown,
 		BoardMenuActionDelete,
+		ImageDisplay,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
@@ -94,6 +103,7 @@ export default defineComponent({
 		"move-keyboard:edit",
 	],
 	setup(props, { emit }) {
+		const { t } = useI18n();
 		const fileContentElement = ref(null);
 		const isLoadingFileRecord = ref(true);
 		const element = toRef(props, "element");
@@ -101,9 +111,9 @@ export default defineComponent({
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
-		const { fetchFile, upload, getFileRecordRef } = useFileStorageApi();
+		const { fetchFile, upload, getFileRecord } = useFileStorageApi();
 
-		const fileRecord = getFileRecordRef(element.value.id);
+		const fileRecord = getFileRecord(element.value.id);
 
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
 
@@ -216,6 +226,7 @@ export default defineComponent({
 			modelValue,
 			alerts,
 			isUploading,
+			hasError,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile: handleFetchFile,
@@ -225,6 +236,7 @@ export default defineComponent({
 			onDelete,
 			onMoveUp,
 			onMoveDown,
+			t,
 		};
 	},
 });

@@ -5,6 +5,7 @@
 				class="d-flex align-center"
 				style="min-height: 52px"
 				@click="openLightBox"
+				v-bind:class="{ 'has-error': hasImageError }"
 			>
 				<div class="w-100 h-100">
 					<PreviewImage
@@ -29,7 +30,7 @@ import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { ContentElementBar } from "@ui-board";
 import { LightBoxOptions, useLightBox } from "@ui-light-box";
 import { PreviewImage } from "@ui-preview-image";
-import { PropType, computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -59,6 +60,8 @@ export default defineComponent({
 		});
 
 		const openLightBox = () => {
+			if (hasImageError.value) return;
+
 			const previewUrl = convertDownloadToPreviewUrl(props.src);
 
 			const options: LightBoxOptions = {
@@ -87,6 +90,10 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
+.has-error {
+	cursor: default;
+}
+
 .image-display:focus {
 	outline: none;
 }
