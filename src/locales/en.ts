@@ -242,7 +242,7 @@ export default {
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"The usage of the tool could not be determined.",
 	"components.administration.externalToolsSection.dialog.content":
-		"Are you sure you want to delete the <b>{itemName}</b> tool? <br><br>Currently the tool is used as follows: <br><b>{courseCount}</b> Course(s) <br><b>{boardElementCount}</b> Column board(s) <br><br>Attention: If the tool is removed, it can no longer be used for this school.",
+		"Are you sure you want to delete the <b>{itemName}</b> tool? <br><br>Currently the tool is used as follows: <br><b>{courseCount}</b> Course(s) <br><b>{boardElementCount}</b> Column board(s) <br><b>{mediaBoardCount}</b> Media shelves <br><br>Attention: If the tool is removed, it can no longer be used for this school.",
 	"components.administration.externalToolsSection.dialog.title":
 		"Remove External Tool",
 	"components.administration.externalToolsSection.header": "External Tools",

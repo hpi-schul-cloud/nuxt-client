@@ -118,6 +118,7 @@ export class SchoolExternalToolMapper {
 		const mapped: SchoolExternalToolMetadata = {
 			course: response.contextExternalToolCountPerContext.course,
 			boardElement: response.contextExternalToolCountPerContext.boardElement,
+			mediaBoard: response.contextExternalToolCountPerContext.mediaBoard,
 		};
 
 		return mapped;

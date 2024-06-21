@@ -78,6 +78,7 @@
 									itemName: getItemName,
 									courseCount: metadata.course,
 									boardElementCount: metadata.boardElement,
+									mediaBoardCount: metadata.mediaBoard,
 								}
 							)
 						"

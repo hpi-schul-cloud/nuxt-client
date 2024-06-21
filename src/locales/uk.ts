@@ -248,7 +248,7 @@ export default {
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
 	"components.administration.externalToolsSection.dialog.content":
-		"Ви впевнені, що хочете видалити інструмент <b>{itemName}</b>? <br><br>Наразі інструмент використовується таким чином: <br><b>{courseCount}</b> Курс(и) <br><b>{boardElementCount}</b> Дошка(и) стовпців <br><br>Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
+		"Ви впевнені, що хочете видалити інструмент <b>{itemName}</b>? <br><br>Наразі інструмент використовується таким чином: <br><b>{courseCount}</b> Курс(и) <br><b>{boardElementCount}</b> Дошка(и) стовпців <br><b>{mediaBoardCount}</b> Медіаполиці <br><br>Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
 	"components.administration.externalToolsSection.dialog.title":
 		"Видаліть зовнішній інструмент",
 	"components.administration.externalToolsSection.header":

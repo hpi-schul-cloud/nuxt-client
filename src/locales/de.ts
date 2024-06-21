@@ -244,7 +244,7 @@ export default {
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
 	"components.administration.externalToolsSection.dialog.content":
-		"Sind Sie sich sicher, dass Sie das Tool <b>{itemName}</b> löschen wollen? </br></br>Zurzeit wird das Tool wie folgt genutzt: <br><b>{courseCount}</b> Kurs(e) <br><b>{boardElementCount}</b> Spalten-Board(s) <br><br> Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
+		"Sind Sie sich sicher, dass Sie das Tool <b>{itemName}</b> löschen wollen? </br></br>Zurzeit wird das Tool wie folgt genutzt: <br><b>{courseCount}</b> Kurs(e) <br><b>{boardElementCount}</b> Spalten-Board(s) <br><b>{mediaBoardCount}</b> Medienregale <br><br> Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
 	"components.administration.externalToolsSection.dialog.title":
 		"Externes Tool entfernen?",
 	"components.administration.externalToolsSection.header": "Externe Tools",
