@@ -1,4 +1,5 @@
 import { computed, ref } from "vue";
+import { useDebounceFn } from "@vueuse/core";
 
 type Importance = "polite" | "assertive";
 const queueingMode = ref(false);
@@ -60,10 +61,10 @@ export const useAriaLiveNotifier = () => {
 	const writeAllNotifications = () => {
 		writeNotifications("polite");
 		writeNotifications("assertive");
+		stopPeriodicRetry();
 	};
 
 	const writeNotifications = (importance: Importance) => {
-		console.log("writeNotifications", notifications.value[importance]);
 		const element = document.getElementById(
 			`notify-screen-reader-${importance}`
 		);
@@ -74,22 +75,34 @@ export const useAriaLiveNotifier = () => {
 			);
 		}
 
-		element.innerHTML = notifications.value[importance]
-			.map((m) => `<span>${m}</span>`)
-			.join("");
+		if (notifications.value[importance].length > 0) {
+			element.innerHTML = notifications.value[importance]
+				.map((m) => `<span>${m}</span>`)
+				.join("");
+		}
 
 		notifications.value[importance] = [];
 		queueingMode.value = false;
 	};
 
 	const queueAriaLiveNotifications = () => {
-		console.log("queueAriaLiveNotifications");
 		queueingMode.value = true;
 	};
 
+	const ensurePoliteNotifications = () => {
+		queueAriaLiveNotifications();
+		processNotificationsDebounced();
+	};
+
+	const processNotificationsDebounced = useDebounceFn(
+		writeAllNotifications,
+		1500,
+		{ maxWait: 30000 }
+	);
+
 	return {
 		notifyOnScreenReader,
-		queueAriaLiveNotifications,
+		ensurePoliteNotifications,
 		writeAllNotifications,
 	};
 };

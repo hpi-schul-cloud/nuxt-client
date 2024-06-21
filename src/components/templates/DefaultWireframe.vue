@@ -79,6 +79,7 @@ import { useVuetifyBreakpoints } from "@util-device-detection";
 import { PropType, computed, useSlots } from "vue";
 import { Fab } from "./default-wireframe.types";
 import EnvConfigModule from "@/store/env-config";
+import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 
 const props = defineProps({
 	breadcrumbs: {
@@ -134,6 +135,18 @@ const oldLayoutEnabled = computed(() => {
 
 const showBorder = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
+});
+// TODO: remove this!!!
+// WIP: remove this!!!
+const { notifyOnScreenReader } = useAriaLiveNotifier();
+const words = ["one", "two", "three", "four", "five"];
+words.forEach((word, index) => {
+	setTimeout(
+		() => {
+			notifyOnScreenReader(`${word} was message ${index + 1}`);
+		},
+		3000 * index + 5000
+	);
 });
 </script>
 

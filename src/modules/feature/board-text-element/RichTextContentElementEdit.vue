@@ -10,7 +10,7 @@
 			@focus="onFocus"
 			@blur="onBlur"
 			@keyboard:delete="onDelete"
-			@input="onInput"
+			@keyup.capture="onKeyUp"
 		/>
 	</div>
 </template>
@@ -32,7 +32,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
-	emits: ["blur", "delete:element", "input", "update:value"],
+	emits: ["blur", "delete:element", "editing:element", "update:value"],
 	setup(props, { emit }) {
 		const modelValue = useVModel(props, "value", emit);
 		const onUpdateValue = (newValue: string) => (modelValue.value = newValue);
@@ -52,9 +52,9 @@ export default defineComponent({
 
 		const onDelete = () => emit("delete:element");
 
-		const onInput = (event: Event) => emit("input", event);
+		const onKeyUp = () => emit("editing:element");
 
-		return { modelValue, onFocus, onDelete, onBlur, onInput, onUpdateValue };
+		return { modelValue, onFocus, onDelete, onBlur, onKeyUp, onUpdateValue };
 	},
 });
 </script>

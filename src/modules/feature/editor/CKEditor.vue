@@ -212,8 +212,6 @@ export default defineComponent({
 			});
 		};
 
-		const handleInput = (event) => emit(event, "keyboard");
-
 		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
 		const showFullToolbar = computed(() => {
 			return props.mode === "simple" && !isMobile.value;
@@ -229,7 +227,6 @@ export default defineComponent({
 			handleBlur,
 			handleFocus,
 			handleDelete,
-			handleInput,
 			handleReady,
 		};
 	},
