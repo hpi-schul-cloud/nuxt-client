@@ -10,17 +10,8 @@
 	</v-chip>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import { mdiAlert } from "@mdi/js";
-
-export default defineComponent({
-	name: "WarningChip",
-
-	setup() {
-		return { mdiAlert };
-	},
-});
 </script>
 
 <style scoped>
