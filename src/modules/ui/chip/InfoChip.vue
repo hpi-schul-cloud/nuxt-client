@@ -5,18 +5,8 @@
 	</v-chip>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import { mdiInformation } from "@mdi/js";
-
-export default defineComponent({
-	name: "InfoChip",
-	setup() {
-		return {
-			mdiInformation,
-		};
-	},
-});
 </script>
 
 <style scoped>
