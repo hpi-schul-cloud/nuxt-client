@@ -13,7 +13,7 @@
 			@update:value="onUpdateElement"
 			@delete:element="onDeleteElement"
 			@blur="onBlur"
-			@editing:element="onEditingElement"
+			@keyup.capture="onKeyUp"
 		/>
 	</div>
 </template>
@@ -62,14 +62,14 @@ export default defineComponent({
 			autofocus.value = false;
 		};
 
-		const onEditingElement = () => ensurePoliteNotifications();
+		const onKeyUp = () => ensurePoliteNotifications();
 
 		return {
 			autofocus,
 			modelValue,
 			onBlur,
 			onDeleteElement,
-			onEditingElement,
+			onKeyUp,
 			onUpdateElement,
 		};
 	},
