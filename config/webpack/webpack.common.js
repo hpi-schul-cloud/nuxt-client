@@ -218,7 +218,7 @@ module.exports = {
 			// I18n - TS
 			{
 				test: /\.ts$/,
-				loader: "vue-i18n-loader",
+				loader: "@intlify/vue-i18n-loader",
 				include: [path.resolve(__src, "/locales")],
 			},
 			// Vue

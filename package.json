@@ -48,6 +48,7 @@
 		"@babel/preset-env": "^7.24.3",
 		"@golevelup/ts-jest": "^0.4.0",
 		"@intlify/bundle-utils": "^7.4.0",
+		"@intlify/vue-i18n-loader": "^5.0.0",
 		"@jest/globals": "^29.7.0",
 		"@mdi/js": "^7.2.96",
 		"@openapitools/openapi-generator-cli": "^2.7.0",
