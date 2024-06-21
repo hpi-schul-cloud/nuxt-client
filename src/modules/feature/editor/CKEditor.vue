@@ -9,7 +9,6 @@
 		@blur="handleBlur"
 		@focus="handleFocus"
 		@ready="handleReady"
-		@input="handleInput"
 	/>
 </template>
 

@@ -31,7 +31,7 @@ describe("useAriaLiveNotifier", () => {
 		expect(element?.innerHTML).toBe(`<span>${message}</span>`);
 	});
 
-	describe("queueScreenReaderNotifications", () => {
+	describe("ensurePoliteNotifications", () => {
 		describe("when politeNotifications are ensured", () => {
 			it("should notify all collected messages after some time without user interaction", () => {
 				jest.useFakeTimers();

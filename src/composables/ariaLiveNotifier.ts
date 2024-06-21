@@ -2,7 +2,7 @@ import { computed, ref } from "vue";
 import { useDebounceFn } from "@vueuse/core";
 
 type Importance = "polite" | "assertive";
-const queueingMode = ref(false);
+let mode: "write" | "queue" = "write";
 const notifications = ref({
 	polite: <string[]>[],
 	assertive: <string[]>[],
@@ -21,34 +21,38 @@ export const useAriaLiveNotifier = () => {
 		importance: Importance = "polite"
 	) => {
 		notifications.value[importance].push(message);
-		console.log(
-			"notifyOnScreenReader",
-			message,
-			notifications.value[importance].length
-		);
-		handleMessageOutput();
+		handleNotificationWriting();
 	};
 
-	const handleMessageOutput = () => {
-		console.log(
-			"handleMessageOutput",
-			numberOfNotifications.value,
-			queueingMode.value
-		);
+	const ensurePoliteNotifications = () => {
+		mode = "queue";
+		processNotificationsDebounced();
+	};
+
+	const processNotificationsDebounced = useDebounceFn(
+		() => {
+			mode = "write";
+			handleNotificationWriting(); // explicit call needed for test
+		},
+		1500,
+		{ maxWait: 30000 }
+	);
+
+	const handleNotificationWriting = () => {
 		if (numberOfNotifications.value > 0) {
-			if (queueingMode.value === true) {
-				ensurePeriodicRetry();
+			if (mode === "write") {
+				stopPeriodicRetry();
+				writeAllNotifications();
 				return;
+			} else {
+				startPeriodicRetry();
 			}
-			writeAllNotifications();
-			stopPeriodicRetry();
 		}
 	};
 
-	const ensurePeriodicRetry = () => {
-		console.log("ensurePeriodicRetry");
+	const startPeriodicRetry = () => {
 		if (handle === undefined) {
-			handle = setInterval(handleMessageOutput, 1000);
+			handle = setInterval(handleNotificationWriting, 1000);
 		}
 	};
 
@@ -61,10 +65,20 @@ export const useAriaLiveNotifier = () => {
 	const writeAllNotifications = () => {
 		writeNotifications("polite");
 		writeNotifications("assertive");
-		stopPeriodicRetry();
 	};
 
 	const writeNotifications = (importance: Importance) => {
+		const element = getElement(importance);
+
+		if (element && notifications.value[importance].length > 0) {
+			element.innerHTML = notifications.value[importance]
+				.map((m) => `<span>${m}</span>`)
+				.join("");
+			notifications.value[importance] = [];
+		}
+	};
+
+	const getElement = (importance: Importance) => {
 		const element = document.getElementById(
 			`notify-screen-reader-${importance}`
 		);
@@ -75,34 +89,11 @@ export const useAriaLiveNotifier = () => {
 			);
 		}
 
-		if (notifications.value[importance].length > 0) {
-			element.innerHTML = notifications.value[importance]
-				.map((m) => `<span>${m}</span>`)
-				.join("");
-		}
-
-		notifications.value[importance] = [];
-		queueingMode.value = false;
+		return element;
 	};
-
-	const queueAriaLiveNotifications = () => {
-		queueingMode.value = true;
-	};
-
-	const ensurePoliteNotifications = () => {
-		queueAriaLiveNotifications();
-		processNotificationsDebounced();
-	};
-
-	const processNotificationsDebounced = useDebounceFn(
-		writeAllNotifications,
-		1500,
-		{ maxWait: 30000 }
-	);
 
 	return {
 		notifyOnScreenReader,
 		ensurePoliteNotifications,
-		writeAllNotifications,
 	};
 };
