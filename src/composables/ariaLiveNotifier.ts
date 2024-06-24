@@ -78,16 +78,10 @@ export const useAriaLiveNotifier = () => {
 		}
 	};
 
-	const getElement = (importance: Importance) => {
+	const getElement = (importance: Importance): HTMLElement | null => {
 		const element = document.getElementById(
 			`notify-screen-reader-${importance}`
 		);
-
-		if (!element) {
-			throw new Error(
-				`useAriaLiveNotifier: Element with id >notify-screen-reader-${importance}< not found`
-			);
-		}
 
 		return element;
 	};
