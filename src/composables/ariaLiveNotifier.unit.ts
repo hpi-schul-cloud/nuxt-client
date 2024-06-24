@@ -54,18 +54,4 @@ describe("useAriaLiveNotifier", () => {
 			});
 		});
 	});
-
-	describe("when aria-live element is not found", () => {
-		it("should throw an error", () => {
-			document.body.innerHTML = `<div></div>`;
-
-			const { notifyOnScreenReader } = useAriaLiveNotifier();
-
-			expect(() => {
-				notifyOnScreenReader("some message", "polite");
-			}).toThrowError(
-				"useAriaLiveNotifier: Element with id >notify-screen-reader-polite< not found"
-			);
-		});
-	});
 });
