@@ -51,7 +51,7 @@ export const useAriaLiveNotifier = () => {
 	};
 
 	const startPeriodicRetry = () => {
-		if (handle === undefined) {
+		if (handle === null) {
 			handle = setInterval(handleNotificationWriting, 1000);
 		}
 	};
@@ -59,6 +59,7 @@ export const useAriaLiveNotifier = () => {
 	const stopPeriodicRetry = () => {
 		if (handle) {
 			clearInterval(handle);
+			handle = null;
 		}
 	};
 
