@@ -79,7 +79,6 @@ import { useVuetifyBreakpoints } from "@util-device-detection";
 import { PropType, computed, useSlots } from "vue";
 import { Fab } from "./default-wireframe.types";
 import EnvConfigModule from "@/store/env-config";
-import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
 
 const props = defineProps({
 	breadcrumbs: {
@@ -136,6 +135,7 @@ const oldLayoutEnabled = computed(() => {
 const showBorder = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
 });
+</script>
 
 <style lang="scss" scoped>
 @import "~vuetify/settings";
