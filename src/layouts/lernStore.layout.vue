@@ -1,30 +1,19 @@
 <template>
-	<legacy-logged-in v-if="legacyLayout">
-		<v-main id="main-content" class="content">
-			<alert-container />
-			<router-view />
-		</v-main>
-		<loading-state-dialog />
-	</legacy-logged-in>
-
+	<newLoggedIn v-if="isCollection" />
 	<router-view v-else />
 </template>
 
 <script>
-import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
-import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
 import { contentModule } from "@/store";
+import newLoggedIn from "./newLoggedIn.layout.vue";
 
 export default {
 	name: "lernStoreLayout",
 	components: {
-		LoadingStateDialog,
-		LegacyLoggedIn,
-		AlertContainer,
+		newLoggedIn,
 	},
 	computed: {
-		legacyLayout() {
+		isCollection() {
 			return (
 				String(this.$route.query.isCollection) === "true" &&
 				contentModule.getCollectionsFeatureFlag === true
