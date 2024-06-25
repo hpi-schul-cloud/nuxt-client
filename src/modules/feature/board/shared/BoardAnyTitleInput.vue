@@ -16,6 +16,7 @@
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
 		@keydown.enter="onEnter"
+		@update:modelValue="onUpdateTitle"
 	/>
 	<VTextarea
 		v-else
@@ -37,6 +38,7 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
+		@update:modelValue="onUpdateTitle"
 	>
 		<template v-slot:append-inner>
 			<slot />
@@ -45,7 +47,6 @@
 </template>
 
 <script lang="ts">
-import { useVModel } from "@vueuse/core";
 import {
 	computed,
 	defineComponent,
@@ -88,8 +89,7 @@ export default defineComponent({
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "value", emit);
-
+		const modelValue = ref("");
 		const internalIsFocused = ref(false);
 
 		const titleInput = ref<typeof VTextarea | null>(null);
@@ -106,7 +106,12 @@ export default defineComponent({
 			}
 		};
 
+		const onUpdateTitle = (newTitle: string) => {
+			emit("update:value", newTitle);
+		};
+
 		onMounted(() => {
+			modelValue.value = props.value;
 			if (props.isFocused && props.isEditMode) setFocusOnEdit();
 		});
 
@@ -155,6 +160,7 @@ export default defineComponent({
 			onEnter,
 			internalIsFocused,
 			titleInput,
+			onUpdateTitle,
 		};
 	},
 });
