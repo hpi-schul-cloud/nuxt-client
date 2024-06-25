@@ -136,19 +136,6 @@ const oldLayoutEnabled = computed(() => {
 const showBorder = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
 });
-// TODO: remove this!!!
-// WIP: remove this!!!
-const { notifyOnScreenReader } = useAriaLiveNotifier();
-const words = ["one", "two", "three", "four", "five"];
-words.forEach((word, index) => {
-	setTimeout(
-		() => {
-			notifyOnScreenReader(`${word} was message ${index + 1}`);
-		},
-		3000 * index + 5000
-	);
-});
-</script>
 
 <style lang="scss" scoped>
 @import "~vuetify/settings";

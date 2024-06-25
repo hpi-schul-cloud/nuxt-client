@@ -188,7 +188,6 @@ export default defineComponent({
 
 		const onDragEnd = async (event: SortableEvent) => {
 			dragEnd();
-			// console.log("drag end", event);
 			const { newIndex, oldIndex, to, from, item } = event;
 			const cardId = extractDataAttribute(item, "cardId") as string;
 			const fromColumnId = extractDataAttribute(from, "columnId") as string;
