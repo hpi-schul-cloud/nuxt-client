@@ -241,8 +241,16 @@ export default {
 		'The school-specific parameters for the external tool are configured here. After saving the configuration, the tool will be available within the school.<br><br>\nFurther information is available in our <a href="https://docs.dbildungscloud.de/x/uoKqDg" target="_blank">Help section on external tools</a>.',
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"The usage of the tool could not be determined.",
-	"components.administration.externalToolsSection.dialog.content":
-		"Are you sure you want to delete the <b>{itemName}</b> tool? <br><br>Currently the tool is used as follows: <br><b>{courseCount}</b> Course(s) <br><b>{boardElementCount}</b> Column board(s) <br><b>{mediaBoardCount}</b> Media shelves <br><br>Attention: If the tool is removed, it can no longer be used for this school.",
+	"components.administration.externalToolsSection.dialog.content.header":
+		"Sind Sie sich sicher, dass Sie das Tool <b>{itemName}</b> löschen wollen? </br></br>Zurzeit wird das Tool wie folgt genutzt: <br>",
+	"components.administration.externalToolsSection.dialog.content.courses":
+		"<b>{courseCount}</b> Kurs(e) <br>",
+	"components.administration.externalToolsSection.dialog.content.boardElements":
+		"<b>{boardElementCount}</b> Spalten-Board(s) <br>",
+	"components.administration.externalToolsSection.dialog.content.mediaShelfs":
+		"<b>{mediaBoardCount}</b> Medienregale <br><br>",
+	"components.administration.externalToolsSection.dialog.content.warning":
+		"Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
 	"components.administration.externalToolsSection.dialog.title":
 		"Remove External Tool",
 	"components.administration.externalToolsSection.header": "External Tools",

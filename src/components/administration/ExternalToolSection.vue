@@ -69,21 +69,63 @@
 				</v-card-title>
 				<v-card-text class="text--primary">
 					<RenderHTML
-						data-testid="delete-dialog-content"
+						data-testid="delete-dialog-content-header"
 						class="text-md mt-2"
 						:html="
 							t(
-								'components.administration.externalToolsSection.dialog.content',
+								'components.administration.externalToolsSection.dialog.content.header',
 								{
 									itemName: getItemName,
+								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						data-testid="delete-dialog-content-courses"
+						class="text-md"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.courses',
+								{
 									courseCount: metadata.course,
+								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						data-testid="delete-dialog-content-board-elements"
+						class="text-md"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.boardElements',
+								{
 									boardElementCount: metadata.boardElement,
+								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						v-if="true"
+						data-testid="delete-dialog-content-media-shelfs"
+						class="text-md"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.mediaShelfs',
+								{
 									mediaBoardCount: metadata.mediaBoard,
 								}
 							)
 						"
 						component="p"
 					/>
+					{{
+						t(
+							"components.administration.externalToolsSection.dialog.content.warning"
+						)
+					}}
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer />
