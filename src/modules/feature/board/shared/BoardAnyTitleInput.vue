@@ -205,8 +205,8 @@ export default defineComponent({
 	opacity: 1;
 }
 :deep(.v-field__append-inner, .v-field__clearable, .v-field__prepend-inner) {
-    display: flex;
-    align-items: flex-start;
+	display: flex;
+	align-items: flex-start;
 	padding-top: 8px !important;
 }
 </style>

@@ -146,5 +146,16 @@ describe("BoardAnyTitleTitleInput", () => {
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 			expect(textAreaComponent.exists()).toBe(true);
 		});
+
+		it("updates modalValue when prop value changes", async () => {
+			setup({ isEditMode: true, scope: "card" });
+			const newValue = "new title";
+			await wrapper.setProps({ value: newValue });
+			await wrapper.vm.$nextTick();
+
+			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+
+			expect(textAreaComponent.vm.modelValue).toBe(newValue);
+		});
 	});
 });
