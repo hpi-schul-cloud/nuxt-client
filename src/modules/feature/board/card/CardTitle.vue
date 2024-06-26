@@ -29,7 +29,7 @@ export default defineComponent({
 	props: {
 		value: {
 			type: String,
-			required: true,
+			default: "",
 		},
 		isEditMode: {
 			type: Boolean,
