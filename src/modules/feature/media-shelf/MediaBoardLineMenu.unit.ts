@@ -130,5 +130,29 @@ describe("MediaBoardLineMenu", () => {
 
 			expect(wrapper.emitted("update:collapsed")).toEqual([[true]]);
 		});
+
+		it("should use the correct icon", async () => {
+			const { wrapper } = getWrapper();
+
+			const svg = wrapper
+				.findComponent("[data-testid=collapse-line-btn]")
+				.find("svg");
+			const path = svg.find("path");
+
+			// mdi-chevron-up
+			expect(path.attributes("d")).toEqual(
+				"M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"
+			);
+
+			const colorListItem = wrapper.findComponent(
+				"[data-testid=collapse-line-btn]"
+			);
+			await colorListItem.trigger("click");
+
+			// mdi-chevron-down
+			expect(path.attributes("d")).toEqual(
+				"M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
+			);
+		});
 	});
 });
