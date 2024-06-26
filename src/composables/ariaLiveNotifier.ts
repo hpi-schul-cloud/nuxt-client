@@ -66,6 +66,7 @@ export const useAriaLiveNotifier = () => {
 	const writeAllNotifications = () => {
 		writeNotifications("polite");
 		writeNotifications("assertive");
+		console.log("writeAllNotifications");
 	};
 
 	const writeNotifications = (importance: Importance) => {
