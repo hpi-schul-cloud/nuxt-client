@@ -3,7 +3,6 @@
 .vscode
 deploy
 node_modules
-.travis.yml*
 Dockerfile.*
 
 **/*.unit.ts

@@ -21,7 +21,7 @@ describe("@/components/molecules/ContentEduSharingFooter", () => {
 		);
 
 		expect(wrapper.find(".edusharing-footer__logo").attributes("src")).toBe(
-			wrapper.vm.img
+			"Mocked media file"
 		);
 	});
 

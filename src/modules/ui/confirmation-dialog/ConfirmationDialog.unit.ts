@@ -9,7 +9,7 @@ const mockedUseInternalConfirmationDialog = jest.mocked(
 	useInternalConfirmationDialog
 );
 
-describe(DeleteConfirmation.name, () => {
+describe("DeleteConfirmation", () => {
 	const confirmSpy = jest.fn();
 	const cancelSpy = jest.fn();
 	const setup = (options: {

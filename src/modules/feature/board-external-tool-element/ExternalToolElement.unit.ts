@@ -744,7 +744,7 @@ describe("ExternalToolElement", () => {
 
 	describe("when refresh time is over", () => {
 		const setup = () => {
-			jest.useFakeTimers("legacy");
+			jest.useFakeTimers({ legacyFakeTimers: true });
 			const { wrapper, refreshTime } = getWrapper(
 				{
 					element: {

@@ -1,5 +1,5 @@
 import { useSharedElementTypeSelection } from "../shared/SharedElementTypeSelection.composable";
-import { jest } from "@jest/globals";
+import { Jest as jest } from "@jest/environment";
 import { Ref, ref } from "vue";
 
 interface Props {

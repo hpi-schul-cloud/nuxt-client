@@ -12,7 +12,7 @@ type Props = {
 	isEditMode?: boolean;
 };
 
-describe(LinkContentElementDisplay.name, () => {
+describe("LinkContentElementDisplay", () => {
 	const setup = (props: Props) => {
 		const wrapper = mount(LinkContentElementDisplay, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },

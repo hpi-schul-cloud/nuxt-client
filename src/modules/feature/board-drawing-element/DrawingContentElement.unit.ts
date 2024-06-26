@@ -82,7 +82,7 @@ describe("DrawingContentElement", () => {
 
 		describe("when arrow key up is pressed", () => {
 			describe("when component is in edit-mode", () => {
-				it('should NOT emit "move-keyboard:edit"', async () => {
+				it('should emit "move-keyboard:edit"', async () => {
 					const { wrapper } = setup({
 						element: DRAWING_ELEMENT,
 						isEditMode: true,
@@ -96,7 +96,7 @@ describe("DrawingContentElement", () => {
 						})
 					);
 
-					expect(wrapper.emitted("move-keyboard:edit")).toBeUndefined();
+					expect(wrapper.emitted("move-keyboard:edit")).toBeDefined();
 				});
 
 				it("should hide the element", () => {

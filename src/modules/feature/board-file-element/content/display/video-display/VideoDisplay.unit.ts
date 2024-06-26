@@ -1,5 +1,6 @@
 import { mount } from "@vue/test-utils";
 import VideoDisplay from "./VideoDisplay.vue";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("VideoDisplay", () => {
 	const setup = () => {
@@ -12,6 +13,9 @@ describe("VideoDisplay", () => {
 		};
 
 		const wrapper = mount(VideoDisplay, {
+			global: {
+				plugins: [createTestingVuetify()],
+			},
 			props,
 			slots: {
 				default: slotContent,

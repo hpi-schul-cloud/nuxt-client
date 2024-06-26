@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { Jest as jest } from "@jest/environment";
 import { Ref, ref } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 
@@ -34,7 +34,7 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 		},
 	]);
 	const askTypeMock = props.askTypeMock || jest.fn();
-	const onFileSelectMock = jest.fn<Promise<void>, unknown[]>();
+	const onFileSelectMock = jest.fn();
 	const isFilePickerOpenMock = ref(false);
 	const isDialogOpenMock = ref(false);
 
@@ -42,7 +42,7 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 		askType: askTypeMock,
 		isDialogOpen: isDialogOpenMock,
 		elementTypeOptions: elementTypeOptionsMock,
-		onElementClick: jest.fn<Promise<void>, unknown[]>(),
+		onElementClick: jest.fn(),
 		onFileElementClick: jest.fn(),
 		onFileSelect: onFileSelectMock,
 		isFilePickerOpen: isFilePickerOpenMock,

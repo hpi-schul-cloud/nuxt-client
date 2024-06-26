@@ -19,6 +19,7 @@ import { nextTick } from "vue";
 import { createStore } from "vuex";
 import mock$objects from "../../../tests/test-utils/pageStubs";
 import StudentPage from "./StudentOverview.page.vue";
+import { RouterLinkStub } from "@vue/test-utils";
 
 const mockData = [
 	{
@@ -176,6 +177,7 @@ describe("students/index", () => {
 					"base-dialog": BaseDialog,
 					"base-modal": BaseModal,
 				},
+				stubs: { RouterLink: RouterLinkStub },
 			},
 		});
 

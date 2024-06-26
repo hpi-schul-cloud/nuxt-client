@@ -157,7 +157,7 @@ describe("@/plugins/datetime", () => {
 	});
 
 	it("formatDateForAlerts", () => {
-		const sevenDaysAgo = dayjs().subtract(7, "days");
+		const sevenDaysAgo = dayjs.tz(undefined, "UTC").subtract(7, "days");
 		const expectedDate = sevenDaysAgo.format("DD.MM.YYYY");
 		const result = formatDateForAlerts(sevenDaysAgo);
 		expect(result).toBe(expectedDate);

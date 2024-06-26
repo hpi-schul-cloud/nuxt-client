@@ -5,7 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-describe(LineClamp.name, () => {
+describe("LineClamp", () => {
 	const setup = (defaultSlotContent: string) => {
 		const icon = "mdi-test";
 		const wrapper = mount(LineClamp, {

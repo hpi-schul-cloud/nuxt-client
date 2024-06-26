@@ -11,7 +11,7 @@ const {
 	createServerProxy,
 	createFileStorageProxy,
 	createH5pEditorProxy,
-} = require("./webpack-config/dev-server-config");
+} = require("./config/webpack/dev-server-config");
 const {
 	isServer,
 	isFileStorage,

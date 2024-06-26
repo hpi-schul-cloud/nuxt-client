@@ -1,19 +1,23 @@
 import { mount } from "@vue/test-utils";
 import H5pEditorPage from "./H5PEditor.page.vue";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ params: { id: "test-id" }, query: {} }),
 }));
 
 describe("H5PEditorPage", () => {
-	const parentType = "test-parent-type";
+	const parentType = H5PContentParentType.LESSONS;
 	const parentId = "test-parent-id";
 
 	const createWrapper = (props = {}) => {
 		return mount(H5pEditorPage, {
 			global: {
-				plugins: [createTestingI18n()],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
 				parentType,

@@ -11,7 +11,7 @@ import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
-import { ProvisioningOptions } from "./type";
+import { ProvisioningOptions } from "./type/ProvisioningOptions";
 
 describe("ProvisioningOptionsApi.composable", () => {
 	let schoolApi: DeepMocked<SchoolApiInterface>;

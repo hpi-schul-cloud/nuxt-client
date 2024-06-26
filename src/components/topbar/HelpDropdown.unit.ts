@@ -10,7 +10,7 @@ describe("@/components/topbar/HelpDropdown", () => {
 	it("shows a list of menu items", () => {
 		const wrapper = mount(HelpDropdown, {
 			global: {
-				plugins: [createTestingI18n(), createTestingVuetify()],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
 

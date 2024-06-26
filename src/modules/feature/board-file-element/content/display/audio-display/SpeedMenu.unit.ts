@@ -33,8 +33,9 @@ describe("SpeedMenu", () => {
 				.filter((listItem) => listItem.text().includes(`${rate}`))
 				.at(0);
 
-			const icon = listItem?.vm.$slots.append()[0].children.default()[0]
-				.children;
+			const icon = listItem?.vm.$slots
+				.append()[0]
+				.children.default()[0].children;
 
 			expect(icon).toBe(mdiCheck);
 		});
@@ -79,8 +80,9 @@ describe("SpeedMenu", () => {
 				.findAllComponents({ name: listItemSelektor })
 				.filter((listItem) => listItem.text().includes(`${rate}`))
 				.at(0);
-			const icon = listItem?.vm.$slots.append()[0].children.default()[0]
-				.children;
+			const icon = listItem?.vm.$slots
+				.append()[0]
+				.children.default()[0].children;
 
 			expect(icon).toBe(mdiCheck);
 		});

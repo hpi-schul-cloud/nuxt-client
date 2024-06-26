@@ -1,5 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import BaseAlert from "./BaseAlert.vue";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("BaseAlert", () => {
 	describe("when default slot is defined", () => {
@@ -7,10 +8,13 @@ describe("BaseAlert", () => {
 			document.body.setAttribute("data-app", "true");
 
 			const slot = "TestSlot";
-			const color = "TestColor";
+			const color = "success";
 			const icon = "TestIcon";
 			const wrapper = shallowMount(BaseAlert, {
-				propsData: {
+				global: {
+					plugins: [createTestingVuetify()],
+				},
+				props: {
 					color,
 					icon,
 				},
@@ -56,7 +60,11 @@ describe("BaseAlert", () => {
 		const setup = () => {
 			document.body.setAttribute("data-app", "true");
 
-			const wrapper = shallowMount(BaseAlert, {});
+			const wrapper = shallowMount(BaseAlert, {
+				global: {
+					plugins: [createTestingVuetify()],
+				},
+			});
 
 			return {
 				wrapper,
