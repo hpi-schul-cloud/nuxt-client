@@ -9,6 +9,7 @@ import { nextTick } from "vue";
 import { VColorPicker, VListItem } from "vuetify/lib/components/index.mjs";
 import colors from "vuetify/lib/util/colors.mjs";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 
 describe("MediaBoardLineMenu", () => {
 	const getWrapper = (
@@ -139,20 +140,14 @@ describe("MediaBoardLineMenu", () => {
 				.find("svg");
 			const path = svg.find("path");
 
-			// mdi-chevron-up
-			expect(path.attributes("d")).toEqual(
-				"M7.41,15.41L12,10.83L16.59,15.41L18,14L12,8L6,14L7.41,15.41Z"
-			);
+			expect(path.attributes("d")).toEqual(mdiChevronUp);
 
 			const colorListItem = wrapper.findComponent(
 				"[data-testid=collapse-line-btn]"
 			);
 			await colorListItem.trigger("click");
 
-			// mdi-chevron-down
-			expect(path.attributes("d")).toEqual(
-				"M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z"
-			);
+			expect(path.attributes("d")).toEqual(mdiChevronDown);
 		});
 	});
 });
