@@ -7,7 +7,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useBoardPermissions } from "@data-board";
-import { mount } from "@vue/test-utils";
+import { VueWrapper, mount } from "@vue/test-utils";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 
 jest.mock("./InlineEditInteractionHandler.composable");
@@ -23,7 +23,7 @@ const defaultProps = {
 };
 
 describe("BoardAnyTitleTitleInput", () => {
-	let wrapper: ReturnType<typeof mount>;
+	let wrapper: VueWrapper<any>;
 
 	const setup = (
 		props: {
@@ -153,9 +153,7 @@ describe("BoardAnyTitleTitleInput", () => {
 			await wrapper.setProps({ value: newValue });
 			await wrapper.vm.$nextTick();
 
-			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-
-			expect(textAreaComponent.vm.modelValue).toBe(newValue);
+			expect(wrapper.vm.modelValue).toBe(newValue);
 		});
 	});
 });
