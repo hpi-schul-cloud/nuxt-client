@@ -185,6 +185,7 @@ export default defineComponent({
 	background: transparent !important;
 	opacity: 1;
 	font-size: var(--heading-5) !important;
+	overflow: hidden;
 }
 
 :deep(textarea[readonly]) {
