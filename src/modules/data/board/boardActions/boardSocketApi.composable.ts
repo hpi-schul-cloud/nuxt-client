@@ -74,7 +74,7 @@ export const useBoardSocketApi = () => {
 			),
 		];
 
-		const ariaLiveNotification = [
+		const ariaLiveNotifications = [
 			on(BoardActions.createCardSuccess, notifyCreateCardSuccess),
 			on(CardActions.deleteCardSuccess, notifyDeleteCardSuccess),
 			on(BoardActions.createColumnSuccess, notifyCreateColumnSuccess),
@@ -93,7 +93,7 @@ export const useBoardSocketApi = () => {
 			action,
 			...successActions,
 			...failureActions,
-			...ariaLiveNotification,
+			...ariaLiveNotifications,
 			on(BoardActions.disconnectSocket, disconnectSocketRequest)
 		);
 	};
