@@ -9,6 +9,10 @@ body.is-noscroll {
 	display: flex;
 }
 
+textarea {
+	height: 48px;
+}
+
 .justify-content-space-between {
 	justify-content: space-between;
 }
