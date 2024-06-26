@@ -41,7 +41,6 @@
 </template>
 
 <script lang="ts">
-import { useVModel } from "@vueuse/core";
 import {
 	computed,
 	defineComponent,
@@ -84,26 +83,43 @@ export default defineComponent({
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "value", emit);
+		const modelValue = ref("");
 
 		const internalIsFocused = ref(false);
 
-		const titleInput = ref<typeof VTextarea | null>(null);
+		const titleInput = ref(null);
 
 		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();
 		});
+
 		const setFocusOnEdit = async () => {
 			await nextTick();
 			internalIsFocused.value = true;
 
 			if (titleInput.value) {
-				titleInput.value.focus();
+				(titleInput.value as VTextarea).focus();
 			}
 		};
 
+		watch(modelValue, (newValue) => {
+			if (newValue !== props.value) {
+				emit("update:value", newValue);
+			}
+		});
+
+		watch(
+			() => props.value,
+			(newVal) => {
+				if (!(props.isFocused && props.isEditMode)) {
+					modelValue.value = newVal;
+				}
+			}
+		);
+
 		onMounted(() => {
 			if (props.isFocused && props.isEditMode) setFocusOnEdit();
+			modelValue.value = props.value;
 		});
 
 		watch(
