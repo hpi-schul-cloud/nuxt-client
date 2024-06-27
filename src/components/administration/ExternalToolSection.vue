@@ -290,11 +290,13 @@ export default defineComponent({
 		};
 
 		const isMediaBoardUsageVisible: ComputedRef<boolean> = computed(() => {
-			if (!metadata.value) return false;
-			return (
+			if (!metadata.value) {
+				return false;
+			}
+			const isVisible =
 				metadata.value.mediaBoard > 0 ||
-				envConfigModule.getEnv.FEATURE_MEDIA_SHELF_ENABLED
-			);
+				envConfigModule.getEnv.FEATURE_MEDIA_SHELF_ENABLED;
+			return isVisible;
 		});
 
 		return {
