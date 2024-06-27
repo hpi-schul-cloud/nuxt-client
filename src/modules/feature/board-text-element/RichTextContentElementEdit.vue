@@ -60,7 +60,10 @@ export default defineComponent({
 			}
 		};
 
-		const onBlur = () => emit("blur");
+		const onBlur = () => {
+			emit("update:value", modelValue.value);
+			emit("blur");
+		};
 
 		const onDelete = () => emit("delete:element");
 
