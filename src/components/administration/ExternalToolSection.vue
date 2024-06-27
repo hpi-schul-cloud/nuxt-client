@@ -16,7 +16,7 @@
 					{{ item.name }}
 				</span>
 			</template>
-			<template #[`item.status`]="{ item }">
+			<template #[`item.statusText`]="{ item }">
 				<div class="text-no-wrap">
 					<v-icon
 						v-if="item.isOutdated || item.isDeactivated"
