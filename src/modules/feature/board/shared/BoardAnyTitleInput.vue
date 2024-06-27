@@ -89,7 +89,9 @@ export default defineComponent({
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
-		const modelValue = ref("");
+		// This component needs to handle the title value in a local state (modelValue) to calculate the height of the textarea immediately
+		// eslint-disable-next-line vue/no-setup-props-reactivity-loss
+		const modelValue = ref(props.value);
 		const internalIsFocused = ref(false);
 
 		const titleInput = ref<typeof VTextarea | null>(null);
@@ -111,7 +113,6 @@ export default defineComponent({
 		};
 
 		onMounted(() => {
-			modelValue.value = props.value;
 			if (props.isFocused && props.isEditMode) setFocusOnEdit();
 		});
 
