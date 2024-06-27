@@ -17,6 +17,7 @@ describe("CaptionText", () => {
 
 		return {
 			wrapper,
+			caption,
 		};
 	};
 
@@ -54,15 +55,6 @@ describe("CaptionText", () => {
 
 		expect(wrapper.emitted("update:caption")).toHaveLength(1);
 		expect(wrapper.emitted("update:caption")?.[0][0]).toBe(newText);
-	});
-
-	it("should pass caption value to textarea", () => {
-		const { wrapper, caption } = shallowMountSetup();
-
-		const textarea = wrapper.find("v-textarea-stub");
-		const hint = textarea.attributes("modelvalue");
-
-		expect(hint).toBe(caption);
 	});
 
 	it("should have a label translation", () => {

@@ -11,8 +11,7 @@
 </template>
 
 <script lang="ts">
-import { useVModel } from "@vueuse/core";
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "AlternativeText",
@@ -21,10 +20,23 @@ export default defineComponent({
 			type: String,
 			required: false,
 		},
+		isEditMode: { type: Boolean, required: true },
 	},
 	emits: ["update:alternativeText"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "alternativeText", emit);
+		const modelValue = ref("");
+
+		onMounted(() => {
+			if (props.alternativeText !== undefined) {
+				modelValue.value = props.alternativeText;
+			}
+		});
+
+		watch(modelValue, (newValue) => {
+			if (newValue !== props.alternativeText) {
+				emit("update:alternativeText", newValue);
+			}
+		});
 
 		return {
 			modelValue,

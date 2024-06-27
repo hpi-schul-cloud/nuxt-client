@@ -3,7 +3,7 @@
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			class="rich_text"
-			:value="element.content.text"
+			:value="modelValue.text"
 		/>
 		<RichTextContentElementEdit
 			v-if="isEditMode"

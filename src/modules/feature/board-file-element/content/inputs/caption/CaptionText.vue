@@ -10,8 +10,7 @@
 </template>
 
 <script lang="ts">
-import { useVModel } from "@vueuse/core";
-import { defineComponent } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "CaptionText",
@@ -20,10 +19,23 @@ export default defineComponent({
 			type: String,
 			required: false,
 		},
+		isEditMode: { type: Boolean, required: true },
 	},
 	emits: ["update:caption"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "caption", emit);
+		const modelValue = ref("");
+
+		onMounted(() => {
+			if (props.caption !== undefined) {
+				modelValue.value = props.caption;
+			}
+		});
+
+		watch(modelValue, (newValue) => {
+			if (newValue !== props.caption) {
+				emit("update:caption", newValue);
+			}
+		});
 
 		return { modelValue };
 	},
