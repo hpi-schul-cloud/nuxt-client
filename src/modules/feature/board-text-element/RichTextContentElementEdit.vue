@@ -15,8 +15,8 @@
 </template>
 <script lang="ts">
 import { CkEditor } from "@feature-editor";
-import { useEventListener, useVModel } from "@vueuse/core";
-import { defineComponent } from "vue";
+import { useEventListener } from "@vueuse/core";
+import { defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
@@ -33,7 +33,20 @@ export default defineComponent({
 	},
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "value", emit);
+		const modelValue = ref("");
+
+		onMounted(() => {
+			if (props.value !== undefined) {
+				modelValue.value = props.value;
+			}
+		});
+
+		watch(modelValue, (newValue) => {
+			if (newValue !== props.value) {
+				emit("update:value", newValue);
+			}
+		});
+
 		const onUpdateValue = (newValue: string) => (modelValue.value = newValue);
 
 		const onFocus = () => {
