@@ -1,13 +1,16 @@
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
+	envsFactory,
 	meResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
@@ -60,6 +63,12 @@ describe("ExternalToolSection", () => {
 			getSchool: mockMe.school,
 		});
 
+		const envConfigModule = createModuleMocks(EnvConfigModule, {
+			getEnv: envsFactory.build({
+				FEATURE_MEDIA_SHELF_ENABLED: true,
+			}),
+		});
+
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
@@ -76,6 +85,7 @@ describe("ExternalToolSection", () => {
 						schoolExternalToolsModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
 
@@ -411,7 +421,7 @@ describe("ExternalToolSection", () => {
 		describe("when metadata is given", () => {
 			const setup = () => {
 				const schoolExternalToolMetadata =
-					schoolExternalToolMetadataFactory.build();
+					schoolExternalToolMetadataFactory.build({ mediaBoard: 1 });
 
 				useSchoolExternalToolUsageMock.metadata = ref(
 					schoolExternalToolMetadata
@@ -455,7 +465,7 @@ describe("ExternalToolSection", () => {
 				const dialogContent = wrapper.findComponent({ name: "renderHTML" });
 
 				expect(dialogContent.props("html")).toEqual(
-					"components.administration.externalToolsSection.dialog.content"
+					"components.administration.externalToolsSection.dialog.content.header"
 				);
 
 				expect(wrapper.vm.getItemName).toEqual("name");
