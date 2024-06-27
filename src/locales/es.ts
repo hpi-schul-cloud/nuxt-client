@@ -247,15 +247,15 @@ export default {
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
 	"components.administration.externalToolsSection.dialog.content.header":
-		"Sind Sie sich sicher, dass Sie das Tool <b>{itemName}</b> löschen wollen? </br></br>Zurzeit wird das Tool wie folgt genutzt: <br>",
+		"¿Está seguro de que desea eliminar la herramienta <b>{itemName}</b>? <br><br>Actualmente la herramienta se utiliza de la siguiente manera:",
 	"components.administration.externalToolsSection.dialog.content.courses":
-		"<b>{courseCount}</b> Kurs(e) <br>",
+		"<b>{courseCount}</b> Curso(s)",
 	"components.administration.externalToolsSection.dialog.content.boardElements":
-		"<b>{boardElementCount}</b> Spalten-Board(s) <br>",
-	"components.administration.externalToolsSection.dialog.content.mediaShelfs":
-		"<b>{mediaBoardCount}</b> Medienregale <br><br>",
+		"<b>{boardElementCount}</b> Tablero(s) de columnas",
+	"components.administration.externalToolsSection.dialog.content.mediaShelves":
+		"<b>{mediaBoardCount}</b> Estante(s) multimedia",
 	"components.administration.externalToolsSection.dialog.content.warning":
-		"Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
+		"Atención: Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
 	"components.administration.externalToolsSection.dialog.title":
 		"Quitar Herramienta Externa",
 	"components.administration.externalToolsSection.header":

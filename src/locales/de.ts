@@ -249,8 +249,8 @@ export default {
 		"<b>{courseCount}</b> Kurs(e)",
 	"components.administration.externalToolsSection.dialog.content.boardElements":
 		"<b>{boardElementCount}</b> Spalten-Board(s)",
-	"components.administration.externalToolsSection.dialog.content.mediaShelfs":
-		"<b>{mediaBoardCount}</b> Medienregal(e) <br>",
+	"components.administration.externalToolsSection.dialog.content.mediaShelves":
+		"<b>{mediaBoardCount}</b> Medienregal(e)",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
 	"components.administration.externalToolsSection.dialog.title":
