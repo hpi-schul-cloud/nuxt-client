@@ -4,6 +4,7 @@
 		:class="{ 'pointer-events-none': !isEditMode }"
 		v-if="isEditMode || value !== ''"
 	>
+		{{ isFocused }}
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
@@ -19,8 +20,8 @@
 	</VCardTitle>
 </template>
 <script lang="ts">
-import { useVModel } from "@vueuse/core";
-import { defineComponent } from "vue";
+// import { useVModel } from "@vueuse/core";
+import { defineComponent, ref, onMounted, watch } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 
 export default defineComponent({
@@ -41,11 +42,23 @@ export default defineComponent({
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "value", emit);
+		const modelValue = ref("");
 		const onUpdateValue = (newValue: string) => (modelValue.value = newValue);
 		const onEnter = () => {
 			emit("enter");
 		};
+
+		onMounted(() => {
+			if (props.value !== undefined) {
+				modelValue.value = props.value;
+			}
+		});
+
+		watch(modelValue, (newValue) => {
+			if (newValue !== props.value) {
+				emit("update:value", newValue);
+			}
+		});
 
 		return {
 			modelValue,

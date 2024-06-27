@@ -13,7 +13,6 @@
 				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
 				size="small"
-				style="height: 36px; width: 36px"
 			>
 				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
