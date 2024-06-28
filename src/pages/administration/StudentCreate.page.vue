@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="$t('pages.administration.students.new.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 	>
 		<form-create-user @create-user="createStudent">
 			<template #inputs>

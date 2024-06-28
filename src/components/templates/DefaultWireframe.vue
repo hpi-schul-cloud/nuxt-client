@@ -59,11 +59,11 @@
 			<div v-if="showBorder" class="border" />
 		</div>
 		<v-container
-			fluid
+			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
 			:class="{
-				'container-max-width': !fullWidth,
-				'container-full-width': fullWidth,
+				'container-short-width': maxWidth === 'short',
+				'container-full-width': maxWidth === 'full',
 				'overflow-x-auto': allowOverflowX,
 			}"
 		>
@@ -91,8 +91,8 @@ const props = defineProps({
 		required: false,
 		default: null,
 	},
-	fullWidth: {
-		type: Boolean,
+	maxWidth: {
+		type: String as PropType<"full" | "short" | "nativ">,
 	},
 	fabItems: {
 		type: Object as PropType<Fab>,
@@ -160,11 +160,12 @@ const showBorder = computed(() => {
 	padding: 0 var(--space-lg);
 }
 
-.container-max-width {
+.container-short-width {
 	max-width: var(--size-content-width-max);
 }
 
 .container-full-width {
+	max-width: none;
 	margin: 0;
 }
 
