@@ -169,6 +169,11 @@ export const useSidebarItems = () => {
 			href: "https://github.com/hpi-schul-cloud",
 			testId: "github",
 			target: "_blank",
+			theme: [
+				SchulcloudTheme.Brb,
+				SchulcloudTheme.Default,
+				SchulcloudTheme.Thr,
+			],
 		},
 		{
 			href: "/security",
