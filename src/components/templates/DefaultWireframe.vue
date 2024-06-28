@@ -73,6 +73,7 @@
 </template>
 
 <script setup lang="ts">
+import VCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import EnvConfigModule from "@/store/env-config";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
