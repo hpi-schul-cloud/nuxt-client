@@ -5,43 +5,42 @@
 		</p>
 		<v-data-table
 			data-testid="external-tool-section-table"
-			v-if="items.length"
-			:hide-default-footer="true"
 			:items="items"
 			:headers="headers"
 			:loading="isLoading"
 			:loading-text="t('common.loading.text')"
 			:no-data-text="t('common.nodata')"
-			:items-per-page="-1"
 		>
 			<template #[`item.name`]="{ item }">
 				<span>
 					{{ item.name }}
 				</span>
 			</template>
-			<template #[`item.status`]="{ item }">
-				<v-icon
-					v-if="item.isOutdated || item.isDeactivated"
-					color="warning"
-					start
-				>
-					{{ mdiAlert }}
-				</v-icon>
-				<v-icon v-else color="success" start>
-					{{ mdiCheckCircle }}
-				</v-icon>
-				<span>
-					{{ item.statusText }}
-				</span>
+			<template #[`item.statusText`]="{ item }">
+				<div class="text-no-wrap">
+					<v-icon
+						v-if="item.isOutdated || item.isDeactivated"
+						color="warning"
+						start
+					>
+						{{ mdiAlert }}
+					</v-icon>
+					<v-icon v-else color="success" start>
+						{{ mdiCheckCircle }}
+					</v-icon>
+					<span>
+						{{ item.statusText }}
+					</span>
+				</div>
 			</template>
 			<template #[`item.actions`]="{ item }">
 				<external-tool-toolbar
+					class="text-no-wrap"
 					@edit="editTool(item)"
 					@datasheet="showDatasheet(item)"
 					@delete="openDeleteDialog(item)"
 				/>
 			</template>
-			<template #bottom />
 		</v-data-table>
 		<v-btn
 			class="mt-8 mb-4 button-save float-right"
