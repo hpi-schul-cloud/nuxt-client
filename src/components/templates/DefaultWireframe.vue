@@ -73,12 +73,11 @@
 </template>
 
 <script setup lang="ts">
-import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
+import EnvConfigModule from "@/store/env-config";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { PropType, computed, useSlots } from "vue";
+import { computed, PropType, useSlots } from "vue";
 import { Fab } from "./default-wireframe.types";
-import EnvConfigModule from "@/store/env-config";
 
 const props = defineProps({
 	breadcrumbs: {
@@ -165,7 +164,6 @@ const showBorder = computed(() => {
 }
 
 .container-full-width {
-	max-width: none;
 	margin: 0;
 }
 
