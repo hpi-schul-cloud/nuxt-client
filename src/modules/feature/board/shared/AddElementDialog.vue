@@ -15,7 +15,7 @@
 
 		<template #content>
 			<div
-				class="d-flex flex-sm-row flex-column flex-wrap align-items-center"
+				class="d-flex flex-sm-row flex-wrap align-items-center"
 				:class="{ 'justify-content-space-between': submissionsEnabled }"
 			>
 				<v-btn

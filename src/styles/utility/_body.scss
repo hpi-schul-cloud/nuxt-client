@@ -9,6 +9,10 @@ body.is-noscroll {
 	display: flex;
 }
 
+textarea.v-field__input {
+	height: var(--text-base-size);
+}
+
 .justify-content-space-between {
 	justify-content: space-between;
 }
