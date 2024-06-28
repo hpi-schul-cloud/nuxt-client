@@ -151,18 +151,18 @@ export const useSidebarItems = () => {
 			featureValue: `${envConfigModule.getEnv.ALERT_STATUS_URL}`,
 		},
 		{
-			title: "global.topbar.actions.releaseNotes",
-			href: "/help/releases",
-			target: "_self",
-			testId: "releases",
-		},
-		{
 			href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
 			title: "components.legacy.footer.accessibility.statement",
 			testId: "accessibility-statement",
 			target: "_blank",
 			rel: "noopener",
 			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
+		},
+		{
+			title: "global.topbar.actions.releaseNotes",
+			href: "/help/releases",
+			target: "_self",
+			testId: "releases",
 		},
 		{
 			title: "components.legacy.footer.github",
@@ -246,6 +246,12 @@ export const useSidebarItems = () => {
 			],
 		},
 		{
+			title: "global.sidebar.item.system",
+			icon: "$mdiApplicationBracketsOutline",
+			testId: "system",
+			children: systemLinks,
+		},
+		{
 			title: "global.sidebar.item.helpArea",
 			icon: "$mdiHelpCircleOutline",
 			testId: "Hilfebereich",
@@ -270,12 +276,6 @@ export const useSidebarItems = () => {
 					testId: "training",
 				},
 			],
-		},
-		{
-			title: "global.sidebar.item.system",
-			icon: "$mdiApplicationBracketsOutline",
-			testId: "system",
-			children: systemLinks,
 		},
 	]);
 
