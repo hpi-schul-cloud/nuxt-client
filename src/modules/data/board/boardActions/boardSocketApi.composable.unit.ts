@@ -405,7 +405,7 @@ describe("useBoardSocketApi", () => {
 
 			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"create-card-request",
-				{ columnId: "test" }
+				{ columnId: "test", requiredEmptyElements: ["richText"] }
 			);
 		});
 	});

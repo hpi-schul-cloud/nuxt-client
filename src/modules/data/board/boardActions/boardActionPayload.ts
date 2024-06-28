@@ -8,7 +8,7 @@ import { ColumnMove } from "@/types/board/DragAndDrop";
 
 export type CreateCardRequestPayload = {
 	columnId: string;
-	requiredEmptyElements: CreateCardBodyParamsRequiredEmptyElementsEnum[];
+	requiredEmptyElements?: CreateCardBodyParamsRequiredEmptyElementsEnum[];
 };
 export type CreateCardSuccessPayload = {
 	newCard: CardResponse;
