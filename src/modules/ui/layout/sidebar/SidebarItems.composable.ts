@@ -274,6 +274,7 @@ export const useSidebarItems = () => {
 					href: "https://www.lernen.cloud/",
 					target: "_blank",
 					testId: "training",
+					theme: [SchulcloudTheme.Default],
 				},
 			],
 		},
