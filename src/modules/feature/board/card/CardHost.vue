@@ -29,7 +29,7 @@
 						scope="card"
 						@update:value="onUpdateCardTitle($event, cardId)"
 						:isFocused="isFocusedById"
-						@enter="addTextAfterTitle"
+						@enter="onEnter"
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
@@ -69,7 +69,7 @@
 			@move-up:element="onMoveContentElementUp"
 			@move-keyboard:element="onMoveContentElementKeyboard"
 			@add:element="onAddElement"
-			@enter:title="addTextAfterTitle"
+			@enter:title="onEnter"
 			@update:title="onUpdateCardTitle"
 			@close:detail-view="onCloseDetailView"
 			@delete:card="onDeleteCard"
@@ -215,6 +215,10 @@ export default defineComponent({
 			);
 		};
 
+		const onEnter = () => {
+			cardStore.addTextAfterTitle(props.cardId);
+		};
+
 		const boardMenuClasses = computed(() => {
 			if (isFocusContained.value === true || isHovered.value === true) {
 				return "";
@@ -245,7 +249,7 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
-			addTextAfterTitle: cardStore.addTextAfterTitle,
+			onEnter,
 			onOpenDetailView,
 			onCloseDetailView,
 			isDetailView,
