@@ -59,11 +59,9 @@
 			<div v-if="showBorder" class="border" />
 		</div>
 		<v-container
-			fluid
 			class="main-content"
 			:class="{
 				'container-max-width': !fullWidth,
-				'container-full-width': fullWidth,
 				'overflow-x-auto': allowOverflowX,
 			}"
 		>
@@ -162,10 +160,6 @@ const showBorder = computed(() => {
 
 .container-max-width {
 	max-width: var(--size-content-width-max);
-}
-
-.container-full-width {
-	margin: 0;
 }
 
 .border {

@@ -1,13 +1,13 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
-import DefaultWireframe from "../templates/DefaultWireframe.vue";
+import { ConfigResponse } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import EnvConfigModule from "@/store/env-config";
-import { ConfigResponse } from "@/serverApi/v3";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import DefaultWireframe from "../templates/DefaultWireframe.vue";
 
 describe("DefaultWireframe", () => {
 	const setup = (
@@ -71,7 +71,6 @@ describe("DefaultWireframe", () => {
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
-		expect(contentWrapper.classes("container-full-width")).toBeTruthy();
 		expect(contentWrapper.classes("container-max-width")).toBeFalsy();
 	});
 
@@ -81,7 +80,6 @@ describe("DefaultWireframe", () => {
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
-		expect(contentWrapper.classes("container-full-width")).toBeFalsy();
 		expect(contentWrapper.classes("container-max-width")).toBeTruthy();
 	});
 
