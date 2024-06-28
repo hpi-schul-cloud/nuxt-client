@@ -26,7 +26,7 @@
 		:rows="1"
 		auto-grow
 		flat
-		class="mx-n4 mb-n2 mt-n2"
+		class="mx-n4 mb-n3 mt-2"
 		:placeholder="placeholder"
 		bg-color="transparent"
 		ref="titleInput"
@@ -37,7 +37,11 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
-	/>
+	>
+		<template v-slot:append-inner>
+			<slot />
+		</template>
+	</VTextarea>
 </template>
 
 <script lang="ts">
@@ -123,6 +127,15 @@ export default defineComponent({
 		});
 
 		watch(
+			() => props.value,
+			async (newVal, oldVal) => {
+				if (newVal !== oldVal) {
+					modelValue.value = newVal;
+				}
+			}
+		);
+
+		watch(
 			() => props.isEditMode,
 			async (newVal, oldVal) => {
 				if (
@@ -182,6 +195,7 @@ export default defineComponent({
 	background: transparent !important;
 	opacity: 1;
 	font-size: var(--heading-5) !important;
+	overflow: hidden;
 }
 
 :deep(textarea[readonly]) {
@@ -199,5 +213,10 @@ export default defineComponent({
 
 :deep(input)::placeholder {
 	opacity: 1;
+}
+:deep(.v-field__append-inner, .v-field__clearable, .v-field__prepend-inner) {
+	display: flex;
+	align-items: flex-start;
+	padding-top: 8px !important;
 }
 </style>
