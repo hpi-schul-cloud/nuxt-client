@@ -191,7 +191,7 @@ export default defineComponent({
 					);
 
 				isDeactivated.value =
-					configuration.value?.status.isDeactivated ?? false;
+					configuration.value?.status.isGloballyDeactivated ?? false;
 			} else if (authModule.getSchool) {
 				await schoolExternalToolsModule.loadAvailableToolsForSchool(
 					authModule.getSchool.id
