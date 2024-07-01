@@ -157,8 +157,6 @@ export default defineComponent({
 
 		const ariaLevel = computed(() => {
 			switch (props.scope) {
-				case "board":
-					return 1;
 				case "column":
 					return 2;
 				case "card":
