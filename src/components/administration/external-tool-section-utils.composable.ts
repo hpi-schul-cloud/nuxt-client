@@ -1,7 +1,7 @@
-import { DataTableHeader } from "@/store/types/data-table-header";
-import { SchoolExternalToolItem } from "./school-external-tool-item";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { DataTableHeader } from "@/store/types/data-table-header";
+import { SchoolExternalToolItem } from "./school-external-tool-item";
 
 export function useExternalToolsSectionUtils(
 	t: (key: string) => string = () => ""
@@ -16,8 +16,8 @@ export function useExternalToolsSectionUtils(
 			title: t(
 				"components.administration.externalToolsSection.table.header.status"
 			),
-			value: "status",
-			key: "status",
+			value: "statusText",
+			key: "statusText",
 		},
 		{
 			title: "",
