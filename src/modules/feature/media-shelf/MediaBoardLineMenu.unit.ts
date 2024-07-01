@@ -9,6 +9,7 @@ import { nextTick } from "vue";
 import { VColorPicker, VListItem } from "vuetify/lib/components/index.mjs";
 import colors from "vuetify/lib/util/colors.mjs";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 
 describe("MediaBoardLineMenu", () => {
 	const getWrapper = (
@@ -129,6 +130,24 @@ describe("MediaBoardLineMenu", () => {
 			await colorListItem.trigger("click");
 
 			expect(wrapper.emitted("update:collapsed")).toEqual([[true]]);
+		});
+
+		it("should use the correct icon", async () => {
+			const { wrapper } = getWrapper();
+
+			const svg = wrapper
+				.findComponent("[data-testid=collapse-line-btn]")
+				.find("svg");
+			const path = svg.find("path");
+
+			expect(path.attributes("d")).toEqual(mdiChevronUp);
+
+			const colorListItem = wrapper.findComponent(
+				"[data-testid=collapse-line-btn]"
+			);
+			await colorListItem.trigger("click");
+
+			expect(path.attributes("d")).toEqual(mdiChevronDown);
 		});
 	});
 });
