@@ -15,16 +15,7 @@ import {
 } from "./cardActionPayload";
 import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPayload";
 import { useDebounceFn } from "@vueuse/core";
-
-type ErrorActions =
-	| ReturnType<typeof CardActions.createElementFailure>
-	| ReturnType<typeof CardActions.deleteCardFailure>
-	| ReturnType<typeof CardActions.deleteElementFailure>
-	| ReturnType<typeof CardActions.fetchCardFailure>
-	| ReturnType<typeof CardActions.moveElementFailure>
-	| ReturnType<typeof CardActions.updateCardHeightFailure>
-	| ReturnType<typeof CardActions.updateCardTitleFailure>
-	| ReturnType<typeof CardActions.updateElementFailure>;
+import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
@@ -34,15 +25,18 @@ export const useCardSocketApi = () => {
 	let cardIdsToFetch: string[] = [];
 
 	const { notifySocketError } = useErrorHandler();
+	const {
+		notifyUpdateCardTitleSuccess,
+		notifyCreateElementSuccess,
+		notifyDeleteElementSuccess,
+		notifyMoveElementSuccess,
+		notifyUpdateElementSuccess,
+	} = useBoardAriaNotification();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof CardActions>
 	) => {
-		handle(
-			action,
-			on(CardActions.disconnectSocket, disconnectSocketRequest),
-
-			// success actions
+		const successActions = [
 			on(CardActions.createElementSuccess, cardStore.createElementSuccess),
 			on(CardActions.deleteElementSuccess, cardStore.deleteElementSuccess),
 			on(CardActions.moveElementSuccess, cardStore.moveElementSuccess),
@@ -54,16 +48,33 @@ export const useCardSocketApi = () => {
 				CardActions.updateCardHeightSuccess,
 				cardStore.updateCardHeightSuccess
 			),
+		];
 
-			// failure actions
-			on(CardActions.createElementFailure, onFailure),
-			on(CardActions.deleteElementFailure, onFailure),
-			on(CardActions.moveElementFailure, onFailure),
-			on(CardActions.updateElementFailure, onFailure),
-			on(CardActions.deleteCardFailure, onFailure),
-			on(CardActions.fetchCardFailure, onFailure),
-			on(CardActions.updateCardTitleFailure, onFailure),
-			on(CardActions.updateCardHeightFailure, onFailure)
+		const failureActions = [
+			on(CardActions.createElementFailure, createElementFailure),
+			on(CardActions.deleteElementFailure, deleteElementFailure),
+			on(CardActions.moveElementFailure, moveElementFailure),
+			on(CardActions.updateElementFailure, updateElementFailure),
+			on(CardActions.deleteCardFailure, deleteCardFailure),
+			on(CardActions.fetchCardFailure, fetchCardFailure),
+			on(CardActions.updateCardTitleFailure, updateCardTitleFailure),
+			on(CardActions.updateCardHeightFailure, updateCardHeightFailure),
+		];
+
+		const ariaLiveNotification = [
+			on(CardActions.updateCardTitleSuccess, notifyUpdateCardTitleSuccess),
+			on(CardActions.createElementSuccess, notifyCreateElementSuccess),
+			on(CardActions.deleteElementSuccess, notifyDeleteElementSuccess),
+			on(CardActions.moveElementSuccess, notifyMoveElementSuccess),
+			on(CardActions.updateElementSuccess, notifyUpdateElementSuccess),
+		];
+
+		handle(
+			action,
+			...successActions,
+			...failureActions,
+			...ariaLiveNotification,
+			on(CardActions.disconnectSocket, disconnectSocketRequest)
 		);
 	};
 
@@ -124,10 +135,27 @@ export const useCardSocketApi = () => {
 		emitOnSocket("update-card-height-request", payload);
 	};
 
-	const onFailure = (payload: ErrorActions["payload"]) => {
-		const { errorType = "notUpdated", boardObjectType = "boardCard" } = payload;
-		notifySocketError(errorType, boardObjectType);
-	};
+	const createElementFailure = () =>
+		notifySocketError("notCreated", "boardElement");
+
+	const deleteElementFailure = () =>
+		notifySocketError("notDeleted", "boardElement");
+
+	const moveElementFailure = () =>
+		notifySocketError("notUpdated", "boardElement");
+
+	const updateElementFailure = () =>
+		notifySocketError("notUpdated", "boardElement");
+
+	const deleteCardFailure = () => notifySocketError("notDeleted", "boardCard");
+
+	const fetchCardFailure = () => notifySocketError("notLoaded", "boardCard");
+
+	const updateCardTitleFailure = () =>
+		notifySocketError("notUpdated", "boardCard");
+
+	const updateCardHeightFailure = () =>
+		notifySocketError("notUpdated", "boardCard");
 
 	return {
 		dispatch,

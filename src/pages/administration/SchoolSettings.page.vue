@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="headline"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		:full-width="true"
 	>
 		<v-alert
 			v-if="error"
@@ -29,7 +29,7 @@
 				</div>
 			</v-alert>
 
-			<v-expansion-panels multiple class="mb-9" :model-value="openedPanels">
+			<v-expansion-panels multiple class="pb-9" :model-value="openedPanels">
 				<v-expansion-panel data-testid="general-settings-panel" value="general">
 					<v-expansion-panel-title>
 						<div class="text-h4">
@@ -42,7 +42,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<general-settings class="mt-9" />
+						<general-settings class="mt-4" />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -62,7 +62,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<school-policy class="mt-9" />
+						<school-policy />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -82,7 +82,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<school-terms-of-use class="mt-9" />
+						<school-terms-of-use />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -104,7 +104,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<admin-migration-section class="mt-9" />
+						<admin-migration-section />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -122,12 +122,11 @@
 					<v-expansion-panel-text eager>
 						<template v-if="isLoading">
 							<v-skeleton-loader
-								class="mt-9"
 								type="table-thead, table-row, table-row"
 								data-testid="systems-panel-skeleton"
 							/>
 						</template>
-						<auth-systems class="mt-9" v-else :systems="systems" />
+						<auth-systems v-else :systems="systems" />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -143,7 +142,7 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<external-tools-section class="mt-9" />
+						<external-tools-section />
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 			</v-expansion-panels>

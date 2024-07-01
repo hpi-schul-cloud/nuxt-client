@@ -37,7 +37,14 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: ["ready", "focus", "update:value", "blur", "keyboard:delete"],
+	emits: [
+		"ready",
+		"focus",
+		"update:value",
+		"blur",
+		"keyboard",
+		"keyboard:delete",
+	],
 	props: {
 		value: {
 			type: String,
@@ -105,6 +112,7 @@ export default defineComponent({
 				heading: headings[props.mode],
 				link: {
 					defaultProtocol: "//",
+					addTargetToExternalLinks: true,
 				},
 				highlight: {
 					options: [

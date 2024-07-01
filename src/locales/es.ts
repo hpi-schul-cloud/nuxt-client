@@ -329,6 +329,32 @@ export default {
 		"{type} no se ha podido cargar.",
 	"components.board.notifications.errors.notUpdated":
 		"No se han podido guardar los cambios.",
+	"components.board.screenReader.notification.cardCreated.success":
+		"Otro usuario ha creado una tarjeta en la columna {columnPosition}.",
+	"components.board.screenReader.notification.columnCreated.success":
+		"Una columna fue creada por otro usuario.",
+	"components.board.screenReader.notification.cardDeleted.success":
+		"Una tarjeta fue eliminada por otro usuario.",
+	"components.board.screenReader.notification.columnDeleted.success":
+		"Una columna fue eliminada por otro usuario.",
+	"components.board.screenReader.notification.cardMovedInSameColumn.success":
+		"En la columna {columnPosition}, se ha movido una carta a la posición {newPosition}.",
+	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
+		"Se ha movido una tarjeta de la columna {fromColumnPosition} a la columna {toColumnPosition}.",
+	"components.board.screenReader.notification.columnMoved.success":
+		"Se ha movido una columna de la posición {oldPosition} a la posición {newPosition}.",
+	"components.board.screenReader.notification.boardTitleUpdated.success":
+		"El título del tablero fue cambiado a {newTitle} por otro usuario.",
+	"components.board.screenReader.notification.boardVisibilityUpdated.published":
+		"El tablero fue publicado por otro usuario.",
+	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
+		"El tablero fue revertido a borrador por otro usuario.",
+	"components.board.screenReader.notification.columnTitleUpdated.success":
+		"El título de la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
+	"components.board.screenReader.notification.cardTitleUpdated.success":
+		"El título de la tarjeta {cardPosition} en la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
+	"components.board.screenReader.notification.cardUpdated.success":
+		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
@@ -771,6 +797,7 @@ export default {
 	"format.dateUTC": "AAAA-MM-DD",
 	"format.dateYY": "DD/MM/YY",
 	"format.time": "HH:mm",
+	"global.cloudLogo": "Logo",
 	"global.sidebar.item.accessibility": "Accesibilidad",
 	"global.sidebar.item.addons": "Complementos",
 	"global.sidebar.item.calendar": "Calendario",
@@ -789,7 +816,6 @@ export default {
 	"global.sidebar.item.tasks": "Tareas",
 	"global.sidebar.item.teacher": "Profesores",
 	"global.sidebar.item.teams": "Equipos",
-	"global.sidebar.logo": "Logo",
 	"global.skipLink.mainContent": "Saltar al contenido principal",
 	"global.topbar.actions.alerts": "Alerta de estado",
 	"global.topbar.actions.contactSupport": "Contacto",
@@ -1551,7 +1577,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Exportar configuración",
 	"pages.room.modal.course.export.options.topics": "Temas",
 	"pages.room.modal.course.export.options.tasks": "Tareas sin tema",
-	"pages.room.modal.course.export.options.columnBoards": "Tableros de columna",
+	"pages.room.modal.course.export.options.columnBoards": "Tableros",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",

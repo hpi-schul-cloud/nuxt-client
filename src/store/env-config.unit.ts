@@ -1,5 +1,8 @@
-import { FilesStorageConfigResponse } from "@/fileStorageApi/v3";
-import * as fileStorageApi from "@/fileStorageApi/v3/api/file-api";
+import {
+	FileConfigApiInterface,
+	FilesStorageConfigResponse,
+} from "@/fileStorageApi/v3";
+import * as fileConfigApi from "@/fileStorageApi/v3/api/file-config-api";
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	ConfigResponse,
@@ -60,8 +63,10 @@ describe("env-config module", () => {
 						serverConfigresponse
 					);
 
-					const fileApi = createMock<fileStorageApi.FileApiInterface>();
-					jest.spyOn(fileStorageApi, "FileApiFactory").mockReturnValue(fileApi);
+					const fileApi = createMock<FileConfigApiInterface>();
+					jest
+						.spyOn(fileConfigApi, "FileConfigApiFactory")
+						.mockReturnValue(fileApi);
 					fileApi.publicConfig.mockResolvedValueOnce(fileStorageConfigResponse);
 
 					const contentInitMock = jest.fn();
@@ -163,8 +168,10 @@ describe("env-config module", () => {
 						serverConfigresponse
 					);
 
-					const fileApi = createMock<fileStorageApi.FileApiInterface>();
-					jest.spyOn(fileStorageApi, "FileApiFactory").mockReturnValue(fileApi);
+					const fileApi = createMock<FileConfigApiInterface>();
+					jest
+						.spyOn(fileConfigApi, "FileConfigApiFactory")
+						.mockReturnValue(fileApi);
 					fileApi.publicConfig.mockRejectedValueOnce(error);
 
 					const contentModuleInitMock = jest.fn();
@@ -281,8 +288,10 @@ describe("env-config module", () => {
 						error
 					);
 
-					const fileApi = createMock<fileStorageApi.FileApiInterface>();
-					jest.spyOn(fileStorageApi, "FileApiFactory").mockReturnValue(fileApi);
+					const fileApi = createMock<FileConfigApiInterface>();
+					jest
+						.spyOn(fileConfigApi, "FileConfigApiFactory")
+						.mockReturnValue(fileApi);
 					fileApi.publicConfig.mockResolvedValueOnce(fileStorageConfigResponse);
 
 					const contentInitMock = jest.fn();

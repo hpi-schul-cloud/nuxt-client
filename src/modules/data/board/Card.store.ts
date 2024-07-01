@@ -99,8 +99,8 @@ export const useCardStore = defineStore("cardStore", () => {
 			card.elements.push(payload.newElement);
 		}
 
-		lastCreatedElementId.value = payload.newElement.id;
 		if (payload.isOwnAction === true) {
+			lastCreatedElementId.value = payload.newElement.id;
 			setFocus(payload.newElement.id);
 		}
 		return payload.newElement;

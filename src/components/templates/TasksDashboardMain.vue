@@ -90,7 +90,7 @@
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
-			@dialog-closed="onCopyResultModalClosed"
+			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
 	</default-wireframe>
 </template>
@@ -394,7 +394,6 @@ export default {
 
 // remove background color from expansion panel title
 :deep(
-		.v-expansion-panel-title--active > .v-expansion-panel-title__overlay,
 		.v-expansion-panel-title[aria-haspopup="menu"][aria-expanded="true"]
 			> .v-expansion-panel-title__overlay
 	) {

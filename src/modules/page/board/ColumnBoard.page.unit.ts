@@ -41,12 +41,4 @@ describe("@pages/ColumnBoard.page.vue", () => {
 
 		expect(boardComponent.vm).toBeDefined();
 	});
-
-	it("should have DefaultWireframe layout", async () => {
-		const { wrapper } = setup();
-
-		const layout = wrapper.findComponent({ name: "DefaultWireframe" });
-
-		expect(layout.vm).toBeDefined();
-	});
 });

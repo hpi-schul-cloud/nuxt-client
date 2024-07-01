@@ -16,31 +16,28 @@ import {
 } from "./boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-
-type ErrorActions =
-	| ReturnType<typeof BoardActions.createCardFailure>
-	| ReturnType<typeof BoardActions.createColumnFailure>
-	| ReturnType<typeof BoardActions.deleteBoardFailure>
-	| ReturnType<typeof CardActions.deleteCardFailure>
-	| ReturnType<typeof BoardActions.deleteColumnFailure>
-	| ReturnType<typeof BoardActions.moveCardFailure>
-	| ReturnType<typeof BoardActions.moveColumnFailure>
-	| ReturnType<typeof BoardActions.updateColumnTitleFailure>
-	| ReturnType<typeof BoardActions.updateBoardTitleFailure>
-	| ReturnType<typeof BoardActions.updateBoardVisibilityFailure>;
+import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
+import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
 	const { notifySocketError } = useErrorHandler();
+	const {
+		notifyCreateCardSuccess,
+		notifyCreateColumnSuccess,
+		notifyDeleteCardSuccess,
+		notifyDeleteColumnSuccess,
+		notifyMoveCardSuccess,
+		notifyMoveColumnSuccess,
+		notifyUpdateBoardTitleSuccess,
+		notifyUpdateBoardVisibilitySuccess,
+		notifyUpdateColumnTitleSuccess,
+	} = useBoardAriaNotification();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
 	) => {
-		handle(
-			action,
-			on(BoardActions.disconnectSocket, disconnectSocketRequest),
-
-			// success actions
+		const successActions = [
 			on(BoardActions.createCardSuccess, boardStore.createCardSuccess),
 			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
 			on(CardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
@@ -60,17 +57,45 @@ export const useBoardSocketApi = () => {
 				BoardActions.updateBoardVisibilitySuccess,
 				boardStore.updateBoardVisibilitySuccess
 			),
+		];
 
-			// failure actions
-			on(BoardActions.createCardFailure, onFailure),
-			on(BoardActions.createColumnFailure, onFailure),
-			on(CardActions.deleteCardFailure, onFailure),
-			on(BoardActions.deleteColumnFailure, onFailure),
-			on(BoardActions.moveCardFailure, onFailure),
-			on(BoardActions.moveColumnFailure, onFailure),
-			on(BoardActions.updateColumnTitleFailure, onFailure),
-			on(BoardActions.updateBoardTitleFailure, onFailure),
-			on(BoardActions.updateBoardVisibilityFailure, onFailure)
+		const failureActions = [
+			on(BoardActions.createCardFailure, createCardFailure),
+			on(BoardActions.createColumnFailure, createColumnFailure),
+			on(CardActions.deleteCardFailure, deleteCardFailure),
+			on(BoardActions.deleteColumnFailure, deleteColumnFailure),
+			on(BoardActions.fetchBoardFailure, fetchBoardFailure),
+			on(BoardActions.moveCardFailure, moveCardFailure),
+			on(BoardActions.moveColumnFailure, moveColumnFailure),
+			on(BoardActions.updateColumnTitleFailure, updateColumnTitleFailure),
+			on(BoardActions.updateBoardTitleFailure, updateBoardTitleFailure),
+			on(
+				BoardActions.updateBoardVisibilityFailure,
+				updateBoardVisibilityFailure
+			),
+		];
+
+		const ariaLiveNotifications = [
+			on(BoardActions.createCardSuccess, notifyCreateCardSuccess),
+			on(CardActions.deleteCardSuccess, notifyDeleteCardSuccess),
+			on(BoardActions.createColumnSuccess, notifyCreateColumnSuccess),
+			on(BoardActions.deleteColumnSuccess, notifyDeleteColumnSuccess),
+			on(BoardActions.moveCardSuccess, notifyMoveCardSuccess),
+			on(BoardActions.moveColumnSuccess, notifyMoveColumnSuccess),
+			on(BoardActions.updateBoardTitleSuccess, notifyUpdateBoardTitleSuccess),
+			on(
+				BoardActions.updateBoardVisibilitySuccess,
+				notifyUpdateBoardVisibilitySuccess
+			),
+			on(BoardActions.updateColumnTitleSuccess, notifyUpdateColumnTitleSuccess),
+		];
+
+		handle(
+			action,
+			...successActions,
+			...failureActions,
+			...ariaLiveNotifications,
+			on(BoardActions.disconnectSocket, disconnectSocketRequest)
 		);
 	};
 
@@ -78,7 +103,12 @@ export const useBoardSocketApi = () => {
 		useSocketConnection(dispatch);
 
 	const createCardRequest = async (payload: CreateCardRequestPayload) => {
-		emitOnSocket("create-card-request", payload);
+		emitOnSocket("create-card-request", {
+			...payload,
+			requiredEmptyElements: [
+				CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
+			],
+		});
 	};
 
 	const fetchBoardRequest = async (
@@ -102,8 +132,11 @@ export const useBoardSocketApi = () => {
 	};
 
 	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
+		const { newIndex, oldIndex, fromColumnId, toColumnId } = payload;
+		if (newIndex === oldIndex && fromColumnId === toColumnId) return;
+
 		try {
-			if (payload.toColumnId === undefined && boardStore.board) {
+			if (toColumnId === undefined && boardStore.board) {
 				const response = await emitWithAck("create-column-request", {
 					boardId: boardStore.board.id,
 				});
@@ -112,11 +145,7 @@ export const useBoardSocketApi = () => {
 			}
 			emitOnSocket("move-card-request", payload);
 		} catch (err) {
-			onFailure({
-				errorType: "notUpdated",
-				boardObjectType: "boardCard",
-				requestPayload: payload,
-			});
+			moveCardFailure();
 		}
 	};
 
@@ -142,10 +171,22 @@ export const useBoardSocketApi = () => {
 		emitOnSocket("update-board-visibility-request", payload);
 	};
 
-	const onFailure = (payload: ErrorActions["payload"]) => {
-		const { errorType = "notUpdated", boardObjectType = "board" } = payload;
-		notifySocketError(errorType, boardObjectType);
-	};
+	const createCardFailure = () => notifySocketError("notCreated", "boardCard");
+	const createColumnFailure = () =>
+		notifySocketError("notCreated", "boardColumn");
+	const deleteCardFailure = () => notifySocketError("notDeleted", "boardCard");
+	const deleteColumnFailure = () =>
+		notifySocketError("notDeleted", "boardColumn");
+	const fetchBoardFailure = () => notifySocketError("notLoaded", "board");
+	const moveCardFailure = () => notifySocketError("notUpdated", "boardCard");
+	const moveColumnFailure = () =>
+		notifySocketError("notUpdated", "boardColumn");
+	const updateColumnTitleFailure = () =>
+		notifySocketError("notUpdated", "boardColumn");
+	const updateBoardTitleFailure = () =>
+		notifySocketError("notUpdated", "board");
+	const updateBoardVisibilityFailure = () =>
+		notifySocketError("notUpdated", "board");
 
 	return {
 		dispatch,

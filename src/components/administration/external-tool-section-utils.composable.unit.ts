@@ -115,7 +115,7 @@ describe("useSchoolExternalToolUtils", () => {
 			expect(headers[0].value).toEqual("name");
 
 			expect(headers[1].title).toEqual(expectedTranslation);
-			expect(headers[1].value).toEqual("status");
+			expect(headers[1].value).toEqual("statusText");
 
 			expect(headers[2].title).toEqual("");
 			expect(headers[2].value).toEqual("actions");

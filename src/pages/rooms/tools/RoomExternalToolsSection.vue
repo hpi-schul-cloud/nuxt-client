@@ -30,13 +30,14 @@
 			@dialog-canceled="onCloseDeleteDialog"
 		>
 			<template #title>
-				<h2 class="text-h4 my-2">
+				<h2 class="text-h4 my-2" data-testid="delete-dialog-title">
 					{{ t("pages.rooms.tools.deleteDialog.title") }}
 				</h2>
 			</template>
 			<template #content>
 				<RenderHTML
 					class="text-md mt-2"
+					data-testid="delete-dialog-content"
 					:html="
 						t('pages.rooms.tools.deleteDialog.content', {
 							itemName: selectedItemName,

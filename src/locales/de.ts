@@ -325,6 +325,32 @@ export default {
 		"{type} konnte nicht geladen werden.",
 	"components.board.notifications.errors.notUpdated":
 		"Die Änderungen konnten nicht gespeichert werden.",
+	"components.board.screenReader.notification.cardCreated.success":
+		"Eine Karte wurde von einem anderen Benutzer in Spalte {columnPosition} erstellt.",
+	"components.board.screenReader.notification.columnCreated.success":
+		"Eine Spalte wurde von einem anderen Benutzer erstellt.",
+	"components.board.screenReader.notification.cardDeleted.success":
+		"Eine Karte wurde von einem anderen Benutzer gelöscht.",
+	"components.board.screenReader.notification.columnDeleted.success":
+		"Eine Spalte wurde von einem anderen Benutzer gelöscht.",
+	"components.board.screenReader.notification.cardMovedInSameColumn.success":
+		"In Spalte {columnPosition} wurde eine Karte an Position {newPosition} verschoben.",
+	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
+		"Eine Karte wurde von Spalte {fromColumnPosition} in Spalte {toColumnPosition} verschoben.",
+	"components.board.screenReader.notification.columnMoved.success":
+		"Eine Spalte wurde von Position {oldPosition} an Position {newPosition} verschoben.",
+	"components.board.screenReader.notification.boardTitleUpdated.success":
+		"Der Boardtitel wurde von einem anderen Benutzer in {newTitle} geändert",
+	"components.board.screenReader.notification.boardVisibilityUpdated.published":
+		"Das Board wurde von einem anderen Benutzer veröffentlicht",
+	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
+		"Das Board wurde von einem anderen Benutzer auf den Entwurfsstatus zurückgesetzt.",
+	"components.board.screenReader.notification.columnTitleUpdated.success":
+		"Titel von Spalte {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
+	"components.board.screenReader.notification.cardTitleUpdated.success":
+		"Titel von Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
+	"components.board.screenReader.notification.cardUpdated.success":
+		"Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
 	"components.board": "Board",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
@@ -751,6 +777,7 @@ export default {
 	"format.dateUTC": "JJJJ-MM-DD",
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
+	"global.cloudLogo": "Logo",
 	"global.sidebar.item.accessibility": "Barrierefreiheit",
 	"global.sidebar.item.addons": "Add-ons",
 	"global.sidebar.item.calendar": "Termine",
@@ -769,7 +796,6 @@ export default {
 	"global.sidebar.item.tasks": "Aufgaben",
 	"global.sidebar.item.teacher": "Lehrkräfte",
 	"global.sidebar.item.teams": "Teams",
-	"global.sidebar.logo": "Logo",
 	"global.skipLink.mainContent": "Zum Hauptinhalt wechseln",
 	"global.topbar.actions.alerts": "Status-Warnung",
 	"global.topbar.actions.contactSupport": "Kontakt",
@@ -1532,7 +1558,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
 	"pages.room.modal.course.export.options.topics": "Themen",
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
-	"pages.room.modal.course.export.options.columnBoards": "Spalten-Boards",
+	"pages.room.modal.course.export.options.columnBoards": "Boards",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",

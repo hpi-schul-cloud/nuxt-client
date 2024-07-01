@@ -1,7 +1,6 @@
 <template>
 	<default-wireframe
 		ref="main"
-		:full-width="true"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
 		@onFabItemClick="fabItemClickHandler"
@@ -84,7 +83,7 @@
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
-			@dialog-closed="onCopyResultModalClosed"
+			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
 		<common-cartridge-export-modal />
 		<end-course-sync-dialog

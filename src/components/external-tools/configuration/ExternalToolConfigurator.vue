@@ -21,7 +21,7 @@
 					:item="item.raw"
 					max-height="20"
 					max-width="20"
-					data-testId=""
+					data-testid="configuration-selected-item"
 				/>
 			</template>
 			<template #item="{ item, props }">
@@ -49,7 +49,12 @@
 			v-model="parameterConfiguration"
 		/>
 		<v-spacer class="mt-10" />
-		<v-alert v-if="error && error.message" type="error" :icon="mdiAlertCircle">
+		<v-alert
+			v-if="error && error.message"
+			type="error"
+			:icon="mdiAlertCircle"
+			data-testId="tool-error-alert"
+		>
 			{{ $t(getBusinessErrorTranslationKey(error)!) }}
 		</v-alert>
 		<v-row class="justify-end mt-10">

@@ -282,6 +282,17 @@ describe("BoardStore", () => {
 
 			expect(boardStore.board?.columns[2]).toEqual(NEW_COLUMN);
 		});
+
+		it("should set focus if user initiated create column", () => {
+			const { boardStore } = setup();
+
+			boardStore.createColumnSuccess({
+				newColumn: NEW_COLUMN,
+				isOwnAction: true,
+			});
+
+			expect(setEditModeId).toHaveBeenCalledWith(NEW_COLUMN.id);
+		});
 	});
 
 	describe("deleteCardSuccess", () => {
