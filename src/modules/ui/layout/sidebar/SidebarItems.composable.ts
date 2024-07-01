@@ -246,12 +246,6 @@ export const useSidebarItems = () => {
 			],
 		},
 		{
-			title: "global.sidebar.item.system",
-			icon: "$mdiApplicationBracketsOutline",
-			testId: "system",
-			children: systemLinks,
-		},
-		{
 			title: "global.sidebar.item.helpArea",
 			icon: "$mdiHelpCircleOutline",
 			testId: "Hilfebereich",
@@ -274,9 +268,14 @@ export const useSidebarItems = () => {
 					href: "https://www.lernen.cloud/",
 					target: "_blank",
 					testId: "training",
-					theme: [SchulcloudTheme.Default],
 				},
 			],
+		},
+		{
+			title: "global.sidebar.item.system",
+			icon: "$mdiApplicationBracketsOutline",
+			testId: "system",
+			children: systemLinks,
 		},
 	]);
 
