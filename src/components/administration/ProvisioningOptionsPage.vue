@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="t('components.administration.provisioningOptions.page.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 	>
 		<v-checkbox
 			:label="t('components.administration.provisioningOptions.class.label')"

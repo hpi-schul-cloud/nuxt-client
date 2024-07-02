@@ -3,7 +3,7 @@
 		<default-wireframe
 			:headline="$t('pages.administration.students.index.title')"
 			:breadcrumbs="breadcrumbs"
-			:full-width="true"
+			max-width="full"
 			:fab-items="fab"
 		>
 			<progress-modal
