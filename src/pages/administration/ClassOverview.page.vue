@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="t('pages.administration.classes.index.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="true"
+		max-width="full"
 		data-testid="admin-class-title"
 	>
 		<template #header>

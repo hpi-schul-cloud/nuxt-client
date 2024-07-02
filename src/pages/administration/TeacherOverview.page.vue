@@ -2,7 +2,7 @@
 	<div>
 		<default-wireframe
 			:breadcrumbs="breadcrumbs"
-			:full-width="true"
+			max-width="full"
 			:headline="$t('pages.administration.teachers.index.title')"
 			:fab-items="fab"
 		>
