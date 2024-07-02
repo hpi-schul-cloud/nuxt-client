@@ -2,7 +2,7 @@
 	<DefaultWireframe
 		:headline="$t('pages.administration.classes.index.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="true"
+		max-width="full"
 	>
 		<template #header>
 			<h1 class="text-h3" data-testid="admin-class-title">
@@ -27,11 +27,11 @@
 <script lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useI18n } from "vue-i18n";
+import { DataTableHeader } from "@/types/vuetify";
 import { GroupMapper, GroupUser, useGroupState } from "@data-group";
 import { computed, ComputedRef, defineComponent, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
-import { DataTableHeader } from "@/types/vuetify";
 
 interface GroupUserTableData {
 	firstName: string;
