@@ -132,15 +132,17 @@ const onMoveColumnKeyboard = (event: KeyboardEvent) => {
 };
 
 const emitIfNotListBoard = (event: string) => {
+	console.log("emitIfNotListBoard", emit);
 	if (!props.isListBoard) {
 		emit(event);
 	}
 };
 
-const onMoveColumnDown = () => emitIfNotListBoard("move:column-down");
 const onMoveColumnLeft = () => emitIfNotListBoard("move:column-left");
 const onMoveColumnRight = () => emitIfNotListBoard("move:column-right");
-const onMoveColumnUp = () => emitIfNotListBoard("move:column-up");
+
+const onMoveColumnDown = () => emit("move:column-down");
+const onMoveColumnUp = () => emit("move:column-up");
 
 const onUpdateTitle = (newTitle: string) => emit("update:title", newTitle);
 </script>
