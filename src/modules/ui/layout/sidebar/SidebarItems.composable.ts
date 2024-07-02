@@ -151,12 +151,6 @@ export const useSidebarItems = () => {
 			featureValue: `${envConfigModule.getEnv.ALERT_STATUS_URL}`,
 		},
 		{
-			title: "global.topbar.actions.releaseNotes",
-			href: "/help/releases",
-			target: "_self",
-			testId: "releases",
-		},
-		{
 			href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
 			title: "components.legacy.footer.accessibility.statement",
 			testId: "accessibility-statement",
@@ -165,10 +159,21 @@ export const useSidebarItems = () => {
 			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
 		},
 		{
+			title: "global.topbar.actions.releaseNotes",
+			href: "/help/releases",
+			target: "_self",
+			testId: "releases",
+		},
+		{
 			title: "components.legacy.footer.github",
 			href: "https://github.com/hpi-schul-cloud",
 			testId: "github",
 			target: "_blank",
+			theme: [
+				SchulcloudTheme.Brb,
+				SchulcloudTheme.Default,
+				SchulcloudTheme.Thr,
+			],
 		},
 		{
 			href: "/security",
