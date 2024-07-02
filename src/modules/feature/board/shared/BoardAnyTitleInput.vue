@@ -16,7 +16,6 @@
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
 		@keydown.enter="onEnter"
-		@update:modelValue="onUpdateTitle"
 	/>
 	<VTextarea
 		v-else
@@ -27,7 +26,7 @@
 		:rows="1"
 		auto-grow
 		flat
-		class="mx-n4 mb-n3 mt-2"
+		class="mx-n4 mb-n4"
 		:placeholder="placeholder"
 		bg-color="transparent"
 		ref="titleInput"
@@ -38,7 +37,6 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
-		@update:modelValue="onUpdateTitle"
 	>
 		<template v-slot:append-inner>
 			<slot />
@@ -89,31 +87,43 @@ export default defineComponent({
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
-		// This component needs to handle the title value in a local state (modelValue) to calculate the height of the textarea immediately
-		// eslint-disable-next-line vue/no-setup-props-reactivity-loss
-		const modelValue = ref(props.value);
+		const modelValue = ref("");
+
 		const internalIsFocused = ref(false);
 
-		const titleInput = ref<typeof VTextarea | null>(null);
+		const titleInput = ref(null);
 
 		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();
 		});
+
 		const setFocusOnEdit = async () => {
 			await nextTick();
 			internalIsFocused.value = true;
 
 			if (titleInput.value) {
-				titleInput.value.focus();
+				(titleInput.value as VTextarea).focus();
 			}
 		};
 
-		const onUpdateTitle = (newTitle: string) => {
-			emit("update:value", newTitle);
-		};
+		watch(modelValue, (newValue) => {
+			if (newValue !== props.value) {
+				emit("update:value", newValue);
+			}
+		});
+
+		watch(
+			() => props.value,
+			(newVal) => {
+				if (!(props.isFocused && props.isEditMode)) {
+					modelValue.value = newVal;
+				}
+			}
+		);
 
 		onMounted(() => {
 			if (props.isFocused && props.isEditMode) setFocusOnEdit();
+			modelValue.value = props.value;
 		});
 
 		watch(
@@ -170,7 +180,6 @@ export default defineComponent({
 			onEnter,
 			internalIsFocused,
 			titleInput,
-			onUpdateTitle,
 		};
 	},
 });
