@@ -5,4 +5,5 @@ export const schoolExternalToolMetadataFactory: Factory<SchoolExternalToolMetada
 	Factory.define<SchoolExternalToolMetadata>(() => ({
 		course: 5,
 		boardElement: 6,
+		mediaBoard: 0,
 	}));

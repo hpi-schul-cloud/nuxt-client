@@ -247,8 +247,16 @@ export default {
 		'Тут налаштовуються спеціальні параметри зовнішнього інструменту для школи. Після збереження конфігурації інструмент буде доступний у школі.<br><br>\nДодаткову інформацію можна знайти на нашому сайті <a href="https://docs.dbildungscloud.de/x/uoKqDg" target=" _blank">Розділ довідки щодо зовнішніх інструментів</a>.',
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
-	"components.administration.externalToolsSection.dialog.content":
-		"Ви впевнені, що хочете видалити інструмент <b>{itemName}</b>? <br><br>Наразі інструмент використовується таким чином: <br><b>{courseCount}</b> Курс(и) <br><b>{boardElementCount}</b> Дошка(и) стовпців <br><br>Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
+	"components.administration.externalToolsSection.dialog.content.header":
+		"Ви впевнені, що хочете видалити інструмент <b>{itemName}</b>? <br><br>Наразі інструмент використовується таким чином:",
+	"components.administration.externalToolsSection.dialog.content.courses":
+		"<b>{courseCount}</b> Курс(и)",
+	"components.administration.externalToolsSection.dialog.content.boardElements":
+		"<b>{boardElementCount}</b> Дошка(и) стовпців",
+	"components.administration.externalToolsSection.dialog.content.mediaShelves":
+		"<b>{mediaBoardCount}</b> Медіаполичка(и)",
+	"components.administration.externalToolsSection.dialog.content.warning":
+		"Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
 	"components.administration.externalToolsSection.dialog.title":
 		"Видаліть зовнішній інструмент",
 	"components.administration.externalToolsSection.header":

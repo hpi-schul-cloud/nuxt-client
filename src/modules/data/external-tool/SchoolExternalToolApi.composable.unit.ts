@@ -1,11 +1,11 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import * as serverApi from "@/serverApi/v3/api";
 import { SchoolExternalToolMetadataResponse } from "@/serverApi/v3";
+import * as serverApi from "@/serverApi/v3/api";
+import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import {
 	mockApiResponse,
 	schoolExternalToolMetadataResponseFactory,
 } from "@@/tests/test-utils";
-import { SchoolExternalToolMetadata } from "@/store/external-tool";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useSchoolExternalToolApi } from "./SchoolExternalToolApi.composable";
 
 describe("SchoolExternalToolApi.composable", () => {
@@ -58,6 +58,7 @@ describe("SchoolExternalToolApi.composable", () => {
 			expect(result).toEqual<SchoolExternalToolMetadata>({
 				course: 5,
 				boardElement: 6,
+				mediaBoard: 0,
 			});
 		});
 	});
