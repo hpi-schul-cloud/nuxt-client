@@ -1,27 +1,46 @@
-import { mount } from "@vue/test-utils";
-import DefaultWireframe from "../templates/DefaultWireframe.vue";
+import { ConfigResponse } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import DefaultWireframe from "../templates/DefaultWireframe.vue";
 
 describe("DefaultWireframe", () => {
-	it("shows title", () => {
+	const setup = (
+		options: ComponentMountingOptions<typeof DefaultWireframe> = {}
+	) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {} as ConfigResponse,
+		});
+
 		const wrapper = mount(DefaultWireframe, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
 			},
-			props: { fullWidth: true, headline: "dummy title" },
+			...options,
+		});
+
+		return wrapper;
+	};
+
+	it("shows title", () => {
+		const wrapper = setup({
+			props: { maxWidth: "full", headline: "dummy title" },
 		});
 
 		const h1 = wrapper.find("h1");
 		expect(h1.text()).toBe("dummy title");
 	});
+
 	it("shows breadcrumbs", () => {
-		const wrapper = mount(DefaultWireframe, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
+		const wrapper = setup({
 			props: {
 				fullWidth: true,
 				headline: "dummy title",
@@ -47,50 +66,49 @@ describe("DefaultWireframe", () => {
 	});
 
 	it("has full width", () => {
-		const wrapper = mount(DefaultWireframe, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-			props: { headline: "dummy title", fullWidth: true },
+		const wrapper = setup({
+			props: { maxWidth: "full", headline: "dummy title" },
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
 		expect(contentWrapper.classes("container-full-width")).toBeTruthy();
-		expect(contentWrapper.classes("container-max-width")).toBeFalsy();
+		expect(contentWrapper.classes("container-short-width")).toBeFalsy();
 	});
 
 	it("has small width", () => {
-		const wrapper = mount(DefaultWireframe, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-			props: { headline: "dummy title", fullWidth: false },
+		const wrapper = setup({
+			props: { maxWidth: "short", headline: "dummy title" },
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
 		expect(contentWrapper.classes("container-full-width")).toBeFalsy();
-		expect(contentWrapper.classes("container-max-width")).toBeTruthy();
+		expect(contentWrapper.classes("container-short-width")).toBeTruthy();
+	});
+
+	it("has nativ width", () => {
+		const wrapper = setup({
+			props: { maxWidth: "nativ", headline: "dummy title" },
+		});
+
+		const contentWrapper = wrapper.find(".main-content");
+		expect(contentWrapper.classes("container-full-width")).toBeFalsy();
+		expect(contentWrapper.classes("container-short-width")).toBeFalsy();
 	});
 
 	it("displays content in slot", () => {
-		const wrapper = mount(DefaultWireframe, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-			props: { headline: "dummy title", fullWidth: false },
+		const wrapper = setup({
+			props: { maxWidth: "full", headline: "dummy title" },
 			slots: {
 				default: ["<p>some stuff</p>", "text"],
 			},
 		});
+
 		const contentWrapper = wrapper.find(".main-content");
 		expect(contentWrapper.text()).toBe("some stufftext");
 	});
 
 	it("displays headline in slot", () => {
-		const wrapper = mount(DefaultWireframe, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
+		const wrapper = setup({
 			props: { headline: "property title", fullWidth: false },
 			slots: {
 				header: [
@@ -99,6 +117,7 @@ describe("DefaultWireframe", () => {
 				],
 			},
 		});
+
 		const h1 = wrapper.find("h1");
 		expect(h1.text()).toBe("slot title");
 		const menu = wrapper.find(".menu");

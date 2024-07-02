@@ -1,6 +1,19 @@
 <template>
-	<v-container fluid class="wireframe-container">
-		<div class="wireframe-header sticky">
+	<div class="wireframe-container">
+		<div
+			aria-live="polite"
+			id="notify-screen-reader-polite"
+			class="d-sr-only"
+		/>
+		<div
+			aria-live="assertive"
+			id="notify-screen-reader-assertive"
+			class="d-sr-only"
+		/>
+		<div
+			class="wireframe-header sticky"
+			:class="{ 'old-layout': oldLayoutEnabled }"
+		>
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -46,80 +59,84 @@
 			<div v-if="showBorder" class="border" />
 		</div>
 		<v-container
+			:fluid="maxWidth !== 'nativ'"
+			class="main-content"
 			:class="{
-				'main-content': true,
-				'container-max-width': !fullWidth,
-				'container-full-width': fullWidth,
-				'overflow-x': allowOverflowX,
+				'container-short-width': maxWidth === 'short',
+				'container-full-width': maxWidth === 'full',
+				'overflow-x-auto': allowOverflowX,
 			}"
 		>
-			<div style="padding: 0 var(--space-lg)">
-				<slot />
-			</div>
+			<slot />
 		</v-container>
-	</v-container>
+	</div>
 </template>
 
-<script lang="ts">
-import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
+<script setup lang="ts">
+import VCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
+import EnvConfigModule from "@/store/env-config";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { defineComponent, PropType } from "vue";
+import { computed, PropType, useSlots } from "vue";
 import { Fab } from "./default-wireframe.types";
 
-export default defineComponent({
-	inheritAttrs: false,
-	components: {
-		vCustomBreadcrumbs,
-		SpeedDialMenu,
-		SpeedDialMenuAction,
+const props = defineProps({
+	breadcrumbs: {
+		type: Array,
+		required: false,
+		default: () => [],
 	},
-	props: {
-		breadcrumbs: {
-			type: Array,
-			required: false,
-			default: () => [],
-		},
-		headline: {
-			type: String,
-			required: false,
-			default: null,
-		},
-		fullWidth: {
-			type: Boolean,
-			required: true,
-		},
-		fabItems: {
-			type: Object as PropType<Fab>,
-			required: false,
-			default: null,
-		},
-		allowOverflowX: {
-			type: Boolean,
-			required: false,
-			default: false,
-		},
-		dataTestid: {
-			type: String as PropType<string | null>,
-			default: null,
-		},
+	headline: {
+		type: String,
+		required: false,
+		default: null,
 	},
-	emits: {
-		onFabItemClick: (event: string) => (event ? true : false),
+	maxWidth: {
+		type: String as PropType<"full" | "short" | "nativ">,
 	},
-	computed: {
-		showBorder(): boolean {
-			return !!(this.headline || this.$slots.header);
-		},
+	fabItems: {
+		type: Object as PropType<Fab>,
+		required: false,
+		default: null,
 	},
-	setup() {
-		const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
-		return {
-			isMobile,
-		};
+	allowOverflowX: {
+		type: Boolean,
+		required: false,
+		default: false,
+	},
+	hideBorder: {
+		type: Boolean,
+	},
+	dataTestid: {
+		type: String as PropType<string | null>,
+		default: null,
+	},
+	// TODO - remove this when new layout is released
+	envConfigModule: {
+		type: EnvConfigModule,
 	},
 });
+
+defineEmits({
+	onFabItemClick: (event: string) => (event ? true : false),
+});
+
+defineOptions({
+	inheritAttrs: false,
+});
+const slots = useSlots();
+
+const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+
+const oldLayoutEnabled = computed(() => {
+	return !props.envConfigModule?.getEnv.FEATURE_NEW_LAYOUT_ENABLED;
+});
+
+const showBorder = computed(() => {
+	return !props.hideBorder && !!(props.headline || slots.header);
+});
 </script>
+
 <style lang="scss" scoped>
 @import "~vuetify/settings";
 
@@ -127,11 +144,12 @@ export default defineComponent({
 	margin-bottom: var(--space-md);
 }
 
+.wireframe-container {
+	height: calc(100vh - 64px);
+}
+
 .wireframe-header {
 	padding: 0 var(--space-lg);
-}
-.wireframe-container {
-	padding: 0;
 }
 
 :deep(.v-application__wrap) {
@@ -139,13 +157,10 @@ export default defineComponent({
 }
 
 .main-content {
-	padding: 0;
-}
-.overflow-x {
-	overflow-x: auto;
+	padding: 0 var(--space-lg);
 }
 
-.container-max-width {
+.container-short-width {
 	max-width: var(--size-content-width-max);
 }
 
@@ -156,8 +171,8 @@ export default defineComponent({
 
 .border {
 	margin-right: calc(-1 * var(--space-lg));
-	margin-bottom: var(--space-xl);
 	margin-left: calc(-1 * var(--space-lg));
+	margin-bottom: var(--space-xl);
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
@@ -169,9 +184,13 @@ export default defineComponent({
 
 .sticky {
 	position: sticky;
-	top: 0;
+	top: 64px;
 	z-index: var(--layer-sticky-header);
 	background-color: rgb(var(--v-theme-white));
+}
+
+.old-layout {
+	top: 0;
 }
 
 @media #{map-get($display-breakpoints, 'lg-and-up')} {

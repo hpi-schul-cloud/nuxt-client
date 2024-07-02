@@ -2,11 +2,13 @@
 	<default-wireframe
 		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
+		data-testid="school-external-tool-configurator-title"
 	>
 		<RenderHTML
 			:html="t('components.administration.externalToolsSection.description')"
 			component="p"
+			data-testId="tool-configuration-infotext"
 		/>
 		<v-spacer class="mt-10" />
 		<external-tool-configurator

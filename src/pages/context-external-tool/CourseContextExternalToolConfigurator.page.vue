@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 		data-testid="context-external-tool-configurator-title"
 	>
 		<RenderHTML :html="t('pages.tool.description')" component="p" />

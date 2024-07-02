@@ -26,7 +26,7 @@
 		:rows="1"
 		auto-grow
 		flat
-		class="mx-n4 mb-n2 mt-n2"
+		class="mx-n4 mb-n4"
 		:placeholder="placeholder"
 		bg-color="transparent"
 		ref="titleInput"
@@ -37,11 +37,14 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
-	/>
+	>
+		<template v-slot:append-inner>
+			<slot />
+		</template>
+	</VTextarea>
 </template>
 
 <script lang="ts">
-import { useVModel } from "@vueuse/core";
 import {
 	computed,
 	defineComponent,
@@ -84,27 +87,53 @@ export default defineComponent({
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "value", emit);
+		const modelValue = ref("");
 
 		const internalIsFocused = ref(false);
 
-		const titleInput = ref<typeof VTextarea | null>(null);
+		const titleInput = ref(null);
 
 		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();
 		});
+
 		const setFocusOnEdit = async () => {
 			await nextTick();
 			internalIsFocused.value = true;
 
 			if (titleInput.value) {
-				titleInput.value.focus();
+				(titleInput.value as VTextarea).focus();
 			}
 		};
 
+		watch(modelValue, (newValue) => {
+			if (newValue !== props.value) {
+				emit("update:value", newValue);
+			}
+		});
+
+		watch(
+			() => props.value,
+			(newVal) => {
+				if (!(props.isFocused && props.isEditMode)) {
+					modelValue.value = newVal;
+				}
+			}
+		);
+
 		onMounted(() => {
 			if (props.isFocused && props.isEditMode) setFocusOnEdit();
+			modelValue.value = props.value;
 		});
+
+		watch(
+			() => props.value,
+			async (newVal, oldVal) => {
+				if (newVal !== oldVal) {
+					modelValue.value = newVal;
+				}
+			}
+		);
 
 		watch(
 			() => props.isEditMode,
@@ -166,6 +195,7 @@ export default defineComponent({
 	background: transparent !important;
 	opacity: 1;
 	font-size: var(--heading-5) !important;
+	overflow: hidden;
 }
 
 :deep(textarea[readonly]) {
@@ -183,5 +213,10 @@ export default defineComponent({
 
 :deep(input)::placeholder {
 	opacity: 1;
+}
+:deep(.v-field__append-inner, .v-field__clearable, .v-field__prepend-inner) {
+	display: flex;
+	align-items: flex-start;
+	padding-top: 8px !important;
 }
 </style>

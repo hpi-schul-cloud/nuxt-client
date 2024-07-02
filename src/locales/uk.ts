@@ -330,6 +330,32 @@ export default {
 		"{type}: не вдалося завантажити.",
 	"components.board.notifications.errors.notUpdated":
 		"Зберегти зміни не вдалося.",
+	"components.board.screenReader.notification.cardCreated.success":
+		"Картку було створено іншим користувачем у колонці {columnPosition}.",
+	"components.board.screenReader.notification.columnCreated.success":
+		"Колонку створив інший користувач.",
+	"components.board.screenReader.notification.cardDeleted.success":
+		"Картка була видалена іншим користувачем.",
+	"components.board.screenReader.notification.columnDeleted.success":
+		"Стовпець був видалений іншим користувачем.",
+	"components.board.screenReader.notification.cardMovedInSameColumn.success":
+		"У колонці {columnPosition} картку було переміщено на позицію {newPosition}.",
+	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
+		"Картку було переміщено зі стовпчика {fromColumnPosition} до стовпчика {toColumnPosition}.",
+	"components.board.screenReader.notification.columnMoved.success":
+		"Стовпець було переміщено з позиції {oldPosition} в позицію {newPosition}.",
+	"components.board.screenReader.notification.boardTitleUpdated.success":
+		"Назву дошки було змінено на {newTitle} іншим користувачем.",
+	"components.board.screenReader.notification.boardVisibilityUpdated.published":
+		"Дошку опублікував інший користувач.",
+	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
+		"Дошка була повернута до чернетки іншим користувачем.",
+	"components.board.screenReader.notification.columnTitleUpdated.success":
+		"Заголовок стовпчика {columnPosition} було змінено на {newTitle} іншим користувачем.",
+	"components.board.screenReader.notification.cardTitleUpdated.success":
+		"Заголовок картки {cardPosition} у колонці {columnPosition} було змінено на {newTitle} іншим користувачем.",
+	"components.board.screenReader.notification.cardUpdated.success":
+		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
@@ -760,6 +786,7 @@ export default {
 	"format.dateUTC": "JJJJ-MM-DD",
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
+	"global.cloudLogo": "Логотип",
 	"global.sidebar.item.accessibility": "Доступність",
 	"global.sidebar.item.addons": "Додаткові компоненти",
 	"global.sidebar.item.calendar": "Календар",
@@ -778,7 +805,6 @@ export default {
 	"global.sidebar.item.tasks": "Завдання",
 	"global.sidebar.item.teacher": "Викладачі",
 	"global.sidebar.item.teams": "Команди",
-	"global.sidebar.logo": "Логотип",
 	"global.skipLink.mainContent": "Перейти до основного вмісту",
 	"global.topbar.actions.alerts": "Сповіщення про стан",
 	"global.topbar.actions.contactSupport": "Зв'язатися",

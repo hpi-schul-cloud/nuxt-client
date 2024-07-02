@@ -1,7 +1,7 @@
 <template>
 	<default-wireframe
 		:headline="$t('common.words.tasks')"
-		:full-width="false"
+		max-width="short"
 		:fab-items="fabItems"
 	>
 		<template #header>
@@ -90,7 +90,7 @@
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
-			@dialog-closed="onCopyResultModalClosed"
+			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
 	</default-wireframe>
 </template>
@@ -101,12 +101,12 @@ import { authModule } from "@/store";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import {
-	mdiPlus,
-	mdiFormatListChecks,
 	mdiArchiveOutline,
-	mdiCheckCircleOutline,
-	mdiPlaylistEdit,
 	mdiCheck,
+	mdiCheckCircleOutline,
+	mdiFormatListChecks,
+	mdiPlaylistEdit,
+	mdiPlus,
 } from "@mdi/js";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";

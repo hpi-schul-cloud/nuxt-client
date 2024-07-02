@@ -3,7 +3,7 @@
 		v-show="true"
 		variant="text"
 		:ripple="false"
-		:icon="collapsed ? mdiChevronUp : mdiChevronDown"
+		:icon="collapsed ? mdiChevronDown : mdiChevronUp"
 		size="small"
 		style="height: 36px; width: 36px"
 		@click="collapsed = !collapsed"
@@ -21,6 +21,7 @@
 				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
 				size="small"
+				data-testid="line-menu-btn"
 				style="height: 36px; width: 36px"
 			>
 				<VIcon class="text-grey-darken-2">
@@ -45,6 +46,7 @@
 						v-bind="props"
 						:prepend-icon="mdiPalette"
 						@click.stop.prevent="() => {}"
+						data-testid="color-picker-btn"
 					>
 						<VListItemTitle>
 							<span>{{ $t("common.actions.pickColor") }}</span>
@@ -62,6 +64,7 @@
 					class="ma-2"
 					@update:model-value="onUpdateColor"
 					show-swatches
+					data-testid="line-color-picker"
 				/>
 			</VListGroup>
 			<VListItem

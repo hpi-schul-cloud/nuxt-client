@@ -2,6 +2,7 @@ import {
 	FileRecordListResponse,
 	FileRecordParentType,
 	FileRecordResponse,
+	StorageLocation,
 } from "@/fileStorageApi/v3";
 import * as serverApi from "@/fileStorageApi/v3/api/file-api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
@@ -146,7 +147,12 @@ describe("FileStorageApi Composable", () => {
 
 				await fetchFile(parentId, parentType);
 
-				expect(fileApi.list).toBeCalledWith("schoolId", parentId, parentType);
+				expect(fileApi.list).toBeCalledWith(
+					"schoolId",
+					StorageLocation.SCHOOL,
+					parentId,
+					parentType
+				);
 			});
 
 			describe("when skeleton filerecord doesn't exist in state", () => {
@@ -283,6 +289,7 @@ describe("FileStorageApi Composable", () => {
 
 				expect(fileApi.upload).toBeCalledWith(
 					"schoolId",
+					StorageLocation.SCHOOL,
 					parentId,
 					parentType,
 					file
@@ -386,6 +393,7 @@ describe("FileStorageApi Composable", () => {
 
 				expect(fileApi.uploadFromUrl).toBeCalledWith(
 					"schoolId",
+					StorageLocation.SCHOOL,
 					parentId,
 					parentType,
 					expect.objectContaining({

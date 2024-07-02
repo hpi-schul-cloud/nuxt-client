@@ -16,19 +16,28 @@ import {
 } from "./boardActionPayload";
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
+import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
 	const { notifySocketError } = useErrorHandler();
+	const {
+		notifyCreateCardSuccess,
+		notifyCreateColumnSuccess,
+		notifyDeleteCardSuccess,
+		notifyDeleteColumnSuccess,
+		notifyMoveCardSuccess,
+		notifyMoveColumnSuccess,
+		notifyUpdateBoardTitleSuccess,
+		notifyUpdateBoardVisibilitySuccess,
+		notifyUpdateColumnTitleSuccess,
+	} = useBoardAriaNotification();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
 	) => {
-		handle(
-			action,
-			on(BoardActions.disconnectSocket, disconnectSocketRequest),
-
-			// success actions
+		const successActions = [
 			on(BoardActions.createCardSuccess, boardStore.createCardSuccess),
 			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
 			on(CardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
@@ -48,8 +57,9 @@ export const useBoardSocketApi = () => {
 				BoardActions.updateBoardVisibilitySuccess,
 				boardStore.updateBoardVisibilitySuccess
 			),
+		];
 
-			// failure actions
+		const failureActions = [
 			on(BoardActions.createCardFailure, createCardFailure),
 			on(BoardActions.createColumnFailure, createColumnFailure),
 			on(CardActions.deleteCardFailure, deleteCardFailure),
@@ -62,7 +72,30 @@ export const useBoardSocketApi = () => {
 			on(
 				BoardActions.updateBoardVisibilityFailure,
 				updateBoardVisibilityFailure
-			)
+			),
+		];
+
+		const ariaLiveNotifications = [
+			on(BoardActions.createCardSuccess, notifyCreateCardSuccess),
+			on(CardActions.deleteCardSuccess, notifyDeleteCardSuccess),
+			on(BoardActions.createColumnSuccess, notifyCreateColumnSuccess),
+			on(BoardActions.deleteColumnSuccess, notifyDeleteColumnSuccess),
+			on(BoardActions.moveCardSuccess, notifyMoveCardSuccess),
+			on(BoardActions.moveColumnSuccess, notifyMoveColumnSuccess),
+			on(BoardActions.updateBoardTitleSuccess, notifyUpdateBoardTitleSuccess),
+			on(
+				BoardActions.updateBoardVisibilitySuccess,
+				notifyUpdateBoardVisibilitySuccess
+			),
+			on(BoardActions.updateColumnTitleSuccess, notifyUpdateColumnTitleSuccess),
+		];
+
+		handle(
+			action,
+			...successActions,
+			...failureActions,
+			...ariaLiveNotifications,
+			on(BoardActions.disconnectSocket, disconnectSocketRequest)
 		);
 	};
 
@@ -70,7 +103,12 @@ export const useBoardSocketApi = () => {
 		useSocketConnection(dispatch);
 
 	const createCardRequest = async (payload: CreateCardRequestPayload) => {
-		emitOnSocket("create-card-request", payload);
+		emitOnSocket("create-card-request", {
+			...payload,
+			requiredEmptyElements: [
+				CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
+			],
+		});
 	};
 
 	const fetchBoardRequest = async (
@@ -94,8 +132,11 @@ export const useBoardSocketApi = () => {
 	};
 
 	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
+		const { newIndex, oldIndex, fromColumnId, toColumnId } = payload;
+		if (newIndex === oldIndex && fromColumnId === toColumnId) return;
+
 		try {
-			if (payload.toColumnId === undefined && boardStore.board) {
+			if (toColumnId === undefined && boardStore.board) {
 				const response = await emitWithAck("create-column-request", {
 					boardId: boardStore.board.id,
 				});

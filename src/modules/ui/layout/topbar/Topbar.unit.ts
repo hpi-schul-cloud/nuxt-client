@@ -5,15 +5,22 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { AUTH_MODULE_KEY, STATUS_ALERTS_MODULE_KEY } from "@/utils/inject";
+import {
+	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	STATUS_ALERTS_MODULE_KEY,
+} from "@/utils/inject";
 import AuthModule from "@/store/auth";
 import StatusAlertsModule from "@/store/status-alerts";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
-import { h } from "vue";
+import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
+import { envsFactory } from "@@/tests/test-utils";
+import EnvConfigModule from "@/store/env-config";
+import { SchulcloudTheme } from "@/serverApi/v3";
 
 describe("@ui-layout/Topbar", () => {
-	const setup = (windowWidth = 1300) => {
+	const setup = async (windowWidth = 1300, isSidebarExpanded?: boolean) => {
 		const authModule = createModuleMocks(AuthModule, {
 			getSchool: {
 				id: "234",
@@ -28,6 +35,12 @@ describe("@ui-layout/Topbar", () => {
 				lastName: "Dent",
 			},
 			getUserRoles: ["administrator"],
+		});
+
+		const envs = envsFactory.build();
+		const envConfigModule = createModuleMocks(EnvConfigModule, {
+			getEnv: envs,
+			getTheme: SchulcloudTheme.Brb,
 		});
 
 		const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
@@ -45,37 +58,76 @@ describe("@ui-layout/Topbar", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 				},
 			},
 			slots: {
 				default: h(Topbar, {
-					sidebarExpanded: true,
+					sidebarExpanded: isSidebarExpanded ?? true,
 				}),
 			},
 		});
 
+		await nextTick();
+		await nextTick();
 		const topbar = wrapper.findComponent({ name: "Topbar" });
 		return { wrapper, topbar };
 	};
 
-	it("should render component", () => {
-		const { wrapper } = setup();
+	it("should render component", async () => {
+		const { wrapper } = await setup();
 
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("should emit sidebar-toggled", async () => {
-		const { wrapper, topbar } = setup();
+	describe("when sidebar is expanded", () => {
+		it("should not show toggle button", async () => {
+			const { wrapper } = await setup();
 
-		const sidebarToggle = wrapper.findComponent({ name: "VAppBarNavIcon" });
-		await sidebarToggle.trigger("click");
+			const sidebarToggle = wrapper.findComponent({ name: "VAppBarNavIcon" });
 
-		expect(topbar.emitted("sidebar-toggled")).toHaveLength(1);
+			expect(sidebarToggle.exists()).toEqual(false);
+		});
+
+		it("should not show logo", async () => {
+			const { wrapper } = await setup();
+
+			const topbarLogo = wrapper.findComponent({ name: "TopbarLogo" });
+
+			expect(topbarLogo.exists()).toEqual(false);
+		});
+	});
+
+	describe("when sidebar is collapsed", () => {
+		it("should show toggle button", async () => {
+			const { wrapper } = await setup(1300, false);
+
+			const sidebarToggle = wrapper.findComponent({ name: "VAppBarNavIcon" });
+
+			expect(sidebarToggle.exists()).toEqual(true);
+		});
+
+		it("should show logo", async () => {
+			const { wrapper } = await setup(1300, false);
+
+			const topbarLogo = wrapper.findComponent({ name: "CloudLogo" });
+
+			expect(topbarLogo.exists()).toEqual(true);
+		});
+
+		it("should emit sidebar-toggled", async () => {
+			const { wrapper, topbar } = await setup(1300, false);
+
+			const sidebarToggle = wrapper.findComponent({ name: "VAppBarNavIcon" });
+			await sidebarToggle.trigger("click");
+
+			expect(topbar.emitted("sidebar-toggled")).toHaveLength(1);
+		});
 	});
 
 	it("should show all topbar items on large sized screens", async () => {
-		const { topbar } = setup();
+		const { topbar } = await setup();
 
 		const iconBtns = topbar.findAllComponents({ name: "TopbarItem" });
 		const schoolName = topbar.find("[data-testid=school-name]");
@@ -89,7 +141,7 @@ describe("@ui-layout/Topbar", () => {
 	});
 
 	it("should not show school logo on medium sized screens", async () => {
-		const { topbar } = setup(1200);
+		const { topbar } = await setup(1200);
 
 		const iconBtns = topbar.findAllComponents({ name: "TopbarItem" });
 		const schoolName = topbar.find("[data-testid=school-name]");
@@ -103,7 +155,7 @@ describe("@ui-layout/Topbar", () => {
 	});
 
 	it("should only show status alerts and user menu on small sized screens", async () => {
-		const { topbar } = setup(500);
+		const { topbar } = await setup(500);
 
 		const iconBtns = topbar.findAllComponents({ name: "TopbarItem" });
 		const schoolName = topbar.find("[data-testid=school-name]");

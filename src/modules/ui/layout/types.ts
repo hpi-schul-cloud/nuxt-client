@@ -1,4 +1,4 @@
-import { ConfigResponse } from "@/serverApi/v3";
+import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
 
 export type ExternalLink = {
 	href: string;
@@ -14,13 +14,16 @@ export type RouterLink = {
 	rel?: never;
 };
 
+export type FeatureValue = string | number | boolean;
+
 export type SidebarItemBaseData = {
 	icon?: string;
 	title: string;
 	testId: string;
 	permissions?: string[];
 	feature?: keyof ConfigResponse;
-	featureValue?: string | number | boolean;
+	featureValue?: FeatureValue;
+	theme?: SchulcloudTheme[];
 };
 
 export type SidebarSingleItem = SidebarItemBaseData &
