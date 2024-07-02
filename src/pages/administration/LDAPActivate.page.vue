@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="$t('pages.administration.ldap.save.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 	>
 		<section class="section">
 			<div class="icon-text">

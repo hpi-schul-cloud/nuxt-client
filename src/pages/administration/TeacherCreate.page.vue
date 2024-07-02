@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="$t('pages.administration.teachers.new.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 	>
 		<form-create-user role-name="teacher" @create-user="createTeacher">
 			<template #inputs>

@@ -16,7 +16,7 @@
 					disabled: true,
 				},
 			]"
-			:full-width="false"
+			max-width="short"
 		>
 			<div>
 				<form-news
@@ -32,20 +32,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRouter, useRoute } from "vue-router";
-import { useTitle } from "@vueuse/core";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { AlertStatus } from "@/store/types/alert-payload";
+import { News, PatchNewsPayload } from "@/store/types/news";
 import {
 	injectStrict,
-	NOTIFIER_MODULE_KEY,
 	NEWS_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { News, PatchNewsPayload } from "@/store/types/news";
-import { AlertStatus } from "@/store/types/alert-payload";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { FormNews } from "@feature-news-form";
+import { useTitle } from "@vueuse/core";
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 const router = useRouter();

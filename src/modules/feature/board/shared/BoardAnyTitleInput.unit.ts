@@ -77,7 +77,7 @@ describe("BoardAnyTitleTitleInput", () => {
 			setup({ isEditMode: true, scope: "card" });
 			const newValue = "new title";
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			textAreaComponent.vm.$emit("update:modelValue", "new title");
+			await textAreaComponent.setValue("new title");
 			const emitted = wrapper.emitted();
 
 			if (emitted["update:value"] === undefined) {

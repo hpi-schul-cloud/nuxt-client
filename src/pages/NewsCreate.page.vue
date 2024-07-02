@@ -11,7 +11,7 @@
 				disabled: true,
 			},
 		]"
-		:full-width="false"
+		max-width="short"
 	>
 		<div>
 			<form-news @save="create" @cancel="onCancel" />
