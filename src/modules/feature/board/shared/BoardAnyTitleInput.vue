@@ -26,7 +26,7 @@
 		:rows="1"
 		auto-grow
 		flat
-		class="mx-n4 mb-n3 mt-2"
+		class="mx-n4 mb-n4"
 		:placeholder="placeholder"
 		bg-color="transparent"
 		ref="titleInput"
