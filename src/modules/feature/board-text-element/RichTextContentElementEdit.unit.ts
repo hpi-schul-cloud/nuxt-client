@@ -45,5 +45,15 @@ describe("RichTextContentElementEdit", () => {
 			const emitted = wrapper.emitted();
 			expect(emitted["delete:element"]).toHaveLength(1);
 		});
+
+		it("should update modalValue when prop value changes", async () => {
+			const { wrapper } = setup({ value: "test value", autofocus: true });
+			const newValue = "new title";
+			await wrapper.setProps({ value: newValue });
+			await nextTick();
+
+			const emitted = wrapper.emitted();
+			expect(emitted["update:value"]).toHaveLength(1);
+		});
 	});
 });
