@@ -1,6 +1,6 @@
 <template>
 	<VCardTitle
-		class="d-block text-break-word pt-0 pb-2"
+		class="d-block text-break-word pb-2"
 		:class="{ 'pointer-events-none': !isEditMode }"
 		v-if="isEditMode || value !== ''"
 	>
