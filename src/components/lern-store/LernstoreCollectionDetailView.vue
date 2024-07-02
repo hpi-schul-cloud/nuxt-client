@@ -313,6 +313,7 @@ $tablet-portrait-width: 768px;
 		justify-content: space-between;
 		width: 100%;
 		padding: 0 var(--space-lg);
+		height: calc(100vh - 122px);
 
 		.wrapper {
 			display: grid;
