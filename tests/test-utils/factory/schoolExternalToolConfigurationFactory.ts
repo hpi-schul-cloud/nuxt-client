@@ -1,5 +1,5 @@
-import { Factory } from "fishery";
 import { SchoolExternalToolConfigurationStatus } from "@/store/external-tool/school-external-tool-configuration-status";
+import { Factory } from "fishery";
 
 export const schoolToolConfigurationStatusFactory =
 	Factory.define<SchoolExternalToolConfigurationStatus>(() => {
@@ -8,6 +8,6 @@ export const schoolToolConfigurationStatusFactory =
 			isOutdatedOnScopeSchool: false,
 			isIncompleteOperationalOnScopeContext: false,
 			isIncompleteOnScopeContext: false,
-			isDeactivated: false,
+			isGloballyDeactivated: false,
 		};
 	});

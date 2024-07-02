@@ -35,7 +35,7 @@ export function useExternalToolsSectionUtils(
 			schoolExternalToolsModule.getSchoolExternalTools;
 		return schoolExternalTools.map((tool: SchoolExternalTool) => {
 			let statusTranslationKey = "components.externalTools.status.latest";
-			if (tool.status.isDeactivated) {
+			if (tool.isDeactivated || tool.status.isGloballyDeactivated) {
 				statusTranslationKey = "components.externalTools.status.deactivated";
 			} else if (tool.status.isOutdatedOnScopeSchool) {
 				statusTranslationKey = "components.externalTools.status.outdated";
@@ -47,7 +47,7 @@ export function useExternalToolsSectionUtils(
 				name: tool.name,
 				statusText: t(statusTranslationKey),
 				isOutdated: tool.status.isOutdatedOnScopeSchool,
-				isDeactivated: tool.status.isDeactivated,
+				isDeactivated: tool.isDeactivated || tool.status.isGloballyDeactivated,
 			};
 		});
 	};
