@@ -1,40 +1,46 @@
 <template>
-	<legacy-logged-in>
-		<v-main id="main-content" class="content">
+	<div>
+		<SkipLinks />
+		<Sidebar v-model="sidebarExpanded" />
+		<Topbar
+			:sidebar-expanded="sidebarExpanded"
+			@sidebar-toggled="onToggleSidebar"
+		/>
+		<v-main
+			id="main-content"
+			:class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }"
+		>
 			<application-error-wrapper>
-				<alert-container />
+				<AlertContainer />
 				<router-view />
 			</application-error-wrapper>
 		</v-main>
 		<loading-state-dialog />
-	</legacy-logged-in>
+		<keep-alive>
+			<autoLogoutWarning />
+		</keep-alive>
+	</div>
 </template>
 
-<script>
-import LegacyLoggedIn from "@/layouts/legacyLoggedIn";
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import { useDisplay } from "vuetify";
+import SkipLinks from "@/components/molecules/SkipLinks.vue";
+import { Sidebar, Topbar } from "@ui-layout";
 import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import LoadingStateDialog from "@/components/molecules/LoadingStateDialog";
-import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper";
+import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
+import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
+import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
 
-export default {
-	name: "LoggedInLayout",
+const { lgAndUp } = useDisplay();
 
-	components: {
-		LoadingStateDialog,
-		LegacyLoggedIn,
-		AlertContainer,
-		ApplicationErrorWrapper,
-	},
+const isDesktop = computed(() => {
+	return lgAndUp.value;
+});
+
+const sidebarExpanded = ref(isDesktop.value);
+
+const onToggleSidebar = () => {
+	sidebarExpanded.value = !sidebarExpanded.value;
 };
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/mixins";
-
-.content {
-	grid-area: content;
-	width: inherit;
-	max-width: 100vw;
-	overflow-x: auto;
-}
-</style>

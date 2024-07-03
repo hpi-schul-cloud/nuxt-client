@@ -16,7 +16,7 @@ import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { SchulcloudTheme } from "@/serverApi/v3";
-import NewLoggedIn from "./newLoggedIn.layout.vue";
+import LoggedIn from "./LoggedIn.layout.vue";
 import { mount } from "@vue/test-utils";
 
 jest.mock("vue-router", () => ({
@@ -44,7 +44,7 @@ const setup = () => {
 
 	const wrapper = mount(VApp, {
 		slots: {
-			default: h(NewLoggedIn),
+			default: h(LoggedIn),
 		},
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -83,7 +83,7 @@ const defineWindowWidth = (width: number) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
-describe("newLoggedIn", () => {
+describe("LoggedIn", () => {
 	it("should render correctly", async () => {
 		const { wrapper } = setup();
 		await nextTick();
