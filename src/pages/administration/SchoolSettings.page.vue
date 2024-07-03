@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="headline"
 		:breadcrumbs="breadcrumbs"
-		:full-width="true"
+		max-width="nativ"
 	>
 		<v-alert
 			v-if="error"

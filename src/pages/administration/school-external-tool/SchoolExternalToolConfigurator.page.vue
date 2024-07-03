@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 		data-testid="school-external-tool-configurator-title"
 	>
 		<RenderHTML
