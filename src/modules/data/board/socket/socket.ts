@@ -1,7 +1,7 @@
 import { io, Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { envConfigModule } from "@/store";
-import { useConnectionStatus } from "../../../../composables/connections.composable";
+import { useConnectionStatus } from "@/composables/connections.composable";
 
 let instance: Socket | null = null;
 
