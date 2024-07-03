@@ -113,10 +113,6 @@ const props = defineProps({
 		type: String as PropType<string | null>,
 		default: null,
 	},
-	// TODO - remove this when new layout is released
-	envConfigModule: {
-		type: EnvConfigModule,
-	},
 });
 
 defineEmits({
