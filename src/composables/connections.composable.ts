@@ -5,6 +5,7 @@ import { useI18n } from "vue-i18n";
 const lossSocketConnection = ref(false);
 const lossInternetConnection = ref(false);
 const timeout = ref(false);
+
 const MAX_TIME_OUT_FOR_INACTIVITY = 3000;
 
 export const useConnectionStatus = () => {
@@ -37,22 +38,18 @@ export const useConnectionStatus = () => {
 		}
 	});
 
+	const timeoutFn = useTimeoutFn(() => {
+		timeout.value = true;
+	}, MAX_TIME_OUT_FOR_INACTIVITY);
+
 	window.addEventListener("visibilitychange", () => {
-		const timeoutFn = useTimeoutFn(() => {
-			timeout.value = true;
-		}, MAX_TIME_OUT_FOR_INACTIVITY);
+		if (timeoutFn.isPending) timeoutFn.stop();
 
-		if (document.hidden) {
-			timeoutFn.stop();
-			timeoutFn.start();
-		} else {
-			if (timeout.value) {
-				showInfo("You should reload the page to get the latest data");
-				timeout.value = false;
-				return;
-			}
+		if (document.hidden) timeoutFn.start();
 
-			timeoutFn.stop();
+		if (timeout.value) {
+			showInfo("You should reload the page to get the latest data");
+			timeout.value = false;
 		}
 	});
 
