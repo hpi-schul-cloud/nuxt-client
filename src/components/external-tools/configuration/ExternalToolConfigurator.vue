@@ -1,11 +1,12 @@
 <template>
 	<div>
-		<v-autocomplete
+		<v-combobox
 			:label="$t('pages.tool.select.label')"
 			item-title="name"
 			item-value="id"
 			hide-selected
 			clearable
+			open-on-clear
 			:items="configurationTemplates"
 			v-model="selectedTemplate"
 			:no-data-text="$t('pages.tool.select.nodata')"
@@ -16,9 +17,11 @@
 			@update:modelValue="onChangeSelection"
 			variant="underlined"
 			:append-icon="mdiClipboardFileOutline"
-			@update:search="(value) => search(value)"
+			@update:search="search"
 			:hide-no-data="hideNoData"
-			auto-select-first="exact"
+			:custom-filter="
+				(value, query, item) => customFilter(value, query, item?.raw)
+			"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
@@ -35,7 +38,7 @@
 					:item="item.raw"
 				/>
 			</template>
-		</v-autocomplete>
+		</v-combobox>
 		<h2
 			v-if="
 				displaySettingsTitle &&
@@ -48,7 +51,11 @@
 		</h2>
 		<slot name="aboveParameters" :selectedTemplate="selectedTemplate" />
 		<external-tool-config-settings
-			v-if="selectedTemplate && selectedTemplate.parameters.length > 0"
+			v-if="
+				selectedTemplate &&
+				selectedTemplate.parameters &&
+				selectedTemplate.parameters.length > 0
+			"
 			:template="selectedTemplate"
 			v-model="parameterConfiguration"
 		/>
@@ -204,6 +211,7 @@ export default defineComponent({
 
 		const onChangeSelection = async () => {
 			fillParametersWithDefaultValues();
+			extractAndSetParametersFromUrl(selectedTemplate.value?.baseUrl);
 
 			emit("change", selectedTemplate.value);
 		};
@@ -220,7 +228,7 @@ export default defineComponent({
 
 		const fillParametersWithDefaultValues = () => {
 			parameterConfiguration.value = [];
-			selectedTemplate.value?.parameters.forEach((parameter, index) => {
+			selectedTemplate.value?.parameters?.forEach((parameter, index) => {
 				parameterConfiguration.value[index] = parameter.defaultValue;
 			});
 		};
@@ -247,7 +255,9 @@ export default defineComponent({
 			return urlRegex.test(text);
 		};
 
-		const checkUrl = (searchText: string) => {
+		const checkUrl = (
+			searchText: string
+		): ExternalToolConfigurationTemplate | undefined => {
 			try {
 				const url = new URL(searchText);
 				const matchedTemplate = configurationTemplates.value.find(
@@ -259,15 +269,55 @@ export default defineComponent({
 					}
 				);
 				if (matchedTemplate) {
-					console.log(`Matched baseUrl: ${matchedTemplate.baseUrl}`);
+					return matchedTemplate;
 				}
 			} catch (e) {
-				// If it's not a valid URL, ignore the error
+				// TODO: Handle error
+			}
+			return undefined;
+		};
+
+		// TODO: remove comments and make it easier to understand
+		const extractAndSetParametersFromUrl = (baseUrl: string | undefined) => {
+			if (!baseUrl || !searchString.value) return;
+
+			// params aus baseUrl holen
+			const urlParts = baseUrl.split("/");
+			const templateParams = urlParts
+				.filter((part) => part.startsWith(":"))
+				.map((part) => part.substring(1)); // : entfernen
+
+			// regex, um parameter werte aus url holen
+			const urlRegex = new RegExp(
+				`${baseUrl.replace(/:\w+/g, "(\\w+)").replace(/\//g, "\\/")}`
+			);
+
+			// params aus searchString holen
+			const match = searchString.value.match(urlRegex);
+			if (match) {
+				// match[0] full hit, match[1] bis match[n] values der caputure groups
+				const parameterValues = match.slice(1);
+
+				// index im template suchen mit param name und wert setzen
+				parameterValues.forEach((value, index) => {
+					const paramName = templateParams[index];
+					const paramIndex = selectedTemplate.value?.parameters.findIndex(
+						(param) => param.name === paramName
+					);
+
+					if (paramIndex !== undefined && paramIndex >= 0) {
+						parameterConfiguration.value[paramIndex] = value;
+					}
+				});
 			}
 		};
 
 		const hideNoData: Ref<boolean> = ref(false);
+
+		const searchString: Ref<string> = ref("");
+
 		const search = (text: string) => {
+			searchString.value = text;
 			if (isValidUrl(text)) {
 				hideNoData.value = true;
 				checkUrl(text);
@@ -286,7 +336,21 @@ export default defineComponent({
 			}
 		});
 
+		const customFilter = (
+			_value: string,
+			query: string,
+			item: ExternalToolConfigurationTemplate | undefined
+		): boolean => {
+			return item
+				? checkUrl(query)?.baseUrl === item.baseUrl ||
+						item.name.toLowerCase().includes(query.toLowerCase())
+				: false;
+		};
+
 		return {
+			searchString,
+			search,
+			customFilter,
 			configurationTemplates,
 			loadedConfiguration,
 			getBusinessErrorTranslationKey,
@@ -301,7 +365,6 @@ export default defineComponent({
 			isAboveParametersSlotEmpty,
 			mdiAlertCircle,
 			mdiClipboardFileOutline,
-			search,
 			hideNoData,
 		};
 	},
