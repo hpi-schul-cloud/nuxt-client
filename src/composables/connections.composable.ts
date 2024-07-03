@@ -1,55 +1,58 @@
 import { useBoardNotifier } from "@util-board";
+import { useTimeoutFn } from "@vueuse/core";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-let lossSocketConnection = false;
-let lossInternetConnection = false;
-let timeOutId: null | ReturnType<typeof setTimeout> = null;
-let timeOut = false;
+const lossSocketConnection = ref(false);
+const lossInternetConnection = ref(false);
+const timeout = ref(false);
+const MAX_TIME_OUT_FOR_INACTIVITY = 3000;
 
 export const useConnectionStatus = () => {
 	const { t } = useI18n();
 	const { showFailure, showInfo } = useBoardNotifier();
 
 	const notifySocketConnectionLost = () => {
-		lossSocketConnection = true;
+		lossSocketConnection.value = true;
 		showFailure(t("error.4500"));
 	};
 
 	const notifyReconnectSocket = () => {
-		if (lossSocketConnection) {
+		if (lossSocketConnection.value) {
 			showInfo("Socket reconnected");
-			lossSocketConnection = false;
+			lossSocketConnection.value = false;
 		}
 	};
 
 	window.addEventListener("offline", () => {
-		if (!lossInternetConnection) {
+		if (!lossInternetConnection.value) {
 			showFailure(t("error.4500"));
-			lossInternetConnection = true;
+			lossInternetConnection.value = true;
 		}
 	});
 
 	window.addEventListener("online", () => {
-		if (lossInternetConnection) {
-			showInfo(t("common.notification.connection.restored"), false);
-			lossInternetConnection = false;
+		if (lossInternetConnection.value) {
+			showInfo(t("common.notification.connection.restored"));
+			lossInternetConnection.value = false;
 		}
 	});
 
 	window.addEventListener("visibilitychange", () => {
-		if (document.hidden) {
-			clearTimeout(timeOutId as ReturnType<typeof setTimeout>);
+		const timeoutFn = useTimeoutFn(() => {
+			timeout.value = true;
+		}, MAX_TIME_OUT_FOR_INACTIVITY);
 
-			timeOutId = setTimeout(() => {
-				timeOut = true;
-			}, 3000);
+		if (document.hidden) {
+			timeoutFn.stop();
+			timeoutFn.start();
 		} else {
-			if (timeOut) {
+			if (timeout.value) {
 				showInfo("You should reload the page to get the latest data");
-				timeOut = false;
+				timeout.value = false;
 				return;
 			}
 
-			clearTimeout(timeOutId as ReturnType<typeof setTimeout>);
+			timeoutFn.stop();
 		}
 	});
 
