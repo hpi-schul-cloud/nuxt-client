@@ -1,10 +1,14 @@
 import { io, Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { envConfigModule } from "@/store";
+import { useConnectionStatus } from "../../../../composables/connections.composable";
 
 let instance: Socket | null = null;
 
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
+	const { notifySocketConnectionLost, notifyReconnectSocket } =
+		useConnectionStatus();
+
 	if (instance === null) {
 		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
 			path: "/board-collaboration",
@@ -13,10 +17,11 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 		instance.on("connect", function () {
 			console.log("connected");
+			notifyReconnectSocket();
 		});
 
 		instance.on("disconnect", () => {
-			// ... anything to do?
+			notifySocketConnectionLost();
 		});
 	}
 
