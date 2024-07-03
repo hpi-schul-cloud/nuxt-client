@@ -16,6 +16,9 @@
 			@update:modelValue="onChangeSelection"
 			variant="underlined"
 			:append-icon="mdiClipboardFileOutline"
+			@update:search="(value) => search(value)"
+			:hide-no-data="hideNoData"
+			auto-select-first="exact"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
@@ -217,7 +220,6 @@ export default defineComponent({
 
 		const fillParametersWithDefaultValues = () => {
 			parameterConfiguration.value = [];
-
 			selectedTemplate.value?.parameters.forEach((parameter, index) => {
 				parameterConfiguration.value[index] = parameter.defaultValue;
 			});
@@ -236,6 +238,42 @@ export default defineComponent({
 					parameterConfiguration.value[index] = configuredParameter.value;
 				}
 			});
+		};
+
+		const isValidUrl = (text: string): boolean => {
+			const urlRegex = new RegExp(
+				"(https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,})"
+			);
+			return urlRegex.test(text);
+		};
+
+		const checkUrl = (searchText: string) => {
+			try {
+				const url = new URL(searchText);
+				const matchedTemplate = configurationTemplates.value.find(
+					(template) => {
+						const baseUrlRegex = new RegExp(
+							`^${template.baseUrl.replace(/:\w+/g, "\\w+")}$`
+						);
+						return baseUrlRegex.test(url.href);
+					}
+				);
+				if (matchedTemplate) {
+					console.log(`Matched baseUrl: ${matchedTemplate.baseUrl}`);
+				}
+			} catch (e) {
+				// If it's not a valid URL, ignore the error
+			}
+		};
+
+		const hideNoData: Ref<boolean> = ref(false);
+		const search = (text: string) => {
+			if (isValidUrl(text)) {
+				hideNoData.value = true;
+				checkUrl(text);
+			} else {
+				hideNoData.value = false;
+			}
 		};
 
 		if (loadedConfiguration.value) {
@@ -263,6 +301,8 @@ export default defineComponent({
 			isAboveParametersSlotEmpty,
 			mdiAlertCircle,
 			mdiClipboardFileOutline,
+			search,
+			hideNoData,
 		};
 	},
 });
