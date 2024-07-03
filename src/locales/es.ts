@@ -1638,7 +1638,8 @@ export default {
 	"pages.tool.deactivate.label": "Desactivar herramienta en la escuela",
 	"pages.tool.description":
 		'Los parámetros específicos del curso para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta está disponible dentro del curso.<br><br>\nEliminar una configuración elimina la herramienta de el curso.<br><br>\nPuede encontrar más información en nuestro <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Sección de ayuda sobre herramientas externas</a>.',
-	"pages.tool.select.label": "Selección de Herramientas",
+	"pages.tool.select.label": "Selección de Herramientas / URL de herramienta",
+	"pages.tool.select.nodata": "No hay herramienta disponible",
 	"pages.tool.settings": "Configuración",
 	"pages.tool.title": "Configuración de herramientas externas",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",

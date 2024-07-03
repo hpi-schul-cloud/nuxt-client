@@ -8,13 +8,14 @@
 			clearable
 			:items="configurationTemplates"
 			v-model="selectedTemplate"
-			:no-data-text="$t('common.nodata')"
+			:no-data-text="$t('pages.tool.select.nodata')"
 			return-object
 			:disabled="isInEditMode"
 			:loading="loading"
 			data-testId="configuration-select"
 			@update:modelValue="onChangeSelection"
 			variant="underlined"
+			:append-icon="mdiClipboardFileOutline"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
@@ -85,6 +86,7 @@
 <script lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { mdiAlertCircle } from "@/components/icons/material";
+import { mdiClipboardFileOutline } from "@mdi/js";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import {
 	SchoolExternalTool,
@@ -260,6 +262,7 @@ export default defineComponent({
 			parameterConfiguration,
 			isAboveParametersSlotEmpty,
 			mdiAlertCircle,
+			mdiClipboardFileOutline,
 		};
 	},
 });

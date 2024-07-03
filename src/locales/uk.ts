@@ -1614,7 +1614,8 @@ export default {
 	"pages.tool.deactivate.label": "Деактивуйте інструмент у школі",
 	"pages.tool.description":
 		'Тут налаштовуються специфічні для курсу параметри зовнішнього інструменту. Після збереження конфігурації інструмент стає доступним у курсі.<br><br>\nВидалення конфігурації видаляє інструмент із курс.<br><br>\nБільше інформації можна знайти в нашому <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Розділ довідки щодо зовнішніх інструментів</a>.',
-	"pages.tool.select.label": "вибір інструменту",
+	"pages.tool.select.label": "вибір інструменту / Інструмент-URL",
+	"pages.tool.select.nodata": "Інструмент відсутній",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",

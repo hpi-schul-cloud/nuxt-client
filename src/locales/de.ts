@@ -1620,7 +1620,8 @@ export default {
 	"pages.tool.deactivate.label": "Tool in der Schule deaktivieren",
 	"pages.tool.description":
 		'Die kursspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb des Kurses verfügbar.<br><br>\nDurch das Löschen einer Konfiguration wird das Tool dem Kurs wieder entzogen.<br><br>\nWeitere Informationen sind in unserem <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Hilfebereich zu externen Tools</a> zu finden.',
-	"pages.tool.select.label": "Tool-Auswahl",
+	"pages.tool.select.label": "Tool-Auswahl / Tool-URL",
+	"pages.tool.select.nodata": "Kein Tool vorhanden",
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.title": "Konfiguration externer Tools",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",

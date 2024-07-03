@@ -1448,6 +1448,12 @@ export interface ContextExternalToolConfigurationTemplateResponse {
      * @type {string}
      * @memberof ContextExternalToolConfigurationTemplateResponse
      */
+    baseUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolConfigurationTemplateResponse
+     */
     logoUrl?: string;
     /**
      * 
@@ -6061,6 +6067,12 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
      * @memberof SchoolExternalToolConfigurationTemplateResponse
      */
     name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolExternalToolConfigurationTemplateResponse
+     */
+    baseUrl: string;
     /**
      * 
      * @type {string}
