@@ -20,7 +20,7 @@ import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificati
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
 
-	const WAIT_AFTER_LAST_CALL_IN_MS = 5;
+	const WAIT_AFTER_LAST_CALL_IN_MS = 30;
 	const MAX_WAIT_BEFORE_FIRST_CALL_IN_MS = 200;
 	let cardIdsToFetch: string[] = [];
 
