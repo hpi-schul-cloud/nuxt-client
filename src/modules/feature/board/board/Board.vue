@@ -131,11 +131,14 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { useConnectionStatus } from "@/composables/connections.composable";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
 	breadcrumbs: { type: Array, default: () => [] },
 });
+
+useConnectionStatus();
 
 const { t } = useI18n();
 const { resetNotifierModule, showCustomNotifier } = useBoardNotifier();

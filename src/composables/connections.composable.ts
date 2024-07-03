@@ -1,15 +1,17 @@
 import { useBoardNotifier } from "@util-board";
+import { useI18n } from "vue-i18n";
 let lossSocketConnection = false;
 let lossInternetConnection = false;
 let timeOutId: null | ReturnType<typeof setTimeout> = null;
 let timeOut = false;
 
 export const useConnectionStatus = () => {
+	const { t } = useI18n();
 	const { showFailure, showInfo } = useBoardNotifier();
 
 	const notifySocketConnectionLost = () => {
 		lossSocketConnection = true;
-		showFailure("Socket disconnected please try again later");
+		showFailure(t("error.4500"));
 	};
 
 	const notifyReconnectSocket = () => {
@@ -21,19 +23,19 @@ export const useConnectionStatus = () => {
 
 	window.addEventListener("offline", () => {
 		if (!lossInternetConnection) {
-			showFailure("internet connection lost in composable");
+			showFailure(t("error.4500"));
 			lossInternetConnection = true;
 		}
 	});
 
 	window.addEventListener("online", () => {
 		if (lossInternetConnection) {
-			showInfo("internet connection back", false);
+			showInfo(t("common.notification.connection.restored"), false);
 			lossInternetConnection = false;
 		}
 	});
 
-	document.addEventListener("visibilitychange", () => {
+	window.addEventListener("visibilitychange", () => {
 		if (document.hidden) {
 			clearTimeout(timeOutId as ReturnType<typeof setTimeout>);
 
@@ -42,7 +44,7 @@ export const useConnectionStatus = () => {
 			}, 3000);
 		} else {
 			if (timeOut) {
-				showInfo("You should refresh the page to get the latest data");
+				showInfo("You should reload the page to get the latest data");
 				timeOut = false;
 				return;
 			}

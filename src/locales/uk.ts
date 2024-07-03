@@ -102,6 +102,7 @@ export default {
 		"Будь ласка, зверніться до адміністратора школи.",
 	"common.nodata": "Немає даних",
 	"common.notification.error": "Сталася помилка.",
+	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email.confirmation":
