@@ -1,55 +1,56 @@
 import { useBoardNotifier } from "@util-board";
 import { useTimeoutFn } from "@vueuse/core";
-import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-const lossSocketConnection = ref(false);
-const lossInternetConnection = ref(false);
-const timeout = ref(false);
 
-const MAX_TIME_OUT_FOR_INACTIVITY = 3000;
+const connectionOptions = {
+	lossSocketConnection: false,
+	lossInternetConnection: false,
+	timeout: false,
+	MAX_TIME_OUT_FOR_INACTIVITY: 3000,
+};
 
 export const useConnectionStatus = () => {
 	const { t } = useI18n();
 	const { showFailure, showInfo } = useBoardNotifier();
 
 	const notifySocketConnectionLost = () => {
-		lossSocketConnection.value = true;
+		connectionOptions.lossSocketConnection = true;
 		showFailure(t("error.4500"));
 	};
 
 	const notifyReconnectSocket = () => {
-		if (lossSocketConnection.value) {
+		if (connectionOptions.lossSocketConnection) {
 			showInfo("Socket reconnected");
-			lossSocketConnection.value = false;
+			connectionOptions.lossSocketConnection = false;
 		}
 	};
 
 	window.addEventListener("offline", () => {
-		if (!lossInternetConnection.value) {
+		if (!connectionOptions.lossInternetConnection) {
 			showFailure(t("error.4500"));
-			lossInternetConnection.value = true;
+			connectionOptions.lossInternetConnection = true;
 		}
 	});
 
 	window.addEventListener("online", () => {
-		if (lossInternetConnection.value) {
+		if (connectionOptions.lossInternetConnection) {
 			showInfo(t("common.notification.connection.restored"));
-			lossInternetConnection.value = false;
+			connectionOptions.lossInternetConnection = false;
 		}
 	});
 
 	const timeoutFn = useTimeoutFn(() => {
-		timeout.value = true;
-	}, MAX_TIME_OUT_FOR_INACTIVITY);
+		connectionOptions.timeout = true;
+	}, connectionOptions.MAX_TIME_OUT_FOR_INACTIVITY);
 
 	window.addEventListener("visibilitychange", () => {
 		if (timeoutFn.isPending) timeoutFn.stop();
 
 		if (document.hidden) timeoutFn.start();
 
-		if (timeout.value) {
+		if (connectionOptions.timeout) {
 			showInfo("You should reload the page to get the latest data");
-			timeout.value = false;
+			connectionOptions.timeout = false;
 		}
 	});
 
