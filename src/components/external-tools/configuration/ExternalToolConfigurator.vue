@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<v-combobox
+			ref="comboboxRef"
 			:label="$t('pages.tool.select.label')"
 			item-title="name"
 			item-value="id"
@@ -160,6 +161,8 @@ export default defineComponent({
 			"configuration"
 		);
 
+		const comboboxRef = ref();
+
 		const isInEditMode: ComputedRef<boolean> = computed(
 			() => !!loadedConfiguration.value
 		);
@@ -277,8 +280,11 @@ export default defineComponent({
 			return undefined;
 		};
 
+		// TODO: remove comments and make it easier to understand
 		const extractAndSetParametersFromUrl = (baseUrl: string | undefined) => {
-			if (!baseUrl || !searchString.value) return;
+			if (!baseUrl || !searchString.value) {
+				return;
+			}
 
 			// params aus baseUrl holen
 			const urlParts = baseUrl.split("/");
@@ -321,6 +327,10 @@ export default defineComponent({
 		const pasteFromClipboard = async () => {
 			try {
 				const text = await navigator.clipboard.readText();
+				comboboxRef.value.search = text;
+				comboboxRef.value.isFocused = true;
+				comboboxRef.value.menuIsActive = true;
+				comboboxRef.value.menu = true;
 				search(text);
 			} catch (err) {
 				console.error("Failed to read clipboard contents: ", err);
@@ -359,6 +369,7 @@ export default defineComponent({
 		};
 
 		return {
+			comboboxRef,
 			searchString,
 			search,
 			customFilter,
