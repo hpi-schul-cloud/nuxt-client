@@ -104,6 +104,7 @@ import ExternalToolConfigSettings from "@/components/external-tools/configuratio
 import { mdiAlertCircle } from "@/components/icons/material";
 import { mdiClipboardFileOutline } from "@mdi/js";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
+import { useExternalToolUrlInsertion } from "@/components/external-tools/configuration/external-tool-url-insertion.composable";
 import {
 	SchoolExternalTool,
 	ToolParameter,
@@ -165,6 +166,13 @@ export default defineComponent({
 			props,
 			"configuration"
 		);
+
+		const {
+			isValidUrl,
+			findMatchingTemplate,
+			extractPathParameters,
+			extractQueryParameters,
+		} = useExternalToolUrlInsertion();
 
 		const comboboxRef = ref();
 
@@ -265,78 +273,24 @@ export default defineComponent({
 			});
 		};
 
-		const isValidUrl = (text: string): boolean => {
-			const urlRegex = new RegExp(
-				"(https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|www\\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\\.[^\\s]{2,}|https?:\\/\\/(?:www\\.|(?!www))[a-zA-Z0-9]+\\.[^\\s]{2,}|www\\.[a-zA-Z0-9]+\\.[^\\s]{2,})"
-			);
-			return urlRegex.test(text);
-		};
-
-		const checkUrl = (
-			searchText: string
-		): ExternalToolConfigurationTemplate | undefined => {
-			try {
-				const url = new URL(searchText);
-				const matchedTemplate = configurationTemplates.value.find(
-					(template) => {
-						const baseUrlRegex = new RegExp(
-							`^${template.baseUrl.replace(/:\w+/g, "\\w+")}$`
-						);
-						return baseUrlRegex.test(url.href);
-					}
-				);
-				if (matchedTemplate) {
-					return matchedTemplate;
-				}
-			} catch (e) {
-				// TODO: Handle error
-			}
-			return undefined;
-		};
-
-		// TODO: remove comments and make it easier to understand
 		const extractAndSetParametersFromUrl = (baseUrl: string | undefined) => {
 			if (!baseUrl || !searchString.value) {
 				return;
 			}
 
-			// params aus baseUrl holen
-			const urlParts = baseUrl.split("/");
-			const templateParams = urlParts
-				.filter((part) => part.startsWith(":"))
-				.map((part) => part.substring(1)); // : entfernen
+			const pathParams = extractPathParameters(searchString.value, baseUrl);
+			const queryParams = extractQueryParameters(searchString.value);
+			const allParams = new Map([...pathParams, ...queryParams]);
 
-			// regex, um parameter werte aus url holen
-			const urlRegex = new RegExp(
-				`${baseUrl
-					.replace(/\\/g, "\\\\")
-					.replace(/:\w+/g, "(\\w+)")
-					.replace(/\//g, "\\/")}`
-			);
-
-			// params aus searchString holen
-			const match = searchString.value.match(urlRegex);
-			if (match) {
-				// match[0] full hit, match[1] bis match[n] values der caputure groups
-				const parameterValues = match.slice(1);
-
-				// index im template suchen mit param name und wert setzen
-				parameterValues.forEach((value, index) => {
-					const paramName = templateParams[index];
-					const paramIndex = selectedTemplate.value?.parameters.findIndex(
-						(param) => param.name === paramName
-					);
-
-					if (paramIndex !== undefined && paramIndex >= 0) {
-						parameterConfiguration.value[paramIndex] = value;
-					}
-				});
-			}
+			allParams.forEach((value, name) => {
+				const paramIndex = selectedTemplate.value?.parameters.findIndex(
+					(param) => param.name === name
+				);
+				if (paramIndex !== undefined && paramIndex >= 0) {
+					parameterConfiguration.value[paramIndex] = value;
+				}
+			});
 		};
-
-		const hideNoData: Ref<boolean> = ref(false);
-
-		const searchString: Ref<string> = ref("");
 
 		const pasteFromClipboard = async () => {
 			try {
