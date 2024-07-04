@@ -16,9 +16,10 @@
 			:loading="loading"
 			data-testId="configuration-select"
 			@update:modelValue="onChangeSelection"
+			@update:search="(value) => onSearchInput(value)"
+			@click:append="pasteFromClipboard"
 			variant="underlined"
 			:append-icon="mdiClipboardFileOutline"
-			@click:append="pasteFromClipboard"
 			:hide-no-data="hideNoData"
 			:custom-filter="
 				(value, query, item) => customFilter(value, query, item?.raw)
@@ -43,14 +44,18 @@
 		<h2
 			v-if="
 				displaySettingsTitle &&
-				selectedTemplate &&
+				selectedTemplate?.externalToolId &&
 				(!isAboveParametersSlotEmpty || selectedTemplate.parameters.length > 0)
 			"
 			class="text-h4 mb-10"
 		>
 			{{ $t("pages.tool.settings") }}
 		</h2>
-		<slot name="aboveParameters" :selectedTemplate="selectedTemplate" />
+		<slot
+			v-if="selectedTemplate?.externalToolId"
+			name="aboveParameters"
+			:selectedTemplate="selectedTemplate"
+		/>
 		<external-tool-config-settings
 			v-if="
 				selectedTemplate &&
@@ -180,6 +185,10 @@ export default defineComponent({
 
 		const parameterConfiguration: Ref<(string | undefined)[]> = ref([]);
 
+		const hideNoData: Ref<boolean> = ref(false);
+
+		const searchString: Ref<string> = ref("");
+
 		const onCancel = () => {
 			emit("cancel");
 		};
@@ -217,6 +226,11 @@ export default defineComponent({
 			extractAndSetParametersFromUrl(selectedTemplate.value?.baseUrl);
 
 			emit("change", selectedTemplate.value);
+		};
+
+		const onSearchInput = (text: string) => {
+			searchString.value = text;
+			hideNoData.value = isValidUrl(text);
 		};
 
 		const populateEditMode = (configuration: ConfigurationTypes) => {
@@ -329,21 +343,10 @@ export default defineComponent({
 				const text = await navigator.clipboard.readText();
 				comboboxRef.value.search = text;
 				comboboxRef.value.isFocused = true;
-				comboboxRef.value.menuIsActive = true;
 				comboboxRef.value.menu = true;
-				search(text);
+				onSearchInput(text);
 			} catch (err) {
 				console.error("Failed to read clipboard contents: ", err);
-			}
-		};
-
-		const search = (text: string) => {
-			searchString.value = text;
-			if (isValidUrl(text)) {
-				hideNoData.value = true;
-				checkUrl(text);
-			} else {
-				hideNoData.value = false;
 			}
 		};
 
@@ -362,16 +365,22 @@ export default defineComponent({
 			query: string,
 			item: ExternalToolConfigurationTemplate | undefined
 		): boolean => {
-			return item
-				? checkUrl(query)?.baseUrl === item.baseUrl ||
-						item.name.toLowerCase().includes(query.toLowerCase())
-				: false;
+			if (!item) {
+				return false;
+			}
+			const isMatchItemUrl =
+				findMatchingTemplate(query, configurationTemplates)?.baseUrl ===
+				item.baseUrl;
+			const isMatchItemName = item.name
+				.toLowerCase()
+				.includes(query.toLowerCase());
+			return isMatchItemName || isMatchItemUrl;
 		};
 
 		return {
 			comboboxRef,
 			searchString,
-			search,
+			onSearchInput,
 			customFilter,
 			configurationTemplates,
 			loadedConfiguration,
