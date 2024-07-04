@@ -17,7 +17,7 @@
 			@update:modelValue="onChangeSelection"
 			variant="underlined"
 			:append-icon="mdiClipboardFileOutline"
-			@update:search="search"
+			@click:append="pasteFromClipboard"
 			:hide-no-data="hideNoData"
 			:custom-filter="
 				(value, query, item) => customFilter(value, query, item?.raw)
@@ -277,7 +277,6 @@ export default defineComponent({
 			return undefined;
 		};
 
-		// TODO: remove comments and make it easier to understand
 		const extractAndSetParametersFromUrl = (baseUrl: string | undefined) => {
 			if (!baseUrl || !searchString.value) return;
 
@@ -318,6 +317,15 @@ export default defineComponent({
 		const hideNoData: Ref<boolean> = ref(false);
 
 		const searchString: Ref<string> = ref("");
+
+		const pasteFromClipboard = async () => {
+			try {
+				const text = await navigator.clipboard.readText();
+				search(text);
+			} catch (err) {
+				console.error("Failed to read clipboard contents: ", err);
+			}
+		};
 
 		const search = (text: string) => {
 			searchString.value = text;
@@ -369,6 +377,7 @@ export default defineComponent({
 			mdiAlertCircle,
 			mdiClipboardFileOutline,
 			hideNoData,
+			pasteFromClipboard,
 		};
 	},
 });
