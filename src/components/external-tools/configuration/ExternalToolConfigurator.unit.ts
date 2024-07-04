@@ -129,7 +129,7 @@ describe("ExternalToolConfigurator", () => {
 			it("should display the edited tool in the selection", async () => {
 				const { wrapper, template } = setup();
 
-				const selectionRow = wrapper.find(".v-autocomplete .v-list-item-title");
+				const selectionRow = wrapper.find(".v-combobox .v-list-item-title");
 
 				expect(selectionRow.text()).toEqual(template.name);
 			});
