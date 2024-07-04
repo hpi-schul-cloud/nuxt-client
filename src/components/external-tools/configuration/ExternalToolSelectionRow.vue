@@ -18,7 +18,7 @@
 import { ExternalToolConfigurationTemplate } from "@data-external-tool";
 import { defineProps, PropType } from "vue";
 
-const props = defineProps({
+defineProps({
 	item: {
 		type: Object as PropType<ExternalToolConfigurationTemplate>,
 		required: true,
