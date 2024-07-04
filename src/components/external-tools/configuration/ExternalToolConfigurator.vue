@@ -289,7 +289,10 @@ export default defineComponent({
 
 			// regex, um parameter werte aus url holen
 			const urlRegex = new RegExp(
-				`${baseUrl.replace(/:\w+/g, "(\\w+)").replace(/\//g, "\\/")}`
+				`${baseUrl
+					.replace(/\\/g, "\\\\")
+					.replace(/:\w+/g, "(\\w+)")
+					.replace(/\//g, "\\/")}`
 			);
 
 			// params aus searchString holen
