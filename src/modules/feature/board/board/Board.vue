@@ -138,8 +138,6 @@ const props = defineProps({
 	breadcrumbs: { type: Array, default: () => [] },
 });
 
-useConnectionStatus();
-
 const { t } = useI18n();
 const { resetNotifierModule, showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
@@ -257,6 +255,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 onMounted(() => {
 	setAlert();
 	boardStore.fetchBoardRequest({ boardId: props.boardId });
+	useConnectionStatus();
 });
 
 onUnmounted(() => {
