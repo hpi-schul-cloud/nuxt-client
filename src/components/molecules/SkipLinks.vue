@@ -4,6 +4,7 @@
 		tabindex="0"
 		class="skip-link d-sr-only-focusable"
 		href="#main-content"
+		@click="skipToContent"
 	>
 		{{ $t("global.skipLink.mainContent") }}
 	</a>
@@ -19,6 +20,17 @@ onMounted(() => {
 	if (section)
 		nextTick(() => window.document.getElementById(section)?.scrollIntoView());
 });
+
+const skipToContent = (event: Event) => {
+	event.preventDefault();
+	nextTick(() => {
+		const mainContent = document.querySelector("#main-content");
+		const firstTabIndexedElement = mainContent?.querySelector("[tabindex]");
+		if (firstTabIndexedElement) {
+			(firstTabIndexedElement as HTMLElement).focus();
+		}
+	});
+};
 </script>
 
 <style lang="scss" scoped>
