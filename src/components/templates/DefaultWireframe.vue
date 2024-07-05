@@ -93,6 +93,8 @@ const props = defineProps({
 	},
 	maxWidth: {
 		type: String as PropType<"full" | "short" | "nativ">,
+		required: true,
+		default: "short",
 	},
 	fabItems: {
 		type: Object as PropType<Fab>,
