@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe
 		ref="main"
-		:full-width="false"
+		max-width="short"
 		:fab-items="fabItems"
 		:env-config-module="envConfigModule"
 		@onFabItemClick="fabItemClickHandler"

@@ -59,11 +59,11 @@
 			<div v-if="showBorder" class="border" />
 		</div>
 		<v-container
-			fluid
+			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
 			:class="{
-				'container-max-width': !fullWidth,
-				'container-full-width': fullWidth,
+				'container-short-width': maxWidth === 'short',
+				'container-full-width': maxWidth === 'full',
 				'overflow-x-auto': allowOverflowX,
 			}"
 		>
@@ -73,12 +73,12 @@
 </template>
 
 <script setup lang="ts">
-import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
+import VCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
+import EnvConfigModule from "@/store/env-config";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { PropType, computed, useSlots } from "vue";
+import { computed, PropType, useSlots } from "vue";
 import { Fab } from "./default-wireframe.types";
-import EnvConfigModule from "@/store/env-config";
 
 const props = defineProps({
 	breadcrumbs: {
@@ -91,8 +91,10 @@ const props = defineProps({
 		required: false,
 		default: null,
 	},
-	fullWidth: {
-		type: Boolean,
+	maxWidth: {
+		type: String as PropType<"full" | "short" | "nativ">,
+		required: true,
+		default: "short",
 	},
 	fabItems: {
 		type: Object as PropType<Fab>,
@@ -160,7 +162,7 @@ const showBorder = computed(() => {
 	padding: 0 var(--space-lg);
 }
 
-.container-max-width {
+.container-short-width {
 	max-width: var(--size-content-width-max);
 }
 

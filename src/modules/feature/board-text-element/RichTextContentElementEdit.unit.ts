@@ -1,4 +1,5 @@
 import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import RichTextContentElementEdit from "./RichTextContentElementEdit.vue";
 import {
 	createTestingI18n,
@@ -29,6 +30,7 @@ describe("RichTextContentElementEdit", () => {
 		it("should pass props to ck-editor component", async () => {
 			const { wrapper } = setup({ value: "test value", autofocus: true });
 			const ckEditorComponent = wrapper.findComponent({ name: "ck-editor" });
+			await nextTick();
 			const ckEditorValue = ckEditorComponent.findComponent({
 				name: "ckeditor",
 			}).vm.modelValue;
@@ -42,6 +44,16 @@ describe("RichTextContentElementEdit", () => {
 
 			const emitted = wrapper.emitted();
 			expect(emitted["delete:element"]).toHaveLength(1);
+		});
+
+		it("should update modalValue when prop value changes", async () => {
+			const { wrapper } = setup({ value: "test value", autofocus: true });
+			const newValue = "new title";
+			await wrapper.setProps({ value: newValue });
+			await nextTick();
+
+			const emitted = wrapper.emitted();
+			expect(emitted["update:value"]).toHaveLength(1);
 		});
 	});
 });

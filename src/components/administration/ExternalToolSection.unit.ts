@@ -171,7 +171,7 @@ describe("ExternalToolSection", () => {
 						parameters: [],
 						name: "Test3",
 						status: schoolToolConfigurationStatusFactory.build({
-							isDeactivated: true,
+							isGloballyDeactivated: true,
 						}),
 						isDeactivated: true,
 					},

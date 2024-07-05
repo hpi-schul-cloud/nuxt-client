@@ -4,6 +4,7 @@
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
 		@onFabItemClick="fabItemClickHandler"
+		max-width="short"
 	>
 		<template #header>
 			<div class="d-flex ma-2 mt-3">
@@ -135,11 +136,11 @@ import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import {
-	COPY_MODULE_KEY,
-	SHARE_MODULE_KEY,
-	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
-	ROOM_MODULE_KEY,
 	AUTH_MODULE_KEY,
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
+	COPY_MODULE_KEY,
+	ROOM_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 
 export default defineComponent({

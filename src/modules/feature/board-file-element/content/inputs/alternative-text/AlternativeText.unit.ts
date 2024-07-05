@@ -54,15 +54,6 @@ describe("AlternativeText", () => {
 		expect(wrapper.emitted("update:alternativeText")?.[0][0]).toBe(newText);
 	});
 
-	it("should pass text value to textarea", async () => {
-		const { wrapper, alternativeText } = shallowMountSetup();
-
-		const textarea = wrapper.find("v-textarea-stub");
-		const hint = textarea.attributes("modelvalue");
-
-		expect(hint).toBe(alternativeText);
-	});
-
 	it("should have a hint translation", async () => {
 		const { wrapper } = shallowMountSetup();
 

@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 		data-testid="school-external-tool-configurator-title"
 	>
 		<RenderHTML
@@ -190,8 +190,7 @@ export default defineComponent({
 						props.configId
 					);
 
-				isDeactivated.value =
-					configuration.value?.status.isDeactivated ?? false;
+				isDeactivated.value = configuration.value?.isDeactivated ?? false;
 			} else if (authModule.getSchool) {
 				await schoolExternalToolsModule.loadAvailableToolsForSchool(
 					authModule.getSchool.id

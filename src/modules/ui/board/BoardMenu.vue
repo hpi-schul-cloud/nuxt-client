@@ -62,3 +62,9 @@ const hasBackground = computed<boolean>(
 	() => scope.value === "card" || scope.value === "element"
 );
 </script>
+
+<style scoped>
+.v-list {
+	width: max-content;
+}
+</style>
