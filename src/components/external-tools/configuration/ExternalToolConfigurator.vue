@@ -66,6 +66,7 @@
 			"
 			:template="selectedTemplate"
 			v-model="parameterConfiguration"
+			data-testid="configuration-field"
 		/>
 		<v-spacer class="mt-10" />
 		<v-alert
