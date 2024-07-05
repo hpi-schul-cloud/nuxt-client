@@ -38,7 +38,7 @@ const menuItems = [
 	{
 		label: "global.topbar.actions.releaseNotes",
 		icon: mdiGiftOutline,
-		action: "/help/releases",
+		action: "/system/releases",
 		target: "_self",
 	},
 	{

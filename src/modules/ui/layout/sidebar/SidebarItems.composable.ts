@@ -160,7 +160,7 @@ export const useSidebarItems = () => {
 		},
 		{
 			title: "global.topbar.actions.releaseNotes",
-			href: "/help/releases",
+			href: "/system/releases",
 			target: "_self",
 			testId: "releases",
 		},
