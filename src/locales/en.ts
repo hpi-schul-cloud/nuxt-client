@@ -1594,6 +1594,8 @@ export default {
 	"pages.tool.description":
 		'The course-specific parameters for the external tool are configured here. After saving the configuration, the tool is available inside the course.<br><br>\nDeleting a configuration removes the tool from the course.<br><br>\nMore information can be found in our <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Help section on external tools</a>.',
 	"pages.tool.select.label": "Tool selection / Tool-URL",
+	"pages.tool.select.description":
+		"Type the address, or use the button to paste it from the clipboard",
 	"pages.tool.select.nodata": "No tool available",
 	"pages.tool.settings": "Settings",
 	"pages.tool.title": "External Tools Configuration",

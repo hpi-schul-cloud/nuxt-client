@@ -19,11 +19,13 @@
 			@update:search="(value) => onSearchInput(value)"
 			@click:append="pasteFromClipboard"
 			variant="underlined"
-			:append-icon="mdiClipboardFileOutline"
+			:append-icon="mdiContentPaste"
 			:hide-no-data="hideNoData"
 			:custom-filter="
 				(value, query, item) => customFilter(value, query, item?.raw)
 			"
+			persistent-hint
+			:hint="$t('pages.tool.select.description')"
 		>
 			<template #selection="{ item }">
 				<external-tool-selection-row
@@ -102,7 +104,7 @@
 <script lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { mdiAlertCircle } from "@/components/icons/material";
-import { mdiClipboardFileOutline } from "@mdi/js";
+import { mdiContentPaste } from "@mdi/js";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import { useExternalToolUrlInsertion } from "@/components/external-tools/configuration/external-tool-url-insertion.composable";
 import {
@@ -349,7 +351,7 @@ export default defineComponent({
 			parameterConfiguration,
 			isAboveParametersSlotEmpty,
 			mdiAlertCircle,
-			mdiClipboardFileOutline,
+			mdiContentPaste,
 			hideNoData,
 			pasteFromClipboard,
 		};
