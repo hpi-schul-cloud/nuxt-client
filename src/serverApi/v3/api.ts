@@ -1474,6 +1474,12 @@ export interface ContextExternalToolCountPerContextResponse {
      * @memberof ContextExternalToolCountPerContextResponse
      */
     boardElement: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ContextExternalToolCountPerContextResponse
+     */
+    mediaBoard: number;
 }
 /**
  * 
