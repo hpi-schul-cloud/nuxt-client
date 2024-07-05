@@ -1,12 +1,12 @@
 import { io, Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { envConfigModule } from "@/store";
-import { useConnectionStatus } from "@/composables/connections.composable";
+import { useConnectionStatus } from "../boardActions/connections.composable";
 
 let instance: Socket | null = null;
 
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
-	const { notifySocketConnectionLost, notifyReconnectSocket } =
+	const { notifySocketConnectionLost, reloadBoardAndNotify } =
 		useConnectionStatus();
 
 	if (instance === null) {
@@ -17,7 +17,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 		instance.on("connect", function () {
 			console.log("connected");
-			notifyReconnectSocket();
+			reloadBoardAndNotify();
 		});
 
 		instance.on("disconnect", () => {

@@ -131,7 +131,7 @@ import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import { useConnectionStatus } from "@/composables/connections.composable";
+import { useConnectionStatus } from "@/modules/data/board/boardActions/connections.composable";
 
 const props = defineProps({
 	boardId: { type: String, required: true },

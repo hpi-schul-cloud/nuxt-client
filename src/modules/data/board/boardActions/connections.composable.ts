@@ -1,6 +1,7 @@
 import { useBoardNotifier } from "@util-board";
 import { useTimeoutFn } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
+import { useBoardStore } from "../Board.store";
 
 const connectionOptions = {
 	lossSocketConnection: false,
@@ -13,15 +14,20 @@ export const useConnectionStatus = () => {
 	const { t } = useI18n();
 	const { showFailure, showInfo } = useBoardNotifier();
 
+	const boardStore = useBoardStore();
+
 	const notifySocketConnectionLost = () => {
 		connectionOptions.lossSocketConnection = true;
 		showFailure(t("error.4500"));
 	};
 
-	const notifyReconnectSocket = () => {
+	const reloadBoardAndNotify = () => {
 		if (connectionOptions.lossSocketConnection) {
 			showInfo("Socket reconnected");
 			connectionOptions.lossSocketConnection = false;
+
+			if (!boardStore.board) return;
+			boardStore.fetchBoardRequest({ boardId: boardStore.board.id });
 		}
 	};
 
@@ -56,6 +62,6 @@ export const useConnectionStatus = () => {
 
 	return {
 		notifySocketConnectionLost,
-		notifyReconnectSocket,
+		reloadBoardAndNotify,
 	};
 };
