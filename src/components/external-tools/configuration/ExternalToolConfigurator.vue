@@ -325,7 +325,7 @@ export default defineComponent({
 				return false;
 			}
 			const isMatchItemUrl =
-				findMatchingTemplate(query, configurationTemplates)?.baseUrl ===
+				findMatchingTemplate(query, configurationTemplates.value)?.baseUrl ===
 				item.baseUrl;
 			const isMatchItemName = item.name
 				.toLowerCase()

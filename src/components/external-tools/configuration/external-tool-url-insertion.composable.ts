@@ -3,27 +3,38 @@ import { Ref } from "vue";
 
 export function useExternalToolUrlInsertion() {
 	const isValidUrl = (text: string): boolean => {
-		const urlRegex = new RegExp(
-			"^(https?:\\/\\/)[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+.*"
+		const pattern = new RegExp(
+			"^(https?:\\/\\/)?" +
+				"((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" +
+				"((\\d{1,3}\\.){3}\\d{1,3}))" +
+				"(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*" +
+				"(\\?[;&a-z\\d%_.~+=-]*)?" +
+				"(\\#[-a-z\\d_]*)?$",
+			"i"
 		);
-		return urlRegex.test(text);
+		return pattern.test(text);
 	};
 
 	const findMatchingTemplate = (
 		searchText: string,
-		configurationTemplates: Ref<ExternalToolConfigurationTemplate[]>
+		configurationTemplates: ExternalToolConfigurationTemplate[]
 	): ExternalToolConfigurationTemplate | undefined => {
 		if (!isValidUrl(searchText)) {
 			return undefined;
 		}
 
 		const url = new URL(searchText);
-		const matchedTemplate = configurationTemplates.value.find((template) => {
+		const matchedTemplate = configurationTemplates.find((template) => {
+			let regexString = template.baseUrl;
+			if (!regexString.endsWith("/")) {
+				regexString += "/";
+			}
 			const baseUrlRegex = new RegExp(
-				`^${template.baseUrl.replace(/:\w+/g, "\\w+")}$`
+				`^${regexString.replace(/:\w+/g, "\\w+")}$`
 			);
 			return baseUrlRegex.test(url.href.split("?")[0]);
 		});
+
 		if (matchedTemplate) {
 			return matchedTemplate;
 		}
@@ -34,13 +45,12 @@ export function useExternalToolUrlInsertion() {
 		inputtedUrl: string,
 		templateBaseUrl: string
 	): Map<string, string> => {
-		// params aus baseUrl holen
+		// TODO: simplify if possible
 		const urlParts = templateBaseUrl.split("/");
 		const templateParamNames = urlParts
 			.filter((part) => part.startsWith(":"))
 			.map((part) => part.substring(1));
 
-		// regex, um parameter werte aus url holen
 		const urlRegex = new RegExp(
 			`${templateBaseUrl
 				.replace(/\\/g, "\\\\")
