@@ -1,8 +1,6 @@
 <template>
 	<div class="mb-4" ref="headerRef">
-		<div
-			class="d-flex flex-column justify-space-between align-stretch top-padding-fix"
-		>
+		<div class="d-flex flex-column justify-space-between align-stretch pt-4">
 			<VBtn
 				elevation="0"
 				variant="text"
@@ -45,9 +43,5 @@ const onAddColumn = () => {
 
 .transition-divider {
 	transition: all ease-in 150ms;
-}
-
-.top-padding-fix {
-	padding-top: 19px;
 }
 </style>
