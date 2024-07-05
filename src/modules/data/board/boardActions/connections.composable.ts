@@ -3,7 +3,7 @@ import { useTimeoutFn } from "@vueuse/core";
 import { useI18n } from "vue-i18n";
 import { useBoardStore } from "../Board.store";
 
-const connectionOptions = {
+export const connectionOptions = {
 	lossSocketConnection: false,
 	lossInternetConnection: false,
 	timeout: false,
