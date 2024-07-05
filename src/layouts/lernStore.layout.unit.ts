@@ -1,5 +1,3 @@
-import { contentModule, envConfigModule } from "@/store";
-import AuthModule from "@/store/auth";
 import ContentModule from "@/store/content";
 import EnvConfigModule from "@/store/env-config";
 import { envsFactory } from "@@/tests/test-utils";
@@ -7,88 +5,101 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { shallowMount } from "@vue/test-utils";
 import lernStoreLayout from "./lernStore.layout.vue";
+import { CONTENT_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import { useRoute } from "vue-router";
 
-describe("lernStoreLayout", () => {
-	const params = {
-		id: "mockId",
-	};
-	const query = {
-		isCollection: "true",
-	};
+const params = {
+	id: "mockId",
+};
+const query = {
+	isCollection: "true",
+};
 
-	const mountComponent = (globalAttr = {}) => {
-		return shallowMount(lernStoreLayout, {
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					contentModule: ContentModule,
-				},
-				...globalAttr,
-			},
-		});
-	};
+jest.mock("vue-router", () => ({
+	useRoute: jest.fn(),
+}));
 
-	beforeEach(() => {
-		setupStores({
-			contentModule: ContentModule,
-			envConfigModule: EnvConfigModule,
-			authModule: AuthModule,
-		});
+const useRouteMock = <jest.Mock>useRoute;
+
+const setup = (options?: {
+	collectionEnabled: boolean;
+	route?: { params: { id: string }; query: { isCollection: string } };
+}) => {
+	const route = options?.route || { params, query };
+	useRouteMock.mockReturnValue(route);
+
+	const contentModule = createModuleMocks(ContentModule, {
+		getCollectionsFeatureFlag: options?.collectionEnabled,
+	});
+	const envConfigModule = createModuleMocks(EnvConfigModule, {
+		getEnv: envsFactory.build({
+			FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: options?.collectionEnabled,
+		}),
 	});
 
+	const wrapper = shallowMount(lernStoreLayout, {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				[CONTENT_MODULE_KEY.valueOf()]: contentModule,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+			},
+			stubs: {
+				"router-view": { template: "<div class='router-view'></div>" },
+			},
+		},
+	});
+
+	return { wrapper };
+};
+
+describe("layouts/lernStoreLayout", () => {
 	describe("when 'feature flag' is set", () => {
-		it("should render 'legacy-logged-in' layout if feature flag set true", async () => {
-			const envs = envsFactory.build({
-				FEATURE_ES_COLLECTIONS_ENABLED: true,
-			});
-			envConfigModule.setEnvs(envs);
+		it("should render 'logged-in' layout if feature flag set true", async () => {
+			const { wrapper } = setup({ collectionEnabled: true });
 
-			contentModule.init();
+			const layout = wrapper.findComponent({ name: "newLoggedIn" });
+			const routerView = wrapper.find(".router-view");
 
-			const wrapper = mountComponent({ mocks: { $route: { params, query } } });
-			const mainContentElement = wrapper.find(".content");
-			expect(mainContentElement.exists()).toBe(true);
+			expect(layout.exists()).toBe(true);
+			expect(routerView.exists()).toBe(false);
 		});
 
-		it("should not render 'legacy-logged-in' layout if feature flag set false", async () => {
-			const envs = envsFactory.build({
-				FEATURE_ES_COLLECTIONS_ENABLED: false,
-			});
-			envConfigModule.setEnvs(envs);
-			contentModule.init();
+		it("should not render 'logged-in' layout if feature flag set false", async () => {
+			const { wrapper } = setup({ collectionEnabled: false });
 
-			const wrapper = mountComponent({ mocks: { $route: { params, query } } });
-			const mainContentElement = wrapper.find(".content");
-			expect(mainContentElement.exists()).toBe(false);
+			const layout = wrapper.findComponent({ name: "newLoggedIn" });
+			const routerView = wrapper.find(".router-view");
+
+			expect(layout.exists()).toBe(false);
+			expect(routerView.exists()).toBe(true);
 		});
 	});
 
 	describe("when 'isCollection' queryString is set", () => {
-		beforeEach(() => {
-			const envs = envsFactory.build({
-				FEATURE_ES_COLLECTIONS_ENABLED: true,
-			});
-			envConfigModule.setEnvs(envs);
-		});
 		it("should render any layout if 'isCollection' queryString is set true", async () => {
-			contentModule.init();
-			const wrapper = mountComponent({ mocks: { $route: { params, query } } });
+			const { wrapper } = setup({ collectionEnabled: true });
 
-			const mainContentElement = wrapper.find(".content");
-			expect(mainContentElement.exists()).toBe(true);
+			const layout = wrapper.findComponent({ name: "newLoggedIn" });
+			expect(layout.exists()).toBe(true);
 		});
 
 		it("should not render any layout if 'isCollection' queryString is set false", async () => {
-			contentModule.init();
-			const wrapper = mountComponent({
-				mocks: { $route: { params, query: { isCollection: "false" } } },
+			const { wrapper } = setup({
+				collectionEnabled: true,
+				route: {
+					params,
+					query: {
+						isCollection: "false",
+					},
+				},
 			});
 
-			const mainContentElement = wrapper.find(".content");
-			expect(mainContentElement.exists()).toBe(false);
+			const layout = wrapper.findComponent({ name: "newLoggedIn" });
+			expect(layout.exists()).toBe(false);
 		});
 	});
 });

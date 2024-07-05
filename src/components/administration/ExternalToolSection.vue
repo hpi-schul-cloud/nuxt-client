@@ -68,16 +68,64 @@
 				</v-card-title>
 				<v-card-text class="text--primary">
 					<RenderHTML
-						data-testid="delete-dialog-content"
-						class="text-md mt-2"
+						data-testid="delete-dialog-content-header"
+						class="text-md mt-2 mb-0"
 						:html="
 							t(
-								'components.administration.externalToolsSection.dialog.content',
+								'components.administration.externalToolsSection.dialog.content.header',
 								{
 									itemName: getItemName,
+								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						data-testid="delete-dialog-content-courses"
+						class="text-md mb-0"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.courses',
+								{
 									courseCount: metadata.course,
+								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						data-testid="delete-dialog-content-board-elements"
+						:class="isMediaBoardUsageVisible ? 'text-md mb-0' : 'text-md'"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.boardElements',
+								{
 									boardElementCount: metadata.boardElement,
 								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						v-if="isMediaBoardUsageVisible"
+						data-testid="delete-dialog-content-media-shelves"
+						class="text-md"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.mediaShelves',
+								{
+									mediaBoardCount: metadata.mediaBoard,
+								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						data-testid="delete-dialog-content-media-warning"
+						class="text-md mb-0"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.warning'
 							)
 						"
 						component="p"
@@ -120,6 +168,7 @@ import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 } from "@/utils/inject";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { RenderHTML } from "@feature-render-html";
@@ -137,6 +186,7 @@ import { useRouter } from "vue-router";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import EnvConfigModule from "@/store/env-config";
 
 export default defineComponent({
 	name: "ExternalToolSection",
@@ -144,6 +194,9 @@ export default defineComponent({
 	setup() {
 		const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 			SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
+		);
+		const envConfigModule: EnvConfigModule = injectStrict(
+			ENV_CONFIG_MODULE_KEY
 		);
 		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
@@ -235,6 +288,16 @@ export default defineComponent({
 			isDeleteDialogOpen.value = false;
 		};
 
+		const isMediaBoardUsageVisible: ComputedRef<boolean> = computed(() => {
+			if (!metadata.value) {
+				return false;
+			}
+			const isVisible =
+				metadata.value.mediaBoard > 0 ||
+				envConfigModule.getEnv.FEATURE_MEDIA_SHELF_ENABLED;
+			return isVisible;
+		});
+
 		return {
 			t,
 			headers,
@@ -251,6 +314,7 @@ export default defineComponent({
 			mdiAlert,
 			mdiCheckCircle,
 			metadata,
+			isMediaBoardUsageVisible,
 		};
 	},
 });

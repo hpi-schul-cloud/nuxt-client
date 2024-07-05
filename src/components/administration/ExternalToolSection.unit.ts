@@ -1,13 +1,16 @@
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
 	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
+	envsFactory,
 	meResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
@@ -20,11 +23,13 @@ import {
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiAlert, mdiCheckCircle } from "@mdi/js";
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import ExternalToolSection from "./ExternalToolSection.vue";
+import { SchoolExternalToolMetadata } from "@/store/external-tool";
+import { ConfigResponse } from "@/serverApi/v3";
 
 jest.mock("@data-external-tool");
 
@@ -40,7 +45,10 @@ describe("ExternalToolSection", () => {
 
 	const createDatasheetButtonIndex = 1;
 
-	const getWrapper = (getters: Partial<SchoolExternalToolsModule> = {}) => {
+	const getWrapper = (
+		getters: Partial<SchoolExternalToolsModule> = {},
+		envs: Partial<ConfigResponse> = {}
+	) => {
 		el = document.createElement("div");
 		el.setAttribute("data-app", "true");
 		document.body.appendChild(el);
@@ -60,6 +68,10 @@ describe("ExternalToolSection", () => {
 			getSchool: mockMe.school,
 		});
 
+		const envConfigModule = createModuleMocks(EnvConfigModule, {
+			getEnv: envsFactory.build(envs),
+		});
+
 		const router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
 
@@ -76,6 +88,7 @@ describe("ExternalToolSection", () => {
 						schoolExternalToolsModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
 
@@ -158,7 +171,7 @@ describe("ExternalToolSection", () => {
 						parameters: [],
 						name: "Test3",
 						status: schoolToolConfigurationStatusFactory.build({
-							isDeactivated: true,
+							isGloballyDeactivated: true,
 						}),
 						isDeactivated: true,
 					},
@@ -444,7 +457,7 @@ describe("ExternalToolSection", () => {
 				expect(dialog.isVisible()).toBeTruthy();
 			});
 
-			it("should display tool usage count", async () => {
+			it("should display tool usage count for courses and board elements", async () => {
 				const { wrapper, schoolExternalToolMetadata } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
@@ -452,11 +465,22 @@ describe("ExternalToolSection", () => {
 
 				await deleteButton.trigger("click");
 
-				const dialogContent = wrapper.findComponent({ name: "renderHTML" });
+				const expectedDialogContents = [
+					"components.administration.externalToolsSection.dialog.content.header",
+					"components.administration.externalToolsSection.dialog.content.courses",
+					"components.administration.externalToolsSection.dialog.content.boardElements",
+					"components.administration.externalToolsSection.dialog.content.warning",
+				];
+				const dialogContents = wrapper.findAllComponents({
+					name: "renderHTML",
+				});
 
-				expect(dialogContent.props("html")).toEqual(
-					"components.administration.externalToolsSection.dialog.content"
+				expect(dialogContents.length).toBeGreaterThanOrEqual(
+					expectedDialogContents.length
 				);
+				for (const content of dialogContents) {
+					expect(expectedDialogContents).toContain(content.props().html);
+				}
 
 				expect(wrapper.vm.getItemName).toEqual("name");
 				expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
@@ -471,6 +495,180 @@ describe("ExternalToolSection", () => {
 				await deleteButton.trigger("click");
 
 				expect(notifierModule.show).not.toHaveBeenCalled();
+			});
+		});
+
+		const setupMediaBoardMetadataAndEnv = (
+			toolUsageMetadata: SchoolExternalToolMetadata,
+			enableMediaShelf: boolean
+		) => {
+			const schoolExternalToolMetadata =
+				schoolExternalToolMetadataFactory.build(toolUsageMetadata);
+
+			useSchoolExternalToolUsageMock.metadata = ref(schoolExternalToolMetadata);
+
+			const envs: Partial<ConfigResponse> = {
+				FEATURE_MEDIA_SHELF_ENABLED: enableMediaShelf,
+			};
+			const { wrapper } = getWrapper(
+				{
+					getSchoolExternalTools: [
+						schoolExternalToolFactory.build(),
+						schoolExternalToolFactory.build(),
+					],
+				},
+				envs
+			);
+
+			return {
+				wrapper,
+				schoolExternalToolMetadata,
+			};
+		};
+
+		const expectMediaBoardDialogIsShown = (deleteDialogWrapper: VueWrapper) => {
+			const dialogContents = deleteDialogWrapper.findAllComponents({
+				name: "renderHTML",
+			});
+
+			const mediaBoardDialogContentIndex = dialogContents.findIndex(
+				(content) =>
+					content.attributes()["data-testid"] ===
+					"delete-dialog-content-media-shelves"
+			);
+			expect(mediaBoardDialogContentIndex).toBeGreaterThan(0);
+
+			const mediaBoardDialogContent =
+				dialogContents[mediaBoardDialogContentIndex];
+			const dialogContentBeforeMediaBoard =
+				dialogContents[mediaBoardDialogContentIndex - 1];
+
+			expect(mediaBoardDialogContent.text()).toEqual(
+				"components.administration.externalToolsSection.dialog.content.mediaShelves"
+			);
+
+			expect(dialogContentBeforeMediaBoard.classes()).toContain("mb-0");
+		};
+
+		const expectMediaBoardDialogIsHidden = (
+			deleteDialogWrapper: VueWrapper
+		) => {
+			const dialogContents = deleteDialogWrapper.findAllComponents({
+				name: "renderHTML",
+			});
+
+			const mediaBoardDialogContentIndex = dialogContents.findIndex(
+				(content) =>
+					content.attributes()["data-testid"] ===
+					"delete-dialog-content-media-shelves"
+			);
+			expect(mediaBoardDialogContentIndex).toEqual(-1);
+
+			const dialogContentBeforeWarning =
+				dialogContents[dialogContents.length - 2];
+
+			expect(dialogContentBeforeWarning.classes()).not.toContain("mb-0");
+		};
+
+		describe("when metadata with media board > 0 is given", () => {
+			const setup = (enabledMediaShelf: boolean) => {
+				const metadataWithNonZeroMediaBoard: SchoolExternalToolMetadata = {
+					course: 3,
+					boardElement: 2,
+					mediaBoard: 1,
+				};
+				const { wrapper, schoolExternalToolMetadata } =
+					setupMediaBoardMetadataAndEnv(
+						metadataWithNonZeroMediaBoard,
+						enabledMediaShelf
+					);
+				return {
+					wrapper,
+					schoolExternalToolMetadata,
+				};
+			};
+
+			describe("when FEATURE_MEDIA_SHELF_ENABLED is true", () => {
+				it("should show tool usage count for media board", async () => {
+					const { wrapper, schoolExternalToolMetadata } = setup(true);
+
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
+
+					await deleteButton.trigger("click");
+
+					expectMediaBoardDialogIsShown(wrapper);
+
+					expect(wrapper.vm.getItemName).toEqual("name");
+					expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
+				});
+			});
+
+			describe("when FEATURE_MEDIA_SHELF_ENABLED is false", () => {
+				it("should show tool usage count for media board", async () => {
+					const { wrapper, schoolExternalToolMetadata } = setup(false);
+
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
+
+					await deleteButton.trigger("click");
+
+					expectMediaBoardDialogIsShown(wrapper);
+
+					expect(wrapper.vm.getItemName).toEqual("name");
+					expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
+				});
+			});
+		});
+
+		describe("when metadata with 0 media board is given", () => {
+			const setup = (enabledMediaShelf: boolean) => {
+				const metadataWithNonZeroMediaBoard: SchoolExternalToolMetadata = {
+					course: 3,
+					boardElement: 2,
+					mediaBoard: 0,
+				};
+				const { wrapper, schoolExternalToolMetadata } =
+					setupMediaBoardMetadataAndEnv(
+						metadataWithNonZeroMediaBoard,
+						enabledMediaShelf
+					);
+				return {
+					wrapper,
+					schoolExternalToolMetadata,
+				};
+			};
+
+			describe("when FEATURE_MEDIA_SHELF_ENABLED is true", () => {
+				it("should show tool usage count for media board", async () => {
+					const { wrapper, schoolExternalToolMetadata } = setup(true);
+
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
+
+					await deleteButton.trigger("click");
+
+					expectMediaBoardDialogIsShown(wrapper);
+
+					expect(wrapper.vm.getItemName).toEqual("name");
+					expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
+				});
+			});
+
+			describe("when FEATURE_MEDIA_SHELF_ENABLED is false", () => {
+				it("should not show tool usage count for media board", async () => {
+					const { wrapper, schoolExternalToolMetadata } = setup(false);
+
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
+
+					await deleteButton.trigger("click");
+
+					expectMediaBoardDialogIsHidden(wrapper);
+
+					expect(wrapper.vm.getItemName).toEqual("name");
+					expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
+				});
 			});
 		});
 

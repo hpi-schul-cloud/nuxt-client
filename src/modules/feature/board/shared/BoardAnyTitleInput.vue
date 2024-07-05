@@ -26,7 +26,7 @@
 		:rows="1"
 		auto-grow
 		flat
-		class="mx-n4 mb-n4"
+		class="mx-n4 mb-n2"
 		:placeholder="placeholder"
 		bg-color="transparent"
 		ref="titleInput"
@@ -157,8 +157,6 @@ export default defineComponent({
 
 		const ariaLevel = computed(() => {
 			switch (props.scope) {
-				case "board":
-					return 1;
 				case "column":
 					return 2;
 				case "card":
