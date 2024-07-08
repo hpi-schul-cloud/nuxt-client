@@ -1,5 +1,4 @@
 import { ExternalToolConfigurationTemplate } from "@data-external-tool";
-import { Ref } from "vue";
 
 export function useExternalToolUrlInsertion() {
 	const isValidUrl = (text: string): boolean => {
@@ -15,6 +14,23 @@ export function useExternalToolUrlInsertion() {
 		return pattern.test(text);
 	};
 
+	const createBaseUrlRegex = (baseUrl: string) => {
+		if (!baseUrl.endsWith("/")) {
+			baseUrl += "/";
+		}
+		const pathParamsReplaced = `^${baseUrl.replace(/:[^/]+/g, "([^/]+)")}$`;
+		const baseUrlRegex = new RegExp(pathParamsReplaced);
+		return baseUrlRegex;
+	};
+
+	const getUrlWithoutQueryParams = (url: string) => {
+		let urlWithoutQuery = url.split("?")[0];
+		if (!urlWithoutQuery.endsWith("/")) {
+			urlWithoutQuery += "/";
+		}
+		return urlWithoutQuery;
+	};
+
 	const findMatchingTemplate = (
 		searchText: string,
 		configurationTemplates: ExternalToolConfigurationTemplate[]
@@ -23,16 +39,10 @@ export function useExternalToolUrlInsertion() {
 			return undefined;
 		}
 
-		const url = new URL(searchText);
 		const matchedTemplate = configurationTemplates.find((template) => {
-			let regexString = template.baseUrl;
-			if (!regexString.endsWith("/")) {
-				regexString += "/";
-			}
-			const baseUrlRegex = new RegExp(
-				`^${regexString.replace(/:\w+/g, "\\w+")}$`
-			);
-			return baseUrlRegex.test(url.href.split("?")[0]);
+			const baseUrlRegex = createBaseUrlRegex(template.baseUrl);
+			const urlWithoutQuery = getUrlWithoutQueryParams(searchText);
+			return baseUrlRegex.test(urlWithoutQuery);
 		});
 
 		if (matchedTemplate) {
@@ -45,24 +55,23 @@ export function useExternalToolUrlInsertion() {
 		inputtedUrl: string,
 		templateBaseUrl: string
 	): Map<string, string> => {
-		// TODO: simplify if possible
+		const paramsNameValueMap: Map<string, string> = new Map<string, string>();
+		if (!isValidUrl(inputtedUrl)) {
+			return paramsNameValueMap;
+		}
+
 		const urlParts = templateBaseUrl.split("/");
 		const templateParamNames = urlParts
 			.filter((part) => part.startsWith(":"))
 			.map((part) => part.substring(1));
 
-		const urlRegex = new RegExp(
-			`${templateBaseUrl
-				.replace(/\\/g, "\\\\")
-				.replace(/:\w+/g, "(\\w+)")
-				.replace(/\//g, "\\/")}`
-		);
+		const baseUrlRegex = createBaseUrlRegex(templateBaseUrl);
+		const inputUrlWithoutQuery = getUrlWithoutQueryParams(inputtedUrl);
+		const match = inputUrlWithoutQuery.match(baseUrlRegex);
 
-		const match = inputtedUrl.match(urlRegex);
-		const paramsNameValueMap: Map<string, string> = new Map<string, string>();
 		if (match) {
-			const parameterValues = match.slice(1);
-			parameterValues.forEach((value, index) => {
+			const matchedParamValues = match.slice(1);
+			matchedParamValues.forEach((value, index) => {
 				const paramName = templateParamNames[index];
 				paramsNameValueMap.set(paramName, value);
 			});
