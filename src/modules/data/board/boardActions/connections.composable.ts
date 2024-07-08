@@ -7,7 +7,7 @@ export const connectionOptions = {
 	lossSocketConnection: false,
 	lossInternetConnection: false,
 	timeout: false,
-	MAX_TIME_OUT_FOR_INACTIVITY: 3000,
+	MAX_TIME_OUT_FOR_INACTIVITY: 15 * 60 * 1000,
 };
 
 export const useConnectionStatus = () => {
@@ -23,7 +23,7 @@ export const useConnectionStatus = () => {
 
 	const reloadBoardAndNotify = () => {
 		if (connectionOptions.lossSocketConnection) {
-			showInfo("common.notification.connection.restored");
+			showInfo(t("common.notification.connection.restored"));
 			connectionOptions.lossSocketConnection = false;
 
 			if (!boardStore.board) return;
@@ -55,8 +55,11 @@ export const useConnectionStatus = () => {
 		if (document.hidden) timeoutFn.start();
 
 		if (connectionOptions.timeout) {
-			showInfo("You should reload the page to get the latest data");
+			showInfo("You should reload the page to get the latest data"); // TODO: Do we need to inform the user?
 			connectionOptions.timeout = false;
+
+			if (!boardStore.board) return;
+			boardStore.fetchBoardRequest({ boardId: boardStore.board.id });
 		}
 	});
 
