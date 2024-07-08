@@ -1,3 +1,4 @@
+import { chunk } from "lodash";
 import * as CardActions from "./cardActions";
 import { useSocketConnection } from "@data-board";
 import { useCardStore } from "../Card.store";
@@ -92,7 +93,10 @@ export const useCardSocketApi = () => {
 
 	const _debouncedFetchCardEmit = useDebounceFn(
 		() => {
-			emitOnSocket("fetch-card-request", { cardIds: cardIdsToFetch });
+			const batches = chunk(cardIdsToFetch, 50);
+			batches.forEach((cardIds) =>
+				emitOnSocket("fetch-card-request", { cardIds })
+			);
 			cardIdsToFetch = [];
 		},
 		WAIT_AFTER_LAST_CALL_IN_MS,
