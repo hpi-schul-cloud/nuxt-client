@@ -23,7 +23,7 @@ export const useConnectionStatus = () => {
 
 	const reloadBoardAndNotify = () => {
 		if (connectionOptions.lossSocketConnection) {
-			showInfo("common.notification.connection.restored");
+			showInfo(t("common.notification.connection.restored"));
 			connectionOptions.lossSocketConnection = false;
 
 			if (!boardStore.board) return;
