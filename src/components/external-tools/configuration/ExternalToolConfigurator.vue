@@ -102,7 +102,7 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { mdiAlertCircle } from "@/components/icons/material";
 import { mdiContentPaste } from "@mdi/js";
@@ -121,7 +121,6 @@ import {
 import {
 	computed,
 	ComputedRef,
-	defineComponent,
 	PropType,
 	Ref,
 	ref,
@@ -133,229 +132,214 @@ import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 
-export default defineComponent({
-	emits: ["cancel", "save", "change"],
-	components: {
-		ExternalToolConfigSettings,
-		ExternalToolSelectionRow,
+const props = defineProps({
+	templates: {
+		type: Array as PropType<Array<ExternalToolConfigurationTemplate>>,
+		required: true,
 	},
-	props: {
-		templates: {
-			type: Array as PropType<Array<ExternalToolConfigurationTemplate>>,
-			required: true,
-		},
-		configuration: {
-			type: Object as PropType<ConfigurationTypes>,
-		},
-		error: {
-			type: Object as PropType<BusinessError>,
-		},
-		loading: {
-			type: Boolean,
-		},
-		displaySettingsTitle: {
-			type: Boolean,
-			default: true,
-		},
+	configuration: {
+		type: Object as PropType<ConfigurationTypes>,
 	},
-	setup(props, { emit }) {
-		const slots = useSlots();
-
-		const { getBusinessErrorTranslationKey } = useExternalToolMappings();
-
-		const configurationTemplates: Ref<ExternalToolConfigurationTemplate[]> =
-			toRef(props, "templates");
-		const loadedConfiguration: Ref<ConfigurationTypes | undefined> = toRef(
-			props,
-			"configuration"
-		);
-
-		const {
-			isValidUrl,
-			findMatchingTemplate,
-			extractPathParameters,
-			extractQueryParameters,
-		} = useExternalToolUrlInsertion();
-
-		const comboboxRef = ref();
-
-		const isInEditMode: ComputedRef<boolean> = computed(
-			() => !!loadedConfiguration.value
-		);
-
-		const isAboveParametersSlotEmpty: ComputedRef<boolean> = computed(
-			() => slots.aboveParameters?.({ selectedTemplate }) === undefined
-		);
-
-		const selectedTemplate: Ref<ExternalToolConfigurationTemplate | undefined> =
-			ref();
-
-		const parametersValid: ComputedRef<boolean> = computed(
-			() => !!selectedTemplate.value
-		);
-
-		const parameterConfiguration: Ref<(string | undefined)[]> = ref([]);
-
-		const hideNoData: Ref<boolean> = ref(false);
-
-		const searchString: Ref<string> = ref("");
-
-		const onCancel = () => {
-			emit("cancel");
-		};
-
-		const onSave = async () => {
-			if (selectedTemplate.value) {
-				const parameterEntries: ToolParameterEntry[] = mapValidParameterEntries(
-					selectedTemplate.value
-				);
-
-				emit("save", selectedTemplate.value, parameterEntries);
-			}
-		};
-
-		const mapValidParameterEntries = (
-			template: ExternalToolConfigurationTemplate
-		) => {
-			const parameterEntries: ToolParameterEntry[] = template.parameters
-				.map(
-					(parameter: ToolParameter, index: number): ToolParameterEntry => ({
-						name: parameter.name,
-						value: parameterConfiguration.value[index],
-					})
-				)
-				.filter(
-					(parameterEntry: ToolParameterEntry) =>
-						parameterEntry.value !== undefined && parameterEntry.value !== ""
-				);
-
-			return parameterEntries;
-		};
-
-		const onChangeSelection = async () => {
-			fillParametersWithDefaultValues();
-			extractAndSetParametersFromUrl(selectedTemplate.value?.baseUrl);
-
-			emit("change", selectedTemplate.value);
-		};
-
-		const onSearchInput = (text: string) => {
-			searchString.value = text;
-			hideNoData.value = isValidUrl(text);
-		};
-
-		const populateEditMode = (configuration: ConfigurationTypes) => {
-			if (props.templates.length >= 1) {
-				selectedTemplate.value = props.templates[0];
-
-				fillParametersWithDefaultValues();
-
-				fillParametersWithValues(configuration);
-			}
-		};
-
-		const fillParametersWithDefaultValues = () => {
-			parameterConfiguration.value = [];
-			selectedTemplate.value?.parameters?.forEach((parameter, index) => {
-				parameterConfiguration.value[index] = parameter.defaultValue;
-			});
-		};
-
-		const fillParametersWithValues = (configuration: ConfigurationTypes) => {
-			configuration.parameters.forEach((configuredParameter) => {
-				// Find the index of the configured parameter in the template
-				const index: number =
-					selectedTemplate.value?.parameters.findIndex(
-						(templateParameter) =>
-							templateParameter.name === configuredParameter.name
-					) ?? -1;
-
-				if (index >= 0) {
-					parameterConfiguration.value[index] = configuredParameter.value;
-				}
-			});
-		};
-
-		const extractAndSetParametersFromUrl = (baseUrl: string | undefined) => {
-			if (!baseUrl || !searchString.value) {
-				return;
-			}
-
-			const pathParams = extractPathParameters(searchString.value, baseUrl);
-			const queryParams = extractQueryParameters(searchString.value);
-			const allParams = new Map([...pathParams, ...queryParams]);
-
-			allParams.forEach((value, name) => {
-				const paramIndex = selectedTemplate.value?.parameters.findIndex(
-					(param) => param.name === name
-				);
-				if (paramIndex !== undefined && paramIndex >= 0) {
-					parameterConfiguration.value[paramIndex] = value;
-				}
-			});
-		};
-
-		const pasteFromClipboard = async () => {
-			try {
-				const text = await navigator.clipboard.readText();
-				comboboxRef.value.search = text;
-				comboboxRef.value.isFocused = true;
-				comboboxRef.value.menu = true;
-				onSearchInput(text);
-			} catch (err) {
-				console.error("Failed to read clipboard contents: ", err);
-			}
-		};
-
-		if (loadedConfiguration.value) {
-			populateEditMode(loadedConfiguration.value);
-		}
-
-		watch(loadedConfiguration, (newConfig) => {
-			if (newConfig) {
-				populateEditMode(newConfig);
-			}
-		});
-
-		const customFilter = (
-			_value: string,
-			query: string,
-			item: ExternalToolConfigurationTemplate | undefined
-		): boolean => {
-			if (!item) {
-				return false;
-			}
-			const isMatchItemUrl =
-				findMatchingTemplate(query, configurationTemplates.value)?.baseUrl ===
-				item.baseUrl;
-			const isMatchItemName = item.name
-				.toLowerCase()
-				.includes(query.toLowerCase());
-			return isMatchItemName || isMatchItemUrl;
-		};
-
-		return {
-			comboboxRef,
-			searchString,
-			onSearchInput,
-			customFilter,
-			configurationTemplates,
-			loadedConfiguration,
-			getBusinessErrorTranslationKey,
-			parametersValid,
-			selectedTemplate,
-			onCancel,
-			onSave,
-			onChangeSelection,
-			isInEditMode,
-			fillParametersWithDefaultValues,
-			parameterConfiguration,
-			isAboveParametersSlotEmpty,
-			mdiAlertCircle,
-			mdiContentPaste,
-			hideNoData,
-			pasteFromClipboard,
-		};
+	error: {
+		type: Object as PropType<BusinessError>,
+	},
+	loading: {
+		type: Boolean,
+	},
+	displaySettingsTitle: {
+		type: Boolean,
+		default: true,
 	},
 });
+
+const emit = defineEmits<{
+	(e: "cancel"): void;
+	(
+		e: "save",
+		template: ExternalToolConfigurationTemplate | undefined,
+		values: ToolParameterEntry[]
+	): void;
+	(e: "change", value: ExternalToolConfigurationTemplate | undefined): void;
+}>();
+
+const slots = useSlots();
+
+const { getBusinessErrorTranslationKey } = useExternalToolMappings();
+
+const {
+	isValidUrl,
+	findMatchingTemplate,
+	extractPathParameters,
+	extractQueryParameters,
+} = useExternalToolUrlInsertion();
+
+const configurationTemplates: Ref<ExternalToolConfigurationTemplate[]> = toRef(
+	props,
+	"templates"
+);
+
+const loadedConfiguration: Ref<ConfigurationTypes | undefined> = toRef(
+	props,
+	"configuration"
+);
+
+const comboboxRef = ref();
+
+const isInEditMode: ComputedRef<boolean> = computed(
+	() => !!loadedConfiguration.value
+);
+
+const isAboveParametersSlotEmpty: ComputedRef<boolean> = computed(
+	() => slots.aboveParameters?.({ selectedTemplate }) === undefined
+);
+
+const selectedTemplate: Ref<ExternalToolConfigurationTemplate | undefined> =
+	ref();
+
+const parametersValid: ComputedRef<boolean> = computed(
+	() => !!selectedTemplate.value
+);
+
+const parameterConfiguration: Ref<(string | undefined)[]> = ref([]);
+
+const hideNoData: Ref<boolean> = ref(false);
+
+const searchString: Ref<string> = ref("");
+
+const onCancel = () => {
+	emit("cancel");
+};
+
+const onSave = async () => {
+	if (selectedTemplate.value) {
+		const parameterEntries: ToolParameterEntry[] = mapValidParameterEntries(
+			selectedTemplate.value
+		);
+
+		emit("save", selectedTemplate.value, parameterEntries);
+	}
+};
+
+const mapValidParameterEntries = (
+	template: ExternalToolConfigurationTemplate
+) => {
+	const parameterEntries: ToolParameterEntry[] = template.parameters
+		.map(
+			(parameter: ToolParameter, index: number): ToolParameterEntry => ({
+				name: parameter.name,
+				value: parameterConfiguration.value[index],
+			})
+		)
+		.filter(
+			(parameterEntry: ToolParameterEntry) =>
+				parameterEntry.value !== undefined && parameterEntry.value !== ""
+		);
+
+	return parameterEntries;
+};
+
+const onChangeSelection = async () => {
+	fillParametersWithDefaultValues();
+
+	try {
+		extractAndSetParametersFromUrl(selectedTemplate.value?.baseUrl);
+	} catch (err) {
+		console.error("Error extracting parameters");
+	}
+
+	emit("change", selectedTemplate.value);
+};
+
+const onSearchInput = (text: string) => {
+	searchString.value = text;
+	hideNoData.value = isValidUrl(text);
+};
+
+const populateEditMode = (configuration: ConfigurationTypes) => {
+	if (props.templates.length >= 1) {
+		selectedTemplate.value = props.templates[0];
+
+		fillParametersWithDefaultValues();
+
+		fillParametersWithValues(configuration);
+	}
+};
+
+const fillParametersWithDefaultValues = () => {
+	parameterConfiguration.value = [];
+	selectedTemplate.value?.parameters?.forEach((parameter, index) => {
+		parameterConfiguration.value[index] = parameter.defaultValue;
+	});
+};
+
+const fillParametersWithValues = (configuration: ConfigurationTypes) => {
+	configuration.parameters.forEach((configuredParameter) => {
+		// Find the index of the configured parameter in the template
+		const index: number =
+			selectedTemplate.value?.parameters.findIndex(
+				(templateParameter) =>
+					templateParameter.name === configuredParameter.name
+			) ?? -1;
+
+		if (index >= 0) {
+			parameterConfiguration.value[index] = configuredParameter.value;
+		}
+	});
+};
+
+const extractAndSetParametersFromUrl = (baseUrl: string | undefined) => {
+	if (!baseUrl || !searchString.value) {
+		return;
+	}
+
+	const pathParams = extractPathParameters(searchString.value, baseUrl);
+	const queryParams = extractQueryParameters(searchString.value);
+	const allParams = new Map([...pathParams, ...queryParams]);
+
+	allParams.forEach((value, name) => {
+		const paramIndex = selectedTemplate.value?.parameters.findIndex(
+			(param) => param.name === name
+		);
+		if (paramIndex !== undefined && paramIndex >= 0) {
+			parameterConfiguration.value[paramIndex] = value;
+		}
+	});
+};
+
+const pasteFromClipboard = async () => {
+	try {
+		const text = await navigator.clipboard.readText();
+		comboboxRef.value.search = text;
+		comboboxRef.value.isFocused = true;
+		comboboxRef.value.menu = true;
+		onSearchInput(text);
+	} catch (err) {
+		console.error("Failed to read clipboard contents: ", err);
+	}
+};
+
+if (loadedConfiguration.value) {
+	populateEditMode(loadedConfiguration.value);
+}
+
+watch(loadedConfiguration, (newConfig) => {
+	if (newConfig) {
+		populateEditMode(newConfig);
+	}
+});
+
+const customFilter = (
+	_value: string,
+	query: string,
+	item: ExternalToolConfigurationTemplate | undefined
+): boolean => {
+	if (!item) {
+		return false;
+	}
+	const isMatchItemUrl =
+		findMatchingTemplate(query, configurationTemplates.value)?.baseUrl ===
+		item.baseUrl;
+	const isMatchItemName = item.name.toLowerCase().includes(query.toLowerCase());
+	return isMatchItemName || isMatchItemUrl;
+};
 </script>
