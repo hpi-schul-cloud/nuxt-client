@@ -142,193 +142,268 @@ describe("ExternalToolConfigurator", () => {
 			});
 		});
 
-		describe("when inputting an url which matches the baseUrl of a tool", () => {
+		describe("when clicking on the 'paste' icon", () => {
 			const setup = () => {
-				const templates = [];
-				templates.push(schoolExternalToolConfigurationTemplateFactory.build());
-				templates.push(schoolExternalToolConfigurationTemplateFactory.build());
-
+				const template = schoolExternalToolConfigurationTemplateFactory.build();
 				const { wrapper } = getWrapper({
-					templates: templates,
+					templates: [template],
 				});
-
-				const openSelect = async (wrapper: VueWrapper) => {
-					await wrapper
-						.find('[data-testId="configuration-select"]')
-						.trigger("click");
-				};
-
 				return {
 					wrapper,
-					templates,
-					openSelect,
+					template,
 				};
 			};
 
-			const getSelectionItems = (wrapper: VueWrapper) => {
-				return [];
-			};
+			it("should paste the text from the clipboard into the input field", async () => {
+				const { wrapper } = setup();
+				const mockClipboardText = "https://google.de";
+				const mockClipboard = {
+					readText: jest.fn().mockReturnValue(mockClipboardText),
+				};
+				Object.assign(navigator, { clipboard: mockClipboard });
 
-			it("should display only the matched tool in the selection", async () => {
-				const { wrapper, templates, openSelect } = setup();
-				await openSelect(wrapper);
+				const icon = wrapper
+					.find(".v-input__append")
+					.find(".v-icon--clickable");
+				await icon.trigger("click");
 
-				const selectInputField = wrapper.get("input");
-				const inputUrl = templates[0].baseUrl;
-				await selectInputField.setValue(inputUrl);
-
-				const selectionItems = getSelectionItems(wrapper);
-
-				expect(selectionItems).toEqual(1);
-				// 	TODO: precise baseURL expects
+				const input = wrapper.find(".v-field__input").find("input");
+				expect(mockClipboard.readText).toBeCalled();
+				expect(input.element.value).toEqual(mockClipboardText);
 			});
 		});
 
-		describe("when inputting an url with path params", () => {
-			const createBaseUrlWithPathParams = (
+		// TODO: comment in the test when https://github.com/vuetifyjs/vuetify/pull/16272 is merged
+		describe("when inputting an url into the search box", () => {
+			const addPathParamsToTemplate = (
 				template: ExternalToolConfigurationTemplate
-			): string => {
-				let url = template.baseUrl;
-				template.parameters.forEach((parameter) => {
-					url += `/:${parameter.name}`;
-				});
-				url += "/";
-				return url;
-			};
-
-			const setup = () => {
-				const pathParams = [];
+			) => {
 				const pathParamConfig: DeepPartial<ToolParameter> = {
 					location: ToolParameterLocation.PATH,
 				};
+
+				const pathParams: ToolParameter[] = [];
 				pathParams.push(toolParameterFactory.build(pathParamConfig));
 				pathParams.push(toolParameterFactory.build(pathParamConfig));
+				template.parameters.push(...pathParams);
 
-				const templates = [];
-				const templateWithParam =
-					schoolExternalToolConfigurationTemplateFactory.build({
-						parameters: pathParams,
-					});
-				templateWithParam.baseUrl =
-					createBaseUrlWithPathParams(templateWithParam);
-				templates.push(templateWithParam);
-				templates.push(schoolExternalToolConfigurationTemplateFactory.build());
-
-				const { wrapper } = getWrapper({
-					templates: templates,
-					configuration: schoolExternalToolFactory.build(),
+				template.parameters.forEach((parameter) => {
+					if (parameter.location !== ToolParameterLocation.PATH) {
+						return;
+					}
+					template.baseUrl += `/:${parameter.name}`;
 				});
-
-				const openSelect = async (wrapper: VueWrapper) => {
-					await wrapper
-						.find('[data-testId="configuration-select"]')
-						.trigger("click");
-				};
-
-				return {
-					wrapper,
-					templates,
-					openSelect,
-				};
 			};
 
-			it("should set path parameters values from inputted url in the configuration fields", async () => {
-				const { wrapper, templates, openSelect } = setup();
-				await openSelect(wrapper);
-
-				const selectInputField = wrapper.get("input");
-				const testPathParams = ["test-2", "test-1"];
-				const baseUrlParts = templates[0].baseUrl.split("/");
-				const inputUrlParts: string[] = [];
-				baseUrlParts.forEach((part) => {
-					let inputPart = part;
-					if (part.startsWith(":")) {
-						inputPart = testPathParams.pop() ?? "test";
-					}
-					inputUrlParts.push(inputPart);
-				});
-				const inputUrl = inputUrlParts.join("/");
-				await selectInputField.setValue(inputUrl);
-
-				// somehow click on the selection?
-
-				const configFields = wrapper.findAll(
-					'[data-testId="configuration-field"]'
-				);
-				configFields.forEach((field) => {
-					const input = field.find("v-field__input");
-					expect(input.text()).toEqual("test-1");
-				});
-			});
-		});
-
-		describe("when inputting an url with query parameters", () => {
-			const setup = () => {
-				const queryParams = [];
-				const queryParamConfig: DeepPartial<ToolParameter> = {
+			const addQueryParamsToTemplate = (
+				template: ExternalToolConfigurationTemplate
+			) => {
+				const pathParamConfig: DeepPartial<ToolParameter> = {
 					location: ToolParameterLocation.QUERY,
 				};
-				queryParams.push(toolParameterFactory.build(queryParamConfig));
 
-				const templates = [];
-				templates.push(
-					schoolExternalToolConfigurationTemplateFactory.build({
-						parameters: queryParams,
-					})
-				);
-				templates.push(schoolExternalToolConfigurationTemplateFactory.build());
-
-				const { wrapper } = getWrapper({
-					templates: templates,
-					configuration: schoolExternalToolFactory.build(),
-				});
-
-				const openSelect = async (wrapper: VueWrapper) => {
-					await wrapper
-						.find('[data-testId="configuration-select"]')
-						.trigger("click");
-				};
-
-				const createInputUrlFromTemplate = (
-					template: ExternalToolConfigurationTemplate
-				) => {
-					const testPathParams = ["test-2", "test-1"];
-					let queryString = "";
-					template.parameters.forEach((parameter, index) => {
-						if (index > 0) {
-							queryString += "&";
-						}
-						queryString += `${parameter.name}=${testPathParams[index]}`;
-					});
-					return template.baseUrl + "?" + queryString;
-				};
-
-				return {
-					wrapper,
-					templates,
-					openSelect,
-					createInputUrlFromTemplate,
-				};
+				const queryParams: ToolParameter[] = [];
+				queryParams.push(toolParameterFactory.build(pathParamConfig));
+				queryParams.push(toolParameterFactory.build(pathParamConfig));
+				template.parameters.push(...queryParams);
 			};
 
-			it("should set query parameters values from inputted url in the configuration fields", async () => {
-				const { wrapper, templates, openSelect, createInputUrlFromTemplate } =
-					setup();
-				await openSelect(wrapper);
+			const generateTestParamValue = (parameterName: string) => {
+				return `test-${parameterName}`;
+			};
 
-				const inputUrl = createInputUrlFromTemplate(templates[0]);
+			const generateTestUrlFromTemplate = (
+				template: ExternalToolConfigurationTemplate
+			) => {
+				let testUrl = template.baseUrl;
+				template.parameters.forEach((parameter) => {
+					const testValue = generateTestParamValue(parameter.name);
+					switch (parameter.location) {
+						case ToolParameterLocation.PATH:
+							testUrl = testUrl.replace(`:${parameter.name}`, testValue);
+							break;
+						case ToolParameterLocation.QUERY:
+							if (testUrl.includes("?")) {
+								testUrl += "&";
+							} else {
+								testUrl += "?";
+							}
+							testUrl += `${parameter.name}=${testValue}`;
+					}
+				});
+				return testUrl;
+			};
 
-				const selectInputField = wrapper.get("input");
-				await selectInputField.setValue(inputUrl);
+			const getListedSelectionItems = (wrapper: VueWrapper) => {
+				return wrapper
+					.find(".v-overlay-container")
+					.find(".v-overlay__content .v-combobox__content")
+					.findAll('[data-testid="configuration-select-item"]');
+			};
 
-				// somehow click on the selection?
+			const clickOnFirstSelectionItem = async (wrapper: VueWrapper) => {
+				wrapper.find(".v-overlay-container");
+				return;
+			};
 
-				const configFields = wrapper.findAll(
-					'[data-testId="configuration-field"]'
-				);
-				configFields.forEach((field) => {
-					const input = field.find("v-field__input");
-					expect(input.text()).toEqual("test-1");
+			describe("when the url matches a template's base url", () => {
+				const setup = () => {
+					const templates = [];
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build()
+					);
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build()
+					);
+					const { wrapper } = getWrapper({
+						templates: templates,
+					});
+
+					const openSelect = async (wrapper: VueWrapper) => {
+						await wrapper
+							.find('[data-testId="configuration-select"]')
+							.trigger("click");
+					};
+
+					return { wrapper, templates, openSelect };
+				};
+
+				it.skip("should display only the matched tool(s) in the selection", async () => {
+					const { wrapper, templates, openSelect } = setup();
+					await openSelect(wrapper);
+
+					const input = wrapper.find(".v-field__input").find("input");
+					const inputUrl = generateTestUrlFromTemplate(templates[0]);
+					await input.setValue(inputUrl);
+
+					const items = getListedSelectionItems(wrapper);
+					expect(items.length).toEqual(1);
+
+					const toolName = items[0].find(".v-list-item-title").text();
+					expect(toolName).toEqual(templates[0].name);
+				});
+			});
+
+			describe("when the url matches a template and contains path parameters", () => {
+				const setup = () => {
+					const templates = [];
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build()
+					);
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build()
+					);
+
+					templates.forEach((template) => addPathParamsToTemplate(template));
+					addQueryParamsToTemplate(templates[1]);
+
+					const templateWithPathParams = templates[0];
+					const templateWithBothParams = templates[1];
+
+					const { wrapper } = getWrapper({
+						templates: templates,
+					});
+
+					const openSelect = async (wrapper: VueWrapper) => {
+						await wrapper
+							.find('[data-testId="configuration-select"]')
+							.trigger("click");
+					};
+
+					return {
+						wrapper,
+						openSelect,
+						templateWithPathParams,
+						templateWithBothParams,
+					};
+				};
+
+				it.skip("should set path parameters values from url in the configuration fields", async () => {
+					const { wrapper, openSelect, templateWithPathParams } = setup();
+					await openSelect(wrapper);
+
+					const input = wrapper.find(".v-field__input").find("input");
+					const inputUrl = generateTestUrlFromTemplate(templateWithPathParams);
+					await input.setValue(inputUrl);
+
+					const items = getListedSelectionItems(wrapper);
+					expect(items.length).toEqual(1);
+					const toolName = items[0].find(".v-list-item-title").text();
+					expect(toolName).toEqual(templateWithPathParams.name);
+
+					await clickOnFirstSelectionItem(wrapper);
+					const inputFields = wrapper
+						.findAll('[data-testid="configuration-field"]')
+						.map((field) => field.find("input"));
+					const validValues = templateWithPathParams.parameters.map(
+						(parameter) => generateTestParamValue(parameter.name)
+					);
+
+					for (const input of inputFields) {
+						expect(validValues).toContain(input.element.value);
+					}
+				});
+
+				it.skip("should set path parameters values from url with both parameters in the correct fields", async () => {
+					const { wrapper, openSelect, templateWithBothParams } = setup();
+					await openSelect(wrapper);
+
+					const input = wrapper.find(".v-field__input").find("input");
+					const inputUrl = generateTestUrlFromTemplate(templateWithBothParams);
+					await input.setValue(inputUrl);
+				});
+			});
+
+			describe("when the url matches a template and contains query parameters", () => {
+				const setup = () => {
+					const templates = [];
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build()
+					);
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build()
+					);
+
+					templates.forEach((template) => addQueryParamsToTemplate(template));
+					addPathParamsToTemplate(templates[1]);
+
+					const templateWithQueryParams = templates[0];
+					const templateWithBothParams = templates[1];
+
+					const { wrapper } = getWrapper({
+						templates: templates,
+					});
+
+					const openSelect = async (wrapper: VueWrapper) => {
+						await wrapper
+							.find('[data-testId="configuration-select"]')
+							.trigger("click");
+					};
+
+					return {
+						wrapper,
+						openSelect,
+						templateWithQueryParams,
+						templateWithBothParams,
+					};
+				};
+
+				it.skip("should set query parameters values from inputted url in the configuration fields", async () => {
+					const { wrapper, openSelect, templateWithQueryParams } = setup();
+					await openSelect(wrapper);
+
+					const input = wrapper.find(".v-field__input").find("input");
+					const inputUrl = generateTestUrlFromTemplate(templateWithQueryParams);
+					await input.setValue(inputUrl);
+				});
+
+				it.skip("should set query parameters values from the url with both parameters in the correct fields", async () => {
+					const { wrapper, openSelect, templateWithBothParams } = setup();
+					await openSelect(wrapper);
+
+					const input = wrapper.find(".v-field__input").find("input");
+					const inputUrl = generateTestUrlFromTemplate(templateWithBothParams);
+					await input.setValue(inputUrl);
 				});
 			});
 		});
