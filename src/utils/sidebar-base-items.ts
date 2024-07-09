@@ -223,7 +223,7 @@ const getSidebarItems = (): SidebarItemList => [
 			{
 				title: "global.sidebar.item.classes",
 				icon: "$class",
-				href: "/administration/groups/classes",
+				to: "/administration/groups/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/groups/classes($|/.*)"],
 				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
