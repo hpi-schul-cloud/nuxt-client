@@ -131,7 +131,7 @@ import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import { useConnectionStatus } from "@/modules/data/board/boardActions/connections.composable";
+import { usePageInactivity } from "@/composables/pageInactivity.composable";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -255,7 +255,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 onMounted(() => {
 	setAlert();
 	boardStore.fetchBoardRequest({ boardId: props.boardId });
-	useConnectionStatus();
+	usePageInactivity(3000);
 });
 
 onUnmounted(() => {
