@@ -134,7 +134,7 @@ const getSidebarItems = (): SidebarItemList => [
 	},
 	{
 		title: "feature.media-shelf.title",
-		href: "/media-shelf",
+		to: "/media-shelf",
 		icon: mdiBookshelf,
 		testId: "Media-shelf",
 		activeForUrls: ["^/media-shelf($|/.*)"],
