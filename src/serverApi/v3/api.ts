@@ -1480,6 +1480,12 @@ export interface ContextExternalToolCountPerContextResponse {
      * @memberof ContextExternalToolCountPerContextResponse
      */
     boardElement: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ContextExternalToolCountPerContextResponse
+     */
+    mediaBoard: number;
 }
 /**
  * 
@@ -6030,11 +6036,11 @@ export interface SchoolExternalToolConfigurationStatusResponse {
      */
     isOutdatedOnScopeSchool: boolean;
     /**
-     * Is the tool deactivated, because of school administrator?
+     * Is the tool deactivated, because of instance administrator?
      * @type {boolean}
      * @memberof SchoolExternalToolConfigurationStatusResponse
      */
-    isDeactivated: boolean;
+    isGloballyDeactivated: boolean;
 }
 /**
  * 
@@ -6162,6 +6168,12 @@ export interface SchoolExternalToolResponse {
     schoolId: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof SchoolExternalToolResponse
+     */
+    isDeactivated: boolean;
+    /**
+     * 
      * @type {Array<CustomParameterEntryResponse>}
      * @memberof SchoolExternalToolResponse
      */
@@ -6172,12 +6184,6 @@ export interface SchoolExternalToolResponse {
      * @memberof SchoolExternalToolResponse
      */
     status: SchoolExternalToolConfigurationStatusResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolResponse
-     */
-    logoUrl?: string;
 }
 /**
  * 
