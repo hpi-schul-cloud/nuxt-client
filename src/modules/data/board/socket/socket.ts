@@ -1,13 +1,21 @@
 import { io, Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { envConfigModule } from "@/store";
-import { useConnectionStatus } from "../boardActions/connections.composable";
+
+import { useBoardStore } from "../Board.store";
+import { useBoardNotifier } from "@util-board";
+import { useI18n } from "vue-i18n";
 
 let instance: Socket | null = null;
 
+const connectionOptions = {
+	socketConnectionLost: false,
+};
+
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
-	const { notifySocketConnectionLost, reloadBoardAndNotify } =
-		useConnectionStatus();
+	const boardStore = useBoardStore();
+	const { showFailure, showInfo } = useBoardNotifier();
+	const { t } = useI18n();
 
 	if (instance === null) {
 		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
@@ -17,11 +25,19 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 		instance.on("connect", function () {
 			console.log("connected");
-			reloadBoardAndNotify();
+			if (connectionOptions.socketConnectionLost) {
+				showInfo(t("common.notification.connection.restored"));
+				connectionOptions.socketConnectionLost = false;
+
+				if (!boardStore.board) return;
+				boardStore.reloadBoard();
+			}
 		});
 
 		instance.on("disconnect", () => {
-			notifySocketConnectionLost();
+			console.log("disconnected");
+			connectionOptions.socketConnectionLost = true;
+			showFailure(t("error.4500"));
 		});
 	}
 
@@ -47,6 +63,8 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 	const disconnectSocket = () => {
 		socket.disconnect();
+		if (connectionOptions.socketConnectionLost)
+			connectionOptions.socketConnectionLost = false;
 	};
 
 	return {
