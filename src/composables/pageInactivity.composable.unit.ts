@@ -1,147 +1,93 @@
-// import {
-// 	useConnectionStatus,
-// 	connectionOptions,
-// } from "./connections.composable";
+import { mountComposable } from "@@/tests/test-utils";
+import {
+	usePageInactivity,
+	connectionOptions,
+} from "./pageInactivity.composable";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import NotifierModule from "@/store/notifier";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import { useBoardNotifier } from "@util-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { MaybeRefOrGetter, nextTick } from "vue";
 
-// const mockNotifier = {
-// 	showFailure: jest.fn(),
-// 	showInfo: jest.fn(),
-// };
+const notifierModule = createModuleMocks(NotifierModule);
 
-// const mockFetchBoardRequest = jest.fn();
+jest.mock("@util-board");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
-// jest.mock("vue-i18n", () => ({
-// 	useI18n: () => ({
-// 		t: jest.fn().mockImplementation((key) => key),
-// 	}),
-// }));
+jest.mock("vue-i18n", () => ({
+	useI18n: () => ({
+		t: jest.fn().mockImplementation((key) => key),
+	}),
+}));
 
-// jest.mock("../Board.store", () => ({
-// 	useBoardStore: () => ({
-// 		board: { id: "testBoardId" },
-// 		fetchBoardRequest: mockFetchBoardRequest,
-// 	}),
-// }));
+describe("pageInactivity.composable", () => {
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
-// jest.mock("@/modules/util/board/BoardNotifier.composable", () => ({
-// 	useBoardNotifier: () => ({
-// 		showFailure: mockNotifier.showFailure,
-// 		showInfo: mockNotifier.showInfo,
-// 	}),
-// }));
+	const setup = (timer: MaybeRefOrGetter<number>) => {
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-it("should be tested", () => {
-	expect(true).toBe(true);
+		const composable = mountComposable(() => usePageInactivity(timer), {
+			global: {
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
+			},
+		});
+
+		return { composable };
+	};
+	beforeEach(() => {
+		jest.clearAllMocks();
+		jest.useFakeTimers();
+	});
+
+	describe("usePageInactivity", () => {
+		it("should call the notifier module with 'info' parameter", async () => {
+			const { composable } = setup(3000);
+			connectionOptions.isTimeoutReached = true;
+			composable.visibility.value = "hidden";
+			await nextTick();
+
+			composable.visibility.value = "visible";
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.showInfo).toHaveBeenCalledWith(
+				"common.notification.reload.page"
+			);
+		});
+
+		it("should not call the notifier module", async () => {
+			const { composable } = setup(3000);
+			connectionOptions.isTimeoutReached = false;
+			composable.visibility.value = "hidden";
+			await nextTick();
+
+			composable.visibility.value = "visible";
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.showInfo).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("isTimeoutReached value", () => {
+		beforeEach(() => {
+			connectionOptions.isTimeoutReached = false;
+		});
+		it("should be changed after MAX_TIMEOUT_FOR_INACTIVITY is achieved", async () => {
+			setup(3000);
+			expect(connectionOptions.isTimeoutReached).toBe(false);
+			jest.advanceTimersByTime(3000);
+			expect(connectionOptions.isTimeoutReached).toBe(true);
+		});
+
+		it("should not be changed after MAX_TIMEOUT_FOR_INACTIVITY is not achieved", async () => {
+			setup(3000);
+			expect(connectionOptions.isTimeoutReached).toBe(false);
+			jest.advanceTimersByTime(1000);
+			expect(connectionOptions.isTimeoutReached).toBe(false);
+		});
+	});
 });
-
-// describe("connections.composable", () => {
-// 	beforeEach(() => {
-// 		jest.clearAllMocks();
-// 	});
-// 	describe("notifySocketConnectionLost", () => {
-// 		it("should call the notifier module with 'error' parameter", () => {
-// 			const { notifySocketConnectionLost } = useConnectionStatus();
-// 			connectionOptions.lossSocketConnection = false;
-// 			notifySocketConnectionLost();
-
-// 			expect(connectionOptions.lossSocketConnection).toBe(true);
-// 			expect(mockNotifier.showFailure).toHaveBeenCalledWith("error.4500");
-// 		});
-// 	});
-
-// 	describe("reloadBoardAndNotify", () => {
-// 		describe("when lossSocketConnection is true", () => {
-// 			it("should call the notifier module with 'info' parameter", () => {
-// 				const { reloadBoardAndNotify } = useConnectionStatus();
-// 				connectionOptions.lossSocketConnection = true;
-// 				reloadBoardAndNotify();
-
-// 				expect(mockNotifier.showInfo).toHaveBeenCalledWith(
-// 					"common.notification.connection.restored"
-// 				);
-// 			});
-
-// 			it("should call the boardStore.mockFetchBoardRequest method", () => {
-// 				const { reloadBoardAndNotify } = useConnectionStatus();
-// 				connectionOptions.lossSocketConnection = true;
-// 				reloadBoardAndNotify();
-
-// 				expect(mockFetchBoardRequest).toHaveBeenCalled();
-// 				expect(mockFetchBoardRequest.mock.calls[0][0]).toEqual({
-// 					boardId: "testBoardId",
-// 				});
-// 			});
-// 		});
-
-// 		describe("when lossSocketConnection is false", () => {
-// 			it("should not call notifier module", () => {
-// 				const { reloadBoardAndNotify } = useConnectionStatus();
-// 				connectionOptions.lossSocketConnection = false;
-// 				reloadBoardAndNotify();
-
-// 				expect(mockNotifier.showInfo).not.toHaveBeenCalled();
-// 			});
-
-// 			it("should not call boardStore.mockFetchBoardRequest method", () => {
-// 				const { reloadBoardAndNotify } = useConnectionStatus();
-// 				connectionOptions.lossSocketConnection = false;
-// 				reloadBoardAndNotify();
-
-// 				expect(mockFetchBoardRequest).not.toHaveBeenCalled();
-// 			});
-// 		});
-// 	});
-
-// 	describe("window events", () => {
-// 		describe("offline event", () => {
-// 			it("should call the notifier module with 'error' parameter", () => {
-// 				useConnectionStatus();
-// 				connectionOptions.lossInternetConnection = false;
-// 				window.dispatchEvent(new Event("offline"));
-
-// 				expect(connectionOptions.lossInternetConnection).toBe(true);
-// 				expect(mockNotifier.showFailure).toHaveBeenCalledWith("error.4500");
-// 			});
-// 		});
-
-// 		describe("online event", () => {
-// 			it("should call the notifier module with 'info' parameter", () => {
-// 				useConnectionStatus();
-// 				connectionOptions.lossInternetConnection = true;
-// 				window.dispatchEvent(new Event("online"));
-
-// 				expect(connectionOptions.lossInternetConnection).toBe(false);
-// 				expect(mockNotifier.showInfo).toHaveBeenCalledWith(
-// 					"common.notification.connection.restored"
-// 				);
-// 			});
-// 		});
-// 	});
-
-// 	describe("visibilitychange event", () => {
-// 		useConnectionStatus();
-// 		describe("when timeout value is true", () => {
-// 			it("should call the notifier module with 'info' parameter", () => {
-// 				connectionOptions.timeout = true;
-// 				window.dispatchEvent(new Event("visibilitychange"));
-
-// 				expect(mockNotifier.showInfo).toHaveBeenCalled();
-
-// 				// expect(mockFetchBoardRequest).toHaveBeenCalled();
-// 				// expect(mockFetchBoardRequest.mock.calls[0][0]).toEqual({
-// 				// 	boardId: "testBoardId",
-// 				// });
-// 			});
-// 		});
-
-// 		describe("when timeout value is false", () => {
-// 			it("should not call notifier module", () => {
-// 				connectionOptions.timeout = false;
-// 				window.dispatchEvent(new Event("visibilitychange"));
-
-// 				expect(mockNotifier.showInfo).not.toHaveBeenCalled();
-// 				// expect(mockFetchBoardRequest).not.toHaveBeenCalled();
-// 			});
-// 		});
-// 	});
-// });
