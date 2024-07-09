@@ -255,7 +255,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 onMounted(() => {
 	setAlert();
 	boardStore.fetchBoardRequest({ boardId: props.boardId });
-	usePageInactivity(3000);
+	usePageInactivity(3000); // TODO: this timeout value will be deleted
 });
 
 onUnmounted(() => {

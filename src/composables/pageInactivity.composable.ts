@@ -6,7 +6,7 @@ import { MaybeRefOrGetter, ref, watch } from "vue";
 
 export const connectionOptions = {
 	isTimeoutReached: false,
-	MAX_TIMEOUT_FOR_INACTIVITY: 15 * 60 * 1000,
+	MAX_TIMEOUT_FOR_INACTIVITY: 15 * 60 * 1000, // TODO: decide the time for inactivity
 };
 
 export const usePageInactivity = (
