@@ -22,7 +22,7 @@
 			:append-icon="mdiContentPaste"
 			:hide-no-data="hideNoData"
 			:custom-filter="
-				(value, query, item) => customFilter(value, query, item?.raw)
+				(value, query, item) => filterToolNameOrUrl(value, query, item?.raw)
 			"
 			persistent-hint
 			:hint="$t('pages.tool.select.description')"
@@ -46,24 +46,20 @@
 		<h2
 			v-if="
 				displaySettingsTitle &&
-				selectedTemplate?.externalToolId &&
-				(!isAboveParametersSlotEmpty || selectedTemplate.parameters.length > 0)
+				isSelectedTemplateATemplateObject &&
+				(!isAboveParametersSlotEmpty || hasSelectedTemplateParameters)
 			"
 			class="text-h4 mb-10"
 		>
 			{{ $t("pages.tool.settings") }}
 		</h2>
 		<slot
-			v-if="selectedTemplate?.externalToolId"
+			v-if="isSelectedTemplateATemplateObject"
 			name="aboveParameters"
 			:selectedTemplate="selectedTemplate"
 		/>
 		<external-tool-config-settings
-			v-if="
-				selectedTemplate &&
-				selectedTemplate.parameters &&
-				selectedTemplate.parameters.length > 0
-			"
+			v-if="hasSelectedTemplateParameters"
 			:template="selectedTemplate"
 			v-model="parameterConfiguration"
 			data-testid="configuration-field"
@@ -129,8 +125,17 @@ import {
 	watch,
 } from "vue";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
+import NotifierModule from "@/store/notifier";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { useI18n } from "vue-i18n";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
+
+const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+
+const { t } = useI18n();
+
+const slots = useSlots();
 
 const props = defineProps({
 	templates: {
@@ -162,8 +167,6 @@ const emit = defineEmits<{
 	(e: "change", value: ExternalToolConfigurationTemplate | undefined): void;
 }>();
 
-const slots = useSlots();
-
 const { getBusinessErrorTranslationKey } = useExternalToolMappings();
 
 const {
@@ -191,6 +194,18 @@ const isInEditMode: ComputedRef<boolean> = computed(
 
 const isAboveParametersSlotEmpty: ComputedRef<boolean> = computed(
 	() => slots.aboveParameters?.({ selectedTemplate }) === undefined
+);
+
+const isSelectedTemplateATemplateObject: ComputedRef<boolean> = computed(
+	() => !!selectedTemplate.value?.externalToolId
+);
+
+const hasSelectedTemplateParameters: ComputedRef<boolean> = computed(
+	() =>
+		!!(
+			selectedTemplate.value?.parameters &&
+			selectedTemplate.value?.parameters.length > 0
+		)
 );
 
 const selectedTemplate: Ref<ExternalToolConfigurationTemplate | undefined> =
@@ -240,11 +255,8 @@ const mapValidParameterEntries = (
 
 const onChangeSelection = async () => {
 	fillParametersWithDefaultValues();
-
-	try {
+	if (hasSelectedTemplateParameters.value) {
 		extractAndSetParametersFromUrl(selectedTemplate.value?.baseUrl);
-	} catch (err) {
-		console.error("Error extracting parameters");
 	}
 
 	emit("change", selectedTemplate.value);
@@ -314,7 +326,11 @@ const pasteFromClipboard = async () => {
 		comboboxRef.value.menu = true;
 		onSearchInput(text);
 	} catch (err) {
-		console.error("Failed to read clipboard contents: ", err);
+		notifierModule.show({
+			text: t("pages.tool.select.clipboard.error"),
+			status: "error",
+			timeout: 5000,
+		});
 	}
 };
 
@@ -328,7 +344,7 @@ watch(loadedConfiguration, (newConfig) => {
 	}
 });
 
-const customFilter = (
+const filterToolNameOrUrl = (
 	_value: string,
 	query: string,
 	item: ExternalToolConfigurationTemplate | undefined

@@ -1642,6 +1642,8 @@ export default {
 	"pages.tool.select.description":
 		"Busque herramientas o ingrese la URL de una herramienta o insértela desde el caché manualmente o con un botón",
 	"pages.tool.select.nodata": "No hay herramienta disponible",
+	"pages.tool.select.clipboard.error":
+		"Se ha producido un error al pegar el texto desde el portapapeles. Por favor, pegue el texto manualmente.",
 	"pages.tool.settings": "Configuración",
 	"pages.tool.title": "Configuración de herramientas externas",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",

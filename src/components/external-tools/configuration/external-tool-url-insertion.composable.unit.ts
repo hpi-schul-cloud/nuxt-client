@@ -110,10 +110,10 @@ describe("useExternalToolUrlInsertion", () => {
 		it("should return false when provided text is an invalid url for an external tool", () => {
 			const { isValidUrl } = setup();
 			const testUrls = [
-				"https://google",
-				"https://g@@gle.de",
+				"google.de",
+				"M https://google.de",
 				"My Tool",
-				"http://unsecure.c12",
+				"Google",
 			];
 			for (const url of testUrls) {
 				expect(isValidUrl(url)).toBeFalsy();

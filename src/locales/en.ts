@@ -1597,6 +1597,8 @@ export default {
 	"pages.tool.select.description":
 		"Type the address, or use the button to paste it from the clipboard",
 	"pages.tool.select.nodata": "No tool available",
+	"pages.tool.select.clipboard.error":
+		"An error had occurred when pasting the text from the clipboard. Please paste the text manually.",
 	"pages.tool.settings": "Settings",
 	"pages.tool.title": "External Tools Configuration",
 	"pages.userMigration.backToLogin": "Return to login page",

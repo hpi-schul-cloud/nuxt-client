@@ -1624,6 +1624,8 @@ export default {
 	"pages.tool.select.description":
 		"Nach Tools suchen oder eine Tool-URL eingeben bzw. aus dem Zwischenspeicher manuell oder per Knopf einfügen",
 	"pages.tool.select.nodata": "Kein Tool vorhanden",
+	"pages.tool.select.clipboard.error":
+		"Beim Einfügen des Textes aus dem Zwischenspeicher ist ein Fehler aufgetreten. Bitte fügen Sie den Text manuell ein.",
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.title": "Konfiguration externer Tools",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",

@@ -1617,6 +1617,8 @@ export default {
 	"pages.tool.select.label": "вибір інструменту / Інструмент-URL",
 	"pages.tool.select.description":
 		"Знайдіть інструменти або введіть URL-адресу інструменту або вставте його з кешу вручну або за допомогою кнопки",
+	"pages.tool.select.clipboard.error":
+		"Виникла помилка при вставці тексту з буфера обміну. Будь ласка, вставте текст вручну.",
 	"pages.tool.select.nodata": "Інструмент відсутній",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",

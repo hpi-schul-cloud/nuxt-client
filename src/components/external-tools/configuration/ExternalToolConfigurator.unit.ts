@@ -22,6 +22,9 @@ import { mount, VueWrapper } from "@vue/test-utils";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 import { DeepPartial } from "fishery";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 describe("ExternalToolConfigurator", () => {
 	jest
@@ -37,9 +40,14 @@ describe("ExternalToolConfigurator", () => {
 		error?: BusinessError;
 		loading?: boolean;
 	}) => {
+		const notifierModule = createModuleMocks(NotifierModule);
+
 		const wrapper = mount(ExternalToolConfigurator, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
 			},
 			props,
 		});
