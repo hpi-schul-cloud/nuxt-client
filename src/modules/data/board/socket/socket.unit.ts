@@ -1,23 +1,38 @@
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import { envsFactory } from "@@/tests/test-utils";
+import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useSocketConnection } from "@data-board";
-
+import { useBoardStore, useSocketConnection } from "@data-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createTestingPinia } from "@pinia/testing";
+import { useBoardNotifier } from "@util-board";
+import { setActivePinia } from "pinia";
 import * as socketModule from "socket.io-client";
+import { useI18n } from "vue-i18n";
+
+jest.mock("vue-i18n");
+(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
 jest.mock("socket.io-client");
 const mockSocketIOClient = jest.mocked(socketModule);
+
+jest.mock("@util-board/BoardNotifier.composable");
+const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock("../boardActions/boardSocketApi.composable");
+jest.mock("../boardActions/boardRestApi.composable");
 
 describe("socket.ts", () => {
 	let dispatchMock: jest.Mock;
 	let mockSocket: Partial<socketModule.Socket>;
 	let timeoutResponseMock: { emitWithAck: jest.Mock };
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeAll(() => {
 		timeoutResponseMock = { emitWithAck: jest.fn() };
 		mockSocket = {
 			connected: false,
+			on: jest.fn(),
 			emit: jest.fn(),
 			connect: jest.fn(),
 			disconnect: jest.fn(),
@@ -28,11 +43,19 @@ describe("socket.ts", () => {
 	});
 
 	beforeEach(() => {
+		setActivePinia(createTestingPinia());
 		setupStores({ envConfigModule: EnvConfigModule });
 		const envs = envsFactory.build({
 			BOARD_COLLABORATION_URI: "mockedUri",
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
 		});
 		envConfigModule.setEnvs(envs);
+
+		mockedPiniaStoreTyping(useBoardStore);
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 		dispatchMock = jest.fn();
 		mockSocket.connected = true;
