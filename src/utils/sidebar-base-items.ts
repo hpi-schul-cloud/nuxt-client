@@ -1,6 +1,5 @@
 import { ConfigResponse } from "@/serverApi/v3/api";
 import { mdiBookshelf } from "@mdi/js";
-import { useSidebarItems } from "../modules/ui/layout/sidebar/SidebarItems.composable";
 
 export type SidebarItemBase = {
 	title: string;
@@ -31,7 +30,7 @@ export type SidebarCategoryItem = SidebarItem & {
 export type SidebarItemList = (SidebarItem | SidebarCategoryItem)[];
 
 /**
- * @deprecated use {@link useSidebarItems}
+ * @deprecated use useSidebarItems composable
  */
 const getSidebarItems = (): SidebarItemList => [
 	{
