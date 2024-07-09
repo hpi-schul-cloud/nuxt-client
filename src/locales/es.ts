@@ -103,6 +103,8 @@ export default {
 	"common.nodata": "Datos no disponibles",
 	"common.notification.error": "Se ha producido un error.",
 	"common.notification.connection.restored": "La conexión se ha reestablecido.",
+	"common.notification.reload.page":
+		"Debes recargar la página para obtener los datos más recientes.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.AAAA",
 	"common.placeholder.email.confirmation":
