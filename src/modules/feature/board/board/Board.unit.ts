@@ -59,6 +59,7 @@ import { Router, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
+import { usePageInactivity } from "@/composables/pageInactivity.composable";
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -91,6 +92,9 @@ const mockedUseEditMode = jest.mocked(useEditMode);
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
+jest.mock("@/composables/pageInactivity.composable");
+const mockUsePageInactivity = <jest.Mock>usePageInactivity;
+
 describe("Board", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
@@ -99,6 +103,7 @@ describe("Board", () => {
 	>;
 	let router: DeepMocked<Router>;
 	let mockedBoardPermissions: BoardPermissionChecks;
+	let mockedUsePageInactivity: DeepMocked<ReturnType<typeof usePageInactivity>>;
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
@@ -141,6 +146,7 @@ describe("Board", () => {
 
 		mockedBoardPermissions = { ...defaultPermissions };
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
+		mockUsePageInactivity.mockReturnValue(mockedUsePageInactivity);
 	});
 
 	afterEach(() => {
@@ -293,6 +299,12 @@ describe("Board", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.findComponent(BoardVue).exists()).toBeTruthy();
+		});
+
+		it("should call 'usePageInactivity' composable", async () => {
+			setup();
+			await nextTick();
+			expect(mockUsePageInactivity).toHaveBeenCalled();
 		});
 
 		describe("BoardHeader component", () => {
