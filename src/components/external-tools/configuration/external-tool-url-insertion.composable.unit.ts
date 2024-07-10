@@ -3,71 +3,10 @@ import {
 	schoolExternalToolConfigurationTemplateFactory,
 	toolParameterFactory,
 } from "@@/tests/test-utils";
-import { useExternalToolUrlInsertion } from "@/components/external-tools/configuration/external-tool-url-insertion.composable";
-import { ExternalToolConfigurationTemplate } from "@data-external-tool";
-import { DeepPartial } from "fishery";
-import { ToolParameter, ToolParameterLocation } from "@/store/external-tool";
+import { useExternalToolUrlInsertion } from "./external-tool-url-insertion.composable";
+import { ToolParameterLocation } from "@/store/external-tool";
 
 describe("useExternalToolUrlInsertion", () => {
-	const addPathParamsToTemplate = (
-		template: ExternalToolConfigurationTemplate
-	) => {
-		const pathParamConfig: DeepPartial<ToolParameter> = {
-			location: ToolParameterLocation.PATH,
-		};
-
-		const pathParams: ToolParameter[] = [];
-		pathParams.push(toolParameterFactory.build(pathParamConfig));
-		pathParams.push(toolParameterFactory.build(pathParamConfig));
-		template.parameters.push(...pathParams);
-
-		template.parameters.forEach((parameter) => {
-			if (parameter.location !== ToolParameterLocation.PATH) {
-				return;
-			}
-			template.baseUrl += `/:${parameter.name}`;
-		});
-	};
-
-	const addQueryParamsToTemplate = (
-		template: ExternalToolConfigurationTemplate
-	) => {
-		const pathParamConfig: DeepPartial<ToolParameter> = {
-			location: ToolParameterLocation.QUERY,
-		};
-
-		const queryParams: ToolParameter[] = [];
-		queryParams.push(toolParameterFactory.build(pathParamConfig));
-		queryParams.push(toolParameterFactory.build(pathParamConfig));
-		template.parameters.push(...queryParams);
-	};
-
-	const generateTestParamValue = (parameterName: string) => {
-		return `test-${parameterName}`;
-	};
-
-	const generateTestUrlFromTemplate = (
-		template: ExternalToolConfigurationTemplate
-	) => {
-		let testUrl = template.baseUrl;
-		template.parameters.forEach((parameter) => {
-			const testValue = generateTestParamValue(parameter.name);
-			switch (parameter.location) {
-				case ToolParameterLocation.PATH:
-					testUrl = testUrl.replace(`:${parameter.name}`, testValue);
-					break;
-				case ToolParameterLocation.QUERY:
-					if (testUrl.includes("?")) {
-						testUrl += "&";
-					} else {
-						testUrl += "?";
-					}
-					testUrl += `${parameter.name}=${testValue}`;
-			}
-		});
-		return testUrl;
-	};
-
 	const setup = () => {
 		const {
 			isValidUrl,
@@ -76,193 +15,429 @@ describe("useExternalToolUrlInsertion", () => {
 			extractQueryParameters,
 		} = mountComposable(useExternalToolUrlInsertion);
 
-		const templates = [];
-		templates.push(schoolExternalToolConfigurationTemplateFactory.build());
-		templates.push(schoolExternalToolConfigurationTemplateFactory.build());
-		templates.push(schoolExternalToolConfigurationTemplateFactory.build());
-		templates.push(schoolExternalToolConfigurationTemplateFactory.build());
-
 		return {
 			isValidUrl,
 			findMatchingTemplate,
 			extractPathParameters,
 			extractQueryParameters,
-			templates,
 		};
 	};
 
 	describe("isValidUrl is called", () => {
-		it("should return true when provided text is a valid url for an external tool", () => {
-			const { isValidUrl } = setup();
-			const testUrls = [
-				"https://google.de?q=search-1&b=search_1",
-				"https://google.de?q=%241%24&r=test.ing~1",
-				"https://test.com/search/test-50/",
-				"https://classroom.com/start?l=de&t=3600",
-				"https://teachers.tool-35.classroom.com/add/",
-				"http://unsecure.co",
-			];
-			for (const url of testUrls) {
-				expect(isValidUrl(url)).toBeTruthy();
-			}
+		describe("when provided text is a valid url", () => {
+			const setupUrls = () => {
+				const testUrls = [
+					"https://google.de?q=search-1&b=search_1",
+					"https://google.de?q=%241%24&r=test.ing~1",
+					"https://test.com/search/test-50/",
+					"https://classroom.com/start?l=de&t=3600",
+					"https://teachers.tool-35.classroom.com/add/",
+					"http://unsecure.co",
+				];
+				return testUrls;
+			};
+
+			it.each(setupUrls())("should return true for $url", (url) => {
+				const { isValidUrl } = setup();
+
+				const result = isValidUrl(url);
+
+				expect(result).toBeTruthy();
+			});
 		});
 
-		it("should return false when provided text is an invalid url for an external tool", () => {
-			const { isValidUrl } = setup();
-			const testUrls = [
-				"google.de",
-				"M https://google.de",
-				"My Tool",
-				"Google",
-			];
-			for (const url of testUrls) {
-				expect(isValidUrl(url)).toBeFalsy();
-			}
+		describe("when the provided text is an invalid", () => {
+			const setupUrls = () => {
+				const testUrls = [
+					"google.de",
+					"M https://google.de",
+					"My Tool",
+					"Google",
+				];
+				return testUrls;
+			};
+
+			it.each(setupUrls())("should return false for $url", (url) => {
+				const { isValidUrl } = setup();
+
+				const result = isValidUrl(url);
+
+				expect(result).toBeFalsy();
+			});
 		});
 	});
 
 	describe("findMatchingTemplate is called", () => {
 		describe("when the provided url has no parameters", () => {
-			it("should return the template which its baseUrl matches the inputted url", () => {
-				const { findMatchingTemplate, templates } = setup();
-				expect(
-					findMatchingTemplate(templates[0].baseUrl, templates)
-				).toBeDefined();
+			describe("when the provided url matches the baseUrl of a template", () => {
+				const setupTemplates = () => {
+					const templates = [];
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-1.com",
+						})
+					);
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-2.com",
+						})
+					);
+					const matchingUrl = "https://test-1.com";
+
+					return { templates, matchingUrl };
+				};
+
+				it("should return the matching template", () => {
+					const { findMatchingTemplate } = setup();
+					const { templates, matchingUrl } = setupTemplates();
+
+					const matchedTemplate = findMatchingTemplate(matchingUrl, templates);
+
+					expect(matchedTemplate).toBeDefined();
+				});
 			});
 
-			it("should return undefined if no matches are found", () => {
-				const { findMatchingTemplate, templates } = setup();
-				expect(
-					findMatchingTemplate(templates[0].baseUrl + "-not---lkf", templates)
-				).toBeUndefined();
+			describe("when the provided url do not match the baseUrl of any template", () => {
+				const setupTemplates = () => {
+					const templates = [];
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-1.com",
+						})
+					);
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-2.com",
+						})
+					);
+
+					const nonMatchingUrl = "https://test-3-not-matching.com";
+
+					return { templates, nonMatchingUrl };
+				};
+
+				it("should return undefined", () => {
+					const { findMatchingTemplate } = setup();
+					const { templates, nonMatchingUrl } = setupTemplates();
+
+					const matchedTemplate = findMatchingTemplate(
+						nonMatchingUrl,
+						templates
+					);
+
+					expect(matchedTemplate).toBeUndefined();
+				});
 			});
 
-			it("should return undefined if provided text is not a valid url", () => {
-				const { findMatchingTemplate, templates } = setup();
-				expect(findMatchingTemplate("my-tool", templates)).toBeUndefined();
+			describe("when the provided url is not a valid url", () => {
+				const setupTemplates = () => {
+					const templates =
+						schoolExternalToolConfigurationTemplateFactory.buildList(2);
+					return { templates };
+				};
+
+				it("should return undefined", () => {
+					const { findMatchingTemplate } = setup();
+					const { templates } = setupTemplates();
+
+					const searchText = "Tool";
+					const matchedTemplate = findMatchingTemplate(searchText, templates);
+
+					expect(matchedTemplate).toBeUndefined();
+				});
 			});
 		});
 
 		describe("when the provided url has path parameters", () => {
-			it("should return the template which its baseUrl matches the inputted url", () => {
-				const { findMatchingTemplate, templates } = setup();
-				const templateWithPathParams = templates[0];
-				addPathParamsToTemplate(templateWithPathParams);
+			describe("when the provided url matches the baseUrl and the path parameters of a template", () => {
+				const setupTemplates = () => {
+					const pathParameters = [];
+					pathParameters.push(
+						toolParameterFactory.build({
+							name: "parameter-1",
+							location: ToolParameterLocation.PATH,
+							isOptional: false,
+						})
+					);
+					pathParameters.push(
+						toolParameterFactory.build({
+							name: "parameter-2",
+							location: ToolParameterLocation.PATH,
+							isOptional: false,
+						})
+					);
 
-				let testUrl = generateTestUrlFromTemplate(templateWithPathParams);
-				expect(findMatchingTemplate(testUrl, templates)).toBeDefined();
+					const templates = [];
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-1.com/:parameter-1/spacer/:parameter-2",
+							parameters: pathParameters,
+						})
+					);
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-2.com/:parameter-1/spacer/:parameter-2",
+							parameters: pathParameters,
+						})
+					);
 
-				const templateWithBothParams = templates[1];
-				addPathParamsToTemplate(templateWithBothParams);
-				addQueryParamsToTemplate(templateWithBothParams);
+					const matchingUrl =
+						"https://test-1.com/test-param-1/spacer/test-param-2";
 
-				testUrl = generateTestUrlFromTemplate(templateWithBothParams);
-				expect(findMatchingTemplate(testUrl, templates)).toBeDefined();
+					return { templates, matchingUrl };
+				};
+
+				it("should return the matching template", () => {
+					const { findMatchingTemplate } = setup();
+					const { templates, matchingUrl } = setupTemplates();
+
+					const matchedTemplate = findMatchingTemplate(matchingUrl, templates);
+
+					expect(matchedTemplate).toBeDefined();
+				});
 			});
 
-			it("should return undefined if the url does not match completely", () => {
-				const { findMatchingTemplate, templates } = setup();
-				const templateWithPathParam = templates[0];
-				addPathParamsToTemplate(templateWithPathParam);
+			describe("when the provided url do not match the baseUrl and path parameters of any template", () => {
+				const setupTemplates = () => {
+					const pathParameters = [];
+					pathParameters.push(
+						toolParameterFactory.build({
+							name: "parameter-1",
+							location: ToolParameterLocation.PATH,
+							isOptional: false,
+						})
+					);
+					pathParameters.push(
+						toolParameterFactory.build({
+							name: "parameter-2",
+							location: ToolParameterLocation.PATH,
+							isOptional: false,
+						})
+					);
 
-				let testUrl = generateTestUrlFromTemplate(templateWithPathParam);
-				testUrl += "/test-add-fault/";
+					const templates = [];
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-1.com/:parameter-1/spacer/:parameter-2",
+							parameters: pathParameters,
+						})
+					);
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-2.com/:parameter-1/spacer/:parameter-2",
+							parameters: pathParameters,
+						})
+					);
 
-				expect(findMatchingTemplate(testUrl, templates)).toBeUndefined();
+					const nonMatchingUrl = "https://test-1.com/parameter-1";
+
+					return { templates, nonMatchingUrl };
+				};
+
+				it("should return undefined", () => {
+					const { findMatchingTemplate } = setup();
+					const { templates, nonMatchingUrl } = setupTemplates();
+
+					const matchedTemplate = findMatchingTemplate(
+						nonMatchingUrl,
+						templates
+					);
+
+					expect(matchedTemplate).toBeUndefined();
+				});
 			});
 		});
 
 		describe("when the provided url has query parameters", () => {
-			it("should return the template which its baseUrl matches the inputted url", () => {
-				const { findMatchingTemplate, templates } = setup();
-				const templateWithQuery = templates[0];
-				addQueryParamsToTemplate(templateWithQuery);
+			describe("when the provided url matches the baseUrl of a template", () => {
+				const setupTemplates = () => {
+					const queryParameters = [];
+					queryParameters.push(
+						toolParameterFactory.build({
+							name: "parameter-1",
+							location: ToolParameterLocation.QUERY,
+						})
+					);
+					queryParameters.push(
+						toolParameterFactory.build({
+							name: "parameter-2",
+							location: ToolParameterLocation.QUERY,
+						})
+					);
 
-				let testUrl = generateTestUrlFromTemplate(templateWithQuery);
-				expect(findMatchingTemplate(testUrl, templates)).toBeDefined();
+					const templates = [];
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-1.com",
+							parameters: queryParameters,
+						})
+					);
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-2.com",
+							parameters: queryParameters,
+						})
+					);
+					const matchingUrl =
+						"https://test-1.com?parameter-1=test-1&parameter-2=test2";
 
-				const templateWithBothParams = templates[1];
-				addPathParamsToTemplate(templateWithBothParams);
-				addQueryParamsToTemplate(templateWithBothParams);
+					return { templates, matchingUrl };
+				};
 
-				testUrl = generateTestUrlFromTemplate(templateWithBothParams);
-				expect(findMatchingTemplate(testUrl, templates)).toBeDefined();
+				it("should return the matching template", () => {
+					const { findMatchingTemplate } = setup();
+					const { templates, matchingUrl } = setupTemplates();
+
+					const matchedTemplate = findMatchingTemplate(matchingUrl, templates);
+
+					expect(matchedTemplate).toBeDefined();
+				});
+			});
+
+			describe("when the provided url do not match the baseUrl and query parameters of any template", () => {
+				const setupTemplates = () => {
+					const queryParameters = [];
+					queryParameters.push(
+						toolParameterFactory.build({
+							name: "parameter-1",
+							location: ToolParameterLocation.QUERY,
+						})
+					);
+
+					const templates = [];
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-1.com",
+							parameters: queryParameters,
+						})
+					);
+					templates.push(
+						schoolExternalToolConfigurationTemplateFactory.build({
+							baseUrl: "https://test-2.com",
+							parameters: queryParameters,
+						})
+					);
+
+					const nonMatchingUrl =
+						"https://test-3.com?parameter-1=test&parameter-50=test";
+
+					return { templates, nonMatchingUrl };
+				};
+
+				it("should return undefined", () => {
+					const { findMatchingTemplate } = setup();
+					const { templates, nonMatchingUrl } = setupTemplates();
+
+					const matchedTemplate = findMatchingTemplate(
+						nonMatchingUrl,
+						templates
+					);
+
+					expect(matchedTemplate).toBeUndefined();
+				});
 			});
 		});
 	});
 
-	describe("extractPathParameters is called with a valid url with path parameters", () => {
-		it("should return all path parameters from the input url based on the template url provided", () => {
-			const { extractPathParameters, templates } = setup();
-			const templateWithPathParams = templates[0];
-			addPathParamsToTemplate(templateWithPathParams);
+	describe("extractPathParameters is called", () => {
+		describe("when a valid url with path parameters is given", () => {
+			const setupParameters = () => {
+				const baseUrl = "https://test-1.com/:parameter-1/spacer/:parameter-2";
 
-			const extractedParams = extractPathParameters(
-				generateTestUrlFromTemplate(templateWithPathParams),
-				templateWithPathParams.baseUrl + "/"
-			);
+				const testUrl = "https://test-1.com/test-param-1/spacer/test-param-2";
 
-			templateWithPathParams.parameters.forEach((parameter) => {
-				const expectedValue = generateTestParamValue(parameter.name);
-				expect(extractedParams.get(parameter.name)).toEqual(expectedValue);
+				const testPathParameters = new Map<string, string>();
+				testPathParameters.set("parameter-1", "test-param-1");
+				testPathParameters.set("parameter-2", "test-param-2");
+
+				return { baseUrl, testUrl, testPathParameters };
+			};
+
+			it("should return all path parameters from the input url based on the template url provided", () => {
+				const { extractPathParameters } = setup();
+				const { baseUrl, testUrl, testPathParameters } = setupParameters();
+
+				const extractedParameters = extractPathParameters(testUrl, baseUrl);
+
+				testPathParameters.forEach((paramValue, paramName) => {
+					expect(extractedParameters.get(paramName)).toEqual(paramValue);
+				});
 			});
 		});
 
-		it("should return all path parameters from the input url that also has query parameters", () => {
-			const { extractPathParameters, templates } = setup();
-			const templateWithBothParams = templates[0];
-			addQueryParamsToTemplate(templateWithBothParams);
-			addPathParamsToTemplate(templateWithBothParams);
+		describe("when a valid url with path and query parameters is given", () => {
+			const setupParameters = () => {
+				const baseUrl = "https://test-1.com/:parameter-1/spacer/:parameter-2";
 
-			const extractedParams = extractPathParameters(
-				generateTestUrlFromTemplate(templateWithBothParams),
-				templateWithBothParams.baseUrl
-			);
+				const testUrl =
+					"https://test-1.com/test-param-1/spacer/test-param-2?parameter-3=test-param-3";
 
-			templateWithBothParams.parameters.forEach((parameter) => {
-				if (parameter.location !== ToolParameterLocation.PATH) {
-					return;
-				}
+				const testPathParameters = new Map<string, string>();
+				testPathParameters.set("parameter-1", "test-param-1");
+				testPathParameters.set("parameter-2", "test-param-2");
 
-				const expectedValue = generateTestParamValue(parameter.name);
-				expect(extractedParams.get(parameter.name)).toEqual(expectedValue);
+				return { baseUrl, testUrl, testPathParameters };
+			};
+
+			it("should return all path parameters from the input url based on the template url provided", () => {
+				const { extractPathParameters } = setup();
+				const { baseUrl, testUrl, testPathParameters } = setupParameters();
+
+				const extractedParameters = extractPathParameters(testUrl, baseUrl);
+
+				testPathParameters.forEach((paramValue, paramName) => {
+					expect(extractedParameters.get(paramName)).toEqual(paramValue);
+				});
 			});
 		});
 	});
 
 	describe("extractQueryParameters is called with a valid url", () => {
-		it("should return all query parameters from the input url with query parameters", () => {
-			const { extractQueryParameters, templates } = setup();
-			const templateWithQueryParams = templates[0];
-			addQueryParamsToTemplate(templateWithQueryParams);
+		describe("when a valid url with query parameters is given", () => {
+			const setupParameters = () => {
+				const testUrl =
+					"https://test-1.com?parameter-1=test-param-1&parameter-2=test-param-2";
 
-			const extractedParams = extractQueryParameters(
-				generateTestUrlFromTemplate(templateWithQueryParams)
-			);
+				const testQueryParameters = new Map<string, string>();
+				testQueryParameters.set("parameter-1", "test-param-1");
+				testQueryParameters.set("parameter-2", "test-param-2");
 
-			templateWithQueryParams.parameters.forEach((parameter) => {
-				const expectedValue = generateTestParamValue(parameter.name);
-				expect(extractedParams.get(parameter.name)).toEqual(expectedValue);
+				return { testUrl, testQueryParameters };
+			};
+
+			it("should return all query parameters from the input url based on the template url provided", () => {
+				const { extractQueryParameters } = setup();
+				const { testUrl, testQueryParameters } = setupParameters();
+
+				const extractedParameters = extractQueryParameters(testUrl);
+
+				testQueryParameters.forEach((paramValue, paramName) => {
+					expect(extractedParameters.get(paramName)).toEqual(paramValue);
+				});
 			});
 		});
 
-		it("should return all query parameters from the input url with path & query parameters", () => {
-			const { extractQueryParameters, templates } = setup();
-			const templateWithBothParams = templates[0];
-			addPathParamsToTemplate(templateWithBothParams);
-			addQueryParamsToTemplate(templateWithBothParams);
+		describe("when a valid url with path and query parameters is given", () => {
+			const setupParameters = () => {
+				const testUrl =
+					"https://test-1.com/test-param-3/spacer?parameter-1=test-param-1&parameter-2=test-param-2";
 
-			const extractedParams = extractQueryParameters(
-				generateTestUrlFromTemplate(templateWithBothParams)
-			);
+				const testQueryParameters = new Map<string, string>();
+				testQueryParameters.set("parameter-1", "test-param-1");
+				testQueryParameters.set("parameter-2", "test-param-2");
 
-			templateWithBothParams.parameters.forEach((parameter) => {
-				if (parameter.location !== ToolParameterLocation.QUERY) {
-					return;
-				}
+				return { testUrl, testQueryParameters };
+			};
 
-				const expectedValue = generateTestParamValue(parameter.name);
-				expect(extractedParams.get(parameter.name)).toEqual(expectedValue);
+			it("should return all query parameters from the input url based on the template url provided", () => {
+				const { extractQueryParameters } = setup();
+				const { testUrl, testQueryParameters } = setupParameters();
+
+				const extractedParameters = extractQueryParameters(testUrl);
+
+				testQueryParameters.forEach((paramValue, paramName) => {
+					expect(extractedParameters.get(paramName)).toEqual(paramValue);
+				});
 			});
 		});
 	});
