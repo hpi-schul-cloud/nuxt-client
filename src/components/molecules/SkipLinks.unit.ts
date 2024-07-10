@@ -15,12 +15,11 @@ describe("@/components/molecules/SkipLinks", () => {
 		});
 		const mainContent = window.document.createElement("div");
 		mainContent.id = "main-content";
-		const tabIndexElement = window.document.createElement("div");
-		tabIndexElement.tabIndex = 0;
-		mainContent.appendChild(tabIndexElement);
+		const linkElement = window.document.createElement("a");
+		mainContent.appendChild(linkElement);
 		window.document.body.appendChild(mainContent);
 
-		return { wrapper, tabIndexElement };
+		return { wrapper, linkElement };
 	};
 
 	it("Should render its skip link", async () => {
@@ -34,13 +33,13 @@ describe("@/components/molecules/SkipLinks", () => {
 
 		expect(wrapper.attributes("tabindex")).toBe("0");
 	});
-	it("should skip to the main content", async () => {
-		const { wrapper, tabIndexElement } = setup();
+	it("should skip to the link element in main content", async () => {
+		const { wrapper, linkElement } = setup();
 
 		await wrapper.find("#skip-link").trigger("click");
 
 		await wrapper.vm.$nextTick();
 
-		expect(window.document.activeElement).toBe(tabIndexElement);
+		expect(window.document.activeElement).toBe(linkElement);
 	});
 });
