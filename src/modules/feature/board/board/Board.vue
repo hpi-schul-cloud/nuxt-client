@@ -254,8 +254,8 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 onMounted(() => {
 	setAlert();
-	boardStore.fetchBoardRequest({ boardId: props.boardId });
 	usePageInactivity();
+	boardStore.fetchBoardRequest({ boardId: props.boardId });
 });
 
 onUnmounted(() => {
