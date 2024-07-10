@@ -1,28 +1,29 @@
 <template>
 	<div>
-		<v-combobox
+		<v-autocomplete
 			ref="comboboxRef"
 			:label="$t('pages.tool.select.label')"
-			item-title="name"
-			item-value="id"
+			variant="underlined"
 			hide-selected
 			clearable
 			open-on-clear
+			item-title="name"
+			item-value="id"
 			:items="configurationTemplates"
 			v-model="selectedTemplate"
+			v-model:search="searchString"
 			:no-data-text="$t('pages.tool.select.nodata')"
 			return-object
 			:disabled="isInEditMode"
 			:loading="loading"
 			data-testId="configuration-select"
 			@update:modelValue="onChangeSelection"
-			@update:search="(value) => onSearchInput(value)"
+			@update:search="updateSearchInput"
 			@click:append="pasteFromClipboard"
-			variant="underlined"
 			:append-icon="mdiContentPaste"
 			:hide-no-data="hideNoData"
 			:custom-filter="
-				(value, query, item) => filterToolNameOrUrl(value, query, item?.raw)
+				(_value, query, item) => filterToolNameOrUrl(query, item?.raw)
 			"
 			persistent-hint
 			:hint="$t('pages.tool.select.description')"
@@ -42,11 +43,11 @@
 					:item="item.raw"
 				/>
 			</template>
-		</v-combobox>
+		</v-autocomplete>
 		<h2
 			v-if="
 				displaySettingsTitle &&
-				isSelectedTemplateATemplateObject &&
+				selectedTemplate &&
 				(!isAboveParametersSlotEmpty || hasSelectedTemplateParameters)
 			"
 			class="text-h4 mb-10"
@@ -54,7 +55,7 @@
 			{{ $t("pages.tool.settings") }}
 		</h2>
 		<slot
-			v-if="isSelectedTemplateATemplateObject"
+			v-if="selectedTemplate"
 			name="aboveParameters"
 			:selectedTemplate="selectedTemplate"
 		/>
@@ -101,22 +102,24 @@
 <script setup lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { mdiAlertCircle } from "@/components/icons/material";
-import { mdiContentPaste } from "@mdi/js";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
-import { useExternalToolUrlInsertion } from "@/components/external-tools/configuration/external-tool-url-insertion.composable";
 import {
 	SchoolExternalTool,
 	ToolParameter,
 	ToolParameterEntry,
 } from "@/store/external-tool";
+import NotifierModule from "@/store/notifier";
 import { BusinessError } from "@/store/types/commons";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	ContextExternalTool,
 	ExternalToolConfigurationTemplate,
 } from "@data-external-tool";
+import { mdiContentPaste } from "@mdi/js";
 import {
 	computed,
 	ComputedRef,
+	nextTick,
 	PropType,
 	Ref,
 	ref,
@@ -124,10 +127,9 @@ import {
 	useSlots,
 	watch,
 } from "vue";
-import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import NotifierModule from "@/store/notifier";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useI18n } from "vue-i18n";
+import { useExternalToolUrlInsertion } from "./external-tool-url-insertion.composable";
+import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
 
 type ConfigurationTypes = SchoolExternalTool | ContextExternalTool;
 
@@ -196,10 +198,6 @@ const isAboveParametersSlotEmpty: ComputedRef<boolean> = computed(
 	() => slots.aboveParameters?.({ selectedTemplate }) === undefined
 );
 
-const isSelectedTemplateATemplateObject: ComputedRef<boolean> = computed(
-	() => !!selectedTemplate.value?.externalToolId
-);
-
 const hasSelectedTemplateParameters: ComputedRef<boolean> = computed(
 	() =>
 		!!(
@@ -255,6 +253,7 @@ const mapValidParameterEntries = (
 
 const onChangeSelection = async () => {
 	fillParametersWithDefaultValues();
+
 	if (hasSelectedTemplateParameters.value) {
 		extractAndSetParametersFromUrl(selectedTemplate.value?.baseUrl);
 	}
@@ -262,7 +261,7 @@ const onChangeSelection = async () => {
 	emit("change", selectedTemplate.value);
 };
 
-const onSearchInput = (text: string) => {
+const updateSearchInput = (text: string) => {
 	searchString.value = text;
 	hideNoData.value = isValidUrl(text);
 };
@@ -300,36 +299,45 @@ const fillParametersWithValues = (configuration: ConfigurationTypes) => {
 };
 
 const extractAndSetParametersFromUrl = (baseUrl: string | undefined) => {
-	if (!baseUrl || !searchString.value) {
+	if (!baseUrl || !searchString.value || !isValidUrl(searchString.value)) {
 		return;
 	}
 
-	const pathParams = extractPathParameters(searchString.value, baseUrl);
-	const queryParams = extractQueryParameters(searchString.value);
-	const allParams = new Map([...pathParams, ...queryParams]);
+	const pathParams: Map<string, string> = extractPathParameters(
+		searchString.value,
+		baseUrl
+	);
+	const queryParams: Map<string, string> = extractQueryParameters(
+		searchString.value
+	);
+	const allParams: Map<string, string> = new Map();
+	pathParams.forEach((value, key) => allParams.set(key, value));
+	queryParams.forEach((value, key) => allParams.set(key, value));
 
-	allParams.forEach((value, name) => {
-		const paramIndex = selectedTemplate.value?.parameters.findIndex(
-			(param) => param.name === name
-		);
-		if (paramIndex !== undefined && paramIndex >= 0) {
-			parameterConfiguration.value[paramIndex] = value;
+	selectedTemplate.value?.parameters?.forEach(
+		(parameter: ToolParameter, index: number) => {
+			const value: string | undefined = allParams.get(parameter.name);
+
+			if (value) {
+				parameterConfiguration.value[index] = value;
+			}
 		}
-	});
+	);
 };
 
 const pasteFromClipboard = async () => {
 	try {
-		const text = await navigator.clipboard.readText();
-		comboboxRef.value.search = text;
-		comboboxRef.value.isFocused = true;
 		comboboxRef.value.menu = true;
-		onSearchInput(text);
+		comboboxRef.value.isFocused = true;
+
+		await nextTick();
+
+		const text = await navigator.clipboard.readText();
+		updateSearchInput(text);
 	} catch (err) {
 		notifierModule.show({
 			text: t("pages.tool.select.clipboard.error"),
 			status: "error",
-			timeout: 5000,
 		});
 	}
 };
@@ -345,7 +353,6 @@ watch(loadedConfiguration, (newConfig) => {
 });
 
 const filterToolNameOrUrl = (
-	_value: string,
 	query: string,
 	item: ExternalToolConfigurationTemplate | undefined
 ): boolean => {
@@ -356,6 +363,7 @@ const filterToolNameOrUrl = (
 		findMatchingTemplate(query, configurationTemplates.value)?.baseUrl ===
 		item.baseUrl;
 	const isMatchItemName = item.name.toLowerCase().includes(query.toLowerCase());
+
 	return isMatchItemName || isMatchItemUrl;
 };
 </script>
