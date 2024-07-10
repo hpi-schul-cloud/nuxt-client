@@ -24,7 +24,7 @@ onMounted(() => {
 const skipToContent = (event: Event) => {
 	event.preventDefault();
 	nextTick(() => {
-		const mainContent = document.querySelector("#main-content");
+		const mainContent = window.document.querySelector("#main-content");
 		const firstTabIndexedElement = mainContent?.querySelector("[tabindex]");
 		if (firstTabIndexedElement) {
 			(firstTabIndexedElement as HTMLElement).focus();
