@@ -8,7 +8,7 @@ import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { MaybeRefOrGetter, nextTick } from "vue";
+import { nextTick } from "vue";
 
 const notifierModule = createModuleMocks(NotifierModule);
 
@@ -24,7 +24,7 @@ jest.mock("vue-i18n", () => ({
 describe("pageInactivity.composable", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
-	const setup = (timer: MaybeRefOrGetter<number>) => {
+	const setup = (timer = 100) => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);

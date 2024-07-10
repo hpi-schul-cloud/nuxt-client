@@ -2,7 +2,7 @@ import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useDocumentVisibility } from "@vueuse/core";
 import { useTimeoutFn } from "@vueuse/shared";
-import { MaybeRefOrGetter, ref, watch } from "vue";
+import { ref, watch } from "vue";
 
 export const connectionOptions = {
 	isTimeoutReached: false,
@@ -10,7 +10,7 @@ export const connectionOptions = {
 };
 
 export const usePageInactivity = (
-	maxInactivityTime: MaybeRefOrGetter<number> = connectionOptions.MAX_TIMEOUT_FOR_INACTIVITY
+	maxInactivityTime: number = connectionOptions.MAX_TIMEOUT_FOR_INACTIVITY
 ) => {
 	const { t } = useI18n();
 	const { showInfo } = useBoardNotifier();
