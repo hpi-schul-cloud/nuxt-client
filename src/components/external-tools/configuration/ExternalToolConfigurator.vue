@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<v-autocomplete
-			ref="comboboxRef"
+			ref="autocompleteRef"
 			:label="$t('pages.tool.select.label')"
 			variant="underlined"
 			hide-selected
@@ -188,7 +188,7 @@ const loadedConfiguration: Ref<ConfigurationTypes | undefined> = toRef(
 	"configuration"
 );
 
-const comboboxRef = ref();
+const autocompleteRef = ref();
 
 const isInEditMode: ComputedRef<boolean> = computed(
 	() => !!loadedConfiguration.value
@@ -327,8 +327,8 @@ const extractAndSetParametersFromUrl = (baseUrl: string | undefined) => {
 
 const pasteFromClipboard = async () => {
 	try {
-		comboboxRef.value.menu = true;
-		comboboxRef.value.isFocused = true;
+		autocompleteRef.value.menu = true;
+		autocompleteRef.value.isFocused = true;
 
 		await nextTick();
 
