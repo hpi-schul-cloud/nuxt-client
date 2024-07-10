@@ -31,9 +31,20 @@ describe("socket.ts", () => {
 	let mockSocket: Partial<socketModule.Socket>;
 	let timeoutResponseMock: { emitWithAck: jest.Mock };
 	let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	// We need to set these two things in the outmost describe level since the socket event handlers that set and use these
+	// values are created only once when the module is loaded and initially used.
 	let socketHandlers: Record<string, () => void> | undefined = undefined;
+	let boardStore: ReturnType<typeof useBoardStore>;
 
 	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+		setupStores({ envConfigModule: EnvConfigModule });
+		const envs = envsFactory.build({
+			BOARD_COLLABORATION_URI: "mockedUri",
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
+		});
+		envConfigModule.setEnvs(envs);
+
 		timeoutResponseMock = { emitWithAck: jest.fn() };
 		mockSocket = {
 			connected: false,
@@ -51,14 +62,6 @@ describe("socket.ts", () => {
 	});
 
 	beforeEach(() => {
-		setActivePinia(createTestingPinia());
-		setupStores({ envConfigModule: EnvConfigModule });
-		const envs = envsFactory.build({
-			BOARD_COLLABORATION_URI: "mockedUri",
-			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
-		});
-		envConfigModule.setEnvs(envs);
-
 		dispatchMock = jest.fn();
 		mockSocket.connected = true;
 	});
@@ -66,16 +69,6 @@ describe("socket.ts", () => {
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
-
-	const setupBoardStore = (options: { createBoard: boolean }) => {
-		const boardStore = mockedPiniaStoreTyping(useBoardStore);
-		if (options.createBoard) {
-			const board = boardResponseFactory.build();
-			boardStore.board = board;
-		}
-
-		return { boardStore };
-	};
 
 	const getEventCallback = (eventName: string) => {
 		const listener = (mockSocket.on as jest.Mock).mock.calls.find(
@@ -91,6 +84,11 @@ describe("socket.ts", () => {
 		};
 		return socketHandlers;
 	}
+
+	const getOrInitialiseBoardStore = () => {
+		boardStore = boardStore ?? mockedPiniaStoreTyping(useBoardStore);
+		return boardStore;
+	};
 
 	describe("connect event", () => {
 		it("should showInfo when socket is connected", () => {
@@ -109,23 +107,31 @@ describe("socket.ts", () => {
 			);
 		});
 
-		it("should reloadBoard when socket is connected and board exists", () => {
-			const { boardStore } = setupBoardStore({ createBoard: true });
-			useSocketConnection(dispatchMock);
+		describe("when board exists", () => {
+			beforeEach(() => {
+				getOrInitialiseBoardStore().board = boardResponseFactory.build();
+			});
 
-			const eventCallbacks = getEventCallbacks();
+			afterEach(() => {
+				getOrInitialiseBoardStore().board = undefined;
+			});
+			it("should reloadBoard when socket is connected", () => {
+				useSocketConnection(dispatchMock);
 
-			// calling disconnect to set connectionOptions.isSocketConnectionLost to true
-			eventCallbacks.disconnect();
-			jest.clearAllMocks();
+				const eventCallbacks = getEventCallbacks();
 
-			eventCallbacks.connect();
+				// calling disconnect to set connectionOptions.isSocketConnectionLost to true
+				eventCallbacks.disconnect();
+				jest.clearAllMocks();
 
-			expect(boardStore.reloadBoard).toHaveBeenCalled();
+				eventCallbacks.connect();
+
+				expect(boardStore.reloadBoard).toHaveBeenCalled();
+			});
 		});
 
 		it("should not reloadBoard when socket is connected and board not exists", () => {
-			const { boardStore } = setupBoardStore({ createBoard: false });
+			getOrInitialiseBoardStore();
 			useSocketConnection(dispatchMock);
 
 			const eventCallbacks = getEventCallbacks();
