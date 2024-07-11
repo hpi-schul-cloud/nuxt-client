@@ -5,7 +5,7 @@
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 		>
-			<div class="board-header" tabindex="0" ref="boardHeader">
+			<div class="board-header ml-4" ref="boardHeader">
 				<BoardAnyTitleInput
 					class="ml-n2"
 					ref="boardHeader"
@@ -191,10 +191,6 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 @import "~vuetify/settings";
-
-.board-header:focus {
-	outline: none;
-}
 
 .input-width-calc-span {
 	position: absolute;

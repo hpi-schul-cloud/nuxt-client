@@ -1,47 +1,29 @@
 <template>
-	<VTextField
-		v-if="scope === 'board'"
-		hide-details="auto"
-		v-model="modelValue"
-		variant="solo"
-		density="compact"
-		flat
-		:placeholder="computedPlaceholder"
-		bg-color="transparent"
-		ref="titleInput"
-		:readonly="!isEditMode"
-		role="heading"
-		:aria-level="ariaLevel"
-		:tabindex="isEditMode ? 0 : -1"
-		:autofocus="internalIsFocused"
-		:maxlength="maxLength"
-		@keydown.enter="onEnter"
-	/>
-	<VTextarea
-		v-else
-		hide-details="auto"
-		v-model="modelValue"
-		variant="solo"
-		density="compact"
-		:rows="1"
-		auto-grow
-		flat
-		class="mx-n4 mb-n2"
-		:placeholder="computedPlaceholder"
-		bg-color="transparent"
-		ref="titleInput"
-		:readonly="!isEditMode"
-		role="heading"
-		:aria-level="ariaLevel"
-		@keydown.enter="onEnter"
-		:tabindex="isEditMode ? 0 : -1"
-		:autofocus="internalIsFocused"
-		:maxlength="maxLength"
-	>
-		<template v-slot:append-inner>
-			<slot />
-		</template>
-	</VTextarea>
+	<div class="d-flex flex-row">
+		<VTextarea
+			hide-details="auto"
+			v-model="modelValue"
+			variant="solo"
+			density="compact"
+			:rows="1"
+			:max-rows="scope === 'board' ? 1 : null"
+			auto-grow
+			flat
+			class="mx-n4 mb-n2"
+			:class="{ board: scope === 'board', 'not-board': scope !== 'board' }"
+			:placeholder="computedPlaceholder"
+			ref="titleInput"
+			:tabindex="scope === 'card' ? -1 : 0"
+			role="heading"
+			:aria-level="ariaLevel"
+			@keydown="onEnter"
+			:autofocus="internalIsFocused"
+			><template v-slot:append-inner>
+				<slot />
+			</template>
+			/></VTextarea
+		>
+	</div>
 </template>
 
 <script lang="ts">
@@ -169,8 +151,23 @@ export default defineComponent({
 		});
 
 		const onEnter = ($event: KeyboardEvent) => {
-			$event.preventDefault();
-			emit("enter");
+			if ($event.key === "enter" || $event.key === "Enter") {
+				$event.preventDefault();
+				emit("enter");
+				return;
+			}
+			// WIP: maxlength handling for e.g. CTRL+A
+			if (
+				$event.key === "Delete" ||
+				$event.key === "Backspace" ||
+				$event.key === "Tab"
+			) {
+				return;
+			}
+			if (props.maxLength && modelValue.value.length >= props.maxLength) {
+				$event.preventDefault();
+				modelValue.value = modelValue.value.slice(0, props.maxLength);
+			}
 		};
 
 		const computedPlaceholder = computed(() => {
@@ -202,7 +199,7 @@ export default defineComponent({
 	font-family: var(--font-accent);
 }
 
-:deep(textarea) {
+:deep(.not-board textarea) {
 	background: transparent !important;
 	opacity: 1;
 	font-size: var(--heading-5) !important;
@@ -213,7 +210,7 @@ export default defineComponent({
 	cursor: pointer;
 }
 
-:deep(input) {
+:deep(.board textarea) {
 	font-size: var(--heading-3);
 	background: transparent !important;
 }

@@ -62,7 +62,7 @@ import {
 	BoardMenuActionMoveLeft,
 	BoardMenuActionMoveRight,
 } from "@ui-board";
-import { ref, toRef } from "vue";
+import { ref, toRef, watch } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 
@@ -125,13 +125,10 @@ const onMoveColumnKeyboard = (event: KeyboardEvent) => {
 		emit("move:column-left");
 	} else if (event.code === "ArrowRight") {
 		emit("move:column-right");
-	} else {
-		console.log("not supported key event");
 	}
 };
 
 const emitIfNotListBoard = (event: string) => {
-	console.log("emitIfNotListBoard", emit);
 	if (!props.isListBoard) {
 		emit(event);
 	}
@@ -144,7 +141,14 @@ const onMoveColumnDown = () => emit("move:column-down");
 const onMoveColumnUp = () => emit("move:column-up");
 
 const onUpdateTitle = (newTitle: string) => emit("update:title", newTitle);
+
+watch(isFocusedById, (isFocused) => {
+	if (isFocused) {
+		startEditMode();
+	}
+});
 </script>
+
 <style scoped>
 .column-header {
 	align-items: top;
