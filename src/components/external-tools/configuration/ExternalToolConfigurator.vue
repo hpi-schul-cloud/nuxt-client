@@ -54,11 +54,7 @@
 		>
 			{{ $t("pages.tool.settings") }}
 		</h2>
-		<slot
-			v-if="selectedTemplate"
-			name="aboveParameters"
-			:selectedTemplate="selectedTemplate"
-		/>
+		<slot name="aboveParameters" :selectedTemplate="selectedTemplate" />
 		<external-tool-config-settings
 			v-if="hasSelectedTemplateParameters"
 			:template="selectedTemplate"
