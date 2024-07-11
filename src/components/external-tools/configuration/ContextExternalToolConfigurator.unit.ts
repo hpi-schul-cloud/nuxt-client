@@ -22,6 +22,9 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.vue";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 jest.mock(
 	"@data-external-tool/contextExternalToolConfigurationState.composable"
@@ -39,9 +42,14 @@ describe("CourseContextExternalToolConfigurator", () => {
 	const getWrapper = (
 		props: ComponentProps<typeof ContextExternalToolConfigurator>
 	) => {
+		const notifierModule = createModuleMocks(NotifierModule);
+
 		const wrapper = mount(ContextExternalToolConfigurator, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
 			},
 			props,
 		});

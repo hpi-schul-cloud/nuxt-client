@@ -36,6 +36,7 @@ export class ContextExternalToolMapper {
 			schoolExternalToolId: response.schoolExternalToolId,
 			logoUrl: response.logoUrl,
 			name: response.name,
+			baseUrl: response.baseUrl,
 			parameters: response.parameters.map(
 				(parameter): ToolParameter =>
 					ExternalToolMapper.mapToToolParameter(parameter)
