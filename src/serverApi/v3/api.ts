@@ -7137,6 +7137,24 @@ export interface SystemForLdapLoginResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum SystemType {
+    Oauth = 'oauth',
+    Ldap = 'ldap',
+    Oidc = 'oidc',
+    TspBase = 'tsp-base',
+    TspSchool = 'tsp-school',
+    Local = 'local',
+    Iserv = 'iserv',
+    Lernsax = 'lernsax',
+    Itslearning = 'itslearning',
+    Moodle = 'moodle'
+}
+
+/**
+ * 
+ * @export
  * @interface TargetInfoResponse
  */
 export interface TargetInfoResponse {
@@ -19755,12 +19773,11 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
          * @summary Finds all publicly available systems.
-         * @param {string} [type] The type of the system.
-         * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+         * @param {SystemType} [types] The type of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerFind: async (type?: string, onlyOauth?: boolean, options: any = {}): Promise<RequestArgs> => {
+        systemControllerFind: async (types?: SystemType, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/systems/public`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -19773,12 +19790,8 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (type !== undefined) {
-                localVarQueryParameter['type'] = type;
-            }
-
-            if (onlyOauth !== undefined) {
-                localVarQueryParameter['onlyOauth'] = onlyOauth;
+            if (types !== undefined) {
+                localVarQueryParameter['types'] = types;
             }
 
 
@@ -19850,13 +19863,12 @@ export const SystemsApiFp = function(configuration?: Configuration) {
         /**
          * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
          * @summary Finds all publicly available systems.
-         * @param {string} [type] The type of the system.
-         * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+         * @param {SystemType} [types] The type of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(type, onlyOauth, options);
+        async systemControllerFind(types?: SystemType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(types, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -19893,13 +19905,12 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
         /**
          * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
          * @summary Finds all publicly available systems.
-         * @param {string} [type] The type of the system.
-         * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+         * @param {SystemType} [types] The type of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse> {
-            return localVarFp.systemControllerFind(type, onlyOauth, options).then((request) => request(axios, basePath));
+        systemControllerFind(types?: SystemType, options?: any): AxiosPromise<PublicSystemListResponse> {
+            return localVarFp.systemControllerFind(types, options).then((request) => request(axios, basePath));
         },
         /**
          * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
@@ -19933,13 +19944,12 @@ export interface SystemsApiInterface {
     /**
      * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
      * @summary Finds all publicly available systems.
-     * @param {string} [type] The type of the system.
-     * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+     * @param {SystemType} [types] The type of the system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SystemsApiInterface
      */
-    systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse>;
+    systemControllerFind(types?: SystemType, options?: any): AxiosPromise<PublicSystemListResponse>;
 
     /**
      * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
@@ -19975,14 +19985,13 @@ export class SystemsApi extends BaseAPI implements SystemsApiInterface {
     /**
      * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
      * @summary Finds all publicly available systems.
-     * @param {string} [type] The type of the system.
-     * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+     * @param {SystemType} [types] The type of the system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SystemsApi
      */
-    public systemControllerFind(type?: string, onlyOauth?: boolean, options?: any) {
-        return SystemsApiFp(this.configuration).systemControllerFind(type, onlyOauth, options).then((request) => request(this.axios, this.basePath));
+    public systemControllerFind(types?: SystemType, options?: any) {
+        return SystemsApiFp(this.configuration).systemControllerFind(types, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
