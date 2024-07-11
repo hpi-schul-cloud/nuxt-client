@@ -1,8 +1,8 @@
 import { io, type Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { envConfigModule } from "@/store";
-
 import { useBoardStore } from "../Board.store";
+import { useCardStore } from "../Card.store";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 
@@ -14,6 +14,7 @@ const connectionOptions = {
 
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	const boardStore = useBoardStore();
+	const cardStore = useCardStore();
 	const { showFailure, showInfo } = useBoardNotifier();
 	const { t } = useI18n();
 
@@ -31,6 +32,9 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 				if (!boardStore.board) return;
 				boardStore.reloadBoard();
+
+				if (!cardStore.cards) return;
+				cardStore.fetchCardRequest({ cardIds: Object.keys(cardStore.cards) });
 			}
 		});
 
