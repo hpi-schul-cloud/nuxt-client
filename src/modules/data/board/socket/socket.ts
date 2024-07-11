@@ -5,6 +5,7 @@ import { useBoardStore } from "../Board.store";
 import { useCardStore } from "../Card.store";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
+import { nextTick } from "vue";
 
 let instance: Socket | null = null;
 
@@ -36,6 +37,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 				await cardStore.fetchCardRequest({
 					cardIds: Object.keys(cardStore.cards),
 				});
+				await nextTick();
 			}
 		});
 
