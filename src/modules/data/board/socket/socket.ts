@@ -24,17 +24,19 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 			withCredentials: true,
 		});
 
-		instance.on("connect", function () {
+		instance.on("connect", async function () {
 			console.log("connected");
 			if (connectionOptions.socketConnectionLost) {
 				showInfo(t("common.notification.connection.restored"));
 				connectionOptions.socketConnectionLost = false;
 
 				if (!boardStore.board) return;
-				boardStore.reloadBoard();
+				await boardStore.reloadBoard();
 
 				if (!cardStore.cards) return;
-				cardStore.fetchCardRequest({ cardIds: Object.keys(cardStore.cards) });
+				await cardStore.fetchCardRequest({
+					cardIds: Object.keys(cardStore.cards),
+				});
 			}
 		});
 
