@@ -1,8 +1,8 @@
 import { mountComposable } from "@@/tests/test-utils";
 import {
-	usePageInactivity,
+	useBoardInactivity,
 	connectionOptions,
-} from "./pageInactivity.composable";
+} from "./boardInactivity.composable";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -29,7 +29,7 @@ describe("pageInactivity.composable", () => {
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-		const composable = mountComposable(() => usePageInactivity(timer), {
+		const composable = mountComposable(() => useBoardInactivity(timer), {
 			global: {
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,

@@ -45,6 +45,7 @@ import {
 	useEditMode,
 	useSharedBoardPageInformation,
 	useSharedEditMode,
+	useBoardInactivity,
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
@@ -59,7 +60,6 @@ import { Router, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
-import { usePageInactivity } from "@/composables/pageInactivity.composable";
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -92,8 +92,8 @@ const mockedUseEditMode = jest.mocked(useEditMode);
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
-jest.mock("@/composables/pageInactivity.composable");
-const mockUsePageInactivity = <jest.Mock>usePageInactivity;
+jest.mock("@data-board/boardInactivity.composable");
+const mockUsePageInactivity = <jest.Mock>useBoardInactivity;
 
 describe("Board", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -103,7 +103,9 @@ describe("Board", () => {
 	>;
 	let router: DeepMocked<Router>;
 	let mockedBoardPermissions: BoardPermissionChecks;
-	let mockedUsePageInactivity: DeepMocked<ReturnType<typeof usePageInactivity>>;
+	let mockedUsePageInactivity: DeepMocked<
+		ReturnType<typeof useBoardInactivity>
+	>;
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =

@@ -1,8 +1,7 @@
 import { io, type Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { envConfigModule } from "@/store";
-import { useBoardStore } from "../Board.store";
-import { useCardStore } from "../Card.store";
+import { useBoardStore, useCardStore } from "@data-board";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { nextTick } from "vue";

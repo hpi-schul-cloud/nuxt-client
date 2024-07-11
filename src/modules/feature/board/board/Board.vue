@@ -115,6 +115,7 @@ import {
 	useCardStore,
 	useSharedBoardPageInformation,
 	useSharedEditMode,
+	useBoardInactivity,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -131,7 +132,6 @@ import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import { usePageInactivity } from "@/composables/pageInactivity.composable";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -254,7 +254,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 onMounted(() => {
 	setAlert();
-	usePageInactivity();
+	useBoardInactivity(2000);
 	boardStore.fetchBoardRequest({ boardId: props.boardId });
 });
 

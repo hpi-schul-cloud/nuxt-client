@@ -1,19 +1,17 @@
-import { useBoardNotifier } from "@util-board";
-import { useI18n } from "vue-i18n";
 import { useDocumentVisibility } from "@vueuse/core";
 import { useTimeoutFn } from "@vueuse/shared";
-import { ref, watch } from "vue";
-
+import { nextTick, ref, watch } from "vue";
+import { useBoardStore, useCardStore } from "@data-board";
 export const connectionOptions = {
 	isTimeoutReached: false,
-	MAX_TIMEOUT_FOR_INACTIVITY: 15 * 60 * 1000,
+	MAX_TIMEOUT_FOR_INACTIVITY: 1 * 60 * 1000,
 };
 
-export const usePageInactivity = (
+export const useBoardInactivity = (
 	maxInactivityTime: number = connectionOptions.MAX_TIMEOUT_FOR_INACTIVITY
 ) => {
-	const { t } = useI18n();
-	const { showInfo } = useBoardNotifier();
+	const boardStore = useBoardStore();
+	const cardStore = useCardStore();
 
 	const timeoutFn = useTimeoutFn(() => {
 		connectionOptions.isTimeoutReached = true;
@@ -21,12 +19,18 @@ export const usePageInactivity = (
 
 	const visibility = ref(useDocumentVisibility());
 
-	watch(visibility, (current, previous) => {
+	watch(visibility, async (current, previous) => {
 		if (timeoutFn.isPending) timeoutFn.stop();
 
 		if (current === "visible" && previous === "hidden") {
 			if (connectionOptions.isTimeoutReached) {
-				showInfo(t("common.notification.reload.page"));
+				if (!(boardStore.board && cardStore.cards)) return;
+
+				await boardStore.reloadBoard();
+				await cardStore.fetchCardRequest({
+					cardIds: Object.keys(cardStore.cards),
+				});
+				await nextTick();
 			}
 			timeoutFn.stop();
 			connectionOptions.isTimeoutReached = false;
