@@ -19,8 +19,6 @@
 			data-testId="configuration-select"
 			@update:modelValue="onChangeSelection"
 			@update:search="updateSearchInput"
-			@click:append="pasteFromClipboard"
-			:append-icon="mdiContentPaste"
 			:hide-no-data="hideNoData"
 			:custom-filter="
 				(_value, query, item) => filterToolNameOrUrl(query, item?.raw)
@@ -28,6 +26,11 @@
 			persistent-hint
 			:hint="$t('pages.tool.select.description')"
 		>
+			<template #append>
+				<VIcon tabindex="-1" aria-hidden="true" @click="pasteFromClipboard">
+					{{ mdiContentPaste }}
+				</VIcon>
+			</template>
 			<template #selection="{ item }">
 				<external-tool-selection-row
 					:item="item.raw"
@@ -325,8 +328,7 @@ const pasteFromClipboard = async () => {
 	try {
 		const text = await navigator.clipboard.readText();
 
-		autocompleteRef.value.menu = true;
-		autocompleteRef.value.isFocused = true;
+		autocompleteRef.value.focus();
 
 		await nextTick();
 
