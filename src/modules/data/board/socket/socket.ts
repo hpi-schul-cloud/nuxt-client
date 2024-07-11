@@ -30,13 +30,10 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 				showInfo(t("common.notification.connection.restored"));
 				connectionOptions.socketConnectionLost = false;
 
-				if (!boardStore.board) return;
-				await boardStore.reloadBoard();
+				if (!(boardStore.board && cardStore.cards)) return;
 
-				if (!cardStore.cards) return;
-				await cardStore.fetchCardRequest({
-					cardIds: Object.keys(cardStore.cards),
-				});
+				await Promise.resolve(() => cardStore.resetState());
+				await boardStore.reloadBoard();
 			}
 		});
 
