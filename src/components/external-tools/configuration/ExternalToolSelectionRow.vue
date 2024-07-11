@@ -14,26 +14,23 @@
 	</v-list-item>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ExternalToolConfigurationTemplate } from "@data-external-tool";
-import { PropType } from "vue";
+import { defineProps, PropType } from "vue";
 
-export default {
-	name: "ExternalToolSelectionRow",
-	props: {
-		item: {
-			type: Object as PropType<ExternalToolConfigurationTemplate>,
-			required: true,
-			default: () => ({}),
-		},
-		maxHeight: {
-			type: [Number, String],
-			default: () => 30,
-		},
-		maxWidth: {
-			type: [Number, String],
-			default: () => 30,
-		},
+defineProps({
+	item: {
+		type: Object as PropType<ExternalToolConfigurationTemplate>,
+		required: true,
+		default: () => ({}),
 	},
-};
+	maxHeight: {
+		type: [Number, String],
+		default: 30,
+	},
+	maxWidth: {
+		type: [Number, String],
+		default: 30,
+	},
+});
 </script>

@@ -5,6 +5,8 @@ export interface ExternalToolConfigurationTemplate {
 
 	name: string;
 
+	baseUrl: string;
+
 	logoUrl?: string;
 
 	parameters: ToolParameter[];
