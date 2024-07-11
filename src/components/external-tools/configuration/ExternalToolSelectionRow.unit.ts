@@ -17,6 +17,7 @@ describe("ExternalToolSelectionRow", () => {
 					name: "expectedName",
 					externalToolId: "expectedExternalToolId",
 					parameters: [],
+					baseUrl: "https://epxected-url.com",
 				},
 				maxHeight: maxHeight,
 				maxWidth: maxWidth,
