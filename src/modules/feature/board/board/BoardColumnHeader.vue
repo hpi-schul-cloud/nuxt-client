@@ -12,7 +12,6 @@
 					:data-testid="`column-title-${index}`"
 					scope="column"
 					:isEditMode="isEditMode"
-					:placeholder="titlePlaceholder"
 					class="w-100"
 					:isFocused="isFocusedById"
 					@update:value="onUpdateTitle"

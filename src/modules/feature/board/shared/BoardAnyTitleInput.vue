@@ -6,7 +6,7 @@
 		variant="solo"
 		density="compact"
 		flat
-		:placeholder="placeholder"
+		:placeholder="computedPlaceholder"
 		bg-color="transparent"
 		ref="titleInput"
 		:readonly="!isEditMode"
@@ -27,7 +27,7 @@
 		auto-grow
 		flat
 		class="mx-n4 mb-n2"
-		:placeholder="placeholder"
+		:placeholder="computedPlaceholder"
 		bg-color="transparent"
 		ref="titleInput"
 		:readonly="!isEditMode"
@@ -56,6 +56,7 @@ import {
 } from "vue";
 import { VTextarea } from "vuetify/lib/components/index.mjs";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",
@@ -87,6 +88,7 @@ export default defineComponent({
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
+		const { t } = useI18n();
 		const modelValue = ref("");
 
 		const internalIsFocused = ref(false);
@@ -171,6 +173,16 @@ export default defineComponent({
 			emit("enter");
 		};
 
+		const computedPlaceholder = computed(() => {
+			if (props.placeholder) {
+				return props.placeholder;
+			}
+			if (props.isEditMode) {
+				return t("components.cardElement.titleElement.placeholder").toString();
+			}
+			return "";
+		});
+
 		return {
 			ariaLevel,
 			modelValue,
@@ -178,6 +190,7 @@ export default defineComponent({
 			onEnter,
 			internalIsFocused,
 			titleInput,
+			computedPlaceholder,
 		};
 	},
 });
@@ -200,18 +213,11 @@ export default defineComponent({
 	cursor: pointer;
 }
 
-:deep(textarea)::placeholder {
-	opacity: 1;
-}
-
 :deep(input) {
 	font-size: var(--heading-3);
 	background: transparent !important;
 }
 
-:deep(input)::placeholder {
-	opacity: 1;
-}
 :deep(.v-field__append-inner, .v-field__clearable, .v-field__prepend-inner) {
 	display: flex;
 	align-items: flex-start;
