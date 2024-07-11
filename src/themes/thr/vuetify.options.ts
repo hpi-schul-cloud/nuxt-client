@@ -11,6 +11,8 @@ const thrTheme: ThemeDefinition = {
 		accent: "#f56b00",
 		"on-surface": "#0f3551",
 		"on-background": "#0f3551",
+		"surface-light": "#f1f3f5",
+		"on-surface-light": "#0f3551",
 		"on-white": "#0f3551",
 	},
 };

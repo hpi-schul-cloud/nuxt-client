@@ -11,6 +11,8 @@ const brbTheme: ThemeDefinition = {
 		accent: "#e4032e",
 		"on-surface": "#294c5a",
 		"on-background": "#294c5a",
+		"surface-light": "#294c5a",
+		"on-surface-light": "#0a9396",
 		"on-white": "#294c5a",
 	},
 };
