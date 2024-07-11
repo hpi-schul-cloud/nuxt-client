@@ -3,7 +3,7 @@
 		<div
 			ref="event-handle"
 			data-testid="event-handle"
-			@dblclick.prevent.stop="onDoubleClick"
+			@click.prevent.stop="onDoubleClick"
 			@keydown.escape="onKeydownEscape"
 		>
 			<slot />
