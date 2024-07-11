@@ -323,12 +323,13 @@ const extractAndSetParametersFromUrl = (baseUrl: string | undefined) => {
 
 const pasteFromClipboard = async () => {
 	try {
+		const text = await navigator.clipboard.readText();
+
 		autocompleteRef.value.menu = true;
 		autocompleteRef.value.isFocused = true;
 
 		await nextTick();
 
-		const text = await navigator.clipboard.readText();
 		updateSearchInput(text);
 	} catch (err) {
 		notifierModule.show({
