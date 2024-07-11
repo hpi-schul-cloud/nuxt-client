@@ -32,8 +32,10 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 				if (!(boardStore.board && cardStore.cards)) return;
 
-				await Promise.resolve(() => cardStore.resetState());
 				await boardStore.reloadBoard();
+				await cardStore.fetchCardRequest({
+					cardIds: Object.keys(cardStore.cards),
+				});
 			}
 		});
 
