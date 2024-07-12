@@ -1,4 +1,9 @@
-import { mountComposable } from "@@/tests/test-utils";
+import {
+	boardResponseFactory,
+	envsFactory,
+	mockedPiniaStoreTyping,
+	mountComposable,
+} from "@@/tests/test-utils";
 import {
 	useBoardInactivity,
 	connectionOptions,
@@ -6,14 +11,16 @@ import {
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { useBoardNotifier } from "@util-board";
+import { computed, nextTick } from "vue";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { nextTick } from "vue";
-
-const notifierModule = createModuleMocks(NotifierModule);
-
-jest.mock("@util-board");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
+import { envConfigModule } from "@/store";
+import { useBoardStore } from "./Board.store";
+import { useCardStore } from "./Card.store";
 
 jest.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -21,54 +28,91 @@ jest.mock("vue-i18n", () => ({
 	}),
 }));
 
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock("@util-board");
+const mockUseSharedLastCreatedElement = jest.mocked(
+	useSharedLastCreatedElement
+);
+
+jest.mock("@util-board/BoardNotifier.composable");
+const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+let boardStore: ReturnType<typeof useBoardStore>;
+let cardStore: ReturnType<typeof useCardStore>;
+let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+const envs = envsFactory.build({
+	BOARD_COLLABORATION_URI: "mockedUri",
+	FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
+});
+
 describe("pageInactivity.composable", () => {
-	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	setActivePinia(createTestingPinia());
+	setupStores({ envConfigModule: EnvConfigModule });
+
+	envConfigModule.setEnvs(envs);
+
+	mockUseSharedLastCreatedElement.mockReturnValue({
+		lastCreatedElementId: computed(() => "element-id"),
+		resetLastCreatedElementId: jest.fn(),
+	});
+
+	mockBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
+	mockUseBoardNotifier.mockReturnValue(mockBoardNotifierCalls);
+
+	mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
+	mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 	const setup = (timer = 100) => {
-		mockedBoardNotifierCalls =
-			createMock<ReturnType<typeof useBoardNotifier>>();
-		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+		boardStore = mockedPiniaStoreTyping(useBoardStore);
+		cardStore = mockedPiniaStoreTyping(useCardStore);
+		boardStore.board = boardResponseFactory.build();
+		cardStore.cards = {};
 
-		const composable = mountComposable(() => useBoardInactivity(timer), {
+		return mountComposable(() => useBoardInactivity(timer), {
 			global: {
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 				},
 			},
 		});
-
-		return { composable };
 	};
-	beforeEach(() => {
-		jest.clearAllMocks();
-		jest.useFakeTimers();
-	});
 
 	describe("usePageInactivity", () => {
-		it("should call the notifier module with 'info' parameter", async () => {
-			const { composable } = setup(3000);
+		beforeEach(() => {
+			jest.clearAllMocks();
+			jest.useFakeTimers();
+		});
+		it("should call the store functions when isTimeoutReached value true", async () => {
+			const boardStore = mockedPiniaStoreTyping(useBoardStore);
+			const cardStore = mockedPiniaStoreTyping(useCardStore);
+			const useBoardInactivity = setup();
 			connectionOptions.isTimeoutReached = true;
-			composable.visibility.value = "hidden";
+			useBoardInactivity.visibility.value = "hidden";
 			await nextTick();
 
-			composable.visibility.value = "visible";
+			useBoardInactivity.visibility.value = "visible";
+
 			await nextTick();
 
-			expect(mockedBoardNotifierCalls.showInfo).toHaveBeenCalledWith(
-				"common.notification.reload.page"
-			);
+			expect(boardStore.reloadBoard).toHaveBeenCalled();
+			expect(cardStore.fetchCardRequest).toHaveBeenCalled();
 		});
 
-		it("should not call the notifier module", async () => {
-			const { composable } = setup(3000);
+		it("should not call the store functions when isTimeoutReached value false", async () => {
+			const boardStore = mockedPiniaStoreTyping(useBoardStore);
+			const cardStore = mockedPiniaStoreTyping(useCardStore);
+			const useBoardInactivity = setup(3000);
 			connectionOptions.isTimeoutReached = false;
-			composable.visibility.value = "hidden";
+			useBoardInactivity.visibility.value = "hidden";
 			await nextTick();
 
-			composable.visibility.value = "visible";
+			useBoardInactivity.visibility.value = "visible";
 			await nextTick();
 
-			expect(mockedBoardNotifierCalls.showInfo).not.toHaveBeenCalled();
+			expect(boardStore.reloadBoard).not.toHaveBeenCalled();
+			expect(cardStore.fetchCardRequest).not.toHaveBeenCalled();
 		});
 	});
 
