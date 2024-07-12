@@ -2,9 +2,10 @@ import { useDocumentVisibility } from "@vueuse/core";
 import { useTimeoutFn } from "@vueuse/shared";
 import { nextTick, ref, watch } from "vue";
 import { useBoardStore, useCardStore } from "@data-board";
+
 export const connectionOptions = {
 	isTimeoutReached: false,
-	MAX_TIMEOUT_FOR_INACTIVITY: 1 * 60 * 1000,
+	MAX_TIMEOUT_FOR_INACTIVITY: 0,
 };
 
 export const useBoardInactivity = (
