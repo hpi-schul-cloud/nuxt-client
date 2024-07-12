@@ -4,32 +4,22 @@
 		tabindex="0"
 		class="skip-link d-sr-only-focusable"
 		href="#main-content"
-		@click="skipToContent"
+		@keydown.enter.prevent="skipToMainContent"
 	>
 		{{ $t("global.skipLink.mainContent") }}
 	</a>
 </template>
 
 <script setup lang="ts">
-import { onMounted, nextTick } from "vue";
-import { useRoute } from "vue-router";
-
-onMounted(() => {
-	const route = useRoute();
-	const section = route.hash ? route.hash.replace("#", "") : "";
-	if (section)
-		nextTick(() => window.document.getElementById(section)?.scrollIntoView());
-});
-
-const skipToContent = (event: Event) => {
-	event.preventDefault();
-	nextTick(() => {
-		const mainContent = window.document.querySelector("#main-content");
-		const firstTabIndexedElement = mainContent?.querySelector("[tabindex]");
-		if (firstTabIndexedElement) {
-			(firstTabIndexedElement as HTMLElement).focus();
-		}
-	});
+const skipToMainContent = () => {
+	const mainContent = window.document.querySelector(
+		"#main-content"
+	) as HTMLElement;
+	if (mainContent) {
+		mainContent.setAttribute("tabindex", "-1");
+		mainContent.focus();
+		setTimeout(() => mainContent.removeAttribute("tabindex"), 1000);
+	}
 };
 </script>
 
