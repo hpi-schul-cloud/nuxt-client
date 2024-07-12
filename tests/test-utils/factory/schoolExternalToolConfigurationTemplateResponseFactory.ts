@@ -6,6 +6,7 @@ export const schoolExternalToolConfigurationTemplateResponseFactory =
 		({ sequence }) => ({
 			externalToolId: `tool-${sequence}`,
 			name: `SchoolExternalTool${sequence}`,
+			baseUrl: `https://school-external-tool-${sequence}.com`,
 			parameters: [],
 		})
 	);
