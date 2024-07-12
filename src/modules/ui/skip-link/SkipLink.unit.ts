@@ -1,15 +1,15 @@
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import SkipLinks from "./SkipLinks.vue";
+import SkipLink from "./SkipLink.vue";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ hash: "#" }),
 }));
 
-describe("@/components/molecules/SkipLinks", () => {
+describe("@ui-skip-link", () => {
 	describe(" element skip-link", () => {
 		const setup = () => {
-			const wrapper = mount(SkipLinks, {
+			const wrapper = mount(SkipLink, {
 				global: {
 					plugins: [createTestingI18n()],
 				},
@@ -32,7 +32,7 @@ describe("@/components/molecules/SkipLinks", () => {
 	});
 	describe("skipToContent", () => {
 		const setup = () => {
-			const wrapper = mount(SkipLinks, {
+			const wrapper = mount(SkipLink, {
 				global: {
 					plugins: [createTestingI18n()],
 				},
