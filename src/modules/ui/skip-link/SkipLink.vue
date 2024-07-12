@@ -5,6 +5,7 @@
 		class="skip-link d-sr-only-focusable"
 		href="#main-content"
 		@keydown.enter.prevent="skipToMainContent"
+		@keydown.space.prevent="skipToMainContent"
 	>
 		{{ $t("global.skipLink.mainContent") }}
 	</a>
@@ -15,6 +16,7 @@ const skipToMainContent = () => {
 	const mainContent = window.document.querySelector(
 		"#main-content"
 	) as HTMLElement;
+
 	if (mainContent) {
 		mainContent.setAttribute("tabindex", "-1");
 		mainContent.focus();
