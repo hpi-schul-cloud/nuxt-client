@@ -64,12 +64,12 @@ describe("pageInactivity.composable", () => {
 	mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 	mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-	const setup = (timer = 100) => {
-		boardStore = mockedPiniaStoreTyping(useBoardStore);
-		cardStore = mockedPiniaStoreTyping(useCardStore);
-		boardStore.board = boardResponseFactory.build();
-		cardStore.cards = {};
+	boardStore = mockedPiniaStoreTyping(useBoardStore);
+	cardStore = mockedPiniaStoreTyping(useCardStore);
+	boardStore.board = boardResponseFactory.build();
+	cardStore.cards = {};
 
+	const setup = (timer = 100) => {
 		return mountComposable(() => useBoardInactivity(timer), {
 			global: {
 				provide: {
@@ -85,8 +85,6 @@ describe("pageInactivity.composable", () => {
 			jest.useFakeTimers();
 		});
 		it("should call the store functions when isTimeoutReached value true", async () => {
-			const boardStore = mockedPiniaStoreTyping(useBoardStore);
-			const cardStore = mockedPiniaStoreTyping(useCardStore);
 			const useBoardInactivity = setup();
 			connectionOptions.isTimeoutReached = true;
 			useBoardInactivity.visibility.value = "hidden";
@@ -101,8 +99,6 @@ describe("pageInactivity.composable", () => {
 		});
 
 		it("should not call the store functions when isTimeoutReached value false", async () => {
-			const boardStore = mockedPiniaStoreTyping(useBoardStore);
-			const cardStore = mockedPiniaStoreTyping(useCardStore);
 			const useBoardInactivity = setup(3000);
 			connectionOptions.isTimeoutReached = false;
 			useBoardInactivity.visibility.value = "hidden";
