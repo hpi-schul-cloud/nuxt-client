@@ -21,6 +21,7 @@ import EnvConfigModule from "@/store/env-config";
 import { envConfigModule } from "@/store";
 import { useBoardStore } from "./Board.store";
 import { useCardStore } from "./Card.store";
+import { useSocketConnection } from "./socket/socket";
 
 jest.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -35,6 +36,9 @@ const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement
 );
 
+jest.mock("./socket/socket");
+const mockSocket = jest.mocked(useSocketConnection);
+
 jest.mock("@util-board/BoardNotifier.composable");
 const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
 
@@ -42,6 +46,7 @@ let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 let boardStore: ReturnType<typeof useBoardStore>;
 let cardStore: ReturnType<typeof useCardStore>;
 let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+let mockedSocketCalls: DeepMocked<ReturnType<typeof useSocketConnection>>;
 const envs = envsFactory.build({
 	BOARD_COLLABORATION_URI: "mockedUri",
 	FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
@@ -65,6 +70,9 @@ describe("pageInactivity.composable", () => {
 
 	mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 	mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+	mockedSocketCalls = createMock<ReturnType<typeof useSocketConnection>>();
+	mockSocket.mockReturnValue(mockedSocketCalls as any);
 
 	const setup = (timer = 0) => {
 		boardStore = mockedPiniaStoreTyping(useBoardStore);
