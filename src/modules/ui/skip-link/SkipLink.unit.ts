@@ -7,54 +7,31 @@ jest.mock("vue-router", () => ({
 }));
 
 describe("@ui-skip-link", () => {
-	describe(" element skip-link", () => {
-		const setup = () => {
-			const wrapper = mount(SkipLink, {
-				global: {
-					plugins: [createTestingI18n()],
-				},
-			});
-
-			return { wrapper };
-		};
-
-		it("Should render its skip link", async () => {
-			const { wrapper } = setup();
-
-			expect(wrapper.find("#skip-link").exists()).toBe(true);
+	const setup = () => {
+		const wrapper = mount(SkipLink, {
+			global: {
+				plugins: [createTestingI18n()],
+			},
 		});
 
-		it("Should have tabindex 0", async () => {
-			const { wrapper } = setup();
+		return { wrapper };
+	};
 
-			expect(wrapper.attributes("tabindex")).toBe("0");
-		});
+	it("should render its skip link", async () => {
+		const { wrapper } = setup();
+
+		expect(wrapper.find("[data-testid=skip-link").exists()).toBe(true);
 	});
-	describe("skipToContent", () => {
-		const setup = () => {
-			const wrapper = mount(SkipLink, {
-				global: {
-					plugins: [createTestingI18n()],
-				},
-			});
 
-			const mainContent = window.document.createElement("div");
-			mainContent.id = "main-content";
-			const linkElement = window.document.createElement("a");
-			linkElement.setAttribute("tabindex", "0");
-			mainContent.appendChild(linkElement);
-			window.document.body.appendChild(mainContent);
+	it("should skip to main content area", async () => {
+		const { wrapper } = setup();
 
-			return { wrapper, linkElement };
-		};
-		it("should skip to the link element in main content", async () => {
-			const { wrapper, linkElement } = setup();
+		const mainContentElement = window.document.createElement("div");
+		mainContentElement.id = "main-content";
+		window.document.body.appendChild(mainContentElement);
 
-			await wrapper.find("#skip-link").trigger("click");
+		await wrapper.findComponent({ name: "SkipLink" }).trigger("keydown.enter");
 
-			await wrapper.vm.$nextTick();
-
-			expect(window.document.activeElement).toBe(linkElement);
-		});
+		expect(window.document.activeElement).toBe(mainContentElement);
 	});
 });

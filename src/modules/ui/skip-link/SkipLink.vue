@@ -4,6 +4,7 @@
 		tabindex="0"
 		class="skip-link d-sr-only-focusable"
 		href="#main-content"
+		data-testid="skip-link"
 		@keydown.enter.prevent="skipToMainContent"
 		@keydown.space.prevent="skipToMainContent"
 	>
@@ -12,15 +13,19 @@
 </template>
 
 <script setup lang="ts">
+const programmaticFocus = (element: HTMLElement) => {
+	element.setAttribute("tabindex", "-1");
+	element.focus();
+	setTimeout(() => element.removeAttribute("tabindex"), 1000);
+};
+
 const skipToMainContent = () => {
-	const mainContent = window.document.querySelector(
+	const mainContentElement = window.document.querySelector(
 		"#main-content"
 	) as HTMLElement;
 
-	if (mainContent) {
-		mainContent.setAttribute("tabindex", "-1");
-		mainContent.focus();
-		setTimeout(() => mainContent.removeAttribute("tabindex"), 1000);
+	if (mainContentElement) {
+		programmaticFocus(mainContentElement);
 	}
 };
 </script>
