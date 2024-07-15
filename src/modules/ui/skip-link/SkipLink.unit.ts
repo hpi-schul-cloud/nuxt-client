@@ -20,7 +20,7 @@ describe("@ui-skip-link", () => {
 	it("should render its skip link", async () => {
 		const { wrapper } = setup();
 
-		expect(wrapper.find("[data-testid=skip-link").exists()).toBe(true);
+		expect(wrapper.find("[data-testid=skip-link]").exists()).toBe(true);
 	});
 
 	it("should skip to main content area", async () => {
