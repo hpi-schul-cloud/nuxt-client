@@ -28,6 +28,7 @@ export class SchoolExternalToolMapper {
 			externalToolId: response.externalToolId,
 			logoUrl: response.logoUrl,
 			name: response.name,
+			baseUrl: response.baseUrl,
 			parameters: response.parameters.map(
 				(parameter): ToolParameter =>
 					ExternalToolMapper.mapToToolParameter(parameter)
