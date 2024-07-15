@@ -37,7 +37,7 @@ const mockUseSharedLastCreatedElement = jest.mocked(
 );
 
 jest.mock("./socket/socket");
-const mockSocket = jest.mocked(useSocketConnection);
+const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -46,7 +46,9 @@ let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 let boardStore: ReturnType<typeof useBoardStore>;
 let cardStore: ReturnType<typeof useCardStore>;
 let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-let mockedSocketCalls: DeepMocked<ReturnType<typeof useSocketConnection>>;
+let mockedSocketConnectionHandler: DeepMocked<
+	ReturnType<typeof useSocketConnection>
+>;
 const envs = envsFactory.build({
 	BOARD_COLLABORATION_URI: "mockedUri",
 	FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
@@ -71,8 +73,9 @@ describe("pageInactivity.composable", () => {
 	mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 	mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-	mockedSocketCalls = createMock<ReturnType<typeof useSocketConnection>>();
-	mockSocket.mockReturnValue(mockedSocketCalls as any);
+	mockedSocketConnectionHandler =
+		createMock<ReturnType<typeof useSocketConnection>>();
+	mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
 
 	const setup = (timer = 0) => {
 		boardStore = mockedPiniaStoreTyping(useBoardStore);
