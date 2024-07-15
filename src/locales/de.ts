@@ -101,6 +101,8 @@ export default {
 	"common.medium.information.teacher": "Bitte an Schuladministrator:in wenden.",
 	"common.nodata": "Keine Daten vorhanden",
 	"common.notification.error": "Es ist ein Fehler aufgetreten.",
+	"common.notification.connection.restored":
+		"Die Verbindung wurde wieder hergestellt.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "TT.MM.JJJJ",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
