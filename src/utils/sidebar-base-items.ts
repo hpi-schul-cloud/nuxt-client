@@ -29,6 +29,9 @@ export type SidebarCategoryItem = SidebarItem & {
 
 export type SidebarItemList = (SidebarItem | SidebarCategoryItem)[];
 
+/**
+ * @deprecated use useSidebarItems composable
+ */
 const getSidebarItems = (): SidebarItemList => [
 	{
 		title: "global.sidebar.item.overview",
@@ -134,7 +137,7 @@ const getSidebarItems = (): SidebarItemList => [
 	},
 	{
 		title: "feature.media-shelf.title",
-		href: "/media-shelf",
+		to: "/media-shelf",
 		icon: mdiBookshelf,
 		testId: "Media-shelf",
 		activeForUrls: ["^/media-shelf($|/.*)"],
@@ -175,7 +178,7 @@ const getSidebarItems = (): SidebarItemList => [
 			{
 				title: "global.sidebar.item.classes",
 				icon: "$class",
-				href: "/administration/groups/classes",
+				to: "/administration/groups/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/groups/classes($|/.*)"],
 				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
@@ -223,7 +226,7 @@ const getSidebarItems = (): SidebarItemList => [
 			{
 				title: "global.sidebar.item.classes",
 				icon: "$class",
-				href: "/administration/groups/classes",
+				to: "/administration/groups/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/groups/classes($|/.*)"],
 				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",

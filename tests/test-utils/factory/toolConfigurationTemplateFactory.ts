@@ -6,6 +6,7 @@ export const schoolExternalToolConfigurationTemplate =
 		externalToolId: `tool${sequence}`,
 		configId: "configId",
 		name: "toolName",
+		baseUrl: `https://school-external-tool-${sequence}.com`,
 		logoUrl: "logoUrl",
 		parameters: [],
 		isDeactivated: false,

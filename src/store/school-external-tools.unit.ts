@@ -328,6 +328,7 @@ describe("SchoolExternalToolsModule", () => {
 						{
 							externalToolId: toolConfigurationTemplate.externalToolId,
 							name: toolConfigurationTemplate.name,
+							baseUrl: toolConfigurationTemplate.baseUrl,
 							parameters: [
 								{
 									name: toolConfigurationTemplate.parameters[0].name,
@@ -432,6 +433,7 @@ describe("SchoolExternalToolsModule", () => {
 						{
 							externalToolId: toolConfigurationTemplate.externalToolId,
 							name: toolConfigurationTemplate.name,
+							baseUrl: toolConfigurationTemplate.baseUrl,
 							parameters: [
 								{
 									name: toolConfigurationTemplate.parameters[0].name,
