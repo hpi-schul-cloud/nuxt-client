@@ -104,8 +104,6 @@ export default {
 	"common.notification.error": "An error has occurred.",
 	"common.notification.connection.restored":
 		"The connection has been restored.",
-	"common.notification.reload.page":
-		"You should reload the page to get the latest data",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.YYYY",
 	"common.placeholder.email.confirmation": "Repeat e-mail address",

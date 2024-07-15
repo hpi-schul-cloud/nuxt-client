@@ -103,8 +103,6 @@ export default {
 	"common.nodata": "Немає даних",
 	"common.notification.error": "Сталася помилка.",
 	"common.notification.connection.restored": "Зв'язок відновлено.",
-	"common.notification.reload.page":
-		"Вам слід перезавантажити сторінку, щоб отримати останні дані",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email.confirmation":
