@@ -5,11 +5,11 @@ import { useBoardStore, useCardStore } from "@data-board";
 
 export const connectionOptions = {
 	isTimeoutReached: false,
-	MAX_TIMEOUT_FOR_INACTIVITY: 0,
+	maxTimeOutForInactivity: 0,
 };
 
 export const useBoardInactivity = (
-	maxInactivityTime: number = connectionOptions.MAX_TIMEOUT_FOR_INACTIVITY
+	maxInactivityTime: number = connectionOptions.maxTimeOutForInactivity
 ) => {
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
