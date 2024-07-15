@@ -21,18 +21,18 @@ export const useBoardInactivity = (
 	const visibility = ref(useDocumentVisibility());
 
 	watch(visibility, async (current, previous) => {
+		if (!(boardStore.board && cardStore.cards)) return;
 		if (timeoutFn.isPending) timeoutFn.stop();
 
 		if (current === "visible" && previous === "hidden") {
 			if (connectionOptions.isTimeoutReached) {
-				if (!(boardStore.board && cardStore.cards)) return;
-
 				await boardStore.reloadBoard();
 				await cardStore.fetchCardRequest({
 					cardIds: Object.keys(cardStore.cards),
 				});
 				await nextTick();
 			}
+
 			timeoutFn.stop();
 			connectionOptions.isTimeoutReached = false;
 			return;
