@@ -47,6 +47,8 @@ const envs = envsFactory.build({
 	FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
 });
 
+jest.useFakeTimers();
+
 describe("pageInactivity.composable", () => {
 	setActivePinia(createTestingPinia());
 	setupStores({ envConfigModule: EnvConfigModule });
@@ -64,12 +66,11 @@ describe("pageInactivity.composable", () => {
 	mockedBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 	mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-	boardStore = mockedPiniaStoreTyping(useBoardStore);
-	cardStore = mockedPiniaStoreTyping(useCardStore);
-	boardStore.board = boardResponseFactory.build();
-	cardStore.cards = {};
-
-	const setup = (timer = 100) => {
+	const setup = (timer = 0) => {
+		boardStore = mockedPiniaStoreTyping(useBoardStore);
+		cardStore = mockedPiniaStoreTyping(useCardStore);
+		boardStore.board = boardResponseFactory.build();
+		cardStore.cards = {};
 		return mountComposable(() => useBoardInactivity(timer), {
 			global: {
 				provide: {
@@ -82,7 +83,6 @@ describe("pageInactivity.composable", () => {
 	describe("usePageInactivity", () => {
 		beforeEach(() => {
 			jest.clearAllMocks();
-			jest.useFakeTimers();
 		});
 		it("should call the store functions when isTimeoutReached value true", async () => {
 			const useBoardInactivity = setup();
@@ -91,7 +91,6 @@ describe("pageInactivity.composable", () => {
 			await nextTick();
 
 			useBoardInactivity.visibility.value = "visible";
-
 			await nextTick();
 
 			expect(boardStore.reloadBoard).toHaveBeenCalled();
@@ -115,6 +114,10 @@ describe("pageInactivity.composable", () => {
 	describe("isTimeoutReached value", () => {
 		beforeEach(() => {
 			connectionOptions.isTimeoutReached = false;
+			jest.clearAllMocks();
+		});
+		afterEach(() => {
+			jest.clearAllTimers();
 		});
 		it("should be changed after MAX_TIMEOUT_FOR_INACTIVITY is achieved", async () => {
 			setup(3000);
