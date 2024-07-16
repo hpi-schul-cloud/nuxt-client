@@ -16,6 +16,7 @@ import {
 	DisconnectSocketRequestPayload,
 	FetchBoardRequestPayload,
 	FetchBoardSuccessPayload,
+	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
 	MoveColumnRequestPayload,
 	MoveColumnSuccessPayload,
@@ -237,7 +238,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 		});
 	};
 
-	const moveCardRequest = socketOrRest.moveCardRequest;
+	const moveCardRequest = async (payload: MoveCardRequestPayload) => {
+		await socketOrRest.moveCardRequest(payload);
+	};
 
 	const moveCardSuccess = async (payload: MoveCardSuccessPayload) => {
 		if (!board.value) return;

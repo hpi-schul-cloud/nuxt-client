@@ -1,22 +1,49 @@
-import { io, Socket } from "socket.io-client";
+import { io, type Socket } from "socket.io-client";
 import { Action } from "@/types/board/ActionFactory";
 import { envConfigModule } from "@/store";
+import { useBoardStore, useCardStore } from "@data-board";
+import { useBoardNotifier } from "@util-board";
+import { useI18n } from "vue-i18n";
+import { nextTick } from "vue";
 
 let instance: Socket | null = null;
 
+const connectionOptions = {
+	socketConnectionLost: false,
+};
+
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
+	const boardStore = useBoardStore();
+	const cardStore = useCardStore();
+	const { showFailure, showInfo } = useBoardNotifier();
+	const { t } = useI18n();
+
 	if (instance === null) {
 		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
 			path: "/board-collaboration",
 			withCredentials: true,
 		});
 
-		instance.on("connect", function () {
+		instance.on("connect", async function () {
 			console.log("connected");
+			if (connectionOptions.socketConnectionLost) {
+				showInfo(t("common.notification.connection.restored"));
+				connectionOptions.socketConnectionLost = false;
+
+				if (!(boardStore.board && cardStore.cards)) return;
+
+				await boardStore.reloadBoard();
+				await cardStore.fetchCardRequest({
+					cardIds: Object.keys(cardStore.cards),
+				});
+				await nextTick();
+			}
 		});
 
 		instance.on("disconnect", () => {
-			// ... anything to do?
+			console.log("disconnected");
+			connectionOptions.socketConnectionLost = true;
+			showFailure(t("error.4500"));
 		});
 	}
 
@@ -42,6 +69,8 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 	const disconnectSocket = () => {
 		socket.disconnect();
+		if (connectionOptions.socketConnectionLost)
+			connectionOptions.socketConnectionLost = false;
 	};
 
 	return {

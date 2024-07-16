@@ -1,3 +1,4 @@
+import { chunk } from "lodash";
 import * as CardActions from "./cardActions";
 import { useSocketConnection } from "@data-board";
 import { useCardStore } from "../Card.store";
@@ -20,7 +21,7 @@ import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificati
 export const useCardSocketApi = () => {
 	const cardStore = useCardStore();
 
-	const WAIT_AFTER_LAST_CALL_IN_MS = 5;
+	const WAIT_AFTER_LAST_CALL_IN_MS = 30;
 	const MAX_WAIT_BEFORE_FIRST_CALL_IN_MS = 200;
 	let cardIdsToFetch: string[] = [];
 
@@ -92,7 +93,10 @@ export const useCardSocketApi = () => {
 
 	const _debouncedFetchCardEmit = useDebounceFn(
 		() => {
-			emitOnSocket("fetch-card-request", { cardIds: cardIdsToFetch });
+			const batches = chunk(cardIdsToFetch, 50);
+			batches.forEach((cardIds) =>
+				emitOnSocket("fetch-card-request", { cardIds })
+			);
 			cardIdsToFetch = [];
 		},
 		WAIT_AFTER_LAST_CALL_IN_MS,
