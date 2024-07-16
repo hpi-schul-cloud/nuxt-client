@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<skip-links />
+		<SkipLink />
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
 				<the-top-bar
@@ -42,7 +42,7 @@ import getSidebarItems, {
 } from "@/utils/sidebar-base-items";
 import { computed, defineComponent, ref } from "vue";
 import { useRoute } from "vue-router";
-import SkipLinks from "../components/molecules/SkipLinks.vue";
+import { SkipLink } from "@ui-skip-link";
 
 export default defineComponent({
 	components: {
@@ -50,7 +50,7 @@ export default defineComponent({
 		TheSidebar,
 		TheFooter,
 		autoLogoutWarning,
-		SkipLinks,
+		SkipLink,
 	},
 	mixins: [toastsFromQueryString],
 	setup() {
