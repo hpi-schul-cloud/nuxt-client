@@ -116,8 +116,8 @@ describe("LoggedIn", () => {
 		await nextTick();
 		await nextTick();
 
-		const sidebarToggle = wrapper.findComponent({ name: "VAppBarNavIcon" });
-		await sidebarToggle.trigger("click");
+		const topbar = wrapper.findComponent({ name: "Topbar" });
+		await topbar.trigger("sidebar-toggled");
 
 		const sidebar = wrapper.find("nav");
 
