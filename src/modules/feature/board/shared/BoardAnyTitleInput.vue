@@ -200,6 +200,10 @@ export default defineComponent({
 	cursor: pointer;
 }
 
+:deep(input[readonly]) {
+	cursor: pointer;
+}
+
 :deep(textarea)::placeholder {
 	opacity: 1;
 }

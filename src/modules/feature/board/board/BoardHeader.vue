@@ -196,6 +196,10 @@ watchEffect(() => {
 	outline: none;
 }
 
+.v-chip {
+	cursor: pointer;
+}
+
 .input-width-calc-span {
 	position: absolute;
 	left: -9999px;
