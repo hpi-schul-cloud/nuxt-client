@@ -4,7 +4,7 @@
 		data-testid="board-menu-action-edit"
 		@click="onClick"
 	>
-		{{ $t("common.actions.edit") }}
+		{{ $t("common.actions.rename") }}
 	</BoardMenuAction>
 </template>
 
