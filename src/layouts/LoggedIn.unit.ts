@@ -109,17 +109,6 @@ describe("LoggedIn", () => {
 		expect(sidebar.classes()).toContain("v-navigation-drawer--active");
 	});
 
-	it("should not show sidebar on tablet and smaller as default", async () => {
-		defineWindowWidth(564);
-
-		const { wrapper } = setup();
-		await nextTick();
-		await nextTick();
-		const sidebar = wrapper.find("nav");
-
-		expect(sidebar.classes()).not.toContain("v-navigation-drawer--active");
-	});
-
 	it("should expand sidebar on toggle button click", async () => {
 		defineWindowWidth(564);
 
@@ -133,5 +122,38 @@ describe("LoggedIn", () => {
 		const sidebar = wrapper.find("nav");
 
 		expect(sidebar.classes()).toContain("v-navigation-drawer--active");
+	});
+
+	describe("when device is medium to small sized", () => {
+		it("should not show sidebar on tablet and smaller as default", async () => {
+			defineWindowWidth(564);
+
+			const { wrapper } = setup();
+			await nextTick();
+			await nextTick();
+			const sidebar = wrapper.find("nav");
+
+			expect(sidebar.classes()).not.toContain("v-navigation-drawer--active");
+		});
+
+		describe("when sidebar is expanded", () => {
+			it("should set fixed position on v-main", async () => {
+				defineWindowWidth(564);
+
+				const { wrapper } = setup();
+				await nextTick();
+				await nextTick();
+
+				const sidebarToggle = wrapper.findComponent({ name: "VAppBarNavIcon" });
+				await sidebarToggle.trigger("click");
+
+				const sidebar = wrapper.find("nav");
+				expect(sidebar.classes()).toContain("v-navigation-drawer--active");
+
+				const main = wrapper.find("#main-content");
+				expect(main.classes()).toContain("position-fixed");
+				expect(main.classes()).toContain("w-100");
+			});
+		});
 	});
 });
