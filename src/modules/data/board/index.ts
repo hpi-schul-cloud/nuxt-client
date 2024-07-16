@@ -8,17 +8,19 @@ import * as boardActions from "./boardActions/boardActions";
 import * as cardActions from "./cardActions/cardActions";
 import { useSocketConnection } from "./socket/socket";
 import { useCardStore } from "./Card.store";
+import { useBoardInactivity } from "./boardInactivity.composable";
 
 export {
+	boardActions,
+	cardActions,
 	useBoardStore,
+	useBoardFocusHandler,
+	useBoardInactivity,
+	useBoardPermissions,
 	useCardStore,
-	useSocketConnection,
 	useContentElementState,
 	useEditMode,
 	useSharedEditMode,
-	useBoardFocusHandler,
-	useBoardPermissions,
 	useSharedBoardPageInformation,
-	boardActions,
-	cardActions,
+	useSocketConnection,
 };
