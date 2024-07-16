@@ -1,6 +1,6 @@
 <template>
 	<BoardMenuAction
-		:icon="mdiPencilOutline"
+		:icon="mdiRenameOutline"
 		data-testid="board-menu-action-edit"
 		@click="onClick"
 	>
@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiPencilOutline } from "@mdi/js";
+import { mdiRenameOutline } from "@mdi/js";
 import { BoardMenuAction } from "@ui-board";
 
 defineProps({
