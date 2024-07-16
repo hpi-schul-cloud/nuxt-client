@@ -17,6 +17,7 @@
 			role="heading"
 			:aria-level="ariaLevel"
 			@keydown="onEnter"
+			@blur="onBlur"
 			:autofocus="internalIsFocused"
 			><template v-slot:append-inner>
 				<slot />
@@ -68,7 +69,7 @@ export default defineComponent({
 			default: null,
 		},
 	},
-	emits: ["update:value", "enter"],
+	emits: ["update:value", "enter", "blur"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 		const modelValue = ref("");
@@ -150,6 +151,8 @@ export default defineComponent({
 			}
 		});
 
+		const onBlur = () => emit("blur");
+
 		const onEnter = ($event: KeyboardEvent) => {
 			if ($event.key === "enter" || $event.key === "Enter") {
 				$event.preventDefault();
@@ -184,6 +187,7 @@ export default defineComponent({
 			ariaLevel,
 			modelValue,
 			hasValue,
+			onBlur,
 			onEnter,
 			internalIsFocused,
 			titleInput,
