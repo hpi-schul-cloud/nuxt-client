@@ -64,7 +64,7 @@ const setup = () => {
 				},
 			},
 			stubs: {
-				SkipLinks: { template: "<div></div>" },
+				SkipLink: { template: "<div></div>" },
 				"application-error-wrapper": { template: "<div></div>" },
 				snackbar: { template: "<div></div>" },
 				"router-view": { template: "<div></div>" },

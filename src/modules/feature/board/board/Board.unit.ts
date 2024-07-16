@@ -45,6 +45,7 @@ import {
 	useEditMode,
 	useSharedBoardPageInformation,
 	useSharedEditMode,
+	useBoardInactivity,
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
@@ -91,6 +92,9 @@ const mockedUseEditMode = jest.mocked(useEditMode);
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
+jest.mock("@data-board/boardInactivity.composable");
+const mockUseBoardInactivity = <jest.Mock>useBoardInactivity;
+
 describe("Board", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
@@ -99,6 +103,9 @@ describe("Board", () => {
 	>;
 	let router: DeepMocked<Router>;
 	let mockedBoardPermissions: BoardPermissionChecks;
+	let mockedUsePageInactivity: DeepMocked<
+		ReturnType<typeof useBoardInactivity>
+	>;
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
@@ -141,6 +148,7 @@ describe("Board", () => {
 
 		mockedBoardPermissions = { ...defaultPermissions };
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
+		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
 	});
 
 	afterEach(() => {
@@ -293,6 +301,12 @@ describe("Board", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.findComponent(BoardVue).exists()).toBeTruthy();
+		});
+
+		it("should call 'useBoardInactivity' composable", async () => {
+			setup();
+			await nextTick();
+			expect(mockUseBoardInactivity).toHaveBeenCalled();
 		});
 
 		describe("BoardHeader component", () => {
