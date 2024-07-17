@@ -102,6 +102,7 @@ export default {
 		"Будь ласка, зверніться до адміністратора школи.",
 	"common.nodata": "Немає даних",
 	"common.notification.error": "Сталася помилка.",
+	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email.confirmation":
@@ -1622,7 +1623,12 @@ export default {
 	"pages.tool.deactivate.label": "Деактивуйте інструмент у школі",
 	"pages.tool.description":
 		'Тут налаштовуються специфічні для курсу параметри зовнішнього інструменту. Після збереження конфігурації інструмент стає доступним у курсі.<br><br>\nВидалення конфігурації видаляє інструмент із курс.<br><br>\nБільше інформації можна знайти в нашому <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Розділ довідки щодо зовнішніх інструментів</a>.',
-	"pages.tool.select.label": "вибір інструменту",
+	"pages.tool.select.label": "вибір інструменту / Інструмент-URL",
+	"pages.tool.select.description":
+		"Знайдіть інструменти або введіть URL-адресу інструменту або вставте його з кешу вручну або за допомогою кнопки",
+	"pages.tool.select.clipboard.error":
+		"Виникла помилка при вставці тексту з буфера обміну. Будь ласка, вставте текст вручну.",
+	"pages.tool.select.nodata": "Інструмент відсутній",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",

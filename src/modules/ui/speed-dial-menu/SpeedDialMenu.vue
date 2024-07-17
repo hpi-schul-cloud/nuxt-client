@@ -7,7 +7,7 @@
 		>
 			<v-btn
 				id="fab"
-				:rounded="!isCollapsed"
+				:rounded="!isCollapsed ? 'xl' : 'circle'"
 				class="size-transition"
 				:class="!isCollapsed ? 'default-width' : ''"
 				:icon="isCollapsed"
@@ -34,7 +34,7 @@
 		<div v-else>
 			<v-btn
 				id="fab"
-				:rounded="!isCollapsed"
+				:rounded="!isCollapsed ? 'xl' : 'circle'"
 				class="size-transition"
 				:class="!isCollapsed ? 'default-width' : ''"
 				:icon="isCollapsed"
