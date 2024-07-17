@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<SkipLinks />
+		<SkipLink />
 		<Sidebar v-model="sidebarExpanded" />
 		<Topbar
 			:sidebar-expanded="sidebarExpanded"
@@ -25,7 +25,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { useDisplay } from "vuetify";
-import SkipLinks from "@/components/molecules/SkipLinks.vue";
+import { SkipLink } from "@ui-skip-link";
 import { Sidebar, Topbar } from "@ui-layout";
 import AlertContainer from "@/components/molecules/AlertContainer.vue";
 import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";

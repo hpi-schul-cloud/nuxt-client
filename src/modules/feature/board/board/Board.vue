@@ -115,6 +115,7 @@ import {
 	useCardStore,
 	useSharedBoardPageInformation,
 	useSharedEditMode,
+	useBoardInactivity,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -253,6 +254,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 onMounted(() => {
 	setAlert();
+	useBoardInactivity();
 	boardStore.fetchBoardRequest({ boardId: props.boardId });
 });
 
