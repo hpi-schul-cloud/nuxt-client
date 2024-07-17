@@ -315,7 +315,7 @@ export default {
 	"components.board.alert.info.draft":
 		"Dieses Board ist nicht für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neue Spalte",
-	"components.board.column.ghost.column.placeholder": "Spalte hinzufügen",
+	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.menu.board": "Board-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
@@ -363,7 +363,7 @@ export default {
 		"Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
 	"components.board": "Board",
 	"components.boardCard": "Karte",
-	"components.boardColumn": "Spalte",
+	"components.boardColumn": "Abschnitt",
 	"components.boardElement": "Element",
 	"components.boardRow": "Abschnitt",
 	"components.boardSection": "Abschnitt",
