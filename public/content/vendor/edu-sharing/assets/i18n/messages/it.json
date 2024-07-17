@@ -1,0 +1,29 @@
+{
+  "MESSAGES": {
+    "GO_TO_SEARCH": "Vai alla ricerca",
+    "INVALID": "errore sconosciuto",
+    "403": "errore di sicurezza",
+    "404": "Mi dispiace,\n stiamo cercando anche questa pagina.",
+    "500": "Qualcosa è andato storto,\n stiamo lavorando a una soluzione.",
+    "share_expired": "Questo link è scaduto.",
+    "share_file_deleted": "L'oggetto è stato eliminato.",
+    "invalid_share": "link non valido",
+    "share_empty": "L'oggetto non può essere caricato.",
+    "usage_missing": "Condividi rimosso",
+    "LTI_ERROR": "Processo LTI fallito",
+    "LTI_REG_ERROR": "Connessione fallita alla piattaforma LTI",
+    "DETAILS": {
+      "share_expired": "Il link condiviso è scaduto o è stato chiuso dal proprietario del materiale.",
+      "share_file_deleted": "Il link condiviso punta a un oggetto che è stato cancellato. Si prega di contattare l'autore.",
+      "invalid_share": "Il link non è valido.",
+      "share_empty": "Il link punta a un file incompatibile o a un file privo di contenuto.",
+      "usage_missing": "Non è stato possibile accedere all'elemento perché la condivisione è stata rimossa per il contesto corrente. Si prega di contattare l'autore della pagina da cui si proviene.",
+      "LTI_ERROR": "messaggio di errore: {{testo}}",
+      "LTI_REG_ERROR": "messaggio di errore: {{testo}}",
+      "INVALID": "Se il problema si presenta in modo anomalo, contattare il responsabile del sistema.",
+      "403": "L'accesso alla risorsa data è limitato.",
+      "404": "Errore 404",
+      "500": "Errore 500"
+    }
+  }
+}

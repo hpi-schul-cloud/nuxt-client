@@ -29,6 +29,7 @@ const vueRoutes = [
 	`^/administration/groups/classes/${mongoId}/?$`,
 	`^/content/?$`,
 	`^/content/${uuid}/?$`,
+	`^/content/vendor/edu-sharing/.*`,
 	`^/error/?$`,
 	`^/imprint/?$`,
 	`^/news/new/?$`,
