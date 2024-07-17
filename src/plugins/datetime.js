@@ -101,7 +101,9 @@ const initDefaultTimezone = (app, store) => {
  */
 export const fromUTC = (date) => {
 	// Date object is needed for firefox bug if date is before 1970
-	return dayjs.tz(new Date(date), "UTC");
+	const dateObject = new Date(date);
+
+	return dayjs.tz(dateObject, "UTC");
 };
 
 /**
