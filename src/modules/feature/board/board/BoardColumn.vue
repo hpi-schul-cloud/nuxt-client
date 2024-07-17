@@ -3,7 +3,6 @@
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
-			:titlePlaceholder="titlePlaceholder"
 			:index="index"
 			:isListBoard="isListBoard"
 			@delete:column="onColumnDelete"
@@ -291,14 +290,6 @@ export default defineComponent({
 			return props.column.cards[index];
 		};
 
-		const titlePlaceholder = computed(() => {
-			const type = props.isListBoard
-				? t("components.boardSection")
-				: t("components.boardColumn");
-
-			return `${type} ${props.index + 1}`;
-		});
-
 		const sortableClasses = computed(() => {
 			const classes = [];
 			if (!props.isListBoard) {
@@ -328,7 +319,6 @@ export default defineComponent({
 			isDragging,
 			isTouchDetected,
 			sortableClasses,
-			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
 			onColumnDelete,
