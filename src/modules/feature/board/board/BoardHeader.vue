@@ -13,7 +13,6 @@
 					:value="boardTitle"
 					data-testid="board-title"
 					:isEditMode="isEditMode"
-					:placeholder="titlePlaceholder"
 					:isFocused="isFocusedById"
 					:maxLength="100"
 					:style="{ width: `${fieldWidth}px` }"
@@ -78,10 +77,6 @@ const props = defineProps({
 		required: true,
 	},
 	title: {
-		type: String,
-		required: true,
-	},
-	titlePlaceholder: {
 		type: String,
 		required: true,
 	},
@@ -170,7 +165,8 @@ const emitTitle = useDebounceFn((newTitle: string) => {
 
 const calculateWidth = () => {
 	if (!inputWidthCalcSpan.value) return;
-	const title = boardTitle.value || t("pages.room.boardCard.label.courseBoard");
+	const title =
+		boardTitle.value || t("components.cardElement.titleElement.placeholder");
 
 	inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
 
