@@ -314,12 +314,12 @@ export default {
 		"Dieses Board ist sichtbar für alle Kursteilnehmenden.",
 	"components.board.alert.info.draft":
 		"Dieses Board ist nicht für die Kursteilnehmenden sichtbar.",
-	"components.board.column.defaultTitle": "Neue Spalte",
+	"components.board.column.defaultTitle": "Neuer Abschnitt",
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.menu.board": "Board-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
-	"components.board.menu.column": "Spalten-Einstellungen",
+	"components.board.menu.column": "Abschnitt-Einstellungen",
 	"components.board.menu.element": "Element-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
@@ -336,19 +336,19 @@ export default {
 	"components.board.notifications.errors.notUpdated":
 		"Die Änderungen konnten nicht gespeichert werden.",
 	"components.board.screenReader.notification.cardCreated.success":
-		"Eine Karte wurde von einem anderen Benutzer in Spalte {columnPosition} erstellt.",
+		"Eine Karte wurde von einem anderen Benutzer in Abschnitt {columnPosition} erstellt.",
 	"components.board.screenReader.notification.columnCreated.success":
-		"Eine Spalte wurde von einem anderen Benutzer erstellt.",
+		"Ein Abschnitt wurde von einem anderen Benutzer erstellt.",
 	"components.board.screenReader.notification.cardDeleted.success":
 		"Eine Karte wurde von einem anderen Benutzer gelöscht.",
 	"components.board.screenReader.notification.columnDeleted.success":
-		"Eine Spalte wurde von einem anderen Benutzer gelöscht.",
+		"Ein Abschnitt wurde von einem anderen Benutzer gelöscht.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
-		"In Spalte {columnPosition} wurde eine Karte an Position {newPosition} verschoben.",
+		"In Abschnitt {columnPosition} wurde eine Karte an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
-		"Eine Karte wurde von Spalte {fromColumnPosition} in Spalte {toColumnPosition} verschoben.",
+		"Eine Karte wurde von Abschnitt {fromColumnPosition} in Abschnitt {toColumnPosition} verschoben.",
 	"components.board.screenReader.notification.columnMoved.success":
-		"Eine Spalte wurde von Position {oldPosition} an Position {newPosition} verschoben.",
+		"Ein Abschnitt wurde von Position {oldPosition} an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
 		"Der Boardtitel wurde von einem anderen Benutzer in {newTitle} geändert",
 	"components.board.screenReader.notification.boardVisibilityUpdated.published":
@@ -356,11 +356,11 @@ export default {
 	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
 		"Das Board wurde von einem anderen Benutzer auf den Entwurfsstatus zurückgesetzt.",
 	"components.board.screenReader.notification.columnTitleUpdated.success":
-		"Titel von Spalte {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
+		"Titel von Abschnitt {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardTitleUpdated.success":
-		"Titel von Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
+		"Titel von Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardUpdated.success":
-		"Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
+		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
 	"components.board": "Board",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
