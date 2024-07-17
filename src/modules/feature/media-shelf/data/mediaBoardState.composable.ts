@@ -334,7 +334,13 @@ const useMediaBoardState = () => {
 				toLineId = newLine.id;
 			}
 
-			availableMediaLine.value?.elements.splice(oldElementIndex, 1);
+			if (availableMediaLine.value) {
+				const temp = Array.from(availableMediaLine.value.elements);
+				temp.splice(oldElementIndex, 1);
+				availableMediaLine.value.elements = temp;
+
+				// availableMediaLine.value.elements.splice(oldElementIndex, 1);
+			}
 
 			const newElement: MediaExternalToolElementResponse =
 				await api.createElement(
