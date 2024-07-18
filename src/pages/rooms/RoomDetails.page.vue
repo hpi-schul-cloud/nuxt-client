@@ -96,6 +96,7 @@
 		/>
 		<PickerDialog
 			v-model="boardTypePickerDialogIsOpen"
+			:title="$t('pages.room.dialog.boardType.title')"
 			:options="boardTypes"
 			@dialog-closed="boardTypePickerDialogIsOpen = false"
 		/>
@@ -208,18 +209,18 @@ export default defineComponent({
 			boardTypePickerDialogIsOpen: false,
 			boardTypes: [
 				{
-					label: this.$t("pages.rooms.fab.add.columnBoard"),
+					label: this.$t("pages.room.dialog.boardType.multiColumn"),
 					icon: "$mdiViewDashboardOutline",
 					action: () => this.$emit("board-create"),
 					dataTestId: "fab_button_add_board",
-					ariaLabel: this.$t("pages.rooms.fab.add.columnBoard"),
+					ariaLabel: this.$t("pages.room.dialog.boardType.multiColumn"),
 				},
 				{
-					label: this.$t("pages.rooms.fab.add.listBoard"),
+					label: this.$t("pages.room.dialog.boardType.singleColumn"),
 					icon: "$mdiCustomGridOutline",
 					action: () => this.$emit("list-board-create"),
 					dataTestId: "fab_button_add_list_board",
-					ariaLabel: this.$t("pages.rooms.fab.add.listBoard"),
+					ariaLabel: this.$t("pages.room.dialog.boardType.singleColumn"),
 				},
 			],
 		};
@@ -304,11 +305,11 @@ export default defineComponent({
 				)
 			) {
 				actions.push({
-					label: this.$t("pages.rooms.fab.add.task"),
+					label: this.$t("pages.room.fab.add.task"),
 					icon: mdiFormatListChecks,
 					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_task",
-					ariaLabel: this.$t("pages.rooms.fab.add.task"),
+					ariaLabel: this.$t("pages.room.fab.add.task"),
 				});
 			}
 
@@ -318,11 +319,11 @@ export default defineComponent({
 				)
 			) {
 				actions.push({
-					label: this.$t("pages.rooms.fab.add.lesson"),
+					label: this.$t("pages.room.fab.add.lesson"),
 					icon: mdiViewListOutline,
 					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_lesson",
-					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
+					ariaLabel: this.$t("pages.room.fab.add.lesson"),
 				});
 			}
 
@@ -334,19 +335,19 @@ export default defineComponent({
 			) {
 				if (envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED) {
 					actions.push({
-						label: this.$t("pages.rooms.fab.add.board"),
+						label: this.$t("pages.room.fab.add.board"),
 						icon: "$mdiViewGridPlusOutline",
 						customEvent: "board-type-dialog-open",
 						dataTestId: "fab_button_add_board",
-						ariaLabel: this.$t("pages.rooms.fab.add.board"),
+						ariaLabel: this.$t("pages.room.fab.add.board"),
 					});
 				} else {
 					actions.push({
-						label: this.$t("pages.rooms.fab.add.columnBoard"),
+						label: this.$t("pages.room.fab.add.columnBoard"),
 						icon: mdiViewDashboardOutline,
 						customEvent: "board-create",
 						dataTestId: "fab_button_add_column_board",
-						ariaLabel: this.$t("pages.rooms.fab.add.columnBoard"),
+						ariaLabel: this.$t("pages.room.fab.add.columnBoard"),
 					});
 				}
 			}
