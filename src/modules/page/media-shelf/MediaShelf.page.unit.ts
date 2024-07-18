@@ -65,6 +65,29 @@ describe("MediaShelfPage", () => {
 		jest.resetAllMocks();
 	});
 
+	describe("when the page is loading", () => {
+		const setup = async () => {
+			const { wrapper } = getWrapper();
+
+			useSharedMediaBoardStateMock.mediaBoard.value = undefined;
+			useSharedMediaBoardStateMock.availableMediaLine.value = undefined;
+
+			await flushPromises();
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should display skeleton loader", async () => {
+			const { wrapper } = await setup();
+
+			const skeletonLoader = wrapper.find("[data-testid=skeleton-loader]");
+
+			expect(skeletonLoader.exists()).toBe(true);
+		});
+	});
+
 	describe("when the page is loaded", () => {
 		const setup = async () => {
 			const { wrapper } = getWrapper();
@@ -98,6 +121,21 @@ describe("MediaShelfPage", () => {
 			const board = wrapper.findComponent(MediaBoard);
 
 			expect(board.isVisible()).toEqual(true);
+		});
+
+		it("should display empty state when there are no media elements", async () => {
+			useSharedMediaBoardStateMock.availableMediaLine.value =
+				mediaAvailableLineResponseFactory.build({ elements: [] });
+			useSharedMediaBoardStateMock.mediaBoard.value =
+				mediaBoardResponseFactory.build({
+					lines: [],
+				});
+
+			const { wrapper } = await setup();
+
+			const emptyState = wrapper.find("[data-testid=empty-state]");
+
+			expect(emptyState.exists()).toBe(true);
 		});
 	});
 

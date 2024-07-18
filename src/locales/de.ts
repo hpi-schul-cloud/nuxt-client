@@ -1702,6 +1702,8 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Erstellt zwischen 02/02/2020",
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
 	"feature.media-shelf.title": "Medienregal",
+	"feature.media-shelf.emptyState":
+		"Aktuell sind noch keine Medien zur Verwendung freigeschaltet.",
 	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
 	"feature.media-shelf.line.title": "Abschnitt",
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
