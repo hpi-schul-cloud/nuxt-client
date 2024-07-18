@@ -137,7 +137,9 @@ const useMediaBoardState = () => {
 				return;
 			}
 
-			mediaBoard.value.lines.splice(lineIndex, 1);
+			const temp = Array.from(mediaBoard.value.lines);
+			temp.splice(lineIndex, 1);
+			mediaBoard.value.lines = temp;
 
 			await api.deleteLine(lineId);
 
@@ -171,12 +173,11 @@ const useMediaBoardState = () => {
 				return;
 			}
 
-			const line: MediaLineResponse = mediaBoard.value.lines.splice(
-				oldLineIndex,
-				1
-			)[0];
+			const temp = Array.from(mediaBoard.value.lines);
+			const line: MediaLineResponse = temp.splice(oldLineIndex, 1)[0];
 
-			mediaBoard.value.lines.splice(newLineIndex, 0, line);
+			temp.splice(newLineIndex, 0, line);
+			mediaBoard.value.lines = temp;
 
 			await api.moveLine(lineId, mediaBoard.value.id, newLineIndex);
 		} catch (error) {
@@ -349,11 +350,9 @@ const useMediaBoardState = () => {
 
 			const lineIndex: number = getLineIndex(toLineId);
 
-			mediaBoard.value.lines[lineIndex].elements.splice(
-				newElementIndex,
-				0,
-				newElement
-			);
+			const temp = Array.from(mediaBoard.value.lines[lineIndex].elements);
+			temp.splice(newElementIndex, 0, newElement);
+			mediaBoard.value.lines[lineIndex].elements = temp;
 
 			return newElement;
 		} catch (error) {
@@ -381,7 +380,9 @@ const useMediaBoardState = () => {
 				lineIndex
 			].elements.findIndex((element) => element.id === elementId);
 
-			mediaBoard.value.lines[lineIndex].elements.splice(elementIndex, 1);
+			const temp = Array.from(mediaBoard.value.lines[lineIndex].elements);
+			temp.splice(elementIndex, 1);
+			mediaBoard.value.lines[lineIndex].elements = temp;
 
 			await api.deleteElement(elementId);
 
@@ -433,15 +434,20 @@ const useMediaBoardState = () => {
 
 			await api.moveElement(elementId, toLineId, newElementIndex);
 
-			const element: MediaExternalToolElementResponse = mediaBoard.value.lines[
-				fromLineIndex
-			].elements.splice(oldElementIndex, 1)[0];
-
-			mediaBoard.value.lines[toLineIndex].elements.splice(
-				newElementIndex,
-				0,
-				element
+			const tempFromLine = Array.from(
+				mediaBoard.value.lines[fromLineIndex].elements
 			);
+			const element: MediaExternalToolElementResponse = tempFromLine.splice(
+				oldElementIndex,
+				1
+			)[0];
+			mediaBoard.value.lines[fromLineIndex].elements = tempFromLine;
+
+			const tempToLine = Array.from(
+				mediaBoard.value.lines[toLineIndex].elements
+			);
+			tempToLine.splice(newElementIndex, 0, element);
+			mediaBoard.value.lines[toLineIndex].elements = tempToLine;
 		} catch (error) {
 			handleAnyError(
 				error,
