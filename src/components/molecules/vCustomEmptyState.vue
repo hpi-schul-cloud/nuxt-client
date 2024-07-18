@@ -1245,7 +1245,7 @@
 			<template v-else-if="image === 'media-shelf-empty-state'">
 				<svg
 					width="200"
-					height="273"
+					:height="imgHeight"
 					viewBox="0 0 200 273"
 					fill="none"
 					xmlns="http://www.w3.org/2000/svg"
