@@ -32,7 +32,7 @@
 				/>
 			</VBtnToggle>
 		</div>
-		<template v-if="isLoading">
+		<template v-if="isLoading && !mediaBoard">
 			<VContainer class="loader" data-testid="skeleton-loader">
 				<v-skeleton-loader type="list-item" width="100%" height="50px" />
 				<div class="d-flex py-4 ga-6">
@@ -86,7 +86,6 @@ const {
 	fetchAvailableMedia,
 	updateMediaBoardLayout,
 	isLoading,
-	isBoardOperationLoading,
 } = useSharedMediaBoardState();
 
 const isEmptyState: ComputedRef<boolean> = computed(() => {
@@ -96,10 +95,7 @@ const isEmptyState: ComputedRef<boolean> = computed(() => {
 
 	const isAvailableMediaLineEmpty = !availableMediaLine.value?.elements.length;
 
-	return (
-		!!(isMediaBoardEmpty && isAvailableMediaLineEmpty) &&
-		!isBoardOperationLoading.value
-	);
+	return !!(isMediaBoardEmpty && isAvailableMediaLineEmpty);
 });
 
 onMounted(async () => {
