@@ -1,5 +1,37 @@
 <template>
 	<DefaultWireframe ref="main" max-width="full">
+		<div class="ml-1 d-flex">
+			<h3 aria-level="1" class="mt-0 me-auto" data-testid="page-title">
+				{{ $t("feature.media-shelf.title") }}
+			</h3>
+			<VBtnToggle
+				v-if="mediaBoard && !isLoading && !isEmptyState"
+				variant="outlined"
+				divided
+				rounded="xl"
+				density="compact"
+				mandatory
+				:model-value="mediaBoard.layout"
+				@update:model-value="updateMediaBoardLayout"
+			>
+				<VBtn
+					:icon="mdiCustomGridOutline"
+					size="x-small"
+					width="48px"
+					:value="MediaBoardLayoutType.List"
+					:aria-label="$t('feature.media-shelf.layout.list')"
+					data-testid="media-board-layout-list"
+				/>
+				<VBtn
+					:icon="mdiViewGridOutline"
+					size="x-small"
+					width="48px"
+					:value="MediaBoardLayoutType.Grid"
+					:aria-label="$t('feature.media-shelf.layout.grid')"
+					data-testid="media-board-layout-grid"
+				/>
+			</VBtnToggle>
+		</div>
 		<template v-if="isLoading">
 			<VContainer class="loader" data-testid="skeleton-loader">
 				<v-skeleton-loader type="list-item" width="100%" height="50px" />
@@ -21,38 +53,6 @@
 			/>
 		</template>
 		<template v-else>
-			<div class="ml-1 d-flex">
-				<h3 aria-level="1" class="mt-0 me-auto" data-testid="page-title">
-					{{ $t("feature.media-shelf.title") }}
-				</h3>
-				<VBtnToggle
-					v-if="mediaBoard"
-					variant="outlined"
-					divided
-					rounded="xl"
-					density="compact"
-					mandatory
-					:model-value="mediaBoard.layout"
-					@update:model-value="updateMediaBoardLayout"
-				>
-					<VBtn
-						:icon="mdiCustomGridOutline"
-						size="x-small"
-						width="48px"
-						:value="MediaBoardLayoutType.List"
-						:aria-label="$t('feature.media-shelf.layout.list')"
-						data-testid="media-board-layout-list"
-					/>
-					<VBtn
-						:icon="mdiViewGridOutline"
-						size="x-small"
-						width="48px"
-						:value="MediaBoardLayoutType.Grid"
-						:aria-label="$t('feature.media-shelf.layout.grid')"
-						data-testid="media-board-layout-grid"
-					/>
-				</VBtnToggle>
-			</div>
 			<MediaBoard
 				v-if="mediaBoard && availableMediaLine"
 				:board="mediaBoard"
