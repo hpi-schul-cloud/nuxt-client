@@ -24,6 +24,9 @@ const useMediaBoardState = () => {
 	const availableMediaLine: Ref<MediaAvailableLineResponse | undefined> = ref();
 	const isLoading: Ref<boolean> = ref<boolean>(false);
 
+	// TODO: add or adjust tests
+	const isBoardOperationLoading: Ref<boolean> = ref<boolean>(false);
+
 	// Utils
 	const getLineIndex = (lineId: string): number => {
 		if (mediaBoard.value === undefined) {
@@ -110,9 +113,11 @@ const useMediaBoardState = () => {
 		}
 
 		try {
+			isBoardOperationLoading.value = true;
 			const newLine: MediaLineResponse = await api.createLine(
 				mediaBoard.value.id
 			);
+			isBoardOperationLoading.value = false;
 
 			mediaBoard.value.lines.push(newLine);
 
@@ -123,6 +128,7 @@ const useMediaBoardState = () => {
 				notifyWithTemplateAndReload("notCreated", "boardRow")
 			);
 		}
+		isBoardOperationLoading.value = false;
 	};
 
 	const deleteLine = async (lineId: string): Promise<void> => {
@@ -336,12 +342,14 @@ const useMediaBoardState = () => {
 
 			availableMediaLine.value?.elements.splice(oldElementIndex, 1);
 
+			isBoardOperationLoading.value = true;
 			const newElement: MediaExternalToolElementResponse =
 				await api.createElement(
 					toLineId,
 					newElementIndex,
 					schoolExternalToolId
 				);
+			isBoardOperationLoading.value = false;
 
 			const lineIndex: number = getLineIndex(toLineId);
 
@@ -378,8 +386,9 @@ const useMediaBoardState = () => {
 			].elements.findIndex((element) => element.id === elementId);
 
 			mediaBoard.value.lines[lineIndex].elements.splice(elementIndex, 1);
-
+			isBoardOperationLoading.value = true;
 			await api.deleteElement(elementId);
+			isBoardOperationLoading.value = false;
 
 			await fetchAvailableMedia();
 		} catch (error) {
@@ -476,6 +485,7 @@ const useMediaBoardState = () => {
 		deleteElement,
 		moveElement,
 		isLoading,
+		isBoardOperationLoading,
 	};
 };
 

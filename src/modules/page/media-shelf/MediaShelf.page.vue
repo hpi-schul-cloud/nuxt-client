@@ -85,20 +85,21 @@ const {
 	fetchMediaBoardForUser,
 	fetchAvailableMedia,
 	updateMediaBoardLayout,
+	isLoading,
+	isBoardOperationLoading,
 } = useSharedMediaBoardState();
 
-const isLoading: ComputedRef<boolean> = computed(
-	() => !mediaBoard.value || !availableMediaLine.value
-);
-
 const isEmptyState: ComputedRef<boolean> = computed(() => {
-	const isMediaBoardEmpty =
-		mediaBoard.value?.lines.length === 0 ||
-		mediaBoard.value?.lines.every((line) => line.elements.length === 0);
+	const isMediaBoardEmpty = mediaBoard.value?.lines.every(
+		(line) => line.elements.length === 0
+	);
 
 	const isAvailableMediaLineEmpty = !availableMediaLine.value?.elements.length;
 
-	return !!(isMediaBoardEmpty && isAvailableMediaLineEmpty);
+	return (
+		!!(isMediaBoardEmpty && isAvailableMediaLineEmpty) &&
+		!isBoardOperationLoading.value
+	);
 });
 
 onMounted(async () => {
