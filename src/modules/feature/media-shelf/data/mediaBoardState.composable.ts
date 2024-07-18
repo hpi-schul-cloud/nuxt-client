@@ -338,8 +338,6 @@ const useMediaBoardState = () => {
 				const temp = Array.from(availableMediaLine.value.elements);
 				temp.splice(oldElementIndex, 1);
 				availableMediaLine.value.elements = temp;
-
-				// availableMediaLine.value.elements.splice(oldElementIndex, 1);
 			}
 
 			const newElement: MediaExternalToolElementResponse =
