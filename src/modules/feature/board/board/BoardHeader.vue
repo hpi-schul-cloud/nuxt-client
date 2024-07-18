@@ -4,8 +4,10 @@
 			:isEditMode="isEditMode"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
+			@keydown.enter="onStartEditMode"
+			tabindex="0"
 		>
-			<div class="board-header" tabindex="0" ref="boardHeader">
+			<div class="board-header" ref="boardHeader">
 				<BoardAnyTitleInput
 					class="ml-n2"
 					ref="boardHeader"
@@ -139,6 +141,7 @@ const onUnpublishBoard = () => {
 };
 
 const onBoardTitleBlur = () => {
+	stopEditMode();
 	if (boardTitle.value.length < 1) {
 		updateBoardTitle(t("pages.room.boardCard.label.courseBoard"));
 	}
@@ -189,7 +192,7 @@ watchEffect(() => {
 @import "~vuetify/settings";
 
 .board-header:focus {
-	outline: none;
+	// outline: none;
 }
 
 .v-chip {

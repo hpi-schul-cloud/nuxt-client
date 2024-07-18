@@ -81,7 +81,7 @@ import {
 } from "@/types/board/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
-import { useI18n } from "vue-i18n";
+// import { useI18n } from "vue-i18n";
 import {
 	BOARD_HAS_MULTIPLE_COLUMNS,
 	BOARD_IS_FIRST_COLUMN,
@@ -124,7 +124,7 @@ export default defineComponent({
 		"update:column-title",
 	],
 	setup(props, { emit }) {
-		const { t } = useI18n();
+		// const { t } = useI18n();
 		const boardStore = useBoardStore();
 		const reactiveIndex = toRef(props, "index");
 		const colWidth = ref<number>(400);

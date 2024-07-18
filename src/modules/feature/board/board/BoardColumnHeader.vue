@@ -85,7 +85,7 @@ const props = defineProps({
 	},
 	titlePlaceholder: {
 		type: String,
-		required: true,
+		default: "",
 	},
 });
 const emit = defineEmits([
