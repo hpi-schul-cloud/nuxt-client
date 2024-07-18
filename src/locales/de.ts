@@ -250,7 +250,7 @@ export default {
 	"components.administration.externalToolsSection.dialog.content.courses":
 		"<b>{courseCount}</b> Kurs(e)",
 	"components.administration.externalToolsSection.dialog.content.boardElements":
-		"<b>{boardElementCount}</b> Spalten-Board(s)",
+		"<b>{boardElementCount}</b> Bereich(e)",
 	"components.administration.externalToolsSection.dialog.content.mediaShelves":
 		"<b>{mediaBoardCount}</b> Medienregal(e)",
 	"components.administration.externalToolsSection.dialog.content.warning":
@@ -317,7 +317,7 @@ export default {
 	"components.board.column.defaultTitle": "Neue Spalte",
 	"components.board.column.ghost.column.placeholder": "Spalte hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
-	"components.board.menu.board": "Board-Einstellungen",
+	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Spalten-Einstellungen",
 	"components.board.menu.element": "Element-Einstellungen",
@@ -350,18 +350,18 @@ export default {
 	"components.board.screenReader.notification.columnMoved.success":
 		"Eine Spalte wurde von Position {oldPosition} an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
-		"Der Boardtitel wurde von einem anderen Benutzer in {newTitle} geändert",
+		"Der Bereich-Titel wurde von einem anderen Benutzer in {newTitle} geändert",
 	"components.board.screenReader.notification.boardVisibilityUpdated.published":
-		"Das Board wurde von einem anderen Benutzer veröffentlicht",
+		"Der Bereich wurde von einem anderen Benutzer veröffentlicht",
 	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
-		"Das Board wurde von einem anderen Benutzer auf den Entwurfsstatus zurückgesetzt.",
+		"Der Bereich wurde von einem anderen Benutzer auf den Entwurfsstatus zurückgesetzt.",
 	"components.board.screenReader.notification.columnTitleUpdated.success":
 		"Titel von Spalte {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardTitleUpdated.success":
 		"Titel von Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
-	"components.board": "Board",
+	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Spalte",
 	"components.boardElement": "Element",
@@ -493,7 +493,7 @@ export default {
 		"Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.information":
 		"Nachfolgend können die fehlenden Inhalte mit Hilfe der Quick-Links ergänzt werden. Die Links öffnen sich in einem separatem Tab.",
-	"components.molecules.copyResult.label.columnBoard": "Spalten-Board",
+	"components.molecules.copyResult.label.columnBoard": "Bereich",
 	"components.molecules.copyResult.label.content": "Inhalt",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "Externe Tools",
@@ -525,7 +525,7 @@ export default {
 	"components.molecules.copyResult.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.board.successfullyCopied":
-		"Board erfolgreich kopiert.",
+		"Bereich erfolgreich kopiert.",
 	"components.molecules.copyResult.task.successfullyCopied":
 		"Aufgabe erfolgreich kopiert.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
@@ -542,13 +542,14 @@ export default {
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
-	"components.molecules.import.columnBoard.label": "Board-Titel",
+	"components.molecules.import.columnBoard.label": "Bereich-Titel",
 	"components.molecules.import.columnBoard.options.infoText":
-		"Das Board kann im Folgenden umbenannt werden. ",
-	"components.molecules.import.columnBoard.options.title": "Board importieren",
+		"Der Bereich kann im Folgenden umbenannt werden. ",
+	"components.molecules.import.columnBoard.options.title":
+		"Bereich importieren",
 	"components.molecules.import.columnBoard.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
-		"Der Kurs, in den das Board importiert werden soll, muss im Folgenden ausgewählt werden.",
+		"Der Kurs, in den der Bereich importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.courses.label": "Kurs",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Es wird eine Kopie erstellt.<br>Personenbezogene Daten werden nicht importiert.<br>Externe Tools werden nicht kopiert. <br>Der Kurs kann im Folgenden umbenannt werden.",
@@ -602,8 +603,9 @@ export default {
 		"Vornamen oder Nachnamen eingeben",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.share.columnBoard.options.infoText":
-		"Mit dem folgenden Link kann das Board als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
-	"components.molecules.share.columnBoard.result.linkLabel": "Link Board-Kopie",
+		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+	"components.molecules.share.columnBoard.result.linkLabel":
+		"Link Bereich-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
 	"components.molecules.share.courses.options.ctlTools.infotext":
@@ -760,9 +762,9 @@ export default {
 	"error.proxy.description":
 		"Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
 	"feature-board-external-tool-element.alert.error.student":
-		"Das Tool kann aktuell nicht gestartet werden. Bitte Board aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
+		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
 	"feature-board-external-tool-element.alert.error.teacher":
-		"Das Tool kann aktuell nicht gestartet werden. Bitte Board aktualisieren oder an die Schuladministrator:in wenden.",
+		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Schuladministrator:in wenden.",
 	"feature-board-external-tool-element.dialog.title": "Auswahl & Einstellungen",
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Tool auswählen...",
@@ -1456,10 +1458,10 @@ export default {
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
-	"pages.room.boardCard.label.columnBoard": "Spalten-Board",
-	"pages.room.boardCard.label.courseBoard": "Kurs-Board",
-	"pages.room.boardCard.label.listBoard": "Listen-Board",
-	"pages.room.boardCard.menu.ariaLabel": "Board-Menü",
+	"pages.room.boardCard.label.columnBoard": "Bereich | mehrspaltig",
+	"pages.room.boardCard.label.courseBoard": "Kurs-Bereich",
+	"pages.room.boardCard.label.listBoard": "Bereich | einspaltig",
+	"pages.room.boardCard.menu.ariaLabel": "Bereich-Menü",
 	"pages.room.cards.aria":
 		"{itemType}, Link, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
@@ -1499,8 +1501,8 @@ export default {
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.add.lesson": "Neues Thema",
-	"pages.rooms.fab.add.board": "Neues Spalten-Board",
-	"pages.rooms.fab.add.listBoard": "Neues Listen-Board",
+	"pages.rooms.fab.add.board": "Neuer Bereich | mehrspaltig",
+	"pages.rooms.fab.add.listBoard": "Neues Bereich | einspaltig",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.fab.import.course": "Kurs importieren",
@@ -1568,7 +1570,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
 	"pages.room.modal.course.export.options.topics": "Themen",
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
-	"pages.room.modal.course.export.options.columnBoards": "Boards",
+	"pages.room.modal.course.export.options.columnBoards": "Bereiche",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
