@@ -51,6 +51,7 @@
 			"@ui-date-time-picker": ["src/modules/ui/date-time-picker"],
 			"@ui-layout": ["src/modules/ui/layout"],
 			"@ui-light-box": ["src/modules/ui/light-box"],
+			"@ui-picker-dialog": ["src/modules/ui/picker-dialog"],
 			"@ui-preview-image": ["src/modules/ui/preview-image"],
 			"@ui-room-details": ["src/modules/ui/room-details"],
 			"@ui-skip-link": ["src/modules/ui/skip-link"],

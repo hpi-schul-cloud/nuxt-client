@@ -107,6 +107,7 @@ import {
 	mdiViewDashboard,
 	mdiViewDashboardOutline,
 	mdiViewGridOutline,
+	mdiViewGridPlusOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
 
@@ -219,5 +220,6 @@ export {
 	mdiViewDashboard,
 	mdiViewDashboardOutline,
 	mdiViewGridOutline,
+	mdiViewGridPlusOutline,
 	mdiViewListOutline,
 };

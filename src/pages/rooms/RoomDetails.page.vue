@@ -94,6 +94,11 @@
 			:course-id="roomData.roomId"
 			@success="refreshRoom"
 		/>
+		<PickerDialog
+			v-model="boardTypePickerDialogIsOpen"
+			:options="boardTypes"
+			@dialog-closed="boardTypePickerDialogIsOpen = false"
+		/>
 	</default-wireframe>
 </template>
 
@@ -142,6 +147,7 @@ import {
 	ROOM_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
+import { PickerDialog } from "@ui-picker-dialog";
 
 export default defineComponent({
 	setup() {
@@ -169,6 +175,7 @@ export default defineComponent({
 		CopyResultModal,
 		ShareModal,
 		commonCartridgeExportModal,
+		PickerDialog,
 	},
 	inject: {
 		copyModule: { from: COPY_MODULE_KEY },
@@ -198,6 +205,23 @@ export default defineComponent({
 			isShareModalOpen: false,
 			isEndSyncDialogOpen: false,
 			tabIndex: 0,
+			boardTypePickerDialogIsOpen: false,
+			boardTypes: [
+				{
+					label: this.$t("pages.rooms.fab.add.columnBoard"),
+					icon: "$mdiViewDashboardOutline",
+					action: () => this.$emit("board-create"),
+					dataTestId: "fab_button_add_board",
+					ariaLabel: this.$t("pages.rooms.fab.add.columnBoard"),
+				},
+				{
+					label: this.$t("pages.rooms.fab.add.listBoard"),
+					icon: "$mdiCustomGridOutline",
+					action: () => this.$emit("list-board-create"),
+					dataTestId: "fab_button_add_list_board",
+					ariaLabel: this.$t("pages.rooms.fab.add.listBoard"),
+				},
+			],
 		};
 	},
 	computed: {
@@ -273,6 +297,7 @@ export default defineComponent({
 		},
 		learnContentFabItems() {
 			const actions = [];
+
 			if (
 				this.authModule.getUserPermissions.includes(
 					"HOMEWORK_CREATE".toLowerCase()
@@ -286,6 +311,7 @@ export default defineComponent({
 					ariaLabel: this.$t("pages.rooms.fab.add.task"),
 				});
 			}
+
 			if (
 				this.authModule.getUserPermissions.includes(
 					"TOPIC_CREATE".toLowerCase()
@@ -299,39 +325,36 @@ export default defineComponent({
 					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
 				});
 			}
+
 			if (
 				this.authModule.getUserPermissions.includes(
 					"COURSE_EDIT".toLowerCase()
 				) &&
 				this.authModule.getUserRoles.includes(Roles.Teacher)
 			) {
-				actions.push({
-					label: this.$t("pages.rooms.fab.add.board"),
-					icon: mdiViewDashboardOutline,
-					customEvent: "board-create",
-					dataTestId: "fab_button_add_board",
-					ariaLabel: this.$t("pages.rooms.fab.add.board"),
-				});
-			}
-			if (
-				envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
-				this.authModule.getUserPermissions.includes(
-					"COURSE_EDIT".toLowerCase()
-				) &&
-				this.authModule.getUserRoles.includes(Roles.Teacher)
-			) {
-				actions.push({
-					label: this.$t("pages.rooms.fab.add.listBoard"),
-					icon: "$mdiCustomGridOutline",
-					customEvent: "list-board-create",
-					dataTestId: "fab_button_add_list_board",
-					ariaLabel: this.$t("pages.rooms.fab.add.listBoard"),
-				});
+				if (envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED) {
+					actions.push({
+						label: this.$t("pages.rooms.fab.add.board"),
+						icon: "$mdiViewGridPlusOutline",
+						customEvent: "board-type-dialog-open",
+						dataTestId: "fab_button_add_board",
+						ariaLabel: this.$t("pages.rooms.fab.add.board"),
+					});
+				} else {
+					actions.push({
+						label: this.$t("pages.rooms.fab.add.columnBoard"),
+						icon: mdiViewDashboardOutline,
+						customEvent: "board-create",
+						dataTestId: "fab_button_add_column_board",
+						ariaLabel: this.$t("pages.rooms.fab.add.columnBoard"),
+					});
+				}
 			}
 
 			if (actions.length === 0) {
 				return null;
 			}
+
 			const items = {
 				icon: mdiPlus,
 				title: this.$t("common.actions.create"),
@@ -339,6 +362,7 @@ export default defineComponent({
 				dataTestId: "add-content-button",
 				actions: actions,
 			};
+
 			return items;
 		},
 		roomData() {
@@ -460,6 +484,9 @@ export default defineComponent({
 			if (event === "list-board-create") {
 				this.onCreateBoard(this.roomData.roomId, BoardLayout.List);
 			}
+			if (event === "board-type-dialog-open") {
+				this.boardTypePickerDialogIsOpen = true;
+			}
 		},
 		setActiveTabIfPageCached(event) {
 			if (event.persisted) {
@@ -560,7 +587,7 @@ export default defineComponent({
 
 // even out border
 .v-tabs {
-	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
+	margin-bottom: -2px;
 }
 
 .v-tab {
