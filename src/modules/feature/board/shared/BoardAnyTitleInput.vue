@@ -217,6 +217,10 @@ export default defineComponent({
 	cursor: pointer;
 }
 
+:deep(textarea[readonly])::placeholder {
+	opacity: 1;
+}
+
 :deep(input) {
 	font-size: var(--heading-3);
 	background: transparent !important;
