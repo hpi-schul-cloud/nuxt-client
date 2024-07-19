@@ -115,7 +115,6 @@ const useMediaBoardState = () => {
 			const newLine: MediaLineResponse = await api.createLine(
 				mediaBoard.value.id
 			);
-			isBoardOperationLoading.value = false;
 
 			mediaBoard.value.lines.push(newLine);
 
@@ -125,8 +124,9 @@ const useMediaBoardState = () => {
 				error,
 				notifyWithTemplateAndReload("notCreated", "boardRow")
 			);
+		} finally {
+			isBoardOperationLoading.value = false;
 		}
-		isBoardOperationLoading.value = false;
 	};
 
 	const deleteLine = async (lineId: string): Promise<void> => {
