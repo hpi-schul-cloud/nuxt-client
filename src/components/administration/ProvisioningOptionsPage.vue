@@ -1,80 +1,101 @@
 <template>
-	<default-wireframe
-		:headline="t('components.administration.provisioningOptions.page.title')"
+	<DefaultWireframe
+		:headline="$t('components.administration.provisioningOptions.page.title')"
 		:breadcrumbs="breadcrumbs"
 		max-width="short"
 	>
-		<v-checkbox
-			:label="t('components.administration.provisioningOptions.class.label')"
-			:loading="isLoading"
-			v-model="provisioningOptions.class"
-			data-testid="checkbox-option-class"
-			class="ml-1"
-		/>
-		<p>
-			{{
-				t("components.administration.provisioningOptions.class.description", {
-					instance: theme.name,
-				})
-			}}
-		</p>
+		<div class="d-flex flex-column ga-9">
+			<div>
+				<VCheckboxBtn
+					color="primary"
+					:label="
+						$t('components.administration.provisioningOptions.class.label')
+					"
+					:loading="isLoading"
+					v-model="provisioningOptions.class"
+					data-testid="checkbox-option-class"
+				/>
+				<div class="ml-10 text-caption text-medium-emphasis">
+					{{
+						$t(
+							"components.administration.provisioningOptions.class.description",
+							{
+								instance: theme.name,
+							}
+						)
+					}}
+				</div>
+			</div>
 
-		<v-checkbox
-			:label="t('components.administration.provisioningOptions.course.label')"
-			:loading="isLoading"
-			v-model="provisioningOptions.course"
-			data-testid="checkbox-option-course"
-			class="ml-1"
-		/>
-		<p>
-			{{
-				t("components.administration.provisioningOptions.course.description", {
-					instance: theme.name,
-				})
-			}}
-		</p>
+			<div>
+				<VCheckboxBtn
+					color="primary"
+					:label="
+						$t('components.administration.provisioningOptions.course.label')
+					"
+					:loading="isLoading"
+					v-model="provisioningOptions.course"
+					data-testid="checkbox-option-course"
+				/>
+				<div class="ml-10 text-caption text-medium-emphasis">
+					{{
+						$t(
+							"components.administration.provisioningOptions.course.description",
+							{
+								instance: theme.name,
+							}
+						)
+					}}
+				</div>
+			</div>
 
-		<v-checkbox
-			:label="
-				t('components.administration.provisioningOptions.otherGroups.label')
-			"
-			:loading="isLoading"
-			v-model="provisioningOptions.others"
-			data-testid="checkbox-option-others"
-			class="ml-1"
-		/>
-		<p>
-			{{
-				t(
-					"components.administration.provisioningOptions.otherGroups.description",
-					{
-						instance: theme.name,
-					}
-				)
-			}}
-		</p>
-		<div v-if="isMediaLicensingEnabled">
-			<v-checkbox
-				:label="
-					t(
-						'components.administration.provisioningOptions.schoolExternalTools.label'
-					)
-				"
-				:loading="isLoading"
-				v-model="provisioningOptions.schoolExternalTools"
-				data-testid="checkbox-option-school-external-tools"
-				class="ml-1"
-			/>
-			<p>
-				{{
-					t(
-						"components.administration.provisioningOptions.schoolExternalTools.description",
-						{
-							instance: theme.name,
-						}
-					)
-				}}
-			</p>
+			<div>
+				<VCheckboxBtn
+					color="primary"
+					:label="
+						$t(
+							'components.administration.provisioningOptions.otherGroups.label'
+						)
+					"
+					:loading="isLoading"
+					v-model="provisioningOptions.others"
+					data-testid="checkbox-option-others"
+				/>
+				<div class="ml-10 text-caption text-medium-emphasis">
+					{{
+						$t(
+							"components.administration.provisioningOptions.otherGroups.description",
+							{
+								instance: theme.name,
+							}
+						)
+					}}
+				</div>
+			</div>
+
+			<div v-if="isMediaLicensingEnabled">
+				<VCheckboxBtn
+					color="primary"
+					:label="
+						$t(
+							'components.administration.provisioningOptions.schoolExternalTools.label'
+						)
+					"
+					:loading="isLoading"
+					v-model="provisioningOptions.schoolExternalTools"
+					data-testid="checkbox-option-school-external-tools"
+				/>
+				<div class="ml-10 text-caption text-medium-emphasis">
+					{{
+						$t(
+							"components.administration.provisioningOptions.schoolExternalTools.description",
+							{
+								instance: theme.name,
+							}
+						)
+					}}
+				</div>
+			</div>
 		</div>
 
 		<v-row class="justify-end mt-10">
@@ -139,7 +160,7 @@
 				</v-alert>
 			</template>
 		</v-custom-dialog>
-	</default-wireframe>
+	</DefaultWireframe>
 </template>
 
 <script lang="ts">
