@@ -350,7 +350,7 @@ export default {
 	"components.board.screenReader.notification.columnMoved.success":
 		"Ein Abschnitt wurde von Position {oldPosition} an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
-		"Der Bereich-Titel wurde von einem anderen Benutzer in {newTitle} geändert",
+		"Der Titel des Bereichs wurde von einem anderen Benutzer in {newTitle} geändert",
 	"components.board.screenReader.notification.boardVisibilityUpdated.published":
 		"Der Bereich wurde von einem anderen Benutzer veröffentlicht",
 	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
@@ -519,7 +519,7 @@ export default {
 	"components.molecules.copyResult.nexboardCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Alte neXboard-Abschnitte wurden nicht kopiert, da das Tool von unserer Plattform entfernt wird. Als Ersatz steht nun das innovative Whiteboard-Tool tldraw im Spaltenboard zur Verfügung.",
+		"Alte neXboard-Abschnitte wurden nicht kopiert, da das Tool von unserer Plattform entfernt wird. Als Ersatz steht nun das innovative Whiteboard-Tool zur Verfügung.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -542,7 +542,7 @@ export default {
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
-	"components.molecules.import.columnBoard.label": "Bereich-Titel",
+	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
 	"components.molecules.import.columnBoard.options.infoText":
 		"Der Bereich kann im Folgenden umbenannt werden. ",
 	"components.molecules.import.columnBoard.options.title":
