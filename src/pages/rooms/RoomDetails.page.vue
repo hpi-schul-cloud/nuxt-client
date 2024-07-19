@@ -94,12 +94,15 @@
 			:course-id="roomData.roomId"
 			@success="refreshRoom"
 		/>
-		<PickerDialog
+		<!-- <PickerDialog
 			v-model="boardTypePickerDialogIsOpen"
 			:title="$t('pages.room.dialog.boardType.title')"
 			:options="boardTypes"
+			@selected=""
 			@dialog-closed="boardTypePickerDialogIsOpen = false"
-		/>
+		>
+		<PickerAction></PickerAction>
+	</PickerDialog> -->
 	</default-wireframe>
 </template>
 

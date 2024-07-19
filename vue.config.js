@@ -68,7 +68,6 @@ module.exports = defineConfig({
 				"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
 				"@ui-layout": getDir("src/modules/ui/layout"),
 				"@ui-light-box": getDir("src/modules/ui/light-box"),
-				"@ui-picker-dialog": getDir("src/modules/ui/picker-dialog"),
 				"@ui-preview-image": getDir("src/modules/ui/preview-image"),
 				"@ui-room-details": getDir("src/modules/ui/room-details"),
 				"@ui-skip-link": getDir("src/modules/ui/skip-link"),
