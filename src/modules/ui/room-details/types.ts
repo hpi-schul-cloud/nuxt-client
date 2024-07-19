@@ -16,7 +16,7 @@ export type LessonData = Lesson & {
 export type PickerOption = {
 	icon: string;
 	label: string;
-	action: () => void;
+	eventName: string;
 	dataTestId: string;
 	ariaLabel: string;
 };

@@ -94,21 +94,21 @@
 			:course-id="roomData.roomId"
 			@success="refreshRoom"
 		/>
-		<!-- <PickerDialog
+		<SelectBoardLayoutDialog
+			v-if="boardLayoutsEnabled"
 			v-model="boardTypePickerDialogIsOpen"
 			:title="$t('pages.room.dialog.boardType.title')"
 			:options="boardTypes"
-			@selected=""
+			@select:multi-column="onMultiColumnLayoutSelected"
+			@select:single-column="onSingleColumnLayoutSelected"
 			@dialog-closed="boardTypePickerDialogIsOpen = false"
-		>
-		<PickerAction></PickerAction>
-	</PickerDialog> -->
+		/>
 	</default-wireframe>
 </template>
 
 <script>
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import { RoomDotMenu } from "@ui-room-details";
+import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
@@ -151,7 +151,6 @@ import {
 	ROOM_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { PickerDialog } from "@ui-picker-dialog";
 
 export default defineComponent({
 	setup() {
@@ -179,7 +178,7 @@ export default defineComponent({
 		CopyResultModal,
 		ShareModal,
 		commonCartridgeExportModal,
-		PickerDialog,
+		SelectBoardLayoutDialog,
 	},
 	inject: {
 		copyModule: { from: COPY_MODULE_KEY },
@@ -214,14 +213,14 @@ export default defineComponent({
 				{
 					label: this.$t("pages.room.dialog.boardType.multiColumn"),
 					icon: "$mdiViewDashboardOutline",
-					action: () => this.$emit("board-create"),
+					eventName: "select:multi-column",
 					dataTestId: "dialog-add-multi-column-board",
 					ariaLabel: this.$t("pages.room.dialog.boardType.multiColumn"),
 				},
 				{
 					label: this.$t("pages.room.dialog.boardType.singleColumn"),
 					icon: "$mdiCustomGridOutline",
-					action: () => this.$emit("list-board-create"),
+					eventName: "select:single-column",
 					dataTestId: "dialog-add-single-column-board",
 					ariaLabel: this.$t("pages.room.dialog.boardType.singleColumn"),
 				},
@@ -229,6 +228,9 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		boardLayoutsEnabled() {
+			return envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED;
+		},
 		getCurrentFabItems() {
 			return this.currentTab?.fabItems;
 		},
@@ -336,7 +338,7 @@ export default defineComponent({
 				) &&
 				this.authModule.getUserRoles.includes(Roles.Teacher)
 			) {
-				if (envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED) {
+				if (this.boardLayoutsEnabled) {
 					actions.push({
 						label: this.$t("pages.room.fab.add.board"),
 						icon: "$mdiViewGridPlusOutline",
@@ -481,13 +483,17 @@ export default defineComponent({
 		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
+		onSingleColumnLayoutSelected() {
+			this.onCreateBoard(this.roomData.roomId, BoardLayout.List);
+		},
+		onMultiColumnLayoutSelected() {
+			this.onCreateBoard(this.roomData.roomId, BoardLayout.Columns);
+		},
 		fabItemClickHandler(event) {
 			if (event === "board-create") {
 				this.onCreateBoard(this.roomData.roomId, BoardLayout.Columns);
 			}
-			if (event === "list-board-create") {
-				this.onCreateBoard(this.roomData.roomId, BoardLayout.List);
-			}
+
 			if (event === "board-type-dialog-open") {
 				this.boardTypePickerDialogIsOpen = true;
 			}

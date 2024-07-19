@@ -13,7 +13,7 @@
 					:height="85"
 					:width="125"
 					:data-testid="item.dataTestId"
-					@click.stop="item.action"
+					@click.stop="$emit(item.eventName)"
 				>
 					<span class="d-flex flex-column justify-center button-max-width">
 						<span>
