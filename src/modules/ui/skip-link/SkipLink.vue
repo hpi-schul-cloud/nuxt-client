@@ -1,7 +1,6 @@
 <template>
 	<a
 		id="skip-link"
-		tabindex="0"
 		class="skip-link d-sr-only-focusable"
 		href="#main-content"
 		data-testid="skip-link"
