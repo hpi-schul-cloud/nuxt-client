@@ -7,7 +7,7 @@
 			@keydown.enter="onStartEditMode"
 			tabindex="0"
 		>
-			<div class="board-header" ref="boardHeader">
+			<div ref="boardHeader">
 				<BoardAnyTitleInput
 					class="ml-n2"
 					ref="boardHeader"
@@ -190,10 +190,6 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 @import "~vuetify/settings";
-
-.board-header:focus {
-	// outline: none;
-}
 
 .v-chip {
 	cursor: pointer;
