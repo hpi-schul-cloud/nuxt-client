@@ -141,11 +141,13 @@ const useMediaBoardState = () => {
 				return;
 			}
 
-			mediaBoard.value.lines.splice(lineIndex, 1);
-
 			isBoardOperationLoading.value = true;
+
+			const temp = Array.from(mediaBoard.value.lines);
+			temp.splice(lineIndex, 1);
+			mediaBoard.value.lines = temp;
+
 			await api.deleteLine(lineId);
-			isBoardOperationLoading.value = false;
 
 			await fetchAvailableMedia();
 		} catch (error) {
@@ -153,8 +155,9 @@ const useMediaBoardState = () => {
 				error,
 				notifyWithTemplateAndReload("notDeleted", "boardRow")
 			);
+		} finally {
+			isBoardOperationLoading.value = true;
 		}
-		isBoardOperationLoading.value = false;
 	};
 
 	const moveLine = async (lineMove: LineMove): Promise<void> => {
@@ -178,12 +181,11 @@ const useMediaBoardState = () => {
 				return;
 			}
 
-			const line: MediaLineResponse = mediaBoard.value.lines.splice(
-				oldLineIndex,
-				1
-			)[0];
+			const temp = Array.from(mediaBoard.value.lines);
+			const line: MediaLineResponse = temp.splice(oldLineIndex, 1)[0];
 
-			mediaBoard.value.lines.splice(newLineIndex, 0, line);
+			temp.splice(newLineIndex, 0, line);
+			mediaBoard.value.lines = temp;
 
 			await api.moveLine(lineId, mediaBoard.value.id, newLineIndex);
 		} catch (error) {
@@ -341,24 +343,25 @@ const useMediaBoardState = () => {
 				toLineId = newLine.id;
 			}
 
-			availableMediaLine.value?.elements.splice(oldElementIndex, 1);
-
 			isBoardOperationLoading.value = true;
+
+			if (availableMediaLine.value) {
+				const temp = Array.from(availableMediaLine.value.elements);
+				temp.splice(oldElementIndex, 1);
+				availableMediaLine.value.elements = temp;
+			}
 			const newElement: MediaExternalToolElementResponse =
 				await api.createElement(
 					toLineId,
 					newElementIndex,
 					schoolExternalToolId
 				);
-			isBoardOperationLoading.value = false;
 
 			const lineIndex: number = getLineIndex(toLineId);
 
-			mediaBoard.value.lines[lineIndex].elements.splice(
-				newElementIndex,
-				0,
-				newElement
-			);
+			const temp = Array.from(mediaBoard.value.lines[lineIndex].elements);
+			temp.splice(newElementIndex, 0, newElement);
+			mediaBoard.value.lines[lineIndex].elements = temp;
 
 			return newElement;
 		} catch (error) {
@@ -366,8 +369,9 @@ const useMediaBoardState = () => {
 				error,
 				notifyWithTemplateAndReload("notCreated", "boardElement")
 			);
+		} finally {
+			isBoardOperationLoading.value = false;
 		}
-		isBoardOperationLoading.value = false;
 	};
 
 	const deleteElement = async (elementId: string): Promise<void> => {
@@ -383,14 +387,17 @@ const useMediaBoardState = () => {
 				return;
 			}
 
+			isBoardOperationLoading.value = true;
+
 			const elementIndex: number = mediaBoard.value.lines[
 				lineIndex
 			].elements.findIndex((element) => element.id === elementId);
 
-			mediaBoard.value.lines[lineIndex].elements.splice(elementIndex, 1);
-			isBoardOperationLoading.value = true;
+			const temp = Array.from(mediaBoard.value.lines[lineIndex].elements);
+			temp.splice(elementIndex, 1);
+			mediaBoard.value.lines[lineIndex].elements = temp;
+
 			await api.deleteElement(elementId);
-			isBoardOperationLoading.value = false;
 
 			await fetchAvailableMedia();
 		} catch (error) {
@@ -398,8 +405,9 @@ const useMediaBoardState = () => {
 				error,
 				notifyWithTemplateAndReload("notCreated", "boardElement")
 			);
+		} finally {
+			isBoardOperationLoading.value = false;
 		}
-		isBoardOperationLoading.value = false;
 	};
 
 	const moveElement = async (elementMove: ElementMove): Promise<void> => {
@@ -426,6 +434,7 @@ const useMediaBoardState = () => {
 				toLineId = newLine.id;
 			}
 
+            isBoardOperationLoading.value = true;
 			const fromLineIndex: number = getLineIndex(fromLineId);
 			const toLineIndex: number = getLineIndex(toLineId);
 
@@ -441,21 +450,28 @@ const useMediaBoardState = () => {
 
 			await api.moveElement(elementId, toLineId, newElementIndex);
 
-			const element: MediaExternalToolElementResponse = mediaBoard.value.lines[
-				fromLineIndex
-			].elements.splice(oldElementIndex, 1)[0];
-
-			mediaBoard.value.lines[toLineIndex].elements.splice(
-				newElementIndex,
-				0,
-				element
+			const tempFromLine = Array.from(
+				mediaBoard.value.lines[fromLineIndex].elements
 			);
+			const element: MediaExternalToolElementResponse = tempFromLine.splice(
+				oldElementIndex,
+				1
+			)[0];
+			mediaBoard.value.lines[fromLineIndex].elements = tempFromLine;
+
+			const tempToLine = Array.from(
+				mediaBoard.value.lines[toLineIndex].elements
+			);
+			tempToLine.splice(newElementIndex, 0, element);
+			mediaBoard.value.lines[toLineIndex].elements = tempToLine;
 		} catch (error) {
 			handleAnyError(
 				error,
 				notifyWithTemplateAndReload("notUpdated", "boardElement")
 			);
-		}
+		} finally {
+            isBoardOperationLoading.value = false;
+        }
 	};
 
 	const notifyWithTemplateAndReload = (
@@ -488,7 +504,7 @@ const useMediaBoardState = () => {
 		deleteElement,
 		moveElement,
 		isLoading,
-		isBoardOperationLoading,
+        isBoardOperationLoading,
 	};
 };
 
