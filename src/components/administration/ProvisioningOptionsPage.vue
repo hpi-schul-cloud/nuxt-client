@@ -15,7 +15,7 @@
 						v-model="provisioningOptions.class"
 						data-testid="checkbox-option-class"
 					/>
-					<div class="ml-10 text-caption text-medium-emphasis">
+					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t(
 								"components.administration.provisioningOptions.class.description",
@@ -36,7 +36,7 @@
 						v-model="provisioningOptions.course"
 						data-testid="checkbox-option-course"
 					/>
-					<div class="ml-10 text-caption text-medium-emphasis">
+					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t(
 								"components.administration.provisioningOptions.course.description",
@@ -59,7 +59,7 @@
 						v-model="provisioningOptions.others"
 						data-testid="checkbox-option-others"
 					/>
-					<div class="ml-10 text-caption text-medium-emphasis">
+					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t(
 								"components.administration.provisioningOptions.otherGroups.description",
@@ -82,7 +82,7 @@
 						v-model="provisioningOptions.schoolExternalTools"
 						data-testid="checkbox-option-school-external-tools"
 					/>
-					<div class="ml-10 text-caption text-medium-emphasis">
+					<div class="ml-10 text-body-2 text-medium-emphasis">
 						{{
 							$t(
 								"components.administration.provisioningOptions.schoolExternalTools.description",
