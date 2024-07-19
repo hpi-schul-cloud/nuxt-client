@@ -1,7 +1,6 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
-import { ComponentProps } from "@/types/vue";
 import { ENV_CONFIG_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -19,6 +18,7 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import { Router, useRouter } from "vue-router";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 
@@ -65,9 +65,7 @@ describe("ProvisioningOptionsPage", () => {
 					},
 				},
 			},
-			props: {
-				...props,
-			},
+			props,
 		});
 
 		return {

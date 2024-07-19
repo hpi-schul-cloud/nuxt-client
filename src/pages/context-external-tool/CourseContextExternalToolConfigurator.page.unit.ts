@@ -2,7 +2,6 @@ import ContextExternalToolConfigurator from "@/components/external-tools/configu
 import { ToolContextType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import RoomModule from "@/store/room";
-import { ComponentProps } from "@/types/vue";
 import { NOTIFIER_MODULE_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { contextExternalToolFactory } from "@@/tests/test-utils/factory";
@@ -13,6 +12,7 @@ import {
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";

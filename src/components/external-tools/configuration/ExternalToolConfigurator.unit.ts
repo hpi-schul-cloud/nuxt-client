@@ -1,7 +1,6 @@
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
 import { ToolParameterLocation } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
-import { ComponentProps } from "@/types/vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -15,6 +14,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
 import { flushPromises, mount } from "@vue/test-utils";
+import { ComponentProps } from "vue-component-type-helpers";
 import { VAutocomplete, VBtn } from "vuetify/lib/components/index.mjs";
 import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
