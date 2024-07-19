@@ -23,8 +23,6 @@ const useMediaBoardState = () => {
 	const mediaBoard: Ref<MediaBoardResponse | undefined> = ref();
 	const availableMediaLine: Ref<MediaAvailableLineResponse | undefined> = ref();
 	const isLoading: Ref<boolean> = ref<boolean>(false);
-
-	// TODO: add or adjust tests
 	const isBoardOperationLoading: Ref<boolean> = ref<boolean>(false);
 
 	// Utils
@@ -145,7 +143,9 @@ const useMediaBoardState = () => {
 
 			mediaBoard.value.lines.splice(lineIndex, 1);
 
+			isBoardOperationLoading.value = true;
 			await api.deleteLine(lineId);
+			isBoardOperationLoading.value = false;
 
 			await fetchAvailableMedia();
 		} catch (error) {
@@ -154,6 +154,7 @@ const useMediaBoardState = () => {
 				notifyWithTemplateAndReload("notDeleted", "boardRow")
 			);
 		}
+		isBoardOperationLoading.value = false;
 	};
 
 	const moveLine = async (lineMove: LineMove): Promise<void> => {
@@ -366,6 +367,7 @@ const useMediaBoardState = () => {
 				notifyWithTemplateAndReload("notCreated", "boardElement")
 			);
 		}
+		isBoardOperationLoading.value = false;
 	};
 
 	const deleteElement = async (elementId: string): Promise<void> => {
@@ -397,6 +399,7 @@ const useMediaBoardState = () => {
 				notifyWithTemplateAndReload("notCreated", "boardElement")
 			);
 		}
+		isBoardOperationLoading.value = false;
 	};
 
 	const moveElement = async (elementMove: ElementMove): Promise<void> => {
