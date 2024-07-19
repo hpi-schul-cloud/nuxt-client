@@ -181,6 +181,8 @@ const useMediaBoardState = () => {
 				return;
 			}
 
+			isBoardOperationLoading.value = true;
+
 			const temp = Array.from(mediaBoard.value.lines);
 			const line: MediaLineResponse = temp.splice(oldLineIndex, 1)[0];
 
@@ -193,6 +195,8 @@ const useMediaBoardState = () => {
 				error,
 				notifyWithTemplateAndReload("notUpdated", "boardRow")
 			);
+		} finally {
+			isBoardOperationLoading.value = false;
 		}
 	};
 
