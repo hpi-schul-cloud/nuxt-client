@@ -12,6 +12,7 @@
 						:boardId="board.id"
 						:title="board.title"
 						:isDraft="!board.isVisible"
+						class="mb-1"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"

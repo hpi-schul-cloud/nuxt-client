@@ -6,7 +6,7 @@
 		@move:column-keyboard="onMoveColumnKeyboard"
 	>
 		<div class="column-header mb-4 rounded" ref="columnHeader">
-			<div class="d-flex align-center py-2 px-2">
+			<div class="d-flex align-center py-2 pr-4 pl-2">
 				<BoardAnyTitleInput
 					:value="title.trim()"
 					:data-testid="`column-title-${index}`"
@@ -16,6 +16,7 @@
 					class="w-100"
 					:isFocused="isFocusedById"
 					@update:value="onUpdateTitle"
+					@blur="onEndEditMode"
 				>
 					<BoardMenu
 						v-if="hasDeletePermission"
