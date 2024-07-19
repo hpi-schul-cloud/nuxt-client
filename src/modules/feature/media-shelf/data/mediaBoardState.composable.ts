@@ -135,13 +135,13 @@ const useMediaBoardState = () => {
 		}
 
 		try {
+			isBoardOperationLoading.value = true;
+
 			const lineIndex: number = getLineIndex(lineId);
 
 			if (lineIndex < 0) {
 				return;
 			}
-
-			isBoardOperationLoading.value = true;
 
 			const temp = Array.from(mediaBoard.value.lines);
 			temp.splice(lineIndex, 1);
@@ -156,7 +156,7 @@ const useMediaBoardState = () => {
 				notifyWithTemplateAndReload("notDeleted", "boardRow")
 			);
 		} finally {
-			isBoardOperationLoading.value = true;
+			isBoardOperationLoading.value = false;
 		}
 	};
 
@@ -380,14 +380,13 @@ const useMediaBoardState = () => {
 		}
 
 		try {
+			isBoardOperationLoading.value = true;
 			const lineIndex: number = getLineIndexOfElement(elementId);
 
 			// Element or line not found
 			if (lineIndex < 0) {
 				return;
 			}
-
-			isBoardOperationLoading.value = true;
 
 			const elementIndex: number = mediaBoard.value.lines[
 				lineIndex
@@ -434,7 +433,7 @@ const useMediaBoardState = () => {
 				toLineId = newLine.id;
 			}
 
-            isBoardOperationLoading.value = true;
+			isBoardOperationLoading.value = true;
 			const fromLineIndex: number = getLineIndex(fromLineId);
 			const toLineIndex: number = getLineIndex(toLineId);
 
@@ -470,8 +469,8 @@ const useMediaBoardState = () => {
 				notifyWithTemplateAndReload("notUpdated", "boardElement")
 			);
 		} finally {
-            isBoardOperationLoading.value = false;
-        }
+			isBoardOperationLoading.value = false;
+		}
 	};
 
 	const notifyWithTemplateAndReload = (
@@ -504,7 +503,7 @@ const useMediaBoardState = () => {
 		deleteElement,
 		moveElement,
 		isLoading,
-        isBoardOperationLoading,
+		isBoardOperationLoading,
 	};
 };
 

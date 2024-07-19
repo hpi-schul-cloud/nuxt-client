@@ -46,15 +46,14 @@ describe("MediaShelfPage", () => {
 	};
 
 	beforeEach(() => {
-		useSharedMediaBoardStateMock =
-			createMock<ReturnType<typeof useSharedMediaBoardState>>();
-
-		useSharedMediaBoardStateMock.mediaBoard = ref(
-			mediaBoardResponseFactory.build()
-		);
-		useSharedMediaBoardStateMock.availableMediaLine = ref(
-			mediaAvailableLineResponseFactory.build()
-		);
+		useSharedMediaBoardStateMock = createMock<
+			ReturnType<typeof useSharedMediaBoardState>
+		>({
+			isLoading: ref(false),
+			isBoardOperationLoading: ref(false),
+			mediaBoard: ref(mediaBoardResponseFactory.build()),
+			availableMediaLine: ref(mediaAvailableLineResponseFactory.build()),
+		});
 
 		jest
 			.mocked(useSharedMediaBoardState)
@@ -67,12 +66,11 @@ describe("MediaShelfPage", () => {
 
 	describe("when the page is loading", () => {
 		const setup = async () => {
-			const { wrapper } = getWrapper();
-
 			useSharedMediaBoardStateMock.mediaBoard.value = undefined;
 			useSharedMediaBoardStateMock.availableMediaLine.value = undefined;
+			useSharedMediaBoardStateMock.isLoading.value = true;
 
-			await flushPromises();
+			const { wrapper } = getWrapper();
 
 			return {
 				wrapper,
@@ -122,8 +120,10 @@ describe("MediaShelfPage", () => {
 
 			expect(board.isVisible()).toEqual(true);
 		});
+	});
 
-		it("should display empty state when there are no media elements", async () => {
+	describe("when the page is loaded and there are no media elements", () => {
+		const setup = async () => {
 			useSharedMediaBoardStateMock.availableMediaLine.value =
 				mediaAvailableLineResponseFactory.build({ elements: [] });
 			useSharedMediaBoardStateMock.mediaBoard.value =
@@ -131,6 +131,14 @@ describe("MediaShelfPage", () => {
 					lines: [],
 				});
 
+			const { wrapper } = getWrapper();
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should display empty state", async () => {
 			const { wrapper } = await setup();
 
 			const emptyState = wrapper.find("[data-testid=empty-state]");

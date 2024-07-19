@@ -441,12 +441,12 @@ describe("mediaBoardState.composable", () => {
 				);
 			});
 
-			it("should handle board operation loading state", async () => {
+			it("should exit board operation loading state", async () => {
 				const { composable } = setup();
 
 				await composable.createLine();
 
-				expect(composable.isLoading.value).toBe(false);
+				expect(composable.isBoardOperationLoading.value).toBe(false);
 			});
 
 			it("should add the new line to the media board", async () => {
@@ -559,12 +559,12 @@ describe("mediaBoardState.composable", () => {
 				expect(mediaBoardApiMock.deleteLine).toHaveBeenCalledWith(line.id);
 			});
 
-			it("should handle board operation loading state", async () => {
+			it("should exit board operation loading state", async () => {
 				const { composable, line } = setup();
 
 				await composable.deleteLine(line.id);
 
-				expect(composable.isLoading.value).toBe(false);
+				expect(composable.isBoardOperationLoading.value).toBe(false);
 			});
 
 			it("should call fetchAvailableMedia", async () => {
@@ -771,7 +771,7 @@ describe("mediaBoardState.composable", () => {
 					);
 				});
 
-				it("should handle board operation loading state", async () => {
+				it("should exit board operation loading state", async () => {
 					const { composable, line1 } = setup();
 
 					await composable.moveLine({
@@ -780,7 +780,7 @@ describe("mediaBoardState.composable", () => {
 						oldLineIndex: 0,
 					});
 
-					expect(composable.isLoading.value).toBe(false);
+					expect(composable.isBoardOperationLoading.value).toBe(false);
 				});
 			});
 		});
@@ -1572,7 +1572,7 @@ describe("mediaBoardState.composable", () => {
 					);
 				});
 
-				it("should handle board operation loading state", async () => {
+				it("should exit board operation loading state", async () => {
 					const { composable } = setup();
 
 					await composable.createElement({
@@ -1581,7 +1581,7 @@ describe("mediaBoardState.composable", () => {
 						schoolExternalToolId: "schoolExternalToolId",
 					});
 
-					expect(composable.isLoading.value).toBe(false);
+					expect(composable.isBoardOperationLoading.value).toBe(false);
 				});
 			});
 
@@ -1832,12 +1832,12 @@ describe("mediaBoardState.composable", () => {
 				expect(mediaBoardApiMock.deleteElement).toHaveBeenCalledWith(elementId);
 			});
 
-			it("should handle board operation loading state", async () => {
+			it("should exit board operation loading state", async () => {
 				const { composable, elementId } = setup();
 
 				await composable.deleteElement(elementId);
 
-				expect(composable.isLoading.value).toBe(false);
+				expect(composable.isBoardOperationLoading.value).toBe(false);
 			});
 
 			it("should call fetchAvailableMedia", async () => {
@@ -1979,7 +1979,7 @@ describe("mediaBoardState.composable", () => {
 				);
 			});
 
-			it("should handle board operation loading state", async () => {
+			it("should exit board operation loading state", async () => {
 				const { composable, line1, line2, element } = setup();
 
 				await composable.moveElement({
@@ -1990,7 +1990,7 @@ describe("mediaBoardState.composable", () => {
 					toLineId: line2.id,
 				});
 
-				expect(composable.isLoading.value).toBe(false);
+				expect(composable.isBoardOperationLoading.value).toBe(false);
 			});
 
 			it("should update the elements in the media board", async () => {

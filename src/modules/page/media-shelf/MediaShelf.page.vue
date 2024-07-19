@@ -32,7 +32,7 @@
 				/>
 			</VBtnToggle>
 		</div>
-		<template v-if="isLoading && !mediaBoard && !availableMediaLine">
+		<template v-if="isLoading && (!mediaBoard || !availableMediaLine)">
 			<VContainer class="loader" data-testid="skeleton-loader">
 				<v-skeleton-loader type="list-item" width="100%" height="50px" />
 				<div class="d-flex py-4 ga-6">
@@ -90,13 +90,13 @@ const {
 } = useSharedMediaBoardState();
 
 const isEmptyState: ComputedRef<boolean> = computed(() => {
-	const isMediaBoardEmpty = mediaBoard.value?.lines.every(
-		(line) => line.elements.length === 0
-	);
+	const isMediaBoardEmpty =
+		!mediaBoard.value ||
+		mediaBoard.value.lines.every((line) => line.elements.length === 0);
 
 	const isAvailableMediaLineEmpty = !availableMediaLine.value?.elements.length;
 
-	return !!(
+	return (
 		isMediaBoardEmpty &&
 		isAvailableMediaLineEmpty &&
 		!isLoading.value &&
