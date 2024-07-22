@@ -49,14 +49,13 @@
 </template>
 
 <script lang="ts">
-import { ContentElementType } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, ComputedRef, defineComponent } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export default defineComponent({
 	name: "AddElementDialog",
-	setup(props, { emit }) {
+	setup() {
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 		const { isDialogOpen, closeDialog, elementTypeOptions } =
@@ -75,7 +74,6 @@ export default defineComponent({
 		);
 
 		return {
-			onAddElement,
 			onCloseDialog,
 			elementTypeOptions,
 			isDialogOpen,
