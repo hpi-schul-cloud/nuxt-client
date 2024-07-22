@@ -1672,6 +1672,8 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Created between 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
 	"feature.media-shelf.title": "Media shelf",
+	"feature.media-shelf.emptyState":
+		"No media has currently been activated for use.",
 	"feature.media-shelf.createLine": "Add line",
 	"feature.media-shelf.line.title": "Line",
 	"feature.media-shelf.availableLine.title": "Available media",

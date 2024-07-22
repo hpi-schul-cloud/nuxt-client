@@ -23,6 +23,7 @@ const useMediaBoardState = () => {
 	const mediaBoard: Ref<MediaBoardResponse | undefined> = ref();
 	const availableMediaLine: Ref<MediaAvailableLineResponse | undefined> = ref();
 	const isLoading: Ref<boolean> = ref<boolean>(false);
+	const isBoardOperationLoading: Ref<boolean> = ref<boolean>(false);
 
 	// Utils
 	const getLineIndex = (lineId: string): number => {
@@ -110,6 +111,7 @@ const useMediaBoardState = () => {
 		}
 
 		try {
+			isBoardOperationLoading.value = true;
 			const newLine: MediaLineResponse = await api.createLine(
 				mediaBoard.value.id
 			);
@@ -122,6 +124,8 @@ const useMediaBoardState = () => {
 				error,
 				notifyWithTemplateAndReload("notCreated", "boardRow")
 			);
+		} finally {
+			isBoardOperationLoading.value = false;
 		}
 	};
 
@@ -131,13 +135,17 @@ const useMediaBoardState = () => {
 		}
 
 		try {
+			isBoardOperationLoading.value = true;
+
 			const lineIndex: number = getLineIndex(lineId);
 
 			if (lineIndex < 0) {
 				return;
 			}
 
-			mediaBoard.value.lines.splice(lineIndex, 1);
+			const temp = Array.from(mediaBoard.value.lines);
+			temp.splice(lineIndex, 1);
+			mediaBoard.value.lines = temp;
 
 			await api.deleteLine(lineId);
 
@@ -147,6 +155,8 @@ const useMediaBoardState = () => {
 				error,
 				notifyWithTemplateAndReload("notDeleted", "boardRow")
 			);
+		} finally {
+			isBoardOperationLoading.value = false;
 		}
 	};
 
@@ -171,12 +181,13 @@ const useMediaBoardState = () => {
 				return;
 			}
 
-			const line: MediaLineResponse = mediaBoard.value.lines.splice(
-				oldLineIndex,
-				1
-			)[0];
+			isBoardOperationLoading.value = true;
 
-			mediaBoard.value.lines.splice(newLineIndex, 0, line);
+			const temp = Array.from(mediaBoard.value.lines);
+			const line: MediaLineResponse = temp.splice(oldLineIndex, 1)[0];
+
+			temp.splice(newLineIndex, 0, line);
+			mediaBoard.value.lines = temp;
 
 			await api.moveLine(lineId, mediaBoard.value.id, newLineIndex);
 		} catch (error) {
@@ -184,6 +195,8 @@ const useMediaBoardState = () => {
 				error,
 				notifyWithTemplateAndReload("notUpdated", "boardRow")
 			);
+		} finally {
+			isBoardOperationLoading.value = false;
 		}
 	};
 
@@ -334,8 +347,13 @@ const useMediaBoardState = () => {
 				toLineId = newLine.id;
 			}
 
-			availableMediaLine.value?.elements.splice(oldElementIndex, 1);
+			isBoardOperationLoading.value = true;
 
+			if (availableMediaLine.value) {
+				const temp = Array.from(availableMediaLine.value.elements);
+				temp.splice(oldElementIndex, 1);
+				availableMediaLine.value.elements = temp;
+			}
 			const newElement: MediaExternalToolElementResponse =
 				await api.createElement(
 					toLineId,
@@ -345,11 +363,9 @@ const useMediaBoardState = () => {
 
 			const lineIndex: number = getLineIndex(toLineId);
 
-			mediaBoard.value.lines[lineIndex].elements.splice(
-				newElementIndex,
-				0,
-				newElement
-			);
+			const temp = Array.from(mediaBoard.value.lines[lineIndex].elements);
+			temp.splice(newElementIndex, 0, newElement);
+			mediaBoard.value.lines[lineIndex].elements = temp;
 
 			return newElement;
 		} catch (error) {
@@ -357,6 +373,8 @@ const useMediaBoardState = () => {
 				error,
 				notifyWithTemplateAndReload("notCreated", "boardElement")
 			);
+		} finally {
+			isBoardOperationLoading.value = false;
 		}
 	};
 
@@ -366,6 +384,7 @@ const useMediaBoardState = () => {
 		}
 
 		try {
+			isBoardOperationLoading.value = true;
 			const lineIndex: number = getLineIndexOfElement(elementId);
 
 			// Element or line not found
@@ -377,7 +396,9 @@ const useMediaBoardState = () => {
 				lineIndex
 			].elements.findIndex((element) => element.id === elementId);
 
-			mediaBoard.value.lines[lineIndex].elements.splice(elementIndex, 1);
+			const temp = Array.from(mediaBoard.value.lines[lineIndex].elements);
+			temp.splice(elementIndex, 1);
+			mediaBoard.value.lines[lineIndex].elements = temp;
 
 			await api.deleteElement(elementId);
 
@@ -387,6 +408,8 @@ const useMediaBoardState = () => {
 				error,
 				notifyWithTemplateAndReload("notCreated", "boardElement")
 			);
+		} finally {
+			isBoardOperationLoading.value = false;
 		}
 	};
 
@@ -414,6 +437,7 @@ const useMediaBoardState = () => {
 				toLineId = newLine.id;
 			}
 
+			isBoardOperationLoading.value = true;
 			const fromLineIndex: number = getLineIndex(fromLineId);
 			const toLineIndex: number = getLineIndex(toLineId);
 
@@ -429,20 +453,27 @@ const useMediaBoardState = () => {
 
 			await api.moveElement(elementId, toLineId, newElementIndex);
 
-			const element: MediaExternalToolElementResponse = mediaBoard.value.lines[
-				fromLineIndex
-			].elements.splice(oldElementIndex, 1)[0];
-
-			mediaBoard.value.lines[toLineIndex].elements.splice(
-				newElementIndex,
-				0,
-				element
+			const tempFromLine = Array.from(
+				mediaBoard.value.lines[fromLineIndex].elements
 			);
+			const element: MediaExternalToolElementResponse = tempFromLine.splice(
+				oldElementIndex,
+				1
+			)[0];
+			mediaBoard.value.lines[fromLineIndex].elements = tempFromLine;
+
+			const tempToLine = Array.from(
+				mediaBoard.value.lines[toLineIndex].elements
+			);
+			tempToLine.splice(newElementIndex, 0, element);
+			mediaBoard.value.lines[toLineIndex].elements = tempToLine;
 		} catch (error) {
 			handleAnyError(
 				error,
 				notifyWithTemplateAndReload("notUpdated", "boardElement")
 			);
+		} finally {
+			isBoardOperationLoading.value = false;
 		}
 	};
 
@@ -476,6 +507,7 @@ const useMediaBoardState = () => {
 		deleteElement,
 		moveElement,
 		isLoading,
+		isBoardOperationLoading,
 	};
 };
 

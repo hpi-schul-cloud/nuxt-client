@@ -1721,6 +1721,8 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
 	"feature.media-shelf.title": "Estante multimedia",
+	"feature.media-shelf.emptyState":
+		"Actualmente no se ha activado ningún medio para su uso.",
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
