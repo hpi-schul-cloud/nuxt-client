@@ -311,9 +311,9 @@ export default {
 	"components.board.action.moveRight": "Nach rechts verschieben",
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.alert.info.teacher":
-		"Dieses Board ist sichtbar für alle Kursteilnehmenden.",
+		"Dieser Bereich ist sichtbar für alle Kursteilnehmenden.",
 	"components.board.alert.info.draft":
-		"Dieses Board ist nicht für die Kursteilnehmenden sichtbar.",
+		"Dieser Bereich ist nicht für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neuer Abschnitt",
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
@@ -361,7 +361,7 @@ export default {
 		"Titel von Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
-	"components.board": "Board",
+	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
 	"components.boardElement": "Element",
@@ -480,7 +480,7 @@ export default {
 	"components.molecules.copyResult.courseGroupCopy.info":
 		"Gruppen und deren Inhalte werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.ctlTools.info":
-		"Dem Kurs und den Boardkarten zugeordnete externe Tools werden nicht kopiert.",
+		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
 		"Geschützte Teile der Tool-Konfigurationen werden nicht kopiert.",
 	"components.molecules.copyResult.etherpadCopy.info":
@@ -609,7 +609,7 @@ export default {
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
 	"components.molecules.share.courses.options.ctlTools.infotext":
-		"Externe Tools, die dem Kurs oder Boardkarten zugeordnet sind, werden nicht kopiert.",
+		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
 	"components.molecules.share.courses.options.infoText":
 		"Mit dem folgenden Link kann der Kurs als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
@@ -1458,9 +1458,9 @@ export default {
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
-	"pages.room.boardCard.label.columnBoard": "Bereich | mehrspaltig",
+	"pages.room.boardCard.label.columnBoard": "Bereich {'|'} mehrspaltig",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Bereich",
-	"pages.room.boardCard.label.listBoard": "Bereich | einspaltig",
+	"pages.room.boardCard.label.listBoard": "Bereich {'|'} einspaltig",
 	"pages.room.boardCard.menu.ariaLabel": "Bereich-Menü",
 	"pages.room.cards.aria":
 		"{itemType}, Link, zum Öffnen die Eingabetaste drücken",
@@ -1501,8 +1501,8 @@ export default {
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.add.lesson": "Neues Thema",
-	"pages.rooms.fab.add.board": "Neuer Bereich | mehrspaltig",
-	"pages.rooms.fab.add.listBoard": "Neuer Bereich | einspaltig",
+	"pages.rooms.fab.add.board": "Neuer Bereich {'|'} mehrspaltig",
+	"pages.rooms.fab.add.listBoard": "Neuer Bereich {'|'} einspaltig",
 	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.fab.import.course": "Kurs importieren",
